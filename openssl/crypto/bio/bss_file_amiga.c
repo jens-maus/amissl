@@ -12,6 +12,8 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
+extern int __io2errno(int);
+
 static int file_write(BIO *h, const char *buf, int num);
 static int file_read(BIO *h, char *buf, int size);
 static int file_puts(BIO *h, const char *str);
@@ -70,7 +72,7 @@ static LONG FSeek(BPTR file, LONG pos, LONG mode)
 
 static BPTR FOpenFromMode(char *name, char *mode)
 {
-	BOOL mode_is_invalid = FALSE, seek_to_end = FALSE;
+	BOOL mode_is_valid = TRUE, seek_to_end = FALSE;
 	BPTR file = (BPTR)NULL;
 	LONG type;
 
@@ -84,9 +86,9 @@ static BPTR FOpenFromMode(char *name, char *mode)
 		seek_to_end = TRUE;
 	}
 	else
-		mode_is_invalid = TRUE;
+		mode_is_valid = FALSE;
 
-	if (!mode_is_invalid)
+	if (mode_is_valid)
 	{
 		file = FOpen(name, type, 16384);
 
@@ -104,7 +106,7 @@ static BOOL FEOF(BPTR file)
 
 	if ((curr_position = FSeek(file, 0, OFFSET_END)) >= 0)
 		if ((end_position = FSeek(file, curr_position, OFFSET_BEGINNING)) >= 0)
-			is_eof = (curr_position == end_position) ? 1 : 0;
+			is_eof = curr_position == end_position;
 
 	return(is_eof);
 }
@@ -121,7 +123,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	}
 	else
 	{
-		SYSerr(SYS_F_FOPEN, IoErr());
+		SYSerr(SYS_F_FOPEN, __io2errno(IoErr()));
 		ERR_add_error_data(5, "FOpenFromMode('", filename, "','", mode, "')");
 
 		if (IoErr() == ERROR_OBJECT_NOT_FOUND)
@@ -196,7 +198,7 @@ static int file_read(BIO *b, char *out, int outl)
 		 */
 		if (ret == 0 && IoErr() != 0)
 		{
-			SYSerr(SYS_F_FREAD, IoErr());
+			SYSerr(SYS_F_FREAD, __io2errno(IoErr()));
 			BIOerr(BIO_F_FILE_READ, ERR_R_SYS_LIB);
 
 			ret = -1;
@@ -278,7 +280,7 @@ static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 				}
 				else
 				{
-					SYSerr(SYS_F_FOPEN, IoErr());
+					SYSerr(SYS_F_FOPEN, __io2errno(IoErr()));
 					ERR_add_error_data(5, "FOpenFromMode('", ptr, "','", p, "')");
 					BIOerr(BIO_F_FILE_CTRL, ERR_R_SYS_LIB);
 					ret = 0;
