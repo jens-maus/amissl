@@ -566,7 +566,7 @@ my %table=(
 "tandem-c89","c89:-Ww -D__TANDEM -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED=1 -D_TANDEM_SOURCE -DB_ENDIAN::(unknown):::THIRTY_TWO_BIT:::",
 
 # SAS/C AmigaOS by default, we support threads
-"SC","sc::::::::",
+"SC","sc::::::EXPORT_VAR_AS_FN::",
 
 );
 
@@ -932,6 +932,7 @@ chop $prefix if $prefix =~ /\/$/;
 $openssldir=$prefix . "/ssl" if $openssldir eq "";
 $openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/])/;
 
+$openssldir = $prefix = "AmiSSL:";
 
 print "IsWindows=$IsWindows\n";
 
