@@ -505,6 +505,7 @@ BOOL WINAPI DLLEntryPoint(HINSTANCE hinstDLL, DWORD fdwReason,
 
 #endif
 
+#ifndef AMISSL
 void OpenSSLDie(const char *file,int line,const char *assertion)
 	{
 	fprintf(stderr,
@@ -512,3 +513,21 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 		file,line,assertion);
 	abort();
 	}
+#else /* AMISSL */
+#include <proto/exec.h>
+#include <intuition/intuition.h>
+#include <proto/intuition.h>
+
+static const struct EasyStruct easy_struct =
+{
+	sizeof(struct EasyStruct), 0, "AmiSSL internal error",
+	"%s (%d): assertion failed:\n%s", "Abort"
+};
+
+void OpenSSLDie(const char *file, int line, const char *assertion)
+{
+	EasyRequest(NULL, &easy_struct, NULL, file, line, assertion);
+
+	Wait(0);
+}
+#endif /* !AMISSL */
