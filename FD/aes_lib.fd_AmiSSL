@@ -1,0 +1,13 @@
+##base _AESBase
+##bias 30
+AES_options_AmiSSL()()
+AES_set_encrypt_key_AmiSSL(userKey,bits,key)(a0,d0,a1)
+AES_set_decrypt_key_AmiSSL(userKey,bits,key)(a0,d0,a1)
+AES_encrypt_AmiSSL(in,out,key)(a0,a1,a2)
+AES_decrypt_AmiSSL(in,out,key)(a0,a1,a2)
+AES_ecb_encrypt_AmiSSL(in,out,key,enc)(a0,a1,a2,d0)
+AES_cbc_encrypt_AmiSSL(in,out,length,key,ivec,enc)(a0,a1,d0,a2,a3,d1)
+AES_cfb128_encrypt_AmiSSL(in,out,length,key,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
+AES_ofb128_encrypt_AmiSSL(in,out,length,key,ivec,num)(a0,a1,d0,a2,a3,d1)
+AES_ctr128_encrypt_AmiSSL(in,out,length,key,counter,ecount_buf,num)(a0,a1,d0,a2,d1,d2,a3)
+##end
