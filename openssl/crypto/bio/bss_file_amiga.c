@@ -3,10 +3,8 @@
  * buffered dos.library calls.
  */
 
-#include <clib/exec_protos.h>
-#include <clib/dos_protos.h>
-#include <pragmas/exec_sysbase_pragmas.h>
-#include <pragmas/dos_pragmas.h>
+#include <proto/exec.h>
+#include <proto/dos.h>
 #include <dos/dos.h>
 #include <dos/stdio.h>
 #include <libraries/amissl.h>
@@ -14,9 +12,6 @@
 
 #include <openssl/bio.h>
 #include <openssl/err.h>
-
-extern struct ExecBase *SysBase;
-extern struct DosLibrary *DOSBase;
 
 static int file_write(BIO *h, char *buf, int num);
 static int file_read(BIO *h, char *buf, int size);
@@ -43,32 +38,29 @@ BIO_METHOD *BIO_s_file(void);
 
 static BPTR FOpen(char *name, char *mode)
 {
-	LONG type, end, invalid = 0;
+	BOOL mode_is_invalid = FALSE, seek_to_end = FALSE;
 	BPTR file = NULL;
+	LONG type;
 
 	if (*mode == 'r')
-	{
 		type = MODE_OLDFILE;
-		end = 0;
-	}
 	else if (*mode == 'w')
-	{
 		type = MODE_NEWFILE;
-		end = 0;
-	}
 	else if (*mode == 'a')
 	{
 		type = MODE_READWRITE;
-		end = 1;
+		seek_to_end = TRUE;
 	}
-	else invalid = 1;
+	else
+		mode_is_invalid = TRUE;
 
-	if (!invalid)
+	if (!mode_is_invalid)
 	{
 		if (file = Open(name, type))
 		{
-			if (end)
+			if (seek_to_end)
 				Seek(file, 0, OFFSET_END);
+
 			if (DOSBase->dl_lib.lib_Version >= 39)
 				SetVBuf(file, NULL, IsInteractive(file) ? BUF_LINE : BUF_FULL, 5120);
 		}
@@ -86,19 +78,22 @@ static void FClose(BPTR file)
 static LONG FSeek(BPTR file, LONG pos, LONG mode)
 {
 	Flush(file);
+
 	return((LONG)Seek(file, pos, mode));
 }
 
-static LONG FEOF(BPTR file)
+static BOOL FEOF(BPTR file)
 {
-	LONG ret = 0, curr, end;
+	LONG curr_position, end_position;
+	BOOL is_eof = FALSE;
 
 	Flush(file);
-	if ((curr = Seek(file, 0, OFFSET_END)) >= 0)
-		if ((end = Seek(file, curr, OFFSET_BEGINNING)) >= 0)
-			ret = (curr == end) ? 1 : 0;
 
-	return(ret);
+	if ((curr_position = Seek(file, 0, OFFSET_END)) >= 0)
+		if ((end_position = Seek(file, curr_position, OFFSET_BEGINNING)) >= 0)
+			is_eof = (curr_position == end_position) ? 1 : 0;
+
+	return(is_eof);
 }
 
 BIO *BIO_new_file(const char *filename, const char *mode)
@@ -106,17 +101,24 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	BIO *ret;
 	BPTR file;
 
-	if (!(file = FOpen((char *)filename, (char *)mode)))
+	if (file = FOpen((char *)filename, (char *)mode))
+	{
+		if (ret = BIO_new(BIO_s_file_internal()))
+			BIO_set_fp_amiga(ret, file, BIO_CLOSE);
+	}
+	else
 	{
 		SYSerr(SYS_F_FOPEN, IoErr());
 		ERR_add_error_data(5, "FOpen('", filename, "','", mode, "')");
-		BIOerr(BIO_F_BIO_NEW_FILE, ERR_R_SYS_LIB);
-		return(NULL);
-	}
-	if (!(ret = BIO_new(BIO_s_file_internal())))
-		return(NULL);
 
-	BIO_set_fp_amiga(ret, file, BIO_CLOSE);
+		if (IoErr() == ERROR_OBJECT_NOT_FOUND)
+			BIOerr(BIO_F_BIO_NEW_FILE, BIO_R_NO_SUCH_FILE);
+		else
+			BIOerr(BIO_F_BIO_NEW_FILE, ERR_R_SYS_LIB);
+
+		ret = NULL;
+	}
+
 	return(ret);
 }
 
@@ -124,10 +126,9 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag)
 {
 	BIO *ret;
 
-	if ((ret = BIO_new(BIO_s_file())) == NULL)
-		return(NULL);
+	if (ret = BIO_new(BIO_s_file()))
+		BIO_set_fp_amiga(ret, stream, close_flag);
 
-	BIO_set_fp_amiga(ret, stream, close_flag);
 	return(ret);
 }
 
@@ -141,33 +142,54 @@ static int file_new(BIO *bi)
 	bi->init = 0;
 	bi->num = 0;
 	bi->ptr = NULL;
+
 	return(1);
 }
 
 static int file_free(BIO *a)
 {
-	if (a == NULL)
-		return(0);
-	if (a->shutdown)
+	int ret;
+
+	if (!a)
+		ret = 0;
+	else if (a->shutdown)
 	{
-		if ((a->init) && (a->ptr != NULL))
+		if (a->init && a->ptr != NULL)
 		{
 			FClose((BPTR)a->ptr);
 			a->ptr = NULL;
 		}
+
 		a->init = 0;
+		ret = 1;
 	}
-	return(1);
+
+	return(ret);
 }
 
 static int file_read(BIO *b, char *out, int outl)
 {
 	int ret = 0;
 
-	if (b->init && (out != NULL))
+	if (b->init && out != NULL)
 	{
+		SetIoErr(0);
+
 		ret = FRead((BPTR)b->ptr, out, 1, outl);
+
+		/* Apparently, OpenSSL framework wants to know about errors only
+		 * if nothing could have been read, at least judging from
+		 * the implementation of file_read in bss_file.c
+		 */
+		if (ret == 0 && IoErr() != 0)
+		{
+			SYSerr(SYS_F_FREAD, IoErr());
+			BIOerr(BIO_F_FILE_READ, ERR_R_SYS_LIB);
+
+			ret = -1;
+		}
 	}
+
 	return(ret);
 }
 
@@ -175,8 +197,9 @@ static int file_write(BIO *b, char *in, int inl)
 {
 	int ret = 0;
 
-	if (b->init && (in != NULL))
+	if (b->init && in)
 		ret = FWrite((BPTR)b->ptr, in, 1, inl);
+
 	return(ret);
 }
 
@@ -189,105 +212,119 @@ static long file_ctrl(BIO *b, int cmd, long num, char *ptr)
 
 	switch (cmd)
 	{
-	case BIO_C_FILE_SEEK:
-	case BIO_CTRL_RESET:
-		ret = FSeek(fp, num, OFFSET_BEGINNING);
-		break;
-	case BIO_CTRL_EOF:
-		ret = FEOF(fp);
-		break;
-	case BIO_C_FILE_TELL:
-	case BIO_CTRL_INFO:
-		ret = FSeek(fp, 0, OFFSET_CURRENT);
-		break;
-	case BIO_C_SET_FILE_PTR:
-		file_free(b);
-		b->shutdown = (int)num & BIO_CLOSE;
-		b->ptr = (char *)ptr;
-		b->init = 1;
-		break;
-	case BIO_C_SET_FILENAME:
-		file_free(b);
-		b->shutdown = (int)num & BIO_CLOSE;
-		if (num & BIO_FP_APPEND)
-		{
-			if (num & BIO_FP_READ)
-				strcpy(p, "a+");
-			else
-				strcpy(p, "a");
-		}
-		else if ((num & BIO_FP_READ) && (num & BIO_FP_WRITE))
-			strcpy(p, "r+");
-		else if (num & BIO_FP_WRITE)
-			strcpy(p, "w");
-		else if (num & BIO_FP_READ)
-			strcpy(p, "r");
-		else
-		{
-			BIOerr(BIO_F_FILE_CTRL, BIO_R_BAD_FOPEN_MODE);
-			ret = 0;
+		case BIO_C_FILE_SEEK:
+		case BIO_CTRL_RESET:
+			ret = FSeek(fp, num, OFFSET_BEGINNING);
 			break;
-		}
-		fp = FOpen(ptr, p);
-		if (fp == NULL)
-		{
-			SYSerr(SYS_F_FOPEN, IoErr());
-			ERR_add_error_data(5, "FOpen('", ptr, "','", p, "')");
-			BIOerr(BIO_F_FILE_CTRL, ERR_R_SYS_LIB);
-			ret = 0;
-			break;
-		}
-		b->ptr = (char *)fp;
-		b->init = 1;
-		break;
-	case BIO_C_GET_FILE_PTR:
-		/* the ptr parameter is actually a BPTR * in this case. */
-		if (ptr != NULL)
-		{
-			fpp = (BPTR *)ptr;
-			*fpp = (BPTR)b->ptr;
-		}
-		break;
-	case BIO_CTRL_GET_CLOSE:
-		ret = (long)b->shutdown;
-		break;
-	case BIO_CTRL_SET_CLOSE:
-		b->shutdown = (int)num;
-		break;
-	case BIO_CTRL_FLUSH:
-		Flush((BPTR)b->ptr);
-		break;
-	case BIO_CTRL_DUP:
-		ret = 1;
-		break;
 
-	case BIO_CTRL_WPENDING:
-	case BIO_CTRL_PENDING:
-	case BIO_CTRL_PUSH:
-	case BIO_CTRL_POP:
-	default:
-		ret = 0;
-		break;
+		case BIO_CTRL_EOF:
+			ret = FEOF(fp);
+			break;
+
+		case BIO_C_FILE_TELL:
+		case BIO_CTRL_INFO:
+			ret = FSeek(fp, 0, OFFSET_CURRENT);
+			break;
+
+		case BIO_C_SET_FILE_PTR:
+			file_free(b);
+			b->shutdown = (int)num & BIO_CLOSE;
+			b->ptr = (char *)ptr;
+			b->init = 1;
+			break;
+
+		case BIO_C_SET_FILENAME:
+			file_free(b);
+			b->shutdown = (int)num & BIO_CLOSE;
+
+			if (num & BIO_FP_APPEND)
+			{
+				if (num & BIO_FP_READ)
+					strcpy(p, "a+");
+				else
+					strcpy(p, "a");
+			}
+			else if ((num & BIO_FP_READ) && (num & BIO_FP_WRITE))
+				strcpy(p, "r+");
+			else if (num & BIO_FP_WRITE)
+				strcpy(p, "w");
+			else if (num & BIO_FP_READ)
+				strcpy(p, "r");
+			else
+			{
+				BIOerr(BIO_F_FILE_CTRL, BIO_R_BAD_FOPEN_MODE);
+				ret = 0;
+			}
+
+			if (ret != 0)
+			{
+				if (fp = FOpen(ptr, p))
+				{
+					b->ptr = (char *)fp;
+					b->init = 1;
+				}
+				else
+				{
+					SYSerr(SYS_F_FOPEN, IoErr());
+					ERR_add_error_data(5, "FOpen('", ptr, "','", p, "')");
+					BIOerr(BIO_F_FILE_CTRL, ERR_R_SYS_LIB);
+					ret = 0;
+				}
+			}
+			break;
+
+		case BIO_C_GET_FILE_PTR:
+			/* the ptr parameter is actually a BPTR * in this case. */
+			if (ptr != NULL)
+			{
+				fpp = (BPTR *)ptr;
+				*fpp = (BPTR)b->ptr;
+			}
+			break;
+
+		case BIO_CTRL_GET_CLOSE:
+			ret = (long)b->shutdown;
+			break;
+
+		case BIO_CTRL_SET_CLOSE:
+			b->shutdown = (int)num;
+			break;
+
+		case BIO_CTRL_FLUSH:
+			Flush((BPTR)b->ptr);
+			break;
+
+		case BIO_CTRL_DUP:
+			ret = 1;
+			break;
+
+		case BIO_CTRL_WPENDING:
+		case BIO_CTRL_PENDING:
+		case BIO_CTRL_PUSH:
+		case BIO_CTRL_POP:
+		default:
+			ret = 0;
+			break;
 	}
+
 	return(ret);
 }
 
 static int file_gets(BIO *bp, char *buf, int size)
 {
-	int ret = 0;
+	int ret;
 
-	buf[0] = '\0';
-	FGets((BPTR)bp->ptr, buf, (DOSBase->dl_lib.lib_Version >= 39) ? size : size - 1);
-	if (buf[0] != '\0')
+	*buf = '\0'; /* Not sure what OpenSSL needs when ret is 0, this is just in case */
+
+	if (FGets((BPTR)bp->ptr, buf, (DOSBase->dl_lib.lib_Version >= 39) ? size : size - 1))
 		ret = strlen(buf);
+	else
+		ret = 0;
+
 	return(ret);
 }
 
 static int file_puts(BIO *bp, char *str)
 {
-	int n, ret;
-
-	n = strlen(str);
-	ret = file_write(bp, str, n);
-	return(ret);
+	return(file_write(bp, str, strlen(str)));
 }
