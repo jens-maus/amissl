@@ -14,7 +14,6 @@
 __attribute__((weak)) struct AmiSSLIFace * IAmiSSL = NULL;
 __attribute__((weak)) struct AmiSSLMasterIFace * IAmiSSLMaster = NULL;
 __attribute__((weak)) struct SocketIFace * ISocket = NULL;
-__attribute__((weak)) int AmiSSLDisableAutoInit = 0;
 
 void __init_amissl_main(void) __attribute__((constructor));
 void __exit_amissl_main(void) __attribute__((destructor));
@@ -53,7 +52,7 @@ static struct SocketIFace *isocket;
 
 void __init_amissl_main(void)
 {
-	if (!ISocket && !AmiSSLDisableAutoInit)
+	if (!ISocket)
 	{
 		if (!(_SocketBase = IExec->OpenLibrary("bsdsocket.library", 4)))
 			fatal_error("Couldn't open bsdsocket.library v4!\n");
@@ -62,7 +61,7 @@ void __init_amissl_main(void)
 			fatal_error("Couldn't obtain socket interface\n");
 	}
 
-	if (!IAmiSSLMaster && !AmiSSLDisableAutoInit)
+	if (!IAmiSSLMaster)
 	{
 		if (!(_AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
 			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "\n");
@@ -74,7 +73,7 @@ void __init_amissl_main(void)
 			fatal_error("Couldn't initialize amisslmaster.library!\n");
 	}
 
-	if (!IAmiSSL && !AmiSSLDisableAutoInit)
+	if (!IAmiSSL)
 	{
 		if (!(_AmiSSLBase = IAmiSSLMaster->OpenAmiSSL()))
 			fatal_error("Couldn't open AmiSSL!\n");

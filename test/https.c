@@ -20,7 +20,6 @@ int ConnectToServer(char *, short, char *, short);
 struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
 
 #ifdef __amigaos4__
-int AmiSSLDisableAutoInit = 1;
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct AmiSSLIFace *IAmiSSL;
 struct SocketIFace *ISocket;

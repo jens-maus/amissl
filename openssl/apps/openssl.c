@@ -226,7 +226,6 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
 
 #ifdef __amigaos4__
-int AmiSSLDisableAutoInit = 1;
 struct AmiSSLIFace *IAmiSSL;
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct SocketIFace *ISocket;
