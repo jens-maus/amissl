@@ -6,7 +6,6 @@
 #include <proto/exec.h>
 #include <proto/intuition.h>
 #include <proto/requester.h>
-
 #include <internal/amissl.h>
 
 #include <reaction/reaction.h>
@@ -150,11 +149,9 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 }
 
 /* This is modeled per OpenSSL write_string. The design *is* a bit weird... */
-static int write_string(UI *ui, UI_STRING *uis)
+int write_string(UI *ui, UI_STRING *uis)
 {
 	int type;
-
-	SETUPSTATEDS();
 
 	type = UI_get_string_type(uis);
 
@@ -172,12 +169,10 @@ static int write_string(UI *ui, UI_STRING *uis)
 #define BUFSIZ 8192
 #endif
 
-static int read_string(UI *ui, UI_STRING *uis)
+int read_string(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
-
-	SETUPSTATEDS();
-
+	
 	type = UI_get_string_type(uis);
 
 	switch(type)
@@ -262,4 +257,30 @@ static UI_METHOD ui_amissl =
 UI_METHOD *UI_OpenSSL(void)
 {
 	return(&ui_amissl);
+}
+
+/* Put this here to avoid possible conflicts with code above */
+
+#include <proto/amissl.h>
+
+int read_string_cb(UI *ui, UI_STRING *uis)
+{
+	SETUPSTATE();
+#ifdef __amigaos4__
+	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+#else
+	struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif	
+	return read_string_lib(ui,uis);
+}
+
+int write_string_cb(UI *ui, UI_STRING *uis)
+{
+	SETUPSTATE();
+#ifdef __amigaos4__
+	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+#else
+	struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif	
+	return write_string_lib(ui,uis);
 }
