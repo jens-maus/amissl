@@ -226,15 +226,22 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 
 	if (state = CreateAmiSSLState())
 	{
+		state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);
+
 #ifdef __amigaos4__
 		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
 		state->IAmiSSL = Self;
 		state->AmiSSLBase = ((struct Interface *)Self)->Data.LibBase;
+
+		/* When ISocket is supplied, there is no need to specify SocketBase.
+		 * This combination would confuse the code below which thinks that it
+		 * needs to GetInterface if there is a SocketBase and also drops it later.
+		 */
+		if (state->ISocket && state->SocketBase)
+			state->SocketBase = NULL;
 #else
 		state->AmiSSLBase = Self;
 #endif
-
-		state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);
 
 #ifdef __amigaos4__
 		if(state->SocketBase)
