@@ -1,8 +1,0 @@
-##base _MD5Base
-##bias 30
-MD5_Init(c)(a0)
-MD5_Update(c,data,len)(a0,a1,d0)
-MD5_Final(md,c)(a0,a1)
-MD5(d,n,md)(a0,d0,a1)
-MD5_Transform(c,b)(a0,a1)
-##end

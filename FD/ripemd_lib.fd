@@ -1,8 +1,0 @@
-##base _RIPEMDBase
-##bias 30
-RIPEMD160_Init(c)(a0)
-RIPEMD160_Update(c,data,len)(a0,a1,d0)
-RIPEMD160_Final(md,c)(a0,a1)
-RIPEMD160(d,n,md)(a0,d0,a1)
-RIPEMD160_Transform(c,b)(a0,a1)
-##end

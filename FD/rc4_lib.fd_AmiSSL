@@ -1,6 +1,0 @@
-##base _RC4Base
-##bias 30
-RC4_options_AmiSSL()()
-RC4_set_key_AmiSSL(key,len,data)(a0,d0,a1)
-RC4_AmiSSL(key,len,indata,outdata)(a0,d0,a1,a2)
-##end

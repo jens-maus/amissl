@@ -1,6 +1,0 @@
-##base _RC4Base
-##bias 30
-RC4_options()()
-RC4_set_key(key,len,data)(a0,d0,a1)
-RC4(key,len,indata,outdata)(a0,d0,a1,a2)
-##end

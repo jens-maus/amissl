@@ -1,8 +1,0 @@
-##base _MDC2Base
-##bias 30
-InitMDC2(DESBase)(a0)
-MDC2_Init(c)(a0)
-MDC2_Update(c,data,len)(a0,a1,d0)
-MDC2_Final(md,c)(a0,a1)
-MDC2(d,n,md)(a0,d0,a1)
-##end

@@ -1,8 +1,0 @@
-##base _RIPEMDBase
-##bias 30
-RIPEMD160_Init_AmiSSL(c)(a0)
-RIPEMD160_Update_AmiSSL(c,data,len)(a0,a1,d0)
-RIPEMD160_Final_AmiSSL(md,c)(a0,a1)
-RIPEMD160_AmiSSL(d,n,md)(a0,d0,a1)
-RIPEMD160_Transform_AmiSSL(c,b)(a0,a1)
-##end
