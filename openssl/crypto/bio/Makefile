@@ -38,7 +38,7 @@ LIBOBJ= bio_lib.o bio_cb.o bio_err.o \
 SRC= $(LIBSRC)
 
 EXHEADER= bio.h
-HEADER=	bss_file.c $(EXHEADER)
+HEADER=	$(EXHEADER)
 
 ALL=    $(GENERAL) $(SRC) $(HEADER)
 
@@ -183,7 +183,7 @@ bss_file.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
 bss_file.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
 bss_file.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
 bss_file.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
-bss_file.o: ../cryptlib.h bss_file.c
+bss_file.o: ../cryptlib.h bss_file.c bss_file_amiga.c
 bss_log.o: ../../e_os.h ../../include/openssl/bio.h
 bss_log.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
 bss_log.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
