@@ -1,0 +1,26 @@
+CFLAGS=DATA=AUTO DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
+       IDIR AmiSSL:Include NOSTACKCHECK DEBUG=FF IGN 315 IDIR NetInclude: \
+       IDIR AmiSSL:/MTCP
+LDFLAGS=LIB lib:sc.lib LIB lib:multitcp.lib MATH=STANDARD
+PROGS=https md2test randtest ssltest
+
+all: $(PROGS)
+
+clean:
+	-Delete $(PROGS) QUIET
+	-Delete *.(o|info|lnk|map) QUIET
+
+.c.o:
+	sc $< $(CFLAGS) OBJNAME $@
+
+https: https.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
+
+md2test: md2test.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
+
+randtest: randtest.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
+
+ssltest: ssltest.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
