@@ -104,6 +104,7 @@ asm/yx86unix.cpp: asm/crypt586.pl ../perlasm/x86asm.pl
 
 files:
 	$(PERL) $(TOP)/util/files.pl Makefile.ssl >> $(TOP)/MINFO
+.PHONY: files
 
 links:
 	@$(TOP)/util/point.sh Makefile.ssl Makefile

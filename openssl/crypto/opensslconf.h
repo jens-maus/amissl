@@ -6,6 +6,9 @@
    /* no ciphers excluded */
 #endif
 #ifdef OPENSSL_THREAD_DEFINES
+# ifndef THREADS
+#  define THREADS
+# endif
 #endif
 #ifdef OPENSSL_OTHER_DEFINES
 #endif

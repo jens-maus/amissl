@@ -235,11 +235,11 @@ printf OUT "#define NUM_SN %d\n",$#sn+1;
 printf OUT "#define NUM_LN %d\n",$#ln+1;
 printf OUT "#define NUM_OBJ %d\n\n",$#ob+1;
 
-printf OUT "static unsigned char lvalues[%d]={\n",$lvalues+1;
+printf OUT "const static unsigned char lvalues[%d]={\n",$lvalues+1;
 print OUT @lvalues;
 print OUT "};\n\n";
 
-printf OUT "static ASN1_OBJECT nid_objs[NUM_NID]={\n";
+printf OUT "const static ASN1_OBJECT nid_objs[NUM_NID]={\n";
 foreach (@out)
 	{
 	if (length($_) > 75)
@@ -263,15 +263,15 @@ foreach (@out)
 	}
 print  OUT "};\n\n";
 
-printf OUT "static ASN1_OBJECT *sn_objs[NUM_SN]={\n";
+printf OUT "const static ASN1_OBJECT *sn_objs[NUM_SN]={\n";
 print  OUT @sn;
 print  OUT "};\n\n";
 
-printf OUT "static ASN1_OBJECT *ln_objs[NUM_LN]={\n";
+printf OUT "const static ASN1_OBJECT *ln_objs[NUM_LN]={\n";
 print  OUT @ln;
 print  OUT "};\n\n";
 
-printf OUT "static ASN1_OBJECT *obj_objs[NUM_OBJ]={\n";
+printf OUT "const static ASN1_OBJECT *obj_objs[NUM_OBJ]={\n";
 print  OUT @ob;
 print  OUT "};\n\n";
 

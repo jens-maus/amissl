@@ -63,6 +63,10 @@
 */
 
 
+#ifdef AMIGA
+#define PRAGMAS_SOCKET_PRAGMAS_H /* Make sure that we don't enable SocketBase calls */
+#endif
+
 #include <stdio.h>
 #include <errno.h>
 

@@ -65,32 +65,58 @@
 /* PKCS#5 v1.5 compatible PBE functions: see PKCS#5 v2.0 for more info.
  */
 
+#ifdef AMISSL
+extern struct Library *DESBase;
+extern struct Library *MD2Base;
+extern struct Library *MD5Base;
+extern struct Library *RC2Base;
+extern struct Library *SHABase;
+#endif
+
 void PKCS5_PBE_add(void)
 {
 #ifndef NO_DES
 #  ifndef NO_MD5
+#ifdef AMISSL
+	if (DESBase && MD5Base)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD5AndDES_CBC, EVP_des_cbc(), EVP_md5(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef NO_MD2
+#ifdef AMISSL
+	if (DESBase && MD2Base)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD2AndDES_CBC, EVP_des_cbc(), EVP_md2(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef NO_SHA
+#ifdef AMISSL
+	if (DESBase && SHABase)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithSHA1AndDES_CBC, EVP_des_cbc(), EVP_sha1(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #endif
 #ifndef NO_RC2
 #  ifndef NO_MD5
+#ifdef AMISSL
+	if (RC2Base && MD5Base)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD5AndRC2_CBC, EVP_rc2_64_cbc(), EVP_md5(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef NO_MD2
+#ifdef AMISSL
+	if (RC2Base && MD2Base)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD2AndRC2_CBC, EVP_rc2_64_cbc(), EVP_md2(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef NO_SHA
+#ifdef AMISSL
+	if (RC2Base && SHABase)
+#endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithSHA1AndRC2_CBC, EVP_rc2_64_cbc(), EVP_sha1(),
 							 PKCS5_PBE_keyivgen);
 #  endif

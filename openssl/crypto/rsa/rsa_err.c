@@ -64,7 +64,7 @@
 
 /* BEGIN ERROR CODES */
 #ifndef NO_ERR
-static ERR_STRING_DATA RSA_str_functs[]=
+const static ERR_STRING_DATA RSA_str_functs[]=
 	{
 {ERR_PACK(0,RSA_F_MEMORY_LOCK,0),	"MEMORY_LOCK"},
 {ERR_PACK(0,RSA_F_RSA_CHECK_KEY,0),	"RSA_check_key"},
@@ -94,7 +94,7 @@ static ERR_STRING_DATA RSA_str_functs[]=
 {0,NULL}
 	};
 
-static ERR_STRING_DATA RSA_str_reasons[]=
+const static ERR_STRING_DATA RSA_str_reasons[]=
 	{
 {RSA_R_ALGORITHM_MISMATCH                ,"algorithm mismatch"},
 {RSA_R_BAD_E_VALUE                       ,"bad e value"},
@@ -141,8 +141,8 @@ void ERR_load_RSA_strings(void)
 		{
 		init=0;
 #ifndef NO_ERR
-		ERR_load_strings(ERR_LIB_RSA,RSA_str_functs);
-		ERR_load_strings(ERR_LIB_RSA,RSA_str_reasons);
+		ERR_load_strings(ERR_LIB_RSA,(ERR_STRING_DATA *)RSA_str_functs);
+		ERR_load_strings(ERR_LIB_RSA,(ERR_STRING_DATA *)RSA_str_reasons);
 #endif
 
 		}

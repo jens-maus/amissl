@@ -594,7 +594,7 @@ int ssl3_mac(SSL *ssl, unsigned char *md, int send)
 		if (seq[i] != 0) break; 
 		}
 
-	return(md_size);
+	return((int)md_size);
 	}
 
 int ssl3_generate_master_secret(SSL *s, unsigned char *out, unsigned char *p,

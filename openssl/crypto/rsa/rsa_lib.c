@@ -65,9 +65,9 @@
 
 const char *RSA_version="RSA" OPENSSL_VERSION_PTEXT;
 
-static RSA_METHOD *default_RSA_meth=NULL;
+const static RSA_METHOD *default_RSA_meth=NULL;
 static int rsa_meth_num=0;
-static STACK_OF(CRYPTO_EX_DATA_FUNCS) *rsa_meth=NULL;
+const static STACK_OF(CRYPTO_EX_DATA_FUNCS) *rsa_meth=NULL;
 
 RSA *RSA_new(void)
 	{

@@ -87,7 +87,7 @@ int i2d_RSAPublicKey(RSA *a, unsigned char **pp)
 		}
 
 	t=ASN1_object_size(1,tot,V_ASN1_SEQUENCE);
-	if (pp == NULL) return(t);
+	if (pp == NULL) return((int)t);
 
 	p= *pp;
 	ASN1_put_object(&p,1,tot,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL);
@@ -107,7 +107,7 @@ int i2d_RSAPublicKey(RSA *a, unsigned char **pp)
 		}
 	OPENSSL_free(bs.data);
 	*pp=p;
-	return(t);
+	return((int)t);
 	}
 #else /* !NO_RSA */
 

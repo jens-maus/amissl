@@ -813,9 +813,9 @@ long SSL_ctrl(SSL *s,int cmd,long larg,char *parg)
 		s->read_ahead=larg;
 		return(l);
 	case SSL_CTRL_OPTIONS:
-		return(s->options|=larg);
+		return(long)(s->options|=larg);
 	case SSL_CTRL_MODE:
-		return(s->mode|=larg);
+		return(long)(s->mode|=larg);
 	default:
 		return(s->method->ssl_ctrl(s,cmd,larg,parg));
 		}
@@ -853,7 +853,7 @@ long SSL_CTX_ctrl(SSL_CTX *ctx,int cmd,long larg,char *parg)
 		ctx->session_cache_size=larg;
 		return(l);
 	case SSL_CTRL_GET_SESS_CACHE_SIZE:
-		return(ctx->session_cache_size);
+		return(long)(ctx->session_cache_size);
 	case SSL_CTRL_SET_SESS_CACHE_MODE:
 		l=ctx->session_cache_mode;
 		ctx->session_cache_mode=larg;
@@ -862,7 +862,7 @@ long SSL_CTX_ctrl(SSL_CTX *ctx,int cmd,long larg,char *parg)
 		return(ctx->session_cache_mode);
 
 	case SSL_CTRL_SESS_NUMBER:
-		return(ctx->sessions->num_items);
+		return(long)(ctx->sessions->num_items);
 	case SSL_CTRL_SESS_CONNECT:
 		return(ctx->stats.sess_connect);
 	case SSL_CTRL_SESS_CONNECT_GOOD:
@@ -886,9 +886,9 @@ long SSL_CTX_ctrl(SSL_CTX *ctx,int cmd,long larg,char *parg)
 	case SSL_CTRL_SESS_CACHE_FULL:
 		return(ctx->stats.sess_cache_full);
 	case SSL_CTRL_OPTIONS:
-		return(ctx->options|=larg);
+		return(long)(ctx->options|=larg);
 	case SSL_CTRL_MODE:
-		return(ctx->mode|=larg);
+		return(long)(ctx->mode|=larg);
 	default:
 		return(ctx->method->ssl_ctx_ctrl(ctx,cmd,larg,parg));
 		}

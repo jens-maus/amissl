@@ -88,6 +88,19 @@ extern "C" {
 #  define NO_SYSLOG
 #endif
   
+#ifdef AMIGA
+# undef  DEVRANDOM
+# if !defined(ssize_t) && !defined(_SIZE_T)
+#  define _SIZE_T 1
+#  define size_t unsigned int // Fixme remove these
+#  define ssize_t long
+# endif
+# if !defined(pid_t) && ! defined(_PID_T)
+#  define _PID_T unsigned long
+#  define pid_t unsigned long
+# endif
+#endif
+
 #if defined(__MWERKS__) && defined(macintosh)
 # if macintosh==1
 #  ifndef MAC_OS_GUSI_SOURCE
@@ -137,6 +150,11 @@ extern "C" {
 #if !defined(WINNT)
 #define WIN_CONSOLE_BUG
 #endif
+#elif defined(AMIGA)
+__stdargs void SetAmiSSLerrno(int errno);
+__stdargs int GetAmiSSLerrno(void);
+#define get_last_sys_error()	GetAmiSSLerrno()
+#define clear_sys_error()	SetAmiSSLerrno(0)
 #else
 #define get_last_sys_error()	errno
 #define clear_sys_error()	errno=0
@@ -149,6 +167,16 @@ extern "C" {
 #define readsocket(s,b,n)	recv((s),(b),(n),0)
 #define writesocket(s,b,n)	send((s),(b),(n),0)
 #define EADDRINUSE		WSAEADDRINUSE
+#elif defined(AMIGA)
+__stdargs void SetAmiSSLerrno(int errno);
+__stdargs int GetAmiSSLerrno(void);
+#define get_last_socket_error()	GetAmiSSLerrno()
+#define clear_socket_error()	SetAmiSSLerrno(0)
+#define ioctlsocket(a,b,c)	ioctlsocket(a,b,c)
+#define closesocket(s)		closesocket(s)
+#define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#define writesocket(s,b,n)	send((s),(b),(n), 0)
+#include "/scmt/scmt.h"
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -312,11 +340,20 @@ extern "C" {
        typedef unsigned long clock_t;
 #    endif
 
-#    define OPENSSL_CONF	"openssl.cnf"
+#    ifndef AMISSL
+#      define OPENSSL_CONF	"openssl.cnf"
+#    else
+#      define OPENSSL_CONF	"amissl.cnf"
+#    endif
 #    define SSLEAY_CONF		OPENSSL_CONF
 #    define RFILE		".rnd"
-#    define LIST_SEPARATOR_CHAR ':'
-#    define NUL_DEV		"/dev/null"
+#    ifdef AMIGA
+#      define LIST_SEPARATOR_CHAR ';'
+#      define NUL_DEV		"NIL:"
+#    else
+#      define LIST_SEPARATOR_CHAR ':'
+#      define NUL_DEV		"/dev/null"
+#    endif
 #    ifndef MONOLITH
 #      define EXIT(n)		exit(n); return(n)
 #    else
@@ -358,6 +395,10 @@ extern HINSTANCE _hInstance;
 #    define SHUTDOWN2(fd)		MacSocket_close(fd)
 
 #  else
+
+#    ifdef AMIGA
+#      define PRAGMAS_SOCKET_PRAGMAS_H /* Make sure that we don't enable SocketBase calls */
+#    endif
 
 #    ifndef NO_SYS_PARAM_H
 #      include <sys/param.h>
@@ -415,10 +456,24 @@ extern HINSTANCE _hInstance;
 #      endif
 #    endif
 
-#    define SSLeay_Read(a,b,c)     read((a),(b),(c))
-#    define SSLeay_Write(a,b,c)    write((a),(b),(c))
-#    define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
-#    define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
+#    ifdef AMIGA
+#      ifdef NO_SOCK
+#        define SSLeay_Read(a,b,c)     (-1)
+#        define SSLeay_Write(a,b,c)    (-1)
+#        define SHUTDOWN(fd)    close(fd)
+#        define SHUTDOWN2(fd)   close(fd)
+#      else
+#        define SSLeay_Read(a,b,c)     recv((a),(b),(c), 0)
+#        define SSLeay_Write(a,b,c)    send((a),(b),(c), 0)
+#        define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
+#        define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
+#      endif
+#    else
+#      define SSLeay_Read(a,b,c)     read((a),(b),(c))
+#      define SSLeay_Write(a,b,c)    write((a),(b),(c))
+#      define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
+#      define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
+#    endif
 #    define INVALID_SOCKET	(-1)
 #  endif
 #endif

@@ -123,6 +123,10 @@
 #endif
 #include <openssl/safestack.h>
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -1006,6 +1010,13 @@ SSL_CIPHER *SSL_get_current_cipher(SSL *s);
 int	SSL_CIPHER_get_bits(SSL_CIPHER *c,int *alg_bits);
 char *	SSL_CIPHER_get_version(SSL_CIPHER *c);
 const char *	SSL_CIPHER_get_name(SSL_CIPHER *c);
+#ifdef AMISSL
+const char *SSL_CIPHER_get_mac(SSL_CIPHER *cipher);
+const char *SSL_CIPHER_get_encryption(SSL_CIPHER *cipher);
+const char *SSL_CIPHER_get_authentication(SSL_CIPHER *cipher);
+const char *SSL_CIPHER_get_key_exchange(SSL_CIPHER *cipher);
+const char *SSL_CIPHER_get_export(SSL_CIPHER *cipher);
+#endif
 
 int	SSL_get_fd(SSL *s);
 int	SSL_get_rfd(SSL *s);

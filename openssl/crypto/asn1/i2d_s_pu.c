@@ -97,11 +97,11 @@ int i2d_DSAPublicKey(DSA *a, unsigned char **pp)
 	if (all)
 		{
 		t=ASN1_object_size(1,tot,V_ASN1_SEQUENCE);
-		if (pp == NULL) return(t);
+		if (pp == NULL) return((int)t);
 		}
 	else
 		{
-		if (pp == NULL) return(tot);
+		if (pp == NULL) return((int)tot);
 		}
 
 	p= *pp;
@@ -123,7 +123,7 @@ int i2d_DSAPublicKey(DSA *a, unsigned char **pp)
 		}
 	OPENSSL_free(bs.data);
 	*pp=p;
-	if(all) return(t);
-	else return(tot);
+	if(all) return((int)t);
+	else return((int)tot);
 	}
 #endif

@@ -64,6 +64,10 @@
 
 #include <openssl/evp.h>
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #define HMAC_MAX_MD_CBLOCK	64
 
 #ifdef  __cplusplus

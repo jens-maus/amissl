@@ -66,6 +66,10 @@
 
 #include <openssl/crypto.h>
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -397,8 +401,13 @@ typedef struct bio_f_buffer_ctx_struct
 #define BIO_set_fd(b,fd,c)	BIO_int_ctrl(b,BIO_C_SET_FD,c,fd)
 #define BIO_get_fd(b,c)		BIO_ctrl(b,BIO_C_GET_FD,0,(char *)c)
 
+#ifndef AMISSL
 #define BIO_set_fp(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+#else
+#define BIO_set_fp_amiga(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
+#define BIO_get_fp_amiga(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+#endif
 
 #define BIO_seek(b,ofs)	(int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
 #define BIO_tell(b)	(int)BIO_ctrl(b,BIO_C_FILE_TELL,0,NULL)
@@ -493,23 +502,31 @@ int BIO_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
 unsigned long BIO_number_read(BIO *bio);
 unsigned long BIO_number_written(BIO *bio);
 
-# ifndef NO_FP_API
 #  if defined(WIN16) && defined(_WINDLL)
 BIO_METHOD *BIO_s_file_internal(void);
 BIO *BIO_new_file_internal(char *filename, char *mode);
 BIO *BIO_new_fp_internal(FILE *stream, int close_flag);
 #    define BIO_s_file	BIO_s_file_internal
 #    define BIO_new_file	BIO_new_file_internal
-#    define BIO_new_fp	BIO_new_fp_internal
-#  else /* FP_API */
+#    ifndef NO_FP_API
+#      define BIO_new_fp	BIO_new_fp_internal
+#    endif /* NO_FP_API */
+#  else
 BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
+#    ifndef NO_FP_API
 BIO *BIO_new_fp(FILE *stream, int close_flag);
+#    endif
+#    ifdef AMIGA
+#      include <dos/dos.h>
+BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
+#    endif
 #    define BIO_s_file_internal		BIO_s_file
 #    define BIO_new_file_internal	BIO_new_file
-#    define BIO_new_fp_internal		BIO_s_file
+#    ifndef NO_FP_API
+#      define BIO_new_fp_internal		BIO_s_file
+#    endif /* NO_FP_API */
 #  endif /* FP_API */
-# endif
 BIO *	BIO_new(BIO_METHOD *type);
 int	BIO_set(BIO *a,BIO_METHOD *type);
 int	BIO_free(BIO *a);

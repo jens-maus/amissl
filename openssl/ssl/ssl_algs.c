@@ -61,40 +61,105 @@
 #include <openssl/lhash.h>
 #include "ssl_locl.h"
 
+#ifdef AMISSL
+extern struct Library *MD2Base;
+extern struct Library *MD5Base;
+extern struct Library *RC2Base;
+extern struct Library *RC4Base;
+extern struct Library *RIPEMDBase;
+extern struct Library *SHABase;
+#endif
+
 int SSL_library_init(void)
 	{
 #ifndef NO_DES
+#ifdef AMISSL
+	if (DESBase)
+	{
+#endif /* AMISSL */
 	EVP_add_cipher(EVP_des_cbc());
 	EVP_add_cipher(EVP_des_ede3_cbc());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
 #endif
 #ifndef NO_IDEA
+#ifdef AMISSL
+	if (IDEABase)
+	{
+#endif /* AMISSL */
 	EVP_add_cipher(EVP_idea_cbc());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
 #endif
 #ifndef NO_RC4
+#ifdef AMISSL
+	if (RC4Base)
+	{
+#endif /* AMISSL */
 	EVP_add_cipher(EVP_rc4());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
 #endif  
 #ifndef NO_RC2
+#ifdef AMISSL
+	if (RC2Base)
+	{
+#endif /* AMISSL */
 	EVP_add_cipher(EVP_rc2_cbc());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
 #endif  
 
 #ifndef NO_MD2
+#ifdef AMISSL
+	if(MD2Base)
+	{
+#endif
 	EVP_add_digest(EVP_md2());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
 #endif
 #ifndef NO_MD5
+#ifdef AMISSL
+	if(MD5Base)
+	{
+#endif
 	EVP_add_digest(EVP_md5());
 	EVP_add_digest_alias(SN_md5,"ssl2-md5");
 	EVP_add_digest_alias(SN_md5,"ssl3-md5");
+#ifdef AMISSL
+	}
 #endif
-#ifndef NO_SHA
+#endif
+#if !defined(NO_SHA) && !defined(NO_RSA)
+#ifdef AMISSL
+	if(SHABase && RSABase)
+	{
+#endif
 	EVP_add_digest(EVP_sha1()); /* RSA with sha1 */
 	EVP_add_digest_alias(SN_sha1,"ssl3-sha1");
 	EVP_add_digest_alias(SN_sha1WithRSAEncryption,SN_sha1WithRSA);
+#ifdef AMISSL
+	}
+#endif
 #endif
 #if !defined(NO_SHA) && !defined(NO_DSA)
+#ifdef AMISSL
+	if(SHABase && DSABase)
+	{
+#endif
 	EVP_add_digest(EVP_dss1()); /* DSA with sha1 */
 	EVP_add_digest_alias(SN_dsaWithSHA1,SN_dsaWithSHA1_2);
 	EVP_add_digest_alias(SN_dsaWithSHA1,"DSS1");
 	EVP_add_digest_alias(SN_dsaWithSHA1,"dss1");
+#ifdef AMISSL
+	}
+#endif
 #endif
 
 	/* If you want support for phased out ciphers, add the following */

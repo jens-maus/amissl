@@ -12,9 +12,9 @@ SHLIB_VERSION_HISTORY=
 SHLIB_MAJOR=0
 SHLIB_MINOR=9.6
 SHLIB_EXT=
-PLATFORM=dist
+PLATFORM=SC
 OPTIONS=
-CONFIGURE_ARGS=dist
+CONFIGURE_ARGS=SC
 SHLIB_TARGET=
 
 # INSTALL_PREFIX is for package builders so that they can configure
@@ -55,16 +55,16 @@ OPENSSLDIR=/usr/local/ssl
 # equal 4.
 # PKCS1_CHECK - pkcs1 tests.
 
-CC= cc
+CC= sc
 #CFLAG= -DL_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -m486 -Wall -Wuninitialized -DSHA1_ASM -DMD5_ASM -DRMD160_ASM
-CFLAG= -O
+CFLAG= -DTHREADS  
 DEPFLAG= 
 PEX_LIBS= 
 EX_LIBS= 
 EXE_EXT= 
 AR=ar r
-RANLIB= /usr/bin/ranlib
-PERL= /usr/local/bin/perl
+RANLIB= /bin/ranlib
+PERL= /bin/perl
 TAR= tar
 TARFLAGS= --no-recursion
 

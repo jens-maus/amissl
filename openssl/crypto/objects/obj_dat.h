@@ -67,7 +67,7 @@
 #define NUM_LN 402
 #define NUM_OBJ 376
 
-static unsigned char lvalues[2951]={
+const static unsigned char lvalues[2951]={
 0x00,                                        /* [  0] OBJ_undef */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,               /* [  1] OBJ_rsadsi */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,          /* [  7] OBJ_pkcs */
@@ -446,7 +446,7 @@ static unsigned char lvalues[2951]={
 0x55,0x1D,0x38,                              /* [2947] OBJ_no_rev_avail */
 };
 
-static ASN1_OBJECT nid_objs[NUM_NID]={
+const static ASN1_OBJECT nid_objs[NUM_NID]={
 {"UNDEF","undefined",NID_undef,1,&(lvalues[0]),0},
 {"rsadsi","RSA Data Security, Inc.",NID_rsadsi,6,&(lvalues[1]),0},
 {"pkcs","RSA Data Security, Inc. PKCS",NID_pkcs,7,&(lvalues[7]),0},
@@ -1077,7 +1077,7 @@ static ASN1_OBJECT nid_objs[NUM_NID]={
 	&(lvalues[2947]),0},
 };
 
-static ASN1_OBJECT *sn_objs[NUM_SN]={
+const static ASN1_OBJECT *sn_objs[NUM_SN]={
 &(nid_objs[364]),/* "AD_DVCS" */
 &(nid_objs[91]),/* "BF-CBC" */
 &(nid_objs[93]),/* "BF-CFB" */
@@ -1482,7 +1482,7 @@ static ASN1_OBJECT *sn_objs[NUM_SN]={
 &(nid_objs[160]),/* "x509Crl" */
 };
 
-static ASN1_OBJECT *ln_objs[NUM_LN]={
+const static ASN1_OBJECT *ln_objs[NUM_LN]={
 &(nid_objs[363]),/* "AD Time Stamping" */
 &(nid_objs[368]),/* "Acceptable OCSP Responses" */
 &(nid_objs[177]),/* "Authority Information Access" */
@@ -1887,7 +1887,7 @@ static ASN1_OBJECT *ln_objs[NUM_LN]={
 &(nid_objs[125]),/* "zlib compression" */
 };
 
-static ASN1_OBJECT *obj_objs[NUM_OBJ]={
+const static ASN1_OBJECT *obj_objs[NUM_OBJ]={
 &(nid_objs[ 0]),/* OBJ_undef                        0 */
 &(nid_objs[181]),/* OBJ_iso                          1 */
 &(nid_objs[182]),/* OBJ_member_body                  1 2 */

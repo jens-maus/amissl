@@ -68,13 +68,17 @@
 #ifndef MSDOS
 #  ifndef WIN32
 #   ifndef VXWORKS
-#    if !defined(VMS) || defined(__DECC)
+#    if (!defined(VMS) || defined(__DECC)) && !defined(AMIGA)
 #      define TIMES
 #    endif
 #   endif
 #  endif
 #endif
 
+#if defined(AMIGA)
+#define CLOCK
+#endif
+ 
 #ifndef _IRIX
 #  include <time.h>
 #endif
@@ -97,7 +101,7 @@
 #include <sys/param.h>
 #endif
 
-#if !defined(TIMES) && !defined(VXWORKS)
+#if !defined(TIMES) && !defined(VXWORKS) && !defined(CLOCK)
 #include <sys/timeb.h>
 #endif
 
@@ -122,6 +126,8 @@ typedef struct ms_tm
 	{
 #ifdef TIMES
 	struct tms ms_tms;
+#elif defined(CLOCK)
+	clock_t ms_clock;
 #else
 #  ifdef WIN32
 	HANDLE thread_id;
@@ -165,6 +171,8 @@ void ms_time_get(char *a)
 
 #ifdef TIMES
 	times(&tm->ms_tms);
+#elif defined(CLOCK)
+	tm->ms_clock = clock();
 #else
 #  ifdef WIN32
 	GetThreadTimes(tm->thread_id,&tmpa,&tmpb,&tmpc,&(tm->ms_win32));
@@ -186,6 +194,8 @@ double ms_time_diff(char *ap, char *bp)
 
 #ifdef TIMES
 	ret=(b->ms_tms.tms_utime-a->ms_tms.tms_utime)/HZ;
+#elif defined(CLOCK)
+	ret=((double)(b->ms_clock - a->ms_clock))/CLOCKS_PER_SEC;
 #else
 # ifdef WIN32
 	{
@@ -223,6 +233,8 @@ int ms_time_cmp(char *ap, char *bp)
 
 #ifdef TIMES
 	d=(b->ms_tms.tms_utime-a->ms_tms.tms_utime)/HZ;
+#elif defined(CLOCK)
+	d = ((double)(b->ms_clock - a->ms_clock))/CLOCKS_PER_SEC;
 #else
 # ifdef WIN32
 	d =(b->ms_win32.dwHighDateTime&0x000fffff)*10+b->ms_win32.dwLowDateTime/1e7;

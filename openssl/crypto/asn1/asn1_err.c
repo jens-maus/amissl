@@ -64,7 +64,7 @@
 
 /* BEGIN ERROR CODES */
 #ifndef NO_ERR
-static ERR_STRING_DATA ASN1_str_functs[]=
+const static ERR_STRING_DATA ASN1_str_functs[]=
 	{
 {ERR_PACK(0,ASN1_F_A2D_ASN1_OBJECT,0),	"a2d_ASN1_OBJECT"},
 {ERR_PACK(0,ASN1_F_A2I_ASN1_ENUMERATED,0),	"a2i_ASN1_ENUMERATED"},
@@ -262,7 +262,7 @@ static ERR_STRING_DATA ASN1_str_functs[]=
 {0,NULL}
 	};
 
-static ERR_STRING_DATA ASN1_str_reasons[]=
+const static ERR_STRING_DATA ASN1_str_reasons[]=
 	{
 {ASN1_R_BAD_CLASS                        ,"bad class"},
 {ASN1_R_BAD_OBJECT_HEADER                ,"bad object header"},
@@ -344,8 +344,8 @@ void ERR_load_ASN1_strings(void)
 		{
 		init=0;
 #ifndef NO_ERR
-		ERR_load_strings(ERR_LIB_ASN1,ASN1_str_functs);
-		ERR_load_strings(ERR_LIB_ASN1,ASN1_str_reasons);
+		ERR_load_strings(ERR_LIB_ASN1,(ERR_STRING_DATA *)ASN1_str_functs);
+		ERR_load_strings(ERR_LIB_ASN1,(ERR_STRING_DATA *)ASN1_str_reasons);
 #endif
 
 		}

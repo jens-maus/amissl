@@ -710,19 +710,19 @@ int RAND_poll(void)
 		setvbuf(fh, NULL, _IONBF, 0);
 		n=fread((unsigned char *)tmpbuf,1,ENTROPY_NEEDED,fh);
 		fclose(fh);
-		RAND_add(tmpbuf,sizeof tmpbuf,n);
+		RAND_add(tmpbuf,sizeof tmpbuf,(double)n);
 		memset(tmpbuf,0,n);
 		}
 #endif
 
 	/* put in some default random data, we need more than just this */
 	l=curr_pid;
-	RAND_add(&l,sizeof(l),0);
+	RAND_add(&l,sizeof(l),(double)0);
 	l=getuid();
-	RAND_add(&l,sizeof(l),0);
+	RAND_add(&l,sizeof(l),(double)0);
 
 	l=time(NULL);
-	RAND_add(&l,sizeof(l),0);
+	RAND_add(&l,sizeof(l),(double)0);
 
 #ifdef DEVRANDOM
 	return 1;

@@ -131,7 +131,7 @@ static unsigned long get_error_values(int inc,const char **file,int *line,
 				      const char **data,int *flags);
 static void ERR_STATE_free(ERR_STATE *s);
 #ifndef NO_ERR
-static ERR_STRING_DATA ERR_str_libraries[]=
+const static ERR_STRING_DATA ERR_str_libraries[]=
 	{
 {ERR_PACK(ERR_LIB_NONE,0,0)		,"unknown library"},
 {ERR_PACK(ERR_LIB_SYS,0,0)		,"system library"},
@@ -160,7 +160,7 @@ static ERR_STRING_DATA ERR_str_libraries[]=
 {0,NULL},
 	};
 
-static ERR_STRING_DATA ERR_str_functs[]=
+const static ERR_STRING_DATA ERR_str_functs[]=
 	{
 	{ERR_PACK(0,SYS_F_FOPEN,0),     	"fopen"},
 	{ERR_PACK(0,SYS_F_CONNECT,0),		"connect"},
@@ -177,7 +177,7 @@ static ERR_STRING_DATA ERR_str_functs[]=
 	{0,NULL},
 	};
 
-static ERR_STRING_DATA ERR_str_reasons[]=
+const static ERR_STRING_DATA ERR_str_reasons[]=
 	{
 {ERR_R_FATAL                             ,"fatal"},
 {ERR_R_SYS_LIB				,"system lib"},
@@ -299,9 +299,9 @@ void ERR_load_ERR_strings(void)
 		CRYPTO_w_unlock(CRYPTO_LOCK_ERR);
 
 #ifndef NO_ERR
-		ERR_load_strings(0,ERR_str_libraries);
-		ERR_load_strings(0,ERR_str_reasons);
-		ERR_load_strings(ERR_LIB_SYS,ERR_str_functs);
+		ERR_load_strings(0,(ERR_STRING_DATA *)ERR_str_libraries);
+		ERR_load_strings(0,(ERR_STRING_DATA *)ERR_str_reasons);
+		ERR_load_strings(ERR_LIB_SYS,(ERR_STRING_DATA *)ERR_str_functs);
 		build_SYS_str_reasons();
 		ERR_load_strings(ERR_LIB_SYS,SYS_str_reasons);
 #endif
@@ -798,3 +798,45 @@ err:
 	va_end(args);
 	}
 
+#ifdef AMISSL
+/* Modified to add tagcall support */
+
+void ERR_add_error_dataA(int num, void *args)
+{
+	int i, n, s;
+	char *str, *p, *a;
+	void **Args = args;
+
+	s = 64;
+	str = OPENSSL_malloc(s + 1);
+	if (str == NULL)
+		return;
+	str[0] = '\0';
+
+	n = 0;
+	for (i = 0; i < num; i++)
+	{
+		a = *Args++;
+
+		/* ignore NULLs, thanks to Bob Beck <beck@obtuse.com> */
+		if (a != NULL)
+		{
+			n += strlen(a);
+			if (n > s)
+			{
+				s = n + 20;
+				p = OPENSSL_realloc(str, s + 1);
+				if (p == NULL)
+				{
+					OPENSSL_free(str);
+					return;
+				}
+				else
+					str = p;
+			}
+			strcat(str, a);
+		}
+	}
+	ERR_set_error_data(str, ERR_TXT_MALLOCED | ERR_TXT_STRING);
+}
+#endif /* AMISSL */

@@ -206,6 +206,7 @@ void *DSA_get_ex_data(DSA *d, int idx)
 	return(CRYPTO_get_ex_data(&d->ex_data,idx));
 	}
 
+#ifndef AMISSL  // This code goes into AmiSSL_spec instead
 #ifndef NO_DH
 DH *DSA_dup_DH(DSA *r)
 	{
@@ -242,4 +243,5 @@ DH *DSA_dup_DH(DSA *r)
 		DH_free(ret);
 	return NULL;
 	}
+#endif
 #endif

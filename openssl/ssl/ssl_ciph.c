@@ -283,12 +283,21 @@ static unsigned long ssl_cipher_get_disabled(void)
 
 	mask = SSL_kFZA;
 #ifdef NO_RSA
+#ifdef AMISSL
+	if(!RSABase)
+#endif
 	mask |= SSL_aRSA|SSL_kRSA;
 #endif
 #ifdef NO_DSA
+#ifdef AMISSL
+	if(!DSABase)
+#endif
 	mask |= SSL_aDSS;
 #endif
 #ifdef NO_DH
+#ifdef AMISSL
+	if(!DHBase)
+#endif
 	mask |= SSL_kDHr|SSL_kDHd|SSL_kEDH|SSL_aDH;
 #endif
 
@@ -1069,3 +1078,129 @@ int SSL_COMP_add_compression_method(int id, COMP_METHOD *cm)
 		return(1);
 	}
 
+
+#ifdef AMISSL
+
+const char *SSL_CIPHER_get_mac(SSL_CIPHER *cipher)
+	{
+
+	switch (cipher->algorithms&SSL_MAC_MASK)
+		{
+	case SSL_MD5:
+		return "MD5";
+		break;
+	case SSL_SHA1:
+		return "SHA1";
+		break;
+	default:
+		return "unknown";
+		break;
+		}
+	}
+
+const char *SSL_CIPHER_get_encryption(SSL_CIPHER *cipher)
+	{
+	int is_export,kl;
+	unsigned long alg,alg2;
+	
+	alg=cipher->algorithms;
+	alg2=cipher->algorithm2;
+
+	is_export=SSL_C_IS_EXPORT(cipher);
+	kl=SSL_C_EXPORT_KEYLENGTH(cipher);
+
+	switch (alg&SSL_ENC_MASK)
+		{
+	case SSL_DES:
+		return (is_export && kl == 5)?"DES(40)":"DES(56)";
+		break;
+	case SSL_3DES:
+		return "3DES(168)";
+		break;
+	case SSL_RC4:
+		return is_export?(kl == 5 ? "RC4(40)" : "RC4(56)")
+		  :((alg2&SSL2_CF_8_BYTE_ENC)?"RC4(64)":"RC4(128)");
+		break;
+	case SSL_RC2:
+		return is_export?(kl == 5 ? "RC2(40)" : "RC2(56)"):"RC2(128)";
+		break;
+	case SSL_IDEA:
+		return "IDEA(128)";
+		break;
+	case SSL_eFZA:
+		return "Fortezza";
+		break;
+	case SSL_eNULL:
+		return "None";
+		break;
+	default:
+		return "unknown";
+		break;
+		}
+
+	}
+
+const char *SSL_CIPHER_get_authentication(SSL_CIPHER *cipher)
+	{
+	switch (cipher->algorithms&SSL_AUTH_MASK)
+		{
+	case SSL_aRSA:
+		return "RSA";
+		break;
+	case SSL_aDSS:
+		return "DSS";
+		break;
+	case SSL_aDH:
+		return "DH";
+		break;
+	case SSL_aFZA:
+	case SSL_aNULL:
+		return "None";
+		break;
+	default:
+		return "unknown";
+		break;
+		}
+
+	}
+
+const char *SSL_CIPHER_get_key_exchange(SSL_CIPHER *cipher)
+	{
+	int is_export,pkl;
+	
+	is_export=SSL_C_IS_EXPORT(cipher);
+	pkl=SSL_C_EXPORT_PKEYLENGTH(cipher);
+
+
+	switch (cipher->algorithms&SSL_MKEY_MASK)
+		{
+	case SSL_kRSA:
+		return is_export?(pkl == 512 ? "RSA(512)" : "RSA(1024)"):"RSA";
+		break;
+	case SSL_kDHr:
+		return "DH/RSA";
+		break;
+	case SSL_kDHd:
+		return "DH/DSS";
+		break;
+	case SSL_kFZA:
+		return "Fortezza";
+		break;
+	case SSL_kEDH:
+		return is_export?(pkl == 512 ? "DH(512)" : "DH(1024)"):"DH";
+		break;
+	default:
+		return "unknown";
+		}
+
+	}
+
+
+const char *SSL_CIPHER_get_export(SSL_CIPHER *cipher)
+	{
+	return SSL_C_IS_EXPORT(cipher)?" export":"";
+	}
+
+
+
+#endif

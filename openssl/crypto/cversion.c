@@ -80,6 +80,7 @@ const char *SSLeay_version(int t)
 		}
 	if (t == SSLEAY_CFLAGS)
 		{
+#ifndef AMISSL
 #ifdef CFLAGS
 		static char buf[sizeof(CFLAGS)+11];
 
@@ -88,9 +89,13 @@ const char *SSLeay_version(int t)
 #else
 		return("compiler: information not available");
 #endif
+#else
+		return("compiler: information not available");
+#endif /* AMISSL */
 		}
 	if (t == SSLEAY_PLATFORM)
 		{
+#ifndef AMISSL
 #ifdef PLATFORM
 		static char buf[sizeof(PLATFORM)+11];
 
@@ -99,6 +104,9 @@ const char *SSLeay_version(int t)
 #else
 		return("platform: information not available");
 #endif
+#else
+		return("platform: Amiga");
+#endif /* AMISSL */
 		}
 	return("not available");
 	}

@@ -67,6 +67,11 @@
 #define IDEA_DECRYPT	0
 
 #include <openssl/opensslconf.h> /* IDEA_INT */
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #define IDEA_BLOCK	8
 #define IDEA_KEY_LENGTH	16
 

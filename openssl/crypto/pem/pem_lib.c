@@ -80,10 +80,12 @@ static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder,
 				int nid, const EVP_CIPHER *enc,
 				char *kstr, int klen,
 				pem_password_cb *cb, void *u);
+#ifndef NO_FP_API
 static int do_pk8pkey_fp(FILE *bp, EVP_PKEY *x, int isder,
 				int nid, const EVP_CIPHER *enc,
 				char *kstr, int klen,
 				pem_password_cb *cb, void *u);
+#endif
 
 static int def_callback(char *buf, int num, int w, void *key)
 	{
@@ -118,7 +120,9 @@ static int def_callback(char *buf, int num, int w, void *key)
 		j=strlen(buf);
 		if (j < MIN_LENGTH)
 			{
+#if !defined(AMIGA)
 			fprintf(stderr,"phrase is too short, needs to be at least %d chars\n",MIN_LENGTH);
+#endif
 			}
 		else
 			break;
@@ -373,7 +377,7 @@ int PEM_ASN1_write_bio(int (*i2d)(), const char *name, BIO *bp, char *x,
 #endif
 			kstr=(unsigned char *)buf;
 			}
-		RAND_add(data,i,0);/* put in the RSA key. */
+		RAND_add(data,i,(double)0);/* put in the RSA key. */
 		if (RAND_pseudo_bytes(iv,enc->iv_len) < 0) /* Generate a salt */
 			goto err;
 		/* The 'iv' is used as the iv and as a salt.  It is

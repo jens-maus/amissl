@@ -59,7 +59,7 @@
 /* Query the EGD <URL: http://www.lothar.com/tech/crypto/>.
  */
 
-#if defined(WIN32) || defined(VMS) || defined(__VMS)
+#if defined(WIN32) || defined(VMS) || defined(__VMS) || defined(AMISSL)
 int RAND_egd(const char *path)
 	{
 	return(-1);
@@ -71,9 +71,11 @@ int RAND_egd_bytes(const char *path,int bytes)
 	}
 #else
 #include <openssl/opensslconf.h>
-#include OPENSSL_UNISTD
-#include <sys/types.h>
-#include <sys/socket.h>
+#define USE_SOCKETS
+#include "cryptlib.h"
+//#include OPENSSL_UNISTD
+//#include <sys/types.h>
+//#include <sys/socket.h>
 #ifndef NO_SYS_UN_H
 # ifdef VXWORKS
 #   include <streams/un.h>

@@ -696,7 +696,7 @@ int ssl3_pending(SSL *s)
 	if (s->rstate == SSL_ST_READ_BODY)
 		return 0;
 	
-	return (s->s3->rrec.type == SSL3_RT_APPLICATION_DATA) ? s->s3->rrec.length : 0;
+	return (int)((s->s3->rrec.type == SSL3_RT_APPLICATION_DATA) ? s->s3->rrec.length : 0);
 	}
 
 int ssl3_new(SSL *s)

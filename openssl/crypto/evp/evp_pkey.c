@@ -269,7 +269,7 @@ PKCS8_PRIV_KEY_INFO *EVP_PKEY2PKCS8_broken(EVP_PKEY *pkey, int broken)
 		return NULL;
 	}
 	RAND_add(p8->pkey->value.octet_string->data,
-		 p8->pkey->value.octet_string->length, 0);
+		 p8->pkey->value.octet_string->length, (double)0);
 	return p8;
 }
 

@@ -162,7 +162,7 @@ int ssl2_connect(SSL *s)
 	void (*cb)()=NULL;
 	int new_state,state;
 
-	RAND_add(&l,sizeof(l),0);
+	RAND_add(&l,sizeof(l),(double)0);
 	ERR_clear_error();
 	clear_sys_error();
 

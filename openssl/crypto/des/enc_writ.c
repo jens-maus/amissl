@@ -156,7 +156,7 @@ int des_enc_write(int fd, const void *_buf, int len,
 		i=write(fd,(void *)&(outbuf[j]),outnum-j);
 		if (i == -1)
 			{
-#ifdef EINTR
+#if defined(EINTR) && !defined(AMIGA)
 			if (errno == EINTR)
 				i=0;
 			else

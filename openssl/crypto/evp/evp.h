@@ -137,6 +137,10 @@
 
 #include <openssl/objects.h>
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #define EVP_PK_RSA	0x0001
 #define EVP_PK_DSA	0x0002
 #define EVP_PK_DH	0x0004

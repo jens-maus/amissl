@@ -416,7 +416,7 @@ BN_ULONG bn_sub_words(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b, int n)
 		b+=4;
 		r+=4;
 		}
-	return(c);
+	return((BN_ULONG)c);
 	}
 
 #ifdef BN_MUL_COMBA

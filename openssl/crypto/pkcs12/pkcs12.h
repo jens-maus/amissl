@@ -62,6 +62,10 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

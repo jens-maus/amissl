@@ -665,7 +665,7 @@ printf("rec=");
 #ifdef TLS_DEBUG
 {unsigned int z; for (z=0; z<md_size; z++) printf("%02X ",md[z]); printf("\n"); }
 #endif
-	return(md_size);
+	return((int)md_size);
 	}
 
 int tls1_generate_master_secret(SSL *s, unsigned char *out, unsigned char *p,

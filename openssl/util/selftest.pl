@@ -57,7 +57,7 @@ chomp $cversion;
 
 if (open(IN,"<CHANGES")) {
     while(<IN>) {
-	if (/\*\) (.{0,55})/ && !/applies to/) {
+	if (/\*\) (.{0,55})/) {
 	    $last=$1;
 	    last;
 	}
