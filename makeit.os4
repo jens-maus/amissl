@@ -1,0 +1,17 @@
+#!/bin/sh
+
+cd openssl
+
+if [ ! -f MINFO ]
+then
+	make files
+fi
+
+perl util/mk1mf.pl no-engine no-krb5 OS4 > Makefile.one
+make -f Makefile.one
+
+cd ..
+
+mkdir -p OS4/AmiSSL
+
+make OUTDIR=OS4/
