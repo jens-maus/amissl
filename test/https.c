@@ -258,7 +258,7 @@ void Cleanup(void)
 	AmiSSLMasterBase = NULL;
 
 #ifdef __amigaos4__
-	DropInterface(ISocket);
+	DropInterface((struct Interface *)ISocket);
 	ISocket = NULL;
 #endif /* __amigaos4__ */
 

@@ -260,7 +260,7 @@ static void cleanup_amissl(void)
 	AmiSSLMasterBase = NULL;
 
 #ifdef __amigaos4__
-	DropInterface(ISocket);
+	DropInterface((struct Interface *)ISocket);
 	ISocket = NULL;
 #endif /* __amigaos4__ */
 
@@ -315,7 +315,7 @@ static void init_amissl(void)
 	if (!is_ok)
 	{
 		cleanup_amissl();
-		OPENSSL_EXIT(1);
+		exit(1);
 	}
 }
 

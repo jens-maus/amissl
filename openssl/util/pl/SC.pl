@@ -24,7 +24,7 @@ $include='IDIR ';
 # EXE linking stuff
 $link='${CC} LINK';
 # either SAS bsearch is fubar'd or SSLeay doesn't like it...
-$lflags='${CFLAG} NOICONS SMALLCODE "LINKOPTS=DEFINE _bsearch=_OBJ_bsearch LIB lib:scm.lib lib:miami.lib AmiSSL:lib/amisslauto.lib AmiSSL:lib/amisslstubs.lib"';
+$lflags='${CFLAG} NOICONS SMALLCODE MATH=STANDARD "LINKOPTS=DEFINE _bsearch=_OBJ_bsearch LIB lib:miami.lib AmiSSL:lib/amisslauto.lib AmiSSL:lib/amisslstubs.lib"';
 $efile='TO ';
 $exep='';
 $ex_libs="";

@@ -11,6 +11,8 @@
 #define TCPIP_Termite 0x04
 #define TCPIP_MLink   0x05
 
+#ifndef NO_MTCP_PROTOS
+
 #ifndef __SASC
 /* SAS-C bug... it doesn't deal with implicit declaration of
    structures correctly (ANSI requires that the parameter list of a
@@ -1121,5 +1123,7 @@ int termite_shutdown(int s, int how);
 	LP3(0xae, int, socket, int, REG(d0,), d0, int, REG(d1,), d1, int, REG(d2,), d2, \
 	, state->SocketBase)
 #endif
+
+#endif /* NO_MTCP_PROTOS */
 
 #endif /* MULTITCP */
