@@ -26,7 +26,7 @@ CBMLIB_CONSTRUCTOR(openintuit)
 	InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE);
     
     AmiSSLBase = libbase2 = OpenAmiSSL();
-	if(AmiSSLMasterBase == NULL)
+	if(AmiSSLBase == NULL)
 	{
 		__autoopenfail("openamissl");
 		return 1;
