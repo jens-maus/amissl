@@ -68,7 +68,7 @@ static void *v2i_EXTENDED_KEY_USAGE(X509V3_EXT_METHOD *method,
 static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(X509V3_EXT_METHOD *method,
 		void *eku, STACK_OF(CONF_VALUE) *extlist);
 
-X509V3_EXT_METHOD v3_ext_ku = {
+X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ext_ku = {
 	NID_ext_key_usage, 0,
 	ASN1_ITEM_ref(EXTENDED_KEY_USAGE),
 	0,0,0,0,
