@@ -128,17 +128,28 @@
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 #include <internal/amissl_compiler.h>
+#ifdef __amigaos4__
+#include <proto/socket.h>
+#else
 #include <multitcp.h>
+#endif
 
 struct Library *AmiSSLMasterBase;
 struct Library *AmiSSLBase;
+#ifdef __amigaos4__
+struct AmiSSLMasterIFace *IAmiSSLMaster;
+struct AmiSSLIFace *IAmiSSL;
+struct Library *SocketBase;
+struct SocketIFace *ISocket;
+#endif
+
 APTR stack;
 
 unsigned long __stack_size = 131072;
 LONG __stack = 131072;
 
-LONG Init(void);
-void Cleanup(void);
+static LONG Init(void);
+static void Cleanup(void);
 
 #include <amissl/bio.h>
 #include <amissl/crypto.h>
@@ -1721,11 +1732,22 @@ static LONG Init(void)
 {
 	LONG err = 1; /* Default: error */
 
+#ifdef __amigaos4__
+	if ( (SocketBase = OpenLibrary("bsdsocket.library",0))
+		&& (ISocket = (struct SocketIFace *)GetInterface(SocketBase,"main",1,NULL))
+	    && (AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 1))
+	    && (IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL))
+	    && InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE)
+	    && (AmiSSLBase = OpenAmiSSL())
+	    && (IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase,"main",1,NULL))
+	    && !InitAmiSSL(AmiSSL_ISocket, ISocket, TAG_DONE))
+#else
 	if ((stack = MTCP_InitTCPIP(NULL))
 	    && (AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 1))
 	    && InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE)
 	    && (AmiSSLBase = OpenAmiSSL())
 	    && !InitAmiSSL(AmiSSL_TCPStack, stack, TAG_DONE))
+#endif
 		err = 0;
 
 	return(err);
@@ -1736,19 +1758,46 @@ static void Cleanup(void)
 	if (AmiSSLBase)
 	{
 		CleanupAmiSSL(TAG_DONE);
+#ifdef __amigaos4__
+		if(IAmiSSL)
+		{
+			DropInterface((struct Interface *)IAmiSSL);
+			IAmiSSL = NULL;
+		}
+#endif
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
 
 	if (AmiSSLMasterBase)
 	{
+#ifdef __amigaos4__
+		if(IAmiSSLMaster)
+		{
+			DropInterface((struct Interface *)IAmiSSLMaster);
+			IAmiSSLMaster = NULL;
+		}
+#endif
 		CloseLibrary(AmiSSLMasterBase);
 		AmiSSLMasterBase = NULL;
 	}
 
+#ifdef __amigaos4__
+	if(SocketBase)
+	{
+		if(ISocket)
+		{
+			DropInterface((struct Interface *)ISocket);
+			ISocket = NULL;
+		}
+		CloseLibrary(SocketBase);
+		SocketBase = NULL;
+	}
+#else
 	if (stack)
 	{
 		MTCP_DoneTCPIP(stack);
 		stack = NULL;
 	}
+#endif
 }

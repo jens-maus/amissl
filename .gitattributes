@@ -2145,6 +2145,7 @@ src/amisslmaster_library.c eol=lf
 src/amisslmaster_library_os4.c eol=lf
 src/amisslmaster_vectors.c eol=lf
 src/debug.h eol=lf
+test/Makefile eol=lf
 test/SMakefile eol=lf
 test/https.c eol=lf
 test/md2test.c eol=lf
