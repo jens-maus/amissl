@@ -1,52 +1,79 @@
-void __regargs __autoopenfail(char *);
-
-#include <constructor.h>
 #include <proto/exec.h> 
+#include <proto/dos.h>
 #include <proto/amisslmaster.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 
 #define AMISSLMASTER_VER 3
 
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+extern struct WBStartup *_WBenchMsg;
+extern char __stdiowin[];
+
+static void fail(const char *message)
+{
+	struct DOSBase *DOSBase;
+	BPTR fh;
+
+	if (DOSBase = (struct DOSBase *)OpenLibrary("dos.library", 36))
+	{
+		if (!_WBenchMsg)
+			fh = Output();
+		else
+			fh = Open(__stdiowin, MODE_NEWFILE);
+
+		if (fh)
+		{
+			FPrintf(fh, message);
+
+			if (_WBenchMsg)
+			{
+				Delay(250);
+				Close(fh);
+			}
+		}
+	}
+}
+
+extern struct Library *SocketBase;
 struct Library * AmiSSLBase;
 struct Library * AmiSSLMasterBase;
 
 static void *libbase1;
 static void *libbase2;
 
-CBMLIB_CONSTRUCTOR(openintuit)
+int __stdargs _STI_250_openamissl(void)
 {
-	AmiSSLMasterBase = libbase1 = OpenLibrary("amisslmaster.library", AMISSLMASTER_VER);
-	if(AmiSSLMasterBase == NULL)
-	{
-		__autoopenfail("amisslmaster.library");
-		return 1;
-    }
+	int ret = 1; /* Error */
 
-	InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE);
-    
-    AmiSSLBase = libbase2 = OpenAmiSSL();
-	if(AmiSSLBase == NULL)
-	{
-		__autoopenfail("openamissl");
-		return 1;
-    }
-	InitAmiSSL(TAG_DONE); // FIXME Setup socket base here
+	if (!(libbase1 = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_VER)))
+		fail("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_VER) "\n");
+	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+		fail("Couldn't initialize amisslmaster.library!\n");
+	else if (!(libbase2 = AmiSSLBase = OpenAmiSSL()))
+		fail("Couldn't open AmiSSL!\n");
+	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase, TAG_DONE))
+		fail("Couldn't initialize AmiSSL!\n");
+	else
+		ret = 0;
 
-	return 0;
+	return(ret);
 }
 
-CBMLIB_DESTRUCTOR(closeintuit)
+void __stdargs _STD_250_openamissl(void)
 {
-   if (libbase2)
-   {
-   		CleanupAmiSSL(TAG_DONE);
-   		CloseAmiSSL();
+	if (libbase2)
+	{
+		CleanupAmiSSL(TAG_DONE);
+		CloseAmiSSL();
 		libbase2 = AmiSSLBase = NULL;
-   }
-   if (libbase1)
-   {
-      CloseLibrary((struct Library *)libbase1);
-      libbase1 = AmiSSLMasterBase = NULL;
-   }
+	}
+
+	if (libbase1)
+	{
+		CloseLibrary(libbase1);
+		libbase1 = AmiSSLMasterBase = NULL;
+	}
 }
