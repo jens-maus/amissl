@@ -251,8 +251,8 @@ $cflags.=" " . $define . "OPENSSL_NO_HW"   if $no_hw;
 
 $ex_libs="$l_flags$ex_libs" if ($l_flags ne "");
 
-%shlib_ex_cflags=("SSL" => " -DOPENSSL_BUILD_SHLIBSSL",
-		  "CRYPTO" => " -DOPENSSL_BUILD_SHLIBCRYPTO");
+%shlib_ex_cflags=("SSL" => $define . "OPENSSL_BUILD_SHLIBSSL",
+		  "CRYPTO" => $define . "OPENSSL_BUILD_SHLIBCRYPTO");
 
 if ($msdos)
 	{
@@ -813,41 +813,45 @@ sub bname
 	return($ret);
 	}
 
-sub is_cipherlib
+sub get_lib_name
 {
-	my ($test) = @_;
-	my $needed = "";
+	my %cipher_dirs = ("crypto/aes", 1,  "crypto/bf", 1, "crypto/cast", 1,
+	                   "crypto/des", 1, "crypto/dh", 1, "crypto/dsa", 1,
+	                   "crypto/idea", 1, "crypto/md2", 1, "crypto/md4", 1,
+	                   "crypto/md5", 1, "crypto/mdc2", 1, "crypto/rc2", 1,
+	                   "crypto/rc4", 1, "crypto/rc5", 1, "crypto/ripemd", 1,
+	                   "crypto/rsa", 1, "crypto/sha", 1, "rsaref", 1);
+	my %main_dirs = ("crypto", 1, "crypto/asn1", 1, "crypto/bio", 1, "crypto/bn", 1,
+	                 "crypto/buffer", 1, "crypto/comp", 1, "crypto/conf", 1,
+	                 "crypto/dso", 1, "crypto/ec", 1, "crypto/engine", 1,
+	                 "crypto/err", 1, "crypto/evp", 1, "crypto/hmac", 1,
+	                 "crypto/krb5", 1, "crypto/lhash", 1, "crypto/objects", 1,
+	                 "crypto/ocsp", 1, "crypto/pem", 1, "crypto/pkcs12", 1,
+	                 "crypto/pkcs7", 1, "crypto/rand", 1, "crypto/stack", 1,
+	                 "crypto/txt_db", 1, "crypto/ui", 1, "crypto/x509", 1,
+	                 "crypto/x509v3", 1, "ssl", 1);
+	my ($dir) = @_;
+	my $lib_name = "";
 
-	if (($test eq "crypto/aes") || ($test eq "crypto/bf") || ($test eq "crypto/cast") || ($test eq "crypto/des")
-		|| ($test eq "crypto/idea") || ($test eq "crypto/md2") || ($test eq "crypto/md4") || ($test eq "crypto/md5")
-		|| ($test eq "crypto/mdc2") || ($test eq "crypto/sha") || ($test eq "crypto/rc2")
-		|| ($test eq "crypto/rc4") || ($test eq "crypto/rc5") || ($test eq "crypto/ripemd")
-		|| ($test eq "crypto/rsa") || ($test eq "crypto/dh") || ($test eq "crypto/dsa")
-		|| ($test eq "rsaref"))
+	if (defined($main_dirs{$dir}))
 	{
-		($needed) = ($test =~ /\/(.*)/);
-		$needed =~ tr/a-z/A-Z/;
-		if($test eq "rsaref")
+		$lib_name = "MAIN";
+	}
+	elsif (defined($cipher_dirs{$dir}))
+	{
+		if ($dir eq "rsaref")
 		{
-			$needed = "RSA";
+			$lib_name = "RSA"
+		}
+		else
+		{
+			($lib_name) = ($dir =~ /\/(.*)/);
+			$lib_name = uc($lib_name);
 		}
 	}
-	elsif (($test eq "crypto") || ($test eq "crypto/asn1") || ($test eq "crypto/bio")
-		 || ($test eq "crypto/bn") || ($test eq "crypto/buffer") || ($test eq "crypto/comp")
-		 || ($test eq "crypto/conf") || ($test eq "crypto/dso")
-		 || ($test eq "crypto/err") || ($test eq "crypto/evp") || ($test eq "crypto/hmac")
-		 || ($test eq "crypto/lhash") || ($test eq "crypto/objects") || ($test eq "crypto/pem")
-		 || ($test eq "crypto/pkcs12") || ($test eq "crypto/pkcs7") || ($test eq "crypto/rand")
-		 || ($test eq "crypto/stack") || ($test eq "crypto/txt_db")
-		 || ($test eq "crypto/x509") || ($test eq "crypto/x509v3")
-		 || ($test eq "ssl"))
-	{
-		$needed = "MAIN";
-	}
 
-	return($needed);
+	return($lib_name);
 }
-
 
 ##############################################################
 # do a rule for each file that says 'compile' to new direcory
@@ -864,7 +868,7 @@ sub do_compile_rule
 		if($ex =~ /LIB/)
 		{
 			($dir) = ($_ =~ /(.*)\//);
-			$libmode = is_cipherlib($dir);
+			$libmode = &get_lib_name($dir);
 			$ret.=&cc_compile_target("$to${o}$n$obj","${_}.c","DEF $libmode\_LIB_COMPILE$ex");
 		}
 		else
