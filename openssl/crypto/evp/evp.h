@@ -171,10 +171,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 /* Type needs to be a bit field
  * Sub-type needs to be for variations on the method, as in, can it do
  * arbitrary encryption.... */

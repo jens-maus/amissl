@@ -62,13 +62,8 @@
 #include "ssl_locl.h"
 
 #ifdef AMISSL
-extern struct Library *MD2Base;
-extern struct Library *MD5Base;
-extern struct Library *RC2Base;
-extern struct Library *RC4Base;
-extern struct Library *RIPEMDBase;
-extern struct Library *SHABase;
-extern struct Library *AESBase;
+#include <libraries/amisslmaster.h>
+long IsCipherAvailable(long cipher);
 #endif
 
 int SSL_library_init(void)
@@ -76,7 +71,7 @@ int SSL_library_init(void)
 
 #ifndef OPENSSL_NO_DES
 #ifdef AMISSL
-	if (DESBase)
+	if (IsCipherAvailable(CIPHER_DES))
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_des_cbc());
@@ -87,7 +82,7 @@ int SSL_library_init(void)
 #endif
 #ifndef OPENSSL_NO_IDEA
 #ifdef AMISSL
-	if (IDEABase)
+	if (IsCipherAvailable(CIPHER_IDEA))
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_idea_cbc());
@@ -97,7 +92,7 @@ int SSL_library_init(void)
 #endif
 #ifndef OPENSSL_NO_RC4
 #ifdef AMISSL
-	if (RC4Base)
+	if (IsCipherAvailable(CIPHER_RC4))
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_rc4());
@@ -107,7 +102,7 @@ int SSL_library_init(void)
 #endif  
 #ifndef OPENSSL_NO_RC2
 #ifdef AMISSL
-	if (RC2Base)
+	if (IsCipherAvailable(CIPHER_RC2))
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_rc2_cbc());
@@ -117,7 +112,7 @@ int SSL_library_init(void)
 #endif
 #ifndef OPENSSL_NO_AES
 #ifdef AMISSL
-	if (AESBase)
+	if (IsCipherAvailable(CIPHER_AES))
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_aes_128_cbc());
@@ -128,7 +123,7 @@ int SSL_library_init(void)
 #endif /* AMISSL */
 #ifndef OPENSSL_NO_MD2
 #ifdef AMISSL
-	if(MD2Base)
+	if(IsCipherAvailable(CIPHER_MD2))
 	{
 #endif
 	EVP_add_digest(EVP_md2());
@@ -138,7 +133,7 @@ int SSL_library_init(void)
 #endif
 #ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
-	if(MD5Base)
+	if(IsCipherAvailable(CIPHER_MD5))
 	{
 #endif
 	EVP_add_digest(EVP_md5());
@@ -150,7 +145,7 @@ int SSL_library_init(void)
 #endif
 #if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_RSA)
 #ifdef AMISSL
-	if(SHABase && RSABase)
+	if(IsCipherAvailable(CIPHER_SHA) && IsCipherAvailable(CIPHER_RSA))
 	{
 #endif
 	EVP_add_digest(EVP_sha1()); /* RSA with sha1 */
@@ -162,7 +157,7 @@ int SSL_library_init(void)
 #endif
 #if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_DSA)
 #ifdef AMISSL
-	if(SHABase && DSABase)
+	if(IsCipherAvailable(CIPHER_SHA) && IsCipherAvailable(CIPHER_DSA))
 	{
 #endif
 	EVP_add_digest(EVP_dss1()); /* DSA with sha1 */

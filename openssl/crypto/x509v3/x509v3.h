@@ -66,10 +66,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 /* Forward reference */
 struct v3_ext_method;
 struct v3_ext_ctx;

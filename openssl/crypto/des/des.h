@@ -75,10 +75,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 typedef unsigned char DES_cblock[8];
 typedef /* const */ unsigned char const_DES_cblock[8];
 /* With "const", gcc 2.8.1 on Solaris thinks that DES_cblock *

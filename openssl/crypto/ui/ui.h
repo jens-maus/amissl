@@ -66,10 +66,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 /* The UI type is a holder for a specific user interface session.  It can
    contain an illimited number of informational or error strings as well
    as things to prompt for, both passwords (noecho mode) and others (echo

@@ -5,7 +5,7 @@
 #include <exec/nodes.h>
 #include <exec/lists.h>
 #include "scmt.h"
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 int __fflush(FILE *stream) /* fflush exactly one file */
 {

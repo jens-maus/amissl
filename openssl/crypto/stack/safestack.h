@@ -57,10 +57,6 @@
 
 #include <openssl/stack.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef DEBUG_SAFESTACK
 
 #define STACK_OF(type) struct stack_st_##type

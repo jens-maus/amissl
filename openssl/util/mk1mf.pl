@@ -671,6 +671,7 @@ sub var_add
 	return("") if $no_rsa  && $dir =~ /^rsaref/;
 	return("") if $no_dsa  && $dir =~ /\/dsa/;
 	return("") if $no_dh   && $dir =~ /\/dh/;
+	return("") if $no_ec   && $dir =~ /\/ec/;
 	if ($no_des && $dir =~ /\/des/)
 		{
 		if ($val =~ /read_pwd/)
@@ -813,46 +814,6 @@ sub bname
 	return($ret);
 	}
 
-sub get_lib_name
-{
-	my %cipher_dirs = ("crypto/aes", 1,  "crypto/bf", 1, "crypto/cast", 1,
-	                   "crypto/des", 1, "crypto/dh", 1, "crypto/dsa", 1,
-	                   "crypto/idea", 1, "crypto/md2", 1, "crypto/md4", 1,
-	                   "crypto/md5", 1, "crypto/mdc2", 1, "crypto/rc2", 1,
-	                   "crypto/rc4", 1, "crypto/rc5", 1, "crypto/ripemd", 1,
-	                   "crypto/rsa", 1, "crypto/sha", 1, "rsaref", 1);
-	my %main_dirs = ("crypto", 1, "crypto/asn1", 1, "crypto/bio", 1, "crypto/bn", 1,
-	                 "crypto/buffer", 1, "crypto/comp", 1, "crypto/conf", 1,
-	                 "crypto/dso", 1, "crypto/ec", 1, "crypto/engine", 1,
-	                 "crypto/err", 1, "crypto/evp", 1, "crypto/hmac", 1,
-	                 "crypto/krb5", 1, "crypto/lhash", 1, "crypto/objects", 1,
-	                 "crypto/ocsp", 1, "crypto/pem", 1, "crypto/pkcs12", 1,
-	                 "crypto/pkcs7", 1, "crypto/rand", 1, "crypto/stack", 1,
-	                 "crypto/txt_db", 1, "crypto/ui", 1, "crypto/x509", 1,
-	                 "crypto/x509v3", 1, "ssl", 1);
-	my ($dir) = @_;
-	my $lib_name = "";
-
-	if (defined($main_dirs{$dir}))
-	{
-		$lib_name = "MAIN";
-	}
-	elsif (defined($cipher_dirs{$dir}))
-	{
-		if ($dir eq "rsaref")
-		{
-			$lib_name = "RSA"
-		}
-		else
-		{
-			($lib_name) = ($dir =~ /\/(.*)/);
-			$lib_name = uc($lib_name);
-		}
-	}
-
-	return($lib_name);
-}
-
 ##############################################################
 # do a rule for each file that says 'compile' to new direcory
 # compile the files in '$files' into $to
@@ -865,16 +826,7 @@ sub do_compile_rule
 	foreach (split(/\s+/,$files))
 		{
 		$n=&bname($_);
-		if($ex =~ /LIB/)
-		{
-			($dir) = ($_ =~ /(.*)\//);
-			$libmode = &get_lib_name($dir);
-			$ret.=&cc_compile_target("$to${o}$n$obj","${_}.c","DEF $libmode\_LIB_COMPILE$ex");
-		}
-		else
-		{
-			$ret.=&cc_compile_target("$to${o}$n$obj","${_}.c",$ex)
-		}
+		$ret.=&cc_compile_target("$to${o}$n$obj","${_}.c",$ex)
 		}
 	return($ret);
 	}

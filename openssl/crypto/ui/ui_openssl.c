@@ -680,7 +680,7 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 
 /* !?! Temporary functions, just to make this compile cleanly */
 
-static int open_window(UI *ui)
+static int create_window(UI *ui)
 {
 	return(1);
 }
@@ -708,7 +708,7 @@ static int close_window(UI *ui)
 static UI_METHOD ui_openssl =
 {
 	"AmiSSL user interface",
-	open_window,
+	create_window,
 	write_string,
 	show_window,
 	read_string,

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <dos/exall.h>
 #include <dos/dosextens.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 
 typedef struct _mydirdesc {

@@ -68,10 +68,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef OPENSSL_SYS_VMS
 #undef BN_LLONG /* experimental, so far... */
 #endif
@@ -252,6 +248,8 @@ typedef struct bn_blinding_st
 	BIGNUM *A;
 	BIGNUM *Ai;
 	BIGNUM *mod; /* just a reference */
+	unsigned long thread_id; /* added in OpenSSL 0.9.6j and 0.9.7b;
+				  * used only by crypto/rsa/rsa_eay.c, rsa_lib.c */
 	} BN_BLINDING;
 
 /* Used for montgomery multiplication */

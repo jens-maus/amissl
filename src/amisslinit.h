@@ -1,6 +1,9 @@
+/* Note: This structure can only grow, it can't be changed since
+ * it is shared between amisslmaster.library and amissl.library,
+ * which might be different versions!
+ */
 struct AmiSSLInitStruct
 {
-	struct Library *AESBase;
 	struct Library *BlowFishBase;
 	struct Library *CASTBase;
 	struct Library *DESBase;

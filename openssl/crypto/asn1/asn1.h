@@ -81,10 +81,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define V_ASN1_UNIVERSAL		0x00
 #define	V_ASN1_APPLICATION		0x40
 #define V_ASN1_CONTEXT_SPECIFIC		0x80
@@ -136,7 +132,7 @@ extern "C" {
 #define B_ASN1_NUMERICSTRING	0x0001
 #define B_ASN1_PRINTABLESTRING	0x0002
 #define B_ASN1_T61STRING	0x0004
-#define B_ASN1_TELETEXSTRING	0x0008
+#define B_ASN1_TELETEXSTRING	0x0004
 #define B_ASN1_VIDEOTEXSTRING	0x0008
 #define B_ASN1_IA5STRING	0x0010
 #define B_ASN1_GRAPHICSTRING	0x0020

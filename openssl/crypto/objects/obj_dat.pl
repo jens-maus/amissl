@@ -235,11 +235,11 @@ printf OUT "#define NUM_SN %d\n",$#sn+1;
 printf OUT "#define NUM_LN %d\n",$#ln+1;
 printf OUT "#define NUM_OBJ %d\n\n",$#ob+1;
 
-printf OUT "const static unsigned char lvalues[%d]={\n",$lvalues+1;
+printf OUT "#ifndef AMISSL\nstatic unsigned char lvalues[%d]=\n#else /* AMISSL */\n#include <internal/compiler.h>\n\nstatic const unsigned char FAR lvalues[%d]=\n#endif /* !AMISSL */\n{\n",$lvalues+1,$lvalues+1;
 print OUT @lvalues;
 print OUT "};\n\n";
 
-printf OUT "const static ASN1_OBJECT nid_objs[NUM_NID]={\n";
+printf OUT "#ifndef AMISSL\nstatic ASN1_OBJECT nid_objs[NUM_NID]=\n#else /* AMISSL */\nstatic const ASN1_OBJECT FAR nid_objs[NUM_NID]=\n#endif /* !AMISSL */\n{\n";
 foreach (@out)
 	{
 	if (length($_) > 75)
@@ -263,15 +263,15 @@ foreach (@out)
 	}
 print  OUT "};\n\n";
 
-printf OUT "const static ASN1_OBJECT *sn_objs[NUM_SN]={\n";
+printf OUT "#ifndef AMISSL\nstatic ASN1_OBJECT *sn_objs[NUM_SN]=\n#else /* AMISSL */\nstatic const ASN1_OBJECT * FAR sn_objs[NUM_SN]=\n#endif /* !AMISSL */\n{\n";
 print  OUT @sn;
 print  OUT "};\n\n";
 
-printf OUT "const static ASN1_OBJECT *ln_objs[NUM_LN]={\n";
+printf OUT "#ifndef AMISSL\nstatic ASN1_OBJECT *ln_objs[NUM_LN]=\n#else /* AMISSL */\nstatic const ASN1_OBJECT * FAR ln_objs[NUM_LN]=\n#endif /* !AMISSL */\n{\n";
 print  OUT @ln;
 print  OUT "};\n\n";
 
-printf OUT "const static ASN1_OBJECT *obj_objs[NUM_OBJ]={\n";
+printf OUT "#ifndef AMISSL\nstatic ASN1_OBJECT *obj_objs[NUM_OBJ]=\n#else /* AMISSL */\nstatic const ASN1_OBJECT * FAR obj_objs[NUM_OBJ]=\n#endif /* !AMISSL */\n{\n";
 print  OUT @ob;
 print  OUT "};\n\n";
 

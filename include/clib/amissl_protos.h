@@ -11,5 +11,6 @@ long InitAmiSSLA(struct TagItem *tagList);
 long InitAmiSSL(Tag tag1, ...);
 long CleanupAmiSSLA(struct TagItem *tagList);
 long CleanupAmiSSL(Tag tag1, ...);
+long IsCipherAvailable(long cipher);
 
-#endif /* CLIB_AMISSL_PROTOS_H */
+#endif /* !CLIB_AMISSL_PROTOS_H */

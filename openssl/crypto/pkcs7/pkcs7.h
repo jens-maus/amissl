@@ -70,10 +70,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef OPENSSL_SYS_WIN32
 /* Under Win32 thes are defined in wincrypt.h */
 #undef PKCS7_ISSUER_AND_SERIAL
@@ -264,6 +260,8 @@ DECLARE_PKCS12_STACK_OF(PKCS7)
 #define PKCS7_BINARY		0x80
 #define PKCS7_NOATTR		0x100
 #define	PKCS7_NOSMIMECAP	0x200
+#define PKCS7_NOOLDMIMETYPE	0x400
+#define PKCS7_CRLFEOL		0x800
 
 /* Flags: for compatibility with older code */
 

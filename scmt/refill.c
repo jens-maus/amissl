@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 #if 0
 static int lflush(FILE *fp)

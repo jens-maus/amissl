@@ -19,7 +19,7 @@
 #include "scmt.h"
 #include <proto/dos.h>
 #include <proto/utility.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 /*
  * Conversion table from Amiga filetypes to Unix filetypes

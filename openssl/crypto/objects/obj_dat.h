@@ -67,7 +67,14 @@
 #define NUM_LN 643
 #define NUM_OBJ 617
 
-const static unsigned char lvalues[4455]={
+#ifndef AMISSL
+static unsigned char lvalues[4455]=
+#else /* AMISSL */
+#include <internal/compiler.h>
+
+static const unsigned char FAR lvalues[4455]=
+#endif /* !AMISSL */
+{
 0x00,                                        /* [  0] OBJ_undef */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,               /* [  1] OBJ_rsadsi */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,          /* [  7] OBJ_pkcs */
@@ -687,7 +694,12 @@ const static unsigned char lvalues[4455]={
 0x2B,0x06,0x01,0x04,0x01,0x82,0x37,0x14,0x02,0x03,/* [4444] OBJ_ms_upn */
 };
 
-const static ASN1_OBJECT nid_objs[NUM_NID]={
+#ifndef AMISSL
+static ASN1_OBJECT nid_objs[NUM_NID]=
+#else /* AMISSL */
+static const ASN1_OBJECT FAR nid_objs[NUM_NID]=
+#endif /* !AMISSL */
+{
 {"UNDEF","undefined",NID_undef,1,&(lvalues[0]),0},
 {"rsadsi","RSA Data Security, Inc.",NID_rsadsi,6,&(lvalues[1]),0},
 {"pkcs","RSA Data Security, Inc. PKCS",NID_pkcs,7,&(lvalues[7]),0},
@@ -1730,7 +1742,12 @@ const static ASN1_OBJECT nid_objs[NUM_NID]={
 	&(lvalues[4444]),0},
 };
 
-const static ASN1_OBJECT *sn_objs[NUM_SN]={
+#ifndef AMISSL
+static ASN1_OBJECT *sn_objs[NUM_SN]=
+#else /* AMISSL */
+static const ASN1_OBJECT * FAR sn_objs[NUM_SN]=
+#endif /* !AMISSL */
+{
 &(nid_objs[364]),/* "AD_DVCS" */
 &(nid_objs[419]),/* "AES-128-CBC" */
 &(nid_objs[421]),/* "AES-128-CFB" */
@@ -2376,7 +2393,12 @@ const static ASN1_OBJECT *sn_objs[NUM_SN]={
 &(nid_objs[160]),/* "x509Crl" */
 };
 
-const static ASN1_OBJECT *ln_objs[NUM_LN]={
+#ifndef AMISSL
+static ASN1_OBJECT *ln_objs[NUM_LN]=
+#else /* AMISSL */
+static const ASN1_OBJECT * FAR ln_objs[NUM_LN]=
+#endif /* !AMISSL */
+{
 &(nid_objs[363]),/* "AD Time Stamping" */
 &(nid_objs[405]),/* "ANSI X9.62" */
 &(nid_objs[368]),/* "Acceptable OCSP Responses" */
@@ -3022,7 +3044,12 @@ const static ASN1_OBJECT *ln_objs[NUM_LN]={
 &(nid_objs[125]),/* "zlib compression" */
 };
 
-const static ASN1_OBJECT *obj_objs[NUM_OBJ]={
+#ifndef AMISSL
+static ASN1_OBJECT *obj_objs[NUM_OBJ]=
+#else /* AMISSL */
+static const ASN1_OBJECT * FAR obj_objs[NUM_OBJ]=
+#endif /* !AMISSL */
+{
 &(nid_objs[ 0]),/* OBJ_undef                        0 */
 &(nid_objs[404]),/* OBJ_ccitt                        0 */
 &(nid_objs[434]),/* OBJ_data                         0 9 */

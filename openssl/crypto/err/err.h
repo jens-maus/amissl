@@ -75,10 +75,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifndef OPENSSL_NO_ERR
 #define ERR_PUT_error(a,b,c,d,e)	ERR_put_error(a,b,c,d,e)
 #else
@@ -285,6 +281,7 @@ ERR_STATE *ERR_get_state(void);
 #ifndef OPENSSL_NO_LHASH
 LHASH *ERR_get_string_table(void);
 LHASH *ERR_get_err_state_table(void);
+void ERR_release_err_state_table(LHASH **hash);
 #endif
 
 int ERR_get_next_error_library(void);

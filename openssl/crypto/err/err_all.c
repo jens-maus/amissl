@@ -97,35 +97,19 @@ void ERR_load_crypto_strings(void)
 #ifndef OPENSSL_NO_ERR
 	ERR_load_ERR_strings(); /* include error strings for SYSerr */
 	ERR_load_BN_strings();
-#ifndef AMISSL
 #ifndef OPENSSL_NO_RSA
 	ERR_load_RSA_strings();
 #endif
-#else	/* AMISSL */
-	if(RSABase)
-		ERR_load_RSA_strings();
-#endif  /* AMISSL */
-#ifndef AMISSL
 #ifndef OPENSSL_NO_DH
 	ERR_load_DH_strings();
 #endif
-#else	/* AMISSL */
-	if(DHBase)
-		ERR_load_DH_strings();
-#endif  /* AMISSL */
-	ERR_load_ERR_strings();
 	ERR_load_EVP_strings();
 	ERR_load_BUF_strings();
 	ERR_load_OBJ_strings();
 	ERR_load_PEM_strings();
-#ifndef AMISSL
 #ifndef OPENSSL_NO_DSA
 	ERR_load_DSA_strings();
 #endif
-#else  /* AMISSL */
-	if(DSABase)
-		ERR_load_DSA_strings();
-#endif /* AMISSL */
 	ERR_load_X509_strings();
 	ERR_load_ASN1_strings();
 	ERR_load_CONF_strings();

@@ -212,7 +212,7 @@ static ERR_STRING_DATA SSL_str_functs[]=
 {0,NULL}
 	};
 
-const static ERR_STRING_DATA SSL_str_reasons[]=
+static ERR_STRING_DATA SSL_str_reasons[]=
 	{
 {SSL_R_APP_DATA_IN_HANDSHAKE             ,"app data in handshake"},
 {SSL_R_ATTEMPT_TO_REUSE_SESSION_IN_DIFFERENT_CONTEXT,"attempt to reuse session in different context"},
@@ -453,8 +453,8 @@ void ERR_load_SSL_strings(void)
 		{
 		init=0;
 #ifndef OPENSSL_NO_ERR
-		ERR_load_strings(ERR_LIB_SSL,(ERR_STRING_DATA *)SSL_str_functs);
-		ERR_load_strings(ERR_LIB_SSL,(ERR_STRING_DATA *)SSL_str_reasons);
+		ERR_load_strings(ERR_LIB_SSL,SSL_str_functs);
+		ERR_load_strings(ERR_LIB_SSL,SSL_str_reasons);
 #endif
 
 		}

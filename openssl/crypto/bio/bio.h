@@ -67,14 +67,9 @@
 #include <openssl/crypto.h>
 #include <openssl/e_os2.h>
 
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
-
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 /* These are the 'types' of BIOs */
 #define BIO_TYPE_NONE		0

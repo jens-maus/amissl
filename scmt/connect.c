@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include "multitcp.h"
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 int
 connect(

@@ -2,7 +2,7 @@
 #include <proto/dos.h>
 #include <proto/locale.h>
 #include <time.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 extern LONG GMTOffset;
 

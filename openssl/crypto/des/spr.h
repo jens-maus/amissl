@@ -56,7 +56,14 @@
  * [including the GNU Public Licence.]
  */
 
-OPENSSL_GLOBAL const DES_LONG DES_SPtrans[8][64]={
+#ifndef AMISSL
+OPENSSL_GLOBAL const DES_LONG DES_SPtrans[8][64]=
+#else /* AMISSL */
+#include <internal/compiler.h>
+
+OPENSSL_GLOBAL const FAR DES_LONG DES_SPtrans[8][64]=
+#endif /* !AMISSL */
+{
 {
 /* nibble 0 */
 0x02080800L, 0x00080000L, 0x02000002L, 0x02080802L,

@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <errno.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 #define FULL_SPECIFIERS
 

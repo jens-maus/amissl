@@ -2,7 +2,7 @@
 #include <dos/dos.h>
 #include <dos/var.h>
 #include <proto/dos.h>
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 char *__getenv(const char *name)
 {

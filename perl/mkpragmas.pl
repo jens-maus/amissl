@@ -4,9 +4,7 @@
 
 use strict;
 
-my @bases = ("AmiSSL", "AES", "BlowFish", "CAST", "DES", "DH", "DSA", "IDEA",
-             "MD2", "MD4", "MD5", "MDC2", "RC2", "RC4", "RC5", "RIPEMD",
-             "RSA", "SHA");
+my @bases = ("AmiSSL");
 my @args;
 
 if (uc($ARGV[0]) eq "ALL")

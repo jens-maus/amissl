@@ -94,10 +94,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef OPENSSL_SYS_WIN32
 /* Under Win32 this is defined in wincrypt.h */
 #undef X509_NAME

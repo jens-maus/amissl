@@ -68,10 +68,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 /* This should be a hidden type, but EVP requires that the size be known */
 struct aes_key_st {
     unsigned long rd_key[4 *(AES_MAXNR + 1)];
@@ -104,7 +100,7 @@ void AES_ofb128_encrypt(const unsigned char *in, unsigned char *out,
 	unsigned char *ivec, int *num);
 void AES_ctr128_encrypt(const unsigned char *in, unsigned char *out,
 	const unsigned long length, const AES_KEY *key,
-	unsigned char counter[AES_BLOCK_SIZE],
+	unsigned char ivec[AES_BLOCK_SIZE],
 	unsigned char ecount_buf[AES_BLOCK_SIZE],
 	unsigned int *num);
 

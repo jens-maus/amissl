@@ -7,7 +7,6 @@
 #include <proto/dos.h>
 #include <dos/dos.h>
 #include <dos/stdio.h>
-#include <libraries/amissl.h>
 #include <string.h>
 
 #include <openssl/bio.h>

@@ -4,7 +4,7 @@
 #include <exec/types.h>
 #include <proto/dos.h>
 #include "scmt.h"
-#include <libraries/amissl.h>
+#include <internal/amissl.h>
 
 int putc(int ch, FILE *stream)
 {

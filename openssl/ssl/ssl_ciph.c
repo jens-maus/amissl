@@ -297,6 +297,11 @@ static void ll_append_tail(CIPHER_ORDER **head, CIPHER_ORDER *curr,
 	*tail=curr;
 	}
 
+#ifdef AMISSL
+#include <libraries/amisslmaster.h>
+long IsCipherAvailable(long cipher);
+#endif
+
 static unsigned long ssl_cipher_get_disabled(void)
 	{
 	unsigned long mask;
@@ -304,19 +309,19 @@ static unsigned long ssl_cipher_get_disabled(void)
 	mask = SSL_kFZA;
 #ifdef OPENSSL_NO_RSA
 #ifdef AMISSL
-	if(!RSABase)
+	if(!IsCipherAvailable(CIPHER_RSA))
 #endif
 	mask |= SSL_aRSA|SSL_kRSA;
 #endif
 #ifdef OPENSSL_NO_DSA
 #ifdef AMISSL
-	if(!DSABase)
+	if(!IsCipherAvailable(CIPHER_DSA))
 #endif
 	mask |= SSL_aDSS;
 #endif
 #ifdef OPENSSL_NO_DH
 #ifdef AMISSL
-	if(!DHBase)
+	if(!IsCipherAvailable(CIPHER_DH))
 #endif
 	mask |= SSL_kDHr|SSL_kDHd|SSL_kEDH|SSL_aDH;
 #endif
@@ -676,13 +681,14 @@ static int ssl_cipher_process_rulestr(const char *rule_str,
 			 * So additionally check whether the cipher name found
 			 * has the correct length. We can save a strlen() call:
 			 * just checking for the '\0' at the right place is
-			 * sufficient, we have to strncmp() anyway.
+			 * sufficient, we have to strncmp() anyway. (We cannot
+			 * use strcmp(), because buf is not '\0' terminated.)
 			 */
 			 j = found = 0;
 			 while (ca_list[j])
 				{
-				if ((ca_list[j]->name[buflen] == '\0') &&
-				    !strncmp(buf, ca_list[j]->name, buflen))
+				if (!strncmp(buf, ca_list[j]->name, buflen) &&
+				    (ca_list[j]->name[buflen] == '\0'))
 					{
 					found = 1;
 					break;

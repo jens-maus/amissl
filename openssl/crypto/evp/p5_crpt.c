@@ -66,11 +66,8 @@
  */
 
 #ifdef AMISSL
-extern struct Library *DESBase;
-extern struct Library *MD2Base;
-extern struct Library *MD5Base;
-extern struct Library *RC2Base;
-extern struct Library *SHABase;
+#include <libraries/amisslmaster.h>
+long IsCipherAvailable(long cipher);
 #endif
 
 void PKCS5_PBE_add(void)
@@ -78,21 +75,21 @@ void PKCS5_PBE_add(void)
 #ifndef OPENSSL_NO_DES
 #  ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
-	if (DESBase && MD5Base)
+	if (IsCipherAvailable(CIPHER_DES) && IsCipherAvailable(CIPHER_MD5))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD5AndDES_CBC, EVP_des_cbc(), EVP_md5(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef OPENSSL_NO_MD2
 #ifdef AMISSL
-	if (DESBase && MD2Base)
+	if (IsCipherAvailable(CIPHER_DES) && IsCipherAvailable(CIPHER_MD2))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD2AndDES_CBC, EVP_des_cbc(), EVP_md2(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef OPENSSL_NO_SHA
 #ifdef AMISSL
-	if (DESBase && SHABase)
+	if (IsCipherAvailable(CIPHER_DES) && IsCipherAvailable(CIPHER_SHA))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithSHA1AndDES_CBC, EVP_des_cbc(), EVP_sha1(),
 							 PKCS5_PBE_keyivgen);
@@ -101,21 +98,21 @@ EVP_PBE_alg_add(NID_pbeWithSHA1AndDES_CBC, EVP_des_cbc(), EVP_sha1(),
 #ifndef OPENSSL_NO_RC2
 #  ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
-	if (RC2Base && MD5Base)
+	if (IsCipherAvailable(CIPHER_RC2) && IsCipherAvailable(CIPHER_MD5))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD5AndRC2_CBC, EVP_rc2_64_cbc(), EVP_md5(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef OPENSSL_NO_MD2
 #ifdef AMISSL
-	if (RC2Base && MD2Base)
+	if (IsCipherAvailable(CIPHER_RC2) && IsCipherAvailable(CIPHER_MD2))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithMD2AndRC2_CBC, EVP_rc2_64_cbc(), EVP_md2(),
 							 PKCS5_PBE_keyivgen);
 #  endif
 #  ifndef OPENSSL_NO_SHA
 #ifdef AMISSL
-	if (RC2Base && SHABase)
+	if (IsCipherAvailable(CIPHER_RC2) && IsCipherAvailable(CIPHER_SHA))
 #endif /* AMISSL */
 EVP_PBE_alg_add(NID_pbeWithSHA1AndRC2_CBC, EVP_rc2_64_cbc(), EVP_sha1(),
 							 PKCS5_PBE_keyivgen);

@@ -65,10 +65,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES	1
 
 #define TLS1_VERSION			0x0301

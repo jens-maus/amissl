@@ -515,13 +515,13 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 	}
 #else /* AMISSL */
 #include <proto/exec.h>
-#include <intuition/intuition.h>
 #include <proto/intuition.h>
+#include <intuition/intuition.h>
 
 static const struct EasyStruct easy_struct =
 {
 	sizeof(struct EasyStruct), 0, "AmiSSL internal error",
-	"%s (%d): assertion failed:\n%s", "Abort"
+	"%s (%ld): assertion failed:\n%s", "Abort"
 };
 
 void OpenSSLDie(const char *file, int line, const char *assertion)

@@ -144,8 +144,8 @@ extern "C" {
 #define WIN_CONSOLE_BUG
 #endif
 #elif defined(AMISSL)
-__stdargs void SetAmiSSLerrno(int errno);
-__stdargs int GetAmiSSLerrno(void);
+void SetAmiSSLerrno(int errno);
+int GetAmiSSLerrno(void);
 #define get_last_sys_error()	GetAmiSSLerrno()
 #define clear_sys_error()	SetAmiSSLerrno(0)
 #else
@@ -167,8 +167,6 @@ __stdargs int GetAmiSSLerrno(void);
 #define readsocket(s,b,n)	read_s(s,b,n)
 #define writesocket(s,b,n)	send(s,b,n,0)
 #elif defined(AMISSL)
-__stdargs void SetAmiSSLerrno(int errno);
-__stdargs int GetAmiSSLerrno(void);
 #define get_last_socket_error()	GetAmiSSLerrno()
 #define clear_socket_error()	SetAmiSSLerrno(0)
 #define ioctlsocket(a,b,c)	ioctlsocket(a,b,c)
@@ -189,6 +187,13 @@ __stdargs int GetAmiSSLerrno(void);
 #define closesocket(s)          close(s)
 #define readsocket(s,b,n)       recv((s),(b),(n),0)
 #define writesocket(s,b,n)      send((s),(b),(n),0)
+#elif defined(OPENSSL_SYS_VXWORKS)
+#define get_last_socket_error()	errno
+#define clear_socket_error()	errno=0
+#define ioctlsocket(a,b,c)	    ioctl((a),(b),(int)(c))
+#define closesocket(s)		    close(s)
+#define readsocket(s,b,n)	    read((s),(b),(n))
+#define writesocket(s,b,n)	    write((s),(char *)(b),(n))
 #else
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -265,7 +270,7 @@ __stdargs int GetAmiSSLerrno(void);
 #    define EXIT(n) _wsetexit(_WINEXITNOPERSIST)
 #    define OPENSSL_EXIT(n) do { if (n == 0) EXIT(n); return(n); } while(0)
 #  else
-#    define EXIT(n) return(n)
+#    define EXIT(n) exit(n)
 #  endif
 #  define LIST_SEPARATOR_CHAR ';'
 #  ifndef X_OK
@@ -346,6 +351,8 @@ __stdargs int GetAmiSSLerrno(void);
 #      define pid_t int /* pid_t is missing on NEXTSTEP/OPENSTEP
                          * (unless when compiling with -D_POSIX_SOURCE,
                          * which doesn't work for us) */
+#    endif
+#    if defined(NeXT) || defined(OPENSSL_SYS_NEWS4) || defined(OPENSSL_SYS_SUNOS)
 #      define ssize_t int /* ditto */
 #    endif
 #    ifdef OPENSSL_SYS_NEWS4 /* setvbuf is missing on mips-sony-bsd */
@@ -554,10 +561,6 @@ extern char *sys_errlist[]; extern int sys_nerr;
 #define TTY_STRUCT int
 
 #define sleep(a) taskDelay((a) * sysClkRateGet())
-#if defined(ioctlsocket)
-#undef ioctlsocket
-#endif
-#define ioctlsocket(a,b,c) ioctl((a),(b),*(c))
 
 #include <vxWorks.h>
 #include <sockLib.h>

@@ -66,10 +66,6 @@
 extern "C" {
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define PKCS12_KEY_ID	1
 #define PKCS12_IV_ID	2
 #define PKCS12_MAC_ID	3
