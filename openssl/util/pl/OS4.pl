@@ -11,7 +11,9 @@ $mkdir='mkdir';
 # C compiler stuff
 $cc="ppc-amigaos-gcc";
 $cfile="-c ";
-$cflags="\$(ADD) -mbaserel -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -g #-O2";
+$cflags="";
+$app_cflag="\$(ADD) -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I$(AmiSSL)/openssl -g -O2";
+$lib_cflag="\$(ADD) -nostdinc -mbaserel -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O2";
 $obj='.o';
 $ofile='-o ';
 $compile='';
@@ -20,7 +22,7 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='${CFLAG} -lauto';
+$lflags='-lauto -lamisslauto';
 $efile='-o ';
 $exep='';
 $ex_libs="";
@@ -68,7 +70,7 @@ sub do_link_rule
 	$file =~ s/\//$o/g if $o ne '/';
 	$n=&bname($target);
 	$ret.="$target: $files $dep_libs\n";
-	$ret.="\t\$(LINK) ${efile}$target \$(LFLAGS) $files $libs\n\n";
+	$ret.="\t\$(LINK) ${efile}$target $files \$(LFLAGS) \n\n";
 	return($ret);
 	}
 
