@@ -1757,14 +1757,17 @@ static void Cleanup(void)
 {
 	if (AmiSSLBase)
 	{
-		CleanupAmiSSL(TAG_DONE);
 #ifdef __amigaos4__
 		if(IAmiSSL)
 		{
+			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
 			IAmiSSL = NULL;
 		}
+#else
+		CleanupAmiSSL(TAG_DONE);
 #endif
+
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
