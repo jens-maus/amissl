@@ -153,6 +153,7 @@ certs/f73e89fd.0 eol=lf
 certs/f944a1cc.0 eol=lf
 certs/fd2cb667.0 eol=lf
 certs/ff783690.0 eol=lf
+/fixme.txt eol=lf
 include/amissl/aes.h eol=lf
 include/amissl/amissl.h eol=lf
 include/amissl/amisslconf.h eol=lf
