@@ -24,20 +24,27 @@ socket(
   if(ISocket) return ISocket->socket(domain,type,protocol);
   else return -1;
 #else
-  SETUPSTATE();
-  struct Socket *r = 0;
-
-  if (domain != AF_INET || type != SOCK_STREAM || 
-      (protocol != IPPROTO_IP && protocol != IPPROTO_TCP)) {
-    state->errno = EINVAL;
-  }
-  else {
-    r = MTCP_Socket(state->stack, 1);
-    if (r == 0) {
-      state->errno = MTCP_ErrNo(state->stack);
-    }
-  }
-  return (int)r;
+	GETSTATE();
+	int s;
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+			return amitcp_Socket(domain, type, protocol);
+			break;
+		case TCPIP_MLink:
+			ObtainSemaphore(&stack->MLinkLock->Semaphore);
+			s = amitcp_Socket(domain, type, protocol);
+			ReleaseSemaphore(&stack->MLinkLock->Semaphore);
+			return s;
+			break;
+		case TCPIP_IN225:
+			return in225_socket(domain, type, protocol);
+			break;
+		case TCPIP_Termite:
+			return termite_socket(domain, type, protocol);
+			break;
+	}
 #endif
 }
 

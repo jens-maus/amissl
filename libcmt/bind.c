@@ -21,16 +21,23 @@ bind(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->bind(s,name,namelen);
+  if(ISocket) return ISocket->bind(s,(struct sockaddr *)name,namelen);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_Bind((struct Socket *)s, (struct sockaddr *)name, namelen);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_Bind(s,name,namelen);
+			break;
+		case TCPIP_IN225:
+			return in225_bind(s,name,namelen);
+			break;
+		case TCPIP_Termite:
+			return termite_bind(s,(char *)name,namelen);
+			break;
+	}
 #endif
 }
-

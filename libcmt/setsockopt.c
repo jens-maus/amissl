@@ -26,13 +26,21 @@ setsockopt(
   if(ISocket) return ISocket->setsockopt(s,level,optname,optval,optlen);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_SetSockOpt((struct Socket *)s, level, optname, optval, optlen);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_SetSockOpt(s,level,optname,optval,optlen);
+			break;
+		case TCPIP_IN225:
+			return in225_setsockopt(s,level,optname,optval,optlen);
+			break;
+		case TCPIP_Termite:
+			return termite_setsockopt(s,level,optname,optval,optlen);
+			break;
+	}
 #endif
 }
 

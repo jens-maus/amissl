@@ -23,13 +23,20 @@ listen(
   if(ISocket) return ISocket->listen(s,backlog);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_Listen((struct Socket *)s, backlog);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_Listen(s,backlog);
+			break;
+		case TCPIP_IN225:
+			return in225_listen(s,backlog);
+			break;
+		case TCPIP_Termite:
+			return termite_listen(s,backlog);
+			break;
+	}
 #endif
 }
-

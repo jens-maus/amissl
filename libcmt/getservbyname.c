@@ -20,17 +20,30 @@ getservbyname(
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // openssl does not care about the error code for getservbyname
-  if(ISocket) return ISocket->getservbyname(name,proto);
-  else return -1;
+  if(ISocket) return ISocket->getservbyname((char *)name,(char *)proto);
+  else return NULL;
 #else
-  SETUPSTATE();
-  struct servent *r;
-
-  r = MTCP_GetServByName(state->stack, (char *)name, (char *)proto);
-  if (r == 0) {
-    state->errno = MTCP_ErrNo(state->stack);
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_MLink:{
+			struct servent *res;
+			ObtainSemaphore(&state->MLinkLock->Semaphore);
+			res=amitcp_GetServByName(name, proto);
+			ReleaseSemaphore(&state->MLinkLock->Semaphore);
+			return res;
+			break;}
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+			return amitcp_GetServByName(name, proto);
+			break;
+		case TCPIP_IN225:
+			return in225_getservbyname(name, proto);
+			break;
+		case TCPIP_Termite:
+			return termite_getservbyname(name, proto);
+			break;
+	}
 #endif
 }
 

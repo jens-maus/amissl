@@ -22,13 +22,20 @@ closesocket(
   if(ISocket) return ISocket->CloseSocket(s);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_CloseSocket((struct Socket *)s);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_CloseSocket(s);
+			break;
+		case TCPIP_IN225:
+			return in225_s_close(s);
+			break;
+		case TCPIP_Termite:
+			return termite_CloseSocket(s);
+			break;
+	}
 #endif
 }
-

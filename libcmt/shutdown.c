@@ -23,12 +23,20 @@ shutdown(
   if(ISocket) return ISocket->shutdown(s,how);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_Shutdown((struct Socket *)s, how);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_Shutdown(s, how);
+			break;
+		case TCPIP_IN225:
+			return in225_shutdown(s, how);
+			break;
+		case TCPIP_Termite:
+			return termite_shutdown(s, how);
+			break;
+	}
 #endif
 }

@@ -23,20 +23,29 @@ getsockopt(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->getsockopt(s,level,optname,optval,optlen);
+  if(ISocket) return ISocket->getsockopt(s,level,optname,optval,(long *)optlen);
   else return -1;
 #else
-  int r = -1;
-
-  if (level != SOL_SOCKET) {
-    SetAmiSSLerrno(EINVAL);
-  }
-  else {
-    r = MTCP_GetSockOpt((struct Socket *)s, optname, optval, optlen);
-    if (r == -1) {
-      SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-    }
-  }
-  return r;
+	GETSTATE();
+	switch(s->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_GetSockOpt(s, level, optname, optval, optlen);
+			break;
+		case TCPIP_IN225:
+			return in225_getsockopt(s, level, optname, optval, optlen);
+			break;
+		case TCPIP_Termite:
+			if (optname == SO_ERROR)
+			{
+				*(int *)optval = 0;
+				return 0;
+			}
+			state->TCPIPStack->ErrNo = EINVAL;
+			return -1;
+			break;
+	}
 #endif
 }

@@ -19,16 +19,29 @@ gethostbyname(
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // h_errno isn't used by openssl
-  if(ISocket) return ISocket->gethostbyname(name);
-  else return -1;
+  if(ISocket) return ISocket->gethostbyname((char *)name);
+  else return NULL;
 #else
-  SETUPSTATE();
-  struct hostent *r;
-
-  r = MTCP_GetHostByName(state->stack, (char *)name);
-  if (r == 0) {
-    state->errno = MTCP_ErrNo(state->stack);
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_MLink:{
+			struct hostent *res;
+			ObtainSemaphore(&state->MLinkLock->Semaphore);
+			res=amitcp_GetHostByName(name);
+			ReleaseSemaphore(&state->MLinkLock->Semaphore);
+			return res;
+			break;}
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+			return amitcp_GetHostByName(name);
+			break;
+		case TCPIP_IN225:
+			return in225_gethostbyname(name);
+			break;
+		case TCPIP_Termite:
+			return termite_gethostbyname(name);
+			break;
+	}
 #endif
 }

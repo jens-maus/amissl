@@ -22,15 +22,23 @@ send(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->send(s,buf,len,flags);
+  if(ISocket) return ISocket->send(s,(void *)buf,len,flags);
   else return -1;
 #else
-  ssize_t r;
-
-  r = MTCP_Send((struct Socket *)s, (void *)buf, len, flags);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_Send(s,msg,len,flags);
+			break;
+		case TCPIP_IN225:
+			return in225_send(s,msg,len,flags);
+			break;
+		case TCPIP_Termite:
+			return termite_send(>s,msg,len,flags);
+			break;
+	}
 #endif
 }

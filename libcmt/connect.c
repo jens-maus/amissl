@@ -24,13 +24,27 @@ connect(
   if(ISocket) return ISocket->connect(s,name,namelen);
   else return -1;
 #else
-  int r;
-
-  r = MTCP_Connect((struct Socket *)s, (struct sockaddr *)name);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_MLink:{
+			int res;
+			ObtainSemaphore(&state->TCPIPStack->MLinkLock->Semaphore);
+			res = amitcp_Connect(s,name,namelen);
+			ReleaseSemaphore(&state->TCPIPStack->MLinkLock->Semaphore);
+			return res;
+			break;}
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+			return amitcp_Connect(s,name,namelen);
+			break;
+		case TCPIP_IN225:
+			return in225_connect(s,name,namelen);
+			break;
+		case TCPIP_Termite:
+			return termite_connect(s,name,namelen);
+			break;
+	}
 #endif
 }
 

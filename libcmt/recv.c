@@ -25,12 +25,20 @@ recv(
   if(ISocket) return ISocket->recv(s,buf,len,flags);
   else return -1;
 #else
-  ssize_t r;
-
-  r = MTCP_Recv((struct Socket *)s, buf, len, flags);
-  if (r == -1) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_AmiTCP:
+		case TCPIP_MLink:
+			return amitcp_Recv(s,buf,len,flags);
+			break;
+		case TCPIP_IN225:
+			return in225_recv(s,buf,len,flags);
+			break;
+		case TCPIP_Termite:
+			return termite_recv(s,buf,len,flags);
+			break;
+	}
 #endif
 }
