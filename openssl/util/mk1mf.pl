@@ -114,7 +114,9 @@ $cc=(defined($VARS{'CC'}))?$VARS{'CC'}:'cc';
 $src_dir=(defined($VARS{'SRC'}))?$VARS{'SRC'}:'.';
 $bin_dir=(defined($VARS{'BIN'}))?$VARS{'BIN'}:'';
 
-$define='DEF ';
+$define='-D';
+$include='-I';
+$cfile='-c ';
 
 # $bin_dir.=$o causes a core dump on my sparc :-(
 
@@ -565,7 +567,7 @@ $defs.=&do_defs("T_OBJ",$test,"\$(OBJ_D)",$obj);
 $rules.=&do_compile_rule("\$(OBJ_D)",$test,"\$(APP_CFLAGS)");
 
 $defs.=&do_defs("E_OBJ",$e_exe,"\$(OBJ_D)",$obj);
-$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,'-DMONOLITH $(APP_CFLAGS)');
+$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,$define . "MONOLITH \$(APP_CFLAGS)");
 
 foreach (values %lib_nam)
 	{
