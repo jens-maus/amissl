@@ -28,10 +28,10 @@ struct HashTable *h_new(long InitialSize,__stdargs void *(*allocator)(long),__st
 {
 	struct HashTable *new;
 
-	if(new = allocator(sizeof(struct HashTable)))
+	if( (new = allocator(sizeof(struct HashTable))) )
 	{
 		//kprintf("Allocating %ld bytes\n",sizeof(struct HashEntry)*InitialSize);
-		if(new->HashEntries = allocator(sizeof(struct HashEntry)*InitialSize))
+		if( (new->HashEntries = allocator(sizeof(struct HashEntry)*InitialSize)) )
 		{
 			memset(new->HashEntries,0,sizeof(struct HashEntry)*InitialSize);
 			new->Locked=0;
@@ -193,7 +193,7 @@ static void *grow(struct HashTable *h)
 	//kprintf("Growing from %ld entries to",h->TableSize);
 
 	old = h->HashEntries;
-	if(h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)*2-1)))
+	if( (h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)*2-1))) )
 	{
 		i=h->TableSize-1;
 		h->TableSize = (h->TableSize+1)*2-1;
@@ -222,7 +222,7 @@ static void shrink(struct HashTable *h)
 	//kprintf("Shrinking from %ld entries to",h->TableSize);
 
 	old = h->HashEntries;
-	if(h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)/2-1)))
+	if( (h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)/2-1))) )
 	{
 		i=h->TableSize-1;
 		h->TableSize = (h->TableSize+1)/2-1;
