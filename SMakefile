@@ -49,7 +49,7 @@ LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
 TO amissl_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 LIB $(LIBCRYPTO) $(LIBSSL) \
-    scmt/scmt.lib LIB:multitcp.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
+    libcmt/libcmt.lib LIB:multitcp.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
 MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
 NOICONS
 BATCH
