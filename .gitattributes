@@ -2023,7 +2023,6 @@ src/amisslmaster_library.c eol=lf
 src/amisslmaster_library_os4.c eol=lf
 src/amisslmaster_vectors.c eol=lf
 src/autoinit_amissl_main.c eol=lf
-src/debug.h eol=lf
 src/libstubs.c eol=lf
 test/Makefile eol=lf
 test/SMakefile eol=lf
