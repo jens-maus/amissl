@@ -464,7 +464,7 @@ typedef struct ssl3_comp_st
 
 OPENSSL_EXTERN SSL3_ENC_METHOD AMISSL_COMMON_DATA ssl3_undef_enc_method;
 OPENSSL_EXTERN SSL_CIPHER AMISSL_COMMON_DATA ssl2_ciphers[];
-OPENSSL_EXTERN SSL_CIPHER AMISSL_COMMON_DATA ssl3_ciphers[];
+const OPENSSL_EXTERN SSL_CIPHER AMISSL_COMMON_DATA const ssl3_ciphers[];
 
 #ifdef OPENSSL_SYS_VMS
 #undef SSL_COMP_get_compression_methods

@@ -1755,7 +1755,7 @@ static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]=
 #ifndef AMISSL
 static ASN1_OBJECT *sn_objs[NUM_SN]=
 #else /* AMISSL */
-static const ASN1_OBJECT * AMISSL_COMMON_DATA sn_objs[NUM_SN]=
+static const ASN1_OBJECT * const AMISSL_COMMON_DATA sn_objs[NUM_SN]=
 #endif /* !AMISSL */
 {
 &(nid_objs[364]),/* "AD_DVCS" */
@@ -2416,7 +2416,7 @@ static const ASN1_OBJECT * AMISSL_COMMON_DATA sn_objs[NUM_SN]=
 #ifndef AMISSL
 static ASN1_OBJECT *ln_objs[NUM_LN]=
 #else /* AMISSL */
-static const ASN1_OBJECT * AMISSL_COMMON_DATA ln_objs[NUM_LN]=
+static const ASN1_OBJECT * const AMISSL_COMMON_DATA ln_objs[NUM_LN]=
 #endif /* !AMISSL */
 {
 &(nid_objs[363]),/* "AD Time Stamping" */
@@ -3077,7 +3077,7 @@ static const ASN1_OBJECT * AMISSL_COMMON_DATA ln_objs[NUM_LN]=
 #ifndef AMISSL
 static ASN1_OBJECT *obj_objs[NUM_OBJ]=
 #else /* AMISSL */
-static const ASN1_OBJECT * AMISSL_COMMON_DATA obj_objs[NUM_OBJ]=
+static const ASN1_OBJECT * const AMISSL_COMMON_DATA obj_objs[NUM_OBJ]=
 #endif /* !AMISSL */
 {
 &(nid_objs[ 0]),/* OBJ_undef                        0 */
