@@ -2,7 +2,7 @@
 OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
 CFLAG=$(OPTIMS) IDLEN=100 DEF __builtin_memcmp=memcmp IDIR AmiSSL:Include NOSTACKCHECK DEBUG=LINE STRSECT=CODE
 
-all: scmt.lib
+all: libcmt.lib
 
 clean:
 	delete \#?.o
@@ -73,5 +73,5 @@ LIBOBJS= malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
 		closesocket.o getsockopt.o socket.o connect.o ioctlsocket.o recv.o \
 		setsockopt.o sscanf.o vsscanf.o getuid.o getpid.o threadhash.o mt.o
 
-scmt.lib: $(LIBOBJS)
-	oml scmt.lib r $(LIBOBJS)
+libcmt.lib: $(LIBOBJS)
+	oml libcmt.lib r $(LIBOBJS)
