@@ -1,5 +1,4 @@
 #include <sys/types.h>
-//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
@@ -22,7 +21,7 @@ connect(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->connect(s,name,namelen);
+  if(ISocket) return ISocket->connect(s,(struct sockaddr *)name,namelen);
   else return -1;
 #else
 	GETSTATE();
