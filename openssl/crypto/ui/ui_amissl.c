@@ -262,7 +262,7 @@ static UI_METHOD ui_amissl =
 	(int (*)(UI *))nop, /* flush */
 	read_string_cb,
 	(int (*)(UI *))nop, /* close session */
-	(char *(*)(UI *,const char *,const char *))nop, /* construct prompt */
+	NULL, /* construct prompt */
 };
 
 UI_METHOD *UI_OpenSSL(void)
@@ -344,8 +344,9 @@ static const struct AmiSSLEmuTrap write_string_emul = {
 	(ULONG (*)(ULONG *))stub_GetAmiSSLState
 };
 
-static const UWORD nop_emul[1] = {
-	0x4E75,		// RTS
+static const UWORD nop_emul[2] = {
+	0x7001,		// MOVEQ.L #1, D0
+	0x4E75		// RTS
 };
 
 static const UI_METHOD ui_amissl_68k =
@@ -356,7 +357,7 @@ static const UI_METHOD ui_amissl_68k =
 	(int (*)(UI *))nop_emul, /* flush */
 	(int (*)(UI *,UI_STRING *))&read_string_emul,
 	(int (*)(UI *))nop_emul, /* close session */
-	(char *(*)(UI *,const char *,const char *))nop_emul, /* construct prompt */
+	NULL, /* construct prompt */
 };
 
 UI_METHOD *UI_OpenSSL_68k(void)
