@@ -70,7 +70,7 @@ OpenSSL  -  Frequently Asked Questions
 * Which is the current version of OpenSSL?
 
 The current version is available from <URL: http://www.openssl.org>.
-OpenSSL 0.9.7e was released on October 25, 2004.
+OpenSSL 0.9.7f was released on March 22, 2005.
 
 In addition to the current stable release, you can also access daily
 snapshots of the OpenSSL development version at <URL:
@@ -471,6 +471,10 @@ following:
 This will only compile sha_dgst.c with -O0, the rest with the optimization
 level chosen by the configuration process.  When the above is done, do the
 test and installation and you're set.
+
+3. Reconfigure the toolkit with no-sha0 option to leave out SHA0. It
+should not be used and is not used in SSL/TLS nor any other recognized
+protocol in either case.
 
 
 * Why does the OpenSSL compilation fail with "ar: command not found"?

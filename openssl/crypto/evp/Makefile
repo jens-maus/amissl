@@ -74,7 +74,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -448,7 +448,7 @@ e_rc4.o: ../../include/openssl/rc5.h ../../include/openssl/ripemd.h
 e_rc4.o: ../../include/openssl/rsa.h ../../include/openssl/safestack.h
 e_rc4.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 e_rc4.o: ../../include/openssl/symhacks.h ../../include/openssl/ui.h
-e_rc4.o: ../../include/openssl/ui_compat.h ../cryptlib.h e_rc4.c
+e_rc4.o: ../../include/openssl/ui_compat.h ../cryptlib.h e_rc4.c evp_locl.h
 e_rc5.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 e_rc5.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 e_rc5.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
@@ -713,7 +713,7 @@ m_md2.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 m_md2.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 m_md2.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 m_md2.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-m_md2.o: ../cryptlib.h m_md2.c
+m_md2.o: ../cryptlib.h evp_locl.h m_md2.c
 m_md4.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 m_md4.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 m_md4.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
@@ -734,7 +734,7 @@ m_md4.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 m_md4.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 m_md4.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 m_md4.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-m_md4.o: ../cryptlib.h m_md4.c
+m_md4.o: ../cryptlib.h evp_locl.h m_md4.c
 m_md5.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 m_md5.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 m_md5.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
@@ -755,7 +755,7 @@ m_md5.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 m_md5.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 m_md5.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 m_md5.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-m_md5.o: ../cryptlib.h m_md5.c
+m_md5.o: ../cryptlib.h evp_locl.h m_md5.c
 m_mdc2.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 m_mdc2.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 m_mdc2.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
@@ -776,7 +776,7 @@ m_mdc2.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 m_mdc2.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 m_mdc2.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 m_mdc2.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-m_mdc2.o: ../cryptlib.h m_mdc2.c
+m_mdc2.o: ../cryptlib.h evp_locl.h m_mdc2.c
 m_null.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 m_null.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 m_null.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
@@ -840,7 +840,7 @@ m_sha.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 m_sha.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 m_sha.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 m_sha.o: ../../include/openssl/x509.h ../../include/openssl/x509_vfy.h
-m_sha.o: ../cryptlib.h m_sha.c
+m_sha.o: ../cryptlib.h evp_locl.h m_sha.c
 m_sha1.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 m_sha1.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 m_sha1.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h

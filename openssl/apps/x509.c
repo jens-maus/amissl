@@ -179,7 +179,7 @@ int MAIN(int argc, char **argv)
 	X509_REQ *rq=NULL;
 	int fingerprint=0;
 	char buf[256];
-	const EVP_MD *md_alg,*digest=EVP_md5();
+	const EVP_MD *md_alg,*digest;
 	CONF *extconf = NULL;
 	char *extsect = NULL, *extfile = NULL, *passin = NULL, *passargin = NULL;
 	int need_rand = 0;
@@ -215,6 +215,13 @@ int MAIN(int argc, char **argv)
 	ctx=X509_STORE_new();
 	if (ctx == NULL) goto end;
 	X509_STORE_set_verify_cb_func(ctx,callb);
+
+#ifdef  OPENSSL_FIPS
+	if (FIPS_mode())
+		digest = EVP_sha1();
+	else
+#endif
+		digest = EVP_md5();
 
 	argc--;
 	argv++;
@@ -598,9 +605,12 @@ bad:
 			sno = ASN1_INTEGER_new();
 			if (!sno || !rand_serial(NULL, sno))
 				goto end;
+			if (!X509_set_serialNumber(x, sno)) 
+				goto end;
+			ASN1_INTEGER_free(sno);
+			sno = NULL;
 			}
-
-		if (!X509_set_serialNumber(x, sno)) 
+		else if (!X509_set_serialNumber(x, sno)) 
 			goto end;
 
 		if (!X509_set_issuer_name(x,req->req_info->subject)) goto end;
@@ -971,9 +981,9 @@ bad:
 
 	if (checkend)
 		{
-		time_t tnow=time(NULL);
+		time_t tcheck=time(NULL) + checkoffset;
 
-		if (ASN1_UTCTIME_cmp_time_t(X509_get_notAfter(x), tnow+checkoffset) == -1)
+		if (X509_cmp_time(X509_get_notAfter(x), &tcheck) < 0)
 			{
 			BIO_printf(out,"Certificate will expire\n");
 			ret=1;

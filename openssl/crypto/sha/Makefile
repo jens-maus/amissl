@@ -61,6 +61,9 @@ asm/sx86bsdi.o: asm/sx86unix.cpp
 asm/sx86unix.cpp: asm/sha1-586.pl ../perlasm/x86asm.pl
 	(cd asm; $(PERL) sha1-586.pl cpp $(PROCESSOR) >sx86unix.cpp)
 
+asm/sha1-ia64.s:  asm/sha1-ia64.pl
+	(cd asm; $(PERL) sha1-ia64.pl $(CFLAGS) ) > $@
+
 files:
 	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
 
@@ -70,7 +73,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \

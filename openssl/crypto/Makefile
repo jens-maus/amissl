@@ -94,7 +94,8 @@ lib:	$(LIBOBJ)
 	@touch lib
 
 shared: buildinf.h lib subdirs
-	if [ -n "$(SHARED_LIBS)" ]; then \
+	@if [ -n "$(SHARED_LIBS)" ]; then \
+		egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null || \
 		(cd ..; $(MAKE) $(SHARED_LIB)); \
 	fi
 
@@ -113,7 +114,7 @@ tests:
 	done;
 
 install:
-	@for i in $(EXHEADER) ;\
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ;\
 	do \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -200,8 +201,8 @@ mem_dbg.o: ../include/openssl/err.h ../include/openssl/lhash.h
 mem_dbg.o: ../include/openssl/opensslconf.h ../include/openssl/opensslv.h
 mem_dbg.o: ../include/openssl/safestack.h ../include/openssl/stack.h
 mem_dbg.o: ../include/openssl/symhacks.h cryptlib.h mem_dbg.c
-o_str.o: ../include/openssl/e_os2.h ../include/openssl/opensslconf.h o_str.c
-o_str.o: o_str.h
+o_str.o: ../e_os.h ../include/openssl/e_os2.h ../include/openssl/opensslconf.h
+o_str.o: o_str.c o_str.h
 o_time.o: ../include/openssl/e_os2.h ../include/openssl/opensslconf.h o_time.c
 o_time.o: o_time.h
 tmdiff.o: ../e_os.h ../include/openssl/bio.h ../include/openssl/buffer.h

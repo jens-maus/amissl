@@ -54,13 +54,11 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl $(TOP)/apps $(APPS)
 
 install:
-	@if test -n "$(EXHEADER)"; then \
-	  for i in $(EXHEADER) ; \
-	  do  \
-	    (cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
-	    chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
-	  done; \
-	fi
+	@headerlist="$(EXHEADER)"; for i in $$headerlist; \
+	do \
+	  (cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
+	  chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
+	done
 
 tags:
 	ctags $(SRC)
@@ -109,5 +107,5 @@ fips_rsa_selftest.o: ../../include/openssl/opensslv.h
 fips_rsa_selftest.o: ../../include/openssl/ossl_typ.h
 fips_rsa_selftest.o: ../../include/openssl/rsa.h
 fips_rsa_selftest.o: ../../include/openssl/safestack.h
-fips_rsa_selftest.o: ../../include/openssl/stack.h
+fips_rsa_selftest.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 fips_rsa_selftest.o: ../../include/openssl/symhacks.h fips_rsa_selftest.c

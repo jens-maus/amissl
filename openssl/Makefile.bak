@@ -4,7 +4,7 @@
 ## Makefile for OpenSSL
 ##
 
-VERSION=0.9.7e
+VERSION=0.9.7f
 MAJOR=0
 MINOR=9.7
 SHLIB_VERSION_NUMBER=0.9.7
@@ -103,7 +103,7 @@ PROCESSOR=
 
 # Set DES_ENC to des_enc.o if you want to use the C version
 #There are 4 x86 assember options.
-FIPS_DES_ENC= fips_des_enc.o
+FIPS_DES_ENC= 
 DES_ENC= des_enc.o fcrypt_b.o
 #DES_ENC= des_enc.o fcrypt_b.o          # C
 #DES_ENC= asm/dx86-elf.o asm/yx86-elf.o # elf
@@ -178,7 +178,7 @@ LIBKRB5=
 SHLIB_MARK=
 
 DIRS=   crypto fips ssl $(SHLIB_MARK) sigs apps test tools
-SHLIBDIRS= fips crypto ssl
+SHLIBDIRS= crypto ssl
 
 # dirs in crypto to build
 SDIRS=  objects \
@@ -229,7 +229,7 @@ all: Makefile sub_all openssl.pc
 
 sigs:	$(SIGS)
 libcrypto.a.sha1: libcrypto.a
-	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
+	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 		$(RANLIB) libcrypto.a; \
 		fips/sha1/fips_standalone_sha1 libcrypto.a > libcrypto.a.sha1; \
 	fi
@@ -336,11 +336,18 @@ do_cygwin-shared:
 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
 		libs="$(LIBKRB5) $$libs"; \
 	fi; \
-	( set -x; ${CC}  -shared -o cyg$$i-$(SHLIB_VERSION_NUMBER).dll \
+	shlib=cyg$${i}-$(SHLIB_VERSION_NUMBER).dll; \
+	[ "$(PLATFORM)" = "mingw" ] && shlib=$${i}eay32.dll; \
+	[ -f apps/$$shlib ] && rm apps/$$shlib; \
+	[ -f test/$$shlib ] && rm test/$$shlib; \
+	base=;  [ $$i = "crypto" ] && base=-Wl,--image-base,0xFE00000; \
+	( set -x; ${CC} ${SHARED_LDFLAGS} \
+		-shared $$base -o $$shlib \
 		-Wl,-Bsymbolic \
 		-Wl,--whole-archive lib$$i.a \
 		-Wl,--out-implib,lib$$i.dll.a \
-		-Wl,--no-whole-archive $$libs ) || exit 1; \
+		-Wl,--no-whole-archive $$libs ${EX_LIBS} ) || exit 1; \
+	cp -p $$shlib apps/; cp -p $$shlib test/; \
 	libs="-l$$i $$libs"; \
 	done
 
@@ -481,8 +488,8 @@ do_irix-shared:
 		if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
 			libs="$(LIBKRB5) $$libs"; \
 		fi; \
-		( WHOLELIB="-all lib$$i.a -notall"; \
-		  (${CC} -v 2>&1 | grep gcc) > /dev/null && WHOLELIB="-Wl,-all,lib$$i.a,-notall"; \
+		( WHOLELIB="-all lib$$i.a -none"; \
+		  (${CC} -v 2>&1 | grep gcc) > /dev/null && WHOLELIB="-Wl,-all,lib$$i.a,-none"; \
 		  set -x; ${CC} ${SHARED_LDFLAGS} \
 			-shared -o lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
 			-Wl,-soname,lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR} \
@@ -507,13 +514,18 @@ do_hpux-shared:
 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
 		libs="$(LIBKRB5) $$libs"; \
 	fi; \
+	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
+		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	else \
+		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	fi; \
+	[ -f $$shlib ] && rm -f $$shlib; \
 	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
 		+vnocompatwarnings \
 		-b -z +s \
-		-o lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR} \
-		+h lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+		-o $$shlib +h $$shlib \
 		-Fl lib$$i.a -ldld -lc ) || exit 1; \
-	chmod a=rx lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	chmod a=rx $$shlib; \
 	done
 
 # This assumes that GNU utilities are *not* used
@@ -530,12 +542,17 @@ do_hpux64-shared:
 	if [ "${SHLIBDIRS}" = "ssl" -a -n "$(LIBKRB5)" ]; then \
 		libs="$(LIBKRB5) $$libs"; \
 	fi; \
+	if expr $(PLATFORM) : '.*ia64' > /dev/null; then \
+		shlib=lib$$i.so.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	else \
+		shlib=lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	fi; \
+	[ -f $$shlib ] && rm -f $$shlib; \
 	( set -x; /usr/ccs/bin/ld ${SHARED_LDFLAGS} \
 		-b -z \
-		-o lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR} \
-		+h lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR} \
+		-o $$shlib +h $$shlib \
 		+forceload lib$$i.a -ldl -lc ) || exit 1; \
-	chmod a=rx lib$$i.sl.${SHLIB_MAJOR}.${SHLIB_MINOR}; \
+	chmod a=rx $$shlib; \
 	done
 
 # The following method is said to work on all platforms.  Tests will
@@ -576,6 +593,8 @@ do_aix-shared:
 		libs="$(LIBKRB5) $$libs"; \
 	fi; \
 	( set -x; \
+	  OBJECT_MODE=`expr x${SHARED_LDFLAGS} : 'x\-[a-z]\([0-9]*\)'`; \
+	  OBJECT_MODE=$${OBJECT_MODE:-32}; export OBJECT_MODE; \
 	  ld -r -o lib$$i.o $(ALLSYMSFLAG) lib$$i.a && \
 	  ( nm -Pg lib$$i.o | grep ' [BD] ' | cut -f1 -d' ' > lib$$i.exp; \
 	    $(SHAREDCMD) $(SHAREDFLAGS) \
@@ -629,7 +648,7 @@ clean:	libclean
 	do \
 	if [ -d "$$i" ]; then \
 		(cd $$i && echo "making clean in $$i..." && \
-		$(MAKE) SDIRS='${SDIRS}' clean ) || exit 1; \
+		$(MAKE) EXE_EXT='${EXE_EXT}' SDIRS='${SDIRS}' clean ) || exit 1; \
 		rm -f $(LIBS); \
 	fi; \
 	done;
@@ -681,15 +700,10 @@ dclean:
 
 rehash: rehash.time
 rehash.time: certs
-	@(OPENSSL="`pwd`/apps/openssl$(EXE_EXT)"; OPENSSL_DEBUG_MEMORY=on; \
-		export OPENSSL OPENSSL_DEBUG_MEMORY; \
-		LD_LIBRARY_PATH="`pwd`:$$LD_LIBRARY_PATH"; \
-		DYLD_LIBRARY_PATH="`pwd`:$$DYLD_LIBRARY_PATH"; \
-		SHLIB_PATH="`pwd`:$$SHLIB_PATH"; \
-		LIBPATH="`pwd`:$$LIBPATH"; \
-		if [ "$(PLATFORM)" = "Cygwin" ]; then PATH="`pwd`:$$PATH"; fi; \
-		export LD_LIBRARY_PATH DYLD_LIBRARY_PATH SHLIB_PATH LIBPATH PATH; \
-		$(PERL) tools/c_rehash certs)
+	@(OPENSSL="`pwd`/util/opensslwrap.sh"; \
+	  OPENSSL_DEBUG_MEMORY=on; \
+	  export OPENSSL OPENSSL_DEBUG_MEMORY; \
+	  $(PERL) tools/c_rehash certs)
 	touch rehash.time
 
 test:   tests
@@ -697,13 +711,7 @@ test:   tests
 tests: rehash
 	@(cd test && echo "testing..." && \
 	$(MAKE) CC='${CC}' PLATFORM='${PLATFORM}' CFLAG='${CFLAG}' SDIRS='$(SDIRS)' INSTALLTOP='${INSTALLTOP}' PEX_LIBS='${PEX_LIBS}' EX_LIBS='${EX_LIBS}' BN_ASM='${BN_ASM}' DES_ENC='${DES_ENC}' FIPS_DES_ENC='${FIPS_DES_ENC}' BF_ENC='${BF_ENC}' CAST_ENC='${CAST_ENC}' RC4_ENC='${RC4_ENC}' RC5_ENC='${RC5_ENC}' SHA1_ASM_OBJ='${SHA1_ASM_OBJ}' FIPS_SHA1_ASM_OBJ='${FIPS_SHA1_ASM_OBJ}' MD5_ASM_OBJ='${MD5_ASM_OBJ}' RMD160_ASM_OBJ='${RMD160_ASM_OBJ}' AR='${AR}' PROCESSOR='${PROCESSOR}' PERL='${PERL}' RANLIB='${RANLIB}' TESTS='${TESTS}' KRB5_INCLUDES='${KRB5_INCLUDES}' LIBKRB5='${LIBKRB5}' EXE_EXT='${EXE_EXT}' SHARED_LIBS='${SHARED_LIBS}' SHLIB_EXT='${SHLIB_EXT}' SHLIB_TARGET='${SHLIB_TARGET}' TESTS='${TESTS}' OPENSSL_DEBUG_MEMORY=on tests );
-	@LD_LIBRARY_PATH="`pwd`:$$LD_LIBRARY_PATH"; \
-	DYLD_LIBRARY_PATH="`pwd`:$$DYLD_LIBRARY_PATH"; \
-	SHLIB_PATH="`pwd`:$$SHLIB_PATH"; \
-	LIBPATH="`pwd`:$$LIBPATH"; \
-	if [ "$(PLATFORM)" = "Cygwin" ]; then PATH="`pwd`:$$PATH"; fi; \
-	export LD_LIBRARY_PATH DYLD_LIBRARY_PATH SHLIB_PATH LIBPATH PATH; \
-	apps/openssl version -a
+	util/shlib_wrap.sh apps/openssl version -a
 
 report:
 	@$(PERL) util/selftest.pl
@@ -802,7 +810,7 @@ install_sw:
 		$(INSTALL_PREFIX)$(OPENSSLDIR)/misc \
 		$(INSTALL_PREFIX)$(OPENSSLDIR)/certs \
 		$(INSTALL_PREFIX)$(OPENSSLDIR)/private
-	@for i in $(EXHEADER) ;\
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ;\
 	do \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -881,7 +889,7 @@ install_docs:
 	@pod2man="`cd util; ./pod2mantest $(PERL)`"; \
 	here="`pwd`"; \
 	filecase=; \
-	if [ "$(PLATFORM)" = "DJGPP" -o "$(PLATFORM)" = "Cygwin" ]; then \
+	if [ "$(PLATFORM)" = "DJGPP" -o "$(PLATFORM)" = "Cygwin" -o "$(PLATFORM)" = "mingw" ]; then \
 		filecase=-i; \
 	fi; \
 	for i in doc/apps/*.pod; do \

@@ -66,6 +66,11 @@ asm/rx86bsdi.o: asm/rx86unix.cpp
 asm/rx86unix.cpp: asm/rc4-586.pl ../perlasm/x86asm.pl
 	(cd asm; $(PERL) rc4-586.pl cpp >rx86unix.cpp)
 
+asm/rc4-amd64.s: asm/rc4-amd64.pl;	$(PERL) $< $@
+
+asm/rc4-ia64.s: asm/rc4-ia64.S
+	$(CC) $(CFLAGS) -E asm/rc4-ia64.S > $@
+
 files:
 	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
 
@@ -75,7 +80,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -101,8 +106,18 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-rc4_enc.o: ../../include/openssl/opensslconf.h ../../include/openssl/rc4.h
-rc4_enc.o: rc4_enc.c rc4_locl.h
-rc4_skey.o: ../../include/openssl/opensslconf.h
+rc4_enc.o: ../../e_os.h ../../include/openssl/bio.h
+rc4_enc.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
+rc4_enc.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
+rc4_enc.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
+rc4_enc.o: ../../include/openssl/opensslv.h ../../include/openssl/rc4.h
+rc4_enc.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
+rc4_enc.o: ../../include/openssl/symhacks.h ../cryptlib.h rc4_enc.c rc4_locl.h
+rc4_skey.o: ../../e_os.h ../../include/openssl/bio.h
+rc4_skey.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
+rc4_skey.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
+rc4_skey.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
 rc4_skey.o: ../../include/openssl/opensslv.h ../../include/openssl/rc4.h
-rc4_skey.o: rc4_locl.h rc4_skey.c
+rc4_skey.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
+rc4_skey.o: ../../include/openssl/symhacks.h ../cryptlib.h rc4_locl.h
+rc4_skey.o: rc4_skey.c

@@ -49,6 +49,7 @@ obj_dat.h: obj_dat.pl obj_mac.h
 # objects.pl both reads and writes obj_mac.num
 obj_mac.h: objects.pl objects.txt obj_mac.num
 	$(PERL) objects.pl objects.txt obj_mac.num obj_mac.h
+	@sleep 1; touch obj_mac.h; sleep 1
 
 files:
 	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
@@ -59,7 +60,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -87,12 +88,12 @@ clean:
 
 o_names.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
 o_names.o: ../../include/openssl/bn.h ../../include/openssl/crypto.h
-o_names.o: ../../include/openssl/e_os2.h ../../include/openssl/lhash.h
-o_names.o: ../../include/openssl/obj_mac.h ../../include/openssl/objects.h
-o_names.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
-o_names.o: ../../include/openssl/ossl_typ.h ../../include/openssl/safestack.h
-o_names.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
-o_names.o: o_names.c
+o_names.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
+o_names.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
+o_names.o: ../../include/openssl/objects.h ../../include/openssl/opensslconf.h
+o_names.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
+o_names.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
+o_names.o: ../../include/openssl/symhacks.h o_names.c
 obj_dat.o: ../../e_os.h ../../include/openssl/asn1.h
 obj_dat.o: ../../include/openssl/bio.h ../../include/openssl/bn.h
 obj_dat.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h

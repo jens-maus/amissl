@@ -60,17 +60,15 @@ files:
 links:
 	@$(PERL) $(TOP)/util/mklink.pl $(TOP)/include/openssl $(EXHEADER)
 	@$(PERL) $(TOP)/util/mklink.pl $(TOP)/test $(TEST)
-	@$(PERL) $(TOP)/util/mklink.pl $(TOP)/test $(TESTDATA)
+	cp $(TESTDATA) $(TOP)/test
 	@$(PERL) $(TOP)/util/mklink.pl $(TOP)/apps $(APPS)
 
 install:
-	@if test -n "$(EXHEADER)"; then \
-	  for i in $(EXHEADER) ; \
-	  do  \
-	    (cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
-	    chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
-	  done; \
-	fi
+	@headerlist="$(EXHEADER)"; for i in $$headerlist; \
+	do  \
+	  (cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
+	  chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
+	done
 
 tags:
 	ctags $(SRC)
@@ -116,9 +114,10 @@ fips_sha1_selftest.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
 fips_sha1_selftest.o: ../../include/openssl/symhacks.h fips_sha1_selftest.c
 fips_sha1dgst.o: ../../include/openssl/opensslconf.h
 fips_sha1dgst.o: ../../include/openssl/opensslv.h fips_sha1dgst.c
-fips_sha1test.o: ../../include/openssl/bio.h ../../include/openssl/crypto.h
-fips_sha1test.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-fips_sha1test.o: ../../include/openssl/fips.h ../../include/openssl/lhash.h
+fips_sha1test.o: ../../e_os.h ../../include/openssl/bio.h
+fips_sha1test.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
+fips_sha1test.o: ../../include/openssl/err.h ../../include/openssl/fips.h
+fips_sha1test.o: ../../include/openssl/lhash.h
 fips_sha1test.o: ../../include/openssl/opensslconf.h
 fips_sha1test.o: ../../include/openssl/opensslv.h
 fips_sha1test.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h

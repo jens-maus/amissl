@@ -45,7 +45,10 @@ ALL=    $(GENERAL) $(SRC) $(HEADER)
 top:
 	@(cd ..; $(MAKE) DIRS=$(DIR) all)
 
-all: subdirs lib check shared
+all:
+	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
+		$(MAKE) -e subdirs check lib shared; \
+	fi
 
 check:
 	TOP=`pwd`/$(TOP) ./fips_check_sha1 fingerprint.sha1 $(SRC) $(HEADER)
@@ -118,7 +121,7 @@ fips_test: top top_fips_test_suite
 	done;
 
 install:
-	@for i in $(EXHEADER) ;\
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ;\
 	do \
 		(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 		chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \

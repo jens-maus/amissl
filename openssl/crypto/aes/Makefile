@@ -58,7 +58,7 @@ links:
 install: installs
 
 installs:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -86,8 +86,9 @@ clean:
 
 aes_cbc.o: ../../include/openssl/aes.h ../../include/openssl/e_os2.h
 aes_cbc.o: ../../include/openssl/opensslconf.h aes_cbc.c aes_locl.h
-aes_cfb.o: ../../include/openssl/aes.h ../../include/openssl/e_os2.h
-aes_cfb.o: ../../include/openssl/opensslconf.h aes_cfb.c aes_locl.h
+aes_cfb.o: ../../e_os.h ../../include/openssl/aes.h
+aes_cfb.o: ../../include/openssl/e_os2.h ../../include/openssl/opensslconf.h
+aes_cfb.o: aes_cfb.c aes_locl.h
 aes_core.o: ../../include/openssl/aes.h ../../include/openssl/e_os2.h
 aes_core.o: ../../include/openssl/fips.h ../../include/openssl/opensslconf.h
 aes_core.o: aes_core.c aes_locl.h

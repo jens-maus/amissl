@@ -51,7 +51,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -81,8 +81,11 @@ rc2_cbc.o: ../../include/openssl/opensslconf.h ../../include/openssl/rc2.h
 rc2_cbc.o: rc2_cbc.c rc2_locl.h
 rc2_ecb.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
 rc2_ecb.o: ../../include/openssl/rc2.h rc2_ecb.c rc2_locl.h
-rc2_skey.o: ../../include/openssl/opensslconf.h ../../include/openssl/rc2.h
-rc2_skey.o: rc2_locl.h rc2_skey.c
+rc2_skey.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
+rc2_skey.o: ../../include/openssl/opensslconf.h
+rc2_skey.o: ../../include/openssl/opensslv.h ../../include/openssl/rc2.h
+rc2_skey.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
+rc2_skey.o: ../../include/openssl/symhacks.h rc2_locl.h rc2_skey.c
 rc2cfb64.o: ../../include/openssl/opensslconf.h ../../include/openssl/rc2.h
 rc2cfb64.o: rc2_locl.h rc2cfb64.c
 rc2ofb64.o: ../../include/openssl/opensslconf.h ../../include/openssl/rc2.h

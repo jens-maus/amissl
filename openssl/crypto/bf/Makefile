@@ -74,7 +74,7 @@ links:
 install: installs
 
 installs:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -109,5 +109,8 @@ bf_enc.o: ../../include/openssl/blowfish.h ../../include/openssl/e_os2.h
 bf_enc.o: ../../include/openssl/opensslconf.h bf_enc.c bf_locl.h
 bf_ofb64.o: ../../include/openssl/blowfish.h ../../include/openssl/e_os2.h
 bf_ofb64.o: ../../include/openssl/opensslconf.h bf_locl.h bf_ofb64.c
-bf_skey.o: ../../include/openssl/blowfish.h ../../include/openssl/e_os2.h
-bf_skey.o: ../../include/openssl/opensslconf.h bf_locl.h bf_pi.h bf_skey.c
+bf_skey.o: ../../include/openssl/blowfish.h ../../include/openssl/crypto.h
+bf_skey.o: ../../include/openssl/e_os2.h ../../include/openssl/opensslconf.h
+bf_skey.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
+bf_skey.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
+bf_skey.o: bf_locl.h bf_pi.h bf_skey.c

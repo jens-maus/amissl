@@ -93,7 +93,7 @@ void OpenSSL_add_all_digests(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifndef OPENSSL_NO_SHA
+#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_SHA0)
 #ifdef AMISSL
 	if (IsCipherAvailable(CIPHER_SHA))
 #endif /* AMISSL */

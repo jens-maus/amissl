@@ -535,7 +535,7 @@ static int ssl3_client_hello(SSL *s)
 		p=s->s3->client_random;
 		Time=time(NULL);			/* Time */
 		l2n(Time,p);
-		if(RAND_pseudo_bytes(p,SSL3_RANDOM_SIZE-sizeof(Time)) <= 0)
+		if(RAND_pseudo_bytes(p,SSL3_RANDOM_SIZE-4) <= 0)
 		    goto err;
 
 		/* Do the message type and length last */
@@ -1162,21 +1162,15 @@ static int ssl3_get_key_exchange(SSL *s)
 			q=md_buf;
 			for (num=2; num > 0; num--)
 				{
+				EVP_MD_CTX_set_flags(&md_ctx,
+					EVP_MD_CTX_FLAG_NON_FIPS_ALLOW);
 				EVP_DigestInit_ex(&md_ctx,(num == 2)
 					?s->ctx->md5:s->ctx->sha1, NULL);
 				EVP_DigestUpdate(&md_ctx,&(s->s3->client_random[0]),SSL3_RANDOM_SIZE);
 				EVP_DigestUpdate(&md_ctx,&(s->s3->server_random[0]),SSL3_RANDOM_SIZE);
 				EVP_DigestUpdate(&md_ctx,param,param_len);
-#ifdef OPENSSL_FIPS
-				if(s->version == TLS1_VERSION && num == 2)
-					FIPS_allow_md5(1);
-#endif
 				
 				EVP_DigestFinal_ex(&md_ctx,q,(unsigned int *)&i);
-#ifdef OPENSSL_FIPS
-				if(s->version == TLS1_VERSION && num == 2)
-					FIPS_allow_md5(1);
-#endif
 				q+=i;
 				j+=i;
 				}

@@ -51,7 +51,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
-	@for i in $(EXHEADER) ; \
+	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
 	chmod 644 $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i ); \
@@ -85,5 +85,8 @@ i_ecb.o: ../../include/openssl/idea.h ../../include/openssl/opensslconf.h
 i_ecb.o: ../../include/openssl/opensslv.h i_ecb.c idea_lcl.h
 i_ofb64.o: ../../include/openssl/idea.h ../../include/openssl/opensslconf.h
 i_ofb64.o: i_ofb64.c idea_lcl.h
+i_skey.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
 i_skey.o: ../../include/openssl/idea.h ../../include/openssl/opensslconf.h
+i_skey.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
+i_skey.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 i_skey.o: i_skey.c idea_lcl.h

@@ -124,14 +124,6 @@ tests:	exe apps $(TESTS)
 apps:
 	@(cd ..; $(MAKE) DIRS=apps all)
 
-SET_SO_PATHS=OSSL_LIBPATH="`cd ..; pwd`"; \
-		LD_LIBRARY_PATH="$$OSSL_LIBPATH:$$LD_LIBRARY_PATH"; \
-		DYLD_LIBRARY_PATH="$$OSSL_LIBPATH:$$DYLD_LIBRARY_PATH"; \
-		SHLIB_PATH="$$OSSL_LIBPATH:$$SHLIB_PATH"; \
-		LIBPATH="$$OSSL_LIBPATH:$$LIBPATH"; \
-		if [ "$(PLATFORM)" = "Cygwin" ]; then PATH="$${LIBPATH}:$$PATH"; fi; \
-		export LD_LIBRARY_PATH DYLD_LIBRARY_PATH SHLIB_PATH LIBPATH PATH
-
 alltests: \
 	test_des test_idea test_sha test_md4 test_md5 test_hmac \
 	test_md2 test_mdc2 \
@@ -145,145 +137,145 @@ alltests: \
 fips_test_aes:
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  mkdir -p fips_aes_data/rsp; \
-	  $(SET_SO_PATHS); ./$(FIPS_AESTEST) -d fips_aes_data/list; \
+	  ../util/shlib_wrap.sh ./$(FIPS_AESTEST) -d fips_aes_data/list; \
 	fi
 
 test_evp:
-	$(SET_SO_PATHS); ./$(EVPTEST) evptests.txt
+	../util/shlib_wrap.sh ./$(EVPTEST) evptests.txt
 
 test_des:
-	$(SET_SO_PATHS); ./$(DESTEST)
+	../util/shlib_wrap.sh ./$(DESTEST)
 
 test_idea:
-	$(SET_SO_PATHS); ./$(IDEATEST)
+	../util/shlib_wrap.sh ./$(IDEATEST)
 
 test_sha:
-	$(SET_SO_PATHS); ./$(SHATEST)
-	$(SET_SO_PATHS); ./$(SHA1TEST)
+	../util/shlib_wrap.sh ./$(SHATEST)
+	../util/shlib_wrap.sh ./$(SHA1TEST)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
-	  $(SET_SO_PATHS); ./$(FIPS_SHA1TEST) sha1vectors.txt | sed s/Strings/Hashes/ | cmp sha1hashes.txt - ; \
+	  ../util/shlib_wrap.sh ./$(FIPS_SHA1TEST) sha1vectors.txt | sed s/Strings/Hashes/ | cmp sha1hashes.txt - ; \
 	fi
 
 test_mdc2:
-	$(SET_SO_PATHS); ./$(MDC2TEST)
+	../util/shlib_wrap.sh ./$(MDC2TEST)
 
 test_md5:
-	$(SET_SO_PATHS); ./$(MD5TEST)
+	../util/shlib_wrap.sh ./$(MD5TEST)
 
 test_md4:
-	$(SET_SO_PATHS); ./$(MD4TEST)
+	../util/shlib_wrap.sh ./$(MD4TEST)
 
 test_hmac:
-	$(SET_SO_PATHS); ./$(HMACTEST)
+	../util/shlib_wrap.sh ./$(HMACTEST)
 
 test_md2:
-	$(SET_SO_PATHS); ./$(MD2TEST)
+	../util/shlib_wrap.sh ./$(MD2TEST)
 
 test_rmd:
-	$(SET_SO_PATHS); ./$(RMDTEST)
+	../util/shlib_wrap.sh ./$(RMDTEST)
 
 test_bf:
-	$(SET_SO_PATHS); ./$(BFTEST)
+	../util/shlib_wrap.sh ./$(BFTEST)
 
 test_cast:
-	$(SET_SO_PATHS); ./$(CASTTEST)
+	../util/shlib_wrap.sh ./$(CASTTEST)
 
 test_rc2:
-	$(SET_SO_PATHS); ./$(RC2TEST)
+	../util/shlib_wrap.sh ./$(RC2TEST)
 
 test_rc4:
-	$(SET_SO_PATHS); ./$(RC4TEST)
+	../util/shlib_wrap.sh ./$(RC4TEST)
 
 test_rc5:
-	$(SET_SO_PATHS); ./$(RC5TEST)
+	../util/shlib_wrap.sh ./$(RC5TEST)
 
 test_rand:
-	$(SET_SO_PATHS); ./$(RANDTEST)
+	../util/shlib_wrap.sh ./$(RANDTEST)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
-	  $(SET_SO_PATHS); ./$(FIPS_RANDTEST); \
+	  ../util/shlib_wrap.sh ./$(FIPS_RANDTEST); \
 	fi
 
 test_enc:
-	@$(SET_SO_PATHS); sh ./testenc
+	@sh ./testenc
 
 test_x509:
 	echo test normal x509v1 certificate
-	$(SET_SO_PATHS); sh ./tx509 2>/dev/null
+	sh ./tx509 2>/dev/null
 	echo test first x509v3 certificate
-	$(SET_SO_PATHS); sh ./tx509 v3-cert1.pem 2>/dev/null
+	sh ./tx509 v3-cert1.pem 2>/dev/null
 	echo test second x509v3 certificate
-	$(SET_SO_PATHS); sh ./tx509 v3-cert2.pem 2>/dev/null
+	sh ./tx509 v3-cert2.pem 2>/dev/null
 
 test_rsa:
-	@$(SET_SO_PATHS); sh ./trsa 2>/dev/null
-	$(SET_SO_PATHS); ./$(RSATEST)
+	@sh ./trsa 2>/dev/null
+	../util/shlib_wrap.sh ./$(RSATEST)
 
 test_crl:
-	@$(SET_SO_PATHS); sh ./tcrl 2>/dev/null
+	@sh ./tcrl 2>/dev/null
 
 test_sid:
-	@$(SET_SO_PATHS); sh ./tsid 2>/dev/null
+	@sh ./tsid 2>/dev/null
 
 test_req:
-	@$(SET_SO_PATHS); sh ./treq 2>/dev/null
-	@$(SET_SO_PATHS); sh ./treq testreq2.pem 2>/dev/null
+	@sh ./treq 2>/dev/null
+	@sh ./treq testreq2.pem 2>/dev/null
 
 test_pkcs7:
-	@$(SET_SO_PATHS); sh ./tpkcs7 2>/dev/null
-	@$(SET_SO_PATHS); sh ./tpkcs7d 2>/dev/null
+	@sh ./tpkcs7 2>/dev/null
+	@sh ./tpkcs7d 2>/dev/null
 
 test_bn:
 	@echo starting big number library test, could take a while...
-	@$(SET_SO_PATHS); ./$(BNTEST) >tmp.bntest
+	@../util/shlib_wrap.sh ./$(BNTEST) >tmp.bntest
 	@echo quit >>tmp.bntest
 	@echo "running bc"
 	@<tmp.bntest sh -c "`sh ./bctest ignore`" | $(PERL) -e '$$i=0; while (<STDIN>) {if (/^test (.*)/) {print STDERR "\nverify $$1";} elsif (!/^0$$/) {die "\nFailed! bc: $$_";} else {print STDERR "."; $$i++;}} print STDERR "\n$$i tests passed\n"'
 	@echo 'test a^b%c implementations'
-	$(SET_SO_PATHS); ./$(EXPTEST)
+	../util/shlib_wrap.sh ./$(EXPTEST)
 
 test_ec:
 	@echo 'test elliptic curves'
-	$(SET_SO_PATHS); ./$(ECTEST)
+	../util/shlib_wrap.sh ./$(ECTEST)
 
 test_verify:
 	@echo "The following command should have some OK's and some failures"
 	@echo "There are definitly a few expired certificates"
-	-$(SET_SO_PATHS); ../apps/openssl verify -CApath ../certs ../certs/*.pem
+	-../util/shlib_wrap.sh ../apps/openssl verify -CApath ../certs ../certs/*.pem
 
 test_dh:
 	@echo "Generate a set of DH parameters"
-	$(SET_SO_PATHS); ./$(DHTEST)
+	../util/shlib_wrap.sh ./$(DHTEST)
 
 test_dsa:
 	@echo "Generate a set of DSA parameters"
-	$(SET_SO_PATHS); ./$(DSATEST)
-	$(SET_SO_PATHS); ./$(DSATEST) -app2_1
+	../util/shlib_wrap.sh ./$(DSATEST)
+	../util/shlib_wrap.sh ./$(DSATEST) -app2_1
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
-	  $(SET_SO_PATHS); ./$(FIPS_DSATEST); \
-	  $(SET_SO_PATHS); ./$(FIPS_DSATEST) -app2_1; \
+	  ../util/shlib_wrap.sh ./$(FIPS_DSATEST); \
+	  ../util/shlib_wrap.sh ./$(FIPS_DSATEST) -app2_1; \
 	fi
 
 test_gen:
 	@echo "Generate and verify a certificate request"
-	@$(SET_SO_PATHS); sh ./testgen
+	@sh ./testgen
 
 test_ss keyU.ss certU.ss certCA.ss: testss
 	@echo "Generate and certify a test certificate"
-	@$(SET_SO_PATHS); sh ./testss
+	@sh ./testss
 
 test_engine: 
 	@echo "Manipulate the ENGINE structures"
-	$(SET_SO_PATHS); ./$(ENGINETEST)
+	../util/shlib_wrap.sh ./$(ENGINETEST)
 
 test_ssl: keyU.ss certU.ss certCA.ss
 	@echo "test SSL protocol"
 	@if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
-	  $(SET_SO_PATHS); sh ./testfipsssl keyU.ss certU.ss certCA.ss; \
+	  sh ./testfipsssl keyU.ss certU.ss certCA.ss; \
 	fi
-	@$(SET_SO_PATHS); sh ./testssl keyU.ss certU.ss certCA.ss
+	@sh ./testssl keyU.ss certU.ss certCA.ss
 
 test_ca:
-	@$(SET_SO_PATHS); if ../apps/openssl no-rsa; then \
+	@if ../util/shlib_wrap.sh ../apps/openssl no-rsa; then \
 	  echo "skipping CA.sh test -- requires RSA"; \
 	else \
 	  echo "Generate and certify a test certificate via the 'ca' program"; \
@@ -292,7 +284,7 @@ test_ca:
 
 test_aes: #$(AESTEST)
 #	@echo "test Rijndael"
-#	$(SET_SO_PATHS); ./$(AESTEST)
+#	../util/shlib_wrap.sh ./$(AESTEST)
 
 lint:
 	lint -DLINT $(INCLUDES) $(SRC)>fluff
@@ -313,286 +305,134 @@ $(DLIBSSL):
 $(DLIBCRYPTO):
 	(cd ..; $(MAKE) DIRS=crypto all)
 
-$(FIPS_AESTEST)$(EXE_EXT): $(FIPS_AESTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(FIPS_AESTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_AESTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
+BUILD_CMD=if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
+		set -x; $${CC:-$(CC)} -o $$target$(EXE_EXT) $(CFLAGS) $$target.o $(PEX_LIBS) $(DLIBSSL) $(LIBKRB5) $(DLIBCRYPTO) $(EX_LIBS) ; \
+	elif [ -z "$(SHARED_LIBS)" ]; then \
+		set -x; $${CC:-$(CC)} -o $$target$(EXE_EXT) $(CFLAGS) $$target.o $(PEX_LIBS) $(LIBSSL) $(LIBKRB5) $(LIBCRYPTO) $(EX_LIBS) ; \
 	else \
-	  $(CC) -o $(FIPS_AESTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_AESTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+		set -x; LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
+		$(CC) -o $$target$(EXE_EXT) $(CFLAGS) $$target.o $(PEX_LIBS) $(LIBSSL) $(LIBKRB5) $(LIBCRYPTO) $(EX_LIBS) ; \
+	fi;
+
+$(FIPS_AESTEST)$(EXE_EXT): $(FIPS_AESTEST).o $(DLIBCRYPTO)
+	@target=$(FIPS_AESTEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_AESTEST); \
 	fi
 
 $(RSATEST)$(EXE_EXT): $(RSATEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RSATEST)$(EXE_EXT) $(CFLAGS) $(RSATEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RSATEST)$(EXE_EXT) $(CFLAGS) $(RSATEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RSATEST); $(BUILD_CMD)
 
 $(BNTEST)$(EXE_EXT): $(BNTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(BNTEST)$(EXE_EXT) $(CFLAGS) $(BNTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(BNTEST)$(EXE_EXT) $(CFLAGS) $(BNTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(BNTEST); $(BUILD_CMD)
 
 $(ECTEST)$(EXE_EXT): $(ECTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(ECTEST)$(EXE_EXT) $(CFLAGS) $(ECTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(ECTEST)$(EXE_EXT) $(CFLAGS) $(ECTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(ECTEST); $(BUILD_CMD)
 
 $(EXPTEST)$(EXE_EXT): $(EXPTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(EXPTEST)$(EXE_EXT) $(CFLAGS) $(EXPTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(EXPTEST)$(EXE_EXT) $(CFLAGS) $(EXPTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(EXPTEST); $(BUILD_CMD)
 
 $(IDEATEST)$(EXE_EXT): $(IDEATEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(IDEATEST)$(EXE_EXT) $(CFLAGS) $(IDEATEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(IDEATEST)$(EXE_EXT) $(CFLAGS) $(IDEATEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(IDEATEST); $(BUILD_CMD)
 
 $(MD2TEST)$(EXE_EXT): $(MD2TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(MD2TEST)$(EXE_EXT) $(CFLAGS) $(MD2TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(MD2TEST)$(EXE_EXT) $(CFLAGS) $(MD2TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(MD2TEST); $(BUILD_CMD)
 
 $(SHATEST)$(EXE_EXT): $(SHATEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(SHATEST)$(EXE_EXT) $(CFLAGS) $(SHATEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(SHATEST)$(EXE_EXT) $(CFLAGS) $(SHATEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(SHATEST); $(BUILD_CMD)
 
 $(SHA1TEST)$(EXE_EXT): $(SHA1TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(SHA1TEST)$(EXE_EXT) $(CFLAGS) $(SHA1TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(SHA1TEST)$(EXE_EXT) $(CFLAGS) $(SHA1TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(SHA1TEST); $(BUILD_CMD)
 
 $(FIPS_SHA1TEST)$(EXE_EXT): $(FIPS_SHA1TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(FIPS_SHA1TEST)$(EXE_EXT) $(CFLAGS) $(FIPS_SHA1TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  $(CC) -o $(FIPS_SHA1TEST)$(EXE_EXT) $(CFLAGS) $(FIPS_SHA1TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(FIPS_SHA1TEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_SHA1TEST); \
 	fi
 
 $(RMDTEST)$(EXE_EXT): $(RMDTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RMDTEST)$(EXE_EXT) $(CFLAGS) $(RMDTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RMDTEST)$(EXE_EXT) $(CFLAGS) $(RMDTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RMDTEST); $(BUILD_CMD)
 
 $(MDC2TEST)$(EXE_EXT): $(MDC2TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(MDC2TEST)$(EXE_EXT) $(CFLAGS) $(MDC2TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(MDC2TEST)$(EXE_EXT) $(CFLAGS) $(MDC2TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(MDC2TEST); $(BUILD_CMD)
 
 $(MD4TEST)$(EXE_EXT): $(MD4TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(MD4TEST)$(EXE_EXT) $(CFLAGS) $(MD4TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(MD4TEST)$(EXE_EXT) $(CFLAGS) $(MD4TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(MD4TEST); $(BUILD_CMD)
 
 $(MD5TEST)$(EXE_EXT): $(MD5TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(MD5TEST)$(EXE_EXT) $(CFLAGS) $(MD5TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(MD5TEST)$(EXE_EXT) $(CFLAGS) $(MD5TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(MD5TEST); $(BUILD_CMD)
 
 $(HMACTEST)$(EXE_EXT): $(HMACTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(HMACTEST)$(EXE_EXT) $(CFLAGS) $(HMACTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(HMACTEST)$(EXE_EXT) $(CFLAGS) $(HMACTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(HMACTEST); $(BUILD_CMD)
 
 $(RC2TEST)$(EXE_EXT): $(RC2TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RC2TEST)$(EXE_EXT) $(CFLAGS) $(RC2TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RC2TEST)$(EXE_EXT) $(CFLAGS) $(RC2TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RC2TEST); $(BUILD_CMD)
 
 $(BFTEST)$(EXE_EXT): $(BFTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(BFTEST)$(EXE_EXT) $(CFLAGS) $(BFTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(BFTEST)$(EXE_EXT) $(CFLAGS) $(BFTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(BFTEST); $(BUILD_CMD)
 
 $(CASTTEST)$(EXE_EXT): $(CASTTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(CASTTEST)$(EXE_EXT) $(CFLAGS) $(CASTTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(CASTTEST)$(EXE_EXT) $(CFLAGS) $(CASTTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(CASTTEST); $(BUILD_CMD)
 
 $(RC4TEST)$(EXE_EXT): $(RC4TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RC4TEST)$(EXE_EXT) $(CFLAGS) $(RC4TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RC4TEST)$(EXE_EXT) $(CFLAGS) $(RC4TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RC4TEST); $(BUILD_CMD)
 
 $(RC5TEST)$(EXE_EXT): $(RC5TEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RC5TEST)$(EXE_EXT) $(CFLAGS) $(RC5TEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RC5TEST)$(EXE_EXT) $(CFLAGS) $(RC5TEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RC5TEST); $(BUILD_CMD)
 
 $(DESTEST)$(EXE_EXT): $(DESTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(DESTEST)$(EXE_EXT) $(CFLAGS) $(DESTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(DESTEST)$(EXE_EXT) $(CFLAGS) $(DESTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(DESTEST); $(BUILD_CMD)
 
 $(FIPS_DESTEST)$(EXE_EXT): $(FIPS_DESTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(FIPS_DESTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_DESTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(FIPS_DESTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_DESTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(FIPS_DESTEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_DESTEST); \
 	fi
 
 $(RANDTEST)$(EXE_EXT): $(RANDTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(RANDTEST)$(EXE_EXT) $(CFLAGS) $(RANDTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(RANDTEST)$(EXE_EXT) $(CFLAGS) $(RANDTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(RANDTEST); $(BUILD_CMD)
 
 $(FIPS_RANDTEST)$(EXE_EXT): $(FIPS_RANDTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(FIPS_RANDTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_RANDTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  $(CC) -o $(FIPS_RANDTEST)$(EXE_EXT) $(CFLAGS) $(FIPS_RANDTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(FIPS_RANDTEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_RANDTEST); \
 	fi
 
 $(DHTEST)$(EXE_EXT): $(DHTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(DHTEST)$(EXE_EXT) $(CFLAGS) $(DHTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(DHTEST)$(EXE_EXT) $(CFLAGS) $(DHTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(DHTEST); $(BUILD_CMD)
 
 $(DSATEST)$(EXE_EXT): $(DSATEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(DSATEST)$(EXE_EXT) $(CFLAGS) $(DSATEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(DSATEST)$(EXE_EXT) $(CFLAGS) $(DSATEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(DSATEST); $(BUILD_CMD)
 
 $(FIPS_DSATEST)$(EXE_EXT): $(FIPS_DSATEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(FIPS_DSATEST)$(EXE_EXT) $(CFLAGS) $(FIPS_DSATEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  $(CC) -o $(FIPS_DSATEST)$(EXE_EXT) $(CFLAGS) $(FIPS_DSATEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(FIPS_DSATEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(FIPS_DSATEST); \
 	fi
 
 $(METHTEST)$(EXE_EXT): $(METHTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(METHTEST)$(EXE_EXT) $(CFLAGS) $(METHTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(METHTEST)$(EXE_EXT) $(CFLAGS) $(METHTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(METHTEST); $(BUILD_CMD)
 
 $(SSLTEST)$(EXE_EXT): $(SSLTEST).o $(DLIBSSL) $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(SSLTEST)$(EXE_EXT) $(CFLAGS) $(SSLTEST).o $(PEX_LIBS) $(DLIBSSL) $(LIBKRB5) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(SSLTEST)$(EXE_EXT) $(CFLAGS) $(SSLTEST).o $(PEX_LIBS) $(LIBSSL) $(LIBKRB5) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(SSLTEST); $(BUILD_CMD)
 	if egrep 'define OPENSSL_FIPS' $(TOP)/include/openssl/opensslconf.h > /dev/null; then \
 	  TOP=$(TOP) $(TOP)/fips/openssl_fips_fingerprint $(TOP)/libcrypto.a $(SSLTEST); \
 	fi
 
 $(ENGINETEST)$(EXE_EXT): $(ENGINETEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(ENGINETEST)$(EXE_EXT) $(CFLAGS) $(ENGINETEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(ENGINETEST)$(EXE_EXT) $(CFLAGS) $(ENGINETEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(ENGINETEST); $(BUILD_CMD)
 
 $(EVPTEST)$(EXE_EXT): $(EVPTEST).o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o $(EVPTEST)$(EXE_EXT) $(CFLAGS) $(EVPTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o $(EVPTEST)$(EXE_EXT) $(CFLAGS) $(EVPTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=$(EVPTEST); $(BUILD_CMD)
 
 #$(AESTEST).o: $(AESTEST).c
 #	$(CC) -c $(CFLAGS) -DINTERMEDIATE_VALUE_KAT -DTRACE_KAT_MCT $(AESTEST).c
 
 #$(AESTEST)$(EXE_EXT): $(AESTEST).o $(DLIBCRYPTO)
-#	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-#	  $(CC) -o $(AESTEST)$(EXE_EXT) $(CFLAGS) $(AESTEST).o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-#	else \
-#	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-#	  $(CC) -o $(AESTEST)$(EXE_EXT) $(CFLAGS) $(AESTEST).o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-#	fi
+#	@target=$(AESTEST); $(BUILD_CMD)
 
 dummytest$(EXE_EXT): dummytest.o $(DLIBCRYPTO)
-	if [ "$(SHLIB_TARGET)" = "hpux-shared" -o "$(SHLIB_TARGET)" = "darwin-shared" ] ; then \
-	  $(CC) -o dummytest$(EXE_EXT) $(CFLAGS) dummytest.o $(PEX_LIBS) $(DLIBCRYPTO) $(EX_LIBS) ; \
-	else \
-	  LD_LIBRARY_PATH=..:$$LD_LIBRARY_PATH \
-	  $(CC) -o dummytest$(EXE_EXT) $(CFLAGS) dummytest.o $(PEX_LIBS) $(LIBCRYPTO) $(EX_LIBS) ; \
-	fi
+	@target=dummytest; $(BUILD_CMD)
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
@@ -750,7 +590,7 @@ fips_randtest.o: ../include/openssl/ossl_typ.h ../include/openssl/rand.h
 fips_randtest.o: ../include/openssl/safestack.h ../include/openssl/stack.h
 fips_randtest.o: ../include/openssl/symhacks.h ../include/openssl/ui.h
 fips_randtest.o: ../include/openssl/ui_compat.h fips_randtest.c
-fips_sha1test.o: ../include/openssl/bio.h ../include/openssl/crypto.h
+fips_sha1test.o: ../e_os.h ../include/openssl/bio.h ../include/openssl/crypto.h
 fips_sha1test.o: ../include/openssl/e_os2.h ../include/openssl/err.h
 fips_sha1test.o: ../include/openssl/fips.h ../include/openssl/lhash.h
 fips_sha1test.o: ../include/openssl/opensslconf.h ../include/openssl/opensslv.h
