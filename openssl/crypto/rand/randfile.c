@@ -194,6 +194,10 @@ err:
 	return (rand_err ? -1 : ret);
 	}
 
+#ifdef AMISSL
+#include <proto/dos.h>
+#endif /* AMISSL */
+
 const char *RAND_file_name(char *buf, size_t size)
 	{
 	char *s=NULL;
@@ -221,10 +225,14 @@ const char *RAND_file_name(char *buf, size_t size)
 		if (s != NULL && (strlen(s)+strlen(RFILE)+2 < size))
 			{
 			strcpy(buf,s);
+#ifndef AMIGA
 #ifndef OPENSSL_SYS_VMS
 			strcat(buf,"/");
 #endif
 			strcat(buf,RFILE);
+#else /* AMIGA */
+			AddPart(buf, RFILE, size);
+#endif /* !AMIGA */
 			ret=buf;
 			}
 		else
