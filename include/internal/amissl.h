@@ -10,7 +10,6 @@ typedef struct {
 	int errno;
 	char *getenv_var;
 	APTR stack;
-	APTR a4;
 	struct tm localtime_var;
 	struct Library *SocketBase;
 	LONG TCPIPStackType;
@@ -20,6 +19,9 @@ typedef struct {
 	int local_errno;	// If no errno and we generated the error ourselves
 #ifdef __amigaos4__
 	struct SocketIFace *ISocket;
+	struct AmiSSLIFace *IAmiSSL;
+#else
+	struct Library *AmiSSLBase;
 #endif
 } AMISSL_STATE;
 
@@ -37,10 +39,6 @@ __stdargs
 int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
-#ifndef __amigaos4__
-#define SETUPSTATEDS() AMISSL_STATE *state = GetAmiSSLState(); putreg(REG_A4,(long)state->a4)
-#else
-#define SETUPSTATEDS() AMISSL_STATE *state = GetAmiSSLState(); // FIXME: setup r2
 #endif
 
 #endif /* !INTERNAL_AMISSL_H */
