@@ -315,6 +315,16 @@ void program_name(char *in, char *out, int size)
 		out[q-p]='\0';
 		}
 	}
+#elif defined(AMIGA)
+#include <proto/dos.h>
+
+long __stack = 65536;
+unsigned int __stack_size = 65536;
+
+void program_name(char *in, char *out, int size)
+{
+	BUF_strlcpy(out, FilePart(in), size);
+}
 #else
 void program_name(char *in, char *out, int size)
 	{
@@ -1368,11 +1378,17 @@ char *make_config_name()
 
 	len=strlen(t)+strlen(OPENSSL_CONF)+2;
 	p=OPENSSL_malloc(len);
+
 	BUF_strlcpy(p,t,len);
+
+#ifndef AMIGA
 #ifndef OPENSSL_SYS_VMS
 	BUF_strlcat(p,"/",len);
 #endif
 	BUF_strlcat(p,OPENSSL_CONF,len);
+#else /* !AMIGA */
+	AddPart(p, OPENSSL_CONF, len);
+#endif /* !AMIGA */
 
 	return p;
 	}

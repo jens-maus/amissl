@@ -134,6 +134,7 @@ int MAIN(int argc, char **argv)
 			meth=TLSv1_client_method();
 #endif
 		else if ((strncmp(*argv,"-h",2) == 0) ||
+			 (strcmp(*argv,"?") == 0) ||
 			 (strcmp(*argv,"-?") == 0))
 			{
 			badops=1;

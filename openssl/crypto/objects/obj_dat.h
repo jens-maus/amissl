@@ -69,7 +69,7 @@
 
 #ifndef AMISSL
 static unsigned char lvalues[4455]=
-#else /* AMISSL */
+#else /* !AMISSL */
 #include <internal/amissl_compiler.h>
 
 static const unsigned char AMISSL_COMMON_DATA lvalues[4455]=
@@ -696,7 +696,7 @@ static const unsigned char AMISSL_COMMON_DATA lvalues[4455]=
 
 #ifndef AMISSL
 static ASN1_OBJECT nid_objs[NUM_NID]=
-#else /* AMISSL */
+#else /* !AMISSL */
 static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]=
 #endif /* !AMISSL */
 {
@@ -1754,7 +1754,7 @@ static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]=
 
 #ifndef AMISSL
 static ASN1_OBJECT *sn_objs[NUM_SN]=
-#else /* AMISSL */
+#else /* !AMISSL */
 static const ASN1_OBJECT * const AMISSL_COMMON_DATA sn_objs[NUM_SN]=
 #endif /* !AMISSL */
 {
@@ -2415,7 +2415,7 @@ static const ASN1_OBJECT * const AMISSL_COMMON_DATA sn_objs[NUM_SN]=
 
 #ifndef AMISSL
 static ASN1_OBJECT *ln_objs[NUM_LN]=
-#else /* AMISSL */
+#else /* !AMISSL */
 static const ASN1_OBJECT * const AMISSL_COMMON_DATA ln_objs[NUM_LN]=
 #endif /* !AMISSL */
 {
@@ -3076,7 +3076,7 @@ static const ASN1_OBJECT * const AMISSL_COMMON_DATA ln_objs[NUM_LN]=
 
 #ifndef AMISSL
 static ASN1_OBJECT *obj_objs[NUM_OBJ]=
-#else /* AMISSL */
+#else /* !AMISSL */
 static const ASN1_OBJECT * const AMISSL_COMMON_DATA obj_objs[NUM_OBJ]=
 #endif /* !AMISSL */
 {

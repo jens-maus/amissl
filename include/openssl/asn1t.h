@@ -89,7 +89,7 @@ extern "C" {
 #ifndef AMISSL
 #define ASN1_ITEM_start(itname) \
 	OPENSSL_GLOBAL const ASN1_ITEM itname##_it = {
-#else /* AMISSL */
+#else /* !AMISSL */
 #error Logic error
 #endif /* !AMISSL */
 
@@ -110,7 +110,7 @@ extern "C" {
 	{ \
 		static const ASN1_ITEM local_it = { \
 
-#else /* AMISSL */
+#else /* !AMISSL */
 #define ASN1_ITEM_start(itname) \
 	const ASN1_ITEM * itname##_it(void) \
 	{ \

@@ -74,6 +74,21 @@
 
 static int openssl_configured = 0;
 
+#ifdef AMISSL
+#include <proto/dos.h>
+
+#ifndef __amigaos4__
+#include <proto/exec.h>
+
+static BPTR ErrorOutput(void)
+{
+	struct Process *proc = (struct Process *)FindTask(NULL);
+
+	return(proc->pr_CES);
+}
+#endif /* !__amigaos4__ */
+#endif /* AMISSL */
+
 void OPENSSL_config(const char *config_name)
 	{
 	if (openssl_configured)
@@ -91,9 +106,9 @@ void OPENSSL_config(const char *config_name)
 	if (CONF_modules_load_file(NULL, NULL,
 					CONF_MFLAGS_IGNORE_MISSING_FILE) <= 0)
 		{
-#ifndef AMISSL
 		BIO *bio_err;
 		ERR_load_crypto_strings();
+#ifndef AMISSL
 		if ((bio_err=BIO_new_fp(stderr, BIO_NOCLOSE)) != NULL)
 			{
 			BIO_printf(bio_err,"Auto configuration failed\n");
@@ -101,6 +116,20 @@ void OPENSSL_config(const char *config_name)
 			BIO_free(bio_err);
 			}
 		exit(1);
+#else /* !AMISSL */
+		if (bio_err = BIO_new(BIO_s_file()))
+		{
+			if (BIO_set_fp_amiga(bio_err, ErrorOutput() ? ErrorOutput() : Output(),
+			                     BIO_NOCLOSE))
+			{
+				BIO_printf(bio_err, "Auto configuration failed\n");
+				ERR_print_errors(bio_err);
+			}
+
+			BIO_free(bio_err);
+		}
+
+		OpenSSLDie(__FILE__, __LINE__, "exit() called");
 #endif /* !AMISSL */
 		}
 

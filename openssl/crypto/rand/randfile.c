@@ -262,7 +262,7 @@ const char *RAND_file_name(char *buf, size_t size)
 			BUF_strlcat(buf,"/",size);
 #endif
 			BUF_strlcat(buf,RFILE,size);
-#else /* AMIGA */
+#else /* !AMIGA */
 			AddPart(buf, RFILE, size);
 #endif /* !AMIGA */
 			ok = 1;

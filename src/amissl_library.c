@@ -55,8 +55,7 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
-//struct LocaleBase *LocaleBase;
-struct Library *LocaleBase;
+struct LocaleBase *LocaleBase;
 struct Library *UtilityBase;
 #endif
 
@@ -589,20 +588,19 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		{
 			GMTOffset = locale->loc_GMTOffset;
 
-			DisableIDEA = CompareCountry(locale->loc_CountryCode, "AUT", "AU", "A") /* Austria */
-			              || CompareCountry(locale->loc_CountryCode, "FRA", "FR", "F") /* France */
-			              || CompareCountry(locale->loc_CountryCode, "DEU", "DE", "D") /* Germany */
-			              || CompareCountry(locale->loc_CountryCode, "ITA", "IT", "I") /* Italy */
-			              || CompareCountry(locale->loc_CountryCode, "JPN", "JP", "J") /* Japan */
+			DisableIDEA = CompareCountry(locale->loc_CountryCode, "AUT", "AU", "A")     /* Austria */
+			              || CompareCountry(locale->loc_CountryCode, "FRA", "FR", "F")  /* France */
+			              || CompareCountry(locale->loc_CountryCode, "DEU", "DE", "D")  /* Germany */
+			              || CompareCountry(locale->loc_CountryCode, "ITA", "IT", "I")  /* Italy */
+			              || CompareCountry(locale->loc_CountryCode, "JPN", "JP", "J")  /* Japan */
 			              || CompareCountry(locale->loc_CountryCode, "NLD", "NL", NULL) /* The Netherlands */
-			              || CompareCountry(locale->loc_CountryCode, "ESP", "ES", "E") /* Spain */
-			              || CompareCountry(locale->loc_CountryCode, "SWE", "SE", "S") /* Sweden */
+			              || CompareCountry(locale->loc_CountryCode, "ESP", "ES", "E")  /* Spain */
+			              || CompareCountry(locale->loc_CountryCode, "SWE", "SE", "S")  /* Sweden */
 			              || CompareCountry(locale->loc_CountryCode, "CHE", "CH", NULL) /* Switzerland */
 			              || CompareCountry(locale->loc_CountryCode, "GBR", "GB", NULL) /* United Kingdom */
 			              || CompareCountry(locale->loc_CountryCode, "USA", "US", NULL) /* USA */;
 
 			DisableRC5 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
-
 
 			CloseLocale(locale);
 			err = 0;

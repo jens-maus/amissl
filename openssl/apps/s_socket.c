@@ -346,11 +346,13 @@ redoit:
 		i=WSAGetLastError();
 		BIO_printf(bio_err,"accept error %d\n",i);
 #else
+#ifndef AMIGA
 		if (errno == EINTR)
 			{
 			/*check_timeout(); */
 			goto redoit;
 			}
+#endif /* !AMIGA */
 		fprintf(stderr,"errno=%d ",errno);
 		perror("accept");
 #endif

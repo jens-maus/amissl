@@ -1,7 +1,8 @@
 CFLAGS=SAVEDS DATA=AUTO DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
        IDIR AmiSSL:Include NOSTACKCHECK DEBUG=FF IGN 315 IDIR NetInclude: \
        IDIR AmiSSL:/MTCP MATH=STANDARD IGN=63
-LDFLAGS=LIB lib:sc.lib LIB lib:multitcp.lib MATH=STANDARD NOICONS lib:amissl.lib
+LDFLAGS=LIB lib:sc.lib MATH=STANDARD NOICONS LIB AmiSSL:lib/amisslauto.lib \
+        LIB AmiSSL:lib/amisslstubs.lib
 PROGS=uitest vatest https randtest ssltest
 
 all: $(PROGS)
@@ -20,7 +21,7 @@ randtest: randtest.o
 	sc $< $(LDFLAGS) PNAME $@ LINK
 
 ssltest: ssltest.o
-	sc $< $(LDFLAGS) PNAME $@ LINK
+	sc $< $(LDFLAGS) LIB lib:multitcp.lib PNAME $@ LINK
 
 vatest: vatest.o
 	sc $< $(LDFLAGS) PNAME $@ LINK

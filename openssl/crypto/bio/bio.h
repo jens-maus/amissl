@@ -518,10 +518,10 @@ BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
 #   ifndef AMISSL
 BIO *BIO_new_fp(FILE *stream, int close_flag);
-#   else
+#   else /* !AMISSL */
 #    include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
-#   endif /* AMISSL */
+#   endif /* !AMISSL */
 #    define BIO_s_file_internal		BIO_s_file
 #    define BIO_new_file_internal	BIO_new_file
 #    define BIO_new_fp_internal		BIO_s_file

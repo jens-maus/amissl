@@ -671,6 +671,4 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 	return(strlen(buf));
 	}
 #endif
-#else /* AMISSL */
-#include "ui_amissl.c"
 #endif /* !AMISSL */

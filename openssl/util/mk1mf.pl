@@ -5,7 +5,7 @@
 # funny stuff
 #
 
-$INSTALLTOP="AmiSSL:";
+$INSTALLTOP="/usr/local/ssl";
 $OPTIONS="";
 $ssl_version="";
 $banner="\t\@echo Building OpenSSL";
@@ -366,7 +366,7 @@ ASM=$bin_dir$asm
 # You should not need to touch anything below this point
 ######################################################
 
-E_EXE=amissl
+E_EXE=openssl
 SSL=$ssl
 CRYPTO=$crypto
 

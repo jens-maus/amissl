@@ -1036,7 +1036,7 @@ void ERR_set_error_data(char *data, int flags)
 
 #ifndef AMISSL
 void ERR_add_error_data(int num, ...)
-#else /* AMISSL */
+#else /* !AMISSL */
 void ERR_add_error_dataA(int num, va_list args)
 #endif /* !AMISSL */
 	{

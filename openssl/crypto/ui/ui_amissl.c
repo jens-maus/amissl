@@ -1,7 +1,10 @@
+#ifdef AMISSL
 #include <openssl/e_os2.h>
 
 #include "ui_locl.h"
 #include "cryptlib.h"
+
+#include <stdio.h> /* for BUFSIZ */
 
 #include <proto/exec.h>
 #include <proto/intuition.h>
@@ -164,10 +167,6 @@ int write_string(UI *ui, UI_STRING *uis)
 
 	return(1);
 }
-
-#ifndef BUFSIZ
-#define BUFSIZ 8192
-#endif
 
 int read_string(UI *ui, UI_STRING *uis)
 {
@@ -366,3 +365,7 @@ UI_METHOD *UI_OpenSSL_68k(void)
 }
 
 #endif
+
+#else /* AMISSL */
+static void *dummy=&dummy;
+#endif /* AMISSL */

@@ -89,6 +89,7 @@
 #include OPENSSL_UNISTD
 #endif
 
+#ifndef AMIGA
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(OPENSSL_SYS_MACOSX)
 # define USE_TOD
 #elif !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_VXWORKS) && (!defined(OPENSSL_SYS_VMS) || defined(__DECC))
@@ -97,6 +98,7 @@
 #if !defined(_UNICOS) && !defined(__OpenBSD__) && !defined(sgi) && !defined(__FreeBSD__) && !(defined(__bsdi) || defined(__bsdi__)) && !defined(_AIX) && !defined(OPENSSL_SYS_MPE) && !defined(__NetBSD__) && !defined(OPENSSL_SYS_VXWORKS) /* FIXME */
 # define TIMEB
 #endif
+#endif /* !AMIGA */
 
 #ifndef _IRIX
 # include <time.h>
@@ -122,7 +124,7 @@
 #include <sys/timeb.h>
 #endif
 
-#if !defined(TIMES) && !defined(TIMEB) && !defined(USE_TOD) && !defined(OPENSSL_SYS_VXWORKS)
+#if !defined(TIMES) && !defined(TIMEB) && !defined(USE_TOD) && !defined(OPENSSL_SYS_VXWORKS) && !defined(AMIGA)
 #error "It seems neither struct tms nor struct timeb is supported in this platform!"
 #endif
 
@@ -205,7 +207,7 @@
 # endif
 #endif
 
-#if !defined(OPENSSL_SYS_VMS) && !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MACINTOSH_CLASSIC) && !defined(OPENSSL_SYS_OS2)
+#if !defined(OPENSSL_SYS_VMS) && !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MACINTOSH_CLASSIC) && !defined(OPENSSL_SYS_OS2) && !defined(AMIGA)
 # define HAVE_FORK 1
 #endif
 
@@ -305,6 +307,45 @@ static double Time_F(int s)
 			return((ret < 0.001)?0.001:ret);
 			}
 		}
+#elif defined(AMIGA)
+	{
+#ifndef __SASC
+		static struct timeval tstart, tend;
+
+		if (s == START)
+		{
+			gettimeofday(&tstart, NULL);
+			ret = 0;
+		}
+		else
+		{
+			gettimeofday(&tend, NULL);
+
+			ret = tend.tv_sec - tstart.tv_sec
+			      + (tend.tv_usec - tstart.tv_usec) / 1000000.0;
+
+			if (ret < 0.001)
+				ret = 0.001;
+		}
+#else /* !__SASC */
+		static clock_t tstart;
+
+		if (s == START)
+		{
+			tstart = clock();
+			ret = 0;
+		}
+		else
+		{
+			ret = (clock() - tstart) / (double)CLOCKS_PER_SEC;
+
+			if (ret < 0.001)
+				ret = 0.001;
+		}
+#endif /* !__SASC */
+	}
+
+	return(ret);
 #else  /* ndef USE_TOD */
 		
 # ifdef TIMES
@@ -1651,6 +1692,7 @@ show_res:
 # endif
 #endif
 		printf("\n");
+#ifndef AMIGA
 		printf("timing function used: %s%s%s%s%s%s%s\n",
 		       (ftime_used ? "ftime" : ""),
 		       (ftime_used + times_used > 1 ? "," : ""),
@@ -1659,6 +1701,11 @@ show_res:
 		       (gettimeofday_used ? "gettimeofday" : ""),
 		       (ftime_used + times_used + gettimeofday_used + getrusage_used > 1 ? "," : ""),
 		       (getrusage_used ? "getrusage" : ""));
+#elif defined(__SASC) /* !AMIGA */
+		printf("timing function used: clock\n");
+#else /* !AMIGA */
+		printf("timing function used: gettimeofday\n");
+#endif /* !AMIGA */
 		}
 
 	if (pr_header)

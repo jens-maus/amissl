@@ -91,9 +91,9 @@ const char *SSLeay_version(int t)
 #else
 		return("compiler: information not available");
 #endif
-#else
+#else /* !AMISSL */
 		return("compiler: information not available");
-#endif /* AMISSL */
+#endif /* !AMISSL */
 		}
 	if (t == SSLEAY_PLATFORM)
 		{
@@ -106,17 +106,21 @@ const char *SSLeay_version(int t)
 #else
 		return("platform: information not available");
 #endif
-#else
+#else /* !AMISSL */
 		return("platform: Amiga");
-#endif /* AMISSL */
+#endif /* !AMISSL */
 		}
 	if (t == SSLEAY_DIR)
 		{
+#ifndef AMISSL
 #ifdef OPENSSLDIR
 		return "OPENSSLDIR: \"" OPENSSLDIR "\"";
 #else
 		return "OPENSSLDIR: N/A";
 #endif
+#else /* !AMISSL */
+		return("OPENSSLDIR: AmiSSL:");
+#endif /* !AMISSL */
 		}
 	return("not available");
 	}

@@ -958,7 +958,6 @@ chop $prefix if $prefix =~ /\/$/;
 $openssldir=$prefix . "/ssl" if $openssldir eq "";
 $openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/])/;
 
-$openssldir = $prefix = "AmiSSL:";
 
 print "IsWindows=$IsWindows\n";
 

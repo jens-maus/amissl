@@ -180,6 +180,15 @@ static void s_server_init(void);
 # endif
 #endif
 
+#if defined(AMIGA) && defined(__SASC)
+#include <proto/dos.h>
+
+void sleep(int secs)
+{
+	Delay(secs * TICKS_PER_SECOND);
+}
+#endif
+
 #ifndef OPENSSL_NO_DH
 static unsigned char dh512_p[]={
 	0xDA,0x58,0x3C,0x16,0xD9,0x85,0x22,0x89,0xD0,0xE4,0xAF,0x75,

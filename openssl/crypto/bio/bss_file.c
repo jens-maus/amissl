@@ -65,9 +65,7 @@
 #ifndef HEADER_BSS_FILE_C
 #define HEADER_BSS_FILE_C
 
-#ifdef AMISSL
-#include "bss_file_amiga.c"
-#else /* !AMISSL */
+#ifndef AMISSL
 
 #include <stdio.h>
 #include <errno.h>
@@ -342,7 +340,7 @@ static int MS_CALLBACK file_puts(BIO *bp, const char *str)
 
 #endif /* OPENSSL_NO_STDIO */
 
-#endif /* AMISSL */
+#endif /* !AMISSL */
 
 #endif /* HEADER_BSS_FILE_C */
 

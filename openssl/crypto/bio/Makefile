@@ -24,13 +24,13 @@ APPS=
 LIB=$(TOP)/libcrypto.a
 LIBSRC= bio_lib.c bio_cb.c bio_err.c \
 	bss_mem.c bss_null.c bss_fd.c \
-	bss_file.c bss_sock.c bss_conn.c \
+	bss_file.c bss_file_amiga.c bss_sock.c bss_conn.c \
 	bf_null.c bf_buff.c b_print.c b_dump.c \
 	b_sock.c bss_acpt.c bf_nbio.c bss_log.c bss_bio.c
 #	bf_lbuf.c
 LIBOBJ= bio_lib.o bio_cb.o bio_err.o \
 	bss_mem.o bss_null.o bss_fd.o \
-	bss_file.o bss_sock.o bss_conn.o \
+	bss_file.o bss_file_amiga.o bss_sock.o bss_conn.o \
 	bf_null.o bf_buff.o b_print.o b_dump.o \
 	b_sock.o bss_acpt.o bf_nbio.o bss_log.o bss_bio.o
 #	bf_lbuf.o
@@ -183,7 +183,8 @@ bss_file.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
 bss_file.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
 bss_file.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
 bss_file.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
-bss_file.o: ../cryptlib.h bss_file.c bss_file_amiga.c
+bss_file.o: ../cryptlib.h bss_file.c
+bss_file_amiga.o: bss_file_amiga.c bss_file.o
 bss_log.o: ../../e_os.h ../../include/openssl/bio.h
 bss_log.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
 bss_log.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h

@@ -4,8 +4,6 @@
 #include <utility/tagitem.h>
 #include <libraries/amisslmaster.h>
 
-#define AMISSLMASTER_VER 3
-
 #include <interfaces/amisslmaster.h>
 #include <interfaces/amissl.h>
 #include <assert.h>
@@ -25,7 +23,7 @@ void __init_amissl_main(void)
 {
     if (AmiSSLMasterBase == NULL) /* Library base is NULL, we need to open it */
     {
-        AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library", AMISSLMASTER_VER);
+        AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library", VERSION);
         assert(AmiSSLMasterBase != NULL);
     }
     else

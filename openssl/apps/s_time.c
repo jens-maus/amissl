@@ -85,7 +85,7 @@
 #include OPENSSL_UNISTD
 #endif
 
-#if !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_VXWORKS) && (!defined(OPENSSL_SYS_VMS) || defined(__DECC))
+#if !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_VXWORKS) && (!defined(OPENSSL_SYS_VMS) || defined(__DECC)) && !defined(AMIGA)
 #define TIMES
 #endif
 
@@ -105,7 +105,7 @@
 #undef TIMES
 #endif
 
-#if !defined(TIMES) && !defined(OPENSSL_SYS_VXWORKS)
+#if !defined(TIMES) && !defined(OPENSSL_SYS_VXWORKS) && !defined(AMIGA)
 #include <sys/timeb.h>
 #endif
 
@@ -400,6 +400,45 @@ static double tm_Time_F(int s)
 		return((ret == 0.0)?1e-6:ret);
 		}
         }
+#elif defined(AMIGA)
+	{
+#ifndef __SASC
+		static struct timeval tstart, tend;
+
+		if (s == START)
+		{
+			gettimeofday(&tstart, NULL);
+			ret = 0;
+		}
+		else
+		{
+			gettimeofday(&tend, NULL);
+
+			ret = tend.tv_sec - tstart.tv_sec
+			      + (tend.tv_usec - tstart.tv_usec) / 1000000.0;
+
+			if (ret < 0.001)
+				ret = 0.001;
+		}
+#else /* !__SASC */
+		static clock_t tstart;
+
+		if (s == START)
+		{
+			tstart = clock();
+			ret = 0;
+		}
+		else
+		{
+			ret = (clock() - tstart) / (double)CLOCKS_PER_SEC;
+
+			if (ret < 0.001)
+				ret = 0.001;
+		}
+#endif /* !__SASC */
+	}
+
+	return(ret);
 #else /* !times() */
 	static struct timeb tstart,tend;
 	long i;

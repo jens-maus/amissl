@@ -26,8 +26,8 @@ COMPATSRC= ui_compat.c
 COMPATOBJ= ui_compat.o
 
 LIB=$(TOP)/libcrypto.a
-LIBSRC= ui_err.c ui_lib.c ui_openssl.c ui_util.c $(COMPATSRC)
-LIBOBJ= ui_err.o ui_lib.o ui_openssl.o ui_util.o $(COMPATOBJ)
+LIBSRC= ui_err.c ui_lib.c ui_openssl.c ui_amissl.c ui_util.c $(COMPATSRC)
+LIBOBJ= ui_err.o ui_lib.o ui_openssl.o ui_amissl.o ui_util.o $(COMPATOBJ)
 
 SRC= $(LIBSRC)
 
@@ -100,7 +100,6 @@ ui_lib.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
 ui_lib.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
 ui_lib.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 ui_lib.o: ../../include/openssl/ui.h ../cryptlib.h ui_lib.c ui_locl.h
-ui_openssl.o: ui_amissl.c
 ui_openssl.o: ../../e_os.h ../../include/openssl/bio.h
 ui_openssl.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
 ui_openssl.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
@@ -109,6 +108,7 @@ ui_openssl.o: ../../include/openssl/opensslv.h
 ui_openssl.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
 ui_openssl.o: ../../include/openssl/symhacks.h ../../include/openssl/ui.h
 ui_openssl.o: ../cryptlib.h ui_locl.h ui_openssl.c
+ui_amissl.o: ui_amissl.c ui_openssl.o
 ui_util.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
 ui_util.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
 ui_util.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h

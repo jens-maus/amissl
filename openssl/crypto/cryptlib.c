@@ -515,7 +515,7 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 		file,line,assertion);
 	abort();
 	}
-#else /* AMISSL */
+#else /* !AMISSL */
 #include <proto/exec.h>
 #include <proto/intuition.h>
 #include <intuition/intuition.h>

@@ -2,8 +2,8 @@ CC = ppc-amigaos-gcc
 LD = ppc-amigaos-gcc
 
 CFLAGS = -I$(AmiSSL)/include -D__USE_INLINE__ -c
-LDFLAGS = -lauto -lamisslauto
-PROGS = uitest # vatest https md2test ssltest randtest
+LDFLAGS = -lauto -L$(AmiSSL)/lib -lamisslauto -lamisslstubs
+PROGS = vatest uitest https ssltest
 
 all: $(PROGS)
 

@@ -134,11 +134,7 @@ int CONF_modules_load(const CONF *cnf, const char *appname,
 		return 1;
 
 	if (appname == NULL)
-#ifndef AMISSL
 		appname = "openssl_conf";
-#else /* AMISSL */
-		appname = "amissl_conf";
-#endif /* !AMISSL */
 
 	vsection = NCONF_get_string(cnf, NULL, appname); 
 
@@ -555,13 +551,6 @@ char *CONF_get1_default_config_file(void)
 	char *file;
 	int len;
 
-#ifdef AMISSL
-	file = getenv("AMISSL_CONF");
-
-	if (file)
-		return(BUF_strdup(file));
-#endif /* AMISSL */
-
 	file = getenv("OPENSSL_CONF");
 	if (file) 
 		return BUF_strdup(file);
@@ -582,7 +571,7 @@ char *CONF_get1_default_config_file(void)
 	BUF_strlcat(file,"/",len + 1);
 #endif
 	BUF_strlcat(file,OPENSSL_CONF,len + 1);
-#else /* AMIGA */
+#else /* !AMIGA */
 	AddPart(file, OPENSSL_CONF, len + 1);
 #endif /* !AMIGA */
 

@@ -4,8 +4,6 @@
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 
-#define AMISSLMASTER_VER 3
-
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
@@ -48,8 +46,8 @@ int __stdargs _STI_250_openamissl(void)
 {
 	int ret = 1; /* Error */
 
-	if (!(libbase1 = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_VER)))
-		fail("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_VER) "\n");
+	if (!(libbase1 = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", VERSION)))
+		fail("Couldn't open amisslmaster.library v" MKSTR(VERSION) "\n");
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
 		fail("Couldn't initialize amisslmaster.library!\n");
 	else if (!(libbase2 = AmiSSLBase = OpenAmiSSL()))

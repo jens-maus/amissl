@@ -1,5 +1,6 @@
 SRC_D=src
 OBJ_D=obj
+LIB_D=lib
 OUTDIR=LIBS:
 LIBCPU=68000
 LIBSSL=openssl/OS4/out/libssl.a
@@ -10,7 +11,7 @@ VERSION=3
 VERSIONNAME=097e
 AMISSLREVISION=1
 AMISSLMASTERREVISION=1
-AMISSLDATE=7.2.2005
+AMISSLDATE=16.2.2005
 AMISSLMASTERDATE=7.2.2005
 
 LFLAGS=-nostdlib
@@ -22,9 +23,9 @@ CFLAGS=$(INCLUDE) -mbaserel $(OPT) -DAMISSL_COMPILE -DVERSION=$(VERSION) \
        -DAMISSLMASTERDATE=$(AMISSLMASTERDATE)
 OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
 LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lm -lgcc
-LIBAUTO=lib/libamisslauto.a
 
-all: amissl_v$(VERSIONNAME).library amisslmaster.library $(LIBAUTO)
+all: amissl_v$(VERSIONNAME).library amisslmaster.library \
+     $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a
 
 clean:
 	-rm obj/*.o
@@ -51,14 +52,17 @@ amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_
 	cp $@ /cygdrive/D/FTP
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
-	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE)
+	ppc-amigaos-gcc -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE)
 
-$(LIBAUTO): $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
-	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
-	cp $@ ../ppc-amigaos/clib2/lib
+$(LIB_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
+	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o
+#	cp $@ /usr/local/amiga/ppc-amigaos/local/clib2/lib
+
+$(LIB_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
+	ppc-amigaos-ar r $@ $(OBJ_D)/libstubs.o
 
 testing:
 	ppc-amigaos-gcc basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib

@@ -111,7 +111,6 @@ extern "C" {
 
 #ifdef AMIGA
 #  define NO_CHMOD
-//#  define NO_SYSLOG
 #  undef  DEVRANDOM
 #  ifdef CLIB2
 #    define __USE_NETINET_IN_H
@@ -153,7 +152,7 @@ extern "C" {
 #if !defined(WINNT)
 #define WIN_CONSOLE_BUG
 #endif
-#elif defined(AMISSL)
+#elif defined(AMISSL_COMPILE)
 void SetAmiSSLerrno(int errno);
 int GetAmiSSLerrno(void);
 #define get_last_sys_error()	GetAmiSSLerrno()
@@ -177,17 +176,36 @@ int GetAmiSSLerrno(void);
 #define readsocket(s,b,n)	read_s(s,b,n)
 #define writesocket(s,b,n)	send(s,b,n,0)
 #elif defined(AMISSL)
-#define get_last_socket_error()	GetAmiSSLerrno()
-#define clear_socket_error()	SetAmiSSLerrno(0)
-#define ioctlsocket(a,b,c)	ioctlsocket(a,b,c)
-#define closesocket(s)		closesocket(s)
-#define readsocket(s,b,n)	recv((s),(b),(n), 0)
-#define writesocket(s,b,n)	send((s),(b),(n), 0)
-#ifdef __SASC
-#include "/libcmt/libcmt.h"
-#else /* __SASC */
-#include "../libcmt/libcmt.h"
-#endif /* __SASC */
+# ifdef AMISSL_COMPILE
+#  define get_last_socket_error()	GetAmiSSLerrno()
+#  define clear_socket_error()	SetAmiSSLerrno(0)
+/* # define ioctlsocket(a,b,c)	ioctlsocket((a),(b),(c)) */
+/* # define closesocket(s)		closesocket((s)) */
+#  define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#  define writesocket(s,b,n)	send((s),(b),(n), 0)
+#  ifdef __SASC
+#   include "/libcmt/libcmt.h"
+#  else /* __SASC */
+#   include "../libcmt/libcmt.h"
+#  endif /* __SASC */
+# else /* !AMISSL_COMPILE */
+#  define get_last_socket_error()	errno
+#  define clear_socket_error()	errno = 0
+#  include <stdio.h>
+#  ifdef CLIB2
+#   include <unistd.h>
+#   define ioctlsocket(a,b,c)	ioctl((a),(b),(c))
+#   define closesocket(s)		close((s))
+#   define readsocket(s,b,n)	read((s),(b),(n))
+#   define writesocket(s,b,n)	write((s),(b),(n))
+#  else /* !CLIB2 */
+#   include <proto/socket.h>
+#   define ioctlsocket(a,b,c)	IoctlSocket((a),(b),(c))
+#   define closesocket(s)		CloseSocket((s))
+#   define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#   define writesocket(s,b,n)	send((s),(b),(n), 0)
+#  endif /* CLIB2 */
+# endif /* AMISSL_COMPILE */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -374,11 +392,7 @@ int GetAmiSSLerrno(void);
        typedef unsigned long clock_t;
 #    endif
 
-#    ifndef AMISSL
-#      define OPENSSL_CONF	"openssl.cnf"
-#    else
-#      define OPENSSL_CONF	"amissl.cnf"
-#    endif
+#    define OPENSSL_CONF	"openssl.cnf"
 #    define SSLEAY_CONF		OPENSSL_CONF
 #    define RFILE		".rnd"
 #    ifdef AMIGA
@@ -435,7 +449,7 @@ extern HINSTANCE _hInstance;
 
 #  else
 
-#    ifdef AMIGA
+#    ifdef AMISSL_COMPILE
 #      define PRAGMAS_SOCKET_PRAGMAS_H /* Make sure that we don't enable SocketBase calls */
 #    endif
 
@@ -499,8 +513,8 @@ extern HINSTANCE _hInstance;
 #    define INVALID_SOCKET	(-1)
 #    endif /* INVALID_SOCKET */
 #    ifdef AMIGA
-#      define SSLeay_Read(a,b,c)     recv((a),(b),(c), 0)
-#      define SSLeay_Write(a,b,c)    send((a),(b),(c), 0)
+#      define SSLeay_Read(a,b,c)     readsocket((a),(b),(c))
+#      define SSLeay_Write(a,b,c)    writesocket((a),(b),(c))
 #      define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
 #      define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
 #    else

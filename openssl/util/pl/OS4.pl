@@ -21,7 +21,7 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='-lauto -lamisslauto';
+$lflags='-lauto -lnet -L\$(AmiSSL)/lib -lamisslauto -lamisslstubs';
 $efile='-o ';
 $exep='';
 $ex_libs="";

@@ -83,10 +83,14 @@
 #    else
 #      include <unixlib.h>
 #    endif
-#  elif !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_WINDOWS)
+#  elif !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_WINDOWS) && !defined(AMIGA)
 #    include <sys/file.h>
 #  endif
 #endif
+
+#ifdef AMIGA
+#include <proto/dos.h>
+#endif /* AMIGA */
 
 #include "apps.h"
 
@@ -547,6 +551,7 @@ bad:
 		const char *s=X509_get_default_cert_area();
 		size_t len;
 
+#ifndef AMIGA
 #ifdef OPENSSL_SYS_VMS
 		len = strlen(s)+sizeof(CONFIG_FILE);
 		tofree=OPENSSL_malloc(len);
@@ -558,6 +563,12 @@ bad:
 		BUF_strlcat(tofree,"/",len);
 #endif
 		BUF_strlcat(tofree,CONFIG_FILE,len);
+#else /* AMIGA */
+		len = strlen(s) + 1 + sizeof(CONFIG_FILE);
+		tofree = OPENSSL_malloc(len); /* No check for return value... */
+		BUF_strlcpy(tofree, s, len);
+		AddPart(tofree, CONFIG_FILE, len);
+#endif /* !AMIGA */
 		configfile=tofree;
 		}
 
@@ -1258,11 +1269,21 @@ bad:
 
 			strcpy(buf[2],outdir);
 
+#ifndef AMIGA
 #ifndef OPENSSL_SYS_VMS
 			BUF_strlcat(buf[2],"/",sizeof(buf[2]));
 #endif
 
 			n=(char *)&(buf[2][strlen(buf[2])]);
+#else /* AMIGA */
+			if (AddPart(buf[2], "z", sizeof(buf[2])))
+			{
+				n = &buf[2][strlen(buf[2])];
+				*n-- = '\0'; /* Remove the 'z' that was just added to the end */
+			}
+			else
+				n = &buf[2][strlen(buf[2])];
+#endif /* !AMIGA */
 			if (j > 0)
 				{
 				for (k=0; k<j; k++)

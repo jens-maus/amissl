@@ -79,7 +79,7 @@ extern "C" {
 #define X509_CERT_DIR		"AmiSSL:certs"
 #define X509_CERT_FILE		"AmiSSL:cert.pem"
 #define X509_PRIVATE_DIR	"AmiSSL:private"
-#else /* !AMISSL */
+#else /* AMISSL */
 #ifndef OPENSSL_SYS_VMS
 #define X509_CERT_AREA		OPENSSLDIR
 #define X509_CERT_DIR		OPENSSLDIR "/certs"
