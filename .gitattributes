@@ -290,6 +290,7 @@ include/clib/rsa_protos.h eol=lf
 include/clib/sha_protos.h eol=lf
 include/libraries/amissl.h eol=lf
 include/libraries/amisslmaster.h eol=lf
+include/pragmas/aes_pragmas.h eol=lf
 include/pragmas/amissl_pragmas.h eol=lf
 include/pragmas/amisslmaster_pragmas.h eol=lf
 include/pragmas/blowfish_pragmas.h eol=lf
