@@ -1,15 +1,13 @@
 #!/usr/bin/perl -w
 
-# Patches all includes (both in outinc and respective directories) to
-# change #include <openssl/file.h> to #include <amissl/file.h> and
-# adds #include <proto/amissl_all.h>
+# Patches all includes to change #include <openssl/file.h>
+# to #include <amissl/file.h> and adds #include <proto/amissl_all.h>
 
 use strict;
 
 my $openssldir = "/SSL"; # Must be UNIX style path
 my @includes;
 my $dir = "";
-my $curr;
 
 open(IN, "<${openssldir}/MINFO") || die "${openssldir}/MINFO: $!\n";
 
@@ -30,42 +28,34 @@ while(<IN>)
 		}
 	}
 }
+
 close(IN);
 
 foreach(@includes)
 {
-	$curr = $_;
-	fixinclude($curr);
-
-# This is not needed since SMakefile will copy original includes
-# to outinc whenever they change
-
-#	$curr =~ /^(.*)\/(.*)$/;
-#	fixinclude($openssldir . "/outinc/openssl/" . $2);
+	fixinclude($_);
 }
+
+exit(0);
 
 sub fixinclude
 {
-	my ($file) = @_;
+	my $file = shift;
 
 	open(INC, "<$file") || die "couldn't open $file: $!\n";
 	open(OUT, ">$file.new") || die "couldn't open $file.new: $!\n";
 
 	while(<INC>)
 	{
-
 		if (/^extern "C" \{$/)
 		{
 			<INC>;	# Read #endif
 			print OUT &Include;
-			$_ = "";
 		}
-
-
-#		s/(.*)<openssl\/(.*?)\.h>(.*)$/$1<amissl\/$2\.h>$3/;
-#		# The following one is for <openssl/opensslconf> and similar
-#		s/(.*)<amissl\/openssl(.*?)\.h>(.*)$/$1<amissl\/amissl$2\.h>$3/;
-		print OUT;
+		else
+		{
+			print OUT;
+		}
 	}
 
 	close(OUT);
