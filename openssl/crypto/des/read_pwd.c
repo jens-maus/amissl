@@ -75,10 +75,6 @@
 #endif
 #endif
 
-#ifdef AMISSL
-#include "read_pwd_amiga.c"
-#else /* !AMISSL */
-
 /* #define SIGACTION */ /* Define this if you have sigaction() */
 
 #ifdef WIN16TTY
@@ -523,4 +519,3 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 	}
 #endif
 #endif /* !OPENSSL_SYS_WINCE && !WIN16 */
-#endif /* AMISSL */
