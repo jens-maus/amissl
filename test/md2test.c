@@ -67,6 +67,11 @@
 struct Library *AmiSSLMasterBase;
 struct Library *AmiSSLBase;
 
+#ifdef __amigaos4__
+struct AmiSSLMasterIFace *IAmiSSLMaster;
+struct AmiSSLIFace *IAmiSSL;
+#endif
+
 #ifdef OPENSSL_NO_MD2
 int main(int argc, char *argv[])
 {
@@ -110,10 +115,19 @@ int main(int argc, char *argv[])
 	char *p;
 	unsigned char md[MD2_DIGEST_LENGTH];
 
+#ifdef __amigaos4__
+	if ((AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 1))
+		&& (IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)AmiSSLMasterBase,"main",1,NULL))
+	    && InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE)
+	    && (AmiSSLBase = OpenAmiSSL())
+	    && (IAmiSSL = (struct IAmiSSLIFace *)GetInterface((struct Library *)AmiSSLBase,"main",1,NULL))
+	    && !InitAmiSSL(TAG_DONE))
+#else
 	if ((AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 1))
 	    && InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE)
 	    && (AmiSSLBase = OpenAmiSSL())
 	    && !InitAmiSSL(TAG_DONE))
+#endif
 	{
 	P=test;
 	R=ret;
@@ -141,8 +155,16 @@ int main(int argc, char *argv[])
 	if (AmiSSLBase)
 	{
 		CleanupAmiSSL(TAG_DONE);
+#ifdef __amigaos4__
+		DropInterface((struct Interface *)IAmiSSL);
+#endif
 		CloseAmiSSL();
 	}
+	
+#ifdef __amigaos4__
+	if (IAmiSSLMaster)
+		DropInterface((struct Interface *)IAmiSSLMaster);
+#endif
 
 	if (AmiSSLMasterBase)
 		CloseLibrary(AmiSSLMasterBase);
