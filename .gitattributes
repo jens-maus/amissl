@@ -1,6 +1,7 @@
 * text=auto !eol
 FD/amissl_lib.fd eol=lf
 FD/amisslmaster_lib.fd eol=lf
+/Makefile eol=lf
 /SMakefile eol=lf
 certs/03e16f6c.0 eol=lf
 certs/04183E8D.0 eol=lf
