@@ -4,6 +4,7 @@ SHA_Init_AmiSSL(c)(a0)
 SHA_Update_AmiSSL(c,data,len)(a0,a1,d0)
 SHA_Final_AmiSSL(md,c)(a0,a1)
 SHA_AmiSSL(d,n,md)(a0,d0,a1)
+*notagcall
 SHA_Transform_AmiSSL(c,data)(a0,a1)
 SHA1_Init_AmiSSL(c)(a0)
 SHA1_Update_AmiSSL(c,data,len)(a0,a1,d0)
