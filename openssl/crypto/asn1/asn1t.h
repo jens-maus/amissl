@@ -82,8 +82,12 @@ extern "C" {
 
 /* Macros for start and end of ASN1_ITEM definition */
 
+#ifndef AMISSL
 #define ASN1_ITEM_start(itname) \
 	OPENSSL_GLOBAL const ASN1_ITEM itname##_it = {
+#else /* AMISSL */
+#error Logic error
+#endif /* !AMISSL */
 
 #define ASN1_ITEM_end(itname) \
 		};
@@ -96,10 +100,19 @@ extern "C" {
 
 /* Macros for start and end of ASN1_ITEM definition */
 
+#ifndef AMISSL
 #define ASN1_ITEM_start(itname) \
 	const ASN1_ITEM * itname##_it(void) \
 	{ \
 		static const ASN1_ITEM local_it = { \
+
+#else /* AMISSL */
+#define ASN1_ITEM_start(itname) \
+	const ASN1_ITEM * itname##_it(void) \
+	{ \
+		static const ASN1_ITEM local_it = {{0, 0, 0} /* amissl_pad */, \
+
+#endif /* !AMISSL */
 
 #define ASN1_ITEM_end(itname) \
 		}; \
