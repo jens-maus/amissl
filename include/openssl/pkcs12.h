@@ -250,9 +250,13 @@ PKCS12 *PKCS12_create(char *pass, char *name, EVP_PKEY *pkey, X509 *cert,
 			 STACK_OF(X509) *ca, int nid_key, int nid_cert, int iter,
 						 int mac_iter, int keytype);
 int i2d_PKCS12_bio(BIO *bp, PKCS12 *p12);
+#ifndef OPENSSL_NO_FP_API
 int i2d_PKCS12_fp(FILE *fp, PKCS12 *p12);
+#endif
 PKCS12 *d2i_PKCS12_bio(BIO *bp, PKCS12 **p12);
+#ifndef OPENSSL_NO_FP_API
 PKCS12 *d2i_PKCS12_fp(FILE *fp, PKCS12 **p12);
+#endif
 int PKCS12_newpass(PKCS12 *p12, char *oldpass, char *newpass);
 
 /* BEGIN ERROR CODES */
