@@ -1,0 +1,8 @@
+##base _MD2Base
+##bias 30
+MD2_options()()
+MD2_Init(c)(a0)
+MD2_Update(c,data,len)(a0,a1,d0)
+MD2_Final(md,c)(a0,a1)
+MD2(d,n,md)(a0,d0,a1)
+##end

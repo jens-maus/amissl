@@ -1,0 +1,13 @@
+##base _SHABase
+##bias 30
+SHA_Init(c)(a0)
+SHA_Update(c,data,len)(a0,a1,d0)
+SHA_Final(md,c)(a0,a1)
+SHA(d,n,md)(a0,d0,a1)
+SHA_Transform(c,data)(a0,a1)
+SHA1_Init(c)(a0)
+SHA1_Update(c,data,len)(a0,a1,d0)
+SHA1_Final(md,c)(a0,a1)
+SHA1(d,n,md)(a0,d0,a1)
+SHA1_Transform(c,data)(a0,a1)
+##end

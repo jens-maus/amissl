@@ -1,0 +1,31 @@
+#/bin/sh
+
+cd openssl
+
+mkdir -p {680{0,6}0,68020-40}/{tmp,out}
+
+cd 68000
+(cd .. && perl util/mk1mf.pl SRC= TMP=68000/tmp \
+						  OUT=68000/out SC) >makefile.one
+cd ..
+make -f 68000/makefile.one CPU_TYPE=ANY
+
+cd 68020-40
+(cd .. && perl util/mk1mf.pl SRC= TMP=68020-40/tmp \
+						  OUT=68020-40/out SC) >makefile.one
+cd ..
+make -f 68020-40/makefile.one CPU_TYPE=020
+
+cd 68060
+(cd .. && perl util/mk1mf.pl SRC= TMP=68060/tmp \
+						  OUT=68060/out SC) >makefile.one
+cd ..
+make -f 68060/makefile.one CPU_TYPE=060
+
+cd ..
+
+mkdir -p {680{0,6}0,68020-40}/AmiSSL
+
+/sc/c/smake all LIBCPU=68000 OUTDIR=68000/
+/sc/c/smake all LIBCPU=68020-40 OUTDIR=68020-40/
+/sc/c/smake all LIBCPU=68060 OUTDIR=68060/

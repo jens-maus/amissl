@@ -1,0 +1,490 @@
+Configure:1108
+	system "perl crypto/objects/obj_dat.pl <crypto\\objects\\objects.h >crypto\\objects\\obj_dat.h";
+
+Set NO_CHMOD
+
+apps:
+diff -r openssl-0.9.4/apps/ca.c openssl/apps/ca.c
+100a101
+> #ifndef AMISSL
+101a103,105
+> #else /* AMISSL */
+> #define CONFIG_FILE "amissl.cnf"
+> #endif /* !AMISSL */
+416a421,423
+> #ifdef AMISSL
+> 	if (configfile == NULL) configfile = getenv("AMISSL_CONF");
+> #endif /* AMISSL */
+422c429
+< #ifdef VMS
+---
+> #if defined(VMS) || defined(AMISSL)
+diff -r openssl-0.9.4/apps/ciphers.c openssl/apps/ciphers.c
+127a128
+> 			 (strcmp(*argv, "?") == 0) ||
+diff -r openssl-0.9.4/apps/dsa.c openssl/apps/dsa.c
+160a161
+> 		if (EVP_idea_IsReal())
+diff -r openssl-0.9.4/apps/enc.c openssl/apps/enc.c
+229a230
+> 			if (EVP_idea_IsReal())
+232a234
+> 			if (EVP_RC4_IsReal())
+235a238
+> 			if (EVP_BF_IsReal())
+238a242
+> 			if (EVP_RC4_IsReal())
+261a266,267
+> 			if (EVP_idea_IsReal())
+> 			{
+265a272
+> 			}
+267a275,276
+> 			if (EVP_RC2_IsReal())
+> 			{
+271a281
+> 			}
+273a284,285
+> 			if (EVP_BF_IsReal())
+> 			{
+277a290
+> 			}
+279a293,294
+> 			if (EVP_CAST_IsReal())
+> 			{
+283a299
+> 			}
+285a302,303
+> 			if (EVP_RC5_IsReal())
+> 			{
+289a308
+> 			}
+diff -r openssl-0.9.4/apps/gendsa.c openssl/apps/gendsa.c
+112c112
+< 		else if (strcmp(*argv,"-des") == 0)
+---
+> 		else if (strcmp(*argv,"-des") == 0 && EVP_des_IsReal())
+114c114
+< 		else if (strcmp(*argv,"-des3") == 0)
+---
+> 		else if (strcmp(*argv,"-des3") == 0 && EVP_des_IsReal())
+118c118
+< 		else if (strcmp(*argv,"-idea") == 0)
+---
+> 		else if (strcmp(*argv,"-idea") == 0 && EVP_idea_IsReal())
+136a137,138
+> 		if (EVP_des_IsReal())
+> 		{
+138a141
+> 		}
+140a144
+> 		if (EVP_idea_IsReal())
+diff -r openssl-0.9.4/apps/genrsa.c openssl/apps/genrsa.c
+124c124
+< 		else if (strcmp(*argv,"-des") == 0)
+---
+> 		else if (strcmp(*argv,"-des") == 0 && EVP_des_IsReal())
+126c126
+< 		else if (strcmp(*argv,"-des3") == 0)
+---
+> 		else if (strcmp(*argv,"-des3") == 0 && EVP_des_IsReal())
+130c130
+< 		else if (strcmp(*argv,"-idea") == 0)
+---
+> 		else if (strcmp(*argv,"-idea") == 0 && EVP_idea_IsReal())
+144a145
+> 		if (EVP_idea_IsReal())
+diff -r openssl-0.9.4/apps/openssl.c openssl/apps/openssl.c
+62a63,64
+> long __stack = 32768;
+> 
+143a146,150
+> 
+> #ifdef AMISSL
+> 	p=getenv("AMISSL_CONF");
+> 	if (p == NULL)
+> #endif
+150c157
+< #ifndef VMS
+---
+> #if !defined(VMS) && !defined(AMISSL)
+199a207
+> #ifndef AMISSL
+200a209,211
+> #else /* AMISSL */
+> 			else prompt="AmiSSL> ";
+> #endif /* !AMISSL */
+296a308
+> #ifndef AMISSL
+298a311,314
+> #else /* AMISSL */
+> 		BIO_printf(bio_err,"AmiSSL: error: '%s' is an invalid command.\n",
+> 			argv[0]);
+> #endif /* !AMISSL */
+diff -r openssl-0.9.4/apps/pkcs12.c openssl/apps/pkcs12.c
+140c140
+< 		else if (!strcmp (*args, "-idea")) enc=EVP_idea_cbc();
+---
+> 		else if (!strcmp (*args, "-idea") && EVP_idea_IsReal()) enc=EVP_idea_cbc();
+220a221
+> 	if (EVP_idea_IsReal())
+diff -r openssl-0.9.4/apps/pkcs7.c openssl/apps/pkcs7.c
+136c136
+< 		else if (strcmp(*argv,"-des") == 0)
+---
+> 		else if (strcmp(*argv,"-des") == 0 && EVP_des_IsReal())
+138c138
+< 		else if (strcmp(*argv,"-des3") == 0)
+---
+> 		else if (strcmp(*argv,"-des3") == 0 && EVP_des_IsReal())
+142c142
+< 		else if (strcmp(*argv,"-idea") == 0)
+---
+> 		else if (strcmp(*argv,"-idea") == 0 && EVP_idea_IsReal())
+167a168
+> 		if (EVP_idea_IsReal())
+diff -r openssl-0.9.4/apps/req.c openssl/apps/req.c
+153a154
+> 	if (EVP_des_IsReal())
+357a359,362
+> #ifdef AMISSL
+> 	p=getenv("AMISSL_CONF");
+> 	if (p == NULL)
+> #endif /* AMISSL */
+364c369
+< #ifndef VMS
+---
+> #if !defined(VMS) && !defined(AMISSL)
+diff -r openssl-0.9.4/apps/rsa.c openssl/apps/rsa.c
+163a164
+> 		if (EVP_idea_IsReal())
+198c199
+< 	else if (informat == FORMAT_NETSCAPE)
+---
+> 	else if (informat == FORMAT_NETSCAPE && EVP_RC4_IsReal())
+296c297
+< 	else if (outformat == FORMAT_NETSCAPE)
+---
+> 	else if (outformat == FORMAT_NETSCAPE && EVP_RC4_IsReal())
+diff -r openssl-0.9.4/apps/s_client.c openssl/apps/s_client.c
+153a154
+> #ifndef AMISSL
+154a156,158
+> #else /* AMISSL */
+> 	BIO_printf(bio_err," -cipher       - prefered cipher to use, use the 'amissl ciphers'\n");
+> #endif /* !AMISSL */
+470c474
+< #ifndef WINDOWS
+---
+> #if !defined(WINDOWS) && !(defined(AMIGA) && defined(__SASC))
+569c573
+< #ifndef WINDOWS
+---
+> #if !defined(WINDOWS) && !(defined(AMIGA) && defined(__SASC))
+647c651
+< #ifndef WINDOWS
+---
+> #if !defined(WINDOWS) && !(defined(AMIGA) && defined(__SASC))
+diff -r openssl-0.9.4/apps/s_server.c openssl/apps/s_server.c
+229a230
+> #ifndef AMISSL
+230a232,234
+> #else /* AMISSL */
+> 	BIO_printf(bio_err," -cipher arg   - play with 'amissl ciphers' to see what goes here\n");
+> #endif /* !AMISSL */
+700c704,705
+< 	SSL_CTX_set_client_CA_list(ctx,SSL_load_client_CA_file(CAfile));
+---
+> 	if (CAfile)
+> 		SSL_CTX_set_client_CA_list(ctx,SSL_load_client_CA_file(CAfile));
+802c807
+< #ifndef WINDOWS
+---
+> #if !defined(WINDOWS) && !(defined(AMIGA) && defined(__SASC))
+diff -r openssl-0.9.4/apps/s_socket.c openssl/apps/s_socket.c
+404a405
+> #if !defined(AMIGA) && !defined(__SASC)
+409a411
+> #endif /* !defined(AMIGA) && !defined(__SASC) */
+610c612
+< #ifndef MSDOS
+---
+> #if !defined(MSDOS) && !(defined(AMIGA) && defined(__SASC))
+651c653
+< #endif /* MSDOS */
+---
+> #endif /* MSDOS && AMIGA && __SASC */
+diff -r openssl-0.9.4/apps/s_time.c openssl/apps/s_time.c
+89c89
+< #if !defined(MSDOS) && (!defined(VMS) || defined(__DECC))
+---
+> #if !defined(MSDOS) && (!defined(VMS) || defined(__DECC)) && !(defined(AMIGA) && defined(__SASC))
+92a93,96
+> #if defined(AMIGA) && defined(__SASC)
+> #define CLOCK
+> #endif
+> 
+109c113
+< #ifndef TIMES
+---
+> #if !defined TIMES && !defined CLOCK
+222,223c226,231
+< -CAfile arg   - PEM format file of CA's\n\
+< -cipher       - prefered cipher to use, play with 'openssl ciphers'\n\n";
+---
+> -CAfile arg   - PEM format file of CA's\n"
+> #ifndef AMISSL
+> "-cipher       - prefered cipher to use, play with 'openssl ciphers'\n\n";
+> #else /* AMISSL */
+> "-cipher       - prefered cipher to use, play with 'amissl ciphers'\n\n";
+> #endif /* !AMISSL */
+384c392,407
+< #else /* !times() */
+---
+> #elif defined CLOCK /* !times() */
+> 	static clock_t tstart,tend;
+> 	long i;
+> 
+> 	if (s == START)
+> 		{
+> 		tstart=clock();
+> 		return(0);
+> 		}
+> 	else
+> 		{
+> 		tend=clock();
+> 		ret=((double)(tend-tstart))/CLOCKS_PER_SEC;
+> 		return((ret < 0.001)?0.001:ret);
+> 		}
+> #else /* !clock() */
+Only in openssl/apps: smakefile
+diff -r openssl-0.9.4/apps/speed.c openssl/apps/speed.c
+85c85
+< #if !defined(MSDOS) && (!defined(VMS) || defined(__DECC))
+---
+> #if !defined(MSDOS) && (!defined(VMS) || defined(__DECC)) && !(defined(AMIGA) && defined(__SASC))
+88a89,92
+> #if defined(AMIGA) && defined(__SASC)
+> #define CLOCK
+> #endif
+> 
+105c109
+< #ifndef TIMES
+---
+> #if !defined TIMES && !defined CLOCK
+157c161
+< #include "./testrsa.h"
+---
+> #include "testrsa.h"
+161c165
+< #include "./testdsa.h"
+---
+> #include "testdsa.h"
+221a226,240
+> #elif defined CLOCK /* !times() */
+> 	static clock_t tstart,tend;
+> 	long i;
+> 
+> 	if (s == START)
+> 		{
+> 		tstart=clock();
+> 		return(0);
+> 		}
+> 	else
+> 		{
+> 		tend=clock();
+> 		ret=((double)(tend-tstart))/CLOCKS_PER_SEC;
+> 		return((ret < 0.001)?0.001:ret);
+> 		}
+391c410
+< 		if	(strcmp(*argv,"md2") == 0) doit[D_MD2]=1;
+---
+> 		if	(strcmp(*argv,"md2") == 0 && EVP_MD2_IsReal()) doit[D_MD2]=1;
+395c414
+< 			if (strcmp(*argv,"mdc2") == 0) doit[D_MDC2]=1;
+---
+> 			if (strcmp(*argv,"mdc2") == 0 && EVP_MDC2_IsReal()) doit[D_MDC2]=1;
+399c418
+< 			if (strcmp(*argv,"md5") == 0) doit[D_MD5]=1;
+---
+> 			if (strcmp(*argv,"md5") == 0 && EVP_MD5_IsReal()) doit[D_MD5]=1;
+403c422
+< 			if (strcmp(*argv,"hmac") == 0) doit[D_HMAC]=1;
+---
+> 			if (strcmp(*argv,"hmac") == 0 && EVP_MD5_IsReal()) doit[D_HMAC]=1;
+407c426
+< 			if (strcmp(*argv,"sha1") == 0) doit[D_SHA1]=1;
+---
+> 			if (strcmp(*argv,"sha1") == 0 && EVP_SHA_IsReal()) doit[D_SHA1]=1;
+409c428
+< 			if (strcmp(*argv,"sha") == 0) doit[D_SHA1]=1;
+---
+> 			if (strcmp(*argv,"sha") == 0 && EVP_SHA_IsReal()) doit[D_SHA1]=1;
+413c432
+< 			if (strcmp(*argv,"ripemd") == 0) doit[D_RMD160]=1;
+---
+> 			if (strcmp(*argv,"ripemd") == 0 && EVP_RIPEMD160_IsReal()) doit[D_RMD160]=1;
+415c434
+< 			if (strcmp(*argv,"rmd160") == 0) doit[D_RMD160]=1;
+---
+> 			if (strcmp(*argv,"rmd160") == 0 && EVP_RIPEMD160_IsReal()) doit[D_RMD160]=1;
+417c436
+< 			if (strcmp(*argv,"ripemd160") == 0) doit[D_RMD160]=1;
+---
+> 			if (strcmp(*argv,"ripemd160") == 0 && EVP_RIPEMD160_IsReal()) doit[D_RMD160]=1;
+421c440
+< 			if (strcmp(*argv,"rc4") == 0) doit[D_RC4]=1;
+---
+> 			if (strcmp(*argv,"rc4") == 0 && EVP_RC4_IsReal()) doit[D_RC4]=1;
+425,426c444,445
+< 			if (strcmp(*argv,"des-cbc") == 0) doit[D_CBC_DES]=1;
+< 		else	if (strcmp(*argv,"des-ede3") == 0) doit[D_EDE3_DES]=1;
+---
+> 			if (strcmp(*argv,"des-cbc") == 0 && EVP_des_IsReal()) doit[D_CBC_DES]=1;
+> 		else	if (strcmp(*argv,"des-ede3") == 0 && EVP_des_IsReal()) doit[D_EDE3_DES]=1;
+437a457
+> #ifndef AMISSL
+442a463,469
+> #else /* AMISSL */
+> 			if (strcmp(*argv,"amissl") == 0) 
+> 			{
+> 			RSA_set_default_method(RSA_PKCS1_Default());
+> 			j--;
+> 			}
+> #endif /* !AMISSL */
+454,455c481,482
+< 		     if (strcmp(*argv,"rc2-cbc") == 0) doit[D_CBC_RC2]=1;
+< 		else if (strcmp(*argv,"rc2") == 0) doit[D_CBC_RC2]=1;
+---
+> 		     if (strcmp(*argv,"rc2-cbc") == 0 && EVP_RC2_IsReal()) doit[D_CBC_RC2]=1;
+> 		else if (strcmp(*argv,"rc2") == 0 && EVP_RC2_IsReal()) doit[D_CBC_RC2]=1;
+459,460c486,487
+< 		     if (strcmp(*argv,"rc5-cbc") == 0) doit[D_CBC_RC5]=1;
+< 		else if (strcmp(*argv,"rc5") == 0) doit[D_CBC_RC5]=1;
+---
+> 		     if (strcmp(*argv,"rc5-cbc") == 0 && EVP_RC5_IsReal()) doit[D_CBC_RC5]=1;
+> 		else if (strcmp(*argv,"rc5") == 0 && EVP_RC5_IsReal()) doit[D_CBC_RC5]=1;
+464,465c491,492
+< 		     if (strcmp(*argv,"idea-cbc") == 0) doit[D_CBC_IDEA]=1;
+< 		else if (strcmp(*argv,"idea") == 0) doit[D_CBC_IDEA]=1;
+---
+> 		     if (strcmp(*argv,"idea-cbc") == 0 && EVP_idea_IsReal()) doit[D_CBC_IDEA]=1;
+> 		else if (strcmp(*argv,"idea") == 0 && EVP_idea_IsReal()) doit[D_CBC_IDEA]=1;
+469,471c496,498
+< 		     if (strcmp(*argv,"bf-cbc") == 0) doit[D_CBC_BF]=1;
+< 		else if (strcmp(*argv,"blowfish") == 0) doit[D_CBC_BF]=1;
+< 		else if (strcmp(*argv,"bf") == 0) doit[D_CBC_BF]=1;
+---
+> 		     if (strcmp(*argv,"bf-cbc") == 0 && EVP_BF_IsReal()) doit[D_CBC_BF]=1;
+> 		else if (strcmp(*argv,"blowfish") == 0 && EVP_BF_IsReal()) doit[D_CBC_BF]=1;
+> 		else if (strcmp(*argv,"bf") == 0 && EVP_BF_IsReal()) doit[D_CBC_BF]=1;
+475,477c502,504
+< 		     if (strcmp(*argv,"cast-cbc") == 0) doit[D_CBC_CAST]=1;
+< 		else if (strcmp(*argv,"cast") == 0) doit[D_CBC_CAST]=1;
+< 		else if (strcmp(*argv,"cast5") == 0) doit[D_CBC_CAST]=1;
+---
+> 		     if (strcmp(*argv,"cast-cbc") == 0 && EVP_CAST_IsReal()) doit[D_CBC_CAST]=1;
+> 		else if (strcmp(*argv,"cast") == 0 && EVP_CAST_IsReal()) doit[D_CBC_CAST]=1;
+> 		else if (strcmp(*argv,"cast5") == 0 && EVP_CAST_IsReal()) doit[D_CBC_CAST]=1;
+481c508
+< 			if (strcmp(*argv,"des") == 0)
+---
+> 			if (strcmp(*argv,"des") == 0 && EVP_des_IsReal())
+509a537
+> 			if (EVP_idea_IsReal())
+512a541
+> 			if (EVP_RC2_IsReal())
+515a545
+> 			if (EVP_RC5_IsReal())
+518a549
+> 			if (EVP_BF_IsReal())
+521a553
+> 			if (EVP_idea_IsReal() && EVP_RC2_IsReal() && EVP_BF_IsReal() && EVP_RC5_IsReal())
+525a558
+> 			if (EVP_RC4_IsReal())
+588a622,623
+> 	if (EVP_des_IsReal())
+> 	{
+591a627
+> 	}
+593a630
+> 	if (EVP_idea_IsReal())
+596a634
+> 	if (EVP_RC4_IsReal())
+599a638
+> 	if (EVP_RC2_IsReal())
+602a642
+> 	if (EVP_RC5_IsReal())
+605a646
+> 	if (EVP_BF_IsReal())
+608a650
+> 	if (EVP_CAST_IsReal())
+1088a1131
+> 	if (EVP_MD2_IsReal())
+1091a1135
+> 	if (EVP_RC4_IsReal())
+1094a1139
+> 	if (EVP_des_IsReal())
+1097a1143
+> 	if (EVP_idea_IsReal())
+1100a1147
+> 	if (EVP_BF_IsReal())
+1120,1123c1167
+< 			if (results[k][j] > 10000)
+< 				fprintf(stdout," %11.2fk",results[k][j]/1e3);
+< 			else
+< 				fprintf(stdout," %11.2f ",results[k][j]);
+---
+> 			fprintf(stdout," %11.2fk",results[k][j]/1e3);
+diff -r openssl-0.9.4/apps/version.c openssl/apps/version.c
+110a111
+> 		if (EVP_MD2_IsReal())
+113a115
+> 		if (EVP_RC4_IsReal())
+116a119
+> 		if (EVP_des_IsReal())
+119a123
+> 		if (EVP_idea_IsReal())
+122a127
+> 		if (EVP_BF_IsReal())
+Only in openssl/certs: 052eae11.0
+Only in openssl/certs: 18d46017.0
+Only in openssl/certs: 1ef89214.0
+Only in openssl/certs: 1f6c59cd.0
+Only in openssl/certs: 24867d38.0
+Only in openssl/certs: 2edf7016.0
+Only in openssl/certs: 3ecf89a3.0
+Only in openssl/certs: 6bee6be3.0
+Only in openssl/certs: 73912336.0
+Only in openssl/certs: 7651b327.0
+Only in openssl/certs: 8c401b31.0
+Only in openssl/certs: 8caad35e.0
+Only in openssl/certs: a99c5886.0
+Only in openssl/certs: adbec561.0
+Only in openssl/certs: b5f329fa.0
+Only in openssl/certs: c33a80d4.0
+Only in openssl/certs: ddc328ff.0
+Only in openssl/certs: f3e90025.0
+Only in openssl/certs: f73e89fd.0
+
+
+diff -r openssl-0.9.4/crypto/bio/b_print.c openssl/crypto/bio/b_print.c
+87a88,103
+> #ifdef AMISSL
+> /* Modified to add tagcall support. Andrija Antonijevic <TheAntony@bigfoot.com> */
+> 
+> int BIO_printfA(BIO *bio, void **args)
+> {
+> 	char *format = *args++;
+> 	int ret;
+> 	MS_STATIC char hugebuf[1024 * 2];	/* 10k in one chunk is the limit */
+> 
+> 	hugebuf[0] = '\0';
+> 	vsprintf(hugebuf, format, (void *)args);
+> 	ret = BIO_write(bio, hugebuf, strlen(hugebuf));
+> 
+> 	return(ret);
+> }
+> #endif /* AMISSL */
+
+

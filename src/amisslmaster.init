@@ -1,0 +1,301 @@
+#include <exec/types.h>
+#include <exec/nodes.h>
+#include <exec/memory.h>
+#include <exec/resident.h>
+#include <exec/libraries.h>
+#include <exec/execbase.h>
+#include <libraries/dos.h>
+#include <proto/exec.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include <proto/exec.h>
+#include <proto/utility.h>
+
+#include <clib/dos_protos.h>
+#include <pragmas/dos_pragmas.h>
+
+#include <proto/locale.h>
+#include <exec/memory.h>
+#include <utility/tagitem.h>
+#include <amissl/tags.h>
+#include <exec/semaphores.h>
+#include <libraries/amissl.h>
+#include <libraries/amisslmaster.h>
+#include "/scmt/scmt.h"
+#include <proto/rsa.h>
+#include <proto/dh.h>
+#include <proto/dsa.h>
+#include <proto/amissl.h>
+#include "amisslinit.h"
+struct ExecBase *SysBase;
+
+struct Library *BlowFishBase;
+struct Library *CASTBase;
+struct Library *DESBase;
+struct Library *IDEABase;
+struct Library *MD2Base;
+struct Library *MD4Base;
+struct Library *MD5Base;
+struct Library *MDC2Base;
+struct Library *RC2Base;
+struct Library *RC4Base;
+struct Library *RC5Base;
+struct Library *RIPEMDBase;
+struct Library *SHABase;
+struct Library *RSABase;
+struct Library *DHBase;
+struct Library *DSABase;
+struct Library *AmiSSLBase;
+
+#define XMKSTR(x)	#x
+#define MKSTR(x)	XMKSTR(x)
+
+static const char *version = "$VER: " MKSTR(LIBNAME) " " MKSTR(LIBVER) " " __AMIGADATE__ " part of AmiSSL package, " MKSTR(CPUPREFIX) MKSTR(CPUVER) " version";
+
+DeclareSemaphore(AmiSSLMasterLock);
+
+#pragma syscall SB_ObtainSemaphore 234 801
+#pragma syscall SB_ReleaseSemaphore 23a 801
+
+void SB_ObtainSemaphore(struct SignalSemaphore *);
+void SB_ReleaseSemaphore(struct SignalSemaphore *);
+
+void FlushCipher(struct Library *CipherBase)
+{
+	if(CipherBase)
+	{
+		CipherBase->lib_OpenCnt=1;
+		CloseLibrary(CipherBase);
+	}
+}
+
+void __saveds __asm __UserLibCleanup(register __a6 struct MyLibrary *libbase)
+{
+	FlushCipher(SHABase);
+	FlushCipher(RIPEMDBase);
+	FlushCipher(RC5Base);
+	FlushCipher(RC4Base);
+	FlushCipher(RC2Base);
+	FlushCipher(MDC2Base);
+	FlushCipher(MD5Base);
+	FlushCipher(MD4Base);
+	FlushCipher(MD2Base);
+	FlushCipher(IDEABase);
+	FlushCipher(DESBase);
+	FlushCipher(CASTBase);
+	FlushCipher(BlowFishBase);
+	FlushCipher(RSABase);
+	FlushCipher(DHBase);
+	FlushCipher(DSABase);
+}
+
+void __saveds __asm __UserLibExpunge(register __a6 struct MyLibrary *libbase)
+{
+}
+
+int __saveds __asm __UserLibInit(register __a6 struct MyLibrary *libbase)
+{
+	SysBase = *(struct ExecBase **)4;
+
+	return(0);
+error:
+	__UserLibCleanup(libbase);
+	return(1);
+}
+
+LONG LibAPIVersion;
+LONG LibAllowUserStructs;
+
+__saveds __asm LONG InitAmiSSLMaster(register __d0 LONG APIVersion,register __d1 LONG AllowUserStructs)
+{
+	LibAPIVersion = APIVersion;
+	LibAllowUserStructs = AllowUserStructs;
+	return TRUE;
+}
+
+struct Library *OpenCipher(struct Library **CipherBase,char *CipherName,LONG CipherVersion)
+{
+	if(*CipherBase)
+	{
+		(*CipherBase)->lib_OpenCnt++;
+	}
+	else
+	{
+		*CipherBase = OpenLibrary(CipherName,CipherVersion);
+	}
+	return *CipherBase;
+}
+
+#define CheckLibBase(LibBase) if(CipherBase==LibBase) LibBase=NULL
+
+void CloseCipher(struct Library *CipherBase)
+{
+	if(CipherBase)
+	{
+		if(CipherBase->lib_OpenCnt==1)
+		{
+			CloseLibrary(CipherBase);
+			CheckLibBase(BlowFishBase);
+			CheckLibBase(CASTBase);
+			CheckLibBase(DESBase);
+			CheckLibBase(IDEABase);
+			CheckLibBase(MD2Base);
+			CheckLibBase(MD4Base);
+			CheckLibBase(MD5Base);
+			CheckLibBase(MDC2Base);
+			CheckLibBase(RC2Base);
+			CheckLibBase(RC4Base);
+			CheckLibBase(RC5Base);
+			CheckLibBase(RIPEMDBase);
+			CheckLibBase(SHABase);
+			CheckLibBase(RSABase);
+			CheckLibBase(DHBase);
+			CheckLibBase(DSABase);
+		}
+		else
+		{
+			CipherBase->lib_OpenCnt--;
+		}
+	}
+}
+
+struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
+
+__saveds __asm struct Library *OpenAmiSSL(void)
+{
+	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	if(OpenCipher(&AmiSSLBase,"libs:amissl/amissl_v2.library",2))
+	{
+		amisslinit.BlowFishBase = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
+		amisslinit.CASTBase = OpenCipher(&CASTBase,"libs:amissl/cast_v2.library",2);
+		amisslinit.DESBase = OpenCipher(&DESBase,"libs:amissl/des_v2.library",2);
+		amisslinit.IDEABase = OpenCipher(&IDEABase,"libs:amissl/idea_v2.library",2);
+		amisslinit.MD2Base = OpenCipher(&MD2Base,"libs:amissl/md2_v2.library",2);
+		amisslinit.MD4Base = OpenCipher(&MD4Base,"libs:amissl/md4_v2.library",2);
+		amisslinit.MD5Base = OpenCipher(&MD5Base,"libs:amissl/md5_v2.library",2);
+		amisslinit.RC2Base = OpenCipher(&RC2Base,"libs:amissl/rc2_v2.library",2);
+		amisslinit.RC4Base = OpenCipher(&RC4Base,"libs:amissl/rc4_v2.library",2);
+		amisslinit.RC5Base = OpenCipher(&RC5Base,"libs:amissl/rc5_v2.library",2);
+		amisslinit.RIPEMDBase = OpenCipher(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
+		amisslinit.SHABase = OpenCipher(&SHABase,"libs:amissl/sha_v2.library",2);
+
+		if(SHABase)
+		{
+			amisslinit.DSABase = OpenCipher(&DSABase,"libs:amissl/dsa_v2.library",2);
+			amisslinit.DHBase = OpenCipher(&DHBase,"libs:amissl/dh_v2.library",2);
+		}
+
+		if(SHABase && MD5Base)
+		{
+			amisslinit.RSABase = OpenCipher(&RSABase,"libs:amissl/rsa_v2.library",2);
+		}
+		
+		if(DESBase)
+		{
+			amisslinit.MDC2Base = OpenCipher(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
+		}
+
+		InternalInitAmiSSL(&amisslinit);
+	}
+	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	return AmiSSLBase;
+}
+
+__saveds __asm void CloseAmiSSL(void)
+{
+	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	CloseCipher(AmiSSLBase);
+
+	CloseCipher(amisslinit.BlowFishBase);
+	CloseCipher(amisslinit.CASTBase);
+	CloseCipher(amisslinit.DESBase);
+	CloseCipher(amisslinit.IDEABase);
+	CloseCipher(amisslinit.MD2Base);
+	CloseCipher(amisslinit.MD4Base);
+	CloseCipher(amisslinit.MD5Base);
+	CloseCipher(amisslinit.MDC2Base);
+	CloseCipher(amisslinit.RC2Base);
+	CloseCipher(amisslinit.RC4Base);
+	CloseCipher(amisslinit.RC5Base);
+	CloseCipher(amisslinit.RIPEMDBase);
+	CloseCipher(amisslinit.SHABase);
+	CloseCipher(amisslinit.RSABase);
+
+	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+}
+
+__saveds __asm struct Library *OpenAmiSSLCipher(register __d0 LONG Cipher)
+{
+	struct Library *result = NULL;
+	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	switch(Cipher)
+	{
+		case CIPHER_BlowFish:
+			result = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
+			break;
+		case CIPHER_CAST:
+			result = OpenCipher(&CASTBase,"libs:amissl/cast_v2.library",2);
+			break;
+		case CIPHER_DES:
+			result = OpenCipher(&DESBase,"libs:amissl/des_v2.library",2);
+			break;
+		case CIPHER_IDEA:
+			result = OpenCipher(&IDEABase,"libs:amissl/idea_v2.library",2);
+			break;
+		case CIPHER_MD2:
+			result = OpenCipher(&MD2Base,"libs:amissl/md2_v2.library",2);
+			break;
+		case CIPHER_MD4:
+			result = OpenCipher(&MD4Base,"libs:amissl/md4_v2.library",2);
+			break;
+		case CIPHER_MD5:
+			result = OpenCipher(&MD5Base,"libs:amissl/md5_v2.library",2);
+			break;
+		case CIPHER_MDC2:
+			result = OpenCipher(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
+			break;
+		case CIPHER_RC2:
+			result = OpenCipher(&RC2Base,"libs:amissl/rc2_v2.library",2);
+			break;
+		case CIPHER_RC4:
+			result = OpenCipher(&RC4Base,"libs:amissl/rc4_v2.library",2);
+			break;
+		case CIPHER_RC5:
+			result = OpenCipher(&RC5Base,"libs:amissl/rc5_v2.library",2);
+			break;
+		case CIPHER_RIPEMD:
+			result = OpenCipher(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
+			break;
+		case CIPHER_SHA:
+			result = OpenCipher(&SHABase,"libs:amissl/sha_v2.library",2);
+			break;
+		case CIPHER_RSA:
+			if(OpenAmiSSL())
+			{
+				result = RSABase;
+			}
+			break;
+		case CIPHER_DH:
+			if(OpenAmiSSL())
+			{
+				result = DHBase;
+			}
+			break;
+		case CIPHER_DSA:
+			if(OpenAmiSSL())
+			{
+				result = DSABase;
+			}
+			break;
+	}
+	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	return result;
+}
+
+__saveds __asm void CloseAmiSSLCipher(register __a0 struct Library *CipherBase)
+{
+	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	CloseCipher(CipherBase);
+	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+}

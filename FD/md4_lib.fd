@@ -1,0 +1,8 @@
+##base _MD4Base
+##bias 30
+MD4_Init(c)(a0)
+MD4_Update(c,data,len)(a0,a1,d0)
+MD4_Final(md,c)(a0,a1)
+MD4(d,n,md)(a0,d0,a1)
+MD4_Transform(c,b)(a0,a1)
+##end

@@ -1,0 +1,38 @@
+#include <proto/exec.h>
+
+struct ExecBase *SysBase;
+struct Library *IntuitionBase;
+
+struct Library *AmiSSLBase;
+
+#define XMKSTR(x)	#x
+#define MKSTR(x)	XMKSTR(x)
+
+static const char *version = "$VER: " MKSTR(LIBNAME) " " MKSTR(LIBVER) " " __AMIGADATE__ " part of AmiSSL package, " MKSTR(CPUPREFIX) MKSTR(CPUVER) " version";
+
+int __saveds __asm __UserLibInit(register __a6 struct Library *libbase)
+{
+	SysBase = *((struct ExecBase **)4);
+	if (IntuitionBase = OpenLibrary("intuition.library", LIBRARY_MINIMUM))
+		return(0);
+	else
+		return(1);
+}
+
+void __saveds __asm __UserLibCleanup(register __a6 struct Library *libbase)
+{
+	if (IntuitionBase)
+		CloseLibrary(IntuitionBase);
+}
+
+long __saveds __asm InitDES_AmiSSL(register __a0 struct Library *_AmiSSLBase)
+{
+	AmiSSLBase = _AmiSSLBase;
+	return 1;
+}
+
+long __saveds __asm CleanupDES_AmiSSL(void)
+{
+	return(0);
+}
+

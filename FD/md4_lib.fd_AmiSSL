@@ -1,0 +1,8 @@
+##base _MD4Base
+##bias 30
+MD4_Init_AmiSSL(c)(a0)
+MD4_Update_AmiSSL(c,data,len)(a0,a1,d0)
+MD4_Final_AmiSSL(md,c)(a0,a1)
+MD4_AmiSSL(d,n,md)(a0,d0,a1)
+MD4_Transform_AmiSSL(c,b)(a0,a1)
+##end

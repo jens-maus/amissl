@@ -1,0 +1,11 @@
+##base _IDEABase
+##bias 30
+idea_options()()
+idea_ecb_encrypt(in,out,ks)(a0,a1,a2)
+idea_set_encrypt_key(key,ks)(a0,a1)
+idea_set_decrypt_key(ek,dk)(a0,a1)
+idea_cbc_encrypt(in,out,length,ks,iv,enc)(a0,a1,d0,a2,a3,d1)
+idea_cfb64_encrypt(in,out,length,ks,iv,num,enc)(a0,a1,d0,a2,a3,d1,d2)
+idea_ofb64_encrypt(in,out,length,ks,iv,num)(a0,a1,d0,a2,a3,d1)
+idea_encrypt(in,ks)(a0,a1)
+##end

@@ -1,0 +1,11 @@
+##base _BlowFishBase
+##bias 30
+BF_set_key_AmiSSL(key,len,data)(a0,d0,a1)
+BF_encrypt_AmiSSL(data,key)(a0,a1)
+BF_decrypt_AmiSSL(data,key)(a0,a1)
+BF_ecb_encrypt_AmiSSL(in,out,key,enc)(a0,a1,a2,d0)
+BF_cbc_encrypt_AmiSSL(in,out,length,schedule,ivec,enc)(a0,a1,d0,a2,a3,d1)
+BF_cfb64_encrypt_AmiSSL(in,out,length,schedule,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
+BF_ofb64_encrypt_AmiSSL(in,out,length,schedule,ivec,num)(a0,a1,d0,a2,a3,d1)
+BF_options_AmiSSL()()
+##end
