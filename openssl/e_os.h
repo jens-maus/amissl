@@ -143,7 +143,7 @@ extern "C" {
 #if !defined(WINNT)
 #define WIN_CONSOLE_BUG
 #endif
-#elif defined(AMIGA)
+#elif defined(AMISSL)
 __stdargs void SetAmiSSLerrno(int errno);
 __stdargs int GetAmiSSLerrno(void);
 #define get_last_sys_error()	GetAmiSSLerrno()
@@ -166,10 +166,7 @@ __stdargs int GetAmiSSLerrno(void);
 #define closesocket(s)		close_s(s)
 #define readsocket(s,b,n)	read_s(s,b,n)
 #define writesocket(s,b,n)	send(s,b,n,0)
-
-
-
-#elif defined(AMIGA)
+#elif defined(AMISSL)
 __stdargs void SetAmiSSLerrno(int errno);
 __stdargs int GetAmiSSLerrno(void);
 #define get_last_socket_error()	GetAmiSSLerrno()
@@ -366,6 +363,8 @@ __stdargs int GetAmiSSLerrno(void);
 #    ifdef AMIGA
 #      define LIST_SEPARATOR_CHAR ';'
 #      define NUL_DEV		"NIL:"
+       typedef long ssize_t;
+       typedef long pid_t;
 #    else
 #      define LIST_SEPARATOR_CHAR ':'
 #      define NUL_DEV		"/dev/null"
