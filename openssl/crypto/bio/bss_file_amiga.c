@@ -12,11 +12,11 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
-static int file_write(BIO *h, char *buf, int num);
+static int file_write(BIO *h, const char *buf, int num);
 static int file_read(BIO *h, char *buf, int size);
-static int file_puts(BIO *h, char *str);
+static int file_puts(BIO *h, const char *str);
 static int file_gets(BIO *h, char *str, int size);
-static long file_ctrl(BIO *h, int cmd, long arg1, char *arg2);
+static long file_ctrl(BIO *h, int cmd, long arg1, void *arg2);
 static int file_new(BIO *h);
 static int file_free(BIO *data);
 
@@ -31,6 +31,7 @@ static BIO_METHOD methods_filep =
 	file_ctrl,
 	file_new,
 	file_free,
+	NULL
 };
 
 BIO_METHOD *BIO_s_file(void);
@@ -70,7 +71,7 @@ static LONG FSeek(BPTR file, LONG pos, LONG mode)
 static BPTR FOpenFromMode(char *name, char *mode)
 {
 	BOOL mode_is_invalid = FALSE, seek_to_end = FALSE;
-	BPTR file = NULL;
+	BPTR file = (BPTR)NULL;
 	LONG type;
 
 	if (*mode == 'r')
@@ -205,17 +206,17 @@ static int file_read(BIO *b, char *out, int outl)
 	return(ret);
 }
 
-static int file_write(BIO *b, char *in, int inl)
+static int file_write(BIO *b, const char *in, int inl)
 {
 	int ret = 0;
 
 	if (b->init && in)
-		ret = FWrite((BPTR)b->ptr, in, 1, inl);
+		ret = FWrite((BPTR)b->ptr, (char *)in, 1, inl);
 
 	return(ret);
 }
 
-static long file_ctrl(BIO *b, int cmd, long num, char *ptr)
+static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 {
 	long ret = 1;
 	BPTR fp = (BPTR)b->ptr;
@@ -337,7 +338,7 @@ static int file_gets(BIO *bp, char *buf, int size)
 	return(ret);
 }
 
-static int file_puts(BIO *bp, char *str)
+static int file_puts(BIO *bp, const char *str)
 {
 	return(file_write(bp, str, strlen(str)));
 }
