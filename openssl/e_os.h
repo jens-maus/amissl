@@ -184,7 +184,9 @@ int GetAmiSSLerrno(void);
 #define readsocket(s,b,n)	recv((s),(b),(n), 0)
 #define writesocket(s,b,n)	send((s),(b),(n), 0)
 #ifdef __SASC
-#include "/scmt/scmt.h"
+#include "/libcmt/libcmt.h"
+#else /* __SASC */
+#include "../libcmt/libcmt.h"
 #endif /* __SASC */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
