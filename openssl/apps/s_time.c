@@ -415,7 +415,7 @@ static double tm_Time_F(int s)
 			gettimeofday(&tend, NULL);
 
 			ret = tend.tv_sec - tstart.tv_sec
-			      + (tend.tv_usec - tstart.tv_usec) / 1000000.0;
+			      + ((long)tend.tv_usec - (long)tstart.tv_usec) / 1000000.0;
 
 			if (ret < 0.001)
 				ret = 0.001;
