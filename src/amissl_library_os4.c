@@ -664,6 +664,30 @@ int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, c
 	return ret;
 }
 
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
+{
+	va_list os4va;
+	os4va.args.m68k = (char *)params;
+	os4va.is_68k = 1;
+	return BIO_vprintf(bio,format,os4va);
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
+{
+	va_list os4va;
+	os4va.args.m68k = (char *)params;
+	os4va.is_68k = 1;
+	return BIO_vsnprintf(buf,n,format,os4va);
+}
+
+void AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_dataA(struct AmiSSLIFace *Self, int num, long *params)
+{
+	va_list os4va;
+	os4va.args.m68k = (char *)params;
+	os4va.is_68k = 1;
+	ERR_add_error_dataA(num,os4va);
+}
+
 int __amigaos4_check68k_check(int (*func)())
 {
 //	kprintf("__amigaos4_check68k_check_func called with: %08x\n",func);
