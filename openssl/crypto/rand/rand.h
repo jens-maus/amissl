@@ -67,13 +67,13 @@
 #include <windows.h>
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 typedef struct rand_meth_st
 	{
@@ -99,7 +99,11 @@ void RAND_cleanup(void );
 int  RAND_bytes(unsigned char *buf,int num);
 int  RAND_pseudo_bytes(unsigned char *buf,int num);
 void RAND_seed(const void *buf,int num);
+#if !defined(AMISSL) || defined(AMISSL_COMPILE)
 void RAND_add(const void *buf,int num,double entropy);
+#else /* defined(AMISSL) && !defined(AMISSL_COMPILE) */
+void RAND_add(const void *buf, int num, float entropy);
+#endif /* !defined(AMISSL) || defined(AMISSL_COMPILE) */
 int  RAND_load_file(const char *file,long max_bytes);
 int  RAND_write_file(const char *file);
 const char *RAND_file_name(char *file,size_t num);
