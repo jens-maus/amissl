@@ -13,18 +13,17 @@ LFLAGS=-nostdlib
 OPT= -O2
 INCLUDE = -I$(AmiSSL)/include -I$(AmiSSL)/libcmt/include
 CFLAGS=$(INCLUDE) -mbaserel $(OPT) 
-OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o # $(OBJ_D)/stubs.o
+OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
 LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lm -lgcc
+LIBAUTO=lib/libamisslauto.a
 
-all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library libamisslauto.a
+all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library $(LIBAUTO)
 
 clean:
 	-rm obj/*.o
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
-
-$(OBJ_D)/stubs.o: $(SRC_D)/stubs.c
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
@@ -50,9 +49,9 @@ $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE)
 
-libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
+$(LIBAUTO): $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
-	cp libamisslauto.a ../ppc-amigaos/clib2/lib	
+	cp $@ ../ppc-amigaos/clib2/lib
 
 testing:
 	ppc-amigaos-gcc basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib

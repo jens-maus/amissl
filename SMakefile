@@ -11,10 +11,13 @@ LIBREVISION=1
 LIBVERSIONFULL=$(LIBVERSION).$(LIBREVISION)
 
 OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
+INCLUDE=IDIR AmiSSL:include
 CFLAGS=$(OPTIMS) DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
-       IDIR AmiSSL:Include NOSTACKCHECK DEBUG=LINE LIBCODE
+       $(INCLUDE) NOSTACKCHECK DEBUG=LINE LIBCODE
 
-all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library
+LIBAUTO=lib/amisslauto.lib
+
+all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library $(LIBAUTO)
 
 clean:
 	-rm obj/*.o
@@ -49,7 +52,7 @@ LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
 TO amissl_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 LIB $(LIBCRYPTO) $(LIBSSL) \
-    libcmt/libcmt.lib LIB:multitcp.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
+    libcmt/libcmt.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
 MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
 NOICONS
 BATCH
@@ -72,3 +75,18 @@ SMALLCODE SMALLDATA
 LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
 $(STRIPDEBUG)
 <
+
+$(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
+	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK
+
+$(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
+	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK
+
+$(LIBAUTO): $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
+	oml $@ r $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
+
+tests:
+	cd openssl
+	list
+	make -f $(LIBCPU)/makefile.one exe
+	cd /
