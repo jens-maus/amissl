@@ -2,6 +2,8 @@
  INSTALLATION ON THE WIN32 PLATFORM
  ----------------------------------
 
+ [Instructions for building for Windows CE can be found in INSTALL.WCE]
+
  Heres a few comments about building OpenSSL in Windows environments.  Most
  of this is tested on Win32 but it may also work in Win 3.1 with some
  modification.
@@ -24,12 +26,13 @@
   * Microsoft MASM (aka "ml")
   * Free Netwide Assembler NASM.
 
- MASM was at one point distributed with VC++. It is now distributed with some
- Microsoft DDKs, for example the Windows NT 4.0 DDK and the Windows 98 DDK. If
- you do not have either of these DDKs then you can just download the binaries
- for the Windows 98 DDK and extract and rename the two files XXXXXml.exe and
- XXXXXml.err, to ml.exe and ml.err and install somewhere on your PATH. Both
- DDKs can be downloaded from the Microsoft developers site www.msdn.com.
+ MASM is distributed with most versions of VC++. For the versions where it is
+ not included in VC++, it is also distributed with some Microsoft DDKs, for
+ example the Windows NT 4.0 DDK and the Windows 98 DDK. If you do not have
+ either of these DDKs then you can just download the binaries for the Windows
+ 98 DDK and extract and rename the two files XXXXXml.exe and XXXXXml.err, to
+ ml.exe and ml.err and install somewhere on your PATH. Both DDKs can be
+ downloaded from the Microsoft developers site www.msdn.com.
 
  NASM is freely available. Version 0.98 was used during testing: other versions
  may also work. It is available from many places, see for example:
@@ -82,7 +85,8 @@
  There are various changes you can make to the Win32 compile environment. By
  default the library is not compiled with debugging symbols. If you add 'debug'
  to the mk1mf.pl lines in the do_* batch file then debugging symbols will be
- compiled in.
+ compiled in. Note that mk1mf.pl expects the platform to be the last argument
+ on the command line, so 'debug' must appear before that, as all other options.
 
  The default Win32 environment is to leave out any Windows NT specific
  features.
@@ -124,10 +128,10 @@
  * Compiler installation:
 
    Mingw32 is available from <ftp://ftp.xraylith.wisc.edu/pub/khan/
-   gnu-win32/mingw32/gcc-2.95.2/gcc-2.95.2-msvcrt.exe>. GNU make is at
-   <ftp://agnes.dida.physik.uni-essen.de/home/janjaap/mingw32/binaries/
-   make-3.76.1.zip>. Install both of them in C:\egcs-1.1.2 and run
-   C:\egcs-1.1.2\mingw32.bat to set the PATH.
+   gnu-win32/mingw32/gcc-2.95.2/gcc-2.95.2-msvcrt.exe>. Extract it
+   to a directory such as C:\gcc-2.95.2 and add c:\gcc-2.95.2\bin to
+   the PATH environment variable in "System Properties"; or edit and
+   run C:\gcc-2.95.2\mingw32.bat to set the PATH.
 
  * Compile OpenSSL:
 
@@ -152,17 +156,17 @@
  GNU C (Cygwin)
  --------------
 
- Cygwin provides a bash shell and GNU tools environment running on
- NT 4.0, Windows 9x and Windows 2000. Consequently, a make of OpenSSL
- with Cygwin is closer to a GNU bash environment such as Linux rather
- than other W32 makes that are based on a single makefile approach.
- Cygwin implements Posix/Unix calls through cygwin1.dll, and is
- contrasted to Mingw32 which links dynamically to msvcrt.dll or
- crtdll.dll.
+ Cygwin provides a bash shell and GNU tools environment running
+ on NT 4.0, Windows 9x, Windows ME, Windows 2000, and Windows XP.
+ Consequently, a make of OpenSSL with Cygwin is closer to a GNU
+ bash environment such as Linux than to other W32 makes which are
+ based on a single makefile approach. Cygwin implements Posix/Unix
+ calls through cygwin1.dll, and is contrasted to Mingw32 which links
+ dynamically to msvcrt.dll or crtdll.dll.
 
  To build OpenSSL using Cygwin:
 
- * Install Cygwin (see http://sourceware.cygnus.com/cygwin)
+ * Install Cygwin (see http://cygwin.com/)
 
  * Install Perl and ensure it is in the path (recent Cygwin perl 
    (version 5.6.1-2 of the latter has been reported to work) or
@@ -188,13 +192,9 @@
  stripping of carriage returns. To avoid this ensure that a binary
  mount is used, e.g. mount -b c:\somewhere /home.
 
- As of version 1.1.1 Cygwin is relatively unstable in its handling
- of cr/lf issues. These make procedures succeeded with versions 1.1 and
- the snapshot 20000524 (Slow!).
-
- "bc" is not provided in the Cygwin distribution.  This causes a
+ "bc" is not provided in older Cygwin distribution.  This causes a
  non-fatal error in "make test" but is otherwise harmless.  If
- desired, GNU bc can be built with Cygwin without change.
+ desired and needed, GNU bc can be built with Cygwin without change.
 
 
  Installation
@@ -274,5 +274,5 @@
  malloc(), free() and realloc() as the application.  However there are many
  standard library functions used by OpenSSL that call malloc() internally
  (e.g. fopen()), and OpenSSL cannot change these; so in general you cannot
- rely on CYRPTO_malloc_init() solving your problem, and you should
+ rely on CRYPTO_malloc_init() solving your problem, and you should
  consistently use the multithreaded library.
