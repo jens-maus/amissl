@@ -8,16 +8,20 @@
 #include <proto/exec.h>
 #include <proto/dos.h>
 #include <proto/amissl.h>
+#include <proto/amisslmaster.h>
 #include <proto/socket.h>
 #include <amissl/amissl.h>
+#include <libraries/amisslmaster.h>
 
 BOOL Init(void);
 void Cleanup(void);
 int ConnectToServer(char *, short, char *, short);
 
+struct Library *AmiSSLMasterBase;
 struct Library *AmiSSLBase;
 
 #ifdef __amigaos4__
+struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct AmiSSLIFace *IAmiSSL;
 #else /* !__amigaos4__ */
 static BPTR ErrorOutput(void)
@@ -113,7 +117,7 @@ int main(int argc, char *argv[])
 							if (str = X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0))
 							{
 								Printf("\tSubject: %s\n", str);
-								AmiSSL_free(str);
+								OPENSSL_free(str);
 							}
 							else
 								Printf("Warning: couldn't read subject name in certificate!\n");
@@ -121,7 +125,7 @@ int main(int argc, char *argv[])
 							if (str = X509_NAME_oneline(X509_get_issuer_name(server_cert), 0, 0))
 							{
 								Printf("\tIssuer: %s\n", str);
-								AmiSSL_free(str);
+								OPENSSL_free(str);
 							}
 							else
 								Printf("Warning: couldn't read issuer name in certificate!\n");
@@ -185,26 +189,34 @@ BOOL Init(void)
 {
 	BOOL is_ok = FALSE;
 
-	if (!(AmiSSLBase = OpenLibrary("amissl.library", 1)))
-		Printf("Couldn't open amissl.library v1!\n");
+	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 3)))
+		Printf("Couldn't open amisslmaster.library v3!\n");
+#ifdef __amigaos4__
+	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
+		Printf("Couldn't get AmiSSLMaster interface!\n");
+#endif /* __amigaos4__ */
+	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+		Printf("Couldn't init AmiSSLMaster!\n");
+	else if (!(AmiSSLBase = OpenAmiSSL()))
+		Printf("Couldn't open AmiSSL!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
 		Printf("Couldn't get AmiSSL interface!\n");
 #endif /* __amigaos4__ */
-	else if (InitAmiSSL(AmiSSL_Version, AmiSSL_CurrentVersion,
-	                    AmiSSL_Revision, AmiSSL_CurrentRevision,
-	                    AmiSSL_SocketBase, SocketBase,
+#ifdef __amigaos4__
+	else if (InitAmiSSL(AmiSSL_ISocket, ISocket,
 	                    TAG_DONE) != 0)
+#else
+	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase,
+	                    TAG_DONE) != 0)
+#endif
 		Printf("Couldn't initialize AmiSSL!\n");
 	else
 		is_ok = TRUE;
 
 	if (!is_ok)
 	{
-#ifdef __amigaos4__
-		DropInterface((struct Interface *)IAmiSSL), IAmiSSL = NULL;
-#endif /* __amigaos4__ */
-		CloseLibrary(AmiSSLBase), AmiSSLBase = NULL;
+		Cleanup(); // This is safe to call even if something failed above
 	}
 
 	return(is_ok);
@@ -212,11 +224,35 @@ BOOL Init(void)
 
 void Cleanup(void)
 {
-	CleanupAmiSSL(TAG_DONE);
+	if (AmiSSLBase)
+	{
 #ifdef __amigaos4__
-	DropInterface((struct Interface *)IAmiSSL);
-#endif /* __amigaos4__ */
-	CloseLibrary(AmiSSLBase);
+		if(IAmiSSL)
+		{
+			CleanupAmiSSL(TAG_DONE);
+			DropInterface((struct Interface *)IAmiSSL);
+			IAmiSSL = NULL;
+		}
+#else
+		CleanupAmiSSL(TAG_DONE);
+#endif
+
+		CloseAmiSSL();
+		AmiSSLBase = NULL;
+	}
+
+	if (AmiSSLMasterBase)
+	{
+#ifdef __amigaos4__
+		if(IAmiSSLMaster)
+		{
+			DropInterface((struct Interface *)IAmiSSLMaster);
+			IAmiSSLMaster = NULL;
+		}
+#endif
+		CloseLibrary(AmiSSLMasterBase);
+		AmiSSLMasterBase = NULL;
+	}
 }
 
 /* Connect to the specified server, either directly or through the specified
@@ -246,7 +282,6 @@ int ConnectToServer(char *host, short port, char *proxy, short pport)
 			addr.sin_addr.s_addr = inet_addr(host); /* This should be checked against INADDR_NONE */
 			addr.sin_port = htons(port);
 		}
-
 		if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) >= 0)
 		{
 			/* For proxy connection, use SSL tunneling. First issue a HTTP CONNECT
