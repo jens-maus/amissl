@@ -18,30 +18,51 @@
 #include <libraries/amisslmaster.h>
 
 #include <clib/amissl_protos.h>
+#ifdef __GNUC__
+#include <../libcmt/scmt.h>
+#else
 #include "/scmt/scmt.h"
+#endif
 #include "amisslinit.h"
 
+#include "debug.h"
+
 #ifdef __amigaos4__
+struct AmiSSLIFace;
 #define __IFACE_OR_BASE	struct AmiSSLIFace *Self
+#undef SAVEDS
+#define SAVEDS __attribute__ ((baserel_restore))
 #else
 #define __IFACE_OR_BASE	struct Library *Self
 #endif
 
+#ifdef __amigaos4__
+struct Library *IntuitionBase;
+struct IntuitionIFace *IIntuition;
+struct Library *LocaleBase;
+struct LocaleIFace *ILocale;
+struct Library *UtilityBase;
+struct UtilityIFace *IUtility;
+struct DOSIFace *IDOS;
+struct Library *DOSBase;
+#else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
-struct Library *UtilityBase;
 struct LocaleBase *LocaleBase;
+struct Library *UtilityBase;
+struct DOSBase *DOSBase;
+#endif
 
 struct SignalSemaphore __mem_cs;
 LONG GMTOffset;
 void *__pool;
 
-static struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
-static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs = {NULL};
-static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
-static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
+struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
+static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs = {NULL};
+static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
+static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG clock_base;
-static long SSLVersionApp = 0;
+static long SSLVersionApp = 0;
 
 clock_t clock(void)
 {
@@ -57,7 +78,7 @@ clock_t clock(void)
 
 AMISSL_STATE *CreateAmiSSLState(void)
 {
-	long pid = (long)FindTask(NULL);
+	long pid = (long)FindTask(NULL);
 	AMISSL_STATE *ret;
 
 	ObtainSemaphore(&openssl_cs);
@@ -67,10 +88,10 @@ AMISSL_STATE *CreateAmiSSLState(void)
 	if (ret != NULL)
 	{
 //		kprintf("Allocating new state for %08lx\n",pid);
-		ret->pid = pid;
-		ret->errno = 0;
-		ret->getenv_var = 0;
-		ret->stack = 0;
+		ret->pid = pid;
+		ret->errno = 0;
+		ret->getenv_var = 0;
+		ret->stack = 0;
 
 		if(!h_insert(thread_hash, pid, ret))
 		{
@@ -83,6 +104,13 @@ AMISSL_STATE *CreateAmiSSLState(void)
 
 	return ret;
 }
+#ifdef __amigaos4__
+
+#define SB_ObtainSemaphore  ObtainSemaphore
+#define SB_ReleaseSemaphore ReleaseSemaphore
+#define SB_FindTask         FindTask
+
+#else
 
 #pragma syscall SB_ObtainSemaphore 234 801
 #pragma syscall SB_ReleaseSemaphore 23a 801
@@ -91,6 +119,9 @@ AMISSL_STATE *CreateAmiSSLState(void)
 void SB_ObtainSemaphore(struct SignalSemaphore *);
 void SB_ReleaseSemaphore(struct SignalSemaphore *);
 struct Task *SB_FindTask(STRPTR);
+
+#endif
+
 
 AMISSL_STATE *GetAmiSSLState(void)
 {
@@ -106,15 +137,32 @@ AMISSL_STATE *GetAmiSSLState(void)
 
 void SetAmiSSLerrno(int errno)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
-	p->errno = errno;
+	AMISSL_STATE *p = GetAmiSSLState();
+#ifdef __amigaos4__
+	p->socket_base_owns_errno = 0;
+#endif
+	p->errno = errno;
 }
 
 int GetAmiSSLerrno(void)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
+	AMISSL_STATE *p = GetAmiSSLState();
 	return p->errno;
 }
+
+#ifdef __amigaos4__
+
+struct SocketIFace *GetSocketIFace(int modifies_errno)
+{
+	AMISSL_STATE *p = GetAmiSSLState();
+	if(modifies_errno)
+	{
+		p->socket_base_owns_errno = 1;
+	}
+	return p->ISocket;
+}
+
+#endif
 
 static void amigaos_locking_callback(int mode,int type,char *file,int line)
 {
@@ -151,7 +199,10 @@ long ASM SAVEDS _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct Tag
 
 	if (state = CreateAmiSSLState())
 	{
-		state->a4 = (APTR)getreg(REG_A4);
+#ifdef __amigaos4__
+#else
+		state->a4 = (APTR)getreg(REG_A4);
+#endif
 		state->stack = (APTR)GetTagData(AmiSSL_TCPStack, NULL, tagList);
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
@@ -302,7 +353,7 @@ void RAND_add_internal(const void *buf, int num, double entropy);
 
 void ASM SAVEDS _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
 {
-	RAND_add_internal(buf, num, (double)entropy);
+	RAND_add(buf, num, (double)entropy);
 }
 
 static char AMISSL_COMMON_DATA rand_poll_buffer[128];
@@ -316,7 +367,7 @@ int RAND_poll(void)
 	for(i = 0; i < 10; i++)
 	{
 		OPENSSL_cleanse(&rand_poll_buffer[0], sizeof(rand_poll_buffer));
-		RAND_add_internal(&rand_poll_buffer[0], sizeof(rand_poll_buffer), (double)0);
+		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), (double)0);
 	}
 
 	return(1);
@@ -358,7 +409,7 @@ void ASM SAVEDS __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 	{
 		h_doall(thread_hash,cleanupState); /* Clean up any left overs from tasks not calling cleanup */
 		h_free(thread_hash);
-		thread_hash = NULL;
+		thread_hash = NULL;
 	}
 
 	ReleaseSemaphore(&openssl_cs);
@@ -368,56 +419,94 @@ int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
 
+#ifndef __amigaos4__
 	SysBase = *(struct ExecBase **)4;
+#endif
+
+	kprintf("Calling user lib init\n");
 
 	if (!thread_hash)
 	{
+traceline();
 		Forbid();
 
+traceline();
 		if(!SemaphoreInitialized)
 		{
+traceline();
 			InitSemaphore(&openssl_cs);
+traceline();
 			SemaphoreInitialized = TRUE;
 		}
+traceline();
 
 		Permit();
+traceline();
 
 		ObtainSemaphore(&openssl_cs);
+traceline();
 
 		if (!thread_hash)
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
+traceline();
 
 		ReleaseSemaphore(&openssl_cs);
+traceline();
 	}
 
+traceline();
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, MEMF_CLEAR)))
 	{
 		struct Locale *locale;
 		struct DateStamp ds;
 		int i;
+traceline();
+kprintf("lock_cs: %08x\n",lock_cs);
 
 		for (i=0; i<CRYPTO_NUM_LOCKS; i++)
+		{
+			kprintf("Initializing: %08x\n",&lock_cs[i]);
 			InitSemaphore(&lock_cs[i]);
+		}
+traceline();
 
 		InitSemaphore(&__mem_cs);
+traceline();
 
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
+traceline();
 
-		DateStamp(&ds);
+//FIXME		DateStamp(&ds);
+traceline();
 		clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
 		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
+traceline();
+#ifdef __amigaos4__
+		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
+            && (UtilityBase = OpenLibrary("utility.library", 36))
+			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
+			&& (IIntuition = GetInterface(IntuitionBase,"main",1,NULL))
+			&& (IUtility = GetInterface(UtilityBase,"main",1,NULL))
+			&& (ILocale = GetInterface(LocaleBase,"main",1,NULL))
+			&& (locale = OpenLocale(NULL)))
+#else
 		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
             && (UtilityBase = OpenLibrary("utility.library", 36))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
 			&& (locale = OpenLocale(NULL)))
+#endif
 		{
+traceline();
 			GMTOffset = locale->loc_GMTOffset;
 			CloseLocale(locale);
 			err = 0;
 		}
+traceline();
 	}
+	
+	kprintf("Userlib res: %d\n",err);
 
 	if (err != 0)
 		__UserLibCleanup(Self);

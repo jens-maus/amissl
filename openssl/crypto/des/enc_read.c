@@ -149,7 +149,7 @@ int DES_enc_read(int fd, void *buf, int len, DES_key_schedule *sched,
 		{
 		i=read(fd,(void *)&(net[net_num]),HDRSIZE-net_num);
 #ifdef EINTR
-		if ((i == -1) && (errno == EINTR)) continue;
+		if ((i == -1) && (get_last_sys_error() == EINTR)) continue;
 #endif
 		if (i <= 0) return(0);
 		net_num+=i;
@@ -171,7 +171,7 @@ int DES_enc_read(int fd, void *buf, int len, DES_key_schedule *sched,
 		{
 		i=read(fd,(void *)&(net[net_num]),rnum-net_num);
 #ifdef EINTR
-		if ((i == -1) && (errno == EINTR)) continue;
+		if ((i == -1) && (get_last_sys_error() == EINTR)) continue;
 #endif
 		if (i <= 0) return(0);
 		net_num+=i;

@@ -165,7 +165,7 @@ int RAND_write_file(const char *file)
 #endif
 	}
 
-#if defined(O_CREAT) && !defined(OPENSSL_SYS_WIN32)
+#if defined(O_CREAT) && !defined(OPENSSL_SYS_WIN32) && !defined(AMISSL)
 	{
 	/* For some reason Win32 can't write to files created this way */
 	

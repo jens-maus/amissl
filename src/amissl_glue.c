@@ -2,7 +2,10 @@
 #include <internal/amissl_compiler.h>
 
 #ifdef __amigaos4__
+struct AmiSSLIFace;
 #define __IFACE_OR_BASE	struct AmiSSLIFace *Self
+#undef SAVEDS
+#define SAVEDS __attribute__ ((baserel_restore))
 #else
 #define __IFACE_OR_BASE	struct Library *Self
 #endif

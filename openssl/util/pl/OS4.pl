@@ -11,7 +11,7 @@ $mkdir='mkdir';
 # C compiler stuff
 $cc="ppc-amigaos-gcc";
 $cfile="-c ";
-$cflags="\$(ADD) -mbaserel -DAMISSL -DAMISSL_COMPILE -DB_ENDIAN -DTHIRTY_TWO_BITS -I/AmiSSL/include -g -O2";
+$cflags="\$(ADD) -mbaserel -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -g #-O2";
 $obj='.o';
 $ofile='-o ';
 $compile='';
@@ -20,7 +20,7 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='${CFLAG}';
+$lflags='${CFLAG} -lauto';
 $efile='-o ';
 $exep='';
 $ex_libs="";

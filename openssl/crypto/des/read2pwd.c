@@ -113,6 +113,10 @@
 #include <openssl/des.h>
 #include <openssl/ui.h>
 
+#ifdef OPENSSL_NO_FP_API
+#define BUFSIZ 8192
+#endif
+
 int DES_read_password(DES_cblock *key, const char *prompt, int verify)
 	{
 	int ok;

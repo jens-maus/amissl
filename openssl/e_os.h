@@ -111,7 +111,7 @@ extern "C" {
 
 #ifdef AMIGA
 #  define NO_CHMOD
-#  define NO_SYSLOG
+//#  define NO_SYSLOG
 #  undef  DEVRANDOM
 #  ifdef CLIB2
 #    define __USE_NETINET_IN_H

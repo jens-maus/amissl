@@ -505,6 +505,7 @@ int	PEM_X509_INFO_write_bio(BIO *bp,X509_INFO *xi, EVP_CIPHER *enc,
 #endif
 
 #ifndef OPENSSL_SYS_WIN16
+#ifndef OPENSSL_NO_FP_API
 int	PEM_read(FILE *fp, char **name, char **header,
 		unsigned char **data,long *len);
 int	PEM_write(FILE *fp,char *name,char *hdr,unsigned char *data,long len);
@@ -515,6 +516,7 @@ int	PEM_ASN1_write(int (*i2d)(),const char *name,FILE *fp,char *x,
 		       pem_password_cb *callback, void *u);
 STACK_OF(X509_INFO) *	PEM_X509_INFO_read(FILE *fp, STACK_OF(X509_INFO) *sk,
 	pem_password_cb *cb, void *u);
+#endif
 #endif
 
 int	PEM_SealInit(PEM_ENCODE_SEAL_CTX *ctx, EVP_CIPHER *type,
@@ -597,6 +599,7 @@ int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, EVP_PKEY *x, int nid,
 				  pem_password_cb *cb, void *u);
 EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb, void *u);
 
+#ifndef OPENSSL_NO_FP_API
 int i2d_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
 				  char *kstr, int klen,
 				  pem_password_cb *cb, void *u);
@@ -611,6 +614,7 @@ EVP_PKEY *d2i_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY **x, pem_password_cb *cb, vo
 
 int PEM_write_PKCS8PrivateKey(FILE *fp,EVP_PKEY *x,const EVP_CIPHER *enc,
 			      char *kstr,int klen, pem_password_cb *cd, void *u);
+#endif
 
 #endif /* SSLEAY_MACROS */
 

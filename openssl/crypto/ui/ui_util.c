@@ -56,6 +56,10 @@
 #include <string.h>
 #include <openssl/ui.h>
 
+#ifndef BUFSIZ
+#define BUFSIZ 8192
+#endif
+
 int UI_UTIL_read_pw_string(char *buf,int length,const char *prompt,int verify)
 	{
 	char buff[BUFSIZ];

@@ -504,6 +504,7 @@ int BIO_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
 	CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
 unsigned long BIO_number_read(BIO *bio);
 unsigned long BIO_number_written(BIO *bio);
+#if 0
 
 # if !defined(OPENSSL_NO_FP_API) || defined(AMISSL)
 #  if defined(OPENSSL_SYS_WIN16) && defined(_WINDLL)
@@ -528,6 +529,35 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
 #   define BIO_new_fp_internal		BIO_s_file
 #  endif
 # endif /* !OPENSSL_FP_API || AMISSL */
+
+#endif
+
+#  if defined(OPENSSL_SYS_WIN16) && defined(_WINDLL)
+BIO_METHOD *BIO_s_file_internal(void);
+BIO *BIO_new_file_internal(char *filename, char *mode);
+# if !defined(OPENSSL_NO_FP_API)
+BIO *BIO_new_fp_internal(FILE *stream, int close_flag);
+# endif
+#    define BIO_s_file	BIO_s_file_internal
+#    define BIO_new_file	BIO_new_file_internal
+# if !defined(OPENSSL_NO_FP_API)
+#    define BIO_new_fp	BIO_new_fp_internal
+# endif
+#  else /* defined(OPENSSL_SYS_WIN16) && defined(_WINDLL) */
+BIO_METHOD *BIO_s_file(void );
+BIO *BIO_new_file(const char *filename, const char *mode);
+#   define BIO_s_file_internal		BIO_s_file
+#   define BIO_new_file_internal	BIO_new_file
+# if !defined(OPENSSL_NO_FP_API)
+#   define BIO_new_fp_internal		BIO_s_file
+# endif
+#  endif
+
+#ifdef AMISSL
+#    include <dos/dos.h>
+BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
+#endif
+
 BIO *	BIO_new(BIO_METHOD *type);
 int	BIO_set(BIO *a,BIO_METHOD *type);
 int	BIO_free(BIO *a);

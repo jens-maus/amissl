@@ -77,7 +77,7 @@ int BN_kronecker(const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx)
 	BN_CTX_start(ctx);
 	A = BN_CTX_get(ctx);
 	B = BN_CTX_get(ctx);
-	if (B == NULL) goto end;
+	if (B == 0) goto end;
 	
 	err = !BN_copy(A, a);
 	if (err) goto end;
