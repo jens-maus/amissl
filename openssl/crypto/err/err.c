@@ -993,9 +993,15 @@ void ERR_set_error_data(char *data, int flags)
 	es->err_data_flags[i]=flags;
 	}
 
+#ifndef AMISSL
 void ERR_add_error_data(int num, ...)
+#else /* AMISSL */
+void ERR_add_error_dataA(int num, va_list args)
+#endif /* !AMISSL */
 	{
+#ifndef AMISSL
 	va_list args;
+#endif /* !AMISSL */
 	int i,n,s;
 	char *str,*p,*a;
 
@@ -1004,7 +1010,9 @@ void ERR_add_error_data(int num, ...)
 	if (str == NULL) return;
 	str[0]='\0';
 
+#ifndef AMISSL
 	va_start(args, num);
+#endif /* !AMISSL */
 	n=0;
 	for (i=0; i<num; i++)
 		{
@@ -1031,48 +1039,20 @@ void ERR_add_error_data(int num, ...)
 	ERR_set_error_data(str,ERR_TXT_MALLOCED|ERR_TXT_STRING);
 
 err:
+#ifndef AMISSL
 	va_end(args);
+#endif /* !AMISSL */
 	}
 
 #ifdef AMISSL
-/* Modified to add tagcall support */
 
-void ERR_add_error_dataA(int num, void *args)
+void ERR_add_error_data(int num, ...)
 {
-	int i, n, s;
-	char *str, *p, *a;
-	void **Args = args;
+	va_list args;
 
-	s = 64;
-	str = OPENSSL_malloc(s + 1);
-	if (str == NULL)
-		return;
-	str[0] = '\0';
-
-	n = 0;
-	for (i = 0; i < num; i++)
-	{
-		a = *Args++;
-
-		/* ignore NULLs, thanks to Bob Beck <beck@obtuse.com> */
-		if (a != NULL)
-		{
-			n += strlen(a);
-			if (n > s)
-			{
-				s = n + 20;
-				p = OPENSSL_realloc(str, s + 1);
-				if (p == NULL)
-				{
-					OPENSSL_free(str);
-					return;
-				}
-				else
-					str = p;
-			}
-			strcat(str, a);
-		}
-	}
-	ERR_set_error_data(str, ERR_TXT_MALLOCED | ERR_TXT_STRING);
+	va_start(args, num);
+	ERR_add_error_data(num, args);
+	va_end(args);
 }
+
 #endif /* AMISSL */
