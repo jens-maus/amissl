@@ -31,7 +31,6 @@ certs/ddc328ff.0 eol=lf
 certs/f3e90025.0 eol=lf
 certs/f73e89fd.0 eol=lf
 /fixme.txt eol=lf
-include/amissl/all.h eol=lf
 include/amissl/amissl.h eol=lf
 include/amissl/tags.h eol=lf
 include/clib/amissl_protos.h eol=lf

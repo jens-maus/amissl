@@ -4,9 +4,9 @@
 #include <dos/dos.h>
 #include <utility/tagitem.h>
 #include <stdlib.h>
-#ifndef OPENSSL_ALL_H
-#include <amissl/all.h>
-#endif
+#include <amissl/amissl.h>
+
+struct AmiSSLInitStruct;
 
 void InternalInitAmiSSL(struct AmiSSLInitStruct *amisslinit);
 long InitAmiSSLA(struct TagItem *tagList);

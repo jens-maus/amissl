@@ -16,8 +16,8 @@
 #include <exec/interfaces.h>
 #endif
 
-#ifndef AMISSL_ALL_H
-#include <amissl/all.h>
+#ifndef AMISSL_AMISSL_H
+#include <amissl/amissl.h>
 #endif
 
 struct AmiSSLIFace
