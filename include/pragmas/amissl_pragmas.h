@@ -2504,6 +2504,8 @@
 #pragma libcall AmiSSLBase SHA1_Final 3ae6 9802
 #pragma libcall AmiSSLBase SHA1 3aec 90803
 #pragma libcall AmiSSLBase SHA1_Transform 3af2 9802
+#pragma libcall AmiSSLBase read_string_lib 3af8 9802
+#pragma libcall AmiSSLBase write_string_lib 3afe 9802
 #ifdef __SASC_60
 #pragma tagcall AmiSSLBase InitAmiSSL 024 801
 #pragma tagcall AmiSSLBase CleanupAmiSSL 02a 801
