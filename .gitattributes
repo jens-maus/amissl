@@ -215,6 +215,7 @@ include/amissl/conf.h eol=lf
 include/amissl/conf_api.h eol=lf
 include/amissl/crypto.h eol=lf
 include/amissl/des.h eol=lf
+include/amissl/des_old.h eol=lf
 include/amissl/dh.h eol=lf
 include/amissl/dsa.h eol=lf
 include/amissl/dso.h eol=lf
