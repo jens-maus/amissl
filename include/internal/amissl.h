@@ -12,6 +12,7 @@ typedef struct {
 	APTR stack;
 	APTR a4;
 	struct tm localtime_var;
+	struct Library *SocketBase;
 #ifdef __amigaos4__
 	int socket_base_owns_errno;
 	struct SocketIFace *ISocket;
