@@ -629,41 +629,53 @@ int __io2errno(int io_err)
 	return errno;
 }
 
-AMISSL_LIB_ENTRY int VARARGS68K _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
+int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
 	__gnuc_va_list va;
 	va_list os4va;
 	int ret;
-	
+
 	__builtin_va_start(va,format);
 	os4va.args.m68k = va_getlinearva(va,char *);
 	os4va.is_68k = 1;
-	
+
 	ret = BIO_vprintf(bio,format,os4va);
 
 	__builtin_va_end(va);
-	
+
 	return ret;
 }
 
-AMISSL_LIB_ENTRY int  VARARGS68K _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
+int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
 {
 	__gnuc_va_list va;
 	va_list os4va;
 	int ret;
-	
+
 	__builtin_va_start(va,format);
 	os4va.args.m68k = va_getlinearva(va,char *);
 	os4va.is_68k = 1;
-	
+
 	ret = BIO_vsnprintf(buf,n,format,os4va);
 
 	__builtin_va_end(va);
-	
+
 	return ret;
 }
 
-AMISSL_LIB_ENTRY void VARARGS68K _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...) {}
+void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...)
+{
+	__gnuc_va_list va;
+	va_list os4va;
+
+	__builtin_va_start(va,num);
+	os4va.args.m68k = va_getlinearva(va,char *);
+	os4va.is_68k = 1;
+
+	ERR_add_error_dataA(num,os4va);
+
+	__builtin_va_end(va);
+}
 
 void __baserel_get_addr(struct Interface *self);
 
@@ -700,7 +712,3 @@ GetDataBase:							\n\
 	.section .dend, \"wa\", @nobits		\n\
 	.space 4							\n\
 ");
-
-
-
-

@@ -2,6 +2,8 @@
 #define __USE_INLINE__
 #endif
 
+#define PROTO_AMISSL_H // Don't include amissl protos
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -14,15 +16,9 @@
 #include <utility/tagitem.h>
 #include <exec/memory.h>
 
-#define PROTO_AMISSL_H // Don't include amissl protos
-
-#undef __USE_INLINE__
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
 #include <amissl/tags.h>
-#ifdef __amigaos4__
-#define __USE_INLINE__
-#endif
 
 #include <internal/amissl.h>
 #include <internal/amissl_compiler.h>
@@ -59,7 +55,7 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
-struct Library *LocaleBase;
+struct LocaleBase *LocaleBase;
 struct Library *UtilityBase;
 #endif
 
@@ -560,7 +556,7 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 #ifdef __amigaos4__
 		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
             && (UtilityBase = OpenLibrary("utility.library", 36))
-			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
+			&& (LocaleBase = OpenLibrary("locale.library", 38))
 			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
 			&& (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
 			&& (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
