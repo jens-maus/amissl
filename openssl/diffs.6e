@@ -1,0 +1,134 @@
+diff -cr openssl6-engine/CHANGES ossl6-engine/CHANGES
+*** openssl6-engine/CHANGES	Mon Sep 29 21:33:17 2003
+--- ossl6-engine/CHANGES	Mon Sep 29 21:33:07 2003
+***************
+*** 2,8 ****
+   OpenSSL CHANGES
+   _______________
+  
+!  Changes between 0.9.6j and 0.9.6k  [xx XXX 2003]
+  
+    *) Fix various bugs revealed by running the NISCC test suite:
+  
+--- 2,8 ----
+   OpenSSL CHANGES
+   _______________
+  
+!  Changes between 0.9.6j and 0.9.6k  [30 Sep 2003]
+  
+    *) Fix various bugs revealed by running the NISCC test suite:
+  
+diff -cr openssl6-engine/FAQ ossl6-engine/FAQ
+*** openssl6-engine/FAQ	Thu Apr 10 20:42:58 2003
+--- ossl6-engine/FAQ	Mon Sep 29 21:33:07 2003
+***************
+*** 63,69 ****
+  * Which is the current version of OpenSSL?
+  
+  The current version is available from <URL: http://www.openssl.org>.
+! OpenSSL 0.9.7b was released on April 10, 2003.
+  
+  In addition to the current stable release, you can also access daily
+  snapshots of the OpenSSL development version at <URL:
+--- 63,69 ----
+  * Which is the current version of OpenSSL?
+  
+  The current version is available from <URL: http://www.openssl.org>.
+! OpenSSL 0.9.7c was released on September 30, 2003.
+  
+  In addition to the current stable release, you can also access daily
+  snapshots of the OpenSSL development version at <URL:
+diff -cr openssl6-engine/NEWS ossl6-engine/NEWS
+*** openssl6-engine/NEWS	Thu Apr 10 19:37:38 2003
+--- ossl6-engine/NEWS	Mon Sep 29 21:33:07 2003
+***************
+*** 5,10 ****
+--- 5,15 ----
+    This file gives a brief overview of the major changes between each OpenSSL
+    release. For more details please read the CHANGES file.
+  
++   Major changes between OpenSSL 0.9.6j and OpenSSL 0.9.6k:
++ 
++       o Security: fix various ASN1 parsing bugs.
++       o SSL/TLS protocol fix for unrequested client certificates.
++ 
+    Major changes between OpenSSL 0.9.6i and OpenSSL 0.9.6j:
+  
+        o Security: counter the Klima-Pokorny-Rosa extension of
+diff -cr openssl6-engine/README ossl6-engine/README
+*** openssl6-engine/README	Thu Apr 10 20:57:52 2003
+--- ossl6-engine/README	Mon Sep 29 21:33:07 2003
+***************
+*** 1,5 ****
+  
+!  OpenSSL 0.9.6k-dev [engine] xx XXX 2003
+  
+   Copyright (c) 1998-2003 The OpenSSL Project
+   Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson
+--- 1,5 ----
+  
+!  OpenSSL 0.9.6k [engine] 30 Sep 2003
+  
+   Copyright (c) 1998-2003 The OpenSSL Project
+   Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson
+diff -cr openssl6-engine/STATUS ossl6-engine/STATUS
+*** openssl6-engine/STATUS	Thu Apr 10 20:42:58 2003
+--- ossl6-engine/STATUS	Mon Sep 29 21:33:07 2003
+***************
+*** 5,13 ****
+--- 5,15 ----
+    DEVELOPMENT STATE
+  
+      o  OpenSSL 0.9.8:  Under development...
++     o  OpenSSL 0.9.7c: Released on September 30th, 2003
+      o  OpenSSL 0.9.7b: Released on April     10th, 2003
+      o  OpenSSL 0.9.7a: Released on February  19th, 2003
+      o  OpenSSL 0.9.7:  Released on December  31st, 2002
++     o  OpenSSL 0.9.6k: Released on September 30th, 2003
+      o  OpenSSL 0.9.6j: Released on April     10th, 2003
+      o  OpenSSL 0.9.6i: Released on February  19th, 2003
+      o  OpenSSL 0.9.6h: Released on December   5th, 2002
+diff -cr openssl6-engine/crypto/opensslv.h ossl6-engine/crypto/opensslv.h
+*** openssl6-engine/crypto/opensslv.h	Thu Apr 10 20:57:53 2003
+--- ossl6-engine/crypto/opensslv.h	Mon Sep 29 21:33:07 2003
+***************
+*** 25,32 ****
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060b0L
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k-dev [engine] xx XXX 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+--- 25,32 ----
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060bfL
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k [engine] 30 Sep 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+diff -cr openssl6-engine/include/openssl/opensslv.h ossl6-engine/include/openssl/opensslv.h
+*** openssl6-engine/include/openssl/opensslv.h	Thu Apr 10 20:57:53 2003
+--- ossl6-engine/include/openssl/opensslv.h	Mon Sep 29 21:33:07 2003
+***************
+*** 25,32 ****
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060b0L
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k-dev [engine] xx XXX 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+--- 25,32 ----
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060bfL
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k [engine] 30 Sep 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  

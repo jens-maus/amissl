@@ -1,0 +1,146 @@
+Only in openssl7: .CHANGES.swp
+diff -ur openssl7/CHANGES ossl7/CHANGES
+--- openssl7/CHANGES	Thu Sep  4 12:52:10 2003
++++ ossl7/CHANGES	Fri Sep 26 13:53:53 2003
+@@ -2,7 +2,18 @@
+  OpenSSL CHANGES
+  _______________
+ 
+- Changes between 0.9.7b and 0.9.7c  [xx XXX 2003]
++ Changes between 0.9.7b and 0.9.7c  [30 Sep 2003]
++
++  *) Fix various ASN1 parsing bugs revealed by running the NISCC test
++     suite. These cause the ASN1 code to perform an out of bounds read
++     when presented with an invalid tag (CAN-2003-0543 and CAN-2003-0544)
++     or corrupt the stack when presented with an invalid ANY type
++     (CAN-2003-0545).
++     [Steve Henson]
++
++  *) If verify callback ignores invalid public key errors don't try to check
++     certificate signature with the NULL public key.
++     [Steve Henson]
+ 
+   *) New -ignore_err option in ocsp application to stop the server
+      exiting on the first error in a request.
+@@ -1980,7 +1991,16 @@
+   *) Clean old EAY MD5 hack from e_os.h.
+      [Richard Levitte]
+ 
+- Changes between 0.9.6j and 0.9.6k  [xx XXX 2003]
++ Changes between 0.9.6j and 0.9.6k  [30 Sep 2003]
++
++  *) Fix various ASN1 parsing bugs revealed by running the NISCC test
++     suite. These cause the ASN1 code to perform an out of bounds read
++     when presented with an invalid tag (CAN-2003-0543 and CAN-2003-0544).
++     [Steve Henson]
++
++  *) If verify callback ignores invalid public key errors don't try to check
++     certificate signature with the NULL public key.
++     [Steve Henson]
+ 
+   *) In ssl3_accept() (ssl/s3_srvr.c) only accept a client certificate
+      if the server requested one: as stated in TLS 1.0 and SSL 3.0
+diff -ur openssl7/NEWS ossl7/NEWS
+--- openssl7/NEWS	Thu Apr 10 20:37:53 2003
++++ ossl7/NEWS	Fri Sep 26 13:49:51 2003
+@@ -5,6 +5,13 @@
+   This file gives a brief overview of the major changes between each OpenSSL
+   release. For more details please read the CHANGES file.
+ 
++  Major changes between OpenSSL 0.9.7b and OpenSSL 0.9.7c:
++
++      o Security: fix various ASN1 parsing bugs.
++      o New -ignore_err option to OCSP utility.
++      o Various interop and bug fixes in S/MIME code.
++      o SSL/TLS protocol fix for unrequested client certificates.
++
+   Major changes between OpenSSL 0.9.7a and OpenSSL 0.9.7b:
+ 
+       o Security: counter the Klima-Pokorny-Rosa extension of
+@@ -73,6 +80,11 @@
+       o SSL/TLS: add callback to retrieve SSL/TLS messages.
+       o SSL/TLS: support AES cipher suites (RFC3268).
+ 
++  Major changes between OpenSSL 0.9.6j and OpenSSL 0.9.6k:
++
++      o Security: fix various ASN1 parsing bugs.
++      o SSL/TLS protocol fix for unrequested client certificates.
++
+   Major changes between OpenSSL 0.9.6i and OpenSSL 0.9.6j:
+ 
+       o Security: counter the Klima-Pokorny-Rosa extension of
+diff -ur openssl7/crypto/asn1/asn1_lib.c ossl7/crypto/asn1/asn1_lib.c
+--- openssl7/crypto/asn1/asn1_lib.c	Fri Aug  2 19:03:41 2002
++++ ossl7/crypto/asn1/asn1_lib.c	Fri Sep 26 13:51:38 2003
+@@ -104,10 +104,12 @@
+ 			l<<=7L;
+ 			l|= *(p++)&0x7f;
+ 			if (--max == 0) goto err;
++			if (l > (INT_MAX >> 7L)) goto err;
+ 			}
+ 		l<<=7L;
+ 		l|= *(p++)&0x7f;
+ 		tag=(int)l;
++		if (--max == 0) goto err;
+ 		}
+ 	else
+ 		{ 
+diff -ur openssl7/crypto/asn1/tasn_dec.c ossl7/crypto/asn1/tasn_dec.c
+--- openssl7/crypto/asn1/tasn_dec.c	Tue Nov 12 13:21:26 2002
++++ ossl7/crypto/asn1/tasn_dec.c	Fri Sep 26 13:51:38 2003
+@@ -691,6 +691,7 @@
+ 
+ int asn1_ex_c2i(ASN1_VALUE **pval, unsigned char *cont, int len, int utype, char *free_cont, const ASN1_ITEM *it)
+ {
++	ASN1_VALUE **opval = NULL;
+ 	ASN1_STRING *stmp;
+ 	ASN1_TYPE *typ = NULL;
+ 	int ret = 0;
+@@ -705,6 +706,7 @@
+ 			*pval = (ASN1_VALUE *)typ;
+ 		} else typ = (ASN1_TYPE *)*pval;
+ 		if(utype != typ->type) ASN1_TYPE_set(typ, utype, NULL);
++		opval = pval;
+ 		pval = (ASN1_VALUE **)&typ->value.ptr;
+ 	}
+ 	switch(utype) {
+@@ -796,7 +798,12 @@
+ 
+ 	ret = 1;
+ 	err:
+-	if(!ret) ASN1_TYPE_free(typ);
++	if(!ret)
++		{
++		ASN1_TYPE_free(typ);
++		if (opval)
++			*opval = NULL;
++		}
+ 	return ret;
+ }
+ 
+diff -ur openssl7/crypto/opensslv.h ossl7/crypto/opensslv.h
+--- openssl7/crypto/opensslv.h	Thu Apr 10 20:40:19 2003
++++ ossl7/crypto/opensslv.h	Fri Sep 26 13:39:07 2003
+@@ -25,8 +25,8 @@
+  * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+  *  major minor fix final patch/beta)
+  */
+-#define OPENSSL_VERSION_NUMBER	0x00907030L
+-#define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.7c-dev xx XXX 2003"
++#define OPENSSL_VERSION_NUMBER	0x0090703fL
++#define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.7c 30 Sep 2003"
+ #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+ 
+ 
+diff -ur openssl7/crypto/x509/x509_vfy.c ossl7/crypto/x509/x509_vfy.c
+--- openssl7/crypto/x509/x509_vfy.c	Wed Jun  4 00:40:47 2003
++++ ossl7/crypto/x509/x509_vfy.c	Fri Sep 26 13:51:38 2003
+@@ -674,7 +674,7 @@
+ 				ok=(*cb)(0,ctx);
+ 				if (!ok) goto end;
+ 				}
+-			if (X509_verify(xs,pkey) <= 0)
++			else if (X509_verify(xs,pkey) <= 0)
+ 				/* XXX  For the final trusted self-signed cert,
+ 				 * this is a waste of time.  That check should
+ 				 * optional so that e.g. 'openssl x509' can be

@@ -1,0 +1,195 @@
+diff -cr openssl6/CHANGES ossl6/CHANGES
+*** openssl6/CHANGES	Wed Sep  3 23:35:53 2003
+--- ossl6/CHANGES	Mon Sep 29 21:22:00 2003
+***************
+*** 2,8 ****
+   OpenSSL CHANGES
+   _______________
+  
+!  Changes between 0.9.6j and 0.9.6k  [xx XXX 2003]
+  
+    *) In ssl3_accept() (ssl/s3_srvr.c) only accept a client certificate
+       if the server requested one: as stated in TLS 1.0 and SSL 3.0
+--- 2,28 ----
+   OpenSSL CHANGES
+   _______________
+  
+!  Changes between 0.9.6j and 0.9.6k  [30 Sep 2003]
+! 
+!   *) Fix various bugs revealed by running the NISCC test suite:
+! 
+!      Stop out of bounds reads in the ASN1 code when presented with
+!      invalid tags (CAN-2003-0543 and CAN-2003-0544).
+!      
+!      If verify callback ignores invalid public key errors don't try to check
+!      certificate signature with the NULL public key.
+! 
+!      [Steve Henson]
+! 
+!   *) Fix various bugs revealed by running the NISCC test suite:
+! 
+!      Stop out of bounds reads in the ASN1 code when presented with
+!      invalid tags (CAN-2003-0543 and CAN-2003-0544).
+!      
+!      If verify callback ignores invalid public key errors don't try to check
+!      certificate signature with the NULL public key.
+! 
+!      [Steve Henson]
+  
+    *) In ssl3_accept() (ssl/s3_srvr.c) only accept a client certificate
+       if the server requested one: as stated in TLS 1.0 and SSL 3.0
+Only in ossl6: CHANGES.orig
+diff -cr openssl6/FAQ ossl6/FAQ
+*** openssl6/FAQ	Thu Apr 10 20:21:26 2003
+--- ossl6/FAQ	Mon Sep 29 21:22:00 2003
+***************
+*** 63,69 ****
+  * Which is the current version of OpenSSL?
+  
+  The current version is available from <URL: http://www.openssl.org>.
+! OpenSSL 0.9.7b was released on April 10, 2003.
+  
+  In addition to the current stable release, you can also access daily
+  snapshots of the OpenSSL development version at <URL:
+--- 63,69 ----
+  * Which is the current version of OpenSSL?
+  
+  The current version is available from <URL: http://www.openssl.org>.
+! OpenSSL 0.9.7c was released on September 30, 2003.
+  
+  In addition to the current stable release, you can also access daily
+  snapshots of the OpenSSL development version at <URL:
+diff -cr openssl6/NEWS ossl6/NEWS
+*** openssl6/NEWS	Thu Apr 10 19:33:23 2003
+--- ossl6/NEWS	Mon Sep 29 21:22:00 2003
+***************
+*** 5,10 ****
+--- 5,15 ----
+    This file gives a brief overview of the major changes between each OpenSSL
+    release. For more details please read the CHANGES file.
+  
++   Major changes between OpenSSL 0.9.6j and OpenSSL 0.9.6k:
++ 
++       o Security: fix various ASN1 parsing bugs.
++       o SSL/TLS protocol fix for unrequested client certificates.
++ 
+    Major changes between OpenSSL 0.9.6i and OpenSSL 0.9.6j:
+  
+        o Security: counter the Klima-Pokorny-Rosa extension of
+diff -cr openssl6/README ossl6/README
+*** openssl6/README	Thu Apr 10 20:41:01 2003
+--- ossl6/README	Mon Sep 29 21:22:00 2003
+***************
+*** 1,5 ****
+  
+!  OpenSSL 0.9.6k-dev xx XXX 2003
+  
+   Copyright (c) 1998-2003 The OpenSSL Project
+   Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson
+--- 1,5 ----
+  
+!  OpenSSL 0.9.6k 30 Sep 2003
+  
+   Copyright (c) 1998-2003 The OpenSSL Project
+   Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson
+diff -cr openssl6/STATUS ossl6/STATUS
+*** openssl6/STATUS	Thu Apr 10 20:21:26 2003
+--- ossl6/STATUS	Mon Sep 29 21:22:00 2003
+***************
+*** 5,13 ****
+--- 5,15 ----
+    DEVELOPMENT STATE
+  
+      o  OpenSSL 0.9.8:  Under development...
++     o  OpenSSL 0.9.7c: Released on September 30th, 2003
+      o  OpenSSL 0.9.7b: Released on April     10th, 2003
+      o  OpenSSL 0.9.7a: Released on February  19th, 2003
+      o  OpenSSL 0.9.7:  Released on December  31st, 2002
++     o  OpenSSL 0.9.6k: Released on September 30th, 2003
+      o  OpenSSL 0.9.6j: Released on April     10th, 2003
+      o  OpenSSL 0.9.6i: Released on February  19th, 2003
+      o  OpenSSL 0.9.6h: Released on December   5th, 2002
+diff -cr openssl6/crypto/asn1/asn1_lib.c ossl6/crypto/asn1/asn1_lib.c
+*** openssl6/crypto/asn1/asn1_lib.c	Fri Aug  2 19:00:21 2002
+--- ossl6/crypto/asn1/asn1_lib.c	Mon Sep 29 21:21:21 2003
+***************
+*** 104,113 ****
+--- 104,115 ----
+  			l<<=7L;
+  			l|= *(p++)&0x7f;
+  			if (--max == 0) goto err;
++ 			if (l > (INT_MAX >> 7L)) goto err;
+  			}
+  		l<<=7L;
+  		l|= *(p++)&0x7f;
+  		tag=(int)l;
++ 		if (--max == 0) goto err;
+  		}
+  	else
+  		{ 
+Only in ossl6/crypto/asn1: asn1_lib.c.rej
+diff -cr openssl6/crypto/opensslv.h ossl6/crypto/opensslv.h
+*** openssl6/crypto/opensslv.h	Thu Apr 10 20:41:02 2003
+--- ossl6/crypto/opensslv.h	Mon Sep 29 21:22:06 2003
+***************
+*** 25,32 ****
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060b0L
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k-dev xx XXX 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+--- 25,32 ----
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060bfL
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k 30 Sep 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+diff -cr openssl6/crypto/x509/x509_vfy.c ossl6/crypto/x509/x509_vfy.c
+*** openssl6/crypto/x509/x509_vfy.c	Tue Dec 10 08:28:16 2002
+--- ossl6/crypto/x509/x509_vfy.c	Mon Sep 29 21:21:21 2003
+***************
+*** 490,496 ****
+  				ok=(*cb)(0,ctx);
+  				if (!ok) goto end;
+  				}
+! 			if (X509_verify(xs,pkey) <= 0)
+  				{
+  				ctx->error=X509_V_ERR_CERT_SIGNATURE_FAILURE;
+  				ctx->current_cert=xs;
+--- 490,496 ----
+  				ok=(*cb)(0,ctx);
+  				if (!ok) goto end;
+  				}
+! 			else if (X509_verify(xs,pkey) <= 0)
+  				{
+  				ctx->error=X509_V_ERR_CERT_SIGNATURE_FAILURE;
+  				ctx->current_cert=xs;
+Only in ossl6/crypto/x509: x509_vfy.c.rej
+diff -cr openssl6/include/openssl/opensslv.h ossl6/include/openssl/opensslv.h
+*** openssl6/include/openssl/opensslv.h	Thu Apr 10 20:41:02 2003
+--- ossl6/include/openssl/opensslv.h	Mon Sep 29 21:22:06 2003
+***************
+*** 25,32 ****
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060b0L
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k-dev xx XXX 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  
+--- 25,32 ----
+   * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+   *  major minor fix final patch/beta)
+   */
+! #define OPENSSL_VERSION_NUMBER	0x009060bfL
+! #define OPENSSL_VERSION_TEXT	"OpenSSL 0.9.6k 30 Sep 2003"
+  #define OPENSSL_VERSION_PTEXT	" part of " OPENSSL_VERSION_TEXT
+  
+  

@@ -1,0 +1,60 @@
+diff -cr openssl6-engine/CHANGES ossl6-engine/CHANGES
+*** openssl6-engine/CHANGES	Mon Sep  8 16:57:27 2003
+--- ossl6-engine/CHANGES	Mon Sep 29 21:30:15 2003
+***************
+*** 4,9 ****
+--- 4,19 ----
+  
+   Changes between 0.9.6j and 0.9.6k  [xx XXX 2003]
+  
++   *) Fix various bugs revealed by running the NISCC test suite:
++ 
++      Stop out of bounds reads in the ASN1 code when presented with
++      invalid tags (CAN-2003-0543 and CAN-2003-0544).
++      
++      If verify callback ignores invalid public key errors don't try to check
++      certificate signature with the NULL public key.
++ 
++      [Steve Henson]
++ 
+    *) In ssl3_accept() (ssl/s3_srvr.c) only accept a client certificate
+       if the server requested one: as stated in TLS 1.0 and SSL 3.0
+       specifications.
+diff -cr openssl6-engine/crypto/asn1/asn1_lib.c ossl6-engine/crypto/asn1/asn1_lib.c
+*** openssl6-engine/crypto/asn1/asn1_lib.c	Thu Aug  8 20:11:25 2002
+--- ossl6-engine/crypto/asn1/asn1_lib.c	Mon Sep 29 21:30:15 2003
+***************
+*** 104,113 ****
+--- 104,115 ----
+  			l<<=7L;
+  			l|= *(p++)&0x7f;
+  			if (--max == 0) goto err;
++ 			if (l > (INT_MAX >> 7L)) goto err;
+  			}
+  		l<<=7L;
+  		l|= *(p++)&0x7f;
+  		tag=(int)l;
++ 		if (--max == 0) goto err;
+  		}
+  	else
+  		{ 
+diff -cr openssl6-engine/crypto/x509/x509_vfy.c ossl6-engine/crypto/x509/x509_vfy.c
+*** openssl6-engine/crypto/x509/x509_vfy.c	Sat Dec 28 02:01:41 2002
+--- ossl6-engine/crypto/x509/x509_vfy.c	Mon Sep 29 21:30:15 2003
+***************
+*** 490,496 ****
+  				ok=(*cb)(0,ctx);
+  				if (!ok) goto end;
+  				}
+! 			if (X509_verify(xs,pkey) <= 0)
+  				{
+  				ctx->error=X509_V_ERR_CERT_SIGNATURE_FAILURE;
+  				ctx->current_cert=xs;
+--- 490,496 ----
+  				ok=(*cb)(0,ctx);
+  				if (!ok) goto end;
+  				}
+! 			else if (X509_verify(xs,pkey) <= 0)
+  				{
+  				ctx->error=X509_V_ERR_CERT_SIGNATURE_FAILURE;
+  				ctx->current_cert=xs;
