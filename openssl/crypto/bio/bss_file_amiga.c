@@ -36,20 +36,34 @@ static BIO_METHOD methods_filep =
 BIO_METHOD *BIO_s_file(void);
 
 #ifndef __amigaos4__
-#define FOpen(name, mode, buffer_size) Open(name, mode)
 #define FFlush(file) Flush(file)
+
+static BPTR FOpen(STRPTR name, LONG mode, LONG buffer_size)
+{
+	BPTR fh = Open(name, mode);
+
+	if (fh && ((struct Library *)DOSBase)->lib_Version >= 39)
+		SetVBuf(fh, NULL, IsInteractive(fh) ? BUF_LINE : BUF_FULL, buffer_size);
+
+	return(fh);
+}
 
 static void FClose(BPTR file)
 {
-	FFlush(file);
-	FClose(file);
+	Flush(file);
+	Close(file);
 }
 
 static LONG FSeek(BPTR file, LONG pos, LONG mode)
 {
-	FFlush(file);
+	LONG ret;
 
-	return((LONG)Seek(file, pos, mode));
+	if (Flush(file))
+		ret = Seek(file, pos, mode);
+	else
+		ret = -1;
+
+	return(ret);
 }
 #endif /* !__amigaos4__ */
 
@@ -73,15 +87,10 @@ static BPTR FOpenFromMode(char *name, char *mode)
 
 	if (!mode_is_invalid)
 	{
-		if (file = FOpen(name, type, 16384))
-		{
-			if (seek_to_end)
-				Seek(file, 0, OFFSET_END);
+		file = FOpen(name, type, 16384);
 
-			if (((struct Library *)DOSBase)->lib_Version >= 39
-			    && ((struct Library *)DOSBase)->lib_Version < 51)
-				SetVBuf(file, NULL, IsInteractive(file) ? BUF_LINE : BUF_FULL, 5120);
-		}
+		if (file && seek_to_end)
+			Seek(file, 0, OFFSET_END);
 	}
 
 	return(file);
@@ -92,10 +101,8 @@ static BOOL FEOF(BPTR file)
 	LONG curr_position, end_position;
 	BOOL is_eof = FALSE;
 
-	FFlush(file);
-
-	if ((curr_position = Seek(file, 0, OFFSET_END)) >= 0)
-		if ((end_position = Seek(file, curr_position, OFFSET_BEGINNING)) >= 0)
+	if ((curr_position = FSeek(file, 0, OFFSET_END)) >= 0)
+		if ((end_position = FSeek(file, curr_position, OFFSET_BEGINNING)) >= 0)
 			is_eof = (curr_position == end_position) ? 1 : 0;
 
 	return(is_eof);
@@ -319,9 +326,10 @@ static int file_gets(BIO *bp, char *buf, int size)
 {
 	int ret;
 
-	*buf = '\0'; /* Not sure what OpenSSL needs when ret is 0, this is just in case */
+	*buf = '\0';
 
-	if (FGets((BPTR)bp->ptr, buf, (((struct Library *)DOSBase)->lib_Version >= 39) ? size : size - 1))
+	if (FGets((BPTR)bp->ptr, buf,
+	          ((struct Library *)DOSBase)->lib_Version >= 39 ? size : size - 1))
 		ret = strlen(buf);
 	else
 		ret = 0;
