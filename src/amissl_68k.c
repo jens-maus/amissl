@@ -4369,12 +4369,12 @@ static int stub_BIO_vprintfPPC(ULONG *regarray)
 	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
-/* FIXME
+
 	return Self->BIO_vprintf(
 		(BIO *)regarray[8],
 		(const char *)regarray[9],
 		(void *)regarray[0]
-	); */
+	);
 }
 const struct EmuTrap stub_BIO_vprintf = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_BIO_vprintfPPC };
 
@@ -4383,13 +4383,13 @@ static int stub_BIO_vsnprintfPPC(ULONG *regarray)
 	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
-/* FIXME
+
 	return Self->BIO_vsnprintf(
 		(char *)regarray[8],
 		(size_t)regarray[0],
 		(const char *)regarray[9],
 		(void *)regarray[1]
-	);*/
+	);
 }
 const struct EmuTrap stub_BIO_vsnprintf = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_BIO_vsnprintfPPC };
 
@@ -8699,11 +8699,11 @@ static void stub_ERR_add_error_dataAPPC(ULONG *regarray)
 	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
-/*FIXME
+
 	Self->ERR_add_error_dataA(
 		(int)regarray[0],
 		(void *)regarray[1]
-	);*/
+	);
 }
 const struct EmuTrap stub_ERR_add_error_dataA = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_ERR_add_error_dataAPPC };
 

@@ -374,9 +374,9 @@ struct AmiSSLIFace
 	BIO * APICALL (*BIO_new_accept)(struct AmiSSLIFace *Self, char * host_port);
 	int APICALL (*BIO_new_bio_pair)(struct AmiSSLIFace *Self, BIO ** bio1, size_t writebuf1, BIO ** bio2, size_t writebuf2);
 	void APICALL (*BIO_copy_next_retry)(struct AmiSSLIFace *Self, BIO * b);
-	int APICALL (*BIO_vprintf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, va_list args);
+	int APICALL (*BIO_vprintf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, long *args);
 	int APICALL (*BIO_printf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...);
-	int APICALL (*BIO_vsnprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, va_list args);
+	int APICALL (*BIO_vsnprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *args);
 	int APICALL (*BIO_snprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...);
 	void APICALL (*ERR_load_BIO_strings)(struct AmiSSLIFace *Self);
 	const BIGNUM * APICALL (*BN_value_one)(struct AmiSSLIFace *Self);
@@ -704,7 +704,7 @@ struct AmiSSLIFace
 	const char * APICALL (*ERR_reason_error_string)(struct AmiSSLIFace *Self, unsigned long e);
 	void APICALL (*ERR_print_errors_cb)(struct AmiSSLIFace *Self, int (*cb)(const char *str, size_t len, void *u), void * u);
 	void APICALL (*ERR_print_errors)(struct AmiSSLIFace *Self, BIO * bp);
-	void APICALL (*ERR_add_error_dataA)(struct AmiSSLIFace *Self, int num, va_list args);
+	void APICALL (*ERR_add_error_dataA)(struct AmiSSLIFace *Self, int num, long *args);
 	void APICALL (*ERR_add_error_data)(struct AmiSSLIFace *Self, int num, ...);
 	void APICALL (*ERR_load_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);
 	void APICALL (*ERR_unload_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);

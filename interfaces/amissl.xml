@@ -1316,7 +1316,7 @@
 		<method name="BIO_vprintf" result="int">
 			<arg name="bio" type="BIO *"/>
 			<arg name="format" type="const char *"/>
-			<arg name="args" type="va_list"/>
+			<arg name="args" type="long *"/>
 		</method>
 		<method name="BIO_printf" result="int">
 			<arg name="bio" type="BIO *"/>
@@ -1327,7 +1327,7 @@
 			<arg name="buf" type="char *"/>
 			<arg name="n" type="size_t"/>
 			<arg name="format" type="const char *"/>
-			<arg name="args" type="va_list"/>
+			<arg name="args" type="long *t"/>
 		</method>
 		<method name="BIO_snprintf" result="int">
 			<arg name="buf" type="char *"/>
@@ -2704,7 +2704,7 @@
 		</method>
 		<method name="ERR_add_error_dataA" result="void">
 			<arg name="num" type="int"/>
-			<arg name="args" type="va_list"/>
+			<arg name="args" type="long *t"/>
 		</method>
 		<method name="ERR_add_error_data" result="void">
 			<arg name="num" type="int"/>
@@ -5390,7 +5390,7 @@
 		<method name="RAND_add" result="void">
 			<arg name="buf" type="const void *"/>
 			<arg name="num" type="int"/>
-			<arg name="entropy" type="float"/>
+			<arg name="entropy" type="double"/>
 		</method>
 		<method name="RAND_load_file" result="int">
 			<arg name="file" type="const char *"/>
