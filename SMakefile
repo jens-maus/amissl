@@ -5,26 +5,32 @@ LIBCPU=68000
 LIBSSL=openssl/$(LIBCPU)/out/ssl.lib
 LIBCRYPTO=openssl/$(LIBCPU)/out/crypto.lib
 STRIPDEBUG=
-LIBVERSIONNAME=097e
-LIBVERSION=3
-LIBREVISION=1
-LIBVERSIONFULL=$(LIBVERSION).$(LIBREVISION)
+
+VERSION=3
+VERSIONNAME=097e
+AMISSLREVISION=1
+AMISSLMASTERREVISION=1
+AMISSLDATE=7.2.2005
+AMISSLMASTERDATE=7.2.2005
 
 OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
 INCLUDE=IDIR AmiSSL:include
 CFLAGS=$(OPTIMS) DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
-       $(INCLUDE) NOSTACKCHECK DEBUG=LINE LIBCODE
-
+       $(INCLUDE) NOSTACKCHECK DEBUG=LINE LIBCODE DEF AMISSL_COMPILE \
+       DEF VERSION=$(VERSION) DEF VERSIONNAME=$(VERSIONNAME) \
+       DEF AMISSLREVISION=$(AMISSLREVISION) DEF AMISSLDATE=$(AMISSLDATE) \
+       DEF AMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
+       DEF AMISSLMASTERDATE=$(AMISSLMASTERDATE)
 LIB=lib/amissl.lib
 
-all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library $(LIB)
+all: amissl_v$(VERSIONNAME).library amisslmaster.library $(LIB)
 
 clean:
 	-rm obj/*.o
 
 copylibs:
 	Move amisslmaster.library $(OUTDIR)amisslmaster.library
-	Move amissl_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/amissl_v$(LIBVERSIONNAME).library
+	Move amissl_v$(VERSIONNAME).library $(OUTDIR)amissl/amissl_v$(VERSIONNAME).library
 
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	sc $* OBJNAME $@ $(CFLAGS) CODE=FAR
@@ -35,7 +41,7 @@ $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	sc $* OBJNAME $@ $(CFLAGS)
 
-amissl_v$(LIBVERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
+amissl_v$(VERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 	slink WITH <<
 DEFINE _bsearch=_OBJ_bsearch
 DEFINE __XCEXIT=_AmiSSLAbort
@@ -48,8 +54,8 @@ DEFINE _openlog=@__dummy
 DEFINE _DummyFunc=@__dummy
 LIBFD FD/amissl_lib.fd
 LIBPREFIX __AmiSSL_
-LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
-TO amissl_v$(LIBVERSIONNAME).library
+LIBID "$@ $(VERSION).$(AMISSLREVISION) ($(AMISSLDATE))"
+TO amissl_v$(VERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 LIB $(LIBCRYPTO) $(LIBSSL) \
     libcmt/libcmt.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
@@ -57,14 +63,14 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
 NOICONS
 BATCH
 SMALLCODE
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+LIBVERSION $(VERSION) LIBREVISION $(AMISSLREVISION)
 $(STRIPDEBUG)
 <
 
 amisslmaster.library: $(OBJ_D)/amisslmaster_library.o
 	slink WITH <<
 LIBFD FD/amisslmaster_lib.fd
-LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+LIBID "$@ $(VERSION).$(AMISSLMASTERREVISION) ($(AMISSLMASTERDATE))"
 TO amisslmaster.library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amisslmaster_library.o
 LIB LIB:sc.lib
@@ -72,7 +78,7 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
 NOICONS
 BATCH
 SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+LIBVERSION $(VERSION) LIBREVISION $(AMISSLMASTERREVISION)
 $(STRIPDEBUG)
 <
 

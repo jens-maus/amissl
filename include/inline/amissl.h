@@ -2925,17 +2925,17 @@ static __inline__ long ___CleanupAmiSSL(struct Library * AmiSSLBase, Tag tagList
 #define BIO_vprintf(bio, format, args) ({ \
   BIO * _BIO_vprintf_bio = (bio); \
   const char * _BIO_vprintf_format = (format); \
-  va_list _BIO_vprintf_args = (args); \
+  long * _BIO_vprintf_args = (args); \
   ({ \
   register char * _BIO_vprintf__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), BIO * __asm("a0"), const char * __asm("a1"), va_list __asm("d0"))) \
+  ((int (*)(char * __asm("a6"), BIO * __asm("a0"), const char * __asm("a1"), long * __asm("d0"))) \
   (_BIO_vprintf__bn - 2094))(_BIO_vprintf__bn, _BIO_vprintf_bio, _BIO_vprintf_format, _BIO_vprintf_args); \
 });})
 
 #ifndef NO_INLINE_STDARG
-static __inline__ int ___BIO_printf(struct Library * AmiSSLBase, BIO * bio, const char * format, long args, ...)
+static __inline__ int ___BIO_printf(struct Library * AmiSSLBase, BIO * bio, const char * format, ...)
 {
-  return BIO_vprintf(bio, format, (va_list) &args);
+  return BIO_vprintf(bio, format, (long *)(&format + 1));
 }
 
 #define BIO_printf(bio, format...) ___BIO_printf(AMISSL_BASE_NAME, bio, format)
@@ -2945,17 +2945,17 @@ static __inline__ int ___BIO_printf(struct Library * AmiSSLBase, BIO * bio, cons
   char * _BIO_vsnprintf_buf = (buf); \
   ULONG _BIO_vsnprintf_n = (n); \
   const char * _BIO_vsnprintf_format = (format); \
-  va_list _BIO_vsnprintf_args = (args); \
+  long * _BIO_vsnprintf_args = (args); \
   ({ \
   register char * _BIO_vsnprintf__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), char * __asm("a0"), ULONG __asm("d0"), const char * __asm("a1"), va_list __asm("d1"))) \
+  ((int (*)(char * __asm("a6"), char * __asm("a0"), ULONG __asm("d0"), const char * __asm("a1"), long * __asm("d1"))) \
   (_BIO_vsnprintf__bn - 2100))(_BIO_vsnprintf__bn, _BIO_vsnprintf_buf, _BIO_vsnprintf_n, _BIO_vsnprintf_format, _BIO_vsnprintf_args); \
 });})
 
 #ifndef NO_INLINE_STDARG
-static __inline__ int ___BIO_snprintf(struct Library * AmiSSLBase, char * buf, ULONG n, const char * format, long args, ...)
+static __inline__ int ___BIO_snprintf(struct Library * AmiSSLBase, char * buf, ULONG n, const char * format, ...)
 {
-  return BIO_vsnprintf(buf, n, format, (va_list) &args);
+  return BIO_vsnprintf(buf, n, format, (long *)(&format + 1));
 }
 
 #define BIO_snprintf(buf, n, format...) ___BIO_snprintf(AMISSL_BASE_NAME, buf, n, format)
@@ -5903,17 +5903,17 @@ static __inline__ int ___BIO_snprintf(struct Library * AmiSSLBase, char * buf, U
 
 #define ERR_add_error_dataA(num, args) ({ \
   LONG _ERR_add_error_dataA_num = (num); \
-  va_list _ERR_add_error_dataA_args = (args); \
+  long * _ERR_add_error_dataA_args = (args); \
   ({ \
   register char * _ERR_add_error_dataA__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void (*)(char * __asm("a6"), LONG __asm("d0"), va_list __asm("d1"))) \
+  ((void (*)(char * __asm("a6"), LONG __asm("d0"), long * __asm("d1"))) \
   (_ERR_add_error_dataA__bn - 4062))(_ERR_add_error_dataA__bn, _ERR_add_error_dataA_num, _ERR_add_error_dataA_args); \
 });})
 
 #ifndef NO_INLINE_STDARG
-static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG num, long args, ...)
+static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG num, ...)
 {
-  ERR_add_error_dataA(num, (va_list) &args);
+  ERR_add_error_dataA(num, &num + 1);
 }
 
 #define ERR_add_error_data(num...) ___ERR_add_error_data(AMISSL_BASE_NAME, num)
@@ -22355,6 +22355,24 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   register char * _SHA1_Transform__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
   ((void (*)(char * __asm("a6"), SHA_CTX * __asm("a0"), const unsigned char * __asm("a1"))) \
   (_SHA1_Transform__bn - 15090))(_SHA1_Transform__bn, _SHA1_Transform_c, _SHA1_Transform_data); \
+});})
+
+#define UI_read_string_lib(ui, uis) ({ \
+  UI * _UI_read_string_lib_ui = (ui); \
+  UI_STRING * _UI_read_string_lib_uis = (uis); \
+  ({ \
+  register char * _UI_read_string_lib__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((int (*)(char * __asm("a6"), UI * __asm("a0"), UI_STRING * __asm("a1"))) \
+  (_UI_read_string_lib__bn - 15096))(_UI_read_string_lib__bn, _UI_read_string_lib_ui, _UI_read_string_lib_uis); \
+});})
+
+#define UI_write_string_lib(ui, uis) ({ \
+  UI * _UI_write_string_lib_ui = (ui); \
+  UI_STRING * _UI_write_string_lib_uis = (uis); \
+  ({ \
+  register char * _UI_write_string_lib__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((int (*)(char * __asm("a6"), UI * __asm("a0"), UI_STRING * __asm("a1"))) \
+  (_UI_write_string_lib__bn - 15102))(_UI_write_string_lib__bn, _UI_write_string_lib_ui, _UI_write_string_lib_uis); \
 });})
 
 #endif /*  _INLINE_AMISSL_H  */

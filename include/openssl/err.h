@@ -271,9 +271,11 @@ void ERR_print_errors_fp(FILE *fp);
 #ifndef OPENSSL_NO_BIO
 void ERR_print_errors(BIO *bp);
 void ERR_add_error_data(int num, ...);
-#ifdef AMISSL
+#ifdef AMISSL_COMPILE
+void ERR_add_error_dataA(int num, va_list args);
+#elif defined(AMISSL)
 void ERR_add_error_dataA(int num, long *args);
-#endif /* AMISSL */
+#endif /* AMISSL_COMPILE */
 #endif
 void ERR_load_strings(int lib,ERR_STRING_DATA str[]);
 void ERR_unload_strings(int lib,ERR_STRING_DATA str[]);

@@ -1,19 +1,19 @@
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
-//#include <proto/amisslmaster.h>
 #include <internal/amissl_compiler.h>
 #include <stdarg.h>
 
 #define kprintf IExec->DebugPrintF
 
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
 /* Version Tag */
-
-#define VERSION		3
-#define REVISION	1
-#define VSTRING "amisslmaster version 3.0"
 #define LIBNAME "amisslmaster.library"
+#define VSTRING LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLMASTERREVISION) " (" MKSTR(AMISSLMASTERDATE) ")\r\n"
 
+static const char * __attribute__((used)) FullVersion = "\0$VER: " VSTRING;
 
 struct AmiSSLMasterLibrary
 {
@@ -173,7 +173,7 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
     libBase->libNode.lib_Node.ln_Name = LIBNAME;
     libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
     libBase->libNode.lib_Version      = VERSION;
-    libBase->libNode.lib_Revision     = REVISION;
+    libBase->libNode.lib_Revision     = AMISSLMASTERREVISION;
     libBase->libNode.lib_IdString     = VSTRING;
 
     libBase->segList = (BPTR)seglist;

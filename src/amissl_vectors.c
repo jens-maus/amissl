@@ -1360,7 +1360,7 @@ extern void                 VARARGS68K _AmiSSL_RAND_cleanup(struct AmiSSLIFace *
 extern int                  VARARGS68K _AmiSSL_RAND_bytes(struct AmiSSLIFace *, unsigned char * buf, int num);
 extern int                  VARARGS68K _AmiSSL_RAND_pseudo_bytes(struct AmiSSLIFace *, unsigned char * buf, int num);
 extern void                 VARARGS68K _AmiSSL_RAND_seed(struct AmiSSLIFace *, const void * buf, int num);
-extern void                 VARARGS68K _AmiSSL_RAND_add(struct AmiSSLIFace *, const void * buf, int num, float entropy);
+extern void                 VARARGS68K _AmiSSL_RAND_add(struct AmiSSLIFace *, const void * buf, int num, double entropy);
 extern int                  VARARGS68K _AmiSSL_RAND_load_file(struct AmiSSLIFace *, const char * file, long max_bytes);
 extern int                  VARARGS68K _AmiSSL_RAND_write_file(struct AmiSSLIFace *, const char * file);
 extern const char *         VARARGS68K _AmiSSL_RAND_file_name(struct AmiSSLIFace *, char * file, size_t num);

@@ -3,7 +3,6 @@
 #endif
 
 #define PROTO_AMISSL_H // Don't include amissl protos
-#define AMISSL_COMPILE
 
 #include <string.h>
 #include <stdlib.h>
@@ -574,16 +573,16 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
 #ifdef __amigaos4__
-		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-            && (UtilityBase = OpenLibrary("utility.library", 36))
-			&& (LocaleBase = OpenLibrary("locale.library", 38))
+		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 50))
+            && (UtilityBase = OpenLibrary("utility.library", 50))
+			&& (LocaleBase = OpenLibrary("locale.library", 50))
 			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
 			&& (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
 			&& (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
 			&& (locale = OpenLocale(NULL)))
 #else
 		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-            && (UtilityBase = OpenLibrary("utility.library", 36))
+            && (UtilityBase = OpenLibrary("utility.library", 37))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
 			&& (locale = OpenLocale(NULL)))
 #endif

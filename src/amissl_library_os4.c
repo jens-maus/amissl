@@ -4,28 +4,19 @@
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
 
-#define BIO_vprintf hide1
-#define BIO_vsnprintf hide2
-#define ERR_add_error_dataA hide3
-
 #include <interfaces/amissl.h>
-
-#undef BIO_vprintf
-#undef BIO_vsnprintf
-#undef ERR_add_error_dataA
-
 #include <exec/emulation.h>
 
 #define kprintf IExec->DebugPrintF
 
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
 /* Version Tag */
-//#include "amissl.library_rev.h"
+#define LIBNAME "amissl_v" MKSTR(VERSIONNAME) ".library"
+#define VSTRING LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ")\r\n"
 
-#define VERSION 3
-#define REVISION 0
-#define VSTRING "amissl version 3.0"
-#define LIBNAME "amissl_v097e.library"
-
+static const char * __attribute__((used)) FullVersion = "\0$VER: " VSTRING;
 
 struct AmiSSLLibrary
 {
@@ -145,6 +136,10 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 			
 			if(libOpen2((struct AmiSSLIFace *)extlib->MainIFace))
 			{
+				if (offsetof(struct AmiSSLIFace, UI_read_string_lib) != 10140
+				    || offsetof(struct AmiSSLIFace, UI_write_string_lib) != 10144)
+					IExec->DebugPrintF("*** WARNING: UI_read_string_lib and/or UI_write_string_lib have wrong offset!\n");
+
 				return (struct Library *)newLibBase;
 			}
 
@@ -213,7 +208,7 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
     libBase->libNode.lib_Node.ln_Name = LIBNAME;
     libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
     libBase->libNode.lib_Version      = VERSION;
-    libBase->libNode.lib_Revision     = REVISION;
+    libBase->libNode.lib_Revision     = AMISSLREVISION;
     libBase->libNode.lib_IdString     = VSTRING;
 
     libBase->segList = (BPTR)seglist;
@@ -313,7 +308,6 @@ const static struct Resident lib_res __attribute__ ((used)) =
     VSTRING,
     (APTR)libCreateTags
 };
-
 
 
 int errno; // libc strtol needs this, but nobody checks the results anyway

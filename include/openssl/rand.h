@@ -105,9 +105,9 @@ int  RAND_pseudo_bytes(unsigned char *buf,int num);
 void RAND_seed(const void *buf,int num);
 #if !defined(AMISSL) || defined(AMISSL_COMPILE) || defined(__amigaos4__)
 void RAND_add(const void *buf,int num,double entropy);
-#else /* defined(AMISSL) && defined(AMISSL_COMPILE) */
+#else /* defined(AMISSL) && !defined(AMISSL_COMPILE) && !defined(__amigaos4__) */
 void RAND_add(const void *buf, int num, float entropy);
-#endif /* !defined(AMISSL) || defined(AMISSL_COMPILE) */
+#endif /* !defined(AMISSL) || defined(AMISSL_COMPILE) || defined(__amigaos4__) */
 int  RAND_load_file(const char *file,long max_bytes);
 int  RAND_write_file(const char *file);
 const char *RAND_file_name(char *file,size_t num);
