@@ -1670,6 +1670,18 @@ void AMISSL_LIB_ENTRY _AmiSSL_BIO_copy_next_retry(REG(a6, __IFACE_OR_BASE), REG(
 	BIO_copy_next_retry(b);
 }
 
+#ifndef __amigaos4__
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *bio), REG(a1, const char *format), REG(d0, va_list args))
+{
+	return(BIO_vprintf(bio, format, args));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char *buf), REG(d0, size_t n), REG(a1, const char *format), REG(d1, va_list args))
+{
+	return(BIO_vsnprintf(buf, n, format, args));
+}
+#endif
+
 void AMISSL_LIB_ENTRY _AmiSSL_ERR_load_BIO_strings(REG(a6, __IFACE_OR_BASE))
 {
 	ERR_load_BIO_strings();
@@ -3299,6 +3311,13 @@ void AMISSL_LIB_ENTRY _AmiSSL_ERR_print_errors(REG(a6, __IFACE_OR_BASE), REG(a0,
 {
 	ERR_print_errors(bp);
 }
+
+#ifndef __amigaos4__
+void AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_dataA(REG(a6, __IFACE_OR_BASE), REG(d0, int num), REG(d1, va_list args))
+{
+	ERR_add_error_dataA(num, args);
+}
+#endif
 
 void AMISSL_LIB_ENTRY _AmiSSL_ERR_load_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA *str))
 {
