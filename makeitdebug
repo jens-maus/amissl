@@ -5,7 +5,7 @@ cd openssl
 mkdir -p {680{0,6}0,68020-40}/{tmp,out}
 
 cd 68000
-(cd .. && perl util/mk1mf.pl SRC= TMP=68000/tmp \
+(cd .. && perl util/mk1mf.pl no-engine SRC= TMP=68000/tmp \
 						  OUT=68000/out SC) >makefile.one
 cd ..
 make -f 68000/makefile.one CPU_TYPE=ANY

@@ -56,35 +56,44 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef HEADER_DES_H
-#define HEADER_DES_H
-
-#ifdef _KERBEROS_DES_H
-#error <amissl/des.h> replaces <kerberos/des.h>.
-#endif
+#ifndef HEADER_NEW_DES_H
+#define HEADER_NEW_DES_H
 
 #include <amissl/amisslconf.h> /* DES_LONG */
+#include <amissl/e_os2.h>	/* OPENSSL_EXTERN */
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-typedef unsigned char des_cblock[8];
-typedef unsigned char const_des_cblock[8];
+typedef unsigned char DES_cblock[8];
+typedef /* const */ unsigned char const_DES_cblock[8];
+/* With "const", gcc 2.8.1 on Solaris thinks that DES_cblock *
+ * and const_DES_cblock * are incompatible pointer types. */
 
-typedef struct des_ks_struct
+typedef struct DES_ks
+    {
+    union
 	{
-	union	{
-		des_cblock cblock;
-		/* make sure things are correct size on machines with
-		 * 8 byte longs */
-		DES_LONG deslong[2];
-		} ks;
-	int weak_key;
-	} des_key_schedule[16];
+	DES_cblock cblock;
+	/* make sure things are correct size on machines with
+	 * 8 byte longs */
+	DES_LONG deslong[2];
+	} ks[16];
+    } DES_key_schedule;
 
-#define DES_KEY_SZ 	(sizeof(des_cblock))
-#define DES_SCHEDULE_SZ (sizeof(des_key_schedule))
+#ifndef OPENSSL_DISABLE_OLD_DES_SUPPORT
+# ifndef OPENSSL_ENABLE_OLD_DES_SUPPORT
+#  define OPENSSL_ENABLE_OLD_DES_SUPPORT
+# endif
+#endif
+
+#ifdef OPENSSL_ENABLE_OLD_DES_SUPPORT
+# include <amissl/des_old.h>
+#endif
+
+#define DES_KEY_SZ 	(sizeof(DES_cblock))
+#define DES_SCHEDULE_SZ (sizeof(DES_key_schedule))
 
 #define DES_ENCRYPT	1
 #define DES_DECRYPT	0
@@ -92,52 +101,24 @@ typedef struct des_ks_struct
 #define DES_CBC_MODE	0
 #define DES_PCBC_MODE	1
 
-#define des_ecb2_encrypt(i,o,k1,k2,e) \
-	des_ecb3_encrypt((i),(o),(k1),(k2),(k1),(e))
+#define DES_ecb2_encrypt(i,o,k1,k2,e) \
+	DES_ecb3_encrypt((i),(o),(k1),(k2),(k1),(e))
 
-#define des_ede2_cbc_encrypt(i,o,l,k1,k2,iv,e) \
-	des_ede3_cbc_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(e))
+#define DES_ede2_cbc_encrypt(i,o,l,k1,k2,iv,e) \
+	DES_ede3_cbc_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(e))
 
-#define des_ede2_cfb64_encrypt(i,o,l,k1,k2,iv,n,e) \
-	des_ede3_cfb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n),(e))
+#define DES_ede2_cfb64_encrypt(i,o,l,k1,k2,iv,n,e) \
+	DES_ede3_cfb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n),(e))
 
-#define des_ede2_ofb64_encrypt(i,o,l,k1,k2,iv,n) \
-	des_ede3_ofb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n))
+#define DES_ede2_ofb64_encrypt(i,o,l,k1,k2,iv,n) \
+	DES_ede3_ofb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n))
 
-/* The following definitions provide compatibility with the MIT Kerberos
- * library. The des_key_schedule structure is not binary compatible. */
+OPENSSL_DECLARE_GLOBAL(int,DES_check_key);	/* defaults to false */
+#define DES_check_key OPENSSL_GLOBAL_REF(DES_check_key)
+OPENSSL_DECLARE_GLOBAL(int,DES_rw_mode);	/* defaults to DES_PCBC_MODE */
+#define DES_rw_mode OPENSSL_GLOBAL_REF(DES_rw_mode)
 
-#define _KERBEROS_DES_H
-
-#define KRBDES_ENCRYPT DES_ENCRYPT
-#define KRBDES_DECRYPT DES_DECRYPT
-
-#ifdef KERBEROS
-#  define ENCRYPT DES_ENCRYPT
-#  define DECRYPT DES_DECRYPT
-#endif
-
-#ifndef NCOMPAT
-#  define C_Block des_cblock
-#  define Key_schedule des_key_schedule
-#  define KEY_SZ DES_KEY_SZ
-#  define string_to_key des_string_to_key
-#  define read_pw_string des_read_pw_string
-#  define random_key des_random_key
-#  define pcbc_encrypt des_pcbc_encrypt
-#  define set_key des_set_key
-#  define key_sched des_key_sched
-#  define ecb_encrypt des_ecb_encrypt
-#  define cbc_encrypt des_cbc_encrypt
-#  define ncbc_encrypt des_ncbc_encrypt
-#  define xcbc_encrypt des_xcbc_encrypt
-#  define cbc_cksum des_cbc_cksum
-#  define quad_cksum des_quad_cksum
-#  define check_parity des_check_key_parity
-#endif
-
-typedef des_key_schedule bit_64;
-#define des_fixup_key_parity des_set_odd_parity
+#define DES_fixup_key_parity DES_set_odd_parity
 
 #ifdef  __cplusplus
 }

@@ -1,6 +1,7 @@
 #ifndef LIBRARIES_AMISSLMASTER_H
 #define LIBRARIES_AMISSLMASTER_H
 
+#define CIPHER_AES			0x11
 #define CIPHER_BlowFish		0x01
 #define CIPHER_CAST			0x02
 #define CIPHER_DES			0x03
@@ -18,6 +19,8 @@
 #define CIPHER_RSA			0x0f
 #define CIPHER_SHA			0x10
 
-#define AMISSL_V2			0x01
+#define AMISSL_V2			0x01	/* OBSOLETE NAME */
+#define AMISSL_V096g		0x01
+#define AMISSL_V097a		0x02
 
 #endif /* LIBRARIES_AMISSLMASTER_H */

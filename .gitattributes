@@ -1,5 +1,4 @@
 * text=auto !eol
-/AmiSSL.info text eol=lf
 FD/amissl_lib.fd eol=lf
 FD/amissl_lib.fd_AmiSSL eol=lf
 FD/amisslmaster_lib.fd eol=lf

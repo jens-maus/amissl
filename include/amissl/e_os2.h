@@ -19,3 +19,11 @@ extern "C" {
 }
 #endif
 #endif
+
+# define OPENSSL_EXPORT extern
+# define OPENSSL_IMPORT extern
+# define OPENSSL_GLOBAL
+
+# define OPENSSL_IMPLEMENT_GLOBAL(type,name) OPENSSL_GLOBAL type _shadow_##name
+# define OPENSSL_DECLARE_GLOBAL(type,name) OPENSSL_EXPORT type _shadow_##name
+# define OPENSSL_GLOBAL_REF(name) _shadow_##name
