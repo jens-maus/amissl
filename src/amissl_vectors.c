@@ -16,6 +16,10 @@
 #include <amissl/amissl.h>
 #endif
 
+#ifndef INTERNAL_AMISSL_COMPILER_H
+#include <internal/amissl_compiler.h>
+#endif
+
 extern ULONG                VARARGS68K _AmiSSL_Obtain(struct AmiSSLIFace *);
 extern ULONG                VARARGS68K _AmiSSL_Release(struct AmiSSLIFace *);
 extern void                 VARARGS68K _AmiSSL_InternalInitAmiSSL(struct AmiSSLIFace *, void * amisslinit);
@@ -2528,7 +2532,7 @@ extern unsigned char *      VARARGS68K _AmiSSL_SHA1(struct AmiSSLIFace *, const 
 extern void                 VARARGS68K _AmiSSL_SHA1_Transform(struct AmiSSLIFace *, SHA_CTX * c, const unsigned char * data);
 
 
-static void *main_vectors[] = {
+AMISSL_COMMON_DATA static void *main_vectors[] = {
 	(void *)_AmiSSL_Obtain,
 	(void *)_AmiSSL_Release,
 	(void *)NULL,

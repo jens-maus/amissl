@@ -19,9 +19,9 @@
 
 #include <clib/amissl_protos.h>
 #ifdef __GNUC__
-#include <../libcmt/scmt.h>
+#include <../libcmt/libcmt.h>
 #else
-#include "/scmt/scmt.h"
+#include "/libcmt/libcmt.h"
 #endif
 #include "amisslinit.h"
 
@@ -229,6 +229,31 @@ long ASM SAVEDS _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct 
 
 	return(0);
 }
+
+#ifdef __amigaos4__
+long ASM SAVEDS _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+{
+	va_list ap;
+	struct TagItem *tags;
+
+	va_startlinear(ap, Self);
+	tags = va_getlinearva(ap, struct TagItem *);
+
+	return _AmiSSL_InitAmiSSLA(Self,tags);
+}
+
+long ASM SAVEDS _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+{
+	va_list ap;
+	struct TagItem *tags;
+
+	va_startlinear(ap, Self);
+	tags = va_getlinearva(ap, struct TagItem *);
+
+	return _AmiSSL_CleanupAmiSSLA(Self,tags);
+}
+
+#endif
 
 long IsCipherAvailable(long cipher)
 {

@@ -6,6 +6,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.1  2005/01/08 20:18:40  stefan
+ * Initial checkin
+ *
  *
  *
  */
@@ -16,6 +19,7 @@
 #include <dos/dos.h>
 //#include <proto/ixemul.h>
 #include <stdarg.h>
+#include <internal/amissl_compiler.h>
 
 /* Version Tag */
 //#include "amissl.library_rev.h"
@@ -242,7 +246,7 @@ static ULONG _manager_Release(struct LibraryManagerInterface *Self)
 }
 
 /* Manager interface vectors */
-const static int lib_manager_vectors[] =
+AMISSL_COMMON_DATA const static int lib_manager_vectors[] =
 {
     (int)_manager_Obtain,
     (int)_manager_Release,
@@ -256,7 +260,7 @@ const static int lib_manager_vectors[] =
 };
 
 /* "__library" interface tag list */
-const static struct TagItem lib_managerTags[] =
+AMISSL_COMMON_DATA const static struct TagItem lib_managerTags[] =
 {
     {MIT_Name,             (ULONG)"__library"},
     {MIT_VectorTable,      (ULONG)lib_manager_vectors},
@@ -271,7 +275,7 @@ const static struct TagItem lib_managerTags[] =
 /* Uncomment this line (and see below) if your library has a 68k jump table */
 /* extern ULONG VecTable68K; */
 
-const static struct TagItem mainTags[] =
+AMISSL_COMMON_DATA const static struct TagItem mainTags[] =
 {
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_vectors},
@@ -279,14 +283,14 @@ const static struct TagItem mainTags[] =
     {TAG_DONE,              0}
 };
 
-const static uint32 libInterfaces[] =
+AMISSL_COMMON_DATA const static uint32 libInterfaces[] =
 {
     (uint32)lib_managerTags,
     (uint32)mainTags,
     (uint32)0
 };
 
-const struct TagItem libCreateTags[] =
+AMISSL_COMMON_DATA const struct TagItem libCreateTags[] =
 {
     {CLT_DataSize,         (uint32)(sizeof(struct AmiSSLLibrary))},
     {CLT_InitFunc,         (uint32)libInit},
@@ -298,7 +302,7 @@ const struct TagItem libCreateTags[] =
 
 
 /* ------------------- ROM Tag ------------------------ */
-const static struct Resident lib_res __attribute__ ((used)) =
+AMISSL_COMMON_DATA const static struct Resident lib_res __attribute__ ((used)) =
 {
     RTC_MATCHWORD,
     (struct Resident *)&lib_res,
