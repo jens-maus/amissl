@@ -2,6 +2,8 @@
 
 cd openssl
 
+set PWD = `pwd`
+
 mkdir -p OS4/{tmp,out}
 
 if [ ! -f crypto/opensslconf.h ]
@@ -19,10 +21,10 @@ cd OS4
 							OUT=OS4/out OS4) > Makefile.one
 cd ..
 
-make -f OS4/Makefile.one
+make -f OS4/Makefile.one AmiSSL=$PWD
 
 cd ..
 
 mkdir -p OS4/AmiSSL
 
-make OUTDIR=OS4/
+make OUTDIR=OS4/ AmiSSL=$PWD
