@@ -7,57 +7,68 @@ LIBCPU=68000
 LIBSSL=openssl/$(LIBCPU)/out/ssl.lib
 LIBCRYPTO=openssl/$(LIBCPU)/out/crypto.lib
 STRIPDEBUG=
+LIBVERSIONNAME=097a
 LIBVERSION=3
 LIBREVISION=1
+LIBVERSIONFULL=$(LIBVERSION).$(LIBREVISION)
 
 OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
 CFLAG=$(OPTIMS) DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp IDIR AmiSSL:Include NOSTACKCHECK DEBUG=LINE LIBCODE
 
-all: libs amissl_v$(LIBVERSION).library amisslmaster.library
+all: libs amissl_v$(LIBVERSIONNAME).library amisslmaster.library
 
-libs: blowfish_v$(LIBVERSION).library cast_v$(LIBVERSION).library des_v$(LIBVERSION).library idea_v$(LIBVERSION).library \
-      md2_v$(LIBVERSION).library md4_v$(LIBVERSION).library md5_v$(LIBVERSION).library mdc2_v$(LIBVERSION).library rc2_v$(LIBVERSION).library rc4_v$(LIBVERSION).library \
-      rc5_v$(LIBVERSION).library ripemd_v$(LIBVERSION).library sha_v$(LIBVERSION).library rsa_v$(LIBVERSION).library \
-      dh_v$(LIBVERSION).library dsa_v$(LIBVERSION).library
+libs: aes_v$(LIBVERSIONNAME).library blowfish_v$(LIBVERSIONNAME).library \
+      cast_v$(LIBVERSIONNAME).library des_v$(LIBVERSIONNAME).library \
+      dh_v$(LIBVERSIONNAME).library dsa_v$(LIBVERSIONNAME).library \
+      idea_v$(LIBVERSIONNAME).library md2_v$(LIBVERSIONNAME).library \
+      md4_v$(LIBVERSIONNAME).library md5_v$(LIBVERSIONNAME).library \
+      mdc2_v$(LIBVERSIONNAME).library rc2_v$(LIBVERSIONNAME).library \
+      rc4_v$(LIBVERSIONNAME).library rc5_v$(LIBVERSIONNAME).library \
+      ripemd_v$(LIBVERSIONNAME).library rsa_v$(LIBVERSIONNAME).library \
+      sha_v$(LIBVERSIONNAME).library \
 
 clean:
 	-rm obj/*.o
 
 copylibs:
 	Move amisslmaster.library $(OUTDIR)amisslmaster.library
-	Move amissl_v$(LIBVERSION).library $(OUTDIR)amissl/amissl_v$(LIBVERSION).library
-	Move blowfish_v$(LIBVERSION).library $(OUTDIR)amissl/blowfish_v$(LIBVERSION).library
-	Move cast_v$(LIBVERSION).library $(OUTDIR)amissl/cast_v$(LIBVERSION).library
-	Move des_v$(LIBVERSION).library $(OUTDIR)amissl/des_v$(LIBVERSION).library
-	Move idea_v$(LIBVERSION).library $(OUTDIR)amissl/idea_v$(LIBVERSION).library
-	Move md2_v$(LIBVERSION).library $(OUTDIR)amissl/md2_v$(LIBVERSION).library
-	Move md4_v$(LIBVERSION).library $(OUTDIR)amissl/md4_v$(LIBVERSION).library
-	Move md5_v$(LIBVERSION).library $(OUTDIR)amissl/md5_v$(LIBVERSION).library
-	Move mdc2_v$(LIBVERSION).library $(OUTDIR)amissl/mdc2_v$(LIBVERSION).library
-	Move rc2_v$(LIBVERSION).library $(OUTDIR)amissl/rc2_v$(LIBVERSION).library
-	Move rc4_v$(LIBVERSION).library $(OUTDIR)amissl/rc4_v$(LIBVERSION).library
-	Move rc5_v$(LIBVERSION).library $(OUTDIR)amissl/rc5_v$(LIBVERSION).library
-	Move ripemd_v$(LIBVERSION).library $(OUTDIR)amissl/ripemd_v$(LIBVERSION).library
-	Move sha_v$(LIBVERSION).library $(OUTDIR)amissl/sha_v$(LIBVERSION).library
-	Move rsa_v$(LIBVERSION).library $(OUTDIR)amissl/rsa_v$(LIBVERSION).library
-	Move dh_v$(LIBVERSION).library $(OUTDIR)amissl/dh_v$(LIBVERSION).library
-	Move dsa_v$(LIBVERSION).library $(OUTDIR)amissl/dsa_v$(LIBVERSION).library
+	Move amissl_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/amissl_v$(LIBVERSIONNAME).library
+	Move aes_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/aes_v$(LIBVERSIONNAME).library
+	Move blowfish_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/blowfish_v$(LIBVERSIONNAME).library
+	Move cast_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/cast_v$(LIBVERSIONNAME).library
+	Move des_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/des_v$(LIBVERSIONNAME).library
+	Move dh_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/dh_v$(LIBVERSIONNAME).library
+	Move dsa_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/dsa_v$(LIBVERSIONNAME).library
+	Move idea_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/idea_v$(LIBVERSIONNAME).library
+	Move md2_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/md2_v$(LIBVERSIONNAME).library
+	Move md4_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/md4_v$(LIBVERSIONNAME).library
+	Move md5_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/md5_v$(LIBVERSIONNAME).library
+	Move mdc2_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/mdc2_v$(LIBVERSIONNAME).library
+	Move rc2_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/rc2_v$(LIBVERSIONNAME).library
+	Move rc4_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/rc4_v$(LIBVERSIONNAME).library
+	Move rc5_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/rc5_v$(LIBVERSIONNAME).library
+	Move ripemd_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/ripemd_v$(LIBVERSIONNAME).library
+	Move rsa_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/rsa_v$(LIBVERSIONNAME).library
+	Move sha_v$(LIBVERSIONNAME).library $(OUTDIR)amissl/sha_v$(LIBVERSIONNAME).library
 
 $(OBJ_D)/amissl_init.o: $(SRC_D)/amissl.init
-	sc $*.init OBJNAME $(OBJ_D)/$>.o $(CFLAG) IDIR outinc DEF LIBNAME=amissl.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSION).$(LIBREVISION)
+	sc $*.init OBJNAME $(OBJ_D)/$>.o $(CFLAG) IDIR outinc DEF LIBNAME=amissl.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSIONFULL)
 
 $(OBJ_D)/amisslmaster_init.o: $(SRC_D)/amisslmaster.init
-	sc $*.init OBJNAME $(OBJ_D)/$>.o $(CFLAG) IDIR outinc DEF LIBNAME=amisslmaster.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSION).$(LIBREVISION)
+	sc $*.init OBJNAME $(OBJ_D)/$>.o $(CFLAG) IDIR outinc DEF LIBNAME=amisslmaster.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSIONFULL)
 
 .init.o:
-	sc CSRC $*.init OBJNAME $(OBJ_D)/$>_init.o $(CFLAG) DEF LIBNAME=$>.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSION).$(LIBREVISION)
+	sc CSRC $*.init OBJNAME $(OBJ_D)/$>_init.o $(CFLAG) DEF LIBNAME=$>.library IGN 315 DEF CPUPREFIX=MC DEF CPUVER=$(LIBCPU) DEF LIBVER=$(LIBVERSIONFULL)
 
 .c.o:
 	sc $* $(CFLAG) OBJNAME $@ DEF LIBNAME=$>.library IGN 315
 
+$(OBJ_D)/aes_init.o: $(SRC_D)/aes.init
 $(OBJ_D)/blowfish_init.o: $(SRC_D)/blowfish.init
 $(OBJ_D)/cast_init.o: $(SRC_D)/cast.init
 $(OBJ_D)/des_init.o: $(SRC_D)/des.init
+$(OBJ_D)/dh_init.o: $(SRC_D)/dh.init
+$(OBJ_D)/dsa_init.o: $(SRC_D)/dsa.init
 $(OBJ_D)/idea_init.o: $(SRC_D)/idea.init
 $(OBJ_D)/md2_init.o: $(SRC_D)/md2.init
 $(OBJ_D)/md4_init.o: $(SRC_D)/md4.init
@@ -69,10 +80,8 @@ $(OBJ_D)/rc5_init.o: $(SRC_D)/rc5.init
 $(OBJ_D)/ripemd_init.o: $(SRC_D)/ripemd.init
 $(OBJ_D)/rsa_init.o: $(SRC_D)/rsa.init
 $(OBJ_D)/sha_init.o: $(SRC_D)/sha.init				
-$(OBJ_D)/dh_init.o: $(SRC_D)/dh.init
-$(OBJ_D)/dsa_init.o: $(SRC_D)/dsa.init
 
-amissl_v$(LIBVERSION).library: $(OBJ_D)/AmiSSL.o $(OBJ_D)/AmiSSL_spec.o $(OBJ_D)/amissl_init.o $(OBJ_D)/myabort.o
+amissl_v$(LIBVERSIONNAME).library: $(OBJ_D)/AmiSSL.o $(OBJ_D)/AmiSSL_spec.o $(OBJ_D)/amissl_init.o $(OBJ_D)/myabort.o
 	slink WITH <<
 DEFINE _bsearch=_OBJ_bsearch
 DEFINE _MD2_Final=_MD2_Final_AmiSSL
@@ -115,8 +124,8 @@ DEFINE _closelog=@__dummy
 DEFINE _openlog=@__dummy
 
 LIBFD FD/amissl_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO amissl_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO amissl_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $*_init.o $(OBJ_D)/AmiSSL.o $(OBJ_D)/AmiSSL_spec.o
 	$(OBJ_D)/myabort.o \
 LIB $(LIBCRYPTO) $(LIBSSL) \
@@ -132,7 +141,7 @@ $(STRIPDEBUG)
 amisslmaster.library: $(OBJ_D)/amisslmaster_init.o
 	slink WITH <<
 LIBFD FD/amisslmaster_lib.fd
-LIBID "$@ 2.0 ($(DATE))"
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
 TO amisslmaster.library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amisslmaster_init.o
 LIB LIB:sc.lib
@@ -214,6 +223,9 @@ $(OBJ_D)/AmiSSL_spec.o: $(SRC_D)/AmiSSL_spec.c
 $(OBJ_D)/AmiSSL.o: $(SRC_D)/AmiSSL.c
 	sc $(SRC_D)/AmiSSL.c CODE=FAR OBJNAME $(OBJ_D)/AmiSSL.o $(CFLAG) LIBCODE
 
+$(OBJ_D)/AES.o: $(SRC_D)/AES.c
+	sc $(SRC_D)/AES.c OBJNAME $(OBJ_D)/AES.o $(CFLAG)
+
 $(OBJ_D)/BlowFish.o: $(SRC_D)/BlowFish.c
 	sc $(SRC_D)/BlowFish.c OBJNAME $(OBJ_D)/BlowFish.o $(CFLAG)
 
@@ -222,6 +234,12 @@ $(OBJ_D)/CAST.o: $(SRC_D)/CAST.c
 
 $(OBJ_D)/DES.o: $(SRC_D)/DES.c
 	sc $(SRC_D)/DES.c OBJNAME $(OBJ_D)/DES.o $(CFLAG)
+
+$(OBJ_D)/DH.o: $(SRC_D)/DH.c
+	sc $(SRC_D)/DH.c OBJNAME $(OBJ_D)/DH.o $(CFLAG)
+
+$(OBJ_D)/DSA.o: $(SRC_D)/DSA.c
+	sc $(SRC_D)/DSA.c OBJNAME $(OBJ_D)/DSA.o $(CFLAG)
 
 $(OBJ_D)/IDEA.o: $(SRC_D)/IDEA.c
 	sc $(SRC_D)/IDEA.c OBJNAME $(OBJ_D)/IDEA.o $(CFLAG)
@@ -253,20 +271,28 @@ $(OBJ_D)/RIPEMD.o: $(SRC_D)/RIPEMD.c
 $(OBJ_D)/RSA.o: $(SRC_D)/RSA.c
 	sc $(SRC_D)/RSA.c OBJNAME $(OBJ_D)/RSA.o $(CFLAG)
 
-$(OBJ_D)/DH.o: $(SRC_D)/DH.c
-	sc $(SRC_D)/DH.c OBJNAME $(OBJ_D)/DH.o $(CFLAG)
-
-$(OBJ_D)/DSA.o: $(SRC_D)/DSA.c
-	sc $(SRC_D)/DSA.c OBJNAME $(OBJ_D)/DSA.o $(CFLAG)
-
 $(OBJ_D)/SHA.o: $(SRC_D)/SHA.c
 	sc $(SRC_D)/SHA.c OBJNAME $(OBJ_D)/SHA.o $(CFLAG)
 
-blowfish_v$(LIBVERSION).library: $(OBJ_D)/BlowFish.o $(OBJ_D)/blowfish_init.o
+aes_v$(LIBVERSIONNAME).library: $(OBJ_D)/AES.o $(OBJ_D)/aes_init.o
+	slink WITH <<
+LIBFD FD/aes_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO aes_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/AES.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+$(STRIPDEBUG)
+<
+
+blowfish_v$(LIBVERSIONNAME).library: $(OBJ_D)/BlowFish.o $(OBJ_D)/blowfish_init.o
 	slink WITH <<
 LIBFD FD/blowfish_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO blowfish_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO blowfish_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/BlowFish.o
 LIB $(LIBCRYPTO) LIB:sc.lib
 NOICONS
@@ -276,11 +302,11 @@ LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
 $(STRIPDEBUG)
 <
 
-cast_v$(LIBVERSION).library: $(OBJ_D)/CAST.o $(OBJ_D)/cast_init.o
+cast_v$(LIBVERSIONNAME).library: $(OBJ_D)/CAST.o $(OBJ_D)/cast_init.o
 	slink WITH <<
 LIBFD FD/cast_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO cast_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO cast_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/CAST.o
 LIB $(LIBCRYPTO) LIB:sc.lib
 NOICONS
@@ -291,13 +317,13 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
 $(STRIPDEBUG)
 <
 
-des_v$(LIBVERSION).library: $(OBJ_D)/DES.o $(OBJ_D)/des_init.o $(OBJ_D)/myabort.o $(OBJ_D)/mysprintf.o $(OBJ_D)/time.o
+des_v$(LIBVERSIONNAME).library: $(OBJ_D)/DES.o $(OBJ_D)/des_init.o $(OBJ_D)/myabort.o $(OBJ_D)/mysprintf.o $(OBJ_D)/time.o
 	slink WITH <<
 DEFINE _abort=_myabort
 DEFINE _sprintf=_mysprintf
 LIBFD FD/des_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO des_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO des_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/DES.o $(OBJ_D)/time.o
 LIB $(LIBCRYPTO) LIB:scm.lib LIB:sc.lib scmt/scmt.lib LIB:sc.lib \
     $(OBJ_D)/myabort.o $(OBJ_D)/mysprintf.o \
@@ -309,161 +335,11 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
 $(STRIPDEBUG)
 <
 
-idea_v$(LIBVERSION).library: $(OBJ_D)/IDEA.o $(OBJ_D)/idea_init.o
-	slink WITH <<
-LIBFD FD/idea_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO idea_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/IDEA.o
-LIB $(LIBCRYPTO) LIB:scm.lib LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-md2_v$(LIBVERSION).library: $(OBJ_D)/MD2.o $(OBJ_D)/md2_init.o
-	slink WITH <<
-LIBFD FD/md2_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO md2_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD2.o
-LIB $(LIBCRYPTO) LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-md4_v$(LIBVERSION).library: $(OBJ_D)/MD4.o $(OBJ_D)/md4_init.o
-	slink WITH <<
-LIBFD FD/md4_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO md4_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD4.o
-LIB $(LIBCRYPTO) LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-md5_v$(LIBVERSION).library: $(OBJ_D)/MD5.o $(OBJ_D)/md5_init.o
-	slink WITH <<
-LIBFD FD/md5_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO md5_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD5.o
-LIB $(LIBCRYPTO) LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-mdc2_v$(LIBVERSION).library: $(OBJ_D)/MDC2.o $(OBJ_D)/mdc2_init.o
-	slink WITH <<
-LIBFD FD/mdc2_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO mdc2_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MDC2.o
-LIB $(LIBCRYPTO) LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-rc2_v$(LIBVERSION).library: $(OBJ_D)/RC2.o $(OBJ_D)/rc2_init.o
-	slink WITH <<
-LIBFD FD/rc2_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO rc2_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC2.o
-LIB $(LIBCRYPTO)
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-rc4_v$(LIBVERSION).library: $(OBJ_D)/RC4.o $(OBJ_D)/rc4_init.o
-	slink WITH <<
-LIBFD FD/rc4_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO rc4_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC4.o
-LIB $(LIBCRYPTO)
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-rc5_v$(LIBVERSION).library: $(OBJ_D)/RC5.o $(OBJ_D)/rc5_init.o
-	slink WITH <<
-LIBFD FD/rc5_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO rc5_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC5.o
-LIB $(LIBCRYPTO)
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-ripemd_v$(LIBVERSION).library: $(OBJ_D)/RIPEMD.o $(OBJ_D)/ripemd_init.o
-	slink WITH <<
-LIBFD FD/ripemd_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO ripemd_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RIPEMD.o
-LIB $(LIBCRYPTO) LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-rsa_v$(LIBVERSION).library: $(OBJ_D)/rsa_init.o $(OBJ_D)/RSA.o
-	slink WITH <<
-LIBFD FD/rsa_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO rsa_v$(LIBVERSION).library
-FROM lib:libent.o lib:libinitr.o $(OBJ_D)/rsa_init.o $(OBJ_D)/RSA.o
-LIB $(LIBCRYPTO) scmt/scmt.lib lib:debug.lib lib:amiga.lib LIB:sc.lib
-NOICONS
-BATCH
-SMALLCODE SMALLDATA
-LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
-MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
-$(STRIPDEBUG)
-<
-
-dh_v$(LIBVERSION).library: $(OBJ_D)/dh_init.o $(OBJ_D)/dh.o
+dh_v$(LIBVERSIONNAME).library: $(OBJ_D)/dh_init.o $(OBJ_D)/dh.o
 	slink WITH <<
 LIBFD FD/dh_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO dh_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO dh_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/dh_init.o $(OBJ_D)/DH.o
 LIB $(LIBCRYPTO) scmt/scmt.lib lib:debug.lib lib:amiga.lib LIB:sc.lib
 NOICONS
@@ -474,11 +350,11 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
 $(STRIPDEBUG)
 <
 
-dsa_v$(LIBVERSION).library: $(OBJ_D)/dsa_init.o $(OBJ_D)/DSA.o
+dsa_v$(LIBVERSIONNAME).library: $(OBJ_D)/dsa_init.o $(OBJ_D)/DSA.o
 	slink WITH <<
 LIBFD FD/dsa_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO dsa_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO dsa_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/dsa_init.o $(OBJ_D)/DSA.o
 LIB $(LIBCRYPTO) scmt/scmt.lib lib:debug.lib lib:amiga.lib LIB:sc.lib
 NOICONS
@@ -489,11 +365,161 @@ MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
 $(STRIPDEBUG)
 <
 
-sha_v$(LIBVERSION).library: $(OBJ_D)/SHA.o $(OBJ_D)/sha_init.o
+idea_v$(LIBVERSIONNAME).library: $(OBJ_D)/IDEA.o $(OBJ_D)/idea_init.o
+	slink WITH <<
+LIBFD FD/idea_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO idea_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/IDEA.o
+LIB $(LIBCRYPTO) LIB:scm.lib LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+md2_v$(LIBVERSIONNAME).library: $(OBJ_D)/MD2.o $(OBJ_D)/md2_init.o
+	slink WITH <<
+LIBFD FD/md2_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO md2_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD2.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+md4_v$(LIBVERSIONNAME).library: $(OBJ_D)/MD4.o $(OBJ_D)/md4_init.o
+	slink WITH <<
+LIBFD FD/md4_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO md4_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD4.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+md5_v$(LIBVERSIONNAME).library: $(OBJ_D)/MD5.o $(OBJ_D)/md5_init.o
+	slink WITH <<
+LIBFD FD/md5_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO md5_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MD5.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+mdc2_v$(LIBVERSIONNAME).library: $(OBJ_D)/MDC2.o $(OBJ_D)/mdc2_init.o
+	slink WITH <<
+LIBFD FD/mdc2_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO mdc2_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/MDC2.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+rc2_v$(LIBVERSIONNAME).library: $(OBJ_D)/RC2.o $(OBJ_D)/rc2_init.o
+	slink WITH <<
+LIBFD FD/rc2_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO rc2_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC2.o
+LIB $(LIBCRYPTO)
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+rc4_v$(LIBVERSIONNAME).library: $(OBJ_D)/RC4.o $(OBJ_D)/rc4_init.o
+	slink WITH <<
+LIBFD FD/rc4_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO rc4_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC4.o
+LIB $(LIBCRYPTO)
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+rc5_v$(LIBVERSIONNAME).library: $(OBJ_D)/RC5.o $(OBJ_D)/rc5_init.o
+	slink WITH <<
+LIBFD FD/rc5_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO rc5_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RC5.o
+LIB $(LIBCRYPTO)
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+ripemd_v$(LIBVERSIONNAME).library: $(OBJ_D)/RIPEMD.o $(OBJ_D)/ripemd_init.o
+	slink WITH <<
+LIBFD FD/ripemd_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO ripemd_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/RIPEMD.o
+LIB $(LIBCRYPTO) LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+rsa_v$(LIBVERSIONNAME).library: $(OBJ_D)/rsa_init.o $(OBJ_D)/RSA.o
+	slink WITH <<
+LIBFD FD/rsa_lib.fd_AmiSSL
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO rsa_v$(LIBVERSIONNAME).library
+FROM lib:libent.o lib:libinitr.o $(OBJ_D)/rsa_init.o $(OBJ_D)/RSA.o
+LIB $(LIBCRYPTO) scmt/scmt.lib lib:debug.lib lib:amiga.lib LIB:sc.lib
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 16 HWIDTH 16 PWIDTH 16
+$(STRIPDEBUG)
+<
+
+sha_v$(LIBVERSIONNAME).library: $(OBJ_D)/SHA.o $(OBJ_D)/sha_init.o
 	slink WITH <<
 LIBFD FD/sha_lib.fd_AmiSSL
-LIBID "$@ 2.0 ($(DATE))"
-TO sha_v$(LIBVERSION).library
+LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
+TO sha_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinit.o $*_init.o $(OBJ_D)/SHA.o
 LIB $(LIBCRYPTO) LIB:sc.lib
 NOICONS
