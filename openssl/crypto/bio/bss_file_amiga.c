@@ -35,7 +35,25 @@ static BIO_METHOD methods_filep =
 
 BIO_METHOD *BIO_s_file(void);
 
-static BPTR FOpen(char *name, char *mode)
+#ifndef __amigaos4__
+#define FOpen(name, mode, buffer_size) Open(name, mode)
+#define FFlush(file) Flush(file)
+
+static void FClose(BPTR file)
+{
+	FFlush(file);
+	FClose(file);
+}
+
+static LONG FSeek(BPTR file, LONG pos, LONG mode)
+{
+	FFlush(file);
+
+	return((LONG)Seek(file, pos, mode));
+}
+#endif /* !__amigaos4__ */
+
+static BPTR FOpenFromMode(char *name, char *mode)
 {
 	BOOL mode_is_invalid = FALSE, seek_to_end = FALSE;
 	BPTR file = NULL;
@@ -55,12 +73,13 @@ static BPTR FOpen(char *name, char *mode)
 
 	if (!mode_is_invalid)
 	{
-		if (file = Open(name, type))
+		if (file = FOpen(name, type, 16384))
 		{
 			if (seek_to_end)
 				Seek(file, 0, OFFSET_END);
 
-			if (((struct Library *)DOSBase)->lib_Version >= 39)
+			if (((struct Library *)DOSBase)->lib_Version >= 39
+			    && ((struct Library *)DOSBase)->lib_Version < 51)
 				SetVBuf(file, NULL, IsInteractive(file) ? BUF_LINE : BUF_FULL, 5120);
 		}
 	}
@@ -68,25 +87,12 @@ static BPTR FOpen(char *name, char *mode)
 	return(file);
 }
 
-static void FClose(BPTR file)
-{
-	Flush(file);
-	Close(file);
-}
-
-static LONG FSeek(BPTR file, LONG pos, LONG mode)
-{
-	Flush(file);
-
-	return((LONG)Seek(file, pos, mode));
-}
-
 static BOOL FEOF(BPTR file)
 {
 	LONG curr_position, end_position;
 	BOOL is_eof = FALSE;
 
-	Flush(file);
+	FFlush(file);
 
 	if ((curr_position = Seek(file, 0, OFFSET_END)) >= 0)
 		if ((end_position = Seek(file, curr_position, OFFSET_BEGINNING)) >= 0)
@@ -100,7 +106,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	BIO *ret;
 	BPTR file;
 
-	if (file = FOpen((char *)filename, (char *)mode))
+	if (file = FOpenFromMode((char *)filename, (char *)mode))
 	{
 		if (ret = BIO_new(BIO_s_file_internal()))
 			BIO_set_fp_amiga(ret, file, BIO_CLOSE);
@@ -108,7 +114,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	else
 	{
 		SYSerr(SYS_F_FOPEN, IoErr());
-		ERR_add_error_data(5, "FOpen('", filename, "','", mode, "')");
+		ERR_add_error_data(5, "FOpenFromMode('", filename, "','", mode, "')");
 
 		if (IoErr() == ERROR_OBJECT_NOT_FOUND)
 			BIOerr(BIO_F_BIO_NEW_FILE, BIO_R_NO_SUCH_FILE);
@@ -257,7 +263,7 @@ static long file_ctrl(BIO *b, int cmd, long num, char *ptr)
 
 			if (ret != 0)
 			{
-				if (fp = FOpen(ptr, p))
+				if (fp = FOpenFromMode(ptr, p))
 				{
 					b->ptr = (char *)fp;
 					b->init = 1;
@@ -265,7 +271,7 @@ static long file_ctrl(BIO *b, int cmd, long num, char *ptr)
 				else
 				{
 					SYSerr(SYS_F_FOPEN, IoErr());
-					ERR_add_error_data(5, "FOpen('", ptr, "','", p, "')");
+					ERR_add_error_data(5, "FOpenFromMode('", ptr, "','", p, "')");
 					BIOerr(BIO_F_FILE_CTRL, ERR_R_SYS_LIB);
 					ret = 0;
 				}
@@ -290,7 +296,7 @@ static long file_ctrl(BIO *b, int cmd, long num, char *ptr)
 			break;
 
 		case BIO_CTRL_FLUSH:
-			Flush((BPTR)b->ptr);
+			FFlush((BPTR)b->ptr);
 			break;
 
 		case BIO_CTRL_DUP:
