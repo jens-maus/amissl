@@ -23,19 +23,25 @@ closesocket(
   else return -1;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-		case TCPIP_MLink:
-			return amitcp_CloseSocket(s);
-			break;
-		case TCPIP_IN225:
-			return in225_s_close(s);
-			break;
-		case TCPIP_Termite:
-			return termite_CloseSocket(s);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+			case TCPIP_MLink:
+				return amitcp_CloseSocket(s);
+				break;
+			case TCPIP_IN225:
+				return in225_s_close(s);
+				break;
+			case TCPIP_Termite:
+				return termite_CloseSocket(s);
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }

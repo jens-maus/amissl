@@ -24,26 +24,31 @@ getservbyname(
   else return NULL;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_MLink:{
-			struct servent *res;
-			ObtainSemaphore(&state->MLinkLock->Semaphore);
-			res=amitcp_GetServByName(name, proto);
-			ReleaseSemaphore(&state->MLinkLock->Semaphore);
-			return res;
-			break;}
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-			return amitcp_GetServByName(name, proto);
-			break;
-		case TCPIP_IN225:
-			return in225_getservbyname((char *)name, (char *)proto);
-			break;
-		case TCPIP_Termite:
-			return termite_getservbyname((char *)name, (char *)proto);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_MLink:{
+				struct servent *res;
+				ObtainSemaphore(&state->MLinkLock->Semaphore);
+				res=amitcp_GetServByName(name, proto);
+				ReleaseSemaphore(&state->MLinkLock->Semaphore);
+				return res;
+				break;}
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+				return amitcp_GetServByName(name, proto);
+				break;
+			case TCPIP_IN225:
+				return in225_getservbyname((char *)name, (char *)proto);
+				break;
+			case TCPIP_Termite:
+				return termite_getservbyname((char *)name, (char *)proto);
+				break;
+		}
 	}
+
+	return(NULL);
 #endif
 }
-

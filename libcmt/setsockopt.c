@@ -27,20 +27,25 @@ setsockopt(
   else return -1;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-		case TCPIP_MLink:
-			return amitcp_SetSockOpt(s,level,optname,optval,optlen);
-			break;
-		case TCPIP_IN225:
-			return in225_setsockopt(s,level,optname,optval,optlen);
-			break;
-		case TCPIP_Termite:
-			return termite_setsockopt(s,level,optname,optval,optlen);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+			case TCPIP_MLink:
+				return amitcp_SetSockOpt(s,level,optname,optval,optlen);
+				break;
+			case TCPIP_IN225:
+				return in225_setsockopt(s,level,optname,optval,optlen);
+				break;
+			case TCPIP_Termite:
+				return termite_setsockopt(s,level,optname,optval,optlen);
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }
-

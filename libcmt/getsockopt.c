@@ -27,33 +27,39 @@ getsockopt(
   else return -1;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-		case TCPIP_MLink:
-			return amitcp_GetSockOpt(s, level, optname, optval, optlen);
-			break;
-		case TCPIP_IN225:
-			return in225_getsockopt(s, level, optname, optval, optlen);
-			break;
-		case TCPIP_Termite:
-			if (optname == SO_ERROR)
-			{
-				*(int *)optval = 0;
-				return 0;
-			}
-			if(state->errno_ptr)
-			{
-				*state->errno_ptr = EINVAL;
-			}
-			else
-			{
-				state->local_errno = EINVAL;
-				state->socket_base_owns_errno = 0;
-			}
-			return -1;
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+			case TCPIP_MLink:
+				return amitcp_GetSockOpt(s, level, optname, optval, optlen);
+				break;
+			case TCPIP_IN225:
+				return in225_getsockopt(s, level, optname, optval, optlen);
+				break;
+			case TCPIP_Termite:
+				if (optname == SO_ERROR)
+				{
+					*(int *)optval = 0;
+					return 0;
+				}
+				if(state->errno_ptr)
+				{
+					*state->errno_ptr = EINVAL;
+				}
+				else
+				{
+					state->local_errno = EINVAL;
+					state->socket_base_owns_errno = 0;
+				}
+				return -1;
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }

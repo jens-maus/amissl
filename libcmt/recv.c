@@ -26,19 +26,25 @@ recv(
   else return -1;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-		case TCPIP_MLink:
-			return amitcp_Recv(s,buf,len,flags);
-			break;
-		case TCPIP_IN225:
-			return in225_recv(s,buf,len,flags);
-			break;
-		case TCPIP_Termite:
-			return termite_recv(s,buf,len,flags);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+			case TCPIP_MLink:
+				return amitcp_Recv(s,buf,len,flags);
+				break;
+			case TCPIP_IN225:
+				return in225_recv(s,buf,len,flags);
+				break;
+			case TCPIP_Termite:
+				return termite_recv(s,buf,len,flags);
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }

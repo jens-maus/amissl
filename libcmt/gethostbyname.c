@@ -23,25 +23,31 @@ gethostbyname(
   else return NULL;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_MLink:{
-			struct hostent *res;
-			ObtainSemaphore(&state->MLinkLock->Semaphore);
-			res=amitcp_GetHostByName(name);
-			ReleaseSemaphore(&state->MLinkLock->Semaphore);
-			return res;
-			break;}
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-			return amitcp_GetHostByName(name);
-			break;
-		case TCPIP_IN225:
-			return in225_gethostbyname((char *)name);
-			break;
-		case TCPIP_Termite:
-			return termite_gethostbyname((char *)name);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_MLink:{
+				struct hostent *res;
+				ObtainSemaphore(&state->MLinkLock->Semaphore);
+				res=amitcp_GetHostByName(name);
+				ReleaseSemaphore(&state->MLinkLock->Semaphore);
+				return res;
+				break;}
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+				return amitcp_GetHostByName(name);
+				break;
+			case TCPIP_IN225:
+				return in225_gethostbyname((char *)name);
+				break;
+			case TCPIP_Termite:
+				return termite_gethostbyname((char *)name);
+				break;
+		}
 	}
+
+	return(NULL);
 #endif
 }

@@ -24,19 +24,25 @@ shutdown(
   else return -1;
 #else
 	GETSTATE();
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-		case TCPIP_MLink:
-			return amitcp_Shutdown(s, how);
-			break;
-		case TCPIP_IN225:
-			return in225_shutdown(s, how);
-			break;
-		case TCPIP_Termite:
-			return termite_shutdown(s, how);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+			case TCPIP_MLink:
+				return amitcp_Shutdown(s, how);
+				break;
+			case TCPIP_IN225:
+				return in225_shutdown(s, how);
+				break;
+			case TCPIP_Termite:
+				return termite_shutdown(s, how);
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }

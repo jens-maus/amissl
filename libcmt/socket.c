@@ -26,25 +26,30 @@ socket(
 #else
 	GETSTATE();
 	int s;
-	switch(state->TCPIPStackType)
+
+	if (state->SocketBase)
 	{
-		case TCPIP_Miami:
-		case TCPIP_AmiTCP:
-			return amitcp_Socket(domain, type, protocol);
-			break;
-		case TCPIP_MLink:
-			ObtainSemaphore(&state->MLinkLock->Semaphore);
-			s = amitcp_Socket(domain, type, protocol);
-			ReleaseSemaphore(&state->MLinkLock->Semaphore);
-			return s;
-			break;
-		case TCPIP_IN225:
-			return in225_socket(domain, type, protocol);
-			break;
-		case TCPIP_Termite:
-			return termite_socket(domain, type, protocol);
-			break;
+		switch(state->TCPIPStackType)
+		{
+			case TCPIP_Miami:
+			case TCPIP_AmiTCP:
+				return amitcp_Socket(domain, type, protocol);
+				break;
+			case TCPIP_MLink:
+				ObtainSemaphore(&state->MLinkLock->Semaphore);
+				s = amitcp_Socket(domain, type, protocol);
+				ReleaseSemaphore(&state->MLinkLock->Semaphore);
+				return s;
+				break;
+			case TCPIP_IN225:
+				return in225_socket(domain, type, protocol);
+				break;
+			case TCPIP_Termite:
+				return termite_socket(domain, type, protocol);
+				break;
+		}
 	}
+
+	return(-1);
 #endif
 }
-
