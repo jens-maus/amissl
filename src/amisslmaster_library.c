@@ -73,6 +73,8 @@ struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers w
 void SB_ObtainSemaphore(struct SignalSemaphore *);
 void SB_ReleaseSemaphore(struct SignalSemaphore *);
 
+#pragma libcall AmiSSLBase InternalInitAmiSSL 01e 801
+
 #endif
 
 static void FlushLib(struct Library *LibBase)
