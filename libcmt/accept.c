@@ -31,13 +31,13 @@ accept(
 		case TCPIP_Miami:
 		case TCPIP_MLink:
 		case TCPIP_AmiTCP:
-			return amitcp_Accept(s,name,(LONG *)namelen);
+			return amitcp_Accept(s,addr,(LONG *)addrlen);
 			break;
-		case TCPIP_IN225:{
-			return in225_accept(s,name,namelen);
+		case TCPIP_IN225:
+			return in225_accept(s,addr,addrlen);
 			break;
 		case TCPIP_Termite:
-			return termite_accept(s,name,namelen);
+			return termite_accept(s,addr,addrlen);
 			break;
 	}
 #endif

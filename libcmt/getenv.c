@@ -22,9 +22,12 @@ char *__getenv(const char *name)
   else
     return state->getenv_var;
 }
-    
+
+#ifdef __amigaos4__
+
 char *getenv(const char *name)
 {
 	return __getenv(name);
 }
 
+#endif

@@ -104,12 +104,19 @@ void rewinddir(DIR *mydirp)
   dirp->d_count=0; dirp->d_more = DOSTRUE; dirp->d_eac->eac_LastKey=0;
 }
 
-int closedir(DIR *mydirp)
+#ifdef __amigaos4__
+int 
+#else
+void
+#endif
+closedir(DIR *mydirp)
 {
   MYDIR *dirp=(MYDIR *)mydirp;
   rewinddir(mydirp);
   FreeDosObject(DOS_EXALLCONTROL,dirp->d_eac);
   UnLock(dirp->d_lock);
   free(dirp);
+#ifdef __amigaos4__
   return 1;
+#endif
 }

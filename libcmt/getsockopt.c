@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 int
 getsockopt(
@@ -27,7 +28,7 @@ getsockopt(
   else return -1;
 #else
 	GETSTATE();
-	switch(s->TCPIPStackType)
+	switch(state->TCPIPStackType)
 	{
 		case TCPIP_Miami:
 		case TCPIP_AmiTCP:
@@ -43,7 +44,15 @@ getsockopt(
 				*(int *)optval = 0;
 				return 0;
 			}
-			state->TCPIPStack->ErrNo = EINVAL;
+			if(state->errno_ptr)
+			{
+				*state->errno_ptr = EINVAL;
+			}
+			else
+			{
+				state->local_errno = EINVAL;
+				state->socket_base_owns_errno = 0;
+			}
 			return -1;
 			break;
 	}

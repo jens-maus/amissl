@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 int
 bind(
@@ -33,7 +34,7 @@ bind(
 			return amitcp_Bind(s,name,namelen);
 			break;
 		case TCPIP_IN225:
-			return in225_bind(s,name,namelen);
+			return in225_bind(s,(struct sockaddr *)name,namelen);
 			break;
 		case TCPIP_Termite:
 			return termite_bind(s,(char *)name,namelen);

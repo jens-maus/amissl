@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 int
 connect(
@@ -29,9 +30,9 @@ connect(
 	{
 		case TCPIP_MLink:{
 			int res;
-			ObtainSemaphore(&state->TCPIPStack->MLinkLock->Semaphore);
+			ObtainSemaphore(&state->MLinkLock->Semaphore);
 			res = amitcp_Connect(s,name,namelen);
-			ReleaseSemaphore(&state->TCPIPStack->MLinkLock->Semaphore);
+			ReleaseSemaphore(&state->MLinkLock->Semaphore);
 			return res;
 			break;}
 		case TCPIP_Miami:
@@ -39,10 +40,10 @@ connect(
 			return amitcp_Connect(s,name,namelen);
 			break;
 		case TCPIP_IN225:
-			return in225_connect(s,name,namelen);
+			return in225_connect(s,(struct sockaddr *)name,namelen);
 			break;
 		case TCPIP_Termite:
-			return termite_connect(s,name,namelen);
+			return termite_connect(s,(struct sockaddr *)name,namelen);
 			break;
 	}
 #endif

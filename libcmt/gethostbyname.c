@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 struct hostent *
 gethostbyname(
@@ -37,10 +38,10 @@ gethostbyname(
 			return amitcp_GetHostByName(name);
 			break;
 		case TCPIP_IN225:
-			return in225_gethostbyname(name);
+			return in225_gethostbyname((char *)name);
 			break;
 		case TCPIP_Termite:
-			return termite_gethostbyname(name);
+			return termite_gethostbyname((char *)name);
 			break;
 	}
 #endif

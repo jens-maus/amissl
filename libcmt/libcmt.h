@@ -35,6 +35,8 @@ extern int __io2errno(int);
 #define SEEK_CUR 1              /* Seek from current file position */
 #define SEEK_END 2              /* Seek from end of file */
 
+#ifdef __amigaos4__
+
 struct __iobuf {
     struct __iobuf *_next;
     unsigned char *_ptr;	/* current buffer pointer */
@@ -46,6 +48,8 @@ struct __iobuf {
     int _file;		        /* file descriptor */
     unsigned char _cbuff;	/* single char buffer */
 };
+
+#endif
 
 #define TOFILE(x) ((struct __iobuf *)x)
 

@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 int
 socket(
@@ -33,9 +34,9 @@ socket(
 			return amitcp_Socket(domain, type, protocol);
 			break;
 		case TCPIP_MLink:
-			ObtainSemaphore(&stack->MLinkLock->Semaphore);
+			ObtainSemaphore(&state->MLinkLock->Semaphore);
 			s = amitcp_Socket(domain, type, protocol);
-			ReleaseSemaphore(&stack->MLinkLock->Semaphore);
+			ReleaseSemaphore(&state->MLinkLock->Semaphore);
 			return s;
 			break;
 		case TCPIP_IN225:

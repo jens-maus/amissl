@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 ssize_t
 send(
@@ -31,13 +32,13 @@ send(
 		case TCPIP_Miami:
 		case TCPIP_AmiTCP:
 		case TCPIP_MLink:
-			return amitcp_Send(s,msg,len,flags);
+			return amitcp_Send(s,(void *)buf,len,flags);
 			break;
 		case TCPIP_IN225:
-			return in225_send(s,msg,len,flags);
+			return in225_send(s,(void *)buf,len,flags);
 			break;
 		case TCPIP_Termite:
-			return termite_send(>s,msg,len,flags);
+			return termite_send(s,(void *)buf,len,flags);
 			break;
 	}
 #endif

@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 struct servent *
 getservbyname(
@@ -38,10 +39,10 @@ getservbyname(
 			return amitcp_GetServByName(name, proto);
 			break;
 		case TCPIP_IN225:
-			return in225_getservbyname(name, proto);
+			return in225_getservbyname((char *)name, (char *)proto);
 			break;
 		case TCPIP_Termite:
-			return termite_getservbyname(name, proto);
+			return termite_getservbyname((char *)name, (char *)proto);
 			break;
 	}
 #endif
