@@ -339,6 +339,10 @@ int toupper(int c) {return 1;}
 
 int __io2errno[10];
 
+int                  VARARGS68K _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...) { return 0; }
+int                  VARARGS68K _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...) {return 0;}
+void                 VARARGS68K _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...) {}
+
 void __baserel_get_addr(struct Interface *self);
 
 asm (" \n\
@@ -375,11 +379,6 @@ GetDataBase:							\n\
 	.space 4							\n\
 ");
 
-
-
-int                  VARARGS68K _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...) { return 0; }
-int                  VARARGS68K _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...) {return 0;}
-void                 VARARGS68K _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...) {}
 
 
 
