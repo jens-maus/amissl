@@ -6655,10 +6655,15 @@ void AMISSL_LIB_ENTRY _AmiSSL_RAND_seed(REG(a6, __IFACE_OR_BASE), REG(a0, const 
 	RAND_seed(buf, num);
 }
 
-#if 0
-void AMISSL_LIB_ENTRY _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
+#ifdef __amigaos4__
+void AMISSL_LIB_ENTRY _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, double entropy))
 {
 	RAND_add(buf, num, entropy);
+}
+#else
+void AMISSL_LIB_ENTRY _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
+{
+	RAND_add(buf, num, (double)entropy);
 }
 #endif
 

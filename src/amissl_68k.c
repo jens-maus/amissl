@@ -17405,7 +17405,7 @@ static void stub_RAND_addPPC(ULONG *regarray)
 	Self->RAND_add(
 		(const void *)regarray[8],
 		(int)regarray[0],
-		(float)regarray[1]
+		(double)regarray[1]  // Convert to double here
 	);
 }
 const struct EmuTrap stub_RAND_add = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_RAND_addPPC };
