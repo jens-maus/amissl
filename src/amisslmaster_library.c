@@ -143,8 +143,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
 	if (LibAPIVersion == AMISSL_V097e)
-//		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
-		OpenLib(&AmiSSLBase,"temp:amissl_v097e.library", 3);
+		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 /* This only happens for m68k code, no need to handle ppc versions here */
