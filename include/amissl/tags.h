@@ -2,7 +2,6 @@
 #define AMISSL_TAGS_H
 
 #include <utility/tagitem.h>
-#include <amissl/version.h>
 
 #define	AmiSSL_SocketBase		(TAG_USER + 0x01) /* OBSOLETE */
 #define	AmiSSL_Version			(TAG_USER + 0x02) /* OBSOLETE */
