@@ -59,11 +59,31 @@
 #ifndef HEADER_SHA_H
 #define HEADER_SHA_H
 
+#include <amissl/e_os2.h>
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
+#if defined(OPENSSL_NO_SHA) || (defined(OPENSSL_NO_SHA0) && defined(OPENSSL_NO_SHA1))
+#error SHA is disabled.
+#endif
+
+/*
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * ! SHA_LONG has to be at least 32 bits wide. If it's wider, then !
+ * ! SHA_LONG_LOG2 has to be defined along.                        !
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+#if defined(OPENSSL_SYS_WIN16) || defined(__LP32__)
+#define SHA_LONG unsigned long
+#elif defined(OPENSSL_SYS_CRAY) || defined(__ILP64__)
+#define SHA_LONG unsigned long
+#define SHA_LONG_LOG2 3
+#else
 #define SHA_LONG unsigned int
+#endif
 
 #define SHA_LBLOCK	16
 #define SHA_CBLOCK	(SHA_LBLOCK*4)	/* SHA treats input data as a
@@ -80,6 +100,20 @@ typedef struct SHAstate_st
 	int num;
 	} SHA_CTX;
 
+#ifndef OPENSSL_NO_SHA0
+int SHA_Init(SHA_CTX *c);
+int SHA_Update(SHA_CTX *c, const void *data, unsigned long len);
+int SHA_Final(unsigned char *md, SHA_CTX *c);
+unsigned char *SHA(const unsigned char *d, unsigned long n,unsigned char *md);
+void SHA_Transform(SHA_CTX *c, const unsigned char *data);
+#endif
+#ifndef OPENSSL_NO_SHA1
+int SHA1_Init(SHA_CTX *c);
+int SHA1_Update(SHA_CTX *c, const void *data, unsigned long len);
+int SHA1_Final(unsigned char *md, SHA_CTX *c);
+unsigned char *SHA1(const unsigned char *d, unsigned long n,unsigned char *md);
+void SHA1_Transform(SHA_CTX *c, const unsigned char *data);
+#endif
 #ifdef  __cplusplus
 }
 #endif

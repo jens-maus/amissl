@@ -63,5 +63,19 @@
 #ifndef HEADER_TMDIFF_H
 #define HEADER_TMDIFF_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+char *ms_time_new(void );
+void ms_time_free(char *a);
+void ms_time_get(char *a);
+double ms_time_diff(char *start,char *end);
+int ms_time_cmp(char *ap,char *bp);
+
+#ifdef  __cplusplus
+}
+#endif
+
 #endif
 

@@ -57,6 +57,93 @@
 
 #include <amissl/stack.h>
 
+
+#ifdef DEBUG_SAFESTACK
+
+#define STACK_OF(type) struct stack_st_##type
+#define PREDECLARE_STACK_OF(type) STACK_OF(type);
+
+#define DECLARE_STACK_OF(type) \
+STACK_OF(type) \
+    { \
+    STACK stack; \
+    };
+
+#define IMPLEMENT_STACK_OF(type) /* nada (obsolete in new safestack approach)*/
+
+/* SKM_sk_... stack macros are internal to safestack.h:
+ * never use them directly, use sk_<type>_... instead */
+#define SKM_sk_new(type, cmp) \
+	((STACK_OF(type) * (*)(int (*)(const type * const *, const type * const *)))sk_new)(cmp)
+#define SKM_sk_new_null(type) \
+	((STACK_OF(type) * (*)(void))sk_new_null)()
+#define SKM_sk_free(type, st) \
+	((void (*)(STACK_OF(type) *))sk_free)(st)
+#define SKM_sk_num(type, st) \
+	((int (*)(const STACK_OF(type) *))sk_num)(st)
+#define SKM_sk_value(type, st,i) \
+	((type * (*)(const STACK_OF(type) *, int))sk_value)(st, i)
+#define SKM_sk_set(type, st,i,val) \
+	((type * (*)(STACK_OF(type) *, int, type *))sk_set)(st, i, val)
+#define SKM_sk_zero(type, st) \
+	((void (*)(STACK_OF(type) *))sk_zero)(st)
+#define SKM_sk_push(type, st,val) \
+	((int (*)(STACK_OF(type) *, type *))sk_push)(st, val)
+#define SKM_sk_unshift(type, st,val) \
+	((int (*)(STACK_OF(type) *, type *))sk_unshift)(st, val)
+#define SKM_sk_find(type, st,val) \
+	((int (*)(STACK_OF(type) *, type *))sk_find)(st, val)
+#define SKM_sk_delete(type, st,i) \
+	((type * (*)(STACK_OF(type) *, int))sk_delete)(st, i)
+#define SKM_sk_delete_ptr(type, st,ptr) \
+	((type * (*)(STACK_OF(type) *, type *))sk_delete_ptr)(st, ptr)
+#define SKM_sk_insert(type, st,val,i) \
+	((int (*)(STACK_OF(type) *, type *, int))sk_insert)(st, val, i)
+#define SKM_sk_set_cmp_func(type, st,cmp) \
+	((int (*(*)(STACK_OF(type) *, int (*)(const type * const *, const type * const *))) \
+	  (const type * const *, const type * const *))sk_set_cmp_func)\
+	(st, cmp)
+#define SKM_sk_dup(type, st) \
+	((STACK_OF(type) *(*)(STACK_OF(type) *))sk_dup)(st)
+#define SKM_sk_pop_free(type, st,free_func) \
+	((void (*)(STACK_OF(type) *, void (*)(type *)))sk_pop_free)\
+	(st, free_func)
+#define SKM_sk_shift(type, st) \
+	((type * (*)(STACK_OF(type) *))sk_shift)(st)
+#define SKM_sk_pop(type, st) \
+	((type * (*)(STACK_OF(type) *))sk_pop)(st)
+#define SKM_sk_sort(type, st) \
+	((void (*)(STACK_OF(type) *))sk_sort)(st)
+
+#define	SKM_ASN1_SET_OF_d2i(type, st, pp, length, d2i_func, free_func, ex_tag, ex_class) \
+	((STACK_OF(type) * (*) (STACK_OF(type) **,unsigned char **, long , \
+                                       type *(*)(type **, unsigned char **,long), \
+                                       void (*)(type *), int ,int )) d2i_ASN1_SET) \
+						(st,pp,length, d2i_func, free_func, ex_tag,ex_class)
+#define	SKM_ASN1_SET_OF_i2d(type, st, pp, i2d_func, ex_tag, ex_class, is_set) \
+	((int (*)(STACK_OF(type) *,unsigned char **, \
+                           int (*)(type *,unsigned char **), int , int , int)) i2d_ASN1_SET) \
+						(st,pp,i2d_func,ex_tag,ex_class,is_set)
+
+#define	SKM_ASN1_seq_pack(type, st, i2d_func, buf, len) \
+	((unsigned char *(*)(STACK_OF(type) *, \
+                                    int (*)(type *,unsigned char **), unsigned char **,int *)) ASN1_seq_pack) \
+				(st, i2d_func, buf, len)
+#define	SKM_ASN1_seq_unpack(type, buf, len, d2i_func, free_func) \
+	((STACK_OF(type) * (*)(unsigned char *,int, \
+                                       type *(*)(type **,unsigned char **, long), \
+                                       void (*)(type *)))ASN1_seq_unpack) \
+					(buf,len,d2i_func, free_func)
+
+#define SKM_PKCS12_decrypt_d2i(type, algor, d2i_func, free_func, pass, passlen, oct, seq) \
+	((STACK_OF(type) * (*)(X509_ALGOR *, \
+                                type *(*)(type **, unsigned char **, long), void (*)(type *), \
+                                const char *, int, \
+                                ASN1_STRING *, int))PKCS12_decrypt_d2i) \
+				(algor,d2i_func,free_func,pass,passlen,oct,seq)
+
+#else
+
 #define STACK_OF(type) STACK
 #define PREDECLARE_STACK_OF(type) /* nada */
 #define DECLARE_STACK_OF(type)    /* nada */
@@ -115,6 +202,8 @@
 #define SKM_PKCS12_decrypt_d2i(type, algor, d2i_func, free_func, pass, passlen, oct, seq) \
 	((STACK *)PKCS12_decrypt_d2i(algor,(char *(*)())d2i_func, (void(*)(void *))free_func,pass,passlen,oct,seq))
 
+#endif
+
 /* This block of defines is updated by util/mkstack.pl, please do not touch! */
 #define sk_ACCESS_DESCRIPTION_new(st) SKM_sk_new(ACCESS_DESCRIPTION, (st))
 #define sk_ACCESS_DESCRIPTION_new_null() SKM_sk_new_null(ACCESS_DESCRIPTION)
@@ -135,6 +224,26 @@
 #define sk_ACCESS_DESCRIPTION_shift(st) SKM_sk_shift(ACCESS_DESCRIPTION, (st))
 #define sk_ACCESS_DESCRIPTION_pop(st) SKM_sk_pop(ACCESS_DESCRIPTION, (st))
 #define sk_ACCESS_DESCRIPTION_sort(st) SKM_sk_sort(ACCESS_DESCRIPTION, (st))
+
+#define sk_ASN1_GENERALSTRING_new(st) SKM_sk_new(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_new_null() SKM_sk_new_null(ASN1_GENERALSTRING)
+#define sk_ASN1_GENERALSTRING_free(st) SKM_sk_free(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_num(st) SKM_sk_num(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_value(st, i) SKM_sk_value(ASN1_GENERALSTRING, (st), (i))
+#define sk_ASN1_GENERALSTRING_set(st, i, val) SKM_sk_set(ASN1_GENERALSTRING, (st), (i), (val))
+#define sk_ASN1_GENERALSTRING_zero(st) SKM_sk_zero(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_push(st, val) SKM_sk_push(ASN1_GENERALSTRING, (st), (val))
+#define sk_ASN1_GENERALSTRING_unshift(st, val) SKM_sk_unshift(ASN1_GENERALSTRING, (st), (val))
+#define sk_ASN1_GENERALSTRING_find(st, val) SKM_sk_find(ASN1_GENERALSTRING, (st), (val))
+#define sk_ASN1_GENERALSTRING_delete(st, i) SKM_sk_delete(ASN1_GENERALSTRING, (st), (i))
+#define sk_ASN1_GENERALSTRING_delete_ptr(st, ptr) SKM_sk_delete_ptr(ASN1_GENERALSTRING, (st), (ptr))
+#define sk_ASN1_GENERALSTRING_insert(st, val, i) SKM_sk_insert(ASN1_GENERALSTRING, (st), (val), (i))
+#define sk_ASN1_GENERALSTRING_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(ASN1_GENERALSTRING, (st), (cmp))
+#define sk_ASN1_GENERALSTRING_dup(st) SKM_sk_dup(ASN1_GENERALSTRING, st)
+#define sk_ASN1_GENERALSTRING_pop_free(st, free_func) SKM_sk_pop_free(ASN1_GENERALSTRING, (st), (free_func))
+#define sk_ASN1_GENERALSTRING_shift(st) SKM_sk_shift(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_pop(st) SKM_sk_pop(ASN1_GENERALSTRING, (st))
+#define sk_ASN1_GENERALSTRING_sort(st) SKM_sk_sort(ASN1_GENERALSTRING, (st))
 
 #define sk_ASN1_INTEGER_new(st) SKM_sk_new(ASN1_INTEGER, (st))
 #define sk_ASN1_INTEGER_new_null() SKM_sk_new_null(ASN1_INTEGER)
@@ -216,6 +325,26 @@
 #define sk_ASN1_TYPE_pop(st) SKM_sk_pop(ASN1_TYPE, (st))
 #define sk_ASN1_TYPE_sort(st) SKM_sk_sort(ASN1_TYPE, (st))
 
+#define sk_ASN1_VALUE_new(st) SKM_sk_new(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_new_null() SKM_sk_new_null(ASN1_VALUE)
+#define sk_ASN1_VALUE_free(st) SKM_sk_free(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_num(st) SKM_sk_num(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_value(st, i) SKM_sk_value(ASN1_VALUE, (st), (i))
+#define sk_ASN1_VALUE_set(st, i, val) SKM_sk_set(ASN1_VALUE, (st), (i), (val))
+#define sk_ASN1_VALUE_zero(st) SKM_sk_zero(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_push(st, val) SKM_sk_push(ASN1_VALUE, (st), (val))
+#define sk_ASN1_VALUE_unshift(st, val) SKM_sk_unshift(ASN1_VALUE, (st), (val))
+#define sk_ASN1_VALUE_find(st, val) SKM_sk_find(ASN1_VALUE, (st), (val))
+#define sk_ASN1_VALUE_delete(st, i) SKM_sk_delete(ASN1_VALUE, (st), (i))
+#define sk_ASN1_VALUE_delete_ptr(st, ptr) SKM_sk_delete_ptr(ASN1_VALUE, (st), (ptr))
+#define sk_ASN1_VALUE_insert(st, val, i) SKM_sk_insert(ASN1_VALUE, (st), (val), (i))
+#define sk_ASN1_VALUE_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(ASN1_VALUE, (st), (cmp))
+#define sk_ASN1_VALUE_dup(st) SKM_sk_dup(ASN1_VALUE, st)
+#define sk_ASN1_VALUE_pop_free(st, free_func) SKM_sk_pop_free(ASN1_VALUE, (st), (free_func))
+#define sk_ASN1_VALUE_shift(st) SKM_sk_shift(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_pop(st) SKM_sk_pop(ASN1_VALUE, (st))
+#define sk_ASN1_VALUE_sort(st) SKM_sk_sort(ASN1_VALUE, (st))
+
 #define sk_BIO_new(st) SKM_sk_new(BIO, (st))
 #define sk_BIO_new_null() SKM_sk_new_null(BIO)
 #define sk_BIO_free(st) SKM_sk_free(BIO, (st))
@@ -235,6 +364,46 @@
 #define sk_BIO_shift(st) SKM_sk_shift(BIO, (st))
 #define sk_BIO_pop(st) SKM_sk_pop(BIO, (st))
 #define sk_BIO_sort(st) SKM_sk_sort(BIO, (st))
+
+#define sk_CONF_IMODULE_new(st) SKM_sk_new(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_new_null() SKM_sk_new_null(CONF_IMODULE)
+#define sk_CONF_IMODULE_free(st) SKM_sk_free(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_num(st) SKM_sk_num(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_value(st, i) SKM_sk_value(CONF_IMODULE, (st), (i))
+#define sk_CONF_IMODULE_set(st, i, val) SKM_sk_set(CONF_IMODULE, (st), (i), (val))
+#define sk_CONF_IMODULE_zero(st) SKM_sk_zero(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_push(st, val) SKM_sk_push(CONF_IMODULE, (st), (val))
+#define sk_CONF_IMODULE_unshift(st, val) SKM_sk_unshift(CONF_IMODULE, (st), (val))
+#define sk_CONF_IMODULE_find(st, val) SKM_sk_find(CONF_IMODULE, (st), (val))
+#define sk_CONF_IMODULE_delete(st, i) SKM_sk_delete(CONF_IMODULE, (st), (i))
+#define sk_CONF_IMODULE_delete_ptr(st, ptr) SKM_sk_delete_ptr(CONF_IMODULE, (st), (ptr))
+#define sk_CONF_IMODULE_insert(st, val, i) SKM_sk_insert(CONF_IMODULE, (st), (val), (i))
+#define sk_CONF_IMODULE_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(CONF_IMODULE, (st), (cmp))
+#define sk_CONF_IMODULE_dup(st) SKM_sk_dup(CONF_IMODULE, st)
+#define sk_CONF_IMODULE_pop_free(st, free_func) SKM_sk_pop_free(CONF_IMODULE, (st), (free_func))
+#define sk_CONF_IMODULE_shift(st) SKM_sk_shift(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_pop(st) SKM_sk_pop(CONF_IMODULE, (st))
+#define sk_CONF_IMODULE_sort(st) SKM_sk_sort(CONF_IMODULE, (st))
+
+#define sk_CONF_MODULE_new(st) SKM_sk_new(CONF_MODULE, (st))
+#define sk_CONF_MODULE_new_null() SKM_sk_new_null(CONF_MODULE)
+#define sk_CONF_MODULE_free(st) SKM_sk_free(CONF_MODULE, (st))
+#define sk_CONF_MODULE_num(st) SKM_sk_num(CONF_MODULE, (st))
+#define sk_CONF_MODULE_value(st, i) SKM_sk_value(CONF_MODULE, (st), (i))
+#define sk_CONF_MODULE_set(st, i, val) SKM_sk_set(CONF_MODULE, (st), (i), (val))
+#define sk_CONF_MODULE_zero(st) SKM_sk_zero(CONF_MODULE, (st))
+#define sk_CONF_MODULE_push(st, val) SKM_sk_push(CONF_MODULE, (st), (val))
+#define sk_CONF_MODULE_unshift(st, val) SKM_sk_unshift(CONF_MODULE, (st), (val))
+#define sk_CONF_MODULE_find(st, val) SKM_sk_find(CONF_MODULE, (st), (val))
+#define sk_CONF_MODULE_delete(st, i) SKM_sk_delete(CONF_MODULE, (st), (i))
+#define sk_CONF_MODULE_delete_ptr(st, ptr) SKM_sk_delete_ptr(CONF_MODULE, (st), (ptr))
+#define sk_CONF_MODULE_insert(st, val, i) SKM_sk_insert(CONF_MODULE, (st), (val), (i))
+#define sk_CONF_MODULE_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(CONF_MODULE, (st), (cmp))
+#define sk_CONF_MODULE_dup(st) SKM_sk_dup(CONF_MODULE, st)
+#define sk_CONF_MODULE_pop_free(st, free_func) SKM_sk_pop_free(CONF_MODULE, (st), (free_func))
+#define sk_CONF_MODULE_shift(st) SKM_sk_shift(CONF_MODULE, (st))
+#define sk_CONF_MODULE_pop(st) SKM_sk_pop(CONF_MODULE, (st))
+#define sk_CONF_MODULE_sort(st) SKM_sk_sort(CONF_MODULE, (st))
 
 #define sk_CONF_VALUE_new(st) SKM_sk_new(CONF_VALUE, (st))
 #define sk_CONF_VALUE_new_null() SKM_sk_new_null(CONF_VALUE)
@@ -316,6 +485,46 @@
 #define sk_DIST_POINT_pop(st) SKM_sk_pop(DIST_POINT, (st))
 #define sk_DIST_POINT_sort(st) SKM_sk_sort(DIST_POINT, (st))
 
+#define sk_ENGINE_new(st) SKM_sk_new(ENGINE, (st))
+#define sk_ENGINE_new_null() SKM_sk_new_null(ENGINE)
+#define sk_ENGINE_free(st) SKM_sk_free(ENGINE, (st))
+#define sk_ENGINE_num(st) SKM_sk_num(ENGINE, (st))
+#define sk_ENGINE_value(st, i) SKM_sk_value(ENGINE, (st), (i))
+#define sk_ENGINE_set(st, i, val) SKM_sk_set(ENGINE, (st), (i), (val))
+#define sk_ENGINE_zero(st) SKM_sk_zero(ENGINE, (st))
+#define sk_ENGINE_push(st, val) SKM_sk_push(ENGINE, (st), (val))
+#define sk_ENGINE_unshift(st, val) SKM_sk_unshift(ENGINE, (st), (val))
+#define sk_ENGINE_find(st, val) SKM_sk_find(ENGINE, (st), (val))
+#define sk_ENGINE_delete(st, i) SKM_sk_delete(ENGINE, (st), (i))
+#define sk_ENGINE_delete_ptr(st, ptr) SKM_sk_delete_ptr(ENGINE, (st), (ptr))
+#define sk_ENGINE_insert(st, val, i) SKM_sk_insert(ENGINE, (st), (val), (i))
+#define sk_ENGINE_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(ENGINE, (st), (cmp))
+#define sk_ENGINE_dup(st) SKM_sk_dup(ENGINE, st)
+#define sk_ENGINE_pop_free(st, free_func) SKM_sk_pop_free(ENGINE, (st), (free_func))
+#define sk_ENGINE_shift(st) SKM_sk_shift(ENGINE, (st))
+#define sk_ENGINE_pop(st) SKM_sk_pop(ENGINE, (st))
+#define sk_ENGINE_sort(st) SKM_sk_sort(ENGINE, (st))
+
+#define sk_ENGINE_CLEANUP_ITEM_new(st) SKM_sk_new(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_new_null() SKM_sk_new_null(ENGINE_CLEANUP_ITEM)
+#define sk_ENGINE_CLEANUP_ITEM_free(st) SKM_sk_free(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_num(st) SKM_sk_num(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_value(st, i) SKM_sk_value(ENGINE_CLEANUP_ITEM, (st), (i))
+#define sk_ENGINE_CLEANUP_ITEM_set(st, i, val) SKM_sk_set(ENGINE_CLEANUP_ITEM, (st), (i), (val))
+#define sk_ENGINE_CLEANUP_ITEM_zero(st) SKM_sk_zero(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_push(st, val) SKM_sk_push(ENGINE_CLEANUP_ITEM, (st), (val))
+#define sk_ENGINE_CLEANUP_ITEM_unshift(st, val) SKM_sk_unshift(ENGINE_CLEANUP_ITEM, (st), (val))
+#define sk_ENGINE_CLEANUP_ITEM_find(st, val) SKM_sk_find(ENGINE_CLEANUP_ITEM, (st), (val))
+#define sk_ENGINE_CLEANUP_ITEM_delete(st, i) SKM_sk_delete(ENGINE_CLEANUP_ITEM, (st), (i))
+#define sk_ENGINE_CLEANUP_ITEM_delete_ptr(st, ptr) SKM_sk_delete_ptr(ENGINE_CLEANUP_ITEM, (st), (ptr))
+#define sk_ENGINE_CLEANUP_ITEM_insert(st, val, i) SKM_sk_insert(ENGINE_CLEANUP_ITEM, (st), (val), (i))
+#define sk_ENGINE_CLEANUP_ITEM_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(ENGINE_CLEANUP_ITEM, (st), (cmp))
+#define sk_ENGINE_CLEANUP_ITEM_dup(st) SKM_sk_dup(ENGINE_CLEANUP_ITEM, st)
+#define sk_ENGINE_CLEANUP_ITEM_pop_free(st, free_func) SKM_sk_pop_free(ENGINE_CLEANUP_ITEM, (st), (free_func))
+#define sk_ENGINE_CLEANUP_ITEM_shift(st) SKM_sk_shift(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_pop(st) SKM_sk_pop(ENGINE_CLEANUP_ITEM, (st))
+#define sk_ENGINE_CLEANUP_ITEM_sort(st) SKM_sk_sort(ENGINE_CLEANUP_ITEM, (st))
+
 #define sk_GENERAL_NAME_new(st) SKM_sk_new(GENERAL_NAME, (st))
 #define sk_GENERAL_NAME_new_null() SKM_sk_new_null(GENERAL_NAME)
 #define sk_GENERAL_NAME_free(st) SKM_sk_free(GENERAL_NAME, (st))
@@ -335,6 +544,166 @@
 #define sk_GENERAL_NAME_shift(st) SKM_sk_shift(GENERAL_NAME, (st))
 #define sk_GENERAL_NAME_pop(st) SKM_sk_pop(GENERAL_NAME, (st))
 #define sk_GENERAL_NAME_sort(st) SKM_sk_sort(GENERAL_NAME, (st))
+
+#define sk_KRB5_APREQBODY_new(st) SKM_sk_new(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_new_null() SKM_sk_new_null(KRB5_APREQBODY)
+#define sk_KRB5_APREQBODY_free(st) SKM_sk_free(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_num(st) SKM_sk_num(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_value(st, i) SKM_sk_value(KRB5_APREQBODY, (st), (i))
+#define sk_KRB5_APREQBODY_set(st, i, val) SKM_sk_set(KRB5_APREQBODY, (st), (i), (val))
+#define sk_KRB5_APREQBODY_zero(st) SKM_sk_zero(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_push(st, val) SKM_sk_push(KRB5_APREQBODY, (st), (val))
+#define sk_KRB5_APREQBODY_unshift(st, val) SKM_sk_unshift(KRB5_APREQBODY, (st), (val))
+#define sk_KRB5_APREQBODY_find(st, val) SKM_sk_find(KRB5_APREQBODY, (st), (val))
+#define sk_KRB5_APREQBODY_delete(st, i) SKM_sk_delete(KRB5_APREQBODY, (st), (i))
+#define sk_KRB5_APREQBODY_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_APREQBODY, (st), (ptr))
+#define sk_KRB5_APREQBODY_insert(st, val, i) SKM_sk_insert(KRB5_APREQBODY, (st), (val), (i))
+#define sk_KRB5_APREQBODY_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_APREQBODY, (st), (cmp))
+#define sk_KRB5_APREQBODY_dup(st) SKM_sk_dup(KRB5_APREQBODY, st)
+#define sk_KRB5_APREQBODY_pop_free(st, free_func) SKM_sk_pop_free(KRB5_APREQBODY, (st), (free_func))
+#define sk_KRB5_APREQBODY_shift(st) SKM_sk_shift(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_pop(st) SKM_sk_pop(KRB5_APREQBODY, (st))
+#define sk_KRB5_APREQBODY_sort(st) SKM_sk_sort(KRB5_APREQBODY, (st))
+
+#define sk_KRB5_AUTHDATA_new(st) SKM_sk_new(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_new_null() SKM_sk_new_null(KRB5_AUTHDATA)
+#define sk_KRB5_AUTHDATA_free(st) SKM_sk_free(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_num(st) SKM_sk_num(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_value(st, i) SKM_sk_value(KRB5_AUTHDATA, (st), (i))
+#define sk_KRB5_AUTHDATA_set(st, i, val) SKM_sk_set(KRB5_AUTHDATA, (st), (i), (val))
+#define sk_KRB5_AUTHDATA_zero(st) SKM_sk_zero(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_push(st, val) SKM_sk_push(KRB5_AUTHDATA, (st), (val))
+#define sk_KRB5_AUTHDATA_unshift(st, val) SKM_sk_unshift(KRB5_AUTHDATA, (st), (val))
+#define sk_KRB5_AUTHDATA_find(st, val) SKM_sk_find(KRB5_AUTHDATA, (st), (val))
+#define sk_KRB5_AUTHDATA_delete(st, i) SKM_sk_delete(KRB5_AUTHDATA, (st), (i))
+#define sk_KRB5_AUTHDATA_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_AUTHDATA, (st), (ptr))
+#define sk_KRB5_AUTHDATA_insert(st, val, i) SKM_sk_insert(KRB5_AUTHDATA, (st), (val), (i))
+#define sk_KRB5_AUTHDATA_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_AUTHDATA, (st), (cmp))
+#define sk_KRB5_AUTHDATA_dup(st) SKM_sk_dup(KRB5_AUTHDATA, st)
+#define sk_KRB5_AUTHDATA_pop_free(st, free_func) SKM_sk_pop_free(KRB5_AUTHDATA, (st), (free_func))
+#define sk_KRB5_AUTHDATA_shift(st) SKM_sk_shift(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_pop(st) SKM_sk_pop(KRB5_AUTHDATA, (st))
+#define sk_KRB5_AUTHDATA_sort(st) SKM_sk_sort(KRB5_AUTHDATA, (st))
+
+#define sk_KRB5_AUTHENTBODY_new(st) SKM_sk_new(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_new_null() SKM_sk_new_null(KRB5_AUTHENTBODY)
+#define sk_KRB5_AUTHENTBODY_free(st) SKM_sk_free(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_num(st) SKM_sk_num(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_value(st, i) SKM_sk_value(KRB5_AUTHENTBODY, (st), (i))
+#define sk_KRB5_AUTHENTBODY_set(st, i, val) SKM_sk_set(KRB5_AUTHENTBODY, (st), (i), (val))
+#define sk_KRB5_AUTHENTBODY_zero(st) SKM_sk_zero(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_push(st, val) SKM_sk_push(KRB5_AUTHENTBODY, (st), (val))
+#define sk_KRB5_AUTHENTBODY_unshift(st, val) SKM_sk_unshift(KRB5_AUTHENTBODY, (st), (val))
+#define sk_KRB5_AUTHENTBODY_find(st, val) SKM_sk_find(KRB5_AUTHENTBODY, (st), (val))
+#define sk_KRB5_AUTHENTBODY_delete(st, i) SKM_sk_delete(KRB5_AUTHENTBODY, (st), (i))
+#define sk_KRB5_AUTHENTBODY_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_AUTHENTBODY, (st), (ptr))
+#define sk_KRB5_AUTHENTBODY_insert(st, val, i) SKM_sk_insert(KRB5_AUTHENTBODY, (st), (val), (i))
+#define sk_KRB5_AUTHENTBODY_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_AUTHENTBODY, (st), (cmp))
+#define sk_KRB5_AUTHENTBODY_dup(st) SKM_sk_dup(KRB5_AUTHENTBODY, st)
+#define sk_KRB5_AUTHENTBODY_pop_free(st, free_func) SKM_sk_pop_free(KRB5_AUTHENTBODY, (st), (free_func))
+#define sk_KRB5_AUTHENTBODY_shift(st) SKM_sk_shift(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_pop(st) SKM_sk_pop(KRB5_AUTHENTBODY, (st))
+#define sk_KRB5_AUTHENTBODY_sort(st) SKM_sk_sort(KRB5_AUTHENTBODY, (st))
+
+#define sk_KRB5_CHECKSUM_new(st) SKM_sk_new(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_new_null() SKM_sk_new_null(KRB5_CHECKSUM)
+#define sk_KRB5_CHECKSUM_free(st) SKM_sk_free(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_num(st) SKM_sk_num(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_value(st, i) SKM_sk_value(KRB5_CHECKSUM, (st), (i))
+#define sk_KRB5_CHECKSUM_set(st, i, val) SKM_sk_set(KRB5_CHECKSUM, (st), (i), (val))
+#define sk_KRB5_CHECKSUM_zero(st) SKM_sk_zero(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_push(st, val) SKM_sk_push(KRB5_CHECKSUM, (st), (val))
+#define sk_KRB5_CHECKSUM_unshift(st, val) SKM_sk_unshift(KRB5_CHECKSUM, (st), (val))
+#define sk_KRB5_CHECKSUM_find(st, val) SKM_sk_find(KRB5_CHECKSUM, (st), (val))
+#define sk_KRB5_CHECKSUM_delete(st, i) SKM_sk_delete(KRB5_CHECKSUM, (st), (i))
+#define sk_KRB5_CHECKSUM_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_CHECKSUM, (st), (ptr))
+#define sk_KRB5_CHECKSUM_insert(st, val, i) SKM_sk_insert(KRB5_CHECKSUM, (st), (val), (i))
+#define sk_KRB5_CHECKSUM_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_CHECKSUM, (st), (cmp))
+#define sk_KRB5_CHECKSUM_dup(st) SKM_sk_dup(KRB5_CHECKSUM, st)
+#define sk_KRB5_CHECKSUM_pop_free(st, free_func) SKM_sk_pop_free(KRB5_CHECKSUM, (st), (free_func))
+#define sk_KRB5_CHECKSUM_shift(st) SKM_sk_shift(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_pop(st) SKM_sk_pop(KRB5_CHECKSUM, (st))
+#define sk_KRB5_CHECKSUM_sort(st) SKM_sk_sort(KRB5_CHECKSUM, (st))
+
+#define sk_KRB5_ENCDATA_new(st) SKM_sk_new(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_new_null() SKM_sk_new_null(KRB5_ENCDATA)
+#define sk_KRB5_ENCDATA_free(st) SKM_sk_free(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_num(st) SKM_sk_num(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_value(st, i) SKM_sk_value(KRB5_ENCDATA, (st), (i))
+#define sk_KRB5_ENCDATA_set(st, i, val) SKM_sk_set(KRB5_ENCDATA, (st), (i), (val))
+#define sk_KRB5_ENCDATA_zero(st) SKM_sk_zero(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_push(st, val) SKM_sk_push(KRB5_ENCDATA, (st), (val))
+#define sk_KRB5_ENCDATA_unshift(st, val) SKM_sk_unshift(KRB5_ENCDATA, (st), (val))
+#define sk_KRB5_ENCDATA_find(st, val) SKM_sk_find(KRB5_ENCDATA, (st), (val))
+#define sk_KRB5_ENCDATA_delete(st, i) SKM_sk_delete(KRB5_ENCDATA, (st), (i))
+#define sk_KRB5_ENCDATA_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_ENCDATA, (st), (ptr))
+#define sk_KRB5_ENCDATA_insert(st, val, i) SKM_sk_insert(KRB5_ENCDATA, (st), (val), (i))
+#define sk_KRB5_ENCDATA_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_ENCDATA, (st), (cmp))
+#define sk_KRB5_ENCDATA_dup(st) SKM_sk_dup(KRB5_ENCDATA, st)
+#define sk_KRB5_ENCDATA_pop_free(st, free_func) SKM_sk_pop_free(KRB5_ENCDATA, (st), (free_func))
+#define sk_KRB5_ENCDATA_shift(st) SKM_sk_shift(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_pop(st) SKM_sk_pop(KRB5_ENCDATA, (st))
+#define sk_KRB5_ENCDATA_sort(st) SKM_sk_sort(KRB5_ENCDATA, (st))
+
+#define sk_KRB5_ENCKEY_new(st) SKM_sk_new(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_new_null() SKM_sk_new_null(KRB5_ENCKEY)
+#define sk_KRB5_ENCKEY_free(st) SKM_sk_free(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_num(st) SKM_sk_num(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_value(st, i) SKM_sk_value(KRB5_ENCKEY, (st), (i))
+#define sk_KRB5_ENCKEY_set(st, i, val) SKM_sk_set(KRB5_ENCKEY, (st), (i), (val))
+#define sk_KRB5_ENCKEY_zero(st) SKM_sk_zero(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_push(st, val) SKM_sk_push(KRB5_ENCKEY, (st), (val))
+#define sk_KRB5_ENCKEY_unshift(st, val) SKM_sk_unshift(KRB5_ENCKEY, (st), (val))
+#define sk_KRB5_ENCKEY_find(st, val) SKM_sk_find(KRB5_ENCKEY, (st), (val))
+#define sk_KRB5_ENCKEY_delete(st, i) SKM_sk_delete(KRB5_ENCKEY, (st), (i))
+#define sk_KRB5_ENCKEY_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_ENCKEY, (st), (ptr))
+#define sk_KRB5_ENCKEY_insert(st, val, i) SKM_sk_insert(KRB5_ENCKEY, (st), (val), (i))
+#define sk_KRB5_ENCKEY_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_ENCKEY, (st), (cmp))
+#define sk_KRB5_ENCKEY_dup(st) SKM_sk_dup(KRB5_ENCKEY, st)
+#define sk_KRB5_ENCKEY_pop_free(st, free_func) SKM_sk_pop_free(KRB5_ENCKEY, (st), (free_func))
+#define sk_KRB5_ENCKEY_shift(st) SKM_sk_shift(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_pop(st) SKM_sk_pop(KRB5_ENCKEY, (st))
+#define sk_KRB5_ENCKEY_sort(st) SKM_sk_sort(KRB5_ENCKEY, (st))
+
+#define sk_KRB5_PRINCNAME_new(st) SKM_sk_new(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_new_null() SKM_sk_new_null(KRB5_PRINCNAME)
+#define sk_KRB5_PRINCNAME_free(st) SKM_sk_free(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_num(st) SKM_sk_num(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_value(st, i) SKM_sk_value(KRB5_PRINCNAME, (st), (i))
+#define sk_KRB5_PRINCNAME_set(st, i, val) SKM_sk_set(KRB5_PRINCNAME, (st), (i), (val))
+#define sk_KRB5_PRINCNAME_zero(st) SKM_sk_zero(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_push(st, val) SKM_sk_push(KRB5_PRINCNAME, (st), (val))
+#define sk_KRB5_PRINCNAME_unshift(st, val) SKM_sk_unshift(KRB5_PRINCNAME, (st), (val))
+#define sk_KRB5_PRINCNAME_find(st, val) SKM_sk_find(KRB5_PRINCNAME, (st), (val))
+#define sk_KRB5_PRINCNAME_delete(st, i) SKM_sk_delete(KRB5_PRINCNAME, (st), (i))
+#define sk_KRB5_PRINCNAME_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_PRINCNAME, (st), (ptr))
+#define sk_KRB5_PRINCNAME_insert(st, val, i) SKM_sk_insert(KRB5_PRINCNAME, (st), (val), (i))
+#define sk_KRB5_PRINCNAME_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_PRINCNAME, (st), (cmp))
+#define sk_KRB5_PRINCNAME_dup(st) SKM_sk_dup(KRB5_PRINCNAME, st)
+#define sk_KRB5_PRINCNAME_pop_free(st, free_func) SKM_sk_pop_free(KRB5_PRINCNAME, (st), (free_func))
+#define sk_KRB5_PRINCNAME_shift(st) SKM_sk_shift(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_pop(st) SKM_sk_pop(KRB5_PRINCNAME, (st))
+#define sk_KRB5_PRINCNAME_sort(st) SKM_sk_sort(KRB5_PRINCNAME, (st))
+
+#define sk_KRB5_TKTBODY_new(st) SKM_sk_new(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_new_null() SKM_sk_new_null(KRB5_TKTBODY)
+#define sk_KRB5_TKTBODY_free(st) SKM_sk_free(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_num(st) SKM_sk_num(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_value(st, i) SKM_sk_value(KRB5_TKTBODY, (st), (i))
+#define sk_KRB5_TKTBODY_set(st, i, val) SKM_sk_set(KRB5_TKTBODY, (st), (i), (val))
+#define sk_KRB5_TKTBODY_zero(st) SKM_sk_zero(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_push(st, val) SKM_sk_push(KRB5_TKTBODY, (st), (val))
+#define sk_KRB5_TKTBODY_unshift(st, val) SKM_sk_unshift(KRB5_TKTBODY, (st), (val))
+#define sk_KRB5_TKTBODY_find(st, val) SKM_sk_find(KRB5_TKTBODY, (st), (val))
+#define sk_KRB5_TKTBODY_delete(st, i) SKM_sk_delete(KRB5_TKTBODY, (st), (i))
+#define sk_KRB5_TKTBODY_delete_ptr(st, ptr) SKM_sk_delete_ptr(KRB5_TKTBODY, (st), (ptr))
+#define sk_KRB5_TKTBODY_insert(st, val, i) SKM_sk_insert(KRB5_TKTBODY, (st), (val), (i))
+#define sk_KRB5_TKTBODY_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(KRB5_TKTBODY, (st), (cmp))
+#define sk_KRB5_TKTBODY_dup(st) SKM_sk_dup(KRB5_TKTBODY, st)
+#define sk_KRB5_TKTBODY_pop_free(st, free_func) SKM_sk_pop_free(KRB5_TKTBODY, (st), (free_func))
+#define sk_KRB5_TKTBODY_shift(st) SKM_sk_shift(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_pop(st) SKM_sk_pop(KRB5_TKTBODY, (st))
+#define sk_KRB5_TKTBODY_sort(st) SKM_sk_sort(KRB5_TKTBODY, (st))
 
 #define sk_MIME_HEADER_new(st) SKM_sk_new(MIME_HEADER, (st))
 #define sk_MIME_HEADER_new_null() SKM_sk_new_null(MIME_HEADER)
@@ -395,6 +764,66 @@
 #define sk_NAME_FUNCS_shift(st) SKM_sk_shift(NAME_FUNCS, (st))
 #define sk_NAME_FUNCS_pop(st) SKM_sk_pop(NAME_FUNCS, (st))
 #define sk_NAME_FUNCS_sort(st) SKM_sk_sort(NAME_FUNCS, (st))
+
+#define sk_OCSP_CERTID_new(st) SKM_sk_new(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_new_null() SKM_sk_new_null(OCSP_CERTID)
+#define sk_OCSP_CERTID_free(st) SKM_sk_free(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_num(st) SKM_sk_num(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_value(st, i) SKM_sk_value(OCSP_CERTID, (st), (i))
+#define sk_OCSP_CERTID_set(st, i, val) SKM_sk_set(OCSP_CERTID, (st), (i), (val))
+#define sk_OCSP_CERTID_zero(st) SKM_sk_zero(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_push(st, val) SKM_sk_push(OCSP_CERTID, (st), (val))
+#define sk_OCSP_CERTID_unshift(st, val) SKM_sk_unshift(OCSP_CERTID, (st), (val))
+#define sk_OCSP_CERTID_find(st, val) SKM_sk_find(OCSP_CERTID, (st), (val))
+#define sk_OCSP_CERTID_delete(st, i) SKM_sk_delete(OCSP_CERTID, (st), (i))
+#define sk_OCSP_CERTID_delete_ptr(st, ptr) SKM_sk_delete_ptr(OCSP_CERTID, (st), (ptr))
+#define sk_OCSP_CERTID_insert(st, val, i) SKM_sk_insert(OCSP_CERTID, (st), (val), (i))
+#define sk_OCSP_CERTID_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(OCSP_CERTID, (st), (cmp))
+#define sk_OCSP_CERTID_dup(st) SKM_sk_dup(OCSP_CERTID, st)
+#define sk_OCSP_CERTID_pop_free(st, free_func) SKM_sk_pop_free(OCSP_CERTID, (st), (free_func))
+#define sk_OCSP_CERTID_shift(st) SKM_sk_shift(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_pop(st) SKM_sk_pop(OCSP_CERTID, (st))
+#define sk_OCSP_CERTID_sort(st) SKM_sk_sort(OCSP_CERTID, (st))
+
+#define sk_OCSP_ONEREQ_new(st) SKM_sk_new(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_new_null() SKM_sk_new_null(OCSP_ONEREQ)
+#define sk_OCSP_ONEREQ_free(st) SKM_sk_free(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_num(st) SKM_sk_num(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_value(st, i) SKM_sk_value(OCSP_ONEREQ, (st), (i))
+#define sk_OCSP_ONEREQ_set(st, i, val) SKM_sk_set(OCSP_ONEREQ, (st), (i), (val))
+#define sk_OCSP_ONEREQ_zero(st) SKM_sk_zero(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_push(st, val) SKM_sk_push(OCSP_ONEREQ, (st), (val))
+#define sk_OCSP_ONEREQ_unshift(st, val) SKM_sk_unshift(OCSP_ONEREQ, (st), (val))
+#define sk_OCSP_ONEREQ_find(st, val) SKM_sk_find(OCSP_ONEREQ, (st), (val))
+#define sk_OCSP_ONEREQ_delete(st, i) SKM_sk_delete(OCSP_ONEREQ, (st), (i))
+#define sk_OCSP_ONEREQ_delete_ptr(st, ptr) SKM_sk_delete_ptr(OCSP_ONEREQ, (st), (ptr))
+#define sk_OCSP_ONEREQ_insert(st, val, i) SKM_sk_insert(OCSP_ONEREQ, (st), (val), (i))
+#define sk_OCSP_ONEREQ_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(OCSP_ONEREQ, (st), (cmp))
+#define sk_OCSP_ONEREQ_dup(st) SKM_sk_dup(OCSP_ONEREQ, st)
+#define sk_OCSP_ONEREQ_pop_free(st, free_func) SKM_sk_pop_free(OCSP_ONEREQ, (st), (free_func))
+#define sk_OCSP_ONEREQ_shift(st) SKM_sk_shift(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_pop(st) SKM_sk_pop(OCSP_ONEREQ, (st))
+#define sk_OCSP_ONEREQ_sort(st) SKM_sk_sort(OCSP_ONEREQ, (st))
+
+#define sk_OCSP_SINGLERESP_new(st) SKM_sk_new(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_new_null() SKM_sk_new_null(OCSP_SINGLERESP)
+#define sk_OCSP_SINGLERESP_free(st) SKM_sk_free(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_num(st) SKM_sk_num(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_value(st, i) SKM_sk_value(OCSP_SINGLERESP, (st), (i))
+#define sk_OCSP_SINGLERESP_set(st, i, val) SKM_sk_set(OCSP_SINGLERESP, (st), (i), (val))
+#define sk_OCSP_SINGLERESP_zero(st) SKM_sk_zero(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_push(st, val) SKM_sk_push(OCSP_SINGLERESP, (st), (val))
+#define sk_OCSP_SINGLERESP_unshift(st, val) SKM_sk_unshift(OCSP_SINGLERESP, (st), (val))
+#define sk_OCSP_SINGLERESP_find(st, val) SKM_sk_find(OCSP_SINGLERESP, (st), (val))
+#define sk_OCSP_SINGLERESP_delete(st, i) SKM_sk_delete(OCSP_SINGLERESP, (st), (i))
+#define sk_OCSP_SINGLERESP_delete_ptr(st, ptr) SKM_sk_delete_ptr(OCSP_SINGLERESP, (st), (ptr))
+#define sk_OCSP_SINGLERESP_insert(st, val, i) SKM_sk_insert(OCSP_SINGLERESP, (st), (val), (i))
+#define sk_OCSP_SINGLERESP_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(OCSP_SINGLERESP, (st), (cmp))
+#define sk_OCSP_SINGLERESP_dup(st) SKM_sk_dup(OCSP_SINGLERESP, st)
+#define sk_OCSP_SINGLERESP_pop_free(st, free_func) SKM_sk_pop_free(OCSP_SINGLERESP, (st), (free_func))
+#define sk_OCSP_SINGLERESP_shift(st) SKM_sk_shift(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_pop(st) SKM_sk_pop(OCSP_SINGLERESP, (st))
+#define sk_OCSP_SINGLERESP_sort(st) SKM_sk_sort(OCSP_SINGLERESP, (st))
 
 #define sk_PKCS12_SAFEBAG_new(st) SKM_sk_new(PKCS12_SAFEBAG, (st))
 #define sk_PKCS12_SAFEBAG_new_null() SKM_sk_new_null(PKCS12_SAFEBAG)
@@ -575,6 +1004,26 @@
 #define sk_SXNETID_shift(st) SKM_sk_shift(SXNETID, (st))
 #define sk_SXNETID_pop(st) SKM_sk_pop(SXNETID, (st))
 #define sk_SXNETID_sort(st) SKM_sk_sort(SXNETID, (st))
+
+#define sk_UI_STRING_new(st) SKM_sk_new(UI_STRING, (st))
+#define sk_UI_STRING_new_null() SKM_sk_new_null(UI_STRING)
+#define sk_UI_STRING_free(st) SKM_sk_free(UI_STRING, (st))
+#define sk_UI_STRING_num(st) SKM_sk_num(UI_STRING, (st))
+#define sk_UI_STRING_value(st, i) SKM_sk_value(UI_STRING, (st), (i))
+#define sk_UI_STRING_set(st, i, val) SKM_sk_set(UI_STRING, (st), (i), (val))
+#define sk_UI_STRING_zero(st) SKM_sk_zero(UI_STRING, (st))
+#define sk_UI_STRING_push(st, val) SKM_sk_push(UI_STRING, (st), (val))
+#define sk_UI_STRING_unshift(st, val) SKM_sk_unshift(UI_STRING, (st), (val))
+#define sk_UI_STRING_find(st, val) SKM_sk_find(UI_STRING, (st), (val))
+#define sk_UI_STRING_delete(st, i) SKM_sk_delete(UI_STRING, (st), (i))
+#define sk_UI_STRING_delete_ptr(st, ptr) SKM_sk_delete_ptr(UI_STRING, (st), (ptr))
+#define sk_UI_STRING_insert(st, val, i) SKM_sk_insert(UI_STRING, (st), (val), (i))
+#define sk_UI_STRING_set_cmp_func(st, cmp) SKM_sk_set_cmp_func(UI_STRING, (st), (cmp))
+#define sk_UI_STRING_dup(st) SKM_sk_dup(UI_STRING, st)
+#define sk_UI_STRING_pop_free(st, free_func) SKM_sk_pop_free(UI_STRING, (st), (free_func))
+#define sk_UI_STRING_shift(st) SKM_sk_shift(UI_STRING, (st))
+#define sk_UI_STRING_pop(st) SKM_sk_pop(UI_STRING, (st))
+#define sk_UI_STRING_sort(st) SKM_sk_sort(UI_STRING, (st))
 
 #define sk_X509_new(st) SKM_sk_new(X509, (st))
 #define sk_X509_new_null() SKM_sk_new_null(X509)
@@ -909,6 +1358,24 @@
 	SKM_ASN1_seq_pack(GENERAL_NAME, (st), (i2d_func), (buf), (len))
 #define ASN1_seq_unpack_GENERAL_NAME(buf, len, d2i_func, free_func) \
 	SKM_ASN1_seq_unpack(GENERAL_NAME, (buf), (len), (d2i_func), (free_func))
+
+#define d2i_ASN1_SET_OF_OCSP_ONEREQ(st, pp, length, d2i_func, free_func, ex_tag, ex_class) \
+	SKM_ASN1_SET_OF_d2i(OCSP_ONEREQ, (st), (pp), (length), (d2i_func), (free_func), (ex_tag), (ex_class)) 
+#define i2d_ASN1_SET_OF_OCSP_ONEREQ(st, pp, i2d_func, ex_tag, ex_class, is_set) \
+	SKM_ASN1_SET_OF_i2d(OCSP_ONEREQ, (st), (pp), (i2d_func), (ex_tag), (ex_class), (is_set))
+#define ASN1_seq_pack_OCSP_ONEREQ(st, i2d_func, buf, len) \
+	SKM_ASN1_seq_pack(OCSP_ONEREQ, (st), (i2d_func), (buf), (len))
+#define ASN1_seq_unpack_OCSP_ONEREQ(buf, len, d2i_func, free_func) \
+	SKM_ASN1_seq_unpack(OCSP_ONEREQ, (buf), (len), (d2i_func), (free_func))
+
+#define d2i_ASN1_SET_OF_OCSP_SINGLERESP(st, pp, length, d2i_func, free_func, ex_tag, ex_class) \
+	SKM_ASN1_SET_OF_d2i(OCSP_SINGLERESP, (st), (pp), (length), (d2i_func), (free_func), (ex_tag), (ex_class)) 
+#define i2d_ASN1_SET_OF_OCSP_SINGLERESP(st, pp, i2d_func, ex_tag, ex_class, is_set) \
+	SKM_ASN1_SET_OF_i2d(OCSP_SINGLERESP, (st), (pp), (i2d_func), (ex_tag), (ex_class), (is_set))
+#define ASN1_seq_pack_OCSP_SINGLERESP(st, i2d_func, buf, len) \
+	SKM_ASN1_seq_pack(OCSP_SINGLERESP, (st), (i2d_func), (buf), (len))
+#define ASN1_seq_unpack_OCSP_SINGLERESP(buf, len, d2i_func, free_func) \
+	SKM_ASN1_seq_unpack(OCSP_SINGLERESP, (buf), (len), (d2i_func), (free_func))
 
 #define d2i_ASN1_SET_OF_PKCS12_SAFEBAG(st, pp, length, d2i_func, free_func, ex_tag, ex_class) \
 	SKM_ASN1_SET_OF_d2i(PKCS12_SAFEBAG, (st), (pp), (length), (d2i_func), (free_func), (ex_tag), (ex_class)) 

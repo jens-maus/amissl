@@ -88,6 +88,9 @@ typedef void * (*X509V3_EXT_R2I)(struct v3_ext_method *method, struct v3_ext_ctx
 struct v3_ext_method {
 int ext_nid;
 int ext_flags;
+/* If this is set the following four fields are ignored */
+ASN1_ITEM_EXP *it;
+/* Old style ASN1 calls */
 X509V3_EXT_NEW ext_new;
 X509V3_EXT_FREE ext_free;
 X509V3_EXT_D2I d2i;
@@ -156,34 +159,55 @@ ASN1_OBJECT *type_id;
 ASN1_TYPE *value;
 } OTHERNAME;
 
+typedef struct EDIPartyName_st {
+	ASN1_STRING *nameAssigner;
+	ASN1_STRING *partyName;
+} EDIPARTYNAME;
+
 typedef struct GENERAL_NAME_st {
 
-#define GEN_OTHERNAME	(0|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_EMAIL	(1|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_DNS		(2|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_X400	(3|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_DIRNAME	(4|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_EDIPARTY	(5|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_URI		(6|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_IPADD	(7|V_ASN1_CONTEXT_SPECIFIC)
-#define GEN_RID		(8|V_ASN1_CONTEXT_SPECIFIC)
+#define GEN_OTHERNAME	0
+#define GEN_EMAIL	1
+#define GEN_DNS		2
+#define GEN_X400	3
+#define GEN_DIRNAME	4
+#define GEN_EDIPARTY	5
+#define GEN_URI		6
+#define GEN_IPADD	7
+#define GEN_RID		8
 
 int type;
 union {
 	char *ptr;
-	ASN1_IA5STRING *ia5;/* rfc822Name, dNSName, uniformResourceIdentifier */
+	OTHERNAME *otherName; /* otherName */
+	ASN1_IA5STRING *rfc822Name;
+	ASN1_IA5STRING *dNSName;
+	ASN1_TYPE *x400Address;
+	X509_NAME *directoryName;
+	EDIPARTYNAME *ediPartyName;
+	ASN1_IA5STRING *uniformResourceIdentifier;
+	ASN1_OCTET_STRING *iPAddress;
+	ASN1_OBJECT *registeredID;
+
+	/* Old names */
 	ASN1_OCTET_STRING *ip; /* iPAddress */
 	X509_NAME *dirn;		/* dirn */
+	ASN1_IA5STRING *ia5;/* rfc822Name, dNSName, uniformResourceIdentifier */
 	ASN1_OBJECT *rid; /* registeredID */
-	OTHERNAME *otherName; /* otherName */
-	ASN1_TYPE *other; /* ediPartyName, x400Address */
+	ASN1_TYPE *other; /* x400Address */
 } d;
 } GENERAL_NAME;
+
+typedef STACK_OF(GENERAL_NAME) GENERAL_NAMES;
 
 typedef struct ACCESS_DESCRIPTION_st {
 	ASN1_OBJECT *method;
 	GENERAL_NAME *location;
 } ACCESS_DESCRIPTION;
+
+typedef STACK_OF(ACCESS_DESCRIPTION) AUTHORITY_INFO_ACCESS;
+
+typedef STACK_OF(ASN1_OBJECT) EXTENDED_KEY_USAGE;
 
 DECLARE_STACK_OF(GENERAL_NAME)
 DECLARE_ASN1_SET_OF(GENERAL_NAME)
@@ -192,23 +216,27 @@ DECLARE_STACK_OF(ACCESS_DESCRIPTION)
 DECLARE_ASN1_SET_OF(ACCESS_DESCRIPTION)
 
 typedef struct DIST_POINT_NAME_st {
-/* NB: this is a CHOICE type and only one of these should be set */
-STACK_OF(GENERAL_NAME) *fullname;
-STACK_OF(X509_NAME_ENTRY) *relativename;
+int type;
+union {
+	GENERAL_NAMES *fullname;
+	STACK_OF(X509_NAME_ENTRY) *relativename;
+} name;
 } DIST_POINT_NAME;
 
 typedef struct DIST_POINT_st {
 DIST_POINT_NAME	*distpoint;
 ASN1_BIT_STRING *reasons;
-STACK_OF(GENERAL_NAME) *CRLissuer;
+GENERAL_NAMES *CRLissuer;
 } DIST_POINT;
+
+typedef STACK_OF(DIST_POINT) CRL_DIST_POINTS;
 
 DECLARE_STACK_OF(DIST_POINT)
 DECLARE_ASN1_SET_OF(DIST_POINT)
 
 typedef struct AUTHORITY_KEYID_st {
 ASN1_OCTET_STRING *keyid;
-STACK_OF(GENERAL_NAME) *issuer;
+GENERAL_NAMES *issuer;
 ASN1_INTEGER *serial;
 } AUTHORITY_KEYID;
 
@@ -254,6 +282,8 @@ typedef struct POLICYINFO_st {
 	STACK_OF(POLICYQUALINFO) *qualifiers;
 } POLICYINFO;
 
+typedef STACK_OF(POLICYINFO) CERTIFICATEPOLICIES;
+
 DECLARE_STACK_OF(POLICYINFO)
 DECLARE_ASN1_SET_OF(POLICYINFO)
 
@@ -262,32 +292,24 @@ DECLARE_ASN1_SET_OF(POLICYINFO)
 
 #define X509V3_set_ctx_test(ctx) \
 			X509V3_set_ctx(ctx, NULL, NULL, NULL, NULL, CTX_TEST)
-#define X509V3_set_ctx_nodb(ctx) ctx->db = NULL;
+#define X509V3_set_ctx_nodb(ctx) (ctx)->db = NULL;
 
-#define EXT_BITSTRING(nid, table) { nid, 0, \
-			(X509V3_EXT_NEW)ASN1_BIT_STRING_new, \
-			(X509V3_EXT_FREE)ASN1_BIT_STRING_free, \
-			(X509V3_EXT_D2I)d2i_ASN1_BIT_STRING, \
-			(X509V3_EXT_I2D)i2d_ASN1_BIT_STRING, \
-			NULL, NULL, \
+#define EXT_BITSTRING(nid, table) { nid, 0, ASN1_ITEM_ref(ASN1_BIT_STRING), \
+			0,0,0,0, \
+			0,0, \
 			(X509V3_EXT_I2V)i2v_ASN1_BIT_STRING, \
 			(X509V3_EXT_V2I)v2i_ASN1_BIT_STRING, \
 			NULL, NULL, \
-			(char *)table}
+			table}
 
-#define EXT_IA5STRING(nid) { nid, 0, \
-			(X509V3_EXT_NEW)ASN1_IA5STRING_new, \
-			(X509V3_EXT_FREE)ASN1_IA5STRING_free, \
-			(X509V3_EXT_D2I)d2i_ASN1_IA5STRING, \
-			(X509V3_EXT_I2D)i2d_ASN1_IA5STRING, \
+#define EXT_IA5STRING(nid) { nid, 0, ASN1_ITEM_ref(ASN1_IA5STRING), \
+			0,0,0,0, \
 			(X509V3_EXT_I2S)i2s_ASN1_IA5STRING, \
 			(X509V3_EXT_S2I)s2i_ASN1_IA5STRING, \
-			NULL, NULL, NULL, NULL, \
+			0,0,0,0, \
 			NULL}
 
-#define EXT_END { -1, 0, NULL, NULL, NULL, NULL, NULL, NULL, \
-			 NULL, NULL, NULL, NULL, \
-			 NULL}
+#define EXT_END { -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
 /* X509_PURPOSE stuff */
@@ -302,6 +324,7 @@ DECLARE_ASN1_SET_OF(POLICYINFO)
 #define EXFLAG_V1		0x40
 #define EXFLAG_INVALID		0x80
 #define EXFLAG_SET		0x100
+#define EXFLAG_CRITICAL		0x200
 
 #define KU_DIGITAL_SIGNATURE	0x0080
 #define KU_NON_REPUDIATION	0x0040
@@ -320,12 +343,16 @@ DECLARE_ASN1_SET_OF(POLICYINFO)
 #define NS_SSL_CA		0x04
 #define NS_SMIME_CA		0x02
 #define NS_OBJSIGN_CA		0x01
+#define NS_ANY_CA		(NS_SSL_CA|NS_SMIME_CA|NS_OBJSIGN_CA)
 
 #define XKU_SSL_SERVER		0x1	
 #define XKU_SSL_CLIENT		0x2
 #define XKU_SMIME		0x4
 #define XKU_CODE_SIGN		0x8
 #define XKU_SGC			0x10
+#define XKU_OCSP_SIGN		0x20
+#define XKU_TIMESTAMP		0x40
+#define XKU_DVCS		0x80
 
 #define X509_PURPOSE_DYNAMIC	0x1
 #define X509_PURPOSE_DYNAMIC_NAME	0x2
@@ -348,11 +375,187 @@ typedef struct x509_purpose_st {
 #define X509_PURPOSE_SMIME_ENCRYPT	5
 #define X509_PURPOSE_CRL_SIGN		6
 #define X509_PURPOSE_ANY		7
+#define X509_PURPOSE_OCSP_HELPER	8
 
 #define X509_PURPOSE_MIN		1
-#define X509_PURPOSE_MAX		7
+#define X509_PURPOSE_MAX		8
+
+/* Flags for X509V3_EXT_print() */
+
+#define X509V3_EXT_UNKNOWN_MASK		(0xfL << 16)
+/* Return error for unknown extensions */
+#define X509V3_EXT_DEFAULT		0
+/* Print error for unknown extensions */
+#define X509V3_EXT_ERROR_UNKNOWN	(1L << 16)
+/* ASN1 parse unknown extensions */
+#define X509V3_EXT_PARSE_UNKNOWN	(2L << 16)
+/* BIO_dump unknown extensions */
+#define X509V3_EXT_DUMP_UNKNOWN		(3L << 16)
+
+/* Flags for X509V3_add1_i2d */
+
+#define X509V3_ADD_OP_MASK		0xfL
+#define X509V3_ADD_DEFAULT		0L
+#define X509V3_ADD_APPEND		1L
+#define X509V3_ADD_REPLACE		2L
+#define X509V3_ADD_REPLACE_EXISTING	3L
+#define X509V3_ADD_KEEP_EXISTING	4L
+#define X509V3_ADD_DELETE		5L
+#define X509V3_ADD_SILENT		0x10
 
 DECLARE_STACK_OF(X509_PURPOSE)
+
+DECLARE_ASN1_FUNCTIONS(BASIC_CONSTRAINTS)
+
+DECLARE_ASN1_FUNCTIONS(SXNET)
+DECLARE_ASN1_FUNCTIONS(SXNETID)
+
+int SXNET_add_id_asc(SXNET **psx, char *zone, char *user, int userlen); 
+int SXNET_add_id_ulong(SXNET **psx, unsigned long lzone, char *user, int userlen); 
+int SXNET_add_id_INTEGER(SXNET **psx, ASN1_INTEGER *izone, char *user, int userlen); 
+
+ASN1_OCTET_STRING *SXNET_get_id_asc(SXNET *sx, char *zone);
+ASN1_OCTET_STRING *SXNET_get_id_ulong(SXNET *sx, unsigned long lzone);
+ASN1_OCTET_STRING *SXNET_get_id_INTEGER(SXNET *sx, ASN1_INTEGER *zone);
+
+DECLARE_ASN1_FUNCTIONS(AUTHORITY_KEYID)
+
+DECLARE_ASN1_FUNCTIONS(PKEY_USAGE_PERIOD)
+
+DECLARE_ASN1_FUNCTIONS(GENERAL_NAME)
+
+STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME(X509V3_EXT_METHOD *method, GENERAL_NAME *gen, STACK_OF(CONF_VALUE) *ret);
+int GENERAL_NAME_print(BIO *out, GENERAL_NAME *gen);
+
+DECLARE_ASN1_FUNCTIONS(GENERAL_NAMES)
+
+STACK_OF(CONF_VALUE) *i2v_GENERAL_NAMES(X509V3_EXT_METHOD *method,
+		GENERAL_NAMES *gen, STACK_OF(CONF_VALUE) *extlist);
+GENERAL_NAMES *v2i_GENERAL_NAMES(X509V3_EXT_METHOD *method,
+				X509V3_CTX *ctx, STACK_OF(CONF_VALUE) *nval);
+
+DECLARE_ASN1_FUNCTIONS(OTHERNAME)
+DECLARE_ASN1_FUNCTIONS(EDIPARTYNAME)
+
+char *i2s_ASN1_OCTET_STRING(X509V3_EXT_METHOD *method, ASN1_OCTET_STRING *ia5);
+ASN1_OCTET_STRING *s2i_ASN1_OCTET_STRING(X509V3_EXT_METHOD *method, X509V3_CTX *ctx, char *str);
+
+DECLARE_ASN1_FUNCTIONS(EXTENDED_KEY_USAGE)
+int i2a_ACCESS_DESCRIPTION(BIO *bp, ACCESS_DESCRIPTION* a);
+
+DECLARE_ASN1_FUNCTIONS(CERTIFICATEPOLICIES)
+DECLARE_ASN1_FUNCTIONS(POLICYINFO)
+DECLARE_ASN1_FUNCTIONS(POLICYQUALINFO)
+DECLARE_ASN1_FUNCTIONS(USERNOTICE)
+DECLARE_ASN1_FUNCTIONS(NOTICEREF)
+
+DECLARE_ASN1_FUNCTIONS(CRL_DIST_POINTS)
+DECLARE_ASN1_FUNCTIONS(DIST_POINT)
+DECLARE_ASN1_FUNCTIONS(DIST_POINT_NAME)
+
+DECLARE_ASN1_FUNCTIONS(ACCESS_DESCRIPTION)
+DECLARE_ASN1_FUNCTIONS(AUTHORITY_INFO_ACCESS)
+
+#ifdef HEADER_CONF_H
+GENERAL_NAME *v2i_GENERAL_NAME(X509V3_EXT_METHOD *method, X509V3_CTX *ctx, CONF_VALUE *cnf);
+void X509V3_conf_free(CONF_VALUE *val);
+
+X509_EXTENSION *X509V3_EXT_nconf_nid(CONF *conf, X509V3_CTX *ctx, int ext_nid, char *value);
+X509_EXTENSION *X509V3_EXT_nconf(CONF *conf, X509V3_CTX *ctx, char *name, char *value);
+int X509V3_EXT_add_nconf_sk(CONF *conf, X509V3_CTX *ctx, char *section, STACK_OF(X509_EXTENSION) **sk);
+int X509V3_EXT_add_nconf(CONF *conf, X509V3_CTX *ctx, char *section, X509 *cert);
+int X509V3_EXT_REQ_add_nconf(CONF *conf, X509V3_CTX *ctx, char *section, X509_REQ *req);
+int X509V3_EXT_CRL_add_nconf(CONF *conf, X509V3_CTX *ctx, char *section, X509_CRL *crl);
+
+X509_EXTENSION *X509V3_EXT_conf_nid(LHASH *conf, X509V3_CTX *ctx, int ext_nid, char *value);
+X509_EXTENSION *X509V3_EXT_conf(LHASH *conf, X509V3_CTX *ctx, char *name, char *value);
+int X509V3_EXT_add_conf(LHASH *conf, X509V3_CTX *ctx, char *section, X509 *cert);
+int X509V3_EXT_REQ_add_conf(LHASH *conf, X509V3_CTX *ctx, char *section, X509_REQ *req);
+int X509V3_EXT_CRL_add_conf(LHASH *conf, X509V3_CTX *ctx, char *section, X509_CRL *crl);
+
+int X509V3_add_value_bool_nf(char *name, int asn1_bool,
+						STACK_OF(CONF_VALUE) **extlist);
+int X509V3_get_value_bool(CONF_VALUE *value, int *asn1_bool);
+int X509V3_get_value_int(CONF_VALUE *value, ASN1_INTEGER **aint);
+void X509V3_set_nconf(X509V3_CTX *ctx, CONF *conf);
+void X509V3_set_conf_lhash(X509V3_CTX *ctx, LHASH *lhash);
+#endif
+
+char * X509V3_get_string(X509V3_CTX *ctx, char *name, char *section);
+STACK_OF(CONF_VALUE) * X509V3_get_section(X509V3_CTX *ctx, char *section);
+void X509V3_string_free(X509V3_CTX *ctx, char *str);
+void X509V3_section_free( X509V3_CTX *ctx, STACK_OF(CONF_VALUE) *section);
+void X509V3_set_ctx(X509V3_CTX *ctx, X509 *issuer, X509 *subject,
+				 X509_REQ *req, X509_CRL *crl, int flags);
+
+int X509V3_add_value(const char *name, const char *value,
+						STACK_OF(CONF_VALUE) **extlist);
+int X509V3_add_value_uchar(const char *name, const unsigned char *value,
+						STACK_OF(CONF_VALUE) **extlist);
+int X509V3_add_value_bool(const char *name, int asn1_bool,
+						STACK_OF(CONF_VALUE) **extlist);
+int X509V3_add_value_int(const char *name, ASN1_INTEGER *aint,
+						STACK_OF(CONF_VALUE) **extlist);
+char * i2s_ASN1_INTEGER(X509V3_EXT_METHOD *meth, ASN1_INTEGER *aint);
+ASN1_INTEGER * s2i_ASN1_INTEGER(X509V3_EXT_METHOD *meth, char *value);
+char * i2s_ASN1_ENUMERATED(X509V3_EXT_METHOD *meth, ASN1_ENUMERATED *aint);
+char * i2s_ASN1_ENUMERATED_TABLE(X509V3_EXT_METHOD *meth, ASN1_ENUMERATED *aint);
+int X509V3_EXT_add(X509V3_EXT_METHOD *ext);
+int X509V3_EXT_add_list(X509V3_EXT_METHOD *extlist);
+int X509V3_EXT_add_alias(int nid_to, int nid_from);
+void X509V3_EXT_cleanup(void);
+
+X509V3_EXT_METHOD *X509V3_EXT_get(X509_EXTENSION *ext);
+X509V3_EXT_METHOD *X509V3_EXT_get_nid(int nid);
+int X509V3_add_standard_extensions(void);
+STACK_OF(CONF_VALUE) *X509V3_parse_list(const char *line);
+void *X509V3_EXT_d2i(X509_EXTENSION *ext);
+void *X509V3_get_d2i(STACK_OF(X509_EXTENSION) *x, int nid, int *crit, int *idx);
+
+
+X509_EXTENSION *X509V3_EXT_i2d(int ext_nid, int crit, void *ext_struc);
+int X509V3_add1_i2d(STACK_OF(X509_EXTENSION) **x, int nid, void *value, int crit, unsigned long flags);
+
+char *hex_to_string(unsigned char *buffer, long len);
+unsigned char *string_to_hex(char *str, long *len);
+int name_cmp(const char *name, const char *cmp);
+
+void X509V3_EXT_val_prn(BIO *out, STACK_OF(CONF_VALUE) *val, int indent,
+								 int ml);
+int X509V3_EXT_print(BIO *out, X509_EXTENSION *ext, unsigned long flag, int indent);
+#ifndef OPENSSL_NO_FP_API
+int X509V3_EXT_print_fp(FILE *out, X509_EXTENSION *ext, int flag, int indent);
+#endif /* !OPENSSL_NO_FP_API */
+
+int X509V3_extensions_print(BIO *out, char *title, STACK_OF(X509_EXTENSION) *exts, unsigned long flag, int indent);
+
+int X509_check_purpose(X509 *x, int id, int ca);
+int X509_supported_extension(X509_EXTENSION *ex);
+int X509_PURPOSE_set(int *p, int purpose);
+int X509_check_issued(X509 *issuer, X509 *subject);
+int X509_PURPOSE_get_count(void);
+X509_PURPOSE * X509_PURPOSE_get0(int idx);
+int X509_PURPOSE_get_by_sname(char *sname);
+int X509_PURPOSE_get_by_id(int id);
+int X509_PURPOSE_add(int id, int trust, int flags,
+			int (*ck)(const X509_PURPOSE *, const X509 *, int),
+				char *name, char *sname, void *arg);
+char *X509_PURPOSE_get0_name(X509_PURPOSE *xp);
+char *X509_PURPOSE_get0_sname(X509_PURPOSE *xp);
+int X509_PURPOSE_get_trust(X509_PURPOSE *xp);
+void X509_PURPOSE_cleanup(void);
+int X509_PURPOSE_get_id(X509_PURPOSE *);
+
+STACK *X509_get1_email(X509 *x);
+STACK *X509_REQ_get1_email(X509_REQ *x);
+void X509_email_free(STACK *sk);
+
+
+/* BEGIN ERROR CODES */
+/* The following lines are auto generated by the script mkerr.pl. Any changes
+ * made after this point may be overwritten when the script is next run.
+ */
+void ERR_load_X509V3_strings(void);
 
 /* Error codes for the X509V3 functions. */
 
@@ -389,6 +592,7 @@ DECLARE_STACK_OF(X509_PURPOSE)
 #define X509V3_F_V2I_GENERAL_NAME			 117
 #define X509V3_F_V2I_GENERAL_NAMES			 118
 #define X509V3_F_V3_GENERIC_EXTENSION			 116
+#define X509V3_F_X509V3_ADD_I2D				 140
 #define X509V3_F_X509V3_ADD_VALUE			 105
 #define X509V3_F_X509V3_EXT_ADD				 104
 #define X509V3_F_X509V3_EXT_ADD_ALIAS			 106
@@ -397,6 +601,7 @@ DECLARE_STACK_OF(X509_PURPOSE)
 #define X509V3_F_X509V3_GET_VALUE_BOOL			 110
 #define X509V3_F_X509V3_PARSE_LIST			 109
 #define X509V3_F_X509_PURPOSE_ADD			 137
+#define X509V3_F_X509_PURPOSE_SET			 141
 
 /* Reason codes. */
 #define X509V3_R_BAD_IP_ADDRESS				 118
@@ -405,8 +610,10 @@ DECLARE_STACK_OF(X509_PURPOSE)
 #define X509V3_R_BN_TO_ASN1_INTEGER_ERROR		 101
 #define X509V3_R_DUPLICATE_ZONE_ID			 133
 #define X509V3_R_ERROR_CONVERTING_ZONE			 131
+#define X509V3_R_ERROR_CREATING_EXTENSION		 144
 #define X509V3_R_ERROR_IN_EXTENSION			 128
 #define X509V3_R_EXPECTED_A_SECTION_NAME		 137
+#define X509V3_R_EXTENSION_EXISTS			 145
 #define X509V3_R_EXTENSION_NAME_ERROR			 115
 #define X509V3_R_EXTENSION_NOT_FOUND			 102
 #define X509V3_R_EXTENSION_SETTING_NOT_SUPPORTED	 103
@@ -423,6 +630,7 @@ DECLARE_STACK_OF(X509_PURPOSE)
 #define X509V3_R_INVALID_OBJECT_IDENTIFIER		 110
 #define X509V3_R_INVALID_OPTION				 138
 #define X509V3_R_INVALID_POLICY_IDENTIFIER		 134
+#define X509V3_R_INVALID_PURPOSE			 146
 #define X509V3_R_INVALID_SECTION			 135
 #define X509V3_R_INVALID_SYNTAX				 143
 #define X509V3_R_ISSUER_DECODE_ERROR			 126

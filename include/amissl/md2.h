@@ -59,6 +59,10 @@
 #ifndef HEADER_MD2_H
 #define HEADER_MD2_H
 
+#ifdef OPENSSL_NO_MD2
+#error MD2 is disabled.
+#endif
+
 #define MD2_DIGEST_LENGTH	16
 #define MD2_BLOCK       	16
 #include <amissl/amisslconf.h> /* MD2_INT */
@@ -75,6 +79,11 @@ typedef struct MD2state_st
 	MD2_INT state[MD2_BLOCK];
 	} MD2_CTX;
 
+const char *MD2_options(void);
+int MD2_Init(MD2_CTX *c);
+int MD2_Update(MD2_CTX *c, const unsigned char *data, unsigned long len);
+int MD2_Final(unsigned char *md, MD2_CTX *c);
+unsigned char *MD2(const unsigned char *d, unsigned long n,unsigned char *md);
 #ifdef  __cplusplus
 }
 #endif

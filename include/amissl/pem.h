@@ -59,11 +59,16 @@
 #ifndef HEADER_PEM_H
 #define HEADER_PEM_H
 
+#ifndef OPENSSL_NO_BIO
 #include <amissl/bio.h>
+#endif
+#ifndef OPENSSL_NO_STACK
 #include <amissl/stack.h>
+#endif
 #include <amissl/evp.h>
 #include <amissl/x509.h>
 #include <amissl/pem2.h>
+#include <amissl/e_os2.h>
 
 #ifdef  __cplusplus
 extern "C" {
@@ -122,7 +127,8 @@ extern "C" {
 #define PEM_STRING_SSL_SESSION	"SSL SESSION PARAMETERS"
 #define PEM_STRING_DSAPARAMS	"DSA PARAMETERS"
 
-
+  /* Note that this structure is initialised by PEM_SealInit and cleaned up
+     by PEM_SealFinal (at least for now) */
 typedef struct PEM_Encode_Seal_st
 	{
 	EVP_ENCODE_CTX encode;
@@ -143,7 +149,7 @@ typedef struct pem_recip_st
 
 	int cipher;
 	int key_enc;
-	char iv[8];
+	/*	char iv[8]; unused and wrong size */
 	} PEM_USER;
 
 typedef struct pem_ctx_st
@@ -159,7 +165,8 @@ typedef struct pem_ctx_st
 
 	struct	{
 		int cipher;
-		unsigned char iv[8];
+	/* unused, and wrong size
+	   unsigned char iv[8]; */
 		} DEK_info;
 		
 	PEM_USER *originator;
@@ -167,7 +174,11 @@ typedef struct pem_ctx_st
 	int num_recipient;
 	PEM_USER **recipient;
 
+#ifndef OPENSSL_NO_STACK
 	STACK *x509_chain;	/* certificate chain */
+#else
+	char *x509_chain;	/* certificate chain */
+#endif
 	EVP_MD *md;		/* signature type */
 
 	int md_enc;		/* is the md encrypted or not? */
@@ -177,7 +188,8 @@ typedef struct pem_ctx_st
 	EVP_CIPHER *dec;	/* date encryption cipher */
 	int key_len;		/* key length */
 	unsigned char *key;	/* key */
-	unsigned char iv[8];	/* the iv */
+	/* unused, and wrong size
+	   unsigned char iv[8]; */
 
 	
 	int  data_enc;		/* is the data encrypted */
@@ -190,9 +202,38 @@ typedef struct pem_ctx_st
  * IMPLEMENT_PEM_rw(...) or IMPLEMENT_PEM_rw_cb(...)
  */
 
+#ifdef OPENSSL_NO_FP_API
+
 #define IMPLEMENT_PEM_read_fp(name, type, str, asn1) /**/
 #define IMPLEMENT_PEM_write_fp(name, type, str, asn1) /**/
 #define IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1) /**/
+
+#else
+
+#define IMPLEMENT_PEM_read_fp(name, type, str, asn1) \
+type *PEM_read_##name(FILE *fp, type **x, pem_password_cb *cb, void *u)\
+{ \
+return((type *)PEM_ASN1_read((char *(*)())d2i_##asn1, str,fp,(char **)x,\
+	cb,u)); \
+} \
+
+#define IMPLEMENT_PEM_write_fp(name, type, str, asn1) \
+int PEM_write_##name(FILE *fp, type *x) \
+{ \
+return(PEM_ASN1_write((int (*)())i2d_##asn1,str,fp, (char *)x, \
+							 NULL,NULL,0,NULL,NULL)); \
+} 
+
+#define IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1) \
+int PEM_write_##name(FILE *fp, type *x, const EVP_CIPHER *enc, \
+	     unsigned char *kstr, int klen, pem_password_cb *cb, \
+		  void *u) \
+	{ \
+	return(PEM_ASN1_write((int (*)())i2d_##asn1,str,fp, \
+		(char *)x,enc,kstr,klen,cb,u)); \
+	}
+
+#endif
 
 #define IMPLEMENT_PEM_read_bio(name, type, str, asn1) \
 type *PEM_read_bio_##name(BIO *bp, type **x, pem_password_cb *cb, void *u)\
@@ -238,10 +279,27 @@ int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 
 /* These are the same except they are for the declarations */
 
+#if defined(OPENSSL_SYS_WIN16) || defined(OPENSSL_NO_FP_API)
+
 #define DECLARE_PEM_read_fp(name, type) /**/
 #define DECLARE_PEM_write_fp(name, type) /**/
 #define DECLARE_PEM_write_cb_fp(name, type) /**/
 
+#else
+
+#define DECLARE_PEM_read_fp(name, type) \
+	type *PEM_read_##name(FILE *fp, type **x, pem_password_cb *cb, void *u);
+
+#define DECLARE_PEM_write_fp(name, type) \
+	int PEM_write_##name(FILE *fp, type *x);
+
+#define DECLARE_PEM_write_cb_fp(name, type) \
+	int PEM_write_##name(FILE *fp, type *x, const EVP_CIPHER *enc, \
+	     unsigned char *kstr, int klen, pem_password_cb *cb, void *u);
+
+#endif
+
+#ifndef OPENSSL_NO_BIO
 #define DECLARE_PEM_read_bio(name, type) \
 	type *PEM_read_bio_##name(BIO *bp, type **x, pem_password_cb *cb, void *u);
 
@@ -251,6 +309,14 @@ int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 #define DECLARE_PEM_write_cb_bio(name, type) \
 	int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 	     unsigned char *kstr, int klen, pem_password_cb *cb, void *u);
+
+#else
+
+#define DECLARE_PEM_read_bio(name, type) /**/
+#define DECLARE_PEM_write_bio(name, type) /**/
+#define DECLARE_PEM_write_cb_bio(name, type) /**/
+
+#endif
 
 #define DECLARE_PEM_write(name, type) \
 	DECLARE_PEM_write_bio(name, type) \
@@ -272,8 +338,292 @@ int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 	DECLARE_PEM_read(name, type) \
 	DECLARE_PEM_write_cb(name, type)
 
+#ifdef SSLEAY_MACROS
+
+#define PEM_write_SSL_SESSION(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_SSL_SESSION, \
+			PEM_STRING_SSL_SESSION,fp, (char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_X509(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_X509,PEM_STRING_X509,fp, \
+			(char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_X509_REQ(fp,x) PEM_ASN1_write( \
+		(int (*)())i2d_X509_REQ,PEM_STRING_X509_REQ,fp,(char *)x, \
+			NULL,NULL,0,NULL,NULL)
+#define PEM_write_X509_CRL(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_X509_CRL,PEM_STRING_X509_CRL, \
+			fp,(char *)x, NULL,NULL,0,NULL,NULL)
+#define	PEM_write_RSAPrivateKey(fp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write((int (*)())i2d_RSAPrivateKey,PEM_STRING_RSA,fp,\
+			(char *)x,enc,kstr,klen,cb,u)
+#define	PEM_write_RSAPublicKey(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_RSAPublicKey,\
+			PEM_STRING_RSA_PUBLIC,fp,(char *)x,NULL,NULL,0,NULL,NULL)
+#define	PEM_write_DSAPrivateKey(fp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write((int (*)())i2d_DSAPrivateKey,PEM_STRING_DSA,fp,\
+			(char *)x,enc,kstr,klen,cb,u)
+#define	PEM_write_PrivateKey(bp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write((int (*)())i2d_PrivateKey,\
+		(((x)->type == EVP_PKEY_DSA)?PEM_STRING_DSA:PEM_STRING_RSA),\
+			bp,(char *)x,enc,kstr,klen,cb,u)
+#define PEM_write_PKCS7(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_PKCS7,PEM_STRING_PKCS7,fp, \
+			(char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_DHparams(fp,x) \
+		PEM_ASN1_write((int (*)())i2d_DHparams,PEM_STRING_DHPARAMS,fp,\
+			(char *)x,NULL,NULL,0,NULL,NULL)
+
+#define PEM_write_NETSCAPE_CERT_SEQUENCE(fp,x) \
+                PEM_ASN1_write((int (*)())i2d_NETSCAPE_CERT_SEQUENCE, \
+			PEM_STRING_X509,fp, \
+                        (char *)x, NULL,NULL,0,NULL,NULL)
+
+#define	PEM_read_SSL_SESSION(fp,x,cb,u) (SSL_SESSION *)PEM_ASN1_read( \
+	(char *(*)())d2i_SSL_SESSION,PEM_STRING_SSL_SESSION,fp,(char **)x,cb,u)
+#define	PEM_read_X509(fp,x,cb,u) (X509 *)PEM_ASN1_read( \
+	(char *(*)())d2i_X509,PEM_STRING_X509,fp,(char **)x,cb,u)
+#define	PEM_read_X509_REQ(fp,x,cb,u) (X509_REQ *)PEM_ASN1_read( \
+	(char *(*)())d2i_X509_REQ,PEM_STRING_X509_REQ,fp,(char **)x,cb,u)
+#define	PEM_read_X509_CRL(fp,x,cb,u) (X509_CRL *)PEM_ASN1_read( \
+	(char *(*)())d2i_X509_CRL,PEM_STRING_X509_CRL,fp,(char **)x,cb,u)
+#define	PEM_read_RSAPrivateKey(fp,x,cb,u) (RSA *)PEM_ASN1_read( \
+	(char *(*)())d2i_RSAPrivateKey,PEM_STRING_RSA,fp,(char **)x,cb,u)
+#define	PEM_read_RSAPublicKey(fp,x,cb,u) (RSA *)PEM_ASN1_read( \
+	(char *(*)())d2i_RSAPublicKey,PEM_STRING_RSA_PUBLIC,fp,(char **)x,cb,u)
+#define	PEM_read_DSAPrivateKey(fp,x,cb,u) (DSA *)PEM_ASN1_read( \
+	(char *(*)())d2i_DSAPrivateKey,PEM_STRING_DSA,fp,(char **)x,cb,u)
+#define	PEM_read_PrivateKey(fp,x,cb,u) (EVP_PKEY *)PEM_ASN1_read( \
+	(char *(*)())d2i_PrivateKey,PEM_STRING_EVP_PKEY,fp,(char **)x,cb,u)
+#define	PEM_read_PKCS7(fp,x,cb,u) (PKCS7 *)PEM_ASN1_read( \
+	(char *(*)())d2i_PKCS7,PEM_STRING_PKCS7,fp,(char **)x,cb,u)
+#define	PEM_read_DHparams(fp,x,cb,u) (DH *)PEM_ASN1_read( \
+	(char *(*)())d2i_DHparams,PEM_STRING_DHPARAMS,fp,(char **)x,cb,u)
+
+#define PEM_read_NETSCAPE_CERT_SEQUENCE(fp,x,cb,u) \
+		(NETSCAPE_CERT_SEQUENCE *)PEM_ASN1_read( \
+        (char *(*)())d2i_NETSCAPE_CERT_SEQUENCE,PEM_STRING_X509,fp,\
+							(char **)x,cb,u)
+
+#define PEM_write_bio_SSL_SESSION(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_SSL_SESSION, \
+			PEM_STRING_SSL_SESSION,bp, (char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_bio_X509(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_X509,PEM_STRING_X509,bp, \
+			(char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_bio_X509_REQ(bp,x) PEM_ASN1_write_bio( \
+		(int (*)())i2d_X509_REQ,PEM_STRING_X509_REQ,bp,(char *)x, \
+			NULL,NULL,0,NULL,NULL)
+#define PEM_write_bio_X509_CRL(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_X509_CRL,PEM_STRING_X509_CRL,\
+			bp,(char *)x, NULL,NULL,0,NULL,NULL)
+#define	PEM_write_bio_RSAPrivateKey(bp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write_bio((int (*)())i2d_RSAPrivateKey,PEM_STRING_RSA,\
+			bp,(char *)x,enc,kstr,klen,cb,u)
+#define	PEM_write_bio_RSAPublicKey(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_RSAPublicKey, \
+			PEM_STRING_RSA_PUBLIC,\
+			bp,(char *)x,NULL,NULL,0,NULL,NULL)
+#define	PEM_write_bio_DSAPrivateKey(bp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write_bio((int (*)())i2d_DSAPrivateKey,PEM_STRING_DSA,\
+			bp,(char *)x,enc,kstr,klen,cb,u)
+#define	PEM_write_bio_PrivateKey(bp,x,enc,kstr,klen,cb,u) \
+		PEM_ASN1_write_bio((int (*)())i2d_PrivateKey,\
+		(((x)->type == EVP_PKEY_DSA)?PEM_STRING_DSA:PEM_STRING_RSA),\
+			bp,(char *)x,enc,kstr,klen,cb,u)
+#define PEM_write_bio_PKCS7(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_PKCS7,PEM_STRING_PKCS7,bp, \
+			(char *)x, NULL,NULL,0,NULL,NULL)
+#define PEM_write_bio_DHparams(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_DHparams,PEM_STRING_DHPARAMS,\
+			bp,(char *)x,NULL,NULL,0,NULL,NULL)
+#define PEM_write_bio_DSAparams(bp,x) \
+		PEM_ASN1_write_bio((int (*)())i2d_DSAparams, \
+			PEM_STRING_DSAPARAMS,bp,(char *)x,NULL,NULL,0,NULL,NULL)
+
+#define PEM_write_bio_NETSCAPE_CERT_SEQUENCE(bp,x) \
+                PEM_ASN1_write_bio((int (*)())i2d_NETSCAPE_CERT_SEQUENCE, \
+			PEM_STRING_X509,bp, \
+                        (char *)x, NULL,NULL,0,NULL,NULL)
+
+#define	PEM_read_bio_SSL_SESSION(bp,x,cb,u) (SSL_SESSION *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_SSL_SESSION,PEM_STRING_SSL_SESSION,bp,(char **)x,cb,u)
+#define	PEM_read_bio_X509(bp,x,cb,u) (X509 *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_X509,PEM_STRING_X509,bp,(char **)x,cb,u)
+#define	PEM_read_bio_X509_REQ(bp,x,cb,u) (X509_REQ *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_X509_REQ,PEM_STRING_X509_REQ,bp,(char **)x,cb,u)
+#define	PEM_read_bio_X509_CRL(bp,x,cb,u) (X509_CRL *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_X509_CRL,PEM_STRING_X509_CRL,bp,(char **)x,cb,u)
+#define	PEM_read_bio_RSAPrivateKey(bp,x,cb,u) (RSA *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_RSAPrivateKey,PEM_STRING_RSA,bp,(char **)x,cb,u)
+#define	PEM_read_bio_RSAPublicKey(bp,x,cb,u) (RSA *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_RSAPublicKey,PEM_STRING_RSA_PUBLIC,bp,(char **)x,cb,u)
+#define	PEM_read_bio_DSAPrivateKey(bp,x,cb,u) (DSA *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_DSAPrivateKey,PEM_STRING_DSA,bp,(char **)x,cb,u)
+#define	PEM_read_bio_PrivateKey(bp,x,cb,u) (EVP_PKEY *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_PrivateKey,PEM_STRING_EVP_PKEY,bp,(char **)x,cb,u)
+
+#define	PEM_read_bio_PKCS7(bp,x,cb,u) (PKCS7 *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_PKCS7,PEM_STRING_PKCS7,bp,(char **)x,cb,u)
+#define	PEM_read_bio_DHparams(bp,x,cb,u) (DH *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_DHparams,PEM_STRING_DHPARAMS,bp,(char **)x,cb,u)
+#define	PEM_read_bio_DSAparams(bp,x,cb,u) (DSA *)PEM_ASN1_read_bio( \
+	(char *(*)())d2i_DSAparams,PEM_STRING_DSAPARAMS,bp,(char **)x,cb,u)
+
+#define PEM_read_bio_NETSCAPE_CERT_SEQUENCE(bp,x,cb,u) \
+		(NETSCAPE_CERT_SEQUENCE *)PEM_ASN1_read_bio( \
+        (char *(*)())d2i_NETSCAPE_CERT_SEQUENCE,PEM_STRING_X509,bp,\
+							(char **)x,cb,u)
+
+#endif
+
+#if 1
 /* "userdata": new with OpenSSL 0.9.4 */
 typedef int pem_password_cb(char *buf, int size, int rwflag, void *userdata);
+#else
+/* OpenSSL 0.9.3, 0.9.3a */
+typedef int pem_password_cb(char *buf, int size, int rwflag);
+#endif
+
+int	PEM_get_EVP_CIPHER_INFO(char *header, EVP_CIPHER_INFO *cipher);
+int	PEM_do_header (EVP_CIPHER_INFO *cipher, unsigned char *data,long *len,
+	pem_password_cb *callback,void *u);
+
+#ifndef OPENSSL_NO_BIO
+int	PEM_read_bio(BIO *bp, char **name, char **header,
+		unsigned char **data,long *len);
+int	PEM_write_bio(BIO *bp,const char *name,char *hdr,unsigned char *data,
+		long len);
+int PEM_bytes_read_bio(unsigned char **pdata, long *plen, char **pnm, const char *name, BIO *bp,
+	     pem_password_cb *cb, void *u);
+char *	PEM_ASN1_read_bio(char *(*d2i)(),const char *name,BIO *bp,char **x,
+		pem_password_cb *cb, void *u);
+int	PEM_ASN1_write_bio(int (*i2d)(),const char *name,BIO *bp,char *x,
+			   const EVP_CIPHER *enc,unsigned char *kstr,int klen,
+			   pem_password_cb *cb, void *u);
+STACK_OF(X509_INFO) *	PEM_X509_INFO_read_bio(BIO *bp, STACK_OF(X509_INFO) *sk, pem_password_cb *cb, void *u);
+int	PEM_X509_INFO_write_bio(BIO *bp,X509_INFO *xi, EVP_CIPHER *enc,
+		unsigned char *kstr, int klen, pem_password_cb *cd, void *u);
+#endif
+
+#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_SYS_WIN16
+int	PEM_read(FILE *fp, char **name, char **header,
+		unsigned char **data,long *len);
+int	PEM_write(FILE *fp,char *name,char *hdr,unsigned char *data,long len);
+char *	PEM_ASN1_read(char *(*d2i)(),const char *name,FILE *fp,char **x,
+	pem_password_cb *cb, void *u);
+int	PEM_ASN1_write(int (*i2d)(),const char *name,FILE *fp,char *x,
+		       const EVP_CIPHER *enc,unsigned char *kstr,int klen,
+		       pem_password_cb *callback, void *u);
+STACK_OF(X509_INFO) *	PEM_X509_INFO_read(FILE *fp, STACK_OF(X509_INFO) *sk,
+	pem_password_cb *cb, void *u);
+#endif
+#endif /* !OPENSSL_NO_FP_API */
+
+int	PEM_SealInit(PEM_ENCODE_SEAL_CTX *ctx, EVP_CIPHER *type,
+		EVP_MD *md_type, unsigned char **ek, int *ekl,
+		unsigned char *iv, EVP_PKEY **pubk, int npubk);
+void	PEM_SealUpdate(PEM_ENCODE_SEAL_CTX *ctx, unsigned char *out, int *outl,
+		unsigned char *in, int inl);
+int	PEM_SealFinal(PEM_ENCODE_SEAL_CTX *ctx, unsigned char *sig,int *sigl,
+		unsigned char *out, int *outl, EVP_PKEY *priv);
+
+void    PEM_SignInit(EVP_MD_CTX *ctx, EVP_MD *type);
+void    PEM_SignUpdate(EVP_MD_CTX *ctx,unsigned char *d,unsigned int cnt);
+int	PEM_SignFinal(EVP_MD_CTX *ctx, unsigned char *sigret,
+		unsigned int *siglen, EVP_PKEY *pkey);
+
+int	PEM_def_callback(char *buf, int num, int w, void *key);
+void	PEM_proc_type(char *buf, int type);
+void	PEM_dek_info(char *buf, const char *type, int len, char *str);
+
+#ifndef SSLEAY_MACROS
+
+#include <amissl/symhacks.h>
+
+DECLARE_PEM_rw(X509, X509)
+
+DECLARE_PEM_rw(X509_AUX, X509)
+
+DECLARE_PEM_rw(X509_REQ, X509_REQ)
+DECLARE_PEM_write(X509_REQ_NEW, X509_REQ)
+
+DECLARE_PEM_rw(X509_CRL, X509_CRL)
+
+DECLARE_PEM_rw(PKCS7, PKCS7)
+
+DECLARE_PEM_rw(NETSCAPE_CERT_SEQUENCE, NETSCAPE_CERT_SEQUENCE)
+
+DECLARE_PEM_rw(PKCS8, X509_SIG)
+
+DECLARE_PEM_rw(PKCS8_PRIV_KEY_INFO, PKCS8_PRIV_KEY_INFO)
+
+#ifndef OPENSSL_NO_RSA
+
+DECLARE_PEM_rw_cb(RSAPrivateKey, RSA)
+
+DECLARE_PEM_rw(RSAPublicKey, RSA)
+DECLARE_PEM_rw(RSA_PUBKEY, RSA)
+
+#endif
+
+#ifndef OPENSSL_NO_DSA
+
+DECLARE_PEM_rw_cb(DSAPrivateKey, DSA)
+
+DECLARE_PEM_rw(DSA_PUBKEY, DSA)
+
+DECLARE_PEM_rw(DSAparams, DSA)
+
+#endif
+
+#ifndef OPENSSL_NO_DH
+
+DECLARE_PEM_rw(DHparams, DH)
+
+#endif
+
+DECLARE_PEM_rw_cb(PrivateKey, EVP_PKEY)
+
+DECLARE_PEM_rw(PUBKEY, EVP_PKEY)
+
+int PEM_write_bio_PKCS8PrivateKey_nid(BIO *bp, EVP_PKEY *x, int nid,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+int PEM_write_bio_PKCS8PrivateKey(BIO *, EVP_PKEY *, const EVP_CIPHER *,
+                                  char *, int, pem_password_cb *, void *);
+int i2d_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, EVP_PKEY *x, int nid,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+
+#ifndef OPENSSL_NO_FP_API
+int i2d_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+int i2d_PKCS8PrivateKey_nid_fp(FILE *fp, EVP_PKEY *x, int nid,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+int PEM_write_PKCS8PrivateKey_nid(FILE *fp, EVP_PKEY *x, int nid,
+				  char *kstr, int klen,
+				  pem_password_cb *cb, void *u);
+
+EVP_PKEY *d2i_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+
+int PEM_write_PKCS8PrivateKey(FILE *fp,EVP_PKEY *x,const EVP_CIPHER *enc,
+			      char *kstr,int klen, pem_password_cb *cd, void *u);
+#endif /* !OPENSSL_NO_FP_API */
+
+#endif /* SSLEAY_MACROS */
+
+
+/* BEGIN ERROR CODES */
+/* The following lines are auto generated by the script mkerr.pl. Any changes
+ * made after this point may be overwritten when the script is next run.
+ */
+void ERR_load_PEM_strings(void);
 
 /* Error codes for the PEM functions. */
 
