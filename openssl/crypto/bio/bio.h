@@ -68,13 +68,13 @@
 #include <openssl/e_os2.h>
 
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 /* These are the 'types' of BIOs */
 #define BIO_TYPE_NONE		0
@@ -405,13 +405,15 @@ typedef struct bio_f_buffer_ctx_struct
 #define BIO_set_fd(b,fd,c)	BIO_int_ctrl(b,BIO_C_SET_FD,c,fd)
 #define BIO_get_fd(b,c)		BIO_ctrl(b,BIO_C_GET_FD,0,(char *)c)
 
-#ifndef AMISSL
+#ifndef OPENSSL_NO_FP_API
 #define BIO_set_fp(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#else
+#endif /* !OPENSSL_NO_FP_API */
+
+#ifdef AMISSL
 #define BIO_set_fp_amiga(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp_amiga(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#endif
+#endif /* AMISSL */
 
 #define BIO_seek(b,ofs)	(int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
 #define BIO_tell(b)	(int)BIO_ctrl(b,BIO_C_FILE_TELL,0,NULL)
@@ -507,7 +509,7 @@ int BIO_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
 unsigned long BIO_number_read(BIO *bio);
 unsigned long BIO_number_written(BIO *bio);
 
-# ifndef OPENSSL_NO_FP_API
+# if !defined(OPENSSL_NO_FP_API) || defined(AMISSL)
 #  if defined(OPENSSL_SYS_WIN16) && defined(_WINDLL)
 BIO_METHOD *BIO_s_file_internal(void);
 BIO *BIO_new_file_internal(char *filename, char *mode);
@@ -518,17 +520,18 @@ BIO *BIO_new_fp_internal(FILE *stream, int close_flag);
 #  else /* defined(OPENSSL_SYS_WIN16) && defined(_WINDLL) */
 BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
-#   ifdef AMIGA
+#   if !defined(AMISSL) || defined(AMISSL_COMPILE)
+BIO *BIO_new_fp(FILE *stream, int close_flag);
+#   endif /* !defined(AMISSL) || defined(AMISSL_COMPILE) */
+#   ifdef AMISSL
 #    include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
-#   else
-BIO *BIO_new_fp(FILE *stream, int close_flag);
-#   endif
+#   endif /* AMISSL */
 #   define BIO_s_file_internal		BIO_s_file
 #   define BIO_new_file_internal	BIO_new_file
 #   define BIO_new_fp_internal		BIO_s_file
 #  endif
-# endif /* OPENSSL_FP_API */
+# endif /* !OPENSSL_FP_API || AMISSL */
 BIO *	BIO_new(BIO_METHOD *type);
 int	BIO_set(BIO *a,BIO_METHOD *type);
 int	BIO_free(BIO *a);
