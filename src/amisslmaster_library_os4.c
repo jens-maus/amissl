@@ -2,6 +2,7 @@
 #include <proto/exec.h>
 #include <dos/dos.h>
 //#include <proto/amisslmaster.h>
+#include <internal/amissl_compiler.h>
 #include <stdarg.h>
 
 #define kprintf IExec->DebugPrintF
@@ -26,8 +27,8 @@ struct AmiSSLMasterIFace;
 
 extern const struct TagItem libCreateTags[];
 
-__attribute__((force_no_baserel)) struct Library *ExecBase;
-__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+struct Library * AMISSL_COMMON_DATA ExecBase;
+struct ExecIFace * AMISSL_COMMON_DATA IExec;
 
 int __UserLibInit(struct AmiSSLMasterIFace *Self);
 

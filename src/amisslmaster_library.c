@@ -21,15 +21,13 @@
 #ifdef __amigaos4__
 #define __IFACE_OR_BASE	struct AmiSSLMasterIFace *Self
 struct AmiSSLMasterIFace;
-#undef SAVEDS
-#define SAVEDS __attribute__ ((baserel_restore))
 #else
 #define __IFACE_OR_BASE	struct Library *Self
 #endif
 
 #ifdef __amigaos4__
-__attribute__((force_no_baserel)) struct Library *ExecBase;
-__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+struct Library * AMISSL_COMMON_DATA ExecBase;
+struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct ExecBase *SysBase;
 #endif
@@ -132,7 +130,7 @@ static void CloseLib(struct Library *LibBase)
 	}
 }
 
-LONG ASM SAVEDS InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG AllowUserStructs))
+LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG AllowUserStructs))
 {
 	LibAPIVersion = APIVersion;
 	LibAllowUserStructs = AllowUserStructs;
@@ -140,7 +138,7 @@ LONG ASM SAVEDS InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersi
 	return(TRUE);
 }
 
-struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
+struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
@@ -197,7 +195,7 @@ struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 	return AmiSSLBase;
 }
 
-void ASM SAVEDS CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
@@ -221,7 +219,7 @@ void ASM SAVEDS CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
 	SB_ReleaseSemaphore(&AmiSSLMasterLock);
 }
 
-struct Library * ASM SAVEDS OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher))
+struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher))
 {
 	struct Library *result = NULL;
 
@@ -298,14 +296,14 @@ struct Library * ASM SAVEDS OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, L
 	return result;
 }
 
-void ASM SAVEDS CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
+void AMISSL_LIB_ENTRY CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	CloseLib(LibBase);
 	SB_ReleaseSemaphore(&AmiSSLMasterLock);
 }
 
-void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
 	kprintf("UserLibCleanup called\n");
 
@@ -332,12 +330,12 @@ void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 	}
 }
 
-void ASM SAVEDS __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 {
 	kprintf("UserExpungeInit called\n");
 }
 
-int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
+int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	kprintf("UserLibInit called\n");
 #ifdef __amigaos4__

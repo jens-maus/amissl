@@ -2532,7 +2532,7 @@ extern unsigned char *      VARARGS68K _AmiSSL_SHA1(struct AmiSSLIFace *, const 
 extern void                 VARARGS68K _AmiSSL_SHA1_Transform(struct AmiSSLIFace *, SHA_CTX * c, const unsigned char * data);
 
 
-AMISSL_COMMON_DATA static void *const main_vectors[] = {
+static void *const AMISSL_COMMON_DATA main_vectors[] = {
 	(void *)_AmiSSL_Obtain,
 	(void *)_AmiSSL_Release,
 	(void *)NULL,

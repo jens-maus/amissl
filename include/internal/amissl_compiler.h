@@ -8,8 +8,11 @@
 #endif /* !AMIGA_COMPILER_H */
 
 #define AMISSL_COMMON_DATA __attribute__((force_no_baserel))
+#define AMISSL_LIB_ENTRY __attribute__((baserel_restore))
 
 #else /* !__amigaos4__ */
+
+#define AMISSL_LIB_ENTRY __asm __saveds
 
 #ifndef ASM
 #define ASM __asm

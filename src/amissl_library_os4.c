@@ -27,8 +27,8 @@ struct AmiSSLIFace;
 
 extern const struct TagItem libCreateTags[];
 
-__attribute__((force_no_baserel)) struct Library *ExecBase;
-__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+struct Library * AMISSL_COMMON_DATA ExecBase;
+struct ExecIFace * AMISSL_COMMON_DATA IExec;
 
 struct Library *DOSBase;
 struct DOSIFace *IDOS;
