@@ -1,15 +1,20 @@
 ##base _AmiSSLBase
 ##public
 ##bias 30
-##private
 InternalInitAmiSSL(amisslinit)(a0)
-##public
 InitAmiSSLA(tagList)(a0)
 *tagcall-A
 CleanupAmiSSLA(tagList)(a0)
 *tagcall-A
 IsCipherAvailable(cipher)(d0)
-##bias 102
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
+DummyFunc()()
 ASN1_TYPE_new()()
 ASN1_TYPE_free(a)(a0)
 d2i_ASN1_TYPE(a,in,len)(a0,a1,d0)

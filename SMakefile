@@ -42,6 +42,7 @@ DEFINE _RAND_add_internal=_RAND_add
 DEFINE _BIO_new_fp=@__dummy
 DEFINE _closelog=@__dummy
 DEFINE _openlog=@__dummy
+DEFINE _DummyFunc=@__dummy
 LIBFD FD/amissl_lib.fd
 LIBPREFIX __AmiSSL_
 LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"

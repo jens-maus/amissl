@@ -4,6 +4,11 @@ cd openssl
 
 mkdir -p OS4/{tmp,out}
 
+if [ ! -f crypto/opensslconf.h ]
+then
+	perl Configure OS4
+fi
+
 if [ ! -f MINFO ]
 then
 	make files

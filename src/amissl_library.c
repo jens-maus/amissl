@@ -54,7 +54,6 @@ struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
 struct LocaleBase *LocaleBase;
 struct Library *UtilityBase;
-struct DosLibrary *DOSBase;
 #endif
 
 struct SignalSemaphore __mem_cs;

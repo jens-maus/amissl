@@ -4,6 +4,11 @@ cd openssl
 
 mkdir -p {680{0,6}0,68020-40}/{tmp,out}
 
+if [ ! -f crypto/opensslconf.h ]
+then
+	perl Configure SC
+fi
+
 if [ ! -f MINFO ]
 then
 	make files

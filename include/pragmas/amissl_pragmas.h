@@ -1,6 +1,7 @@
 #ifndef PRAGMAS_AMISSL_PRAGMAS_H
 #define PRAGMAS_AMISSL_PRAGMAS_H
 
+#pragma libcall AmiSSLBase InternalInitAmiSSL 01e 801
 #pragma libcall AmiSSLBase InitAmiSSLA 024 801
 #pragma libcall AmiSSLBase CleanupAmiSSLA 02a 801
 #pragma libcall AmiSSLBase IsCipherAvailable 030 001
