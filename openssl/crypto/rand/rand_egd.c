@@ -110,11 +110,9 @@ int RAND_egd_bytes(const char *path,int bytes)
 	}
 #else
 #include <openssl/opensslconf.h>
-#define USE_SOCKETS
-#include "cryptlib.h"
-//#include OPENSSL_UNISTD
-//#include <sys/types.h>
-//#include <sys/socket.h>
+#include OPENSSL_UNISTD
+#include <sys/types.h>
+#include <sys/socket.h>
 #ifndef NO_SYS_UN_H
 # ifdef OPENSSL_SYS_VXWORKS
 #   include <streams/un.h>
