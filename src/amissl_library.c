@@ -12,7 +12,7 @@
 
 #include <dos/var.h>
 #include <utility/tagitem.h>
-
+#include <exec/memory.h>
 
 #undef __USE_INLINE__
 #include <openssl/crypto.h>
