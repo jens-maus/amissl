@@ -4,8 +4,8 @@
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
 #endif
-#ifndef AMISSL_AMISSL_H
-#include <amissl/amissl.h>
+#ifndef OPENSSL_ALL_H
+#include <amissl/all.h>
 #endif
 
 /****************************************************************************/

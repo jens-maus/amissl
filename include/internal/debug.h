@@ -5,7 +5,7 @@
 #include <interfaces/exec.h>
 extern struct ExecIFace * __attribute__((force_no_baserel)) IExec;
 #ifdef __USE_INLINE__
-#define kprintf (DebugPrintF)
+#define kprintf DebugPrintF
 #define traceline() DebugPrintF("%08x %s:%d\n",FindTask(NULL),__FILE__,__LINE__)
 #else
 #define kprintf (IExec->DebugPrintF)

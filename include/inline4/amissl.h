@@ -21,7 +21,7 @@
 #endif
 
 #ifndef AMISSL_AMISSL_H
-#include <amissl/amissl.h>
+#include <amissl/all.h>
 #endif
 
 /* Inline macros for Interface "main" */
