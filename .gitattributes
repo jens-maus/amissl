@@ -1170,6 +1170,7 @@ openssl/crypto/txt_db/txt_db.c eol=lf
 openssl/crypto/txt_db/txt_db.h eol=lf
 openssl/crypto/ui/Makefile eol=lf
 openssl/crypto/ui/ui.h eol=lf
+openssl/crypto/ui/ui_amissl.c eol=lf
 openssl/crypto/ui/ui_compat.c eol=lf
 openssl/crypto/ui/ui_compat.h eol=lf
 openssl/crypto/ui/ui_err.c eol=lf

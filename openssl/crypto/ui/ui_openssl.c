@@ -114,9 +114,8 @@
  * [including the GNU Public Licence.]
  */
 
-#include <openssl/e_os2.h>
-
 #ifndef AMISSL
+#include <openssl/e_os2.h>
 
 #if !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_VMS)
 # ifdef OPENSSL_UNISTD
@@ -143,12 +142,9 @@
 # include <graph.h>
 #endif
 
-#endif /* !AMISSL */
-
 /* 06-Apr-92 Luke Brennan    Support for VMS */
 #include "ui_locl.h"
 #include "cryptlib.h"
-#ifndef AMISSL
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
@@ -675,51 +671,6 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 	return(strlen(buf));
 	}
 #endif
-
 #else /* AMISSL */
-
-/* !?! Temporary functions, just to make this compile cleanly */
-
-static int create_window(UI *ui)
-{
-	return(1);
-}
-
-static int show_window(UI *ui)
-{
-	return(1);
-}
-
-static int read_string(UI *ui, UI_STRING *uis)
-{
-	return(1);
-}
-
-static int write_string(UI *ui, UI_STRING *uis)
-{
-	return(1);
-}
-
-static int close_window(UI *ui)
-{
-	return(1);
-}
-
-static UI_METHOD ui_openssl =
-{
-	"AmiSSL user interface",
-	create_window,
-	write_string,
-	show_window,
-	read_string,
-	close_window,
-	NULL
-};
-
-/* The method with all the built-in thingies */
-UI_METHOD *UI_OpenSSL(void)
-{
-	return(&ui_openssl);
-}
-
+#include "ui_amissl.c"
 #endif /* !AMISSL */

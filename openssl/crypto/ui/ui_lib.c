@@ -417,9 +417,15 @@ char *UI_construct_prompt(UI *ui, const char *object_desc,
 			object_desc, object_name);
 	else
 		{
+#ifndef AMISSL
 		char prompt1[] = "Enter ";
 		char prompt2[] = " for ";
 		char prompt3[] = ":";
+#else
+		char prompt1[] = "Please enter ";
+		char prompt2[] = " for ";
+		char prompt3[] = "";
+#endif
 		int len = 0;
 
 		if (object_desc == NULL)
