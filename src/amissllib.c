@@ -15,7 +15,7 @@ static void report_error(const char *message)
 	if (DOSBase = (struct DOSBase *)OpenLibrary("dos.library", 36))
 	{
 		struct Process *proc = (struct Process *)FindTask(NULL);
-		BOOL from_wb = process->pr_CLI == NULL;
+		BOOL from_wb = proc->pr_CLI == NULL;
 
 		if (!from_wb)
 			fh = proc->pr_CES ? proc->pr_CES : Output();
@@ -30,7 +30,7 @@ static void report_error(const char *message)
 				Close(fh);
 		}
 
-		CloseLibrary(DOSBase);
+		CloseLibrary((struct Library *)DOSBase);
 	}
 }
 
@@ -45,9 +45,9 @@ int __stdargs _STI_250_openamissl(void)
 
 	if (!AmiSSLMasterBase)
 	{
-		if (!(amisslmaster_base = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", VERSION)))
+		if (!(amisslmaster_base = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
 		{
-			report_error("Couldn't open amisslmaster.library v" MKSTR(VERSION) "\n");
+			report_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "\n");
 			ret = 1;
 		}
 		else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))

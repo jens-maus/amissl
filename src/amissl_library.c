@@ -25,10 +25,13 @@
 #include <libraries/amisslmaster.h>
 
 #include <clib/amissl_protos.h>
+#define NO_MTCP_PROTOS
 #ifdef __GNUC__
 #include "../libcmt/libcmt.h"
+#include "../libcmt/multitcp.h"
 #else
 #include "/libcmt/libcmt.h"
+#include "/libcmt/multitcp.h"
 #endif
 #include "amisslinit.h"
 
@@ -249,7 +252,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 		kprintf("SocketBase: %08lx\n",state->SocketBase);
 		kprintf("ISocket: %08lx\n",state->ISocket);
 #else
-		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, (int)NULL, tagList);
+		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, TCPIP_AmiTCP, tagList);
 		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
 

@@ -17,12 +17,13 @@ BOOL Init(void);
 void Cleanup(void);
 int ConnectToServer(char *, short, char *, short);
 
-struct Library *AmiSSLMasterBase;
-struct Library *AmiSSLBase;
+struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
 
 #ifdef __amigaos4__
+int AmiSSLDisableAutoInit = 1;
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct AmiSSLIFace *IAmiSSL;
+struct SocketIFace *ISocket;
 #else /* !__amigaos4__ */
 static BPTR ErrorOutput(void)
 {
@@ -182,21 +183,28 @@ int main(int argc, char *argv[])
 	return(is_ok ? RETURN_OK : RETURN_ERROR);
 }
 
-/* Open and initialize AmiSSL. SocketBase should be initialized either by
- * startup code or by the program itself.
- */
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+/* Open and initialize AmiSSL */
 BOOL Init(void)
 {
 	BOOL is_ok = FALSE;
 
-	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 3)))
-		Printf("Couldn't open amisslmaster.library v3!\n");
+	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
+		Printf("Couldn't open bsdsocket.library v4!\n");
+#ifdef __amigaos4__
+	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
+		Printf("Couldn't get Socket interface!\n");
+#endif /* __amigaos4__ */
+	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
+		Printf("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
 		Printf("Couldn't get AmiSSLMaster interface!\n");
 #endif /* __amigaos4__ */
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-		Printf("Couldn't init AmiSSLMaster!\n");
+		Printf("Couldn't initialize amisslmaster.library!\n");
 	else if (!(AmiSSLBase = OpenAmiSSL()))
 		Printf("Couldn't open AmiSSL!\n");
 #ifdef __amigaos4__
@@ -206,10 +214,10 @@ BOOL Init(void)
 #ifdef __amigaos4__
 	else if (InitAmiSSL(AmiSSL_ISocket, ISocket,
 	                    TAG_DONE) != 0)
-#else
+#else /* __amigaos4__ */
 	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase,
 	                    TAG_DONE) != 0)
-#endif
+#endif /* __amigaos4__ */
 		Printf("Couldn't initialize AmiSSL!\n");
 	else
 		is_ok = TRUE;
@@ -227,32 +235,35 @@ void Cleanup(void)
 	if (AmiSSLBase)
 	{
 #ifdef __amigaos4__
-		if(IAmiSSL)
+		if (IAmiSSL)
 		{
 			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
 			IAmiSSL = NULL;
 		}
-#else
+#else /* __amigaos4__ */
 		CleanupAmiSSL(TAG_DONE);
-#endif
+#endif /* __amigaos4__ */
 
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
 
-	if (AmiSSLMasterBase)
-	{
 #ifdef __amigaos4__
-		if(IAmiSSLMaster)
-		{
-			DropInterface((struct Interface *)IAmiSSLMaster);
-			IAmiSSLMaster = NULL;
-		}
-#endif
-		CloseLibrary(AmiSSLMasterBase);
-		AmiSSLMasterBase = NULL;
-	}
+	DropInterface((struct Interface *)IAmiSSLMaster);
+	IAmiSSLMaster = NULL;
+#endif /* __amigaos4__ */
+
+	CloseLibrary(AmiSSLMasterBase);
+	AmiSSLMasterBase = NULL;
+
+#ifdef __amigaos4__
+	DropInterface(ISocket);
+	ISocket = NULL;
+#endif /* __amigaos4__ */
+
+	CloseLibrary(SocketBase);
+	SocketBase = NULL;
 }
 
 /* Connect to the specified server, either directly or through the specified
