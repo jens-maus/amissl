@@ -410,6 +410,7 @@ typedef struct X509_crl_info_st
 	ASN1_TIME *nextUpdate;
 	STACK_OF(X509_REVOKED) *revoked;
 	STACK_OF(X509_EXTENSION) /* [0] */ *extensions;
+	ASN1_ENCODING enc;
 	} X509_CRL_INFO;
 
 struct X509_crl_st
@@ -810,10 +811,6 @@ X509_REQ *X509_REQ_dup(X509_REQ *req);
 X509_ALGOR *X509_ALGOR_dup(X509_ALGOR *xn);
 X509_NAME *X509_NAME_dup(X509_NAME *xn);
 X509_NAME_ENTRY *X509_NAME_ENTRY_dup(X509_NAME_ENTRY *ne);
-#ifndef OPENSSL_NO_RSA
-RSA *RSAPublicKey_dup(RSA *rsa);
-RSA *RSAPrivateKey_dup(RSA *rsa);
-#endif
 
 #endif /* !SSLEAY_MACROS */
 

@@ -121,6 +121,7 @@ int SSL_library_init(void)
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
+#endif
 #ifndef OPENSSL_NO_MD2
 #ifdef AMISSL
 	if(IsCipherAvailable(CIPHER_MD2))
@@ -143,17 +144,17 @@ int SSL_library_init(void)
 	}
 #endif
 #endif
-#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_RSA)
+#ifndef OPENSSL_NO_SHA
 #ifdef AMISSL
-	if(IsCipherAvailable(CIPHER_SHA) && IsCipherAvailable(CIPHER_RSA))
+	if(IsCipherAvailable(CIPHER_SHA))
 	{
 #endif
 	EVP_add_digest(EVP_sha1()); /* RSA with sha1 */
 	EVP_add_digest_alias(SN_sha1,"ssl3-sha1");
 	EVP_add_digest_alias(SN_sha1WithRSAEncryption,SN_sha1WithRSA);
-#endif
 #ifdef AMISSL
 	}
+#endif
 #endif
 #if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_DSA)
 #ifdef AMISSL

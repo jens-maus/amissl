@@ -109,8 +109,8 @@ struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
-	if (LibAPIVersion == AMISSL_V097c)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097c.library", 2);
+	if (LibAPIVersion == AMISSL_V097e)
+		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2))
@@ -183,7 +183,7 @@ struct Library * ASM SAVEDS OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, L
 
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if (LibAPIVersion == AMISSL_V097c)
+	if (LibAPIVersion == AMISSL_V097e)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{
@@ -263,7 +263,7 @@ void ASM SAVEDS CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Libra
 
 void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
-	if (LibAPIVersion == AMISSL_V097c)
+	if (LibAPIVersion == AMISSL_V097e)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{

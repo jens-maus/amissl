@@ -117,7 +117,7 @@
 #include <openssl/objects.h>
 #include <openssl/evp.h>
 #include <openssl/md5.h>
-#include "cryptlib.h"
+#include <openssl/fips.h>
 
 static SSL_METHOD *ssl3_get_client_method(int ver);
 static int ssl3_client_hello(SSL *s);
@@ -535,7 +535,8 @@ static int ssl3_client_hello(SSL *s)
 		p=s->s3->client_random;
 		Time=time(NULL);			/* Time */
 		l2n(Time,p);
-		RAND_pseudo_bytes(p,SSL3_RANDOM_SIZE-sizeof(Time));
+		if(RAND_pseudo_bytes(p,SSL3_RANDOM_SIZE-sizeof(Time)) <= 0)
+		    goto err;
 
 		/* Do the message type and length last */
 		d=p= &(buf[4]);
@@ -1166,7 +1167,16 @@ static int ssl3_get_key_exchange(SSL *s)
 				EVP_DigestUpdate(&md_ctx,&(s->s3->client_random[0]),SSL3_RANDOM_SIZE);
 				EVP_DigestUpdate(&md_ctx,&(s->s3->server_random[0]),SSL3_RANDOM_SIZE);
 				EVP_DigestUpdate(&md_ctx,param,param_len);
+#ifdef OPENSSL_FIPS
+				if(s->version == TLS1_VERSION && num == 2)
+					FIPS_allow_md5(1);
+#endif
+				
 				EVP_DigestFinal_ex(&md_ctx,q,(unsigned int *)&i);
+#ifdef OPENSSL_FIPS
+				if(s->version == TLS1_VERSION && num == 2)
+					FIPS_allow_md5(1);
+#endif
 				q+=i;
 				j+=i;
 				}
@@ -1947,7 +1957,7 @@ static int ssl3_check_cert_and_algorithm(SSL *s)
 		if (algs & SSL_kRSA)
 			{
 			if (rsa == NULL
-			    || RSA_size(rsa) > SSL_C_EXPORT_PKEYLENGTH(s->s3->tmp.new_cipher))
+			    || RSA_size(rsa)*8 > SSL_C_EXPORT_PKEYLENGTH(s->s3->tmp.new_cipher))
 				{
 				SSLerr(SSL_F_SSL3_CHECK_CERT_AND_ALGORITHM,SSL_R_MISSING_EXPORT_TMP_RSA_KEY);
 				goto f_err;
@@ -1959,7 +1969,7 @@ static int ssl3_check_cert_and_algorithm(SSL *s)
 			if (algs & (SSL_kEDH|SSL_kDHr|SSL_kDHd))
 			    {
 			    if (dh == NULL
-				|| DH_size(dh) > SSL_C_EXPORT_PKEYLENGTH(s->s3->tmp.new_cipher))
+				|| DH_size(dh)*8 > SSL_C_EXPORT_PKEYLENGTH(s->s3->tmp.new_cipher))
 				{
 				SSLerr(SSL_F_SSL3_CHECK_CERT_AND_ALGORITHM,SSL_R_MISSING_EXPORT_TMP_DH_KEY);
 				goto f_err;

@@ -3732,19 +3732,39 @@ const EVP_CIPHER * ASM SAVEDS EVP_des_ede3_ecb_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_des_ede3_ecb());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_des_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_des_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_des_cfb());
+	return(EVP_des_cfb64());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_des_ede_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_des_cfb1_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_des_ede_cfb());
+	return(EVP_des_cfb1());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_des_ede3_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_des_cfb8_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_des_ede3_cfb());
+	return(EVP_des_cfb8());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_des_ede_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_des_ede_cfb64());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_des_ede3_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_des_ede3_cfb64());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_des_ede3_cfb1_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_des_ede3_cfb1());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_des_ede3_cfb8_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_des_ede3_cfb8());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_des_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3797,9 +3817,9 @@ const EVP_CIPHER * ASM SAVEDS EVP_idea_ecb_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_idea_ecb());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_idea_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_idea_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_idea_cfb());
+	return(EVP_idea_cfb64());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_idea_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3832,9 +3852,9 @@ const EVP_CIPHER * ASM SAVEDS EVP_rc2_64_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_rc2_64_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_rc2_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_rc2_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_rc2_cfb());
+	return(EVP_rc2_cfb64());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_rc2_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3852,9 +3872,9 @@ const EVP_CIPHER * ASM SAVEDS EVP_bf_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_bf_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_bf_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_bf_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_bf_cfb());
+	return(EVP_bf_cfb64());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_bf_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3872,9 +3892,9 @@ const EVP_CIPHER * ASM SAVEDS EVP_cast5_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_cast5_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_cast5_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_cast5_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_cast5_cfb());
+	return(EVP_cast5_cfb64());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_cast5_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3892,9 +3912,9 @@ const EVP_CIPHER * ASM SAVEDS EVP_rc5_32_12_16_ecb_AmiSSL(REG(a6, __IFACE_OR_BAS
 	return(EVP_rc5_32_12_16_ecb());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_rc5_32_12_16_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_rc5_32_12_16_cfb64_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_rc5_32_12_16_cfb());
+	return(EVP_rc5_32_12_16_cfb64());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_rc5_32_12_16_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3912,9 +3932,19 @@ const EVP_CIPHER * ASM SAVEDS EVP_aes_128_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_aes_128_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_aes_128_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_aes_128_cfb1_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_aes_128_cfb());
+	return(EVP_aes_128_cfb1());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_128_cfb8_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_128_cfb8());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_128_cfb128_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_128_cfb128());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_aes_128_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3932,9 +3962,19 @@ const EVP_CIPHER * ASM SAVEDS EVP_aes_192_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_aes_192_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_aes_192_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_aes_192_cfb1_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_aes_192_cfb());
+	return(EVP_aes_192_cfb1());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_192_cfb8_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_192_cfb8());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_192_cfb128_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_192_cfb128());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_aes_192_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -3952,9 +3992,19 @@ const EVP_CIPHER * ASM SAVEDS EVP_aes_256_cbc_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(EVP_aes_256_cbc());
 }
 
-const EVP_CIPHER * ASM SAVEDS EVP_aes_256_cfb_AmiSSL(REG(a6, __IFACE_OR_BASE))
+const EVP_CIPHER * ASM SAVEDS EVP_aes_256_cfb1_AmiSSL(REG(a6, __IFACE_OR_BASE))
 {
-	return(EVP_aes_256_cfb());
+	return(EVP_aes_256_cfb1());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_256_cfb8_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_256_cfb8());
+}
+
+const EVP_CIPHER * ASM SAVEDS EVP_aes_256_cfb128_AmiSSL(REG(a6, __IFACE_OR_BASE))
+{
+	return(EVP_aes_256_cfb128());
 }
 
 const EVP_CIPHER * ASM SAVEDS EVP_aes_256_ofb_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -7406,14 +7456,14 @@ const char * ASM SAVEDS SSL_alert_desc_string_AmiSSL(REG(a6, __IFACE_OR_BASE), R
 	return(SSL_alert_desc_string(value));
 }
 
-void ASM SAVEDS SSL_set_client_CA_list_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(a1, STACK_OF(X509_NAME) *list))
+void ASM SAVEDS SSL_set_client_CA_list_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(a1, STACK_OF(X509_NAME) *name_list))
 {
-	SSL_set_client_CA_list(s, list);
+	SSL_set_client_CA_list(s, name_list);
 }
 
-void ASM SAVEDS SSL_CTX_set_client_CA_list_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx), REG(a1, STACK_OF(X509_NAME) *list))
+void ASM SAVEDS SSL_CTX_set_client_CA_list_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx), REG(a1, STACK_OF(X509_NAME) *name_list))
 {
-	SSL_CTX_set_client_CA_list(ctx, list);
+	SSL_CTX_set_client_CA_list(ctx, name_list);
 }
 
 STACK_OF(X509_NAME) * ASM SAVEDS SSL_get_client_CA_list_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
@@ -7739,6 +7789,11 @@ STACK * ASM SAVEDS sk_dup_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, STACK *st))
 void ASM SAVEDS sk_sort_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, STACK *st))
 {
 	sk_sort(st);
+}
+
+int ASM SAVEDS sk_is_sorted_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const STACK *st))
+{
+	return(sk_is_sorted(st));
 }
 
 char * ASM SAVEDS ms_time_new_AmiSSL(REG(a6, __IFACE_OR_BASE))
@@ -11146,6 +11201,21 @@ void ASM SAVEDS AES_cfb128_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, cons
 	AES_cfb128_encrypt(in, out, length, key, ivec, num, enc);
 }
 
+void ASM SAVEDS AES_cfb1_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, const unsigned long length), REG(a2, const AES_KEY *key), REG(a3, unsigned char *ivec), REG(d1, int *num), REG(d2, const int enc))
+{
+	AES_cfb1_encrypt(in, out, length, key, ivec, num, enc);
+}
+
+void ASM SAVEDS AES_cfb8_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, const unsigned long length), REG(a2, const AES_KEY *key), REG(a3, unsigned char *ivec), REG(d1, int *num), REG(d2, const int enc))
+{
+	AES_cfb8_encrypt(in, out, length, key, ivec, num, enc);
+}
+
+void ASM SAVEDS AES_cfbr_encrypt_block_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, const int nbits), REG(a2, const AES_KEY *key), REG(a3, unsigned char *ivec), REG(d1, const int enc))
+{
+	AES_cfbr_encrypt_block(in, out, nbits, key, ivec, enc);
+}
+
 void ASM SAVEDS AES_ofb128_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, const unsigned long length), REG(a2, const AES_KEY *key), REG(a3, unsigned char *ivec), REG(d1, int *num))
 {
 	AES_ofb128_encrypt(in, out, length, key, ivec, num);
@@ -11246,7 +11316,7 @@ const char * ASM SAVEDS DES_options_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(DES_options());
 }
 
-void ASM SAVEDS DES_ecb3_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const_DES_cblock *input), REG(a1, DES_cblock *output), REG(a2, DES_key_schedule *ks1), REG(a3, DES_key_schedule *ks2), REG(d0, DES_key_schedule *ks3), REG(d1, int enc))
+void ASM SAVEDS DES_ecb3_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *input), REG(a1, unsigned char *output), REG(a2, DES_key_schedule *ks1), REG(a3, DES_key_schedule *ks2), REG(d0, DES_key_schedule *ks3), REG(d1, int enc))
 {
 	DES_ecb3_encrypt(input, output, ks1, ks2, ks3, enc);
 }
@@ -11314,6 +11384,11 @@ void ASM SAVEDS DES_ede3_cbcm_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, c
 void ASM SAVEDS DES_ede3_cfb64_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, long length), REG(a2, DES_key_schedule *ks1), REG(a3, DES_key_schedule *ks2), REG(d1, DES_key_schedule *ks3), REG(d2, DES_cblock *ivec), REG(d3, int *num), REG(d4, int enc))
 {
 	DES_ede3_cfb64_encrypt(in, out, length, ks1, ks2, ks3, ivec, num, enc);
+}
+
+void ASM SAVEDS DES_ede3_cfb_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, int numbits), REG(d1, long length), REG(a2, DES_key_schedule *ks1), REG(a3, DES_key_schedule *ks2), REG(d2, DES_key_schedule *ks3), REG(d3, DES_cblock *ivec), REG(d4, int enc))
+{
+	DES_ede3_cfb_encrypt(in, out, numbits, length, ks1, ks2, ks3, ivec, enc);
 }
 
 void ASM SAVEDS DES_ede3_ofb64_encrypt_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *in), REG(a1, unsigned char *out), REG(d0, long length), REG(a2, DES_key_schedule *ks1), REG(a3, DES_key_schedule *ks2), REG(d1, DES_key_schedule *ks3), REG(d2, DES_cblock *ivec), REG(d3, int *num))

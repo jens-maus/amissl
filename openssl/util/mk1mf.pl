@@ -10,7 +10,7 @@ $OPTIONS="";
 $ssl_version="";
 $banner="\t\@echo Building OpenSSL";
 
-open(IN,"<Makefile.ssl") || die "unable to open Makefile.ssl!\n";
+open(IN,"<Makefile") || die "unable to open Makefile!\n";
 while(<IN>) {
     $ssl_version=$1 if (/^VERSION=(.*)$/);
     $OPTIONS=$1 if (/^OPTIONS=(.*)$/);
@@ -18,7 +18,7 @@ while(<IN>) {
 }
 close(IN);
 
-die "Makefile.ssl is not the toplevel Makefile!\n" if $ssl_version eq "";
+die "Makefile is not the toplevel Makefile!\n" if $ssl_version eq "";
 
 $infile="MINFO";
 
@@ -229,7 +229,7 @@ $cflags.=" " . $define . "OPENSSL_NO_SHA"  if $no_sha;
 $cflags.=" " . $define . "OPENSSL_NO_SHA1" if $no_sha1;
 $cflags.=" " . $define . "OPENSSL_NO_RIPEMD" if $no_ripemd;
 $cflags.=" " . $define . "OPENSSL_NO_MDC2" if $no_mdc2;
-$cflags.=" " . $define . "OPENSSL_NO_BF"  if $no_bf;
+$cflags.=" " . $define . "OPENSSL_NO_BF"   if $no_bf;
 $cflags.=" " . $define . "OPENSSL_NO_CAST" if $no_cast;
 $cflags.=" " . $define . "OPENSSL_NO_DES"  if $no_des;
 $cflags.=" " . $define . "OPENSSL_NO_RSA"  if $no_rsa;
@@ -243,6 +243,7 @@ $cflags.=" " . $define . "OPENSSL_NO_KRB5" if $no_krb5;
 $cflags.=" " . $define . "OPENSSL_NO_EC"   if $no_ec;
 $cflags.=" " . $define . "OPENSSL_NO_ENGINE"   if $no_engine;
 $cflags.=" " . $define . "OPENSSL_NO_HW"   if $no_hw;
+$cflags.=" " . $define . "OPENSSL_FIPS"    if $fips;
 
 ## if ($unix)
 ##	{ $cflags="$c_flags" if ($c_flags ne ""); }
@@ -284,6 +285,8 @@ $defs= <<"EOF";
 # environments.
 
 EOF
+
+$defs .= $preamble if defined $preamble;
 
 if ($platform eq "VC-CE")
 	{
@@ -637,15 +640,21 @@ foreach (split(/\s+/,$test))
 $rules.= &do_lib_rule("\$(SSLOBJ)","\$(O_SSL)",$ssl,$shlib,"\$(SO_SSL)");
 $rules.= &do_lib_rule("\$(CRYPTOOBJ)","\$(O_CRYPTO)",$crypto,$shlib,"\$(SO_CRYPTO)");
 
-$rules.=&do_link_rule("\$(BIN_D)$o\$(E_EXE)$exep","\$(E_OBJ)","\$(LIBS_DEP)","\$(L_LIBS) \$(EX_LIBS)");
-
+if ($fips)
+	{
+	$rules.=&do_link_rule("\$(BIN_D)$o\$(E_EXE)$exep","\$(E_OBJ)","\$(LIBS_DEP)","\$(L_LIBS) \$(EX_LIBS)","\$(BIN_D)$o.sha1","\$(BIN_D)$o\$(E_EXE)$exep");
+	}
+else
+	{
+	$rules.=&do_link_rule("\$(BIN_D)$o\$(E_EXE)$exep","\$(E_OBJ)","\$(LIBS_DEP)","\$(L_LIBS) \$(EX_LIBS)");
+	}
 print $defs;
 
 if ($platform eq "linux-elf") {
     print <<"EOF";
 # Generate perlasm output files
 %.cpp:
-	(cd \$(\@D)/..; PERL=perl make -f Makefile.ssl asm/\$(\@F))
+	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
 print "###################################################################\n";
@@ -941,6 +950,7 @@ sub read_options
 				  $no_aes=1; }
 
 	elsif (/^rsaref$/)	{ }
+	elsif (/^fips$/)	{ $fips=1; }
 	elsif (/^gcc$/)		{ $gcc=1; }
 	elsif (/^debug$/)	{ $debug=1; }
 	elsif (/^profile$/)	{ $profile=1; }

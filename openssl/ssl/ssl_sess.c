@@ -60,7 +60,6 @@
 #include <openssl/lhash.h>
 #include <openssl/rand.h>
 #include "ssl_locl.h"
-#include "cryptlib.h"
 
 static void SSL_SESSION_list_remove(SSL_CTX *ctx, SSL_SESSION *s);
 static void SSL_SESSION_list_add(SSL_CTX *ctx,SSL_SESSION *s);
@@ -142,7 +141,8 @@ static int def_generate_session_id(const SSL *ssl, unsigned char *id,
 {
 	unsigned int retry = 0;
 	do
-		RAND_pseudo_bytes(id, *id_len);
+		if(RAND_pseudo_bytes(id, *id_len) <= 0)
+			return 0;
 	while(SSL_has_matching_session_id(ssl, id, *id_len) &&
 		(++retry < MAX_SESS_ID_ATTEMPTS));
 	if(retry < MAX_SESS_ID_ATTEMPTS)
