@@ -543,7 +543,7 @@ static ERR_STRING_DATA SYS_str_reasons[NUM_SYS_STR_REASONS + 1];
 static void build_SYS_str_reasons()
 	{
 	/* OPENSSL_malloc cannot be used here, use static storage instead */
-	static __far char strerror_tab[NUM_SYS_STR_REASONS][LEN_SYS_STR_REASON];
+	static char strerror_tab[NUM_SYS_STR_REASONS][LEN_SYS_STR_REASON];
 	int i;
 	static int init = 1;
 
