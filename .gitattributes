@@ -1091,7 +1091,6 @@ openssl/crypto/ocsp/ocsp_lib.c eol=lf
 openssl/crypto/ocsp/ocsp_prn.c eol=lf
 openssl/crypto/ocsp/ocsp_srv.c eol=lf
 openssl/crypto/ocsp/ocsp_vfy.c eol=lf
-openssl/crypto/opensslconf.h eol=lf
 openssl/crypto/opensslconf.h.in eol=lf
 openssl/crypto/opensslv.h eol=lf
 openssl/crypto/ossl_typ.h eol=lf
