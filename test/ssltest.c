@@ -1717,7 +1717,7 @@ static DH *get_dh1024dsa()
 #endif
 
 /* Demonstration only. Ideally, it would say what exactly went wrong */
-LONG Init(void)
+static LONG Init(void)
 {
 	LONG err = 1; /* Default: error */
 
@@ -1731,17 +1731,24 @@ LONG Init(void)
 	return(err);
 }
 
-void Cleanup(void)
+static void Cleanup(void)
 {
 	if (AmiSSLBase)
 	{
 		CleanupAmiSSL(TAG_DONE);
 		CloseAmiSSL();
+		AmiSSLBase = NULL;
 	}
 
 	if (AmiSSLMasterBase)
+	{
 		CloseLibrary(AmiSSLMasterBase);
+		AmiSSLMasterBase = NULL;
+	}
 
 	if (stack)
+	{
 		MTCP_DoneTCPIP(stack);
+		stack = NULL;
+	}
 }
