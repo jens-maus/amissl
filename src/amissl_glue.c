@@ -1,5 +1,6 @@
 #define PROTO_AMISSL_H // Don't include amissl protos
 
+#include <internal/debug.h>
 #include <amissl/amissl.h>
 #include <internal/amissl_compiler.h>
 
@@ -7998,6 +7999,14 @@ UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_OpenSSL(REG(a6, __IFACE_OR_BASE))
 	return(UI_OpenSSL());
 }
 
+#ifdef __amigaos4__
+UI_METHOD * UI_OpenSSL_68k(void);
+UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_OpenSSL_68k(REG(a6, __IFACE_OR_BASE))
+{
+	return(UI_OpenSSL_68k());
+}
+#endif
+
 UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_create_method(REG(a6, __IFACE_OR_BASE), REG(a0, char *name))
 {
 	return(UI_create_method(name));
@@ -12516,4 +12525,14 @@ unsigned char * AMISSL_LIB_ENTRY _AmiSSL_SHA1(REG(a6, __IFACE_OR_BASE), REG(a0, 
 void AMISSL_LIB_ENTRY _AmiSSL_SHA1_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, SHA_CTX *c), REG(a1, const unsigned char *data))
 {
 	SHA1_Transform(c, data);
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
+{
+	return read_string(ui, uis);
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
+{
+	return write_string(ui, uis);
 }

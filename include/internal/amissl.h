@@ -6,6 +6,10 @@
 #include <time.h>
 
 typedef struct {
+	struct Library *AmiSSLBase;
+#ifdef __amigaos4__
+	struct AmiSSLIFace *IAmiSSL;
+#endif
 	unsigned long pid;
 	int errno;
 	char *getenv_var;
@@ -19,9 +23,6 @@ typedef struct {
 	int local_errno;	// If no errno and we generated the error ourselves
 #ifdef __amigaos4__
 	struct SocketIFace *ISocket;
-	struct AmiSSLIFace *IAmiSSL;
-#else
-	struct Library *AmiSSLBase;
 #endif
 } AMISSL_STATE;
 
@@ -39,6 +40,5 @@ __stdargs
 int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
-#endif
 
 #endif /* !INTERNAL_AMISSL_H */

@@ -135,6 +135,13 @@ struct Task *SB_FindTask(STRPTR);
 
 #endif
 
+#ifdef __amigaos4__
+asm ("									\n\
+	.text								\n\
+putr2:	mr		2,3						\n\
+	blr									\n\
+");
+#endif
 
 AMISSL_STATE *GetAmiSSLState(void)
 {
@@ -144,7 +151,7 @@ AMISSL_STATE *GetAmiSSLState(void)
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
 //	kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
-
+	
 	return ret;
 }
 
@@ -220,8 +227,10 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 	{
 #ifdef __amigaos4__
 		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
+		state->IAmiSSL = Self;
+		state->AmiSSLBase = ((struct Interface *)Self)->Data.LibBase;
 #else
-		state->a4 = (APTR)getreg(REG_A4);
+		state->AmiSSLBase = Self;
 #endif
 
 		state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);

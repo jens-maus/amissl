@@ -20784,14 +20784,14 @@ static const UI_METHOD * stub_UI_set_methodPPC(ULONG *regarray)
 }
 const struct EmuTrap stub_UI_set_method = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_UI_set_methodPPC };
 
+UI_METHOD *UI_OpenSSL_68k(struct AmiSSLIFace *);
 static UI_METHOD * stub_UI_OpenSSLPPC(ULONG *regarray)
 {
 	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
 
-	return Self->UI_OpenSSL(
-	);
+	return UI_OpenSSL_68k(Self);
 }
 const struct EmuTrap stub_UI_OpenSSL = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_UI_OpenSSLPPC };
 
@@ -32846,6 +32846,33 @@ static void stub_SHA1_TransformPPC(ULONG *regarray)
 }
 const struct EmuTrap stub_SHA1_Transform = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_SHA1_TransformPPC };
 
+static int stub_read_string_libPPC(ULONG *regarray)
+{
+	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
+
+	return Self->read_string_lib(
+		(UI *)regarray[8],
+		(UI_STRING*)regarray[9]
+	);
+}
+const struct EmuTrap stub_read_string_lib = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_read_string_libPPC };
+
+static int stub_write_string_libPPC(ULONG *regarray)
+{
+	struct Library *Base = (struct Library *) regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *) ((ULONG)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *) ExtLib->MainIFace;
+
+	return Self->write_string_lib(
+		(UI *)regarray[8],
+		(UI_STRING*)regarray[9]
+	);
+}
+const struct EmuTrap stub_write_string_lib = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_write_string_libPPC };
+
+
 const ULONG VecTable68K[] = {
 	(ULONG)&stub_Open,
 	(ULONG)&stub_Close,
@@ -35362,5 +35389,7 @@ const ULONG VecTable68K[] = {
 	(ULONG)&stub_SHA1_Final,
 	(ULONG)&stub_SHA1,
 	(ULONG)&stub_SHA1_Transform,
+	(ULONG)&stub_read_string_lib,
+	(ULONG)&stub_write_string_lib,
 	(ULONG)-1
 };

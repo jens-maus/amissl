@@ -100,6 +100,7 @@ ui_lib.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
 ui_lib.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
 ui_lib.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 ui_lib.o: ../../include/openssl/ui.h ../cryptlib.h ui_lib.c ui_locl.h
+ui_openssl.o: ui_amissl.c
 ui_openssl.o: ../../e_os.h ../../include/openssl/bio.h
 ui_openssl.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
 ui_openssl.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h

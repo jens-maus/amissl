@@ -254,16 +254,18 @@ static int nop(void)
 static UI_METHOD ui_amissl =
 {
 	"AmiSSL user interface",
-	nop, /* open session */
+	(int (*)(UI *))nop, /* open session */
 	write_string,
-	nop, /* flush */
+	(int (*)(UI *))nop, /* flush */
 	read_string,
-	nop, /* close session */
-	nop, /* construct prompt */
+	(int (*)(UI *))nop, /* close session */
+	(char *(*)(UI *,const char *,const char *))nop, /* construct prompt */
 };
 
 UI_METHOD *UI_OpenSSL(void)
 {
+	SETUPSTATE();
+	
 	return(&ui_amissl);
 }
 
@@ -292,3 +294,73 @@ int write_string_cb(UI *ui, UI_STRING *uis)
 #endif	
 	return write_string_lib(ui,uis);
 }
+
+#ifdef __amigaos4__
+#include <exec/emulation.h>
+#include <exec/types.h>
+
+AMISSL_STATE *stub_GetAmiSSLState(void)
+{
+	return GetAmiSSLState();
+}
+
+#pragma pack(2)
+
+struct AmiSSLEmuTrap {
+	UWORD  Entry[13];
+	ULONG  Instruction;                 /* TRAPINST, see below  */
+	UWORD  Type;                        /* TRAPTYPE, see below  */
+	ULONG  (*Function)(ULONG *Reg68K);  /* PPC function address, */
+};
+
+static const struct AmiSSLEmuTrap read_string_emul = {
+	0x6118,		// BSR	       stub
+	0x2F0E,		// MOVE.L      A6,-(A7)
+	0x2C40,		// MOVEA.L     D0,A6
+	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
+	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
+	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
+	0x4EAE,0xC508,	// JSR         -$3AF8(A6)
+	0x2C5F,		// MOVEA.L     (A7)+,A6
+	0x4E75,		// RTS
+	TRAPINST,
+	TRAPTYPE,
+	(ULONG (*)(ULONG *))stub_GetAmiSSLState
+};
+
+static const struct AmiSSLEmuTrap write_string_emul = {
+	0x6118,		// BSR	       stub
+	0x2F0E,		// MOVE.L      A6,-(A7)
+	0x2C40,		// MOVEA.L     D0,A6
+	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
+	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
+	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
+	0x4EAE,0xC502,	// JSR         -$3AFE(A6)
+	0x2C5F,		// MOVEA.L     (A7)+,A6
+	0x4E75,		// RTS
+	TRAPINST,
+	TRAPTYPE,
+	(ULONG (*)(ULONG *))stub_GetAmiSSLState
+};
+
+static const UWORD nop_emul[1] = {
+	0x4E75,		// RTS
+};
+
+static const UI_METHOD ui_amissl_68k =
+{
+	"AmiSSL user interface",
+	(int (*)(UI *))nop_emul, /* open session */
+	(int (*)(UI *,UI_STRING *))&write_string_emul,
+	(int (*)(UI *))nop_emul, /* flush */
+	(int (*)(UI *,UI_STRING *))&read_string_emul,
+	(int (*)(UI *))nop_emul, /* close session */
+	(char *(*)(UI *,const char *,const char *))nop_emul, /* construct prompt */
+};
+
+UI_METHOD *UI_OpenSSL_68k(void)
+{
+	return((UI_METHOD *)&ui_amissl_68k);
+}
+
+#endif

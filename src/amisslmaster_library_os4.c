@@ -73,18 +73,13 @@ extern APTR GetDataBase(void);
 /* Open the library */
 struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 {
-    struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase; 
-    struct AmiSSLMasterLibrary *newLibBase;
+	struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase; 
+	struct AmiSSLMasterLibrary *newLibBase;
 
-	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
-
-#define GetDataBase GetDataStart // Quick fix since the linker sometimes misses to set _DATA_BASE_
-								// Verify in mapfile that __data_start and _DATA_BASE_ are equal
-
-	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
-	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
-	kprintf("Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
-	kprintf("Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
+//	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
+//	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
+//	kprintf("Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
+//	kprintf("Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
 
     /* Add up the open count */
     libBase->libNode.lib_OpenCnt++;
@@ -101,17 +96,17 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 		{
 			struct ExtendedLibrary *extlib;
 			IExec->CopyMem(GetDataStart(),envvec,GetDataEnd()-GetDataStart());
-			kprintf("Env vector: %08x\n",envvec);
+//			kprintf("Env vector: %08x\n",envvec);
 
 			extlib = (struct ExtendedLibrary *)((ULONG)newLibBase + newLibBase->libNode.lib_PosSize);
 			
 			extlib->MainIFace->Data.EnvironmentVector = envvec + (GetDataBase() - GetDataStart());
 
-			kprintf("Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
+//			kprintf("Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
 			if(!__UserLibInit((struct AmiSSLIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
 			{
-				kprintf("Returning libBase: %08lx\n",newLibBase);
+//				kprintf("Returning libBase: %08lx\n",newLibBase);
 				return (struct Library *)newLibBase;
 			}
 

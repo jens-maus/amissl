@@ -3,7 +3,17 @@
 #include <dos/dos.h>
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
+
+#define BIO_vprintf hide1
+#define BIO_vsnprintf hide2
+#define ERR_add_error_dataA hide3
+
 #include <interfaces/amissl.h>
+
+#undef BIO_vprintf
+#undef BIO_vsnprintf
+#undef ERR_add_error_dataA
+
 #include <exec/emulation.h>
 
 #define kprintf IExec->DebugPrintF

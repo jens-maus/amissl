@@ -2530,7 +2530,8 @@ extern int                  VARARGS68K _AmiSSL_SHA1_Update(struct AmiSSLIFace *,
 extern int                  VARARGS68K _AmiSSL_SHA1_Final(struct AmiSSLIFace *, unsigned char * md, SHA_CTX * c);
 extern unsigned char *      VARARGS68K _AmiSSL_SHA1(struct AmiSSLIFace *, const unsigned char * d, unsigned long n, unsigned char * md);
 extern void                 VARARGS68K _AmiSSL_SHA1_Transform(struct AmiSSLIFace *, SHA_CTX * c, const unsigned char * data);
-
+extern void                 VARARGS68K _AmiSSL_read_string_lib(struct AmiSSLIFace *, UI *ui, UI_STRING *uis);
+extern void                 VARARGS68K _AmiSSL_write_string_lib(struct AmiSSLIFace *, UI *ui, UI_STRING *uis);
 
 static void *const AMISSL_COMMON_DATA main_vectors[] = {
 	(void *)_AmiSSL_Obtain,
@@ -5053,6 +5054,8 @@ static void *const AMISSL_COMMON_DATA main_vectors[] = {
 	(void *)_AmiSSL_SHA1_Final,
 	(void *)_AmiSSL_SHA1,
 	(void *)_AmiSSL_SHA1_Transform,
+	(void *)_AmiSSL_read_string_lib,
+	(void *)_AmiSSL_write_string_lib,
 	(void *)-1
 };
 
