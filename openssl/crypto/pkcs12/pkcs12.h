@@ -62,13 +62,13 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 #define PKCS12_KEY_ID	1
 #define PKCS12_IV_ID	2

@@ -72,13 +72,13 @@
 #include <openssl/crypto.h>
 #include <openssl/symhacks.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 /* Outer object */
 typedef struct x509_hash_dir_st

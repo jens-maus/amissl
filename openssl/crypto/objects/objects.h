@@ -959,10 +959,6 @@
 #include <openssl/bio.h>
 #include <openssl/asn1.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define	OBJ_NAME_TYPE_UNDEF		0x00
 #define	OBJ_NAME_TYPE_MD_METH		0x01
 #define	OBJ_NAME_TYPE_CIPHER_METH	0x02
@@ -976,6 +972,10 @@
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 typedef struct obj_name_st
 	{

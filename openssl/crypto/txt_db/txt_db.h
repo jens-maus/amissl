@@ -65,10 +65,6 @@
 #include <openssl/stack.h>
 #include <openssl/lhash.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define DB_ERROR_OK			0
 #define DB_ERROR_MALLOC			1
 #define DB_ERROR_INDEX_CLASH    	2
@@ -79,6 +75,10 @@
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 typedef struct txt_db_st
 	{

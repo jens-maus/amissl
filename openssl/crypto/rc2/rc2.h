@@ -68,16 +68,16 @@
 
 #include <openssl/opensslconf.h> /* RC2_INT */
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #define RC2_BLOCK	8
 #define RC2_KEY_LENGTH	16
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 typedef struct rc2_key_st
 	{

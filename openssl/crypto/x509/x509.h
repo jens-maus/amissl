@@ -90,13 +90,13 @@
 #include <openssl/e_os2.h>
 #include <openssl/ossl_typ.h>
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 #ifdef OPENSSL_SYS_WIN32
 /* Under Win32 this is defined in wincrypt.h */
