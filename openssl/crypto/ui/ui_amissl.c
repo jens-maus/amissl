@@ -251,21 +251,22 @@ static int nop(void)
 	return(1);
 }
 
+int read_string_cb(UI *ui, UI_STRING *uis);
+int write_string_cb(UI *ui, UI_STRING *uis);
+
 static UI_METHOD ui_amissl =
 {
 	"AmiSSL user interface",
 	(int (*)(UI *))nop, /* open session */
-	write_string,
+	write_string_cb,
 	(int (*)(UI *))nop, /* flush */
-	read_string,
+	read_string_cb,
 	(int (*)(UI *))nop, /* close session */
 	(char *(*)(UI *,const char *,const char *))nop, /* construct prompt */
 };
 
 UI_METHOD *UI_OpenSSL(void)
 {
-	SETUPSTATE();
-	
 	return(&ui_amissl);
 }
 
@@ -291,7 +292,7 @@ int write_string_cb(UI *ui, UI_STRING *uis)
 	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
 #else
 	struct Library *AmiSSLBase=state->AmiSSLBase;
-#endif	
+#endif
 	return write_string_lib(ui,uis);
 }
 
