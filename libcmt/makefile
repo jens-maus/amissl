@@ -1,7 +1,7 @@
 CC=ppc-amigaos-gcc
 OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
 CFLAG=$(OPTIMS) IDLEN=100 DEF __builtin_memcmp=memcmp IDIR AmiSSL:Include NOSTACKCHECK DEBUG=LINE STRSECT=CODE
-CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -Wall -mbaserel
+CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -Wall -mbaserel -O2 -g
 
 all: libcmt.a
 
