@@ -2545,8 +2545,8 @@ struct AmiSSLIFace
 	unsigned char * APICALL (*SHA1)(struct AmiSSLIFace *Self, const unsigned char * d, unsigned long n, unsigned char * md);
 	void APICALL (*SHA1_Transform)(struct AmiSSLIFace *Self, SHA_CTX * c, const unsigned char * data);
 
-	int APICALL (*read_string_lib)(struct AmiSSLIFace *Self, UI *ui, UI_STRING *uis);
-	int APICALL (*write_string_lib)(struct AmiSSLIFace *Self, UI *ui, UI_STRING *uis);
+	int APICALL (*UI_read_string_lib)(struct AmiSSLIFace *Self, UI *ui, UI_STRING *uis);
+	int APICALL (*UI_write_string_lib)(struct AmiSSLIFace *Self, UI *ui, UI_STRING *uis);
 };
 
 #endif /* AMISSL_INTERFACE_DEF_H */

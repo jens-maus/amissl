@@ -12527,12 +12527,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SHA1_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, S
 	SHA1_Transform(c, data);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
+int AMISSL_LIB_ENTRY _AmiSSL_UI_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
 {
 	return read_string(ui, uis);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
+int AMISSL_LIB_ENTRY _AmiSSL_UI_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
 {
 	return write_string(ui, uis);
 }

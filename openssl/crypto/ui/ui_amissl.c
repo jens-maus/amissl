@@ -282,7 +282,7 @@ int read_string_cb(UI *ui, UI_STRING *uis)
 #else
 	struct Library *AmiSSLBase=state->AmiSSLBase;
 #endif	
-	return read_string_lib(ui,uis);
+	return UI_read_string_lib(ui,uis);
 }
 
 int write_string_cb(UI *ui, UI_STRING *uis)
@@ -293,7 +293,7 @@ int write_string_cb(UI *ui, UI_STRING *uis)
 #else
 	struct Library *AmiSSLBase=state->AmiSSLBase;
 #endif
-	return write_string_lib(ui,uis);
+	return UI_write_string_lib(ui,uis);
 }
 
 #ifdef __amigaos4__

@@ -14,7 +14,7 @@ long InitAmiSSL(Tag tag1, ...);
 long CleanupAmiSSLA(struct TagItem *tagList);
 long CleanupAmiSSL(Tag tag1, ...);
 long IsCipherAvailable(long cipher);
-int read_string_lib(UI *ui,UI_STRING *uis);
-int write_string_lib(UI *ui,UI_STRING *uis);
+int UI_read_string_lib(UI *ui, UI_STRING *uis);
+int UI_write_string_lib(UI *ui, UI_STRING *uis);
 
 #endif /* !CLIB_AMISSL_PROTOS_H */

@@ -10307,5 +10307,13 @@
 			<arg name="c" type="SHA_CTX *"/>
 			<arg name="data" type="const unsigned char *"/>
 		</method>
+		<method name="UI_read_string_lib" result="int" status="private">
+			<arg name="ui" type="UI *"/>
+			<arg name="uis" type="UI_STRING *"/>
+		</method>
+		<method name="UI_write_string_lib" result="int" status="private">
+			<arg name="ui" type="UI *"/>
+			<arg name="uis" type="UI_STRING *"/>
+		</method>
 	</interface>
 </library>
