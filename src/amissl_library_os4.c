@@ -664,6 +664,20 @@ int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, c
 	return ret;
 }
 
+void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...)
+{
+	__gnuc_va_list va;
+	va_list os4va;
+
+	__builtin_va_start(va,num);
+	os4va.args.m68k = va_getlinearva(va,char *);
+	os4va.is_68k = 1;
+
+	ERR_add_error_dataA(num,os4va);
+
+	__builtin_va_end(va);
+}
+
 int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
 {
 	va_list os4va;
@@ -737,20 +751,6 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 		TAG_MORE,ptr);
 	__builtin_va_end(va);
 	return result;
-}
-
-void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...)
-{
-	__gnuc_va_list va;
-	va_list os4va;
-
-	__builtin_va_start(va,num);
-	os4va.args.m68k = va_getlinearva(va,char *);
-	os4va.is_68k = 1;
-
-	ERR_add_error_dataA(num,os4va);
-
-	__builtin_va_end(va);
 }
 
 void __baserel_get_addr(struct Interface *self);
