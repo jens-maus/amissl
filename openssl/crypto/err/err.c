@@ -149,6 +149,7 @@ static ERR_STRING_DATA ERR_str_libraries[]=
 {ERR_PACK(ERR_LIB_DSO,0,0)		,"DSO support routines"},
 {ERR_PACK(ERR_LIB_ENGINE,0,0)		,"engine routines"},
 {ERR_PACK(ERR_LIB_OCSP,0,0)		,"OCSP routines"},
+{ERR_PACK(ERR_LIB_FIPS,0,0)		,"FIPS routines"},
 {0,NULL},
 	};
 
@@ -1073,7 +1074,7 @@ void ERR_add_error_dataA(int num, va_list args)
 				else
 					str=p;
 				}
-			strcat(str,a);
+			BUF_strlcat(str,a,s+1);
 			}
 		}
 	ERR_set_error_data(str,ERR_TXT_MALLOCED|ERR_TXT_STRING);
