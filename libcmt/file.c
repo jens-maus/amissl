@@ -91,6 +91,16 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 DeclareMinList(__filelist); /* list of open files (fflush() needs also access) */
 DeclareSemaphore(FileListLock);
 
+#ifdef __amigaos4__
+void __init_libcmt_file(void) __attribute__((constructor));
+
+void __init_libcmt_file(void)
+{
+	NewList(&__filelist);
+	InitSemaphore(&FileListLock);
+}
+#endif
+
 FILE *fopen(const char *name, const char *mode)
 {
 	struct filenode *node;

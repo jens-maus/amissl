@@ -51,7 +51,7 @@ ULONG _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *Self)
 {
     /* Write me. Really, I dare you! */
     IExec->DebugPrintF(
-		"Function ixemul::Obtain not implemented\n");  
+		"Function AmiSSLMaster::Obtain not implemented\n");  
     return (ULONG)0;
 
 }
@@ -60,7 +60,7 @@ ULONG _AmiSSLMaster_Release(struct AmiSSLMasterIFace *Self)
 {
     /* Write me. Really, I dare you! */
     IExec->DebugPrintF(
-		"Function ixemul::Release not implemented\n");  
+		"Function AmiSSLMaster::Release not implemented\n");  
     return (ULONG)0;
 
 }
@@ -69,12 +69,16 @@ extern APTR GetDataStart(void);
 extern APTR GetDataEnd(void);
 extern APTR GetDataBase(void);
 
+#define GetDataBase GetDataStart // Quick fix since the linker sometimes misses to set _DATA_BASE_
+								// Verify in makefile that __data_start and _DATA_BASE_ are equal
+
 /* Open the library */
 struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 {
     struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase; 
     struct AmiSSLMasterLibrary *newLibBase;
 
+	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
 	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
 	kprintf("Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
 	kprintf("Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
@@ -89,6 +93,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	{
 		char *envvec;
 		newLibBase->origLibBase = libBase;
+		newLibBase->libNode.lib_OpenCnt = libBase->libNode.lib_OpenCnt;
 		if(envvec = IExec->AllocVec(GetDataEnd()-GetDataStart(),MEMF_ANY))
 		{
 			struct ExtendedLibrary *extlib;
@@ -275,6 +280,7 @@ const static struct Resident lib_res __attribute__ ((used)) =
 void __baserel_get_addr(struct Interface *self);
 
 asm (" \n\
+	.text								\n\
 	.globl __baserel_get_addr		 \n\
 __baserel_get_addr:		 \n\
 	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\

@@ -47,8 +47,10 @@ struct Library *LocaleBase;
 struct LocaleIFace *ILocale;
 struct Library *UtilityBase;
 struct UtilityIFace *IUtility;
-struct DOSIFace *IDOS;
-struct Library *DOSBase;
+
+__attribute__((force_no_baserel)) struct Library *ExecBase;
+__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+
 #else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
@@ -96,6 +98,10 @@ AMISSL_STATE *CreateAmiSSLState(void)
 		ret->errno = 0;
 		ret->getenv_var = 0;
 		ret->stack = 0;
+#ifdef __amigaos4__
+		ret->socket_base_owns_errno = 0;
+		ret->ISocket = NULL;
+#endif
 
 		if(!h_insert(thread_hash, pid, ret))
 		{
@@ -151,6 +157,12 @@ void SetAmiSSLerrno(int errno)
 int GetAmiSSLerrno(void)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
+#ifdef __amigaos4__
+	if(p->socket_base_owns_errno)
+	{
+		// Call socketbase to get error here
+	}
+#endif
 	return p->errno;
 }
 
@@ -204,11 +216,11 @@ long ASM SAVEDS _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct Tag
 	if (state = CreateAmiSSLState())
 	{
 #ifdef __amigaos4__
-		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, NULL, tagList);
+		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
 #else
 		state->a4 = (APTR)getreg(REG_A4);
 #endif
-		state->stack = (APTR)GetTagData(AmiSSL_TCPStack, NULL, tagList);
+		state->stack = (APTR)GetTagData(AmiSSL_TCPStack, (int)NULL, tagList);
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
 		err = 0;
@@ -420,6 +432,12 @@ void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 		h_doall(thread_hash,cleanupState); /* Clean up any left overs from tasks not calling cleanup */
 		ReleaseSemaphore(&openssl_cs);
 	}
+	
+#ifdef __amigaos4__
+	DropInterface((struct Interface *)ILocale);
+	DropInterface((struct Interface *)IUtility);
+	DropInterface((struct Interface *)IIntuition);
+#endif
 
 	CloseLibrary((struct Library *)LocaleBase);
 	CloseLibrary((struct Library *)UtilityBase);
@@ -449,7 +467,11 @@ int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
 
-#ifndef __amigaos4__
+
+#ifdef __amigaos4__
+	InitSemaphore(&__mem_cs);
+	InitSemaphore(&openssl_cs);
+#else
 	SysBase = *(struct ExecBase **)4;
 #endif
 
@@ -481,7 +503,6 @@ int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		struct Locale *locale;
 		struct DateStamp ds;
 		int i;
-traceline();
 
 		for (i=0; i<CRYPTO_NUM_LOCKS; i++)
 		{
@@ -492,19 +513,17 @@ traceline();
 
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
 
-traceline();
 		DateStamp(&ds);
 		clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
 		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
-traceline();
 #ifdef __amigaos4__
 		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
             && (UtilityBase = OpenLibrary("utility.library", 36))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
-			&& (IIntuition = GetInterface(IntuitionBase,"main",1,NULL))
-			&& (IUtility = GetInterface(UtilityBase,"main",1,NULL))
-			&& (ILocale = GetInterface(LocaleBase,"main",1,NULL))
+			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
+			&& (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
+			&& (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
 			&& (locale = OpenLocale(NULL)))
 #else
 		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
@@ -513,12 +532,10 @@ traceline();
 			&& (locale = OpenLocale(NULL)))
 #endif
 		{
-traceline();
 			GMTOffset = locale->loc_GMTOffset;
 			CloseLocale(locale);
 			err = 0;
 		}
-traceline();
 	}
 	
 	kprintf("Userlib res: %d\n",err);

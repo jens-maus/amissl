@@ -12,6 +12,7 @@
 #else
 #include "/libcmt/libcmt.h"
 #endif
+#include "debug.h"
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>
@@ -20,11 +21,16 @@
 #ifdef __amigaos4__
 #define __IFACE_OR_BASE	struct AmiSSLMasterIFace *Self
 struct AmiSSLMasterIFace;
+#undef SAVEDS
+#define SAVEDS __attribute__ ((baserel_restore))
 #else
 #define __IFACE_OR_BASE	struct Library *Self
 #endif
 
-#ifndef __amigaos4__
+#ifdef __amigaos4__
+__attribute__((force_no_baserel)) struct Library *ExecBase;
+__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+#else
 struct ExecBase *SysBase;
 #endif
 
@@ -139,7 +145,8 @@ struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
 	if (LibAPIVersion == AMISSL_V097e)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
+//		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
+		OpenLib(&AmiSSLBase,"amissl_v097e.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 /* This only happens for m68k code, no need to handle ppc versions here */
@@ -300,6 +307,8 @@ void ASM SAVEDS CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Libra
 
 void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
+	kprintf("UserLibCleanup called\n");
+
 	if (LibAPIVersion == AMISSL_V097e)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
@@ -325,11 +334,15 @@ void ASM SAVEDS __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 
 void ASM SAVEDS __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 {
+	kprintf("UserExpungeInit called\n");
 }
 
 int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
-#ifndef __amigaos4__
+	kprintf("UserLibInit called\n");
+#ifdef __amigaos4__
+	InitSemaphore(&AmiSSLMasterLock);
+#else
 	SysBase = *(struct ExecBase **)4;
 #endif
 

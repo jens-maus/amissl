@@ -11,6 +11,7 @@
 #define	AmiSSL_SSLVersionApp	(TAG_USER + 0x06)
 #ifdef __amigaos4__
 #define	AmiSSL_ISocket			(TAG_USER + 0x07) /* Only accessible from ppc code */
+#define	AmiSSL_ISocketPtr		(TAG_USER + 0x08) /* Used by auto initializer to avoid dependancy on opening order */
 #endif
 
 #endif /* !AMISSL_TAGS_H */

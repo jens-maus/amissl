@@ -1,7 +1,6 @@
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
-//#include <proto/ixemul.h>
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
 
@@ -56,7 +55,7 @@ ULONG _AmiSSL_Obtain(struct AmiSSLIFace *Self)
 {
     /* Write me. Really, I dare you! */
     IExec->DebugPrintF(
-		"Function ixemul::Obtain not implemented\n");  
+		"Function AmiSSL::Obtain not implemented\n");  
     return (ULONG)0;
 
 }
@@ -65,7 +64,7 @@ ULONG _AmiSSL_Release(struct AmiSSLIFace *Self)
 {
     /* Write me. Really, I dare you! */
     IExec->DebugPrintF(
-		"Function ixemul::Release not implemented\n");  
+		"Function AmiSSL::Release not implemented\n");  
     return (ULONG)0;
 
 }
@@ -73,6 +72,7 @@ ULONG _AmiSSL_Release(struct AmiSSLIFace *Self)
 extern APTR GetDataStart(void);
 extern APTR GetDataEnd(void);
 extern APTR GetDataBase(void);
+void __init_libcmt_file(void);
 
 /* trampoline to set up r2 */
 
@@ -85,6 +85,8 @@ __attribute__ ((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 	{
 		if(IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL))
 		{
+			__init_libcmt_file();
+
 			if(!__UserLibInit(self)) /* SAS/C defined errors the other way */
 			{
 				return 1;
@@ -115,6 +117,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	{
 		char *envvec;
 		newLibBase->origLibBase = libBase;
+		newLibBase->libNode.lib_OpenCnt = libBase->libNode.lib_OpenCnt;
 		if(envvec = IExec->AllocVec(GetDataEnd()-GetDataStart(),MEMF_ANY))
 		{
 			struct ExtendedLibrary *extlib;
@@ -148,6 +151,8 @@ APTR libClose(struct LibraryManagerInterface *Self)
 {
     struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase;
     /* Make sure to undo what open did */
+
+kprintf("close amissl\n");
 
     /* Make the close count */
 	libBase->origLibBase->libNode.lib_OpenCnt--;
@@ -337,6 +342,7 @@ int __io2errno[10];
 void __baserel_get_addr(struct Interface *self);
 
 asm (" \n\
+	.text								\n\
 	.globl __baserel_get_addr		 \n\
 __baserel_get_addr:		 \n\
 	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\
