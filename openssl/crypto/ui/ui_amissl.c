@@ -152,7 +152,7 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 }
 
 /* This is modeled per OpenSSL write_string. The design *is* a bit weird... */
-int write_string(UI *ui, UI_STRING *uis)
+int UI_write_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type;
 
@@ -168,7 +168,7 @@ int write_string(UI *ui, UI_STRING *uis)
 	return(1);
 }
 
-int read_string(UI *ui, UI_STRING *uis)
+int UI_read_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
 	
@@ -245,7 +245,7 @@ int read_string(UI *ui, UI_STRING *uis)
 /* Some applications will call UI_METHOD function pointers without checking
  * if they are NULL (which is valid). This is to take care of that.
  */
-static int nop(void)
+static int nop_method(void)
 {
 	return(1);
 }
@@ -256,11 +256,11 @@ int write_string_cb(UI *ui, UI_STRING *uis);
 static UI_METHOD ui_amissl =
 {
 	"AmiSSL user interface",
-	(int (*)(UI *))nop, /* open session */
+	(int (*)(UI *))nop_method, /* open session */
 	write_string_cb,
-	(int (*)(UI *))nop, /* flush */
+	(int (*)(UI *))nop_method, /* flush */
 	read_string_cb,
-	(int (*)(UI *))nop, /* close session */
+	(int (*)(UI *))nop_method, /* close session */
 	NULL, /* construct prompt */
 };
 
@@ -343,7 +343,7 @@ static const struct AmiSSLEmuTrap write_string_emul = {
 	(ULONG (*)(ULONG *))stub_GetAmiSSLState
 };
 
-static const UWORD nop_emul[2] = {
+static const UWORD nop_method_emul[2] = {
 	0x7001,		// MOVEQ.L #1, D0
 	0x4E75		// RTS
 };
@@ -351,11 +351,11 @@ static const UWORD nop_emul[2] = {
 static const UI_METHOD ui_amissl_68k =
 {
 	"AmiSSL user interface",
-	(int (*)(UI *))nop_emul, /* open session */
+	(int (*)(UI *))nop_method_emul, /* open session */
 	(int (*)(UI *,UI_STRING *))&write_string_emul,
-	(int (*)(UI *))nop_emul, /* flush */
+	(int (*)(UI *))nop_method_emul, /* flush */
 	(int (*)(UI *,UI_STRING *))&read_string_emul,
-	(int (*)(UI *))nop_emul, /* close session */
+	(int (*)(UI *))nop_method_emul, /* close session */
 	NULL, /* construct prompt */
 };
 

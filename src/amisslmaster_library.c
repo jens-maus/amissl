@@ -32,18 +32,6 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 struct ExecBase *SysBase;
 #endif
 
-#if 0
-/* These must not change! This is for compatibility with previous versions. */
-#pragma libcall DHBase InitDH 01e 9802
-#pragma libcall DHBase CleanupDH 024 00
-
-#pragma libcall DSABase InitDSA 01e 9802
-#pragma libcall DSABase CleanupDSA 024 00
-
-#pragma libcall RSABase InitRSA 01e a9803
-#pragma libcall RSABase CleanupRSA 024 00
-#endif
-
 struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
@@ -135,18 +123,18 @@ LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG AP
 	LibAPIVersion = APIVersion;
 	LibAllowUserStructs = AllowUserStructs;
 
-	return(TRUE);
+	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
 
 struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
-	if (LibAPIVersion == AMISSL_V097e)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
+	if (LibAPIVersion == AMISSL_V097f)
+		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097f.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
-/* This only happens for m68k code, no need to handle ppc versions here */
+		/* This only happens for m68k code, no need to handle ppc versions here */
 		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2))
 		{
 			amisslinit.BlowFishBase = OpenLib(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
@@ -224,7 +212,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG
 
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if (LibAPIVersion == AMISSL_V097e)
+	if (LibAPIVersion == AMISSL_V097f)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{
@@ -306,7 +294,7 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
 	kprintf("UserLibCleanup called\n");
 
-	if (LibAPIVersion == AMISSL_V097e)
+	if (LibAPIVersion == AMISSL_V097f)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{

@@ -41,8 +41,8 @@ $lfile='';
 
 $asm='asm';
 $afile='-o ';
-$bn_mulw_obj="";
-$bn_mulw_src="";
+$bn_asm_obj="";
+$bn_asm_src="";
 $des_enc_obj="";
 $des_enc_src="";
 $bf_enc_obj="";

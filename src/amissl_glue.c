@@ -7999,14 +7999,6 @@ UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_OpenSSL(REG(a6, __IFACE_OR_BASE))
 	return(UI_OpenSSL());
 }
 
-#ifdef __amigaos4__
-UI_METHOD * UI_OpenSSL_68k(void);
-UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_OpenSSL_68k(REG(a6, __IFACE_OR_BASE))
-{
-	return(UI_OpenSSL_68k());
-}
-#endif
-
 UI_METHOD * AMISSL_LIB_ENTRY _AmiSSL_UI_create_method(REG(a6, __IFACE_OR_BASE), REG(a0, char *name))
 {
 	return(UI_create_method(name));
@@ -12529,10 +12521,20 @@ void AMISSL_LIB_ENTRY _AmiSSL_SHA1_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, S
 
 int AMISSL_LIB_ENTRY _AmiSSL_UI_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
 {
-	return read_string(ui, uis);
+	return(UI_read_string_lib(ui, uis));
 }
 
 int AMISSL_LIB_ENTRY _AmiSSL_UI_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI *ui), REG(a1, UI_STRING *uis))
 {
-	return write_string(ui, uis);
+	return(UI_write_string_lib(ui, uis));
+}
+
+void AMISSL_LIB_ENTRY _AmiSSL_HMAC_CTX_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, HMAC_CTX *ctx), REG(d0, unsigned long flags))
+{
+	HMAC_CTX_set_flags(ctx, flags);
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_X509_check_ca(REG(a6, __IFACE_OR_BASE), REG(a0, X509 *x))
+{
+	return(X509_check_ca(x));
 }

@@ -2553,7 +2553,9 @@
 #define SHA1_Final(md, c) IAmiSSL->SHA1_Final(md, c) 
 #define SHA1(d, n, md) IAmiSSL->SHA1(d, n, md) 
 #define SHA1_Transform(c, data) IAmiSSL->SHA1_Transform(c, data) 
-#define UI_read_string_lib(ui, uis) IAmiSSL->UI_read_string_lib(ui, uis)
-#define UI_write_string_lib(ui, uis) IAmiSSL->UI_write_string_lib(ui, uis)
+#define UI_read_string_lib(ui, uis) IAmiSSL->UI_read_string_lib(ui, uis) 
+#define UI_write_string_lib(ui, uis) IAmiSSL->UI_write_string_lib(ui, uis) 
+#define HMAC_CTX_set_flags(ctx, flags) IAmiSSL->HMAC_CTX_set_flags(ctx, flags) 
+#define X509_check_ca(x) IAmiSSL->X509_check_ca(x) 
 
 #endif /* INLINE4_AMISSL_H */

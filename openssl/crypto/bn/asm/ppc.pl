@@ -174,6 +174,7 @@ my @items = ("bn_sqr_comba4",
 if    ($opf =~ /linux/)	{  do_linux();	}
 elsif ($opf =~ /aix/)	{  do_aix();	}
 elsif ($opf =~ /osx/)	{  do_osx();	}
+elsif ($opf =~ /amigaos4/)	{  do_amigaos4();	}
 else			{  do_bsd();	}
 
 sub do_linux {
@@ -230,6 +231,19 @@ sub do_bsd {
       $d=~s/\.$t/_$t/g;
     }
     print $d;
+}
+
+# AmigaOS4
+sub do_amigaos4
+{
+	$d = &data();
+
+	foreach $t (@items)
+	{
+		$d =~ s/\.$t/$t/g;
+	}
+
+	print $d;
 }
 
 sub data {

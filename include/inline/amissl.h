@@ -22375,4 +22375,21 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   (_UI_write_string_lib__bn - 15102))(_UI_write_string_lib__bn, _UI_write_string_lib_ui, _UI_write_string_lib_uis); \
 });})
 
+#define HMAC_CTX_set_flags(ctx, flags) ({ \
+  HMAC_CTX * _HMAC_CTX_set_flags_ctx = (ctx); \
+  unsigned long _HMAC_CTX_set_flags_flags = (flags); \
+  ({ \
+  register char * _HMAC_CTX_set_flags__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((void (*)(char * __asm("a6"), HMAC_CTX * __asm("a0"), unsigned long __asm("d0"))) \
+  (_HMAC_CTX_set_flags__bn - 15108))(_HMAC_CTX_set_flags__bn, _HMAC_CTX_set_flags_ctx, _HMAC_CTX_set_flags_flags); \
+});})
+
+#define X509_check_ca(x) ({ \
+  X509 * _X509_check_ca_x = (x); \
+  ({ \
+  register char * _X509_check_ca__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((int (*)(char * __asm("a6"), X509 * __asm("a0"))) \
+  (_X509_check_ca__bn - 15114))(_X509_check_ca__bn, _X509_check_ca_x); \
+});})
+
 #endif /*  _INLINE_AMISSL_H  */

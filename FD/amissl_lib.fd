@@ -2536,4 +2536,6 @@ SHA1(d,n,md)(a0,d0,a1)
 SHA1_Transform(c,data)(a0,a1)
 UI_read_string_lib(ui,uis)(a0,a1)
 UI_write_string_lib(ui,uis)(a0,a1)
+HMAC_CTX_set_flags(ctx,flags)(a0,d0)
+X509_check_ca(x)(a0)
 ##end

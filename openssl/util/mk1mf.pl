@@ -664,6 +664,15 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
+elsif ($platform eq "OS4")
+	{
+	$rules .= <<"EOF";
+\$(TMP_D)/bn_asm_amigaos4_ppc32.s: \$(SRC_D)crypto/bn/asm/ppc.pl
+	perl \$< \$@
+
+EOF
+	}
+
 print "###################################################################\n";
 print $rules;
 

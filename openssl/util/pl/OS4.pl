@@ -21,24 +21,24 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='-lauto -lnet -L\$(AmiSSL)/lib -lamisslauto -lamisslstubs';
+$lflags='-lm -lauto -lnet -L$(AmiSSL)/lib -lamisslauto -lamisslstubs';
 $efile='-o ';
 $exep='';
 $ex_libs="";
 
 # static library stuff
-$mklib='ar r';
+$mklib='ppc-amigaos-ar r';
 $mlflags='';
-$ranlib='ranlib';
+$ranlib='ppc-amigaos-ranlib';
 $plib='lib';
 $libp=".a";
 $shlibp=".a";
 $lfile='';
 
-$asm='as';
+$asm='ppc-amigaos-as';
 $afile='-o ';
-$bn_mulw_obj="";
-$bn_mulw_src="";
+$bn_asm_obj="\$(OBJ_D)/bn_asm_amigaos4_ppc32.o";
+$bn_asm_src="\$(TMP_D)/bn_asm_amigaos4_ppc32.s";
 $des_enc_obj="";
 $des_enc_src="";
 $bf_enc_obj="";

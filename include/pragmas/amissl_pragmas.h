@@ -2506,6 +2506,8 @@
 #pragma libcall AmiSSLBase SHA1_Transform 3af2 9802
 #pragma libcall AmiSSLBase UI_read_string_lib 3af8 9802
 #pragma libcall AmiSSLBase UI_write_string_lib 3afe 9802
+#pragma libcall AmiSSLBase HMAC_CTX_set_flags 3b04 0802
+#pragma libcall AmiSSLBase X509_check_ca 3b0a 801
 #ifdef __SASC_60
 #pragma tagcall AmiSSLBase InitAmiSSL 024 801
 #pragma tagcall AmiSSLBase CleanupAmiSSL 02a 801

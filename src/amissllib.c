@@ -7,71 +7,85 @@
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
-extern struct WBStartup *_WBenchMsg;
-extern char __stdiowin[];
-
-static void fail(const char *message)
+static void report_error(const char *message)
 {
 	struct DOSBase *DOSBase;
 	BPTR fh;
 
 	if (DOSBase = (struct DOSBase *)OpenLibrary("dos.library", 36))
 	{
-		if (!_WBenchMsg)
-			fh = Output();
+		struct Process *proc = (struct Process *)FindTask(NULL);
+		BOOL from_wb = process->pr_CLI == NULL;
+
+		if (!from_wb)
+			fh = proc->pr_CES ? proc->pr_CES : Output();
 		else
-			fh = Open(__stdiowin, MODE_NEWFILE);
+			fh = Open("CON://///AUTO/CLOSE/WAIT", MODE_NEWFILE);
 
 		if (fh)
 		{
 			FPrintf(fh, message);
 
-			if (_WBenchMsg)
-			{
-				Delay(250);
+			if (from_wb)
 				Close(fh);
-			}
 		}
+
+		CloseLibrary(DOSBase);
 	}
 }
 
 extern struct Library *SocketBase;
-struct Library * AmiSSLBase;
-struct Library * AmiSSLMasterBase;
 
-static void *libbase1;
-static void *libbase2;
+struct Library *AmiSSLMasterBase, *AmiSSLBase;
+static struct Library *amisslmaster_base, *amissl_base;
 
 int __stdargs _STI_250_openamissl(void)
 {
-	int ret = 1; /* Error */
+	int ret = 0; /* No error */
 
-	if (!(libbase1 = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", VERSION)))
-		fail("Couldn't open amisslmaster.library v" MKSTR(VERSION) "\n");
-	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-		fail("Couldn't initialize amisslmaster.library!\n");
-	else if (!(libbase2 = AmiSSLBase = OpenAmiSSL()))
-		fail("Couldn't open AmiSSL!\n");
-	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase, TAG_DONE))
-		fail("Couldn't initialize AmiSSL!\n");
-	else
-		ret = 0;
+	if (!AmiSSLMasterBase)
+	{
+		if (!(amisslmaster_base = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", VERSION)))
+		{
+			report_error("Couldn't open amisslmaster.library v" MKSTR(VERSION) "\n");
+			ret = 1;
+		}
+		else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+		{
+			report_error("Couldn't initialize amisslmaster.library!\n");
+			ret = 1;
+		}
+	}
+
+	if (ret == 0 && !AmiSSLBase)
+	{
+		if (!(amissl_base = AmiSSLBase = OpenAmiSSL()))
+		{
+			report_error("Couldn't open AmiSSL!\n");
+			ret = 1;
+		}
+		else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase, TAG_DONE))
+		{
+			report_error("Couldn't initialize AmiSSL!\n");
+			ret = 1;
+		}
+	}
 
 	return(ret);
 }
 
 void __stdargs _STD_250_openamissl(void)
 {
-	if (libbase2)
+	if (amissl_base)
 	{
 		CleanupAmiSSL(TAG_DONE);
 		CloseAmiSSL();
-		libbase2 = AmiSSLBase = NULL;
+		amissl_base = AmiSSLBase = NULL;
 	}
 
-	if (libbase1)
+	if (amisslmaster_base)
 	{
-		CloseLibrary(libbase1);
-		libbase1 = AmiSSLMasterBase = NULL;
+		CloseLibrary(amisslmaster_base);
+		amisslmaster_base = AmiSSLMasterBase = NULL;
 	}
 }
