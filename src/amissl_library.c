@@ -17,7 +17,7 @@
 #undef __USE_INLINE__
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
-#include <openssl/tags.h>
+#include <amissl/tags.h>
 #ifdef __amigaos4__
 #define __USE_INLINE__
 #endif
@@ -34,7 +34,7 @@
 #endif
 #include "amisslinit.h"
 
-#include "debug.h"
+#include <internal/debug.h>
 
 #ifdef __amigaos4__
 struct AmiSSLIFace;
@@ -458,7 +458,7 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 	if(thread_hash)
 	{
 		ObtainSemaphore(&openssl_cs);
-		h_doall(thread_hash,cleanupState); /* Clean up any left overs from tasks not calling cleanup */
+		h_doall(thread_hash,(void (*)(long,void *))cleanupState); /* Clean up any left overs from tasks not calling cleanup */
 		ReleaseSemaphore(&openssl_cs);
 	}
 	
@@ -484,7 +484,7 @@ void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 
 	if(thread_hash)
 	{
-		h_doall(thread_hash,cleanupState); /* Clean up any left overs from tasks not calling cleanup */
+		h_doall(thread_hash,(void (*)(long,void *))cleanupState); /* Clean up any left overs from tasks not calling cleanup */
 		h_free(thread_hash);
 		thread_hash = NULL;
 	}

@@ -12,7 +12,7 @@
 #else
 #include "/libcmt/libcmt.h"
 #endif
-#include "debug.h"
+#include <internal/debug.h>
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>

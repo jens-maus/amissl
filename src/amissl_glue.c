@@ -1,4 +1,4 @@
-#include <clib/amissl_protos.h>
+#include <amissl/amissl.h>
 #include <internal/amissl_compiler.h>
 
 #ifdef __amigaos4__
