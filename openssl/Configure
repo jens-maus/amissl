@@ -577,6 +577,9 @@ my %table=(
 # SAS/C AmigaOS by default, we support threads
 "SC","sc::::::EXPORT_VAR_AS_FN::",
 
+# GCC AmigaOS4
+"OS4","ppc-amigaos-gcc::::::EXPORT_VAR_AS_FN::",
+
 );
 
 my @WinTargets=qw(VC-NT VC-CE VC-WIN32 VC-WIN16 VC-W31-16 VC-W31-32 VC-MSDOS
@@ -1506,7 +1509,7 @@ print "RC2 uses u$type[$rc2_int]\n" if $rc2_int != $def_int;
 print "BF_PTR used\n" if $bf_ptr == 1; 
 print "BF_PTR2 used\n" if $bf_ptr == 2; 
 
-if($IsWindows || $target == "SC") {
+if($IsWindows || $target == "SC" || $target == "OS4") {
 	open (OUT,">crypto/buildinf.h") || die "Can't open buildinf.h";
 	printf OUT <<EOF;
 #ifndef MK1MF_BUILD

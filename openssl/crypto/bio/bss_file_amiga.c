@@ -60,7 +60,7 @@ static BPTR FOpen(char *name, char *mode)
 			if (seek_to_end)
 				Seek(file, 0, OFFSET_END);
 
-			if (DOSBase->dl_lib.lib_Version >= 39)
+			if (((struct Library *)DOSBase)->lib_Version >= 39)
 				SetVBuf(file, NULL, IsInteractive(file) ? BUF_LINE : BUF_FULL, 5120);
 		}
 	}
@@ -315,7 +315,7 @@ static int file_gets(BIO *bp, char *buf, int size)
 
 	*buf = '\0'; /* Not sure what OpenSSL needs when ret is 0, this is just in case */
 
-	if (FGets((BPTR)bp->ptr, buf, (DOSBase->dl_lib.lib_Version >= 39) ? size : size - 1))
+	if (FGets((BPTR)bp->ptr, buf, (((struct Library *)DOSBase)->lib_Version >= 39) ? size : size - 1))
 		ret = strlen(buf);
 	else
 		ret = 0;

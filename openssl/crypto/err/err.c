@@ -1082,6 +1082,8 @@ void ERR_add_error_dataA(int num, va_list args)
 err:
 #ifndef AMISSL
 	va_end(args);
+#else
+	/* GCC complains otherwise */;
 #endif /* !AMISSL */
 	}
 

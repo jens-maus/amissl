@@ -109,6 +109,16 @@ extern "C" {
 # endif
 #endif
 
+#ifdef AMIGA
+#  define NO_CHMOD
+#  define NO_SYSLOG
+#  undef  DEVRANDOM
+#  ifdef CLIB2
+#    define __USE_NETINET_IN_H
+#    define NO_SYS_PARAM_H
+#  endif /* CLIB2 */
+#endif /* AMIGA */
+
 /********************************************************************
  The Microsoft section
  ********************************************************************/
@@ -173,7 +183,9 @@ int GetAmiSSLerrno(void);
 #define closesocket(s)		closesocket(s)
 #define readsocket(s,b,n)	recv((s),(b),(n), 0)
 #define writesocket(s,b,n)	send((s),(b),(n), 0)
+#ifdef __SASC
 #include "/scmt/scmt.h"
+#endif /* __SASC */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -370,8 +382,10 @@ int GetAmiSSLerrno(void);
 #    ifdef AMIGA
 #      define LIST_SEPARATOR_CHAR ';'
 #      define NUL_DEV		"NIL:"
-       typedef long ssize_t;
-       typedef long pid_t;
+#      ifdef __SASC
+         typedef long ssize_t;
+         typedef long pid_t;
+#      endif /* __SASC */
 #    else
 #      define LIST_SEPARATOR_CHAR ':'
 #      define NUL_DEV		"/dev/null"

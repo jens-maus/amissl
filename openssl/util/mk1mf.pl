@@ -40,6 +40,7 @@ $infile="MINFO";
 	"FreeBSD","FreeBSD distribution",
 	"OS2-EMX", "EMX GCC OS/2",
 	"SC", "SAS/C Amiga",
+	"OS4", "Amiga OS4",
 	"default","cc under unix",
 	);
 
@@ -202,6 +203,10 @@ elsif ($platform eq "OS2-EMX")
 elsif ($platform eq "SC")
 	{
 	require "SC.pl";
+	}
+elsif ($platform eq "OS4")
+	{
+	require "OS4.pl";
 	}
 else
 	{
