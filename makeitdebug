@@ -4,9 +4,14 @@ cd openssl
 
 mkdir -p {680{0,6}0,68020-40}/{tmp,out}
 
+if [ ! -f MINFO ]
+then
+	make -f Makefile.ssl files
+fi
+
 cd 68000
-(cd .. && perl util/mk1mf.pl no-engine SRC= TMP=68000/tmp \
-						  OUT=68000/out SC) >makefile.one
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=68000/tmp \
+							OUT=68000/out SC) >makefile.one
 cd ..
 make -f 68000/makefile.one CPU_TYPE=ANY
 
