@@ -29,6 +29,9 @@
 #define OPENSSLDIR "AmiSSL:"
 #endif /* !OPENSSLDIR */
 
+#undef OPENSSL_UNISTD
+#define OPENSSL_UNISTD <unistd.h>
+
 #ifndef THIRTY_TWO_BIT
 #define THIRTY_TWO_BIT
 #endif /* !THIRTY_TWO_BIT */
