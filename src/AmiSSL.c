@@ -10,14 +10,19 @@ __asm __saveds void ASN1_TYPE_free_AmiSSL(register __a0 ASN1_TYPE *a)
 	ASN1_TYPE_free(a);
 }
 
-__asm __saveds int i2d_ASN1_TYPE_AmiSSL(register __a0 ASN1_TYPE *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_TYPE *d2i_ASN1_TYPE_AmiSSL(register __a0 ASN1_TYPE **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_TYPE(a, pp));
+	return(d2i_ASN1_TYPE(a, in, len));
 }
 
-__asm __saveds ASN1_TYPE *d2i_ASN1_TYPE_AmiSSL(register __a0 ASN1_TYPE **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_TYPE_AmiSSL(register __a0 ASN1_TYPE *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_TYPE(a, pp, length));
+	return(i2d_ASN1_TYPE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_ANY_it_AmiSSL(void)
+{
+	return(ASN1_ANY_it());
 }
 
 __asm __saveds int ASN1_TYPE_get_AmiSSL(register __a0 ASN1_TYPE *a)
@@ -53,6 +58,11 @@ __asm __saveds ASN1_OBJECT *c2i_ASN1_OBJECT_AmiSSL(register __a0 ASN1_OBJECT **a
 __asm __saveds ASN1_OBJECT *d2i_ASN1_OBJECT_AmiSSL(register __a0 ASN1_OBJECT **a, register __a1 unsigned char **pp, register __d0 long length)
 {
 	return(d2i_ASN1_OBJECT(a, pp, length));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_OBJECT_it_AmiSSL(void)
+{
+	return(ASN1_OBJECT_it());
 }
 
 __asm __saveds ASN1_STRING *ASN1_STRING_new_AmiSSL(void)
@@ -115,19 +125,24 @@ __asm __saveds void ASN1_BIT_STRING_free_AmiSSL(register __a0 ASN1_BIT_STRING *a
 	ASN1_BIT_STRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_BIT_STRING *d2i_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_BIT_STRING(a, pp));
+	return(d2i_ASN1_BIT_STRING(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_BIT_STRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_BIT_STRING_it_AmiSSL(void)
+{
+	return(ASN1_BIT_STRING_it());
 }
 
 __asm __saveds int i2c_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING *a, register __a1 unsigned char **pp)
 {
 	return(i2c_ASN1_BIT_STRING(a, pp));
-}
-
-__asm __saveds ASN1_BIT_STRING *d2i_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_ASN1_BIT_STRING(a, pp, length));
 }
 
 __asm __saveds ASN1_BIT_STRING *c2i_ASN1_BIT_STRING_AmiSSL(register __a0 ASN1_BIT_STRING **a, register __a1 unsigned char **pp, register __d0 long length)
@@ -185,19 +200,24 @@ __asm __saveds void ASN1_INTEGER_free_AmiSSL(register __a0 ASN1_INTEGER *a)
 	ASN1_INTEGER_free(a);
 }
 
-__asm __saveds int i2d_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_INTEGER *d2i_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_INTEGER(a, pp));
+	return(d2i_ASN1_INTEGER(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_INTEGER(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_INTEGER_it_AmiSSL(void)
+{
+	return(ASN1_INTEGER_it());
 }
 
 __asm __saveds int i2c_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER *a, register __a1 unsigned char **pp)
 {
 	return(i2c_ASN1_INTEGER(a, pp));
-}
-
-__asm __saveds ASN1_INTEGER *d2i_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_ASN1_INTEGER(a, pp, length));
 }
 
 __asm __saveds ASN1_INTEGER *c2i_ASN1_INTEGER_AmiSSL(register __a0 ASN1_INTEGER **a, register __a1 unsigned char **pp, register __d0 long length)
@@ -230,14 +250,19 @@ __asm __saveds void ASN1_ENUMERATED_free_AmiSSL(register __a0 ASN1_ENUMERATED *a
 	ASN1_ENUMERATED_free(a);
 }
 
-__asm __saveds int i2d_ASN1_ENUMERATED_AmiSSL(register __a0 ASN1_ENUMERATED *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_ENUMERATED *d2i_ASN1_ENUMERATED_AmiSSL(register __a0 ASN1_ENUMERATED **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_ENUMERATED(a, pp));
+	return(d2i_ASN1_ENUMERATED(a, in, len));
 }
 
-__asm __saveds ASN1_ENUMERATED *d2i_ASN1_ENUMERATED_AmiSSL(register __a0 ASN1_ENUMERATED **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_ENUMERATED_AmiSSL(register __a0 ASN1_ENUMERATED *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_ENUMERATED(a, pp, length));
+	return(i2d_ASN1_ENUMERATED(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_ENUMERATED_it_AmiSSL(void)
+{
+	return(ASN1_ENUMERATED_it());
 }
 
 __asm __saveds int ASN1_UTCTIME_check_AmiSSL(register __a0 ASN1_UTCTIME *a)
@@ -285,14 +310,19 @@ __asm __saveds void ASN1_OCTET_STRING_free_AmiSSL(register __a0 ASN1_OCTET_STRIN
 	ASN1_OCTET_STRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_OCTET_STRING_AmiSSL(register __a0 ASN1_OCTET_STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_OCTET_STRING *d2i_ASN1_OCTET_STRING_AmiSSL(register __a0 ASN1_OCTET_STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_OCTET_STRING(a, pp));
+	return(d2i_ASN1_OCTET_STRING(a, in, len));
 }
 
-__asm __saveds ASN1_OCTET_STRING *d2i_ASN1_OCTET_STRING_AmiSSL(register __a0 ASN1_OCTET_STRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_OCTET_STRING_AmiSSL(register __a0 ASN1_OCTET_STRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_OCTET_STRING(a, pp, length));
+	return(i2d_ASN1_OCTET_STRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_OCTET_STRING_it_AmiSSL(void)
+{
+	return(ASN1_OCTET_STRING_it());
 }
 
 __asm __saveds ASN1_OCTET_STRING *ASN1_OCTET_STRING_dup_AmiSSL(register __a0 ASN1_OCTET_STRING *a)
@@ -320,14 +350,44 @@ __asm __saveds void ASN1_VISIBLESTRING_free_AmiSSL(register __a0 ASN1_VISIBLESTR
 	ASN1_VISIBLESTRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_VISIBLESTRING_AmiSSL(register __a0 ASN1_VISIBLESTRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_VISIBLESTRING *d2i_ASN1_VISIBLESTRING_AmiSSL(register __a0 ASN1_VISIBLESTRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_VISIBLESTRING(a, pp));
+	return(d2i_ASN1_VISIBLESTRING(a, in, len));
 }
 
-__asm __saveds ASN1_VISIBLESTRING *d2i_ASN1_VISIBLESTRING_AmiSSL(register __a0 ASN1_VISIBLESTRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_VISIBLESTRING_AmiSSL(register __a0 ASN1_VISIBLESTRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_VISIBLESTRING(a, pp, length));
+	return(i2d_ASN1_VISIBLESTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_VISIBLESTRING_it_AmiSSL(void)
+{
+	return(ASN1_VISIBLESTRING_it());
+}
+
+__asm __saveds ASN1_UNIVERSALSTRING *ASN1_UNIVERSALSTRING_new_AmiSSL(void)
+{
+	return(ASN1_UNIVERSALSTRING_new());
+}
+
+__asm __saveds void ASN1_UNIVERSALSTRING_free_AmiSSL(register __a0 ASN1_UNIVERSALSTRING *a)
+{
+	ASN1_UNIVERSALSTRING_free(a);
+}
+
+__asm __saveds ASN1_UNIVERSALSTRING *d2i_ASN1_UNIVERSALSTRING_AmiSSL(register __a0 ASN1_UNIVERSALSTRING **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_ASN1_UNIVERSALSTRING(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_UNIVERSALSTRING_AmiSSL(register __a0 ASN1_UNIVERSALSTRING *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_UNIVERSALSTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_UNIVERSALSTRING_it_AmiSSL(void)
+{
+	return(ASN1_UNIVERSALSTRING_it());
 }
 
 __asm __saveds ASN1_UTF8STRING *ASN1_UTF8STRING_new_AmiSSL(void)
@@ -340,14 +400,19 @@ __asm __saveds void ASN1_UTF8STRING_free_AmiSSL(register __a0 ASN1_UTF8STRING *a
 	ASN1_UTF8STRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_UTF8STRING_AmiSSL(register __a0 ASN1_UTF8STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_UTF8STRING *d2i_ASN1_UTF8STRING_AmiSSL(register __a0 ASN1_UTF8STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_UTF8STRING(a, pp));
+	return(d2i_ASN1_UTF8STRING(a, in, len));
 }
 
-__asm __saveds ASN1_UTF8STRING *d2i_ASN1_UTF8STRING_AmiSSL(register __a0 ASN1_UTF8STRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_UTF8STRING_AmiSSL(register __a0 ASN1_UTF8STRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_UTF8STRING(a, pp, length));
+	return(i2d_ASN1_UTF8STRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_UTF8STRING_it_AmiSSL(void)
+{
+	return(ASN1_UTF8STRING_it());
 }
 
 __asm __saveds ASN1_NULL *ASN1_NULL_new_AmiSSL(void)
@@ -360,14 +425,19 @@ __asm __saveds void ASN1_NULL_free_AmiSSL(register __a0 ASN1_NULL *a)
 	ASN1_NULL_free(a);
 }
 
-__asm __saveds int i2d_ASN1_NULL_AmiSSL(register __a0 ASN1_NULL *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_NULL *d2i_ASN1_NULL_AmiSSL(register __a0 ASN1_NULL **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_NULL(a, pp));
+	return(d2i_ASN1_NULL(a, in, len));
 }
 
-__asm __saveds ASN1_NULL *d2i_ASN1_NULL_AmiSSL(register __a0 ASN1_NULL **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_NULL_AmiSSL(register __a0 ASN1_NULL *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_NULL(a, pp, length));
+	return(i2d_ASN1_NULL(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_NULL_it_AmiSSL(void)
+{
+	return(ASN1_NULL_it());
 }
 
 __asm __saveds ASN1_BMPSTRING *ASN1_BMPSTRING_new_AmiSSL(void)
@@ -380,14 +450,19 @@ __asm __saveds void ASN1_BMPSTRING_free_AmiSSL(register __a0 ASN1_BMPSTRING *a)
 	ASN1_BMPSTRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_BMPSTRING_AmiSSL(register __a0 ASN1_BMPSTRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_BMPSTRING *d2i_ASN1_BMPSTRING_AmiSSL(register __a0 ASN1_BMPSTRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_BMPSTRING(a, pp));
+	return(d2i_ASN1_BMPSTRING(a, in, len));
 }
 
-__asm __saveds ASN1_BMPSTRING *d2i_ASN1_BMPSTRING_AmiSSL(register __a0 ASN1_BMPSTRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_BMPSTRING_AmiSSL(register __a0 ASN1_BMPSTRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_BMPSTRING(a, pp, length));
+	return(i2d_ASN1_BMPSTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_BMPSTRING_it_AmiSSL(void)
+{
+	return(ASN1_BMPSTRING_it());
 }
 
 __asm __saveds int UTF8_getc_AmiSSL(register __a0 const unsigned char *str, register __d0 int len, register __a1 unsigned long *val)
@@ -400,34 +475,29 @@ __asm __saveds int UTF8_putc_AmiSSL(register __a0 unsigned char *str, register _
 	return(UTF8_putc(str, len, value));
 }
 
-__asm __saveds int i2d_ASN1_PRINTABLE_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_STRING *ASN1_PRINTABLE_new_AmiSSL(void)
 {
-	return(i2d_ASN1_PRINTABLE(a, pp));
+	return(ASN1_PRINTABLE_new());
 }
 
-__asm __saveds ASN1_STRING *d2i_ASN1_PRINTABLE_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **pp, register __d0 long l)
+__asm __saveds void ASN1_PRINTABLE_free_AmiSSL(register __a0 ASN1_STRING *a)
 {
-	return(d2i_ASN1_PRINTABLE(a, pp, l));
+	ASN1_PRINTABLE_free(a);
 }
 
-__asm __saveds ASN1_PRINTABLESTRING *ASN1_PRINTABLESTRING_new_AmiSSL(void)
+__asm __saveds ASN1_STRING *d2i_ASN1_PRINTABLE_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(ASN1_PRINTABLESTRING_new());
+	return(d2i_ASN1_PRINTABLE(a, in, len));
 }
 
-__asm __saveds void ASN1_PRINTABLESTRING_free_AmiSSL(register __a0 ASN1_PRINTABLESTRING *a)
+__asm __saveds int i2d_ASN1_PRINTABLE_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **out)
 {
-	ASN1_PRINTABLESTRING_free(a);
+	return(i2d_ASN1_PRINTABLE(a, out));
 }
 
-__asm __saveds ASN1_PRINTABLESTRING *d2i_ASN1_PRINTABLESTRING_AmiSSL(register __a0 ASN1_PRINTABLESTRING **a, register __a1 unsigned char **pp, register __d0 long l)
+__asm __saveds const ASN1_ITEM *ASN1_PRINTABLE_it_AmiSSL(void)
 {
-	return(d2i_ASN1_PRINTABLESTRING(a, pp, l));
-}
-
-__asm __saveds int i2d_ASN1_PRINTABLESTRING_AmiSSL(register __a0 ASN1_PRINTABLESTRING *a, register __a1 unsigned char **pp)
-{
-	return(i2d_ASN1_PRINTABLESTRING(a, pp));
+	return(ASN1_PRINTABLE_it());
 }
 
 __asm __saveds ASN1_STRING *DIRECTORYSTRING_new_AmiSSL(void)
@@ -440,14 +510,19 @@ __asm __saveds void DIRECTORYSTRING_free_AmiSSL(register __a0 ASN1_STRING *a)
 	DIRECTORYSTRING_free(a);
 }
 
-__asm __saveds int i2d_DIRECTORYSTRING_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_STRING *d2i_DIRECTORYSTRING_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_DIRECTORYSTRING(a, pp));
+	return(d2i_DIRECTORYSTRING(a, in, len));
 }
 
-__asm __saveds ASN1_STRING *d2i_DIRECTORYSTRING_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_DIRECTORYSTRING_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_DIRECTORYSTRING(a, pp, length));
+	return(i2d_DIRECTORYSTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *DIRECTORYSTRING_it_AmiSSL(void)
+{
+	return(DIRECTORYSTRING_it());
 }
 
 __asm __saveds ASN1_STRING *DISPLAYTEXT_new_AmiSSL(void)
@@ -460,14 +535,44 @@ __asm __saveds void DISPLAYTEXT_free_AmiSSL(register __a0 ASN1_STRING *a)
 	DISPLAYTEXT_free(a);
 }
 
-__asm __saveds int i2d_DISPLAYTEXT_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_STRING *d2i_DISPLAYTEXT_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_DISPLAYTEXT(a, pp));
+	return(d2i_DISPLAYTEXT(a, in, len));
 }
 
-__asm __saveds ASN1_STRING *d2i_DISPLAYTEXT_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_DISPLAYTEXT_AmiSSL(register __a0 ASN1_STRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_DISPLAYTEXT(a, pp, length));
+	return(i2d_DISPLAYTEXT(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *DISPLAYTEXT_it_AmiSSL(void)
+{
+	return(DISPLAYTEXT_it());
+}
+
+__asm __saveds ASN1_PRINTABLESTRING *ASN1_PRINTABLESTRING_new_AmiSSL(void)
+{
+	return(ASN1_PRINTABLESTRING_new());
+}
+
+__asm __saveds void ASN1_PRINTABLESTRING_free_AmiSSL(register __a0 ASN1_PRINTABLESTRING *a)
+{
+	ASN1_PRINTABLESTRING_free(a);
+}
+
+__asm __saveds ASN1_PRINTABLESTRING *d2i_ASN1_PRINTABLESTRING_AmiSSL(register __a0 ASN1_PRINTABLESTRING **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_ASN1_PRINTABLESTRING(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_PRINTABLESTRING_AmiSSL(register __a0 ASN1_PRINTABLESTRING *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_PRINTABLESTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_PRINTABLESTRING_it_AmiSSL(void)
+{
+	return(ASN1_PRINTABLESTRING_it());
 }
 
 __asm __saveds ASN1_T61STRING *ASN1_T61STRING_new_AmiSSL(void)
@@ -475,14 +580,24 @@ __asm __saveds ASN1_T61STRING *ASN1_T61STRING_new_AmiSSL(void)
 	return(ASN1_T61STRING_new());
 }
 
-__asm __saveds void ASN1_T61STRING_free_AmiSSL(register __a0 ASN1_IA5STRING *a)
+__asm __saveds void ASN1_T61STRING_free_AmiSSL(register __a0 ASN1_T61STRING *a)
 {
 	ASN1_T61STRING_free(a);
 }
 
-__asm __saveds ASN1_T61STRING *d2i_ASN1_T61STRING_AmiSSL(register __a0 ASN1_T61STRING **a, register __a1 unsigned char **pp, register __d0 long l)
+__asm __saveds ASN1_T61STRING *d2i_ASN1_T61STRING_AmiSSL(register __a0 ASN1_T61STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(d2i_ASN1_T61STRING(a, pp, l));
+	return(d2i_ASN1_T61STRING(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_T61STRING_AmiSSL(register __a0 ASN1_T61STRING *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_T61STRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_T61STRING_it_AmiSSL(void)
+{
+	return(ASN1_T61STRING_it());
 }
 
 __asm __saveds ASN1_IA5STRING *ASN1_IA5STRING_new_AmiSSL(void)
@@ -495,14 +610,44 @@ __asm __saveds void ASN1_IA5STRING_free_AmiSSL(register __a0 ASN1_IA5STRING *a)
 	ASN1_IA5STRING_free(a);
 }
 
-__asm __saveds int i2d_ASN1_IA5STRING_AmiSSL(register __a0 ASN1_IA5STRING *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_IA5STRING *d2i_ASN1_IA5STRING_AmiSSL(register __a0 ASN1_IA5STRING **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_IA5STRING(a, pp));
+	return(d2i_ASN1_IA5STRING(a, in, len));
 }
 
-__asm __saveds ASN1_IA5STRING *d2i_ASN1_IA5STRING_AmiSSL(register __a0 ASN1_IA5STRING **a, register __a1 unsigned char **pp, register __d0 long l)
+__asm __saveds int i2d_ASN1_IA5STRING_AmiSSL(register __a0 ASN1_IA5STRING *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_IA5STRING(a, pp, l));
+	return(i2d_ASN1_IA5STRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_IA5STRING_it_AmiSSL(void)
+{
+	return(ASN1_IA5STRING_it());
+}
+
+__asm __saveds ASN1_GENERALSTRING *ASN1_GENERALSTRING_new_AmiSSL(void)
+{
+	return(ASN1_GENERALSTRING_new());
+}
+
+__asm __saveds void ASN1_GENERALSTRING_free_AmiSSL(register __a0 ASN1_GENERALSTRING *a)
+{
+	ASN1_GENERALSTRING_free(a);
+}
+
+__asm __saveds ASN1_GENERALSTRING *d2i_ASN1_GENERALSTRING_AmiSSL(register __a0 ASN1_GENERALSTRING **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_ASN1_GENERALSTRING(a, in, len));
+}
+
+__asm __saveds int i2d_ASN1_GENERALSTRING_AmiSSL(register __a0 ASN1_GENERALSTRING *a, register __a1 unsigned char **out)
+{
+	return(i2d_ASN1_GENERALSTRING(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_GENERALSTRING_it_AmiSSL(void)
+{
+	return(ASN1_GENERALSTRING_it());
 }
 
 __asm __saveds ASN1_UTCTIME *ASN1_UTCTIME_new_AmiSSL(void)
@@ -515,14 +660,19 @@ __asm __saveds void ASN1_UTCTIME_free_AmiSSL(register __a0 ASN1_UTCTIME *a)
 	ASN1_UTCTIME_free(a);
 }
 
-__asm __saveds int i2d_ASN1_UTCTIME_AmiSSL(register __a0 ASN1_UTCTIME *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_UTCTIME *d2i_ASN1_UTCTIME_AmiSSL(register __a0 ASN1_UTCTIME **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_UTCTIME(a, pp));
+	return(d2i_ASN1_UTCTIME(a, in, len));
 }
 
-__asm __saveds ASN1_UTCTIME *d2i_ASN1_UTCTIME_AmiSSL(register __a0 ASN1_UTCTIME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_UTCTIME_AmiSSL(register __a0 ASN1_UTCTIME *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_UTCTIME(a, pp, length));
+	return(i2d_ASN1_UTCTIME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_UTCTIME_it_AmiSSL(void)
+{
+	return(ASN1_UTCTIME_it());
 }
 
 __asm __saveds ASN1_GENERALIZEDTIME *ASN1_GENERALIZEDTIME_new_AmiSSL(void)
@@ -535,14 +685,19 @@ __asm __saveds void ASN1_GENERALIZEDTIME_free_AmiSSL(register __a0 ASN1_GENERALI
 	ASN1_GENERALIZEDTIME_free(a);
 }
 
-__asm __saveds int i2d_ASN1_GENERALIZEDTIME_AmiSSL(register __a0 ASN1_GENERALIZEDTIME *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_GENERALIZEDTIME *d2i_ASN1_GENERALIZEDTIME_AmiSSL(register __a0 ASN1_GENERALIZEDTIME **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_GENERALIZEDTIME(a, pp));
+	return(d2i_ASN1_GENERALIZEDTIME(a, in, len));
 }
 
-__asm __saveds ASN1_GENERALIZEDTIME *d2i_ASN1_GENERALIZEDTIME_AmiSSL(register __a0 ASN1_GENERALIZEDTIME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_GENERALIZEDTIME_AmiSSL(register __a0 ASN1_GENERALIZEDTIME *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_GENERALIZEDTIME(a, pp, length));
+	return(i2d_ASN1_GENERALIZEDTIME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_GENERALIZEDTIME_it_AmiSSL(void)
+{
+	return(ASN1_GENERALIZEDTIME_it());
 }
 
 __asm __saveds ASN1_TIME *ASN1_TIME_new_AmiSSL(void)
@@ -555,19 +710,34 @@ __asm __saveds void ASN1_TIME_free_AmiSSL(register __a0 ASN1_TIME *a)
 	ASN1_TIME_free(a);
 }
 
-__asm __saveds int i2d_ASN1_TIME_AmiSSL(register __a0 ASN1_TIME *a, register __a1 unsigned char **pp)
+__asm __saveds ASN1_TIME *d2i_ASN1_TIME_AmiSSL(register __a0 ASN1_TIME **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_ASN1_TIME(a, pp));
+	return(d2i_ASN1_TIME(a, in, len));
 }
 
-__asm __saveds ASN1_TIME *d2i_ASN1_TIME_AmiSSL(register __a0 ASN1_TIME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_ASN1_TIME_AmiSSL(register __a0 ASN1_TIME *a, register __a1 unsigned char **out)
 {
-	return(d2i_ASN1_TIME(a, pp, length));
+	return(i2d_ASN1_TIME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_TIME_it_AmiSSL(void)
+{
+	return(ASN1_TIME_it());
 }
 
 __asm __saveds ASN1_TIME *ASN1_TIME_set_AmiSSL(register __a0 ASN1_TIME *s, register __d0 time_t t)
 {
 	return(ASN1_TIME_set(s, t));
+}
+
+__asm __saveds int ASN1_TIME_check_AmiSSL(register __a0 ASN1_TIME *t)
+{
+	return(ASN1_TIME_check(t));
+}
+
+__asm __saveds ASN1_GENERALIZEDTIME *ASN1_TIME_to_generalizedtime_AmiSSL(register __a0 ASN1_TIME *t, register __a1 ASN1_GENERALIZEDTIME **out)
+{
+	return(ASN1_TIME_to_generalizedtime(t, out));
 }
 
 __asm __saveds int i2d_ASN1_SET_AmiSSL(register __a0 STACK *a, register __a1 unsigned char **pp, register __a2 int (*func)(), register __d0 int ex_tag, register __d1 int ex_class, register __d2 int is_set)
@@ -625,7 +795,7 @@ __asm __saveds int a2d_ASN1_OBJECT_AmiSSL(register __a0 unsigned char *out, regi
 	return(a2d_ASN1_OBJECT(out, olen, buf, num));
 }
 
-__asm __saveds ASN1_OBJECT *ASN1_OBJECT_create_AmiSSL(register __d0 int nid, register __a0 unsigned char *data, register __d1 int len, register __a1 char *sn, register __a2 char *ln)
+__asm __saveds ASN1_OBJECT *ASN1_OBJECT_create_AmiSSL(register __d0 int nid, register __a0 unsigned char *data, register __d1 int len, register __a1 const char *sn, register __a2 const char *ln)
 {
 	return(ASN1_OBJECT_create(nid, data, len, sn, ln));
 }
@@ -685,6 +855,11 @@ __asm __saveds ASN1_STRING *d2i_ASN1_bytes_AmiSSL(register __a0 ASN1_STRING **a,
 	return(d2i_ASN1_bytes(a, pp, length, Ptag, Pclass));
 }
 
+__asm __saveds unsigned long ASN1_tag2bit_AmiSSL(register __d0 int tag)
+{
+	return(ASN1_tag2bit(tag));
+}
+
 __asm __saveds ASN1_STRING *d2i_ASN1_type_bytes_AmiSSL(register __a0 ASN1_STRING **a, register __a1 unsigned char **pp, register __d0 long length, register __d1 int type)
 {
 	return(d2i_ASN1_type_bytes(a, pp, length, type));
@@ -720,6 +895,11 @@ __asm __saveds char *ASN1_dup_AmiSSL(register __a0 int (*i2d)(), register __a1 c
 	return(ASN1_dup(i2d, d2i, x));
 }
 
+__asm __saveds void *ASN1_item_dup_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 void *x)
+{
+	return(ASN1_item_dup(it, x));
+}
+
 __asm __saveds int ASN1_STRING_to_UTF8_AmiSSL(register __a0 unsigned char **out, register __a1 ASN1_STRING *in)
 {
 	return(ASN1_STRING_to_UTF8(out, in));
@@ -730,9 +910,19 @@ __asm __saveds char *ASN1_d2i_bio_AmiSSL(register __a0 char *(*xnew)(), register
 	return(ASN1_d2i_bio(xnew, d2i, bp, x));
 }
 
+__asm __saveds void *ASN1_item_d2i_bio_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 BIO *in, register __a2 void *x)
+{
+	return(ASN1_item_d2i_bio(it, in, x));
+}
+
 __asm __saveds int ASN1_i2d_bio_AmiSSL(register __a0 int (*i2d)(), register __a1 BIO *out, register __a2 unsigned char *x)
 {
 	return(ASN1_i2d_bio(i2d, out, x));
+}
+
+__asm __saveds int ASN1_item_i2d_bio_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 BIO *out, register __a2 void *x)
+{
+	return(ASN1_item_i2d_bio(it, out, x));
 }
 
 __asm __saveds int ASN1_UTCTIME_print_AmiSSL(register __a0 BIO *fp, register __a1 ASN1_UTCTIME *a)
@@ -855,9 +1045,19 @@ __asm __saveds void *ASN1_unpack_string_AmiSSL(register __a0 ASN1_STRING *oct, r
 	return(ASN1_unpack_string(oct, d2i));
 }
 
+__asm __saveds void *ASN1_item_unpack_AmiSSL(register __a0 ASN1_STRING *oct, register __a1 const ASN1_ITEM *it)
+{
+	return(ASN1_item_unpack(oct, it));
+}
+
 __asm __saveds ASN1_STRING *ASN1_pack_string_AmiSSL(register __a0 void *obj, register __a1 int (*i2d)(), register __a2 ASN1_OCTET_STRING **oct)
 {
 	return(ASN1_pack_string(obj, i2d, oct));
+}
+
+__asm __saveds ASN1_STRING *ASN1_item_pack_AmiSSL(register __a0 void *obj, register __a1 const ASN1_ITEM *it, register __a2 ASN1_OCTET_STRING **oct)
+{
+	return(ASN1_item_pack(obj, it, oct));
 }
 
 __asm __saveds void ASN1_STRING_set_default_mask_AmiSSL(register __d0 unsigned long mask)
@@ -905,6 +1105,31 @@ __asm __saveds void ASN1_STRING_TABLE_cleanup_AmiSSL(void)
 	ASN1_STRING_TABLE_cleanup();
 }
 
+__asm __saveds ASN1_VALUE *ASN1_item_new_AmiSSL(register __a0 const ASN1_ITEM *it)
+{
+	return(ASN1_item_new(it));
+}
+
+__asm __saveds void ASN1_item_free_AmiSSL(register __a0 ASN1_VALUE *val, register __a1 const ASN1_ITEM *it)
+{
+	ASN1_item_free(val, it);
+}
+
+__asm __saveds ASN1_VALUE *ASN1_item_d2i_AmiSSL(register __a0 ASN1_VALUE **val, register __a1 unsigned char **in, register __d0 long len, register __a2 const ASN1_ITEM *it)
+{
+	return(ASN1_item_d2i(val, in, len, it));
+}
+
+__asm __saveds int ASN1_item_i2d_AmiSSL(register __a0 ASN1_VALUE *val, register __a1 unsigned char **out, register __a2 const ASN1_ITEM *it)
+{
+	return(ASN1_item_i2d(val, out, it));
+}
+
+__asm __saveds void ASN1_add_oid_module_AmiSSL(void)
+{
+	ASN1_add_oid_module();
+}
+
 __asm __saveds void ERR_load_ASN1_strings_AmiSSL(void)
 {
 	ERR_load_ASN1_strings();
@@ -918,6 +1143,151 @@ __asm __saveds int asn1_GetSequence_AmiSSL(register __a0 ASN1_CTX *c, register _
 __asm __saveds void asn1_add_error_AmiSSL(register __a0 unsigned char *address, register __d0 int offset)
 {
 	asn1_add_error(address, offset);
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_BOOLEAN_it_AmiSSL(void)
+{
+	return(ASN1_BOOLEAN_it());
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_TBOOLEAN_it_AmiSSL(void)
+{
+	return(ASN1_TBOOLEAN_it());
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_FBOOLEAN_it_AmiSSL(void)
+{
+	return(ASN1_FBOOLEAN_it());
+}
+
+__asm __saveds const ASN1_ITEM *ASN1_SEQUENCE_it_AmiSSL(void)
+{
+	return(ASN1_SEQUENCE_it());
+}
+
+__asm __saveds const ASN1_ITEM *CBIGNUM_it_AmiSSL(void)
+{
+	return(CBIGNUM_it());
+}
+
+__asm __saveds const ASN1_ITEM *BIGNUM_it_AmiSSL(void)
+{
+	return(BIGNUM_it());
+}
+
+__asm __saveds const ASN1_ITEM *LONG_it_AmiSSL(void)
+{
+	return(LONG_it());
+}
+
+__asm __saveds const ASN1_ITEM *ZLONG_it_AmiSSL(void)
+{
+	return(ZLONG_it());
+}
+
+__asm __saveds int ASN1_item_ex_new_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	return(ASN1_item_ex_new(pval, it));
+}
+
+__asm __saveds void ASN1_item_ex_free_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	ASN1_item_ex_free(pval, it);
+}
+
+__asm __saveds int ASN1_template_new_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_TEMPLATE *tt)
+{
+	return(ASN1_template_new(pval, tt));
+}
+
+__asm __saveds int ASN1_primitive_new_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	return(ASN1_primitive_new(pval, it));
+}
+
+__asm __saveds void ASN1_template_free_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_TEMPLATE *tt)
+{
+	ASN1_template_free(pval, tt);
+}
+
+__asm __saveds int ASN1_template_d2i_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char **in, register __d0 long len, register __a2 const ASN1_TEMPLATE *tt)
+{
+	return(ASN1_template_d2i(pval, in, len, tt));
+}
+
+__asm __saveds int ASN1_item_ex_d2i_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char **in, register __d0 long len, register __a2 const ASN1_ITEM *it, register __d1 int tag, register __d2 int aclass, register __d3 char opt, register __a3 ASN1_TLC *ctx)
+{
+	return(ASN1_item_ex_d2i(pval, in, len, it, tag, aclass, opt, ctx));
+}
+
+__asm __saveds int ASN1_item_ex_i2d_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char **out, register __a2 const ASN1_ITEM *it, register __d0 int tag, register __d1 int aclass)
+{
+	return(ASN1_item_ex_i2d(pval, out, it, tag, aclass));
+}
+
+__asm __saveds int ASN1_template_i2d_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char **out, register __a2 const ASN1_TEMPLATE *tt)
+{
+	return(ASN1_template_i2d(pval, out, tt));
+}
+
+__asm __saveds void ASN1_primitive_free_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	ASN1_primitive_free(pval, it);
+}
+
+__asm __saveds int asn1_ex_i2c_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char *cont, register __a2 int *putype, register __a3 const ASN1_ITEM *it)
+{
+	return(asn1_ex_i2c(pval, cont, putype, it));
+}
+
+__asm __saveds int asn1_ex_c2i_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char *cont, register __d0 int len, register __d1 int utype, register __a2 char *free_cont, register __a3 const ASN1_ITEM *it)
+{
+	return(asn1_ex_c2i(pval, cont, len, utype, free_cont, it));
+}
+
+__asm __saveds int asn1_get_choice_selector_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	return(asn1_get_choice_selector(pval, it));
+}
+
+__asm __saveds int asn1_set_choice_selector_AmiSSL(register __a0 ASN1_VALUE **pval, register __d0 int value, register __a1 const ASN1_ITEM *it)
+{
+	return(asn1_set_choice_selector(pval, value, it));
+}
+
+__asm __saveds ASN1_VALUE **asn1_get_field_ptr_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_TEMPLATE *tt)
+{
+	return(asn1_get_field_ptr(pval, tt));
+}
+
+__asm __saveds const ASN1_TEMPLATE *asn1_do_adb_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_TEMPLATE *tt, register __d0 int nullerr)
+{
+	return(asn1_do_adb(pval, tt, nullerr));
+}
+
+__asm __saveds int asn1_do_lock_AmiSSL(register __a0 ASN1_VALUE **pval, register __d0 int op, register __a1 const ASN1_ITEM *it)
+{
+	return(asn1_do_lock(pval, op, it));
+}
+
+__asm __saveds void asn1_enc_init_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	asn1_enc_init(pval, it);
+}
+
+__asm __saveds void asn1_enc_free_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 const ASN1_ITEM *it)
+{
+	asn1_enc_free(pval, it);
+}
+
+__asm __saveds int asn1_enc_restore_AmiSSL(register __a0 int *len, register __a1 unsigned char **out, register __a2 ASN1_VALUE **pval, register __a3 const ASN1_ITEM *it)
+{
+	return(asn1_enc_restore(len, out, pval, it));
+}
+
+__asm __saveds int asn1_enc_save_AmiSSL(register __a0 ASN1_VALUE **pval, register __a1 unsigned char *in, register __d0 int inlen, register __a2 const ASN1_ITEM *it)
+{
+	return(asn1_enc_save(pval, in, inlen, it));
 }
 
 __asm __saveds size_t BIO_ctrl_pending_AmiSSL(register __a0 BIO *b)
@@ -1023,6 +1393,11 @@ __asm __saveds int BIO_write_AmiSSL(register __a0 BIO *b, register __a1 const vo
 __asm __saveds int BIO_puts_AmiSSL(register __a0 BIO *bp, register __a1 const char *buf)
 {
 	return(BIO_puts(bp, buf));
+}
+
+__asm __saveds int BIO_indent_AmiSSL(register __a0 BIO *b, register __d0 int indent, register __d1 int max)
+{
+	return(BIO_indent(b, indent, max));
 }
 
 __asm __saveds long BIO_ctrl_AmiSSL(register __a0 BIO *bp, register __d0 int cmd, register __d1 long larg, register __a1 void *parg)
@@ -1210,7 +1585,7 @@ __asm __saveds int BIO_sock_error_AmiSSL(register __d0 int sock)
 	return(BIO_sock_error(sock));
 }
 
-__asm __saveds int BIO_socket_ioctl_AmiSSL(register __d0 int fd, register __d1 long type, register __a0 unsigned long *arg)
+__asm __saveds int BIO_socket_ioctl_AmiSSL(register __d0 int fd, register __d1 long type, register __a0 void *arg)
 {
 	return(BIO_socket_ioctl(fd, type, arg));
 }
@@ -1285,11 +1660,6 @@ __asm __saveds void BIO_copy_next_retry_AmiSSL(register __a0 BIO *b)
 	BIO_copy_next_retry(b);
 }
 
-__asm __saveds long BIO_ghbn_ctrl_AmiSSL(register __d0 int cmd, register __d1 int iarg, register __a0 char *parg)
-{
-	return(BIO_ghbn_ctrl(cmd, iarg, parg));
-}
-
 __asm __saveds int BIO_vprintf_AmiSSL(register __a0 BIO *bio, register __a1 const char *format, register __d0 va_list args)
 {
 	return(BIO_vprintf(bio, format, args));
@@ -1305,7 +1675,7 @@ __asm __saveds void ERR_load_BIO_strings_AmiSSL(void)
 	ERR_load_BIO_strings();
 }
 
-__asm __saveds BIGNUM *BN_value_one_AmiSSL(void)
+__asm __saveds const BIGNUM *BN_value_one_AmiSSL(void)
 {
 	return(BN_value_one());
 }
@@ -1395,6 +1765,11 @@ __asm __saveds BIGNUM *BN_copy_AmiSSL(register __a0 BIGNUM *a, register __a1 con
 	return(BN_copy(a, b));
 }
 
+__asm __saveds void BN_swap_AmiSSL(register __a0 BIGNUM *a, register __a1 BIGNUM *b)
+{
+	BN_swap(a, b);
+}
+
 __asm __saveds BIGNUM *BN_bin2bn_AmiSSL(register __a0 const unsigned char *s, register __d0 int len, register __a1 BIGNUM *ret)
 {
 	return(BN_bin2bn(s, len, ret));
@@ -1405,7 +1780,7 @@ __asm __saveds int BN_bn2bin_AmiSSL(register __a0 const BIGNUM *a, register __a1
 	return(BN_bn2bin(a, to));
 }
 
-__asm __saveds BIGNUM *BN_mpi2bn_AmiSSL(register __a0 unsigned char *s, register __d0 int len, register __a1 BIGNUM *ret)
+__asm __saveds BIGNUM *BN_mpi2bn_AmiSSL(register __a0 const unsigned char *s, register __d0 int len, register __a1 BIGNUM *ret)
 {
 	return(BN_mpi2bn(s, len, ret));
 }
@@ -1435,9 +1810,14 @@ __asm __saveds int BN_add_AmiSSL(register __a0 BIGNUM *r, register __a1 const BI
 	return(BN_add(r, a, b));
 }
 
-__asm __saveds int BN_mod_AmiSSL(register __a0 BIGNUM *rem, register __a1 const BIGNUM *m, register __a2 const BIGNUM *d, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_mul_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 BN_CTX *ctx)
 {
-	return(BN_mod(rem, m, d, ctx));
+	return(BN_mul(r, a, b, ctx));
+}
+
+__asm __saveds int BN_sqr_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 BN_CTX *ctx)
+{
+	return(BN_sqr(r, a, ctx));
 }
 
 __asm __saveds int BN_div_AmiSSL(register __a0 BIGNUM *dv, register __a1 BIGNUM *rem, register __a2 const BIGNUM *m, register __a3 const BIGNUM *d, register __d0 BN_CTX *ctx)
@@ -1445,14 +1825,59 @@ __asm __saveds int BN_div_AmiSSL(register __a0 BIGNUM *dv, register __a1 BIGNUM 
 	return(BN_div(dv, rem, m, d, ctx));
 }
 
-__asm __saveds int BN_mul_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BIGNUM *b, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_nnmod_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *m, register __a2 const BIGNUM *d, register __a3 BN_CTX *ctx)
 {
-	return(BN_mul(r, a, b, ctx));
+	return(BN_nnmod(r, m, d, ctx));
 }
 
-__asm __saveds int BN_sqr_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BN_CTX *ctx)
+__asm __saveds int BN_mod_add_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
 {
-	return(BN_sqr(r, a, ctx));
+	return(BN_mod_add(r, a, b, m, ctx));
+}
+
+__asm __saveds int BN_mod_add_quick_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 const BIGNUM *m)
+{
+	return(BN_mod_add_quick(r, a, b, m));
+}
+
+__asm __saveds int BN_mod_sub_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
+{
+	return(BN_mod_sub(r, a, b, m, ctx));
+}
+
+__asm __saveds int BN_mod_sub_quick_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 const BIGNUM *m)
+{
+	return(BN_mod_sub_quick(r, a, b, m));
+}
+
+__asm __saveds int BN_mod_mul_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
+{
+	return(BN_mod_mul(r, a, b, m, ctx));
+}
+
+__asm __saveds int BN_mod_sqr_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *m, register __a3 BN_CTX *ctx)
+{
+	return(BN_mod_sqr(r, a, m, ctx));
+}
+
+__asm __saveds int BN_mod_lshift1_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *m, register __a3 BN_CTX *ctx)
+{
+	return(BN_mod_lshift1(r, a, m, ctx));
+}
+
+__asm __saveds int BN_mod_lshift1_quick_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *m)
+{
+	return(BN_mod_lshift1_quick(r, a, m));
+}
+
+__asm __saveds int BN_mod_lshift_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __d0 int n, register __a2 const BIGNUM *m, register __a3 BN_CTX *ctx)
+{
+	return(BN_mod_lshift(r, a, n, m, ctx));
+}
+
+__asm __saveds int BN_mod_lshift_quick_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __d0 int n, register __a2 const BIGNUM *m)
+{
+	return(BN_mod_lshift_quick(r, a, n, m));
 }
 
 __asm __saveds BN_ULONG BN_mod_word_AmiSSL(register __a0 const BIGNUM *a, register __d0 BN_ULONG w)
@@ -1485,7 +1910,7 @@ __asm __saveds int BN_set_word_AmiSSL(register __a0 BIGNUM *a, register __d0 BN_
 	return(BN_set_word(a, w));
 }
 
-__asm __saveds BN_ULONG BN_get_word_AmiSSL(register __a0 BIGNUM *a)
+__asm __saveds BN_ULONG BN_get_word_AmiSSL(register __a0 const BIGNUM *a)
 {
 	return(BN_get_word(a));
 }
@@ -1510,22 +1935,22 @@ __asm __saveds int BN_lshift_AmiSSL(register __a0 BIGNUM *r, register __a1 const
 	return(BN_lshift(r, a, n));
 }
 
-__asm __saveds int BN_lshift1_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a)
+__asm __saveds int BN_lshift1_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a)
 {
 	return(BN_lshift1(r, a));
 }
 
-__asm __saveds int BN_exp_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BIGNUM *p, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_exp_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *p, register __a3 BN_CTX *ctx)
 {
 	return(BN_exp(r, a, p, ctx));
 }
 
-__asm __saveds int BN_mod_exp_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 const BIGNUM *p, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
+__asm __saveds int BN_mod_exp_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *p, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
 {
 	return(BN_mod_exp(r, a, p, m, ctx));
 }
 
-__asm __saveds int BN_mod_exp_mont_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 const BIGNUM *p, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx, register __d1 BN_MONT_CTX *m_ctx)
+__asm __saveds int BN_mod_exp_mont_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *p, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx, register __d1 BN_MONT_CTX *m_ctx)
 {
 	return(BN_mod_exp_mont(r, a, p, m, ctx, m_ctx));
 }
@@ -1535,12 +1960,12 @@ __asm __saveds int BN_mod_exp_mont_word_AmiSSL(register __a0 BIGNUM *r, register
 	return(BN_mod_exp_mont_word(r, a, p, m, ctx, m_ctx));
 }
 
-__asm __saveds int BN_mod_exp2_mont_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a1, register __a2 BIGNUM *p1, register __a3 BIGNUM *a2, register __d0 BIGNUM *p2, register __d1 BIGNUM *m, register __d2 BN_CTX *ctx, register __d3 BN_MONT_CTX *m_ctx)
+__asm __saveds int BN_mod_exp2_mont_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a1, register __a2 const BIGNUM *p1, register __a3 const BIGNUM *a2, register __d0 const BIGNUM *p2, register __d1 const BIGNUM *m, register __d2 BN_CTX *ctx, register __d3 BN_MONT_CTX *m_ctx)
 {
 	return(BN_mod_exp2_mont(r, a1, p1, a2, p2, m, ctx, m_ctx));
 }
 
-__asm __saveds int BN_mod_exp_simple_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BIGNUM *p, register __a3 BIGNUM *m, register __d0 BN_CTX *ctx)
+__asm __saveds int BN_mod_exp_simple_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *p, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
 {
 	return(BN_mod_exp_simple(r, a, p, m, ctx));
 }
@@ -1550,27 +1975,22 @@ __asm __saveds int BN_mask_bits_AmiSSL(register __a0 BIGNUM *a, register __d0 in
 	return(BN_mask_bits(a, n));
 }
 
-__asm __saveds int BN_mod_mul_AmiSSL(register __a0 BIGNUM *ret, register __a1 BIGNUM *a, register __a2 BIGNUM *b, register __a3 const BIGNUM *m, register __d0 BN_CTX *ctx)
-{
-	return(BN_mod_mul(ret, a, b, m, ctx));
-}
-
 __asm __saveds int BN_print_AmiSSL(register __a0 BIO *fp, register __a1 const BIGNUM *a)
 {
 	return(BN_print(fp, a));
 }
 
-__asm __saveds int BN_reciprocal_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *m, register __d0 int len, register __a2 BN_CTX *ctx)
+__asm __saveds int BN_reciprocal_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *m, register __d0 int len, register __a2 BN_CTX *ctx)
 {
 	return(BN_reciprocal(r, m, len, ctx));
 }
 
-__asm __saveds int BN_rshift_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __d0 int n)
+__asm __saveds int BN_rshift_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __d0 int n)
 {
 	return(BN_rshift(r, a, n));
 }
 
-__asm __saveds int BN_rshift1_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a)
+__asm __saveds int BN_rshift1_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a)
 {
 	return(BN_rshift1(r, a));
 }
@@ -1620,17 +2040,27 @@ __asm __saveds int BN_dec2bn_AmiSSL(register __a0 BIGNUM **a, register __a1 cons
 	return(BN_dec2bn(a, str));
 }
 
-__asm __saveds int BN_gcd_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *in_a, register __a2 BIGNUM *in_b, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_gcd_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 BN_CTX *ctx)
 {
-	return(BN_gcd(r, in_a, in_b, ctx));
+	return(BN_gcd(r, a, b, ctx));
 }
 
-__asm __saveds BIGNUM *BN_mod_inverse_AmiSSL(register __a0 BIGNUM *ret, register __a1 BIGNUM *a, register __a2 const BIGNUM *n, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_kronecker_AmiSSL(register __a0 const BIGNUM *a, register __a1 const BIGNUM *b, register __a2 BN_CTX *ctx)
+{
+	return(BN_kronecker(a, b, ctx));
+}
+
+__asm __saveds BIGNUM *BN_mod_inverse_AmiSSL(register __a0 BIGNUM *ret, register __a1 const BIGNUM *a, register __a2 const BIGNUM *n, register __a3 BN_CTX *ctx)
 {
 	return(BN_mod_inverse(ret, a, n, ctx));
 }
 
-__asm __saveds BIGNUM *BN_generate_prime_AmiSSL(register __a0 BIGNUM *ret, register __d0 int bits, register __d1 int safe, register __a1 BIGNUM *add, register __a2 BIGNUM *rem, register __a3 void (*callback)(int, int, void *), register __d2 void *cb_arg)
+__asm __saveds BIGNUM *BN_mod_sqrt_AmiSSL(register __a0 BIGNUM *ret, register __a1 const BIGNUM *a, register __a2 const BIGNUM *n, register __a3 BN_CTX *ctx)
+{
+	return(BN_mod_sqrt(ret, a, n, ctx));
+}
+
+__asm __saveds BIGNUM *BN_generate_prime_AmiSSL(register __a0 BIGNUM *ret, register __d0 int bits, register __d1 int safe, register __a1 const BIGNUM *add, register __a2 const BIGNUM *rem, register __a3 void (*callback)(int, int, void *), register __d2 void *cb_arg)
 {
 	return(BN_generate_prime(ret, bits, safe, add, rem, callback, cb_arg));
 }
@@ -1655,12 +2085,12 @@ __asm __saveds void BN_MONT_CTX_init_AmiSSL(register __a0 BN_MONT_CTX *ctx)
 	BN_MONT_CTX_init(ctx);
 }
 
-__asm __saveds int BN_mod_mul_montgomery_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BIGNUM *b, register __a3 BN_MONT_CTX *mont, register __d0 BN_CTX *ctx)
+__asm __saveds int BN_mod_mul_montgomery_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 BN_MONT_CTX *mont, register __d0 BN_CTX *ctx)
 {
 	return(BN_mod_mul_montgomery(r, a, b, mont, ctx));
 }
 
-__asm __saveds int BN_from_montgomery_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *a, register __a2 BN_MONT_CTX *mont, register __a3 BN_CTX *ctx)
+__asm __saveds int BN_from_montgomery_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *a, register __a2 BN_MONT_CTX *mont, register __a3 BN_CTX *ctx)
 {
 	return(BN_from_montgomery(r, a, mont, ctx));
 }
@@ -1670,9 +2100,9 @@ __asm __saveds void BN_MONT_CTX_free_AmiSSL(register __a0 BN_MONT_CTX *mont)
 	BN_MONT_CTX_free(mont);
 }
 
-__asm __saveds int BN_MONT_CTX_set_AmiSSL(register __a0 BN_MONT_CTX *mont, register __a1 const BIGNUM *modulus, register __a2 BN_CTX *ctx)
+__asm __saveds int BN_MONT_CTX_set_AmiSSL(register __a0 BN_MONT_CTX *mont, register __a1 const BIGNUM *mod, register __a2 BN_CTX *ctx)
 {
-	return(BN_MONT_CTX_set(mont, modulus, ctx));
+	return(BN_MONT_CTX_set(mont, mod, ctx));
 }
 
 __asm __saveds BN_MONT_CTX *BN_MONT_CTX_copy_AmiSSL(register __a0 BN_MONT_CTX *to, register __a1 BN_MONT_CTX *from)
@@ -1735,7 +2165,7 @@ __asm __saveds int BN_RECP_CTX_set_AmiSSL(register __a0 BN_RECP_CTX *recp, regis
 	return(BN_RECP_CTX_set(recp, rdiv, ctx));
 }
 
-__asm __saveds int BN_mod_mul_reciprocal_AmiSSL(register __a0 BIGNUM *r, register __a1 BIGNUM *x, register __a2 BIGNUM *y, register __a3 BN_RECP_CTX *recp, register __d0 BN_CTX *ctx)
+__asm __saveds int BN_mod_mul_reciprocal_AmiSSL(register __a0 BIGNUM *r, register __a1 const BIGNUM *x, register __a2 const BIGNUM *y, register __a3 BN_RECP_CTX *recp, register __d0 BN_CTX *ctx)
 {
 	return(BN_mod_mul_reciprocal(r, x, y, recp, ctx));
 }
@@ -1745,7 +2175,7 @@ __asm __saveds int BN_mod_exp_recp_AmiSSL(register __a0 BIGNUM *r, register __a1
 	return(BN_mod_exp_recp(r, a, p, m, ctx));
 }
 
-__asm __saveds int BN_div_recp_AmiSSL(register __a0 BIGNUM *dv, register __a1 BIGNUM *rem, register __a2 BIGNUM *m, register __a3 BN_RECP_CTX *recp, register __d0 BN_CTX *ctx)
+__asm __saveds int BN_div_recp_AmiSSL(register __a0 BIGNUM *dv, register __a1 BIGNUM *rem, register __a2 const BIGNUM *m, register __a3 BN_RECP_CTX *recp, register __d0 BN_CTX *ctx)
 {
 	return(BN_div_recp(dv, rem, m, recp, ctx));
 }
@@ -1755,17 +2185,22 @@ __asm __saveds BIGNUM *bn_expand2_AmiSSL(register __a0 BIGNUM *a, register __d0 
 	return(bn_expand2(a, words));
 }
 
-__asm __saveds BN_ULONG bn_mul_add_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 BN_ULONG *ap, register __d0 int num, register __d1 BN_ULONG w)
+__asm __saveds BIGNUM *bn_dup_expand_AmiSSL(register __a0 const BIGNUM *a, register __d0 int words)
+{
+	return(bn_dup_expand(a, words));
+}
+
+__asm __saveds BN_ULONG bn_mul_add_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 const BN_ULONG *ap, register __d0 int num, register __d1 BN_ULONG w)
 {
 	return(bn_mul_add_words(rp, ap, num, w));
 }
 
-__asm __saveds BN_ULONG bn_mul_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 BN_ULONG *ap, register __d0 int num, register __d1 BN_ULONG w)
+__asm __saveds BN_ULONG bn_mul_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 const BN_ULONG *ap, register __d0 int num, register __d1 BN_ULONG w)
 {
 	return(bn_mul_words(rp, ap, num, w));
 }
 
-__asm __saveds void bn_sqr_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 BN_ULONG *ap, register __d0 int num)
+__asm __saveds void bn_sqr_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 const BN_ULONG *ap, register __d0 int num)
 {
 	bn_sqr_words(rp, ap, num);
 }
@@ -1775,12 +2210,12 @@ __asm __saveds BN_ULONG bn_div_words_AmiSSL(register __d0 BN_ULONG h, register _
 	return(bn_div_words(h, l, d));
 }
 
-__asm __saveds BN_ULONG bn_add_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 BN_ULONG *ap, register __a2 BN_ULONG *bp, register __d0 int num)
+__asm __saveds BN_ULONG bn_add_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 const BN_ULONG *ap, register __a2 const BN_ULONG *bp, register __d0 int num)
 {
 	return(bn_add_words(rp, ap, bp, num));
 }
 
-__asm __saveds BN_ULONG bn_sub_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 BN_ULONG *ap, register __a2 BN_ULONG *bp, register __d0 int num)
+__asm __saveds BN_ULONG bn_sub_words_AmiSSL(register __a0 BN_ULONG *rp, register __a1 const BN_ULONG *ap, register __a2 const BN_ULONG *bp, register __d0 int num)
 {
 	return(bn_sub_words(rp, ap, bp, num));
 }
@@ -1810,9 +2245,24 @@ __asm __saveds int BUF_MEM_grow_AmiSSL(register __a0 BUF_MEM *str, register __d0
 	return(BUF_MEM_grow(str, len));
 }
 
+__asm __saveds int BUF_MEM_grow_clean_AmiSSL(register __a0 BUF_MEM *str, register __d0 int len)
+{
+	return(BUF_MEM_grow_clean(str, len));
+}
+
 __asm __saveds char *BUF_strdup_AmiSSL(register __a0 const char *str)
 {
 	return(BUF_strdup(str));
+}
+
+__asm __saveds size_t BUF_strlcpy_AmiSSL(register __a0 char *dst, register __a1 const char *src, register __d0 size_t siz)
+{
+	return(BUF_strlcpy(dst, src, siz));
+}
+
+__asm __saveds size_t BUF_strlcat_AmiSSL(register __a0 char *dst, register __a1 const char *src, register __d0 size_t siz)
+{
+	return(BUF_strlcat(dst, src, siz));
 }
 
 __asm __saveds void ERR_load_BUF_strings_AmiSSL(void)
@@ -1845,54 +2295,24 @@ __asm __saveds COMP_METHOD *COMP_rle_AmiSSL(void)
 	return(COMP_rle());
 }
 
+__asm __saveds COMP_METHOD *COMP_zlib_AmiSSL(void)
+{
+	return(COMP_zlib());
+}
+
 __asm __saveds void ERR_load_COMP_strings_AmiSSL(void)
 {
 	ERR_load_COMP_strings();
 }
 
-__asm __saveds CONF_VALUE *_CONF_new_section_AmiSSL(register __a0 CONF *conf, register __a1 char *section)
-{
-	return(_CONF_new_section(conf, section));
-}
-
-__asm __saveds CONF_VALUE *_CONF_get_section_AmiSSL(register __a0 CONF *conf, register __a1 char *section)
-{
-	return(_CONF_get_section(conf, section));
-}
-
-__asm __saveds STACK_OF(CONF_VALUE) *_CONF_get_section_values_AmiSSL(register __a0 CONF *conf, register __a1 char *section)
-{
-	return(_CONF_get_section_values(conf, section));
-}
-
-__asm __saveds int _CONF_add_string_AmiSSL(register __a0 CONF *conf, register __a1 CONF_VALUE *section, register __a2 CONF_VALUE *value)
-{
-	return(_CONF_add_string(conf, section, value));
-}
-
-__asm __saveds char *_CONF_get_string_AmiSSL(register __a0 CONF *conf, register __a1 char *section, register __a2 char *name)
-{
-	return(_CONF_get_string(conf, section, name));
-}
-
-__asm __saveds long _CONF_get_number_AmiSSL(register __a0 CONF *conf, register __a1 char *section, register __a2 char *name)
-{
-	return(_CONF_get_number(conf, section, name));
-}
-
-__asm __saveds int _CONF_new_data_AmiSSL(register __a0 CONF *conf)
-{
-	return(_CONF_new_data(conf));
-}
-
-__asm __saveds void _CONF_free_data_AmiSSL(register __a0 CONF *conf)
-{
-	_CONF_free_data(conf);
-}
-
 __asm __saveds int CONF_set_default_method_AmiSSL(register __a0 CONF_METHOD *meth)
 {
 	return(CONF_set_default_method(meth));
+}
+
+__asm __saveds void CONF_set_nconf_AmiSSL(register __a0 CONF *conf, register __a1 LHASH *hash)
+{
+	CONF_set_nconf(conf, hash);
 }
 
 __asm __saveds LHASH *CONF_load_AmiSSL(register __a0 LHASH *conf, register __a1 const char *file, register __a2 long *eline)
@@ -1905,17 +2325,17 @@ __asm __saveds LHASH *CONF_load_bio_AmiSSL(register __a0 LHASH *conf, register _
 	return(CONF_load_bio(conf, bp, eline));
 }
 
-__asm __saveds STACK_OF(CONF_VALUE) *CONF_get_section_AmiSSL(register __a0 LHASH *conf, register __a1 char *section)
+__asm __saveds STACK_OF(CONF_VALUE) *CONF_get_section_AmiSSL(register __a0 LHASH *conf, register __a1 const char *section)
 {
 	return(CONF_get_section(conf, section));
 }
 
-__asm __saveds char *CONF_get_string_AmiSSL(register __a0 LHASH *conf, register __a1 char *group, register __a2 char *name)
+__asm __saveds char *CONF_get_string_AmiSSL(register __a0 LHASH *conf, register __a1 const char *group, register __a2 const char *name)
 {
 	return(CONF_get_string(conf, group, name));
 }
 
-__asm __saveds long CONF_get_number_AmiSSL(register __a0 LHASH *conf, register __a1 char *group, register __a2 char *name)
+__asm __saveds long CONF_get_number_AmiSSL(register __a0 LHASH *conf, register __a1 const char *group, register __a2 const char *name)
 {
 	return(CONF_get_number(conf, group, name));
 }
@@ -1928,6 +2348,16 @@ __asm __saveds void CONF_free_AmiSSL(register __a0 LHASH *conf)
 __asm __saveds int CONF_dump_bio_AmiSSL(register __a0 LHASH *conf, register __a1 BIO *out)
 {
 	return(CONF_dump_bio(conf, out));
+}
+
+__asm __saveds void OPENSSL_config_AmiSSL(register __a0 const char *config_name)
+{
+	OPENSSL_config(config_name);
+}
+
+__asm __saveds void OPENSSL_no_config_AmiSSL(void)
+{
+	OPENSSL_no_config();
 }
 
 __asm __saveds CONF *NCONF_new_AmiSSL(register __a0 CONF_METHOD *meth)
@@ -1965,29 +2395,159 @@ __asm __saveds int NCONF_load_bio_AmiSSL(register __a0 CONF *conf, register __a1
 	return(NCONF_load_bio(conf, bp, eline));
 }
 
-__asm __saveds STACK_OF(CONF_VALUE) *NCONF_get_section_AmiSSL(register __a0 CONF *conf, register __a1 char *section)
+__asm __saveds STACK_OF(CONF_VALUE) *NCONF_get_section_AmiSSL(register __a0 const CONF *conf, register __a1 const char *section)
 {
 	return(NCONF_get_section(conf, section));
 }
 
-__asm __saveds char *NCONF_get_string_AmiSSL(register __a0 CONF *conf, register __a1 char *group, register __a2 char *name)
+__asm __saveds char *NCONF_get_string_AmiSSL(register __a0 const CONF *conf, register __a1 const char *group, register __a2 const char *name)
 {
 	return(NCONF_get_string(conf, group, name));
 }
 
-__asm __saveds long NCONF_get_number_AmiSSL(register __a0 CONF *conf, register __a1 char *group, register __a2 char *name)
+__asm __saveds int NCONF_get_number_e_AmiSSL(register __a0 const CONF *conf, register __a1 const char *group, register __a2 const char *name, register __a3 long *result)
 {
-	return(NCONF_get_number(conf, group, name));
+	return(NCONF_get_number_e(conf, group, name, result));
 }
 
-__asm __saveds int NCONF_dump_bio_AmiSSL(register __a0 CONF *conf, register __a1 BIO *out)
+__asm __saveds int NCONF_dump_bio_AmiSSL(register __a0 const CONF *conf, register __a1 BIO *out)
 {
 	return(NCONF_dump_bio(conf, out));
+}
+
+__asm __saveds int CONF_modules_load_AmiSSL(register __a0 const CONF *cnf, register __a1 const char *appname, register __d0 unsigned long flags)
+{
+	return(CONF_modules_load(cnf, appname, flags));
+}
+
+__asm __saveds int CONF_modules_load_file_AmiSSL(register __a0 const char *filename, register __a1 const char *appname, register __d0 unsigned long flags)
+{
+	return(CONF_modules_load_file(filename, appname, flags));
+}
+
+__asm __saveds void CONF_modules_unload_AmiSSL(register __d0 int all)
+{
+	CONF_modules_unload(all);
+}
+
+__asm __saveds void CONF_modules_finish_AmiSSL(void)
+{
+	CONF_modules_finish();
+}
+
+__asm __saveds void CONF_modules_free_AmiSSL(void)
+{
+	CONF_modules_free();
+}
+
+__asm __saveds int CONF_module_add_AmiSSL(register __a0 const char *name, register __a1 conf_init_func *ifunc, register __a2 conf_finish_func *ffunc)
+{
+	return(CONF_module_add(name, ifunc, ffunc));
+}
+
+__asm __saveds const char *CONF_imodule_get_name_AmiSSL(register __a0 const CONF_IMODULE *md)
+{
+	return(CONF_imodule_get_name(md));
+}
+
+__asm __saveds const char *CONF_imodule_get_value_AmiSSL(register __a0 const CONF_IMODULE *md)
+{
+	return(CONF_imodule_get_value(md));
+}
+
+__asm __saveds void *CONF_imodule_get_usr_data_AmiSSL(register __a0 const CONF_IMODULE *md)
+{
+	return(CONF_imodule_get_usr_data(md));
+}
+
+__asm __saveds void CONF_imodule_set_usr_data_AmiSSL(register __a0 CONF_IMODULE *md, register __a1 void *usr_data)
+{
+	CONF_imodule_set_usr_data(md, usr_data);
+}
+
+__asm __saveds CONF_MODULE *CONF_imodule_get_module_AmiSSL(register __a0 const CONF_IMODULE *md)
+{
+	return(CONF_imodule_get_module(md));
+}
+
+__asm __saveds unsigned long CONF_imodule_get_flags_AmiSSL(register __a0 const CONF_IMODULE *md)
+{
+	return(CONF_imodule_get_flags(md));
+}
+
+__asm __saveds void CONF_imodule_set_flags_AmiSSL(register __a0 CONF_IMODULE *md, register __d0 unsigned long flags)
+{
+	CONF_imodule_set_flags(md, flags);
+}
+
+__asm __saveds void *CONF_module_get_usr_data_AmiSSL(register __a0 CONF_MODULE *pmod)
+{
+	return(CONF_module_get_usr_data(pmod));
+}
+
+__asm __saveds void CONF_module_set_usr_data_AmiSSL(register __a0 CONF_MODULE *pmod, register __a1 void *usr_data)
+{
+	CONF_module_set_usr_data(pmod, usr_data);
+}
+
+__asm __saveds char *CONF_get1_default_config_file_AmiSSL(void)
+{
+	return(CONF_get1_default_config_file());
+}
+
+__asm __saveds int CONF_parse_list_AmiSSL(register __a0 const char *list, register __d0 int sep, register __d1 int nospc, register __a1 int (*list_cb)(const char *elem, int len, void *usr), register __a2 void *arg)
+{
+	return(CONF_parse_list(list, sep, nospc, list_cb, arg));
+}
+
+__asm __saveds void OPENSSL_load_builtin_modules_AmiSSL(void)
+{
+	OPENSSL_load_builtin_modules();
 }
 
 __asm __saveds void ERR_load_CONF_strings_AmiSSL(void)
 {
 	ERR_load_CONF_strings();
+}
+
+__asm __saveds CONF_VALUE *_CONF_new_section_AmiSSL(register __a0 CONF *conf, register __a1 const char *section)
+{
+	return(_CONF_new_section(conf, section));
+}
+
+__asm __saveds CONF_VALUE *_CONF_get_section_AmiSSL(register __a0 const CONF *conf, register __a1 const char *section)
+{
+	return(_CONF_get_section(conf, section));
+}
+
+__asm __saveds STACK_OF(CONF_VALUE) *_CONF_get_section_values_AmiSSL(register __a0 const CONF *conf, register __a1 const char *section)
+{
+	return(_CONF_get_section_values(conf, section));
+}
+
+__asm __saveds int _CONF_add_string_AmiSSL(register __a0 CONF *conf, register __a1 CONF_VALUE *section, register __a2 CONF_VALUE *value)
+{
+	return(_CONF_add_string(conf, section, value));
+}
+
+__asm __saveds char *_CONF_get_string_AmiSSL(register __a0 const CONF *conf, register __a1 const char *section, register __a2 const char *name)
+{
+	return(_CONF_get_string(conf, section, name));
+}
+
+__asm __saveds long _CONF_get_number_AmiSSL(register __a0 const CONF *conf, register __a1 const char *section, register __a2 const char *name)
+{
+	return(_CONF_get_number(conf, section, name));
+}
+
+__asm __saveds int _CONF_new_data_AmiSSL(register __a0 CONF *conf)
+{
+	return(_CONF_new_data(conf));
+}
+
+__asm __saveds void _CONF_free_data_AmiSSL(register __a0 CONF *conf)
+{
+	_CONF_free_data(conf);
 }
 
 __asm __saveds int CRYPTO_mem_ctrl_AmiSSL(register __d0 int mode)
@@ -2015,9 +2575,39 @@ __asm __saveds int OPENSSL_issetugid_AmiSSL(void)
 	return(OPENSSL_issetugid());
 }
 
-__asm __saveds int CRYPTO_get_ex_new_index_AmiSSL(register __d0 int idx, register __a0 STACK_OF(CRYPTO_EX_DATA_FUNCS) **skp, register __d1 long argl, register __a1 void *argp, register __a2 CRYPTO_EX_new *new_func, register __a3 CRYPTO_EX_dup *dup_func, register __d2 CRYPTO_EX_free *free_func)
+__asm __saveds const CRYPTO_EX_DATA_IMPL *CRYPTO_get_ex_data_implementation_AmiSSL(void)
 {
-	return(CRYPTO_get_ex_new_index(idx, skp, argl, argp, new_func, dup_func, free_func));
+	return(CRYPTO_get_ex_data_implementation());
+}
+
+__asm __saveds int CRYPTO_set_ex_data_implementation_AmiSSL(register __a0 const CRYPTO_EX_DATA_IMPL *i)
+{
+	return(CRYPTO_set_ex_data_implementation(i));
+}
+
+__asm __saveds int CRYPTO_ex_data_new_class_AmiSSL(void)
+{
+	return(CRYPTO_ex_data_new_class());
+}
+
+__asm __saveds int CRYPTO_get_ex_new_index_AmiSSL(register __d0 int class_index, register __d1 long argl, register __a0 void *argp, register __a1 CRYPTO_EX_new *new_func, register __a2 CRYPTO_EX_dup *dup_func, register __a3 CRYPTO_EX_free *free_func)
+{
+	return(CRYPTO_get_ex_new_index(class_index, argl, argp, new_func, dup_func, free_func));
+}
+
+__asm __saveds int CRYPTO_new_ex_data_AmiSSL(register __d0 int class_index, register __a0 void *obj, register __a1 CRYPTO_EX_DATA *ad)
+{
+	return(CRYPTO_new_ex_data(class_index, obj, ad));
+}
+
+__asm __saveds int CRYPTO_dup_ex_data_AmiSSL(register __d0 int class_index, register __a0 CRYPTO_EX_DATA *to, register __a1 CRYPTO_EX_DATA *from)
+{
+	return(CRYPTO_dup_ex_data(class_index, to, from));
+}
+
+__asm __saveds void CRYPTO_free_ex_data_AmiSSL(register __d0 int class_index, register __a0 void *obj, register __a1 CRYPTO_EX_DATA *ad)
+{
+	CRYPTO_free_ex_data(class_index, obj, ad);
 }
 
 __asm __saveds int CRYPTO_set_ex_data_AmiSSL(register __a0 CRYPTO_EX_DATA *ad, register __d0 int idx, register __a1 void *val)
@@ -2025,24 +2615,14 @@ __asm __saveds int CRYPTO_set_ex_data_AmiSSL(register __a0 CRYPTO_EX_DATA *ad, r
 	return(CRYPTO_set_ex_data(ad, idx, val));
 }
 
-__asm __saveds void *CRYPTO_get_ex_data_AmiSSL(register __a0 CRYPTO_EX_DATA *ad, register __d0 int idx)
+__asm __saveds void *CRYPTO_get_ex_data_AmiSSL(register __a0 const CRYPTO_EX_DATA *ad, register __d0 int idx)
 {
 	return(CRYPTO_get_ex_data(ad, idx));
 }
 
-__asm __saveds int CRYPTO_dup_ex_data_AmiSSL(register __a0 STACK_OF(CRYPTO_EX_DATA_FUNCS) *meth, register __a1 CRYPTO_EX_DATA *to, register __a2 CRYPTO_EX_DATA *from)
+__asm __saveds void CRYPTO_cleanup_all_ex_data_AmiSSL(void)
 {
-	return(CRYPTO_dup_ex_data(meth, to, from));
-}
-
-__asm __saveds void CRYPTO_free_ex_data_AmiSSL(register __a0 STACK_OF(CRYPTO_EX_DATA_FUNCS) *meth, register __a1 void *obj, register __a2 CRYPTO_EX_DATA *ad)
-{
-	CRYPTO_free_ex_data(meth, obj, ad);
-}
-
-__asm __saveds void CRYPTO_new_ex_data_AmiSSL(register __a0 STACK_OF(CRYPTO_EX_DATA_FUNCS) *meth, register __a1 void *obj, register __a2 CRYPTO_EX_DATA *ad)
-{
-	CRYPTO_new_ex_data(meth, obj, ad);
+	CRYPTO_cleanup_all_ex_data();
 }
 
 __asm __saveds int CRYPTO_get_new_lockid_AmiSSL(register __a0 char *name)
@@ -2160,6 +2740,16 @@ __asm __saveds int CRYPTO_set_locked_mem_functions_AmiSSL(register __a0 void *(*
 	return(CRYPTO_set_locked_mem_functions(m, free_func));
 }
 
+__asm __saveds int CRYPTO_set_mem_ex_functions_AmiSSL(register __a0 void *(*m)(size_t, const char *, int), register __a1 void *(*r)(void *, size_t, const char *, int), register __a2 void (*f)(void *))
+{
+	return(CRYPTO_set_mem_ex_functions(m, r, f));
+}
+
+__asm __saveds int CRYPTO_set_locked_mem_ex_functions_AmiSSL(register __a0 void *(*m)(size_t, const char *, int), register __a1 void (*free_func)(void *))
+{
+	return(CRYPTO_set_locked_mem_ex_functions(m, free_func));
+}
+
 __asm __saveds int CRYPTO_set_mem_debug_functions_AmiSSL(register __a0 void (*m)(void *, int, const char *, int, int), register __a1 void (*r)(void *, void *, int, const char *, int, int), register __a2 void (*f)(void *, int), register __a3 void (*so)(long), register __d0 long (*go)(void))
 {
 	return(CRYPTO_set_mem_debug_functions(m, r, f, so, go));
@@ -2173,6 +2763,16 @@ __asm __saveds void CRYPTO_get_mem_functions_AmiSSL(register __a0 void *(**m)(si
 __asm __saveds void CRYPTO_get_locked_mem_functions_AmiSSL(register __a0 void *(**m)(size_t), register __a1 void (**f)(void *))
 {
 	CRYPTO_get_locked_mem_functions(m, f);
+}
+
+__asm __saveds void CRYPTO_get_mem_ex_functions_AmiSSL(register __a0 void *(**m)(size_t, const char *, int), register __a1 void *(**r)(void *, size_t, const char *, int), register __a2 void (**f)(void *))
+{
+	CRYPTO_get_mem_ex_functions(m, r, f);
+}
+
+__asm __saveds void CRYPTO_get_locked_mem_ex_functions_AmiSSL(register __a0 void *(**m)(size_t, const char *, int), register __a1 void (**f)(void *))
+{
+	CRYPTO_get_locked_mem_ex_functions(m, f);
 }
 
 __asm __saveds void CRYPTO_get_mem_debug_functions_AmiSSL(register __a0 void (**m)(void *, int, const char *, int, int), register __a1 void (**r)(void *, void *, int, const char *, int, int), register __a2 void (**f)(void *, int), register __a3 void (**so)(long), register __d0 long (**go)(void))
@@ -2205,9 +2805,19 @@ __asm __saveds void *CRYPTO_realloc_AmiSSL(register __a0 void *addr, register __
 	return(CRYPTO_realloc(addr, num, file, line));
 }
 
+__asm __saveds void *CRYPTO_realloc_clean_AmiSSL(register __a0 void *addr, register __d0 int old_num, register __d1 int num, register __a1 const char *file, register __d2 int line)
+{
+	return(CRYPTO_realloc_clean(addr, old_num, num, file, line));
+}
+
 __asm __saveds void *CRYPTO_remalloc_AmiSSL(register __a0 void *addr, register __d0 int num, register __a1 const char *file, register __d1 int line)
 {
 	return(CRYPTO_remalloc(addr, num, file, line));
+}
+
+__asm __saveds void OPENSSL_cleanse_AmiSSL(register __a0 void *ptr, register __d0 size_t len)
+{
+	OPENSSL_cleanse(ptr, len);
 }
 
 __asm __saveds void CRYPTO_set_mem_debug_options_AmiSSL(register __d0 long bits)
@@ -2265,9 +2875,14 @@ __asm __saveds void CRYPTO_mem_leaks_AmiSSL(register __a0 struct bio_st *bio)
 	CRYPTO_mem_leaks(bio);
 }
 
-__asm __saveds void CRYPTO_mem_leaks_cb_AmiSSL(register __a0 void (*cb)(unsigned long, const char *, int, int, void *))
+__asm __saveds void CRYPTO_mem_leaks_cb_AmiSSL(register __a0 CRYPTO_MEM_LEAK_CB *cb)
 {
 	CRYPTO_mem_leaks_cb(cb);
+}
+
+__asm __saveds void OpenSSLDie_AmiSSL(register __a0 const char *file, register __d0 int line, register __a1 const char *assertion)
+{
+	OpenSSLDie(file, line, assertion);
 }
 
 __asm __saveds void ERR_load_CRYPTO_strings_AmiSSL(void)
@@ -2295,14 +2910,39 @@ __asm __saveds int DSO_flags_AmiSSL(register __a0 DSO *dso)
 	return(DSO_flags(dso));
 }
 
-__asm __saveds int DSO_up_AmiSSL(register __a0 DSO *dso)
+__asm __saveds int DSO_up_ref_AmiSSL(register __a0 DSO *dso)
 {
-	return(DSO_up(dso));
+	return(DSO_up_ref(dso));
 }
 
 __asm __saveds long DSO_ctrl_AmiSSL(register __a0 DSO *dso, register __d0 int cmd, register __d1 long larg, register __a1 void *parg)
 {
 	return(DSO_ctrl(dso, cmd, larg, parg));
+}
+
+__asm __saveds int DSO_set_name_converter_AmiSSL(register __a0 DSO *dso, register __d0 DSO_NAME_CONVERTER_FUNC cb, register __a1 DSO_NAME_CONVERTER_FUNC *oldcb)
+{
+	return(DSO_set_name_converter(dso, cb, oldcb));
+}
+
+__asm __saveds const char *DSO_get_filename_AmiSSL(register __a0 DSO *dso)
+{
+	return(DSO_get_filename(dso));
+}
+
+__asm __saveds int DSO_set_filename_AmiSSL(register __a0 DSO *dso, register __a1 const char *filename)
+{
+	return(DSO_set_filename(dso, filename));
+}
+
+__asm __saveds char *DSO_convert_filename_AmiSSL(register __a0 DSO *dso, register __a1 const char *filename)
+{
+	return(DSO_convert_filename(dso, filename));
+}
+
+__asm __saveds const char *DSO_get_loaded_filename_AmiSSL(register __a0 DSO *dso)
+{
+	return(DSO_get_loaded_filename(dso));
 }
 
 __asm __saveds void DSO_set_default_method_AmiSSL(register __a0 DSO_METHOD *meth)
@@ -2375,6 +3015,201 @@ __asm __saveds void ERR_load_DSO_strings_AmiSSL(void)
 	ERR_load_DSO_strings();
 }
 
+__asm __saveds const EC_METHOD *EC_GFp_simple_method_AmiSSL(void)
+{
+	return(EC_GFp_simple_method());
+}
+
+__asm __saveds const EC_METHOD *EC_GFp_mont_method_AmiSSL(void)
+{
+	return(EC_GFp_mont_method());
+}
+
+__asm __saveds EC_GROUP *EC_GROUP_new_AmiSSL(register __a0 const EC_METHOD *a)
+{
+	return(EC_GROUP_new(a));
+}
+
+__asm __saveds void EC_GROUP_free_AmiSSL(register __a0 EC_GROUP *a)
+{
+	EC_GROUP_free(a);
+}
+
+__asm __saveds void EC_GROUP_clear_free_AmiSSL(register __a0 EC_GROUP *a)
+{
+	EC_GROUP_clear_free(a);
+}
+
+__asm __saveds int EC_GROUP_copy_AmiSSL(register __a0 EC_GROUP *a, register __a1 const EC_GROUP *b)
+{
+	return(EC_GROUP_copy(a, b));
+}
+
+__asm __saveds const EC_METHOD *EC_GROUP_method_of_AmiSSL(register __a0 const EC_GROUP *a)
+{
+	return(EC_GROUP_method_of(a));
+}
+
+__asm __saveds int EC_GROUP_set_curve_GFp_AmiSSL(register __a0 EC_GROUP *a1, register __a1 const BIGNUM *p, register __a2 const BIGNUM *a, register __a3 const BIGNUM *b, register __d0 BN_CTX *a2)
+{
+	return(EC_GROUP_set_curve_GFp(a1, p, a, b, a2));
+}
+
+__asm __saveds int EC_GROUP_get_curve_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 BIGNUM *p, register __a2 BIGNUM *a, register __a3 BIGNUM *b, register __d0 BN_CTX *a2)
+{
+	return(EC_GROUP_get_curve_GFp(a1, p, a, b, a2));
+}
+
+__asm __saveds EC_GROUP *EC_GROUP_new_curve_GFp_AmiSSL(register __a0 const BIGNUM *p, register __a1 const BIGNUM *a, register __a2 const BIGNUM *b, register __a3 BN_CTX *a1)
+{
+	return(EC_GROUP_new_curve_GFp(p, a, b, a1));
+}
+
+__asm __saveds int EC_GROUP_set_generator_AmiSSL(register __a0 EC_GROUP *a1, register __a1 const EC_POINT *generator, register __a2 const BIGNUM *order, register __a3 const BIGNUM *cofactor)
+{
+	return(EC_GROUP_set_generator(a1, generator, order, cofactor));
+}
+
+__asm __saveds EC_POINT *EC_GROUP_get0_generator_AmiSSL(register __a0 const EC_GROUP *a1)
+{
+	return(EC_GROUP_get0_generator(a1));
+}
+
+__asm __saveds int EC_GROUP_get_order_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 BIGNUM *order, register __a2 BN_CTX *a2)
+{
+	return(EC_GROUP_get_order(a1, order, a2));
+}
+
+__asm __saveds int EC_GROUP_get_cofactor_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 BIGNUM *cofactor, register __a2 BN_CTX *a2)
+{
+	return(EC_GROUP_get_cofactor(a1, cofactor, a2));
+}
+
+__asm __saveds EC_POINT *EC_POINT_new_AmiSSL(register __a0 const EC_GROUP *a)
+{
+	return(EC_POINT_new(a));
+}
+
+__asm __saveds void EC_POINT_free_AmiSSL(register __a0 EC_POINT *a)
+{
+	EC_POINT_free(a);
+}
+
+__asm __saveds void EC_POINT_clear_free_AmiSSL(register __a0 EC_POINT *a)
+{
+	EC_POINT_clear_free(a);
+}
+
+__asm __saveds int EC_POINT_copy_AmiSSL(register __a0 EC_POINT *a, register __a1 const EC_POINT *b)
+{
+	return(EC_POINT_copy(a, b));
+}
+
+__asm __saveds const EC_METHOD *EC_POINT_method_of_AmiSSL(register __a0 const EC_POINT *a)
+{
+	return(EC_POINT_method_of(a));
+}
+
+__asm __saveds int EC_POINT_set_to_infinity_AmiSSL(register __a0 const EC_GROUP *a, register __a1 EC_POINT *b)
+{
+	return(EC_POINT_set_to_infinity(a, b));
+}
+
+__asm __saveds int EC_POINT_set_Jprojective_coordinates_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *a2, register __a2 const BIGNUM *x, register __a3 const BIGNUM *y, register __d0 const BIGNUM *z, register __d1 BN_CTX *a3)
+{
+	return(EC_POINT_set_Jprojective_coordinates_GFp(a1, a2, x, y, z, a3));
+}
+
+__asm __saveds int EC_POINT_get_Jprojective_coordinates_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 const EC_POINT *a2, register __a2 BIGNUM *x, register __a3 BIGNUM *y, register __d0 BIGNUM *z, register __d1 BN_CTX *a3)
+{
+	return(EC_POINT_get_Jprojective_coordinates_GFp(a1, a2, x, y, z, a3));
+}
+
+__asm __saveds int EC_POINT_set_affine_coordinates_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *a2, register __a2 const BIGNUM *x, register __a3 const BIGNUM *y, register __d0 BN_CTX *a3)
+{
+	return(EC_POINT_set_affine_coordinates_GFp(a1, a2, x, y, a3));
+}
+
+__asm __saveds int EC_POINT_get_affine_coordinates_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 const EC_POINT *a2, register __a2 BIGNUM *x, register __a3 BIGNUM *y, register __d0 BN_CTX *a3)
+{
+	return(EC_POINT_get_affine_coordinates_GFp(a1, a2, x, y, a3));
+}
+
+__asm __saveds int EC_POINT_set_compressed_coordinates_GFp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *a2, register __a2 const BIGNUM *x, register __d0 int y_bit, register __a3 BN_CTX *a3)
+{
+	return(EC_POINT_set_compressed_coordinates_GFp(a1, a2, x, y_bit, a3));
+}
+
+__asm __saveds size_t EC_POINT_point2oct_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 const EC_POINT *a2, register __d0 point_conversion_form_t form, register __a2 unsigned char *buf, register __d1 size_t len, register __a3 BN_CTX *a3)
+{
+	return(EC_POINT_point2oct(a1, a2, form, buf, len, a3));
+}
+
+__asm __saveds int EC_POINT_oct2point_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *a2, register __a2 const unsigned char *buf, register __d0 size_t len, register __a3 BN_CTX *a3)
+{
+	return(EC_POINT_oct2point(a1, a2, buf, len, a3));
+}
+
+__asm __saveds int EC_POINT_add_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *r, register __a2 const EC_POINT *a, register __a3 const EC_POINT *b, register __d0 BN_CTX *a2)
+{
+	return(EC_POINT_add(a1, r, a, b, a2));
+}
+
+__asm __saveds int EC_POINT_dbl_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *r, register __a2 const EC_POINT *a, register __a3 BN_CTX *a2)
+{
+	return(EC_POINT_dbl(a1, r, a, a2));
+}
+
+__asm __saveds int EC_POINT_invert_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *a2, register __a2 BN_CTX *a3)
+{
+	return(EC_POINT_invert(a1, a2, a3));
+}
+
+__asm __saveds int EC_POINT_is_at_infinity_AmiSSL(register __a0 const EC_GROUP *a, register __a1 const EC_POINT *b)
+{
+	return(EC_POINT_is_at_infinity(a, b));
+}
+
+__asm __saveds int EC_POINT_is_on_curve_AmiSSL(register __a0 const EC_GROUP *a, register __a1 const EC_POINT *b, register __a2 BN_CTX *c)
+{
+	return(EC_POINT_is_on_curve(a, b, c));
+}
+
+__asm __saveds int EC_POINT_cmp_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 const EC_POINT *a, register __a2 const EC_POINT *b, register __a3 BN_CTX *a2)
+{
+	return(EC_POINT_cmp(a1, a, b, a2));
+}
+
+__asm __saveds int EC_POINT_make_affine_AmiSSL(register __a0 const EC_GROUP *a, register __a1 EC_POINT *b, register __a2 BN_CTX *c)
+{
+	return(EC_POINT_make_affine(a, b, c));
+}
+
+__asm __saveds int EC_POINTs_make_affine_AmiSSL(register __a0 const EC_GROUP *a1, register __d0 size_t num, register __a1 EC_POINT *a2[], register __a2 BN_CTX *a3)
+{
+	return(EC_POINTs_make_affine(a1, num, a2, a3));
+}
+
+__asm __saveds int EC_POINTs_mul_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *r, register __a2 const BIGNUM *a2, register __d0 size_t num, register __a3 const EC_POINT *a3[], register __d1 const BIGNUM *a4[], register __d2 BN_CTX *a5)
+{
+	return(EC_POINTs_mul(a1, r, a2, num, a3, a4, a5));
+}
+
+__asm __saveds int EC_POINT_mul_AmiSSL(register __a0 const EC_GROUP *a1, register __a1 EC_POINT *r, register __a2 const BIGNUM *a2, register __a3 const EC_POINT *a3, register __d0 const BIGNUM *a4, register __d1 BN_CTX *a5)
+{
+	return(EC_POINT_mul(a1, r, a2, a3, a4, a5));
+}
+
+__asm __saveds int EC_GROUP_precompute_mult_AmiSSL(register __a0 EC_GROUP *a, register __a1 BN_CTX *b)
+{
+	return(EC_GROUP_precompute_mult(a, b));
+}
+
+__asm __saveds void ERR_load_EC_strings_AmiSSL(void)
+{
+	ERR_load_EC_strings();
+}
+
 __asm __saveds void ERR_put_error_AmiSSL(register __d0 int lib, register __d1 int func, register __d2 int reason, register __a0 const char *file, register __d3 int line)
 {
 	ERR_put_error(lib, func, reason, file, line);
@@ -2415,6 +3250,21 @@ __asm __saveds unsigned long ERR_peek_error_line_data_AmiSSL(register __a0 const
 	return(ERR_peek_error_line_data(file, line, data, flags));
 }
 
+__asm __saveds unsigned long ERR_peek_last_error_AmiSSL(void)
+{
+	return(ERR_peek_last_error());
+}
+
+__asm __saveds unsigned long ERR_peek_last_error_line_AmiSSL(register __a0 const char **file, register __a1 int *line)
+{
+	return(ERR_peek_last_error_line(file, line));
+}
+
+__asm __saveds unsigned long ERR_peek_last_error_line_data_AmiSSL(register __a0 const char **file, register __a1 int *line, register __a2 const char **data, register __a3 int *flags)
+{
+	return(ERR_peek_last_error_line_data(file, line, data, flags));
+}
+
 __asm __saveds void ERR_clear_error_AmiSSL(void)
 {
 	ERR_clear_error();
@@ -2445,19 +3295,29 @@ __asm __saveds const char *ERR_reason_error_string_AmiSSL(register __d0 unsigned
 	return(ERR_reason_error_string(e));
 }
 
+__asm __saveds void ERR_print_errors_cb_AmiSSL(register __a0 int (*cb)(const char *str, size_t len, void *u), register __a1 void *u)
+{
+	ERR_print_errors_cb(cb, u);
+}
+
 __asm __saveds void ERR_print_errors_AmiSSL(register __a0 BIO *bp)
 {
 	ERR_print_errors(bp);
 }
 
-__asm __saveds void ERR_add_error_dataA_AmiSSL(register __d0 int num, register __a0 void *args)
+__asm __saveds void ERR_add_error_dataA_AmiSSL(register __d0 int num, register __d1 va_list args)
 {
 	ERR_add_error_dataA(num, args);
 }
 
-__asm __saveds void ERR_load_strings_AmiSSL(register __d0 int lib, register __a0 ERR_STRING_DATA *str)
+__asm __saveds void ERR_load_strings_AmiSSL(register __d0 int lib, register __d1 ERR_STRING_DATA str[])
 {
 	ERR_load_strings(lib, str);
+}
+
+__asm __saveds void ERR_unload_strings_AmiSSL(register __d0 int lib, register __d1 ERR_STRING_DATA str[])
+{
+	ERR_unload_strings(lib, str);
 }
 
 __asm __saveds void ERR_load_ERR_strings_AmiSSL(void)
@@ -2500,24 +3360,74 @@ __asm __saveds int ERR_get_next_error_library_AmiSSL(void)
 	return(ERR_get_next_error_library());
 }
 
-__asm __saveds int EVP_MD_CTX_copy_AmiSSL(register __a0 EVP_MD_CTX *out, register __a1 EVP_MD_CTX *in)
+__asm __saveds const ERR_FNS *ERR_get_implementation_AmiSSL(void)
+{
+	return(ERR_get_implementation());
+}
+
+__asm __saveds int ERR_set_implementation_AmiSSL(register __a0 const ERR_FNS *fns)
+{
+	return(ERR_set_implementation(fns));
+}
+
+__asm __saveds void EVP_MD_CTX_init_AmiSSL(register __a0 EVP_MD_CTX *ctx)
+{
+	EVP_MD_CTX_init(ctx);
+}
+
+__asm __saveds int EVP_MD_CTX_cleanup_AmiSSL(register __a0 EVP_MD_CTX *ctx)
+{
+	return(EVP_MD_CTX_cleanup(ctx));
+}
+
+__asm __saveds EVP_MD_CTX *EVP_MD_CTX_create_AmiSSL(void)
+{
+	return(EVP_MD_CTX_create());
+}
+
+__asm __saveds void EVP_MD_CTX_destroy_AmiSSL(register __a0 EVP_MD_CTX *ctx)
+{
+	EVP_MD_CTX_destroy(ctx);
+}
+
+__asm __saveds int EVP_MD_CTX_copy_ex_AmiSSL(register __a0 EVP_MD_CTX *out, register __a1 const EVP_MD_CTX *in)
+{
+	return(EVP_MD_CTX_copy_ex(out, in));
+}
+
+__asm __saveds int EVP_DigestInit_ex_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 const EVP_MD *type, register __a2 ENGINE *impl)
+{
+	return(EVP_DigestInit_ex(ctx, type, impl));
+}
+
+__asm __saveds int EVP_DigestUpdate_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 const void *d, register __d0 unsigned int cnt)
+{
+	return(EVP_DigestUpdate(ctx, d, cnt));
+}
+
+__asm __saveds int EVP_DigestFinal_ex_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 unsigned char *md, register __a2 unsigned int *s)
+{
+	return(EVP_DigestFinal_ex(ctx, md, s));
+}
+
+__asm __saveds int EVP_Digest_AmiSSL(register __a0 void *data, register __d0 unsigned int count, register __a1 unsigned char *md, register __a2 unsigned int *size, register __a3 const EVP_MD *type, register __d1 ENGINE *impl)
+{
+	return(EVP_Digest(data, count, md, size, type, impl));
+}
+
+__asm __saveds int EVP_MD_CTX_copy_AmiSSL(register __a0 EVP_MD_CTX *out, register __a1 const EVP_MD_CTX *in)
 {
 	return(EVP_MD_CTX_copy(out, in));
 }
 
-__asm __saveds void EVP_DigestInit_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 const EVP_MD *type)
+__asm __saveds int EVP_DigestInit_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 const EVP_MD *type)
 {
-	EVP_DigestInit(ctx, type);
+	return(EVP_DigestInit(ctx, type));
 }
 
-__asm __saveds void EVP_DigestUpdate_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 const void *d, register __d0 unsigned int cnt)
+__asm __saveds int EVP_DigestFinal_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 unsigned char *md, register __a2 unsigned int *s)
 {
-	EVP_DigestUpdate(ctx, d, cnt);
-}
-
-__asm __saveds void EVP_DigestFinal_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 unsigned char *md, register __a2 unsigned int *s)
-{
-	EVP_DigestFinal(ctx, md, s);
+	return(EVP_DigestFinal(ctx, md, s));
 }
 
 __asm __saveds int EVP_read_pw_string_AmiSSL(register __a0 char *buf, register __d0 int length, register __a1 const char *prompt, register __d1 int verify)
@@ -2535,19 +3445,29 @@ __asm __saveds char *EVP_get_pw_prompt_AmiSSL(void)
 	return(EVP_get_pw_prompt());
 }
 
-__asm __saveds int EVP_BytesToKey_AmiSSL(register __a0 const EVP_CIPHER *type, register __a1 EVP_MD *md, register __a2 const unsigned char *salt, register __a3 const unsigned char *data, register __d0 int datal, register __d1 int count, register __d2 unsigned char *key, register __d3 unsigned char *iv)
+__asm __saveds int EVP_BytesToKey_AmiSSL(register __a0 const EVP_CIPHER *type, register __a1 const EVP_MD *md, register __a2 const unsigned char *salt, register __a3 const unsigned char *data, register __d0 int datal, register __d1 int count, register __d2 unsigned char *key, register __d3 unsigned char *iv)
 {
 	return(EVP_BytesToKey(type, md, salt, data, datal, count, key, iv));
 }
 
-__asm __saveds int EVP_EncryptInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *type, register __a2 unsigned char *key, register __a3 unsigned char *iv)
+__asm __saveds int EVP_EncryptInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 const unsigned char *key, register __a3 const unsigned char *iv)
 {
-	return(EVP_EncryptInit(ctx, type, key, iv));
+	return(EVP_EncryptInit(ctx, cipher, key, iv));
 }
 
-__asm __saveds int EVP_EncryptUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 unsigned char *in, register __d0 int inl)
+__asm __saveds int EVP_EncryptInit_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 ENGINE *impl, register __a3 const unsigned char *key, register __d0 const unsigned char *iv)
+{
+	return(EVP_EncryptInit_ex(ctx, cipher, impl, key, iv));
+}
+
+__asm __saveds int EVP_EncryptUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 const unsigned char *in, register __d0 int inl)
 {
 	return(EVP_EncryptUpdate(ctx, out, outl, in, inl));
+}
+
+__asm __saveds int EVP_EncryptFinal_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl)
+{
+	return(EVP_EncryptFinal_ex(ctx, out, outl));
 }
 
 __asm __saveds int EVP_EncryptFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl)
@@ -2555,12 +3475,17 @@ __asm __saveds int EVP_EncryptFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, re
 	return(EVP_EncryptFinal(ctx, out, outl));
 }
 
-__asm __saveds int EVP_DecryptInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *type, register __a2 unsigned char *key, register __a3 unsigned char *iv)
+__asm __saveds int EVP_DecryptInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 const unsigned char *key, register __a3 const unsigned char *iv)
 {
-	return(EVP_DecryptInit(ctx, type, key, iv));
+	return(EVP_DecryptInit(ctx, cipher, key, iv));
 }
 
-__asm __saveds int EVP_DecryptUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 unsigned char *in, register __d0 int inl)
+__asm __saveds int EVP_DecryptInit_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 ENGINE *impl, register __a3 const unsigned char *key, register __d0 const unsigned char *iv)
+{
+	return(EVP_DecryptInit_ex(ctx, cipher, impl, key, iv));
+}
+
+__asm __saveds int EVP_DecryptUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 const unsigned char *in, register __d0 int inl)
 {
 	return(EVP_DecryptUpdate(ctx, out, outl, in, inl));
 }
@@ -2570,12 +3495,22 @@ __asm __saveds int EVP_DecryptFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, re
 	return(EVP_DecryptFinal(ctx, outm, outl));
 }
 
-__asm __saveds int EVP_CipherInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *type, register __a2 unsigned char *key, register __a3 unsigned char *iv, register __d0 int enc)
+__asm __saveds int EVP_DecryptFinal_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *outm, register __a2 int *outl)
 {
-	return(EVP_CipherInit(ctx, type, key, iv, enc));
+	return(EVP_DecryptFinal_ex(ctx, outm, outl));
 }
 
-__asm __saveds int EVP_CipherUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 unsigned char *in, register __d0 int inl)
+__asm __saveds int EVP_CipherInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 const unsigned char *key, register __a3 const unsigned char *iv, register __d0 int enc)
+{
+	return(EVP_CipherInit(ctx, cipher, key, iv, enc));
+}
+
+__asm __saveds int EVP_CipherInit_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *cipher, register __a2 ENGINE *impl, register __a3 const unsigned char *key, register __d0 const unsigned char *iv, register __d1 int enc)
+{
+	return(EVP_CipherInit_ex(ctx, cipher, impl, key, iv, enc));
+}
+
+__asm __saveds int EVP_CipherUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl, register __a3 const unsigned char *in, register __d0 int inl)
 {
 	return(EVP_CipherUpdate(ctx, out, outl, in, inl));
 }
@@ -2583,6 +3518,11 @@ __asm __saveds int EVP_CipherUpdate_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, re
 __asm __saveds int EVP_CipherFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *outm, register __a2 int *outl)
 {
 	return(EVP_CipherFinal(ctx, outm, outl));
+}
+
+__asm __saveds int EVP_CipherFinal_ex_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *outm, register __a2 int *outl)
+{
+	return(EVP_CipherFinal_ex(ctx, outm, outl));
 }
 
 __asm __saveds int EVP_SignFinal_AmiSSL(register __a0 EVP_MD_CTX *ctx, register __a1 unsigned char *md, register __a2 unsigned int *s, register __a3 EVP_PKEY *pkey)
@@ -2595,7 +3535,7 @@ __asm __saveds int EVP_VerifyFinal_AmiSSL(register __a0 EVP_MD_CTX *ctx, registe
 	return(EVP_VerifyFinal(ctx, sigbuf, siglen, pkey));
 }
 
-__asm __saveds int EVP_OpenInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 EVP_CIPHER *type, register __a2 unsigned char *ek, register __d0 int ekl, register __a3 unsigned char *iv, register __d1 EVP_PKEY *priv)
+__asm __saveds int EVP_OpenInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *type, register __a2 unsigned char *ek, register __d0 int ekl, register __a3 unsigned char *iv, register __d1 EVP_PKEY *priv)
 {
 	return(EVP_OpenInit(ctx, type, ek, ekl, iv, priv));
 }
@@ -2605,14 +3545,14 @@ __asm __saveds int EVP_OpenFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, regis
 	return(EVP_OpenFinal(ctx, out, outl));
 }
 
-__asm __saveds int EVP_SealInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 EVP_CIPHER *type, register __a2 unsigned char **ek, register __a3 int *ekl, register __d0 unsigned char *iv, register __d1 EVP_PKEY **pubk, register __d2 int npubk)
+__asm __saveds int EVP_SealInit_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const EVP_CIPHER *type, register __a2 unsigned char **ek, register __a3 int *ekl, register __d0 unsigned char *iv, register __d1 EVP_PKEY **pubk, register __d2 int npubk)
 {
 	return(EVP_SealInit(ctx, type, ek, ekl, iv, pubk, npubk));
 }
 
-__asm __saveds void EVP_SealFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl)
+__asm __saveds int EVP_SealFinal_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 unsigned char *out, register __a2 int *outl)
 {
-	EVP_SealFinal(ctx, out, outl);
+	return(EVP_SealFinal(ctx, out, outl));
 }
 
 __asm __saveds void EVP_EncodeInit_AmiSSL(register __a0 EVP_ENCODE_CTX *ctx)
@@ -2670,6 +3610,11 @@ __asm __saveds int EVP_CIPHER_CTX_set_key_length_AmiSSL(register __a0 EVP_CIPHER
 	return(EVP_CIPHER_CTX_set_key_length(x, keylen));
 }
 
+__asm __saveds int EVP_CIPHER_CTX_set_padding_AmiSSL(register __a0 EVP_CIPHER_CTX *c, register __d0 int pad)
+{
+	return(EVP_CIPHER_CTX_set_padding(c, pad));
+}
+
 __asm __saveds int EVP_CIPHER_CTX_ctrl_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __d0 int type, register __d1 int arg, register __a1 void *ptr)
 {
 	return(EVP_CIPHER_CTX_ctrl(ctx, type, arg, ptr));
@@ -2700,249 +3645,324 @@ __asm __saveds void BIO_set_cipher_AmiSSL(register __a0 BIO *b, register __a1 co
 	BIO_set_cipher(b, c, k, i, enc);
 }
 
-__asm __saveds EVP_MD *EVP_md_null_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_md_null_AmiSSL(void)
 {
 	return(EVP_md_null());
 }
 
-__asm __saveds EVP_MD *EVP_md2_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_md2_AmiSSL(void)
 {
 	return(EVP_md2());
 }
 
-__asm __saveds EVP_MD *EVP_md4_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_md4_AmiSSL(void)
 {
 	return(EVP_md4());
 }
 
-__asm __saveds EVP_MD *EVP_md5_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_md5_AmiSSL(void)
 {
 	return(EVP_md5());
 }
 
-__asm __saveds EVP_MD *EVP_sha_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_sha_AmiSSL(void)
 {
 	return(EVP_sha());
 }
 
-__asm __saveds EVP_MD *EVP_sha1_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_sha1_AmiSSL(void)
 {
 	return(EVP_sha1());
 }
 
-__asm __saveds EVP_MD *EVP_dss_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_dss_AmiSSL(void)
 {
 	return(EVP_dss());
 }
 
-__asm __saveds EVP_MD *EVP_dss1_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_dss1_AmiSSL(void)
 {
 	return(EVP_dss1());
 }
 
-__asm __saveds EVP_MD *EVP_mdc2_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_mdc2_AmiSSL(void)
 {
 	return(EVP_mdc2());
 }
 
-__asm __saveds EVP_MD *EVP_ripemd160_AmiSSL(void)
+__asm __saveds const EVP_MD *EVP_ripemd160_AmiSSL(void)
 {
 	return(EVP_ripemd160());
 }
 
-__asm __saveds EVP_CIPHER *EVP_enc_null_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_enc_null_AmiSSL(void)
 {
 	return(EVP_enc_null());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ecb_AmiSSL(void)
 {
 	return(EVP_des_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede_AmiSSL(void)
 {
 	return(EVP_des_ede());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede3_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede3_AmiSSL(void)
 {
 	return(EVP_des_ede3());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede_ecb_AmiSSL(void)
+{
+	return(EVP_des_ede_ecb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_des_ede3_ecb_AmiSSL(void)
+{
+	return(EVP_des_ede3_ecb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_des_cfb_AmiSSL(void)
 {
 	return(EVP_des_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede_cfb_AmiSSL(void)
 {
 	return(EVP_des_ede_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede3_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede3_cfb_AmiSSL(void)
 {
 	return(EVP_des_ede3_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ofb_AmiSSL(void)
 {
 	return(EVP_des_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede_ofb_AmiSSL(void)
 {
 	return(EVP_des_ede_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede3_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede3_ofb_AmiSSL(void)
 {
 	return(EVP_des_ede3_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_cbc_AmiSSL(void)
 {
 	return(EVP_des_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede_cbc_AmiSSL(void)
 {
 	return(EVP_des_ede_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_des_ede3_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_des_ede3_cbc_AmiSSL(void)
 {
 	return(EVP_des_ede3_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_desx_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_desx_cbc_AmiSSL(void)
 {
 	return(EVP_desx_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc4_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc4_AmiSSL(void)
 {
 	return(EVP_rc4());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc4_40_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc4_40_AmiSSL(void)
 {
 	return(EVP_rc4_40());
 }
 
-__asm __saveds EVP_CIPHER *EVP_idea_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_idea_ecb_AmiSSL(void)
 {
 	return(EVP_idea_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_idea_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_idea_cfb_AmiSSL(void)
 {
 	return(EVP_idea_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_idea_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_idea_ofb_AmiSSL(void)
 {
 	return(EVP_idea_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_idea_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_idea_cbc_AmiSSL(void)
 {
 	return(EVP_idea_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_ecb_AmiSSL(void)
 {
 	return(EVP_rc2_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_cbc_AmiSSL(void)
 {
 	return(EVP_rc2_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_40_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_40_cbc_AmiSSL(void)
 {
 	return(EVP_rc2_40_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_64_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_64_cbc_AmiSSL(void)
 {
 	return(EVP_rc2_64_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_cfb_AmiSSL(void)
 {
 	return(EVP_rc2_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc2_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc2_ofb_AmiSSL(void)
 {
 	return(EVP_rc2_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_bf_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_bf_ecb_AmiSSL(void)
 {
 	return(EVP_bf_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_bf_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_bf_cbc_AmiSSL(void)
 {
 	return(EVP_bf_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_bf_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_bf_cfb_AmiSSL(void)
 {
 	return(EVP_bf_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_bf_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_bf_ofb_AmiSSL(void)
 {
 	return(EVP_bf_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_cast5_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_cast5_ecb_AmiSSL(void)
 {
 	return(EVP_cast5_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_cast5_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_cast5_cbc_AmiSSL(void)
 {
 	return(EVP_cast5_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_cast5_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_cast5_cfb_AmiSSL(void)
 {
 	return(EVP_cast5_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_cast5_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_cast5_ofb_AmiSSL(void)
 {
 	return(EVP_cast5_ofb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc5_32_12_16_cbc_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc5_32_12_16_cbc_AmiSSL(void)
 {
 	return(EVP_rc5_32_12_16_cbc());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc5_32_12_16_ecb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc5_32_12_16_ecb_AmiSSL(void)
 {
 	return(EVP_rc5_32_12_16_ecb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc5_32_12_16_cfb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc5_32_12_16_cfb_AmiSSL(void)
 {
 	return(EVP_rc5_32_12_16_cfb());
 }
 
-__asm __saveds EVP_CIPHER *EVP_rc5_32_12_16_ofb_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_rc5_32_12_16_ofb_AmiSSL(void)
 {
 	return(EVP_rc5_32_12_16_ofb());
 }
 
-__asm __saveds void OpenSSL_add_all_algorithms_AmiSSL(void)
+__asm __saveds const EVP_CIPHER *EVP_aes_128_ecb_AmiSSL(void)
 {
-	OpenSSL_add_all_algorithms();
+	return(EVP_aes_128_ecb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_128_cbc_AmiSSL(void)
+{
+	return(EVP_aes_128_cbc());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_128_cfb_AmiSSL(void)
+{
+	return(EVP_aes_128_cfb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_128_ofb_AmiSSL(void)
+{
+	return(EVP_aes_128_ofb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_192_ecb_AmiSSL(void)
+{
+	return(EVP_aes_192_ecb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_192_cbc_AmiSSL(void)
+{
+	return(EVP_aes_192_cbc());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_192_cfb_AmiSSL(void)
+{
+	return(EVP_aes_192_cfb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_192_ofb_AmiSSL(void)
+{
+	return(EVP_aes_192_ofb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_256_ecb_AmiSSL(void)
+{
+	return(EVP_aes_256_ecb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_256_cbc_AmiSSL(void)
+{
+	return(EVP_aes_256_cbc());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_256_cfb_AmiSSL(void)
+{
+	return(EVP_aes_256_cfb());
+}
+
+__asm __saveds const EVP_CIPHER *EVP_aes_256_ofb_AmiSSL(void)
+{
+	return(EVP_aes_256_ofb());
+}
+
+__asm __saveds void OPENSSL_add_all_algorithms_noconf_AmiSSL(void)
+{
+	OPENSSL_add_all_algorithms_noconf();
+}
+
+__asm __saveds void OPENSSL_add_all_algorithms_conf_AmiSSL(void)
+{
+	OPENSSL_add_all_algorithms_conf();
 }
 
 __asm __saveds void OpenSSL_add_all_ciphers_AmiSSL(void)
@@ -2955,12 +3975,12 @@ __asm __saveds void OpenSSL_add_all_digests_AmiSSL(void)
 	OpenSSL_add_all_digests();
 }
 
-__asm __saveds int EVP_add_cipher_AmiSSL(register __a0 EVP_CIPHER *cipher)
+__asm __saveds int EVP_add_cipher_AmiSSL(register __a0 const EVP_CIPHER *cipher)
 {
 	return(EVP_add_cipher(cipher));
 }
 
-__asm __saveds int EVP_add_digest_AmiSSL(register __a0 EVP_MD *digest)
+__asm __saveds int EVP_add_digest_AmiSSL(register __a0 const EVP_MD *digest)
 {
 	return(EVP_add_digest(digest));
 }
@@ -3010,32 +4030,32 @@ __asm __saveds int EVP_PKEY_assign_AmiSSL(register __a0 EVP_PKEY *pkey, register
 	return(EVP_PKEY_assign(pkey, type, key));
 }
 
-__asm __saveds int EVP_PKEY_set1_RSA_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 RSA *key)
+__asm __saveds int EVP_PKEY_set1_RSA_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 struct rsa_st *key)
 {
 	return(EVP_PKEY_set1_RSA(pkey, key));
 }
 
-__asm __saveds RSA *EVP_PKEY_get1_RSA_AmiSSL(register __a0 EVP_PKEY *pkey)
+__asm __saveds struct rsa_st *EVP_PKEY_get1_RSA_AmiSSL(register __a0 EVP_PKEY *pkey)
 {
 	return(EVP_PKEY_get1_RSA(pkey));
 }
 
-__asm __saveds int EVP_PKEY_set1_DSA_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 DSA *key)
+__asm __saveds int EVP_PKEY_set1_DSA_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 struct dsa_st *key)
 {
 	return(EVP_PKEY_set1_DSA(pkey, key));
 }
 
-__asm __saveds DSA *EVP_PKEY_get1_DSA_AmiSSL(register __a0 EVP_PKEY *pkey)
+__asm __saveds struct dsa_st *EVP_PKEY_get1_DSA_AmiSSL(register __a0 EVP_PKEY *pkey)
 {
 	return(EVP_PKEY_get1_DSA(pkey));
 }
 
-__asm __saveds int EVP_PKEY_set1_DH_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 DH *key)
+__asm __saveds int EVP_PKEY_set1_DH_AmiSSL(register __a0 EVP_PKEY *pkey, register __a1 struct dh_st *key)
 {
 	return(EVP_PKEY_set1_DH(pkey, key));
 }
 
-__asm __saveds DH *EVP_PKEY_get1_DH_AmiSSL(register __a0 EVP_PKEY *pkey)
+__asm __saveds struct dh_st *EVP_PKEY_get1_DH_AmiSSL(register __a0 EVP_PKEY *pkey)
 {
 	return(EVP_PKEY_get1_DH(pkey));
 }
@@ -3120,7 +4140,7 @@ __asm __saveds int EVP_CIPHER_get_asn1_iv_AmiSSL(register __a0 EVP_CIPHER_CTX *c
 	return(EVP_CIPHER_get_asn1_iv(c, type));
 }
 
-__asm __saveds int PKCS5_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 EVP_CIPHER *cipher, register __d1 EVP_MD *md, register __d2 int en_de)
+__asm __saveds int PKCS5_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 const EVP_CIPHER *cipher, register __d1 const EVP_MD *md, register __d2 int en_de)
 {
 	return(PKCS5_PBE_keyivgen(ctx, pass, passlen, param, cipher, md, en_de));
 }
@@ -3130,7 +4150,7 @@ __asm __saveds int PKCS5_PBKDF2_HMAC_SHA1_AmiSSL(register __a0 const char *pass,
 	return(PKCS5_PBKDF2_HMAC_SHA1(pass, passlen, salt, saltlen, iter, keylen, out));
 }
 
-__asm __saveds int PKCS5_v2_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 EVP_CIPHER *cipher, register __d1 EVP_MD *md, register __d2 int en_de)
+__asm __saveds int PKCS5_v2_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 const EVP_CIPHER *cipher, register __d1 const EVP_MD *md, register __d2 int en_de)
 {
 	return(PKCS5_v2_PBE_keyivgen(ctx, pass, passlen, param, cipher, md, en_de));
 }
@@ -3145,7 +4165,7 @@ __asm __saveds int EVP_PBE_CipherInit_AmiSSL(register __a0 ASN1_OBJECT *pbe_obj,
 	return(EVP_PBE_CipherInit(pbe_obj, pass, passlen, param, ctx, en_de));
 }
 
-__asm __saveds int EVP_PBE_alg_add_AmiSSL(register __d0 int nid, register __a0 EVP_CIPHER *cipher, register __a1 EVP_MD *md, register __a2 EVP_PBE_KEYGEN *keygen)
+__asm __saveds int EVP_PBE_alg_add_AmiSSL(register __d0 int nid, register __a0 const EVP_CIPHER *cipher, register __a1 const EVP_MD *md, register __a2 EVP_PBE_KEYGEN *keygen)
 {
 	return(EVP_PBE_alg_add(nid, cipher, md, keygen));
 }
@@ -3160,9 +4180,24 @@ __asm __saveds void ERR_load_EVP_strings_AmiSSL(void)
 	ERR_load_EVP_strings();
 }
 
+__asm __saveds void HMAC_CTX_init_AmiSSL(register __a0 HMAC_CTX *ctx)
+{
+	HMAC_CTX_init(ctx);
+}
+
+__asm __saveds void HMAC_CTX_cleanup_AmiSSL(register __a0 HMAC_CTX *ctx)
+{
+	HMAC_CTX_cleanup(ctx);
+}
+
 __asm __saveds void HMAC_Init_AmiSSL(register __a0 HMAC_CTX *ctx, register __a1 const void *key, register __d0 int len, register __a2 const EVP_MD *md)
 {
 	HMAC_Init(ctx, key, len, md);
+}
+
+__asm __saveds void HMAC_Init_ex_AmiSSL(register __a0 HMAC_CTX *ctx, register __a1 const void *key, register __d0 int len, register __a2 const EVP_MD *md, register __a3 ENGINE *impl)
+{
+	HMAC_Init_ex(ctx, key, len, md, impl);
 }
 
 __asm __saveds void HMAC_Update_AmiSSL(register __a0 HMAC_CTX *ctx, register __a1 const unsigned char *data, register __d0 int len)
@@ -3175,17 +4210,287 @@ __asm __saveds void HMAC_Final_AmiSSL(register __a0 HMAC_CTX *ctx, register __a1
 	HMAC_Final(ctx, md, len);
 }
 
-__asm __saveds void HMAC_cleanup_AmiSSL(register __a0 HMAC_CTX *ctx)
-{
-	HMAC_cleanup(ctx);
-}
-
 __asm __saveds unsigned char *HMAC_AmiSSL(register __a0 const EVP_MD *evp_md, register __a1 const void *key, register __d0 int key_len, register __a2 const unsigned char *d, register __d1 int n, register __a3 unsigned char *md, register __d2 unsigned int *md_len)
 {
 	return(HMAC(evp_md, key, key_len, d, n, md, md_len));
 }
 
-__asm __saveds LHASH *lh_new_AmiSSL(register __a0 unsigned long (*h)(), register __a1 int (*c)())
+__asm __saveds KRB5_ENCDATA *KRB5_ENCDATA_new_AmiSSL(void)
+{
+	return(KRB5_ENCDATA_new());
+}
+
+__asm __saveds void KRB5_ENCDATA_free_AmiSSL(register __a0 KRB5_ENCDATA *a)
+{
+	KRB5_ENCDATA_free(a);
+}
+
+__asm __saveds KRB5_ENCDATA *d2i_KRB5_ENCDATA_AmiSSL(register __a0 KRB5_ENCDATA **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_ENCDATA(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_ENCDATA_AmiSSL(register __a0 KRB5_ENCDATA *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_ENCDATA(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_ENCDATA_it_AmiSSL(void)
+{
+	return(KRB5_ENCDATA_it());
+}
+
+__asm __saveds KRB5_PRINCNAME *KRB5_PRINCNAME_new_AmiSSL(void)
+{
+	return(KRB5_PRINCNAME_new());
+}
+
+__asm __saveds void KRB5_PRINCNAME_free_AmiSSL(register __a0 KRB5_PRINCNAME *a)
+{
+	KRB5_PRINCNAME_free(a);
+}
+
+__asm __saveds KRB5_PRINCNAME *d2i_KRB5_PRINCNAME_AmiSSL(register __a0 KRB5_PRINCNAME **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_PRINCNAME(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_PRINCNAME_AmiSSL(register __a0 KRB5_PRINCNAME *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_PRINCNAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_PRINCNAME_it_AmiSSL(void)
+{
+	return(KRB5_PRINCNAME_it());
+}
+
+__asm __saveds KRB5_TKTBODY *KRB5_TKTBODY_new_AmiSSL(void)
+{
+	return(KRB5_TKTBODY_new());
+}
+
+__asm __saveds void KRB5_TKTBODY_free_AmiSSL(register __a0 KRB5_TKTBODY *a)
+{
+	KRB5_TKTBODY_free(a);
+}
+
+__asm __saveds KRB5_TKTBODY *d2i_KRB5_TKTBODY_AmiSSL(register __a0 KRB5_TKTBODY **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_TKTBODY(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_TKTBODY_AmiSSL(register __a0 KRB5_TKTBODY *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_TKTBODY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_TKTBODY_it_AmiSSL(void)
+{
+	return(KRB5_TKTBODY_it());
+}
+
+__asm __saveds KRB5_APREQBODY *KRB5_APREQBODY_new_AmiSSL(void)
+{
+	return(KRB5_APREQBODY_new());
+}
+
+__asm __saveds void KRB5_APREQBODY_free_AmiSSL(register __a0 KRB5_APREQBODY *a)
+{
+	KRB5_APREQBODY_free(a);
+}
+
+__asm __saveds KRB5_APREQBODY *d2i_KRB5_APREQBODY_AmiSSL(register __a0 KRB5_APREQBODY **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_APREQBODY(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_APREQBODY_AmiSSL(register __a0 KRB5_APREQBODY *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_APREQBODY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_APREQBODY_it_AmiSSL(void)
+{
+	return(KRB5_APREQBODY_it());
+}
+
+__asm __saveds KRB5_TICKET *KRB5_TICKET_new_AmiSSL(void)
+{
+	return(KRB5_TICKET_new());
+}
+
+__asm __saveds void KRB5_TICKET_free_AmiSSL(register __a0 KRB5_TICKET *a)
+{
+	KRB5_TICKET_free(a);
+}
+
+__asm __saveds KRB5_TICKET *d2i_KRB5_TICKET_AmiSSL(register __a0 KRB5_TICKET **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_TICKET(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_TICKET_AmiSSL(register __a0 KRB5_TICKET *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_TICKET(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_TICKET_it_AmiSSL(void)
+{
+	return(KRB5_TICKET_it());
+}
+
+__asm __saveds KRB5_APREQ *KRB5_APREQ_new_AmiSSL(void)
+{
+	return(KRB5_APREQ_new());
+}
+
+__asm __saveds void KRB5_APREQ_free_AmiSSL(register __a0 KRB5_APREQ *a)
+{
+	KRB5_APREQ_free(a);
+}
+
+__asm __saveds KRB5_APREQ *d2i_KRB5_APREQ_AmiSSL(register __a0 KRB5_APREQ **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_APREQ(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_APREQ_AmiSSL(register __a0 KRB5_APREQ *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_APREQ(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_APREQ_it_AmiSSL(void)
+{
+	return(KRB5_APREQ_it());
+}
+
+__asm __saveds KRB5_CHECKSUM *KRB5_CHECKSUM_new_AmiSSL(void)
+{
+	return(KRB5_CHECKSUM_new());
+}
+
+__asm __saveds void KRB5_CHECKSUM_free_AmiSSL(register __a0 KRB5_CHECKSUM *a)
+{
+	KRB5_CHECKSUM_free(a);
+}
+
+__asm __saveds KRB5_CHECKSUM *d2i_KRB5_CHECKSUM_AmiSSL(register __a0 KRB5_CHECKSUM **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_CHECKSUM(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_CHECKSUM_AmiSSL(register __a0 KRB5_CHECKSUM *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_CHECKSUM(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_CHECKSUM_it_AmiSSL(void)
+{
+	return(KRB5_CHECKSUM_it());
+}
+
+__asm __saveds KRB5_ENCKEY *KRB5_ENCKEY_new_AmiSSL(void)
+{
+	return(KRB5_ENCKEY_new());
+}
+
+__asm __saveds void KRB5_ENCKEY_free_AmiSSL(register __a0 KRB5_ENCKEY *a)
+{
+	KRB5_ENCKEY_free(a);
+}
+
+__asm __saveds KRB5_ENCKEY *d2i_KRB5_ENCKEY_AmiSSL(register __a0 KRB5_ENCKEY **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_ENCKEY(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_ENCKEY_AmiSSL(register __a0 KRB5_ENCKEY *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_ENCKEY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_ENCKEY_it_AmiSSL(void)
+{
+	return(KRB5_ENCKEY_it());
+}
+
+__asm __saveds KRB5_AUTHDATA *KRB5_AUTHDATA_new_AmiSSL(void)
+{
+	return(KRB5_AUTHDATA_new());
+}
+
+__asm __saveds void KRB5_AUTHDATA_free_AmiSSL(register __a0 KRB5_AUTHDATA *a)
+{
+	KRB5_AUTHDATA_free(a);
+}
+
+__asm __saveds KRB5_AUTHDATA *d2i_KRB5_AUTHDATA_AmiSSL(register __a0 KRB5_AUTHDATA **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_AUTHDATA(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_AUTHDATA_AmiSSL(register __a0 KRB5_AUTHDATA *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_AUTHDATA(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_AUTHDATA_it_AmiSSL(void)
+{
+	return(KRB5_AUTHDATA_it());
+}
+
+__asm __saveds KRB5_AUTHENTBODY *KRB5_AUTHENTBODY_new_AmiSSL(void)
+{
+	return(KRB5_AUTHENTBODY_new());
+}
+
+__asm __saveds void KRB5_AUTHENTBODY_free_AmiSSL(register __a0 KRB5_AUTHENTBODY *a)
+{
+	KRB5_AUTHENTBODY_free(a);
+}
+
+__asm __saveds KRB5_AUTHENTBODY *d2i_KRB5_AUTHENTBODY_AmiSSL(register __a0 KRB5_AUTHENTBODY **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_AUTHENTBODY(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_AUTHENTBODY_AmiSSL(register __a0 KRB5_AUTHENTBODY *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_AUTHENTBODY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_AUTHENTBODY_it_AmiSSL(void)
+{
+	return(KRB5_AUTHENTBODY_it());
+}
+
+__asm __saveds KRB5_AUTHENT *KRB5_AUTHENT_new_AmiSSL(void)
+{
+	return(KRB5_AUTHENT_new());
+}
+
+__asm __saveds void KRB5_AUTHENT_free_AmiSSL(register __a0 KRB5_AUTHENT *a)
+{
+	KRB5_AUTHENT_free(a);
+}
+
+__asm __saveds KRB5_AUTHENT *d2i_KRB5_AUTHENT_AmiSSL(register __a0 KRB5_AUTHENT **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_KRB5_AUTHENT(a, in, len));
+}
+
+__asm __saveds int i2d_KRB5_AUTHENT_AmiSSL(register __a0 KRB5_AUTHENT *a, register __a1 unsigned char **out)
+{
+	return(i2d_KRB5_AUTHENT(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *KRB5_AUTHENT_it_AmiSSL(void)
+{
+	return(KRB5_AUTHENT_it());
+}
+
+__asm __saveds LHASH *lh_new_AmiSSL(register __d0 LHASH_HASH_FN_TYPE h, register __d1 LHASH_COMP_FN_TYPE c)
 {
 	return(lh_new(h, c));
 }
@@ -3195,27 +4500,27 @@ __asm __saveds void lh_free_AmiSSL(register __a0 LHASH *lh)
 	lh_free(lh);
 }
 
-__asm __saveds void *lh_insert_AmiSSL(register __a0 LHASH *lh, register __a1 void *data)
+__asm __saveds void *lh_insert_AmiSSL(register __a0 LHASH *lh, register __a1 const void *data)
 {
 	return(lh_insert(lh, data));
 }
 
-__asm __saveds void *lh_delete_AmiSSL(register __a0 LHASH *lh, register __a1 void *data)
+__asm __saveds void *lh_delete_AmiSSL(register __a0 LHASH *lh, register __a1 const void *data)
 {
 	return(lh_delete(lh, data));
 }
 
-__asm __saveds void *lh_retrieve_AmiSSL(register __a0 LHASH *lh, register __a1 void *data)
+__asm __saveds void *lh_retrieve_AmiSSL(register __a0 LHASH *lh, register __a1 const void *data)
 {
 	return(lh_retrieve(lh, data));
 }
 
-__asm __saveds void lh_doall_AmiSSL(register __a0 LHASH *lh, register __a1 void (*func)())
+__asm __saveds void lh_doall_AmiSSL(register __a0 LHASH *lh, register __d0 LHASH_DOALL_FN_TYPE func)
 {
 	lh_doall(lh, func);
 }
 
-__asm __saveds void lh_doall_arg_AmiSSL(register __a0 LHASH *lh, register __a1 void (*func)(), register __a2 void *arg)
+__asm __saveds void lh_doall_arg_AmiSSL(register __a0 LHASH *lh, register __d0 LHASH_DOALL_ARG_FN_TYPE func, register __a1 void *arg)
 {
 	lh_doall_arg(lh, func, arg);
 }
@@ -3225,22 +4530,22 @@ __asm __saveds unsigned long lh_strhash_AmiSSL(register __a0 const char *c)
 	return(lh_strhash(c));
 }
 
-__asm __saveds unsigned long lh_num_items_AmiSSL(register __a0 LHASH *lh)
+__asm __saveds unsigned long lh_num_items_AmiSSL(register __a0 const LHASH *lh)
 {
 	return(lh_num_items(lh));
 }
 
-__asm __saveds void lh_stats_bio_AmiSSL(register __a0 LHASH *lh, register __a1 BIO *out)
+__asm __saveds void lh_stats_bio_AmiSSL(register __a0 const LHASH *lh, register __a1 BIO *out)
 {
 	lh_stats_bio(lh, out);
 }
 
-__asm __saveds void lh_node_stats_bio_AmiSSL(register __a0 LHASH *lh, register __a1 BIO *out)
+__asm __saveds void lh_node_stats_bio_AmiSSL(register __a0 const LHASH *lh, register __a1 BIO *out)
 {
 	lh_node_stats_bio(lh, out);
 }
 
-__asm __saveds void lh_node_usage_stats_bio_AmiSSL(register __a0 LHASH *lh, register __a1 BIO *out)
+__asm __saveds void lh_node_usage_stats_bio_AmiSSL(register __a0 const LHASH *lh, register __a1 BIO *out)
 {
 	lh_node_usage_stats_bio(lh, out);
 }
@@ -3250,7 +4555,7 @@ __asm __saveds int OBJ_NAME_init_AmiSSL(void)
 	return(OBJ_NAME_init());
 }
 
-__asm __saveds int OBJ_NAME_new_index_AmiSSL(register __a0 unsigned long (*hash_func)(const char *), register __a1 int (*cmp_func)(const void *, const void *), register __a2 void (*free_func)(const char *, int, const char *))
+__asm __saveds int OBJ_NAME_new_index_AmiSSL(register __a0 unsigned long (*hash_func)(const char *), register __a1 int (*cmp_func)(const char *, const char *), register __a2 void (*free_func)(const char *, int, const char *))
 {
 	return(OBJ_NAME_new_index(hash_func, cmp_func, free_func));
 }
@@ -3275,7 +4580,17 @@ __asm __saveds void OBJ_NAME_cleanup_AmiSSL(register __d0 int type)
 	OBJ_NAME_cleanup(type);
 }
 
-__asm __saveds ASN1_OBJECT *OBJ_dup_AmiSSL(register __a0 ASN1_OBJECT *o)
+__asm __saveds void OBJ_NAME_do_all_AmiSSL(register __d0 int type, register __a0 void (*fn)(const OBJ_NAME *, void *arg), register __a1 void *arg)
+{
+	OBJ_NAME_do_all(type, fn, arg);
+}
+
+__asm __saveds void OBJ_NAME_do_all_sorted_AmiSSL(register __d0 int type, register __a0 void (*fn)(const OBJ_NAME *, void *arg), register __a1 void *arg)
+{
+	OBJ_NAME_do_all_sorted(type, fn, arg);
+}
+
+__asm __saveds ASN1_OBJECT *OBJ_dup_AmiSSL(register __a0 const ASN1_OBJECT *o)
 {
 	return(OBJ_dup(o));
 }
@@ -3295,7 +4610,7 @@ __asm __saveds const char *OBJ_nid2sn_AmiSSL(register __d0 int n)
 	return(OBJ_nid2sn(n));
 }
 
-__asm __saveds int OBJ_obj2nid_AmiSSL(register __a0 ASN1_OBJECT *o)
+__asm __saveds int OBJ_obj2nid_AmiSSL(register __a0 const ASN1_OBJECT *o)
 {
 	return(OBJ_obj2nid(o));
 }
@@ -3305,12 +4620,12 @@ __asm __saveds ASN1_OBJECT *OBJ_txt2obj_AmiSSL(register __a0 const char *s, regi
 	return(OBJ_txt2obj(s, no_name));
 }
 
-__asm __saveds int OBJ_obj2txt_AmiSSL(register __a0 char *buf, register __d0 int buf_len, register __a1 ASN1_OBJECT *a, register __d1 int no_name)
+__asm __saveds int OBJ_obj2txt_AmiSSL(register __a0 char *buf, register __d0 int buf_len, register __a1 const ASN1_OBJECT *a, register __d1 int no_name)
 {
 	return(OBJ_obj2txt(buf, buf_len, a, no_name));
 }
 
-__asm __saveds int OBJ_txt2nid_AmiSSL(register __a0 char *s)
+__asm __saveds int OBJ_txt2nid_AmiSSL(register __a0 const char *s)
 {
 	return(OBJ_txt2nid(s));
 }
@@ -3325,12 +4640,12 @@ __asm __saveds int OBJ_sn2nid_AmiSSL(register __a0 const char *s)
 	return(OBJ_sn2nid(s));
 }
 
-__asm __saveds int OBJ_cmp_AmiSSL(register __a0 ASN1_OBJECT *a, register __a1 ASN1_OBJECT *b)
+__asm __saveds int OBJ_cmp_AmiSSL(register __a0 const ASN1_OBJECT *a, register __a1 const ASN1_OBJECT *b)
 {
 	return(OBJ_cmp(a, b));
 }
 
-__asm __saveds char *OBJ_bsearch_AmiSSL(register __a0 char *key, register __a1 char *base, register __d0 int num, register __d1 int size, register __a2 int (*cmp)(const void *, const void *))
+__asm __saveds const char *OBJ_bsearch_AmiSSL(register __a0 const char *key, register __a1 const char *base, register __d0 int num, register __d1 int size, register __a2 int (*cmp)(const void *, const void *))
 {
 	return(OBJ_bsearch(key, base, num, size, cmp));
 }
@@ -3340,12 +4655,12 @@ __asm __saveds int OBJ_new_nid_AmiSSL(register __d0 int num)
 	return(OBJ_new_nid(num));
 }
 
-__asm __saveds int OBJ_add_object_AmiSSL(register __a0 ASN1_OBJECT *obj)
+__asm __saveds int OBJ_add_object_AmiSSL(register __a0 const ASN1_OBJECT *obj)
 {
 	return(OBJ_add_object(obj));
 }
 
-__asm __saveds int OBJ_create_AmiSSL(register __a0 char *oid, register __a1 char *sn, register __a2 char *ln)
+__asm __saveds int OBJ_create_AmiSSL(register __a0 const char *oid, register __a1 const char *sn, register __a2 const char *ln)
 {
 	return(OBJ_create(oid, sn, ln));
 }
@@ -3363,6 +4678,781 @@ __asm __saveds int OBJ_create_objects_AmiSSL(register __a0 BIO *in)
 __asm __saveds void ERR_load_OBJ_strings_AmiSSL(void)
 {
 	ERR_load_OBJ_strings();
+}
+
+__asm __saveds OCSP_RESPONSE *OCSP_sendreq_bio_AmiSSL(register __a0 BIO *b, register __a1 char *path, register __a2 OCSP_REQUEST *req)
+{
+	return(OCSP_sendreq_bio(b, path, req));
+}
+
+__asm __saveds OCSP_CERTID *OCSP_cert_to_id_AmiSSL(register __a0 const EVP_MD *dgst, register __a1 X509 *subject, register __a2 X509 *issuer)
+{
+	return(OCSP_cert_to_id(dgst, subject, issuer));
+}
+
+__asm __saveds OCSP_CERTID *OCSP_cert_id_new_AmiSSL(register __a0 const EVP_MD *dgst, register __a1 X509_NAME *issuerName, register __a2 ASN1_BIT_STRING*issuerKey, register __a3 ASN1_INTEGER *serialNumber)
+{
+	return(OCSP_cert_id_new(dgst, issuerName, issuerKey, serialNumber));
+}
+
+__asm __saveds OCSP_ONEREQ *OCSP_request_add0_id_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 OCSP_CERTID *cid)
+{
+	return(OCSP_request_add0_id(req, cid));
+}
+
+__asm __saveds int OCSP_request_add1_nonce_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 unsigned char *val, register __d0 int len)
+{
+	return(OCSP_request_add1_nonce(req, val, len));
+}
+
+__asm __saveds int OCSP_basic_add1_nonce_AmiSSL(register __a0 OCSP_BASICRESP *resp, register __a1 unsigned char *val, register __d0 int len)
+{
+	return(OCSP_basic_add1_nonce(resp, val, len));
+}
+
+__asm __saveds int OCSP_check_nonce_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 OCSP_BASICRESP *bs)
+{
+	return(OCSP_check_nonce(req, bs));
+}
+
+__asm __saveds int OCSP_copy_nonce_AmiSSL(register __a0 OCSP_BASICRESP *resp, register __a1 OCSP_REQUEST *req)
+{
+	return(OCSP_copy_nonce(resp, req));
+}
+
+__asm __saveds int OCSP_request_set1_name_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 X509_NAME *nm)
+{
+	return(OCSP_request_set1_name(req, nm));
+}
+
+__asm __saveds int OCSP_request_add1_cert_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 X509 *cert)
+{
+	return(OCSP_request_add1_cert(req, cert));
+}
+
+__asm __saveds int OCSP_request_sign_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 X509 *signer, register __a2 EVP_PKEY *key, register __a3 const EVP_MD *dgst, register __d0 STACK_OF(X509) *certs, register __d1 unsigned long flags)
+{
+	return(OCSP_request_sign(req, signer, key, dgst, certs, flags));
+}
+
+__asm __saveds int OCSP_response_status_AmiSSL(register __a0 OCSP_RESPONSE *resp)
+{
+	return(OCSP_response_status(resp));
+}
+
+__asm __saveds OCSP_BASICRESP *OCSP_response_get1_basic_AmiSSL(register __a0 OCSP_RESPONSE *resp)
+{
+	return(OCSP_response_get1_basic(resp));
+}
+
+__asm __saveds int OCSP_resp_count_AmiSSL(register __a0 OCSP_BASICRESP *bs)
+{
+	return(OCSP_resp_count(bs));
+}
+
+__asm __saveds OCSP_SINGLERESP *OCSP_resp_get0_AmiSSL(register __a0 OCSP_BASICRESP *bs, register __d0 int idx)
+{
+	return(OCSP_resp_get0(bs, idx));
+}
+
+__asm __saveds int OCSP_resp_find_AmiSSL(register __a0 OCSP_BASICRESP *bs, register __a1 OCSP_CERTID *id, register __d0 int last)
+{
+	return(OCSP_resp_find(bs, id, last));
+}
+
+__asm __saveds int OCSP_single_get0_status_AmiSSL(register __a0 OCSP_SINGLERESP *single, register __a1 int *reason, register __a2 ASN1_GENERALIZEDTIME **revtime, register __a3 ASN1_GENERALIZEDTIME **thisupd, register __d0 ASN1_GENERALIZEDTIME **nextupd)
+{
+	return(OCSP_single_get0_status(single, reason, revtime, thisupd, nextupd));
+}
+
+__asm __saveds int OCSP_resp_find_status_AmiSSL(register __a0 OCSP_BASICRESP *bs, register __a1 OCSP_CERTID *id, register __a2 int *status, register __a3 int *reason, register __d0 ASN1_GENERALIZEDTIME **revtime, register __d1 ASN1_GENERALIZEDTIME **thisupd, register __d2 ASN1_GENERALIZEDTIME **nextupd)
+{
+	return(OCSP_resp_find_status(bs, id, status, reason, revtime, thisupd, nextupd));
+}
+
+__asm __saveds int OCSP_check_validity_AmiSSL(register __a0 ASN1_GENERALIZEDTIME *thisupd, register __a1 ASN1_GENERALIZEDTIME *nextupd, register __d0 long sec, register __d1 long maxsec)
+{
+	return(OCSP_check_validity(thisupd, nextupd, sec, maxsec));
+}
+
+__asm __saveds int OCSP_request_verify_AmiSSL(register __a0 OCSP_REQUEST *req, register __a1 STACK_OF(X509) *certs, register __a2 X509_STORE *store, register __d0 unsigned long flags)
+{
+	return(OCSP_request_verify(req, certs, store, flags));
+}
+
+__asm __saveds int OCSP_parse_url_AmiSSL(register __a0 char *url, register __a1 char **phost, register __a2 char **pport, register __a3 char **ppath, register __d0 int *pssl)
+{
+	return(OCSP_parse_url(url, phost, pport, ppath, pssl));
+}
+
+__asm __saveds int OCSP_id_issuer_cmp_AmiSSL(register __a0 OCSP_CERTID *a, register __a1 OCSP_CERTID *b)
+{
+	return(OCSP_id_issuer_cmp(a, b));
+}
+
+__asm __saveds int OCSP_id_cmp_AmiSSL(register __a0 OCSP_CERTID *a, register __a1 OCSP_CERTID *b)
+{
+	return(OCSP_id_cmp(a, b));
+}
+
+__asm __saveds int OCSP_request_onereq_count_AmiSSL(register __a0 OCSP_REQUEST *req)
+{
+	return(OCSP_request_onereq_count(req));
+}
+
+__asm __saveds OCSP_ONEREQ *OCSP_request_onereq_get0_AmiSSL(register __a0 OCSP_REQUEST *req, register __d0 int i)
+{
+	return(OCSP_request_onereq_get0(req, i));
+}
+
+__asm __saveds OCSP_CERTID *OCSP_onereq_get0_id_AmiSSL(register __a0 OCSP_ONEREQ *one)
+{
+	return(OCSP_onereq_get0_id(one));
+}
+
+__asm __saveds int OCSP_id_get0_info_AmiSSL(register __a0 ASN1_OCTET_STRING **piNameHash, register __a1 ASN1_OBJECT **pmd, register __a2 ASN1_OCTET_STRING **pikeyHash, register __a3 ASN1_INTEGER **pserial, register __d0 OCSP_CERTID *cid)
+{
+	return(OCSP_id_get0_info(piNameHash, pmd, pikeyHash, pserial, cid));
+}
+
+__asm __saveds int OCSP_request_is_signed_AmiSSL(register __a0 OCSP_REQUEST *req)
+{
+	return(OCSP_request_is_signed(req));
+}
+
+__asm __saveds OCSP_RESPONSE *OCSP_response_create_AmiSSL(register __d0 int status, register __a0 OCSP_BASICRESP *bs)
+{
+	return(OCSP_response_create(status, bs));
+}
+
+__asm __saveds OCSP_SINGLERESP *OCSP_basic_add1_status_AmiSSL(register __a0 OCSP_BASICRESP *rsp, register __a1 OCSP_CERTID *cid, register __d0 int status, register __d1 int reason, register __a2 ASN1_TIME *revtime, register __a3 ASN1_TIME *thisupd, register __d2 ASN1_TIME *nextupd)
+{
+	return(OCSP_basic_add1_status(rsp, cid, status, reason, revtime, thisupd, nextupd));
+}
+
+__asm __saveds int OCSP_basic_add1_cert_AmiSSL(register __a0 OCSP_BASICRESP *resp, register __a1 X509 *cert)
+{
+	return(OCSP_basic_add1_cert(resp, cert));
+}
+
+__asm __saveds int OCSP_basic_sign_AmiSSL(register __a0 OCSP_BASICRESP *brsp, register __a1 X509 *signer, register __a2 EVP_PKEY *key, register __a3 const EVP_MD *dgst, register __d0 STACK_OF(X509) *certs, register __d1 unsigned long flags)
+{
+	return(OCSP_basic_sign(brsp, signer, key, dgst, certs, flags));
+}
+
+__asm __saveds ASN1_STRING *ASN1_STRING_encode_AmiSSL(register __a0 ASN1_STRING *s, register __a1 int (*i2d)(), register __a2 char *data, register __a3 STACK_OF(ASN1_OBJECT) *sk)
+{
+	return(ASN1_STRING_encode(s, i2d, data, sk));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_crlID_new_AmiSSL(register __a0 char *url, register __a1 long *n, register __a2 char *tim)
+{
+	return(OCSP_crlID_new(url, n, tim));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_accept_responses_new_AmiSSL(register __a0 char **oids)
+{
+	return(OCSP_accept_responses_new(oids));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_archive_cutoff_new_AmiSSL(register __a0 char*tim)
+{
+	return(OCSP_archive_cutoff_new(tim));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_url_svcloc_new_AmiSSL(register __a0 X509_NAME*issuer, register __a1 char **urls)
+{
+	return(OCSP_url_svcloc_new(issuer, urls));
+}
+
+__asm __saveds int OCSP_REQUEST_get_ext_count_AmiSSL(register __a0 OCSP_REQUEST *x)
+{
+	return(OCSP_REQUEST_get_ext_count(x));
+}
+
+__asm __saveds int OCSP_REQUEST_get_ext_by_NID_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int nid, register __d1 int lastpos)
+{
+	return(OCSP_REQUEST_get_ext_by_NID(x, nid, lastpos));
+}
+
+__asm __saveds int OCSP_REQUEST_get_ext_by_OBJ_AmiSSL(register __a0 OCSP_REQUEST *x, register __a1 ASN1_OBJECT *obj, register __d0 int lastpos)
+{
+	return(OCSP_REQUEST_get_ext_by_OBJ(x, obj, lastpos));
+}
+
+__asm __saveds int OCSP_REQUEST_get_ext_by_critical_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int crit, register __d1 int lastpos)
+{
+	return(OCSP_REQUEST_get_ext_by_critical(x, crit, lastpos));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_REQUEST_get_ext_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int loc)
+{
+	return(OCSP_REQUEST_get_ext(x, loc));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_REQUEST_delete_ext_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int loc)
+{
+	return(OCSP_REQUEST_delete_ext(x, loc));
+}
+
+__asm __saveds void *OCSP_REQUEST_get1_ext_d2i_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
+{
+	return(OCSP_REQUEST_get1_ext_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds int OCSP_REQUEST_add1_ext_i2d_AmiSSL(register __a0 OCSP_REQUEST *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(OCSP_REQUEST_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
+__asm __saveds int OCSP_REQUEST_add_ext_AmiSSL(register __a0 OCSP_REQUEST *x, register __a1 X509_EXTENSION *ex, register __d0 int loc)
+{
+	return(OCSP_REQUEST_add_ext(x, ex, loc));
+}
+
+__asm __saveds int OCSP_ONEREQ_get_ext_count_AmiSSL(register __a0 OCSP_ONEREQ *x)
+{
+	return(OCSP_ONEREQ_get_ext_count(x));
+}
+
+__asm __saveds int OCSP_ONEREQ_get_ext_by_NID_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int nid, register __d1 int lastpos)
+{
+	return(OCSP_ONEREQ_get_ext_by_NID(x, nid, lastpos));
+}
+
+__asm __saveds int OCSP_ONEREQ_get_ext_by_OBJ_AmiSSL(register __a0 OCSP_ONEREQ *x, register __a1 ASN1_OBJECT *obj, register __d0 int lastpos)
+{
+	return(OCSP_ONEREQ_get_ext_by_OBJ(x, obj, lastpos));
+}
+
+__asm __saveds int OCSP_ONEREQ_get_ext_by_critical_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int crit, register __d1 int lastpos)
+{
+	return(OCSP_ONEREQ_get_ext_by_critical(x, crit, lastpos));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_ONEREQ_get_ext_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int loc)
+{
+	return(OCSP_ONEREQ_get_ext(x, loc));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_ONEREQ_delete_ext_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int loc)
+{
+	return(OCSP_ONEREQ_delete_ext(x, loc));
+}
+
+__asm __saveds void *OCSP_ONEREQ_get1_ext_d2i_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
+{
+	return(OCSP_ONEREQ_get1_ext_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds int OCSP_ONEREQ_add1_ext_i2d_AmiSSL(register __a0 OCSP_ONEREQ *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(OCSP_ONEREQ_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
+__asm __saveds int OCSP_ONEREQ_add_ext_AmiSSL(register __a0 OCSP_ONEREQ *x, register __a1 X509_EXTENSION *ex, register __d0 int loc)
+{
+	return(OCSP_ONEREQ_add_ext(x, ex, loc));
+}
+
+__asm __saveds int OCSP_BASICRESP_get_ext_count_AmiSSL(register __a0 OCSP_BASICRESP *x)
+{
+	return(OCSP_BASICRESP_get_ext_count(x));
+}
+
+__asm __saveds int OCSP_BASICRESP_get_ext_by_NID_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int nid, register __d1 int lastpos)
+{
+	return(OCSP_BASICRESP_get_ext_by_NID(x, nid, lastpos));
+}
+
+__asm __saveds int OCSP_BASICRESP_get_ext_by_OBJ_AmiSSL(register __a0 OCSP_BASICRESP *x, register __a1 ASN1_OBJECT *obj, register __d0 int lastpos)
+{
+	return(OCSP_BASICRESP_get_ext_by_OBJ(x, obj, lastpos));
+}
+
+__asm __saveds int OCSP_BASICRESP_get_ext_by_critical_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int crit, register __d1 int lastpos)
+{
+	return(OCSP_BASICRESP_get_ext_by_critical(x, crit, lastpos));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_BASICRESP_get_ext_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int loc)
+{
+	return(OCSP_BASICRESP_get_ext(x, loc));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_BASICRESP_delete_ext_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int loc)
+{
+	return(OCSP_BASICRESP_delete_ext(x, loc));
+}
+
+__asm __saveds void *OCSP_BASICRESP_get1_ext_d2i_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
+{
+	return(OCSP_BASICRESP_get1_ext_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds int OCSP_BASICRESP_add1_ext_i2d_AmiSSL(register __a0 OCSP_BASICRESP *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(OCSP_BASICRESP_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
+__asm __saveds int OCSP_BASICRESP_add_ext_AmiSSL(register __a0 OCSP_BASICRESP *x, register __a1 X509_EXTENSION *ex, register __d0 int loc)
+{
+	return(OCSP_BASICRESP_add_ext(x, ex, loc));
+}
+
+__asm __saveds int OCSP_SINGLERESP_get_ext_count_AmiSSL(register __a0 OCSP_SINGLERESP *x)
+{
+	return(OCSP_SINGLERESP_get_ext_count(x));
+}
+
+__asm __saveds int OCSP_SINGLERESP_get_ext_by_NID_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int nid, register __d1 int lastpos)
+{
+	return(OCSP_SINGLERESP_get_ext_by_NID(x, nid, lastpos));
+}
+
+__asm __saveds int OCSP_SINGLERESP_get_ext_by_OBJ_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __a1 ASN1_OBJECT *obj, register __d0 int lastpos)
+{
+	return(OCSP_SINGLERESP_get_ext_by_OBJ(x, obj, lastpos));
+}
+
+__asm __saveds int OCSP_SINGLERESP_get_ext_by_critical_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int crit, register __d1 int lastpos)
+{
+	return(OCSP_SINGLERESP_get_ext_by_critical(x, crit, lastpos));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_SINGLERESP_get_ext_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int loc)
+{
+	return(OCSP_SINGLERESP_get_ext(x, loc));
+}
+
+__asm __saveds X509_EXTENSION *OCSP_SINGLERESP_delete_ext_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int loc)
+{
+	return(OCSP_SINGLERESP_delete_ext(x, loc));
+}
+
+__asm __saveds void *OCSP_SINGLERESP_get1_ext_d2i_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
+{
+	return(OCSP_SINGLERESP_get1_ext_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds int OCSP_SINGLERESP_add1_ext_i2d_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(OCSP_SINGLERESP_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
+__asm __saveds int OCSP_SINGLERESP_add_ext_AmiSSL(register __a0 OCSP_SINGLERESP *x, register __a1 X509_EXTENSION *ex, register __d0 int loc)
+{
+	return(OCSP_SINGLERESP_add_ext(x, ex, loc));
+}
+
+__asm __saveds OCSP_SINGLERESP *OCSP_SINGLERESP_new_AmiSSL(void)
+{
+	return(OCSP_SINGLERESP_new());
+}
+
+__asm __saveds void OCSP_SINGLERESP_free_AmiSSL(register __a0 OCSP_SINGLERESP *a)
+{
+	OCSP_SINGLERESP_free(a);
+}
+
+__asm __saveds OCSP_SINGLERESP *d2i_OCSP_SINGLERESP_AmiSSL(register __a0 OCSP_SINGLERESP **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_SINGLERESP(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_SINGLERESP_AmiSSL(register __a0 OCSP_SINGLERESP *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_SINGLERESP(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_SINGLERESP_it_AmiSSL(void)
+{
+	return(OCSP_SINGLERESP_it());
+}
+
+__asm __saveds OCSP_CERTSTATUS *OCSP_CERTSTATUS_new_AmiSSL(void)
+{
+	return(OCSP_CERTSTATUS_new());
+}
+
+__asm __saveds void OCSP_CERTSTATUS_free_AmiSSL(register __a0 OCSP_CERTSTATUS *a)
+{
+	OCSP_CERTSTATUS_free(a);
+}
+
+__asm __saveds OCSP_CERTSTATUS *d2i_OCSP_CERTSTATUS_AmiSSL(register __a0 OCSP_CERTSTATUS **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_CERTSTATUS(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_CERTSTATUS_AmiSSL(register __a0 OCSP_CERTSTATUS *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_CERTSTATUS(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_CERTSTATUS_it_AmiSSL(void)
+{
+	return(OCSP_CERTSTATUS_it());
+}
+
+__asm __saveds OCSP_REVOKEDINFO *OCSP_REVOKEDINFO_new_AmiSSL(void)
+{
+	return(OCSP_REVOKEDINFO_new());
+}
+
+__asm __saveds void OCSP_REVOKEDINFO_free_AmiSSL(register __a0 OCSP_REVOKEDINFO *a)
+{
+	OCSP_REVOKEDINFO_free(a);
+}
+
+__asm __saveds OCSP_REVOKEDINFO *d2i_OCSP_REVOKEDINFO_AmiSSL(register __a0 OCSP_REVOKEDINFO **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_REVOKEDINFO(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_REVOKEDINFO_AmiSSL(register __a0 OCSP_REVOKEDINFO *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_REVOKEDINFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_REVOKEDINFO_it_AmiSSL(void)
+{
+	return(OCSP_REVOKEDINFO_it());
+}
+
+__asm __saveds OCSP_BASICRESP *OCSP_BASICRESP_new_AmiSSL(void)
+{
+	return(OCSP_BASICRESP_new());
+}
+
+__asm __saveds void OCSP_BASICRESP_free_AmiSSL(register __a0 OCSP_BASICRESP *a)
+{
+	OCSP_BASICRESP_free(a);
+}
+
+__asm __saveds OCSP_BASICRESP *d2i_OCSP_BASICRESP_AmiSSL(register __a0 OCSP_BASICRESP **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_BASICRESP(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_BASICRESP_AmiSSL(register __a0 OCSP_BASICRESP *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_BASICRESP(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_BASICRESP_it_AmiSSL(void)
+{
+	return(OCSP_BASICRESP_it());
+}
+
+__asm __saveds OCSP_RESPDATA *OCSP_RESPDATA_new_AmiSSL(void)
+{
+	return(OCSP_RESPDATA_new());
+}
+
+__asm __saveds void OCSP_RESPDATA_free_AmiSSL(register __a0 OCSP_RESPDATA *a)
+{
+	OCSP_RESPDATA_free(a);
+}
+
+__asm __saveds OCSP_RESPDATA *d2i_OCSP_RESPDATA_AmiSSL(register __a0 OCSP_RESPDATA **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_RESPDATA(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_RESPDATA_AmiSSL(register __a0 OCSP_RESPDATA *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_RESPDATA(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_RESPDATA_it_AmiSSL(void)
+{
+	return(OCSP_RESPDATA_it());
+}
+
+__asm __saveds OCSP_RESPID *OCSP_RESPID_new_AmiSSL(void)
+{
+	return(OCSP_RESPID_new());
+}
+
+__asm __saveds void OCSP_RESPID_free_AmiSSL(register __a0 OCSP_RESPID *a)
+{
+	OCSP_RESPID_free(a);
+}
+
+__asm __saveds OCSP_RESPID *d2i_OCSP_RESPID_AmiSSL(register __a0 OCSP_RESPID **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_RESPID(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_RESPID_AmiSSL(register __a0 OCSP_RESPID *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_RESPID(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_RESPID_it_AmiSSL(void)
+{
+	return(OCSP_RESPID_it());
+}
+
+__asm __saveds OCSP_RESPONSE *OCSP_RESPONSE_new_AmiSSL(void)
+{
+	return(OCSP_RESPONSE_new());
+}
+
+__asm __saveds void OCSP_RESPONSE_free_AmiSSL(register __a0 OCSP_RESPONSE *a)
+{
+	OCSP_RESPONSE_free(a);
+}
+
+__asm __saveds OCSP_RESPONSE *d2i_OCSP_RESPONSE_AmiSSL(register __a0 OCSP_RESPONSE **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_RESPONSE(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_RESPONSE_AmiSSL(register __a0 OCSP_RESPONSE *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_RESPONSE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_RESPONSE_it_AmiSSL(void)
+{
+	return(OCSP_RESPONSE_it());
+}
+
+__asm __saveds OCSP_RESPBYTES *OCSP_RESPBYTES_new_AmiSSL(void)
+{
+	return(OCSP_RESPBYTES_new());
+}
+
+__asm __saveds void OCSP_RESPBYTES_free_AmiSSL(register __a0 OCSP_RESPBYTES *a)
+{
+	OCSP_RESPBYTES_free(a);
+}
+
+__asm __saveds OCSP_RESPBYTES *d2i_OCSP_RESPBYTES_AmiSSL(register __a0 OCSP_RESPBYTES **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_RESPBYTES(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_RESPBYTES_AmiSSL(register __a0 OCSP_RESPBYTES *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_RESPBYTES(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_RESPBYTES_it_AmiSSL(void)
+{
+	return(OCSP_RESPBYTES_it());
+}
+
+__asm __saveds OCSP_ONEREQ *OCSP_ONEREQ_new_AmiSSL(void)
+{
+	return(OCSP_ONEREQ_new());
+}
+
+__asm __saveds void OCSP_ONEREQ_free_AmiSSL(register __a0 OCSP_ONEREQ *a)
+{
+	OCSP_ONEREQ_free(a);
+}
+
+__asm __saveds OCSP_ONEREQ *d2i_OCSP_ONEREQ_AmiSSL(register __a0 OCSP_ONEREQ **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_ONEREQ(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_ONEREQ_AmiSSL(register __a0 OCSP_ONEREQ *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_ONEREQ(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_ONEREQ_it_AmiSSL(void)
+{
+	return(OCSP_ONEREQ_it());
+}
+
+__asm __saveds OCSP_CERTID *OCSP_CERTID_new_AmiSSL(void)
+{
+	return(OCSP_CERTID_new());
+}
+
+__asm __saveds void OCSP_CERTID_free_AmiSSL(register __a0 OCSP_CERTID *a)
+{
+	OCSP_CERTID_free(a);
+}
+
+__asm __saveds OCSP_CERTID *d2i_OCSP_CERTID_AmiSSL(register __a0 OCSP_CERTID **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_CERTID(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_CERTID_AmiSSL(register __a0 OCSP_CERTID *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_CERTID(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_CERTID_it_AmiSSL(void)
+{
+	return(OCSP_CERTID_it());
+}
+
+__asm __saveds OCSP_REQUEST *OCSP_REQUEST_new_AmiSSL(void)
+{
+	return(OCSP_REQUEST_new());
+}
+
+__asm __saveds void OCSP_REQUEST_free_AmiSSL(register __a0 OCSP_REQUEST *a)
+{
+	OCSP_REQUEST_free(a);
+}
+
+__asm __saveds OCSP_REQUEST *d2i_OCSP_REQUEST_AmiSSL(register __a0 OCSP_REQUEST **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_REQUEST(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_REQUEST_AmiSSL(register __a0 OCSP_REQUEST *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_REQUEST(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_REQUEST_it_AmiSSL(void)
+{
+	return(OCSP_REQUEST_it());
+}
+
+__asm __saveds OCSP_SIGNATURE *OCSP_SIGNATURE_new_AmiSSL(void)
+{
+	return(OCSP_SIGNATURE_new());
+}
+
+__asm __saveds void OCSP_SIGNATURE_free_AmiSSL(register __a0 OCSP_SIGNATURE *a)
+{
+	OCSP_SIGNATURE_free(a);
+}
+
+__asm __saveds OCSP_SIGNATURE *d2i_OCSP_SIGNATURE_AmiSSL(register __a0 OCSP_SIGNATURE **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_SIGNATURE(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_SIGNATURE_AmiSSL(register __a0 OCSP_SIGNATURE *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_SIGNATURE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_SIGNATURE_it_AmiSSL(void)
+{
+	return(OCSP_SIGNATURE_it());
+}
+
+__asm __saveds OCSP_REQINFO *OCSP_REQINFO_new_AmiSSL(void)
+{
+	return(OCSP_REQINFO_new());
+}
+
+__asm __saveds void OCSP_REQINFO_free_AmiSSL(register __a0 OCSP_REQINFO *a)
+{
+	OCSP_REQINFO_free(a);
+}
+
+__asm __saveds OCSP_REQINFO *d2i_OCSP_REQINFO_AmiSSL(register __a0 OCSP_REQINFO **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_REQINFO(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_REQINFO_AmiSSL(register __a0 OCSP_REQINFO *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_REQINFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_REQINFO_it_AmiSSL(void)
+{
+	return(OCSP_REQINFO_it());
+}
+
+__asm __saveds OCSP_CRLID *OCSP_CRLID_new_AmiSSL(void)
+{
+	return(OCSP_CRLID_new());
+}
+
+__asm __saveds void OCSP_CRLID_free_AmiSSL(register __a0 OCSP_CRLID *a)
+{
+	OCSP_CRLID_free(a);
+}
+
+__asm __saveds OCSP_CRLID *d2i_OCSP_CRLID_AmiSSL(register __a0 OCSP_CRLID **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_CRLID(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_CRLID_AmiSSL(register __a0 OCSP_CRLID *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_CRLID(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_CRLID_it_AmiSSL(void)
+{
+	return(OCSP_CRLID_it());
+}
+
+__asm __saveds OCSP_SERVICELOC *OCSP_SERVICELOC_new_AmiSSL(void)
+{
+	return(OCSP_SERVICELOC_new());
+}
+
+__asm __saveds void OCSP_SERVICELOC_free_AmiSSL(register __a0 OCSP_SERVICELOC *a)
+{
+	OCSP_SERVICELOC_free(a);
+}
+
+__asm __saveds OCSP_SERVICELOC *d2i_OCSP_SERVICELOC_AmiSSL(register __a0 OCSP_SERVICELOC **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OCSP_SERVICELOC(a, in, len));
+}
+
+__asm __saveds int i2d_OCSP_SERVICELOC_AmiSSL(register __a0 OCSP_SERVICELOC *a, register __a1 unsigned char **out)
+{
+	return(i2d_OCSP_SERVICELOC(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OCSP_SERVICELOC_it_AmiSSL(void)
+{
+	return(OCSP_SERVICELOC_it());
+}
+
+__asm __saveds char *OCSP_response_status_str_AmiSSL(register __d0 long s)
+{
+	return(OCSP_response_status_str(s));
+}
+
+__asm __saveds char *OCSP_cert_status_str_AmiSSL(register __d0 long s)
+{
+	return(OCSP_cert_status_str(s));
+}
+
+__asm __saveds char *OCSP_crl_reason_str_AmiSSL(register __d0 long s)
+{
+	return(OCSP_crl_reason_str(s));
+}
+
+__asm __saveds int OCSP_REQUEST_print_AmiSSL(register __a0 BIO *bp, register __a1 OCSP_REQUEST*a, register __d0 unsigned long flags)
+{
+	return(OCSP_REQUEST_print(bp, a, flags));
+}
+
+__asm __saveds int OCSP_RESPONSE_print_AmiSSL(register __a0 BIO *bp, register __a1 OCSP_RESPONSE*o, register __d0 unsigned long flags)
+{
+	return(OCSP_RESPONSE_print(bp, o, flags));
+}
+
+__asm __saveds int OCSP_basic_verify_AmiSSL(register __a0 OCSP_BASICRESP *bs, register __a1 STACK_OF(X509) *certs, register __a2 X509_STORE *st, register __d0 unsigned long flags)
+{
+	return(OCSP_basic_verify(bs, certs, st, flags));
+}
+
+__asm __saveds void ERR_load_OCSP_strings_AmiSSL(void)
+{
+	ERR_load_OCSP_strings();
 }
 
 __asm __saveds int PEM_get_EVP_CIPHER_INFO_AmiSSL(register __a0 char *header, register __a1 EVP_CIPHER_INFO *cipher)
@@ -3383,6 +5473,11 @@ __asm __saveds int PEM_read_bio_AmiSSL(register __a0 BIO *bp, register __a1 char
 __asm __saveds int PEM_write_bio_AmiSSL(register __a0 BIO *bp, register __a1 const char *name, register __a2 char *hdr, register __a3 unsigned char *data, register __d0 long len)
 {
 	return(PEM_write_bio(bp, name, hdr, data, len));
+}
+
+__asm __saveds int PEM_bytes_read_bio_AmiSSL(register __a0 unsigned char **pdata, register __a1 long *plen, register __a2 char **pnm, register __a3 const char *name, register __d0 BIO *bp, register __d1 pem_password_cb *cb, register __d2 void *u)
+{
+	return(PEM_bytes_read_bio(pdata, plen, pnm, name, bp, cb, u));
 }
 
 __asm __saveds char *PEM_ASN1_read_bio_AmiSSL(register __a0 char *(*d2i)(), register __a1 const char *name, register __a2 BIO *bp, register __a3 char **x, register __d0 pem_password_cb *cb, register __d1 void *u)
@@ -3435,6 +5530,11 @@ __asm __saveds int PEM_SignFinal_AmiSSL(register __a0 EVP_MD_CTX *ctx, register 
 	return(PEM_SignFinal(ctx, sigret, siglen, pkey));
 }
 
+__asm __saveds int PEM_def_callback_AmiSSL(register __a0 char *buf, register __d0 int num, register __d1 int w, register __a1 void *key)
+{
+	return(PEM_def_callback(buf, num, w, key));
+}
+
 __asm __saveds void PEM_proc_type_AmiSSL(register __a0 char *buf, register __d0 int type)
 {
 	PEM_proc_type(buf, type);
@@ -3450,94 +5550,24 @@ __asm __saveds X509 *PEM_read_bio_X509_AmiSSL(register __a0 BIO *bp, register __
 	return(PEM_read_bio_X509(bp, x, cb, u));
 }
 
-__asm __saveds X509 *PEM_read_bio_X509_AUX_AmiSSL(register __a0 BIO *bp, register __a1 X509 **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_X509_AUX(bp, x, cb, u));
-}
-
-__asm __saveds X509_REQ *PEM_read_bio_X509_REQ_AmiSSL(register __a0 BIO *bp, register __a1 X509_REQ **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_X509_REQ(bp, x, cb, u));
-}
-
-__asm __saveds X509_CRL *PEM_read_bio_X509_CRL_AmiSSL(register __a0 BIO *bp, register __a1 X509_CRL **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_X509_CRL(bp, x, cb, u));
-}
-
-__asm __saveds PKCS7 *PEM_read_bio_PKCS7_AmiSSL(register __a0 BIO *bp, register __a1 PKCS7 **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_PKCS7(bp, x, cb, u));
-}
-
-__asm __saveds NETSCAPE_CERT_SEQUENCE *PEM_read_bio_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 BIO *bp, register __a1 NETSCAPE_CERT_SEQUENCE **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_NETSCAPE_CERT_SEQUENCE(bp, x, cb, u));
-}
-
-__asm __saveds X509_SIG *PEM_read_bio_PKCS8_AmiSSL(register __a0 BIO *bp, register __a1 X509_SIG **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_PKCS8(bp, x, cb, u));
-}
-
-__asm __saveds PKCS8_PRIV_KEY_INFO *PEM_read_bio_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 BIO *bp, register __a1 PKCS8_PRIV_KEY_INFO **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_PKCS8_PRIV_KEY_INFO(bp, x, cb, u));
-}
-
-__asm __saveds RSA *PEM_read_bio_RSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_RSAPrivateKey(bp, x, cb, u));
-}
-
-__asm __saveds RSA *PEM_read_bio_RSAPublicKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_RSAPublicKey(bp, x, cb, u));
-}
-
-__asm __saveds RSA *PEM_read_bio_RSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_RSA_PUBKEY(bp, x, cb, u));
-}
-
-__asm __saveds DSA *PEM_read_bio_DSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_DSAPrivateKey(bp, x, cb, u));
-}
-
-__asm __saveds DSA *PEM_read_bio_DSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_DSA_PUBKEY(bp, x, cb, u));
-}
-
-__asm __saveds DSA *PEM_read_bio_DSAparams_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_DSAparams(bp, x, cb, u));
-}
-
-__asm __saveds DH *PEM_read_bio_DHparams_AmiSSL(register __a0 BIO *bp, register __a1 DH **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_DHparams(bp, x, cb, u));
-}
-
-__asm __saveds EVP_PKEY *PEM_read_bio_PrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_PrivateKey(bp, x, cb, u));
-}
-
-__asm __saveds EVP_PKEY *PEM_read_bio_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY **x, register __a2 pem_password_cb *cb, register __a3 void *u)
-{
-	return(PEM_read_bio_PUBKEY(bp, x, cb, u));
-}
-
 __asm __saveds int PEM_write_bio_X509_AmiSSL(register __a0 BIO *bp, register __a1 X509 *x)
 {
 	return(PEM_write_bio_X509(bp, x));
 }
 
+__asm __saveds X509 *PEM_read_bio_X509_AUX_AmiSSL(register __a0 BIO *bp, register __a1 X509 **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_X509_AUX(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_X509_AUX_AmiSSL(register __a0 BIO *bp, register __a1 X509 *x)
 {
 	return(PEM_write_bio_X509_AUX(bp, x));
+}
+
+__asm __saveds X509_REQ *PEM_read_bio_X509_REQ_AmiSSL(register __a0 BIO *bp, register __a1 X509_REQ **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_X509_REQ(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_X509_REQ_AmiSSL(register __a0 BIO *bp, register __a1 X509_REQ *x)
@@ -3550,9 +5580,19 @@ __asm __saveds int PEM_write_bio_X509_REQ_NEW_AmiSSL(register __a0 BIO *bp, regi
 	return(PEM_write_bio_X509_REQ_NEW(bp, x));
 }
 
+__asm __saveds X509_CRL *PEM_read_bio_X509_CRL_AmiSSL(register __a0 BIO *bp, register __a1 X509_CRL **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_X509_CRL(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_X509_CRL_AmiSSL(register __a0 BIO *bp, register __a1 X509_CRL *x)
 {
 	return(PEM_write_bio_X509_CRL(bp, x));
+}
+
+__asm __saveds PKCS7 *PEM_read_bio_PKCS7_AmiSSL(register __a0 BIO *bp, register __a1 PKCS7 **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_PKCS7(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_PKCS7_AmiSSL(register __a0 BIO *bp, register __a1 PKCS7 *x)
@@ -3560,9 +5600,19 @@ __asm __saveds int PEM_write_bio_PKCS7_AmiSSL(register __a0 BIO *bp, register __
 	return(PEM_write_bio_PKCS7(bp, x));
 }
 
+__asm __saveds NETSCAPE_CERT_SEQUENCE *PEM_read_bio_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 BIO *bp, register __a1 NETSCAPE_CERT_SEQUENCE **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_NETSCAPE_CERT_SEQUENCE(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 BIO *bp, register __a1 NETSCAPE_CERT_SEQUENCE *x)
 {
 	return(PEM_write_bio_NETSCAPE_CERT_SEQUENCE(bp, x));
+}
+
+__asm __saveds X509_SIG *PEM_read_bio_PKCS8_AmiSSL(register __a0 BIO *bp, register __a1 X509_SIG **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_PKCS8(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_PKCS8_AmiSSL(register __a0 BIO *bp, register __a1 X509_SIG *x)
@@ -3570,9 +5620,19 @@ __asm __saveds int PEM_write_bio_PKCS8_AmiSSL(register __a0 BIO *bp, register __
 	return(PEM_write_bio_PKCS8(bp, x));
 }
 
+__asm __saveds PKCS8_PRIV_KEY_INFO *PEM_read_bio_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 BIO *bp, register __a1 PKCS8_PRIV_KEY_INFO **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_PKCS8_PRIV_KEY_INFO(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 BIO *bp, register __a1 PKCS8_PRIV_KEY_INFO *x)
 {
 	return(PEM_write_bio_PKCS8_PRIV_KEY_INFO(bp, x));
+}
+
+__asm __saveds RSA *PEM_read_bio_RSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_RSAPrivateKey(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_RSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA *x, register __a2 const EVP_CIPHER *enc, register __a3 unsigned char *kstr, register __d0 int klen, register __d1 pem_password_cb *cb, register __d2 void *u)
@@ -3580,9 +5640,19 @@ __asm __saveds int PEM_write_bio_RSAPrivateKey_AmiSSL(register __a0 BIO *bp, reg
 	return(PEM_write_bio_RSAPrivateKey(bp, x, enc, kstr, klen, cb, u));
 }
 
+__asm __saveds RSA *PEM_read_bio_RSAPublicKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_RSAPublicKey(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_RSAPublicKey_AmiSSL(register __a0 BIO *bp, register __a1 RSA *x)
 {
 	return(PEM_write_bio_RSAPublicKey(bp, x));
+}
+
+__asm __saveds RSA *PEM_read_bio_RSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 RSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_RSA_PUBKEY(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_RSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 RSA *x)
@@ -3590,9 +5660,19 @@ __asm __saveds int PEM_write_bio_RSA_PUBKEY_AmiSSL(register __a0 BIO *bp, regist
 	return(PEM_write_bio_RSA_PUBKEY(bp, x));
 }
 
+__asm __saveds DSA *PEM_read_bio_DSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_DSAPrivateKey(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_DSAPrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 DSA *x, register __a2 const EVP_CIPHER *enc, register __a3 unsigned char *kstr, register __d0 int klen, register __d1 pem_password_cb *cb, register __d2 void *u)
 {
 	return(PEM_write_bio_DSAPrivateKey(bp, x, enc, kstr, klen, cb, u));
+}
+
+__asm __saveds DSA *PEM_read_bio_DSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_DSA_PUBKEY(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_DSA_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 DSA *x)
@@ -3600,9 +5680,19 @@ __asm __saveds int PEM_write_bio_DSA_PUBKEY_AmiSSL(register __a0 BIO *bp, regist
 	return(PEM_write_bio_DSA_PUBKEY(bp, x));
 }
 
+__asm __saveds DSA *PEM_read_bio_DSAparams_AmiSSL(register __a0 BIO *bp, register __a1 DSA **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_DSAparams(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_DSAparams_AmiSSL(register __a0 BIO *bp, register __a1 DSA *x)
 {
 	return(PEM_write_bio_DSAparams(bp, x));
+}
+
+__asm __saveds DH *PEM_read_bio_DHparams_AmiSSL(register __a0 BIO *bp, register __a1 DH **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_DHparams(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_DHparams_AmiSSL(register __a0 BIO *bp, register __a1 DH *x)
@@ -3610,9 +5700,19 @@ __asm __saveds int PEM_write_bio_DHparams_AmiSSL(register __a0 BIO *bp, register
 	return(PEM_write_bio_DHparams(bp, x));
 }
 
+__asm __saveds EVP_PKEY *PEM_read_bio_PrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_PrivateKey(bp, x, cb, u));
+}
+
 __asm __saveds int PEM_write_bio_PrivateKey_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY *x, register __a2 const EVP_CIPHER *enc, register __a3 unsigned char *kstr, register __d0 int klen, register __d1 pem_password_cb *cb, register __d2 void *u)
 {
 	return(PEM_write_bio_PrivateKey(bp, x, enc, kstr, klen, cb, u));
+}
+
+__asm __saveds EVP_PKEY *PEM_read_bio_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY **x, register __a2 pem_password_cb *cb, register __a3 void *u)
+{
+	return(PEM_read_bio_PUBKEY(bp, x, cb, u));
 }
 
 __asm __saveds int PEM_write_bio_PUBKEY_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY *x)
@@ -3625,9 +5725,9 @@ __asm __saveds int PEM_write_bio_PKCS8PrivateKey_nid_AmiSSL(register __a0 BIO *b
 	return(PEM_write_bio_PKCS8PrivateKey_nid(bp, x, nid, kstr, klen, cb, u));
 }
 
-__asm __saveds int PEM_write_bio_PKCS8PrivateKey_AmiSSL(register __a0 BIO *a, register __a1 EVP_PKEY *b, register __a2 const EVP_CIPHER *c, register __a3 char *d, register __d0 int e, register __d1 pem_password_cb *f, register __d2 void *g)
+__asm __saveds int PEM_write_bio_PKCS8PrivateKey_AmiSSL(register __a0 BIO *a, register __a1 EVP_PKEY *b, register __a2 const EVP_CIPHER *c, register __a3 char *d, register __d0 int a1, register __d1 pem_password_cb *e, register __d2 void *f)
 {
-	return(PEM_write_bio_PKCS8PrivateKey(a, b, c, d, e, f, g));
+	return(PEM_write_bio_PKCS8PrivateKey(a, b, c, d, a1, e, f));
 }
 
 __asm __saveds int i2d_PKCS8PrivateKey_bio_AmiSSL(register __a0 BIO *bp, register __a1 EVP_PKEY *x, register __a2 const EVP_CIPHER *enc, register __a3 char *kstr, register __d0 int klen, register __d1 pem_password_cb *cb, register __d2 void *u)
@@ -3650,14 +5750,44 @@ __asm __saveds void ERR_load_PEM_strings_AmiSSL(void)
 	ERR_load_PEM_strings();
 }
 
-__asm __saveds PKCS12_SAFEBAG *PKCS12_pack_safebag_AmiSSL(register __a0 char *obj, register __a1 int (*i2d)(), register __d0 int nid1, register __d1 int nid2)
+__asm __saveds PKCS12_SAFEBAG *PKCS12_x5092certbag_AmiSSL(register __a0 X509 *x509)
 {
-	return(PKCS12_pack_safebag(obj, i2d, nid1, nid2));
+	return(PKCS12_x5092certbag(x509));
+}
+
+__asm __saveds PKCS12_SAFEBAG *PKCS12_x509crl2certbag_AmiSSL(register __a0 X509_CRL *crl)
+{
+	return(PKCS12_x509crl2certbag(crl));
+}
+
+__asm __saveds X509 *PKCS12_certbag2x509_AmiSSL(register __a0 PKCS12_SAFEBAG *bag)
+{
+	return(PKCS12_certbag2x509(bag));
+}
+
+__asm __saveds X509_CRL *PKCS12_certbag2x509crl_AmiSSL(register __a0 PKCS12_SAFEBAG *bag)
+{
+	return(PKCS12_certbag2x509crl(bag));
+}
+
+__asm __saveds PKCS12_SAFEBAG *PKCS12_item_pack_safebag_AmiSSL(register __a0 void *obj, register __a1 const ASN1_ITEM *it, register __d0 int nid1, register __d1 int nid2)
+{
+	return(PKCS12_item_pack_safebag(obj, it, nid1, nid2));
 }
 
 __asm __saveds PKCS12_SAFEBAG *PKCS12_MAKE_KEYBAG_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO *p8)
 {
 	return(PKCS12_MAKE_KEYBAG(p8));
+}
+
+__asm __saveds PKCS8_PRIV_KEY_INFO *PKCS8_decrypt_AmiSSL(register __a0 X509_SIG *p8, register __a1 const char *pass, register __d0 int passlen)
+{
+	return(PKCS8_decrypt(p8, pass, passlen));
+}
+
+__asm __saveds PKCS8_PRIV_KEY_INFO *PKCS12_decrypt_skey_AmiSSL(register __a0 PKCS12_SAFEBAG *bag, register __a1 const char *pass, register __d0 int passlen)
+{
+	return(PKCS12_decrypt_skey(bag, pass, passlen));
 }
 
 __asm __saveds X509_SIG *PKCS8_encrypt_AmiSSL(register __d0 int pbe_nid, register __a0 const EVP_CIPHER *cipher, register __a1 const char *pass, register __d1 int passlen, register __a2 unsigned char *salt, register __d2 int saltlen, register __d3 int iter, register __a3 PKCS8_PRIV_KEY_INFO *p8)
@@ -3675,9 +5805,29 @@ __asm __saveds PKCS7 *PKCS12_pack_p7data_AmiSSL(register __a0 STACK_OF(PKCS12_SA
 	return(PKCS12_pack_p7data(sk));
 }
 
+__asm __saveds STACK_OF(PKCS12_SAFEBAG) *PKCS12_unpack_p7data_AmiSSL(register __a0 PKCS7 *p7)
+{
+	return(PKCS12_unpack_p7data(p7));
+}
+
 __asm __saveds PKCS7 *PKCS12_pack_p7encdata_AmiSSL(register __d0 int pbe_nid, register __a0 const char *pass, register __d1 int passlen, register __a1 unsigned char *salt, register __d2 int saltlen, register __d3 int iter, register __a2 STACK_OF(PKCS12_SAFEBAG) *bags)
 {
 	return(PKCS12_pack_p7encdata(pbe_nid, pass, passlen, salt, saltlen, iter, bags));
+}
+
+__asm __saveds STACK_OF(PKCS12_SAFEBAG) *PKCS12_unpack_p7encdata_AmiSSL(register __a0 PKCS7 *p7, register __a1 const char *pass, register __d0 int passlen)
+{
+	return(PKCS12_unpack_p7encdata(p7, pass, passlen));
+}
+
+__asm __saveds int PKCS12_pack_authsafes_AmiSSL(register __a0 PKCS12 *p12, register __a1 STACK_OF(PKCS7) *safes)
+{
+	return(PKCS12_pack_authsafes(p12, safes));
+}
+
+__asm __saveds STACK_OF(PKCS7) *PKCS12_unpack_authsafes_AmiSSL(register __a0 PKCS12 *p12)
+{
+	return(PKCS12_unpack_authsafes(p12));
 }
 
 __asm __saveds int PKCS12_add_localkeyid_AmiSSL(register __a0 PKCS12_SAFEBAG *bag, register __a1 unsigned char *name, register __d0 int namelen)
@@ -3688,6 +5838,11 @@ __asm __saveds int PKCS12_add_localkeyid_AmiSSL(register __a0 PKCS12_SAFEBAG *ba
 __asm __saveds int PKCS12_add_friendlyname_asc_AmiSSL(register __a0 PKCS12_SAFEBAG *bag, register __a1 const char *name, register __d0 int namelen)
 {
 	return(PKCS12_add_friendlyname_asc(bag, name, namelen));
+}
+
+__asm __saveds int PKCS12_add_CSPName_asc_AmiSSL(register __a0 PKCS12_SAFEBAG *bag, register __a1 const char *name, register __d0 int namelen)
+{
+	return(PKCS12_add_CSPName_asc(bag, name, namelen));
 }
 
 __asm __saveds int PKCS12_add_friendlyname_uni_AmiSSL(register __a0 PKCS12_SAFEBAG *bag, register __a1 const unsigned char *name, register __d0 int namelen)
@@ -3715,14 +5870,14 @@ __asm __saveds unsigned char *PKCS12_pbe_crypt_AmiSSL(register __a0 X509_ALGOR *
 	return(PKCS12_pbe_crypt(algor, pass, passlen, in, inlen, data, datalen, en_de));
 }
 
-__asm __saveds char *PKCS12_decrypt_d2i_AmiSSL(register __a0 X509_ALGOR *algor, register __a1 char *(*d2i)(), register __a2 void (*free_func)(void *), register __a3 const char *pass, register __d0 int passlen, register __d1 ASN1_STRING *oct, register __d2 int seq)
+__asm __saveds void *PKCS12_item_decrypt_d2i_AmiSSL(register __a0 X509_ALGOR *algor, register __a1 const ASN1_ITEM *it, register __a2 const char *pass, register __d0 int passlen, register __a3 ASN1_OCTET_STRING *oct, register __d1 int zbuf)
 {
-	return(PKCS12_decrypt_d2i(algor, d2i, free_func, pass, passlen, oct, seq));
+	return(PKCS12_item_decrypt_d2i(algor, it, pass, passlen, oct, zbuf));
 }
 
-__asm __saveds ASN1_STRING *PKCS12_i2d_encrypt_AmiSSL(register __a0 X509_ALGOR *algor, register __a1 int (*i2d)(), register __a2 const char *pass, register __d0 int passlen, register __a3 char *obj, register __d1 int seq)
+__asm __saveds ASN1_OCTET_STRING *PKCS12_item_i2d_encrypt_AmiSSL(register __a0 X509_ALGOR *algor, register __a1 const ASN1_ITEM *it, register __a2 const char *pass, register __d0 int passlen, register __a3 void *obj, register __d1 int zbuf)
 {
-	return(PKCS12_i2d_encrypt(algor, i2d, pass, passlen, obj, seq));
+	return(PKCS12_item_i2d_encrypt(algor, it, pass, passlen, obj, zbuf));
 }
 
 __asm __saveds PKCS12 *PKCS12_init_AmiSSL(register __d0 int mode)
@@ -3740,7 +5895,7 @@ __asm __saveds int PKCS12_key_gen_uni_AmiSSL(register __a0 unsigned char *pass, 
 	return(PKCS12_key_gen_uni(pass, passlen, salt, saltlen, id, iter, n, out, md_type));
 }
 
-__asm __saveds int PKCS12_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 EVP_CIPHER *cipher, register __d1 EVP_MD *md_type, register __d2 int en_de)
+__asm __saveds int PKCS12_PBE_keyivgen_AmiSSL(register __a0 EVP_CIPHER_CTX *ctx, register __a1 const char *pass, register __d0 int passlen, register __a2 ASN1_TYPE *param, register __a3 const EVP_CIPHER *cipher, register __d1 const EVP_MD *md_type, register __d2 int en_de)
 {
 	return(PKCS12_PBE_keyivgen(ctx, pass, passlen, param, cipher, md_type, en_de));
 }
@@ -3755,12 +5910,12 @@ __asm __saveds int PKCS12_verify_mac_AmiSSL(register __a0 PKCS12 *p12, register 
 	return(PKCS12_verify_mac(p12, pass, passlen));
 }
 
-__asm __saveds int PKCS12_set_mac_AmiSSL(register __a0 PKCS12 *p12, register __a1 const char *pass, register __d0 int passlen, register __a2 unsigned char *salt, register __d1 int saltlen, register __d2 int iter, register __a3 EVP_MD *md_type)
+__asm __saveds int PKCS12_set_mac_AmiSSL(register __a0 PKCS12 *p12, register __a1 const char *pass, register __d0 int passlen, register __a2 unsigned char *salt, register __d1 int saltlen, register __d2 int iter, register __a3 const EVP_MD *md_type)
 {
 	return(PKCS12_set_mac(p12, pass, passlen, salt, saltlen, iter, md_type));
 }
 
-__asm __saveds int PKCS12_setup_mac_AmiSSL(register __a0 PKCS12 *p12, register __d0 int iter, register __a1 unsigned char *salt, register __d1 int saltlen, register __a2 EVP_MD *md_type)
+__asm __saveds int PKCS12_setup_mac_AmiSSL(register __a0 PKCS12 *p12, register __d0 int iter, register __a1 unsigned char *salt, register __d1 int saltlen, register __a2 const EVP_MD *md_type)
 {
 	return(PKCS12_setup_mac(p12, iter, salt, saltlen, md_type));
 }
@@ -3775,36 +5930,6 @@ __asm __saveds char *uni2asc_AmiSSL(register __a0 unsigned char *uni, register _
 	return(uni2asc(uni, unilen));
 }
 
-__asm __saveds int i2d_PKCS12_BAGS_AmiSSL(register __a0 PKCS12_BAGS *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PKCS12_BAGS(a, pp));
-}
-
-__asm __saveds PKCS12_BAGS *PKCS12_BAGS_new_AmiSSL(void)
-{
-	return(PKCS12_BAGS_new());
-}
-
-__asm __saveds PKCS12_BAGS *d2i_PKCS12_BAGS_AmiSSL(register __a0 PKCS12_BAGS **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS12_BAGS(a, pp, length));
-}
-
-__asm __saveds void PKCS12_BAGS_free_AmiSSL(register __a0 PKCS12_BAGS *a)
-{
-	PKCS12_BAGS_free(a);
-}
-
-__asm __saveds int i2d_PKCS12_AmiSSL(register __a0 PKCS12 *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PKCS12(a, pp));
-}
-
-__asm __saveds PKCS12 *d2i_PKCS12_AmiSSL(register __a0 PKCS12 **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS12(a, pp, length));
-}
-
 __asm __saveds PKCS12 *PKCS12_new_AmiSSL(void)
 {
 	return(PKCS12_new());
@@ -3815,9 +5940,19 @@ __asm __saveds void PKCS12_free_AmiSSL(register __a0 PKCS12 *a)
 	PKCS12_free(a);
 }
 
-__asm __saveds int i2d_PKCS12_MAC_DATA_AmiSSL(register __a0 PKCS12_MAC_DATA *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS12 *d2i_PKCS12_AmiSSL(register __a0 PKCS12 **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS12_MAC_DATA(a, pp));
+	return(d2i_PKCS12(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS12_AmiSSL(register __a0 PKCS12 *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS12(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_it_AmiSSL(void)
+{
+	return(PKCS12_it());
 }
 
 __asm __saveds PKCS12_MAC_DATA *PKCS12_MAC_DATA_new_AmiSSL(void)
@@ -3825,19 +5960,24 @@ __asm __saveds PKCS12_MAC_DATA *PKCS12_MAC_DATA_new_AmiSSL(void)
 	return(PKCS12_MAC_DATA_new());
 }
 
-__asm __saveds PKCS12_MAC_DATA *d2i_PKCS12_MAC_DATA_AmiSSL(register __a0 PKCS12_MAC_DATA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS12_MAC_DATA(a, pp, length));
-}
-
 __asm __saveds void PKCS12_MAC_DATA_free_AmiSSL(register __a0 PKCS12_MAC_DATA *a)
 {
 	PKCS12_MAC_DATA_free(a);
 }
 
-__asm __saveds int i2d_PKCS12_SAFEBAG_AmiSSL(register __a0 PKCS12_SAFEBAG *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS12_MAC_DATA *d2i_PKCS12_MAC_DATA_AmiSSL(register __a0 PKCS12_MAC_DATA **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS12_SAFEBAG(a, pp));
+	return(d2i_PKCS12_MAC_DATA(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS12_MAC_DATA_AmiSSL(register __a0 PKCS12_MAC_DATA *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS12_MAC_DATA(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_MAC_DATA_it_AmiSSL(void)
+{
+	return(PKCS12_MAC_DATA_it());
 }
 
 __asm __saveds PKCS12_SAFEBAG *PKCS12_SAFEBAG_new_AmiSSL(void)
@@ -3845,14 +5985,59 @@ __asm __saveds PKCS12_SAFEBAG *PKCS12_SAFEBAG_new_AmiSSL(void)
 	return(PKCS12_SAFEBAG_new());
 }
 
-__asm __saveds PKCS12_SAFEBAG *d2i_PKCS12_SAFEBAG_AmiSSL(register __a0 PKCS12_SAFEBAG **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS12_SAFEBAG(a, pp, length));
-}
-
 __asm __saveds void PKCS12_SAFEBAG_free_AmiSSL(register __a0 PKCS12_SAFEBAG *a)
 {
 	PKCS12_SAFEBAG_free(a);
+}
+
+__asm __saveds PKCS12_SAFEBAG *d2i_PKCS12_SAFEBAG_AmiSSL(register __a0 PKCS12_SAFEBAG **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PKCS12_SAFEBAG(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS12_SAFEBAG_AmiSSL(register __a0 PKCS12_SAFEBAG *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS12_SAFEBAG(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_SAFEBAG_it_AmiSSL(void)
+{
+	return(PKCS12_SAFEBAG_it());
+}
+
+__asm __saveds PKCS12_BAGS *PKCS12_BAGS_new_AmiSSL(void)
+{
+	return(PKCS12_BAGS_new());
+}
+
+__asm __saveds void PKCS12_BAGS_free_AmiSSL(register __a0 PKCS12_BAGS *a)
+{
+	PKCS12_BAGS_free(a);
+}
+
+__asm __saveds PKCS12_BAGS *d2i_PKCS12_BAGS_AmiSSL(register __a0 PKCS12_BAGS **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PKCS12_BAGS(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS12_BAGS_AmiSSL(register __a0 PKCS12_BAGS *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS12_BAGS(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_BAGS_it_AmiSSL(void)
+{
+	return(PKCS12_BAGS_it());
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_SAFEBAGS_it_AmiSSL(void)
+{
+	return(PKCS12_SAFEBAGS_it());
+}
+
+__asm __saveds const ASN1_ITEM *PKCS12_AUTHSAFES_it_AmiSSL(void)
+{
+	return(PKCS12_AUTHSAFES_it());
 }
 
 __asm __saveds void PKCS12_PBE_add_AmiSSL(void)
@@ -3890,26 +6075,6 @@ __asm __saveds void ERR_load_PKCS12_strings_AmiSSL(void)
 	ERR_load_PKCS12_strings();
 }
 
-__asm __saveds PKCS7_ISSUER_AND_SERIAL *PKCS7_ISSUER_AND_SERIAL_new_AmiSSL(void)
-{
-	return(PKCS7_ISSUER_AND_SERIAL_new());
-}
-
-__asm __saveds void PKCS7_ISSUER_AND_SERIAL_free_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL *a)
-{
-	PKCS7_ISSUER_AND_SERIAL_free(a);
-}
-
-__asm __saveds int i2d_PKCS7_ISSUER_AND_SERIAL_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PKCS7_ISSUER_AND_SERIAL(a, pp));
-}
-
-__asm __saveds PKCS7_ISSUER_AND_SERIAL *d2i_PKCS7_ISSUER_AND_SERIAL_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS7_ISSUER_AND_SERIAL(a, pp, length));
-}
-
 __asm __saveds int PKCS7_ISSUER_AND_SERIAL_digest_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL *data, register __a1 const EVP_MD *type, register __a2 unsigned char *md, register __a3 unsigned int *len)
 {
 	return(PKCS7_ISSUER_AND_SERIAL_digest(data, type, md, len));
@@ -3930,6 +6095,31 @@ __asm __saveds int i2d_PKCS7_bio_AmiSSL(register __a0 BIO *bp, register __a1 PKC
 	return(i2d_PKCS7_bio(bp, p7));
 }
 
+__asm __saveds PKCS7_ISSUER_AND_SERIAL *PKCS7_ISSUER_AND_SERIAL_new_AmiSSL(void)
+{
+	return(PKCS7_ISSUER_AND_SERIAL_new());
+}
+
+__asm __saveds void PKCS7_ISSUER_AND_SERIAL_free_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL *a)
+{
+	PKCS7_ISSUER_AND_SERIAL_free(a);
+}
+
+__asm __saveds PKCS7_ISSUER_AND_SERIAL *d2i_PKCS7_ISSUER_AND_SERIAL_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PKCS7_ISSUER_AND_SERIAL(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS7_ISSUER_AND_SERIAL_AmiSSL(register __a0 PKCS7_ISSUER_AND_SERIAL *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS7_ISSUER_AND_SERIAL(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ISSUER_AND_SERIAL_it_AmiSSL(void)
+{
+	return(PKCS7_ISSUER_AND_SERIAL_it());
+}
+
 __asm __saveds PKCS7_SIGNER_INFO *PKCS7_SIGNER_INFO_new_AmiSSL(void)
 {
 	return(PKCS7_SIGNER_INFO_new());
@@ -3940,14 +6130,19 @@ __asm __saveds void PKCS7_SIGNER_INFO_free_AmiSSL(register __a0 PKCS7_SIGNER_INF
 	PKCS7_SIGNER_INFO_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_SIGNER_INFO_AmiSSL(register __a0 PKCS7_SIGNER_INFO *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_SIGNER_INFO *d2i_PKCS7_SIGNER_INFO_AmiSSL(register __a0 PKCS7_SIGNER_INFO **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_SIGNER_INFO(a, pp));
+	return(d2i_PKCS7_SIGNER_INFO(a, in, len));
 }
 
-__asm __saveds PKCS7_SIGNER_INFO *d2i_PKCS7_SIGNER_INFO_AmiSSL(register __a0 PKCS7_SIGNER_INFO **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_SIGNER_INFO_AmiSSL(register __a0 PKCS7_SIGNER_INFO *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_SIGNER_INFO(a, pp, length));
+	return(i2d_PKCS7_SIGNER_INFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_SIGNER_INFO_it_AmiSSL(void)
+{
+	return(PKCS7_SIGNER_INFO_it());
 }
 
 __asm __saveds PKCS7_RECIP_INFO *PKCS7_RECIP_INFO_new_AmiSSL(void)
@@ -3960,14 +6155,19 @@ __asm __saveds void PKCS7_RECIP_INFO_free_AmiSSL(register __a0 PKCS7_RECIP_INFO 
 	PKCS7_RECIP_INFO_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_RECIP_INFO_AmiSSL(register __a0 PKCS7_RECIP_INFO *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_RECIP_INFO *d2i_PKCS7_RECIP_INFO_AmiSSL(register __a0 PKCS7_RECIP_INFO **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_RECIP_INFO(a, pp));
+	return(d2i_PKCS7_RECIP_INFO(a, in, len));
 }
 
-__asm __saveds PKCS7_RECIP_INFO *d2i_PKCS7_RECIP_INFO_AmiSSL(register __a0 PKCS7_RECIP_INFO **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_RECIP_INFO_AmiSSL(register __a0 PKCS7_RECIP_INFO *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_RECIP_INFO(a, pp, length));
+	return(i2d_PKCS7_RECIP_INFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_RECIP_INFO_it_AmiSSL(void)
+{
+	return(PKCS7_RECIP_INFO_it());
 }
 
 __asm __saveds PKCS7_SIGNED *PKCS7_SIGNED_new_AmiSSL(void)
@@ -3980,14 +6180,19 @@ __asm __saveds void PKCS7_SIGNED_free_AmiSSL(register __a0 PKCS7_SIGNED *a)
 	PKCS7_SIGNED_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_SIGNED_AmiSSL(register __a0 PKCS7_SIGNED *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_SIGNED *d2i_PKCS7_SIGNED_AmiSSL(register __a0 PKCS7_SIGNED **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_SIGNED(a, pp));
+	return(d2i_PKCS7_SIGNED(a, in, len));
 }
 
-__asm __saveds PKCS7_SIGNED *d2i_PKCS7_SIGNED_AmiSSL(register __a0 PKCS7_SIGNED **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_SIGNED_AmiSSL(register __a0 PKCS7_SIGNED *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_SIGNED(a, pp, length));
+	return(i2d_PKCS7_SIGNED(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_SIGNED_it_AmiSSL(void)
+{
+	return(PKCS7_SIGNED_it());
 }
 
 __asm __saveds PKCS7_ENC_CONTENT *PKCS7_ENC_CONTENT_new_AmiSSL(void)
@@ -4000,14 +6205,19 @@ __asm __saveds void PKCS7_ENC_CONTENT_free_AmiSSL(register __a0 PKCS7_ENC_CONTEN
 	PKCS7_ENC_CONTENT_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_ENC_CONTENT_AmiSSL(register __a0 PKCS7_ENC_CONTENT *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_ENC_CONTENT *d2i_PKCS7_ENC_CONTENT_AmiSSL(register __a0 PKCS7_ENC_CONTENT **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_ENC_CONTENT(a, pp));
+	return(d2i_PKCS7_ENC_CONTENT(a, in, len));
 }
 
-__asm __saveds PKCS7_ENC_CONTENT *d2i_PKCS7_ENC_CONTENT_AmiSSL(register __a0 PKCS7_ENC_CONTENT **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_ENC_CONTENT_AmiSSL(register __a0 PKCS7_ENC_CONTENT *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_ENC_CONTENT(a, pp, length));
+	return(i2d_PKCS7_ENC_CONTENT(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ENC_CONTENT_it_AmiSSL(void)
+{
+	return(PKCS7_ENC_CONTENT_it());
 }
 
 __asm __saveds PKCS7_ENVELOPE *PKCS7_ENVELOPE_new_AmiSSL(void)
@@ -4020,14 +6230,19 @@ __asm __saveds void PKCS7_ENVELOPE_free_AmiSSL(register __a0 PKCS7_ENVELOPE *a)
 	PKCS7_ENVELOPE_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_ENVELOPE_AmiSSL(register __a0 PKCS7_ENVELOPE *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_ENVELOPE *d2i_PKCS7_ENVELOPE_AmiSSL(register __a0 PKCS7_ENVELOPE **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_ENVELOPE(a, pp));
+	return(d2i_PKCS7_ENVELOPE(a, in, len));
 }
 
-__asm __saveds PKCS7_ENVELOPE *d2i_PKCS7_ENVELOPE_AmiSSL(register __a0 PKCS7_ENVELOPE **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_ENVELOPE_AmiSSL(register __a0 PKCS7_ENVELOPE *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_ENVELOPE(a, pp, length));
+	return(i2d_PKCS7_ENVELOPE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ENVELOPE_it_AmiSSL(void)
+{
+	return(PKCS7_ENVELOPE_it());
 }
 
 __asm __saveds PKCS7_SIGN_ENVELOPE *PKCS7_SIGN_ENVELOPE_new_AmiSSL(void)
@@ -4040,14 +6255,19 @@ __asm __saveds void PKCS7_SIGN_ENVELOPE_free_AmiSSL(register __a0 PKCS7_SIGN_ENV
 	PKCS7_SIGN_ENVELOPE_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_SIGN_ENVELOPE_AmiSSL(register __a0 PKCS7_SIGN_ENVELOPE *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_SIGN_ENVELOPE *d2i_PKCS7_SIGN_ENVELOPE_AmiSSL(register __a0 PKCS7_SIGN_ENVELOPE **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_SIGN_ENVELOPE(a, pp));
+	return(d2i_PKCS7_SIGN_ENVELOPE(a, in, len));
 }
 
-__asm __saveds PKCS7_SIGN_ENVELOPE *d2i_PKCS7_SIGN_ENVELOPE_AmiSSL(register __a0 PKCS7_SIGN_ENVELOPE **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_SIGN_ENVELOPE_AmiSSL(register __a0 PKCS7_SIGN_ENVELOPE *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_SIGN_ENVELOPE(a, pp, length));
+	return(i2d_PKCS7_SIGN_ENVELOPE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_SIGN_ENVELOPE_it_AmiSSL(void)
+{
+	return(PKCS7_SIGN_ENVELOPE_it());
 }
 
 __asm __saveds PKCS7_DIGEST *PKCS7_DIGEST_new_AmiSSL(void)
@@ -4060,14 +6280,19 @@ __asm __saveds void PKCS7_DIGEST_free_AmiSSL(register __a0 PKCS7_DIGEST *a)
 	PKCS7_DIGEST_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_DIGEST_AmiSSL(register __a0 PKCS7_DIGEST *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_DIGEST *d2i_PKCS7_DIGEST_AmiSSL(register __a0 PKCS7_DIGEST **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_DIGEST(a, pp));
+	return(d2i_PKCS7_DIGEST(a, in, len));
 }
 
-__asm __saveds PKCS7_DIGEST *d2i_PKCS7_DIGEST_AmiSSL(register __a0 PKCS7_DIGEST **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_DIGEST_AmiSSL(register __a0 PKCS7_DIGEST *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_DIGEST(a, pp, length));
+	return(i2d_PKCS7_DIGEST(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_DIGEST_it_AmiSSL(void)
+{
+	return(PKCS7_DIGEST_it());
 }
 
 __asm __saveds PKCS7_ENCRYPT *PKCS7_ENCRYPT_new_AmiSSL(void)
@@ -4080,14 +6305,19 @@ __asm __saveds void PKCS7_ENCRYPT_free_AmiSSL(register __a0 PKCS7_ENCRYPT *a)
 	PKCS7_ENCRYPT_free(a);
 }
 
-__asm __saveds int i2d_PKCS7_ENCRYPT_AmiSSL(register __a0 PKCS7_ENCRYPT *a, register __a1 unsigned char **pp)
+__asm __saveds PKCS7_ENCRYPT *d2i_PKCS7_ENCRYPT_AmiSSL(register __a0 PKCS7_ENCRYPT **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_PKCS7_ENCRYPT(a, pp));
+	return(d2i_PKCS7_ENCRYPT(a, in, len));
 }
 
-__asm __saveds PKCS7_ENCRYPT *d2i_PKCS7_ENCRYPT_AmiSSL(register __a0 PKCS7_ENCRYPT **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_PKCS7_ENCRYPT_AmiSSL(register __a0 PKCS7_ENCRYPT *a, register __a1 unsigned char **out)
 {
-	return(d2i_PKCS7_ENCRYPT(a, pp, length));
+	return(i2d_PKCS7_ENCRYPT(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ENCRYPT_it_AmiSSL(void)
+{
+	return(PKCS7_ENCRYPT_it());
 }
 
 __asm __saveds PKCS7 *PKCS7_new_AmiSSL(void)
@@ -4100,19 +6330,29 @@ __asm __saveds void PKCS7_free_AmiSSL(register __a0 PKCS7 *a)
 	PKCS7_free(a);
 }
 
-__asm __saveds void PKCS7_content_free_AmiSSL(register __a0 PKCS7 *a)
+__asm __saveds PKCS7 *d2i_PKCS7_AmiSSL(register __a0 PKCS7 **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	PKCS7_content_free(a);
+	return(d2i_PKCS7(a, in, len));
 }
 
-__asm __saveds int i2d_PKCS7_AmiSSL(register __a0 PKCS7 *a, register __a1 unsigned char **pp)
+__asm __saveds int i2d_PKCS7_AmiSSL(register __a0 PKCS7 *a, register __a1 unsigned char **out)
 {
-	return(i2d_PKCS7(a, pp));
+	return(i2d_PKCS7(a, out));
 }
 
-__asm __saveds PKCS7 *d2i_PKCS7_AmiSSL(register __a0 PKCS7 **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds const ASN1_ITEM *PKCS7_it_AmiSSL(void)
 {
-	return(d2i_PKCS7(a, pp, length));
+	return(PKCS7_it());
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ATTR_SIGN_it_AmiSSL(void)
+{
+	return(PKCS7_ATTR_SIGN_it());
+}
+
+__asm __saveds const ASN1_ITEM *PKCS7_ATTR_VERIFY_it_AmiSSL(void)
+{
+	return(PKCS7_ATTR_VERIFY_it());
 }
 
 __asm __saveds long PKCS7_ctrl_AmiSSL(register __a0 PKCS7 *p7, register __d0 int cmd, register __d1 long larg, register __a1 char *parg)
@@ -4130,7 +6370,7 @@ __asm __saveds int PKCS7_set_content_AmiSSL(register __a0 PKCS7 *p7, register __
 	return(PKCS7_set_content(p7, p7_data));
 }
 
-__asm __saveds int PKCS7_SIGNER_INFO_set_AmiSSL(register __a0 PKCS7_SIGNER_INFO *p7i, register __a1 X509 *x509, register __a2 EVP_PKEY *pkey, register __a3 EVP_MD *dgst)
+__asm __saveds int PKCS7_SIGNER_INFO_set_AmiSSL(register __a0 PKCS7_SIGNER_INFO *p7i, register __a1 X509 *x509, register __a2 EVP_PKEY *pkey, register __a3 const EVP_MD *dgst)
 {
 	return(PKCS7_SIGNER_INFO_set(p7i, x509, pkey, dgst));
 }
@@ -4180,7 +6420,7 @@ __asm __saveds BIO *PKCS7_dataDecode_AmiSSL(register __a0 PKCS7 *p7, register __
 	return(PKCS7_dataDecode(p7, pkey, in_bio, pcert));
 }
 
-__asm __saveds PKCS7_SIGNER_INFO *PKCS7_add_signature_AmiSSL(register __a0 PKCS7 *p7, register __a1 X509 *x509, register __a2 EVP_PKEY *pkey, register __a3 EVP_MD *dgst)
+__asm __saveds PKCS7_SIGNER_INFO *PKCS7_add_signature_AmiSSL(register __a0 PKCS7 *p7, register __a1 X509 *x509, register __a2 EVP_PKEY *pkey, register __a3 const EVP_MD *dgst)
 {
 	return(PKCS7_add_signature(p7, x509, pkey, dgst));
 }
@@ -4270,7 +6510,7 @@ __asm __saveds STACK_OF(X509) *PKCS7_get0_signers_AmiSSL(register __a0 PKCS7 *p7
 	return(PKCS7_get0_signers(p7, certs, flags));
 }
 
-__asm __saveds PKCS7 *PKCS7_encrypt_AmiSSL(register __a0 STACK_OF(X509) *certs, register __a1 BIO *in, register __a2 EVP_CIPHER *cipher, register __d0 int flags)
+__asm __saveds PKCS7 *PKCS7_encrypt_AmiSSL(register __a0 STACK_OF(X509) *certs, register __a1 BIO *in, register __a2 const EVP_CIPHER *cipher, register __d0 int flags)
 {
 	return(PKCS7_encrypt(certs, in, cipher, flags));
 }
@@ -4320,12 +6560,12 @@ __asm __saveds void ERR_load_PKCS7_strings_AmiSSL(void)
 	ERR_load_PKCS7_strings();
 }
 
-__asm __saveds void RAND_set_rand_method_AmiSSL(register __a0 RAND_METHOD *meth)
+__asm __saveds int RAND_set_rand_method_AmiSSL(register __a0 const RAND_METHOD *meth)
 {
-	RAND_set_rand_method(meth);
+	return(RAND_set_rand_method(meth));
 }
 
-__asm __saveds RAND_METHOD *RAND_get_rand_method_AmiSSL(void)
+__asm __saveds const RAND_METHOD *RAND_get_rand_method_AmiSSL(void)
 {
 	return(RAND_get_rand_method());
 }
@@ -4355,14 +6595,12 @@ __asm __saveds void RAND_seed_AmiSSL(register __a0 const void *buf, register __d
 	RAND_seed(buf, num);
 }
 
-/*
-
+#if 0
 __asm __saveds void RAND_add_AmiSSL(register __a0 const void *buf, register __d0 int num, register __d1 float entropy)
 {
 	RAND_add(buf, num, entropy);
 }
-
-*/
+#endif
 
 __asm __saveds int RAND_load_file_AmiSSL(register __a0 const char *file, register __d0 long max_bytes)
 {
@@ -4384,6 +6622,11 @@ __asm __saveds int RAND_status_AmiSSL(void)
 	return(RAND_status());
 }
 
+__asm __saveds int RAND_query_egd_bytes_AmiSSL(register __a0 const char *path, register __a1 unsigned char *buf, register __d0 int bytes)
+{
+	return(RAND_query_egd_bytes(path, buf, bytes));
+}
+
 __asm __saveds int RAND_egd_AmiSSL(register __a0 const char *path)
 {
 	return(RAND_egd(path));
@@ -4397,6 +6640,36 @@ __asm __saveds int RAND_egd_bytes_AmiSSL(register __a0 const char *path, registe
 __asm __saveds int RAND_poll_AmiSSL(void)
 {
 	return(RAND_poll());
+}
+
+__asm __saveds void ERR_load_RAND_strings_AmiSSL(void)
+{
+	ERR_load_RAND_strings();
+}
+
+__asm __saveds void SSL_CTX_set_msg_callback_AmiSSL(register __a0 SSL_CTX *ctx, register __a1 void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg))
+{
+	SSL_CTX_set_msg_callback(ctx, cb);
+}
+
+__asm __saveds void SSL_set_msg_callback_AmiSSL(register __a0 SSL *ssl, register __a1 void (*cb)(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg))
+{
+	SSL_set_msg_callback(ssl, cb);
+}
+
+__asm __saveds struct lhash_st *SSL_CTX_sessions_AmiSSL(register __a0 SSL_CTX *ctx)
+{
+	return(SSL_CTX_sessions(ctx));
+}
+
+__asm __saveds size_t SSL_get_finished_AmiSSL(register __a0 SSL *s, register __a1 void *buf, register __d0 size_t count)
+{
+	return(SSL_get_finished(s, buf, count));
+}
+
+__asm __saveds size_t SSL_get_peer_finished_AmiSSL(register __a0 SSL *s, register __a1 void *buf, register __d0 size_t count)
+{
+	return(SSL_get_peer_finished(s, buf, count));
 }
 
 __asm __saveds BIO_METHOD *BIO_f_ssl_AmiSSL(void)
@@ -4429,9 +6702,9 @@ __asm __saveds void BIO_ssl_shutdown_AmiSSL(register __a0 BIO *ssl_bio)
 	BIO_ssl_shutdown(ssl_bio);
 }
 
-__asm __saveds int SSL_CTX_set_cipher_list_AmiSSL(register __a0 SSL_CTX *a, register __a1 const char *str)
+__asm __saveds int SSL_CTX_set_cipher_list_AmiSSL(register __a0 SSL_CTX *a1, register __a1 const char *str)
 {
-	return(SSL_CTX_set_cipher_list(a, str));
+	return(SSL_CTX_set_cipher_list(a1, str));
 }
 
 __asm __saveds SSL_CTX *SSL_CTX_new_AmiSSL(register __a0 SSL_METHOD *meth)
@@ -4499,29 +6772,29 @@ __asm __saveds const char *SSL_CIPHER_get_name_AmiSSL(register __a0 SSL_CIPHER *
 	return(SSL_CIPHER_get_name(c));
 }
 
-__asm __saveds const char *SSL_CIPHER_get_mac_AmiSSL(register __a0 SSL_CIPHER *c)
+__asm __saveds const char *SSL_CIPHER_get_mac_AmiSSL(register __a0 SSL_CIPHER *cipher)
 {
-	return(SSL_CIPHER_get_mac(c));
+	return(SSL_CIPHER_get_mac(cipher));
 }
 
-__asm __saveds const char *SSL_CIPHER_get_encryption_AmiSSL(register __a0 SSL_CIPHER *c)
+__asm __saveds const char *SSL_CIPHER_get_encryption_AmiSSL(register __a0 SSL_CIPHER *cipher)
 {
-	return(SSL_CIPHER_get_encryption(c));
+	return(SSL_CIPHER_get_encryption(cipher));
 }
 
-__asm __saveds const char *SSL_CIPHER_get_authentication_AmiSSL(register __a0 SSL_CIPHER *c)
+__asm __saveds const char *SSL_CIPHER_get_authentication_AmiSSL(register __a0 SSL_CIPHER *cipher)
 {
-	return(SSL_CIPHER_get_authentication(c));
+	return(SSL_CIPHER_get_authentication(cipher));
 }
 
-__asm __saveds const char *SSL_CIPHER_get_key_exchange_AmiSSL(register __a0 SSL_CIPHER *c)
+__asm __saveds const char *SSL_CIPHER_get_key_exchange_AmiSSL(register __a0 SSL_CIPHER *cipher)
 {
-	return(SSL_CIPHER_get_key_exchange(c));
+	return(SSL_CIPHER_get_key_exchange(cipher));
 }
 
-__asm __saveds const char *SSL_CIPHER_get_export_AmiSSL(register __a0 SSL_CIPHER *c)
+__asm __saveds const char *SSL_CIPHER_get_export_AmiSSL(register __a0 SSL_CIPHER *cipher)
 {
-	return(SSL_CIPHER_get_export(c));
+	return(SSL_CIPHER_get_export(cipher));
 }
 
 __asm __saveds int SSL_get_fd_AmiSSL(register __a0 SSL *s)
@@ -4609,7 +6882,7 @@ __asm __saveds int SSL_get_verify_depth_AmiSSL(register __a0 SSL *s)
 	return(SSL_get_verify_depth(s));
 }
 
-__asm __saveds int (*SSL_get_verify_callback_AmiSSL(register __a0 SSL *s))(int, X509_STORE_CTX *a)
+__asm __saveds int (*SSL_get_verify_callback_AmiSSL(register __a0 SSL *s))(int, X509_STORE_CTX *)
 {
 	return(SSL_get_verify_callback(s));
 }
@@ -4709,22 +6982,22 @@ __asm __saveds void SSL_load_error_strings_AmiSSL(void)
 	SSL_load_error_strings();
 }
 
-__asm __saveds char *SSL_state_string_AmiSSL(register __a0 SSL *s)
+__asm __saveds const char *SSL_state_string_AmiSSL(register __a0 const SSL *s)
 {
 	return(SSL_state_string(s));
 }
 
-__asm __saveds char *SSL_rstate_string_AmiSSL(register __a0 SSL *s)
+__asm __saveds const char *SSL_rstate_string_AmiSSL(register __a0 const SSL *s)
 {
 	return(SSL_rstate_string(s));
 }
 
-__asm __saveds char *SSL_state_string_long_AmiSSL(register __a0 SSL *s)
+__asm __saveds const char *SSL_state_string_long_AmiSSL(register __a0 const SSL *s)
 {
 	return(SSL_state_string_long(s));
 }
 
-__asm __saveds char *SSL_rstate_string_long_AmiSSL(register __a0 SSL *s)
+__asm __saveds const char *SSL_rstate_string_long_AmiSSL(register __a0 const SSL *s)
 {
 	return(SSL_rstate_string_long(s));
 }
@@ -4794,9 +7067,24 @@ __asm __saveds int SSL_CTX_add_session_AmiSSL(register __a0 SSL_CTX *s, register
 	return(SSL_CTX_add_session(s, c));
 }
 
-__asm __saveds int SSL_CTX_remove_session_AmiSSL(register __a0 SSL_CTX *a, register __a1 SSL_SESSION *c)
+__asm __saveds int SSL_CTX_remove_session_AmiSSL(register __a0 SSL_CTX *a1, register __a1 SSL_SESSION *c)
 {
-	return(SSL_CTX_remove_session(a, c));
+	return(SSL_CTX_remove_session(a1, c));
+}
+
+__asm __saveds int SSL_CTX_set_generate_session_id_AmiSSL(register __a0 SSL_CTX *a, register __d0 GEN_SESSION_CB b)
+{
+	return(SSL_CTX_set_generate_session_id(a, b));
+}
+
+__asm __saveds int SSL_set_generate_session_id_AmiSSL(register __a0 SSL *a, register __d0 GEN_SESSION_CB b)
+{
+	return(SSL_set_generate_session_id(a, b));
+}
+
+__asm __saveds int SSL_has_matching_session_id_AmiSSL(register __a0 const SSL *ssl, register __a1 const unsigned char *id, register __d0 unsigned int id_len)
+{
+	return(SSL_has_matching_session_id(ssl, id, id_len));
 }
 
 __asm __saveds SSL_SESSION *d2i_SSL_SESSION_AmiSSL(register __a0 SSL_SESSION **a, register __a1 unsigned char **pp, register __d0 long length)
@@ -4824,7 +7112,7 @@ __asm __saveds int SSL_CTX_get_verify_depth_AmiSSL(register __a0 SSL_CTX *ctx)
 	return(SSL_CTX_get_verify_depth(ctx));
 }
 
-__asm __saveds int (*SSL_CTX_get_verify_callback_AmiSSL(register __a0 SSL_CTX *ctx))(int, X509_STORE_CTX *a)
+__asm __saveds int (*SSL_CTX_get_verify_callback_AmiSSL(register __a0 SSL_CTX *ctx))(int, X509_STORE_CTX *)
 {
 	return(SSL_CTX_get_verify_callback(ctx));
 }
@@ -4839,7 +7127,7 @@ __asm __saveds void SSL_CTX_set_verify_depth_AmiSSL(register __a0 SSL_CTX *ctx, 
 	SSL_CTX_set_verify_depth(ctx, depth);
 }
 
-__asm __saveds void SSL_CTX_set_cert_verify_callback_AmiSSL(register __a0 SSL_CTX *ctx, register __a1 int (*cb)(), register __a2 char *arg)
+__asm __saveds void SSL_CTX_set_cert_verify_callback_AmiSSL(register __a0 SSL_CTX *ctx, register __a1 int (*cb)(X509_STORE_CTX *, void *), register __a2 void *arg)
 {
 	SSL_CTX_set_cert_verify_callback(ctx, cb, arg);
 }
@@ -4959,24 +7247,24 @@ __asm __saveds int SSL_write_AmiSSL(register __a0 SSL *ssl, register __a1 const 
 	return(SSL_write(ssl, buf, num));
 }
 
-__asm __saveds long SSL_ctrl_AmiSSL(register __a0 SSL *ssl, register __d0 int cmd, register __d1 long larg, register __a1 char *parg)
+__asm __saveds long SSL_ctrl_AmiSSL(register __a0 SSL *ssl, register __d0 int cmd, register __d1 long larg, register __a1 void *parg)
 {
 	return(SSL_ctrl(ssl, cmd, larg, parg));
 }
 
-__asm __saveds long SSL_callback_ctrl_AmiSSL(register __a0 SSL *a, register __d0 int b, register __a1 void (*c)())
+__asm __saveds long SSL_callback_ctrl_AmiSSL(register __a0 SSL *a, register __d0 int a1, register __a1 void (*b)())
 {
-	return(SSL_callback_ctrl(a, b, c));
+	return(SSL_callback_ctrl(a, a1, b));
 }
 
-__asm __saveds long SSL_CTX_ctrl_AmiSSL(register __a0 SSL_CTX *ctx, register __d0 int cmd, register __d1 long larg, register __a1 char *parg)
+__asm __saveds long SSL_CTX_ctrl_AmiSSL(register __a0 SSL_CTX *ctx, register __d0 int cmd, register __d1 long larg, register __a1 void *parg)
 {
 	return(SSL_CTX_ctrl(ctx, cmd, larg, parg));
 }
 
-__asm __saveds long SSL_CTX_callback_ctrl_AmiSSL(register __a0 SSL_CTX *a, register __d0 int b, register __a1 void (*c)())
+__asm __saveds long SSL_CTX_callback_ctrl_AmiSSL(register __a0 SSL_CTX *a1, register __d0 int a2, register __a1 void (*a3)())
 {
-	return(SSL_CTX_callback_ctrl(a, b, c));
+	return(SSL_CTX_callback_ctrl(a1, a2, a3));
 }
 
 __asm __saveds int SSL_get_error_AmiSSL(register __a0 SSL *s, register __d0 int ret_code)
@@ -4993,8 +7281,6 @@ __asm __saveds int SSL_CTX_set_ssl_version_AmiSSL(register __a0 SSL_CTX *ctx, re
 {
 	return(SSL_CTX_set_ssl_version(ctx, meth));
 }
-
-/*
 
 __asm __saveds SSL_METHOD *SSLv2_method_AmiSSL(void)
 {
@@ -5026,6 +7312,7 @@ __asm __saveds SSL_METHOD *SSLv3_client_method_AmiSSL(void)
 	return(SSLv3_client_method());
 }
 
+#if 0
 __asm __saveds SSL_METHOD *SSLv23_method_AmiSSL(void)
 {
 	return(SSLv23_method());
@@ -5040,6 +7327,7 @@ __asm __saveds SSL_METHOD *SSLv23_client_method_AmiSSL(void)
 {
 	return(SSLv23_client_method());
 }
+#endif
 
 __asm __saveds SSL_METHOD *TLSv1_method_AmiSSL(void)
 {
@@ -5056,8 +7344,6 @@ __asm __saveds SSL_METHOD *TLSv1_client_method_AmiSSL(void)
 	return(TLSv1_client_method());
 }
 
-*/
-
 __asm __saveds STACK_OF(SSL_CIPHER) *SSL_get_ciphers_AmiSSL(register __a0 SSL *s)
 {
 	return(SSL_get_ciphers(s));
@@ -5071,6 +7357,11 @@ __asm __saveds int SSL_do_handshake_AmiSSL(register __a0 SSL *s)
 __asm __saveds int SSL_renegotiate_AmiSSL(register __a0 SSL *s)
 {
 	return(SSL_renegotiate(s));
+}
+
+__asm __saveds int SSL_renegotiate_pending_AmiSSL(register __a0 SSL *s)
+{
+	return(SSL_renegotiate_pending(s));
 }
 
 __asm __saveds int SSL_shutdown_AmiSSL(register __a0 SSL *s)
@@ -5088,22 +7379,22 @@ __asm __saveds int SSL_set_ssl_method_AmiSSL(register __a0 SSL *s, register __a1
 	return(SSL_set_ssl_method(s, method));
 }
 
-__asm __saveds char *SSL_alert_type_string_long_AmiSSL(register __d0 int value)
+__asm __saveds const char *SSL_alert_type_string_long_AmiSSL(register __d0 int value)
 {
 	return(SSL_alert_type_string_long(value));
 }
 
-__asm __saveds char *SSL_alert_type_string_AmiSSL(register __d0 int value)
+__asm __saveds const char *SSL_alert_type_string_AmiSSL(register __d0 int value)
 {
 	return(SSL_alert_type_string(value));
 }
 
-__asm __saveds char *SSL_alert_desc_string_long_AmiSSL(register __d0 int value)
+__asm __saveds const char *SSL_alert_desc_string_long_AmiSSL(register __d0 int value)
 {
 	return(SSL_alert_desc_string_long(value));
 }
 
-__asm __saveds char *SSL_alert_desc_string_AmiSSL(register __d0 int value)
+__asm __saveds const char *SSL_alert_desc_string_AmiSSL(register __d0 int value)
 {
 	return(SSL_alert_desc_string(value));
 }
@@ -5158,9 +7449,9 @@ __asm __saveds int SSL_library_init_AmiSSL(void)
 	return(SSL_library_init());
 }
 
-__asm __saveds char *SSL_CIPHER_description_AmiSSL(register __a0 SSL_CIPHER *a, register __a1 char *buf, register __d0 int size)
+__asm __saveds char *SSL_CIPHER_description_AmiSSL(register __a0 SSL_CIPHER *a1, register __a1 char *buf, register __d0 int size)
 {
-	return(SSL_CIPHER_description(a, buf, size));
+	return(SSL_CIPHER_description(a1, buf, size));
 }
 
 __asm __saveds STACK_OF(X509_NAME) *SSL_dup_CA_list_AmiSSL(register __a0 STACK_OF(X509_NAME) *sk)
@@ -5243,12 +7534,12 @@ __asm __saveds SSL_CTX *SSL_get_SSL_CTX_AmiSSL(register __a0 SSL *ssl)
 	return(SSL_get_SSL_CTX(ssl));
 }
 
-__asm __saveds void SSL_set_info_callback_AmiSSL(register __a0 SSL *ssl, register __a1 void (*cb)())
+__asm __saveds void SSL_set_info_callback_AmiSSL(register __a0 SSL *ssl, register __a1 void (*cb)(const SSL *ssl, int type, int val))
 {
 	SSL_set_info_callback(ssl, cb);
 }
 
-__asm __saveds void (*SSL_get_info_callback_AmiSSL(register __a0 SSL *ssl))()
+__asm __saveds void (*SSL_get_info_callback_AmiSSL(register __a0 SSL *ssl))(const SSL *ssl, int type, int val)
 {
 	return(SSL_get_info_callback(ssl));
 }
@@ -5428,7 +7719,7 @@ __asm __saveds void sk_zero_AmiSSL(register __a0 STACK *st)
 	sk_zero(st);
 }
 
-__asm __saveds int (*sk_set_cmp_func_AmiSSL(register __a0 STACK *sk, register __a1 int (*c)(const char *const *, const char *const *)))(const char *const *, const char *const *)
+__asm __saveds int (*sk_set_cmp_func_AmiSSL(register __a0 STACK *sk, register __a1 int (*c)(const char *const *, const char *const *))) (const char *const *, const char *const *)
 {
 	return(sk_set_cmp_func(sk, c));
 }
@@ -5478,7 +7769,7 @@ __asm __saveds long TXT_DB_write_AmiSSL(register __a0 BIO *out, register __a1 TX
 	return(TXT_DB_write(out, db));
 }
 
-__asm __saveds int TXT_DB_create_index_AmiSSL(register __a0 TXT_DB *db, register __d0 int field, register __a1 int (*qual)(), register __a2 unsigned long (*hash)(), register __a3 int (*cmp)())
+__asm __saveds int TXT_DB_create_index_AmiSSL(register __a0 TXT_DB *db, register __d0 int field, register __a1 int (*qual)(), register __d1 LHASH_HASH_FN_TYPE hash, register __d2 LHASH_COMP_FN_TYPE cmp)
 {
 	return(TXT_DB_create_index(db, field, qual, hash, cmp));
 }
@@ -5498,719 +7789,269 @@ __asm __saveds int TXT_DB_insert_AmiSSL(register __a0 TXT_DB *db, register __a1 
 	return(TXT_DB_insert(db, value));
 }
 
-__asm __saveds int i2d_BASIC_CONSTRAINTS_AmiSSL(register __a0 BASIC_CONSTRAINTS *a, register __a1 unsigned char **pp)
+__asm __saveds UI *UI_new_AmiSSL(void)
 {
-	return(i2d_BASIC_CONSTRAINTS(a, pp));
+	return(UI_new());
 }
 
-__asm __saveds BASIC_CONSTRAINTS *d2i_BASIC_CONSTRAINTS_AmiSSL(register __a0 BASIC_CONSTRAINTS **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds UI *UI_new_method_AmiSSL(register __a0 const UI_METHOD *method)
 {
-	return(d2i_BASIC_CONSTRAINTS(a, pp, length));
+	return(UI_new_method(method));
 }
 
-__asm __saveds BASIC_CONSTRAINTS *BASIC_CONSTRAINTS_new_AmiSSL(void)
+__asm __saveds void UI_free_AmiSSL(register __a0 UI *ui)
 {
-	return(BASIC_CONSTRAINTS_new());
+	UI_free(ui);
 }
 
-__asm __saveds void BASIC_CONSTRAINTS_free_AmiSSL(register __a0 BASIC_CONSTRAINTS *a)
+__asm __saveds int UI_add_input_string_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __d0 int flags, register __a2 char *result_buf, register __d1 int minsize, register __d2 int maxsize)
 {
-	BASIC_CONSTRAINTS_free(a);
+	return(UI_add_input_string(ui, prompt, flags, result_buf, minsize, maxsize));
 }
 
-__asm __saveds int i2d_GENERAL_NAME_AmiSSL(register __a0 GENERAL_NAME *a, register __a1 unsigned char **pp)
+__asm __saveds int UI_dup_input_string_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __d0 int flags, register __a2 char *result_buf, register __d1 int minsize, register __d2 int maxsize)
 {
-	return(i2d_GENERAL_NAME(a, pp));
+	return(UI_dup_input_string(ui, prompt, flags, result_buf, minsize, maxsize));
 }
 
-__asm __saveds GENERAL_NAME *d2i_GENERAL_NAME_AmiSSL(register __a0 GENERAL_NAME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int UI_add_verify_string_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __d0 int flags, register __a2 char *result_buf, register __d1 int minsize, register __d2 int maxsize, register __a3 const char *test_buf)
 {
-	return(d2i_GENERAL_NAME(a, pp, length));
+	return(UI_add_verify_string(ui, prompt, flags, result_buf, minsize, maxsize, test_buf));
 }
 
-__asm __saveds GENERAL_NAME *GENERAL_NAME_new_AmiSSL(void)
+__asm __saveds int UI_dup_verify_string_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __d0 int flags, register __a2 char *result_buf, register __d1 int minsize, register __d2 int maxsize, register __a3 const char *test_buf)
 {
-	return(GENERAL_NAME_new());
+	return(UI_dup_verify_string(ui, prompt, flags, result_buf, minsize, maxsize, test_buf));
 }
 
-__asm __saveds void GENERAL_NAME_free_AmiSSL(register __a0 GENERAL_NAME *a)
+__asm __saveds int UI_add_input_boolean_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __a2 const char *action_desc, register __a3 const char *ok_chars, register __d0 const char *cancel_chars, register __d1 int flags, register __d2 char *result_buf)
 {
-	GENERAL_NAME_free(a);
+	return(UI_add_input_boolean(ui, prompt, action_desc, ok_chars, cancel_chars, flags, result_buf));
 }
 
-__asm __saveds STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 GENERAL_NAME *gen, register __a2 STACK_OF(CONF_VALUE) *ret)
+__asm __saveds int UI_dup_input_boolean_AmiSSL(register __a0 UI *ui, register __a1 const char *prompt, register __a2 const char *action_desc, register __a3 const char *ok_chars, register __d0 const char *cancel_chars, register __d1 int flags, register __d2 char *result_buf)
 {
-	return(i2v_GENERAL_NAME(method, gen, ret));
+	return(UI_dup_input_boolean(ui, prompt, action_desc, ok_chars, cancel_chars, flags, result_buf));
 }
 
-__asm __saveds int i2d_SXNET_AmiSSL(register __a0 SXNET *a, register __a1 unsigned char **pp)
+__asm __saveds int UI_add_info_string_AmiSSL(register __a0 UI *ui, register __a1 const char *text)
 {
-	return(i2d_SXNET(a, pp));
+	return(UI_add_info_string(ui, text));
 }
 
-__asm __saveds SXNET *d2i_SXNET_AmiSSL(register __a0 SXNET **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int UI_dup_info_string_AmiSSL(register __a0 UI *ui, register __a1 const char *text)
 {
-	return(d2i_SXNET(a, pp, length));
+	return(UI_dup_info_string(ui, text));
 }
 
-__asm __saveds SXNET *SXNET_new_AmiSSL(void)
+__asm __saveds int UI_add_error_string_AmiSSL(register __a0 UI *ui, register __a1 const char *text)
 {
-	return(SXNET_new());
+	return(UI_add_error_string(ui, text));
 }
 
-__asm __saveds void SXNET_free_AmiSSL(register __a0 SXNET *a)
+__asm __saveds int UI_dup_error_string_AmiSSL(register __a0 UI *ui, register __a1 const char *text)
 {
-	SXNET_free(a);
+	return(UI_dup_error_string(ui, text));
 }
 
-__asm __saveds int i2d_SXNETID_AmiSSL(register __a0 SXNETID *a, register __a1 unsigned char **pp)
+__asm __saveds char *UI_construct_prompt_AmiSSL(register __a0 UI *ui_method, register __a1 const char *object_desc, register __a2 const char *object_name)
 {
-	return(i2d_SXNETID(a, pp));
+	return(UI_construct_prompt(ui_method, object_desc, object_name));
 }
 
-__asm __saveds SXNETID *d2i_SXNETID_AmiSSL(register __a0 SXNETID **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds void *UI_add_user_data_AmiSSL(register __a0 UI *ui, register __a1 void *user_data)
 {
-	return(d2i_SXNETID(a, pp, length));
+	return(UI_add_user_data(ui, user_data));
 }
 
-__asm __saveds SXNETID *SXNETID_new_AmiSSL(void)
+__asm __saveds void *UI_get0_user_data_AmiSSL(register __a0 UI *ui)
 {
-	return(SXNETID_new());
+	return(UI_get0_user_data(ui));
 }
 
-__asm __saveds void SXNETID_free_AmiSSL(register __a0 SXNETID *a)
+__asm __saveds const char *UI_get0_result_AmiSSL(register __a0 UI *ui, register __d0 int i)
 {
-	SXNETID_free(a);
+	return(UI_get0_result(ui, i));
 }
 
-__asm __saveds int SXNET_add_id_asc_AmiSSL(register __a0 SXNET **psx, register __a1 char *zone, register __a2 char *user, register __d0 int userlen)
+__asm __saveds int UI_process_AmiSSL(register __a0 UI *ui)
 {
-	return(SXNET_add_id_asc(psx, zone, user, userlen));
+	return(UI_process(ui));
 }
 
-__asm __saveds int SXNET_add_id_ulong_AmiSSL(register __a0 SXNET **psx, register __d0 unsigned long lzone, register __a1 char *user, register __d1 int userlen)
+__asm __saveds int UI_ctrl_AmiSSL(register __a0 UI *ui, register __d0 int cmd, register __d1 long i, register __a1 void *p, register __a2 void (*f)())
 {
-	return(SXNET_add_id_ulong(psx, lzone, user, userlen));
+	return(UI_ctrl(ui, cmd, i, p, f));
 }
 
-__asm __saveds int SXNET_add_id_INTEGER_AmiSSL(register __a0 SXNET **psx, register __a1 ASN1_INTEGER *izone, register __a2 char *user, register __d0 int userlen)
+__asm __saveds int UI_get_ex_new_index_AmiSSL(register __d0 long argl, register __a0 void *argp, register __a1 CRYPTO_EX_new *new_func, register __a2 CRYPTO_EX_dup *dup_func, register __a3 CRYPTO_EX_free *free_func)
 {
-	return(SXNET_add_id_INTEGER(psx, izone, user, userlen));
+	return(UI_get_ex_new_index(argl, argp, new_func, dup_func, free_func));
 }
 
-__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_asc_AmiSSL(register __a0 SXNET *sx, register __a1 char *zone)
+__asm __saveds int UI_set_ex_data_AmiSSL(register __a0 UI *r, register __d0 int idx, register __a1 void *arg)
 {
-	return(SXNET_get_id_asc(sx, zone));
+	return(UI_set_ex_data(r, idx, arg));
 }
 
-__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_ulong_AmiSSL(register __a0 SXNET *sx, register __d0 unsigned long lzone)
+__asm __saveds void *UI_get_ex_data_AmiSSL(register __a0 UI *r, register __d0 int idx)
 {
-	return(SXNET_get_id_ulong(sx, lzone));
+	return(UI_get_ex_data(r, idx));
 }
 
-__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_INTEGER_AmiSSL(register __a0 SXNET *sx, register __a1 ASN1_INTEGER *zone)
+__asm __saveds void UI_set_default_method_AmiSSL(register __a0 const UI_METHOD *meth)
 {
-	return(SXNET_get_id_INTEGER(sx, zone));
+	UI_set_default_method(meth);
 }
 
-__asm __saveds int i2d_AUTHORITY_KEYID_AmiSSL(register __a0 AUTHORITY_KEYID *a, register __a1 unsigned char **pp)
+__asm __saveds const UI_METHOD *UI_get_default_method_AmiSSL(void)
 {
-	return(i2d_AUTHORITY_KEYID(a, pp));
+	return(UI_get_default_method());
 }
 
-__asm __saveds AUTHORITY_KEYID *d2i_AUTHORITY_KEYID_AmiSSL(register __a0 AUTHORITY_KEYID **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds const UI_METHOD *UI_get_method_AmiSSL(register __a0 UI *ui)
 {
-	return(d2i_AUTHORITY_KEYID(a, pp, length));
+	return(UI_get_method(ui));
 }
 
-__asm __saveds AUTHORITY_KEYID *AUTHORITY_KEYID_new_AmiSSL(void)
+__asm __saveds const UI_METHOD *UI_set_method_AmiSSL(register __a0 UI *ui, register __a1 const UI_METHOD *meth)
 {
-	return(AUTHORITY_KEYID_new());
+	return(UI_set_method(ui, meth));
 }
 
-__asm __saveds void AUTHORITY_KEYID_free_AmiSSL(register __a0 AUTHORITY_KEYID *a)
+__asm __saveds UI_METHOD *UI_OpenSSL_AmiSSL(void)
 {
-	AUTHORITY_KEYID_free(a);
+	return(UI_OpenSSL());
 }
 
-__asm __saveds int i2d_PKEY_USAGE_PERIOD_AmiSSL(register __a0 PKEY_USAGE_PERIOD *a, register __a1 unsigned char **pp)
+__asm __saveds UI_METHOD *UI_create_method_AmiSSL(register __a0 char *name)
 {
-	return(i2d_PKEY_USAGE_PERIOD(a, pp));
+	return(UI_create_method(name));
 }
 
-__asm __saveds PKEY_USAGE_PERIOD *d2i_PKEY_USAGE_PERIOD_AmiSSL(register __a0 PKEY_USAGE_PERIOD **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds void UI_destroy_method_AmiSSL(register __a0 UI_METHOD *ui_method)
 {
-	return(d2i_PKEY_USAGE_PERIOD(a, pp, length));
+	UI_destroy_method(ui_method);
 }
 
-__asm __saveds PKEY_USAGE_PERIOD *PKEY_USAGE_PERIOD_new_AmiSSL(void)
+__asm __saveds int UI_method_set_opener_AmiSSL(register __a0 UI_METHOD *method, register __a1 int (*opener)(UI *ui))
 {
-	return(PKEY_USAGE_PERIOD_new());
+	return(UI_method_set_opener(method, opener));
 }
 
-__asm __saveds void PKEY_USAGE_PERIOD_free_AmiSSL(register __a0 PKEY_USAGE_PERIOD *a)
+__asm __saveds int UI_method_set_writer_AmiSSL(register __a0 UI_METHOD *method, register __a1 int (*writer)(UI *ui, UI_STRING *uis))
 {
-	PKEY_USAGE_PERIOD_free(a);
+	return(UI_method_set_writer(method, writer));
 }
 
-__asm __saveds STACK_OF(GENERAL_NAME) *GENERAL_NAMES_new_AmiSSL(void)
+__asm __saveds int UI_method_set_flusher_AmiSSL(register __a0 UI_METHOD *method, register __a1 int (*flusher)(UI *ui))
 {
-	return(GENERAL_NAMES_new());
+	return(UI_method_set_flusher(method, flusher));
 }
 
-__asm __saveds void GENERAL_NAMES_free_AmiSSL(register __a0 STACK_OF(GENERAL_NAME) *a)
+__asm __saveds int UI_method_set_reader_AmiSSL(register __a0 UI_METHOD *method, register __a1 int (*reader)(UI *ui, UI_STRING *uis))
 {
-	GENERAL_NAMES_free(a);
+	return(UI_method_set_reader(method, reader));
 }
 
-__asm __saveds STACK_OF(GENERAL_NAME) *d2i_GENERAL_NAMES_AmiSSL(register __a0 STACK_OF(GENERAL_NAME) **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int UI_method_set_closer_AmiSSL(register __a0 UI_METHOD *method, register __a1 int (*closer)(UI *ui))
 {
-	return(d2i_GENERAL_NAMES(a, pp, length));
+	return(UI_method_set_closer(method, closer));
 }
 
-__asm __saveds int i2d_GENERAL_NAMES_AmiSSL(register __a0 STACK_OF(GENERAL_NAME) *a, register __a1 unsigned char **pp)
+__asm __saveds int (*UI_method_get_opener_AmiSSL(register __a0 UI_METHOD *method))(UI*)
 {
-	return(i2d_GENERAL_NAMES(a, pp));
+	return(UI_method_get_opener(method));
 }
 
-__asm __saveds STACK_OF(CONF_VALUE) *i2v_GENERAL_NAMES_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 STACK_OF(GENERAL_NAME) *gen, register __a2 STACK_OF(CONF_VALUE) *extlist)
+__asm __saveds int (*UI_method_get_writer_AmiSSL(register __a0 UI_METHOD *method))(UI*, UI_STRING*)
 {
-	return(i2v_GENERAL_NAMES(method, gen, extlist));
+	return(UI_method_get_writer(method));
 }
 
-__asm __saveds STACK_OF(GENERAL_NAME) *v2i_GENERAL_NAMES_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 STACK_OF(CONF_VALUE) *nval)
+__asm __saveds int (*UI_method_get_flusher_AmiSSL(register __a0 UI_METHOD *method))(UI*)
 {
-	return(v2i_GENERAL_NAMES(method, ctx, nval));
+	return(UI_method_get_flusher(method));
 }
 
-__asm __saveds int i2d_OTHERNAME_AmiSSL(register __a0 OTHERNAME *a, register __a1 unsigned char **pp)
+__asm __saveds int (*UI_method_get_reader_AmiSSL(register __a0 UI_METHOD *method))(UI*, UI_STRING*)
 {
-	return(i2d_OTHERNAME(a, pp));
+	return(UI_method_get_reader(method));
 }
 
-__asm __saveds OTHERNAME *OTHERNAME_new_AmiSSL(void)
+__asm __saveds int (*UI_method_get_closer_AmiSSL(register __a0 UI_METHOD *method))(UI*)
 {
-	return(OTHERNAME_new());
+	return(UI_method_get_closer(method));
 }
 
-__asm __saveds OTHERNAME *d2i_OTHERNAME_AmiSSL(register __a0 OTHERNAME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds enum UI_string_types UI_get_string_type_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(d2i_OTHERNAME(a, pp, length));
+	return(UI_get_string_type(uis));
 }
 
-__asm __saveds void OTHERNAME_free_AmiSSL(register __a0 OTHERNAME *a)
+__asm __saveds int UI_get_input_flags_AmiSSL(register __a0 UI_STRING *uis)
 {
-	OTHERNAME_free(a);
+	return(UI_get_input_flags(uis));
 }
 
-__asm __saveds char *i2s_ASN1_OCTET_STRING_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 ASN1_OCTET_STRING *ia5)
+__asm __saveds const char *UI_get0_output_string_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(i2s_ASN1_OCTET_STRING(method, ia5));
+	return(UI_get0_output_string(uis));
 }
 
-__asm __saveds ASN1_OCTET_STRING *s2i_ASN1_OCTET_STRING_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 char *str)
+__asm __saveds const char *UI_get0_action_string_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(s2i_ASN1_OCTET_STRING(method, ctx, str));
+	return(UI_get0_action_string(uis));
 }
 
-__asm __saveds int i2d_ext_ku_AmiSSL(register __a0 STACK_OF(ASN1_OBJECT) *a, register __a1 unsigned char **pp)
+__asm __saveds const char *UI_get0_result_string_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(i2d_ext_ku(a, pp));
+	return(UI_get0_result_string(uis));
 }
 
-__asm __saveds STACK_OF(ASN1_OBJECT) *d2i_ext_ku_AmiSSL(register __a0 STACK_OF(ASN1_OBJECT) **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds const char *UI_get0_test_string_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(d2i_ext_ku(a, pp, length));
+	return(UI_get0_test_string(uis));
 }
 
-__asm __saveds void ext_ku_free_AmiSSL(register __a0 STACK_OF(ASN1_OBJECT) *a)
+__asm __saveds int UI_get_result_minsize_AmiSSL(register __a0 UI_STRING *uis)
 {
-	ext_ku_free(a);
+	return(UI_get_result_minsize(uis));
 }
 
-__asm __saveds STACK_OF(ASN1_OBJECT) *ext_ku_new_AmiSSL(void)
+__asm __saveds int UI_get_result_maxsize_AmiSSL(register __a0 UI_STRING *uis)
 {
-	return(ext_ku_new());
+	return(UI_get_result_maxsize(uis));
 }
 
-__asm __saveds int i2d_CERTIFICATEPOLICIES_AmiSSL(register __a0 STACK_OF(POLICYINFO) *a, register __a1 unsigned char **pp)
+__asm __saveds int UI_set_result_AmiSSL(register __a0 UI *ui, register __a1 UI_STRING *uis, register __a2 const char *result)
 {
-	return(i2d_CERTIFICATEPOLICIES(a, pp));
+	return(UI_set_result(ui, uis, result));
 }
 
-__asm __saveds STACK_OF(POLICYINFO) *CERTIFICATEPOLICIES_new_AmiSSL(void)
+__asm __saveds int UI_UTIL_read_pw_string_AmiSSL(register __a0 char *buf, register __d0 int length, register __a1 const char *prompt, register __d1 int verify)
 {
-	return(CERTIFICATEPOLICIES_new());
+	return(UI_UTIL_read_pw_string(buf, length, prompt, verify));
 }
 
-__asm __saveds void CERTIFICATEPOLICIES_free_AmiSSL(register __a0 STACK_OF(POLICYINFO) *a)
+__asm __saveds int UI_UTIL_read_pw_AmiSSL(register __a0 char *buf, register __a1 char *buff, register __d0 int size, register __a2 const char *prompt, register __d1 int verify)
 {
-	CERTIFICATEPOLICIES_free(a);
+	return(UI_UTIL_read_pw(buf, buff, size, prompt, verify));
 }
 
-__asm __saveds STACK_OF(POLICYINFO) *d2i_CERTIFICATEPOLICIES_AmiSSL(register __a0 STACK_OF(POLICYINFO) **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds void ERR_load_UI_strings_AmiSSL(void)
 {
-	return(d2i_CERTIFICATEPOLICIES(a, pp, length));
+	ERR_load_UI_strings();
 }
 
-__asm __saveds int i2d_POLICYINFO_AmiSSL(register __a0 POLICYINFO *a, register __a1 unsigned char **pp)
+__asm __saveds int _ossl_old_des_read_pw_string_AmiSSL(register __a0 char *buf, register __d0 int length, register __a1 const char *prompt, register __d1 int verify)
 {
-	return(i2d_POLICYINFO(a, pp));
+	return(_ossl_old_des_read_pw_string(buf, length, prompt, verify));
 }
 
-__asm __saveds POLICYINFO *POLICYINFO_new_AmiSSL(void)
+__asm __saveds int _ossl_old_des_read_pw_AmiSSL(register __a0 char *buf, register __a1 char *buff, register __d0 int size, register __a2 const char *prompt, register __d1 int verify)
 {
-	return(POLICYINFO_new());
-}
-
-__asm __saveds POLICYINFO *d2i_POLICYINFO_AmiSSL(register __a0 POLICYINFO **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_POLICYINFO(a, pp, length));
-}
-
-__asm __saveds void POLICYINFO_free_AmiSSL(register __a0 POLICYINFO *a)
-{
-	POLICYINFO_free(a);
-}
-
-__asm __saveds int i2d_POLICYQUALINFO_AmiSSL(register __a0 POLICYQUALINFO *a, register __a1 unsigned char **pp)
-{
-	return(i2d_POLICYQUALINFO(a, pp));
-}
-
-__asm __saveds POLICYQUALINFO *POLICYQUALINFO_new_AmiSSL(void)
-{
-	return(POLICYQUALINFO_new());
-}
-
-__asm __saveds POLICYQUALINFO *d2i_POLICYQUALINFO_AmiSSL(register __a0 POLICYQUALINFO **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_POLICYQUALINFO(a, pp, length));
-}
-
-__asm __saveds void POLICYQUALINFO_free_AmiSSL(register __a0 POLICYQUALINFO *a)
-{
-	POLICYQUALINFO_free(a);
-}
-
-__asm __saveds int i2d_USERNOTICE_AmiSSL(register __a0 USERNOTICE *a, register __a1 unsigned char **pp)
-{
-	return(i2d_USERNOTICE(a, pp));
-}
-
-__asm __saveds USERNOTICE *USERNOTICE_new_AmiSSL(void)
-{
-	return(USERNOTICE_new());
-}
-
-__asm __saveds USERNOTICE *d2i_USERNOTICE_AmiSSL(register __a0 USERNOTICE **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_USERNOTICE(a, pp, length));
-}
-
-__asm __saveds void USERNOTICE_free_AmiSSL(register __a0 USERNOTICE *a)
-{
-	USERNOTICE_free(a);
-}
-
-__asm __saveds int i2d_NOTICEREF_AmiSSL(register __a0 NOTICEREF *a, register __a1 unsigned char **pp)
-{
-	return(i2d_NOTICEREF(a, pp));
-}
-
-__asm __saveds NOTICEREF *NOTICEREF_new_AmiSSL(void)
-{
-	return(NOTICEREF_new());
-}
-
-__asm __saveds NOTICEREF *d2i_NOTICEREF_AmiSSL(register __a0 NOTICEREF **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_NOTICEREF(a, pp, length));
-}
-
-__asm __saveds void NOTICEREF_free_AmiSSL(register __a0 NOTICEREF *a)
-{
-	NOTICEREF_free(a);
-}
-
-__asm __saveds int i2d_CRL_DIST_POINTS_AmiSSL(register __a0 STACK_OF(DIST_POINT) *a, register __a1 unsigned char **pp)
-{
-	return(i2d_CRL_DIST_POINTS(a, pp));
-}
-
-__asm __saveds STACK_OF(DIST_POINT) *CRL_DIST_POINTS_new_AmiSSL(void)
-{
-	return(CRL_DIST_POINTS_new());
-}
-
-__asm __saveds void CRL_DIST_POINTS_free_AmiSSL(register __a0 STACK_OF(DIST_POINT) *a)
-{
-	CRL_DIST_POINTS_free(a);
-}
-
-__asm __saveds STACK_OF(DIST_POINT) *d2i_CRL_DIST_POINTS_AmiSSL(register __a0 STACK_OF(DIST_POINT) **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_CRL_DIST_POINTS(a, pp, length));
-}
-
-__asm __saveds int i2d_DIST_POINT_AmiSSL(register __a0 DIST_POINT *a, register __a1 unsigned char **pp)
-{
-	return(i2d_DIST_POINT(a, pp));
-}
-
-__asm __saveds DIST_POINT *DIST_POINT_new_AmiSSL(void)
-{
-	return(DIST_POINT_new());
-}
-
-__asm __saveds DIST_POINT *d2i_DIST_POINT_AmiSSL(register __a0 DIST_POINT **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_DIST_POINT(a, pp, length));
-}
-
-__asm __saveds void DIST_POINT_free_AmiSSL(register __a0 DIST_POINT *a)
-{
-	DIST_POINT_free(a);
-}
-
-__asm __saveds int i2d_DIST_POINT_NAME_AmiSSL(register __a0 DIST_POINT_NAME *a, register __a1 unsigned char **pp)
-{
-	return(i2d_DIST_POINT_NAME(a, pp));
-}
-
-__asm __saveds DIST_POINT_NAME *DIST_POINT_NAME_new_AmiSSL(void)
-{
-	return(DIST_POINT_NAME_new());
-}
-
-__asm __saveds void DIST_POINT_NAME_free_AmiSSL(register __a0 DIST_POINT_NAME *a)
-{
-	DIST_POINT_NAME_free(a);
-}
-
-__asm __saveds DIST_POINT_NAME *d2i_DIST_POINT_NAME_AmiSSL(register __a0 DIST_POINT_NAME **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_DIST_POINT_NAME(a, pp, length));
-}
-
-__asm __saveds int i2d_ACCESS_DESCRIPTION_AmiSSL(register __a0 ACCESS_DESCRIPTION *a, register __a1 unsigned char **pp)
-{
-	return(i2d_ACCESS_DESCRIPTION(a, pp));
-}
-
-__asm __saveds ACCESS_DESCRIPTION *ACCESS_DESCRIPTION_new_AmiSSL(void)
-{
-	return(ACCESS_DESCRIPTION_new());
-}
-
-__asm __saveds void ACCESS_DESCRIPTION_free_AmiSSL(register __a0 ACCESS_DESCRIPTION *a)
-{
-	ACCESS_DESCRIPTION_free(a);
-}
-
-__asm __saveds ACCESS_DESCRIPTION *d2i_ACCESS_DESCRIPTION_AmiSSL(register __a0 ACCESS_DESCRIPTION **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_ACCESS_DESCRIPTION(a, pp, length));
-}
-
-__asm __saveds STACK_OF(ACCESS_DESCRIPTION) *AUTHORITY_INFO_ACCESS_new_AmiSSL(void)
-{
-	return(AUTHORITY_INFO_ACCESS_new());
-}
-
-__asm __saveds void AUTHORITY_INFO_ACCESS_free_AmiSSL(register __a0 STACK_OF(ACCESS_DESCRIPTION) *a)
-{
-	AUTHORITY_INFO_ACCESS_free(a);
-}
-
-__asm __saveds STACK_OF(ACCESS_DESCRIPTION) *d2i_AUTHORITY_INFO_ACCESS_AmiSSL(register __a0 STACK_OF(ACCESS_DESCRIPTION) **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_AUTHORITY_INFO_ACCESS(a, pp, length));
-}
-
-__asm __saveds int i2d_AUTHORITY_INFO_ACCESS_AmiSSL(register __a0 STACK_OF(ACCESS_DESCRIPTION) *a, register __a1 unsigned char **pp)
-{
-	return(i2d_AUTHORITY_INFO_ACCESS(a, pp));
-}
-
-__asm __saveds GENERAL_NAME *v2i_GENERAL_NAME_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 CONF_VALUE *cnf)
-{
-	return(v2i_GENERAL_NAME(method, ctx, cnf));
-}
-
-__asm __saveds void X509V3_conf_free_AmiSSL(register __a0 CONF_VALUE *val)
-{
-	X509V3_conf_free(val);
-}
-
-__asm __saveds X509_EXTENSION *X509V3_EXT_conf_nid_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __d0 int ext_nid, register __a2 char *value)
-{
-	return(X509V3_EXT_conf_nid(conf, ctx, ext_nid, value));
-}
-
-__asm __saveds X509_EXTENSION *X509V3_EXT_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *name, register __a3 char *value)
-{
-	return(X509V3_EXT_conf(conf, ctx, name, value));
-}
-
-__asm __saveds int X509V3_EXT_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509 *cert)
-{
-	return(X509V3_EXT_add_conf(conf, ctx, section, cert));
-}
-
-__asm __saveds int X509V3_EXT_REQ_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_REQ *req)
-{
-	return(X509V3_EXT_REQ_add_conf(conf, ctx, section, req));
-}
-
-__asm __saveds int X509V3_EXT_CRL_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_CRL *crl)
-{
-	return(X509V3_EXT_CRL_add_conf(conf, ctx, section, crl));
-}
-
-__asm __saveds int X509V3_add_value_bool_nf_AmiSSL(register __a0 char *name, register __d0 int asn1_bool, register __a1 STACK_OF(CONF_VALUE) **extlist)
-{
-	return(X509V3_add_value_bool_nf(name, asn1_bool, extlist));
-}
-
-__asm __saveds int X509V3_get_value_bool_AmiSSL(register __a0 CONF_VALUE *value, register __a1 int *asn1_bool)
-{
-	return(X509V3_get_value_bool(value, asn1_bool));
-}
-
-__asm __saveds int X509V3_get_value_int_AmiSSL(register __a0 CONF_VALUE *value, register __a1 ASN1_INTEGER **aint)
-{
-	return(X509V3_get_value_int(value, aint));
-}
-
-__asm __saveds void X509V3_set_conf_lhash_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 LHASH *lhash)
-{
-	X509V3_set_conf_lhash(ctx, lhash);
-}
-
-__asm __saveds char *X509V3_get_string_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *name, register __a2 char *section)
-{
-	return(X509V3_get_string(ctx, name, section));
-}
-
-__asm __saveds STACK_OF(CONF_VALUE) *X509V3_get_section_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *section)
-{
-	return(X509V3_get_section(ctx, section));
-}
-
-__asm __saveds void X509V3_string_free_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *str)
-{
-	X509V3_string_free(ctx, str);
-}
-
-__asm __saveds void X509V3_section_free_AmiSSL(register __a0  X509V3_CTX *ctx, register __a1 STACK_OF(CONF_VALUE) *section)
-{
-	X509V3_section_free(ctx, section);
-}
-
-__asm __saveds void X509V3_set_ctx_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 X509 *issuer, register __a2 X509 *subject, register __a3 X509_REQ *req, register __d0 X509_CRL *crl, register __d1 int flags)
-{
-	X509V3_set_ctx(ctx, issuer, subject, req, crl, flags);
-}
-
-__asm __saveds int X509V3_add_value_AmiSSL(register __a0 const char *name, register __a1 const char *value, register __a2 STACK_OF(CONF_VALUE) **extlist)
-{
-	return(X509V3_add_value(name, value, extlist));
-}
-
-__asm __saveds int X509V3_add_value_uchar_AmiSSL(register __a0 const char *name, register __a1 const unsigned char *value, register __a2 STACK_OF(CONF_VALUE) **extlist)
-{
-	return(X509V3_add_value_uchar(name, value, extlist));
-}
-
-__asm __saveds int X509V3_add_value_bool_AmiSSL(register __a0 const char *name, register __d0 int asn1_bool, register __a1 STACK_OF(CONF_VALUE) **extlist)
-{
-	return(X509V3_add_value_bool(name, asn1_bool, extlist));
-}
-
-__asm __saveds int X509V3_add_value_int_AmiSSL(register __a0 const char *name, register __a1 ASN1_INTEGER *aint, register __a2 STACK_OF(CONF_VALUE) **extlist)
-{
-	return(X509V3_add_value_int(name, aint, extlist));
-}
-
-__asm __saveds char *i2s_ASN1_INTEGER_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_INTEGER *aint)
-{
-	return(i2s_ASN1_INTEGER(meth, aint));
-}
-
-__asm __saveds ASN1_INTEGER *s2i_ASN1_INTEGER_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 char *value)
-{
-	return(s2i_ASN1_INTEGER(meth, value));
-}
-
-__asm __saveds char *i2s_ASN1_ENUMERATED_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_ENUMERATED *aint)
-{
-	return(i2s_ASN1_ENUMERATED(meth, aint));
-}
-
-__asm __saveds char *i2s_ASN1_ENUMERATED_TABLE_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_ENUMERATED *aint)
-{
-	return(i2s_ASN1_ENUMERATED_TABLE(meth, aint));
-}
-
-__asm __saveds int X509V3_EXT_add_AmiSSL(register __a0 X509V3_EXT_METHOD *ext)
-{
-	return(X509V3_EXT_add(ext));
-}
-
-__asm __saveds int X509V3_EXT_add_list_AmiSSL(register __a0 X509V3_EXT_METHOD *extlist)
-{
-	return(X509V3_EXT_add_list(extlist));
-}
-
-__asm __saveds int X509V3_EXT_add_alias_AmiSSL(register __d0 int nid_to, register __d1 int nid_from)
-{
-	return(X509V3_EXT_add_alias(nid_to, nid_from));
-}
-
-__asm __saveds void X509V3_EXT_cleanup_AmiSSL(void)
-{
-	X509V3_EXT_cleanup();
-}
-
-__asm __saveds X509V3_EXT_METHOD *X509V3_EXT_get_AmiSSL(register __a0 X509_EXTENSION *ext)
-{
-	return(X509V3_EXT_get(ext));
-}
-
-__asm __saveds X509V3_EXT_METHOD *X509V3_EXT_get_nid_AmiSSL(register __d0 int nid)
-{
-	return(X509V3_EXT_get_nid(nid));
-}
-
-__asm __saveds int X509V3_add_standard_extensions_AmiSSL(void)
-{
-	return(X509V3_add_standard_extensions());
-}
-
-__asm __saveds STACK_OF(CONF_VALUE) *X509V3_parse_list_AmiSSL(register __a0 char *line)
-{
-	return(X509V3_parse_list(line));
-}
-
-__asm __saveds void *X509V3_EXT_d2i_AmiSSL(register __a0 X509_EXTENSION *ext)
-{
-	return(X509V3_EXT_d2i(ext));
-}
-
-__asm __saveds void *X509V3_get_d2i_AmiSSL(register __a0 STACK_OF(X509_EXTENSION) *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
-{
-	return(X509V3_get_d2i(x, nid, crit, idx));
-}
-
-__asm __saveds X509_EXTENSION *X509V3_EXT_i2d_AmiSSL(register __d0 int ext_nid, register __d1 int crit, register __a0 void *ext_struc)
-{
-	return(X509V3_EXT_i2d(ext_nid, crit, ext_struc));
-}
-
-__asm __saveds char *hex_to_string_AmiSSL(register __a0 unsigned char *buffer, register __d0 long len)
-{
-	return(hex_to_string(buffer, len));
-}
-
-__asm __saveds unsigned char *string_to_hex_AmiSSL(register __a0 char *str, register __a1 long *len)
-{
-	return(string_to_hex(str, len));
-}
-
-__asm __saveds int name_cmp_AmiSSL(register __a0 const char *name, register __a1 const char *cmp)
-{
-	return(name_cmp(name, cmp));
-}
-
-__asm __saveds void X509V3_EXT_val_prn_AmiSSL(register __a0 BIO *out, register __a1 STACK_OF(CONF_VALUE) *val, register __d0 int indent, register __d1 int ml)
-{
-	X509V3_EXT_val_prn(out, val, indent, ml);
-}
-
-__asm __saveds int X509V3_EXT_print_AmiSSL(register __a0 BIO *out, register __a1 X509_EXTENSION *ext, register __d0 int flag, register __d1 int indent)
-{
-	return(X509V3_EXT_print(out, ext, flag, indent));
-}
-
-__asm __saveds int X509_check_purpose_AmiSSL(register __a0 X509 *x, register __d0 int id, register __d1 int ca)
-{
-	return(X509_check_purpose(x, id, ca));
-}
-
-__asm __saveds int X509_check_issued_AmiSSL(register __a0 X509 *issuer, register __a1 X509 *subject)
-{
-	return(X509_check_issued(issuer, subject));
-}
-
-__asm __saveds int X509_PURPOSE_get_count_AmiSSL(void)
-{
-	return(X509_PURPOSE_get_count());
-}
-
-__asm __saveds X509_PURPOSE *X509_PURPOSE_get0_AmiSSL(register __d0 int idx)
-{
-	return(X509_PURPOSE_get0(idx));
-}
-
-__asm __saveds int X509_PURPOSE_get_by_sname_AmiSSL(register __a0 char *sname)
-{
-	return(X509_PURPOSE_get_by_sname(sname));
-}
-
-__asm __saveds int X509_PURPOSE_get_by_id_AmiSSL(register __d0 int id)
-{
-	return(X509_PURPOSE_get_by_id(id));
-}
-
-__asm __saveds int X509_PURPOSE_add_AmiSSL(register __d0 int id, register __d1 int trust, register __d2 int flags, register __a0 int (*ck)(const X509_PURPOSE *, const X509 *, int), register __a1 char *name, register __a2 char *sname, register __a3 void *arg)
-{
-	return(X509_PURPOSE_add(id, trust, flags, ck, name, sname, arg));
-}
-
-__asm __saveds char *X509_PURPOSE_get0_name_AmiSSL(register __a0 X509_PURPOSE *xp)
-{
-	return(X509_PURPOSE_get0_name(xp));
-}
-
-__asm __saveds char *X509_PURPOSE_get0_sname_AmiSSL(register __a0 X509_PURPOSE *xp)
-{
-	return(X509_PURPOSE_get0_sname(xp));
-}
-
-__asm __saveds int X509_PURPOSE_get_trust_AmiSSL(register __a0 X509_PURPOSE *xp)
-{
-	return(X509_PURPOSE_get_trust(xp));
-}
-
-__asm __saveds void X509_PURPOSE_cleanup_AmiSSL(void)
-{
-	X509_PURPOSE_cleanup();
-}
-
-__asm __saveds int X509_PURPOSE_get_id_AmiSSL(register __a0 X509_PURPOSE *a)
-{
-	return(X509_PURPOSE_get_id(a));
-}
-
-__asm __saveds STACK *X509_get1_email_AmiSSL(register __a0 X509 *x)
-{
-	return(X509_get1_email(x));
-}
-
-__asm __saveds STACK *X509_REQ_get1_email_AmiSSL(register __a0 X509_REQ *x)
-{
-	return(X509_REQ_get1_email(x));
-}
-
-__asm __saveds void X509_email_free_AmiSSL(register __a0 STACK *sk)
-{
-	X509_email_free(sk);
-}
-
-__asm __saveds void ERR_load_X509V3_strings_AmiSSL(void)
-{
-	ERR_load_X509V3_strings();
+	return(_ossl_old_des_read_pw(buf, buff, size, prompt, verify));
 }
 
 __asm __saveds const char *X509_verify_cert_error_string_AmiSSL(register __d0 long n)
@@ -6263,6 +8104,11 @@ __asm __saveds int NETSCAPE_SPKI_print_AmiSSL(register __a0 BIO *out, register _
 	return(NETSCAPE_SPKI_print(out, spki));
 }
 
+__asm __saveds int X509_signature_print_AmiSSL(register __a0 BIO *bp, register __a1 X509_ALGOR *alg, register __a2 ASN1_STRING *sig)
+{
+	return(X509_signature_print(bp, alg, sig));
+}
+
 __asm __saveds int X509_sign_AmiSSL(register __a0 X509 *x, register __a1 EVP_PKEY *pkey, register __a2 const EVP_MD *md)
 {
 	return(X509_sign(x, pkey, md));
@@ -6281,6 +8127,11 @@ __asm __saveds int X509_CRL_sign_AmiSSL(register __a0 X509_CRL *x, register __a1
 __asm __saveds int NETSCAPE_SPKI_sign_AmiSSL(register __a0 NETSCAPE_SPKI *x, register __a1 EVP_PKEY *pkey, register __a2 const EVP_MD *md)
 {
 	return(NETSCAPE_SPKI_sign(x, pkey, md));
+}
+
+__asm __saveds int X509_pubkey_digest_AmiSSL(register __a0 const X509 *data, register __a1 const EVP_MD *type, register __a2 unsigned char *md, register __a3 unsigned int *len)
+{
+	return(X509_pubkey_digest(data, type, md, len));
 }
 
 __asm __saveds int X509_digest_AmiSSL(register __a0 const X509 *data, register __a1 const EVP_MD *type, register __a2 unsigned char *md, register __a3 unsigned int *len)
@@ -6468,16 +8319,6 @@ __asm __saveds X509_NAME_ENTRY *X509_NAME_ENTRY_dup_AmiSSL(register __a0 X509_NA
 	return(X509_NAME_ENTRY_dup(ne));
 }
 
-__asm __saveds RSA *RSAPublicKey_dup_AmiSSL(register __a0 RSA *rsa)
-{
-	return(RSAPublicKey_dup(rsa));
-}
-
-__asm __saveds RSA *RSAPrivateKey_dup_AmiSSL(register __a0 RSA *rsa)
-{
-	return(RSAPrivateKey_dup(rsa));
-}
-
 __asm __saveds int X509_cmp_time_AmiSSL(register __a0 ASN1_TIME *s, register __a1 time_t *t)
 {
 	return(X509_cmp_time(s, t));
@@ -6548,14 +8389,19 @@ __asm __saveds void X509_ALGOR_free_AmiSSL(register __a0 X509_ALGOR *a)
 	X509_ALGOR_free(a);
 }
 
-__asm __saveds int i2d_X509_ALGOR_AmiSSL(register __a0 X509_ALGOR *a, register __a1 unsigned char **pp)
+__asm __saveds X509_ALGOR *d2i_X509_ALGOR_AmiSSL(register __a0 X509_ALGOR **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_ALGOR(a, pp));
+	return(d2i_X509_ALGOR(a, in, len));
 }
 
-__asm __saveds X509_ALGOR *d2i_X509_ALGOR_AmiSSL(register __a0 X509_ALGOR **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_ALGOR_AmiSSL(register __a0 X509_ALGOR *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_ALGOR(a, pp, length));
+	return(i2d_X509_ALGOR(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_ALGOR_it_AmiSSL(void)
+{
+	return(X509_ALGOR_it());
 }
 
 __asm __saveds X509_VAL *X509_VAL_new_AmiSSL(void)
@@ -6568,14 +8414,19 @@ __asm __saveds void X509_VAL_free_AmiSSL(register __a0 X509_VAL *a)
 	X509_VAL_free(a);
 }
 
-__asm __saveds int i2d_X509_VAL_AmiSSL(register __a0 X509_VAL *a, register __a1 unsigned char **pp)
+__asm __saveds X509_VAL *d2i_X509_VAL_AmiSSL(register __a0 X509_VAL **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_VAL(a, pp));
+	return(d2i_X509_VAL(a, in, len));
 }
 
-__asm __saveds X509_VAL *d2i_X509_VAL_AmiSSL(register __a0 X509_VAL **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_VAL_AmiSSL(register __a0 X509_VAL *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_VAL(a, pp, length));
+	return(i2d_X509_VAL(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_VAL_it_AmiSSL(void)
+{
+	return(X509_VAL_it());
 }
 
 __asm __saveds X509_PUBKEY *X509_PUBKEY_new_AmiSSL(void)
@@ -6588,14 +8439,19 @@ __asm __saveds void X509_PUBKEY_free_AmiSSL(register __a0 X509_PUBKEY *a)
 	X509_PUBKEY_free(a);
 }
 
-__asm __saveds int i2d_X509_PUBKEY_AmiSSL(register __a0 X509_PUBKEY *a, register __a1 unsigned char **pp)
+__asm __saveds X509_PUBKEY *d2i_X509_PUBKEY_AmiSSL(register __a0 X509_PUBKEY **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_PUBKEY(a, pp));
+	return(d2i_X509_PUBKEY(a, in, len));
 }
 
-__asm __saveds X509_PUBKEY *d2i_X509_PUBKEY_AmiSSL(register __a0 X509_PUBKEY **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_PUBKEY_AmiSSL(register __a0 X509_PUBKEY *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_PUBKEY(a, pp, length));
+	return(i2d_X509_PUBKEY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_PUBKEY_it_AmiSSL(void)
+{
+	return(X509_PUBKEY_it());
 }
 
 __asm __saveds int X509_PUBKEY_set_AmiSSL(register __a0 X509_PUBKEY **x, register __a1 EVP_PKEY *pkey)
@@ -6653,14 +8509,19 @@ __asm __saveds void X509_SIG_free_AmiSSL(register __a0 X509_SIG *a)
 	X509_SIG_free(a);
 }
 
-__asm __saveds int i2d_X509_SIG_AmiSSL(register __a0 X509_SIG *a, register __a1 unsigned char **pp)
+__asm __saveds X509_SIG *d2i_X509_SIG_AmiSSL(register __a0 X509_SIG **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_SIG(a, pp));
+	return(d2i_X509_SIG(a, in, len));
 }
 
-__asm __saveds X509_SIG *d2i_X509_SIG_AmiSSL(register __a0 X509_SIG **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_SIG_AmiSSL(register __a0 X509_SIG *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_SIG(a, pp, length));
+	return(i2d_X509_SIG(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_SIG_it_AmiSSL(void)
+{
+	return(X509_SIG_it());
 }
 
 __asm __saveds X509_REQ_INFO *X509_REQ_INFO_new_AmiSSL(void)
@@ -6673,14 +8534,19 @@ __asm __saveds void X509_REQ_INFO_free_AmiSSL(register __a0 X509_REQ_INFO *a)
 	X509_REQ_INFO_free(a);
 }
 
-__asm __saveds int i2d_X509_REQ_INFO_AmiSSL(register __a0 X509_REQ_INFO *a, register __a1 unsigned char **pp)
+__asm __saveds X509_REQ_INFO *d2i_X509_REQ_INFO_AmiSSL(register __a0 X509_REQ_INFO **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_REQ_INFO(a, pp));
+	return(d2i_X509_REQ_INFO(a, in, len));
 }
 
-__asm __saveds X509_REQ_INFO *d2i_X509_REQ_INFO_AmiSSL(register __a0 X509_REQ_INFO **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_REQ_INFO_AmiSSL(register __a0 X509_REQ_INFO *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_REQ_INFO(a, pp, length));
+	return(i2d_X509_REQ_INFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_REQ_INFO_it_AmiSSL(void)
+{
+	return(X509_REQ_INFO_it());
 }
 
 __asm __saveds X509_REQ *X509_REQ_new_AmiSSL(void)
@@ -6693,14 +8559,19 @@ __asm __saveds void X509_REQ_free_AmiSSL(register __a0 X509_REQ *a)
 	X509_REQ_free(a);
 }
 
-__asm __saveds int i2d_X509_REQ_AmiSSL(register __a0 X509_REQ *a, register __a1 unsigned char **pp)
+__asm __saveds X509_REQ *d2i_X509_REQ_AmiSSL(register __a0 X509_REQ **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_REQ(a, pp));
+	return(d2i_X509_REQ(a, in, len));
 }
 
-__asm __saveds X509_REQ *d2i_X509_REQ_AmiSSL(register __a0 X509_REQ **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_REQ_AmiSSL(register __a0 X509_REQ *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_REQ(a, pp, length));
+	return(i2d_X509_REQ(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_REQ_it_AmiSSL(void)
+{
+	return(X509_REQ_it());
 }
 
 __asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_new_AmiSSL(void)
@@ -6713,14 +8584,19 @@ __asm __saveds void X509_ATTRIBUTE_free_AmiSSL(register __a0 X509_ATTRIBUTE *a)
 	X509_ATTRIBUTE_free(a);
 }
 
-__asm __saveds int i2d_X509_ATTRIBUTE_AmiSSL(register __a0 X509_ATTRIBUTE *a, register __a1 unsigned char **pp)
+__asm __saveds X509_ATTRIBUTE *d2i_X509_ATTRIBUTE_AmiSSL(register __a0 X509_ATTRIBUTE **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_ATTRIBUTE(a, pp));
+	return(d2i_X509_ATTRIBUTE(a, in, len));
 }
 
-__asm __saveds X509_ATTRIBUTE *d2i_X509_ATTRIBUTE_AmiSSL(register __a0 X509_ATTRIBUTE **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_ATTRIBUTE_AmiSSL(register __a0 X509_ATTRIBUTE *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_ATTRIBUTE(a, pp, length));
+	return(i2d_X509_ATTRIBUTE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_ATTRIBUTE_it_AmiSSL(void)
+{
+	return(X509_ATTRIBUTE_it());
 }
 
 __asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_AmiSSL(register __d0 int nid, register __d1 int atrtype, register __a0 void *value)
@@ -6738,14 +8614,19 @@ __asm __saveds void X509_EXTENSION_free_AmiSSL(register __a0 X509_EXTENSION *a)
 	X509_EXTENSION_free(a);
 }
 
-__asm __saveds int i2d_X509_EXTENSION_AmiSSL(register __a0 X509_EXTENSION *a, register __a1 unsigned char **pp)
+__asm __saveds X509_EXTENSION *d2i_X509_EXTENSION_AmiSSL(register __a0 X509_EXTENSION **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_EXTENSION(a, pp));
+	return(d2i_X509_EXTENSION(a, in, len));
 }
 
-__asm __saveds X509_EXTENSION *d2i_X509_EXTENSION_AmiSSL(register __a0 X509_EXTENSION **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_EXTENSION_AmiSSL(register __a0 X509_EXTENSION *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_EXTENSION(a, pp, length));
+	return(i2d_X509_EXTENSION(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_EXTENSION_it_AmiSSL(void)
+{
+	return(X509_EXTENSION_it());
 }
 
 __asm __saveds X509_NAME_ENTRY *X509_NAME_ENTRY_new_AmiSSL(void)
@@ -6758,14 +8639,19 @@ __asm __saveds void X509_NAME_ENTRY_free_AmiSSL(register __a0 X509_NAME_ENTRY *a
 	X509_NAME_ENTRY_free(a);
 }
 
-__asm __saveds int i2d_X509_NAME_ENTRY_AmiSSL(register __a0 X509_NAME_ENTRY *a, register __a1 unsigned char **pp)
+__asm __saveds X509_NAME_ENTRY *d2i_X509_NAME_ENTRY_AmiSSL(register __a0 X509_NAME_ENTRY **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_NAME_ENTRY(a, pp));
+	return(d2i_X509_NAME_ENTRY(a, in, len));
 }
 
-__asm __saveds X509_NAME_ENTRY *d2i_X509_NAME_ENTRY_AmiSSL(register __a0 X509_NAME_ENTRY **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_NAME_ENTRY_AmiSSL(register __a0 X509_NAME_ENTRY *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_NAME_ENTRY(a, pp, length));
+	return(i2d_X509_NAME_ENTRY(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_NAME_ENTRY_it_AmiSSL(void)
+{
+	return(X509_NAME_ENTRY_it());
 }
 
 __asm __saveds X509_NAME *X509_NAME_new_AmiSSL(void)
@@ -6778,14 +8664,19 @@ __asm __saveds void X509_NAME_free_AmiSSL(register __a0 X509_NAME *a)
 	X509_NAME_free(a);
 }
 
-__asm __saveds int i2d_X509_NAME_AmiSSL(register __a0 X509_NAME *a, register __a1 unsigned char **pp)
+__asm __saveds X509_NAME *d2i_X509_NAME_AmiSSL(register __a0 X509_NAME **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_NAME(a, pp));
+	return(d2i_X509_NAME(a, in, len));
 }
 
-__asm __saveds X509_NAME *d2i_X509_NAME_AmiSSL(register __a0 X509_NAME **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_NAME_AmiSSL(register __a0 X509_NAME *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_NAME(a, pp, length));
+	return(i2d_X509_NAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_NAME_it_AmiSSL(void)
+{
+	return(X509_NAME_it());
 }
 
 __asm __saveds int X509_NAME_set_AmiSSL(register __a0 X509_NAME **xn, register __a1 X509_NAME *name)
@@ -6803,14 +8694,19 @@ __asm __saveds void X509_CINF_free_AmiSSL(register __a0 X509_CINF *a)
 	X509_CINF_free(a);
 }
 
-__asm __saveds int i2d_X509_CINF_AmiSSL(register __a0 X509_CINF *a, register __a1 unsigned char **pp)
+__asm __saveds X509_CINF *d2i_X509_CINF_AmiSSL(register __a0 X509_CINF **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_CINF(a, pp));
+	return(d2i_X509_CINF(a, in, len));
 }
 
-__asm __saveds X509_CINF *d2i_X509_CINF_AmiSSL(register __a0 X509_CINF **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_CINF_AmiSSL(register __a0 X509_CINF *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_CINF(a, pp, length));
+	return(i2d_X509_CINF(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_CINF_it_AmiSSL(void)
+{
+	return(X509_CINF_it());
 }
 
 __asm __saveds X509 *X509_new_AmiSSL(void)
@@ -6823,14 +8719,44 @@ __asm __saveds void X509_free_AmiSSL(register __a0 X509 *a)
 	X509_free(a);
 }
 
-__asm __saveds int i2d_X509_AmiSSL(register __a0 X509 *a, register __a1 unsigned char **pp)
+__asm __saveds X509 *d2i_X509_AmiSSL(register __a0 X509 **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509(a, pp));
+	return(d2i_X509(a, in, len));
 }
 
-__asm __saveds X509 *d2i_X509_AmiSSL(register __a0 X509 **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_AmiSSL(register __a0 X509 *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509(a, pp, length));
+	return(i2d_X509(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_it_AmiSSL(void)
+{
+	return(X509_it());
+}
+
+__asm __saveds X509_CERT_AUX *X509_CERT_AUX_new_AmiSSL(void)
+{
+	return(X509_CERT_AUX_new());
+}
+
+__asm __saveds void X509_CERT_AUX_free_AmiSSL(register __a0 X509_CERT_AUX *a)
+{
+	X509_CERT_AUX_free(a);
+}
+
+__asm __saveds X509_CERT_AUX *d2i_X509_CERT_AUX_AmiSSL(register __a0 X509_CERT_AUX **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_X509_CERT_AUX(a, in, len));
+}
+
+__asm __saveds int i2d_X509_CERT_AUX_AmiSSL(register __a0 X509_CERT_AUX *a, register __a1 unsigned char **out)
+{
+	return(i2d_X509_CERT_AUX(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_CERT_AUX_it_AmiSSL(void)
+{
+	return(X509_CERT_AUX_it());
 }
 
 __asm __saveds int X509_get_ex_new_index_AmiSSL(register __d0 long argl, register __a0 void *argp, register __a1 CRYPTO_EX_new *new_func, register __a2 CRYPTO_EX_dup *dup_func, register __a3 CRYPTO_EX_free *free_func)
@@ -6858,26 +8784,6 @@ __asm __saveds X509 *d2i_X509_AUX_AmiSSL(register __a0 X509 **a, register __a1 u
 	return(d2i_X509_AUX(a, pp, length));
 }
 
-__asm __saveds X509_CERT_AUX *X509_CERT_AUX_new_AmiSSL(void)
-{
-	return(X509_CERT_AUX_new());
-}
-
-__asm __saveds void X509_CERT_AUX_free_AmiSSL(register __a0 X509_CERT_AUX *a)
-{
-	X509_CERT_AUX_free(a);
-}
-
-__asm __saveds int i2d_X509_CERT_AUX_AmiSSL(register __a0 X509_CERT_AUX *a, register __a1 unsigned char **pp)
-{
-	return(i2d_X509_CERT_AUX(a, pp));
-}
-
-__asm __saveds X509_CERT_AUX *d2i_X509_CERT_AUX_AmiSSL(register __a0 X509_CERT_AUX **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_X509_CERT_AUX(a, pp, length));
-}
-
 __asm __saveds int X509_alias_set1_AmiSSL(register __a0 X509 *x, register __a1 unsigned char *name, register __d0 int len)
 {
 	return(X509_alias_set1(x, name, len));
@@ -6893,9 +8799,14 @@ __asm __saveds unsigned char *X509_alias_get0_AmiSSL(register __a0 X509 *x, regi
 	return(X509_alias_get0(x, len));
 }
 
-__asm __saveds int (*X509_TRUST_set_default_AmiSSL(register __a0 int (*trust)(int , X509 *, int)))(int, X509 *, int)
+__asm __saveds int (*X509_TRUST_set_default_AmiSSL(register __a0 int (*trust)(int, X509 *, int)))(int, X509 *, int)
 {
 	return(X509_TRUST_set_default(trust));
+}
+
+__asm __saveds int X509_TRUST_set_AmiSSL(register __a0 int *t, register __d0 int trust)
+{
+	return(X509_TRUST_set(t, trust));
 }
 
 __asm __saveds int X509_add1_trust_object_AmiSSL(register __a0 X509 *x, register __a1 ASN1_OBJECT *obj)
@@ -6928,14 +8839,19 @@ __asm __saveds void X509_REVOKED_free_AmiSSL(register __a0 X509_REVOKED *a)
 	X509_REVOKED_free(a);
 }
 
-__asm __saveds int i2d_X509_REVOKED_AmiSSL(register __a0 X509_REVOKED *a, register __a1 unsigned char **pp)
+__asm __saveds X509_REVOKED *d2i_X509_REVOKED_AmiSSL(register __a0 X509_REVOKED **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_REVOKED(a, pp));
+	return(d2i_X509_REVOKED(a, in, len));
 }
 
-__asm __saveds X509_REVOKED *d2i_X509_REVOKED_AmiSSL(register __a0 X509_REVOKED **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_REVOKED_AmiSSL(register __a0 X509_REVOKED *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_REVOKED(a, pp, length));
+	return(i2d_X509_REVOKED(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_REVOKED_it_AmiSSL(void)
+{
+	return(X509_REVOKED_it());
 }
 
 __asm __saveds X509_CRL_INFO *X509_CRL_INFO_new_AmiSSL(void)
@@ -6948,14 +8864,19 @@ __asm __saveds void X509_CRL_INFO_free_AmiSSL(register __a0 X509_CRL_INFO *a)
 	X509_CRL_INFO_free(a);
 }
 
-__asm __saveds int i2d_X509_CRL_INFO_AmiSSL(register __a0 X509_CRL_INFO *a, register __a1 unsigned char **pp)
+__asm __saveds X509_CRL_INFO *d2i_X509_CRL_INFO_AmiSSL(register __a0 X509_CRL_INFO **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_CRL_INFO(a, pp));
+	return(d2i_X509_CRL_INFO(a, in, len));
 }
 
-__asm __saveds X509_CRL_INFO *d2i_X509_CRL_INFO_AmiSSL(register __a0 X509_CRL_INFO **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_CRL_INFO_AmiSSL(register __a0 X509_CRL_INFO *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_CRL_INFO(a, pp, length));
+	return(i2d_X509_CRL_INFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_CRL_INFO_it_AmiSSL(void)
+{
+	return(X509_CRL_INFO_it());
 }
 
 __asm __saveds X509_CRL *X509_CRL_new_AmiSSL(void)
@@ -6968,14 +8889,24 @@ __asm __saveds void X509_CRL_free_AmiSSL(register __a0 X509_CRL *a)
 	X509_CRL_free(a);
 }
 
-__asm __saveds int i2d_X509_CRL_AmiSSL(register __a0 X509_CRL *a, register __a1 unsigned char **pp)
+__asm __saveds X509_CRL *d2i_X509_CRL_AmiSSL(register __a0 X509_CRL **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_X509_CRL(a, pp));
+	return(d2i_X509_CRL(a, in, len));
 }
 
-__asm __saveds X509_CRL *d2i_X509_CRL_AmiSSL(register __a0 X509_CRL **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_X509_CRL_AmiSSL(register __a0 X509_CRL *a, register __a1 unsigned char **out)
 {
-	return(d2i_X509_CRL(a, pp, length));
+	return(i2d_X509_CRL(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *X509_CRL_it_AmiSSL(void)
+{
+	return(X509_CRL_it());
+}
+
+__asm __saveds int X509_CRL_add0_revoked_AmiSSL(register __a0 X509_CRL *crl, register __a1 X509_REVOKED *rev)
+{
+	return(X509_CRL_add0_revoked(crl, rev));
 }
 
 __asm __saveds X509_PKEY *X509_PKEY_new_AmiSSL(void)
@@ -7008,14 +8939,19 @@ __asm __saveds void NETSCAPE_SPKI_free_AmiSSL(register __a0 NETSCAPE_SPKI *a)
 	NETSCAPE_SPKI_free(a);
 }
 
-__asm __saveds int i2d_NETSCAPE_SPKI_AmiSSL(register __a0 NETSCAPE_SPKI *a, register __a1 unsigned char **pp)
+__asm __saveds NETSCAPE_SPKI *d2i_NETSCAPE_SPKI_AmiSSL(register __a0 NETSCAPE_SPKI **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_NETSCAPE_SPKI(a, pp));
+	return(d2i_NETSCAPE_SPKI(a, in, len));
 }
 
-__asm __saveds NETSCAPE_SPKI *d2i_NETSCAPE_SPKI_AmiSSL(register __a0 NETSCAPE_SPKI **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_NETSCAPE_SPKI_AmiSSL(register __a0 NETSCAPE_SPKI *a, register __a1 unsigned char **out)
 {
-	return(d2i_NETSCAPE_SPKI(a, pp, length));
+	return(i2d_NETSCAPE_SPKI(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *NETSCAPE_SPKI_it_AmiSSL(void)
+{
+	return(NETSCAPE_SPKI_it());
 }
 
 __asm __saveds NETSCAPE_SPKAC *NETSCAPE_SPKAC_new_AmiSSL(void)
@@ -7028,19 +8964,19 @@ __asm __saveds void NETSCAPE_SPKAC_free_AmiSSL(register __a0 NETSCAPE_SPKAC *a)
 	NETSCAPE_SPKAC_free(a);
 }
 
-__asm __saveds int i2d_NETSCAPE_SPKAC_AmiSSL(register __a0 NETSCAPE_SPKAC *a, register __a1 unsigned char **pp)
+__asm __saveds NETSCAPE_SPKAC *d2i_NETSCAPE_SPKAC_AmiSSL(register __a0 NETSCAPE_SPKAC **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_NETSCAPE_SPKAC(a, pp));
+	return(d2i_NETSCAPE_SPKAC(a, in, len));
 }
 
-__asm __saveds NETSCAPE_SPKAC *d2i_NETSCAPE_SPKAC_AmiSSL(register __a0 NETSCAPE_SPKAC **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds int i2d_NETSCAPE_SPKAC_AmiSSL(register __a0 NETSCAPE_SPKAC *a, register __a1 unsigned char **out)
 {
-	return(d2i_NETSCAPE_SPKAC(a, pp, length));
+	return(i2d_NETSCAPE_SPKAC(a, out));
 }
 
-__asm __saveds int i2d_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 NETSCAPE_CERT_SEQUENCE *a, register __a1 unsigned char **pp)
+__asm __saveds const ASN1_ITEM *NETSCAPE_SPKAC_it_AmiSSL(void)
 {
-	return(i2d_NETSCAPE_CERT_SEQUENCE(a, pp));
+	return(NETSCAPE_SPKAC_it());
 }
 
 __asm __saveds NETSCAPE_CERT_SEQUENCE *NETSCAPE_CERT_SEQUENCE_new_AmiSSL(void)
@@ -7048,14 +8984,24 @@ __asm __saveds NETSCAPE_CERT_SEQUENCE *NETSCAPE_CERT_SEQUENCE_new_AmiSSL(void)
 	return(NETSCAPE_CERT_SEQUENCE_new());
 }
 
-__asm __saveds NETSCAPE_CERT_SEQUENCE *d2i_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 NETSCAPE_CERT_SEQUENCE **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_NETSCAPE_CERT_SEQUENCE(a, pp, length));
-}
-
 __asm __saveds void NETSCAPE_CERT_SEQUENCE_free_AmiSSL(register __a0 NETSCAPE_CERT_SEQUENCE *a)
 {
 	NETSCAPE_CERT_SEQUENCE_free(a);
+}
+
+__asm __saveds NETSCAPE_CERT_SEQUENCE *d2i_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 NETSCAPE_CERT_SEQUENCE **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_NETSCAPE_CERT_SEQUENCE(a, in, len));
+}
+
+__asm __saveds int i2d_NETSCAPE_CERT_SEQUENCE_AmiSSL(register __a0 NETSCAPE_CERT_SEQUENCE *a, register __a1 unsigned char **out)
+{
+	return(i2d_NETSCAPE_CERT_SEQUENCE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *NETSCAPE_CERT_SEQUENCE_it_AmiSSL(void)
+{
+	return(NETSCAPE_CERT_SEQUENCE_it());
 }
 
 __asm __saveds X509_INFO *X509_INFO_new_AmiSSL(void)
@@ -7086,6 +9032,21 @@ __asm __saveds int ASN1_digest_AmiSSL(register __a0 int (*i2d)(), register __a1 
 __asm __saveds int ASN1_sign_AmiSSL(register __a0 int (*i2d)(), register __a1 X509_ALGOR *algor1, register __a2 X509_ALGOR *algor2, register __a3 ASN1_BIT_STRING *signature, register __d0 char *data, register __d1 EVP_PKEY *pkey, register __d2 const EVP_MD *type)
 {
 	return(ASN1_sign(i2d, algor1, algor2, signature, data, pkey, type));
+}
+
+__asm __saveds int ASN1_item_digest_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 const EVP_MD *type, register __a2 void *data, register __a3 unsigned char *md, register __d0 unsigned int *len)
+{
+	return(ASN1_item_digest(it, type, data, md, len));
+}
+
+__asm __saveds int ASN1_item_verify_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 X509_ALGOR *algor1, register __a2 ASN1_BIT_STRING *signature, register __a3 void *data, register __d0 EVP_PKEY *pkey)
+{
+	return(ASN1_item_verify(it, algor1, signature, data, pkey));
+}
+
+__asm __saveds int ASN1_item_sign_AmiSSL(register __a0 const ASN1_ITEM *it, register __a1 X509_ALGOR *algor1, register __a2 X509_ALGOR *algor2, register __a3 ASN1_BIT_STRING *signature, register __d0 void *data, register __d1 EVP_PKEY *pkey, register __d2 const EVP_MD *type)
+{
+	return(ASN1_item_sign(it, algor1, algor2, signature, data, pkey, type));
 }
 
 __asm __saveds int X509_set_version_AmiSSL(register __a0 X509 *x, register __d0 long version)
@@ -7141,6 +9102,11 @@ __asm __saveds int X509_set_pubkey_AmiSSL(register __a0 X509 *x, register __a1 E
 __asm __saveds EVP_PKEY *X509_get_pubkey_AmiSSL(register __a0 X509 *x)
 {
 	return(X509_get_pubkey(x));
+}
+
+__asm __saveds ASN1_BIT_STRING *X509_get0_pubkey_bitstr_AmiSSL(register __a0 const X509 *x)
+{
+	return(X509_get0_pubkey_bitstr(x));
 }
 
 __asm __saveds int X509_certificate_type_AmiSSL(register __a0 X509 *x, register __a1 EVP_PKEY *pubkey)
@@ -7228,19 +9194,54 @@ __asm __saveds int X509_REQ_add1_attr_AmiSSL(register __a0 X509_REQ *req, regist
 	return(X509_REQ_add1_attr(req, attr));
 }
 
-__asm __saveds int X509_REQ_add1_attr_by_OBJ_AmiSSL(register __a0 X509_REQ *req, register __a1 ASN1_OBJECT *obj, register __d0 int type, register __a2 unsigned char *bytes, register __d1 int len)
+__asm __saveds int X509_REQ_add1_attr_by_OBJ_AmiSSL(register __a0 X509_REQ *req, register __a1 const ASN1_OBJECT *obj, register __d0 int type, register __a2 const unsigned char *bytes, register __d1 int len)
 {
 	return(X509_REQ_add1_attr_by_OBJ(req, obj, type, bytes, len));
 }
 
-__asm __saveds int X509_REQ_add1_attr_by_NID_AmiSSL(register __a0 X509_REQ *req, register __d0 int nid, register __d1 int type, register __a1 unsigned char *bytes, register __d2 int len)
+__asm __saveds int X509_REQ_add1_attr_by_NID_AmiSSL(register __a0 X509_REQ *req, register __d0 int nid, register __d1 int type, register __a1 const unsigned char *bytes, register __d2 int len)
 {
 	return(X509_REQ_add1_attr_by_NID(req, nid, type, bytes, len));
 }
 
-__asm __saveds int X509_REQ_add1_attr_by_txt_AmiSSL(register __a0 X509_REQ *req, register __a1 char *attrname, register __d0 int type, register __a2 unsigned char *bytes, register __d1 int len)
+__asm __saveds int X509_REQ_add1_attr_by_txt_AmiSSL(register __a0 X509_REQ *req, register __a1 const char *attrname, register __d0 int type, register __a2 const unsigned char *bytes, register __d1 int len)
 {
 	return(X509_REQ_add1_attr_by_txt(req, attrname, type, bytes, len));
+}
+
+__asm __saveds int X509_CRL_set_version_AmiSSL(register __a0 X509_CRL *x, register __d0 long version)
+{
+	return(X509_CRL_set_version(x, version));
+}
+
+__asm __saveds int X509_CRL_set_issuer_name_AmiSSL(register __a0 X509_CRL *x, register __a1 X509_NAME *name)
+{
+	return(X509_CRL_set_issuer_name(x, name));
+}
+
+__asm __saveds int X509_CRL_set_lastUpdate_AmiSSL(register __a0 X509_CRL *x, register __a1 ASN1_TIME *tm)
+{
+	return(X509_CRL_set_lastUpdate(x, tm));
+}
+
+__asm __saveds int X509_CRL_set_nextUpdate_AmiSSL(register __a0 X509_CRL *x, register __a1 ASN1_TIME *tm)
+{
+	return(X509_CRL_set_nextUpdate(x, tm));
+}
+
+__asm __saveds int X509_CRL_sort_AmiSSL(register __a0 X509_CRL *crl)
+{
+	return(X509_CRL_sort(crl));
+}
+
+__asm __saveds int X509_REVOKED_set_serialNumber_AmiSSL(register __a0 X509_REVOKED *x, register __a1 ASN1_INTEGER *serial)
+{
+	return(X509_REVOKED_set_serialNumber(x, serial));
+}
+
+__asm __saveds int X509_REVOKED_set_revocationDate_AmiSSL(register __a0 X509_REVOKED *r, register __a1 ASN1_TIME *tm)
+{
+	return(X509_REVOKED_set_revocationDate(r, tm));
 }
 
 __asm __saveds int X509_check_private_key_AmiSSL(register __a0 X509 *x509, register __a1 EVP_PKEY *pkey)
@@ -7308,9 +9309,19 @@ __asm __saveds int X509_NAME_print_ex_AmiSSL(register __a0 BIO *out, register __
 	return(X509_NAME_print_ex(out, nm, indent, flags));
 }
 
+__asm __saveds int X509_print_ex_AmiSSL(register __a0 BIO *bp, register __a1 X509 *x, register __d0 unsigned long nmflag, register __d1 unsigned long cflag)
+{
+	return(X509_print_ex(bp, x, nmflag, cflag));
+}
+
 __asm __saveds int X509_print_AmiSSL(register __a0 BIO *bp, register __a1 X509 *x)
 {
 	return(X509_print(bp, x));
+}
+
+__asm __saveds int X509_ocspid_print_AmiSSL(register __a0 BIO *bp, register __a1 X509 *x)
+{
+	return(X509_ocspid_print(bp, x));
 }
 
 __asm __saveds int X509_CERT_AUX_print_AmiSSL(register __a0 BIO *bp, register __a1 X509_CERT_AUX *x, register __d0 int indent)
@@ -7321,6 +9332,11 @@ __asm __saveds int X509_CERT_AUX_print_AmiSSL(register __a0 BIO *bp, register __
 __asm __saveds int X509_CRL_print_AmiSSL(register __a0 BIO *bp, register __a1 X509_CRL *x)
 {
 	return(X509_CRL_print(bp, x));
+}
+
+__asm __saveds int X509_REQ_print_ex_AmiSSL(register __a0 BIO *bp, register __a1 X509_REQ *x, register __d0 unsigned long nmflag, register __d1 unsigned long cflag)
+{
+	return(X509_REQ_print_ex(bp, x, nmflag, cflag));
 }
 
 __asm __saveds int X509_REQ_print_AmiSSL(register __a0 BIO *bp, register __a1 X509_REQ *req)
@@ -7493,6 +9509,11 @@ __asm __saveds void *X509_get_ext_d2i_AmiSSL(register __a0 X509 *x, register __d
 	return(X509_get_ext_d2i(x, nid, crit, idx));
 }
 
+__asm __saveds int X509_add1_ext_i2d_AmiSSL(register __a0 X509 *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(X509_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
 __asm __saveds int X509_CRL_get_ext_count_AmiSSL(register __a0 X509_CRL *x)
 {
 	return(X509_CRL_get_ext_count(x));
@@ -7533,6 +9554,11 @@ __asm __saveds void *X509_CRL_get_ext_d2i_AmiSSL(register __a0 X509_CRL *x, regi
 	return(X509_CRL_get_ext_d2i(x, nid, crit, idx));
 }
 
+__asm __saveds int X509_CRL_add1_ext_i2d_AmiSSL(register __a0 X509_CRL *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(X509_CRL_add1_ext_i2d(x, nid, value, crit, flags));
+}
+
 __asm __saveds int X509_REVOKED_get_ext_count_AmiSSL(register __a0 X509_REVOKED *x)
 {
 	return(X509_REVOKED_get_ext_count(x));
@@ -7571,6 +9597,11 @@ __asm __saveds int X509_REVOKED_add_ext_AmiSSL(register __a0 X509_REVOKED *x, re
 __asm __saveds void *X509_REVOKED_get_ext_d2i_AmiSSL(register __a0 X509_REVOKED *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
 {
 	return(X509_REVOKED_get_ext_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds int X509_REVOKED_add1_ext_i2d_AmiSSL(register __a0 X509_REVOKED *x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(X509_REVOKED_add1_ext_i2d(x, nid, value, crit, flags));
 }
 
 __asm __saveds X509_EXTENSION *X509_EXTENSION_create_by_NID_AmiSSL(register __a0 X509_EXTENSION **ex, register __d0 int nid, register __d1 int crit, register __a1 ASN1_OCTET_STRING *data)
@@ -7643,42 +9674,42 @@ __asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_AmiSSL(register __a0 S
 	return(X509at_add1_attr(x, attr));
 }
 
-__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_OBJ_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __a1 ASN1_OBJECT *obj, register __d0 int type, register __a2 unsigned char *bytes, register __d1 int len)
+__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_OBJ_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __a1 const ASN1_OBJECT *obj, register __d0 int type, register __a2 const unsigned char *bytes, register __d1 int len)
 {
 	return(X509at_add1_attr_by_OBJ(x, obj, type, bytes, len));
 }
 
-__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_NID_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __d0 int nid, register __d1 int type, register __a1 unsigned char *bytes, register __d2 int len)
+__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_NID_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __d0 int nid, register __d1 int type, register __a1 const unsigned char *bytes, register __d2 int len)
 {
 	return(X509at_add1_attr_by_NID(x, nid, type, bytes, len));
 }
 
-__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_txt_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __a1 char *attrname, register __d0 int type, register __a2 unsigned char *bytes, register __d1 int len)
+__asm __saveds STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_txt_AmiSSL(register __a0 STACK_OF(X509_ATTRIBUTE) **x, register __a1 const char *attrname, register __d0 int type, register __a2 const unsigned char *bytes, register __d1 int len)
 {
 	return(X509at_add1_attr_by_txt(x, attrname, type, bytes, len));
 }
 
-__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_NID_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __d0 int nid, register __d1 int atrtype, register __a1 void *data, register __d2 int len)
+__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_NID_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __d0 int nid, register __d1 int atrtype, register __a1 const void *data, register __d2 int len)
 {
 	return(X509_ATTRIBUTE_create_by_NID(attr, nid, atrtype, data, len));
 }
 
-__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_OBJ_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __a1 ASN1_OBJECT *obj, register __d0 int atrtype, register __a2 void *data, register __d1 int len)
+__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_OBJ_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __a1 const ASN1_OBJECT *obj, register __d0 int atrtype, register __a2 const void *data, register __d1 int len)
 {
 	return(X509_ATTRIBUTE_create_by_OBJ(attr, obj, atrtype, data, len));
 }
 
-__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_txt_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __a1 char *atrname, register __d0 int type, register __a2 unsigned char *bytes, register __d1 int len)
+__asm __saveds X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_txt_AmiSSL(register __a0 X509_ATTRIBUTE **attr, register __a1 const char *atrname, register __d0 int type, register __a2 const unsigned char *bytes, register __d1 int len)
 {
 	return(X509_ATTRIBUTE_create_by_txt(attr, atrname, type, bytes, len));
 }
 
-__asm __saveds int X509_ATTRIBUTE_set1_object_AmiSSL(register __a0 X509_ATTRIBUTE *attr, register __a1 ASN1_OBJECT *obj)
+__asm __saveds int X509_ATTRIBUTE_set1_object_AmiSSL(register __a0 X509_ATTRIBUTE *attr, register __a1 const ASN1_OBJECT *obj)
 {
 	return(X509_ATTRIBUTE_set1_object(attr, obj));
 }
 
-__asm __saveds int X509_ATTRIBUTE_set1_data_AmiSSL(register __a0 X509_ATTRIBUTE *attr, register __d0 int attrtype, register __a1 void *data, register __d1 int len)
+__asm __saveds int X509_ATTRIBUTE_set1_data_AmiSSL(register __a0 X509_ATTRIBUTE *attr, register __d0 int attrtype, register __a1 const void *data, register __d1 int len)
 {
 	return(X509_ATTRIBUTE_set1_data(attr, attrtype, data, len));
 }
@@ -7718,24 +9749,79 @@ __asm __saveds X509 *X509_find_by_subject_AmiSSL(register __a0 STACK_OF(X509) *s
 	return(X509_find_by_subject(sk, name));
 }
 
-__asm __saveds int i2d_PBEPARAM_AmiSSL(register __a0 PBEPARAM *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PBEPARAM(a, pp));
-}
-
 __asm __saveds PBEPARAM *PBEPARAM_new_AmiSSL(void)
 {
 	return(PBEPARAM_new());
 }
 
-__asm __saveds PBEPARAM *d2i_PBEPARAM_AmiSSL(register __a0 PBEPARAM **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PBEPARAM(a, pp, length));
-}
-
 __asm __saveds void PBEPARAM_free_AmiSSL(register __a0 PBEPARAM *a)
 {
 	PBEPARAM_free(a);
+}
+
+__asm __saveds PBEPARAM *d2i_PBEPARAM_AmiSSL(register __a0 PBEPARAM **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PBEPARAM(a, in, len));
+}
+
+__asm __saveds int i2d_PBEPARAM_AmiSSL(register __a0 PBEPARAM *a, register __a1 unsigned char **out)
+{
+	return(i2d_PBEPARAM(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PBEPARAM_it_AmiSSL(void)
+{
+	return(PBEPARAM_it());
+}
+
+__asm __saveds PBE2PARAM *PBE2PARAM_new_AmiSSL(void)
+{
+	return(PBE2PARAM_new());
+}
+
+__asm __saveds void PBE2PARAM_free_AmiSSL(register __a0 PBE2PARAM *a)
+{
+	PBE2PARAM_free(a);
+}
+
+__asm __saveds PBE2PARAM *d2i_PBE2PARAM_AmiSSL(register __a0 PBE2PARAM **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PBE2PARAM(a, in, len));
+}
+
+__asm __saveds int i2d_PBE2PARAM_AmiSSL(register __a0 PBE2PARAM *a, register __a1 unsigned char **out)
+{
+	return(i2d_PBE2PARAM(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PBE2PARAM_it_AmiSSL(void)
+{
+	return(PBE2PARAM_it());
+}
+
+__asm __saveds PBKDF2PARAM *PBKDF2PARAM_new_AmiSSL(void)
+{
+	return(PBKDF2PARAM_new());
+}
+
+__asm __saveds void PBKDF2PARAM_free_AmiSSL(register __a0 PBKDF2PARAM *a)
+{
+	PBKDF2PARAM_free(a);
+}
+
+__asm __saveds PBKDF2PARAM *d2i_PBKDF2PARAM_AmiSSL(register __a0 PBKDF2PARAM **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PBKDF2PARAM(a, in, len));
+}
+
+__asm __saveds int i2d_PBKDF2PARAM_AmiSSL(register __a0 PBKDF2PARAM *a, register __a1 unsigned char **out)
+{
+	return(i2d_PBKDF2PARAM(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PBKDF2PARAM_it_AmiSSL(void)
+{
+	return(PBKDF2PARAM_it());
 }
 
 __asm __saveds X509_ALGOR *PKCS5_pbe_set_AmiSSL(register __d0 int alg, register __d1 int iter, register __a0 unsigned char *salt, register __d2 int saltlen)
@@ -7748,64 +9834,29 @@ __asm __saveds X509_ALGOR *PKCS5_pbe2_set_AmiSSL(register __a0 const EVP_CIPHER 
 	return(PKCS5_pbe2_set(cipher, iter, salt, saltlen));
 }
 
-__asm __saveds int i2d_PBKDF2PARAM_AmiSSL(register __a0 PBKDF2PARAM *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PBKDF2PARAM(a, pp));
-}
-
-__asm __saveds PBKDF2PARAM *PBKDF2PARAM_new_AmiSSL(void)
-{
-	return(PBKDF2PARAM_new());
-}
-
-__asm __saveds PBKDF2PARAM *d2i_PBKDF2PARAM_AmiSSL(register __a0 PBKDF2PARAM **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PBKDF2PARAM(a, pp, length));
-}
-
-__asm __saveds void PBKDF2PARAM_free_AmiSSL(register __a0 PBKDF2PARAM *a)
-{
-	PBKDF2PARAM_free(a);
-}
-
-__asm __saveds int i2d_PBE2PARAM_AmiSSL(register __a0 PBE2PARAM *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PBE2PARAM(a, pp));
-}
-
-__asm __saveds PBE2PARAM *PBE2PARAM_new_AmiSSL(void)
-{
-	return(PBE2PARAM_new());
-}
-
-__asm __saveds PBE2PARAM *d2i_PBE2PARAM_AmiSSL(register __a0 PBE2PARAM **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PBE2PARAM(a, pp, length));
-}
-
-__asm __saveds void PBE2PARAM_free_AmiSSL(register __a0 PBE2PARAM *a)
-{
-	PBE2PARAM_free(a);
-}
-
-__asm __saveds int i2d_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO *a, register __a1 unsigned char **pp)
-{
-	return(i2d_PKCS8_PRIV_KEY_INFO(a, pp));
-}
-
 __asm __saveds PKCS8_PRIV_KEY_INFO *PKCS8_PRIV_KEY_INFO_new_AmiSSL(void)
 {
 	return(PKCS8_PRIV_KEY_INFO_new());
 }
 
-__asm __saveds PKCS8_PRIV_KEY_INFO *d2i_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_PKCS8_PRIV_KEY_INFO(a, pp, length));
-}
-
 __asm __saveds void PKCS8_PRIV_KEY_INFO_free_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO *a)
 {
 	PKCS8_PRIV_KEY_INFO_free(a);
+}
+
+__asm __saveds PKCS8_PRIV_KEY_INFO *d2i_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PKCS8_PRIV_KEY_INFO(a, in, len));
+}
+
+__asm __saveds int i2d_PKCS8_PRIV_KEY_INFO_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKCS8_PRIV_KEY_INFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKCS8_PRIV_KEY_INFO_it_AmiSSL(void)
+{
+	return(PKCS8_PRIV_KEY_INFO_it());
 }
 
 __asm __saveds EVP_PKEY *EVP_PKCS82PKEY_AmiSSL(register __a0 PKCS8_PRIV_KEY_INFO *p8)
@@ -7913,6 +9964,21 @@ __asm __saveds void X509_STORE_free_AmiSSL(register __a0 X509_STORE *v)
 	X509_STORE_free(v);
 }
 
+__asm __saveds void X509_STORE_set_flags_AmiSSL(register __a0 X509_STORE *ctx, register __d0 long flags)
+{
+	X509_STORE_set_flags(ctx, flags);
+}
+
+__asm __saveds int X509_STORE_set_purpose_AmiSSL(register __a0 X509_STORE *ctx, register __d0 int purpose)
+{
+	return(X509_STORE_set_purpose(ctx, purpose));
+}
+
+__asm __saveds int X509_STORE_set_trust_AmiSSL(register __a0 X509_STORE *ctx, register __d0 int trust)
+{
+	return(X509_STORE_set_trust(ctx, trust));
+}
+
 __asm __saveds X509_STORE_CTX *X509_STORE_CTX_new_AmiSSL(void)
 {
 	return(X509_STORE_CTX_new());
@@ -7928,9 +9994,9 @@ __asm __saveds void X509_STORE_CTX_free_AmiSSL(register __a0 X509_STORE_CTX *ctx
 	X509_STORE_CTX_free(ctx);
 }
 
-__asm __saveds void X509_STORE_CTX_init_AmiSSL(register __a0 X509_STORE_CTX *ctx, register __a1 X509_STORE *store, register __a2 X509 *x509, register __a3 STACK_OF(X509) *chain)
+__asm __saveds int X509_STORE_CTX_init_AmiSSL(register __a0 X509_STORE_CTX *ctx, register __a1 X509_STORE *store, register __a2 X509 *x509, register __a3 STACK_OF(X509) *chain)
 {
-	X509_STORE_CTX_init(ctx, store, x509, chain);
+	return(X509_STORE_CTX_init(ctx, store, x509, chain));
 }
 
 __asm __saveds void X509_STORE_CTX_trusted_stack_AmiSSL(register __a0 X509_STORE_CTX *ctx, register __a1 STACK_OF(X509) *sk)
@@ -8128,118 +10194,907 @@ __asm __saveds void X509_STORE_CTX_set_verify_cb_AmiSSL(register __a0 X509_STORE
 	X509_STORE_CTX_set_verify_cb(ctx, verify_cb);
 }
 
-__asm __saveds int DHparams_print_AmiSSL(register __a0 BIO *bp, register __a1 DH *x)
+__asm __saveds BASIC_CONSTRAINTS *BASIC_CONSTRAINTS_new_AmiSSL(void)
 {
-	return(DHparams_print(bp, x));
+	return(BASIC_CONSTRAINTS_new());
 }
 
-__asm __saveds DH *d2i_DHparams_AmiSSL(register __a0 DH **a, register __a1 unsigned char **pp, register __d0 long length)
+__asm __saveds void BASIC_CONSTRAINTS_free_AmiSSL(register __a0 BASIC_CONSTRAINTS *a)
 {
-	return(d2i_DHparams(a, pp, length));
+	BASIC_CONSTRAINTS_free(a);
 }
 
-__asm __saveds int i2d_DHparams_AmiSSL(register __a0 DH *a, register __a1 unsigned char **pp)
+__asm __saveds BASIC_CONSTRAINTS *d2i_BASIC_CONSTRAINTS_AmiSSL(register __a0 BASIC_CONSTRAINTS **a, register __a1 unsigned char **in, register __d0 long len)
 {
-	return(i2d_DHparams(a, pp));
+	return(d2i_BASIC_CONSTRAINTS(a, in, len));
 }
 
-__asm __saveds DH *DSA_dup_DH_AmiSSL(register __a0 DSA *r)
+__asm __saveds int i2d_BASIC_CONSTRAINTS_AmiSSL(register __a0 BASIC_CONSTRAINTS *a, register __a1 unsigned char **out)
+{
+	return(i2d_BASIC_CONSTRAINTS(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *BASIC_CONSTRAINTS_it_AmiSSL(void)
+{
+	return(BASIC_CONSTRAINTS_it());
+}
+
+__asm __saveds SXNET *SXNET_new_AmiSSL(void)
+{
+	return(SXNET_new());
+}
+
+__asm __saveds void SXNET_free_AmiSSL(register __a0 SXNET *a)
+{
+	SXNET_free(a);
+}
+
+__asm __saveds SXNET *d2i_SXNET_AmiSSL(register __a0 SXNET **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_SXNET(a, in, len));
+}
+
+__asm __saveds int i2d_SXNET_AmiSSL(register __a0 SXNET *a, register __a1 unsigned char **out)
+{
+	return(i2d_SXNET(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *SXNET_it_AmiSSL(void)
+{
+	return(SXNET_it());
+}
+
+__asm __saveds SXNETID *SXNETID_new_AmiSSL(void)
+{
+	return(SXNETID_new());
+}
+
+__asm __saveds void SXNETID_free_AmiSSL(register __a0 SXNETID *a)
+{
+	SXNETID_free(a);
+}
+
+__asm __saveds SXNETID *d2i_SXNETID_AmiSSL(register __a0 SXNETID **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_SXNETID(a, in, len));
+}
+
+__asm __saveds int i2d_SXNETID_AmiSSL(register __a0 SXNETID *a, register __a1 unsigned char **out)
+{
+	return(i2d_SXNETID(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *SXNETID_it_AmiSSL(void)
+{
+	return(SXNETID_it());
+}
+
+__asm __saveds int SXNET_add_id_asc_AmiSSL(register __a0 SXNET **psx, register __a1 char *zone, register __a2 char *user, register __d0 int userlen)
+{
+	return(SXNET_add_id_asc(psx, zone, user, userlen));
+}
+
+__asm __saveds int SXNET_add_id_ulong_AmiSSL(register __a0 SXNET **psx, register __d0 unsigned long lzone, register __a1 char *user, register __d1 int userlen)
+{
+	return(SXNET_add_id_ulong(psx, lzone, user, userlen));
+}
+
+__asm __saveds int SXNET_add_id_INTEGER_AmiSSL(register __a0 SXNET **psx, register __a1 ASN1_INTEGER *izone, register __a2 char *user, register __d0 int userlen)
+{
+	return(SXNET_add_id_INTEGER(psx, izone, user, userlen));
+}
+
+__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_asc_AmiSSL(register __a0 SXNET *sx, register __a1 char *zone)
+{
+	return(SXNET_get_id_asc(sx, zone));
+}
+
+__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_ulong_AmiSSL(register __a0 SXNET *sx, register __d0 unsigned long lzone)
+{
+	return(SXNET_get_id_ulong(sx, lzone));
+}
+
+__asm __saveds ASN1_OCTET_STRING *SXNET_get_id_INTEGER_AmiSSL(register __a0 SXNET *sx, register __a1 ASN1_INTEGER *zone)
+{
+	return(SXNET_get_id_INTEGER(sx, zone));
+}
+
+__asm __saveds AUTHORITY_KEYID *AUTHORITY_KEYID_new_AmiSSL(void)
+{
+	return(AUTHORITY_KEYID_new());
+}
+
+__asm __saveds void AUTHORITY_KEYID_free_AmiSSL(register __a0 AUTHORITY_KEYID *a)
+{
+	AUTHORITY_KEYID_free(a);
+}
+
+__asm __saveds AUTHORITY_KEYID *d2i_AUTHORITY_KEYID_AmiSSL(register __a0 AUTHORITY_KEYID **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_AUTHORITY_KEYID(a, in, len));
+}
+
+__asm __saveds int i2d_AUTHORITY_KEYID_AmiSSL(register __a0 AUTHORITY_KEYID *a, register __a1 unsigned char **out)
+{
+	return(i2d_AUTHORITY_KEYID(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *AUTHORITY_KEYID_it_AmiSSL(void)
+{
+	return(AUTHORITY_KEYID_it());
+}
+
+__asm __saveds PKEY_USAGE_PERIOD *PKEY_USAGE_PERIOD_new_AmiSSL(void)
+{
+	return(PKEY_USAGE_PERIOD_new());
+}
+
+__asm __saveds void PKEY_USAGE_PERIOD_free_AmiSSL(register __a0 PKEY_USAGE_PERIOD *a)
+{
+	PKEY_USAGE_PERIOD_free(a);
+}
+
+__asm __saveds PKEY_USAGE_PERIOD *d2i_PKEY_USAGE_PERIOD_AmiSSL(register __a0 PKEY_USAGE_PERIOD **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_PKEY_USAGE_PERIOD(a, in, len));
+}
+
+__asm __saveds int i2d_PKEY_USAGE_PERIOD_AmiSSL(register __a0 PKEY_USAGE_PERIOD *a, register __a1 unsigned char **out)
+{
+	return(i2d_PKEY_USAGE_PERIOD(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *PKEY_USAGE_PERIOD_it_AmiSSL(void)
+{
+	return(PKEY_USAGE_PERIOD_it());
+}
+
+__asm __saveds GENERAL_NAME *GENERAL_NAME_new_AmiSSL(void)
+{
+	return(GENERAL_NAME_new());
+}
+
+__asm __saveds void GENERAL_NAME_free_AmiSSL(register __a0 GENERAL_NAME *a)
+{
+	GENERAL_NAME_free(a);
+}
+
+__asm __saveds GENERAL_NAME *d2i_GENERAL_NAME_AmiSSL(register __a0 GENERAL_NAME **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_GENERAL_NAME(a, in, len));
+}
+
+__asm __saveds int i2d_GENERAL_NAME_AmiSSL(register __a0 GENERAL_NAME *a, register __a1 unsigned char **out)
+{
+	return(i2d_GENERAL_NAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *GENERAL_NAME_it_AmiSSL(void)
+{
+	return(GENERAL_NAME_it());
+}
+
+__asm __saveds STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 GENERAL_NAME *gen, register __a2 STACK_OF(CONF_VALUE) *ret)
+{
+	return(i2v_GENERAL_NAME(method, gen, ret));
+}
+
+__asm __saveds int GENERAL_NAME_print_AmiSSL(register __a0 BIO *out, register __a1 GENERAL_NAME *gen)
+{
+	return(GENERAL_NAME_print(out, gen));
+}
+
+__asm __saveds GENERAL_NAMES *GENERAL_NAMES_new_AmiSSL(void)
+{
+	return(GENERAL_NAMES_new());
+}
+
+__asm __saveds void GENERAL_NAMES_free_AmiSSL(register __a0 GENERAL_NAMES *a)
+{
+	GENERAL_NAMES_free(a);
+}
+
+__asm __saveds GENERAL_NAMES *d2i_GENERAL_NAMES_AmiSSL(register __a0 GENERAL_NAMES **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_GENERAL_NAMES(a, in, len));
+}
+
+__asm __saveds int i2d_GENERAL_NAMES_AmiSSL(register __a0 GENERAL_NAMES *a, register __a1 unsigned char **out)
+{
+	return(i2d_GENERAL_NAMES(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *GENERAL_NAMES_it_AmiSSL(void)
+{
+	return(GENERAL_NAMES_it());
+}
+
+__asm __saveds STACK_OF(CONF_VALUE) *i2v_GENERAL_NAMES_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 GENERAL_NAMES *gen, register __a2 STACK_OF(CONF_VALUE) *extlist)
+{
+	return(i2v_GENERAL_NAMES(method, gen, extlist));
+}
+
+__asm __saveds GENERAL_NAMES *v2i_GENERAL_NAMES_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 STACK_OF(CONF_VALUE) *nval)
+{
+	return(v2i_GENERAL_NAMES(method, ctx, nval));
+}
+
+__asm __saveds OTHERNAME *OTHERNAME_new_AmiSSL(void)
+{
+	return(OTHERNAME_new());
+}
+
+__asm __saveds void OTHERNAME_free_AmiSSL(register __a0 OTHERNAME *a)
+{
+	OTHERNAME_free(a);
+}
+
+__asm __saveds OTHERNAME *d2i_OTHERNAME_AmiSSL(register __a0 OTHERNAME **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_OTHERNAME(a, in, len));
+}
+
+__asm __saveds int i2d_OTHERNAME_AmiSSL(register __a0 OTHERNAME *a, register __a1 unsigned char **out)
+{
+	return(i2d_OTHERNAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *OTHERNAME_it_AmiSSL(void)
+{
+	return(OTHERNAME_it());
+}
+
+__asm __saveds EDIPARTYNAME *EDIPARTYNAME_new_AmiSSL(void)
+{
+	return(EDIPARTYNAME_new());
+}
+
+__asm __saveds void EDIPARTYNAME_free_AmiSSL(register __a0 EDIPARTYNAME *a)
+{
+	EDIPARTYNAME_free(a);
+}
+
+__asm __saveds EDIPARTYNAME *d2i_EDIPARTYNAME_AmiSSL(register __a0 EDIPARTYNAME **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_EDIPARTYNAME(a, in, len));
+}
+
+__asm __saveds int i2d_EDIPARTYNAME_AmiSSL(register __a0 EDIPARTYNAME *a, register __a1 unsigned char **out)
+{
+	return(i2d_EDIPARTYNAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *EDIPARTYNAME_it_AmiSSL(void)
+{
+	return(EDIPARTYNAME_it());
+}
+
+__asm __saveds char *i2s_ASN1_OCTET_STRING_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 ASN1_OCTET_STRING *ia5)
+{
+	return(i2s_ASN1_OCTET_STRING(method, ia5));
+}
+
+__asm __saveds ASN1_OCTET_STRING *s2i_ASN1_OCTET_STRING_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 char *str)
+{
+	return(s2i_ASN1_OCTET_STRING(method, ctx, str));
+}
+
+__asm __saveds EXTENDED_KEY_USAGE *EXTENDED_KEY_USAGE_new_AmiSSL(void)
+{
+	return(EXTENDED_KEY_USAGE_new());
+}
+
+__asm __saveds void EXTENDED_KEY_USAGE_free_AmiSSL(register __a0 EXTENDED_KEY_USAGE *a)
+{
+	EXTENDED_KEY_USAGE_free(a);
+}
+
+__asm __saveds EXTENDED_KEY_USAGE *d2i_EXTENDED_KEY_USAGE_AmiSSL(register __a0 EXTENDED_KEY_USAGE **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_EXTENDED_KEY_USAGE(a, in, len));
+}
+
+__asm __saveds int i2d_EXTENDED_KEY_USAGE_AmiSSL(register __a0 EXTENDED_KEY_USAGE *a, register __a1 unsigned char **out)
+{
+	return(i2d_EXTENDED_KEY_USAGE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *EXTENDED_KEY_USAGE_it_AmiSSL(void)
+{
+	return(EXTENDED_KEY_USAGE_it());
+}
+
+__asm __saveds int i2a_ACCESS_DESCRIPTION_AmiSSL(register __a0 BIO *bp, register __a1 ACCESS_DESCRIPTION*a)
+{
+	return(i2a_ACCESS_DESCRIPTION(bp, a));
+}
+
+__asm __saveds CERTIFICATEPOLICIES *CERTIFICATEPOLICIES_new_AmiSSL(void)
+{
+	return(CERTIFICATEPOLICIES_new());
+}
+
+__asm __saveds void CERTIFICATEPOLICIES_free_AmiSSL(register __a0 CERTIFICATEPOLICIES *a)
+{
+	CERTIFICATEPOLICIES_free(a);
+}
+
+__asm __saveds CERTIFICATEPOLICIES *d2i_CERTIFICATEPOLICIES_AmiSSL(register __a0 CERTIFICATEPOLICIES **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_CERTIFICATEPOLICIES(a, in, len));
+}
+
+__asm __saveds int i2d_CERTIFICATEPOLICIES_AmiSSL(register __a0 CERTIFICATEPOLICIES *a, register __a1 unsigned char **out)
+{
+	return(i2d_CERTIFICATEPOLICIES(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *CERTIFICATEPOLICIES_it_AmiSSL(void)
+{
+	return(CERTIFICATEPOLICIES_it());
+}
+
+__asm __saveds POLICYINFO *POLICYINFO_new_AmiSSL(void)
+{
+	return(POLICYINFO_new());
+}
+
+__asm __saveds void POLICYINFO_free_AmiSSL(register __a0 POLICYINFO *a)
+{
+	POLICYINFO_free(a);
+}
+
+__asm __saveds POLICYINFO *d2i_POLICYINFO_AmiSSL(register __a0 POLICYINFO **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_POLICYINFO(a, in, len));
+}
+
+__asm __saveds int i2d_POLICYINFO_AmiSSL(register __a0 POLICYINFO *a, register __a1 unsigned char **out)
+{
+	return(i2d_POLICYINFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *POLICYINFO_it_AmiSSL(void)
+{
+	return(POLICYINFO_it());
+}
+
+__asm __saveds POLICYQUALINFO *POLICYQUALINFO_new_AmiSSL(void)
+{
+	return(POLICYQUALINFO_new());
+}
+
+__asm __saveds void POLICYQUALINFO_free_AmiSSL(register __a0 POLICYQUALINFO *a)
+{
+	POLICYQUALINFO_free(a);
+}
+
+__asm __saveds POLICYQUALINFO *d2i_POLICYQUALINFO_AmiSSL(register __a0 POLICYQUALINFO **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_POLICYQUALINFO(a, in, len));
+}
+
+__asm __saveds int i2d_POLICYQUALINFO_AmiSSL(register __a0 POLICYQUALINFO *a, register __a1 unsigned char **out)
+{
+	return(i2d_POLICYQUALINFO(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *POLICYQUALINFO_it_AmiSSL(void)
+{
+	return(POLICYQUALINFO_it());
+}
+
+__asm __saveds USERNOTICE *USERNOTICE_new_AmiSSL(void)
+{
+	return(USERNOTICE_new());
+}
+
+__asm __saveds void USERNOTICE_free_AmiSSL(register __a0 USERNOTICE *a)
+{
+	USERNOTICE_free(a);
+}
+
+__asm __saveds USERNOTICE *d2i_USERNOTICE_AmiSSL(register __a0 USERNOTICE **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_USERNOTICE(a, in, len));
+}
+
+__asm __saveds int i2d_USERNOTICE_AmiSSL(register __a0 USERNOTICE *a, register __a1 unsigned char **out)
+{
+	return(i2d_USERNOTICE(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *USERNOTICE_it_AmiSSL(void)
+{
+	return(USERNOTICE_it());
+}
+
+__asm __saveds NOTICEREF *NOTICEREF_new_AmiSSL(void)
+{
+	return(NOTICEREF_new());
+}
+
+__asm __saveds void NOTICEREF_free_AmiSSL(register __a0 NOTICEREF *a)
+{
+	NOTICEREF_free(a);
+}
+
+__asm __saveds NOTICEREF *d2i_NOTICEREF_AmiSSL(register __a0 NOTICEREF **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_NOTICEREF(a, in, len));
+}
+
+__asm __saveds int i2d_NOTICEREF_AmiSSL(register __a0 NOTICEREF *a, register __a1 unsigned char **out)
+{
+	return(i2d_NOTICEREF(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *NOTICEREF_it_AmiSSL(void)
+{
+	return(NOTICEREF_it());
+}
+
+__asm __saveds CRL_DIST_POINTS *CRL_DIST_POINTS_new_AmiSSL(void)
+{
+	return(CRL_DIST_POINTS_new());
+}
+
+__asm __saveds void CRL_DIST_POINTS_free_AmiSSL(register __a0 CRL_DIST_POINTS *a)
+{
+	CRL_DIST_POINTS_free(a);
+}
+
+__asm __saveds CRL_DIST_POINTS *d2i_CRL_DIST_POINTS_AmiSSL(register __a0 CRL_DIST_POINTS **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_CRL_DIST_POINTS(a, in, len));
+}
+
+__asm __saveds int i2d_CRL_DIST_POINTS_AmiSSL(register __a0 CRL_DIST_POINTS *a, register __a1 unsigned char **out)
+{
+	return(i2d_CRL_DIST_POINTS(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *CRL_DIST_POINTS_it_AmiSSL(void)
+{
+	return(CRL_DIST_POINTS_it());
+}
+
+__asm __saveds DIST_POINT *DIST_POINT_new_AmiSSL(void)
+{
+	return(DIST_POINT_new());
+}
+
+__asm __saveds void DIST_POINT_free_AmiSSL(register __a0 DIST_POINT *a)
+{
+	DIST_POINT_free(a);
+}
+
+__asm __saveds DIST_POINT *d2i_DIST_POINT_AmiSSL(register __a0 DIST_POINT **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_DIST_POINT(a, in, len));
+}
+
+__asm __saveds int i2d_DIST_POINT_AmiSSL(register __a0 DIST_POINT *a, register __a1 unsigned char **out)
+{
+	return(i2d_DIST_POINT(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *DIST_POINT_it_AmiSSL(void)
+{
+	return(DIST_POINT_it());
+}
+
+__asm __saveds DIST_POINT_NAME *DIST_POINT_NAME_new_AmiSSL(void)
+{
+	return(DIST_POINT_NAME_new());
+}
+
+__asm __saveds void DIST_POINT_NAME_free_AmiSSL(register __a0 DIST_POINT_NAME *a)
+{
+	DIST_POINT_NAME_free(a);
+}
+
+__asm __saveds DIST_POINT_NAME *d2i_DIST_POINT_NAME_AmiSSL(register __a0 DIST_POINT_NAME **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_DIST_POINT_NAME(a, in, len));
+}
+
+__asm __saveds int i2d_DIST_POINT_NAME_AmiSSL(register __a0 DIST_POINT_NAME *a, register __a1 unsigned char **out)
+{
+	return(i2d_DIST_POINT_NAME(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *DIST_POINT_NAME_it_AmiSSL(void)
+{
+	return(DIST_POINT_NAME_it());
+}
+
+__asm __saveds ACCESS_DESCRIPTION *ACCESS_DESCRIPTION_new_AmiSSL(void)
+{
+	return(ACCESS_DESCRIPTION_new());
+}
+
+__asm __saveds void ACCESS_DESCRIPTION_free_AmiSSL(register __a0 ACCESS_DESCRIPTION *a)
+{
+	ACCESS_DESCRIPTION_free(a);
+}
+
+__asm __saveds ACCESS_DESCRIPTION *d2i_ACCESS_DESCRIPTION_AmiSSL(register __a0 ACCESS_DESCRIPTION **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_ACCESS_DESCRIPTION(a, in, len));
+}
+
+__asm __saveds int i2d_ACCESS_DESCRIPTION_AmiSSL(register __a0 ACCESS_DESCRIPTION *a, register __a1 unsigned char **out)
+{
+	return(i2d_ACCESS_DESCRIPTION(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *ACCESS_DESCRIPTION_it_AmiSSL(void)
+{
+	return(ACCESS_DESCRIPTION_it());
+}
+
+__asm __saveds AUTHORITY_INFO_ACCESS *AUTHORITY_INFO_ACCESS_new_AmiSSL(void)
+{
+	return(AUTHORITY_INFO_ACCESS_new());
+}
+
+__asm __saveds void AUTHORITY_INFO_ACCESS_free_AmiSSL(register __a0 AUTHORITY_INFO_ACCESS *a)
+{
+	AUTHORITY_INFO_ACCESS_free(a);
+}
+
+__asm __saveds AUTHORITY_INFO_ACCESS *d2i_AUTHORITY_INFO_ACCESS_AmiSSL(register __a0 AUTHORITY_INFO_ACCESS **a, register __a1 unsigned char **in, register __d0 long len)
+{
+	return(d2i_AUTHORITY_INFO_ACCESS(a, in, len));
+}
+
+__asm __saveds int i2d_AUTHORITY_INFO_ACCESS_AmiSSL(register __a0 AUTHORITY_INFO_ACCESS *a, register __a1 unsigned char **out)
+{
+	return(i2d_AUTHORITY_INFO_ACCESS(a, out));
+}
+
+__asm __saveds const ASN1_ITEM *AUTHORITY_INFO_ACCESS_it_AmiSSL(void)
+{
+	return(AUTHORITY_INFO_ACCESS_it());
+}
+
+__asm __saveds GENERAL_NAME *v2i_GENERAL_NAME_AmiSSL(register __a0 X509V3_EXT_METHOD *method, register __a1 X509V3_CTX *ctx, register __a2 CONF_VALUE *cnf)
+{
+	return(v2i_GENERAL_NAME(method, ctx, cnf));
+}
+
+__asm __saveds void X509V3_conf_free_AmiSSL(register __a0 CONF_VALUE *val)
+{
+	X509V3_conf_free(val);
+}
+
+__asm __saveds X509_EXTENSION *X509V3_EXT_nconf_nid_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __d0 int ext_nid, register __a2 char *value)
+{
+	return(X509V3_EXT_nconf_nid(conf, ctx, ext_nid, value));
+}
+
+__asm __saveds X509_EXTENSION *X509V3_EXT_nconf_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __a2 char *name, register __a3 char *value)
+{
+	return(X509V3_EXT_nconf(conf, ctx, name, value));
+}
+
+__asm __saveds int X509V3_EXT_add_nconf_sk_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 STACK_OF(X509_EXTENSION) **sk)
+{
+	return(X509V3_EXT_add_nconf_sk(conf, ctx, section, sk));
+}
+
+__asm __saveds int X509V3_EXT_add_nconf_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509 *cert)
+{
+	return(X509V3_EXT_add_nconf(conf, ctx, section, cert));
+}
+
+__asm __saveds int X509V3_EXT_REQ_add_nconf_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_REQ *req)
+{
+	return(X509V3_EXT_REQ_add_nconf(conf, ctx, section, req));
+}
+
+__asm __saveds int X509V3_EXT_CRL_add_nconf_AmiSSL(register __a0 CONF *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_CRL *crl)
+{
+	return(X509V3_EXT_CRL_add_nconf(conf, ctx, section, crl));
+}
+
+__asm __saveds X509_EXTENSION *X509V3_EXT_conf_nid_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __d0 int ext_nid, register __a2 char *value)
+{
+	return(X509V3_EXT_conf_nid(conf, ctx, ext_nid, value));
+}
+
+__asm __saveds X509_EXTENSION *X509V3_EXT_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *name, register __a3 char *value)
+{
+	return(X509V3_EXT_conf(conf, ctx, name, value));
+}
+
+__asm __saveds int X509V3_EXT_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509 *cert)
+{
+	return(X509V3_EXT_add_conf(conf, ctx, section, cert));
+}
+
+__asm __saveds int X509V3_EXT_REQ_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_REQ *req)
+{
+	return(X509V3_EXT_REQ_add_conf(conf, ctx, section, req));
+}
+
+__asm __saveds int X509V3_EXT_CRL_add_conf_AmiSSL(register __a0 LHASH *conf, register __a1 X509V3_CTX *ctx, register __a2 char *section, register __a3 X509_CRL *crl)
+{
+	return(X509V3_EXT_CRL_add_conf(conf, ctx, section, crl));
+}
+
+__asm __saveds int X509V3_add_value_bool_nf_AmiSSL(register __a0 char *name, register __d0 int asn1_bool, register __a1 STACK_OF(CONF_VALUE) **extlist)
+{
+	return(X509V3_add_value_bool_nf(name, asn1_bool, extlist));
+}
+
+__asm __saveds int X509V3_get_value_bool_AmiSSL(register __a0 CONF_VALUE *value, register __a1 int *asn1_bool)
+{
+	return(X509V3_get_value_bool(value, asn1_bool));
+}
+
+__asm __saveds int X509V3_get_value_int_AmiSSL(register __a0 CONF_VALUE *value, register __a1 ASN1_INTEGER **aint)
+{
+	return(X509V3_get_value_int(value, aint));
+}
+
+__asm __saveds void X509V3_set_nconf_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 CONF *conf)
+{
+	X509V3_set_nconf(ctx, conf);
+}
+
+__asm __saveds void X509V3_set_conf_lhash_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 LHASH *lhash)
+{
+	X509V3_set_conf_lhash(ctx, lhash);
+}
+
+__asm __saveds char *X509V3_get_string_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *name, register __a2 char *section)
+{
+	return(X509V3_get_string(ctx, name, section));
+}
+
+__asm __saveds STACK_OF(CONF_VALUE) *X509V3_get_section_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *section)
+{
+	return(X509V3_get_section(ctx, section));
+}
+
+__asm __saveds void X509V3_string_free_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 char *str)
+{
+	X509V3_string_free(ctx, str);
+}
+
+__asm __saveds void X509V3_section_free_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 STACK_OF(CONF_VALUE) *section)
+{
+	X509V3_section_free(ctx, section);
+}
+
+__asm __saveds void X509V3_set_ctx_AmiSSL(register __a0 X509V3_CTX *ctx, register __a1 X509 *issuer, register __a2 X509 *subject, register __a3 X509_REQ *req, register __d0 X509_CRL *crl, register __d1 int flags)
+{
+	X509V3_set_ctx(ctx, issuer, subject, req, crl, flags);
+}
+
+__asm __saveds int X509V3_add_value_AmiSSL(register __a0 const char *name, register __a1 const char *value, register __a2 STACK_OF(CONF_VALUE) **extlist)
+{
+	return(X509V3_add_value(name, value, extlist));
+}
+
+__asm __saveds int X509V3_add_value_uchar_AmiSSL(register __a0 const char *name, register __a1 const unsigned char *value, register __a2 STACK_OF(CONF_VALUE) **extlist)
+{
+	return(X509V3_add_value_uchar(name, value, extlist));
+}
+
+__asm __saveds int X509V3_add_value_bool_AmiSSL(register __a0 const char *name, register __d0 int asn1_bool, register __a1 STACK_OF(CONF_VALUE) **extlist)
+{
+	return(X509V3_add_value_bool(name, asn1_bool, extlist));
+}
+
+__asm __saveds int X509V3_add_value_int_AmiSSL(register __a0 const char *name, register __a1 ASN1_INTEGER *aint, register __a2 STACK_OF(CONF_VALUE) **extlist)
+{
+	return(X509V3_add_value_int(name, aint, extlist));
+}
+
+__asm __saveds char *i2s_ASN1_INTEGER_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_INTEGER *aint)
+{
+	return(i2s_ASN1_INTEGER(meth, aint));
+}
+
+__asm __saveds ASN1_INTEGER *s2i_ASN1_INTEGER_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 char *value)
+{
+	return(s2i_ASN1_INTEGER(meth, value));
+}
+
+__asm __saveds char *i2s_ASN1_ENUMERATED_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_ENUMERATED *aint)
+{
+	return(i2s_ASN1_ENUMERATED(meth, aint));
+}
+
+__asm __saveds char *i2s_ASN1_ENUMERATED_TABLE_AmiSSL(register __a0 X509V3_EXT_METHOD *meth, register __a1 ASN1_ENUMERATED *aint)
+{
+	return(i2s_ASN1_ENUMERATED_TABLE(meth, aint));
+}
+
+__asm __saveds int X509V3_EXT_add_AmiSSL(register __a0 X509V3_EXT_METHOD *ext)
+{
+	return(X509V3_EXT_add(ext));
+}
+
+__asm __saveds int X509V3_EXT_add_list_AmiSSL(register __a0 X509V3_EXT_METHOD *extlist)
+{
+	return(X509V3_EXT_add_list(extlist));
+}
+
+__asm __saveds int X509V3_EXT_add_alias_AmiSSL(register __d0 int nid_to, register __d1 int nid_from)
+{
+	return(X509V3_EXT_add_alias(nid_to, nid_from));
+}
+
+__asm __saveds void X509V3_EXT_cleanup_AmiSSL(void)
+{
+	X509V3_EXT_cleanup();
+}
+
+__asm __saveds X509V3_EXT_METHOD *X509V3_EXT_get_AmiSSL(register __a0 X509_EXTENSION *ext)
+{
+	return(X509V3_EXT_get(ext));
+}
+
+__asm __saveds X509V3_EXT_METHOD *X509V3_EXT_get_nid_AmiSSL(register __d0 int nid)
+{
+	return(X509V3_EXT_get_nid(nid));
+}
+
+__asm __saveds int X509V3_add_standard_extensions_AmiSSL(void)
+{
+	return(X509V3_add_standard_extensions());
+}
+
+__asm __saveds STACK_OF(CONF_VALUE) *X509V3_parse_list_AmiSSL(register __a0 const char *line)
+{
+	return(X509V3_parse_list(line));
+}
+
+__asm __saveds void *X509V3_EXT_d2i_AmiSSL(register __a0 X509_EXTENSION *ext)
+{
+	return(X509V3_EXT_d2i(ext));
+}
+
+__asm __saveds void *X509V3_get_d2i_AmiSSL(register __a0 STACK_OF(X509_EXTENSION) *x, register __d0 int nid, register __a1 int *crit, register __a2 int *idx)
+{
+	return(X509V3_get_d2i(x, nid, crit, idx));
+}
+
+__asm __saveds X509_EXTENSION *X509V3_EXT_i2d_AmiSSL(register __d0 int ext_nid, register __d1 int crit, register __a0 void *ext_struc)
+{
+	return(X509V3_EXT_i2d(ext_nid, crit, ext_struc));
+}
+
+__asm __saveds int X509V3_add1_i2d_AmiSSL(register __a0 STACK_OF(X509_EXTENSION) **x, register __d0 int nid, register __a1 void *value, register __d1 int crit, register __d2 unsigned long flags)
+{
+	return(X509V3_add1_i2d(x, nid, value, crit, flags));
+}
+
+__asm __saveds char *hex_to_string_AmiSSL(register __a0 unsigned char *buffer, register __d0 long len)
+{
+	return(hex_to_string(buffer, len));
+}
+
+__asm __saveds unsigned char *string_to_hex_AmiSSL(register __a0 char *str, register __a1 long *len)
+{
+	return(string_to_hex(str, len));
+}
+
+__asm __saveds int name_cmp_AmiSSL(register __a0 const char *name, register __a1 const char *cmp)
+{
+	return(name_cmp(name, cmp));
+}
+
+__asm __saveds void X509V3_EXT_val_prn_AmiSSL(register __a0 BIO *out, register __a1 STACK_OF(CONF_VALUE) *val, register __d0 int indent, register __d1 int ml)
+{
+	X509V3_EXT_val_prn(out, val, indent, ml);
+}
+
+__asm __saveds int X509V3_EXT_print_AmiSSL(register __a0 BIO *out, register __a1 X509_EXTENSION *ext, register __d0 unsigned long flag, register __d1 int indent)
+{
+	return(X509V3_EXT_print(out, ext, flag, indent));
+}
+
+__asm __saveds int X509V3_extensions_print_AmiSSL(register __a0 BIO *out, register __a1 char *title, register __a2 STACK_OF(X509_EXTENSION) *exts, register __d0 unsigned long flag, register __d1 int indent)
+{
+	return(X509V3_extensions_print(out, title, exts, flag, indent));
+}
+
+__asm __saveds int X509_check_purpose_AmiSSL(register __a0 X509 *x, register __d0 int id, register __d1 int ca)
+{
+	return(X509_check_purpose(x, id, ca));
+}
+
+__asm __saveds int X509_supported_extension_AmiSSL(register __a0 X509_EXTENSION *ex)
+{
+	return(X509_supported_extension(ex));
+}
+
+__asm __saveds int X509_PURPOSE_set_AmiSSL(register __a0 int *p, register __d0 int purpose)
+{
+	return(X509_PURPOSE_set(p, purpose));
+}
+
+__asm __saveds int X509_check_issued_AmiSSL(register __a0 X509 *issuer, register __a1 X509 *subject)
+{
+	return(X509_check_issued(issuer, subject));
+}
+
+__asm __saveds int X509_PURPOSE_get_count_AmiSSL(void)
+{
+	return(X509_PURPOSE_get_count());
+}
+
+__asm __saveds X509_PURPOSE *X509_PURPOSE_get0_AmiSSL(register __d0 int idx)
+{
+	return(X509_PURPOSE_get0(idx));
+}
+
+__asm __saveds int X509_PURPOSE_get_by_sname_AmiSSL(register __a0 char *sname)
+{
+	return(X509_PURPOSE_get_by_sname(sname));
+}
+
+__asm __saveds int X509_PURPOSE_get_by_id_AmiSSL(register __d0 int id)
+{
+	return(X509_PURPOSE_get_by_id(id));
+}
+
+__asm __saveds int X509_PURPOSE_add_AmiSSL(register __d0 int id, register __d1 int trust, register __d2 int flags, register __a0 int (*ck)(const X509_PURPOSE *, const X509 *, int), register __a1 char *name, register __a2 char *sname, register __a3 void *arg)
+{
+	return(X509_PURPOSE_add(id, trust, flags, ck, name, sname, arg));
+}
+
+__asm __saveds char *X509_PURPOSE_get0_name_AmiSSL(register __a0 X509_PURPOSE *xp)
+{
+	return(X509_PURPOSE_get0_name(xp));
+}
+
+__asm __saveds char *X509_PURPOSE_get0_sname_AmiSSL(register __a0 X509_PURPOSE *xp)
+{
+	return(X509_PURPOSE_get0_sname(xp));
+}
+
+__asm __saveds int X509_PURPOSE_get_trust_AmiSSL(register __a0 X509_PURPOSE *xp)
+{
+	return(X509_PURPOSE_get_trust(xp));
+}
+
+__asm __saveds void X509_PURPOSE_cleanup_AmiSSL(void)
+{
+	X509_PURPOSE_cleanup();
+}
+
+__asm __saveds int X509_PURPOSE_get_id_AmiSSL(register __a0 X509_PURPOSE *a)
+{
+	return(X509_PURPOSE_get_id(a));
+}
+
+__asm __saveds STACK *X509_get1_email_AmiSSL(register __a0 X509 *x)
+{
+	return(X509_get1_email(x));
+}
+
+__asm __saveds STACK *X509_REQ_get1_email_AmiSSL(register __a0 X509_REQ *x)
+{
+	return(X509_REQ_get1_email(x));
+}
+
+__asm __saveds void X509_email_free_AmiSSL(register __a0 STACK *sk)
+{
+	X509_email_free(sk);
+}
+
+__asm __saveds void ERR_load_X509V3_strings_AmiSSL(void)
+{
+	ERR_load_X509V3_strings();
+}
+
+__asm __saveds DH *DSA_dup_DH_AmiSSL(register __a0 const DSA *r)
 {
 	return(DSA_dup_DH(r));
 }
-
-__asm __saveds DSA *d2i_DSAPublicKey_AmiSSL(register __a0 DSA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_DSAPublicKey(a, pp, length));
-}
-
-__asm __saveds DSA *d2i_DSAPrivateKey_AmiSSL(register __a0 DSA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_DSAPrivateKey(a, pp, length));
-}
-
-__asm __saveds DSA *d2i_DSAparams_AmiSSL(register __a0 DSA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_DSAparams(a, pp, length));
-}
-
-__asm __saveds int i2d_DSAPublicKey_AmiSSL(register __a0 DSA *a, register __a1 unsigned char **pp)
-{
-	return(i2d_DSAPublicKey(a, pp));
-}
-
-__asm __saveds int i2d_DSAPrivateKey_AmiSSL(register __a0 DSA *a, register __a1 unsigned char **pp)
-{
-	return(i2d_DSAPrivateKey(a, pp));
-}
-
-__asm __saveds int i2d_DSAparams_AmiSSL(register __a0 DSA *a, register __a1 unsigned char **pp)
-{
-	return(i2d_DSAparams(a, pp));
-}
-
-__asm __saveds int DSAparams_print_AmiSSL(register __a0 BIO *bp, register __a1 DSA *x)
-{
-	return(DSAparams_print(bp, x));
-}
-
-__asm __saveds int DSA_print_AmiSSL(register __a0 BIO *bp, register __a1 DSA *x, register __d0 int off)
-{
-	return(DSA_print(bp, x, off));
-}
-
-__asm __saveds RSA *d2i_RSAPublicKey_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_RSAPublicKey(a, pp, length));
-}
-
-__asm __saveds int i2d_RSAPublicKey_AmiSSL(register __a0 RSA *a, register __a1 unsigned char **pp)
-{
-	return(i2d_RSAPublicKey(a, pp));
-}
-
-__asm __saveds RSA *d2i_RSAPrivateKey_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length)
-{
-	return(d2i_RSAPrivateKey(a, pp, length));
-}
-
-__asm __saveds int i2d_RSAPrivateKey_AmiSSL(register __a0 RSA *a, register __a1 unsigned char **pp)
-{
-	return(i2d_RSAPrivateKey(a, pp));
-}
-
-__asm __saveds int RSA_print_AmiSSL(register __a0 BIO *bp, register __a1 RSA *r, register __d0 int offset)
-{
-	return(RSA_print(bp, r, offset));
-}
-
-__asm __saveds int i2d_RSA_NET_AmiSSL(register __a0 RSA *a, register __a1 unsigned char **pp, register __a2 int (*cb)(), register __d0 int sgckey)
-{
-	return(i2d_RSA_NET(a, pp, cb, sgckey));
-}
-
-__asm __saveds RSA *d2i_RSA_NET_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length, register __a2 int (*cb)(), register __d1 int sgckey)
-{
-	return(d2i_RSA_NET(a, pp, length, cb, sgckey));
-}
-
-__asm __saveds RSA *d2i_RSA_NET_2_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length, register __a2 int (*cb)(), register __d1 int sgckey)
-{
-	return(d2i_RSA_NET_2(a, pp, length, cb, sgckey));
-}
-
-__asm __saveds int i2d_Netscape_RSA_AmiSSL(register __a0 RSA *a, register __a1 unsigned char **pp, register __a2 int (*cb)())
-{
-	return(i2d_Netscape_RSA(a, pp, cb));
-}
-
-__asm __saveds RSA *d2i_Netscape_RSA_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length, register __a2 int (*cb)())
-{
-	return(d2i_Netscape_RSA(a, pp, length, cb));
-}
-
-__asm __saveds RSA *d2i_Netscape_RSA_2_AmiSSL(register __a0 RSA **a, register __a1 unsigned char **pp, register __d0 long length, register __a2 int (*cb)())
-{
-	return(d2i_Netscape_RSA_2(a, pp, length, cb));
-}
-

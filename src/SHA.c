@@ -1,18 +1,18 @@
 #include <clib/sha_protos.h>
 
-__asm __saveds void SHA_Init_AmiSSL(register __a0 SHA_CTX *c)
+__asm __saveds int SHA_Init_AmiSSL(register __a0 SHA_CTX *c)
 {
-	SHA_Init(c);
+	return(SHA_Init(c));
 }
 
-__asm __saveds void SHA_Update_AmiSSL(register __a0 SHA_CTX *c, register __a1 const void *data, register __d0 unsigned long len)
+__asm __saveds int SHA_Update_AmiSSL(register __a0 SHA_CTX *c, register __a1 const void *data, register __d0 unsigned long len)
 {
-	SHA_Update(c, data, len);
+	return(SHA_Update(c, data, len));
 }
 
-__asm __saveds void SHA_Final_AmiSSL(register __a0 unsigned char *md, register __a1 SHA_CTX *c)
+__asm __saveds int SHA_Final_AmiSSL(register __a0 unsigned char *md, register __a1 SHA_CTX *c)
 {
-	SHA_Final(md, c);
+	return(SHA_Final(md, c));
 }
 
 __asm __saveds unsigned char *SHA_AmiSSL(register __a0 const unsigned char *d, register __d0 unsigned long n, register __a1 unsigned char *md)
@@ -25,19 +25,19 @@ __asm __saveds void SHA_Transform_AmiSSL(register __a0 SHA_CTX *c, register __a1
 	SHA_Transform(c, data);
 }
 
-__asm __saveds void SHA1_Init_AmiSSL(register __a0 SHA_CTX *c)
+__asm __saveds int SHA1_Init_AmiSSL(register __a0 SHA_CTX *c)
 {
-	SHA1_Init(c);
+	return(SHA1_Init(c));
 }
 
-__asm __saveds void SHA1_Update_AmiSSL(register __a0 SHA_CTX *c, register __a1 const void *data, register __d0 unsigned long len)
+__asm __saveds int SHA1_Update_AmiSSL(register __a0 SHA_CTX *c, register __a1 const void *data, register __d0 unsigned long len)
 {
-	SHA1_Update(c, data, len);
+	return(SHA1_Update(c, data, len));
 }
 
-__asm __saveds void SHA1_Final_AmiSSL(register __a0 unsigned char *md, register __a1 SHA_CTX *c)
+__asm __saveds int SHA1_Final_AmiSSL(register __a0 unsigned char *md, register __a1 SHA_CTX *c)
 {
-	SHA1_Final(md, c);
+	return(SHA1_Final(md, c));
 }
 
 __asm __saveds unsigned char *SHA1_AmiSSL(register __a0 const unsigned char *d, register __d0 unsigned long n, register __a1 unsigned char *md)
@@ -49,4 +49,3 @@ __asm __saveds void SHA1_Transform_AmiSSL(register __a0 SHA_CTX *c, register __a
 {
 	SHA1_Transform(c, data);
 }
-

@@ -2,12 +2,15 @@
 #include <intuition/intuition.h>
 #include <proto/intuition.h>
 
+static const struct EasyStruct easy_struct =
+{
+	sizeof(struct EasyStruct), 0, "AmiSSL error",
+	"A fatal AmiSSL error has occured!", "Abort"
+};
+
 void myabort(void)
 {
-	struct EasyStruct es = {sizeof(struct EasyStruct), 0, "AmiSSL request",
-							"Fatal AmiSSL error has occured!", "OK"};
-
-	EasyRequestArgs(NULL, &es, NULL, NULL);
+	EasyRequestArgs(NULL, &easy_struct, NULL, NULL);
 
 	Wait(0);
 }
