@@ -7,9 +7,12 @@
 #include <stdlib.h>
 #include <amissl/amissl.h>
 #include <clib/amissl_protos.h>
+#include <proto/aes.h>
 #include <proto/blowfish.h>
 #include <proto/cast.h>
 #include <proto/des.h>
+#include <proto/dh.h>
+#include <proto/dsa.h>
 #include <proto/idea.h>
 #include <proto/md2.h>
 #include <proto/md4.h>
@@ -20,15 +23,18 @@
 #include <proto/rc5.h>
 #include <proto/ripemd.h>
 #include <proto/rsa.h>
-#include <proto/dsa.h>
-#include <proto/dh.h>
 #include <proto/sha.h>
 #include <libraries/amissl.h>
 
 extern struct ExecBase *SysBase;
+extern struct DosLibrary *DOSBase;
+
+extern struct Library *AESBase;
 extern struct Library *BlowFishBase;
 extern struct Library *CASTBase;
 extern struct Library *DESBase;
+extern struct Library *DHBase;
+extern struct Library *DSABase;
 extern struct Library *IDEABase;
 extern struct Library *MD2Base;
 extern struct Library *MD4Base;
@@ -39,44 +45,12 @@ extern struct Library *RC4Base;
 extern struct Library *RC5Base;
 extern struct Library *RIPEMDBase;
 extern struct Library *RSABase;
-extern struct Library *DSABase;
 extern struct Library *SHABase;
-extern struct Library *DHBase;
 extern long SSLVersionApp;
 
 #define AMISSL_SERVER_ENV	"AmiSSL/SSL_SERVER_VERSION"
 #define AMISSL_CLIENT_ENV	"AmiSSL/SSL_CLIENT_VERSION"
 #define AMISSL_BOTH_ENV		"AmiSSL/SSL_VERSION"
-
-__asm __saveds SSL_METHOD *SSLv2_method_AmiSSL(void)
-{
-	return(SSLv2_method());
-}
-
-__asm __saveds SSL_METHOD *SSLv2_server_method_AmiSSL(void)
-{
-	return(SSLv2_server_method());
-}
-
-__asm __saveds SSL_METHOD *SSLv2_client_method_AmiSSL(void)
-{
-	return(SSLv2_client_method());
-}
-
-__asm __saveds SSL_METHOD *SSLv3_method_AmiSSL(void)
-{
-	return(SSLv3_method());
-}
-
-__asm __saveds SSL_METHOD *SSLv3_server_method_AmiSSL(void)
-{
-	return(SSLv3_server_method());
-}
-
-__asm __saveds SSL_METHOD *SSLv3_client_method_AmiSSL(void)
-{
-	return(SSLv3_client_method());
-}
 
 __asm __saveds SSL_METHOD *SSLv23_method_AmiSSL(void)
 {
@@ -139,21 +113,6 @@ __asm __saveds SSL_METHOD *SSLv23_client_method_AmiSSL(void)
 	/* No match, return default */
 
 	return(SSLv23_client_method());
-}
-
-__asm __saveds SSL_METHOD *TLSv1_method_AmiSSL(void)
-{
-	return(TLSv1_method());
-}
-
-__asm __saveds SSL_METHOD *TLSv1_server_method_AmiSSL(void)
-{
-	return(TLSv1_server_method());
-}
-
-__asm __saveds SSL_METHOD *TLSv1_client_method_AmiSSL(void)
-{
-	return(TLSv1_client_method());
 }
 
 void RAND_add_internal(const void *buf, int num, double entropy);
@@ -350,7 +309,7 @@ int DSA_verify_AmiSSL(int type, const unsigned char *dgst, int dgst_len,
 	return(DSA_verify(type,dgst,dgst_len,sigbuf,siglen,dsa));
 }
 
-DH *DSA_dup_DH(DSA *r)
+DH *DSA_dup_DH(const DSA *r)
 	{
 	/* DSA has p, q, g, optional pub_key, optional priv_key.
 	 * DH has p, optional length, g, optional pub_key, optional priv_key.

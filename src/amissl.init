@@ -21,8 +21,8 @@
 #include <amissl/tags.h>
 #include <exec/semaphores.h>
 
-#include <openssl/crypto.h>
-#include <openssl/lhash.h>
+#include <amissl/crypto.h>
+#include <amissl/lhash.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 #include "/scmt/scmt.h"
@@ -39,6 +39,7 @@ struct Library *UtilityBase;
 struct IntuitionBase *IntuitionBase;
 struct DosLibrary *DOSBase;
 
+struct Library *AESBase;
 struct Library *BlowFishBase;
 struct Library *CASTBase;
 struct Library *DESBase;
@@ -327,9 +328,12 @@ __stdargs void syslog(int priority, const char * message, ...)
 
 __saveds __asm void InternalInitAmiSSL_AmiSSL(register __a0 struct AmiSSLInitStruct *amisslinit)
 {
+	AESBase = amisslinit->AESBase;
 	BlowFishBase = amisslinit->BlowFishBase;
 	CASTBase = amisslinit->CASTBase;
 	DESBase = amisslinit->DESBase;
+	DHBase = amisslinit->DHBase;
+	DSABase = amisslinit->DSABase;
 	IDEABase = amisslinit->IDEABase;
 	MD2Base = amisslinit->MD2Base;
 	MD4Base = amisslinit->MD4Base;
@@ -339,8 +343,6 @@ __saveds __asm void InternalInitAmiSSL_AmiSSL(register __a0 struct AmiSSLInitStr
 	RC4Base = amisslinit->RC4Base;
 	RC5Base = amisslinit->RC5Base;
 	RIPEMDBase = amisslinit->RIPEMDBase;
-	SHABase = amisslinit->SHABase;
 	RSABase = amisslinit->RSABase;
-	DHBase = amisslinit->DHBase;
-	DSABase = amisslinit->DSABase;
+	SHABase = amisslinit->SHABase;
 }

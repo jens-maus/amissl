@@ -1,5 +1,6 @@
 struct AmiSSLInitStruct
 {
+	struct Library *AESBase;
 	struct Library *BlowFishBase;
 	struct Library *CASTBase;
 	struct Library *DESBase;
