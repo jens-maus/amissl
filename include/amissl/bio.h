@@ -67,7 +67,6 @@
 #include <amissl/crypto.h>
 #include <amissl/e_os2.h>
 
-
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -409,7 +408,7 @@ typedef struct bio_f_buffer_ctx_struct
 
 #ifdef AMISSL
 #define BIO_set_fp_amiga(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
-#define BIO_get_fp_amiga(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+#define BIO_get_fp_amiga(b,fpp)		BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
 #endif /* AMISSL */
 
 #define BIO_seek(b,ofs)	(int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
@@ -506,7 +505,7 @@ int BIO_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
 unsigned long BIO_number_read(BIO *bio);
 unsigned long BIO_number_written(BIO *bio);
 
-# if !defined(OPENSSL_NO_FP_API) || defined(AMISSL)
+# ifndef OPENSSL_NO_FP_API
 #  if defined(OPENSSL_SYS_WIN16) && defined(_WINDLL)
 BIO_METHOD *BIO_s_file_internal(void);
 BIO *BIO_new_file_internal(char *filename, char *mode);
@@ -514,21 +513,21 @@ BIO *BIO_new_fp_internal(FILE *stream, int close_flag);
 #    define BIO_s_file	BIO_s_file_internal
 #    define BIO_new_file	BIO_new_file_internal
 #    define BIO_new_fp	BIO_new_fp_internal
-#  else /* defined(OPENSSL_SYS_WIN16) && defined(_WINDLL) */
+#  else /* FP_API */
 BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
-#   if !defined(AMISSL) || defined(AMISSL_COMPILE)
 BIO *BIO_new_fp(FILE *stream, int close_flag);
-#   endif /* !defined(AMISSL) || defined(AMISSL_COMPILE) */
-#   ifdef AMISSL
-#    include <dos/dos.h>
+#    define BIO_s_file_internal		BIO_s_file
+#    define BIO_new_file_internal	BIO_new_file
+#    define BIO_new_fp_internal		BIO_s_file
+#  endif /* FP_API */
+# endif
+
+#ifdef AMISSL
+#include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
-#   endif /* AMISSL */
-#   define BIO_s_file_internal		BIO_s_file
-#   define BIO_new_file_internal	BIO_new_file
-#   define BIO_new_fp_internal		BIO_s_file
-#  endif
-# endif /* !OPENSSL_FP_API || AMISSL */
+#endif /* AMISSL */
+
 BIO *	BIO_new(BIO_METHOD *type);
 int	BIO_set(BIO *a,BIO_METHOD *type);
 int	BIO_free(BIO *a);
