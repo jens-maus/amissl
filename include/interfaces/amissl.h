@@ -1374,7 +1374,7 @@ struct AmiSSLIFace
 	int APICALL (*RAND_bytes)(struct AmiSSLIFace *Self, unsigned char * buf, int num);
 	int APICALL (*RAND_pseudo_bytes)(struct AmiSSLIFace *Self, unsigned char * buf, int num);
 	void APICALL (*RAND_seed)(struct AmiSSLIFace *Self, const void * buf, int num);
-	void APICALL (*RAND_add)(struct AmiSSLIFace *Self, const void * buf, int num, float entropy);
+	void APICALL (*RAND_add)(struct AmiSSLIFace *Self, const void * buf, int num, double entropy);
 	int APICALL (*RAND_load_file)(struct AmiSSLIFace *Self, const char * file, long max_bytes);
 	int APICALL (*RAND_write_file)(struct AmiSSLIFace *Self, const char * file);
 	const char * APICALL (*RAND_file_name)(struct AmiSSLIFace *Self, char * file, size_t num);
