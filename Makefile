@@ -12,22 +12,22 @@ LIBVERSIONFULL=$(LIBVERSION).$(LIBREVISION)
 LFLAGS=-nostdlib
 OPT= #-O2
 CFLAGS=-I$(AmiSSL)/include -mbaserel $(OPT)
-OBJS=$(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o
-LIBS=$(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lm -lgcc
+OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o # $(OBJ_D)/stubs.o
+LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lm -lgcc
 
-all: amissl_v$(LIBVERSIONNAME).library # amisslmaster.library
+all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library
 
 clean:
 	-rm obj/*.o
 
+$(OBJ_D)/%.o: $(SRC_D)/%.c
+	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
+
+$(OBJ_D)/stubs.o: $(SRC_D)/stubs.c
+
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
-	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
-
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
-	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
-
 $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c src/debug.h
-	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS) -D__USE_INLINE__
 
 #$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 #	sc $* OBJNAME $@ $(CFLAGS)
@@ -37,7 +37,21 @@ $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c src/debug.h
 
 amissl_v$(LIBVERSIONNAME).library: $(OBJS)
 	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
-	cp amissl_v$(LIBVERSIONNAME).library /cygdrive/D/FTP
+	ppc-amigaos-strip $@
+	cp $@ /cygdrive/D/FTP
+
+
+$(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
+	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
+
+$(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
+	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
+
+amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o
+	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
+	ppc-amigaos-strip $@
+	cp $@ /cygdrive/D/FTP
+
 
 testing:
 	ppc-amigaos-gcc basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib

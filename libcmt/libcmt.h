@@ -62,6 +62,10 @@ struct filenode
 extern struct MinList __filelist;
 extern struct SignalSemaphore FileListLock;
 
+#ifdef __amigaos4__
+#define DeclareMinList(l) struct MinList l
+#define DeclareSemaphore(s) struct SignalSemaphore s
+#else
 /*
  * These are onsafe to use on __far data due to a compiler/linker bug
  * in SAS which does not relocate the address references
@@ -88,6 +92,7 @@ extern struct SignalSemaphore FileListLock;
 		NULL, \
 		-1 \
 	}
+#endif
 
 struct HashTable *h_new(long InitialSize,void *(*allocator)(long),void (*deallocator)(void *));
 void *h_insert(struct HashTable *h,long Key,void * UserData);
