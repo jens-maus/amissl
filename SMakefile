@@ -15,9 +15,9 @@ INCLUDE=IDIR AmiSSL:include
 CFLAGS=$(OPTIMS) DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
        $(INCLUDE) NOSTACKCHECK DEBUG=LINE LIBCODE
 
-LIBAUTO=lib/amisslauto.lib
+LIB=lib/amissl.lib
 
-all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library $(LIBAUTO)
+all: amissl_v$(LIBVERSIONNAME).library amisslmaster.library $(LIB)
 
 clean:
 	-rm obj/*.o
@@ -76,14 +76,14 @@ LIBVERSION $(LIBVERSION) LIBREVISION $(LIBREVISION)
 $(STRIPDEBUG)
 <
 
-$(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
+$(OBJ_D)/amissllib.o: $(SRC_D)/amissllib.c
 	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK
 
-$(LIBAUTO): $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
-	oml $@ r $(OBJ_D)/autoinit_amissl_main.o $(OBJ_D)/libstubs.o
+$(LIB): $(OBJ_D)/amissllib.o #$(OBJ_D)/libstubs.o
+	oml $@ r $(OBJ_D)/amissllib.o # $(OBJ_D)/libstubs.o
 
 tests:
 	cd openssl
