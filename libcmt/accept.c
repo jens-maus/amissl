@@ -1,17 +1,18 @@
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <netinet/in.h>
 
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>
 #include "multitcp.h"
 #include <internal/amissl.h>
 #endif
+
+#include "libcmt.h"
 
 int
 accept(
@@ -21,16 +22,23 @@ accept(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->accept(s,addr,addrlen);
+  if(ISocket) return ISocket->accept(s,addr,(LONG *)addrlen);
   else return -1;
 #else
-  struct Socket *r;
-
-  r = MTCP_Accept((struct Socket *)s, addr, addrlen);
-  if (r == 0) {
-    SetAmiSSLerrno(MTCP_SockErrNo((struct Socket *)s));
-  }
-  return (int)r;
+	GETSTATE();
+	switch(state->TCPIPStackType)
+	{
+		case TCPIP_Miami:
+		case TCPIP_MLink:
+		case TCPIP_AmiTCP:
+			return amitcp_Accept(s,name,(LONG *)namelen);
+			break;
+		case TCPIP_IN225:{
+			return in225_accept(s,name,namelen);
+			break;
+		case TCPIP_Termite:
+			return termite_accept(s,name,namelen);
+			break;
+	}
 #endif
 }
-
