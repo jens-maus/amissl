@@ -193,7 +193,7 @@ int RSA_verify(int dtype, const unsigned char *m, unsigned int m_len,
 		sigtype=OBJ_obj2nid(sig->algor->algorithm);
 
 
-	#if defined(RSA_DEBUG) && !defined(AMIGA)
+	#if defined(RSA_DEBUG)
 		/* put a backward compatibility flag in EAY */
 		fprintf(stderr,"in(%s) expect(%s)\n",OBJ_nid2ln(sigtype),
 			OBJ_nid2ln(dtype));
@@ -206,7 +206,7 @@ int RSA_verify(int dtype, const unsigned char *m, unsigned int m_len,
 				(sigtype == NID_md2WithRSAEncryption)))
 				{
 				/* ok, we will let it through */
-#if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_WIN16)
+#if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_WIN16) && !defined(AMISSL)
 				fprintf(stderr,"signature has problems, re-make with post SSLeay045\n");
 #endif
 				}
