@@ -13,9 +13,14 @@
 #include <dos/var.h>
 #include <utility/tagitem.h>
 
+
+#undef __USE_INLINE__
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
 #include <openssl/tags.h>
+#ifdef __amigaos4__
+#define __USE_INLINE__
+#endif
 
 #include <internal/amissl.h>
 #include <internal/amissl_compiler.h>
@@ -95,6 +100,7 @@ AMISSL_STATE *CreateAmiSSLState(void)
 		ret->errno = 0;
 		ret->getenv_var = 0;
 		ret->stack = 0;
+		ret->SocketBase = NULL;
 #ifdef __amigaos4__
 		ret->socket_base_owns_errno = 0;
 		ret->ISocket = NULL;
@@ -217,6 +223,23 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 #else
 		state->a4 = (APTR)getreg(REG_A4);
 #endif
+
+#ifdef __amigaos4__
+		if(state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList))
+		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
+			if(state->ISocket = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL))
+			{
+				// All is good. Now we can make socket calls as if everything was ppc
+			}
+			else
+			{
+				// Ouch, we are using a 68k stack without an interface. Not much to do for now...
+			}
+		}
+		kprintf("SocketBase: %08lx\n",state->SocketBase);
+		kprintf("ISocket: %08lx\n",state->ISocket);
+#endif
+
 		state->stack = (APTR)GetTagData(AmiSSL_TCPStack, (int)NULL, tagList);
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
@@ -234,6 +257,13 @@ long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, s
 
 	if (state = GetAmiSSLState())
 	{
+#ifdef __amigaos4__
+		if(state->SocketBase && state->ISocket)
+		{
+			DropInterface((struct Interface *)state->ISocket);
+		}
+#endif
+		
 		ObtainSemaphore(&openssl_cs);
 		h_delete(thread_hash, state->pid);
 		ReleaseSemaphore(&openssl_cs);
@@ -247,22 +277,24 @@ long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, s
 #ifdef __amigaos4__
 long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 {
-	va_list ap;
+	__gnuc_va_list ap;
 	struct TagItem *tags;
 
-	va_startlinear(ap, Self);
+	__builtin_va_start(ap, Self);
 	tags = va_getlinearva(ap, struct TagItem *);
+	__builtin_va_end(ap);
 
 	return _AmiSSL_InitAmiSSLA(Self,tags);
 }
 
 long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 {
-	va_list ap;
+	__gnuc_va_list ap;
 	struct TagItem *tags;
 
-	va_startlinear(ap, Self);
+	__builtin_va_start(ap, Self);
 	tags = va_getlinearva(ap, struct TagItem *);
+	__builtin_va_end(ap);
 
 	return _AmiSSL_CleanupAmiSSLA(Self,tags);
 }

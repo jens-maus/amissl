@@ -28,7 +28,7 @@ STATIC ULONG stub_OpenPPC(ULONG *regarray)
 
 	return (ULONG) Self->Open(0);
 }
-struct EmuTrap stub_Open = { TRAPINST, TRAPTYPE, stub_OpenPPC };
+const struct EmuTrap stub_Open = { TRAPINST, TRAPTYPE, stub_OpenPPC };
 
 STATIC ULONG stub_ClosePPC(ULONG *regarray)
 {
@@ -38,19 +38,19 @@ STATIC ULONG stub_ClosePPC(ULONG *regarray)
 
 	return (ULONG) Self->Close();
 }
-struct EmuTrap stub_Close = { TRAPINST, TRAPTYPE, stub_ClosePPC };
+const struct EmuTrap stub_Close = { TRAPINST, TRAPTYPE, stub_ClosePPC };
 
 STATIC ULONG stub_ExpungePPC(ULONG *regarray)
 {
 	return 0UL;
 }
-struct EmuTrap stub_Expunge = { TRAPINST, TRAPTYPE, stub_ExpungePPC };
+const struct EmuTrap stub_Expunge = { TRAPINST, TRAPTYPE, stub_ExpungePPC };
 
 STATIC ULONG stub_ReservedPPC(ULONG *regarray)
 {
 	return 0UL;
 }
-struct EmuTrap stub_Reserved = { TRAPINST, TRAPTYPE, stub_ReservedPPC };
+const struct EmuTrap stub_Reserved = { TRAPINST, TRAPTYPE, stub_ReservedPPC };
 
 static LONG stub_InitAmiSSLMasterPPC(ULONG *regarray)
 {
@@ -63,7 +63,7 @@ static LONG stub_InitAmiSSLMasterPPC(ULONG *regarray)
 		(LONG)regarray[1]
 	);
 }
-struct EmuTrap stub_InitAmiSSLMaster = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_InitAmiSSLMasterPPC };
+const struct EmuTrap stub_InitAmiSSLMaster = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_InitAmiSSLMasterPPC };
 
 static struct Library * stub_OpenAmiSSLPPC(ULONG *regarray)
 {
@@ -74,7 +74,7 @@ static struct Library * stub_OpenAmiSSLPPC(ULONG *regarray)
 	return Self->OpenAmiSSL(
 	);
 }
-struct EmuTrap stub_OpenAmiSSL = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_OpenAmiSSLPPC };
+const struct EmuTrap stub_OpenAmiSSL = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_OpenAmiSSLPPC };
 
 static void stub_CloseAmiSSLPPC(ULONG *regarray)
 {
@@ -85,7 +85,7 @@ static void stub_CloseAmiSSLPPC(ULONG *regarray)
 	Self->CloseAmiSSL(
 	);
 }
-struct EmuTrap stub_CloseAmiSSL = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_CloseAmiSSLPPC };
+const struct EmuTrap stub_CloseAmiSSL = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_CloseAmiSSLPPC };
 
 static struct Library * stub_OpenAmiSSLCipherPPC(ULONG *regarray)
 {
@@ -97,7 +97,7 @@ static struct Library * stub_OpenAmiSSLCipherPPC(ULONG *regarray)
 		(LONG)regarray[0]
 	);
 }
-struct EmuTrap stub_OpenAmiSSLCipher = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_OpenAmiSSLCipherPPC };
+const struct EmuTrap stub_OpenAmiSSLCipher = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_OpenAmiSSLCipherPPC };
 
 static void stub_CloseAmiSSLCipherPPC(ULONG *regarray)
 {
@@ -109,9 +109,9 @@ static void stub_CloseAmiSSLCipherPPC(ULONG *regarray)
 		(struct Library *)regarray[8]
 	);
 }
-struct EmuTrap stub_CloseAmiSSLCipher = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_CloseAmiSSLCipherPPC };
+const struct EmuTrap stub_CloseAmiSSLCipher = { TRAPINST, TRAPTYPE, (ULONG (*)(ULONG *))stub_CloseAmiSSLCipherPPC };
 
-ULONG VecTable68K[] = {
+const ULONG VecTable68K[] = {
 	(ULONG)&stub_Open,
 	(ULONG)&stub_Close,
 	(ULONG)&stub_Expunge,

@@ -70,14 +70,16 @@ extern APTR GetDataStart(void);
 extern APTR GetDataEnd(void);
 extern APTR GetDataBase(void);
 
-#define GetDataBase GetDataStart // Quick fix since the linker sometimes misses to set _DATA_BASE_
-								// Verify in makefile that __data_start and _DATA_BASE_ are equal
-
 /* Open the library */
 struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 {
     struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase; 
     struct AmiSSLMasterLibrary *newLibBase;
+
+	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
+
+#define GetDataBase GetDataStart // Quick fix since the linker sometimes misses to set _DATA_BASE_
+								// Verify in mapfile that __data_start and _DATA_BASE_ are equal
 
 	kprintf("Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
 	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
@@ -105,11 +107,11 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 			
 			extlib->MainIFace->Data.EnvironmentVector = envvec + (GetDataBase() - GetDataStart());
 
-			kprintf("Returning libBase: %08lx\n",newLibBase);
 			kprintf("Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
 			if(!__UserLibInit((struct AmiSSLIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
 			{
+				kprintf("Returning libBase: %08lx\n",newLibBase);
 				return (struct Library *)newLibBase;
 			}
 
@@ -234,8 +236,7 @@ const static struct TagItem const lib_managerTags[] =
 
 #include "amisslmaster_vectors.c"
 
-/* Uncomment this line (and see below) if your library has a 68k jump table */
-/* extern ULONG VecTable68K; */
+extern const ULONG VecTable68K;
 
 const static struct TagItem mainTags[] =
 {
@@ -257,8 +258,7 @@ const struct TagItem libCreateTags[] =
     {CLT_DataSize,         (uint32)(sizeof(struct AmiSSLMasterLibrary))},
     {CLT_InitFunc,         (uint32)libInit},
     {CLT_Interfaces,       (uint32)libInterfaces},
-    /* Uncomment the following line if you have a 68k jump table */
-    /* {CLT_Vector68K,        (uint32)&VecTable68K}, */
+    {CLT_Vector68K,        (uint32)&VecTable68K},
     {TAG_DONE,             0}
 };
 
