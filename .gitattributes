@@ -1973,6 +1973,7 @@ src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
 src/amissl_vectors.c eol=lf
 src/amisslinit.h eol=lf
+src/amissllib.c eol=lf
 src/amisslmaster_68k.c eol=lf
 src/amisslmaster_library.c eol=lf
 src/amisslmaster_library_os4.c eol=lf
