@@ -22,7 +22,7 @@ long getuid(void)
 #ifndef __amigaos4__
 		ret = _getuid();
 #else
-		if (IUserGroup = (struct UserGroupIFace *)GetInterface(UserGroupBase, "main", 1, NULL))
+		if ( (IUserGroup = (struct UserGroupIFace *)GetInterface(UserGroupBase, "main", 1, NULL)) )
 		{
 			ret = IUserGroup->getuid();
 			DropInterface((struct Interface *)IUserGroup);
