@@ -75,28 +75,14 @@ static int RSA_eay_private_decrypt(int flen, const unsigned char *from,
 static int RSA_eay_mod_exp(BIGNUM *r0, const BIGNUM *i, RSA *rsa);
 static int RSA_eay_init(RSA *rsa);
 static int RSA_eay_finish(RSA *rsa);
-
-#ifdef AMISSL
-int RSA_eay_BN_mod_exp_mont(BIGNUM *r, BIGNUM *a, const BIGNUM *p,
-			const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx)
-{
-	MTSAVEDS();
-	return(BN_mod_exp_mont(r, a, p,m,ctx,m_ctx));
-}
-#endif
-
-const static RSA_METHOD rsa_pkcs1_eay_meth={
+static RSA_METHOD rsa_pkcs1_eay_meth={
 	"Eric Young's PKCS#1 RSA",
 	RSA_eay_public_encrypt,
 	RSA_eay_public_decrypt, /* signature verification */
 	RSA_eay_private_encrypt, /* signing */
 	RSA_eay_private_decrypt,
 	RSA_eay_mod_exp,
-#ifdef AMISSL
-	RSA_eay_BN_mod_exp_mont,
-#else
 	BN_mod_exp_mont, /* XXX probably we should not use Montgomery if  e == 3 */
-#endif
 	RSA_eay_init,
 	RSA_eay_finish,
 	0, /* flags */
@@ -117,9 +103,6 @@ static int RSA_eay_public_encrypt(int flen, const unsigned char *from,
 	int i,j,k,num=0,r= -1;
 	unsigned char *buf=NULL;
 	BN_CTX *ctx=NULL;
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
 
 	BN_init(&f);
 	BN_init(&ret);
@@ -270,11 +253,8 @@ static int RSA_eay_private_encrypt(int flen, const unsigned char *from,
 	int i,j,k,num=0,r= -1;
 	unsigned char *buf=NULL;
 	BN_CTX *ctx=NULL;
- 	int local_blinding = 0;
- 	BN_BLINDING *blinding = NULL;
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
+	int local_blinding = 0;
+	BN_BLINDING *blinding = NULL;
 
 	BN_init(&f);
 	BN_init(&ret);
@@ -390,11 +370,8 @@ static int RSA_eay_private_decrypt(int flen, const unsigned char *from,
 	unsigned char *p;
 	unsigned char *buf=NULL;
 	BN_CTX *ctx=NULL;
- 	int local_blinding = 0;
- 	BN_BLINDING *blinding = NULL;
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
+	int local_blinding = 0;
+	BN_BLINDING *blinding = NULL;
 
 	BN_init(&f);
 	BN_init(&ret);
@@ -526,9 +503,6 @@ static int RSA_eay_public_decrypt(int flen, const unsigned char *from,
 	unsigned char *p;
 	unsigned char *buf=NULL;
 	BN_CTX *ctx=NULL;
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
 
 	BN_init(&f);
 	BN_init(&ret);
@@ -622,9 +596,6 @@ static int RSA_eay_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa)
 	BIGNUM r1,m1,vrfy;
 	int ret=0;
 	BN_CTX *ctx;
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
 
 	BN_init(&m1);
 	BN_init(&r1);
@@ -744,9 +715,6 @@ static int RSA_eay_init(RSA *rsa)
 
 static int RSA_eay_finish(RSA *rsa)
 	{
-#ifdef AMISSL
-	MTSAVEDS();
-#endif
 	if (rsa->_method_mod_n != NULL)
 		BN_MONT_CTX_free(rsa->_method_mod_n);
 	if (rsa->_method_mod_p != NULL)
