@@ -830,29 +830,3 @@ int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
 	else
 		return (retlen <= INT_MAX) ? (int)retlen : -1;
 	}
-
-#ifdef AMISSL
-
-#ifdef _M68000
-
-#if 0
-
-/* This is not necessary since it's solved using a tagcall in pragmas directly */
-
-int BIO_printfA(BIO *bio, char *format, void *args)
-{
-	return(BIO_vprintf(bio, format, args));
-}
-
-int BIO_snprintfA(char *buf, size_t n, const char *format, void *args)
-{
-	return(BIO_vsnprintf(buf, n, format, args));
-}
-
-#endif /* 0 */
-
-#else
-#error Different tagcall routines are needed for CPUs different then M68k
-#endif /* _M68000 */
-
-#endif /* AMISSL */
