@@ -61,6 +61,10 @@
  *
  */
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_OCSP_H
 #define HEADER_OCSP_H
 

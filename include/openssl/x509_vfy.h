@@ -56,6 +56,10 @@
  * [including the GNU Public Licence.]
  */
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_X509_H
 #include <openssl/x509.h>
 /* openssl/x509.h ends up #include-ing this file at about the only

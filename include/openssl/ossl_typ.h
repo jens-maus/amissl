@@ -52,6 +52,10 @@
  *
  */
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_OPENSSL_TYPES_H
 #define HEADER_OPENSSL_TYPES_H
 

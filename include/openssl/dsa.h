@@ -62,6 +62,10 @@
  * work and I have just tweaked them a little to fit into my
  * stylistic vision for SSLeay :-) */
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_DSA_H
 #define HEADER_DSA_H
 

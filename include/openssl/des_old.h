@@ -88,6 +88,10 @@
  *
  */
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_DES_H
 #define HEADER_DES_H
 

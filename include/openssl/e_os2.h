@@ -55,6 +55,10 @@
 
 #include <openssl/opensslconf.h>
 
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+
 #ifndef HEADER_E_OS2_H
 #define HEADER_E_OS2_H
 
