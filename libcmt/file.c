@@ -7,7 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <internal/amissl.h>
-#include "scmt.h"
+#include "libcmt.h"
 
 FILE *freopen(const char *filename,const char *mode,FILE *stream)
 {

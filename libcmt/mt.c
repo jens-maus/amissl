@@ -1,6 +1,6 @@
 #include <proto/exec.h>
 #include <exec/memory.h>
-#include "scmt.h"
+#include "libcmt.h"
 
 __far struct SignalSemaphore mt_cs = {NULL};
 __far LONG SemaphoreInitialized = 0;

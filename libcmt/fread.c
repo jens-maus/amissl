@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "scmt.h"
+#include "libcmt.h"
 
 extern int __srefill(FILE *fp);
 

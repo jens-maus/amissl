@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <internal/amissl.h>
-#include "scmt.h"
+#include "libcmt.h"
 
 #if 0
 static int lflush(FILE *TOFILE(fp))

@@ -5,7 +5,7 @@
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
-#include "scmt.h"
+#include "libcmt.h"
 #else
 #define AMITCP_NEW_NAMES
 #include <errno.h>

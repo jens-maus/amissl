@@ -16,7 +16,7 @@
 
 /* DOS 3.0 and MuFS extensions to file info block */
 #include "fibex.h"
-#include "scmt.h"
+#include "libcmt.h"
 #include <proto/dos.h>
 #include <proto/utility.h>
 #include <internal/amissl.h>

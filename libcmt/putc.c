@@ -3,7 +3,7 @@
 #include <string.h>
 #include <exec/types.h>
 #include <proto/dos.h>
-#include "scmt.h"
+#include "libcmt.h"
 #include <internal/amissl.h>
 
 #undef putc

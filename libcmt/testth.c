@@ -1,6 +1,6 @@
 #include <proto/exec.h>
 #include <exec/memory.h>
-#include "scmt.h"
+#include "libcmt.h"
 
 __stdargs void *h_allocfunc(long size)
 {
