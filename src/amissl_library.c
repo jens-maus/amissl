@@ -319,24 +319,31 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 
 #endif
 
+static BOOL AMISSL_COMMON_DATA DisableIDEA, DisableRC5;
+
 long IsCipherAvailable(long cipher)
 {
 	long is_available;
 
-	/* !?! FIXME with Locale checks */
 	switch(cipher)
 	{
+		case CIPHER_IDEA:
+			is_available = !DisableIDEA;
+			break;
+
+		case CIPHER_RC5:
+			is_available = !DisableRC5;
+			break;
+
 		case CIPHER_AES:
 		case CIPHER_BLOWFISH:
 		case CIPHER_CAST:
 		case CIPHER_DES:
-		case CIPHER_IDEA:
 		case CIPHER_MD2:
 		case CIPHER_MD4:
 		case CIPHER_MD5:
 		case CIPHER_RC2:
 		case CIPHER_RC4:
-		case CIPHER_RC5:
 		case CIPHER_RIPEMD:
 		case CIPHER_SHA:
 			is_available = TRUE;
@@ -503,6 +510,15 @@ void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 	ReleaseSemaphore(&openssl_cs);
 }
 
+static BOOL CompareCountry(LONG country_code, char *iso3, char *iso2, char *plates)
+{
+	char *country = (char *)&country_code;
+
+	return((iso3 && Strnicmp(iso3, country, 4) == 0)
+	       || (iso2 && Strnicmp(iso2, country, 4) == 0)
+	       || (plates && Strnicmp(plates, country, 4) == 0));
+}
+
 int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
@@ -573,6 +589,22 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 #endif
 		{
 			GMTOffset = locale->loc_GMTOffset;
+
+			DisableIDEA = CompareCountry(locale->loc_CountryCode, "AUT", "AU", "A") /* Austria */
+			              || CompareCountry(locale->loc_CountryCode, "FRA", "FR", "F") /* France */
+			              || CompareCountry(locale->loc_CountryCode, "DEU", "DE", "D") /* Germany */
+			              || CompareCountry(locale->loc_CountryCode, "ITA", "IT", "I") /* Italy */
+			              || CompareCountry(locale->loc_CountryCode, "JPN", "JP", "J") /* Japan */
+			              || CompareCountry(locale->loc_CountryCode, "NLD", "NL", NULL) /* The Netherlands */
+			              || CompareCountry(locale->loc_CountryCode, "ESP", "ES", "E") /* Spain */
+			              || CompareCountry(locale->loc_CountryCode, "SWE", "SE", "S") /* Sweden */
+			              || CompareCountry(locale->loc_CountryCode, "CHE", "CH", NULL) /* Switzerland */
+			              || CompareCountry(locale->loc_CountryCode, "GBR", "GB", NULL) /* United Kingdom */
+			              || CompareCountry(locale->loc_CountryCode, "USA", "US", NULL) /* USA */;
+
+			DisableRC5 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
+
+
 			CloseLocale(locale);
 			err = 0;
 		}
@@ -585,8 +617,6 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 	return(err);
 }
-
-
 
 #if 0
 extern int v3_ns_ia5_list;
