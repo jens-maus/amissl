@@ -397,7 +397,7 @@ L_LIBS= \$(L_SSL) \$(L_CRYPTO)
 ######################################################
 
 INC=$inc
-APP_CFLAGS=\$(INC) \$(CFLAG) \$(APP_CFLAG)
+APP_CFLAGS=\$(CFLAG) \$(APP_CFLAG) \$(INC)
 LIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG)
 SHLIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG) \$(SHLIB_CFLAG)
 LIBS_DEP=\$(O_CRYPTO) \$(O_SSL)
