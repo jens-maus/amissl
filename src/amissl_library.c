@@ -3,6 +3,7 @@
 #endif
 
 #define PROTO_AMISSL_H // Don't include amissl protos
+#define AMISSL_COMPILE
 
 #include <string.h>
 #include <stdlib.h>
@@ -55,7 +56,8 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
-struct LocaleBase *LocaleBase;
+//struct LocaleBase *LocaleBase;
+struct Library *LocaleBase;
 struct Library *UtilityBase;
 #endif
 
@@ -574,6 +576,9 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 	return(err);
 }
+
+
+
 #if 0
 extern int v3_ns_ia5_list;
 extern int rand_ssleay_meth;
