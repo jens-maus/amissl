@@ -34,6 +34,8 @@ struct Library *AESBase;
 struct Library *BlowFishBase;
 struct Library *CASTBase;
 struct Library *DESBase;
+struct Library *DHBase;
+struct Library *DSABase;
 struct Library *IDEABase;
 struct Library *MD2Base;
 struct Library *MD4Base;
@@ -45,8 +47,6 @@ struct Library *RC5Base;
 struct Library *RIPEMDBase;
 struct Library *SHABase;
 struct Library *RSABase;
-struct Library *DHBase;
-struct Library *DSABase;
 struct Library *AmiSSLBase;
 
 #define XMKSTR(x)	#x
@@ -73,7 +73,7 @@ void FlushCipher(struct Library *CipherBase)
 
 void __saveds __asm __UserLibCleanup(register __a6 struct MyLibrary *libbase)
 {
-	FlushCipher(AESBase);
+	FlushCipher(RSABase);
 	FlushCipher(SHABase);
 	FlushCipher(RIPEMDBase);
 	FlushCipher(RC5Base);
@@ -85,11 +85,11 @@ void __saveds __asm __UserLibCleanup(register __a6 struct MyLibrary *libbase)
 	FlushCipher(MD2Base);
 	FlushCipher(IDEABase);
 	FlushCipher(DESBase);
+	FlushCipher(DSABase);
+	FlushCipher(DHBase);
 	FlushCipher(CASTBase);
 	FlushCipher(BlowFishBase);
-	FlushCipher(RSABase);
-	FlushCipher(DHBase);
-	FlushCipher(DSABase);
+	FlushCipher(AESBase);
 }
 
 void __saveds __asm __UserLibExpunge(register __a6 struct MyLibrary *libbase)
@@ -142,6 +142,8 @@ void CloseCipher(struct Library *CipherBase)
 			CheckLibBase(BlowFishBase);
 			CheckLibBase(CASTBase);
 			CheckLibBase(DESBase);
+			CheckLibBase(DHBase);
+			CheckLibBase(DSABase);
 			CheckLibBase(IDEABase);
 			CheckLibBase(MD2Base);
 			CheckLibBase(MD4Base);
@@ -151,10 +153,8 @@ void CloseCipher(struct Library *CipherBase)
 			CheckLibBase(RC4Base);
 			CheckLibBase(RC5Base);
 			CheckLibBase(RIPEMDBase);
-			CheckLibBase(SHABase);
 			CheckLibBase(RSABase);
-			CheckLibBase(DHBase);
-			CheckLibBase(DSABase);
+			CheckLibBase(SHABase);
 		}
 		else
 		{
@@ -173,8 +173,8 @@ __saveds __asm struct Library *OpenAmiSSL(void)
 	{
 		if(OpenCipher(&AmiSSLBase,"libs:amissl/amissl_v097a.library",2))
 		{
-			amisslinit.BlowFishBase = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v097a.library",2);
 			amisslinit.AESBase = OpenCipher(&AESBase,"libs:amissl/aes_v097a.library",2);
+			amisslinit.BlowFishBase = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v097a.library",2);
 			amisslinit.CASTBase = OpenCipher(&CASTBase,"libs:amissl/cast_v097a.library",2);
 			amisslinit.DESBase = OpenCipher(&DESBase,"libs:amissl/des_v097a.library",2);
 			amisslinit.IDEABase = OpenCipher(&IDEABase,"libs:amissl/idea_v097a.library",2);
@@ -278,50 +278,17 @@ __saveds __asm struct Library *OpenAmiSSLCipher(register __d0 LONG Cipher)
 	{
 		switch(Cipher)
 		{
+			case CIPHER_AES:
+				result = OpenCipher(&AESBase, "LIBS:amissl/aes_v097a.library", 3);
+				break;
 			case CIPHER_BlowFish:
-				result = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v097a.library",2);
+				result = OpenCipher(&BlowFishBase,"libs:amissl/blowfish_v097a.library",3);
 				break;
 			case CIPHER_CAST:
-				result = OpenCipher(&CASTBase,"libs:amissl/cast_v097a.library",2);
+				result = OpenCipher(&CASTBase,"libs:amissl/cast_v097a.library",3);
 				break;
 			case CIPHER_DES:
-				result = OpenCipher(&DESBase,"libs:amissl/des_v097a.library",2);
-				break;
-			case CIPHER_IDEA:
-				result = OpenCipher(&IDEABase,"libs:amissl/idea_v097a.library",2);
-				break;
-			case CIPHER_MD2:
-				result = OpenCipher(&MD2Base,"libs:amissl/md2_v097a.library",2);
-				break;
-			case CIPHER_MD4:
-				result = OpenCipher(&MD4Base,"libs:amissl/md4_v097a.library",2);
-				break;
-			case CIPHER_MD5:
-				result = OpenCipher(&MD5Base,"libs:amissl/md5_v097a.library",2);
-				break;
-			case CIPHER_MDC2:
-				result = OpenCipher(&MDC2Base,"libs:amissl/mdc2_v097a.library",2);
-				break;
-			case CIPHER_RC2:
-				result = OpenCipher(&RC2Base,"libs:amissl/rc2_v097a.library",2);
-				break;
-			case CIPHER_RC4:
-				result = OpenCipher(&RC4Base,"libs:amissl/rc4_v097a.library",2);
-				break;
-			case CIPHER_RC5:
-				result = OpenCipher(&RC5Base,"libs:amissl/rc5_v097a.library",2);
-				break;
-			case CIPHER_RIPEMD:
-				result = OpenCipher(&RIPEMDBase,"libs:amissl/ripemd_v097a.library",2);
-				break;
-			case CIPHER_SHA:
-				result = OpenCipher(&SHABase,"libs:amissl/sha_v097a.library",2);
-				break;
-			case CIPHER_RSA:
-				if(OpenAmiSSL())
-				{
-					result = RSABase;
-				}
+				result = OpenCipher(&DESBase,"libs:amissl/des_v097a.library",3);
 				break;
 			case CIPHER_DH:
 				if(OpenAmiSSL())
@@ -334,6 +301,42 @@ __saveds __asm struct Library *OpenAmiSSLCipher(register __d0 LONG Cipher)
 				{
 					result = DSABase;
 				}
+				break;
+			case CIPHER_IDEA:
+				result = OpenCipher(&IDEABase,"libs:amissl/idea_v097a.library",3);
+				break;
+			case CIPHER_MD2:
+				result = OpenCipher(&MD2Base,"libs:amissl/md2_v097a.library",3);
+				break;
+			case CIPHER_MD4:
+				result = OpenCipher(&MD4Base,"libs:amissl/md4_v097a.library",3);
+				break;
+			case CIPHER_MD5:
+				result = OpenCipher(&MD5Base,"libs:amissl/md5_v097a.library",3);
+				break;
+			case CIPHER_MDC2:
+				result = OpenCipher(&MDC2Base,"libs:amissl/mdc2_v097a.library",3);
+				break;
+			case CIPHER_RC2:
+				result = OpenCipher(&RC2Base,"libs:amissl/rc2_v097a.library",3);
+				break;
+			case CIPHER_RC4:
+				result = OpenCipher(&RC4Base,"libs:amissl/rc4_v097a.library",3);
+				break;
+			case CIPHER_RC5:
+				result = OpenCipher(&RC5Base,"libs:amissl/rc5_v097a.library",3);
+				break;
+			case CIPHER_RIPEMD:
+				result = OpenCipher(&RIPEMDBase,"libs:amissl/ripemd_v097a.library",3);
+				break;
+			case CIPHER_RSA:
+				if(OpenAmiSSL())
+				{
+					result = RSABase;
+				}
+				break;
+			case CIPHER_SHA:
+				result = OpenCipher(&SHABase,"libs:amissl/sha_v097a.library",3);
 				break;
 		}
 	}
@@ -349,6 +352,18 @@ __saveds __asm struct Library *OpenAmiSSLCipher(register __d0 LONG Cipher)
 				break;
 			case CIPHER_DES:
 				result = OpenCipher(&DESBase,"libs:amissl/des_v2.library",2);
+				break;
+			case CIPHER_DH:
+				if(OpenAmiSSL())
+				{
+					result = DHBase;
+				}
+				break;
+			case CIPHER_DSA:
+				if(OpenAmiSSL())
+				{
+					result = DSABase;
+				}
 				break;
 			case CIPHER_IDEA:
 				result = OpenCipher(&IDEABase,"libs:amissl/idea_v2.library",2);
@@ -377,26 +392,14 @@ __saveds __asm struct Library *OpenAmiSSLCipher(register __d0 LONG Cipher)
 			case CIPHER_RIPEMD:
 				result = OpenCipher(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
 				break;
-			case CIPHER_SHA:
-				result = OpenCipher(&SHABase,"libs:amissl/sha_v2.library",2);
-				break;
 			case CIPHER_RSA:
 				if(OpenAmiSSL())
 				{
 					result = RSABase;
 				}
 				break;
-			case CIPHER_DH:
-				if(OpenAmiSSL())
-				{
-					result = DHBase;
-				}
-				break;
-			case CIPHER_DSA:
-				if(OpenAmiSSL())
-				{
-					result = DSABase;
-				}
+			case CIPHER_SHA:
+				result = OpenCipher(&SHABase,"libs:amissl/sha_v2.library",2);
 				break;
 		}
 	}
