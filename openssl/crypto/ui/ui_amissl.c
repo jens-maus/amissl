@@ -243,15 +243,23 @@ int read_string(UI *ui, UI_STRING *uis)
 	return(ret);
 }
 
+/* Some applications will call UI_METHOD function pointers without checking
+ * if they are NULL (which is valid). This is to take care of that.
+ */
+static int nop(void)
+{
+	return(1);
+}
+
 static UI_METHOD ui_amissl =
 {
 	"AmiSSL user interface",
-	NULL, /* open session */
+	nop, /* open session */
 	write_string,
-	NULL, /* flush */
+	nop, /* flush */
 	read_string,
-	NULL, /* close session */
-	NULL, /* construct prompt */
+	nop, /* close session */
+	nop, /* construct prompt */
 };
 
 UI_METHOD *UI_OpenSSL(void)
