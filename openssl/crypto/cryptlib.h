@@ -74,12 +74,12 @@
 extern "C" {
 #endif
 
-#ifdef AMIGA
+#ifdef AMISSL
 #define X509_CERT_AREA		"AmiSSL:"
 #define X509_CERT_DIR		"AmiSSL:certs"
 #define X509_CERT_FILE		"AmiSSL:cert.pem"
 #define X509_PRIVATE_DIR	"AmiSSL:private"
-#else /* !AMIGA */
+#else /* !AMISSL */
 #ifndef OPENSSL_SYS_VMS
 #define X509_CERT_AREA		OPENSSLDIR
 #define X509_CERT_DIR		OPENSSLDIR "/certs"
@@ -91,7 +91,7 @@ extern "C" {
 #define X509_CERT_FILE		"SSLCERTS:cert.pem"
 #define X509_PRIVATE_DIR        "SSLPRIVATE:"
 #endif
-#endif
+#endif /* AMISSL */
 
 #define X509_CERT_DIR_EVP        "SSL_CERT_DIR"
 #define X509_CERT_FILE_EVP       "SSL_CERT_FILE"
