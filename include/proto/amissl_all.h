@@ -21,6 +21,11 @@ extern struct Library *AmiSSLBase;
 #include <pragmas/amissl_pragmas.h>
 #endif
 
+#ifndef AES_LIB_COMPILE
+extern struct Library *AESBase;
+#include <pragmas/aes_pragmas.h>
+#endif
+
 #ifndef BF_LIB_COMPILE
 extern struct Library *BlowFishBase;
 #include <pragmas/blowfish_pragmas.h>
@@ -34,6 +39,16 @@ extern struct Library *CASTBase;
 #ifndef DES_LIB_COMPILE
 extern struct Library *DESBase;
 #include <pragmas/des_pragmas.h>
+#endif
+
+#ifndef DH_LIB_COMPILE
+extern struct Library *DHBase;
+#include <pragmas/dh_pragmas.h>
+#endif
+
+#ifndef DSA_LIB_COMPILE
+extern struct Library *DSABase;
+#include <pragmas/dsa_pragmas.h>
 #endif
 
 #ifndef IDEA_LIB_COMPILE
@@ -84,16 +99,6 @@ extern struct Library *RIPEMDBase;
 #ifndef RSA_LIB_COMPILE
 extern struct Library *RSABase;
 #include <pragmas/rsa_pragmas.h>
-#endif
-
-#ifndef DH_LIB_COMPILE
-extern struct Library *DHBase;
-#include <pragmas/dh_pragmas.h>
-#endif
-
-#ifndef DSA_LIB_COMPILE
-extern struct Library *DSABase;
-#include <pragmas/dsa_pragmas.h>
 #endif
 
 #ifndef SHA_LIB_COMPILE
