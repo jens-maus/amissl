@@ -55,13 +55,7 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table0[256]=
-#else /* AMISSL */
-#include <internal/compiler.h>
-
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table0[256]=
-#endif /* !AMISSL */
 {
 	0x30fb40d4,0x9fa0ff0b,0x6beccd2f,0x3f258c7a,
 	0x1e213f2f,0x9c004dd3,0x6003e540,0xcf9fc949,
@@ -129,11 +123,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table0[256]=
 	0x427b169c,0x5ac9f049,0xdd8f0f00,0x5c8165bf,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table1[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table1[256]=
-#endif /* !AMISSL */
 {
 	0x1f201094,0xef0ba75b,0x69e3cf7e,0x393f4380,
 	0xfe61cf7a,0xeec5207a,0x55889c94,0x72fc0651,
@@ -201,11 +191,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table1[256]=
 	0x7160a539,0x73bfbe70,0x83877605,0x4523ecf1,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table2[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table2[256]=
-#endif /* !AMISSL */
 {
 	0x8defc240,0x25fa5d9f,0xeb903dbf,0xe810c907,
 	0x47607fff,0x369fe44b,0x8c1fc644,0xaececa90,
@@ -273,11 +259,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table2[256]=
 	0xdfef4636,0xa133c501,0xe9d3531c,0xee353783,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table3[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table3[256]=
-#endif /* !AMISSL */
 {
 	0x9db30420,0x1fb6e9de,0xa7be7bef,0xd273a298,
 	0x4a4f7bdb,0x64ad8c57,0x85510443,0xfa020ed1,
@@ -345,11 +327,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table3[256]=
 	0x13ecf0b0,0xd3ffb372,0x3f85c5c1,0x0aef7ed2,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table4[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table4[256]=
-#endif /* !AMISSL */
 {
 	0x7ec90c04,0x2c6e74b9,0x9b0e66df,0xa6337911,
 	0xb86a7fff,0x1dd358f5,0x44dd9d44,0x1731167f,
@@ -417,11 +395,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table4[256]=
 	0x5e76ffa8,0xb1534546,0x6d47de08,0xefe9e7d4,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table5[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table5[256]=
-#endif /* !AMISSL */
 {
 	0xf6fa8f9d,0x2cac6ce1,0x4ca34867,0xe2337f7c,
 	0x95db08e7,0x016843b4,0xeced5cbc,0x325553ac,
@@ -489,11 +463,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table5[256]=
 	0x48392905,0xa65b1db8,0x851c97bd,0xd675cf2f,
 	};
 
-#ifdef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table6[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table6[256]=
-#endif /* !AMISSL */
 {
 	0x85e04019,0x332bf567,0x662dbfff,0xcfc65693,
 	0x2a8d7f6f,0xab9bc912,0xde6008a1,0x2028da1f,
@@ -561,11 +531,7 @@ OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table6[256]=
 	0xf2a279c7,0x94e01be8,0x90716f4b,0x954b8aa3,
 	};
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const CAST_LONG CAST_S_table7[256]=
-#else /* AMISSL */
-OPENSSL_GLOBAL FAR const CAST_LONG CAST_S_table7[256]=
-#endif /* !AMISSL */
 {
 	0xe216300d,0xbbddfffc,0xa7ebdabd,0x35648095,
 	0x7789f8b7,0xe6c1121b,0x0e241600,0x052ce8b5,

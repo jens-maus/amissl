@@ -380,6 +380,7 @@ static int dsa_bn_mod_exp(DSA *dsa, BIGNUM *r, BIGNUM *a, const BIGNUM *p,
 	return BN_mod_exp_mont(r, a, p, m, ctx, m_ctx);
 }
 
+#elif defined(AMISSL)
 #else /* ndef OPENSSL_FIPS */
 
 static void *dummy=&dummy;

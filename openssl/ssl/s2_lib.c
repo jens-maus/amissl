@@ -69,13 +69,7 @@ const char *ssl2_version_str="SSLv2" OPENSSL_VERSION_PTEXT;
 
 #define SSL2_NUM_CIPHERS (sizeof(ssl2_ciphers)/sizeof(SSL_CIPHER))
 
-#ifndef AMISSL
 OPENSSL_GLOBAL SSL_CIPHER ssl2_ciphers[]=
-#else /* AMISSL */
-#include <internal/compiler.h>
-
-OPENSSL_GLOBAL SSL_CIPHER FAR ssl2_ciphers[]=
-#endif /* !AMISSL */
 {
 /* NULL_WITH_MD5 v3 */
 #if 0

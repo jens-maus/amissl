@@ -60,7 +60,7 @@
 #include "cryptlib.h"
 #include <openssl/x509v3.h>
 
-static ENUMERATED_NAMES crl_reasons[] = {
+static ENUMERATED_NAMES AMISSL_COMMON_DATA crl_reasons[] = {
 {0, "Unspecified", "unspecified"},
 {1, "Key Compromise", "keyCompromise"},
 {2, "CA Compromise", "CACompromise"},

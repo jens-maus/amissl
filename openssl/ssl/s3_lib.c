@@ -121,13 +121,7 @@ const char *ssl3_version_str="SSLv3" OPENSSL_VERSION_PTEXT;
 
 static long ssl3_default_timeout(void );
 
-#ifndef AMISSL
 OPENSSL_GLOBAL SSL_CIPHER ssl3_ciphers[]=
-#else /* AMISSL */
-#include <internal/compiler.h>
-
-OPENSSL_GLOBAL SSL_CIPHER FAR ssl3_ciphers[]=
-#endif /* !AMISSL */
 {
 /* The RSA ciphers */
 /* Cipher 01 */
@@ -997,7 +991,7 @@ OPENSSL_GLOBAL SSL_CIPHER FAR ssl3_ciphers[]=
 /* end of list */
 	};
 
-static SSL3_ENC_METHOD SSLv3_enc_data={
+static SSL3_ENC_METHOD AMISSL_COMMON_DATA SSLv3_enc_data={
 	ssl3_enc,
 	ssl3_mac,
 	ssl3_setup_key_block,

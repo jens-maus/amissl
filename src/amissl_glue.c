@@ -1,5 +1,5 @@
 #include <clib/amissl_protos.h>
-#include <internal/compiler.h>
+#include <internal/amissl_compiler.h>
 
 #ifdef __amigaos4__
 #define __IFACE_OR_BASE	struct AmiSSLIFace *Self

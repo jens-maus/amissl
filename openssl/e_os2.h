@@ -240,12 +240,25 @@ extern "C" {
 # define OPENSSL_EXPORT extern _declspec(dllexport)
 # define OPENSSL_IMPORT extern _declspec(dllimport)
 # define OPENSSL_GLOBAL
+#elif defined(AMISSL)
+# define OPENSSL_EXPORT extern
+# define OPENSSL_IMPORT extern
+# ifdef AMISSL_COMPILE
+#  include <internal/amissl_compiler.h>
+#  define OPENSSL_GLOBAL AMISSL_COMMON_DATA
+# else
+#  define OPENSSL_GLOBAL
+# endif /* AMISSL_COMPILE */
 #else
 # define OPENSSL_EXPORT extern
 # define OPENSSL_IMPORT extern
 # define OPENSSL_GLOBAL
 #endif
 #define OPENSSL_EXTERN OPENSSL_IMPORT
+
+#ifndef AMISSL
+# define AMISSL_COMMON_DATA
+#endif /* !AMISSL */
 
 /* Macros to allow global variables to be reached through function calls when
    required (if a shared library version requires it, for example.

@@ -70,9 +70,9 @@
 #ifndef AMISSL
 static unsigned char lvalues[4455]=
 #else /* AMISSL */
-#include <internal/compiler.h>
+#include <internal/amissl_compiler.h>
 
-static const unsigned char FAR lvalues[4455]=
+static const unsigned char AMISSL_COMMON_DATA lvalues[4455]=
 #endif /* !AMISSL */
 {
 0x00,                                        /* [  0] OBJ_undef */
@@ -697,7 +697,7 @@ static const unsigned char FAR lvalues[4455]=
 #ifndef AMISSL
 static ASN1_OBJECT nid_objs[NUM_NID]=
 #else /* AMISSL */
-static const ASN1_OBJECT FAR nid_objs[NUM_NID]=
+static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]=
 #endif /* !AMISSL */
 {
 {"UNDEF","undefined",NID_undef,1,&(lvalues[0]),0},
@@ -1755,7 +1755,7 @@ static const ASN1_OBJECT FAR nid_objs[NUM_NID]=
 #ifndef AMISSL
 static ASN1_OBJECT *sn_objs[NUM_SN]=
 #else /* AMISSL */
-static const ASN1_OBJECT * FAR sn_objs[NUM_SN]=
+static const ASN1_OBJECT * AMISSL_COMMON_DATA sn_objs[NUM_SN]=
 #endif /* !AMISSL */
 {
 &(nid_objs[364]),/* "AD_DVCS" */
@@ -2416,7 +2416,7 @@ static const ASN1_OBJECT * FAR sn_objs[NUM_SN]=
 #ifndef AMISSL
 static ASN1_OBJECT *ln_objs[NUM_LN]=
 #else /* AMISSL */
-static const ASN1_OBJECT * FAR ln_objs[NUM_LN]=
+static const ASN1_OBJECT * AMISSL_COMMON_DATA ln_objs[NUM_LN]=
 #endif /* !AMISSL */
 {
 &(nid_objs[363]),/* "AD Time Stamping" */
@@ -3077,7 +3077,7 @@ static const ASN1_OBJECT * FAR ln_objs[NUM_LN]=
 #ifndef AMISSL
 static ASN1_OBJECT *obj_objs[NUM_OBJ]=
 #else /* AMISSL */
-static const ASN1_OBJECT * FAR obj_objs[NUM_OBJ]=
+static const ASN1_OBJECT * AMISSL_COMMON_DATA obj_objs[NUM_OBJ]=
 #endif /* !AMISSL */
 {
 &(nid_objs[ 0]),/* OBJ_undef                        0 */

@@ -56,13 +56,7 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef AMISSL
 OPENSSL_GLOBAL const DES_LONG DES_SPtrans[8][64]=
-#else /* AMISSL */
-#include <internal/compiler.h>
-
-OPENSSL_GLOBAL const FAR DES_LONG DES_SPtrans[8][64]=
-#endif /* !AMISSL */
 {
 {
 /* nibble 0 */

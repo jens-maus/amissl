@@ -1,7 +1,7 @@
 #include <proto/exec.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
-#include <internal/compiler.h>
+#include <internal/amissl_compiler.h>
 #include "amisslinit.h"
 #include "/scmt/scmt.h"
 

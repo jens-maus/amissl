@@ -14,7 +14,7 @@
 #include <amissl/tags.h>
 
 #include <internal/amissl.h>
-#include <internal/compiler.h>
+#include <internal/amissl_compiler.h>
 #include <libraries/amisslmaster.h>
 
 #include <clib/amissl_protos.h>
@@ -37,9 +37,9 @@ LONG GMTOffset;
 void *__pool;
 
 static struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
-static FAR struct SignalSemaphore openssl_cs = {NULL};
-static FAR LONG SemaphoreInitialized = 0;
-static FAR struct HashTable *thread_hash = NULL;
+static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs = {NULL};
+static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
+static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG clock_base;
 static long SSLVersionApp = 0;
 
@@ -305,7 +305,7 @@ void ASM SAVEDS RAND_add_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const void *bu
 	RAND_add_internal(buf, num, (double)entropy);
 }
 
-static FAR char rand_poll_buffer[128];
+static char AMISSL_COMMON_DATA rand_poll_buffer[128];
 
 int RAND_poll(void)
 {

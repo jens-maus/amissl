@@ -127,7 +127,7 @@
 #include <proto/amisslmaster.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
-#include <internal/compiler.h>
+#include <internal/amissl_compiler.h>
 #include <multitcp.h>
 
 struct Library *AmiSSLMasterBase;

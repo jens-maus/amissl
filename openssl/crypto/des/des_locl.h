@@ -421,13 +421,7 @@
 	PERM_OP(l,r,tt, 4,0x0f0f0f0fL); \
 	}
 
-#ifndef AMISSL
-OPENSSL_EXTERN const DES_LONG DES_SPtrans[8][64];
-#else /* AMISSL */
-#include <internal/compiler.h>
-
-OPENSSL_EXTERN const DES_LONG FAR DES_SPtrans[8][64];
-#endif /* !AMISSL */
+OPENSSL_EXTERN const DES_LONG AMISSL_COMMON_DATA DES_SPtrans[8][64];
 
 void fcrypt_body(DES_LONG *out,DES_key_schedule *ks,
 		 DES_LONG Eswap0, DES_LONG Eswap1);

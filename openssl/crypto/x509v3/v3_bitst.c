@@ -67,7 +67,7 @@ static STACK_OF(CONF_VALUE) *i2v_ASN1_BIT_STRING(X509V3_EXT_METHOD *method,
 				ASN1_BIT_STRING *bits,
 				STACK_OF(CONF_VALUE) *extlist);
 
-static BIT_STRING_BITNAME ns_cert_type_table[] = {
+static BIT_STRING_BITNAME AMISSL_COMMON_DATA ns_cert_type_table[] = {
 {0, "SSL Client", "client"},
 {1, "SSL Server", "server"},
 {2, "S/MIME", "email"},
@@ -79,7 +79,7 @@ static BIT_STRING_BITNAME ns_cert_type_table[] = {
 {-1, NULL, NULL}
 };
 
-static BIT_STRING_BITNAME key_usage_type_table[] = {
+static BIT_STRING_BITNAME AMISSL_COMMON_DATA key_usage_type_table[] = {
 {0, "Digital Signature", "digitalSignature"},
 {1, "Non Repudiation", "nonRepudiation"},
 {2, "Key Encipherment", "keyEncipherment"},

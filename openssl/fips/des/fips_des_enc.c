@@ -302,6 +302,7 @@ void DES_decrypt3(DES_LONG *data, DES_key_schedule *ks1,
 	data[1]=r;
 	}
 
+#elif defined(AMISSL)
 #else /* ndef OPENSSL_FIPS */
 
 static void *dummy=&dummy;
