@@ -64,3 +64,15 @@ cleanlibs:
 	
 tests:
 	(cd openssl; make -f OS4/Makefile.one exe)
+
+release:
+	delete ram:AmiSSL3 all
+	makedir ram:AmiSSL3
+	makedir ram:AmiSSL3/libs
+	makedir ram:AmiSSL3/libs/amissl
+	copy libs:amissl/amissl_v097e.library ram:AmiSSL3/libs/amissl
+	copy libs:amisslmaster.library ram:AmiSSL3/libs
+	copy include ram:AmiSSL3/include all
+	delete ram:AmiSSL3/include/CVS all
+	delete ram:AmiSSL3/include/#?/CVS all
+	copy certs/~(#?CVS#?) ram:AmiSSL3/certs all
