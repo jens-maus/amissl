@@ -1,10 +1,15 @@
 ##base _AmiSSLBase
+##public
 ##bias 30
+##private
 InternalInitAmiSSL(amisslinit)(a0)
+##public
 InitAmiSSLA(tagList)(a0)
 *tagcall-A
 CleanupAmiSSLA(tagList)(a0)
 *tagcall-A
+IsCipherAvailable(cipher)(d0)
+##bias 102
 ASN1_TYPE_new()()
 ASN1_TYPE_free(a)(a0)
 d2i_ASN1_TYPE(a,in,len)(a0,a1,d0)
@@ -669,8 +674,8 @@ ERR_print_errors_cb(cb,u)(a0,a1)
 ERR_print_errors(bp)(a0)
 ERR_add_error_dataA(num,args)(d0,d1)
 *tagcall-A
-ERR_load_strings(lib,str)(d0,d1)
-ERR_unload_strings(lib,str)(d0,d1)
+ERR_load_strings(lib,str)(d0,a0)
+ERR_unload_strings(lib,str)(d0,a0)
 ERR_load_ERR_strings()()
 ERR_load_crypto_strings()()
 ERR_free_strings()()
@@ -2251,7 +2256,6 @@ X509_get1_email(x)(a0)
 X509_REQ_get1_email(x)(a0)
 X509_email_free(sk)(a0)
 ERR_load_X509V3_strings()()
-DSA_dup_DH(r)(a0)
 AES_options()()
 AES_set_encrypt_key(userKey,bits,key)(a0,d0,a1)
 AES_set_decrypt_key(userKey,bits,key)(a0,d0,a1)
@@ -2306,7 +2310,7 @@ DES_fcrypt(buf,salt,ret)(a0,a1,a2)
 DES_crypt(buf,salt)(a0,a1)
 DES_ofb_encrypt(in,out,numbits,length,schedule,ivec)(a0,a1,d0,d1,a2,a3)
 DES_pcbc_encrypt(input,output,length,schedule,ivec,enc)(a0,a1,d0,a2,a3,d1)
-DES_quad_cksum(input,output,length,out_count,seed)(a0,d0,d1,d2,a1)
+DES_quad_cksum(input,output,length,out_count,seed)(a0,a1,d0,d1,a2)
 DES_random_key(ret)(a0)
 DES_set_odd_parity(key)(a0)
 DES_check_key_parity(key)(a0)
@@ -2409,6 +2413,7 @@ i2d_DSAPrivateKey(a,pp)(a0,a1)
 i2d_DSAparams(a,pp)(a0,a1)
 DSAparams_print(bp,x)(a0,a1)
 DSA_print(bp,x,off)(a0,a1,d0)
+DSA_dup_DH(r)(a0)
 ERR_load_DSA_strings()()
 idea_options()()
 idea_ecb_encrypt(in,out,ks)(a0,a1,a2)

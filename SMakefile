@@ -42,7 +42,8 @@ DEFINE _RAND_add_internal=_RAND_add
 DEFINE _BIO_new_fp=@__dummy
 DEFINE _closelog=@__dummy
 DEFINE _openlog=@__dummy
-LIBFD FD/amissl_lib.fd_AmiSSL
+LIBFD FD/amissl_lib.fd
+LIBPREFIX __AmiSSL_
 LIBID "$@ $(LIBVERSIONFULL) ($(DATE))"
 TO amissl_v$(LIBVERSIONNAME).library
 FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o

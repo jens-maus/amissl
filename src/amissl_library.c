@@ -140,11 +140,11 @@ static void h_freefunc(void *mem)
 	FreeVec(mem);
 }
 
-void ASM SAVEDS InternalInitAmiSSL_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct AmiSSLInitStruct *amisslinit))
+void ASM SAVEDS _AmiSSL_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct AmiSSLInitStruct *amisslinit))
 {
 }
 
-long ASM SAVEDS InitAmiSSLA_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
+long ASM SAVEDS _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 	long err;
@@ -163,7 +163,7 @@ long ASM SAVEDS InitAmiSSLA_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagI
 	return(err);
 }
 
-long ASM SAVEDS CleanupAmiSSLA_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
+long ASM SAVEDS _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 
@@ -224,7 +224,7 @@ long IsCipherAvailable(long cipher)
 	return(is_available);
 }
 
-long ASM SAVEDS IsCipherAvailable_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(d0, long cipher))
+long ASM SAVEDS _AmiSSL_IsCipherAvailable(REG(a6, __IFACE_OR_BASE), REG(d0, long cipher))
 {
 	return(IsCipherAvailable(cipher));
 }
@@ -238,7 +238,7 @@ void AmiSSLAbort(void)
 #define AMISSL_CLIENT_ENV	"AmiSSL/SSL_CLIENT_VERSION"
 #define AMISSL_BOTH_ENV		"AmiSSL/SSL_VERSION"
 
-SSL_METHOD * ASM SAVEDS SSLv23_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
+SSL_METHOD * ASM SAVEDS _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
@@ -259,7 +259,7 @@ SSL_METHOD * ASM SAVEDS SSLv23_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(SSLv23_method());
 }
 
-SSL_METHOD * ASM SAVEDS SSLv23_server_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
+SSL_METHOD * ASM SAVEDS _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
@@ -280,7 +280,7 @@ SSL_METHOD * ASM SAVEDS SSLv23_server_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
 	return(SSLv23_server_method());
 }
 
-SSL_METHOD * ASM SAVEDS SSLv23_client_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
+SSL_METHOD * ASM SAVEDS _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
@@ -300,7 +300,7 @@ SSL_METHOD * ASM SAVEDS SSLv23_client_method_AmiSSL(REG(a6, __IFACE_OR_BASE))
 
 void RAND_add_internal(const void *buf, int num, double entropy);
 
-void ASM SAVEDS RAND_add_AmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
+void ASM SAVEDS _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
 {
 	RAND_add_internal(buf, num, (double)entropy);
 }
