@@ -1,6 +1,8 @@
 #ifndef AMISSL_AMISSL_H
 #define AMISSL_AMISSL_H
 
+#include <openssl/e_os2.h>
+
 #include <openssl/aes.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1_mac.h>
