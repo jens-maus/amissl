@@ -72,6 +72,10 @@
 extern "C" {
 #endif
 
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
+
 /* Various flags and values */
 
 #define OCSP_DEFAULT_NONCE_LENGTH	16
