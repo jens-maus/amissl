@@ -1985,4 +1985,5 @@ test/SMakefile eol=lf
 test/https.c eol=lf
 test/randtest.c eol=lf
 test/ssltest.c eol=lf
+test/uitest.c eol=lf
 test/vatest.c eol=lf

@@ -1,9 +1,9 @@
 CC = ppc-amigaos-gcc
 LD = ppc-amigaos-gcc
 
-CFLAGS= -I$(AmiSSL)/include -D__USE_INLINE__ -c
-LDFLAGS= -lauto -lamisslauto
-PROGS= vatest # https # md2test ssltest  # randtest 
+CFLAGS = -I$(AmiSSL)/include -D__USE_INLINE__ -c
+LDFLAGS = -lauto -lamisslauto
+PROGS = uitest # vatest https md2test ssltest randtest
 
 all: $(PROGS)
 
@@ -11,7 +11,7 @@ clean:
 	-rm $(PROGS)
 	-rm *.o
 
-.c.o:
+%.o: %.c
 	$(CC) $< $(CFLAGS) -o $@
 
 https: https.o
@@ -28,3 +28,6 @@ ssltest: ssltest.o
 
 vatest: vatest.o
 	$(LD) $< $(LDFLAGS) -o $@ -Wl,-M,-Map=$@.map
+
+uitest: uitest.o
+	$(LD) $< $(LDFLAGS) -o $@
