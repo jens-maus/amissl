@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 mkdir -p {680{0,6}0,68020-40}/AmiSSL
 

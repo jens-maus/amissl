@@ -23,8 +23,8 @@
 
 #define AMISSL_V2           0x01    /* OBSOLETE NAME */
 #define AMISSL_V096g        0x01
-#define AMISSL_V097c        0x02
+#define AMISSL_V097e        0x02
 
-#define AMISSL_CURRENT_VERSION  AMISSL_V097c
+#define AMISSL_CURRENT_VERSION  AMISSL_V097e
 
 #endif /* !LIBRARIES_AMISSLMASTER_H */

@@ -23,6 +23,7 @@
 PREFIX=""
 SUFFIX=""
 TEST="false"
+EXE=""
 
 # pick up any command line args to config
 for i
@@ -134,7 +135,7 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	HPUXVER=`echo ${RELEASE}|sed -e 's/[^.]*.[0B]*//'`
 	case "$HPUXVER" in
 	    1[0-9].*)	# HPUX 10 and 11 targets are unified
-		echo "${MACHINE}-hp-hpux10"; exit 0
+		echo "${MACHINE}-hp-hpux1x"; exit 0
 		;;
 	    *)
 		echo "${MACHINE}-hp-hpux"; exit 0
@@ -288,6 +289,14 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	echo "${MACHINE}-whatever-sysv4"; exit 0
 	;;
 
+    VOS:*:*:i786)
+     echo "i386-stratus-vos"; exit 0
+     ;;
+
+    VOS:*:*:*)
+     echo "hppa1.1-stratus-vos"; exit 0
+     ;;
+
     *:4*:R4*:m88k)
 	echo "${MACHINE}-whatever-sysv4"; exit 0
 	;;
@@ -410,9 +419,10 @@ if [ "$SYSTEM" = "HP-UX" ];then
   GCC_BITS="32"
   if [ $GCCVER -ge 30 ]; then
     # PA64 support only came in with gcc 3.0.x.
-    # We look for the preprocessor symbol __LP64__ indicating
-    # 64bit bit long and pointer.  sizeof(int) == 32 on HPUX64.
-    if gcc -v -E -x c /dev/null 2>&1 | grep __LP64__ > /dev/null; then
+    # We check if the preprocessor symbol __LP64__ is defined...
+    if echo "__LP64__" | gcc -v -E -x c - 2>/dev/null | grep "^__LP64__" 2>&1 > /dev/null; then
+      : # __LP64__ has slipped through, it therefore is not defined
+    else
       GCC_BITS="64"
     fi
   fi
@@ -678,6 +688,10 @@ EOF
   *-*-UnixWare21*) OUT="unixware-2.1" ;;
   *-*-Unixware20*) OUT="unixware-2.0" ;;
   *-*-Unixware21*) OUT="unixware-2.1" ;;
+  *-*-vos)
+	options="$options no-threads no-shared no-asm no-dso"
+	EXE=".pm"
+	OUT="vos-$CC" ;;
   BS2000-siemens-sysv4) OUT="BS2000-OSD" ;;
   RM*-siemens-sysv4) OUT="ReliantUNIX" ;;
   *-siemens-sysv4) OUT="SINIX" ;;
@@ -685,7 +699,7 @@ EOF
 	if [ $CC = "gcc" ];
 	then
 	  if [ $GCC_BITS = "64" ]; then
-	    OUT="hpux64-parisc-gcc"
+	    OUT="hpux64-parisc2-gcc"
 	  else
 	    OUT="hpux-parisc-gcc"
 	  fi
@@ -700,7 +714,7 @@ EOF
 	if   [ $CPU_VERSION -ge 768 ]; then	# IA-64 CPU
 	     echo "WARNING! 64-bit ABI is the default configured ABI on HP-UXi."
 	     echo "         If you wish to build 32-bit library, the you have to"
-	     echo "         invoke './Configure hpux-ia32-cc' *manually*."
+	     echo "         invoke './Configure hpux-ia64-cc' *manually*."
 	     if [ "$TEST" = "false" ]; then
 		echo "         You have about 5 seconds to press Ctrl-C to abort."
 		(stty -icanon min 0 time 50; read waste) < /dev/tty
@@ -805,8 +819,8 @@ fi
 
 if [ ".$PERL" = . ] ; then
 	for i in . `echo $PATH | sed 's/:/ /g'`; do
-		if [ -f "$i/perl5" ] ; then
-			PERL="$i/perl5"
+		if [ -f "$i/perl5$EXE" ] ; then
+			PERL="$i/perl5$EXE"
 			break;
 		fi;
 	done
@@ -814,9 +828,9 @@ fi
 
 if [ ".$PERL" = . ] ; then
 	for i in . `echo $PATH | sed 's/:/ /g'`; do
-		if [ -f "$i/perl" ] ; then
-			if "$i/perl" -e 'exit($]<5.0)'; then
-				PERL="$i/perl"
+		if [ -f "$i/perl$EXE" ] ; then
+			if "$i/perl$EXE" -e 'exit($]<5.0)'; then
+				PERL="$i/perl$EXE"
 				break;
 			fi;
 		fi;
