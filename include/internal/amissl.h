@@ -37,6 +37,10 @@ __stdargs
 int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
+#ifndef __amigaos4__
 #define SETUPSTATEDS() AMISSL_STATE *state = GetAmiSSLState(); putreg(REG_A4,(long)state->a4)
+#else
+#define SETUPSTATEDS() AMISSL_STATE *state = GetAmiSSLState(); // FIXME: setup r2
+#endif
 
 #endif /* !INTERNAL_AMISSL_H */
