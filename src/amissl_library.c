@@ -226,8 +226,10 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 		state->a4 = (APTR)getreg(REG_A4);
 #endif
 
+		state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);
+
 #ifdef __amigaos4__
-		if(state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList))
+		if(state->SocketBase)
 		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
 			if(state->ISocket = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL))
 			{
@@ -236,19 +238,26 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 			else
 			{
 				// Ouch, we are using a 68k stack without an interface. Not much to do for now...
+				return 1; // Error
 			}
 		}
 		kprintf("SocketBase: %08lx\n",state->SocketBase);
 		kprintf("ISocket: %08lx\n",state->ISocket);
+#else
+		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, (int)NULL, tagList);
+		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
 
-		state->stack = (APTR)GetTagData(AmiSSL_TCPStack, (int)NULL, tagList);
+		state->errno_ptr = (APTR)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList);
+
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
 		err = 0;
 	}
 	else
+	{
 		err = 1;
+	}
 
 	return(err);
 }
