@@ -68,11 +68,13 @@ extern struct Library *RC2Base;
 extern struct Library *RC4Base;
 extern struct Library *RIPEMDBase;
 extern struct Library *SHABase;
+extern struct Library *AESBase;
 #endif
 
 int SSL_library_init(void)
 	{
-#ifndef NO_DES
+
+#ifndef OPENSSL_NO_DES
 #ifdef AMISSL
 	if (DESBase)
 	{
@@ -83,7 +85,7 @@ int SSL_library_init(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifndef NO_IDEA
+#ifndef OPENSSL_NO_IDEA
 #ifdef AMISSL
 	if (IDEABase)
 	{
@@ -93,7 +95,7 @@ int SSL_library_init(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifndef NO_RC4
+#ifndef OPENSSL_NO_RC4
 #ifdef AMISSL
 	if (RC4Base)
 	{
@@ -103,7 +105,7 @@ int SSL_library_init(void)
 	}
 #endif /* AMISSL */
 #endif  
-#ifndef NO_RC2
+#ifndef OPENSSL_NO_RC2
 #ifdef AMISSL
 	if (RC2Base)
 	{
@@ -112,9 +114,19 @@ int SSL_library_init(void)
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
-#endif  
-
-#ifndef NO_MD2
+#endif
+#ifndef OPENSSL_NO_AES
+#ifdef AMISSL
+	if (AESBase)
+	{
+#endif /* AMISSL */
+	EVP_add_cipher(EVP_aes_128_cbc());
+	EVP_add_cipher(EVP_aes_192_cbc());
+	EVP_add_cipher(EVP_aes_256_cbc());
+#ifdef AMISSL
+	}
+#endif /* AMISSL */
+#ifndef OPENSSL_NO_MD2
 #ifdef AMISSL
 	if(MD2Base)
 	{
@@ -124,7 +136,7 @@ int SSL_library_init(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifndef NO_MD5
+#ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
 	if(MD5Base)
 	{
@@ -136,7 +148,7 @@ int SSL_library_init(void)
 	}
 #endif
 #endif
-#if !defined(NO_SHA) && !defined(NO_RSA)
+#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_RSA)
 #ifdef AMISSL
 	if(SHABase && RSABase)
 	{
@@ -144,11 +156,11 @@ int SSL_library_init(void)
 	EVP_add_digest(EVP_sha1()); /* RSA with sha1 */
 	EVP_add_digest_alias(SN_sha1,"ssl3-sha1");
 	EVP_add_digest_alias(SN_sha1WithRSAEncryption,SN_sha1WithRSA);
+#endif
 #ifdef AMISSL
 	}
 #endif
-#endif
-#if !defined(NO_SHA) && !defined(NO_DSA)
+#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_DSA)
 #ifdef AMISSL
 	if(SHABase && DSABase)
 	{
@@ -161,7 +173,6 @@ int SSL_library_init(void)
 	}
 #endif
 #endif
-
 	/* If you want support for phased out ciphers, add the following */
 #if 0
 	EVP_add_digest(EVP_sha());

@@ -8,6 +8,8 @@
 $INSTALLTOP="AmiSSL:";
 $OPTIONS="";
 $ssl_version="";
+$banner="\t\@echo Building OpenSSL";
+
 open(IN,"<Makefile.ssl") || die "unable to open Makefile.ssl!\n";
 while(<IN>) {
     $ssl_version=$1 if (/^VERSION=(.*)$/);
@@ -22,6 +24,7 @@ $infile="MINFO";
 
 %ops=(
 	"VC-WIN32",   "Microsoft Visual C++ [4-6] - Windows NT or 9X",
+	"VC-CE",   "Microsoft eMbedded Visual C++ 3.0 - Windows CE ONLY",
 	"VC-NT",   "Microsoft Visual C++ [4-6] - Windows NT ONLY",
 	"VC-W31-16",  "Microsoft Visual C++ 1.52 - Windows 3.1 - 286",
 	"VC-WIN16",   "Alias for VC-W31-32",
@@ -35,6 +38,7 @@ $infile="MINFO";
 	"linux-elf","Linux elf",
 	"ultrix-mips","DEC mips ultrix",
 	"FreeBSD","FreeBSD distribution",
+	"OS2-EMX", "EMX GCC OS/2",
 	"SC", "SAS/C Amiga",
 	"default","cc under unix",
 	);
@@ -53,12 +57,16 @@ foreach (@ARGV)
 and [options] can be one of
 	no-md2 no-md4 no-md5 no-sha no-mdc2	- Skip this digest
 	no-ripemd
-	no-rc2 no-rc4 no-idea no-des no-bf no-cast - Skip this symetric cipher
-	no-rc5
+	no-rc2 no-rc4 no-rc5 no-idea no-des     - Skip this symetric cipher
+	no-bf no-cast no-aes
 	no-rsa no-dsa no-dh			- Skip this public key cipher
 	no-ssl2 no-ssl3				- Skip this version of SSL
 	just-ssl				- remove all non-ssl keys/digest
 	no-asm 					- No x86 asm
+	no-krb5					- No KRB5
+	no-ec					- No EC
+	no-engine				- No engine
+	no-hw					- No hw
 	nasm 					- Use NASM for x86 asm
 	gaswin					- Use GNU as with Mingw32
 	no-socks				- No socket code
@@ -67,7 +75,6 @@ and [options] can be one of
 	debug					- Debug build
         profile                                 - Profiling build
 	gcc					- Use Gcc (unix)
-	rsaref					- Build to require RSAref
 
 Values that can be set
 TMP=tmpdir OUT=outdir SRC=srcdir BIN=binpath INC=header-outdir CC=C-compiler
@@ -80,7 +87,7 @@ EOF
 		}
 	$platform=$_;
 	}
-foreach (split / /, $OPTIONS)
+foreach (grep(!/^$/, split(/ /, $OPTIONS)))
 	{
 	print STDERR "unknown option - $_\n" if !&read_options;
 	}
@@ -90,7 +97,7 @@ $no_mdc2=1 if ($no_des);
 $no_ssl3=1 if ($no_md5 || $no_sha);
 $no_ssl3=1 if ($no_rsa && $no_dh);
 
-$no_ssl2=1 if ($no_md5 || $no_rsa);
+$no_ssl2=1 if ($no_md5);
 $no_ssl2=1 if ($no_rsa);
 
 $out_def="out";
@@ -100,24 +107,13 @@ $tmp_def="tmp";
 $mkdir="-mkdir";
 
 ($ssl,$crypto)=("ssl","crypto");
-$RSAglue="RSAglue";
 $ranlib="echo ranlib";
 
 $cc=(defined($VARS{'CC'}))?$VARS{'CC'}:'cc';
 $src_dir=(defined($VARS{'SRC'}))?$VARS{'SRC'}:'.';
 $bin_dir=(defined($VARS{'BIN'}))?$VARS{'BIN'}:'';
-$mkdir=(defined($VARS{'MKDIR'}))?$VARS{'MKDIR'}:'mkdir';
 
-$cfile='-c';
-$include='-I';
-$define='-D';
-$quotequote='\"';
-$quote='"';
-$ignmkdir='';
-$maxchars=65536;
-$wild='*';
-
-$banner="\t\@echo ${quote}Building OpenSSL${quote}\n";
+$define='DEF ';
 
 # $bin_dir.=$o causes a core dump on my sparc :-(
 
@@ -146,6 +142,10 @@ elsif (($platform eq "VC-WIN32") || ($platform eq "VC-NT"))
 	{
 	$NT = 1 if $platform eq "VC-NT";
 	require 'VC-32.pl';
+	}
+elsif ($platform eq "VC-CE")
+	{
+	require 'VC-CE.pl';
 	}
 elsif ($platform eq "Mingw32")
 	{
@@ -194,10 +194,14 @@ elsif ($platform eq "ultrix-mips")
 	require "ultrix.pl";
 	$unix=1;
 	}
+elsif ($platform eq "OS2-EMX")
+	{
+	$wc=1;
+	require 'OS2-EMX.pl';
+	}
 elsif ($platform eq "SC")
 	{
 	require "SC.pl";
-	$msdos=1;
 	}
 else
 	{
@@ -213,28 +217,32 @@ $inc_dir=(defined($VARS{'INC'}))?$VARS{'INC'}:$inc_def;
 
 $bin_dir=$bin_dir.$o unless ((substr($bin_dir,-1,1) eq $o) || ($bin_dir eq ''));
 
-$cflags.=" " . $define . "NO_IDEA" if $no_idea;
-$cflags.=" " . $define . "NO_RC2"  if $no_rc2;
-$cflags.=" " . $define . "NO_RC4"  if $no_rc4;
-$cflags.=" " . $define . "NO_RC5"  if $no_rc5;
-$cflags.=" " . $define . "NO_MD2"  if $no_md2;
-$cflags.=" " . $define . "NO_MD4"  if $no_md4;
-$cflags.=" " . $define . "NO_MD5"  if $no_md5;
-$cflags.=" " . $define . "NO_SHA"  if $no_sha;
-$cflags.=" " . $define . "NO_SHA1" if $no_sha1;
-$cflags.=" " . $define . "NO_RIPEMD" if $no_rmd160;
-$cflags.=" " . $define . "NO_MDC2" if $no_mdc2;
-$cflags.=" " . $define . "NO_BF"  if $no_bf;
-$cflags.=" " . $define . "NO_CAST" if $no_cast;
-$cflags.=" " . $define . "NO_DES"  if $no_des;
-$cflags.=" " . $define . "NO_RSA"  if $no_rsa;
-$cflags.=" " . $define . "NO_DSA"  if $no_dsa;
-$cflags.=" " . $define . "NO_DH"   if $no_dh;
-$cflags.=" " . $define . "NO_SOCK" if $no_sock;
-$cflags.=" " . $define . "NO_SSL2" if $no_ssl2;
-$cflags.=" " . $define . "NO_SSL3" if $no_ssl3;
-$cflags.=" " . $define . "NO_ERR"  if $no_err;
-$cflags.=" " . $define . "RSAref"  if $rsaref ne "";
+$cflags.=" " . $define . "OPENSSL_NO_IDEA" if $no_idea;
+$cflags.=" " . $define . "OPENSSL_NO_AES"  if $no_aes;
+$cflags.=" " . $define . "OPENSSL_NO_RC2"  if $no_rc2;
+$cflags.=" " . $define . "OPENSSL_NO_RC4"  if $no_rc4;
+$cflags.=" " . $define . "OPENSSL_NO_RC5"  if $no_rc5;
+$cflags.=" " . $define . "OPENSSL_NO_MD2"  if $no_md2;
+$cflags.=" " . $define . "OPENSSL_NO_MD4"  if $no_md4;
+$cflags.=" " . $define . "OPENSSL_NO_MD5"  if $no_md5;
+$cflags.=" " . $define . "OPENSSL_NO_SHA"  if $no_sha;
+$cflags.=" " . $define . "OPENSSL_NO_SHA1" if $no_sha1;
+$cflags.=" " . $define . "OPENSSL_NO_RIPEMD" if $no_ripemd;
+$cflags.=" " . $define . "OPENSSL_NO_MDC2" if $no_mdc2;
+$cflags.=" " . $define . "OPENSSL_NO_BF"  if $no_bf;
+$cflags.=" " . $define . "OPENSSL_NO_CAST" if $no_cast;
+$cflags.=" " . $define . "OPENSSL_NO_DES"  if $no_des;
+$cflags.=" " . $define . "OPENSSL_NO_RSA"  if $no_rsa;
+$cflags.=" " . $define . "OPENSSL_NO_DSA"  if $no_dsa;
+$cflags.=" " . $define . "OPENSSL_NO_DH"   if $no_dh;
+$cflags.=" " . $define . "OPENSSL_NO_SOCK" if $no_sock;
+$cflags.=" " . $define . "OPENSSL_NO_SSL2" if $no_ssl2;
+$cflags.=" " . $define . "OPENSSL_NO_SSL3" if $no_ssl3;
+$cflags.=" " . $define . "OPENSSL_NO_ERR"  if $no_err;
+$cflags.=" " . $define . "OPENSSL_NO_KRB5" if $no_krb5;
+$cflags.=" " . $define . "OPENSSL_NO_EC"   if $no_ec;
+$cflags.=" " . $define . "OPENSSL_NO_ENGINE"   if $no_engine;
+$cflags.=" " . $define . "OPENSSL_NO_HW"   if $no_hw;
 
 ## if ($unix)
 ##	{ $cflags="$c_flags" if ($c_flags ne ""); }
@@ -243,12 +251,15 @@ $cflags.=" " . $define . "RSAref"  if $rsaref ne "";
 
 $ex_libs="$l_flags$ex_libs" if ($l_flags ne "");
 
+%shlib_ex_cflags=("SSL" => " -DOPENSSL_BUILD_SHLIBSSL",
+		  "CRYPTO" => " -DOPENSSL_BUILD_SHLIBCRYPTO");
+
 if ($msdos)
 	{
-	$banner ="\t\@echo ${quote}Make sure you have run 'perl Configure $platform' in the${quote}\n";
-	$banner.="\t\@echo ${quote}top level directory, if you don't have perl, you will${quote}\n";
-	$banner.="\t\@echo ${quote}need to probably edit crypto/bn/bn.h, check the${quote}\n";
-	$banner.="\t\@echo ${quote}documentation for details.${quote}\n";
+	$banner ="\t\@echo Make sure you have run \'perl Configure $platform\' in the\n";
+	$banner.="\t\@echo top level directory, if you don't have perl, you will\n";
+	$banner.="\t\@echo need to probably edit crypto/bn/bn.h, check the\n";
+	$banner.="\t\@echo documentation for details.\n";
 	}
 
 # have to do this to allow $(CC) under unix
@@ -272,6 +283,17 @@ $defs= <<"EOF";
 # The one monster makefile better suits building in non-unix
 # environments.
 
+EOF
+
+if ($platform eq "VC-CE")
+	{
+	$defs.= <<"EOF";
+!INCLUDE <\$(WCECOMPAT)/wcedefs.mak>
+
+EOF
+	}
+
+$defs.= <<"EOF";
 INSTALLTOP=$INSTALLTOP
 
 # Set your compiler options
@@ -337,7 +359,6 @@ ASM=$bin_dir$asm
 E_EXE=amissl
 SSL=$ssl
 CRYPTO=$crypto
-RSAGLUE=$RSAglue
 
 # BIN_D  - Binary output directory
 # TEST_D - Binary test file output directory
@@ -356,14 +377,12 @@ INCL_D=\$(TMP_D)
 
 O_SSL=     \$(LIB_D)$o$plib\$(SSL)$shlibp
 O_CRYPTO=  \$(LIB_D)$o$plib\$(CRYPTO)$shlibp
-O_RSAGLUE= \$(LIB_D)$o$plib\$(RSAGLUE)$libp
 SO_SSL=    $plib\$(SSL)$so_shlibp
 SO_CRYPTO= $plib\$(CRYPTO)$so_shlibp
 L_SSL=     \$(LIB_D)$o$plib\$(SSL)$libp
 L_CRYPTO=  \$(LIB_D)$o$plib\$(CRYPTO)$libp
 
 L_LIBS= \$(L_SSL) \$(L_CRYPTO)
-#L_LIBS= \$(O_SSL) \$(O_RSAGLUE) -lrsaref \$(O_CRYPTO)
 
 ######################################################
 # Don't touch anything below this point
@@ -373,7 +392,7 @@ INC=$inc
 APP_CFLAGS=\$(INC) \$(CFLAG) \$(APP_CFLAG)
 LIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG)
 SHLIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG) \$(SHLIB_CFLAG)
-LIBS_DEP=\$(O_CRYPTO) \$(O_RSAGLUE) \$(O_SSL)
+LIBS_DEP=\$(O_CRYPTO) \$(O_SSL)
 
 #############################################
 EOF
@@ -385,13 +404,13 @@ banner:
 $banner
 
 \$(TMP_D):
-	$ignmkdir\$(MKDIR) \$(TMP_D)
+	\$(MKDIR) \$(TMP_D)
 # NB: uncomment out these lines if BIN_D, TEST_D and LIB_D are different
 #\$(BIN_D):
-#	$ignmkdir\$(MKDIR) \$(BIN_D)
+#	\$(MKDIR) \$(BIN_D)
 #
 #\$(TEST_D):
-#	$ignmkdir\$(MKDIR) \$(TEST_D)
+#	\$(MKDIR) \$(TEST_D)
 
 \$(LIB_D):
 	\$(MKDIR) \$(LIB_D)
@@ -415,17 +434,17 @@ install:
 	\$(MKDIR) \$(INSTALLTOP)${o}include
 	\$(MKDIR) \$(INSTALLTOP)${o}include${o}openssl
 	\$(MKDIR) \$(INSTALLTOP)${o}lib
-	\$(CP) \$(INCO_D)${o}*.[ch] \$(INSTALLTOP)${o}include${o}openssl
+	\$(CP) \$(INCO_D)${o}*.\[ch\] \$(INSTALLTOP)${o}include${o}openssl
 	\$(CP) \$(BIN_D)$o\$(E_EXE)$exep \$(INSTALLTOP)${o}bin
 	\$(CP) \$(O_SSL) \$(INSTALLTOP)${o}lib
 	\$(CP) \$(O_CRYPTO) \$(INSTALLTOP)${o}lib
 
 clean:
-	\$(RM) \$(TMP_D)$o$wild.$wild
+	\$(RM) \$(TMP_D)$o*.*
 
 vclean:
-	\$(RM) \$(TMP_D)$o$wild.$wild
-	\$(RM) \$(OUT_D)$o$wild.$wild
+	\$(RM) \$(TMP_D)$o*.*
+	\$(RM) \$(OUT_D)$o*.*
 
 EOF
     
@@ -538,25 +557,16 @@ $defs.=&do_defs("T_OBJ",$test,"\$(OBJ_D)",$obj);
 $rules.=&do_compile_rule("\$(OBJ_D)",$test,"\$(APP_CFLAGS)");
 
 $defs.=&do_defs("E_OBJ",$e_exe,"\$(OBJ_D)",$obj);
-$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe, $define . 'MONOLITH $(APP_CFLAGS)');
+$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,'-DMONOLITH $(APP_CFLAGS)');
 
 foreach (values %lib_nam)
 	{
 	$lib_obj=$lib_obj{$_};
-	$lib_dir=$lib_dir{$_};
 	local($slib)=$shlib;
-
-	$slib=0 if ($_ eq "RSAGLUE");
 
 	if (($_ eq "SSL") && $no_ssl2 && $no_ssl3)
 		{
 		$rules.="\$(O_SSL):\n\n"; 
-		next;
-		}
-
-	if (($_ eq "RSAGLUE") && $no_rsa)
-		{
-		$rules.="\$(O_RSAGLUE):\n\n"; 
 		next;
 		}
 
@@ -612,7 +622,7 @@ foreach (values %lib_nam)
 		$rules.=&do_asm_rule($rmd160_asm_obj,$rmd160_asm_src);
 		}
 	$defs.=&do_defs(${_}."OBJ",$lib_obj,"\$(OBJ_D)",$obj);
-	$lib=($slib)?" \$(SHLIB_CFLAGS)":" \$(LIB_CFLAGS)";
+	$lib=($slib)?" \$(SHLIB_CFLAGS)".$shlib_ex_cflags{$_}:" \$(LIB_CFLAGS)";
 	$rules.=&do_compile_rule("\$(OBJ_D)",$lib_obj{$_},$lib);
 	}
 
@@ -625,8 +635,6 @@ foreach (split(/\s+/,$test))
 	}
 
 $rules.= &do_lib_rule("\$(SSLOBJ)","\$(O_SSL)",$ssl,$shlib,"\$(SO_SSL)");
-$rules.= &do_lib_rule("\$(RSAGLUEOBJ)","\$(O_RSAGLUE)",$RSAglue,0,"")
-	unless $no_rsa;
 $rules.= &do_lib_rule("\$(CRYPTOOBJ)","\$(O_CRYPTO)",$crypto,$shlib,"\$(SO_CRYPTO)");
 
 $rules.=&do_link_rule("\$(BIN_D)$o\$(E_EXE)$exep","\$(E_OBJ)","\$(LIBS_DEP)","\$(L_LIBS) \$(EX_LIBS)");
@@ -652,7 +660,10 @@ sub var_add
 	local($dir,$val)=@_;
 	local(@a,$_,$ret);
 
+	return("") if $no_engine && $dir =~ /\/engine/;
+	return("") if $no_hw   && $dir =~ /\/hw/;
 	return("") if $no_idea && $dir =~ /\/idea/;
+	return("") if $no_aes  && $dir =~ /\/aes/;
 	return("") if $no_rc2  && $dir =~ /\/rc2/;
 	return("") if $no_rc4  && $dir =~ /\/rc4/;
 	return("") if $no_rc5  && $dir =~ /\/rc5/;
@@ -678,7 +689,8 @@ sub var_add
 
 	@a=grep(!/^e_.*_3d$/,@a) if $no_des;
 	@a=grep(!/^e_.*_d$/,@a) if $no_des;
-	@a=grep(!/^e_.*_i$/,@a) if $no_idea;
+	@a=grep(!/^e_.*_ae$/,@a) if $no_idea;
+	@a=grep(!/^e_.*_i$/,@a) if $no_aes;
 	@a=grep(!/^e_.*_r2$/,@a) if $no_rc2;
 	@a=grep(!/^e_.*_r5$/,@a) if $no_rc5;
 	@a=grep(!/^e_.*_bf$/,@a) if $no_bf;
@@ -693,7 +705,7 @@ sub var_add
 	@a=grep(!/(^md2)|(_md2$)/,@a) if $no_md2;
 	@a=grep(!/(^md4)|(_md4$)/,@a) if $no_md4;
 	@a=grep(!/(^md5)|(_md5$)/,@a) if $no_md5;
-	@a=grep(!/(rmd)|(ripemd)/,@a) if $no_rmd160;
+	@a=grep(!/(rmd)|(ripemd)/,@a) if $no_ripemd;
 
 	@a=grep(!/(^d2i_r_)|(^i2d_r_)/,@a) if $no_rsa;
 	@a=grep(!/(^p_open$)|(^p_seal$)/,@a) if $no_rsa;
@@ -710,6 +722,8 @@ sub var_add
 	@a=grep(!/(^sha1)|(_sha1$)|(m_dss1$)/,@a) if $no_sha1;
 	@a=grep(!/_mdc2$/,@a) if $no_mdc2;
 
+	@a=grep(!/^engine$/,@a) if $no_engine;
+	@a=grep(!/^hw$/,@a) if $no_hw;
 	@a=grep(!/(^rsa$)|(^genrsa$)/,@a) if $no_rsa;
 	@a=grep(!/(^dsa$)|(^gendsa$)|(^dsaparam$)/,@a) if $no_dsa;
 	@a=grep(!/^gendsa$/,@a) if $no_sha1;
@@ -804,7 +818,7 @@ sub is_cipherlib
 	my ($test) = @_;
 	my $needed = "";
 
-	if (($test eq "crypto/bf") || ($test eq "crypto/cast") || ($test eq "crypto/des")
+	if (($test eq "crypto/aes") || ($test eq "crypto/bf") || ($test eq "crypto/cast") || ($test eq "crypto/des")
 		|| ($test eq "crypto/idea") || ($test eq "crypto/md2") || ($test eq "crypto/md4") || ($test eq "crypto/md5")
 		|| ($test eq "crypto/mdc2") || ($test eq "crypto/sha") || ($test eq "crypto/rc2")
 		|| ($test eq "crypto/rc4") || ($test eq "crypto/rc5") || ($test eq "crypto/ripemd")
@@ -936,6 +950,7 @@ sub read_options
 	elsif (/^no-rc4$/)	{ $no_rc4=1; }
 	elsif (/^no-rc5$/)	{ $no_rc5=1; }
 	elsif (/^no-idea$/)	{ $no_idea=1; }
+	elsif (/^no-aes$/)	{ $no_aes=1; }
 	elsif (/^no-des$/)	{ $no_des=1; }
 	elsif (/^no-bf$/)	{ $no_bf=1; }
 	elsif (/^no-cast$/)	{ $no_cast=1; }
@@ -951,6 +966,7 @@ sub read_options
 	elsif (/^no-dsa$/)	{ $no_dsa=1; }
 	elsif (/^no-dh$/)	{ $no_dh=1; }
 	elsif (/^no-hmac$/)	{ $no_hmac=1; }
+	elsif (/^no-aes$/)	{ $no_aes=1; }
 	elsif (/^no-asm$/)	{ $no_asm=1; }
 	elsif (/^nasm$/)	{ $nasm=1; }
 	elsif (/^gaswin$/)	{ $gaswin=1; }
@@ -958,12 +974,17 @@ sub read_options
 	elsif (/^no-ssl3$/)	{ $no_ssl3=1; }
 	elsif (/^no-err$/)	{ $no_err=1; }
 	elsif (/^no-sock$/)	{ $no_sock=1; }
+	elsif (/^no-krb5$/)	{ $no_krb5=1; }
+	elsif (/^no-ec$/)	{ $no_ec=1; }
+	elsif (/^no-engine$/)	{ $no_engine=1; }
+	elsif (/^no-hw$/)	{ $no_hw=1; }
 
 	elsif (/^just-ssl$/)	{ $no_rc2=$no_idea=$no_des=$no_bf=$no_cast=1;
 				  $no_md2=$no_sha=$no_mdc2=$no_dsa=$no_dh=1;
-				  $no_ssl2=$no_err=$no_rmd160=$no_rc5=1; }
+				  $no_ssl2=$no_err=$no_ripemd=$no_rc5=1;
+				  $no_aes=1; }
 
-	elsif (/^rsaref$/)	{ $rsaref=1; }
+	elsif (/^rsaref$/)	{ }
 	elsif (/^gcc$/)		{ $gcc=1; }
 	elsif (/^debug$/)	{ $debug=1; }
 	elsif (/^profile$/)	{ $profile=1; }

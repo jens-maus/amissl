@@ -67,7 +67,7 @@
 extern "C" {
 #endif
 
-#ifdef NO_RC5
+#ifdef OPENSSL_NO_RC5
 #error RC5 is disabled.
 #endif
 

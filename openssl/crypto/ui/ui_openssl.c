@@ -114,6 +114,7 @@
  * [including the GNU Public Licence.]
  */
 
+#ifndef AMIGA
 
 #include <openssl/e_os2.h>
 
@@ -670,4 +671,6 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 #endif
 	return(strlen(buf));
 	}
+#endif
+
 #endif

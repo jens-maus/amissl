@@ -63,11 +63,13 @@
 #include <proto/amissl_all.h>
 #endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
+#include <openssl/e_os2.h>
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-#ifdef NO_BF
+#ifdef OPENSSL_NO_BF
 #error BF is disabled.
 #endif
 
@@ -81,9 +83,9 @@ extern "C" {
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-#if defined(WIN16) || defined(__LP32__)
+#if defined(OPENSSL_SYS_WIN16) || defined(__LP32__)
 #define BF_LONG unsigned long
-#elif defined(_CRAY) || defined(__ILP64__)
+#elif defined(OPENSSL_SYS_CRAY) || defined(__ILP64__)
 #define BF_LONG unsigned long
 #define BF_LONG_LOG2 3
 /*

@@ -59,6 +59,8 @@
 #ifndef HEADER_MD4_H
 #define HEADER_MD4_H
 
+#include <openssl/e_os2.h>
+
 #if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
 #include <proto/amissl_all.h>
 #endif /* AMISSL && !PROTO_AMISSL_ALL_H */
@@ -67,7 +69,7 @@
 extern "C" {
 #endif
 
-#ifdef NO_MD4
+#ifdef OPENSSL_NO_MD4
 #error MD4 is disabled.
 #endif
 
@@ -78,9 +80,9 @@ extern "C" {
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-#if defined(WIN16) || defined(__LP32__)
+#if defined(OPENSSL_SYS_WIN16) || defined(__LP32__)
 #define MD4_LONG unsigned long
-#elif defined(_CRAY) || defined(__ILP64__)
+#elif defined(OPENSSL_SYS_CRAY) || defined(__ILP64__)
 #define MD4_LONG unsigned long
 #define MD4_LONG_LOG2 3
 /*
@@ -106,9 +108,9 @@ typedef struct MD4state_st
 	int num;
 	} MD4_CTX;
 
-void MD4_Init(MD4_CTX *c);
-void MD4_Update(MD4_CTX *c, const void *data, unsigned long len);
-void MD4_Final(unsigned char *md, MD4_CTX *c);
+int MD4_Init(MD4_CTX *c);
+int MD4_Update(MD4_CTX *c, const void *data, unsigned long len);
+int MD4_Final(unsigned char *md, MD4_CTX *c);
 unsigned char *MD4(const unsigned char *d, unsigned long n, unsigned char *md);
 void MD4_Transform(MD4_CTX *c, const unsigned char *b);
 #ifdef  __cplusplus
