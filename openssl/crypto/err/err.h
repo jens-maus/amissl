@@ -71,13 +71,13 @@
 #include <openssl/lhash.h>
 #endif
 
-#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
-#include <proto/amissl_all.h>
-#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
-
 #ifdef	__cplusplus
 extern "C" {
 #endif
+
+#if defined(AMISSL) && !defined(PROTO_AMISSL_ALL_H)
+#include <proto/amissl_all.h>
+#endif /* AMISSL && !PROTO_AMISSL_ALL_H */
 
 #ifndef OPENSSL_NO_ERR
 #define ERR_PUT_error(a,b,c,d,e)	ERR_put_error(a,b,c,d,e)
@@ -269,6 +269,9 @@ void ERR_print_errors_fp(FILE *fp);
 #ifndef OPENSSL_NO_BIO
 void ERR_print_errors(BIO *bp);
 void ERR_add_error_data(int num, ...);
+#ifdef AMISSL
+void ERR_add_error_dataA(int num, va_list args);
+#endif /* AMISSL */
 #endif
 void ERR_load_strings(int lib,ERR_STRING_DATA str[]);
 void ERR_unload_strings(int lib,ERR_STRING_DATA str[]);
