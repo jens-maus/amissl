@@ -14,6 +14,8 @@
 #include <utility/tagitem.h>
 #include <exec/memory.h>
 
+#define PROTO_AMISSL_H // Don't include amissl protos
+
 #undef __USE_INLINE__
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
@@ -57,7 +59,7 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
-struct LocaleBase *LocaleBase;
+struct Library *LocaleBase;
 struct Library *UtilityBase;
 #endif
 
@@ -583,5 +585,11 @@ void checkdos(void)
 	kprintf("DOSBase: %08x\n",&DOSBase);
 	kprintf("v3_ns_ia5_list: %08x\n",&v3_ns_ia5_list);
 	kprintf("rand_ssleay_meth: %08x\n",&rand_ssleay_meth);
+}
+#endif
+
+#ifndef __amigaos4__
+void _AmiSSL_DummyFunc(void)
+{
 }
 #endif
