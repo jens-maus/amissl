@@ -12,26 +12,25 @@
 #include <exec/interfaces.h>
 #endif
 
+extern ULONG                _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *);
+extern ULONG                _AmiSSLMaster_Release(struct AmiSSLMasterIFace *);
+extern LONG                 InitAmiSSLMaster(struct AmiSSLMasterIFace *, LONG APIVersion, LONG AllowUserStructs);
+extern struct Library *     OpenAmiSSL(struct AmiSSLMasterIFace *);
+extern void                 CloseAmiSSL(struct AmiSSLMasterIFace *);
+extern struct Library *     OpenAmiSSLCipher(struct AmiSSLMasterIFace *, LONG Cipher);
+extern void                 CloseAmiSSLCipher(struct AmiSSLMasterIFace *, struct Library * CipherBase);
 
-extern ULONG                VARARGS68K _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *);
-extern ULONG                VARARGS68K _AmiSSLMaster_Release(struct AmiSSLMasterIFace *);
-extern LONG                 VARARGS68K _AmiSSLMaster_InitAmiSSLMaster(struct AmiSSLMasterIFace *, LONG APIVersion, LONG AllowUserStructs);
-extern struct Library *     VARARGS68K _AmiSSLMaster_OpenAmiSSL(struct AmiSSLMasterIFace *);
-extern void                 VARARGS68K _AmiSSLMaster_CloseAmiSSL(struct AmiSSLMasterIFace *);
-extern struct Library *     VARARGS68K _AmiSSLMaster_OpenAmiSSLCipher(struct AmiSSLMasterIFace *, LONG Cipher);
-extern void                 VARARGS68K _AmiSSLMaster_CloseAmiSSLCipher(struct AmiSSLMasterIFace *, struct Library * CipherBase);
 
-
-static void *main_vectors[] = {
+const static void * const main_vectors[] = {
 	(void *)_AmiSSLMaster_Obtain,
 	(void *)_AmiSSLMaster_Release,
 	(void *)NULL,
 	(void *)NULL,
-	(void *)_AmiSSLMaster_InitAmiSSLMaster,
-	(void *)_AmiSSLMaster_OpenAmiSSL,
-	(void *)_AmiSSLMaster_CloseAmiSSL,
-	(void *)_AmiSSLMaster_OpenAmiSSLCipher,
-	(void *)_AmiSSLMaster_CloseAmiSSLCipher,
+	(void *)InitAmiSSLMaster,
+	(void *)OpenAmiSSL,
+	(void *)CloseAmiSSL,
+	(void *)OpenAmiSSLCipher,
+	(void *)CloseAmiSSLCipher,
 	(void *)-1
 };
 

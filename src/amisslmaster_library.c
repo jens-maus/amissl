@@ -1,18 +1,34 @@
+#ifdef __amigaos4__
+#define __USE_INLINE__
+#endif
+
 #include <proto/exec.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 #include <internal/amissl_compiler.h>
 #include "amisslinit.h"
-#include "/scmt/scmt.h"
+#ifdef __GNUC__
+#include "../libcmt/libcmt.h"
+#else
+#include "/libcmt/libcmt.h"
+#endif
+
+#ifdef __amigaos4__
+#include <exec/emulation.h>
+#endif
 
 #ifdef __amigaos4__
 #define __IFACE_OR_BASE	struct AmiSSLMasterIFace *Self
+struct AmiSSLMasterIFace;
 #else
 #define __IFACE_OR_BASE	struct Library *Self
 #endif
 
+#ifndef __amigaos4__
 struct ExecBase *SysBase;
+#endif
 
+#if 0
 /* These must not change! This is for compatibility with previous versions. */
 #pragma libcall DHBase InitDH 01e 9802
 #pragma libcall DHBase CleanupDH 024 00
@@ -22,12 +38,16 @@ struct ExecBase *SysBase;
 
 #pragma libcall RSABase InitRSA 01e a9803
 #pragma libcall RSABase CleanupRSA 024 00
+#endif
 
 struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 
 struct Library *AmiSSLBase;
+#ifdef __amigaos4__
+struct AmiSSLIFace *IAmiSSL;
+#endif
 
 LONG LibAPIVersion;
 LONG LibAllowUserStructs;
@@ -36,11 +56,20 @@ DeclareSemaphore(AmiSSLMasterLock);
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
+#ifdef __amigaos4__
+
+#define SB_ObtainSemaphore  ObtainSemaphore
+#define SB_ReleaseSemaphore ReleaseSemaphore
+
+#else
+
 #pragma syscall SB_ObtainSemaphore 234 801
 #pragma syscall SB_ReleaseSemaphore 23a 801
 
 void SB_ObtainSemaphore(struct SignalSemaphore *);
 void SB_ReleaseSemaphore(struct SignalSemaphore *);
+
+#endif
 
 static void FlushLib(struct Library *LibBase)
 {
@@ -113,6 +142,7 @@ struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097e.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
+/* This only happens for m68k code, no need to handle ppc versions here */
 		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2))
 		{
 			amisslinit.BlowFishBase = OpenLib(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
@@ -143,8 +173,15 @@ struct Library * ASM SAVEDS OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 			{
 				amisslinit.MDC2Base = OpenLib(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
 			}
-
+#ifdef __amigaos4__
+			EmulateTags(AmiSSLBase,
+				ET_Offset,-30,	// Internal function of amissl v2
+				ET_RegisterA0,&amisslinit,
+				ET_RegisterA6,AmiSSLBase,
+				TAG_DONE);
+#else
 			InternalInitAmiSSL(&amisslinit);
+#endif
 		}
 	}
 
@@ -292,7 +329,9 @@ void ASM SAVEDS __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 
 int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
+#ifndef __amigaos4__
 	SysBase = *(struct ExecBase **)4;
+#endif
 
 	return(0);
 }

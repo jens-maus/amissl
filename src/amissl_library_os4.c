@@ -1,25 +1,11 @@
-/*
- *  $VER: init.c $Revision$ (15-Nov-2004)
- *
- *  This file is part of amissl.
- *
- * $Id$
- *
- * $Log$
- * Revision 1.1  2005/01/08 20:18:40  stefan
- * Initial checkin
- *
- *
- *
- */
-
-
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <dos/dos.h>
 //#include <proto/ixemul.h>
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
+
+#define kprintf IExec->DebugPrintF
 
 /* Version Tag */
 //#include "amissl.library_rev.h"
@@ -40,8 +26,14 @@ struct AmiSSLLibrary
 
 struct AmiSSLIFace;
 
-const static uint32 libInterfaces[];
-const struct TagItem libCreateTags[];
+extern const struct TagItem libCreateTags[];
+
+__attribute__((force_no_baserel)) struct Library *ExecBase;
+__attribute__((force_no_baserel)) struct ExecIFace *IExec;
+
+struct Library *DOSBase;
+struct DOSIFace *IDOS;
+
 int __UserLibInit(struct AmiSSLIFace *Self);
 
 /*
@@ -59,14 +51,6 @@ void _start(void)
 {
     /* If you feel like it, open DOS and print something to the user */
 }
-
-__attribute__((force_no_baserel)) struct Library *ExecBase;
-__attribute__((force_no_baserel)) struct ExecIFace *IExec;
-
-struct Library *DOSBase;
-struct DOSIFace *IDOS;
-
-#define kprintf IExec->DebugPrintF
 
 ULONG _AmiSSL_Obtain(struct AmiSSLIFace *Self)
 {
@@ -94,12 +78,17 @@ extern APTR GetDataBase(void);
 
 __attribute__ ((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 {
+	kprintf("DOSBase; %08lx DataStart: %08lx me: %08x\n",&DOSBase,GetDataStart(),libOpen2);
+/*	checkdos();
+	return 0; */
 	if(DOSBase = IExec->OpenLibrary("dos.library", 36))
 	{
-		if(IDOS = IExec->GetInterface(DOSBase,"main",1,NULL))
+		if(IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL))
 		{
-			__UserLibInit(self);
-		    return 1;
+			if(!__UserLibInit(self)) /* SAS/C defined errors the other way */
+			{
+				return 1;
+			}
 		}
 		IExec->CloseLibrary(DOSBase);
 	}
@@ -111,9 +100,6 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 {
     struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase; 
     struct AmiSSLLibrary *newLibBase;
-    APTR temp;
-	struct TagItem **InterfaceDesc = libInterfaces;
-	struct Interface *pLegacy;
 
 	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
 	kprintf("Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
@@ -125,7 +111,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
     /* Add any specific open code here 
        Return 0 before incrementing OpenCnt to fail opening */
 
-	if( newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary(libCreateTags))
+	if( newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags))
 	{
 		char *envvec;
 		newLibBase->origLibBase = libBase;
@@ -149,9 +135,8 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 
 			IExec->FreeVec(envvec);
 		}
-		IExec->DeleteLibrary(newLibBase);
+		IExec->DeleteLibrary((struct Library *)newLibBase);
 	}
-
 
 	libBase->libNode.lib_OpenCnt--;
 	return NULL;	
@@ -169,8 +154,6 @@ APTR libClose(struct LibraryManagerInterface *Self)
 
 	if(libBase->origLibBase != libBase)
 	{
-//		IExec->FreeMem((APTR) ((ULONG)libBase - libBase->libNode.lib_NegSize), libBase->libNode.lib_NegSize + libBase->libNode.lib_PosSize + sizeof(struct ExtendedLibrary));
-		kprintf("Deleting library: %08x\n",libBase);
 		IExec->DeleteLibrary((struct Library *)libBase);
 	}
 
@@ -246,21 +229,21 @@ static ULONG _manager_Release(struct LibraryManagerInterface *Self)
 }
 
 /* Manager interface vectors */
-AMISSL_COMMON_DATA const static int lib_manager_vectors[] =
+const static void * const lib_manager_vectors[] =
 {
-    (int)_manager_Obtain,
-    (int)_manager_Release,
-    (int)0,
-    (int)0,
-    (int)libOpen,
-    (int)libClose,
-    (int)libExpunge,
-    (int)0,
-    (int)-1,
+    (void *)_manager_Obtain,
+    (void *)_manager_Release,
+    (void *)0,
+    (void *)0,
+    (void *)libOpen,
+    (void *)libClose,
+    (void *)libExpunge,
+    (void *)0,
+    (void *)-1,
 };
 
 /* "__library" interface tag list */
-AMISSL_COMMON_DATA const static struct TagItem lib_managerTags[] =
+const static struct TagItem const lib_managerTags[] =
 {
     {MIT_Name,             (ULONG)"__library"},
     {MIT_VectorTable,      (ULONG)lib_manager_vectors},
@@ -275,7 +258,7 @@ AMISSL_COMMON_DATA const static struct TagItem lib_managerTags[] =
 /* Uncomment this line (and see below) if your library has a 68k jump table */
 /* extern ULONG VecTable68K; */
 
-AMISSL_COMMON_DATA const static struct TagItem mainTags[] =
+const static struct TagItem mainTags[] =
 {
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_vectors},
@@ -283,14 +266,14 @@ AMISSL_COMMON_DATA const static struct TagItem mainTags[] =
     {TAG_DONE,              0}
 };
 
-AMISSL_COMMON_DATA const static uint32 libInterfaces[] =
+const static uint32 libInterfaces[] =
 {
     (uint32)lib_managerTags,
     (uint32)mainTags,
     (uint32)0
 };
 
-AMISSL_COMMON_DATA const struct TagItem libCreateTags[] =
+const struct TagItem libCreateTags[] =
 {
     {CLT_DataSize,         (uint32)(sizeof(struct AmiSSLLibrary))},
     {CLT_InitFunc,         (uint32)libInit},
@@ -302,7 +285,7 @@ AMISSL_COMMON_DATA const struct TagItem libCreateTags[] =
 
 
 /* ------------------- ROM Tag ------------------------ */
-AMISSL_COMMON_DATA const static struct Resident lib_res __attribute__ ((used)) =
+const static struct Resident lib_res __attribute__ ((used)) =
 {
     RTC_MATCHWORD,
     (struct Resident *)&lib_res,
@@ -356,7 +339,7 @@ void __baserel_get_addr(struct Interface *self);
 asm (" \n\
 	.globl __baserel_get_addr		 \n\
 __baserel_get_addr:		 \n\
-	lwz     2,48(3)	/* Fetch Reserved2 from struct Interface * */	 \n\
+	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\
 	blr		 \n\
 ");
 
@@ -385,3 +368,12 @@ GetDataBase:							\n\
 	.section .dend, \"wa\", @nobits		\n\
 	.space 4							\n\
 ");
+
+
+
+int                  VARARGS68K _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...) { return 0; }
+int                  VARARGS68K _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...) {return 0;}
+void                 VARARGS68K _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...) {}
+
+
+

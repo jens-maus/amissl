@@ -1,3 +1,7 @@
+#ifdef __amigaos4__
+#define __USE_INLINE__
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -200,6 +204,7 @@ long ASM SAVEDS _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct Tag
 	if (state = CreateAmiSSLState())
 	{
 #ifdef __amigaos4__
+		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, NULL, tagList);
 #else
 		state->a4 = (APTR)getreg(REG_A4);
 #endif
@@ -231,7 +236,7 @@ long ASM SAVEDS _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct 
 }
 
 #ifdef __amigaos4__
-long ASM SAVEDS _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+long ASM SAVEDS VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 {
 	va_list ap;
 	struct TagItem *tags;
@@ -242,7 +247,7 @@ long ASM SAVEDS _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 	return _AmiSSL_InitAmiSSLA(Self,tags);
 }
 
-long ASM SAVEDS _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+long ASM SAVEDS VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 {
 	va_list ap;
 	struct TagItem *tags;
@@ -452,34 +457,24 @@ int ASM SAVEDS __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 	if (!thread_hash)
 	{
-traceline();
 		Forbid();
 
-traceline();
 		if(!SemaphoreInitialized)
 		{
-traceline();
 			InitSemaphore(&openssl_cs);
-traceline();
 			SemaphoreInitialized = TRUE;
 		}
-traceline();
 
 		Permit();
-traceline();
 
 		ObtainSemaphore(&openssl_cs);
-traceline();
 
 		if (!thread_hash)
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
-traceline();
 
 		ReleaseSemaphore(&openssl_cs);
-traceline();
 	}
 
-traceline();
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, MEMF_CLEAR)))
 	{
@@ -487,23 +482,18 @@ traceline();
 		struct DateStamp ds;
 		int i;
 traceline();
-kprintf("lock_cs: %08x\n",lock_cs);
 
 		for (i=0; i<CRYPTO_NUM_LOCKS; i++)
 		{
-			kprintf("Initializing: %08x\n",&lock_cs[i]);
 			InitSemaphore(&lock_cs[i]);
 		}
-traceline();
 
 		InitSemaphore(&__mem_cs);
-traceline();
 
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
-traceline();
 
-//FIXME		DateStamp(&ds);
 traceline();
+		DateStamp(&ds);
 		clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
 		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
@@ -538,3 +528,14 @@ traceline();
 
 	return(err);
 }
+#if 0
+extern int v3_ns_ia5_list;
+extern int rand_ssleay_meth;
+
+void checkdos(void)
+{
+	kprintf("DOSBase: %08x\n",&DOSBase);
+	kprintf("v3_ns_ia5_list: %08x\n",&v3_ns_ia5_list);
+	kprintf("rand_ssleay_meth: %08x\n",&rand_ssleay_meth);
+}
+#endif
