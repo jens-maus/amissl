@@ -534,10 +534,10 @@ struct ASN1_ADB_TABLE_st {
 /* This is the actual ASN1 item itself */
 
 struct ASN1_ITEM_st {
-char itype;			/* The item type, primitive, SEQUENCE, CHOICE or extern */
 #ifdef AMISSL
 char amissl_pad[3];
 #endif /* AMISSL */
+char itype;			/* The item type, primitive, SEQUENCE, CHOICE or extern */
 long utype;			/* underlying type */
 const ASN1_TEMPLATE *templates;	/* If SEQUENCE or CHOICE this contains the contents */
 long tcount;			/* Number of templates if SEQUENCE or CHOICE */
