@@ -1,6 +1,5 @@
 * text=auto !eol
 FD/amissl_lib.fd eol=lf
-FD/amissl_lib.fd_AmiSSL eol=lf
 FD/amisslmaster_lib.fd eol=lf
 /SMakefile eol=lf
 certs/03e16f6c.0 eol=lf
@@ -2028,7 +2027,6 @@ openssl/util/ssleay.num eol=lf
 openssl/util/tab_num.pl eol=lf
 openssl/util/x86asm.sh eol=lf
 perl/fixstackof.pl eol=lf
-perl/makefd.pl eol=lf
 perl/mkpragmas.pl eol=lf
 scmt/accept.c eol=lf
 scmt/asm.h eol=lf
