@@ -272,7 +272,7 @@ void ERR_print_errors_fp(FILE *fp);
 void ERR_print_errors(BIO *bp);
 void ERR_add_error_data(int num, ...);
 #ifdef AMISSL
-void ERR_add_error_dataA(int num, va_list args);
+void ERR_add_error_dataA(int num, long *args);
 #endif /* AMISSL */
 #endif
 void ERR_load_strings(int lib,ERR_STRING_DATA str[]);
