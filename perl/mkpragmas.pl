@@ -4,7 +4,7 @@
 
 use strict;
 
-my @bases = ("AmiSSL", "BlowFish", "CAST", "DES", "DH", "DSA", "IDEA",
+my @bases = ("AmiSSL", "AES", "BlowFish", "CAST", "DES", "DH", "DSA", "IDEA",
              "MD2", "MD4", "MD5", "MDC2", "RC2", "RC4", "RC5", "RIPEMD",
              "RSA", "SHA");
 my @args;
@@ -39,6 +39,7 @@ sub mkpragmas
 	{
 		open(IN, "<$tmpfile") || die "Couldn't read file $tmpfile: $!\n";
 		open(OUT, ">$outfile") || die "Couldn't open $outfile: $!\n";
+
 		$skip = 0;
 
 		while(<IN>)
@@ -53,11 +54,16 @@ sub mkpragmas
 			{
 				tr/ //s;
 				s/^#endif\t\/\* PRAGMAS_(.*)_PRAGMA_H \*\/$/#endif \/\* PRAGMAS_$1_PRAGMAS_H \*\//;
+
 				print OUT;
+
+				print STDERR "$base tagcall: $_" if (/tagcall/);
 			}
 		}
+
 		close(OUT);
 		close(IN);
+
 		unlink($tmpfile) || warn("Couldn't unlink $tmpfile: $!\n");
 	}
 	else
