@@ -11,7 +11,7 @@ $mkdir='mkdir';
 # C compiler stuff
 $cc="ppc-amigaos-gcc";
 $cfile="-c ";
-$cflags="\$(ADD) -DAMISSL -DAMISSL_COMPILE -DB_ENDIAN -DTHIRTY_TWO_BITS -I/AmiSSL/include -g -O2";
+$cflags="\$(ADD) -mbaserel -DAMISSL -DAMISSL_COMPILE -DB_ENDIAN -DTHIRTY_TWO_BITS -I/AmiSSL/include -g -O2";
 $obj='.o';
 $ofile='-o ';
 $compile='';
