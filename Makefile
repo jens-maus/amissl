@@ -28,7 +28,7 @@ $(OBJ_D)/stubs.o: $(SRC_D)/stubs.c
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
-$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c src/debug.h
+$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(OBJ_D)/amissl_68k.o: $(SRC_D)/amissl_68k.c
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
