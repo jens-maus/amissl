@@ -427,13 +427,6 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BA
 	return(SSLv23_client_method());
 }
 
-void RAND_add_internal(const void *buf, int num, double entropy);
-
-void AMISSL_LIB_ENTRY _AmiSSL_RAND_add(REG(a6, __IFACE_OR_BASE), REG(a0, const void *buf), REG(d0, int num), REG(d1, float entropy))
-{
-	RAND_add(buf, num, (double)entropy);
-}
-
 static char AMISSL_COMMON_DATA rand_poll_buffer[128];
 
 int RAND_poll(void)
