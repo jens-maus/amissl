@@ -13,9 +13,9 @@
 #include <dos/var.h>
 #include <utility/tagitem.h>
 
-#include <amissl/crypto.h>
-#include <amissl/lhash.h>
-#include <amissl/tags.h>
+#include <openssl/crypto.h>
+#include <openssl/lhash.h>
+#include <openssl/tags.h>
 
 #include <internal/amissl.h>
 #include <internal/amissl_compiler.h>
