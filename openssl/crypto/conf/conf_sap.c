@@ -91,6 +91,7 @@ void OPENSSL_config(const char *config_name)
 	if (CONF_modules_load_file(NULL, NULL,
 					CONF_MFLAGS_IGNORE_MISSING_FILE) <= 0)
 		{
+#ifndef AMISSL
 		BIO *bio_err;
 		ERR_load_crypto_strings();
 		if ((bio_err=BIO_new_fp(stderr, BIO_NOCLOSE)) != NULL)
@@ -100,6 +101,7 @@ void OPENSSL_config(const char *config_name)
 			BIO_free(bio_err);
 			}
 		exit(1);
+#endif /* !AMISSL */
 		}
 
 	return;
