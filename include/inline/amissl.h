@@ -1466,11 +1466,11 @@ static __inline__ long ___CleanupAmiSSL(struct Library * AmiSSLBase, Tag tagList
 });})
 
 #define ASN1_PRINTABLE_type(s, max) ({ \
-  unsigned char * _ASN1_PRINTABLE_type_s = (s); \
+  const unsigned char * _ASN1_PRINTABLE_type_s = (s); \
   LONG _ASN1_PRINTABLE_type_max = (max); \
   ({ \
   register char * _ASN1_PRINTABLE_type__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), unsigned char * __asm("a0"), LONG __asm("d0"))) \
+  ((int (*)(char * __asm("a6"), const unsigned char * __asm("a0"), LONG __asm("d0"))) \
   (_ASN1_PRINTABLE_type__bn - 1110))(_ASN1_PRINTABLE_type__bn, _ASN1_PRINTABLE_type_s, _ASN1_PRINTABLE_type_max); \
 });})
 
@@ -11854,22 +11854,22 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_finished(s, buf, count) ({ \
-  SSL * _SSL_get_finished_s = (s); \
+  const SSL * _SSL_get_finished_s = (s); \
   void * _SSL_get_finished_buf = (buf); \
   ULONG _SSL_get_finished_count = (count); \
   ({ \
   register char * _SSL_get_finished__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((size_t (*)(char * __asm("a6"), SSL * __asm("a0"), void * __asm("a1"), ULONG __asm("d0"))) \
+  ((size_t (*)(char * __asm("a6"), const SSL * __asm("a0"), void * __asm("a1"), ULONG __asm("d0"))) \
   (_SSL_get_finished__bn - 8154))(_SSL_get_finished__bn, _SSL_get_finished_s, _SSL_get_finished_buf, _SSL_get_finished_count); \
 });})
 
 #define SSL_get_peer_finished(s, buf, count) ({ \
-  SSL * _SSL_get_peer_finished_s = (s); \
+  const SSL * _SSL_get_peer_finished_s = (s); \
   void * _SSL_get_peer_finished_buf = (buf); \
   ULONG _SSL_get_peer_finished_count = (count); \
   ({ \
   register char * _SSL_get_peer_finished__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((size_t (*)(char * __asm("a6"), SSL * __asm("a0"), void * __asm("a1"), ULONG __asm("d0"))) \
+  ((size_t (*)(char * __asm("a6"), const SSL * __asm("a0"), void * __asm("a1"), ULONG __asm("d0"))) \
   (_SSL_get_peer_finished__bn - 8160))(_SSL_get_peer_finished__bn, _SSL_get_peer_finished_s, _SSL_get_peer_finished_buf, _SSL_get_peer_finished_count); \
 });})
 
@@ -11956,18 +11956,18 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_CTX_get_timeout(ctx) ({ \
-  SSL_CTX * _SSL_CTX_get_timeout_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_get_timeout_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_get_timeout__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((long (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((long (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_timeout__bn - 8226))(_SSL_CTX_get_timeout__bn, _SSL_CTX_get_timeout_ctx); \
 });})
 
 #define SSL_CTX_get_cert_store(a) ({ \
-  SSL_CTX * _SSL_CTX_get_cert_store_a = (a); \
+  const SSL_CTX * _SSL_CTX_get_cert_store_a = (a); \
   ({ \
   register char * _SSL_CTX_get_cert_store__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((X509_STORE * (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((X509_STORE * (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_cert_store__bn - 8232))(_SSL_CTX_get_cert_store__bn, _SSL_CTX_get_cert_store_a); \
 });})
 
@@ -11981,10 +11981,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_want(s) ({ \
-  SSL * _SSL_want_s = (s); \
+  const SSL * _SSL_want_s = (s); \
   ({ \
   register char * _SSL_want__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_want__bn - 8244))(_SSL_want__bn, _SSL_want_s); \
 });})
 
@@ -12006,35 +12006,35 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_current_cipher(s) ({ \
-  SSL * _SSL_get_current_cipher_s = (s); \
+  const SSL * _SSL_get_current_cipher_s = (s); \
   ({ \
   register char * _SSL_get_current_cipher__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((SSL_CIPHER * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((SSL_CIPHER * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_current_cipher__bn - 8262))(_SSL_get_current_cipher__bn, _SSL_get_current_cipher_s); \
 });})
 
 #define SSL_CIPHER_get_bits(c, alg_bits) ({ \
-  SSL_CIPHER * _SSL_CIPHER_get_bits_c = (c); \
+  const SSL_CIPHER * _SSL_CIPHER_get_bits_c = (c); \
   int * _SSL_CIPHER_get_bits_alg_bits = (alg_bits); \
   ({ \
   register char * _SSL_CIPHER_get_bits__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_CIPHER * __asm("a0"), int * __asm("a1"))) \
+  ((int (*)(char * __asm("a6"), const SSL_CIPHER * __asm("a0"), int * __asm("a1"))) \
   (_SSL_CIPHER_get_bits__bn - 8268))(_SSL_CIPHER_get_bits__bn, _SSL_CIPHER_get_bits_c, _SSL_CIPHER_get_bits_alg_bits); \
 });})
 
 #define SSL_CIPHER_get_version(c) ({ \
-  SSL_CIPHER * _SSL_CIPHER_get_version_c = (c); \
+  const SSL_CIPHER * _SSL_CIPHER_get_version_c = (c); \
   ({ \
   register char * _SSL_CIPHER_get_version__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((char * (*)(char * __asm("a6"), SSL_CIPHER * __asm("a0"))) \
+  ((char * (*)(char * __asm("a6"), const SSL_CIPHER * __asm("a0"))) \
   (_SSL_CIPHER_get_version__bn - 8274))(_SSL_CIPHER_get_version__bn, _SSL_CIPHER_get_version_c); \
 });})
 
 #define SSL_CIPHER_get_name(c) ({ \
-  SSL_CIPHER * _SSL_CIPHER_get_name_c = (c); \
+  const SSL_CIPHER * _SSL_CIPHER_get_name_c = (c); \
   ({ \
   register char * _SSL_CIPHER_get_name__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((const char * (*)(char * __asm("a6"), SSL_CIPHER * __asm("a0"))) \
+  ((const char * (*)(char * __asm("a6"), const SSL_CIPHER * __asm("a0"))) \
   (_SSL_CIPHER_get_name__bn - 8280))(_SSL_CIPHER_get_name__bn, _SSL_CIPHER_get_name_c); \
 });})
 
@@ -12079,61 +12079,61 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_fd(s) ({ \
-  SSL * _SSL_get_fd_s = (s); \
+  const SSL * _SSL_get_fd_s = (s); \
   ({ \
   register char * _SSL_get_fd__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_fd__bn - 8316))(_SSL_get_fd__bn, _SSL_get_fd_s); \
 });})
 
 #define SSL_get_rfd(s) ({ \
-  SSL * _SSL_get_rfd_s = (s); \
+  const SSL * _SSL_get_rfd_s = (s); \
   ({ \
   register char * _SSL_get_rfd__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_rfd__bn - 8322))(_SSL_get_rfd__bn, _SSL_get_rfd_s); \
 });})
 
 #define SSL_get_wfd(s) ({ \
-  SSL * _SSL_get_wfd_s = (s); \
+  const SSL * _SSL_get_wfd_s = (s); \
   ({ \
   register char * _SSL_get_wfd__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_wfd__bn - 8328))(_SSL_get_wfd__bn, _SSL_get_wfd_s); \
 });})
 
 #define SSL_get_cipher_list(s, n) ({ \
-  SSL * _SSL_get_cipher_list_s = (s); \
+  const SSL * _SSL_get_cipher_list_s = (s); \
   LONG _SSL_get_cipher_list_n = (n); \
   ({ \
   register char * _SSL_get_cipher_list__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((const char * (*)(char * __asm("a6"), SSL * __asm("a0"), LONG __asm("d0"))) \
+  ((const char * (*)(char * __asm("a6"), const SSL * __asm("a0"), LONG __asm("d0"))) \
   (_SSL_get_cipher_list__bn - 8334))(_SSL_get_cipher_list__bn, _SSL_get_cipher_list_s, _SSL_get_cipher_list_n); \
 });})
 
 #define SSL_get_shared_ciphers(s, buf, len) ({ \
-  SSL * _SSL_get_shared_ciphers_s = (s); \
+  const SSL * _SSL_get_shared_ciphers_s = (s); \
   char * _SSL_get_shared_ciphers_buf = (buf); \
   LONG _SSL_get_shared_ciphers_len = (len); \
   ({ \
   register char * _SSL_get_shared_ciphers__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((char * (*)(char * __asm("a6"), SSL * __asm("a0"), char * __asm("a1"), LONG __asm("d0"))) \
+  ((char * (*)(char * __asm("a6"), const SSL * __asm("a0"), char * __asm("a1"), LONG __asm("d0"))) \
   (_SSL_get_shared_ciphers__bn - 8340))(_SSL_get_shared_ciphers__bn, _SSL_get_shared_ciphers_s, _SSL_get_shared_ciphers_buf, _SSL_get_shared_ciphers_len); \
 });})
 
 #define SSL_get_read_ahead(s) ({ \
-  SSL * _SSL_get_read_ahead_s = (s); \
+  const SSL * _SSL_get_read_ahead_s = (s); \
   ({ \
   register char * _SSL_get_read_ahead__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_read_ahead__bn - 8346))(_SSL_get_read_ahead__bn, _SSL_get_read_ahead_s); \
 });})
 
 #define SSL_pending(s) ({ \
-  SSL * _SSL_pending_s = (s); \
+  const SSL * _SSL_pending_s = (s); \
   ({ \
   register char * _SSL_pending__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_pending__bn - 8352))(_SSL_pending__bn, _SSL_pending_s); \
 });})
 
@@ -12175,18 +12175,18 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_rbio(s) ({ \
-  SSL * _SSL_get_rbio_s = (s); \
+  const SSL * _SSL_get_rbio_s = (s); \
   ({ \
   register char * _SSL_get_rbio__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((BIO * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((BIO * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_rbio__bn - 8382))(_SSL_get_rbio__bn, _SSL_get_rbio_s); \
 });})
 
 #define SSL_get_wbio(s) ({ \
-  SSL * _SSL_get_wbio_s = (s); \
+  const SSL * _SSL_get_wbio_s = (s); \
   ({ \
   register char * _SSL_get_wbio__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((BIO * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((BIO * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_wbio__bn - 8388))(_SSL_get_wbio__bn, _SSL_get_wbio_s); \
 });})
 
@@ -12209,26 +12209,26 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_verify_mode(s) ({ \
-  SSL * _SSL_get_verify_mode_s = (s); \
+  const SSL * _SSL_get_verify_mode_s = (s); \
   ({ \
   register char * _SSL_get_verify_mode__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_verify_mode__bn - 8406))(_SSL_get_verify_mode__bn, _SSL_get_verify_mode_s); \
 });})
 
 #define SSL_get_verify_depth(s) ({ \
-  SSL * _SSL_get_verify_depth_s = (s); \
+  const SSL * _SSL_get_verify_depth_s = (s); \
   ({ \
   register char * _SSL_get_verify_depth__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_verify_depth__bn - 8412))(_SSL_get_verify_depth__bn, _SSL_get_verify_depth_s); \
 });})
 
 #define SSL_get_verify_callback(s) ({ \
-  SSL * _SSL_get_verify_callback_s = (s); \
+  const SSL * _SSL_get_verify_callback_s = (s); \
   ({ \
   register char * _SSL_get_verify_callback__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(int, X509_STORE_CTX *) (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(int, X509_STORE_CTX *) (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_verify_callback__bn - 8418))(_SSL_get_verify_callback__bn, _SSL_get_verify_callback_s); \
 });})
 
@@ -12443,10 +12443,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_SESSION_get_time(s) ({ \
-  SSL_SESSION * _SSL_SESSION_get_time_s = (s); \
+  const SSL_SESSION * _SSL_SESSION_get_time_s = (s); \
   ({ \
   register char * _SSL_SESSION_get_time__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((long (*)(char * __asm("a6"), SSL_SESSION * __asm("a0"))) \
+  ((long (*)(char * __asm("a6"), const SSL_SESSION * __asm("a0"))) \
   (_SSL_SESSION_get_time__bn - 8562))(_SSL_SESSION_get_time__bn, _SSL_SESSION_get_time_s); \
 });})
 
@@ -12460,10 +12460,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_SESSION_get_timeout(s) ({ \
-  SSL_SESSION * _SSL_SESSION_get_timeout_s = (s); \
+  const SSL_SESSION * _SSL_SESSION_get_timeout_s = (s); \
   ({ \
   register char * _SSL_SESSION_get_timeout__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((long (*)(char * __asm("a6"), SSL_SESSION * __asm("a0"))) \
+  ((long (*)(char * __asm("a6"), const SSL_SESSION * __asm("a0"))) \
   (_SSL_SESSION_get_timeout__bn - 8574))(_SSL_SESSION_get_timeout__bn, _SSL_SESSION_get_timeout_s); \
 });})
 
@@ -12478,10 +12478,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 
 #define SSL_copy_session_id(to, from) ({ \
   SSL * _SSL_copy_session_id_to = (to); \
-  SSL * _SSL_copy_session_id_from = (from); \
+  const SSL * _SSL_copy_session_id_from = (from); \
   ({ \
   register char * _SSL_copy_session_id__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void (*)(char * __asm("a6"), SSL * __asm("a0"), SSL * __asm("a1"))) \
+  ((void (*)(char * __asm("a6"), SSL * __asm("a0"), const SSL * __asm("a1"))) \
   (_SSL_copy_session_id__bn - 8586))(_SSL_copy_session_id__bn, _SSL_copy_session_id_to, _SSL_copy_session_id_from); \
 });})
 
@@ -12492,28 +12492,28 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 })
 
 #define SSL_SESSION_hash(a) ({ \
-  SSL_SESSION * _SSL_SESSION_hash_a = (a); \
+  const SSL_SESSION * _SSL_SESSION_hash_a = (a); \
   ({ \
   register char * _SSL_SESSION_hash__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((unsigned long (*)(char * __asm("a6"), SSL_SESSION * __asm("a0"))) \
+  ((unsigned long (*)(char * __asm("a6"), const SSL_SESSION * __asm("a0"))) \
   (_SSL_SESSION_hash__bn - 8598))(_SSL_SESSION_hash__bn, _SSL_SESSION_hash_a); \
 });})
 
 #define SSL_SESSION_cmp(a, b) ({ \
-  SSL_SESSION * _SSL_SESSION_cmp_a = (a); \
-  SSL_SESSION * _SSL_SESSION_cmp_b = (b); \
+  const SSL_SESSION * _SSL_SESSION_cmp_a = (a); \
+  const SSL_SESSION * _SSL_SESSION_cmp_b = (b); \
   ({ \
   register char * _SSL_SESSION_cmp__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_SESSION * __asm("a0"), SSL_SESSION * __asm("a1"))) \
+  ((int (*)(char * __asm("a6"), const SSL_SESSION * __asm("a0"), const SSL_SESSION * __asm("a1"))) \
   (_SSL_SESSION_cmp__bn - 8604))(_SSL_SESSION_cmp__bn, _SSL_SESSION_cmp_a, _SSL_SESSION_cmp_b); \
 });})
 
 #define SSL_SESSION_print(fp, ses) ({ \
   BIO * _SSL_SESSION_print_fp = (fp); \
-  SSL_SESSION * _SSL_SESSION_print_ses = (ses); \
+  const SSL_SESSION * _SSL_SESSION_print_ses = (ses); \
   ({ \
   register char * _SSL_SESSION_print__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), BIO * __asm("a0"), SSL_SESSION * __asm("a1"))) \
+  ((int (*)(char * __asm("a6"), BIO * __asm("a0"), const SSL_SESSION * __asm("a1"))) \
   (_SSL_SESSION_print__bn - 8610))(_SSL_SESSION_print__bn, _SSL_SESSION_print_fp, _SSL_SESSION_print_ses); \
 });})
 
@@ -12591,51 +12591,51 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 
 #define d2i_SSL_SESSION(a, pp, length) ({ \
   SSL_SESSION ** _d2i_SSL_SESSION_a = (a); \
-  unsigned char ** _d2i_SSL_SESSION_pp = (pp); \
+  const unsigned char *const * _d2i_SSL_SESSION_pp = (pp); \
   long _d2i_SSL_SESSION_length = (length); \
   ({ \
   register char * _d2i_SSL_SESSION__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((SSL_SESSION * (*)(char * __asm("a6"), SSL_SESSION ** __asm("a0"), unsigned char ** __asm("a1"), long __asm("d0"))) \
+  ((SSL_SESSION * (*)(char * __asm("a6"), SSL_SESSION ** __asm("a0"), const unsigned char *const * __asm("a1"), long __asm("d0"))) \
   (_d2i_SSL_SESSION__bn - 8664))(_d2i_SSL_SESSION__bn, _d2i_SSL_SESSION_a, _d2i_SSL_SESSION_pp, _d2i_SSL_SESSION_length); \
 });})
 
 #define SSL_get_peer_certificate(s) ({ \
-  SSL * _SSL_get_peer_certificate_s = (s); \
+  const SSL * _SSL_get_peer_certificate_s = (s); \
   ({ \
   register char * _SSL_get_peer_certificate__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((X509 * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((X509 * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_peer_certificate__bn - 8670))(_SSL_get_peer_certificate__bn, _SSL_get_peer_certificate_s); \
 });})
 
 #define SSL_get_peer_cert_chain(s) ({ \
-  SSL * _SSL_get_peer_cert_chain_s = (s); \
+  const SSL * _SSL_get_peer_cert_chain_s = (s); \
   ({ \
   register char * _SSL_get_peer_cert_chain__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((STACK_OF(X509) * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((STACK_OF(X509) * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_peer_cert_chain__bn - 8676))(_SSL_get_peer_cert_chain__bn, _SSL_get_peer_cert_chain_s); \
 });})
 
 #define SSL_CTX_get_verify_mode(ctx) ({ \
-  SSL_CTX * _SSL_CTX_get_verify_mode_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_get_verify_mode_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_get_verify_mode__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_verify_mode__bn - 8682))(_SSL_CTX_get_verify_mode__bn, _SSL_CTX_get_verify_mode_ctx); \
 });})
 
 #define SSL_CTX_get_verify_depth(ctx) ({ \
-  SSL_CTX * _SSL_CTX_get_verify_depth_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_get_verify_depth_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_get_verify_depth__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_verify_depth__bn - 8688))(_SSL_CTX_get_verify_depth__bn, _SSL_CTX_get_verify_depth_ctx); \
 });})
 
 #define SSL_CTX_get_verify_callback(ctx) ({ \
-  SSL_CTX * _SSL_CTX_get_verify_callback_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_get_verify_callback_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_get_verify_callback__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(int, X509_STORE_CTX *) (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((int (*)(int, X509_STORE_CTX *) (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_verify_callback__bn - 8694))(_SSL_CTX_get_verify_callback__bn, _SSL_CTX_get_verify_callback_ctx); \
 });})
 
@@ -12745,18 +12745,18 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_CTX_check_private_key(ctx) ({ \
-  SSL_CTX * _SSL_CTX_check_private_key_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_check_private_key_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_check_private_key__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_check_private_key__bn - 8766))(_SSL_CTX_check_private_key__bn, _SSL_CTX_check_private_key_ctx); \
 });})
 
 #define SSL_check_private_key(ctx) ({ \
-  SSL * _SSL_check_private_key_ctx = (ctx); \
+  const SSL * _SSL_check_private_key_ctx = (ctx); \
   ({ \
   register char * _SSL_check_private_key__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_check_private_key__bn - 8772))(_SSL_check_private_key__bn, _SSL_check_private_key_ctx); \
 });})
 
@@ -12921,19 +12921,19 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_error(s, ret_code) ({ \
-  SSL * _SSL_get_error_s = (s); \
+  const SSL * _SSL_get_error_s = (s); \
   LONG _SSL_get_error_ret_code = (ret_code); \
   ({ \
   register char * _SSL_get_error__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"), LONG __asm("d0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"), LONG __asm("d0"))) \
   (_SSL_get_error__bn - 8880))(_SSL_get_error__bn, _SSL_get_error_s, _SSL_get_error_ret_code); \
 });})
 
 #define SSL_get_version(s) ({ \
-  SSL * _SSL_get_version_s = (s); \
+  const SSL * _SSL_get_version_s = (s); \
   ({ \
   register char * _SSL_get_version__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((const char * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((const char * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_version__bn - 8886))(_SSL_get_version__bn, _SSL_get_version_s); \
 });})
 
@@ -13019,10 +13019,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 })
 
 #define SSL_get_ciphers(s) ({ \
-  SSL * _SSL_get_ciphers_s = (s); \
+  const SSL * _SSL_get_ciphers_s = (s); \
   ({ \
   register char * _SSL_get_ciphers__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((STACK_OF(SSL_CIPHER) * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((STACK_OF(SSL_CIPHER) * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_ciphers__bn - 8970))(_SSL_get_ciphers__bn, _SSL_get_ciphers_s); \
 });})
 
@@ -13107,37 +13107,37 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   (_SSL_alert_desc_string__bn - 9030))(_SSL_alert_desc_string__bn, _SSL_alert_desc_string_value); \
 });})
 
-#define SSL_set_client_CA_list(s, list) ({ \
+#define SSL_set_client_CA_list(s, name_list) ({ \
   SSL * _SSL_set_client_CA_list_s = (s); \
-  STACK_OF(X509_NAME) * _SSL_set_client_CA_list_list = (list); \
+  STACK_OF(X509_NAME) * _SSL_set_client_CA_list_name_list = (name_list); \
   ({ \
   register char * _SSL_set_client_CA_list__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
   ((void (*)(char * __asm("a6"), SSL * __asm("a0"), STACK_OF(X509_NAME) * __asm("a1"))) \
-  (_SSL_set_client_CA_list__bn - 9036))(_SSL_set_client_CA_list__bn, _SSL_set_client_CA_list_s, _SSL_set_client_CA_list_list); \
+  (_SSL_set_client_CA_list__bn - 9036))(_SSL_set_client_CA_list__bn, _SSL_set_client_CA_list_s, _SSL_set_client_CA_list_name_list); \
 });})
 
-#define SSL_CTX_set_client_CA_list(ctx, list) ({ \
+#define SSL_CTX_set_client_CA_list(ctx, name_list) ({ \
   SSL_CTX * _SSL_CTX_set_client_CA_list_ctx = (ctx); \
-  STACK_OF(X509_NAME) * _SSL_CTX_set_client_CA_list_list = (list); \
+  STACK_OF(X509_NAME) * _SSL_CTX_set_client_CA_list_name_list = (name_list); \
   ({ \
   register char * _SSL_CTX_set_client_CA_list__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
   ((void (*)(char * __asm("a6"), SSL_CTX * __asm("a0"), STACK_OF(X509_NAME) * __asm("a1"))) \
-  (_SSL_CTX_set_client_CA_list__bn - 9042))(_SSL_CTX_set_client_CA_list__bn, _SSL_CTX_set_client_CA_list_ctx, _SSL_CTX_set_client_CA_list_list); \
+  (_SSL_CTX_set_client_CA_list__bn - 9042))(_SSL_CTX_set_client_CA_list__bn, _SSL_CTX_set_client_CA_list_ctx, _SSL_CTX_set_client_CA_list_name_list); \
 });})
 
 #define SSL_get_client_CA_list(s) ({ \
-  SSL * _SSL_get_client_CA_list_s = (s); \
+  const SSL * _SSL_get_client_CA_list_s = (s); \
   ({ \
   register char * _SSL_get_client_CA_list__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((STACK_OF(X509_NAME) * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((STACK_OF(X509_NAME) * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_client_CA_list__bn - 9048))(_SSL_get_client_CA_list__bn, _SSL_get_client_CA_list_s); \
 });})
 
 #define SSL_CTX_get_client_CA_list(s) ({ \
-  SSL_CTX * _SSL_CTX_get_client_CA_list_s = (s); \
+  const SSL_CTX * _SSL_CTX_get_client_CA_list_s = (s); \
   ({ \
   register char * _SSL_CTX_get_client_CA_list__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((STACK_OF(X509_NAME) * (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((STACK_OF(X509_NAME) * (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_client_CA_list__bn - 9054))(_SSL_CTX_get_client_CA_list__bn, _SSL_CTX_get_client_CA_list_s); \
 });})
 
@@ -13176,10 +13176,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_default_timeout(s) ({ \
-  SSL * _SSL_get_default_timeout_s = (s); \
+  const SSL * _SSL_get_default_timeout_s = (s); \
   ({ \
   register char * _SSL_get_default_timeout__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((long (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((long (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_default_timeout__bn - 9084))(_SSL_get_default_timeout__bn, _SSL_get_default_timeout_s); \
 });})
 
@@ -13216,10 +13216,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_certificate(ssl) ({ \
-  SSL * _SSL_get_certificate_ssl = (ssl); \
+  const SSL * _SSL_get_certificate_ssl = (ssl); \
   ({ \
   register char * _SSL_get_certificate__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((X509 * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((X509 * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_certificate__bn - 9114))(_SSL_get_certificate__bn, _SSL_get_certificate_ssl); \
 });})
 
@@ -13241,10 +13241,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_CTX_get_quiet_shutdown(ctx) ({ \
-  SSL_CTX * _SSL_CTX_get_quiet_shutdown_ctx = (ctx); \
+  const SSL_CTX * _SSL_CTX_get_quiet_shutdown_ctx = (ctx); \
   ({ \
   register char * _SSL_CTX_get_quiet_shutdown__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL_CTX * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"))) \
   (_SSL_CTX_get_quiet_shutdown__bn - 9132))(_SSL_CTX_get_quiet_shutdown__bn, _SSL_CTX_get_quiet_shutdown_ctx); \
 });})
 
@@ -13258,10 +13258,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_quiet_shutdown(ssl) ({ \
-  SSL * _SSL_get_quiet_shutdown_ssl = (ssl); \
+  const SSL * _SSL_get_quiet_shutdown_ssl = (ssl); \
   ({ \
   register char * _SSL_get_quiet_shutdown__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_quiet_shutdown__bn - 9144))(_SSL_get_quiet_shutdown__bn, _SSL_get_quiet_shutdown_ssl); \
 });})
 
@@ -13275,18 +13275,18 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_shutdown(ssl) ({ \
-  SSL * _SSL_get_shutdown_ssl = (ssl); \
+  const SSL * _SSL_get_shutdown_ssl = (ssl); \
   ({ \
   register char * _SSL_get_shutdown__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_shutdown__bn - 9156))(_SSL_get_shutdown__bn, _SSL_get_shutdown_ssl); \
 });})
 
 #define SSL_version(ssl) ({ \
-  SSL * _SSL_version_ssl = (ssl); \
+  const SSL * _SSL_version_ssl = (ssl); \
   ({ \
   register char * _SSL_version__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_version__bn - 9162))(_SSL_version__bn, _SSL_version_ssl); \
 });})
 
@@ -13309,10 +13309,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_session(ssl) ({ \
-  SSL * _SSL_get_session_ssl = (ssl); \
+  const SSL * _SSL_get_session_ssl = (ssl); \
   ({ \
   register char * _SSL_get_session__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((SSL_SESSION * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((SSL_SESSION * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_session__bn - 9180))(_SSL_get_session__bn, _SSL_get_session_ssl); \
 });})
 
@@ -13325,10 +13325,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_SSL_CTX(ssl) ({ \
-  SSL * _SSL_get_SSL_CTX_ssl = (ssl); \
+  const SSL * _SSL_get_SSL_CTX_ssl = (ssl); \
   ({ \
   register char * _SSL_get_SSL_CTX__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((SSL_CTX * (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((SSL_CTX * (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_SSL_CTX__bn - 9192))(_SSL_get_SSL_CTX__bn, _SSL_get_SSL_CTX_ssl); \
 });})
 
@@ -13342,18 +13342,18 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_info_callback(ssl) ({ \
-  SSL * _SSL_get_info_callback_ssl = (ssl); \
+  const SSL * _SSL_get_info_callback_ssl = (ssl); \
   ({ \
   register char * _SSL_get_info_callback__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void (*)(const SSL *ssl, int type, int val) (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((void (*)(const SSL *ssl, int type, int val) (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_info_callback__bn - 9204))(_SSL_get_info_callback__bn, _SSL_get_info_callback_ssl); \
 });})
 
 #define SSL_state(ssl) ({ \
-  SSL * _SSL_state_ssl = (ssl); \
+  const SSL * _SSL_state_ssl = (ssl); \
   ({ \
   register char * _SSL_state__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((int (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_state__bn - 9210))(_SSL_state__bn, _SSL_state_ssl); \
 });})
 
@@ -13367,10 +13367,10 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_verify_result(ssl) ({ \
-  SSL * _SSL_get_verify_result_ssl = (ssl); \
+  const SSL * _SSL_get_verify_result_ssl = (ssl); \
   ({ \
   register char * _SSL_get_verify_result__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((long (*)(char * __asm("a6"), SSL * __asm("a0"))) \
+  ((long (*)(char * __asm("a6"), const SSL * __asm("a0"))) \
   (_SSL_get_verify_result__bn - 9222))(_SSL_get_verify_result__bn, _SSL_get_verify_result_ssl); \
 });})
 
@@ -13385,11 +13385,11 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_get_ex_data(ssl, idx) ({ \
-  SSL * _SSL_get_ex_data_ssl = (ssl); \
+  const SSL * _SSL_get_ex_data_ssl = (ssl); \
   LONG _SSL_get_ex_data_idx = (idx); \
   ({ \
   register char * _SSL_get_ex_data__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void * (*)(char * __asm("a6"), SSL * __asm("a0"), LONG __asm("d0"))) \
+  ((void * (*)(char * __asm("a6"), const SSL * __asm("a0"), LONG __asm("d0"))) \
   (_SSL_get_ex_data__bn - 9234))(_SSL_get_ex_data__bn, _SSL_get_ex_data_ssl, _SSL_get_ex_data_idx); \
 });})
 
@@ -13416,11 +13416,11 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_SESSION_get_ex_data(ss, idx) ({ \
-  SSL_SESSION * _SSL_SESSION_get_ex_data_ss = (ss); \
+  const SSL_SESSION * _SSL_SESSION_get_ex_data_ss = (ss); \
   LONG _SSL_SESSION_get_ex_data_idx = (idx); \
   ({ \
   register char * _SSL_SESSION_get_ex_data__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void * (*)(char * __asm("a6"), SSL_SESSION * __asm("a0"), LONG __asm("d0"))) \
+  ((void * (*)(char * __asm("a6"), const SSL_SESSION * __asm("a0"), LONG __asm("d0"))) \
   (_SSL_SESSION_get_ex_data__bn - 9252))(_SSL_SESSION_get_ex_data__bn, _SSL_SESSION_get_ex_data_ss, _SSL_SESSION_get_ex_data_idx); \
 });})
 
@@ -13447,11 +13447,11 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 });})
 
 #define SSL_CTX_get_ex_data(ssl, idx) ({ \
-  SSL_CTX * _SSL_CTX_get_ex_data_ssl = (ssl); \
+  const SSL_CTX * _SSL_CTX_get_ex_data_ssl = (ssl); \
   LONG _SSL_CTX_get_ex_data_idx = (idx); \
   ({ \
   register char * _SSL_CTX_get_ex_data__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((void * (*)(char * __asm("a6"), SSL_CTX * __asm("a0"), LONG __asm("d0"))) \
+  ((void * (*)(char * __asm("a6"), const SSL_CTX * __asm("a0"), LONG __asm("d0"))) \
   (_SSL_CTX_get_ex_data__bn - 9270))(_SSL_CTX_get_ex_data__bn, _SSL_CTX_get_ex_data_ssl, _SSL_CTX_get_ex_data_idx); \
 });})
 
@@ -16612,13 +16612,13 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 
 #define X509_NAME_ENTRY_create_by_txt(ne, field, type, bytes, len) ({ \
   X509_NAME_ENTRY ** _X509_NAME_ENTRY_create_by_txt_ne = (ne); \
-  char * _X509_NAME_ENTRY_create_by_txt_field = (field); \
+  const char * _X509_NAME_ENTRY_create_by_txt_field = (field); \
   LONG _X509_NAME_ENTRY_create_by_txt_type = (type); \
-  unsigned char * _X509_NAME_ENTRY_create_by_txt_bytes = (bytes); \
+  const unsigned char * _X509_NAME_ENTRY_create_by_txt_bytes = (bytes); \
   LONG _X509_NAME_ENTRY_create_by_txt_len = (len); \
   ({ \
   register char * _X509_NAME_ENTRY_create_by_txt__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((X509_NAME_ENTRY * (*)(char * __asm("a6"), X509_NAME_ENTRY ** __asm("a0"), char * __asm("a1"), LONG __asm("d0"), unsigned char * __asm("a2"), LONG __asm("d1"))) \
+  ((X509_NAME_ENTRY * (*)(char * __asm("a6"), X509_NAME_ENTRY ** __asm("a0"), const char * __asm("a1"), LONG __asm("d0"), const unsigned char * __asm("a2"), LONG __asm("d1"))) \
   (_X509_NAME_ENTRY_create_by_txt__bn - 11436))(_X509_NAME_ENTRY_create_by_txt__bn, _X509_NAME_ENTRY_create_by_txt_ne, _X509_NAME_ENTRY_create_by_txt_field, _X509_NAME_ENTRY_create_by_txt_type, _X509_NAME_ENTRY_create_by_txt_bytes, _X509_NAME_ENTRY_create_by_txt_len); \
 });})
 
@@ -16636,15 +16636,15 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 
 #define X509_NAME_add_entry_by_txt(name, field, type, bytes, len, loc, set) ({ \
   X509_NAME * _X509_NAME_add_entry_by_txt_name = (name); \
-  char * _X509_NAME_add_entry_by_txt_field = (field); \
+  const char * _X509_NAME_add_entry_by_txt_field = (field); \
   LONG _X509_NAME_add_entry_by_txt_type = (type); \
-  unsigned char * _X509_NAME_add_entry_by_txt_bytes = (bytes); \
+  const unsigned char * _X509_NAME_add_entry_by_txt_bytes = (bytes); \
   LONG _X509_NAME_add_entry_by_txt_len = (len); \
   LONG _X509_NAME_add_entry_by_txt_loc = (loc); \
   LONG _X509_NAME_add_entry_by_txt_set = (set); \
   ({ \
   register char * _X509_NAME_add_entry_by_txt__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), X509_NAME * __asm("a0"), char * __asm("a1"), LONG __asm("d0"), unsigned char * __asm("a2"), LONG __asm("d1"), LONG __asm("d2"), LONG __asm("d3"))) \
+  ((int (*)(char * __asm("a6"), X509_NAME * __asm("a0"), const char * __asm("a1"), LONG __asm("d0"), const unsigned char * __asm("a2"), LONG __asm("d1"), LONG __asm("d2"), LONG __asm("d3"))) \
   (_X509_NAME_add_entry_by_txt__bn - 11448))(_X509_NAME_add_entry_by_txt__bn, _X509_NAME_add_entry_by_txt_name, _X509_NAME_add_entry_by_txt_field, _X509_NAME_add_entry_by_txt_type, _X509_NAME_add_entry_by_txt_bytes, _X509_NAME_add_entry_by_txt_len, _X509_NAME_add_entry_by_txt_loc, _X509_NAME_add_entry_by_txt_set); \
 });})
 
@@ -16652,11 +16652,11 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   X509_NAME_ENTRY ** _X509_NAME_ENTRY_create_by_OBJ_ne = (ne); \
   ASN1_OBJECT * _X509_NAME_ENTRY_create_by_OBJ_obj = (obj); \
   LONG _X509_NAME_ENTRY_create_by_OBJ_type = (type); \
-  unsigned char * _X509_NAME_ENTRY_create_by_OBJ_bytes = (bytes); \
+  const unsigned char * _X509_NAME_ENTRY_create_by_OBJ_bytes = (bytes); \
   LONG _X509_NAME_ENTRY_create_by_OBJ_len = (len); \
   ({ \
   register char * _X509_NAME_ENTRY_create_by_OBJ__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((X509_NAME_ENTRY * (*)(char * __asm("a6"), X509_NAME_ENTRY ** __asm("a0"), ASN1_OBJECT * __asm("a1"), LONG __asm("d0"), unsigned char * __asm("a2"), LONG __asm("d1"))) \
+  ((X509_NAME_ENTRY * (*)(char * __asm("a6"), X509_NAME_ENTRY ** __asm("a0"), ASN1_OBJECT * __asm("a1"), LONG __asm("d0"), const unsigned char * __asm("a2"), LONG __asm("d1"))) \
   (_X509_NAME_ENTRY_create_by_OBJ__bn - 11454))(_X509_NAME_ENTRY_create_by_OBJ__bn, _X509_NAME_ENTRY_create_by_OBJ_ne, _X509_NAME_ENTRY_create_by_OBJ_obj, _X509_NAME_ENTRY_create_by_OBJ_type, _X509_NAME_ENTRY_create_by_OBJ_bytes, _X509_NAME_ENTRY_create_by_OBJ_len); \
 });})
 
@@ -16672,11 +16672,11 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
 #define X509_NAME_ENTRY_set_data(ne, type, bytes, len) ({ \
   X509_NAME_ENTRY * _X509_NAME_ENTRY_set_data_ne = (ne); \
   LONG _X509_NAME_ENTRY_set_data_type = (type); \
-  unsigned char * _X509_NAME_ENTRY_set_data_bytes = (bytes); \
+  const unsigned char * _X509_NAME_ENTRY_set_data_bytes = (bytes); \
   LONG _X509_NAME_ENTRY_set_data_len = (len); \
   ({ \
   register char * _X509_NAME_ENTRY_set_data__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), X509_NAME_ENTRY * __asm("a0"), LONG __asm("d0"), unsigned char * __asm("a1"), LONG __asm("d1"))) \
+  ((int (*)(char * __asm("a6"), X509_NAME_ENTRY * __asm("a0"), LONG __asm("d0"), const unsigned char * __asm("a1"), LONG __asm("d1"))) \
   (_X509_NAME_ENTRY_set_data__bn - 11466))(_X509_NAME_ENTRY_set_data__bn, _X509_NAME_ENTRY_set_data_ne, _X509_NAME_ENTRY_set_data_type, _X509_NAME_ENTRY_set_data_bytes, _X509_NAME_ENTRY_set_data_len); \
 });})
 
@@ -22357,24 +22357,6 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   (_SHA1_Transform__bn - 15090))(_SHA1_Transform__bn, _SHA1_Transform_c, _SHA1_Transform_data); \
 });})
 
-#define UI_read_string_lib(ui, uis) ({ \
-  UI * _UI_read_string_lib_ui = (ui); \
-  UI_STRING * _UI_read_string_lib_uis = (uis); \
-  ({ \
-  register char * _UI_read_string_lib__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), UI * __asm("a0"), UI_STRING * __asm("a1"))) \
-  (_UI_read_string_lib__bn - 15096))(_UI_read_string_lib__bn, _UI_read_string_lib_ui, _UI_read_string_lib_uis); \
-});})
-
-#define UI_write_string_lib(ui, uis) ({ \
-  UI * _UI_write_string_lib_ui = (ui); \
-  UI_STRING * _UI_write_string_lib_uis = (uis); \
-  ({ \
-  register char * _UI_write_string_lib__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
-  ((int (*)(char * __asm("a6"), UI * __asm("a0"), UI_STRING * __asm("a1"))) \
-  (_UI_write_string_lib__bn - 15102))(_UI_write_string_lib__bn, _UI_write_string_lib_ui, _UI_write_string_lib_uis); \
-});})
-
 #define HMAC_CTX_set_flags(ctx, flags) ({ \
   HMAC_CTX * _HMAC_CTX_set_flags_ctx = (ctx); \
   unsigned long _HMAC_CTX_set_flags_flags = (flags); \
@@ -22391,5 +22373,83 @@ static __inline__ void ___ERR_add_error_data(struct Library * AmiSSLBase, LONG n
   ((int (*)(char * __asm("a6"), X509 * __asm("a0"))) \
   (_X509_check_ca__bn - 15114))(_X509_check_ca__bn, _X509_check_ca_x); \
 });})
+
+#define PROXY_POLICY_new() ({ \
+  register char * _PROXY_POLICY_new__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((PROXY_POLICY * (*)(char * __asm("a6"))) \
+  (_PROXY_POLICY_new__bn - 15120))(_PROXY_POLICY_new__bn); \
+})
+
+#define PROXY_POLICY_free(a) ({ \
+  PROXY_POLICY * _PROXY_POLICY_free_a = (a); \
+  ({ \
+  register char * _PROXY_POLICY_free__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((void (*)(char * __asm("a6"), PROXY_POLICY * __asm("a0"))) \
+  (_PROXY_POLICY_free__bn - 15126))(_PROXY_POLICY_free__bn, _PROXY_POLICY_free_a); \
+});})
+
+#define d2i_PROXY_POLICY(a, in, len) ({ \
+  PROXY_POLICY ** _d2i_PROXY_POLICY_a = (a); \
+  unsigned char ** _d2i_PROXY_POLICY_in = (in); \
+  long _d2i_PROXY_POLICY_len = (len); \
+  ({ \
+  register char * _d2i_PROXY_POLICY__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((PROXY_POLICY * (*)(char * __asm("a6"), PROXY_POLICY ** __asm("a0"), unsigned char ** __asm("a1"), long __asm("d0"))) \
+  (_d2i_PROXY_POLICY__bn - 15132))(_d2i_PROXY_POLICY__bn, _d2i_PROXY_POLICY_a, _d2i_PROXY_POLICY_in, _d2i_PROXY_POLICY_len); \
+});})
+
+#define i2d_PROXY_POLICY(a, out) ({ \
+  PROXY_POLICY * _i2d_PROXY_POLICY_a = (a); \
+  unsigned char ** _i2d_PROXY_POLICY_out = (out); \
+  ({ \
+  register char * _i2d_PROXY_POLICY__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((int (*)(char * __asm("a6"), PROXY_POLICY * __asm("a0"), unsigned char ** __asm("a1"))) \
+  (_i2d_PROXY_POLICY__bn - 15138))(_i2d_PROXY_POLICY__bn, _i2d_PROXY_POLICY_a, _i2d_PROXY_POLICY_out); \
+});})
+
+#define PROXY_POLICY_it() ({ \
+  register char * _PROXY_POLICY_it__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((const ASN1_ITEM * (*)(char * __asm("a6"))) \
+  (_PROXY_POLICY_it__bn - 15144))(_PROXY_POLICY_it__bn); \
+})
+
+#define PROXY_CERT_INFO_EXTENSION_new() ({ \
+  register char * _PROXY_CERT_INFO_EXTENSION_new__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((PROXY_CERT_INFO_EXTENSION * (*)(char * __asm("a6"))) \
+  (_PROXY_CERT_INFO_EXTENSION_new__bn - 15150))(_PROXY_CERT_INFO_EXTENSION_new__bn); \
+})
+
+#define PROXY_CERT_INFO_EXTENSION_free(a) ({ \
+  PROXY_CERT_INFO_EXTENSION * _PROXY_CERT_INFO_EXTENSION_free_a = (a); \
+  ({ \
+  register char * _PROXY_CERT_INFO_EXTENSION_free__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((void (*)(char * __asm("a6"), PROXY_CERT_INFO_EXTENSION * __asm("a0"))) \
+  (_PROXY_CERT_INFO_EXTENSION_free__bn - 15156))(_PROXY_CERT_INFO_EXTENSION_free__bn, _PROXY_CERT_INFO_EXTENSION_free_a); \
+});})
+
+#define d2i_PROXY_CERT_INFO_EXTENSION(a, in, len) ({ \
+  PROXY_CERT_INFO_EXTENSION ** _d2i_PROXY_CERT_INFO_EXTENSION_a = (a); \
+  unsigned char ** _d2i_PROXY_CERT_INFO_EXTENSION_in = (in); \
+  long _d2i_PROXY_CERT_INFO_EXTENSION_len = (len); \
+  ({ \
+  register char * _d2i_PROXY_CERT_INFO_EXTENSION__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((PROXY_CERT_INFO_EXTENSION * (*)(char * __asm("a6"), PROXY_CERT_INFO_EXTENSION ** __asm("a0"), unsigned char ** __asm("a1"), long __asm("d0"))) \
+  (_d2i_PROXY_CERT_INFO_EXTENSION__bn - 15162))(_d2i_PROXY_CERT_INFO_EXTENSION__bn, _d2i_PROXY_CERT_INFO_EXTENSION_a, _d2i_PROXY_CERT_INFO_EXTENSION_in, _d2i_PROXY_CERT_INFO_EXTENSION_len); \
+});})
+
+#define i2d_PROXY_CERT_INFO_EXTENSION(a, out) ({ \
+  PROXY_CERT_INFO_EXTENSION * _i2d_PROXY_CERT_INFO_EXTENSION_a = (a); \
+  unsigned char ** _i2d_PROXY_CERT_INFO_EXTENSION_out = (out); \
+  ({ \
+  register char * _i2d_PROXY_CERT_INFO_EXTENSION__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((int (*)(char * __asm("a6"), PROXY_CERT_INFO_EXTENSION * __asm("a0"), unsigned char ** __asm("a1"))) \
+  (_i2d_PROXY_CERT_INFO_EXTENSION__bn - 15168))(_i2d_PROXY_CERT_INFO_EXTENSION__bn, _i2d_PROXY_CERT_INFO_EXTENSION_a, _i2d_PROXY_CERT_INFO_EXTENSION_out); \
+});})
+
+#define PROXY_CERT_INFO_EXTENSION_it() ({ \
+  register char * _PROXY_CERT_INFO_EXTENSION_it__bn __asm("a6") = (char *) (AMISSL_BASE_NAME);\
+  ((const ASN1_ITEM * (*)(char * __asm("a6"))) \
+  (_PROXY_CERT_INFO_EXTENSION_it__bn - 15174))(_PROXY_CERT_INFO_EXTENSION_it__bn); \
+})
 
 #endif /*  _INLINE_AMISSL_H  */

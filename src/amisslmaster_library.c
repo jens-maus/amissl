@@ -130,8 +130,8 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
-	if (LibAPIVersion == AMISSL_V097f)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097f.library", 3);
+	if (LibAPIVersion == AMISSL_V097g)
+		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 		/* This only happens for m68k code, no need to handle ppc versions here */
@@ -212,7 +212,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG
 
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if (LibAPIVersion == AMISSL_V097f)
+	if (LibAPIVersion == AMISSL_V097g)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{
@@ -294,7 +294,7 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
 	kprintf("UserLibCleanup called\n");
 
-	if (LibAPIVersion == AMISSL_V097f)
+	if (LibAPIVersion == AMISSL_V097g)
 		;
 	else if (LibAPIVersion == AMISSL_V2)
 	{

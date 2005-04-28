@@ -851,7 +851,7 @@ BIGNUM * AMISSL_LIB_ENTRY _AmiSSL_ASN1_ENUMERATED_to_BN(REG(a6, __IFACE_OR_BASE)
 	return(ASN1_ENUMERATED_to_BN(ai, bn));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_ASN1_PRINTABLE_type(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char *s), REG(d0, int max))
+int AMISSL_LIB_ENTRY _AmiSSL_ASN1_PRINTABLE_type(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char *s), REG(d0, int max))
 {
 	return(ASN1_PRINTABLE_type(s, max));
 }
@@ -1676,7 +1676,9 @@ int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *
 {
 	return(BIO_vprintf(bio, format, args));
 }
+#endif
 
+#ifndef __amigaos4__
 int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char *buf), REG(d0, size_t n), REG(a1, const char *format), REG(d1, va_list args))
 {
 	return(BIO_vsnprintf(buf, n, format, args));
@@ -2653,7 +2655,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_locking_callback(REG(a6, __IFACE_OR_BAS
 	CRYPTO_set_locking_callback(func);
 }
 
-void (* AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_locking_callback(REG(a6, __IFACE_OR_BASE)))(int mode, int type, const char *file, int line)
+void AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_locking_callback(REG(a6, __IFACE_OR_BASE)))(int mode, int type, const char *file, int line)
 {
 	return(CRYPTO_get_locking_callback());
 }
@@ -2663,7 +2665,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_add_lock_callback(REG(a6, __IFACE_OR_BA
 	CRYPTO_set_add_lock_callback(func);
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_add_lock_callback(REG(a6, __IFACE_OR_BASE)))(int *num, int mount, int type, const char *file, int line)
+int AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_add_lock_callback(REG(a6, __IFACE_OR_BASE)))(int *num, int mount, int type, const char *file, int line)
 {
 	return(CRYPTO_get_add_lock_callback());
 }
@@ -2723,17 +2725,17 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_dynlock_destroy_callback(REG(a6, __IFAC
 	CRYPTO_set_dynlock_destroy_callback(dyn_destroy_function);
 }
 
-struct CRYPTO_dynlock_value *(* AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_create_callback(REG(a6, __IFACE_OR_BASE)))(const char *file, int line)
+struct CRYPTO_dynlock_value * AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_create_callback(REG(a6, __IFACE_OR_BASE)))(const char *file, int line)
 {
 	return(CRYPTO_get_dynlock_create_callback());
 }
 
-void (* AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_lock_callback(REG(a6, __IFACE_OR_BASE)))(int mode, struct CRYPTO_dynlock_value *l, const char *file, int line)
+void AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_lock_callback(REG(a6, __IFACE_OR_BASE)))(int mode, struct CRYPTO_dynlock_value *l, const char *file, int line)
 {
 	return(CRYPTO_get_dynlock_lock_callback());
 }
 
-void (* AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_destroy_callback(REG(a6, __IFACE_OR_BASE)))(struct CRYPTO_dynlock_value *l, const char *file, int line)
+void AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_destroy_callback(REG(a6, __IFACE_OR_BASE)))(struct CRYPTO_dynlock_value *l, const char *file, int line)
 {
 	return(CRYPTO_get_dynlock_destroy_callback());
 }
@@ -6732,12 +6734,12 @@ struct lhash_st * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_sessions(REG(a6, __IFACE_OR_B
 	return(SSL_CTX_sessions(ctx));
 }
 
-size_t AMISSL_LIB_ENTRY _AmiSSL_SSL_get_finished(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(a1, void *buf), REG(d0, size_t count))
+size_t AMISSL_LIB_ENTRY _AmiSSL_SSL_get_finished(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s), REG(a1, void *buf), REG(d0, size_t count))
 {
 	return(SSL_get_finished(s, buf, count));
 }
 
-size_t AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_finished(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(a1, void *buf), REG(d0, size_t count))
+size_t AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_finished(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s), REG(a1, void *buf), REG(d0, size_t count))
 {
 	return(SSL_get_peer_finished(s, buf, count));
 }
@@ -6792,12 +6794,12 @@ long AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_timeout(REG(a6, __IFACE_OR_BASE), REG(
 	return(SSL_CTX_set_timeout(ctx, t));
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx))
+long AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx))
 {
 	return(SSL_CTX_get_timeout(ctx));
 }
 
-X509_STORE * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_cert_store(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *a))
+X509_STORE * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_cert_store(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *a))
 {
 	return(SSL_CTX_get_cert_store(a));
 }
@@ -6807,7 +6809,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_cert_store(REG(a6, __IFACE_OR_BASE), R
 	SSL_CTX_set_cert_store(a, b);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_want(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_want(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_want(s));
 }
@@ -6822,22 +6824,22 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_flush_sessions(REG(a6, __IFACE_OR_BASE), R
 	SSL_CTX_flush_sessions(ctx, tm);
 }
 
-SSL_CIPHER * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_current_cipher(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+SSL_CIPHER * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_current_cipher(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_current_cipher(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_bits(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CIPHER *c), REG(a1, int *alg_bits))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_bits(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER *c), REG(a1, int *alg_bits))
 {
 	return(SSL_CIPHER_get_bits(c, alg_bits));
 }
 
-char * AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CIPHER *c))
+char * AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER *c))
 {
 	return(SSL_CIPHER_get_version(c));
 }
 
-const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_name(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CIPHER *c))
+const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_name(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER *c))
 {
 	return(SSL_CIPHER_get_name(c));
 }
@@ -6867,37 +6869,37 @@ const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_CIPHER_get_export(REG(a6, __IFACE_OR_B
 	return(SSL_CIPHER_get_export(cipher));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_fd(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_fd(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_fd(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_rfd(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_rfd(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_rfd(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_wfd(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_wfd(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_wfd(s));
 }
 
-const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_cipher_list(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(d0, int n))
+const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_cipher_list(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s), REG(d0, int n))
 {
 	return(SSL_get_cipher_list(s, n));
 }
 
-char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_shared_ciphers(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(a1, char *buf), REG(d0, int len))
+char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_shared_ciphers(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s), REG(a1, char *buf), REG(d0, int len))
 {
 	return(SSL_get_shared_ciphers(s, buf, len));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_read_ahead(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_read_ahead(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_read_ahead(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_pending(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_pending(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_pending(s));
 }
@@ -6922,12 +6924,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_bio(REG(a6, __IFACE_OR_BASE), REG(a0, SSL 
 	SSL_set_bio(s, rbio, wbio);
 }
 
-BIO * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_rbio(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+BIO * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_rbio(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_rbio(s));
 }
 
-BIO * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_wbio(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+BIO * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_wbio(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_wbio(s));
 }
@@ -6942,17 +6944,17 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_read_ahead(REG(a6, __IFACE_OR_BASE), REG(a
 	SSL_set_read_ahead(s, yes);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_mode(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_mode(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_verify_mode(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_verify_depth(s));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s)))(int, X509_STORE_CTX *)
+int AMISSL_LIB_ENTRY (*_AmiSSL_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s)))(int, X509_STORE_CTX *)
 {
 	return(SSL_get_verify_callback(s));
 }
@@ -7072,7 +7074,7 @@ const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_rstate_string_long(REG(a6, __IFACE_OR_
 	return(SSL_rstate_string_long(s));
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_time(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION *s))
+long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_time(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION *s))
 {
 	return(SSL_SESSION_get_time(s));
 }
@@ -7082,7 +7084,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_set_time(REG(a6, __IFACE_OR_BASE), REG
 	return(SSL_SESSION_set_time(s, t));
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION *s))
+long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION *s))
 {
 	return(SSL_SESSION_get_timeout(s));
 }
@@ -7092,7 +7094,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_set_timeout(REG(a6, __IFACE_OR_BASE), 
 	return(SSL_SESSION_set_timeout(s, t));
 }
 
-void AMISSL_LIB_ENTRY _AmiSSL_SSL_copy_session_id(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *to), REG(a1, SSL *from))
+void AMISSL_LIB_ENTRY _AmiSSL_SSL_copy_session_id(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *to), REG(a1, const SSL *from))
 {
 	SSL_copy_session_id(to, from);
 }
@@ -7102,17 +7104,17 @@ SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_new(REG(a6, __IFACE_OR_BASE))
 	return(SSL_SESSION_new());
 }
 
-unsigned long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_hash(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION *a))
+unsigned long AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_hash(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION *a))
 {
 	return(SSL_SESSION_hash(a));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_cmp(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION *a), REG(a1, SSL_SESSION *b))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_cmp(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION *a), REG(a1, const SSL_SESSION *b))
 {
 	return(SSL_SESSION_cmp(a, b));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *fp), REG(a1, SSL_SESSION *ses))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *fp), REG(a1, const SSL_SESSION *ses))
 {
 	return(SSL_SESSION_print(fp, ses));
 }
@@ -7157,32 +7159,32 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_has_matching_session_id(REG(a6, __IFACE_OR_BASE
 	return(SSL_has_matching_session_id(ssl, id, id_len));
 }
 
-SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_d2i_SSL_SESSION(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION **a), REG(a1, unsigned char **pp), REG(d0, long length))
+SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_d2i_SSL_SESSION(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION **a), REG(a1, const unsigned char *const *pp), REG(d0, long length))
 {
 	return(d2i_SSL_SESSION(a, pp, length));
 }
 
-X509 * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+X509 * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_peer_certificate(s));
 }
 
-STACK_OF(X509) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_cert_chain(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+STACK_OF(X509) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_peer_cert_chain(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_peer_cert_chain(s));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_mode(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_mode(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx))
 {
 	return(SSL_CTX_get_verify_mode(ctx));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx))
 {
 	return(SSL_CTX_get_verify_depth(ctx));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx)))(int, X509_STORE_CTX *)
+int AMISSL_LIB_ENTRY (*_AmiSSL_SSL_CTX_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx)))(int, X509_STORE_CTX *)
 {
 	return(SSL_CTX_get_verify_callback(ctx));
 }
@@ -7242,12 +7244,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_default_passwd_cb_userdata(REG(a6, __I
 	SSL_CTX_set_default_passwd_cb_userdata(ctx, u);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_check_private_key(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_check_private_key(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx))
 {
 	return(SSL_CTX_check_private_key(ctx));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_check_private_key(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ctx))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_check_private_key(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ctx))
 {
 	return(SSL_check_private_key(ctx));
 }
@@ -7337,12 +7339,12 @@ long AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_callback_ctrl(REG(a6, __IFACE_OR_BASE), RE
 	return(SSL_CTX_callback_ctrl(a1, a2, a3));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_error(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s), REG(d0, int ret_code))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_error(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s), REG(d0, int ret_code))
 {
 	return(SSL_get_error(s, ret_code));
 }
 
-const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+const char * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_version(s));
 }
@@ -7382,23 +7384,6 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv3_client_method(REG(a6, __IFACE_OR_BAS
 	return(SSLv3_client_method());
 }
 
-#if 0
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
-{
-	return(SSLv23_method());
-}
-
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
-{
-	return(SSLv23_server_method());
-}
-
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
-{
-	return(SSLv23_client_method());
-}
-#endif
-
 SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_TLSv1_method(REG(a6, __IFACE_OR_BASE))
 {
 	return(TLSv1_method());
@@ -7414,7 +7399,7 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_TLSv1_client_method(REG(a6, __IFACE_OR_BAS
 	return(TLSv1_client_method());
 }
 
-STACK_OF(SSL_CIPHER) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_ciphers(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+STACK_OF(SSL_CIPHER) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_ciphers(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_ciphers(s));
 }
@@ -7479,12 +7464,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_client_CA_list(REG(a6, __IFACE_OR_BASE
 	SSL_CTX_set_client_CA_list(ctx, name_list);
 }
 
-STACK_OF(X509_NAME) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_client_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+STACK_OF(X509_NAME) * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_client_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_client_CA_list(s));
 }
 
-STACK_OF(X509_NAME) * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_client_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *s))
+STACK_OF(X509_NAME) * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_client_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *s))
 {
 	return(SSL_CTX_get_client_CA_list(s));
 }
@@ -7509,7 +7494,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_accept_state(REG(a6, __IFACE_OR_BASE), REG
 	SSL_set_accept_state(s);
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_SSL_get_default_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *s))
+long AMISSL_LIB_ENTRY _AmiSSL_SSL_get_default_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *s))
 {
 	return(SSL_get_default_timeout(s));
 }
@@ -7534,7 +7519,7 @@ SSL * AMISSL_LIB_ENTRY _AmiSSL_SSL_dup(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ss
 	return(SSL_dup(ssl));
 }
 
-X509 * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+X509 * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_certificate(ssl));
 }
@@ -7549,7 +7534,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_quiet_shutdown(REG(a6, __IFACE_OR_BASE
 	SSL_CTX_set_quiet_shutdown(ctx, mode);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_quiet_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ctx))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_quiet_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ctx))
 {
 	return(SSL_CTX_get_quiet_shutdown(ctx));
 }
@@ -7559,7 +7544,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_quiet_shutdown(REG(a6, __IFACE_OR_BASE), R
 	SSL_set_quiet_shutdown(ssl, mode);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_quiet_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_quiet_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_quiet_shutdown(ssl));
 }
@@ -7569,12 +7554,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0,
 	SSL_set_shutdown(ssl, mode);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_shutdown(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_shutdown(ssl));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_version(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_version(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_version(ssl));
 }
@@ -7589,7 +7574,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_load_verify_locations(REG(a6, __IFACE_OR_BA
 	return(SSL_CTX_load_verify_locations(ctx, CAfile, CApath));
 }
 
-SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_session(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_session(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_session(ssl));
 }
@@ -7599,7 +7584,7 @@ SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_SSL_get1_session(REG(a6, __IFACE_OR_BASE)
 	return(SSL_get1_session(ssl));
 }
 
-SSL_CTX * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_SSL_CTX(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+SSL_CTX * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_SSL_CTX(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_SSL_CTX(ssl));
 }
@@ -7609,12 +7594,12 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_info_callback(REG(a6, __IFACE_OR_BASE), RE
 	SSL_set_info_callback(ssl, cb);
 }
 
-void (* AMISSL_LIB_ENTRY _AmiSSL_SSL_get_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl)))(const SSL *ssl, int type, int val)
+void AMISSL_LIB_ENTRY (*_AmiSSL_SSL_get_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl)))(const SSL *ssl, int type, int val)
 {
 	return(SSL_get_info_callback(ssl));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+int AMISSL_LIB_ENTRY _AmiSSL_SSL_state(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_state(ssl));
 }
@@ -7624,7 +7609,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_verify_result(REG(a6, __IFACE_OR_BASE), RE
 	SSL_set_verify_result(ssl, v);
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_result(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl))
+long AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_result(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl))
 {
 	return(SSL_get_verify_result(ssl));
 }
@@ -7634,7 +7619,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, S
 	return(SSL_set_ex_data(ssl, idx, data));
 }
 
-void * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL *ssl), REG(d0, int idx))
+void * AMISSL_LIB_ENTRY _AmiSSL_SSL_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL *ssl), REG(d0, int idx))
 {
 	return(SSL_get_ex_data(ssl, idx));
 }
@@ -7649,7 +7634,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_set_ex_data(REG(a6, __IFACE_OR_BASE), R
 	return(SSL_SESSION_set_ex_data(ss, idx, data));
 }
 
-void * AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION *ss), REG(d0, int idx))
+void * AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION *ss), REG(d0, int idx))
 {
 	return(SSL_SESSION_get_ex_data(ss, idx));
 }
@@ -7664,7 +7649,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a
 	return(SSL_CTX_set_ex_data(ssl, idx, data));
 }
 
-void * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX *ssl), REG(d0, int idx))
+void * AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX *ssl), REG(d0, int idx))
 {
 	return(SSL_CTX_get_ex_data(ssl, idx));
 }
@@ -7789,7 +7774,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_sk_zero(REG(a6, __IFACE_OR_BASE), REG(a0, STACK *s
 	sk_zero(st);
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, STACK *sk), REG(a1, int (*c)(const char *const *, const char *const *)))) (const char *const *, const char *const *)
+int AMISSL_LIB_ENTRY (*_AmiSSL_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, STACK *sk), REG(a1, int (*c)(const char *const *, const char *const *)))) (const char *const *, const char *const *)
 {
 	return(sk_set_cmp_func(sk, c));
 }
@@ -8034,27 +8019,27 @@ int AMISSL_LIB_ENTRY _AmiSSL_UI_method_set_closer(REG(a6, __IFACE_OR_BASE), REG(
 	return(UI_method_set_closer(method, closer));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_opener(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
+int AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_opener(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
 {
 	return(UI_method_get_opener(method));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_writer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*, UI_STRING*)
+int AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_writer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*, UI_STRING*)
 {
 	return(UI_method_get_writer(method));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_flusher(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
+int AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_flusher(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
 {
 	return(UI_method_get_flusher(method));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_reader(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*, UI_STRING*)
+int AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_reader(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*, UI_STRING*)
 {
 	return(UI_method_get_reader(method));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_closer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
+int AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_closer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD *method)))(UI*)
 {
 	return(UI_method_get_closer(method));
 }
@@ -8874,7 +8859,7 @@ unsigned char * AMISSL_LIB_ENTRY _AmiSSL_X509_alias_get0(REG(a6, __IFACE_OR_BASE
 	return(X509_alias_get0(x, len));
 }
 
-int (* AMISSL_LIB_ENTRY _AmiSSL_X509_TRUST_set_default(REG(a6, __IFACE_OR_BASE), REG(a0, int (*trust)(int, X509 *, int))))(int, X509 *, int)
+int AMISSL_LIB_ENTRY (*_AmiSSL_X509_TRUST_set_default(REG(a6, __IFACE_OR_BASE), REG(a0, int (*trust)(int, X509 *, int))))(int, X509 *, int)
 {
 	return(X509_TRUST_set_default(trust));
 }
@@ -9469,7 +9454,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_add_entry_by_NID(REG(a6, __IFACE_OR_BASE)
 	return(X509_NAME_add_entry_by_NID(name, nid, type, bytes, len, loc, set));
 }
 
-X509_NAME_ENTRY * AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_create_by_txt(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY **ne), REG(a1, char *field), REG(d0, int type), REG(a2, unsigned char *bytes), REG(d1, int len))
+X509_NAME_ENTRY * AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_create_by_txt(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY **ne), REG(a1, const char *field), REG(d0, int type), REG(a2, const unsigned char *bytes), REG(d1, int len))
 {
 	return(X509_NAME_ENTRY_create_by_txt(ne, field, type, bytes, len));
 }
@@ -9479,12 +9464,12 @@ X509_NAME_ENTRY * AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_create_by_NID(REG(a6,
 	return(X509_NAME_ENTRY_create_by_NID(ne, nid, type, bytes, len));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_add_entry_by_txt(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME *name), REG(a1, char *field), REG(d0, int type), REG(a2, unsigned char *bytes), REG(d1, int len), REG(d2, int loc), REG(d3, int set))
+int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_add_entry_by_txt(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME *name), REG(a1, const char *field), REG(d0, int type), REG(a2, const unsigned char *bytes), REG(d1, int len), REG(d2, int loc), REG(d3, int set))
 {
 	return(X509_NAME_add_entry_by_txt(name, field, type, bytes, len, loc, set));
 }
 
-X509_NAME_ENTRY * AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_create_by_OBJ(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY **ne), REG(a1, ASN1_OBJECT *obj), REG(d0, int type), REG(a2, unsigned char *bytes), REG(d1, int len))
+X509_NAME_ENTRY * AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_create_by_OBJ(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY **ne), REG(a1, ASN1_OBJECT *obj), REG(d0, int type), REG(a2, const unsigned char *bytes), REG(d1, int len))
 {
 	return(X509_NAME_ENTRY_create_by_OBJ(ne, obj, type, bytes, len));
 }
@@ -9494,7 +9479,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_set_object(REG(a6, __IFACE_OR_BASE)
 	return(X509_NAME_ENTRY_set_object(ne, obj));
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_set_data(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY *ne), REG(d0, int type), REG(a1, unsigned char *bytes), REG(d1, int len))
+int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_ENTRY_set_data(REG(a6, __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY *ne), REG(d0, int type), REG(a1, const unsigned char *bytes), REG(d1, int len))
 {
 	return(X509_NAME_ENTRY_set_data(ne, type, bytes, len));
 }
@@ -12538,3 +12523,54 @@ int AMISSL_LIB_ENTRY _AmiSSL_X509_check_ca(REG(a6, __IFACE_OR_BASE), REG(a0, X50
 {
 	return(X509_check_ca(x));
 }
+
+PROXY_POLICY * AMISSL_LIB_ENTRY _AmiSSL_PROXY_POLICY_new(REG(a6, __IFACE_OR_BASE))
+{
+	return(PROXY_POLICY_new());
+}
+
+void AMISSL_LIB_ENTRY _AmiSSL_PROXY_POLICY_free(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_POLICY *a))
+{
+	PROXY_POLICY_free(a);
+}
+
+PROXY_POLICY * AMISSL_LIB_ENTRY _AmiSSL_d2i_PROXY_POLICY(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_POLICY **a), REG(a1, unsigned char **in), REG(d0, long len))
+{
+	return(d2i_PROXY_POLICY(a, in, len));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_i2d_PROXY_POLICY(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_POLICY *a), REG(a1, unsigned char **out))
+{
+	return(i2d_PROXY_POLICY(a, out));
+}
+
+const ASN1_ITEM * AMISSL_LIB_ENTRY _AmiSSL_PROXY_POLICY_it(REG(a6, __IFACE_OR_BASE))
+{
+	return(PROXY_POLICY_it());
+}
+
+PROXY_CERT_INFO_EXTENSION * AMISSL_LIB_ENTRY _AmiSSL_PROXY_CERT_INFO_EXTENSION_new(REG(a6, __IFACE_OR_BASE))
+{
+	return(PROXY_CERT_INFO_EXTENSION_new());
+}
+
+void AMISSL_LIB_ENTRY _AmiSSL_PROXY_CERT_INFO_EXTENSION_free(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_CERT_INFO_EXTENSION *a))
+{
+	PROXY_CERT_INFO_EXTENSION_free(a);
+}
+
+PROXY_CERT_INFO_EXTENSION * AMISSL_LIB_ENTRY _AmiSSL_d2i_PROXY_CERT_INFO_EXTENSION(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_CERT_INFO_EXTENSION **a), REG(a1, unsigned char **in), REG(d0, long len))
+{
+	return(d2i_PROXY_CERT_INFO_EXTENSION(a, in, len));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_i2d_PROXY_CERT_INFO_EXTENSION(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_CERT_INFO_EXTENSION *a), REG(a1, unsigned char **out))
+{
+	return(i2d_PROXY_CERT_INFO_EXTENSION(a, out));
+}
+
+const ASN1_ITEM * AMISSL_LIB_ENTRY _AmiSSL_PROXY_CERT_INFO_EXTENSION_it(REG(a6, __IFACE_OR_BASE))
+{
+	return(PROXY_CERT_INFO_EXTENSION_it());
+}
+

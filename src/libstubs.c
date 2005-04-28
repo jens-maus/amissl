@@ -253,7 +253,7 @@ OCSP_RESPONSE * SAVEDS d2i_OCSP_RESPONSE(OCSP_RESPONSE **a, unsigned char **in, 
 	return(IFACE_PREFIX d2i_OCSP_RESPONSE(a, in, len));
 }
 
-SSL_SESSION * SAVEDS d2i_SSL_SESSION(SSL_SESSION **a, unsigned char **pp, long length)
+SSL_SESSION * SAVEDS d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char *const *pp, long length)
 {
 	return(IFACE_PREFIX d2i_SSL_SESSION(a, pp, length));
 }

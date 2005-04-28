@@ -2508,6 +2508,16 @@
 #pragma libcall AmiSSLBase UI_write_string_lib 3afe 9802
 #pragma libcall AmiSSLBase HMAC_CTX_set_flags 3b04 0802
 #pragma libcall AmiSSLBase X509_check_ca 3b0a 801
+#pragma libcall AmiSSLBase PROXY_POLICY_new 3b10 00
+#pragma libcall AmiSSLBase PROXY_POLICY_free 3b16 801
+#pragma libcall AmiSSLBase d2i_PROXY_POLICY 3b1c 09803
+#pragma libcall AmiSSLBase i2d_PROXY_POLICY 3b22 9802
+#pragma libcall AmiSSLBase PROXY_POLICY_it 3b28 00
+#pragma libcall AmiSSLBase PROXY_CERT_INFO_EXTENSION_new 3b2e 00
+#pragma libcall AmiSSLBase PROXY_CERT_INFO_EXTENSION_free 3b34 801
+#pragma libcall AmiSSLBase d2i_PROXY_CERT_INFO_EXTENSION 3b3a 09803
+#pragma libcall AmiSSLBase i2d_PROXY_CERT_INFO_EXTENSION 3b40 9802
+#pragma libcall AmiSSLBase PROXY_CERT_INFO_EXTENSION_it 3b46 00
 #ifdef __SASC_60
 #pragma tagcall AmiSSLBase InitAmiSSL 024 801
 #pragma tagcall AmiSSLBase CleanupAmiSSL 02a 801
