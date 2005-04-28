@@ -37,6 +37,7 @@ struct Library *DOSBase;
 struct DOSIFace *IDOS;
 
 int __UserLibInit(struct AmiSSLIFace *Self);
+int __UserLibCleanup(struct AmiSSLIFace *Self);
 
 /*
  * The system (and compiler) rely on a symbol named _start which marks
@@ -125,7 +126,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 		{
 			struct ExtendedLibrary *extlib;
 			IExec->CopyMem(GetDataStart(),envvec,GetDataEnd()-GetDataStart());
-			kprintf("Env vector: %08x\n",envvec);
+			kprintf("Env vector for %08lx: %08x\n", newLibBase, envvec);
 
 			extlib = (struct ExtendedLibrary *)((ULONG)newLibBase + newLibBase->libNode.lib_PosSize);
 			
@@ -166,6 +167,13 @@ kprintf("close amissl\n");
 
 	if(libBase->origLibBase != libBase)
 	{
+		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
+		void *envvec = extlib->MainIFace->Data.EnvironmentVector - (GetDataBase() - GetDataStart());
+
+		__UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
+		kprintf("Freeing env vector for %08lx: %08lx\n", libBase, envvec);
+		IExec->FreeVec(envvec);
+
 		IExec->DeleteLibrary((struct Library *)libBase);
 	}
 
@@ -274,6 +282,7 @@ const static struct TagItem mainTags[] =
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_vectors},
     {MIT_Version,           1},
+    {MIT_Flags, IFLF_PROTECTED},
     {TAG_DONE,              0}
 };
 
@@ -724,10 +733,10 @@ AMISSL_COMMON_DATA static UWORD trampoline_code [][6] =
 	{0x48E7,0xFE00,0x4E95,0xDEFC,0x001C,0x4E75},	//MOVEM.L D0-D6,      -(A7);   JSR  (A5);   ADDA.W  #0x001C,A7  RTS
 	{0x48E7,0xFF00,0x4E95,0xDEFC,0x0020,0x4E75},	//MOVEM.L D0-D7,      -(A7);   JSR  (A5);   ADDA.W  #0x0020,A7  RTS
 	{0x48E7,0xFF80,0x4E95,0xDEFC,0x0024,0x4E75},	//MOVEM.L D0-D7/A0,   -(A7);   JSR  (A5);   ADDA.W  #0x0024,A7  RTS
-	{0x48E7,0xFFC0,0x4E95,0xDEFC,0x0028,0x4E75},	//MOVEM.L D0-D2/A0-A1,-(A7);   JSR  (A5);   ADDA.W  #0x0028,A7  RTS
-	{0x48E7,0xFFE0,0x4E95,0xDEFC,0x002C,0x4E75},	//MOVEM.L D0-D2/A0-A2,-(A7);   JSR  (A5);   ADDA.W  #0x002C,A7  RTS
-	{0x48E7,0xFFF0,0x4E95,0xDEFC,0x0030,0x4E75},	//MOVEM.L D0-D3/A0-A3,-(A7);   JSR  (A5);   ADDA.W  #0x0030,A7  RTS
-	{0x48E7,0xFFF8,0x4E95,0xDEFC,0x0034,0x4E75},	//MOVEM.L D0-D3/A0-A3,-(A7);   JSR  (A5);   ADDA.W  #0x0034,A7  RTS
+	{0x48E7,0xFFC0,0x4E95,0xDEFC,0x0028,0x4E75},	//MOVEM.L D0-D7/A0-A1,-(A7);   JSR  (A5);   ADDA.W  #0x0028,A7  RTS
+	{0x48E7,0xFFE0,0x4E95,0xDEFC,0x002C,0x4E75},	//MOVEM.L D0-D7/A0-A2,-(A7);   JSR  (A5);   ADDA.W  #0x002C,A7  RTS
+	{0x48E7,0xFFF0,0x4E95,0xDEFC,0x0030,0x4E75},	//MOVEM.L D0-D7/A0-A3,-(A7);   JSR  (A5);   ADDA.W  #0x0030,A7  RTS
+	{0x48E7,0xFFF8,0x4E95,0xDEFC,0x0034,0x4E75},	//MOVEM.L D0-D7/A0-A3,-(A7);   JSR  (A5);   ADDA.W  #0x0034,A7  RTS
 };
 
 VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)

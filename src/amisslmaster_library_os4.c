@@ -31,6 +31,7 @@ struct Library * AMISSL_COMMON_DATA ExecBase;
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
 
 int __UserLibInit(struct AmiSSLMasterIFace *Self);
+int __UserLibCleanup(struct AmiSSLMasterIFace *Self);
 
 /*
  * The system (and compiler) rely on a symbol named _start which marks
@@ -131,6 +132,13 @@ APTR libClose(struct LibraryManagerInterface *Self)
 
 	if(libBase->origLibBase != libBase)
 	{
+		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
+		void *envvec = extlib->MainIFace->Data.EnvironmentVector - (GetDataBase() - GetDataStart());
+
+		__UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
+//		kprintf("Freeing env vector for %08lx: %08lx\n", libBase, envvec);
+		IExec->FreeVec(envvec);
+
 		IExec->DeleteLibrary((struct Library *)libBase);
 	}
 
@@ -238,6 +246,7 @@ const static struct TagItem mainTags[] =
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_vectors},
     {MIT_Version,           1},
+    {MIT_Flags, IFLF_PROTECTED},
     {TAG_DONE,              0}
 };
 

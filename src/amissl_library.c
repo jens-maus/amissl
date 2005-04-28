@@ -136,14 +136,6 @@ struct Task *SB_FindTask(STRPTR);
 
 #endif
 
-#ifdef __amigaos4__
-asm ("									\n\
-	.text								\n\
-putr2:	mr		2,3						\n\
-	blr									\n\
-");
-#endif
-
 AMISSL_STATE *GetAmiSSLState(void)
 {
 	AMISSL_STATE *ret;
