@@ -157,19 +157,37 @@ int fseek(FILE *file, LONG pos, int mode)
 	return res;
 }
 
-static LONG FEOF(BPTR file)
+/* Only used by the (currently) unsupported FD interface */
+
+int open(const char *path_name, int open_flag, ... /* mode_t mode */ )
 {
-	LONG ret = 0, curr, end;
-
-#ifdef __amigaos4__
-	FFlush(file);
-#else
-	Flush(file);
-#endif
-	if ((curr = Seek(file, 0, OFFSET_END)) >= 0)
-		if ((end = Seek(file, curr, OFFSET_BEGINNING)) >= 0)
-			ret = (curr == end) ? 1 : 0;
-
-	return(ret);
+	return(-1);
 }
 
+int close(int fd)
+{
+	SetAmiSSLerrno(EINVAL);
+
+	return(-1);
+}
+
+int lseek(int fd, long offset, int mode)
+{
+	SetAmiSSLerrno(EINVAL);
+
+	return(-1);
+}
+
+int read(int fd, void *buffer, size_t num_bytes)
+{
+	SetAmiSSLerrno(EINVAL);
+
+	return(-1);
+}
+
+int write(int fd, const void* buffer, size_t num_bytes)
+{
+	SetAmiSSLerrno(EINVAL);
+
+	return(-1);
+}

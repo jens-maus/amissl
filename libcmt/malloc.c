@@ -19,21 +19,3 @@ malloc(
   ReleaseSemaphore(&__mem_cs);
   return p;
 }
-
-/* Only used by the (currently) unsupported FD interface */
-
-void open(void)
-{}
-
-void close(void)
-{}
-
-void lseek(void)
-{}
-
-void read(void)
-{}
-
-void write(void)
-{}
-
