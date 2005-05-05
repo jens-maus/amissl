@@ -28,6 +28,7 @@ static BPTR ErrorOutput(void)
 {
 	return(((struct Process *)FindTask(NULL))->pr_CES);
 }
+#define FFlush(x) Flush(x)
 #endif /* __amigaos4__ */
 
 static BPTR GetStdErr(void)
@@ -44,11 +45,10 @@ static BPTR GetStdErr(void)
  * resolving code is left out).
  *
  * Default values are "127.0.0.1", 443. If any proxy parameter is
- * omitted program will connect directly to the host.
+ * omitted, the program will connect directly to the host.
  */
 int main(int argc, char *argv[])
 {
-	const char rand[] = "fklgnlnhrjxnc 94ut c,mnxclnvhepgs poaw u5-wxfjl vfnkl";
 	char buffer[4096]; /* This should be dynamically allocated */
 	const char *request = "GET / HTTP/1.0\r\n\r\n";
 	BOOL is_ok = FALSE;
@@ -65,9 +65,6 @@ int main(int argc, char *argv[])
 		SSLeay_add_ssl_algorithms();
 		SSL_load_error_strings();
 
-		/* Much better *random* data needed! */
-		RAND_seed(rand, sizeof(rand));
-
 		/* Note: BIO writing routines are prepared for NULL BIO handle */
 		if (bio_err = BIO_new(BIO_s_file()))
 			BIO_set_fp_amiga(bio_err, GetStdErr(), BIO_NOCLOSE | BIO_FP_TEXT);
@@ -79,7 +76,8 @@ int main(int argc, char *argv[])
 			 * information on this.
 			 */
 			SSL_CTX_set_default_verify_paths(ctx);
-			SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+			SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
+			                   NULL);
 
 			/* The following needs to be done once per socket */
 			if (ssl = SSL_new(ctx))
@@ -88,7 +86,8 @@ int main(int argc, char *argv[])
 
 				/* Connect to the HTTPS server, directly or through a proxy */
 				if (argc > 4)
-					sock = ConnectToServer(argv[1], atol(argv[2]), argv[3], atol(argv[4]));
+					sock = ConnectToServer(argv[1], atol(argv[2]), argv[3],
+					                       atol(argv[4]));
 				else
 					sock = ConnectToServer(argv[1] ? argv[1] : "127.0.0.1",
 					                       argc > 2 ? atol(argv[2]) : 443,
@@ -114,7 +113,8 @@ int main(int argc, char *argv[])
 
 							Printf("Server certificate:\n");
 
-							if (str = X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0))
+							if (str = X509_NAME_oneline(X509_get_subject_name(server_cert),
+							                            0, 0))
 							{
 								Printf("\tSubject: %s\n", str);
 								OPENSSL_free(str);
@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
 							else
 								Printf("Warning: couldn't read subject name in certificate!\n");
 
-							if (str = X509_NAME_oneline(X509_get_issuer_name(server_cert), 0, 0))
+							if (str = X509_NAME_oneline(X509_get_issuer_name(server_cert),
+							                            0, 0))
 							{
 								Printf("\tIssuer: %s\n", str);
 								OPENSSL_free(str);
@@ -135,11 +136,16 @@ int main(int argc, char *argv[])
 							/* Send a HTTP request. Again, this is just
 							 * a very basic example.
 							 */
-							if ((ssl_err = SSL_write(ssl, request, strlen(request))) > 0)
+							if ((ssl_err = SSL_write(ssl, request, strlen(request)))
+							    > 0)
 							{
 								/* Dump everything to output */
-								while ((ssl_err = SSL_read(ssl, buffer, sizeof(buffer) - 1)) > 0)
+								while ((ssl_err = SSL_read(ssl, buffer,
+								                           sizeof(buffer) - 1))
+								       > 0)
 									FWrite(Output(), buffer, ssl_err, 1);
+
+								FFlush(Output());
 
 								/* This is not entirely true, check
 								 * the SSL_read documentation
@@ -196,10 +202,12 @@ BOOL Init(void)
 	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
 		Printf("Couldn't get Socket interface!\n");
 #endif /* __amigaos4__ */
-	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
+	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
+	                                          AMISSLMASTER_MIN_VERSION)))
 		Printf("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
 #ifdef __amigaos4__
-	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
+	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,
+	                                                                    "main", 1, NULL)))
 		Printf("Couldn't get AmiSSLMaster interface!\n");
 #endif /* __amigaos4__ */
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
@@ -207,7 +215,8 @@ BOOL Init(void)
 	else if (!(AmiSSLBase = OpenAmiSSL()))
 		Printf("Couldn't open AmiSSL!\n");
 #ifdef __amigaos4__
-	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
+	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase,
+	                                                        "main", 1, NULL)))
 		Printf("Couldn't get AmiSSL interface!\n");
 #endif /* __amigaos4__ */
 #ifdef __amigaos4__
@@ -222,9 +231,7 @@ BOOL Init(void)
 		is_ok = TRUE;
 
 	if (!is_ok)
-	{
-		Cleanup(); // This is safe to call even if something failed above
-	}
+		Cleanup(); /* This is safe to call even if something failed above */
 
 	return(is_ok);
 }
@@ -299,11 +306,14 @@ int ConnectToServer(char *host, short port, char *proxy, short pport)
 			 */
 			if (proxy && pport)
 			{
-				/* This should be using snprintf, but some compilers don't have it */
+				/* This should be done with snprintf to prevent buffer
+				 * overflows, but some compilers don't have it and
+				 * handling that would be an overkill for this example
+				 */
 				sprintf(buffer, "CONNECT %s:%ld HTTP/1.0\r\n\r\n",
 				        host, (long)port);
 
-				/* If this was a real application, it would be necessary to loop
+				/* In a real application, it would be necessary to loop
 				 * until everything is sent or an error occurrs, but here we
 				 * hope that everything gets sent at once.
 				 */
@@ -314,8 +324,11 @@ int ConnectToServer(char *host, short port, char *proxy, short pport)
 					 */
 					if (recv(sock, buffer, sizeof(buffer) - 1, 0) >= 0)
 					{
-						/* Assuming it was received, find the end of the line and cut it off */
-						if ((s1 = strchr(buffer, '\r')) || (s1 = strchr(buffer, '\n')))
+						/* Assuming it was received, find the end of
+						 * the line and cut it off
+						 */
+						if ((s1 = strchr(buffer, '\r'))
+						    || (s1 = strchr(buffer, '\n')))
 							*s1 = '\0';
 
 						Printf("Proxy returned: %s\n", buffer);
