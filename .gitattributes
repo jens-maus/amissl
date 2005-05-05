@@ -44,6 +44,7 @@ include/interfaces/amisslmaster.h eol=lf
 include/internal/amissl.h eol=lf
 include/internal/amissl_compiler.h eol=lf
 include/internal/debug.h eol=lf
+include/libraries/amissl.h eol=lf
 include/libraries/amisslmaster.h eol=lf
 include/openssl/aes.h eol=lf
 include/openssl/asn1.h eol=lf
