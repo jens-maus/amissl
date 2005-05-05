@@ -74,6 +74,11 @@ void RC5_32_cfb64_encrypt(const unsigned char *in, unsigned char *out,
 	unsigned long ti[2];
 	unsigned char *iv,c,cc;
 
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_RC5))
+		return;
+#endif /* AMISSL */
+
 	iv=(unsigned char *)ivec;
 	if (encrypt)
 		{

@@ -74,6 +74,11 @@ void idea_cfb64_encrypt(const unsigned char *in, unsigned char *out,
 	unsigned long ti[2];
 	unsigned char *iv,c,cc;
 
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_IDEA))
+		return;
+#endif /* AMISSL */
+
 	iv=(unsigned char *)ivec;
 	if (encrypt)
 		{

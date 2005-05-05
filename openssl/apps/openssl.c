@@ -222,6 +222,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 #include <proto/socket.h>
 
 #include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 
 struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
 

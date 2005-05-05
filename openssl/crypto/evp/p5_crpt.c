@@ -66,7 +66,7 @@
  */
 
 #ifdef AMISSL
-#include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 long IsCipherAvailable(long cipher);
 #endif
 

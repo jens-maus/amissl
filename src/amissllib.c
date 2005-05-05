@@ -3,6 +3,7 @@
 #include <proto/amisslmaster.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)

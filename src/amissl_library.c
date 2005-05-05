@@ -22,7 +22,7 @@
 
 #include <internal/amissl.h>
 #include <internal/amissl_compiler.h>
-#include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 
 #include <clib/amissl_protos.h>
 #define NO_MTCP_PROTOS

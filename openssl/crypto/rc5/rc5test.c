@@ -240,6 +240,14 @@ int main(int argc, char *argv[])
 	RC5_32_KEY key; 
 	unsigned char buf[8],buf2[8],ivb[8];
 
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_RC5))
+	{
+		printf("RC5 cipher is unavailable in this country\n");
+		return(0);
+	}
+#endif /* AMISSL */
+
 	for (n=0; n<5; n++)
 		{
 		RC5_32_set_key(&key,16,&(RC5key[n][0]),12);

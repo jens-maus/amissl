@@ -113,6 +113,14 @@ int main(int argc, char *argv[])
 	IDEA_KEY_SCHEDULE key,dkey; 
 	unsigned char iv[8];
 
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_RC5))
+	{
+		printf("IDEA cipher is unavailable in this country\n");
+		return(0);
+	}
+#endif /* AMISSL */
+
 	idea_set_encrypt_key(k,&key);
 	idea_ecb_encrypt(in,out,&key);
 	if (memcmp(out,c,8) != 0)

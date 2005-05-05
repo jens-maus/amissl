@@ -5,6 +5,7 @@
 #include <proto/exec.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 #include <internal/amissl_compiler.h>
 #include "amisslinit.h"
 #ifdef __GNUC__

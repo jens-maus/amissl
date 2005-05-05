@@ -76,6 +76,11 @@ void idea_ofb64_encrypt(const unsigned char *in, unsigned char *out,
 	unsigned char *iv;
 	int save=0;
 
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_IDEA))
+		return;
+#endif /* AMISSL */
+
 	iv=(unsigned char *)ivec;
 	n2l(iv,v0);
 	n2l(iv,v1);

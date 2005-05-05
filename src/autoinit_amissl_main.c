@@ -5,6 +5,7 @@
 #include <dos/dos.h>
 #include <utility/tagitem.h>
 #include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 
 #include <interfaces/amisslmaster.h>
 #include <interfaces/amissl.h>

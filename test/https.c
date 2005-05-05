@@ -12,6 +12,7 @@
 #include <proto/socket.h>
 #include <amissl/amissl.h>
 #include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
 
 BOOL Init(void);
 void Cleanup(void);

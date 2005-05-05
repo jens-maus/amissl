@@ -213,3 +213,7 @@ else	{ \
 	x2=x3^t1; \
 	x3=ul;
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+long IsCipherAvailable(long cipher);
+#endif /* AMISSL */
