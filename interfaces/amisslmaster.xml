@@ -10,7 +10,7 @@
 		<method name="Clone" result="struct Interface *" status="unimplemented"/>
 		<method name="InitAmiSSLMaster" result="LONG">
 			<arg name="APIVersion" type="LONG"/>
-			<arg name="AllowUserStructs" type="LONG"/>
+			<arg name="UsesOpenSSLStructs" type="LONG"/>
 		</method>
 		<method name="OpenAmiSSL" result="struct Library *">
 		</method>

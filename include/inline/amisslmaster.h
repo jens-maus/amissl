@@ -13,13 +13,13 @@
 #define AMISSLMASTER_BASE_NAME AmiSSLMasterBase
 #endif
 
-#define InitAmiSSLMaster(APIVersion, AllowUserStructs) ({ \
+#define InitAmiSSLMaster(APIVersion, UsesOpenSSLStructs) ({ \
   LONG _InitAmiSSLMaster_APIVersion = (APIVersion); \
-  LONG _InitAmiSSLMaster_AllowUserStructs = (AllowUserStructs); \
+  LONG _InitAmiSSLMaster_UsesOpenSSLStructs = (UsesOpenSSLStructs); \
   ({ \
   register char * _InitAmiSSLMaster__bn __asm("a6") = (char *) (AMISSLMASTER_BASE_NAME);\
   ((LONG (*)(char * __asm("a6"), LONG __asm("d0"), LONG __asm("d1"))) \
-  (_InitAmiSSLMaster__bn - 30))(_InitAmiSSLMaster__bn, _InitAmiSSLMaster_APIVersion, _InitAmiSSLMaster_AllowUserStructs); \
+  (_InitAmiSSLMaster__bn - 30))(_InitAmiSSLMaster__bn, _InitAmiSSLMaster_APIVersion, _InitAmiSSLMaster_UsesOpenSSLStructs); \
 });})
 
 #define OpenAmiSSL() ({ \

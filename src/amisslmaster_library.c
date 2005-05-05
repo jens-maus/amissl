@@ -42,7 +42,7 @@ struct AmiSSLIFace *IAmiSSL;
 #endif
 
 LONG LibAPIVersion;
-LONG LibAllowUserStructs;
+LONG LibUsesOpenSSLStructs;
 
 DeclareSemaphore(AmiSSLMasterLock);
 
@@ -118,10 +118,10 @@ static void CloseLib(struct Library *LibBase)
 	}
 }
 
-LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG AllowUserStructs))
+LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
 	LibAPIVersion = APIVersion;
-	LibAllowUserStructs = AllowUserStructs;
+	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
 
 	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }

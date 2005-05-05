@@ -25,7 +25,7 @@ struct AmiSSLMasterIFace
 	ULONG APICALL (*Release)(struct AmiSSLMasterIFace *Self);
 	void APICALL (*Expunge)(struct AmiSSLMasterIFace *Self);
 	struct Interface * APICALL (*Clone)(struct AmiSSLMasterIFace *Self);
-	LONG APICALL (*InitAmiSSLMaster)(struct AmiSSLMasterIFace *Self, LONG APIVersion, LONG AllowUserStructs);
+	LONG APICALL (*InitAmiSSLMaster)(struct AmiSSLMasterIFace *Self, LONG APIVersion, LONG UsesOpenSSLStructs);
 	struct Library * APICALL (*OpenAmiSSL)(struct AmiSSLMasterIFace *Self);
 	void APICALL (*CloseAmiSSL)(struct AmiSSLMasterIFace *Self);
 	struct Library * APICALL (*OpenAmiSSLCipher)(struct AmiSSLMasterIFace *Self, LONG Cipher);

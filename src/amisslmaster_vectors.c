@@ -18,7 +18,7 @@
 
 extern ULONG                _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *);
 extern ULONG                _AmiSSLMaster_Release(struct AmiSSLMasterIFace *);
-extern LONG                 InitAmiSSLMaster(struct AmiSSLMasterIFace *, LONG APIVersion, LONG AllowUserStructs);
+extern LONG                 InitAmiSSLMaster(struct AmiSSLMasterIFace *, LONG APIVersion, LONG UsesOpenSSLStructs);
 extern struct Library *     OpenAmiSSL(struct AmiSSLMasterIFace *);
 extern void                 CloseAmiSSL(struct AmiSSLMasterIFace *);
 extern struct Library *     OpenAmiSSLCipher(struct AmiSSLMasterIFace *, LONG Cipher);

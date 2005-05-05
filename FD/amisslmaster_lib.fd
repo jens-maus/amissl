@@ -1,6 +1,6 @@
 ##base _AmiSSLMasterBase
 ##bias 30
-InitAmiSSLMaster(APIVersion,AllowUserStructs)(d0,d1)
+InitAmiSSLMaster(APIVersion,UsesOpenSSLStructs)(d0,d1)
 OpenAmiSSL()()
 CloseAmiSSL()()
 OpenAmiSSLCipher(Cipher)(d0)

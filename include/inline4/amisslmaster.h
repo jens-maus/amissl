@@ -22,7 +22,7 @@
 
 
 /* Inline macros for Interface "main" */
-#define InitAmiSSLMaster(APIVersion, AllowUserStructs) IAmiSSLMaster->InitAmiSSLMaster(APIVersion, AllowUserStructs) 
+#define InitAmiSSLMaster(APIVersion, UsesOpenSSLStructs) IAmiSSLMaster->InitAmiSSLMaster(APIVersion, UsesOpenSSLStructs) 
 #define OpenAmiSSL() IAmiSSLMaster->OpenAmiSSL() 
 #define CloseAmiSSL() IAmiSSLMaster->CloseAmiSSL() 
 #define OpenAmiSSLCipher(Cipher) IAmiSSLMaster->OpenAmiSSLCipher(Cipher) 
