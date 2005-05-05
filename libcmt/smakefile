@@ -1,0 +1,77 @@
+OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
+CFLAG=$(OPTIMS) IDLEN=100 DEF __builtin_memcmp=memcmp IDIR NetInclude: \
+      IDIR AmiSSL:Include NOSTACKCHECK DEBUG=LINE STRSECT=CODE
+
+all: libcmt.lib
+
+clean:
+	delete \#?.o
+
+.c.o:
+	-sc $* $(CFLAG) OBJNAME $@ IGN 315 IDIR include:amitcp PARMS=BOTH
+
+libobjs: $(LIBOBJS)
+
+objs: myabort.o mytime.o mysprintf.o mygetpid.o \
+		mygetuid.o mystdio.o
+
+myabort.o: myabort.c
+	sc myabort.c OBJNAME myabort.o $(CFLAG)
+
+mysprintf.o: mysprintf.c
+	sc mysprintf.c OBJNAME mysprintf.o $(CFLAG)
+
+mygetpid.o: mygetpid.c
+	sc mygetpid.c OBJNAME mygetpid.o $(CFLAG)
+
+mygetuid.o: mygetuid.c
+	sc mygetuid.c OBJNAME mygetuid.o IDIR NetInclude: $(CFLAG)
+
+mystdio.o: mystdio.c
+	sc mystdio.c OBJNAME mystdio.o $(CFLAG)
+
+accept.o: accept.c 
+gethostbyname.o: gethostbyname.c 
+listen.o: listen.c 
+send.o: send.c 
+bind.o: bind.c 
+getservbyname.o: getservbyname.c 
+shutdown.o: shutdown.c 
+closesocket.o: closesocket.c 
+getsockopt.o: getsockopt.c 
+socket.o: socket.c 
+connect.o: connect.c 
+ioctlsocket.o: ioctlsocket.c 
+setsockopt.o: setsockopt.c 			
+recv.o: recv.c 			
+stat.o : stat.c
+malloc.o: malloc.c
+free.o: free.c
+realloc.o: realloc.c
+time.o: time.c
+gmtime.o: gmtime.c
+stat.o: stat.c
+dirent.o: dirent.c
+file.o: file.c
+fread.o: fread.c
+fwrite.o: fwrite.c
+refill.o: refill.c
+putc.o: putc.c
+fflush.o: fflush.c
+sscanf.o: sscanf.c
+vsscanf.o: vsscanf.c
+vfscanf.o: vfscanf.c
+fgetc.o: fgetc.c
+getuid.o: getuid.c
+getpid.o: getpid.c
+threadhash.o: threadhash.c
+mt.o: mt.c
+
+LIBOBJS= malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
+		dirent.o file.o fread.o fwrite.o refill.o putc.o fflush.o accept.o \
+		gethostbyname.o listen.o send.o bind.o getservbyname.o shutdown.o \
+		closesocket.o getsockopt.o socket.o connect.o ioctlsocket.o recv.o \
+		setsockopt.o sscanf.o vsscanf.o getuid.o getpid.o threadhash.o mt.o
+
+libcmt.lib: $(LIBOBJS)
+	oml libcmt.lib r $(LIBOBJS)

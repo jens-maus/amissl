@@ -1,0 +1,9 @@
+#!/bin/sh
+
+mkdir -p {680{0,6}0,68020-40}/AmiSSL
+
+#rm obj/*_init.o
+/sc/c/smake all LIBCPU=68000 OUTDIR=68000/
+/sc/c/smake copylibs LIBCPU=68000 OUTDIR=68000/
+
+cp -r 68000/* /libs

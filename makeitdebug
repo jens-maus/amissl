@@ -1,0 +1,27 @@
+#!/bin/sh
+
+cd openssl
+
+mkdir -p {680{0,6}0,68020-40}/{tmp,out}
+
+if [ ! -f crypto/opensslconf.h ]
+then
+	perl Configure SC
+fi
+
+if [ ! -f MINFO ]
+then
+	make files
+fi
+
+cd 68000
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=68000/tmp \
+							OUT=68000/out SC) >makefile.one
+cd ..
+make -f 68000/makefile.one CPU_TYPE=ANY
+
+cd ..
+
+mkdir -p {680{0,6}0,68020-40}/AmiSSL
+
+/sc/c/smake all LIBCPU=68000 OUTDIR=68000/
