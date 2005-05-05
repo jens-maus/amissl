@@ -45,9 +45,9 @@ int __stdargs _STI_250_openamissl(void)
 
 	if (!AmiSSLMasterBase)
 	{
-		if (!(amisslmaster_base = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
+		if (!(amisslmaster_base = AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
 		{
-			report_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "\n");
+			report_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
 			ret = 1;
 		}
 		else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))

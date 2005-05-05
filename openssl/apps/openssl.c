@@ -286,8 +286,8 @@ static void init_amissl(void)
 #endif /* __amigaos4__ */
 	}
 
-	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
-		fprintf(stderr, "Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "!\n");
+	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
+		fprintf(stderr, "Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
 		fprintf(stderr, "Couldn't get AmiSSLMaster interface!\n");

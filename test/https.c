@@ -196,8 +196,8 @@ BOOL Init(void)
 	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
 		Printf("Couldn't get Socket interface!\n");
 #endif /* __amigaos4__ */
-	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
-		Printf("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "!\n");
+	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
+		Printf("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
 		Printf("Couldn't get AmiSSLMaster interface!\n");

@@ -63,8 +63,9 @@ void __init_amissl_main(void)
 
 	if (!IAmiSSLMaster)
 	{
-		if (!(_AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library", AMISSLMASTER_CURRENT_VERSION)))
-			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_CURRENT_VERSION) "\n");
+		if (!(_AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library",
+		                                             AMISSLMASTER_MIN_VERSION)))
+			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
 
 		if (!(iamisslmaster = IAmiSSLMaster = (struct AmiSSLMasterIFace *)IExec->GetInterface((struct Library *)_AmiSSLMasterBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amisslmaster interface\n");
