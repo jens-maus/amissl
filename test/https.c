@@ -14,9 +14,9 @@
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
-BOOL Init(void);
-void Cleanup(void);
-int ConnectToServer(char *, short, char *, short);
+static BOOL Init(void);
+static void Cleanup(void);
+static int ConnectToServer(char *, short, char *, short);
 
 struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 								OPENSSL_free(str);
 							}
 							else
-								Printf("Warning: couldn't read subject name in certificate!\n");
+								FPrintf(GetStdErr(), "Warning: couldn't read subject name in certificate!\n");
 
 							if (str = X509_NAME_oneline(X509_get_issuer_name(server_cert),
 							                            0, 0))
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 								OPENSSL_free(str);
 							}
 							else
-								Printf("Warning: couldn't read issuer name in certificate!\n");
+								FPrintf(GetStdErr(), "Warning: couldn't read issuer name in certificate!\n");
 
 							X509_free(server_cert);
 
@@ -154,13 +154,13 @@ int main(int argc, char *argv[])
 								is_ok = ssl_err == 0;
 							}
 							else
-								Printf("Couldn't write request!\n");
+								FPrintf(GetStdErr(), "Couldn't write request!\n");
 						}
 						else
-							Printf("Couldn't get server certificate!\n");
+							FPrintf(GetStdErr(), "Couldn't get server certificate!\n");
 					}
 					else
-						Printf("Couldn't establish SSL connection!\n");
+						FPrintf(GetStdErr(), "Couldn't establish SSL connection!\n");
 
 					/* If there were errors, print them */
 					if (ssl_err < 0)
@@ -171,17 +171,17 @@ int main(int argc, char *argv[])
 					CloseSocket(sock);
 				}
 				else
-					Printf("Couldn't connect to host!\n");
+					FPrintf(GetStdErr(), "Couldn't connect to host!\n");
 
 				SSL_free(ssl);
 			}
 			else
-				Printf("Couldn't create new SSL handle!\n");
+				FPrintf(GetStdErr(), "Couldn't create new SSL handle!\n");
 
 			SSL_CTX_free(ctx);
 		}
 		else
-			Printf("Couldn't create new context!\n");
+			FPrintf(GetStdErr(), "Couldn't create new context!\n");
 
 		Cleanup();
 	}
@@ -193,32 +193,33 @@ int main(int argc, char *argv[])
 #define MKSTR(x)  XMKSTR(x)
 
 /* Open and initialize AmiSSL */
-BOOL Init(void)
+static BOOL Init(void)
 {
 	BOOL is_ok = FALSE;
 
 	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
-		Printf("Couldn't open bsdsocket.library v4!\n");
+		FPrintf(GetStdErr(), "Couldn't open bsdsocket.library v4!\n");
 #ifdef __amigaos4__
 	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
-		Printf("Couldn't get Socket interface!\n");
+		FPrintf(GetStdErr(), "Couldn't get Socket interface!\n");
 #endif /* __amigaos4__ */
 	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 	                                          AMISSLMASTER_MIN_VERSION)))
-		Printf("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
+		FPrintf(GetStdErr(), "Couldn't open amisslmaster.library v"
+		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,
 	                                                                    "main", 1, NULL)))
-		Printf("Couldn't get AmiSSLMaster interface!\n");
+		FPrintf(GetStdErr(), "Couldn't get AmiSSLMaster interface!\n");
 #endif /* __amigaos4__ */
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-		Printf("Couldn't initialize amisslmaster.library!\n");
+		FPrintf(GetStdErr(), "AmiSSL version is too old!\n");
 	else if (!(AmiSSLBase = OpenAmiSSL()))
-		Printf("Couldn't open AmiSSL!\n");
+		FPrintf(GetStdErr(), "Couldn't open AmiSSL!\n");
 #ifdef __amigaos4__
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase,
 	                                                        "main", 1, NULL)))
-		Printf("Couldn't get AmiSSL interface!\n");
+		FPrintf(GetStdErr(), "Couldn't get AmiSSL interface!\n");
 #endif /* __amigaos4__ */
 #ifdef __amigaos4__
 	else if (InitAmiSSL(AmiSSL_ISocket, ISocket,
@@ -227,7 +228,7 @@ BOOL Init(void)
 	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase,
 	                    TAG_DONE) != 0)
 #endif /* __amigaos4__ */
-		Printf("Couldn't initialize AmiSSL!\n");
+		FPrintf(GetStdErr(), "Couldn't initialize AmiSSL!\n");
 	else
 		is_ok = TRUE;
 
@@ -237,7 +238,7 @@ BOOL Init(void)
 	return(is_ok);
 }
 
-void Cleanup(void)
+static void Cleanup(void)
 {
 	if (AmiSSLBase)
 	{
@@ -276,7 +277,7 @@ void Cleanup(void)
 /* Connect to the specified server, either directly or through the specified
  * proxy using HTTP CONNECT method.
  */
-int ConnectToServer(char *host, short port, char *proxy, short pport)
+static int ConnectToServer(char *host, short port, char *proxy, short pport)
 {
 	struct sockaddr_in addr;
 	char buffer[1024]; /* This should be dynamically alocated */
@@ -344,16 +345,16 @@ int ConnectToServer(char *host, short port, char *proxy, short pport)
 							if (atol(s1) == 200)
 								is_ok = TRUE;
 							else
-								Printf("Proxy responce indicates error!\n");
+								FPrintf(GetStdErr(), "Proxy responce indicates error!\n");
 						}
 						else
-							Printf("Amibigous proxy responce!\n");
+							FPrintf(GetStdErr(), "Amibigous proxy responce!\n");
 					}
 					else
-						Printf("Couldn't get proxy response!\n");
+						FPrintf(GetStdErr(), "Couldn't get proxy response!\n");
 				}
 				else
-					Printf("Couldn't send request to proxy!\n");
+					FPrintf(GetStdErr(), "Couldn't send request to proxy!\n");
 			}
 			else
 				is_ok = TRUE;
