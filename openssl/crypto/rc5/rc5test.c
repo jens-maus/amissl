@@ -234,6 +234,10 @@ static unsigned char rc5_cbc_iv[RC5_CBC_NUM][8]={
 	{0x7c,0xb3,0xf1,0xdf,0x34,0xf9,0x48,0x11},
 	};
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+#endif /* AMISSL */
+
 int main(int argc, char *argv[])
 	{
 	int i,n,err=0;

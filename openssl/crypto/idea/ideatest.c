@@ -105,6 +105,10 @@ static unsigned char cfb_cipher64[CFB_TEST_SIZE]={
 	0x3D,0x1E,0xAE,0x47,0xFC,0xCF,0x29,0x0B,*/
 	}; 
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+#endif /* AMISSL */
+
 static int cfb64_test(unsigned char *cfb_cipher);
 static char *pt(unsigned char *p);
 int main(int argc, char *argv[])
@@ -114,7 +118,7 @@ int main(int argc, char *argv[])
 	unsigned char iv[8];
 
 #ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
+	if (!IsCipherAvailable(CIPHER_IDEA))
 	{
 		printf("IDEA cipher is unavailable in this country\n");
 		return(0);
