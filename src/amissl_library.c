@@ -456,7 +456,7 @@ int RAND_poll(void)
 	for(i = 0; i < 10; i++)
 	{
 		OPENSSL_cleanse(&rand_poll_buffer[0], sizeof(rand_poll_buffer));
-		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), (double)0);
+		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), (double)8);
 	}
 
 	return(1);
