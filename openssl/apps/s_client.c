@@ -179,6 +179,11 @@ static BIO *bio_c_out=NULL;
 static int c_quiet=0;
 static int c_ign_eof=0;
 
+#ifdef AMIGA
+#include <proto/dos.h>
+static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
+#endif
+
 static void sc_usage(void)
 	{
 	BIO_printf(bio_err,"usage: s_client args\n");
@@ -259,7 +264,7 @@ int MAIN(int argc, char **argv)
 	char *engine_id=NULL;
 	ENGINE *e=NULL;
 #endif
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
 	struct timeval tv;
 #endif
 
@@ -649,7 +654,7 @@ re_start:
 
 		if (!ssl_pending)
 			{
-#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS)
+#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(AMIGA)
 			if (tty_on)
 				{
 				if (read_tty)  FD_SET(fileno(stdin),&readfds);
@@ -676,7 +681,7 @@ re_start:
 			 * will choke the compiler: if you do have a cast then
 			 * you can either go for (int *) or (void *).
 			 */
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
                         /* Under Windows/DOS we make the assumption that we can
 			 * always write to the tty: therefore if we need to
 			 * write to the tty we just fall through. Otherwise
@@ -691,7 +696,7 @@ re_start:
 					tv.tv_usec = 0;
 					i=select(width,(void *)&readfds,(void *)&writefds,
 						 NULL,&tv);
-#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
 					if(!i && (!_kbhit() || !read_tty) ) continue;
 #else
 					if(!i && (!((_kbhit()) || (WAIT_OBJECT_0 == WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0))) || !read_tty) ) continue;
@@ -779,7 +784,7 @@ re_start:
 				goto shut;
 				}
 			}
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
 		/* Assume Windows/DOS can always write */
 		else if (!ssl_pending && write_tty)
 #else
@@ -860,8 +865,8 @@ printf("read=%d pending=%d peek=%d\n",k,SSL_pending(con),SSL_peek(con,zbuf,10240
 				}
 			}
 
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS)
-#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
 		else if (_kbhit())
 #else
 		else if ((_kbhit()) || (WAIT_OBJECT_0 == WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0)))

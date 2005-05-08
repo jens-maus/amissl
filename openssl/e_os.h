@@ -192,19 +192,13 @@ int GetAmiSSLerrno(void);
 #  define get_last_socket_error()	errno
 #  define clear_socket_error()	errno = 0
 #  include <stdio.h>
-#  ifdef CLIB2
-#   include <unistd.h>
-#   define ioctlsocket(a,b,c)	ioctl((a),(b),(c))
-#   define closesocket(s)		close((s))
-#   define readsocket(s,b,n)	read((s),(b),(n))
-#   define writesocket(s,b,n)	write((s),(b),(n))
-#  else /* !CLIB2 */
-#   include <proto/socket.h>
-#   define ioctlsocket(a,b,c)	IoctlSocket((a),(b),(c))
-#   define closesocket(s)		CloseSocket((s))
-#   define readsocket(s,b,n)	recv((s),(b),(n), 0)
-#   define writesocket(s,b,n)	send((s),(b),(n), 0)
-#  endif /* CLIB2 */
+#  include <proto/socket.h>
+#  define ioctlsocket(a,b,c)	IoctlSocket((a),(b),(c))
+#  define closesocket(s)		CloseSocket((s))
+#  define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#  define writesocket(s,b,n)	send((s),(b),(n), 0)
+#  undef select
+#  define select(a,b,c,d,e) WaitSelect(a,b,c,d,e,NULL);
 # endif /* AMISSL_COMPILE */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno

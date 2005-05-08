@@ -271,11 +271,25 @@ static void cleanup_amissl(void)
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
+static void (*old_sigint_handler)(int);
+
+static void amissl_sigint_handler(int sig)
+{
+	signal(SIGINT, old_sigint_handler);
+	cleanup_amissl();
+	raise(SIGINT);
+
+	/* Just in case... */
+	fprintf(stderr, "*** BREAK\n");
+	exit(1);
+}
+
 static void init_amissl(void)
 {
 	BOOL is_ok = FALSE;
 
 	atexit(cleanup_amissl);
+	old_sigint_handler = signal(SIGINT, amissl_sigint_handler);
 
 	/* Failing to open this is not fatal since there are parts of
 	 * openssl tool that don't require networking functionality.
