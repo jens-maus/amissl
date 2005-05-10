@@ -274,7 +274,7 @@ extern "C" {
 # define OPENSSL_IMPLEMENT_GLOBAL(type,name)			     \
 	extern type _hide_##name;				     \
 	type *_shadow_##name(void) { return &_hide_##name; }	     \
-	static type _hide_##name
+	type _hide_##name
 # define OPENSSL_DECLARE_GLOBAL(type,name) type *_shadow_##name(void)
 # define OPENSSL_GLOBAL_REF(name) (*(_shadow_##name()))
 #else
