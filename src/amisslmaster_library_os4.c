@@ -105,7 +105,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 
 //			kprintf("Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
-			if(!__UserLibInit((struct AmiSSLIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
+			if(!__UserLibInit((struct AmiSSLMasterIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
 			{
 //				kprintf("Returning libBase: %08lx\n",newLibBase);
 				return (struct Library *)newLibBase;
