@@ -7,7 +7,8 @@
 #include <interfaces/amissl.h>
 #include <exec/emulation.h>
 
-#define kprintf IExec->DebugPrintF
+//#define DEBUG
+#include <internal/debug.h>
 
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
@@ -57,18 +58,11 @@ void _start(void)
 
 ULONG _AmiSSL_Obtain(struct AmiSSLIFace *Self)
 {
-    /* Write me. Really, I dare you! */
-    IExec->DebugPrintF(
-		"Function AmiSSL::Obtain not implemented\n");  
     return (ULONG)0;
-
 }
 
 ULONG _AmiSSL_Release(struct AmiSSLIFace *Self)
 {
-    /* Write me. Really, I dare you! */
-    IExec->DebugPrintF(
-		"Function AmiSSL::Release not implemented\n");  
     return (ULONG)0;
 
 }
@@ -137,6 +131,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 			
 			if(libOpen2((struct AmiSSLIFace *)extlib->MainIFace))
 			{
+				/* This should always be written to debug output since it's important */
 				if (offsetof(struct AmiSSLIFace, UI_read_string_lib) != 10140
 				    || offsetof(struct AmiSSLIFace, UI_write_string_lib) != 10144)
 					IExec->DebugPrintF("*** WARNING: UI_read_string_lib and/or UI_write_string_lib have wrong offset!\n");
@@ -160,7 +155,7 @@ APTR libClose(struct LibraryManagerInterface *Self)
     struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase;
     /* Make sure to undo what open did */
 
-kprintf("close amissl\n");
+	kprintf("close amissl\n");
 
     /* Make the close count */
 	libBase->origLibBase->libNode.lib_OpenCnt--;

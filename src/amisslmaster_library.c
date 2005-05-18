@@ -13,6 +13,8 @@
 #else
 #include "/libcmt/libcmt.h"
 #endif
+
+//#define DEBUG
 #include <internal/debug.h>
 
 #ifdef __amigaos4__
@@ -293,7 +295,7 @@ void AMISSL_LIB_ENTRY CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct
 
 void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
-	kprintf("UserLibCleanup called\n");
+	traceline();
 
 	if (LibAPIVersion == AMISSL_V097g)
 		;
@@ -320,17 +322,18 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 
 void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 {
-	kprintf("UserExpungeInit called\n");
+	traceline();
 }
 
 int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
-	kprintf("UserLibInit called\n");
 #ifdef __amigaos4__
 	InitSemaphore(&AmiSSLMasterLock);
 #else
 	SysBase = *(struct ExecBase **)4;
 #endif
+
+	traceline();
 
 	return(0);
 }

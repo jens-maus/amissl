@@ -1,6 +1,5 @@
 #define PROTO_AMISSL_H // Don't include amissl protos
 
-#include <internal/debug.h>
 #include <amissl/amissl.h>
 #include <internal/amissl_compiler.h>
 

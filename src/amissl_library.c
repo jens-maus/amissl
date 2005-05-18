@@ -4,6 +4,9 @@
 
 #define PROTO_AMISSL_H // Don't include amissl protos
 
+//#define DEBUG
+#include <internal/debug.h>
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -34,8 +37,6 @@
 #include "/libcmt/multitcp.h"
 #endif
 #include "amisslinit.h"
-
-#include <internal/debug.h>
 
 #ifdef __amigaos4__
 struct AmiSSLIFace;
@@ -96,7 +97,7 @@ AMISSL_STATE *CreateAmiSSLState(void)
 
 	if (ret != NULL)
 	{
-//		kprintf("Allocating new state for %08lx\n",pid);
+		//kprintf("Allocating new state for %08lx\n",pid);
 		ret->pid = pid;
 		ret->errno = 0;
 		ret->getenv_var = 0;
@@ -142,7 +143,7 @@ AMISSL_STATE *GetAmiSSLState(void)
 
 	SB_ObtainSemaphore(&openssl_cs);
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
-//	kprintf("Looked up state %08lx for %08lx\n",ret,pid);
+	//kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
 	
 	return ret;
@@ -626,11 +627,5 @@ void checkdos(void)
 	kprintf("DOSBase: %08x\n",&DOSBase);
 	kprintf("v3_ns_ia5_list: %08x\n",&v3_ns_ia5_list);
 	kprintf("rand_ssleay_meth: %08x\n",&rand_ssleay_meth);
-}
-#endif
-
-#ifndef __amigaos4__
-void _AmiSSL_DummyFunc(void)
-{
 }
 #endif
