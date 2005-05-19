@@ -12,24 +12,6 @@ clean:
 
 libobjs: $(LIBOBJS)
 
-objs: myabort.o mytime.o mysprintf.o mygetpid.o \
-		mygetuid.o mystdio.o
-
-myabort.o: myabort.c
-	sc myabort.c OBJNAME myabort.o $(CFLAG)
-
-mysprintf.o: mysprintf.c
-	sc mysprintf.c OBJNAME mysprintf.o $(CFLAG)
-
-mygetpid.o: mygetpid.c
-	sc mygetpid.c OBJNAME mygetpid.o $(CFLAG)
-
-mygetuid.o: mygetuid.c
-	sc mygetuid.c OBJNAME mygetuid.o IDIR NetInclude: $(CFLAG)
-
-mystdio.o: mystdio.c
-	sc mystdio.c OBJNAME mystdio.o $(CFLAG)
-
 accept.o: accept.c 
 gethostbyname.o: gethostbyname.c 
 listen.o: listen.c 
