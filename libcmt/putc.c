@@ -12,7 +12,7 @@ int putc(int ch, FILE *stream)
 {
 	if(TOFILE(stream)->_wcnt>=TOFILE(stream)->_size)
 	{
-		if(fflush(TOFILE(stream))==-1)
+		if(fflush((FILE *)TOFILE(stream))==-1)
 			return -1;
 	}
 	if(TOFILE(stream)->_wcnt<TOFILE(stream)->_size)

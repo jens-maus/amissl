@@ -15,8 +15,8 @@
 
 struct servent *
 getservbyname(
-	      const char *name,
-	      const char *proto)
+	      const unsigned char *name,
+	      const unsigned char *proto)
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // openssl does not care about the error code for getservbyname

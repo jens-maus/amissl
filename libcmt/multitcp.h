@@ -13,6 +13,28 @@
 
 #ifndef NO_MTCP_PROTOS
 
+#ifndef __amigaos4__
+#ifndef _UID_T
+#define _UID_T long
+typedef _UID_T uid_t;
+#endif
+
+#ifndef _GID_T
+#define _GID_T long
+typedef _GID_T gid_t;
+#endif
+
+#ifndef _MODE_T
+#define _MODE_T unsigned short 
+typedef _MODE_T mode_t;
+#endif
+
+#ifndef _TIME_T
+#define _TIME_T long
+typedef _TIME_T time_t;
+#endif
+#endif /* !__amigaos4__ */
+
 #ifndef __SASC
 /* SAS-C bug... it doesn't deal with implicit declaration of
    structures correctly (ANSI requires that the parameter list of a
@@ -44,7 +66,6 @@ struct Library;
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
-#include <amitcp/socketbasetags.h>
 #include <net/route.h>
 #include <net/if.h>
 

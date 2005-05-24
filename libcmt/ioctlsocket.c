@@ -55,9 +55,15 @@ ioctlsocket(
 					case SIOCSIFNETMASK  : request = ('i'<<8)|15; break;
 					case SIOCGIFMETRIC   : request = ('i'<<8)|16; break;
 					case SIOCSIFMETRIC   : request = ('i'<<8)|17; break;
+#ifdef SIOCDARP
 					case SIOCSARP	     : request = ('i'<<8)|18; break;
+#endif /* SIOCSARP */
+#ifdef SIOCGARP
 					case SIOCGARP	     : request = ('i'<<8)|19; break;
+#endif /* SIOCGARP */
+#ifdef SIOCDARP
 					case SIOCDARP	     : request = ('i'<<8)|20; break;
+#endif /* SIOCDARP */
 					case SIOCATMARK      : request = ('i'<<8)|21; break;
 					case FIONBIO	     : request = ('m'<<8)|22; break;
 					case FIONREAD	     : request = ('m'<<8)|23; break;

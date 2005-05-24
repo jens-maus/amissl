@@ -13,13 +13,13 @@
 
 #include "libcmt.h"
 
-int
+long
 setsockopt(
-     int s,
-     int level,
-     int optname,
+     long s,
+     long level,
+     long optname,
      char *optval,
-     int optlen)
+     long optlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();

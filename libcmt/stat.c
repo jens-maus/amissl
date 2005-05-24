@@ -21,6 +21,21 @@
 #include <proto/utility.h>
 #include <internal/amissl.h>
 
+#ifndef __amigaos4__
+#ifndef _MODE_T
+#define _MODE_T unsigned short 
+typedef _MODE_T mode_t;
+#endif
+#endif /* !__amigaos4__ */
+
+#ifndef S_IFIFO
+#define S_IFIFO S_IFDIR /* Fixme */
+#endif /* S_IFIFO */
+
+#ifndef S_IFLNK
+#define S_IFLNK S_IFDIR /* Fixme */
+#endif /* S_IFLNK */
+
 /*
  * Conversion table from Amiga filetypes to Unix filetypes
  */
@@ -65,12 +80,18 @@ void __dostat(struct FileInfoBlock *fib,
     | (fbits[(pbits >> FIBB_GRP_DELETE) & 0xf] << 3)
       | fbits[(pbits >> FIBB_OTR_DELETE) & 0xf];
 
+#ifdef S_ISVTX
   if ((pbits & FIBF_PURE) != 0)
     mode |= S_ISVTX;
+#endif /* S_ISVTX */
+#ifdef S_ISUID
   if ((pbits & FIBF_SUID) != 0)
     mode |= S_ISUID;
+#endif /* S_ISUID */
+#ifdef S_ISGID
   if ((pbits & FIBF_SGID) != 0)
     mode |= S_ISGID;
+#endif
 
   st->st_ino = fib->fib_DiskKey;
   st->st_mode = mode;
@@ -92,12 +113,18 @@ void __dostat(struct FileInfoBlock *fib,
 	  + fib->fib_Date.ds_Minute)
       + fib->fib_Date.ds_Tick / 50;
 
+/* SYS_STAT_H is defined only by AmiTCP netincludes */
+#if defined(__amigaos4__) || defined(SYS_STAT_H)
   st->st_blksize = 512;
   st->st_blocks = fib->fib_NumBlocks;
-#ifndef __amigaos4__
-  st->st_dosmode = fib->fib_Protection;
+#endif
+
+#if !defined(__amigaos4__) || defined(SYS_STAT_H)
   st->st_type = fib->fib_DirEntryType;
   st->st_comment = fib->fib_Comment;
+#ifdef SYS_STAT_H
+  st->st_dosmode = fib->fib_Protection;
+#endif
 #endif
 }
 

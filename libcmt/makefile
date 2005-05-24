@@ -1,10 +1,11 @@
 CC=ppc-amigaos-gcc
-CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -Wall -mbaserel -O2 -g
+CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -mbaserel -O2 -g \
+       -Wall -Wno-pointer-sign
 
 all: libcmt.a
 
 clean:
-	rm *.o
+	rm -f *.o libcmt.a
 
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

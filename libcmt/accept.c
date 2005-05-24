@@ -13,11 +13,11 @@
 
 #include "libcmt.h"
 
-int
+long
 accept(
-       int s,
+       long s,
        struct sockaddr *addr,
-       int *addrlen)
+       long *addrlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
@@ -36,10 +36,10 @@ accept(
 				return amitcp_Accept(s,addr,(LONG *)addrlen);
 				break;
 			case TCPIP_IN225:
-				return in225_accept(s,addr,addrlen);
+				return in225_accept(s,addr,(int *)addrlen);
 				break;
 			case TCPIP_Termite:
-				return termite_accept(s,addr,addrlen);
+				return termite_accept(s,addr,(int *)addrlen);
 				break;
 		}
 	}

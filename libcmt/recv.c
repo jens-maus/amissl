@@ -13,12 +13,12 @@
 
 #include "libcmt.h"
 
-ssize_t
+long
 recv(
-     int s,
+     long s,
      void *buf,
-     size_t len,
-     int flags)
+     long len,
+     long flags)
 {
 #ifdef __amigaos4__
   GETISOCKET();

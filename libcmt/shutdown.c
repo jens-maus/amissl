@@ -13,10 +13,10 @@
 
 #include "libcmt.h"
 
-int
+long
 shutdown(
-	 int s,
-	 int how)
+	 long s,
+	 long how)
 {
 #ifdef __amigaos4__
   GETISOCKET();

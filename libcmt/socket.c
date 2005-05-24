@@ -13,11 +13,11 @@
 
 #include "libcmt.h"
 
-int
+long
 socket(
-       int domain,
-       int type,
-       int protocol)
+       long domain,
+       long type,
+       long protocol)
 {
 #ifdef __amigaos4__
   GETISOCKET();

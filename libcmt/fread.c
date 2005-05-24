@@ -28,7 +28,7 @@ size_t fread(void *buf,size_t size,size_t count,FILE *fp)
 		/* fp->_rcnt = 0 ... done in __srefill */
 		p += r;
 		resid -= r;
-		if (__srefill(TOFILE(fp))) {
+		if (__srefill((FILE *)TOFILE(fp))) {
 			/* no more input: return partial result */
 			return ((total - resid) / size);
 		}

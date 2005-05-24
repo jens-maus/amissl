@@ -15,7 +15,7 @@
 
 struct hostent *
 gethostbyname(
-	      const char *name)
+	      const unsigned char *name)
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // h_errno isn't used by openssl

@@ -13,10 +13,10 @@
 
 #include "libcmt.h"
 
-int
+long
 listen(
-       int s,
-       int backlog)
+       long s,
+       long backlog)
 {
 #ifdef __amigaos4__
   GETISOCKET();

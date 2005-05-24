@@ -5,7 +5,7 @@ CFLAG=$(OPTIMS) IDLEN=100 DEF __builtin_memcmp=memcmp IDIR NetInclude: \
 all: libcmt.lib
 
 clean:
-	delete \#?.o
+	delete \#?.o libcmt.lib
 
 .c.o:
 	-sc $* $(CFLAG) OBJNAME $@ IGN 315 IDIR include:amitcp PARMS=BOTH

@@ -96,7 +96,7 @@ void __init_libcmt_file(void) __attribute__((constructor));
 
 void __init_libcmt_file(void)
 {
-	NewList(&__filelist);
+	NewList((struct List *)&__filelist);
 	InitSemaphore(&FileListLock);
 }
 #endif
@@ -111,12 +111,12 @@ FILE *fopen(const char *name, const char *mode)
 		{
 			node->FILE._size=BUFSIZ;
 			node->FILE._flag|=0x80; /* Buffer is malloc'ed */
-			if(freopen(name,mode,&node->FILE)!=NULL)
+			if(freopen(name,mode,(FILE *)&node->FILE)!=NULL)
 			{
 				ObtainSemaphore(&FileListLock);
 				AddHead((struct List *)&__filelist,(struct Node *)&node->node);
 				ReleaseSemaphore(&FileListLock);
-				return &node->FILE;
+				return (FILE *)&node->FILE;
 			}
 			free(node->FILE._base);
 		}

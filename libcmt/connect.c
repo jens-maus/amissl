@@ -13,11 +13,11 @@
 
 #include "libcmt.h"
 
-int
+long
 connect(
-	int s,
+	long s,
 	const struct sockaddr *name,
-	int namelen)
+	long namelen)
 {
 #ifdef __amigaos4__
   GETISOCKET();

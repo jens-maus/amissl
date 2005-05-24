@@ -13,13 +13,13 @@
 
 #include "libcmt.h"
 
-int
+long
 getsockopt(
-	   int s,
-	   int level,
-	   int optname,
+	   long s,
+	   long level,
+	   long optname,
 	   void *optval,
-	   int *optlen)
+	   long *optlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
@@ -35,10 +35,10 @@ getsockopt(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_GetSockOpt(s, level, optname, optval, optlen);
+				return amitcp_GetSockOpt(s, level, optname, optval, (int *)optlen);
 				break;
 			case TCPIP_IN225:
-				return in225_getsockopt(s, level, optname, optval, optlen);
+				return in225_getsockopt(s, level, optname, optval, (int *)optlen);
 				break;
 			case TCPIP_Termite:
 				if (optname == SO_ERROR)
