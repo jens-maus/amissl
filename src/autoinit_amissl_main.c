@@ -58,7 +58,7 @@ void __init_amissl_main(void)
 		if (!(_SocketBase = IExec->OpenLibrary("bsdsocket.library", 4)))
 			fatal_error("Couldn't open bsdsocket.library v4!\n");
 
-		if (!(isocket = ISocket = (struct ISocket *)IExec->GetInterface((struct Library *)_SocketBase, "main", 1, NULL)))
+		if (!(isocket = ISocket = (struct SocketIFace *)IExec->GetInterface((struct Library *)_SocketBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain socket interface\n");
 	}
 
@@ -80,7 +80,7 @@ void __init_amissl_main(void)
 		if (!(_AmiSSLBase = IAmiSSLMaster->OpenAmiSSL()))
 			fatal_error("Couldn't open AmiSSL!\n");
 
-		if (!(iamissl = IAmiSSL = (struct IAmiSSLIFace *)IExec->GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
+		if (!(iamissl = IAmiSSL = (struct AmiSSLIFace *)IExec->GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amissl interface\n");
 
 		if (IAmiSSL->InitAmiSSL(AmiSSL_ISocketPtr, &ISocket, TAG_DONE))

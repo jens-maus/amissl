@@ -53,10 +53,10 @@ amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_
 	cp $@ /cygdrive/D/FTP
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
-	ppc-amigaos-gcc -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
+	ppc-amigaos-gcc -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
-	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE)
+	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
 
 $(LIB_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o
