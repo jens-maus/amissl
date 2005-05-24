@@ -105,7 +105,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 		{
 		SYSerr(SYS_F_FOPEN,get_last_sys_error());
 		ERR_add_error_data(5,"fopen('",filename,"','",mode,"')");
-		if (errno == ENOENT)
+		if (get_last_sys_error() == ENOENT)
 			BIOerr(BIO_F_BIO_NEW_FILE,BIO_R_NO_SUCH_FILE);
 		else
 			BIOerr(BIO_F_BIO_NEW_FILE,ERR_R_SYS_LIB);
