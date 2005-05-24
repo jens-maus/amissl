@@ -1,14 +1,7 @@
 #include <stdio.h>
 #include <dos.h>
 
-extern int _OSERR;
-extern int errno;
 extern int __io2errno(int);
-#define __set_errno(x) do { errno = __io2errno(_OSERR = (x)); } while (0)
-#define SET_OSERR(code) do { _OSERR = (code); } while (0)
-
-#define set_errno __set_errno
-#define OSERR _OSERR
 
 /**
 *
