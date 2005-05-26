@@ -17,13 +17,13 @@ AMISSLMASTERDATE=24.5.2005
 LFLAGS=-nostdlib -mbaserel
 OPT= -O2
 INCLUDE = -I$(AmiSSL)/include -I$(AmiSSL)/libcmt/include
-CFLAGS=$(INCLUDE) -mbaserel $(OPT) -DAMISSL_COMPILE \
+CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL_COMPILE \
        -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
        -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
        -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
        -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -Wno-pointer-sign
 OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
-LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lm -lgcc
+LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
 
 all: amissl_v$(VERSIONNAME).library amisslmaster.library \
      $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a

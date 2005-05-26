@@ -13,7 +13,7 @@ $cc="ppc-amigaos-gcc";
 $cfile="-c ";
 $cflags="";
 $app_cflag="\$(ADD) -DAMISSL -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O2  -Wno-pointer-sign";
-$lib_cflag="\$(ADD) -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O2 -Wno-pointer-sign";
+$lib_cflag="\$(ADD) -mcrt=clib2 -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O2 -Wno-pointer-sign";
 $obj='.o';
 $ofile='-o ';
 $define='-D';
