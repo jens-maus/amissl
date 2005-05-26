@@ -29,9 +29,9 @@
 
 #include <clib/amissl_protos.h>
 #define NO_MTCP_PROTOS
-#ifdef __amigaos4__
-#include "libcmt.h"
-#include "multitcp.h"
+#ifdef __GNUC__
+#include "../libcmt/libcmt.h"
+#include "../libcmt/multitcp.h"
 #else
 #include "/libcmt/libcmt.h"
 #include "/libcmt/multitcp.h"
@@ -204,7 +204,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 
 #ifdef __amigaos4__
 		state->ISocket = (struct SocketIFace *)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
-		state->ISocketPtr = (struct SocketIFace **)GetTagData(AmiSSL_ISocketPtr, NULL, tagList);
+		state->ISocketPtr = (struct SocketIFace **)GetTagData(AmiSSL_ISocketPtr, (ULONG)NULL, tagList);
 		state->IAmiSSL = Self;
 		state->AmiSSLBase = ((struct Interface *)Self)->Data.LibBase;
 

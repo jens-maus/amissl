@@ -3,6 +3,7 @@
 #include <dos/dos.h>
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
+#include <internal/amissl.h>
 
 #include <interfaces/amissl.h>
 #include <exec/emulation.h>
