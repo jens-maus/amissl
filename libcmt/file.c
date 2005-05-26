@@ -46,12 +46,15 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 			switch(mode[0])
 			{
 				case 'r':
+					TOFILE(stream)->_flag |= _IOREAD;
 					break;
 				case 'w':
 					flags=MODE_NEWFILE;
+					TOFILE(stream)->_flag |= _IOWRT;
 					break;
 				case 'a':
 					flags=MODE_READWRITE;
+					TOFILE(stream)->_flag |= _IOWRT;
 					append=1;
 					break;
 				default:
@@ -63,7 +66,7 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 			{
 				case '+':
 					if(mode[plus+1])
-						return NULL;
+						return NULL; // TOFILE(stream)->_flag |= _IORW;
 					break;
 				case '\0':
 					break;
@@ -73,10 +76,16 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 		}
 
 		if((file=Open((char *)filename,flags))<0)
+		{
+			SetAmiSSLerrno(__io2errno(IoErr()));
 			return NULL;
-		
+		}
+
 		if(append && Seek(file,0,SEEK_END)<0)
+		{
+			SetAmiSSLerrno(__io2errno(IoErr()));
 			return NULL;
+		}
 
 		TOFILE(stream)->_flag &= ~(_IOLBF);
 		if(IsInteractive(file))
@@ -110,7 +119,9 @@ FILE *fopen(const char *name, const char *mode)
 		if((node->FILE._base=(char *)malloc(BUFSIZ))!=NULL)
 		{
 			node->FILE._size=BUFSIZ;
-			node->FILE._flag|=0x80; /* Buffer is malloc'ed */
+			/* FIXME: what is this for? 0x80 is _IORW, nothing related to malloc */
+			/* node->FILE._flag|=0x80; *//* Buffer is malloc'ed */
+			node->FILE._flag |= _IOALLOCBUF;
 			if(freopen(name,mode,(FILE *)&node->FILE)!=NULL)
 			{
 				ObtainSemaphore(&FileListLock);
@@ -137,10 +148,18 @@ int fclose(FILE *file)
 {
 	struct filenode *node;
 	fflush(file);
-	Close(TOFILE(file)->_file);
 
 	node = (struct filenode *)(((BYTE *)file)-offsetof(struct filenode,FILE));
+
+	ObtainSemaphore(&FileListLock);
 	Remove((struct Node *)node);
+	ReleaseSemaphore(&FileListLock);
+
+	Close(TOFILE(file)->_file);
+
+	if (TOFILE(file)->_flag & _IOALLOCBUF)
+		free(TOFILE(file)->_base);
+
 	free(node);
 	return 0;
 }
@@ -190,4 +209,104 @@ int write(int fd, const void* buffer, size_t num_bytes)
 	SetAmiSSLerrno(EINVAL);
 
 	return(-1);
+}
+
+/*
+ * $Id$
+ *
+ * :ts=4
+ *
+ * Portable ISO 'C' (1994) runtime library for the Amiga computer
+ * Copyright (c) 2002-2005 by Olaf Barthel <olsen@sourcery.han.de>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   - Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   - Neither the name of Olaf Barthel nor the names of contributors
+ *     may be used to endorse or promote products derived from this
+ *     software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+int
+setvbuf(FILE *stream,char *buf,int bufmode,size_t size)
+{
+	struct __iobuf *file = TOFILE(stream);
+	char *new_buffer = NULL;
+	int result = EOF;
+
+	if ((int)size < 0)
+	{
+		SetAmiSSLerrno(EINVAL);
+		goto out;
+	}
+
+	if (fflush(stream) == EOF)
+		goto out;
+
+	if (size == 0)
+		bufmode = _IONBF; /* A buffer size of 0 bytes defaults to unbuffered operation. */
+	else if (buf == NULL)
+	{
+		if ((new_buffer = malloc(size)))
+		{
+			SetAmiSSLerrno(ENOMEM);
+			goto out;
+		}
+	}
+
+	/* Get rid of any buffer specially allocated for this stream. */
+	if (file->_flag & _IOALLOCBUF)
+	{
+		free(file->_base);
+		file->_base = NULL;
+		file->_flag &= ~_IOALLOCBUF;
+	}
+
+	if (bufmode == _IONBF)
+	{
+		file->_base = &file->_cbuff;
+		file->_size = 1;
+	}
+	else if (buf)
+	{
+		file->_base = buf;
+		file->_size = size;
+	}
+	else
+	{
+		file->_base = new_buffer;
+		file->_size = size;
+		file->_flag |= _IOALLOCBUF;
+	}
+
+	file->_flag &= ~_IOBFMASK;
+	file->_flag |= bufmode;
+
+	new_buffer = NULL;
+
+	result = 0;
+
+ out:
+
+	if(new_buffer != NULL)
+		free(new_buffer);
+
+	return(result);
 }
