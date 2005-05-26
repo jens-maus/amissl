@@ -4,6 +4,7 @@
 #include <exec/types.h>
 #include <dos.h>
 #include <time.h>
+#include <internal/amissl_compiler.h>
 
 typedef struct {
 	struct Library *AmiSSLBase;
@@ -12,32 +13,23 @@ typedef struct {
 #endif
 	unsigned long pid;
 	int errno;
+	int *errno_ptr;		// If the app supplied an errno ptr
+	int socket_errno_initialized;
 	char *getenv_var;
 	APTR stack;
 	struct tm localtime_var;
 	struct Library *SocketBase;
 	LONG TCPIPStackType;
 	struct MLinkLock *MLinkLock; // This is really ancient, but ib still supports it so...
-	int socket_base_owns_errno;
-	int *errno_ptr;		// If the app supplied an errno ptr
-	int local_errno;	// If no errno and we generated the error ourselves
 #ifdef __amigaos4__
 	struct SocketIFace *ISocket;
+	struct SocketIFace **ISocketPtr;
 #endif
 } AMISSL_STATE;
 
-#ifndef __amigaos4__
-__stdargs
-#endif
-AMISSL_STATE *GetAmiSSLState(void);
-#ifndef __amigaos4__
-__stdargs
-#endif
-void SetAmiSSLerrno(int errno);
-#ifndef __amigaos4__
-__stdargs
-#endif
-int GetAmiSSLerrno(void);
+STDARGS AMISSL_STATE *GetAmiSSLState(void);
+STDARGS void SetAmiSSLerrno(int errno);
+STDARGS int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
 

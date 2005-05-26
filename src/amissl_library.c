@@ -29,9 +29,9 @@
 
 #include <clib/amissl_protos.h>
 #define NO_MTCP_PROTOS
-#ifdef __GNUC__
-#include "../libcmt/libcmt.h"
-#include "../libcmt/multitcp.h"
+#ifdef __amigaos4__
+#include "libcmt.h"
+#include "multitcp.h"
 #else
 #include "/libcmt/libcmt.h"
 #include "/libcmt/multitcp.h"
@@ -100,12 +100,14 @@ AMISSL_STATE *CreateAmiSSLState(void)
 		//kprintf("Allocating new state for %08lx\n",pid);
 		ret->pid = pid;
 		ret->errno = 0;
+		ret->errno_ptr = &ret->errno;
+		ret->socket_errno_initialized = 0;
 		ret->getenv_var = 0;
 		ret->stack = 0;
 		ret->SocketBase = NULL;
 #ifdef __amigaos4__
-		ret->socket_base_owns_errno = 0;
 		ret->ISocket = NULL;
+		ret->ISocketPtr = NULL;
 #endif
 
 		if(!h_insert(thread_hash, pid, ret))
@@ -152,37 +154,14 @@ AMISSL_STATE *GetAmiSSLState(void)
 void SetAmiSSLerrno(int errno)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
-#ifdef __amigaos4__
-	p->socket_base_owns_errno = 0;
-#endif
-	p->errno = errno;
+	*p->errno_ptr = errno;
 }
 
 int GetAmiSSLerrno(void)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
-#ifdef __amigaos4__
-	if(p->socket_base_owns_errno)
-	{
-		// Call socketbase to get error here
-	}
-#endif
-	return p->errno;
+	return *p->errno_ptr;
 }
-
-#ifdef __amigaos4__
-
-struct SocketIFace *GetSocketIFace(int modifies_errno)
-{
-	AMISSL_STATE *p = GetAmiSSLState();
-	if(modifies_errno)
-	{
-		p->socket_base_owns_errno = 1;
-	}
-	return p->ISocket;
-}
-
-#endif
 
 static void amigaos_locking_callback(int mode,int type,char *file,int line)
 {
@@ -219,19 +198,27 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 
 	if (state = CreateAmiSSLState())
 	{
+		int *errno_ptr;
+
 		state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);
 
 #ifdef __amigaos4__
-		state->ISocket = (APTR)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
+		state->ISocket = (struct SocketIFace *)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
+		state->ISocketPtr = (struct SocketIFace **)GetTagData(AmiSSL_ISocketPtr, NULL, tagList);
 		state->IAmiSSL = Self;
 		state->AmiSSLBase = ((struct Interface *)Self)->Data.LibBase;
 
-		/* When ISocket is supplied, there is no need to specify SocketBase.
+		/* When ISocket[Ptr] is supplied, there is no need to specify SocketBase.
 		 * This combination would confuse the code below which thinks that it
 		 * needs to GetInterface if there is a SocketBase and also drops it later.
 		 */
-		if (state->ISocket && state->SocketBase)
+		if (state->ISocket || state->ISocketPtr)
 			state->SocketBase = NULL;
+
+		if (state->ISocketPtr)
+			state->ISocket = NULL; /* This is unneeded, ISocket should never be accessed directly */
+		else
+			state->ISocketPtr = &state->ISocket;
 #else
 		state->AmiSSLBase = Self;
 #endif
@@ -239,7 +226,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 #ifdef __amigaos4__
 		if(state->SocketBase)
 		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
-			if(state->ISocket = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL))
+			if(*state->ISocketPtr = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL))
 			{
 				// All is good. Now we can make socket calls as if everything was ppc
 			}
@@ -250,13 +237,17 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 			}
 		}
 		kprintf("SocketBase: %08lx\n",state->SocketBase);
-		kprintf("ISocket: %08lx\n",state->ISocket);
+		kprintf("ISocket: %08lx (ISocket address: %08lx)\n",state->ISocket,&state->ISocket);
+		kprintf("ISocketPtr: %08lx\n",state->ISocketPtr);
 #else
 		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, TCPIP_AmiTCP, tagList);
 		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
 
-		state->errno_ptr = (APTR)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList);
+		if (errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList))
+			state->errno_ptr = errno_ptr;
+
+		initialize_socket_errno();
 
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
@@ -277,12 +268,13 @@ long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, s
 	if (state = GetAmiSSLState())
 	{
 #ifdef __amigaos4__
-		if(state->SocketBase && state->ISocket)
+		if(state->SocketBase && state->ISocketPtr && *state->ISocketPtr)
 		{
-			DropInterface((struct Interface *)state->ISocket);
+			DropInterface((struct Interface *)*state->ISocketPtr);
+			state->ISocketPtr = NULL;
 		}
 #endif
-		
+
 		ObtainSemaphore(&openssl_cs);
 		h_delete(thread_hash, state->pid);
 		ReleaseSemaphore(&openssl_cs);
@@ -317,7 +309,6 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 
 	return _AmiSSL_CleanupAmiSSLA(Self,tags);
 }
-
 #endif
 
 static BOOL AMISSL_COMMON_DATA DisableIDEA, DisableRC5;
@@ -457,20 +448,15 @@ int RAND_poll(void)
 	for(i = 0; i < 10; i++)
 	{
 		OPENSSL_cleanse(&rand_poll_buffer[0], sizeof(rand_poll_buffer));
-		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), (double)8);
+		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), 8.0);
 	}
 
 	return(1);
 }
 
-void _CXFERR(int code)
-{
-	/* Do nothing since no one will ever look at the fp error code */
-}
-
-void syslog(int priority, const char * message, ...)
-{
-}
+void openlog(void) {}
+void closelog(void) {}
+void syslog(int priority, const char * message, ...) {}
 
 void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
@@ -524,7 +510,6 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
 
-
 #ifdef __amigaos4__
 	InitSemaphore(&__mem_cs);
 	InitSemaphore(&openssl_cs);
@@ -575,7 +560,7 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
 #ifdef __amigaos4__
-		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 50))
+		if ((IntuitionBase = OpenLibrary("intuition.library", 50))
             && (UtilityBase = OpenLibrary("utility.library", 50))
 			&& (LocaleBase = OpenLibrary("locale.library", 50))
 			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
@@ -617,15 +602,3 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 	return(err);
 }
-
-#if 0
-extern int v3_ns_ia5_list;
-extern int rand_ssleay_meth;
-
-void checkdos(void)
-{
-	kprintf("DOSBase: %08x\n",&DOSBase);
-	kprintf("v3_ns_ia5_list: %08x\n",&v3_ns_ia5_list);
-	kprintf("rand_ssleay_meth: %08x\n",&rand_ssleay_meth);
-}
-#endif

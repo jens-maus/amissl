@@ -1,20 +1,6 @@
 #ifndef _STDARG_H
 #define _STDARG_H
 
-#if 0
-typedef struct va_list_t
-{
-	char*   args;
-} va_list;
-
-#define va_start(ap,x)   ((ap).args=((char*)&(x)+sizeof(x)))
-#define va_end(ap)       ((void)0)
-
-#define va_arg(ap,T) \
-    (((T*)(ap.args += sizeof(T)))[-1] )
-
-#endif
-
 #ifndef __GNUC_VA_LIST
 #define __GNUC_VA_LIST
 typedef __builtin_va_list __gnuc_va_list;
@@ -39,5 +25,3 @@ typedef struct va_list_t
 #include <sys/amigaos-va.h>
 
 #endif
-
-

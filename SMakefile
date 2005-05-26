@@ -44,15 +44,12 @@ $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 
 amissl_v$(VERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 	slink WITH <<
-DEFINE _bsearch=_OBJ_bsearch
 DEFINE __XCEXIT=_AmiSSLAbort
+DEFINE __CXFERR=@__dummy
 DEFINE @abort=_AmiSSLAbort
 DEFINE @__chkabort=@__dummy
-DEFINE _RAND_add_internal=_RAND_add
-DEFINE _BIO_new_fp=@__dummy
-DEFINE _closelog=@__dummy
-DEFINE _openlog=@__dummy
 DEFINE __AmiSSL_DummyFunc=@__dummy
+DEFINE _bsearch=_OBJ_bsearch
 LIBFD FD/amissl_lib.fd
 LIBPREFIX __AmiSSL_
 LIBID "$@ $(VERSION).$(AMISSLREVISION) ($(AMISSLDATE))"

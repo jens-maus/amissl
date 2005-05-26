@@ -5,6 +5,7 @@
 #include <dos.h>
 
 extern int __io2errno(int);
+extern void initialize_socket_errno(void);
 
 /**
 *

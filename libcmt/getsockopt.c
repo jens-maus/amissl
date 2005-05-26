@@ -46,16 +46,11 @@ getsockopt(
 					*(int *)optval = 0;
 					return 0;
 				}
-				if(state->errno_ptr)
-				{
-					*state->errno_ptr = EINVAL;
-				}
 				else
 				{
-					state->local_errno = EINVAL;
-					state->socket_base_owns_errno = 0;
+					SetAmiSSLerrno(EINVAL);
+					return -1;
 				}
-				return -1;
 				break;
 		}
 	}

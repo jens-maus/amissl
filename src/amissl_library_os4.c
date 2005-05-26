@@ -72,13 +72,10 @@ extern APTR GetDataEnd(void);
 extern APTR GetDataBase(void);
 void __init_libcmt_file(void);
 
-/* trampoline to set up r2 */
-
 __attribute__ ((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 {
 	kprintf("DOSBase; %08lx DataStart: %08lx me: %08x\n",&DOSBase,GetDataStart(),libOpen2);
-/*	checkdos();
-	return 0; */
+
 	if(DOSBase = IExec->OpenLibrary("dos.library", 36))
 	{
 		if(IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL))
@@ -105,11 +102,11 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	kprintf("Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
 	kprintf("Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
 
-    /* Add up the open count */
-    libBase->libNode.lib_OpenCnt++;
+	/* Add up the open count */
+	libBase->libNode.lib_OpenCnt++;
 
-    /* Add any specific open code here 
-       Return 0 before incrementing OpenCnt to fail opening */
+	/* Add any specific open code here 
+	   Return 0 before incrementing OpenCnt to fail opening */
 
 	if( newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags))
 	{
@@ -313,6 +310,17 @@ const static struct Resident lib_res __attribute__ ((used)) =
     (APTR)libCreateTags
 };
 
+struct SocketIFace *GetSocketIFace(int modifies_errno)
+{
+	AMISSL_STATE *p = GetAmiSSLState();
+
+	/* The ISocketPtr might be pointing to uninitialized ISocket in __UserLibInit */
+	if (!p->socket_errno_initialized)
+		initialize_socket_errno();
+
+	return(p->ISocketPtr ? *p->ISocketPtr : NULL);
+}
+
 int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
 	__gnuc_va_list va;
@@ -435,9 +443,6 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 	__builtin_va_end(va);
 	return result;
 }
-
-void openlog(void) {}
-void closelog(void) {}
 
 void __baserel_get_addr(struct Interface *self);
 
