@@ -1,3 +1,6 @@
+#ifndef LIBCMT_H
+#define LIBCMT_H
+
 #include <stdio.h>
 #include <dos.h>
 
@@ -5,22 +8,22 @@ extern int __io2errno(int);
 
 /**
 *
-* Definitions associated with __iobuf._flag
+* Definitions associated with __iobuf._flag. These are already defined in SAS/C stdio.h.
 *
 **/
-#define _IOFBF   0		/* fully buffered (for setvbuf) */
-#define _IOREAD  1		/* read flag */
-#define _IOWRT   2		/* write flag */
-//#define _IONBF   4		/* non-buffered flag */
-#define _IOMYBUF 8		/* private buffer flag */
-#define _IOEOF   16		/* end-of-file flag */
-#define _IOERR   32		/* error flag */
-//#define _IOLBF   64		/* line-buffered flag */
-#define _IORW    128		/* read-write (update) flag */
-#define _IOUNGET 0x1000         /* unget was used since last seek */
-#define _IORKEY  0x2000         /* raw console I/O flag */
-#define _IOAPP   0x4000		/* append flag */
-#define _IOXLAT  0x8000		/* translation flag */
+#ifdef __amigaos4__
+#if !defined(_IOFBF) || !defined(_IOLBF) || !defined(_IONBF)
+#error _IOFBF, _IOLBF and _IONBF should be defined in stdio.h
+#endif
+#define _IOREAD     __FILE_READABLE /* read flag */
+#define _IOWRT      __FILE_WRITABLE /* write flag */
+#define _IOEOF      __FILE_EOF      /* end-of-file flag */
+#define _IOERR      __FILE_ERROR    /* error flag */
+#define _IORW       (1 << 29)       /* read-write (update) flag */
+#endif /* __amigaos4__ */
+
+#define _IOALLOCBUF (1 << 30)       /* buffer is locally allocated */
+#define _IOBFMASK ((_IOFBF) | (_IOLBF) | (_IONBF))
 
 #define EOF (-1)		/* end-of-file code */
 
@@ -111,3 +114,5 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define GETISOCKET() struct SocketIFace *ISocket = GetSocketIFace(1);
 #define GETISOCKET_NOERRNO() struct SocketIFace *ISocket = GetSocketIFace(0);
 #define GETSTATE() AMISSL_STATE *state = GetAmiSSLState()
+
+#endif /* !LIBCMT_H */
