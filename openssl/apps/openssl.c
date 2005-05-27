@@ -315,13 +315,13 @@ static void init_amissl(void)
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
 		fprintf(stderr, "Couldn't get AmiSSL interface!\n");
 #endif /* __amigaos4__ */
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 #ifdef __amigaos4__
-	else if (InitAmiSSL(AmiSSL_ISocket, ISocket,
-	                    TAG_DONE) != 0)
+	                    AmiSSL_ISocket, ISocket,
 #else /* __amigaos4__ */
-	else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase,
-	                    TAG_DONE) != 0)
+	                    AmiSSL_SocketBase, SocketBase,
 #endif /* __amigaos4__ */
+	                    TAG_DONE) != 0)
 		fprintf(stderr, "Couldn't initialize AmiSSL!\n");
 	else
 		is_ok = TRUE;
