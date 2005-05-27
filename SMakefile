@@ -42,7 +42,8 @@ $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	sc $* OBJNAME $@ $(CFLAGS)
 
-amissl_v$(VERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
+amissl_v$(VERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o \
+                                $(LIB_D)/libinitr.o
 	slink WITH <<
 DEFINE __XCEXIT=_AmiSSLAbort
 DEFINE __CXFERR=@__dummy
@@ -54,7 +55,7 @@ LIBFD FD/amissl_lib.fd
 LIBPREFIX __AmiSSL_
 LIBID "$@ $(VERSION).$(AMISSLREVISION) ($(AMISSLDATE))"
 TO amissl_v$(VERSIONNAME).library
-FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
+FROM lib:libent.o $(LIB_D)/libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
 LIB $(LIBCRYPTO) $(LIBSSL) \
     libcmt/libcmt.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
 MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
@@ -65,12 +66,12 @@ LIBVERSION $(VERSION) LIBREVISION $(AMISSLREVISION)
 $(STRIPDEBUG)
 <
 
-amisslmaster.library: $(OBJ_D)/amisslmaster_library.o
+amisslmaster.library: $(OBJ_D)/amisslmaster_library.o $(LIB_D)/libinitr.o
 	slink WITH <<
 LIBFD FD/amisslmaster_lib.fd
 LIBID "$@ $(VERSION).$(AMISSLMASTERREVISION) ($(AMISSLMASTERDATE))"
 TO amisslmaster.library
-FROM lib:libent.o lib:libinitr.o $(OBJ_D)/amisslmaster_library.o
+FROM lib:libent.o $(LIB_D)/libinitr.o $(OBJ_D)/amisslmaster_library.o
 LIB LIB:sc.lib
 MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
 NOICONS
@@ -85,6 +86,9 @@ $(OBJ_D)/amissllib.o: $(SRC_D)/amissllib.c
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK IGN 63
+
+$(LIB_D)/libinitr.o: $(SRC_D)/libinit.c
+	sc RESETOPTS $* LIBCODE STRMER NOSTACKCHECK OBJNAME $@
 
 $(LIB_D)/amisslauto.lib: $(OBJ_D)/amissllib.o
 	oml $@ r $(OBJ_D)/amissllib.o

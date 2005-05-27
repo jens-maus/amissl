@@ -40,6 +40,7 @@ struct DOSIFace *IDOS;
 
 int __UserLibInit(struct AmiSSLIFace *Self);
 int __UserLibCleanup(struct AmiSSLIFace *Self);
+int __UserLibExpunge(struct AmiSSLIFace *Self);
 
 /*
  * The system (and compiler) rely on a symbol named _start which marks
@@ -153,7 +154,7 @@ APTR libClose(struct LibraryManagerInterface *Self)
     struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase;
     /* Make sure to undo what open did */
 
-	kprintf("close amissl\n");
+	kprintf("Close amissl\n");
 
     /* Make the close count */
 	libBase->origLibBase->libNode.lib_OpenCnt--;
@@ -182,7 +183,12 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
     struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase;
     if (libBase->libNode.lib_OpenCnt == 0)
     {
-	     result = (APTR)libBase->segList;
+		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
+
+		kprintf("Expunge amissl\n");
+		__UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
+
+        result = (APTR)libBase->segList;
         /* Undo what the init code did */
 
         IExec->Remove((struct Node *)libBase);
