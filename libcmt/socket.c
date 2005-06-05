@@ -62,45 +62,55 @@ void initialize_socket_errno(void)
 {
 #ifdef __amigaos4__
 	GETSTATE();
-	GETISOCKET();
 
-	if (ISocket && !state->socket_errno_initialized)
-		ISocket->SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-		                        SBTM_SETVAL(SBTC_BREAKMASK), SIGBREAKF_CTRL_C,
-		                        TAG_DONE);
+	if (!state->socket_errno_initialized)
+	{
+		/* Done this early to prevent infinite recursion with the following GETISOCKET() */
+		state->socket_errno_initialized = 1;
 
-	state->socket_errno_initialized = 1;
+		{
+			GETISOCKET();
+
+			if (ISocket)
+				ISocket->SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
+				                        SBTM_SETVAL(SBTC_BREAKMASK), SIGBREAKF_CTRL_C,
+				                        TAG_DONE);
+		}
+	}
 #else
 	GETSTATE();
 
-	if (state->SocketBase)
+	if (!state->socket_errno_initialized)
 	{
-		switch(state->TCPIPStackType)
+		if (state->SocketBase)
 		{
-			case TCPIP_Miami:
-			case TCPIP_AmiTCP:
-				amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-				                      TAG_DONE);
-				break;
+			switch(state->TCPIPStackType)
+			{
+				case TCPIP_Miami:
+				case TCPIP_AmiTCP:
+					amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
+					                      TAG_DONE);
+					break;
 
-			case TCPIP_MLink:
-				ObtainSemaphore(&state->MLinkLock->Semaphore);
-				amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-				                      TAG_DONE);
-				ReleaseSemaphore(&state->MLinkLock->Semaphore);
-				break;
+				case TCPIP_MLink:
+					ObtainSemaphore(&state->MLinkLock->Semaphore);
+					amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
+					                      TAG_DONE);
+					ReleaseSemaphore(&state->MLinkLock->Semaphore);
+					break;
 
-			case TCPIP_IN225:
-				/* Unfortunately, nothing can be done here since it sets errno in setup_sockets */
-				break;
+				case TCPIP_IN225:
+					/* Unfortunately, nothing can be done here since it sets errno in setup_sockets */
+					break;
 
-			case TCPIP_Termite:
-				termite_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-				                       TAG_DONE);
-				break;
+				case TCPIP_Termite:
+					termite_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
+					                       TAG_DONE);
+					break;
+			}
 		}
-	}
 
-	state->socket_errno_initialized = 1;
+		state->socket_errno_initialized = 1;
+	}
 #endif
 }
