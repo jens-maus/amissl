@@ -64,6 +64,11 @@
 #include <openssl/err.h>
 #include "example.h"
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+long IsCipherAvailable(long cipher);
+#endif /* AMISSL */
+
 int verify_callback(int ok, X509_STORE_CTX *ctx);
 
 BIO *bio_err=NULL;
@@ -95,6 +100,9 @@ char *argv[];
 	EVP_add_digest(EVP_sha1());
 #endif
 #ifndef OPENSSL_NO_MDC2
+#ifdef AMISSL
+	if (IsCipherAvailable(CIPHER_MDC2))
+#endif /* AMISSL */
 	EVP_add_digest(EVP_mdc2());
 #endif
 

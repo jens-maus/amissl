@@ -64,6 +64,11 @@
 #include <openssl/err.h>
 #include <openssl/mdc2.h>
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+long IsCipherAvailable(long cipher);
+#endif /* AMISSL */
+
 #undef c2l
 #define c2l(c,l)	(l =((DES_LONG)(*((c)++)))    , \
 			 l|=((DES_LONG)(*((c)++)))<< 8L, \
@@ -79,6 +84,11 @@
 static void mdc2_body(MDC2_CTX *c, const unsigned char *in, unsigned int len);
 FIPS_NON_FIPS_MD_Init(MDC2)
 	{
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_MDC2))
+		return(0);
+#endif /* AMISSL */
+
 	c->num=0;
 	c->pad_type=1;
 	memset(&(c->h[0]),0x52,MDC2_BLOCK);
@@ -89,6 +99,11 @@ FIPS_NON_FIPS_MD_Init(MDC2)
 int MDC2_Update(MDC2_CTX *c, const unsigned char *in, unsigned long len)
 	{
 	int i,j;
+
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_MDC2))
+		return(0);
+#endif /* AMISSL */
 
 	i=c->num;
 	if (i != 0)
@@ -163,6 +178,11 @@ static void mdc2_body(MDC2_CTX *c, const unsigned char *in, unsigned int len)
 int MDC2_Final(unsigned char *md, MDC2_CTX *c)
 	{
 	int i,j;
+
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_MDC2))
+		return(0);
+#endif /* AMISSL */
 
 	i=c->num;
 	j=c->pad_type;

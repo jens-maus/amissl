@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_RC5))
 	{
-		printf("RC5 cipher is unavailable in this country\n");
+		printf("RC5 cipher is not available\n");
 		return(0);
 	}
 #endif /* AMISSL */

@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
 	{
-		printf("IDEA cipher is unavailable in this country\n");
+		printf("IDEA cipher is not available\n");
 		return(0);
 	}
 #endif /* AMISSL */

@@ -311,7 +311,7 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 }
 #endif
 
-static BOOL AMISSL_COMMON_DATA DisableIDEA, DisableRC5;
+static BOOL AMISSL_COMMON_DATA DisableIDEA, DisableMDC2, DisableRC5;
 
 long IsCipherAvailable(long cipher)
 {
@@ -352,7 +352,7 @@ long IsCipherAvailable(long cipher)
 			break;
 
 		case CIPHER_MDC2:
-			is_available = IsCipherAvailable(CIPHER_DES);
+			is_available = !DisableMDC2 && IsCipherAvailable(CIPHER_DES);
 			break;
 
 		default:
@@ -588,6 +588,7 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 			              || CompareCountry(locale->loc_CountryCode, "GBR", "GB", NULL) /* United Kingdom */
 			              || CompareCountry(locale->loc_CountryCode, "USA", "US", NULL) /* USA */;
 
+			DisableMDC2 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
 			DisableRC5 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
 
 			CloseLocale(locale);
