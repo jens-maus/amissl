@@ -77,7 +77,10 @@ void idea_ecb_encrypt(const unsigned char *in, unsigned char *out,
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("IDEA");
 		return;
+	}
 #endif /* AMISSL */
 
 	n2l(in,l0); d[0]=l0;

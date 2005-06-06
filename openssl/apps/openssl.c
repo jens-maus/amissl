@@ -333,6 +333,12 @@ static void init_amissl(void)
 	}
 }
 
+static BOOL IgnoreAmiSSLCipher(const char *cipher)
+{
+	return((strncmp(cipher, "idea", 4) == 0 && !IsCipherAvailable(CIPHER_IDEA))
+	       || (strncmp(cipher, "mdc2", 4) == 0 && !IsCipherAvailable(CIPHER_MDC2))
+	       || (strncmp(cipher, "rc5", 3) == 0 && !IsCipherAvailable(CIPHER_RC5)));
+}
 #endif /* AMISSL */
 
 int main(int Argc, char *Argv[])
@@ -580,6 +586,9 @@ static int do_cmd(LHASH *prog, int argc, char *argv[])
 		
 		for (fp=functions; fp->name != NULL; fp++)
 			if (fp->type == list_type)
+#ifdef AMISSL
+				if (!IgnoreAmiSSLCipher(fp->name))
+#endif /* AMISSL */
 				BIO_printf(bio_stdout, "%s\n", fp->name);
 		BIO_free_all(bio_stdout);
 		ret=0;
@@ -616,6 +625,11 @@ static int do_cmd(LHASH *prog, int argc, char *argv[])
 					BIO_printf(bio_err,"\nCipher commands (see the `enc' command for more details)\n");
 					}
 				}
+#ifdef AMISSL
+			if (IgnoreAmiSSLCipher(fp->name))
+				BIO_printf(bio_err, "%-15s", "");
+			else
+#endif /* AMISSL */
 			BIO_printf(bio_err,"%-15s",fp->name);
 			}
 		BIO_printf(bio_err,"\n\n");
@@ -650,6 +664,9 @@ static LHASH *prog_init(void)
 		return(NULL);
 
 	for (f=functions; f->name != NULL; f++)
+#ifdef AMISSL
+		if (!IgnoreAmiSSLCipher(f->name))
+#endif /* AMISSL */
 		lh_insert(ret,f);
 	return(ret);
 	}

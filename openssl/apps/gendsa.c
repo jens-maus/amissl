@@ -69,6 +69,10 @@
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+#endif /* AMISSL */
+
 #define DEFBITS	512
 #undef PROG
 #define PROG gendsa_main
@@ -136,7 +140,11 @@ int MAIN(int argc, char **argv)
 			enc=EVP_des_ede3_cbc();
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifndef AMISSL
 		else if (strcmp(*argv,"-idea") == 0)
+#else
+		else if (strcmp(*argv,"-idea") == 0 && IsCipherAvailable(CIPHER_IDEA))
+#endif /* !AMISSL */
 			enc=EVP_idea_cbc();
 #endif
 #ifndef OPENSSL_NO_AES
@@ -167,6 +175,9 @@ bad:
 		BIO_printf(bio_err," -des3     - encrypt the generated key with DES in ede cbc mode (168 bit key)\n");
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+		if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 		BIO_printf(bio_err," -idea     - encrypt the generated key with IDEA in cbc mode\n");
 #endif
 #ifndef OPENSSL_NO_AES

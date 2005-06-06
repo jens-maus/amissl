@@ -437,10 +437,9 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BA
 	return(SSLv23_client_method());
 }
 
-static char AMISSL_COMMON_DATA rand_poll_buffer[128];
-
 int RAND_poll(void)
 {
+	char rand_poll_buffer[128];
 	int i;
 
 	/* !?! FIXME */
@@ -456,7 +455,7 @@ int RAND_poll(void)
 
 void openlog(void) {}
 void closelog(void) {}
-void syslog(int priority, const char * message, ...) {}
+void syslog(int priority, const char *message, ...) {}
 
 void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
@@ -602,4 +601,49 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		__UserLibCleanup(Self);
 
 	return(err);
+}
+
+/* Use automatic wordwrapping on OS4 */
+#ifdef __amigaos4__
+#define REQNL
+#else
+#define REQNL "\n"
+#endif
+
+void AmiSSLCipherUsageError(const char *cipher, const char *func)
+{
+	char name_buffer[80];
+	static const char format[] = "\"%s\" has called AmiSSL function " REQNL
+	    "\"%s\" without checking if %s cipher/message digest " REQNL
+	    "is available. The function will do nothing which is almost certainly " REQNL
+	    "NOT desirable and might cause the program to malfunction!\n\n"
+	    "Please notify the author of the program using AmiSSL of this problem.";
+	char *buffer;
+	int length;
+
+	SetIoErr(0);
+
+	if (!GetProgramName(&name_buffer[0], sizeof(name_buffer) - 1) || IoErr() != 0)
+		BIO_snprintf(&name_buffer[0], sizeof(name_buffer), "[An AmiSSL program]");
+
+	length = sizeof(format) /* + 1 */ + strlen(&name_buffer[0]) + strlen(cipher)
+	         + strlen(func);
+
+	if (buffer = malloc(length))
+	{
+		BIO_snprintf(buffer, length, &format[0], &name_buffer[0], func, cipher);
+
+		ShowRequester(SR_ERROR, "AmiSSL important warning", buffer,
+		              "Continue");
+
+		free(buffer);
+	}
+	else
+		ShowRequester(SR_ERROR, &name_buffer[0],
+		              "The program has called an AmiSSL function without checking " REQNL
+		              "if the appropriate cipher/message digest is available. " REQNL
+		              "The function will do nothing which is almost certainly " REQNL
+		              "NOT desirable and might cause the program to malfunction!\n\n"
+		              "Please notify the author of the program using AmiSSL of this problem.",
+		              "Continue");
 }

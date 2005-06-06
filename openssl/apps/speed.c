@@ -65,6 +65,10 @@
 #define RSA_SECONDS	10
 #define DSA_SECONDS	10
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+#endif /* AMISSL */
+
 /* 11-Sep-92 Andrew Daviel   Support for Silicon Graphics IRIX added */
 /* 06-Apr-92 Luke Brennan    Support for VMS and add extra signal calls */
 
@@ -685,7 +689,11 @@ int MAIN(int argc, char **argv)
 		else
 #endif
 #ifndef OPENSSL_NO_MDC2
+#ifndef AMISSL
 			if (strcmp(*argv,"mdc2") == 0) doit[D_MDC2]=1;
+#else
+			if (strcmp(*argv,"mdc2") == 0 && IsCipherAvailable(CIPHER_MDC2)) doit[D_MDC2]=1;
+#endif /* !AMISSL */
 		else
 #endif
 #ifndef OPENSSL_NO_MD4
@@ -761,13 +769,23 @@ int MAIN(int argc, char **argv)
 		else
 #endif
 #ifndef OPENSSL_NO_RC5
+#ifndef AMISSL
 		     if (strcmp(*argv,"rc5-cbc") == 0) doit[D_CBC_RC5]=1;
 		else if (strcmp(*argv,"rc5") == 0) doit[D_CBC_RC5]=1;
+#else
+		     if (strcmp(*argv,"rc5-cbc") == 0 && IsCipherAvailable(CIPHER_RC5)) doit[D_CBC_RC5]=1;
+		else if (strcmp(*argv,"rc5") == 0 && IsCipherAvailable(CIPHER_RC5)) doit[D_CBC_RC5]=1;
+#endif /* !AMISSL */
 		else
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifndef AMISSL
 		     if (strcmp(*argv,"idea-cbc") == 0) doit[D_CBC_IDEA]=1;
 		else if (strcmp(*argv,"idea") == 0) doit[D_CBC_IDEA]=1;
+#else
+		     if (strcmp(*argv,"idea-cbc") == 0 && IsCipherAvailable(CIPHER_IDEA)) doit[D_CBC_IDEA]=1;
+		else if (strcmp(*argv,"idea") == 0 && IsCipherAvailable(CIPHER_IDEA)) doit[D_CBC_IDEA]=1;
+#endif /* !AMISSL */
 		else
 #endif
 #ifndef OPENSSL_NO_BF
@@ -826,6 +844,9 @@ int MAIN(int argc, char **argv)
 			BIO_printf(bio_err,"md2      ");
 #endif
 #ifndef OPENSSL_NO_MDC2
+#ifdef AMISSL
+			if (IsCipherAvailable(CIPHER_MDC2))
+#endif /* AMISSL */
 			BIO_printf(bio_err,"mdc2     ");
 #endif
 #ifndef OPENSSL_NO_MD4
@@ -850,12 +871,18 @@ int MAIN(int argc, char **argv)
 #endif
 
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+			if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 			BIO_printf(bio_err,"idea-cbc ");
 #endif
 #ifndef OPENSSL_NO_RC2
 			BIO_printf(bio_err,"rc2-cbc  ");
 #endif
 #ifndef OPENSSL_NO_RC5
+#ifdef AMISSL
+			if (IsCipherAvailable(CIPHER_RC5))
+#endif /* AMISSL */
 			BIO_printf(bio_err,"rc5-cbc  ");
 #endif
 #ifndef OPENSSL_NO_BF
@@ -885,6 +912,9 @@ int MAIN(int argc, char **argv)
 #endif
 
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+			if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 			BIO_printf(bio_err,"idea     ");
 #endif
 #ifndef OPENSSL_NO_RC2
@@ -999,6 +1029,9 @@ int MAIN(int argc, char **argv)
 	AES_set_encrypt_key(key32,256,&aes_ks3);
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+	if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 	idea_set_encrypt_key(key16,&idea_ks);
 #endif
 #ifndef OPENSSL_NO_RC4
@@ -1008,6 +1041,9 @@ int MAIN(int argc, char **argv)
 	RC2_set_key(&rc2_ks,16,key16,128);
 #endif
 #ifndef OPENSSL_NO_RC5
+#ifdef AMISSL
+	if (IsCipherAvailable(CIPHER_RC5))
+#endif /* AMISSL */
 	RC5_32_set_key(&rc5_ks,16,key16,12);
 #endif
 #ifndef OPENSSL_NO_BF
@@ -1147,7 +1183,11 @@ int MAIN(int argc, char **argv)
 		}
 #endif
 #ifndef OPENSSL_NO_MDC2
+#ifndef AMISSL
 	if (doit[D_MDC2])
+#else
+	if (doit[D_MDC2] && IsCipherAvailable(CIPHER_MDC2))
+#endif /* !AMISSL */
 		{
 		for (j=0; j<SIZE_NUM; j++)
 			{
@@ -1335,7 +1375,11 @@ int MAIN(int argc, char **argv)
 
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifndef AMISSL
 	if (doit[D_CBC_IDEA])
+#else
+	if (doit[D_CBC_IDEA] && IsCipherAvailable(CIPHER_IDEA))
+#endif /* !AMISSL */
 		{
 		for (j=0; j<SIZE_NUM; j++)
 			{
@@ -1367,7 +1411,11 @@ int MAIN(int argc, char **argv)
 		}
 #endif
 #ifndef OPENSSL_NO_RC5
+#ifndef AMISSL
 	if (doit[D_CBC_RC5])
+#else
+	if (doit[D_CBC_RC5] && IsCipherAvailable(CIPHER_RC5))
+#endif /* !AMISSL */
 		{
 		for (j=0; j<SIZE_NUM; j++)
 			{
@@ -1668,6 +1716,9 @@ show_res:
 		printf("%s ",AES_options());
 #endif
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+		if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 		printf("%s ",idea_options());
 #endif
 #ifndef OPENSSL_NO_BF

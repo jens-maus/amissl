@@ -80,7 +80,10 @@ void idea_set_encrypt_key(const unsigned char *key, IDEA_KEY_SCHEDULE *ks)
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("IDEA");
 		return;
+	}
 #endif /* AMISSL */
 
 	kt= &(ks->data[0][0]);
@@ -119,7 +122,10 @@ void idea_set_decrypt_key(IDEA_KEY_SCHEDULE *ek, IDEA_KEY_SCHEDULE *dk)
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("IDEA");
 		return;
+	}
 #endif /* AMISSL */
 
 	tp= &(dk->data[0][0]);

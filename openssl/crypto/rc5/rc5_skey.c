@@ -81,7 +81,10 @@ void RC5_32_set_key(RC5_32_KEY *key, int len, const unsigned char *data,
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_RC5))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("RC5");
 		return;
+	}
 #endif /* AMISSL */
 
 	if (	(rounds != RC5_16_ROUNDS) &&

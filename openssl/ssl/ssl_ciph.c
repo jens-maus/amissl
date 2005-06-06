@@ -62,6 +62,11 @@
 #include <openssl/fips.h>
 #include "ssl_locl.h"
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+long IsCipherAvailable(long cipher);
+#endif /* AMISSL */
+
 #define SSL_ENC_DES_IDX		0
 #define SSL_ENC_3DES_IDX	1
 #define SSL_ENC_RC4_IDX		2
@@ -170,6 +175,11 @@ static void load_ciphers(void)
 	ssl_cipher_methods[SSL_ENC_RC2_IDX]= 
 		EVP_get_cipherbyname(SN_rc2_cbc);
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+	if (!IsCipherAvailable(CIPHER_IDEA))
+		ssl_cipher_methods[SSL_ENC_IDEA_IDX] = NULL;
+	else
+#endif /* AMISSL */
 	ssl_cipher_methods[SSL_ENC_IDEA_IDX]= 
 		EVP_get_cipherbyname(SN_idea_cbc);
 #else

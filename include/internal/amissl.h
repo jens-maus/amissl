@@ -33,4 +33,16 @@ STDARGS int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
 
+enum SRType {SR_INFO, SR_WARNING, SR_ERROR, SR_QUESTION};
+LONG ShowRequester(enum SRType type, const char *title, const char *body,
+                   const char *gadgets);
+
+#ifdef __SASC
+#define AMISSL_CIPHER_USAGE_ERROR(cipher) AmiSSLCipherUsageError(cipher, __FUNC__)
+#else
+#define AMISSL_CIPHER_USAGE_ERROR(cipher) AmiSSLCipherUsageError(cipher, __FUNCTION__)
+#endif
+
+void AmiSSLCipherUsageError(const char *cipher, const char *func);
+
 #endif /* !INTERNAL_AMISSL_H */

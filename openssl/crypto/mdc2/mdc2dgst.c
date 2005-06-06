@@ -66,6 +66,7 @@
 
 #ifdef AMISSL
 #include <libraries/amissl.h>
+#include <internal/amissl.h>
 long IsCipherAvailable(long cipher);
 #endif /* AMISSL */
 
@@ -86,7 +87,10 @@ FIPS_NON_FIPS_MD_Init(MDC2)
 	{
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_MDC2))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("MDC2");
 		return(0);
+	}
 #endif /* AMISSL */
 
 	c->num=0;
@@ -102,7 +106,10 @@ int MDC2_Update(MDC2_CTX *c, const unsigned char *in, unsigned long len)
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_MDC2))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("MDC2");
 		return(0);
+	}
 #endif /* AMISSL */
 
 	i=c->num;
@@ -181,7 +188,10 @@ int MDC2_Final(unsigned char *md, MDC2_CTX *c)
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_MDC2))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("MDC2");
 		return(0);
+	}
 #endif /* AMISSL */
 
 	i=c->num;

@@ -207,5 +207,6 @@
 
 #ifdef AMISSL
 #include <libraries/amissl.h>
+#include <internal/amissl.h>
 long IsCipherAvailable(long cipher);
 #endif /* AMISSL */

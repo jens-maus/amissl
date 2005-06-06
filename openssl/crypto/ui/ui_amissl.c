@@ -28,14 +28,12 @@
 enum {REQIMAGE_WARNING, REQIMAGE_ERROR, REQIMAGE_QUESTION, REQIMAGE_INFO};
 #endif
 
-enum SRType {SR_INFO, SR_WARNING, SR_ERROR, SR_QUESTION};
-
 /* Opens a requester and displays a text to the user. Returns number of the
  * chosen button. The buttons are numbered 1, 2, 3, ..., 0. A single button
  * has number 0.
  */
-static LONG ShowRequester(enum SRType type, const char *title, const char *body,
-                          const char *gadgets)
+LONG ShowRequester(enum SRType type, const char *title, const char *body,
+                   const char *gadgets)
 {
 	struct Screen *screen = LockPubScreen(NULL);
 	struct RequesterIFace *IRequester = NULL;

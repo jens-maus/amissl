@@ -67,6 +67,10 @@
 #include <openssl/pem.h>
 #include <openssl/pkcs12.h>
 
+#ifdef AMISSL
+#include <libraries/amissl.h>
+#endif /* AMISSL */
+
 #define PROG pkcs12_main
 
 const EVP_CIPHER *enc;
@@ -160,7 +164,11 @@ int MAIN(int argc, char **argv)
 		else if (!strcmp (*args, "-export")) export_cert = 1;
 		else if (!strcmp (*args, "-des")) enc=EVP_des_cbc();
 #ifndef OPENSSL_NO_IDEA
+#ifndef AMISSL
 		else if (!strcmp (*args, "-idea")) enc=EVP_idea_cbc();
+#else
+		else if (!strcmp (*args, "-idea") && IsCipherAvailable(CIPHER_IDEA)) enc=EVP_idea_cbc();
+#endif /* !AMISSL */
 #endif
 		else if (!strcmp (*args, "-des3")) enc = EVP_des_ede3_cbc();
 #ifndef OPENSSL_NO_AES
@@ -297,6 +305,9 @@ int MAIN(int argc, char **argv)
 	BIO_printf (bio_err, "-des          encrypt private keys with DES\n");
 	BIO_printf (bio_err, "-des3         encrypt private keys with triple DES (default)\n");
 #ifndef OPENSSL_NO_IDEA
+#ifdef AMISSL
+	if (IsCipherAvailable(CIPHER_IDEA))
+#endif /* AMISSL */
 	BIO_printf (bio_err, "-idea         encrypt private keys with idea\n");
 #endif
 #ifndef OPENSSL_NO_AES

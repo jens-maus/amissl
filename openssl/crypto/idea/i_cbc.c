@@ -69,7 +69,10 @@ void idea_cbc_encrypt(const unsigned char *in, unsigned char *out, long length,
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("IDEA");
 		return;
+	}
 #endif /* AMISSL */
 
 	if (encrypt)
@@ -145,7 +148,10 @@ void idea_encrypt(unsigned long *d, IDEA_KEY_SCHEDULE *key)
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))
+	{
+		AMISSL_CIPHER_USAGE_ERROR("IDEA");
 		return;
+	}
 #endif /* AMISSL */
 
 	x2=d[0];
