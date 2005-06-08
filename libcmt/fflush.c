@@ -32,6 +32,7 @@ int __fflush(FILE *stream) /* fflush exactly one file */
 			subbuf+=subsize;
 		}
 		TOFILE(stream)->_wcnt=0;
+		TOFILE(stream)->_ptr = TOFILE(stream)->_base;
 	} /* Nothing to be done for input streams */
 	return 0;
 }

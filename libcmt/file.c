@@ -119,6 +119,7 @@ FILE *fopen(const char *name, const char *mode)
 		if((node->FILE._base=(char *)malloc(BUFSIZ))!=NULL)
 		{
 			node->FILE._size=BUFSIZ;
+			node->FILE._ptr = node->FILE._base;
 			/* FIXME: what is this for? 0x80 is _IORW, nothing related to malloc */
 			/* node->FILE._flag|=0x80; *//* Buffer is malloc'ed */
 			node->FILE._flag |= _IOALLOCBUF;
