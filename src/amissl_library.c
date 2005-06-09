@@ -437,22 +437,6 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BA
 	return(SSLv23_client_method());
 }
 
-int RAND_poll(void)
-{
-	char rand_poll_buffer[128];
-	int i;
-
-	/* !?! FIXME */
-
-	for(i = 0; i < 10; i++)
-	{
-		OPENSSL_cleanse(&rand_poll_buffer[0], sizeof(rand_poll_buffer));
-		RAND_add(&rand_poll_buffer[0], sizeof(rand_poll_buffer), 8.0);
-	}
-
-	return(1);
-}
-
 void openlog(void) {}
 void closelog(void) {}
 void syslog(int priority, const char *message, ...) {}
