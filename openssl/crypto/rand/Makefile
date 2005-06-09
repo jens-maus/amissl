@@ -23,9 +23,9 @@ APPS=
 
 LIB=$(TOP)/libcrypto.a
 LIBSRC=md_rand.c randfile.c rand_lib.c rand_err.c rand_egd.c \
-	rand_win.c rand_unix.c rand_os2.c
+	rand_win.c rand_unix.c rand_os2.c rand_amiga.c
 LIBOBJ=md_rand.o randfile.o rand_lib.o rand_err.o rand_egd.o \
-	rand_win.o rand_unix.o rand_os2.o
+	rand_win.o rand_unix.o rand_os2.o rand_amiga.o
 
 SRC= $(LIBSRC)
 
@@ -187,6 +187,7 @@ rand_win.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 rand_win.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 rand_win.o: ../../include/openssl/ui.h ../../include/openssl/ui_compat.h
 rand_win.o: ../cryptlib.h rand_lcl.h rand_win.c
+rand_amiga.o: rand_amiga.c ../../include/openssl/sha.h rand_lcl.h
 randfile.o: ../../e_os.h ../../include/openssl/buffer.h
 randfile.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
 randfile.o: ../../include/openssl/opensslconf.h

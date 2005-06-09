@@ -1056,6 +1056,7 @@ openssl/crypto/pkcs7/verify.c eol=lf
 openssl/crypto/rand/Makefile eol=lf
 openssl/crypto/rand/md_rand.c eol=lf
 openssl/crypto/rand/rand.h eol=lf
+openssl/crypto/rand/rand_amiga.c eol=lf
 openssl/crypto/rand/rand_egd.c eol=lf
 openssl/crypto/rand/rand_err.c eol=lf
 openssl/crypto/rand/rand_lcl.h eol=lf
