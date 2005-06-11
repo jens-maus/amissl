@@ -2,7 +2,7 @@ SRC_D=src
 OBJ_D=obj
 LIB_D=lib
 OUTDIR=LIBS:
-LIBCPU=68000
+LIBCPU=OS4 # Should be PPC, but PPC is #defined to 1: "$VER: xxx.library (...) 1 version"
 LIBSSL=openssl/OS4/out/libssl.a
 LIBCRYPTO=openssl/OS4/out/libcrypto.a
 STRIPDEBUG=
@@ -21,7 +21,8 @@ CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL_COMPILE \
        -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
        -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
        -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
-       -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -Wno-pointer-sign
+       -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(LIBCPU) \
+       -Wno-pointer-sign
 OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
 LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
 

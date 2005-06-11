@@ -16,7 +16,7 @@
 
 /* Version Tag */
 #define LIBNAME "amissl_v" MKSTR(VERSIONNAME) ".library"
-#define VSTRING LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ")\r\n"
+#define VSTRING LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n"
 
 static const char * __attribute__((used)) FullVersion = "\0$VER: " VSTRING;
 

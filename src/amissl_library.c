@@ -57,6 +57,11 @@ struct Library * AMISSL_COMMON_DATA ExecBase;
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
 
 #else
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+const char *FullVersion = "\0$VER: amissl_v" MKSTR(VERSIONNAME) ".library " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n";
+
 struct ExecBase *SysBase;
 struct IntuitionBase *IntuitionBase;
 struct LocaleBase *LocaleBase;
