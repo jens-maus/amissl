@@ -226,43 +226,38 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 
 struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
 
-#ifdef __amigaos4__
 struct AmiSSLIFace *IAmiSSL;
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct SocketIFace *ISocket;
-#endif /* __amigaos4__ */
+
+#ifndef __amigaos4__
+#define GetInterface(a, b, c, d) 1
+#define DropInterface(x)
+#endif /* !__amigaos4__ */
 
 static void cleanup_amissl(void)
 {
 	if (AmiSSLBase)
 	{
-#ifdef __amigaos4__
 		if (IAmiSSL)
 		{
 			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
 			IAmiSSL = NULL;
 		}
-#else /* __amigaos4__ */
-		CleanupAmiSSL(TAG_DONE);
-#endif /* __amigaos4__ */
 
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
 
-#ifdef __amigaos4__
 	DropInterface((struct Interface *)IAmiSSLMaster);
 	IAmiSSLMaster = NULL;
-#endif /* __amigaos4__ */
 
 	CloseLibrary(AmiSSLMasterBase);
 	AmiSSLMasterBase = NULL;
 
-#ifdef __amigaos4__
 	DropInterface((struct Interface *)ISocket);
 	ISocket = NULL;
-#endif /* __amigaos4__ */
 
 	CloseLibrary(SocketBase);
 	SocketBase = NULL;
@@ -295,26 +290,18 @@ static void init_amissl(void)
 	 * openssl tool that don't require networking functionality.
 	 */
 	if (SocketBase = OpenLibrary("bsdsocket.library", 4))
-	{
-#ifdef __amigaos4__
 		ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL);
-#endif /* __amigaos4__ */
-	}
 
 	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
 		fprintf(stderr, "Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
-#ifdef __amigaos4__
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
 		fprintf(stderr, "Couldn't get AmiSSLMaster interface!\n");
-#endif /* __amigaos4__ */
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
 		fprintf(stderr, "Couldn't initialize amisslmaster.library!\n");
 	else if (!(AmiSSLBase = OpenAmiSSL()))
 		fprintf(stderr, "Couldn't open AmiSSL!\n");
-#ifdef __amigaos4__
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
 		fprintf(stderr, "Couldn't get AmiSSL interface!\n");
-#endif /* __amigaos4__ */
 	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 #ifdef __amigaos4__
 	                    AmiSSL_ISocket, ISocket,

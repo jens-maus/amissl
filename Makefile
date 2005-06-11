@@ -11,8 +11,8 @@ VERSION=3
 VERSIONNAME=097g
 AMISSLREVISION=5
 AMISSLMASTERREVISION=5
-AMISSLDATE=9.6.2005
-AMISSLMASTERDATE=9.6.2005
+AMISSLDATE=11.6.2005
+AMISSLMASTERDATE=11.6.2005
 
 LFLAGS=-nostdlib -mbaserel
 OPT= -O2
@@ -29,7 +29,7 @@ all: amissl_v$(VERSIONNAME).library amisslmaster.library \
      $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a
 
 clean:
-	-rm obj/*.o
+	-rm -f obj/*.o lib/*.a
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
@@ -87,6 +87,7 @@ release:
 	copy libs:amissl/amissl_v$(VERSIONNAME).library $(RELDIR)/libs/amissl CLONE
 	copy libs:amisslmaster.library $(RELDIR)/libs CLONE
 	copy include $(RELDIR)/include all CLONE
+	delete $(RELDIR)/include/internal all
 	delete $(RELDIR)/include/CVS all
 	delete $(RELDIR)/include/#?/CVS all
 	copy certs/~(#?CVS#?) $(RELDIR)/certs all CLONE

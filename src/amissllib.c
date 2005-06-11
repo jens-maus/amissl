@@ -4,16 +4,17 @@
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
+#include <errno.h>
 
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
 static void report_error(const char *message)
 {
-	struct DOSBase *DOSBase;
+	struct DosLibrary *DOSBase;
 	BPTR fh;
 
-	if (DOSBase = (struct DOSBase *)OpenLibrary("dos.library", 36))
+	if (DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 36))
 	{
 		struct Process *proc = (struct Process *)FindTask(NULL);
 		BOOL from_wb = proc->pr_CLI == NULL;
@@ -65,7 +66,9 @@ int __stdargs _STI_250_openamissl(void)
 			report_error("Couldn't open AmiSSL!\n");
 			ret = 1;
 		}
-		else if (InitAmiSSL(AmiSSL_SocketBase, SocketBase, TAG_DONE))
+		else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+		                    AmiSSL_SocketBase, SocketBase,
+		                    TAG_DONE))
 		{
 			report_error("Couldn't initialize AmiSSL!\n");
 			ret = 1;

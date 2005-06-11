@@ -10,6 +10,8 @@
 #include <interfaces/amisslmaster.h>
 #include <interfaces/amissl.h>
 
+#include <errno.h>
+
 /****************************************************************************/
 
 __attribute__((weak)) struct AmiSSLIFace * IAmiSSL = NULL;
@@ -83,7 +85,9 @@ void __init_amissl_main(void)
 		if (!(iamissl = IAmiSSL = (struct AmiSSLIFace *)IExec->GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amissl interface\n");
 
-		if (IAmiSSL->InitAmiSSL(AmiSSL_ISocketPtr, &ISocket, TAG_DONE))
+		if (IAmiSSL->InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+		                        AmiSSL_ISocketPtr, &ISocket,
+		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
 	}
 }

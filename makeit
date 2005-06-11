@@ -36,6 +36,14 @@ cd ..
 
 mkdir -p {680{0,6}0,68020-40}/AmiSSL
 
+/sc/c/smake clean
 /sc/c/smake all LIBCPU=68000 OUTDIR=68000/
+/sc/c/smake copylibs LIBCPU=68000 OUTDIR=68000/ STRIPDEBUG=STRIPDEBUG
+
+/sc/c/smake clean
 /sc/c/smake all LIBCPU=68020-40 OUTDIR=68020-40/
+/sc/c/smake copylibs LIBCPU=68020-40 OUTDIR=68020-40/ STRIPDEBUG=STRIPDEBUG
+
+/sc/c/smake clean
 /sc/c/smake all LIBCPU=68060 OUTDIR=68060/
+/sc/c/smake copylibs LIBCPU=68060 OUTDIR=68060/ STRIPDEBUG=STRIPDEBUG
