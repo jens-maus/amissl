@@ -126,16 +126,22 @@ AMISSL_STATE *CreateAmiSSLState(void)
 #define SB_ObtainSemaphore  ObtainSemaphore
 #define SB_ReleaseSemaphore ReleaseSemaphore
 #define SB_FindTask         FindTask
+#define SB_AllocVec         AllocVec
+#define SB_FreeVec          FreeVec
 
 #else
 
 #pragma syscall SB_ObtainSemaphore 234 801
 #pragma syscall SB_ReleaseSemaphore 23a 801
 #pragma syscall SB_FindTask 126 901
+#pragma syscall SB_AllocVec 2ac 1002
+#pragma syscall SB_FreeVec 2b2 901
 
 void SB_ObtainSemaphore(struct SignalSemaphore *);
 void SB_ReleaseSemaphore(struct SignalSemaphore *);
 struct Task *SB_FindTask(STRPTR);
+APTR SB_AllocVec(ULONG, ULONG);
+VOID SB_FreeVec(APTR);
 
 #endif
 
@@ -179,12 +185,12 @@ static void cleanupState(long Key,AMISSL_STATE *a)
 
 static void *h_allocfunc(long size)
 {
-	return AllocVec(size,MEMF_ANY);
+	return SB_AllocVec(size,MEMF_ANY);
 }
 
 static void h_freefunc(void *mem)
 {
-	FreeVec(mem);
+	SB_FreeVec(mem);
 }
 
 void AMISSL_LIB_ENTRY _AmiSSL_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct AmiSSLInitStruct *amisslinit))
@@ -468,7 +474,7 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 
 void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 {
-	ObtainSemaphore(&openssl_cs);
+	SB_ObtainSemaphore(&openssl_cs);
 
 	if(thread_hash)
 	{
@@ -477,16 +483,16 @@ void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 		thread_hash = NULL;
 	}
 
-	ReleaseSemaphore(&openssl_cs);
+	SB_ReleaseSemaphore(&openssl_cs);
 }
 
 static BOOL CompareCountry(LONG country_code, char *iso3, char *iso2, char *plates)
 {
 	char *country = (char *)&country_code;
 
-	return((iso3 && Strnicmp(iso3, country, 4) == 0)
-	       || (iso2 && Strnicmp(iso2, country, 4) == 0)
-	       || (plates && Strnicmp(plates, country, 4) == 0));
+	return((BOOL)((iso3 && Strnicmp(iso3, country, 4) == 0)
+	              || (iso2 && Strnicmp(iso2, country, 4) == 0)
+	              || (plates && Strnicmp(plates, country, 4) == 0)));
 }
 
 int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
