@@ -115,8 +115,8 @@ int RAND_poll(void)
 					if (!aborted)
 					{
 						SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-						RAND_add(&data_buffer[0], sizeof(data_buffer), (double)sizeof(data_buffer) / 2);
-						entropy_added += sizeof(data_buffer) / 2;
+						RAND_add(&data_buffer[0], sizeof(data_buffer), (double)sizeof(data_buffer) / 4);
+						entropy_added += sizeof(data_buffer) / 4;
 					}
 				}
 			}
