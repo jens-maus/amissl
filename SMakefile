@@ -1,0 +1,103 @@
+SRC_D=src
+OBJ_D=obj
+LIB_D=lib
+OUTDIR=LIBS:
+LIBCPU=68000
+LIBSSL=openssl/$(LIBCPU)/out/ssl.lib
+LIBCRYPTO=openssl/$(LIBCPU)/out/crypto.lib
+STRIPDEBUG=
+
+VERSION=3
+VERSIONNAME=097g
+AMISSLREVISION=5
+AMISSLMASTERREVISION=5
+AMISSLDATE=14.6.2005
+AMISSLMASTERDATE=14.6.2005
+
+OPTIMS=#OPT OPTGO OPTPEEP OPTLOOP OPTINL OPTINLOCAL OPTDEP=4 OPTSCHED
+INCLUDE=IDIR AmiSSL:include
+CFLAGS=$(OPTIMS) DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
+       $(INCLUDE) NOSTACKCHECK DEBUG=LINE LIBCODE DEF AMISSL_COMPILE \
+       DEF VERSION=$(VERSION) DEF VERSIONNAME=$(VERSIONNAME) \
+       DEF AMISSLREVISION=$(AMISSLREVISION) DEF AMISSLDATE=$(AMISSLDATE) \
+       DEF AMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
+       DEF AMISSLMASTERDATE=$(AMISSLMASTERDATE) DEF LIBCPU=$(LIBCPU) IGN 63
+
+all: amissl_v$(VERSIONNAME).library amisslmaster.library \
+     $(LIB_D)/amisslauto.lib $(LIB_D)/amisslstubs.lib
+
+clean:
+	-rm -f obj/*.o lib/*.o lib/*.lib
+
+copylibs:
+	Move amisslmaster.library $(OUTDIR)amisslmaster.library
+	Move amissl_v$(VERSIONNAME).library $(OUTDIR)amissl/amissl_v$(VERSIONNAME).library
+
+$(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
+	sc $* OBJNAME $@ $(CFLAGS) CODE=FAR
+
+$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
+	sc $* OBJNAME $@ $(CFLAGS)
+
+$(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
+	sc $* OBJNAME $@ $(CFLAGS)
+
+amissl_v$(VERSIONNAME).library: $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o \
+                                $(LIB_D)/libinitr.o
+	slink WITH <<
+DEFINE __XCEXIT=_AmiSSLAbort
+DEFINE __CXFERR=@__dummy
+DEFINE @abort=_AmiSSLAbort
+DEFINE @__chkabort=@__dummy
+DEFINE __AmiSSL_DummyFunc=@__dummy
+DEFINE _bsearch=_OBJ_bsearch
+LIBFD FD/amissl_lib.fd
+LIBPREFIX __AmiSSL_
+LIBID "$@ $(VERSION).$(AMISSLREVISION) ($(AMISSLDATE))"
+TO amissl_v$(VERSIONNAME).library
+FROM lib:libent.o $(LIB_D)/libinitr.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o
+LIB $(LIBCRYPTO) $(LIBSSL) \
+    libcmt/libcmt.lib lib:debug.lib LIB:scm.lib LIB:sc.lib lib:amiga.lib 
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
+NOICONS
+BATCH
+SMALLCODE
+LIBVERSION $(VERSION) LIBREVISION $(AMISSLREVISION)
+$(STRIPDEBUG)
+<
+
+amisslmaster.library: $(OBJ_D)/amisslmaster_library.o $(LIB_D)/libinitr.o
+	slink WITH <<
+LIBFD FD/amisslmaster_lib.fd
+LIBID "$@ $(VERSION).$(AMISSLMASTERREVISION) ($(AMISSLMASTERDATE))"
+TO amisslmaster.library
+FROM lib:libent.o $(LIB_D)/libinitr.o $(OBJ_D)/amisslmaster_library.o
+LIB LIB:sc.lib
+MAP $>.map HXSFLO PLAIN HEIGHT 0 SWIDTH 32 HWIDTH 16 PWIDTH 16 FWIDTH 32
+NOICONS
+BATCH
+SMALLCODE SMALLDATA
+LIBVERSION $(VERSION) LIBREVISION $(AMISSLMASTERREVISION)
+$(STRIPDEBUG)
+<
+
+$(OBJ_D)/amissllib.o: $(SRC_D)/amissllib.c
+	sc $* OBJNAME $@ DEF VERSION=$(VERSION) $(INCLUDE) NOSTACKCHECK IGN 63
+
+$(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
+	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK IGN 63
+
+$(LIB_D)/libinitr.o: $(SRC_D)/libinit.c
+	sc RESETOPTS $* LIBCODE STRMER NOSTACKCHECK OBJNAME $@
+
+$(LIB_D)/amisslauto.lib: $(OBJ_D)/amissllib.o
+	oml $@ r $(OBJ_D)/amissllib.o
+
+$(LIB_D)/amisslstubs.lib: $(OBJ_D)/libstubs.o
+	oml $@ r $(OBJ_D)/libstubs.o
+
+tests:
+	cd openssl
+	list
+	make -f $(LIBCPU)/makefile.one exe
+	cd /
