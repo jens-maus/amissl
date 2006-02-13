@@ -4,6 +4,8 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <dos/dos.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <errno.h>
 
@@ -292,6 +294,7 @@ static int ConnectToServer(char *host, short port, char *proxy, short pport)
 			addr.sin_addr.s_addr = inet_addr(host); /* This should be checked against INADDR_NONE */
 			addr.sin_port = htons(port);
 		}
+
 		if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) >= 0)
 		{
 			/* For proxy connection, use SSL tunneling. First issue a HTTP CONNECT
@@ -312,10 +315,12 @@ static int ConnectToServer(char *host, short port, char *proxy, short pport)
 				 */
 				if (send(sock, buffer, strlen(buffer), 0) >= 0)
 				{
+					int len;
+
 					/* Again, some optimistic behaviour: HTTP response might not be
 					 * received with only one recv
 					 */
-					if (recv(sock, buffer, sizeof(buffer) - 1, 0) >= 0)
+					if ((len = recv(sock, buffer, sizeof(buffer) - 1, 0)) >= 0)
 					{
 						/* Assuming it was received, find the end of
 						 * the line and cut it off
@@ -323,6 +328,8 @@ static int ConnectToServer(char *host, short port, char *proxy, short pport)
 						if ((s1 = strchr(buffer, '\r'))
 						    || (s1 = strchr(buffer, '\n')))
 							*s1 = '\0';
+						else
+							buffer[len] = '\0';
 
 						Printf("Proxy returned: %s\n", buffer);
 
