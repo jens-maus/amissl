@@ -1,8 +1,6 @@
 #ifdef __amigaos4__
 #define __USE_INLINE__
-#define IFACE_PREFIX IAmiSSL->
 #else /* !__amigaos4__ */
-#define IFACE_PREFIX
 #define SAVEDS __saveds
 #define FFlush Flush
 #endif /* __amigaos4__ */
@@ -117,175 +115,144 @@ void CRYPTO_mem_leaks_fp(FILE *fp)
 	}
 }
 
-#undef __USE_INLINE__
-
-#undef ASN1_OBJECT_free
-#undef BIO_debug_callback
-#undef CRYPTO_dbg_free
-#undef CRYPTO_dbg_get_options
-#undef CRYPTO_dbg_malloc
-#undef CRYPTO_dbg_realloc
-#undef CRYPTO_dbg_set_options
-#undef DH_new
-#undef DSA_new
-#undef OCSP_REQUEST_new
-#undef PKCS12_SAFEBAG_free
-#undef PKCS7_free
-#undef SSL_SESSION_new
-#undef X509V3_conf_free
-#undef X509_EXTENSION_free
-#undef X509_INFO_free
-#undef X509_free
-#undef d2i_DHparams
-#undef d2i_DSAparams
-#undef d2i_OCSP_REQUEST
-#undef d2i_OCSP_RESPONSE
-#undef d2i_SSL_SESSION
-#undef i2d_ASN1_HEADER
-#undef i2d_DHparams
-#undef i2d_DSAparams
-#undef i2d_OCSP_REQUEST
-#undef i2d_OCSP_RESPONSE
-#undef i2d_SSL_SESSION
-
-void SAVEDS ASN1_OBJECT_free(ASN1_OBJECT *a)
+void SAVEDS (ASN1_OBJECT_free)(ASN1_OBJECT *a)
 {
-	IFACE_PREFIX ASN1_OBJECT_free(a);
+	ASN1_OBJECT_free(a);
 }
 
-long SAVEDS BIO_debug_callback(BIO *bio, int cmd, const char *argp, int argi, long argl, long ret)
+long SAVEDS (BIO_debug_callback)(BIO *bio, int cmd, const char *argp, int argi, long argl, long ret)
 {
-	return(IFACE_PREFIX BIO_debug_callback(bio, cmd, argp, argi, argl, ret));
+	return(BIO_debug_callback(bio, cmd, argp, argi, argl, ret));
 }
 
-void SAVEDS CRYPTO_dbg_free(void *addr, int before_p)
+void SAVEDS (CRYPTO_dbg_free)(void *addr, int before_p)
 {
-	IFACE_PREFIX CRYPTO_dbg_free(addr, before_p);
+	CRYPTO_dbg_free(addr, before_p);
 }
 
-long SAVEDS CRYPTO_dbg_get_options(void)
+long SAVEDS (CRYPTO_dbg_get_options)(void)
 {
-	return(IFACE_PREFIX CRYPTO_dbg_get_options());
+	return(CRYPTO_dbg_get_options());
 }
 
-void SAVEDS CRYPTO_dbg_malloc(void *addr, int num, const char *file, int line, int before_p)
+void SAVEDS (CRYPTO_dbg_malloc)(void *addr, int num, const char *file, int line, int before_p)
 {
-	IFACE_PREFIX CRYPTO_dbg_malloc(addr, num, file, line, before_p);
+	CRYPTO_dbg_malloc(addr, num, file, line, before_p);
 }
 
-void SAVEDS CRYPTO_dbg_realloc(void *addr1, void *addr2, int num, const char *file, int line, int before_p)
+void SAVEDS (CRYPTO_dbg_realloc)(void *addr1, void *addr2, int num, const char *file, int line, int before_p)
 {
-	IFACE_PREFIX CRYPTO_dbg_realloc(addr1, addr2, num, file, line, before_p);
+	CRYPTO_dbg_realloc(addr1, addr2, num, file, line, before_p);
 }
 
-void SAVEDS CRYPTO_dbg_set_options(long bits)
+void SAVEDS (CRYPTO_dbg_set_options)(long bits)
 {
-	IFACE_PREFIX CRYPTO_dbg_set_options(bits);
+	CRYPTO_dbg_set_options(bits);
 }
 
-DH * SAVEDS DH_new(void)
+DH * SAVEDS (DH_new)(void)
 {
-	return(IFACE_PREFIX DH_new());
+	return(DH_new());
 }
 
-DSA * SAVEDS DSA_new(void)
+DSA * SAVEDS (DSA_new)(void)
 {
-	return(IFACE_PREFIX DSA_new());
+	return(DSA_new());
 }
 
-OCSP_REQUEST * SAVEDS OCSP_REQUEST_new(void)
+OCSP_REQUEST * SAVEDS (OCSP_REQUEST_new)(void)
 {
-	return(IFACE_PREFIX OCSP_REQUEST_new());
+	return(OCSP_REQUEST_new());
 }
 
-void SAVEDS PKCS12_SAFEBAG_free(PKCS12_SAFEBAG *a)
+void SAVEDS (PKCS12_SAFEBAG_free)(PKCS12_SAFEBAG *a)
 {
-	IFACE_PREFIX PKCS12_SAFEBAG_free(a);
+	PKCS12_SAFEBAG_free(a);
 }
 
-void SAVEDS PKCS7_free(PKCS7 *a)
+void SAVEDS (PKCS7_free)(PKCS7 *a)
 {
-	IFACE_PREFIX PKCS7_free(a);
+	PKCS7_free(a);
 }
 
-SSL_SESSION * SAVEDS SSL_SESSION_new(void)
+SSL_SESSION * SAVEDS (SSL_SESSION_new)(void)
 {
-	return(IFACE_PREFIX SSL_SESSION_new());
+	return(SSL_SESSION_new());
 }
 
-void SAVEDS X509V3_conf_free(CONF_VALUE *val)
+void SAVEDS (X509V3_conf_free)(CONF_VALUE *val)
 {
-	IFACE_PREFIX X509V3_conf_free(val);
+	X509V3_conf_free(val);
 }
 
-void SAVEDS X509_EXTENSION_free(X509_EXTENSION *a)
+void SAVEDS (X509_EXTENSION_free)(X509_EXTENSION *a)
 {
-	IFACE_PREFIX X509_EXTENSION_free(a);
+	X509_EXTENSION_free(a);
 }
 
-void SAVEDS X509_INFO_free(X509_INFO *a)
+void SAVEDS (X509_INFO_free)(X509_INFO *a)
 {
-	IFACE_PREFIX X509_INFO_free(a);
+	X509_INFO_free(a);
 }
 
-void SAVEDS X509_free(X509 *a)
+void SAVEDS (X509_free)(X509 *a)
 {
-	IFACE_PREFIX X509_free(a);
+	X509_free(a);
 }
 
-DH * SAVEDS d2i_DHparams(DH **a, const unsigned char **pp, long length)
+DH * SAVEDS (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
 {
-	return(IFACE_PREFIX d2i_DHparams(a, pp, length));
+	return(d2i_DHparams(a, pp, length));
 }
 
-DSA * SAVEDS d2i_DSAparams(DSA **a, const unsigned char **pp, long length)
+DSA * SAVEDS (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
 {
-	return(IFACE_PREFIX d2i_DSAparams(a, pp, length));
+	return(d2i_DSAparams(a, pp, length));
 }
 
-OCSP_REQUEST * SAVEDS d2i_OCSP_REQUEST(OCSP_REQUEST **a, unsigned char **in, long len)
+OCSP_REQUEST * SAVEDS (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, unsigned char **in, long len)
 {
-	return(IFACE_PREFIX d2i_OCSP_REQUEST(a, in, len));
+	return(d2i_OCSP_REQUEST(a, in, len));
 }
 
-OCSP_RESPONSE * SAVEDS d2i_OCSP_RESPONSE(OCSP_RESPONSE **a, unsigned char **in, long len)
+OCSP_RESPONSE * SAVEDS (d2i_OCSP_RESPONSE)(OCSP_RESPONSE **a, unsigned char **in, long len)
 {
-	return(IFACE_PREFIX d2i_OCSP_RESPONSE(a, in, len));
+	return(d2i_OCSP_RESPONSE(a, in, len));
 }
 
-SSL_SESSION * SAVEDS d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char *const *pp, long length)
+SSL_SESSION * SAVEDS (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char *const *pp, long length)
 {
-	return(IFACE_PREFIX d2i_SSL_SESSION(a, pp, length));
+	return(d2i_SSL_SESSION(a, pp, length));
 }
 
-int SAVEDS i2d_ASN1_HEADER(ASN1_HEADER *a, unsigned char **pp)
+int SAVEDS (i2d_ASN1_HEADER)(ASN1_HEADER *a, unsigned char **pp)
 {
-	return(IFACE_PREFIX i2d_ASN1_HEADER(a, pp));
+	return(i2d_ASN1_HEADER(a, pp));
 }
 
-int SAVEDS i2d_DHparams(const DH *a, unsigned char **pp)
+int SAVEDS (i2d_DHparams)(const DH *a, unsigned char **pp)
 {
-	return(IFACE_PREFIX i2d_DHparams(a, pp));
+	return(i2d_DHparams(a, pp));
 }
 
-int SAVEDS i2d_DSAparams(const DSA *a, unsigned char **pp)
+int SAVEDS (i2d_DSAparams)(const DSA *a, unsigned char **pp)
 {
-	return(IFACE_PREFIX i2d_DSAparams(a, pp));
+	return(i2d_DSAparams(a, pp));
 }
 
-int SAVEDS i2d_OCSP_REQUEST(OCSP_REQUEST *a, unsigned char **out)
+int SAVEDS (i2d_OCSP_REQUEST)(OCSP_REQUEST *a, unsigned char **out)
 {
-	return(IFACE_PREFIX i2d_OCSP_REQUEST(a, out));
+	return(i2d_OCSP_REQUEST(a, out));
 }
 
-int SAVEDS i2d_OCSP_RESPONSE(OCSP_RESPONSE *a, unsigned char **out)
+int SAVEDS (i2d_OCSP_RESPONSE)(OCSP_RESPONSE *a, unsigned char **out)
 {
-	return(IFACE_PREFIX i2d_OCSP_RESPONSE(a, out));
+	return(i2d_OCSP_RESPONSE(a, out));
 }
 
-int SAVEDS i2d_SSL_SESSION(SSL_SESSION *in, unsigned char **pp)
+int SAVEDS (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
 {
-	return(IFACE_PREFIX i2d_SSL_SESSION(in, pp));
+	return(i2d_SSL_SESSION(in, pp));
 }
 
 #ifdef __SASC
