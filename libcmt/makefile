@@ -1,5 +1,5 @@
 CC=ppc-amigaos-gcc
-CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -mbaserel -O2 -g \
+CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -O2 -g \
        -Wall -Wno-pointer-sign -mcrt=clib2
 
 all: libcmt.a
