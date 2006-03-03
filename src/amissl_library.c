@@ -454,13 +454,6 @@ void syslog(int priority, const char *message, ...) {}
 
 void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
-	if(thread_hash)
-	{
-		ObtainSemaphore(&openssl_cs);
-		h_doall(thread_hash,(void (*)(long,void *))cleanupState); /* Clean up any left overs from tasks not calling cleanup */
-		ReleaseSemaphore(&openssl_cs);
-	}
-	
 #ifdef __amigaos4__
 	DropInterface((struct Interface *)ILocale);
 	DropInterface((struct Interface *)IUtility);
