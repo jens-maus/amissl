@@ -15,7 +15,7 @@
 
 /* Maximum number of attempts to get a delay of 1 microsecond that is not equal to 0 */
 #define MAX_ATTEMPTS 1000
-		  
+
 int RAND_poll(void)
 {
 	unsigned char temp_buffer[SHA_DIGEST_LENGTH], data_buffer[SHA_DIGEST_LENGTH];
@@ -53,11 +53,15 @@ int RAND_poll(void)
 	DeleteIORequest((struct IORequest *)entropy_request);
 #endif /* __amigaos4__ */
 
+	/* The following block will be used on "classic" machines. It does not generate
+	 * a high degree of randomness, but it does the job since RAND_poll is
+	 * called only once by OpenSSL to generate a 32 byte seed.
+	 */
 	if (entropy_added < ENTROPY_NEEDED
 	    && (port || (port = CreateMsgPort()))
 	    && (time_request = (struct timerequest *)CreateIORequest(port, sizeof(*time_request))))
 	{
-		if (OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *)time_request, 0) == 0)
+		if (OpenDevice(TIMERNAME, UNIT_VBLANK, (struct IORequest *)time_request, 0) == 0)
 		{
 			struct TimerIFace *ITimer = NULL;
 			struct Device *TimerBase;
@@ -82,6 +86,9 @@ int RAND_poll(void)
 					{
 						attempt = 0;
 
+						/* Ask for a one microsecond delay and measure the time
+						 * the delay actually took.
+						 */
 						do
 						{
 							time_request->tr_node.io_Command = TR_ADDREQUEST;
@@ -112,6 +119,9 @@ int RAND_poll(void)
 						*(ULONG *)&temp_buffer[sizeof(temp_buffer) - sizeof(ULONG)]
 						    = tv.tv_micro;
 
+					/* Shuffle the bits around and specify that about
+					 * one fourth of it adds to the entropy.
+					 */
 					if (!aborted)
 					{
 						SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
