@@ -102,6 +102,8 @@
 #if !defined(_UNICOS) && !defined(__OpenBSD__) && !defined(sgi) && !defined(__FreeBSD__) && !(defined(__bsdi) || defined(__bsdi__)) && !defined(_AIX) && !defined(OPENSSL_SYS_MPE) && !defined(__NetBSD__) && !defined(OPENSSL_SYS_VXWORKS) /* FIXME */
 # define TIMEB
 #endif
+#else
+#include <sys/time.h>
 #endif /* !AMIGA */
 
 #ifndef _IRIX

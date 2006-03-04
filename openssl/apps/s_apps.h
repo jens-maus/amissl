@@ -120,6 +120,10 @@
 #define _kbhit kbhit
 #endif
 
+#if defined(__amigaos4__) && defined(__CLIB2__) && defined(__NO_NET_API) && !defined(FD_SET)
+#include <sys/select.h>
+#endif
+
 #if defined(OPENSSL_SYS_VMS) && !defined(FD_SET)
 /* VAX C does not defined fd_set and friends, but it's actually quite simple */
 /* These definitions are borrowed from SOCKETSHR.	/Richard Levitte */

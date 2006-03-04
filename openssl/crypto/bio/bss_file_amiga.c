@@ -39,7 +39,9 @@ static BIO_METHOD methods_filep =
 
 BIO_METHOD *BIO_s_file(void);
 
-#ifndef __amigaos4__
+#ifdef __amigaos4__
+#define FSeek(file, pos, offset) Seek(file, pos, offset)
+#else /* __amigaos4__ */
 #define FFlush(file) Flush(file)
 
 static BPTR FOpen(STRPTR name, LONG mode, LONG buffer_size)
@@ -69,7 +71,7 @@ static LONG FSeek(BPTR file, LONG pos, LONG mode)
 
 	return(ret);
 }
-#endif /* !__amigaos4__ */
+#endif /* __amigaos4__ */
 
 static BPTR FOpenFromMode(char *name, char *mode)
 {
