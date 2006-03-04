@@ -9,10 +9,10 @@ STRIPDEBUG=
 
 VERSION=3
 VERSIONNAME=097g
-AMISSLREVISION=5
-AMISSLMASTERREVISION=5
-AMISSLDATE=14.6.2005
-AMISSLMASTERDATE=14.6.2005
+AMISSLREVISION=6
+AMISSLMASTERREVISION=6
+AMISSLDATE=4.3.2006
+AMISSLMASTERDATE=4.3.2006
 
 LFLAGS=-nostdlib -mbaserel
 OPT= -O2
@@ -46,12 +46,12 @@ $(OBJ_D)/amisslmaster_68k.o: $(SRC_D)/amisslmaster_68k.c
 amissl_v$(VERSIONNAME).library: $(OBJS) libcmt/libcmt.a $(LIBSSL) $(LIBCRYPTO)
 	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
-	cp $@ /cygdrive/D/FTP
+#	cp $@ /cygdrive/D/FTP
 
 amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_68k.o
 	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -mbaserel -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
-	cp $@ /cygdrive/D/FTP
+#	cp $@ /cygdrive/D/FTP
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	ppc-amigaos-gcc -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
