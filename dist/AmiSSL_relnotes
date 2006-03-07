@@ -1,0 +1,13 @@
+AmiSSL 3.6 (4.3.2006)
+
+- The close routine for amissl.library was cleaning up all currently hashed
+states, including those belonging to other openers of the library. This could
+lead to a crash when two programs were using AmiSSL (bug #2960).
+
+
+---- OS4.0 update #4 ---- 
+
+
+AmiSSL 3.5 (14.6.2005)
+
+- First v3 release, port of OpenSSL 0.9.7g.

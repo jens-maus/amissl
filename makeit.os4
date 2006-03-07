@@ -1,0 +1,30 @@
+#!/bin/sh
+
+cd openssl
+
+set PWD = `pwd`
+
+mkdir -p OS4/{tmp,out}
+
+if [ ! -f crypto/opensslconf.h ]
+then
+	perl Configure OS4
+fi
+
+if [ ! -f MINFO ]
+then
+	make files
+fi
+
+cd OS4
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=OS4/tmp \
+							OUT=OS4/out OS4) > Makefile.one
+cd ..
+
+make -f OS4/Makefile.one AmiSSL=$PWD
+
+cd ..
+
+mkdir -p OS4/AmiSSL
+
+make OUTDIR=OS4/ AmiSSL=$PWD
