@@ -266,4 +266,4 @@
 (complete 100)
 
 (set @default-dest #dest-dir)
-(exit "AmiSSL installation finished succesfully. Enjoy!\n\n(Please reboot for user-startup modifications to take effect)")
+(exit "AmiSSL installation finished succesfully. Enjoy!\n\n(Please reboot for User-Startup modifications to take effect)")
