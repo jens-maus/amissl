@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 3.6 (25.2.2006)
+; $VER: Install-AmiSSL 3.6 (7.3.2006)
 
 (set @app-name "AmiSSL")
 (set #cipher-lib-name "amissl_v097g.library")
@@ -38,11 +38,11 @@
 			(prompt
 				"The Installer has detected that you already have the "
 				"AmiSSL: assign pointing to \"" #amissl-assign "\". Would "
-				"you like to install AmiSSL there?\n"
+				"you like to install AmiSSL there?\n\n"
 				"Note: It is strongly recommended to have all AmiSSL releases "
 				"installed into the same directory. Installations in different "
-				"directories will most likely require manual interventions in "
-				"User-Startup"
+				"directories will most likely require manual intervention in "
+				"User-Startup."
 			)
 			(help "No help available")
 			(default 1)
