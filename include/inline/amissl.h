@@ -5457,8 +5457,8 @@
 	LP1NR(0x2004, BIO_ssl_shutdown, BIO *, ssl_bio, a0, \
 	, AMISSL_BASE_NAME)
 
-#define SSL_CTX_set_cipher_list(a1, str) \
-	LP2(0x200a, int, SSL_CTX_set_cipher_list, SSL_CTX *, a1, a0, const char *, str, a1, \
+#define SSL_CTX_set_cipher_list(a, str) \
+	LP2(0x200a, int, SSL_CTX_set_cipher_list, SSL_CTX *, a, a0, const char *, str, a1, \
 	, AMISSL_BASE_NAME)
 
 #define SSL_CTX_new(meth) \
