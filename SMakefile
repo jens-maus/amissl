@@ -88,7 +88,7 @@ $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	sc $* OBJNAME $@ $(INCLUDE) NOSTACKCHECK IGN 63
 
 $(LIB_D)/libinitr.o: $(SRC_D)/libinit.c
-	sc RESETOPTS $* LIBCODE STRMER NOSTACKCHECK OBJNAME $@
+	sc RESETOPTS $* LIBCODE STRMER NOSTACKCHECK DEF=SMART_CACHE_FLUSH OBJNAME $@
 
 $(LIB_D)/amisslauto.lib: $(OBJ_D)/amissllib.o
 	oml $@ r $(OBJ_D)/amissllib.o

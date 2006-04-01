@@ -207,7 +207,11 @@ LONG __asm _LibOpen(
 
     /* now we need to flush the cache because we copied the jmp table */
     if (SysBase->LibNode.lib_Version >= 36) 
+#ifdef SMART_CACHE_FLUSH
+      CacheClearE(newlib,SIZEJMPTAB,CACRF_ClearI | CACRF_ClearD);
+#else
       CacheClearU();
+#endif
 
 #ifdef DEVICE
     ior->io_Device = (struct Device *)libbase; /* local copy of libary base */
