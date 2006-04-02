@@ -25,6 +25,7 @@ typedef struct {
 	struct SocketIFace *ISocket;
 	struct SocketIFace **ISocketPtr;
 #endif
+	ULONG ThreadGroupID; // All states for a specific library base have the same ID
 } AMISSL_STATE;
 
 STDARGS AMISSL_STATE *GetAmiSSLState(void);

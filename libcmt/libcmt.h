@@ -102,14 +102,6 @@ void h_delete(struct HashTable *h,long Key);
 void h_free(struct HashTable *h);
 void h_doall(struct HashTable *h,void (*func)(long,void *));
 
-long mtgeta4(void);
-int initmta4(void);
-void donemta4(void);
-int addmta4user(void);
-void removemta4user(void);
-
-#define MTSAVEDS() putreg(REG_A4,(long)mtgeta4())
-
 struct SocketIFace *GetSocketIFace(int modifies_errno);
 
 #define GETISOCKET() struct SocketIFace *ISocket = GetSocketIFace(1)

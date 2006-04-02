@@ -76,6 +76,8 @@ struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocate
 static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs = {NULL};
 static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
 static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
+static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
+static ULONG ThreadGroupID = 0;
 static ULONG clock_base;
 static long SSLVersionApp = 0;
 
@@ -114,6 +116,7 @@ AMISSL_STATE *CreateAmiSSLState(void)
 		ret->ISocket = NULL;
 		ret->ISocketPtr = NULL;
 #endif
+		ret->ThreadGroupID = ThreadGroupID;
 
 		if(!h_insert(thread_hash, pid, ret))
 		{
@@ -182,10 +185,14 @@ static void amigaos_locking_callback(int mode,int type,char *file,int line)
 		ReleaseSemaphore(&(lock_cs[type]));
 }
 
-static void cleanupState(long Key,AMISSL_STATE *a)
+static void ThreadGroupStateCleanup(long Key, AMISSL_STATE *a)
 {
-	h_delete(thread_hash,a->pid);
-	free(a);
+	if (a->ThreadGroupID == ThreadGroupID)
+	{
+		kprintf("- Cleaning up state %08lx for %08lx (group %lu)\n", a, a->pid, a->ThreadGroupID);
+		h_delete(thread_hash, a->pid);
+		free(a);
+	}
 }
 
 static void *h_allocfunc(long size)
@@ -454,6 +461,18 @@ void syslog(int priority, const char *message, ...) {}
 
 void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
+	traceline();
+
+	if (thread_hash)
+	{
+		kprintf("Performing unfreed states cleanup for %08lx (group %lu)\n", FindTask(NULL), ThreadGroupID);
+		ObtainSemaphore(&openssl_cs);
+		h_doall(thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
+		ReleaseSemaphore(&openssl_cs);
+	}
+	else
+		kprintf("No thread_hash\n");
+
 #ifdef __amigaos4__
 	DropInterface((struct Interface *)ILocale);
 	DropInterface((struct Interface *)IUtility);
@@ -472,16 +491,7 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 
 void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 {
-	SB_ObtainSemaphore(&openssl_cs);
-
-	if(thread_hash)
-	{
-		h_doall(thread_hash,(void (*)(long,void *))cleanupState); /* Clean up any left overs from tasks not calling cleanup */
-		h_free(thread_hash);
-		thread_hash = NULL;
-	}
-
-	SB_ReleaseSemaphore(&openssl_cs);
+	traceline();
 }
 
 static BOOL CompareCountry(LONG country_code, char *iso3, char *iso2, char *plates)
@@ -525,6 +535,13 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 		ReleaseSemaphore(&openssl_cs);
 	}
+
+	ObtainSemaphore(&openssl_cs);
+
+	ThreadGroupID = ++LastThreadGroupID;
+	kprintf("Thread group ID: %lu\n", ThreadGroupID);
+
+	ReleaseSemaphore(&openssl_cs);
 
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, MEMF_CLEAR)))

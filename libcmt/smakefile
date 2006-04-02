@@ -53,7 +53,7 @@ LIBOBJS= malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
 		dirent.o file.o fread.o fwrite.o refill.o putc.o fflush.o accept.o \
 		gethostbyname.o listen.o send.o bind.o getservbyname.o shutdown.o \
 		closesocket.o getsockopt.o socket.o connect.o ioctlsocket.o recv.o \
-		setsockopt.o sscanf.o vsscanf.o getuid.o getpid.o threadhash.o mt.o
+		setsockopt.o sscanf.o vsscanf.o getuid.o getpid.o threadhash.o
 
 libcmt.lib: $(LIBOBJS)
 	oml libcmt.lib r $(LIBOBJS)

@@ -250,7 +250,6 @@ libcmt/localtime.c eol=lf
 libcmt/makefile eol=lf
 libcmt/malloc.c eol=lf
 libcmt/math.c eol=lf
-libcmt/mt.c eol=lf
 libcmt/multitcp.h eol=lf
 libcmt/putc.c eol=lf
 libcmt/realloc.c eol=lf

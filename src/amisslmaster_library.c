@@ -82,13 +82,18 @@ static void FlushLib(struct Library *LibBase)
 
 static struct Library *OpenLib(struct Library **LibBase,char *CipherName,LONG CipherVersion)
 {
-	if(*LibBase)
-	{
-		(*LibBase)->lib_OpenCnt++;
-	}
+	if (LibAPIVersion > AMISSL_V2) // See CloseLib for explanation
+		*LibBase = OpenLibrary(CipherName, CipherVersion);
 	else
 	{
-		*LibBase = OpenLibrary(CipherName,CipherVersion);
+		if(*LibBase)
+		{
+			(*LibBase)->lib_OpenCnt++;
+		}
+		else
+		{
+			*LibBase = OpenLibrary(CipherName,CipherVersion);
+		}
 	}
 	return *LibBase;
 }
@@ -99,29 +104,61 @@ static void CloseLib(struct Library *LibBase)
 {
 	if(LibBase)
 	{
-		if(LibBase->lib_OpenCnt==1)
-		{
+		if (LibAPIVersion > AMISSL_V2)
 			CloseLibrary(LibBase);
-			CheckLibBase(BlowFishBase);
-			CheckLibBase(CASTBase);
-			CheckLibBase(DESBase);
-			CheckLibBase(DHBase);
-			CheckLibBase(DSABase);
-			CheckLibBase(IDEABase);
-			CheckLibBase(MD2Base);
-			CheckLibBase(MD4Base);
-			CheckLibBase(MD5Base);
-			CheckLibBase(MDC2Base);
-			CheckLibBase(RC2Base);
-			CheckLibBase(RC4Base);
-			CheckLibBase(RC5Base);
-			CheckLibBase(RIPEMDBase);
-			CheckLibBase(RSABase);
-			CheckLibBase(SHABase);
-		}
 		else
 		{
-			LibBase->lib_OpenCnt--;
+			/* This branch is not taken for AmiSSL v3.7 and higher since the
+			 * following happens:
+			 *
+			 * OpenLib() is called for the first time for current opener. Since
+			 * LibBase is NULL at that point, it will always use OpenLibrary()
+			 * which returns a base with open count of 1. Suppose that the program
+			 * keeps running when another program opens amisslmaster.library and
+			 * calls OpenAmiSSL(). OpenLib() is called again, LibBase is NULL for
+			 * that instance and OpenLibrary() is called again and a base with
+			 * open count of *2* is returned. Each OpenLibrary() implicitly calls
+			 * __UserLibInit().
+			 *
+			 * When one of these two openers calls CloseAmiSSL(), CloseLib() will
+			 * find out that open count is 2 and just decrease it. When the other
+			 * opener calls CloseAmiSSL(), open count will be 1 and CloseLibrary()
+			 * and implicitly __UserLibCleanup() will be called.
+			 *
+			 * The result of this is that __UserLibInit() will be called once for
+			 * each amisslmaster.library opener that calls OpenAmiSSL(), but
+			 * it is possible that __UserLibCleanup() will not be called the
+			 * matching number of times.
+			 *
+			 * Since only IBrowse is using AmiSSL v2, it can use this branch and
+			 * since AmiSSL v3 only has one library to open and OpenAmiSSL() and
+			 * thus OpenLib() can be called only once for it, this solution should
+			 * work, at least temporarily.
+			 */
+			if(LibBase->lib_OpenCnt==1)
+			{
+				CloseLibrary(LibBase);
+				CheckLibBase(BlowFishBase);
+				CheckLibBase(CASTBase);
+				CheckLibBase(DESBase);
+				CheckLibBase(DHBase);
+				CheckLibBase(DSABase);
+				CheckLibBase(IDEABase);
+				CheckLibBase(MD2Base);
+				CheckLibBase(MD4Base);
+				CheckLibBase(MD5Base);
+				CheckLibBase(MDC2Base);
+				CheckLibBase(RC2Base);
+				CheckLibBase(RC4Base);
+				CheckLibBase(RC5Base);
+				CheckLibBase(RIPEMDBase);
+				CheckLibBase(RSABase);
+				CheckLibBase(SHABase);
+			}
+			else
+			{
+				LibBase->lib_OpenCnt--;
+			}
 		}
 	}
 }
