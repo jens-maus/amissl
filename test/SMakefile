@@ -1,0 +1,24 @@
+CFLAGS=SAVEDS DATA=AUTO DEF __USE_SYSBASE=1 IDLEN=100 DEF __builtin_memcmp=memcmp \
+       IDIR AmiSSL:Include NOSTACKCHECK DEBUG=FF IGN 315 IDIR NetInclude: \
+       MATH=STANDARD IGN=63
+LDFLAGS=LIB lib:sc.lib MATH=STANDARD NOICONS LIB AmiSSL:lib/amisslauto.lib \
+        LIB AmiSSL:lib/amisslstubs.lib
+PROGS=vatest uitest https
+
+all: $(PROGS)
+
+clean:
+	-Delete $(PROGS) QUIET
+	-Delete *.(o|info|lnk|map) QUIET
+
+.c.o:
+	sc $< $(CFLAGS) OBJNAME $@
+
+https: https.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
+
+vatest: vatest.o
+	sc $< $(LDFLAGS) PNAME $@ LINK
+
+uitest: uitest.o
+	sc $< $(LDFLAGS) PNAME $@ LINK

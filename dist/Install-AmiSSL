@@ -1,0 +1,269 @@
+; $VER: Install-AmiSSL 3.6 (7.3.2006)
+
+(set @app-name "AmiSSL")
+(set #cipher-lib-name "amissl_v097g.library")
+(set #cpu (database "cpu"))
+
+(if
+	(not
+		(askbool
+			(prompt
+				"Even though AmiSSL includes IDEA and RC5 ciphers and "
+				"MDC2 message digest, AmiSSL will make them unavailable "
+				"depending on the country selected in the Locale settings "
+				"(for example, none of IDEA, RC5 and MDC2 are available in "
+				"the USA due to licensing issues).\n\n"
+				"When downloading AmiSSL, you should have been presented with "
+				"a license which includes a standard disclaimer and also "
+				"specifies that you agree to select the correct country in the "
+				"Locale settings.\n\n"
+				"AmiSSL authors take no responsibility for potential legal "
+				"problems if incorrect country is selected."
+			)
+			(choices "Accept license" "Decline license")
+			(help "No help available")
+			(default 0)
+		)
+	)
+	(abort "Installation was aborted since the license was not accepted.")
+)
+
+(complete 0)
+
+(set #amissl-assign (getassign "AmiSSL"))
+
+(if #amissl-assign
+	(if
+		(askbool
+			(prompt
+				"The Installer has detected that you already have the "
+				"AmiSSL: assign pointing to \"" #amissl-assign "\". Would "
+				"you like to install AmiSSL there?\n\n"
+				"Note: It is strongly recommended to have all AmiSSL releases "
+				"installed into the same directory. Installations in different "
+				"directories will most likely require manual intervention in "
+				"User-Startup."
+			)
+			(help "No help available")
+			(default 1)
+		)
+		(set #dest-dir #amissl-assign)
+	)
+)
+
+(if (not (if #dest-dir 1 0))
+	(set #dest-dir
+		(tackon
+			(askdir
+				(prompt
+					"Where would you like to install AmiSSL? A directory named "
+					"AmiSSL WILL be created there."
+				)
+				(default
+					(if (exists "Work:" (noreq))
+						"Work:"
+						; else
+						"SYS:"
+					)
+				)
+				(help @askdir-help)
+			)
+			"AmiSSL"
+		)
+	)
+)
+
+(makedir #dest-dir (infos))
+
+(set #libs-dir (tackon #dest-dir "Libs"))
+
+(if (= #cpu "68060")
+	(set #default-cpu 2)
+;else
+	(if (or (= #cpu "68020") (or (= #cpu "68030") (= #cpu "68040")))
+		(set #default-cpu 1)
+	;else
+		(set #default-cpu 0)
+	)
+)
+
+(set #cpu-id
+	(askchoice
+		(prompt
+			"AmiSSL comes in several versions for different processors. "
+			"Which version of AmiSSL would you like to install?"
+		)
+		(help @askchoice-help)
+		(choices "68000/68010" "68020/68030/68040" "68060")
+		(default #default-cpu)
+	)
+)
+
+(set #libs-src-dir (tackon "Libs" (select #cpu-id "68000" "68020-40" "68060")))
+
+(set #old-lib-ver (getversion "LIBS:amisslmaster.library"))
+(set #new-lib-ver (getversion (tackon #libs-src-dir "amisslmaster.library")))
+
+(copylib
+	(source (tackon #libs-src-dir "amisslmaster.library"))
+	(dest #libs-dir)
+)
+
+(complete 15)
+
+(copylib
+	(source (tackon (tackon #libs-src-dir "AmiSSL") #cipher-lib-name))
+	(dest (tackon #libs-dir "AmiSSL"))
+)
+
+(complete 35)
+
+	(copylib
+	(source "Doc/AmiSSL.doc")
+	(dest #dest-dir)
+	(infos)
+)
+
+(complete 45)
+
+(copylib
+	(source "Doc/OpenSSL.doc")
+	(dest #dest-dir)
+	(infos)
+)
+
+(complete 55)
+
+(copylib
+	(source "OpenSSL")
+	(dest #dest-dir)
+	(infos)
+)
+
+(complete 70)
+
+(set #certs-dir (tackon #dest-dir "Certs"))
+
+(set #delete-old-certs 0)
+(set #copy-certs 1)
+
+(set #ask-about-certs (exists #certs-dir (noreq)))
+
+(if
+	(and
+		#ask-about-certs
+		(> #old-lib-ver #new-lib-ver)
+	)
+	(if
+		(askbool
+			(prompt
+				"It seems that you already have a newer version of AmiSSL "
+				"installed. It is recommended that you do not install the "
+				"certificates from this, older version and keep the "
+				"currently installed certificates from the newer version.\n\n"
+				"Would you like to keep the currently installed "
+				"certificates?"
+			)
+			(choices "Keep installed" "Replace")
+			(help "No help available")
+			(default 1)
+		)
+		(
+			(set #delete-old-certs 0)
+			(set #copy-certs 0)
+			(set #ask-about-certs 0)
+		)
+		; else
+		(
+			(set #delete-old-certs 1)
+			(set #copy-certs 1)
+			(set #ask-about-certs 0)
+		)
+	)
+)
+
+(if #ask-about-certs
+	(if
+		(askbool
+			(prompt
+				"The \"" #dest-dir "\" directory which you selected for AmiSSL "
+				"certificates already contains the directory with certificates "
+				"from what appears to be an earlier AmiSSL release.\n\n"
+				"It is suggested that you let the Installer remove the "
+				"contents of \"" #certs-dir "\" directory and copy the "
+				"certificates from this version of AmiSSL.\n\n"
+				"Would you like to replace the currently installed "
+				"certificates?"
+			)
+			(choices "Replace certificates" "Keep installed certificates")
+			(help "No help available")
+			(default 1)
+		)
+		(
+			(set #delete-old-certs 1)
+			(set #copy-certs 1)
+		)
+		; else
+		(
+			(set #delete-old-certs 0)
+			(set #copy-certs 0)
+		)
+	)
+)
+
+(if #delete-old-certs
+	(foreach #certs-dir "#?"
+		(delete (tackon #certs-dir @each-name))
+	)
+)
+
+(complete 80)
+
+(if #copy-certs
+	(copyfiles
+		(source "Certs")
+		(dest #certs-dir)
+		(all)
+	)
+)
+
+(makedir (tackon #dest-dir "UserCerts"))
+(makedir (tackon #dest-dir "Private"))
+
+(complete 90)
+
+(set #startup-command
+	(cat
+		"Assign AmiSSL: \"" #dest-dir "\"\n"
+		"If Exists AmiSSL:Libs\n"
+		"\tAssign LIBS: AmiSSL:Libs ADD\n"
+		"EndIf\n"
+	)
+)
+
+(if
+	(askbool
+		(prompt
+			"Would you like to add AmiSSL: to your path? This will make it "
+			"possible to execute the OpenSSL tool without specifying full "
+			"path to it."
+		)
+		(help "No help available")
+		(default 1)
+	)
+	(set #startup-command (cat #startup-command "Path AmiSSL: ADD\n"))
+)
+
+(startup @app-name
+	(prompt
+		"The AmiSSL: assign needs to be added to User-Startup "
+		"so that AmiSSL can find its certificates."
+	)
+	(help @startup-help)
+	(command #startup-command)
+)
+
+(complete 100)
+
+(set @default-dest #dest-dir)
+(exit "AmiSSL installation finished succesfully. Enjoy!\n\n(Please reboot for User-Startup modifications to take effect)")

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+cd openssl
+
+mkdir -p {680{0,6}0,68020-40}/{tmp,out}
+
+if [ ! -f crypto/opensslconf.h ]
+then
+	perl Configure SC
+fi
+
+if [ ! -f MINFO ]
+then
+	make files
+fi
+
+cd 68000
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=68000/tmp \
+							OUT=68000/out SC) > makefile.one
+cd ..
+make -f 68000/makefile.one CPU_TYPE=ANY
+
+cd 68020-40
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=68020-40/tmp \
+							OUT=68020-40/out SC) >makefile.one
+cd ..
+make -f 68020-40/makefile.one CPU_TYPE=020
+
+cd 68060
+(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=68060/tmp \
+							OUT=68060/out SC) >makefile.one
+cd ..
+make -f 68060/makefile.one CPU_TYPE=060
+
+cd ..
+
+mkdir -p {680{0,6}0,68020-40}/AmiSSL
+
+/sc/c/smake clean
+/sc/c/smake all LIBCPU=68000 OUTDIR=68000/
+/sc/c/smake copylibs LIBCPU=68000 OUTDIR=68000/ STRIPDEBUG=STRIPDEBUG
+
+/sc/c/smake clean
+/sc/c/smake all LIBCPU=68020-40 OUTDIR=68020-40/
+/sc/c/smake copylibs LIBCPU=68020-40 OUTDIR=68020-40/ STRIPDEBUG=STRIPDEBUG
+
+/sc/c/smake clean
+/sc/c/smake all LIBCPU=68060 OUTDIR=68060/
+/sc/c/smake copylibs LIBCPU=68060 OUTDIR=68060/ STRIPDEBUG=STRIPDEBUG
