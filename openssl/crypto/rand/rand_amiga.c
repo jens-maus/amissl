@@ -21,7 +21,7 @@ int RAND_poll(void)
 	unsigned char temp_buffer[SHA_DIGEST_LENGTH], data_buffer[SHA_DIGEST_LENGTH];
 	struct MsgPort *port = NULL;
 	double entropy_added = 0;
-	struct timerequest *time_request = NULL;
+	struct TimeRequest *time_request = NULL;
 #ifdef __amigaos4__
 	struct IOStdReq *entropy_request = NULL;
 
@@ -59,19 +59,19 @@ int RAND_poll(void)
 	 */
 	if (entropy_added < ENTROPY_NEEDED
 	    && (port || (port = CreateMsgPort()))
-	    && (time_request = (struct timerequest *)CreateIORequest(port, sizeof(*time_request))))
+	    && (time_request = (struct TimeRequest *)CreateIORequest(port, sizeof(*time_request))))
 	{
 		if (OpenDevice(TIMERNAME, UNIT_VBLANK, (struct IORequest *)time_request, 0) == 0)
 		{
 			struct TimerIFace *ITimer = NULL;
 			struct Device *TimerBase;
 
-			if ((TimerBase = time_request->tr_node.io_Device)
+			if ((TimerBase = time_request->Request.io_Device)
 			    && (ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL)))
 			{
 				struct EClockVal curr_eclock;
 				ULONG prev_ev_lo = 0;
-				struct timeval tv;
+				struct TimeVal tv;
 				int i, attempt;
 				BOOL aborted;
 
@@ -91,9 +91,9 @@ int RAND_poll(void)
 						 */
 						do
 						{
-							time_request->tr_node.io_Command = TR_ADDREQUEST;
-							time_request->tr_time.tv_secs = 0;
-							time_request->tr_time.tv_micro = 1;
+							time_request->Request.io_Command = TR_ADDREQUEST;
+							time_request->Time.Seconds = 0;
+							time_request->Time.Microseconds = 1;
 
 							if (DoIO((struct IORequest *)time_request) == 0)
 							{
@@ -117,7 +117,7 @@ int RAND_poll(void)
 
 					if (sizeof(temp_buffer) > sizeof(ULONG))
 						*(ULONG *)&temp_buffer[sizeof(temp_buffer) - sizeof(ULONG)]
-						    = tv.tv_micro;
+						    = tv.Microseconds;
 
 					/* Shuffle the bits around and specify that about
 					 * one fourth of it adds to the entropy.

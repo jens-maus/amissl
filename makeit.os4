@@ -21,7 +21,7 @@ cd OS4
 							OUT=OS4/out OS4) > Makefile.one
 cd ..
 
-make -f OS4/Makefile.one AmiSSL=$PWD
+make -f OS4/Makefile.one AmiSSL=$PWD/..
 
 cd ..
 
