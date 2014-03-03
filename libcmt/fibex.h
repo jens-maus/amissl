@@ -9,6 +9,9 @@
  */
 
 #include <dos/dosextens.h>
+#ifdef __amigaos4__
+#include <dos/obsolete.h>
+#endif
 
 /*
  * This is already in 3.0 includes

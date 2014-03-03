@@ -9,10 +9,10 @@ $rm='-rm -f';
 $mkdir='mkdir';
 
 # C compiler stuff
-$cc="ppc-amigaos-gcc";
+$cc="ppc-amigaos-gcc \$(GCCVER)";
 $cfile="-c ";
 $cflags="";
-$app_cflag="\$(ADD) -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O2  -Wno-pointer-sign";
+$app_cflag="\$(ADD) -mcrt=clib2 -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O2  -Wno-pointer-sign";
 $lib_cflag="\$(ADD) -mcrt=clib2 -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O2 -Wno-pointer-sign";
 $obj='.o';
 $ofile='-o ';
@@ -21,7 +21,7 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='-lauto -L$(AmiSSL)/lib -lamisslauto -lamisslstubs -lm';
+$lflags='-mcrt=clib2 -lauto -L$(AmiSSL)/lib -lamisslauto -lamisslstubs -lm';
 $efile='-o ';
 $exep='';
 $ex_libs="";

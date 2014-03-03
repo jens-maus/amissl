@@ -1,5 +1,7 @@
 #include <exec/exec.h>
 #include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/elf.h>
 #include <dos/dos.h>
 #include <internal/amissl_compiler.h>
 #include <stdarg.h>
@@ -20,7 +22,11 @@ struct AmiSSLMasterLibrary
 {
     struct Library libNode;
     BPTR segList;
-	struct AmiSSLMasterLibrary *origLibBase;
+    struct AmiSSLMasterLibrary *origLibBase;
+    struct Library *ElfBase;
+    struct ElfIFace *IElf;
+    Elf32_Handle elfHandle;
+    uint8 *baserelData;
     /* If you need more data fields, add them here */
 };
 
@@ -62,20 +68,16 @@ ULONG _AmiSSLMaster_Release(struct AmiSSLMasterIFace *Self)
     return (ULONG)0;
 }
 
-extern APTR GetDataStart(void);
-extern APTR GetDataEnd(void);
-extern APTR GetDataBase(void);
-
 /* Open the library */
 struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 {
 	struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase; 
 	struct AmiSSLMasterLibrary *newLibBase;
 
-	kprintf("AmiSSLMaster: Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
+	//kprintf("AmiSSLMaster: Start%08x End: %08x Base: %08x\n",GetDataStart(),GetDataEnd(),GetDataBase());
 	kprintf("AmiSSLMaster: LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
-	kprintf("AmiSSLMaster: Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
-	kprintf("AmiSSLMaster: Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
+	//kprintf("AmiSSLMaster: Will copy from %08x to %08x, size: %08x\n",GetDataStart(),GetDataEnd(),GetDataEnd()-GetDataStart());
+	//kprintf("AmiSSLMaster: Env ptr from start: %08x\n",GetDataBase() - GetDataStart());
 
     /* Add up the open count */
     libBase->libNode.lib_OpenCnt++;
@@ -85,18 +87,17 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 
 	if( newLibBase = (struct AmiSSLMasterLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags))
 	{
-		char *envvec;
+		uint32 offset;
 		newLibBase->origLibBase = libBase;
 		newLibBase->libNode.lib_OpenCnt = libBase->libNode.lib_OpenCnt;
-		if(envvec = IExec->AllocVec(GetDataEnd()-GetDataStart(),MEMF_ANY))
+		if(newLibBase->baserelData = libBase->IElf->CopyDataSegment(libBase->elfHandle, &offset))
 		{
 			struct ExtendedLibrary *extlib;
-			IExec->CopyMem(GetDataStart(),envvec,GetDataEnd()-GetDataStart());
-			kprintf("AmiSSLMaster: Env vector: %08x\n",envvec);
+			kprintf("AmiSSLMaster: Env vector: %08x\n",newLibBase->baserelData);
 
 			extlib = (struct ExtendedLibrary *)((ULONG)newLibBase + newLibBase->libNode.lib_PosSize);
 			
-			extlib->MainIFace->Data.EnvironmentVector = envvec + (GetDataBase() - GetDataStart());
+			extlib->MainIFace->Data.EnvironmentVector = newLibBase->baserelData + offset;
 
 			kprintf("AmiSSLMaster: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
@@ -106,7 +107,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 				return (struct Library *)newLibBase;
 			}
 
-			IExec->FreeVec(envvec);
+			libBase->IElf->FreeDataSegmentCopy(libBase->elfHandle,newLibBase->baserelData);
 		}
 		IExec->DeleteLibrary((struct Library *)newLibBase);
 	}
@@ -130,11 +131,10 @@ APTR libClose(struct LibraryManagerInterface *Self)
 	if(libBase->origLibBase != libBase)
 	{
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
-		void *envvec = extlib->MainIFace->Data.EnvironmentVector - (GetDataBase() - GetDataStart());
 
 		__UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
-		kprintf("AmiSSLMaster: Freeing env vector for %08lx: %08lx\n", libBase, envvec);
-		IExec->FreeVec(envvec);
+		kprintf("AmiSSLMaster: Freeing env vector for %08lx: %08lx\n", libBase, libBase->data);
+		libBase->origLibBase->IElf->FreeDataSegmentCopy(libBase->origLibBase->elfHandle,libBase->baserelData);
 
 		IExec->DeleteLibrary((struct Library *)libBase);
 	}
@@ -158,6 +158,9 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
 
         result = (APTR)libBase->segList;
         /* Undo what the init code did */
+	libBase->IElf->CloseElfTags(libBase->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+	IExec->DropInterface((struct Interface *)libBase->IElf);
+	IExec->CloseLibrary((struct Library *)libBase->ElfBase);
 
         IExec->Remove((struct Node *)libBase);
         IExec->DeleteLibrary((struct Library *)libBase);
@@ -173,33 +176,53 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
 /* The ROMTAG Init Function */
 struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interface *exec)
 {
-    struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)LibraryBase;
+	struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)LibraryBase;
 
-    IExec = (struct ExecIFace *)exec;
-    ExecBase = (struct Library *)exec->Data.LibBase;
+	libBase->libNode.lib_Node.ln_Type = NT_LIBRARY;
+	libBase->libNode.lib_Node.ln_Pri  = 0;
+	libBase->libNode.lib_Node.ln_Name = LIBNAME;
+	libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
+	libBase->libNode.lib_Version      = VERSION;
+	libBase->libNode.lib_Revision     = AMISSLMASTERREVISION;
+	libBase->libNode.lib_IdString     = VSTRING;
 
-    libBase->libNode.lib_Node.ln_Type = NT_LIBRARY;
-    libBase->libNode.lib_Node.ln_Pri  = 0;
-    libBase->libNode.lib_Node.ln_Name = LIBNAME;
-    libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
-    libBase->libNode.lib_Version      = VERSION;
-    libBase->libNode.lib_Revision     = AMISSLMASTERREVISION;
-    libBase->libNode.lib_IdString     = VSTRING;
+	if(libBase->segList = (BPTR)seglist)
+	{
+		struct Library *DOSBase;
+		struct DOSIFace *IDOS;
 
-    libBase->segList = (BPTR)seglist;
+		IExec = (struct ExecIFace *)exec;
+		ExecBase = (struct Library *)exec->Data.LibBase;
+		LibraryBase = NULL;
 
-    /* Add additional init code here if you need it. For example, to open additional
-       Libraries:
-       libBase->UtilityBase = IExec->OpenLibrary("utility.library", 50L);
-       if (libBase->UtilityBase)
-       {
-           libBase->IUtility = (struct UtilityIFace *)IExec->GetInterface(ElfBase->UtilityBase, 
-              "main", 1, NULL);
-           if (!libBase->IUtility)
-               return NULL;
-       } else return NULL; */
+		if(DOSBase = IExec->OpenLibrary("dos.library",52))
+			IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL);
 
-       return (struct Library *)libBase;
+		if(libBase->ElfBase = IExec->OpenLibrary("elf.library",52))
+			libBase->IElf = (struct ElfIFace *)IExec->GetInterface(libBase->ElfBase,"main",1,NULL);
+		
+		if(IDOS && libBase->IElf)
+		{
+			IDOS->GetSegListInfoTags(libBase->segList, GSLI_ElfHandle, &libBase->elfHandle, TAG_DONE);
+			if(libBase->elfHandle && (libBase->elfHandle = libBase->IElf->OpenElfTags(OET_ElfHandle, libBase->elfHandle, TAG_DONE)))
+			{
+				libBase->origLibBase = libBase;
+				LibraryBase = (struct Library *)libBase;
+			}
+		}
+
+		if(!LibraryBase)
+		{
+			IExec->DropInterface((struct Interface *)libBase->IElf);
+			IExec->CloseLibrary((struct Library *)libBase->ElfBase);
+		}
+
+		IExec->DropInterface((struct Interface *)IDOS);
+		IExec->CloseLibrary((struct Library *)DOSBase);
+	}
+
+	kprintf("libInit returning: %08lx\n",LibraryBase);
+	return LibraryBase;
 }
 
 /* ------------------- Manager Interface ------------------------ */
@@ -292,30 +315,4 @@ asm (" \n\
 __baserel_get_addr:		 \n\
 	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\
 	blr		 \n\
-");
-
-
-asm ("									\n\
-	.text								\n\
-										\n\
-	.globl GetDataStart					\n\
-GetDataStart:							\n\
-	lis		3, __data_start@h			\n\
-	ori		3, 3, __data_start@l		\n\
-	blr									\n\
-										\n\
-	.globl GetDataEnd					\n\
-GetDataEnd:								\n\
-	lis		3, __data_end@h				\n\
-	ori		3, 3, __data_end@l			\n\
-	blr									\n\
-										\n\
-	.globl GetDataBase					\n\
-GetDataBase:							\n\
-	lis		3, _DATA_BASE_@h			\n\
-	ori		3, 3, _DATA_BASE_@l			\n\
-	blr									\n\
-										\n\
-	.section .dend, \"wa\", @nobits		\n\
-	.space 4							\n\
 ");

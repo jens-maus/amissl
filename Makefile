@@ -33,7 +33,7 @@ clean:
 	-rm -f obj/*.o lib/*.a
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
-	ppc-amigaos-gcc -c $< -o $@ $(CFLAGS)
+	ppc-amigaos-gcc $(GCCVER) -c $< -o $@ $(CFLAGS)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
@@ -49,15 +49,15 @@ amissl_v$(VERSIONNAME).library: $(OBJS) libcmt/libcmt.a $(LIBSSL) $(LIBCRYPTO)
 #	cp $@ /cygdrive/D/FTP
 
 amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_68k.o
-	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -mbaserel -Wl,-M,-Map=$@.map
+	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
 #	cp $@ /cygdrive/D/FTP
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
-	ppc-amigaos-gcc -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
+	ppc-amigaos-gcc -mcrt=clib2 -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
-	ppc-amigaos-gcc -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
+	ppc-amigaos-gcc -mcrt=clib2 -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
 
 $(LIB_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o

@@ -1,10 +1,16 @@
 #!/bin/sh
 
+# First arg is passed to GCC where necessary - intended for setting
+# the compiler version to use (e.g. sh make.os4 -V4.0.3)
+GCCVER=$1
+
+mkdir -p obj lib
+
 cd openssl
 
 set PWD = `pwd`
 
-mkdir -p OS4/{tmp,out}
+mkdir -p OS4/tmp OS4/out
 
 if [ ! -f crypto/opensslconf.h ]
 then
@@ -21,10 +27,14 @@ cd OS4
 							OUT=OS4/out OS4) > Makefile.one
 cd ..
 
-make -f OS4/Makefile.one AmiSSL=$PWD/..
+make -f OS4/Makefile.one AmiSSL=$PWD/.. GCCVER=$GCCVER
 
+cd ..
+
+cd libcmt
+make -f Makefile AmiSSL=$PWD/.. GCCVER=$GCCVER
 cd ..
 
 mkdir -p OS4/AmiSSL
 
-make OUTDIR=OS4/ AmiSSL=$PWD
+make OUTDIR=OS4/ AmiSSL=$PWD GCCVER=$GCCVER

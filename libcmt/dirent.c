@@ -26,6 +26,10 @@ typedef struct _mydirdesc {
 #define d_ead _dirun.ead
 #define d_info _dirun.fib
 
+#ifdef __amigaos4__
+#define fib_EntryType fib_Obsolete /* FIXME */
+#endif
+
 DIR *opendir(const char *dirname)
 {
   MYDIR *dirp;
