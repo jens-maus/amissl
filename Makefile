@@ -7,6 +7,10 @@ LIBSSL=openssl/OS4/out/libssl.a
 LIBCRYPTO=openssl/OS4/out/libcrypto.a
 STRIPDEBUG=
 
+ifeq ($(AmiSSL),)
+  AmiSSL=.
+endif
+
 VERSION=3
 VERSIONNAME=097g
 AMISSLREVISION=7
@@ -26,11 +30,12 @@ CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL_COMPILE \
 OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
 LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
 
-all: amissl_v$(VERSIONNAME).library amisslmaster.library \
-     $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a
+all: $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a amissl_v$(VERSIONNAME).library amisslmaster.library
 
 clean:
 	-rm -f obj/*.o lib/*.a
+	-rm -f amissl_v$(VERSIONNAME).library*
+	-rm -f amisslmaster.library*
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	ppc-amigaos-gcc $(GCCVER) -c $< -o $@ $(CFLAGS)
@@ -73,7 +78,7 @@ libs:
 	sh makeit.os4
 
 cleanlibs:
-	rm -rf openssl/OS4/*
+	rm -rf openssl/OS4
 	
 tests:
 	(cd openssl; make -f OS4/Makefile.one exe)

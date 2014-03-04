@@ -6,6 +6,9 @@
 #include <string.h>
 #include <dos/exall.h>
 #include <dos/dosextens.h>
+#if defined(__amigaos4__)
+#include <dos/obsolete.h> // FIXME
+#endif
 #include <internal/amissl.h>
 
 

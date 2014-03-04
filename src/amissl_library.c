@@ -16,6 +16,9 @@
 #include <proto/utility.h>
 
 #include <dos/var.h>
+#if defined(__amigaos4__)
+#include <dos/obsolete.h>
+#endif
 #include <utility/tagitem.h>
 #include <exec/memory.h>
 

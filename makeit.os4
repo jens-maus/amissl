@@ -6,6 +6,8 @@ GCCVER=$1
 
 mkdir -p obj lib
 
+make lib/libamisslauto.a lib/libamisslstubs.a
+
 cd openssl
 
 set PWD = `pwd`
