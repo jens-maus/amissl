@@ -65,7 +65,7 @@
 #include <openssl/md5.h>
 
 static long ssl2_default_timeout(void );
-const char *ssl2_version_str="SSLv2" OPENSSL_VERSION_PTEXT;
+const char ssl2_version_str[]="SSLv2" OPENSSL_VERSION_PTEXT;
 
 #define SSL2_NUM_CIPHERS (sizeof(ssl2_ciphers)/sizeof(SSL_CIPHER))
 
@@ -180,7 +180,7 @@ OPENSSL_GLOBAL SSL_CIPHER ssl2_ciphers[]=
 	SSL_ALL_STRENGTHS,
 	},
 /* RC4_64_WITH_MD5 */
-#if 1
+#if 0
 	{
 	1,
 	SSL2_TXT_RC4_64_WITH_MD5,

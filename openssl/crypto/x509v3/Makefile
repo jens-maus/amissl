@@ -1,5 +1,5 @@
 #
-# SSLeay/crypto/x509v3/Makefile
+# OpenSSL/crypto/x509v3/Makefile
 #
 
 DIR=	x509v3
@@ -25,11 +25,11 @@ LIB=$(TOP)/libcrypto.a
 LIBSRC=	v3_bcons.c v3_bitst.c v3_conf.c v3_extku.c v3_ia5.c v3_lib.c \
 v3_prn.c v3_utl.c v3err.c v3_genn.c v3_alt.c v3_skey.c v3_akey.c v3_pku.c \
 v3_int.c v3_enum.c v3_sxnet.c v3_cpols.c v3_crld.c v3_purp.c v3_info.c \
-v3_ocsp.c v3_akeya.c v3_pcia.c v3_pci.c
+v3_ocsp.c v3_akeya.c v3_pcia.c v3_pci.c v3_hex.c
 LIBOBJ= v3_bcons.o v3_bitst.o v3_conf.o v3_extku.o v3_ia5.o v3_lib.o \
 v3_prn.o v3_utl.o v3err.o v3_genn.o v3_alt.o v3_skey.o v3_akey.o v3_pku.o \
 v3_int.o v3_enum.o v3_sxnet.o v3_cpols.o v3_crld.o v3_purp.o v3_info.o \
-v3_ocsp.o v3_akeya.o v3_pcia.o v3_pci.o
+v3_ocsp.o v3_akeya.o v3_pcia.o v3_pci.o v3_hex.o
 
 SRC= $(LIBSRC)
 
@@ -332,6 +332,28 @@ v3_genn.o: ../../include/openssl/symhacks.h ../../include/openssl/ui.h
 v3_genn.o: ../../include/openssl/ui_compat.h ../../include/openssl/x509.h
 v3_genn.o: ../../include/openssl/x509_vfy.h ../../include/openssl/x509v3.h
 v3_genn.o: ../cryptlib.h v3_genn.c
+v3_hex.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
+v3_hex.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
+v3_hex.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h
+v3_hex.o: ../../include/openssl/cast.h ../../include/openssl/conf.h
+v3_hex.o: ../../include/openssl/crypto.h ../../include/openssl/des.h
+v3_hex.o: ../../include/openssl/des_old.h ../../include/openssl/dh.h
+v3_hex.o: ../../include/openssl/dsa.h ../../include/openssl/e_os2.h
+v3_hex.o: ../../include/openssl/err.h ../../include/openssl/evp.h
+v3_hex.o: ../../include/openssl/idea.h ../../include/openssl/lhash.h
+v3_hex.o: ../../include/openssl/md2.h ../../include/openssl/md4.h
+v3_hex.o: ../../include/openssl/md5.h ../../include/openssl/mdc2.h
+v3_hex.o: ../../include/openssl/obj_mac.h ../../include/openssl/objects.h
+v3_hex.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
+v3_hex.o: ../../include/openssl/ossl_typ.h ../../include/openssl/pkcs7.h
+v3_hex.o: ../../include/openssl/rc2.h ../../include/openssl/rc4.h
+v3_hex.o: ../../include/openssl/rc5.h ../../include/openssl/ripemd.h
+v3_hex.o: ../../include/openssl/rsa.h ../../include/openssl/safestack.h
+v3_hex.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
+v3_hex.o: ../../include/openssl/symhacks.h ../../include/openssl/ui.h
+v3_hex.o: ../../include/openssl/ui_compat.h ../../include/openssl/x509.h
+v3_hex.o: ../../include/openssl/x509_vfy.h ../../include/openssl/x509v3.h
+v3_hex.o: ../cryptlib.h v3_hex.c
 v3_ia5.o: ../../e_os.h ../../include/openssl/aes.h ../../include/openssl/asn1.h
 v3_ia5.o: ../../include/openssl/bio.h ../../include/openssl/blowfish.h
 v3_ia5.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h

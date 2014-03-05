@@ -78,7 +78,7 @@ static int check_trust(X509_STORE_CTX *ctx);
 static int check_revocation(X509_STORE_CTX *ctx);
 static int check_cert(X509_STORE_CTX *ctx);
 static int internal_verify(X509_STORE_CTX *ctx);
-const char *X509_version="X.509" OPENSSL_VERSION_PTEXT;
+const char X509_version[]="X.509" OPENSSL_VERSION_PTEXT;
 
 
 static int null_callback(int ok, X509_STORE_CTX *e)
@@ -944,7 +944,7 @@ int X509_cmp_time(ASN1_TIME *ctm, time_t *cmp_time)
 		offset=0;
 	else
 		{
-		if ((*str != '+') && (str[5] != '-'))
+		if ((*str != '+') && (*str != '-'))
 			return 0;
 		offset=((str[1]-'0')*10+(str[2]-'0'))*60;
 		offset+=(str[3]-'0')*10+(str[4]-'0');

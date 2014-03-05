@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
 /* ====================================================================
- * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1998-2006 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -73,12 +73,12 @@
  * 3. All advertising materials mentioning features or use of this
  *    software must display the following acknowledgment:
  *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
+ *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
  *
  * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
  *    endorse or promote products derived from this software without
  *    prior written permission. For written permission, please contact
- *    openssl-core@OpenSSL.org.
+ *    openssl-core@openssl.org.
  *
  * 5. Products derived from this software may not be called "OpenSSL"
  *    nor may "OpenSSL" appear in their names without prior written
@@ -87,7 +87,7 @@
  * 6. Redistributions of any form whatsoever must retain the following
  *    acknowledgment:
  *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
+ *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
  *
  * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
  * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -102,6 +102,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
  */
 
 #include <stdio.h>
@@ -135,21 +140,28 @@
 int SSL_get_ex_data_X509_STORE_CTX_idx(void)
 	{
 	static volatile int ssl_x509_store_ctx_idx= -1;
+	int got_write_lock = 0;
+
+	CRYPTO_r_lock(CRYPTO_LOCK_SSL_CTX);
 
 	if (ssl_x509_store_ctx_idx < 0)
 		{
-		/* any write lock will do; usually this branch
-		 * will only be taken once anyway */
+		CRYPTO_r_unlock(CRYPTO_LOCK_SSL_CTX);
 		CRYPTO_w_lock(CRYPTO_LOCK_SSL_CTX);
+		got_write_lock = 1;
 		
 		if (ssl_x509_store_ctx_idx < 0)
 			{
 			ssl_x509_store_ctx_idx=X509_STORE_CTX_get_ex_new_index(
 				0,"SSL for verify callback",NULL,NULL,NULL);
 			}
-		
-		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_CTX);
 		}
+
+	if (got_write_lock)
+		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_CTX);
+	else
+		CRYPTO_r_unlock(CRYPTO_LOCK_SSL_CTX);
+	
 	return ssl_x509_store_ctx_idx;
 	}
 
@@ -616,14 +628,13 @@ STACK_OF(X509_NAME) *SSL_load_client_CA_file(const char *file)
 	BIO *in;
 	X509 *x=NULL;
 	X509_NAME *xn=NULL;
-	STACK_OF(X509_NAME) *ret,*sk;
+	STACK_OF(X509_NAME) *ret = NULL,*sk;
 
-	ret=sk_X509_NAME_new_null();
 	sk=sk_X509_NAME_new(xname_cmp);
 
 	in=BIO_new(BIO_s_file_internal());
 
-	if ((ret == NULL) || (sk == NULL) || (in == NULL))
+	if ((sk == NULL) || (in == NULL))
 		{
 		SSLerr(SSL_F_SSL_LOAD_CLIENT_CA_FILE,ERR_R_MALLOC_FAILURE);
 		goto err;
@@ -636,6 +647,15 @@ STACK_OF(X509_NAME) *SSL_load_client_CA_file(const char *file)
 		{
 		if (PEM_read_bio_X509(in,&x,NULL,NULL) == NULL)
 			break;
+		if (ret == NULL)
+			{
+			ret = sk_X509_NAME_new_null();
+			if (ret == NULL)
+				{
+				SSLerr(SSL_F_SSL_LOAD_CLIENT_CA_FILE,ERR_R_MALLOC_FAILURE);
+				goto err;
+				}
+			}
 		if ((xn=X509_get_subject_name(x)) == NULL) goto err;
 		/* check for duplicates */
 		xn=X509_NAME_dup(xn);
@@ -658,6 +678,8 @@ err:
 	if (sk != NULL) sk_X509_NAME_free(sk);
 	if (in != NULL) BIO_free(in);
 	if (x != NULL) X509_free(x);
+	if (ret != NULL)
+		ERR_clear_error();
 	return(ret);
 	}
 #endif

@@ -549,9 +549,20 @@ static void build_SYS_str_reasons()
 	int i;
 	static int init = 1;
 
-	if (!init) return;
-
+	CRYPTO_r_lock(CRYPTO_LOCK_ERR);
+	if (!init)
+		{
+		CRYPTO_r_unlock(CRYPTO_LOCK_ERR);
+		return;
+		}
+	
+	CRYPTO_r_unlock(CRYPTO_LOCK_ERR);
 	CRYPTO_w_lock(CRYPTO_LOCK_ERR);
+	if (!init)
+		{
+		CRYPTO_w_unlock(CRYPTO_LOCK_ERR);
+		return;
+		}
 
 	for (i = 1; i <= NUM_SYS_STR_REASONS; i++)
 		{
@@ -621,7 +632,8 @@ static void err_load_strings(int lib, ERR_STRING_DATA *str)
 	{
 	while (str->error)
 		{
-		str->error|=ERR_PACK(lib,0,0);
+		if (lib)
+			str->error|=ERR_PACK(lib,0,0);
 		ERRFN(err_set_item)(str);
 		str++;
 		}
@@ -637,7 +649,8 @@ void ERR_unload_strings(int lib, ERR_STRING_DATA *str)
 	{
 	while (str->error)
 		{
-		str->error|=ERR_PACK(lib,0,0);
+		if (lib)
+			str->error|=ERR_PACK(lib,0,0);
 		ERRFN(err_del_item)(str);
 		str++;
 		}
