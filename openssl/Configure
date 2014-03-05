@@ -591,7 +591,7 @@ my %table=(
 "SC","sc::::::EXPORT_VAR_AS_FN::",
 
 # GCC AmigaOS4
-"OS4","ppc-amigaos-gcc::::::EXPORT_VAR_AS_FN::",
+"OS4","ppc-amigaos-gcc-4.0.3::::::EXPORT_VAR_AS_FN::",
 
 );
 

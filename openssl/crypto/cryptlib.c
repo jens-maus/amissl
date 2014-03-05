@@ -521,7 +521,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason,
 	}
 #endif
 
-#ifndef AMISSL
 #if defined(_WIN32)
 #include <tchar.h>
 

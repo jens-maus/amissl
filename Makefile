@@ -37,8 +37,13 @@ clean:
 	-rm -f amissl_v$(VERSIONNAME).library*
 	-rm -f amisslmaster.library*
 
+distclean: clean cleanlibs
+	-rm -f openssl/MINFO
+	-rm -f openssl/Makefile
+	-rm -f openssl/crypto/opensslconf.h
+
 $(OBJ_D)/%.o: $(SRC_D)/%.c
-	ppc-amigaos-gcc $(GCCVER) -c $< -o $@ $(CFLAGS)
+	ppc-amigaos-gcc-4.0.3 $(GCCVER) -c $< -o $@ $(CFLAGS)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
@@ -49,20 +54,20 @@ $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D
 $(OBJ_D)/amisslmaster_68k.o: $(SRC_D)/amisslmaster_68k.c
 
 amissl_v$(VERSIONNAME).library: $(OBJS) libcmt/libcmt.a $(LIBSSL) $(LIBCRYPTO)
-	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
+	ppc-amigaos-gcc-4.0.3 -o $@ $(LFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
 #	cp $@ /cygdrive/D/FTP
 
 amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_68k.o
-	ppc-amigaos-gcc -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
+	ppc-amigaos-gcc-4.0.3 -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
 #	cp $@ /cygdrive/D/FTP
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
-	ppc-amigaos-gcc -mcrt=clib2 -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
+	ppc-amigaos-gcc-4.0.3 -mcrt=clib2 -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
-	ppc-amigaos-gcc -mcrt=clib2 -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
+	ppc-amigaos-gcc-4.0.3 -mcrt=clib2 -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
 
 $(LIB_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o
@@ -72,7 +77,7 @@ $(LIB_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/libstubs.o
 
 testing:
-	ppc-amigaos-gcc basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib
+	ppc-amigaos-gcc-4.0.3 basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib
 
 libs:
 	sh makeit.os4

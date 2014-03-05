@@ -14,8 +14,7 @@ set PWD = `pwd`
 
 mkdir -p OS4/tmp OS4/out
 
-if [ ! -f crypto/opensslconf.h ]
-then
+if [ ! -f crypto/opensslconf.h ] || [ ! -f Makefile ] || [ ! -f MINFO ]; then
 	perl Configure OS4
 fi
 

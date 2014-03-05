@@ -9,7 +9,7 @@ $rm='-rm -f';
 $mkdir='mkdir';
 
 # C compiler stuff
-$cc="ppc-amigaos-gcc \$(GCCVER)";
+$cc="ppc-amigaos-gcc-4.0.3 \$(GCCVER)";
 $cfile="-c ";
 $cflags="";
 $app_cflag="\$(ADD) -mcrt=clib2 -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O2  -Wno-pointer-sign";
