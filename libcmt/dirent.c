@@ -6,15 +6,14 @@
 #include <string.h>
 #include <dos/exall.h>
 #include <dos/dosextens.h>
-#if defined(__amigaos4__)
-#include <dos/obsolete.h> // FIXME
-#endif
 #include <internal/amissl.h>
 
 
 typedef struct _mydirdesc {
-  int dd_fd;
   struct dirent dd_ent;
+#ifdef __amigaos4__
+  APTR d_context;
+#else
   BPTR d_lock;
   ULONG d_count;
   LONG d_more;
@@ -24,14 +23,11 @@ typedef struct _mydirdesc {
     char ead[2048];
     struct FileInfoBlock fib;
   } _dirun;
+#endif
 } MYDIR;
 
 #define d_ead _dirun.ead
 #define d_info _dirun.fib
-
-#ifdef __amigaos4__
-#define fib_EntryType fib_Obsolete /* FIXME */
-#endif
 
 DIR *opendir(const char *dirname)
 {
@@ -39,6 +35,11 @@ DIR *opendir(const char *dirname)
 
   if ((dirp=(MYDIR *)malloc(sizeof(MYDIR))) != NULL)
   {
+#ifdef __amigaos4__
+    if ((dirp->d_context = ObtainDirContextTags(EX_StringNameInput, dirname, EX_DataFields, EXF_NAME, TAG_DONE))) {
+       return (DIR *)dirp;
+    }
+#else
     if ((dirp->d_lock=(Lock((STRPTR)dirname,SHARED_LOCK))) != 0ul)
     {
       dirp->d_count=0; dirp->d_more = DOSTRUE;
@@ -59,6 +60,7 @@ DIR *opendir(const char *dirname)
       }
       UnLock(dirp->d_lock);
     }
+#endif
     free(dirp); dirp=NULL;
   }
   return (DIR *)dirp;
@@ -67,8 +69,16 @@ DIR *opendir(const char *dirname)
 struct dirent *readdir(DIR *mydirp)
 {
   MYDIR *dirp=(MYDIR *)mydirp;
-  struct dirent *result;
+  struct dirent *result = NULL;
 
+#ifdef __amigaos4__
+  struct ExamineData *ed;
+  if ((ed = ExamineDir(dirp->d_context))) {
+    dirp->dd_ent.d_ino = 1;
+    strcpy(dirp->dd_ent.d_name,ed->Name);
+    result=&dirp->dd_ent;
+  }
+#else
   if (dirp->d_count==0 && dirp->d_more!=DOSFALSE)
   {
     dirp->d_more=ExAll(dirp->d_lock,(APTR)&dirp->d_ead[0],sizeof(dirp->d_ead),ED_NAME,dirp->d_eac);
@@ -76,24 +86,16 @@ struct dirent *readdir(DIR *mydirp)
     dirp->d_count=dirp->d_eac->eac_Entries;
   }
 
-  result = NULL;
-
   if (dirp->d_count)
   {
-#ifdef __amigaos4__
-    dirp->dd_ent.d_ino = 1;
-    strcpy(dirp->dd_ent.d_name,dirp->current->ed_Name);
-    dirp->current=dirp->current->ed_Next;
-    dirp->d_count--;
-#else
     dirp->dd_ent.d_ino = dirp->dd_ent.d_reclen = 1;
     strcpy(dirp->dd_ent.d_name,dirp->current->ed_Name);
     dirp->dd_ent.d_namlen = strlen(dirp->dd_ent.d_name);
     dirp->current=dirp->current->ed_Next;
     dirp->d_count--;
-#endif
     result=&dirp->dd_ent;
   }
+#endif
   return result;
 }
 
@@ -102,6 +104,9 @@ struct dirent *readdir(DIR *mydirp)
 void rewinddir(DIR *mydirp)
 {
   MYDIR *dirp=(MYDIR *)mydirp;
+#ifdef __amigaos4__
+  ObtainDirContextTags(EX_ResetContext, dirp->d_context, TAG_DONE);
+#else
   if (dirp->d_more!=DOSFALSE)
     do
      {
@@ -109,21 +114,24 @@ void rewinddir(DIR *mydirp)
      }
     while(dirp->d_more!=DOSFALSE);
   dirp->d_count=0; dirp->d_more = DOSTRUE; dirp->d_eac->eac_LastKey=0;
+#endif
 }
 
 #ifdef __amigaos4__
-int 
+int closedir(DIR *mydirp)
+{
+  MYDIR *dirp=(MYDIR *)mydirp;
+  ReleaseDirContext(dirp->d_context);
+  free(dirp);
+  return 1;
+}
 #else
-void
-#endif
-closedir(DIR *mydirp)
+void closedir(DIR *mydirp)
 {
   MYDIR *dirp=(MYDIR *)mydirp;
   rewinddir(mydirp);
   FreeDosObject(DOS_EXALLCONTROL,dirp->d_eac);
   UnLock(dirp->d_lock);
   free(dirp);
-#ifdef __amigaos4__
-  return 1;
-#endif
 }
+#endif

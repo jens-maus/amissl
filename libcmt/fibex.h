@@ -9,9 +9,6 @@
  */
 
 #include <dos/dosextens.h>
-#ifdef __amigaos4__
-#include <dos/obsolete.h>
-#endif
 
 /*
  * This is already in 3.0 includes
@@ -74,6 +71,4 @@ struct FileInfoBlock {
 #define FIBF_SUID (1<<FIBB_SUID)
 #define FIBF_SGID (1<<FIBB_SGID)
 
-void __dostat(struct FileInfoBlock *fib, struct stat *st);
-extern struct FileInfoBlock __dostat_fib[];
 

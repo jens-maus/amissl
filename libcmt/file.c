@@ -81,7 +81,11 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 			return NULL;
 		}
 
+#ifdef __amigaos4__
+		if(append && !ChangeFilePosition(file,0,SEEK_END))
+#else
 		if(append && Seek(file,0,SEEK_END)<0)
+#endif
 		{
 			SetAmiSSLerrno(__io2errno(IoErr()));
 			return NULL;
@@ -167,9 +171,20 @@ int fclose(FILE *file)
 
 int fseek(FILE *file, LONG pos, int mode)
 {
+#ifdef __amigaos4__
+	int res = -1;
+	int64 res64;
+	fflush(file);
+	res64 = GetFilePosition(TOFILE(file)->_file);
+	if((res64!=-1LL) && ChangeFilePosition(TOFILE(file)->_file, (int64)pos, mode))
+	{
+		res = (int)res64;
+	}
+#else
 	int res;
 	fflush(file);
 	res = Seek(TOFILE(file)->_file, pos, mode);
+#endif
 	if(res==-1)
 	{
 		SetAmiSSLerrno(__io2errno(IoErr()));
