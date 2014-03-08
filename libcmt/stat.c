@@ -120,7 +120,7 @@ static void __dostat(BPTR lock, struct ExamineData *ed, struct stat *st)
     }
     FreeDosObject(DOS_INFODATA,id);
   }
-  st->st_blocks = (ed->FileSize + st->st_blksize - 1) / st->st_blksize;
+  st->st_blocks = ((uint32)ed->FileSize + st->st_blksize - 1) / st->st_blksize;
 
 /* SYS_STAT_H is defined only by AmiTCP netincludes */
 #if defined(SYS_STAT_H)
