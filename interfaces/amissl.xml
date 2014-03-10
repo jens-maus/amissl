@@ -9625,7 +9625,7 @@
 		<method name="DSA_SIG_new" result="DSA_SIG *">
 		</method>
 		<method name="DSA_SIG_free" result="void">
-			<arg name="a" type="DSA_SIG *"/>
+			<arg name="sig" type="DSA_SIG *"/>
 		</method>
 		<method name="i2d_DSA_SIG" result="int">
 			<arg name="a" type="const DSA_SIG *"/>
@@ -10354,5 +10354,56 @@
 		</method>
 		<method name="PROXY_CERT_INFO_EXTENSION_it" result="const ASN1_ITEM *">
 		</method>
+		<method name="BN_mod_exp_mont_consttime" result="int">
+			<arg name="rr" type="BIGNUM *"/>
+			<arg name="a" type="const BIGNUM *"/>
+			<arg name="p" type="const BIGNUM *"/>
+			<arg name="m" type="const BIGNUM *"/>
+			<arg name="ctx" type="BN_CTX *"/>
+			<arg name="in_mont" type="BN_MONT_CTX *"/>
+		</method>
+		<method name="BN_MONT_CTX_set_locked" result="BN_MONT_CTX *">
+			<arg name="pmont" type="BN_MONT_CTX **"/>
+			<arg name="lock" type="int"/>
+			<arg name="mod" type="const BIGNUM *"/>
+			<arg name="ctx" type="BN_CTX *"/>
+		</method>
+		<method name="PKCS1_MGF1" result="int">
+			<arg name="mask" type="unsigned char *"/>
+			<arg name="len" type="long"/>
+			<arg name="seed" type="const unsigned char *"/>
+			<arg name="seedlen" type="long"/>
+			<arg name="dgst" type="const EVP_MD *"/>
+    </method>
+		<method name="RSA_padding_add_X931" result="int">
+			<arg name="to" type="unsigned char *"/>
+			<arg name="tlen" type="int"/>
+			<arg name="from" type="const unsigned char *"/>
+			<arg name="flen" type="int"/>
+    </method>
+		<method name="RSA_padding_check_X931" result="int">
+			<arg name="to" type="unsigned char *"/>
+			<arg name="tlen" type="int"/>
+			<arg name="from" type="const unsigned char *"/>
+			<arg name="flen" type="int"/>
+			<arg name="num" type="int"/>
+    </method>
+		<method name="RSA_X931_hash_id" result="int">
+			<arg name="nid" type="int"/>
+    </method>
+		<method name="RSA_verify_PKCS1_PSS" result="int">
+			<arg name="rsa" type="RSA *"/>
+			<arg name="mHash" type="const unsigned char *"/>
+			<arg name="Hash" type="const EVP_MD *"/>
+			<arg name="EM" type="const unsigned char *"/>
+			<arg name="sLen" type="int"/>
+    </method>
+		<method name="RSA_padding_add_PKCS1_PSS" result="int">
+			<arg name="rsa" type="RSA *"/>
+			<arg name="EM" type="unsigned char *"/>
+			<arg name="mHash" type="const unsigned char *"/>
+			<arg name="Hash" type="const EVP_MD *"/>
+			<arg name="sLen" type="int"/>
+    </method>
 	</interface>
 </library>
