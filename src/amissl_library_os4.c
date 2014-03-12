@@ -298,12 +298,12 @@ const static struct TagItem const lib_managerTags[] =
 
 #include "amissl_vectors.c"
 
-extern const ULONG VecTable68K;
+extern const ULONG main_VecTable68K;
 
 const static struct TagItem mainTags[] =
 {
     {MIT_Name,              (uint32)"main"},
-    {MIT_VectorTable,       (uint32)main_vectors},
+    {MIT_VectorTable,       (uint32)main_v1_vectors},
     {MIT_Version,           1},
     {MIT_Flags, IFLF_PROTECTED},
     {TAG_DONE,              0}
@@ -321,7 +321,7 @@ const struct TagItem libCreateTags[] =
     {CLT_DataSize,         (uint32)(sizeof(struct AmiSSLLibrary))},
     {CLT_InitFunc,         (uint32)libInit},
     {CLT_Interfaces,       (uint32)libInterfaces},
-    {CLT_Vector68K,        (uint32)&VecTable68K},
+    {CLT_Vector68K,        (uint32)&main_VecTable68K},
     {TAG_DONE,             0}
 };
 

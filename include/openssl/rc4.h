@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/rc4/rc4.h */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -56,10 +59,6 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_RC4_H
 #define HEADER_RC4_H
 
@@ -77,10 +76,6 @@ typedef struct rc4_key_st
 	{
 	RC4_INT x,y;
 	RC4_INT data[256];
-#if defined(__ia64) || defined(__ia64__) || defined(_M_IA64)
-	/* see crypto/rc4/asm/rc4-ia64.S for further details... */
-	RC4_INT pad[512-256-2];
-#endif
 	} RC4_KEY;
 
  

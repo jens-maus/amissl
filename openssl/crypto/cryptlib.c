@@ -648,6 +648,7 @@ void OPENSSL_showfatal (const char *fmta,...)
     }
 }
 #else
+#ifndef AMISSL
 void OPENSSL_showfatal (const char *fmta,...)
 { va_list ap;
 
@@ -655,9 +656,34 @@ void OPENSSL_showfatal (const char *fmta,...)
     vfprintf (stderr,fmta,ap);
     va_end (ap);
 }
+#else
+#include <proto/exec.h>
+#include <proto/intuition.h>
+#include <intuition/intuition.h>
+
+void OPENSSL_showfatal (const char *fmta,...)
+{ 
+  va_list ap;
+  struct EasyStruct ErrReq;
+  char error[512];
+
+  va_start(ap, fmta);
+  vsnprintf(error, sizeof(error), fmta, ap);
+  va_end(ap);
+
+  ErrReq.es_StructSize   = sizeof(struct EasyStruct);
+  ErrReq.es_Flags        = 0;
+  ErrReq.es_Title        = "AmiSSL internal error";
+  ErrReq.es_TextFormat   = error;
+  ErrReq.es_GadgetFormat = "Abort";
+
+  // Open an Easy Requester
+  EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
+  Wait(0);
+}
+#endif /* !AMISSL */
 #endif
 
-#ifndef AMISSL
 void OpenSSLDie(const char *file,int line,const char *assertion)
 	{
 	OPENSSL_showfatal(
@@ -665,26 +691,10 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 		file,line,assertion);
 	abort();
 	}
-#else /* !AMISSL */
-#include <proto/exec.h>
-#include <proto/intuition.h>
-#include <intuition/intuition.h>
 
-static const struct EasyStruct easy_struct =
-{
-	sizeof(struct EasyStruct), 0, "AmiSSL internal error",
-	"%s (%ld): assertion failed:\n%s", "Abort"
-};
-
-void OpenSSLDie(const char *file, int line, const char *assertion)
-{
-	EasyRequest(NULL, &easy_struct, NULL, file, line, assertion);
-
-	Wait(0);
-}
-#endif /* !AMISSL */
-
+#ifndef AMISSL
 void *OPENSSL_stderr(void)	{ return stderr; }
+#endif /* !AMISSL */
 
 #ifdef OPENSSL_FIPS
 

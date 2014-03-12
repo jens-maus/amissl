@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* x509v3.h */
 /* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
  * project 1999.
@@ -55,10 +58,6 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_X509V3_H
 #define HEADER_X509V3_H
 

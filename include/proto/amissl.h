@@ -1,6 +1,13 @@
 #ifndef PROTO_AMISSL_H
 #define PROTO_AMISSL_H
 
+/*
+**	$Id$
+**
+**	Prototype/inline/pragma header file combo
+**
+*/
+
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
 #endif
@@ -11,7 +18,11 @@
 /****************************************************************************/
 
 #ifndef __NOLIBBASE__
-extern struct Library *AmiSSLBase;
+ #ifndef __USE_BASETYPE__
+  extern struct Library * AmiSSLBase;
+ #else
+  extern struct Library * AmiSSLBase;
+ #endif /* __USE_BASETYPE__ */
 #endif /* __NOLIBBASE__ */
 
 /****************************************************************************/
@@ -34,14 +45,14 @@ extern struct Library *AmiSSLBase;
  #if defined(__GNUC__)
   #ifndef __PPC__
    #include <inline/amissl.h>
-  #else
+  #else /* __PPC__ */
    #include <ppcinline/amissl.h>
   #endif /* __PPC__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/amissl_protos.h>
   #endif /* __PPC__ */
- #else
+ #else /* __GNUC__ */
   #include <pragmas/amissl_pragmas.h>
  #endif /* __GNUC__ */
 #endif /* __amigaos4__ */

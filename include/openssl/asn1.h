@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/asn1/asn1.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -55,10 +58,6 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_ASN1_H
 #define HEADER_ASN1_H
@@ -966,6 +965,7 @@ void ERR_load_ASN1_strings(void);
 #define ASN1_F_ASN1_DUP					 111
 #define ASN1_F_ASN1_ENUMERATED_SET			 112
 #define ASN1_F_ASN1_ENUMERATED_TO_BN			 113
+#define ASN1_F_ASN1_FIND_END				 182
 #define ASN1_F_ASN1_GENERALIZEDTIME_SET			 178
 #define ASN1_F_ASN1_GET_OBJECT				 114
 #define ASN1_F_ASN1_HEADER_NEW				 115
@@ -1079,6 +1079,7 @@ void ERR_load_ASN1_strings(void);
 #define ASN1_R_MISSING_SECOND_NUMBER			 138
 #define ASN1_R_MSTRING_NOT_UNIVERSAL			 139
 #define ASN1_R_MSTRING_WRONG_TAG			 140
+#define ASN1_R_NESTED_ASN1_STRING			 174
 #define ASN1_R_NON_HEX_CHARACTERS			 141
 #define ASN1_R_NOT_ENOUGH_DATA				 142
 #define ASN1_R_NO_MATCHING_CHOICE_TYPE			 143

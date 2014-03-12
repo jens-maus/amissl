@@ -163,7 +163,7 @@ static void CloseLib(struct Library *LibBase)
 	}
 }
 
-LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
+LONG AMISSL_LIB_ENTRY _AmiSSLMaster_InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
@@ -171,12 +171,17 @@ LONG AMISSL_LIB_ENTRY InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG AP
 	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
 
-struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
+struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
-	if (LibAPIVersion == AMISSL_V097g)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
+	if(LibAPIVersion == AMISSL_V097m || LibAPIVersion == AMISSL_V097g)
+  {
+    // v097m and v097g are API compatible. Honor that and try 'm' first and afterwards
+    // 'g'.
+		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3) == NULL)
+		  OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
+  }
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 		/* This only happens for m68k code, no need to handle ppc versions here */
@@ -227,7 +232,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 	return AmiSSLBase;
 }
 
-void AMISSL_LIB_ENTRY CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
@@ -251,14 +256,14 @@ void AMISSL_LIB_ENTRY CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
 	SB_ReleaseSemaphore(&AmiSSLMasterLock);
 }
 
-struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher))
+struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher))
 {
 	struct Library *result = NULL;
 
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if (LibAPIVersion == AMISSL_V097g)
-		;
+	if (LibAPIVersion == AMISSL_V097g || LibAPIVersion == AMISSL_V097m)
+		; // do nothing
 	else if (LibAPIVersion == AMISSL_V2)
 	{
 		switch(Cipher)
@@ -273,13 +278,13 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG
 				result = OpenLib(&DESBase,"libs:amissl/des_v2.library",2);
 				break;
 			case CIPHER_DH:
-				if(OpenAmiSSL(Self))
+				if(_AmiSSLMaster_OpenAmiSSL(Self))
 				{
 					result = DHBase;
 				}
 				break;
 			case CIPHER_DSA:
-				if(OpenAmiSSL(Self))
+				if(_AmiSSLMaster_OpenAmiSSL(Self))
 				{
 					result = DSABase;
 				}
@@ -312,7 +317,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG
 				result = OpenLib(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
 				break;
 			case CIPHER_RSA:
-				if(OpenAmiSSL(Self))
+				if(_AmiSSLMaster_OpenAmiSSL(Self))
 				{
 					result = RSABase;
 				}
@@ -328,7 +333,7 @@ struct Library * AMISSL_LIB_ENTRY OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG
 	return result;
 }
 
-void AMISSL_LIB_ENTRY CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
+void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	CloseLib(LibBase);
@@ -339,8 +344,8 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
 	traceline();
 
-	if (LibAPIVersion == AMISSL_V097g)
-		;
+	if (LibAPIVersion == AMISSL_V097m || LibAPIVersion == AMISSL_V097g)
+		; // do nothing
 	else if (LibAPIVersion == AMISSL_V2)
 	{
 		FlushLib(RSABase);

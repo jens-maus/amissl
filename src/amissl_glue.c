@@ -12573,3 +12573,42 @@ const ASN1_ITEM * AMISSL_LIB_ENTRY _AmiSSL_PROXY_CERT_INFO_EXTENSION_it(REG(a6, 
 	return(PROXY_CERT_INFO_EXTENSION_it());
 }
 
+int AMISSL_LIB_ENTRY _AmiSSL_BN_mod_exp_mont_consttime(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNUM *rr), REG(a1, const BIGNUM *a), REG(a2, const BIGNUM *p), REG(a3, const BIGNUM *m), REG(a4, BN_CTX *ctx), REG(a5, BN_MONT_CTX *in_mont))
+{
+  return(BN_mod_exp_mont_consttime(rr, a, p, m, ctx, in_mont));
+}
+
+BN_MONT_CTX * AMISSL_LIB_ENTRY _AmiSSL_BN_MONT_CTX_set_locked(REG(a6, __IFACE_OR_BASE), REG(a0, BN_MONT_CTX **pmont), REG(d0, int lock), REG(a1, const BIGNUM *mod), REG(a2, BN_CTX *ctx))
+{
+  return(BN_MONT_CTX_set_locked(pmont, lock, mod, ctx));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_PKCS1_MGF1(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char *mask), REG(d0, long len), REG(a1, const unsigned char *seed), REG(d1, long seedlen), REG(a2, const EVP_MD *dgst))
+{
+  return(PKCS1_MGF1(mask, len, seed, seedlen, dgst));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_RSA_padding_add_X931(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char *to), REG(d0, int tlen), REG(a1, const unsigned char *from), REG(d1, int flen))
+{
+  return(RSA_padding_add_X931(to, tlen, from, flen));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_RSA_padding_check_X931(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char *to), REG(d0, int tlen), REG(a1, const unsigned char *from), REG(d1, int flen), REG(d2, int num))
+{
+  return(RSA_padding_check_X931(to, tlen, from, flen, num));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_RSA_X931_hash_id(REG(a6, __IFACE_OR_BASE), REG(a0, int nid))
+{
+  return(RSA_X931_hash_id(nid));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_RSA_verify_PKCS1_PSS(REG(a6, __IFACE_OR_BASE), REG(a0, RSA *rsa), REG(a1, const unsigned char *mHash), REG(a2, const EVP_MD *Hash), REG(a3, const unsigned char *EM), REG(d1, int sLen))
+{
+  return(RSA_verify_PKCS1_PSS(rsa, mHash, Hash, EM, sLen));
+}
+
+int AMISSL_LIB_ENTRY _AmiSSL_RSA_padding_add_PKCS1_PSS(REG(a6, __IFACE_OR_BASE), REG(a0, RSA *rsa), REG(a1, unsigned char *EM), REG(a2, const unsigned char *mHash), REG(a3, const EVP_MD *Hash), REG(d1, int sLen))
+{
+  return(RSA_padding_add_PKCS1_PSS(rsa, EM, mHash, Hash, sLen));
+}

@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/des/des_old.h -*- mode:C; c-file-style: "eay" -*- */
 
 /* WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
@@ -87,10 +90,6 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_DES_H
 #define HEADER_DES_H

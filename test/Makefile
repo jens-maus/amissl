@@ -1,15 +1,19 @@
 CC = ppc-amigaos-gcc
 LD = ppc-amigaos-gcc
 
+ifeq ($(AmiSSL),)
+  AmiSSL=..
+endif
+
 CFLAGS = -I$(AmiSSL)/include -D__USE_INLINE__ -c
-LDFLAGS = -lauto -L$(AmiSSL)/lib -lamisslauto -lamisslstubs
+LDFLAGS = -lauto -L$(AmiSSL)/lib -lamisslauto -lamisslstubs -lc
 PROGS = vatest uitest https
 
 all: $(PROGS)
 
 clean:
 	-rm $(PROGS)
-	-rm *.o
+	-rm *.o *.map
 
 %.o: %.c
 	$(CC) $< $(CFLAGS) -o $@

@@ -1,4 +1,3 @@
-
 #ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
 #endif /* PROTO_AMISSL_H */

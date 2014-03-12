@@ -1,4 +1,7 @@
 * text=auto !eol
+/AUTHORS -text
+/COPYING -text
+/ChangeLog -text
 /Makefile eol=lf
 /SMakefile eol=lf
 certs/03e16f6c.0 eol=lf
@@ -140,7 +143,9 @@ include/inline/amisslmaster.h eol=lf
 include/inline4/amissl.h eol=lf
 include/inline4/amisslmaster.h eol=lf
 include/interfaces/amissl.h eol=lf
+include/interfaces/amissl.i -text
 include/interfaces/amisslmaster.h eol=lf
+include/interfaces/amisslmaster.i -text
 include/internal/amissl.h eol=lf
 include/internal/amissl_compiler.h eol=lf
 include/internal/debug.h eol=lf
@@ -172,6 +177,7 @@ include/openssl/err.h eol=lf
 include/openssl/evp.h eol=lf
 include/openssl/fips.h eol=lf
 include/openssl/fips_rand.h eol=lf
+include/openssl/fips_sha.h -text
 include/openssl/hmac.h eol=lf
 include/openssl/idea.h eol=lf
 include/openssl/krb5_asn.h eol=lf
@@ -219,6 +225,7 @@ include/pragmas/amissl_pragmas.h eol=lf
 include/pragmas/amisslmaster_pragmas.h eol=lf
 include/proto/amissl.h eol=lf
 include/proto/amisslmaster.h eol=lf
+include/sfd/amisslmaster_lib.sfd -text
 include/xml/amissl.xml eol=lf
 include/xml/amisslmaster.xml eol=lf
 libcmt/Makefile eol=lf
@@ -2177,19 +2184,22 @@ openssl/util/src-dep.pl eol=lf
 openssl/util/ssleay.num eol=lf
 openssl/util/tab_num.pl eol=lf
 openssl/util/x86asm.sh eol=lf
-src/amissl_68k.c eol=lf
 src/amissl_glue.c eol=lf
 src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
+src/amissl_m68k.c eol=lf
 src/amissl_vectors.c eol=lf
+src/amissl_vectors.h -text
 src/amisslinit.h eol=lf
 src/amissllib.c eol=lf
-src/amisslmaster_68k.c eol=lf
 src/amisslmaster_library.c eol=lf
 src/amisslmaster_library_os4.c eol=lf
+src/amisslmaster_m68k.c eol=lf
 src/amisslmaster_vectors.c eol=lf
+src/amisslmaster_vectors.h -text
 src/autoinit_amissl_main.c eol=lf
 src/baserel.c eol=lf
+src/libStdVec.c -text
 src/libinit.c eol=lf
 src/libstubs.c eol=lf
 test/Makefile eol=lf

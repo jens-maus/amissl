@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/err/err.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -55,10 +58,6 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_ERR_H
 #define HEADER_ERR_H

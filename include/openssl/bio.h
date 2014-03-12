@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/bio/bio.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -55,10 +58,6 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_BIO_H
 #define HEADER_BIO_H
@@ -405,15 +404,15 @@ typedef struct bio_f_buffer_ctx_struct
 #define BIO_set_fd(b,fd,c)	BIO_int_ctrl(b,BIO_C_SET_FD,c,fd)
 #define BIO_get_fd(b,c)		BIO_ctrl(b,BIO_C_GET_FD,0,(char *)c)
 
+#ifndef AMISSL
 #ifndef OPENSSL_NO_FP_API
 #define BIO_set_fp(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
 #endif /* !OPENSSL_NO_FP_API */
-
-#ifdef AMISSL
+#else
 #define BIO_set_fp_amiga(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp_amiga(b,fpp)		BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#endif /* AMISSL */
+#endif /* !AMISSL */
 
 #define BIO_seek(b,ofs)	(int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
 #define BIO_tell(b)	(int)BIO_ctrl(b,BIO_C_FILE_TELL,0,NULL)

@@ -1,0 +1,42 @@
+------------------------------
+AmiSSL Open Source - ChangeLog
+------------------------------
+
+$Id$
+$URL$
+
+2014-03-12 Jens Maus <mail@jens-maus.de>
+
+  * misc: adapted all AmiSSL related changes to match and integrate the change from
+    OpenSSL 0.9.7g to 0.9.7m. Modified the build environment to get everything more
+    smoothly compiled. Also updated the include/xml interface desription files to
+    match idltool 53.7 functionality so that even the m68k vector table source files
+    are generated via idltool.
+  * opemssl, misc: merged the changes between 0.9.7g and 0.9.7m into our 'openssl'
+    top-level directory.
+  * vendor/openssl-0.9.7m: put the latest OpenSSL 0.9.7 sources into a separate
+    vendor branch
+
+===== OLD RELEASE NOTES =====
+
+AmiSSL 3.7 (2.4.2006)
+
+- Fixed a problem in amisslmaster.library where init and cleanup routines
+  might not get called a matching number of times.
+- The expunge routine for amissl.library was cleaning up all currently hashed
+  states, which is fine, but the pool from which these states were allocated was
+  long gone at that time causing spectacular fireworks. Removed the cleanup from
+  expunge routine and restored the one from close routine, but changed it to
+  free only those states that belong to it (bug #2988).
+- The 68k version now uses modified SAS/C libinit code which calls CacheClearE()
+  instead of CacheClearU() to improve performance.
+
+AmiSSL 3.6 (4.3.2006)
+
+- The close routine for amissl.library was cleaning up all currently hashed
+states, including those belonging to other openers of the library. This could
+lead to a crash when two programs were using AmiSSL (bug #2960).
+
+AmiSSL 3.5 (14.6.2005)
+
+- First v3 release, port of OpenSSL 0.9.7g.

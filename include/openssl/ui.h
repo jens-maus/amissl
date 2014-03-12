@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/ui/ui.h -*- mode:C; c-file-style: "eay" -*- */
 /* Written by Richard Levitte (richard@levitte.org) for the OpenSSL
  * project 2001.
@@ -55,10 +58,6 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_UI_H
 #define HEADER_UI_H

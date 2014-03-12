@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/crypto.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -55,10 +58,6 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_CRYPTO_H
 #define HEADER_CRYPTO_H
@@ -438,12 +437,9 @@ void CRYPTO_mem_leaks_cb(CRYPTO_MEM_LEAK_CB *cb);
 
 /* die if we have to */
 void OpenSSLDie(const char *file,int line,const char *assertion);
-#define OPENSSL_assert(e)	((e) ? (void)0 : OpenSSLDie(__FILE__, __LINE__, #e))
+#define OPENSSL_assert(e)	(void)((e) ? 0 : (OpenSSLDie(__FILE__, __LINE__, #e),1))
 
 #ifdef OPENSSL_FIPS
-int FIPS_mode(void);
-void *FIPS_rand_check(void);
-
 #define FIPS_ERROR_IGNORED(alg) OpenSSLDie(__FILE__, __LINE__, \
 		alg " previous FIPS forbidden algorithm error ignored");
 

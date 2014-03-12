@@ -30,6 +30,18 @@ cd ..
 
 make -f OS4/Makefile.one AmiSSL=$PWD/.. GCCVER=$GCCVER
 
+for header in outinc/openssl/*; do
+
+  outfile=`basename ${header}`
+  cat > ../include/openssl/${outfile} << EOF
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
+EOF
+
+  cat ${header} >>../include/openssl/${outfile}
+done
+
 cd ..
 
 cd libcmt

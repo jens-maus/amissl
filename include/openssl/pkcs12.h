@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* pkcs12.h */
 /* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
  * project 1999.
@@ -55,10 +58,6 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_PKCS12_H
 #define HEADER_PKCS12_H
@@ -295,12 +294,15 @@ void ERR_load_PKCS12_strings(void);
 #define PKCS12_F_PKCS12_PBE_KEYIVGEN			 120
 #define PKCS12_F_PKCS12_SETUP_MAC			 122
 #define PKCS12_F_PKCS12_SET_MAC				 123
+#define PKCS12_F_PKCS12_UNPACK_AUTHSAFES		 129
+#define PKCS12_F_PKCS12_UNPACK_P7DATA			 130
 #define PKCS12_F_PKCS8_ADD_KEYUSAGE			 124
 #define PKCS12_F_PKCS8_ENCRYPT				 125
 #define PKCS12_F_VERIFY_MAC				 126
 
 /* Reason codes. */
 #define PKCS12_R_CANT_PACK_STRUCTURE			 100
+#define PKCS12_R_CONTENT_TYPE_NOT_DATA			 121
 #define PKCS12_R_DECODE_ERROR				 101
 #define PKCS12_R_ENCODE_ERROR				 102
 #define PKCS12_R_ENCRYPT_ERROR				 103

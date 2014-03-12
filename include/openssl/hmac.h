@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/hmac/hmac.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -55,10 +58,6 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_HMAC_H
 #define HEADER_HMAC_H
 
@@ -68,7 +67,11 @@
 
 #include <openssl/evp.h>
 
+#ifdef OPENSSL_FIPS
+#define HMAC_MAX_MD_CBLOCK	128
+#else
 #define HMAC_MAX_MD_CBLOCK	64
+#endif
 
 #ifdef  __cplusplus
 extern "C" {

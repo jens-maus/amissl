@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* e_os2.h */
 /* ====================================================================
  * Copyright (c) 1998-2000 The OpenSSL Project.  All rights reserved.
@@ -54,10 +57,6 @@
  */
 
 #include <openssl/opensslconf.h>
-
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
 
 #ifndef HEADER_E_OS2_H
 #define HEADER_E_OS2_H
@@ -241,8 +240,8 @@ extern "C" {
 # define OPENSSL_IMPORT globalref
 # define OPENSSL_GLOBAL globaldef
 #elif defined(OPENSSL_SYS_WINDOWS) && defined(OPENSSL_OPT_WINDLL)
-# define OPENSSL_EXPORT extern _declspec(dllexport)
-# define OPENSSL_IMPORT extern _declspec(dllimport)
+# define OPENSSL_EXPORT extern __declspec(dllexport)
+# define OPENSSL_IMPORT extern __declspec(dllimport)
 # define OPENSSL_GLOBAL
 #elif defined(AMISSL)
 # define OPENSSL_EXPORT extern

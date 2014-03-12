@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* ssl/tls1.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -56,10 +59,6 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_TLS1_H 
 #define HEADER_TLS1_H 
 
@@ -69,7 +68,7 @@
 extern "C" {
 #endif
 
-#define TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES	1
+#define TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES	0
 
 #define TLS1_VERSION			0x0301
 #define TLS1_VERSION_MAJOR		0x03

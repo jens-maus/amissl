@@ -1,1 +1,12 @@
+/*.library
+/*.map
+/.AppleDouble
+/OS4
+/lib
+/obj
+openssl/MINFO
+openssl/Makefile
+openssl/OS4
+openssl/crypto/buildinf.h
 openssl/crypto/opensslconf.h
+openssl/outinc

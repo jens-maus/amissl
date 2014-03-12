@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* crypto/dh/dh.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
@@ -56,10 +59,6 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_DH_H
 #define HEADER_DH_H
 
@@ -74,7 +73,18 @@
 #include <openssl/crypto.h>
 #include <openssl/ossl_typ.h>
 	
-#define DH_FLAG_CACHE_MONT_P	0x01
+#ifndef OPENSSL_DH_MAX_MODULUS_BITS
+# define OPENSSL_DH_MAX_MODULUS_BITS	10000
+#endif
+
+#define DH_FLAG_CACHE_MONT_P     0x01
+#define DH_FLAG_NO_EXP_CONSTTIME 0x02 /* new with 0.9.7h; the built-in DH
+                                       * implementation now uses constant time
+                                       * modular exponentiation for secret exponents
+                                       * by default. This flag causes the
+                                       * faster variable sliding window method to
+                                       * be used for all exponents.
+                                       */
 
 #ifdef  __cplusplus
 extern "C" {
@@ -204,6 +214,7 @@ void ERR_load_DH_strings(void);
 /* Reason codes. */
 #define DH_R_BAD_GENERATOR				 101
 #define DH_R_NO_PRIVATE_VALUE				 100
+#define DH_R_MODULUS_TOO_LARGE                           103
 
 #ifdef  __cplusplus
 }

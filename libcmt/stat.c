@@ -221,7 +221,7 @@ int stat(const char *name, struct stat *st)
     if ( (ed = ExamineObjectTags(EX_LockInput,lock,TAG_DONE)) ) {
       __dostat(lock, ed, st);
       FreeDosObject(DOS_EXAMINEDATA,ed);
-      st->st_dev = (dev_t)((struct FileLock *)BADDR(lock))->fl_Task;
+      st->st_dev = (dev_t)((struct Lock *)BADDR(lock))->fl_Port;
       rc = 0;
     } else {
       SetAmiSSLerrno(__io2errno(IoErr()));
@@ -285,7 +285,7 @@ int lstat(const char *name, struct stat *st)
         while((ed = ExamineDir(dircontext))) {
           if (Stricmp(pp, ed->Name) == 0) {
 	    __dostat(lock, ed, st);
-	    st->st_dev = (dev_t)((struct FileLock *)BADDR(lock))->fl_Task;
+	    st->st_dev = (dev_t)((struct Lock *)BADDR(lock))->fl_Port;
 	    rc = 0;
 	    break;
 	  }

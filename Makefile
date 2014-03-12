@@ -12,23 +12,23 @@ ifeq ($(AmiSSL),)
 endif
 
 VERSION=3
-VERSIONNAME=097g
-AMISSLREVISION=7
-AMISSLMASTERREVISION=7
-AMISSLDATE=2.4.2006
-AMISSLMASTERDATE=2.4.2006
+VERSIONNAME=097m
+AMISSLREVISION=8
+AMISSLMASTERREVISION=8
+AMISSLDATE=09.03.2014
+AMISSLMASTERDATE=09.03.2014
 
-LFLAGS=-nostdlib -mbaserel
-OPT= -O2
+LFLAGS=-mcrt=clib2 -nostdlib -mbaserel
+OPT=-O2 
 INCLUDE = -I$(AmiSSL)/include -I$(AmiSSL)/libcmt/include
-CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL_COMPILE \
+CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL -DAMISSL_COMPILE \
        -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
        -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
        -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
        -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(LIBCPU) \
        -Wno-pointer-sign
-OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_68k.o
-LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
+OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_m68k.o
+LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lgcc
 
 all: $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a amissl_v$(VERSIONNAME).library amisslmaster.library
 
@@ -41,6 +41,11 @@ distclean: clean cleanlibs
 	-rm -f openssl/MINFO
 	-rm -f openssl/Makefile
 	-rm -f openssl/crypto/opensslconf.h
+	-rm -f openssl/openssl.pc
+	-rm -f openssl/crypto/buildinf.h
+	-rm -rf openssl/outinc
+	-rm -rf obj lib
+	-rm -rf *.library *.map
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	ppc-amigaos-gcc-4.0.3 $(GCCVER) -c $< -o $@ $(CFLAGS)
@@ -48,18 +53,18 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
-$(OBJ_D)/amissl_68k.o: $(SRC_D)/amissl_68k.c
+$(OBJ_D)/amissl_m68k.o: $(SRC_D)/amissl_m68k.c
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
-$(OBJ_D)/amisslmaster_68k.o: $(SRC_D)/amisslmaster_68k.c
+$(OBJ_D)/amisslmaster_m68k.o: $(SRC_D)/amisslmaster_m68k.c
 
 amissl_v$(VERSIONNAME).library: $(OBJS) libcmt/libcmt.a $(LIBSSL) $(LIBCRYPTO)
 	ppc-amigaos-gcc-4.0.3 -o $@ $(LFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
 #	cp $@ /cygdrive/D/FTP
 
-amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_68k.o
-	ppc-amigaos-gcc-4.0.3 -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
+amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_m68k.o
+	ppc-amigaos-gcc-4.0.3 -o $@ $(LFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_m68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
 #	ppc-amigaos-strip $@
 #	cp $@ /cygdrive/D/FTP
 
@@ -67,7 +72,7 @@ $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	ppc-amigaos-gcc-4.0.3 -mcrt=clib2 -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
-	ppc-amigaos-gcc-4.0.3 -mcrt=clib2 -c $< -o $@ $(INCLUDE) -Wno-pointer-sign
+	ppc-amigaos-gcc-4.0.3 -mcrt=clib2 -c $< -o $@ -DAMISSL $(INCLUDE) -Wno-pointer-sign
 
 $(LIB_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	ppc-amigaos-ar r $@ $(OBJ_D)/autoinit_amissl_main.o

@@ -1,3 +1,6 @@
+#ifndef PROTO_AMISSL_H
+#include <proto/amissl.h>
+#endif /* PROTO_AMISSL_H */
 /* ====================================================================
  * Copyright (c) 2003 The OpenSSL Project.  All rights reserved.
  *
@@ -47,10 +50,6 @@
  *
  */
 
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-
 #ifndef HEADER_FIPS_RAND_H
 #define HEADER_FIPS_RAND_H
 
@@ -68,7 +67,7 @@ void FIPS_rand_seed(const void *buf, FIPS_RAND_SIZE_T num);
 /* NB: this returns true if _partially_ seeded */
 int FIPS_rand_seeded(void);
 
-RAND_METHOD *FIPS_rand_method(void);
+const RAND_METHOD *FIPS_rand_method(void);
 
 #ifdef  __cplusplus
 }

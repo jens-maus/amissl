@@ -1,6 +1,12 @@
 #ifndef PROTO_AMISSLMASTER_H
 #define PROTO_AMISSLMASTER_H
 
+/*
+**	$Id$
+**
+**	Prototype/inline/pragma header file combo
+*/
+
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
 #endif
@@ -8,7 +14,11 @@
 /****************************************************************************/
 
 #ifndef __NOLIBBASE__
-extern struct Library *AmiSSLMasterBase;
+ #ifndef __USE_BASETYPE__
+  extern struct Library * AmiSSLMasterBase;
+ #else
+  extern struct Library * AmiSSLMasterBase;
+ #endif /* __USE_BASETYPE__ */
 #endif /* __NOLIBBASE__ */
 
 /****************************************************************************/
@@ -31,14 +41,14 @@ extern struct Library *AmiSSLMasterBase;
  #if defined(__GNUC__)
   #ifndef __PPC__
    #include <inline/amisslmaster.h>
-  #else
+  #else /* __PPC__ */
    #include <ppcinline/amisslmaster.h>
   #endif /* __PPC__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/amisslmaster_protos.h>
   #endif /* __PPC__ */
- #else
+ #else /* __GNUC__ */
   #include <pragmas/amisslmaster_pragmas.h>
  #endif /* __GNUC__ */
 #endif /* __amigaos4__ */
