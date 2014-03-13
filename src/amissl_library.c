@@ -332,7 +332,7 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 }
 #endif
 
-static BOOL AMISSL_COMMON_DATA DisableIDEA, DisableMDC2, DisableRC5;
+static BOOL AMISSL_COMMON_DATA DisableRC5;
 
 long IsCipherAvailable(long cipher)
 {
@@ -340,10 +340,6 @@ long IsCipherAvailable(long cipher)
 
 	switch(cipher)
 	{
-		case CIPHER_IDEA:
-			is_available = !DisableIDEA;
-			break;
-
 		case CIPHER_RC5:
 			is_available = !DisableRC5;
 			break;
@@ -359,6 +355,8 @@ long IsCipherAvailable(long cipher)
 		case CIPHER_RC4:
 		case CIPHER_RIPEMD:
 		case CIPHER_SHA:
+    case CIPHER_IDEA:
+    case CIPHER_MDC2:
 			is_available = TRUE;
 			break;
 
@@ -370,10 +368,6 @@ long IsCipherAvailable(long cipher)
 		case CIPHER_RSA:
 			is_available = IsCipherAvailable(CIPHER_SHA)
 			               && IsCipherAvailable(CIPHER_MD5);
-			break;
-
-		case CIPHER_MDC2:
-			is_available = !DisableMDC2 && IsCipherAvailable(CIPHER_DES);
 			break;
 
 		default:
@@ -583,19 +577,6 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		{
 			GMTOffset = locale->loc_GMTOffset;
 
-			DisableIDEA = CompareCountry(locale->loc_CountryCode, "AUT", "AU", "A")     /* Austria */
-			              || CompareCountry(locale->loc_CountryCode, "FRA", "FR", "F")  /* France */
-			              || CompareCountry(locale->loc_CountryCode, "DEU", "DE", "D")  /* Germany */
-			              || CompareCountry(locale->loc_CountryCode, "ITA", "IT", "I")  /* Italy */
-			              || CompareCountry(locale->loc_CountryCode, "JPN", "JP", "J")  /* Japan */
-			              || CompareCountry(locale->loc_CountryCode, "NLD", "NL", NULL) /* The Netherlands */
-			              || CompareCountry(locale->loc_CountryCode, "ESP", "ES", "E")  /* Spain */
-			              || CompareCountry(locale->loc_CountryCode, "SWE", "SE", "S")  /* Sweden */
-			              || CompareCountry(locale->loc_CountryCode, "CHE", "CH", NULL) /* Switzerland */
-			              || CompareCountry(locale->loc_CountryCode, "GBR", "GB", NULL) /* United Kingdom */
-			              || CompareCountry(locale->loc_CountryCode, "USA", "US", NULL) /* USA */;
-
-			DisableMDC2 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
 			DisableRC5 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
 
 			CloseLocale(locale);

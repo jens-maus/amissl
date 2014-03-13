@@ -5,6 +5,14 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-03-13 Jens Maus <mail@jens-maus.de>
+
+  * src/amissl_library.c: removed the restrictions of the IDEA and MDC2 cipher due
+    to patents being in place. In fact, the IDEA patent lasted only till 2012
+    (see http://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm) and
+    the MDC2 cipher patent expired in 2002 (see http://en.wikipedia.org/wiki/MDC-2).
+    Also note that the RC5 cipher patent is also going to be expire in 2015.
+
 2014-03-12 Jens Maus <mail@jens-maus.de>
 
   * misc: adapted all AmiSSL related changes to match and integrate the change from
