@@ -98,11 +98,12 @@ clock_t clock(void)
 
 AMISSL_STATE *CreateAmiSSLState(void)
 {
-	long pid = (long)FindTask(NULL);
+	unsigned long pid;
 	AMISSL_STATE *ret;
 
 	ObtainSemaphore(&openssl_cs);
 
+  pid = (unsigned long)FindTask(NULL);
 	ret = (AMISSL_STATE *)malloc(sizeof(AMISSL_STATE));
 
 	if (ret != NULL)
@@ -186,6 +187,17 @@ static void amigaos_locking_callback(int mode,int type,char *file,int line)
 		ObtainSemaphore(&(lock_cs[type]));
 	else
 		ReleaseSemaphore(&(lock_cs[type]));
+}
+
+static unsigned long amigaos_thread_id(void)
+{
+  unsigned long ret;
+
+	ObtainSemaphore(&openssl_cs);
+  ret = (unsigned long)FindTask(NULL);
+	ReleaseSemaphore(&openssl_cs);
+
+  return(ret);
 }
 
 static void ThreadGroupStateCleanup(long Key, AMISSL_STATE *a)
@@ -480,6 +492,8 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 	CloseLibrary((struct Library *)UtilityBase);
 	CloseLibrary((struct Library *)IntuitionBase);
 
+  CRYPTO_set_locking_callback(NULL);
+
 	FreeVec(lock_cs);
 
 	if(__pool)
@@ -541,19 +555,20 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 	ReleaseSemaphore(&openssl_cs);
 
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
-	    && (lock_cs = AllocVec(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, MEMF_CLEAR)))
+	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
 	{
 		struct Locale *locale;
 		struct DateStamp ds;
 		int i;
 
-		for (i=0; i<CRYPTO_NUM_LOCKS; i++)
+		for (i=0; i<CRYPTO_num_locks(); i++)
 		{
 			InitSemaphore(&lock_cs[i]);
 		}
 
 		InitSemaphore(&__mem_cs);
 
+		CRYPTO_set_id_callback((unsigned long (*)())amigaos_thread_id);
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
 
 		DateStamp(&ds);
