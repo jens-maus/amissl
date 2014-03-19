@@ -28,7 +28,7 @@ CFLAGS=$(INCLUDE) -mbaserel -mcrt=clib2 $(OPT) -DAMISSL -DAMISSL_COMPILE \
        -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(LIBCPU) \
        -Wno-pointer-sign
 OBJS= $(OBJ_D)/amissl_library_os4.o $(OBJ_D)/amissl_library.o $(OBJ_D)/amissl_glue.o $(OBJ_D)/amissl_m68k.o
-LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a -lc -lgcc
+LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
 
 all: $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a amissl_v$(VERSIONNAME).library amisslmaster.library
 

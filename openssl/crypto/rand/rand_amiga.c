@@ -4,17 +4,38 @@
 
 #ifdef AMIGA
 
-#ifndef __amigaos4__
-#define GetInterface(a, b, c, d) 1
-#define DropInterface(x)
-#endif /* !__amigaos4__ */
-
 #include <proto/exec.h>
 #include <proto/timer.h>
 #include <devices/timer.h>
 
 /* Maximum number of attempts to get a delay of 1 microsecond that is not equal to 0 */
 #define MAX_ATTEMPTS 1000
+
+#ifdef __amigaos4__
+
+#ifdef CreateMsgPort
+#undef CreateMsgPort
+#endif
+#define CreateMsgPort() AllocSysObject(ASOT_PORT,NULL)
+#ifdef DeleteMsgPort
+#undef DeleteMsgPort
+#endif
+#define DeleteMsgPort(msgPort) FreeSysObject(ASOT_PORT,msgPort)
+#ifdef CreateIORequest
+#undef CreateIORequest
+#endif
+#define CreateIORequest(ioReplyPort,size) AllocSysObjectTags(ASOT_IOREQUEST,ASOIOR_ReplyPort,ioReplyPort,ASOIOR_Size,size,TAG_DONE)
+#ifdef DeleteIORequest
+#undef DeleteIORequest
+#endif
+#define DeleteIORequest(ioReq) FreeSysObject(ASOT_IOREQUEST,ioReq)
+
+#else
+
+#define GetInterface(a, b, c, d) 1
+#define DropInterface(x)
+
+#endif /* !__amigaos4__ */
 
 int RAND_poll(void)
 {

@@ -668,7 +668,7 @@ void OPENSSL_showfatal (const char *fmta,...)
   char error[512];
 
   va_start(ap, fmta);
-  vsnprintf(error, sizeof(error), fmta, ap);
+  BIO_vsnprintf(error, sizeof(error), fmta, ap);
   va_end(ap);
 
   ErrReq.es_StructSize   = sizeof(struct EasyStruct);
@@ -679,7 +679,6 @@ void OPENSSL_showfatal (const char *fmta,...)
 
   // Open an Easy Requester
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
-  Wait(0);
 }
 #endif /* !AMISSL */
 #endif
@@ -689,7 +688,11 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 	OPENSSL_showfatal(
 		"%s(%d): OpenSSL internal error, assertion failed: %s\n",
 		file,line,assertion);
+#ifndef AMISSL
 	abort();
+#else
+	Wait(0);
+#endif /* !AMISSL */
 	}
 
 #ifndef AMISSL

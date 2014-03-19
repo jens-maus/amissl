@@ -138,7 +138,7 @@ AMISSL_STATE *CreateAmiSSLState(void)
 #define SB_ObtainSemaphore  ObtainSemaphore
 #define SB_ReleaseSemaphore ReleaseSemaphore
 #define SB_FindTask         FindTask
-#define SB_AllocVec         AllocVec
+#define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, TAG_DONE)
 #define SB_FreeVec          FreeVec
 
 #else
@@ -496,8 +496,13 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 
 	FreeVec(lock_cs);
 
+#ifdef __amigaos4__
+	if(__pool)
+		FreeSysObject(ASOT_MEMPOOL, __pool);
+#else
 	if(__pool)
 		DeletePool(__pool);
+#endif
 }
 
 void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
@@ -554,8 +559,13 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 	ReleaseSemaphore(&openssl_cs);
 
+#ifdef __amigaos4__
+	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
+	    && (lock_cs = AllocVecTags(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
+#else
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
+#endif
 	{
 		struct Locale *locale;
 		struct DateStamp ds;
