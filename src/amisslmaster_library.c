@@ -49,8 +49,8 @@ struct Library *AmiSSLBase;
 struct AmiSSLIFace *IAmiSSL;
 #endif
 
-LONG LibAPIVersion;
-LONG LibUsesOpenSSLStructs;
+LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
+LONG LibUsesOpenSSLStructs = 0;
 
 DeclareSemaphore(AmiSSLMasterLock);
 
@@ -175,10 +175,16 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BA
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 	
-	if(LibAPIVersion == AMISSL_V097m || LibAPIVersion == AMISSL_V097g)
+	if(LibAPIVersion == AMISSL_V097m)
   {
-    // v097m and v097g are API compatible. Honor that and try 'm' first and afterwards
-    // 'g'.
+    // if an application requests 0.9.7m we try to open newer 0.9.7 versions until 0.9.7m
+    // as they are API compatible
+	  OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3);
+  }
+  else if(LibAPIVersion == AMISSL_V097g)
+  {
+    // if an application requests 0.9.7g we try to open newer 0.9.7 versions until 0.9.7m
+    // as they are API compatible
 		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3) == NULL)
 		  OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
   }
