@@ -18,7 +18,7 @@ EVP digest routines
  EVP_MD_CTX *EVP_MD_CTX_create(void);
 
  int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, ENGINE *impl);
- int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d, unsigned int cnt);
+ int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d, size_t cnt);
  int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md,
         unsigned int *s);
 
@@ -64,9 +64,9 @@ EVP digest routines
 
 The EVP digest routines are a high level interface to message digests.
 
-EVP_MD_CTX_init() initializes digest contet B<ctx>.
+EVP_MD_CTX_init() initializes digest context B<ctx>.
 
-EVP_MD_CTX_create() allocates, initializes and returns a digest contet.
+EVP_MD_CTX_create() allocates, initializes and returns a digest context.
 
 EVP_DigestInit_ex() sets up digest context B<ctx> to use a digest
 B<type> from ENGINE B<impl>. B<ctx> must be initialized before calling this
@@ -102,7 +102,7 @@ the passed context B<ctx> does not have to be initialized, and it always
 uses the default digest implementation.
 
 EVP_DigestFinal() is similar to EVP_DigestFinal_ex() except the digest
-contet B<ctx> is automatically cleaned up.
+context B<ctx> is automatically cleaned up.
 
 EVP_MD_CTX_copy() is similar to EVP_MD_CTX_copy_ex() except the destination
 B<out> does not have to be initialized.

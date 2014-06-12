@@ -1,12 +1,28 @@
-0			: CCITT			: ccitt
+# CCITT was renamed to ITU-T quite some time ago
+0			: ITU-T			: itu-t
+!Alias ccitt itu-t
 
 1			: ISO			: iso
 
-2			: JOINT-ISO-CCITT	: joint-iso-ccitt
+2			: JOINT-ISO-ITU-T	: joint-iso-itu-t
+!Alias joint-iso-ccitt joint-iso-itu-t
 
 iso 2			: member-body		: ISO Member Body
 
-joint-iso-ccitt 5 1 5	: selected-attribute-types	: Selected Attribute Types
+iso 3			: identified-organization
+
+# HMAC OIDs
+identified-organization 6 1 5 5 8 1 1	: HMAC-MD5	: hmac-md5
+identified-organization 6 1 5 5 8 1 2	: HMAC-SHA1	: hmac-sha1
+
+identified-organization 132	: certicom-arc
+
+joint-iso-itu-t 23	: international-organizations	: International Organizations
+
+international-organizations 43	: wap
+wap 1			: wap-wsg
+
+joint-iso-itu-t 5 1 5	: selected-attribute-types	: Selected Attribute Types
 
 selected-attribute-types 55	: clearance
 
@@ -24,12 +40,34 @@ ISO-US 10045		: ansi-X9-62		: ANSI X9.62
 !Alias id-fieldType ansi-X9-62 1
 X9-62_id-fieldType 1		: prime-field
 X9-62_id-fieldType 2		: characteristic-two-field
-# ... characteristic-two-field OID subtree
+X9-62_characteristic-two-field 3 : id-characteristic-two-basis
+X9-62_id-characteristic-two-basis 1 : onBasis
+X9-62_id-characteristic-two-basis 2 : tpBasis
+X9-62_id-characteristic-two-basis 3 : ppBasis
 !Alias id-publicKeyType ansi-X9-62 2
 X9-62_id-publicKeyType 1	: id-ecPublicKey
 !Alias ellipticCurve ansi-X9-62 3
 !Alias c-TwoCurve X9-62_ellipticCurve 0
-# ... characteristic 2 curve OIDs
+X9-62_c-TwoCurve 1		: c2pnb163v1
+X9-62_c-TwoCurve 2		: c2pnb163v2
+X9-62_c-TwoCurve 3		: c2pnb163v3
+X9-62_c-TwoCurve 4		: c2pnb176v1
+X9-62_c-TwoCurve 5		: c2tnb191v1
+X9-62_c-TwoCurve 6		: c2tnb191v2
+X9-62_c-TwoCurve 7		: c2tnb191v3
+X9-62_c-TwoCurve 8		: c2onb191v4
+X9-62_c-TwoCurve 9		: c2onb191v5
+X9-62_c-TwoCurve 10		: c2pnb208w1
+X9-62_c-TwoCurve 11		: c2tnb239v1
+X9-62_c-TwoCurve 12		: c2tnb239v2
+X9-62_c-TwoCurve 13		: c2tnb239v3
+X9-62_c-TwoCurve 14		: c2onb239v4
+X9-62_c-TwoCurve 15		: c2onb239v5
+X9-62_c-TwoCurve 16		: c2pnb272w1
+X9-62_c-TwoCurve 17		: c2pnb304w1
+X9-62_c-TwoCurve 18		: c2tnb359v1
+X9-62_c-TwoCurve 19		: c2pnb368w1
+X9-62_c-TwoCurve 20		: c2tnb431r1
 !Alias primeCurve X9-62_ellipticCurve 1
 X9-62_primeCurve 1	 	: prime192v1
 X9-62_primeCurve 2	 	: prime192v2
@@ -41,7 +79,67 @@ X9-62_primeCurve 7	 	: prime256v1
 !Alias id-ecSigType ansi-X9-62 4
 !global
 X9-62_id-ecSigType 1		: ecdsa-with-SHA1
+X9-62_id-ecSigType 2		: ecdsa-with-Recommended
+X9-62_id-ecSigType 3		: ecdsa-with-Specified
+ecdsa-with-Specified 1		: ecdsa-with-SHA224
+ecdsa-with-Specified 2		: ecdsa-with-SHA256
+ecdsa-with-Specified 3		: ecdsa-with-SHA384
+ecdsa-with-Specified 4		: ecdsa-with-SHA512
 
+# SECG curve OIDs from "SEC 2: Recommended Elliptic Curve Domain Parameters"
+# (http://www.secg.org/)
+!Alias secg_ellipticCurve certicom-arc 0
+# SECG prime curves OIDs
+secg-ellipticCurve 6		: secp112r1
+secg-ellipticCurve 7		: secp112r2
+secg-ellipticCurve 28		: secp128r1
+secg-ellipticCurve 29		: secp128r2
+secg-ellipticCurve 9		: secp160k1
+secg-ellipticCurve 8		: secp160r1
+secg-ellipticCurve 30		: secp160r2
+secg-ellipticCurve 31		: secp192k1
+# NOTE: the curve secp192r1 is the same as prime192v1 defined above
+#       and is therefore omitted
+secg-ellipticCurve 32		: secp224k1
+secg-ellipticCurve 33		: secp224r1
+secg-ellipticCurve 10		: secp256k1
+# NOTE: the curve secp256r1 is the same as prime256v1 defined above
+#       and is therefore omitted
+secg-ellipticCurve 34		: secp384r1
+secg-ellipticCurve 35		: secp521r1
+# SECG characteristic two curves OIDs
+secg-ellipticCurve 4		: sect113r1
+secg-ellipticCurve 5		: sect113r2
+secg-ellipticCurve 22		: sect131r1
+secg-ellipticCurve 23		: sect131r2
+secg-ellipticCurve 1		: sect163k1
+secg-ellipticCurve 2		: sect163r1
+secg-ellipticCurve 15		: sect163r2
+secg-ellipticCurve 24		: sect193r1
+secg-ellipticCurve 25		: sect193r2
+secg-ellipticCurve 26		: sect233k1
+secg-ellipticCurve 27		: sect233r1
+secg-ellipticCurve 3		: sect239k1
+secg-ellipticCurve 16		: sect283k1
+secg-ellipticCurve 17		: sect283r1
+secg-ellipticCurve 36		: sect409k1
+secg-ellipticCurve 37		: sect409r1
+secg-ellipticCurve 38		: sect571k1
+secg-ellipticCurve 39		: sect571r1
+
+# WAP/TLS curve OIDs (http://www.wapforum.org/)
+!Alias wap-wsg-idm-ecid wap-wsg 4
+wap-wsg-idm-ecid 1	: wap-wsg-idm-ecid-wtls1
+wap-wsg-idm-ecid 3	: wap-wsg-idm-ecid-wtls3
+wap-wsg-idm-ecid 4	: wap-wsg-idm-ecid-wtls4
+wap-wsg-idm-ecid 5	: wap-wsg-idm-ecid-wtls5
+wap-wsg-idm-ecid 6	: wap-wsg-idm-ecid-wtls6
+wap-wsg-idm-ecid 7	: wap-wsg-idm-ecid-wtls7
+wap-wsg-idm-ecid 8	: wap-wsg-idm-ecid-wtls8
+wap-wsg-idm-ecid 9	: wap-wsg-idm-ecid-wtls9
+wap-wsg-idm-ecid 10	: wap-wsg-idm-ecid-wtls10
+wap-wsg-idm-ecid 11	: wap-wsg-idm-ecid-wtls11
+wap-wsg-idm-ecid 12	: wap-wsg-idm-ecid-wtls12
 
 
 ISO-US 113533 7 66 10	: CAST5-CBC		: cast5-cbc
@@ -52,6 +150,10 @@ ISO-US 113533 7 66 10	: CAST5-CBC		: cast5-cbc
 			: CAST5-OFB		: cast5-ofb
 !Cname pbeWithMD5AndCast5-CBC
 ISO-US 113533 7 66 12	:			: pbeWithMD5AndCast5CBC
+
+# Macs for CMP and CRMF
+ISO-US 113533 7 66 13	: id-PasswordBasedMAC	: password based MAC
+ISO-US 113533 7 66 30	: id-DHBasedMac		: Diffie-Hellman based MAC
 
 ISO-US 113549		: rsadsi		: RSA Data Security, Inc.
 
@@ -149,6 +251,8 @@ id-smime-ct 5		: id-smime-ct-TDTInfo
 id-smime-ct 6		: id-smime-ct-contentInfo
 id-smime-ct 7		: id-smime-ct-DVCSRequestData
 id-smime-ct 8		: id-smime-ct-DVCSResponseData
+id-smime-ct 9		: id-smime-ct-compressedData
+id-smime-ct 27		: id-ct-asciiTextWithCRLF
 
 # S/MIME Attributes
 id-smime-aa 1		: id-smime-aa-receiptRequest
@@ -215,6 +319,7 @@ pkcs9 20		:			: friendlyName
 pkcs9 21		:			: localKeyID
 !Cname ms-csp-name
 1 3 6 1 4 1 311 17 1	: CSPName		: Microsoft CSP Name
+1 3 6 1 4 1 311 17 2	: LocalKeySet		: Microsoft Local Key set
 !Alias certTypes pkcs9 22
 certTypes 1		:			: x509Certificate
 certTypes 2		:			: sdsiCertificate
@@ -250,7 +355,15 @@ rsadsi 2 2		: MD2			: md2
 rsadsi 2 4		: MD4			: md4
 rsadsi 2 5		: MD5			: md5
 			: MD5-SHA1		: md5-sha1
+rsadsi 2 6		:			: hmacWithMD5
 rsadsi 2 7		:			: hmacWithSHA1
+
+# From RFC4231
+rsadsi 2 8		:			: hmacWithSHA224
+rsadsi 2 9		:			: hmacWithSHA256
+rsadsi 2 10		:			: hmacWithSHA384
+rsadsi 2 11		:			: hmacWithSHA512
+
 rsadsi 3 2		: RC2-CBC		: rc2-cbc
 			: RC2-ECB		: rc2-ecb
 !Cname rc2-cfb64
@@ -396,6 +509,7 @@ id-it 12		: id-it-revPassphrase
 id-it 13		: id-it-implicitConfirm
 id-it 14		: id-it-confirmWaitTime
 id-it 15		: id-it-origPKIMessage
+id-it 16		: id-it-suppLangTags
 
 # CRMF registration
 id-pkip 1		: id-regCtrl
@@ -443,6 +557,7 @@ id-cmc 24		: id-cmc-confirmCertAcceptance
 
 # other names
 id-on 1			: id-on-personalData
+id-on 3			: id-on-permanentIdentifier : Permanent Identifier
 
 # personal data attributes
 id-pda 1		: id-pda-dateOfBirth
@@ -482,6 +597,7 @@ id-ad 2			: caIssuers		: CA Issuers
 id-ad 3			: ad_timestamping	: AD Time Stamping
 !Cname ad-dvcs
 id-ad 4			: AD_DVCS		: ad dvcs
+id-ad 5			: caRepository		: CA Repository
 
 
 !Alias id-pkix-OCSP ad-OCSP
@@ -548,18 +664,52 @@ X509 5			: 			: serialNumber
 X509 6			: C			: countryName
 X509 7			: L			: localityName
 X509 8			: ST			: stateOrProvinceName
-X509 9			:			: streetAddress
+X509 9			: street		: streetAddress
 X509 10			: O			: organizationName
 X509 11			: OU			: organizationalUnitName
-X509 12			: 			: title
+X509 12			: title			: title
 X509 13			: 			: description
-X509 17			:			: postalCode
+X509 14			: 			: searchGuide
+X509 15			: 			: businessCategory
+X509 16			: 			: postalAddress
+X509 17			: 			: postalCode
+X509 18			: 			: postOfficeBox
+X509 19			: 			: physicalDeliveryOfficeName
+X509 20			: 			: telephoneNumber
+X509 21			: 			: telexNumber
+X509 22			: 			: teletexTerminalIdentifier
+X509 23			: 			: facsimileTelephoneNumber
+X509 24			: 			: x121Address
+X509 25			: 			: internationaliSDNNumber
+X509 26			: 			: registeredAddress
+X509 27			: 			: destinationIndicator
+X509 28			: 			: preferredDeliveryMethod
+X509 29			: 			: presentationAddress
+X509 30			: 			: supportedApplicationContext
+X509 31			: member		:
+X509 32			: owner			:
+X509 33			: 			: roleOccupant
+X509 34			: seeAlso		:
+X509 35			: 			: userPassword
+X509 36			: 			: userCertificate
+X509 37			: 			: cACertificate
+X509 38			: 			: authorityRevocationList
+X509 39			: 			: certificateRevocationList
+X509 40			: 			: crossCertificatePair
 X509 41			: name			: name
 X509 42			: GN			: givenName
-X509 43			: 			: initials
+X509 43			: initials		: initials
 X509 44			: 			: generationQualifier
 X509 45			: 			: x500UniqueIdentifier
 X509 46			: dnQualifier		: dnQualifier
+X509 47			: 			: enhancedSearchGuide
+X509 48			: 			: protocolInformation
+X509 49			: 			: distinguishedName
+X509 50			: 			: uniqueMember
+X509 51			: 			: houseIdentifier
+X509 52			: 			: supportedAlgorithms
+X509 53			: 			: deltaRevocationList
+X509 54			: dmdName		:
 X509 65			:			: pseudonym
 X509 72			: role			: role
 
@@ -569,6 +719,8 @@ X500algorithms 3 100	: RSA-MDC2		: mdc2WithRSA
 X500algorithms 3 101	: MDC2			: mdc2
 
 X500 29			: id-ce
+!Cname subject-directory-attributes
+id-ce 9			: subjectDirectoryAttributes : X509v3 Subject Directory Attributes
 !Cname subject-key-identifier
 id-ce 14		: subjectKeyIdentifier	: X509v3 Subject Key Identifier
 !Cname key-usage
@@ -589,18 +741,30 @@ id-ce 21		: CRLReason		: X509v3 CRL Reason Code
 id-ce 24		: invalidityDate	: Invalidity Date
 !Cname delta-crl
 id-ce 27		: deltaCRL		: X509v3 Delta CRL Indicator
+!Cname issuing-distribution-point
+id-ce 28		: issuingDistributionPoint : X509v3 Issuing Distrubution Point
+!Cname certificate-issuer
+id-ce 29		: certificateIssuer	: X509v3 Certificate Issuer
 !Cname name-constraints
 id-ce 30		: nameConstraints	: X509v3 Name Constraints
 !Cname crl-distribution-points
 id-ce 31		: crlDistributionPoints	: X509v3 CRL Distribution Points
 !Cname certificate-policies
 id-ce 32		: certificatePolicies	: X509v3 Certificate Policies
+!Cname any-policy
+certificate-policies 0	: anyPolicy		: X509v3 Any Policy
+!Cname policy-mappings
+id-ce 33		: policyMappings	: X509v3 Policy Mappings
 !Cname authority-key-identifier
 id-ce 35		: authorityKeyIdentifier : X509v3 Authority Key Identifier
 !Cname policy-constraints
 id-ce 36		: policyConstraints	: X509v3 Policy Constraints
 !Cname ext-key-usage
 id-ce 37		: extendedKeyUsage	: X509v3 Extended Key Usage
+!Cname freshest-crl
+id-ce 46		: freshestCRL		: X509v3 Freshest CRL
+!Cname inhibit-any-policy
+id-ce 54		: inhibitAnyPolicy	: X509v3 Inhibit Any Policy
 !Cname target-information
 id-ce 55		: targetInformation	: X509v3 AC Targeting
 !Cname no-rev-avail
@@ -668,7 +832,7 @@ mime-mhs-headings 2	: id-hex-multipart-message : id-hex-multipart-message
 !Cname rle-compression
 1 1 1 1 666 1		: RLE			: run length compression
 !Cname zlib-compression
-1 1 1 1 666 2		: ZLIB			: zlib compression
+id-smime-alg 8		: ZLIB			: zlib compression
 
 # AES aka Rijndael
 
@@ -710,12 +874,21 @@ aes 44			: AES-256-CFB		: aes-256-cfb
 			: DES-EDE3-CFB1		: des-ede3-cfb1
 			: DES-EDE3-CFB8		: des-ede3-cfb8
 
+aes 5			: id-aes128-wrap 
+aes 25			: id-aes192-wrap 
+aes 45			: id-aes256-wrap 
+
 # OIDs for SHA224, SHA256, SHA385 and SHA512, according to x9.84.
 !Alias nist_hashalgs nistAlgorithms 2
 nist_hashalgs 1		: SHA256		: sha256
 nist_hashalgs 2		: SHA384		: sha384
 nist_hashalgs 3		: SHA512		: sha512
 nist_hashalgs 4		: SHA224		: sha224
+
+# OIDs for dsa-with-sha224 and dsa-with-sha256
+!Alias dsa_with_sha2 nistAlgorithms 3
+dsa_with_sha2 1		: dsa_with_SHA224
+dsa_with_sha2 2		: dsa_with_SHA256
 
 # Hold instruction CRL entry extension
 !Cname hold-instruction-code
@@ -728,9 +901,9 @@ holdInstruction 2	: holdInstructionCallIssuer : Hold Instruction Call Issuer
 !Cname hold-instruction-reject
 holdInstruction 3	: holdInstructionReject	: Hold Instruction Reject
 
-# OID's from CCITT.  Most of this is defined in RFC 1274.  A couple of
+# OID's from ITU-T.  Most of this is defined in RFC 1274.  A couple of
 # them are also mentioned in RFC 2247
-ccitt 9			: data
+itu-t 9			: data
 data 2342		: pss
 pss 19200300		: ucl
 ucl 100			: pilot
@@ -804,7 +977,7 @@ pilotAttributeType 54	:			: dITRedirect
 pilotAttributeType 55	: audio
 pilotAttributeType 56	:			: documentPublisher
 
-2 23 42			: id-set		: Secure Electronic Transactions
+international-organizations 42	: id-set	: Secure Electronic Transactions
 
 id-set 0		: set-ctype		: content types
 id-set 1		: set-msgExt		: message extensions
@@ -950,3 +1123,137 @@ set-brand 6011		: set-brand-Novus
 
 rsadsi 3 10		: DES-CDMF		: des-cdmf
 rsadsi 1 1 6		: rsaOAEPEncryptionSET
+
+			: Oakley-EC2N-3		: ipsec3
+			: Oakley-EC2N-4		: ipsec4
+
+iso 0 10118 3 0 55	: whirlpool
+
+# GOST OIDs
+
+member-body 643 2 2	: cryptopro
+member-body 643 2 9	: cryptocom
+
+cryptopro 3		: id-GostR3411-94-with-GostR3410-2001 : GOST R 34.11-94 with GOST R 34.10-2001
+cryptopro 4		: id-GostR3411-94-with-GostR3410-94 : GOST R 34.11-94 with GOST R 34.10-94
+!Cname id-GostR3411-94
+cryptopro 9		: md_gost94		: GOST R 34.11-94
+cryptopro 10		: id-HMACGostR3411-94	: HMAC GOST 34.11-94
+!Cname id-GostR3410-2001
+cryptopro 19		: gost2001	: GOST R 34.10-2001
+!Cname id-GostR3410-94
+cryptopro 20		: gost94	: GOST R 34.10-94
+!Cname id-Gost28147-89
+cryptopro 21		: gost89 		: GOST 28147-89
+			: gost89-cnt
+!Cname id-Gost28147-89-MAC
+cryptopro 22		: gost-mac	: GOST 28147-89 MAC
+!Cname id-GostR3411-94-prf
+cryptopro 23		: prf-gostr3411-94	: GOST R 34.11-94 PRF
+cryptopro 98		: id-GostR3410-2001DH	: GOST R 34.10-2001 DH
+cryptopro 99		: id-GostR3410-94DH	: GOST R 34.10-94 DH
+
+cryptopro 14 1		: id-Gost28147-89-CryptoPro-KeyMeshing
+cryptopro 14 0		: id-Gost28147-89-None-KeyMeshing
+
+# GOST parameter set OIDs
+
+cryptopro 30 0		: id-GostR3411-94-TestParamSet
+cryptopro 30 1		: id-GostR3411-94-CryptoProParamSet
+
+cryptopro 31 0		: id-Gost28147-89-TestParamSet
+cryptopro 31 1		: id-Gost28147-89-CryptoPro-A-ParamSet
+cryptopro 31 2		: id-Gost28147-89-CryptoPro-B-ParamSet
+cryptopro 31 3		: id-Gost28147-89-CryptoPro-C-ParamSet
+cryptopro 31 4		: id-Gost28147-89-CryptoPro-D-ParamSet
+cryptopro 31 5		: id-Gost28147-89-CryptoPro-Oscar-1-1-ParamSet
+cryptopro 31 6		: id-Gost28147-89-CryptoPro-Oscar-1-0-ParamSet
+cryptopro 31 7		: id-Gost28147-89-CryptoPro-RIC-1-ParamSet
+
+cryptopro 32 0		: id-GostR3410-94-TestParamSet
+cryptopro 32 2		: id-GostR3410-94-CryptoPro-A-ParamSet
+cryptopro 32 3		: id-GostR3410-94-CryptoPro-B-ParamSet
+cryptopro 32 4		: id-GostR3410-94-CryptoPro-C-ParamSet
+cryptopro 32 5		: id-GostR3410-94-CryptoPro-D-ParamSet
+
+cryptopro 33 1		: id-GostR3410-94-CryptoPro-XchA-ParamSet
+cryptopro 33 2		: id-GostR3410-94-CryptoPro-XchB-ParamSet
+cryptopro 33 3		: id-GostR3410-94-CryptoPro-XchC-ParamSet
+
+cryptopro 35 0		: id-GostR3410-2001-TestParamSet
+cryptopro 35 1		: id-GostR3410-2001-CryptoPro-A-ParamSet
+cryptopro 35 2		: id-GostR3410-2001-CryptoPro-B-ParamSet
+cryptopro 35 3		: id-GostR3410-2001-CryptoPro-C-ParamSet
+
+cryptopro 36 0		: id-GostR3410-2001-CryptoPro-XchA-ParamSet
+cryptopro 36 1		: id-GostR3410-2001-CryptoPro-XchB-ParamSet
+
+id-GostR3410-94 1	: id-GostR3410-94-a
+id-GostR3410-94 2	: id-GostR3410-94-aBis
+id-GostR3410-94 3	: id-GostR3410-94-b
+id-GostR3410-94 4	: id-GostR3410-94-bBis
+
+# Cryptocom LTD GOST OIDs
+
+cryptocom 1 6 1		: id-Gost28147-89-cc	: GOST 28147-89 Cryptocom ParamSet
+!Cname id-GostR3410-94-cc
+cryptocom 1 5 3		: gost94cc	: GOST 34.10-94 Cryptocom
+!Cname id-GostR3410-2001-cc
+cryptocom 1 5 4		: gost2001cc	: GOST 34.10-2001 Cryptocom
+
+cryptocom 1 3 3		: id-GostR3411-94-with-GostR3410-94-cc : GOST R 34.11-94 with GOST R 34.10-94 Cryptocom
+cryptocom 1 3 4		: id-GostR3411-94-with-GostR3410-2001-cc : GOST R 34.11-94 with GOST R 34.10-2001 Cryptocom
+
+cryptocom 1 8 1		: id-GostR3410-2001-ParamSet-cc : GOST R 3410-2001 Parameter Set Cryptocom
+
+# Definitions for Camellia cipher - CBC MODE
+
+1 2 392 200011 61 1 1 1 2 : CAMELLIA-128-CBC		: camellia-128-cbc
+1 2 392 200011 61 1 1 1 3 : CAMELLIA-192-CBC		: camellia-192-cbc
+1 2 392 200011 61 1 1 1 4 : CAMELLIA-256-CBC		: camellia-256-cbc
+
+# Definitions for Camellia cipher - ECB, CFB, OFB MODE
+
+!Alias ntt-ds 0 3 4401 5
+!Alias camellia ntt-ds 3 1 9 
+
+camellia 1		: CAMELLIA-128-ECB		: camellia-128-ecb
+!Cname camellia-128-ofb128
+camellia 3		: CAMELLIA-128-OFB		: camellia-128-ofb
+!Cname camellia-128-cfb128
+camellia 4		: CAMELLIA-128-CFB		: camellia-128-cfb
+
+camellia 21		: CAMELLIA-192-ECB		: camellia-192-ecb
+!Cname camellia-192-ofb128
+camellia 23		: CAMELLIA-192-OFB		: camellia-192-ofb
+!Cname camellia-192-cfb128
+camellia 24		: CAMELLIA-192-CFB		: camellia-192-cfb
+
+camellia 41		: CAMELLIA-256-ECB		: camellia-256-ecb
+!Cname camellia-256-ofb128
+camellia 43		: CAMELLIA-256-OFB		: camellia-256-ofb
+!Cname camellia-256-cfb128
+camellia 44		: CAMELLIA-256-CFB		: camellia-256-cfb
+
+# There are no OIDs for these modes...
+
+			: CAMELLIA-128-CFB1		: camellia-128-cfb1
+			: CAMELLIA-192-CFB1		: camellia-192-cfb1
+			: CAMELLIA-256-CFB1		: camellia-256-cfb1
+			: CAMELLIA-128-CFB8		: camellia-128-cfb8
+			: CAMELLIA-192-CFB8		: camellia-192-cfb8
+			: CAMELLIA-256-CFB8		: camellia-256-cfb8
+
+# Definitions for SEED cipher - ECB, CBC, OFB mode
+
+member-body 410 200004  : KISA          : kisa
+kisa 1 3                : SEED-ECB      : seed-ecb
+kisa 1 4                : SEED-CBC      : seed-cbc
+!Cname seed-cfb128
+kisa 1 5                : SEED-CFB      : seed-cfb
+!Cname seed-ofb128
+kisa 1 6                : SEED-OFB      : seed-ofb
+
+# There is no OID that just denotes "HMAC" oddly enough...
+
+			: HMAC				: hmac

@@ -1,5 +1,5 @@
 /* p12_init.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -62,7 +62,7 @@
 
 /* Initialise a PKCS12 structure to take data */
 
-PKCS12 *PKCS12_init (int mode)
+PKCS12 *PKCS12_init(int mode)
 {
 	PKCS12 *pkcs12;
 	if (!(pkcs12 = PKCS12_new())) {

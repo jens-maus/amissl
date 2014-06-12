@@ -58,7 +58,10 @@
 
 #include <openssl/rc2.h>
 #include <openssl/crypto.h>
+#ifdef OPENSSL_FIPS
 #include <openssl/fips.h>
+#endif
+
 #include "rc2_locl.h"
 
 static unsigned char key_table[256]={
@@ -85,6 +88,10 @@ static unsigned char key_table[256]={
 	0xc5,0xf3,0xdb,0x47,0xe5,0xa5,0x9c,0x77,0x0a,0xa6,0x20,0x68,
 	0xfe,0x7f,0xc1,0xad,
 	};
+
+#if defined(_MSC_VER) && defined(_ARM_)
+#pragma optimize("g",off)
+#endif
 
 /* It has come to my attention that there are 2 versions of the RC2
  * key schedule.  One which is normal, and anther which has a hook to
@@ -150,3 +157,6 @@ void RC2_set_key(RC2_KEY *key, int len, const unsigned char *data, int bits)
 		*(ki--)=((k[i]<<8)|k[i-1])&0xffff;
 	}
 
+#if defined(_MSC_VER)
+#pragma optimize("",on)
+#endif

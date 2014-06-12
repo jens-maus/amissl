@@ -54,7 +54,7 @@
  */
 
 #include <string.h>
-#include <openssl/ui.h>
+#include "ui_locl.h"
 
 #ifndef BUFSIZ
 #define BUFSIZ 8192

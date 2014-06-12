@@ -125,19 +125,17 @@ static int nbiof_free(BIO *a)
 	
 static int nbiof_read(BIO *b, char *out, int outl)
 	{
-	NBIO_TEST *nt;
 	int ret=0;
-#if 0
+#if 1
 	int num;
 	unsigned char n;
 #endif
 
 	if (out == NULL) return(0);
 	if (b->next_bio == NULL) return(0);
-	nt=(NBIO_TEST *)b->ptr;
 
 	BIO_clear_retry_flags(b);
-#if 0
+#if 1
 	RAND_pseudo_bytes(&n,1);
 	num=(n&0x07);
 

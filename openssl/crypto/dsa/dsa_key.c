@@ -56,16 +56,26 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef OPENSSL_NO_SHA
 #include <stdio.h>
 #include <time.h>
 #include "cryptlib.h"
+#ifndef OPENSSL_NO_SHA
 #include <openssl/bn.h>
 #include <openssl/dsa.h>
 #include <openssl/rand.h>
 
 #ifndef OPENSSL_FIPS
+
+static int dsa_builtin_keygen(DSA *dsa);
+
 int DSA_generate_key(DSA *dsa)
+	{
+	if(dsa->meth->dsa_keygen)
+		return dsa->meth->dsa_keygen(dsa);
+	return dsa_builtin_keygen(dsa);
+	}
+
+static int dsa_builtin_keygen(DSA *dsa)
 	{
 	int ok=0;
 	BN_CTX *ctx=NULL;
@@ -99,7 +109,7 @@ int DSA_generate_key(DSA *dsa)
 			{
 			BN_init(&local_prk);
 			prk = &local_prk;
-			BN_with_flags(prk, priv_key, BN_FLG_EXP_CONSTTIME);
+			BN_with_flags(prk, priv_key, BN_FLG_CONSTTIME);
 			}
 		else
 			prk = priv_key;
@@ -118,4 +128,5 @@ err:
 	return(ok);
 	}
 #endif
+
 #endif

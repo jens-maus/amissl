@@ -7,11 +7,6 @@ TOP=	../..
 CC=	cc
 INCLUDES= -I.. -I$(TOP) -I../../include
 CFLAG=-g
-INSTALL_PREFIX=
-OPENSSLDIR=     /usr/local/ssl
-INSTALLTOP=/usr/local/ssl
-MAKEDEPPROG=	makedepend
-MAKEDEPEND=	$(TOP)/util/domd $(TOP) -MD $(MAKEDEPPROG)
 MAKEFILE=	Makefile
 AR=		ar r
 
@@ -22,8 +17,8 @@ TEST=
 APPS=
 
 LIB=$(TOP)/libcrypto.a
-LIBSRC= buffer.c buf_err.c
-LIBOBJ= buffer.o buf_err.o
+LIBSRC= buffer.c buf_str.c buf_err.c
+LIBOBJ= buffer.o buf_str.o buf_err.o
 
 SRC= $(LIBSRC)
 
@@ -38,7 +33,7 @@ top:
 all:	lib
 
 lib:	$(LIBOBJ)
-	$(AR) $(LIB) $(LIBOBJ)
+	$(ARX) $(LIB) $(LIBOBJ)
 	$(RANLIB) $(LIB) || echo Never mind.
 	@touch lib
 
@@ -51,6 +46,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
+	@[ -n "$(INSTALLTOP)" ] # should be set by top Makefile...
 	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
@@ -66,6 +62,7 @@ lint:
 	lint -DLINT $(INCLUDES) $(SRC)>fluff
 
 depend:
+	@[ -n "$(MAKEDEPEND)" ] # should be set by upper Makefile...
 	$(MAKEDEPEND) -- $(CFLAG) $(INCLUDES) $(DEPFLAG) -- $(PROGS) $(LIBSRC)
 
 dclean:
@@ -77,16 +74,6 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-buf_err.o: ../../include/openssl/bio.h ../../include/openssl/buffer.h
-buf_err.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-buf_err.o: ../../include/openssl/err.h ../../include/openssl/lhash.h
-buf_err.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
-buf_err.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-buf_err.o: ../../include/openssl/symhacks.h buf_err.c
-buffer.o: ../../e_os.h ../../include/openssl/bio.h
-buffer.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
-buffer.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-buffer.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
-buffer.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
-buffer.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
-buffer.o: ../cryptlib.h buffer.c
+buf_err.o: buf_err.c
+buf_str.o: ../../e_os.h ../cryptlib.h buf_str.c
+buffer.o: ../../e_os.h ../cryptlib.h buffer.c

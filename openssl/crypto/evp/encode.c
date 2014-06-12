@@ -129,14 +129,14 @@ void EVP_EncodeInit(EVP_ENCODE_CTX *ctx)
 	}
 
 void EVP_EncodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
-	     unsigned char *in, int inl)
+	     const unsigned char *in, int inl)
 	{
 	int i,j;
 	unsigned int total=0;
 
 	*outl=0;
 	if (inl == 0) return;
-	OPENSSL_assert(ctx->length <= sizeof ctx->enc_data);
+	OPENSSL_assert(ctx->length <= (int)sizeof(ctx->enc_data));
 	if ((ctx->num+inl) < ctx->length)
 		{
 		memcpy(&(ctx->enc_data[ctx->num]),in,inl);
@@ -233,9 +233,9 @@ void EVP_DecodeInit(EVP_ENCODE_CTX *ctx)
  *  1 for full line
  */
 int EVP_DecodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
-	     unsigned char *in, int inl)
+	     const unsigned char *in, int inl)
 	{
-	int seof= -1,eof=0,rv= -1,ret=0,i,v,tmp,n,ln,tmp2,exp_nl;
+	int seof= -1,eof=0,rv= -1,ret=0,i,v,tmp,n,ln,exp_nl;
 	unsigned char *d;
 
 	n=ctx->num;
@@ -259,7 +259,7 @@ int EVP_DecodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
 		/* only save the good data :-) */
 		if (!B64_NOT_BASE64(v))
 			{
-			OPENSSL_assert(n < sizeof ctx->enc_data);
+			OPENSSL_assert(n < (int)sizeof(ctx->enc_data));
 			d[n++]=tmp;
 			ln++;
 			}
@@ -319,12 +319,11 @@ int EVP_DecodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
 			 * lines.  We process the line and then need to
 			 * accept the '\n' */
 			if ((v != B64_EOF) && (n >= 64)) exp_nl=1;
-			tmp2=v;
 			if (n > 0)
 				{
 				v=EVP_DecodeBlock(out,d,n);
-				if (v < 0) { rv=0; goto end; }
 				n=0;
+				if (v < 0) { rv=0; goto end; }
 				ret+=(v-eof);
 				}
 			else

@@ -66,6 +66,9 @@
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
+#ifndef OPENSSL_NO_DH
+#include <openssl/dh.h>
+#endif
 
 const char DSA_version[]="DSA" OPENSSL_VERSION_PTEXT;
 
@@ -73,6 +76,14 @@ static const DSA_METHOD *default_DSA_method = NULL;
 
 void DSA_set_default_method(const DSA_METHOD *meth)
 	{
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(meth->flags & DSA_FLAG_FIPS_METHOD))
+		{
+		DSAerr(DSA_F_DSA_SET_DEFAULT_METHOD, DSA_R_NON_FIPS_METHOD);
+		return;
+		}
+#endif
+		
 	default_DSA_method = meth;
 	}
 
@@ -93,6 +104,13 @@ int DSA_set_method(DSA *dsa, const DSA_METHOD *meth)
 	/* NB: The caller is specifically setting a method, so it's not up to us
 	 * to deal with which ENGINE it comes from. */
         const DSA_METHOD *mtmp;
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(meth->flags & DSA_FLAG_FIPS_METHOD))
+		{
+		DSAerr(DSA_F_DSA_SET_METHOD, DSA_R_NON_FIPS_METHOD);
+		return 0;
+		}
+#endif
         mtmp = dsa->meth;
         if (mtmp->finish) mtmp->finish(dsa);
 #ifndef OPENSSL_NO_ENGINE
@@ -144,6 +162,18 @@ DSA *DSA_new_method(ENGINE *engine)
 			}
 		}
 #endif
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(ret->meth->flags & DSA_FLAG_FIPS_METHOD))
+		{
+		DSAerr(DSA_F_DSA_NEW_METHOD, DSA_R_NON_FIPS_METHOD);
+#ifndef OPENSSL_NO_ENGINE
+		if (ret->engine)
+			ENGINE_finish(ret->engine);
+#endif
+		OPENSSL_free(ret);
+		return NULL;
+		}
+#endif
 
 	ret->pad=0;
 	ret->version=0;
@@ -160,7 +190,7 @@ DSA *DSA_new_method(ENGINE *engine)
 	ret->method_mont_p=NULL;
 
 	ret->references=1;
-	ret->flags=ret->meth->flags;
+	ret->flags=ret->meth->flags & ~DSA_FLAG_NON_FIPS_ALLOW;
 	CRYPTO_new_ex_data(CRYPTO_EX_INDEX_DSA, ret, &ret->ex_data);
 	if ((ret->meth->init != NULL) && !ret->meth->init(ret))
 		{
@@ -245,29 +275,6 @@ int DSA_set_ex_data(DSA *d, int idx, void *arg)
 void *DSA_get_ex_data(DSA *d, int idx)
 	{
 	return(CRYPTO_get_ex_data(&d->ex_data,idx));
-	}
-
-DSA_SIG *DSA_SIG_new(void)
-	{
-	DSA_SIG *sig;
-	sig = OPENSSL_malloc(sizeof(DSA_SIG));
-	if (!sig)
-		return NULL;
-	sig->r = NULL;
-	sig->s = NULL;
-	return sig;
-	}
-
-void DSA_SIG_free(DSA_SIG *sig)
-	{
-	if (sig)
-		{
-		if (sig->r)
-			BN_free(sig->r);
-		if (sig->s)
-			BN_free(sig->s);
-		OPENSSL_free(sig);
-		}
 	}
 
 #ifndef OPENSSL_NO_DH

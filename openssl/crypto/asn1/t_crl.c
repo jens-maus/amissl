@@ -1,5 +1,5 @@
 /* t_crl.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -72,7 +72,7 @@ int X509_CRL_print_fp(FILE *fp, X509_CRL *x)
 
         if ((b=BIO_new(BIO_s_file())) == NULL)
 		{
-		X509err(X509_F_X509_PRINT_FP,ERR_R_BUF_LIB);
+		X509err(X509_F_X509_CRL_PRINT_FP,ERR_R_BUF_LIB);
                 return(0);
 		}
         BIO_set_fp(b,fp,BIO_NOCLOSE);
@@ -87,7 +87,7 @@ int X509_CRL_print(BIO *out, X509_CRL *x)
 	STACK_OF(X509_REVOKED) *rev;
 	X509_REVOKED *r;
 	long l;
-	int i, n;
+	int i;
 	char *p;
 
 	BIO_printf(out, "Certificate Revocation List (CRL):\n");
@@ -107,7 +107,6 @@ int X509_CRL_print(BIO *out, X509_CRL *x)
 	else BIO_printf(out,"NONE");
 	BIO_printf(out,"\n");
 
-	n=X509_CRL_get_ext_count(x);
 	X509V3_extensions_print(out, "CRL extensions",
 						x->crl->extensions, 0, 8);
 
@@ -121,7 +120,7 @@ int X509_CRL_print(BIO *out, X509_CRL *x)
 		r = sk_X509_REVOKED_value(rev, i);
 		BIO_printf(out,"    Serial Number: ");
 		i2a_ASN1_INTEGER(out,r->serialNumber);
-		BIO_printf(out,"\n        Revocation Date: ","");
+		BIO_printf(out,"\n        Revocation Date: ");
 		ASN1_TIME_print(out,r->revocationDate);
 		BIO_printf(out,"\n");
 		X509V3_extensions_print(out, "CRL entry extensions",

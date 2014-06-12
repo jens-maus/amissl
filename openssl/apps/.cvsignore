@@ -3,6 +3,5 @@ Makefile.save
 der_chop
 der_chop.bak
 CA.pl
-openssl.sha1
 *.flc
 semantic.cache

@@ -56,13 +56,13 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef OPENSSL_NO_SOCK
-
 #include <stdio.h>
 #include <errno.h>
 #define USE_SOCKETS
 #include "cryptlib.h"
 #include <openssl/bio.h>
+
+#ifndef OPENSSL_NO_SOCK
 
 #ifdef OPENSSL_SYS_WIN16
 #define SOCKET_PROTOCOL 0 /* more microsoft stupidity */
@@ -340,7 +340,6 @@ static int acpt_write(BIO *b, const char *in, int inl)
 
 static long acpt_ctrl(BIO *b, int cmd, long num, void *ptr)
 	{
-	BIO *dbio;
 	int *ip;
 	long ret=1;
 	BIO_ACCEPT *data;
@@ -437,8 +436,8 @@ static long acpt_ctrl(BIO *b, int cmd, long num, void *ptr)
 		ret=(long)data->bind_mode;
 		break;
 	case BIO_CTRL_DUP:
-		dbio=(BIO *)ptr;
-/*		if (data->param_port) EAY EAY
+/*		dbio=(BIO *)ptr;
+		if (data->param_port) EAY EAY
 			BIO_set_port(dbio,data->param_port);
 		if (data->param_hostname)
 			BIO_set_hostname(dbio,data->param_hostname);

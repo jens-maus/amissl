@@ -109,6 +109,7 @@
  *
  */
 
+#include <openssl/opensslconf.h>	/* for OPENSSL_NO_DH */
 #ifndef OPENSSL_NO_DH
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,15 +143,12 @@
  * -C
  */
 
-static void MS_CALLBACK dh_cb(int p, int n, void *arg);
+static int MS_CALLBACK dh_cb(int p, int n, BN_GENCB *cb);
 
 int MAIN(int, char **);
 
 int MAIN(int argc, char **argv)
 	{
-#ifndef OPENSSL_NO_ENGINE
-	ENGINE *e = NULL;
-#endif
 	DH *dh=NULL;
 	int i,badops=0,text=0;
 #ifndef OPENSSL_NO_DSA
@@ -269,7 +267,7 @@ bad:
 	ERR_load_crypto_strings();
 
 #ifndef OPENSSL_NO_ENGINE
-        e = setup_engine(bio_err, engine, 0);
+        setup_engine(bio_err, engine, 0);
 #endif
 
 	if (g && !num)
@@ -294,6 +292,8 @@ bad:
 
 	if(num) {
 
+		BN_GENCB cb;
+		BN_GENCB_set(&cb, dh_cb, bio_err);
 		if (!app_RAND_load_file(NULL, bio_err, 1) && inrand == NULL)
 			{
 			BIO_printf(bio_err,"warning, not much extra random data, consider using the -rand option\n");
@@ -305,12 +305,13 @@ bad:
 #ifndef OPENSSL_NO_DSA
 		if (dsaparam)
 			{
-			DSA *dsa;
+			DSA *dsa = DSA_new();
 			
 			BIO_printf(bio_err,"Generating DSA parameters, %d bit long prime\n",num);
-			dsa = DSA_generate_parameters(num, NULL, 0, NULL, NULL, dh_cb, bio_err);
-			if (dsa == NULL)
+			if(!dsa || !DSA_generate_parameters_ex(dsa, num,
+						NULL, 0, NULL, NULL, &cb))
 				{
+				if(dsa) DSA_free(dsa);
 				ERR_print_errors(bio_err);
 				goto end;
 				}
@@ -326,11 +327,10 @@ bad:
 		else
 #endif
 			{
+			dh = DH_new();
 			BIO_printf(bio_err,"Generating DH parameters, %d bit long safe prime, generator %d\n",num,g);
 			BIO_printf(bio_err,"This is going to take a long time\n");
-			dh=DH_generate_parameters(num,g,dh_cb,bio_err);
-			
-			if (dh == NULL)
+			if(!dh || !DH_generate_parameters_ex(dh, num, g, &cb))
 				{
 				ERR_print_errors(bio_err);
 				goto end;
@@ -534,7 +534,7 @@ end:
 	}
 
 /* dh_cb is identical to dsa_cb in apps/dsaparam.c */
-static void MS_CALLBACK dh_cb(int p, int n, void *arg)
+static int MS_CALLBACK dh_cb(int p, int n, BN_GENCB *cb)
 	{
 	char c='*';
 
@@ -542,11 +542,12 @@ static void MS_CALLBACK dh_cb(int p, int n, void *arg)
 	if (p == 1) c='+';
 	if (p == 2) c='*';
 	if (p == 3) c='\n';
-	BIO_write((BIO *)arg,&c,1);
-	(void)BIO_flush((BIO *)arg);
+	BIO_write(cb->arg,&c,1);
+	(void)BIO_flush(cb->arg);
 #ifdef LINT
 	p=n;
 #endif
+	return 1;
 	}
 
 #endif

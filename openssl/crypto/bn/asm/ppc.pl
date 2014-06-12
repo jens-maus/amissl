@@ -1053,7 +1053,7 @@ sub data {
 	addze	r11,r0
 					#mul_add_c(a[3],b[2],c3,c1,c2);
 	$LD	r6,`3*$BNSZ`(r4)
-	$LD	r7,`2*$BNSZ`(r4)
+	$LD	r7,`2*$BNSZ`(r5)
 	$UMULL	r8,r6,r7
 	$UMULH	r9,r6,r7
 	addc	r12,r8,r12
@@ -2088,5 +2088,7 @@ EOF
 	$data =~ s/^(\s*)cmplw(\s+)([^,]+),(.*)/$1cmpl$2$3,0,$4/gm;
 	# assembler X doesn't accept li, load immediate value
 	#$data =~ s/^(\s*)li(\s+)([^,]+),(.*)/$1addi$2$3,0,$4/gm;
+	# assembler Y chokes on apostrophes in comments
+	$data =~ s/'//gm;
 	return($data);
 }

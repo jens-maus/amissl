@@ -1,5 +1,5 @@
 /* evp_pbe.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -74,7 +74,7 @@ const EVP_MD *md;
 EVP_PBE_KEYGEN *keygen;
 } EVP_PBE_CTL;
 
-int EVP_PBE_CipherInit (ASN1_OBJECT *pbe_obj, const char *pass, int passlen,
+int EVP_PBE_CipherInit(ASN1_OBJECT *pbe_obj, const char *pass, int passlen,
 	     ASN1_TYPE *param, EVP_CIPHER_CTX *ctx, int en_de)
 {
 
@@ -106,7 +106,8 @@ int EVP_PBE_CipherInit (ASN1_OBJECT *pbe_obj, const char *pass, int passlen,
 
 static int pbe_cmp(const char * const *a, const char * const *b)
 {
-	EVP_PBE_CTL **pbe1 = (EVP_PBE_CTL **) a,  **pbe2 = (EVP_PBE_CTL **)b;
+	const EVP_PBE_CTL * const *pbe1 = (const EVP_PBE_CTL * const *) a,
+			* const *pbe2 = (const EVP_PBE_CTL * const *)b;
 	return ((*pbe1)->pbe_nid - (*pbe2)->pbe_nid);
 }
 
@@ -115,17 +116,50 @@ static int pbe_cmp(const char * const *a, const char * const *b)
 int EVP_PBE_alg_add(int nid, const EVP_CIPHER *cipher, const EVP_MD *md,
 	     EVP_PBE_KEYGEN *keygen)
 {
-	EVP_PBE_CTL *pbe_tmp;
-	if (!pbe_algs) pbe_algs = sk_new(pbe_cmp);
-	if (!(pbe_tmp = (EVP_PBE_CTL*) OPENSSL_malloc (sizeof(EVP_PBE_CTL)))) {
-		EVPerr(EVP_F_EVP_PBE_ALG_ADD,ERR_R_MALLOC_FAILURE);
-		return 0;
-	}
-	pbe_tmp->pbe_nid = nid;
+	EVP_PBE_CTL *pbe_tmp = NULL, pbelu;
+	int i;
+	if (!pbe_algs)
+		{
+		pbe_algs = sk_new(pbe_cmp);
+		if (!pbe_algs)
+			{
+			EVPerr(EVP_F_EVP_PBE_ALG_ADD,ERR_R_MALLOC_FAILURE);
+			return 0;
+			}
+		}
+	else
+		{
+		/* Check if already present */
+		pbelu.pbe_nid = nid;
+		i = sk_find(pbe_algs, (char *)&pbelu);
+		if (i >= 0)
+			{
+			pbe_tmp = (EVP_PBE_CTL *)sk_value(pbe_algs, i);
+			/* If everything identical leave alone */
+			if (pbe_tmp->cipher == cipher
+				&& pbe_tmp->md == md
+				&& pbe_tmp->keygen == keygen)
+				return 1;
+			}
+		}
+
+	if (!pbe_tmp)
+		{
+		pbe_tmp = OPENSSL_malloc (sizeof(EVP_PBE_CTL));
+		if (!pbe_tmp)
+			{
+			EVPerr(EVP_F_EVP_PBE_ALG_ADD,ERR_R_MALLOC_FAILURE);
+			return 0;
+			}
+		/* If adding a new PBE, set nid, append and sort */
+		pbe_tmp->pbe_nid = nid;
+		sk_push (pbe_algs, (char *)pbe_tmp);
+		sk_sort(pbe_algs);
+		}
+		
 	pbe_tmp->cipher = cipher;
 	pbe_tmp->md = md;
 	pbe_tmp->keygen = keygen;
-	sk_push (pbe_algs, (char *)pbe_tmp);
 	return 1;
 }
 

@@ -1,6 +1,6 @@
 /* crypto/bio/bio_err.c */
 /* ====================================================================
- * Copyright (c) 1999-2006 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2005 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -73,6 +73,7 @@ static ERR_STRING_DATA BIO_str_functs[]=
 {ERR_FUNC(BIO_F_ACPT_STATE),	"ACPT_STATE"},
 {ERR_FUNC(BIO_F_BIO_ACCEPT),	"BIO_accept"},
 {ERR_FUNC(BIO_F_BIO_BER_GET_HEADER),	"BIO_BER_GET_HEADER"},
+{ERR_FUNC(BIO_F_BIO_CALLBACK_CTRL),	"BIO_callback_ctrl"},
 {ERR_FUNC(BIO_F_BIO_CTRL),	"BIO_ctrl"},
 {ERR_FUNC(BIO_F_BIO_GETHOSTBYNAME),	"BIO_gethostbyname"},
 {ERR_FUNC(BIO_F_BIO_GETS),	"BIO_gets"},

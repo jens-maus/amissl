@@ -115,6 +115,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <assert.h>
 #include <openssl/err.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
@@ -125,13 +126,20 @@
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
+#ifndef OPENSSL_NO_RSA
+#include <openssl/rsa.h>
+#endif
+#include <openssl/bn.h>
+#ifndef OPENSSL_NO_JPAKE
+#include <openssl/jpake.h>
+#endif
 
 #define NON_MAIN
 #include "apps.h"
 #undef NON_MAIN
 
 typedef struct {
-	char *name;
+	const char *name;
 	unsigned long flag;
 	unsigned long mask;
 } NAME_EX_TBL;
@@ -250,7 +258,7 @@ int str2fmt(char *s)
 		return(FORMAT_UNDEF);
 	}
 
-#if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_WIN16)
+#if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_WIN16) || defined(OPENSSL_SYS_NETWARE)
 void program_name(char *in, char *out, int size)
 	{
 	int i,n;
@@ -269,12 +277,23 @@ void program_name(char *in, char *out, int size)
 	if (p == NULL)
 		p=in;
 	n=strlen(p);
+
+#if defined(OPENSSL_SYS_NETWARE)
+   /* strip off trailing .nlm if present. */
+   if ((n > 4) && (p[n-4] == '.') &&
+      ((p[n-3] == 'n') || (p[n-3] == 'N')) &&
+      ((p[n-2] == 'l') || (p[n-2] == 'L')) &&
+      ((p[n-1] == 'm') || (p[n-1] == 'M')))
+      n-=4;
+#else
 	/* strip off trailing .exe if present. */
 	if ((n > 4) && (p[n-4] == '.') &&
 		((p[n-3] == 'e') || (p[n-3] == 'E')) &&
 		((p[n-2] == 'x') || (p[n-2] == 'X')) &&
 		((p[n-1] == 'e') || (p[n-1] == 'E')))
 		n-=4;
+#endif
+
 	if (n > size-1)
 		n=size-1;
 
@@ -342,13 +361,12 @@ void program_name(char *in, char *out, int size)
 
 int chopup_args(ARGS *arg, char *buf, int *argc, char **argv[])
 	{
-	int num,len,i;
+	int num,i;
 	char *p;
 
 	*argc=0;
 	*argv=NULL;
 
-	len=strlen(buf);
 	i=0;
 	if (arg->count == 0)
 		{
@@ -771,7 +789,7 @@ X509 *load_cert(BIO *err, const char *file, int format,
 		x=d2i_X509_bio(cert,NULL);
 	else if (format == FORMAT_NETSCAPE)
 		{
-		unsigned char *p,*op;
+		const unsigned char *p,*op;
 		int size=0,i;
 
 		/* We sort of have to do it this way because it is sort of nice
@@ -857,10 +875,17 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
 	if (format == FORMAT_ENGINE)
 		{
 		if (!e)
-			BIO_printf(bio_err,"no engine specified\n");
+			BIO_printf(err,"no engine specified\n");
 		else
+			{
 			pkey = ENGINE_load_private_key(e, file,
 				ui_method, &cb_data);
+			if (!pkey) 
+				{
+				BIO_printf(err,"cannot load %s from engine\n",key_descrip);
+				ERR_print_errors(err);
+				}	
+			}
 		goto end;
 		}
 #endif
@@ -910,8 +935,11 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
 		}
  end:
 	if (key != NULL) BIO_free(key);
-	if (pkey == NULL)
+	if (pkey == NULL) 
+		{
 		BIO_printf(err,"unable to load %s\n", key_descrip);
+		ERR_print_errors(err);
+		}	
 	return(pkey);
 	}
 
@@ -1273,7 +1301,7 @@ static int set_table_opts(unsigned long *flags, const char *arg, const NAME_EX_T
 	return 0;
 }
 
-void print_name(BIO *out, char *title, X509_NAME *nm, unsigned long lflags)
+void print_name(BIO *out, const char *title, X509_NAME *nm, unsigned long lflags)
 {
 	char *buf;
 	char mline = 0;
@@ -1747,23 +1775,10 @@ CA_DB *load_index(char *dbfile, DB_ATTR *db_attr)
 		char *p = NCONF_get_string(dbattr_conf,NULL,"unique_subject");
 		if (p)
 			{
+#ifdef RL_DEBUG
 			BIO_printf(bio_err, "DEBUG[load_index]: unique_subject = \"%s\"\n", p);
-			switch(*p)
-				{
-			case 'f': /* false */
-			case 'F': /* FALSE */
-			case 'n': /* no */
-			case 'N': /* NO */
-				retdb->attributes.unique_subject = 0;
-				break;
-			case 't': /* true */
-			case 'T': /* TRUE */
-			case 'y': /* yes */
-			case 'Y': /* YES */
-			default:
-				retdb->attributes.unique_subject = 1;
-				break;
-				}
+#endif
+			retdb->attributes.unique_subject = parse_yesno(p,1);
 			}
 		}
 
@@ -1798,7 +1813,7 @@ int index_index(CA_DB *db)
 	return 1;
 	}
 
-int save_index(char *dbfile, char *suffix, CA_DB *db)
+int save_index(const char *dbfile, const char *suffix, CA_DB *db)
 	{
 	char buf[3][BSIZE];
 	BIO *out = BIO_new(BIO_s_file());
@@ -1865,7 +1880,7 @@ int save_index(char *dbfile, char *suffix, CA_DB *db)
 	return 0;
 	}
 
-int rotate_index(char *dbfile, char *new_suffix, char *old_suffix)
+int rotate_index(const char *dbfile, const char *new_suffix, const char *old_suffix)
 	{
 	char buf[5][BSIZE];
 	int i,j;
@@ -2005,9 +2020,177 @@ void free_index(CA_DB *db)
 		}
 	}
 
+int parse_yesno(const char *str, int def)
+	{
+	int ret = def;
+	if (str)
+		{
+		switch (*str)
+			{
+		case 'f': /* false */
+		case 'F': /* FALSE */
+		case 'n': /* no */
+		case 'N': /* NO */
+		case '0': /* 0 */
+			ret = 0;
+			break;
+		case 't': /* true */
+		case 'T': /* TRUE */
+		case 'y': /* yes */
+		case 'Y': /* YES */
+		case '1': /* 1 */
+			ret = 1;
+			break;
+		default:
+			ret = def;
+			break;
+			}
+		}
+	return ret;
+	}
+
+/*
+ * subject is expected to be in the format /type0=value0/type1=value1/type2=...
+ * where characters may be escaped by \
+ */
+X509_NAME *parse_name(char *subject, long chtype, int multirdn)
+	{
+	size_t buflen = strlen(subject)+1; /* to copy the types and values into. due to escaping, the copy can only become shorter */
+	char *buf = OPENSSL_malloc(buflen);
+	size_t max_ne = buflen / 2 + 1; /* maximum number of name elements */
+	char **ne_types = OPENSSL_malloc(max_ne * sizeof (char *));
+	char **ne_values = OPENSSL_malloc(max_ne * sizeof (char *));
+	int *mval = OPENSSL_malloc (max_ne * sizeof (int));
+
+	char *sp = subject, *bp = buf;
+	int i, ne_num = 0;
+
+	X509_NAME *n = NULL;
+	int nid;
+
+	if (!buf || !ne_types || !ne_values || !mval)
+		{
+		BIO_printf(bio_err, "malloc error\n");
+		goto error;
+		}	
+
+	if (*subject != '/')
+		{
+		BIO_printf(bio_err, "Subject does not start with '/'.\n");
+		goto error;
+		}
+	sp++; /* skip leading / */
+
+	/* no multivalued RDN by default */
+	mval[ne_num] = 0;
+
+	while (*sp)
+		{
+		/* collect type */
+		ne_types[ne_num] = bp;
+		while (*sp)
+			{
+			if (*sp == '\\') /* is there anything to escape in the type...? */
+				{
+				if (*++sp)
+					*bp++ = *sp++;
+				else	
+					{
+					BIO_printf(bio_err, "escape character at end of string\n");
+					goto error;
+					}
+				}	
+			else if (*sp == '=')
+				{
+				sp++;
+				*bp++ = '\0';
+				break;
+				}
+			else
+				*bp++ = *sp++;
+			}
+		if (!*sp)
+			{
+			BIO_printf(bio_err, "end of string encountered while processing type of subject name element #%d\n", ne_num);
+			goto error;
+			}
+		ne_values[ne_num] = bp;
+		while (*sp)
+			{
+			if (*sp == '\\')
+				{
+				if (*++sp)
+					*bp++ = *sp++;
+				else
+					{
+					BIO_printf(bio_err, "escape character at end of string\n");
+					goto error;
+					}
+				}
+			else if (*sp == '/')
+				{
+				sp++;
+				/* no multivalued RDN by default */
+				mval[ne_num+1] = 0;
+				break;
+				}
+			else if (*sp == '+' && multirdn)
+				{
+				/* a not escaped + signals a mutlivalued RDN */
+				sp++;
+				mval[ne_num+1] = -1;
+				break;
+				}
+			else
+				*bp++ = *sp++;
+			}
+		*bp++ = '\0';
+		ne_num++;
+		}	
+
+	if (!(n = X509_NAME_new()))
+		goto error;
+
+	for (i = 0; i < ne_num; i++)
+		{
+		if ((nid=OBJ_txt2nid(ne_types[i])) == NID_undef)
+			{
+			BIO_printf(bio_err, "Subject Attribute %s has no known NID, skipped\n", ne_types[i]);
+			continue;
+			}
+
+		if (!*ne_values[i])
+			{
+			BIO_printf(bio_err, "No value provided for Subject Attribute %s, skipped\n", ne_types[i]);
+			continue;
+			}
+
+		if (!X509_NAME_add_entry_by_NID(n, nid, chtype, (unsigned char*)ne_values[i], -1,-1,mval[i]))
+			goto error;
+		}
+
+	OPENSSL_free(ne_values);
+	OPENSSL_free(ne_types);
+	OPENSSL_free(buf);
+	OPENSSL_free(mval);
+	return n;
+
+error:
+	X509_NAME_free(n);
+	if (ne_values)
+		OPENSSL_free(ne_values);
+	if (ne_types)
+		OPENSSL_free(ne_types);
+	if (mval)
+		OPENSSL_free(mval);
+	if (buf)
+		OPENSSL_free(buf);
+	return NULL;
+}
+
 /* This code MUST COME AFTER anything that uses rename() */
 #ifdef OPENSSL_SYS_WIN32
-int WIN32_rename(char *from, char *to)
+int WIN32_rename(const char *from, const char *to)
 	{
 #ifndef OPENSSL_SYS_WINCE
 	/* Windows rename gives an error if 'to' exists, so delete it
@@ -2042,4 +2225,375 @@ int WIN32_rename(char *from, char *to)
 	}
 #endif
 	}
+#endif
+
+int args_verify(char ***pargs, int *pargc,
+			int *badarg, BIO *err, X509_VERIFY_PARAM **pm)
+	{
+	ASN1_OBJECT *otmp = NULL;
+	unsigned long flags = 0;
+	int i;
+	int purpose = 0;
+	char **oldargs = *pargs;
+	char *arg = **pargs, *argn = (*pargs)[1];
+	if (!strcmp(arg, "-policy"))
+		{
+		if (!argn)
+			*badarg = 1;
+		else
+			{
+			otmp = OBJ_txt2obj(argn, 0);
+			if (!otmp)
+				{
+				BIO_printf(err, "Invalid Policy \"%s\"\n",
+									argn);
+				*badarg = 1;
+				}
+			}
+		(*pargs)++;
+		}
+	else if (strcmp(arg,"-purpose") == 0)
+		{
+		X509_PURPOSE *xptmp;
+		if (!argn)
+			*badarg = 1;
+		else
+			{
+			i = X509_PURPOSE_get_by_sname(argn);
+			if(i < 0)
+				{
+				BIO_printf(err, "unrecognized purpose\n");
+				*badarg = 1;
+				}
+			else
+				{
+				xptmp = X509_PURPOSE_get0(i);
+				purpose = X509_PURPOSE_get_id(xptmp);
+				}
+			}
+		(*pargs)++;
+		}
+	else if (!strcmp(arg, "-ignore_critical"))
+		flags |= X509_V_FLAG_IGNORE_CRITICAL;
+	else if (!strcmp(arg, "-issuer_checks"))
+		flags |= X509_V_FLAG_CB_ISSUER_CHECK;
+	else if (!strcmp(arg, "-crl_check"))
+		flags |=  X509_V_FLAG_CRL_CHECK;
+	else if (!strcmp(arg, "-crl_check_all"))
+		flags |= X509_V_FLAG_CRL_CHECK|X509_V_FLAG_CRL_CHECK_ALL;
+	else if (!strcmp(arg, "-policy_check"))
+		flags |= X509_V_FLAG_POLICY_CHECK;
+	else if (!strcmp(arg, "-explicit_policy"))
+		flags |= X509_V_FLAG_EXPLICIT_POLICY;
+	else if (!strcmp(arg, "-x509_strict"))
+		flags |= X509_V_FLAG_X509_STRICT;
+	else if (!strcmp(arg, "-policy_print"))
+		flags |= X509_V_FLAG_NOTIFY_POLICY;
+	else if (!strcmp(arg, "-check_ss_sig"))
+		flags |= X509_V_FLAG_CHECK_SS_SIGNATURE;
+	else
+		return 0;
+
+	if (*badarg)
+		{
+		if (*pm)
+			X509_VERIFY_PARAM_free(*pm);
+		*pm = NULL;
+		goto end;
+		}
+
+	if (!*pm && !(*pm = X509_VERIFY_PARAM_new()))
+		{
+		*badarg = 1;
+		goto end;
+		}
+
+	if (otmp)
+		X509_VERIFY_PARAM_add0_policy(*pm, otmp);
+	if (flags)
+		X509_VERIFY_PARAM_set_flags(*pm, flags);
+
+	if (purpose)
+		X509_VERIFY_PARAM_set_purpose(*pm, purpose);
+
+	end:
+
+	(*pargs)++;
+
+	if (pargc)
+		*pargc -= *pargs - oldargs;
+
+	return 1;
+
+	}
+
+static void nodes_print(BIO *out, const char *name,
+	STACK_OF(X509_POLICY_NODE) *nodes)
+	{
+	X509_POLICY_NODE *node;
+	int i;
+	BIO_printf(out, "%s Policies:", name);
+	if (nodes)
+		{
+		BIO_puts(out, "\n");
+		for (i = 0; i < sk_X509_POLICY_NODE_num(nodes); i++)
+			{
+			node = sk_X509_POLICY_NODE_value(nodes, i);
+			X509_POLICY_NODE_print(out, node, 2);
+			}
+		}
+	else
+		BIO_puts(out, " <empty>\n");
+	}
+
+void policies_print(BIO *out, X509_STORE_CTX *ctx)
+	{
+	X509_POLICY_TREE *tree;
+	int explicit_policy;
+	int free_out = 0;
+	if (out == NULL)
+		{
+		out = BIO_new_fp(stderr, BIO_NOCLOSE);
+		free_out = 1;
+		}
+	tree = X509_STORE_CTX_get0_policy_tree(ctx);
+	explicit_policy = X509_STORE_CTX_get_explicit_policy(ctx);
+
+	BIO_printf(out, "Require explicit Policy: %s\n",
+				explicit_policy ? "True" : "False");
+
+	nodes_print(out, "Authority", X509_policy_tree_get0_policies(tree));
+	nodes_print(out, "User", X509_policy_tree_get0_user_policies(tree));
+	if (free_out)
+		BIO_free(out);
+	}
+
+#ifndef OPENSSL_NO_JPAKE
+
+static JPAKE_CTX *jpake_init(const char *us, const char *them,
+							 const char *secret)
+	{
+	BIGNUM *p = NULL;
+	BIGNUM *g = NULL;
+	BIGNUM *q = NULL;
+	BIGNUM *bnsecret = BN_new();
+	JPAKE_CTX *ctx;
+
+	/* Use a safe prime for p (that we found earlier) */
+	BN_hex2bn(&p, "F9E5B365665EA7A05A9C534502780FEE6F1AB5BD4F49947FD036DBD7E905269AF46EF28B0FC07487EE4F5D20FB3C0AF8E700F3A2FA3414970CBED44FEDFF80CE78D800F184BB82435D137AADA2C6C16523247930A63B85661D1FC817A51ACD96168E95898A1F83A79FFB529368AA7833ABD1B0C3AEDDB14D2E1A2F71D99F763F");
+	g = BN_new();
+	BN_set_word(g, 2);
+	q = BN_new();
+	BN_rshift1(q, p);
+
+	BN_bin2bn((const unsigned char *)secret, strlen(secret), bnsecret);
+
+	ctx = JPAKE_CTX_new(us, them, p, g, q, bnsecret);
+	BN_free(bnsecret);
+	BN_free(q);
+	BN_free(g);
+	BN_free(p);
+
+	return ctx;
+	}
+
+static void jpake_send_part(BIO *conn, const JPAKE_STEP_PART *p)
+	{
+	BN_print(conn, p->gx);
+	BIO_puts(conn, "\n");
+	BN_print(conn, p->zkpx.gr);
+	BIO_puts(conn, "\n");
+	BN_print(conn, p->zkpx.b);
+	BIO_puts(conn, "\n");
+	}
+
+static void jpake_send_step1(BIO *bconn, JPAKE_CTX *ctx)
+	{
+	JPAKE_STEP1 s1;
+
+	JPAKE_STEP1_init(&s1);
+	JPAKE_STEP1_generate(&s1, ctx);
+	jpake_send_part(bconn, &s1.p1);
+	jpake_send_part(bconn, &s1.p2);
+	(void)BIO_flush(bconn);
+	JPAKE_STEP1_release(&s1);
+	}
+
+static void jpake_send_step2(BIO *bconn, JPAKE_CTX *ctx)
+	{
+	JPAKE_STEP2 s2;
+
+	JPAKE_STEP2_init(&s2);
+	JPAKE_STEP2_generate(&s2, ctx);
+	jpake_send_part(bconn, &s2);
+	(void)BIO_flush(bconn);
+	JPAKE_STEP2_release(&s2);
+	}
+
+static void jpake_send_step3a(BIO *bconn, JPAKE_CTX *ctx)
+	{
+	JPAKE_STEP3A s3a;
+
+	JPAKE_STEP3A_init(&s3a);
+	JPAKE_STEP3A_generate(&s3a, ctx);
+	BIO_write(bconn, s3a.hhk, sizeof s3a.hhk);
+	(void)BIO_flush(bconn);
+	JPAKE_STEP3A_release(&s3a);
+	}
+
+static void jpake_send_step3b(BIO *bconn, JPAKE_CTX *ctx)
+	{
+	JPAKE_STEP3B s3b;
+
+	JPAKE_STEP3B_init(&s3b);
+	JPAKE_STEP3B_generate(&s3b, ctx);
+	BIO_write(bconn, s3b.hk, sizeof s3b.hk);
+	(void)BIO_flush(bconn);
+	JPAKE_STEP3B_release(&s3b);
+	}
+
+static void readbn(BIGNUM **bn, BIO *bconn)
+	{
+	char buf[10240];
+	int l;
+
+	l = BIO_gets(bconn, buf, sizeof buf);
+	assert(l > 0);
+	assert(buf[l-1] == '\n');
+	buf[l-1] = '\0';
+	BN_hex2bn(bn, buf);
+	}
+
+static void jpake_receive_part(JPAKE_STEP_PART *p, BIO *bconn)
+	{
+	readbn(&p->gx, bconn);
+	readbn(&p->zkpx.gr, bconn);
+	readbn(&p->zkpx.b, bconn);
+	}
+
+static void jpake_receive_step1(JPAKE_CTX *ctx, BIO *bconn)
+	{
+	JPAKE_STEP1 s1;
+
+	JPAKE_STEP1_init(&s1);
+	jpake_receive_part(&s1.p1, bconn);
+	jpake_receive_part(&s1.p2, bconn);
+	if(!JPAKE_STEP1_process(ctx, &s1))
+		{
+		ERR_print_errors(bio_err);
+		exit(1);
+		}
+	JPAKE_STEP1_release(&s1);
+	}
+
+static void jpake_receive_step2(JPAKE_CTX *ctx, BIO *bconn)
+	{
+	JPAKE_STEP2 s2;
+
+	JPAKE_STEP2_init(&s2);
+	jpake_receive_part(&s2, bconn);
+	if(!JPAKE_STEP2_process(ctx, &s2))
+		{
+		ERR_print_errors(bio_err);
+		exit(1);
+		}
+	JPAKE_STEP2_release(&s2);
+	}
+
+static void jpake_receive_step3a(JPAKE_CTX *ctx, BIO *bconn)
+	{
+	JPAKE_STEP3A s3a;
+	int l;
+
+	JPAKE_STEP3A_init(&s3a);
+	l = BIO_read(bconn, s3a.hhk, sizeof s3a.hhk);
+	assert(l == sizeof s3a.hhk);
+	if(!JPAKE_STEP3A_process(ctx, &s3a))
+		{
+		ERR_print_errors(bio_err);
+		exit(1);
+		}
+	JPAKE_STEP3A_release(&s3a);
+	}
+
+static void jpake_receive_step3b(JPAKE_CTX *ctx, BIO *bconn)
+	{
+	JPAKE_STEP3B s3b;
+	int l;
+
+	JPAKE_STEP3B_init(&s3b);
+	l = BIO_read(bconn, s3b.hk, sizeof s3b.hk);
+	assert(l == sizeof s3b.hk);
+	if(!JPAKE_STEP3B_process(ctx, &s3b))
+		{
+		ERR_print_errors(bio_err);
+		exit(1);
+		}
+	JPAKE_STEP3B_release(&s3b);
+	}
+
+void jpake_client_auth(BIO *out, BIO *conn, const char *secret)
+	{
+	JPAKE_CTX *ctx;
+	BIO *bconn;
+
+	BIO_puts(out, "Authenticating with JPAKE\n");
+
+	ctx = jpake_init("client", "server", secret);
+
+	bconn = BIO_new(BIO_f_buffer());
+	BIO_push(bconn, conn);
+
+	jpake_send_step1(bconn, ctx);
+	jpake_receive_step1(ctx, bconn);
+	jpake_send_step2(bconn, ctx);
+	jpake_receive_step2(ctx, bconn);
+	jpake_send_step3a(bconn, ctx);
+	jpake_receive_step3b(ctx, bconn);
+
+	/*
+	 * The problem is that you must use the derived key in the
+	 * session key or you are subject to man-in-the-middle
+	 * attacks.
+	 */
+	BIO_puts(out, "JPAKE authentication succeeded (N.B. This version can"
+		 " be MitMed. See the version in HEAD for how to do it"
+		 " properly)\n");
+
+	BIO_pop(bconn);
+	BIO_free(bconn);
+	}
+
+void jpake_server_auth(BIO *out, BIO *conn, const char *secret)
+	{
+	JPAKE_CTX *ctx;
+	BIO *bconn;
+
+	BIO_puts(out, "Authenticating with JPAKE\n");
+
+	ctx = jpake_init("server", "client", secret);
+
+	bconn = BIO_new(BIO_f_buffer());
+	BIO_push(bconn, conn);
+
+	jpake_receive_step1(ctx, bconn);
+	jpake_send_step1(bconn, ctx);
+	jpake_receive_step2(ctx, bconn);
+	jpake_send_step2(bconn, ctx);
+	jpake_receive_step3a(ctx, bconn);
+	jpake_send_step3b(bconn, ctx);
+
+	/*
+	 * The problem is that you must use the derived key in the
+	 * session key or you are subject to man-in-the-middle
+	 * attacks.
+	 */
+	BIO_puts(out, "JPAKE authentication succeeded (N.B. This version can"
+		 " be MitMed. See the version in HEAD for how to do it"
+		 " properly)\n");
+
+	BIO_pop(bconn);
+	BIO_free(bconn);
+	}
+
 #endif

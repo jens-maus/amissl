@@ -72,7 +72,7 @@
 #undef POSTFIX
 #define	POSTFIX	".rvk"
 
-static char *crl_usage[]={
+static const char *crl_usage[]={
 "usage: crl args\n",
 "\n",
 " -inform arg     - input format - default PEM (DER or PEM)\n",
@@ -85,6 +85,7 @@ static char *crl_usage[]={
 " -issuer         - print issuer DN\n",
 " -lastupdate     - lastUpdate field\n",
 " -nextupdate     - nextUpdate field\n",
+" -crlnumber      - print CRL number\n",
 " -noout          - no CRL output\n",
 " -CAfile  name   - verify CRL using certificates in file \"name\"\n",
 " -CApath  dir    - verify CRL using certificates in \"dir\"\n",
@@ -107,15 +108,15 @@ int MAIN(int argc, char **argv)
 	int informat,outformat;
 	char *infile=NULL,*outfile=NULL;
 	int hash=0,issuer=0,lastupdate=0,nextupdate=0,noout=0,text=0;
-	int fingerprint = 0;
-	char **pp;
+	int fingerprint = 0, crlnumber = 0;
+	const char **pp;
 	X509_STORE *store = NULL;
 	X509_STORE_CTX ctx;
 	X509_LOOKUP *lookup = NULL;
 	X509_OBJECT xobj;
 	EVP_PKEY *pkey;
 	int do_ver = 0;
-	const EVP_MD *md_alg,*digest=EVP_md5();
+	const EVP_MD *md_alg,*digest=EVP_sha1();
 
 	apps_startup();
 
@@ -206,6 +207,8 @@ int MAIN(int argc, char **argv)
 			noout= ++num;
 		else if (strcmp(*argv,"-fingerprint") == 0)
 			fingerprint= ++num;
+		else if (strcmp(*argv,"-crlnumber") == 0)
+			crlnumber= ++num;
 		else if ((md_alg=EVP_get_digestbyname(*argv + 1)))
 			{
 			/* ok */
@@ -281,7 +284,21 @@ bad:
 				{
 				print_name(bio_out, "issuer=", X509_CRL_get_issuer(x), nmflag);
 				}
-
+			if (crlnumber == i)
+				{
+				ASN1_INTEGER *crlnum;
+				crlnum = X509_CRL_get_ext_d2i(x, NID_crl_number,
+							      NULL, NULL);
+				BIO_printf(bio_out,"crlNumber=");
+				if (crlnum)
+					{
+					i2a_ASN1_INTEGER(bio_out, crlnum);
+					ASN1_INTEGER_free(crlnum);
+					}
+				else
+					BIO_puts(bio_out, "<NONE>");
+				BIO_printf(bio_out,"\n");
+				}
 			if (hash == i)
 				{
 				BIO_printf(bio_out,"%08lx\n",

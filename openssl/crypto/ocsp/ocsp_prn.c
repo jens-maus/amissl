@@ -182,7 +182,6 @@ int OCSP_RESPONSE_print(BIO *bp, OCSP_RESPONSE* o, unsigned long flags)
         {
 	int i, ret = 0;
 	long l;
-	unsigned char *p;
 	OCSP_CERTID *cid = NULL;
 	OCSP_BASICRESP *br = NULL;
 	OCSP_RESPID *rid = NULL;
@@ -194,7 +193,7 @@ int OCSP_RESPONSE_print(BIO *bp, OCSP_RESPONSE* o, unsigned long flags)
 
 	if (BIO_puts(bp,"OCSP Response Data:\n") <= 0) goto err;
 	l=ASN1_ENUMERATED_get(o->responseStatus);
-	if (BIO_printf(bp,"    OCSP Response Status: %s (0x%x)\n",
+	if (BIO_printf(bp,"    OCSP Response Status: %s (0x%lx)\n",
 		       OCSP_response_status_str(l), l) <= 0) goto err;
 	if (rb == NULL) return 1;
         if (BIO_puts(bp,"    Response Type: ") <= 0)
@@ -207,7 +206,6 @@ int OCSP_RESPONSE_print(BIO *bp, OCSP_RESPONSE* o, unsigned long flags)
 		return 1;
 		}
 
-	p = ASN1_STRING_data(rb->response);
 	i = ASN1_STRING_length(rb->response);
 	if (!(br = OCSP_response_get1_basic(o))) goto err;
 	rd = br->tbsResponseData;
@@ -252,7 +250,7 @@ int OCSP_RESPONSE_print(BIO *bp, OCSP_RESPONSE* o, unsigned long flags)
 			        {
 				l=ASN1_ENUMERATED_get(rev->revocationReason);
 				if (BIO_printf(bp, 
-					 "\n    Revocation Reason: %s (0x%x)",
+					 "\n    Revocation Reason: %s (0x%lx)",
 					       OCSP_crl_reason_str(l), l) <= 0)
 				        goto err;
 				}
@@ -266,15 +264,16 @@ int OCSP_RESPONSE_print(BIO *bp, OCSP_RESPONSE* o, unsigned long flags)
 			if (!ASN1_GENERALIZEDTIME_print(bp,single->nextUpdate))
 				goto err;
 			}
-		if (!BIO_write(bp,"\n",1)) goto err;
+		if (BIO_write(bp,"\n",1) <= 0) goto err;
 		if (!X509V3_extensions_print(bp,
 					"Response Single Extensions",
 					single->singleExtensions, flags, 8))
 							goto err;
-		if (!BIO_write(bp,"\n",1)) goto err;
+		if (BIO_write(bp,"\n",1) <= 0) goto err;
 		}
 	if (!X509V3_extensions_print(bp, "Response Extensions",
 					rd->responseExtensions, flags, 4))
+							goto err;
 	if(X509_signature_print(bp, br->signatureAlgorithm, br->signature) <= 0)
 							goto err;
 

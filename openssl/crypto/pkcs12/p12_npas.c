@@ -1,5 +1,5 @@
 /* p12_npas.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -77,28 +77,26 @@ static int alg_get(X509_ALGOR *alg, int *pnid, int *piter, int *psaltlen);
 
 int PKCS12_newpass(PKCS12 *p12, char *oldpass, char *newpass)
 {
+	/* Check for NULL PKCS12 structure */
 
-/* Check for NULL PKCS12 structure */
+	if(!p12) {
+		PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_INVALID_NULL_PKCS12_POINTER);
+		return 0;
+	}
 
-if(!p12) {
-	PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_INVALID_NULL_PKCS12_POINTER);
-	return 0;
-}
+	/* Check the mac */
+	
+	if (!PKCS12_verify_mac(p12, oldpass, -1)) {
+		PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_MAC_VERIFY_FAILURE);
+		return 0;
+	}
 
-/* Check the mac */
+	if (!newpass_p12(p12, oldpass, newpass)) {
+		PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_PARSE_ERROR);
+		return 0;
+	}
 
-if (!PKCS12_verify_mac(p12, oldpass, -1)) {
-	PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_MAC_VERIFY_FAILURE);
-	return 0;
-}
-
-if (!newpass_p12(p12, oldpass, newpass)) {
-	PKCS12err(PKCS12_F_PKCS12_NEWPASS,PKCS12_R_PARSE_ERROR);
-	return 0;
-}
-
-return 1;
-
+	return 1;
 }
 
 /* Parse the outer PKCS#12 structure */
@@ -122,8 +120,13 @@ static int newpass_p12(PKCS12 *p12, char *oldpass, char *newpass)
 			bags = PKCS12_unpack_p7data(p7);
 		} else if (bagnid == NID_pkcs7_encrypted) {
 			bags = PKCS12_unpack_p7encdata(p7, oldpass, -1);
-			alg_get(p7->d.encrypted->enc_data->algorithm,
-				&pbe_nid, &pbe_iter, &pbe_saltlen);
+			if (!alg_get(p7->d.encrypted->enc_data->algorithm,
+				&pbe_nid, &pbe_iter, &pbe_saltlen))
+				{
+				sk_PKCS12_SAFEBAG_pop_free(bags,
+						PKCS12_SAFEBAG_free);
+				bags = NULL;
+				}
 		} else continue;
 		if (!bags) {
 			sk_PKCS7_pop_free(asafes, PKCS7_free);
@@ -195,7 +198,9 @@ static int newpass_bag(PKCS12_SAFEBAG *bag, char *oldpass, char *newpass)
 	if(M_PKCS12_bag_type(bag) != NID_pkcs8ShroudedKeyBag) return 1;
 
 	if (!(p8 = PKCS8_decrypt(bag->value.shkeybag, oldpass, -1))) return 0;
-	alg_get(bag->value.shkeybag->algor, &p8_nid, &p8_iter, &p8_saltlen);
+	if (!alg_get(bag->value.shkeybag->algor, &p8_nid, &p8_iter,
+							&p8_saltlen))
+		return 0;
 	if(!(p8new = PKCS8_encrypt(p8_nid, NULL, newpass, -1, NULL, p8_saltlen,
 						     p8_iter, p8))) return 0;
 	X509_SIG_free(bag->value.shkeybag);
@@ -206,12 +211,15 @@ static int newpass_bag(PKCS12_SAFEBAG *bag, char *oldpass, char *newpass)
 static int alg_get(X509_ALGOR *alg, int *pnid, int *piter, int *psaltlen)
 {
         PBEPARAM *pbe;
-        unsigned char *p;
+        const unsigned char *p;
+
         p = alg->parameter->value.sequence->data;
         pbe = d2i_PBEPARAM(NULL, &p, alg->parameter->value.sequence->length);
+	if (!pbe)
+		return 0;
         *pnid = OBJ_obj2nid(alg->algorithm);
 	*piter = ASN1_INTEGER_get(pbe->iter);
 	*psaltlen = pbe->salt->length;
         PBEPARAM_free(pbe);
-        return 0;
+        return 1;
 }

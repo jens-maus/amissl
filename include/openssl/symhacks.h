@@ -63,7 +63,16 @@
 /* Hacks to solve the problem with linkers incapable of handling very long
    symbol names.  In the case of VMS, the limit is 31 characters on VMS for
    VAX. */
+/* Note that this affects util/libeay.num and util/ssleay.num...  you may
+   change those manually, but that's not recommended, as those files are
+   controlled centrally and updated on Unix, and the central definition
+   may disagree with yours, which in turn may come with shareable library
+   incompatibilities. */
 #ifdef OPENSSL_SYS_VMS
+
+/* Hack a long name in crypto/cryptlib.c */
+#undef int_CRYPTO_set_do_dynlock_callback
+#define int_CRYPTO_set_do_dynlock_callback	int_CRYPTO_set_do_dynlock_cb
 
 /* Hack a long name in crypto/ex_data.c */
 #undef CRYPTO_get_ex_data_implementation
@@ -130,6 +139,14 @@
 /* Hack some long X509 names */
 #undef X509_REVOKED_get_ext_by_critical
 #define X509_REVOKED_get_ext_by_critical	X509_REVOKED_get_ext_by_critic
+#undef X509_policy_tree_get0_user_policies
+#define X509_policy_tree_get0_user_policies	X509_pcy_tree_get0_usr_policies
+#undef X509_policy_node_get0_qualifiers
+#define X509_policy_node_get0_qualifiers	X509_pcy_node_get0_qualifiers
+#undef X509_STORE_CTX_get_explicit_policy
+#define X509_STORE_CTX_get_explicit_policy	X509_STORE_CTX_get_expl_policy
+#undef X509_STORE_CTX_get0_current_issuer
+#define X509_STORE_CTX_get0_current_issuer	X509_STORE_CTX_get0_cur_issuer
 
 /* Hack some long CRYPTO names */
 #undef CRYPTO_set_dynlock_destroy_callback
@@ -156,16 +173,25 @@
 #define SSL_get_ex_data_X509_STORE_CTX_idx      SSL_get_ex_d_X509_STORE_CTX_idx
 #undef SSL_add_file_cert_subjects_to_stack
 #define SSL_add_file_cert_subjects_to_stack     SSL_add_file_cert_subjs_to_stk
-#if 0 /* This function is not defined i VMS. */
 #undef SSL_add_dir_cert_subjects_to_stack
 #define SSL_add_dir_cert_subjects_to_stack      SSL_add_dir_cert_subjs_to_stk
-#endif
 #undef SSL_CTX_use_certificate_chain_file
 #define SSL_CTX_use_certificate_chain_file      SSL_CTX_use_cert_chain_file
 #undef SSL_CTX_set_cert_verify_callback
 #define SSL_CTX_set_cert_verify_callback        SSL_CTX_set_cert_verify_cb
 #undef SSL_CTX_set_default_passwd_cb_userdata
 #define SSL_CTX_set_default_passwd_cb_userdata  SSL_CTX_set_def_passwd_cb_ud
+#undef SSL_COMP_get_compression_methods
+#define SSL_COMP_get_compression_methods	SSL_COMP_get_compress_methods
+
+#undef ssl_add_clienthello_renegotiate_ext
+#define ssl_add_clienthello_renegotiate_ext	ssl_add_clienthello_reneg_ext
+#undef ssl_add_serverhello_renegotiate_ext
+#define ssl_add_serverhello_renegotiate_ext	ssl_add_serverhello_reneg_ext
+#undef ssl_parse_clienthello_renegotiate_ext
+#define ssl_parse_clienthello_renegotiate_ext	ssl_parse_clienthello_reneg_ext
+#undef ssl_parse_serverhello_renegotiate_ext
+#define ssl_parse_serverhello_renegotiate_ext	ssl_parse_serverhello_reneg_ext
 
 /* Hack some long ENGINE names */
 #undef ENGINE_get_default_BN_mod_exp_crt
@@ -176,6 +202,11 @@
 #define ENGINE_set_load_privkey_function        ENGINE_set_load_privkey_fn
 #undef ENGINE_get_load_privkey_function
 #define ENGINE_get_load_privkey_function        ENGINE_get_load_privkey_fn
+#undef ENGINE_set_load_ssl_client_cert_function
+#define ENGINE_set_load_ssl_client_cert_function \
+						ENGINE_set_ld_ssl_clnt_cert_fn
+#undef ENGINE_get_ssl_client_cert_function
+#define ENGINE_get_ssl_client_cert_function	ENGINE_get_ssl_client_cert_fn
 
 /* Hack some long OCSP names */
 #undef OCSP_REQUEST_get_ext_by_critical
@@ -198,6 +229,12 @@
 #define OPENSSL_add_all_algorithms_conf		OPENSSL_add_all_algo_conf
 
 /* Hack some long EC names */
+#undef EC_GROUP_set_point_conversion_form
+#define EC_GROUP_set_point_conversion_form	EC_GROUP_set_point_conv_form
+#undef EC_GROUP_get_point_conversion_form
+#define EC_GROUP_get_point_conversion_form	EC_GROUP_get_point_conv_form
+#undef EC_GROUP_clear_free_all_extra_data
+#define EC_GROUP_clear_free_all_extra_data	EC_GROUP_clr_free_all_xtra_data
 #undef EC_POINT_set_Jprojective_coordinates_GFp
 #define EC_POINT_set_Jprojective_coordinates_GFp \
                                                 EC_POINT_set_Jproj_coords_GFp
@@ -210,6 +247,32 @@
 #define EC_POINT_get_affine_coordinates_GFp     EC_POINT_get_affine_coords_GFp
 #undef EC_POINT_set_compressed_coordinates_GFp
 #define EC_POINT_set_compressed_coordinates_GFp EC_POINT_set_compr_coords_GFp
+#undef EC_POINT_set_affine_coordinates_GF2m
+#define EC_POINT_set_affine_coordinates_GF2m    EC_POINT_set_affine_coords_GF2m
+#undef EC_POINT_get_affine_coordinates_GF2m
+#define EC_POINT_get_affine_coordinates_GF2m    EC_POINT_get_affine_coords_GF2m
+#undef EC_POINT_set_compressed_coordinates_GF2m
+#define EC_POINT_set_compressed_coordinates_GF2m \
+                                                EC_POINT_set_compr_coords_GF2m
+#undef ec_GF2m_simple_group_clear_finish
+#define ec_GF2m_simple_group_clear_finish       ec_GF2m_simple_grp_clr_finish
+#undef ec_GF2m_simple_group_check_discriminant
+#define ec_GF2m_simple_group_check_discriminant	ec_GF2m_simple_grp_chk_discrim
+#undef ec_GF2m_simple_point_clear_finish
+#define ec_GF2m_simple_point_clear_finish       ec_GF2m_simple_pt_clr_finish
+#undef ec_GF2m_simple_point_set_to_infinity
+#define ec_GF2m_simple_point_set_to_infinity    ec_GF2m_simple_pt_set_to_inf
+#undef ec_GF2m_simple_points_make_affine
+#define ec_GF2m_simple_points_make_affine       ec_GF2m_simple_pts_make_affine
+#undef ec_GF2m_simple_point_set_affine_coordinates
+#define ec_GF2m_simple_point_set_affine_coordinates \
+                                                ec_GF2m_smp_pt_set_af_coords
+#undef ec_GF2m_simple_point_get_affine_coordinates
+#define ec_GF2m_simple_point_get_affine_coordinates \
+                                                ec_GF2m_smp_pt_get_af_coords
+#undef ec_GF2m_simple_set_compressed_coordinates
+#define ec_GF2m_simple_set_compressed_coordinates \
+                                                ec_GF2m_smp_set_compr_coords
 #undef ec_GFp_simple_group_set_curve_GFp
 #define ec_GFp_simple_group_set_curve_GFp       ec_GFp_simple_grp_set_curve_GFp
 #undef ec_GFp_simple_group_get_curve_GFp
@@ -228,8 +291,6 @@
 #define ec_GFp_simple_point_set_to_infinity     ec_GFp_simple_pt_set_to_inf
 #undef ec_GFp_simple_points_make_affine
 #define ec_GFp_simple_points_make_affine        ec_GFp_simple_pts_make_affine
-#undef ec_GFp_simple_group_get_curve_GFp
-#define ec_GFp_simple_group_get_curve_GFp       ec_GFp_simple_grp_get_curve_GFp
 #undef ec_GFp_simple_set_Jprojective_coordinates_GFp
 #define ec_GFp_simple_set_Jprojective_coordinates_GFp \
                                                 ec_GFp_smp_set_Jproj_coords_GFp
@@ -245,6 +306,85 @@
 #undef ec_GFp_simple_set_compressed_coordinates_GFp
 #define ec_GFp_simple_set_compressed_coordinates_GFp \
                                                 ec_GFp_smp_set_compr_coords_GFp
+#undef ec_GFp_simple_point_set_affine_coordinates
+#define ec_GFp_simple_point_set_affine_coordinates \
+                                                ec_GFp_smp_pt_set_af_coords
+#undef ec_GFp_simple_point_get_affine_coordinates
+#define ec_GFp_simple_point_get_affine_coordinates \
+                                                ec_GFp_smp_pt_get_af_coords
+#undef ec_GFp_simple_set_compressed_coordinates
+#define ec_GFp_simple_set_compressed_coordinates \
+                                                ec_GFp_smp_set_compr_coords
+#undef ec_GFp_simple_group_check_discriminant
+#define ec_GFp_simple_group_check_discriminant	ec_GFp_simple_grp_chk_discrim
+
+/* Hack som long STORE names */
+#undef STORE_method_set_initialise_function
+#define STORE_method_set_initialise_function	STORE_meth_set_initialise_fn
+#undef STORE_method_set_cleanup_function
+#define STORE_method_set_cleanup_function	STORE_meth_set_cleanup_fn
+#undef STORE_method_set_generate_function
+#define STORE_method_set_generate_function	STORE_meth_set_generate_fn
+#undef STORE_method_set_modify_function
+#define STORE_method_set_modify_function	STORE_meth_set_modify_fn
+#undef STORE_method_set_revoke_function
+#define STORE_method_set_revoke_function	STORE_meth_set_revoke_fn
+#undef STORE_method_set_delete_function
+#define STORE_method_set_delete_function	STORE_meth_set_delete_fn
+#undef STORE_method_set_list_start_function
+#define STORE_method_set_list_start_function	STORE_meth_set_list_start_fn
+#undef STORE_method_set_list_next_function
+#define STORE_method_set_list_next_function	STORE_meth_set_list_next_fn
+#undef STORE_method_set_list_end_function
+#define STORE_method_set_list_end_function	STORE_meth_set_list_end_fn
+#undef STORE_method_set_update_store_function
+#define STORE_method_set_update_store_function	STORE_meth_set_update_store_fn
+#undef STORE_method_set_lock_store_function
+#define STORE_method_set_lock_store_function	STORE_meth_set_lock_store_fn
+#undef STORE_method_set_unlock_store_function
+#define STORE_method_set_unlock_store_function	STORE_meth_set_unlock_store_fn
+#undef STORE_method_get_initialise_function
+#define STORE_method_get_initialise_function	STORE_meth_get_initialise_fn
+#undef STORE_method_get_cleanup_function
+#define STORE_method_get_cleanup_function	STORE_meth_get_cleanup_fn
+#undef STORE_method_get_generate_function
+#define STORE_method_get_generate_function	STORE_meth_get_generate_fn
+#undef STORE_method_get_modify_function
+#define STORE_method_get_modify_function	STORE_meth_get_modify_fn
+#undef STORE_method_get_revoke_function
+#define STORE_method_get_revoke_function	STORE_meth_get_revoke_fn
+#undef STORE_method_get_delete_function
+#define STORE_method_get_delete_function	STORE_meth_get_delete_fn
+#undef STORE_method_get_list_start_function
+#define STORE_method_get_list_start_function	STORE_meth_get_list_start_fn
+#undef STORE_method_get_list_next_function
+#define STORE_method_get_list_next_function	STORE_meth_get_list_next_fn
+#undef STORE_method_get_list_end_function
+#define STORE_method_get_list_end_function	STORE_meth_get_list_end_fn
+#undef STORE_method_get_update_store_function
+#define STORE_method_get_update_store_function	STORE_meth_get_update_store_fn
+#undef STORE_method_get_lock_store_function
+#define STORE_method_get_lock_store_function	STORE_meth_get_lock_store_fn
+#undef STORE_method_get_unlock_store_function
+#define STORE_method_get_unlock_store_function	STORE_meth_get_unlock_store_fn
+
+/* Hack some long CMS names */
+#undef CMS_RecipientInfo_ktri_get0_algs
+#define CMS_RecipientInfo_ktri_get0_algs	CMS_RecipInfo_ktri_get0_algs
+#undef CMS_RecipientInfo_ktri_get0_signer_id
+#define CMS_RecipientInfo_ktri_get0_signer_id	CMS_RecipInfo_ktri_get0_sigr_id
+#undef CMS_OtherRevocationInfoFormat_it
+#define CMS_OtherRevocationInfoFormat_it	CMS_OtherRevocInfoFormat_it
+#undef CMS_KeyAgreeRecipientIdentifier_it
+#define CMS_KeyAgreeRecipientIdentifier_it	CMS_KeyAgreeRecipIdentifier_it
+#undef CMS_OriginatorIdentifierOrKey_it
+#define CMS_OriginatorIdentifierOrKey_it	CMS_OriginatorIdOrKey_it
+#undef cms_SignerIdentifier_get0_signer_id
+#define cms_SignerIdentifier_get0_signer_id	cms_SignerId_get0_signer_id
+
+/* Hack some long DTLS1 names */
+#undef dtls1_retransmit_buffered_messages
+#define dtls1_retransmit_buffered_messages	dtls1_retransmit_buffered_msgs
 
 #endif /* defined OPENSSL_SYS_VMS */
 
@@ -255,6 +395,15 @@
 #define ERR_load_CRYPTO_strings			ERR_load_CRYPTOlib_strings
 #undef OCSP_crlID_new
 #define OCSP_crlID_new                          OCSP_crlID2_new
+
+#undef d2i_ECPARAMETERS
+#define d2i_ECPARAMETERS                        d2i_UC_ECPARAMETERS
+#undef i2d_ECPARAMETERS
+#define i2d_ECPARAMETERS                        i2d_UC_ECPARAMETERS
+#undef d2i_ECPKPARAMETERS
+#define d2i_ECPKPARAMETERS                      d2i_UC_ECPKPARAMETERS
+#undef i2d_ECPKPARAMETERS
+#define i2d_ECPKPARAMETERS                      i2d_UC_ECPKPARAMETERS
 
 /* These functions do not seem to exist!  However, I'm paranoid...
    Original command in x509v3.h:
@@ -276,3 +425,6 @@
 
 
 #endif /* ! defined HEADER_VMS_IDHACKS_H */
+/* This one clashes with CMS_data_create */
+#undef cms_Data_create
+#define cms_Data_create				priv_cms_Data_create

@@ -158,7 +158,6 @@ sub cbc
 	&jmp_ptr($count);
 
 &set_label("ej7");
-	&xor("edx",		"edx") if $ppro; # ppro friendly
 	&movb(&HB("edx"),	&BP(6,$in,"",0));
 	&shl("edx",8);
 &set_label("ej6");
@@ -170,7 +169,6 @@ sub cbc
 	&jmp(&label("ejend"));
 &set_label("ej3");
 	&movb(&HB("ecx"),	&BP(2,$in,"",0));
-	&xor("ecx",		"ecx") if $ppro; # ppro friendly
 	&shl("ecx",8);
 &set_label("ej2");
 	&movb(&HB("ecx"),	&BP(1,$in,"",0));
@@ -322,7 +320,8 @@ sub cbc
 
 	&function_end_A($name);
 
-	&set_label("cbc_enc_jmp_table",1);
+	&align(64);
+	&set_label("cbc_enc_jmp_table");
 	&data_word("0");
 	&data_word(&label("ej1")."-".&label("PIC_point"));
 	&data_word(&label("ej2")."-".&label("PIC_point"));
@@ -341,6 +340,7 @@ sub cbc
 	#&data_word(&label("dj5")."-".&label("PIC_point"));
 	#&data_word(&label("dj6")."-".&label("PIC_point"));
 	#&data_word(&label("dj7")."-".&label("PIC_point"));
+	&align(64);
 
 	&function_end_B($name);
 	

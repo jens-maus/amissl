@@ -122,16 +122,16 @@ int SSL_library_init(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifndef OPENSSL_NO_MD2
-#ifdef AMISSL
-	if(IsCipherAvailable(CIPHER_MD2))
-	{
+
+#ifndef OPENSSL_NO_CAMELLIA
+	EVP_add_cipher(EVP_camellia_128_cbc());
+	EVP_add_cipher(EVP_camellia_256_cbc());
 #endif
-	EVP_add_digest(EVP_md2());
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
+
+#ifndef OPENSSL_NO_SEED
+	EVP_add_cipher(EVP_seed_cbc());
 #endif
+
 #ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
 	if(IsCipherAvailable(CIPHER_MD5))
@@ -156,6 +156,14 @@ int SSL_library_init(void)
 	}
 #endif
 #endif
+#ifndef OPENSSL_NO_SHA256
+	EVP_add_digest(EVP_sha224());
+	EVP_add_digest(EVP_sha256());
+#endif
+#ifndef OPENSSL_NO_SHA512
+	EVP_add_digest(EVP_sha384());
+	EVP_add_digest(EVP_sha512());
+#endif
 #if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_DSA)
 #ifdef AMISSL
 	if(IsCipherAvailable(CIPHER_SHA) && IsCipherAvailable(CIPHER_DSA))
@@ -169,11 +177,22 @@ int SSL_library_init(void)
 	}
 #endif
 #endif
+#ifndef OPENSSL_NO_ECDSA
+	EVP_add_digest(EVP_ecdsa());
+#endif
 	/* If you want support for phased out ciphers, add the following */
 #if 0
 	EVP_add_digest(EVP_sha());
 	EVP_add_digest(EVP_dss());
 #endif
+#ifndef OPENSSL_NO_COMP
+	/* This will initialise the built-in compression algorithms.
+	   The value returned is a STACK_OF(SSL_COMP), but that can
+	   be discarded safely */
+	(void)SSL_COMP_get_compression_methods();
+#endif
+	/* initialize cipher/digest methods table */
+	ssl_load_ciphers();
 	return(1);
 	}
 

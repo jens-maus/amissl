@@ -60,6 +60,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "cryptlib.h"
 #include <openssl/stack.h>
 #include <openssl/lhash.h>
 #include <openssl/conf.h>
@@ -67,7 +68,6 @@
 #include "conf_def.h"
 #include <openssl/buffer.h>
 #include <openssl/err.h>
-#include "cryptlib.h"
 
 static char *eat_ws(CONF *conf, char *p);
 static char *eat_alpha_numeric(CONF *conf, char *p);
@@ -194,9 +194,9 @@ static int def_load(CONF *conf, const char *name, long *line)
 	if (in == NULL)
 		{
 		if (ERR_GET_REASON(ERR_peek_last_error()) == BIO_R_NO_SUCH_FILE)
-			CONFerr(CONF_F_CONF_LOAD,CONF_R_NO_SUCH_FILE);
+			CONFerr(CONF_F_DEF_LOAD,CONF_R_NO_SUCH_FILE);
 		else
-			CONFerr(CONF_F_CONF_LOAD,ERR_R_SYS_LIB);
+			CONFerr(CONF_F_DEF_LOAD,ERR_R_SYS_LIB);
 		return 0;
 		}
 
@@ -213,44 +213,45 @@ static int def_load_bio(CONF *conf, BIO *in, long *line)
 	int bufnum=0,i,ii;
 	BUF_MEM *buff=NULL;
 	char *s,*p,*end;
-	int again,n;
+	int again;
 	long eline=0;
 	char btmp[DECIMAL_SIZE(eline)+1];
 	CONF_VALUE *v=NULL,*tv;
 	CONF_VALUE *sv=NULL;
 	char *section=NULL,*buf;
-	STACK_OF(CONF_VALUE) *section_sk=NULL,*ts;
+/*	STACK_OF(CONF_VALUE) *section_sk=NULL;*/
+/*	STACK_OF(CONF_VALUE) *ts=NULL;*/
 	char *start,*psection,*pname;
 	void *h = (void *)(conf->data);
 
 	if ((buff=BUF_MEM_new()) == NULL)
 		{
-		CONFerr(CONF_F_CONF_LOAD_BIO,ERR_R_BUF_LIB);
+		CONFerr(CONF_F_DEF_LOAD_BIO,ERR_R_BUF_LIB);
 		goto err;
 		}
 
 	section=(char *)OPENSSL_malloc(10);
 	if (section == NULL)
 		{
-		CONFerr(CONF_F_CONF_LOAD_BIO,ERR_R_MALLOC_FAILURE);
+		CONFerr(CONF_F_DEF_LOAD_BIO,ERR_R_MALLOC_FAILURE);
 		goto err;
 		}
 	BUF_strlcpy(section,"default",10);
 
 	if (_CONF_new_data(conf) == 0)
 		{
-		CONFerr(CONF_F_CONF_LOAD_BIO,ERR_R_MALLOC_FAILURE);
+		CONFerr(CONF_F_DEF_LOAD_BIO,ERR_R_MALLOC_FAILURE);
 		goto err;
 		}
 
 	sv=_CONF_new_section(conf,section);
 	if (sv == NULL)
 		{
-		CONFerr(CONF_F_CONF_LOAD_BIO,
+		CONFerr(CONF_F_DEF_LOAD_BIO,
 					CONF_R_UNABLE_TO_CREATE_NEW_SECTION);
 		goto err;
 		}
-	section_sk=(STACK_OF(CONF_VALUE) *)sv->value;
+/*	section_sk=(STACK_OF(CONF_VALUE) *)sv->value;*/
 
 	bufnum=0;
 	again=0;
@@ -258,7 +259,7 @@ static int def_load_bio(CONF *conf, BIO *in, long *line)
 		{
 		if (!BUF_MEM_grow(buff,bufnum+CONFBUFSIZE))
 			{
-			CONFerr(CONF_F_CONF_LOAD_BIO,ERR_R_BUF_LIB);
+			CONFerr(CONF_F_DEF_LOAD_BIO,ERR_R_BUF_LIB);
 			goto err;
 			}
 		p= &(buff->data[bufnum]);
@@ -309,7 +310,6 @@ static int def_load_bio(CONF *conf, BIO *in, long *line)
 		buf=buff->data;
 
 		clear_comments(conf, buf);
-		n=strlen(buf);
 		s=eat_ws(conf, buf);
 		if (IS_EOF(conf,*s)) continue; /* blank line */
 		if (*s == '[')
@@ -329,7 +329,7 @@ again:
 					ss=p;
 					goto again;
 					}
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 					CONF_R_MISSING_CLOSE_SQUARE_BRACKET);
 				goto err;
 				}
@@ -339,11 +339,11 @@ again:
 				sv=_CONF_new_section(conf,section);
 			if (sv == NULL)
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 					CONF_R_UNABLE_TO_CREATE_NEW_SECTION);
 				goto err;
 				}
-			section_sk=(STACK_OF(CONF_VALUE) *)sv->value;
+/*			section_sk=(STACK_OF(CONF_VALUE) *)sv->value;*/
 			continue;
 			}
 		else
@@ -362,7 +362,7 @@ again:
 			p=eat_ws(conf, end);
 			if (*p != '=')
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 						CONF_R_MISSING_EQUAL_SIGN);
 				goto err;
 				}
@@ -379,7 +379,7 @@ again:
 
 			if (!(v=(CONF_VALUE *)OPENSSL_malloc(sizeof(CONF_VALUE))))
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 							ERR_R_MALLOC_FAILURE);
 				goto err;
 				}
@@ -388,7 +388,7 @@ again:
 			v->value=NULL;
 			if (v->name == NULL)
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 							ERR_R_MALLOC_FAILURE);
 				goto err;
 				}
@@ -402,21 +402,21 @@ again:
 					tv=_CONF_new_section(conf,psection);
 				if (tv == NULL)
 					{
-					CONFerr(CONF_F_CONF_LOAD_BIO,
+					CONFerr(CONF_F_DEF_LOAD_BIO,
 					   CONF_R_UNABLE_TO_CREATE_NEW_SECTION);
 					goto err;
 					}
-				ts=(STACK_OF(CONF_VALUE) *)tv->value;
+/*				ts=(STACK_OF(CONF_VALUE) *)tv->value;*/
 				}
 			else
 				{
 				tv=sv;
-				ts=section_sk;
+/*				ts=section_sk;*/
 				}
 #if 1
 			if (_CONF_add_string(conf, tv, v) == 0)
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 							ERR_R_MALLOC_FAILURE);
 				goto err;
 				}
@@ -424,7 +424,7 @@ again:
 			v->section=tv->section;	
 			if (!sk_CONF_VALUE_push(ts,v))
 				{
-				CONFerr(CONF_F_CONF_LOAD_BIO,
+				CONFerr(CONF_F_DEF_LOAD_BIO,
 							ERR_R_MALLOC_FAILURE);
 				goto err;
 				}
@@ -465,9 +465,6 @@ err:
 
 static void clear_comments(CONF *conf, char *p)
 	{
-	char *to;
-
-	to=p;
 	for (;;)
 		{
 		if (IS_FCOMMENT(conf,*p))
@@ -629,7 +626,7 @@ static int str_copy(CONF *conf, char *section, char **pto, char *from)
 				CONFerr(CONF_F_STR_COPY,CONF_R_VARIABLE_HAS_NO_VALUE);
 				goto err;
 				}
-			BUF_MEM_grow_clean(buf,(strlen(p)+len-(e-from)));
+			BUF_MEM_grow_clean(buf,(strlen(p)+buf->length-(e-from)));
 			while (*p)
 				buf->data[to++]= *(p++);
 

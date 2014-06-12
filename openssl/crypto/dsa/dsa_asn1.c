@@ -1,5 +1,5 @@
 /* dsa_asn1.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2000.
  */
 /* ====================================================================
@@ -61,18 +61,25 @@
 #include <openssl/dsa.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <openssl/bn.h>
+#include <openssl/rand.h>
+#ifdef OPENSSL_FIPS
+#include <openssl/fips.h>
+#endif
+
 
 /* Override the default new methods */
 static int sig_cb(int operation, ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
 	if(operation == ASN1_OP_NEW_PRE) {
-		*pval = (ASN1_VALUE *)DSA_SIG_new();
-		if(*pval) return 2;
+		DSA_SIG *sig;
+		sig = OPENSSL_malloc(sizeof(DSA_SIG));
+		sig->r = NULL;
+		sig->s = NULL;
+		*pval = (ASN1_VALUE *)sig;
+		if(sig) return 2;
+		DSAerr(DSA_F_SIG_CB, ERR_R_MALLOC_FAILURE);
 		return 0;
-	} else if(operation == ASN1_OP_FREE_PRE) {
-		DSA_SIG_free((DSA_SIG *)*pval);
-		*pval = NULL;
-		return 2;
 	}
 	return 1;
 }
@@ -142,6 +149,14 @@ int DSA_sign(int type, const unsigned char *dgst, int dlen, unsigned char *sig,
 	     unsigned int *siglen, DSA *dsa)
 	{
 	DSA_SIG *s;
+#ifdef OPENSSL_FIPS
+	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_NON_FIPS_ALLOW))
+		{
+		DSAerr(DSA_F_DSA_SIGN, DSA_R_OPERATION_NOT_ALLOWED_IN_FIPS_MODE);
+		return 0;
+		}
+#endif
+	RAND_seed(dgst, dlen);
 	s=DSA_do_sign(dgst,dlen,dsa);
 	if (s == NULL)
 		{
@@ -151,27 +166,6 @@ int DSA_sign(int type, const unsigned char *dgst, int dlen, unsigned char *sig,
 	*siglen=i2d_DSA_SIG(s,&sig);
 	DSA_SIG_free(s);
 	return(1);
-	}
-
-/* data has already been hashed (probably with SHA or SHA-1). */
-/* returns
- *      1: correct signature
- *      0: incorrect signature
- *     -1: error
- */
-int DSA_verify(int type, const unsigned char *dgst, int dgst_len,
-	     const unsigned char *sigbuf, int siglen, DSA *dsa)
-	{
-	DSA_SIG *s;
-	int ret=-1;
-
-	s = DSA_SIG_new();
-	if (s == NULL) return(ret);
-	if (d2i_DSA_SIG(&s,&sigbuf,siglen) == NULL) goto err;
-	ret=DSA_do_verify(dgst,dgst_len,s,dsa);
-err:
-	DSA_SIG_free(s);
-	return(ret);
 	}
 
 int DSA_size(const DSA *r)
@@ -195,3 +189,32 @@ int DSA_size(const DSA *r)
 	ret=ASN1_object_size(1,i,V_ASN1_SEQUENCE);
 	return(ret);
 	}
+
+/* data has already been hashed (probably with SHA or SHA-1). */
+/* returns
+ *      1: correct signature
+ *      0: incorrect signature
+ *     -1: error
+ */
+int DSA_verify(int type, const unsigned char *dgst, int dgst_len,
+	     const unsigned char *sigbuf, int siglen, DSA *dsa)
+	{
+	DSA_SIG *s;
+	int ret=-1;
+#ifdef OPENSSL_FIPS
+	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_NON_FIPS_ALLOW))
+		{
+		DSAerr(DSA_F_DSA_VERIFY, DSA_R_OPERATION_NOT_ALLOWED_IN_FIPS_MODE);
+		return 0;
+		}
+#endif
+
+	s = DSA_SIG_new();
+	if (s == NULL) return(ret);
+	if (d2i_DSA_SIG(&s,&sigbuf,siglen) == NULL) goto err;
+	ret=DSA_do_verify(dgst,dgst_len,s,dsa);
+err:
+	DSA_SIG_free(s);
+	return(ret);
+	}
+

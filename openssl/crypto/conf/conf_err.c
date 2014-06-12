@@ -1,6 +1,6 @@
 /* crypto/conf/conf_err.c */
 /* ====================================================================
- * Copyright (c) 1999-2006 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2005 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -75,6 +75,8 @@ static ERR_STRING_DATA CONF_str_functs[]=
 {ERR_FUNC(CONF_F_CONF_LOAD_BIO),	"CONF_load_bio"},
 {ERR_FUNC(CONF_F_CONF_LOAD_FP),	"CONF_load_fp"},
 {ERR_FUNC(CONF_F_CONF_MODULES_LOAD),	"CONF_modules_load"},
+{ERR_FUNC(CONF_F_DEF_LOAD),	"DEF_LOAD"},
+{ERR_FUNC(CONF_F_DEF_LOAD_BIO),	"DEF_LOAD_BIO"},
 {ERR_FUNC(CONF_F_MODULE_INIT),	"MODULE_INIT"},
 {ERR_FUNC(CONF_F_MODULE_LOAD_DSO),	"MODULE_LOAD_DSO"},
 {ERR_FUNC(CONF_F_MODULE_RUN),	"MODULE_RUN"},

@@ -73,6 +73,12 @@
 #ifndef OPENSSL_NO_DSA
 #include <openssl/dsa.h>
 #endif
+#ifndef OPENSSL_NO_ECDSA
+#include <openssl/ecdsa.h>
+#endif
+#ifndef OPENSSL_NO_ECDH
+#include <openssl/ecdh.h>
+#endif
 #include <openssl/evp.h>
 #include <openssl/objects.h>
 #include <openssl/pem2.h>
@@ -85,9 +91,22 @@
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
+#include <openssl/ui.h>
 #include <openssl/ocsp.h>
 #include <openssl/err.h>
+#ifdef OPENSSL_FIPS
 #include <openssl/fips.h>
+#endif
+
+#ifndef OPENSSL_NO_CMS
+#include <openssl/cms.h>
+#endif
+#ifndef OPENSSL_NO_JPAKE
+#include <openssl/jpake.h>
+#endif
+#ifndef OPENSSL_NO_COMP
+#include <openssl/comp.h>
+#endif
 
 void ERR_load_crypto_strings(void)
 	{
@@ -114,6 +133,12 @@ void ERR_load_crypto_strings(void)
 #ifndef OPENSSL_NO_EC
 	ERR_load_EC_strings();
 #endif
+#ifndef OPENSSL_NO_ECDSA
+	ERR_load_ECDSA_strings();
+#endif
+#ifndef OPENSSL_NO_ECDH
+	ERR_load_ECDH_strings();
+#endif
 	/* skip ERR_load_SSL_strings() because it is not in this library */
 	ERR_load_BIO_strings();
 	ERR_load_PKCS7_strings();	
@@ -126,8 +151,15 @@ void ERR_load_crypto_strings(void)
 #endif
 	ERR_load_OCSP_strings();
 	ERR_load_UI_strings();
-#endif
 #ifdef OPENSSL_FIPS
 	ERR_load_FIPS_strings();
+#endif
+#ifndef OPENSSL_NO_CMS
+	ERR_load_CMS_strings();
+#endif
+#ifndef OPENSSL_NO_JPAKE
+	ERR_load_JPAKE_strings();
+#endif
+	ERR_load_COMP_strings();
 #endif
 	}

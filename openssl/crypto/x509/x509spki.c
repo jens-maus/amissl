@@ -1,5 +1,5 @@
 /* x509spki.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -77,7 +77,8 @@ EVP_PKEY *NETSCAPE_SPKI_get_pubkey(NETSCAPE_SPKI *x)
 
 NETSCAPE_SPKI * NETSCAPE_SPKI_b64_decode(const char *str, int len)
 {
-	unsigned char *spki_der, *p;
+	unsigned char *spki_der;
+	const unsigned char *p;
 	int spki_len;
 	NETSCAPE_SPKI *spki;
 	if(len <= 0) len = strlen(str);

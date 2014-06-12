@@ -1,5 +1,5 @@
 /* p12_mutl.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -64,8 +64,8 @@
 #include <openssl/pkcs12.h>
 
 /* Generate a MAC */
-int PKCS12_gen_mac (PKCS12 *p12, const char *pass, int passlen,
-		    unsigned char *mac, unsigned int *maclen)
+int PKCS12_gen_mac(PKCS12 *p12, const char *pass, int passlen,
+		   unsigned char *mac, unsigned int *maclen)
 {
 	const EVP_MD *md_type;
 	HMAC_CTX hmac;
@@ -102,16 +102,16 @@ int PKCS12_gen_mac (PKCS12 *p12, const char *pass, int passlen,
 }
 
 /* Verify the mac */
-int PKCS12_verify_mac (PKCS12 *p12, const char *pass, int passlen)
+int PKCS12_verify_mac(PKCS12 *p12, const char *pass, int passlen)
 {
 	unsigned char mac[EVP_MAX_MD_SIZE];
 	unsigned int maclen;
 	if(p12->mac == NULL) {
-		PKCS12err(PKCS12_F_VERIFY_MAC,PKCS12_R_MAC_ABSENT);
+		PKCS12err(PKCS12_F_PKCS12_VERIFY_MAC,PKCS12_R_MAC_ABSENT);
 		return 0;
 	}
 	if (!PKCS12_gen_mac (p12, pass, passlen, mac, &maclen)) {
-		PKCS12err(PKCS12_F_VERIFY_MAC,PKCS12_R_MAC_GENERATION_ERROR);
+		PKCS12err(PKCS12_F_PKCS12_VERIFY_MAC,PKCS12_R_MAC_GENERATION_ERROR);
 		return 0;
 	}
 	if ((maclen != (unsigned int)p12->mac->dinfo->digest->length)
@@ -121,7 +121,7 @@ int PKCS12_verify_mac (PKCS12 *p12, const char *pass, int passlen)
 
 /* Set a mac */
 
-int PKCS12_set_mac (PKCS12 *p12, const char *pass, int passlen,
+int PKCS12_set_mac(PKCS12 *p12, const char *pass, int passlen,
 	     unsigned char *salt, int saltlen, int iter, const EVP_MD *md_type)
 {
 	unsigned char mac[EVP_MAX_MD_SIZE];
@@ -145,7 +145,7 @@ int PKCS12_set_mac (PKCS12 *p12, const char *pass, int passlen,
 }
 
 /* Set up a mac structure */
-int PKCS12_setup_mac (PKCS12 *p12, int iter, unsigned char *salt, int saltlen,
+int PKCS12_setup_mac(PKCS12 *p12, int iter, unsigned char *salt, int saltlen,
 	     const EVP_MD *md_type)
 {
 	if (!(p12->mac = PKCS12_MAC_DATA_new())) return PKCS12_ERROR;

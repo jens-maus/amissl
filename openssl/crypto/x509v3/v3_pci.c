@@ -82,13 +82,13 @@ static int process_pci_value(CONF_VALUE *val,
 		{
 		if (*language)
 			{
-			X509V3err(X509V3_F_R2I_PCI,X509V3_R_POLICY_LANGUAGE_ALREADTY_DEFINED);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_POLICY_LANGUAGE_ALREADTY_DEFINED);
 			X509V3_conf_err(val);
 			return 0;
 			}
 		if (!(*language = OBJ_txt2obj(val->value, 0)))
 			{
-			X509V3err(X509V3_F_R2I_PCI,X509V3_R_INVALID_OBJECT_IDENTIFIER);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_INVALID_OBJECT_IDENTIFIER);
 			X509V3_conf_err(val);
 			return 0;
 			}
@@ -97,13 +97,13 @@ static int process_pci_value(CONF_VALUE *val,
 		{
 		if (*pathlen)
 			{
-			X509V3err(X509V3_F_R2I_PCI,X509V3_R_POLICY_PATH_LENGTH_ALREADTY_DEFINED);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_POLICY_PATH_LENGTH_ALREADTY_DEFINED);
 			X509V3_conf_err(val);
 			return 0;
 			}
 		if (!X509V3_get_value_int(val, pathlen))
 			{
-			X509V3err(X509V3_F_R2I_PCI,X509V3_R_POLICY_PATH_LENGTH);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_POLICY_PATH_LENGTH);
 			X509V3_conf_err(val);
 			return 0;
 			}
@@ -117,7 +117,7 @@ static int process_pci_value(CONF_VALUE *val,
 			*policy = ASN1_OCTET_STRING_new();
 			if (!*policy)
 				{
-				X509V3err(X509V3_F_R2I_PCI,ERR_R_MALLOC_FAILURE);
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_MALLOC_FAILURE);
 				X509V3_conf_err(val);
 				return 0;
 				}
@@ -128,7 +128,12 @@ static int process_pci_value(CONF_VALUE *val,
 			unsigned char *tmp_data2 =
 				string_to_hex(val->value + 4, &val_len);
 
-			if (!tmp_data2) goto err;
+			if (!tmp_data2) 
+				{
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_ILLEGAL_HEX_DIGIT);
+				X509V3_conf_err(val);
+				goto err;
+				}
 
 			tmp_data = OPENSSL_realloc((*policy)->data,
 				(*policy)->length + val_len + 1);
@@ -140,6 +145,17 @@ static int process_pci_value(CONF_VALUE *val,
 				(*policy)->length += val_len;
 				(*policy)->data[(*policy)->length] = '\0';
 				}
+			else
+				{
+				OPENSSL_free(tmp_data2);
+				/* realloc failure implies the original data space is b0rked too! */
+				(*policy)->data = NULL;
+				(*policy)->length = 0;
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_MALLOC_FAILURE);
+				X509V3_conf_err(val);
+				goto err;
+				}
+			OPENSSL_free(tmp_data2);
 			}
 		else if (strncmp(val->value, "file:", 5) == 0)
 			{
@@ -148,7 +164,7 @@ static int process_pci_value(CONF_VALUE *val,
 			BIO *b = BIO_new_file(val->value + 5, "r");
 			if (!b)
 				{
-				X509V3err(X509V3_F_R2I_PCI,ERR_R_BIO_LIB);
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_BIO_LIB);
 				X509V3_conf_err(val);
 				goto err;
 				}
@@ -169,10 +185,11 @@ static int process_pci_value(CONF_VALUE *val,
 				(*policy)->length += n;
 				(*policy)->data[(*policy)->length] = '\0';
 				}
+			BIO_free_all(b);
 
 			if (n < 0)
 				{
-				X509V3err(X509V3_F_R2I_PCI,ERR_R_BIO_LIB);
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_BIO_LIB);
 				X509V3_conf_err(val);
 				goto err;
 				}
@@ -190,16 +207,25 @@ static int process_pci_value(CONF_VALUE *val,
 				(*policy)->length += val_len;
 				(*policy)->data[(*policy)->length] = '\0';
 				}
+			else
+				{
+				/* realloc failure implies the original data space is b0rked too! */
+				(*policy)->data = NULL;
+				(*policy)->length = 0;
+				X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_MALLOC_FAILURE);
+				X509V3_conf_err(val);
+				goto err;
+				}
 			}
 		else
 			{
-			X509V3err(X509V3_F_R2I_PCI,X509V3_R_INCORRECT_POLICY_SYNTAX_TAG);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,X509V3_R_INCORRECT_POLICY_SYNTAX_TAG);
 			X509V3_conf_err(val);
 			goto err;
 			}
 		if (!tmp_data)
 			{
-			X509V3err(X509V3_F_R2I_PCI,ERR_R_MALLOC_FAILURE);
+			X509V3err(X509V3_F_PROCESS_PCI_VALUE,ERR_R_MALLOC_FAILURE);
 			X509V3_conf_err(val);
 			goto err;
 			}
@@ -286,12 +312,6 @@ static PROXY_CERT_INFO_EXTENSION *r2i_pci(X509V3_EXT_METHOD *method,
 		X509V3err(X509V3_F_R2I_PCI,ERR_R_MALLOC_FAILURE);
 		goto err;
 		}
-	pci->proxyPolicy = PROXY_POLICY_new();
-	if (!pci->proxyPolicy)
-		{
-		X509V3err(X509V3_F_R2I_PCI,ERR_R_MALLOC_FAILURE);
-		goto err;
-		}
 
 	pci->proxyPolicy->policyLanguage = language; language = NULL;
 	pci->proxyPolicy->policy = policy; policy = NULL;
@@ -301,11 +321,6 @@ err:
 	if (language) { ASN1_OBJECT_free(language); language = NULL; }
 	if (pathlen) { ASN1_INTEGER_free(pathlen); pathlen = NULL; }
 	if (policy) { ASN1_OCTET_STRING_free(policy); policy = NULL; }
-	if (pci && pci->proxyPolicy)
-		{
-		PROXY_POLICY_free(pci->proxyPolicy);
-		pci->proxyPolicy = NULL;
-		}
 	if (pci) { PROXY_CERT_INFO_EXTENSION_free(pci); pci = NULL; }
 end:
 	sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);

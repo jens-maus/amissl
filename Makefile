@@ -12,11 +12,11 @@ ifeq ($(AmiSSL),)
 endif
 
 VERSION=3
-VERSIONNAME=097m
+VERSIONNAME=098y
 AMISSLREVISION=8
 AMISSLMASTERREVISION=8
-AMISSLDATE=09.03.2014
-AMISSLMASTERDATE=09.03.2014
+AMISSLDATE=28.03.2014
+AMISSLMASTERDATE=28.03.2014
 
 LFLAGS=-mcrt=clib2 -nostdlib -mbaserel
 OPT=-O2 
@@ -46,6 +46,7 @@ distclean: clean cleanlibs
 	-rm -rf openssl/outinc
 	-rm -rf obj lib
 	-rm -rf *.library *.map
+	-rm -rf OS4
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	ppc-amigaos-gcc-4.0.3 $(GCCVER) -c $< -o $@ $(CFLAGS)

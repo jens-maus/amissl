@@ -5,6 +5,12 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-06-12 Jens Maus <mail@jens-maus.de>
+
+  * misc: merged the vendor update of OpenSSL 0.9.8y to our 'openssl' top-level
+    directory and adapted our build environment accordingly. The build still doesn't
+    success until linking the shared library but we are pretty close I would think.
+
 2014-03-13 Jens Maus <mail@jens-maus.de>
 
   * src/amissl_library.c: slightly improved the multithreading locking mechanism.

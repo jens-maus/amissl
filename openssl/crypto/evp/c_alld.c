@@ -69,12 +69,6 @@ long IsCipherAvailable(long cipher);
 
 void OpenSSL_add_all_digests(void)
 	{
-#ifndef OPENSSL_NO_MD2
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_MD2))
-#endif /* AMISSL */
-	EVP_add_digest(EVP_md2());
-#endif
 #ifndef OPENSSL_NO_MD4
 #ifdef AMISSL
 	if (IsCipherAvailable(CIPHER_MD4))
@@ -129,6 +123,9 @@ void OpenSSL_add_all_digests(void)
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
+#ifndef OPENSSL_NO_ECDSA
+	EVP_add_digest(EVP_ecdsa());
+#endif
 #endif
 #if !defined(OPENSSL_NO_MDC2) && !defined(OPENSSL_NO_DES)
 #ifdef AMISSL
@@ -148,7 +145,6 @@ void OpenSSL_add_all_digests(void)
 	}
 #endif /* AMISSL */
 #endif
-#ifdef OPENSSL_FIPS
 #ifndef OPENSSL_NO_SHA256
 	EVP_add_digest(EVP_sha224());
 	EVP_add_digest(EVP_sha256());
@@ -156,6 +152,5 @@ void OpenSSL_add_all_digests(void)
 #ifndef OPENSSL_NO_SHA512
 	EVP_add_digest(EVP_sha384());
 	EVP_add_digest(EVP_sha512());
-#endif
 #endif
 	}

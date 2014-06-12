@@ -115,6 +115,7 @@
 #include "apps.h"
 #include <openssl/evp.h>
 #include <openssl/crypto.h>
+#include <openssl/bn.h>
 #ifndef OPENSSL_NO_MD2
 # include <openssl/md2.h>
 #endif
@@ -170,13 +171,25 @@ int MAIN(int argc, char **argv)
 			date=version=cflags=options=platform=dir=1;
 		else
 			{
-			BIO_printf(bio_err,"usage:version -[avbofp]\n");
+			BIO_printf(bio_err,"usage:version -[avbofpd]\n");
 			ret=1;
 			goto end;
 			}
 		}
 
-	if (version) printf("%s\n",SSLeay_version(SSLEAY_VERSION));
+	if (version)
+		{
+		if (SSLeay() == SSLEAY_VERSION_NUMBER)
+			{
+			printf("%s\n",SSLeay_version(SSLEAY_VERSION));
+			}
+		else
+			{
+			printf("%s (Library: %s)\n",
+				OPENSSL_VERSION_TEXT,
+				SSLeay_version(SSLEAY_VERSION));
+			}
+		}
 	if (date)    printf("%s\n",SSLeay_version(SSLEAY_BUILT_ON));
 	if (platform) printf("%s\n",SSLeay_version(SSLEAY_PLATFORM));
 	if (options) 

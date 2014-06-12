@@ -58,7 +58,10 @@
 
 #include <openssl/idea.h>
 #include <openssl/crypto.h>
+#ifdef OPENSSL_FIPS
 #include <openssl/fips.h>
+#endif
+
 #include "idea_lcl.h"
 
 static IDEA_INT inverse(unsigned int xin);
@@ -116,10 +119,11 @@ void idea_set_encrypt_key(const unsigned char *key, IDEA_KEY_SCHEDULE *ks)
 		}
 	}
 
-void idea_set_decrypt_key(IDEA_KEY_SCHEDULE *ek, IDEA_KEY_SCHEDULE *dk)
+void idea_set_decrypt_key(const IDEA_KEY_SCHEDULE *ek, IDEA_KEY_SCHEDULE *dk)
 	{
 	int r;
-	register IDEA_INT *fp,*tp,t;
+	register IDEA_INT *tp,t;
+	const IDEA_INT *fp;
 
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_IDEA))

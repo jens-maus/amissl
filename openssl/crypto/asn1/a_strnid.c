@@ -1,5 +1,5 @@
 /* a_strnid.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -96,7 +96,7 @@ unsigned long ASN1_STRING_get_default_mask(void)
  * default:   the default value, Printable, T61, BMP.
  */
 
-int ASN1_STRING_set_default_mask_asc(char *p)
+int ASN1_STRING_set_default_mask_asc(const char *p)
 {
 	unsigned long mask;
 	char *end;

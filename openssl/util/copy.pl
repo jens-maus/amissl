@@ -7,7 +7,6 @@ use Fcntl;
 
 # Perl script 'copy' comment. On Windows the built in "copy" command also
 # copies timestamps: this messes up Makefile dependencies.
-#
 
 my $stripcr = 0;
 

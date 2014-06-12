@@ -57,12 +57,12 @@
  */
 
 #include <string.h>
+#include "cryptlib.h"
 #include <openssl/e_os2.h>
 #include <openssl/buffer.h>
 #include <openssl/ui.h>
 #include <openssl/err.h>
 #include "ui_locl.h"
-#include "cryptlib.h"
 
 IMPLEMENT_STACK_OF(UI_STRING_ST)
 
@@ -90,6 +90,7 @@ UI *UI_new_method(const UI_METHOD *method)
 
 	ret->strings=NULL;
 	ret->user_data=NULL;
+	ret->flags=0;
 	CRYPTO_new_ex_data(CRYPTO_EX_INDEX_UI, ret, &ret->ex_data);
 	return ret;
 	}
@@ -551,7 +552,7 @@ int UI_process(UI *ui)
 	return ok;
 	}
 
-int UI_ctrl(UI *ui, int cmd, long i, void *p, void (*f)())
+int UI_ctrl(UI *ui, int cmd, long i, void *p, void (*f)(void))
 	{
 	if (ui == NULL)
 		{
@@ -626,8 +627,10 @@ UI_METHOD *UI_create_method(char *name)
 	UI_METHOD *ui_method = (UI_METHOD *)OPENSSL_malloc(sizeof(UI_METHOD));
 
 	if (ui_method)
+		{
 		memset(ui_method, 0, sizeof(*ui_method));
-	ui_method->name = BUF_strdup(name);
+		ui_method->name = BUF_strdup(name);
+		}
 	return ui_method;
 	}
 

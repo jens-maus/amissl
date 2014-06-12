@@ -112,6 +112,7 @@
 #include <string.h>
 #include <openssl/des.h>
 #include <openssl/ui.h>
+#include <openssl/crypto.h>
 
 #ifdef OPENSSL_NO_FP_API
 #define BUFSIZ 8192

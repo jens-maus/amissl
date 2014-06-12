@@ -37,10 +37,11 @@
 
 #include <stdlib.h>
 #include <openssl/aes.h>
+#ifdef OPENSSL_FIPS
 #include <openssl/fips.h>
-#include "aes_locl.h"
+#endif
 
-#ifndef OPENSSL_FIPS
+#include "aes_locl.h"
 
 /*
 Te0[x] = S [x].[02, 01, 01, 03];
@@ -634,6 +635,10 @@ int AES_set_encrypt_key(const unsigned char *userKey, const int bits,
    	int i = 0;
 	u32 temp;
 
+#ifdef OPENSSL_FIPS
+	FIPS_selftest_check();
+#endif
+
 	if (!userKey || !key)
 		return -1;
 	if (bits != 128 && bits != 192 && bits != 256)
@@ -776,6 +781,7 @@ int AES_set_decrypt_key(const unsigned char *userKey, const int bits,
 	return 0;
 }
 
+#ifndef AES_ASM
 /*
  * Encrypt a single block
  * in and out can overlap
@@ -1158,4 +1164,4 @@ void AES_decrypt(const unsigned char *in, unsigned char *out,
 	PUTU32(out + 12, s3);
 }
 
-#endif /* ndef OPENSSL_FIPS */
+#endif /* AES_ASM */

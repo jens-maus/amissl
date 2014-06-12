@@ -167,7 +167,6 @@ int GetAmiSSLerrno(void);
 #define clear_socket_error()	WSASetLastError(0)
 #define readsocket(s,b,n)	recv((s),(b),(n),0)
 #define writesocket(s,b,n)	send((s),(b),(n),0)
-#define EADDRINUSE		WSAEADDRINUSE
 #elif defined(__DJGPP__)
 #define WATT32
 #define get_last_socket_error()	errno
@@ -198,7 +197,7 @@ int GetAmiSSLerrno(void);
 #  define readsocket(s,b,n)	recv((s),(b),(n), 0)
 #  define writesocket(s,b,n)	send((s),(b),(n), 0)
 #  undef select
-#  define select(a,b,c,d,e) WaitSelect(a,b,c,d,e,NULL);
+#  define select(a,b,c,d,e) WaitSelect(a,b,c,d,e,NULL)
 # endif /* AMISSL_COMPILE */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
@@ -220,6 +219,25 @@ int GetAmiSSLerrno(void);
 #define closesocket(s)		    close(s)
 #define readsocket(s,b,n)	    read((s),(b),(n))
 #define writesocket(s,b,n)	    write((s),(char *)(b),(n))
+#elif defined(OPENSSL_SYS_NETWARE)
+#if defined(NETWARE_BSDSOCK)
+#define get_last_socket_error() errno
+#define clear_socket_error()    errno=0
+#define closesocket(s)          close(s)
+#define ioctlsocket(a,b,c)      ioctl(a,b,c)
+#if defined(NETWARE_LIBC)
+#define readsocket(s,b,n)       recv((s),(b),(n),0)
+#define writesocket(s,b,n)      send((s),(b),(n),0)
+#else
+#define readsocket(s,b,n)       recv((s),(char*)(b),(n),0)
+#define writesocket(s,b,n)      send((s),(char*)(b),(n),0)
+#endif
+#else
+#define get_last_socket_error()	WSAGetLastError()
+#define clear_socket_error()	WSASetLastError(0)
+#define readsocket(s,b,n)		recv((s),(b),(n),0)
+#define writesocket(s,b,n)		send((s),(b),(n),0)
+#endif
 #else
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -230,7 +248,6 @@ int GetAmiSSLerrno(void);
 #endif
 
 #ifdef WIN16
-#  define OPENSSL_NO_FP_API
 #  define MS_CALLBACK	_far _loadds
 #  define MS_FAR	_far
 #else
@@ -239,6 +256,7 @@ int GetAmiSSLerrno(void);
 #endif
 
 #ifdef OPENSSL_NO_STDIO
+#  undef OPENSSL_NO_FP_API
 #  define OPENSSL_NO_FP_API
 #endif
 
@@ -271,11 +289,72 @@ int GetAmiSSLerrno(void);
 #  define NO_DIRENT
 
 #  ifdef WINDOWS
+#    if !defined(_WIN32_WCE) && !defined(_WIN32_WINNT)
+       /*
+	* Defining _WIN32_WINNT here in e_os.h implies certain "discipline."
+	* Most notably we ought to check for availability of each specific
+	* routine with GetProcAddress() and/or quard NT-specific calls with
+	* GetVersion() < 0x80000000. One can argue that in latter "or" case
+	* we ought to /DELAYLOAD some .DLLs in order to protect ourselves
+	* against run-time link errors. This doesn't seem to be necessary,
+	* because it turned out that already Windows 95, first non-NT Win32
+	* implementation, is equipped with at least NT 3.51 stubs, dummy
+	* routines with same name, but which do nothing. Meaning that it's
+	* apparently appropriate to guard generic NT calls with GetVersion
+	* alone, while NT 4.0 and above calls ought to be additionally
+	* checked upon with GetProcAddress.
+	*/
+#      define _WIN32_WINNT 0x0400
+#    endif
 #    include <windows.h>
+#    include <stdio.h>
 #    include <stddef.h>
 #    include <errno.h>
 #    include <string.h>
+#    ifdef _WIN64
+#      define strlen(s) _strlen31(s)
+/* cut strings to 2GB */
+static unsigned int _strlen31(const char *str)
+	{
+	unsigned int len=0;
+	while (*str && len<0x80000000U) str++, len++;
+	return len&0x7FFFFFFF;
+	}
+#    endif
 #    include <malloc.h>
+#    if defined(_MSC_VER) && _MSC_VER<=1200 && defined(_MT) && defined(isspace)
+       /* compensate for bug in VC6 ctype.h */
+#      undef isspace
+#      undef isdigit
+#      undef isalnum
+#      undef isupper
+#      undef isxdigit
+#    endif
+#    if defined(_MSC_VER) && !defined(_DLL) && defined(stdin)
+#      if _MSC_VER>=1300
+#        undef stdin
+#        undef stdout
+#        undef stderr
+         FILE *__iob_func();
+#        define stdin  (&__iob_func()[0])
+#        define stdout (&__iob_func()[1])
+#        define stderr (&__iob_func()[2])
+#      elif defined(I_CAN_LIVE_WITH_LNK4049)
+#        undef stdin
+#        undef stdout
+#        undef stderr
+         /* pre-1300 has __p__iob(), but it's available only in msvcrt.lib,
+          * or in other words with /MD. Declaring implicit import, i.e.
+          * with _imp_ prefix, works correctly with all compiler options,
+          * but without /MD results in LINK warning LNK4049:
+          * 'locally defined symbol "__iob" imported'.
+          */
+         extern FILE *_imp___iob;
+#        define stdin  (&_imp___iob[0])
+#        define stdout (&_imp___iob[1])
+#        define stderr (&_imp___iob[2])
+#      endif
+#    endif
 #  endif
 #  include <io.h>
 #  include <fcntl.h>
@@ -362,6 +441,32 @@ int GetAmiSSLerrno(void);
                                      __VMS_EXIT |= 0x10000000; \
 				     exit(__VMS_EXIT); } while(0)
 #    define NO_SYS_PARAM_H
+
+#  elif defined(OPENSSL_SYS_NETWARE)
+#    include <fcntl.h>
+#    include <unistd.h>
+#    define NO_SYS_TYPES_H
+#    undef  DEVRANDOM
+#    ifdef NETWARE_CLIB
+#      define getpid GetThreadID
+       extern int GetThreadID(void);
+/* #      include <conio.h> */
+       extern int kbhit(void);
+       extern void delay(unsigned milliseconds);
+#    else
+#      include <screen.h>
+#    endif
+#    define NO_SYSLOG
+#    define _setmode setmode
+#    define _kbhit kbhit
+#    define _O_TEXT O_TEXT
+#    define _O_BINARY O_BINARY
+#    define OPENSSL_CONF   "openssl.cnf"
+#    define SSLEAY_CONF    OPENSSL_CONF
+#    define RFILE    ".rnd"
+#    define LIST_SEPARATOR_CHAR ';'
+#    define EXIT(n)  { if (n) printf("ERROR: %d\n", (int)n); exit(n); }
+
 #  else
      /* !defined VMS */
 #    ifdef OPENSSL_SYS_MPE
@@ -424,6 +529,15 @@ int GetAmiSSLerrno(void);
 #    elif !defined(__DJGPP__)
 #      include <winsock.h>
 extern HINSTANCE _hInstance;
+#      ifdef _WIN64
+/*
+ * Even though sizeof(SOCKET) is 8, it's safe to cast it to int, because
+ * the value constitutes an index in per-process table of limited size
+ * and not a real pointer.
+ */
+#        define socket(d,t,p)	((int)socket(d,t,p))
+#        define accept(s,f,l)	((int)accept(s,f,l))
+#      endif
 #      define SSLeay_Write(a,b,c)	send((a),(b),(c),0)
 #      define SSLeay_Read(a,b,c)	recv((a),(b),(c),0)
 #      define SHUTDOWN(fd)		{ shutdown((fd),0); closesocket(fd); }
@@ -442,6 +556,27 @@ extern HINSTANCE _hInstance;
 #    define SSLeay_Read(a,b,c)		MacSocket_recv((a),(b),(c),true)
 #    define SHUTDOWN(fd)		MacSocket_close(fd)
 #    define SHUTDOWN2(fd)		MacSocket_close(fd)
+
+#  elif defined(OPENSSL_SYS_NETWARE)
+         /* NetWare uses the WinSock2 interfaces by default, but can be configured for BSD
+         */
+#      if defined(NETWARE_BSDSOCK)
+#        include <sys/socket.h>
+#        include <netinet/in.h>
+#        include <sys/time.h>
+#        if defined(NETWARE_CLIB)
+#          include <sys/bsdskt.h>
+#        else
+#          include <sys/select.h>
+#        endif
+#        define INVALID_SOCKET (int)(~0)
+#      else
+#        include <novsock2.h>
+#      endif
+#      define SSLeay_Write(a,b,c)   send((a),(b),(c),0)
+#      define SSLeay_Read(a,b,c) recv((a),(b),(c),0)
+#      define SHUTDOWN(fd)    { shutdown((fd),0); closesocket(fd); }
+#      define SHUTDOWN2(fd)      { shutdown((fd),2); closesocket(fd); }
 
 #  else
 
@@ -538,6 +673,9 @@ extern HINSTANCE _hInstance;
 extern char *sys_errlist[]; extern int sys_nerr;
 # define strerror(errnum) \
 	(((errnum)<0 || (errnum)>=sys_nerr) ? NULL : sys_errlist[errnum])
+  /* Being signed SunOS 4.x memcpy breaks ASN1_OBJECT table lookup */
+#include "crypto/o_str.h"
+# define memcmp OPENSSL_memcmp
 #endif
 
 #ifndef OPENSSL_EXIT
@@ -583,13 +721,12 @@ extern char *sys_errlist[]; extern int sys_nerr;
 #elif defined(OPENSSL_SYS_OS2) && defined(__EMX__)
 #  define strcasecmp stricmp
 #  define strncasecmp strnicmp
-#else
-#  ifdef NO_STRINGS_H
-    int	strcasecmp();
-    int	strncasecmp();
-#  else
-#    include <strings.h>
-#  endif /* NO_STRINGS_H */
+#elif defined(OPENSSL_SYS_NETWARE)
+#  include <string.h>
+#  if defined(NETWARE_CLIB)
+#    define strcasecmp stricmp
+#    define strncasecmp strnicmp
+#  endif /* NETWARE_CLIB */
 #endif
 
 #if defined(OPENSSL_SYS_OS2) && defined(__EMX__)

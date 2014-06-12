@@ -56,26 +56,23 @@
  * [including the GNU Public Licence.]
  */
 
+#include <openssl/opensslconf.h>
 #if !defined(OPENSSL_NO_SHA1) && !defined(OPENSSL_NO_SHA)
 
 #undef  SHA_0
 #define SHA_1
 
 #include <openssl/opensslv.h>
-#include <openssl/opensslconf.h>
+#ifdef OPENSSL_FIPS
+#include <openssl/fips.h>
+#endif
 
-#ifndef OPENSSL_FIPS
+
 const char SHA1_version[]="SHA1" OPENSSL_VERSION_PTEXT;
 
 /* The implementation is in ../md32_common.h */
 
 #include "sha_locl.h"
-
-#else /* ndef OPENSSL_FIPS */
-
-static void *dummy=&dummy;
-
-#endif /* ndef OPENSSL_FIPS */
 
 #endif
 

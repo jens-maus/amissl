@@ -74,6 +74,10 @@
 #include <openssl/lhash.h>
 #include <openssl/x509.h>
 
+#ifdef _WIN32
+#define stat	_stat
+#endif
+
 typedef struct lookup_dir_st
 	{
 	BUF_MEM *buffer;
@@ -189,7 +193,7 @@ static int add_cert_dir(BY_DIR *ctx, const char *dir, int type)
 
 	s=dir;
 	p=s;
-	for (;;)
+	for (;;p++)
 		{
 		if ((*p == LIST_SEPARATOR_CHAR) || (*p == '\0'))
 			{
@@ -198,8 +202,11 @@ static int add_cert_dir(BY_DIR *ctx, const char *dir, int type)
 			len=(int)(p-ss);
 			if (len == 0) continue;
 			for (j=0; j<ctx->num_dirs; j++)
-				if (strncmp(ctx->dirs[j],ss,(unsigned int)len) == 0)
-					continue;
+				if (strlen(ctx->dirs[j]) == (size_t)len &&
+				    strncmp(ctx->dirs[j],ss,(unsigned int)len) == 0)
+					break;
+			if (j<ctx->num_dirs)
+				continue;
 			if (ctx->num_dirs_alloced < (ctx->num_dirs+1))
 				{
 				ctx->num_dirs_alloced+=10;
@@ -231,7 +238,6 @@ static int add_cert_dir(BY_DIR *ctx, const char *dir, int type)
 			ctx->num_dirs++;
 			}
 		if (*p == '\0') break;
-		p++;
 		}
 	return(1);
 	}
@@ -354,11 +360,11 @@ static int get_cert_by_subject(X509_LOOKUP *xl, int type, X509_NAME *name,
 
 		/* we have added it to the cache so now pull
 		 * it out again */
-		CRYPTO_r_lock(CRYPTO_LOCK_X509_STORE);
+		CRYPTO_w_lock(CRYPTO_LOCK_X509_STORE);
 		j = sk_X509_OBJECT_find(xl->store_ctx->objs,&stmp);
 		if(j != -1) tmp=sk_X509_OBJECT_value(xl->store_ctx->objs,j);
 		else tmp = NULL;
-		CRYPTO_r_unlock(CRYPTO_LOCK_X509_STORE);
+		CRYPTO_w_unlock(CRYPTO_LOCK_X509_STORE);
 
 		if (tmp != NULL)
 			{
@@ -377,4 +383,3 @@ finish:
 	if (b != NULL) BUF_MEM_free(b);
 	return(ok);
 	}
-

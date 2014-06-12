@@ -15,23 +15,24 @@ set PWD = `pwd`
 mkdir -p OS4/tmp OS4/out
 
 if [ ! -f crypto/opensslconf.h ] || [ ! -f Makefile ] || [ ! -f MINFO ]; then
-	perl Configure OS4
+	perl Configure OS4 enable-mdc2 enable-rc5 no-krb5
 fi
 
-if [ ! -f MINFO ]
-then
+if [ ! -f MINFO ]; then
 	make files
+  #make depend
 fi
 
 cd OS4
-(cd .. && perl util/mk1mf.pl no-engine no-krb5 SRC= TMP=OS4/tmp \
-							OUT=OS4/out OS4) > Makefile.one
+(cd .. && perl util/mk1mf.pl SRC= TMP=OS4/tmp OUT=OS4/out OS4) > Makefile.one
 cd ..
 
 make -f OS4/Makefile.one AmiSSL=$PWD/.. GCCVER=$GCCVER
 
-for header in outinc/openssl/*; do
+cp crypto/x509/x509.h outinc/openssl/
+cp crypto/x509/x509_vfy.h outinc/openssl/
 
+for header in outinc/openssl/*; do
   outfile=`basename ${header}`
   cat > ../include/openssl/${outfile} << EOF
 #ifndef PROTO_AMISSL_H

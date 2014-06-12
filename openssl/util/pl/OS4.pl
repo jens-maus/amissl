@@ -12,8 +12,8 @@ $mkdir='mkdir';
 $cc="ppc-amigaos-gcc-4.0.3 \$(GCCVER)";
 $cfile="-c ";
 $cflags="";
-$app_cflag="\$(ADD) -mcrt=clib2 -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O2  -Wno-pointer-sign";
-$lib_cflag="\$(ADD) -mcrt=clib2 -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_NO_ENGINE -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O2 -Wno-pointer-sign";
+$app_cflag="\$(ADD) -mcrt=clib2 -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -g -O3  -Wno-pointer-sign";
+$lib_cflag="\$(ADD) -mcrt=clib2 -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -g -O3 -Wno-pointer-sign";
 $obj='.o';
 $ofile='-o ';
 $define='-D';
@@ -51,25 +51,26 @@ sub do_lib_rule
 	{
 	local($obj,$target,$name,$shlib)=@_;
 	local($ret,$_,$Name);
-	
+
 	$target =~ s/\//$o/g if $o ne '/';
+	$target="$target";
 	($Name=$name) =~ tr/a-z/A-Z/;
 
 	$ret.="$target: \$(${Name}OBJ)\n";
-	$ret.="\t-\$(RM) $target\n";
+	$ret.="\t\$(RM) $target\n";
 	$ret.="\t\$(MKLIB) $target \$(${Name}OBJ)\n";
 	$ret.="\t\$(RANLIB) $target\n\n";
 	}
 
 sub do_link_rule
 	{
-	local($target,$files,$dep_libs,$libs,$sha1file,$openssl)=@_;
+	local($target,$files,$dep_libs,$libs)=@_;
 	local($ret,$_);
 	
 	$file =~ s/\//$o/g if $o ne '/';
 	$n=&bname($target);
 	$ret.="$target: $files $dep_libs\n";
-	$ret.="\t\$(LINK) ${efile}$target $files \$(LFLAGS) \n\n";
+	$ret.="\t\$(LINK) ${efile}$target \$(LFLAGS) $files $libs\n\n";
 	return($ret);
 	}
 

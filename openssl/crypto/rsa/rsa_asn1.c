@@ -1,5 +1,5 @@
 /* rsa_asn1.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2000.
  */
 /* ====================================================================
@@ -63,10 +63,10 @@
 #include <openssl/asn1t.h>
 
 static ASN1_METHOD method={
-        (int (*)())  i2d_RSAPrivateKey,
-        (char *(*)())d2i_RSAPrivateKey,
-        (char *(*)())RSA_new,
-        (void (*)()) RSA_free};
+        (I2D_OF(void))     i2d_RSAPrivateKey,
+        (D2I_OF(void))     d2i_RSAPrivateKey,
+        (void *(*)(void))  RSA_new,
+        (void (*)(void *)) RSA_free};
 
 ASN1_METHOD *RSAPrivateKey_asn1_meth(void)
 	{

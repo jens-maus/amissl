@@ -64,6 +64,7 @@
 #endif
 
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 #include <openssl/conf.h>
 #include <openssl/conf_api.h>
@@ -121,7 +122,7 @@ int _CONF_add_string(CONF *conf, CONF_VALUE *section, CONF_VALUE *value)
 	v = (CONF_VALUE *)lh_insert(conf->data, value);
 	if (v != NULL)
 		{
-		sk_CONF_VALUE_delete_ptr(ts,v);
+		(void)sk_CONF_VALUE_delete_ptr(ts,v);
 		OPENSSL_free(v->name);
 		OPENSSL_free(v->value);
 		OPENSSL_free(v);

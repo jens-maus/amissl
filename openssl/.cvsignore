@@ -1,5 +1,4 @@
 openssl.pc
-Makefile
 MINFO
 makefile.one
 tmp
@@ -12,9 +11,10 @@ maketest.log
 cctest
 cctest.c
 cctest.a
-libcrypto.so.*
-libssl.so.*
-libcrypto.sha1
-libcrypto.a.sha1
 *.flc
 semantic.cache
+Makefile
+*.so*
+*.dll*
+*.sl*
+*.dylib*

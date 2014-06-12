@@ -7,11 +7,6 @@ TOP=	../..
 CC=	cc
 INCLUDES= -I.. -I$(TOP) -I../../include
 CFLAG=-g
-INSTALL_PREFIX=
-OPENSSLDIR=     /usr/local/ssl
-INSTALLTOP=/usr/local/ssl
-MAKEDEPPROG=	makedepend
-MAKEDEPEND=	$(TOP)/util/domd $(TOP) -MD $(MAKEDEPPROG)
 MAKEFILE=	Makefile
 AR=		ar r
 PERL=		perl
@@ -39,7 +34,7 @@ top:
 all:	obj_dat.h lib
 
 lib:	$(LIBOBJ)
-	$(AR) $(LIB) $(LIBOBJ)
+	$(ARX) $(LIB) $(LIBOBJ)
 	$(RANLIB) $(LIB) || echo Never mind.
 	@touch lib
 
@@ -60,6 +55,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
+	@[ -n "$(INSTALLTOP)" ] # should be set by top Makefile...
 	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
@@ -75,6 +71,7 @@ lint:
 	lint -DLINT $(INCLUDES) $(SRC)>fluff
 
 depend:
+	@[ -n "$(MAKEDEPEND)" ] # should be set by upper Makefile...
 	$(MAKEDEPEND) -- $(CFLAG) $(INCLUDES) $(DEPFLAG) -- $(PROGS) $(LIBSRC)
 
 dclean:
@@ -86,37 +83,7 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-o_names.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
-o_names.o: ../../include/openssl/bn.h ../../include/openssl/crypto.h
-o_names.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-o_names.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
-o_names.o: ../../include/openssl/objects.h ../../include/openssl/opensslconf.h
-o_names.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-o_names.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-o_names.o: ../../include/openssl/symhacks.h o_names.c
-obj_dat.o: ../../e_os.h ../../include/openssl/asn1.h
-obj_dat.o: ../../include/openssl/bio.h ../../include/openssl/bn.h
-obj_dat.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
-obj_dat.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-obj_dat.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
-obj_dat.o: ../../include/openssl/objects.h ../../include/openssl/opensslconf.h
-obj_dat.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-obj_dat.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-obj_dat.o: ../../include/openssl/symhacks.h ../cryptlib.h obj_dat.c obj_dat.h
-obj_err.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
-obj_err.o: ../../include/openssl/bn.h ../../include/openssl/crypto.h
-obj_err.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-obj_err.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
-obj_err.o: ../../include/openssl/objects.h ../../include/openssl/opensslconf.h
-obj_err.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-obj_err.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-obj_err.o: ../../include/openssl/symhacks.h obj_err.c
-obj_lib.o: ../../e_os.h ../../include/openssl/asn1.h
-obj_lib.o: ../../include/openssl/bio.h ../../include/openssl/bn.h
-obj_lib.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
-obj_lib.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-obj_lib.o: ../../include/openssl/lhash.h ../../include/openssl/obj_mac.h
-obj_lib.o: ../../include/openssl/objects.h ../../include/openssl/opensslconf.h
-obj_lib.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-obj_lib.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-obj_lib.o: ../../include/openssl/symhacks.h ../cryptlib.h obj_lib.c
+o_names.o: o_names.c
+obj_dat.o: ../../e_os.h ../cryptlib.h obj_dat.c obj_dat.h
+obj_err.o: obj_err.c
+obj_lib.o: ../../e_os.h ../cryptlib.h obj_lib.c

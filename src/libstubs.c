@@ -165,6 +165,11 @@ OCSP_REQUEST * SAVEDS (OCSP_REQUEST_new)(void)
 	return(OCSP_REQUEST_new());
 }
 
+OCSP_RESPONSE * SAVEDS (OCSP_RESPONSE_new)(void)
+{
+	return(OCSP_RESPONSE_new());
+}
+
 void SAVEDS (PKCS12_SAFEBAG_free)(PKCS12_SAFEBAG *a)
 {
 	PKCS12_SAFEBAG_free(a);
@@ -210,19 +215,24 @@ DSA * SAVEDS (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
 	return(d2i_DSAparams(a, pp, length));
 }
 
-OCSP_REQUEST * SAVEDS (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, unsigned char **in, long len)
+OCSP_REQUEST * SAVEDS (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, const unsigned char **in, long len)
 {
 	return(d2i_OCSP_REQUEST(a, in, len));
 }
 
-OCSP_RESPONSE * SAVEDS (d2i_OCSP_RESPONSE)(OCSP_RESPONSE **a, unsigned char **in, long len)
+OCSP_RESPONSE * SAVEDS (d2i_OCSP_RESPONSE)(OCSP_RESPONSE **a, const unsigned char **in, long len)
 {
 	return(d2i_OCSP_RESPONSE(a, in, len));
 }
 
-SSL_SESSION * SAVEDS (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char *const *pp, long length)
+SSL_SESSION * SAVEDS (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char **pp, long length)
 {
 	return(d2i_SSL_SESSION(a, pp, length));
+}
+
+EC_GROUP * SAVEDS (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, long len)
+{
+  return(d2i_ECPKParameters(a, in, len));
 }
 
 int SAVEDS (i2d_ASN1_HEADER)(ASN1_HEADER *a, unsigned char **pp)
@@ -253,6 +263,11 @@ int SAVEDS (i2d_OCSP_RESPONSE)(OCSP_RESPONSE *a, unsigned char **out)
 int SAVEDS (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
 {
 	return(i2d_SSL_SESSION(in, pp));
+}
+
+int SAVEDS (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
+{
+  return(i2d_ECPKParameters(a, out));
 }
 
 #ifdef __SASC

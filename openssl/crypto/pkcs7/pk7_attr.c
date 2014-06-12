@@ -1,5 +1,5 @@
 /* pk7_attr.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2001.
  */
 /* ====================================================================
@@ -96,7 +96,8 @@ int PKCS7_add_attrib_smimecap(PKCS7_SIGNER_INFO *si, STACK_OF(X509_ALGOR) *cap)
 STACK_OF(X509_ALGOR) *PKCS7_get_smimecap(PKCS7_SIGNER_INFO *si)
 	{
 	ASN1_TYPE *cap;
-	unsigned char *p;
+	const unsigned char *p;
+
 	cap = PKCS7_get_signed_attribute(si, NID_SMIMECapabilities);
 	if (!cap || (cap->type != V_ASN1_SEQUENCE))
 		return NULL;

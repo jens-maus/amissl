@@ -60,6 +60,11 @@
 #include "cryptlib.h"
 #include <openssl/buffer.h>
 
+/* LIMIT_BEFORE_EXPANSION is the maximum n such that (n+3)/3*4 < 2**31. That
+ * function is applied in several functions in this file and this limit ensures
+ * that the result fits in an int. */
+#define LIMIT_BEFORE_EXPANSION 0x5ffffffc
+
 BUF_MEM *BUF_MEM_new(void)
 	{
 	BUF_MEM *ret;
@@ -94,6 +99,11 @@ int BUF_MEM_grow(BUF_MEM *str, int len)
 	char *ret;
 	unsigned int n;
 
+	if (len < 0)
+		{
+		BUFerr(BUF_F_BUF_MEM_GROW,ERR_R_MALLOC_FAILURE);
+		return 0;
+		}
 	if (str->length >= len)
 		{
 		str->length=len;
@@ -104,6 +114,12 @@ int BUF_MEM_grow(BUF_MEM *str, int len)
 		memset(&str->data[str->length],0,len-str->length);
 		str->length=len;
 		return(len);
+		}
+	/* This limit is sufficient to ensure (len+3)/3*4 < 2**31 */
+	if (len > LIMIT_BEFORE_EXPANSION)
+		{
+		BUFerr(BUF_F_BUF_MEM_GROW,ERR_R_MALLOC_FAILURE);
+		return 0;
 		}
 	n=(len+3)/3*4;
 	if (str->data == NULL)
@@ -130,6 +146,11 @@ int BUF_MEM_grow_clean(BUF_MEM *str, int len)
 	char *ret;
 	unsigned int n;
 
+	if (len < 0)
+		{
+		BUFerr(BUF_F_BUF_MEM_GROW_CLEAN,ERR_R_MALLOC_FAILURE);
+		return 0;
+		}
 	if (str->length >= len)
 		{
 		memset(&str->data[len],0,str->length-len);
@@ -142,6 +163,12 @@ int BUF_MEM_grow_clean(BUF_MEM *str, int len)
 		str->length=len;
 		return(len);
 		}
+	/* This limit is sufficient to ensure (len+3)/3*4 < 2**31 */
+	if (len > LIMIT_BEFORE_EXPANSION)
+		{
+		BUFerr(BUF_F_BUF_MEM_GROW_CLEAN,ERR_R_MALLOC_FAILURE);
+		return 0;
+		}
 	n=(len+3)/3*4;
 	if (str->data == NULL)
 		ret=OPENSSL_malloc(n);
@@ -149,7 +176,7 @@ int BUF_MEM_grow_clean(BUF_MEM *str, int len)
 		ret=OPENSSL_realloc_clean(str->data,str->max,n);
 	if (ret == NULL)
 		{
-		BUFerr(BUF_F_BUF_MEM_GROW,ERR_R_MALLOC_FAILURE);
+		BUFerr(BUF_F_BUF_MEM_GROW_CLEAN,ERR_R_MALLOC_FAILURE);
 		len=0;
 		}
 	else
@@ -160,43 +187,4 @@ int BUF_MEM_grow_clean(BUF_MEM *str, int len)
 		str->length=len;
 		}
 	return(len);
-	}
-
-char *BUF_strdup(const char *str)
-	{
-	char *ret;
-	int n;
-
-	if (str == NULL) return(NULL);
-
-	n=strlen(str);
-	ret=OPENSSL_malloc(n+1);
-	if (ret == NULL) 
-		{
-		BUFerr(BUF_F_BUF_STRDUP,ERR_R_MALLOC_FAILURE);
-		return(NULL);
-		}
-	memcpy(ret,str,n+1);
-	return(ret);
-	}
-
-size_t BUF_strlcpy(char *dst, const char *src, size_t size)
-	{
-	size_t l = 0;
-	for(; size > 1 && *src; size--)
-		{
-		*dst++ = *src++;
-		l++;
-		}
-	if (size)
-		*dst = '\0';
-	return l + strlen(src);
-	}
-
-size_t BUF_strlcat(char *dst, const char *src, size_t size)
-	{
-	size_t l = 0;
-	for(; size > 0 && *dst; size--, dst++)
-		l++;
-	return l + BUF_strlcpy(dst, src, size);
 	}

@@ -1,9 +1,9 @@
 /* v3_cpols.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
- * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2004 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -62,6 +62,8 @@
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/x509v3.h>
+
+#include "pcy_int.h"
 
 /* Certificate policies extension support: this one is a bit complex... */
 
@@ -179,7 +181,11 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
 			pol = POLICYINFO_new();
 			pol->policyid = pobj;
 		}
-		sk_POLICYINFO_push(pols, pol);
+		if (!sk_POLICYINFO_push(pols, pol)){
+			POLICYINFO_free(pol);
+			X509V3err(X509V3_F_R2I_CERTPOL, ERR_R_MALLOC_FAILURE);
+			goto err;
+		}
 	}
 	sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);
 	return pols;
@@ -348,7 +354,7 @@ static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos)
 	return 1;
 
 	merr:
-	X509V3err(X509V3_F_NOTICE_SECTION,ERR_R_MALLOC_FAILURE);
+	X509V3err(X509V3_F_NREF_NOS,ERR_R_MALLOC_FAILURE);
 
 	err:
 	sk_ASN1_INTEGER_pop_free(nnums, ASN1_STRING_free);
@@ -429,3 +435,20 @@ static void print_notice(BIO *out, USERNOTICE *notice, int indent)
 							 notice->exptext->data);
 }
 
+void X509_POLICY_NODE_print(BIO *out, X509_POLICY_NODE *node, int indent)
+	{
+	const X509_POLICY_DATA *dat = node->data;
+
+	BIO_printf(out, "%*sPolicy: ", indent, "");
+			
+	i2a_ASN1_OBJECT(out, dat->valid_policy);
+	BIO_puts(out, "\n");
+	BIO_printf(out, "%*s%s\n", indent + 2, "",
+		node_data_critical(dat) ? "Critical" : "Non Critical");
+	if (dat->qualifier_set)
+		print_qualifiers(out, dat->qualifier_set, indent + 2);
+	else
+		BIO_printf(out, "%*sNo Qualifiers\n", indent + 2, "");
+	}
+	
+IMPLEMENT_STACK_OF(X509_POLICY_NODE)

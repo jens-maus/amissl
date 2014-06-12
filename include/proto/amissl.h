@@ -6,10 +6,15 @@
 **
 **	Prototype/inline/pragma header file combo
 **
+**	Copyright (c) 2010 Hyperion Entertainment CVBA.
+**	All Rights Reserved.
 */
 
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
+#endif
+#ifndef DOS_DOS_H
+#include <dos/dos.h>
 #endif
 #ifndef AMISSL_AMISSL_H
 #include <amissl/amissl.h>

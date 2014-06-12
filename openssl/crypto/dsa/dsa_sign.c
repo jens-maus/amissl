@@ -64,17 +64,19 @@
 #include <openssl/dsa.h>
 #include <openssl/rand.h>
 #include <openssl/asn1.h>
-#ifndef OPENSSL_NO_ENGINE
-#include <openssl/engine.h>
-#endif
+#ifdef OPENSSL_FIPS
 #include <openssl/fips.h>
+#endif
+
 
 DSA_SIG * DSA_do_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 	{
 #ifdef OPENSSL_FIPS
-	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_FIPS_EXTERNAL_METHOD_ALLOW)
-		&& !FIPS_dsa_check(dsa))
+	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_NON_FIPS_ALLOW))
+		{
+		DSAerr(DSA_F_DSA_DO_SIGN, DSA_R_OPERATION_NOT_ALLOWED_IN_FIPS_MODE);
 		return NULL;
+		}
 #endif
 	return dsa->meth->dsa_do_sign(dgst, dlen, dsa);
 	}
@@ -82,9 +84,11 @@ DSA_SIG * DSA_do_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 int DSA_sign_setup(DSA *dsa, BN_CTX *ctx_in, BIGNUM **kinvp, BIGNUM **rp)
 	{
 #ifdef OPENSSL_FIPS
-	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_FIPS_EXTERNAL_METHOD_ALLOW)
-		&& !FIPS_dsa_check(dsa))
+	if(FIPS_mode() && !(dsa->flags & DSA_FLAG_NON_FIPS_ALLOW))
+		{
+		DSAerr(DSA_F_DSA_SIGN_SETUP, DSA_R_OPERATION_NOT_ALLOWED_IN_FIPS_MODE);
 		return 0;
+		}
 #endif
 	return dsa->meth->dsa_sign_setup(dsa, ctx_in, kinvp, rp);
 	}

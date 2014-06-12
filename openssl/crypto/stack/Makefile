@@ -7,11 +7,6 @@ TOP=	../..
 CC=	cc
 INCLUDES=
 CFLAG=-g
-INSTALL_PREFIX=
-OPENSSLDIR=     /usr/local/ssl
-INSTALLTOP=/usr/local/ssl
-MAKEDEPPROG=	makedepend
-MAKEDEPEND=	$(TOP)/util/domd $(TOP) -MD $(MAKEDEPPROG)
 MAKEFILE=	Makefile
 AR=		ar r
 
@@ -38,7 +33,7 @@ top:
 all:	lib
 
 lib:	$(LIBOBJ)
-	$(AR) $(LIB) $(LIBOBJ)
+	$(ARX) $(LIB) $(LIBOBJ)
 	$(RANLIB) $(LIB) || echo Never mind.
 	@touch lib
 
@@ -51,6 +46,7 @@ links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../apps $(APPS)
 
 install:
+	@[ -n "$(INSTALLTOP)" ] # should be set by top Makefile...
 	@headerlist="$(EXHEADER)"; for i in $$headerlist ; \
 	do  \
 	(cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/include/openssl/$$i; \
@@ -66,6 +62,7 @@ lint:
 	lint -DLINT $(INCLUDES) $(SRC)>fluff
 
 depend:
+	@[ -n "$(MAKEDEPEND)" ] # should be set by upper Makefile...
 	$(MAKEDEPEND) -- $(CFLAG) $(INCLUDES) $(DEPFLAG) -- $(PROGS) $(LIBSRC)
 
 dclean:
@@ -77,10 +74,4 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-stack.o: ../../e_os.h ../../include/openssl/bio.h
-stack.o: ../../include/openssl/buffer.h ../../include/openssl/crypto.h
-stack.o: ../../include/openssl/e_os2.h ../../include/openssl/err.h
-stack.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
-stack.o: ../../include/openssl/opensslv.h ../../include/openssl/safestack.h
-stack.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
-stack.o: ../cryptlib.h stack.c
+stack.o: ../../e_os.h ../cryptlib.h stack.c

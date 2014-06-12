@@ -56,6 +56,7 @@
  * [including the GNU Public Licence.]
  */
 
+#include <openssl/opensslconf.h>	/* for OPENSSL_NO_RSA */
 #ifndef OPENSSL_NO_RSA
 #include <stdio.h>
 #include "cryptlib.h"
@@ -64,6 +65,7 @@
 #include <openssl/objects.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
+#include <openssl/rsa.h>
 
 int PEM_SealInit(PEM_ENCODE_SEAL_CTX *ctx, EVP_CIPHER *type, EVP_MD *md_type,
 	     unsigned char **ek, int *ekl, unsigned char *iv, EVP_PKEY **pubk,
@@ -98,7 +100,7 @@ int PEM_SealInit(PEM_ENCODE_SEAL_CTX *ctx, EVP_CIPHER *type, EVP_MD *md_type,
 
 	EVP_CIPHER_CTX_init(&ctx->cipher);
 	ret=EVP_SealInit(&ctx->cipher,type,ek,ekl,iv,pubk,npubk);
-	if (!ret) goto err;
+	if (ret <= 0) goto err;
 
 	/* base64 encode the keys */
 	for (i=0; i<npubk; i++)
