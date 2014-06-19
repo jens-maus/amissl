@@ -29,9 +29,6 @@ cd ..
 
 make -f OS4/Makefile.one AmiSSL=$PWD/.. GCCVER=$GCCVER
 
-cp crypto/x509/x509.h outinc/openssl/
-cp crypto/x509/x509_vfy.h outinc/openssl/
-
 for header in outinc/openssl/*; do
   outfile=`basename ${header}`
   cat > ../include/openssl/${outfile} << EOF
