@@ -9206,11 +9206,6 @@
 			<arg name="ivec" type="DES_cblock *" m68kreg="a5"/>
 			<arg name="num" type="int *" m68kreg="a6"/>
 		</method>
-		<method name="DES_xwhite_in2out" result="void">
-			<arg name="DES_key" type="const_DES_cblock *" m68kreg="a0"/>
-			<arg name="in_white" type="const_DES_cblock *" m68kreg="a1"/>
-			<arg name="out_white" type="DES_cblock *" m68kreg="a2"/>
-		</method>
 		<method name="DES_enc_read" result="int">
 			<arg name="fd" type="int" m68kreg="d0"/>
 			<arg name="buf" type="void *" m68kreg="a0"/>
@@ -9432,11 +9427,6 @@
 			<arg name="ks3" type="_ossl_old_des_key_schedule" m68kreg="d3"/>
 			<arg name="ivec" type="_ossl_old_des_cblock *" m68kreg="a2"/>
 			<arg name="num" type="int *" m68kreg="a3"/>
-		</method>
-		<method name="_ossl_old_des_xwhite_in2out" result="void">
-			<arg name="des_key" type="_ossl_old_des_cblock *" m68kreg="a0"/>
-			<arg name="in_white" type="_ossl_old_des_cblock *" m68kreg="a1"/>
-			<arg name="out_white" type="_ossl_old_des_cblock *" m68kreg="a2"/>
 		</method>
 		<method name="_ossl_old_des_enc_read" result="int">
 			<arg name="fd" type="int" m68kreg="d0"/>

@@ -33890,22 +33890,6 @@ STATIC CONST struct EmuTrap stub_main_DES_ede3_ofb64_encrypt = { TRAPINST, TRAPT
 
 // ---
 
-STATIC void stub_main_DES_xwhite_in2out_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->DES_xwhite_in2out(
-		(const_DES_cblock *)regarray[REG68K_A0/4],
-		(const_DES_cblock *)regarray[REG68K_A1/4],
-		(DES_cblock *)regarray[REG68K_A2/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_DES_xwhite_in2out = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_DES_xwhite_in2out_PPC };
-
-// ---
-
 STATIC int stub_main_DES_enc_read_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -34520,22 +34504,6 @@ STATIC void stub_main__ossl_old_des_ede3_ofb64_encrypt_PPC(uint32 *regarray)
 	);
 }
 STATIC CONST struct EmuTrap stub_main__ossl_old_des_ede3_ofb64_encrypt = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main__ossl_old_des_ede3_ofb64_encrypt_PPC };
-
-// ---
-
-STATIC void stub_main__ossl_old_des_xwhite_in2out_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->_ossl_old_des_xwhite_in2out(
-		(_ossl_old_des_cblock *)regarray[REG68K_A0/4],
-		(_ossl_old_des_cblock *)regarray[REG68K_A1/4],
-		(_ossl_old_des_cblock *)regarray[REG68K_A2/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main__ossl_old_des_xwhite_in2out = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main__ossl_old_des_xwhite_in2out_PPC };
 
 // ---
 
@@ -42288,7 +42256,6 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_DES_ede3_cfb64_encrypt,
 	&stub_main_DES_ede3_cfb_encrypt,
 	&stub_main_DES_ede3_ofb64_encrypt,
-	&stub_main_DES_xwhite_in2out,
 	&stub_main_DES_enc_read,
 	&stub_main_DES_enc_write,
 	&stub_main_DES_fcrypt,
@@ -42325,7 +42292,6 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main__ossl_old_des_ede3_cbc_encrypt,
 	&stub_main__ossl_old_des_ede3_cfb64_encrypt,
 	&stub_main__ossl_old_des_ede3_ofb64_encrypt,
-	&stub_main__ossl_old_des_xwhite_in2out,
 	&stub_main__ossl_old_des_enc_read,
 	&stub_main__ossl_old_des_enc_write,
 	&stub_main__ossl_old_des_fcrypt,

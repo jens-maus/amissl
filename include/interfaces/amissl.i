@@ -2307,7 +2307,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_DES_ede3_cfb64_encrypt
 	    FPTR IAmiSSL_DES_ede3_cfb_encrypt
 	    FPTR IAmiSSL_DES_ede3_ofb64_encrypt
-	    FPTR IAmiSSL_DES_xwhite_in2out
 	    FPTR IAmiSSL_DES_enc_read
 	    FPTR IAmiSSL_DES_enc_write
 	    FPTR IAmiSSL_DES_fcrypt
@@ -2344,7 +2343,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL__ossl_old_des_ede3_cbc_encrypt
 	    FPTR IAmiSSL__ossl_old_des_ede3_cfb64_encrypt
 	    FPTR IAmiSSL__ossl_old_des_ede3_ofb64_encrypt
-	    FPTR IAmiSSL__ossl_old_des_xwhite_in2out
 	    FPTR IAmiSSL__ossl_old_des_enc_read
 	    FPTR IAmiSSL__ossl_old_des_enc_write
 	    FPTR IAmiSSL__ossl_old_des_fcrypt

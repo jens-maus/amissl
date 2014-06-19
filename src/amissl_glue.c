@@ -3769,7 +3769,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_locking_callback(REG(a6, __IFACE_OR_BAS
 
 // ---
 
-void  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_locking_callback(REG(a6, __IFACE_OR_BASE))
+void  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_locking_callback(REG(a6, __IFACE_OR_BASE)))(int mode, int type, const char *file, int line)
 {
 	return CRYPTO_get_locking_callback();
 }
@@ -3783,7 +3783,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_add_lock_callback(REG(a6, __IFACE_OR_BA
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_add_lock_callback(REG(a6, __IFACE_OR_BASE))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_add_lock_callback(REG(a6, __IFACE_OR_BASE)))(int *num, int mount, int type, const char *file, int line)
 {
 	return CRYPTO_get_add_lock_callback();
 }
@@ -3797,7 +3797,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_id_callback(REG(a6, __IFACE_OR_BASE), R
 
 // ---
 
-unsigned long  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_id_callback(REG(a6, __IFACE_OR_BASE))
+unsigned long  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_id_callback(REG(a6, __IFACE_OR_BASE)))(void)
 {
 	return CRYPTO_get_id_callback();
 }
@@ -3867,21 +3867,21 @@ void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_set_dynlock_destroy_callback(REG(a6, __IFAC
 
 // ---
 
-struct CRYPTO_dynlock_value *  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_create_callback(REG(a6, __IFACE_OR_BASE))
+struct CRYPTO_dynlock_value *  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_create_callback(REG(a6, __IFACE_OR_BASE)))(const char *file, int line)
 {
 	return CRYPTO_get_dynlock_create_callback();
 }
 
 // ---
 
-void  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_lock_callback(REG(a6, __IFACE_OR_BASE))
+void  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_lock_callback(REG(a6, __IFACE_OR_BASE)))(int mode, struct CRYPTO_dynlock_value *l, const char *file, int line)
 {
 	return CRYPTO_get_dynlock_lock_callback();
 }
 
 // ---
 
-void  AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_get_dynlock_destroy_callback(REG(a6, __IFACE_OR_BASE))
+void  AMISSL_LIB_ENTRY (*_AmiSSL_CRYPTO_get_dynlock_destroy_callback(REG(a6, __IFACE_OR_BASE)))(struct CRYPTO_dynlock_value *l, const char *file, int line)
 {
 	return CRYPTO_get_dynlock_destroy_callback();
 }
@@ -9777,7 +9777,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s)))(int, X509_STORE_CTX *)
 {
 	return SSL_get_verify_callback(s);
 }
@@ -10099,7 +10099,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_depth(REG(a6, __IFACE_OR_BASE), 
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_SSL_CTX_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ctx))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_SSL_CTX_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ctx)))(int, X509_STORE_CTX *)
 {
 	return SSL_CTX_get_verify_callback(ctx);
 }
@@ -10700,7 +10700,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_SSL_set_info_callback(REG(a6, __IFACE_OR_BASE), RE
 
 // ---
 
-void  AMISSL_LIB_ENTRY _AmiSSL_SSL_get_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl))
+void  AMISSL_LIB_ENTRY (*_AmiSSL_SSL_get_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl)))(const SSL *ssl, int type, int val)
 {
 	return SSL_get_info_callback(ssl);
 }
@@ -10952,7 +10952,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_sk_zero(REG(a6, __IFACE_OR_BASE), REG(a0, STACK * 
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, STACK * sk), REG(a1, int (*c)(const char *const *, const char *const *)))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, STACK * sk), REG(a1, int (*c)(const char *const *, const char *const *))))(const char *const *, const char *const *)
 {
 	return sk_set_cmp_func(sk, c);
 }
@@ -11295,35 +11295,35 @@ int AMISSL_LIB_ENTRY _AmiSSL_UI_method_set_closer(REG(a6, __IFACE_OR_BASE), REG(
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_opener(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_opener(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method)))(UI *)
 {
 	return UI_method_get_opener(method);
 }
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_writer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_writer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method)))(UI *, UI_STRING *)
 {
 	return UI_method_get_writer(method);
 }
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_flusher(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_flusher(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method)))(UI *)
 {
 	return UI_method_get_flusher(method);
 }
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_reader(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_reader(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method)))(UI *, UI_STRING *)
 {
 	return UI_method_get_reader(method);
 }
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_UI_method_get_closer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_UI_method_get_closer(REG(a6, __IFACE_OR_BASE), REG(a0, UI_METHOD * method)))(UI *)
 {
 	return UI_method_get_closer(method);
 }
@@ -12471,7 +12471,7 @@ unsigned char * AMISSL_LIB_ENTRY _AmiSSL_X509_alias_get0(REG(a6, __IFACE_OR_BASE
 
 // ---
 
-int  AMISSL_LIB_ENTRY _AmiSSL_X509_TRUST_set_default(REG(a6, __IFACE_OR_BASE), REG(a0, int (*trust)(int, X509 *, int)))
+int  AMISSL_LIB_ENTRY (*_AmiSSL_X509_TRUST_set_default(REG(a6, __IFACE_OR_BASE), REG(a0, int (*trust)(int, X509 *, int))))(int, X509 *, int)
 {
 	return X509_TRUST_set_default(trust);
 }
@@ -16013,13 +16013,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_DES_ede3_ofb64_encrypt(REG(a6, __IFACE_OR_BASE), R
 
 // ---
 
-void AMISSL_LIB_ENTRY _AmiSSL_DES_xwhite_in2out(REG(a6, __IFACE_OR_BASE), REG(a0, const_DES_cblock * DES_key), REG(a1, const_DES_cblock * in_white), REG(a2, DES_cblock * out_white))
-{
-	DES_xwhite_in2out(DES_key, in_white, out_white);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_DES_enc_read(REG(a6, __IFACE_OR_BASE), REG(d0, int fd), REG(a0, void * buf), REG(d1, int len), REG(a1, DES_key_schedule * sched), REG(a2, DES_cblock * iv))
 {
 	return DES_enc_read(fd, buf, len, sched, iv);
@@ -16268,13 +16261,6 @@ void AMISSL_LIB_ENTRY _AmiSSL__ossl_old_des_ede3_cfb64_encrypt(REG(a6, __IFACE_O
 void AMISSL_LIB_ENTRY _AmiSSL__ossl_old_des_ede3_ofb64_encrypt(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char * in), REG(a1, unsigned char * out), REG(d0, long length), REG(d1, _ossl_old_des_key_schedule ks1), REG(d2, _ossl_old_des_key_schedule ks2), REG(d3, _ossl_old_des_key_schedule ks3), REG(a2, _ossl_old_des_cblock * ivec), REG(a3, int * num))
 {
 	_ossl_old_des_ede3_ofb64_encrypt(in, out, length, ks1, ks2, ks3, ivec, num);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL__ossl_old_des_xwhite_in2out(REG(a6, __IFACE_OR_BASE), REG(a0, _ossl_old_des_cblock * des_key), REG(a1, _ossl_old_des_cblock * in_white), REG(a2, _ossl_old_des_cblock * out_white))
-{
-	_ossl_old_des_xwhite_in2out(des_key, in_white, out_white);
 }
 
 // ---

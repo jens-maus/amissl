@@ -2331,7 +2331,6 @@ struct AmiSSLIFace
 	void APICALL (*DES_ede3_cfb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int * num, int enc);
 	void APICALL (*DES_ede3_cfb_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, int numbits, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int enc);
 	void APICALL (*DES_ede3_ofb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int * num);
-	void APICALL (*DES_xwhite_in2out)(struct AmiSSLIFace *Self, const_DES_cblock * DES_key, const_DES_cblock * in_white, DES_cblock * out_white);
 	int APICALL (*DES_enc_read)(struct AmiSSLIFace *Self, int fd, void * buf, int len, DES_key_schedule * sched, DES_cblock * iv);
 	int APICALL (*DES_enc_write)(struct AmiSSLIFace *Self, int fd, const void * buf, int len, DES_key_schedule * sched, DES_cblock * iv);
 	char * APICALL (*DES_fcrypt)(struct AmiSSLIFace *Self, const char * buf, const char * salt, char * ret);
@@ -2368,7 +2367,6 @@ struct AmiSSLIFace
 	void APICALL (*_ossl_old_des_ede3_cbc_encrypt)(struct AmiSSLIFace *Self, _ossl_old_des_cblock * input, _ossl_old_des_cblock * output, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int enc);
 	void APICALL (*_ossl_old_des_ede3_cfb64_encrypt)(struct AmiSSLIFace *Self, unsigned char * in, unsigned char * out, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int * num, int enc);
 	void APICALL (*_ossl_old_des_ede3_ofb64_encrypt)(struct AmiSSLIFace *Self, unsigned char * in, unsigned char * out, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int * num);
-	void APICALL (*_ossl_old_des_xwhite_in2out)(struct AmiSSLIFace *Self, _ossl_old_des_cblock * des_key, _ossl_old_des_cblock * in_white, _ossl_old_des_cblock * out_white);
 	int APICALL (*_ossl_old_des_enc_read)(struct AmiSSLIFace *Self, int fd, char * buf, int len, _ossl_old_des_key_schedule sched, _ossl_old_des_cblock * iv);
 	int APICALL (*_ossl_old_des_enc_write)(struct AmiSSLIFace *Self, int fd, char * buf, int len, _ossl_old_des_key_schedule sched, _ossl_old_des_cblock * iv);
 	char * APICALL (*_ossl_old_des_fcrypt)(struct AmiSSLIFace *Self, const char * buf, const char * salt, char * ret);
