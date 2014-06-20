@@ -548,7 +548,7 @@ static int cswift_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_MOD_EXP,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		}
 		goto err;
@@ -565,7 +565,7 @@ static int cswift_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_MOD_EXP,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		goto err;
 		}
@@ -693,7 +693,7 @@ static int cswift_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_MOD_EXP_CRT,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		}
 		goto err;
@@ -710,7 +710,7 @@ static int cswift_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_MOD_EXP_CRT,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		goto err;
 		}
@@ -875,7 +875,7 @@ static DSA_SIG *cswift_dsa_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_DSA_SIGN,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		}
 		goto err;
@@ -893,7 +893,7 @@ static DSA_SIG *cswift_dsa_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_DSA_SIGN,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		goto err;
 		}
@@ -986,7 +986,7 @@ static int cswift_dsa_verify(const unsigned char *dgst, int dgst_len,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_DSA_VERIFY,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		}
 		goto err;
@@ -1008,7 +1008,7 @@ static int cswift_dsa_verify(const unsigned char *dgst, int dgst_len,
 		{
 		char tmpbuf[DECIMAL_SIZE(sw_status)+1];
 		CSWIFTerr(CSWIFT_F_CSWIFT_DSA_VERIFY,CSWIFT_R_REQUEST_FAILED);
-		sprintf(tmpbuf, "%ld", sw_status);
+		BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", sw_status);
 		ERR_add_error_data(2, "CryptoSwift error number is ",tmpbuf);
 		goto err;
 		}
@@ -1073,7 +1073,7 @@ static int cswift_rand_bytes(unsigned char *buf, int num)
 		{
 			char tmpbuf[20];
 			CSWIFTerr(CSWIFT_F_CSWIFT_RAND_BYTES, CSWIFT_R_REQUEST_FAILED);
-			sprintf(tmpbuf, "%ld", swrc);
+			BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", swrc);
 			ERR_add_error_data(2, "CryptoSwift error number is ", tmpbuf);
 			goto err;
 		}
@@ -1089,7 +1089,7 @@ static int cswift_rand_bytes(unsigned char *buf, int num)
 		{
 			char tmpbuf[20];
 			CSWIFTerr(CSWIFT_F_CSWIFT_RAND_BYTES, CSWIFT_R_REQUEST_FAILED);
-			sprintf(tmpbuf, "%ld", swrc);
+			BIO_snprintf(tmpbuf, sizeof(tmpbuf), "%ld", swrc);
 			ERR_add_error_data(2, "CryptoSwift error number is ", tmpbuf);
 			goto err;
 		}
