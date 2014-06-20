@@ -21,10 +21,10 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='-mcrt=clib2 -L$(AmiSSL)/lib -lamisslauto -lamisslstubs -lm';
+$lflags='-mcrt=clib2';
 $efile='-o ';
 $exep='';
-$ex_libs="";
+$ex_libs='$(AmiSSL)/lib/libamisslauto.a $(AmiSSL)/lib/libamisslstubs.a -lm';
 
 # static library stuff
 $mklib='ppc-amigaos-ar r';

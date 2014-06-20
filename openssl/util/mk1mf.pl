@@ -646,7 +646,8 @@ L_SSL=     \$(LIB_D)$o$plib\$(SSL)$libp
 L_CRYPTO=  \$(LIB_D)$o$plib\$(CRYPTO)$libp
 L_FIPS=    \$(LIB_D)$o$plib\$(LIBFIPS)$libp
 
-L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
+#L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
+L_LIBS= # AMIGA doesn't require L_LIBS
 
 ######################################################
 # Don't touch anything below this point
