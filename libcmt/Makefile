@@ -1,5 +1,5 @@
 CC=ppc-amigaos-gcc-4.0.3 $(GCCVER)
-CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -O2 -g \
+CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -O3 -g \
        -Wall -Wno-pointer-sign -mcrt=clib2
 
 all: libcmt.a
@@ -12,7 +12,7 @@ clean:
 
 libobjs: $(LIBOBJS)
 
-OS4OBJS = error.o stdlib_funcs.o string_char.o string_mem.o math.o
+OS4OBJS = error.o errno.o stdlib_funcs.o string_char.o string_mem.o math.o
 
 STDIOOBJS = malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
 		dirent.o file.o fread.o fwrite.o refill.o putc.o fflush.o \

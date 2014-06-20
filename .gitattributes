@@ -238,6 +238,7 @@ libcmt/bind.c eol=lf
 libcmt/closesocket.c eol=lf
 libcmt/connect.c eol=lf
 libcmt/dirent.c eol=lf
+libcmt/errno.c -text
 libcmt/error.c eol=lf
 libcmt/fflush.c eol=lf
 libcmt/fgetc.c eol=lf
