@@ -244,6 +244,7 @@ libcmt/fflush.c eol=lf
 libcmt/fgetc.c eol=lf
 libcmt/fibex.h eol=lf
 libcmt/file.c eol=lf
+libcmt/fprintf.c -text
 libcmt/fread.c eol=lf
 libcmt/free.c eol=lf
 libcmt/fwrite.c eol=lf

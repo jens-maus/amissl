@@ -548,7 +548,7 @@ void OPENSSL_showfatal (const char *fmta,...)
 
   ErrReq.es_StructSize   = sizeof(struct EasyStruct);
   ErrReq.es_Flags        = 0;
-  ErrReq.es_Title        = "AmiSSL internal error";
+  ErrReq.es_Title        = "AmiSSL/OpenSSL internal error";
   ErrReq.es_TextFormat   = error;
   ErrReq.es_GadgetFormat = "Abort";
 

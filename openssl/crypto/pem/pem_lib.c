@@ -76,18 +76,6 @@ const char PEM_version[]="PEM" OPENSSL_VERSION_PTEXT;
 static int load_iv(char **fromp,unsigned char *to, int num);
 static int check_pem(const char *nm, const char *name);
 
-#ifdef AMISSL
-#include <proto/intuition.h>
-#include <intuition/intuition.h>
-
-static const struct EasyStruct easy_struct =
-{
-	sizeof(struct EasyStruct), 0, "AmiSSL error",
-	"Pass phrase is too short, it must be at least %ld characters",
-	"Retry"
-};
-
-#endif /* AMISSL */
 
 int PEM_def_callback(char *buf, int num, int w, void *key)
 	{
@@ -122,11 +110,7 @@ int PEM_def_callback(char *buf, int num, int w, void *key)
 		j=strlen(buf);
 		if (j < MIN_LENGTH)
 			{
-#if !defined(AMISSL)
 			fprintf(stderr,"phrase is too short, needs to be at least %d chars\n",MIN_LENGTH);
-#else
-			EasyRequest(NULL, &easy_struct, NULL, (LONG)MIN_LENGTH);
-#endif /* !AMISSL */
 			}
 		else
 			break;
