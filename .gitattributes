@@ -2362,6 +2362,7 @@ openssl/util/ssleay.num eol=lf
 openssl/util/tab_num.pl eol=lf
 openssl/util/x86asm.sh eol=lf
 src/amissl_glue.c eol=lf
+src/amissl_glue.patch -text
 src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
 src/amissl_m68k.c eol=lf
@@ -2379,6 +2380,7 @@ src/baserel.c eol=lf
 src/libStdVec.c -text
 src/libinit.c eol=lf
 src/libstubs.c eol=lf
+src/mkidl.sh -text
 test/Makefile eol=lf
 test/SMakefile eol=lf
 test/https.c eol=lf

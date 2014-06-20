@@ -33,7 +33,7 @@ LIBS= $(LIBSSL) $(LIBCRYPTO) libcmt/libcmt.a
 all: $(LIB_D)/libamisslauto.a $(LIB_D)/libamisslstubs.a amissl_v$(VERSIONNAME).library amisslmaster.library
 
 clean:
-	-rm -f obj/*.o lib/*.a
+	-rm -f obj/*.o lib/*.a libcmt/*.o libcmt/*.a
 	-rm -f amissl_v$(VERSIONNAME).library*
 	-rm -f amisslmaster.library*
 
