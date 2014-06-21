@@ -12,7 +12,7 @@ clean:
 
 libobjs: $(LIBOBJS)
 
-OS4OBJS = error.o errno.o stdlib_funcs.o string_char.o string_mem.o math.o
+OS4OBJS = error.o errno.o stdlib_funcs.o string_char.o string_mem.o math.o gettimeofday.o
 
 STDIOOBJS = malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
 		dirent.o file.o fread.o fwrite.o refill.o putc.o fflush.o \

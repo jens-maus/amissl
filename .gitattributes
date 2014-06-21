@@ -253,6 +253,7 @@ libcmt/gethostbyname.c eol=lf
 libcmt/getpid.c eol=lf
 libcmt/getservbyname.c eol=lf
 libcmt/getsockopt.c eol=lf
+libcmt/gettimeofday.c -text
 libcmt/getuid.c eol=lf
 libcmt/gmtime.c eol=lf
 libcmt/include/stdarg.h eol=lf
