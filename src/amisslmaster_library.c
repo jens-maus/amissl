@@ -174,8 +174,14 @@ LONG AMISSL_LIB_ENTRY _AmiSSLMaster_InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), R
 struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
-	
-	if(LibAPIVersion == AMISSL_V097m)
+
+	if(LibAPIVersion == AMISSL_V098y)
+  {
+    // if an application requests 0.9.8y we try to open newer 0.9.8 versions until 0.9.8y
+    // as they are API compatible
+	  OpenLib(&AmiSSLBase,"libs:amissl/amissl_v098y.library", 3);
+  }
+	else if(LibAPIVersion == AMISSL_V097m)
   {
     // if an application requests 0.9.7m we try to open newer 0.9.7 versions until 0.9.7m
     // as they are API compatible
@@ -268,9 +274,8 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSLCipher(REG(a6, __IFACE
 
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if (LibAPIVersion == AMISSL_V097g || LibAPIVersion == AMISSL_V097m)
-		; // do nothing
-	else if (LibAPIVersion == AMISSL_V2)
+  // only open sub libraries for our old-style AmiSSL v2 versions.
+	if(LibAPIVersion == AMISSL_V2)
 	{
 		switch(Cipher)
 		{
@@ -350,9 +355,8 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 {
 	traceline();
 
-	if (LibAPIVersion == AMISSL_V097m || LibAPIVersion == AMISSL_V097g)
-		; // do nothing
-	else if (LibAPIVersion == AMISSL_V2)
+  // only flush sub libraries for the old-style v2 libraries
+	if(LibAPIVersion == AMISSL_V2)
 	{
 		FlushLib(RSABase);
 		FlushLib(SHABase);

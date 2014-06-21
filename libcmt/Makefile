@@ -1,4 +1,4 @@
-CC=ppc-amigaos-gcc-4.0.3 $(GCCVER)
+CC=ppc-amigaos-gcc-4.0.3
 CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -O3 -g \
        -Wall -Wno-pointer-sign -mcrt=clib2
 

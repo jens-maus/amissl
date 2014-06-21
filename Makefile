@@ -15,8 +15,8 @@ VERSION=3
 VERSIONNAME=098y
 AMISSLREVISION=8
 AMISSLMASTERREVISION=8
-AMISSLDATE=28.03.2014
-AMISSLMASTERDATE=28.03.2014
+AMISSLDATE=21.06.2014
+AMISSLMASTERDATE=21.06.2014
 
 LFLAGS=-mcrt=clib2 -nostdlib -mbaserel
 OPT=-O2 
@@ -49,7 +49,7 @@ distclean: clean cleanlibs
 	-rm -rf OS4
 
 $(OBJ_D)/%.o: $(SRC_D)/%.c
-	ppc-amigaos-gcc-4.0.3 $(GCCVER) -c $< -o $@ $(CFLAGS)
+	ppc-amigaos-gcc-4.0.3 -c $< -o $@ $(CFLAGS)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c

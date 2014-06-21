@@ -5,6 +5,13 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-06-21 Jens Maus <mail@jens-maus.de>
+
+  * misc: finalized work on port of OpenSSL 0.9.8y to AmiSSL. Now we have a first
+    working version of AmiSSL for OS4 which is based on OpenSSL 0.9.8y. Next will
+    be porting/merging to OpenSSL 1.0.1 which will be hopefully not such a huge
+    effort than porting from 0.9.7 to 0.9.8 took.
+
 2014-06-12 Jens Maus <mail@jens-maus.de>
 
   * misc: merged the vendor update of OpenSSL 0.9.8y to our 'openssl' top-level

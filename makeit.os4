@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# First arg is passed to GCC where necessary - intended for setting
-# the compiler version to use (e.g. sh make.os4 -V4.0.3)
-GCCVER=$1
-
 mkdir -p obj lib
 
 make lib/libamisslauto.a lib/libamisslstubs.a
@@ -27,7 +23,7 @@ cd OS4
 (cd .. && perl util/mk1mf.pl SRC= TMP=OS4/tmp OUT=OS4/out OS4) > Makefile.one
 cd ..
 
-make -f OS4/Makefile.one AmiSSL=$PWD/.. GCCVER=$GCCVER
+make -f OS4/Makefile.one AmiSSL=$PWD/.. 
 
 for header in outinc/openssl/*; do
   outfile=`basename ${header}`
@@ -43,9 +39,9 @@ done
 cd ..
 
 cd libcmt
-make -f Makefile AmiSSL=$PWD/.. GCCVER=$GCCVER
+make -f Makefile AmiSSL=$PWD/..
 cd ..
 
 mkdir -p OS4/AmiSSL
 
-make OUTDIR=OS4/ AmiSSL=$PWD GCCVER=$GCCVER
+make OUTDIR=OS4/ AmiSSL=$PWD
