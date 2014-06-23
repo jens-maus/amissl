@@ -32,58 +32,83 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
   ULONG microseconds;
   struct TimeVal tv;
   struct MsgPort *port = NULL;
-  double entropy_added = 0;
   struct TimeRequest *tr = NULL;
 
-  if((port = CreateMsgPort()) &&
-     (tr = (struct IOStdReq *)CreateIORequest(port, sizeof(*tr))))
+  #if defined(__amigaos4__)
+  if((port = AllocSysObjectTags(ASOT_PORT, TAG_DONE)) != NULL)
   {
-    if(OpenDevice(TIMERNAME, UNIT_ENTROPY, (struct IORequest *)tr, 0) == 0)
+    if((tr = AllocSysObjectTags(ASOT_IOREQUEST,
+      ASOIOR_Size, sizeof(*tr),
+      ASOIOR_ReplyPort, port,
+      TAG_DONE)) != NULL)
     {
-      struct TimerIFace *ITimer = NULL;
-      struct Device *TimerBase;
-
-      if((TimerBase = tr->Request.io_Device) &&
-         (ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL)))
+  #else
+  if((port = CreateMsgPort()) != NULL)
+  {
+     if((tr = (struct IOStdReq *)CreateIORequest(port, sizeof(*tr))) != NULL)
+     {
+  #endif
+      if(OpenDevice(TIMERNAME, UNIT_ENTROPY, (struct IORequest *)tr, 0) == 0)
       {
-        GetSysTime(TIMEVAL(&tv));
+        struct TimerIFace *ITimer = NULL;
+        struct Device *TimerBase;
 
-        seconds = tv.Seconds;
-        microseconds = tv.Microseconds;
-      
-        /* Convert the number of seconds so that they match the Unix epoch, which
-           starts (January 1st, 1970) eight years before the AmigaOS epoch. */
-        seconds += UNIX_TIME_OFFSET;
-      
-        /* If possible, adjust for the local time zone. We do this because the
-           AmigaOS system time is returned in local time and we want to return
-           it in UTC. */
-        seconds += 60 * GMTOffset;
-      
-        if(tp != NULL)
-        {
-          tp->tv_sec  = (long)seconds;
-          tp->tv_usec = (long)microseconds;
-        }
-      
-        if(tzp != NULL)
-        {
-          tzp->tz_minuteswest = GMTOffset;
-      
-          /* The -1 means "we do not know if the time given is in
-             daylight savings time". */
-          tzp->tz_dsttime = -1;
-        }
+        if((TimerBase = tr->Request.io_Device) != NULL)
+	{
+	#if defined(__amigaos4__)
+          if((ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL)) != NULL)
+	  {
+	#endif
+            GetSysTime(TIMEVAL(&tv));
 
-        result = 0;
+            seconds = tv.Seconds;
+            microseconds = tv.Microseconds;
+      
+            /* Convert the number of seconds so that they match the Unix epoch, which
+               starts (January 1st, 1970) eight years before the AmigaOS epoch. */
+            seconds += UNIX_TIME_OFFSET;
+
+            /* If possible, adjust for the local time zone. We do this because the
+               AmigaOS system time is returned in local time and we want to return
+               it in UTC. */
+            seconds += 60 * GMTOffset;
+
+            if(tp != NULL)
+            {
+              tp->tv_sec  = (long)seconds;
+              tp->tv_usec = (long)microseconds;
+            }
+
+            if(tzp != NULL)
+            {
+              tzp->tz_minuteswest = GMTOffset;
+
+              /* The -1 means "we do not know if the time given is in
+                 daylight savings time". */
+              tzp->tz_dsttime = -1;
+            }
+
+            result = 0;
+          }
+
+        #if defined(__amigaos4__)
+          DropInterface((struct Interface *)ITimer);
+	}
+	#endif
+        
+	CloseDevice((struct IORequest *)tr);
       }
-
-      DropInterface((struct Interface *)ITimer);
-      CloseDevice((struct IORequest *)tr);
+    #if defined(__amigaos4__)
+      FreeSysObject(ASOT_IOREQUEST, tr);
     }
 
-    DeleteIORequest((struct IORequest *)tr);
+    FreeSysObject(ASOT_PORT, port);
+    #else
+      DeleteIORequest((struct IORequest *)tr);
+    }
+
     DeleteMsgPort(port);
+    #endif
   }
 
   return(result);
