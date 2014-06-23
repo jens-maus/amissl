@@ -277,7 +277,7 @@ int lstat(const char *name, struct stat *st)
     *pp = '\0';
 
     if ( (lock = Lock(cname, SHARED_LOCK)) ) {
-      pp = FilePart((STRPTR)name);
+      pp = (char *)FilePart((STRPTR)name);
 
 #ifdef __amigaos4__
       if ((dircontext = ObtainDirContextTags(EX_LockInput, lock, EX_DataFields, EXF_ALL, TAG_DONE))) {

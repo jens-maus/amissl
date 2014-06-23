@@ -19,7 +19,7 @@ sendto(
      const void *buf,
      long len,
      long flags,
-     const struct sockaddr *to,
+     struct sockaddr *to,
      long tolen)
 {
 #ifdef __amigaos4__
