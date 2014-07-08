@@ -99,7 +99,7 @@ void OpenSSL_add_all_digests(void)
 	EVP_add_digest(EVP_dss());
 #endif
 #endif
-#ifndef OPENSSL_NO_SHA
+#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_SHA1)
 #ifdef AMISSL
 	if (IsCipherAvailable(CIPHER_SHA))
 	{
@@ -152,5 +152,8 @@ void OpenSSL_add_all_digests(void)
 #ifndef OPENSSL_NO_SHA512
 	EVP_add_digest(EVP_sha384());
 	EVP_add_digest(EVP_sha512());
+#endif
+#ifndef OPENSSL_NO_WHIRLPOOL
+	EVP_add_digest(EVP_whirlpool());
 #endif
 	}

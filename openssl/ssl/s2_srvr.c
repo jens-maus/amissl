@@ -117,7 +117,7 @@
 #include <openssl/objects.h>
 #include <openssl/evp.h>
 
-static SSL_METHOD *ssl2_get_server_method(int ver);
+static const SSL_METHOD *ssl2_get_server_method(int ver);
 static int get_client_master_key(SSL *s);
 static int get_client_hello(SSL *s);
 static int server_hello(SSL *s); 
@@ -129,7 +129,7 @@ static int ssl_rsa_private_decrypt(CERT *c, int len, unsigned char *from,
 	unsigned char *to,int padding);
 #define BREAK	break
 
-static SSL_METHOD *ssl2_get_server_method(int ver)
+static const SSL_METHOD *ssl2_get_server_method(int ver)
 	{
 	if (ver == SSL2_VERSION)
 		return(SSLv2_server_method());
@@ -366,7 +366,7 @@ static int get_client_master_key(SSL *s)
 	int is_export,i,n,keya,ek;
 	unsigned long len;
 	unsigned char *p;
-	SSL_CIPHER *cp;
+	const SSL_CIPHER *cp;
 	const EVP_CIPHER *c;
 	const EVP_MD *md;
 
@@ -452,7 +452,7 @@ static int get_client_master_key(SSL *s)
 
 	is_export=SSL_C_IS_EXPORT(s->session->cipher);
 	
-	if (!ssl_cipher_get_evp(s->session,&c,&md,NULL))
+	if (!ssl_cipher_get_evp(s->session,&c,&md,NULL,NULL,NULL))
 		{
 		ssl2_return_error(s,SSL2_PE_NO_CIPHER);
 		SSLerr(SSL_F_GET_CLIENT_MASTER_KEY,SSL_R_PROBLEMS_MAPPING_CIPHER_FUNCTIONS);
@@ -1059,10 +1059,12 @@ static int request_certificate(SSL *s)
 		EVP_PKEY *pkey=NULL;
 
 		EVP_MD_CTX_init(&ctx);
-		EVP_VerifyInit_ex(&ctx,s->ctx->rsa_md5, NULL);
-		EVP_VerifyUpdate(&ctx,s->s2->key_material,
-				 s->s2->key_material_length);
-		EVP_VerifyUpdate(&ctx,ccd,SSL2_MIN_CERT_CHALLENGE_LENGTH);
+		if (!EVP_VerifyInit_ex(&ctx,s->ctx->rsa_md5, NULL)
+		    || !EVP_VerifyUpdate(&ctx,s->s2->key_material,
+					 s->s2->key_material_length)
+		    || !EVP_VerifyUpdate(&ctx,ccd,
+					 SSL2_MIN_CERT_CHALLENGE_LENGTH))
+			goto msg_end;
 
 		i=i2d_X509(s->cert->pkeys[SSL_PKEY_RSA_ENC].x509,NULL);
 		buf2=OPENSSL_malloc((unsigned int)i);
@@ -1073,7 +1075,11 @@ static int request_certificate(SSL *s)
 			}
 		p2=buf2;
 		i=i2d_X509(s->cert->pkeys[SSL_PKEY_RSA_ENC].x509,&p2);
-		EVP_VerifyUpdate(&ctx,buf2,(unsigned int)i);
+		if (!EVP_VerifyUpdate(&ctx,buf2,(unsigned int)i))
+			{
+			OPENSSL_free(buf2);
+			goto msg_end;
+			}
 		OPENSSL_free(buf2);
 
 		pkey=X509_get_pubkey(x509);

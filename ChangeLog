@@ -5,6 +5,14 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-07-08 Jens Maus <mail@jens-maus.de>
+
+  * misc: merged the OpenSSL 1.0.1h vendor branch onto the trunk and adapted all
+    AmiSSL sources accordingly. Note, however, that the sources doesn't completly
+    compile without errors and warnings and that linking of the main shared library
+    is still not finished. However, we are almost done with the job, so lets put
+    the sources upstream so that other (e.g. Thore) can help ;)
+
 2014-06-21 Jens Maus <mail@jens-maus.de>
 
   * misc: finalized work on port of OpenSSL 0.9.8y to AmiSSL. Now we have a first

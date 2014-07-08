@@ -59,12 +59,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <openssl/crypto.h>
 #include <openssl/des.h>
 #include <openssl/mdc2.h>
-#include <openssl/err.h>
-#ifdef OPENSSL_FIPS
-#include <openssl/fips.h>
-#endif
 
 #ifdef AMISSL
 #include <libraries/amissl.h>
@@ -85,7 +82,7 @@ long IsCipherAvailable(long cipher);
 			*((c)++)=(unsigned char)(((l)>>24L)&0xff))
 
 static void mdc2_body(MDC2_CTX *c, const unsigned char *in, size_t len);
-FIPS_NON_FIPS_MD_Init(MDC2)
+fips_md_init(MDC2)
 	{
 #ifdef AMISSL
 	if (!IsCipherAvailable(CIPHER_MDC2))

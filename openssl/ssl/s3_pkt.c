@@ -110,11 +110,13 @@
  */
 
 #include <stdio.h>
+#include <limits.h>
 #include <errno.h>
 #define USE_SOCKETS
 #include "ssl_locl.h"
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
+#include <openssl/rand.h>
 
 static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 			 unsigned int len, int create_empty_fragment);
@@ -129,14 +131,49 @@ int ssl3_read_n(SSL *s, int n, int max, int extend)
 	 * (If s->read_ahead is set, 'max' bytes may be stored in rbuf
 	 * [plus s->packet_length bytes if extend == 1].)
 	 */
-	int i,off,newb;
+	int i,len,left;
+	long align=0;
+	unsigned char *pkt;
+	SSL3_BUFFER *rb;
+
+	if (n <= 0) return n;
+
+	rb    = &(s->s3->rbuf);
+	if (rb->buf == NULL)
+		if (!ssl3_setup_read_buffer(s))
+			return -1;
+
+	left  = rb->left;
+#if defined(SSL3_ALIGN_PAYLOAD) && SSL3_ALIGN_PAYLOAD!=0
+	align = (long)rb->buf + SSL3_RT_HEADER_LENGTH;
+	align = (-align)&(SSL3_ALIGN_PAYLOAD-1);
+#endif
 
 	if (!extend)
 		{
 		/* start with empty packet ... */
-		if (s->s3->rbuf.left == 0)
-			s->s3->rbuf.offset = 0;
-		s->packet = s->s3->rbuf.buf + s->s3->rbuf.offset;
+		if (left == 0)
+			rb->offset = align;
+		else if (align != 0 && left >= SSL3_RT_HEADER_LENGTH)
+			{
+			/* check if next packet length is large
+			 * enough to justify payload alignment... */
+			pkt = rb->buf + rb->offset;
+			if (pkt[0] == SSL3_RT_APPLICATION_DATA
+			    && (pkt[3]<<8|pkt[4]) >= 128)
+				{
+				/* Note that even if packet is corrupted
+				 * and its length field is insane, we can
+				 * only be led to wrong decision about
+				 * whether memmove will occur or not.
+				 * Header values has no effect on memmove
+				 * arguments and therefore no buffer
+				 * overrun can be triggered. */
+				memmove (rb->buf+align,pkt,left);
+				rb->offset = align;
+				}
+			}
+		s->packet = rb->buf + rb->offset;
 		s->packet_length = 0;
 		/* ... now we can act as if 'extend' was set */
 		}
@@ -144,59 +181,63 @@ int ssl3_read_n(SSL *s, int n, int max, int extend)
 	/* For DTLS/UDP reads should not span multiple packets
 	 * because the read operation returns the whole packet
 	 * at once (as long as it fits into the buffer). */
-	if (SSL_version(s) == DTLS1_VERSION)
+	if (SSL_version(s) == DTLS1_VERSION || SSL_version(s) == DTLS1_BAD_VER)
 		{
-		if ( s->s3->rbuf.left > 0 && n > s->s3->rbuf.left)
-			n = s->s3->rbuf.left;
+		if (left > 0 && n > left)
+			n = left;
 		}
 
 	/* if there is enough in the buffer from a previous read, take some */
-	if (s->s3->rbuf.left >= (int)n)
+	if (left >= n)
 		{
 		s->packet_length+=n;
-		s->s3->rbuf.left-=n;
-		s->s3->rbuf.offset+=n;
+		rb->left=left-n;
+		rb->offset+=n;
 		return(n);
 		}
 
 	/* else we need to read more data */
-	if (!s->read_ahead)
-		max=n;
 
-	{
-		/* avoid buffer overflow */
-		int max_max = s->s3->rbuf.len - s->packet_length;
-		if (max > max_max)
-			max = max_max;
-	}
-	if (n > max) /* does not happen */
+	len = s->packet_length;
+	pkt = rb->buf+align;
+	/* Move any available bytes to front of buffer:
+	 * 'len' bytes already pointed to by 'packet',
+	 * 'left' extra ones at the end */
+	if (s->packet != pkt) /* len > 0 */
+		{
+		memmove(pkt, s->packet, len+left);
+		s->packet = pkt;
+		rb->offset = len + align;
+		}
+
+	if (n > (int)(rb->len - rb->offset)) /* does not happen */
 		{
 		SSLerr(SSL_F_SSL3_READ_N,ERR_R_INTERNAL_ERROR);
 		return -1;
 		}
 
-	off = s->packet_length;
-	newb = s->s3->rbuf.left;
-	/* Move any available bytes to front of buffer:
-	 * 'off' bytes already pointed to by 'packet',
-	 * 'newb' extra ones at the end */
-	if (s->packet != s->s3->rbuf.buf)
+	if (!s->read_ahead)
+		/* ignore max parameter */
+		max = n;
+	else
 		{
-		/*  off > 0 */
-		memmove(s->s3->rbuf.buf, s->packet, off+newb);
-		s->packet = s->s3->rbuf.buf;
+		if (max < n)
+			max = n;
+		if (max > (int)(rb->len - rb->offset))
+			max = rb->len - rb->offset;
 		}
 
-	while (newb < n)
+	while (left < n)
 		{
-		/* Now we have off+newb bytes at the front of s->s3->rbuf.buf and need
-		 * to read in more until we have off+n (up to off+max if possible) */
+		/* Now we have len+left bytes at the front of s->s3->rbuf.buf
+		 * and need to read in more until we have len+n (up to
+		 * len+max if possible) */
 
 		clear_sys_error();
 		if (s->rbio != NULL)
 			{
 			s->rwstate=SSL_READING;
-			i=BIO_read(s->rbio,	&(s->s3->rbuf.buf[off+newb]), max-newb);
+			i=BIO_read(s->rbio,pkt+len+left, max-left);
 			}
 		else
 			{
@@ -206,23 +247,27 @@ int ssl3_read_n(SSL *s, int n, int max, int extend)
 
 		if (i <= 0)
 			{
-			s->s3->rbuf.left = newb;
+			rb->left = left;
+			if (s->mode & SSL_MODE_RELEASE_BUFFERS &&
+			    SSL_version(s) != DTLS1_VERSION && SSL_version(s) != DTLS1_BAD_VER)
+				if (len+left == 0)
+					ssl3_release_read_buffer(s);
 			return(i);
 			}
-		newb+=i;
+		left+=i;
 		/* reads should *never* span multiple packets for DTLS because
 		 * the underlying transport protocol is message oriented as opposed
 		 * to byte oriented as in the TLS case. */
-		if (SSL_version(s) == DTLS1_VERSION)
+		if (SSL_version(s) == DTLS1_VERSION || SSL_version(s) == DTLS1_BAD_VER)
 			{
-			if (n > newb)
-				n = newb; /* makes the while condition false */
+			if (n > left)
+				n = left; /* makes the while condition false */
 			}
 		}
 
 	/* done reading, now the book-keeping */
-	s->s3->rbuf.offset = off + n;
-	s->s3->rbuf.left = newb - n;
+	rb->offset += n;
+	rb->left = left - n;
 	s->packet_length += n;
 	s->rwstate=SSL_NOTHING;
 	return(n);
@@ -246,7 +291,7 @@ static int ssl3_get_record(SSL *s)
 	unsigned char *p;
 	unsigned char md[EVP_MAX_MD_SIZE];
 	short version;
-	unsigned mac_size;
+	unsigned mac_size, orig_len;
 	size_t extra;
 
 	rr= &(s->s3->rrec);
@@ -256,9 +301,9 @@ static int ssl3_get_record(SSL *s)
 		extra=SSL3_RT_MAX_EXTRA;
 	else
 		extra=0;
-	if (extra != s->s3->rbuf.len - SSL3_RT_MAX_PACKET_SIZE)
+	if (extra && !s->s3->init_extra)
 		{
-		/* actually likely an application error: SLS_OP_MICROSOFT_BIG_SSLV3_BUFFER
+		/* An application error: SLS_OP_MICROSOFT_BIG_SSLV3_BUFFER
 		 * set after ssl3_setup_buffers() was done */
 		SSLerr(SSL_F_SSL3_GET_RECORD, ERR_R_INTERNAL_ERROR);
 		return -1;
@@ -281,6 +326,9 @@ again:
 		ssl_minor= *(p++);
 		version=(ssl_major<<8)|ssl_minor;
 		n2s(p,rr->length);
+#if 0
+fprintf(stderr, "Record type=%d, Length=%d\n", rr->type, rr->length);
+#endif
 
 		/* Lets check version */
 		if (!s->first_packet)
@@ -288,7 +336,7 @@ again:
 			if (version != s->version)
 				{
 				SSLerr(SSL_F_SSL3_GET_RECORD,SSL_R_WRONG_VERSION_NUMBER);
-                                if ((s->version & 0xFF00) == (version & 0xFF00))
+                                if ((s->version & 0xFF00) == (version & 0xFF00) && !s->enc_write_ctx && !s->write_hash)
                                 	/* Send back error using their minor version number :-) */
 					s->version = (unsigned short)version;
 				al=SSL_AD_PROTOCOL_VERSION;
@@ -302,7 +350,7 @@ again:
 			goto err;
 			}
 
-		if (rr->length > SSL3_RT_MAX_ENCRYPTED_LENGTH+extra)
+		if (rr->length > s->s3->rbuf.len - SSL3_RT_HEADER_LENGTH)
 			{
 			al=SSL_AD_RECORD_OVERFLOW;
 			SSLerr(SSL_F_SSL3_GET_RECORD,SSL_R_PACKET_LENGTH_TOO_LONG);
@@ -351,7 +399,6 @@ again:
 
 	/* decrypt in place in 'rr->input' */
 	rr->data=rr->input;
-	rr->orig_len=rr->length;
 
 	enc_err = s->method->ssl3_enc->enc(s,0);
 	/* enc_err is:
@@ -374,23 +421,26 @@ printf("\n");
 	/* r->length is now the compressed data plus mac */
 	if ((sess != NULL) &&
 	    (s->enc_read_ctx != NULL) &&
-	    (s->read_hash != NULL))
+	    (EVP_MD_CTX_md(s->read_hash) != NULL))
 		{
 		/* s->read_hash != NULL => mac_size != -1 */
 		unsigned char *mac = NULL;
 		unsigned char mac_tmp[EVP_MAX_MD_SIZE];
-		mac_size=EVP_MD_size(s->read_hash);
+		mac_size=EVP_MD_CTX_size(s->read_hash);
 		OPENSSL_assert(mac_size <= EVP_MAX_MD_SIZE);
+
+		/* kludge: *_cbc_remove_padding passes padding length in rr->type */
+		orig_len = rr->length+((unsigned int)rr->type>>8);
 
 		/* orig_len is the length of the record before any padding was
 		 * removed. This is public information, as is the MAC in use,
 		 * therefore we can safely process the record in a different
 		 * amount of time if it's too short to possibly contain a MAC.
 		 */
-		if (rr->orig_len < mac_size ||
+		if (orig_len < mac_size ||
 		    /* CBC records must have a padding length byte too. */
 		    (EVP_CIPHER_CTX_mode(s->enc_read_ctx) == EVP_CIPH_CBC_MODE &&
-		     rr->orig_len < mac_size+1))
+		     orig_len < mac_size+1))
 			{
 			al=SSL_AD_DECODE_ERROR;
 			SSLerr(SSL_F_SSL3_GET_RECORD,SSL_R_LENGTH_TOO_SHORT);
@@ -405,12 +455,12 @@ printf("\n");
 			 * without leaking the contents of the padding bytes.
 			 * */
 			mac = mac_tmp;
-			ssl3_cbc_copy_mac(mac_tmp, rr, mac_size);
+			ssl3_cbc_copy_mac(mac_tmp, rr, mac_size, orig_len);
 			rr->length -= mac_size;
 			}
 		else
 			{
-			/* In this case there's no padding, so |rec->orig_len|
+			/* In this case there's no padding, so |orig_len|
 			 * equals |rec->length| and we checked that there's
 			 * enough bytes for |mac_size| above. */
 			rr->length -= mac_size;
@@ -475,6 +525,10 @@ printf("\n");
 	/* just read a 0 length packet */
 	if (rr->length == 0) goto again;
 
+#if 0
+fprintf(stderr, "Ultimate Record type=%d, Length=%d\n", rr->type, rr->length);
+#endif
+
 	return(1);
 
 f_err:
@@ -527,10 +581,11 @@ int ssl3_do_compress(SSL *ssl)
 int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
 	{
 	const unsigned char *buf=buf_;
-	unsigned int tot,n,nw;
-	int i;
+	unsigned int n,nw;
+	int i,tot;
 
 	s->rwstate=SSL_NOTHING;
+	OPENSSL_assert(s->s3->wnum <= INT_MAX);
 	tot=s->s3->wnum;
 	s->s3->wnum=0;
 
@@ -545,11 +600,27 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
 			}
 		}
 
+	/* ensure that if we end up with a smaller value of data to write 
+	 * out than the the original len from a write which didn't complete 
+	 * for non-blocking I/O and also somehow ended up avoiding 
+	 * the check for this in ssl3_write_pending/SSL_R_BAD_WRITE_RETRY as
+	 * it must never be possible to end up with (len-tot) as a large
+	 * number that will then promptly send beyond the end of the users
+	 * buffer ... so we trap and report the error in a way the user
+	 * will notice
+	 */
+	if (len < tot)
+		{
+		SSLerr(SSL_F_SSL3_WRITE_BYTES,SSL_R_BAD_LENGTH);
+		return(-1);
+		}
+
+
 	n=(len-tot);
 	for (;;)
 		{
-		if (n > SSL3_RT_MAX_PLAIN_LENGTH)
-			nw=SSL3_RT_MAX_PLAIN_LENGTH;
+		if (n > s->max_send_fragment)
+			nw=s->max_send_fragment;
 		else
 			nw=n;
 
@@ -581,14 +652,17 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 	{
 	unsigned char *p,*plen;
 	int i,mac_size,clear=0;
-	int prefix_len = 0;
+	int prefix_len=0;
+	int eivlen;
+	long align=0;
 	SSL3_RECORD *wr;
-	SSL3_BUFFER *wb;
+	SSL3_BUFFER *wb=&(s->s3->wbuf);
 	SSL_SESSION *sess;
+
 
 	/* first check if there is a SSL3_BUFFER still being written
 	 * out.  This will happen with non blocking IO */
-	if (s->s3->wbuf.left != 0)
+	if (wb->left != 0)
 		return(ssl3_write_pending(s,type,buf,len));
 
 	/* If we have an alert to send, lets send it */
@@ -600,22 +674,33 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 		/* if it went, fall through and send more stuff */
 		}
 
+ 	if (wb->buf == NULL)
+		if (!ssl3_setup_write_buffer(s))
+			return -1;
+
 	if (len == 0 && !create_empty_fragment)
 		return 0;
 
 	wr= &(s->s3->wrec);
-	wb= &(s->s3->wbuf);
 	sess=s->session;
 
 	if (	(sess == NULL) ||
 		(s->enc_write_ctx == NULL) ||
-		(s->write_hash == NULL))
+		(EVP_MD_CTX_md(s->write_hash) == NULL))
+		{
+#if 1
+		clear=s->enc_write_ctx?0:1;	/* must be AEAD cipher */
+#else
 		clear=1;
-
-	if (clear)
+#endif
 		mac_size=0;
+		}
 	else
-		mac_size=EVP_MD_size(s->write_hash);
+		{
+		mac_size=EVP_MD_CTX_size(s->write_hash);
+		if (mac_size < 0)
+			goto err;
+		}
 
 	/* 'create_empty_fragment' is true only when this function calls itself */
 	if (!clear && !create_empty_fragment && !s->s3->empty_fragment_done)
@@ -633,7 +718,8 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 			if (prefix_len <= 0)
 				goto err;
 
-			if (s->s3->wbuf.len < (size_t)prefix_len + SSL3_RT_MAX_PACKET_SIZE)
+			if (prefix_len >
+		(SSL3_RT_HEADER_LENGTH + SSL3_RT_SEND_MAX_ENCRYPTED_OVERHEAD))
 				{
 				/* insufficient space */
 				SSLerr(SSL_F_DO_SSL3_WRITE, ERR_R_INTERNAL_ERROR);
@@ -644,7 +730,32 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 		s->s3->empty_fragment_done = 1;
 		}
 
-	p = wb->buf + prefix_len;
+	if (create_empty_fragment)
+		{
+#if defined(SSL3_ALIGN_PAYLOAD) && SSL3_ALIGN_PAYLOAD!=0
+		/* extra fragment would be couple of cipher blocks,
+		 * which would be multiple of SSL3_ALIGN_PAYLOAD, so
+		 * if we want to align the real payload, then we can
+		 * just pretent we simply have two headers. */
+		align = (long)wb->buf + 2*SSL3_RT_HEADER_LENGTH;
+		align = (-align)&(SSL3_ALIGN_PAYLOAD-1);
+#endif
+		p = wb->buf + align;
+		wb->offset  = align;
+		}
+	else if (prefix_len)
+		{
+		p = wb->buf + wb->offset + prefix_len;
+		}
+	else
+		{
+#if defined(SSL3_ALIGN_PAYLOAD) && SSL3_ALIGN_PAYLOAD!=0
+		align = (long)wb->buf + SSL3_RT_HEADER_LENGTH;
+		align = (-align)&(SSL3_ALIGN_PAYLOAD-1);
+#endif
+		p = wb->buf + align;
+		wb->offset  = align;
+		}
 
 	/* write the header */
 
@@ -652,14 +763,40 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 	wr->type=type;
 
 	*(p++)=(s->version>>8);
-	*(p++)=s->version&0xff;
+	/* Some servers hang if iniatial client hello is larger than 256
+	 * bytes and record version number > TLS 1.0
+	 */
+	if (s->state == SSL3_ST_CW_CLNT_HELLO_B
+				&& !s->renegotiate
+				&& TLS1_get_version(s) > TLS1_VERSION)
+		*(p++) = 0x1;
+	else
+		*(p++)=s->version&0xff;
 
 	/* field where we are to write out packet length */
 	plen=p; 
 	p+=2;
+	/* Explicit IV length, block ciphers and TLS version 1.1 or later */
+	if (s->enc_write_ctx && s->version >= TLS1_1_VERSION)
+		{
+		int mode = EVP_CIPHER_CTX_mode(s->enc_write_ctx);
+		if (mode == EVP_CIPH_CBC_MODE)
+			{
+			eivlen = EVP_CIPHER_CTX_iv_length(s->enc_write_ctx);
+			if (eivlen <= 1)
+				eivlen = 0;
+			}
+		/* Need explicit part of IV for GCM mode */
+		else if (mode == EVP_CIPH_GCM_MODE)
+			eivlen = EVP_GCM_TLS_EXPLICIT_IV_LEN;
+		else
+			eivlen = 0;
+		}
+	else 
+		eivlen = 0;
 
 	/* lets setup the record stuff. */
-	wr->data=p;
+	wr->data=p + eivlen;
 	wr->length=(int)len;
 	wr->input=(unsigned char *)buf;
 
@@ -687,10 +824,19 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 
 	if (mac_size != 0)
 		{
-		s->method->ssl3_enc->mac(s,&(p[wr->length]),1);
+		if (s->method->ssl3_enc->mac(s,&(p[wr->length + eivlen]),1) < 0)
+			goto err;
 		wr->length+=mac_size;
-		wr->input=p;
-		wr->data=p;
+		}
+
+	wr->input=p;
+	wr->data=p;
+
+	if (eivlen)
+		{
+	/*	if (RAND_pseudo_bytes(p, eivlen) <= 0)
+			goto err; */
+		wr->length += eivlen;
 		}
 
 	/* ssl3_enc can only have an error on read */
@@ -715,7 +861,6 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 
 	/* now let's set up wb */
 	wb->left = prefix_len + wr->length;
-	wb->offset = 0;
 
 	/* memorize arguments so that ssl3_write_pending can detect bad write retries later */
 	s->s3->wpend_tot=len;
@@ -734,6 +879,7 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 	unsigned int len)
 	{
 	int i;
+	SSL3_BUFFER *wb=&(s->s3->wbuf);
 
 /* XXXX */
 	if ((s->s3->wpend_tot > (int)len)
@@ -752,17 +898,21 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 			{
 			s->rwstate=SSL_WRITING;
 			i=BIO_write(s->wbio,
-				(char *)&(s->s3->wbuf.buf[s->s3->wbuf.offset]),
-				(unsigned int)s->s3->wbuf.left);
+				(char *)&(wb->buf[wb->offset]),
+				(unsigned int)wb->left);
 			}
 		else
 			{
 			SSLerr(SSL_F_SSL3_WRITE_PENDING,SSL_R_BIO_NOT_SET);
 			i= -1;
 			}
-		if (i == s->s3->wbuf.left)
+		if (i == wb->left)
 			{
-			s->s3->wbuf.left=0;
+			wb->left=0;
+			wb->offset+=i;
+			if (s->mode & SSL_MODE_RELEASE_BUFFERS &&
+			    SSL_version(s) != DTLS1_VERSION && SSL_version(s) != DTLS1_BAD_VER)
+				ssl3_release_write_buffer(s);
 			s->rwstate=SSL_NOTHING;
 			return(s->s3->wpend_ret);
 			}
@@ -771,12 +921,12 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 			    s->version == DTLS1_BAD_VER) {
 				/* For DTLS, just drop it. That's kind of the whole
 				   point in using a datagram service */
-				s->s3->wbuf.left = 0;
+				wb->left = 0;
 			}
 			return(i);
 		}
-		s->s3->wbuf.offset+=i;
-		s->s3->wbuf.left-=i;
+		wb->offset+=i;
+		wb->left-=i;
 		}
 	}
 
@@ -815,7 +965,7 @@ int ssl3_read_bytes(SSL *s, int type, unsigned char *buf, int len, int peek)
 	void (*cb)(const SSL *ssl,int type2,int val)=NULL;
 
 	if (s->s3->rbuf.buf == NULL) /* Not initialized yet */
-		if (!ssl3_setup_buffers(s))
+		if (!ssl3_setup_read_buffer(s))
 			return(-1);
 
 	if ((type && (type != SSL3_RT_APPLICATION_DATA) && (type != SSL3_RT_HANDSHAKE) && type) ||
@@ -924,6 +1074,8 @@ start:
 				{
 				s->rstate=SSL_ST_READ_HEADER;
 				rr->off=0;
+				if (s->mode & SSL_MODE_RELEASE_BUFFERS && s->s3->rbuf.left == 0)
+					ssl3_release_read_buffer(s);
 				}
 			}
 		return((int)n);
@@ -953,6 +1105,19 @@ start:
 			dest = s->s3->alert_fragment;
 			dest_len = &s->s3->alert_fragment_len;
 			}
+#ifndef OPENSSL_NO_HEARTBEATS
+		else if (rr->type == TLS1_RT_HEARTBEAT)
+			{
+			tls1_process_heartbeat(s);
+
+			/* Exit and notify application to read again */
+			rr->length = 0;
+			s->rwstate=SSL_READING;
+			BIO_clear_retry_flags(SSL_get_rbio(s));
+			BIO_set_retry_read(SSL_get_rbio(s));
+			return(-1);
+			}
+#endif
 
 		if (dest_maxlen > 0)
 			{
@@ -1096,6 +1261,10 @@ start:
 				SSLerr(SSL_F_SSL3_READ_BYTES,SSL_R_NO_RENEGOTIATION);
 				goto f_err;
 				}
+#ifdef SSL_AD_MISSING_SRP_USERNAME
+			else if (alert_descr == SSL_AD_MISSING_SRP_USERNAME)
+				return(0);
+#endif
 			}
 		else if (alert_level == 2) /* fatal */
 			{
@@ -1147,6 +1316,15 @@ start:
 			goto f_err;
 			}
 
+		if (!(s->s3->flags & SSL3_FLAGS_CCS_OK))
+			{
+			al=SSL_AD_UNEXPECTED_MESSAGE;
+			SSLerr(SSL_F_SSL3_READ_BYTES,SSL_R_CCS_RECEIVED_EARLY);
+			goto f_err;
+			}
+
+		s->s3->flags &= ~SSL3_FLAGS_CCS_OK;
+
 		rr->length=0;
 
 		if (s->msg_callback)
@@ -1174,6 +1352,7 @@ start:
 #else
 			s->state = s->server ? SSL_ST_ACCEPT : SSL_ST_CONNECT;
 #endif
+			s->renegotiate=1;
 			s->new_session=1;
 			}
 		i=s->handshake_func(s);
@@ -1207,8 +1386,10 @@ start:
 		{
 	default:
 #ifndef OPENSSL_NO_TLS
-		/* TLS just ignores unknown message types */
-		if (s->version == TLS1_VERSION)
+		/* TLS up to v1.1 just ignores unknown message types:
+		 * TLS v1.2 give an unexpected message alert.
+		 */
+		if (s->version >= TLS1_VERSION && s->version <= TLS1_1_VERSION)
 			{
 			rr->length = 0;
 			goto start;
@@ -1278,7 +1459,7 @@ int ssl3_do_change_cipher_spec(SSL *s)
 
 	if (s->s3->tmp.key_block == NULL)
 		{
-		if (s->session == NULL) 
+		if (s->session == NULL || s->session->master_key_length == 0)
 			{
 			/* might happen if dtls1_read_bytes() calls this */
 			SSLerr(SSL_F_SSL3_DO_CHANGE_CIPHER_SPEC,SSL_R_CCS_RECEIVED_EARLY);
@@ -1306,10 +1487,14 @@ int ssl3_do_change_cipher_spec(SSL *s)
 		slen=s->method->ssl3_enc->client_finished_label_len;
 		}
 
-	s->s3->tmp.peer_finish_md_len = s->method->ssl3_enc->final_finish_mac(s,
-		&(s->s3->finish_dgst1),
-		&(s->s3->finish_dgst2),
+	i = s->method->ssl3_enc->final_finish_mac(s,
 		sender,slen,s->s3->tmp.peer_finish_md);
+	if (i == 0)
+		{
+		SSLerr(SSL_F_SSL3_DO_CHANGE_CIPHER_SPEC, ERR_R_INTERNAL_ERROR);
+		return 0;
+		}
+	s->s3->tmp.peer_finish_md_len = i;
 
 	return(1);
 	}

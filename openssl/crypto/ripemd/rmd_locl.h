@@ -72,7 +72,7 @@
  */
 #ifdef RMD160_ASM
 # if defined(__i386) || defined(__i386__) || defined(_M_IX86) || defined(__INTEL__)
-#  define ripemd160_block_host_order ripemd160_block_asm_data_order
+#  define ripemd160_block_data_order ripemd160_block_asm_data_order
 # endif
 #endif
 
@@ -88,11 +88,11 @@ void ripemd160_block_data_order (RIPEMD160_CTX *c, const void *p,size_t num);
 #define HASH_FINAL              RIPEMD160_Final
 #define	HASH_MAKE_STRING(c,s)	do {	\
 	unsigned long ll;		\
-	ll=(c)->A; HOST_l2c(ll,(s));	\
-	ll=(c)->B; HOST_l2c(ll,(s));	\
-	ll=(c)->C; HOST_l2c(ll,(s));	\
-	ll=(c)->D; HOST_l2c(ll,(s));	\
-	ll=(c)->E; HOST_l2c(ll,(s));	\
+	ll=(c)->A; (void)HOST_l2c(ll,(s));	\
+	ll=(c)->B; (void)HOST_l2c(ll,(s));	\
+	ll=(c)->C; (void)HOST_l2c(ll,(s));	\
+	ll=(c)->D; (void)HOST_l2c(ll,(s));	\
+	ll=(c)->E; (void)HOST_l2c(ll,(s));	\
 	} while (0)
 #define HASH_BLOCK_DATA_ORDER   ripemd160_block_data_order
 

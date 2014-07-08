@@ -115,7 +115,7 @@
 #include <openssl/rsa.h>
 #include <openssl/rand.h>
 
-#if !defined(RSA_NULL) && !defined(OPENSSL_FIPS)
+#ifndef RSA_NULL
 
 static int RSA_eay_public_encrypt(int flen, const unsigned char *from,
 		unsigned char *to, RSA *rsa,int padding);
@@ -256,6 +256,7 @@ static BN_BLINDING *rsa_get_blinding(RSA *rsa, int *local, BN_CTX *ctx)
 {
 	BN_BLINDING *ret;
 	int got_write_lock = 0;
+	CRYPTO_THREADID cur;
 
 	CRYPTO_r_lock(CRYPTO_LOCK_RSA);
 
@@ -273,7 +274,8 @@ static BN_BLINDING *rsa_get_blinding(RSA *rsa, int *local, BN_CTX *ctx)
 	if (ret == NULL)
 		goto err;
 
-	if (BN_BLINDING_get_thread_id(ret) == CRYPTO_thread_id())
+	CRYPTO_THREADID_current(&cur);
+	if (!CRYPTO_THREADID_cmp(&cur, BN_BLINDING_thread_id(ret)))
 		{
 		/* rsa->blinding is ours! */
 
@@ -845,12 +847,12 @@ static int RSA_eay_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx)
 	if (!BN_mod(r0,pr1,rsa->p,ctx)) goto err;
 
 	/* If p < q it is occasionally possible for the correction of
-         * adding 'p' if r0 is negative above to leave the result still
+	 * adding 'p' if r0 is negative above to leave the result still
 	 * negative. This can break the private key operations: the following
 	 * second correction should *always* correct this rare occurrence.
 	 * This will *never* happen with OpenSSL generated keys because
-         * they ensure p > q [steve]
-         */
+	 * they ensure p > q [steve]
+	 */
 	if (BN_is_negative(r0))
 		if (!BN_add(r0,r0,rsa->p)) goto err;
 	if (!BN_mul(r1,r0,rsa->q,ctx)) goto err;

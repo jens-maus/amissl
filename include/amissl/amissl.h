@@ -24,8 +24,15 @@
 #endif
 #include <openssl/bn.h>
 #include <openssl/buffer.h>
+#ifndef OPENSSL_NO_CAMELLIA
+#include <openssl/camellia.h>
+#endif
 #ifndef OPENSSL_NO_CAST
 #include <openssl/cast.h>
+#endif
+#include <openssl/cmac.h>
+#ifndef OPENSSL_NO_CMS
+#include <openssl/cms.h>
 #endif
 #include <openssl/comp.h>
 #include <openssl/conf.h>
@@ -80,6 +87,7 @@
 #ifndef OPENSSL_NO_MDC2
 #include <openssl/mdc2.h>
 #endif
+#include <openssl/modes.h>
 #include <openssl/obj_mac.h>
 #include <openssl/objects.h>
 #include <openssl/ocsp.h>
@@ -108,6 +116,9 @@
 #include <openssl/rsa.h>
 #endif
 #include <openssl/safestack.h>
+#ifndef OPENSSL_NO_SEED
+#include <openssl/seed.h>
+#endif
 #ifndef OPENSSL_NO_SHA
 #include <openssl/sha.h>
 #endif
@@ -115,13 +126,20 @@
 #include <openssl/ssl2.h>
 #include <openssl/ssl23.h>
 #include <openssl/ssl3.h>
+#ifndef OPENSSL_NO_SRP
+#include <openssl/srp.h>
+#endif
 #include <openssl/stack.h>
 #include <openssl/symhacks.h>
 #include <openssl/tls1.h>
 #include <openssl/tmdiff.h>
+#include <openssl/ts.h>
 #include <openssl/txt_db.h>
 #include <openssl/ui.h>
 #include <openssl/ui_compat.h>
+#ifndef OPENSSL_NO_WHIRLPOOL
+#include <openssl/whrlpool.h>
+#endif
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>

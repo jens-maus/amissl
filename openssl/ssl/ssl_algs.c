@@ -96,6 +96,9 @@ int SSL_library_init(void)
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_rc4());
+#if !defined(OPENSSL_NO_MD5) && (defined(__x86_64) || defined(__x86_64__))
+	EVP_add_cipher(EVP_rc4_hmac_md5());
+#endif
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
@@ -106,6 +109,10 @@ int SSL_library_init(void)
 	{
 #endif /* AMISSL */
 	EVP_add_cipher(EVP_rc2_cbc());
+	/* Not actually used for SSL/TLS but this makes PKCS#12 work
+	 * if an application only calls SSL_library_init().
+	 */
+	EVP_add_cipher(EVP_rc2_40_cbc());
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
@@ -118,11 +125,17 @@ int SSL_library_init(void)
 	EVP_add_cipher(EVP_aes_128_cbc());
 	EVP_add_cipher(EVP_aes_192_cbc());
 	EVP_add_cipher(EVP_aes_256_cbc());
+	EVP_add_cipher(EVP_aes_128_gcm());
+	EVP_add_cipher(EVP_aes_256_gcm());
+#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_SHA1)
+	EVP_add_cipher(EVP_aes_128_cbc_hmac_sha1());
+	EVP_add_cipher(EVP_aes_256_cbc_hmac_sha1());
 #ifdef AMISSL
 	}
 #endif /* AMISSL */
 #endif
 
+#endif
 #ifndef OPENSSL_NO_CAMELLIA
 	EVP_add_cipher(EVP_camellia_128_cbc());
 	EVP_add_cipher(EVP_camellia_256_cbc());
@@ -131,7 +144,7 @@ int SSL_library_init(void)
 #ifndef OPENSSL_NO_SEED
 	EVP_add_cipher(EVP_seed_cbc());
 #endif
-
+  
 #ifndef OPENSSL_NO_MD5
 #ifdef AMISSL
 	if(IsCipherAvailable(CIPHER_MD5))

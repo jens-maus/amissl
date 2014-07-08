@@ -45,7 +45,7 @@ static BPTR GetFileBPTR(const char *func_name, FILE *fp)
 	return(ret);
 }
 
-void ERR_print_errors_fp(FILE *fp)
+void (ERR_print_errors_fp)(FILE *fp)
 {
 	BIO *temp;
 
@@ -60,7 +60,7 @@ void ERR_print_errors_fp(FILE *fp)
 	}
 }
 
-int BN_print_fp(FILE *fp, const BIGNUM *a)
+int (BN_print_fp)(FILE *fp, const BIGNUM *a)
 {
 	BIO *temp;
 	int ret;
@@ -86,7 +86,7 @@ long BIO_set_fp(BIO *b, FILE *fp, int closeflag)
 	                        (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE)); // We cannot allow someone else to close the file
 }
 
-BIO *BIO_new_fp(FILE *fp, int closeflag)
+BIO *(BIO_new_fp)(FILE *fp, int closeflag)
 {
 	BIO *temp;
 
@@ -99,7 +99,7 @@ BIO *BIO_new_fp(FILE *fp, int closeflag)
 	return(temp);
 }
 
-void CRYPTO_mem_leaks_fp(FILE *fp)
+void (CRYPTO_mem_leaks_fp)(FILE *fp)
 {
 	BIO *b;
 
@@ -235,11 +235,6 @@ EC_GROUP * SAVEDS (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, l
   return(d2i_ECPKParameters(a, in, len));
 }
 
-int SAVEDS (i2d_ASN1_HEADER)(ASN1_HEADER *a, unsigned char **pp)
-{
-	return(i2d_ASN1_HEADER(a, pp));
-}
-
 int SAVEDS (i2d_DHparams)(const DH *a, unsigned char **pp)
 {
 	return(i2d_DHparams(a, pp));
@@ -268,6 +263,46 @@ int SAVEDS (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
 int SAVEDS (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
 {
   return(i2d_ECPKParameters(a, out));
+}
+
+int SAVEDS (ssl_init_wbio_buffer)(SSL *s, int push)
+{
+  return(ssl_init_wbio_buffer)(s, push);
+}
+
+int SAVEDS (ssl3_setup_buffers)(SSL *s)
+{
+  return(ssl3_setup_buffers(s));
+}
+
+char * SAVEDS (BUF_strndup)(const char *str, size_t siz)
+{
+  return(BUF_strndup(str, siz));
+}
+
+int SAVEDS (dtls1_process_heartbeat)(SSL *s)
+{
+  return(dtls1_process_heartbeat(s));
+}
+
+int SAVEDS (tls1_process_heartbeat)(SSL *s)
+{
+  return(tls1_process_heartbeat(s));
+}
+
+void SAVEDS (X509_CRL_free)(X509_CRL * a)
+{
+  X509_CRL_free(a);
+}
+
+void SAVEDS (AES_encrypt)(const unsigned char * in, unsigned char * out, const AES_KEY * key)
+{
+  AES_encrypt(in, out, key);
+}
+
+void SAVEDS (GENERAL_NAMES_free)(GENERAL_NAMES * a)
+{
+  GENERAL_NAMES_free(a);
 }
 
 #ifdef __SASC

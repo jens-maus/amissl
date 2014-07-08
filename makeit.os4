@@ -11,7 +11,7 @@ set PWD = `pwd`
 mkdir -p OS4/tmp OS4/out
 
 if [ ! -f crypto/opensslconf.h ] || [ ! -f Makefile ] || [ ! -f MINFO ]; then
-	perl Configure OS4 enable-mdc2 enable-rc5 no-krb5
+	perl Configure OS4 enable-mdc2 enable-md2 enable-rc5 no-krb5
 fi
 
 if [ ! -f MINFO ]; then

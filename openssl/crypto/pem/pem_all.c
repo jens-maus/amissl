@@ -110,7 +110,6 @@
  */
 
 #include <stdio.h>
-#undef SSLEAY_MACROS
 #include "cryptlib.h"
 #include <openssl/bio.h>
 #include <openssl/evp.h>
@@ -200,16 +199,22 @@ int PEM_write_bio_RSAPrivateKey(BIO *bp, RSA *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
-	EVP_PKEY_set1_RSA(k, x);
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
+		EVP_PKEY_set1_RSA(k, x);
 
-	ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+		ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write_bio((i2d_of_void *)i2d_RSAPrivateKey,
+					PEM_STRING_RSA,bp,x,enc,kstr,klen,cb,u);
 }
 
 #ifndef OPENSSL_NO_FP_API
@@ -217,17 +222,23 @@ int PEM_write_RSAPrivateKey(FILE *fp, RSA *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
 
-	EVP_PKEY_set1_RSA(k, x);
+		EVP_PKEY_set1_RSA(k, x);
 
-	ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+		ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write((i2d_of_void *)i2d_RSAPrivateKey,
+					PEM_STRING_RSA,fp,x,enc,kstr,klen,cb,u);
 }
 #endif
 
@@ -263,7 +274,7 @@ DSA *PEM_read_bio_DSAPrivateKey(BIO *bp, DSA **dsa, pem_password_cb *cb,
 {
 	EVP_PKEY *pktmp;
 	pktmp = PEM_read_bio_PrivateKey(bp, NULL, cb, u);
-	return pkey_get_dsa(pktmp, dsa);
+	return pkey_get_dsa(pktmp, dsa);	/* will free pktmp */
 }
 
 #ifdef OPENSSL_FIPS
@@ -272,16 +283,22 @@ int PEM_write_bio_DSAPrivateKey(BIO *bp, DSA *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
-	EVP_PKEY_set1_DSA(k, x);
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
+		EVP_PKEY_set1_DSA(k, x);
 
-	ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+		ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write_bio((i2d_of_void *)i2d_DSAPrivateKey,
+					PEM_STRING_DSA,bp,x,enc,kstr,klen,cb,u);
 }
 
 #ifndef OPENSSL_NO_FP_API
@@ -289,15 +306,21 @@ int PEM_write_DSAPrivateKey(FILE *fp, DSA *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
-	EVP_PKEY_set1_DSA(k, x);
-	ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
+		EVP_PKEY_set1_DSA(k, x);
+		ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write((i2d_of_void *)i2d_DSAPrivateKey,
+					PEM_STRING_DSA,fp,x,enc,kstr,klen,cb,u);
 }
 #endif
 
@@ -316,7 +339,7 @@ DSA *PEM_read_DSAPrivateKey(FILE *fp, DSA **dsa, pem_password_cb *cb,
 {
 	EVP_PKEY *pktmp;
 	pktmp = PEM_read_PrivateKey(fp, NULL, cb, u);
-	return pkey_get_dsa(pktmp, dsa);
+	return pkey_get_dsa(pktmp, dsa);	/* will free pktmp */
 }
 
 #endif
@@ -347,7 +370,7 @@ EC_KEY *PEM_read_bio_ECPrivateKey(BIO *bp, EC_KEY **key, pem_password_cb *cb,
 {
 	EVP_PKEY *pktmp;
 	pktmp = PEM_read_bio_PrivateKey(bp, NULL, cb, u);
-	return pkey_get_eckey(pktmp, key);
+	return pkey_get_eckey(pktmp, key);	/* will free pktmp */
 }
 
 IMPLEMENT_PEM_rw_const(ECPKParameters, EC_GROUP, PEM_STRING_ECPARAMETERS, ECPKParameters)
@@ -360,16 +383,23 @@ int PEM_write_bio_ECPrivateKey(BIO *bp, EC_KEY *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
-	EVP_PKEY_set1_EC_KEY(k, x);
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
+		EVP_PKEY_set1_EC_KEY(k, x);
 
-	ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+		ret = PEM_write_bio_PrivateKey(bp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write_bio((i2d_of_void *)i2d_ECPrivateKey,
+						PEM_STRING_ECPRIVATEKEY,
+						bp,x,enc,kstr,klen,cb,u);
 }
 
 #ifndef OPENSSL_NO_FP_API
@@ -377,15 +407,22 @@ int PEM_write_ECPrivateKey(FILE *fp, EC_KEY *x, const EVP_CIPHER *enc,
                                                unsigned char *kstr, int klen,
                                                pem_password_cb *cb, void *u)
 {
-	EVP_PKEY *k;
-	int ret;
-	k = EVP_PKEY_new();
-	if (!k)
-		return 0;
-	EVP_PKEY_set1_EC_KEY(k, x);
-	ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
-	EVP_PKEY_free(k);
-	return ret;
+	if (FIPS_mode())
+		{
+		EVP_PKEY *k;
+		int ret;
+		k = EVP_PKEY_new();
+		if (!k)
+			return 0;
+		EVP_PKEY_set1_EC_KEY(k, x);
+		ret = PEM_write_PrivateKey(fp, k, enc, kstr, klen, cb, u);
+		EVP_PKEY_free(k);
+		return ret;
+		}
+	else
+		return PEM_ASN1_write((i2d_of_void *)i2d_ECPrivateKey,
+						PEM_STRING_ECPRIVATEKEY,
+						fp,x,enc,kstr,klen,cb,u);
 }
 #endif
 
@@ -404,7 +441,7 @@ EC_KEY *PEM_read_ECPrivateKey(FILE *fp, EC_KEY **eckey, pem_password_cb *cb,
 {
 	EVP_PKEY *pktmp;
 	pktmp = PEM_read_PrivateKey(fp, NULL, cb, u);
-	return pkey_get_eckey(pktmp, eckey);
+	return pkey_get_eckey(pktmp, eckey);	/* will free pktmp */
 }
 
 #endif
@@ -417,66 +454,4 @@ IMPLEMENT_PEM_rw_const(DHparams, DH, PEM_STRING_DHPARAMS, DHparams)
 
 #endif
 
-
-/* The PrivateKey case is not that straightforward.
- *   IMPLEMENT_PEM_rw_cb(PrivateKey, EVP_PKEY, PEM_STRING_EVP_PKEY, PrivateKey)
- * does not work, RSA and DSA keys have specific strings.
- * (When reading, parameter PEM_STRING_EVP_PKEY is a wildcard for anything
- * appropriate.)
- */
-
-#ifdef OPENSSL_FIPS
-
-static const char *pkey_str(EVP_PKEY *x)
-	{
-	switch (x->type)
-		{
-		case EVP_PKEY_RSA:
-		return PEM_STRING_RSA;
-
-		case EVP_PKEY_DSA:
-		return PEM_STRING_DSA;
-
-		case EVP_PKEY_EC:
-		return PEM_STRING_ECPRIVATEKEY;
-
-		default:
-		return NULL;
-		}
-	}
-
-
-int PEM_write_bio_PrivateKey(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
-                                               unsigned char *kstr, int klen,
-                                               pem_password_cb *cb, void *u)
-	{
-		if (FIPS_mode())
-			return PEM_write_bio_PKCS8PrivateKey(bp, x, enc,
-						(char *)kstr, klen, cb, u);
-		else
-                	return PEM_ASN1_write_bio((i2d_of_void *)i2d_PrivateKey,
-			pkey_str(x), bp,(char *)x,enc,kstr,klen,cb,u);
-	}
-
-#ifndef OPENSSL_NO_FP_API
-int PEM_write_PrivateKey(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
-                                               unsigned char *kstr, int klen,
-                                               pem_password_cb *cb, void *u)
-	{
-		if (FIPS_mode())
-			return PEM_write_PKCS8PrivateKey(fp, x, enc,
-						(char *)kstr, klen, cb, u);
-		else
-                	return PEM_ASN1_write((i2d_of_void *)i2d_PrivateKey,
-			pkey_str(x), fp,(char *)x,enc,kstr,klen,cb,u);
-	}
-#endif
-
-#else
-IMPLEMENT_PEM_write_cb(PrivateKey, EVP_PKEY, ((x->type == EVP_PKEY_DSA)?PEM_STRING_DSA:\
-			(x->type == EVP_PKEY_RSA)?PEM_STRING_RSA:PEM_STRING_ECPRIVATEKEY), PrivateKey)
-
-#endif
-
 IMPLEMENT_PEM_rw(PUBKEY, EVP_PKEY, PEM_STRING_PUBLIC, PUBKEY)
-

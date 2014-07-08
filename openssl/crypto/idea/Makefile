@@ -33,7 +33,7 @@ top:
 all:	lib
 
 lib:	$(LIBOBJ)
-	$(ARX) $(LIB) $(LIBOBJ)
+	$(AR) $(LIB) $(LIBOBJ)
 	$(RANLIB) $(LIB) || echo Never mind.
 	@touch lib
 
@@ -78,4 +78,8 @@ i_cbc.o: i_cbc.c idea_lcl.h
 i_cfb64.o: i_cfb64.c idea_lcl.h
 i_ecb.o: i_ecb.c idea_lcl.h
 i_ofb64.o: i_ofb64.c idea_lcl.h
-i_skey.o: i_skey.c idea_lcl.h
+i_skey.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
+i_skey.o: ../../include/openssl/idea.h ../../include/openssl/opensslconf.h
+i_skey.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
+i_skey.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
+i_skey.o: ../../include/openssl/symhacks.h i_skey.c idea_lcl.h

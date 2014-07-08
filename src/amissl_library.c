@@ -404,7 +404,7 @@ void AmiSSLAbort(void)
 #define AMISSL_CLIENT_ENV	"AmiSSL/SSL_CLIENT_VERSION"
 #define AMISSL_BOTH_ENV		"AmiSSL/SSL_VERSION"
 
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
+const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
@@ -425,7 +425,7 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
 	return(SSLv23_method());
 }
 
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
+const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
@@ -446,7 +446,7 @@ SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BA
 	return(SSLv23_server_method());
 }
 
-SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
+const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
 {
 	char var[6];
 
