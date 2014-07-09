@@ -7,6 +7,8 @@ $URL$
 
 2014-07-09 Jens Maus <mail@jens-maus.de>
 
+  * openssl/crypto/cryptlib.c: brought back OPENSSL_stderr() function which is part
+    of the public OpenSSL API.
   * include/xml/amissl.xml: added ENGINE_load_gost() which was still missing in the
     interface description.
   * libcmt/abort.c, libcmt/Makefile: implement an abort() wrapper which simply
