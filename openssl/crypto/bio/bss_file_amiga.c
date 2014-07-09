@@ -150,6 +150,54 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag)
 	return(ret);
 }
 
+#if !defined(OPENSSL_NO_FP_API)
+/* Only stdin, stdout and stderr are used in OpenSSL test applications
+ * and openssl program, so the following function should cover all cases.
+ */
+static BPTR GetFileBPTR(const char *func_name, FILE *fp)
+{
+  BPTR ret;
+
+  if (fp == stdout || (fp == stderr && !ErrorOutput()))
+    ret = Output();
+  else if (fp == stderr)
+    ret = ErrorOutput();
+  else if (fp == stdin)
+    ret = Input();
+  else
+  {
+    Printf("*** WARNING (%s): %lx is neither stdin (%lx), stdout (%lx) nor stderr (%lx) in GetFileBPTR in stubs, returning NULL!\n", func_name, fp, stdin, stdout, stderr);
+    ret = (BPTR)NULL;
+  }
+
+  if (ret)
+    FFlush(ret);
+
+  return(ret);
+}
+
+long (BIO_set_fp)(BIO *b, FILE *fp, int closeflag)
+{
+  fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+
+  return(BIO_set_fp_amiga(b, GetFileBPTR("BIO_set_fp", fp),
+                          (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE)); // We cannot allow someone else to close the file
+}
+
+BIO *(BIO_new_fp)(FILE *stream, int closeflag)
+{
+  BIO *ret;
+
+  fflush(stream); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+
+  if((ret = BIO_new(BIO_s_file())) != NULL)
+    BIO_set_fp_amiga(ret, GetFileBPTR("BIO_new_fp", stream),
+                     (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
+
+  return(ret);
+}
+#endif
+
 BIO_METHOD *BIO_s_file(void)
 {
 	return(&methods_filep);
