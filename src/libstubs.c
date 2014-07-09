@@ -311,9 +311,6 @@ long getpid(void)
 	return((long)FindTask(NULL));
 }
 
-int strncasecmp(const char *s1, const char *s2, int n) { return(strnicmp(s1, s2, n)); }
-int strcasecmp(const char *s1, const char *s2) { return(stricmp(s1, s2)); }
-
 const char *OBJ_bsearch(const char *key, const char *base, int num, int size,
 	int (*cmp)(const void *, const void *))
 	{
