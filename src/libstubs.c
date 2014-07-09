@@ -78,7 +78,7 @@ int (BN_print_fp)(FILE *fp, const BIGNUM *a)
 	return(ret);
 }
 
-long BIO_set_fp(BIO *b, FILE *fp, int closeflag)
+long (BIO_set_fp)(BIO *b, FILE *fp, int closeflag)
 {
 	fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
 
@@ -86,17 +86,17 @@ long BIO_set_fp(BIO *b, FILE *fp, int closeflag)
 	                        (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE)); // We cannot allow someone else to close the file
 }
 
-BIO *(BIO_new_fp)(FILE *fp, int closeflag)
+BIO *(BIO_new_fp)(FILE *stream, int closeflag)
 {
-	BIO *temp;
+	BIO *ret;
 
-	fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+	fflush(stream); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
 
-	if (temp = BIO_new(BIO_s_file()))
-		BIO_set_fp_amiga(temp, GetFileBPTR("BIO_new_fp", fp),
+	if((ret = BIO_new(BIO_s_file())) != NULL)
+		BIO_set_fp_amiga(ret, GetFileBPTR("BIO_new_fp", stream),
 		                 (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
 
-	return(temp);
+	return(ret);
 }
 
 void (CRYPTO_mem_leaks_fp)(FILE *fp)
