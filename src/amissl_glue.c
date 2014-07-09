@@ -7748,13 +7748,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_PEM_bytes_read_bio(REG(a6, __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void * AMISSL_LIB_ENTRY _AmiSSL_PEM_ASN1_read(REG(a6, __IFACE_OR_BASE), REG(a0, d2i_of_void * d2i), REG(a1, const char * name), REG(a2, FILE * fp), REG(a3, void ** x), REG(a4, pem_password_cb * cb), REG(d0, void * u))
-{
-	return PEM_ASN1_read(d2i, name, fp, x, cb, u);
-}
-
-// ---
-
 void * AMISSL_LIB_ENTRY _AmiSSL_PEM_ASN1_read_bio(REG(a6, __IFACE_OR_BASE), REG(a0, d2i_of_void * d2i), REG(a1, const char * name), REG(a2, BIO * bp), REG(a3, void ** x), REG(a4, pem_password_cb * cb), REG(d0, void * u))
 {
 	return PEM_ASN1_read_bio(d2i, name, bp, x, cb, u);
@@ -7762,23 +7755,9 @@ void * AMISSL_LIB_ENTRY _AmiSSL_PEM_ASN1_read_bio(REG(a6, __IFACE_OR_BASE), REG(
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_ASN1_write(REG(a6, __IFACE_OR_BASE), REG(a0, i2d_of_void * i2d), REG(a1, const char * name), REG(a2, FILE * fp), REG(a3, char * x), REG(a4, const EVP_CIPHER * enc), REG(d0, unsigned char * kstr), REG(d1, int klen), REG(d2, pem_password_cb * callback), REG(d3, void * u))
-{
-	return PEM_ASN1_write(i2d, name, fp, x, enc, kstr, klen, callback, u);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_PEM_ASN1_write_bio(REG(a6, __IFACE_OR_BASE), REG(a0, i2d_of_void * i2d), REG(a1, const char * name), REG(a2, BIO * bp), REG(a3, char * x), REG(a4, const EVP_CIPHER * enc), REG(d0, unsigned char * kstr), REG(d1, int klen), REG(d2, pem_password_cb * cb), REG(d3, void * u))
 {
 	return PEM_ASN1_write_bio(i2d, name, bp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-STACK_OF(X509_INFO) * AMISSL_LIB_ENTRY _AmiSSL_PEM_X509_INFO_read(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, STACK_OF(X509_INFO) * sk), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_X509_INFO_read(fp, sk, cb, u);
 }
 
 // ---
@@ -7853,13 +7832,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_PEM_proc_type(REG(a6, __IFACE_OR_BASE), REG(a0, ch
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_read(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, char ** name), REG(a2, char ** header), REG(a3, unsigned char ** data), REG(a4, long * len))
-{
-	return PEM_read(fp, name, header, data, len);
-}
-
-// ---
-
 void AMISSL_LIB_ENTRY _AmiSSL_PEM_dek_info(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(a1, const char * type), REG(d0, int len), REG(a2, char * str))
 {
 	PEM_dek_info(buf, type, len, str);
@@ -7898,13 +7870,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_bio_X509_AUX(REG(a6, __IFACE_OR_BASE), RE
 X509_REQ * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_bio_X509_REQ(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, X509_REQ ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
 {
 	return PEM_read_bio_X509_REQ(bp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, char * name), REG(a2, char * hdr), REG(a3, unsigned char * data), REG(d0, long len))
-{
-	return PEM_write(fp, name, hdr, data, len);
 }
 
 // ---
@@ -9956,13 +9921,6 @@ SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_new(REG(a6, __IFACE_OR_BASE))
 int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * fp), REG(a1, const SSL_SESSION * ses))
 {
 	return SSL_SESSION_print(fp, ses);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_SSL_SESSION_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, SSL_SESSION * ses))
-{
-	return SSL_SESSION_print_fp(fp, ses);
 }
 
 // ---
@@ -19073,394 +19031,9 @@ int AMISSL_LIB_ENTRY _AmiSSL_SSL_SRP_CTX_init(REG(a6, __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void * AMISSL_LIB_ENTRY _AmiSSL_ASN1_d2i_fp(REG(a6, __IFACE_OR_BASE), REG(a0, void *(*xnew)(void)), REG(a1, d2i_of_void * d2i), REG(a2, FILE * in), REG(a3, void ** x))
-{
-	return ASN1_d2i_fp(xnew, d2i, in, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_ASN1_i2d_fp(REG(a6, __IFACE_OR_BASE), REG(a0, i2d_of_void * i2d), REG(a1, FILE * out), REG(a2, void * x))
-{
-	return ASN1_i2d_fp(i2d, out, x);
-}
-
-// ---
-
-BIO * AMISSL_LIB_ENTRY _AmiSSL_BIO_new_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * stream), REG(a1, int close_flag))
-{
-	return BIO_new_fp(stream, close_flag);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_BN_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const BIGNUM * a))
-{
-	return BN_print_fp(fp, a);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL_CRYPTO_mem_leaks_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp))
-{
-	CRYPTO_mem_leaks_fp(fp);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_DHparams_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const DH * x))
-{
-	return DHparams_print_fp(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_DSA_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * bp), REG(a1, const DSA * x), REG(d0, int off))
-{
-	return DSA_print_fp(bp, x, off);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_DSAparams_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const DSA * x))
-{
-	return DSAparams_print_fp(fp, x);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL_ERR_print_errors_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp))
-{
-	ERR_print_errors_fp(fp);
-}
-
-// ---
-
-DH * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_DHparams(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DH ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_DHparams(fp, x, cb, u);
-}
-
-// ---
-
-DSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_DSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_DSAPrivateKey(fp, x, cb, u);
-}
-
-// ---
-
-DSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_DSAparams(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_DSAparams(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_DHparams(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DH * x))
-{
-	return PEM_write_DHparams(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_DSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA * x), REG(a2, const EVP_CIPHER * enc), REG(a3, unsigned char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_DSAPrivateKey(fp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_DSAparams(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA * x))
-{
-	return PEM_write_DSAparams(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_RSA_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const RSA * r), REG(d0, int offset))
-{
-	return RSA_print_fp(fp, r, offset);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_X509_REQ_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * bp), REG(a1, X509_REQ * req))
-{
-	return X509_REQ_print_fp(bp, req);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_X509_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * bp), REG(a1, X509 * x))
-{
-	return X509_print_fp(bp, x);
-}
-
-// ---
-
-DSA * AMISSL_LIB_ENTRY _AmiSSL_d2i_DSAPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA ** dsa))
-{
-	return d2i_DSAPrivateKey_fp(fp, dsa);
-}
-
-// ---
-
-PKCS7 * AMISSL_LIB_ENTRY _AmiSSL_d2i_PKCS7_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS7 ** p7))
-{
-	return d2i_PKCS7_fp(fp, p7);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_d2i_RSAPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** rsa))
-{
-	return d2i_RSAPrivateKey_fp(fp, rsa);
-}
-
-// ---
-
-X509_CRL * AMISSL_LIB_ENTRY _AmiSSL_d2i_X509_CRL_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CRL ** crl))
-{
-	return d2i_X509_CRL_fp(fp, crl);
-}
-
-// ---
-
-X509_REQ * AMISSL_LIB_ENTRY _AmiSSL_d2i_X509_REQ_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_REQ ** req))
-{
-	return d2i_X509_REQ_fp(fp, req);
-}
-
-// ---
-
-X509 * AMISSL_LIB_ENTRY _AmiSSL_d2i_X509_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 ** x509))
-{
-	return d2i_X509_fp(fp, x509);
-}
-
-// ---
-
 const char * AMISSL_LIB_ENTRY _AmiSSL_DES_options(REG(a6, __IFACE_OR_BASE))
 {
 	return DES_options();
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_DSAPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA * dsa))
-{
-	return i2d_DSAPrivateKey_fp(fp, dsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS7_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS7 * p7))
-{
-	return i2d_PKCS7_fp(fp, p7);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_RSAPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * rsa))
-{
-	return i2d_RSAPrivateKey_fp(fp, rsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_X509_CRL_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CRL * crl))
-{
-	return i2d_X509_CRL_fp(fp, crl);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_X509_REQ_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_REQ * req))
-{
-	return i2d_X509_REQ_fp(fp, req);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_X509_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 * x509))
-{
-	return i2d_X509_fp(fp, x509);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL_lh_node_stats(REG(a6, __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, FILE * out))
-{
-	lh_node_stats(lh, out);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL_lh_node_usage_stats(REG(a6, __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, FILE * out))
-{
-	lh_node_usage_stats(lh, out);
-}
-
-// ---
-
-void AMISSL_LIB_ENTRY _AmiSSL_lh_stats(REG(a6, __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, FILE * out))
-{
-	lh_stats(lh, out);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_d2i_RSAPublicKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** rsa))
-{
-	return d2i_RSAPublicKey_fp(fp, rsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_RSAPublicKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * rsa))
-{
-	return i2d_RSAPublicKey_fp(fp, rsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_X509_CRL_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CRL * x))
-{
-	return X509_CRL_print_fp(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS8_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_SIG * p8))
-{
-	return i2d_PKCS8_fp(fp, p8);
-}
-
-// ---
-
-PKCS8_PRIV_KEY_INFO * AMISSL_LIB_ENTRY _AmiSSL_d2i_PKCS8_PRIV_KEY_INFO_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS8_PRIV_KEY_INFO ** p8inf))
-{
-	return d2i_PKCS8_PRIV_KEY_INFO_fp(fp, p8inf);
-}
-
-// ---
-
-X509_SIG * AMISSL_LIB_ENTRY _AmiSSL_d2i_PKCS8_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_SIG ** p8))
-{
-	return d2i_PKCS8_fp(fp, p8);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS8_PRIV_KEY_INFO_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS8_PRIV_KEY_INFO * p8inf))
-{
-	return i2d_PKCS8_PRIV_KEY_INFO_fp(fp, p8inf);
-}
-
-// ---
-
-LHASH_OF(CONF_VALUE) * AMISSL_LIB_ENTRY _AmiSSL_CONF_load_fp(REG(a6, __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, FILE * fp), REG(a2, long * eline))
-{
-	return CONF_load_fp(conf, fp, eline);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_d2i_RSA_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** rsa))
-{
-	return d2i_RSA_PUBKEY_fp(fp, rsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_DSA_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA * dsa))
-{
-	return i2d_DSA_PUBKEY_fp(fp, dsa);
-}
-
-// ---
-
-DSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_DSA_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_DSA_PUBKEY(fp, x, cb, u);
-}
-
-// ---
-
-DSA * AMISSL_LIB_ENTRY _AmiSSL_d2i_DSA_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA ** dsa))
-{
-	return d2i_DSA_PUBKEY_fp(fp, dsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_DSA_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, DSA * x))
-{
-	return PEM_write_DSA_PUBKEY(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_RSA_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * rsa))
-{
-	return i2d_RSA_PUBKEY_fp(fp, rsa);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS8PrivateKeyInfo_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * key))
-{
-	return i2d_PKCS8PrivateKeyInfo_fp(fp, key);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * pkey))
-{
-	return i2d_PrivateKey_fp(fp, pkey);
-}
-
-// ---
-
-EVP_PKEY * AMISSL_LIB_ENTRY _AmiSSL_d2i_PrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY ** a))
-{
-	return d2i_PrivateKey_fp(fp, a);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_NCONF_load_fp(REG(a6, __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, FILE * fp), REG(a2, long * eline))
-{
-	return NCONF_load_fp(conf, fp, eline);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_X509_NAME_print_ex_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_NAME * nm), REG(d0, int indent), REG(d1, unsigned long flags))
-{
-	return X509_NAME_print_ex_fp(fp, nm, indent, flags);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_ASN1_STRING_print_ex_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, ASN1_STRING * str), REG(d0, unsigned long flags))
-{
-	return ASN1_STRING_print_ex_fp(fp, str, flags);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * pkey))
-{
-	return i2d_PUBKEY_fp(fp, pkey);
-}
-
-// ---
-
-EVP_PKEY * AMISSL_LIB_ENTRY _AmiSSL_d2i_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY ** a))
-{
-	return d2i_PUBKEY_fp(fp, a);
 }
 
 // ---
@@ -19808,13 +19381,6 @@ void * AMISSL_LIB_ENTRY _AmiSSL_ENGINE_get_ex_data(REG(a6, __IFACE_OR_BASE), REG
 
 // ---
 
-void * AMISSL_LIB_ENTRY _AmiSSL_ASN1_item_d2i_fp(REG(a6, __IFACE_OR_BASE), REG(a0, const ASN1_ITEM * it), REG(a1, FILE * in), REG(a2, void * x))
-{
-	return ASN1_item_d2i_fp(it, in, x);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_ENGINE_set_cmd_defns(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, const ENGINE_CMD_DEFN * defns))
 {
 	return ENGINE_set_cmd_defns(e, defns);
@@ -19892,13 +19458,6 @@ ENGINE * AMISSL_LIB_ENTRY _AmiSSL_ENGINE_get_cipher_engine(REG(a6, __IFACE_OR_BA
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_X509_print_ex_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * bp), REG(a1, X509 * x), REG(d0, unsigned long nmflag), REG(d1, unsigned long cflag))
-{
-	return X509_print_ex_fp(bp, x, nmflag, cflag);
-}
-
-// ---
-
 void AMISSL_LIB_ENTRY _AmiSSL_ENGINE_load_cswift(REG(a6, __IFACE_OR_BASE))
 {
 	ENGINE_load_cswift();
@@ -19944,13 +19503,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_ENGINE_load_chil(REG(a6, __IFACE_OR_BASE))
 ENGINE_GEN_INT_FUNC_PTR AMISSL_LIB_ENTRY _AmiSSL_ENGINE_get_destroy_function(REG(a6, __IFACE_OR_BASE), REG(a0, const ENGINE * e))
 {
 	return ENGINE_get_destroy_function(e);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_ASN1_item_i2d_fp(REG(a6, __IFACE_OR_BASE), REG(a0, const ASN1_ITEM * it), REG(a1, FILE * out), REG(a2, void * x))
-{
-	return ASN1_item_i2d_fp(it, out, x);
 }
 
 // ---
@@ -20109,13 +19661,6 @@ EC_KEY * AMISSL_LIB_ENTRY _AmiSSL_EC_KEY_copy(REG(a6, __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_dump_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const char * s), REG(d0, int len))
-{
-	return BIO_dump_fp(fp, s, len);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_EC_GROUP_check_discriminant(REG(a6, __IFACE_OR_BASE), REG(a0, const EC_GROUP * group), REG(a1, BN_CTX * ctx))
 {
 	return EC_GROUP_check_discriminant(group, ctx);
@@ -20242,13 +19787,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_EC_GROUP_have_precompute_mult(REG(a6, __IFACE_OR_BA
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_EC_KEY_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const EC_KEY * key), REG(a2, int off))
-{
-	return EC_KEY_print_fp(fp, key, off);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_BN_GF2m_mod_arr(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNUM * r), REG(a1, const BIGNUM * a), REG(a2, const int * p))
 {
 	return BN_GF2m_mod_arr(r, a, p);
@@ -20298,13 +19836,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_BN_GF2m_mod_sqrt_arr(REG(a6, __IFACE_OR_BASE), REG(
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_ECPKParameters_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const EC_GROUP * x), REG(d0, int off))
-{
-	return ECPKParameters_print_fp(fp, x, off);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_EC_KEY_set_private_key(REG(a6, __IFACE_OR_BASE), REG(a0, EC_KEY * key), REG(a1, const BIGNUM * prv))
 {
 	return EC_KEY_set_private_key(key, prv);
@@ -20350,13 +19881,6 @@ void * AMISSL_LIB_ENTRY _AmiSSL_ECDSA_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(
 unsigned char * AMISSL_LIB_ENTRY _AmiSSL_SHA224(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char * d), REG(d0, size_t n), REG(a1, unsigned char * md))
 {
 	return SHA224(d, n, md);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_dump_indent_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const char * s), REG(d0, int len), REG(d1, int indent))
-{
-	return BIO_dump_indent_fp(fp, s, len, indent);
 }
 
 // ---
@@ -20515,13 +20039,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_ENGINE_set_ECDSA(REG(a6, __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_EC_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY * x))
-{
-	return PEM_write_EC_PUBKEY(fp, x);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_ECDH_set_method(REG(a6, __IFACE_OR_BASE), REG(a0, EC_KEY * key), REG(a1, const ECDH_METHOD * meth))
 {
 	return ECDH_set_method(key, meth);
@@ -20532,13 +20049,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_ECDH_set_method(REG(a6, __IFACE_OR_BASE), REG(a0, E
 int AMISSL_LIB_ENTRY _AmiSSL_ECDH_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, EC_KEY * d), REG(d0, int idx), REG(a1, void * arg))
 {
 	return ECDH_set_ex_data(d, idx, arg);
-}
-
-// ---
-
-EC_KEY * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_EC_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_EC_PUBKEY(fp, x, cb, u);
 }
 
 // ---
@@ -20585,13 +20095,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_SHA224_Init(REG(a6, __IFACE_OR_BASE), REG(a0, SHA25
 
 // ---
 
-EC_KEY * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_ECPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_ECPrivateKey(fp, x, cb, u);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_SHA512_Init(REG(a6, __IFACE_OR_BASE), REG(a0, SHA512_CTX * c))
 {
 	return SHA512_Init(c);
@@ -20613,23 +20116,9 @@ int AMISSL_LIB_ENTRY _AmiSSL_EC_GROUP_get_basis_type(REG(a6, __IFACE_OR_BASE), R
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_ECPKParameters(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const EC_GROUP * x))
-{
-	return PEM_write_ECPKParameters(fp, x);
-}
-
-// ---
-
 void AMISSL_LIB_ENTRY _AmiSSL_ENGINE_register_all_ECDH(REG(a6, __IFACE_OR_BASE))
 {
 	ENGINE_register_all_ECDH();
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_ECPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY * eckey))
-{
-	return i2d_ECPrivateKey_fp(fp, eckey);
 }
 
 // ---
@@ -20690,23 +20179,9 @@ ECDSA_SIG * AMISSL_LIB_ENTRY _AmiSSL_ECDSA_do_sign_ex(REG(a6, __IFACE_OR_BASE), 
 
 // ---
 
-EC_KEY * AMISSL_LIB_ENTRY _AmiSSL_d2i_ECPrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY ** eckey))
-{
-	return d2i_ECPrivateKey_fp(fp, eckey);
-}
-
-// ---
-
 void AMISSL_LIB_ENTRY _AmiSSL_SHA512_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, SHA512_CTX * c), REG(a1, const unsigned char * data))
 {
 	SHA512_Transform(c, data);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_ECPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY * x), REG(a2, const EVP_CIPHER * enc), REG(a3, unsigned char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_ECPrivateKey(fp, x, enc, kstr, klen, cb, u);
 }
 
 // ---
@@ -20718,13 +20193,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_EC_KEY_set_public_key(REG(a6, __IFACE_OR_BASE), REG
 
 // ---
 
-EC_GROUP * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_ECPKParameters(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_GROUP ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_ECPKParameters(fp, x, cb, u);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_ENGINE_register_STORE(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e))
 {
 	return ENGINE_register_STORE(e);
@@ -20732,23 +20200,9 @@ int AMISSL_LIB_ENTRY _AmiSSL_ENGINE_register_STORE(REG(a6, __IFACE_OR_BASE), REG
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_ECParameters_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, const EC_KEY * key))
-{
-	return ECParameters_print_fp(fp, key);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_EC_GROUP_get_curve_name(REG(a6, __IFACE_OR_BASE), REG(a0, const EC_GROUP * group))
 {
 	return EC_GROUP_get_curve_name(group);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_EC_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY * eckey))
-{
-	return i2d_EC_PUBKEY_fp(fp, eckey);
 }
 
 // ---
@@ -20826,13 +20280,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_ECDSA_get_ex_new_index(REG(a6, __IFACE_OR_BASE), RE
 unsigned char * AMISSL_LIB_ENTRY _AmiSSL_SHA384(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char * d), REG(d0, size_t n), REG(a1, unsigned char * md))
 {
 	return SHA384(d, n, md);
-}
-
-// ---
-
-EC_KEY * AMISSL_LIB_ENTRY _AmiSSL_d2i_EC_PUBKEY_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EC_KEY ** eckey))
-{
-	return d2i_EC_PUBKEY_fp(fp, eckey);
 }
 
 // ---
@@ -21187,13 +20634,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_CMS_ReceiptRequest_free(REG(a6, __IFACE_OR_BASE), 
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_CMS(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, CMS_ContentInfo * x))
-{
-	return PEM_write_CMS(fp, x);
-}
-
-// ---
-
 CMS_CertificateChoices * AMISSL_LIB_ENTRY _AmiSSL_CMS_add0_CertificateChoices(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_ContentInfo * cms))
 {
 	return CMS_add0_CertificateChoices(cms);
@@ -21477,13 +20917,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_CMS_unsigned_get_attr_count(REG(a6, __IFACE_OR_BASE
 int AMISSL_LIB_ENTRY _AmiSSL_CMS_add_smimecap(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_SignerInfo * si), REG(a1, STACK_OF(X509_ALGOR) * algs))
 {
 	return CMS_add_smimecap(si, algs);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_read_CMS(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, CMS_ContentInfo ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_CMS(fp, x, cb, u);
 }
 
 // ---
@@ -22587,282 +22020,9 @@ int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_bio_SSL_SESSION(REG(a6, __IFACE_OR_BASE),
 
 // ---
 
-SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_SSL_SESSION(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, SSL_SESSION ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_SSL_SESSION(fp, x, cb, u);
-}
-
-// ---
-
 SSL_SESSION * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_bio_SSL_SESSION(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, SSL_SESSION ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
 {
 	return PEM_read_bio_SSL_SESSION(bp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_SSL_SESSION(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, SSL_SESSION * x))
-{
-	return PEM_write_SSL_SESSION(fp, x);
-}
-
-// ---
-
-PKCS7 * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_PKCS7(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS7 ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_PKCS7(fp, x, cb, u);
-}
-
-// ---
-
-EVP_PKEY * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_PrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_PrivateKey(fp, x, cb, u);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_RSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_RSAPrivateKey(fp, x, cb, u);
-}
-
-// ---
-
-X509 * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_X509(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_X509(fp, x, cb, u);
-}
-
-// ---
-
-X509_CRL * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_X509_CRL(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CRL ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_X509_CRL(fp, x, cb, u);
-}
-
-// ---
-
-X509_REQ * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_X509_REQ(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_REQ ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_X509_REQ(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PKCS7(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS7 * x))
-{
-	return PEM_write_PKCS7(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x), REG(a2, const EVP_CIPHER * enc), REG(a3, unsigned char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_PrivateKey(fp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_RSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * x), REG(a2, const EVP_CIPHER * enc), REG(a3, unsigned char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_RSAPrivateKey(fp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 * x))
-{
-	return PEM_write_X509(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509_CRL(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CRL * x))
-{
-	return PEM_write_X509_CRL(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509_REQ(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_REQ * x))
-{
-	return PEM_write_X509_REQ(fp, x);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_RSAPublicKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_RSAPublicKey(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_RSAPublicKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * x))
-{
-	return PEM_write_RSAPublicKey(fp, x);
-}
-
-// ---
-
-NETSCAPE_CERT_SEQUENCE * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_NETSCAPE_CERT_SEQUENCE(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, NETSCAPE_CERT_SEQUENCE ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_NETSCAPE_CERT_SEQUENCE(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_NETSCAPE_CERT_SEQUENCE(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, NETSCAPE_CERT_SEQUENCE * x))
-{
-	return PEM_write_NETSCAPE_CERT_SEQUENCE(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_X509V3_EXT_print_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * out), REG(a1, X509_EXTENSION * ext), REG(d0, int flag), REG(d0, int indent))
-{
-	return X509V3_EXT_print_fp(out, ext, flag, indent);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS12_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS12 * p12))
-{
-	return i2d_PKCS12_fp(fp, p12);
-}
-
-// ---
-
-PKCS12 * AMISSL_LIB_ENTRY _AmiSSL_d2i_PKCS12_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS12 ** p12))
-{
-	return d2i_PKCS12_fp(fp, p12);
-}
-
-// ---
-
-X509_SIG * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_PKCS8(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_SIG ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_PKCS8(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PKCS8(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_SIG * x))
-{
-	return PEM_write_PKCS8(fp, x);
-}
-
-// ---
-
-PKCS8_PRIV_KEY_INFO * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_PKCS8_PRIV_KEY_INFO(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS8_PRIV_KEY_INFO ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_PKCS8_PRIV_KEY_INFO(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PKCS8_PRIV_KEY_INFO(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, PKCS8_PRIV_KEY_INFO * x))
-{
-	return PEM_write_PKCS8_PRIV_KEY_INFO(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PKCS8PrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x), REG(a2, const EVP_CIPHER * enc), REG(a3, char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_PKCS8PrivateKey(fp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-X509 * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_X509_AUX(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_X509_AUX(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x))
-{
-	return PEM_write_PUBKEY(fp, x);
-}
-
-// ---
-
-RSA * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_RSA_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_RSA_PUBKEY(fp, x, cb, u);
-}
-
-// ---
-
-EVP_PKEY * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_PUBKEY(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509_AUX(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509 * x))
-{
-	return PEM_write_X509_AUX(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_RSA_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, RSA * x))
-{
-	return PEM_write_RSA_PUBKEY(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_PKCS8PrivateKey_nid(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x), REG(a2, int nid), REG(a3, char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return PEM_write_PKCS8PrivateKey_nid(fp, x, nid, kstr, klen, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS8PrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x), REG(a2, const EVP_CIPHER * enc), REG(a3, char * kstr), REG(d0, int klen), REG(a4, pem_password_cb * cb), REG(d1, void * u))
-{
-	return i2d_PKCS8PrivateKey_fp(fp, x, enc, kstr, klen, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_PKCS8PrivateKey_nid_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY * x), REG(d0, int nid), REG(a2, char * kstr), REG(d1, int klen), REG(a3, pem_password_cb * cb), REG(a4, void * u))
-{
-	return i2d_PKCS8PrivateKey_nid_fp(fp, x, nid, kstr, klen, cb, u);
-}
-
-// ---
-
-EVP_PKEY * AMISSL_LIB_ENTRY _AmiSSL_d2i_PKCS8PrivateKey_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, EVP_PKEY ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return d2i_PKCS8PrivateKey_fp(fp, x, cb, u);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509_REQ_NEW(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_REQ * x))
-{
-	return PEM_write_X509_REQ_NEW(fp, x);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_CONF_dump_fp(REG(a6, __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, FILE * out))
-{
-	return CONF_dump_fp(conf, out);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_NCONF_dump_fp(REG(a6, __IFACE_OR_BASE), REG(a0, const CONF * conf), REG(a1, FILE * out))
-{
-	return NCONF_dump_fp(conf, out);
 }
 
 // ---
@@ -23196,13 +22356,6 @@ X509_VERIFY_PARAM * AMISSL_LIB_ENTRY _AmiSSL_X509_STORE_CTX_get0_param(REG(a6, _
 
 // ---
 
-X509_CERT_PAIR * AMISSL_LIB_ENTRY _AmiSSL_PEM_read_X509_CERT_PAIR(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CERT_PAIR ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u))
-{
-	return PEM_read_X509_CERT_PAIR(fp, x, cb, u);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_X509_STORE_set_depth(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * store), REG(a0, int depth))
 {
 	return X509_STORE_set_depth(store, depth);
@@ -23444,13 +22597,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_X509V3_NAME_from_section(REG(a6, __IFACE_OR_BASE), 
 int AMISSL_LIB_ENTRY _AmiSSL_EVP_PKEY_add1_attr(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * key), REG(a1, X509_ATTRIBUTE * attr))
 {
 	return EVP_PKEY_add1_attr(key, attr);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_PEM_write_X509_CERT_PAIR(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, X509_CERT_PAIR * x))
-{
-	return PEM_write_X509_CERT_PAIR(fp, x);
 }
 
 // ---
@@ -24057,13 +23203,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_ACCURACY(REG(a6, __IFACE_OR_BASE), REG(a0, c
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_MSG_IMPRINT_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a0, TS_MSG_IMPRINT * a))
-{
-	return i2d_TS_MSG_IMPRINT_fp(fp, a);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_MSG_IMPRINT(REG(a6, __IFACE_OR_BASE), REG(a0, const TS_MSG_IMPRINT * a), REG(a1, unsigned char ** pp))
 {
 	return i2d_TS_MSG_IMPRINT(a, pp);
@@ -24162,13 +23301,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_PKCS7_add0_attrib_signing_time(REG(a6, __IFACE_OR_B
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_TST_INFO_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_TST_INFO * a))
-{
-	return i2d_TS_TST_INFO_fp(fp, a);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_BIO_asn1_get_prefix(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * b), REG(a1, asn1_ps_func ** pprefix), REG(a2, asn1_ps_func ** pprefix_free))
 {
 	return BIO_asn1_get_prefix(b, pprefix, pprefix_free);
@@ -24207,13 +23339,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_EVP_PKEY_CTX_get_keygen_info(REG(a6, __IFACE_OR_BAS
 int AMISSL_LIB_ENTRY _AmiSSL_TS_REQ_set_policy_id(REG(a6, __IFACE_OR_BASE), REG(a0, TS_REQ * a), REG(a1, ASN1_OBJECT * policy))
 {
 	return TS_REQ_set_policy_id(a, policy);
-}
-
-// ---
-
-TS_RESP * AMISSL_LIB_ENTRY _AmiSSL_d2i_TS_RESP_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_RESP ** a))
-{
-	return d2i_TS_RESP_fp(fp, a);
 }
 
 // ---
@@ -25086,13 +24211,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_EVP_PKEY_meth_set_derive(REG(a6, __IFACE_OR_BASE),
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_RESP_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_RESP * a))
-{
-	return i2d_TS_RESP_fp(fp, a);
-}
-
-// ---
-
 int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_MSG_IMPRINT_bio(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * fp), REG(a1, TS_MSG_IMPRINT * a))
 {
 	return i2d_TS_MSG_IMPRINT_bio(fp, a);
@@ -25257,13 +24375,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_PKCS8_pkey_set0(REG(a6, __IFACE_OR_BASE), REG(a0, P
 int AMISSL_LIB_ENTRY _AmiSSL_ASN1_STRING_copy(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_STRING * dst), REG(a1, const ASN1_STRING * str))
 {
 	return ASN1_STRING_copy(dst, str);
-}
-
-// ---
-
-TS_TST_INFO * AMISSL_LIB_ENTRY _AmiSSL_d2i_TS_TST_INFO_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_TST_INFO ** a))
-{
-	return d2i_TS_TST_INFO_fp(fp, a);
 }
 
 // ---
@@ -25544,13 +24655,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_TS_CONF_set_serial(REG(a6, __IFACE_OR_BASE), REG(a0
 void AMISSL_LIB_ENTRY _AmiSSL_TS_TST_INFO_free(REG(a6, __IFACE_OR_BASE), REG(a0, TS_TST_INFO * a))
 {
 	TS_TST_INFO_free(a);
-}
-
-// ---
-
-TS_REQ * AMISSL_LIB_ENTRY _AmiSSL_d2i_TS_REQ_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_REQ ** a))
-{
-	return d2i_TS_REQ_fp(fp, a);
 }
 
 // ---
@@ -26052,13 +25156,6 @@ void AMISSL_LIB_ENTRY _AmiSSL_EVP_PKEY_CTX_free(REG(a6, __IFACE_OR_BASE), REG(a0
 
 // ---
 
-TS_MSG_IMPRINT * AMISSL_LIB_ENTRY _AmiSSL_d2i_TS_MSG_IMPRINT_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_MSG_IMPRINT ** a))
-{
-	return d2i_TS_MSG_IMPRINT_fp(fp, a);
-}
-
-// ---
-
 STACK_OF(X509) * AMISSL_LIB_ENTRY _AmiSSL_X509_STORE_get1_certs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * st), REG(a1, X509_NAME * nm))
 {
 	return X509_STORE_get1_certs(st, nm);
@@ -26545,13 +25642,6 @@ int AMISSL_LIB_ENTRY _AmiSSL_GENERAL_NAME_cmp(REG(a6, __IFACE_OR_BASE), REG(a0, 
 ASN1_SEQUENCE_ANY * AMISSL_LIB_ENTRY _AmiSSL_d2i_ASN1_SET_ANY(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_SEQUENCE_ANY ** a), REG(a1, const unsigned char ** pp), REG(d0, long length))
 {
 	return d2i_ASN1_SET_ANY(a, pp, length);
-}
-
-// ---
-
-int AMISSL_LIB_ENTRY _AmiSSL_i2d_TS_REQ_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp), REG(a1, TS_REQ * a))
-{
-	return i2d_TS_REQ_fp(fp, a);
 }
 
 // ---

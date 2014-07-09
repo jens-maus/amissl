@@ -328,6 +328,7 @@ int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 
 #define DECLARE_PEM_read_fp(name, type) /**/
 #define DECLARE_PEM_write_fp(name, type) /**/
+#define DECLARE_PEM_write_fp_const(name, type) /**/
 #define DECLARE_PEM_write_cb_fp(name, type) /**/
 
 #else

@@ -4326,7 +4326,7 @@
 			<arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
 			<arg name="u" type="void *" m68kreg="d1"/>
 		</method>
-		<method name="PEM_ASN1_read" result="void *">
+		<method name="PEM_ASN1_read" result="void *" status="unimplemented">
 			<arg name="d2i" type="d2i_of_void *" m68kreg="a0"/>
 			<arg name="name" type="const char *" m68kreg="a1"/>
 			<arg name="fp" type="FILE *" m68kreg="a2"/>
@@ -4342,7 +4342,7 @@
 			<arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
 			<arg name="u" type="void *" m68kreg="d0"/>
 		</method>
-		<method name="PEM_ASN1_write" result="int">
+		<method name="PEM_ASN1_write" result="int" status="unimplemented">
 			<arg name="i2d" type="i2d_of_void *" m68kreg="a0"/>
 			<arg name="name" type="const char *" m68kreg="a1"/>
 			<arg name="fp" type="FILE *" m68kreg="a2"/>
@@ -4364,7 +4364,7 @@
 			<arg name="cb" type="pem_password_cb *" m68kreg="d2"/>
 			<arg name="u" type="void *" m68kreg="d3"/>
 		</method>
-		<method name="PEM_X509_INFO_read" result="STACK_OF(X509_INFO) *">
+		<method name="PEM_X509_INFO_read" result="STACK_OF(X509_INFO) *" status="unimplemented">
 			<arg name="fp" type="FILE *" m68kreg="a0"/>
 			<arg name="sk" type="STACK_OF(X509_INFO) *" m68kreg="a1"/>
 			<arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -4435,7 +4435,7 @@
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="type" type="int" m68kreg="d0"/>
 		</method>
-		<method name="PEM_read" result="int">
+		<method name="PEM_read" result="int" status="unimplemented">
 			<arg name="fp" type="FILE *" m68kreg="a0"/>
 			<arg name="name" type="char **" m68kreg="a1"/>
 			<arg name="header" type="char **" m68kreg="a2"/>
@@ -4474,7 +4474,7 @@
 			<arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
 			<arg name="u" type="void *" m68kreg="a3"/>
 		</method>
-		<method name="PEM_write" result="int">
+		<method name="PEM_write" result="int" status="unimplemented">
 			<arg name="fp" type="FILE *" m68kreg="a0"/>
 			<arg name="name" type="char *" m68kreg="a1"/>
 			<arg name="hdr" type="char *" m68kreg="a2"/>
@@ -5713,7 +5713,7 @@
 			<arg name="fp" type="BIO *" m68kreg="a0"/>
 			<arg name="ses" type="const SSL_SESSION *" m68kreg="a1"/>
 		</method>
-		<method name="SSL_SESSION_print_fp" result="int">
+		<method name="SSL_SESSION_print_fp" result="int" status="unimplemented">
 			<arg name="fp" type="FILE *" m68kreg="a0"/>
 			<arg name="ses" type="SSL_SESSION *" m68kreg="a1"/>
 		</method>
@@ -11220,67 +11220,67 @@
     <method name="SSL_SRP_CTX_init" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
-    <method name="ASN1_d2i_fp" result="void *">
+    <method name="ASN1_d2i_fp" result="void *" status="unimplemented">
       <arg name="xnew" type="void *(*)(void)" m68kreg="a0"/>
       <arg name="d2i" type="d2i_of_void *" m68kreg="a1"/>
       <arg name="in" type="FILE *" m68kreg="a2"/>
       <arg name="x" type="void **" m68kreg="a3"/>
     </method>
-    <method name="ASN1_i2d_fp" result="int">
+    <method name="ASN1_i2d_fp" result="int" status="unimplemented">
       <arg name="i2d" type="i2d_of_void *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
     </method>
-    <method name="BIO_new_fp" result="BIO *">
+    <method name="BIO_new_fp" result="BIO *" status="unimplemented">
       <arg name="stream" type="FILE *" m68kreg="a0"/>
       <arg name="close_flag" type="int" m68kreg="a1"/>
     </method>
-    <method name="BN_print_fp" result="int">
+    <method name="BN_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="const BIGNUM *" m68kreg="a1"/>
     </method>
-    <method name="CRYPTO_mem_leaks_fp" result="void">
+    <method name="CRYPTO_mem_leaks_fp" result="void" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
     </method>
-    <method name="DHparams_print_fp" result="int">
+    <method name="DHparams_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="const DH *" m68kreg="a1"/>
     </method>
-    <method name="DSA_print_fp" result="int">
+    <method name="DSA_print_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="const DSA *" m68kreg="a1"/>
       <arg name="off" type="int" m68kreg="d0"/>
     </method>
-    <method name="DSAparams_print_fp" result="int">
+    <method name="DSAparams_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="const DSA *" m68kreg="a1"/>
     </method>
-    <method name="ERR_print_errors_fp" result="void">
+    <method name="ERR_print_errors_fp" result="void" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
     </method>
-    <method name="PEM_read_DHparams" result="DH *">
+    <method name="PEM_read_DHparams" result="DH *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DH **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_DSAPrivateKey" result="DSA *">
+    <method name="PEM_read_DSAPrivateKey" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_DSAparams" result="DSA *">
+    <method name="PEM_read_DSAparams" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_DHparams" result="int">
+    <method name="PEM_write_DHparams" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DH *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_DSAPrivateKey" result="int">
+    <method name="PEM_write_DSAPrivateKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -11289,177 +11289,177 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="PEM_write_DSAparams" result="int">
+    <method name="PEM_write_DSAparams" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA *" m68kreg="a1"/>
     </method>
-    <method name="RSA_print_fp" result="int">
+    <method name="RSA_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="r" type="const RSA *" m68kreg="a1"/>
       <arg name="offset" type="int" m68kreg="d0"/>
     </method>
-    <method name="X509_REQ_print_fp" result="int">
+    <method name="X509_REQ_print_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
       <arg name="req" type="X509_REQ *" m68kreg="a1"/>
     </method>
-    <method name="X509_print_fp" result="int">
+    <method name="X509_print_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 *" m68kreg="a1"/>
     </method>
-    <method name="d2i_DSAPrivateKey_fp" result="DSA *">
+    <method name="d2i_DSAPrivateKey_fp" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="dsa" type="DSA **" m68kreg="a1"/>
     </method>
-    <method name="d2i_PKCS7_fp" result="PKCS7 *">
+    <method name="d2i_PKCS7_fp" result="PKCS7 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p7" type="PKCS7 **" m68kreg="a1"/>
     </method>
-    <method name="d2i_RSAPrivateKey_fp" result="RSA *">
+    <method name="d2i_RSAPrivateKey_fp" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA **" m68kreg="a1"/>
     </method>
-    <method name="d2i_X509_CRL_fp" result="X509_CRL *">
+    <method name="d2i_X509_CRL_fp" result="X509_CRL *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="crl" type="X509_CRL **" m68kreg="a1"/>
     </method>
-    <method name="d2i_X509_REQ_fp" result="X509_REQ *">
+    <method name="d2i_X509_REQ_fp" result="X509_REQ *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="req" type="X509_REQ **" m68kreg="a1"/>
     </method>
-    <method name="d2i_X509_fp" result="X509 *">
+    <method name="d2i_X509_fp" result="X509 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x509" type="X509 **" m68kreg="a1"/>
     </method>
     <method name="DES_options" result="const char *">
     </method>
-    <method name="i2d_DSAPrivateKey_fp" result="int">
+    <method name="i2d_DSAPrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="dsa" type="DSA *" m68kreg="a1"/>
     </method>
-    <method name="i2d_PKCS7_fp" result="int">
+    <method name="i2d_PKCS7_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p7" type="PKCS7 *" m68kreg="a1"/>
     </method>
-    <method name="i2d_RSAPrivateKey_fp" result="int">
+    <method name="i2d_RSAPrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA *" m68kreg="a1"/>
     </method>
-    <method name="i2d_X509_CRL_fp" result="int">
+    <method name="i2d_X509_CRL_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="crl" type="X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="i2d_X509_REQ_fp" result="int">
+    <method name="i2d_X509_REQ_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="req" type="X509_REQ *" m68kreg="a1"/>
     </method>
-    <method name="i2d_X509_fp" result="int">
+    <method name="i2d_X509_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x509" type="X509 *" m68kreg="a1"/>
     </method>
-    <method name="lh_node_stats" result="void">
+    <method name="lh_node_stats" result="void" status="unimplemented">
       <arg name="lh" type="const _LHASH *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="lh_node_usage_stats" result="void">
+    <method name="lh_node_usage_stats" result="void" status="unimplemented">
       <arg name="lh" type="const _LHASH *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="lh_stats" result="void">
+    <method name="lh_stats" result="void" status="unimplemented">
       <arg name="lh" type="const _LHASH *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="d2i_RSAPublicKey_fp" result="RSA *">
+    <method name="d2i_RSAPublicKey_fp" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA **" m68kreg="a1"/>
     </method>
-    <method name="i2d_RSAPublicKey_fp" result="int">
+    <method name="i2d_RSAPublicKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA *" m68kreg="a1"/>
     </method>
-    <method name="X509_CRL_print_fp" result="int">
+    <method name="X509_CRL_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="i2d_PKCS8_fp" result="int">
+    <method name="i2d_PKCS8_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p8" type="X509_SIG *" m68kreg="a1"/>
     </method>
-    <method name="d2i_PKCS8_PRIV_KEY_INFO_fp" result="PKCS8_PRIV_KEY_INFO *">
+    <method name="d2i_PKCS8_PRIV_KEY_INFO_fp" result="PKCS8_PRIV_KEY_INFO *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p8inf" type="PKCS8_PRIV_KEY_INFO **" m68kreg="a1"/>
     </method>
-    <method name="d2i_PKCS8_fp" result="X509_SIG *">
+    <method name="d2i_PKCS8_fp" result="X509_SIG *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p8" type="X509_SIG **" m68kreg="a1"/>
     </method>
-    <method name="i2d_PKCS8_PRIV_KEY_INFO_fp" result="int">
+    <method name="i2d_PKCS8_PRIV_KEY_INFO_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p8inf" type="PKCS8_PRIV_KEY_INFO *" m68kreg="a1"/>
     </method>
-    <method name="CONF_load_fp" result="LHASH_OF(CONF_VALUE) *">
+    <method name="CONF_load_fp" result="LHASH_OF(CONF_VALUE) *" status="unimplemented">
       <arg name="conf" type="LHASH_OF(CONF_VALUE) *" m68kreg="a0"/>
       <arg name="fp" type="FILE *" m68kreg="a1"/>
       <arg name="eline" type="long *" m68kreg="a2"/>
     </method>
-    <method name="d2i_RSA_PUBKEY_fp" result="RSA *">
+    <method name="d2i_RSA_PUBKEY_fp" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA **" m68kreg="a1"/>
     </method>
-    <method name="i2d_DSA_PUBKEY_fp" result="int">
+    <method name="i2d_DSA_PUBKEY_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="dsa" type="DSA *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_DSA_PUBKEY" result="DSA *">
+    <method name="PEM_read_DSA_PUBKEY" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="d2i_DSA_PUBKEY_fp" result="DSA *">
+    <method name="d2i_DSA_PUBKEY_fp" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="dsa" type="DSA **" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_DSA_PUBKEY" result="int">
+    <method name="PEM_write_DSA_PUBKEY" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="DSA *" m68kreg="a1"/>
     </method>
-    <method name="i2d_RSA_PUBKEY_fp" result="int">
+    <method name="i2d_RSA_PUBKEY_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="rsa" type="RSA *" m68kreg="a1"/>
     </method>
-    <method name="i2d_PKCS8PrivateKeyInfo_fp" result="int">
+    <method name="i2d_PKCS8PrivateKeyInfo_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="key" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="i2d_PrivateKey_fp" result="int">
+    <method name="i2d_PrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="d2i_PrivateKey_fp" result="EVP_PKEY *">
+    <method name="d2i_PrivateKey_fp" result="EVP_PKEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="EVP_PKEY **" m68kreg="a1"/>
     </method>
-    <method name="NCONF_load_fp" result="int">
+    <method name="NCONF_load_fp" result="int" status="unimplemented">
       <arg name="conf" type="CONF *" m68kreg="a0"/>
       <arg name="fp" type="FILE *" m68kreg="a1"/>
       <arg name="eline" type="long *" m68kreg="a2"/>
     </method>
-    <method name="X509_NAME_print_ex_fp" result="int">
+    <method name="X509_NAME_print_ex_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="nm" type="X509_NAME *" m68kreg="a1"/>
       <arg name="indent" type="int" m68kreg="d0"/>
       <arg name="flags" type="unsigned long" m68kreg="d1"/>
     </method>
-    <method name="ASN1_STRING_print_ex_fp" result="int">
+    <method name="ASN1_STRING_print_ex_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="str" type="ASN1_STRING *" m68kreg="a1"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="i2d_PUBKEY_fp" result="int">
+    <method name="i2d_PUBKEY_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="d2i_PUBKEY_fp" result="EVP_PKEY *">
+    <method name="d2i_PUBKEY_fp" result="EVP_PKEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="EVP_PKEY **" m68kreg="a1"/>
     </method>
@@ -11616,7 +11616,7 @@
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
-    <method name="ASN1_item_d2i_fp" result="void *">
+    <method name="ASN1_item_d2i_fp" result="void *" status="unimplemented">
       <arg name="it" type="const ASN1_ITEM *" m68kreg="a0"/>
       <arg name="in" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
@@ -11657,7 +11657,7 @@
     <method name="ENGINE_get_cipher_engine" result="ENGINE *">
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="X509_print_ex_fp" result="int">
+    <method name="X509_print_ex_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 *" m68kreg="a1"/>
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
@@ -11681,7 +11681,7 @@
     <method name="ENGINE_get_destroy_function" result="ENGINE_GEN_INT_FUNC_PTR">
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ASN1_item_i2d_fp" result="int">
+    <method name="ASN1_item_i2d_fp" result="int" status="unimplemented">
       <arg name="it" type="const ASN1_ITEM *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
@@ -11763,7 +11763,7 @@
       <arg name="dst" type="EC_KEY *" m68kreg="a0"/>
       <arg name="src" type="const EC_KEY *" m68kreg="a1"/>
     </method>
-    <method name="BIO_dump_fp" result="int">
+    <method name="BIO_dump_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/> 
       <arg name="s" type="const char *" m68kreg="a1"/> 
       <arg name="len" type="int" m68kreg="d0"/> 
@@ -11848,7 +11848,7 @@
     <method name="EC_GROUP_have_precompute_mult" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
     </method>
-    <method name="EC_KEY_print_fp" result="int">
+    <method name="EC_KEY_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="key" type="const EC_KEY *" m68kreg="a1"/>
       <arg name="off" type="int" m68kreg="a2"/>
@@ -11881,7 +11881,7 @@
       <arg name="p" type="const int *" m68kreg="a2"/>
       <arg name="ctx" type="BN_CTX *" m68kreg="a3"/>
     </method>
-    <method name="ECPKParameters_print_fp" result="int">
+    <method name="ECPKParameters_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="const EC_GROUP *" m68kreg="a1"/>
       <arg name="off" type="int" m68kreg="d0"/>
@@ -11915,7 +11915,7 @@
       <arg name="n" type="size_t" m68kreg="d0"/>
       <arg name="md" type="unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="BIO_dump_indent_fp" result="int">
+    <method name="BIO_dump_indent_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="s" type="const char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
@@ -12008,7 +12008,7 @@
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="ecdsa_meth" type="const ECDSA_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_EC_PUBKEY" result="int">
+    <method name="PEM_write_EC_PUBKEY" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY *" m68kreg="a1"/>
     </method>
@@ -12021,7 +12021,7 @@
       <arg name="idx" type="int" m68kreg="d0"/>
       <arg name="arg" type="void *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_EC_PUBKEY" result="EC_KEY *">
+    <method name="PEM_read_EC_PUBKEY" result="EC_KEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -12050,7 +12050,7 @@
     <method name="SHA224_Init" result="int">
       <arg name="c" type="SHA256_CTX *" m68kreg="a0"/>
     </method>
-    <method name="PEM_read_ECPrivateKey" result="EC_KEY *">
+    <method name="PEM_read_ECPrivateKey" result="EC_KEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -12064,13 +12064,13 @@
     <method name="EC_GROUP_get_basis_type" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
     </method>
-    <method name="PEM_write_ECPKParameters" result="int">
+    <method name="PEM_write_ECPKParameters" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="const EC_GROUP *" m68kreg="a1"/>
     </method>
     <method name="ENGINE_register_all_ECDH" result="void">
     </method>
-    <method name="i2d_ECPrivateKey_fp" result="int">
+    <method name="i2d_ECPrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="eckey" type="EC_KEY *" m68kreg="a1"/>
     </method>
@@ -12105,7 +12105,7 @@
       <arg name="rp" type="const BIGNUM *" m68kreg="a2"/>
       <arg name="eckey" type="EC_KEY *" m68kreg="a3"/>
     </method>
-    <method name="d2i_ECPrivateKey_fp" result="EC_KEY *">
+    <method name="d2i_ECPrivateKey_fp" result="EC_KEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="eckey" type="EC_KEY **" m68kreg="a1"/>
     </method>
@@ -12113,7 +12113,7 @@
       <arg name="c" type="SHA512_CTX *" m68kreg="a0"/>
       <arg name="data" type="const unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_ECPrivateKey" result="int">
+    <method name="PEM_write_ECPrivateKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -12126,7 +12126,7 @@
       <arg name="key" type="EC_KEY *" m68kreg="a0"/>
       <arg name="pub" type="const EC_POINT *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_ECPKParameters" result="EC_GROUP *">
+    <method name="PEM_read_ECPKParameters" result="EC_GROUP *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EC_GROUP **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -12135,14 +12135,14 @@
     <method name="ENGINE_register_STORE" result="int">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ECParameters_print_fp" result="int">
+    <method name="ECParameters_print_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="key" type="const EC_KEY *" m68kreg="a1"/>
     </method>
     <method name="EC_GROUP_get_curve_name" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
     </method>
-    <method name="i2d_EC_PUBKEY_fp" result="int">
+    <method name="i2d_EC_PUBKEY_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="eckey" type="EC_KEY *" m68kreg="a1"/>
     </method>
@@ -12191,7 +12191,7 @@
       <arg name="n" type="size_t" m68kreg="d0"/>
       <arg name="md" type="unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="d2i_EC_PUBKEY_fp" result="EC_KEY *">
+    <method name="d2i_EC_PUBKEY_fp" result="EC_KEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="eckey" type="EC_KEY **" m68kreg="a1"/>
     </method>
@@ -12415,7 +12415,7 @@
     <method name="CMS_ReceiptRequest_free" result="void">
       <arg name="rr" type="CMS_ReceiptRequest *" m68kreg="a0"/>
     </method>
-    <method name="PEM_write_CMS" result="int">
+    <method name="PEM_write_CMS" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="CMS_ContentInfo *" m68kreg="a1"/>
     </method>
@@ -12613,7 +12613,7 @@
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
       <arg name="algs" type="STACK_OF(X509_ALGOR) *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_CMS" result="int">
+    <method name="PEM_read_CMS" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="CMS_ContentInfo **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -13282,7 +13282,7 @@
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="x" type="SSL_SESSION *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_SSL_SESSION" result="SSL_SESSION *">
+    <method name="PEM_read_SSL_SESSION" result="SSL_SESSION *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="SSL_SESSION **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -13294,51 +13294,51 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_SSL_SESSION" result="int">
+    <method name="PEM_write_SSL_SESSION" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="SSL_SESSION *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_PKCS7" result="PKCS7 *">
+    <method name="PEM_read_PKCS7" result="PKCS7 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="PKCS7 **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_PrivateKey" result="EVP_PKEY *">
+    <method name="PEM_read_PrivateKey" result="EVP_PKEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_RSAPrivateKey" result="RSA *">
+    <method name="PEM_read_RSAPrivateKey" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_X509" result="X509 *">
+    <method name="PEM_read_X509" result="X509 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_X509_CRL" result="X509_CRL *">
+    <method name="PEM_read_X509_CRL" result="X509_CRL *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_CRL **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_X509_REQ" result="X509_REQ *">
+    <method name="PEM_read_X509_REQ" result="X509_REQ *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_REQ **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_PKCS7" result="int">
+    <method name="PEM_write_PKCS7" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="PKCS7 *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_PrivateKey" result="int">
+    <method name="PEM_write_PrivateKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -13347,7 +13347,7 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="PEM_write_RSAPrivateKey" result="int">
+    <method name="PEM_write_RSAPrivateKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -13356,73 +13356,73 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="PEM_write_X509" result="int">
+    <method name="PEM_write_X509" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_X509_CRL" result="int">
+    <method name="PEM_write_X509_CRL" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_X509_REQ" result="int">
+    <method name="PEM_write_X509_REQ" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_REQ *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_RSAPublicKey" result="RSA *">
+    <method name="PEM_read_RSAPublicKey" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_RSAPublicKey" result="int">
+    <method name="PEM_write_RSAPublicKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_NETSCAPE_CERT_SEQUENCE" result="NETSCAPE_CERT_SEQUENCE *">
+    <method name="PEM_read_NETSCAPE_CERT_SEQUENCE" result="NETSCAPE_CERT_SEQUENCE *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="NETSCAPE_CERT_SEQUENCE **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_NETSCAPE_CERT_SEQUENCE" result="int">
+    <method name="PEM_write_NETSCAPE_CERT_SEQUENCE" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="NETSCAPE_CERT_SEQUENCE *" m68kreg="a1"/>
     </method>
-    <method name="X509V3_EXT_print_fp" result="int">
+    <method name="X509V3_EXT_print_fp" result="int" status="unimplemented">
       <arg name="out" type="FILE *" m68kreg="a0"/>
       <arg name="ext" type="X509_EXTENSION *" m68kreg="a1"/>
       <arg name="flag" type="int" m68kreg="d0"/>
       <arg name="indent" type="int" m68kreg="d0"/>
     </method>
-    <method name="i2d_PKCS12_fp" result="int">
+    <method name="i2d_PKCS12_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p12" type="PKCS12 *" m68kreg="a1"/>
     </method>
-    <method name="d2i_PKCS12_fp" result="PKCS12 *">
+    <method name="d2i_PKCS12_fp" result="PKCS12 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="p12" type="PKCS12 **" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_PKCS8" result="X509_SIG *">
+    <method name="PEM_read_PKCS8" result="X509_SIG *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_SIG **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_PKCS8" result="int">
+    <method name="PEM_write_PKCS8" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_SIG *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_PKCS8_PRIV_KEY_INFO" result="PKCS8_PRIV_KEY_INFO *">
+    <method name="PEM_read_PKCS8_PRIV_KEY_INFO" result="PKCS8_PRIV_KEY_INFO *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="PKCS8_PRIV_KEY_INFO **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_PKCS8_PRIV_KEY_INFO" result="int">
+    <method name="PEM_write_PKCS8_PRIV_KEY_INFO" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="PKCS8_PRIV_KEY_INFO *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_PKCS8PrivateKey" result="int">
+    <method name="PEM_write_PKCS8PrivateKey" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -13431,37 +13431,37 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="PEM_read_X509_AUX" result="X509 *">
+    <method name="PEM_read_X509_AUX" result="X509 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_PUBKEY" result="int">
+    <method name="PEM_write_PUBKEY" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_RSA_PUBKEY" result="RSA *">
+    <method name="PEM_read_RSA_PUBKEY" result="RSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_read_PUBKEY" result="EVP_PKEY *">
+    <method name="PEM_read_PUBKEY" result="EVP_PKEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_X509_AUX" result="int">
+    <method name="PEM_write_X509_AUX" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509 *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_RSA_PUBKEY" result="int">
+    <method name="PEM_write_RSA_PUBKEY" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="RSA *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_PKCS8PrivateKey_nid" result="int">
+    <method name="PEM_write_PKCS8PrivateKey_nid" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="nid" type="int" m68kreg="a2"/>
@@ -13470,7 +13470,7 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="i2d_PKCS8PrivateKey_fp" result="int">
+    <method name="i2d_PKCS8PrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="enc" type="const EVP_CIPHER *" m68kreg="a2"/>
@@ -13479,7 +13479,7 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a4"/>
       <arg name="u" type="void *" m68kreg="d1"/>
     </method>
-    <method name="i2d_PKCS8PrivateKey_nid_fp" result="int">
+    <method name="i2d_PKCS8PrivateKey_nid_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="nid" type="int" m68kreg="d0"/>
@@ -13488,21 +13488,21 @@
       <arg name="cb" type="pem_password_cb *" m68kreg="a3"/>
       <arg name="u" type="void *" m68kreg="a4"/>
     </method>
-    <method name="d2i_PKCS8PrivateKey_fp" result="EVP_PKEY *">
+    <method name="d2i_PKCS8PrivateKey_fp" result="EVP_PKEY *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="EVP_PKEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
-    <method name="PEM_write_X509_REQ_NEW" result="int">
+    <method name="PEM_write_X509_REQ_NEW" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_REQ *" m68kreg="a1"/>
     </method>
-    <method name="CONF_dump_fp" result="int">
+    <method name="CONF_dump_fp" result="int" status="unimplemented">
       <arg name="conf" type="LHASH_OF(CONF_VALUE) *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="NCONF_dump_fp" result="int">
+    <method name="NCONF_dump_fp" result="int" status="unimplemented">
       <arg name="conf" type="const CONF *" m68kreg="a0"/>
       <arg name="out" type="FILE *" m68kreg="a1"/>
     </method>
@@ -13679,7 +13679,7 @@
     <method name="X509_STORE_CTX_get0_param" result="X509_VERIFY_PARAM *">
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
     </method>
-    <method name="PEM_read_X509_CERT_PAIR" result="X509_CERT_PAIR *">
+    <method name="PEM_read_X509_CERT_PAIR" result="X509_CERT_PAIR *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_CERT_PAIR **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -13822,7 +13822,7 @@
       <arg name="key" type="EVP_PKEY *" m68kreg="a0"/>
       <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a1"/>
     </method>
-    <method name="PEM_write_X509_CERT_PAIR" result="int">
+    <method name="PEM_write_X509_CERT_PAIR" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x" type="X509_CERT_PAIR *" m68kreg="a1"/>
     </method>
@@ -14180,7 +14180,7 @@
       <arg name="a" type="const TS_ACCURACY *" m68kreg="a0"/>
       <arg name="pp" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="i2d_TS_MSG_IMPRINT_fp" result="int">
+    <method name="i2d_TS_MSG_IMPRINT_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_MSG_IMPRINT *" m68kreg="a0"/>
     </method>
@@ -14239,7 +14239,7 @@
       <arg name="si" type="PKCS7_SIGNER_INFO *" m68kreg="a0"/>
       <arg name="t" type="ASN1_TIME *" m68kreg="a1"/>
     </method>
-    <method name="i2d_TS_TST_INFO_fp" result="int">
+    <method name="i2d_TS_TST_INFO_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_TST_INFO *" m68kreg="a1"/>
     </method>
@@ -14270,7 +14270,7 @@
       <arg name="a" type="TS_REQ *" m68kreg="a0"/>
       <arg name="policy" type="ASN1_OBJECT *" m68kreg="a1"/>
     </method>
-    <method name="d2i_TS_RESP_fp" result="TS_RESP *">
+    <method name="d2i_TS_RESP_fp" result="TS_RESP *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_RESP **" m68kreg="a1"/>
     </method>
@@ -14800,7 +14800,7 @@
       <arg name="derive_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="derive" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *key, size_t *keylen)" m68kreg="a2"/>
     </method>
-    <method name="i2d_TS_RESP_fp" result="int">
+    <method name="i2d_TS_RESP_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_RESP *" m68kreg="a1"/>
     </method>
@@ -14910,7 +14910,7 @@
       <arg name="dst" type="ASN1_STRING *" m68kreg="a0"/>
       <arg name="str" type="const ASN1_STRING *" m68kreg="a1"/>
     </method>
-    <method name="d2i_TS_TST_INFO_fp" result="TS_TST_INFO *">
+    <method name="d2i_TS_TST_INFO_fp" result="TS_TST_INFO *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_TST_INFO **" m68kreg="a1"/>
     </method>
@@ -15089,7 +15089,7 @@
     <method name="TS_TST_INFO_free" result="void">
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
     </method>
-    <method name="d2i_TS_REQ_fp" result="TS_REQ *">
+    <method name="d2i_TS_REQ_fp" result="TS_REQ *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_REQ **" m68kreg="a1"/>
     </method>
@@ -15385,7 +15385,7 @@
     <method name="EVP_PKEY_CTX_free" result="void">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
-    <method name="d2i_TS_MSG_IMPRINT_fp" result="TS_MSG_IMPRINT *">
+    <method name="d2i_TS_MSG_IMPRINT_fp" result="TS_MSG_IMPRINT *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_MSG_IMPRINT **" m68kreg="a1"/>
     </method>
@@ -15671,7 +15671,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_TS_REQ_fp" result="int">
+    <method name="i2d_TS_REQ_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="TS_REQ *" m68kreg="a1"/>
     </method>

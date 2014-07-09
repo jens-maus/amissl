@@ -69,7 +69,7 @@ int (BN_print_fp)(FILE *fp, const BIGNUM *a)
 	{
 		fflush(fp);
 
-		if (BIO_set_fp_amiga(temp, GetFileBPTR("ERR_print_errors_fp", fp), BIO_NOCLOSE))
+		if (BIO_set_fp_amiga(temp, GetFileBPTR("BN_print_fp", fp), BIO_NOCLOSE))
 			ret = BN_print(temp, a);
 
 		BIO_free(temp);
@@ -97,6 +97,24 @@ BIO *(BIO_new_fp)(FILE *stream, int closeflag)
 		                 (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
 
 	return(ret);
+}
+
+int (X509_NAME_print_ex_fp)(FILE *fp, X509_NAME *nm, int indent, unsigned long flags)
+{
+  int ret=0;
+  BIO *out;
+
+  if((out = BIO_new(BIO_s_file())) != NULL)
+  {
+	  fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+
+		if(BIO_set_fp_amiga(out, GetFileBPTR("X509_NAME_print_ex_fp", fp), BIO_NOCLOSE))
+      ret = X509_NAME_print_ex(out, nm, indent, flags);
+
+    BIO_free(out);
+  }
+
+  return ret;
 }
 
 void (CRYPTO_mem_leaks_fp)(FILE *fp)

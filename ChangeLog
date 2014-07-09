@@ -6,7 +6,10 @@ $Id$
 $URL$
 
 2014-07-09 Jens Maus <mail@jens-maus.de>
-
+ 
+  * misc: added OPENSSL_NO_FP_API to our main makefile and commented out all public
+    functions dealing eith FILE* file pointers which are specific to every C library
+    and are thus not compatible throughout the different c-libraries.
   * openssl/crypto/cryptlib.c: brought back OPENSSL_stderr() function which is part
     of the public OpenSSL API.
   * include/xml/amissl.xml: added ENGINE_load_gost() which was still missing in the

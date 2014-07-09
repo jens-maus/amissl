@@ -175,7 +175,14 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BA
 {
 	SB_ObtainSemaphore(&AmiSSLMasterLock);
 
-	if(LibAPIVersion == AMISSL_V098y)
+	if(LibAPIVersion == AMISSL_V10x)
+  {
+    // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
+    // known 1.0.X amissl library as OpenSSL defines binary/api compatibility when only
+    // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
+	  OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101h.library", 3);
+  }
+	else if(LibAPIVersion == AMISSL_V098y)
   {
     // if an application requests 0.9.8y we try to open newer 0.9.8 versions until 0.9.8y
     // as they are API compatible

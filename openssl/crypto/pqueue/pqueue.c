@@ -199,16 +199,39 @@ pqueue_find(pqueue_s *pq, unsigned char *prio64be)
 	return found;
 	}
 
+#if defined(AMISSL)
+#include <proto/dos.h>
 void
 pqueue_print(pqueue_s *pq)
 	{
 	pitem *item = pq->items;
-	BIO *bio_stdout;
+  BIO *bio_out;
 
-	bio_stdout=BIO_new_fp(stdout,BIO_NOCLOSE|BIO_FP_TEXT);
+  if((bio_out = BIO_new(BIO_s_file())) != NULL &&
+     BIO_set_fp_amiga(bio_out, Output(), BIO_NOCLOSE) != NULL)
+  {
+		while(item != NULL && bio_out != NULL)
+			{
+			BIO_printf(bio_out, "item\t%02x%02x%02x%02x%02x%02x%02x%02x\n",
+				item->priority[0],item->priority[1],
+				item->priority[2],item->priority[3],
+				item->priority[4],item->priority[5],
+				item->priority[6],item->priority[7]);
+			item = item->next;
+			}
+
+    BIO_free(bio_out);
+	}
+	}
+#else
+void
+pqueue_print(pqueue_s *pq)
+	{
+	pitem *item = pq->items;
+
 	while(item != NULL)
 		{
-		BIO_printf(bio_stdout, "item\t%02x%02x%02x%02x%02x%02x%02x%02x\n",
+		printf("item\t%02x%02x%02x%02x%02x%02x%02x%02x\n",
 			item->priority[0],item->priority[1],
 			item->priority[2],item->priority[3],
 			item->priority[4],item->priority[5],
@@ -216,8 +239,8 @@ pqueue_print(pqueue_s *pq)
 		item = item->next;
 		}
 
-	if (bio_stdout != NULL) BIO_free(bio_stdout);
 	}
+#endif
 
 pitem *
 pqueue_iterator(pqueue_s *pq)

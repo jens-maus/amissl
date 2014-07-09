@@ -6,8 +6,9 @@
 #define AMISSL_V097g        0x02  /* AmiSSL v3.7 */
 #define AMISSL_V097m        0x03  /* unreleased version */
 #define AMISSL_V098y        0x04  /* unreleased version */
+#define AMISSL_V10x         0x05  /* AmiSSL/OpenSSL 1.0.x compatible versions */
 
-#define AMISSL_CURRENT_VERSION   AMISSL_V098y
+#define AMISSL_CURRENT_VERSION   AMISSL_V10x
 
 #define AMISSLMASTER_MIN_VERSION 3
 
