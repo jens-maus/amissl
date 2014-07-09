@@ -3,6 +3,8 @@
 #include <proto/dos.h>
 #include <proto/elf.h>
 #include <dos/dos.h>
+#include <proto/intuition.h>
+#include <intuition/intuition.h>
 #include <stdarg.h>
 #include <internal/amissl_compiler.h>
 #include <internal/amissl.h>
@@ -384,6 +386,31 @@ int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, c
 	__builtin_va_end(va);
 
 	return ret;
+}
+
+void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(struct AmiSSLIFace *Self, const char * fmta, ...)
+{
+	__gnuc_va_list va;
+	va_list os4va;
+	struct EasyStruct ErrReq;
+	char error[512];
+
+	__builtin_va_start(va,fmta);
+	os4va.args.m68k = va_getlinearva(va,char *);
+	os4va.is_68k = 1;
+
+	BIO_vsnprintf(error,sizeof(error),fmta,os4va);
+
+	__builtin_va_end(va);
+
+	ErrReq.es_StructSize   = sizeof(struct EasyStruct);
+	ErrReq.es_Flags        = 0;
+	ErrReq.es_Title        = "AmiSSL/OpenSSL internal error";
+	ErrReq.es_TextFormat   = error;
+	ErrReq.es_GadgetFormat = "Abort";
+
+	// Open an Easy Requester
+	IIntuition->EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
 void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...)
