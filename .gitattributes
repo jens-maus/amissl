@@ -241,6 +241,7 @@ include/sfd/amisslmaster_lib.sfd -text
 include/xml/amissl.xml eol=lf
 include/xml/amisslmaster.xml eol=lf
 libcmt/Makefile eol=lf
+libcmt/abort.c -text
 libcmt/accept.c eol=lf
 libcmt/asm.h eol=lf
 libcmt/bind.c eol=lf
