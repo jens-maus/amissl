@@ -3754,7 +3754,7 @@ struct AmiSSLIFace
 	void APICALL (*(*CRYPTO_THREADID_get_callback)(struct AmiSSLIFace *Self))(CRYPTO_THREADID *);
 	GENERAL_NAME * APICALL (*TS_TST_INFO_get_tsa)(struct AmiSSLIFace *Self, TS_TST_INFO * a);
 	TS_STATUS_INFO * APICALL (*TS_STATUS_INFO_new)(struct AmiSSLIFace *Self);
-	EVP_PKEY_gen_cb * APICALL (*EVP_PKEY_CTX_get_cb)(struct AmiSSLIFace *Self, EVP_PKEY_CTX * ctx);
+	int APICALL (*(*EVP_PKEY_CTX_get_cb)(struct AmiSSLIFace *Self, EVP_PKEY_CTX * ctx))(EVP_PKEY_CTX *ctx);
 	void * APICALL (*TS_REQ_get_ext_d2i)(struct AmiSSLIFace *Self, TS_REQ * a, int nid, int * crit, int * idx);
 	int APICALL (*GENERAL_NAME_set0_othername)(struct AmiSSLIFace *Self, GENERAL_NAME * gen, ASN1_OBJECT * oid, ASN1_TYPE * value);
 	int APICALL (*TS_TST_INFO_get_ext_count)(struct AmiSSLIFace *Self, TS_TST_INFO * a);

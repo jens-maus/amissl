@@ -3727,7 +3727,7 @@ extern int                  VARARGS68K _AmiSSL_TS_RESP_verify_signature(struct A
 extern void                 VARARGS68K (*_AmiSSL_CRYPTO_THREADID_get_callback(struct AmiSSLIFace *))(CRYPTO_THREADID *);
 extern GENERAL_NAME *       VARARGS68K _AmiSSL_TS_TST_INFO_get_tsa(struct AmiSSLIFace *, TS_TST_INFO * a);
 extern TS_STATUS_INFO *     VARARGS68K _AmiSSL_TS_STATUS_INFO_new(struct AmiSSLIFace *);
-extern EVP_PKEY_gen_cb *    VARARGS68K _AmiSSL_EVP_PKEY_CTX_get_cb(struct AmiSSLIFace *, EVP_PKEY_CTX * ctx);
+extern int                  VARARGS68K (*_AmiSSL_EVP_PKEY_CTX_get_cb(struct AmiSSLIFace *, EVP_PKEY_CTX * ctx))(EVP_PKEY_CTX *ctx);
 extern void *               VARARGS68K _AmiSSL_TS_REQ_get_ext_d2i(struct AmiSSLIFace *, TS_REQ * a, int nid, int * crit, int * idx);
 extern int                  VARARGS68K _AmiSSL_GENERAL_NAME_set0_othername(struct AmiSSLIFace *, GENERAL_NAME * gen, ASN1_OBJECT * oid, ASN1_TYPE * value);
 extern int                  VARARGS68K _AmiSSL_TS_TST_INFO_get_ext_count(struct AmiSSLIFace *, TS_TST_INFO * a);

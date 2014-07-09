@@ -55498,7 +55498,7 @@ STATIC CONST struct EmuTrap stub_main_TS_STATUS_INFO_new = { TRAPINST, TRAPTYPE,
 
 // ---
 
-STATIC EVP_PKEY_gen_cb * stub_main_EVP_PKEY_CTX_get_cb_PPC(uint32 *regarray)
+STATIC int  (*stub_main_EVP_PKEY_CTX_get_cb_PPC(uint32 *regarray))(EVP_PKEY_CTX *ctx)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);

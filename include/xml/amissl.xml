@@ -15341,7 +15341,7 @@
     </method>
     <method name="TS_STATUS_INFO_new" result="TS_STATUS_INFO *">
     </method>
-    <method name="EVP_PKEY_CTX_get_cb" result="EVP_PKEY_gen_cb *">
+    <method name="EVP_PKEY_CTX_get_cb" result="int (*)(EVP_PKEY_CTX *ctx)">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
     <method name="TS_REQ_get_ext_d2i" result="void *">
