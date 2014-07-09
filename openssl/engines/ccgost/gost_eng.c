@@ -80,38 +80,38 @@ static int bind_gost (ENGINE *e,const char *id)
 	if (id && strcmp(id, engine_gost_id)) return 0;
 	if (ameth_GostR3410_94)
 		{
-		printf("GOST engine already loaded\n");
+		fprintf(stderr,"GOST engine already loaded\n");
 		goto end;
 		}
 
 	if (!ENGINE_set_id(e, engine_gost_id)) 
 		{
-		printf("ENGINE_set_id failed\n"); 
+		fprintf(stderr,"ENGINE_set_id failed\n"); 
 		goto end;
 		}	
 	if (!ENGINE_set_name(e, engine_gost_name)) 
 		{
-		printf("ENGINE_set_name failed\n");
+		fprintf(stderr,"ENGINE_set_name failed\n");
 		goto end;
 		}	
 	if (!ENGINE_set_digests(e, gost_digests)) 
 		{
-		printf("ENGINE_set_digests failed\n");
+		fprintf(stderr,"ENGINE_set_digests failed\n");
 		goto end;
 		}	
 	if (! ENGINE_set_ciphers(e, gost_ciphers)) 
 		{
-		printf("ENGINE_set_ciphers failed\n");
+		fprintf(stderr,"ENGINE_set_ciphers failed\n");
 		goto end;
 		}	
 	if (! ENGINE_set_pkey_meths(e, gost_pkey_meths)) 
 		{
-		printf("ENGINE_set_pkey_meths failed\n");
+		fprintf(stderr,"ENGINE_set_pkey_meths failed\n");
 		goto end;
 		}	
 	if (! ENGINE_set_pkey_asn1_meths(e, gost_pkey_asn1_meths)) 
 		{
-		printf("ENGINE_set_pkey_asn1_meths failed\n");
+		fprintf(stderr,"ENGINE_set_pkey_asn1_meths failed\n");
 		goto end;
 		}	
 	/* Control function and commands */
