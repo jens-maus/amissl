@@ -376,30 +376,6 @@ strcmp(const char *s1, const char * s2)
 	return(result);
 }
 
-int
-strcasecmp(const char *s1, const char * s2)
-{
-	int result = 0;
-
-	if(s1 != s2)
-	{
-		unsigned char c1, c2;
-
-		while((c1 = toupper(*s1)) == (c2 = toupper(*s2)))
-		{
-			if(c1 == '\0')
-				break;
-
-			s1++;
-			s2++;
-		}
-
-		result = (int)c1 - (int)c2;
-	}
-
-	return(result);
-}
-
 char *
 strcpy(char *dest, const char *src)
 {
