@@ -203,16 +203,20 @@ void
 pqueue_print(pqueue_s *pq)
 	{
 	pitem *item = pq->items;
+	BIO *bio_stdout;
 
+	bio_stdout=BIO_new_fp(stdout,BIO_NOCLOSE|BIO_FP_TEXT);
 	while(item != NULL)
 		{
-		printf("item\t%02x%02x%02x%02x%02x%02x%02x%02x\n",
+		BIO_printf(bio_stdout, "item\t%02x%02x%02x%02x%02x%02x%02x%02x\n",
 			item->priority[0],item->priority[1],
 			item->priority[2],item->priority[3],
 			item->priority[4],item->priority[5],
 			item->priority[6],item->priority[7]);
 		item = item->next;
 		}
+
+	if (bio_stdout != NULL) BIO_free(bio_stdout);
 	}
 
 pitem *

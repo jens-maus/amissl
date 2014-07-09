@@ -16251,5 +16251,7 @@
     </method>
     <method name="_shadow_DES_check_key" result="int *">
     </method>
+    <method name="ENGINE_load_gost" result="void">
+    </method>
 	</interface>
 </library>

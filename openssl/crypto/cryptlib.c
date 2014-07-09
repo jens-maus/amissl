@@ -942,11 +942,7 @@ void OpenSSLDie(const char *file,int line,const char *assertion)
 		"%s(%d): OpenSSL internal error, assertion failed: %s\n",
 		file,line,assertion);
 #if !defined(_WIN32) || defined(__CYGWIN__)
-#ifndef AMISSL
 	abort();
-#else
-	Wait(0);
-#endif /* !AMISSL */
 #else
 	/* Win32 abort() customarily shows a dialog, but we just did that... */
 	raise(SIGABRT);

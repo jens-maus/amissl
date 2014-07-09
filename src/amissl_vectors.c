@@ -3927,6 +3927,7 @@ STATIC CONST APTR main_v1_vectors[] =
     _AmiSSL_RSA_PSS_PARAMS_it,
     _AmiSSL__shadow_DES_rw_mode,
     _AmiSSL__shadow_DES_check_key,
+    _AmiSSL_ENGINE_load_gost,
     (APTR)-1
 };
 

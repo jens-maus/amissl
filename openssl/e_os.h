@@ -749,6 +749,10 @@ extern char *sys_errlist[]; extern int sys_nerr;
 #    define strcasecmp stricmp
 #    define strncasecmp strnicmp
 #  endif /* NETWARE_CLIB */
+#elif defined(AMISSL)
+#  define strcasecmp OPENSSL_strcasecmp
+#  define strncasecmp OPENSSL_strncasecmp
+#  define OPENSSL_IMPLEMENTS_strncasecmp
 #endif
 
 #if defined(OPENSSL_SYS_OS2) && defined(__EMX__)

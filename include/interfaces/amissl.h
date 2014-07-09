@@ -3956,6 +3956,7 @@ struct AmiSSLIFace
 	const ASN1_ITEM * APICALL (*RSA_PSS_PARAMS_it)(struct AmiSSLIFace *Self);
 	int * APICALL (*_shadow_DES_rw_mode)(struct AmiSSLIFace *Self);
 	int * APICALL (*_shadow_DES_check_key)(struct AmiSSLIFace *Self);
+	void APICALL (*ENGINE_load_gost)(struct AmiSSLIFace *Self);
 };
 
 #ifdef __cplusplus

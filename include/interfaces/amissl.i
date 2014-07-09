@@ -3932,6 +3932,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_RSA_PSS_PARAMS_it
 	    FPTR IAmiSSL__shadow_DES_rw_mode
 	    FPTR IAmiSSL__shadow_DES_check_key
+	    FPTR IAmiSSL_ENGINE_load_gost
 	LABEL AmiSSLIFace_SIZE
 
 #endif

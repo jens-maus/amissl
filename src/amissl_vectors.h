@@ -3929,3 +3929,4 @@ extern const ASN1_ITEM *    VARARGS68K _AmiSSL_ISSUING_DIST_POINT_it(struct AmiS
 extern const ASN1_ITEM *    VARARGS68K _AmiSSL_RSA_PSS_PARAMS_it(struct AmiSSLIFace *);
 extern int *                VARARGS68K _AmiSSL__shadow_DES_rw_mode(struct AmiSSLIFace *);
 extern int *                VARARGS68K _AmiSSL__shadow_DES_check_key(struct AmiSSLIFace *);
+extern void                 VARARGS68K _AmiSSL_ENGINE_load_gost(struct AmiSSLIFace *);

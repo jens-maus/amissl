@@ -16,7 +16,7 @@ OS4OBJS = error.o errno.o stdlib_funcs.o string_char.o string_mem.o math.o getti
 
 STDIOOBJS = malloc.o free.o realloc.o time.o gmtime.o getenv.o stat.o \
 		dirent.o file.o fread.o fwrite.o refill.o putc.o fflush.o \
-		sscanf.o vsscanf.o sscanf.o getpid.o fprintf.o perror.o
+		sscanf.o vsscanf.o sscanf.o getpid.o fprintf.o perror.o abort.o
 
 NWLIBOBJS = setsockopt.o accept.o gethostbyname.o listen.o send.o bind.o getservbyname.o shutdown.o \
 			closesocket.o getsockopt.o socket.o connect.o ioctlsocket.o recv.o \

@@ -3962,5 +3962,6 @@
 #define RSA_PSS_PARAMS_it() IAmiSSL->RSA_PSS_PARAMS_it() 
 #define _shadow_DES_rw_mode() IAmiSSL->_shadow_DES_rw_mode() 
 #define _shadow_DES_check_key() IAmiSSL->_shadow_DES_check_key() 
+#define ENGINE_load_gost() IAmiSSL->ENGINE_load_gost() 
 
 #endif /* INLINE4_AMISSL_H */

@@ -5,6 +5,18 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-07-09 Jens Maus <mail@jens-maus.de>
+
+  * include/xml/amissl.xml: added ENGINE_load_gost() which was still missing in the
+    interface description.
+  * libcmt/abort.c, libcmt/Makefile: implement an abort() wrapper which simply
+    outputs an error message and runs Wait(0) instead of using exit() which might
+    be problematic in a shared library.
+  * openssl/crypto/pqueue.c: instead of using printf() we use BIO_printf() instead
+    to get rid of undefined symbols warning at linkage.
+  * openssl/e_os.h: added strcasecmp/strncasecmp replacement defines for AMISSL so
+    that OPENSSL_strcasecmp() is used instead.
+
 2014-07-08 Jens Maus <mail@jens-maus.de>
 
   * misc: merged the OpenSSL 1.0.1h vendor branch onto the trunk and adapted all

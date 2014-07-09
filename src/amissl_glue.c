@@ -27382,6 +27382,13 @@ int * AMISSL_LIB_ENTRY _AmiSSL__shadow_DES_check_key(REG(a6, __IFACE_OR_BASE))
 
 // ---
 
+void AMISSL_LIB_ENTRY _AmiSSL_ENGINE_load_gost(REG(a6, __IFACE_OR_BASE))
+{
+	ENGINE_load_gost();
+}
+
+// ---
+
 
 /***************************************************************************/
 
