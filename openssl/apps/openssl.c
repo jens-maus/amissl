@@ -327,13 +327,6 @@ static void init_amissl(void)
 		exit(1);
 	}
 }
-
-static BOOL IgnoreAmiSSLCipher(const char *cipher)
-{
-	return((strncmp(cipher, "idea", 4) == 0 && !IsCipherAvailable(CIPHER_IDEA))
-	       || (strncmp(cipher, "mdc2", 4) == 0 && !IsCipherAvailable(CIPHER_MDC2))
-	       || (strncmp(cipher, "rc5", 3) == 0 && !IsCipherAvailable(CIPHER_RC5)));
-}
 #endif /* AMISSL */
 
 int main(int Argc, char *ARGV[])
@@ -681,9 +674,6 @@ static int do_cmd(LHASH_OF(FUNCTION) *prog, int argc, char *argv[])
 			{
 			for (fp=functions; fp->name != NULL; fp++)
 				if (fp->type == list_type)
-#ifdef AMISSL
-				if (!IgnoreAmiSSLCipher(fp->name))
-#endif /* AMISSL */
 					BIO_printf(bio_stdout, "%s\n",
 								fp->name);
 			}
@@ -726,15 +716,6 @@ static int do_cmd(LHASH_OF(FUNCTION) *prog, int argc, char *argv[])
 					BIO_printf(bio_err,"\nCipher commands (see the `enc' command for more details)\n");
 					}
 				}
-#ifdef AMISSL
-			if (IgnoreAmiSSLCipher(fp->name))
-#ifdef OPENSSL_NO_CAMELLIA
-				BIO_printf(bio_err, "%-15s", "");
-#else
-				BIO_printf(bio_err, "%-18s", "");
-#endif
-			else
-#endif /* AMISSL */
 #ifdef OPENSSL_NO_CAMELLIA
 			BIO_printf(bio_err,"%-15s",fp->name);
 #else
@@ -858,9 +839,6 @@ static LHASH_OF(FUNCTION) *prog_init(void)
 		return(NULL);
 
 	for (f=functions; f->name != NULL; f++)
-#ifdef AMISSL
-		if (!IgnoreAmiSSLCipher(f->name))
-#endif /* AMISSL */
 		(void)lh_FUNCTION_insert(ret,f);
 	return(ret);
 	}

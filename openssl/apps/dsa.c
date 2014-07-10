@@ -71,10 +71,6 @@
 #include <openssl/pem.h>
 #include <openssl/bn.h>
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-#endif /* AMISSL */
-
 #undef PROG
 #define PROG	dsa_main
 
@@ -220,9 +216,6 @@ bad:
 		BIO_printf(bio_err," -des            encrypt PEM output with cbc des\n");
 		BIO_printf(bio_err," -des3           encrypt PEM output with ede cbc des using 168 bit key\n");
 #ifndef OPENSSL_NO_IDEA
-#ifdef AMISSL
-		if (IsCipherAvailable(CIPHER_IDEA))
-#endif /* AMISSL */
 		BIO_printf(bio_err," -idea           encrypt PEM output with cbc idea\n");
 #endif
 #ifndef OPENSSL_NO_AES

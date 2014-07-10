@@ -90,10 +90,6 @@ static unsigned char pad2[16]={
 	0x35,0xD8,0x7A,0xFE,0xAB,0x33,0xBE,0xE2
 	};
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-#endif /* AMISSL */
-
 int main(int argc, char *argv[])
 	{
 	int ret=0;
@@ -101,14 +97,6 @@ int main(int argc, char *argv[])
 	int i;
 	EVP_MD_CTX c;
 	static char *text="Now is the time for all ";
-
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_MDC2))
-	{
-		printf("MDC2 message digest is not available\n");
-		return(0);
-	}
-#endif /* AMISSL */
 
 #ifdef CHARSET_EBCDIC
 	ebcdic2ascii(text,text,strlen(text));

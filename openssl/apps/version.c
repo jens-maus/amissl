@@ -132,10 +132,6 @@
 # include <openssl/blowfish.h>
 #endif
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-#endif /* AMISSL */
-
 #undef PROG
 #define PROG	version_main
 
@@ -206,9 +202,6 @@ int MAIN(int argc, char **argv)
 		printf("%s ",DES_options());
 #endif
 #ifndef OPENSSL_NO_IDEA
-#ifdef AMISSL
-		if (IsCipherAvailable(CIPHER_IDEA))
-#endif /* AMISSL */
 		printf("%s ",idea_options());
 #endif
 #ifndef OPENSSL_NO_BF

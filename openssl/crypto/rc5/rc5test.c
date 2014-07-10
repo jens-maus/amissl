@@ -234,23 +234,11 @@ static unsigned char rc5_cbc_iv[RC5_CBC_NUM][8]={
 	{0x7c,0xb3,0xf1,0xdf,0x34,0xf9,0x48,0x11},
 	};
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-#endif /* AMISSL */
-
 int main(int argc, char *argv[])
 	{
 	int i,n,err=0;
 	RC5_32_KEY key; 
 	unsigned char buf[8],buf2[8],ivb[8];
-
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
-	{
-		printf("RC5 cipher is not available\n");
-		return(0);
-	}
-#endif /* AMISSL */
 
 	for (n=0; n<5; n++)
 		{
