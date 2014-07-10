@@ -1,6 +1,5 @@
 CC=ppc-amigaos-gcc-4.0.3
-CFLAGS=-I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -O3 -g \
-       -Wall -Wno-pointer-sign -mcrt=clib2
+CFLAGS=-O3 -fomit-frame-pointer -mcrt=clib2 -mcpu=powerpc -mstrict-align -I$(AmiSSL)/include -D__USE_INLINE__ -D__NO_NET_API -mbaserel -W -Wall
 
 all: libcmt.a
 
@@ -8,7 +7,8 @@ clean:
 	rm -f *.o libcmt.a
 
 %.o: %.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+	@echo CC $<
+	@$(CC) -c $< -o $@ $(CFLAGS)
 
 libobjs: $(LIBOBJS)
 
@@ -26,4 +26,5 @@ LIBOBJS=  $(OS4OBJS) $(STDIOOBJS) threadhash.o $(NWLIBOBJS) localtime.o
 
 
 libcmt.a: $(LIBOBJS)
-	ppc-amigaos-ar r libcmt.a $(LIBOBJS)
+	@echo AR libcmt.a
+	@ppc-amigaos-ar r libcmt.a $(LIBOBJS)

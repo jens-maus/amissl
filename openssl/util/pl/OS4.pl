@@ -11,9 +11,17 @@ $mkdir='mkdir';
 # C compiler stuff
 $cc="ppc-amigaos-gcc-4.0.3";
 $cfile="-c ";
-$cflags="";
-$app_cflag="\$(ADD) -mcrt=clib2 -mcpu=powerpc -mstrict-align -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -I\$(AmiSSL)/openssl -O3 -fomit-frame-pointer -Wall";
-$lib_cflag="\$(ADD) -mcrt=clib2 -mcpu=powerpc -mstrict-align -mbaserel -mcheck68kfuncptr -DAMISSL -DAMISSL_COMPILE -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -I\$(AmiSSL)/libcmt/include -O3 -fomit-frame-pointer -Wall";
+
+if ($debug)
+  { $cflags="-g -gstabs -DREF_CHECK -DCRYPTO_MDEBUG"; }
+elsif ($profile)
+  { $cflags="-pg -O3"; }
+else
+  { $cflags="-O3 -fomit-frame-pointer"; }
+
+$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -W -Wall";
+$app_cflag="-I\$(AmiSSL)/openssl";
+$lib_cflag="-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
 $ofile='-o ';
 $define='-D';
