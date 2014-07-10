@@ -212,9 +212,3 @@ else	{ \
 	ul=x2^t0; /* do the swap to x3 */ \
 	x2=x3^t1; \
 	x3=ul;
-
-#ifdef AMISSL
-#include <libraries/amissl.h>
-#include <internal/amissl.h>
-long IsCipherAvailable(long cipher);
-#endif /* AMISSL */

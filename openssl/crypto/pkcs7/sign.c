@@ -62,11 +62,6 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-long IsCipherAvailable(long cipher);
-#endif /* AMISSL */
-
 int main(argc,argv)
 int argc;
 char *argv[];
@@ -91,9 +86,6 @@ char *argv[];
 	EVP_add_digest(EVP_sha1());
 #endif
 #ifndef OPENSSL_NO_MDC2
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_MDC2))
-#endif /* AMISSL */
 	EVP_add_digest(EVP_mdc2());
 #endif
 
