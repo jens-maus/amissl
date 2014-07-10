@@ -67,14 +67,6 @@ void RC5_32_ecb_encrypt(const unsigned char *in, unsigned char *out,
 	{
 	unsigned long l,d[2];
 
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("RC5");
-		return;
-	}
-#endif /* AMISSL */
-
 	c2l(in,l); d[0]=l;
 	c2l(in,l); d[1]=l;
 	if (encrypt)

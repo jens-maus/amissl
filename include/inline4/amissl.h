@@ -42,7 +42,6 @@
 #elif (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
 #define CleanupAmiSSL(...) IAmiSSL->CleanupAmiSSL(## vargs) 
 #endif
-#define IsCipherAvailable(cipher) IAmiSSL->IsCipherAvailable((cipher)) 
 #define ASN1_TYPE_new() IAmiSSL->ASN1_TYPE_new() 
 #define ASN1_TYPE_free(a) IAmiSSL->ASN1_TYPE_free((a)) 
 #define d2i_ASN1_TYPE(a, in, len) IAmiSSL->d2i_ASN1_TYPE((a), (in), (len)) 

@@ -62,19 +62,10 @@
 #include <openssl/pkcs12.h>
 #include <openssl/objects.h>
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-long IsCipherAvailable(long cipher);
-#endif
-
 void OpenSSL_add_all_ciphers(void)
 	{
 
 #ifndef OPENSSL_NO_DES
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_DES))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_des_cfb());
 	EVP_add_cipher(EVP_des_cfb1());
 	EVP_add_cipher(EVP_des_cfb8());
@@ -102,40 +93,23 @@ void OpenSSL_add_all_ciphers(void)
 	EVP_add_cipher(EVP_des_ecb());
 	EVP_add_cipher(EVP_des_ede());
 	EVP_add_cipher(EVP_des_ede3());
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_RC4
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_RC4))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_rc4());
 	EVP_add_cipher(EVP_rc4_40());
 #ifndef OPENSSL_NO_MD5
 	EVP_add_cipher(EVP_rc4_hmac_md5());
 #endif
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_IDEA
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_IDEA))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_idea_ecb());
 	EVP_add_cipher(EVP_idea_cfb());
 	EVP_add_cipher(EVP_idea_ofb());
 	EVP_add_cipher(EVP_idea_cbc());
 	EVP_add_cipher_alias(SN_idea_cbc,"IDEA");
 	EVP_add_cipher_alias(SN_idea_cbc,"idea");
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_SEED
@@ -148,10 +122,6 @@ void OpenSSL_add_all_ciphers(void)
 #endif
 
 #ifndef OPENSSL_NO_RC2
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_RC2))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_rc2_ecb());
 	EVP_add_cipher(EVP_rc2_cfb());
 	EVP_add_cipher(EVP_rc2_ofb());
@@ -160,16 +130,9 @@ void OpenSSL_add_all_ciphers(void)
 	EVP_add_cipher(EVP_rc2_64_cbc());
 	EVP_add_cipher_alias(SN_rc2_cbc,"RC2");
 	EVP_add_cipher_alias(SN_rc2_cbc,"rc2");
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_BF
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_BLOWFISH))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_bf_ecb());
 	EVP_add_cipher(EVP_bf_cfb());
 	EVP_add_cipher(EVP_bf_ofb());
@@ -177,16 +140,9 @@ void OpenSSL_add_all_ciphers(void)
 	EVP_add_cipher_alias(SN_bf_cbc,"BF");
 	EVP_add_cipher_alias(SN_bf_cbc,"bf");
 	EVP_add_cipher_alias(SN_bf_cbc,"blowfish");
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_CAST
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_CAST))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_cast5_ecb());
 	EVP_add_cipher(EVP_cast5_cfb());
 	EVP_add_cipher(EVP_cast5_ofb());
@@ -195,32 +151,18 @@ void OpenSSL_add_all_ciphers(void)
 	EVP_add_cipher_alias(SN_cast5_cbc,"cast");
 	EVP_add_cipher_alias(SN_cast5_cbc,"CAST-cbc");
 	EVP_add_cipher_alias(SN_cast5_cbc,"cast-cbc");
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_RC5
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_RC5))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_rc5_32_12_16_ecb());
 	EVP_add_cipher(EVP_rc5_32_12_16_cfb());
 	EVP_add_cipher(EVP_rc5_32_12_16_ofb());
 	EVP_add_cipher(EVP_rc5_32_12_16_cbc());
 	EVP_add_cipher_alias(SN_rc5_cbc,"rc5");
 	EVP_add_cipher_alias(SN_rc5_cbc,"RC5");
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_AES
-#ifdef AMISSL
-	if (IsCipherAvailable(CIPHER_AES))
-	{
-#endif /* AMISSL */
 	EVP_add_cipher(EVP_aes_128_ecb());
 	EVP_add_cipher(EVP_aes_128_cbc());
 	EVP_add_cipher(EVP_aes_128_cfb());
@@ -257,9 +199,6 @@ void OpenSSL_add_all_ciphers(void)
 	EVP_add_cipher(EVP_aes_128_cbc_hmac_sha1());
 	EVP_add_cipher(EVP_aes_256_cbc_hmac_sha1());
 #endif
-#ifdef AMISSL
-	}
-#endif /* AMISSL */
 #endif
 
 #ifndef OPENSSL_NO_CAMELLIA

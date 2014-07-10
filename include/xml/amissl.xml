@@ -24,7 +24,7 @@
 		<method name="CleanupAmiSSL" result="long">
 			<vararg name="tagList" type="Tag"/>
 		</method>
-		<method name="IsCipherAvailable" result="long">
+		<method name="IsCipherAvailable" result="long" status="unimplemented">
 			<arg name="cipher" type="long" m68kreg="d0"/>
 		</method>
 		<method name="Reserved1" result="void" status="unimplemented"/>

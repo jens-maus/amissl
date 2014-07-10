@@ -5,6 +5,17 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-07-10 Jens Maus <mail@jens-maus.de>
+ 
+  * amissl_library.c, misc: removed the whole IsCipherAvailable() functionality which
+    just makes the changes against the official OpenSSL sources way too complex. In
+    addition, it should not be the task of AmiSSL (or any OpenSSL-based library) to
+    enforce country specific cipher details. In fact, it is the clear responsibility
+    of the applications using AmiSSL/OpenSSL to only use ciphers which are legal
+    in the country the applications might be used. This is definitly out of the
+    scope of AmiSSL/OpenSSL and is also handled like this on other operating systems
+    (e.g. Linux, etc.)
+
 2014-07-09 Jens Maus <mail@jens-maus.de>
  
   * misc: added OPENSSL_NO_FP_API to our main makefile and commented out all public

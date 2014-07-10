@@ -344,57 +344,6 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 }
 #endif
 
-static BOOL AMISSL_COMMON_DATA DisableRC5;
-
-long IsCipherAvailable(long cipher)
-{
-	long is_available;
-
-	switch(cipher)
-	{
-		case CIPHER_RC5:
-			is_available = !DisableRC5;
-			break;
-
-		case CIPHER_AES:
-		case CIPHER_BLOWFISH:
-		case CIPHER_CAST:
-		case CIPHER_DES:
-		case CIPHER_MD2:
-		case CIPHER_MD4:
-		case CIPHER_MD5:
-		case CIPHER_RC2:
-		case CIPHER_RC4:
-		case CIPHER_RIPEMD:
-		case CIPHER_SHA:
-    case CIPHER_IDEA:
-    case CIPHER_MDC2:
-			is_available = TRUE;
-			break;
-
-		case CIPHER_DH:
-		case CIPHER_DSA:
-			is_available = IsCipherAvailable(CIPHER_SHA);
-			break;
-
-		case CIPHER_RSA:
-			is_available = IsCipherAvailable(CIPHER_SHA)
-			               && IsCipherAvailable(CIPHER_MD5);
-			break;
-
-		default:
-			is_available = FALSE;
-			break;
-	}
-
-	return(is_available);
-}
-
-long AMISSL_LIB_ENTRY _AmiSSL_IsCipherAvailable(REG(a6, __IFACE_OR_BASE), REG(d0, long cipher))
-{
-	return(IsCipherAvailable(cipher));
-}
-
 void AmiSSLAbort(void)
 {
 	OpenSSLDie("unknown", 0, "abort() or similar function called");
@@ -510,15 +459,6 @@ void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
 	traceline();
 }
 
-static BOOL CompareCountry(LONG country_code, char *iso3, char *iso2, char *plates)
-{
-	char *country = (char *)&country_code;
-
-	return((BOOL)((iso3 && Strnicmp(iso3, country, 4) == 0)
-	              || (iso2 && Strnicmp(iso2, country, 4) == 0)
-	              || (plates && Strnicmp(plates, country, 4) == 0)));
-}
-
 int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
@@ -602,8 +542,6 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		{
 			GMTOffset = locale->loc_GMTOffset;
 
-			DisableRC5 = CompareCountry(locale->loc_CountryCode, "USA", "US", NULL); /* USA */
-
 			CloseLocale(locale);
 			err = 0;
 		}
@@ -615,49 +553,4 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		__UserLibCleanup(Self);
 
 	return(err);
-}
-
-/* Use automatic wordwrapping on OS4 */
-#ifdef __amigaos4__
-#define REQNL
-#else
-#define REQNL "\n"
-#endif
-
-void AmiSSLCipherUsageError(const char *cipher, const char *func)
-{
-	char name_buffer[80];
-	static const char format[] = "\"%s\" has called AmiSSL function " REQNL
-	    "\"%s\" without checking if %s cipher/message digest " REQNL
-	    "is available. The function will do nothing which is almost certainly " REQNL
-	    "NOT desirable and might cause the program to malfunction!\n\n"
-	    "Please notify the author of the program using AmiSSL of this problem.";
-	char *buffer;
-	int length;
-
-	SetIoErr(0);
-
-	if (!GetProgramName(&name_buffer[0], sizeof(name_buffer) - 1) || IoErr() != 0)
-		BIO_snprintf(&name_buffer[0], sizeof(name_buffer), "[An AmiSSL program]");
-
-	length = sizeof(format) /* + 1 */ + strlen(&name_buffer[0]) + strlen(cipher)
-	         + strlen(func);
-
-	if (buffer = malloc(length))
-	{
-		BIO_snprintf(buffer, length, &format[0], &name_buffer[0], func, cipher);
-
-		ShowRequester(SR_ERROR, "AmiSSL important warning", buffer,
-		              "Continue");
-
-		free(buffer);
-	}
-	else
-		ShowRequester(SR_ERROR, &name_buffer[0],
-		              "The program has called an AmiSSL function without checking " REQNL
-		              "if the appropriate cipher/message digest is available. " REQNL
-		              "The function will do nothing which is almost certainly " REQNL
-		              "NOT desirable and might cause the program to malfunction!\n\n"
-		              "Please notify the author of the program using AmiSSL of this problem.",
-		              "Continue");
 }

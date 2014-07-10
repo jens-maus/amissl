@@ -150,11 +150,6 @@
 #endif
 #include "ssl_locl.h"
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-long IsCipherAvailable(long cipher);
-#endif /* AMISSL */
-
 #define SSL_ENC_DES_IDX		0
 #define SSL_ENC_3DES_IDX	1
 #define SSL_ENC_RC4_IDX		2
@@ -378,11 +373,6 @@ void ssl_load_ciphers(void)
 	ssl_cipher_methods[SSL_ENC_RC2_IDX]= 
 		EVP_get_cipherbyname(SN_rc2_cbc);
 #ifndef OPENSSL_NO_IDEA
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_IDEA))
-		ssl_cipher_methods[SSL_ENC_IDEA_IDX] = NULL;
-	else
-#endif /* AMISSL */
 	ssl_cipher_methods[SSL_ENC_IDEA_IDX]= 
 		EVP_get_cipherbyname(SN_idea_cbc);
 #else
@@ -703,11 +693,6 @@ static void ll_append_head(CIPHER_ORDER **head, CIPHER_ORDER *curr,
 	*head=curr;
 	}
 
-#ifdef AMISSL
-#include <libraries/amissl.h>
-long IsCipherAvailable(long cipher);
-#endif
-
 static void ssl_cipher_get_disabled(unsigned long *mkey, unsigned long *auth, unsigned long *enc, unsigned long *mac, unsigned long *ssl)
 	{
 	*mkey = 0;
@@ -717,34 +702,17 @@ static void ssl_cipher_get_disabled(unsigned long *mkey, unsigned long *auth, un
 	*ssl = 0;
 
 #ifdef OPENSSL_NO_RSA
-#ifdef AMISSL
-	if(!IsCipherAvailable(CIPHER_RSA))
-	{
-#endif
 	*mkey |= SSL_kRSA;
 	*auth |= SSL_aRSA;
-#ifdef AMISSL
-	}
-#endif
 #endif
 #ifdef OPENSSL_NO_DSA
-#ifdef AMISSL
-	if(!IsCipherAvailable(CIPHER_DSA))
-#endif
 	*auth |= SSL_aDSS;
 #endif
 	*mkey |= SSL_kDHr|SSL_kDHd; /* no such ciphersuites supported! */
 	*auth |= SSL_aDH;
 #ifdef OPENSSL_NO_DH
-#ifdef AMISSL
-	if(!IsCipherAvailable(CIPHER_DH))
-	{
-#endif
 	*mkey |= SSL_kDHr|SSL_kDHd|SSL_kEDH;
 	*auth |= SSL_aDH;
-#ifdef AMISSL
-	}
-#endif
 #endif
 #ifdef OPENSSL_NO_KRB5
 	*mkey |= SSL_kKRB5;

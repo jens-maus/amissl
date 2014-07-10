@@ -69,14 +69,6 @@ void RC5_32_cbc_encrypt(const unsigned char *in, unsigned char *out,
 	register long l=length;
 	unsigned long tin[2];
 
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("RC5");
-		return;
-	}
-#endif /* AMISSL */
-
 	if (encrypt)
 		{
 		c2l(iv,tout0);
@@ -147,14 +139,6 @@ void RC5_32_encrypt(unsigned long *d, RC5_32_KEY *key)
 	{
 	RC5_32_INT a,b,*s;
 
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("RC5");
-		return;
-	}
-#endif /* AMISSL */
-
 	s=key->data;
 
 	a=d[0]+s[0];
@@ -193,14 +177,6 @@ void RC5_32_encrypt(unsigned long *d, RC5_32_KEY *key)
 void RC5_32_decrypt(unsigned long *d, RC5_32_KEY *key)
 	{
 	RC5_32_INT a,b,*s;
-
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_RC5))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("RC5");
-		return;
-	}
-#endif /* AMISSL */
 
 	s=key->data;
 

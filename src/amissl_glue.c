@@ -70,15 +70,6 @@ long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, s
 
 // ---
 
-#if 0
-long AMISSL_LIB_ENTRY _AmiSSL_IsCipherAvailable(REG(a6, __IFACE_OR_BASE), REG(d0, long cipher))
-{
-	return IsCipherAvailable(cipher);
-}
-#endif
-
-// ---
-
 ASN1_TYPE * AMISSL_LIB_ENTRY _AmiSSL_ASN1_TYPE_new(REG(a6, __IFACE_OR_BASE))
 {
 	return ASN1_TYPE_new();
@@ -2347,7 +2338,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_BIO_copy_next_retry(REG(a6, __IFACE_OR_BASE), REG(
 
 // ---
 
-#ifndef __amigaos4__
+#if 0
 int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args))
 {
 	return BIO_vprintf(bio, format, args);

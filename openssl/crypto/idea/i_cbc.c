@@ -67,14 +67,6 @@ void idea_cbc_encrypt(const unsigned char *in, unsigned char *out, long length,
 	register long l=length;
 	unsigned long tin[2];
 
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_IDEA))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("IDEA");
-		return;
-	}
-#endif /* AMISSL */
-
 	if (encrypt)
 		{
 		n2l(iv,tout0);
@@ -145,14 +137,6 @@ void idea_encrypt(unsigned long *d, IDEA_KEY_SCHEDULE *key)
 	{
 	register IDEA_INT *p;
 	register unsigned long x1,x2,x3,x4,t0,t1,ul;
-
-#ifdef AMISSL
-	if (!IsCipherAvailable(CIPHER_IDEA))
-	{
-		AMISSL_CIPHER_USAGE_ERROR("IDEA");
-		return;
-	}
-#endif /* AMISSL */
 
 	x2=d[0];
 	x1=(x2>>16);

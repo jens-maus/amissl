@@ -14,7 +14,7 @@ STATIC CONST APTR main_v1_vectors[] =
     _AmiSSL_InitAmiSSL,
     _AmiSSL_CleanupAmiSSLA,
     _AmiSSL_CleanupAmiSSL,
-    _AmiSSL_IsCipherAvailable,
+    NULL,
     NULL,
     NULL,
     NULL,

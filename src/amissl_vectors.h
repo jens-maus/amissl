@@ -25,7 +25,6 @@ extern long                 VARARGS68K _AmiSSL_InitAmiSSLA(struct AmiSSLIFace *,
 extern long                 VARARGS68K _AmiSSL_InitAmiSSL(struct AmiSSLIFace *, ...);
 extern long                 VARARGS68K _AmiSSL_CleanupAmiSSLA(struct AmiSSLIFace *, struct TagItem * tagList);
 extern long                 VARARGS68K _AmiSSL_CleanupAmiSSL(struct AmiSSLIFace *, ...);
-extern long                 VARARGS68K _AmiSSL_IsCipherAvailable(struct AmiSSLIFace *, long cipher);
 extern ASN1_TYPE *          VARARGS68K _AmiSSL_ASN1_TYPE_new(struct AmiSSLIFace *);
 extern void                 VARARGS68K _AmiSSL_ASN1_TYPE_free(struct AmiSSLIFace *, ASN1_TYPE * a);
 extern ASN1_TYPE *          VARARGS68K _AmiSSL_d2i_ASN1_TYPE(struct AmiSSLIFace *, ASN1_TYPE ** a, const unsigned char ** in, long len);

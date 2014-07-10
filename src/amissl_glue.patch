@@ -1,6 +1,6 @@
---- amissl_glue.c_old	2014-06-22 18:18:58.427031368 +0200
-+++ amissl_glue.c	2014-06-22 21:25:51.335617507 +0200
-@@ -25,45 +25,57 @@
+--- amissl_glue.c_old	2014-07-10 10:01:31.380449365 +0200
++++ amissl_glue.c	2014-07-10 10:06:55.308810234 +0200
+@@ -25,38 +25,48 @@
  
  /***************************************************************************/
  
@@ -49,20 +49,11 @@
  
  // ---
  
+@@ -2328,17 +2338,21 @@
+ 
+ // ---
+ 
 +#if 0
- long AMISSL_LIB_ENTRY _AmiSSL_IsCipherAvailable(REG(a6, __IFACE_OR_BASE), REG(d0, long cipher))
- {
- 	return IsCipherAvailable(cipher);
- }
-+#endif
- 
- // ---
- 
-@@ -2391,17 +2403,21 @@
- 
- // ---
- 
-+#ifndef __amigaos4__
  int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args))
  {
  	return BIO_vprintf(bio, format, args);
@@ -80,7 +71,7 @@
  
  // ---
  
-@@ -10357,24 +10373,30 @@
+@@ -10273,24 +10287,30 @@
  
  // ---
  
