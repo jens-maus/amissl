@@ -10391,7 +10391,7 @@
 			<arg name="b" type="const BIGNUM *" m68kreg="a2"/>
     </method>
     <method name="BN_GF2m_arr2poly" result="int">
-			<arg name="p" type="const unsigned int *" m68kreg="a0"/>
+			<arg name="p" type="const int *" m68kreg="a0"/>
 			<arg name="a" type="BIGNUM *" m68kreg="a1"/>
     </method>
     <method name="BN_GF2m_mod" result="int">
@@ -15361,7 +15361,7 @@
     <method name="TS_RESP_CTX_get_request" result="TS_REQ *">
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a0"/>
     </method>
-    <method name="i2d_NETSCAPE_X509" result="">
+    <method name="i2d_NETSCAPE_X509" result="int">
       <arg name="a" type="NETSCAPE_X509 *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
@@ -15506,7 +15506,7 @@
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a0"/>
       <arg name="clock_precision_digits" type="unsigned" m68kreg="d0"/>
     </method>
-    <method name="TS_RESP_CTX_add_failure_info" result="">
+    <method name="TS_RESP_CTX_add_failure_info" result="int">
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a0"/>
       <arg name="failure" type="int" m68kreg="d0"/>
     </method>

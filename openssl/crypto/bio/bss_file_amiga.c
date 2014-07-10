@@ -12,6 +12,7 @@
 
 #include <openssl/bio.h>
 #include <openssl/err.h>
+#include <openssl/buffer.h>
 
 extern int __io2errno(int);
 
@@ -119,9 +120,9 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	BIO *ret;
 	BPTR file;
 
-	if (file = FOpenFromMode((char *)filename, (char *)mode))
+	if((file = FOpenFromMode((char *)filename, (char *)mode)))
 	{
-		if (ret = BIO_new(BIO_s_file_internal()))
+		if((ret = BIO_new(BIO_s_file_internal())))
 			BIO_set_fp_amiga(ret, file, BIO_CLOSE);
 	}
 	else
@@ -144,7 +145,7 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag)
 {
 	BIO *ret;
 
-	if (ret = BIO_new(BIO_s_file()))
+	if((ret = BIO_new(BIO_s_file())))
 		BIO_set_fp_amiga(ret, stream, close_flag);
 
 	return(ret);
@@ -214,11 +215,9 @@ static int file_new(BIO *bi)
 
 static int file_free(BIO *a)
 {
-	int ret;
+	int ret = 0;
 
-	if (!a)
-		ret = 0;
-	else if (a->shutdown)
+	if(a != NULL && a->shutdown)
 	{
 		if (a->init && a->ptr != NULL)
 		{
@@ -324,7 +323,7 @@ static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 
 			if (ret != 0)
 			{
-				if (fp = FOpenFromMode(ptr, p))
+				if((fp = FOpenFromMode(ptr, p)))
 				{
 					b->ptr = (char *)fp;
 					b->init = 1;

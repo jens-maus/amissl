@@ -208,7 +208,7 @@ pqueue_print(pqueue_s *pq)
   BIO *bio_out;
 
   if((bio_out = BIO_new(BIO_s_file())) != NULL &&
-     BIO_set_fp_amiga(bio_out, Output(), BIO_NOCLOSE) != NULL)
+     BIO_set_fp_amiga(bio_out, Output(), BIO_NOCLOSE) != 0)
   {
 		while(item != NULL && bio_out != NULL)
 			{

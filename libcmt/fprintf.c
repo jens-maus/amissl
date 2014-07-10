@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args);
+
 struct iob ** __iob = NULL;
 
 int fprintf(FILE *stream, const char *format, ...)

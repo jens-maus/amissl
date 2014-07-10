@@ -297,7 +297,7 @@ static void init_amissl(void)
 	/* Failing to open this is not fatal since there are parts of
 	 * openssl tool that don't require networking functionality.
 	 */
-	if (SocketBase = OpenLibrary("bsdsocket.library", 4))
+	if((SocketBase = OpenLibrary("bsdsocket.library", 4)))
 		ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL);
 
 	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))

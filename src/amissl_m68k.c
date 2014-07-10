@@ -37506,7 +37506,7 @@ STATIC int stub_main_BN_GF2m_arr2poly_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->BN_GF2m_arr2poly(
-		(const unsigned int *)regarray[REG68K_A0/4],
+		(const int *)regarray[REG68K_A0/4],
 		(BIGNUM *)regarray[REG68K_A1/4]
 	);
 }
@@ -53513,7 +53513,7 @@ STATIC CONST struct EmuTrap stub_main_TS_RESP_CTX_get_request = { TRAPINST, TRAP
 
 // ---
 
-STATIC  stub_main_i2d_NETSCAPE_X509_PPC(uint32 *regarray)
+STATIC int stub_main_i2d_NETSCAPE_X509_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -54028,7 +54028,7 @@ STATIC CONST struct EmuTrap stub_main_TS_RESP_CTX_set_clock_precision_digits = {
 
 // ---
 
-STATIC  stub_main_TS_RESP_CTX_add_failure_info_PPC(uint32 *regarray)
+STATIC int stub_main_TS_RESP_CTX_add_failure_info_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);

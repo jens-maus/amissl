@@ -7,6 +7,7 @@ $URL$
 
 2014-07-10 Jens Maus <mail@jens-maus.de>
  
+  * openssl/util/pl/OS4.pl: enabled -Wall and fixed a whole bunch of compiler warnings.
   * amissl_library.c, amissl_glue.c: removed the functionality to use an environment
     variable to override the SSL protocol version even if an application directly uses
     a SSLv23_XXXX_method() function. While this functionality was really rarely used

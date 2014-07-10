@@ -2532,7 +2532,7 @@ extern const EVP_MD *       VARARGS68K _AmiSSL_EVP_sha256(struct AmiSSLIFace *);
 extern const EVP_MD *       VARARGS68K _AmiSSL_EVP_sha384(struct AmiSSLIFace *);
 extern const EVP_MD *       VARARGS68K _AmiSSL_EVP_sha512(struct AmiSSLIFace *);
 extern int                  VARARGS68K _AmiSSL_BN_GF2m_add(struct AmiSSLIFace *, BIGNUM * r, const BIGNUM * a, const BIGNUM * b);
-extern int                  VARARGS68K _AmiSSL_BN_GF2m_arr2poly(struct AmiSSLIFace *, const unsigned int * p, BIGNUM * a);
+extern int                  VARARGS68K _AmiSSL_BN_GF2m_arr2poly(struct AmiSSLIFace *, const int * p, BIGNUM * a);
 extern int                  VARARGS68K _AmiSSL_BN_GF2m_mod(struct AmiSSLIFace *, BIGNUM * r, const BIGNUM * a, const BIGNUM * p);
 extern int                  VARARGS68K _AmiSSL_BN_GF2m_mod_mul(struct AmiSSLIFace *, BIGNUM * r, const BIGNUM * a, const BIGNUM * b, const BIGNUM * p, BN_CTX * ctx);
 extern int                  VARARGS68K _AmiSSL_BN_GF2m_mod_sqr(struct AmiSSLIFace *, BIGNUM * r, const BIGNUM * a, const BIGNUM * p, BN_CTX * ctx);
@@ -3603,7 +3603,7 @@ extern void *               VARARGS68K _AmiSSL_TS_REQ_get_ext_d2i(struct AmiSSLI
 extern int                  VARARGS68K _AmiSSL_GENERAL_NAME_set0_othername(struct AmiSSLIFace *, GENERAL_NAME * gen, ASN1_OBJECT * oid, ASN1_TYPE * value);
 extern int                  VARARGS68K _AmiSSL_TS_TST_INFO_get_ext_count(struct AmiSSLIFace *, TS_TST_INFO * a);
 extern TS_REQ *             VARARGS68K _AmiSSL_TS_RESP_CTX_get_request(struct AmiSSLIFace *, TS_RESP_CTX * ctx);
-extern                      VARARGS68K _AmiSSL_i2d_NETSCAPE_X509(struct AmiSSLIFace *, NETSCAPE_X509 * a, unsigned char ** out);
+extern int                  VARARGS68K _AmiSSL_i2d_NETSCAPE_X509(struct AmiSSLIFace *, NETSCAPE_X509 * a, unsigned char ** out);
 extern void                 VARARGS68K _AmiSSL_EVP_PKEY_meth_set_signctx(struct AmiSSLIFace *, EVP_PKEY_METHOD * pmeth, int (*signctx_init)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx), int (*signctx)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, EVP_MD_CTX *mctx));
 extern void                 VARARGS68K _AmiSSL_EVP_PKEY_asn1_copy(struct AmiSSLIFace *, EVP_PKEY_ASN1_METHOD * dst, const EVP_PKEY_ASN1_METHOD * src);
 extern int                  VARARGS68K _AmiSSL_ASN1_TYPE_cmp(struct AmiSSLIFace *, ASN1_TYPE * a, ASN1_TYPE * b);
@@ -3637,7 +3637,7 @@ extern void                 VARARGS68K _AmiSSL_TS_REQ_free(struct AmiSSLIFace *,
 extern void                 VARARGS68K _AmiSSL_EVP_PKEY_meth_free(struct AmiSSLIFace *, EVP_PKEY_METHOD * pmeth);
 extern STACK_OF(X509_EXTENSION) * VARARGS68K _AmiSSL_TS_REQ_get_exts(struct AmiSSLIFace *, TS_REQ * a);
 extern int                  VARARGS68K _AmiSSL_TS_RESP_CTX_set_clock_precision_digits(struct AmiSSLIFace *, TS_RESP_CTX * ctx, unsigned clock_precision_digits);
-extern                      VARARGS68K _AmiSSL_TS_RESP_CTX_add_failure_info(struct AmiSSLIFace *, TS_RESP_CTX * ctx, int failure);
+extern int                  VARARGS68K _AmiSSL_TS_RESP_CTX_add_failure_info(struct AmiSSLIFace *, TS_RESP_CTX * ctx, int failure);
 extern int                  VARARGS68K _AmiSSL_i2d_TS_RESP_bio(struct AmiSSLIFace *, BIO * fp, TS_RESP * a);
 extern EVP_PKEY *           VARARGS68K _AmiSSL_EVP_PKEY_CTX_get0_peerkey(struct AmiSSLIFace *, EVP_PKEY_CTX * ctx);
 extern TS_REQ *             VARARGS68K _AmiSSL_TS_REQ_new(struct AmiSSLIFace *);

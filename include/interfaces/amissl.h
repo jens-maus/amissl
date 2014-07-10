@@ -2566,7 +2566,7 @@ struct AmiSSLIFace
 	const EVP_MD * APICALL (*EVP_sha384)(struct AmiSSLIFace *Self);
 	const EVP_MD * APICALL (*EVP_sha512)(struct AmiSSLIFace *Self);
 	int APICALL (*BN_GF2m_add)(struct AmiSSLIFace *Self, BIGNUM * r, const BIGNUM * a, const BIGNUM * b);
-	int APICALL (*BN_GF2m_arr2poly)(struct AmiSSLIFace *Self, const unsigned int * p, BIGNUM * a);
+	int APICALL (*BN_GF2m_arr2poly)(struct AmiSSLIFace *Self, const int * p, BIGNUM * a);
 	int APICALL (*BN_GF2m_mod)(struct AmiSSLIFace *Self, BIGNUM * r, const BIGNUM * a, const BIGNUM * p);
 	int APICALL (*BN_GF2m_mod_mul)(struct AmiSSLIFace *Self, BIGNUM * r, const BIGNUM * a, const BIGNUM * b, const BIGNUM * p, BN_CTX * ctx);
 	int APICALL (*BN_GF2m_mod_sqr)(struct AmiSSLIFace *Self, BIGNUM * r, const BIGNUM * a, const BIGNUM * p, BN_CTX * ctx);
@@ -3759,7 +3759,7 @@ struct AmiSSLIFace
 	int APICALL (*GENERAL_NAME_set0_othername)(struct AmiSSLIFace *Self, GENERAL_NAME * gen, ASN1_OBJECT * oid, ASN1_TYPE * value);
 	int APICALL (*TS_TST_INFO_get_ext_count)(struct AmiSSLIFace *Self, TS_TST_INFO * a);
 	TS_REQ * APICALL (*TS_RESP_CTX_get_request)(struct AmiSSLIFace *Self, TS_RESP_CTX * ctx);
-	 APICALL (*i2d_NETSCAPE_X509)(struct AmiSSLIFace *Self, NETSCAPE_X509 * a, unsigned char ** out);
+	int APICALL (*i2d_NETSCAPE_X509)(struct AmiSSLIFace *Self, NETSCAPE_X509 * a, unsigned char ** out);
 	void APICALL (*EVP_PKEY_meth_set_signctx)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (*signctx_init)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx), int (*signctx)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, EVP_MD_CTX *mctx));
 	void APICALL (*EVP_PKEY_asn1_copy)(struct AmiSSLIFace *Self, EVP_PKEY_ASN1_METHOD * dst, const EVP_PKEY_ASN1_METHOD * src);
 	int APICALL (*ASN1_TYPE_cmp)(struct AmiSSLIFace *Self, ASN1_TYPE * a, ASN1_TYPE * b);
@@ -3794,7 +3794,7 @@ struct AmiSSLIFace
 	void APICALL (*EVP_PKEY_meth_free)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth);
 	STACK_OF(X509_EXTENSION) * APICALL (*TS_REQ_get_exts)(struct AmiSSLIFace *Self, TS_REQ * a);
 	int APICALL (*TS_RESP_CTX_set_clock_precision_digits)(struct AmiSSLIFace *Self, TS_RESP_CTX * ctx, unsigned clock_precision_digits);
-	 APICALL (*TS_RESP_CTX_add_failure_info)(struct AmiSSLIFace *Self, TS_RESP_CTX * ctx, int failure);
+	int APICALL (*TS_RESP_CTX_add_failure_info)(struct AmiSSLIFace *Self, TS_RESP_CTX * ctx, int failure);
 	int APICALL (*i2d_TS_RESP_bio)(struct AmiSSLIFace *Self, BIO * fp, TS_RESP * a);
 	EVP_PKEY * APICALL (*EVP_PKEY_CTX_get0_peerkey)(struct AmiSSLIFace *Self, EVP_PKEY_CTX * ctx);
 	TS_REQ * APICALL (*TS_REQ_new)(struct AmiSSLIFace *Self);

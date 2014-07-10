@@ -17594,7 +17594,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_BN_GF2m_add(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNU
 
 // ---
 
-int AMISSL_LIB_ENTRY _AmiSSL_BN_GF2m_arr2poly(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned int * p), REG(a1, BIGNUM * a))
+int AMISSL_LIB_ENTRY _AmiSSL_BN_GF2m_arr2poly(REG(a6, __IFACE_OR_BASE), REG(a0, const int * p), REG(a1, BIGNUM * a))
 {
 	return BN_GF2m_arr2poly(p, a);
 }
@@ -25091,7 +25091,7 @@ TS_REQ * AMISSL_LIB_ENTRY _AmiSSL_TS_RESP_CTX_get_request(REG(a6, __IFACE_OR_BAS
 
 // ---
 
- AMISSL_LIB_ENTRY _AmiSSL_i2d_NETSCAPE_X509(REG(a6, __IFACE_OR_BASE), REG(a0, NETSCAPE_X509 * a), REG(a1, unsigned char ** out))
+int AMISSL_LIB_ENTRY _AmiSSL_i2d_NETSCAPE_X509(REG(a6, __IFACE_OR_BASE), REG(a0, NETSCAPE_X509 * a), REG(a1, unsigned char ** out))
 {
 	return i2d_NETSCAPE_X509(a, out);
 }
@@ -25329,7 +25329,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_TS_RESP_CTX_set_clock_precision_digits(REG(a6, __IF
 
 // ---
 
- AMISSL_LIB_ENTRY _AmiSSL_TS_RESP_CTX_add_failure_info(REG(a6, __IFACE_OR_BASE), REG(a0, TS_RESP_CTX * ctx), REG(d0, int failure))
+int AMISSL_LIB_ENTRY _AmiSSL_TS_RESP_CTX_add_failure_info(REG(a6, __IFACE_OR_BASE), REG(a0, TS_RESP_CTX * ctx), REG(d0, int failure))
 {
 	return TS_RESP_CTX_add_failure_info(ctx, failure);
 }

@@ -41,7 +41,7 @@ LONG ShowRequester(enum SRType type, const char *title, const char *body,
 	Object *requester = NULL;
 	LONG ret;
 
-	if (RequesterBase = OpenLibrary("requester.class", 44))
+	if((RequesterBase = OpenLibrary("requester.class", 44)))
 	{
 		ULONG req_image;
 
@@ -54,7 +54,7 @@ LONG ShowRequester(enum SRType type, const char *title, const char *body,
 			default:          req_image = REQIMAGE_INFO; break;
 		}
 
-		if (IRequester = (struct RequesterIFace *)GetInterface(RequesterBase, "main", 1, NULL))
+		if((IRequester = (struct RequesterIFace *)GetInterface(RequesterBase, "main", 1, NULL)))
 			requester = (Object *)NewObject(REQUESTER_GetClass(), NULL,
 			                                REQ_Type, REQTYPE_INFO,
 			                                REQ_TitleText, title,
@@ -104,9 +104,9 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 
 	*buffer = '\0';
 
-	if (RequesterBase = OpenLibrary("requester.class", 44))
+	if((RequesterBase = OpenLibrary("requester.class", 44)))
 	{
-		if (IRequester = (struct RequesterIFace *)GetInterface(RequesterBase, "main", 1, NULL))
+		if((IRequester = (struct RequesterIFace *)GetInterface(RequesterBase, "main", 1, NULL)))
 			requester = (Object *)NewObject(REQUESTER_GetClass(), NULL,
 			                                REQ_Type, REQTYPE_STRING,
 			                                REQ_TitleText, title,
@@ -312,6 +312,7 @@ struct AmiSSLEmuTrap {
 };
 
 static const struct AmiSSLEmuTrap read_string_emul = {
+  {
 	0x6118,		// BSR	       stub
 	0x2F0E,		// MOVE.L      A6,-(A7)
 	0x2C40,		// MOVEA.L     D0,A6
@@ -320,13 +321,15 @@ static const struct AmiSSLEmuTrap read_string_emul = {
 	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
 	0x4EAE,0xC508,	// JSR         -$3AF8(A6)
 	0x2C5F,		// MOVEA.L     (A7)+,A6
-	0x4E75,		// RTS
+	0x4E75		// RTS
+  },
 	TRAPINST,
 	TRAPTYPE,
 	(ULONG (*)(ULONG *))stub_GetAmiSSLState
 };
 
 static const struct AmiSSLEmuTrap write_string_emul = {
+  {
 	0x6118,		// BSR	       stub
 	0x2F0E,		// MOVE.L      A6,-(A7)
 	0x2C40,		// MOVEA.L     D0,A6
@@ -335,7 +338,8 @@ static const struct AmiSSLEmuTrap write_string_emul = {
 	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
 	0x4EAE,0xC502,	// JSR         -$3AFE(A6)
 	0x2C5F,		// MOVEA.L     (A7)+,A6
-	0x4E75,		// RTS
+	0x4E75	  // RTS
+  },
 	TRAPINST,
 	TRAPTYPE,
 	(ULONG (*)(ULONG *))stub_GetAmiSSLState

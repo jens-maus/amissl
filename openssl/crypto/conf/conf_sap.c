@@ -117,7 +117,7 @@ void OPENSSL_config(const char *config_name)
 			}
 		exit(1);
 #else /* !AMISSL */
-		if (bio_err = BIO_new(BIO_s_file()))
+		if((bio_err = BIO_new(BIO_s_file())))
 		{
 			if (BIO_set_fp_amiga(bio_err, ErrorOutput() ? ErrorOutput() : Output(),
 			                     BIO_NOCLOSE))
