@@ -1,33 +1,6 @@
---- amissl_glue.c_old	2014-07-10 10:01:31.380449365 +0200
-+++ amissl_glue.c	2014-07-10 10:06:55.308810234 +0200
-@@ -25,38 +25,48 @@
- 
- /***************************************************************************/
- 
-+#if 0
- ULONG AMISSL_LIB_ENTRY _AmiSSL_Obtain(REG(a6, __IFACE_OR_BASE))
- {
- 	return Obtain();
- }
-+#endif
- 
- // ---
- 
-+#if 0
- ULONG AMISSL_LIB_ENTRY _AmiSSL_Release(REG(a6, __IFACE_OR_BASE))
- {
- 	return Release();
- }
-+#endif
- 
- // ---
- 
-+#if 0
- void AMISSL_LIB_ENTRY _AmiSSL_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, void * amisslinit))
- {
- 	InternalInitAmiSSL(amisslinit);
- }
-+#endif
+--- amissl_glue.c	2014-07-10 11:15:22.691865718 +0200
++++ amissl_glue.c_new	2014-07-10 11:15:12.756099791 +0200
+@@ -46,10 +46,12 @@
  
  // ---
  
@@ -40,16 +13,7 @@
  
  // ---
  
-+#if 0
- long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
- {
- 	return CleanupAmiSSLA(tagList);
- }
-+#endif
- 
- // ---
- 
-@@ -2328,17 +2338,21 @@
+@@ -2328,17 +2330,21 @@
  
  // ---
  
@@ -62,41 +26,10 @@
  
  // ---
  
-+#ifndef __amigaos4__
++#if 0
  int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args))
  {
  	return BIO_vsnprintf(buf, n, format, args);
- }
-+#endif
- 
- // ---
- 
-@@ -10273,24 +10287,30 @@
- 
- // ---
- 
-+#if 0
- const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
- {
- 	return SSLv23_method();
- }
-+#endif
- 
- // ---
- 
-+#if 0
- const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
- {
- 	return SSLv23_server_method();
- }
-+#endif
- 
- // ---
- 
-+#if 0
- const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
- {
- 	return SSLv23_client_method();
  }
 +#endif
  

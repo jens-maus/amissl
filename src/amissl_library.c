@@ -220,8 +220,9 @@ static void h_freefunc(void *mem)
 	SB_FreeVec(mem);
 }
 
-void AMISSL_LIB_ENTRY _AmiSSL_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, struct AmiSSLInitStruct *amisslinit))
+void (InternalInitAmiSSL)(struct AmiSSLInitStruct *amisslinit)
 {
+  /* nothing */
 }
 
 long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
@@ -294,7 +295,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 	return(err);
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
+long CleanupAmiSSLA(struct TagItem *tagList)
 {
 	AMISSL_STATE *state;
 
@@ -347,70 +348,6 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE),
 void AmiSSLAbort(void)
 {
 	OpenSSLDie("unknown", 0, "abort() or similar function called");
-}
-
-#define AMISSL_SERVER_ENV	"AmiSSL/SSL_SERVER_VERSION"
-#define AMISSL_CLIENT_ENV	"AmiSSL/SSL_CLIENT_VERSION"
-#define AMISSL_BOTH_ENV		"AmiSSL/SSL_VERSION"
-
-const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
-{
-	char var[6];
-
-	if (!SSLVersionApp)
-	{
-		if (GetVar(AMISSL_BOTH_ENV, &var[0], 5, GVF_GLOBAL_ONLY) > 0)
-		{
-			if (!strnicmp(var, "ssl2", 4))
-				return(SSLv2_method());
-			else if (!strnicmp(var, "ssl3", 4))
-				return(SSLv3_method());
-			else if (!strnicmp(var, "tls1", 4))
-				return(TLSv1_method());
-		}
-	}
-
-	/* No match, return default */
-	return(SSLv23_method());
-}
-
-const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
-{
-	char var[6];
-
-	if (!SSLVersionApp)
-	{
-		if (GetVar(AMISSL_SERVER_ENV, &var[0], 5, GVF_GLOBAL_ONLY) > 0)
-		{
-			if (!strnicmp(var, "ssl2", 4))
-				return(SSLv2_server_method());
-			else if (!strnicmp(var, "ssl3", 4))
-				return(SSLv3_server_method());
-			else if (!strnicmp(var, "tls1", 4))
-				return(TLSv1_server_method());
-		}
-	}
-
-	/* No match, return default */
-	return(SSLv23_server_method());
-}
-
-const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
-{
-	char var[6];
-
-	if (GetVar(AMISSL_CLIENT_ENV, &var[0], 5, GVF_GLOBAL_ONLY) > 0)
-	{
-		if (!strnicmp(var, "ssl2", 4))
-			return(SSLv2_client_method());
-		else if (!strnicmp(var, "ssl3", 4))
-			return(SSLv3_client_method());
-		else if (!strnicmp(var, "tls1", 4))
-			return(TLSv1_client_method());
-	}
-
-	/* No match, return default */
-	return(SSLv23_client_method());
 }
 
 void openlog(void) {}

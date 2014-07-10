@@ -25,30 +25,24 @@ struct AmiSSLIFace;
 
 /***************************************************************************/
 
-#if 0
 ULONG AMISSL_LIB_ENTRY _AmiSSL_Obtain(REG(a6, __IFACE_OR_BASE))
 {
 	return Obtain();
 }
-#endif
 
 // ---
 
-#if 0
 ULONG AMISSL_LIB_ENTRY _AmiSSL_Release(REG(a6, __IFACE_OR_BASE))
 {
 	return Release();
 }
-#endif
 
 // ---
 
-#if 0
 void AMISSL_LIB_ENTRY _AmiSSL_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, void * amisslinit))
 {
 	InternalInitAmiSSL(amisslinit);
 }
-#endif
 
 // ---
 
@@ -61,12 +55,10 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 
 // ---
 
-#if 0
 long AMISSL_LIB_ENTRY _AmiSSL_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
 {
 	return CleanupAmiSSLA(tagList);
 }
-#endif
 
 // ---
 
@@ -2347,7 +2339,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *
 
 // ---
 
-#ifndef __amigaos4__
+#if 0
 int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args))
 {
 	return BIO_vsnprintf(buf, n, format, args);
@@ -10287,30 +10279,24 @@ const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv3_client_method(REG(a6, __IFACE_
 
 // ---
 
-#if 0
 const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_method(REG(a6, __IFACE_OR_BASE))
 {
 	return SSLv23_method();
 }
-#endif
 
 // ---
 
-#if 0
 const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_server_method(REG(a6, __IFACE_OR_BASE))
 {
 	return SSLv23_server_method();
 }
-#endif
 
 // ---
 
-#if 0
 const SSL_METHOD * AMISSL_LIB_ENTRY _AmiSSL_SSLv23_client_method(REG(a6, __IFACE_OR_BASE))
 {
 	return SSLv23_client_method();
 }
-#endif
 
 // ---
 

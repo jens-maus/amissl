@@ -66,15 +66,14 @@ void _start(void)
     /* If you feel like it, open DOS and print something to the user */
 }
 
-ULONG _AmiSSL_Obtain(struct AmiSSLIFace *Self)
+ULONG Obtain()
 {
-    return (ULONG)0;
+  return (ULONG)0;
 }
 
-ULONG _AmiSSL_Release(struct AmiSSLIFace *Self)
+ULONG Release()
 {
-    return (ULONG)0;
-
+  return (ULONG)0;
 }
 
 void __init_libcmt_file(void);

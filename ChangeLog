@@ -7,6 +7,20 @@ $URL$
 
 2014-07-10 Jens Maus <mail@jens-maus.de>
  
+  * amissl_library.c, amissl_glue.c: removed the functionality to use an environment
+    variable to override the SSL protocol version even if an application directly uses
+    a SSLv23_XXXX_method() function. While this functionality was really rarely used
+    it also contradicts what an application expects these functions to do. So if an
+    application want to explictly force a protocol version to be used it ought to 
+    better use SSL_CTX_set_options() afterwards rather than directly allowing users
+    to override this functionality for all applications which potentially might
+    fail. Thus, this is again not the task of AmiSSL/OpenSSL and thus the removal
+    of it.
+  * amissl_glue.c, amissl_library.c: renamed _AmiSSL_InternalInitAmiSSL() and
+    _AmiSSL_CleanupAmiSSLA() to just InternalInitAmiSSL()/CleanupAmiSSLA()
+    so that in amissl_glue.c we don't have to comment out these functions.
+  * amissl_glue.c, amissl_library_os4.c: renamed _AmiSSL_Obtain/Release to just
+    Obtain/Release so that amissl_glue.c can use these functions properly.
   * amissl_library.c, misc: removed the whole IsCipherAvailable() functionality which
     just makes the changes against the official OpenSSL sources way too complex. In
     addition, it should not be the task of AmiSSL (or any OpenSSL-based library) to
