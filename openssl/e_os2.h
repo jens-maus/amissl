@@ -277,7 +277,9 @@ extern "C" {
 #define OPENSSL_EXTERN OPENSSL_IMPORT
 
 #ifndef AMISSL
+#ifndef AMISSL_COMMON_DATA
 # define AMISSL_COMMON_DATA
+#endif /* !AMISSL_COMMON_DATA */
 #endif /* !AMISSL */
 
 /* Macros to allow global variables to be reached through function calls when

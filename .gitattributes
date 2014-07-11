@@ -2623,3 +2623,4 @@ test/https.c eol=lf
 test/uitest.c eol=lf
 test/vatest.c eol=lf
 tools/checkIDL.sh -text
+tools/cpheaders.sh -text

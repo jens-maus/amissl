@@ -5,6 +5,15 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-07-11 Jens Maus <mail@jens-maus.de>
+ 
+  * Makefile, misc: largely reworked the top-level Makefile so that we will only have
+    a single Makefile for compiling AmiSSL out-of-the-box rather than having to run
+    several kind of shell scripts for different platforms and different debugging
+    levels. This makefile now stores automatically generated data (object files and
+    binary files in seperate directories based on the platform AmiSSL is compiled for).
+  * src: fixed a bunch of compiler warning appearing with -W -Wall.
+
 2014-07-10 Jens Maus <mail@jens-maus.de>
  
   * openssl/util/pl/OS4.pl: enabled -Wall and fixed a whole bunch of compiler warnings.

@@ -4,6 +4,7 @@
 #include <exec/types.h>
 #include <dos/dos.h>
 #include <utility/tagitem.h>
+#include <internal/amissl_compiler.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 

@@ -1,7 +1,3 @@
-#ifdef __amigaos4__
-#define __USE_INLINE__
-#endif
-
 #define PROTO_AMISSL_H // Don't include amissl protos
 
 //#define DEBUG
@@ -169,10 +165,10 @@ AMISSL_STATE *GetAmiSSLState(void)
 	return ret;
 }
 
-void SetAmiSSLerrno(int errno)
+void SetAmiSSLerrno(int err)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
-	*p->errno_ptr = errno;
+	*p->errno_ptr = err;
 }
 
 int GetAmiSSLerrno(void)
@@ -230,7 +226,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 	AMISSL_STATE *state;
 	long err;
 
-	if (state = CreateAmiSSLState())
+	if((state = CreateAmiSSLState()))
 	{
 		int *errno_ptr;
 
@@ -260,7 +256,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 #ifdef __amigaos4__
 		if(state->SocketBase)
 		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
-			if(*state->ISocketPtr = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL))
+			if((*state->ISocketPtr = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL)))
 			{
 				// All is good. Now we can make socket calls as if everything was ppc
 			}
@@ -278,7 +274,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
 
-		if (errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList))
+		if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
 			state->errno_ptr = errno_ptr;
 
 		initialize_socket_errno();
@@ -299,7 +295,7 @@ long CleanupAmiSSLA(struct TagItem *tagList)
 {
 	AMISSL_STATE *state;
 
-	if (state = GetAmiSSLState())
+	if((state = GetAmiSSLState()))
 	{
 #ifdef __amigaos4__
 		if(state->SocketBase && state->ISocketPtr && *state->ISocketPtr)
@@ -332,7 +328,7 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ..
 	return _AmiSSL_InitAmiSSLA(Self,tags);
 }
 
-long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ...)
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;

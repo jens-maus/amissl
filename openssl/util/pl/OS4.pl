@@ -9,7 +9,7 @@ $rm='-rm -f';
 $mkdir='mkdir';
 
 # C compiler stuff
-$cc="ppc-amigaos-gcc-4.0.3";
+$cc="\$(CC)";
 $cfile="-c ";
 
 if ($debug)
@@ -32,7 +32,7 @@ $link='${CC}';
 $lflags='-mcrt=clib2';
 $efile='-o ';
 $exep='';
-$ex_libs='$(AmiSSL)/lib/libamisslauto.a $(AmiSSL)/lib/libamisslstubs.a -lm';
+$ex_libs='$(AmiSSL)/bin_os4/libamisslauto.a $(AmiSSL)/bin_os4/libamisslstubs.a -lm';
 
 # static library stuff
 $mklib='ppc-amigaos-ar r';

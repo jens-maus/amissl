@@ -36,6 +36,8 @@ extern const struct TagItem libCreateTags[];
 
 struct Library * AMISSL_COMMON_DATA ExecBase;
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
+struct Library * AMISSL_COMMON_DATA DOSBase;
+struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 
 int __UserLibInit(struct AmiSSLMasterIFace *Self);
 int __UserLibCleanup(struct AmiSSLMasterIFace *Self);
@@ -59,13 +61,12 @@ void _start(void)
 
 ULONG _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *Self)
 {
-    return (ULONG)0;
-
+  return (ULONG)0;
 }
 
 ULONG _AmiSSLMaster_Release(struct AmiSSLMasterIFace *Self)
 {
-    return (ULONG)0;
+  return (ULONG)0;
 }
 
 /* Open the library */
@@ -85,12 +86,12 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
     /* Add any specific open code here 
        Return 0 before incrementing OpenCnt to fail opening */
 
-	if( newLibBase = (struct AmiSSLMasterLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags))
+	if((newLibBase = (struct AmiSSLMasterLibrary *)CreateLibrary((struct TagItem *)libCreateTags)))
 	{
 		uint32 offset;
 		newLibBase->origLibBase = libBase;
 		newLibBase->libNode.lib_OpenCnt = libBase->libNode.lib_OpenCnt;
-		if(newLibBase->baserelData = libBase->IElf->CopyDataSegment(libBase->elfHandle, &offset))
+		if((newLibBase->baserelData = (libBase->IElf->CopyDataSegment)(libBase->elfHandle, &offset)))
 		{
 			struct ExtendedLibrary *extlib;
 			kprintf("AmiSSLMaster: Env vector: %08x\n",newLibBase->baserelData);
@@ -107,9 +108,10 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 				return (struct Library *)newLibBase;
 			}
 
-			libBase->IElf->FreeDataSegmentCopy(libBase->elfHandle,newLibBase->baserelData);
+			(libBase->IElf->FreeDataSegmentCopy)(libBase->elfHandle,newLibBase->baserelData);
 		}
-		IExec->DeleteLibrary((struct Library *)newLibBase);
+
+		DeleteLibrary((struct Library *)newLibBase);
 	}
 
 	libBase->libNode.lib_OpenCnt--;
@@ -120,12 +122,12 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 /* Close the library */
 APTR libClose(struct LibraryManagerInterface *Self)
 {
-    struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase;
-    /* Make sure to undo what open did */
+  struct AmiSSLMasterLibrary *libBase = (struct AmiSSLMasterLibrary *)Self->Data.LibBase;
+  /* Make sure to undo what open did */
 
 	kprintf("AmiSSLMaster: close\n");
 
-    /* Make the close count */
+  /* Make the close count */
 	libBase->origLibBase->libNode.lib_OpenCnt--;
 
 	if(libBase->origLibBase != libBase)
@@ -133,13 +135,12 @@ APTR libClose(struct LibraryManagerInterface *Self)
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
 
 		__UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
-		kprintf("AmiSSLMaster: Freeing env vector for %08lx: %08lx\n", libBase, libBase->data);
-		libBase->origLibBase->IElf->FreeDataSegmentCopy(libBase->origLibBase->elfHandle,libBase->baserelData);
+		(libBase->origLibBase->IElf->FreeDataSegmentCopy)(libBase->origLibBase->elfHandle,libBase->baserelData);
 
-		IExec->DeleteLibrary((struct Library *)libBase);
+		DeleteLibrary((struct Library *)libBase);
 	}
 
-    return 0;
+  return 0;
 }
 
 
@@ -158,12 +159,12 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
 
         result = (APTR)libBase->segList;
         /* Undo what the init code did */
-	libBase->IElf->CloseElfTags(libBase->elfHandle, CET_ReClose, TRUE, TAG_DONE);
-	IExec->DropInterface((struct Interface *)libBase->IElf);
-	IExec->CloseLibrary((struct Library *)libBase->ElfBase);
+	(libBase->IElf->CloseElfTags)(libBase->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+	DropInterface((struct Interface *)libBase->IElf);
+	CloseLibrary((struct Library *)libBase->ElfBase);
 
-        IExec->Remove((struct Node *)libBase);
-        IExec->DeleteLibrary((struct Library *)libBase);
+  Remove((struct Node *)libBase);
+  DeleteLibrary((struct Library *)libBase);
     }
     else
     {
@@ -186,25 +187,22 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 	libBase->libNode.lib_Revision     = AMISSLMASTERREVISION;
 	libBase->libNode.lib_IdString     = VSTRING;
 
-	if(libBase->segList = (BPTR)seglist)
+	if((libBase->segList = (BPTR)seglist))
 	{
-		struct Library *DOSBase;
-		struct DOSIFace *IDOS;
-
 		IExec = (struct ExecIFace *)exec;
 		ExecBase = (struct Library *)exec->Data.LibBase;
 		LibraryBase = NULL;
 
-		if(DOSBase = IExec->OpenLibrary("dos.library",52))
-			IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL);
+		if((DOSBase = OpenLibrary("dos.library",52)))
+			IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL);
 
-		if(libBase->ElfBase = IExec->OpenLibrary("elf.library",52))
-			libBase->IElf = (struct ElfIFace *)IExec->GetInterface(libBase->ElfBase,"main",1,NULL);
+		if((libBase->ElfBase = OpenLibrary("elf.library",52)))
+			libBase->IElf = (struct ElfIFace *)GetInterface(libBase->ElfBase,"main",1,NULL);
 		
 		if(IDOS && libBase->IElf)
 		{
-			IDOS->GetSegListInfoTags(libBase->segList, GSLI_ElfHandle, &libBase->elfHandle, TAG_DONE);
-			if(libBase->elfHandle && (libBase->elfHandle = libBase->IElf->OpenElfTags(OET_ElfHandle, libBase->elfHandle, TAG_DONE)))
+			GetSegListInfoTags(libBase->segList, GSLI_ElfHandle, &libBase->elfHandle, TAG_DONE);
+			if(libBase->elfHandle && (libBase->elfHandle = (libBase->IElf->OpenElfTags)(OET_ElfHandle, libBase->elfHandle, TAG_DONE)))
 			{
 				libBase->origLibBase = libBase;
 				LibraryBase = (struct Library *)libBase;
@@ -213,12 +211,12 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 
 		if(!LibraryBase)
 		{
-			IExec->DropInterface((struct Interface *)libBase->IElf);
-			IExec->CloseLibrary((struct Library *)libBase->ElfBase);
+			DropInterface((struct Interface *)libBase->IElf);
+			CloseLibrary((struct Library *)libBase->ElfBase);
 		}
 
-		IExec->DropInterface((struct Interface *)IDOS);
-		IExec->CloseLibrary((struct Library *)DOSBase);
+		DropInterface((struct Interface *)IDOS);
+		CloseLibrary((struct Library *)DOSBase);
 	}
 
 	kprintf("libInit returning: %08lx\n",LibraryBase);
@@ -238,7 +236,7 @@ static ULONG _manager_Release(struct LibraryManagerInterface *Self)
 }
 
 /* Manager interface vectors */
-const static void * const lib_manager_vectors[] =
+static const void * const lib_manager_vectors[] =
 {
     (void *)_manager_Obtain,
     (void *)_manager_Release,
@@ -252,7 +250,7 @@ const static void * const lib_manager_vectors[] =
 };
 
 /* "__library" interface tag list */
-const static struct TagItem const lib_managerTags[] =
+static const struct TagItem const lib_managerTags[] =
 {
     {MIT_Name,             (ULONG)"__library"},
     {MIT_VectorTable,      (ULONG)lib_manager_vectors},
@@ -266,7 +264,7 @@ const static struct TagItem const lib_managerTags[] =
 
 extern const ULONG main_VecTable68K;
 
-const static struct TagItem mainTags[] =
+static const struct TagItem mainTags[] =
 {
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_v1_vectors},
@@ -275,7 +273,7 @@ const static struct TagItem mainTags[] =
     {TAG_DONE,              0}
 };
 
-const static uint32 libInterfaces[] =
+static const uint32 libInterfaces[] =
 {
     (uint32)lib_managerTags,
     (uint32)mainTags,
@@ -293,7 +291,7 @@ const struct TagItem libCreateTags[] =
 
 
 /* ------------------- ROM Tag ------------------------ */
-const static struct Resident lib_res __attribute__ ((used)) =
+static const struct Resident lib_res __attribute__ ((used)) =
 {
     RTC_MATCHWORD,
     (struct Resident *)&lib_res,

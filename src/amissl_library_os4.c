@@ -1,3 +1,5 @@
+#undef __USE_INLINE__ // prevent the inline4 macros from being active
+
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <proto/dos.h>
@@ -78,13 +80,13 @@ ULONG Release()
 
 void __init_libcmt_file(void);
 
-__attribute__ ((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
+__attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 {
 //	kprintf("DOSBase; %08lx DataStart: %08lx me: %08x\n",&DOSBase,GetDataStart(),libOpen2);
 
-	if(DOSBase = IExec->OpenLibrary("dos.library", 52))
+	if((DOSBase = IExec->OpenLibrary("dos.library", 52)))
 	{
-		if(IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL))
+		if((IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL)))
 		{
 			__init_libcmt_file();
 
@@ -115,7 +117,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	/* Add any specific open code here 
 	   Return 0 before incrementing OpenCnt to fail opening */
 
-	if( newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags))
+	if((newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags)))
 	{
 		uint32 offset;
 		newLibBase->origLibBase = libBase;
@@ -221,19 +223,16 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 	libBase->libNode.lib_Revision     = AMISSLREVISION;
 	libBase->libNode.lib_IdString     = VSTRING;
 
-	if(libBase->segList = (BPTR)seglist)
+	if((libBase->segList = (BPTR)seglist))
 	{
-		struct Library *DOSBase;
-		struct DOSIFace *IDOS;
-
 		IExec = (struct ExecIFace *)exec;
 		ExecBase = (struct Library *)exec->Data.LibBase;
 		LibraryBase = NULL;
 
-		if(DOSBase = IExec->OpenLibrary("dos.library",52))
+		if((DOSBase = IExec->OpenLibrary("dos.library",52)))
 			IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL);
 
-		if(libBase->ElfBase = IExec->OpenLibrary("elf.library",52))
+		if((libBase->ElfBase = IExec->OpenLibrary("elf.library",52)))
 			libBase->IElf = (struct ElfIFace *)IExec->GetInterface(libBase->ElfBase,"main",1,NULL);
 		
 		if(IDOS && libBase->IElf)
@@ -273,7 +272,7 @@ static ULONG _manager_Release(struct LibraryManagerInterface *Self)
 }
 
 /* Manager interface vectors */
-const static void * const lib_manager_vectors[] =
+static const void * const lib_manager_vectors[] =
 {
     (void *)_manager_Obtain,
     (void *)_manager_Release,
@@ -287,7 +286,7 @@ const static void * const lib_manager_vectors[] =
 };
 
 /* "__library" interface tag list */
-const static struct TagItem const lib_managerTags[] =
+static const struct TagItem const lib_managerTags[] =
 {
     {MIT_Name,             (ULONG)"__library"},
     {MIT_VectorTable,      (ULONG)lib_manager_vectors},
@@ -301,7 +300,7 @@ const static struct TagItem const lib_managerTags[] =
 
 extern const ULONG main_VecTable68K;
 
-const static struct TagItem mainTags[] =
+static const struct TagItem mainTags[] =
 {
     {MIT_Name,              (uint32)"main"},
     {MIT_VectorTable,       (uint32)main_v1_vectors},
@@ -310,7 +309,7 @@ const static struct TagItem mainTags[] =
     {TAG_DONE,              0}
 };
 
-const static uint32 libInterfaces[] =
+static const uint32 libInterfaces[] =
 {
     (uint32)lib_managerTags,
     (uint32)mainTags,
@@ -328,7 +327,7 @@ const struct TagItem libCreateTags[] =
 
 
 /* ------------------- ROM Tag ------------------------ */
-const static struct Resident lib_res __attribute__ ((used)) =
+static const struct Resident lib_res __attribute__((used)) =
 {
     RTC_MATCHWORD,
     (struct Resident *)&lib_res,
