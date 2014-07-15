@@ -42,11 +42,11 @@ struct AmiSSLIFace;
 
 extern const struct TagItem libCreateTags[];
 
-struct Library * AMISSL_COMMON_DATA ExecBase;
-struct ExecIFace * AMISSL_COMMON_DATA IExec;
+struct Library * AMISSL_COMMON_DATA ExecBase = NULL;
+struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
 
-struct Library *DOSBase;
-struct DOSIFace *IDOS;
+struct Library *DOSBase = NULL;
+struct DOSIFace *IDOS = NULL;
 
 int __UserLibInit(struct AmiSSLIFace *Self);
 int __UserLibCleanup(struct AmiSSLIFace *Self);
@@ -225,6 +225,9 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 
 	if((libBase->segList = (BPTR)seglist))
 	{
+    struct Library *DOSBase;
+    struct DOSIFace *IDOS;
+
 		IExec = (struct ExecIFace *)exec;
 		ExecBase = (struct Library *)exec->Data.LibBase;
 		LibraryBase = NULL;
@@ -251,8 +254,11 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 			IExec->CloseLibrary((struct Library *)libBase->ElfBase);
 		}
 
-		IExec->DropInterface((struct Interface *)IDOS);
-		IExec->CloseLibrary((struct Library *)DOSBase);
+    if(IDOS != NULL)
+    {
+		  IExec->DropInterface((struct Interface *)IDOS);
+		  IExec->CloseLibrary((struct Library *)DOSBase);
+    }
 	}
 
 	kprintf("libInit returning: %08lx\n",LibraryBase);

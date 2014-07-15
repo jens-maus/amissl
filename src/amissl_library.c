@@ -45,16 +45,12 @@ struct AmiSSLIFace;
 #endif
 
 #ifdef __amigaos4__
-struct Library *IntuitionBase;
-struct IntuitionIFace *IIntuition;
-struct Library *LocaleBase;
-struct LocaleIFace *ILocale;
-struct Library *UtilityBase;
-struct UtilityIFace *IUtility;
-
-struct Library * AMISSL_COMMON_DATA ExecBase;
-struct ExecIFace * AMISSL_COMMON_DATA IExec;
-
+struct Library *IntuitionBase = NULL;
+struct IntuitionIFace *IIntuition = NULL;
+struct Library *LocaleBase = NULL;
+struct LocaleIFace *ILocale = NULL;
+struct Library *UtilityBase = NULL;
+struct UtilityIFace *IUtility = NULL;
 #else
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
