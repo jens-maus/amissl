@@ -1,9 +1,5 @@
-/*.library
-/*.map
-/.AppleDouble
-/OS4
-/lib
-/obj
+/.obj_*
+/bin_*
 openssl/MINFO
 openssl/Makefile
 openssl/OS4
