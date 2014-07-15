@@ -2,7 +2,7 @@
 /*
  *      stat.c - stat() for the netlib
  *
- *      Copyright © 1994 AmiTCP/IP Group, 
+ *      Copyright © 1994 AmiTCP/IP Group,
  *                       Network Solutions Development Inc.
  *                       All rights reserved.
  */
@@ -25,7 +25,7 @@
 
 #ifndef __amigaos4__
 #ifndef _MODE_T
-#define _MODE_T unsigned short 
+#define _MODE_T unsigned short
 typedef _MODE_T mode_t;
 #endif
 #endif /* !__amigaos4__ */
@@ -103,9 +103,9 @@ static void __dostat(BPTR lock, struct ExamineData *ed, struct stat *st)
   st->st_rdev = 0;
   st->st_size = (off_t)ed->FileSize;
 
-  /* 
-   * Calculatory time since Jan 1 1970, UCT 
-   * (in reality there are an odd number of leap seconds, 
+  /*
+   * Calculatory time since Jan 1 1970, UCT
+   * (in reality there are an odd number of leap seconds,
    * which are not included)
    */
   st->st_atime = st->st_ctime = st->st_mtime =
@@ -124,7 +124,7 @@ static void __dostat(BPTR lock, struct ExamineData *ed, struct stat *st)
 
 /* SYS_STAT_H is defined only by AmiTCP netincludes */
 #if defined(SYS_STAT_H)
-  #error Probably shouldn't reach here!
+  #error Probably should not reach here!
   st->st_type = ed->Type;
   st->st_comment = ed->Comment;
   st->st_dosmode = ed->Protection;
@@ -172,9 +172,9 @@ static void __dostat(struct FileInfoBlock *fib,
   st->st_rdev = 0;
   st->st_size = fib->fib_Size;
 
-  /* 
-   * Calculatory time since Jan 1 1970, UCT 
-   * (in reality there are an odd number of leap seconds, 
+  /*
+   * Calculatory time since Jan 1 1970, UCT
+   * (in reality there are an odd number of leap seconds,
    * which are not included)
    */
   st->st_atime = st->st_ctime = st->st_mtime =
@@ -237,7 +237,7 @@ int stat(const char *name, struct stat *st)
 #endif
   } else {
     UBYTE errcode = IoErr();
-    
+
     if (errcode == ERROR_OBJECT_IN_USE) {
       rc = lstat(name, st);
     } else {
@@ -302,7 +302,7 @@ int lstat(const char *name, struct stat *st)
 	    break;
 	  }
 	}
-      } 
+      }
 #endif
       if (rc != 0)
 	SetAmiSSLerrno(ENOENT);
