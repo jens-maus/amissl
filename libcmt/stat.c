@@ -23,13 +23,6 @@
 #include <proto/utility.h>
 #include <internal/amissl.h>
 
-#ifndef __amigaos4__
-#ifndef _MODE_T
-#define _MODE_T unsigned short
-typedef _MODE_T mode_t;
-#endif
-#endif /* !__amigaos4__ */
-
 #ifndef S_IFIFO
 #define S_IFIFO S_IFDIR /* Fixme */
 #endif /* S_IFIFO */
@@ -42,7 +35,7 @@ typedef _MODE_T mode_t;
 /*
  * Conversion table from Amiga filetypes to Unix filetypes
  */
-const static mode_t ftype[ST_LINKDIR - ST_PIPEFILE + 1] = {
+static const mode_t ftype[ST_LINKDIR - ST_PIPEFILE + 1] = {
   S_IFIFO,
   S_IFREG,
   S_IFREG,
@@ -60,7 +53,7 @@ const static mode_t ftype[ST_LINKDIR - ST_PIPEFILE + 1] = {
  * Conversion table from Amiga protections to Unix protections
  * rwed -> rwx
  */
-const static UBYTE fbits[16] =
+static const UBYTE fbits[16] =
 {
   00, 02, 01, 03, 02, 02, 03, 03,
   04, 06, 05, 07, 06, 06, 07, 07,

@@ -48,9 +48,11 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
      if((tr = (struct IOStdReq *)CreateIORequest(port, sizeof(*tr))) != NULL)
      {
   #endif
-      if(OpenDevice(TIMERNAME, UNIT_ENTROPY, (struct IORequest *)tr, 0) == 0)
+      if(OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *)tr, 0) == 0)
       {
+        #if defined(__amigaos4__)
         struct TimerIFace *ITimer = NULL;
+        #endif
         struct Device *TimerBase;
 
         if((TimerBase = tr->Request.io_Device) != NULL)
