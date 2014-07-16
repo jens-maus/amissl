@@ -1,9 +1,7 @@
-#ifdef __amigaos4__
-#define __USE_INLINE__
-#else /* !__amigaos4__ */
+#ifndef __amigaos4__
 #define SAVEDS __saveds
 #define FFlush Flush
-#endif /* __amigaos4__ */
+#endif /* !__amigaos4__ */
 
 #include <stdio.h>
 #include <string.h>
@@ -49,7 +47,7 @@ void (ERR_print_errors_fp)(FILE *fp)
 {
 	BIO *temp;
 
-	if (temp = BIO_new(BIO_s_file()))
+	if((temp = BIO_new(BIO_s_file())))
 	{
 		fflush(fp);
 
@@ -63,9 +61,9 @@ void (ERR_print_errors_fp)(FILE *fp)
 int (BN_print_fp)(FILE *fp, const BIGNUM *a)
 {
 	BIO *temp;
-	int ret;
+	int ret = 0;
 
-	if (temp = BIO_new(BIO_s_file()))
+	if((temp = BIO_new(BIO_s_file())))
 	{
 		fflush(fp);
 

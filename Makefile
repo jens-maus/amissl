@@ -175,7 +175,7 @@ CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
            -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
            $(WARN) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(INCLUDE)
-LDFLAGS  = $(CPU) $(DEBUGSYM) -mcrt=clib2 -nostdlib -mbaserel
+LDFLAGS  = $(CPU) $(DEBUGSYM) -nostdlib -mbaserel
 LDLIBS   = -L$(BIN_D) -lssl -lcrypto
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
@@ -410,11 +410,11 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
-	@$(CC) -mcrt=clib2 -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -Wno-pointer-sign
+	@$(CC) $(CFLAGS) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
-	@$(CC) -mcrt=clib2 -c $< -o $@ -DAMISSL $(INCLUDE) -Wno-pointer-sign
+	@$(CC) $(CFLAGS) -c $< -o $@ -DAMISSL $(INCLUDE)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: CFLAGS += -Wno-unused-parameter

@@ -1,3 +1,5 @@
+#if defined(__amigaos4__)
+
 #include <proto/exec.h>
 #include <proto/dos.h>
 
@@ -26,20 +28,20 @@ void __exit_amissl_main(void) __attribute__((destructor));
 
 static void fatal_error(const char *message)
 {
-	BOOL from_wb = ((struct Process *)IExec->FindTask(NULL))->pr_CLI == 0;
+	BOOL from_wb = ((struct Process *)FindTask(NULL))->pr_CLI == 0;
 	BPTR fh;
 
 	if (!from_wb)
-		fh = IDOS->ErrorOutput() ? IDOS->ErrorOutput() : IDOS->Output();
+		fh = ErrorOutput() ? ErrorOutput() : Output();
 	else
-		fh = IDOS->Open("CON://///AUTO/CLOSE/WAIT", MODE_NEWFILE);
+		fh = Open("CON://///AUTO/CLOSE/WAIT", MODE_NEWFILE);
 
 	if (fh)
 	{
-		IDOS->FPrintf(fh, (char *)message);
+		FPrintf(fh, (char *)message);
 
 		if (from_wb)
-			IDOS->Close(fh);
+			Close(fh);
 	}
 
 	exit(RETURN_FAIL);
@@ -48,30 +50,32 @@ static void fatal_error(const char *message)
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
-static struct Library *_AmiSSLBase, *_AmiSSLMasterBase, *_SocketBase;
+static struct Library *_AmiSSLBase = NULL;
+static struct Library *_AmiSSLMasterBase = NULL;
+static struct Library *_SocketBase = NULL;
 
-static struct AmiSSLIFace *iamissl;
-static struct AmiSSLMasterIFace *iamisslmaster;
-static struct SocketIFace *isocket;
+static struct AmiSSLIFace *iamissl = NULL;
+static struct AmiSSLMasterIFace *iamisslmaster = NULL;
+static struct SocketIFace *isocket = NULL;
 
 void __init_amissl_main(void)
 {
 	if (!ISocket)
 	{
-		if (!(_SocketBase = IExec->OpenLibrary("bsdsocket.library", 4)))
+		if (!(_SocketBase = OpenLibrary("bsdsocket.library", 4)))
 			fatal_error("Couldn't open bsdsocket.library v4!\n");
 
-		if (!(isocket = ISocket = (struct SocketIFace *)IExec->GetInterface((struct Library *)_SocketBase, "main", 1, NULL)))
+		if (!(isocket = ISocket = (struct SocketIFace *)GetInterface((struct Library *)_SocketBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain socket interface\n");
 	}
 
 	if (!IAmiSSLMaster)
 	{
-		if (!(_AmiSSLMasterBase = IExec->OpenLibrary("amisslmaster.library",
+		if (!(_AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 		                                             AMISSLMASTER_MIN_VERSION)))
 			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
 
-		if (!(iamisslmaster = IAmiSSLMaster = (struct AmiSSLMasterIFace *)IExec->GetInterface((struct Library *)_AmiSSLMasterBase, "main", 1, NULL)))
+		if (!(iamisslmaster = IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)_AmiSSLMasterBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amisslmaster interface\n");
 
 		if (!IAmiSSLMaster->InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
@@ -83,10 +87,10 @@ void __init_amissl_main(void)
 		if (!(_AmiSSLBase = IAmiSSLMaster->OpenAmiSSL()))
 			fatal_error("Couldn't open AmiSSL!\n");
 
-		if (!(iamissl = IAmiSSL = (struct AmiSSLIFace *)IExec->GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
+		if (!(iamissl = IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amissl interface\n");
 
-		if (IAmiSSL->InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 		                        AmiSSL_ISocketPtr, &ISocket,
 		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
@@ -101,8 +105,8 @@ void __exit_amissl_main(void)
 	{
 		if (iamissl && IAmiSSL)
 		{
-			IAmiSSL->CleanupAmiSSL(TAG_DONE);
-			IExec->DropInterface((struct Interface *)IAmiSSL);
+			CleanupAmiSSL(TAG_DONE);
+			DropInterface((struct Interface *)IAmiSSL);
 
 			iamissl = IAmiSSL = NULL;
 		}
@@ -117,11 +121,11 @@ void __exit_amissl_main(void)
 	{
 		if (iamisslmaster && IAmiSSLMaster)
 		{
-			IExec->DropInterface((struct Interface *)IAmiSSLMaster);
+			DropInterface((struct Interface *)IAmiSSLMaster);
 			iamisslmaster = IAmiSSLMaster = NULL;
 		}
 
-		IExec->CloseLibrary((struct Library *)_AmiSSLMasterBase);
+		CloseLibrary((struct Library *)_AmiSSLMasterBase);
 		_AmiSSLMasterBase = NULL;
 	}
 
@@ -129,13 +133,15 @@ void __exit_amissl_main(void)
 	{
 		if (isocket && ISocket)
 		{
-			IExec->DropInterface((struct Interface *)ISocket);
+			DropInterface((struct Interface *)ISocket);
 			isocket = ISocket = NULL;
 		}
 
-		IExec->CloseLibrary((struct Library *)_SocketBase);
+		CloseLibrary((struct Library *)_SocketBase);
 		_SocketBase = NULL;
 	}
 }
 
 /****************************************************************************/
+
+#endif
