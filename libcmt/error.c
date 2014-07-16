@@ -29,7 +29,8 @@
 
 #include <errno.h>
 #include <string.h>
-#include <dos/errors.h>
+#include <dos/dos.h>
+#include <dos/dosasl.h>
 
 int __io2errno(int io_err)
 {
