@@ -400,6 +400,8 @@ int chopup_args(ARGS *arg, char *buf, int *argc, char **argv[])
 		{
 		arg->count=20;
 		arg->data=(char **)OPENSSL_malloc(sizeof(char *)*arg->count);
+		if (arg->data == NULL)
+			return 0;
 		}
 	for (i=0; i<arg->count; i++)
 		arg->data[i]=NULL;
@@ -1552,9 +1554,9 @@ char *make_config_name()
 
 	len=strlen(t)+strlen(OPENSSL_CONF)+2;
 	p=OPENSSL_malloc(len);
-
+	if (p == NULL)
+		return NULL;
 	BUF_strlcpy(p,t,len);
-
 #ifndef AMIGA
 #ifndef OPENSSL_SYS_VMS
 	BUF_strlcat(p,"/",len);

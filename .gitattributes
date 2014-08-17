@@ -1319,22 +1319,7 @@ openssl/crypto/pkcs12/pk12err.c eol=lf
 openssl/crypto/pkcs12/pkcs12.h eol=lf
 openssl/crypto/pkcs7/.cvsignore -text
 openssl/crypto/pkcs7/Makefile eol=lf
-openssl/crypto/pkcs7/bio_ber.c eol=lf
 openssl/crypto/pkcs7/bio_pk7.c -text
-openssl/crypto/pkcs7/dec.c eol=lf
-openssl/crypto/pkcs7/des.pem eol=lf
-openssl/crypto/pkcs7/doc eol=lf
-openssl/crypto/pkcs7/enc.c eol=lf
-openssl/crypto/pkcs7/es1.pem eol=lf
-openssl/crypto/pkcs7/example.c eol=lf
-openssl/crypto/pkcs7/example.h eol=lf
-openssl/crypto/pkcs7/info.pem eol=lf
-openssl/crypto/pkcs7/infokey.pem eol=lf
-openssl/crypto/pkcs7/p7/a1 eol=lf
-openssl/crypto/pkcs7/p7/a2 eol=lf
-openssl/crypto/pkcs7/p7/cert.p7c text eol=lf
-openssl/crypto/pkcs7/p7/smime.p7m text eol=lf
-openssl/crypto/pkcs7/p7/smime.p7s text eol=lf
 openssl/crypto/pkcs7/pk7_asn1.c eol=lf
 openssl/crypto/pkcs7/pk7_attr.c eol=lf
 openssl/crypto/pkcs7/pk7_dgst.c eol=lf
@@ -1345,24 +1330,6 @@ openssl/crypto/pkcs7/pk7_mime.c eol=lf
 openssl/crypto/pkcs7/pk7_smime.c eol=lf
 openssl/crypto/pkcs7/pkcs7.h eol=lf
 openssl/crypto/pkcs7/pkcs7err.c eol=lf
-openssl/crypto/pkcs7/server.pem eol=lf
-openssl/crypto/pkcs7/sign.c eol=lf
-openssl/crypto/pkcs7/t/3des.pem eol=lf
-openssl/crypto/pkcs7/t/3dess.pem eol=lf
-openssl/crypto/pkcs7/t/c.pem eol=lf
-openssl/crypto/pkcs7/t/ff eol=lf
-openssl/crypto/pkcs7/t/msie-e eol=lf
-openssl/crypto/pkcs7/t/msie-e.pem eol=lf
-openssl/crypto/pkcs7/t/msie-enc-01 eol=lf
-openssl/crypto/pkcs7/t/msie-enc-01.pem eol=lf
-openssl/crypto/pkcs7/t/msie-enc-02 eol=lf
-openssl/crypto/pkcs7/t/msie-enc-02.pem eol=lf
-openssl/crypto/pkcs7/t/msie-s-a-e eol=lf
-openssl/crypto/pkcs7/t/msie-s-a-e.pem eol=lf
-openssl/crypto/pkcs7/t/nav-smime eol=lf
-openssl/crypto/pkcs7/t/s.pem eol=lf
-openssl/crypto/pkcs7/t/server.pem eol=lf
-openssl/crypto/pkcs7/verify.c eol=lf
 openssl/crypto/ppccap.c -text
 openssl/crypto/ppccpuid.pl -text
 openssl/crypto/pqueue/.cvsignore -text
@@ -1710,10 +1677,6 @@ openssl/demos/easy_tls/easy-tls.c eol=lf
 openssl/demos/easy_tls/easy-tls.h eol=lf
 openssl/demos/easy_tls/test.c eol=lf
 openssl/demos/easy_tls/test.h eol=lf
-openssl/demos/eay/Makefile eol=lf
-openssl/demos/eay/base64.c eol=lf
-openssl/demos/eay/conn.c eol=lf
-openssl/demos/eay/loadrsa.c eol=lf
 openssl/demos/engines/cluster_labs/.cvsignore -text
 openssl/demos/engines/cluster_labs/Makefile eol=lf
 openssl/demos/engines/cluster_labs/cluster_labs.h eol=lf
@@ -1743,17 +1706,6 @@ openssl/demos/engines/zencod/hw_zencod.ec eol=lf
 openssl/demos/engines/zencod/hw_zencod.h eol=lf
 openssl/demos/engines/zencod/hw_zencod_err.c eol=lf
 openssl/demos/engines/zencod/hw_zencod_err.h eol=lf
-openssl/demos/maurice/.cvsignore -text
-openssl/demos/maurice/Makefile eol=lf
-openssl/demos/maurice/README eol=lf
-openssl/demos/maurice/cert.pem eol=lf
-openssl/demos/maurice/example1.c eol=lf
-openssl/demos/maurice/example2.c eol=lf
-openssl/demos/maurice/example3.c eol=lf
-openssl/demos/maurice/example4.c eol=lf
-openssl/demos/maurice/loadkeys.c eol=lf
-openssl/demos/maurice/loadkeys.h eol=lf
-openssl/demos/maurice/privkey.pem eol=lf
 openssl/demos/pkcs12/README eol=lf
 openssl/demos/pkcs12/pkread.c eol=lf
 openssl/demos/pkcs12/pkwrite.c eol=lf
@@ -2117,6 +2069,7 @@ openssl/doc/ssl/SSL_CTX_set_session_id_context eol=lf
 openssl/doc/ssl/SSL_CTX_set_session_id_context.pod eol=lf
 openssl/doc/ssl/SSL_CTX_set_ssl_version.pod eol=lf
 openssl/doc/ssl/SSL_CTX_set_timeout.pod eol=lf
+openssl/doc/ssl/SSL_CTX_set_tlsext_ticket_key_cb.pod -text
 openssl/doc/ssl/SSL_CTX_set_tmp_dh_callback.po eol=lf
 openssl/doc/ssl/SSL_CTX_set_tmp_dh_callback.pod eol=lf
 openssl/doc/ssl/SSL_CTX_set_tmp_rsa_callback.p eol=lf
@@ -2384,6 +2337,7 @@ openssl/ssl/ssl_sess.c eol=lf
 openssl/ssl/ssl_stat.c eol=lf
 openssl/ssl/ssl_task.c eol=lf
 openssl/ssl/ssl_txt.c eol=lf
+openssl/ssl/ssl_utst.c -text
 openssl/ssl/ssltest.c eol=lf
 openssl/ssl/t1_clnt.c eol=lf
 openssl/ssl/t1_enc.c eol=lf
@@ -2455,6 +2409,7 @@ openssl/test/testssl.com eol=lf
 openssl/test/testsslproxy eol=lf
 openssl/test/testtsa -text
 openssl/test/testtsa.com -text
+openssl/test/testutil.h -text
 openssl/test/testx509.pem eol=lf
 openssl/test/times eol=lf
 openssl/test/tpkcs7 eol=lf

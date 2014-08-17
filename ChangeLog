@@ -5,6 +5,11 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-08-17 Jens Maus <mail@jens-maus.de>
+ 
+  * misc: merged the OpenSSL 1.0.1i vendor branch onto the trunk and adapted all
+    AmiSSL sources accordingly.
+
 2014-07-11 Jens Maus <mail@jens-maus.de>
  
   * Makefile, misc: largely reworked the top-level Makefile so that we will only have
