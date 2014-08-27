@@ -75,9 +75,9 @@ struct dirent *readdir(DIR *mydirp)
   struct ExamineData *ed;
   if ((ed = ExamineDir(dirp->d_context))) {
     dirp->dd_ent.d_ino = 1;
-    dirp->dd_ent.d_reclen = 1;
+    //dirp->dd_ent.d_reclen = 1;
     strcpy(dirp->dd_ent.d_name,ed->Name);
-    dirp->dd_ent.d_namelen = strlen(ed->Name);
+    //dirp->dd_ent.d_namelen = strlen(ed->Name);
     result=&dirp->dd_ent;
   }
 #else
