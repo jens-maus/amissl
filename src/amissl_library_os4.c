@@ -54,7 +54,7 @@ int __UserLibExpunge(struct AmiSSLIFace *Self);
 
 /*
  * The system (and compiler) rely on a symbol named _start which marks
- * the beginning of execution of an ELF file. To prevent others from 
+ * the beginning of execution of an ELF file. To prevent others from
  * executing this library, and to keep the compiler/linker happy, we
  * define an empty _start symbol here.
  *
@@ -102,9 +102,9 @@ __attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 }
 
 /* Open the library */
-struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
+struct Library *libOpen(struct LibraryManagerInterface *Self, UNUSED ULONG version)
 {
-	struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase; 
+	struct AmiSSLLibrary *libBase = (struct AmiSSLLibrary *)Self->Data.LibBase;
 	struct AmiSSLLibrary *newLibBase;
 
 	kprintf("LibOpen called with libbase: %08lx, libopen: %d\n",libBase,libBase->libNode.lib_OpenCnt);
@@ -114,7 +114,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	/* Add up the open count */
 	libBase->libNode.lib_OpenCnt++;
 
-	/* Add any specific open code here 
+	/* Add any specific open code here
 	   Return 0 before incrementing OpenCnt to fail opening */
 
 	if((newLibBase = (struct AmiSSLLibrary *)IExec->CreateLibrary((struct TagItem *)libCreateTags)))
@@ -122,18 +122,18 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 		uint32 offset;
 		newLibBase->origLibBase = libBase;
 		newLibBase->libNode.lib_OpenCnt = libBase->libNode.lib_OpenCnt;
-		if(newLibBase->baserelData = libBase->IElf->CopyDataSegment(libBase->elfHandle, &offset))
+		if((newLibBase->baserelData = libBase->IElf->CopyDataSegment(libBase->elfHandle, &offset)) != NULL)
 		{
 			struct ExtendedLibrary *extlib;
 			kprintf("Env vector for %08lx: %08x\n", newLibBase, newLibBase->baserelData);
 
 			extlib = (struct ExtendedLibrary *)((ULONG)newLibBase + newLibBase->libNode.lib_PosSize);
-			
+
 			extlib->MainIFace->Data.EnvironmentVector = newLibBase->baserelData + offset;
 
 			kprintf("Returning libBase: %08lx\n",newLibBase);
 			kprintf("Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
-			
+
 			if(libOpen2((struct AmiSSLIFace *)extlib->MainIFace))
 			{
 				/* This should always be written to debug output since it's important */
@@ -150,7 +150,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 	}
 
 	libBase->libNode.lib_OpenCnt--;
-	return NULL;	
+	return NULL;
 }
 
 
@@ -217,30 +217,30 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 
 	libBase->libNode.lib_Node.ln_Type = NT_LIBRARY;
 	libBase->libNode.lib_Node.ln_Pri  = 0;
-	libBase->libNode.lib_Node.ln_Name = LIBNAME;
+	libBase->libNode.lib_Node.ln_Name = (STRPTR)LIBNAME;
 	libBase->libNode.lib_Flags        = LIBF_SUMUSED|LIBF_CHANGED;
 	libBase->libNode.lib_Version      = VERSION;
 	libBase->libNode.lib_Revision     = AMISSLREVISION;
-	libBase->libNode.lib_IdString     = VSTRING;
+	libBase->libNode.lib_IdString     = (STRPTR)VSTRING;
 
 	if((libBase->segList = (BPTR)seglist))
 	{
-    struct Library *DOSBase;
-    struct DOSIFace *IDOS;
+		struct Library *dosBase;
+		struct DOSIFace *idos;
 
 		IExec = (struct ExecIFace *)exec;
 		ExecBase = (struct Library *)exec->Data.LibBase;
 		LibraryBase = NULL;
 
-		if((DOSBase = IExec->OpenLibrary("dos.library",52)))
-			IDOS = (struct DOSIFace *)IExec->GetInterface(DOSBase,"main",1,NULL);
+		if((dosBase = IExec->OpenLibrary("dos.library",52)))
+			idos = (struct DOSIFace *)IExec->GetInterface(dosBase,"main",1,NULL);
 
 		if((libBase->ElfBase = IExec->OpenLibrary("elf.library",52)))
 			libBase->IElf = (struct ElfIFace *)IExec->GetInterface(libBase->ElfBase,"main",1,NULL);
-		
-		if(IDOS && libBase->IElf)
+
+		if(idos && libBase->IElf)
 		{
-			IDOS->GetSegListInfoTags(libBase->segList, GSLI_ElfHandle, &libBase->elfHandle, TAG_DONE);
+			idos->GetSegListInfoTags(libBase->segList, GSLI_ElfHandle, &libBase->elfHandle, TAG_DONE);
 			if(libBase->elfHandle && (libBase->elfHandle = libBase->IElf->OpenElfTags(OET_ElfHandle, libBase->elfHandle, TAG_DONE)))
 			{
 				libBase->origLibBase = libBase;
@@ -254,10 +254,10 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 			IExec->CloseLibrary((struct Library *)libBase->ElfBase);
 		}
 
-    if(IDOS != NULL)
+    if(idos != NULL)
     {
-		  IExec->DropInterface((struct Interface *)IDOS);
-		  IExec->CloseLibrary((struct Library *)DOSBase);
+		  IExec->DropInterface((struct Interface *)idos);
+		  IExec->CloseLibrary((struct Library *)dosBase);
     }
 	}
 
@@ -347,7 +347,7 @@ static const struct Resident lib_res __attribute__((used)) =
     (APTR)libCreateTags
 };
 
-struct SocketIFace *GetSocketIFace(int modifies_errno)
+struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
 
@@ -358,54 +358,39 @@ struct SocketIFace *GetSocketIFace(int modifies_errno)
 	return(p->ISocketPtr ? *p->ISocketPtr : NULL);
 }
 
-int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
+int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
-	__gnuc_va_list va;
-	va_list os4va;
+	VA_LIST args;
 	int ret;
 
-	__builtin_va_start(va,format);
-	os4va.args.m68k = va_getlinearva(va,char *);
-	os4va.is_68k = 1;
-
-	ret = BIO_vprintf(bio,format,os4va);
-
-	__builtin_va_end(va);
+	VA_START(args, format);
+	ret = BIO_vprintf(bio,format,args);
+	VA_END(args);
 
 	return ret;
 }
 
-int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
+int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
 {
-	__gnuc_va_list va;
-	va_list os4va;
+	VA_LIST args;
 	int ret;
 
-	__builtin_va_start(va,format);
-	os4va.args.m68k = va_getlinearva(va,char *);
-	os4va.is_68k = 1;
-
-	ret = BIO_vsnprintf(buf,n,format,os4va);
-
-	__builtin_va_end(va);
+	VA_START(args, format);
+	ret = BIO_vsnprintf(buf,n,format,args);
+	VA_END(args);
 
 	return ret;
 }
 
-void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(struct AmiSSLIFace *Self, const char * fmta, ...)
+void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
 {
-	__gnuc_va_list va;
-	va_list os4va;
+	VA_LIST args;
 	struct EasyStruct ErrReq;
 	char error[512];
 
-	__builtin_va_start(va,fmta);
-	os4va.args.m68k = va_getlinearva(va,char *);
-	os4va.is_68k = 1;
-
-	BIO_vsnprintf(error,sizeof(error),fmta,os4va);
-
-	__builtin_va_end(va);
+	VA_START(args, fmta);
+	BIO_vsnprintf(error,sizeof(error),fmta,args);
+	VA_END(args);
 
 	ErrReq.es_StructSize   = sizeof(struct EasyStruct);
 	ErrReq.es_Flags        = 0;
@@ -417,43 +402,29 @@ void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(struct AmiSSLIFace *S
 	IIntuition->EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
-void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(struct AmiSSLIFace *Self, int num, ...)
+void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(UNUSED struct AmiSSLIFace *Self, int num, ...)
 {
-	__gnuc_va_list va;
-	va_list os4va;
+	VA_LIST args;
 
-	__builtin_va_start(va,num);
-	os4va.args.m68k = va_getlinearva(va,char *);
-	os4va.is_68k = 1;
-
-	ERR_add_error_vdata(num,os4va);
-
-	__builtin_va_end(va);
+	VA_START(args, num);
+	ERR_add_error_vdata(num,args);
+	VA_END(args);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, VA_LIST params)
 {
-	va_list os4va;
-	os4va.args.m68k = (char *)params;
-	os4va.is_68k = 1;
-	return BIO_vprintf(bio,format,os4va);
+	return BIO_vprintf(bio,format,params);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, VA_LIST params)
 {
-	va_list os4va;
-	os4va.args.m68k = (char *)params;
-	os4va.is_68k = 1;
-	return BIO_vsnprintf(buf,n,format,os4va);
+	return BIO_vsnprintf(buf,n,format,params);
 }
 
 #if 0
-void AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_vdata(struct AmiSSLIFace *Self, int num, long *params)
+void AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_vdata(UNUSED struct AmiSSLIFace *Self, int num, VA_LIST params)
 {
-	va_list os4va;
-	os4va.args.m68k = (char *)params;
-	os4va.is_68k = 1;
-	ERR_add_error_vdata(num,os4va);
+	ERR_add_error_vdata(num,params);
 }
 #endif
 
@@ -463,7 +434,7 @@ int __amigaos4_check68k_check(int (*func)())
 	return IExec->IsNative(func);
 }
 
-AMISSL_COMMON_DATA static UWORD trampoline_code [][6] = 
+AMISSL_COMMON_DATA static UWORD trampoline_code [][6] =
 {
 	{0x4ED5,0,0,0,0,0},				//JMP     (A5)
 	{0x48E7,0x8000,0x4E95,0x588F,0x4E75,0},		//MOVEM.L D0,         -(A7);   JSR  (A5);   ADDQ.L  #4,A7;   RTS
@@ -483,16 +454,16 @@ AMISSL_COMMON_DATA static UWORD trampoline_code [][6] =
 
 VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 {
-	__gnuc_va_list va;
+	VA_LIST args;
 	long *ptr;
 	int result,i;
 
-	__builtin_va_start(va,func);
+	VA_START(args, func);
 
 	//kprintf("__amigaos4_check68k_trampoline called with: %d args, func: %08x\n",nargs,func);
 
-	ptr = va_getlinearva(va,long *);
-	
+	ptr = VA_ARG(args, long *);
+
 	//kprintf("Stack: %08x %08x %08x %08x %08x %08x %08x\n",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
 
 	for(i=0;i<nargs;i++)
@@ -504,7 +475,7 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 	result = IExec->EmulateTags(trampoline_code[nargs],ET_SaveRegs,TRUE,
 		ET_RegisterA5,func,
 		TAG_MORE,ptr);
-	__builtin_va_end(va);
+	VA_END(args);
 	return result;
 }
 

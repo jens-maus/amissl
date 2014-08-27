@@ -349,9 +349,9 @@ extern BIO *                VARARGS68K _AmiSSL_BIO_new_connect(struct AmiSSLIFac
 extern BIO *                VARARGS68K _AmiSSL_BIO_new_accept(struct AmiSSLIFace *, char * host_port);
 extern int                  VARARGS68K _AmiSSL_BIO_new_bio_pair(struct AmiSSLIFace *, BIO ** bio1, size_t writebuf1, BIO ** bio2, size_t writebuf2);
 extern void                 VARARGS68K _AmiSSL_BIO_copy_next_retry(struct AmiSSLIFace *, BIO * b);
-extern int                  VARARGS68K _AmiSSL_BIO_vprintf(struct AmiSSLIFace *, BIO * bio, const char * format, long * args);
+extern int                  VARARGS68K _AmiSSL_BIO_vprintf(struct AmiSSLIFace *, BIO * bio, const char * format, VA_LIST args);
 extern int                  VARARGS68K _AmiSSL_BIO_printf(struct AmiSSLIFace *, BIO * bio, const char * format, ...);
-extern int                  VARARGS68K _AmiSSL_BIO_vsnprintf(struct AmiSSLIFace *, char * buf, size_t n, const char * format, long * args);
+extern int                  VARARGS68K _AmiSSL_BIO_vsnprintf(struct AmiSSLIFace *, char * buf, size_t n, const char * format, VA_LIST args);
 extern int                  VARARGS68K _AmiSSL_BIO_snprintf(struct AmiSSLIFace *, char * buf, size_t n, const char * format, ...);
 extern void                 VARARGS68K _AmiSSL_ERR_load_BIO_strings(struct AmiSSLIFace *);
 extern const BIGNUM *       VARARGS68K _AmiSSL_BN_value_one(struct AmiSSLIFace *);
