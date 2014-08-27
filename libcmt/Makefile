@@ -27,7 +27,7 @@ BIN_D=$(AmiSSL)/bin_$(OS)
 WARN       = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-aliasing #-Wunreachable-code
 OPTFLAGS   = -O3 -fomit-frame-pointer -funroll-loops
 DEBUG      = -DDEBUG -fno-omit-frame-pointer #-O0
-CFLAGS     = $(CPU) $(WARN) -I$(AmiSSL)/include -I$(AmiSSL)/include/netinclude -D__NO_NET_API
+CFLAGS     = $(CPU) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
 
 # different options per target OS
 ifeq ($(OS), os4)
@@ -67,7 +67,7 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU	    = -m68020-60 -msoft-float
-  CFLAGS  += -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
+  CFLAGS  += -I$(AmiSSL)/include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -lm
 
