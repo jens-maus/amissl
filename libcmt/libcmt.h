@@ -1,6 +1,10 @@
 #ifndef LIBCMT_H
 #define LIBCMT_H
 
+#ifndef PATH_MAX
+#define PATH_MAX 1024
+#endif
+
 #include <stdio.h>
 #include <dos.h>
 
@@ -12,7 +16,6 @@ extern void initialize_socket_errno(void);
 * Definitions associated with __iobuf._flag. These are already defined in SAS/C stdio.h.
 *
 **/
-#ifdef __amigaos4__
 #if !defined(_IOFBF) || !defined(_IOLBF) || !defined(_IONBF)
 #error _IOFBF, _IOLBF and _IONBF should be defined in stdio.h
 #endif
@@ -21,7 +24,6 @@ extern void initialize_socket_errno(void);
 #define _IOEOF      __FILE_EOF      /* end-of-file flag */
 #define _IOERR      __FILE_ERROR    /* error flag */
 #define _IORW       (1 << 29)       /* read-write (update) flag */
-#endif /* __amigaos4__ */
 
 #define _IOALLOCBUF (1 << 30)       /* buffer is locally allocated */
 #define _IOBFMASK ((_IOFBF) | (_IOLBF) | (_IONBF))
@@ -31,8 +33,6 @@ extern void initialize_socket_errno(void);
 #define SEEK_SET 0              /* Seek from beginning of file */
 #define SEEK_CUR 1              /* Seek from current file position */
 #define SEEK_END 2              /* Seek from end of file */
-
-#ifdef __amigaos4__
 
 struct __iobuf {
     struct __iobuf *_next;
@@ -46,18 +46,12 @@ struct __iobuf {
     unsigned char _cbuff;	/* single char buffer */
 };
 
-#endif
-
 #define TOFILE(x) ((struct __iobuf *)x)
 
 struct filenode
 {
 	struct Node node;
-#ifdef __amigaos4__
 	struct __iobuf FILE;
-#else	
-	FILE FILE;
-#endif
 };
 
 extern struct MinList __filelist;

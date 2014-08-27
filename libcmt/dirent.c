@@ -75,7 +75,9 @@ struct dirent *readdir(DIR *mydirp)
   struct ExamineData *ed;
   if ((ed = ExamineDir(dirp->d_context))) {
     dirp->dd_ent.d_ino = 1;
+    dirp->dd_ent.d_reclen = 1;
     strcpy(dirp->dd_ent.d_name,ed->Name);
+    dirp->dd_ent.d_namelen = strlen(ed->Name);
     result=&dirp->dd_ent;
   }
 #else
@@ -88,9 +90,10 @@ struct dirent *readdir(DIR *mydirp)
 
   if (dirp->d_count)
   {
-    dirp->dd_ent.d_ino = dirp->dd_ent.d_reclen = 1;
+    dirp->dd_ent.d_ino = 1;
+    //dirp->dd_ent.d_reclen = 1;
     strcpy(dirp->dd_ent.d_name,dirp->current->ed_Name);
-    dirp->dd_ent.d_namlen = strlen(dirp->dd_ent.d_name);
+    //dirp->dd_ent.d_namlen = strlen(dirp->dd_ent.d_name);
     dirp->current=dirp->current->ed_Next;
     dirp->d_count--;
     result=&dirp->dd_ent;
@@ -126,12 +129,13 @@ int closedir(DIR *mydirp)
   return 1;
 }
 #else
-void closedir(DIR *mydirp)
+int closedir(DIR *mydirp)
 {
   MYDIR *dirp=(MYDIR *)mydirp;
   rewinddir(mydirp);
   FreeDosObject(DOS_EXALLCONTROL,dirp->d_eac);
   UnLock(dirp->d_lock);
   free(dirp);
+  return 1;
 }
 #endif

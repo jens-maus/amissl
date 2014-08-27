@@ -68,7 +68,7 @@ LONG GMTOffset;
 void *__pool;
 
 struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
-static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs = {NULL};
+static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;// = {NULL};
 static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
 static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
@@ -135,21 +135,15 @@ AMISSL_STATE *CreateAmiSSLState(void)
 
 #else
 
-#pragma syscall SB_ObtainSemaphore 234 801
-#pragma syscall SB_ReleaseSemaphore 23a 801
-#pragma syscall SB_FindTask 126 901
-#pragma syscall SB_AllocVec 2ac 1002
-#pragma syscall SB_FreeVec 2b2 901
-
-void SB_ObtainSemaphore(struct SignalSemaphore *);
-void SB_ReleaseSemaphore(struct SignalSemaphore *);
-struct Task *SB_FindTask(STRPTR);
-APTR SB_AllocVec(ULONG, ULONG);
-VOID SB_FreeVec(APTR);
+#define SB_ObtainSemaphore  ObtainSemaphore
+#define SB_ReleaseSemaphore ReleaseSemaphore
+#define SB_FindTask         FindTask
+#define SB_AllocVec(s,t)    AllocVec(s, t)
+#define SB_FreeVec          FreeVec
 
 #endif
 
-AMISSL_STATE *GetAmiSSLState(void)
+STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
 	AMISSL_STATE *ret;
 
@@ -157,23 +151,23 @@ AMISSL_STATE *GetAmiSSLState(void)
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
 	//kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
-	
+
 	return ret;
 }
 
-void SetAmiSSLerrno(int err)
+STDARGS void SetAmiSSLerrno(int err)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
 	*p->errno_ptr = err;
 }
 
-int GetAmiSSLerrno(void)
+STDARGS int GetAmiSSLerrno(void)
 {
 	AMISSL_STATE *p = GetAmiSSLState();
 	return *p->errno_ptr;
 }
 
-static void amigaos_locking_callback(int mode,int type,char *file,int line)
+static void amigaos_locking_callback(int mode,int type,UNUSED char *file,UNUSED int line)
 {
 	if (mode & CRYPTO_LOCK)
 		ObtainSemaphore(&(lock_cs[type]));
@@ -192,7 +186,7 @@ static unsigned long amigaos_thread_id(void)
   return(ret);
 }
 
-static void ThreadGroupStateCleanup(long Key, AMISSL_STATE *a)
+static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 {
 	if (a->ThreadGroupID == ThreadGroupID)
 	{
@@ -212,15 +206,15 @@ static void h_freefunc(void *mem)
 	SB_FreeVec(mem);
 }
 
-void (InternalInitAmiSSL)(struct AmiSSLInitStruct *amisslinit)
+void InternalInitAmiSSL(UNUSED struct AmiSSLInitStruct *amisslinit)
 {
   /* nothing */
 }
 
-long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
+AMISSL_LIB_ENTRY LONG _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
-	long err;
+	LONG err;
 
 	if((state = CreateAmiSSLState()))
 	{
@@ -287,7 +281,7 @@ long AMISSL_LIB_ENTRY _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, stru
 	return(err);
 }
 
-long CleanupAmiSSLA(struct TagItem *tagList)
+LONG CleanupAmiSSLA(UNUSED struct TagItem *tagList)
 {
 	AMISSL_STATE *state;
 
@@ -312,7 +306,7 @@ long CleanupAmiSSLA(struct TagItem *tagList)
 }
 
 #ifdef __amigaos4__
-long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -324,7 +318,7 @@ long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ..
 	return _AmiSSL_InitAmiSSLA(Self,tags);
 }
 
-long AMISSL_LIB_ENTRY VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ...)
+AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ...)
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -344,9 +338,9 @@ void AmiSSLAbort(void)
 
 void openlog(void) {}
 void closelog(void) {}
-void syslog(int priority, const char *message, ...) {}
+void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
 
-void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
+AMISSL_LIB_ENTRY void __UserLibCleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	traceline();
 
@@ -383,12 +377,12 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 #endif
 }
 
-void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
+AMISSL_LIB_ENTRY void __UserLibExpunge(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	traceline();
 }
 
-int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
+AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 {
 	int err = 1; /* Assume error condition */
 
@@ -475,7 +469,7 @@ int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
 			err = 0;
 		}
 	}
-	
+
 	kprintf("Userlib res: %d\n",err);
 
 	if (err != 0)

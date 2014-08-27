@@ -40,18 +40,18 @@
 #include "libcmt.h"
 #include <internal/amissl.h>
 
-#ifdef __PPC__
-
 union ieee_double
 {
 	double			value;
 	unsigned long	raw[2];
 };
 
+#if defined(__PPC__)
+
 typedef union
 {
 	double value;
-	struct 
+	struct
 	{
 		unsigned int msw;
 		unsigned int lsw;
@@ -139,13 +139,13 @@ double __scalbn (double x, int n)
 	k = (hx&0x7ff00000)>>20;		/* extract exponent */
 	if (k==0) {				/* 0 or subnormal x */
 		if ((lx|(hx&0x7fffffff))==0) return x; /* +-0 */
-	    x *= two54; 
+	    x *= two54;
 	    GET_HIGH_WORD(hx,x);
-	    k = ((hx&0x7ff00000)>>20) - 54; 
+	    k = ((hx&0x7ff00000)>>20) - 54;
 		if (n< -50000) return tiny*x; 	/*underflow*/
 	}
 	if (k==0x7ff) return x+x;		/* NaN or Inf */
-	k = k+n; 
+	k = k+n;
 	if (k >  0x7fe) return huge*copysign(huge,x); /* overflow  */
 	if (k > 0) 				/* normal result */
 	{SET_HIGH_WORD(x,(hx&0x800fffff)|(k<<20)); return x;}
@@ -161,21 +161,20 @@ double __scalbn (double x, int n)
 
 static	const double	one	= 1.0/*, tiny=1.0e-300 */;
 
-static __inline double
-__sqrt(double x)
+INLINE double __sqrt(double x)
 {
 	double z;
-	int sign = (int)0x80000000; 
+	int sign = (int)0x80000000;
 	unsigned int r,t1,s1,ix1,q1;
 	int ix0,s0,q,m,t,i;
 
 	EXTRACT_WORDS(ix0,ix1,x);
 
     /* take care of Inf and NaN */
-	if((ix0&0x7ff00000)==0x7ff00000) {			
+	if((ix0&0x7ff00000)==0x7ff00000) {
 	    return x*x+x;		/* sqrt(NaN)=NaN, sqrt(+inf)=+inf
 					   sqrt(-inf)=sNaN */
-	} 
+	}
     /* take care of zero */
 	if(ix0<=0) {
 	    if(((ix0&(~sign))|ix1)==0) return x;/* sqrt(+-0) = +-0 */
@@ -209,12 +208,12 @@ __sqrt(double x)
 	r = 0x00200000;		/* r = moving bit from right to left */
 
 	while(r!=0) {
-	    t = s0+r; 
-	    if(t<=ix0) { 
-		s0   = t+r; 
-		ix0 -= t; 
-		q   += r; 
-	    } 
+	    t = s0+r;
+	    if(t<=ix0) {
+		s0   = t+r;
+		ix0 -= t;
+		q   += r;
+	    }
 	    ix0 += ix0 + ((ix1&sign)>>31);
 	    ix1 += ix1;
 	    r>>=1;
@@ -222,9 +221,9 @@ __sqrt(double x)
 
 	r = sign;
 	while(r!=0) {
-	    t1 = s1+r; 
+	    t1 = s1+r;
 	    t  = s0;
-	    if((t<ix0)||((t==ix0)&&(t1<=ix1))) { 
+	    if((t<ix0)||((t==ix0)&&(t1<=ix1))) {
 		s1  = t1+r;
 		if(((t1&sign)==sign)&&(s1&sign)==0) s0 += 1;
 		ix0 -= t;
@@ -245,7 +244,7 @@ __sqrt(double x)
 	        if (q1==(unsigned int)0xffffffff) { q1=0; q += 1;}
 		else if (z>one) {
 		    if (q1==(unsigned int)0xfffffffe) q+=1;
-		    q1+=2; 
+		    q1+=2;
 		} else
 	            q1 += (q1&1);
 	    }
@@ -258,39 +257,7 @@ __sqrt(double x)
 	return z;
 }
 
-double
-sqrt(double x)
-{
-	double result;
-
-	if(x >= 0.0)
-	{
-		result = __sqrt(x);
-	}
-	else
-	{
-		result = 0;
-		SetAmiSSLerrno(EDOM);
-	}
-
-	return(result);
-}
-
-double
-fabs(double x)
-{
-	double res;
-
-	if(x < 0)
-		res = (-x);
-	else
-		res = x;
-
-	return res;
-}
-
-double
-floor(double x)
+INLINE double __floor(double x)
 {
 	int i0,i1,j0;
 	unsigned int i,j;
@@ -299,62 +266,62 @@ floor(double x)
 
 	j0 = ((i0>>20)&0x7ff)-0x3ff;
 
-	if(j0<20) 
+	if(j0<20)
 	{
-	    if(j0<0) 
+	    if(j0<0)
 		{
-			if(huge+x>0.0) 
+			if(huge+x>0.0)
 			{
-				if(i0>=0) 
+				if(i0>=0)
 				{
 					i0=i1=0;
-				} 
+				}
 				else if(((i0&0x7fffffff)|i1)!=0)
-				{ 
+				{
 					i0=0xbff00000;
 					i1=0;
 				}
 			}
-	    } 
-		else 
+	    }
+		else
 		{
 			i = (0x000fffff)>>j0;
 
-			if(((i0&i)|i1)==0) 
+			if(((i0&i)|i1)==0)
 				return x;
 
-			if(huge+x>0.0) 
+			if(huge+x>0.0)
 			{
-				if(i0<0) 
+				if(i0<0)
 					i0 += (0x00100000)>>j0;
 				i0 &= (~i); i1=0;
 			}
 	    }
 	}
-	else if (j0>51) 
+	else if (j0>51)
 	{
 	    if(j0==0x400)
 			return x+x;
 	    else
 			return x;
-	} 
-	else 
+	}
+	else
 	{
 	    i = ((unsigned int)(0xffffffff))>>(j0-20);
 
-	    if((i1&i)==0) 
+	    if((i1&i)==0)
 			return x;
 
 	    if(huge+x>0.0)
 		{
-			if(i0<0) 
+			if(i0<0)
 			{
-				if(j0==20) 
-					i0+=1; 
-				else 
+				if(j0==20)
+					i0+=1;
+				else
 				{
 					j = i1+(1<<(52-j0));
-					if(j<i1) 
+					if(j<i1)
 						i0 +=1;
 					i1=j;
 				}
@@ -367,7 +334,7 @@ floor(double x)
 	return x;
 }
 
-static const double 
+static const double
 bp[] = {1.0, 1.5,},
 dp_h[] = { 0.0, 5.84962487220764160156e-01,}, /* 0x3FE2B803, 0x40000000 */
 dp_l[] = { 0.0, 1.35003920212974897128e-08,}, /* 0x3E4CFDEB, 0x43CFD006 */
@@ -400,8 +367,7 @@ ivln2    =  1.44269504088896338700e+00, /* 0x3FF71547, 0x652B82FE =1/ln2 */
 ivln2_h  =  1.44269502162933349609e+00, /* 0x3FF71547, 0x60000000 =24b 1/ln2*/
 ivln2_l  =  1.92596299112661746887e-08; /* 0x3E54AE0B, 0xF85DDF44 =1/ln2 tail*/
 
-static __inline double
-__pow(double x,double y)
+INLINE double __pow(double x,double y)
 {
 	double z,ax,z_h,z_l,p_h,p_l;
 	double y1,t1,t2,r,s,t,u,v,w;
@@ -414,12 +380,12 @@ __pow(double x,double y)
 	ix = hx&0x7fffffff;  iy = hy&0x7fffffff;
 
     /* y==zero: x**0 = 1 */
-	if((iy|ly)==0) return one; 	
+	if((iy|ly)==0) return one;
 
     /* +-NaN return x+y */
 	if(ix > 0x7ff00000 || ((ix==0x7ff00000)&&(lx!=0)) ||
-	   iy > 0x7ff00000 || ((iy==0x7ff00000)&&(ly!=0))) 
-		return x+y;	
+	   iy > 0x7ff00000 || ((iy==0x7ff00000)&&(ly!=0)))
+		return x+y;
 
     /* determine if y is an odd int when x < 0
      * yisint = 0	... y is not an integer
@@ -427,7 +393,7 @@ __pow(double x,double y)
      * yisint = 2	... y is an even int
      */
 	yisint  = 0;
-	if(hx<0) {	
+	if(hx<0) {
 	    if(iy>=0x43400000) yisint = 2; /* even integer y */
 	    else if(iy>=0x3ff00000) {
 			k = (iy>>20)-0x3ff;	   /* exponent */
@@ -438,11 +404,11 @@ __pow(double x,double y)
 				j = iy>>(20-k);
 				if((j<<(20-k))==iy) yisint = 2-(j&1);
 			}
-	    }		
-	} 
+	    }
+	}
 
     /* special value of y */
-	if(ly==0) { 	
+	if(ly==0) {
 	    if (iy==0x7ff00000) {	/* y is +-inf */
 	        if(((ix-0x3ff00000)|lx)==0)
 				return  y - y;	/* inf**+-1 is NaN */
@@ -450,14 +416,14 @@ __pow(double x,double y)
 				return (hy>=0)? y: zero;
 	        else			/* (|x|<1)**-,+inf = inf,0 */
 				return (hy<0)?-y: zero;
-	    } 
+	    }
 	    if(iy==0x3ff00000) {	/* y is  +-1 */
 			if(hy<0) return one/x; else return x;
 	    }
 	    if(hy==0x40000000) return x*x; /* y is  2 */
 	    if(hy==0x3fe00000) {	/* y is  0.5 */
 			if(hx>=0)	/* x >= +0 */
-				return sqrt(x);	
+				return sqrt(x);
 	    }
 	}
 
@@ -470,13 +436,13 @@ __pow(double x,double y)
 			if(hx<0) {
 				if(((ix-0x3ff00000)|yisint)==0) {
 					z = (z-z)/(z-z); /* (-1)**non-int is NaN */
-				} else if(yisint==1) 
+				} else if(yisint==1)
 					z = -z;		/* (x<0)**odd = -(|x|**odd) */
 			}
 			return z;
 	    }
 	}
-    
+
     /* (x<0)**(non-int) is NaN */
 	n = ((unsigned int)hx>>31)+1;
 	if((n|yisint)==0) return (x-x)/(x-x);
@@ -494,7 +460,7 @@ __pow(double x,double y)
 		/* over/underflow if x is not close to one */
 	    if(ix<0x3fefffff) return (hy<0)? s*huge*huge:s*tiny*tiny;
 	    if(ix>0x3ff00000) return (hy>0)? s*huge*huge:s*tiny*tiny;
-		/* now |1-x| is tiny <= 2**-20, suffice to compute 
+		/* now |1-x| is tiny <= 2**-20, suffice to compute
 		   log(x) by x-x^2/2+x^3/3-x^4/4 */
 	    t = ax-one;		/* t has 20 trailing zeros */
 	    w = (t*t)*(0.5-t*(0.3333333333333333333333-t*0.25));
@@ -587,7 +553,7 @@ __pow(double x,double y)
 	    n = ((n&0x000fffff)|0x00100000)>>(20-k);
 	    if(j<0) n = -n;
 	    p_h -= t;
-	} 
+	}
 	t = p_l+p_h;
 	SET_LOW_WORD(t,0);
 	u = t*lg2_h;
@@ -605,8 +571,7 @@ __pow(double x,double y)
 	return s*z;
 }
 
-static __inline double
-__get_huge_val()
+INLINE double __get_huge_val()
 {
 	double ret;
 	union ieee_double *double_x = (union ieee_double *)&ret;
@@ -618,12 +583,120 @@ __get_huge_val()
 	return(ret);
 }
 
-double
-pow(double x,double y)
+#else /* __PPC__ */
+
+#include <proto/mathieeedoubbas.h>
+#include <proto/mathieeedoubtrans.h>
+
+INLINE double __sqrt(double x)
 {
 	double result;
 
-	if(x == 0.0 && y < 0.0)
+	result = IEEEDPSqrt(x);
+
+	return(result);
+}
+
+INLINE double __floor(double x)
+{
+	double result;
+
+	result = IEEEDPFloor(x);
+
+	return(result);
+}
+
+INLINE double __exp(double x)
+{
+	double result;
+
+	result = IEEEDPExp(x);
+
+	return(result);
+}
+
+INLINE double __log(double x)
+{
+	double result;
+
+	result = IEEEDPLog(x);
+
+	return(result);
+}
+
+INLINE double __pow(double x,double y)
+{
+	double result;
+
+	if(x > 0)
+	{
+		result = __exp(y * __log(x));
+	}
+	else
+	{
+		int i = (int)y;
+
+		if((i & 1) == 0) /* even */
+			result = __exp(y) * __log(-x);
+		else
+            result = -(__exp(y) * __log(-x));
+	}
+
+	return(result);
+}
+
+INLINE double __get_huge_val()
+{
+	double ret;
+	union ieee_double *double_x = (union ieee_double *)&ret;
+
+	/* Exponent = +1022, Mantissa = 4,503,599,627,370,495 */
+	double_x->raw[0] = 0x7fefffff;
+	double_x->raw[1] = 0xffffffff;
+
+	return(ret);
+}
+#endif /* __PPC__ */
+
+double fabs(double x)
+{
+	double res;
+
+	if(x < 0)
+		res = (-x);
+	else
+		res = x;
+
+	return res;
+}
+
+double sqrt(double x)
+{
+	double result;
+
+	if(x >= 0.0)
+	{
+		result = __sqrt(x);
+	}
+	else
+	{
+		result = 0;
+		SetAmiSSLerrno(EDOM);
+	}
+
+	return result;
+}
+
+double floor(double x)
+{
+	return __floor(x);
+}
+
+double pow(double x,double y)
+{
+	double result;
+
+	if(x == 0 && y < 0)
 	{
 		SetAmiSSLerrno(EDOM);
 
@@ -631,7 +704,7 @@ pow(double x,double y)
 		goto out;
 	}
 
-	if(x < 0.0)
+	if(x < 0)
 	{
 		double abs_y;
 
@@ -645,24 +718,9 @@ pow(double x,double y)
 		}
 	}
 
-	if(x != 0.0 && y == 0.0)
-	{
-		result = 1.0;
-	}
-	else if (x == 0.0 && y > 0.0)
-	{
-		result = 0.0;
-	}
-	else
-	{
-		result = __pow(x,y);
-	}
+	result = __pow(x,y);
 
  out:
 
-	return(result);
+	return result;
 }
-
-#else /* __PPC__ */
-#error Unsupported architecture
-#endif

@@ -94,7 +94,7 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 		TOFILE(stream)->_flag &= ~(_IOLBF);
 		if(IsInteractive(file))
 			TOFILE(stream)->_flag |= _IOLBF; /* set linebuffered flag */
-	 
+
 		TOFILE(stream)->_file=file;
 	}
 
@@ -194,33 +194,33 @@ int fseek(FILE *file, LONG pos, int mode)
 
 /* Only used by the (currently) unsupported FD interface */
 
-int open(const char *path_name, int open_flag, ... /* mode_t mode */ )
+int open(UNUSED const char *path_name, UNUSED int open_flag, ... /* mode_t mode */ )
 {
 	return(-1);
 }
 
-int close(int fd)
-{
-	SetAmiSSLerrno(EINVAL);
-
-	return(-1);
-}
-
-int lseek(int fd, long offset, int mode)
+int close(UNUSED int fd)
 {
 	SetAmiSSLerrno(EINVAL);
 
 	return(-1);
 }
 
-int read(int fd, void *buffer, size_t num_bytes)
+int lseek(UNUSED int fd, UNUSED long offset, UNUSED int mode)
 {
 	SetAmiSSLerrno(EINVAL);
 
 	return(-1);
 }
 
-int write(int fd, const void* buffer, size_t num_bytes)
+int read(UNUSED int fd, UNUSED void *buffer, UNUSED size_t num_bytes)
+{
+	SetAmiSSLerrno(EINVAL);
+
+	return(-1);
+}
+
+int write(UNUSED int fd, UNUSED const void* buffer, UNUSED size_t num_bytes)
 {
 	SetAmiSSLerrno(EINVAL);
 

@@ -36,13 +36,13 @@ recvfrom(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_Recv(s,buf,len,flags,from,fromlen);
+				return amitcp_RecvFrom(s,buf,len,flags,from,fromlen);
 				break;
 			case TCPIP_IN225:
-				return in225_recv(s,buf,len,flags,from,fromlen);
+				return in225_recvfrom(s,buf,len,flags,from,fromlen);
 				break;
 			case TCPIP_Termite:
-				return termite_recv(s,buf,len,flags,from,fromlen);
+				return termite_recvfrom(s,buf,len,flags,from,fromlen);
 				break;
 		}
 	}

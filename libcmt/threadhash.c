@@ -1,8 +1,5 @@
 #include <string.h>
-
-#ifdef __GNUC__
-#define __stdargs
-#endif
+#include <internal/amissl.h>
 
 struct HashEntry
 {
@@ -16,15 +13,15 @@ struct HashTable
 	long TableSize;
 	long Entries;
 	long Locked;
-	__stdargs void *(*allocator)(long);
-	__stdargs void (*deallocator)(void *);
+	void STDARGS *(*allocator)(long);
+	void STDARGS  (*deallocator)(void *);
 	struct HashEntry *HashEntries;
 };
 
 static void *grow(struct HashTable *old);
 static void shrink(struct HashTable *old);
 
-struct HashTable *h_new(long InitialSize,__stdargs void *(*allocator)(long),__stdargs void (*deallocator)(void *))
+struct HashTable *h_new(long InitialSize,void STDARGS *(*allocator)(long),void STDARGS (*deallocator)(void *))
 {
 	struct HashTable *new;
 
@@ -40,7 +37,7 @@ struct HashTable *h_new(long InitialSize,__stdargs void *(*allocator)(long),__st
 			new->InitialSize = InitialSize;
 			new->allocator = allocator;
 			new->deallocator = deallocator;
-			return new;	
+			return new;
 		}
 		deallocator(new);
 	}
@@ -68,7 +65,7 @@ void *h_insert(struct HashTable *h,long Key,void * UserData)
 	if(h->Entries*2 > h->TableSize)
 		if(!grow(h))
 			return 0;
-	
+
 	h1=(((long)Key)/8) % h->TableSize;
 	h2=1+(((long)Key)/8) % (h->TableSize-2);
 
@@ -163,7 +160,7 @@ void h_delete(struct HashTable *h,long Key)
 	return; /* Not found */
 }
 
-void h_doall(struct HashTable *h,__stdargs void (*func)(long,void *))
+void h_doall(struct HashTable *h,STDARGS void (*func)(long,void *))
 {
 	long i=h->TableSize-1;
 	h->Locked++; /* Avoid rehashing. Add to the list will simply not work, delete will not shrink */

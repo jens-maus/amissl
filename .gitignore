@@ -1,5 +1,8 @@
 /.obj_*
+/OS4
 /bin_*
+/lib
+/obj
 openssl/MINFO
 openssl/Makefile
 openssl/OS4

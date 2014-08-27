@@ -181,8 +181,11 @@ static void __dostat(struct FileInfoBlock *fib,
   st->st_blocks = fib->fib_NumBlocks;
 #endif
 
+#if 0
   st->st_type = fib->fib_DirEntryType;
   st->st_comment = fib->fib_Comment;
+#endif
+
 #ifdef SYS_STAT_H
   st->st_dosmode = fib->fib_Protection;
 #endif

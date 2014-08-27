@@ -3813,8 +3813,8 @@
 	LP2(0x1662, int, OBJ_cmp, const ASN1_OBJECT *, a, a0, const ASN1_OBJECT *, b, a1, \
 	, AMISSL_BASE_NAME)
 
-#define OBJ_bsearch(key, base, num, size, cmp) \
-	LP5FP(0x1668, const char *, OBJ_bsearch, const char *, key, a0, const char *, base, a1, LONG, num, d0, LONG, size, d1, __fpt, cmp, a2, \
+#define OBJ_bsearch_(key, base, num, size, cmp) \
+	LP5FP(0x1668, const char *, OBJ_bsearch_, const char *, key, a0, const char *, base, a1, LONG, num, d0, LONG, size, d1, __fpt, cmp, a2, \
 	, AMISSL_BASE_NAME, int (*__fpt)(const void *, const void *))
 
 #define OBJ_new_nid(num) \

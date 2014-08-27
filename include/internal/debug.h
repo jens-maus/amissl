@@ -9,15 +9,14 @@ extern struct ExecIFace * __attribute__((force_no_baserel)) IExec;
 #define kprintf (IExec->DebugPrintF)
 #define traceline() (IExec->DebugPrintF)("%08x %s:%d\n",(IExec->FindTask)(NULL),__FILE__,__LINE__)
 #else /* DEBUG */
-#define kprintf(...) ((void)0) 
-#define traceline() ((void)0) 
+#define kprintf(...) ((void)0)
+#define traceline() ((void)0)
 #endif /* DEBUG */
 
 #else /* __amigaos4__ */
 
-/* Currently not supported */
-static void kprintf(const char *dummy, ...) {}
-#define traceline() ((void)0) 
+extern void kprintf(const char *fmt, ...);
+#define traceline() kprintf("%08x %s:%d\n",FindTask(NULL),__FILE__,__LINE__)
 
 #endif /* __amigaos4__ */
 

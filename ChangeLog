@@ -5,13 +5,19 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-08-27 Thore Böckelmann <tboeckel@gmx.de>
+
+  * misc: lots of changes to get this beast buildable for AmigaOS3. This is
+    definitely work in progress and not yet finished. At least libcmt is built
+    successfully now, although there are still lots of warnings.
+
 2014-08-17 Jens Maus <mail@jens-maus.de>
- 
+
   * misc: merged the OpenSSL 1.0.1i vendor branch onto the trunk and adapted all
     AmiSSL sources accordingly.
 
 2014-07-11 Jens Maus <mail@jens-maus.de>
- 
+
   * Makefile, misc: largely reworked the top-level Makefile so that we will only have
     a single Makefile for compiling AmiSSL out-of-the-box rather than having to run
     several kind of shell scripts for different platforms and different debugging
@@ -20,13 +26,13 @@ $URL$
   * src: fixed a bunch of compiler warning appearing with -W -Wall.
 
 2014-07-10 Jens Maus <mail@jens-maus.de>
- 
+
   * openssl/util/pl/OS4.pl: enabled -Wall and fixed a whole bunch of compiler warnings.
   * amissl_library.c, amissl_glue.c: removed the functionality to use an environment
     variable to override the SSL protocol version even if an application directly uses
     a SSLv23_XXXX_method() function. While this functionality was really rarely used
     it also contradicts what an application expects these functions to do. So if an
-    application want to explictly force a protocol version to be used it ought to 
+    application want to explictly force a protocol version to be used it ought to
     better use SSL_CTX_set_options() afterwards rather than directly allowing users
     to override this functionality for all applications which potentially might
     fail. Thus, this is again not the task of AmiSSL/OpenSSL and thus the removal
@@ -46,7 +52,7 @@ $URL$
     (e.g. Linux, etc.)
 
 2014-07-09 Jens Maus <mail@jens-maus.de>
- 
+
   * misc: added OPENSSL_NO_FP_API to our main makefile and commented out all public
     functions dealing eith FILE* file pointers which are specific to every C library
     and are thus not compatible throughout the different c-libraries.

@@ -400,9 +400,8 @@ int vsscanf(const char *s,const char *format,va_list args)
     return (int)blocks;
 }
 
-double __except(int type,const char *name,double arg1,double arg2,double retval)
+double __except(int type,UNUSED const char *name,UNUSED double arg1,UNUSED double arg2,double retval)
 {
-#ifdef __amigaos4__
     switch(type) {
         case EDOM:
             SetAmiSSLerrno(EDOM);
@@ -411,16 +410,5 @@ double __except(int type,const char *name,double arg1,double arg2,double retval)
         default:
             SetAmiSSLerrno(ERANGE);
     }
-#else
-    switch(type) {
-        case DOMAIN:
-        case SING:
-            SetAmiSSLerrno(EDOM);
-            break;
-
-        default:
-            SetAmiSSLerrno(ERANGE);
-    }
-#endif
     return retval;
 }

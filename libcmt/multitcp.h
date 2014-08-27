@@ -13,28 +13,6 @@
 
 #ifndef NO_MTCP_PROTOS
 
-#ifndef __amigaos4__
-#ifndef _UID_T
-#define _UID_T long
-typedef _UID_T uid_t;
-#endif
-
-#ifndef _GID_T
-#define _GID_T long
-typedef _GID_T gid_t;
-#endif
-
-#ifndef _MODE_T
-#define _MODE_T unsigned short 
-typedef _MODE_T mode_t;
-#endif
-
-#ifndef _TIME_T
-#define _TIME_T long
-typedef _TIME_T time_t;
-#endif
-#endif /* !__amigaos4__ */
-
 #ifndef __SASC
 /* SAS-C bug... it doesn't deal with implicit declaration of
    structures correctly (ANSI requires that the parameter list of a
@@ -52,6 +30,7 @@ struct Library;
 #include <exec/memory.h>
 #include <exec/semaphores.h>
 #include <dos/dosextens.h>
+#include <utility/tagitem.h>
 
 #include <sys/ioctl.h>
 #include <errno.h>
@@ -146,11 +125,11 @@ LONG amitcp_Bind(LONG s, const struct sockaddr *name, LONG namelen);
 LONG amitcp_Listen(LONG s, LONG backlog);
 LONG amitcp_Accept(LONG s, struct sockaddr *addr, LONG *addrlen);
 LONG amitcp_Connect(LONG s, const struct sockaddr *name, LONG namelen);
-LONG amitcp_Send(LONG s, const UBYTE *msg, LONG len, LONG flags);
-LONG amitcp_SendTo(LONG s, const UBYTE *msg, LONG len, LONG flags,const struct sockaddr *to, LONG tolen);
+LONG amitcp_Send(LONG s, const void *msg, LONG len, LONG flags);
+LONG amitcp_SendTo(LONG s, const void *msg, LONG len, LONG flags, const struct sockaddr *to, LONG tolen);
 LONG amitcp_SendMsg(LONG s, struct msghdr * msg, LONG flags);
-LONG amitcp_Recv(LONG s, UBYTE *buf, LONG len, LONG flags);	/* V3 */
-LONG amitcp_RecvFrom(LONG s, UBYTE *buf, LONG len, LONG flags,struct sockaddr *from, LONG *fromlen);
+LONG amitcp_Recv(LONG s, void *buf, LONG len, LONG flags);	/* V3 */
+LONG amitcp_RecvFrom(LONG s, void *buf, LONG len, LONG flags, struct sockaddr *from, LONG *fromlen);
 LONG amitcp_RecvMsg(LONG s, struct msghdr * msg, LONG flags);	/* V3 */
 LONG amitcp_Shutdown(LONG s, LONG how);
 LONG amitcp_SetSockOpt(LONG s, LONG level, LONG optname, const void *optval, LONG optlen);
@@ -168,9 +147,7 @@ LONG amitcp_GetDTableSize(void);			       /* V3 */
 void amitcp_SetSocketSignals(ULONG SIGINTR, ULONG SIGIO, ULONG SIGURG);
 LONG amitcp_SetErrnoPtr(void *errno_p, LONG size);
 LONG amitcp_SocketBaseTagList(struct TagItem *tagList);	/* V3 */
-#pragma msg 162 ignore push
 LONG amitcp_SocketBaseTags(ULONG, ...);				/* V3 */
-#pragma msg 162 pop
 LONG amitcp_GetSocketEvents(ULONG *eventmaskp);		/* V4 */
 
 LONG amitcp_Errno(void);
@@ -391,11 +368,11 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 	, state->SocketBase)
 
 #define amitcp_Recv(sock, buf, len, flags) \
-	LP4(0x4e, LONG, amitcp_Recv, LONG, sock, d0, UBYTE *, buf, a0, LONG, len, d1, LONG, flags, d2, \
+	LP4(0x4e, LONG, amitcp_Recv, LONG, sock, d0, void *, buf, a0, LONG, len, d1, LONG, flags, d2, \
 	, state->SocketBase)
 
 #define amitcp_RecvFrom(sock, buf, len, flags, from, fromlen) \
-	LP6(0x48, LONG, amitcp_RecvFrom, LONG, sock, d0, UBYTE *, buf, a0, LONG, len, d1, LONG, flags, d2, struct sockaddr *, from, a1, int *, fromlen, a2, \
+	LP6(0x48, LONG, amitcp_RecvFrom, LONG, sock, d0, void *, buf, a0, LONG, len, d1, LONG, flags, d2, struct sockaddr *, from, a1, LONG *, fromlen, a2, \
 	, state->SocketBase)
 
 #define amitcp_RecvMsg(sock, msg, flags) \
@@ -411,7 +388,7 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 	, state->SocketBase)
 
 #define amitcp_Send(sock, msg, len, flags) \
-	LP4(0x42, LONG, amitcp_Send, LONG, sock, d0, const UBYTE *, msg, a0, LONG, len, d1, LONG, flags, d2, \
+	LP4(0x42, LONG, amitcp_Send, LONG, sock, d0, const void *, msg, a0, LONG, len, d1, LONG, flags, d2, \
 	, state->SocketBase)
 
 #define amitcp_SendMsg(sock, msg, flags) \
@@ -419,7 +396,7 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 	, state->SocketBase)
 
 #define amitcp_SendTo(sock, msg, len, flags, to, tolen) \
-	LP6(0x3c, LONG, amitcp_SendTo, LONG, sock, d0, const UBYTE *, msg, a0, LONG, len, d1, LONG, flags, d2, const struct sockaddr *, to, a1, LONG, tolen, d3, \
+	LP6(0x3c, LONG, amitcp_SendTo, LONG, sock, d0, const void *, msg, a0, LONG, len, d1, LONG, flags, d2, const struct sockaddr *, to, a1, LONG, tolen, d3, \
 	, state->SocketBase)
 
 #define amitcp_SetErrnoPtr(errno_p, size) \
@@ -462,6 +439,14 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 
 
 /* IN225 functions */
+
+#ifndef u_short
+#define u_short USHORT
+#endif
+
+#ifndef u_long
+#define u_long ULONG
+#endif
 
 int in225_accept (int, struct sockaddr *, int *);
 int in225_bind (int, struct sockaddr *, int );
@@ -981,8 +966,8 @@ int termite_socket(
         int                   Type,
         int                   Protocol);
 int termite_SocketBaseTagList(
-        struct TagItem       *tagList);	
-int termite_SocketBaseTags(ULONG, ...);	
+        struct TagItem       *tagList);
+int termite_SocketBaseTags(ULONG, ...);
 int termite_WaitSelect(
         int                   NumFDS,
         fd_set               *ReadFDS,
@@ -1031,24 +1016,24 @@ int termite_shutdown(int s, int how);
 #pragma tagcall state->SocketBase termite_SocketBaseTags b4 801
 #pragma libcall state->SocketBase termite_WaitSelect ba 1BA98006
 #elif defined __GNUC__
-#define termite_CloseSocket(REG(d0,)) \
-	LP1(0x2a, int, CloseSocket, int, REG(d0,), d0, \
+#define termite_CloseSocket(__pD0) \
+	LP1(0x2a, int, CloseSocket, int, __pD0, d0, \
 	, state->SocketBase)
 
-#define termite_IoctlSocket(REG(d0,), REG(d1,), REG(a0,)) \
-	LP3(0x72, int, IoctlSocket, int, REG(d0,), d0, int, REG(d1,), d1, char                 *, REG(a0,), a0, \
+#define termite_IoctlSocket(__pD0, __pD1, __pA0) \
+	LP3(0x72, int, IoctlSocket, int, __pD0, d0, int, __pD1, d1, char                 *, __pA0, a0, \
 	, state->SocketBase)
 
-#define termite_SetErrnoPtr(REG(a0,)) \
-	LP1NR(0x96, SetErrnoPtr, int                  *, REG(a0,), a0, \
+#define termite_SetErrnoPtr(__pA0) \
+	LP1NR(0x96, SetErrnoPtr, int                  *, __pA0, a0, \
 	, state->SocketBase)
 
-#define termite_SetSocketSignals(REG(d0,), REG(d1,), REG(d2,)) \
-	LP3NR(0x9c, SetSocketSignals, unsigned long, REG(d0,), d0, unsigned long, REG(d1,), d1, unsigned long, REG(d2,), d2, \
+#define termite_SetSocketSignals(__pD0, __pD1, __pD2) \
+	LP3NR(0x9c, SetSocketSignals, unsigned long, __pD0, d0, unsigned long, __pD1, d1, unsigned long, __pD2, d2, \
 	, state->SocketBase)
 
-#define termite_SocketBaseTagList(REG(a0,)) \
-	LP1(0xb4, int, SocketBaseTagList, struct TagItem       *, REG(a0,), a0, \
+#define termite_SocketBaseTagList(__pA0) \
+	LP1(0xb4, int, SocketBaseTagList, struct TagItem       *, __pA0, a0, \
 	, state->SocketBase)
 
 #ifndef NO_INLINE_STDARG
@@ -1056,92 +1041,92 @@ int termite_shutdown(int s, int how);
 	({ULONG _tags[] = { tags }; termite_SocketBaseTagList((struct TagItem       *)_tags);})
 #endif /* !NO_INLINE_STDARG */
 
-#define termite_WaitSelect(REG(d0,), REG(a0,), REG(a1,), REG(a2,), REG(a3,), REG(d1,)) \
-	LP6(0xba, int, WaitSelect, int, REG(d0,), d0, fd_set               *, REG(a0,), a0, fd_set               *, REG(a1,), a1, fd_set               *, REG(a2,), a2, struct timeval       *, REG(a3,), a3, unsigned long        *, REG(d1,), d1, \
+#define termite_WaitSelect(__pD0, __pA0, __pA1, __pA2, __pA3, __pD1) \
+	LP6(0xba, int, WaitSelect, int, __pD0, d0, fd_set               *, __pA0, a0, fd_set               *, __pA1, a1, fd_set               *, __pA2, a2, struct timeval       *, __pA3, a3, unsigned long        *, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_accept(REG(d0,), REG(a0,), REG(a1,)) \
-	LP3(0x1e, int, accept, int, REG(d0,), d0, struct sockaddr      *, REG(a0,), a0, int                  *, REG(a1,), a1, \
+#define termite_accept(__pD0, __pA0, __pA1) \
+	LP3(0x1e, int, accept, int, __pD0, d0, struct sockaddr      *, __pA0, a0, int                  *, __pA1, a1, \
 	, state->SocketBase)
 
-#define termite_bind(REG(d0,), REG(a0,), REG(d1,)) \
-	LP3(0x24, int, bind, int, REG(d0,), d0, char                 *, REG(a0,), a0, int, REG(d1,), d1, \
+#define termite_bind(__pD0, __pA0, __pD1) \
+	LP3(0x24, int, bind, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_connect(REG(d0,), REG(a0,), REG(d1,)) \
-	LP3(0x30, int, connect, int, REG(d0,), d0, struct sockaddr      *, REG(a0,), a0, int, REG(d1,), d1, \
+#define termite_connect(__pD0, __pA0, __pD1) \
+	LP3(0x30, int, connect, int, __pD0, d0, struct sockaddr      *, __pA0, a0, int, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_gethostbyaddr(REG(a0,), REG(d0,), REG(d1,)) \
-	LP3(0x36, struct hostent *, gethostbyaddr, char                 *, REG(a0,), a0, int, REG(d0,), d0, int, REG(d1,), d1, \
+#define termite_gethostbyaddr(__pA0, __pD0, __pD1) \
+	LP3(0x36, struct hostent *, gethostbyaddr, char                 *, __pA0, a0, int, __pD0, d0, int, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_gethostbyname(REG(a0,)) \
-	LP1(0x3c, struct hostent *, gethostbyname, char                 *, REG(a0,), a0, \
+#define termite_gethostbyname(__pA0) \
+	LP1(0x3c, struct hostent *, gethostbyname, char                 *, __pA0, a0, \
 	, state->SocketBase)
 
 #define termite_gethostid() \
 	LP0(0x42, unsigned long, gethostid, \
 	, state->SocketBase)
 
-#define termite_gethostname(REG(a0,), REG(d0,)) \
-	LP2(0x48, int, gethostname, char                 *, REG(a0,), a0, int, REG(d0,), d0, \
+#define termite_gethostname(__pA0, __pD0) \
+	LP2(0x48, int, gethostname, char                 *, __pA0, a0, int, __pD0, d0, \
 	, state->SocketBase)
 
-#define termite_getprotobyname(REG(a0,)) \
-	LP1(0x4e, struct protoent *, getprotobyname, char                 *, REG(a0,), a0, \
+#define termite_getprotobyname(__pA0) \
+	LP1(0x4e, struct protoent *, getprotobyname, char                 *, __pA0, a0, \
 	, state->SocketBase)
 
-#define termite_getprotobynumber(REG(d0,)) \
-	LP1(0x54, struct protoent *, getprotobynumber, int, REG(d0,), d0, \
+#define termite_getprotobynumber(__pD0) \
+	LP1(0x54, struct protoent *, getprotobynumber, int, __pD0, d0, \
 	, state->SocketBase)
 
-#define termite_getservbyname(REG(a0,), REG(a1,)) \
-	LP2(0x5a, struct servent *, getservbyname, char                 *, REG(a0,), a0, char                 *, REG(a1,), a1, \
+#define termite_getservbyname(__pA0, __pA1) \
+	LP2(0x5a, struct servent *, getservbyname, char                 *, __pA0, a0, char                 *, __pA1, a1, \
 	, state->SocketBase)
 
-#define termite_getsockname(REG(d0,), REG(a0,), REG(a1,)) \
-	LP3(0x60, int, getsockname, int, REG(d0,), d0, char                 *, REG(a0,), a0, int                  *, REG(a1,), a1, \
+#define termite_getsockname(__pD0, __pA0, __pA1) \
+	LP3(0x60, int, getsockname, int, __pD0, d0, char                 *, __pA0, a0, int                  *, __pA1, a1, \
 	, state->SocketBase)
 
-#define termite_inet_addr(REG(a0,)) \
-	LP1(0x66, int, inet_addr, char                 *, REG(a0,), a0, \
+#define termite_inet_addr(__pA0) \
+	LP1(0x66, int, inet_addr, char                 *, __pA0, a0, \
 	, state->SocketBase)
 
-#define termite_inet_ntoa(REG(d0,)) \
-	LP1(0x6c, char *, inet_ntoa, long, REG(d0,), d0, \
+#define termite_inet_ntoa(__pD0) \
+	LP1(0x6c, char *, inet_ntoa, long, __pD0, d0, \
 	, state->SocketBase)
 
-#define termite_listen(REG(d0,), REG(d1,)) \
-	LP2(0x78, int, listen, int, REG(d0,), d0, int, REG(d1,), d1, \
+#define termite_listen(__pD0, __pD1) \
+	LP2(0x78, int, listen, int, __pD0, d0, int, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_recv(REG(d0,), REG(a0,), REG(d1,), REG(d2,)) \
-	LP4(0x7e, int, recv, int, REG(d0,), d0, char                 *, REG(a0,), a0, int, REG(d1,), d1, int, REG(d2,), d2, \
+#define termite_recv(__pD0, __pA0, __pD1, __pD2) \
+	LP4(0x7e, int, recv, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, \
 	, state->SocketBase)
 
-#define termite_recvfrom(REG(d0,), REG(a0,), REG(d1,), REG(d2,), REG(a1,), REG(a2,)) \
-	LP6(0x84, int, recvfrom, int, REG(d0,), d0, char                 *, REG(a0,), a0, int, REG(d1,), d1, int, REG(d2,), d2, char                 *, REG(a1,), a1, int                  *, REG(a2,), a2, \
+#define termite_recvfrom(__pD0, __pA0, __pD1, __pD2, __pA1, __pA2) \
+	LP6(0x84, int, recvfrom, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, char                 *, __pA1, a1, int                  *, __pA2, a2, \
 	, state->SocketBase)
 
-#define termite_send(REG(d0,), REG(a0,), REG(d1,), REG(d2,)) \
-	LP4(0x8a, int, send, int, REG(d0,), d0, char                 *, REG(a0,), a0, int, REG(d1,), d1, int, REG(d2,), d2, \
+#define termite_send(__pD0, __pA0, __pD1, __pD2) \
+	LP4(0x8a, int, send, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, \
 	, state->SocketBase)
 
-#define termite_sendto(REG(d0,), REG(a0,), REG(d1,), REG(d2,), REG(a1,), REG(d3,)) \
-	LP6(0x90, int, sendto, int, REG(d0,), d0, char                 *, REG(a0,), a0, int, REG(d1,), d1, int, REG(d2,), d2, char                 *, REG(a1,), a1, int, REG(d3,), d3, \
+#define termite_sendto(__pD0, __pA0, __pD1, __pD2, __pA1, __pD3) \
+	LP6(0x90, int, sendto, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, char                 *, __pA1, a1, int, __pD3, d3, \
 	, state->SocketBase)
 
-#define termite_setsockopt(REG(d0,), REG(d1,), REG(d2,), REG(a0,), REG(d3,)) \
-	LP5(0xa2, int, setsockopt, int, REG(d0,), d0, int, REG(d1,), d1, int, REG(d2,), d2, char                 *, REG(a0,), a0, int, REG(d3,), d3, \
+#define termite_setsockopt(__pD0, __pD1, __pD2, __pA0, __pD3) \
+	LP5(0xa2, int, setsockopt, int, __pD0, d0, int, __pD1, d1, int, __pD2, d2, char                 *, __pA0, a0, int, __pD3, d3, \
 	, state->SocketBase)
 
-#define termite_shutdown(REG(d0,), REG(d1,)) \
-	LP2(0xa8, int, shutdown, int, REG(d0,), d0, int, REG(d1,), d1, \
+#define termite_shutdown(__pD0, __pD1) \
+	LP2(0xa8, int, shutdown, int, __pD0, d0, int, __pD1, d1, \
 	, state->SocketBase)
 
-#define termite_socket(REG(d0,), REG(d1,), REG(d2,)) \
-	LP3(0xae, int, socket, int, REG(d0,), d0, int, REG(d1,), d1, int, REG(d2,), d2, \
+#define termite_socket(__pD0, __pD1, __pD2) \
+	LP3(0xae, int, socket, int, __pD0, d0, int, __pD1, d1, int, __pD2, d2, \
 	, state->SocketBase)
 #endif
 
