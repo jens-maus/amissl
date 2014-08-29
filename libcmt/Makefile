@@ -186,3 +186,4 @@ LIBOBJS = $(OS4OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/lo
 $(BIN_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"
 	@$(AR) r $@ $(LIBOBJS)
+	@$(RANLIB) $@

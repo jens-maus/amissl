@@ -192,6 +192,8 @@ ifeq ($(OS), os4)
     CC      = ppc-amigaos-gcc-4.0.3
     STRIP   = ppc-amigaos-strip
     OBJDUMP = ppc-amigaos-objdump
+    AR      = ppc-amigaos-ar
+    RANLIB  = ppc-amigaos-ranlib
   endif
 
   # Compiler/Linker flags
@@ -220,6 +222,8 @@ ifeq ($(OS), os3)
     CC      = m68k-amigaos-gcc
     STRIP   = m68k-amigaos-strip
     OBJDUMP = m68k-amigaos-objdump
+    AR      = m68k-amigaos-ar
+    RANLIB  = m68k-amigaos-ranlib
   endif
 
   # Compiler/Linker flags
@@ -242,6 +246,8 @@ ifeq ($(OS), mos)
     CC      = ppc-morphos-gcc
     STRIP   = ppc-morphos-strip
     OBJDUMP = ppc-morphos-objdump
+    AR      = ppc-morphos-ar
+    RANLIB  = ppc-morphos-ranlib
   endif
 
   # Compiler/Linker flags
@@ -261,6 +267,8 @@ ifeq ($(OS), aros-i386)
     CC      = i386-aros-gcc
     STRIP   = i386-aros-strip
     OBJDUMP = i386-aros-objdump
+    AR      = i386-aros-ar
+    RANLIB  = i386-aros-ranlib
   endif
 
   # Compiler/Linker flags
@@ -278,6 +286,8 @@ ifeq ($(OS), aros-ppc)
     CC      = ppc-aros-gcc
     STRIP   = ppc-aros-strip
     OBJDUMP = ppc-aros-objdump
+    AR      = ppc-aros-ar
+    RANLIB  = ppc-aros-ranlib
   endif
 
   # Compiler/Linker flags
@@ -295,6 +305,8 @@ ifeq ($(OS), aros-x86_64)
     CC      = x86_64-aros-gcc
     STRIP   = x86_64-aros-strip
     OBJDUMP = x86_64-aros-objdump
+    AR      = x86_64-aros-ar
+    RANLIB  = x86_64-aros-ranlib
   endif
 
   # Compiler/Linker flags
@@ -312,6 +324,8 @@ ifeq ($(OS), aros-arm)
     CC      = arm-aros-gcc
     STRIP   = arm-aros-strip
     OBJDUMP = arm-aros-objdump
+    AR      = arm-aros-ar
+    RANLIB  = arm-aros-ranlib
   endif
 
   # Compiler/Linker flags
@@ -390,7 +404,7 @@ $(LIBSSL): $(LIBCRYPTO)
 ## LIBCMT BUILD RULES ##
 
 $(LIBCMT): $(OBJ_D)/libcmt
-	@make -C libcmt AmiSSL=.. CC=$(CC) AR=$(AR) OS=$(OS)
+	@make -C libcmt AmiSSL=.. CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS)
 
 ## AMISSL BUILD RULES ##
 
@@ -405,10 +419,12 @@ $(BIN_D)/amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amis
 $(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	@echo "  AR $@"
 	@$(AR) r $@ $(OBJ_D)/autoinit_amissl_main.o
+	@$(RANLIB) $@
 
 $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	@echo "  AR $@"
 	@$(AR) r $@ $(OBJ_D)/libstubs.o
+	@$(RANLIB) $@
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
