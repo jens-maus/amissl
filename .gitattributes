@@ -136,10 +136,12 @@ include/amissl/amissl.h eol=lf
 include/amissl/tags.h eol=lf
 include/clib/amissl_protos.h eol=lf
 include/clib/amisslmaster_protos.h eol=lf
+include/clib/reqtools_protos.h -text
 include/fd/amissl_lib.fd eol=lf
 include/fd/amisslmaster_lib.fd eol=lf
 include/inline/amissl.h eol=lf
 include/inline/amisslmaster.h eol=lf
+include/inline/reqtools.h -text
 include/inline4/amissl.h eol=lf
 include/inline4/amisslmaster.h eol=lf
 include/interfaces/amissl.h eol=lf
@@ -151,6 +153,7 @@ include/internal/amissl_compiler.h eol=lf
 include/internal/debug.h eol=lf
 include/libraries/amissl.h eol=lf
 include/libraries/amisslmaster.h eol=lf
+include/libraries/reqtools.h -text
 include/netinclude/arpa/ftp.h -text
 include/netinclude/arpa/inet.h -text
 include/netinclude/arpa/nameser.h -text
@@ -305,6 +308,7 @@ include/pragmas/amissl_pragmas.h eol=lf
 include/pragmas/amisslmaster_pragmas.h eol=lf
 include/proto/amissl.h eol=lf
 include/proto/amisslmaster.h eol=lf
+include/proto/reqtools.h -text
 include/sfd/amisslmaster_lib.sfd -text
 include/timeval.h -text
 include/xml/amissl.xml eol=lf

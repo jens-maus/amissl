@@ -68,8 +68,10 @@ LONG ShowRequester(enum SRType type, const char *title, const char *body,
 		ret = DoMethod(requester, RM_OPENREQ, NULL, NULL, screen, TAG_DONE);
 	else
 	{
-		static struct EasyStruct easy_struct = {sizeof(struct EasyStruct), 0};
-		
+		struct EasyStruct easy_struct;
+
+		memset(&easy_struct, 0, sizeof(easy_struct));
+		easy_struct.es_StructSize = sizeof(easy_struct);
 		easy_struct.es_Title = (char *)title;
 		easy_struct.es_TextFormat = (char *)body;
 		easy_struct.es_GadgetFormat = (char *)gadgets;
@@ -123,7 +125,7 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 	if (requester)
 		ret = DoMethod(requester, RM_OPENREQ, NULL, NULL, screen, TAG_DONE);
 #ifndef __amigaos4__
-	else if (ReqToolsBase = OpenLibrary("reqtools.library", 38))
+	else if ((ReqToolsBase = OpenLibrary("reqtools.library", 38)) != NULL)
 	{
 		ret = rtGetString(buffer, max_string_len, (char *)body, NULL,
 		                  RTGS_AllowEmpty, TRUE,
@@ -169,7 +171,7 @@ int UI_write_string_lib(UI *ui, UI_STRING *uis)
 int UI_read_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
-	
+
 	type = UI_get_string_type(uis);
 
 	switch(type)
@@ -278,7 +280,7 @@ int read_string_cb(UI *ui, UI_STRING *uis)
 	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
 #else
 	struct Library *AmiSSLBase=state->AmiSSLBase;
-#endif	
+#endif
 	return UI_read_string_lib(ui,uis);
 }
 
