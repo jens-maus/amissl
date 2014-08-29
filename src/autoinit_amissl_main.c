@@ -15,6 +15,10 @@
 
 /****************************************************************************/
 
+__attribute__((weak)) struct Library *AmiSSLBase = NULL;
+__attribute__((weak)) struct Library *AmiSSLMasterBase = NULL;
+__attribute__((weak)) struct Library *SocketBase = NULL;
+
 #if defined(__amigaos4__)
 __attribute__((weak)) struct AmiSSLIFace * IAmiSSL = NULL;
 __attribute__((weak)) struct AmiSSLMasterIFace * IAmiSSLMaster = NULL;
@@ -53,18 +57,21 @@ static void fatal_error(const char *message)
 	exit(RETURN_FAIL);
 }
 
+#if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
+#if defined(_M68000) || defined(__M68000) || defined(__mc68000)
+// the AmigaOS3 build needs these stubs for the varargs functions
+LONG FPrintf(BPTR fh, CONST_STRPTR format, ...)
+{ return VFPrintf(fh, format, &format+1); }
+
+long InitAmiSSL(Tag tag1, ...)
+{ return InitAmiSSLA((struct TagItem *)&tag1); }
+long CleanupAmiSSL(Tag tag1, ...)
+{ return CleanupAmiSSLA((struct TagItem *)&tag1); }
+#endif
+#endif
+
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
-
-static struct Library *_AmiSSLBase = NULL;
-static struct Library *_AmiSSLMasterBase = NULL;
-static struct Library *_SocketBase = NULL;
-
-#if defined(__amigaos4__)
-static struct AmiSSLIFace *iamissl = NULL;
-static struct AmiSSLMasterIFace *iamisslmaster = NULL;
-static struct SocketIFace *isocket = NULL;
-#endif
 
 void __init_amissl_main(void)
 {
@@ -72,11 +79,11 @@ void __init_amissl_main(void)
 	if (!ISocket)
 	#endif
 	{
-		if (!(_SocketBase = OpenLibrary("bsdsocket.library", 4)))
+		if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
 			fatal_error("Couldn't open bsdsocket.library v4!\n");
 
 		#if defined(__amigaos4__)
-		if (!(isocket = ISocket = (struct SocketIFace *)GetInterface((struct Library *)_SocketBase, "main", 1, NULL)))
+		if (!(ISocket = (struct SocketIFace *)GetInterface((struct Library *)SocketBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain socket interface\n");
 		#endif
 	}
@@ -85,12 +92,12 @@ void __init_amissl_main(void)
 	if (!IAmiSSLMaster)
 	#endif
 	{
-		if (!(_AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
+		if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 		                                             AMISSLMASTER_MIN_VERSION)))
 			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
 
 		#if defined(__amigaos4__)
-		if (!(iamisslmaster = IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)_AmiSSLMasterBase, "main", 1, NULL)))
+		if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)AmiSSLMasterBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amisslmaster interface\n");
 
 		if (!IAmiSSLMaster->InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
@@ -106,10 +113,10 @@ void __init_amissl_main(void)
 	#endif
 	{
 		#if defined(__amigaos4__)
-		if (!(_AmiSSLBase = IAmiSSLMaster->OpenAmiSSL()))
+		if (!(AmiSSLBase = IAmiSSLMaster->OpenAmiSSL()))
 			fatal_error("Couldn't open AmiSSL!\n");
 
-		if (!(iamissl = IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)_AmiSSLBase, "main", 1, NULL)))
+		if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)AmiSSLBase, "main", 1, NULL)))
 			fatal_error("Couldn't obtain amissl interface\n");
 
 		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
@@ -117,11 +124,11 @@ void __init_amissl_main(void)
 		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
 		#else
-		if (!(_AmiSSLBase = OpenAmiSSL()))
+		if (!(AmiSSLBase = OpenAmiSSL()))
 			fatal_error("Couldn't open AmiSSL!\n");
 
 		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-		                        AmiSSL_SocketBase, &_SocketBase,
+		                        AmiSSL_SocketBase, &SocketBase,
 		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
 		#endif
@@ -132,15 +139,15 @@ void __init_amissl_main(void)
 
 void __exit_amissl_main(void)
 {
-	if (_AmiSSLBase)
+	if (AmiSSLBase)
 	{
 		#if defined(__amigaos4__)
-		if (iamissl && IAmiSSL)
+		if (IAmiSSL)
 		{
 			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
 
-			iamissl = IAmiSSL = NULL;
+			IAmiSSL = NULL;
 		}
 
 		if (IAmiSSLMaster)
@@ -150,35 +157,35 @@ void __exit_amissl_main(void)
 		CloseAmiSSL();
 		#endif
 
-		_AmiSSLBase = NULL;
+		AmiSSLBase = NULL;
 	}
 
-	if (_AmiSSLMasterBase)
+	if (AmiSSLMasterBase)
 	{
 		#if defined(__amigaos4__)
-		if (iamisslmaster && IAmiSSLMaster)
+		if (IAmiSSLMaster)
 		{
 			DropInterface((struct Interface *)IAmiSSLMaster);
-			iamisslmaster = IAmiSSLMaster = NULL;
+			IAmiSSLMaster = NULL;
 		}
 		#endif
 
-		CloseLibrary((struct Library *)_AmiSSLMasterBase);
-		_AmiSSLMasterBase = NULL;
+		CloseLibrary((struct Library *)AmiSSLMasterBase);
+		AmiSSLMasterBase = NULL;
 	}
 
-	if (_SocketBase)
+	if (SocketBase)
 	{
 		#if defined(__amigaos4__)
-		if (isocket && ISocket)
+		if (ISocket)
 		{
 			DropInterface((struct Interface *)ISocket);
-			isocket = ISocket = NULL;
+			ISocket = NULL;
 		}
 		#endif
 
-		CloseLibrary((struct Library *)_SocketBase);
-		_SocketBase = NULL;
+		CloseLibrary((struct Library *)SocketBase);
+		SocketBase = NULL;
 	}
 }
 
