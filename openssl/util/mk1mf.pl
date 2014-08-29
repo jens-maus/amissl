@@ -83,6 +83,7 @@ $infile="MINFO";
 	"netware-libc", "CodeWarrior for NetWare - LibC - with WinSock Sockets",
 	"netware-libc-bsdsock", "CodeWarrior for NetWare - LibC - with BSD Sockets",
 	"SC", "SAS/C Amiga",
+	"OS3", "Amiga OS3",
 	"OS4", "Amiga OS4",
 	"default","cc under unix",
 	"auto", "auto detect from top level Makefile"
@@ -234,6 +235,10 @@ elsif (($platform eq "netware-clib") || ($platform eq "netware-libc") ||
 elsif ($platform eq "SC")
 	{
 	require "SC.pl";
+	}
+elsif ($platform eq "OS3")
+	{
+	require "OS3.pl";
 	}
 elsif ($platform eq "OS4")
 	{
@@ -521,7 +526,7 @@ CRYPTO=$crypto
 # ENG_D  - dynamic engine output directory
 # Note: if you change these point to different directories then uncomment out
 # the lines around the 'NB' comment below.
-# 
+#
 BIN_D=\$(OUT_D)
 TEST_D=\$(OUT_D)
 LIB_D=\$(OUT_D)
@@ -611,7 +616,7 @@ vclean:
 	\$(RM) \$(OUT_D)$o*.*
 
 EOF
-    
+
 my $platform_cpp_symbol = "MK1MF_PLATFORM_$platform";
 $platform_cpp_symbol =~ s/-/_/g;
 if (open(IN,"crypto/buildinf.h"))
@@ -689,7 +694,7 @@ foreach (values %lib_nam)
 
 	if (($_ eq "SSL") && $no_ssl2 && $no_ssl3)
 		{
-		$rules.="\$(O_SSL):\n\n"; 
+		$rules.="\$(O_SSL):\n\n";
 		next;
 		}
 
@@ -756,7 +761,7 @@ if ($fips)
 foreach (split(" ",$otherlibs))
 	{
 	my $uc = $_;
-	$uc =~ tr /a-z/A-Z/;	
+	$uc =~ tr /a-z/A-Z/;
 	$rules.= &do_lib_rule("\$(${uc}OBJ)","\$(ENG_D)$o$_$shlibp", "", $shlib, "");
 
 	}
@@ -779,7 +784,7 @@ elsif ($platform eq "OS4")
 	perl \$< \$@
 
 EOF
-	}
+}
 
 print "###################################################################\n";
 print $rules;
@@ -1041,7 +1046,7 @@ sub cc_compile_target
 	{
 	local($target,$source,$ex_flags, $srcd)=@_;
 	local($ret);
-	
+
 	$ex_flags.=" $define MK1MF_BUILD $define $platform_cpp_symbol" if ($source =~ /cversion/);
 	$target =~ s/\//$o/g if $o ne "/";
 	$source =~ s/\//$o/g if $o ne "/";
@@ -1104,7 +1109,7 @@ sub do_copy_rule
 	{
 	local($to,$files,$p)=@_;
 	local($ret,$_,$n,$pp);
-	
+
 	$files =~ s/\//$o/g if $o ne '/';
 	foreach (split(/\s+/,$files))
 		{
@@ -1143,7 +1148,7 @@ sub read_options
 		"no-ripemd" => \$no_ripemd,
 		"no-mdc2" => \$no_mdc2,
 		"no-whirlpool" => \$no_whirlpool,
-		"no-patents" => 
+		"no-patents" =>
 			[\$no_rc2, \$no_rc4, \$no_rc5, \$no_idea, \$no_rsa],
 		"no-rsa" => \$no_rsa,
 		"no-dsa" => \$no_dsa,
@@ -1245,7 +1250,7 @@ sub read_options
 		($ALGO = $algo) =~ tr/[a-z]/[A-Z]/;
 
 		$xcflags="-DOPENSSL_EXPERIMENTAL_$ALGO $xcflags";
-		
+
 		}
 	elsif (/^--with-krb5-flavor=(.*)$/)
 		{

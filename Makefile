@@ -229,6 +229,8 @@ ifeq ($(OS), os3)
   LDLIBS  += -ldebug
   GCCVER  = 2
 
+  OPENSSL_T = OS3
+
 else
 ifeq ($(OS), mos)
 
@@ -368,7 +370,7 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; perl Configure OS4 enable-mdc2 enable-md2 enable-rc5 no-krb5)
+	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5)
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; make files)
