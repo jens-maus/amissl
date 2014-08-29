@@ -306,6 +306,7 @@ include/pragmas/amisslmaster_pragmas.h eol=lf
 include/proto/amissl.h eol=lf
 include/proto/amisslmaster.h eol=lf
 include/sfd/amisslmaster_lib.sfd -text
+include/timeval.h -text
 include/xml/amissl.xml eol=lf
 include/xml/amisslmaster.xml eol=lf
 libcmt/Makefile eol=lf

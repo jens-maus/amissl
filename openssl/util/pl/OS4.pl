@@ -19,7 +19,7 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DAMISSL -D__USE_INLINE__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -W -Wall";
+$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DAMISSL -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -W -Wall";
 $app_cflag="-I\$(AmiSSL)/openssl";
 $lib_cflag="-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
@@ -74,7 +74,7 @@ sub do_link_rule
 	{
 	local($target,$files,$dep_libs,$libs)=@_;
 	local($ret,$_);
-	
+
 	$file =~ s/\//$o/g if $o ne '/';
 	$n=&bname($target);
 	$ret.="$target: $files $dep_libs\n";

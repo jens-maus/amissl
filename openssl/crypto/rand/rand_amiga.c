@@ -7,6 +7,7 @@
 #include <proto/exec.h>
 #include <proto/timer.h>
 #include <devices/timer.h>
+#include <timeval.h>
 
 /* Maximum number of attempts to get a delay of 1 microsecond that is not equal to 0 */
 #define MAX_ATTEMPTS 1000
@@ -56,7 +57,7 @@ int RAND_poll(void)
 				entropy_request->io_Command = TR_READENTROPY;
 				entropy_request->io_Data = &temp_buffer[0];
 				entropy_request->io_Length = sizeof(temp_buffer);
-	
+
 				if (DoIO((struct IORequest *)entropy_request) == 0)
 				{
 					SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
@@ -84,11 +85,16 @@ int RAND_poll(void)
 	{
 		if (OpenDevice(TIMERNAME, UNIT_VBLANK, (struct IORequest *)time_request, 0) == 0)
 		{
+			#if defined(__amigaos4__)
 			struct TimerIFace *ITimer = NULL;
+			#endif
 			struct Device *TimerBase;
 
 			if ((TimerBase = time_request->Request.io_Device)
-			    && (ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL)))
+			#if defined(__amigaos4__)
+			    && (ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL))
+			#endif
+			)
 			{
 				struct EClockVal curr_eclock;
 				ULONG prev_ev_lo = 0;
@@ -134,7 +140,7 @@ int RAND_poll(void)
 						temp_buffer[i] = (unsigned char)(curr_eclock.ev_lo - prev_ev_lo);
 					}
 
-					GetSysTime(&tv);
+					GetSysTime(TIMEVAL(&tv));
 
 					if (sizeof(temp_buffer) > sizeof(ULONG))
 						*(ULONG *)&temp_buffer[sizeof(temp_buffer) - sizeof(ULONG)]
@@ -152,7 +158,9 @@ int RAND_poll(void)
 				}
 			}
 
+			#if defined(__amigaos4__)
 			DropInterface((struct Interface *)ITimer);
+			#endif
 			CloseDevice((struct IORequest *)time_request);
 		}
 	}
