@@ -376,9 +376,9 @@ struct AmiSSLIFace
 	BIO * APICALL (*BIO_new_accept)(struct AmiSSLIFace *Self, char * host_port);
 	int APICALL (*BIO_new_bio_pair)(struct AmiSSLIFace *Self, BIO ** bio1, size_t writebuf1, BIO ** bio2, size_t writebuf2);
 	void APICALL (*BIO_copy_next_retry)(struct AmiSSLIFace *Self, BIO * b);
-	int APICALL (*BIO_vprintf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, VA_LIST args);
+	int APICALL (*BIO_vprintf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, long * args);
 	int APICALL (*BIO_printf)(struct AmiSSLIFace *Self, BIO * bio, const char * format, ...);
-	int APICALL (*BIO_vsnprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, VA_LIST args);
+	int APICALL (*BIO_vsnprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long * args);
 	int APICALL (*BIO_snprintf)(struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...);
 	void APICALL (*ERR_load_BIO_strings)(struct AmiSSLIFace *Self);
 	const BIGNUM * APICALL (*BN_value_one)(struct AmiSSLIFace *Self);
