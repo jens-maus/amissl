@@ -16,13 +16,13 @@
 			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
 		</method>
 		<method name="InitAmiSSL" result="long">
-			<vararg name="tagList" type="Tag" m68kreg="a0"/>
+			<vararg name="tag" type="Tag" m68kreg="a0"/>
 		</method>
 		<method name="CleanupAmiSSLA" result="long">
 			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
 		</method>
 		<method name="CleanupAmiSSL" result="long">
-			<vararg name="tagList" type="Tag" m68kreg="a0"/>
+			<vararg name="tag" type="Tag" m68kreg="a0"/>
 		</method>
 		<method name="IsCipherAvailable" result="long" status="unimplemented">
 			<arg name="cipher" type="long" m68kreg="d0"/>
@@ -11995,7 +11995,7 @@
       <arg name="free_func" type="CRYPTO_EX_free *" m68kreg="a3"/>
     </method>
     <method name="EC_GROUP_get0_seed" result="unsigned char *">
-      <arg name="x" type="const EC_GROUP *" m68kreg="a1"/>
+      <arg name="x" type="const EC_GROUP *" m68kreg="a0"/>
     </method>
     <method name="BN_GF2m_mod_div_arr" result="int">
       <arg name="r" type="BIGNUM *" m68kreg="a0"/>
@@ -15351,9 +15351,9 @@
       <arg name="idx" type="int *" m68kreg="d1"/>
     </method>
     <method name="GENERAL_NAME_set0_othername" result="int">
-      <arg name="gen" type="GENERAL_NAME *" m68kreg="a1"/>
-      <arg name="oid" type="ASN1_OBJECT *" m68kreg="a2"/>
-      <arg name="value" type="ASN1_TYPE *" m68kreg="a3"/>
+      <arg name="gen" type="GENERAL_NAME *" m68kreg="a0"/>
+      <arg name="oid" type="ASN1_OBJECT *" m68kreg="a1"/>
+      <arg name="value" type="ASN1_TYPE *" m68kreg="a2"/>
     </method>
     <method name="TS_TST_INFO_get_ext_count" result="int">
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
@@ -15545,7 +15545,7 @@
       <arg name="device" type="const char *" m68kreg="a2"/>
     </method>
     <method name="EVP_PKEY_verify_init" result="int">
-      <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a1"/>
+      <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
     <method name="TS_CONF_set_policies" result="int">
       <arg name="conf" type="CONF *" m68kreg="a0"/>
