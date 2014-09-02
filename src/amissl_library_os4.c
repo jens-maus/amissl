@@ -411,12 +411,12 @@ void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(UNUSED struct AmiSSL
 	VA_END(args);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, VA_LIST params)
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
 {
 	return BIO_vprintf(bio,format,params);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, VA_LIST params)
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
 {
 	return BIO_vsnprintf(buf,n,format,params);
 }
