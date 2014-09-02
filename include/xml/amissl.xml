@@ -16,13 +16,13 @@
 			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
 		</method>
 		<method name="InitAmiSSL" result="long">
-			<vararg name="tagList" type="Tag"/>
+			<vararg name="tagList" type="Tag" m68kreg="a0"/>
 		</method>
 		<method name="CleanupAmiSSLA" result="long">
 			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
 		</method>
 		<method name="CleanupAmiSSL" result="long">
-			<vararg name="tagList" type="Tag"/>
+			<vararg name="tagList" type="Tag" m68kreg="a0"/>
 		</method>
 		<method name="IsCipherAvailable" result="long" status="unimplemented">
 			<arg name="cipher" type="long" m68kreg="d0"/>
@@ -1299,7 +1299,7 @@
 		<method name="BIO_printf" result="int">
 			<arg name="bio" type="BIO *" m68kreg="a0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<vararg name="dummy" type="long"/>
+			<vararg name="dummy" type="long" m68kreg="a2"/>
 		</method>
 		<method name="BIO_vsnprintf" result="int">
 			<arg name="buf" type="char *" m68kreg="a0"/>
@@ -1311,7 +1311,7 @@
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="n" type="size_t" m68kreg="d0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<vararg name="dummy" type="long"/>
+			<vararg name="dummy" type="long" m68kreg="a2"/>
 		</method>
 		<method name="ERR_load_BIO_strings" result="void">
 		</method>
@@ -2686,7 +2686,7 @@
 		</method>
 		<method name="ERR_add_error_data" result="void">
 			<arg name="num" type="int" m68kreg="d0"/>
-			<vararg name="dummy" type="long"/>
+			<vararg name="dummy" type="long" m68kreg="a0"/>
 		</method>
 		<method name="ERR_load_strings" result="void">
 			<arg name="lib" type="int" m68kreg="d0"/>
@@ -16213,7 +16213,7 @@
     </method>
     <method name="OPENSSL_showfatal" result="void">
       <arg name="fmta" type="const char *" m68kreg="a0"/>
-			<vararg name="dummy" type="long"/>
+      <vararg name="dummy" type="long" m68kreg="a1"/>
     </method>
     <method name="POLICY_MAPPING_it" result="const ASN1_ITEM *">
     </method>
