@@ -1294,7 +1294,7 @@
 		<method name="BIO_vprintf" result="int">
 			<arg name="bio" type="BIO *" m68kreg="a0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<arg name="args" type="long *" m68kreg="a2"/>
+			<arg name="args" type="VA_LIST" m68kreg="a2"/>
 		</method>
 		<method name="BIO_printf" result="int">
 			<arg name="bio" type="BIO *" m68kreg="a0"/>
@@ -1305,7 +1305,7 @@
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="n" type="size_t" m68kreg="d0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<arg name="args" type="long *" m68kreg="a2"/>
+			<arg name="args" type="VA_LIST" m68kreg="a2"/>
 		</method>
 		<method name="BIO_snprintf" result="int">
 			<arg name="buf" type="char *" m68kreg="a0"/>

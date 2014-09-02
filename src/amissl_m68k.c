@@ -4904,7 +4904,7 @@ STATIC int stub_main_BIO_vprintf_PPC(uint32 *regarray)
 	return Self->BIO_vprintf(
 		(BIO *)regarray[REG68K_A0/4],
 		(const char *)regarray[REG68K_A1/4],
-		(long *)regarray[REG68K_A2/4]
+		(VA_LIST)regarray[REG68K_A2/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_BIO_vprintf = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_BIO_vprintf_PPC };
@@ -4921,7 +4921,7 @@ STATIC int stub_main_BIO_vsnprintf_PPC(uint32 *regarray)
 		(char *)regarray[REG68K_A0/4],
 		(size_t)regarray[REG68K_D0/4],
 		(const char *)regarray[REG68K_A1/4],
-		(long *)regarray[REG68K_A2/4]
+		(VA_LIST)regarray[REG68K_A2/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_BIO_vsnprintf = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_BIO_vsnprintf_PPC };

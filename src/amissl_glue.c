@@ -2331,7 +2331,7 @@ void AMISSL_LIB_ENTRY _AmiSSL_BIO_copy_next_retry(REG(a6, __IFACE_OR_BASE), REG(
 // ---
 
 #if 0
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args))
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, VA_LIST args))
 {
 	return BIO_vprintf(bio, format, args);
 }
@@ -2340,7 +2340,7 @@ int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO *
 // ---
 
 #if 0
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args))
+int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, VA_LIST args))
 {
 	return BIO_vsnprintf(buf, n, format, args);
 }
