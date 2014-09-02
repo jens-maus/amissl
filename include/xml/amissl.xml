@@ -2590,7 +2590,7 @@
 			<arg name="num" type="size_t" m68kreg="d0"/>
 			<arg name="a3" type="const EC_POINT **" m68kreg="a3"/>
 			<arg name="a4" type="const BIGNUM **" m68kreg="a4"/>
-			<arg name="a5" type="BN_CTX *" m68kreg="d0"/>
+			<arg name="a5" type="BN_CTX *" m68kreg="a5"/>
 		</method>
 		<method name="EC_POINT_mul" result="int">
 			<arg name="a1" type="const EC_GROUP *" m68kreg="a0"/>
@@ -10709,13 +10709,13 @@
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
-      <arg name="u" type="void *" m68kreg="a2"/>
+      <arg name="u" type="void *" m68kreg="a3"/>
     </method>
     <method name="PEM_read_bio_ECPrivateKey" result="EC_KEY *">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="x" type="EC_KEY **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
-      <arg name="u" type="void *" m68kreg="a2"/>
+      <arg name="u" type="void *" m68kreg="a3"/>
     </method>
     <method name="PEM_write_bio_EC_PUBKEY" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -11764,9 +11764,9 @@
       <arg name="src" type="const EC_KEY *" m68kreg="a1"/>
     </method>
     <method name="BIO_dump_fp" result="int" status="unimplemented">
-      <arg name="fp" type="FILE *" m68kreg="a0"/> 
-      <arg name="s" type="const char *" m68kreg="a1"/> 
-      <arg name="len" type="int" m68kreg="d0"/> 
+      <arg name="fp" type="FILE *" m68kreg="a0"/>
+      <arg name="s" type="const char *" m68kreg="a1"/>
+      <arg name="len" type="int" m68kreg="d0"/>
     </method>
     <method name="EC_GROUP_check_discriminant" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
@@ -12393,8 +12393,8 @@
     <method name="EVP_seed_ecb" result="const EVP_CIPHER *">
     </method>
     <method name="SEED_set_key" result="void">
-      <arg name="rawkey" type="const unsigned char *" m68kreg="a0"/> 
-      <arg name="ks" type="SEED_KEY_SCHEDULE *" m68kreg="a1"/> 
+      <arg name="rawkey" type="const unsigned char *" m68kreg="a0"/>
+      <arg name="ks" type="SEED_KEY_SCHEDULE *" m68kreg="a1"/>
     </method>
     <method name="EVP_seed_cfb128" result="const EVP_CIPHER *">
     </method>
@@ -12460,7 +12460,7 @@
       <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="dcont" type="BIO *" m68kreg="a3"/>
-      <arg name="out" type="BIO *" m68kreg="a3"/>
+      <arg name="out" type="BIO *" m68kreg="a4"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="SMIME_read_CMS" result="CMS_ContentInfo *">
@@ -12647,7 +12647,7 @@
       <arg name="signcert" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
-      <arg name="data" type="BIO *" m68kreg="a2"/>
+      <arg name="data" type="BIO *" m68kreg="a3"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="CMS_signed_add1_attr" result="int">
@@ -12816,7 +12816,7 @@
     </method>
     <method name="CMS_unsigned_add1_attr" result="int">
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
-      <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a0"/>
+      <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a1"/>
     </method>
     <method name="CMS_signed_get_attr_by_NID" result="int">
       <arg name="si" type="const CMS_SignerInfo *" m68kreg="a0"/>
@@ -13263,7 +13263,7 @@
     </method>
     <method name="SSL_CTX_set_client_cert_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="client_cert_cb" type="int (*)(SSL *ssl, X509 **x509, EVP_PKEY **pkey)" m68kreg="a0"/>
+      <arg name="client_cert_cb" type="int (*)(SSL *ssl, X509 **x509, EVP_PKEY **pkey)" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_sess_set_remove_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -13687,7 +13687,7 @@
     </method>
     <method name="X509_STORE_set_depth" result="int">
       <arg name="store" type="X509_STORE *" m68kreg="a0"/>
-      <arg name="depth" type="int" m68kreg="a0"/>
+      <arg name="depth" type="int" m68kreg="d0"/>
     </method>
     <method name="BUF_strndup" result="char *">
       <arg name="str" type="const char *" m68kreg="a0"/>
@@ -13704,7 +13704,7 @@
     </method>
     <method name="sk_find_ex" result="int">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
-      <arg name="data" type="void *" m68kreg="a0"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
     </method>
     <method name="POLICY_CONSTRAINTS_new" result="POLICY_CONSTRAINTS *">
     </method>
@@ -13728,7 +13728,7 @@
     </method>
     <method name="ASN1_generate_v3" result="ASN1_TYPE *">
       <arg name="str" type="char *" m68kreg="a0"/>
-      <arg name="cnf" type="X509V3_CTX *" m68kreg="a0"/>
+      <arg name="cnf" type="X509V3_CTX *" m68kreg="a1"/>
     </method>
     <method name="X509_policy_tree_level_count" result="int">
       <arg name="tree" type="const X509_POLICY_TREE *" m68kreg="a0"/>
@@ -14000,7 +14000,7 @@
     </method>
     <method name="EVP_CIPHER_CTX_set_app_data" result="void">
       <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
-      <arg name="data" type="void *" m68kreg="a0"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
     </method>
     <method name="BIO_method_type" result="int">
       <arg name="b" type="const BIO *" m68kreg="a0"/>
@@ -14563,7 +14563,7 @@
     </method>
     <method name="TS_STATUS_INFO_print_bio" result="int">
       <arg name="bio" type="BIO *" m68kreg="a0"/>
-      <arg name="a" type="TS_STATUS_INFO *" m68kreg="a0"/>
+      <arg name="a" type="TS_STATUS_INFO *" m68kreg="a1"/>
     </method>
     <method name="EVP_PKEY_derive_init" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
@@ -14774,8 +14774,8 @@
     </method>
     <method name="EVP_PKEY_meth_set_verify_recover" result="void">
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
-      <arg name="verify_recover_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a0"/>
-      <arg name="verify_recover" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a0"/>
+      <arg name="verify_recover_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
+      <arg name="verify_recover" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a2"/>
     </method>
     <method name="TS_RESP_get_status_info" result="TS_STATUS_INFO *">
       <arg name="g" type="TS_RESP *" m68kreg="a0"/>
@@ -15150,7 +15150,7 @@
     </method>
     <method name="ASN1_PCTX_set_flags" result="void">
       <arg name="p" type="ASN1_PCTX *" m68kreg="a0"/>
-      <arg name="flags" type="unsigned long" m68kreg="a0"/>
+      <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
     <method name="i2d_ESS_CERT_ID" result="int">
       <arg name="a" type="const ESS_CERT_ID *" m68kreg="a0"/>
@@ -15270,9 +15270,9 @@
     <method name="TS_CONF_set_signer_key" result="int">
       <arg name="conf" type="CONF *" m68kreg="a0"/>
       <arg name="section" type="const char *" m68kreg="a1"/>
-      <arg name="key" type="const char *" m68kreg="a1"/>
-      <arg name="pass" type="const char *" m68kreg="a2"/>
-      <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a3"/>
+      <arg name="key" type="const char *" m68kreg="a2"/>
+      <arg name="pass" type="const char *" m68kreg="a3"/>
+      <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a4"/>
     </method>
     <method name="TS_ACCURACY_get_millis" result="const ASN1_INTEGER *">
       <arg name="a" type="const TS_ACCURACY *" m68kreg="a0"/>
@@ -15845,7 +15845,7 @@
       <arg name="minlen" type="int" m68kreg="d0"/>
       <arg name="maxlen" type="int" m68kreg="d1"/>
       <arg name="prompt" type="const char *" m68kreg="a1"/>
-      <arg name="verify" type="int" m68kreg="d1"/>
+      <arg name="verify" type="int" m68kreg="d2"/>
     </method>
     <method name="CRYPTO_cts128_encrypt" result="size_t">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
