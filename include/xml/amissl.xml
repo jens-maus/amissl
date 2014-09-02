@@ -12686,7 +12686,7 @@
     </method>
     <method name="CMS_SignerInfo_set1_signer_cert" result="void">
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
-      <arg name="signer" type="X509 *" m68kreg="a2"/>
+      <arg name="signer" type="X509 *" m68kreg="a1"/>
     </method>
     <method name="CMS_get0_signers" result="STACK_OF(X509) *">
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
