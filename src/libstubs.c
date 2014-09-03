@@ -351,3 +351,11 @@ const char *OBJ_bsearch(const char *key, const char *base, int num, int size,
 	return(NULL);
 	}
 #endif /* __SASC */
+
+#if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
+#if defined(_M68000) || defined(__M68000) || defined(__mc68000)
+#include <proto/dos.h>
+LONG Printf( CONST_STRPTR format, ... )
+{ return VPrintf(format, (CONST APTR)&format+1); }
+#endif
+#endif
