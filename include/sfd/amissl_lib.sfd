@@ -649,7 +649,7 @@ int EC_POINT_is_on_curve(const EC_GROUP * a, const EC_POINT * b, BN_CTX * c) (a0
 int EC_POINT_cmp(const EC_GROUP * a1, const EC_POINT * a, const EC_POINT * b, BN_CTX * a2) (a0,a1,a2,a3)
 int EC_POINT_make_affine(const EC_GROUP * a, EC_POINT * b, BN_CTX * c) (a0,a1,a2)
 int EC_POINTs_make_affine(const EC_GROUP * a1, size_t num, EC_POINT ** a2, BN_CTX * a3) (a0,d0,a1,a2)
-int EC_POINTs_mul(const EC_GROUP * a1, EC_POINT * r, const BIGNUM * a2, size_t num, const EC_POINT ** a3, const BIGNUM ** a4, BN_CTX * a5) (a0,a1,a2,d0,a3,a4,a5)
+int EC_POINTs_mul(const EC_GROUP * a1, EC_POINT * r, const BIGNUM * a2, size_t num, const EC_POINT ** a3, const BIGNUM ** a4, BN_CTX * a5) (a0,a1,a2,d0,a3,a4,d1)
 int EC_POINT_mul(const EC_GROUP * a1, EC_POINT * r, const BIGNUM * a2, const EC_POINT * a3, const BIGNUM * a4, BN_CTX * a5) (a0,a1,a2,a3,a4,d0)
 int EC_GROUP_precompute_mult(EC_GROUP * a, BN_CTX * b) (a0,a1)
 void ERR_load_EC_strings() ()

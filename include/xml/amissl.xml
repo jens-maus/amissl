@@ -2590,7 +2590,7 @@
 			<arg name="num" type="size_t" m68kreg="d0"/>
 			<arg name="a3" type="const EC_POINT **" m68kreg="a3"/>
 			<arg name="a4" type="const BIGNUM **" m68kreg="a4"/>
-			<arg name="a5" type="BN_CTX *" m68kreg="a5"/>
+			<arg name="a5" type="BN_CTX *" m68kreg="d1"/>
 		</method>
 		<method name="EC_POINT_mul" result="int">
 			<arg name="a1" type="const EC_GROUP *" m68kreg="a0"/>

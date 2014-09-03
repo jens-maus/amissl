@@ -616,13 +616,13 @@ my %table=(
 "uClinux-dist64","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):SIXTY_FOUR_BIT_LONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 
 # SAS/C AmigaOS by default, we support threads
-"SC","sc:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"SC","sc::::AMIGAOS3:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
 
 # GCC AmigaOS3
-"OS3","m68k-amigaos-gcc:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"OS3","m68k-amigaos-gcc::::AMIGAOS3:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
 
 # GCC AmigaOS4
-"OS4","ppc-amigaos-gcc-4.0.3:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"OS4","ppc-amigaos-gcc-4.0.3::::AMIGAOS4:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
 
 );
 

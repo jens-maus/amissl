@@ -5,6 +5,13 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-09-03 Jens Maus <mail@jens-maus.de>
+
+  * misc: after finally being able to convert the os3 sfd file to proper clib and
+    inline files applied some changes to get AmiSSL compiled for OS3/gcc. At least
+    it compiles now until the first test binary. So lets see how fast we can solve
+    that.
+
 2014-08-27 Thore Böckelmann <tboeckel@gmx.de>
 
   * misc: lots of changes to get this beast buildable for AmigaOS3. This is

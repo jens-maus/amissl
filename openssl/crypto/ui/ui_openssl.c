@@ -214,6 +214,12 @@
 #undef SGTTY
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA_OS3) || defined(OPENSSL_SYS_AMIGA_OS4)
+#define TERMIOS
+#undef TERMIO
+#undef SGTTY
+#endif
+
 #if defined(OPENSSL_SYS_NETWARE)
 #undef TERMIOS
 #undef TERMIO
