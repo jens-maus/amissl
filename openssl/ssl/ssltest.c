@@ -5,21 +5,21 @@
  * This package is an SSL implementation written
  * by Eric Young (eay@cryptsoft.com).
  * The implementation was written so as to conform with Netscapes SSL.
- * 
+ *
  * This library is free for commercial and non-commercial use as long as
  * the following conditions are aheared to.  The following conditions
  * apply to all code found in this distribution, be it the RC4, RSA,
  * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
  * included with this distribution is covered by the same copyright terms
  * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- * 
+ *
  * Copyright remains Eric Young's, and as such any Copyright notices in
  * the code are not to be removed.
  * If this package is used in a product, Eric Young should be given attribution
  * as the author of the parts of the library used.
  * This can be in the form of a textual message at program startup or
  * in documentation (online or textual) provided with the package.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -34,10 +34,10 @@
  *     Eric Young (eay@cryptsoft.com)"
  *    The word 'cryptographic' can be left out if the rouines from the library
  *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from 
+ * 4. If you include any Windows specific code (or a derivative thereof) from
  *    the apps directory (application code) you must include an acknowledgement:
  *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
@@ -63,7 +63,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -110,7 +110,7 @@
  */
 /* ====================================================================
  * Copyright 2002 Sun Microsystems, Inc. ALL RIGHTS RESERVED.
- * ECC cipher suite support in OpenSSL originally developed by 
+ * ECC cipher suite support in OpenSSL originally developed by
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
 /* ====================================================================
@@ -153,6 +153,11 @@
 
 #define USE_SOCKETS
 #include "e_os.h"
+
+#ifndef __eprintf
+#warning artifical definition of __eprintf()
+#define __eprintf(...) fprintf (stderr, __VA_ARGS__)
+#endif
 
 #ifdef OPENSSL_SYS_VMS
 #define _XOPEN_SOURCE 500	/* Or isascii won't be declared properly on
@@ -378,7 +383,7 @@ static void print_details(SSL *c_ssl, const char *prefix)
 	{
 	const SSL_CIPHER *ciph;
 	X509 *cert;
-		
+
 	ciph=SSL_get_current_cipher(c_ssl);
 	BIO_printf(bio_stdout,"%s%s, cipher %s %s",
 		prefix,
@@ -391,7 +396,7 @@ static void print_details(SSL *c_ssl, const char *prefix)
 		EVP_PKEY *pkey = X509_get_pubkey(cert);
 		if (pkey != NULL)
 			{
-			if (0) 
+			if (0)
 				;
 #ifndef OPENSSL_NO_RSA
 			else if (pkey->type == EVP_PKEY_RSA && pkey->pkey.rsa != NULL
@@ -423,7 +428,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 	static int modes[CRYPTO_NUM_LOCKS]; /* = {0, 0, ... } */
 	const char *errstr = NULL;
 	int rw;
-	
+
 	rw = mode & (CRYPTO_READ|CRYPTO_WRITE);
 	if (!((rw == CRYPTO_READ) || (rw == CRYPTO_WRITE)))
 		{
@@ -456,7 +461,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 			errstr = "not locked";
 			goto err;
 			}
-		
+
 		if (modes[type] != rw)
 			{
 			errstr = (rw == CRYPTO_READ) ?
@@ -494,7 +499,7 @@ int opaque_prf_input_cb(SSL *ssl, void *peerinput, size_t len, void *arg_)
 
 	if (arg == NULL)
 		return 1;
-	
+
 	if (!SSL_set_tlsext_opaque_prf_input(ssl, arg->input, arg->len))
 		return 0;
 	return arg->ret;
@@ -557,7 +562,7 @@ int main(int argc, char *argv[])
 	debug = 0;
 	cipher = 0;
 
-	bio_err=BIO_new_fp(stderr,BIO_NOCLOSE|BIO_FP_TEXT);	
+	bio_err=BIO_new_fp(stderr,BIO_NOCLOSE|BIO_FP_TEXT);
 
 	CRYPTO_set_locking_callback(lock_dbg_cb);
 
@@ -749,7 +754,7 @@ int main(int argc, char *argv[])
 		else if	(strcmp(*argv,"-named_curve") == 0)
 			{
 			if (--argc < 1) goto bad;
-#ifndef OPENSSL_NO_ECDH		
+#ifndef OPENSSL_NO_ECDH
 			named_curve = *(++argv);
 #else
 			fprintf(stderr,"ignoring -named_curve, since I'm compiled without ECDH\n");
@@ -874,7 +879,7 @@ bad:
 #if !defined(OPENSSL_NO_SSL2) && !defined(OPENSSL_NO_SSL3)
 	if (ssl2)
 		meth=SSLv2_method();
-	else 
+	else
 	if (tls1)
 		meth=TLSv1_method();
 	else
@@ -1022,7 +1027,7 @@ bad:
 			verify_callback);
 		SSL_CTX_set_cert_verify_callback(c_ctx, app_verify_callback, &app_verify_arg);
 		}
-	
+
 	{
 		int session_id_context = 0;
 		SSL_CTX_set_session_id_context(s_ctx, (void *)&session_id_context, sizeof session_id_context);
@@ -1164,14 +1169,14 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 	BIO *s_ssl_bio = NULL, *c_ssl_bio = NULL;
 	BIO *server = NULL, *server_io = NULL, *client = NULL, *client_io = NULL;
 	int ret = 1;
-	
+
 	size_t bufsiz = 256; /* small buffer for testing */
 
 	if (!BIO_new_bio_pair(&server, bufsiz, &server_io, bufsiz))
 		goto err;
 	if (!BIO_new_bio_pair(&client, bufsiz, &client_io, bufsiz))
 		goto err;
-	
+
 	s_ssl_bio = BIO_new(BIO_f_ssl());
 	if (!s_ssl_bio)
 		goto err;
@@ -1232,7 +1237,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 
 			{
 			/* CLIENT */
-		
+
 			MS_STATIC char cbuf[1024*8];
 			int i, r;
 			clock_t c_clock = clock();
@@ -1247,7 +1252,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 			if (cw_num > 0)
 				{
 				/* Write to server. */
-				
+
 				if (cw_num > (long)sizeof cbuf)
 					i = sizeof cbuf;
 				else
@@ -1274,7 +1279,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 					{
 					if (debug)
 						printf("client wrote %d\n", r);
-					cw_num -= r;				
+					cw_num -= r;
 					}
 				}
 
@@ -1318,7 +1323,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 
 			{
 			/* SERVER */
-		
+
 			MS_STATIC char sbuf[1024*8];
 			int i, r;
 			clock_t s_clock = clock();
@@ -1333,7 +1338,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 			if (sw_num > 0)
 				{
 				/* Write to client. */
-				
+
 				if (sw_num > (long)sizeof sbuf)
 					i = sizeof sbuf;
 				else
@@ -1357,7 +1362,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 					{
 					if (debug)
 						printf("server wrote %d\n", r);
-					sw_num -= r;				
+					sw_num -= r;
 					}
 				}
 
@@ -1390,7 +1395,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 
 			*s_time += (clock() - s_clock);
 			}
-			
+
 			{
 			/* "I/O" BETWEEN CLIENT AND SERVER. */
 
@@ -1399,10 +1404,10 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 			/* we use the non-copying interface for io1
 			 * and the standard BIO_write/BIO_read interface for io2
 			 */
-			
+
 			static int prev_progress = 1;
 			int progress = 0;
-			
+
 			/* io1 to io2 */
 			do
 				{
@@ -1421,7 +1426,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 
 					if (INT_MAX < num) /* yeah, right */
 						num = INT_MAX;
-					
+
 					r = BIO_nread(io1, &dataptr, (int)num);
 					assert(r > 0);
 					assert(r <= (int)num);
@@ -1462,13 +1467,13 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 				if (num)
 					{
 					char *dataptr;
-					
+
 					if (INT_MAX < num)
 						num = INT_MAX;
 
 					if (num > 1)
 						--num; /* test restartability even more thoroughly */
-					
+
 					r = BIO_nwrite0(io1, &dataptr);
 					assert(r > 0);
 					if (r < (int)num)
@@ -1488,7 +1493,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 							"BIO_nwrite0() bytes");
 						goto err;
 						}
-					
+
 					if (debug)
 						printf((io2 == client_io) ?
 							"C->S relaying: %d bytes\n" :
@@ -1528,7 +1533,7 @@ end:
 
  err:
 	ERR_print_errors(bio_err);
-	
+
 	if (server)
 		BIO_free(server);
 	if (server_io)
@@ -2476,7 +2481,7 @@ static int psk_key2bn(const char *pskkey, unsigned char *psk,
 	ret = BN_hex2bn(&bn, pskkey);
 	if (!ret)
 		{
-		BIO_printf(bio_err,"Could not convert PSK key '%s' to BIGNUM\n", pskkey); 
+		BIO_printf(bio_err,"Could not convert PSK key '%s' to BIGNUM\n", pskkey);
 		if (bn)
 			BN_free(bn);
 		return 0;
