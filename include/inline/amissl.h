@@ -93,6 +93,7 @@ typedef ULONG _sfdc_vararg;
    t5 _##name##_v5 = (v5);                                      \
    t6 _##name##_v6 = (v6);                                      \
    {                                                            \
+      register int _d0 __asm("d0");                             \
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
@@ -158,6 +159,7 @@ typedef ULONG _sfdc_vararg;
    t6 _##name##_v6 = (v6);                                      \
    t7 _##name##_v7 = (v7);                                      \
    {                                                            \
+      register int _d0 __asm("d0");                             \
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
