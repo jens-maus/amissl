@@ -141,6 +141,7 @@ include/fd/amissl_lib.fd eol=lf
 include/fd/amisslmaster_lib.fd eol=lf
 include/inline/amissl.h eol=lf
 include/inline/amisslmaster.h eol=lf
+include/inline/macros.h -text
 include/inline/reqtools.h -text
 include/inline4/amissl.h eol=lf
 include/inline4/amisslmaster.h eol=lf
