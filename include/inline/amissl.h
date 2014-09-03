@@ -29,7 +29,6 @@ typedef ULONG _sfdc_vararg;
    t3 _##name##_v3 = (v3);                                      \
    t4 _##name##_v4 = (v4);                                      \
    t5 _##name##_v5 = (v5);                                      \
-   t6 _##name##_v6 = (v6);                                      \
    rt _##name##_re2 =                                           \
    ({                                                           \
       register int _d1 __asm("d1");                             \
@@ -42,10 +41,9 @@ typedef ULONG _sfdc_vararg;
       register t3 _n3 __asm(#r3) = _##name##_v3;                \
       register t4 _n4 __asm(#r4) = _##name##_v4;                \
       register t5 _n5 __asm(#r5) = _##name##_v5;                \
-      register t6 _n6 __asm(#r6) = _##name##_v6;                \
       __asm volatile ("exg d7,a4\n\tjsr a6@(-"#offs":W)\n\texg d7,a4" \
       : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
-      : "r" (_##name##_bn), "rf"(_n1), "rf"(_n2), "rf"(_n3), "rf"(_n4), "rf"(_n5), "rf"(_n6) \
+      : "r" (_##name##_bn), "rf"(_n1), "rf"(_n2), "rf"(_n3), "rf"(_n4), "rf"(_n5) \
       : "fp0", "fp1", "cc", "memory");                          \
       _##name##_re;                                             \
    });                                                          \
