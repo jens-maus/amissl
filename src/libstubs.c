@@ -356,6 +356,13 @@ const char *OBJ_bsearch(const char *key, const char *base, int num, int size,
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
 #include <proto/dos.h>
 LONG Printf( CONST_STRPTR format, ... )
-{ return VPrintf(format, (CONST APTR)&format+1); }
+{ return VPrintf(format, (CONST APTR)((ULONG)&format + sizeof(CONST_STRPTR))); }
+
+#undef BIO_printf
+int BIO_printf( BIO *bio, const char *format, ... )
+{ return BIO_vprintf(bio, format, (long *)((ULONG)&format + sizeof(const char *))); }
+#undef BIO_snprintf
+int BIO_snprintf( char *buf, size_t n, const char *format, ... )
+{ return BIO_vsnprintf(buf, n, format, (long *)((ULONG)&format + sizeof(const char *))); }
 #endif
 #endif
