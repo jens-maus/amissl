@@ -6394,24 +6394,24 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, int (*__fpt)(UI *ui))
 
 #define UI_method_get_opener(___method) \
-	LP1(0x25b6, int (*)(UI *), UI_method_get_opener , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x25b6, __fpr, UI_method_get_opener , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(UI *))
 
 #define UI_method_get_writer(___method) \
-	LP1(0x25bc, int (*)(UI *, UI_STRING *), UI_method_get_writer , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x25bc, __fpr, UI_method_get_writer , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(UI *, UI_STRING *))
 
 #define UI_method_get_flusher(___method) \
 	LP1(0x25c2, int (*)(UI *), UI_method_get_flusher , UI_METHOD *, ___method, a0,\
 	, AMISSL_BASE_NAME)
 
 #define UI_method_get_reader(___method) \
-	LP1(0x25c8, int (*)(UI *, UI_STRING *), UI_method_get_reader , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x25c8, __fpr, UI_method_get_reader , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(UI *, UI_STRING *))
 
 #define UI_method_get_closer(___method) \
-	LP1(0x25ce, int (*)(UI *), UI_method_get_closer , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x25ce, __fpr, UI_method_get_closer , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(UI *))
 
 #define UI_get_string_type(___uis) \
 	LP1(0x25d4, enum UI_string_types, UI_get_string_type , UI_STRING *, ___uis, a0,\

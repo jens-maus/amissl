@@ -13,6 +13,7 @@
    A4, A5 - "a4" or "a5" is used as one of the arguments,
    UB - base will be given explicitly by user (see cia.resource).
    FP - one of the parameters has type "pointer to function".
+   FR - the return type is a "pointer to function".
 
    "bt" arguments are not used - they are provided for backward compatibility
    only.
@@ -57,6 +58,27 @@
 
 #define LP1(offs, rt, name, t1, v1, r1, bt, bn)			\
 ({								\
+   t1 _##name##_v1 = (v1);					\
+   rt _##name##_re2 =						\
+   ({								\
+      register int _d1 __asm("d1");				\
+      register int _a0 __asm("a0");				\
+      register int _a1 __asm("a1");				\
+      register rt _##name##_re __asm("d0");			\
+      register void *const _##name##_bn __asm("a6") = (bn);	\
+      register t1 _n1 __asm(#r1) = _##name##_v1;		\
+      __asm volatile ("jsr a6@(-"#offs":W)"			\
+      : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1)	\
+      : "r" (_##name##_bn), "rf"(_n1)				\
+      : "fp0", "fp1", "cc", "memory");				\
+      _##name##_re;						\
+   });								\
+   _##name##_re2;						\
+})
+
+#define LP1FR(offs, rt, name, t1, v1, r1, bt, bn, fpt)			\
+({								\
+   typedef fpt;					\
    t1 _##name##_v1 = (v1);					\
    rt _##name##_re2 =						\
    ({								\
