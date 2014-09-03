@@ -97,7 +97,6 @@ typedef ULONG _sfdc_vararg;
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
-      register rt _##name##_re __asm("d0");                     \
       register void *const _##name##_bn __asm("a6") = (bn);     \
       register t1 _n1 __asm(#r1) = _##name##_v1;                \
       register t2 _n2 __asm(#r2) = _##name##_v2;                \
@@ -163,7 +162,6 @@ typedef ULONG _sfdc_vararg;
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
-      register rt _##name##_re __asm("d0");                     \
       register void *const _##name##_bn __asm("a6") = (bn);     \
       register t1 _n1 __asm(#r1) = _##name##_v1;                \
       register t2 _n2 __asm(#r2) = _##name##_v2;                \
@@ -228,10 +226,10 @@ typedef ULONG _sfdc_vararg;
    t7 _##name##_v7 = (v7);                                      \
    t8 _##name##_v8 = (v8);                                      \
    {                                                            \
+      register int _d0 __asm("d0");                             \
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
-      register rt _##name##_re __asm("d0");                     \
       register void *const _##name##_bn __asm("a6") = (bn);     \
       register t1 _n1 __asm(#r1) = _##name##_v1;                \
       register t2 _n2 __asm(#r2) = _##name##_v2;                \
@@ -262,10 +260,10 @@ typedef ULONG _sfdc_vararg;
    t8 _##name##_v8 = (v8);                                      \
    t9 _##name##_v9 = (v9);                                      \
    {                                                            \
+      register int _d0 __asm("d0");                             \
       register int _d1 __asm("d1");                             \
       register int _a0 __asm("a0");                             \
       register int _a1 __asm("a1");                             \
-      register rt _##name##_re __asm("d0");                     \
       register void *const _##name##_bn __asm("a6") = (bn);     \
       register t1 _n1 __asm(#r1) = _##name##_v1;                \
       register t2 _n2 __asm(#r2) = _##name##_v2;                \
