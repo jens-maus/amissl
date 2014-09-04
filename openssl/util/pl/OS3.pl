@@ -19,7 +19,7 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -m68020-60 -msoft-float -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DNO_INLINE_VARARGS -I\$(AmiSSL)/include -I\$(AmiSSL)/include/netinclude -W -Wall";
+$cflags.=" -m68020-60 -msoft-float -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DNO_INLINE_VARARGS -I\$(AmiSSL)/include -I\$(AmiSSL)/include/netinclude -W -Wall -Wno-unused-parameter";
 $app_cflag="-I\$(AmiSSL)/openssl";
 $lib_cflag="-DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
