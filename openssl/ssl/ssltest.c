@@ -154,11 +154,6 @@
 #define USE_SOCKETS
 #include "e_os.h"
 
-#ifndef __eprintf
-#warning artifical definition of __eprintf()
-#define __eprintf(...) fprintf (stderr, __VA_ARGS__)
-#endif
-
 #ifdef OPENSSL_SYS_VMS
 #define _XOPEN_SOURCE 500	/* Or isascii won't be declared properly on
 				   VMS (at least with DECompHP C).  */
