@@ -373,7 +373,7 @@ __memcpy(unsigned char * to,unsigned char * from,size_t len)
 				(*_to++) = (*_from++);
 
 				len -= sizeof(long);
-			}		
+			}
 
 			to		= (char *)_to;
 			from	= (char *)_from;
@@ -488,7 +488,7 @@ __memmove(unsigned char * to,unsigned char * from,size_t len)
 					(*--_to) = (*--_from);
 
 					len -= sizeof(long);
-				}		
+				}
 
 				to		= (char *)_to;
 				from	= (char *)_from;
@@ -590,7 +590,7 @@ __memmove(unsigned char * to,unsigned char * from,size_t len)
 					(*_to++) = (*_from++);
 
 					len -= sizeof(long);
-				}		
+				}
 
 				to		= (char *)_to;
 				from	= (char *)_from;
@@ -685,7 +685,7 @@ __memset(unsigned char * to,unsigned char value,size_t len)
 				(*_to++) = _value;
 
 				len -= sizeof(long);
-			}		
+			}
 
 			to = (char *)_to;
 		}
@@ -701,4 +701,9 @@ memset(void *ptr, int val, size_t len)
 	__memset(ptr,(unsigned char)(val & 255),len);
 
 	return(ptr);
+}
+
+void bcopy(const void *src, void *dest, size_t n)
+{
+	memcpy(dest, src, n);
 }
