@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.4)! Do not edit! */
+/* Automatically generated header (sfdc 1.5)! Do not edit! */
 
 #ifndef _INLINE_AMISSL_H
 #define _INLINE_AMISSL_H
@@ -2129,24 +2129,24 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, void (*__fpt)(int mode,int type,const char *file,int line))
 
 #define CRYPTO_get_locking_callback() \
-	LP0(0xc96, void (*)(int mode, int type, const char *file, int line), CRYPTO_get_locking_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xc96, __fpr, CRYPTO_get_locking_callback ,\
+	, AMISSL_BASE_NAME, void (*__fpr)(int mode, int type, const char *file, int line))
 
 #define CRYPTO_set_add_lock_callback(___func) \
 	LP1NRFP(0xc9c, CRYPTO_set_add_lock_callback , __fpt, ___func, a0,\
 	, AMISSL_BASE_NAME, int (*__fpt)(int *num,int mount,int type,const char *file,int line))
 
 #define CRYPTO_get_add_lock_callback() \
-	LP0(0xca2, int (*)(int *num, int mount, int type, const char *file, int line), CRYPTO_get_add_lock_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xca2, __fpr, CRYPTO_get_add_lock_callback ,\
+	, AMISSL_BASE_NAME, int (*__fpr)(int *num, int mount, int type, const char *file, int line))
 
 #define CRYPTO_set_id_callback(___func) \
 	LP1NRFP(0xca8, CRYPTO_set_id_callback , __fpt, ___func, a0,\
 	, AMISSL_BASE_NAME, unsigned long (*__fpt)(void))
 
 #define CRYPTO_get_id_callback() \
-	LP0(0xcae, unsigned long (*)(void), CRYPTO_get_id_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xcae, __fpr, CRYPTO_get_id_callback ,\
+	, AMISSL_BASE_NAME, unsigned long (*__fpr)(void))
 
 #define CRYPTO_thread_id() \
 	LP0(0xcb4, unsigned long, CRYPTO_thread_id ,\
@@ -2185,16 +2185,16 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, void (*__fpt)(struct CRYPTO_dynlock_value *l,const char *file,int line))
 
 #define CRYPTO_get_dynlock_create_callback() \
-	LP0(0xcea, struct CRYPTO_dynlock_value * (*)(const char *file, int line), CRYPTO_get_dynlock_create_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xcea, __fpr, CRYPTO_get_dynlock_create_callback ,\
+	, AMISSL_BASE_NAME, struct CRYPTO_dynlock_value * (*__fpr)(const char *file, int line))
 
 #define CRYPTO_get_dynlock_lock_callback() \
-	LP0(0xcf0, void (*)(int mode, struct CRYPTO_dynlock_value *l, const char *file, int line), CRYPTO_get_dynlock_lock_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xcf0, __fpr, CRYPTO_get_dynlock_lock_callback ,\
+	, AMISSL_BASE_NAME, void (*__fpr)(int mode, struct CRYPTO_dynlock_value *l, const char *file, int line))
 
 #define CRYPTO_get_dynlock_destroy_callback() \
-	LP0(0xcf6, void (*)(struct CRYPTO_dynlock_value *l, const char *file, int line), CRYPTO_get_dynlock_destroy_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0xcf6, __fpr, CRYPTO_get_dynlock_destroy_callback ,\
+	, AMISSL_BASE_NAME, void (*__fpr)(struct CRYPTO_dynlock_value *l, const char *file, int line))
 
 #define CRYPTO_set_mem_functions(___m, ___r, ___f) \
 	LP3FP(0xcfc, int, CRYPTO_set_mem_functions , __fpt, ___m, a0, __fpt, ___r, a1, __fpt, ___f, a2,\
@@ -5554,8 +5554,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_get_verify_callback(___s) \
-	LP1(0x20c4, int (*)(int, X509_STORE_CTX *), SSL_get_verify_callback , const SSL *, ___s, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x20c4, __fpr, SSL_get_verify_callback , const SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(int, X509_STORE_CTX *))
 
 #define SSL_set_verify(___s, ___mode, ___callback) \
 	LP3NRFP(0x20ca, SSL_set_verify , SSL *, ___s, a0, int, ___mode, d0, __fpt, ___callback, a1,\
@@ -5730,8 +5730,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_CTX_get_verify_callback(___ctx) \
-	LP1(0x21d2, int (*)(int, X509_STORE_CTX *), SSL_CTX_get_verify_callback , const SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x21d2, __fpr, SSL_CTX_get_verify_callback , const SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(int, X509_STORE_CTX *))
 
 #define SSL_CTX_set_verify(___ctx, ___mode, ___callback) \
 	LP3NRFP(0x21d8, SSL_CTX_set_verify , SSL_CTX *, ___ctx, a0, int, ___mode, d0, __fpt, ___callback, a1,\
@@ -6070,8 +6070,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, void (*__fpt)(const SSL *ssl,int type,int val))
 
 #define SSL_get_info_callback(___ssl) \
-	LP1(0x23d0, void (*)(const SSL *ssl, int type, int val), SSL_get_info_callback , const SSL *, ___ssl, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x23d0, __fpr, SSL_get_info_callback , const SSL *, ___ssl, a0,\
+	, AMISSL_BASE_NAME, void (*__fpr)(const SSL *ssl, int type, int val))
 
 #define SSL_state(___ssl) \
 	LP1(0x23d6, int, SSL_state , const SSL *, ___ssl, a0,\
@@ -6214,8 +6214,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define sk_set_cmp_func(___sk, ___c) \
-	LP2FP(0x24a8, int (*)(const void *, const void *), sk_set_cmp_func , _STACK *, ___sk, a0, __fpt, ___c, a1,\
-	, AMISSL_BASE_NAME, int (*__fpt)(const void *,const void *))
+	LP2FPFR(0x24a8, __fpr, sk_set_cmp_func , _STACK *, ___sk, a0, __fpt, ___c, a1,\
+	, AMISSL_BASE_NAME, int (*__fpt)(const void *,const void *), int (*__fpr)(const void *, const void *))
 
 #define sk_dup(___st) \
 	LP1(0x24ae, _STACK *, sk_dup , _STACK *, ___st, a0,\
@@ -6402,8 +6402,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, int (*__fpr)(UI *, UI_STRING *))
 
 #define UI_method_get_flusher(___method) \
-	LP1(0x25c2, int (*)(UI *), UI_method_get_flusher , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x25c2, __fpr, UI_method_get_flusher , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(UI *))
 
 #define UI_method_get_reader(___method) \
 	LP1FR(0x25c8, __fpr, UI_method_get_reader , UI_METHOD *, ___method, a0,\
@@ -7066,8 +7066,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define X509_TRUST_set_default(___trust) \
-	LP1FP(0x29a6, int (*)(int, X509 *, int), X509_TRUST_set_default , __fpt, ___trust, a0,\
-	, AMISSL_BASE_NAME, int (*__fpt)(int,X509 *,int))
+	LP1FPFR(0x29a6, __fpr, X509_TRUST_set_default , __fpt, ___trust, a0,\
+	, AMISSL_BASE_NAME, int (*__fpt)(int,X509 *,int), int (*__fpr)(int, X509 *, int))
 
 #define X509_TRUST_set(___t, ___trust) \
 	LP2(0x29ac, int, X509_TRUST_set , int *, ___t, a0, int, ___trust, d0,\
@@ -12542,16 +12542,16 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, int (*__fpt)(struct ssl_st *ssl,SSL_SESSION *sess))
 
 #define SSL_CTX_sess_get_get_cb(___ctx) \
-	LP1(0x4b8a, SSL_SESSION *(*)(struct ssl_st *ssl, unsigned char *Data, int len, int *copy), SSL_CTX_sess_get_get_cb , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4b8a, __fpr, SSL_CTX_sess_get_get_cb , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpr)(struct ssl_st *ssl, unsigned char *Data, int len, int *copy))
 
 #define SSL_CTX_sess_set_get_cb(___ctx, ___get_session_cb) \
 	LP2NRFP(0x4b90, SSL_CTX_sess_set_get_cb , SSL_CTX *, ___ctx, a0, __fpt, ___get_session_cb, a1,\
 	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpt)(struct ssl_st *ssl,unsigned char *data,int len,int *copy))
 
 #define SSL_CTX_get_info_callback(___ctx) \
-	LP1(0x4b96, void (*)(const SSL *ssl,int type,int val), SSL_CTX_get_info_callback , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4b96, __fpr, SSL_CTX_get_info_callback , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, void (*__fpr)(const SSL *ssl,int type,int val))
 
 #define SSL_CTX_set_client_cert_cb(___ctx, ___client_cert_cb) \
 	LP2NRFP(0x4b9c, SSL_CTX_set_client_cert_cb , SSL_CTX *, ___ctx, a0, __fpt, ___client_cert_cb, a1,\
@@ -12562,16 +12562,16 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, void (*__fpt)(struct ssl_ctx_st *ctx,SSL_SESSION *sess))
 
 #define SSL_CTX_sess_get_new_cb(___ctx) \
-	LP1(0x4ba8, int (*)(struct ssl_st *ssl, SSL_SESSION *sess), SSL_CTX_sess_get_new_cb , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4ba8, __fpr, SSL_CTX_sess_get_new_cb , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(struct ssl_st *ssl, SSL_SESSION *sess))
 
 #define SSL_CTX_get_client_cert_cb(___ctx) \
-	LP1(0x4bae, int (*)(SSL *ssl, X509 **x509, EVP_PKEY **pkey), SSL_CTX_get_client_cert_cb , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4bae, __fpr, SSL_CTX_get_client_cert_cb , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(SSL *ssl, X509 **x509, EVP_PKEY **pkey))
 
 #define SSL_CTX_sess_get_remove_cb(___ctx) \
-	LP1(0x4bb4, void (*)(struct ssl_ctx_st *ctx, SSL_SESSION *sess), SSL_CTX_sess_get_remove_cb , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4bb4, __fpr, SSL_CTX_sess_get_remove_cb , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, void (*__fpr)(struct ssl_ctx_st *ctx, SSL_SESSION *sess))
 
 #define PEM_write_bio_SSL_SESSION(___bp, ___x) \
 	LP2(0x4bba, int, PEM_write_bio_SSL_SESSION , BIO *, ___bp, a0, SSL_SESSION *, ___x, a1,\
@@ -13118,8 +13118,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define BIO_get_callback(___b) \
-	LP1(0x4fe0, long (*)(struct bio_st *,int,const char *,int, long,long), BIO_get_callback , const BIO *, ___b, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x4fe0, __fpr, BIO_get_callback , const BIO *, ___b, a0,\
+	, AMISSL_BASE_NAME, long (*__fpr)(struct bio_st *,int,const char *,int, long,long))
 
 #define EVP_CIPHER_key_length(___cipher) \
 	LP1(0x4fe6, int, EVP_CIPHER_key_length , const EVP_CIPHER *, ___cipher, a0,\
@@ -14314,8 +14314,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define CRYPTO_THREADID_get_callback() \
-	LP0(0x5706, void (*)(CRYPTO_THREADID *), CRYPTO_THREADID_get_callback ,\
-	, AMISSL_BASE_NAME)
+	LP0FR(0x5706, __fpr, CRYPTO_THREADID_get_callback ,\
+	, AMISSL_BASE_NAME, void (*__fpr)(CRYPTO_THREADID *))
 
 #define TS_TST_INFO_get_tsa(___a) \
 	LP1(0x570c, GENERAL_NAME *, TS_TST_INFO_get_tsa , TS_TST_INFO *, ___a, a0,\
@@ -14326,8 +14326,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define EVP_PKEY_CTX_get_cb(___ctx) \
-	LP1(0x5718, int (*)(EVP_PKEY_CTX *ctx), EVP_PKEY_CTX_get_cb , EVP_PKEY_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x5718, __fpr, EVP_PKEY_CTX_get_cb , EVP_PKEY_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(EVP_PKEY_CTX *ctx))
 
 #define TS_REQ_get_ext_d2i(___a, ___nid, ___crit, ___idx) \
 	LP4(0x571e, void *, TS_REQ_get_ext_d2i , TS_REQ *, ___a, a0, int, ___nid, d0, int *, ___crit, a1, int *, ___idx, d1,\
@@ -14794,8 +14794,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define UI_method_get_prompt_constructor(___method) \
-	LP1(0x59e2, char *(*)(UI*, const char*, const char*), UI_method_get_prompt_constructor , UI_METHOD *, ___method, a0,\
-	, AMISSL_BASE_NAME)
+	LP1FR(0x59e2, __fpr, UI_method_get_prompt_constructor , UI_METHOD *, ___method, a0,\
+	, AMISSL_BASE_NAME, char *(*__fpr)(UI*, const char*, const char*))
 
 #define UI_method_set_prompt_constructor(___method, ___prompt_constructor) \
 	LP2FP(0x59e8, int, UI_method_set_prompt_constructor , UI_METHOD *, ___method, a0, __fpt, ___prompt_constructor, a1,\

@@ -41,6 +41,25 @@
    _##name##_re2;						\
 })
 
+#define LP0FR(offs, rt, name, bt, bn, fpr)				\
+({								\
+   typedef fpr;						\
+   rt _##name##_re2 =						\
+   ({								\
+      register int _d1 __asm("d1");				\
+      register int _a0 __asm("a0");				\
+      register int _a1 __asm("a1");				\
+      register rt _##name##_re __asm("d0");			\
+      register void *const _##name##_bn __asm("a6") = (bn);	\
+      __asm volatile ("jsr a6@(-"#offs":W)"			\
+      : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1)	\
+      : "r" (_##name##_bn)					\
+      : "fp0", "fp1", "cc", "memory");				\
+      _##name##_re;						\
+   });								\
+   _##name##_re2;						\
+})
+
 #define LP0NR(offs, name, bt, bn)				\
 ({								\
    {								\
@@ -76,8 +95,30 @@
    _##name##_re2;						\
 })
 
-#define LP1FR(offs, rt, name, t1, v1, r1, bt, bn, fpt)			\
+#define LP1FR(offs, rt, name, t1, v1, r1, bt, bn, fpr)			\
 ({								\
+   typedef fpr;					\
+   t1 _##name##_v1 = (v1);					\
+   rt _##name##_re2 =						\
+   ({								\
+      register int _d1 __asm("d1");				\
+      register int _a0 __asm("a0");				\
+      register int _a1 __asm("a1");				\
+      register rt _##name##_re __asm("d0");			\
+      register void *const _##name##_bn __asm("a6") = (bn);	\
+      register t1 _n1 __asm(#r1) = _##name##_v1;		\
+      __asm volatile ("jsr a6@(-"#offs":W)"			\
+      : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1)	\
+      : "r" (_##name##_bn), "rf"(_n1)				\
+      : "fp0", "fp1", "cc", "memory");				\
+      _##name##_re;						\
+   });								\
+   _##name##_re2;						\
+})
+
+#define LP1FPFR(offs, rt, name, t1, v1, r1, bt, bn, fpt, fpr)			\
+({								\
+   typedef fpr;					\
    typedef fpt;					\
    t1 _##name##_v1 = (v1);					\
    rt _##name##_re2 =						\
@@ -259,6 +300,30 @@
 /* Only dos.library/InternalUnLoadSeg() */
 #define LP2FP(offs, rt, name, t1, v1, r1, t2, v2, r2, bt, bn, fpt) \
 ({								\
+   typedef fpt;							\
+   t1 _##name##_v1 = (v1);					\
+   t2 _##name##_v2 = (v2);					\
+   rt _##name##_re2 =						\
+   ({								\
+      register int _d1 __asm("d1");				\
+      register int _a0 __asm("a0");				\
+      register int _a1 __asm("a1");				\
+      register rt _##name##_re __asm("d0");			\
+      register void *const _##name##_bn __asm("a6") = (bn);	\
+      register t1 _n1 __asm(#r1) = _##name##_v1;		\
+      register t2 _n2 __asm(#r2) = _##name##_v2;		\
+      __asm volatile ("jsr a6@(-"#offs":W)"			\
+      : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1)	\
+      : "r" (_##name##_bn), "rf"(_n1), "rf"(_n2)		\
+      : "fp0", "fp1", "cc", "memory");				\
+      _##name##_re;						\
+   });								\
+   _##name##_re2;						\
+})
+
+#define LP2FPFR(offs, rt, name, t1, v1, r1, t2, v2, r2, bt, bn, fpt, fpr) \
+({								\
+   typedef fpr;							\
    typedef fpt;							\
    t1 _##name##_v1 = (v1);					\
    t2 _##name##_v2 = (v2);					\
