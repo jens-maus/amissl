@@ -219,22 +219,6 @@ extern "C" {
 # endif
 #endif
 
-/* ------------------------------ AmigaOS3 --------------------------------- */
-#ifdef OPENSSL_SYSNAME_AMIGAOS3
-# define OPENSSL_SYS_AMIGA_OS3
-# ifndef AMISSL
-#  define AMISSL
-# endif
-#endif
-
-/* ------------------------------ AmigaOS4 --------------------------------- */
-#ifdef OPENSSL_SYSNAME_AMIGAOS4
-# define OPENSSL_SYS_AMIGA_OS4
-# ifndef AMISSL
-#  define AMISSL
-# endif
-#endif
-
 /**
  * That's it for OS-specific stuff
  *****************************************************************************/

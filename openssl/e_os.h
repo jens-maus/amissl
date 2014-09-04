@@ -94,11 +94,6 @@ extern "C" {
 #  define NO_SYSLOG
 #endif
   
-#if defined(OPENSSL_SYS_AMIGA_OS3)
-#  define _USE_NETINET_IN_H
-#  define NO_SYS_PARAM_H
-#endif
-
 #if defined(OPENSSL_SYS_MACINTOSH_CLASSIC)
 # if macintosh==1
 #  ifndef MAC_OS_GUSI_SOURCE
@@ -113,14 +108,14 @@ extern "C" {
 # endif
 #endif
 
-#ifdef AMIGA
+#if defined(AMISSL)
 #  define NO_CHMOD
 #  undef  DEVRANDOM
-#  ifdef CLIB2
+#  ifdef __CLIB2__
 #    define __USE_NETINET_IN_H
 #    define NO_SYS_PARAM_H
-#  endif /* CLIB2 */
-#endif /* AMIGA */
+#  endif /* __CLIB2__ */
+#endif /* AMISSL */
 
 /********************************************************************
  The Microsoft section

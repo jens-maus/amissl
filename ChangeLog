@@ -5,6 +5,13 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-09-04 Jens Maus <mail@jens-maus.de>
+
+  * misc: reverted some basic changes which prevented the OS4 build to be linked
+    properly. In addition the OS3 build also complained about missing memcpy()
+    functions which pointed out that there was a general build system problem. We
+    are quite near now to get a linked os3 binary of amissl.library.
+
 2014-09-03 Jens Maus <mail@jens-maus.de>
 
   * misc: after finally being able to convert the os3 sfd file to proper clib and

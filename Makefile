@@ -176,7 +176,7 @@ CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE \
            -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
            $(WARN) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(INCLUDE)
 LDFLAGS  = $(CPU) $(DEBUGSYM) -nostdlib -mbaserel
-LDLIBS   = -L$(BIN_D) -L$(BIN_D)/openssl -lssl -lcrypto
+LDLIBS   = -L$(BIN_D) -lssl -lcrypto
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
 LIBCMT   = $(BIN_D)/libcmt.a
@@ -410,7 +410,7 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 $(BIN_D)/amissl_v$(VERSIONNAME).library: $(OBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_m68k.o
 	@echo "  LD $@"
@@ -432,7 +432,7 @@ $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(CC) $(CFLAGS) -c $< -o $@ -DAMISSL $(INCLUDE)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: CFLAGS += -Wno-unused-parameter
