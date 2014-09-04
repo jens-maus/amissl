@@ -176,7 +176,6 @@ CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE \
            -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
            $(WARN) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(INCLUDE)
 LDFLAGS  = $(CPU) $(DEBUGSYM) -nostdlib -mbaserel
-LDLIBS   = -L$(BIN_D) -lssl -lcrypto
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
 LIBCMT   = $(BIN_D)/libcmt.a
@@ -410,7 +409,7 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 $(BIN_D)/amissl_v$(VERSIONNAME).library: $(OBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_m68k.o
 	@echo "  LD $@"
