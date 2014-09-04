@@ -7,7 +7,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -222,13 +222,17 @@ extern "C" {
 /* ------------------------------ AmigaOS3 --------------------------------- */
 #ifdef OPENSSL_SYSNAME_AMIGAOS3
 # define OPENSSL_SYS_AMIGA_OS3
-# define AMISSL
+# ifndef AMISSL
+#  define AMISSL
+# endif
 #endif
 
 /* ------------------------------ AmigaOS4 --------------------------------- */
 #ifdef OPENSSL_SYSNAME_AMIGAOS4
 # define OPENSSL_SYS_AMIGA_OS4
-# define AMISSL
+# ifndef AMISSL
+#  define AMISSL
+# endif
 #endif
 
 /**
@@ -329,7 +333,7 @@ extern "C" {
 #endif
 
 #if defined(__ultrix) && !defined(ssize_t)
-#  define ossl_ssize_t int 
+#  define ossl_ssize_t int
 #endif
 
 #ifndef ossl_ssize_t
