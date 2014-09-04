@@ -705,5 +705,5 @@ memset(void *ptr, int val, size_t len)
 
 void bcopy(const void *src, void *dest, size_t n)
 {
-	memcpy(dest, src, n);
+	memmove(dest, src, n);
 }
