@@ -82,9 +82,8 @@ $infile="MINFO";
 	"netware-clib-bsdsock", "CodeWarrior for NetWare - CLib - with BSD Sockets",
 	"netware-libc", "CodeWarrior for NetWare - LibC - with WinSock Sockets",
 	"netware-libc-bsdsock", "CodeWarrior for NetWare - LibC - with BSD Sockets",
-	"SC", "SAS/C Amiga",
-	"OS3", "Amiga OS3",
-	"OS4", "Amiga OS4",
+	"amiga-os3", "Amiga OS3",
+	"amiga-os4", "Amiga OS4",
 	"default","cc under unix",
 	"auto", "auto detect from top level Makefile"
 	);
@@ -232,17 +231,13 @@ elsif (($platform eq "netware-clib") || ($platform eq "netware-libc") ||
 	$BSDSOCK=1 if ($platform eq "netware-libc-bsdsock") || ($platform eq "netware-clib-bsdsock");
 	require 'netware.pl';
 	}
-elsif ($platform eq "SC")
+elsif ($platform eq "amiga-os3")
 	{
-	require "SC.pl";
+	require "amiga-os3.pl";
 	}
-elsif ($platform eq "OS3")
+elsif ($platform eq "amiga-os4")
 	{
-	require "OS3.pl";
-	}
-elsif ($platform eq "OS4")
-	{
-	require "OS4.pl";
+	require "amiga-os4.pl";
 	}
 else
 	{
@@ -777,7 +772,7 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
-elsif ($platform eq "OS4")
+elsif ($platform eq "amiga-os4")
 	{
 	$rules .= <<"EOF";
 \$(TMP_D)/bn_asm_amigaos4_ppc32.s: \$(SRC_D)crypto/bn/asm/ppc.pl

@@ -222,7 +222,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 # define ARGV Argv
 #endif
 
-#ifdef AMISSL
+#if defined(OPENSSL_SYS_AMIGA)
 #include <proto/exec.h>
 #include <proto/amisslmaster.h>
 #include <proto/socket.h>
@@ -238,7 +238,7 @@ struct AmiSSLIFace *IAmiSSL;
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct SocketIFace *ISocket;
 
-#ifndef __amigaos4__
+#if !defined(__amigaos4__)
 #define GetInterface(a, b, c, d) 1
 #define DropInterface(x)
 #endif /* !__amigaos4__ */
@@ -310,7 +310,7 @@ static void init_amissl(void)
 		fprintf(stderr, "Couldn't open AmiSSL!\n");
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
 		fprintf(stderr, "Couldn't get AmiSSL interface!\n");
-#ifdef __amigaos4__
+#if defined(__amigaos4__)
 	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 	                    AmiSSL_ISocket, ISocket,
 	                    TAG_DONE) != 0)
@@ -329,7 +329,7 @@ static void init_amissl(void)
 		exit(1);
 	}
 }
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 int main(int Argc, char *ARGV[])
 	{
@@ -394,9 +394,9 @@ int main(int Argc, char *ARGV[])
 		}
 #endif /* defined( OPENSSL_SYS_VMS) && (__INITIAL_POINTER_SIZE == 64) */
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 	init_amissl();
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 	arg.data=NULL;
 	arg.count=0;
@@ -557,9 +557,9 @@ end:
 		bio_err=NULL;
 		}
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 	cleanup_amissl();
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 #if defined( OPENSSL_SYS_VMS) && (__INITIAL_POINTER_SIZE == 64)
 	/* Free any duplicate Argv[] storage. */

@@ -510,7 +510,7 @@ struct bio_dgram_sctp_prinfo
 #define BIO_set_fd(b,fd,c)	BIO_int_ctrl(b,BIO_C_SET_FD,c,fd)
 #define BIO_get_fd(b,c)		BIO_ctrl(b,BIO_C_GET_FD,0,(char *)c)
 
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_NO_FP_API
 #define BIO_set_fp(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp(b,fpp)	BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
@@ -518,7 +518,7 @@ struct bio_dgram_sctp_prinfo
 #else
 #define BIO_set_fp_amiga(b,fp,c)	BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #define BIO_get_fp_amiga(b,fpp)		BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 
 #define BIO_seek(b,ofs)	(int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
 #define BIO_tell(b)	(int)BIO_ctrl(b,BIO_C_FILE_TELL,0,NULL)
@@ -638,15 +638,15 @@ int BIO_asn1_set_suffix(BIO *b, asn1_ps_func *suffix,
 int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
 					asn1_ps_func **psuffix_free);
 
-# if !defined(OPENSSL_NO_FP_API) || defined(AMISSL)
+# if !defined(OPENSSL_NO_FP_API) || defined(OPENSSL_SYS_AMIGA)
 BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
-#   ifndef AMISSL
+# if !defined(OPENSSL_SYS_AMIGA)
 BIO *BIO_new_fp(FILE *stream, int close_flag);
-#   else /* !AMISSL */
-#    include <dos/dos.h>
+# else
+#  include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
-#   endif /* !AMISSL */
+#  endif
 # define BIO_s_file_internal	BIO_s_file
 # endif
 BIO *	BIO_new(BIO_METHOD *type);
@@ -774,7 +774,7 @@ void BIO_copy_next_retry(BIO *b);
 #endif
 int BIO_printf(BIO *bio, const char *format, ...)
 	__bio_h__attr__((__format__(__printf__,2,3)));
-#if !defined(AMISSL) || defined(AMISSL_COMPILE)
+#if !defined(OPENSSL_SYS_AMIGA) || defined(AMISSL_COMPILE)
 int BIO_vprintf(BIO *bio, const char *format, va_list args)
 	__bio_h__attr__((__format__(__printf__,2,0)));
 #else
@@ -783,7 +783,7 @@ int BIO_vprintf(BIO *bio, const char *format, long *args)
 #endif
 int BIO_snprintf(char *buf, size_t n, const char *format, ...)
 	__bio_h__attr__((__format__(__printf__,3,4)));
-#if !defined(AMISSL) || defined(AMISSL_COMPILE)
+#if !defined(OPENSSL_SYS_AMIGA) || defined(AMISSL_COMPILE)
 int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
 	__bio_h__attr__((__format__(__printf__,3,0)));
 #else

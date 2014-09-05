@@ -900,7 +900,7 @@ void OPENSSL_showfatal (const char *fmta,...)
 	MessageBox (NULL,buf,_T("OpenSSL: FATAL"),MB_OK|MB_ICONSTOP);
 }
 #else
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 void OPENSSL_showfatal (const char *fmta,...)
 { va_list ap;
 
@@ -932,7 +932,7 @@ void OPENSSL_showfatal (const char *fmta,...)
   // Open an Easy Requester
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 int OPENSSL_isservice (void) { return 0; }
 #endif
 

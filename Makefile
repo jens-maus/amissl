@@ -204,7 +204,7 @@ ifeq ($(OS), os4)
   CDUP     = ../
   CDTHIS   = ./
 
-  OPENSSL_T = OS4
+  OPENSSL_T = amiga-os4
 
   EXTRALIBOBJS = $(OBJ_D)/amissl_library_os4.o \
                  $(OBJ_D)/amissl_glue.o \
@@ -235,7 +235,7 @@ ifeq ($(OS), os3)
   LDLIBS  += -ldebug -lm
   GCCVER  = 2
 
-  OPENSSL_T = OS3
+  OPENSSL_T = amiga-os3
 
 else
 ifeq ($(OS), mos)

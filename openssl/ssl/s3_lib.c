@@ -2892,7 +2892,11 @@ OPENSSL_GLOBAL SSL_CIPHER ssl3_ciphers[]={
 /* end of list */
 	};
 
+#ifndef OPENSSL_SYS_AMIGA
+SSL3_ENC_METHOD SSLv3_enc_data={
+#else
 SSL3_ENC_METHOD AMISSL_COMMON_DATA SSLv3_enc_data={
+#endif
 	ssl3_enc,
 	n_ssl3_mac,
 	ssl3_setup_key_block,

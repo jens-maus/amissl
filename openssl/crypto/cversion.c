@@ -79,7 +79,7 @@ const char *SSLeay_version(int t)
 		}
 	if (t == SSLEAY_CFLAGS)
 		{
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 #ifdef CFLAGS
 		static char buf[sizeof(CFLAGS)+11];
 
@@ -88,13 +88,13 @@ const char *SSLeay_version(int t)
 #else
 		return("compiler: information not available");
 #endif
-#else /* !AMISSL */
+#else /* !OPENSSL_SYS_AMIGA */
 		return("compiler: information not available");
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 		}
 	if (t == SSLEAY_PLATFORM)
 		{
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 #ifdef PLATFORM
 		static char buf[sizeof(PLATFORM)+11];
 
@@ -103,21 +103,21 @@ const char *SSLeay_version(int t)
 #else
 		return("platform: information not available");
 #endif
-#else /* !AMISSL */
+#else /* !OPENSSL_SYS_AMIGA */
 		return("platform: Amiga");
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 		}
 	if (t == SSLEAY_DIR)
 		{
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 #ifdef OPENSSLDIR
 		return "OPENSSLDIR: \"" OPENSSLDIR "\"";
 #else
 		return "OPENSSLDIR: N/A";
 #endif
-#else /* !AMISSL */
+#else /* !OPENSSL_SYS_AMIGA */
 		return("OPENSSLDIR: AmiSSL:");
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 		}
 	return("not available");
 	}

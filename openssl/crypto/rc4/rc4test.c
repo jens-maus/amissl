@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	unsigned char obuf[512];
 
 #if !defined(OPENSSL_PIC)
-  #if !defined(AMISSL)
+  #if !defined(OPENSSL_SYS_AMIGA)
 	void OPENSSL_cpuid_setup(void);
   #endif
 

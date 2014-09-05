@@ -1726,7 +1726,7 @@ const char *SSL_COMP_get_name(const COMP_METHOD *comp)
 
 #endif
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 
 /* The following five functions are AmiSSL specific, but are used
  * by the code to make sure that the future changes in OpenSSL
@@ -1936,4 +1936,4 @@ const char *SSL_CIPHER_get_export(const SSL_CIPHER *cipher)
   return exp_str;
 }
 
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */

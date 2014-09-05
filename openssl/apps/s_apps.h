@@ -121,7 +121,7 @@
 #define _kbhit kbhit
 #endif
 
-#if defined(__amigaos4__) && defined(__CLIB2__) && defined(__NO_NET_API) && !defined(FD_SET)
+#if defined(OPENSSL_SYS_AMIGA) && defined(__amigaos4__) && defined(__CLIB2__) && defined(__NO_NET_API) && !defined(FD_SET)
 #include <sys/select.h>
 #endif
 

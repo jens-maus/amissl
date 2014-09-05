@@ -239,21 +239,21 @@ printf OUT "#define NUM_SN %d\n",$#sn+1;
 printf OUT "#define NUM_LN %d\n",$#ln+1;
 printf OUT "#define NUM_OBJ %d\n\n",$#ob+1;
 
-print OUT "#ifndef AMISSL\n";
+print OUT "#ifndef OPENSSL_SYS_AMIGA\n";
 printf OUT "static const unsigned char lvalues[%d]={\n",$lvalues+1;
-print OUT "#else /* !AMISSL */\n";
+print OUT "#else /* !OPENSSL_SYS_AMIGA */\n";
 print OUT "#include <internal/amissl_compiler.h>\n";
 printf OUT "static const unsigned char AMISSL_COMMON_DATA lvalues[%d]={\n",$lvalues+1;
-print OUT "#endif /* !AMISSL */\n";
+print OUT "#endif /* !OPENSSL_SYS_AMIGA */\n";
 print OUT @lvalues;
 print OUT "};\n\n";
 
-print OUT "#ifndef AMISSL\n";
+print OUT "#ifndef OPENSSL_SYS_AMIGA\n";
 printf OUT "static const ASN1_OBJECT nid_objs[NUM_NID]={\n";
-print OUT "#else /* !AMISSL */\n";
+print OUT "#else /* !OPENSSL_SYS_AMIGA */\n";
 print OUT "#include <internal/amissl_compiler.h>\n";
 printf OUT "static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]={\n";
-print OUT "#endif /* !AMISSL */\n";
+print OUT "#endif /* !OPENSSL_SYS_AMIGA */\n";
 foreach (@out)
 	{
 	if (length($_) > 75)
@@ -277,30 +277,30 @@ foreach (@out)
 	}
 print  OUT "};\n\n";
 
-print OUT "#ifndef AMISSL\n";
+print OUT "#ifndef OPENSSL_SYS_AMIGA\n";
 printf OUT "static const unsigned int sn_objs[NUM_SN]={\n";
-print OUT "#else /* !AMISSL */\n";
+print OUT "#else /* !OPENSSL_SYS_AMIGA */\n";
 print OUT "#include <internal/amissl_compiler.h>\n";
 printf OUT "static const unsigned int AMISSL_COMMON_DATA sn_objs[NUM_SN]={\n";
-print OUT "#endif /* !AMISSL */\n";
+print OUT "#endif /* !OPENSSL_SYS_AMIGA */\n";
 print  OUT @sn;
 print  OUT "};\n\n";
 
-print OUT "#ifndef AMISSL\n";
+print OUT "#ifndef OPENSSL_SYS_AMIGA\n";
 printf OUT "static const unsigned int ln_objs[NUM_LN]={\n";
-print OUT "#else /* !AMISSL */\n";
+print OUT "#else /* !OPENSSL_SYS_AMIGA */\n";
 print OUT "#include <internal/amissl_compiler.h>\n";
 printf OUT "static const unsigned int AMISSL_COMMON_DATA ln_objs[NUM_LN]={\n";
-print OUT "#endif /* !AMISSL */\n";
+print OUT "#endif /* !OPENSSL_SYS_AMIGA */\n";
 print  OUT @ln;
 print  OUT "};\n\n";
 
-print OUT "#ifndef AMISSL\n";
+print OUT "#ifndef OPENSSL_SYS_AMIGA\n";
 printf OUT "static const unsigned int obj_objs[NUM_OBJ]={\n";
-print OUT "#else /* !AMISSL */\n";
+print OUT "#else /* !OPENSSL_SYS_AMIGA */\n";
 print OUT "#include <internal/amissl_compiler.h>\n";
 printf OUT "static const unsigned int AMISSL_COMMON_DATA obj_objs[NUM_OBJ]={\n";
-print OUT "#endif /* !AMISSL */\n";
+print OUT "#endif /* !OPENSSL_SYS_AMIGA */\n";
 print  OUT @ob;
 print  OUT "};\n\n";
 

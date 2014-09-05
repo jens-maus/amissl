@@ -159,7 +159,11 @@ int X509_REQ_check_private_key(X509_REQ *x, EVP_PKEY *k)
  * used and there may be more: so the list is configurable.
  */
 
+#ifndef OPENSSL_SYS_AMIGA
+static int ext_nid_list[] = { NID_ext_req, NID_ms_ext_req, NID_undef};
+#else
 static int AMISSL_COMMON_DATA ext_nid_list[] = { NID_ext_req, NID_ms_ext_req, NID_undef};
+#endif
 
 static int *ext_nids = ext_nid_list;
 

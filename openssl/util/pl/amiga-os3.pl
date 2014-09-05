@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 #
-# OS4.pl - Amiga OS4
+# amiga-os3.pl - AmigaOS3
 #
 
 $o='/';
@@ -19,9 +19,9 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -DAMISSL -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
+$cflags.=" -m68020-60 -msoft-float -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -DNO_INLINE_VARARGS -I\$(AmiSSL)/include -I\$(AmiSSL)/include/netinclude -W -Wall";
 $app_cflag="-I\$(AmiSSL)/openssl";
-$lib_cflag="-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
+$lib_cflag="-DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
 $ofile='-o ';
 $define='-D';
@@ -29,24 +29,24 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='-mcrt=clib2';
+$lflags='';
 $efile='-o ';
 $exep='';
-$ex_libs='$(AmiSSL)/bin_os4/libamisslauto.a $(AmiSSL)/bin_os4/libamisslstubs.a -lm';
+$ex_libs='$(AmiSSL)/bin_os3/libamisslauto.a $(AmiSSL)/bin_os3/libamisslstubs.a -lm';
 
 # static library stuff
-$mklib='ppc-amigaos-ar r';
+$mklib='m68k-amigaos-ar r';
 $mlflags='';
-$ranlib='ppc-amigaos-ranlib';
+$ranlib='m68k-amigaos-ranlib';
 $plib='lib';
 $libp=".a";
 $shlibp=".a";
 $lfile='';
 
-$asm='ppc-amigaos-as';
+$asm='m68k-amigaos-as';
 $afile='-o ';
-$bn_asm_obj="\$(OBJ_D)/bn_asm_amigaos4_ppc32.o";
-$bn_asm_src="\$(TMP_D)/bn_asm_amigaos4_ppc32.s";
+$bn_asm_obj="\$(OBJ_D)/bn_asm_amigaos3_m68k32.o";
+$bn_asm_src="\$(TMP_D)/bn_asm_amigaos3_m68k32.s";
 $des_enc_obj="";
 $des_enc_src="";
 $bf_enc_obj="";

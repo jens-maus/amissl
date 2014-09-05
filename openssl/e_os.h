@@ -108,14 +108,14 @@ extern "C" {
 # endif
 #endif
 
-#if defined(AMISSL)
+#if defined(OPENSSL_SYS_AMIGA)
 #  define NO_CHMOD
 #  undef  DEVRANDOM
 #  ifdef __CLIB2__
 #    define __USE_NETINET_IN_H
 #    define NO_SYS_PARAM_H
-#  endif /* __CLIB2__ */
-#endif /* AMISSL */
+#  endif
+#endif
 
 /********************************************************************
  The Microsoft section
@@ -170,7 +170,7 @@ STDARGS int GetAmiSSLerrno(void);
 #define closesocket(s)		close_s(s)
 #define readsocket(s,b,n)	read_s(s,b,n)
 #define writesocket(s,b,n)	send(s,b,n,0)
-#elif defined(AMISSL)
+#elif defined(OPENSSL_SYS_AMIGA)
 # ifdef AMISSL_COMPILE
 #  define get_last_socket_error()	GetAmiSSLerrno()
 #  define clear_socket_error()	SetAmiSSLerrno(0)
@@ -178,11 +178,7 @@ STDARGS int GetAmiSSLerrno(void);
 /* # define closesocket(s)		closesocket((s)) */
 #  define readsocket(s,b,n)	recv((s),(b),(n), 0)
 #  define writesocket(s,b,n)	send((s),(b),(n), 0)
-#  ifdef __SASC
-#   include "/libcmt/libcmt.h"
-#  else /* __SASC */
-#   include "../libcmt/libcmt.h"
-#  endif /* __SASC */
+#  include "../libcmt/libcmt.h"
 # else /* !AMISSL_COMPILE */
 #  define get_last_socket_error()	errno
 #  define clear_socket_error()	errno = 0
@@ -749,7 +745,7 @@ extern char *sys_errlist[]; extern int sys_nerr;
 #    define strcasecmp stricmp
 #    define strncasecmp strnicmp
 #  endif /* NETWARE_CLIB */
-#elif defined(AMISSL)
+#elif defined(OPENSSL_SYS_AMIGA)
 #  define strcasecmp OPENSSL_strcasecmp
 #  define strncasecmp OPENSSL_strncasecmp
 #  define OPENSSL_IMPLEMENTS_strncasecmp

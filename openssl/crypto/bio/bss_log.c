@@ -63,7 +63,7 @@
 */
 
 
-#ifdef AMIGA
+#ifdef OPENSSL_SYS_AMIGA
 #define PRAGMAS_SOCKET_PRAGMAS_H /* Make sure that we don't enable SocketBase calls */
 #endif
 
@@ -125,7 +125,7 @@
 
 #define LOG_DAEMON	OPC$M_NM_NTWORK
 
-#elif defined(AMISSL)
+#elif defined(OPENSSL_SYS_AMIGA)
 
 #define LOG_EMERG	0
 #define LOG_ALERT	1

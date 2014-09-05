@@ -418,7 +418,7 @@ char *UI_construct_prompt(UI *ui, const char *object_desc,
 			object_desc, object_name);
 	else
 		{
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 		char prompt1[] = "Enter ";
 		char prompt2[] = " for ";
 		char prompt3[] = ":";

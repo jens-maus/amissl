@@ -409,13 +409,13 @@ redoit:
 		i=WSAGetLastError();
 		BIO_printf(bio_err,"accept error %d\n",i);
 #else
-#ifndef AMIGA
+#if !defined(OPENSSL_SYS_AMIGA)
 		if (errno == EINTR)
 			{
 			/*check_timeout(); */
 			goto redoit;
 			}
-#endif /* !AMIGA */
+#endif /* !OPENSSL_SYS_AMIGA */
 		fprintf(stderr,"errno=%d ",errno);
 		perror("accept");
 #endif

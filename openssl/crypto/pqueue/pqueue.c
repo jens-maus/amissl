@@ -199,7 +199,7 @@ pqueue_find(pqueue_s *pq, unsigned char *prio64be)
 	return found;
 	}
 
-#if defined(AMISSL)
+#if defined(OPENSSL_SYS_AMIGA)
 #include <proto/dos.h>
 void
 pqueue_print(pqueue_s *pq)

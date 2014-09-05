@@ -1,4 +1,4 @@
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 #include <openssl/e_os2.h>
 
 #include "ui_locl.h"
@@ -370,6 +370,6 @@ UI_METHOD *UI_OpenSSL_68k(void)
 
 #endif
 
-#else /* AMISSL */
+#else /* OPENSSL_SYS_AMIGA */
 static void *dummy=&dummy;
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */

@@ -1689,7 +1689,7 @@ int	SSL_CIPHER_get_bits(const SSL_CIPHER *c,int *alg_bits);
 char *	SSL_CIPHER_get_version(const SSL_CIPHER *c);
 const char *	SSL_CIPHER_get_name(const SSL_CIPHER *c);
 unsigned long 	SSL_CIPHER_get_id(const SSL_CIPHER *c);
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 const char *SSL_CIPHER_get_mac(const SSL_CIPHER *cipher);
 const char *SSL_CIPHER_get_encryption(const SSL_CIPHER *cipher);
 const char *SSL_CIPHER_get_authentication(const SSL_CIPHER *cipher);

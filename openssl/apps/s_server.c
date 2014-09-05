@@ -221,15 +221,6 @@ static DH *get_dh512(void);
 static void s_server_init(void);
 #endif
 
-#if defined(AMIGA) && defined(__SASC)
-#include <proto/dos.h>
-
-void sleep(int secs)
-{
-	Delay(secs * TICKS_PER_SECOND);
-}
-#endif
-
 #ifndef OPENSSL_NO_DH
 static unsigned char dh512_p[]={
 	0xDA,0x58,0x3C,0x16,0xD9,0x85,0x22,0x89,0xD0,0xE4,0xAF,0x75,
@@ -311,7 +302,7 @@ static char *engine_id=NULL;
 #endif
 static const char *session_id_prefix=NULL;
 
-#ifdef AMIGA
+#ifdef OPENSSL_SYS_AMIGA
 #include <proto/dos.h>
 static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
 #endif
@@ -1990,7 +1981,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 	KSSL_CTX *kctx;
 #endif
 	struct timeval timeout;
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(OPENSSL_SYS_AMIGA)
 	struct timeval tv;
 #else
 	struct timeval *timeoutp;
@@ -2125,7 +2116,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 		if (!read_from_sslcon)
 			{
 			FD_ZERO(&readfds);
-#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_BEOS_R5) && !defined(AMIGA)
+#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_BEOS_R5) && !defined(OPENSSL_SYS_AMIGA)
 			openssl_fdset(fileno(stdin),&readfds);
 #endif
 			openssl_fdset(s,&readfds);
@@ -2135,7 +2126,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 			 * the compiler: if you do have a cast then you can either
 			 * go for (int *) or (void *).
 			 */
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_AMIGA)
                         /* Under DOS (non-djgpp) and Windows we can't select on stdin: only
 			 * on sockets. As a workaround we timeout the select every
 			 * second and check for any keypress. In a proper Windows

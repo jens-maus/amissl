@@ -541,9 +541,9 @@ void CONF_module_set_usr_data(CONF_MODULE *pmod, void *usr_data)
 	pmod->usr_data = usr_data;
 	}
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 #include <proto/dos.h>
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 /* Return default config file name */
 

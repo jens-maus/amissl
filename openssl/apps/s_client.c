@@ -218,7 +218,7 @@ static BIO *bio_c_out=NULL;
 static int c_quiet=0;
 static int c_ign_eof=0;
 
-#ifdef AMIGA
+#ifdef OPENSSL_SYS_AMIGA
 #include <proto/dos.h>
 static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
 #endif
@@ -604,7 +604,7 @@ int MAIN(int argc, char **argv)
 	ENGINE *ssl_client_engine=NULL;
 #endif
 	ENGINE *e=NULL;
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(OPENSSL_SYS_AMIGA)
 	struct timeval tv;
 #if defined(OPENSSL_SYS_BEOS_R5)
 	int stdin_set = 0;
@@ -1569,7 +1569,7 @@ SSL_set_tlsext_status_ids(con, ids);
 
 		if (!ssl_pending)
 			{
-#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined (OPENSSL_SYS_BEOS_R5) && !defined(AMIGA)
+#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined (OPENSSL_SYS_BEOS_R5) && !defined(OPENSSL_SYS_AMIGA)
 			if (tty_on)
 				{
 				if (read_tty)  openssl_fdset(fileno(stdin),&readfds);
@@ -1596,7 +1596,7 @@ SSL_set_tlsext_status_ids(con, ids);
 			 * will choke the compiler: if you do have a cast then
 			 * you can either go for (int *) or (void *).
 			 */
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
                         /* Under Windows/DOS we make the assumption that we can
 			 * always write to the tty: therefore if we need to
 			 * write to the tty we just fall through. Otherwise
@@ -1611,7 +1611,7 @@ SSL_set_tlsext_status_ids(con, ids);
 					tv.tv_usec = 0;
 					i=select(width,(void *)&readfds,(void *)&writefds,
 						 NULL,&tv);
-#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
 					if(!i && (!_kbhit() || !read_tty) ) continue;
 #else
 					if(!i && (!((_kbhit()) || (WAIT_OBJECT_0 == WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0))) || !read_tty) ) continue;
@@ -1734,7 +1734,7 @@ SSL_set_tlsext_status_ids(con, ids);
 				goto shut;
 				}
 			}
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(OPENSSL_SYS_AMIGA)
 		/* Assume Windows/DOS/BeOS can always write */
 		else if (!ssl_pending && write_tty)
 #else
@@ -1818,8 +1818,8 @@ printf("read=%d pending=%d peek=%d\n",k,SSL_pending(con),SSL_peek(con,zbuf,10240
 				}
 			}
 
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
-#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
+#if defined(OPENSSL_SYS_WINCE) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
 		else if (_kbhit())
 #else
 		else if ((_kbhit()) || (WAIT_OBJECT_0 == WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0)))

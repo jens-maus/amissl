@@ -104,7 +104,7 @@
 #include OPENSSL_UNISTD
 #endif
 
-#ifndef AMIGA
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_NETWARE
 #include <signal.h>
 #endif
@@ -120,7 +120,7 @@
 #endif
 #else
 #include <sys/time.h>
-#endif /* !AMIGA */
+#endif /* !OPENSSL_SYS_AMIGA */
 
 #include <openssl/bn.h>
 #ifndef OPENSSL_NO_DES
@@ -214,7 +214,7 @@
 #endif
 
 #ifndef HAVE_FORK
-# if defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MACINTOSH_CLASSIC) || defined(OPENSSL_SYS_OS2) || defined(OPENSSL_SYS_NETWARE) || defined(AMIGA)
+# if defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MACINTOSH_CLASSIC) || defined(OPENSSL_SYS_OS2) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_AMIGA)
 #  define HAVE_FORK 0
 # else
 #  define HAVE_FORK 1

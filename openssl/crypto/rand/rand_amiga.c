@@ -2,7 +2,7 @@
 #include <openssl/sha.h>
 #include "rand_lcl.h"
 
-#ifdef AMIGA
+#ifdef OPENSSL_SYS_AMIGA
 
 #include <proto/exec.h>
 #include <proto/timer.h>
@@ -172,4 +172,4 @@ int RAND_poll(void)
 	return(entropy_added >= ENTROPY_NEEDED);
 }
 
-#endif /* AMIGA */
+#endif /* OPENSSL_SYS_AMIGA */

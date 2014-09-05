@@ -203,7 +203,7 @@ int RAND_write_file(const char *file)
 	}
 #endif
 
-#if defined(O_CREAT) && !defined(OPENSSL_NO_POSIX_IO) && !defined(OPENSSL_SYS_VMS) && !defined(AMISSL)
+#if defined(O_CREAT) && !defined(OPENSSL_NO_POSIX_IO) && !defined(OPENSSL_SYS_VMS) && !defined(OPENSSL_SYS_AMIGA)
 	{
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -271,9 +271,9 @@ err:
 	return (rand_err ? -1 : ret);
 	}
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 #include <proto/dos.h>
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 const char *RAND_file_name(char *buf, size_t size)
 	{

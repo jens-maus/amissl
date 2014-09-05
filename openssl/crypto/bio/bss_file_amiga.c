@@ -3,7 +3,7 @@
  * buffered dos.library calls.
  */
 
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 #include <proto/exec.h>
 #include <proto/dos.h>
 #include <dos/dos.h>
@@ -394,6 +394,6 @@ static int file_puts(BIO *bp, const char *str)
 {
 	return(file_write(bp, str, strlen(str)));
 }
-#else /* AMISSL */
+#else /* OPENSSL_SYS_AMIGA */
 static void *dummy=&dummy;
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */

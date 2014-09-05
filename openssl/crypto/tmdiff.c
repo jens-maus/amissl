@@ -68,11 +68,11 @@
 #undef TIMES
 #endif
 
-#if !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_WIN32) && !(defined(OPENSSL_SYS_VMS) || defined(__DECC)) && !defined(OPENSSL_SYS_MACOSX_RHAPSODY) && !defined(OPENSSL_SYS_VXWORKS) && !defined(AMISSL)
+#if !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_WIN32) && !(defined(OPENSSL_SYS_VMS) || defined(__DECC)) && !defined(OPENSSL_SYS_MACOSX_RHAPSODY) && !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
 # define TIMES
 #endif
 
-#if defined(AMISSL)
+#if defined(OPENSSL_SYS_AMIGA)
 #define CLOCK
 #endif
  

@@ -5,6 +5,14 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-09-05 Jens Maus <mail@jens-maus.de>
+
+  * misc: general cleanup to make the sources more compatible to programming
+    style of OpenSSL (e.g. definition of OPENSSL_SYS_AMIGA). Thus, the sources
+    should produce way nicer diffs against the upstream sources of OpenSSL.
+    Also removed support for SAS/C builds as it is anyway way to broken now and
+    will never be used again.
+
 2014-09-04 Jens Maus <mail@jens-maus.de>
 
   * misc: reverted some basic changes which prevented the OS4 build to be linked

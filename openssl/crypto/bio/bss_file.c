@@ -65,7 +65,7 @@
 #ifndef HEADER_BSS_FILE_C
 #define HEADER_BSS_FILE_C
 
-#ifndef AMISSL
+#ifndef OPENSSL_SYS_AMIGA
 
 #if defined(__linux) || defined(__sun) || defined(__hpux)
 /* Following definition aliases fopen to fopen64 on above mentioned
@@ -474,7 +474,7 @@ static int MS_CALLBACK file_puts(BIO *bp, const char *str)
 
 #endif /* OPENSSL_NO_STDIO */
 
-#endif /* !AMISSL */
+#endif /* !OPENSSL_SYS_AMIGA */
 
 #endif /* HEADER_BSS_FILE_C */
 

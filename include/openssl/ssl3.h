@@ -437,9 +437,9 @@ typedef struct ssl3_state_st
 	/* storage for Alert/Handshake protocol data received but not
 	 * yet processed by ssl3_read_bytes: */
 	unsigned char alert_fragment[2];
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 	char amissl_pad1[2];
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 	unsigned int alert_fragment_len;
 	unsigned char handshake_fragment[4];
 	unsigned int handshake_fragment_len;
@@ -467,9 +467,9 @@ typedef struct ssl3_state_st
 	 * send close alert via the warning alert */
 	int alert_dispatch;
 	unsigned char send_alert[2];
-#ifdef AMISSL
+#ifdef OPENSSL_SYS_AMIGA
 	char amissl_pad2[2];
-#endif /* AMISSL */
+#endif /* OPENSSL_SYS_AMIGA */
 
 	/* This flag is set when we should renegotiate ASAP, basically when
 	 * there is no more data in the read or write buffers */

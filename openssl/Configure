@@ -615,14 +615,11 @@ my %table=(
 "uClinux-dist","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):BN_LLONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 "uClinux-dist64","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):SIXTY_FOUR_BIT_LONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 
-# SAS/C AmigaOS by default, we support threads
-"SC","sc:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
-
 # GCC AmigaOS3
-"OS3","m68k-amigaos-gcc:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"amiga-os3","m68k-amigaos-gcc::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
 
 # GCC AmigaOS4
-"OS4","ppc-amigaos-gcc-4.0.3:::::THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"amiga-os4","ppc-amigaos-gcc-4.0.3::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
 
 );
 
@@ -1909,7 +1906,7 @@ print "RC2 uses u$type[$rc2_int]\n" if $rc2_int != $def_int;
 print "BF_PTR used\n" if $bf_ptr == 1; 
 print "BF_PTR2 used\n" if $bf_ptr == 2; 
 
-if($IsMK1MF || $target == "SC" || $target == "OS3" || $target == "OS4") {
+if($IsMK1MF || $target == "amiga-os3" || $target == "amiga-os4") {
 	open (OUT,">crypto/buildinf.h") || die "Can't open buildinf.h";
 	printf OUT <<EOF;
 #ifndef MK1MF_BUILD

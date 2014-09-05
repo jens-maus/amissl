@@ -5,6 +5,9 @@
 /* WARNING: Generated automatically from opensslconf.h.in by Configure. */
 
 /* OpenSSL was configured with the following options: */
+#ifndef OPENSSL_SYSNAME_AMIGA
+# define OPENSSL_SYSNAME_AMIGA
+#endif
 #ifndef OPENSSL_DOING_MAKEDEPEND
 
 
