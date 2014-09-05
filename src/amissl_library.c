@@ -58,6 +58,7 @@ struct UtilityIFace *IUtility = NULL;
 const char *FullVersion = "\0$VER: amissl_v" MKSTR(VERSIONNAME) ".library " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n";
 
 struct ExecBase *SysBase;
+struct DosLibrary *DOSBase;
 struct IntuitionBase *IntuitionBase;
 struct LocaleBase *LocaleBase;
 struct Library *UtilityBase;
@@ -363,8 +364,11 @@ AMISSL_LIB_ENTRY void __UserLibCleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 	CloseLibrary((struct Library *)LocaleBase);
 	CloseLibrary((struct Library *)UtilityBase);
 	CloseLibrary((struct Library *)IntuitionBase);
+#ifndef __amigaos4__
+	CloseLibrary((struct Library *)DOSBase);
+#endif
 
-  CRYPTO_set_locking_callback(NULL);
+	CRYPTO_set_locking_callback(NULL);
 
 	FreeVec(lock_cs);
 
@@ -444,10 +448,6 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 		CRYPTO_set_id_callback((unsigned long (*)())amigaos_thread_id);
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
 
-		DateStamp(&ds);
-		clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
-		             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
-
 #ifdef __amigaos4__
 		if ((IntuitionBase = OpenLibrary("intuition.library", 50))
             && (UtilityBase = OpenLibrary("utility.library", 50))
@@ -457,12 +457,17 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 			&& (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
 			&& (locale = OpenLocale(NULL)))
 #else
-		if ((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
+		if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
+		    && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
             && (UtilityBase = OpenLibrary("utility.library", 37))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
 			&& (locale = OpenLocale(NULL)))
 #endif
 		{
+			DateStamp(&ds);
+			clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
+						 * CLOCKS_PER_SEC / TICKS_PER_SECOND;
+
 			GMTOffset = locale->loc_GMTOffset;
 
 			CloseLocale(locale);
