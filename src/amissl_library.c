@@ -89,6 +89,31 @@ clock_t clock(void)
 	return(clock_curr - clock_base);
 }
 
+#include <proto/intuition.h>
+#include <intuition/intuition.h>
+#include <internal/amissl.h>
+
+#if !defined(__amigaos4__)
+// required for clib2's math init/exit functions
+void __show_error(const char * message)
+{
+  struct EasyStruct ErrReq;
+
+  ErrReq.es_StructSize   = sizeof(struct EasyStruct);
+  ErrReq.es_Flags        = 0;
+  ErrReq.es_Title        = (STRPTR)"AmiSSL/OpenSSL internal error";
+  ErrReq.es_TextFormat   = (STRPTR)message;
+  ErrReq.es_GadgetFormat = (STRPTR)"Ok";
+
+  // Open an Easy Requester
+  EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
+}
+
+void exit(int rc)
+{
+}
+#endif
+
 AMISSL_STATE *CreateAmiSSLState(void)
 {
 	unsigned long pid;
