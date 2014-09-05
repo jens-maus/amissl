@@ -60,9 +60,17 @@ socket(
 
 void initialize_socket_errno(void)
 {
-#ifdef __amigaos4__
 	GETSTATE();
+	struct TagItem tags[] =
+	{
+		{ SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr },
+		#if defined(__amigaos4__)
+		{ SBTM_SETVAL(SBTC_BREAKMASK),    SIGBREAKF_CTRL_C        },
+		#endif
+		{ TAG_DONE,                       0                       }
+	};
 
+#if defined(__amigaos4__)
 	if (!state->socket_errno_initialized)
 	{
 		/* Done this early to prevent infinite recursion with the following GETISOCKET() */
@@ -72,14 +80,10 @@ void initialize_socket_errno(void)
 			GETISOCKET();
 
 			if (ISocket)
-				ISocket->SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-				                        SBTM_SETVAL(SBTC_BREAKMASK), SIGBREAKF_CTRL_C,
-				                        TAG_DONE);
+				ISocket->SocketBaseTagList(tags);
 		}
 	}
 #else
-	GETSTATE();
-
 	if (!state->socket_errno_initialized)
 	{
 		if (state->SocketBase)
@@ -88,14 +92,12 @@ void initialize_socket_errno(void)
 			{
 				case TCPIP_Miami:
 				case TCPIP_AmiTCP:
-					amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-					                      TAG_DONE);
+					amitcp_SocketBaseTagList(tags);
 					break;
 
 				case TCPIP_MLink:
 					ObtainSemaphore(&state->MLinkLock->Semaphore);
-					amitcp_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-					                      TAG_DONE);
+					amitcp_SocketBaseTagList(tags);
 					ReleaseSemaphore(&state->MLinkLock->Semaphore);
 					break;
 
@@ -104,8 +106,7 @@ void initialize_socket_errno(void)
 					break;
 
 				case TCPIP_Termite:
-					termite_SocketBaseTags(SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr,
-					                       TAG_DONE);
+					termite_SocketBaseTagList(tags);
 					break;
 			}
 		}
