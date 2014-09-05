@@ -206,9 +206,12 @@ ifeq ($(OS), os4)
 
   OPENSSL_T = OS4
 
-  EXTRAOBJS = $(OBJ_D)/amissl_library_os4.o \
-              $(OBJ_D)/amissl_glue.o \
-              $(OBJ_D)/amissl_m68k.o
+  EXTRALIBOBJS = $(OBJ_D)/amissl_library_os4.o \
+                 $(OBJ_D)/amissl_glue.o \
+                 $(OBJ_D)/amissl_m68k.o
+
+  EXTRAMASTEROBJS = $(OBJ_D)/amisslmaster_library_os4.o \
+                    $(OBJ_D)/amisslmaster_m68k.o
 
 else
 ifeq ($(OS), os3)
@@ -344,8 +347,11 @@ endif
 # Here starts all stuff that is common for all target platforms and
 # hosts.
 
-OBJS = $(OBJ_D)/amissl_library.o \
-       $(EXTRAOBJS)
+LIBOBJS = $(OBJ_D)/amissl_library.o \
+          $(EXTRALIBOBJS)
+
+MASTEROBJS = $(OBJ_D)/amisslmaster_library.o \
+             $(EXTRAMASTEROBJS)
 
 LIBS = $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
@@ -407,13 +413,13 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 ## AMISSL BUILD RULES ##
 
-$(BIN_D)/amissl_v$(VERSIONNAME).library: $(OBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
+$(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
-$(BIN_D)/amisslmaster.library: $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_library.o $(OBJ_D)/amisslmaster_m68k.o
+$(BIN_D)/amisslmaster.library: $(MASTEROBJS)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(OBJ_D)/amisslmaster_library_os4.o $(OBJ_D)/amisslmaster_m68k.o $(OBJ_D)/amisslmaster_library.o -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	@echo "  AR $@"

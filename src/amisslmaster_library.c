@@ -56,21 +56,6 @@ DeclareSemaphore(AmiSSLMasterLock);
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
-#ifdef __amigaos4__
-
-#define SB_ObtainSemaphore  ObtainSemaphore
-#define SB_ReleaseSemaphore ReleaseSemaphore
-
-#else
-
-#pragma syscall SB_ObtainSemaphore 234 801
-#pragma syscall SB_ReleaseSemaphore 23a 801
-
-void SB_ObtainSemaphore(struct SignalSemaphore *);
-void SB_ReleaseSemaphore(struct SignalSemaphore *);
-
-#endif
-
 static void FlushLib(struct Library *LibBase)
 {
 	if(LibBase)
@@ -80,7 +65,7 @@ static void FlushLib(struct Library *LibBase)
 	}
 }
 
-static struct Library *OpenLib(struct Library **LibBase,char *CipherName,LONG CipherVersion)
+static struct Library *OpenLib(struct Library **LibBase,const char *CipherName,LONG CipherVersion)
 {
 	if (LibAPIVersion > AMISSL_V2) // See CloseLib for explanation
 		*LibBase = OpenLibrary(CipherName, CipherVersion);
@@ -163,7 +148,7 @@ static void CloseLib(struct Library *LibBase)
 	}
 }
 
-LONG AMISSL_LIB_ENTRY _AmiSSLMaster_InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
+LONG AMISSL_LIB_ENTRY _AmiSSLMaster_InitAmiSSLMaster(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
@@ -171,9 +156,9 @@ LONG AMISSL_LIB_ENTRY _AmiSSLMaster_InitAmiSSLMaster(REG(a6, __IFACE_OR_BASE), R
 	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
 
-struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BASE))
+struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	ObtainSemaphore(&AmiSSLMasterLock);
 
 	if(LibAPIVersion == AMISSL_V10x)
   {
@@ -230,7 +215,7 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BA
 			{
 				amisslinit.RSABase = OpenLib(&RSABase,"libs:amissl/rsa_v2.library",2);
 			}
-			
+
 			if(DESBase)
 			{
 				amisslinit.MDC2Base = OpenLib(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
@@ -242,19 +227,21 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSL(REG(a6, __IFACE_OR_BA
 				ET_RegisterA6,AmiSSLBase,
 				TAG_DONE);
 #else
+			// Internal function of amissl v2
+			#define InternalInitAmiSSL(init) LP1NR(0x1e, InternalInitAmiSSL, void *, init, a0, , AmiSSLBase)
 			InternalInitAmiSSL(&amisslinit);
 #endif
 		}
 	}
 
-	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	ReleaseSemaphore(&AmiSSLMasterLock);
 
 	return AmiSSLBase;
 }
 
-void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSL(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	ObtainSemaphore(&AmiSSLMasterLock);
 
 	CloseLib(AmiSSLBase);
 
@@ -273,14 +260,14 @@ void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSL(REG(a6, __IFACE_OR_BASE))
 	CloseLib(amisslinit.SHABase);
 	CloseLib(amisslinit.RSABase);
 
-	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	ReleaseSemaphore(&AmiSSLMasterLock);
 }
 
-struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher))
+struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSLCipher(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, LONG Cipher))
 {
 	struct Library *result = NULL;
 
-	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	ObtainSemaphore(&AmiSSLMasterLock);
 
   // only open sub libraries for our old-style AmiSSL v2 versions.
 	if(LibAPIVersion == AMISSL_V2)
@@ -347,19 +334,19 @@ struct Library * AMISSL_LIB_ENTRY _AmiSSLMaster_OpenAmiSSLCipher(REG(a6, __IFACE
 		}
 	}
 
-	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	ReleaseSemaphore(&AmiSSLMasterLock);
 
 	return result;
 }
 
-void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
+void AMISSL_LIB_ENTRY _AmiSSLMaster_CloseAmiSSLCipher(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct Library *LibBase))
 {
-	SB_ObtainSemaphore(&AmiSSLMasterLock);
+	ObtainSemaphore(&AmiSSLMasterLock);
 	CloseLib(LibBase);
-	SB_ReleaseSemaphore(&AmiSSLMasterLock);
+	ReleaseSemaphore(&AmiSSLMasterLock);
 }
 
-void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	traceline();
 
@@ -385,12 +372,12 @@ void AMISSL_LIB_ENTRY __UserLibCleanup(REG(a6, __IFACE_OR_BASE))
 	}
 }
 
-void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, __IFACE_OR_BASE))
+void AMISSL_LIB_ENTRY __UserLibExpunge(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	traceline();
 }
 
-int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, __IFACE_OR_BASE))
+int AMISSL_LIB_ENTRY __UserLibInit(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 #ifdef __amigaos4__
 	InitSemaphore(&AmiSSLMasterLock);
