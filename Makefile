@@ -475,7 +475,7 @@ distclean: clean
 .PHONY: dump
 dump:
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amisslmaster.library > $(BIN_D)/amisslmaster.library.dump
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amissl_v$(VERSIONNAME) > $(BIN_D)/amissl_v$(VERSIONNAME).dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amissl_v$(VERSIONNAME).library > $(BIN_D)/amissl_v$(VERSIONNAME).library.dump
 
 testing:
 	@echo "  LD $<"
