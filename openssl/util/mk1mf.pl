@@ -84,6 +84,7 @@ $infile="MINFO";
 	"netware-libc-bsdsock", "CodeWarrior for NetWare - LibC - with BSD Sockets",
 	"amiga-os3", "Amiga OS3",
 	"amiga-os4", "Amiga OS4",
+	"amiga-mos", "Amiga MorphOS",
 	"default","cc under unix",
 	"auto", "auto detect from top level Makefile"
 	);
@@ -238,6 +239,10 @@ elsif ($platform eq "amiga-os3")
 elsif ($platform eq "amiga-os4")
 	{
 	require "amiga-os4.pl";
+	}
+elsif ($platform eq "amiga-mos")
+	{
+	require "amiga-mos.pl";
 	}
 else
 	{

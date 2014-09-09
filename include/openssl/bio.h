@@ -641,10 +641,10 @@ int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
 # if !defined(OPENSSL_NO_FP_API) || defined(OPENSSL_SYS_AMIGA)
 BIO_METHOD *BIO_s_file(void );
 BIO *BIO_new_file(const char *filename, const char *mode);
-# if !defined(OPENSSL_SYS_AMIGA)
+#  if !defined(OPENSSL_SYS_AMIGA)
 BIO *BIO_new_fp(FILE *stream, int close_flag);
-# else
-#  include <dos/dos.h>
+#  else
+#   include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
 #  endif
 # define BIO_s_file_internal	BIO_s_file

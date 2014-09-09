@@ -57,11 +57,15 @@ struct UtilityIFace *IUtility = NULL;
 
 const char *FullVersion = "\0$VER: amissl_v" MKSTR(VERSIONNAME) ".library " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n";
 
-struct ExecBase *SysBase;
-struct DosLibrary *DOSBase;
-struct IntuitionBase *IntuitionBase;
-struct LocaleBase *LocaleBase;
-struct Library *UtilityBase;
+struct ExecBase *SysBase = NULL;
+struct DosLibrary *DOSBase = NULL;
+struct IntuitionBase *IntuitionBase = NULL;
+#if !defined(__MORPHOS__)
+struct LocaleBase *LocaleBase = NULL;
+#else
+struct Library *LocaleBase = NULL;
+#endif
+struct Library *UtilityBase = NULL;
 #endif
 
 struct SignalSemaphore __mem_cs;

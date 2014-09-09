@@ -5,6 +5,11 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-09-09 Jens Maus <mail@jens-maus.de>
+
+  * Makefile, openssl/util/pl/amiga-mos.pl: create a first version of the
+    neccessary build files to get AmiSSL compiled for MorphOS in future.
+
 2014-09-05 Jens Maus <mail@jens-maus.de>
 
   * misc: general cleanup to make the sources more compatible to programming

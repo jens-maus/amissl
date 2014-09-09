@@ -2608,6 +2608,7 @@ openssl/util/pl/BC-32.pl eol=lf
 openssl/util/pl/Mingw32.pl eol=lf
 openssl/util/pl/OS2-EMX.pl eol=lf
 openssl/util/pl/VC-32.pl eol=lf
+openssl/util/pl/amiga-mos.pl -text
 openssl/util/pl/amiga-os3.pl eol=lf
 openssl/util/pl/amiga-os4.pl eol=lf
 openssl/util/pl/linux.pl eol=lf

@@ -259,6 +259,8 @@ ifeq ($(OS), mos)
   LDLIBS  +=
   GCCVER  = 2
 
+  OPENSSL_T = amiga-mos
+
 else
 ifeq ($(OS), aros-i386)
 
