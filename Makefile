@@ -471,6 +471,12 @@ distclean: clean
 	-rm -rf $(OBJ_D) $(BIN_D)
 	-rm -rf *.library *.map
 
+# for creating a .dump file
+.PHONY: dump
+dump:
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amisslmaster.library > $(BIN_D)/amisslmaster.library.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amissl_v$(VERSIONNAME) > $(BIN_D)/amissl_v$(VERSIONNAME).dump
+
 testing:
 	@echo "  LD $<"
 	@$(CC) basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib
