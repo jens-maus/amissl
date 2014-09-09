@@ -101,8 +101,8 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 	return stream;
 }
 
-DeclareMinList(__filelist); /* list of open files (fflush() needs also access) */
-DeclareSemaphore(FileListLock);
+struct MinList __filelist; /* list of open files (fflush() needs also access) */
+struct SignalSemaphore FileListLock;
 
 #ifdef __amigaos4__
 void __init_libcmt_file(void) __attribute__((constructor));

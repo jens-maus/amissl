@@ -58,38 +58,6 @@ struct filenode
 extern struct MinList __filelist;
 extern struct SignalSemaphore FileListLock;
 
-#ifdef __amigaos4__
-#define DeclareMinList(l) struct MinList l
-#define DeclareSemaphore(s) struct SignalSemaphore s
-#else
-/*
- * These are onsafe to use on __far data due to a compiler/linker bug
- * in SAS which does not relocate the address references
- */
-
-#define DeclareMinList(l) \
-	struct MinList l = \
-	{ \
-		(struct MinNode *)&l.mlh_Tail, \
-		NULL, \
-		(struct MinNode *)&l.mlh_Head \
-	}
-
-#define DeclareSemaphore(s) \
-	struct SignalSemaphore s = \
-	{ \
-		{NULL,NULL,NT_SIGNALSEM,0,NULL}, \
-		0, \
-		{(struct MinNode *)&s.ss_WaitQueue.mlh_Tail, \
-		 NULL, \
-		 (struct MinNode *)&s.ss_WaitQueue.mlh_Head \
-		}, \
-		{{NULL,NULL},NULL}, \
-		NULL, \
-		-1 \
-	}
-#endif
-
 struct HashTable *h_new(long InitialSize,void *(*allocator)(long),void (*deallocator)(void *));
 void *h_insert(struct HashTable *h,long Key,void * UserData);
 void * h_find(struct HashTable *h,long Key);

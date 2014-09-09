@@ -52,7 +52,7 @@ struct AmiSSLIFace *IAmiSSL;
 LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
 LONG LibUsesOpenSSLStructs = 0;
 
-DeclareSemaphore(AmiSSLMasterLock);
+struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
