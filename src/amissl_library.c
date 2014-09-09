@@ -113,7 +113,7 @@ void __show_error(const char * message)
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
-void exit(int rc)
+void exit(UNUSED int rc)
 {
 }
 #endif
@@ -197,23 +197,56 @@ STDARGS int GetAmiSSLerrno(void)
 	return *p->errno_ptr;
 }
 
-static void amigaos_locking_callback(int mode,int type,UNUSED char *file,UNUSED int line)
+struct CRYPTO_dynlock_value
 {
-	if (mode & CRYPTO_LOCK)
+  struct SignalSemaphore lock_cs;
+};
+
+static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const char *file, UNUSED int line) 
+{ 
+  struct CRYPTO_dynlock_value *value; 
+
+#if defined(__amigaos4__)
+	if((value = AllocVecTags(sizeof(*value), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
+#else
+	if((value = AllocVec(sizeof(*value), MEMF_CLEAR)))
+#endif
+  {
+    InitSemaphore(&value->lock_cs);
+  }
+
+  return value;
+}
+
+static void amigaos_dyn_lock_function(int mode, struct CRYPTO_dynlock_value *l, 
+                                      UNUSED const char *file, UNUSED int line) 
+{ 
+  if(mode & CRYPTO_LOCK)
+    ObtainSemaphore(&l->lock_cs);
+  else
+    ReleaseSemaphore(&l->lock_cs);
+}  
+
+static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l, 
+                                         UNUSED const char *file, UNUSED int line) 
+{
+  InitSemaphore(&l->lock_cs);
+	FreeVec(l);
+}
+
+static void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
+{
+	if(mode & CRYPTO_LOCK)
 		ObtainSemaphore(&(lock_cs[type]));
 	else
 		ReleaseSemaphore(&(lock_cs[type]));
 }
 
-static unsigned long amigaos_thread_id(void)
+static void amigaos_threadid_callback(CRYPTO_THREADID *id)
 {
-  unsigned long ret;
-
 	ObtainSemaphore(&openssl_cs);
-  ret = (unsigned long)FindTask(NULL);
+  CRYPTO_THREADID_set_pointer(id, (void*)FindTask(NULL));
 	ReleaseSemaphore(&openssl_cs);
-
-  return(ret);
 }
 
 static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
@@ -457,7 +490,7 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 #ifdef __amigaos4__
 	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
-	    && (lock_cs = AllocVecTags(sizeof(*lock_cs) * CRYPTO_NUM_LOCKS, AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
+	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
 #else
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
@@ -474,8 +507,14 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 
 		InitSemaphore(&__mem_cs);
 
-		CRYPTO_set_id_callback((unsigned long (*)())amigaos_thread_id);
+    // set static locks callbacks
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
+    CRYPTO_THREADID_set_callback(amigaos_threadid_callback);
+
+    // set dynamic locks callbacks
+    CRYPTO_set_dynlock_create_callback(amigaos_dyn_create_function); 
+    CRYPTO_set_dynlock_lock_callback(amigaos_dyn_lock_function); 
+    CRYPTO_set_dynlock_destroy_callback(amigaos_dyn_destroy_function); 
 
 #ifdef __amigaos4__
 		if ((IntuitionBase = OpenLibrary("intuition.library", 50))

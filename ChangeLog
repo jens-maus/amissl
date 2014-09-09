@@ -7,6 +7,9 @@ $URL$
 
 2014-09-09 Jens Maus <mail@jens-maus.de>
 
+  * amissl_library.c: replaced deprecated use of CRYPTO_set_id_callback() with
+    CRYPTO_THREADID_set_callback() and also implemented locking mechanism
+    functions according to the CRYPTO_set_dynlock_XXX_callback() API.
   * Makefile, openssl/util/pl/amiga-mos.pl: create a first version of the
     neccessary build files to get AmiSSL compiled for MorphOS in future.
 
