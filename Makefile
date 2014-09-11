@@ -230,8 +230,8 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU     = -m68020-60 -msoft-float
-  CFLAGS  += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS += -noixemul
+  CFLAGS  += -fbaserel32 -mrestore-a4 -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS += -fbaserel32 -mrestore-a4 -noixemul
   LDLIBS  += -ldebug -lm
   GCCVER  = 2
 
@@ -352,7 +352,9 @@ endif
 LIBOBJS = $(OBJ_D)/amissl_library.o \
           $(EXTRALIBOBJS)
 
-MASTEROBJS = $(OBJ_D)/amisslmaster_library.o \
+MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
+             $(OBJ_D)/amisslmaster_library.o \
+             $(OBJ_D)/amisslmaster_init.o \
              $(EXTRAMASTEROBJS)
 
 LIBS = $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)

@@ -5,6 +5,12 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2014-09-11 Thore Böckelmann <tboeckel@gmx.de>
+
+  * misc: lots of changes to get at least amisslmaster.library built with the
+    typical baserel stuff for AmigaOS3. The necessary relocation of the .data
+    section is yet missing and needs to be ported over from the libnix sources.
+
 2014-09-09 Jens Maus <mail@jens-maus.de>
 
   * amissl_library.c: replaced deprecated use of CRYPTO_set_id_callback() with

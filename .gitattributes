@@ -2636,6 +2636,11 @@ src/amissl_vectors.c eol=lf
 src/amissl_vectors.h -text
 src/amisslinit.h eol=lf
 src/amissllib.c eol=lf
+src/amisslmaster_base.h -text
+src/amisslmaster_init.c -text
+src/amisslmaster_lib.h -text
+src/amisslmaster_lib_protos.h -text
+src/amisslmaster_libinit.c -text
 src/amisslmaster_library.c eol=lf
 src/amisslmaster_library_os4.c eol=lf
 src/amisslmaster_m68k.c eol=lf
