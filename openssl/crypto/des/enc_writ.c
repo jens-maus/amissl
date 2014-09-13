@@ -163,7 +163,7 @@ int DES_enc_write(int fd, const void *_buf, int len,
 #endif
 		if (i == -1)
 			{
-#if defined(EINTR) && !defined(AMIGA)
+#if defined(EINTR) && !defined(OPENSSL_SYS_AMIGA)
 			if (errno == EINTR)
 				i=0;
 			else

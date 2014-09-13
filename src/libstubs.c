@@ -321,37 +321,6 @@ void SAVEDS (GENERAL_NAMES_free)(GENERAL_NAMES * a)
   GENERAL_NAMES_free(a);
 }
 
-#ifdef __SASC
-long getpid(void)
-{
-	return((long)FindTask(NULL));
-}
-
-const char *OBJ_bsearch(const char *key, const char *base, int num, int size,
-	int (*cmp)(const void *, const void *))
-	{
-	int l,h,i,c;
-	const char *p;
-
-	if (num == 0) return(NULL);
-	l=0;
-	h=num;
-	while (l < h)
-		{
-		i=(l+h)/2;
-		p= &(base[i*size]);
-		c=(*cmp)(key,p);
-		if (c < 0)
-			h=i;
-		else if (c > 0)
-			l=i+1;
-		else
-			return(p);
-		}
-	return(NULL);
-	}
-#endif /* __SASC */
-
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
 #include <proto/dos.h>

@@ -207,7 +207,7 @@
 #elif defined(OPENSSL_SYS_NETWARE)
 #  define TEST_SERVER_CERT "\\openssl\\apps\\server.pem"
 #  define TEST_CLIENT_CERT "\\openssl\\apps\\client.pem"
-#elif defined(AMIGA)
+#elif defined(OPENSSL_SYS_AMIGA)
 #  define TEST_SERVER_CERT "/apps/server.pem"
 #  define TEST_CLIENT_CERT "/apps/client.pem"
 #else

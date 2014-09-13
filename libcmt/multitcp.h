@@ -13,18 +13,11 @@
 
 #ifndef NO_MTCP_PROTOS
 
-#ifndef __SASC
-/* SAS-C bug... it doesn't deal with implicit declaration of
-   structures correctly (ANSI requires that the parameter list of a
-   function declaration forms a scope), SAS breaks that most likely
-   because the C= includes are fubar'd */
-
 struct Socket;
 struct TCPIPStack;
 struct sockaddr;
 struct sockaddr_in;
 struct Library;
-#endif
 
 #include <proto/exec.h>
 #include <exec/memory.h>
@@ -48,15 +41,8 @@ struct Library;
 #include <net/route.h>
 #include <net/if.h>
 
-#ifdef __SASC
-#include <clib/macros.h>
-#include <clib/socket_protos.h>
-#include <proto/socket.h>
-#include <pragmas/socket_pragmas.h>
-#elif defined __GNUC__
 #undef FD_ZERO
 #define	FD_ZERO(p) (InitStruct((APTR)"", (p), sizeof *(p)))
-#endif
 
 struct Socket
 {
@@ -180,68 +166,6 @@ struct protoent *amitcp_GetProtoByNumber(LONG proto);
 /* Syslog functions */
 void amitcp_SyslogA(ULONG pri, const char *fmt, LONG *);
 void amitcp_Syslog(ULONG pri, const char *fmt, ...);
-
-#ifdef __SASC
-#pragma libcall state->SocketBase amitcp_Socket 1E 21003
-#pragma libcall state->SocketBase amitcp_Bind 24 18003
-#pragma libcall state->SocketBase amitcp_Listen 2A 1002
-#pragma libcall state->SocketBase amitcp_Accept 30 98003
-#pragma libcall state->SocketBase amitcp_Connect 36 18003
-#pragma libcall state->SocketBase amitcp_SendTo 3C 39218006
-#pragma libcall state->SocketBase amitcp_Send 42 218004
-#pragma libcall state->SocketBase amitcp_RecvFrom 48 A9218006
-#pragma libcall state->SocketBase amitcp_Recv 4E 218004
-#pragma libcall state->SocketBase amitcp_Shutdown 54 1002
-#pragma libcall state->SocketBase amitcp_SetSockOpt 5A 3821005
-#pragma libcall state->SocketBase amitcp_GetSockOpt 60 9821005
-#pragma libcall state->SocketBase amitcp_GetSockName 66 98003
-#pragma libcall state->SocketBase amitcp_GetPeerName 6C 98003
-/*------ Generic System Calls Related to Sockets*/
-#pragma libcall state->SocketBase amitcp_IoctlSocket 72 81003
-#pragma libcall state->SocketBase amitcp_CloseSocket 78 001
-/*------ AmiTCP/IP specific stuff ------*/
-#pragma libcall state->SocketBase amitcp_WaitSelect 7E 1BA98006
-#pragma libcall state->SocketBase amitcp_SetSocketSignals 84 21003
-#pragma libcall state->SocketBase amitcp_GetDTableSize 8A 0
-#pragma libcall state->SocketBase amitcp_ObtainSocket 90 321004
-#pragma libcall state->SocketBase amitcp_ReleaseSocket 96 1002
-#pragma libcall state->SocketBase amitcp_ReleaseCopyOfSocket 9C 1002
-#pragma libcall state->SocketBase amitcp_Errno A2 0
-#pragma libcall state->SocketBase amitcp_SetErrnoPtr A8 0802
-/*------ INet library calls related to INet address manipulation ------*/
-#pragma libcall state->SocketBase amitcp_Inet_NtoA AE 001
-#pragma libcall state->SocketBase amitcp_Inet_Addr B4 801
-#pragma libcall state->SocketBase amitcp_Inet_LnaOf BA 001
-#pragma libcall state->SocketBase amitcp_Inet_NetOf C0 001
-#pragma libcall state->SocketBase amitcp_Inet_MakeAddr C6 1002
-#pragma libcall state->SocketBase amitcp_Inet_Network CC 801
-/*------ NetDB Functions ------ */
-#pragma libcall state->SocketBase amitcp_GetHostByName D2 801
-#pragma libcall state->SocketBase amitcp_GetHostByAddr D8 10803
-#pragma libcall state->SocketBase amitcp_GetNetByName DE 801
-#pragma libcall state->SocketBase amitcp_GetNetByAddr E4 1002
-#pragma libcall state->SocketBase amitcp_GetServByName EA 9802
-#pragma libcall state->SocketBase amitcp_GetServByPort F0 8002
-#pragma libcall state->SocketBase amitcp_GetProtoByName F6 801
-#pragma libcall state->SocketBase amitcp_GetProtoByNumber FC 001
-/*------ Syslog function ------*/
-#pragma libcall state->SocketBase amitcp_SyslogA 102 98003
-#pragma tagcall state->SocketBase amitcp_Syslog 102 98003
-/*------ AmiTCP/IP 2 extensions ------*/
-#pragma libcall state->SocketBase amitcp_Dup2Socket 108 1002
-/*------ AmiTCP/IP version 3 extensions below ------*/
-#pragma libcall state->SocketBase amitcp_SendMsg 10E 18003
-#pragma libcall state->SocketBase amitcp_RecvMsg 114 18003
-/*------ Host identification ------*/
-#pragma libcall state->SocketBase amitcp_GetHostName 11A 0802
-#pragma libcall state->SocketBase amitcp_GetHostId 120 0
-/*------ Socket Base manipulation ------*/
-#pragma libcall state->SocketBase amitcp_SocketBaseTagList 126 801
-#pragma tagcall state->SocketBase amitcp_SocketBaseTags 126 801
-/*------ AmiTCP/IP version 4 extensions below ------*/
-#pragma libcall state->SocketBase amitcp_GetSocketEvents 12C 801
-
-#elif defined __GNUC__
 
 #ifndef __INLINE_MACROS_H
 #include <inline/macros.h>
@@ -435,8 +359,6 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 #define amitcp_WaitSelect(nfds, readfds, writefds, execptfds, timeout, maskp) \
 	LP6(0x7e, LONG, amitcp_WaitSelect, LONG, nfds, d0, fd_set *, readfds, a0, fd_set *, writefds, a1, fd_set *, execptfds, a2, struct timeval *, timeout, a3, ULONG *, maskp, d1, \
 	, state->SocketBase)
-#endif
-
 
 /* IN225 functions */
 
@@ -540,101 +462,6 @@ void in225_endgrent ( void );
 void in225_ConfigureInetA( struct TagItem * );
 void in225_ConfigureInet( ULONG, ... );
 
-#ifdef __SASC
-#pragma libcall state->SocketBase in225_setup_sockets 1e 8102
-#pragma libcall state->SocketBase in225_cleanup_sockets 24 0
-#pragma libcall state->SocketBase in225_socket 2a 21003
-#pragma libcall state->SocketBase in225_s_close 30 001
-#pragma libcall state->SocketBase in225_s_getsignal 36 101
-#pragma libcall state->SocketBase in225_strerror 3c 101
-#pragma libcall state->SocketBase in225_getuid 42 0
-#pragma libcall state->SocketBase in225_getgid 48 0
-#pragma libcall state->SocketBase in225_getgroups 4e 8002
-#pragma libcall state->SocketBase in225_getlogin 54 0
-#pragma libcall state->SocketBase in225_get_tz 5a 0
-#pragma libcall state->SocketBase in225_getdomainname 60 1902
-#pragma libcall state->SocketBase in225_getumask 66 0
-#pragma libcall state->SocketBase in225_umask 6c 001
-#pragma libcall state->SocketBase in225_gethostname 72 0802
-#pragma libcall state->SocketBase in225_sethostent 78 101
-#pragma libcall state->SocketBase in225_endhostent 7e 0
-#pragma libcall state->SocketBase in225_gethostent 84 0
-#pragma libcall state->SocketBase in225_gethostbyname 8a 801
-#pragma libcall state->SocketBase in225_gethostbyaddr 90 10803
-#pragma libcall state->SocketBase in225_inet_addr 96 901
-#pragma libcall state->SocketBase in225_inet_makeaddr 9c 1002
-#pragma libcall state->SocketBase in225_inet_lnaof a2 101
-#pragma libcall state->SocketBase in225_inet_netof a8 101
-#pragma libcall state->SocketBase in225_inet_network ae 901
-#pragma libcall state->SocketBase in225_inet_ntoa b4 101
-#pragma libcall state->SocketBase in225_accept ba 98003
-#pragma libcall state->SocketBase in225_bind c0 19003
-#pragma libcall state->SocketBase in225_connect c6 19003
-#pragma libcall state->SocketBase in225_s_ioctl cc 81003
-#pragma libcall state->SocketBase in225_listen d2 1002
-#pragma libcall state->SocketBase in225_recv d8 218004
-#pragma libcall state->SocketBase in225_recvfrom de A9218006
-#pragma libcall state->SocketBase in225_recvmsg e4 18003
-#pragma libcall state->SocketBase in225_select ea 1A98005
-#pragma libcall state->SocketBase in225_selectwait f0 21A98006
-#pragma libcall state->SocketBase in225_send f6 918004
-#pragma libcall state->SocketBase in225_sendto fc 39218006
-#pragma libcall state->SocketBase in225_sendmsg 102 18003
-#pragma libcall state->SocketBase in225_shutdown 108 1002
-#pragma libcall state->SocketBase in225_setsockopt 10e 3821005
-#pragma libcall state->SocketBase in225_getsockopt 114 9821005
-#pragma libcall state->SocketBase in225_setnetent 11a 101
-#pragma libcall state->SocketBase in225_endnetent 120 0
-#pragma libcall state->SocketBase in225_getnetent 126 0
-#pragma libcall state->SocketBase in225_getnetbyaddr 12c 1002
-#pragma libcall state->SocketBase in225_getnetbyname 132 801
-#pragma libcall state->SocketBase in225_setprotoent 138 101
-#pragma libcall state->SocketBase in225_endprotoent 13e 0
-#pragma libcall state->SocketBase in225_getprotoent 144 0
-#pragma libcall state->SocketBase in225_getprotobyname 14a 801
-#pragma libcall state->SocketBase in225_getprotobynumber 150 001
-#pragma libcall state->SocketBase in225_setservent 156 101
-#pragma libcall state->SocketBase in225_endservent 15c 0
-#pragma libcall state->SocketBase in225_getservent 162 0
-#pragma libcall state->SocketBase in225_getservbyname 168 9802
-#pragma libcall state->SocketBase in225_getservbyport 16e 8002
-#pragma libcall state->SocketBase in225_getpwuid 174 101
-#pragma libcall state->SocketBase in225_getpwnam 17a 801
-#pragma libcall state->SocketBase in225_getpwent 180 0
-#pragma libcall state->SocketBase in225_setpwent 186 101
-#pragma libcall state->SocketBase in225_endpwent 18c 0
-#pragma libcall state->SocketBase in225_rcmd 192 2A981006
-#pragma libcall state->SocketBase in225_getpeername 198 98003
-#pragma libcall state->SocketBase in225_getsockname 19e 98003
-#pragma libcall state->SocketBase in225_s_syslog 1a4 8002
-#pragma libcall state->SocketBase in225_reconfig 1aa 0
-#pragma libcall state->SocketBase in225_s_release 1b0 101
-#pragma libcall state->SocketBase in225_s_inherit 1b6 101
-#pragma libcall state->SocketBase in225_s_dev_list 1bc 1002
-#pragma libcall state->SocketBase in225_syslogA 1c2 98003
-#pragma libcall state->SocketBase in225_vsyslog 1c2 98003
-#pragma tagcall state->SocketBase in225_syslog 1c2 98003
-#pragma libcall state->SocketBase in225_setgid 1c8 001
-#pragma libcall state->SocketBase in225_setuid 1ce 001
-/* Private functions from 1d4 -> 21c */
-#pragma libcall state->SocketBase in225_get_h_errno 222 0
-#pragma libcall state->SocketBase in225_set_h_errno 228 001
-#pragma libcall state->SocketBase in225_get_res 22e 0
-/* Private functions from 234 -> 2a6 */
-#pragma libcall state->SocketBase in225_ConfigureInetA 2ac 801
-#pragma tagcall state->SocketBase in225_ConfigureInet 2ac 801
-#pragma libcall state->SocketBase in225_s_dup 2b2 001
-#pragma libcall state->SocketBase in225_s_dup2 2b8 1002
-#pragma libcall state->SocketBase in225_getgrgid 2be 101
-#pragma libcall state->SocketBase in225_getgrnam 2c4 801
-#pragma libcall state->SocketBase in225_getgrent 2ca 0
-#pragma libcall state->SocketBase in225_setgrent 2d0 101
-#pragma libcall state->SocketBase in225_endgrent 2d6 0
-#pragma libcall state->SocketBase in225_s_dev_func 2dc 801
-#pragma libcall state->SocketBase in225_s_crypt 2e2 a9803
-#pragma libcall state->SocketBase in225_s_errno 2e8 0
-#pragma libcall state->SocketBase in225_inet_aton 2ee 9802
-#elif defined __GNUC__
 #define in225_accept(sock, name, lenp) \
 	LP3(0xba, int, in225_accept, int, sock, d0, struct sockaddr *, name, a0, int *, lenp, a1, \
 	, state->SocketBase)
@@ -915,8 +742,6 @@ void in225_ConfigureInet( ULONG, ... );
 	LP1(0x6c, mode_t, in225_umask, mode_t, cmask, d0, \
 	, state->SocketBase)
 
-#endif
-
 /* Termite TCP functions */
 
 int termite_accept(
@@ -986,36 +811,6 @@ int termite_inet_addr(
         char                 *Addr);
 int termite_shutdown(int s, int how);
 
-#ifdef __SASC
-#pragma libcall state->SocketBase termite_accept 1e 98003
-#pragma libcall state->SocketBase termite_bind 24 18003
-#pragma libcall state->SocketBase termite_CloseSocket 2a 001
-#pragma libcall state->SocketBase termite_connect 30 18003
-#pragma libcall state->SocketBase termite_gethostbyaddr 36 10803
-#pragma libcall state->SocketBase termite_gethostbyname 3c 801
-#pragma libcall state->SocketBase termite_gethostid 42 0
-#pragma libcall state->SocketBase termite_gethostname 48 0802
-#pragma libcall state->SocketBase termite_getprotobyname 4e 801
-#pragma libcall state->SocketBase termite_getprotobynumber 54 001
-#pragma libcall state->SocketBase termite_getservbyname 5a 9802
-#pragma libcall state->SocketBase termite_getsockname 60 98003
-#pragma libcall state->SocketBase termite_inet_addr 66 801
-#pragma libcall state->SocketBase termite_inet_ntoa 6c 001
-#pragma libcall state->SocketBase termite_IoctlSocket 72 81003
-#pragma libcall state->SocketBase termite_listen 78 1002
-#pragma libcall state->SocketBase termite_recv 7e 218004
-#pragma libcall state->SocketBase termite_recvfrom 84 A9218006
-#pragma libcall state->SocketBase termite_send 8a 218004
-#pragma libcall state->SocketBase termite_sendto 90 39218006
-#pragma libcall state->SocketBase termite_SetErrnoPtr 96 801
-#pragma libcall state->SocketBase termite_SetSocketSignals 9c 21003
-#pragma libcall state->SocketBase termite_setsockopt a2 3821005
-#pragma libcall state->SocketBase termite_shutdown a8 1002
-#pragma libcall state->SocketBase termite_socket ae 21003
-#pragma libcall state->SocketBase termite_SocketBaseTagList b4 801
-#pragma tagcall state->SocketBase termite_SocketBaseTags b4 801
-#pragma libcall state->SocketBase termite_WaitSelect ba 1BA98006
-#elif defined __GNUC__
 #define termite_CloseSocket(__pD0) \
 	LP1(0x2a, int, CloseSocket, int, __pD0, d0, \
 	, state->SocketBase)
@@ -1128,7 +923,6 @@ int termite_shutdown(int s, int how);
 #define termite_socket(__pD0, __pD1, __pD2) \
 	LP3(0xae, int, socket, int, __pD0, d0, int, __pD1, d1, int, __pD2, d2, \
 	, state->SocketBase)
-#endif
 
 #endif /* NO_MTCP_PROTOS */
 

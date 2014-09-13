@@ -507,13 +507,9 @@ static unsigned int _strlen31(const char *str)
 #    define OPENSSL_CONF	"openssl.cnf"
 #    define SSLEAY_CONF		OPENSSL_CONF
 #    define RFILE		".rnd"
-#    ifdef AMIGA
+#    if defined(OPENSSL_SYS_AMIGA)
 #      define LIST_SEPARATOR_CHAR ';'
 #      define NUL_DEV		"NIL:"
-#      ifdef __SASC
-         typedef long ssize_t;
-         typedef long pid_t;
-#      endif /* __SASC */
 #    else
 #      define LIST_SEPARATOR_CHAR ':'
 #      define NUL_DEV		"/dev/null"
@@ -667,7 +663,7 @@ static unsigned int _strlen31(const char *str)
 #    ifndef INVALID_SOCKET
 #    define INVALID_SOCKET	(-1)
 #    endif /* INVALID_SOCKET */
-#    ifdef AMIGA
+#    if defined(OPENSSL_SYS_AMIGA)
 #      define SSLeay_Read(a,b,c)     readsocket((a),(b),(c))
 #      define SSLeay_Write(a,b,c)    writesocket((a),(b),(c))
 #      define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
