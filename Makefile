@@ -230,8 +230,8 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU     = -m68020-60 -msoft-float
-  CFLAGS  += -fbaserel32 -mrestore-a4 -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS += -fbaserel32 -mrestore-a4 -noixemul
+  CFLAGS  += -fbaserel32 -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS += -fbaserel32 -noixemul
   LDLIBS  += -ldebug -lm
   GCCVER  = 2
 
