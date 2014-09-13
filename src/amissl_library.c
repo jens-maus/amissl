@@ -39,10 +39,11 @@
 
 #ifdef __amigaos4__
 struct AmiSSLIFace;
-#define __IFACE_OR_BASE	struct AmiSSLIFace *Self
+#define __BASE_OR_IFACE	struct AmiSSLIFace *Self
 #else
-#define __IFACE_OR_BASE	struct Library *Self
+#define __BASE_OR_IFACE	struct Library *Self
 #endif
+#define __BASE_OR_IFACE_VAR	Self
 
 #ifdef __amigaos4__
 struct Library *IntuitionBase = NULL;
@@ -202,9 +203,9 @@ struct CRYPTO_dynlock_value
   struct SignalSemaphore lock_cs;
 };
 
-static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const char *file, UNUSED int line) 
-{ 
-  struct CRYPTO_dynlock_value *value; 
+static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const char *file, UNUSED int line)
+{
+  struct CRYPTO_dynlock_value *value;
 
 #if defined(__amigaos4__)
 	if((value = AllocVecTags(sizeof(*value), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
@@ -218,17 +219,17 @@ static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const cha
   return value;
 }
 
-static void amigaos_dyn_lock_function(int mode, struct CRYPTO_dynlock_value *l, 
-                                      UNUSED const char *file, UNUSED int line) 
-{ 
+static void amigaos_dyn_lock_function(int mode, struct CRYPTO_dynlock_value *l,
+                                      UNUSED const char *file, UNUSED int line)
+{
   if(mode & CRYPTO_LOCK)
     ObtainSemaphore(&l->lock_cs);
   else
     ReleaseSemaphore(&l->lock_cs);
-}  
+}
 
-static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l, 
-                                         UNUSED const char *file, UNUSED int line) 
+static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
+                                         UNUSED const char *file, UNUSED int line)
 {
   InitSemaphore(&l->lock_cs);
 	FreeVec(l);
@@ -274,7 +275,7 @@ void InternalInitAmiSSL(UNUSED struct AmiSSLInitStruct *amisslinit)
   /* nothing */
 }
 
-AMISSL_LIB_ENTRY LONG _AmiSSL_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem *tagList))
+LIBPROTO(AmiSSL_InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 	LONG err;
@@ -369,7 +370,7 @@ LONG CleanupAmiSSLA(UNUSED struct TagItem *tagList)
 }
 
 #ifdef __amigaos4__
-AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ... )
+AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __BASE_OR_IFACE), ... )
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -381,7 +382,7 @@ AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __IFACE_OR_BASE), ..
 	return _AmiSSL_InitAmiSSLA(Self,tags);
 }
 
-AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __IFACE_OR_BASE), ...)
+AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __BASE_OR_IFACE), ...)
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -403,7 +404,7 @@ void openlog(void) {}
 void closelog(void) {}
 void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
 
-AMISSL_LIB_ENTRY void __UserLibCleanup(REG(a6, UNUSED __IFACE_OR_BASE))
+LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
 	traceline();
 
@@ -443,12 +444,12 @@ AMISSL_LIB_ENTRY void __UserLibCleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 #endif
 }
 
-AMISSL_LIB_ENTRY void __UserLibExpunge(REG(a6, UNUSED __IFACE_OR_BASE))
+LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
 	traceline();
 }
 
-AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 {
 	int err = 1; /* Assume error condition */
 
@@ -512,9 +513,9 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
     CRYPTO_THREADID_set_callback(amigaos_threadid_callback);
 
     // set dynamic locks callbacks
-    CRYPTO_set_dynlock_create_callback(amigaos_dyn_create_function); 
-    CRYPTO_set_dynlock_lock_callback(amigaos_dyn_lock_function); 
-    CRYPTO_set_dynlock_destroy_callback(amigaos_dyn_destroy_function); 
+    CRYPTO_set_dynlock_create_callback(amigaos_dyn_create_function);
+    CRYPTO_set_dynlock_lock_callback(amigaos_dyn_lock_function);
+    CRYPTO_set_dynlock_destroy_callback(amigaos_dyn_destroy_function);
 
 #ifdef __amigaos4__
 		if ((IntuitionBase = OpenLibrary("intuition.library", 50))
@@ -546,7 +547,7 @@ AMISSL_LIB_ENTRY int __UserLibInit(REG(a6, __IFACE_OR_BASE))
 	kprintf("Userlib res: %d\n",err);
 
 	if (err != 0)
-		__UserLibCleanup(Self);
+		CALL_LFUNC_NP(__UserLibCleanup, Self);
 
 	return(err);
 }
