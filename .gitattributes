@@ -347,6 +347,7 @@ libcmt/listen.c eol=lf
 libcmt/localtime.c eol=lf
 libcmt/malloc.c eol=lf
 libcmt/math.c eol=lf
+libcmt/memset.c eol=lf
 libcmt/multitcp.h eol=lf
 libcmt/perror.c -text
 libcmt/putc.c eol=lf

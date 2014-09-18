@@ -3,7 +3,7 @@
 <library name="amisslmaster" basename="AmiSSLMasterBase" basetype="Library" openname="amisslmaster.library">
 	<include>exec/types.h</include>
 	<include>utility/tagitem.h</include>
-	<interface name="main" version="1.0" struct="AmiSSLMasterIFace" prefix="_AmiSSLMaster_" asmprefix="IAmiSSLMaster" global="IAmiSSLMaster" m68ksupport="yes">
+	<interface name="main" version="1.0" struct="AmiSSLMasterIFace" prefix="LIB_" asmprefix="IAmiSSLMaster" global="IAmiSSLMaster" m68ksupport="yes">
 		<method name="Obtain" result="uint32"/>
 		<method name="Release" result="uint32"/>
 		<method name="Expunge" result="void" status="unimplemented"/>

@@ -70,11 +70,14 @@ asm(".text\n\
 
 /****************************************************************************/
 
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
 #define MIN_STACKSIZE 65536
 
 #if defined(__amigaos4__)
 // stack cookie for shell v45+
-static const char USED_VAR stack_size[] = "$STACK:" STR(MIN_STACKSIZE) "\n";
+static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
 #endif
 
 /****************************************************************************/
@@ -95,9 +98,6 @@ struct LibraryHeader *AmiSSLMasterBase = NULL;
 struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
 #endif
 
-#define XMKSTR(x) #x
-#define MKSTR(x)  XMKSTR(x)
-
 #define LIBNAME        "amisslmaster.library"
 #define LIB_VERSION    VERSION
 #define LIB_REVISION   AMISSLMASTERREVISION
@@ -108,12 +108,12 @@ static const char UserLibID[]   = LIB_REV_STRING;
 
 /****************************************************************************/
 
-#define libvector LibNull                                    \
-                  LFUNC_FA_(AmiSSLMaster_InitAmiSSLMaster)   \
-                  LFUNC_FA_(AmiSSLMaster_OpenAmiSSL)         \
-                  LFUNC_FA_(AmiSSLMaster_CloseAmiSSL)        \
-                  LFUNC_FA_(AmiSSLMaster_OpenAmiSSLCipher)   \
-                  LFUNC_FA_(AmiSSLMaster_CloseAmiSSLCipher)
+#define libvector LibNull                       \
+                  LFUNC_FA_(InitAmiSSLMaster)   \
+                  LFUNC_FA_(OpenAmiSSL)         \
+                  LFUNC_FA_(CloseAmiSSL)        \
+                  LFUNC_FA_(OpenAmiSSLCipher)   \
+                  LFUNC_FA_(CloseAmiSSLCipher)
 
 
 /****************************************************************************/
@@ -171,6 +171,7 @@ static LONG                   LIBFUNC LibNull    (void);
 
 /****************************************************************************/
 
+#if defined(__amigaos3__)
 extern ULONG *__datadata_relocs;
 extern ULONG __data_size;
 extern ULONG __bss_size;
@@ -184,6 +185,7 @@ static ULONG __dbsize(void)
 {
 	return (char *)&_edata - (char *)&_sdata;
 }
+#endif
 
 /****************************************************************************/
 
@@ -587,6 +589,7 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
       // with the class open phase
       base->segList = librarySegment;
 
+      #if defined(__amigaos3__)
       kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
       kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
       kprintf("dbsize     %ld %08lx\n", __dbsize(), __dbsize());
@@ -597,6 +600,7 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
       kprintf("sdata      %08lx %08lx\n", _sdata, &_sdata);
       kprintf("edata      %08lx %08lx\n", _edata, &_edata);
       kprintf("data size  %08lx %ld\n", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
+      #endif
 
       // return the library base as success
       return base;

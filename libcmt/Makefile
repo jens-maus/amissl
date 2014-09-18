@@ -142,6 +142,7 @@ OS4OBJS = $(OBJ_D)/error.o \
 
 STDIOOBJS = $(OBJ_D)/malloc.o \
             $(OBJ_D)/free.o \
+            $(OBJ_D)/memset.o \
             $(OBJ_D)/realloc.o \
             $(OBJ_D)/time.o \
             $(OBJ_D)/gmtime.o \

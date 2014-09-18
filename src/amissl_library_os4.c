@@ -48,9 +48,9 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
 struct Library *DOSBase = NULL;
 struct DOSIFace *IDOS = NULL;
 
-int __UserLibInit(struct AmiSSLIFace *Self);
-int __UserLibCleanup(struct AmiSSLIFace *Self);
-int __UserLibExpunge(struct AmiSSLIFace *Self);
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
 
 /*
  * The system (and compiler) rely on a symbol named _start which marks
@@ -90,7 +90,7 @@ __attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 		{
 			__init_libcmt_file();
 
-			if(!__UserLibInit(self)) /* SAS/C defined errors the other way */
+			if(!LIB___UserLibInit(self)) /* SAS/C defined errors the other way */
 			{
 				return 1;
 			}
@@ -169,7 +169,7 @@ APTR libClose(struct LibraryManagerInterface *Self)
 	{
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
 
-		__UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
+		LIB___UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
 		kprintf("Freeing env vector for %08lx: %08lx\n", libBase, libBase->baserelData);
 		libBase->origLibBase->IElf->FreeDataSegmentCopy(libBase->origLibBase->elfHandle,libBase->baserelData);
 
@@ -191,7 +191,7 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
 
 		kprintf("Expunge amissl\n");
-		__UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
+		LIB___UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
 
         result = (APTR)libBase->segList;
         /* Undo what the init code did */
@@ -358,7 +358,7 @@ struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
 	return(p->ISocketPtr ? *p->ISocketPtr : NULL);
 }
 
-int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
+int VARARGS68K LIB_BIO_printf(UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
 	VA_LIST args;
 	int ret;
@@ -370,7 +370,7 @@ int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_printf(UNUSED struct AmiSSLIFace *Se
 	return ret;
 }
 
-int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
+int VARARGS68K LIB_BIO_snprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
 {
 	VA_LIST args;
 	int ret;
@@ -382,7 +382,7 @@ int VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_BIO_snprintf(UNUSED struct AmiSSLIFace *
 	return ret;
 }
 
-void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
+void VARARGS68K LIB_OPENSSL_showfatal(UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
 {
 	VA_LIST args;
 	struct EasyStruct ErrReq;
@@ -402,7 +402,7 @@ void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_OPENSSL_showfatal(UNUSED struct AmiSSLI
 	IIntuition->EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
-void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(UNUSED struct AmiSSLIFace *Self, int num, ...)
+void VARARGS68K LIB_ERR_add_error_data(UNUSED struct AmiSSLIFace *Self, int num, ...)
 {
 	VA_LIST args;
 
@@ -411,18 +411,18 @@ void VARARGS68K AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_data(UNUSED struct AmiSSL
 	VA_END(args);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
+int LIB_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
 {
 	return BIO_vprintf(bio,format,params);
 }
 
-int AMISSL_LIB_ENTRY _AmiSSL_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
+int LIB_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
 {
 	return BIO_vsnprintf(buf,n,format,params);
 }
 
 #if 0
-void AMISSL_LIB_ENTRY _AmiSSL_ERR_add_error_vdata(UNUSED struct AmiSSLIFace *Self, int num, VA_LIST params)
+void LIB_ERR_add_error_vdata(UNUSED struct AmiSSLIFace *Self, int num, VA_LIST params)
 {
 	ERR_add_error_vdata(num,params);
 }

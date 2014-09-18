@@ -5,10 +5,16 @@
 **	$Id$
 **
 **	Prototype/inline/pragma header file combo
+**
+**	Copyright (c) 2010 Hyperion Entertainment CVBA.
+**	All Rights Reserved.
 */
 
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
+#endif
+#ifndef UTILITY_TAGITEM_H
+#include <utility/tagitem.h>
 #endif
 
 /****************************************************************************/

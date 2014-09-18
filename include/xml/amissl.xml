@@ -4,7 +4,7 @@
 	<include>exec/types.h</include>
 	<include>dos/dos.h</include>
 	<include>amissl/amissl.h</include>
-	<interface name="main" version="1.0" struct="AmiSSLIFace" prefix="_AmiSSL_" asmprefix="IAmiSSL" global="IAmiSSL" m68ksupport="yes">
+	<interface name="main" version="1.0" struct="AmiSSLIFace" prefix="LIB_" asmprefix="IAmiSSL" global="IAmiSSL" m68ksupport="yes">
 		<method name="Obtain" result="ULONG"/>
 		<method name="Release" result="ULONG"/>
 		<method name="Expunge" result="void" status="unimplemented"/>

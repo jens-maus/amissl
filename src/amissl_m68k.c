@@ -9492,7 +9492,7 @@ STATIC int stub_main_EC_POINTs_mul_PPC(uint32 *regarray)
 		(size_t)regarray[REG68K_D0/4],
 		(const EC_POINT **)regarray[REG68K_A3/4],
 		(const BIGNUM **)regarray[REG68K_A4/4],
-		(BN_CTX *)regarray[REG68K_A5/4]
+		(BN_CTX *)regarray[REG68K_D1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_EC_POINTs_mul = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EC_POINTs_mul_PPC };

@@ -275,7 +275,7 @@ void InternalInitAmiSSL(UNUSED struct AmiSSLInitStruct *amisslinit)
   /* nothing */
 }
 
-LIBPROTO(AmiSSL_InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
+LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 	LONG err;
@@ -370,7 +370,7 @@ LONG CleanupAmiSSLA(UNUSED struct TagItem *tagList)
 }
 
 #ifdef __amigaos4__
-AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __BASE_OR_IFACE), ... )
+LIBPROTOVA(InitAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -379,10 +379,10 @@ AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_InitAmiSSL(REG(a6, __BASE_OR_IFACE), ..
 	tags = va_getlinearva(ap, struct TagItem *);
 	__builtin_va_end(ap);
 
-	return _AmiSSL_InitAmiSSLA(Self,tags);
+	return CALL_LFUNC(InitAmiSSLA, tags);
 }
 
-AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __BASE_OR_IFACE), ...)
+LIBPROTOVA(CleanupAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 {
 	__gnuc_va_list ap;
 	struct TagItem *tags;
@@ -391,7 +391,7 @@ AMISSL_LIB_ENTRY LONG VARARGS68K _AmiSSL_CleanupAmiSSL(REG(a6, __BASE_OR_IFACE),
 	tags = va_getlinearva(ap, struct TagItem *);
 	__builtin_va_end(ap);
 
-	return _AmiSSL_CleanupAmiSSLA(Self,tags);
+	return LIB_CleanupAmiSSLA(Self, tags);
 }
 #endif
 

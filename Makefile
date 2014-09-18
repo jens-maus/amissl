@@ -423,7 +423,7 @@ $(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRY
 
 $(BIN_D)/amisslmaster.library: $(MASTEROBJS)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	@echo "  AR $@"

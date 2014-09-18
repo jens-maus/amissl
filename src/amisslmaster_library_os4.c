@@ -39,32 +39,16 @@ struct ExecIFace * AMISSL_COMMON_DATA IExec;
 struct Library * AMISSL_COMMON_DATA DOSBase;
 struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 
-int __UserLibInit(struct AmiSSLMasterIFace *Self);
-int __UserLibCleanup(struct AmiSSLMasterIFace *Self);
-int __UserLibExpunge(struct AmiSSLMasterIFace *Self);
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
 
-/*
- * The system (and compiler) rely on a symbol named _start which marks
- * the beginning of execution of an ELF file. To prevent others from 
- * executing this library, and to keep the compiler/linker happy, we
- * define an empty _start symbol here.
- *
- * On the classic system (pre-AmigaOS4) this was usually done by
- * moveq #0,d0
- * rts
- *
- */
-void _start(void)
-{
-    /* If you feel like it, open DOS and print something to the user */
-}
-
-ULONG _AmiSSLMaster_Obtain(struct AmiSSLMasterIFace *Self)
+ULONG LIB_Obtain(UNUSED struct AmiSSLMasterIFace *Self)
 {
   return (ULONG)0;
 }
 
-ULONG _AmiSSLMaster_Release(struct AmiSSLMasterIFace *Self)
+ULONG LIB_Release(UNUSED struct AmiSSLMasterIFace *Self)
 {
   return (ULONG)0;
 }
@@ -102,7 +86,7 @@ struct Library *libOpen(struct LibraryManagerInterface *Self, ULONG version)
 
 			kprintf("AmiSSLMaster: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
-			if(!__UserLibInit((struct AmiSSLMasterIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
+			if(!LIB___UserLibInit((struct AmiSSLMasterIFace *)extlib->MainIFace)) /* SAS/C defined errors the other way */
 			{
 				kprintf("AmiSSLMaster: Returning libBase: %08lx\n",newLibBase);
 				return (struct Library *)newLibBase;
@@ -134,7 +118,7 @@ APTR libClose(struct LibraryManagerInterface *Self)
 	{
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
 
-		__UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
+		LIB___UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
 		(libBase->origLibBase->IElf->FreeDataSegmentCopy)(libBase->origLibBase->elfHandle,libBase->baserelData);
 
 		DeleteLibrary((struct Library *)libBase);
@@ -155,7 +139,7 @@ APTR libExpunge(struct LibraryManagerInterface *Self)
 		struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)libBase + libBase->libNode.lib_PosSize);
 
 		kprintf("AmiSSLMaster: expunge\n");
-		__UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
+		LIB___UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
 
         result = (APTR)libBase->segList;
         /* Undo what the init code did */
