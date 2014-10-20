@@ -44,7 +44,7 @@
 asm(".text\n\
      .even\n\
      .globl _start\n\
-    _start:\n\
+     _start:\n\
      moveq #20,d0\n\
      rts");
 #elif defined(__AROS__)
@@ -57,15 +57,6 @@ LONG _start(void)
 {
   return RETURN_FAIL;
 }
-#endif
-
-#if defined(__amigaos3__)
-asm(".text\n\
-     .even\n\
-     .globl ___restore_a4\n\
-    ___restore_a4:\n\
-     movel #0,a4\n\
-     rts");
 #endif
 
 /****************************************************************************/
@@ -88,15 +79,15 @@ struct ExecIFace* IExec = NULL;
 #if defined(__NEWLIB__)
 struct Library *NewlibBase = NULL;
 struct NewlibIFace* INewlib = NULL;
-#endif
 #else
 struct ExecBase *SysBase = NULL;
 #endif
-
-struct LibraryHeader *AmiSSLMasterBase = NULL;
-#if defined(__amigaos4__)
-struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
 #endif
+
+struct LibraryHeader *globalBase;
+
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
 
 #define LIBNAME        "amisslmaster.library"
 #define LIB_VERSION    VERSION
@@ -108,31 +99,29 @@ static const char UserLibID[]   = LIB_REV_STRING;
 
 /****************************************************************************/
 
-#define libvector LibNull                       \
-                  LFUNC_FA_(InitAmiSSLMaster)   \
+#define libvector LFUNC_FAS(InitAmiSSLMaster)   \
                   LFUNC_FA_(OpenAmiSSL)         \
                   LFUNC_FA_(CloseAmiSSL)        \
                   LFUNC_FA_(OpenAmiSSLCipher)   \
                   LFUNC_FA_(CloseAmiSSLCipher)
 
-
 /****************************************************************************/
 
 #if defined(__amigaos4__)
 
-static struct LibraryHeader * LIBFUNC LibInit    (struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec);
-static BPTR                   LIBFUNC LibExpunge (struct LibraryManagerInterface *Self);
-static struct LibraryHeader * LIBFUNC LibOpen    (struct LibraryManagerInterface *Self, ULONG version);
-static BPTR                   LIBFUNC LibClose   (struct LibraryManagerInterface *Self);
-static LONG                   LIBFUNC LibNull    (void);
+struct LibraryHeader * LIBFUNC LibInit    (struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec);
+BPTR                   LIBFUNC LibExpunge (struct LibraryManagerInterface *Self);
+struct LibraryHeader * LIBFUNC LibOpen    (struct LibraryManagerInterface *Self, ULONG version);
+BPTR                   LIBFUNC LibClose   (struct LibraryManagerInterface *Self);
+LONG                   LIBFUNC LibNull    (void);
 
 #elif defined(__MORPHOS__)
 
-static struct LibraryHeader * LIBFUNC LibInit   (struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb);
-static BPTR                   LIBFUNC LibExpunge(void);
-static struct LibraryHeader * LIBFUNC LibOpen   (void);
-static BPTR                   LIBFUNC LibClose  (void);
-static LONG                   LIBFUNC LibNull   (void);
+struct LibraryHeader * LIBFUNC LibInit   (struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb);
+BPTR                   LIBFUNC LibExpunge(void);
+struct LibraryHeader * LIBFUNC LibOpen   (void);
+BPTR                   LIBFUNC LibClose  (void);
+LONG                   LIBFUNC LibNull   (void);
 
 #elif defined(__AROS__)
 
@@ -142,30 +131,30 @@ static LONG                   LIBFUNC LibNull   (void);
 #define AmiSSLMaster_LibClose LibClose
 #define AmiSSLMaster_LibExpunge LibExpunge
 
-static AROS_UFP3 (struct LibraryHeader *, LibInit,
+AROS_UFP3 (struct LibraryHeader *, LibInit,
                   AROS_UFPA(struct LibraryHeader *, base, D0),
                   AROS_UFPA(BPTR, librarySegment, A0),
                   AROS_UFPA(struct ExecBase *, sb, A6)
 );
-static AROS_LD1 (struct LibraryHeader *, LibOpen,
+AROS_LD1 (struct LibraryHeader *, LibOpen,
                  AROS_LPA (UNUSED ULONG, version, D0),
                  struct LibraryHeader *, base, 1, AmiSSLMaster
 );
-static AROS_LD0 (BPTR, LibClose,
+AROS_LD0 (BPTR, LibClose,
                  struct LibraryHeader *, base, 2, AmiSSLMaster
 );
-static AROS_LD1(BPTR, LibExpunge,
+AROS_LD1(BPTR, LibExpunge,
                 AROS_LPA(UNUSED struct LibraryHeader *, __extrabase, D0),
                 struct LibraryHeader *, base, 3, AmiSSLMaster
 );
 
 #else
 
-static struct LibraryHeader * LIBFUNC LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
-static BPTR                   LIBFUNC LibExpunge (REG(a6, struct LibraryHeader *base));
-static struct LibraryHeader * LIBFUNC LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
-static BPTR                   LIBFUNC LibClose   (REG(a6, struct LibraryHeader *base));
-static LONG                   LIBFUNC LibNull    (void);
+struct LibraryHeader * LIBFUNC LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
+BPTR                   LIBFUNC LibExpunge (REG(a6, struct LibraryHeader *base));
+struct LibraryHeader * LIBFUNC LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
+BPTR                   LIBFUNC LibClose   (REG(a6, struct LibraryHeader *base));
+LONG                   LIBFUNC LibNull    (void);
 
 #endif
 
@@ -189,7 +178,7 @@ static ULONG __dbsize(void)
 
 /****************************************************************************/
 
-static LONG LIBFUNC LibNull(VOID)
+LONG LIBFUNC LibNull(VOID)
 {
   return(0);
 }
@@ -395,6 +384,30 @@ ULONG stackswap_call(struct StackSwapStruct *stack,
                      ULONG (*function)(struct LibraryHeader *),
                      struct LibraryHeader *arg);
 
+#if 0
+asm(".text                       \n\
+     .even                       \n\
+     .globl _stackswap_call      \n\
+   _stackswap_call:              \n\
+      moveml d2-d3/a2-a3/a6,sp@- \n\
+      movel sp@(24),d3           \n\
+      movel sp@(28),a2           \n\
+      movel sp@(32),d2           \n\
+      movel d2,a3                \n\
+      movel a3@(36),a6           \n\
+      movel d3,a0                \n\
+      jsr a6@(-732:W)            \n\
+      movel d2,sp@-              \n\
+      jbsr a2@                   \n\
+      movel d0,d2                \n\
+      addql #4,sp                \n\
+      movel a3@(36),a6           \n\
+      movel d3,a0                \n\
+      jsr a6@(-732:W)            \n\
+      movel d2,d0                \n\
+      moveml sp@+,d2-d3/a2-a3/a6 \n\
+      rts");
+#else
 asm(".text                    \n\
      .even                    \n\
      .globl _stackswap_call   \n\
@@ -403,19 +416,20 @@ asm(".text                    \n\
       movel sp@(20),d3        \n\
       movel sp@(24),a2        \n\
       movel sp@(28),d2        \n\
-      movel _SysBase(a4),a6   \n\
+      movel _SysBase,a6       \n\
       movel d3,a0             \n\
       jsr a6@(-732:W)         \n\
       movel d2,sp@-           \n\
       jbsr a2@                \n\
       movel d0,d2             \n\
       addql #4,sp             \n\
-      movel _SysBase(a4),a6   \n\
+      movel _SysBase,a6       \n\
       movel d3,a0             \n\
       jsr a6@(-732:W)         \n\
       movel d2,d0             \n\
       moveml sp@+,#0x440c     \n\
       rts");
+#endif
 #elif defined(__MORPHOS__)
 ULONG stackswap_call(struct StackSwapStruct *stack,
                      ULONG (*function)(struct LibraryHeader *),
@@ -442,7 +456,7 @@ ULONG stackswap_call(struct StackSwapStruct *stack,
 #error Bogus operating system
 #endif
 
-static BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
+BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
 {
   BOOL success = FALSE;
   struct Task *tc;
@@ -480,8 +494,10 @@ static BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct Li
         #endif
         stack->stk_Pointer = (APTR)stack->stk_Upper;
 
+        kprintf("call with swapped stack\n");
         // call routine but with embedding it into a [NewPPC]StackSwap()
         success = stackswap_call(stack, function, arg);
+        kprintf("done\n");
 
         FreeVec(stack->stk_Lower);
       }
@@ -489,7 +505,11 @@ static BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct Li
     }
   }
   else
+  {
+    kprintf("call directly\n");
     success = function(arg);
+    kprintf("done\n");
+  }
 
   return success;
 }
@@ -499,16 +519,108 @@ static BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct Li
 
 /****************************************************************************/
 
+#if defined(__amigaos3__)
+extern ULONG *__datadata_relocs;
+extern ULONG __data_size;
+extern ULONG __bss_size;
+extern ULONG __a4_init;
+extern ULONG _stext;
+extern ULONG _etext;
+extern ULONG _sdata;
+extern ULONG _edata;
+extern ULONG _bss_start;
+extern ULONG _end;
+
+static __inline APTR __GetDataSeg(void)
+{
+  APTR res;
+
+  __asm("lea ___a4_init-0x7ffe,%0" : "=a" (res));
+//__asm("movel #___a4_init,%0" : "=a" (res));
+//__asm("subl #32766,%0" : "=a" (res));
+
+  return res;
+}
+
+static __inline LONG __GetDataSize(void)
+{
+  LONG res;
+
+//__asm("movel #___data_size,%0" : "=d" (res));
+//__asm("subl #__sdata,%0" : "=d" (res));
+  res = (char *)&_edata - (char *)&_sdata;
+
+  return res;
+}
+
+static __inline LONG __GetDataSize2(void)
+{
+  LONG res;
+
+  __asm("movel #___data_size,%0" : "=d" (res));
+
+  return res;
+}
+
+static __inline LONG __GetDataBSSSize(void)
+{
+  LONG res;
+
+  __asm("movel #___data_size,%0; addl #___bss_size,%0" : "=d" (res));
+
+  return res;
+}
+
+
+static __inline APTR __GetBSSSeg(void)
+{
+  APTR res;
+
+  __asm("lea ___a4_init,%0" : "=a" (res));
+
+  return res;
+}
+
+static __inline LONG __GetBSSSize(void)
+{
+  LONG res;
+
+//__asm("movel #___bss_size,%0" : "=d" (res));
+//__asm("subl #__bss_start,%0" : "=d" (res));
+  res = (char *)&_end - (char *)&_bss_start;
+
+  return res;
+}
+
+static __inline APTR __GetA4(void)
+{
+  APTR res;
+
+  __asm("movel a4,%0" : "=d" (res));
+
+  return res;
+}
+
+#if defined(BASEREL)
+asm(".text\n\
+     .even\n\
+     .globl ___restore_a4\n\
+     ___restore_a4:\n\
+     movel a6@(90),a4\n\
+     rts");
+#endif
+#endif
+
 #if defined(__amigaos4__)
-static struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
+struct LibraryHeader * LIBFUNC LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
 #elif defined(__MORPHOS__)
-static struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
+struct LibraryHeader * LIBFUNC LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
 #elif defined(__AROS__)
-static AROS_UFH3(struct LibraryHeader *, LibInit,
+AROS_UFH3(struct LibraryHeader *, LibInit,
                  AROS_UFHA(struct LibraryHeader *, base, D0),
                  AROS_UFHA(BPTR, librarySegment, A0),
                  AROS_UFHA(struct ExecBase *, sb, A6)
@@ -516,13 +628,14 @@ static AROS_UFH3(struct LibraryHeader *, LibInit,
 {
   AROS_USERFUNC_INIT
 #else
-static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
+struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
 {
 #endif
 
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
   SysBase = (APTR)sb;
-  kprintf("%s/%ld %08lx %08lx\n", __FUNCTION__, __LINE__, sb, SysBase);
+
+  kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
+  kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
 
   // make sure that this is really a 68020+ machine if optimized for 020+
   #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
@@ -543,7 +656,6 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
     #endif
     D(DBF_STARTUP, "LibInit()");
 
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
     // cleanup the library header structure beginning with the
     // library base.
     base->libBase.lib_Node.ln_Type = NT_LIBRARY;
@@ -554,29 +666,37 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
     base->libBase.lib_Revision     = LIB_REVISION;
     base->libBase.lib_IdString     = (char *)(UserLibID+6);
 
+    base->dataSeg  = __GetDataSeg();
+
+    #if defined(MULTIBASE)
+    base->dataSize = __GetDataBSSSize();
+    base->parent   = base;
+    #endif
+
+    #if defined(BASEREL)
+    #if defined(__amigaos3__)
+    base->a4 = __GetA4();//__GetBSSSeg();
+    #endif
+    #endif
+
     memset(&base->libSem, 0, sizeof(base->libSem));
     InitSemaphore(&base->libSem);
-
-    base->sysBase = (APTR)SysBase;
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
 
     // protect access to initBase()
     ObtainSemaphore(&base->libSem);
 
-    // set the AmiSSLMasterBase
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-    AmiSSLMasterBase = base;
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-    #if defined(__amigaos4__)
-    GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase);
-    #endif
+    // set the global base
+    globalBase = base;
 
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
     // If we are not running on AmigaOS4 (no stackswap required) we go and
     // do an explicit StackSwap() in case the user wants to make sure we
     // have enough stack for his user functions
+    kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+    kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
     success = callLibFunction(initBase, base);
-    kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+    kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
 
     // unprotect initBase()
     ReleaseSemaphore(&base->libSem);
@@ -588,8 +708,9 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
       // set the initialized value and contiue
       // with the class open phase
       base->segList = librarySegment;
+      kprintf("success\n");
 
-      #if defined(__amigaos3__)
+      #if defined(__amigaos3__) && 0
       kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
       kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
       kprintf("dbsize     %ld %08lx\n", __dbsize(), __dbsize());
@@ -608,8 +729,6 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
     else
     {
       callLibFunction(freeBase, base);
-      AmiSSLMasterBase = NULL;
-      DROPINTERFACE(IAmiSSLMaster);
     }
 
     #if defined(__amigaos4__) && defined(__NEWLIB__)
@@ -621,6 +740,8 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
     }
     #endif
   }
+
+  kprintf("failure\n");
 
   return NULL;
 #ifdef __AROS__
@@ -637,13 +758,9 @@ static struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base
 
 STATIC BPTR LibDelete(struct LibraryHeader *base)
 {
-#if defined(__amigaos4__)
-  struct ExecIFace *IExec = (struct ExecIFace *)(*(struct ExecBase **)4)->MainInterface;
-#endif
   BPTR rc;
 
-  // make sure to restore the SysBase
-  SysBase = (APTR)base->sysBase;
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
 
   // remove the library base from exec's lib list in advance
   Remove((struct Node *)base);
@@ -656,12 +773,6 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 
   // unprotect
   ReleaseSemaphore(&base->libSem);
-
-  #if defined(__amigaos4__)
-  DROPINTERFACE(IAmiSSLMaster);
-  IAmiSSLMaster = NULL;
-  #endif
-  AmiSSLMasterBase = NULL;
 
   #if defined(__amigaos4__) && defined(__NEWLIB__)
   if(NewlibBase)
@@ -676,32 +787,34 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   rc = base->segList;
   DeleteLibrary(&base->libBase);
 
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+
   return rc;
 }
 
 #if defined(__amigaos4__)
-static BPTR LibExpunge(struct LibraryManagerInterface *Self)
+BPTR LIBFUNC LibExpunge(struct LibraryManagerInterface *Self)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-static BPTR LibExpunge(void)
+BPTR LIBFUNC LibExpunge(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
 #elif defined(__AROS__)
-static AROS_LH1(BPTR, LibExpunge,
+AROS_LH1(BPTR, LibExpunge,
   AROS_LHA(UNUSED struct LibraryHeader *, __extrabase, D0),
   struct LibraryHeader *, base, 3, AmiSSLMaster
 )
 {
-    AROS_LIBFUNC_INIT
+  AROS_LIBFUNC_INIT
 #else
-static BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
+BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc;
 
   D(DBF_STARTUP, "LibExpunge(): %ld", base->libBase.lib_OpenCnt);
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
 
   // in case our open counter is still > 0, we have
   // to set the late expunge flag and return immediately
@@ -714,7 +827,7 @@ static BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   {
     rc = LibDelete(base);
   }
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
 
   return rc;
 #ifdef __AROS__
@@ -725,28 +838,33 @@ static BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-static struct LibraryHeader *LibOpen(struct LibraryManagerInterface *Self, ULONG version UNUSED)
+struct LibraryHeader * LIBFUNC LibOpen(struct LibraryManagerInterface *Self, ULONG version UNUSED)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-static struct LibraryHeader *LibOpen(void)
+struct LibraryHeader * LIBFUNC LibOpen(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
 #elif defined(__AROS__)
-static AROS_LH1(struct LibraryHeader *, LibOpen,
+AROS_LH1(struct LibraryHeader *, LibOpen,
                 AROS_LHA(UNUSED ULONG, version, D0),
                 struct LibraryHeader *, base, 1, AmiSSLMaster
 )
 {
-    AROS_LIBFUNC_INIT
+  AROS_LIBFUNC_INIT
 #else
-static struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
+struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
 {
 #endif
-  struct LibraryHeader *res = base;
+  struct LibraryHeader *res = NULL;
+  #if defined(MULTIBASE)
+  struct LibraryHeader *child;
+  #endif
 
   D(DBF_STARTUP, "LibOpen(): %ld", base->libBase.lib_OpenCnt);
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
 
   // LibOpen(), LibClose() and LibExpunge() are called while the system is in
   // Forbid() state. That means that these functions should be quick and should
@@ -764,7 +882,80 @@ static struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG
   // delete the late expunge flag
   base->libBase.lib_Flags &= ~LIBF_DELEXP;
 
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  #if defined(MULTIBASE)
+  #if defined(__amigaos4__)
+  #else
+  child = (struct LibraryHeader *)MakeLibrary((APTR)&LibInitTab[1], NULL, (ULONG (*)())LibInit, sizeof(*base) + base->dataSize, 0);
+  #endif
+  kprintf("%s/%ld child %08lx\n", __FUNCTION__, __LINE__, child);
+
+  if(child != NULL)
+  {
+    char *dataSeg;
+    LONG *relocs;
+    LONG numRelocs;
+
+    // free all our private data and stuff.
+    ObtainSemaphore(&child->libSem);
+
+    #if defined(__amigaos4__)
+    #else
+    dataSeg = (char *)child + sizeof(*child);
+    CopyMem(child->dataSeg, dataSeg, __GetDataSize2());
+
+    relocs = __datadata_relocs;
+    numRelocs = *relocs++;
+    kprintf("relocate %ld offsets\n", numRelocs);
+    if((numRelocs = *relocs++))
+    {
+      LONG dist = (LONG)child->dataSeg - (LONG)dataSeg;
+
+      do
+      {
+        *(LONG *)((LONG)dataSeg + *relocs++) -= dist;
+      }
+      while(--numRelocs != 0);
+    }
+
+    dataSeg += 0x7ffe;
+    #endif // MULTIBASE
+
+    child->dataSeg = dataSeg;
+
+    // our 'real' parent
+    child->parent = base;
+
+    // assume openBase won't fail
+    child->libBase.lib_Flags &= LIBF_DELEXP;
+    child->libBase.lib_OpenCnt++;
+
+    // make sure we have enough stack here
+    callLibFunction(openBase, child);
+
+    // unprotect
+    ReleaseSemaphore(&child->libSem);
+
+    res = child;
+  }
+
+  base->libBase.lib_OpenCnt--;
+  #else // MULTIBASE
+  // free all our private data and stuff.
+  ObtainSemaphore(&base->libSem);
+
+  // make sure we have enough stack here
+  callLibFunction(openBase, base);
+
+  // unprotect
+  ReleaseSemaphore(&base->libSem);
+
+  res = base;
+  #endif // MULTIBASE
+
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+
   return res;
 #ifdef __AROS__
   AROS_LIBFUNC_EXIT
@@ -774,27 +965,38 @@ static struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-static BPTR LibClose(struct LibraryManagerInterface *Self)
+BPTR LIBFUNC LibClose(struct LibraryManagerInterface *Self)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-static BPTR LibClose(void)
+BPTR LIBFUNC LibClose(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)REG_A6;
 #elif defined(__AROS__)
-static AROS_LH0(BPTR, LibClose,
+AROS_LH0(BPTR, LibClose,
                 struct LibraryHeader *, base, 2, AmiSSLMaster
 )
 {
-    AROS_LIBFUNC_INIT
+  AROS_LIBFUNC_INIT
 #else
-static BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
+BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc = 0;
 
   D(DBF_STARTUP, "LibClose(): %ld", base->libBase.lib_OpenCnt);
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+
+  // free all our private data and stuff.
+  ObtainSemaphore(&base->libSem);
+
+  // make sure we have enough stack here
+  callLibFunction(closeBase, base);
+
+  // unprotect
+  ReleaseSemaphore(&base->libSem);
 
   // decrease the open counter
   base->libBase.lib_OpenCnt--;
@@ -811,7 +1013,10 @@ static BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     }
   }
 
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+
   return rc;
 #ifdef __AROS__
   AROS_LIBFUNC_EXIT

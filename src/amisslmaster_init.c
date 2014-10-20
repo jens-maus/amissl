@@ -14,12 +14,38 @@ struct DOSIFace *IDOS = NULL;
 #define DROPINTERFACE(iface)
 
 struct DosLibrary *DOSBase = NULL;
+
+void kprintf(const char *,...);
 #endif
 
 /***********************************************************************/
 
 ULONG freeBase(UNUSED struct LibraryHeader *lib)
 {
+//kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+//kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+
+  return TRUE;
+}
+
+/***********************************************************************/
+
+ULONG initBase(UNUSED struct LibraryHeader *lib)
+{
+//kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+//kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+
+  return TRUE;
+}
+
+/***********************************************************************/
+
+ULONG closeBase(UNUSED struct LibraryHeader *lib)
+{
+  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+
   if(DOSBase)
   {
     DROPINTERFACE(IDOS);
@@ -32,17 +58,19 @@ ULONG freeBase(UNUSED struct LibraryHeader *lib)
 
 /***********************************************************************/
 
-ULONG initBase(struct LibraryHeader *lib)
+ULONG openBase(struct LibraryHeader *lib)
 {
+  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+
   if((DOSBase = (APTR)OpenLibrary("dos.library", 37)) &&
      GETINTERFACE(IDOS, DOSBase))
   {
+    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
     return TRUE;
   }
 
-  freeBase(lib);
+  closeBase(lib);
 
   return FALSE;
 }
-
-/***********************************************************************/

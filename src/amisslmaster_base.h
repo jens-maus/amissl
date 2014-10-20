@@ -18,9 +18,19 @@
 struct LibraryHeader
 {
   struct Library          libBase;
-  struct Library          *sysBase;
+  UWORD                   pad;
   BPTR                    segList;
   struct SignalSemaphore  libSem;
+  APTR                    dataSeg;
+  #if defined(MULTIBASE)
+  ULONG                   dataSize;
+  struct LibraryHeader    *parent;
+  #endif
+  #if defined(BASEREL)
+  #if defined(__amigaos3__)
+  APTR                    a4;
+  #endif
+  #endif
 };
 
 #define __NOLIBBASE__

@@ -169,13 +169,13 @@ OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
 INCLUDE  = -I./include -I./libcmt/include
-CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE \
+CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
            -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
            $(WARN) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(INCLUDE)
-LDFLAGS  = $(CPU) $(DEBUGSYM) -nostdlib -mbaserel
+LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
 LIBCMT   = $(BIN_D)/libcmt.a
@@ -199,8 +199,9 @@ ifeq ($(OS), os4)
   CRT      = clib2
   CPU      = -mcpu=powerpc -mstrict-align
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
-  CFLAGS   += -mbaserel -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS   += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
+  BASEREL   = -mbaserel
   CDUP     = ../
   CDTHIS   = ./
 
@@ -230,9 +231,10 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU     = -m68020-60 -msoft-float
-  CFLAGS  += -fbaserel32 -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS += -fbaserel32 -noixemul
+  CFLAGS  += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lm
+  BASEREL  = -fbaserel32 -resident32 -mrestore-a4
   GCCVER  = 2
 
   OPENSSL_T = amiga-os3
@@ -361,7 +363,7 @@ LIBS = $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amisslmaster.library
+all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amisslmaster.library $(BIN_D)/mastertest
 
 # make the object directory
 $(OBJ_D):
@@ -388,7 +390,7 @@ $(BIN_D)/openssl:
 # for compiling single .c files
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(BASEREL) -c $< -o $@
 
 ## OPENSSL BUILD RULES ##
 
@@ -419,7 +421,7 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 $(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(BASEREL) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/amisslmaster.library: $(MASTEROBJS)
 	@echo "  LD $@"
@@ -434,6 +436,10 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	@echo "  AR $@"
 	@$(AR) r $@ $(OBJ_D)/libstubs.o
 	@$(RANLIB) $@
+
+$(BIN_D)/mastertest: $(SRC_D)/mastertest.c
+	@echo "  CC/LD $@"
+	@$(CC) -o $@ $^
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
@@ -451,6 +457,10 @@ $(OBJ_D)/amissl_m68k.o: $(SRC_D)/amissl_m68k.c
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
 $(OBJ_D)/amisslmaster_m68k.o: $(SRC_D)/amisslmaster_m68k.c
+
+$(OBJ_D)/amisslmaster_libinit.o: $(SRC_D)/amisslmaster_libinit.c
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 # cleanup target
 .PHONY: clean

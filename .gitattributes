@@ -2652,6 +2652,7 @@ src/baserel.c eol=lf
 src/libStdVec.c -text
 src/libinit.c eol=lf
 src/libstubs.c eol=lf
+src/mastertest.c -text
 src/mkidl.sh -text
 test/Makefile eol=lf
 test/SMakefile eol=lf

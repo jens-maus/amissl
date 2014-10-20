@@ -13,5 +13,7 @@ LIBPROTO(CloseAmiSSLCipher, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struc
 
 ULONG freeBase(struct LibraryHeader *lib);
 ULONG initBase(struct LibraryHeader *lib);
+ULONG closeBase(struct LibraryHeader *lib);
+ULONG openBase(struct LibraryHeader *lib);
 
 #endif /* _LIB_PROTOS_H */

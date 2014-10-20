@@ -30,7 +30,6 @@ struct AmiSSLMasterIFace;
 #endif
 
 #ifdef __amigaos4__
-struct Library * AMISSL_COMMON_DATA ExecBase;
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 #define XMKSTR(x) #x
@@ -151,8 +150,10 @@ static void CloseLib(struct Library *LibBase)
 
 LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
+	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, Self, LibAPIVersion, LibUsesOpenSSLStructs);
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
+	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, Self, LibAPIVersion, LibUsesOpenSSLStructs);
 
 	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
@@ -273,6 +274,12 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
   // only open sub libraries for our old-style AmiSSL v2 versions.
 	if(LibAPIVersion == AMISSL_V2)
 	{
+		#if defined(__amigaos4__)
+		struct AmiSSLMasterIFace *IAmiSSLMaster = Self;
+		#else
+		struct Library *AmiSSLMasterBase = Self;
+		#endif
+
 		switch(Cipher)
 		{
 			case CIPHER_BLOWFISH:
