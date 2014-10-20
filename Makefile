@@ -234,7 +234,7 @@ ifeq ($(OS), os3)
   CFLAGS  += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lm
-  BASEREL  = -fbaserel32 -resident32 -mrestore-a4
+  BASEREL  = -fbaserel -resident -mrestore-a4
   GCCVER  = 2
 
   OPENSSL_T = amiga-os3

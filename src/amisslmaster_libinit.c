@@ -109,19 +109,19 @@ static const char UserLibID[]   = LIB_REV_STRING;
 
 #if defined(__amigaos4__)
 
-struct LibraryHeader * LIBFUNC LibInit    (struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec);
-BPTR                   LIBFUNC LibExpunge (struct LibraryManagerInterface *Self);
-struct LibraryHeader * LIBFUNC LibOpen    (struct LibraryManagerInterface *Self, ULONG version);
-BPTR                   LIBFUNC LibClose   (struct LibraryManagerInterface *Self);
-LONG                   LIBFUNC LibNull    (void);
+struct LibraryHeader * LibInit    (struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec);
+BPTR                   LibExpunge (struct LibraryManagerInterface *Self);
+struct LibraryHeader * LibOpen    (struct LibraryManagerInterface *Self, ULONG version);
+BPTR                   LibClose   (struct LibraryManagerInterface *Self);
+LONG                   LibNull    (void);
 
 #elif defined(__MORPHOS__)
 
-struct LibraryHeader * LIBFUNC LibInit   (struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb);
-BPTR                   LIBFUNC LibExpunge(void);
-struct LibraryHeader * LIBFUNC LibOpen   (void);
-BPTR                   LIBFUNC LibClose  (void);
-LONG                   LIBFUNC LibNull   (void);
+struct LibraryHeader * LibInit   (struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb);
+BPTR                   LibExpunge(void);
+struct LibraryHeader * LibOpen   (void);
+BPTR                   LibClose  (void);
+LONG                   LibNull   (void);
 
 #elif defined(__AROS__)
 
@@ -150,11 +150,11 @@ AROS_LD1(BPTR, LibExpunge,
 
 #else
 
-struct LibraryHeader * LIBFUNC LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
-BPTR                   LIBFUNC LibExpunge (REG(a6, struct LibraryHeader *base));
-struct LibraryHeader * LIBFUNC LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
-BPTR                   LIBFUNC LibClose   (REG(a6, struct LibraryHeader *base));
-LONG                   LIBFUNC LibNull    (void);
+struct LibraryHeader * LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
+BPTR                   LibExpunge (REG(a6, struct LibraryHeader *base));
+struct LibraryHeader * LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
+BPTR                   LibClose   (REG(a6, struct LibraryHeader *base));
+LONG                   LibNull    (void);
 
 #endif
 
@@ -178,7 +178,7 @@ static ULONG __dbsize(void)
 
 /****************************************************************************/
 
-LONG LIBFUNC LibNull(VOID)
+LONG LibNull(VOID)
 {
   return(0);
 }
@@ -612,12 +612,12 @@ asm(".text\n\
 #endif
 
 #if defined(__amigaos4__)
-struct LibraryHeader * LIBFUNC LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
+struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
 #elif defined(__MORPHOS__)
-struct LibraryHeader * LIBFUNC LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
+struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
 #elif defined(__AROS__)
 AROS_UFH3(struct LibraryHeader *, LibInit,
@@ -628,7 +628,7 @@ AROS_UFH3(struct LibraryHeader *, LibInit,
 {
   AROS_USERFUNC_INIT
 #else
-struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
+struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
 {
 #endif
 
@@ -793,11 +793,11 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 }
 
 #if defined(__amigaos4__)
-BPTR LIBFUNC LibExpunge(struct LibraryManagerInterface *Self)
+BPTR LibExpunge(struct LibraryManagerInterface *Self)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-BPTR LIBFUNC LibExpunge(void)
+BPTR LibExpunge(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
 #elif defined(__AROS__)
@@ -808,7 +808,7 @@ AROS_LH1(BPTR, LibExpunge,
 {
   AROS_LIBFUNC_INIT
 #else
-BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
+BPTR LibExpunge(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc;
@@ -838,11 +838,11 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-struct LibraryHeader * LIBFUNC LibOpen(struct LibraryManagerInterface *Self, ULONG version UNUSED)
+struct LibraryHeader * LibOpen(struct LibraryManagerInterface *Self, ULONG version UNUSED)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-struct LibraryHeader * LIBFUNC LibOpen(void)
+struct LibraryHeader * LibOpen(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
 #elif defined(__AROS__)
@@ -853,7 +853,7 @@ AROS_LH1(struct LibraryHeader *, LibOpen,
 {
   AROS_LIBFUNC_INIT
 #else
-struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
+struct LibraryHeader * LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
 {
 #endif
   struct LibraryHeader *res = NULL;
@@ -943,6 +943,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   // free all our private data and stuff.
   ObtainSemaphore(&base->libSem);
 
+  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   // make sure we have enough stack here
   callLibFunction(openBase, base);
 
@@ -965,11 +966,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-BPTR LIBFUNC LibClose(struct LibraryManagerInterface *Self)
+BPTR LibClose(struct LibraryManagerInterface *Self)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
 #elif defined(__MORPHOS__)
-BPTR LIBFUNC LibClose(void)
+BPTR LibClose(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)REG_A6;
 #elif defined(__AROS__)
@@ -979,7 +980,7 @@ AROS_LH0(BPTR, LibClose,
 {
   AROS_LIBFUNC_INIT
 #else
-BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
+BPTR LibClose(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc = 0;
