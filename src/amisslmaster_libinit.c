@@ -160,24 +160,6 @@ LONG                   LibNull    (void);
 
 /****************************************************************************/
 
-#if defined(__amigaos3__)
-extern ULONG *__datadata_relocs;
-extern ULONG __data_size;
-extern ULONG __bss_size;
-extern ULONG __a4_init;
-extern ULONG _stext;
-extern ULONG _etext;
-extern ULONG _sdata;
-extern ULONG _edata;
-
-static ULONG __dbsize(void)
-{
-	return (char *)&_edata - (char *)&_sdata;
-}
-#endif
-
-/****************************************************************************/
-
 LONG LibNull(VOID)
 {
   return(0);
