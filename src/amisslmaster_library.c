@@ -167,7 +167,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
     // known 1.0.X amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
-	  if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101i.library", 3))
+	  if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101i.library", 3) == NULL)
 	    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101h.library", 3);
   }
 	else if(LibAPIVersion == AMISSL_V098y)
@@ -192,7 +192,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 	else if(LibAPIVersion == AMISSL_V2)
 	{
 		/* This only happens for m68k code, no need to handle ppc versions here */
-		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2))
+		if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2) != NULL)
 		{
 			amisslinit.BlowFishBase = OpenLib(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
 			amisslinit.CASTBase = OpenLib(&CASTBase,"libs:amissl/cast_v2.library",2);
