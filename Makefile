@@ -398,24 +398,24 @@ openssl/Makefile:
 	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5)
 
 openssl/MINFO: openssl/Makefile
-	@(cd openssl; make files)
+	@(cd openssl; $(MAKE) files)
 
 $(OBJ_D)/openssl/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
 	@(cd openssl; perl util/mk1mf.pl SRC= TMP=../$(OBJ_D)/openssl OUT=../$(BIN_D)/openssl $(OPENSSL_T) > ../$(OBJ_D)/Makefile.ossl)
 
 $(OBJ_D)/openssl/outinc: $(OBJ_D)/openssl/Makefile.ossl
-	@make -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC) outinc outinc/openssl headers
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC) outinc outinc/openssl headers
 	@sh tools/cpheaders.sh
 
 $(LIBCRYPTO): $(OBJ_D)/openssl/outinc
-	@make -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC)
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC)
 
 $(LIBSSL): $(LIBCRYPTO)
 
 ## LIBCMT BUILD RULES ##
 
 $(LIBCMT): $(OBJ_D)/libcmt
-	@make -C libcmt AmiSSL=.. CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS)
+	@$(MAKE) -C libcmt AmiSSL=.. CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS)
 
 ## AMISSL BUILD RULES ##
 
@@ -494,4 +494,4 @@ testing:
 	@$(CC) basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib
 
 tests:
-	@make -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. exe
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. exe
