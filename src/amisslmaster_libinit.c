@@ -277,7 +277,7 @@ STATIC CONST struct TagItem libCreateTags[] =
 
 #else
 
-STATIC CONST CONST_APTR LibVectors[] =
+STATIC CONST_APTR LibVectors[] =
 {
   #ifdef __MORPHOS__
   (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
@@ -298,7 +298,7 @@ STATIC CONST CONST_APTR LibVectors[] =
   (CONST_APTR)LibExpunge,
   #endif
   (CONST_APTR)LibNull,
-  (CONST_APTR)libvector,
+  libvector,
   (CONST_APTR)-1
 };
 
