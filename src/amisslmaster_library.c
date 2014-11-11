@@ -9,11 +9,6 @@
 #include <libraries/amissl.h>
 #include <internal/amissl_compiler.h>
 #include "amisslinit.h"
-#ifdef __GNUC__
-#include "../libcmt/libcmt.h"
-#else
-#include "/libcmt/libcmt.h"
-#endif
 
 //#define DEBUG
 #include <internal/debug.h>
