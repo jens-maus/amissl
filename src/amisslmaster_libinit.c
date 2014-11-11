@@ -150,11 +150,11 @@ AROS_LD1(BPTR, LibExpunge,
 
 #else
 
-struct LibraryHeader * LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
-BPTR                   LibExpunge (REG(a6, struct LibraryHeader *base));
-struct LibraryHeader * LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
-BPTR                   LibClose   (REG(a6, struct LibraryHeader *base));
-LONG                   LibNull    (void);
+struct LibraryHeader * LIBFUNC LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
+BPTR                   LIBFUNC LibExpunge (REG(a6, struct LibraryHeader *base));
+struct LibraryHeader * LIBFUNC LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
+BPTR                   LIBFUNC LibClose   (REG(a6, struct LibraryHeader *base));
+LONG                           LibNull    (void);
 
 #endif
 
@@ -398,14 +398,14 @@ asm(".text                    \n\
       movel sp@(20),d3        \n\
       movel sp@(24),a2        \n\
       movel sp@(28),d2        \n\
-      movel _SysBase,a6       \n\
+      movel a4@(_SysBase:W),a6\n\
       movel d3,a0             \n\
       jsr a6@(-732:W)         \n\
       movel d2,sp@-           \n\
       jbsr a2@                \n\
       movel d0,d2             \n\
       addql #4,sp             \n\
-      movel _SysBase,a6       \n\
+      movel a4@(_SysBase:W),a6\n\
       movel d3,a0             \n\
       jsr a6@(-732:W)         \n\
       movel d2,d0             \n\
@@ -593,9 +593,9 @@ asm(".text\n\
      .even\n\
      .globl ___restore_a4\n\
      ___restore_a4:\n\
-     movel a6@(90),a4\n\
+     movel a6@(96),a4\n\
      rts");
-#endif
+#endif // BASEREL
 #endif // __amigaos3__
 
 #if defined(__amigaos4__)
@@ -615,7 +615,7 @@ AROS_UFH3(struct LibraryHeader *, LibInit,
 {
   AROS_USERFUNC_INIT
 #else
-struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
+struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
 {
 #endif
 
@@ -626,7 +626,7 @@ struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR
 
   // make sure that this is really a 68020+ machine if optimized for 020+
   #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
-  if(!(SysBase->AttnFlags & AFF_68020))
+  if((SysBase->AttnFlags & AFF_68020) == 0)
     return(NULL);
   #endif
 
@@ -635,7 +635,7 @@ struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR
      GETINTERFACE(INewlib, NewlibBase))
   #endif
   {
-    BOOL success = FALSE;
+    BOOL success;
 
     #if defined(DEBUG)
     // this must be called ahead of any debug output, otherwise we get stuck
@@ -653,21 +653,21 @@ struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR
     base->libBase.lib_Revision     = LIB_REVISION;
     base->libBase.lib_IdString     = (char *)(UserLibID+6);
 
-    base->dataSeg  = __GetDataSeg();
+    base->segList = librarySegment;
+    base->sysBase = &sb->LibNode;
+
+    InitSemaphore(&base->libSem);
 
     #if defined(MULTIBASE)
-    base->dataSize = __GetDataBSSSize();
     base->parent   = base;
-    #endif
-
+    base->dataSeg  = __GetDataSeg();
+    base->dataSize = __GetDataBSSSize();
     #if defined(BASEREL)
     #if defined(__amigaos3__)
     base->a4 = __GetA4();//__GetBSSSeg();
-    #endif
-    #endif
-
-    memset(&base->libSem, 0, sizeof(base->libSem));
-    InitSemaphore(&base->libSem);
+    #endif /* __amigaos3__ */
+    #endif /* BASEREL */
+    #endif /* MULTIBASE */
 
     // protect access to initBase()
     ObtainSemaphore(&base->libSem);
@@ -689,12 +689,11 @@ struct LibraryHeader * LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR
     ReleaseSemaphore(&base->libSem);
 
     // check if everything worked out fine
-    if(success == TRUE)
+    if(success != FALSE)
     {
       // everything was successfully so lets
       // set the initialized value and contiue
       // with the class open phase
-      base->segList = librarySegment;
       kprintf("success\n");
 
       #if defined(__amigaos3__) && 0
@@ -795,17 +794,25 @@ AROS_LH1(BPTR, LibExpunge,
 {
   AROS_LIBFUNC_INIT
 #else
-BPTR LibExpunge(REG(a6, struct LibraryHeader *base))
+BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc;
+  #if defined(MULTIBASE)
+  struct LibraryHeader *child = base;
+  base = base->parent;
+  #endif
 
   D(DBF_STARTUP, "LibExpunge(): %ld", base->libBase.lib_OpenCnt);
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
 
   // in case our open counter is still > 0, we have
   // to set the late expunge flag and return immediately
-  if(base->libBase.lib_OpenCnt > 0)
+  if(base->libBase.lib_OpenCnt
+#ifdef MULTIBASE
+     || base != child
+#endif // MULTIBASE
+    )
   {
     base->libBase.lib_Flags |= LIBF_DELEXP;
     rc = 0;
@@ -840,7 +847,7 @@ AROS_LH1(struct LibraryHeader *, LibOpen,
 {
   AROS_LIBFUNC_INIT
 #else
-struct LibraryHeader * LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
+struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct LibraryHeader *base))
 {
 #endif
   struct LibraryHeader *res = NULL;
@@ -869,76 +876,74 @@ struct LibraryHeader * LibOpen(REG(d0, UNUSED ULONG version), REG(a6, struct Lib
   // delete the late expunge flag
   base->libBase.lib_Flags &= ~LIBF_DELEXP;
 
+  // protect
+  ObtainSemaphore(&base->libSem);
+
   #if defined(MULTIBASE)
   #if defined(__amigaos4__)
+  child = 0;
   #else
-  child = (struct LibraryHeader *)MakeLibrary((APTR)&LibInitTab[1], NULL, (ULONG (*)())LibInit, sizeof(*base) + base->dataSize, 0);
+  child = (struct LibraryHeader *)MakeLibrary((APTR)&LibVectors[0], NULL, NULL, sizeof(*child) + base->dataSize, 0);
   #endif
   kprintf("%s/%ld child %08lx\n", __FUNCTION__, __LINE__, child);
 
   if(child != NULL)
   {
-    char *dataSeg;
-    LONG *relocs;
-    LONG numRelocs;
+    unsigned char *dataSeg;
+    ULONG *relocs;
+    ULONG numRelocs;
 
-    // free all our private data and stuff.
-    ObtainSemaphore(&child->libSem);
+    child->libBase.lib_Revision = base->libBase.lib_Revision;
+    child->libBase.lib_OpenCnt++;
+    child->segList  = 0;
+    child->sysBase  = base->sysBase;
+    InitSemaphore(&child->libSem);
+    child->parent   = base;
+    child->dataSize = base->dataSize;
 
+    dataSeg = (unsigned char *)(child + 1);
     #if defined(__amigaos4__)
     #else
-    dataSeg = (char *)child + sizeof(*child);
-    CopyMem(child->dataSeg, dataSeg, __GetDataSize2());
-
-    relocs = __datadata_relocs;
-    numRelocs = *relocs++;
+    CopyMem(base->dataSeg, dataSeg, base->dataSize);
+    relocs = &((ULONG *)__datadata_relocs)[1];
+    numRelocs = relocs[-1];
     kprintf("relocate %ld offsets\n", numRelocs);
-    if((numRelocs = *relocs++))
+    if(numRelocs != 0)
     {
-      LONG dist = (LONG)child->dataSeg - (LONG)dataSeg;
+      ULONG dist = (unsigned char *)base->dataSeg - dataSeg;
 
       do
       {
-        *(LONG *)((LONG)dataSeg + *relocs++) -= dist;
+        ((ULONG *)dataSeg)[*relocs++] -= dist;
       }
       while(--numRelocs != 0);
     }
-
-    dataSeg += 0x7ffe;
-    #endif // MULTIBASE
+    dataSeg += 0x7ffeu;
+    #endif // !__amigaos4__
 
     child->dataSeg = dataSeg;
 
-    // our 'real' parent
-    child->parent = base;
-
     // assume openBase won't fail
-    child->libBase.lib_Flags &= LIBF_DELEXP;
-    child->libBase.lib_OpenCnt++;
+    base->libBase.lib_OpenCnt++;
 
     // make sure we have enough stack here
     callLibFunction(openBase, child);
-
-    // unprotect
-    ReleaseSemaphore(&child->libSem);
 
     res = child;
   }
 
   base->libBase.lib_OpenCnt--;
   #else // MULTIBASE
-  // free all our private data and stuff.
-  ObtainSemaphore(&base->libSem);
 
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   // make sure we have enough stack here
   callLibFunction(openBase, base);
 
-  // unprotect
-  ReleaseSemaphore(&base->libSem);
-
   res = base;
   #endif // MULTIBASE
+
+  // unprotect
+  ReleaseSemaphore(&base->libSem);
 
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
@@ -967,7 +972,7 @@ AROS_LH0(BPTR, LibClose,
 {
   AROS_LIBFUNC_INIT
 #else
-BPTR LibClose(REG(a6, struct LibraryHeader *base))
+BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
 {
 #endif
   BPTR rc = 0;
@@ -989,16 +994,37 @@ BPTR LibClose(REG(a6, struct LibraryHeader *base))
   // decrease the open counter
   base->libBase.lib_OpenCnt--;
 
-  // in case the opern counter is <= 0 we can
+  // in case the open counter is == 0 we can
   // make sure that we free everything
-  if(base->libBase.lib_OpenCnt <= 0)
+  if(base->libBase.lib_OpenCnt == 0)
   {
+    #ifdef MULTIBASE
+    struct LibraryHeader *parent = base->parent;
+    BOOL exp_lib = (base->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
+
+    /* release child base */
+    FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
+
+    parent->libBase.lib_OpenCnt--;
+    if(exp_lib)
+    {
+      if(parent->libBase.lib_OpenCnt == 0)
+      {
+        rc = LibDelete(parent);
+      }
+      else
+      {
+        parent->libBase.lib_Flags |= LIBF_DELEXP;
+      }
+    }
+    #else
     // in case the late expunge flag is set we go and
     // expunge the library base right now
-    if(base->libBase.lib_Flags & LIBF_DELEXP)
+    if((base->libBase.lib_Flags & LIBF_DELEXP) != 0)
     {
       rc = LibDelete(base);
     }
+    #endif
   }
 
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
