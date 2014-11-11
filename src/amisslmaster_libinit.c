@@ -41,23 +41,16 @@
  */
 
 #if defined(__amigaos3__)
-asm(".text\n\
-     .even\n\
-     .globl _start\n\
-     _start:\n\
-     moveq #20,d0\n\
-     rts");
-#elif defined(__AROS__)
+asm(".text\n\tjra __start\n");
+#endif
+#if defined(__AROS__)
 __startup int Main(void)
-{
-  return RETURN_FAIL;
-}
 #else
 LONG _start(void)
+#endif
 {
   return RETURN_FAIL;
 }
-#endif
 
 /****************************************************************************/
 
