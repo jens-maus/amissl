@@ -502,83 +502,88 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
 /****************************************************************************/
 
 #if defined(__amigaos3__)
-extern ULONG *__datadata_relocs;
-extern ULONG __data_size;
-extern ULONG __bss_size;
-extern ULONG __a4_init;
-extern ULONG _stext;
-extern ULONG _etext;
-extern ULONG _sdata;
-extern ULONG _edata;
-extern ULONG _bss_start;
-extern ULONG _end;
+void __datadata_relocs(void);
+void __data_size(void);
+void __bss_size(void);
+void __a4_init(void);
+void _stext(void);
+void _etext(void);
+void _sdata(void);
+void _edata(void);
+void _bss_start(void);
+void _end(void);
 
-static __inline APTR __GetDataSeg(void)
+INLINE APTR __GetDataSeg(void)
 {
   APTR res;
 
-  __asm("lea ___a4_init-0x7ffe,%0" : "=a" (res));
-//__asm("movel #___a4_init,%0" : "=a" (res));
-//__asm("subl #32766,%0" : "=a" (res));
+//__asm volatile ("lea ___a4_init-0x7ffe,%0" : "=a" (res));
+//__asm volatile ("movel #___a4_init,%0" : "=a" (res));
+//__asm volatile ("subl #32766,%0" : "=a" (res));
+//res = (APTR)((ULONG)&__a4_init - 0x7ffeu);
+  res = (APTR)&_sdata;
 
   return res;
 }
 
-static __inline LONG __GetDataSize(void)
+INLINE ULONG __GetDataSize(void)
 {
-  LONG res;
+  ULONG res;
 
-//__asm("movel #___data_size,%0" : "=d" (res));
-//__asm("subl #__sdata,%0" : "=d" (res));
-  res = (char *)&_edata - (char *)&_sdata;
+//__asm volatile ("movel #___data_size,%0" : "=r" (res));
+//__asm volatile ("subl #__sdata,%0" : "=r" (res));
+  res = (ULONG)&_edata - (ULONG)&_sdata;
 
   return res;
 }
 
-static __inline LONG __GetDataSize2(void)
+INLINE ULONG __GetDataSize2(void)
 {
-  LONG res;
+  ULONG res;
 
-  __asm("movel #___data_size,%0" : "=d" (res));
+//__asm volatile ("movel #___data_size,%0" : "=r" (res));
+  res = (ULONG)&__data_size;
 
   return res;
 }
 
-static __inline LONG __GetDataBSSSize(void)
+INLINE ULONG __GetDataBSSSize(void)
 {
-  LONG res;
+  ULONG res;
 
-  __asm("movel #___data_size,%0; addl #___bss_size,%0" : "=d" (res));
-
-  return res;
-}
-
-
-static __inline APTR __GetBSSSeg(void)
-{
-  APTR res;
-
-  __asm("lea ___a4_init,%0" : "=a" (res));
+//__asm volatile ("movel #___data_size,%0; addl #___bss_size,%0" : "=r" (res));
+  res = (ULONG)&__data_size + (ULONG)&__bss_size;
 
   return res;
 }
 
-static __inline LONG __GetBSSSize(void)
-{
-  LONG res;
 
-//__asm("movel #___bss_size,%0" : "=d" (res));
-//__asm("subl #__bss_start,%0" : "=d" (res));
-  res = (char *)&_end - (char *)&_bss_start;
-
-  return res;
-}
-
-static __inline APTR __GetA4(void)
+INLINE APTR __GetBSSSeg(void)
 {
   APTR res;
 
-  __asm("movel a4,%0" : "=d" (res));
+//__asm volatile ("lea ___a4_init,%0" : "=a" (res));
+  res = &__a4_init;
+
+  return res;
+}
+
+INLINE ULONG __GetBSSSize(void)
+{
+  ULONG res;
+
+//__asm volatile ("movel #___bss_size,%0" : "=r" (res));
+//__asm volatile ("subl #__bss_start,%0" : "=r" (res));
+  res = (ULONG)&_end - (ULONG)&_bss_start;
+
+  return res;
+}
+
+INLINE APTR __GetA4(void)
+{
+  APTR res;
+
+  __asm volatile ("movel a4,%0" : "=r" (res));
 
   return res;
 }
@@ -591,7 +596,7 @@ asm(".text\n\
      movel a6@(90),a4\n\
      rts");
 #endif
-#endif
+#endif // __amigaos3__
 
 #if defined(__amigaos4__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
