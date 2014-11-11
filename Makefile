@@ -169,7 +169,7 @@ OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
 INCLUDE  = -I./include -I./libcmt/include
-CFLAGS   = $(CPU) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
+CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
@@ -201,7 +201,7 @@ ifeq ($(OS), os4)
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
   CFLAGS   += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
-  BASEREL   = -mbaserel
+  BASEREL  = -mbaserel
   CDUP     = ../
   CDTHIS   = ./
 
@@ -234,7 +234,8 @@ ifeq ($(OS), os3)
   CFLAGS  += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lm
-  BASEREL  = -fbaserel -resident -mrestore-a4
+  BASEREL = -resident
+  BRELLIB = -mrestore-a4
   GCCVER  = 2
 
   OPENSSL_T = amiga-os3
@@ -390,7 +391,7 @@ $(BIN_D)/openssl:
 # for compiling single .c files
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) $(BASEREL) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 ## OPENSSL BUILD RULES ##
 
@@ -421,11 +422,11 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 $(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(BASEREL) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/amisslmaster.library: $(MASTEROBJS)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	@echo "  AR $@"
@@ -454,13 +455,12 @@ $(OBJ_D)/amissl_glue.o: CFLAGS += -Wno-unused-parameter
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(OBJ_D)/amissl_m68k.o: $(SRC_D)/amissl_m68k.c
-$(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
 $(OBJ_D)/amisslmaster_m68k.o: $(SRC_D)/amisslmaster_m68k.c
 
-$(OBJ_D)/amisslmaster_libinit.o: $(SRC_D)/amisslmaster_libinit.c
+$(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
 
 # cleanup target
 .PHONY: clean
