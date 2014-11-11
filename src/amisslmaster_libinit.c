@@ -661,9 +661,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     #endif /* BASEREL */
     #endif /* MULTIBASE */
 
-    // protect access to initBase()
-    ObtainSemaphore(&base->libSem);
-
     // set the global base
     globalBase = base;
 
@@ -676,9 +673,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     success = callLibFunction(initBase, base);
     kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
     kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-
-    // unprotect initBase()
-    ReleaseSemaphore(&base->libSem);
 
     // check if everything worked out fine
     if(success != FALSE)
@@ -743,14 +737,8 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   // remove the library base from exec's lib list in advance
   Remove((struct Node *)base);
 
-  // free all our private data and stuff.
-  ObtainSemaphore(&base->libSem);
-
   // make sure we have enough stack here
   callLibFunction(freeBase, base);
-
-  // unprotect
-  ReleaseSemaphore(&base->libSem);
 
   #if defined(__amigaos4__) && defined(__NEWLIB__)
   if(NewlibBase)
