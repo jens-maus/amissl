@@ -643,15 +643,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     #endif
     D(DBF_STARTUP, "LibInit()");
 
-    // cleanup the library header structure beginning with the
-    // library base.
-    base->libBase.lib_Node.ln_Type = NT_LIBRARY;
-    base->libBase.lib_Node.ln_Pri  = 0;
-    base->libBase.lib_Node.ln_Name = (char *)UserLibName;
-    base->libBase.lib_Flags        = LIBF_CHANGED | LIBF_SUMUSED;
-    base->libBase.lib_Version      = LIB_VERSION;
-    base->libBase.lib_Revision     = LIB_REVISION;
-    base->libBase.lib_IdString     = (char *)(UserLibID+6);
+    base->libBase.lib_Revision = LIB_REVISION;
 
     base->segList = librarySegment;
     base->sysBase = &sb->LibNode;
