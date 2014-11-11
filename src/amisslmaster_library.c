@@ -145,6 +145,8 @@ static void CloseLib(struct Library *LibBase)
 
 LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
+	InitSemaphore(&AmiSSLMasterLock);
+
 	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, Self, LibAPIVersion, LibUsesOpenSSLStructs);
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
