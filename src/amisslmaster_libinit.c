@@ -580,15 +580,6 @@ INLINE APTR __GetA4(void)
 
   return res;
 }
-
-#if defined(BASEREL)
-asm(".text\n\
-     .even\n\
-     .globl ___restore_a4\n\
-     ___restore_a4:\n\
-     movel a6@(96),a4\n\
-     rts");
-#endif // BASEREL
 #endif // __amigaos3__
 
 #if defined(__amigaos4__)

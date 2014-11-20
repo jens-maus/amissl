@@ -51,6 +51,17 @@ struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
+#if defined(__amigaos3__)
+#if defined(MULTIBASE) && defined(BASEREL)
+asm(".text\n\
+     .even\n\
+|    .globl ___restore_a4\n\
+     ___restore_a4:\n\
+     movel a6@(96),a4\n\
+     rts");
+#endif // MULTIBASE + BASEREL
+#endif // __amigaos3__
+
 static void FlushLib(struct Library *LibBase)
 {
 	if(LibBase)
