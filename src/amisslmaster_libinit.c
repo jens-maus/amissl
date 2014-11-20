@@ -26,6 +26,16 @@
 #define DROPINTERFACE(iface)
 #endif
 
+#if defined(__amigaos3__)
+#if defined(__GNUC__)
+#define BASEREL_CONST __attribute__ ((section (".text")))
+#endif // __GNUC__
+#endif // __amigaos3__
+
+#ifndef BASEREL_CONST
+#define BASEREL_CONST
+#endif // BASEREL_CONST
+
 /****************************************************************************/
 
 /*
@@ -270,7 +280,7 @@ STATIC CONST struct TagItem libCreateTags[] =
 
 #else
 
-STATIC CONST_APTR LibVectors[] =
+STATIC BASEREL_CONST CONST_APTR LibVectors[] =
 {
   #ifdef __MORPHOS__
   (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
@@ -295,7 +305,7 @@ STATIC CONST_APTR LibVectors[] =
   (CONST_APTR)-1
 };
 
-STATIC CONST IPTR LibInitTab[] =
+STATIC CONST BASEREL_CONST IPTR LibInitTab[] =
 {
   sizeof(struct LibraryHeader),
   (IPTR)LibVectors,
@@ -307,7 +317,7 @@ STATIC CONST IPTR LibInitTab[] =
 
 /****************************************************************************/
 
-static const USED_VAR struct Resident ROMTag =
+static const BASEREL_CONST USED_VAR struct Resident ROMTag =
 {
   RTC_MATCHWORD,
   (struct Resident *)&ROMTag,
