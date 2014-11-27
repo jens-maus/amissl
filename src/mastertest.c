@@ -45,6 +45,16 @@ int main(void)
 		printf("checking base %08lx...", AmiSSLMasterBase);
 		InitAmiSSLMaster(AMISSL_V2, FALSE);
 		printf(" done\n");
+
+		AmiSSLMasterBase = base1;
+		printf("checking base %08lx...", AmiSSLMasterBase);
+		InitAmiSSLMaster(AMISSL_V097g, TRUE);
+		printf(" done\n");
+
+		AmiSSLMasterBase = base2;
+		printf("checking base %08lx...", AmiSSLMasterBase);
+		InitAmiSSLMaster(AMISSL_V2, FALSE);
+		printf(" done\n");
 	}
 
 	if(base1 != NULL)
