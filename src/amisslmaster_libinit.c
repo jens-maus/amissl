@@ -1,7 +1,17 @@
-#include "amisslmaster_lib.h"
-
+#include <exec/execbase.h>
+#include <exec/semaphores.h>
 #include <exec/resident.h>
 #include <proto/exec.h>
+
+//
+
+#include "amisslmaster_lib_protos.h"
+
+//
+
+#include "amisslmaster_base.h"
+
+//
 
 #include <internal/debug.h>
 
@@ -92,6 +102,7 @@ struct NewlibIFace* INewlib = NULL;
 struct ExecBase *SysBase = NULL;
 #endif
 #endif
+extern struct DosLibrary *DOSBase;
 
 struct LibraryHeader *globalBase;
 

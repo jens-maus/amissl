@@ -1,13 +1,14 @@
-//#ifdef __amigaos4__
-//#define __USE_INLINE__
-//#endif
-
-#include <proto/exec.h>
-#include <proto/amisslmaster.h>
-#include <proto/amissl.h>
-#include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
-#include <internal/amissl_compiler.h>
+#include <libraries/amisslmaster.h>
+#include <proto/amisslmaster.h>
+#include <proto/exec.h>
+
+//
+
+#include "amisslmaster_lib_protos.h"
+
+//
+
 #include "amisslinit.h"
 
 //#define DEBUG
@@ -15,13 +16,6 @@
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>
-#endif
-
-#ifdef __amigaos4__
-#define __BASE_OR_IFACE	struct AmiSSLMasterIFace *Self
-struct AmiSSLMasterIFace;
-#else
-#define __BASE_OR_IFACE	struct Library *Self
 #endif
 
 #ifdef __amigaos4__
@@ -153,10 +147,10 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
 {
 	InitSemaphore(&AmiSSLMasterLock);
 
-	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, Self, LibAPIVersion, LibUsesOpenSSLStructs);
+	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, __BASE_OR_IFACE_VAR, LibAPIVersion, LibUsesOpenSSLStructs);
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
-	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, Self, LibAPIVersion, LibUsesOpenSSLStructs);
+	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, __BASE_OR_IFACE_VAR, LibAPIVersion, LibUsesOpenSSLStructs);
 
 	return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
@@ -277,12 +271,6 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
   // only open sub libraries for our old-style AmiSSL v2 versions.
 	if(LibAPIVersion == AMISSL_V2)
 	{
-		#if defined(__amigaos4__)
-		struct AmiSSLMasterIFace *IAmiSSLMaster = Self;
-		#else
-		struct Library *AmiSSLMasterBase = Self;
-		#endif
-
 		switch(Cipher)
 		{
 			case CIPHER_BLOWFISH:

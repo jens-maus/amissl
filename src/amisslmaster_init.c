@@ -1,7 +1,5 @@
-#include "amisslmaster_lib.h"
-
-#define __NOLIBBASE__
-#include <proto/amisslmaster.h>
+#include <proto/exec.h>
+#include "amisslmaster_lib_protos.h"
 
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base)   (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
@@ -63,8 +61,8 @@ ULONG openBase(struct LibraryHeader *lib)
   kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
 
-  if((DOSBase = (APTR)OpenLibrary("dos.library", 37)) &&
-     GETINTERFACE(IDOS, DOSBase))
+  DOSBase = (APTR)OpenLibrary("dos.library", 37L);
+  if(DOSBase && GETINTERFACE(IDOS, DOSBase))
   {
     kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
     return TRUE;
