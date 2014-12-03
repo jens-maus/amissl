@@ -291,6 +291,7 @@ STATIC CONST struct TagItem libCreateTags[] =
   #endif
   { TAG_DONE,       0 }
 };
+#define LibInitTab libCreateTags
 
 #else
 
@@ -342,11 +343,7 @@ static FORCED_CONST USED_VAR struct Resident ROMTag =
   0,
   (char *)UserLibName,
   (char *)UserLibID+6,          // +6 to skip '$VER: '
-  #if defined(__amigaos4__)
-  (APTR)libCreateTags           // This table is for initializing the Library.
-  #else
-  (APTR)LibInitTab,
-  #endif
+  (APTR)LibInitTab,             // This table is for initializing the Library.
   #if defined(__MORPHOS__) || defined(__AROS__)
   LIB_REVISION,
   0
