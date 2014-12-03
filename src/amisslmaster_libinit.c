@@ -216,7 +216,7 @@ STATIC uint32 _manager_Release(struct LibraryManagerInterface *Self)
   return res;
 }
 
-STATIC CONST CONST_APTR lib_manager_vectors[] =
+STATIC CONST_APTR lib_manager_vectors[] =
 {
   (CONST_APTR)_manager_Obtain,
   (CONST_APTR)_manager_Release,
@@ -249,7 +249,7 @@ ULONG LibRelease(UNUSED struct Interface *Self)
   return 0;
 }
 
-STATIC CONST CONST_APTR main_vectors[] =
+STATIC CONST_APTR main_vectors[] =
 {
   (CONST_APTR)LibObtain,
   (CONST_APTR)LibRelease,
@@ -267,7 +267,7 @@ STATIC CONST struct TagItem mainTags[] =
   { TAG_DONE,         0 }
 };
 
-STATIC CONST CONST_APTR libInterfaces[] =
+STATIC CONST_APTR libInterfaces[] =
 {
   (CONST_APTR)lib_managerTags,
   (CONST_APTR)mainTags,
