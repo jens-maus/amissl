@@ -20,8 +20,6 @@
 
 #ifdef __amigaos4__
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
-#else
-struct ExecBase *SysBase;
 #endif
 
 struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;

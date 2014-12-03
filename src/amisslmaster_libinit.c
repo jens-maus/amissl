@@ -98,9 +98,9 @@ struct ExecIFace* IExec = NULL;
 #if defined(__NEWLIB__)
 struct Library *NewlibBase = NULL;
 struct NewlibIFace* INewlib = NULL;
+#endif
 #else
 struct ExecBase *SysBase = NULL;
-#endif
 #endif
 extern struct DosLibrary *DOSBase;
 
