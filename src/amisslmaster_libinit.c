@@ -57,6 +57,7 @@
 
 #if defined(__amigaos3__)
 asm(".text\n\tjra __start\n");
+void kprintf(UNUSED const char *fmt, ...) {}
 #endif
 #if defined(__AROS__)
 __startup int Main(void)
@@ -100,7 +101,7 @@ struct LibraryHeader *globalBase;
 #define LIBNAME        "amisslmaster.library"
 #define LIB_VERSION    VERSION
 #define LIB_REVISION   AMISSLMASTERREVISION
-#define LIB_REV_STRING LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLMASTERREVISION) " (" MKSTR(AMISSLMASTERDATE) ") " MKSTR(LIBCPU) " version\r\n"
+#define LIB_REV_STRING "$VER: " LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLMASTERREVISION) " (" MKSTR(AMISSLMASTERDATE) ") " MKSTR(LIBCPU) " version\r\n"
 
 static const char UserLibName[] = LIBNAME;
 static const char UserLibID[]   = LIB_REV_STRING;

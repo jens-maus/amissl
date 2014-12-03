@@ -27,11 +27,6 @@ struct AmiSSLMasterIFace;
 #ifdef __amigaos4__
 struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
-#define XMKSTR(x) #x
-#define MKSTR(x)  XMKSTR(x)
-
-const char *FullVersion = "\0$VER: amisslmaster.library " MKSTR(VERSION) "." MKSTR(AMISSLMASTERREVISION) " (" MKSTR(AMISSLMASTERDATE) ") " MKSTR(LIBCPU) " version\r\n";
-
 struct ExecBase *SysBase;
 #endif
 
