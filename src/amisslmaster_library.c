@@ -42,12 +42,8 @@ struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers w
 
 #if defined(__amigaos3__)
 #if defined(MULTIBASE) && defined(BASEREL)
-asm(".text\n\
-     .even\n\
-|    .globl ___restore_a4\n\
-     ___restore_a4:\n\
-     movel a6@(96),a4\n\
-     rts");
+#include "amisslmaster_base.h"
+static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 #endif // MULTIBASE + BASEREL
 #endif // __amigaos3__
 
