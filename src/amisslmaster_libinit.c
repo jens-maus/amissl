@@ -95,9 +95,6 @@ struct ExecBase *SysBase = NULL;
 
 struct LibraryHeader *globalBase;
 
-#define XMKSTR(x) #x
-#define MKSTR(x)  XMKSTR(x)
-
 #define LIBNAME        "amisslmaster.library"
 #define LIB_VERSION    VERSION
 #define LIB_REVISION   AMISSLMASTERREVISION
