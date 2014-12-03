@@ -26,6 +26,11 @@
 #define DROPINTERFACE(iface)
 #endif
 
+#ifndef __amigaos4__
+#define DeleteLibrary(LIB) \
+  FreeMem((STRPTR)(LIB)-(LIB)->lib_NegSize, (ULONG)((LIB)->lib_NegSize+(LIB)->lib_PosSize))
+#endif
+
 #if defined(__amigaos3__)
 #if defined(__GNUC__)
 #define BASEREL_CONST __attribute__ ((section (".text")))
@@ -621,7 +626,10 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
   // make sure that this is really a 68020+ machine if optimized for 020+
   #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
   if((SysBase->AttnFlags & AFF_68020) == 0)
+  {
+    DeleteLibrary(&base->libBase);
     return(NULL);
+  }
   #endif
 
   #if defined(__amigaos4__) && defined(__NEWLIB__)
@@ -709,6 +717,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
   kprintf("failure\n");
 
+  DeleteLibrary(&base->libBase);
   return NULL;
 #ifdef __AROS__
     AROS_USERFUNC_EXIT
@@ -716,11 +725,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 }
 
 /****************************************************************************/
-
-#ifndef __amigaos4__
-#define DeleteLibrary(LIB) \
-  FreeMem((STRPTR)(LIB)-(LIB)->lib_NegSize, (ULONG)((LIB)->lib_NegSize+(LIB)->lib_PosSize))
-#endif
 
 STATIC BPTR LibDelete(struct LibraryHeader *base)
 {
