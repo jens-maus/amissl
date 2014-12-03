@@ -67,7 +67,6 @@
 
 #if defined(__amigaos3__)
 asm(".text\n\tjra __start\n");
-void kprintf(UNUSED const char *fmt, ...) {}
 #endif
 #if defined(__AROS__)
 __startup int Main(void)
