@@ -123,6 +123,8 @@ struct LibraryHeader * LibOpen    (struct LibraryManagerInterface *Self, ULONG v
 BPTR                   LibClose   (struct LibraryManagerInterface *Self);
 LONG                   LibNull    (void);
 
+#define RTF_EXTRA RTF_NATIVE
+
 #elif defined(__MORPHOS__)
 
 struct LibraryHeader * LibInit   (struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb);
@@ -130,6 +132,8 @@ BPTR                   LibExpunge(void);
 struct LibraryHeader * LibOpen   (void);
 BPTR                   LibClose  (void);
 LONG                   LibNull   (void);
+
+#define RTF_EXTRA (RTF_EXTENDED | RTF_PPC)
 
 #elif defined(__AROS__)
 
@@ -156,6 +160,8 @@ AROS_LD1(BPTR, LibExpunge,
                 struct LibraryHeader *, base, 3, AmiSSLMaster
 );
 
+#define RTF_EXTRA RTF_EXTENDED
+
 #else
 
 struct LibraryHeader * LIBFUNC LibInit    (REG(d0, struct LibraryHeader *lh), REG(a0, BPTR Segment), REG(a6, struct ExecBase *sb));
@@ -163,6 +169,8 @@ BPTR                   LIBFUNC LibExpunge (REG(a6, struct LibraryHeader *base));
 struct LibraryHeader * LIBFUNC LibOpen    (REG(d0, ULONG version), REG(a6, struct LibraryHeader *base));
 BPTR                   LIBFUNC LibClose   (REG(a6, struct LibraryHeader *base));
 LONG                           LibNull    (void);
+
+#define RTF_EXTRA 0
 
 #endif
 
@@ -327,15 +335,7 @@ static FORCED_CONST USED_VAR struct Resident ROMTag =
   RTC_MATCHWORD,
   (struct Resident *)&ROMTag,
   (struct Resident *)(&ROMTag + 1),
-  #if defined(__amigaos4__)
-  RTF_AUTOINIT|RTF_NATIVE,      // The Library should be set up according to the given table.
-  #elif defined(__MORPHOS__)
-  RTF_AUTOINIT|RTF_EXTENDED|RTF_PPC,
-  #elif defined(__AROS__)
-  RTF_AUTOINIT|RTF_EXTENDED,
-  #else
-  RTF_AUTOINIT,
-  #endif
+  RTF_AUTOINIT | RTF_EXTRA,     // The Library should be set up according to the given table.
   LIB_VERSION,
   NT_LIBRARY,
   0,
