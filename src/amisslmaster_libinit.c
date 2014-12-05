@@ -374,7 +374,29 @@ const USED_VAR ULONG __abox__ = 1;
 /* generic StackSwap() function which calls function() surrounded by
    StackSwap() calls */
 
-#if defined(__mc68000__) && !defined(__AROS__)
+#if defined(__MORPHOS__)
+ULONG stackswap_call(struct StackSwapStruct *stack,
+                     ULONG (*function)(struct LibraryHeader *),
+                     struct LibraryHeader *arg)
+{
+   struct PPCStackSwapArgs swapargs;
+
+   swapargs.Args[0] = (ULONG)arg;
+
+   return NewPPCStackSwap(stack, function, &swapargs);
+}
+#elif defined(__AROS__)
+ULONG stackswap_call(struct StackSwapStruct *stack,
+                             ULONG (*function)(struct LibraryHeader *),
+                             struct LibraryHeader *arg)
+{
+   struct StackSwapArgs swapargs;
+
+   swapargs.Args[0] = (IPTR)arg;
+
+   return NewStackSwap(stack, function, &swapargs);
+}
+#elif defined(__amigaos3__)
 ULONG stackswap_call(struct StackSwapStruct *stack,
                      ULONG (*function)(struct LibraryHeader *),
                      struct LibraryHeader *arg);
@@ -425,28 +447,7 @@ asm(".text                    \n\
       moveml sp@+,#0x440c     \n\
       rts");
 #endif
-#elif defined(__MORPHOS__)
-ULONG stackswap_call(struct StackSwapStruct *stack,
-                     ULONG (*function)(struct LibraryHeader *),
-                     struct LibraryHeader *arg)
-{
-   struct PPCStackSwapArgs swapargs;
-
-   swapargs.Args[0] = (ULONG)arg;
-
-   return NewPPCStackSwap(stack, function, &swapargs);
-}
-#elif defined(__AROS__)
-ULONG stackswap_call(struct StackSwapStruct *stack,
-                             ULONG (*function)(struct LibraryHeader *),
-                             struct LibraryHeader *arg)
-{
-   struct StackSwapArgs swapargs;
-
-   swapargs.Args[0] = (IPTR)arg;
-
-   return NewStackSwap(stack, function, &swapargs);
-}
+#define stackPtr() ({register unsigned char *sp __asm("sp");sp;})
 #else
 #error Bogus operating system
 #endif
@@ -454,48 +455,51 @@ ULONG stackswap_call(struct StackSwapStruct *stack,
 BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
 {
   BOOL success = FALSE;
-  struct Task *tc;
-  ULONG stacksize;
-
-  // retrieve the task structure for the
-  // current task
-  tc = FindTask(NULL);
+  struct Task *tc = FindTask(NULL); // retrieve the task structure for the current task
+  ULONG stackleft;
 
   #if defined(__MORPHOS__)
+  ULONG stacksize;
+  ULONG stackused;
   // In MorphOS we have two stacks. One for PPC code and another for 68k code.
   // We are only interested in the PPC stack.
   NewGetTaskAttrsA(tc, &stacksize, sizeof(ULONG), TASKINFOTYPE_STACKSIZE, NULL);
+  NewGetTaskAttrsA(tc, &stackused, sizeof(ULONG), TASKINFOTYPE_USEDSTACKSIZE, NULL);
+  stackleft = stacksize - stackused;
+  #elif defined(stackPtr)
+  stackleft = stackPtr() - (UBYTE *)tc->tc_SPLower;
   #else
   // on all other systems we query via SPUpper-SPLower calculation
-  stacksize = (UBYTE *)tc->tc_SPUpper - (UBYTE *)tc->tc_SPLower;
+  stackleft = (UBYTE *)tc->tc_SPUpper - (UBYTE *)tc->tc_SPLower;
   #endif
 
   // Swap stacks only if current stack is insufficient
-  if(stacksize < MIN_STACKSIZE)
+  if(stackleft < MIN_STACKSIZE)
   {
-    struct StackSwapStruct *stack;
+    struct MyStackSwapStruct {
+      struct StackSwapStruct ctrl;
+      UBYTE stack[MIN_STACKSIZE];
+    } *stack;
 
-    if((stack = AllocVec(sizeof(*stack), MEMF_PUBLIC)) != NULL)
+    stack = AllocVec(sizeof(*stack), MEMF_PUBLIC);
+    if(stack != NULL)
     {
-      if((stack->stk_Lower = AllocVec(MIN_STACKSIZE, MEMF_PUBLIC)) != NULL)
-      {
-        // perform the StackSwap
-        #if defined(__AROS__)
-        // AROS uses an APTR type for stk_Upper
-        stack->stk_Upper = (APTR)((IPTR)stack->stk_Lower + MIN_STACKSIZE);
-        #else
-        // all other systems use ULONG
-        stack->stk_Upper = (ULONG)stack->stk_Lower + MIN_STACKSIZE;
-        #endif
-        stack->stk_Pointer = (APTR)stack->stk_Upper;
+      // perform the StackSwap
+      stack->ctrl.stk_Lower = &stack->stack[0];
+      stack->ctrl.stk_Pointer = &stack->stack[MIN_STACKSIZE];
+      #if defined(__AROS__)
+      // AROS uses an APTR type for stk_Upper
+      stack->ctrl.stk_Upper = stack->ctrl.stk_Pointer;
+      #else
+      // all other systems use ULONG
+      stack->ctrl.stk_Upper = (ULONG)stack->ctrl.stk_Pointer;
+      #endif
 
-        kprintf("call with swapped stack\n");
-        // call routine but with embedding it into a [NewPPC]StackSwap()
-        success = stackswap_call(stack, function, arg);
-        kprintf("done\n");
+      kprintf("call with swapped stack\n");
+      // call routine but with embedding it into a [NewPPC]StackSwap()
+      success = stackswap_call(&stack->ctrl, function, arg);
+      kprintf("done\n");
 
-        FreeVec(stack->stk_Lower);
-      }
       FreeVec(stack);
     }
   }
