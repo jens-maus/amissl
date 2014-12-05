@@ -115,11 +115,12 @@ static const char UserLibID[]   = LIB_REV_STRING;
 
 /****************************************************************************/
 
-#define libvector LFUNC_FAS(InitAmiSSLMaster)   \
-                  LFUNC_FA_(OpenAmiSSL)         \
-                  LFUNC_FA_(CloseAmiSSL)        \
-                  LFUNC_FA_(OpenAmiSSLCipher)   \
-                  LFUNC_FA_(CloseAmiSSLCipher)
+#define libvector \
+	LFUNC_FAS(InitAmiSSLMaster), \
+	LFUNC_FAS(OpenAmiSSL), \
+	LFUNC_FAS(CloseAmiSSL), \
+	LFUNC_FAS(OpenAmiSSLCipher), \
+	LFUNC_FAS(CloseAmiSSLCipher)
 
 /****************************************************************************/
 
