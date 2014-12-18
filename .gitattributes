@@ -3,7 +3,6 @@
 /COPYING -text
 /ChangeLog -text
 /Makefile eol=lf
-/SMakefile eol=lf
 certs/03e16f6c.0 eol=lf
 certs/08ff38aa.0 eol=lf
 certs/0c364b2d.0 eol=lf
@@ -2636,7 +2635,6 @@ src/amissl_m68k.c eol=lf
 src/amissl_vectors.c eol=lf
 src/amissl_vectors.h -text
 src/amisslinit.h eol=lf
-src/amissllib.c eol=lf
 src/amisslmaster_base.h -text
 src/amisslmaster_init.c -text
 src/amisslmaster_lib.h -text
