@@ -63,7 +63,9 @@ int main(void)
      GETINTERFACE(ibase2, base2))
 	{
 		AmiSSLMasterBase = base1;
+    #if defined(__amigaos4__)
     IAmiSSLMaster = ibase1;
+    #endif
 		printf("checking base %08lx...", AmiSSLMasterBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
@@ -72,7 +74,9 @@ int main(void)
 		printf(" done\n");
 
 		AmiSSLMasterBase = base2;
+    #if defined(__amigaos4__)
     IAmiSSLMaster = ibase2;
+    #endif
 		printf("checking base %08lx...", AmiSSLMasterBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
@@ -81,7 +85,9 @@ int main(void)
 		printf(" done\n");
 
 		AmiSSLMasterBase = base1;
+    #if defined(__amigaos4__)
     IAmiSSLMaster = ibase1;
+    #endif
 		printf("checking base %08lx...", AmiSSLMasterBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
@@ -90,7 +96,9 @@ int main(void)
 		printf(" done\n");
 
 		AmiSSLMasterBase = base2;
+    #if defined(__amigaos4__)
     IAmiSSLMaster = ibase2;
+    #endif
 		printf("checking base %08lx...", AmiSSLMasterBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
