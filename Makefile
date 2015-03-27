@@ -235,6 +235,7 @@ ifeq ($(OS), os3)
   LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lm
   BASEREL = -resident
+  NOBASEREL = -fno-baserel
   BRELLIB = -mrestore-a4
   GCCVER  = 2
 
@@ -444,11 +445,11 @@ $(BIN_D)/mastertest: $(SRC_D)/mastertest.c
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
+	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
 $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@ -DAMISSL $(INCLUDE)
+	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL $(INCLUDE)
 
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: CFLAGS += -Wno-unused-parameter
