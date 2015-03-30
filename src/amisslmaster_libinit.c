@@ -42,13 +42,13 @@
 #endif
 
 #if defined(__amigaos3__)
-#if defined(__GNUC__)
+#if defined(__GNUC__) && __GNUC__ < 3
 #define FORCED_CONST const __attribute__ ((section (".text")))
 #endif // __GNUC__
 #endif // __amigaos3__
 
 #ifndef FORCED_CONST
-#define FORCED_CONST const
+#define FORCED_CONST const FAR
 #endif // FORCED_CONST
 
 /****************************************************************************/
