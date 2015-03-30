@@ -303,26 +303,26 @@ STATIC CONST struct TagItem libCreateTags[] =
 
 #else
 
+#if defined(__AROS__)
+  #ifdef AROS_ABI_V1
+    #define SLIB_ENTRY(FUNC, LIB, NUM) AROS_SLIB_ENTRY(FUNC, LIB, NUM)
+  #else
+    #define SLIB_ENTRY(FUNC, LIB, NUM) AROS_SLIB_ENTRY(FUNC, LIB)
+  #endif
+#endif /* __AROS__ */
+
+#ifndef SLIB_ENTRY
+  #define SLIB_ENTRY(FUNC, LIB, NUM) FUNC
+#endif /* !SLIB_ENTRY */
+
 STATIC FORCED_CONST APTR LibVectors[] =
 {
   #ifdef __MORPHOS__
   (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
   #endif
-  #if defined(__AROS__)
-    #ifdef AROS_ABI_V1
-    (CONST_APTR)AROS_SLIB_ENTRY(LibOpen, AmiSSLMaster, 1),
-    (CONST_APTR)AROS_SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
-    (CONST_APTR)AROS_SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
-    #else
-    (CONST_APTR)AROS_SLIB_ENTRY(LibOpen, AmiSSLMaster),
-    (CONST_APTR)AROS_SLIB_ENTRY(LibClose, AmiSSLMaster),
-    (CONST_APTR)AROS_SLIB_ENTRY(LibExpunge, AmiSSLMaster),
-    #endif
-  #else
-  (CONST_APTR)LibOpen,
-  (CONST_APTR)LibClose,
-  (CONST_APTR)LibExpunge,
-  #endif
+  (CONST_APTR)SLIB_ENTRY(LibOpen, AmiSSLMaster, 1),
+  (CONST_APTR)SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
+  (CONST_APTR)SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
   (CONST_APTR)LibNull,
   libvector,
   (CONST_APTR)-1
