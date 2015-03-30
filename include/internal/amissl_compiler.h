@@ -162,7 +162,9 @@
     #define INTERRUPT
     #define CHIP
   #endif
-  #define FAR
+  #ifndef __far
+    #define FAR /* __far NOT supported! */
+  #endif
   #define NEAR
 #elif defined(_DCC)
   #define REG(reg,arg) __##reg arg
