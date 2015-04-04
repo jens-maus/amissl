@@ -40,9 +40,11 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
 ULONG closeBase(UNUSED struct LibraryHeader *lib)
 {
+  #if defined(__amigaos3__)
   kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  #endif
 
   if(DOSBase)
   {
@@ -58,13 +60,17 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
 
 ULONG openBase(struct LibraryHeader *lib)
 {
+  #if defined(__amigaos3__)
   kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  #endif
 
   DOSBase = (APTR)OpenLibrary("dos.library", 37L);
   if(DOSBase && GETINTERFACE(IDOS, DOSBase))
   {
+    #if defined(__amigaos3__)
     kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+    #endif
     return TRUE;
   }
 

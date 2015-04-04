@@ -630,8 +630,10 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
   SysBase = (APTR)sb;
 
+  #if defined(__amigaos3__)
   kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
   kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
+  #endif
 
   // make sure that this is really a 68020+ machine if optimized for 020+
   #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
