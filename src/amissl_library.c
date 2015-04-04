@@ -53,13 +53,6 @@ struct LocaleIFace *ILocale = NULL;
 struct Library *UtilityBase = NULL;
 struct UtilityIFace *IUtility = NULL;
 #else
-#define XMKSTR(x) #x
-#define MKSTR(x)  XMKSTR(x)
-
-const char *FullVersion = "\0$VER: amissl_v" MKSTR(VERSIONNAME) ".library " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n";
-
-struct ExecBase *SysBase = NULL;
-struct DosLibrary *DOSBase = NULL;
 struct IntuitionBase *IntuitionBase = NULL;
 #if !defined(__MORPHOS__)
 struct LocaleBase *LocaleBase = NULL;
@@ -81,6 +74,13 @@ static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
 static ULONG ThreadGroupID = 0;
 static ULONG clock_base;
 static long SSLVersionApp = 0;
+
+#if defined(__amigaos3__)
+#if defined(MULTIBASE) && defined(BASEREL)
+#include "amisslmaster_base.h"
+static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
+#endif // MULTIBASE + BASEREL
+#endif // __amigaos3__
 
 clock_t clock(void)
 {
@@ -270,7 +270,7 @@ static void h_freefunc(void *mem)
 	SB_FreeVec(mem);
 }
 
-void InternalInitAmiSSL(UNUSED struct AmiSSLInitStruct *amisslinit)
+LIBPROTO(InternalInitAmiSSL, void, REG(a6, __BASE_OR_IFACE), REG(a0, struct AmiSSLInitStruct *amisslinit))
 {
   /* nothing */
 }
@@ -345,7 +345,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 	return(err);
 }
 
-LONG CleanupAmiSSLA(UNUSED struct TagItem *tagList)
+LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 

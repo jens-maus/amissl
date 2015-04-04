@@ -5,11 +5,11 @@
 
 //
 
-#include "amisslmaster_lib_protos.h"
+#include "amissl_lib_protos.h"
 
 //
 
-#include "amisslmaster_base.h"
+#include "amissl_base.h"
 
 //
 
@@ -105,21 +105,21 @@ extern struct DosLibrary *DOSBase;
 
 struct LibraryHeader *globalBase;
 
-#define LIBNAME        "amisslmaster.library"
+#define LIBNAME        "amissl_v" MKSTR(VERSIONNAME) ".library"
 #define LIB_VERSION    VERSION
-#define LIB_REVISION   AMISSLMASTERREVISION
-#define LIB_REV_STRING "$VER: " LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLMASTERREVISION) " (" MKSTR(AMISSLMASTERDATE) ") " MKSTR(LIBCPU) " version\r\n"
+#define LIB_REVISION   AMISSLREVISION
+#define LIB_REV_STRING "$VER: " LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n"
 
 static const char UserLibName[] = LIBNAME;
 static const char UserLibID[]   = LIB_REV_STRING;
 
 /****************************************************************************/
 
-#define libvector LFUNC_FAS(InitAmiSSLMaster) \
-	                LFUNC_FA_(OpenAmiSSL) \
-	                LFUNC_FA_(CloseAmiSSL) \
-	                LFUNC_FA_(OpenAmiSSLCipher) \
-	                LFUNC_FA_(CloseAmiSSLCipher)
+#define libvector LFUNC_FAS(InternalInitAmiSSL) \
+	                LFUNC_FA_(InitAmiSSLA) \
+	                LFUNC_VA_(InitAmiSSL) \
+	                LFUNC_FA_(CleanupAmiSSLA) \
+	                LFUNC_VA_(CleanupAmiSSL)
 
 /****************************************************************************/
 
@@ -147,9 +147,9 @@ LONG                   LibNull   (void);
 
 #include <aros/libcall.h>
 
-#define AmiSSLMaster_LibOpen LibOpen
-#define AmiSSLMaster_LibClose LibClose
-#define AmiSSLMaster_LibExpunge LibExpunge
+#define AmiSSL_LibOpen LibOpen
+#define AmiSSL_LibClose LibClose
+#define AmiSSL_LibExpunge LibExpunge
 
 AROS_UFP3 (struct LibraryHeader *, LibInit,
                   AROS_UFPA(struct LibraryHeader *, base, D0),
@@ -158,14 +158,14 @@ AROS_UFP3 (struct LibraryHeader *, LibInit,
 );
 AROS_LD1 (struct LibraryHeader *, LibOpen,
                  AROS_LPA (UNUSED ULONG, version, D0),
-                 struct LibraryHeader *, base, 1, AmiSSLMaster
+                 struct LibraryHeader *, base, 1, AmiSSL
 );
 AROS_LD0 (BPTR, LibClose,
-                 struct LibraryHeader *, base, 2, AmiSSLMaster
+                 struct LibraryHeader *, base, 2, AmiSSL
 );
 AROS_LD1(BPTR, LibExpunge,
                 AROS_LPA(UNUSED struct LibraryHeader *, __extrabase, D0),
-                struct LibraryHeader *, base, 3, AmiSSLMaster
+                struct LibraryHeader *, base, 3, AmiSSL
 );
 
 #define RTF_EXTRA RTF_EXTENDED
@@ -319,9 +319,9 @@ STATIC FORCED_CONST APTR LibVectors[] =
   #ifdef __MORPHOS__
   (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
   #endif
-  (CONST_APTR)SLIB_ENTRY(LibOpen, AmiSSLMaster, 1),
-  (CONST_APTR)SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
-  (CONST_APTR)SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
+  (CONST_APTR)SLIB_ENTRY(LibOpen, AmiSSL, 1),
+  (CONST_APTR)SLIB_ENTRY(LibClose, AmiSSL, 2),
+  (CONST_APTR)SLIB_ENTRY(LibExpunge, AmiSSL, 3),
   (CONST_APTR)LibNull,
   libvector,
   (CONST_APTR)-1
@@ -778,7 +778,7 @@ BPTR LibExpunge(void)
 #elif defined(__AROS__)
 AROS_LH1(BPTR, LibExpunge,
   AROS_LHA(UNUSED struct LibraryHeader *, __extrabase, D0),
-  struct LibraryHeader *, base, 3, AmiSSLMaster
+  struct LibraryHeader *, base, 3, AmiSSL
 )
 {
   AROS_LIBFUNC_INIT
@@ -831,7 +831,7 @@ struct LibraryHeader * LibOpen(void)
 #elif defined(__AROS__)
 AROS_LH1(struct LibraryHeader *, LibOpen,
                 AROS_LHA(UNUSED ULONG, version, D0),
-                struct LibraryHeader *, base, 1, AmiSSLMaster
+                struct LibraryHeader *, base, 1, AmiSSL
 )
 {
   AROS_LIBFUNC_INIT
@@ -956,7 +956,7 @@ BPTR LibClose(void)
   struct LibraryHeader *base = (struct LibraryHeader *)REG_A6;
 #elif defined(__AROS__)
 AROS_LH0(BPTR, LibClose,
-                struct LibraryHeader *, base, 2, AmiSSLMaster
+                struct LibraryHeader *, base, 2, AmiSSL
 )
 {
   AROS_LIBFUNC_INIT

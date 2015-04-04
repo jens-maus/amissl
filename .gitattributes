@@ -148,6 +148,9 @@ include/interfaces/amissl.h eol=lf
 include/interfaces/amissl.i -text
 include/interfaces/amisslmaster.h eol=lf
 include/interfaces/amisslmaster.i -text
+include/internal/SDI_compiler.h -text
+include/internal/SDI_lib.h -text
+include/internal/SDI_stdarg.h -text
 include/internal/amissl.h eol=lf
 include/internal/amissl_compiler.h eol=lf
 include/internal/debug.h eol=lf
@@ -2627,8 +2630,12 @@ openssl/util/src-dep.pl eol=lf
 openssl/util/ssleay.num eol=lf
 openssl/util/tab_num.pl eol=lf
 openssl/util/x86asm.sh eol=lf
+src/amissl_base.h -text
 src/amissl_glue.c eol=lf
 src/amissl_glue.patch -text
+src/amissl_init.c -text
+src/amissl_lib_protos.h -text
+src/amissl_libinit.c -text
 src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
 src/amissl_m68k.c eol=lf
@@ -2637,7 +2644,6 @@ src/amissl_vectors.h -text
 src/amisslinit.h eol=lf
 src/amisslmaster_base.h -text
 src/amisslmaster_init.c -text
-src/amisslmaster_lib.h -text
 src/amisslmaster_lib_protos.h -text
 src/amisslmaster_libinit.c -text
 src/amisslmaster_library.c eol=lf
@@ -2648,7 +2654,6 @@ src/amisslmaster_vectors.h -text
 src/autoinit_amissl_main.c eol=lf
 src/baserel.c eol=lf
 src/libStdVec.c -text
-src/libinit.c eol=lf
 src/libstubs.c eol=lf
 src/mastertest.c -text
 src/mkidl.sh -text

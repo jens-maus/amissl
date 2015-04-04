@@ -26,9 +26,9 @@ struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 
-struct Library *AmiSSLBase;
+struct Library *AmiSSLBase = NULL;
 #ifdef __amigaos4__
-struct AmiSSLIFace *IAmiSSL;
+struct AmiSSLIFace *IAmiSSL = NULL;
 #endif
 
 LONG LibAPIVersion = AMISSL_CURRENT_VERSION;

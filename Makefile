@@ -353,7 +353,9 @@ endif
 # Here starts all stuff that is common for all target platforms and
 # hosts.
 
-LIBOBJS = $(OBJ_D)/amissl_library.o \
+LIBOBJS = $(OBJ_D)/amissl_libinit.o \
+          $(OBJ_D)/amissl_library.o \
+          $(OBJ_D)/amissl_init.o \
           $(EXTRALIBOBJS)
 
 MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
