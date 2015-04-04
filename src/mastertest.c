@@ -62,27 +62,7 @@ int main(void)
      GETINTERFACE(ibase1, base1) &&
      GETINTERFACE(ibase2, base2))
 	{
-		AmiSSLMasterBase = base1;
-    #if defined(__amigaos4__)
-    IAmiSSLMaster = ibase1;
-    #endif
-		printf("checking base %08lx...", AmiSSLMasterBase);
-    #if defined(__amigaos4__)
-		printf(" iface %08lx...", IAmiSSLMaster);
-    #endif
-		InitAmiSSLMaster(AMISSL_V097g, TRUE);
-		printf(" done\n");
-
-		AmiSSLMasterBase = base2;
-    #if defined(__amigaos4__)
-    IAmiSSLMaster = ibase2;
-    #endif
-		printf("checking base %08lx...", AmiSSLMasterBase);
-    #if defined(__amigaos4__)
-		printf(" iface %08lx...", IAmiSSLMaster);
-    #endif
-		InitAmiSSLMaster(AMISSL_V2, FALSE);
-		printf(" done\n");
+    LONG ret = 0;
 
 		AmiSSLMasterBase = base1;
     #if defined(__amigaos4__)
@@ -92,8 +72,8 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
     #endif
-		InitAmiSSLMaster(AMISSL_V097g, TRUE);
-		printf(" done\n");
+		ret = InitAmiSSLMaster(AMISSL_V097g, TRUE);
+		printf(" done: %ld\n", ret);
 
 		AmiSSLMasterBase = base2;
     #if defined(__amigaos4__)
@@ -103,8 +83,30 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSLMaster);
     #endif
-		InitAmiSSLMaster(AMISSL_V2, FALSE);
-		printf(" done\n");
+		ret = InitAmiSSLMaster(AMISSL_V2, FALSE);
+		printf(" done: %ld\n", ret);
+
+		AmiSSLMasterBase = base1;
+    #if defined(__amigaos4__)
+    IAmiSSLMaster = ibase1;
+    #endif
+		printf("checking base %08lx...", AmiSSLMasterBase);
+    #if defined(__amigaos4__)
+		printf(" iface %08lx...", IAmiSSLMaster);
+    #endif
+		ret = InitAmiSSLMaster(AMISSL_V097g, TRUE);
+		printf(" done: %ld\n", ret);
+
+		AmiSSLMasterBase = base2;
+    #if defined(__amigaos4__)
+    IAmiSSLMaster = ibase2;
+    #endif
+		printf("checking base %08lx...", AmiSSLMasterBase);
+    #if defined(__amigaos4__)
+		printf(" iface %08lx...", IAmiSSLMaster);
+    #endif
+		ret = InitAmiSSLMaster(AMISSL_V10x, FALSE);
+		printf(" done: %ld\n", ret);
 	}
 
 	if(base1 != NULL)

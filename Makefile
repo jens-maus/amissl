@@ -441,7 +441,7 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 
 $(BIN_D)/mastertest: $(SRC_D)/mastertest.c
 	@echo "  CC/LD $@"
-	@$(CC) -o $@ $^
+	@$(CC) -o $@ -I./include $^
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
