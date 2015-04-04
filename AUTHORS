@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2014 AmiSSL Open Source Team
+ Copyright (C) 2006-2015 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -24,6 +24,8 @@ AmiSSL is an Open Source development effort with the code base and design
 provided by the following people:
 
 Andrija Antonijevic <antony@heightanxiety.com>
+Gunther Nikl        <gnikl@baltic.net>
 Jens Maus           <mail@jens-maus.de>
 Oliver Roberts      <oliver@futaura.co.uk>
 Stefan Burstroem    <SBurstrom@livescribe.com>
+Thore Boeckelmann   <tboeckel@gmx.de>

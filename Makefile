@@ -199,7 +199,7 @@ ifeq ($(OS), os4)
   CRT      = clib2
   CPU      = -mcpu=powerpc -mstrict-align
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
-  CFLAGS   += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS   += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
   BASEREL  = -mbaserel
   CDUP     = ../
@@ -211,8 +211,7 @@ ifeq ($(OS), os4)
                  $(OBJ_D)/amissl_glue.o \
                  $(OBJ_D)/amissl_m68k.o
 
-  EXTRAMASTEROBJS = $(OBJ_D)/amisslmaster_library_os4.o \
-                    $(OBJ_D)/amisslmaster_m68k.o
+  EXTRAMASTEROBJS = $(OBJ_D)/amisslmaster_m68k.o
 
 else
 ifeq ($(OS), os3)

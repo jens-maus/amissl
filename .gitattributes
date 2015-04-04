@@ -373,11 +373,6 @@ libcmt/threadhash.c eol=lf
 libcmt/time.c eol=lf
 libcmt/vscanf.c eol=lf
 libcmt/vsscanf.c eol=lf
-/makeit eol=lf
-/makeit.os4 eol=lf
-/makeitdebug eol=lf
-/makelibs eol=lf
-/makelibsdebug eol=lf
 openssl/.cvsignore -text
 openssl/ACKNOWLEDGMENTS -text
 openssl/CHANGES eol=lf
@@ -2647,7 +2642,6 @@ src/amisslmaster_init.c -text
 src/amisslmaster_lib_protos.h -text
 src/amisslmaster_libinit.c -text
 src/amisslmaster_library.c eol=lf
-src/amisslmaster_library_os4.c eol=lf
 src/amisslmaster_m68k.c eol=lf
 src/amisslmaster_vectors.c eol=lf
 src/amisslmaster_vectors.h -text

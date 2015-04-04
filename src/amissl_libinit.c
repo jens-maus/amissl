@@ -3,6 +3,11 @@
 #include <exec/resident.h>
 #include <proto/exec.h>
 
+#if defined(__amigaos4__)
+#include <proto/elf.h>
+#include <proto/dos.h>
+#endif
+
 //
 
 #include "amissl_lib_protos.h"
@@ -50,6 +55,10 @@
 #ifndef FORCED_CONST
 #define FORCED_CONST const FAR
 #endif // FORCED_CONST
+
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
 
 /****************************************************************************/
 
@@ -104,8 +113,8 @@ struct ExecBase *SysBase = NULL;
 #if defined(__amigaos3__)
 extern struct DosLibrary *DOSBase;
 #elif defined(__amigaos4__)
-extern struct Library *DOSBase;
-extern struct DOSIFace *IDOS;
+extern struct Library * AMISSL_COMMON_DATA DOSBase;
+extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 #endif
 
 struct LibraryHeader *globalBase = NULL;
@@ -668,18 +677,29 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     InitSemaphore(&base->libSem);
 
     #if defined(MULTIBASE)
-    base->parent   = base;
     #if defined(__amigaos3__)
+    base->parent   = base;
     base->dataSeg  = __GetDataSeg();
     base->dataSize = __GetDataBSSSize();
     #endif /* __amigaos3__ */
     #if defined(__amigaos4__)
+    if((DOSBase = OpenLibrary("dos.library", 52)))
+      IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
+
     if((base->ElfBase = OpenLibrary("elf.library",52)))
-    {
       base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
+
+    if(IDOS && base->IElf)
+    {
+      GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
+      if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
+      {
+        base->parent = base;
+        kprintf("OpenElfTags success!\n");
+      }
+      else
+        kprintf("OpenElfTags NO success!\n");
     }
-    GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
-    base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE);
     #endif /* __amigaos4__ */
     #if defined(BASEREL)
     #if defined(__amigaos3__)
@@ -822,8 +842,12 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   }
   else
   {
-    #if defined(__amigaos4_) && defined(MULTIBASE)
-    struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libNode.lib_PosSize);
+    #if defined(__amigaos4__) && defined(MULTIBASE)
+    struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+
+    kprintf("AmiSSL: expunge\n");
+    LIB___UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
+
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
     DropInterface((struct Interface *)base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
@@ -899,9 +923,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
   if(child != NULL)
   {
+    #if defined(__amigaos3__)
     unsigned char *dataSeg;
     ULONG *relocs;
     ULONG numRelocs;
+    #endif
 
     child->libBase.lib_Revision = base->libBase.lib_Revision;
     child->libBase.lib_OpenCnt++;
@@ -909,23 +935,33 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->sysBase  = base->sysBase;
     InitSemaphore(&child->libSem);
     child->parent   = base;
-    child->dataSize = base->dataSize;
 
-    dataSeg = (unsigned char *)(child + 1);
     #if defined(__amigaos4__)
     {
       uint32 offset;
       if((child->baserelData = (base->IElf->CopyDataSegment)(base->elfHandle, &offset)))
-     {
+      {
         struct ExtendedLibrary *extlib;
         kprintf("AmiSSL: Env vector: %08x\n", child->baserelData);
 
-        extlib = (struct ExtendedLibrary *)((ULONG)child + child->libNode.lib_PosSize);
+        extlib = (struct ExtendedLibrary *)((ULONG)child + child->libBase.lib_PosSize);
         extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
         kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
+        if(!LIB___UserLibInit((struct AmiSSLIFace *)extlib->MainIFace))
+        {
+          kprintf("AmiSSL: Returning libBase: %08lx\n", child);
+        }
+        else
+        {
+          kprintf("AmiSSL: != 0 returned by __UserLibInit()\n");
+
+          (base->IElf->FreeDataSegmentCopy)(base->elfHandle, child->baserelData);
+        }
       }
     }
     #else
+    child->dataSize = base->dataSize;
+    dataSeg = (unsigned char *)(child + 1);
     CopyMem(base->dataSeg, dataSeg, base->dataSize);
     relocs = &((ULONG *)__datadata_relocs)[1];
     numRelocs = relocs[-1];
@@ -941,9 +977,8 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
       while(--numRelocs != 0);
     }
     dataSeg += 0x7ffeu;
-    #endif // !__amigaos4__
-
     child->dataSeg = dataSeg;
+    #endif // !__amigaos4__
 
     // assume openBase won't fail
     base->libBase.lib_OpenCnt++;
@@ -1035,8 +1070,9 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
       if(parent->libBase.lib_OpenCnt == 0)
       {
         #if defined(__amigaos4__)
-        struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libNode.lib_PosSize);
+        struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
+        LIB___UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
         (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
         base->baserelData = NULL;
         #endif
