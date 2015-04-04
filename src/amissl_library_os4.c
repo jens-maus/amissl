@@ -42,31 +42,9 @@ struct AmiSSLIFace;
 
 extern const struct TagItem libCreateTags[];
 
-struct Library * AMISSL_COMMON_DATA ExecBase = NULL;
-struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
-
-struct Library *DOSBase = NULL;
-struct DOSIFace *IDOS = NULL;
-
 LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
 LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
 LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
-
-/*
- * The system (and compiler) rely on a symbol named _start which marks
- * the beginning of execution of an ELF file. To prevent others from
- * executing this library, and to keep the compiler/linker happy, we
- * define an empty _start symbol here.
- *
- * On the classic system (pre-AmigaOS4) this was usually done by
- * moveq #0,d0
- * rts
- *
- */
-void _start(void)
-{
-    /* If you feel like it, open DOS and print something to the user */
-}
 
 ULONG Obtain()
 {
@@ -229,7 +207,7 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 		struct DOSIFace *idos;
 
 		IExec = (struct ExecIFace *)exec;
-		ExecBase = (struct Library *)exec->Data.LibBase;
+		SysBase = (struct Library *)exec->Data.LibBase;
 		LibraryBase = NULL;
 
 		if((dosBase = IExec->OpenLibrary("dos.library",52)))
@@ -478,13 +456,3 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 	VA_END(args);
 	return result;
 }
-
-void __baserel_get_addr(struct Interface *self);
-
-asm (" \n\
-	.text								\n\
-	.globl __baserel_get_addr		 \n\
-__baserel_get_addr:		 \n\
-	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\
-	blr		 \n\
-");

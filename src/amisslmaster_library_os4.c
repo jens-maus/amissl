@@ -288,13 +288,3 @@ static const struct Resident lib_res __attribute__ ((used)) =
     VSTRING,
     (APTR)libCreateTags
 };
-
-void __baserel_get_addr(struct Interface *self);
-
-asm (" \n\
-	.text								\n\
-	.globl __baserel_get_addr		 \n\
-__baserel_get_addr:		 \n\
-	lwz     2,48(3)	/* Fetch EnvironmentVector from struct Interface * */	 \n\
-	blr		 \n\
-");

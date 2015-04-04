@@ -13,6 +13,10 @@
 #include <dos/dos.h>
 #endif
 
+#if defined(__amigaos4__)
+#include <proto/elf.h>
+#endif
+
 struct LibraryHeader
 {
   struct Library          libBase;
@@ -23,12 +27,22 @@ struct LibraryHeader
   UWORD                   pad2;
   #if defined(MULTIBASE)
   struct LibraryHeader    *parent;
+  #if defined(__amigaos3__)
   APTR                    dataSeg;
   ULONG                   dataSize;
+  #endif /* __amigaos3__ */
+  #if defined(__amigaos4__)
+  struct Library          *ElfBase;
+  struct ElfIFace         *IElf;
+  Elf32_Handle            elfHandle;
+  #endif /* __amigaos4__ */
   #if defined(BASEREL)
   #if defined(__amigaos3__)
   APTR                    a4;
   #endif /* __amigaos3__ */
+  #if defined(__amigaos4__)
+  uint8                   *baserelData;
+  #endif /* __amigaos4__ */
   #endif /* BASEREL */
   #endif /* MULTIBASE */
 };

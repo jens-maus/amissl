@@ -92,8 +92,8 @@ static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-struct Library *SysBase = NULL;
-struct ExecIFace* IExec = NULL;
+struct Library * AMISSL_COMMON_DATA SysBase = NULL;
+struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
 #if defined(__NEWLIB__)
 struct Library *NewlibBase = NULL;
 struct NewlibIFace* INewlib = NULL;
@@ -101,9 +101,14 @@ struct NewlibIFace* INewlib = NULL;
 #else
 struct ExecBase *SysBase = NULL;
 #endif
+#if defined(__amigaos3__)
 extern struct DosLibrary *DOSBase;
+#elif defined(__amigaos4__)
+extern struct Library *DOSBase;
+extern struct DOSIFace *IDOS;
+#endif
 
-struct LibraryHeader *globalBase;
+struct LibraryHeader *globalBase = NULL;
 
 #define LIBNAME        "amissl_v" MKSTR(VERSIONNAME) ".library"
 #define LIB_VERSION    VERSION
@@ -657,7 +662,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     D(DBF_STARTUP, "LibInit()");
 
     base->libBase.lib_Revision = LIB_REVISION;
-
     base->segList = librarySegment;
     base->sysBase = &sb->LibNode;
 
@@ -665,8 +669,18 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
     #if defined(MULTIBASE)
     base->parent   = base;
+    #if defined(__amigaos3__)
     base->dataSeg  = __GetDataSeg();
     base->dataSize = __GetDataBSSSize();
+    #endif /* __amigaos3__ */
+    #if defined(__amigaos4__)
+    if((base->ElfBase = OpenLibrary("elf.library",52)))
+    {
+      base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
+    }
+    GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
+    base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE);
+    #endif /* __amigaos4__ */
     #if defined(BASEREL)
     #if defined(__amigaos3__)
     base->a4 = __GetA4();//__GetBSSSeg();
@@ -808,6 +822,13 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   }
   else
   {
+    #if defined(__amigaos4_) && defined(MULTIBASE)
+    struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libNode.lib_PosSize);
+    (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+    DropInterface((struct Interface *)base->IElf);
+    CloseLibrary((struct Library *)base->ElfBase);
+    #endif
+
     rc = LibDelete(base);
   }
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
@@ -841,7 +862,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 #endif
   struct LibraryHeader *res = NULL;
   #if defined(MULTIBASE)
-  struct LibraryHeader *child;
+  struct LibraryHeader *child = NULL;
   #endif
 
   D(DBF_STARTUP, "LibOpen(): %ld", base->libBase.lib_OpenCnt);
@@ -870,7 +891,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
   #if defined(MULTIBASE)
   #if defined(__amigaos4__)
-  child = 0;
+  child = (struct LibraryHeader *)CreateLibrary((struct TagItem *)LibInitTab);
   #else
   child = (struct LibraryHeader *)MakeLibrary((APTR)&LibVectors[0], NULL, NULL, sizeof(*child) + base->dataSize, 0);
   #endif
@@ -892,6 +913,18 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
     dataSeg = (unsigned char *)(child + 1);
     #if defined(__amigaos4__)
+    {
+      uint32 offset;
+      if((child->baserelData = (base->IElf->CopyDataSegment)(base->elfHandle, &offset)))
+     {
+        struct ExtendedLibrary *extlib;
+        kprintf("AmiSSL: Env vector: %08x\n", child->baserelData);
+
+        extlib = (struct ExtendedLibrary *)((ULONG)child + child->libNode.lib_PosSize);
+        extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
+        kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
+      }
+    }
     #else
     CopyMem(base->dataSeg, dataSeg, base->dataSize);
     relocs = &((ULONG *)__datadata_relocs)[1];
@@ -992,13 +1025,22 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     BOOL exp_lib = (base->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
 
     /* release child base */
+    #if !defined(__amigaos4__)
     FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
+    #endif
 
     parent->libBase.lib_OpenCnt--;
     if(exp_lib)
     {
       if(parent->libBase.lib_OpenCnt == 0)
       {
+        #if defined(__amigaos4__)
+        struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libNode.lib_PosSize);
+
+        (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
+        base->baserelData = NULL;
+        #endif
+
         rc = LibDelete(parent);
       }
       else
@@ -1027,3 +1069,17 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
 }
 
 /****************************************************************************/
+
+#if defined(BASEREL)
+#if defined(__amigaos4__)
+void __baserel_get_addr(struct Interface *self);
+
+asm (" \n\
+  .text               \n\
+  .globl __baserel_get_addr    \n\
+__baserel_get_addr:    \n\
+  lwz     2,48(3) /* Fetch EnvironmentVector from struct Interface * */  \n\
+  blr    \n\
+");
+#endif /* __amigaos4__ */
+#endif /* BASEREL */

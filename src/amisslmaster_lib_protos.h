@@ -1,6 +1,10 @@
 #ifndef _LIB_PROTOS_H
 #define _LIB_PROTOS_H
 
+#if defined(__amigaos4__)
+#include <proto/amisslmaster.h>
+#endif
+
 #include <internal/amissl_compiler.h>
 
 #if defined(__amigaos4__)

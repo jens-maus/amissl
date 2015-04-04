@@ -39,10 +39,12 @@ ULONG LIB_Release(REG(a6, __IFACE_OR_BASE))
 
 // ---
 
+#if 0
 void LIB_InternalInitAmiSSL(REG(a6, __IFACE_OR_BASE), REG(a0, void * amisslinit))
 {
 	InternalInitAmiSSL(amisslinit);
 }
+#endif
 
 // ---
 
@@ -55,10 +57,12 @@ long LIB_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList)
 
 // ---
 
+#if 0
 long LIB_CleanupAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
 {
 	return CleanupAmiSSLA(tagList);
 }
+#endif
 
 // ---
 

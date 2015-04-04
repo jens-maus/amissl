@@ -1,6 +1,10 @@
 #ifndef _LIB_PROTOS_H
 #define _LIB_PROTOS_H
 
+#if defined(__amigaos4__)
+#include <proto/amissl.h>
+#endif
+
 #include <utility/tagitem.h>
 #include <internal/amissl_compiler.h>
 
@@ -15,7 +19,9 @@
 
 LIBPROTO(InternalInitAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, void * amisslinit));
 LIBPROTO(InitAmiSSLA, long, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct TagItem * tagList));
+LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
 LIBPROTO(CleanupAmiSSLA, long, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct TagItem * tagList));
+LIBPROTOVA(CleanupAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
 
 struct LibraryHeader;
 ULONG freeBase(struct LibraryHeader *lib);
