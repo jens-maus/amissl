@@ -4,12 +4,12 @@
 /* Includeheader
 
         Name:           SDI_compiler.h
-        Versionstring:  $VER: SDI_compiler.h 1.35 (03.03.2011)
+        Versionstring:  $VER: SDI_compiler.h 1.36 (30.03.2015)
         Authors:        Dirk Stoecker, Jens Maus
         Distribution:   PD
         Project page:   http://sf.net/p/adtools/code/HEAD/tree/trunk/sdi/
         Description:    defines to hide compiler stuff
-        Id:             $Id: SDI_compiler.h 488 2014-03-31 13:05:32Z damato $
+        Id:             $Id: SDI_compiler.h 600 2015-04-08 07:36:20Z damato $
         URL:            $URL: https://svn.code.sf.net/p/adtools/code/trunk/sdi/SDI_compiler.h $
 
  1.1   25.06.98 : created from data made by Gunter Nikl
@@ -61,6 +61,8 @@
  1.34  26.07.10 : adapted IPTR and SIPTR definitions as the latest MorphOS SDK already
                   contains them. (tboeckel)
  1.35  03.03.11 : fixed AROS macros for m68k (Jason McMullan)
+ 1.36  30.03.15 : changed FAR define to only define it empty in case __far does not
+                  exist (Gunther Nikl)
 
 */
 
@@ -159,7 +161,9 @@
     #define INTERRUPT
     #define CHIP
   #endif
-  #define FAR
+  #if !defined(__far)
+    #define FAR /* __far NOT supported! */
+  #endif
   #define NEAR
 #elif defined(_DCC)
   #define REG(reg,arg) __##reg arg
