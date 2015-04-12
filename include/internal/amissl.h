@@ -1,12 +1,7 @@
 #ifndef INTERNAL_AMISSL_H
 #define INTERNAL_AMISSL_H
 
-#ifndef PATH_MAX
-#define PATH_MAX 1024
-#endif
-
 #include <exec/types.h>
-#include <dos.h>
 #include <time.h>
 #include <internal/amissl_compiler.h>
 

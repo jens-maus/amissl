@@ -206,7 +206,7 @@ int close(UNUSED int fd)
 	return(-1);
 }
 
-int lseek(UNUSED int fd, UNUSED long offset, UNUSED int mode)
+off_t lseek(UNUSED int fd, UNUSED long offset, UNUSED int mode)
 {
 	SetAmiSSLerrno(EINVAL);
 

@@ -1,10 +1,6 @@
 #ifndef LIBCMT_H
 #define LIBCMT_H
 
-#ifndef PATH_MAX
-#define PATH_MAX 1024
-#endif
-
 #include <stdio.h>
 #include <dos.h>
 #include <proto/exec.h>
