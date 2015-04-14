@@ -464,6 +464,10 @@ $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
 
+$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
+
 # cleanup target
 .PHONY: clean
 clean:
