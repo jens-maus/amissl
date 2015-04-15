@@ -77,7 +77,7 @@ static long SSLVersionApp = 0;
 
 #if defined(__amigaos3__)
 #if defined(MULTIBASE) && defined(BASEREL)
-#include "amisslmaster_base.h"
+#include "amissl_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 #endif // MULTIBASE + BASEREL
 #endif // __amigaos3__
