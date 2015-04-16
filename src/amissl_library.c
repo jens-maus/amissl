@@ -1,15 +1,7 @@
-#define PROTO_AMISSL_H // Don't include amissl protos
+#undef errno
+//#define PROTO_AMISSL_H // Don't include amissl protos
 
-//#define DEBUG
-#include <internal/debug.h>
-
-#include <string.h>
-#include <stdlib.h>
-
-#include <proto/exec.h>
-#include <proto/dos.h>
-#include <proto/locale.h>
-#include <proto/utility.h>
+#include <stdlib.h> // malloc, free, exit
 
 #include <dos/var.h>
 #if defined(__amigaos4__)
@@ -18,15 +10,12 @@
 #include <utility/tagitem.h>
 #include <exec/memory.h>
 
+#include <amissl/tags.h>
+#include <libraries/amissl.h>
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
-#include <amissl/tags.h>
 
-#include <internal/amissl.h>
-#include <internal/amissl_compiler.h>
-#include <libraries/amissl.h>
-
-#include <clib/amissl_protos.h>
+//#include <clib/amissl_protos.h>
 #define NO_MTCP_PROTOS
 #ifdef __GNUC__
 #include "../libcmt/libcmt.h"
@@ -35,15 +24,28 @@
 #include "/libcmt/libcmt.h"
 #include "/libcmt/multitcp.h"
 #endif
+
+//
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/locale.h>
+#include <proto/utility.h>
+
+//
+
+#include "amissl_lib_protos.h"
+
+//
+
 #include "amisslinit.h"
 
-#ifdef __amigaos4__
-struct AmiSSLIFace;
-#define __BASE_OR_IFACE	struct AmiSSLIFace *Self
-#else
-#define __BASE_OR_IFACE	struct Library *Self
-#endif
-#define __BASE_OR_IFACE_VAR	Self
+//
+
+#include <internal/amissl.h>
+
+//#define DEBUG
+#include <internal/debug.h>
 
 #ifdef __amigaos4__
 struct Library *IntuitionBase = NULL;
@@ -94,11 +96,11 @@ clock_t clock(void)
 	return(clock_curr - clock_base);
 }
 
-#include <proto/intuition.h>
-#include <intuition/intuition.h>
-#include <internal/amissl.h>
-
 #if !defined(__amigaos4__)
+
+#include <intuition/intuition.h>
+#include <proto/intuition.h>
+
 // required for clib2's math init/exit functions
 void __show_error(const char * message)
 {
@@ -117,7 +119,8 @@ void __show_error(const char * message)
 void exit(UNUSED int rc)
 {
 }
-#endif
+
+#endif /* !__amigaos4__ */
 
 AMISSL_STATE *CreateAmiSSLState(void)
 {
@@ -156,6 +159,7 @@ AMISSL_STATE *CreateAmiSSLState(void)
 
 	return ret;
 }
+
 #ifdef __amigaos4__
 
 #define SB_ObtainSemaphore  ObtainSemaphore
@@ -289,8 +293,8 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 #ifdef __amigaos4__
 		state->ISocket = (struct SocketIFace *)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
 		state->ISocketPtr = (struct SocketIFace **)GetTagData(AmiSSL_ISocketPtr, (ULONG)NULL, tagList);
-		state->IAmiSSL = Self;
-		state->AmiSSLBase = ((struct Interface *)Self)->Data.LibBase;
+		state->IAmiSSL = __BASE_OR_IFACE_VAR;
+		state->AmiSSLBase = ((struct Interface *)__BASE_OR_IFACE_VAR)->Data.LibBase;
 
 		/* When ISocket[Ptr] is supplied, there is no need to specify SocketBase.
 		 * This combination would confuse the code below which thinks that it
@@ -304,7 +308,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 		else
 			state->ISocketPtr = &state->ISocket;
 #else
-		state->AmiSSLBase = Self;
+		state->AmiSSLBase = __BASE_OR_IFACE_VAR;
 #endif
 
 #ifdef __amigaos4__
@@ -375,7 +379,7 @@ LIBPROTOVA(InitAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 	__gnuc_va_list ap;
 	struct TagItem *tags;
 
-	__builtin_va_start(ap, Self);
+	__builtin_va_start(ap, __BASE_OR_IFACE_VAR);
 	tags = va_getlinearva(ap, struct TagItem *);
 	__builtin_va_end(ap);
 
@@ -387,11 +391,11 @@ LIBPROTOVA(CleanupAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 	__gnuc_va_list ap;
 	struct TagItem *tags;
 
-	__builtin_va_start(ap, Self);
+	__builtin_va_start(ap, __BASE_OR_IFACE_VAR);
 	tags = va_getlinearva(ap, struct TagItem *);
 	__builtin_va_end(ap);
 
-	return LIB_CleanupAmiSSLA(Self, tags);
+	return LIB_CleanupAmiSSLA(__BASE_OR_IFACE_VAR, tags);
 }
 #endif
 
@@ -547,7 +551,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	kprintf("Userlib res: %d\n",err);
 
 	if (err != 0)
-		CALL_LFUNC_NP(__UserLibCleanup, Self);
+		CALL_LFUNC_NP(__UserLibCleanup, __BASE_OR_IFACE_VAR);
 
 	return(err);
 }
