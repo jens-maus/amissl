@@ -455,7 +455,6 @@ $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 $(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c $(SRC_D)/amissl_vectors.c
 $(OBJ_D)/amissl_glue.o: CFLAGS += -Wno-unused-parameter
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
-$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(OBJ_D)/amissl_m68k.o: $(SRC_D)/amissl_m68k.c
 $(OBJ_D)/amisslmaster_library_os4.o: $(SRC_D)/amisslmaster_library_os4.c $(SRC_D)/amisslmaster_vectors.c
 $(OBJ_D)/amisslmaster_m68k.o: $(SRC_D)/amisslmaster_m68k.c
