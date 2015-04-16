@@ -307,11 +307,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 			state->ISocket = NULL; /* This is unneeded, ISocket should never be accessed directly */
 		else
 			state->ISocketPtr = &state->ISocket;
-#else
-		state->AmiSSLBase = __BASE_OR_IFACE_VAR;
-#endif
 
-#ifdef __amigaos4__
 		if(state->SocketBase)
 		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
 			if((*state->ISocketPtr = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL)))
@@ -328,6 +324,8 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 		kprintf("ISocket: %08lx (ISocket address: %08lx)\n",state->ISocket,&state->ISocket);
 		kprintf("ISocketPtr: %08lx\n",state->ISocketPtr);
 #else
+		state->AmiSSLBase = __BASE_OR_IFACE_VAR;
+
 		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, TCPIP_AmiTCP, tagList);
 		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
