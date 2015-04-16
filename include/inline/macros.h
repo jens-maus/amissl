@@ -138,6 +138,28 @@
    _##name##_re2;						\
 })
 
+#define LP1FPFR(offs, rt, name, t1, v1, r1, bt, bn, fpt, fpr)	\
+({								\
+   typedef fpr;							\
+   typedef fpt;							\
+   t1 _##name##_v1 = (v1);					\
+   rt _##name##_re2 =						\
+   ({								\
+      register int _d1 __asm("d1");				\
+      register int _a0 __asm("a0");				\
+      register int _a1 __asm("a1");				\
+      register rt _##name##_re __asm("d0");			\
+      register void *const _##name##_bn __asm("a6") = (bn);	\
+      register t1 _n1 __asm(#r1) = _##name##_v1;		\
+      __asm volatile ("jsr a6@(-"#offs":W)"			\
+      : "=r" (_##name##_re), "=r" (_d1), "=r" (_a0), "=r" (_a1)	\
+      : "r" (_##name##_bn), "rf"(_n1)				\
+      : "fp0", "fp1", "cc", "memory");				\
+      _##name##_re;						\
+   });								\
+   _##name##_re2;						\
+})
+
 #define LP1NR(offs, name, t1, v1, r1, bt, bn)			\
 ({								\
    t1 _##name##_v1 = (v1);					\
