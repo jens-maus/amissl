@@ -366,7 +366,7 @@ LIBS = $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amisslmaster.library $(BIN_D)/mastertest
+all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test
 
 # make the object directory
 $(OBJ_D):
@@ -440,9 +440,13 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	@$(AR) r $@ $(OBJ_D)/libstubs.o
 	@$(RANLIB) $@
 
-$(BIN_D)/mastertest: $(SRC_D)/mastertest.c
+$(BIN_D)/amisslmaster_test: $(SRC_D)/amisslmaster_test.c
 	@echo "  CC/LD $@"
 	@$(CC) -o $@ -I./include $^
+
+$(BIN_D)/amissl_v$(VERSIONNAME)_test: $(SRC_D)/amissl_test.c
+	@echo "  CC/LD $@"
+	@$(CC) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"

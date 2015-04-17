@@ -842,15 +842,18 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   }
   else
   {
+    kprintf("AmiSSL: expunge\n");
+
     #if defined(__amigaos4__) && defined(MULTIBASE)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
-    kprintf("AmiSSL: expunge\n");
     LIB___UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
 
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
     DropInterface((struct Interface *)base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
+    #else
+    LIB___UserLibExpunge(base);
     #endif
 
     rc = LibDelete(base);
@@ -978,6 +981,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     }
     dataSeg += 0x7ffeu;
     child->dataSeg = dataSeg;
+    LIB___UserLibInit(child);
     #endif // !__amigaos4__
 
     // assume openBase won't fail
@@ -1075,6 +1079,10 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
         LIB___UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
         (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
         base->baserelData = NULL;
+        #else
+
+        LIB___UserLibCleanup(base);
+
         #endif
 
         rc = LibDelete(parent);
@@ -1085,12 +1093,12 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
       }
     }
     #else
+
     // in case the late expunge flag is set we go and
     // expunge the library base right now
     if((base->libBase.lib_Flags & LIBF_DELEXP) != 0)
-    {
       rc = LibDelete(base);
-    }
+
     #endif
   }
 

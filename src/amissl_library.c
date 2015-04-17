@@ -122,19 +122,25 @@ void exit(UNUSED int rc)
 
 #endif /* !__amigaos4__ */
 
-AMISSL_STATE *CreateAmiSSLState(void)
+static AMISSL_STATE *CreateAmiSSLState(void)
 {
 	unsigned long pid;
 	AMISSL_STATE *ret;
 
+  kprintf("CreateAmiSSLState()\n");
+
 	ObtainSemaphore(&openssl_cs);
 
+  kprintf("CreateAmiSSLState()1\n");
+
   pid = (unsigned long)FindTask(NULL);
-	ret = (AMISSL_STATE *)malloc(sizeof(AMISSL_STATE));
+  kprintf("CreateAmiSSLState()2\n");
+	ret = (AMISSL_STATE *)AllocVec(sizeof(*ret), MEMF_CLEAR);
+  kprintf("CreateAmiSSLState()3\n");
 
 	if (ret != NULL)
 	{
-		//kprintf("Allocating new state for %08lx\n",pid);
+		kprintf("Allocating new state for %08lx\n", pid);
 		ret->pid = pid;
 		ret->errno = 0;
 		ret->errno_ptr = &ret->errno;
@@ -148,9 +154,10 @@ AMISSL_STATE *CreateAmiSSLState(void)
 #endif
 		ret->ThreadGroupID = ThreadGroupID;
 
+    kprintf("h_insert(thread_hash)\n");
 		if(!h_insert(thread_hash, pid, ret))
 		{
-			free(ret);
+			FreeVec(ret);
 			ret = NULL;
 		}
 	}
@@ -183,6 +190,7 @@ STDARGS AMISSL_STATE *GetAmiSSLState(void)
 	AMISSL_STATE *ret;
 
 	SB_ObtainSemaphore(&openssl_cs);
+  kprintf("h_find(thread_hash)\n");
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
 	//kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
@@ -260,7 +268,7 @@ static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 	{
 		kprintf("- Cleaning up state %08lx for %08lx (group %lu)\n", a, a->pid, a->ThreadGroupID);
 		h_delete(thread_hash, a->pid);
-		free(a);
+		FreeVec(a);
 	}
 }
 
@@ -277,12 +285,15 @@ static void h_freefunc(void *mem)
 LIBPROTO(InternalInitAmiSSL, void, REG(a6, __BASE_OR_IFACE), REG(a0, struct AmiSSLInitStruct *amisslinit))
 {
   /* nothing */
+  kprintf("InternalInitAmiSSL()\n");
 }
 
 LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 	LONG err;
+
+  kprintf("InitAmiSSLA()\n");
 
 	if((state = CreateAmiSSLState()))
 	{
@@ -362,10 +373,11 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem 
 #endif
 
 		ObtainSemaphore(&openssl_cs);
+    kprintf("h_delete(thread_hash)\n");
 		h_delete(thread_hash, state->pid);
 		ReleaseSemaphore(&openssl_cs);
 
-		free(state);
+		FreeVec(state);
 	}
 
 	return(0);
@@ -414,6 +426,7 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 	{
 		kprintf("Performing unfreed states cleanup for %08lx (group %lu)\n", FindTask(NULL), ThreadGroupID);
 		ObtainSemaphore(&openssl_cs);
+    kprintf("h_doall(thread_hash)\n");
 		h_doall(thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
 		ReleaseSemaphore(&openssl_cs);
 	}
@@ -462,14 +475,17 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	SysBase = *(struct ExecBase **)4;
 #endif
 
-	kprintf("Calling user lib init\n");
+	kprintf("Calling user lib init: %lx %lx\n", thread_hash, ThreadGroupID);
 
 	if (!thread_hash)
 	{
+	kprintf("Calling user lib init1\n");
 		Forbid();
 
+	kprintf("Calling user lib init2\n");
 		if(!SemaphoreInitialized)
 		{
+	kprintf("Calling user lib init3\n");
 			InitSemaphore(&openssl_cs);
 			SemaphoreInitialized = TRUE;
 		}
@@ -479,7 +495,10 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		ObtainSemaphore(&openssl_cs);
 
 		if (!thread_hash)
+    {
+      kprintf("h_new(thread_hash)\n");
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
+    }
 
 		ReleaseSemaphore(&openssl_cs);
 	}
@@ -495,6 +514,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
 	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
 #else
+  kprintf("YEAH1\n");
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
 #endif
@@ -546,6 +566,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		}
 	}
 
+  kprintf("YEARH\n");
 	kprintf("Userlib res: %d\n",err);
 
 	if (err != 0)

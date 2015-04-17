@@ -2634,6 +2634,7 @@ src/amissl_libinit.c -text
 src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
 src/amissl_m68k.c eol=lf
+src/amissl_test.c -text
 src/amissl_vectors.c eol=lf
 src/amissl_vectors.h -text
 src/amisslinit.h eol=lf
@@ -2643,13 +2644,13 @@ src/amisslmaster_lib_protos.h -text
 src/amisslmaster_libinit.c -text
 src/amisslmaster_library.c eol=lf
 src/amisslmaster_m68k.c eol=lf
+src/amisslmaster_test.c -text
 src/amisslmaster_vectors.c eol=lf
 src/amisslmaster_vectors.h -text
 src/autoinit_amissl_main.c eol=lf
 src/baserel.c eol=lf
 src/libStdVec.c -text
 src/libstubs.c eol=lf
-src/mastertest.c -text
 src/mkidl.sh -text
 test/Makefile eol=lf
 test/SMakefile eol=lf
