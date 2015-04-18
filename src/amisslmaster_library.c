@@ -139,8 +139,6 @@ static void CloseLib(struct Library *LibBase)
 
 LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
-	InitSemaphore(&AmiSSLMasterLock);
-
 	kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, __BASE_OR_IFACE_VAR, LibAPIVersion, LibUsesOpenSSLStructs);
 	LibAPIVersion = APIVersion;
 	LibUsesOpenSSLStructs = UsesOpenSSLStructs;
@@ -372,11 +370,7 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-#ifdef __amigaos4__
 	InitSemaphore(&AmiSSLMasterLock);
-#else
-	SysBase = *(struct ExecBase **)4;
-#endif
 
 	traceline();
 

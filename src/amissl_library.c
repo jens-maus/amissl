@@ -468,12 +468,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 {
 	int err = 1; /* Assume error condition */
 
-#ifdef __amigaos4__
 	InitSemaphore(&__mem_cs);
 	InitSemaphore(&openssl_cs);
-#else
-	SysBase = *(struct ExecBase **)4;
-#endif
 
 	kprintf("Calling user lib init: %lx %lx\n", thread_hash, ThreadGroupID);
 
