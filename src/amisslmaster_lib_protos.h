@@ -22,6 +22,10 @@ LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE));
 LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG Cipher));
 LIBPROTO(CloseAmiSSLCipher, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct Library *LibBase));
 
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibExpunge, void, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE));
+
 struct LibraryHeader;
 ULONG freeBase(struct LibraryHeader *lib);
 ULONG initBase(struct LibraryHeader *lib);

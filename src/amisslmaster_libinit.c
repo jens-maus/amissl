@@ -56,10 +56,6 @@
 #define FORCED_CONST const FAR
 #endif // FORCED_CONST
 
-LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
-LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
-LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
-
 /****************************************************************************/
 
 /*

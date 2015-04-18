@@ -27,6 +27,10 @@ LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
 LIBPROTOVA(CleanupAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
 #endif /* __amigaos4__ */
 
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibExpunge, void, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE));
+
 struct LibraryHeader;
 ULONG freeBase(struct LibraryHeader *lib);
 ULONG initBase(struct LibraryHeader *lib);
