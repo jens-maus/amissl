@@ -21,7 +21,7 @@ else
 
 $cflags.=" -m68020-60 -msoft-float -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -DNO_INLINE_VARARGS -I\$(AmiSSL)/include -I\$(AmiSSL)/include/netinclude -W -Wall";
 $app_cflag="-I\$(AmiSSL)/openssl";
-$lib_cflag="-fbaserel -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
+$lib_cflag="-fbaserel32 -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
 $ofile='-o ';
 $define='-D';
@@ -29,7 +29,7 @@ $include='-I';
 
 # EXE linking stuff
 $link='${CC}';
-$lflags='';
+$lflags='-fbaserel32';
 $efile='-o ';
 $exep='';
 $ex_libs='$(AmiSSL)/bin_os3/libamisslauto.a $(AmiSSL)/bin_os3/libamisslstubs.a -lm';
