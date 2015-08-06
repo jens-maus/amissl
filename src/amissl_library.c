@@ -62,16 +62,19 @@ struct Library *UtilityBase = NULL;
 #endif
 
 struct SignalSemaphore __mem_cs;
-LONG GMTOffset;
-void *__pool;
+LONG GMTOffset = 0;
+void * AMISSL_COMMON_DATA __pool = NULL;
+
+// keep a pointer to the library base;
+__BASE_OR_IFACE_TYPE AmiSSL = NULL;
 
 struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
-static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;// = {NULL};
+static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
 static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
 static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
 static ULONG ThreadGroupID = 0;
-static ULONG clock_base;
+static ULONG clock_base = 0;
 static long SSLVersionApp = 0;
 
 #if defined(__amigaos3__)
@@ -113,9 +116,12 @@ void __show_error(const char * message)
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
+#warning exit() not required?
+#if 0
 void exit(UNUSED int rc)
 {
 }
+#endif
 
 #endif /* !__amigaos4__ */
 
@@ -254,6 +260,8 @@ static void amigaos_locking_callback(int mode, int type, UNUSED const char *file
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)
 {
+  __BASE_OR_IFACE = AmiSSL;
+
 	ObtainSemaphore(&openssl_cs);
   CRYPTO_THREADID_set_pointer(id, (void*)FindTask(NULL));
 	ReleaseSemaphore(&openssl_cs);
@@ -279,7 +287,7 @@ static void h_freefunc(void *mem)
 	SB_FreeVec(mem);
 }
 
-LIBPROTO(InternalInitAmiSSL, void, REG(a6, __BASE_OR_IFACE), REG(a0, struct AmiSSLInitStruct *amisslinit))
+LIBPROTO(InternalInitAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED struct AmiSSLInitStruct *amisslinit))
 {
   /* nothing */
   kprintf("InternalInitAmiSSL()\n");
@@ -355,7 +363,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 	return(err);
 }
 
-LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
+LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
 
@@ -406,10 +414,13 @@ LIBPROTOVA(CleanupAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 }
 #endif
 
+#warning AmiSSLAbort() not required?
+#if 0
 void AmiSSLAbort(void)
 {
 	OpenSSLDie("unknown", 0, "abort() or similar function called");
 }
+#endif
 
 void openlog(void) {}
 void closelog(void) {}
@@ -468,7 +479,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	InitSemaphore(&__mem_cs);
 	InitSemaphore(&openssl_cs);
 
-	kprintf("Calling user lib init: %lx %lx\n", thread_hash, ThreadGroupID);
+	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, AmiSSLBase);
 
 	if (!thread_hash)
 	{
@@ -507,7 +518,12 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
 	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
 #else
-  kprintf("YEAH1\n");
+  kprintf("YEAH4: %ld\n", CRYPTO_NUM_LOCKS);
+	__pool = CreatePool(MEMF_ANY, 8192, 4096);
+  kprintf("YEAH4.1\n");
+  kprintf("YEAH5: %ld\n", CRYPTO_num_locks());
+	lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR);
+  kprintf("YEAH6\n");
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
 #endif
@@ -516,12 +532,17 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		struct DateStamp ds;
 		int i;
 
+    kprintf("FUNZT\n");
+
 		for (i=0; i<CRYPTO_num_locks(); i++)
 		{
 			InitSemaphore(&lock_cs[i]);
 		}
 
 		InitSemaphore(&__mem_cs);
+
+    // lets save the library base
+    AmiSSL = __BASE_OR_IFACE_VAR;
 
     // set static locks callbacks
 		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
