@@ -1,7 +1,10 @@
 #include <libraries/amissl.h>
 #include <libraries/amisslmaster.h>
-#include <proto/amisslmaster.h>
 #include <proto/exec.h>
+
+#define __NOLIBBASE__
+#define __NOGLOBALIFACE__
+#include <proto/amisslmaster.h>
 
 //
 
@@ -16,6 +19,8 @@
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>
+#else
+#include <inline/macros.h>
 #endif
 
 #ifdef __amigaos4__
@@ -257,6 +262,11 @@ LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE))
 LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG Cipher))
 {
 	struct Library *result = NULL;
+	#if defined(__amigaos4__)
+	struct AmiSSLMasterIFace *IAmiSSLMaster = __BASE_OR_IFACE_VAR;
+	#else
+	struct Library *AmiSSLMasterBase = __BASE_OR_IFACE_VAR;
+	#endif
 
 	ObtainSemaphore(&AmiSSLMasterLock);
 
@@ -275,13 +285,13 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
 				result = OpenLib(&DESBase,"libs:amissl/des_v2.library",2);
 				break;
 			case CIPHER_DH:
-				if(OpenAmiSSL())
+				if(OpenAmiSSL() != NULL)
 				{
 					result = DHBase;
 				}
 				break;
 			case CIPHER_DSA:
-				if(OpenAmiSSL())
+				if(OpenAmiSSL() != NULL)
 				{
 					result = DSABase;
 				}
@@ -314,7 +324,7 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
 				result = OpenLib(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
 				break;
 			case CIPHER_RSA:
-				if(OpenAmiSSL())
+				if(OpenAmiSSL() != NULL)
 				{
 					result = RSABase;
 				}

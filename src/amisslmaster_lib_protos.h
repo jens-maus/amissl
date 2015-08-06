@@ -1,18 +1,18 @@
 #ifndef _LIB_PROTOS_H
 #define _LIB_PROTOS_H
 
-#if defined(__amigaos4__)
+#define __NOLIBBASE__
+#define __NO_GLOBAL_IFACE__
 #include <proto/amisslmaster.h>
-#endif
 
 #include <internal/amissl_compiler.h>
 
 #if defined(__amigaos4__)
 #define __BASE_OR_IFACE_TYPE	struct AmiSSLMasterIFace *
-#define __BASE_OR_IFACE_VAR		IAmiSSLMaster
+#define __BASE_OR_IFACE_VAR		_IAmiSSLMaster
 #else
 #define __BASE_OR_IFACE_TYPE	struct Library *
-#define __BASE_OR_IFACE_VAR		AmiSSLMasterBase
+#define __BASE_OR_IFACE_VAR		_AmiSSLMasterBase
 #endif
 #define __BASE_OR_IFACE			__BASE_OR_IFACE_TYPE __BASE_OR_IFACE_VAR
 
