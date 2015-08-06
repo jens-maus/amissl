@@ -838,17 +838,17 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   }
   else
   {
-    kprintf("AmiSSL: expunge\n");
-
     #if defined(__amigaos4__) && defined(MULTIBASE)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
+    kprintf("AmiSSL: expunge\n");
     LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
 
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
     DropInterface((struct Interface *)base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
     #else
+    kprintf("AmiSSL: expunge\n");
     LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
     #endif
 
