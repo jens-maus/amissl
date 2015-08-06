@@ -327,14 +327,14 @@ STATIC CONST struct TagItem libCreateTags[] =
 STATIC FORCED_CONST APTR LibVectors[] =
 {
   #ifdef __MORPHOS__
-  (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
+  (APTR)FUNCARRAY_32BIT_NATIVE,
   #endif
-  (CONST_APTR)SLIB_ENTRY(LibOpen, AmiSSLMaster, 1),
-  (CONST_APTR)SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
-  (CONST_APTR)SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
-  (CONST_APTR)LibNull,
+  (APTR)SLIB_ENTRY(LibOpen, AmiSSLMaster, 1),
+  (APTR)SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
+  (APTR)SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
+  (APTR)LibNull,
   libvector,
-  (CONST_APTR)-1
+  (APTR)-1
 };
 
 STATIC FORCED_CONST IPTR LibInitTab[] =
