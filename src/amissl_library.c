@@ -479,7 +479,11 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	InitSemaphore(&__mem_cs);
 	InitSemaphore(&openssl_cs);
 
+	#if defined(__amigaos4__)
+	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, IAmiSSL);
+	#else
 	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, AmiSSLBase);
+	#endif
 
 	if (!thread_hash)
 	{
