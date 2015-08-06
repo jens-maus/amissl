@@ -2,7 +2,7 @@
 #define _LIB_PROTOS_H
 
 #define __NOLIBBASE__
-#define __NO_GLOBAL_IFACE__
+#define __NOGLOBALIFACE__
 #include <proto/amisslmaster.h>
 
 #include <internal/amissl_compiler.h>

@@ -1,9 +1,9 @@
 #ifndef _LIB_PROTOS_H
 #define _LIB_PROTOS_H
 
-#if defined(__amigaos4__)
+#define __NOLIBBASE__
+#define __NOGLOBALIFACE__
 #include <proto/amissl.h>
-#endif
 
 #include <internal/amissl_compiler.h>
 
