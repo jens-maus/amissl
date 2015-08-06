@@ -327,14 +327,14 @@ STATIC CONST struct TagItem libCreateTags[] =
 STATIC FORCED_CONST APTR LibVectors[] =
 {
   #ifdef __MORPHOS__
-  (CONST_APTR)FUNCARRAY_32BIT_NATIVE,
+  (APTR)FUNCARRAY_32BIT_NATIVE,
   #endif
-  (CONST_APTR)SLIB_ENTRY(LibOpen, AmiSSL, 1),
-  (CONST_APTR)SLIB_ENTRY(LibClose, AmiSSL, 2),
-  (CONST_APTR)SLIB_ENTRY(LibExpunge, AmiSSL, 3),
-  (CONST_APTR)LibNull,
+  (APTR)SLIB_ENTRY(LibOpen, AmiSSL, 1),
+  (APTR)SLIB_ENTRY(LibClose, AmiSSL, 2),
+  (APTR)SLIB_ENTRY(LibExpunge, AmiSSL, 3),
+  (APTR)LibNull,
   libvector,
-  (CONST_APTR)-1
+  (APTR)-1
 };
 
 STATIC FORCED_CONST IPTR LibInitTab[] =
@@ -843,13 +843,13 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
     #if defined(__amigaos4__) && defined(MULTIBASE)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
-    LIB___UserLibExpunge((struct AmiSSLIFace *)extlib->MainIFace);
+    LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
 
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
     DropInterface((struct Interface *)base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
     #else
-    LIB___UserLibExpunge(base);
+    LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
     #endif
 
     rc = LibDelete(base);
@@ -946,7 +946,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         extlib = (struct ExtendedLibrary *)((ULONG)child + child->libBase.lib_PosSize);
         extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
         kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
-        if(!LIB___UserLibInit((struct AmiSSLIFace *)extlib->MainIFace))
+        if(!LIB___UserLibInit((__BASE_OR_IFACE_TYPE)extlib->MainIFace))
         {
           kprintf("AmiSSL: Returning libBase: %08lx\n", child);
         }
@@ -977,7 +977,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     }
     dataSeg += 0x7ffeu;
     child->dataSeg = dataSeg;
-    LIB___UserLibInit(child);
+    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
     #endif // !__amigaos4__
 
     // assume openBase won't fail
@@ -1072,12 +1072,12 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
         #if defined(__amigaos4__)
         struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
-        LIB___UserLibCleanup((struct AmiSSLIFace *)extlib->MainIFace);
+        LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
         (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
         base->baserelData = NULL;
         #else
 
-        LIB___UserLibCleanup(base);
+        LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
 
         #endif
 
