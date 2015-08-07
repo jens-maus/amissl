@@ -389,16 +389,6 @@ void VARARGS68K LIB_ERR_add_error_data(UNUSED struct AmiSSLIFace *Self, int num,
 	VA_END(args);
 }
 
-int LIB_BIO_vprintf(UNUSED struct AmiSSLIFace *Self, BIO *bio, const char *format, long *params)
-{
-	return BIO_vprintf(bio,format,params);
-}
-
-int LIB_BIO_vsnprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, long *params)
-{
-	return BIO_vsnprintf(buf,n,format,params);
-}
-
 #if 0
 void LIB_ERR_add_error_vdata(UNUSED struct AmiSSLIFace *Self, int num, VA_LIST params)
 {
