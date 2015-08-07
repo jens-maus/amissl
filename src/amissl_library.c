@@ -475,7 +475,6 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	int err = 1; /* Assume error condition */
 
 	InitSemaphore(&__mem_cs);
-	InitSemaphore(&openssl_cs);
 
 	#if defined(__amigaos4__)
 	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, IAmiSSL);
@@ -493,19 +492,24 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		{
 	kprintf("Calling user lib init3\n");
 			InitSemaphore(&openssl_cs);
+	kprintf("Calling user lib init3.1\n");
 			SemaphoreInitialized = TRUE;
 		}
 
+	kprintf("Calling user lib init4\n");
 		Permit();
 
 		ObtainSemaphore(&openssl_cs);
+	kprintf("Calling user lib init5\n");
 
 		if (!thread_hash)
     {
       kprintf("h_new(thread_hash)\n");
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
+	kprintf("Calling user lib init6\n");
     }
 
+	kprintf("Calling user lib init7\n");
 		ReleaseSemaphore(&openssl_cs);
 	}
 
@@ -520,12 +524,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
 	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
 #else
-  kprintf("YEAH4: %ld\n", CRYPTO_NUM_LOCKS);
-	__pool = CreatePool(MEMF_ANY, 8192, 4096);
-  kprintf("YEAH4.1\n");
+  kprintf("before CRYPTO_num_locks()\n");
   kprintf("YEAH5: %ld\n", CRYPTO_num_locks());
-	lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR);
-  kprintf("YEAH6\n");
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
 #endif
