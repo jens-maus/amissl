@@ -2627,6 +2627,7 @@ openssl/util/tab_num.pl eol=lf
 openssl/util/x86asm.sh eol=lf
 src/amissl_base.h -text
 src/amissl_glue.c eol=lf
+src/amissl_glue.h -text
 src/amissl_glue.patch -text
 src/amissl_init.c -text
 src/amissl_lib_protos.h -text
