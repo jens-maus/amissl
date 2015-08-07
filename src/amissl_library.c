@@ -116,12 +116,10 @@ void __show_error(const char * message)
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
-#warning exit() not required?
-#if 0
 void exit(UNUSED int rc)
 {
+  // nothing
 }
-#endif
 
 #endif /* !__amigaos4__ */
 
