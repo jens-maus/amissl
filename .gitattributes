@@ -322,6 +322,7 @@ libcmt/abort.c -text
 libcmt/accept.c eol=lf
 libcmt/asm.h eol=lf
 libcmt/bind.c eol=lf
+libcmt/bzero.c eol=lf
 libcmt/closesocket.c eol=lf
 libcmt/connect.c eol=lf
 libcmt/dirent.c eol=lf
