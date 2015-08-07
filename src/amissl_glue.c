@@ -8,17 +8,21 @@
 
 /***************************************************************************/
 
+#if defined(__amigaos4__)
 ULONG SAVEDS ASM LIB_Obtain(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return Obtain();
 }
+#endif
 
 // ---
 
+#if defined(__amigaos4__)
 ULONG SAVEDS ASM LIB_Release(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return Release();
 }
+#endif
 
 // ---
 
