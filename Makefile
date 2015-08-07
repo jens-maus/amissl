@@ -232,8 +232,8 @@ ifeq ($(OS), os3)
   CPU     = -m68020-60 -msoft-float
   CFLAGS  += -DMULTIBASE -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
-  LDLIBS  += -ldebug -lm
-  BASEREL = -resident
+  LDLIBS  += -ldebug -lamiga -lm
+  BASEREL = -resident32
   NOBASEREL = -fno-baserel
   BRELLIB = -mrestore-a4
   GCCVER  = 2
