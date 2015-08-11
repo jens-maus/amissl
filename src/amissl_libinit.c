@@ -4612,6 +4612,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     #if defined(BASEREL)
     #if defined(__amigaos3__)
     base->a4 = __GetA4();//__GetBSSSeg();
+    kprintf("a4 %08lx\n", base->a4);
     #endif /* __amigaos3__ */
     #endif /* BASEREL */
     #endif /* MULTIBASE */
