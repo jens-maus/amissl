@@ -364,7 +364,7 @@ MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
              $(OBJ_D)/amisslmaster_init.o \
              $(EXTRAMASTEROBJS)
 
-LIBS = $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
+LIBS = -L$(BIN_D)/openssl -lssl -lcrypto -L$(BIN_D) -lcmt
 
 # main target
 .PHONY: all
@@ -426,7 +426,7 @@ $(LIBCMT): $(OBJ_D)/libcmt
 
 $(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/amisslmaster.library: $(MASTEROBJS)
 	@echo "  LD $@"

@@ -328,6 +328,7 @@ libcmt/connect.c eol=lf
 libcmt/dirent.c eol=lf
 libcmt/errno.c -text
 libcmt/error.c eol=lf
+libcmt/exit.c -text
 libcmt/fflush.c eol=lf
 libcmt/fgetc.c eol=lf
 libcmt/fibex.h eol=lf

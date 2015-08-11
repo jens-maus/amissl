@@ -115,12 +115,6 @@ void __show_error(const char * message)
   // Open an Easy Requester
   EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
-
-void exit(UNUSED int rc)
-{
-  // nothing
-}
-
 #endif /* !__amigaos4__ */
 
 static AMISSL_STATE *CreateAmiSSLState(void)

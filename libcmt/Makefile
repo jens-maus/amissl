@@ -162,7 +162,8 @@ STDIOOBJS = $(OBJ_D)/malloc.o \
             $(OBJ_D)/getpid.o \
             $(OBJ_D)/fprintf.o \
             $(OBJ_D)/perror.o \
-            $(OBJ_D)/abort.o
+            $(OBJ_D)/abort.o \
+	    $(OBJ_D)/exit.o
 
 NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/accept.o \
