@@ -60,7 +60,11 @@ socket(
 
 void initialize_socket_errno(void)
 {
+	kprintf("%s\n", __FUNCTION__);
+	{
 	GETSTATE();
+	kprintf("%s %08lx\n", __FUNCTION__, state);
+	{
 	struct TagItem tags[] =
 	{
 		{ SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr },
@@ -114,4 +118,7 @@ void initialize_socket_errno(void)
 		state->socket_errno_initialized = 1;
 	}
 #endif
+	}
+	}
+	kprintf("%s done\n", __FUNCTION__);
 }

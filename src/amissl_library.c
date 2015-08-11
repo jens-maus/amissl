@@ -137,7 +137,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
   pid = (unsigned long)FindTask(NULL);
   kprintf("CreateAmiSSLState()2\n");
 	ret = (AMISSL_STATE *)AllocVec(sizeof(*ret), MEMF_CLEAR);
-  kprintf("CreateAmiSSLState()3\n");
+	kprintf("CreateAmiSSLState()3\n");
 
 	if (ret != NULL)
 	{
@@ -155,7 +155,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 #endif
 		ret->ThreadGroupID = ThreadGroupID;
 
-    kprintf("h_insert(thread_hash)\n");
+		kprintf("h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)\n", thread_hash, pid, ret);
 		if(!h_insert(thread_hash, pid, ret))
 		{
 			FreeVec(ret);
@@ -164,6 +164,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 	}
 
 	ReleaseSemaphore(&openssl_cs);
+	kprintf("CreateAmiSSLState done %08lx\n", ret);
 
 	return ret;
 }
@@ -190,11 +191,13 @@ STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
 	AMISSL_STATE *ret;
 
+	kprintf("%s %08lx\n", __FUNCTION__, SysBase);
 	SB_ObtainSemaphore(&openssl_cs);
-  kprintf("h_find(thread_hash)\n");
+	kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
 	//kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
+	kprintf("%s done\n", __FUNCTION__);
 
 	return ret;
 }
@@ -296,7 +299,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 	AMISSL_STATE *state;
 	LONG err;
 
-  kprintf("InitAmiSSLA()\n");
+	kprintf("InitAmiSSLA() %08lx\n", SysBase);
 
 	if((state = CreateAmiSSLState()))
 	{
@@ -347,6 +350,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 		if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
 			state->errno_ptr = errno_ptr;
 
+		kprintf("initialize socket errno\n");
 		initialize_socket_errno();
 
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
@@ -357,6 +361,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 	{
 		err = 1;
 	}
+	kprintf("InitAmiSSLA() done %d\n", err);
 
 	return(err);
 }
