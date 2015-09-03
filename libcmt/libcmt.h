@@ -5,8 +5,10 @@
 #include <dos.h>
 #include <proto/exec.h>
 
+#include <internal/amissl.h>
+
 extern int __io2errno(int);
-extern void initialize_socket_errno(void);
+extern void initialize_socket_errno(AMISSL_STATE *state);
 
 /**
 *

@@ -331,7 +331,7 @@ struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
 
 	/* The ISocketPtr might be pointing to uninitialized ISocket in __UserLibInit */
 	if (!p->socket_errno_initialized)
-		initialize_socket_errno();
+		initialize_socket_errno(p);
 
 	return(p->ISocketPtr ? *p->ISocketPtr : NULL);
 }

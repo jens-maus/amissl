@@ -61,21 +61,21 @@ struct Library *LocaleBase = NULL;
 struct Library *UtilityBase = NULL;
 #endif
 
-struct SignalSemaphore __mem_cs;
-LONG GMTOffset = 0;
+struct SignalSemaphore AMISSL_COMMON_DATA __mem_cs;
+LONG AMISSL_COMMON_DATA GMTOffset = 0;
 void * AMISSL_COMMON_DATA __pool = NULL;
 
 // keep a pointer to the library base;
 __BASE_OR_IFACE_TYPE AmiSSL = NULL;
 
-struct SignalSemaphore *lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
-static struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
-static LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
-static struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
+struct SignalSemaphore * AMISSL_COMMON_DATA lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
+struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
+LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
+struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
-static ULONG ThreadGroupID = 0;
-static ULONG clock_base = 0;
-static long SSLVersionApp = 0;
+static ULONG AMISSL_COMMON_DATA ThreadGroupID = 0;
+static ULONG AMISSL_COMMON_DATA clock_base = 0;
+static long AMISSL_COMMON_DATA SSLVersionApp = 0;
 
 #if defined(__amigaos3__)
 #if defined(MULTIBASE) && defined(BASEREL)
@@ -158,7 +158,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 	}
 
 	ReleaseSemaphore(&openssl_cs);
-	kprintf("CreateAmiSSLState done %08lx\n", ret);
+	kprintf("CreateAmiSSLState done %08lx %08lx\n", ret, SysBase);
 
 	return ret;
 }
@@ -184,12 +184,10 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
 	AMISSL_STATE *ret;
-
 	kprintf("%s %08lx\n", __FUNCTION__, SysBase);
 	SB_ObtainSemaphore(&openssl_cs);
 	kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
-	//kprintf("Looked up state %08lx for %08lx\n",ret,pid);
 	SB_ReleaseSemaphore(&openssl_cs);
 	kprintf("%s done\n", __FUNCTION__);
 
@@ -293,7 +291,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 	AMISSL_STATE *state;
 	LONG err;
 
-	kprintf("InitAmiSSLA() %08lx\n", SysBase);
+	kprintf("InitAmiSSLA() %08lx %08lx\n", SysBase, AmiSSLBase);
 
 	if((state = CreateAmiSSLState()))
 	{
@@ -340,21 +338,19 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 		state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, TCPIP_AmiTCP, tagList);
 		state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
-
 		if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
 			state->errno_ptr = errno_ptr;
 
-		kprintf("initialize socket errno\n");
-		initialize_socket_errno();
+		kprintf("initialize socket errno: %08lx %08lx\n", SysBase, AmiSSLBase);
+		initialize_socket_errno(GetAmiSSLState());
 
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
 		err = 0;
 	}
 	else
-	{
 		err = 1;
-	}
+
 	kprintf("InitAmiSSLA() done %d\n", err);
 
 	return(err);
@@ -473,6 +469,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 {
 	int err = 1; /* Assume error condition */
 
+  kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
+  kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
 	InitSemaphore(&__mem_cs);
 
 	#if defined(__amigaos4__)
@@ -523,8 +521,6 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
 	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
 #else
-  kprintf("before CRYPTO_num_locks()\n");
-  kprintf("YEAH5: %ld\n", CRYPTO_num_locks());
 	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
 	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
 #endif
@@ -533,12 +529,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		struct DateStamp ds;
 		int i;
 
-    kprintf("FUNZT\n");
-
 		for (i=0; i<CRYPTO_num_locks(); i++)
-		{
 			InitSemaphore(&lock_cs[i]);
-		}
 
 		InitSemaphore(&__mem_cs);
 
@@ -556,7 +548,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 
 #ifdef __amigaos4__
 		if ((IntuitionBase = OpenLibrary("intuition.library", 50))
-            && (UtilityBase = OpenLibrary("utility.library", 50))
+      && (UtilityBase = OpenLibrary("utility.library", 50))
 			&& (LocaleBase = OpenLibrary("locale.library", 50))
 			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
 			&& (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
@@ -564,8 +556,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 			&& (locale = OpenLocale(NULL)))
 #else
 		if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
-		    && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-            && (UtilityBase = OpenLibrary("utility.library", 37))
+		  && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
+      && (UtilityBase = OpenLibrary("utility.library", 37))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
 			&& (locale = OpenLocale(NULL)))
 #endif
@@ -575,14 +567,14 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 						 * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 
 			GMTOffset = locale->loc_GMTOffset;
+      kprintf("GMTOffset: %ld\n", GMTOffset);
 
 			CloseLocale(locale);
 			err = 0;
 		}
 	}
 
-  kprintf("YEARH\n");
-	kprintf("Userlib res: %d\n",err);
+	kprintf("Userlib err: %d %08lx\n",err, SysBase);
 
 	if (err != 0)
 		CALL_LFUNC_NP(__UserLibCleanup, __BASE_OR_IFACE_VAR);

@@ -4890,6 +4890,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     }
     dataSeg += 0x7ffeu;
     child->dataSeg = dataSeg;
+    kprintf("Calling __UserLibInit(%08lx)\n", child);
     LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
     #endif // !__amigaos4__
 

@@ -5,6 +5,17 @@ AmiSSL Open Source - ChangeLog
 $Id$
 $URL$
 
+2015-09-03 Jens Maus <mail@jens-maus.de>
+
+  * libcmt/initialize_socket_errno: added AMISSL_STATE* parameter to not rely
+    on GetAmiSSLState() to retrieve the actual state. This should fix problems
+    when running amissl_vXXX_test on OS3 where the restore_a4 function wasn't
+    using a correct a6 and thus wasn't able to restore the correct a4. Now
+    the pointer to the correct state is directly supplied. Please note that this
+    is a slight woraround as probably we will meet this problem again at a later
+    time if another function in libcmt or openssl calls a baserel function of
+    amissl.
+
 2014-09-11 Thore Böckelmann <tboeckel@gmx.de>
 
   * misc: lots of changes to get at least amisslmaster.library built with the
