@@ -76,7 +76,7 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
-		//ret = InitAmiSSL(TAG_DONE);
+		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 
 		AmiSSLBase = base2;
@@ -87,7 +87,7 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
-		//ret = InitAmiSSL(TAG_DONE);
+		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 
 		AmiSSLBase = base1;
@@ -98,7 +98,7 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
-		//ret = InitAmiSSL(TAG_DONE);
+		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 
 		AmiSSLBase = base2;
@@ -109,7 +109,7 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
-		//ret = InitAmiSSL(TAG_DONE);
+		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 	}
 
