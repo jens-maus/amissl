@@ -10,9 +10,9 @@
 
 #if defined(BASEREL)
 #if defined(__amigaos3__)
-#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
 // restore the base relative data segment from the library base address in register a6
 // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
+#include "amissl_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 #endif // __amigaos3__
 #endif // BASEREL
