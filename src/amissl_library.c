@@ -243,12 +243,28 @@ static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
 	FreeVec(l);
 }
 
-static void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
+void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
 {
+  SHOWREGISTERS();
+
+  #if defined(DEBUG)
+  kprintf("amigaos_locking_callback(%ld, %ld, '%s', %ld), SysBase: %08lx\n", mode, type, file, line, SysBase);
+  #endif
+  
 	if(mode & CRYPTO_LOCK)
-		ObtainSemaphore(&(lock_cs[type]));
+  {
+    kprintf("lock_cs: %08lx %08lx %08lx %ld\n", lock_cs, &lock_cs[0], &lock_cs[9], &lock_cs[type], sizeof(*lock_cs));
+    kprintf("sizeof(lock_cs): %ld\n", sizeof(*lock_cs));
+    kprintf("obtain: %08lx\n", &lock_cs[type]);
+		ObtainSemaphore(&lock_cs[type]);
+  }
 	else
-		ReleaseSemaphore(&(lock_cs[type]));
+  {
+    kprintf("release: %08lx\n", &lock_cs[type]);
+		ReleaseSemaphore(&lock_cs[type]);
+  }
+
+  kprintf("amigaos_locking_callback() done\n");
 }
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)
@@ -530,7 +546,10 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 		int i;
 
 		for (i=0; i<CRYPTO_num_locks(); i++)
+    {
 			InitSemaphore(&lock_cs[i]);
+      kprintf("initialized lockcs[%ld]: %08lx\n", i, &lock_cs[i]);
+    }
 
 		InitSemaphore(&__mem_cs);
 
