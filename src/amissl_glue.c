@@ -10,6 +10,7 @@
 
 #if defined(BASEREL)
 #if defined(__amigaos3__)
+//#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
 // restore the base relative data segment from the library base address in register a6
 // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
 #include "amissl_base.h"
@@ -2330,6 +2331,7 @@ int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char *
 
 void SAVEDS ASM LIB_ERR_load_BIO_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
+  SHOWREGISTERS();
 	ERR_load_BIO_strings();
 }
 
