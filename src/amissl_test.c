@@ -4,7 +4,9 @@
 
 #include <proto/exec.h>
 #include <proto/amissl.h>
+#include <proto/amisslmaster.h>
 #include <libraries/amissl.h>
+#include <libraries/amisslmaster.h>
 #include <stdio.h>
 
 #if defined(__amigaos4__)
@@ -18,12 +20,15 @@
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 #define LIBNAME "amissl_v" MKSTR(VERSIONNAME) ".library"
+#define AMISSL_CURRENT_VERSION   AMISSL_V10x
 
 int main(void)
 {
 	struct Library *AmiSSLBase;
+  struct Library *AmiSSLMasterBase;
   #if defined(__amigaos4__)
   struct AmiSSLIFace *IAmiSSL;
+  struct AmiSSLMasterIFace *IAmiSSLMaster;
   #endif
 
 #if 1
@@ -125,6 +130,57 @@ int main(void)
 		CloseLibrary(base2);
   }
 	printf("multi base test finished\n");
+}
+#endif
+
+// lets perform a full-fledged amissl test case
+#if 1
+{
+  printf("\ncomplex amissl test\n");
+  if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library", 0)) != NULL &&
+     GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
+  {
+    printf("amisslmaster.library opened: %08lx\n", AmiSSLMasterBase);
+
+    if(InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+    {
+      printf("amisslmaster.library initialized\n");
+
+      if((AmiSSLBase = OpenAmiSSL()) != NULL &&
+         GETINTERFACE(IAmiSSL, AmiSSLBase))
+      {
+        char tmp[24+1];
+
+        printf("successfully opened AmiSSL library %d.%d (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
+
+        // initialize AmiSSL/OpenSSL related stuff
+        printf("initializing internal OpenSSL strings\n");
+        ERR_load_BIO_strings();
+        printf("1\n");
+        SSL_load_error_strings();
+        printf("2\n");
+        OpenSSL_add_all_algorithms();
+        printf("3\n");
+        SSL_library_init();
+        printf("4\n");
+
+        // seed the random number generator with some valuable entropy
+        printf("seed random number generator\n");
+        snprintf(tmp, sizeof(tmp), "%08lx%08lx%08lx", (unsigned long)time((time_t *)NULL), (unsigned long)FindTask(NULL), (unsigned long)rand());
+        RAND_seed(tmp, strlen(tmp));
+
+        // cleanup
+        CleanupAmiSSLA(NULL);
+        DROPINTERFACE(IAmiSSL);
+        CloseAmiSSL();
+        AmiSSLBase = NULL;
+      }
+    }
+
+    DROPINTERFACE(IAmiSSLMaster);
+    CloseLibrary(AmiSSLMasterBase);
+    AmiSSLMasterBase = NULL;
+  }
 }
 #endif
 

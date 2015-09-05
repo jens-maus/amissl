@@ -154,10 +154,16 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
 
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 {
+  kprintf("OpenAmiSSL called: %08lx %08lx\n", SysBase, AmiSSLBase);
+
+  kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
 	ObtainSemaphore(&AmiSSLMasterLock);
+  kprintf("Semaphore obtained\n");
 
 	if(LibAPIVersion == AMISSL_V10x)
   {
+    kprintf("about to open amissl v10x library\n");
+
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
     // known 1.0.X amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
@@ -229,6 +235,13 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 #endif
 		}
 	}
+  else
+    kprintf("ERROR: unknown LibAPI Version specified!\n");
+
+  if(AmiSSLBase != NULL)
+    kprintf("successfully opened AmiSSL library %ld.%ld (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
+  else
+    kprintf("ERROR: couldn't open amissl library: %08lx\n", AmiSSLBase);
 
 	ReleaseSemaphore(&AmiSSLMasterLock);
 
@@ -380,6 +393,8 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 {
+  kprintf("init AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
+
 	InitSemaphore(&AmiSSLMasterLock);
 
 	traceline();
