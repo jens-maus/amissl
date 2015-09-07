@@ -46,12 +46,12 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
 LIBPROTO(__UserLibCleanup, int, REG(a6, __BASE_OR_IFACE));
 LIBPROTO(__UserLibExpunge, int, REG(a6, __BASE_OR_IFACE));
 
-ULONG Obtain()
+ULONG VARARGS68K LIB_Obtain(struct AmiSSLIFace *Self)
 {
   return (ULONG)0;
 }
 
-ULONG Release()
+ULONG VARARGS68K LIB_Release(struct AmiSSLIFace *Self)
 {
   return (ULONG)0;
 }
@@ -203,8 +203,8 @@ struct Library *libInit(struct Library *LibraryBase, APTR seglist, struct Interf
 
 	if((libBase->segList = (BPTR)seglist))
 	{
-		struct Library *dosBase;
-		struct DOSIFace *idos;
+		struct Library *dosBase = NULL;
+		struct DOSIFace *idos = NULL;
 
 		IExec = (struct ExecIFace *)exec;
 		SysBase = (struct Library *)exec->Data.LibBase;
