@@ -949,7 +949,9 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     ULONG numRelocs;
     #endif
 
+    child->libBase.lib_Version = base->libBase.lib_Version;
     child->libBase.lib_Revision = base->libBase.lib_Revision;
+    child->libBase.lib_IdString = base->libBase.lib_IdString;
     child->libBase.lib_OpenCnt++;
     child->segList  = 0;
     child->sysBase  = base->sysBase;
