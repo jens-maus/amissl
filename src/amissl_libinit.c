@@ -8,7 +8,7 @@
 #include <proto/dos.h>
 #endif
 
-#if !defined( __amigaos4__)
+#if defined(__amigaos3__) && defined(__CLIB2__)
   #include <proto/mathieeedoubbas.h>
   #include <proto/mathieeedoubtrans.h>
 #endif
@@ -4622,7 +4622,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       MathIeeeDoubBasBase = OpenLibrary("mathieeedoubbas.library", 37);
       MathIeeeDoubTransBase = OpenLibrary("mathieeedoubtrans.library", 37);
       #endif
- 
+
       #if defined(MULTIBASE)
       #if defined(__amigaos3__)
       base->parent   = base;
@@ -4920,7 +4920,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->libBase.lib_Version      = base->libBase.lib_Version;
     child->libBase.lib_Revision     = base->libBase.lib_Revision;
     child->libBase.lib_IdString     = base->libBase.lib_IdString;
- 
+
     InitSemaphore(&child->libSem);
     child->parent   = base;
 
