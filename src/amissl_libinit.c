@@ -8,6 +8,11 @@
 #include <proto/dos.h>
 #endif
 
+#if !defined( __amigaos4__)
+  #include <proto/mathieeedoubbas.h>
+  #include <proto/mathieeedoubtrans.h>
+#endif
+
 //
 
 #include "amissl_lib_protos.h"
@@ -112,6 +117,13 @@ extern struct DosLibrary *DOSBase;
 #elif defined(__amigaos4__)
 extern struct Library * AMISSL_COMMON_DATA DOSBase;
 extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
+#endif
+
+#if defined(__amigaos3__) && defined(__CLIB2__)
+struct Library *__MathIeeeDoubBasBase = NULL;
+struct Library *__MathIeeeDoubTransBase = NULL;
+void __ctor_math_init(void);
+void __dtor_math_exit(void);
 #endif
 
 #if defined(DEBUG)
@@ -4606,6 +4618,11 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
       InitSemaphore(&base->libSem);
 
+      #if defined(__amigaos3__) && defined(__CLIB2__)
+      MathIeeeDoubBasBase = OpenLibrary("mathieeedoubbas.library", 37);
+      MathIeeeDoubTransBase = OpenLibrary("mathieeedoubtrans.library", 37);
+      #endif
+ 
       #if defined(MULTIBASE)
       #if defined(__amigaos3__)
       base->parent   = base;
@@ -4638,6 +4655,12 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #endif /* __amigaos3__ */
       #endif /* BASEREL */
       #endif /* MULTIBASE */
+
+      #if defined(__amigaos3__) && defined(__CLIB2__)
+      __MathIeeeDoubBasBase = MathIeeeDoubBasBase;
+      __MathIeeeDoubTransBase = MathIeeeDoubTransBase;
+      __ctor_math_init();
+      #endif
 
       // set the global base
       #if defined(DEBUG)
@@ -4684,6 +4707,16 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       }
       else
         callLibFunction(freeBase, base);
+
+      #if defined(__amigaos3__) && defined(__CLIB2__)
+      CloseLibrary(MathIeeeDoubTransBase);
+      MathIeeeDoubTransBase = NULL;
+      __MathIeeeDoubTransBase = NULL;
+
+      CloseLibrary(MathIeeeDoubBasBase);
+      MathIeeeDoubBasBase = NULL;
+      __MathIeeeDoubBasBase = NULL;
+      #endif
 
       #if defined(__amigaos4__) && defined(__NEWLIB__)
       if(NewlibBase)
