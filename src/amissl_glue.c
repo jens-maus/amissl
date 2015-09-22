@@ -9268,7 +9268,6 @@ int SAVEDS ASM LIB_RAND_pseudo_bytes(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, un
 
 void SAVEDS ASM LIB_RAND_seed(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const void * buf), REG(d0, int num))
 {
-  SHOWREGISTERS();
 	RAND_seed(buf, num);
 }
 

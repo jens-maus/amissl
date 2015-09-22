@@ -144,7 +144,6 @@ static ERR_STRING_DATA BIO_str_reasons[]=
 
 void ERR_load_BIO_strings(void)
 	{
-  SHOWREGISTERS();
 #ifndef OPENSSL_NO_ERR
 
 	if (ERR_func_error_string(BIO_str_functs[0].error) == NULL)
@@ -153,5 +152,4 @@ void ERR_load_BIO_strings(void)
 		ERR_load_strings(0,BIO_str_reasons);
 		}
 #endif
-kprintf("openssl: ERR_load_BIO_strings(): done\n");
 	}

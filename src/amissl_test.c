@@ -165,9 +165,9 @@ int main(void)
         printf("SSL_library_init() done.\n");
 
         // seed the random number generator with some valuable entropy
-        snprintf(tmp, sizeof(tmp), "%08lx%08lx%08lx", (unsigned long)FindTask(NULL), (unsigned long)FindTask(NULL), (unsigned long)FindTask(NULL));
+        snprintf(tmp, sizeof(tmp), "%08lx%08lx%08lx", (unsigned long)time((time_t *)NULL), (unsigned long)FindTask(NULL), (unsigned long)rand());
         printf("about to seed random number generator\n");
-        RAND_seed(tmp, sizeof(tmp)-1);
+        RAND_seed(tmp, strlen(tmp));
         printf("RAND_seed() done!\n");
 
         // cleanup
