@@ -77,6 +77,10 @@ static ULONG AMISSL_COMMON_DATA ThreadGroupID = 0;
 static ULONG AMISSL_COMMON_DATA clock_base = 0;
 static long AMISSL_COMMON_DATA SSLVersionApp = 0;
 
+// on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
+// implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
+// applied to non-static functions in this file. Thus, be careful to change
+// the static/non-static parameter of functions in here.
 #if defined(__amigaos3__)
 #if defined(MULTIBASE) && defined(BASEREL)
 #include "amissl_base.h"
@@ -243,28 +247,30 @@ static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
 	FreeVec(l);
 }
 
-void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
+static void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
 {
-  SHOWREGISTERS();
+  //SHOWREGISTERS();
 
   #if defined(DEBUG)
-  kprintf("amigaos_locking_callback(%ld, %ld, '%s', %ld), SysBase: %08lx\n", mode, type, file, line, SysBase);
+  //kprintf("amigaos_locking_callback(%ld, %ld, '%s', %ld), SysBase: %08lx\n", mode, type, file, line, SysBase);
   #endif
   
 	if(mode & CRYPTO_LOCK)
   {
+    /*
     kprintf("lock_cs: %08lx %08lx %08lx %ld\n", lock_cs, &lock_cs[0], &lock_cs[9], &lock_cs[type], sizeof(*lock_cs));
     kprintf("sizeof(lock_cs): %ld\n", sizeof(*lock_cs));
     kprintf("obtain: %08lx\n", &lock_cs[type]);
+    */
 		ObtainSemaphore(&lock_cs[type]);
   }
 	else
   {
-    kprintf("release: %08lx\n", &lock_cs[type]);
+    //kprintf("release: %08lx\n", &lock_cs[type]);
 		ReleaseSemaphore(&lock_cs[type]);
   }
 
-  kprintf("amigaos_locking_callback() done\n");
+  //kprintf("amigaos_locking_callback() done\n");
 }
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)

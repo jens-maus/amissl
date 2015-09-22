@@ -92,10 +92,12 @@ int RAND_set_rand_method(const RAND_METHOD *meth)
 
 const RAND_METHOD *RAND_get_rand_method(void)
 	{
+  SHOWREGISTERS();
 	if (!default_RAND_meth)
 		{
 #ifndef OPENSSL_NO_ENGINE
 		ENGINE *e = ENGINE_get_default_RAND();
+    SHOWREGISTERS();
 		if(e)
 			{
 			default_RAND_meth = ENGINE_get_RAND(e);
@@ -147,6 +149,7 @@ void RAND_cleanup(void)
 void RAND_seed(const void *buf, int num)
 	{
 	const RAND_METHOD *meth = RAND_get_rand_method();
+  SHOWREGISTERS();
 	if (meth && meth->seed)
 		meth->seed(buf,num);
 	}

@@ -43,6 +43,10 @@ struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
+// on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
+// implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
+// applied to non-static functions in this file. Thus, be careful to change
+// the static/non-static parameter of functions in here.
 #if defined(__amigaos3__)
 #if defined(MULTIBASE) && defined(BASEREL)
 #include "amisslmaster_base.h"

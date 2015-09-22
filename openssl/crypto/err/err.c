@@ -290,17 +290,12 @@ static int int_err_library_number= ERR_LIB_USER;
  * the defaults. */
 static void err_fns_check(void)
 	{
-  SHOWREGISTERS();
 	if (err_fns) return;
 	
-kprintf("before CRYPTO_w_lock(%ld)\n", CRYPTO_LOCK_ERR);
 	CRYPTO_w_lock(CRYPTO_LOCK_ERR);
-kprintf("CRYPTO_w_lock(%ld) done\n", CRYPTO_LOCK_ERR);
 	if (!err_fns)
 		err_fns = &err_defaults;
-kprintf("before CRYPTO_w_unlock(%ld)\n", CRYPTO_LOCK_ERR);
 	CRYPTO_w_unlock(CRYPTO_LOCK_ERR);
-kprintf("CRYPTO_w_unlock(%ld) done\n", CRYPTO_LOCK_ERR);
 	}
 
 /* API functions to get or set the underlying ERR functions. */
@@ -597,11 +592,7 @@ static void build_SYS_str_reasons(void)
 		return;
 		}
 
-  SHOWREGISTERS();
-
 	for (i = 1; i <= NUM_SYS_STR_REASONS; i++)
-		{
-    SHOWREGISTERS();
 		{
 		ERR_STRING_DATA *str = &SYS_str_reasons[i - 1];
 
@@ -620,15 +611,12 @@ static void build_SYS_str_reasons(void)
 		if (str->string == NULL)
 			str->string = "unknown";
 		}
-		}
 
 	/* Now we still have SYS_str_reasons[NUM_SYS_STR_REASONS] = {0, NULL},
 	 * as required by ERR_load_strings. */
 
 	init = 0;
 	
-  SHOWREGISTERS();
-
 	CRYPTO_w_unlock(CRYPTO_LOCK_ERR);
 	}
 #endif
@@ -965,7 +953,6 @@ const char *ERR_func_error_string(unsigned long e)
 	{
 	ERR_STRING_DATA d,*p;
 	unsigned long l,f;
-  SHOWREGISTERS();
 	err_fns_check();
 	l=ERR_GET_LIB(e);
 	f=ERR_GET_FUNC(e);

@@ -154,31 +154,37 @@ int main(void)
         printf("successfully opened AmiSSL library %d.%d (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
 
         // initialize AmiSSL/OpenSSL related stuff
-        printf("initializing internal OpenSSL strings\n");
+        printf("initializing internal OpenSSL strings:\n");
         ERR_load_BIO_strings();
-        printf("1\n");
+        printf("ERR_load_BIO_string() done.\n");
         SSL_load_error_strings();
-        printf("2\n");
+        printf("SSL_load_error_strings() done.\n");
         OpenSSL_add_all_algorithms();
-        printf("3\n");
+        printf("OpenSSL_add_all_algorithms() done.\n");
         SSL_library_init();
-        printf("4\n");
+        printf("SSL_library_init() done.\n");
 
         // seed the random number generator with some valuable entropy
-        printf("seed random number generator\n");
-        snprintf(tmp, sizeof(tmp), "%08lx%08lx%08lx", (unsigned long)time((time_t *)NULL), (unsigned long)FindTask(NULL), (unsigned long)rand());
-        RAND_seed(tmp, strlen(tmp));
+        snprintf(tmp, sizeof(tmp), "%08lx%08lx%08lx", (unsigned long)FindTask(NULL), (unsigned long)FindTask(NULL), (unsigned long)FindTask(NULL));
+        printf("about to seed random number generator\n");
+        RAND_seed(tmp, sizeof(tmp)-1);
+        printf("RAND_seed() done!\n");
 
         // cleanup
+        printf("starting cleanup\n");
         CleanupAmiSSLA(NULL);
+        printf("CleanupAmiSSLA() done!\n");
         DROPINTERFACE(IAmiSSL);
         CloseAmiSSL();
+        printf("CloseAmiSSL() done!\n");
         AmiSSLBase = NULL;
       }
     }
 
+    printf("About to close amisslmaster.library\n");
     DROPINTERFACE(IAmiSSLMaster);
     CloseLibrary(AmiSSLMasterBase);
+    printf("done.\n");
     AmiSSLMasterBase = NULL;
   }
 }

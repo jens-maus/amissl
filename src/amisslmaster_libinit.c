@@ -467,8 +467,12 @@ asm(".text                    \n\
 BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
 {
   BOOL success = FALSE;
-  struct Task *tc = FindTask(NULL); // retrieve the task structure for the current task
+  struct Task *tc;
   ULONG stackleft;
+
+  // retrieve the task structure for the
+  // current task
+  tc = FindTask(NULL); // retrieve the task structure for the current task
 
   #if defined(__MORPHOS__)
   ULONG stacksize;
@@ -641,8 +645,17 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
   SysBase = (APTR)sb;
 
-  base->libBase.lib_Version = LIB_VERSION;
-  base->libBase.lib_Revision = LIB_REVISION;
+  // cleanup the library header structure beginning with the
+  // library base.
+  base->libBase.lib_Node.ln_Type = NT_LIBRARY;
+  base->libBase.lib_Node.ln_Pri  = 0;
+  base->libBase.lib_Node.ln_Name = (char *)UserLibName;
+  base->libBase.lib_Flags        = LIBF_CHANGED | LIBF_SUMUSED;
+  base->libBase.lib_Version      = LIB_VERSION;
+  base->libBase.lib_Revision     = LIB_REVISION;
+  base->libBase.lib_IdString     = (char *)(UserLibID+6);
+
+  // set some important member variables
   base->sysBase = &sb->LibNode;
   base->segList = librarySegment;
 
@@ -709,6 +722,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #if defined(BASEREL)
       #if defined(__amigaos3__)
       base->a4 = __GetA4();//__GetBSSSeg();
+      kprintf("a4 %08lx\n", base->a4);
       #endif /* __amigaos3__ */
       #endif /* BASEREL */
       #endif /* MULTIBASE */
@@ -949,12 +963,17 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     ULONG numRelocs;
     #endif
 
-    child->libBase.lib_Version = base->libBase.lib_Version;
-    child->libBase.lib_Revision = base->libBase.lib_Revision;
-    child->libBase.lib_IdString = base->libBase.lib_IdString;
     child->libBase.lib_OpenCnt++;
-    child->segList  = 0;
-    child->sysBase  = base->sysBase;
+
+    // lets clone the child library header
+    child->libBase.lib_Node.ln_Type = NT_LIBRARY;
+    child->libBase.lib_Node.ln_Pri  = 0;
+    child->libBase.lib_Node.ln_Name = base->libBase.lib_Node.ln_Name;
+    child->libBase.lib_Flags        = LIBF_CHANGED | LIBF_SUMUSED;
+    child->libBase.lib_Version      = base->libBase.lib_Version;
+    child->libBase.lib_Revision     = base->libBase.lib_Revision;
+    child->libBase.lib_IdString     = base->libBase.lib_IdString;
+
     InitSemaphore(&child->libSem);
     child->parent   = base;
 

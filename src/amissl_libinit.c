@@ -114,7 +114,9 @@ extern struct Library * AMISSL_COMMON_DATA DOSBase;
 extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 #endif
 
+#if defined(DEBUG)
 struct LibraryHeader *globalBase = NULL;
+#endif
 
 #define LIBNAME        "amissl_v" MKSTR(VERSIONNAME) ".library"
 #define LIB_VERSION    VERSION
@@ -4377,8 +4379,12 @@ asm(".text                    \n\
 BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
 {
   BOOL success = FALSE;
-  struct Task *tc = FindTask(NULL); // retrieve the task structure for the current task
+  struct Task *tc;
   ULONG stackleft;
+
+  // retrieve the task structure for the
+  // current task
+  tc = FindTask(NULL); // retrieve the task structure for the current task
 
   #if defined(__MORPHOS__)
   ULONG stacksize;
@@ -4551,129 +4557,154 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
   SysBase = (APTR)sb;
 
-  #if defined(__amigaos3__)
-  kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
-  kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
-  #endif
+  // cleanup the library header structure beginning with the
+  // library base.
+  base->libBase.lib_Node.ln_Type = NT_LIBRARY;
+  base->libBase.lib_Node.ln_Pri  = 0;
+  base->libBase.lib_Node.ln_Name = (char *)UserLibName;
+  base->libBase.lib_Flags        = LIBF_CHANGED | LIBF_SUMUSED;
+  base->libBase.lib_Version      = LIB_VERSION;
+  base->libBase.lib_Revision     = LIB_REVISION;
+  base->libBase.lib_IdString     = (char *)(UserLibID+6);
 
-  // make sure that this is really a 68020+ machine if optimized for 020+
-  #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
-  if((SysBase->AttnFlags & AFF_68020) == 0)
+  // set some important member variables
+  base->sysBase = &sb->LibNode;
+  base->segList = librarySegment;
+
+  // if LibInit() is called with librarySegment == 0 then we
+  // can skip all the library init stuff and return the base pointer right away.
+  if(base->segList != 0)
   {
-    DeleteLibrary(&base->libBase);
-    return(NULL);
-  }
-  #endif
+    kprintf("LIBINIT(%08lx, %08lx, %08lx)\n", base, librarySegment, sb);
 
-  #if defined(__amigaos4__) && defined(__NEWLIB__)
-  if((NewlibBase = OpenLibrary("newlib.library", 3)) &&
-     GETINTERFACE(INewlib, NewlibBase))
-  #endif
-  {
-    BOOL success;
-
-    #if defined(DEBUG)
-    // this must be called ahead of any debug output, otherwise we get stuck
-    InitDebug();
+    #if defined(__amigaos3__)
+    kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
+    kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
     #endif
-    D(DBF_STARTUP, "LibInit()");
 
-    base->libBase.lib_Version = LIB_VERSION;
-    base->libBase.lib_Revision = LIB_REVISION;
-    base->segList = librarySegment;
-    base->sysBase = &sb->LibNode;
-
-    InitSemaphore(&base->libSem);
-
-    #if defined(MULTIBASE)
-    #if defined(__amigaos3__)
-    base->parent   = base;
-    base->dataSeg  = __GetDataSeg();
-    base->dataSize = __GetDataBSSSize();
-    #endif /* __amigaos3__ */
-    #if defined(__amigaos4__)
-    if((DOSBase = OpenLibrary("dos.library", 52)))
-      IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
-
-    if((base->ElfBase = OpenLibrary("elf.library",52)))
-      base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
-
-    if(IDOS && base->IElf)
+    // make sure that this is really a 68020+ machine if optimized for 020+
+    #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
+    if((SysBase->AttnFlags & AFF_68020) == 0)
     {
-      GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
-      if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
-      {
-        base->parent = base;
-        kprintf("OpenElfTags success!\n");
-      }
-      else
-        kprintf("OpenElfTags NO success!\n");
+      DeleteLibrary(&base->libBase);
+      return(NULL);
     }
-    #endif /* __amigaos4__ */
-    #if defined(BASEREL)
-    #if defined(__amigaos3__)
-    base->a4 = __GetA4();//__GetBSSSeg();
-    kprintf("a4 %08lx\n", base->a4);
-    #endif /* __amigaos3__ */
-    #endif /* BASEREL */
-    #endif /* MULTIBASE */
-
-    // set the global base
-    globalBase = base;
-
-    // If we are not running on AmigaOS4 (no stackswap required) we go and
-    // do an explicit StackSwap() in case the user wants to make sure we
-    // have enough stack for his user functions
-    kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-    kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
-    success = callLibFunction(initBase, base);
-    kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-
-    // check if everything worked out fine
-    if(success != FALSE)
-    {
-      // everything was successfully so lets
-      // set the initialized value and contiue
-      // with the class open phase
-      kprintf("success\n");
-
-      #if defined(__amigaos3__) && 0
-      kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
-      kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
-      kprintf("dbsize     %ld %08lx\n", __dbsize(), __dbsize());
-      kprintf("a4_init    %08lx %08lx\n", __a4_init, &__a4_init);
-      kprintf("relocs     %08lx %08lx\n", __datadata_relocs, &__datadata_relocs);
-      kprintf("stext      %08lx %08lx\n", _stext, &_stext);
-      kprintf("etext      %08lx %08lx\n", _etext, &_etext);
-      kprintf("sdata      %08lx %08lx\n", _sdata, &_sdata);
-      kprintf("edata      %08lx %08lx\n", _edata, &_edata);
-      kprintf("data size  %08lx %ld\n", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
-      #endif
-
-      // return the library base as success
-      return base;
-    }
-    else
-    {
-      callLibFunction(freeBase, base);
-    }
+    #endif
 
     #if defined(__amigaos4__) && defined(__NEWLIB__)
-    if(NewlibBase)
-    {
-      DROPINTERFACE(INewlib);
-      CloseLibrary(NewlibBase);
-      NewlibBase = NULL;
-    }
+    if((NewlibBase = OpenLibrary("newlib.library", 3)) &&
+       GETINTERFACE(INewlib, NewlibBase))
     #endif
+    {
+      BOOL success;
+
+      #if defined(DEBUG)
+      // this must be called ahead of any debug output, otherwise we get stuck
+      InitDebug();
+      #endif
+      D(DBF_STARTUP, "LibInit()");
+
+      InitSemaphore(&base->libSem);
+
+      #if defined(MULTIBASE)
+      #if defined(__amigaos3__)
+      base->parent   = base;
+      base->dataSeg  = __GetDataSeg();
+      base->dataSize = __GetDataBSSSize();
+      #endif /* __amigaos3__ */
+      #if defined(__amigaos4__)
+      if((DOSBase = OpenLibrary("dos.library", 52)))
+        IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
+
+      if((base->ElfBase = OpenLibrary("elf.library",52)))
+        base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
+
+      if(IDOS != NULL && base->IElf != NULL)
+      {
+        GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
+        if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
+        {
+          base->parent = base;
+          kprintf("OpenElfTags success!\n");
+        }
+        else
+          kprintf("OpenElfTags NO success!\n");
+      }
+      #endif /* __amigaos4__ */
+      #if defined(BASEREL)
+      #if defined(__amigaos3__)
+      base->a4 = __GetA4();//__GetBSSSeg();
+      kprintf("a4 %08lx\n", base->a4);
+      #endif /* __amigaos3__ */
+      #endif /* BASEREL */
+      #endif /* MULTIBASE */
+
+      // set the global base
+      #if defined(DEBUG)
+      globalBase = base;
+      #endif
+
+      // If we are not running on AmigaOS4 (no stackswap required) we go and
+      // do an explicit StackSwap() in case the user wants to make sure we
+      // have enough stack for his user functions
+      #if defined(DEBUG)
+      kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+      kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+      kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+      #endif
+      success = callLibFunction(initBase, base);
+      #if defined(DEBUG)
+      kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+      kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+      #endif
+
+      // check if everything worked out fine
+      if(success != FALSE)
+      {
+        // everything was successfully so lets
+        // set the initialized value and contiue
+        // with the class open phase
+        kprintf("success: %08lx\n", base);
+
+        #if defined(__amigaos3__) && 0
+        kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
+        kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
+        kprintf("dbsize     %ld %08lx\n", __dbsize(), __dbsize());
+        kprintf("a4_init    %08lx %08lx\n", __a4_init, &__a4_init);
+        kprintf("relocs     %08lx %08lx\n", __datadata_relocs, &__datadata_relocs);
+        kprintf("stext      %08lx %08lx\n", _stext, &_stext);
+        kprintf("etext      %08lx %08lx\n", _etext, &_etext);
+        kprintf("sdata      %08lx %08lx\n", _sdata, &_sdata);
+        kprintf("edata      %08lx %08lx\n", _edata, &_edata);
+        kprintf("data size  %08lx %ld\n", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
+        #endif
+
+        // return the library base as success
+        return base;
+      }
+      else
+        callLibFunction(freeBase, base);
+
+      #if defined(__amigaos4__) && defined(__NEWLIB__)
+      if(NewlibBase)
+      {
+        DROPINTERFACE(INewlib);
+        CloseLibrary(NewlibBase);
+        NewlibBase = NULL;
+      }
+      #endif
+    }
+
+    kprintf("failure\n");
+
+    DeleteLibrary(&base->libBase);
+    return NULL;
   }
-
-  kprintf("failure\n");
-
-  DeleteLibrary(&base->libBase);
-  return NULL;
+  else
+  {
+    kprintf("segList == NULL, libbase: %08lx\n", base);
+    return base;
+  }
 #ifdef __AROS__
     AROS_USERFUNC_EXIT
 #endif
@@ -4802,10 +4833,14 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   struct LibraryHeader *child = NULL;
   #endif
 
+  kprintf("LIBOPEN(%ld, %08lx), opencnt: %ld\n", version, base, base->libBase.lib_OpenCnt);
+
   D(DBF_STARTUP, "LibOpen(): %ld", base->libBase.lib_OpenCnt);
+  #if defined(DEBUG)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
   kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  #endif
 
   // LibOpen(), LibClose() and LibExpunge() are called while the system is in
   // Forbid() state. That means that these functions should be quick and should
@@ -4842,12 +4877,17 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     ULONG numRelocs;
     #endif
 
-    child->libBase.lib_Version = base->libBase.lib_Version;
-    child->libBase.lib_Revision = base->libBase.lib_Revision;
-    child->libBase.lib_IdString = base->libBase.lib_IdString;
     child->libBase.lib_OpenCnt++;
-    child->segList  = 0;
-    child->sysBase  = base->sysBase;
+
+    // lets clone the child library header
+    child->libBase.lib_Node.ln_Type = NT_LIBRARY;
+    child->libBase.lib_Node.ln_Pri  = 0;
+    child->libBase.lib_Node.ln_Name = base->libBase.lib_Node.ln_Name;
+    child->libBase.lib_Flags        = LIBF_CHANGED | LIBF_SUMUSED;
+    child->libBase.lib_Version      = base->libBase.lib_Version;
+    child->libBase.lib_Revision     = base->libBase.lib_Revision;
+    child->libBase.lib_IdString     = base->libBase.lib_IdString;
+ 
     InitSemaphore(&child->libSem);
     child->parent   = base;
 
@@ -4919,9 +4959,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   // unprotect
   ReleaseSemaphore(&base->libSem);
 
+  #if defined(DEBUG)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
   kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  #endif
 
   return res;
 #ifdef __AROS__
@@ -4952,9 +4994,11 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   BPTR rc = 0;
 
   D(DBF_STARTUP, "LibClose(): %ld", base->libBase.lib_OpenCnt);
+  #if defined(DEBUG)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
   kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  #endif
 
   // free all our private data and stuff.
   ObtainSemaphore(&base->libSem);
@@ -5015,9 +5059,11 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     #endif
   }
 
+  #if defined(DEBUG)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
   kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  #endif
 
   return rc;
 #ifdef __AROS__

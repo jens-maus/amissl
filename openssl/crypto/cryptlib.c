@@ -560,7 +560,6 @@ unsigned long CRYPTO_thread_id(void)
 
 void CRYPTO_lock(int mode, int type, const char *file, int line)
 	{
-  SHOWREGISTERS();
 
 #ifdef LOCK_DEBUG
 		{
@@ -603,10 +602,7 @@ void CRYPTO_lock(int mode, int type, const char *file, int line)
 		}
 	else
 		if (locking_callback != NULL)
-    {
-      SHOWREGISTERS();
 			locking_callback(mode,type,file,line);
-    }
 	}
 
 int CRYPTO_add_lock(int *pointer, int amount, int type, const char *file,
