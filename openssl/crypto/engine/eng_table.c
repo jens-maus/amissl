@@ -245,7 +245,7 @@ ENGINE *engine_table_select_tmp(ENGINE_TABLE **table, int nid, const char *f, in
 	ENGINE *ret = NULL;
 	ENGINE_PILE tmplate, *fnd=NULL;
 	int initres, loop = 0;
-
+SHOWREGISTERS();
 	if(!(*table))
 		{
 #ifdef ENGINE_TABLE_DEBUG

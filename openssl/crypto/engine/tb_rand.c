@@ -101,12 +101,16 @@ int ENGINE_set_default_RAND(ENGINE *e)
  * references). */
 ENGINE *ENGINE_get_default_RAND(void)
 	{
+	ENGINE *e = engine_table_select(&rand_table, dummy_nid);
+  SHOWREGISTERS();
+  kprintf("ENGINE: '%s'\n", e->id);
 	return engine_table_select(&rand_table, dummy_nid);
 	}
 
 /* Obtains an RAND implementation from an ENGINE functional reference */
 const RAND_METHOD *ENGINE_get_RAND(const ENGINE *e)
 	{
+  SHOWREGISTERS();
 	return e->rand_meth;
 	}
 

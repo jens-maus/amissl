@@ -174,6 +174,7 @@ RAND_METHOD rand_ssleay_meth={
 
 RAND_METHOD *RAND_SSLeay(void)
 	{
+  SHOWREGISTERS();
 	return(&rand_ssleay_meth);
 	}
 
@@ -191,6 +192,8 @@ static void ssleay_rand_cleanup(void)
 
 static void ssleay_rand_add(const void *buf, int num, double add)
 	{
+SHOWREGISTERS();
+  {
 	int i,j,k,st_idx;
 	long md_c[2];
 	unsigned char local_md[MD_DIGEST_LENGTH];
@@ -326,11 +329,21 @@ SHOWREGISTERS();
 #if !defined(OPENSSL_THREADS) && !defined(OPENSSL_SYS_WIN32)
 	assert(md_c[1] == md_count[1]);
 #endif
+  }
 	}
+
+static void test1()
+{
+  SHOWREGISTERS();
+  kprintf("test1()\n");
+}
 
 static void ssleay_rand_seed(const void *buf, int num)
 	{
+  SHOWREGISTERS();
+  test1();
 	ssleay_rand_add(buf, num, (double)num);
+  kprintf("JOPP\n");
 	}
 
 int ssleay_rand_bytes(unsigned char *buf, int num, int pseudo, int lock)
