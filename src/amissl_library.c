@@ -188,7 +188,8 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
 	AMISSL_STATE *ret;
-	kprintf("%s %08lx\n", __FUNCTION__, SysBase);
+  SHOWREGISTERS();
+	kprintf("%s SysBase: %08lx\n", __FUNCTION__, SysBase);
 	SB_ObtainSemaphore(&openssl_cs);
 	kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
 	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
@@ -200,13 +201,18 @@ STDARGS AMISSL_STATE *GetAmiSSLState(void)
 
 STDARGS void SetAmiSSLerrno(int err)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
+	AMISSL_STATE *p;
+  SHOWREGISTERS();
+
+  p = GetAmiSSLState();
 	*p->errno_ptr = err;
 }
 
 STDARGS int GetAmiSSLerrno(void)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
+	AMISSL_STATE *p;
+  SHOWREGISTERS();
+  p = GetAmiSSLState();
 	return *p->errno_ptr;
 }
 
@@ -381,6 +387,8 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED struct TagItem *tagList))
 {
 	AMISSL_STATE *state;
+
+  SHOWREGISTERS();
 
 	if((state = GetAmiSSLState()))
 	{

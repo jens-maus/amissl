@@ -4613,6 +4613,7 @@ void SAVEDS ASM LIB_ERR_print_errors(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BI
 
 void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int num), REG(a0, va_list args))
 {
+  SHOWREGISTERS();
 	ERR_add_error_vdata(num, args);
 }
 

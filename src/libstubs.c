@@ -335,10 +335,15 @@ int BIO_printf( BIO *bio, const char *format, ... )
 int BIO_snprintf( char *buf, size_t n, const char *format, ... )
 { return BIO_vsnprintf(buf, n, format, (long *)((ULONG)&format + sizeof(const char *))); }
 
-
 #undef ERR_add_error_data
 void ERR_add_error_data(int num, ...)
-{ ERR_add_error_vdata(num, (long*)((ULONG)&num + sizeof(int))); }
+{
+  va_list args;
+  SHOWREGISTERS();
+  va_start(args, num);
+  ERR_add_error_vdata(num, args);
+  va_end(args);
+}
 
 #endif
 #endif
