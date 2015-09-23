@@ -1,6 +1,8 @@
+* "amisslmaster.library"
+* Automatically generated FD (sfdc 1.5)! Do not edit!
 ##base _AmiSSLMasterBase
-##public
 ##bias 30
+##public
 InitAmiSSLMaster(APIVersion,UsesOpenSSLStructs)(d0,d1)
 OpenAmiSSL()()
 CloseAmiSSL()()

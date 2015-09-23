@@ -1,67 +1,34 @@
+/* Automatically generated header (sfdc 1.5)! Do not edit! */
+
 #ifndef PROTO_AMISSL_H
 #define PROTO_AMISSL_H
 
-/*
-**	$Id$
-**
-**	Prototype/inline/pragma header file combo
-**
-**	Copyright (c) 2010 Hyperion Entertainment CVBA.
-**	All Rights Reserved.
-*/
+#include <clib/amissl_protos.h>
 
-#ifndef EXEC_TYPES_H
-#include <exec/types.h>
-#endif
-#ifndef DOS_DOS_H
-#include <dos/dos.h>
-#endif
-#ifndef AMISSL_AMISSL_H
-#include <amissl/amissl.h>
-#endif
-
-/****************************************************************************/
-
-#ifndef __NOLIBBASE__
- #ifndef __USE_BASETYPE__
-  extern struct Library * AmiSSLBase;
- #else
-  extern struct Library * AmiSSLBase;
- #endif /* __USE_BASETYPE__ */
-#endif /* __NOLIBBASE__ */
-
-/****************************************************************************/
+#ifndef _NO_INLINE
+# if defined(__GNUC__)
+#  ifdef __AROS__
+#   include <defines/amissl.h>
+#  else
+#   include <inline/amissl.h>
+#  endif
+# else
+#  include <pragmas/amissl_pragmas.h>
+# endif
+#endif /* _NO_INLINE */
 
 #ifdef __amigaos4__
- #include <interfaces/amissl.h>
- #ifdef __USE_INLINE__
-  #include <inline4/amissl.h>
- #endif /* __USE_INLINE__ */
- #ifndef CLIB_AMISSL_PROTOS_H
-  #define CLIB_AMISSL_PROTOS_H 1
- #endif /* CLIB_AMISSL_PROTOS_H */
- #ifndef __NOGLOBALIFACE__
-  extern struct AmiSSLIFace *IAmiSSL;
- #endif /* __NOGLOBALIFACE__ */
-#else /* __amigaos4__ */
- #ifndef CLIB_AMISSL_PROTOS_H
-  #include <clib/amissl_protos.h>
- #endif /* CLIB_AMISSL_PROTOS_H */
- #if defined(__GNUC__)
-  #ifndef __PPC__
-   #include <inline/amissl.h>
-  #else /* __PPC__ */
-   #include <ppcinline/amissl.h>
-  #endif /* __PPC__ */
- #elif defined(__VBCC__)
-  #ifndef __PPC__
-   #include <inline/amissl_protos.h>
-  #endif /* __PPC__ */
- #else /* __GNUC__ */
-  #include <pragmas/amissl_pragmas.h>
- #endif /* __GNUC__ */
-#endif /* __amigaos4__ */
+# include <interfaces/amissl.h>
+# ifndef __NOGLOBALIFACE__
+   extern struct AmiSSLIFace *IAmiSSL;
+# endif /* __NOGLOBALIFACE__*/
+#endif /* !__amigaos4__ */
+#ifndef __NOLIBBASE__
+  extern struct Library *
+# ifdef __CONSTLIBBASEDECL__
+   __CONSTLIBBASEDECL__
+# endif /* __CONSTLIBBASEDECL__ */
+  AmiSSLBase;
+#endif /* !__NOLIBBASE__ */
 
-/****************************************************************************/
-
-#endif /* PROTO_AMISSL_H */
+#endif /* !PROTO_AMISSL_H */

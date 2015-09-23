@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.4)! Do not edit! */
+/* Automatically generated header (sfdc 1.5)! Do not edit! */
 
 #ifndef CLIB_AMISSL_PROTOS_H
 #define CLIB_AMISSL_PROTOS_H
@@ -679,6 +679,7 @@ const char * ERR_func_error_string(unsigned long e);
 const char * ERR_reason_error_string(unsigned long e);
 void ERR_print_errors_cb(int (*cb)(const char *str,size_t len,void *u), void * u);
 void ERR_print_errors(BIO * bp);
+void ERR_add_error_vdata(int num, va_list args);
 void ERR_add_error_data(int num, long dummy, ...);
 void ERR_load_strings(int lib, ERR_STRING_DATA * str);
 void ERR_unload_strings(int lib, ERR_STRING_DATA * str);

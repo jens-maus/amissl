@@ -3,12 +3,9 @@
 ==basetype struct Library *
 ==libname amisslmaster.library
 ==include <exec/types.h>
-==include <utility/tagitem.h>
 ==bias 30
-==public
 LONG InitAmiSSLMaster(LONG APIVersion, LONG UsesOpenSSLStructs) (d0,d1)
 struct Library * OpenAmiSSL() ()
 void CloseAmiSSL() ()
 struct Library * OpenAmiSSLCipher(LONG Cipher) (d0)
 void CloseAmiSSLCipher(struct Library * CipherBase) (a0)
-==end

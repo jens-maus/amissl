@@ -14,6 +14,7 @@
 #include <proto/amissl.h>
 #include <proto/amisslmaster.h>
 #include <proto/socket.h>
+
 #include <amissl/amissl.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
@@ -24,9 +25,11 @@ static int ConnectToServer(char *, short, char *, short);
 
 struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
 
+#if defined(__amigaos4__)
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct AmiSSLIFace *IAmiSSL;
 struct SocketIFace *ISocket;
+#endif
 
 #ifndef __amigaos4__
 #define GetInterface(a, b, c, d) 1
@@ -110,19 +113,18 @@ int main(int argc, char *argv[])
 					SSL_set_fd(ssl, sock);
 
 					/* Perform SSL handshake */
-					if ((ssl_err = SSL_connect(ssl)) >= 0)
+					if((ssl_err = SSL_connect(ssl)) >= 0)
 					{
 						Printf("SSL connection using %s\n", SSL_get_cipher(ssl));
 
 						/* Certificate checking. This example is *very* basic */
-						if (server_cert = SSL_get_peer_certificate(ssl))
+						if((server_cert = SSL_get_peer_certificate(ssl)))
 						{
 							char *str;
 
 							Printf("Server certificate:\n");
 
-							if (str = X509_NAME_oneline(X509_get_subject_name(server_cert),
-							                            0, 0))
+							if((str = X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0)))
 							{
 								Printf("\tSubject: %s\n", str);
 								OPENSSL_free(str);
@@ -206,29 +208,37 @@ static BOOL Init(void)
 
 	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
 		FPrintf(GetStdErr(), "Couldn't open bsdsocket.library v4!\n");
+#if defined(__amigaos4__)
 	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
 		FPrintf(GetStdErr(), "Couldn't get Socket interface!\n");
+#endif
 	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 	                                          AMISSLMASTER_MIN_VERSION)))
 		FPrintf(GetStdErr(), "Couldn't open amisslmaster.library v"
 		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
+#if defined(__amigaos4__)
 	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,
 	                                                                    "main", 1, NULL)))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSLMaster interface!\n");
+#endif
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
 		FPrintf(GetStdErr(), "AmiSSL version is too old!\n");
 	else if (!(AmiSSLBase = OpenAmiSSL()))
 		FPrintf(GetStdErr(), "Couldn't open AmiSSL!\n");
+#if defined(__amigaos4__)
 	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase,
 	                                                        "main", 1, NULL)))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSL interface!\n");
+#endif
+#if defined(__amigaos4__)
 	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-#ifdef __amigaos4__
 	                    AmiSSL_ISocket, ISocket,
-#else /* __amigaos4__ */
-	                    AmiSSL_SocketBase, SocketBase,
-#endif /* __amigaos4__ */
 	                    TAG_DONE) != 0)
+#else
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+	                    AmiSSL_SocketBase, SocketBase,
+	                    TAG_DONE) != 0)
+#endif
 		FPrintf(GetStdErr(), "Couldn't initialize AmiSSL!\n");
 	else
 		is_ok = TRUE;
@@ -243,25 +253,31 @@ static void Cleanup(void)
 {
 	if (AmiSSLBase)
 	{
+    #if defined(__amigaos4__)
 		if (IAmiSSL)
 		{
 			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
 			IAmiSSL = NULL;
 		}
+    #endif
 
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
 
+  #if defined(__amigaos4__)
 	DropInterface((struct Interface *)IAmiSSLMaster);
 	IAmiSSLMaster = NULL;
+  #endif
 
 	CloseLibrary(AmiSSLMasterBase);
 	AmiSSLMasterBase = NULL;
 
+  #if defined(__amigaos4__)
 	DropInterface((struct Interface *)ISocket);
 	ISocket = NULL;
+  #endif
 
 	CloseLibrary(SocketBase);
 	SocketBase = NULL;

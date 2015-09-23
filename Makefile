@@ -160,6 +160,7 @@ PREFIX    = $(CDTHIS)
 OBJ_D     = $(PREFIX).obj_$(OS)
 BIN_D     = $(PREFIX)bin_$(OS)
 SRC_D     = $(PREFIX)src
+TEST_D    = $(PREFIX)test
 VPATH     = $(OBJ_D)
 GCCVER    = 4
 
@@ -368,7 +369,7 @@ LIBS = -L$(BIN_D)/openssl -lssl -lcrypto -L$(BIN_D) -lcmt
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test
+all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
 
 # make the object directory
 $(OBJ_D):
@@ -442,13 +443,29 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	@$(AR) r $@ $(OBJ_D)/libstubs.o
 	@$(RANLIB) $@
 
-$(BIN_D)/amisslmaster_test: $(SRC_D)/amisslmaster_test.c
+$(BIN_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
 	@echo "  CC/LD $@"
 	@$(CC) -o $@ -I./include $^
 
-$(BIN_D)/amissl_v$(VERSIONNAME)_test: $(SRC_D)/amissl_test.c
+## AMISSL TESTCASE BINARIES ##
+
+$(BIN_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
 	@$(CC) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
+
+$(BIN_D)/https: $(TEST_D)/https.c
+	@echo "  CC/LD $@"
+	$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+
+$(BIN_D)/uitest: $(TEST_D)/uitest.c
+	
+	@$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+
+$(BIN_D)/vatest: $(TEST_D)/vatest.c
+	@echo "  CC/LD $@"
+	@$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+
+## AMISSL AUTOINIT / LIBSTUBS ##
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"

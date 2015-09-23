@@ -330,8 +330,15 @@ LONG Printf( CONST_STRPTR format, ... )
 #undef BIO_printf
 int BIO_printf( BIO *bio, const char *format, ... )
 { return BIO_vprintf(bio, format, (long *)((ULONG)&format + sizeof(const char *))); }
+
 #undef BIO_snprintf
 int BIO_snprintf( char *buf, size_t n, const char *format, ... )
 { return BIO_vsnprintf(buf, n, format, (long *)((ULONG)&format + sizeof(const char *))); }
+
+
+#undef ERR_add_error_data
+void ERR_add_error_data(int num, ...)
+{ ERR_add_error_vdata(num, (long*)((ULONG)&num + sizeof(int))); }
+
 #endif
 #endif

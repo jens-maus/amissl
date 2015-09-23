@@ -1,13 +1,42 @@
---- amissl_glue.c	2014-07-10 11:15:22.691865718 +0200
-+++ amissl_glue.c_new	2014-07-10 11:15:12.756099791 +0200
-@@ -46,10 +46,12 @@
+--- amissl_glue.c_org	2015-09-23 11:24:12.036972892 +0200
++++ amissl_glue.c	2015-09-23 11:25:28.199807073 +0200
+@@ -10,33 +10,40 @@
+ 
+ #if defined(BASEREL)
+ #if defined(__amigaos3__)
+-#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
++//#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
+ // restore the base relative data segment from the library base address in register a6
+ // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
++#include "amissl_base.h"
+ static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
+ #endif // __amigaos3__
+ #endif // BASEREL
+ 
+ /***************************************************************************/
+ 
++#if 0
+ void SAVEDS ASM LIB_InternalInitAmiSSL(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, void * amisslinit))
+ {
+ 	InternalInitAmiSSL(amisslinit);
+ }
++#endif
  
  // ---
  
 +#if 0
- long LIB_InitAmiSSLA(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
+ long SAVEDS ASM LIB_InitAmiSSLA(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
  {
  	return InitAmiSSLA(tagList);
+ }
++#endif
+ 
+ // ---
+ 
++#if 0
+ long SAVEDS ASM LIB_CleanupAmiSSLA(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
+ {
+ 	return CleanupAmiSSLA(tagList);
  }
 +#endif
  

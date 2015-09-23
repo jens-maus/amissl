@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <openssl/ui.h>
 
-#if !defined(SAVEDS) && defined(__SASC)
+#if !defined(SAVEDS)
 #define SAVEDS __saveds
 #endif
 
