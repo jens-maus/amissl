@@ -117,12 +117,12 @@ void __init_amissl_main(void)
 			fatal_error("Couldn't obtain amissl interface\n");
 
 		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-		                        AmiSSL_ISocketPtr, &ISocket,
+		                        AmiSSL_ISocket, ISocket,
 		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
 		#else
 		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-		                        AmiSSL_SocketBase, &SocketBase,
+		                        AmiSSL_SocketBase, SocketBase,
 		                        TAG_DONE))
 			fatal_error("Couldn't initialize AmiSSL!\n");
 		#endif
