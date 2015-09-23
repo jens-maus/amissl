@@ -20,9 +20,6 @@
 #include <exec/interfaces.h>
 #endif
 
-#ifndef UTILITY_TAGITEM_H
-#include <utility/tagitem.h>
-#endif
 #include <interfaces/amisslmaster.h>
 
 /* Inline macros for Interface "main" */

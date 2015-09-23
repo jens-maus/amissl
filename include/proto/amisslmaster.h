@@ -13,9 +13,6 @@
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
 #endif
-#ifndef UTILITY_TAGITEM_H
-#include <utility/tagitem.h>
-#endif
 
 /****************************************************************************/
 

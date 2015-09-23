@@ -16,9 +16,6 @@
 #include <exec/interfaces.h>
 #endif
 
-#ifndef UTILITY_TAGITEM_H
-#include <utility/tagitem.h>
-#endif
 
 #ifdef __cplusplus
 #ifdef __USE_AMIGAOS_NAMESPACE__
