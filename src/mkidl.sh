@@ -36,5 +36,5 @@ sfdc --mode=macros ../include/sfd/amissl_lib.sfd -o ../include/inline/amissl.h
 sfdc --mode=macros ../include/sfd/amisslmaster_lib.sfd -o ../include/inline/amisslmaster.h
 sfdc --mode=pragmas ../include/sfd/amissl_lib.sfd -o ../include/pragmas/amissl_pragmas.h
 sfdc --mode=pragmas ../include/sfd/amisslmaster_lib.sfd -o ../include/pragmas/amisslmaster_pragmas.h
-sfdc --mode=proto ../include/sfd/amissl_lib.sfd -o ../include/proto/amissl.h
-sfdc --mode=proto ../include/sfd/amisslmaster_lib.sfd -o ../include/proto/amisslmaster.h
+#sfdc --mode=proto ../include/sfd/amissl_lib.sfd -o ../include/proto/amissl.h
+#sfdc --mode=proto ../include/sfd/amisslmaster_lib.sfd -o ../include/proto/amisslmaster.h
