@@ -451,19 +451,19 @@ $(BIN_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
 
 $(BIN_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
-	@$(CC) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
+	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
 
 $(BIN_D)/https: $(TEST_D)/https.c
 	@echo "  CC/LD $@"
-	$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 $(BIN_D)/uitest: $(TEST_D)/uitest.c
-	
-	@$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+
+	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 $(BIN_D)/vatest: $(TEST_D)/vatest.c
 	@echo "  CC/LD $@"
-	@$(CC) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 ## AMISSL AUTOINIT / LIBSTUBS ##
 
