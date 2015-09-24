@@ -182,19 +182,24 @@ int main(int argc, char *argv[])
 				else
 					FPrintf(GetStdErr(), "Couldn't connect to host!\n");
 
+        
+			  FPrintf(GetStdErr(), "before SSL_free()\n");
 				SSL_free(ssl);
 			}
 			else
 				FPrintf(GetStdErr(), "Couldn't create new SSL handle!\n");
 
+			FPrintf(GetStdErr(), "before SSL_CTX_free()\n");
 			SSL_CTX_free(ctx);
 		}
 		else
 			FPrintf(GetStdErr(), "Couldn't create new context!\n");
 
+	  FPrintf(GetStdErr(), "before Cleanup()\n");
 		Cleanup();
 	}
 
+	FPrintf(GetStdErr(), "before end of main()\n");
 	return(is_ok ? RETURN_OK : RETURN_ERROR);
 }
 
