@@ -369,8 +369,8 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 		if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
 			state->errno_ptr = errno_ptr;
 
-		kprintf("initialize socket errno: %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR);
-		initialize_socket_errno(GetAmiSSLState());
+		kprintf("initialize socket errno: %08lx %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR, state->SocketBase);
+		initialize_socket_errno(state);
 
 		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
