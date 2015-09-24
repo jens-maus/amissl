@@ -357,6 +357,7 @@ endif
 
 LIBOBJS = $(OBJ_D)/amissl_libinit.o \
           $(OBJ_D)/amissl_library.o \
+          $(OBJ_D)/amissl_norestore.o \
           $(OBJ_D)/amissl_init.o \
           $(EXTRALIBOBJS)
 

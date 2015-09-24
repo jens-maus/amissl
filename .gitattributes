@@ -2637,6 +2637,7 @@ src/amissl_libinit.c -text
 src/amissl_library.c eol=lf
 src/amissl_library_os4.c eol=lf
 src/amissl_m68k.c eol=lf
+src/amissl_norestore.c -text
 src/amissl_vectors.c eol=lf
 src/amissl_vectors.h -text
 src/amisslinit.h eol=lf

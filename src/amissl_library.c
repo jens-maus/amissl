@@ -185,37 +185,6 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 
 #endif
 
-STDARGS AMISSL_STATE *GetAmiSSLState(void)
-{
-	AMISSL_STATE *ret;
-  SHOWREGISTERS();
-	kprintf("%s SysBase: %08lx\n", __FUNCTION__, SysBase);
-	SB_ObtainSemaphore(&openssl_cs);
-	kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
-	ret = (AMISSL_STATE *)h_find(thread_hash, (long)SB_FindTask(NULL));
-	SB_ReleaseSemaphore(&openssl_cs);
-	kprintf("%s done\n", __FUNCTION__);
-
-	return ret;
-}
-
-STDARGS void SetAmiSSLerrno(int err)
-{
-	AMISSL_STATE *p;
-  SHOWREGISTERS();
-
-  p = GetAmiSSLState();
-	*p->errno_ptr = err;
-}
-
-STDARGS int GetAmiSSLerrno(void)
-{
-	AMISSL_STATE *p;
-  SHOWREGISTERS();
-  p = GetAmiSSLState();
-	return *p->errno_ptr;
-}
-
 struct CRYPTO_dynlock_value
 {
   struct SignalSemaphore lock_cs;

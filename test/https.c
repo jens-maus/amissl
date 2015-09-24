@@ -373,6 +373,8 @@ static int ConnectToServer(char *host, short port, char *proxy, short pport)
 			else
 				is_ok = TRUE;
 		}
+    else
+      FPrintf(GetStdErr(), "Couldn't connect to server\n");
 
 		if (!is_ok)
 		{
