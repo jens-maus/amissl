@@ -518,6 +518,9 @@ distclean: clean
 dump:
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amisslmaster.library > $(BIN_D)/amisslmaster.library.dump
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amissl_v$(VERSIONNAME).library > $(BIN_D)/amissl_v$(VERSIONNAME).library.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/https > $(BIN_D)/https.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/uitest > $(BIN_D)/uitest.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/vatest > $(BIN_D)/vatest.dump
 
 testing:
 	@echo "  LD $<"
