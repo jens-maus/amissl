@@ -153,6 +153,7 @@
   #define LFUNC_VAS(name) LIB_##name
   #define LFUNC_FA_(name) ,LIB_##name
   #define LFUNC_VA_(name) ,LIB_##name
+  #define LFUNC_NULL      ,NULL
   #define LFUNC(name)     LIB_##name
 #elif defined(__MORPHOS__)
   #define LIBFUNC
@@ -172,6 +173,7 @@
   #define LFUNC_VAS(name)
   #define LFUNC_FA_(name) ,LIBSTUB_##name
   #define LFUNC_VA_(name)
+  #define LFUNC_NULL      ,NULL
   #define LFUNC(name)     LIBSTUB_##name
 #else
   #define LIBFUNC SAVEDS ASM
@@ -189,6 +191,7 @@
   #define LFUNC_VAS(name)
   #define LFUNC_FA_(name) ,LIB_##name
   #define LFUNC_VA_(name)
+  #define LFUNC_NULL      ,NULL
   #define LFUNC(name)     LIB_##name
 #endif
 
