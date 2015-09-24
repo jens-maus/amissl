@@ -240,8 +240,8 @@ static const char UserLibID[]   = LIB_REV_STRING;
     LFUNC_FA_(ASN1_UTF8STRING_it) \
     LFUNC_FA_(ASN1_NULL_new) \
     LFUNC_FA_(ASN1_NULL_free) \
-    LFUNC_FA_(d2i_ASN1_LFUNC_NULL \
-    LFUNC_FA_(i2d_ASN1_LFUNC_NULL \
+    LFUNC_FA_(d2i_ASN1_NULL) \
+    LFUNC_FA_(i2d_ASN1_NULL) \
     LFUNC_FA_(ASN1_NULL_it) \
     LFUNC_FA_(ASN1_BMPSTRING_new) \
     LFUNC_FA_(ASN1_BMPSTRING_free) \
