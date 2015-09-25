@@ -9832,7 +9832,7 @@ STATIC void stub_main_ERR_add_error_vdata_PPC(uint32 *regarray)
 
 	Self->ERR_add_error_vdata(
 		(int)regarray[REG68K_D0/4],
-		(va_list)regarray[REG68K_A0/4]
+		(long *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_ERR_add_error_vdata = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ERR_add_error_vdata_PPC };

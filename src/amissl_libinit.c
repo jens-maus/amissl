@@ -22,6 +22,10 @@
 #include "amissl_base.h"
 #include "amissl_glue.h"
 
+#if defined(__amigaos4__)
+#include "amissl_vectors.h"
+#endif
+
 //
 
 #include <internal/debug.h>
