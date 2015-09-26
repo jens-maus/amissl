@@ -117,10 +117,10 @@ struct NewlibIFace* INewlib = NULL;
 struct ExecBase *SysBase = NULL;
 #endif
 #if defined(__amigaos3__)
-extern struct DosLibrary *DOSBase;
+extern struct DosLibrary *DOSBase = NULL;
 #elif defined(__amigaos4__)
-extern struct Library * AMISSL_COMMON_DATA DOSBase;
-extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
+extern struct Library * AMISSL_COMMON_DATA DOSBase = NULL;
+extern struct DOSIFace * AMISSL_COMMON_DATA IDOS = NULL;
 #endif
 
 #if defined(__amigaos3__) && defined(__CLIB2__)

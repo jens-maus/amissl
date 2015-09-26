@@ -107,10 +107,10 @@ struct NewlibIFace* INewlib = NULL;
 struct ExecBase *SysBase = NULL;
 #endif
 #if defined(__amigaos3__)
-extern struct DosLibrary *DOSBase;
+extern struct DosLibrary * DOSBase = NULL;
 #elif defined(__amigaos4__)
-extern struct Library * AMISSL_COMMON_DATA DOSBase;
-extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
+extern struct Library * AMISSL_COMMON_DATA DOSBase = NULL;
+extern struct DOSIFace * AMISSL_COMMON_DATA IDOS = NULL;
 #endif
 
 #if defined(DEBUG)
@@ -627,6 +627,7 @@ struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, 
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
+  kprintf("%s:%ld iexec: %08lx\n", __FUNCTION__, __LINE__, IExec);
 #elif defined(__MORPHOS__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {

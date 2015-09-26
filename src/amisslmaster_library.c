@@ -31,15 +31,15 @@ struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 
-struct Library *AmiSSLBase = NULL;
+struct Library * AMISSL_COMMON_DATA AmiSSLBase = NULL;
 #ifdef __amigaos4__
-struct AmiSSLIFace *IAmiSSL = NULL;
+struct AmiSSLIFace * AMISSL_COMMON_DATA IAmiSSL = NULL;
 #endif
 
-LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
-LONG LibUsesOpenSSLStructs = 0;
+LONG AMISSL_COMMON_DATA LibAPIVersion = AMISSL_CURRENT_VERSION;
+LONG AMISSL_COMMON_DATA LibUsesOpenSSLStructs = 0;
 
-struct SignalSemaphore AmiSSLMasterLock;
+struct SignalSemaphore AMISSL_COMMON_DATA AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
@@ -397,7 +397,7 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  kprintf("init AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
+	traceline();
 
 	InitSemaphore(&AmiSSLMasterLock);
 

@@ -5,13 +5,13 @@
 #define GETINTERFACE(iface, base)   (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
 #define DROPINTERFACE(iface)        (DropInterface((struct Interface *)iface), iface = NULL)
 
-struct Library *DOSBase = NULL;
-struct DOSIFace *IDOS = NULL;
+extern struct Library * AMISSL_COMMON_DATA DOSBase;
+extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 #else
 #define GETINTERFACE(iface, base)    TRUE
 #define DROPINTERFACE(iface)
 
-struct DosLibrary *DOSBase = NULL;
+extern struct DosLibrary *DOSBase;
 
 void kprintf(const char *,...);
 #endif
