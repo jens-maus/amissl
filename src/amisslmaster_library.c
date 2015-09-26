@@ -23,10 +23,6 @@
 #include <inline/macros.h>
 #endif
 
-#ifdef __amigaos4__
-struct ExecIFace * AMISSL_COMMON_DATA IExec;
-#endif
-
 struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;

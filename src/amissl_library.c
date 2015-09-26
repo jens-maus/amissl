@@ -44,6 +44,11 @@
 //#define DEBUG
 #include <internal/debug.h>
 
+struct Library * AMISSL_COMMON_DATA AmiSSLBase = NULL;
+#ifdef __amigaos4__
+struct AmiSSLIFace * AMISSL_COMMON_DATA IAmiSSL = NULL;
+#endif
+
 #ifdef __amigaos4__
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
@@ -66,7 +71,7 @@ LONG AMISSL_COMMON_DATA GMTOffset = 0;
 void * AMISSL_COMMON_DATA __pool = NULL;
 
 // keep a pointer to the library base;
-__BASE_OR_IFACE_TYPE AmiSSL = NULL;
+__BASE_OR_IFACE_TYPE AMISSL_COMMON_DATA AmiSSL = NULL;
 
 struct SignalSemaphore * AMISSL_COMMON_DATA lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
 struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
@@ -525,7 +530,6 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 #endif
 	{
 		struct Locale *locale;
-		struct DateStamp ds;
 		int i;
 
 		for (i=0; i<CRYPTO_num_locks(); i++)
@@ -564,7 +568,10 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 			&& (locale = OpenLocale(NULL)))
 #endif
 		{
+		  struct DateStamp ds;
+
 			DateStamp(&ds);
+
 			clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
 						 * CLOCKS_PER_SEC / TICKS_PER_SECOND;
 

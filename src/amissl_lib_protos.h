@@ -17,18 +17,18 @@
 #define __BASE_OR_IFACE			__BASE_OR_IFACE_TYPE __BASE_OR_IFACE_VAR
 
 #ifdef __amigaos4__
-LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
-LIBPROTOVA(CleanupAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE), ...);
+LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE_TYPE), ...);
+LIBPROTOVA(CleanupAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE_TYPE), ...);
 #endif /* __amigaos4__ */
 
-LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE));
-LIBPROTO(__UserLibExpunge, void, REG(a6, __BASE_OR_IFACE));
-LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE));
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE_TYPE));
+LIBPROTO(__UserLibExpunge, void, REG(a6, __BASE_OR_IFACE_TYPE));
+LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE_TYPE));
 
 struct LibraryHeader;
-ULONG freeBase(struct LibraryHeader *lib);
-ULONG initBase(struct LibraryHeader *lib);
-ULONG closeBase(struct LibraryHeader *lib);
-ULONG openBase(struct LibraryHeader *lib);
+ULONG freeBase(struct LibraryHeader *);
+ULONG initBase(struct LibraryHeader *);
+ULONG closeBase(struct LibraryHeader *);
+ULONG openBase(struct LibraryHeader *);
 
 #endif /* _LIB_PROTOS_H */
