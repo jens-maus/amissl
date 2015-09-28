@@ -7,6 +7,9 @@
 #include "libcmt.h"
 #include <internal/amissl.h>
 
+extern struct MinList __filelist;
+extern struct SignalSemaphore FileListLock;
+
 int __fflush(FILE *stream) /* fflush exactly one file */
 {
 	long size,subsize;

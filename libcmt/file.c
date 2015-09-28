@@ -9,6 +9,11 @@
 #include <internal/amissl.h>
 #include "libcmt.h"
 
+struct MinList __filelist; /* list of open files (fflush() needs also access) */
+struct SignalSemaphore FileListLock;
+
+void __init_libcmt_file(void) __attribute__((constructor));
+
 FILE *freopen(const char *filename,const char *mode,FILE *stream)
 {
 	int error;
@@ -101,18 +106,12 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 	return stream;
 }
 
-struct MinList __filelist; /* list of open files (fflush() needs also access) */
-struct SignalSemaphore FileListLock;
-
-#ifdef __amigaos4__
-void __init_libcmt_file(void) __attribute__((constructor));
-
 void __init_libcmt_file(void)
 {
+  kprintf("%s:%ld %08lx %08lx\n", __FUNCTION__, __LINE__, &__filelist, &FileListLock);
 	NewList((struct List *)&__filelist);
 	InitSemaphore(&FileListLock);
 }
-#endif
 
 FILE *fopen(const char *name, const char *mode)
 {

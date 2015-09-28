@@ -16,6 +16,8 @@ extern struct DosLibrary *DOSBase;
 void kprintf(const char *,...);
 #endif
 
+void __init_libcmt_file(void);
+
 /***********************************************************************/
 
 ULONG freeBase(UNUSED struct LibraryHeader *lib)
@@ -71,6 +73,10 @@ ULONG openBase(struct LibraryHeader *lib)
     #if defined(__amigaos3__)
     kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
     #endif
+
+    // initialze the libcmt file i/o stuff
+    __init_libcmt_file();
+
     return TRUE;
   }
 

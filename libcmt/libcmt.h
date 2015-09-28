@@ -53,9 +53,6 @@ struct filenode
 	struct __iobuf FILE;
 };
 
-extern struct MinList __filelist;
-extern struct SignalSemaphore FileListLock;
-
 struct HashTable *h_new(long InitialSize,void *(*allocator)(long),void (*deallocator)(void *));
 void *h_insert(struct HashTable *h,long Key,void * UserData);
 void * h_find(struct HashTable *h,long Key);
