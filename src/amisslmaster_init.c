@@ -65,10 +65,10 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
 ULONG openBase(struct LibraryHeader *lib)
 {
   kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-  #if defined(__amigaos3__)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-  #endif
+  #if defined(__amigaos4__)
   kprintf("%s/%ld iexec %08lx\n", __FUNCTION__, __LINE__, IExec);
+  #endif
 
   #if !defined(__amigaos4__)
   DOSBase = (APTR)OpenLibrary("dos.library", 37L);
