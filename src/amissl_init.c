@@ -53,17 +53,6 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
   kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
   #endif
 
-  if(DOSBase != NULL)
-  {
-    #if defined(__amigaos4__)
-    if(IDOS != NULL)
-      DROPINTERFACE(IDOS);
-    #endif
-
-    CloseLibrary((struct Library *)DOSBase);
-    DOSBase = NULL;
-  }
-
   return TRUE;
 }
 
@@ -77,23 +66,15 @@ ULONG openBase(struct LibraryHeader *lib)
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   #endif
 
-  DOSBase = (APTR)OpenLibrary("dos.library", 37L);
-  if(DOSBase && GETINTERFACE(IDOS, DOSBase))
-  {
-    kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-    #if defined(__amigaos4__)
-    kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
-    #endif
+  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  #if defined(__amigaos4__)
+  kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
+  #endif
 
-    // initialze the libcmt file i/o stuff
-    __init_libcmt_file();
+  #if !defined(__amigaos4__)
+  // initialze the libcmt file i/o stuff
+  __init_libcmt_file();
+  #endif
 
-    return TRUE;
-  }
-  else
-    kprintf("ERROR: couldn't open dos.library\n");
-
-  closeBase(lib);
-
-  return FALSE;
+  return TRUE;
 }

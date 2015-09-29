@@ -56,6 +56,7 @@ ULONG VARARGS68K LIB_Release(struct AmiSSLIFace *Self)
   return (ULONG)0;
 }
 
+/*
 void __init_libcmt_file(void);
 
 __attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
@@ -68,7 +69,7 @@ __attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 		{
 			__init_libcmt_file();
 
-			if(!LIB___UserLibInit(self)) /* SAS/C defined errors the other way */
+			if(!LIB___UserLibInit(self))
 			{
 				return 1;
 			}
@@ -78,6 +79,7 @@ __attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
 
 	return 0;
 }
+*/
 
 /* Open the library */
 struct Library *libOpen(struct LibraryManagerInterface *Self, UNUSED ULONG version)

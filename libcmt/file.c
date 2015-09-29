@@ -108,7 +108,8 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 
 void __init_libcmt_file(void)
 {
-  kprintf("%s:%ld %08lx %08lx\n", __FUNCTION__, __LINE__, &__filelist, &FileListLock);
+  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
+  kprintf("%08lx %08lx\n", &__filelist, &FileListLock);
 	NewList((struct List *)&__filelist);
 	InitSemaphore(&FileListLock);
 }

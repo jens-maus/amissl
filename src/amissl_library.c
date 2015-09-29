@@ -440,16 +440,23 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 #ifdef __amigaos4__
 	DropInterface((struct Interface *)ILocale);
+  ILocale = NULL;
 	DropInterface((struct Interface *)IUtility);
+  IUtility = NULL;
 	DropInterface((struct Interface *)IIntuition);
+  IIntuition = NULL;
+	DropInterface((struct Interface *)IDOS);
+  IDOS = NULL;
 #endif
 
 	CloseLibrary((struct Library *)LocaleBase);
+  LocaleBase = NULL;
 	CloseLibrary((struct Library *)UtilityBase);
+  UtilityBase = NULL;
 	CloseLibrary((struct Library *)IntuitionBase);
-#ifndef __amigaos4__
+  IntuitionBase = NULL;
 	CloseLibrary((struct Library *)DOSBase);
-#endif
+  DOSBase = NULL;
 
 	CRYPTO_set_locking_callback(NULL);
 
@@ -552,16 +559,18 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
     CRYPTO_set_dynlock_lock_callback(amigaos_dyn_lock_function);
     CRYPTO_set_dynlock_destroy_callback(amigaos_dyn_destroy_function);
 
-#ifdef __amigaos4__
-		if ((IntuitionBase = OpenLibrary("intuition.library", 50))
+#if defined(__amigaos4__)
+		if ((DOSBase = OpenLibrary("dos.library", 50))
+      && (IntuitionBase = OpenLibrary("intuition.library", 50))
       && (UtilityBase = OpenLibrary("utility.library", 50))
 			&& (LocaleBase = OpenLibrary("locale.library", 50))
+			&& (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
 			&& (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
 			&& (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
 			&& (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
 			&& (locale = OpenLocale(NULL)))
 #else
-		if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
+    if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
 		  && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
       && (UtilityBase = OpenLibrary("utility.library", 37))
 			&& (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))

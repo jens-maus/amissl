@@ -154,7 +154,8 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
 
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  kprintf("OpenAmiSSL called: %08lx %08lx\n", SysBase, AmiSSLBase);
+  kprintf("%s:%ld\n", __FILE__, __LINE__);
+  kprintf("OpenAmiSSL called: %08lx base: %08lx\n", SysBase, __BASE_OR_IFACE_VAR);
 
   kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
 	ObtainSemaphore(&AmiSSLMasterLock);
