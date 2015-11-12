@@ -17,7 +17,7 @@ if ($debug)
 elsif ($profile)
   { $cflags="-pg -O3"; }
 else
-  { $cflags="-O3 -fomit-frame-pointer"; }
+  { $cflags="-g -gstabs"; }
 
 $cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
 $app_cflag="-I\$(AmiSSL)/openssl";

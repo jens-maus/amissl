@@ -1,9 +1,9 @@
 #include <libraries/amissl.h>
 #include <libraries/amisslmaster.h>
-#include <proto/exec.h>
 
 #define __NOLIBBASE__
 #define __NOGLOBALIFACE__
+#include <proto/exec.h>
 #include <proto/amisslmaster.h>
 
 //
@@ -30,6 +30,13 @@ struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 struct Library * AMISSL_COMMON_DATA AmiSSLBase = NULL;
 #ifdef __amigaos4__
 struct AmiSSLIFace * AMISSL_COMMON_DATA IAmiSSL = NULL;
+#endif
+
+#if defined(__amigaos4__)
+extern struct Library * AMISSL_COMMON_DATA SysBase;
+extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
+#else
+extern struct ExecBase *SysBase;
 #endif
 
 LONG AMISSL_COMMON_DATA LibAPIVersion = AMISSL_CURRENT_VERSION;
@@ -155,7 +162,10 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 {
   kprintf("%s:%ld\n", __FILE__, __LINE__);
-  kprintf("OpenAmiSSL called: %08lx base: %08lx\n", SysBase, __BASE_OR_IFACE_VAR);
+  kprintf("jo\n");
+  kprintf("OpenAmiSSL called. iface: %08lx\n", __BASE_OR_IFACE_VAR);
+  kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
+  kprintf("OpenAmiSSL called. sysbase: %08lx\n", SysBase);
 
   kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
 	ObtainSemaphore(&AmiSSLMasterLock);

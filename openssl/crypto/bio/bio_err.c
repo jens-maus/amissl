@@ -68,7 +68,7 @@
 #define ERR_FUNC(func) ERR_PACK(ERR_LIB_BIO,func,0)
 #define ERR_REASON(reason) ERR_PACK(ERR_LIB_BIO,0,reason)
 
-static ERR_STRING_DATA BIO_str_functs[]=
+static ERR_STRING_DATA AMISSL_COMMON_DATA BIO_str_functs[]=
 	{
 {ERR_FUNC(BIO_F_ACPT_STATE),	"ACPT_STATE"},
 {ERR_FUNC(BIO_F_BIO_ACCEPT),	"BIO_accept"},
@@ -106,7 +106,7 @@ static ERR_STRING_DATA BIO_str_functs[]=
 {0,NULL}
 	};
 
-static ERR_STRING_DATA BIO_str_reasons[]=
+static ERR_STRING_DATA AMISSL_COMMON_DATA BIO_str_reasons[]=
 	{
 {ERR_REASON(BIO_R_ACCEPT_ERROR)          ,"accept error"},
 {ERR_REASON(BIO_R_BAD_FOPEN_MODE)        ,"bad fopen mode"},
@@ -144,6 +144,7 @@ static ERR_STRING_DATA BIO_str_reasons[]=
 
 void ERR_load_BIO_strings(void)
 	{
+  kprintf("load_BIO_strings\n");
 #ifndef OPENSSL_NO_ERR
 
 	if (ERR_func_error_string(BIO_str_functs[0].error) == NULL)

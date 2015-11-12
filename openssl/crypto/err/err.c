@@ -255,7 +255,7 @@ static ERR_STATE *int_thread_set_item(ERR_STATE *);
 static void int_thread_del_item(const ERR_STATE *);
 static int int_err_get_next_lib(void);
 /* The static ERR_FNS table using these defaults functions */
-static const ERR_FNS err_defaults =
+static const ERR_FNS AMISSL_COMMON_DATA err_defaults =
 	{
 	int_err_get,
 	int_err_del,
@@ -271,7 +271,7 @@ static const ERR_FNS err_defaults =
 	};
 
 /* The replacable table of ERR_FNS functions we use at run-time */
-static const ERR_FNS *err_fns = NULL;
+static const ERR_FNS * AMISSL_COMMON_DATA err_fns = NULL;
 
 /* Eg. rather than using "err_get()", use "ERRFN(err_get)()". */
 #define ERRFN(a) err_fns->cb_##a
@@ -281,8 +281,8 @@ static const ERR_FNS *err_fns = NULL;
  * "err_defaults" functions. This way, a linked module can completely defer all
  * ERR state operation (together with requisite locking) to the implementations
  * and state in the loading application. */
-static LHASH_OF(ERR_STRING_DATA) *int_error_hash = NULL;
-static LHASH_OF(ERR_STATE) *int_thread_hash = NULL;
+static LHASH_OF(ERR_STRING_DATA) * AMISSL_COMMON_DATA int_error_hash = NULL;
+static LHASH_OF(ERR_STATE) * AMISSL_COMMON_DATA int_thread_hash = NULL;
 static int int_thread_hash_references = 0;
 static int int_err_library_number= ERR_LIB_USER;
 
@@ -291,11 +291,13 @@ static int int_err_library_number= ERR_LIB_USER;
 static void err_fns_check(void)
 	{
 	if (err_fns) return;
-	
+
+kprintf("err_fns_check1\n");
 	CRYPTO_w_lock(CRYPTO_LOCK_ERR);
 	if (!err_fns)
 		err_fns = &err_defaults;
 	CRYPTO_w_unlock(CRYPTO_LOCK_ERR);
+kprintf("err_fns_check2\n");
 	}
 
 /* API functions to get or set the underlying ERR functions. */
@@ -953,11 +955,17 @@ const char *ERR_func_error_string(unsigned long e)
 	{
 	ERR_STRING_DATA d,*p;
 	unsigned long l,f;
+  kprintf("1\n");
 	err_fns_check();
+  kprintf("2\n");
 	l=ERR_GET_LIB(e);
+  kprintf("3\n");
 	f=ERR_GET_FUNC(e);
+  kprintf("4\n");
 	d.error=ERR_PACK(l,f,0);
+  kprintf("5\n");
 	p=ERRFN(err_get_item)(&d);
+  kprintf("6\n");
 	return((p == NULL)?NULL:p->string);
 	}
 
