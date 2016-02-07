@@ -37,7 +37,7 @@
 
 #endif
 
-extern struct SignalSemaphore * AMISSL_COMMON_DATA lock_cs;
+extern struct SignalSemaphore *lock_cs;
 extern struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
 extern struct HashTable * AMISSL_COMMON_DATA thread_hash;
 

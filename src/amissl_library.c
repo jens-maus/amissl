@@ -1,5 +1,5 @@
 #undef errno
-//#define PROTO_AMISSL_H // Don't include amissl protos
+#define PROTO_AMISSL_H // Don't include amissl protos
 
 #include <stdlib.h> // malloc, free, exit
 
@@ -44,11 +44,6 @@
 //#define DEBUG
 #include <internal/debug.h>
 
-struct Library * AMISSL_COMMON_DATA AmiSSLBase = NULL;
-#ifdef __amigaos4__
-struct AmiSSLIFace * AMISSL_COMMON_DATA IAmiSSL = NULL;
-#endif
-
 #ifdef __amigaos4__
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
@@ -56,6 +51,8 @@ struct Library *LocaleBase = NULL;
 struct LocaleIFace *ILocale = NULL;
 struct Library *UtilityBase = NULL;
 struct UtilityIFace *IUtility = NULL;
+extern struct Library * AMISSL_COMMON_DATA SysBase;
+extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct IntuitionBase *IntuitionBase = NULL;
 #if !defined(__MORPHOS__)
@@ -66,21 +63,18 @@ struct Library *LocaleBase = NULL;
 struct Library *UtilityBase = NULL;
 #endif
 
-struct SignalSemaphore AMISSL_COMMON_DATA __mem_cs;
-LONG AMISSL_COMMON_DATA GMTOffset = 0;
-void * AMISSL_COMMON_DATA __pool = NULL;
+struct SignalSemaphore __mem_cs;
+LONG GMTOffset = 0;
+void * __pool = NULL;
 
-// keep a pointer to the library base;
-__BASE_OR_IFACE_TYPE AMISSL_COMMON_DATA AmiSSL = NULL;
-
-struct SignalSemaphore * AMISSL_COMMON_DATA lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
+struct SignalSemaphore * lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
 struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
 LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
 struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
-static ULONG AMISSL_COMMON_DATA ThreadGroupID = 0;
-static ULONG AMISSL_COMMON_DATA clock_base = 0;
-static long AMISSL_COMMON_DATA SSLVersionApp = 0;
+static ULONG ThreadGroupID = 0;
+static ULONG clock_base = 0;
+static long SSLVersionApp = 0;
 
 // on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
@@ -255,8 +249,6 @@ static void amigaos_locking_callback(int mode, int type, UNUSED const char *file
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)
 {
-  __BASE_OR_IFACE = AmiSSL;
-
 	ObtainSemaphore(&openssl_cs);
   CRYPTO_THREADID_set_pointer(id, (void*)FindTask(NULL));
 	ReleaseSemaphore(&openssl_cs);
@@ -485,9 +477,9 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	InitSemaphore(&__mem_cs);
 
 	#if defined(__amigaos4__)
-	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, IAmiSSL);
+	kprintf("Calling user lib init: %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR);
 	#else
-	kprintf("Calling user lib init: %08lx %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR, AmiSSLBase);
+	kprintf("Calling user lib init: %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR);
 	#endif
 
 	if (!thread_hash)
@@ -547,11 +539,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 
 		InitSemaphore(&__mem_cs);
 
-    // lets save the library base
-    AmiSSL = __BASE_OR_IFACE_VAR;
-
     // set static locks callbacks
-		CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
+    CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
     CRYPTO_THREADID_set_callback(amigaos_threadid_callback);
 
     // set dynamic locks callbacks

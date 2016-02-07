@@ -271,7 +271,7 @@ static const ERR_FNS AMISSL_COMMON_DATA err_defaults =
 	};
 
 /* The replacable table of ERR_FNS functions we use at run-time */
-static const ERR_FNS * AMISSL_COMMON_DATA err_fns = NULL;
+static const ERR_FNS *err_fns = NULL;
 
 /* Eg. rather than using "err_get()", use "ERRFN(err_get)()". */
 #define ERRFN(a) err_fns->cb_##a

@@ -17,6 +17,11 @@
 //#define DEBUG
 #include <internal/debug.h>
 
+extern struct Library * AMISSL_COMMON_DATA SysBase;
+extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
+
+#if 0 // OBSOLETE - replaced by amissl_libinit.c
+
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
@@ -326,6 +331,7 @@ static const struct Resident lib_res __attribute__((used)) =
     VSTRING,
     (APTR)libCreateTags
 };
+#endif // OBSOLETE
 
 struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
 {

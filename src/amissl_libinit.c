@@ -112,8 +112,8 @@ static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
 struct Library * AMISSL_COMMON_DATA SysBase = NULL;
 struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
 #if defined(__NEWLIB__)
-struct Library *NewlibBase = NULL;
-struct NewlibIFace* INewlib = NULL;
+struct Library * AMISSL_COMMON_DATA NewlibBase = NULL;
+struct NewlibIFace* AMISSL_COMMON_DATA INewlib = NULL;
 #endif
 #else
 struct ExecBase *SysBase = NULL;
@@ -4760,7 +4760,7 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 {
   BPTR rc;
 
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld sys %08lx base %08lx\n", __FUNCTION__, __LINE__, SysBase, base);
 
   // remove the library base from exec's lib list in advance
   Remove((struct Node *)base);
@@ -4781,7 +4781,7 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   rc = base->segList;
   DeleteLibrary(&base->libBase);
 
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  kprintf("%s/%ld sys %08lx base %08lx\n", __FUNCTION__, __LINE__, SysBase, base);
 
   return rc;
 }
@@ -4854,12 +4854,11 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-__attribute__((baserel_restore)) int libOpen2(struct AmiSSLIFace *self)
+LIBFUNC int libOpen2(struct AmiSSLIFace *self)
 {
   kprintf("%s:%ld %08lx %08lx\n", __FUNCTION__, __LINE__, DOSBase, IDOS);
   
-  //__init_libcmt_file();
-  #warning "calling __init_libcmt_file() crashes on OS4!"
+  __init_libcmt_file();
       
   if(!LIB___UserLibInit((__BASE_OR_IFACE_TYPE)self))
   { 
@@ -4942,6 +4941,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
     child->libBase.lib_OpenCnt++;
 
+    #if !defined(__amigaos4__) // CreateLibrary/LibInit has already done this
     // lets clone the child library header
     child->libBase.lib_Node.ln_Type = NT_LIBRARY;
     child->libBase.lib_Node.ln_Pri  = 0;
@@ -4950,6 +4950,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->libBase.lib_Version      = base->libBase.lib_Version;
     child->libBase.lib_Revision     = base->libBase.lib_Revision;
     child->libBase.lib_IdString     = base->libBase.lib_IdString;
+    #endif
 
     InitSemaphore(&child->libSem);
     child->parent   = base;
@@ -4976,6 +4977,12 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
           (base->IElf->FreeDataSegmentCopy)(base->elfHandle, child->baserelData);
         }
       }
+      else
+      { 
+        kprintf("IElf->CopyDataSegment failed (handle %08lx)\n",base->elfHandle);
+        DeleteLibrary(&child->libBase);
+        child = NULL;
+      }
     }
     #else
     child->dataSize = base->dataSize;
@@ -5000,11 +5007,14 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
     #endif // !__amigaos4__
 
-    // assume openBase won't fail
-    base->libBase.lib_OpenCnt++;
+    if (child)
+    {
+       // assume openBase won't fail
+       base->libBase.lib_OpenCnt++;
 
-    // make sure we have enough stack here
-    callLibFunction(openBase, child);
+       // make sure we have enough stack here
+       callLibFunction(openBase, child);
+    }
 
     res = child;
   }
@@ -5082,28 +5092,32 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   {
     #ifdef MULTIBASE
     struct LibraryHeader *parent = base->parent;
-    BOOL exp_lib = (base->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
+    BOOL exp_parent = (parent->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
 
     /* release child base */
-    #if !defined(__amigaos4__)
+    #if defined(__amigaos4__)
+    struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
+    (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
+    base->baserelData = NULL;
+    DeleteLibrary(&base->libBase);
+    #else
     FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
     #endif
 
     parent->libBase.lib_OpenCnt--;
-    if(exp_lib)
+    if(exp_parent)
     {
       if(parent->libBase.lib_OpenCnt == 0)
       {
+        kprintf("AmiSSL: delayed expunge\n");
+
         #if defined(__amigaos4__)
-        struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
-
-        LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
-        (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
-        base->baserelData = NULL;
-        #else
-
-        LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
-
+        extlib = (struct ExtendedLibrary *)((ULONG)parent + parent->libBase.lib_PosSize);
+        LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
+        (parent->IElf->CloseElfTags)(parent->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+        DropInterface((struct Interface *)parent->IElf);
+        CloseLibrary((struct Library *)parent->ElfBase);
         #endif
 
         rc = LibDelete(parent);

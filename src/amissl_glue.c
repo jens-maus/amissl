@@ -15,7 +15,11 @@
 // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
 #include "amissl_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
-#endif // __amigaos3__
+#elif defined(__amigaos4__)
+// redefine SAVEDS so that all glue stubs work with baserel
+#undef SAVEDS
+#define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
+#endif
 #endif // BASEREL
 
 /***************************************************************************/

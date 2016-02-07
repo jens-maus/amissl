@@ -5,6 +5,8 @@
 #define GETINTERFACE(iface, base)   (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
 #define DROPINTERFACE(iface)        (DropInterface((struct Interface *)iface), iface = NULL)
 
+extern struct Library * AMISSL_COMMON_DATA SysBase;
+extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 extern struct Library * AMISSL_COMMON_DATA DOSBase;
 extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 #else

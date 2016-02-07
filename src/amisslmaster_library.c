@@ -27,9 +27,9 @@ struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 
-struct Library * AMISSL_COMMON_DATA AmiSSLBase = NULL;
+struct Library * AmiSSLBase = NULL;
 #ifdef __amigaos4__
-struct AmiSSLIFace * AMISSL_COMMON_DATA IAmiSSL = NULL;
+struct AmiSSLIFace * IAmiSSL = NULL;
 #endif
 
 #if defined(__amigaos4__)
@@ -39,10 +39,10 @@ extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 extern struct ExecBase *SysBase;
 #endif
 
-LONG AMISSL_COMMON_DATA LibAPIVersion = AMISSL_CURRENT_VERSION;
-LONG AMISSL_COMMON_DATA LibUsesOpenSSLStructs = 0;
+LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
+LONG LibUsesOpenSSLStructs = 0;
 
-struct SignalSemaphore AMISSL_COMMON_DATA AmiSSLMasterLock;
+struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 

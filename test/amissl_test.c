@@ -19,7 +19,7 @@
 
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
-#define LIBNAME "amissl_v" MKSTR(VERSIONNAME) ".library"
+#define LIBNAME "AmiSSL/amissl_v" MKSTR(VERSIONNAME) ".library"
 #define AMISSL_CURRENT_VERSION   AMISSL_V10x
 
 int main(void)
@@ -44,6 +44,7 @@ int main(void)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
 		InitAmiSSL(NULL);
+		CleanupAmiSSL(TAG_DONE);
 		printf(" done\n");
     DROPINTERFACE(IAmiSSL);
 		CloseLibrary(AmiSSLBase);
@@ -83,6 +84,7 @@ int main(void)
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
+		CleanupAmiSSL(TAG_DONE);
 
 		AmiSSLBase = base2;
     #if defined(__amigaos4__)
@@ -94,6 +96,7 @@ int main(void)
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
+		CleanupAmiSSL(TAG_DONE);
 
 		AmiSSLBase = base1;
     #if defined(__amigaos4__)
@@ -105,6 +108,7 @@ int main(void)
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
+		CleanupAmiSSL(TAG_DONE);
 
 		AmiSSLBase = base2;
     #if defined(__amigaos4__)
@@ -116,6 +120,7 @@ int main(void)
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
+		CleanupAmiSSL(TAG_DONE);
 	}
 
 	if(base1 != NULL)

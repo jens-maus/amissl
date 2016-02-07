@@ -15,7 +15,17 @@
 #include <amiga_compiler.h>
 #endif /* !AMIGA_COMPILER_H */
 
-#define AMISSL_COMMON_DATA __attribute__((force_no_baserel))
+#if defined(BASEREL)
+  #define AMISSL_COMMON_DATA __attribute__((force_no_baserel))
+  // redefine LIBFUNC so that all the functions using LIBPROTO()
+  // will get the (baserel_restore) attribute added.  Functions
+  // of this type must also never been inlined (e.g. by -O3) as
+  // inlining effectively wipes out the (baserel_restore) attribute.
+  #undef LIBFUNC
+  #define LIBFUNC __attribute__((baserel_restore)) __attribute__ ((noinline))
+#else
+  #define AMISSL_COMMON_DATA
+#endif
 
 #else /* !__amigaos4__ */
 
