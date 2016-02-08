@@ -672,7 +672,7 @@ const char * ERR_func_error_string(unsigned long e) (d0)
 const char * ERR_reason_error_string(unsigned long e) (d0)
 void ERR_print_errors_cb(int (*cb)(const char *str, size_t len, void *u), void * u) (a0,a1)
 void ERR_print_errors(BIO * bp) (a0)
-void ERR_add_error_vdata(int num, va_list args) (d0,a0)
+void ERR_add_error_vdata(int num, long * args) (d0,a0)
 ==varargs
 void ERR_add_error_data(int num, long dummy, ...) (d0,a0)
 void ERR_load_strings(int lib, ERR_STRING_DATA * str) (d0,a0)
