@@ -203,6 +203,7 @@ ifeq ($(OS), os4)
   CFLAGS   += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
   BASEREL  = -mbaserel
+  NOBASEREL= -mno-baserel
   CDUP     = ../
   CDTHIS   = ./
 
