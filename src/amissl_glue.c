@@ -2321,14 +2321,20 @@ void SAVEDS ASM LIB_BIO_copy_next_retry(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 int SAVEDS ASM LIB_BIO_vprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args))
 {
-	return BIO_vprintf(bio, format, args);
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+	return BIO_vprintf(bio, format, os4va);
 }
 
 // ---
 
 int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args))
 {
-	return BIO_vsnprintf(buf, n, format, args);
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+	return BIO_vsnprintf(buf, n, format, os4va);
 }
 
 // ---
@@ -4615,9 +4621,12 @@ void SAVEDS ASM LIB_ERR_print_errors(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BI
 
 // ---
 
-void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int num), REG(a0, va_list args))
+void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int num), REG(a0, long *args))
 {
-	ERR_add_error_vdata(num, args);
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+	ERR_add_error_vdata(num, os4va);
 }
 
 // ---

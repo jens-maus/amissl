@@ -686,7 +686,7 @@ const char * SAVEDS ASM LIB_ERR_func_error_string(REG(a6, __IFACE_OR_BASE), REG(
 const char * SAVEDS ASM LIB_ERR_reason_error_string(REG(a6, __IFACE_OR_BASE), REG(d0, unsigned long e));
 void SAVEDS ASM LIB_ERR_print_errors_cb(REG(a6, __IFACE_OR_BASE), REG(a0, int (*cb)(const char *str, size_t len, void *u)), REG(a1, void * u));
 void SAVEDS ASM LIB_ERR_print_errors(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp));
-void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, __IFACE_OR_BASE), REG(d0, int num), REG(a0, va_list args));
+void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, __IFACE_OR_BASE), REG(d0, int num), REG(a0, long *args));
 void SAVEDS ASM LIB_ERR_load_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_unload_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_load_ERR_strings(REG(a6, __IFACE_OR_BASE));

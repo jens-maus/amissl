@@ -428,17 +428,17 @@ AMISSL_COMMON_DATA static UWORD trampoline_code [][6] =
 	{0x48E7,0xFFF8,0x4E95,0xDEFC,0x0034,0x4E75},	//MOVEM.L D0-D7/A0-A3,-(A7);   JSR  (A5);   ADDA.W  #0x0034,A7  RTS
 };
 
-VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
+VARARGS68K int __amigaos4_check68k_trampoline(int nargs, int func, ...)
 {
-	VA_LIST args;
+  __gnuc_va_list args;
 	long *ptr;
 	int result,i;
 
-	VA_START(args, func);
+  __builtin_va_start(args, func);
 
 	//kprintf("__amigaos4_check68k_trampoline called with: %d args, func: %08x\n",nargs,func);
 
-	ptr = VA_ARG(args, long *);
+  ptr = va_getlinearva(args, long *);
 
 	//kprintf("Stack: %08x %08x %08x %08x %08x %08x %08x\n",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
 
@@ -451,6 +451,7 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs,int func,...)
 	result = IExec->EmulateTags(trampoline_code[nargs],ET_SaveRegs,TRUE,
 		ET_RegisterA5,func,
 		TAG_MORE,ptr);
-	VA_END(args);
+
+  __builtin_va_end(args);
 	return result;
 }

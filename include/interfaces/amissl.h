@@ -706,7 +706,7 @@ struct AmiSSLIFace
 	const char * APICALL (*ERR_reason_error_string)(struct AmiSSLIFace *Self, unsigned long e);
 	void APICALL (*ERR_print_errors_cb)(struct AmiSSLIFace *Self, int (*cb)(const char *str, size_t len, void *u), void * u);
 	void APICALL (*ERR_print_errors)(struct AmiSSLIFace *Self, BIO * bp);
-	void APICALL (*ERR_add_error_vdata)(struct AmiSSLIFace *Self, int num, va_list args);
+	void APICALL (*ERR_add_error_vdata)(struct AmiSSLIFace *Self, int num, long *args);
 	void APICALL (*ERR_add_error_data)(struct AmiSSLIFace *Self, int num, ...);
 	void APICALL (*ERR_load_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);
 	void APICALL (*ERR_unload_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);

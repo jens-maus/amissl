@@ -2682,7 +2682,7 @@
 		</method>
 		<method name="ERR_add_error_vdata" result="void">
 			<arg name="num" type="int" m68kreg="d0"/>
-			<arg name="args" type="va_list" m68kreg="a0"/>
+			<arg name="args" type="long *" m68kreg="a0"/>
 		</method>
 		<method name="ERR_add_error_data" result="void">
 			<arg name="num" type="int" m68kreg="d0"/>

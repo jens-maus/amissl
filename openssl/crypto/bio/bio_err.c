@@ -144,7 +144,6 @@ static ERR_STRING_DATA BIO_str_reasons[]=
 
 void ERR_load_BIO_strings(void)
 	{
-  kprintf("load_BIO_strings\n");
 #ifndef OPENSSL_NO_ERR
 
 	if (ERR_func_error_string(BIO_str_functs[0].error) == NULL)
