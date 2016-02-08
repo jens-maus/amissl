@@ -344,7 +344,7 @@ struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
 	return(p->ISocketPtr ? *p->ISocketPtr : NULL);
 }
 
-int VARARGS68K LIB_BIO_printf(UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
+LIBPROTOVA(BIO_printf, int, UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
 	VA_LIST args;
 	int ret;
@@ -356,7 +356,7 @@ int VARARGS68K LIB_BIO_printf(UNUSED struct AmiSSLIFace *Self, BIO * bio, const 
 	return ret;
 }
 
-int VARARGS68K LIB_BIO_snprintf(UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
+LIBPROTOVA(BIO_snprintf, int, UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
 {
 	VA_LIST args;
 	int ret;
@@ -368,7 +368,7 @@ int VARARGS68K LIB_BIO_snprintf(UNUSED struct AmiSSLIFace *Self, char * buf, siz
 	return ret;
 }
 
-void VARARGS68K LIB_OPENSSL_showfatal(UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
+LIBPROTOVA(OPENSSL_showfatal, void, UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
 {
 	VA_LIST args;
 	struct EasyStruct ErrReq;
@@ -388,7 +388,7 @@ void VARARGS68K LIB_OPENSSL_showfatal(UNUSED struct AmiSSLIFace *Self, const cha
 	IIntuition->EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
 }
 
-void VARARGS68K LIB_ERR_add_error_data(UNUSED struct AmiSSLIFace *Self, int num, ...)
+LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, ...)
 {
 	VA_LIST args;
 
