@@ -2657,12 +2657,12 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define ERR_add_error_vdata(___num, ___args) \
-	LP2NR(0xfae, ERR_add_error_vdata , int, ___num, d0, va_list, ___args, a0,\
+	LP2NR(0xfae, ERR_add_error_vdata , int, ___num, d0, long *, ___args, a0,\
 	, AMISSL_BASE_NAME)
 
 #ifndef NO_INLINE_VARARGS
 #define ERR_add_error_data(___num, ___dummy, ...) \
-	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; ERR_add_error_vdata((___num), (va_list) _message); })
+	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; ERR_add_error_vdata((___num), (long *) _message); })
 #endif /* !NO_INLINE_VARARGS */
 
 #define ERR_load_strings(___lib, ___str) \
