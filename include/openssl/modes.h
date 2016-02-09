@@ -8,8 +8,8 @@
  * forms are granted according to the OpenSSL license.
  */
 
-#ifndef HEADER_MODES_H 
-#define HEADER_MODES_H 
+#ifndef HEADER_MODES_H
+#define HEADER_MODES_H
 
 #include <stddef.h>
 
