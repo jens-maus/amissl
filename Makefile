@@ -398,7 +398,7 @@ $(BIN_D)/openssl:
 # for compiling single .c files
 $(OBJ_D)/%.o: $(SRC_D)/%.c
 	@echo "  CC $<"
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 ## OPENSSL BUILD RULES ##
 

@@ -2319,7 +2319,15 @@ void SAVEDS ASM LIB_BIO_copy_next_retry(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-#if !defined(__amigaos4__)
+#if defined(__amigaos4__)
+int SAVEDS ASM LIB_BIO_vprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args))
+{
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  return BIO_vprintf(bio, format, os4va);
+}
+#else
 int SAVEDS ASM LIB_BIO_vprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, va_list args))
 {
 	return BIO_vprintf(bio, format, args);
@@ -2328,7 +2336,15 @@ int SAVEDS ASM LIB_BIO_vprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bi
 
 // ---
 
-#if !defined(__amigaos4__)
+#if defined(__amigaos4__)
+int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args))
+{
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  return BIO_vsnprintf(buf, n, format, os4va);
+}
+#else
 int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, va_list args))
 {
 	return BIO_vsnprintf(buf, n, format, args);
@@ -4619,7 +4635,15 @@ void SAVEDS ASM LIB_ERR_print_errors(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BI
 
 // ---
 
-#if !defined(__amigaos4__)
+#if defined(__amigaos4__)
+void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int num), REG(a0, long * args))
+{
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  ERR_add_error_vdata(num, os4va);
+}
+#else
 void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int num), REG(a0, va_list args))
 {
 	ERR_add_error_vdata(num, args);
