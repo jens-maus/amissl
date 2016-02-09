@@ -397,12 +397,29 @@ LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, .
 	VA_END(args);
 }
 
-#if 0
-void LIB_ERR_add_error_vdata(UNUSED struct AmiSSLIFace *Self, int num, VA_LIST params)
+LIBPROTO(BIO_vprintf, int, BIO * bio, const char * format, long * args)
 {
-	ERR_add_error_vdata(num,params);
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  return BIO_vprintf(bio, format, os4va);
 }
-#endif
+
+LIBPROTO(BIO_vsnprintf, int, char * buf, size_t n, const char * format, long * args)
+{
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  return BIO_vsnprintf(buf, n, format, os4va);
+}
+
+LIBPROTO(ERR_add_error_vdata, void, int num, long * args)
+{
+  va_list os4va;
+  os4va.args.m68k = (char *)args;
+  os4va.is_68k = 1;
+  ERR_add_error_vdata(num, os4va);
+}
 
 int __amigaos4_check68k_check(int (*func)())
 {

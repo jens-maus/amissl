@@ -358,8 +358,12 @@ BIO * SAVEDS ASM LIB_BIO_new_connect(REG(a6, __IFACE_OR_BASE), REG(a0, char * ho
 BIO * SAVEDS ASM LIB_BIO_new_accept(REG(a6, __IFACE_OR_BASE), REG(a0, char * host_port));
 int SAVEDS ASM LIB_BIO_new_bio_pair(REG(a6, __IFACE_OR_BASE), REG(a0, BIO ** bio1), REG(d0, size_t writebuf1), REG(a1, BIO ** bio2), REG(d1, size_t writebuf2));
 void SAVEDS ASM LIB_BIO_copy_next_retry(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * b));
-int SAVEDS ASM LIB_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, long * args));
-int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, long * args));
+#if !defined(__amigaos4__)
+int SAVEDS ASM LIB_BIO_vprintf(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio), REG(a1, const char * format), REG(a2, va_list args));
+#endif
+#if !defined(__amigaos4__)
+int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, size_t n), REG(a1, const char * format), REG(a2, va_list args));
+#endif
 void SAVEDS ASM LIB_ERR_load_BIO_strings(REG(a6, __IFACE_OR_BASE));
 const BIGNUM * SAVEDS ASM LIB_BN_value_one(REG(a6, __IFACE_OR_BASE));
 char * SAVEDS ASM LIB_BN_options(REG(a6, __IFACE_OR_BASE));
@@ -686,7 +690,9 @@ const char * SAVEDS ASM LIB_ERR_func_error_string(REG(a6, __IFACE_OR_BASE), REG(
 const char * SAVEDS ASM LIB_ERR_reason_error_string(REG(a6, __IFACE_OR_BASE), REG(d0, unsigned long e));
 void SAVEDS ASM LIB_ERR_print_errors_cb(REG(a6, __IFACE_OR_BASE), REG(a0, int (*cb)(const char *str, size_t len, void *u)), REG(a1, void * u));
 void SAVEDS ASM LIB_ERR_print_errors(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp));
-void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, __IFACE_OR_BASE), REG(d0, int num), REG(a0, long * args));
+#if !defined(__amigaos4__)
+void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, __IFACE_OR_BASE), REG(d0, int num), REG(a0, va_list args));
+#endif
 void SAVEDS ASM LIB_ERR_load_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_unload_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_load_ERR_strings(REG(a6, __IFACE_OR_BASE));

@@ -1,6 +1,8 @@
 #ifndef _STDARG_H
 #define _STDARG_H
 
+#if defined(__amigaos4__)
+
 #ifndef __GNUC_VA_LIST
 #define __GNUC_VA_LIST
 typedef __builtin_va_list __gnuc_va_list;
@@ -23,5 +25,22 @@ typedef struct va_list_t
 	(__builtin_va_arg(v.args.ppc,l)))
 
 #include <sys/amigaos-va.h>
+
+#else
+
+// on other systems we take the default varargs
+// stuff by simply including the next stdarg.h file.
+// (this only works with GCC!)
+#if defined(__GNUC__)
+
+#undef _STDARG_H
+#include_next "stdarg.h"
+
+#else
+
+#error "Unknown compiler"
+
+#endif
+#endif
 
 #endif
