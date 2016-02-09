@@ -65,6 +65,8 @@
 #ifndef HEADER_BSS_FILE_C
 #define HEADER_BSS_FILE_C
 
+#ifndef OPENSSL_SYS_AMIGA
+
 #if defined(__linux) || defined(__sun) || defined(__hpux)
 /* Following definition aliases fopen to fopen64 on above mentioned
  * platforms. This makes it possible to open and sequentially access
@@ -168,7 +170,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 		{
 		SYSerr(SYS_F_FOPEN,get_last_sys_error());
 		ERR_add_error_data(5,"fopen('",filename,"','",mode,"')");
-		if (errno == ENOENT)
+		if (get_last_sys_error() == ENOENT)
 			BIOerr(BIO_F_BIO_NEW_FILE,BIO_R_NO_SUCH_FILE);
 		else
 			BIOerr(BIO_F_BIO_NEW_FILE,ERR_R_SYS_LIB);
@@ -472,6 +474,7 @@ static int MS_CALLBACK file_puts(BIO *bp, const char *str)
 
 #endif /* OPENSSL_NO_STDIO */
 
-#endif /* HEADER_BSS_FILE_C */
+#endif /* !OPENSSL_SYS_AMIGA */
 
+#endif /* HEADER_BSS_FILE_C */
 

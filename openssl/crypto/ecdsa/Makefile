@@ -75,21 +75,7 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-ecs_asn1.o: ../../include/openssl/asn1.h ../../include/openssl/asn1t.h
-ecs_asn1.o: ../../include/openssl/bio.h ../../include/openssl/crypto.h
-ecs_asn1.o: ../../include/openssl/e_os2.h ../../include/openssl/ec.h
-ecs_asn1.o: ../../include/openssl/ecdsa.h ../../include/openssl/err.h
-ecs_asn1.o: ../../include/openssl/lhash.h ../../include/openssl/opensslconf.h
-ecs_asn1.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-ecs_asn1.o: ../../include/openssl/safestack.h ../../include/openssl/stack.h
-ecs_asn1.o: ../../include/openssl/symhacks.h ecs_asn1.c ecs_locl.h
-ecs_err.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
-ecs_err.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-ecs_err.o: ../../include/openssl/ec.h ../../include/openssl/ecdsa.h
-ecs_err.o: ../../include/openssl/err.h ../../include/openssl/lhash.h
-ecs_err.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
-ecs_err.o: ../../include/openssl/ossl_typ.h ../../include/openssl/safestack.h
-ecs_err.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
+ecs_asn1.o: ecs_asn1.c ecs_locl.h
 ecs_err.o: ecs_err.c
 ecs_lib.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
 ecs_lib.o: ../../include/openssl/bn.h ../../include/openssl/buffer.h

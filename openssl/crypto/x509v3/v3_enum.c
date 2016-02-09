@@ -60,7 +60,7 @@
 #include "cryptlib.h"
 #include <openssl/x509v3.h>
 
-static ENUMERATED_NAMES crl_reasons[] = {
+static ENUMERATED_NAMES AMISSL_COMMON_DATA crl_reasons[] = {
 {CRL_REASON_UNSPECIFIED, 	 "Unspecified", "unspecified"},
 {CRL_REASON_KEY_COMPROMISE,	 "Key Compromise", "keyCompromise"},
 {CRL_REASON_CA_COMPROMISE,	 "CA Compromise", "CACompromise"},
@@ -75,7 +75,7 @@ static ENUMERATED_NAMES crl_reasons[] = {
 {-1, NULL, NULL}
 };
 
-const X509V3_EXT_METHOD v3_crl_reason = { 
+const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_crl_reason = {
 NID_crl_reason, 0, ASN1_ITEM_ref(ASN1_ENUMERATED),
 0,0,0,0,
 (X509V3_EXT_I2S)i2s_ASN1_ENUMERATED_TABLE,

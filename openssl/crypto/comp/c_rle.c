@@ -38,7 +38,7 @@ static int rle_compress_block(COMP_CTX *ctx, unsigned char *out,
 
 	*(out++)=0;
 	memcpy(out,in,ilen);
-	return(ilen+1);
+	return((int)(ilen+1));
 	}
 
 static int rle_expand_block(COMP_CTX *ctx, unsigned char *out,
@@ -57,5 +57,5 @@ static int rle_expand_block(COMP_CTX *ctx, unsigned char *out,
 		{
 		memcpy(out,in,ilen-1);
 		}
-	return(ilen-1);
+	return((int)(ilen-1));
 	}

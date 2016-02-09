@@ -75,13 +75,6 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-ech_err.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
-ech_err.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-ech_err.o: ../../include/openssl/ec.h ../../include/openssl/ecdh.h
-ech_err.o: ../../include/openssl/err.h ../../include/openssl/lhash.h
-ech_err.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
-ech_err.o: ../../include/openssl/ossl_typ.h ../../include/openssl/safestack.h
-ech_err.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 ech_err.o: ech_err.c
 ech_key.o: ../../include/openssl/asn1.h ../../include/openssl/bio.h
 ech_key.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h

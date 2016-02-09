@@ -2892,7 +2892,7 @@ OPENSSL_GLOBAL SSL_CIPHER ssl3_ciphers[]={
 /* end of list */
 	};
 
-SSL3_ENC_METHOD SSLv3_enc_data={
+SSL3_ENC_METHOD AMISSL_COMMON_DATA SSLv3_enc_data={
 	ssl3_enc,
 	n_ssl3_mac,
 	ssl3_setup_key_block,
@@ -2934,7 +2934,7 @@ int ssl3_pending(const SSL *s)
 	if (s->rstate == SSL_ST_READ_BODY)
 		return 0;
 	
-	return (s->s3->rrec.type == SSL3_RT_APPLICATION_DATA) ? s->s3->rrec.length : 0;
+	return (int)((s->s3->rrec.type == SSL3_RT_APPLICATION_DATA) ? s->s3->rrec.length : 0);
 	}
 
 int ssl3_new(SSL *s)

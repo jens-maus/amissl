@@ -60,7 +60,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../e_os.h"
+#include "e_os.h"
 
 #ifdef OPENSSL_NO_MD2
 int main(int argc, char *argv[])

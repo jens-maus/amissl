@@ -388,7 +388,7 @@ int PEM_ASN1_write_bio(i2d_of_void *i2d, const char *name, BIO *bp,
 #endif
 			kstr=(unsigned char *)buf;
 			}
-		RAND_add(data,i,0);/* put in the RSA key. */
+		RAND_add(data,i,(double)0);/* put in the RSA key. */
 		OPENSSL_assert(enc->iv_len <= (int)sizeof(iv));
 		if (RAND_pseudo_bytes(iv,enc->iv_len) < 0) /* Generate a salt */
 			goto err;

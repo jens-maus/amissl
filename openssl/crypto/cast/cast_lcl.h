@@ -217,6 +217,7 @@
 	}
 #endif
 
+#ifndef OPENSSL_SYS_AMIGA
 extern const CAST_LONG CAST_S_table0[256];
 extern const CAST_LONG CAST_S_table1[256];
 extern const CAST_LONG CAST_S_table2[256];
@@ -225,3 +226,13 @@ extern const CAST_LONG CAST_S_table4[256];
 extern const CAST_LONG CAST_S_table5[256];
 extern const CAST_LONG CAST_S_table6[256];
 extern const CAST_LONG CAST_S_table7[256];
+#else
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table0[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table1[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table2[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table3[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table4[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table5[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table6[256];
+extern const CAST_LONG AMISSL_COMMON_DATA CAST_S_table7[256];
+#endif

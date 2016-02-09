@@ -900,6 +900,7 @@ void OPENSSL_showfatal (const char *fmta,...)
 	MessageBox (NULL,buf,_T("OpenSSL: FATAL"),MB_OK|MB_ICONSTOP);
 }
 #else
+#ifndef OPENSSL_SYS_AMIGA
 void OPENSSL_showfatal (const char *fmta,...)
 { va_list ap;
 
@@ -907,6 +908,31 @@ void OPENSSL_showfatal (const char *fmta,...)
     vfprintf (stderr,fmta,ap);
     va_end (ap);
 }
+#else
+#include <proto/exec.h>
+#include <proto/intuition.h>
+#include <intuition/intuition.h>
+
+void OPENSSL_showfatal (const char *fmta,...)
+{
+  va_list ap;
+  struct EasyStruct ErrReq;
+  char error[512];
+
+  va_start(ap, fmta);
+  BIO_vsnprintf(error, sizeof(error), fmta, ap);
+  va_end(ap);
+
+  ErrReq.es_StructSize   = sizeof(struct EasyStruct);
+  ErrReq.es_Flags        = 0;
+  ErrReq.es_Title        = "AmiSSL/OpenSSL internal error";
+  ErrReq.es_TextFormat   = error;
+  ErrReq.es_GadgetFormat = "Abort";
+
+  // Open an Easy Requester
+  EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
+}
+#endif /* !OPENSSL_SYS_AMIGA */
 int OPENSSL_isservice (void) { return 0; }
 #endif
 

@@ -67,7 +67,11 @@
 #define NUM_LN 913
 #define NUM_OBJ 857
 
+#ifndef OPENSSL_SYS_AMIGA
 static const unsigned char lvalues[5974]={
+#else /* !OPENSSL_SYS_AMIGA */
+static const unsigned char AMISSL_COMMON_DATA lvalues[5974]={
+#endif /* !OPENSSL_SYS_AMIGA */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,               /* [  0] OBJ_rsadsi */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,          /* [  6] OBJ_pkcs */
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x02,0x02,     /* [ 13] OBJ_md2 */
@@ -921,7 +925,11 @@ static const unsigned char lvalues[5974]={
 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x07,/* [5964] OBJ_rsaesOaep */
 };
 
+#ifndef OPENSSL_SYS_AMIGA
 static const ASN1_OBJECT nid_objs[NUM_NID]={
+#else /* !OPENSSL_SYS_AMIGA */
+static const ASN1_OBJECT AMISSL_COMMON_DATA nid_objs[NUM_NID]={
+#endif /* !OPENSSL_SYS_AMIGA */
 {"UNDEF","undefined",NID_undef,0,NULL,0},
 {"rsadsi","RSA Data Security, Inc.",NID_rsadsi,6,&(lvalues[0]),0},
 {"pkcs","RSA Data Security, Inc. PKCS",NID_pkcs,7,&(lvalues[6]),0},
@@ -2401,7 +2409,11 @@ static const ASN1_OBJECT nid_objs[NUM_NID]={
 {"RSAES-OAEP","rsaesOaep",NID_rsaesOaep,9,&(lvalues[5964]),0},
 };
 
+#ifndef OPENSSL_SYS_AMIGA
 static const unsigned int sn_objs[NUM_SN]={
+#else
+static const unsigned int AMISSL_COMMON_DATA sn_objs[NUM_SN]={
+#endif
 364,	/* "AD_DVCS" */
 419,	/* "AES-128-CBC" */
 916,	/* "AES-128-CBC-HMAC-SHA1" */
@@ -3317,7 +3329,11 @@ static const unsigned int sn_objs[NUM_SN]={
 160,	/* "x509Crl" */
 };
 
+#ifndef OPENSSL_SYS_AMIGA
 static const unsigned int ln_objs[NUM_LN]={
+#else
+static const unsigned int AMISSL_COMMON_DATA ln_objs[NUM_LN]={
+#endif
 363,	/* "AD Time Stamping" */
 405,	/* "ANSI X9.62" */
 368,	/* "Acceptable OCSP Responses" */
@@ -4233,7 +4249,11 @@ static const unsigned int ln_objs[NUM_LN]={
 125,	/* "zlib compression" */
 };
 
+#ifndef OPENSSL_SYS_AMIGA
 static const unsigned int obj_objs[NUM_OBJ]={
+#else
+static const unsigned int AMISSL_COMMON_DATA obj_objs[NUM_OBJ]={
+#endif
  0,	/* OBJ_undef                        0 */
 181,	/* OBJ_iso                          1 */
 393,	/* OBJ_joint_iso_ccitt              OBJ_joint_iso_itu_t */

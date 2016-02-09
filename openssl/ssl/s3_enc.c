@@ -810,7 +810,7 @@ int n_ssl3_mac(SSL *ssl, unsigned char *md, int send)
 	}
 
 	ssl3_record_sequence_update(seq);
-	return(md_size);
+	return((int)md_size);
 	}
 
 void ssl3_record_sequence_update(unsigned char *seq)

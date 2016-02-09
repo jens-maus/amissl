@@ -57,7 +57,7 @@
  */
 
 /* We need to define this to get macros like S_IFBLK and S_IFCHR */
-#if !defined(OPENSSL_SYS_VXWORKS)
+#if !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
 #define _XOPEN_SOURCE 500
 #endif
 
@@ -203,7 +203,7 @@ int RAND_write_file(const char *file)
 	}
 #endif
 
-#if defined(O_CREAT) && !defined(OPENSSL_NO_POSIX_IO) && !defined(OPENSSL_SYS_VMS)
+#if defined(O_CREAT) && !defined(OPENSSL_NO_POSIX_IO) && !defined(OPENSSL_SYS_VMS) && !defined(OPENSSL_SYS_AMIGA)
 	{
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -271,6 +271,10 @@ err:
 	return (rand_err ? -1 : ret);
 	}
 
+#ifdef OPENSSL_SYS_AMIGA
+#include <proto/dos.h>
+#endif /* OPENSSL_SYS_AMIGA */
+
 const char *RAND_file_name(char *buf, size_t size)
 	{
 	char *s=NULL;
@@ -298,10 +302,14 @@ const char *RAND_file_name(char *buf, size_t size)
 		if (s && *s && strlen(s)+strlen(RFILE)+2 < size)
 			{
 			BUF_strlcpy(buf,s,size);
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_VMS
 			BUF_strlcat(buf,"/",size);
 #endif
 			BUF_strlcat(buf,RFILE,size);
+#else /* !OPENSSL_SYS_AMIGA */
+			AddPart(buf, RFILE, size);
+#endif /* !OPENSSL_SYS_AMIGA */
 			}
 		else
 		  	buf[0] = '\0'; /* no file name */

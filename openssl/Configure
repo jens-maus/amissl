@@ -615,6 +615,15 @@ my %table=(
 "uClinux-dist","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):BN_LLONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 "uClinux-dist64","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):SIXTY_FOUR_BIT_LONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 
+##### Amiga OS3 (GCC)
+"amiga-os3","m68k-amigaos-gcc::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+
+##### Amiga OS4 (GCC)
+"amiga-os4","ppc-amigaos-gcc-4.0.3::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+
+##### Amiga MorphOS (GCC)
+"amiga-mos","ppc-morphos-gcc::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+
 );
 
 my @MK1MF_Builds=qw(VC-WIN64I VC-WIN64A
@@ -1387,7 +1396,7 @@ if (!$IsMK1MF)
 	if ($no_shared)
 		{
 		$openssl_other_defines.="#define OPENSSL_NO_DYNAMIC_ENGINE\n";
-		$options.=" static-engine";
+		$options.=" enable-static-engine";
 		}
 	else
 		{
@@ -1900,7 +1909,7 @@ print "RC2 uses u$type[$rc2_int]\n" if $rc2_int != $def_int;
 print "BF_PTR used\n" if $bf_ptr == 1; 
 print "BF_PTR2 used\n" if $bf_ptr == 2; 
 
-if($IsMK1MF) {
+if($IsMK1MF || $target == "amiga-os3" || $target == "amiga-os4" || $target == "amiga-mos") {
 	open (OUT,">crypto/buildinf.h") || die "Can't open buildinf.h";
 	printf OUT <<EOF;
 #ifndef MK1MF_BUILD

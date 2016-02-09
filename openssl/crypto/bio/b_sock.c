@@ -261,10 +261,10 @@ long BIO_ghbn_ctrl(int cmd, int iarg, char *parg)
 	switch (cmd)
 		{
 	case BIO_GHBN_CTRL_HITS:
-		return(BIO_ghbn_hits);
+		return((long)BIO_ghbn_hits);
 		/* break; */
 	case BIO_GHBN_CTRL_MISSES:
-		return(BIO_ghbn_miss);
+		return((long)BIO_ghbn_miss);
 		/* break; */
 	case BIO_GHBN_CTRL_CACHE_SIZE:
 		return(GHBN_NUM);

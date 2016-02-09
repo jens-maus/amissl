@@ -541,6 +541,10 @@ void CONF_module_set_usr_data(CONF_MODULE *pmod, void *usr_data)
 	pmod->usr_data = usr_data;
 	}
 
+#ifdef OPENSSL_SYS_AMIGA
+#include <proto/dos.h>
+#endif /* OPENSSL_SYS_AMIGA */
+
 /* Return default config file name */
 
 char *CONF_get1_default_config_file(void)
@@ -563,10 +567,14 @@ char *CONF_get1_default_config_file(void)
 	if (!file)
 		return NULL;
 	BUF_strlcpy(file,X509_get_default_cert_area(),len + 1);
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_VMS
 	BUF_strlcat(file,"/",len + 1);
 #endif
 	BUF_strlcat(file,OPENSSL_CONF,len + 1);
+#else /* !OPENSSL_SYS_AMIGA */
+	AddPart(file, OPENSSL_CONF, len + 1);
+#endif /* !OPENSSL_SYS_AMIGA */
 
 	return file;
 	}

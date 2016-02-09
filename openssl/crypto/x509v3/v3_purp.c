@@ -135,7 +135,7 @@ int X509_PURPOSE_set(int *p, int purpose)
 int X509_PURPOSE_get_count(void)
 {
 	if(!xptable) return X509_PURPOSE_COUNT;
-	return sk_X509_PURPOSE_num(xptable) + X509_PURPOSE_COUNT;
+	return (int)(sk_X509_PURPOSE_num(xptable) + X509_PURPOSE_COUNT);
 }
 
 X509_PURPOSE * X509_PURPOSE_get0(int idx)
@@ -166,7 +166,7 @@ int X509_PURPOSE_get_by_id(int purpose)
 	if(!xptable) return -1;
 	idx = sk_X509_PURPOSE_find(xptable, &tmp);
 	if(idx == -1) return -1;
-	return idx + X509_PURPOSE_COUNT;
+	return (int)(idx + X509_PURPOSE_COUNT);
 }
 
 int X509_PURPOSE_add(int id, int trust, int flags,

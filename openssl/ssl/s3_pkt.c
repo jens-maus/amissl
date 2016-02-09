@@ -639,7 +639,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
 			 * in ciphersuites with known-IV weakness: */
 			s->s3->empty_fragment_done = 0;
 			
-			return tot+i;
+			return (int)(tot+i);
 			}
 
 		n-=i;
@@ -856,7 +856,7 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 		/* we are in a recursive call;
 		 * just return the length, don't write out anything here
 		 */
-		return wr->length;
+		return (int)(wr->length);
 		}
 
 	/* now let's set up wb */
@@ -993,7 +993,7 @@ int ssl3_read_bytes(SSL *s, int type, unsigned char *buf, int len, int peek)
 		/* move any remaining fragment bytes: */
 		for (k = 0; k < s->s3->handshake_fragment_len; k++)
 			s->s3->handshake_fragment[k] = *src++;
-		return n;
+		return (int)n;
 	}
 
 	/* Now s->s3->handshake_fragment_len == 0 if type == SSL3_RT_HANDSHAKE. */
@@ -1078,7 +1078,7 @@ start:
 					ssl3_release_read_buffer(s);
 				}
 			}
-		return(n);
+		return((int)n);
 		}
 
 

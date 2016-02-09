@@ -132,6 +132,13 @@ int MAIN(int argc, char **argv)
 		else if (strcmp(*argv,"-tls1") == 0)
 			meth=TLSv1_client_method();
 #endif
+#ifdef OPENSSL_SYS_AMIGA
+		else if (strcmp(*argv,"?") == 0)
+			{
+			badops=1;
+			break;
+			}
+#endif
 		else if ((strncmp(*argv,"-h",2) == 0) ||
 			 (strcmp(*argv,"-?") == 0))
 			{

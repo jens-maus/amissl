@@ -125,7 +125,7 @@ static int tls_decrypt_ticket(SSL *s, const unsigned char *tick, int ticklen,
 				SSL_SESSION **psess);
 #endif
 
-SSL3_ENC_METHOD TLSv1_enc_data={
+SSL3_ENC_METHOD AMISSL_COMMON_DATA TLSv1_enc_data={
 	tls1_enc,
 	tls1_mac,
 	tls1_setup_key_block,

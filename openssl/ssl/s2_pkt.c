@@ -333,7 +333,7 @@ static int read_n(SSL *s, unsigned int n, unsigned int max,
 			}
 		s->s2->rbuf_left-=n;
 		s->s2->rbuf_offs+=n;
-		return(n);
+		return((int)n);
 		}
 
 	if (!s->read_ahead) max=n;
@@ -411,7 +411,7 @@ static int read_n(SSL *s, unsigned int n, unsigned int max,
 	else
 		s->packet_length=n;
 	s->rwstate=SSL_NOTHING;
-	return(n);
+	return((int)n);
 	}
 
 int ssl2_write(SSL *s, const void *_buf, int len)
@@ -457,7 +457,7 @@ int ssl2_write(SSL *s, const void *_buf, int len)
 		if ((i == (int)n) ||
 			(s->mode & SSL_MODE_ENABLE_PARTIAL_WRITE))
 			{
-			return(tot+i);
+			return((int)(tot+i));
 			}
 		
 		n-=i;

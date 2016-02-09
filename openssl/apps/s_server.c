@@ -302,6 +302,11 @@ static char *engine_id=NULL;
 #endif
 static const char *session_id_prefix=NULL;
 
+#ifdef OPENSSL_SYS_AMIGA
+#include <proto/dos.h>
+static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
+#endif
+
 static int enable_timeouts = 0;
 static long socket_mtu;
 #ifndef OPENSSL_NO_DTLS1
@@ -1976,7 +1981,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 	KSSL_CTX *kctx;
 #endif
 	struct timeval timeout;
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_BEOS_R5) || defined(OPENSSL_SYS_AMIGA)
 	struct timeval tv;
 #else
 	struct timeval *timeoutp;
@@ -2111,7 +2116,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 		if (!read_from_sslcon)
 			{
 			FD_ZERO(&readfds);
-#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_BEOS_R5)
+#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_BEOS_R5) && !defined(OPENSSL_SYS_AMIGA)
 			openssl_fdset(fileno(stdin),&readfds);
 #endif
 			openssl_fdset(s,&readfds);
@@ -2121,7 +2126,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 			 * the compiler: if you do have a cast then you can either
 			 * go for (int *) or (void *).
 			 */
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_AMIGA)
                         /* Under DOS (non-djgpp) and Windows we can't select on stdin: only
 			 * on sockets. As a workaround we timeout the select every
 			 * second and check for any keypress. In a proper Windows

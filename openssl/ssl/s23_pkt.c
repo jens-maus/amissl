@@ -109,7 +109,7 @@ int ssl23_read_bytes(SSL *s, int n)
 			s->rwstate=SSL_NOTHING;
 			s->packet_length+=j;
 			if (s->packet_length >= (unsigned int)n)
-				return(s->packet_length);
+				return((int)s->packet_length);
 			}
 		}
 	return(n);

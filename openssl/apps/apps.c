@@ -362,6 +362,16 @@ void program_name(char *in, char *out, int size)
 		out[q-p]='\0';
 		}
 	}
+#elif defined(OPENSSL_SYS_AMIGA)
+#include <proto/dos.h>
+
+long __stack = 65536;
+unsigned int __stack_size = 65536;
+
+void program_name(char *in, char *out, int size)
+{
+	BUF_strlcpy(out, FilePart(in), size);
+}
 #else
 void program_name(char *in, char *out, int size)
 	{
@@ -1547,10 +1557,14 @@ char *make_config_name()
 	if (p == NULL)
 		return NULL;
 	BUF_strlcpy(p,t,len);
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_VMS
 	BUF_strlcat(p,"/",len);
 #endif
 	BUF_strlcat(p,OPENSSL_CONF,len);
+#else /* !OPENSSL_SYS_AMIGA */
+	AddPart(p, OPENSSL_CONF, len);
+#endif /* !OPENSSL_SYS_AMIGA */
 
 	return p;
 	}
@@ -3006,12 +3020,18 @@ double app_tminterval(int stop,int usertime)
 double app_tminterval(int stop,int usertime)
 	{
 	double		ret = 0;
+  #if !defined(OPENSSL_SYS_AMIGA)
 	struct rusage	rus;
+  #endif
 	struct timeval	now;
 	static struct timeval tmstart;
 
+  #if !defined(OPENSSL_SYS_AMIGA)
 	if (usertime)		getrusage(RUSAGE_SELF,&rus), now = rus.ru_utime;
 	else			gettimeofday(&now,NULL);
+  #else
+  gettimeofday(&now, NULL);
+  #endif
 
 	if (stop==TM_START)	tmstart = now;
 	else			ret = ( (now.tv_sec+now.tv_usec*1e-6)

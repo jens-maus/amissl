@@ -255,7 +255,7 @@ static ERR_STATE *int_thread_set_item(ERR_STATE *);
 static void int_thread_del_item(const ERR_STATE *);
 static int int_err_get_next_lib(void);
 /* The static ERR_FNS table using these defaults functions */
-static const ERR_FNS err_defaults =
+static const ERR_FNS AMISSL_COMMON_DATA err_defaults =
 	{
 	int_err_get,
 	int_err_del,
@@ -281,8 +281,8 @@ static const ERR_FNS *err_fns = NULL;
  * "err_defaults" functions. This way, a linked module can completely defer all
  * ERR state operation (together with requisite locking) to the implementations
  * and state in the loading application. */
-static LHASH_OF(ERR_STRING_DATA) *int_error_hash = NULL;
-static LHASH_OF(ERR_STATE) *int_thread_hash = NULL;
+static LHASH_OF(ERR_STRING_DATA) * AMISSL_COMMON_DATA int_error_hash = NULL;
+static LHASH_OF(ERR_STATE) * AMISSL_COMMON_DATA int_thread_hash = NULL;
 static int int_thread_hash_references = 0;
 static int int_err_library_number= ERR_LIB_USER;
 
@@ -953,7 +953,6 @@ const char *ERR_func_error_string(unsigned long e)
 	{
 	ERR_STRING_DATA d,*p;
 	unsigned long l,f;
-
 	err_fns_check();
 	l=ERR_GET_LIB(e);
 	f=ERR_GET_FUNC(e);

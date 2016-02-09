@@ -196,7 +196,6 @@ static void ssleay_rand_add(const void *buf, int num, double add)
 	unsigned char local_md[MD_DIGEST_LENGTH];
 	EVP_MD_CTX m;
 	int do_not_lock;
-
 	if (!num)
 		return;
 

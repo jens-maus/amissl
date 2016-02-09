@@ -5,6 +5,9 @@
  * forms are granted according to the OpenSSL license.
  */
 
+#ifndef HEADER_MODES_H
+#define HEADER_MODES_H
+
 #include <stddef.h>
 
 typedef void (*block128_f)(const unsigned char in[16],
@@ -133,3 +136,5 @@ typedef struct xts128_context XTS128_CONTEXT;
 
 int CRYPTO_xts128_encrypt(const XTS128_CONTEXT *ctx, const unsigned char iv[16],
 	const unsigned char *inp, unsigned char *out, size_t len, int enc);
+
+#endif /* HEADER_MODES_H */

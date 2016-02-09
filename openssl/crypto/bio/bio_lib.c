@@ -407,12 +407,12 @@ long BIO_callback_ctrl(BIO *b, int cmd, void (*fp)(struct bio_st *, int, const c
  * from other programming languages, C macros aren't much of a help anyway. */
 size_t BIO_ctrl_pending(BIO *bio)
 	{
-	return BIO_ctrl(bio, BIO_CTRL_PENDING, 0, NULL);
+	return (size_t)BIO_ctrl(bio, BIO_CTRL_PENDING, 0, NULL);
 	}
 
 size_t BIO_ctrl_wpending(BIO *bio)
 	{
-	return BIO_ctrl(bio, BIO_CTRL_WPENDING, 0, NULL);
+	return (size_t)BIO_ctrl(bio, BIO_CTRL_WPENDING, 0, NULL);
 	}
 
 

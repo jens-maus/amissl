@@ -82,6 +82,9 @@ $infile="MINFO";
 	"netware-clib-bsdsock", "CodeWarrior for NetWare - CLib - with BSD Sockets",
 	"netware-libc", "CodeWarrior for NetWare - LibC - with WinSock Sockets",
 	"netware-libc-bsdsock", "CodeWarrior for NetWare - LibC - with BSD Sockets",
+	"amiga-os3", "Amiga OS3",
+	"amiga-os4", "Amiga OS4",
+	"amiga-mos", "Amiga MorphOS",
 	"default","cc under unix",
 	"auto", "auto detect from top level Makefile"
 	);
@@ -165,6 +168,10 @@ $cc=(defined($VARS{'CC'}))?$VARS{'CC'}:'cc';
 $src_dir=(defined($VARS{'SRC'}))?$VARS{'SRC'}:'.';
 $bin_dir=(defined($VARS{'BIN'}))?$VARS{'BIN'}:'';
 
+$define='-D';
+$include='-I';
+$cfile='-c ';
+
 # $bin_dir.=$o causes a core dump on my sparc :-(
 
 
@@ -225,6 +232,18 @@ elsif (($platform eq "netware-clib") || ($platform eq "netware-libc") ||
 	$BSDSOCK=1 if ($platform eq "netware-libc-bsdsock") || ($platform eq "netware-clib-bsdsock");
 	require 'netware.pl';
 	}
+elsif ($platform eq "amiga-os3")
+	{
+	require "amiga-os3.pl";
+	}
+elsif ($platform eq "amiga-os4")
+	{
+	require "amiga-os4.pl";
+	}
+elsif ($platform eq "amiga-mos")
+	{
+	require "amiga-mos.pl";
+	}
 else
 	{
 	require "unix.pl";
@@ -243,54 +262,54 @@ $bin_dir=$bin_dir.$o unless ((substr($bin_dir,-1,1) eq $o) || ($bin_dir eq ''));
 
 $cflags= "$xcflags$cflags" if $xcflags ne "";
 
-$cflags.=" -DOPENSSL_NO_IDEA" if $no_idea;
-$cflags.=" -DOPENSSL_NO_AES"  if $no_aes;
-$cflags.=" -DOPENSSL_NO_CAMELLIA"  if $no_camellia;
-$cflags.=" -DOPENSSL_NO_SEED" if $no_seed;
-$cflags.=" -DOPENSSL_NO_RC2"  if $no_rc2;
-$cflags.=" -DOPENSSL_NO_RC4"  if $no_rc4;
-$cflags.=" -DOPENSSL_NO_RC5"  if $no_rc5;
-$cflags.=" -DOPENSSL_NO_MD2"  if $no_md2;
-$cflags.=" -DOPENSSL_NO_MD4"  if $no_md4;
-$cflags.=" -DOPENSSL_NO_MD5"  if $no_md5;
-$cflags.=" -DOPENSSL_NO_SHA"  if $no_sha;
-$cflags.=" -DOPENSSL_NO_SHA1" if $no_sha1;
-$cflags.=" -DOPENSSL_NO_RIPEMD" if $no_ripemd;
-$cflags.=" -DOPENSSL_NO_MDC2" if $no_mdc2;
-$cflags.=" -DOPENSSL_NO_BF"  if $no_bf;
-$cflags.=" -DOPENSSL_NO_CAST" if $no_cast;
-$cflags.=" -DOPENSSL_NO_DES"  if $no_des;
-$cflags.=" -DOPENSSL_NO_RSA"  if $no_rsa;
-$cflags.=" -DOPENSSL_NO_DSA"  if $no_dsa;
-$cflags.=" -DOPENSSL_NO_DH"   if $no_dh;
-$cflags.=" -DOPENSSL_NO_WHIRLPOOL"   if $no_whirlpool;
-$cflags.=" -DOPENSSL_NO_SOCK" if $no_sock;
-$cflags.=" -DOPENSSL_NO_SSL2" if $no_ssl2;
-$cflags.=" -DOPENSSL_NO_SSL3" if $no_ssl3;
-$cflags.=" -DOPENSSL_NO_TLSEXT" if $no_tlsext;
-$cflags.=" -DOPENSSL_NO_SRP" if $no_srp;
-$cflags.=" -DOPENSSL_NO_CMS" if $no_cms;
-$cflags.=" -DOPENSSL_NO_ERR"  if $no_err;
-$cflags.=" -DOPENSSL_NO_KRB5" if $no_krb5;
-$cflags.=" -DOPENSSL_NO_EC"   if $no_ec;
-$cflags.=" -DOPENSSL_NO_ECDSA" if $no_ecdsa;
-$cflags.=" -DOPENSSL_NO_ECDH" if $no_ecdh;
-$cflags.=" -DOPENSSL_NO_GOST" if $no_gost;
-$cflags.=" -DOPENSSL_NO_ENGINE"   if $no_engine;
-$cflags.=" -DOPENSSL_NO_HW"   if $no_hw;
-$cflags.=" -DOPENSSL_FIPS"    if $fips;
-$cflags.=" -DOPENSSL_NO_JPAKE"    if $no_jpake;
-$cflags.=" -DOPENSSL_NO_EC2M"    if $no_ec2m;
-$cflags.= " -DZLIB" if $zlib_opt;
-$cflags.= " -DZLIB_SHARED" if $zlib_opt == 2;
+$cflags.=" " . $define . "OPENSSL_NO_IDEA" if $no_idea;
+$cflags.=" " . $define . "OPENSSL_NO_AES"  if $no_aes;
+$cflags.=" " . $define . "OPENSSL_NO_CAMELLIA"  if $no_camellia;
+$cflags.=" " . $define . "OPENSSL_NO_SEED" if $no_seed;
+$cflags.=" " . $define . "OPENSSL_NO_RC2"  if $no_rc2;
+$cflags.=" " . $define . "OPENSSL_NO_RC4"  if $no_rc4;
+$cflags.=" " . $define . "OPENSSL_NO_RC5"  if $no_rc5;
+$cflags.=" " . $define . "OPENSSL_NO_MD2"  if $no_md2;
+$cflags.=" " . $define . "OPENSSL_NO_MD4"  if $no_md4;
+$cflags.=" " . $define . "OPENSSL_NO_MD5"  if $no_md5;
+$cflags.=" " . $define . "OPENSSL_NO_SHA"  if $no_sha;
+$cflags.=" " . $define . "OPENSSL_NO_SHA1" if $no_sha1;
+$cflags.=" " . $define . "OPENSSL_NO_RIPEMD" if $no_ripemd;
+$cflags.=" " . $define . "OPENSSL_NO_MDC2" if $no_mdc2;
+$cflags.=" " . $define . "OPENSSL_NO_BF"  if $no_bf;
+$cflags.=" " . $define . "OPENSSL_NO_CAST" if $no_cast;
+$cflags.=" " . $define . "OPENSSL_NO_DES"  if $no_des;
+$cflags.=" " . $define . "OPENSSL_NO_RSA"  if $no_rsa;
+$cflags.=" " . $define . "OPENSSL_NO_DSA"  if $no_dsa;
+$cflags.=" " . $define . "OPENSSL_NO_DH"   if $no_dh;
+$cflags.=" " . $define . "OPENSSL_NO_WHIRLPOOL"   if $no_whirlpool;
+$cflags.=" " . $define . "OPENSSL_NO_SOCK" if $no_sock;
+$cflags.=" " . $define . "OPENSSL_NO_SSL2" if $no_ssl2;
+$cflags.=" " . $define . "OPENSSL_NO_SSL3" if $no_ssl3;
+$cflags.=" " . $define . "OPENSSL_NO_TLSEXT" if $no_tlsext;
+$cflags.=" " . $define . "OPENSSL_NO_SRP" if $no_srp;
+$cflags.=" " . $define . "OPENSSL_NO_CMS" if $no_cms;
+$cflags.=" " . $define . "OPENSSL_NO_ERR"  if $no_err;
+$cflags.=" " . $define . "OPENSSL_NO_KRB5" if $no_krb5;
+$cflags.=" " . $define . "OPENSSL_NO_EC"   if $no_ec;
+$cflags.=" " . $define . "OPENSSL_NO_ECDSA" if $no_ecdsa;
+$cflags.=" " . $define . "OPENSSL_NO_ECDH" if $no_ecdh;
+$cflags.=" " . $define . "OPENSSL_NO_GOST" if $no_gost;
+$cflags.=" " . $define . "OPENSSL_NO_ENGINE"   if $no_engine;
+$cflags.=" " . $define . "OPENSSL_NO_HW"   if $no_hw;
+$cflags.=" " . $define . "OPENSSL_FIPS"    if $fips;
+$cflags.=" " . $define . "OPENSSL_NO_JPAKE"    if $no_jpake;
+$cflags.=" " . $define . "OPENSSL_NO_EC2M"    if $no_ec2m;
+$cflags.=" " . $define . "ZLIB" if $zlib_opt;
+$cflags.=" " . $define . "ZLIB_SHARED" if $zlib_opt == 2;
 
 if ($no_static_engine)
 	{
-	$cflags .= " -DOPENSSL_NO_STATIC_ENGINE";
+	$cflags .= " " . $define . "OPENSSL_NO_STATIC_ENGINE";
 	}
 else
 	{
-	$cflags .= " -DOPENSSL_NO_DYNAMIC_ENGINE";
+	$cflags .= " " . $define . "OPENSSL_NO_DYNAMIC_ENGINE";
 	}
 
 #$cflags.=" -DRSAref"  if $rsaref ne "";
@@ -302,13 +321,12 @@ else
 
 $ex_libs="$l_flags$ex_libs" if ($l_flags ne "");
 
-
-%shlib_ex_cflags=("SSL" => " -DOPENSSL_BUILD_SHLIBSSL",
-		  "CRYPTO" => " -DOPENSSL_BUILD_SHLIBCRYPTO");
+%shlib_ex_cflags=("SSL" => $define . "OPENSSL_BUILD_SHLIBSSL",
+		  "CRYPTO" => $define . "OPENSSL_BUILD_SHLIBCRYPTO");
 
 if ($msdos)
 	{
-	$banner ="\t\@echo Make sure you have run 'perl Configure $platform' in the\n";
+	$banner ="\t\@echo Make sure you have run \'perl Configure $platform\' in the\n";
 	$banner.="\t\@echo top level directory, if you don't have perl, you will\n";
 	$banner.="\t\@echo need to probably edit crypto/bn/bn.h, check the\n";
 	$banner.="\t\@echo documentation for details.\n";
@@ -319,6 +337,8 @@ $link="$bin_dir$link" if ($link !~ /^\$/);
 
 $INSTALLTOP =~ s|/|$o|g;
 $OPENSSLDIR =~ s|/|$o|g;
+
+$inc= $include . "\$(INC_D) " . $include . "\$(INCL_D)";
 
 #############################################
 # We parse in input file and 'store' info for later printing.
@@ -524,14 +544,15 @@ SO_CRYPTO= $plib\$(CRYPTO)$so_shlibp
 L_SSL=     \$(LIB_D)$o$plib\$(SSL)$libp
 L_CRYPTO=  \$(LIB_D)$o$plib\$(CRYPTO)$libp
 
-L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
+#L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
+L_LIBS= # AMIGA doesn't require L_LIBS
 
 ######################################################
 # Don't touch anything below this point
 ######################################################
 
-INC=-I\$(INC_D) -I\$(INCL_D)
-APP_CFLAGS=\$(INC) \$(CFLAG) \$(APP_CFLAG)
+INC=$inc
+APP_CFLAGS=\$(CFLAG) \$(APP_CFLAG) \$(INC)
 LIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG)
 SHLIB_CFLAGS=\$(INC) \$(CFLAG) \$(LIB_CFLAG) \$(SHLIB_CFLAG)
 LIBS_DEP=\$(O_CRYPTO) \$(O_SSL)
@@ -654,7 +675,7 @@ $defs.=&do_defs("T_OBJ",$test,"\$(OBJ_D)",$obj);
 $rules.=&do_compile_rule("\$(OBJ_D)",$test,"\$(APP_CFLAGS)");
 
 $defs.=&do_defs("E_OBJ",$e_exe,"\$(OBJ_D)",$obj);
-$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,'-DMONOLITH $(APP_CFLAGS)');
+$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,$define . "MONOLITH \$(APP_CFLAGS)");
 
 # Special case rule for fips_premain_dso
 
@@ -756,6 +777,15 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
+elsif ($platform eq "amiga-os4")
+	{
+	$rules .= <<"EOF";
+\$(TMP_D)/bn_asm_amigaos4_ppc32.s: \$(SRC_D)crypto/bn/asm/ppc.pl
+	perl \$< \$@
+
+EOF
+	}
+
 print "###################################################################\n";
 print $rules;
 
@@ -870,13 +900,15 @@ sub clean_up_ws
 sub do_defs
 	{
 	local($var,$files,$location,$postfix)=@_;
-	local($_,$ret,$pf);
+	local($_,$ret,$pf,$m);
 	local(*OUT,$tmp,$t);
 
 	$files =~ s/\//$o/g if $o ne '/';
-	$ret="$var="; 
 	$n=1;
 	$Vars{$var}.="";
+	if (length $files > $maxchars) { $m=1; $ret="${var}1="; }
+	else { $ret="$var="; }
+	$total=0;
 	foreach (split(/ /,$files))
 		{
 		$orig=$_;
@@ -906,6 +938,13 @@ sub do_defs
 
 		$Vars{$var}.="$t ";
 		$ret.=$t;
+		$total+=length $t;
+		if ($total > $maxchars && length $files > $maxchars)
+			{
+			$total=0;
+			++$m;
+			$ret.="\n\n${var}$m=";
+			}
 		}
 	# hack to add version info on MSVC
 	if ($shlib && (($platform eq "VC-WIN32") || ($platfrom eq "VC-WIN64I") || ($platform eq "VC-WIN64A") || ($platform eq "VC-NT")))
@@ -917,6 +956,12 @@ sub do_defs
 		}
 	chomp($ret);
 	$ret.="\n\n";
+	if (length $files > $maxchars)
+		{
+		$ret.="$var=";
+		for (1..$m) { $ret.="\$(${var}$_) "; }
+		$ret.="\n\n";
+		}
 	return($ret);
 	}
 
@@ -1002,12 +1047,12 @@ sub cc_compile_target
 	local($target,$source,$ex_flags, $srcd)=@_;
 	local($ret);
 	
-	$ex_flags.=" -DMK1MF_BUILD -D$platform_cpp_symbol" if ($source =~ /cversion/);
+	$ex_flags.=" $define MK1MF_BUILD $define $platform_cpp_symbol" if ($source =~ /cversion/);
 	$target =~ s/\//$o/g if $o ne "/";
 	$source =~ s/\//$o/g if $o ne "/";
-	$srcd = "\$(SRC_D)$o" unless defined $srcd;
+	$srcd = "\$(SRC_D)" unless defined $srcd;
 	$ret ="$target: $srcd$source\n\t";
-	$ret.="\$(CC) ${ofile}$target $ex_flags -c $srcd$source\n\n";
+	$ret.="\$(CC) ${ofile}$target $ex_flags $cfile $srcd$source\n\n";
 	return($ret);
 	}
 
@@ -1038,7 +1083,7 @@ sub do_asm_rule
 			}
 
 		$ret.="$objfile: $srcfile\n";
-		$ret.="\t\$(ASM) $afile$objfile \$(SRC_D)$o$srcfile\n\n";
+		$ret.="\t\$(ASM) $afile$objfile \$(SRC_D)$srcfile\n\n";
 		}
 	return($ret);
 	}
@@ -1072,7 +1117,7 @@ sub do_copy_rule
 		if ($n =~ /bss_file/)
 			{ $pp=".c"; }
 		else	{ $pp=$p; }
-		$ret.="$to${o}$n$pp: \$(SRC_D)$o$_$pp\n\t\$(CP) \"\$(SRC_D)$o$_$pp\" \"$to${o}$n$pp\"\n\n";
+		$ret.="$to${o}$n$pp: \$(SRC_D)$_$pp\n\t\$(CP) \"\$(SRC_D)$_$pp\" \"$to${o}$n$pp\"\n\n";
 		}
 	return($ret);
 	}

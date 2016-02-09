@@ -423,7 +423,7 @@ BN_ULONG bn_sub_words(BN_ULONG *r, const BN_ULONG *a, const BN_ULONG *b, int n)
 		if (t1 != t2) c=(t1 < t2);
 		a++; b++; r++; n--;
 		}
-	return(c);
+	return((BN_ULONG)c);
 	}
 
 #if defined(BN_MUL_COMBA) && !defined(OPENSSL_SMALL_FOOTPRINT)

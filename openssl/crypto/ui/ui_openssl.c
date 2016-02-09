@@ -114,7 +114,7 @@
  * [including the GNU Public Licence.]
  */
 
-
+#if !defined(OPENSSL_SYS_AMIGA)
 #include <openssl/e_os2.h>
 
 /* need for #define _POSIX_C_SOURCE arises whenever you pass -ansi to gcc
@@ -216,6 +216,12 @@
 
 #if defined(OPENSSL_SYS_NETWARE)
 #undef TERMIOS
+#undef TERMIO
+#undef SGTTY
+#endif
+
+#if defined(OPENSSL_SYS_AMIGA)
+#define TERMIOS
 #undef TERMIO
 #undef SGTTY
 #endif
@@ -716,3 +722,4 @@ static int noecho_fgets(char *buf, int size, FILE *tty)
 	return(strlen(buf));
 	}
 #endif
+#endif /* !OPENSSL_SYS_AMIGA */

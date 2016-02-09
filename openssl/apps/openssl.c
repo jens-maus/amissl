@@ -222,6 +222,115 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 # define ARGV Argv
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+#include <proto/exec.h>
+#include <proto/amisslmaster.h>
+#include <proto/socket.h>
+
+#include <libraries/amisslmaster.h>
+#include <libraries/amissl.h>
+
+const char *ProgramVersion = "\0$VER: OpenSSL 1.0.1i (17.08.2014)\r\n";
+
+struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
+
+struct AmiSSLIFace *IAmiSSL;
+struct AmiSSLMasterIFace *IAmiSSLMaster;
+struct SocketIFace *ISocket;
+
+#if !defined(__amigaos4__)
+#define GetInterface(a, b, c, d) 1
+#define DropInterface(x)
+#endif /* !__amigaos4__ */
+
+static void cleanup_amissl(void)
+{
+	if (AmiSSLBase)
+	{
+		if (IAmiSSL)
+		{
+			CleanupAmiSSL(TAG_DONE);
+			DropInterface((struct Interface *)IAmiSSL);
+			IAmiSSL = NULL;
+		}
+
+		CloseAmiSSL();
+		AmiSSLBase = NULL;
+	}
+
+	DropInterface((struct Interface *)IAmiSSLMaster);
+	IAmiSSLMaster = NULL;
+
+	CloseLibrary(AmiSSLMasterBase);
+	AmiSSLMasterBase = NULL;
+
+	DropInterface((struct Interface *)ISocket);
+	ISocket = NULL;
+
+	CloseLibrary(SocketBase);
+	SocketBase = NULL;
+}
+
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+static void (*old_sigint_handler)(int);
+
+static void amissl_sigint_handler(int sig)
+{
+	signal(SIGINT, old_sigint_handler);
+	cleanup_amissl();
+	raise(SIGINT);
+
+	/* Just in case... */
+	fprintf(stderr, "*** BREAK\n");
+	exit(1);
+}
+
+static void init_amissl(void)
+{
+	BOOL is_ok = FALSE;
+
+	atexit(cleanup_amissl);
+	old_sigint_handler = signal(SIGINT, amissl_sigint_handler);
+
+	/* Failing to open this is not fatal since there are parts of
+	 * openssl tool that don't require networking functionality.
+	 */
+	if((SocketBase = OpenLibrary("bsdsocket.library", 4)))
+		ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL);
+
+	if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library", AMISSLMASTER_MIN_VERSION)))
+		fprintf(stderr, "Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
+	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,"main",1,NULL)))
+		fprintf(stderr, "Couldn't get AmiSSLMaster interface!\n");
+	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+		fprintf(stderr, "Couldn't initialize amisslmaster.library!\n");
+	else if (!(AmiSSLBase = OpenAmiSSL()))
+		fprintf(stderr, "Couldn't open AmiSSL!\n");
+	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase, "main", 1, NULL)))
+		fprintf(stderr, "Couldn't get AmiSSL interface!\n");
+#if defined(__amigaos4__)
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+	                    AmiSSL_ISocket, ISocket,
+	                    TAG_DONE) != 0)
+#else /* __amigaos4__ */
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+	                    AmiSSL_SocketBase, SocketBase,
+	                    TAG_DONE) != 0)
+#endif /* __amigaos4__ */
+		fprintf(stderr, "Couldn't initialize AmiSSL!\n");
+	else
+		is_ok = TRUE;
+
+	if (!is_ok)
+	{
+		cleanup_amissl();
+		exit(1);
+	}
+}
+#endif /* OPENSSL_SYS_AMIGA */
+
 int main(int Argc, char *ARGV[])
 	{
 	ARGS arg;
@@ -284,6 +393,10 @@ int main(int Argc, char *ARGV[])
 		Argv = (char **)_Argv;
 		}
 #endif /* defined( OPENSSL_SYS_VMS) && (__INITIAL_POINTER_SIZE == 64) */
+
+#ifdef OPENSSL_SYS_AMIGA
+	init_amissl();
+#endif /* OPENSSL_SYS_AMIGA */
 
 	arg.data=NULL;
 	arg.count=0;
@@ -443,6 +556,11 @@ end:
 		BIO_free(bio_err);
 		bio_err=NULL;
 		}
+
+#ifdef OPENSSL_SYS_AMIGA
+	cleanup_amissl();
+#endif /* OPENSSL_SYS_AMIGA */
+
 #if defined( OPENSSL_SYS_VMS) && (__INITIAL_POINTER_SIZE == 64)
 	/* Free any duplicate Argv[] storage. */
 	if (free_Argv)

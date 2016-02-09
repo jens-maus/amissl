@@ -108,6 +108,15 @@ extern "C" {
 # endif
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+#  define NO_CHMOD
+#  undef  DEVRANDOM
+#  ifdef __CLIB2__
+#    define __USE_NETINET_IN_H
+#    define NO_SYS_PARAM_H
+#  endif
+#endif
+
 /********************************************************************
  The Microsoft section
  ********************************************************************/
@@ -139,6 +148,11 @@ extern "C" {
 #if !defined(WINNT)
 #define WIN_CONSOLE_BUG
 #endif
+#elif defined(AMISSL_COMPILE)
+STDARGS void SetAmiSSLerrno(int errno);
+STDARGS int GetAmiSSLerrno(void);
+#define get_last_sys_error()	GetAmiSSLerrno()
+#define clear_sys_error()	SetAmiSSLerrno(0)
 #else
 #define get_last_sys_error()	errno
 #define clear_sys_error()	errno=0
@@ -156,6 +170,27 @@ extern "C" {
 #define closesocket(s)		close_s(s)
 #define readsocket(s,b,n)	read_s(s,b,n)
 #define writesocket(s,b,n)	send(s,b,n,0)
+#elif defined(OPENSSL_SYS_AMIGA)
+# ifdef AMISSL_COMPILE
+#  define get_last_socket_error()	GetAmiSSLerrno()
+#  define clear_socket_error()	SetAmiSSLerrno(0)
+/* # define ioctlsocket(a,b,c)	ioctlsocket((a),(b),(c)) */
+/* # define closesocket(s)		closesocket((s)) */
+#  define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#  define writesocket(s,b,n)	send((s),(b),(n), 0)
+#  include "../libcmt/libcmt.h"
+# else /* !AMISSL_COMPILE */
+#  define get_last_socket_error()	errno
+#  define clear_socket_error()	errno = 0
+#  include <stdio.h>
+#  include <proto/socket.h>
+#  define ioctlsocket(a,b,c)	IoctlSocket((a),(b),(c))
+#  define closesocket(s)		CloseSocket((s))
+#  define readsocket(s,b,n)	recv((s),(b),(n), 0)
+#  define writesocket(s,b,n)	send((s),(b),(n), 0)
+#  undef select
+#  define select(a,b,c,d,e) WaitSelect(a,b,c,d,e,NULL)
+# endif /* AMISSL_COMPILE */
 #elif defined(MAC_OS_pre_X)
 #define get_last_socket_error()	errno
 #define clear_socket_error()	errno=0
@@ -472,8 +507,13 @@ static unsigned int _strlen31(const char *str)
 #    define OPENSSL_CONF	"openssl.cnf"
 #    define SSLEAY_CONF		OPENSSL_CONF
 #    define RFILE		".rnd"
-#    define LIST_SEPARATOR_CHAR ':'
-#    define NUL_DEV		"/dev/null"
+#    if defined(OPENSSL_SYS_AMIGA)
+#      define LIST_SEPARATOR_CHAR ';'
+#      define NUL_DEV		"NIL:"
+#    else
+#      define LIST_SEPARATOR_CHAR ':'
+#      define NUL_DEV		"/dev/null"
+#    endif
 #    define EXIT(n)		exit(n)
 #  endif
 
@@ -558,6 +598,10 @@ static unsigned int _strlen31(const char *str)
 
 #  else
 
+#    ifdef AMISSL_COMPILE
+#      define PRAGMAS_SOCKET_PRAGMAS_H /* Make sure that we don't enable SocketBase calls */
+#    endif
+
 #    ifndef NO_SYS_PARAM_H
 #      include <sys/param.h>
 #    endif
@@ -616,13 +660,20 @@ static unsigned int _strlen31(const char *str)
 #      endif
 #    endif
 
+#    ifndef INVALID_SOCKET
+#    define INVALID_SOCKET	(-1)
+#    endif /* INVALID_SOCKET */
+#    if defined(OPENSSL_SYS_AMIGA)
+#      define SSLeay_Read(a,b,c)     readsocket((a),(b),(c))
+#      define SSLeay_Write(a,b,c)    writesocket((a),(b),(c))
+#      define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
+#      define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
+#    else
 #    define SSLeay_Read(a,b,c)     read((a),(b),(c))
 #    define SSLeay_Write(a,b,c)    write((a),(b),(c))
 #    define SHUTDOWN(fd)    { shutdown((fd),0); closesocket((fd)); }
 #    define SHUTDOWN2(fd)   { shutdown((fd),2); closesocket((fd)); }
-#    ifndef INVALID_SOCKET
-#    define INVALID_SOCKET	(-1)
-#    endif /* INVALID_SOCKET */
+#    endif
 #  endif
 
 /* Some IPv6 implementations are broken, disable them in known bad
@@ -690,6 +741,10 @@ extern char *sys_errlist[]; extern int sys_nerr;
 #    define strcasecmp stricmp
 #    define strncasecmp strnicmp
 #  endif /* NETWARE_CLIB */
+#elif defined(OPENSSL_SYS_AMIGA)
+#  define strcasecmp OPENSSL_strcasecmp
+#  define strncasecmp OPENSSL_strncasecmp
+#  define OPENSSL_IMPLEMENTS_strncasecmp
 #endif
 
 #if defined(OPENSSL_SYS_OS2) && defined(__EMX__)

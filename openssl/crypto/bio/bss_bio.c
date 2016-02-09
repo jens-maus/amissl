@@ -266,7 +266,7 @@ static int bio_read(BIO *bio, char *buf, int size_)
 		}
 	while (rest);
 	
-	return size;
+	return (int)size;
 	}
 
 /* non-copying interface: provide pointer to available data in buffer
@@ -419,7 +419,7 @@ static int bio_write(BIO *bio, const char *buf, int num_)
 		}
 	while (rest);
 
-	return num;
+	return (int)num;
 	}
 
 /* non-copying interface: provide pointer to region to write to
@@ -473,7 +473,7 @@ static ossl_ssize_t bio_nwrite0(BIO *bio, char **buf)
 		*buf = b->buf + write_offset;
 	assert(write_offset + num <= b->size);
 
-	return num;
+	return (ssize_t)num;
 	}
 
 static ossl_ssize_t bio_nwrite(BIO *bio, char **buf, size_t num_)
@@ -840,12 +840,12 @@ int BIO_new_bio_pair(BIO **bio1_p, size_t writebuf1,
 
 size_t BIO_ctrl_get_write_guarantee(BIO *bio)
 	{
-	return BIO_ctrl(bio, BIO_C_GET_WRITE_GUARANTEE, 0, NULL);
+	return (size_t)BIO_ctrl(bio, BIO_C_GET_WRITE_GUARANTEE, 0, NULL);
 	}
 
 size_t BIO_ctrl_get_read_request(BIO *bio)
 	{
-	return BIO_ctrl(bio, BIO_C_GET_READ_REQUEST, 0, NULL);
+	return (size_t)BIO_ctrl(bio, BIO_C_GET_READ_REQUEST, 0, NULL);
 	}
 
 int BIO_ctrl_reset_read_request(BIO *bio)

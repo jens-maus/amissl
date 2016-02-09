@@ -1560,7 +1560,7 @@ char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf, int len)
 	is_export=SSL_C_IS_EXPORT(cipher);
 	pkl=SSL_C_EXPORT_PKEYLENGTH(cipher);
 	kl=SSL_C_EXPORT_KEYLENGTH(cipher);
-	exp_str=is_export?" export":"";
+	exp_str=SSL_CIPHER_get_export(cipher);
 	
 	if (alg_ssl & SSL_SSLV2)
 		ver="SSLv2";
@@ -1571,162 +1571,10 @@ char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf, int len)
 	else
 		ver="unknown";
 
-	switch (alg_mkey)
-		{
-	case SSL_kRSA:
-		kx=is_export?(pkl == 512 ? "RSA(512)" : "RSA(1024)"):"RSA";
-		break;
-	case SSL_kDHr:
-		kx="DH/RSA";
-		break;
-	case SSL_kDHd:
-		kx="DH/DSS";
-		break;
-        case SSL_kKRB5:
-		kx="KRB5";
-		break;
-	case SSL_kEDH:
-		kx=is_export?(pkl == 512 ? "DH(512)" : "DH(1024)"):"DH";
-		break;
-	case SSL_kECDHr:
-		kx="ECDH/RSA";
-		break;
-	case SSL_kECDHe:
-		kx="ECDH/ECDSA";
-		break;
-	case SSL_kEECDH:
-		kx="ECDH";
-		break;
-	case SSL_kPSK:
-		kx="PSK";
-		break;
-	case SSL_kSRP:
-		kx="SRP";
-		break;
-	case SSL_kGOST:
-		kx="GOST";
-		break;
-	default:
-		kx="unknown";
-		}
-
-	switch (alg_auth)
-		{
-	case SSL_aRSA:
-		au="RSA";
-		break;
-	case SSL_aDSS:
-		au="DSS";
-		break;
-	case SSL_aDH:
-		au="DH";
-		break;
-        case SSL_aKRB5:
-		au="KRB5";
-		break;
-        case SSL_aECDH:
-		au="ECDH";
-		break;
-	case SSL_aNULL:
-		au="None";
-		break;
-	case SSL_aECDSA:
-		au="ECDSA";
-		break;
-	case SSL_aPSK:
-		au="PSK";
-		break;
-	case SSL_aSRP:
-		au="SRP";
-		break;
-	case SSL_aGOST94:
-		au="GOST94";
-		break;
-	case SSL_aGOST01:
-		au="GOST01";
-		break;
-	default:
-		au="unknown";
-		break;
-		}
-
-	switch (alg_enc)
-		{
-	case SSL_DES:
-		enc=(is_export && kl == 5)?"DES(40)":"DES(56)";
-		break;
-	case SSL_3DES:
-		enc="3DES(168)";
-		break;
-	case SSL_RC4:
-		enc=is_export?(kl == 5 ? "RC4(40)" : "RC4(56)")
-		  :((alg2&SSL2_CF_8_BYTE_ENC)?"RC4(64)":"RC4(128)");
-		break;
-	case SSL_RC2:
-		enc=is_export?(kl == 5 ? "RC2(40)" : "RC2(56)"):"RC2(128)";
-		break;
-	case SSL_IDEA:
-		enc="IDEA(128)";
-		break;
-	case SSL_eNULL:
-		enc="None";
-		break;
-	case SSL_AES128:
-		enc="AES(128)";
-		break;
-	case SSL_AES256:
-		enc="AES(256)";
-		break;
-	case SSL_AES128GCM:
-		enc="AESGCM(128)";
-		break;
-	case SSL_AES256GCM:
-		enc="AESGCM(256)";
-		break;
-	case SSL_CAMELLIA128:
-		enc="Camellia(128)";
-		break;
-	case SSL_CAMELLIA256:
-		enc="Camellia(256)";
-		break;
-	case SSL_SEED:
-		enc="SEED(128)";
-		break;
-	case SSL_eGOST2814789CNT:
-		enc="GOST89(256)";
-		break;
-	default:
-		enc="unknown";
-		break;
-		}
-
-	switch (alg_mac)
-		{
-	case SSL_MD5:
-		mac="MD5";
-		break;
-	case SSL_SHA1:
-		mac="SHA1";
-		break;
-	case SSL_SHA256:
-		mac="SHA256";
-		break;
-	case SSL_SHA384:
-		mac="SHA384";
-		break;
-	case SSL_AEAD:
-		mac="AEAD";
-		break;
-	case SSL_GOST89MAC:
-		mac="GOST89";
-		break;
-	case SSL_GOST94:
-		mac="GOST94";
-		break;
-	default:
-		mac="unknown";
-		break;
-		}
+	kx=SSL_CIPHER_get_key_exchange(cipher);
+	au=SSL_CIPHER_get_authentication(cipher);
+	enc=SSL_CIPHER_get_encryption(cipher);
+	mac=SSL_CIPHER_get_mac(cipher);
 
 	if (buf == NULL)
 		{
@@ -1877,3 +1725,215 @@ const char *SSL_COMP_get_name(const COMP_METHOD *comp)
 	}
 
 #endif
+
+#ifdef OPENSSL_SYS_AMIGA
+
+/* The following five functions are AmiSSL specific, but are used
+ * by the code to make sure that the future changes in OpenSSL
+ * don't go unnoticed.
+ */
+const char *SSL_CIPHER_get_mac(const SSL_CIPHER *cipher)
+{
+  const char *mac;
+  unsigned long alg_mac=cipher->algorithm_mac;
+
+	switch (alg_mac)
+		{
+	case SSL_MD5:
+		mac="MD5";
+		break;
+	case SSL_SHA1:
+		mac="SHA1";
+		break;
+	case SSL_SHA256:
+		mac="SHA256";
+		break;
+	case SSL_SHA384:
+		mac="SHA384";
+		break;
+	case SSL_AEAD:
+		mac="AEAD";
+		break;
+	case SSL_GOST89MAC:
+		mac="GOST89";
+		break;
+	case SSL_GOST94:
+		mac="GOST94";
+		break;
+	default:
+		mac="unknown";
+		break;
+		}
+
+  return mac;
+}
+
+const char *SSL_CIPHER_get_encryption(const SSL_CIPHER *cipher)
+{
+  const char *enc;
+  int is_export=SSL_C_IS_EXPORT(cipher);
+  int kl=SSL_C_EXPORT_KEYLENGTH(cipher);
+  unsigned long alg_enc=cipher->algorithm_enc;
+  unsigned long alg2=cipher->algorithm2;
+
+	switch (alg_enc)
+		{
+	case SSL_DES:
+		enc=(is_export && kl == 5)?"DES(40)":"DES(56)";
+		break;
+	case SSL_3DES:
+		enc="3DES(168)";
+		break;
+	case SSL_RC4:
+		enc=is_export?(kl == 5 ? "RC4(40)" : "RC4(56)")
+		  :((alg2&SSL2_CF_8_BYTE_ENC)?"RC4(64)":"RC4(128)");
+		break;
+	case SSL_RC2:
+		enc=is_export?(kl == 5 ? "RC2(40)" : "RC2(56)"):"RC2(128)";
+		break;
+	case SSL_IDEA:
+		enc="IDEA(128)";
+		break;
+	case SSL_eNULL:
+		enc="None";
+		break;
+	case SSL_AES128:
+		enc="AES(128)";
+		break;
+	case SSL_AES256:
+		enc="AES(256)";
+		break;
+	case SSL_AES128GCM:
+		enc="AESGCM(128)";
+		break;
+	case SSL_AES256GCM:
+		enc="AESGCM(256)";
+		break;
+	case SSL_CAMELLIA128:
+		enc="Camellia(128)";
+		break;
+	case SSL_CAMELLIA256:
+		enc="Camellia(256)";
+		break;
+	case SSL_SEED:
+		enc="SEED(128)";
+		break;
+	case SSL_eGOST2814789CNT:
+		enc="GOST89(256)";
+		break;
+	default:
+		enc="unknown";
+		break;
+		}
+
+  return enc;
+}
+
+const char *SSL_CIPHER_get_authentication(const SSL_CIPHER *cipher)
+{
+  const char *au;
+  unsigned long alg_auth=cipher->algorithm_auth;
+
+	switch (alg_auth)
+		{
+	case SSL_aRSA:
+		au="RSA";
+		break;
+	case SSL_aDSS:
+		au="DSS";
+		break;
+	case SSL_aDH:
+		au="DH";
+		break;
+        case SSL_aKRB5:
+		au="KRB5";
+		break;
+        case SSL_aECDH:
+		au="ECDH";
+		break;
+	case SSL_aNULL:
+		au="None";
+		break;
+	case SSL_aECDSA:
+		au="ECDSA";
+		break;
+	case SSL_aPSK:
+		au="PSK";
+		break;
+	case SSL_aSRP:
+		au="SRP";
+		break;
+	case SSL_aGOST94:
+		au="GOST94";
+		break;
+	case SSL_aGOST01:
+		au="GOST01";
+		break;
+	default:
+		au="unknown";
+		break;
+		}
+
+  return au;
+}
+
+const char *SSL_CIPHER_get_key_exchange(const SSL_CIPHER *cipher)
+{
+  const char *kx;
+  int is_export=SSL_C_IS_EXPORT(cipher);
+  int pkl=SSL_C_EXPORT_PKEYLENGTH(cipher);
+  unsigned long alg_mkey=cipher->algorithm_mkey;
+
+	switch (alg_mkey)
+		{
+	case SSL_kRSA:
+		kx=is_export?(pkl == 512 ? "RSA(512)" : "RSA(1024)"):"RSA";
+		break;
+	case SSL_kDHr:
+		kx="DH/RSA";
+		break;
+	case SSL_kDHd:
+		kx="DH/DSS";
+		break;
+        case SSL_kKRB5:
+		kx="KRB5";
+		break;
+	case SSL_kEDH:
+		kx=is_export?(pkl == 512 ? "DH(512)" : "DH(1024)"):"DH";
+		break;
+	case SSL_kECDHr:
+		kx="ECDH/RSA";
+		break;
+	case SSL_kECDHe:
+		kx="ECDH/ECDSA";
+		break;
+	case SSL_kEECDH:
+		kx="ECDH";
+		break;
+	case SSL_kPSK:
+		kx="PSK";
+		break;
+	case SSL_kSRP:
+		kx="SRP";
+		break;
+	case SSL_kGOST:
+		kx="GOST";
+		break;
+	default:
+		kx="unknown";
+		}
+
+  return kx;
+}
+
+const char *SSL_CIPHER_get_export(const SSL_CIPHER *cipher)
+{
+  const char *exp_str;
+  int is_export=SSL_C_IS_EXPORT(cipher);
+
+  exp_str=is_export?" export":"";
+
+  return exp_str;
+}
+
+#endif /* OPENSSL_SYS_AMIGA */

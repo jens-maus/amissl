@@ -130,11 +130,6 @@ clean:
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 
-sha1_one.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-sha1_one.o: ../../include/openssl/opensslconf.h
-sha1_one.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
-sha1_one.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
-sha1_one.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 sha1_one.o: sha1_one.c
 sha1dgst.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
 sha1dgst.o: ../../include/openssl/opensslconf.h
@@ -161,8 +156,4 @@ sha_dgst.o: ../../include/openssl/opensslv.h ../../include/openssl/ossl_typ.h
 sha_dgst.o: ../../include/openssl/safestack.h ../../include/openssl/sha.h
 sha_dgst.o: ../../include/openssl/stack.h ../../include/openssl/symhacks.h
 sha_dgst.o: ../md32_common.h sha_dgst.c sha_locl.h
-sha_one.o: ../../include/openssl/crypto.h ../../include/openssl/e_os2.h
-sha_one.o: ../../include/openssl/opensslconf.h ../../include/openssl/opensslv.h
-sha_one.o: ../../include/openssl/ossl_typ.h ../../include/openssl/safestack.h
-sha_one.o: ../../include/openssl/sha.h ../../include/openssl/stack.h
-sha_one.o: ../../include/openssl/symhacks.h sha_one.c
+sha_one.o: sha_one.c

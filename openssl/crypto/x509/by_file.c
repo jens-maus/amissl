@@ -65,6 +65,7 @@
 #include <openssl/buffer.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
+#include <openssl/bio.h>
 
 #ifndef OPENSSL_NO_STDIO
 

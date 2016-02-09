@@ -219,6 +219,13 @@ extern "C" {
 # endif
 #endif
 
+/* --------------------------------- Amiga --------------------------------- */
+#if defined(OPENSSL_SYSNAME_AMIGA)
+# ifndef OPENSSL_SYS_AMIGA
+#  define OPENSSL_SYS_AMIGA
+# endif
+#endif
+
 /**
  * That's it for OS-specific stuff
  *****************************************************************************/
@@ -260,12 +267,27 @@ extern "C" {
 # define OPENSSL_EXPORT extern __declspec(dllexport)
 # define OPENSSL_IMPORT extern __declspec(dllimport)
 # define OPENSSL_GLOBAL
+#elif defined(OPENSSL_SYS_AMIGA)
+# define OPENSSL_EXPORT extern
+# define OPENSSL_IMPORT extern
+# ifdef AMISSL_COMPILE
+#  include <internal/amissl_compiler.h>
+#  define OPENSSL_GLOBAL AMISSL_COMMON_DATA
+# else
+#  define OPENSSL_GLOBAL
+# endif /* AMISSL_COMPILE */
 #else
 # define OPENSSL_EXPORT extern
 # define OPENSSL_IMPORT extern
 # define OPENSSL_GLOBAL
 #endif
 #define OPENSSL_EXTERN OPENSSL_IMPORT
+
+#ifndef OPENSSL_SYS_AMIGA
+#ifndef AMISSL_COMMON_DATA
+# define AMISSL_COMMON_DATA
+#endif /* !AMISSL_COMMON_DATA */
+#endif /* !OPENSSL_SYS_AMIGA */
 
 /* Macros to allow global variables to be reached through function calls when
    required (if a shared library version requires it, for example.
