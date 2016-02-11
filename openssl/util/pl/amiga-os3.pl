@@ -52,7 +52,7 @@ $des_enc_src="";
 $bf_enc_obj="";
 $bf_enc_src="";
 
-$src_dir=~ s/\.$//;
+$src_dir='$(AmiSSL)/openssl/';
 $maxchars=2048;
 
 sub do_lib_rule

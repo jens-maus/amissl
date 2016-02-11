@@ -2861,6 +2861,13 @@ static X509_CRL *load_crl_crldp(STACK_OF(DIST_POINT) *crldp)
     return NULL;
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+static void D_POINT_free(DIST_POINT *a)
+{
+  DIST_POINT_free(a);
+}
+#endif
+
 /*
  * Example of downloading CRLs from CRLDP: not usable for real world as it
  * always downloads, doesn't support non-blocking I/O and doesn't cache
@@ -2876,7 +2883,11 @@ static STACK_OF(X509_CRL) *crls_http_cb(X509_STORE_CTX *ctx, X509_NAME *nm)
     x = X509_STORE_CTX_get_current_cert(ctx);
     crldp = X509_get_ext_d2i(x, NID_crl_distribution_points, NULL, NULL);
     crl = load_crl_crldp(crldp);
+    #if defined(OPENSSL_SYS_AMIGA)
+    sk_DIST_POINT_pop_free(crldp, D_POINT_free);
+    #else
     sk_DIST_POINT_pop_free(crldp, DIST_POINT_free);
+    #endif
     if (!crl)
         return NULL;
     crls = sk_X509_CRL_new_null();
@@ -2884,7 +2895,11 @@ static STACK_OF(X509_CRL) *crls_http_cb(X509_STORE_CTX *ctx, X509_NAME *nm)
     /* Try to download delta CRL */
     crldp = X509_get_ext_d2i(x, NID_freshest_crl, NULL, NULL);
     crl = load_crl_crldp(crldp);
+    #if defined(OPENSSL_SYS_AMIGA)
+    sk_DIST_POINT_pop_free(crldp, D_POINT_free);
+    #else
     sk_DIST_POINT_pop_free(crldp, DIST_POINT_free);
+    #endif
     if (crl)
         sk_X509_CRL_push(crls, crl);
     return crls;

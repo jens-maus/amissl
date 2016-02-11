@@ -149,11 +149,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=3
-VERSIONNAME=101i
+VERSIONNAME=102f
 AMISSLREVISION=8
 AMISSLMASTERREVISION=8
-AMISSLDATE=17.08.2014
-AMISSLMASTERDATE=17.08.2014
+AMISSLDATE=12.02.2016
+AMISSLMASTERDATE=12.02.2016
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -367,7 +367,7 @@ MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
              $(OBJ_D)/amisslmaster_init.o \
              $(EXTRAMASTEROBJS)
 
-LIBS = -L$(BIN_D)/openssl -lssl -lcrypto -L$(BIN_D) -lcmt
+LIBS = -L$(BIN_D)/openssl -lssl -lcrypto -L$(BIN_D) -lcmt -lgcc
 
 # main target
 .PHONY: all

@@ -223,7 +223,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
-const char *ProgramVersion = "\0$VER: OpenSSL 1.0.1i (17.08.2014)\r\n";
+const char *ProgramVersion = "\0$VER: OpenSSL 1.0.2f (28.01.2016)\r\n";
 
 struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
 

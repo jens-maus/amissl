@@ -3355,7 +3355,7 @@ static const char UserLibID[]   = LIB_REV_STRING;
     LFUNC_FA_(EVP_rc4_hmac_md5) \
     LFUNC_FA_(EVP_aes_128_cbc_hmac_sha1) \
     LFUNC_FA_(ENGINE_load_rdrand) \
-    LFUNC_FA_(ENGINE_load_rsax) \
+    LFUNC_NULL \
     LFUNC_FA_(EVP_aes_256_cbc_hmac_sha1) \
     LFUNC_FA_(CMS_add0_recipient_password) \
     LFUNC_FA_(CMS_decrypt_set1_password) \
@@ -4065,7 +4065,138 @@ static const char UserLibID[]   = LIB_REV_STRING;
     LFUNC_FA_(RSA_PSS_PARAMS_it) \
     LFUNC_FA_(_shadow_DES_rw_mode) \
     LFUNC_FA_(_shadow_DES_check_key) \
-    LFUNC_FA_(ENGINE_load_gost)
+    LFUNC_FA_(ENGINE_load_gost) \
+    LFUNC_FA_(PEM_write_bio_DHxparams) \
+    LFUNC_FA_(X509_ALGOR_cmp) \
+    LFUNC_FA_(ASN1_STRING_clear_free) \
+    LFUNC_FA_(ASN1_TIME_diff) \
+    LFUNC_FA_(BIO_hex_string) \
+    LFUNC_FA_(BUF_strnlen) \
+    LFUNC_FA_(CMS_RecipientEncryptedKey_cert_cmp) \
+    LFUNC_FA_(CMS_RecipientEncryptedKey_get0_id) \
+    LFUNC_FA_(CMS_RecipientInfo_encrypt) \
+    LFUNC_FA_(CMS_RecipientInfo_get0_pkey_ctx) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_decrypt) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_get0_alg) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_get0_ctx) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_get0_orig_id) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_get0_reks) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_orig_id_cmp) \
+    LFUNC_FA_(CMS_RecipientInfo_kari_set0_pkey) \
+    LFUNC_FA_(CMS_SharedInfo_encode) \
+    LFUNC_FA_(CMS_SignerInfo_get0_md_ctx) \
+    LFUNC_FA_(CMS_SignerInfo_get0_pkey_ctx) \
+    LFUNC_FA_(CMS_SignerInfo_get0_signature) \
+    LFUNC_FA_(d2i_DHxparams) \
+    LFUNC_FA_(i2d_DHxparams) \
+    LFUNC_FA_(DH_compute_key_padded) \
+    LFUNC_FA_(DH_get_1024_160) \
+    LFUNC_FA_(DH_get_2048_224) \
+    LFUNC_FA_(DH_get_2048_256) \
+    LFUNC_FA_(DH_KDF_X9_42) \
+    LFUNC_FA_(EC_curve_nid2nist) \
+    LFUNC_FA_(EC_curve_nist2nid) \
+    LFUNC_FA_(EC_GROUP_get_mont_data) \
+    LFUNC_FA_(ECDH_KDF_X9_62) \
+    LFUNC_FA_(ECDSA_METHOD_free) \
+    LFUNC_FA_(ECDSA_METHOD_get_app_data) \
+    LFUNC_FA_(ECDSA_METHOD_new) \
+    LFUNC_FA_(ECDSA_METHOD_set_app_data) \
+    LFUNC_FA_(ECDSA_METHOD_set_flags) \
+    LFUNC_FA_(ECDSA_METHOD_set_name) \
+    LFUNC_FA_(ECDSA_METHOD_set_sign) \
+    LFUNC_FA_(ECDSA_METHOD_set_sign_setup) \
+    LFUNC_FA_(ECDSA_METHOD_set_verify) \
+    LFUNC_FA_(EVP_aes_128_cbc_hmac_sha256) \
+    LFUNC_FA_(EVP_aes_128_wrap) \
+    LFUNC_FA_(EVP_aes_192_wrap) \
+    LFUNC_FA_(EVP_aes_256_cbc_hmac_sha256) \
+    LFUNC_FA_(EVP_aes_256_wrap) \
+    LFUNC_FA_(EVP_des_ede3_wrap) \
+    LFUNC_FA_(CRYPTO_128_unwrap) \
+    LFUNC_FA_(CRYPTO_128_wrap) \
+    LFUNC_FA_(OCSP_REQ_CTX_get0_mem_bio) \
+    LFUNC_FA_(OCSP_REQ_CTX_http) \
+    LFUNC_FA_(OCSP_REQ_CTX_i2d) \
+    LFUNC_FA_(OCSP_REQ_CTX_nbio) \
+    LFUNC_FA_(OCSP_REQ_CTX_nbio_d2i) \
+    LFUNC_FA_(OCSP_REQ_CTX_new) \
+    LFUNC_FA_(OCSP_set_max_response_length) \
+    LFUNC_FA_(d2i_RSA_OAEP_PARAMS) \
+    LFUNC_FA_(RSA_OAEP_PARAMS_free) \
+    LFUNC_FA_(RSA_OAEP_PARAMS_it) \
+    LFUNC_FA_(RSA_OAEP_PARAMS_new) \
+    LFUNC_FA_(RSA_padding_add_PKCS1_OAEP_mgf1) \
+    LFUNC_FA_(RSA_padding_check_PKCS1_OAEP_mgf1) \
+    LFUNC_FA_(sk_deep_copy) \
+    LFUNC_FA_(i2d_re_X509_tbs) \
+    LFUNC_FA_(X509_chain_check_suiteb) \
+    LFUNC_FA_(X509_chain_up_ref) \
+    LFUNC_FA_(X509_CRL_check_suiteb) \
+    LFUNC_FA_(X509_CRL_diff) \
+    LFUNC_FA_(X509_CRL_http_nbio) \
+    LFUNC_FA_(X509_get0_signature) \
+    LFUNC_FA_(X509_get_signature_nid) \
+    LFUNC_FA_(X509_http_nbio) \
+    LFUNC_FA_(X509_REVOKED_dup) \
+    LFUNC_FA_(X509_STORE_CTX_get0_store) \
+    LFUNC_FA_(X509_STORE_set_lookup_crls_cb) \
+    LFUNC_FA_(X509_VERIFY_PARAM_add1_host) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get0) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get0_name) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get0_peername) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get_count) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set1_email) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set1_host) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set1_ip) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set1_ip_asc) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set_hostflags) \
+    LFUNC_FA_(X509_check_email) \
+    LFUNC_FA_(X509_check_host) \
+    LFUNC_FA_(X509_check_ip) \
+    LFUNC_FA_(X509_check_ip_asc) \
+    LFUNC_FA_(X509V3_EXT_free) \
+    LFUNC_FA_(EVP_PKEY_asn1_set_item) \
+    LFUNC_FA_(DTLS_client_method) \
+    LFUNC_FA_(DTLS_method) \
+    LFUNC_FA_(DTLS_server_method) \
+    LFUNC_FA_(DTLSv1_2_client_method) \
+    LFUNC_FA_(DTLSv1_2_method) \
+    LFUNC_FA_(DTLSv1_2_server_method) \
+    LFUNC_FA_(SSL_certs_clear) \
+    LFUNC_FA_(SSL_CIPHER_find) \
+    LFUNC_FA_(SSL_COMP_free_compression_methods) \
+    LFUNC_FA_(SSL_CONF_cmd) \
+    LFUNC_FA_(SSL_CONF_cmd_argv) \
+    LFUNC_FA_(SSL_CONF_cmd_value_type) \
+    LFUNC_FA_(SSL_CONF_CTX_clear_flags) \
+    LFUNC_FA_(SSL_CONF_CTX_finish) \
+    LFUNC_FA_(SSL_CONF_CTX_free) \
+    LFUNC_FA_(SSL_CONF_CTX_new) \
+    LFUNC_FA_(SSL_CONF_CTX_set1_prefix) \
+    LFUNC_FA_(SSL_CONF_CTX_set_flags) \
+    LFUNC_FA_(SSL_CONF_CTX_set_ssl) \
+    LFUNC_FA_(SSL_CONF_CTX_set_ssl_ctx) \
+    LFUNC_FA_(SSL_CTX_add_client_custom_ext) \
+    LFUNC_FA_(SSL_CTX_add_server_custom_ext) \
+    LFUNC_FA_(SSL_CTX_get0_certificate) \
+    LFUNC_FA_(SSL_CTX_get0_param) \
+    LFUNC_FA_(SSL_CTX_get0_privatekey) \
+    LFUNC_FA_(SSL_CTX_get_ssl_method) \
+    LFUNC_FA_(SSL_CTX_set_alpn_protos) \
+    LFUNC_FA_(SSL_CTX_set_alpn_select_cb) \
+    LFUNC_FA_(SSL_CTX_set_cert_cb) \
+    LFUNC_FA_(SSL_CTX_use_serverinfo) \
+    LFUNC_FA_(SSL_CTX_use_serverinfo_file) \
+    LFUNC_FA_(SSL_extension_supported) \
+    LFUNC_FA_(SSL_get0_alpn_selected) \
+    LFUNC_FA_(SSL_get0_param) \
+    LFUNC_FA_(SSL_is_server) \
+    LFUNC_FA_(SSL_set_alpn_protos) \
+    LFUNC_FA_(SSL_set_cert_cb) \
+    LFUNC_FA_(SSL_check_chain) \
+    LFUNC_FA_(SSL_get_shared_sigalgs) \
+    LFUNC_FA_(SSL_get_sigalgs)
 
 /****************************************************************************/
 

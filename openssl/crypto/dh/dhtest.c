@@ -510,6 +510,33 @@ typedef struct {
     size_t Z_len;
 } rfc5114_td;
 
+# if defined(OPENSSL_SYS_AMIGA)
+static DH * DH_1024_160(void)
+{
+  return DH_get_1024_160();
+}
+
+static DH * DH_2048_224(void)
+{
+  return DH_get_2048_224();
+}
+
+static DH * DH_2048_256(void)
+{
+  return DH_get_2048_256();
+}
+
+# define make_rfc5114_td(pre) { \
+        DH_##pre, \
+        dhtest_##pre##_xA, sizeof(dhtest_##pre##_xA), \
+        dhtest_##pre##_yA, sizeof(dhtest_##pre##_yA), \
+        dhtest_##pre##_xB, sizeof(dhtest_##pre##_xB), \
+        dhtest_##pre##_yB, sizeof(dhtest_##pre##_yB), \
+        dhtest_##pre##_Z, sizeof(dhtest_##pre##_Z) \
+        }
+
+# else
+
 # define make_rfc5114_td(pre) { \
         DH_get_##pre, \
         dhtest_##pre##_xA, sizeof(dhtest_##pre##_xA), \
@@ -519,6 +546,8 @@ typedef struct {
         dhtest_##pre##_Z, sizeof(dhtest_##pre##_Z) \
         }
 
+# endif
+#
 static const rfc5114_td rfctd[] = {
         make_rfc5114_td(1024_160),
         make_rfc5114_td(2048_224),

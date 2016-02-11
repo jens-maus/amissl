@@ -231,7 +231,7 @@
 		<method name="ASN1_ENUMERATED_it" result="const ASN1_ITEM *">
 		</method>
 		<method name="ASN1_UTCTIME_check" result="int">
-			<arg name="a" type="ASN1_UTCTIME *" m68kreg="a0"/>
+			<arg name="a" type="const ASN1_UTCTIME *" m68kreg="a0"/>
 		</method>
 		<method name="ASN1_UTCTIME_set" result="ASN1_UTCTIME *">
 			<arg name="s" type="ASN1_UTCTIME *" m68kreg="a0"/>
@@ -246,7 +246,7 @@
 			<arg name="t" type="time_t" m68kreg="d0"/>
 		</method>
 		<method name="ASN1_GENERALIZEDTIME_check" result="int">
-			<arg name="a" type="ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
+			<arg name="a" type="const ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
 		</method>
 		<method name="ASN1_GENERALIZEDTIME_set" result="ASN1_GENERALIZEDTIME *">
 			<arg name="s" type="ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
@@ -1277,10 +1277,10 @@
 			<arg name="close_flag" type="int" m68kreg="d1"/>
 		</method>
 		<method name="BIO_new_connect" result="BIO *">
-			<arg name="host_port" type="char *" m68kreg="a0"/>
+			<arg name="host_port" type="const char *" m68kreg="a0"/>
 		</method>
 		<method name="BIO_new_accept" result="BIO *">
-			<arg name="host_port" type="char *" m68kreg="a0"/>
+			<arg name="host_port" type="const char *" m68kreg="a0"/>
 		</method>
 		<method name="BIO_new_bio_pair" result="int">
 			<arg name="bio1" type="BIO **" m68kreg="a0"/>
@@ -1294,7 +1294,7 @@
 		<method name="BIO_vprintf" result="int">
 			<arg name="bio" type="BIO *" m68kreg="a0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<arg name="args" type="long *" m68kreg="a2"/>
+			<arg name="args" type="va_list" m68kreg="a2"/>
 		</method>
 		<method name="BIO_printf" result="int">
 			<arg name="bio" type="BIO *" m68kreg="a0"/>
@@ -1305,7 +1305,7 @@
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="n" type="size_t" m68kreg="d0"/>
 			<arg name="format" type="const char *" m68kreg="a1"/>
-			<arg name="args" type="long *" m68kreg="a2"/>
+			<arg name="args" type="va_list" m68kreg="a2"/>
 		</method>
 		<method name="BIO_snprintf" result="int">
 			<arg name="buf" type="char *" m68kreg="a0"/>
@@ -2682,7 +2682,7 @@
 		</method>
 		<method name="ERR_add_error_vdata" result="void">
 			<arg name="num" type="int" m68kreg="d0"/>
-			<arg name="args" type="long *" m68kreg="a0"/>
+			<arg name="args" type="va_list" m68kreg="a0"/>
 		</method>
 		<method name="ERR_add_error_data" result="void">
 			<arg name="num" type="int" m68kreg="d0"/>
@@ -3331,25 +3331,25 @@
 		<method name="HMAC_CTX_cleanup" result="void">
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 		</method>
-		<method name="HMAC_Init" result="void">
+		<method name="HMAC_Init" result="int">
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 			<arg name="key" type="const void *" m68kreg="a1"/>
 			<arg name="len" type="int" m68kreg="d0"/>
 			<arg name="md" type="const EVP_MD *" m68kreg="a2"/>
 		</method>
-		<method name="HMAC_Init_ex" result="void">
+		<method name="HMAC_Init_ex" result="int">
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 			<arg name="key" type="const void *" m68kreg="a1"/>
 			<arg name="len" type="int" m68kreg="d0"/>
 			<arg name="md" type="const EVP_MD *" m68kreg="a2"/>
 			<arg name="impl" type="ENGINE *" m68kreg="a3"/>
 		</method>
-		<method name="HMAC_Update" result="void">
+		<method name="HMAC_Update" result="int">
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 			<arg name="data" type="const unsigned char *" m68kreg="a1"/>
-			<arg name="len" type="int" m68kreg="d0"/>
+			<arg name="len" type="size_t" m68kreg="d0"/>
 		</method>
-		<method name="HMAC_Final" result="void">
+		<method name="HMAC_Final" result="int">
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 			<arg name="md" type="unsigned char *" m68kreg="a1"/>
 			<arg name="len" type="unsigned int *" m68kreg="a2"/>
@@ -3676,7 +3676,7 @@
 		</method>
 		<method name="OCSP_sendreq_bio" result="OCSP_RESPONSE *">
 			<arg name="b" type="BIO *" m68kreg="a0"/>
-			<arg name="path" type="char *" m68kreg="a1"/>
+			<arg name="path" type="const char *" m68kreg="a1"/>
 			<arg name="req" type="OCSP_REQUEST *" m68kreg="a2"/>
 		</method>
 		<method name="OCSP_cert_to_id" result="OCSP_CERTID *">
@@ -3775,7 +3775,7 @@
 			<arg name="flags" type="unsigned long" m68kreg="d0"/>
 		</method>
 		<method name="OCSP_parse_url" result="int">
-			<arg name="url" type="char *" m68kreg="a0"/>
+			<arg name="url" type="const char *" m68kreg="a0"/>
 			<arg name="phost" type="char **" m68kreg="a1"/>
 			<arg name="pport" type="char **" m68kreg="a2"/>
 			<arg name="ppath" type="char **" m68kreg="a3"/>
@@ -4313,8 +4313,8 @@
 		<method name="PEM_write_bio" result="int">
 			<arg name="bp" type="BIO *" m68kreg="a0"/>
 			<arg name="name" type="const char *" m68kreg="a1"/>
-			<arg name="hdr" type="char *" m68kreg="a2"/>
-			<arg name="data" type="unsigned char *" m68kreg="a3"/>
+			<arg name="hdr" type="const char *" m68kreg="a2"/>
+			<arg name="data" type="const unsigned char *" m68kreg="a3"/>
 			<arg name="len" type="long" m68kreg="d0"/>
 		</method>
 		<method name="PEM_bytes_read_bio" result="int">
@@ -4476,9 +4476,9 @@
 		</method>
 		<method name="PEM_write" result="int" status="unimplemented">
 			<arg name="fp" type="FILE *" m68kreg="a0"/>
-			<arg name="name" type="char *" m68kreg="a1"/>
-			<arg name="hdr" type="char *" m68kreg="a2"/>
-			<arg name="data" type="unsigned char *" m68kreg="a3"/>
+			<arg name="name" type="const char *" m68kreg="a1"/>
+			<arg name="hdr" type="const char *" m68kreg="a2"/>
+			<arg name="data" type="const unsigned char *" m68kreg="a3"/>
 			<arg name="len" type="long" m68kreg="d0"/>
 		</method>
 		<method name="PEM_write_bio_X509_REQ" result="int">
@@ -6017,7 +6017,7 @@
 			<arg name="ssl" type="const SSL *" m68kreg="a0"/>
 		</method>
 		<method name="SSL_get_privatekey" result="struct evp_pkey_st *">
-			<arg name="ssl" type="SSL *" m68kreg="a0"/>
+			<arg name="ssl" type="const SSL *" m68kreg="a0"/>
 		</method>
 		<method name="SSL_CTX_set_quiet_shutdown" result="void">
 			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -10980,7 +10980,7 @@
     </method>
     <method name="OCSP_sendreq_new" result="OCSP_REQ_CTX *">
       <arg name="io" type="BIO *" m68kreg="a0"/>
-      <arg name="path" type="char *" m68kreg="a1"/>
+      <arg name="path" type="const char *" m68kreg="a1"/>
       <arg name="req" type="OCSP_REQUEST *" m68kreg="a2"/>
       <arg name="maxline" type="int" m68kreg="a3"/>
     </method>
@@ -13186,7 +13186,7 @@
     </method>
     <method name="ENGINE_load_rdrand" result="void">
     </method>
-    <method name="ENGINE_load_rsax" result="void">
+    <method name="ENGINE_load_rsax" result="void" status="unimplemented">
     </method>
     <method name="EVP_aes_256_cbc_hmac_sha1" result="const EVP_CIPHER *">
     </method>
@@ -14514,7 +14514,7 @@
     </method>
     <method name="EVP_DigestVerifyFinal" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
-      <arg name="sig" type="unsigned char *" m68kreg="a1"/>
+      <arg name="sig" type="const unsigned char *" m68kreg="a1"/>
       <arg name="siglen" type="size_t" m68kreg="d0"/>
     </method>
     <method name="EVP_PKEY_print_params" result="int">
@@ -15375,8 +15375,8 @@
       <arg name="src" type="const EVP_PKEY_ASN1_METHOD *" m68kreg="a1"/>
     </method>
     <method name="ASN1_TYPE_cmp" result="int">
-      <arg name="a" type="ASN1_TYPE *" m68kreg="a0"/>
-      <arg name="b" type="ASN1_TYPE *" m68kreg="a1"/>
+      <arg name="a" type="const ASN1_TYPE *" m68kreg="a0"/>
+      <arg name="b" type="const ASN1_TYPE *" m68kreg="a1"/>
     </method>
     <method name="EVP_CIPHER_do_all_sorted" result="void">
       <arg name="fn" type="void (*)(const EVP_CIPHER *ciph, const char *from, const char *to, void *x)" m68kreg="a0"/>
@@ -16253,5 +16253,564 @@
     </method>
     <method name="ENGINE_load_gost" result="void">
     </method>
+    <!-- OpenSSL 1.0.2f additions -->
+		<method name="PEM_write_bio_DHxparams" result="int">
+			<arg name="bp" type="BIO *" m68kreg="a0"/>
+			<arg name="x" type="DH *" m68kreg="a1"/>
+		</method>
+    <method name="X509_ALGOR_cmp" result="int">
+      <arg name="a" type="const X509_ALGOR *" m68kreg="a0"/>
+      <arg name="b" type="const X509_ALGOR *" m68kreg="a1"/>
+    </method>
+    <method name="ASN1_STRING_clear_free" result="void">
+      <arg name="a" type="ASN1_STRING *" m68kreg="a0"/>
+    </method>
+    <method name="ASN1_TIME_diff" result="int">
+      <arg name="pday" type="int *" m68kreg="a0"/>
+      <arg name="psec" type="int *" m68kreg="a1"/>
+      <arg name="from" type="const ASN1_TIME *" m68kreg="a2"/>
+      <arg name="to" type="const ASN1_TIME *" m68kreg="a3"/>
+    </method>
+    <method name="BIO_hex_string" result="int">
+      <arg name="out" type="BIO *" m68kreg="a0"/>
+      <arg name="indent" type="int" m68kreg="d0"/>
+      <arg name="width" type="int" m68kreg="d1"/>
+      <arg name="data" type="unsigned char *" m68kreg="a1"/>
+      <arg name="datalen" type="int" m68kreg="d2"/>
+    </method>
+    <method name="BUF_strnlen" result="size_t">
+      <arg name="str" type="const char *" m68kreg="a0"/>
+      <arg name="maxlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="CMS_RecipientEncryptedKey_cert_cmp" result="int">
+      <arg name="rek" type="CMS_RecipientEncryptedKey *" m68kreg="a0"/>
+      <arg name="cert" type="X509 *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_RecipientEncryptedKey_get0_id" result="int">
+      <arg name="rek" type="CMS_RecipientEncryptedKey *" m68kreg="a0"/>
+      <arg name="keyid" type="ASN1_OCTET_STRING **" m68kreg="a1"/>
+      <arg name="tm" type="ASN1_GENERALIZEDTIME **" m68kreg="a2"/>
+      <arg name="other" type="CMS_OtherKeyAttribute **" m68kreg="a3"/>
+      <arg name="issuer" type="X509_NAME **" m68kreg="d0"/>
+      <arg name="sno" type="ASN1_INTEGER **" m68kreg="d1"/>
+    </method>
+    <method name="CMS_RecipientInfo_encrypt" result="int">
+      <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_RecipientInfo_get0_pkey_ctx" result="EVP_PKEY_CTX *">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_decrypt" result="int">
+      <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a1"/>
+      <arg name="rek" type="CMS_RecipientEncryptedKey *" m68kreg="a2"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_get0_alg" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="palg" type="X509_ALGOR **" m68kreg="a1"/>
+      <arg name="pukm" type="ASN1_OCTET_STRING **" m68kreg="a2"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_get0_ctx" result="EVP_CIPHER_CTX *">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_get0_orig_id" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="pubalg" type="X509_ALGOR **" m68kreg="a1"/>
+      <arg name="pubkey" type="ASN1_BIT_STRING **" m68kreg="a2"/>
+      <arg name="keyid" type="ASN1_OCTET_STRING **" m68kreg="a3"/>
+      <arg name="issuer" type="X509_NAME **" m68kreg="d0"/>
+      <arg name="sno" type="ASN1_INTEGER **" m68kreg="d1"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_get0_reks" result="STACK_OF(CMS_RecipientEncryptedKey) *">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_orig_id_cmp" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="cert" type="X509 *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_RecipientInfo_kari_set0_pkey" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="pk" type="EVP_PKEY *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_SharedInfo_encode" result="int">
+      <arg name="pder" type="unsigned char **" m68kreg="a0"/>
+      <arg name="kekalg" type="X509_ALGOR *" m68kreg="a1"/>
+      <arg name="ukm" type="ASN1_OCTET_STRING *" m68kreg="a2"/>
+      <arg name="keylen" type="int" m68kreg="d0"/>
+    </method>
+    <method name="CMS_SignerInfo_get0_md_ctx" result="EVP_MD_CTX *">
+      <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_SignerInfo_get0_pkey_ctx" result="EVP_PKEY_CTX *">
+      <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_SignerInfo_get0_signature" result="ASN1_OCTET_STRING *">
+      <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
+    </method>
+    <method name="d2i_DHxparams" result="DH *">
+      <arg name="a" type="DH **" m68kreg="a0"/>
+      <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="length" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_DHxparams" result="int">
+      <arg name="dh" type="const DH *" m68kreg="a0"/>
+      <arg name="pp" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="DH_compute_key_padded" result="int">
+      <arg name="key" type="unsigned char *" m68kreg="a0"/>
+      <arg name="pub_key" type="const BIGNUM *" m68kreg="a1"/>
+      <arg name="dh" type="DH *" m68kreg="a2"/>
+    </method>
+    <method name="DH_get_1024_160" result="DH *">
+    </method>
+    <method name="DH_get_2048_224" result="DH *">
+    </method>
+    <method name="DH_get_2048_256" result="DH *">
+    </method>
+    <method name="DH_KDF_X9_42" result="int">
+      <arg name="out" type="unsigned char *" m68kreg="a0"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+      <arg name="Z" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="Zlen" type="size_t" m68kreg="d1"/>
+      <arg name="key_oid" type="ASN1_OBJECT *" m68kreg="a2"/>
+      <arg name="ukm" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="ukmlen" type="size_t" m68kreg="d2"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="d3"/>
+    </method>
+    <method name="EC_curve_nid2nist" result="const char *">
+      <arg name="nid" type="int" m68kreg="d0"/>
+    </method>
+    <method name="EC_curve_nist2nid" result="int">
+      <arg name="name" type="const char *" m68kreg="a0"/>
+    </method>
+    <method name="EC_GROUP_get_mont_data" result="BN_MONT_CTX *">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+    </method>
+    <method name="ECDH_KDF_X9_62" result="int">
+      <arg name="out" type="unsigned char *" m68kreg="a0"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+      <arg name="Z" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="Zlen" type="size_t" m68kreg="d1"/>
+      <arg name="sinfo" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="sinfolen" type="size_t" m68kreg="d2"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="d3"/>
+    </method>
+    <method name="ECDSA_METHOD_free" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+    </method>
+    <method name="ECDSA_METHOD_get_app_data" result="void *">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+    </method>
+    <method name="ECDSA_METHOD_new" result="ECDSA_METHOD *">
+      <arg name="ecdsa_method" type="const ECDSA_METHOD *" m68kreg="a0"/>
+    </method>
+    <method name="ECDSA_METHOD_set_app_data" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="app" type="void *" m68kreg="a1"/>
+    </method>
+    <method name="ECDSA_METHOD_set_flags" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="flags" type="int" m68kreg="d0"/>
+    </method>
+    <method name="ECDSA_METHOD_set_name" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="name" type="char *" m68kreg="a1"/>
+    </method>
+    <method name="ECDSA_METHOD_set_sign" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="ecda_do_sign" type="ECDSA_SIG * (*)(const unsigned char *dgst, int dgst_len, const BIGNUM *inv, const BIGNUM *rp, EC_KEY *eckey)" m68kreg="a1"/>
+    </method>
+    <method name="ECDSA_METHOD_set_sign_setup" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="ecdsa_sign_setup" type="int (*)(EC_KEY *eckey, BN_CTX *ctx, BIGNUM **kinv, BIGNUM **r)" m68kreg="a1"/>
+    </method>
+    <method name="ECDSA_METHOD_set_verify" result="void">
+      <arg name="ecdsa_method" type="ECDSA_METHOD *" m68kreg="a0"/>
+      <arg name="ecdsa_do_verify" type="int (*)(const unsigned char *dgst, int dgst_len, const ECDSA_SIG *sig, EC_KEY *eckey)" m68kreg="a1"/>
+    </method>
+    <method name="EVP_aes_128_cbc_hmac_sha256" result="const EVP_CIPHER *">
+    </method>
+    <method name="EVP_aes_128_wrap" result="const EVP_CIPHER *">
+    </method>
+    <method name="EVP_aes_192_wrap" result="const EVP_CIPHER *">
+    </method>
+    <method name="EVP_aes_256_cbc_hmac_sha256" result="const EVP_CIPHER *">
+    </method>
+    <method name="EVP_aes_256_wrap" result="const EVP_CIPHER *">
+    </method>
+    <method name="EVP_des_ede3_wrap" result="const EVP_CIPHER *">
+    </method>
+    <method name="CRYPTO_128_unwrap" result="size_t">
+      <arg name="key" type="void *" m68kreg="a0"/>
+      <arg name="iv" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="out" type="unsigned char *" m68kreg="a2"/>
+      <arg name="in" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="inlen" type="size_t" m68kreg="d0"/>
+      <arg name="block" type="block128_f" m68kreg="d1"/>
+    </method>
+    <method name="CRYPTO_128_wrap" result="size_t">
+      <arg name="key" type="void *" m68kreg="a0"/>
+      <arg name="iv" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="out" type="unsigned char *" m68kreg="a2"/>
+      <arg name="in" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="inlen" type="size_t" m68kreg="d0"/>
+      <arg name="block" type="block128_f" m68kreg="d1"/>
+    </method>
+    <method name="OCSP_REQ_CTX_get0_mem_bio" result="BIO *">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="OCSP_REQ_CTX_http" result="int">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+      <arg name="op" type="const char *" m68kreg="a1"/>
+      <arg name="path" type="const char *" m68kreg="a2"/>
+    </method>
+    <method name="OCSP_REQ_CTX_i2d" result="int">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+      <arg name="it" type="const ASN1_ITEM *" m68kreg="a1"/>
+      <arg name="val" type="ASN1_VALUE *" m68kreg="a2"/>
+    </method>
+    <method name="OCSP_REQ_CTX_nbio" result="int">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="OCSP_REQ_CTX_nbio_d2i" result="int">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+      <arg name="pval" type="ASN1_VALUE **" m68kreg="a1"/>
+      <arg name="it" type="const ASN1_ITEM *" m68kreg="a2"/>
+    </method>
+    <method name="OCSP_REQ_CTX_new" result="OCSP_REQ_CTX *">
+      <arg name="io" type="BIO *" m68kreg="a0"/>
+      <arg name="maxline" type="int" m68kreg="d0"/>
+    </method>
+    <method name="OCSP_set_max_response_length" result="void">
+      <arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+      <arg name="len" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="d2i_RSA_OAEP_PARAMS" result="RSA_OAEP_PARAMS *">
+      <arg name="a" type="RSA_OAEP_PARAMS **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+		<method name="RSA_OAEP_PARAMS_free" result="void">
+			<arg name="a" type="RSA_OAEP_PARAMS *" m68kreg="a0"/>
+		</method>
+		<method name="RSA_OAEP_PARAMS_it" result="const ASN1_ITEM *">
+		</method>
+		<method name="RSA_OAEP_PARAMS_new" result="RSA_OAEP_PARAMS *">
+		</method>
+		<method name="RSA_padding_add_PKCS1_OAEP_mgf1" result="int">
+      <arg name="to" type="unsigned char *" m68kreg="a0"/>
+      <arg name="tlen" type="int" m68kreg="d0"/>
+      <arg name="from" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="flen" type="int" m68kreg="d1"/>
+      <arg name="param" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="plen" type="int" m68kreg="d2"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="a3"/>
+      <arg name="mgf1md" type="const EVP_MD *" m68kreg="d3"/>
+		</method>
+		<method name="RSA_padding_check_PKCS1_OAEP_mgf1" result="int">
+      <arg name="to" type="unsigned char *" m68kreg="a0"/>
+      <arg name="tlen" type="int" m68kreg="d0"/>
+      <arg name="from" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="flen" type="int" m68kreg="d1"/>
+      <arg name="num" type="int" m68kreg="d2"/>
+      <arg name="param" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="plen" type="int" m68kreg="d3"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="a3"/>
+      <arg name="mgf1md" type="const EVP_MD *" m68kreg="d4"/>
+		</method>
+		<method name="sk_deep_copy" result="_STACK *">
+			<arg name="sk" type="_STACK *" m68kreg="a0"/>
+			<arg name="copy_func" type="void * (*)(void *)" m68kreg="a1"/>
+			<arg name="free_func" type="void (*)(void *)" m68kreg="a2"/>
+		</method>
+		<method name="i2d_re_X509_tbs" result="int">
+			<arg name="x" type="X509 *" m68kreg="a0"/>
+			<arg name="pp" type="unsigned char **" m68kreg="a1"/>
+		</method>
+		<method name="X509_chain_check_suiteb" result="int">
+			<arg name="perror_depth" type="int *" m68kreg="a0"/>
+			<arg name="x" type="X509 *" m68kreg="a1"/>
+			<arg name="chain" type="STACK_OF(X509) *" m68kreg="a2"/>
+			<arg name="flags" type="unsigned long" m68kreg="d0"/>
+		</method>
+		<method name="X509_chain_up_ref" result="STACK_OF(X509) *">
+			<arg name="chain" type="STACK_OF(X509) *" m68kreg="a0"/>
+		</method>
+		<method name="X509_CRL_check_suiteb" result="int">
+			<arg name="crl" type="X509_CRL *" m68kreg="a0"/>
+			<arg name="pk" type="EVP_PKEY *" m68kreg="a1"/>
+			<arg name="flags" type="unsigned long" m68kreg="d0"/>
+		</method>
+		<method name="X509_CRL_diff" result="X509_CRL *">
+			<arg name="base" type="X509_CRL *" m68kreg="a0"/>
+			<arg name="newer" type="X509_CRL *" m68kreg="a1"/>
+			<arg name="skey" type="EVP_PKEY *" m68kreg="a2"/>
+			<arg name="md" type="const EVP_MD *" m68kreg="a3"/>
+			<arg name="flags" type="unsigned int" m68kreg="d0"/>
+		</method>
+		<method name="X509_CRL_http_nbio" result="int">
+			<arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+			<arg name="pcrl" type="X509_CRL **" m68kreg="a1"/>
+		</method>
+		<method name="X509_get0_signature" result="void">
+			<arg name="psig" type="ASN1_BIT_STRING **" m68kreg="a0"/>
+			<arg name="palg" type="X509_ALGOR **" m68kreg="a1"/>
+			<arg name="x" type="const X509 *" m68kreg="a2"/>
+		</method>
+		<method name="X509_get_signature_nid" result="int">
+			<arg name="x" type="const X509 *" m68kreg="a0"/>
+		</method>
+		<method name="X509_http_nbio" result="int">
+			<arg name="rctx" type="OCSP_REQ_CTX *" m68kreg="a0"/>
+			<arg name="pcert" type="X509 **" m68kreg="a1"/>
+		</method>
+		<method name="X509_REVOKED_dup" result="X509_REVOKED *">
+			<arg name="rev" type="X509_REVOKED *" m68kreg="a0"/>
+		</method>
+		<method name="X509_STORE_CTX_get0_store" result="X509_STORE *">
+			<arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="X509_STORE_set_lookup_crls_cb" result="void">
+			<arg name="ctx" type="X509_STORE *" m68kreg="a0"/>
+			<arg name="cb" type="STACK_OF(X509_CRL) *(*)(X509_STORE_CTX *ctx, X509_NAME *nm)" m68kreg="a1"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_add1_host" result="int">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="name" type="const char *" m68kreg="a1"/>
+			<arg name="namelen" type="size_t" m68kreg="d0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_get0" result="const X509_VERIFY_PARAM *">
+			<arg name="id" type="int" m68kreg="d0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_get0_name" result="const char *">
+			<arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_get0_peername" result="char *">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_get_count" result="int">
+		</method>
+		<method name="X509_VERIFY_PARAM_set1_email" result="int">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="email" type="const char *" m68kreg="a1"/>
+			<arg name="emaillen" type="size_t" m68kreg="d0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_set1_host" result="int">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="name" type="const char *" m68kreg="a1"/>
+			<arg name="namelen" type="size_t" m68kreg="d0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_set1_ip" result="int">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="ip" type="const unsigned char *" m68kreg="a1"/>
+			<arg name="iplen" type="size_t" m68kreg="d0"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_set1_ip_asc" result="int">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="ipasc" type="const char *" m68kreg="a1"/>
+		</method>
+		<method name="X509_VERIFY_PARAM_set_hostflags" result="void">
+			<arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+			<arg name="flags" type="unsigned int" m68kreg="d0"/>
+		</method>
+		<method name="X509_check_email" result="int">
+			<arg name="x" type="X509 *" m68kreg="a0"/>
+			<arg name="chk" type="const char *" m68kreg="a1"/>
+			<arg name="chklen" type="size_t" m68kreg="d0"/>
+			<arg name="flags" type="unsigned int" m68kreg="d1"/>
+		</method>
+		<method name="X509_check_host" result="int">
+			<arg name="x" type="X509 *" m68kreg="a0"/>
+			<arg name="chk" type="const char *" m68kreg="a1"/>
+			<arg name="chklen" type="size_t" m68kreg="d0"/>
+			<arg name="flags" type="unsigned int" m68kreg="d1"/>
+			<arg name="peername" type="char **" m68kreg="a2"/>
+		</method>
+		<method name="X509_check_ip" result="int">
+			<arg name="x" type="X509 *" m68kreg="a0"/>
+			<arg name="chk" type="const unsigned char *" m68kreg="a1"/>
+			<arg name="chklen" type="size_t" m68kreg="d0"/>
+			<arg name="flags" type="unsigned int" m68kreg="d1"/>
+		</method>
+		<method name="X509_check_ip_asc" result="int">
+			<arg name="x" type="X509 *" m68kreg="a0"/>
+			<arg name="ipasc" type="const char *" m68kreg="a1"/>
+			<arg name="flags" type="unsigned int" m68kreg="d1"/>
+		</method>
+		<method name="X509V3_EXT_free" result="int">
+			<arg name="nid" type="int" m68kreg="d0"/>
+			<arg name="ext_data" type="void *" m68kreg="a0"/>
+		</method>
+		<method name="EVP_PKEY_asn1_set_item" result="void">
+			<arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
+			<arg name="item_verify" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, void *, X509_ALGOR *, ASN1_BIT_STRING *, EVP_PKEY *)" m68kreg="a1"/>
+			<arg name="item_sign" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, void *, X509_ALGOR *, X509_ALGOR *, ASN1_BIT_STRING *)" m68kreg="a2"/>
+		</method>
+		<method name="DTLS_client_method" result="const SSL_METHOD *">
+		</method>
+		<method name="DTLS_method" result="const SSL_METHOD *">
+		</method>
+		<method name="DTLS_server_method" result="const SSL_METHOD *">
+		</method>
+		<method name="DTLSv1_2_client_method" result="const SSL_METHOD *">
+		</method>
+		<method name="DTLSv1_2_method" result="const SSL_METHOD *">
+		</method>
+		<method name="DTLSv1_2_server_method" result="const SSL_METHOD *">
+		</method>
+		<method name="SSL_certs_clear" result="void">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CIPHER_find" result="const SSL_CIPHER *">
+			<arg name="ssl" type="SSL *" m68kreg="a0"/>
+			<arg name="ptr" type="const unsigned char *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_COMP_free_compression_methods" result="void">
+		</method>
+		<method name="SSL_CONF_cmd" result="int">
+			<arg name="ctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="cmd" type="const char *" m68kreg="a1"/>
+			<arg name="value" type="const char *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CONF_cmd_argv" result="int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="pargc" type="int *" m68kreg="a1"/>
+			<arg name="pargv" type="char ***" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CONF_cmd_value_type" result="int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="cmd" type="const char *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CONF_CTX_clear_flags" result="unsigned int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="flags" type="unsigned int" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CONF_CTX_finish" result="int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CONF_CTX_free" result="void">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CONF_CTX_new" result="SSL_CONF_CTX *">
+		</method>
+		<method name="SSL_CONF_CTX_set1_prefix" result="int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="pre" type="const char *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CONF_CTX_set_flags" result="unsigned int">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="flags" type="unsigned int" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CONF_CTX_set_ssl" result="void">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="ssl" type="SSL *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CONF_CTX_set_ssl_ctx" result="void">
+			<arg name="cctx" type="SSL_CONF_CTX *" m68kreg="a0"/>
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_CTX_add_client_custom_ext" result="int">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="ext_type" type="unsigned int" m68kreg="d0"/>
+			<arg name="add_cb" type="custom_ext_add_cb" m68kreg="d1"/>
+			<arg name="free_cb" type="custom_ext_free_cb" m68kreg="d2"/>
+			<arg name="add_arg" type="void *" m68kreg="a1"/>
+			<arg name="parse_cb" type="custom_ext_parse_cb" m68kreg="d3"/>
+			<arg name="parse_arg" type="void *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CTX_add_server_custom_ext" result="int">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="ext_type" type="unsigned int" m68kreg="d0"/>
+			<arg name="add_cb" type="custom_ext_add_cb" m68kreg="d1"/>
+			<arg name="free_cb" type="custom_ext_free_cb" m68kreg="d2"/>
+			<arg name="add_arg" type="void *" m68kreg="a1"/>
+			<arg name="parse_cb" type="custom_ext_parse_cb" m68kreg="d3"/>
+			<arg name="parse_arg" type="void *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CTX_get0_certificate" result="X509 *">
+			<arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CTX_get0_param" result="X509_VERIFY_PARAM *">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CTX_get0_privatekey" result="EVP_PKEY *">
+			<arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CTX_get_ssl_method" result="const SSL_METHOD *">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_CTX_set_alpn_protos" result="int">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="protos" type="const unsigned char *" m68kreg="a1"/>
+			<arg name="protos_len" type="unsigned int" m68kreg="d0"/>
+		</method>
+		<method name="SSL_CTX_set_alpn_select_cb" result="void">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="cb" type="int (*)(SSL *ssl, const unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)" m68kreg="a1"/>
+			<arg name="arg" type="void *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CTX_set_cert_cb" result="void">
+			<arg name="c" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="cb" type="int (*)(SSL *ssl, void *arg)" m68kreg="a1"/>
+			<arg name="arg" type="void *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_CTX_use_serverinfo" result="int">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="serverinfo" type="const unsigned char *" m68kreg="a1"/>
+			<arg name="serverinfo_length" type="size_t" m68kreg="d0"/>
+		</method>
+		<method name="SSL_CTX_use_serverinfo_file" result="int">
+			<arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+			<arg name="file" type="const char *" m68kreg="a1"/>
+		</method>
+		<method name="SSL_extension_supported" result="int">
+			<arg name="ext_type" type="unsigned int" m68kreg="d0"/>
+		</method>
+		<method name="SSL_get0_alpn_selected" result="void">
+			<arg name="ssl" type="const SSL *" m68kreg="a0"/>
+			<arg name="data" type="const unsigned char **" m68kreg="a1"/>
+			<arg name="len" type="unsigned *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_get0_param" result="X509_VERIFY_PARAM *">
+			<arg name="ssl" type="SSL *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_is_server" result="int">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_set_alpn_protos" result="int">
+			<arg name="ssl" type="SSL *" m68kreg="a0"/>
+			<arg name="protos" type="const unsigned char *" m68kreg="a1"/>
+			<arg name="protos_len" type="unsigned" m68kreg="a2"/>
+		</method>
+		<method name="SSL_set_cert_cb" result="void">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+			<arg name="cb" type="int (*)(SSL *ssl, void *arg)" m68kreg="a1"/>
+			<arg name="arg" type="void *" m68kreg="a2"/>
+		</method>
+		<method name="SSL_check_chain" result="int">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+			<arg name="x" type="X509 *" m68kreg="a1"/>
+			<arg name="pk" type="EVP_PKEY *" m68kreg="a2"/>
+			<arg name="chain" type="STACK_OF(X509) *" m68kreg="a3"/>
+		</method>
+		<method name="SSL_get_shared_sigalgs" result="int">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+			<arg name="idx" type="int" m68kreg="d0"/>
+			<arg name="psign" type="int *" m68kreg="a1"/>
+			<arg name="phash" type="int *" m68kreg="a2"/>
+			<arg name="psignandhash" type="int *" m68kreg="a3"/>
+			<arg name="rsig" type="unsigned char *" m68kreg="d1"/>
+			<arg name="rhash" type="unsigned char *" m68kreg="d2"/>
+		</method>
+		<method name="SSL_get_sigalgs" result="int">
+			<arg name="s" type="SSL *" m68kreg="a0"/>
+			<arg name="idx" type="int" m68kreg="d0"/>
+			<arg name="psign" type="int *" m68kreg="a1"/>
+			<arg name="phash" type="int *" m68kreg="a2"/>
+			<arg name="psignandhash" type="int *" m68kreg="a3"/>
+			<arg name="rsig" type="unsigned char *" m68kreg="d1"/>
+			<arg name="rhash" type="unsigned char *" m68kreg="d2"/>
+		</method>
 	</interface>
 </library>

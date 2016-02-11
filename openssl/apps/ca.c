@@ -1510,7 +1510,6 @@ int MAIN(int argc, char **argv)
     apps_shutdown();
     OPENSSL_EXIT(ret);
 }
->>>>>>> 974cba1899eddef72f804dcae058359ba01ffc3b
 
 static void lookup_fail(const char *name, const char *tag)
 {

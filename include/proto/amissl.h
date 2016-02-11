@@ -23,11 +23,7 @@
 /****************************************************************************/
 
 #ifndef __NOLIBBASE__
- #ifndef __USE_BASETYPE__
-  extern struct Library * AmiSSLBase;
- #else
-  extern struct Library * AmiSSLBase;
- #endif /* __USE_BASETYPE__ */
+ extern struct Library * AmiSSLBase;
 #endif /* __NOLIBBASE__ */
 
 /****************************************************************************/

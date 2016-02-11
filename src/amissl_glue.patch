@@ -1,9 +1,9 @@
---- amissl_glue.c_org	2015-09-23 11:24:12.036972892 +0200
-+++ amissl_glue.c	2015-09-23 11:25:28.199807073 +0200
-@@ -10,33 +10,40 @@
- 
- #if defined(BASEREL)
- #if defined(__amigaos3__)
+--- amissl_glue.c	2016-02-11 22:45:36.494679920 +0100
++++ amissl_glue.c_new	2016-02-11 22:47:21.116221958 +0100
+@@ -14,33 +14,40 @@
+ #undef SAVEDS
+ #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
+ #elif defined(__amigaos3__)
 -#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
 +//#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
  // restore the base relative data segment from the library base address in register a6
