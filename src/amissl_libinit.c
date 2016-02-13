@@ -5233,6 +5233,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     base->baserelData = NULL;
     DeleteLibrary(&base->libBase);
     #else
+    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
     FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
     #endif
 
@@ -5249,6 +5250,8 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
         (parent->IElf->CloseElfTags)(parent->elfHandle, CET_ReClose, TRUE, TAG_DONE);
         DropInterface((struct Interface *)parent->IElf);
         CloseLibrary((struct Library *)parent->ElfBase);
+        #else
+        LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)parent);
         #endif
 
         rc = LibDelete(parent);
