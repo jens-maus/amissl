@@ -99,22 +99,19 @@ static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
 #if defined(__amigaos4__)
 struct Library * AMISSL_COMMON_DATA SysBase = NULL;
 struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
+struct Library * AMISSL_COMMON_DATA DOSBase = NULL;
+struct DOSIFace * AMISSL_COMMON_DATA IDOS = NULL;
 #if defined(__NEWLIB__)
 struct Library * AMISSL_COMMON_DATA NewlibBase = NULL;
-struct NewlibIFace* AMISSL_COMMON_DATA INewlib = NULL;
+struct NewlibIFace * AMISSL_COMMON_DATA INewlib = NULL;
 #endif
 #else
 struct ExecBase *SysBase = NULL;
-#endif
-#if defined(__amigaos3__)
-struct DosLibrary * DOSBase = NULL;
-#elif defined(__amigaos4__)
-struct Library * AMISSL_COMMON_DATA DOSBase = NULL;
-struct DOSIFace * AMISSL_COMMON_DATA IDOS = NULL;
+struct DosLibrary *DOSBase = NULL;
 #endif
 
 #if defined(DEBUG)
-struct LibraryHeader *globalBase = NULL;
+struct LibraryHeader * AMISSL_COMMON_DATA globalBase = NULL;
 #endif
 
 #define LIBNAME        "amisslmaster.library"
@@ -627,7 +624,7 @@ struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, 
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
-  kprintf("%s:%ld iexec: %08lx\n", __FUNCTION__, __LINE__, IExec);
+  kprintf("%s:%ld iexec: %08lx sysbase addr: %08lx\n", __FUNCTION__, __LINE__, IExec, &SysBase);
 #elif defined(__MORPHOS__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
