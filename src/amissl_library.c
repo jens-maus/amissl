@@ -472,15 +472,16 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 {
 	int err = 1; /* Assume error condition */
 
+	kprintf("Calling __UserLibInit()\n");
   kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
   kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
+
 	InitSemaphore(&__mem_cs);
 
-	#if defined(__amigaos4__)
-	kprintf("Calling user lib init: %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR);
-	#else
-	kprintf("Calling user lib init: %08lx %08lx %08lx\n", thread_hash, ThreadGroupID, __BASE_OR_IFACE_VAR);
-	#endif
+	kprintf("thread_hash addr: %08lx\n", thread_hash);
+	kprintf("ThreadGroupID: %08lx\n", ThreadGroupID);
+	kprintf("LastThreadGroupID: %08lx\n", LastThreadGroupID);
+	kprintf("base/iface: %08lx\n", __BASE_OR_IFACE_VAR);
 
 	if (!thread_hash)
 	{
@@ -506,6 +507,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
     {
       kprintf("h_new(thread_hash)\n");
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
+      kprintf("new thread_hash addr: %08lx\n", thread_hash);
 	kprintf("Calling user lib init6\n");
     }
 
