@@ -12,6 +12,7 @@
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base)	(iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
 #define DROPINTERFACE(iface)			(DropInterface((struct Interface *)iface), iface = NULL)
+#define kprintf (IExec->DebugPrintF)
 #else
 #define GETINTERFACE(iface, base)	TRUE
 #define DROPINTERFACE(iface)
@@ -63,10 +64,18 @@ int main(void)
   #endif
 
 	printf("multi base test\n");
+
+	kprintf("########################\n");
+	kprintf("OpenLibrary(base1)\n");
 	base1 = OpenLibrary(LIBNAME, 0);
 	printf("base1 %08lx\n", base1);
+	kprintf("# done #################\n");
+
+	kprintf("########################\n");
+	kprintf("OpenLibrary(base2)\n");
 	base2 = OpenLibrary(LIBNAME, 0);
 	printf("base2 %08lx\n", base2);
+	kprintf("# done #################\n");
 
 	if(base1 != NULL && base2 != NULL &&
      GETINTERFACE(ibase1, base1) &&
@@ -78,49 +87,61 @@ int main(void)
     #if defined(__amigaos4__)
     IAmiSSL = ibase1;
     #endif
-		printf("checking base %08lx...", AmiSSLBase);
+		kprintf("########################\n");
+		kprintf("checking base1 %08lx\n");
+		printf("checking base1 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 		CleanupAmiSSL(TAG_DONE);
+		kprintf("# done #################\n");
 
 		AmiSSLBase = base2;
     #if defined(__amigaos4__)
     IAmiSSL = ibase2;
     #endif
-		printf("checking base %08lx...", AmiSSLBase);
+		kprintf("########################\n");
+		kprintf("checking base2 %08lx\n");
+		printf("checking base2 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 		CleanupAmiSSL(TAG_DONE);
+		kprintf("# done #################\n");
 
 		AmiSSLBase = base1;
     #if defined(__amigaos4__)
     IAmiSSL = ibase1;
     #endif
-		printf("checking base %08lx...", AmiSSLBase);
+		kprintf("########################\n");
+		kprintf("checking base1 %08lx\n");
+		printf("checking base1 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 		CleanupAmiSSL(TAG_DONE);
+		kprintf("# done #################\n");
 
 		AmiSSLBase = base2;
     #if defined(__amigaos4__)
     IAmiSSL = ibase2;
     #endif
-		printf("checking base %08lx...", AmiSSLBase);
+		kprintf("########################\n");
+		kprintf("checking base2 %08lx\n");
+		printf("checking base2 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
 		ret = InitAmiSSL(TAG_DONE);
 		printf(" done: %ld\n", ret);
 		CleanupAmiSSL(TAG_DONE);
+		kprintf("# done #################\n");
 	}
 
 	if(base1 != NULL)
