@@ -91,7 +91,7 @@ static void *s2i_ocsp_nocheck(const X509V3_EXT_METHOD *method,
 static int i2r_ocsp_serviceloc(const X509V3_EXT_METHOD *method, void *in,
                                BIO *bp, int ind);
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_crlid = {
+const X509V3_EXT_METHOD v3_ocsp_crlid = {
     NID_id_pkix_OCSP_CrlID, 0, ASN1_ITEM_ref(OCSP_CRLID),
     0, 0, 0, 0,
     0, 0,
@@ -100,7 +100,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_crlid = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_acutoff = {
+const X509V3_EXT_METHOD v3_ocsp_acutoff = {
     NID_id_pkix_OCSP_archiveCutoff, 0, ASN1_ITEM_ref(ASN1_GENERALIZEDTIME),
     0, 0, 0, 0,
     0, 0,
@@ -109,7 +109,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_acutoff = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_crl_invdate = {
+const X509V3_EXT_METHOD v3_crl_invdate = {
     NID_invalidity_date, 0, ASN1_ITEM_ref(ASN1_GENERALIZEDTIME),
     0, 0, 0, 0,
     0, 0,
@@ -118,7 +118,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_crl_invdate = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_crl_hold = {
+const X509V3_EXT_METHOD v3_crl_hold = {
     NID_hold_instruction_code, 0, ASN1_ITEM_ref(ASN1_OBJECT),
     0, 0, 0, 0,
     0, 0,
@@ -127,7 +127,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_crl_hold = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_nonce = {
+const X509V3_EXT_METHOD v3_ocsp_nonce = {
     NID_id_pkix_OCSP_Nonce, 0, NULL,
     ocsp_nonce_new,
     ocsp_nonce_free,
@@ -139,7 +139,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_nonce = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_nocheck = {
+const X509V3_EXT_METHOD v3_ocsp_nocheck = {
     NID_id_pkix_OCSP_noCheck, 0, ASN1_ITEM_ref(ASN1_NULL),
     0, 0, 0, 0,
     0, s2i_ocsp_nocheck,
@@ -148,7 +148,7 @@ const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_nocheck = {
     NULL
 };
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_ocsp_serviceloc = {
+const X509V3_EXT_METHOD v3_ocsp_serviceloc = {
     NID_id_pkix_OCSP_serviceLocator, 0, ASN1_ITEM_ref(OCSP_SERVICELOC),
     0, 0, 0, 0,
     0, 0,

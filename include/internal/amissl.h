@@ -28,7 +28,7 @@ typedef struct {
 } AMISSL_STATE;
 
 STDARGS AMISSL_STATE *GetAmiSSLState(void);
-STDARGS void SetAmiSSLerrno(int);
+STDARGS void SetAmiSSLerrno(int errno);
 STDARGS int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()

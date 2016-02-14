@@ -72,7 +72,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                             X509V3_CTX *ctx,
                                             STACK_OF(CONF_VALUE) *values);
 
-const X509V3_EXT_METHOD AMISSL_COMMON_DATA v3_akey_id = {
+const X509V3_EXT_METHOD v3_akey_id = {
     NID_authority_key_identifier,
     X509V3_EXT_MULTILINE, ASN1_ITEM_ref(AUTHORITY_KEYID),
     0, 0, 0, 0,

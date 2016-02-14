@@ -77,7 +77,7 @@ static int long_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
 static int long_print(BIO *out, ASN1_VALUE **pval, const ASN1_ITEM *it,
                       int indent, const ASN1_PCTX *pctx);
 
-static ASN1_PRIMITIVE_FUNCS AMISSL_COMMON_DATA long_pf = {
+static ASN1_PRIMITIVE_FUNCS long_pf = {
     NULL, 0,
     long_new,
     long_free,

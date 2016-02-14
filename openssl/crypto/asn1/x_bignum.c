@@ -79,7 +79,7 @@ static int bn_i2c(ASN1_VALUE **pval, unsigned char *cont, int *putype,
 static int bn_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
                   int utype, char *free_cont, const ASN1_ITEM *it);
 
-static ASN1_PRIMITIVE_FUNCS AMISSL_COMMON_DATA bignum_pf = {
+static ASN1_PRIMITIVE_FUNCS bignum_pf = {
     NULL, 0,
     bn_new,
     bn_free,

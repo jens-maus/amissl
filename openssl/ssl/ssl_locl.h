@@ -839,15 +839,9 @@ typedef struct ssl3_buf_freelist_entry_st {
 } SSL3_BUF_FREELIST_ENTRY;
 # endif
 
-#ifndef OPENSSL_SYS_AMIGA
 extern SSL3_ENC_METHOD ssl3_undef_enc_method;
 OPENSSL_EXTERN const SSL_CIPHER ssl2_ciphers[];
 OPENSSL_EXTERN SSL_CIPHER ssl3_ciphers[];
-#else
-extern SSL3_ENC_METHOD AMISSL_COMMON_DATA ssl3_undef_enc_method;
-OPENSSL_EXTERN const SSL_CIPHER AMISSL_COMMON_DATA ssl2_ciphers[];
-OPENSSL_EXTERN SSL_CIPHER AMISSL_COMMON_DATA ssl3_ciphers[];
-#endif
 
 SSL_METHOD *ssl_bad_method(int ver);
 

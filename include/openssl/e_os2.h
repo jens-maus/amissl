@@ -239,6 +239,9 @@ extern "C" {
 #  if !defined(OPENSSL_SYS_AMIGA)
 #   define OPENSSL_SYS_AMIGA
 #  endif
+#  if defined(AMISSL_COMPILE)
+#   include <internal/amissl_compiler.h>
+#  endif
 # endif
 
 /**
@@ -282,15 +285,6 @@ extern "C" {
 #  define OPENSSL_EXPORT extern __declspec(dllexport)
 #  define OPENSSL_IMPORT extern __declspec(dllimport)
 #  define OPENSSL_GLOBAL
-# elif defined(OPENSSL_SYS_AMIGA)
-#  define OPENSSL_EXPORT extern
-#  define OPENSSL_IMPORT extern
-#  if defined(AMISSL_COMPILE)
-#   include <internal/amissl_compiler.h>
-#   define OPENSSL_GLOBAL AMISSL_COMMON_DATA
-#  else
-#   define OPENSSL_GLOBAL
-#  endif
 # else
 #  define OPENSSL_EXPORT extern
 #  define OPENSSL_IMPORT extern
