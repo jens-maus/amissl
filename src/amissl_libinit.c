@@ -30,8 +30,6 @@
 
 #include <internal/debug.h>
 
-void __init_libcmt_file(void);
-
 #undef DEBUG
 #define ENTER()                 ((void)0)
 #define LEAVE()                 ((void)0)
@@ -4982,24 +4980,6 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 /****************************************************************************/
 
 #if defined(__amigaos4__)
-LIBFUNC int libOpen2(struct AmiSSLIFace *self)
-{
-  kprintf("%s:%ld %08lx %08lx\n", __FUNCTION__, __LINE__, DOSBase, IDOS);
-  
-  __init_libcmt_file();
-      
-  if(!LIB___UserLibInit((__BASE_OR_IFACE_TYPE)self))
-  { 
-    return 1;
-  }
-
-  return 0;
-}
-#endif
-
-/****************************************************************************/
-
-#if defined(__amigaos4__)
 struct LibraryHeader * LibOpen(struct LibraryManagerInterface *Self, ULONG version UNUSED)
 {
   struct LibraryHeader *base = (struct LibraryHeader *)Self->Data.LibBase;
@@ -5094,13 +5074,14 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         extlib = (struct ExtendedLibrary *)((ULONG)child + child->libBase.lib_PosSize);
         extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
         kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
-        if(libOpen2((__BASE_OR_IFACE_TYPE)extlib->MainIFace))
+
+        if(LIB___UserLibInit((__BASE_OR_IFACE_TYPE)extlib->MainIFace) == 0)
         {
           kprintf("AmiSSL: Returning libBase: %08lx\n", child);
         }
         else
         {
-          kprintf("AmiSSL: != 0 returned by libOpen2()\n");
+          kprintf("AmiSSL: != 0 returned by LIB___UserLibInit()\n");
 
           (base->IElf->FreeDataSegmentCopy)(base->elfHandle, child->baserelData);
         }

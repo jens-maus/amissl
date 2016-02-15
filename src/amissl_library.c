@@ -32,10 +32,8 @@
 //
 
 #include "amissl_lib_protos.h"
-
-//
-
 #include "amisslinit.h"
+#include "amissl_base.h"
 
 //
 
@@ -63,9 +61,7 @@ struct Library *LocaleBase = NULL;
 struct Library *UtilityBase = NULL;
 #endif
 
-struct SignalSemaphore __mem_cs;
 LONG GMTOffset = 0;
-void * __pool = NULL;
 
 struct SignalSemaphore * lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
 struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
@@ -454,13 +450,8 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 	FreeVec(lock_cs);
 
-#ifdef __amigaos4__
-	if(__pool)
-		FreeSysObject(ASOT_MEMPOOL, __pool);
-#else
-	if(__pool)
-		DeletePool(__pool);
-#endif
+  // make sure to free all resources of libcmt
+  __free_libcmt();
 }
 
 LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
@@ -471,17 +462,19 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 {
 	int err = 1; /* Assume error condition */
+  struct LibraryHeader *base = (struct LibraryHeader *)__BASE_OR_IFACE_VAR;
 
 	kprintf("Calling __UserLibInit()\n");
-  kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
+	kprintf("base/iface addr: %08lx\n", __BASE_OR_IFACE_VAR);
+	kprintf("parent addr: %08lx\n", base->parent);
+
+  // we have to initialize the libcmt stuff
+  __init_libcmt();
+
   kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
-
-	InitSemaphore(&__mem_cs);
-
 	kprintf("thread_hash addr: %08lx\n", thread_hash);
 	kprintf("ThreadGroupID: %08lx\n", ThreadGroupID);
 	kprintf("LastThreadGroupID: %08lx\n", LastThreadGroupID);
-	kprintf("base/iface: %08lx\n", __BASE_OR_IFACE_VAR);
 
 	if (!thread_hash)
 	{
@@ -523,23 +516,20 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 	ReleaseSemaphore(&openssl_cs);
 
 #ifdef __amigaos4__
-	if ((__pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE))
-	    && (lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
+	if((lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)) != NULL)
 #else
-	if ((__pool = CreatePool(MEMF_ANY, 8192, 4096))
-	    && (lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)))
+	if((lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)) != NULL)
 #endif
 	{
 		struct Locale *locale;
 		int i;
 
+    // lets init all semaphores
 		for (i=0; i<CRYPTO_num_locks(); i++)
     {
 			InitSemaphore(&lock_cs[i]);
       kprintf("initialized lockcs[%ld]: %08lx\n", i, &lock_cs[i]);
     }
-
-		InitSemaphore(&__mem_cs);
 
     // set static locks callbacks
     CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);

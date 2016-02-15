@@ -9,6 +9,8 @@
 
 extern int __io2errno(int);
 extern void initialize_socket_errno(AMISSL_STATE *state);
+extern void __init_libcmt(void) __attribute__((constructor));
+extern void __free_libcmt(void) __attribute__((destructor));
 
 /**
 *

@@ -25,9 +25,9 @@ OBJ_D=$(AmiSSL)/.obj_$(OS)/libcmt
 BIN_D=$(AmiSSL)/bin_$(OS)
 
 WARN       = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-aliasing #-Wunreachable-code
-OPTFLAGS   = -O3 -fomit-frame-pointer -funroll-loops
+OPTFLAGS   = -O3 -fomit-frame-pointer
 DEBUG      = -DDEBUG -fno-omit-frame-pointer #-O0
-CFLAGS     = $(CPU) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
+CFLAGS     = $(CPU) $(OPTFLAGS) $(DEBUG) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
 
 # different options per target OS
 ifeq ($(OS), os4)
@@ -184,7 +184,7 @@ NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/sendto.o \
             $(OBJ_D)/recvfrom.o
 
-LIBOBJS = $(OS4OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/localtime.o
+LIBOBJS = $(OS4OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/localtime.o $(OBJ_D)/libcmt.o
 
 $(BIN_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"

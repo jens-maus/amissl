@@ -9,10 +9,8 @@
 #include <internal/amissl.h>
 #include "libcmt.h"
 
-struct MinList __filelist; /* list of open files (fflush() needs also access) */
-struct SignalSemaphore FileListLock;
-
-void __init_libcmt_file(void) __attribute__((constructor));
+extern struct MinList __filelist; /* list of open files (fflush() needs also access) */
+extern struct SignalSemaphore __filelist_cs;
 
 FILE *freopen(const char *filename,const char *mode,FILE *stream)
 {
@@ -106,14 +104,6 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 	return stream;
 }
 
-void __init_libcmt_file(void)
-{
-  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
-  kprintf("%08lx %08lx\n", &__filelist, &FileListLock);
-	NewList((struct List *)&__filelist);
-	InitSemaphore(&FileListLock);
-}
-
 FILE *fopen(const char *name, const char *mode)
 {
 	struct filenode *node;
@@ -129,9 +119,9 @@ FILE *fopen(const char *name, const char *mode)
 			node->FILE._flag |= _IOALLOCBUF;
 			if(freopen(name,mode,(FILE *)&node->FILE)!=NULL)
 			{
-				ObtainSemaphore(&FileListLock);
+				ObtainSemaphore(&__filelist_cs);
 				AddHead((struct List *)&__filelist,(struct Node *)&node->node);
-				ReleaseSemaphore(&FileListLock);
+				ReleaseSemaphore(&__filelist_cs);
 				return (FILE *)&node->FILE;
 			}
 			free(node->FILE._base);
@@ -156,9 +146,9 @@ int fclose(FILE *file)
 
 	node = (struct filenode *)(((BYTE *)file)-offsetof(struct filenode,FILE));
 
-	ObtainSemaphore(&FileListLock);
+	ObtainSemaphore(&__filelist_cs);
 	Remove((struct Node *)node);
-	ReleaseSemaphore(&FileListLock);
+	ReleaseSemaphore(&__filelist_cs);
 
 	Close(TOFILE(file)->_file);
 
