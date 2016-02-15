@@ -61,16 +61,21 @@ struct Library *LocaleBase = NULL;
 struct Library *UtilityBase = NULL;
 #endif
 
+//////////////////////////////////////
+// local variables which are unique for
+// for every child
 LONG GMTOffset = 0;
+static ULONG clock_base = 0;
+static struct SignalSemaphore * lock_cs = NULL;
+static ULONG ThreadGroupID = 0;
 
-struct SignalSemaphore * lock_cs = NULL; /* This needs to be dynamically allocated since it takes up too much near data */
+//////////////////////////////////////
+// global variables valid throughout all
+// libbases
 struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
-LONG AMISSL_COMMON_DATA SemaphoreInitialized = 0;
+static LONG AMISSL_COMMON_DATA openssl_cs_init = 0;
 struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
 static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
-static ULONG ThreadGroupID = 0;
-static ULONG clock_base = 0;
-static long SSLVersionApp = 0;
 
 // on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
@@ -308,7 +313,8 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 			state->ISocketPtr = &state->ISocket;
 
 		if(state->SocketBase)
-		{ // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
+		{
+      // This means we are beeing called from a 68k program and we need to get the ppc interface to the library ourselves
 			if((*state->ISocketPtr = (struct SocketIFace *)GetInterface(state->SocketBase,"main",1,NULL)))
 			{
 				// All is good. Now we can make socket calls as if everything was ppc
@@ -333,8 +339,6 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 
 		kprintf("initialize socket errno: %08lx %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR, state->SocketBase);
 		initialize_socket_errno(state);
-
-		SSLVersionApp = GetTagData(AmiSSL_SSLVersionApp, 0, tagList);
 
 		err = 0;
 	}
@@ -473,45 +477,35 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
 
   kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
 	kprintf("thread_hash addr: %08lx\n", thread_hash);
-	kprintf("ThreadGroupID: %08lx\n", ThreadGroupID);
 	kprintf("LastThreadGroupID: %08lx\n", LastThreadGroupID);
 
 	if (!thread_hash)
 	{
-	kprintf("Calling user lib init1\n");
 		Forbid();
 
-	kprintf("Calling user lib init2\n");
-		if(!SemaphoreInitialized)
+		if(openssl_cs_init == 0)
 		{
-	kprintf("Calling user lib init3\n");
 			InitSemaphore(&openssl_cs);
-	kprintf("Calling user lib init3.1\n");
-			SemaphoreInitialized = TRUE;
+			openssl_cs_init = 1;
 		}
 
-	kprintf("Calling user lib init4\n");
 		Permit();
 
 		ObtainSemaphore(&openssl_cs);
-	kprintf("Calling user lib init5\n");
 
 		if (!thread_hash)
     {
-      kprintf("h_new(thread_hash)\n");
 			thread_hash = h_new(7, h_allocfunc,h_freefunc);
       kprintf("new thread_hash addr: %08lx\n", thread_hash);
-	kprintf("Calling user lib init6\n");
     }
 
-	kprintf("Calling user lib init7\n");
 		ReleaseSemaphore(&openssl_cs);
 	}
 
 	ObtainSemaphore(&openssl_cs);
 
 	ThreadGroupID = ++LastThreadGroupID;
-	kprintf("Thread group ID: %lu\n", ThreadGroupID);
+	kprintf("ThreadGroupID: %08lx\n", ThreadGroupID);
 
 	ReleaseSemaphore(&openssl_cs);
 
