@@ -26,25 +26,25 @@ extern struct HashTable * AMISSL_COMMON_DATA thread_hash;
 
 STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
-	AMISSL_STATE *ret;
-	kprintf("%s SysBase: %08lx openssl_cs addr: %08lx\n", __FUNCTION__, SysBase, &openssl_cs);
-	ObtainSemaphore(&openssl_cs);
-	kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
-	ret = (AMISSL_STATE *)h_find(thread_hash, (long)FindTask(NULL));
-	ReleaseSemaphore(&openssl_cs);
-	kprintf("%s done\n", __FUNCTION__);
+  AMISSL_STATE *ret;
+  kprintf("%s SysBase: %08lx openssl_cs addr: %08lx\n", __FUNCTION__, SysBase, &openssl_cs);
+  ObtainSemaphore(&openssl_cs);
+  kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
+  ret = (AMISSL_STATE *)h_find(thread_hash, (long)FindTask(NULL));
+  ReleaseSemaphore(&openssl_cs);
+  kprintf("%s done\n", __FUNCTION__);
 
-	return ret;
+  return ret;
 }
 
 STDARGS void SetAmiSSLerrno(int err)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
-	*p->errno_ptr = err;
+  AMISSL_STATE *p = GetAmiSSLState();
+  *p->errno_ptr = err;
 }
 
 STDARGS int GetAmiSSLerrno(void)
 {
-	AMISSL_STATE *p = GetAmiSSLState();
-	return *p->errno_ptr;
+  AMISSL_STATE *p = GetAmiSSLState();
+  return *p->errno_ptr;
 }

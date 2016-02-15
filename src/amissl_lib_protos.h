@@ -8,13 +8,13 @@
 #include <internal/amissl_compiler.h>
 
 #if defined(__amigaos4__)
-#define __BASE_OR_IFACE_TYPE	struct AmiSSLIFace *
-#define __BASE_OR_IFACE_VAR		IAmiSSL
+#define __BASE_OR_IFACE_TYPE  struct AmiSSLIFace *
+#define __BASE_OR_IFACE_VAR   IAmiSSL
 #else
-#define __BASE_OR_IFACE_TYPE	struct Library *
-#define __BASE_OR_IFACE_VAR		AmiSSLBase
+#define __BASE_OR_IFACE_TYPE  struct Library *
+#define __BASE_OR_IFACE_VAR   AmiSSLBase
 #endif
-#define __BASE_OR_IFACE			__BASE_OR_IFACE_TYPE __BASE_OR_IFACE_VAR
+#define __BASE_OR_IFACE     __BASE_OR_IFACE_TYPE __BASE_OR_IFACE_VAR
 
 #ifdef __amigaos4__
 LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE_TYPE), ...);

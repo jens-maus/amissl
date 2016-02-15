@@ -63,7 +63,7 @@ extern struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
 
 ULONG openBase(struct LibraryHeader *lib)
 {
-	kprintf("Calling openBase(%08lx)\n", lib);
+  kprintf("Calling openBase(%08lx)\n", lib);
 
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   #if defined(__amigaos4__)
@@ -75,7 +75,7 @@ ULONG openBase(struct LibraryHeader *lib)
   kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
   #endif
 
-	kprintf("parent addr: %08lx\n", lib->parent);
+  kprintf("parent addr: %08lx\n", lib->parent);
   kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
 
   return TRUE;

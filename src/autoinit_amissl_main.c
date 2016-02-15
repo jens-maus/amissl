@@ -32,29 +32,29 @@ void __exit_amissl_main(void) __attribute__((destructor));
 
 static void fatal_error(const char *message)
 {
-	BOOL from_wb = ((struct Process *)FindTask(NULL))->pr_CLI == 0;
-	BPTR fh;
+  BOOL from_wb = ((struct Process *)FindTask(NULL))->pr_CLI == 0;
+  BPTR fh;
 
-	if (!from_wb)
-	{
-		#if defined(__amigaos4__)
-		fh = ErrorOutput() ? ErrorOutput() : Output();
-		#else
-		fh = Output();
-		#endif
-	}
-	else
-		fh = Open("CON://///AUTO/CLOSE/WAIT", MODE_NEWFILE);
+  if (!from_wb)
+  {
+    #if defined(__amigaos4__)
+    fh = ErrorOutput() ? ErrorOutput() : Output();
+    #else
+    fh = Output();
+    #endif
+  }
+  else
+    fh = Open("CON://///AUTO/CLOSE/WAIT", MODE_NEWFILE);
 
-	if (fh)
-	{
-		FPrintf(fh, (char *)message);
+  if (fh)
+  {
+    FPrintf(fh, (char *)message);
 
-		if (from_wb)
-			Close(fh);
-	}
+    if (from_wb)
+      Close(fh);
+  }
 
-	exit(RETURN_FAIL);
+  exit(RETURN_FAIL);
 }
 
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
@@ -75,112 +75,112 @@ long CleanupAmiSSL(Tag tag1, ...)
 
 void __init_amissl_main(void)
 {
-	#if defined(__amigaos4__)
-	if (!ISocket)
-	#endif
-	{
-		if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
-			fatal_error("Couldn't open bsdsocket.library v4!\n");
+  #if defined(__amigaos4__)
+  if (!ISocket)
+  #endif
+  {
+    if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
+      fatal_error("Couldn't open bsdsocket.library v4!\n");
 
-		#if defined(__amigaos4__)
-		if (!(ISocket = (struct SocketIFace *)GetInterface((struct Library *)SocketBase, "main", 1, NULL)))
-			fatal_error("Couldn't obtain socket interface\n");
-		#endif
-	}
+    #if defined(__amigaos4__)
+    if (!(ISocket = (struct SocketIFace *)GetInterface((struct Library *)SocketBase, "main", 1, NULL)))
+      fatal_error("Couldn't obtain socket interface\n");
+    #endif
+  }
 
-	#if defined(__amigaos4__)
-	if (!IAmiSSLMaster)
-	#endif
-	{
-		if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
-		                                             AMISSLMASTER_MIN_VERSION)))
-			fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
+  #if defined(__amigaos4__)
+  if (!IAmiSSLMaster)
+  #endif
+  {
+    if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
+                                                 AMISSLMASTER_MIN_VERSION)))
+      fatal_error("Couldn't open amisslmaster.library v" MKSTR(AMISSLMASTER_MIN_VERSION) "\n");
 
-		#if defined(__amigaos4__)
-		if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)AmiSSLMasterBase, "main", 1, NULL)))
-			fatal_error("Couldn't obtain amisslmaster interface\n");
-		#endif
+    #if defined(__amigaos4__)
+    if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)AmiSSLMasterBase, "main", 1, NULL)))
+      fatal_error("Couldn't obtain amisslmaster interface\n");
+    #endif
 
-		if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-			fatal_error("Couldn't initialize amisslmaster.library!\n");
-	}
+    if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
+      fatal_error("Couldn't initialize amisslmaster.library!\n");
+  }
 
-	#if defined(__amigaos4__)
-	if (!IAmiSSL)
-	#endif
-	{
-		if (!(AmiSSLBase = OpenAmiSSL()))
-			fatal_error("Couldn't open AmiSSL!\n");
+  #if defined(__amigaos4__)
+  if (!IAmiSSL)
+  #endif
+  {
+    if (!(AmiSSLBase = OpenAmiSSL()))
+      fatal_error("Couldn't open AmiSSL!\n");
 
-		#if defined(__amigaos4__)
-		if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)AmiSSLBase, "main", 1, NULL)))
-			fatal_error("Couldn't obtain amissl interface\n");
+    #if defined(__amigaos4__)
+    if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)AmiSSLBase, "main", 1, NULL)))
+      fatal_error("Couldn't obtain amissl interface\n");
 
-		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-		                        AmiSSL_ISocket, ISocket,
-		                        TAG_DONE))
-			fatal_error("Couldn't initialize AmiSSL!\n");
-		#else
-		if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-		                        AmiSSL_SocketBase, SocketBase,
-		                        TAG_DONE))
-			fatal_error("Couldn't initialize AmiSSL!\n");
-		#endif
-	}
+    if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+                            AmiSSL_ISocket, ISocket,
+                            TAG_DONE))
+      fatal_error("Couldn't initialize AmiSSL!\n");
+    #else
+    if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+                            AmiSSL_SocketBase, SocketBase,
+                            TAG_DONE))
+      fatal_error("Couldn't initialize AmiSSL!\n");
+    #endif
+  }
 }
 
 /****************************************************************************/
 
 void __exit_amissl_main(void)
 {
-	if (AmiSSLBase)
-	{
-		#if defined(__amigaos4__)
-		if (IAmiSSL)
-		{
-			CleanupAmiSSL(TAG_DONE);
-			DropInterface((struct Interface *)IAmiSSL);
+  if (AmiSSLBase)
+  {
+    #if defined(__amigaos4__)
+    if (IAmiSSL)
+    {
+      CleanupAmiSSL(TAG_DONE);
+      DropInterface((struct Interface *)IAmiSSL);
 
-			IAmiSSL = NULL;
-		}
+      IAmiSSL = NULL;
+    }
 
-		if (IAmiSSLMaster)
-			CloseAmiSSL();
-		#else
-		CleanupAmiSSL(TAG_DONE);
-		CloseAmiSSL();
-		#endif
+    if (IAmiSSLMaster)
+      CloseAmiSSL();
+    #else
+    CleanupAmiSSL(TAG_DONE);
+    CloseAmiSSL();
+    #endif
 
-		AmiSSLBase = NULL;
-	}
+    AmiSSLBase = NULL;
+  }
 
-	if (AmiSSLMasterBase)
-	{
-		#if defined(__amigaos4__)
-		if (IAmiSSLMaster)
-		{
-			DropInterface((struct Interface *)IAmiSSLMaster);
-			IAmiSSLMaster = NULL;
-		}
-		#endif
+  if (AmiSSLMasterBase)
+  {
+    #if defined(__amigaos4__)
+    if (IAmiSSLMaster)
+    {
+      DropInterface((struct Interface *)IAmiSSLMaster);
+      IAmiSSLMaster = NULL;
+    }
+    #endif
 
-		CloseLibrary((struct Library *)AmiSSLMasterBase);
-		AmiSSLMasterBase = NULL;
-	}
+    CloseLibrary((struct Library *)AmiSSLMasterBase);
+    AmiSSLMasterBase = NULL;
+  }
 
-	if (SocketBase)
-	{
-		#if defined(__amigaos4__)
-		if (ISocket)
-		{
-			DropInterface((struct Interface *)ISocket);
-			ISocket = NULL;
-		}
-		#endif
+  if (SocketBase)
+  {
+    #if defined(__amigaos4__)
+    if (ISocket)
+    {
+      DropInterface((struct Interface *)ISocket);
+      ISocket = NULL;
+    }
+    #endif
 
-		CloseLibrary((struct Library *)SocketBase);
-		SocketBase = NULL;
-	}
+    CloseLibrary((struct Library *)SocketBase);
+    SocketBase = NULL;
+  }
 }
 
 /****************************************************************************/

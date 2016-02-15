@@ -44,10 +44,10 @@
 #define ASSERT(expression)      ((void)0)
 
 #if defined(__amigaos4__)
-#define GETINTERFACE(iface, base)	(iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
-#define DROPINTERFACE(iface)			(DropInterface((struct Interface *)iface), iface = NULL)
+#define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
+#define DROPINTERFACE(iface)      (DropInterface((struct Interface *)iface), iface = NULL)
 #else
-#define GETINTERFACE(iface, base)	TRUE
+#define GETINTERFACE(iface, base) TRUE
 #define DROPINTERFACE(iface)
 #endif
 
