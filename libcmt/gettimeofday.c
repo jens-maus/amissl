@@ -23,7 +23,7 @@ struct TimeRequest
 #define TIMEVAL(x)  (x)
 #endif
 
-extern LONG GMTOffset;
+extern LONG __gmt_offset;
 
 int gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
@@ -73,7 +73,7 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
             /* If possible, adjust for the local time zone. We do this because the
                AmigaOS system time is returned in local time and we want to return
                it in UTC. */
-            seconds += 60 * GMTOffset;
+            seconds += 60 * __gmt_offset;
 
             if(tp != NULL)
             {
@@ -83,7 +83,7 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
 
             if(tzp != NULL)
             {
-              tzp->tz_minuteswest = GMTOffset;
+              tzp->tz_minuteswest = __gmt_offset;
 
               /* The -1 means "we do not know if the time given is in
                  daylight savings time". */

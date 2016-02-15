@@ -26,7 +26,6 @@
 
 #include <proto/exec.h>
 #include <proto/dos.h>
-#include <proto/locale.h>
 #include <proto/utility.h>
 
 //
@@ -45,27 +44,18 @@
 #ifdef __amigaos4__
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
-struct Library *LocaleBase = NULL;
-struct LocaleIFace *ILocale = NULL;
 struct Library *UtilityBase = NULL;
 struct UtilityIFace *IUtility = NULL;
 extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct IntuitionBase *IntuitionBase = NULL;
-#if !defined(__MORPHOS__)
-struct LocaleBase *LocaleBase = NULL;
-#else
-struct Library *LocaleBase = NULL;
-#endif
 struct Library *UtilityBase = NULL;
 #endif
 
 //////////////////////////////////////
 // local variables which are unique for
 // for every child
-LONG GMTOffset = 0;
-static ULONG clock_base = 0;
 static struct SignalSemaphore * lock_cs = NULL;
 static ULONG ThreadGroupID = 0;
 
@@ -87,18 +77,6 @@ static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 #endif // MULTIBASE + BASEREL
 #endif // __amigaos3__
-
-clock_t clock(void)
-{
-  struct DateStamp ds;
-  ULONG clock_curr;
-
-  DateStamp(&ds);
-  clock_curr = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
-             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
-
-  return(clock_curr - clock_base);
-}
 
 #if !defined(__amigaos4__)
 
@@ -431,8 +409,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
     kprintf("No thread_hash\n");
 
 #ifdef __amigaos4__
-  DropInterface((struct Interface *)ILocale);
-  ILocale = NULL;
   DropInterface((struct Interface *)IUtility);
   IUtility = NULL;
   DropInterface((struct Interface *)IIntuition);
@@ -441,8 +417,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
   IDOS = NULL;
 #endif
 
-  CloseLibrary((struct Library *)LocaleBase);
-  LocaleBase = NULL;
   CloseLibrary((struct Library *)UtilityBase);
   UtilityBase = NULL;
   CloseLibrary((struct Library *)IntuitionBase);
@@ -515,7 +489,6 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
   if((lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)) != NULL)
 #endif
   {
-    struct Locale *locale;
     int i;
 
     // lets init all semaphores
@@ -538,31 +511,15 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
     if ((DOSBase = OpenLibrary("dos.library", 50))
       && (IntuitionBase = OpenLibrary("intuition.library", 50))
       && (UtilityBase = OpenLibrary("utility.library", 50))
-      && (LocaleBase = OpenLibrary("locale.library", 50))
       && (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
       && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
-      && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL))
-      && (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL))
-      && (locale = OpenLocale(NULL)))
+      && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
 #else
     if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
       && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-      && (UtilityBase = OpenLibrary("utility.library", 37))
-      && (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))
-      && (locale = OpenLocale(NULL)))
+      && (UtilityBase = OpenLibrary("utility.library", 37)))
 #endif
     {
-      struct DateStamp ds;
-
-      DateStamp(&ds);
-
-      clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
-             * CLOCKS_PER_SEC / TICKS_PER_SECOND;
-
-      GMTOffset = locale->loc_GMTOffset;
-      kprintf("GMTOffset: %ld\n", GMTOffset);
-
-      CloseLocale(locale);
       err = 0;
     }
   }

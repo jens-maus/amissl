@@ -4,14 +4,14 @@
 #include <time.h>
 #include <internal/amissl.h>
 
-extern LONG GMTOffset;
+extern LONG __gmt_offset;
 
 time_t time(time_t *ptr)
 {
 	struct DateStamp ds;
 	time_t ret = 252460800; /* 1. 1. 1970. - 1. 1. 1978. */
 
-	ret += GMTOffset;
+	ret += __gmt_offset;
 	DateStamp(&ds);
 
 	ret += ds.ds_Days * 86400;
