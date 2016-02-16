@@ -59,33 +59,76 @@
 #include <openssl/cast.h>
 #include "cast_lcl.h"
 
+#if defined(__amigaos4__)
+#include <proto/exec.h>
+#undef kprintf
+#define kprintf (IExec->DebugPrintF)
+#endif
+
 void CAST_encrypt(CAST_LONG *data, const CAST_KEY *key)
 {
-    register CAST_LONG l, r, t;
-    const register CAST_LONG *k;
+    CAST_LONG l, r, t;
+    const CAST_LONG *k;
+    int i;
 
     k = &(key->data[0]);
     l = data[0];
     r = data[1];
 
+    kprintf("k = ");
+    for (i = 0; i < 32; i++)
+      kprintf("%02lX ", k[i]);
+    kprintf("\n");
+    kprintf("sk: %ld\n", key->short_key);
+
+    kprintf("l = %08lx\n", l);
+    kprintf("r = %08lx\n", r);
+ 
     E_CAST(0, k, l, r, +, ^, -);
+    kprintf("l0 = %08lx\n", l);
+    kprintf("r0 = %08lx\n", r);
     E_CAST(1, k, r, l, ^, -, +);
+    kprintf("l1 = %08lx\n", l);
+    kprintf("r1 = %08lx\n", r);
     E_CAST(2, k, l, r, -, +, ^);
+    kprintf("l2 = %08lx\n", l);
+    kprintf("r2 = %08lx\n", r);
     E_CAST(3, k, r, l, +, ^, -);
+    kprintf("l3 = %08lx\n", l);
+    kprintf("r3 = %08lx\n", r);
     E_CAST(4, k, l, r, ^, -, +);
+    kprintf("l4 = %08lx\n", l);
+    kprintf("r4 = %08lx\n", r);
     E_CAST(5, k, r, l, -, +, ^);
+    kprintf("l5 = %08lx\n", l);
+    kprintf("r5 = %08lx\n", r);
     E_CAST(6, k, l, r, +, ^, -);
+    kprintf("l6 = %08lx\n", l);
+    kprintf("r6 = %08lx\n", r);
     E_CAST(7, k, r, l, ^, -, +);
+    kprintf("l7 = %08lx\n", l);
+    kprintf("r7 = %08lx\n", r);
     E_CAST(8, k, l, r, -, +, ^);
+    kprintf("l8 = %08lx\n", l);
+    kprintf("r8 = %08lx\n", r);
     E_CAST(9, k, r, l, +, ^, -);
+    kprintf("l9 = %08lx\n", l);
+    kprintf("r9 = %08lx\n", r);
     E_CAST(10, k, l, r, ^, -, +);
+    kprintf("l10 = %08lx\n", l);
+    kprintf("r10 = %08lx\n", r);
     E_CAST(11, k, r, l, -, +, ^);
+    kprintf("l11 = %08lx\n", l);
+    kprintf("r11 = %08lx\n", r);
     if (!key->short_key) {
         E_CAST(12, k, l, r, +, ^, -);
         E_CAST(13, k, r, l, ^, -, +);
         E_CAST(14, k, l, r, -, +, ^);
         E_CAST(15, k, r, l, +, ^, -);
     }
+
+    kprintf("l2 = %08lx\n", l);
+    kprintf("r2 = %08lx\n", r);
 
     data[1] = l & 0xffffffffL;
     data[0] = r & 0xffffffffL;
