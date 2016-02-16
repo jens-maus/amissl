@@ -5114,6 +5114,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
       }
       while(--numRelocs != 0);
     }
+
+    // now we need to flush the cache because we copied the jmp table
+    if(SysBase->LibNode.lib_Version >= 36)
+      CacheClearU();
+
     dataSeg += 0x7ffeu;
     child->dataSeg = dataSeg;
     kprintf("Calling __UserLibInit(%08lx)\n", child);
