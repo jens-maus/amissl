@@ -7,6 +7,9 @@
 
 #include <internal/amissl_compiler.h>
 
+// forward declarations
+struct LibraryHeader;
+
 #if defined(__amigaos4__)
 #define __BASE_OR_IFACE_TYPE  struct AmiSSLIFace *
 #define __BASE_OR_IFACE_VAR   IAmiSSL
@@ -21,11 +24,10 @@ LIBPROTOVA(InitAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE_TYPE), ...);
 LIBPROTOVA(CleanupAmiSSL, long, REG(a6, UNUSED __BASE_OR_IFACE_TYPE), ...);
 #endif /* __amigaos4__ */
 
-LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE_TYPE));
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE_TYPE), REG(a0, struct LibraryHeader *libBase));
+LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE_TYPE), REG(a0, struct LibraryHeader *libBase));
 LIBPROTO(__UserLibExpunge, void, REG(a6, __BASE_OR_IFACE_TYPE));
-LIBPROTO(__UserLibCleanup, void, REG(a6, __BASE_OR_IFACE_TYPE));
 
-struct LibraryHeader;
 ULONG freeBase(struct LibraryHeader *);
 ULONG initBase(struct LibraryHeader *);
 ULONG closeBase(struct LibraryHeader *);

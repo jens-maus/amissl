@@ -292,12 +292,6 @@ extern "C" {
 # endif
 # define OPENSSL_EXTERN OPENSSL_IMPORT
 
-# if !defined(OPENSSL_SYS_AMIGA)
-#  if !defined(AMISSL_COMMON_DATA)
-#   define AMISSL_COMMON_DATA
-#  endif
-# endif
-
 /*-
  * Macros to allow global variables to be reached through function calls when
  * required (if a shared library version requires it, for example.

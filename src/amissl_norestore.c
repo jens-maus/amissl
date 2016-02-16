@@ -11,6 +11,7 @@
 #endif
 
 #include "amissl_lib_protos.h"
+#include "amissl_base.h"
 
 /*
  * All functions in here will be compiled without any restore-a4
@@ -21,17 +22,19 @@
  * file if you don't want them to be affected by restore-a4 functionality.
 */
 
-extern struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
-extern struct HashTable * AMISSL_COMMON_DATA thread_hash;
+extern struct LibraryHeader *ownBase;
+extern struct LibraryHeader *parentBase;
 
 STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
   AMISSL_STATE *ret;
-  kprintf("%s SysBase: %08lx openssl_cs addr: %08lx\n", __FUNCTION__, SysBase, &openssl_cs);
-  ObtainSemaphore(&openssl_cs);
-  kprintf("h_find(thread_hash=%08lx)\n", thread_hash);
-  ret = (AMISSL_STATE *)h_find(thread_hash, (long)FindTask(NULL));
-  ReleaseSemaphore(&openssl_cs);
+  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
+  kprintf("parentBase addr: %08lx (%08lx)\n", &parentBase, parentBase);
+  kprintf("%s SysBase: %08lx openssl_cs addr: %08lx\n", __FUNCTION__, SysBase, &parentBase->openssl_cs);
+  ObtainSemaphore(&parentBase->openssl_cs);
+  kprintf("h_find(parentBase->thread_hash=%08lx)\n", parentBase->thread_hash);
+  ret = (AMISSL_STATE *)h_find(parentBase->thread_hash, (long)FindTask(NULL));
+  ReleaseSemaphore(&parentBase->openssl_cs);
   kprintf("%s done\n", __FUNCTION__);
 
   return ret;

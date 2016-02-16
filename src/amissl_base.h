@@ -45,6 +45,21 @@ struct LibraryHeader
   #endif /* __amigaos4__ */
   #endif /* BASEREL */
   #endif /* MULTIBASE */
+
+  //////////////////////////////////////
+  // local variables which are valid only
+  // for this particular libbase
+  struct SignalSemaphore *lock_cs;
+  ULONG ThreadGroupID;
+
+  //////////////////////////////////////
+  // global variables which are valid only
+  // for the parent libbase and which
+  // are thus global throughout all libbases
+  // created by AmiSSL.
+  struct SignalSemaphore openssl_cs;
+  struct HashTable *thread_hash;
+  ULONG LastThreadGroupID;
 };
 
 #endif /* BASE_H */

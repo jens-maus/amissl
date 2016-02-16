@@ -5061,7 +5061,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     #endif
 
     InitSemaphore(&child->libSem);
-    child->parent   = base;
+    child->parent = base;
+
+    // initialize the user variables to their default values
+    child->lock_cs = NULL;
+    child->ThreadGroupID = 0;
 
     #if defined(__amigaos4__)
     {
@@ -5075,9 +5079,9 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
         kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
 
-        if(LIB___UserLibInit((__BASE_OR_IFACE_TYPE)extlib->MainIFace) == 0)
+        if(LIB___UserLibInit((__BASE_OR_IFACE_TYPE)extlib->MainIFace, child) == 0)
         {
-          kprintf("AmiSSL: Returning libBase: %08lx\n", child);
+          kprintf("AmiSSL: Returning libBase: %08lx (parent: %08lx)\n", child, child->parent);
         }
         else
         {
@@ -5113,7 +5117,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     dataSeg += 0x7ffeu;
     child->dataSeg = dataSeg;
     kprintf("Calling __UserLibInit(%08lx)\n", child);
-    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
+    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
     #endif // !__amigaos4__
 
     if (child)
@@ -5206,12 +5210,12 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     /* release child base */
     #if defined(__amigaos4__)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
-    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
+    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace, base);
     (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
     base->baserelData = NULL;
     DeleteLibrary(&base->libBase);
     #else
-    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
+    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base, base);
     FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
     #endif
 

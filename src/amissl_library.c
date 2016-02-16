@@ -53,19 +53,13 @@ struct IntuitionBase *IntuitionBase = NULL;
 struct Library *UtilityBase = NULL;
 #endif
 
-//////////////////////////////////////
-// local variables which are unique for
-// for every child
-static struct SignalSemaphore * lock_cs = NULL;
-static ULONG ThreadGroupID = 0;
-
-//////////////////////////////////////
-// global variables valid throughout all
-// libbases
-struct SignalSemaphore AMISSL_COMMON_DATA openssl_cs;
-static LONG AMISSL_COMMON_DATA openssl_cs_init = 0;
-struct HashTable * AMISSL_COMMON_DATA thread_hash = NULL;
-static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
+//////////////////////////////////////////////////////////////////////////
+// the following two libbase pointers are used to make sure we can access
+// the local variables stored in each childs' libbase (via ownBase) but
+// also access the global variables which are essentially the same for
+// every child and are stored in the parent libbase (via parentBase)
+struct LibraryHeader *ownBase = NULL;
+struct LibraryHeader *parentBase = NULL;
 
 // on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
@@ -77,6 +71,12 @@ static ULONG AMISSL_COMMON_DATA LastThreadGroupID = 0;
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 #endif // MULTIBASE + BASEREL
 #endif // __amigaos3__
+
+#ifdef __amigaos4__
+  #define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)
+#else
+  #define SB_AllocVec(s,t)    AllocVec(s, t)
+#endif
 
 #if !defined(__amigaos4__)
 
@@ -106,13 +106,15 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 
   kprintf("CreateAmiSSLState()\n");
 
-  ObtainSemaphore(&openssl_cs);
+  ObtainSemaphore(&parentBase->openssl_cs);
+
+  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
 
   kprintf("CreateAmiSSLState()1\n");
 
   pid = (unsigned long)FindTask(NULL);
   kprintf("CreateAmiSSLState()2\n");
-  ret = (AMISSL_STATE *)AllocVec(sizeof(*ret), MEMF_CLEAR);
+  ret = (AMISSL_STATE *)SB_AllocVec(sizeof(*ret), MEMF_CLEAR);
   kprintf("CreateAmiSSLState()3\n");
 
   if (ret != NULL)
@@ -129,39 +131,21 @@ static AMISSL_STATE *CreateAmiSSLState(void)
     ret->ISocket = NULL;
     ret->ISocketPtr = NULL;
 #endif
-    ret->ThreadGroupID = ThreadGroupID;
+    ret->ThreadGroupID = ownBase->ThreadGroupID;
 
-    kprintf("h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)\n", thread_hash, pid, ret);
-    if(!h_insert(thread_hash, pid, ret))
+    kprintf("h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)\n", parentBase->thread_hash, pid, ret);
+    if(!h_insert(parentBase->thread_hash, pid, ret))
     {
       FreeVec(ret);
       ret = NULL;
     }
   }
 
-  ReleaseSemaphore(&openssl_cs);
+  ReleaseSemaphore(&parentBase->openssl_cs);
   kprintf("CreateAmiSSLState done %08lx %08lx\n", ret, SysBase);
 
   return ret;
 }
-
-#ifdef __amigaos4__
-
-#define SB_ObtainSemaphore  ObtainSemaphore
-#define SB_ReleaseSemaphore ReleaseSemaphore
-#define SB_FindTask         FindTask
-#define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, TAG_DONE)
-#define SB_FreeVec          FreeVec
-
-#else
-
-#define SB_ObtainSemaphore  ObtainSemaphore
-#define SB_ReleaseSemaphore ReleaseSemaphore
-#define SB_FindTask         FindTask
-#define SB_AllocVec(s,t)    AllocVec(s, t)
-#define SB_FreeVec          FreeVec
-
-#endif
 
 struct CRYPTO_dynlock_value
 {
@@ -172,14 +156,8 @@ static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const cha
 {
   struct CRYPTO_dynlock_value *value;
 
-#if defined(__amigaos4__)
-  if((value = AllocVecTags(sizeof(*value), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)))
-#else
-  if((value = AllocVec(sizeof(*value), MEMF_CLEAR)))
-#endif
-  {
+  if((value = SB_AllocVec(sizeof(*value), MEMF_CLEAR)) != NULL)
     InitSemaphore(&value->lock_cs);
-  }
 
   return value;
 }
@@ -215,12 +193,12 @@ static void amigaos_locking_callback(int mode, int type, UNUSED const char *file
     kprintf("sizeof(lock_cs): %ld\n", sizeof(*lock_cs));
     kprintf("obtain: %08lx\n", &lock_cs[type]);
     */
-    ObtainSemaphore(&lock_cs[type]);
+    ObtainSemaphore(&ownBase->lock_cs[type]);
   }
   else
   {
     //kprintf("release: %08lx\n", &lock_cs[type]);
-    ReleaseSemaphore(&lock_cs[type]);
+    ReleaseSemaphore(&ownBase->lock_cs[type]);
   }
 
   //kprintf("amigaos_locking_callback() done\n");
@@ -228,29 +206,19 @@ static void amigaos_locking_callback(int mode, int type, UNUSED const char *file
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)
 {
-  ObtainSemaphore(&openssl_cs);
+  ObtainSemaphore(&parentBase->openssl_cs);
   CRYPTO_THREADID_set_pointer(id, (void*)FindTask(NULL));
-  ReleaseSemaphore(&openssl_cs);
+  ReleaseSemaphore(&parentBase->openssl_cs);
 }
 
 static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 {
-  if (a->ThreadGroupID == ThreadGroupID)
+  if(a->ThreadGroupID == ownBase->ThreadGroupID)
   {
     kprintf("- Cleaning up state %08lx for %08lx (group %lu)\n", a, a->pid, a->ThreadGroupID);
-    h_delete(thread_hash, a->pid);
+    h_delete(parentBase->thread_hash, a->pid);
     FreeVec(a);
   }
-}
-
-static void *h_allocfunc(long size)
-{
-  return SB_AllocVec(size,MEMF_ANY);
-}
-
-static void h_freefunc(void *mem)
-{
-  SB_FreeVec(mem);
 }
 
 LIBPROTO(InternalInitAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED struct AmiSSLInitStruct *amisslinit))
@@ -344,10 +312,10 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED s
     }
 #endif
 
-    ObtainSemaphore(&openssl_cs);
-    kprintf("h_delete(thread_hash)\n");
-    h_delete(thread_hash, state->pid);
-    ReleaseSemaphore(&openssl_cs);
+    ObtainSemaphore(&parentBase->openssl_cs);
+    kprintf("h_delete(parentBase->thread_hash)\n");
+    h_delete(parentBase->thread_hash, state->pid);
+    ReleaseSemaphore(&parentBase->openssl_cs);
 
     FreeVec(state);
   }
@@ -393,17 +361,17 @@ void openlog(void) {}
 void closelog(void) {}
 void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
 
-LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
+LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct LibraryHeader *libBase))
 {
   traceline();
 
-  if (thread_hash)
+  if(libBase->parent->thread_hash)
   {
-    kprintf("Performing unfreed states cleanup for %08lx (group %lu)\n", FindTask(NULL), ThreadGroupID);
-    ObtainSemaphore(&openssl_cs);
+    kprintf("Performing unfreed states cleanup for %08lx (group %lu)\n", FindTask(NULL), libBase->ThreadGroupID);
+    ObtainSemaphore(&libBase->parent->openssl_cs);
     kprintf("h_doall(thread_hash)\n");
-    h_doall(thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
-    ReleaseSemaphore(&openssl_cs);
+    h_doall(libBase->parent->thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
+    ReleaseSemaphore(&libBase->parent->openssl_cs);
   }
   else
     kprintf("No thread_hash\n");
@@ -426,7 +394,7 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
   CRYPTO_set_locking_callback(NULL);
 
-  FreeVec(lock_cs);
+  FreeVec(libBase->lock_cs);
 
   // make sure to free all resources of libcmt
   __free_libcmt();
@@ -437,65 +405,49 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
   traceline();
 }
 
-LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
+LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHeader *libBase))
 {
   int err = 1; /* Assume error condition */
-  struct LibraryHeader *base = (struct LibraryHeader *)__BASE_OR_IFACE_VAR;
 
   kprintf("Calling __UserLibInit()\n");
-  kprintf("base/iface addr: %08lx\n", __BASE_OR_IFACE_VAR);
-  kprintf("parent addr: %08lx\n", base->parent);
+  kprintf("base/iface: %08lx\n", __BASE_OR_IFACE_VAR);
+  kprintf("libbase: %08lx\n", libBase);
+  kprintf("libbase->parent: %08lx\n", libBase->parent);
+
+  // lets set libBase as the ownBase for later reference
+  ownBase = libBase;
+  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
+
+  // lets set the parent of libBase as our parentBase
+  parentBase = libBase->parent;
+  kprintf("parentBase addr: %08lx (%08lx)\n", &parentBase, parentBase);
 
   // we have to initialize the libcmt stuff
   __init_libcmt();
 
-  kprintf("openssl_cs addr: %08lx\n", &openssl_cs);
-  kprintf("thread_hash addr: %08lx\n", thread_hash);
-  kprintf("LastThreadGroupID: %08lx\n", LastThreadGroupID);
+  kprintf("Global parentBase variables:\n");
+  kprintf("---------------------------\n");
+  kprintf("openssl_cs addr: %08lx\n", &parentBase->openssl_cs);
+  kprintf("thread_hash addr: %08lx (%08lx)\n", &parentBase->thread_hash, parentBase->thread_hash);
+  kprintf("LastThreadGroupID addr: %08lx (%08lx)\n", &parentBase->LastThreadGroupID, parentBase->LastThreadGroupID);
+  kprintf("---------------------------\n");
 
-  if (!thread_hash)
-  {
-    Forbid();
+  ObtainSemaphore(&parentBase->openssl_cs);
 
-    if(openssl_cs_init == 0)
-    {
-      InitSemaphore(&openssl_cs);
-      openssl_cs_init = 1;
-    }
+  ownBase->ThreadGroupID = ++(parentBase->LastThreadGroupID);
+  kprintf("ThreadGroupID addr: %08lx (%08lx)\n", &ownBase->ThreadGroupID, ownBase->ThreadGroupID);
 
-    Permit();
+  ReleaseSemaphore(&parentBase->openssl_cs);
 
-    ObtainSemaphore(&openssl_cs);
-
-    if (!thread_hash)
-    {
-      thread_hash = h_new(7, h_allocfunc,h_freefunc);
-      kprintf("new thread_hash addr: %08lx\n", thread_hash);
-    }
-
-    ReleaseSemaphore(&openssl_cs);
-  }
-
-  ObtainSemaphore(&openssl_cs);
-
-  ThreadGroupID = ++LastThreadGroupID;
-  kprintf("ThreadGroupID: %08lx\n", ThreadGroupID);
-
-  ReleaseSemaphore(&openssl_cs);
-
-#ifdef __amigaos4__
-  if((lock_cs = AllocVecTags(CRYPTO_num_locks() * sizeof(*lock_cs), AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)) != NULL)
-#else
-  if((lock_cs = AllocVec(CRYPTO_num_locks() * sizeof(*lock_cs), MEMF_CLEAR)) != NULL)
-#endif
+  if((ownBase->lock_cs = SB_AllocVec(CRYPTO_num_locks() * sizeof(*(ownBase->lock_cs)), MEMF_CLEAR)) != NULL)
   {
     int i;
 
     // lets init all semaphores
     for (i=0; i<CRYPTO_num_locks(); i++)
     {
-      InitSemaphore(&lock_cs[i]);
-      kprintf("initialized lockcs[%ld]: %08lx\n", i, &lock_cs[i]);
+      InitSemaphore(&ownBase->lock_cs[i]);
+      kprintf("initialized lockcs[%ld]: %08lx\n", i, &ownBase->lock_cs[i]);
     }
 
     // set static locks callbacks
@@ -527,7 +479,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE))
   kprintf("Userlib err: %d %08lx\n",err, SysBase);
 
   if (err != 0)
-    CALL_LFUNC_NP(__UserLibCleanup, __BASE_OR_IFACE_VAR);
+    CALL_LFUNC(__UserLibCleanup, libBase);
 
   return(err);
 }
