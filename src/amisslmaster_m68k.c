@@ -70,30 +70,6 @@ STATIC CONST struct EmuTrap stub_main_Reserved = { TRAPINST, TRAPTYPE, (uint32 (
 
 // ---
 
-STATIC uint32 stub_main_Obtain_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLMasterIFace *Self = (struct AmiSSLMasterIFace *)ExtLib->MainIFace;
-
-	return Self->Obtain();
-}
-STATIC CONST struct EmuTrap stub_main_Obtain = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_Obtain_PPC };
-
-// ---
-
-STATIC uint32 stub_main_Release_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLMasterIFace *Self = (struct AmiSSLMasterIFace *)ExtLib->MainIFace;
-
-	return Self->Release();
-}
-STATIC CONST struct EmuTrap stub_main_Release = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_Release_PPC };
-
-// ---
-
 STATIC LONG stub_main_InitAmiSSLMaster_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -167,8 +143,6 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_Close,
 	&stub_main_Expunge,
 	&stub_main_Reserved,
-	&stub_main_Obtain,
-	&stub_main_Release,
 	&stub_main_InitAmiSSLMaster,
 	&stub_main_OpenAmiSSL,
 	&stub_main_CloseAmiSSL,
