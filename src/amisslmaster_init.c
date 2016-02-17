@@ -57,7 +57,7 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
 
 /***********************************************************************/
 
-ULONG openBase(struct LibraryHeader *lib)
+ULONG openBase(UNUSED struct LibraryHeader *lib)
 {
   kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
   #if defined(__amigaos4__)
