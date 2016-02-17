@@ -227,13 +227,83 @@ LIBPROTO(InternalInitAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUS
   kprintf("InternalInitAmiSSL()\n");
 }
 
+extern const unsigned int CAST_S_table0[256];
+extern const unsigned int CAST_S_table1[256];
+extern const unsigned int CAST_S_table2[256];
+extern const unsigned int CAST_S_table3[256];
+extern const unsigned int CAST_S_table4[256];
+extern const unsigned int CAST_S_table5[256];
+extern const unsigned int CAST_S_table6[256];
+extern const unsigned int CAST_S_table7[256];
+
+
 LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
 {
   AMISSL_STATE *state;
   LONG err;
 
   kprintf("InitAmiSSLA() %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR);
+  {
+    int i;
+    ULONG checksum;
+      kprintf("CAST TABLE CHECKSUMS in InitAmiSSLA()\n");
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
+        checksum = checksum + CAST_S_table0[i];
+      }
+      kprintf("CHECKSUM table0: %08lx (addr: %08lx)\n", checksum, &CAST_S_table0[0]);
+ 
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
+        checksum = checksum + CAST_S_table1[i];
+      }
+      kprintf("CHECKSUM table1: %08lx (addr: %08lx)\n", checksum, &CAST_S_table1[0]);
+ 
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
+        checksum = checksum + CAST_S_table2[i];
+      }
+      kprintf("CHECKSUM table2: %08lx (addr: %08lx)\n", checksum, &CAST_S_table2[0]);
+ 
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
+        checksum = checksum + CAST_S_table3[i];
+      }
+      kprintf("CHECKSUM table3: %08lx (addr: %08lx)\n", checksum, &CAST_S_table3[0]);
+ 
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
+        checksum = checksum + CAST_S_table4[i];
+      }
+      kprintf("CHECKSUM table4: %08lx (addr: %08lx)\n", checksum, &CAST_S_table4[0]);
 
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//        kprintf("CAST_S_table5[%ld] = %08lx\n", i, CAST_S_table5[i]);
+        checksum = checksum + CAST_S_table5[i];
+      }
+      kprintf("CHECKSUM table5: %08lx (addr: %08lx)\n", checksum, &CAST_S_table5[0]);
+
+      for(i=0,checksum=0; i < 256; i++)
+      {
+//        kprintf("CAST_S_table6[%ld] = %08lx\n", i, CAST_S_table6[i]);
+        checksum = checksum + CAST_S_table6[i];
+      }
+      kprintf("CHECKSUM table6: %08lx (addr: %08lx)\n", checksum, &CAST_S_table6[0]);
+
+       for(i=0,checksum=0; i < 256; i++)
+      {
+//        kprintf("CAST_S_table7[%ld] = %08lx\n", i, CAST_S_table7[i]);
+        checksum = checksum + CAST_S_table7[i];
+      }
+      kprintf("CHECKSUM table7: %08lx (addr: %08lx)\n", checksum, &CAST_S_table7[0]);
+    }
+ 
   if((state = CreateAmiSSLState()))
   {
     int *errno_ptr;
