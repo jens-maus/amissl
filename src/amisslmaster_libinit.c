@@ -532,26 +532,20 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
 /****************************************************************************/
 
 #if defined(__amigaos3__)
-void __datadata_relocs(void);
-void __data_size(void);
-void __bss_size(void);
-void __a4_init(void);
-void _stext(void);
-void _etext(void);
-void _sdata(void);
-void _edata(void);
-void _bss_start(void);
-void _end(void);
+INLINE LONG *__GetDataDataRelocs(void)
+{
+	LONG *res;
+
+	__asm volatile ("movel #___datadata_relocs,%0" : "=r" (res));
+
+	return res;
+}
 
 INLINE APTR __GetDataSeg(void)
 {
   APTR res;
 
-//__asm volatile ("lea ___a4_init-0x7ffe,%0" : "=a" (res));
-//__asm volatile ("movel #___a4_init,%0" : "=a" (res));
-//__asm volatile ("subl #32766,%0" : "=a" (res));
-//res = (APTR)((ULONG)&__a4_init - 0x7ffeu);
-  res = (APTR)&_sdata;
+  __asm volatile ("lea ___a4_init-0x7ffe,%0" : "=a" (res));
 
   return res;
 }
@@ -560,19 +554,7 @@ INLINE ULONG __GetDataSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___data_size,%0" : "=r" (res));
-//__asm volatile ("subl #__sdata,%0" : "=r" (res));
-  res = (ULONG)&_edata - (ULONG)&_sdata;
-
-  return res;
-}
-
-INLINE ULONG __GetDataSize2(void)
-{
-  ULONG res;
-
-//__asm volatile ("movel #___data_size,%0" : "=r" (res));
-  res = (ULONG)&__data_size;
+  __asm volatile ("movel #___data_size,%0" : "=r" (res));
 
   return res;
 }
@@ -581,8 +563,7 @@ INLINE ULONG __GetDataBSSSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___data_size,%0; addl #___bss_size,%0" : "=r" (res));
-  res = (ULONG)&__data_size + (ULONG)&__bss_size;
+  __asm volatile ("movel #___data_size,%0; addl #___bss_size,%0" : "=r" (res));
 
   return res;
 }
@@ -592,8 +573,7 @@ INLINE APTR __GetBSSSeg(void)
 {
   APTR res;
 
-//__asm volatile ("lea ___a4_init,%0" : "=a" (res));
-  res = &__a4_init;
+  __asm volatile ("lea ___a4_init,%0" : "=a" (res));
 
   return res;
 }
@@ -602,9 +582,7 @@ INLINE ULONG __GetBSSSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___bss_size,%0" : "=r" (res));
-//__asm volatile ("subl #__bss_start,%0" : "=r" (res));
-  res = (ULONG)&_end - (ULONG)&_bss_start;
+  __asm volatile ("movel #___bss_size,%0" : "=r" (res));
 
   return res;
 }
@@ -667,7 +645,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
     kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
     #endif
-  
+
     // make sure that this is really a 68020+ machine if optimized for 020+
     #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
     if((SysBase->AttnFlags & AFF_68020) == 0)
@@ -676,35 +654,35 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       return(NULL);
     }
     #endif
-  
+
     #if defined(__amigaos4__) && defined(__NEWLIB__)
     if((NewlibBase = OpenLibrary("newlib.library", 3)) &&
        GETINTERFACE(INewlib, NewlibBase))
     #endif
     {
       BOOL success;
-  
+
       #if defined(DEBUG)
       // this must be called ahead of any debug output, otherwise we get stuck
       InitDebug();
       #endif
       D(DBF_STARTUP, "LibInit()");
-  
+
       InitSemaphore(&base->libSem);
-  
+
       #if defined(MULTIBASE)
       #if defined(__amigaos3__)
       base->parent   = base;
       base->dataSeg  = __GetDataSeg();
-      base->dataSize = __GetDataBSSSize();
+      base->dataSize = __GetDataSize();
       #endif /* __amigaos3__ */
       #if defined(__amigaos4__)
       if((DOSBase = OpenLibrary("dos.library", 52)))
         IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
-  
+
       if((base->ElfBase = OpenLibrary("elf.library",52)))
         base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
-  
+
       if(IDOS != NULL && base->IElf != NULL)
       {
         GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
@@ -719,17 +697,17 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #endif /* __amigaos4__ */
       #if defined(BASEREL)
       #if defined(__amigaos3__)
-      base->a4 = __GetA4();//__GetBSSSeg();
+      base->a4 = __GetA4();
       kprintf("a4 %08lx\n", base->a4);
       #endif /* __amigaos3__ */
       #endif /* BASEREL */
       #endif /* MULTIBASE */
-  
+
       // set the global base
       #if defined(DEBUG)
       globalBase = base;
       #endif
-  
+
       // If we are not running on AmigaOS4 (no stackswap required) we go and
       // do an explicit StackSwap() in case the user wants to make sure we
       // have enough stack for his user functions
@@ -743,7 +721,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
       kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
       #endif
-  
+
       // check if everything worked out fine
       if(success != FALSE)
       {
@@ -751,7 +729,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         // set the initialized value and contiue
         // with the class open phase
         kprintf("success: %08lx\n", base);
-  
+
         #if defined(__amigaos3__) && 0
         kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
         kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
@@ -764,13 +742,13 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         kprintf("edata      %08lx %08lx\n", _edata, &_edata);
         kprintf("data size  %08lx %ld\n", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
         #endif
-  
+
         // return the library base as success
         return base;
       }
       else
         callLibFunction(freeBase, base);
-  
+
       #if defined(__amigaos4__) && defined(__NEWLIB__)
       if(NewlibBase)
       {
@@ -780,9 +758,9 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       }
       #endif
     }
-  
+
     kprintf("failure\n");
-  
+
     DeleteLibrary(&base->libBase);
     return NULL;
   }
@@ -821,7 +799,7 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   #endif
 
   // make sure the system deletes the library as well.
-  rc = base->segList;  
+  rc = base->segList;
   DeleteLibrary(&base->libBase);
 
   kprintf("%s/%ld sys %08lx base %08lx\n", __FUNCTION__, __LINE__, SysBase, base);
@@ -1000,38 +978,38 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         }
       }
       else
-      { 
+      {
         kprintf("IElf->CopyDataSegment failed (handle %08lx)\n",base->elfHandle);
         DeleteLibrary(&child->libBase);
         child = NULL;
       }
     }
     #else
-    child->dataSize = base->dataSize;
+    child->dataSize = __GetDataSize();
     dataSeg = (unsigned char *)(child + 1);
-    CopyMem(base->dataSeg, dataSeg, base->dataSize);
-    relocs = &((ULONG *)__datadata_relocs)[1];
-    numRelocs = relocs[-1];
+    CopyMem(base->dataSeg, dataSeg, child->dataSize);
+    relocs = __GetDataDataRelocs();
+    numRelocs = *relocs++;
     kprintf("relocate %ld offsets\n", numRelocs);
     if(numRelocs != 0)
     {
-      ULONG dist = (unsigned char *)base->dataSeg - dataSeg;
+      LONG dist = (unsigned char *)base->dataSeg - dataSeg;
 
       do
       {
-        ((ULONG *)dataSeg)[*relocs++] -= dist;
+        *(LONG *)(dataSeg + *relocs++) -= dist;
       }
-      while(--numRelocs != 0);
+      while(--numRelocs);
     }
 
     // now we need to flush the cache because we copied the jmp table
     if(SysBase->LibNode.lib_Version >= 36)
       CacheClearU();
 
-    dataSeg += 0x7ffeu;
+    dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
     kprintf("Calling __UserLibInit(%08lx)\n", child);
-    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
+    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
     #endif // !__amigaos4__
 
     if (child)

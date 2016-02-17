@@ -4595,26 +4595,20 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
 /****************************************************************************/
 
 #if defined(__amigaos3__)
-void __datadata_relocs(void);
-void __data_size(void);
-void __bss_size(void);
-void __a4_init(void);
-void _stext(void);
-void _etext(void);
-void _sdata(void);
-void _edata(void);
-void _bss_start(void);
-void _end(void);
+INLINE LONG *__GetDataDataRelocs(void)
+{
+	LONG *res;
+
+	__asm volatile ("movel #___datadata_relocs,%0" : "=r" (res));
+
+	return res;
+}
 
 INLINE APTR __GetDataSeg(void)
 {
   APTR res;
 
-//__asm volatile ("lea ___a4_init-0x7ffe,%0" : "=a" (res));
-//__asm volatile ("movel #___a4_init,%0" : "=a" (res));
-//__asm volatile ("subl #32766,%0" : "=a" (res));
-//res = (APTR)((ULONG)&__a4_init - 0x7ffeu);
-  res = (APTR)&_sdata;
+  __asm volatile ("lea ___a4_init-0x7ffe,%0" : "=a" (res));
 
   return res;
 }
@@ -4623,19 +4617,7 @@ INLINE ULONG __GetDataSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___data_size,%0" : "=r" (res));
-//__asm volatile ("subl #__sdata,%0" : "=r" (res));
-  res = (ULONG)&_edata - (ULONG)&_sdata;
-
-  return res;
-}
-
-INLINE ULONG __GetDataSize2(void)
-{
-  ULONG res;
-
-//__asm volatile ("movel #___data_size,%0" : "=r" (res));
-  res = (ULONG)&__data_size;
+  __asm volatile ("movel #___data_size,%0" : "=r" (res));
 
   return res;
 }
@@ -4644,8 +4626,7 @@ INLINE ULONG __GetDataBSSSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___data_size,%0; addl #___bss_size,%0" : "=r" (res));
-  res = (ULONG)&__data_size + (ULONG)&__bss_size;
+  __asm volatile ("movel #___data_size,%0; addl #___bss_size,%0" : "=r" (res));
 
   return res;
 }
@@ -4655,8 +4636,7 @@ INLINE APTR __GetBSSSeg(void)
 {
   APTR res;
 
-//__asm volatile ("lea ___a4_init,%0" : "=a" (res));
-  res = &__a4_init;
+  __asm volatile ("lea ___a4_init,%0" : "=a" (res));
 
   return res;
 }
@@ -4665,9 +4645,7 @@ INLINE ULONG __GetBSSSize(void)
 {
   ULONG res;
 
-//__asm volatile ("movel #___bss_size,%0" : "=r" (res));
-//__asm volatile ("subl #__bss_start,%0" : "=r" (res));
-  res = (ULONG)&_end - (ULONG)&_bss_start;
+  __asm volatile ("movel #___bss_size,%0" : "=r" (res));
 
   return res;
 }
@@ -4764,7 +4742,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #if defined(__amigaos3__)
       base->parent   = base;
       base->dataSeg  = __GetDataSeg();
-      base->dataSize = __GetDataBSSSize();
+      base->dataSize = __GetDataSize();
       #endif /* __amigaos3__ */
       #if defined(__amigaos4__)
       if((DOSBase = OpenLibrary("dos.library", 52)))
@@ -4787,7 +4765,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #endif /* __amigaos4__ */
       #if defined(BASEREL)
       #if defined(__amigaos3__)
-      base->a4 = __GetA4();//__GetBSSSeg();
+      base->a4 = __GetA4();
       kprintf("a4 %08lx\n", base->a4);
       #endif /* __amigaos3__ */
       #endif /* BASEREL */
@@ -5043,8 +5021,8 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   {
     #if defined(__amigaos3__)
     unsigned char *dataSeg;
-    ULONG *relocs;
-    ULONG numRelocs;
+    LONG *relocs;
+    LONG numRelocs;
     #endif
 
     child->libBase.lib_OpenCnt++;
@@ -5091,35 +5069,35 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         }
       }
       else
-      { 
+      {
         kprintf("IElf->CopyDataSegment failed (handle %08lx)\n",base->elfHandle);
         DeleteLibrary(&child->libBase);
         child = NULL;
       }
     }
     #else
-    child->dataSize = base->dataSize;
+    child->dataSize = __GetDataSize();
     dataSeg = (unsigned char *)(child + 1);
-    CopyMem(base->dataSeg, dataSeg, base->dataSize);
-    relocs = &((ULONG *)__datadata_relocs)[1];
-    numRelocs = relocs[-1];
+    CopyMem(base->dataSeg, dataSeg, child->dataSize);
+    relocs = __GetDataDataRelocs();
+    numRelocs = *relocs++;
     kprintf("relocate %ld offsets\n", numRelocs);
     if(numRelocs != 0)
     {
-      ULONG dist = (unsigned char *)base->dataSeg - dataSeg;
+      LONG dist = (unsigned char *)base->dataSeg - dataSeg;
 
       do
       {
-        ((ULONG *)dataSeg)[*relocs++] -= dist;
+        *(LONG *)(dataSeg + *relocs++) -= dist;
       }
-      while(--numRelocs != 0);
+      while(--numRelocs);
     }
 
     // now we need to flush the cache because we copied the jmp table
     if(SysBase->LibNode.lib_Version >= 36)
       CacheClearU();
 
-    dataSeg += 0x7ffeu;
+    dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
     kprintf("Calling __UserLibInit(%08lx)\n", child);
     LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
