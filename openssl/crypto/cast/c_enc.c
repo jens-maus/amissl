@@ -108,7 +108,42 @@ void CAST_encrypt(CAST_LONG *data, const CAST_KEY *key)
     E_CAST(7, k, r, l, ^, -, +);
     kprintf("l7 = %08lx\n", l);
     kprintf("r7 = %08lx\n", r);
-    E_CAST(8, k, l, r, -, +, ^);
+//    E_CAST(8, k, l, r, -, +, ^);
+
+# define B_CAST(n,key,L,R,OP1,OP2,OP3) \
+{ \
+        CAST_LONG a,b,c,d; \
+        t=(key[n*2] OP1 R)&0xffffffff; \
+        kprintf("t1 = %08lx (key: %08lx)\n", t, key[n*2+1]); \
+        t=ROTL(t,(key[n*2+1])); \
+        kprintf("t2 = %08lx\n", t); \
+        a=CAST_S_table0[(t>> 8)&0xff]; \
+        kprintf("a = %08lx\n", a); \
+        b=CAST_S_table1[(t    )&0xff]; \
+        kprintf("b = %08lx\n", b); \
+        c=CAST_S_table2[(t>>24)&0xff]; \
+        kprintf("c = %08lx\n", c); \
+        d=CAST_S_table3[(t>>16)&0xff]; \
+        kprintf("d = %08lx\n", d); \
+        L^=(((((a OP2 b)&0xffffffffL) OP3 c)&0xffffffffL) OP1 d)&0xffffffffL; \
+        kprintf("L = %08lx\n", L); \
+        }
+
+  
+    B_CAST(8, k, l, r, -, +, ^);
+
+#if 0
+    {
+      CAST_LONG a,b,c,d;
+      t=(key[8*2] - r)&0xffffffff;
+      t=ROTL(t,(key[8*2+1]));
+      a=CAST_S_table0[(t>> 8)&0xff];
+      b=CAST_S_table1[(t    )&0xff];
+      c=CAST_S_table2[(t>>24)&0xff];
+      d=CAST_S_table3[(t>>16)&0xff];
+      l^=(((((a + b)&0xffffffffL) ^ c)&0xffffffffL) - d)&0xffffffffL;
+    }
+#endif
     kprintf("l8 = %08lx\n", l);
     kprintf("r8 = %08lx\n", r);
     E_CAST(9, k, r, l, +, ^, -);
