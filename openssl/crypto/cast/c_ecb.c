@@ -60,12 +60,6 @@
 #include "cast_lcl.h"
 #include <openssl/opensslv.h>
 
-#if defined(__amigaos4__)
-#include <proto/exec.h>
-#undef kprintf
-#define kprintf (IExec->DebugPrintF)
-#endif
-
 const char CAST_version[] = "CAST" OPENSSL_VERSION_PTEXT;
 
 void CAST_ecb_encrypt(const unsigned char *in, unsigned char *out,
@@ -73,23 +67,17 @@ void CAST_ecb_encrypt(const unsigned char *in, unsigned char *out,
 {
     CAST_LONG l, d[2];
 
-    kprintf("CAST_LONG: %ld\n", sizeof(l));
-
     n2l(in, l);
     d[0] = l;
-    kprintf("d[0] = %08lx\n", d[0]);
     n2l(in, l);
     d[1] = l;
-    kprintf("d[1] = %08lx\n", d[1]);
     if (enc)
         CAST_encrypt(d, ks);
     else
         CAST_decrypt(d, ks);
     l = d[0];
-    kprintf("l1 = %08lx\n", l);
     l2n(l, out);
     l = d[1];
-    kprintf("l2 = %08lx\n", l);
     l2n(l, out);
     l = d[0] = d[1] = 0;
 }

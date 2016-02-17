@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 #else
 # include <openssl/cast.h>
 
-//# define FULL_TEST
+# define FULL_TEST
 
 static unsigned char k[16] = {
     0x01, 0x23, 0x45, 0x67, 0x12, 0x34, 0x56, 0x78,
@@ -140,11 +140,6 @@ static unsigned char cfb_cipher64[CFB_TEST_SIZE] = {
 };
 # endif
 
-#if defined(__amigaos4__)
-#include <proto/exec.h>
-#define kprintf (IExec->DebugPrintF)
-#endif
-
 int main(int argc, char *argv[])
 {
 # ifdef FULL_TEST
@@ -155,49 +150,40 @@ int main(int argc, char *argv[])
     CAST_KEY key;
 
     for (z = 0; z < 3; z++) {
-        kprintf("test %ld\n", z);
         CAST_set_key(&key, k_len[z], k);
-
-        kprintf("KEY: ");
-        for (i = 0; i < 32; i++)
-          kprintf("%02lX ", key.data[i]);
-        kprintf("\n");
-        kprintf("sk: %ld\n", key.short_key);
 
         CAST_ecb_encrypt(in, out, &key, CAST_ENCRYPT);
         if (memcmp(out, &(c[z][0]), 8) != 0) {
-            kprintf("ecb cast error encrypting for keysize %ld\n",
+            printf("ecb cast error encrypting for keysize %d\n",
                    k_len[z] * 8);
-        }
-            kprintf("got     :");
+            printf("got     :");
             for (i = 0; i < 8; i++)
-                kprintf("%02lX ", out[i]);
-            kprintf("\n");
-            kprintf("expected:");
+                printf("%02X ", out[i]);
+            printf("\n");
+            printf("expected:");
             for (i = 0; i < 8; i++)
-                kprintf("%02lX ", c[z][i]);
+                printf("%02X ", c[z][i]);
             err = 20;
-            kprintf("\n");
-        //}
+            printf("\n");
+        }
 
         CAST_ecb_encrypt(out, out, &key, CAST_DECRYPT);
         if (memcmp(out, in, 8) != 0) {
-            kprintf("ecb cast error decrypting for keysize %ld\n",
+            printf("ecb cast error decrypting for keysize %d\n",
                    k_len[z] * 8);
-        }
-            kprintf("got     :");
+            printf("got     :");
             for (i = 0; i < 8; i++)
-                kprintf("%02lX ", out[i]);
-            kprintf("\n");
-            kprintf("expected:");
+                printf("%02X ", out[i]);
+            printf("\n");
+            printf("expected:");
             for (i = 0; i < 8; i++)
-                kprintf("%02lX ", in[i]);
-            kprintf("\n");
+                printf("%02X ", in[i]);
+            printf("\n");
             err = 3;
-        //}
+        }
     }
     if (err == 0)
-        kprintf("ecb cast5 ok\n");
+        printf("ecb cast5 ok\n");
 
 # ifdef FULL_TEST
     {
