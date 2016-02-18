@@ -7,8 +7,8 @@ STATIC CONST APTR main_v1_vectors[] =
 {
     LIB_Obtain,
     LIB_Release,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: Expunge */
+    NULL, /* unimplemented/obsolete: Clone */
     LIB_InitAmiSSLMaster,
     LIB_OpenAmiSSL,
     LIB_CloseAmiSSL,

@@ -7,22 +7,22 @@ STATIC CONST APTR main_v1_vectors[] =
 {
     LIB_Obtain,
     LIB_Release,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: Expunge */
+    NULL, /* unimplemented/obsolete: Clone */
     LIB_InternalInitAmiSSL,
     LIB_InitAmiSSLA,
     LIB_InitAmiSSL,
     LIB_CleanupAmiSSLA,
     LIB_CleanupAmiSSL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: IsCipherAvailable */
+    NULL, /* unimplemented/obsolete: Reserved1 */
+    NULL, /* unimplemented/obsolete: Reserved2 */
+    NULL, /* unimplemented/obsolete: Reserved3 */
+    NULL, /* unimplemented/obsolete: Reserved4 */
+    NULL, /* unimplemented/obsolete: Reserved5 */
+    NULL, /* unimplemented/obsolete: Reserved6 */
+    NULL, /* unimplemented/obsolete: Reserved7 */
+    NULL, /* unimplemented/obsolete: Reserved8 */
     LIB_ASN1_TYPE_new,
     LIB_ASN1_TYPE_free,
     LIB_d2i_ASN1_TYPE,
@@ -1122,11 +1122,11 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_PEM_read_bio,
     LIB_PEM_write_bio,
     LIB_PEM_bytes_read_bio,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_ASN1_read */
     LIB_PEM_ASN1_read_bio,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_ASN1_write */
     LIB_PEM_ASN1_write_bio,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_X509_INFO_read */
     LIB_PEM_X509_INFO_read_bio,
     LIB_PEM_X509_INFO_write_bio,
     LIB_PEM_SealInit,
@@ -1137,14 +1137,14 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_PEM_SignFinal,
     LIB_PEM_def_callback,
     LIB_PEM_proc_type,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read */
     LIB_PEM_dek_info,
     LIB_PEM_read_bio_X509,
     LIB_PEM_write_bio_X509,
     LIB_PEM_read_bio_X509_AUX,
     LIB_PEM_write_bio_X509_AUX,
     LIB_PEM_read_bio_X509_REQ,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write */
     LIB_PEM_write_bio_X509_REQ,
     LIB_PEM_write_bio_X509_REQ_NEW,
     LIB_PEM_read_bio_X509_CRL,
@@ -1438,7 +1438,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_SSL_copy_session_id,
     LIB_SSL_SESSION_new,
     LIB_SSL_SESSION_print,
-    NULL,
+    NULL, /* unimplemented/obsolete: SSL_SESSION_print_fp */
     LIB_SSL_SESSION_free,
     LIB_i2d_SSL_SESSION,
     LIB_SSL_set_session,
@@ -2739,62 +2739,62 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_SSL_CTX_set_tmp_ecdh_callback,
     LIB_SSL_set_tmp_ecdh_callback,
     LIB_SSL_SRP_CTX_init,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: ASN1_d2i_fp */
+    NULL, /* unimplemented/obsolete: ASN1_i2d_fp */
+    NULL, /* unimplemented/obsolete: BIO_new_fp */
+    NULL, /* unimplemented/obsolete: BN_print_fp */
+    NULL, /* unimplemented/obsolete: CRYPTO_mem_leaks_fp */
+    NULL, /* unimplemented/obsolete: DHparams_print_fp */
+    NULL, /* unimplemented/obsolete: DSA_print_fp */
+    NULL, /* unimplemented/obsolete: DSAparams_print_fp */
+    NULL, /* unimplemented/obsolete: ERR_print_errors_fp */
+    NULL, /* unimplemented/obsolete: PEM_read_DHparams */
+    NULL, /* unimplemented/obsolete: PEM_read_DSAPrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_read_DSAparams */
+    NULL, /* unimplemented/obsolete: PEM_write_DHparams */
+    NULL, /* unimplemented/obsolete: PEM_write_DSAPrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_write_DSAparams */
+    NULL, /* unimplemented/obsolete: RSA_print_fp */
+    NULL, /* unimplemented/obsolete: X509_REQ_print_fp */
+    NULL, /* unimplemented/obsolete: X509_print_fp */
+    NULL, /* unimplemented/obsolete: d2i_DSAPrivateKey_fp */
+    NULL, /* unimplemented/obsolete: d2i_PKCS7_fp */
+    NULL, /* unimplemented/obsolete: d2i_RSAPrivateKey_fp */
+    NULL, /* unimplemented/obsolete: d2i_X509_CRL_fp */
+    NULL, /* unimplemented/obsolete: d2i_X509_REQ_fp */
+    NULL, /* unimplemented/obsolete: d2i_X509_fp */
     LIB_DES_options,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_DSAPrivateKey_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS7_fp */
+    NULL, /* unimplemented/obsolete: i2d_RSAPrivateKey_fp */
+    NULL, /* unimplemented/obsolete: i2d_X509_CRL_fp */
+    NULL, /* unimplemented/obsolete: i2d_X509_REQ_fp */
+    NULL, /* unimplemented/obsolete: i2d_X509_fp */
+    NULL, /* unimplemented/obsolete: lh_node_stats */
+    NULL, /* unimplemented/obsolete: lh_node_usage_stats */
+    NULL, /* unimplemented/obsolete: lh_stats */
+    NULL, /* unimplemented/obsolete: d2i_RSAPublicKey_fp */
+    NULL, /* unimplemented/obsolete: i2d_RSAPublicKey_fp */
+    NULL, /* unimplemented/obsolete: X509_CRL_print_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS8_fp */
+    NULL, /* unimplemented/obsolete: d2i_PKCS8_PRIV_KEY_INFO_fp */
+    NULL, /* unimplemented/obsolete: d2i_PKCS8_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS8_PRIV_KEY_INFO_fp */
+    NULL, /* unimplemented/obsolete: CONF_load_fp */
+    NULL, /* unimplemented/obsolete: d2i_RSA_PUBKEY_fp */
+    NULL, /* unimplemented/obsolete: i2d_DSA_PUBKEY_fp */
+    NULL, /* unimplemented/obsolete: PEM_read_DSA_PUBKEY */
+    NULL, /* unimplemented/obsolete: d2i_DSA_PUBKEY_fp */
+    NULL, /* unimplemented/obsolete: PEM_write_DSA_PUBKEY */
+    NULL, /* unimplemented/obsolete: i2d_RSA_PUBKEY_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS8PrivateKeyInfo_fp */
+    NULL, /* unimplemented/obsolete: i2d_PrivateKey_fp */
+    NULL, /* unimplemented/obsolete: d2i_PrivateKey_fp */
+    NULL, /* unimplemented/obsolete: NCONF_load_fp */
+    NULL, /* unimplemented/obsolete: X509_NAME_print_ex_fp */
+    NULL, /* unimplemented/obsolete: ASN1_STRING_print_ex_fp */
+    NULL, /* unimplemented/obsolete: i2d_PUBKEY_fp */
+    NULL, /* unimplemented/obsolete: d2i_PUBKEY_fp */
     LIB_ERR_load_ENGINE_strings,
     LIB_ENGINE_set_DSA,
     LIB_ENGINE_get_finish_function,
@@ -2844,7 +2844,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_ENGINE_unregister_digests,
     LIB_ENGINE_get_ex_new_index,
     LIB_ENGINE_get_ex_data,
-    NULL,
+    NULL, /* unimplemented/obsolete: ASN1_item_d2i_fp */
     LIB_ENGINE_set_cmd_defns,
     LIB_ENGINE_register_digests,
     LIB_ENGINE_register_all_DH,
@@ -2856,7 +2856,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_ENGINE_set_ex_data,
     LIB_ENGINE_set_destroy_function,
     LIB_ENGINE_get_cipher_engine,
-    NULL,
+    NULL, /* unimplemented/obsolete: X509_print_ex_fp */
     LIB_ENGINE_load_cswift,
     LIB_ENGINE_set_default_ciphers,
     LIB_ENGINE_unregister_RAND,
@@ -2864,7 +2864,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_ENGINE_set_table_flags,
     LIB_ENGINE_load_chil,
     LIB_ENGINE_get_destroy_function,
-    NULL,
+    NULL, /* unimplemented/obsolete: ASN1_item_i2d_fp */
     LIB_ENGINE_load_atalla,
     LIB_ENGINE_get_table_flags,
     LIB_ENGINE_set_flags,
@@ -2887,7 +2887,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_BN_GF2m_mod_mul_arr,
     LIB_o2i_ECPublicKey,
     LIB_EC_KEY_copy,
-    NULL,
+    NULL, /* unimplemented/obsolete: BIO_dump_fp */
     LIB_EC_GROUP_check_discriminant,
     LIB_i2o_ECPublicKey,
     LIB_EC_GROUP_new_curve_GF2m,
@@ -2906,7 +2906,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_EC_KEY_up_ref,
     LIB_d2i_EC_PUBKEY,
     LIB_EC_GROUP_have_precompute_mult,
-    NULL,
+    NULL, /* unimplemented/obsolete: EC_KEY_print_fp */
     LIB_BN_GF2m_mod_arr,
     LIB_ECDH_get_ex_data,
     LIB_ENGINE_unregister_ECDH,
@@ -2914,7 +2914,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_EC_POINT_dup,
     LIB_EVP_PKEY_set1_EC_KEY,
     LIB_BN_GF2m_mod_sqrt_arr,
-    NULL,
+    NULL, /* unimplemented/obsolete: ECPKParameters_print_fp */
     LIB_EC_KEY_set_private_key,
     LIB_BN_GF2m_poly2arr,
     LIB_i2d_ECParameters,
@@ -2922,7 +2922,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_SHA256_Init,
     LIB_ECDSA_get_ex_data,
     LIB_SHA224,
-    NULL,
+    NULL, /* unimplemented/obsolete: BIO_dump_indent_fp */
     LIB_EC_GROUP_get_seed_len,
     LIB_i2d_EC_PUBKEY,
     LIB_ECDSA_get_default_method,
@@ -2945,23 +2945,23 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_EC_GROUP_get0_seed,
     LIB_BN_GF2m_mod_div_arr,
     LIB_ENGINE_set_ECDSA,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_EC_PUBKEY */
     LIB_ECDH_set_method,
     LIB_ECDH_set_ex_data,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_EC_PUBKEY */
     LIB_ECDSA_OpenSSL,
     LIB_EC_KEY_get_enc_flags,
     LIB_ECDSA_set_default_method,
     LIB_EC_POINT_set_compressed_coordinates_GF2m,
     LIB_EC_GROUP_cmp,
     LIB_SHA224_Init,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_ECPrivateKey */
     LIB_SHA512_Init,
     LIB_ERR_load_ECDSA_strings,
     LIB_EC_GROUP_get_basis_type,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_ECPKParameters */
     LIB_ENGINE_register_all_ECDH,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_ECPrivateKey_fp */
     LIB_ENGINE_register_all_ECDSA,
     LIB_EC_GROUP_dup,
     LIB_ENGINE_get_default_ECDSA,
@@ -2970,15 +2970,15 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_EC_POINT_point2hex,
     LIB_ENGINE_get_STORE,
     LIB_ECDSA_do_sign_ex,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_ECPrivateKey_fp */
     LIB_SHA512_Transform,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_ECPrivateKey */
     LIB_EC_KEY_set_public_key,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_ECPKParameters */
     LIB_ENGINE_register_STORE,
-    NULL,
+    NULL, /* unimplemented/obsolete: ECParameters_print_fp */
     LIB_EC_GROUP_get_curve_name,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_EC_PUBKEY_fp */
     LIB_SHA256_Final,
     LIB_ENGINE_get_ECDH,
     LIB_ENGINE_get_ECDSA,
@@ -2990,7 +2990,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_SHA384_Final,
     LIB_ECDSA_get_ex_new_index,
     LIB_SHA384,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_EC_PUBKEY_fp */
     LIB_ENGINE_set_default_ECDH,
     LIB_EC_POINT_hex2point,
     LIB_SHA256_Update,
@@ -3041,7 +3041,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_AES_unwrap_key,
     LIB_AES_wrap_key,
     LIB_CMS_ReceiptRequest_free,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_CMS */
     LIB_CMS_add0_CertificateChoices,
     LIB_CMS_unsigned_add1_attr_by_OBJ,
     LIB_ERR_load_CMS_strings,
@@ -3083,7 +3083,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_CMS_unsigned_delete_attr,
     LIB_CMS_unsigned_get_attr_count,
     LIB_CMS_add_smimecap,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_CMS */
     LIB_CMS_signed_get_attr_by_OBJ,
     LIB_d2i_CMS_ContentInfo,
     LIB_CMS_add_standard_smimecap,
@@ -3217,7 +3217,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_EVP_rc4_hmac_md5,
     LIB_EVP_aes_128_cbc_hmac_sha1,
     LIB_ENGINE_load_rdrand,
-    NULL,
+    NULL, /* unimplemented/obsolete: ENGINE_load_rsax */
     LIB_EVP_aes_256_cbc_hmac_sha1,
     LIB_CMS_add0_recipient_password,
     LIB_CMS_decrypt_set1_password,
@@ -3241,46 +3241,46 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_SSL_CTX_get_client_cert_cb,
     LIB_SSL_CTX_sess_get_remove_cb,
     LIB_PEM_write_bio_SSL_SESSION,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_SSL_SESSION */
     LIB_PEM_read_bio_SSL_SESSION,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_SSL_SESSION */
+    NULL, /* unimplemented/obsolete: PEM_read_PKCS7 */
+    NULL, /* unimplemented/obsolete: PEM_read_PrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_read_RSAPrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_read_X509 */
+    NULL, /* unimplemented/obsolete: PEM_read_X509_CRL */
+    NULL, /* unimplemented/obsolete: PEM_read_X509_REQ */
+    NULL, /* unimplemented/obsolete: PEM_write_PKCS7 */
+    NULL, /* unimplemented/obsolete: PEM_write_PrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_write_RSAPrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_write_X509 */
+    NULL, /* unimplemented/obsolete: PEM_write_X509_CRL */
+    NULL, /* unimplemented/obsolete: PEM_write_X509_REQ */
+    NULL, /* unimplemented/obsolete: PEM_read_RSAPublicKey */
+    NULL, /* unimplemented/obsolete: PEM_write_RSAPublicKey */
+    NULL, /* unimplemented/obsolete: PEM_read_NETSCAPE_CERT_SEQUENCE */
+    NULL, /* unimplemented/obsolete: PEM_write_NETSCAPE_CERT_SEQUENCE */
+    NULL, /* unimplemented/obsolete: X509V3_EXT_print_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS12_fp */
+    NULL, /* unimplemented/obsolete: d2i_PKCS12_fp */
+    NULL, /* unimplemented/obsolete: PEM_read_PKCS8 */
+    NULL, /* unimplemented/obsolete: PEM_write_PKCS8 */
+    NULL, /* unimplemented/obsolete: PEM_read_PKCS8_PRIV_KEY_INFO */
+    NULL, /* unimplemented/obsolete: PEM_write_PKCS8_PRIV_KEY_INFO */
+    NULL, /* unimplemented/obsolete: PEM_write_PKCS8PrivateKey */
+    NULL, /* unimplemented/obsolete: PEM_read_X509_AUX */
+    NULL, /* unimplemented/obsolete: PEM_write_PUBKEY */
+    NULL, /* unimplemented/obsolete: PEM_read_RSA_PUBKEY */
+    NULL, /* unimplemented/obsolete: PEM_read_PUBKEY */
+    NULL, /* unimplemented/obsolete: PEM_write_X509_AUX */
+    NULL, /* unimplemented/obsolete: PEM_write_RSA_PUBKEY */
+    NULL, /* unimplemented/obsolete: PEM_write_PKCS8PrivateKey_nid */
+    NULL, /* unimplemented/obsolete: i2d_PKCS8PrivateKey_fp */
+    NULL, /* unimplemented/obsolete: i2d_PKCS8PrivateKey_nid_fp */
+    NULL, /* unimplemented/obsolete: d2i_PKCS8PrivateKey_fp */
+    NULL, /* unimplemented/obsolete: PEM_write_X509_REQ_NEW */
+    NULL, /* unimplemented/obsolete: CONF_dump_fp */
+    NULL, /* unimplemented/obsolete: NCONF_dump_fp */
     LIB_FIPS_mode_set,
     LIB_BN_X931_generate_Xpq,
     LIB_BN_get0_nist_prime_384,
@@ -3328,7 +3328,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_X509_VERIFY_PARAM_set_trust,
     LIB_EVP_PKEY_get_attr_count,
     LIB_X509_STORE_CTX_get0_param,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_read_X509_CERT_PAIR */
     LIB_X509_STORE_set_depth,
     LIB_BUF_strndup,
     LIB_ASN1_put_eoc,
@@ -3364,7 +3364,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_X509_CERT_PAIR_new,
     LIB_X509V3_NAME_from_section,
     LIB_EVP_PKEY_add1_attr,
-    NULL,
+    NULL, /* unimplemented/obsolete: PEM_write_X509_CERT_PAIR */
     LIB_BIO_dump_indent_cb,
     LIB_d2i_X509_CERT_PAIR,
     LIB_asn1_const_Finish,
@@ -3451,7 +3451,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_CRYPTO_strdup,
     LIB_pqueue_size,
     LIB_i2d_TS_ACCURACY,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_TS_MSG_IMPRINT_fp */
     LIB_i2d_TS_MSG_IMPRINT,
     LIB_EVP_PKEY_print_public,
     LIB_EVP_PKEY_CTX_new,
@@ -3466,14 +3466,14 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_TS_RESP_dup,
     LIB_EVP_PKEY_asn1_add0,
     LIB_PKCS7_add0_attrib_signing_time,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_TS_TST_INFO_fp */
     LIB_BIO_asn1_get_prefix,
     LIB_TS_TST_INFO_set_time,
     LIB_EVP_PKEY_meth_set_decrypt,
     LIB_EVP_PKEY_set_type_str,
     LIB_EVP_PKEY_CTX_get_keygen_info,
     LIB_TS_REQ_set_policy_id,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_TS_RESP_fp */
     LIB_TS_RESP_set_status_info,
     LIB_EVP_PKEY_keygen,
     LIB_EVP_DigestSignInit,
@@ -3598,7 +3598,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_ASN1_PCTX_get_oid_flags,
     LIB_TS_TST_INFO_add_ext,
     LIB_EVP_PKEY_meth_set_derive,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_TS_RESP_fp */
     LIB_i2d_TS_MSG_IMPRINT_bio,
     LIB_TS_RESP_CTX_set_accuracy,
     LIB_TS_REQ_set_nonce,
@@ -3623,7 +3623,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_X509_CRL_set_meth_data,
     LIB_PKCS8_pkey_set0,
     LIB_ASN1_STRING_copy,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_TS_TST_INFO_fp */
     LIB_X509_CRL_match,
     LIB_EVP_PKEY_asn1_set_private,
     LIB_TS_TST_INFO_get_ext_d2i,
@@ -3664,7 +3664,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_CRYPTO_THREADID_set_callback,
     LIB_TS_CONF_set_serial,
     LIB_TS_TST_INFO_free,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_TS_REQ_fp */
     LIB_TS_RESP_verify_response,
     LIB_i2d_ESS_ISSUER_SERIAL,
     LIB_TS_ACCURACY_get_seconds,
@@ -3736,7 +3736,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_ASN1_TYPE_cmp,
     LIB_EVP_CIPHER_do_all_sorted,
     LIB_EVP_PKEY_CTX_free,
-    NULL,
+    NULL, /* unimplemented/obsolete: d2i_TS_MSG_IMPRINT_fp */
     LIB_X509_STORE_get1_certs,
     LIB_EVP_PKEY_CTX_get_operation,
     LIB_d2i_ESS_SIGNING_CERT,
@@ -3807,7 +3807,7 @@ STATIC CONST APTR main_v1_vectors[] =
     LIB_TS_TST_INFO_set_msg_imprint,
     LIB_GENERAL_NAME_cmp,
     LIB_d2i_ASN1_SET_ANY,
-    NULL,
+    NULL, /* unimplemented/obsolete: i2d_TS_REQ_fp */
     LIB_d2i_ASN1_SEQUENCE_ANY,
     LIB_GENERAL_NAME_get0_otherName,
     LIB_d2i_ESS_CERT_ID,
