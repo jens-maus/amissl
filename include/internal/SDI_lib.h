@@ -4,13 +4,11 @@
 /* Includeheader
 
         Name:           SDI_lib.h
-        Versionstring:  $VER: SDI_lib.h 1.12 (01.04.2014)
+        Versionstring:  $VER: SDI_lib.h 1.14 (18.02.2016)
         Author:         Jens Maus
         Distribution:   PD
-        Project page:   http://sf.net/p/adtools/code/HEAD/tree/trunk/sdi/
+        Project page:   https://github.com/adtools/SDI
         Description:    defines to hide OS specific library function definitions
-        Id:             $Id: SDI_lib.h 489 2014-04-01 08:13:09Z thboeckel $
-        URL:            $URL: https://svn.code.sf.net/p/adtools/code/trunk/sdi/SDI_lib.h $
 
  1.0   09.05.04 : initial version which allows to hide OS specific shared
                   library function definition like it has been introduced with
@@ -43,6 +41,9 @@
                   version (Thore Böckelmann)
  1.12  01.04.14 : removed the necessity of stub functions for AmigaOS4 (Thore
                   Böckelmann)
+ 1.13  28.09.15 : removed the exclusion of C++ (Thore Böckelmann)
+ 1.14  18.02.16 : added LFUNC_NULL (Jens Maus)
+
 */
 
 /*
@@ -55,7 +56,7 @@
 ** (e.g. add your name or nick name).
 **
 ** Find the latest version of this file at:
-** http://sf.net/p/adtools/code/HEAD/tree/trunk/sdi/
+** https://github.com/adtools/SDI
 **
 ** Jens Maus <mail@jens-maus.de>
 ** Dirk Stöcker <soft@dstoecker.de>
@@ -138,13 +139,9 @@
 
 #if defined(__amigaos4__)
   #define LIBFUNC
-  #if !defined(__cplusplus) &&                                        \
-    (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 ||                  \
-    (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-    #define LIBPROTO(name, ret, ...)                                  \
-      LIBFUNC ret LIB_##name(__VA_ARGS__)
-    #define LIBPROTOVA(name, ret, ...)                                \
-      LIBFUNC ret VARARGS68K LIB_##name(__VA_ARGS__)
+  #if (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
+    #define LIBPROTO(name, ret, ...) LIBFUNC ret LIB_##name(__VA_ARGS__)
+    #define LIBPROTOVA(name, ret, ...) LIBFUNC ret VARARGS68K LIB_##name(__VA_ARGS__)
     #define LIBSTUB(name, ret, ...)
     #define CALL_LFUNC_NP(name, ...) LIB_##name(__BASE_OR_IFACE_VAR)
     #define CALL_LFUNC(name, ...) LIB_##name(__BASE_OR_IFACE_VAR, __VA_ARGS__)
@@ -157,15 +154,10 @@
   #define LFUNC(name)     LIB_##name
 #elif defined(__MORPHOS__)
   #define LIBFUNC
-  #if !defined(__cplusplus) &&                                        \
-    (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 ||                  \
-    (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-    #define LIBPROTO(name, ret, ...)                                  \
-      LIBFUNC ret LIBSTUB_##name(void);                               \
-      LIBFUNC ret LIB_##name(__VA_ARGS__)
+  #if (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
+    #define LIBPROTO(name, ret, ...) LIBFUNC ret LIBSTUB_##name(void); LIBFUNC ret LIB_##name(__VA_ARGS__)
     #define LIBPROTOVA(name, ret, ...)
-    #define LIBSTUB(name, ret, ...)                                   \
-      LIBFUNC ret LIBSTUB_##name(void)
+    #define LIBSTUB(name, ret, ...) LIBFUNC ret LIBSTUB_##name(void)
     #define CALL_LFUNC_NP(name, ...) LIB_##name(__BASE_OR_IFACE_VAR)
     #define CALL_LFUNC(name, ...) LIB_##name(__BASE_OR_IFACE_VAR, __VA_ARGS__)
   #endif
@@ -177,11 +169,8 @@
   #define LFUNC(name)     LIBSTUB_##name
 #else
   #define LIBFUNC SAVEDS ASM
-  #if !defined(__cplusplus) &&                                        \
-    (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 ||                  \
-    (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-    #define LIBPROTO(name, ret, ...)                                  \
-      LIBFUNC ret LIB_##name(__VA_ARGS__)
+  #if (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
+    #define LIBPROTO(name, ret, ...) LIBFUNC ret LIB_##name(__VA_ARGS__)
     #define LIBPROTOVA(name, ret, ...)
     #define LIBSTUB(name, ret, ...)
     #define CALL_LFUNC_NP(name, ...) LIB_##name(__BASE_OR_IFACE_VAR)
