@@ -128,22 +128,35 @@ $(OBJ_D):
 
 $(OBJ_D)/%.o: %.c
 	@echo "  CC $<"
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 libobjs: $(LIBOBJS)
 
-OS4OBJS = $(OBJ_D)/error.o \
-          $(OBJ_D)/errno.o \
-          $(OBJ_D)/stdlib_funcs.o \
-          $(OBJ_D)/string_char.o \
-          $(OBJ_D)/string_mem.o \
-          $(OBJ_D)/math.o \
-          $(OBJ_D)/gettimeofday.o
+CLIB2OBJS = $(OBJ_D)/string_memset.o \
+            $(OBJ_D)/string_memcmp.o \
+            $(OBJ_D)/string_memcpy.o \
+            $(OBJ_D)/string_bcopy.o \
+            $(OBJ_D)/string_memmove.o \
+            $(OBJ_D)/string_memchr.o \
+            $(OBJ_D)/string_bzero.o \
+            $(OBJ_D)/string_strcmp.o \
+            $(OBJ_D)/string_strlen.o \
+            $(OBJ_D)/string_strchr.o \
+            $(OBJ_D)/string_strrchr.o \
+            $(OBJ_D)/string_strcpy.o \
+            $(OBJ_D)/string_strncpy.o \
+            $(OBJ_D)/string_strncmp.o \
+            $(OBJ_D)/string_strlcpy.o \
+            $(OBJ_D)/string_strlcat.o \
+            $(OBJ_D)/string_strcat.o \
+            $(OBJ_D)/stdlib_atoi.o \
+            $(OBJ_D)/stdlib_strtoul.o \
+            $(OBJ_D)/stdlib_strtol.o \
+            $(OBJ_D)/stdlib_qsort.o \
+            $(OBJ_D)/ctype_table.o
 
 STDIOOBJS = $(OBJ_D)/malloc.o \
             $(OBJ_D)/free.o \
-            $(OBJ_D)/memset.o \
-            $(OBJ_D)/bzero.o \
             $(OBJ_D)/realloc.o \
             $(OBJ_D)/time.o \
             $(OBJ_D)/gmtime.o \
@@ -164,7 +177,11 @@ STDIOOBJS = $(OBJ_D)/malloc.o \
             $(OBJ_D)/perror.o \
             $(OBJ_D)/abort.o \
             $(OBJ_D)/exit.o \
-            $(OBJ_D)/clock.o
+            $(OBJ_D)/clock.o \
+            $(OBJ_D)/error.o \
+            $(OBJ_D)/errno.o \
+            $(OBJ_D)/math.o \
+            $(OBJ_D)/gettimeofday.o
 
 NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/accept.o \
@@ -185,7 +202,7 @@ NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/sendto.o \
             $(OBJ_D)/recvfrom.o
 
-LIBOBJS = $(OS4OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/localtime.o $(OBJ_D)/libcmt.o
+LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/localtime.o $(OBJ_D)/libcmt.o
 
 $(BIN_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"

@@ -1,6 +1,10 @@
 /*
+ * $Id: stdlib_qsort.c,v 1.6 2006-01-08 12:04:26 obarthel Exp $
+ *
+ * :ts=4
+ *
  * Portable ISO 'C' (1994) runtime library for the Amiga computer
- * Copyright (c) 2002-2005 by Olaf Barthel <olsen@sourcery.han.de>
+ * Copyright (c) 2002-2015 by Olaf Barthel <obarthel (at) gmx.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,50 +31,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <errno.h>
-#include <string.h>
-#include <limits.h>
-#include <exec/types.h>
+/****************************************************************************/
 
-#include "libcmt.h"
-#include <internal/amissl.h>
+#ifndef _STDLIB_HEADERS_H
+#include "stdlib_headers.h"
+#endif /* _STDLIB_HEADERS_H */
 
-extern int isspace(int c);
-
-void *bsearch(const void *key, const void *base, size_t count, size_t size, int (*compare)(const void * key,const void * value))
-{
-	void * result = NULL;
-
-	if(count > 0 && size > 0)
-	{
-		void * current;
-		size_t lower = 0;
-		size_t upper = count;
-		size_t position;
-		int delta;
-
-		while(lower < upper)
-		{
-			position = (lower + upper) / 2;
-
-			current = (void *)(((ULONG)base) + (position * size));
-
-			delta = (*compare)(key, current);
-			if(delta == 0)
-			{
-				result = current;
-				break;
-			}
-
-			if(delta < 0)
-				upper = position;
-			else
-				lower = position + 1;
-		}
-	}
-
-	return(result);
-}
+/****************************************************************************/
 
 /******************************************************************
  * qsort.c  --  Non-Recursive ANSI Quicksort function             *
@@ -92,6 +59,8 @@ void *bsearch(const void *key, const void *base, size_t count, size_t size, int 
  * Quicksort Programs", Comm. ACM, Oct. 1978, and Corrigendum,    *
  * Comm. ACM, June 1979.                                          *
  ******************************************************************/
+
+/******************************************************************/
 
 #define SWAP(a, b, size)	(swap((char *)(a), (char *)(b), size))
 #define COMPARE(a, b)		((*comp)((const void *)(a), (const void *)(b)))
@@ -116,10 +85,12 @@ void *bsearch(const void *key, const void *base, size_t count, size_t size, int 
 /******************************************************************/
 
 /* swap nbytes between a and b */
-static __inline
-void swap(char * a, char * b, size_t nbytes)
+INLINE STATIC void
+swap(char * a, char * b, size_t nbytes)
 {
 	char temp;
+
+	assert( a != NULL && b != NULL && nbytes > 0 );
 
 	/* This is an attempt to use 'long' sized swapping, if possible. */
 	if(nbytes >= sizeof(long) && IS_WORD_ALIGNED(a,b))
@@ -169,12 +140,35 @@ void swap(char * a, char * b, size_t nbytes)
 void
 qsort(void * base, size_t count, size_t size, int (*comp)(const void * element1, const void * element2))
 {
+	ENTER();
+
+	SHOWPOINTER(base);
+	SHOWVALUE(count);
+	SHOWVALUE(size);
+	SHOWPOINTER(comp);
+
+	assert( (int)count >= 0 && (int)size >= 0 );
+
 	if(count > 1 && size > 0)
 	{
 		char *stack[32 * 2], **sp;	/* stack and stack pointer */
 		char *i, *j, *limit;		/* scan and limit pointers */
 		char *base_pointer;			/* base pointer as (char *) */
 		size_t threshold;			/* size of THRESHOLD elements in bytes */
+
+		assert( base != NULL && comp != NULL );
+
+		#if defined(CHECK_FOR_NULL_POINTERS)
+		{
+			if(base == NULL || comp == NULL)
+			{
+				SHOWMSG("invalid parameters");
+
+				__set_errno(EFAULT);
+				goto out;
+			}
+		}
+		#endif /* CHECK_FOR_NULL_POINTERS */
 
 		/* set up (char *) base_pointer pointer */
 		base_pointer = (char *)base;
@@ -286,264 +280,8 @@ qsort(void * base, size_t count, size_t size, int (*comp)(const void * element1,
 			}
 		}
 	}
-}
-
-long
-strtol(const char *str, char **ptr, int base)
-{
-	BOOL is_negative;
-	long result = 0;
-	long new_sum;
-	long sum;
-	char c;
-
-	if(base < 0)
-	{
-		SetAmiSSLerrno(ERANGE);
-		goto out;
-	}
-
-	/* Skip all leading blanks. */
-	while((c = (*str)) != '\0')
-	{
-		if(!isspace(c))
-			break;
-
-		str++;
-	}
-
-	/* The first character may be a sign. */
-	if(c == '-')
-	{
-		/* It's a negative number. */
-		is_negative = TRUE;
-
-		str++;
-	}
-	else
-	{
-		/* It's not going to be negative. */
-		is_negative = FALSE;
-
-		/* But there may be a sign we will choose to
-		 * ignore.
-		 */
-		if(c == '+')
-			str++;
-	}
-
-	c = (*str);
-
-	/* There may be a leading '0x' to indicate that what
-	 * follows is a hexadecimal number.
-	 */
-	if(base == 0 || base == 16)
-	{
-		if((c == '0') && (str[1] == 'x' || str[1] == 'X'))
-		{
-			base = 16;
-
-			str += 2;
-
-			c = (*str);
-		}
-	}
-
-	/* If we still don't know what base to use and the
-	 * next letter to follow is a zero then this is
-	 * probably a number in octal notation.
-	 */
-	if(base == 0)
-	{
-		if(c == '0')
-			base = 8;
-		else
-			base = 10;
-	}
-
-	sum = 0;
-
-	if(1 <= base && base <= 36)
-	{
-		while(c != '\0')
-		{
-			if('0' <= c && c <= '9')
-				c -= '0';
-			else if ('a' <= c)
-				c -= 'a' - 10;
-			else if ('A' <= c)
-				c -= 'A' - 10;
-			else
-				break;
-
-			/* Ignore invalid numbers. */
-			if(c >= base)
-				break;
-
-			new_sum = base * sum + c;
-			if(new_sum < sum) /* overflow? */
-			{
-				SetAmiSSLerrno(ERANGE);
-
-				if(is_negative)
-					result = LONG_MIN;
-				else
-					result = LONG_MAX;
-
-				goto out;
-			}
-
-			sum = new_sum;
-
-			str++;
-
-			c = (*str);
-		}
-	}
-
-	if(is_negative)
-		result = (-sum);
-	else
-		result = sum;
 
  out:
 
-	/* If desired, remember where we stopped reading the
-	 * number from the buffer.
-	 */
-	if(ptr != NULL)
-		(*ptr) = (char *)str;
-
-	return(result);
-}
-
-unsigned long
-strtoul(const char *str, char **ptr, int base)
-{
-	BOOL is_negative;
-	unsigned long result = 0;
-	unsigned long new_sum;
-	unsigned long sum;
-	char c;
-
-	if(base < 0)
-	{
-		SetAmiSSLerrno(ERANGE);
-		goto out;
-	}
-
-	/* Skip all leading blanks. */
-	while((c = (*str)) != '\0')
-	{
-		if(!isspace(c))
-			break;
-
-		str++;
-	}
-
-	/* The first character may be a sign. */
-	if(c == '-')
-	{
-		/* It's a negative number. */
-		is_negative = TRUE;
-
-		str++;
-	}
-	else
-	{
-		/* It's not going to be negative. */
-		is_negative = FALSE;
-
-		/* But there may be a sign we will choose to
-		 * ignore.
-		 */
-		if(c == '+')
-			str++;
-	}
-
-	c = (*str);
-
-	/* There may be a leading '0x' to indicate that what
-	 * follows is a hexadecimal number.
-	 */
-	if(base == 0 || base == 16)
-	{
-		if((c == '0') && (str[1] == 'x' || str[1] == 'X'))
-		{
-			base = 16;
-
-			str += 2;
-
-			c = (*str);
-		}
-	}
-
-	/* If we still don't know what base to use and the
-	 * next letter to follow is a zero then this is
-	 * probably a number in octal notation.
-	 */
-	if(base == 0)
-	{
-		if(c == '0')
-			base = 8;
-		else
-			base = 10;
-	}
-
-	sum = 0;
-
-	if(1 <= base && base <= 36)
-	{
-		while(c != '\0')
-		{
-			if('0' <= c && c <= '9')
-				c -= '0';
-			else if ('a' <= c)
-				c -= 'a' - 10;
-			else if ('A' <= c)
-				c -= 'A' - 10;
-			else
-				break;
-
-			/* Ignore invalid numbers. */
-			if(c >= base)
-				break;
-
-			new_sum = base * sum + c;
-			if(new_sum < sum) /* overflow? */
-			{
-				SetAmiSSLerrno(ERANGE);
-
-				result = ULONG_MAX;
-
-				goto out;
-			}
-
-			sum = new_sum;
-
-			str++;
-
-			c = (*str);
-		}
-	}
-
-	if(is_negative)
-		result = (-sum);
-	else
-		result = sum;
-
- out:
-
-	/* If desired, remember where we stopped reading the
-	 * number from the buffer.
-	 */
-	if(ptr != NULL)
-		(*ptr) = (char *)str;
-
-	return(result);
-}
-
-int atoi(const char *str)
-{
-	return((int)strtol(str, NULL, 10));
+	LEAVE();
 }

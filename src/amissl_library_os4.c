@@ -17,6 +17,8 @@
 //#define DEBUG
 #include <internal/debug.h>
 
+#include "../libcmt/libcmt.h"
+
 extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 
