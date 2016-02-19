@@ -1,6 +1,6 @@
---- amissl_glue.c	2016-02-11 22:45:36.494679920 +0100
-+++ amissl_glue.c_new	2016-02-11 22:47:21.116221958 +0100
-@@ -14,33 +14,40 @@
+--- amissl_glue.c_org	2016-02-19 12:03:40.359698209 +0100
++++ amissl_glue.c	2016-02-19 12:04:22.706676938 +0100
+@@ -14,9 +14,10 @@
  #undef SAVEDS
  #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
  #elif defined(__amigaos3__)
@@ -12,8 +12,9 @@
  static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
  #endif // __amigaos3__
  #endif // BASEREL
+@@ -30,24 +31,30 @@
  
- /***************************************************************************/
+ // ---
  
 +#if 0
  void SAVEDS ASM LIB_InternalInitAmiSSL(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, void * amisslinit))

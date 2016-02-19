@@ -8,15 +8,9 @@
 #include <proto/dos.h>
 #endif
 
-//
-
 #include "amisslmaster_lib_protos.h"
-
-//
-
 #include "amisslmaster_base.h"
-
-//
+#include "amisslmaster_glue.h"
 
 #include <internal/debug.h>
 
@@ -121,14 +115,6 @@ struct LibraryHeader * AMISSL_COMMON_DATA globalBase = NULL;
 
 static const char UserLibName[] = LIBNAME;
 static const char UserLibID[]   = LIB_REV_STRING;
-
-/****************************************************************************/
-
-#define libvector LFUNC_FAS(InitAmiSSLMaster) \
-                  LFUNC_FA_(OpenAmiSSL) \
-                  LFUNC_FA_(CloseAmiSSL) \
-                  LFUNC_FA_(OpenAmiSSLCipher) \
-                  LFUNC_FA_(CloseAmiSSLCipher)
 
 /****************************************************************************/
 
@@ -271,7 +257,7 @@ STATIC CONST_APTR main_vectors[] =
   (CONST_APTR)LibRelease,
   (CONST_APTR)NULL,
   (CONST_APTR)NULL,
-  (CONST_APTR)libvector,
+  (CONST_APTR)SDI_LIBVECTOR,
   (CONST_APTR)-1
 };
 
@@ -332,7 +318,7 @@ STATIC FORCED_CONST APTR LibVectors[] =
   (APTR)SLIB_ENTRY(LibClose, AmiSSLMaster, 2),
   (APTR)SLIB_ENTRY(LibExpunge, AmiSSLMaster, 3),
   (APTR)LibNull,
-  libvector,
+  SDI_LIBVECTOR,
   (APTR)-1
 };
 
