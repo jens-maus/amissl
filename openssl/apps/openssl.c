@@ -240,7 +240,9 @@ static void cleanup_amissl(void)
 {
 	if (AmiSSLBase)
 	{
+#if defined(__amigaos4__)
 		if (IAmiSSL)
+#endif
 		{
 			CleanupAmiSSL(TAG_DONE);
 			DropInterface((struct Interface *)IAmiSSL);
