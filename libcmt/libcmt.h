@@ -84,4 +84,12 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define NOT !
 #define __set_errno(X)  SetAmiSSLerrno(X)
 
+#ifndef PARAMS
+# if PROTOTYPES
+#  define PARAMS(args) args
+# else
+#  define PARAMS(args) ()
+# endif
+#endif
+
 #endif /* !LIBCMT_H */

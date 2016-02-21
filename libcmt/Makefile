@@ -139,6 +139,7 @@ CLIB2OBJS = $(OBJ_D)/string_memset.o \
             $(OBJ_D)/string_memmove.o \
             $(OBJ_D)/string_memchr.o \
             $(OBJ_D)/string_bzero.o \
+            $(OBJ_D)/string_strpbrk.o \
             $(OBJ_D)/string_strcmp.o \
             $(OBJ_D)/string_strlen.o \
             $(OBJ_D)/string_strchr.o \
@@ -149,6 +150,7 @@ CLIB2OBJS = $(OBJ_D)/string_memset.o \
             $(OBJ_D)/string_strlcpy.o \
             $(OBJ_D)/string_strlcat.o \
             $(OBJ_D)/string_strcat.o \
+            $(OBJ_D)/strings_strncasecmp.o \
             $(OBJ_D)/stdlib_atoi.o \
             $(OBJ_D)/stdlib_strtoul.o \
             $(OBJ_D)/stdlib_strtol.o \
@@ -181,7 +183,8 @@ STDIOOBJS = $(OBJ_D)/malloc.o \
             $(OBJ_D)/error.o \
             $(OBJ_D)/errno.o \
             $(OBJ_D)/math.o \
-            $(OBJ_D)/gettimeofday.o
+            $(OBJ_D)/gettimeofday.o \
+            $(OBJ_D)/vsnprintf.o
 
 NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/accept.o \

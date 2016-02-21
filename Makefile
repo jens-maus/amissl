@@ -169,7 +169,7 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachabl
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include -I./libcmt/include
+INCLUDE  = -I./include
 CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
@@ -234,7 +234,7 @@ ifeq ($(OS), os3)
   CPU     = -m68020-60 -msoft-float
   CFLAGS  += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
-  LDLIBS  += -ldebug -lamiga -lm
+  LDLIBS  += -ldebug -lc -lm -lgcc -lamiga
   BASEREL = -resident32
   NOBASEREL = -fno-baserel
   BRELLIB = -mrestore-a4
@@ -360,14 +360,16 @@ LIBOBJS = $(OBJ_D)/amissl_libinit.o \
           $(OBJ_D)/amissl_library.o \
           $(OBJ_D)/amissl_norestore.o \
           $(OBJ_D)/amissl_init.o \
+          $(OBJ_D)/debug.o \
           $(EXTRALIBOBJS)
 
 MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
              $(OBJ_D)/amisslmaster_library.o \
              $(OBJ_D)/amisslmaster_init.o \
+             $(OBJ_D)/debug.o \
              $(EXTRAMASTEROBJS)
 
-LIBS = -L$(BIN_D)/openssl -lssl -lcrypto -L$(BIN_D) -lcmt -lgcc
+LIBS = -L$(BIN_D)/openssl $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
@@ -431,9 +433,9 @@ $(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRY
 	@echo "  LD $@"
 	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,-Map=$@.map
 
-$(BIN_D)/amisslmaster.library: $(MASTEROBJS)
+$(BIN_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,-Map=$@.map
 
 $(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
 	@echo "  AR $@"
