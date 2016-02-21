@@ -990,7 +990,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
     // now we need to flush the cache because we copied the jmp table
     if(SysBase->LibNode.lib_Version >= 36)
-      CacheClearU();
+      CacheClearE((UBYTE *)child - child->libBase.lib_NegSize, child->libBase.lib_NegSize, CACRF_ClearI | CACRF_ClearD);
 
     dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
