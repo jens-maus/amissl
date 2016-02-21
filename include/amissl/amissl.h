@@ -10,6 +10,11 @@
 #include <proto/amissl.h>
 #endif
 
+#ifdef __SASC
+#define ossl_ssize_t int
+#define OPENSSL_NO_SHA512 // uses long long, which SAS/C doesn't have
+#endif
+
 #include <openssl/opensslconf.h>
 
 #ifndef OPENSSL_NO_AES
