@@ -79,7 +79,10 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define SHOWVALUE(x)   ((void)0)
 #define SHOWMSG(x)     ((void)0)
 #define DO_NOTHING     ((void)0)
+
+#if !defined(assert)
 #define assert(X)      ((void)0)
+#endif
 
 #define NOT !
 #define __set_errno(X)  SetAmiSSLerrno(X)
