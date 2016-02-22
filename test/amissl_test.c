@@ -88,7 +88,7 @@ int main(void)
     IAmiSSL = ibase1;
     #endif
 		kprintf("########################\n");
-		kprintf("checking base1 %08lx\n");
+		kprintf("checking base1 %08lx\n", AmiSSLBase);
 		printf("checking base1 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
@@ -103,7 +103,7 @@ int main(void)
     IAmiSSL = ibase2;
     #endif
 		kprintf("########################\n");
-		kprintf("checking base2 %08lx\n");
+		kprintf("checking base2 %08lx\n", AmiSSLBase);
 		printf("checking base2 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
@@ -118,7 +118,7 @@ int main(void)
     IAmiSSL = ibase1;
     #endif
 		kprintf("########################\n");
-		kprintf("checking base1 %08lx\n");
+		kprintf("checking base1 %08lx\n", AmiSSLBase);
 		printf("checking base1 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
@@ -133,7 +133,7 @@ int main(void)
     IAmiSSL = ibase2;
     #endif
 		kprintf("########################\n");
-		kprintf("checking base2 %08lx\n");
+		kprintf("checking base2 %08lx\n", AmiSSLBase);
 		printf("checking base2 %08lx...", AmiSSLBase);
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
