@@ -37,6 +37,7 @@
  */
 
 #include <errno.h>
+#include <math.h>
 #include "libcmt.h"
 #include <internal/amissl.h>
 
