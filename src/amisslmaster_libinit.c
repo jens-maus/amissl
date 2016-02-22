@@ -477,19 +477,19 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
       stack->ctrl.stk_Upper = (ULONG)stack->ctrl.stk_Pointer;
       #endif
 
-      kprintf("call with swapped stack\n");
+      D(DBF_STARTUP, "call with swapped stack");
       // call routine but with embedding it into a [NewPPC]StackSwap()
       success = stackswap_call(&stack->ctrl, function, arg);
-      kprintf("done\n");
+      D(DBF_STARTUP, "done");
 
       FreeVec(stack);
     }
   }
   else
   {
-    kprintf("call directly\n");
+    D(DBF_STARTUP, "call directly");
     success = function(arg);
-    kprintf("done\n");
+    D(DBF_STARTUP, "done");
   }
 
   return success;
@@ -571,7 +571,6 @@ struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, 
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
-  kprintf("%s:%ld iexec: %08lx sysbase addr: %08lx\n", __FUNCTION__, __LINE__, IExec, &SysBase);
 #elif defined(__MORPHOS__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
@@ -608,13 +607,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
   // can skip all the library init stuff and return the base pointer right away.
   if(base->segList != 0)
   {
-    kprintf("LIBINIT(%08lx, %08lx, %08lx)\n", base, librarySegment, sb);
-
-    #if defined(__amigaos3__)
-    kprintf("data %08lx %ld\n", __GetDataSeg(), __GetDataSize());
-    kprintf("bss %08lx %ld\n", __GetBSSSeg(), __GetBSSSize());
-    #endif
-
     // make sure that this is really a 68020+ machine if optimized for 020+
     #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
     if((SysBase->AttnFlags & AFF_68020) == 0)
