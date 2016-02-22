@@ -37,8 +37,6 @@
 //
 
 #include <internal/amissl.h>
-
-//#define DEBUG
 #include <internal/debug.h>
 
 #ifdef __amigaos4__
@@ -433,7 +431,7 @@ void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
 
 LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct LibraryHeader *libBase))
 {
-  traceline();
+  TRACELINE();
 
   if(libBase->parent->thread_hash)
   {
@@ -472,7 +470,7 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
 
 LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  traceline();
+  TRACELINE();
 }
 
 LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHeader *libBase))

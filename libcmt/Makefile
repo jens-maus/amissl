@@ -24,10 +24,11 @@ AmiSSL=..
 OBJ_D=$(AmiSSL)/.obj_$(OS)/libcmt
 BIN_D=$(AmiSSL)/bin_$(OS)
 
-WARN       = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-aliasing #-Wunreachable-code
-OPTFLAGS   = -O3 -fomit-frame-pointer
-DEBUG      = -DDEBUG -fno-omit-frame-pointer #-O0
-CFLAGS     = $(CPU) $(OPTFLAGS) $(DEBUG) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
+WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-aliasing #-Wunreachable-code
+OPTFLAGS = -O3 -fomit-frame-pointer
+DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
+DEBUGSYM = -g -gstabs
+CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
 
 # different options per target OS
 ifeq ($(OS), os4)

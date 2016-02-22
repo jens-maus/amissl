@@ -26,19 +26,6 @@
 
 #include <internal/debug.h>
 
-#undef DEBUG
-#define ENTER()                 ((void)0)
-#define LEAVE()                 ((void)0)
-#define RETURN(r)               ((void)0)
-#define SHOWVALUE(f, v)         ((void)0)
-#define SHOWPOINTER(f, p)       ((void)0)
-#define SHOWSTRING(f, s)        ((void)0)
-#define SHOWMSG(f, m)           ((void)0)
-#define D(f, s, vargs...)       ((void)0)
-#define E(f, s, vargs...)       ((void)0)
-#define W(f, s, vargs...)       ((void)0)
-#define ASSERT(expression)      ((void)0)
-
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
 #define DROPINTERFACE(iface)      (DropInterface((struct Interface *)iface), iface = NULL)
@@ -670,8 +657,9 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #if defined(DEBUG)
       // this must be called ahead of any debug output, otherwise we get stuck
       InitDebug();
-      #endif
+      SetupDebug("amissl.library", LIB_VERSION, LIB_REVISION);
       D(DBF_STARTUP, "LibInit()");
+      #endif
 
       InitSemaphore(&base->libSem);
 
@@ -880,7 +868,7 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
     LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
 
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
-    DropInterface((struct Interface *)base->IElf);
+    DROPINTERFACE(base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
     #else
     kprintf("AmiSSL: expunge\n");
@@ -1155,7 +1143,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
         extlib = (struct ExtendedLibrary *)((ULONG)parent + parent->libBase.lib_PosSize);
         LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
         (parent->IElf->CloseElfTags)(parent->elfHandle, CET_ReClose, TRUE, TAG_DONE);
-        DropInterface((struct Interface *)parent->IElf);
+        DROPINTERFACE(parent->IElf);
         CloseLibrary((struct Library *)parent->ElfBase);
         #else
         LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)parent);

@@ -52,9 +52,9 @@ strtol(const char *str, char **ptr, int base)
 
 	ENTER();
 
-	SHOWSTRING(str);
-	SHOWPOINTER(ptr);
-	SHOWVALUE(base);
+	//SHOWSTRING(str);
+	//SHOWPOINTER(ptr);
+	//SHOWVALUE(base);
 
 	assert(str != NULL && base >= 0);
 
@@ -62,7 +62,7 @@ strtol(const char *str, char **ptr, int base)
 	{
 		if(str == NULL)
 		{
-			SHOWMSG("invalid str parameter");
+			//SHOWMSG("invalid str parameter");
 
 			__set_errno(EFAULT);
 			goto out;
@@ -72,7 +72,7 @@ strtol(const char *str, char **ptr, int base)
 
 	if(base < 0)
 	{
-		SHOWMSG("invalid base parameter");
+		//SHOWMSG("invalid base parameter");
 
 		__set_errno(ERANGE);
 		goto out;

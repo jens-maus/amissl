@@ -70,14 +70,6 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define GETISOCKET_NOERRNO() struct SocketIFace *ISocket = GetSocketIFace(0)
 #define GETSTATE() AMISSL_STATE *state = GetAmiSSLState()
 
-// defines required for CLIB2 compatibility
-#define ENTER()        ((void)0)
-#define RETURN(x)      ((void)0)
-#define LEAVE()        ((void)0)
-#define SHOWSTRING(x)  ((void)0)
-#define SHOWPOINTER(x) ((void)0)
-#define SHOWVALUE(x)   ((void)0)
-#define SHOWMSG(x)     ((void)0)
 #define DO_NOTHING     ((void)0)
 
 #if !defined(assert)

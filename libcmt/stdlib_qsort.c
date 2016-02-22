@@ -142,10 +142,10 @@ qsort(void * base, size_t count, size_t size, int (*comp)(const void * element1,
 {
 	ENTER();
 
-	SHOWPOINTER(base);
-	SHOWVALUE(count);
-	SHOWVALUE(size);
-	SHOWPOINTER(comp);
+	//SHOWPOINTER(base);
+	//SHOWVALUE(count);
+	//SHOWVALUE(size);
+	//SHOWPOINTER(comp);
 
 	assert( (int)count >= 0 && (int)size >= 0 );
 
@@ -162,7 +162,7 @@ qsort(void * base, size_t count, size_t size, int (*comp)(const void * element1,
 		{
 			if(base == NULL || comp == NULL)
 			{
-				SHOWMSG("invalid parameters");
+				//SHOWMSG("invalid parameters");
 
 				__set_errno(EFAULT);
 				goto out;

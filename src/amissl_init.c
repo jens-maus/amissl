@@ -19,7 +19,6 @@ extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 
 extern struct DosLibrary *DOSBase;
 
-void kprintf(const char *,...);
 #endif
 
 #ifdef __amigaos4__

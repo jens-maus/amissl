@@ -30,7 +30,11 @@
 #include <proto/exec.h>
 #include <exec/semaphores.h>
 
-#include "debug.h"
+#include <internal/debug.h>
+
+#if defined(kprintf)
+ #undef kprintf
+#endif
 
 #if defined(__MORPHOS__) || defined(__AROS__)
 #include <exec/rawfmt.h>
@@ -90,129 +94,148 @@ void InitDebug(void)
 
 /****************************************************************************/
 
-void SetupDebug(void)
+void SetupDebug(const char *libName, int version, int revision)
 {
   char var[256];
+  #if defined(__amigaos4__)
+  struct Library *DOSBase = NULL;
+  struct DOSIFace *IDOS = NULL;
+  #else
+  struct DosLibrary *DOSBase = NULL;
+  #endif
 
-  //_DBPRINTF("** AmiSSL %s (%s) startup ****************************\n", LIB_REV_STRING, LIB_DATE);
+  _DBPRINTF("** AmiSSL: %s (%ld.%ld) startup ****************************\n", libName, version, revision);
   _DBPRINTF("Initializing runtime debugging:\n");
 
-  if(GetVar("codesets.library.debug", var, sizeof(var), 0) > 0)
+#if defined(__amigaos4__)
+  if((DOSBase = OpenLibrary("dos.library", 50)) != NULL &&
+     (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL)) != NULL)
+#else
+  if((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) != NULL)
+#endif
   {
-    char *s = var;
-
-    // static list of our debugging classes tokens.
-    // in the yamdebug variable these classes always start with a @
-    static struct { const char *token; unsigned long flag; } dbclasses[] =
+    if(GetVar("amissl.debug", var, sizeof(var), 0) > 0)
     {
-      { "ctrace",  DBC_CTRACE   },
-      { "report",  DBC_REPORT   },
-      { "assert",  DBC_ASSERT   },
-      { "timeval", DBC_TIMEVAL  },
-      { "debug",   DBC_DEBUG    },
-      { "error",   DBC_ERROR    },
-      { "warning", DBC_WARNING  },
-      { "all",     DBC_ALL      },
-      { NULL,      0            }
-    };
+      char *s = var;
 
-    static struct { const char *token; unsigned long flag; } dbflags[] =
-    {
-      { "always",   DBF_ALWAYS  },
-      { "startup",  DBF_STARTUP },
-      { "utf",      DBF_UTF     },
-      { "all",      DBF_ALL     },
-      { NULL,       0           }
-    };
-
-    // we parse the env variable token-wise
-    while(*s)
-    {
-      ULONG i;
-      char *e;
-
-      if((e = strpbrk(s, " ,;")) == NULL)
-        e = s+strlen(s);
-
-      // check if the token is class definition or
-      // just a flag definition
-      if(s[0] == '@')
+      // static list of our debugging classes tokens.
+      // in the yamdebug variable these classes always start with a @
+      static struct { const char *token; unsigned long flag; } dbclasses[] =
       {
-        // skip the '@'
-        s++;
-        // check if this call is a negation or not
-        if(s[0] == '!')
-        {
-          // skip the '!'
-          s++;
-          // search for the token and clear the flag
-          for(i=0; dbclasses[i].token; i++)
-          {
-            if(strnicmp(s, dbclasses[i].token, strlen(dbclasses[i].token)) == 0)
-            {
-              _DBPRINTF("clear '%s' debug class flag.\n", dbclasses[i].token);
-              CLEAR_FLAG(debug_classes, dbclasses[i].flag);
-            }
-          }
-        }
-        else
-        {
-          // search for the token and set the flag
-          for(i=0; dbclasses[i].token; i++)
-          {
-            if(strnicmp(s, dbclasses[i].token, strlen(dbclasses[i].token)) == 0)
-            {
-              _DBPRINTF("set '%s' debug class flag\n", dbclasses[i].token);
-              SET_FLAG(debug_classes, dbclasses[i].flag);
-            }
-          }
-        }
-      }
-      else
+        { "ctrace",  DBC_CTRACE   },
+        { "report",  DBC_REPORT   },
+        { "assert",  DBC_ASSERT   },
+        { "timeval", DBC_TIMEVAL  },
+        { "debug",   DBC_DEBUG    },
+        { "error",   DBC_ERROR    },
+        { "warning", DBC_WARNING  },
+        { "all",     DBC_ALL      },
+        { NULL,      0            }
+      };
+
+      static struct { const char *token; unsigned long flag; } dbflags[] =
       {
-        // check if this call is a negation or not
-        if(s[0] == '!')
+        { "always",   DBF_ALWAYS  },
+        { "startup",  DBF_STARTUP },
+        { "utf",      DBF_UTF     },
+        { "all",      DBF_ALL     },
+        { NULL,       0           }
+      };
+
+      // we parse the env variable token-wise
+      while(*s)
+      {
+        ULONG i;
+        char *e;
+
+        if((e = strpbrk(s, " ,;")) == NULL)
+          e = s+strlen(s);
+
+        // check if the token is class definition or
+        // just a flag definition
+        if(s[0] == '@')
         {
-          // skip the '!'
+          // skip the '@'
           s++;
-          for(i=0; dbflags[i].token; i++)
+          // check if this call is a negation or not
+          if(s[0] == '!')
           {
-            if(strnicmp(s, dbflags[i].token, strlen(dbflags[i].token)) == 0)
+            // skip the '!'
+            s++;
+            // search for the token and clear the flag
+            for(i=0; dbclasses[i].token; i++)
             {
-              _DBPRINTF("clear '%s' debug flag\n", dbflags[i].token);
-              CLEAR_FLAG(debug_flags, dbflags[i].flag);
+              if(strnicmp(s, dbclasses[i].token, strlen(dbclasses[i].token)) == 0)
+              {
+                _DBPRINTF("clear '%s' debug class flag.\n", dbclasses[i].token);
+                CLEAR_FLAG(debug_classes, dbclasses[i].flag);
+              }
             }
-          }
-        }
-        else
-        {
-          // check if the token was "ansi" and if so enable the ANSI color
-          // output
-          if(strnicmp(s, "ansi", 4) == 0)
-          {
-            _DBPRINTF("ansi output enabled\n");
-            ansi_output = TRUE;
           }
           else
           {
-            for(i=0; dbflags[i].token; i++)
+            // search for the token and set the flag
+            for(i=0; dbclasses[i].token; i++)
             {
-              if(strnicmp(s, dbflags[i].token, strlen(dbflags[i].token)) == 0)
+              if(strnicmp(s, dbclasses[i].token, strlen(dbclasses[i].token)) == 0)
               {
-                _DBPRINTF("set '%s' debug flag\n", dbflags[i].token);
-                SET_FLAG(debug_flags, dbflags[i].flag);
+                _DBPRINTF("set '%s' debug class flag\n", dbclasses[i].token);
+                SET_FLAG(debug_classes, dbclasses[i].flag);
               }
             }
           }
         }
-      }
+        else
+        {
+          // check if this call is a negation or not
+          if(s[0] == '!')
+          {
+            // skip the '!'
+            s++;
+            for(i=0; dbflags[i].token; i++)
+            {
+              if(strnicmp(s, dbflags[i].token, strlen(dbflags[i].token)) == 0)
+              {
+                _DBPRINTF("clear '%s' debug flag\n", dbflags[i].token);
+                CLEAR_FLAG(debug_flags, dbflags[i].flag);
+              }
+            }
+          }
+          else
+          {
+            // check if the token was "ansi" and if so enable the ANSI color
+            // output
+            if(strnicmp(s, "ansi", 4) == 0)
+            {
+              _DBPRINTF("ansi output enabled\n");
+              ansi_output = TRUE;
+            }
+            else
+            {
+              for(i=0; dbflags[i].token; i++)
+              {
+                if(strnicmp(s, dbflags[i].token, strlen(dbflags[i].token)) == 0)
+                {
+                  _DBPRINTF("set '%s' debug flag\n", dbflags[i].token);
+                  SET_FLAG(debug_flags, dbflags[i].flag);
+                }
+              }
+            }
+          }
+        }
 
-      // set the next start to our last search
-      if(*e)
-        s = ++e;
-      else
-        break;
+        // set the next start to our last search
+        if(*e)
+          s = ++e;
+        else
+          break;
+      }
     }
+
+    #if defined(__amigaos4__)
+    DropInterface((struct Interface *)IDOS);
+    #endif
+    CloseLibrary((struct Library *)DOSBase);
   }
 
   _DBPRINTF("set debug classes/flags (env:codesets.library.debug): %08lx/%08lx\n", debug_classes, debug_flags);

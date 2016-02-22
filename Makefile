@@ -457,19 +457,19 @@ $(BIN_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
 	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
 
-$(BIN_D)/https: $(TEST_D)/https.c
+$(BIN_D)/https: $(TEST_D)/https.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
 	$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
-$(BIN_D)/uitest: $(TEST_D)/uitest.c
-
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
-
-$(BIN_D)/vatest: $(TEST_D)/vatest.c
+$(BIN_D)/uitest: $(TEST_D)/uitest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
 	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
-## AMISSL AUTOINIT / LIBSTUBS ##
+$(BIN_D)/vatest: $(TEST_D)/vatest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
+	@echo "  CC/LD $@"
+	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+
+## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
 $(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
@@ -479,9 +479,11 @@ $(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL $(INCLUDE)
 
-$(OBJ_D)/amissl_library_os4.o: $(SRC_D)/amissl_library_os4.c
-$(OBJ_D)/amissl_m68k.o: $(SRC_D)/amissl_m68k.c
-$(OBJ_D)/amisslmaster_m68k.o: $(SRC_D)/amisslmaster_m68k.c
+$(OBJ_D)/debug.o: $(SRC_D)/debug.c
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@
+
+## SOURCES COMPILED WITH restore-a4 ##
 
 $(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	@echo "  CC $<"

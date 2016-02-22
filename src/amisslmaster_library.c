@@ -373,7 +373,7 @@ LIBPROTO(CloseAmiSSLCipher, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struc
 
 LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  traceline();
+  TRACELINE();
 
   // only flush sub libraries for the old-style v2 libraries
   if(LibAPIVersion == AMISSL_V2)
@@ -399,16 +399,15 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  traceline();
+  TRACELINE();
 }
 
 LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  traceline();
+  ENTER();
 
   InitSemaphore(&AmiSSLMasterLock);
 
-  traceline();
-
+  RETURN(0);
   return(0);
 }
