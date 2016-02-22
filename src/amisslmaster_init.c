@@ -21,8 +21,7 @@ extern struct DosLibrary *DOSBase;
 
 ULONG freeBase(UNUSED struct LibraryHeader *lib)
 {
-//kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-//kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
 
   return TRUE;
 }
@@ -31,8 +30,7 @@ ULONG freeBase(UNUSED struct LibraryHeader *lib)
 
 ULONG initBase(UNUSED struct LibraryHeader *lib)
 {
-//kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-//kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
 
   return TRUE;
 }
@@ -41,14 +39,14 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
 ULONG closeBase(UNUSED struct LibraryHeader *lib)
 {
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld iexec %08lx\n", __FUNCTION__, __LINE__, IExec);
+  SHOWPOINTER(DBF_STARTUP, IExec);
   #endif
 
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
+  SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
 
   return TRUE;
@@ -58,14 +56,14 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
 
 ULONG openBase(UNUSED struct LibraryHeader *lib)
 {
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld iexec %08lx\n", __FUNCTION__, __LINE__, IExec);
+  SHOWPOINTER(DBF_STARTUP, IExec);
   #endif
 
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
+  SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
 
   return TRUE;

@@ -99,25 +99,22 @@ void __show_error(const char * message)
 
 static AMISSL_STATE *CreateAmiSSLState(void)
 {
-  unsigned long pid;
   AMISSL_STATE *ret;
 
-  kprintf("CreateAmiSSLState()\n");
+  ENTER();
 
   ObtainSemaphore(&parentBase->openssl_cs);
 
-  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
+  SHOWPOINTER(DBF_STARTUP, &ownBase);
+  SHOWPOINTER(DBF_STARTUP, ownBase);
 
-  kprintf("CreateAmiSSLState()1\n");
-
-  pid = (unsigned long)FindTask(NULL);
-  kprintf("CreateAmiSSLState()2\n");
   ret = (AMISSL_STATE *)SB_AllocVec(sizeof(*ret), MEMF_CLEAR);
-  kprintf("CreateAmiSSLState()3\n");
-
   if (ret != NULL)
   {
-    kprintf("Allocating new state for %08lx\n", pid);
+    unsigned long pid = (unsigned long)FindTask(NULL);
+
+    SHOWVALUE(DBF_STARTUP, pid);
+
     ret->pid = pid;
     ret->errno = 0;
     ret->errno_ptr = &ret->errno;
@@ -131,7 +128,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 #endif
     ret->ThreadGroupID = ownBase->ThreadGroupID;
 
-    kprintf("h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)\n", parentBase->thread_hash, pid, ret);
+    D(DBF_STARTUP, "h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)", parentBase->thread_hash, pid, ret);
     if(!h_insert(parentBase->thread_hash, pid, ret))
     {
       FreeVec(ret);
@@ -140,7 +137,9 @@ static AMISSL_STATE *CreateAmiSSLState(void)
   }
 
   ReleaseSemaphore(&parentBase->openssl_cs);
-  kprintf("CreateAmiSSLState done %08lx %08lx\n", ret, SysBase);
+
+  SHOWPOINTER(DBF_STARTUP, ret);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
 
   return ret;
 }
@@ -178,28 +177,10 @@ static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
 
 static void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
 {
-  //SHOWREGISTERS();
-
-  #if defined(DEBUG)
-  //kprintf("amigaos_locking_callback(%ld, %ld, '%s', %ld), SysBase: %08lx\n", mode, type, file, line, SysBase);
-  #endif
-  
   if(mode & CRYPTO_LOCK)
-  {
-    /*
-    kprintf("lock_cs: %08lx %08lx %08lx %ld\n", lock_cs, &lock_cs[0], &lock_cs[9], &lock_cs[type], sizeof(*lock_cs));
-    kprintf("sizeof(lock_cs): %ld\n", sizeof(*lock_cs));
-    kprintf("obtain: %08lx\n", &lock_cs[type]);
-    */
     ObtainSemaphore(&ownBase->lock_cs[type]);
-  }
   else
-  {
-    //kprintf("release: %08lx\n", &lock_cs[type]);
     ReleaseSemaphore(&ownBase->lock_cs[type]);
-  }
-
-  //kprintf("amigaos_locking_callback() done\n");
 }
 
 static void amigaos_threadid_callback(CRYPTO_THREADID *id)
@@ -213,7 +194,7 @@ static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 {
   if(a->ThreadGroupID == ownBase->ThreadGroupID)
   {
-    kprintf("- Cleaning up state %08lx for %08lx (group %lu)\n", a, a->pid, a->ThreadGroupID);
+    D(DBF_STARTUP, "Cleaning up state %08lx for %08lx (group %lu)", a, a->pid, a->ThreadGroupID);
     h_delete(parentBase->thread_hash, a->pid);
     FreeVec(a);
   }
@@ -222,7 +203,8 @@ static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 LIBPROTO(InternalInitAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED struct AmiSSLInitStruct *amisslinit))
 {
   /* nothing */
-  kprintf("InternalInitAmiSSL()\n");
+  ENTER();
+  LEAVE();
 }
 
 extern const unsigned int CAST_S_table0[256];
@@ -240,68 +222,72 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
   AMISSL_STATE *state;
   LONG err;
 
-  kprintf("InitAmiSSLA() %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+
+  #if defined(DEBUG)
   {
     int i;
     ULONG checksum;
-      kprintf("CAST TABLE CHECKSUMS in InitAmiSSLA()\n");
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table0[i];
-      }
-      kprintf("CHECKSUM table0: %08lx (addr: %08lx)\n", checksum, &CAST_S_table0[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table1[i];
-      }
-      kprintf("CHECKSUM table1: %08lx (addr: %08lx)\n", checksum, &CAST_S_table1[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table2[i];
-      }
-      kprintf("CHECKSUM table2: %08lx (addr: %08lx)\n", checksum, &CAST_S_table2[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table3[i];
-      }
-      kprintf("CHECKSUM table3: %08lx (addr: %08lx)\n", checksum, &CAST_S_table3[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table4[i];
-      }
-      kprintf("CHECKSUM table4: %08lx (addr: %08lx)\n", checksum, &CAST_S_table4[0]);
-
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table5[%ld] = %08lx\n", i, CAST_S_table5[i]);
-        checksum = checksum + CAST_S_table5[i];
-      }
-      kprintf("CHECKSUM table5: %08lx (addr: %08lx)\n", checksum, &CAST_S_table5[0]);
-
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table6[%ld] = %08lx\n", i, CAST_S_table6[i]);
-        checksum = checksum + CAST_S_table6[i];
-      }
-      kprintf("CHECKSUM table6: %08lx (addr: %08lx)\n", checksum, &CAST_S_table6[0]);
-
-       for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table7[%ld] = %08lx\n", i, CAST_S_table7[i]);
-        checksum = checksum + CAST_S_table7[i];
-      }
-      kprintf("CHECKSUM table7: %08lx (addr: %08lx)\n", checksum, &CAST_S_table7[0]);
+    D(DBF_STARTUP, "CAST TABLE CHECKSUMS in InitAmiSSLA()");
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table0[i];
     }
+    D(DBF_STARTUP, "CHECKSUM table0: %08lx (addr: %08lx)", checksum, &CAST_S_table0[0]);
  
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table1[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table1: %08lx (addr: %08lx)", checksum, &CAST_S_table1[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table2[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table2: %08lx (addr: %08lx)", checksum, &CAST_S_table2[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table3[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table3: %08lx (addr: %08lx)", checksum, &CAST_S_table3[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table4[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table4: %08lx (addr: %08lx)", checksum, &CAST_S_table4[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table5[%ld] = %08lx", i, CAST_S_table5[i]);
+      checksum = checksum + CAST_S_table5[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table5: %08lx (addr: %08lx)", checksum, &CAST_S_table5[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table6[%ld] = %08lx", i, CAST_S_table6[i]);
+      checksum = checksum + CAST_S_table6[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table6: %08lx (addr: %08lx)", checksum, &CAST_S_table6[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table7[%ld] = %08lx", i, CAST_S_table7[i]);
+      checksum = checksum + CAST_S_table7[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table7: %08lx (addr: %08lx)", checksum, &CAST_S_table7[0]);
+  }
+  #endif
+
   if((state = CreateAmiSSLState()))
   {
     int *errno_ptr;
@@ -339,9 +325,11 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
         return 1; // Error
       }
     }
-    kprintf("SocketBase: %08lx\n",state->SocketBase);
-    kprintf("ISocket: %08lx (ISocket address: %08lx)\n",state->ISocket,&state->ISocket);
-    kprintf("ISocketPtr: %08lx\n",state->ISocketPtr);
+
+    SHOWPOINTER(DBF_STARTUP, state->SocketBase);
+    SHOWPOINTER(DBF_STARTUP, state->ISocket);
+    SHOWPOINTER(DBF_STARTUP, &state->ISocket);
+    SHOWPOINTER(DBF_STARTUP, state->ISocketPtr);
 #else
     state->AmiSSLBase = __BASE_OR_IFACE_VAR;
 
@@ -351,7 +339,10 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
     if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
       state->errno_ptr = errno_ptr;
 
-    kprintf("initialize socket errno: %08lx %08lx %08lx\n", SysBase, __BASE_OR_IFACE_VAR, state->SocketBase);
+    SHOWPOINTER(DBF_STARTUP, SysBase);
+    SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+    SHOWPOINTER(DBF_STARTUP, state->SocketBase);
+
     initialize_socket_errno(state);
 
     err = 0;
@@ -359,7 +350,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
   else
     err = 1;
 
-  kprintf("InitAmiSSLA() done %d\n", err);
+  SHOWVALUE(DBF_STARTUP, err);
 
   return(err);
 }
@@ -381,7 +372,7 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED s
 #endif
 
     ObtainSemaphore(&parentBase->openssl_cs);
-    kprintf("h_delete(parentBase->thread_hash)\n");
+    D(DBF_STARTUP, "h_delete(parentBase->thread_hash)");
     h_delete(parentBase->thread_hash, state->pid);
     ReleaseSemaphore(&parentBase->openssl_cs);
 
@@ -435,14 +426,14 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
 
   if(libBase->parent->thread_hash)
   {
-    kprintf("Performing unfreed states cleanup for %08lx (group %lu)\n", FindTask(NULL), libBase->ThreadGroupID);
+    D(DBF_STARTUP, "Performing unfreed states cleanup for %08lx (group %lu)", FindTask(NULL), libBase->ThreadGroupID);
     ObtainSemaphore(&libBase->parent->openssl_cs);
-    kprintf("h_doall(thread_hash)\n");
+    D(DBF_STARTUP, "h_doall(thread_hash)");
     h_doall(libBase->parent->thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
     ReleaseSemaphore(&libBase->parent->openssl_cs);
   }
   else
-    kprintf("No thread_hash\n");
+    W(DBF_STARTUP, "No thread_hash");
 
 #ifdef __amigaos4__
   DropInterface((struct Interface *)IUtility);
@@ -477,33 +468,39 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
 {
   int err = 1; /* Assume error condition */
 
-  kprintf("Calling __UserLibInit()\n");
-  kprintf("base/iface: %08lx\n", __BASE_OR_IFACE_VAR);
-  kprintf("libbase: %08lx\n", libBase);
-  kprintf("libbase->parent: %08lx\n", libBase->parent);
+  ENTER();
+
+  SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+  SHOWPOINTER(DBF_STARTUP, libBase);
+  SHOWPOINTER(DBF_STARTUP, libBase->parent);
 
   // lets set libBase as the ownBase for later reference
   ownBase = libBase;
-  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
+  SHOWPOINTER(DBF_STARTUP, &ownBase);
+  SHOWPOINTER(DBF_STARTUP, ownBase);
 
   // lets set the parent of libBase as our parentBase
   parentBase = libBase->parent;
-  kprintf("parentBase addr: %08lx (%08lx)\n", &parentBase, parentBase);
+  SHOWPOINTER(DBF_STARTUP, &parentBase);
+  SHOWPOINTER(DBF_STARTUP, parentBase),
 
   // we have to initialize the libcmt stuff
   __init_libcmt();
 
-  kprintf("Global parentBase variables:\n");
-  kprintf("---------------------------\n");
-  kprintf("openssl_cs addr: %08lx\n", &parentBase->openssl_cs);
-  kprintf("thread_hash addr: %08lx (%08lx)\n", &parentBase->thread_hash, parentBase->thread_hash);
-  kprintf("LastThreadGroupID addr: %08lx (%08lx)\n", &parentBase->LastThreadGroupID, parentBase->LastThreadGroupID);
-  kprintf("---------------------------\n");
+  D(DBF_STARTUP, "Global parentBase variables:");
+  D(DBF_STARTUP, "---------------------------");
+  SHOWPOINTER(DBF_STARTUP, &parentBase->openssl_cs);
+  SHOWPOINTER(DBF_STARTUP, &parentBase->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, parentBase->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, &parentBase->LastThreadGroupID);
+  SHOWVALUE(DBF_STARTUP, parentBase->LastThreadGroupID);
+  D(DBF_STARTUP, "---------------------------");
 
   ObtainSemaphore(&parentBase->openssl_cs);
 
   ownBase->ThreadGroupID = ++(parentBase->LastThreadGroupID);
-  kprintf("ThreadGroupID addr: %08lx (%08lx)\n", &ownBase->ThreadGroupID, ownBase->ThreadGroupID);
+  SHOWPOINTER(DBF_STARTUP, &ownBase->ThreadGroupID);
+  SHOWVALUE(DBF_STARTUP, ownBase->ThreadGroupID);
 
   ReleaseSemaphore(&parentBase->openssl_cs);
 
@@ -515,7 +512,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
     for (i=0; i<CRYPTO_num_locks(); i++)
     {
       InitSemaphore(&ownBase->lock_cs[i]);
-      kprintf("initialized lockcs[%ld]: %08lx\n", i, &ownBase->lock_cs[i]);
+      D(DBF_STARTUP, "initialized lockcs[%ld]: %08lx", i, &ownBase->lock_cs[i]);
     }
 
     // set static locks callbacks
@@ -544,10 +541,11 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
     }
   }
 
-  kprintf("Userlib err: %d %08lx\n",err, SysBase);
+  D(DBF_STARTUP, "Userlib err: %d %08lx", err, SysBase);
 
   if (err != 0)
     CALL_LFUNC(__UserLibCleanup, libBase);
 
+  RETURN(err);
   return(err);
 }

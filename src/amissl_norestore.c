@@ -1,6 +1,3 @@
-#include <internal/amissl.h>
-#include <internal/debug.h>
-
 #define NO_MTCP_PROTOS
 #ifdef __GNUC__
 #include "../libcmt/libcmt.h"
@@ -12,6 +9,9 @@
 
 #include "amissl_lib_protos.h"
 #include "amissl_base.h"
+
+#include <internal/amissl.h>
+#include <internal/debug.h>
 
 /*
  * All functions in here will be compiled without any restore-a4
@@ -28,15 +28,22 @@ extern struct LibraryHeader *parentBase;
 STDARGS AMISSL_STATE *GetAmiSSLState(void)
 {
   AMISSL_STATE *ret;
-  kprintf("ownBase addr: %08lx (%08lx)\n", &ownBase, ownBase);
-  kprintf("parentBase addr: %08lx (%08lx)\n", &parentBase, parentBase);
-  kprintf("%s SysBase: %08lx openssl_cs addr: %08lx\n", __FUNCTION__, SysBase, &parentBase->openssl_cs);
+
+  ENTER();
+
+  SHOWPOINTER(DBF_STARTUP, &ownBase);
+  SHOWPOINTER(DBF_STARTUP, ownBase);
+  SHOWPOINTER(DBF_STARTUP, &parentBase);
+  SHOWPOINTER(DBF_STARTUP, parentBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, &parentBase->openssl_cs);
+
   ObtainSemaphore(&parentBase->openssl_cs);
-  kprintf("h_find(parentBase->thread_hash=%08lx)\n", parentBase->thread_hash);
+  D(DBF_STARTUP, "h_find(parentBase->thread_hash=%08lx)", parentBase->thread_hash);
   ret = (AMISSL_STATE *)h_find(parentBase->thread_hash, (long)FindTask(NULL));
   ReleaseSemaphore(&parentBase->openssl_cs);
-  kprintf("%s done\n", __FUNCTION__);
 
+  RETURN(ret);
   return ret;
 }
 

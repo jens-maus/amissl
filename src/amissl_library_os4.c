@@ -88,7 +88,6 @@ LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, .
 
 int __amigaos4_check68k_check(int (*func)())
 {
-//  kprintf("__amigaos4_check68k_check_func called with: %08x\n",func);
   return IExec->IsNative(func);
 }
 
@@ -118,17 +117,16 @@ VARARGS68K int __amigaos4_check68k_trampoline(int nargs, int func, ...)
 
   __builtin_va_start(args, func);
 
-  //kprintf("__amigaos4_check68k_trampoline called with: %d args, func: %08x\n",nargs,func);
+  D(DBF_STARTUP, "__amigaos4_check68k_trampoline called with: %d args, func: %08x", nargs, func);
 
   ptr = va_getlinearva(args, long *);
 
-  //kprintf("Stack: %08x %08x %08x %08x %08x %08x %08x\n",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
+  D(DBF_STARTUP, "Stack: %08x %08x %08x %08x %08x %08x %08x",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
 
   for(i=0;i<nargs;i++)
-  {
     ptr[i*2] = ET_RegisterD0 + i; // Replace 0's with tag id's
-  }
-  //kprintf("Stack: %08x %08x %08x %08x %08x %08x %08x\n",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
+
+  D(DBF_STARTUP, "Stack: %08x %08x %08x %08x %08x %08x %08x",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4],ptr[5],ptr[6]);
 
   result = IExec->EmulateTags(trampoline_code[nargs],ET_SaveRegs,TRUE,
     ET_RegisterA5,func,

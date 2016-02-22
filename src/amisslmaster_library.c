@@ -151,28 +151,36 @@ static void CloseLib(struct Library *LibBase)
 
 LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG APIVersion), REG(d1, LONG UsesOpenSSLStructs))
 {
-  kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, __BASE_OR_IFACE_VAR, LibAPIVersion, LibUsesOpenSSLStructs);
+  ENTER();
+
+  SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+  SHOWVALUE(DBF_STARTUP, LibAPIVersion);
+  SHOWVALUE(DBF_STARTUP, LibUsesOpenSSLStructs);
+
   LibAPIVersion = APIVersion;
   LibUsesOpenSSLStructs = UsesOpenSSLStructs;
-  kprintf("%s/%ld base %08lx version %ld structs %ld\n", __FILE__, __LINE__, __BASE_OR_IFACE_VAR, LibAPIVersion, LibUsesOpenSSLStructs);
 
+  SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+  SHOWVALUE(DBF_STARTUP, LibAPIVersion);
+  SHOWVALUE(DBF_STARTUP, LibUsesOpenSSLStructs);
+
+  RETURN(LibAPIVersion <= AMISSL_CURRENT_VERSION);
   return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
 }
 
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  kprintf("%s:%ld\n", __FILE__, __LINE__);
-  kprintf("OpenAmiSSL called. iface: %08lx\n", __BASE_OR_IFACE_VAR);
-  kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
-  kprintf("OpenAmiSSL called. sysbase: %08lx\n", SysBase);
+  ENTER();
 
-  kprintf("obtain AmiSSLMasterLock: %08lx\n", &AmiSSLMasterLock);
+  SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+
+  SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
-  kprintf("Semaphore obtained\n");
 
   if(LibAPIVersion == AMISSL_V10x)
   {
-    kprintf("about to open amissl v10x library\n");
+    D(DBF_STARTUP, "About to open amissl v10x library");
 
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
     // known 1.0.X amissl library as OpenSSL defines binary/api compatibility when only
@@ -247,15 +255,18 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     }
   }
   else
-    kprintf("ERROR: unknown LibAPI Version specified!\n");
+    E(DBF_STARTUP, "ERROR: unknown LibAPI Version specified!");
 
+  #if defined(DEBUG)
   if(AmiSSLBase != NULL)
-    kprintf("successfully opened AmiSSL library %ld.%ld (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
+    D(DBF_STARTUP, "successfully opened AmiSSL library %ld.%ld (%s): %08lx", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
   else
-    kprintf("ERROR: couldn't open amissl library: %08lx\n", AmiSSLBase);
+    E(DBF_STARTUP, "ERROR: couldn't open amissl library: %08lx", AmiSSLBase);
+  #endif
 
   ReleaseSemaphore(&AmiSSLMasterLock);
 
+  RETURN(AmiSSLBase);
   return AmiSSLBase;
 }
 

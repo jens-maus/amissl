@@ -48,12 +48,15 @@ static void h_freefunc(void *mem)
 
 ULONG freeBase(UNUSED struct LibraryHeader *lib)
 {
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  ENTER();
 
-  kprintf("thread_hash addr: %08lx (%08lx)\n", &lib->thread_hash, lib->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+
+  SHOWPOINTER(DBF_STARTUP, &lib->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, lib->thread_hash);
   h_free(lib->thread_hash);
 
+  RETURN(TRUE);
   return TRUE;
 }
 
@@ -61,24 +64,28 @@ ULONG freeBase(UNUSED struct LibraryHeader *lib)
 
 ULONG initBase(UNUSED struct LibraryHeader *lib)
 {
-  kprintf("%s/%ld\n", __FUNCTION__, __LINE__);
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  ENTER();
 
-  kprintf("Global parentBase variable INIT:\n");
-  kprintf("-------------------------------\n");
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+
+  D(DBF_STARTUP, "Global parentBase variable INIT:");
+  D(DBF_STARTUP, "-------------------------------");
 
   // initialize the global variables of the parent libbase
-  kprintf("openssl_cs addr: %08lx\n", &lib->openssl_cs);
+  SHOWPOINTER(DBF_STARTUP, &lib->openssl_cs);
   InitSemaphore(&lib->openssl_cs);
 
   lib->thread_hash = h_new(7, h_allocfunc, h_freefunc);
-  kprintf("thread_hash addr: %08lx (%08lx)\n", &lib->thread_hash, lib->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, &lib->thread_hash);
+  SHOWPOINTER(DBF_STARTUP, lib->thread_hash);
 
   lib->LastThreadGroupID = 0;
-  kprintf("LastThreadGroupID addr: %08lx (%08lx)\n", &lib->LastThreadGroupID, lib->LastThreadGroupID);
+  SHOWPOINTER(DBF_STARTUP, &lib->LastThreadGroupID);
+  SHOWVALUE(DBF_STARTUP, lib->LastThreadGroupID);
 
-  kprintf("-------------------------------\n");
+  D(DBF_STARTUP, "-------------------------------");
 
+  RETURN(TRUE);
   return TRUE;
 }
 
@@ -86,16 +93,19 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
 ULONG closeBase(UNUSED struct LibraryHeader *lib)
 {
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  ENTER();
+
+  SHOWPOINTER(DBF_STARTUP, SysBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld iexec %08lx\n", __FUNCTION__, __LINE__, IExec);
+  SHOWPOINTER(DBF_STARTUP, IExec);
   #endif
 
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
+  SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
 
+  RETURN(TRUE);
   return TRUE;
 }
 
@@ -112,77 +122,84 @@ extern const unsigned int CAST_S_table7[256];
 
 ULONG openBase(struct LibraryHeader *lib)
 {
-  kprintf("Calling openBase(%08lx)\n", lib);
+  ENTER();
 
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, lib);
+
+  SHOWPOINTER(DBF_STARTUP, SysBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld iexec %08lx\n", __FUNCTION__, __LINE__, IExec);
+  SHOWPOINTER(DBF_STARTUP, IExec);
   #endif
 
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #if defined(__amigaos4__)
-  kprintf("%s/%ld idos %08lx\n", __FUNCTION__, __LINE__, IDOS);
+  SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
+
+
+  #if defined(DEBUG)
   {
     int i;
     ULONG checksum;
-      kprintf("CAST TABLE CHECKSUMS in openBase()\n");
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table0[i];
-      }
-      kprintf("CHECKSUM table0: %08lx (addr: %08lx)\n", checksum, &CAST_S_table0[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table1[i];
-      }
-      kprintf("CHECKSUM table1: %08lx (addr: %08lx)\n", checksum, &CAST_S_table1[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table2[i];
-      }
-      kprintf("CHECKSUM table2: %08lx (addr: %08lx)\n", checksum, &CAST_S_table2[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table3[i];
-      }
-      kprintf("CHECKSUM table3: %08lx (addr: %08lx)\n", checksum, &CAST_S_table3[0]);
- 
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//       kprintf("CAST_S_table4[%ld] = %08lx\n", i, CAST_S_table4[i]);
-        checksum = checksum + CAST_S_table4[i];
-      }
-      kprintf("CHECKSUM table4: %08lx (addr: %08lx)\n", checksum, &CAST_S_table4[0]);
-
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table5[%ld] = %08lx\n", i, CAST_S_table5[i]);
-        checksum = checksum + CAST_S_table5[i];
-      }
-      kprintf("CHECKSUM table5: %08lx (addr: %08lx)\n", checksum, &CAST_S_table5[0]);
-
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table6[%ld] = %08lx\n", i, CAST_S_table6[i]);
-        checksum = checksum + CAST_S_table6[i];
-      }
-      kprintf("CHECKSUM table6: %08lx (addr: %08lx)\n", checksum, &CAST_S_table6[0]);
-
-      for(i=0,checksum=0; i < 256; i++)
-      {
-//        kprintf("CAST_S_table7[%ld] = %08lx\n", i, CAST_S_table7[i]);
-        checksum = checksum + CAST_S_table7[i];
-      }
-      kprintf("CHECKSUM table7: %08lx (addr: %08lx)\n", checksum, &CAST_S_table7[0]);
+    D(DBF_STARTUP, "CAST TABLE CHECKSUMS in openBase()");
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table0[i];
     }
+    D(DBF_STARTUP, "CHECKSUM table0: %08lx (addr: %08lx)", checksum, &CAST_S_table0[0]);
  
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table1[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table1: %08lx (addr: %08lx)", checksum, &CAST_S_table1[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table2[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table2: %08lx (addr: %08lx)", checksum, &CAST_S_table2[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table3[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table3: %08lx (addr: %08lx)", checksum, &CAST_S_table3[0]);
+ 
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//     D(DBF_STARTUP, "CAST_S_table4[%ld] = %08lx", i, CAST_S_table4[i]);
+      checksum = checksum + CAST_S_table4[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table4: %08lx (addr: %08lx)", checksum, &CAST_S_table4[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table5[%ld] = %08lx", i, CAST_S_table5[i]);
+      checksum = checksum + CAST_S_table5[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table5: %08lx (addr: %08lx)", checksum, &CAST_S_table5[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table6[%ld] = %08lx", i, CAST_S_table6[i]);
+      checksum = checksum + CAST_S_table6[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table6: %08lx (addr: %08lx)", checksum, &CAST_S_table6[0]);
+
+    for(i=0,checksum=0; i < 256; i++)
+    {
+//      D(DBF_STARTUP, "CAST_S_table7[%ld] = %08lx", i, CAST_S_table7[i]);
+      checksum = checksum + CAST_S_table7[i];
+    }
+    D(DBF_STARTUP, "CHECKSUM table7: %08lx (addr: %08lx)", checksum, &CAST_S_table7[0]);
+  }
+  #endif
+ 
+  RETURN(TRUE);
   return TRUE;
 }

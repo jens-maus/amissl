@@ -110,10 +110,6 @@ void __ctor_math_init(void);
 void __dtor_math_exit(void);
 #endif
 
-#if defined(DEBUG)
-struct LibraryHeader * AMISSL_COMMON_DATA globalBase = NULL;
-#endif
-
 #define LIBNAME        "amissl_v" MKSTR(VERSIONNAME) ".library"
 #define LIB_VERSION    VERSION
 #define LIB_REVISION   AMISSLREVISION
@@ -687,16 +683,16 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
         {
           base->parent = base;
-          kprintf("OpenElfTags success!\n");
+          D(DBF_STARTUP, "OpenElfTags success!");
         }
         else
-          kprintf("OpenElfTags NO success!\n");
+          D(DBF_STARTUP, "OpenElfTags NO success!");
       }
       #endif /* __amigaos4__ */
       #if defined(BASEREL)
       #if defined(__amigaos3__)
       base->a4 = __GetA4();
-      kprintf("a4 %08lx\n", base->a4);
+      SHOWVALUE(DBF_STARTUP, base->a4);
       #endif /* __amigaos3__ */
       #endif /* BASEREL */
       #endif /* MULTIBASE */
@@ -707,23 +703,17 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       __ctor_math_init();
       #endif
 
-      // set the global base
-      #if defined(DEBUG)
-      globalBase = base;
-      #endif
-
       // If we are not running on AmigaOS4 (no stackswap required) we go and
       // do an explicit StackSwap() in case the user wants to make sure we
       // have enough stack for his user functions
       #if defined(DEBUG)
-      kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-      kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-      kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+      SHOWPOINTER(DBF_STARTUP, SysBase);
+      SHOWPOINTER(DBF_STARTUP, DOSBase);
       #endif
       success = callLibFunction(initBase, base);
       #if defined(DEBUG)
-      kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-      kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
+      SHOWPOINTER(DBF_STARTUP, SysBase);
+      SHOWPOINTER(DBF_STARTUP, DOSBase);
       #endif
 
       // check if everything worked out fine
@@ -732,19 +722,19 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         // everything was successfully so lets
         // set the initialized value and contiue
         // with the class open phase
-        kprintf("success: %08lx\n", base);
+        D(DBF_STARTUP, "success: %08lx", base);
 
         #if defined(__amigaos3__) && 0
-        kprintf(".data size %ld %08lx %08lx\n", __data_size, __data_size, &__data_size);
-        kprintf(".bss size  %ld %08lx %08lx\n", __bss_size, __bss_size, &__bss_size);
-        kprintf("dbsize     %ld %08lx\n", __dbsize(), __dbsize());
-        kprintf("a4_init    %08lx %08lx\n", __a4_init, &__a4_init);
-        kprintf("relocs     %08lx %08lx\n", __datadata_relocs, &__datadata_relocs);
-        kprintf("stext      %08lx %08lx\n", _stext, &_stext);
-        kprintf("etext      %08lx %08lx\n", _etext, &_etext);
-        kprintf("sdata      %08lx %08lx\n", _sdata, &_sdata);
-        kprintf("edata      %08lx %08lx\n", _edata, &_edata);
-        kprintf("data size  %08lx %ld\n", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
+        D(DBF_STARTUP, ".data size %ld %08lx %08lx", __data_size, __data_size, &__data_size);
+        D(DBF_STARTUP, ".bss size  %ld %08lx %08lx", __bss_size, __bss_size, &__bss_size);
+        D(DBF_STARTUP, "dbsize     %ld %08lx", __dbsize(), __dbsize());
+        D(DBF_STARTUP, "a4_init    %08lx %08lx", __a4_init, &__a4_init);
+        D(DBF_STARTUP, "relocs     %08lx %08lx", __datadata_relocs, &__datadata_relocs);
+        D(DBF_STARTUP, "stext      %08lx %08lx", _stext, &_stext);
+        D(DBF_STARTUP, "etext      %08lx %08lx", _etext, &_etext);
+        D(DBF_STARTUP, "sdata      %08lx %08lx", _sdata, &_sdata);
+        D(DBF_STARTUP, "edata      %08lx %08lx", _edata, &_edata);
+        D(DBF_STARTUP, "data size  %08lx %ld", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
         #endif
 
         // return the library base as success
@@ -773,14 +763,14 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       #endif
     }
 
-    kprintf("failure\n");
+    E(DBF_STARTUP, "failure");
 
     DeleteLibrary(&base->libBase);
     return NULL;
   }
   else
   {
-    kprintf("segList == NULL, libbase: %08lx\n", base);
+    D(DBF_STARTUP, "segList == NULL, libbase: %08lx", base);
     return base;
   }
 #ifdef __AROS__
@@ -794,7 +784,8 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 {
   BPTR rc;
 
-  kprintf("%s/%ld sys %08lx base %08lx\n", __FUNCTION__, __LINE__, SysBase, base);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, base);
 
   // remove the library base from exec's lib list in advance
   Remove((struct Node *)base);
@@ -815,7 +806,8 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   rc = base->segList;
   DeleteLibrary(&base->libBase);
 
-  kprintf("%s/%ld sys %08lx base %08lx\n", __FUNCTION__, __LINE__, SysBase, base);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, base);
 
   return rc;
 }
@@ -846,7 +838,7 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   #endif
 
   D(DBF_STARTUP, "LibExpunge(): %ld", base->libBase.lib_OpenCnt);
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
 
   // in case our open counter is still > 0, we have
   // to set the late expunge flag and return immediately
@@ -864,20 +856,21 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
     #if defined(__amigaos4__) && defined(MULTIBASE)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
 
-    kprintf("AmiSSL: expunge\n");
+    D(DBF_STARTUP, "AmiSSL: expunge");
     LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)extlib->MainIFace);
 
     (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
     DROPINTERFACE(base->IElf);
     CloseLibrary((struct Library *)base->ElfBase);
     #else
-    kprintf("AmiSSL: expunge\n");
+    D(DBF_STARTUP, "AmiSSL: expunge");
     LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
     #endif
 
     rc = LibDelete(base);
   }
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+
+  SHOWPOINTER(DBF_STARTUP, SysBase);
 
   return rc;
 #ifdef __AROS__
@@ -911,13 +904,11 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   struct LibraryHeader *child = NULL;
   #endif
 
-  kprintf("LIBOPEN(%ld, %08lx), opencnt: %ld\n", version, base, base->libBase.lib_OpenCnt);
+  D(DBF_STARTUP, "LibOpen(%ld, %08lx), opencnt: %ld", version, base, base->libBase.lib_OpenCnt);
 
-  D(DBF_STARTUP, "LibOpen(): %ld", base->libBase.lib_OpenCnt);
   #if defined(DEBUG)
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #endif
 
   // LibOpen(), LibClose() and LibExpunge() are called while the system is in
@@ -945,7 +936,8 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   #else
   child = (struct LibraryHeader *)MakeLibrary((APTR)&LibVectors[0], NULL, NULL, sizeof(*child) + base->dataSize, 0);
   #endif
-  kprintf("%s/%ld child %08lx\n", __FUNCTION__, __LINE__, child);
+
+  SHOWPOINTER(DBF_STARTUP, child);
 
   if(child != NULL)
   {
@@ -981,26 +973,28 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
       if((child->baserelData = (base->IElf->CopyDataSegment)(base->elfHandle, &offset)))
       {
         struct ExtendedLibrary *extlib;
-        kprintf("AmiSSL: Env vector: %08x\n", child->baserelData);
+        SHOWPOINTER(DBF_STARTUP, child->baserelData);
 
         extlib = (struct ExtendedLibrary *)((ULONG)child + child->libBase.lib_PosSize);
         extlib->MainIFace->Data.EnvironmentVector = child->baserelData + offset;
-        kprintf("AmiSSL: Environment vector: %08x\n",extlib->MainIFace->Data.EnvironmentVector);
+
+        SHOWVALUE(DBF_STARTUP, extlib->MainIFace->Data.EnvironmentVector);
 
         if(LIB___UserLibInit((__BASE_OR_IFACE_TYPE)extlib->MainIFace, child) == 0)
         {
-          kprintf("AmiSSL: Returning libBase: %08lx (parent: %08lx)\n", child, child->parent);
+          SHOWPOINTER(DBF_STARTUP, child);
+          SHOWPOINTER(DBF_STARTUP, child->parent);
         }
         else
         {
-          kprintf("AmiSSL: != 0 returned by LIB___UserLibInit()\n");
+          E(DBF_STARTUP, "AmiSSL: != 0 returned by LIB___UserLibInit()");
 
           (base->IElf->FreeDataSegmentCopy)(base->elfHandle, child->baserelData);
         }
       }
       else
       {
-        kprintf("IElf->CopyDataSegment failed (handle %08lx)\n",base->elfHandle);
+        E(DBF_STARTUP, "IElf->CopyDataSegment failed (handle %08lx)", base->elfHandle);
         DeleteLibrary(&child->libBase);
         child = NULL;
       }
@@ -1011,7 +1005,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     CopyMem(base->dataSeg, dataSeg, child->dataSize);
     relocs = __GetDataDataRelocs();
     numRelocs = *relocs++;
-    kprintf("relocate %ld offsets\n", numRelocs);
+    D(DBF_STARTUP, "relocate %ld offsets", numRelocs);
     if(numRelocs != 0)
     {
       LONG dist = (unsigned char *)base->dataSeg - dataSeg;
@@ -1029,7 +1023,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
     dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
-    kprintf("Calling __UserLibInit(%08lx)\n", child);
+    D(DBF_STARTUP, "Calling __UserLibInit(%08lx)", child);
     LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
     #endif // !__amigaos4__
 
@@ -1048,7 +1042,10 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   base->libBase.lib_OpenCnt--;
   #else // MULTIBASE
 
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
+  #if defined(DEBUG)
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
+  #endif
 
   // make sure we have enough stack here
   callLibFunction(openBase, base);
@@ -1060,9 +1057,8 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   ReleaseSemaphore(&base->libSem);
 
   #if defined(DEBUG)
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #endif
 
   return res;
@@ -1094,10 +1090,10 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   BPTR rc = 0;
 
   D(DBF_STARTUP, "LibClose(): %ld", base->libBase.lib_OpenCnt);
+
   #if defined(DEBUG)
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #endif
 
   // free all our private data and stuff.
@@ -1137,7 +1133,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     {
       if(parent->libBase.lib_OpenCnt == 0)
       {
-        kprintf("AmiSSL: delayed expunge\n");
+        W(DBF_STARTUP, "AmiSSL: delayed expunge");
 
         #if defined(__amigaos4__)
         extlib = (struct ExtendedLibrary *)((ULONG)parent + parent->libBase.lib_PosSize);
@@ -1167,9 +1163,8 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   }
 
   #if defined(DEBUG)
-  kprintf("%s/%ld sys %08lx\n", __FUNCTION__, __LINE__, SysBase);
-  kprintf("%s/%ld dos %08lx\n", __FUNCTION__, __LINE__, DOSBase);
-  kprintf("%s/%ld glo %08lx\n", __FUNCTION__, __LINE__, globalBase);
+  SHOWPOINTER(DBF_STARTUP, SysBase);
+  SHOWPOINTER(DBF_STARTUP, DOSBase);
   #endif
 
   return rc;
