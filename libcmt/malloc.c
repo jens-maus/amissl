@@ -14,10 +14,10 @@ malloc(
   ULONG *p;
 
   #if 0
-  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
+  ENTER();
 
-  kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
-  kprintf("__mem_pool addr: %08lx\n", &__mem_pool);
+  SHOWPOINTER(DBF_STARTUP, &__mem_cs);
+  SHOWPOINTER(DBF_STARTUP, &__mem_pool);
   #endif
  
   ObtainSemaphore(&__mem_cs);
@@ -26,5 +26,9 @@ malloc(
   if (p)
     *p++ = n;
   ReleaseSemaphore(&__mem_cs);
+
+  #if 0
+  RETURN(p);
+  #endif
   return p;
 }

@@ -27,7 +27,8 @@ struct HashTable *h_new(long InitialSize,void STDARGS *(*allocator)(long),void S
 
 	if( (new = allocator(sizeof(struct HashTable))) )
 	{
-		//kprintf("Allocating %ld bytes\n",sizeof(struct HashEntry)*InitialSize);
+		D(DBF_STARTUP, "Allocating %ld bytes", sizeof(struct HashEntry)*InitialSize);
+
 		if( (new->HashEntries = allocator(sizeof(struct HashEntry)*InitialSize)) )
 		{
 			memset(new->HashEntries,0,sizeof(struct HashEntry)*InitialSize);
@@ -60,7 +61,7 @@ void *h_insert(struct HashTable *h,long Key,void * UserData)
 	if(h->Locked)
 		return 0;
 
-	//kprintf("Inserting\n");
+	D(DBF_STARTUP, "Inserting");
 
 	if(h->Entries*2 > h->TableSize)
 		if(!grow(h))
@@ -129,7 +130,7 @@ void h_delete(struct HashTable *h,long Key)
 	long i;
 	long start;
 
-	//kprintf("Deleting %08lx\n",Key);
+	D(DBF_STARTUP, "Deleting %08lx", Key);
 
 	start=h1;
 	do
@@ -187,7 +188,7 @@ static void *grow(struct HashTable *h)
 	struct HashEntry *old;
 	long i;
 
-	//kprintf("Growing from %ld entries to",h->TableSize);
+	D(DBF_STARTUP, "Growing from %ld entries to", h->TableSize);
 
 	old = h->HashEntries;
 	if( (h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)*2-1))) )
@@ -195,7 +196,7 @@ static void *grow(struct HashTable *h)
 		i=h->TableSize-1;
 		h->TableSize = (h->TableSize+1)*2-1;
 		memset(h->HashEntries,0,sizeof(struct HashEntry)*h->TableSize);
-		//kprintf("%ld entries\n",h->TableSize);
+		D(DBF_STARTUP, "%ld entries", h->TableSize);
 		for(;i>=0;i--)
 		{
 			if(old[i].Key!=0 && old[i].Key!=1)
@@ -216,7 +217,7 @@ static void shrink(struct HashTable *h)
 	struct HashEntry *old;
 	long i;
 
-	//kprintf("Shrinking from %ld entries to",h->TableSize);
+	D(DBF_STARTUP, "Shrinking from %ld entries to", h->TableSize);
 
 	old = h->HashEntries;
 	if( (h->HashEntries = h->allocator(sizeof(struct HashEntry)*((h->TableSize+1)/2-1))) )
@@ -224,7 +225,7 @@ static void shrink(struct HashTable *h)
 		i=h->TableSize-1;
 		h->TableSize = (h->TableSize+1)/2-1;
 		memset(h->HashEntries,0,sizeof(struct HashEntry)*h->TableSize);
-		//kprintf("%ld entries\n",h->TableSize);
+		D(DBF_STARTUP, "%ld entries", h->TableSize);
 		for(;i>=0;i--)
 		{
 			if(old[i].Key!=0 && old[i].Key!=1)

@@ -60,9 +60,6 @@ socket(
 
 void initialize_socket_errno(AMISSL_STATE *state)
 {
-	kprintf("%s %08lx\n", __FUNCTION__, state);
-
-  {
 	struct TagItem tags[] =
 	{
 		{ SBTM_SETVAL(SBTC_ERRNOLONGPTR), (ULONG)state->errno_ptr },
@@ -71,6 +68,8 @@ void initialize_socket_errno(AMISSL_STATE *state)
 		#endif
 		{ TAG_DONE,                       0                       }
 	};
+
+  ENTER();
 
 #if defined(__amigaos4__)
 	if (!state->socket_errno_initialized)
@@ -116,7 +115,6 @@ void initialize_socket_errno(AMISSL_STATE *state)
 		state->socket_errno_initialized = 1;
 	}
 #endif
-  }
 
-	kprintf("%s done\n", __FUNCTION__);
+	LEAVE();
 }

@@ -24,11 +24,12 @@ LONG __gmt_offset = 0;
 
 void __init_libcmt(void)
 {
-  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
+  ENTER();
 
   // initialize memory stuff
-  kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
-  kprintf("__mem_pool addr: %08lx\n", &__mem_pool);
+  SHOWPOINTER(DBF_STARTUP, &__mem_cs);
+  SHOWPOINTER(DBF_STARTUP, &__mem_pool);
+
   InitSemaphore(&__mem_cs);
 
 #if defined(__amigaos4__)
@@ -38,14 +39,15 @@ void __init_libcmt(void)
 #endif
 
   // initialize file i/o stuff
-  kprintf("__filelist addr: %08lx\n", &__filelist);
-  kprintf("__filelist_cs addr: %08lx\n", &__filelist_cs);
+  SHOWPOINTER(DBF_STARTUP, &__filelist);
+  SHOWPOINTER(DBF_STARTUP, &__filelist_cs);
   NewList((struct List *)&__filelist);
   InitSemaphore(&__filelist_cs);
 
   // initialize clock/locale stuff
-  kprintf("__clock_base addr: %08lx\n", &__clock_base);
-  kprintf("__gmt_offset addr: %08lx\n", &__gmt_offset);
+  SHOWPOINTER(DBF_STARTUP, &__clock_base);
+  SHOWPOINTER(DBF_STARTUP, &__gmt_offset);
+
 #if defined(__amigaos4__)
   if((DOSBase = OpenLibrary("dos.library", 50)) &&
      (LocaleBase = OpenLibrary("locale.library", 50)) &&
@@ -62,11 +64,11 @@ void __init_libcmt(void)
     if((locale = OpenLocale(NULL)) != NULL)
     {
       __gmt_offset = locale->loc_GMTOffset;
-      kprintf("__gmt_offset: %ld\n", __gmt_offset);
+      SHOWVALUE(DBF_STARTUP, __gmt_offset);
       CloseLocale(locale);
     }
     else
-      kprintf("ERROR on OpenLocale()\n");
+      E(DBF_STARTUP, "ERROR on OpenLocale()");
 
     DateStamp(&ds);
 
@@ -74,16 +76,19 @@ void __init_libcmt(void)
                    * CLOCKS_PER_SEC / TICKS_PER_SECOND;
   }
   else
-    kprintf("ERROR on OpenLibrary calls\n");
+    E(DBF_STARTUP, "ERROR on OpenLibrary()");
+
+  LEAVE();
 }
 
 void __free_libcmt(void)
 {
-  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
+  ENTER();
 
   // close helper libs
-  kprintf("__clock_base addr: %08lx\n", &__clock_base);
-  kprintf("__gmt_offset addr: %08lx\n", &__gmt_offset);
+  SHOWPOINTER(DBF_STARTUP, &__clock_base);
+  SHOWPOINTER(DBF_STARTUP, &__gmt_offset);
+
 #if defined(__amigaos4__)
   DropInterface((struct Interface *)ILocale);
   ILocale = NULL;
@@ -95,7 +100,7 @@ void __free_libcmt(void)
   CloseLibrary((struct Library *)DOSBase);
   DOSBase = NULL;
 
-  kprintf("__mem_pool addr: %08lx\n", &__mem_pool);
+  SHOWPOINTER(DBF_STARTUP, &__mem_pool);
   // free memory related stuff
 #ifdef __amigaos4__
   if(__mem_pool)
@@ -104,4 +109,6 @@ void __free_libcmt(void)
   if(__mem_pool)
     DeletePool(__mem_pool);
 #endif
+
+  LEAVE();
 }

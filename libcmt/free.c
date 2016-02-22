@@ -10,14 +10,14 @@ extern void *__mem_pool;
 void free(void *p)
 {
   #if 0
-  kprintf("%s:%ld\n", __FUNCTION__, __LINE__);
+  ENTER();
   #endif
 
   if(p != NULL)
   {
     #if 0
-    kprintf("__mem_cs addr: %08lx\n", &__mem_cs);
-    kprintf("__mem_pool addr: %08lx\n", &__mem_pool);
+    SHOWPOINTER(DBF_STARTUP, &__mem_cs);
+    SHOWPOINTER(DBF_STARTUP, &__mem_pool);
     #endif
 
     ObtainSemaphore(&__mem_cs);
@@ -25,4 +25,8 @@ void free(void *p)
     FreePooled(__mem_pool, p, *(ULONG *)p);
     ReleaseSemaphore(&__mem_cs);
   }
+
+  #if 0
+  LEAVE();
+  #endif
 }
