@@ -1,3 +1,4 @@
+#include <clib/alib_protos.h>
 #include <proto/exec.h>
 #include <proto/dos.h>
 #include <proto/locale.h>
@@ -39,8 +40,8 @@ void __init_libcmt(void)
   // initialize file i/o stuff
   kprintf("__filelist addr: %08lx\n", &__filelist);
   kprintf("__filelist_cs addr: %08lx\n", &__filelist_cs);
-	NewList((struct List *)&__filelist);
-	InitSemaphore(&__filelist_cs);
+  NewList((struct List *)&__filelist);
+  InitSemaphore(&__filelist_cs);
 
   // initialize clock/locale stuff
   kprintf("__clock_base addr: %08lx\n", &__clock_base);
