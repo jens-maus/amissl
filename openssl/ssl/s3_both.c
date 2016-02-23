@@ -268,11 +268,13 @@ int ssl3_get_finished(SSL *s, int a, int b)
         goto f_err;
     }
 
+    W(DBF_ALWAYS, "BEFORE CRYPTO_memcmp(): %08lx %08lx %ld", p, s->s3->tmp.peer_finish_md, i);
     if (CRYPTO_memcmp(p, s->s3->tmp.peer_finish_md, i) != 0) {
         al = SSL_AD_DECRYPT_ERROR;
         SSLerr(SSL_F_SSL3_GET_FINISHED, SSL_R_DIGEST_CHECK_FAILED);
         goto f_err;
     }
+    W(DBF_ALWAYS, "AFTER CRYPTO_memcmp()");
 
     /*
      * Copy the finished so we can use it for renegotiation checks
