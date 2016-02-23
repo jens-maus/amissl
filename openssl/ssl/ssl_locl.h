@@ -841,7 +841,7 @@ typedef struct ssl3_buf_freelist_entry_st {
 
 extern SSL3_ENC_METHOD ssl3_undef_enc_method;
 OPENSSL_EXTERN const SSL_CIPHER ssl2_ciphers[];
-OPENSSL_EXTERN SSL_CIPHER ssl3_ciphers[];
+OPENSSL_EXTERN const SSL_CIPHER ssl3_ciphers[];
 
 SSL_METHOD *ssl_bad_method(int ver);
 

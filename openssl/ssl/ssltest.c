@@ -213,8 +213,8 @@
 # define TEST_SERVER_CERT "\\openssl\\apps\\server.pem"
 # define TEST_CLIENT_CERT "\\openssl\\apps\\client.pem"
 # elif defined(OPENSSL_SYS_AMIGA)
-#  define TEST_SERVER_CERT "/apps/server.pem"
-#  define TEST_CLIENT_CERT "/apps/client.pem"
+#  define TEST_SERVER_CERT "//openssl/apps/server.pem"
+#  define TEST_CLIENT_CERT "//openssl/apps/client.pem"
 #else
 # define TEST_SERVER_CERT "../apps/server.pem"
 # define TEST_CLIENT_CERT "../apps/client.pem"
