@@ -2932,7 +2932,16 @@ int ssl3_num_ciphers(void)
 const SSL_CIPHER *ssl3_get_cipher(unsigned int u)
 {
     if (u < SSL3_NUM_CIPHERS)
+    {
+        #if defined(DEBUG)
+        const SSL_CIPHER *ciph = &(ssl3_ciphers[SSL3_NUM_CIPHERS - 1 - u]);
+        const SSL_CIPHER *ciph2 = &(ssl3_ciphers[0]);
+        D(DBF_ALWAYS, "ciph2: %08lx %08lx - '%s'", ciph2, ciph2->id, ciph2->name);
+        D(DBF_ALWAYS, "ssl3_ciphers[%ld] = %08lx - id: %08lx - str: '%s'", SSL3_NUM_CIPHERS - 1 - u, &(ssl3_ciphers[SSL3_NUM_CIPHERS - 1 - u]), ciph->id, ciph->name);
+        #endif
+
         return (&(ssl3_ciphers[SSL3_NUM_CIPHERS - 1 - u]));
+    }
     else
         return (NULL);
 }

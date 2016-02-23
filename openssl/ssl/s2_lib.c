@@ -306,7 +306,16 @@ int ssl2_num_ciphers(void)
 const SSL_CIPHER *ssl2_get_cipher(unsigned int u)
 {
     if (u < SSL2_NUM_CIPHERS)
+    {
+        #if defined(DEBUG)
+        const SSL_CIPHER *ciph = &(ssl2_ciphers[SSL2_NUM_CIPHERS - 1 - u]);
+        const SSL_CIPHER *ciph2 = &(ssl2_ciphers[0]);
+        D(DBF_ALWAYS, "ciph2: %08lx %08lx - '%s'", ciph2, ciph2->id, ciph2->name);
+        D(DBF_ALWAYS, "ssl2_ciphers[%ld] = %08lx - id: %08lx - str: '%s'", SSL2_NUM_CIPHERS - 1 - u, &(ssl2_ciphers[SSL2_NUM_CIPHERS - 1 - u]), ciph->id, ciph->name);
+        #endif
+
         return (&(ssl2_ciphers[SSL2_NUM_CIPHERS - 1 - u]));
+    }
     else
         return (NULL);
 }
