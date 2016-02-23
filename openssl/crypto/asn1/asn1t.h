@@ -98,17 +98,10 @@ extern "C" {
 
 /* Macros for start and end of ASN1_ITEM definition */
 
-#  ifndef OPENSSL_SYS_AMIGA
 #  define ASN1_ITEM_start(itname) \
         const ASN1_ITEM * itname##_it(void) \
         { \
                 static const ASN1_ITEM local_it = {
-#  else
-#  define ASN1_ITEM_start(itname) \
-        const ASN1_ITEM * itname##_it(void) \
-        { \
-                static const ASN1_ITEM local_it = {{0, 0, 0} /* amissl_pad */,
-#  endif /* !OPENSSL_SYS_AMIGA */
 
 #  define ASN1_ITEM_end(itname) \
                 }; \
@@ -572,9 +565,6 @@ struct ASN1_ADB_TABLE_st {
 /* This is the actual ASN1 item itself */
 
 struct ASN1_ITEM_st {
-# ifdef OPENSSL_SYS_AMIGA
-    char amissl_pad[3];
-# endif /* OPENSSL_SYS_AMIGA */
     char itype;                 /* The item type, primitive, SEQUENCE, CHOICE
                                  * or extern */
     long utype;                 /* underlying type */
@@ -654,9 +644,6 @@ struct ASN1_ITEM_st {
 
 struct ASN1_TLC_st {
     char valid;                 /* Values below are valid */
-#ifdef OPENSSL_SYS_AMIGA
-    char amissl_pad[3];
-#endif /* OPENSSL_SYS_AMIGA */
     int ret;                    /* return value */
     long plen;                  /* length */
     int ptag;                   /* class value */

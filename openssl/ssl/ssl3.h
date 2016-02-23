@@ -503,9 +503,6 @@ typedef struct ssl3_state_st {
      * processed by ssl3_read_bytes:
      */
     unsigned char alert_fragment[2];
-# ifdef OPENSSL_SYS_AMIGA
-    char amissl_pad1[2];
-# endif
     unsigned int alert_fragment_len;
     unsigned char handshake_fragment[4];
     unsigned int handshake_fragment_len;
@@ -536,9 +533,6 @@ typedef struct ssl3_state_st {
      */
     int alert_dispatch;
     unsigned char send_alert[2];
-# ifdef OPENSSL_SYS_AMIGA
-    char amissl_pad2[2];
-# endif
     /*
      * This flag is set when we should renegotiate ASAP, basically when there
      * is no more data in the read or write buffers
