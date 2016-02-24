@@ -405,7 +405,7 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 $(DEBUG))
+	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 $(DEBUG) $(DEBUGSYM))
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)
