@@ -69,7 +69,7 @@ static int ecdsa_sign_setup(EC_KEY *eckey, BN_CTX *ctx_in, BIGNUM **kinvp,
 static int ecdsa_do_verify(const unsigned char *dgst, int dgst_len,
                            const ECDSA_SIG *sig, EC_KEY *eckey);
 
-static ECDSA_METHOD openssl_ecdsa_meth = {
+static const ECDSA_METHOD openssl_ecdsa_meth = {
     "OpenSSL ECDSA method",
     ecdsa_do_sign,
     ecdsa_sign_setup,

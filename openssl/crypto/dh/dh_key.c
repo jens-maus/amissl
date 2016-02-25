@@ -108,7 +108,7 @@ int DH_compute_key_padded(unsigned char *key, const BIGNUM *pub_key, DH *dh)
     return rv + pad;
 }
 
-static DH_METHOD dh_ossl = {
+static const DH_METHOD dh_ossl = {
     "OpenSSL DH Method",
     generate_key,
     compute_key,

@@ -71,7 +71,7 @@ static int buffer_free(BIO *data);
 static long buffer_callback_ctrl(BIO *h, int cmd, bio_info_cb *fp);
 #define DEFAULT_BUFFER_SIZE     4096
 
-static BIO_METHOD methods_buffer = {
+static const BIO_METHOD methods_buffer = {
     BIO_TYPE_BUFFER,
     "buffer",
     buffer_write,

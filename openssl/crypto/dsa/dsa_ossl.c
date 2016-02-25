@@ -74,7 +74,7 @@ static int dsa_do_verify(const unsigned char *dgst, int dgst_len,
 static int dsa_init(DSA *dsa);
 static int dsa_finish(DSA *dsa);
 
-static DSA_METHOD openssl_dsa_meth = {
+static const DSA_METHOD openssl_dsa_meth = {
     "OpenSSL DSA method",
     dsa_do_sign,
     dsa_sign_setup,

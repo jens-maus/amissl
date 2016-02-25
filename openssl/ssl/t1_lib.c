@@ -3479,7 +3479,7 @@ static const tls12_lookup tls12_sig[] = {
     {EVP_PKEY_EC, TLSEXT_signature_ecdsa}
 };
 
-static int tls12_find_id(int nid, tls12_lookup *table, size_t tlen)
+static int tls12_find_id(int nid, const tls12_lookup *table, size_t tlen)
 {
     size_t i;
     for (i = 0; i < tlen; i++) {
@@ -3489,7 +3489,7 @@ static int tls12_find_id(int nid, tls12_lookup *table, size_t tlen)
     return -1;
 }
 
-static int tls12_find_nid(int id, tls12_lookup *table, size_t tlen)
+static int tls12_find_nid(int id, const tls12_lookup *table, size_t tlen)
 {
     size_t i;
     for (i = 0; i < tlen; i++) {

@@ -183,7 +183,7 @@ static int int_new_ex_data(int class_index, void *obj, CRYPTO_EX_DATA *ad);
 static int int_dup_ex_data(int class_index, CRYPTO_EX_DATA *to,
                            CRYPTO_EX_DATA *from);
 static void int_free_ex_data(int class_index, void *obj, CRYPTO_EX_DATA *ad);
-static CRYPTO_EX_DATA_IMPL impl_default = {
+static const CRYPTO_EX_DATA_IMPL impl_default = {
     int_new_class,
     int_cleanup,
     int_get_new_index,

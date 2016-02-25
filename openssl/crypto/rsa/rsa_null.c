@@ -84,7 +84,7 @@ static int RSA_null_mod_exp(const BIGNUM *r0, const BIGNUM *i, RSA *rsa);
 #endif
 static int RSA_null_init(RSA *rsa);
 static int RSA_null_finish(RSA *rsa);
-static RSA_METHOD rsa_null_meth = {
+static const RSA_METHOD rsa_null_meth = {
     "Null RSA",
     RSA_null_public_encrypt,
     RSA_null_public_decrypt,

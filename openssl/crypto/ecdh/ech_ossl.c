@@ -83,7 +83,7 @@ static int ecdh_compute_key(void *out, size_t len, const EC_POINT *pub_key,
                             void *(*KDF) (const void *in, size_t inlen,
                                           void *out, size_t *outlen));
 
-static ECDH_METHOD openssl_ecdh_meth = {
+static const ECDH_METHOD openssl_ecdh_meth = {
     "OpenSSL ECDH method",
     ecdh_compute_key,
 #if 0

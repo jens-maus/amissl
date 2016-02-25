@@ -129,7 +129,7 @@ static int RSA_eay_mod_exp(BIGNUM *r0, const BIGNUM *i, RSA *rsa,
                            BN_CTX *ctx);
 static int RSA_eay_init(RSA *rsa);
 static int RSA_eay_finish(RSA *rsa);
-static RSA_METHOD rsa_pkcs1_eay_meth = {
+static const RSA_METHOD rsa_pkcs1_eay_meth = {
     "Eric Young's PKCS#1 RSA",
     RSA_eay_public_encrypt,
     RSA_eay_public_decrypt,     /* signature verification */

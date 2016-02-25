@@ -144,9 +144,9 @@ static const SRTP_PROTECTION_PROFILE srtp_known_profiles[] = {
 };
 
 static int find_profile_by_name(char *profile_name,
-                                SRTP_PROTECTION_PROFILE **pptr, unsigned len)
+                                const SRTP_PROTECTION_PROFILE **pptr, unsigned len)
 {
-    SRTP_PROTECTION_PROFILE *p;
+    const SRTP_PROTECTION_PROFILE *p;
 
     p = srtp_known_profiles;
     while (p->name) {
@@ -169,7 +169,7 @@ static int ssl_ctx_make_profiles(const char *profiles_string,
     char *col;
     char *ptr = (char *)profiles_string;
 
-    SRTP_PROTECTION_PROFILE *p;
+    const SRTP_PROTECTION_PROFILE *p;
 
     if (!(profiles = sk_SRTP_PROTECTION_PROFILE_new_null())) {
         SSLerr(SSL_F_SSL_CTX_MAKE_PROFILES,

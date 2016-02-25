@@ -3209,7 +3209,7 @@ typedef struct {
     int nid;                    /* Curve NID */
 } EC_NIST_NAME;
 
-static EC_NIST_NAME nist_curves[] = {
+static const EC_NIST_NAME nist_curves[] = {
     {"B-163", NID_sect163r2},
     {"B-233", NID_sect233r1},
     {"B-283", NID_sect283r1},

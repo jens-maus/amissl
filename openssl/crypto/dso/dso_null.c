@@ -66,7 +66,7 @@
 #include "cryptlib.h"
 #include <openssl/dso.h>
 
-static DSO_METHOD dso_meth_null = {
+static const DSO_METHOD dso_meth_null = {
     "NULL shared library method",
     NULL,                       /* load */
     NULL,                       /* unload */
