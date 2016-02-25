@@ -182,7 +182,7 @@ memcmp(const void *ptr1, const void *ptr2, size_t len)
 		const char * m1 = ptr1;
 		const char * m2 = ptr2;
 
-		#if 1
+		#if 0
 		{
 			do
 			{

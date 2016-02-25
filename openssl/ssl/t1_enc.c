@@ -960,7 +960,6 @@ int tls1_final_finish_mac(SSL *s,
     int err = 0;
     const EVP_MD *md;
 
-D(DBF_ALWAYS, "tls1_final_finish_mac(): %ld '%s'", slen, str);
     q = buf;
 
     if (s->s3->handshake_buffer)

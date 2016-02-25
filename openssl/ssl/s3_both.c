@@ -170,8 +170,6 @@ int ssl3_send_finished(SSL *s, int a, int b, const char *sender, int slen)
                                                   s->s3->tmp.finish_md);
         if (i <= 0)
             return 0;
-        
-        D(DBF_ALWAYS, "ssl3_send_finished()!!!");
         s->s3->tmp.finish_md_len = i;
         memcpy(p, s->s3->tmp.finish_md, i);
         l = i;

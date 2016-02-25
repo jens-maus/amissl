@@ -186,7 +186,7 @@ memchr(const void * ptr, int val, size_t len)
 
 	if(len > 0)
 	{
-		#if 1
+		#if 0
 		{
 			val &= 255;
 
