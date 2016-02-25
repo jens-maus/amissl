@@ -839,18 +839,18 @@ typedef struct ssl3_buf_freelist_entry_st {
 } SSL3_BUF_FREELIST_ENTRY;
 # endif
 
-extern SSL3_ENC_METHOD ssl3_undef_enc_method;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD ssl3_undef_enc_method;
 OPENSSL_EXTERN const SSL_CIPHER ssl2_ciphers[];
 OPENSSL_EXTERN const SSL_CIPHER ssl3_ciphers[];
 
 SSL_METHOD *ssl_bad_method(int ver);
 
-extern SSL3_ENC_METHOD TLSv1_enc_data;
-extern SSL3_ENC_METHOD TLSv1_1_enc_data;
-extern SSL3_ENC_METHOD TLSv1_2_enc_data;
-extern SSL3_ENC_METHOD SSLv3_enc_data;
-extern SSL3_ENC_METHOD DTLSv1_enc_data;
-extern SSL3_ENC_METHOD DTLSv1_2_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_1_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_2_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD SSLv3_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD DTLSv1_enc_data;
+extern OPENSSL_GLOBAL const SSL3_ENC_METHOD DTLSv1_2_enc_data;
 
 # define IMPLEMENT_tls_meth_func(version, func_name, s_accept, s_connect, \
                                 s_get_meth, enc_data) \

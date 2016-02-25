@@ -132,7 +132,7 @@ static int ssl_check_clienthello_tlsext_early(SSL *s);
 int ssl_check_serverhello_tlsext(SSL *s);
 #endif
 
-SSL3_ENC_METHOD TLSv1_enc_data = {
+OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_enc_data = {
     tls1_enc,
     tls1_mac,
     tls1_setup_key_block,
@@ -151,7 +151,7 @@ SSL3_ENC_METHOD TLSv1_enc_data = {
     ssl3_handshake_write
 };
 
-SSL3_ENC_METHOD TLSv1_1_enc_data = {
+OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_1_enc_data = {
     tls1_enc,
     tls1_mac,
     tls1_setup_key_block,
@@ -170,7 +170,7 @@ SSL3_ENC_METHOD TLSv1_1_enc_data = {
     ssl3_handshake_write
 };
 
-SSL3_ENC_METHOD TLSv1_2_enc_data = {
+OPENSSL_GLOBAL const SSL3_ENC_METHOD TLSv1_2_enc_data = {
     tls1_enc,
     tls1_mac,
     tls1_setup_key_block,
@@ -225,7 +225,7 @@ void tls1_clear(SSL *s)
 
 #ifndef OPENSSL_NO_EC
 
-static int nid_list[] = {
+static const int nid_list[] = {
     NID_sect163k1,              /* sect163k1 (1) */
     NID_sect163r1,              /* sect163r1 (2) */
     NID_sect163r2,              /* sect163r2 (3) */
@@ -1012,7 +1012,7 @@ static int tls1_check_cert_param(SSL *s, X509 *x, int set_ee_md)
                 tlsext_sigalg_dsa(md) \
                 tlsext_sigalg_ecdsa(md)
 
-static unsigned char tls12_sigalgs[] = {
+static const unsigned char tls12_sigalgs[] = {
 # ifndef OPENSSL_NO_SHA512
     tlsext_sigalg(TLSEXT_hash_sha512)
         tlsext_sigalg(TLSEXT_hash_sha384)
@@ -1027,7 +1027,7 @@ static unsigned char tls12_sigalgs[] = {
 };
 
 # ifndef OPENSSL_NO_ECDSA
-static unsigned char suiteb_sigalgs[] = {
+static const unsigned char suiteb_sigalgs[] = {
     tlsext_sigalg_ecdsa(TLSEXT_hash_sha256)
         tlsext_sigalg_ecdsa(TLSEXT_hash_sha384)
 };
@@ -3464,7 +3464,7 @@ typedef struct {
     int id;
 } tls12_lookup;
 
-static tls12_lookup tls12_md[] = {
+static const tls12_lookup tls12_md[] = {
     {NID_md5, TLSEXT_hash_md5},
     {NID_sha1, TLSEXT_hash_sha1},
     {NID_sha224, TLSEXT_hash_sha224},
@@ -3473,7 +3473,7 @@ static tls12_lookup tls12_md[] = {
     {NID_sha512, TLSEXT_hash_sha512}
 };
 
-static tls12_lookup tls12_sig[] = {
+static const tls12_lookup tls12_sig[] = {
     {EVP_PKEY_RSA, TLSEXT_signature_rsa},
     {EVP_PKEY_DSA, TLSEXT_signature_dsa},
     {EVP_PKEY_EC, TLSEXT_signature_ecdsa}

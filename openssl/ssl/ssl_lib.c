@@ -162,7 +162,7 @@
 
 const char *SSL_version_str = OPENSSL_VERSION_TEXT;
 
-SSL3_ENC_METHOD ssl3_undef_enc_method = {
+OPENSSL_GLOBAL const SSL3_ENC_METHOD ssl3_undef_enc_method = {
     /*
      * evil casts, but these functions are only called if there's a library
      * bug
@@ -1468,7 +1468,7 @@ int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk,
      */
     if (p != q) {
         if (empty_reneg_info_scsv) {
-            static SSL_CIPHER scsv = {
+            static const SSL_CIPHER scsv = {
                 0, NULL, SSL3_CK_SCSV, 0, 0, 0, 0, 0, 0, 0, 0, 0
             };
             j = put_cb(&scsv, p);
@@ -1479,7 +1479,7 @@ int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk,
 #endif
         }
         if (s->mode & SSL_MODE_SEND_FALLBACK_SCSV) {
-            static SSL_CIPHER scsv = {
+            static const SSL_CIPHER scsv = {
                 0, NULL, SSL3_CK_FALLBACK_SCSV, 0, 0, 0, 0, 0, 0, 0, 0, 0
             };
             j = put_cb(&scsv, p);

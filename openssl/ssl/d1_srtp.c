@@ -121,7 +121,7 @@
 
 #ifndef OPENSSL_NO_SRTP
 
-static SRTP_PROTECTION_PROFILE srtp_known_profiles[] = {
+static const SRTP_PROTECTION_PROFILE srtp_known_profiles[] = {
     {
      "SRTP_AES128_CM_SHA1_80",
      SRTP_AES128_CM_SHA1_80,
