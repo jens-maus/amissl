@@ -1,5 +1,0 @@
-Fixme:
-
-* solve the incompatibilities in the PPC stubs for the m68k version
-* Make sure that the library uses libcmt's putc macro and not clib2
-* Expunge code for OS4 lib

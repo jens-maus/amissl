@@ -678,13 +678,13 @@ my %table=(
 "uClinux-dist64","$ENV{'CC'}:\$(CFLAGS)::-D_REENTRANT::\$(LDFLAGS) \$(LDLIBS):SIXTY_FOUR_BIT_LONG:${no_asm}:$ENV{'LIBSSL_dlfcn'}:linux-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR):$ENV{'RANLIB'}::",
 
 ##### Amiga OS3 (GCC)
-"amiga-os3","m68k-amigaos-gcc::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"amiga-os3","m68k-amigaos-gcc::::AMIGA::THIRTY_TWO_BIT BN_LLONG RC4_CHAR EXPORT_VAR_AS_FN::",
 
 ##### Amiga OS4 (GCC)
-"amiga-os4","ppc-amigaos-gcc-4.0.3::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"amiga-os4","ppc-amigaos-gcc-4.0.3::::AMIGA::THIRTY_TWO_BIT BN_LLONG RC4_CHAR EXPORT_VAR_AS_FN::",
 
 ##### Amiga MorphOS (GCC)
-"amiga-mos","ppc-morphos-gcc::::AMIGA:THIRTY_TWO_BIT:EXPORT_VAR_AS_FN::",
+"amiga-mos","ppc-morphos-gcc::::AMIGA::THIRTY_TWO_BIT BN_LLONG RC4_CHAR EXPORT_VAR_AS_FN::",
 
 );
 
