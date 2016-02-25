@@ -580,7 +580,7 @@ memmove(void *dest, const void * src, size_t len)
 		char * to = dest;
 		const char * from = src;
 
-		#if 0
+		#if 1
 		{
 			if(from < to && to < from + len)
 			{

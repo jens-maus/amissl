@@ -148,7 +148,7 @@ memset(void *ptr, int val, size_t len)
 	}
 	#endif /* CHECK_FOR_NULL_POINTERS */
 
-	#if 0
+	#if 1
 	{
 		while(len-- > 0)
 			(*m++) = val;

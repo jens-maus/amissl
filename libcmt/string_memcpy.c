@@ -354,7 +354,7 @@ memcpy(void *dst, const void *src, size_t len)
 		assert((to)   >= (from)+len ||
 		       (from) >= (to  )+len);
 
-		#if 0
+		#if 1
 		{
 			while(len-- > 0)
 				(*to++) = (*from++);
