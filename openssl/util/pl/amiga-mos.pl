@@ -19,7 +19,7 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -noixemul -mcpu=powerpc -mstrict-align -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DTHIRTY_TWO_BITS -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
+$cflags.=" -noixemul -mcpu=powerpc -mstrict-align -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
 $app_cflag="-I\$(AmiSSL)/openssl";
 $lib_cflag="-mbaserel -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
