@@ -658,6 +658,8 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
 
       #if defined(MULTIBASE)
       #if defined(__amigaos3__)
+      DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 39);
+
       base->parent   = base;
       base->dataSeg  = __GetDataSeg();
       base->dataSize = __GetDataSize();
@@ -834,7 +836,7 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
 
   // in case our open counter is still > 0, we have
   // to set the late expunge flag and return immediately
-  if(base->libBase.lib_OpenCnt
+  if(base->libBase.lib_OpenCnt != 0
 #ifdef MULTIBASE
      || base != child
 #endif // MULTIBASE
@@ -1106,7 +1108,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   {
     #ifdef MULTIBASE
     struct LibraryHeader *parent = base->parent;
-    BOOL exp_parent = (parent->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
+    BOOL expunge_parent = (parent->libBase.lib_Flags & LIBF_DELEXP) != 0 ? TRUE : FALSE;
 
     /* release child base */
     #if defined(__amigaos4__)
@@ -1121,7 +1123,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     #endif
 
     parent->libBase.lib_OpenCnt--;
-    if(exp_parent)
+    if(expunge_parent == TRUE)
     {
       if(parent->libBase.lib_OpenCnt == 0)
       {
