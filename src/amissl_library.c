@@ -435,21 +435,39 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
   else
     W(DBF_STARTUP, "No thread_hash");
 
-#ifdef __amigaos4__
-  DropInterface((struct Interface *)IUtility);
-  IUtility = NULL;
-  DropInterface((struct Interface *)IIntuition);
-  IIntuition = NULL;
-  DropInterface((struct Interface *)IDOS);
-  IDOS = NULL;
+#if defined(__amigaos4__)
+  if(IUtility != NULL)
+  {
+    DropInterface((struct Interface *)IUtility);
+    IUtility = NULL;
+  }
+  if(IIntuition != NULL)
+  {
+    DropInterface((struct Interface *)IIntuition);
+    IIntuition = NULL;
+  }
+  if(IDOS != NULL)
+  {
+    DropInterface((struct Interface *)IDOS);
+    IDOS = NULL;
+  }
 #endif
 
-  CloseLibrary((struct Library *)UtilityBase);
-  UtilityBase = NULL;
-  CloseLibrary((struct Library *)IntuitionBase);
-  IntuitionBase = NULL;
-  CloseLibrary((struct Library *)DOSBase);
-  DOSBase = NULL;
+  if(UtilityBase != NULL)
+  {
+    CloseLibrary((struct Library *)UtilityBase);
+    UtilityBase = NULL;
+  }
+  if(IntuitionBase != NULL)
+  {
+    CloseLibrary((struct Library *)IntuitionBase);
+    IntuitionBase = NULL;
+  }
+  if(DOSBase != NULL)
+  {
+    CloseLibrary((struct Library *)DOSBase);
+    DOSBase = NULL;
+  }
 
   CRYPTO_set_locking_callback(NULL);
 
