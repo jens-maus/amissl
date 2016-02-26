@@ -162,6 +162,10 @@ static const SHA_LONG K256[64] = {
 #  define Ch(x,y,z)       (((x) & (y)) ^ ((~(x)) & (z)))
 #  define Maj(x,y,z)      (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
 
+#if defined(OPENSSL_SYS_AMIGA) && defined(__amigaos3__)
+ #define OPENSSL_SMALL_FOOTPRINT 1
+#endif
+
 #  ifdef OPENSSL_SMALL_FOOTPRINT
 
 static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
