@@ -962,6 +962,8 @@ int tls1_final_finish_mac(SSL *s,
 
     q = buf;
 
+    W(DBF_ALWAYS, "ENTER tls1_final_finish_mac");
+
     if (s->s3->handshake_buffer)
         if (!ssl3_digest_cached_records(s))
             return 0;
@@ -971,6 +973,7 @@ int tls1_final_finish_mac(SSL *s,
     for (idx = 0; ssl_get_handshake_digest(idx, &mask, &md); idx++) {
         if (mask & ssl_get_algorithm2(s)) {
             int hashsize = EVP_MD_size(md);
+            W(DBF_ALWAYS, "hashsize=%ld; name=%s", hashsize, EVP_MD_name(md));
             EVP_MD_CTX *hdgst = s->s3->handshake_dgst[idx];
             if (!hdgst || hashsize < 0
                 || hashsize > (int)(sizeof buf - (size_t)(q - buf))) {
@@ -997,6 +1000,7 @@ int tls1_final_finish_mac(SSL *s,
 
     OPENSSL_cleanse(buf, (int)(q - buf));
     OPENSSL_cleanse(buf2, sizeof(buf2));
+    W(DBF_ALWAYS, "EXIT tls1_final_finish_mac err=%ld; q-buf=%ld", err, (int)(q - buf));
     if (err)
         return 0;
     else
