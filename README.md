@@ -1,4 +1,4 @@
-# AmiSSL – OpenSSL-based Library for Amiga systems
+# AmiSSL library – OpenSSL for Amiga systems
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic
