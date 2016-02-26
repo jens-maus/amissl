@@ -973,8 +973,8 @@ int tls1_final_finish_mac(SSL *s,
     for (idx = 0; ssl_get_handshake_digest(idx, &mask, &md); idx++) {
         if (mask & ssl_get_algorithm2(s)) {
             int hashsize = EVP_MD_size(md);
-            W(DBF_ALWAYS, "hashsize=%ld; name=%s", hashsize, EVP_MD_name(md));
             EVP_MD_CTX *hdgst = s->s3->handshake_dgst[idx];
+            W(DBF_ALWAYS, "hashsize=%ld; name=%s", hashsize, EVP_MD_name(md));
             if (!hdgst || hashsize < 0
                 || hashsize > (int)(sizeof buf - (size_t)(q - buf))) {
                 /*
