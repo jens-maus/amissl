@@ -167,7 +167,7 @@ GCCVER    = 4
 # Common compiler/linker flags
 WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachable-code
 OPTFLAGS = -O3 -fomit-frame-pointer
-DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
+DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
 INCLUDE  = -I./include
 CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
@@ -175,7 +175,7 @@ CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
            -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
-           $(WARN) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(INCLUDE)
+           $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
 LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
@@ -232,6 +232,7 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU     = -m68020-60 -msoft-float
+  OPTFLAGS = -O3
   CFLAGS  += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lc -lm -lgcc -lamiga
@@ -405,7 +406,7 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 $(DEBUG) $(DEBUGSYM))
+	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 $(DEBUG))
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)

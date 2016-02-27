@@ -68,6 +68,7 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU	    = -m68020-60 -msoft-float
+  OPTFLAGS = -O3
   CFLAGS  += -resident32 -I$(AmiSSL)/include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -lm
