@@ -162,10 +162,6 @@ static const SHA_LONG K256[64] = {
 #  define Ch(x,y,z)       (((x) & (y)) ^ ((~(x)) & (z)))
 #  define Maj(x,y,z)      (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
 
-#if defined(OPENSSL_SYS_AMIGA) && defined(__amigaos3__)
- #define OPENSSL_SMALL_FOOTPRINT 1
-#endif
-
 #  ifdef OPENSSL_SMALL_FOOTPRINT
 
 static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
@@ -312,6 +308,16 @@ static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
         } else {
             SHA_LONG l;
 
+            E(DBF_ALWAYS, "LITTLE ENDIAN BRANCH!!!: is_endian.little = %ld, in=%08lx, (in %% 4) = %ld, sizeof(SHA_LONG) = %ld", is_endian.little, in, ((size_t)in % 4), sizeof(SHA_LONG));
+            E(DBF_ALWAYS, "a=%08lx b=%08lx c=%08lx d=%08lx e=%08lx f=%08lx g=%08lx h=%08lx", a, b, c, d, e, f, g, h);
+            #if defined(DEBUG)
+            for(i=0; i < 16; i++)
+            {
+              const unsigned char *d = data + (i*4);
+              D(DBF_ALWAYS, "%ld: %02lx %02lx %02lx %02lx", i, d[0], d[1], d[2], d[3]);
+            }
+            #endif
+
             HOST_c2l(data, l);
             T1 = X[0] = l;
             ROUND_00_15(0, a, b, c, d, e, f, g, h);
@@ -360,6 +366,12 @@ static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
             HOST_c2l(data, l);
             T1 = X[15] = l;
             ROUND_00_15(15, b, c, d, e, f, g, h, a);
+
+            E(DBF_ALWAYS, "a=%08lx b=%08lx c=%08lx d=%08lx e=%08lx f=%08lx g=%08lx h=%08lx", a, b, c, d, e, f, g, h);
+            #if defined(DEBUG)
+            for(i=0; i < 16; i++)
+              D(DBF_ALWAYS, "X[%ld] = %08lx", i, X[i]);
+            #endif
         }
 
         for (i = 16; i < 64; i += 8) {
@@ -372,6 +384,8 @@ static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
             ROUND_16_63(i + 6, c, d, e, f, g, h, a, b, X);
             ROUND_16_63(i + 7, b, c, d, e, f, g, h, a, X);
         }
+
+        E(DBF_ALWAYS, "FINAL: a=%08lx b=%08lx c=%08lx d=%08lx e=%08lx f=%08lx g=%08lx h=%08lx", a, b, c, d, e, f, g, h);
 
         ctx->h[0] += a;
         ctx->h[1] += b;
