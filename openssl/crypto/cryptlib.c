@@ -1049,12 +1049,8 @@ int CRYPTO_memcmp(const void *in_a, const void *in_b, size_t len)
     const unsigned char *b = in_b;
     unsigned char x = 0;
 
-    W(DBF_ALWAYS, "IN CRYPTO_memcmp(): %08lx %08lx %ld", a, b, len);
     for (i = 0; i < len; i++)
-    {
-      W(DBF_ALWAYS, "a[%ld]=%02lx == b[%ld]=%02lx", i, a[i], i, b[i]);
         x |= a[i] ^ b[i];
-    }
 
     return x;
 }
