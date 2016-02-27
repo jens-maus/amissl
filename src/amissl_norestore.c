@@ -31,15 +31,15 @@ STDARGS AMISSL_STATE *GetAmiSSLState(void)
 
   ENTER();
 
-  SHOWPOINTER(DBF_STARTUP, &ownBase);
-  SHOWPOINTER(DBF_STARTUP, ownBase);
-  SHOWPOINTER(DBF_STARTUP, &parentBase);
-  SHOWPOINTER(DBF_STARTUP, parentBase);
-  SHOWPOINTER(DBF_STARTUP, SysBase);
-  SHOWPOINTER(DBF_STARTUP, &parentBase->openssl_cs);
+  SHOWPOINTER(DBF_BASEREL, &ownBase);
+  SHOWPOINTER(DBF_BASEREL, ownBase);
+  SHOWPOINTER(DBF_BASEREL, &parentBase);
+  SHOWPOINTER(DBF_BASEREL, parentBase);
+  SHOWPOINTER(DBF_BASEREL, SysBase);
+  SHOWPOINTER(DBF_BASEREL, &parentBase->openssl_cs);
 
   ObtainSemaphore(&parentBase->openssl_cs);
-  D(DBF_STARTUP, "h_find(parentBase->thread_hash=%08lx)", parentBase->thread_hash);
+  D(DBF_BASEREL, "h_find(parentBase->thread_hash=%08lx)", parentBase->thread_hash);
   ret = (AMISSL_STATE *)h_find(parentBase->thread_hash, (long)FindTask(NULL));
   ReleaseSemaphore(&parentBase->openssl_cs);
 

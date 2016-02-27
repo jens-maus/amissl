@@ -137,7 +137,7 @@ void SetupDebug(const char *libName, int version, int revision)
       {
         { "always",   DBF_ALWAYS  },
         { "startup",  DBF_STARTUP },
-        { "utf",      DBF_UTF     },
+        { "baserel",  DBF_BASEREL },
         { "all",      DBF_ALL     },
         { NULL,       0           }
       };
@@ -238,7 +238,7 @@ void SetupDebug(const char *libName, int version, int revision)
     CloseLibrary((struct Library *)DOSBase);
   }
 
-  _DBPRINTF("set debug classes/flags (env:codesets.library.debug): %08lx/%08lx\n", debug_classes, debug_flags);
+  _DBPRINTF("set debug classes/flags (env:amissl.debug): %08lx/%08lx\n", debug_classes, debug_flags);
   _DBPRINTF("** Normal processing follows ***************************************\n");
 }
 
