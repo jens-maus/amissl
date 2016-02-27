@@ -165,14 +165,11 @@ int ssl3_send_finished(SSL *s, int a, int b, const char *sender, int slen)
     if (s->state == a) {
         p = ssl_handshake_start(s);
 
-	for (l=0; l<slen; l++) W(DBF_ALWAYS, "BEFORE final_finish_mac: %02lx %02lx [%ld]", ((unsigned char *)sender)[l], ((unsigned char *)s->s3->tmp.finish_md)[l], l);
-
         i = s->method->ssl3_enc->final_finish_mac(s,
                                                   sender, slen,
                                                   s->s3->tmp.finish_md);
         if (i <= 0)
             return 0;
-	for (l=0; l<i; l++) W(DBF_ALWAYS, "AFTER final_finish_mac: %02lx %02lx [%ld]", ((unsigned char *)sender)[l], ((unsigned char *)s->s3->tmp.finish_md)[l], l);
         s->s3->tmp.finish_md_len = i;
         memcpy(p, s->s3->tmp.finish_md, i);
         l = i;

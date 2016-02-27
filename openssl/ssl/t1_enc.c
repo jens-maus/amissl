@@ -962,8 +962,6 @@ int tls1_final_finish_mac(SSL *s,
 
     q = buf;
 
-    W(DBF_ALWAYS, "ENTER tls1_final_finish_mac");
-
     if (s->s3->handshake_buffer)
         if (!ssl3_digest_cached_records(s))
             return 0;
@@ -1000,7 +998,6 @@ int tls1_final_finish_mac(SSL *s,
 
     OPENSSL_cleanse(buf, (int)(q - buf));
     OPENSSL_cleanse(buf2, sizeof(buf2));
-    W(DBF_ALWAYS, "EXIT tls1_final_finish_mac err=%ld; q-buf=%ld", err, (int)(q - buf));
     if (err)
         return 0;
     else
