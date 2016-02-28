@@ -233,6 +233,16 @@
 #      define HOST_l2c(l,c)      (*((unsigned int *)(c))=(l), (c)+=4, (l))
 #     endif
 #    endif
+#   elif defined(__mc68000)
+#    define HOST_c2l(c,l)   ({ asm ("moveb %1@+,%0\n"    \
+                                    "lsll  #8,%0\n"      \
+                                    "moveb %1@+,%0\n"    \
+                                    "lsll  #8,%0\n"      \
+                                    "moveb %1@+,%0\n"    \
+                                    "lsll  #8,%0\n"      \
+                                    "moveb %1@+,%0\n"    \
+                                    : "=d" (l), "=a" (c) \
+                                    : "0" (l), "1" (c)); })
 #   endif
 #  endif
 #  if defined(__s390__) || defined(__s390x__)
