@@ -232,7 +232,6 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU     = -m68020-60 -msoft-float
-  OPTFLAGS = -O3
   CFLAGS  += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -ldebug -lc -lm -lgcc -lamiga
@@ -284,7 +283,6 @@ ifeq ($(OS), aros-i386)
   endif
 
   # Compiler/Linker flags
-  OPTFLAGS = -O3 -fomit-frame-pointer
   CFLAGS += -Wno-pointer-sign -DNO_INLINE_STDARG -D__BSD_VISIBLE=1
   LDLIBS += -lamiga -larossupport -larosc
 
@@ -303,7 +301,6 @@ ifeq ($(OS), aros-ppc)
   endif
 
   # Compiler/Linker flags
-  OPTFLAGS = -O3 -fomit-frame-pointer
   CFLAGS += -Wno-pointer-sign -DNO_INLINE_STDARG -D__BSD_VISIBLE=1
   LDLIBS += -lamiga -larossupport -larosc
 
@@ -322,7 +319,6 @@ ifeq ($(OS), aros-x86_64)
   endif
 
   # Compiler/Linker flags
-  OPTFLAGS = -O3 -fomit-frame-pointer
   CFLAGS += -Wno-pointer-sign -DNO_INLINE_STDARG -D__BSD_VISIBLE=1
   LDLIBS += -lamiga -larossupport -larosc
 
@@ -341,7 +337,6 @@ ifeq ($(OS), aros-arm)
   endif
 
   # Compiler/Linker flags
-  OPTFLAGS = -O3 -fomit-frame-pointer
   CFLAGS += -Wno-pointer-sign -DNO_INLINE_STDARG -D__BSD_VISIBLE=1
   LDLIBS += -lamiga -larossupport -larosc
 
