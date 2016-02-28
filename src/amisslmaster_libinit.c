@@ -13,6 +13,7 @@
 #include "amisslmaster_glue.h"
 
 #include <internal/debug.h>
+#include <internal/amissl.h>
 
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
@@ -68,12 +69,8 @@ LONG _start(void)
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
-#define MIN_STACKSIZE 65536
-
-#if defined(__amigaos4__)
 // stack cookie for shell v45+
 static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
-#endif
 
 /****************************************************************************/
 

@@ -364,9 +364,32 @@ void program_name(char *in, char *out, int size)
 }
 #elif defined(OPENSSL_SYS_AMIGA)
 #include <proto/dos.h>
+#include <internal/amissl.h>
 
-long __stack = 65536;
-unsigned int __stack_size = 65536;
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+// stack cookie for shell v45+
+static const char USED_VAR openssl_stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
+
+#if defined(__amigaos4__)
+  long __stack_size = MIN_STACKSIZE;        // set the minimum startup stack for clib2
+  long __default_pool_size = 128*1024;   // set the pool & puddle size for the
+  long __default_puddle_size = 32*1024;  // AllocPool() functions to something more reasonable.
+#elif defined(__SASC) || defined(__GNUC__)
+  #if defined(__libnix__) || defined(__SASC)
+  // GCC (libnix) supports the same as SAS/C!
+  long NEAR __stack = MIN_STACKSIZE;
+  long NEAR __buffsize = 8192;
+  long NEAR _MSTEP = 16384;
+  #else
+  long __stack_size = MIN_STACKSIZE;    // set the minimum startup stack for clib2
+  #endif
+#elif defined(__VBCC__) /* starting with VBCC 0.8 release */
+  long __stack = MIN_STACKSIZE;
+#else
+  #error "initial stack/memory specification failed"
+#endif
 
 void program_name(char *in, char *out, int size)
 {

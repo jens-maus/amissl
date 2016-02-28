@@ -5,6 +5,9 @@
 #include <time.h>
 #include <internal/amissl_compiler.h>
 
+// default stack size for applications
+#define MIN_STACKSIZE 65536
+
 typedef struct {
 	struct Library *AmiSSLBase;
 #ifdef __amigaos4__
