@@ -233,32 +233,9 @@
 #      define HOST_l2c(l,c)      (*((unsigned int *)(c))=(l), (c)+=4, (l))
 #     endif
 #    endif
-#   elif defined(__mc68020) || defined(__mc68030) || defined(__mc68040) || defined(__mc68060)
-#    define HOST_c2l(c,l) ((l)=*((const unsigned int *)(c)), (c)+=4, (l))
-#    define HOST_l2c(l,c) (*((unsigned int *)(c))=(l), (c)+=4, (l))
-#   elif defined(__mc68000)
-#    define HOST_c2l(c,l)   ({ asm ("moveb %0@+,%1\n"    \
-                                    "lsll  #8,%1\n"      \
-                                    "moveb %0@+,%1\n"    \
-                                    "lsll  #8,%1\n"      \
-                                    "moveb %0@+,%1\n"    \
-                                    "lsll  #8,%1\n"      \
-                                    "moveb %0@+,%1\n"    \
-                                    : "=a" (c), "=d" (l) \
-                                    : "0" (c)); })
-#    define HOST_l2c(l,c)   ({ asm ("roll  #8,%2\n"      \
-                                    "moveb %2,%0@+\n"    \
-                                    "roll  #8,%2\n"      \
-                                    "moveb %2,%0@+\n"    \
-                                    "roll  #8,%2\n"      \
-                                    "moveb %2,%0@+\n"    \
-                                    "roll  #8,%2\n"      \
-                                    "moveb %2,%0@+\n"    \
-                                    : "=a" (c)           \
-                                    : "0" (c), "d" (l)); })
 #   endif
 #  endif
-#  if defined(__s390__) || defined(__s390x__)
+#  if defined(__s390__) || defined(__s390x__) || defined(__mc68020)
 #   define HOST_c2l(c,l) ((l)=*((const unsigned int *)(c)), (c)+=4, (l))
 #   define HOST_l2c(l,c) (*((unsigned int *)(c))=(l), (c)+=4, (l))
 #  endif
