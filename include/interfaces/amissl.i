@@ -221,7 +221,15 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_parse
 	    FPTR IAmiSSL_ASN1_parse_dump
 	    FPTR IAmiSSL_ASN1_tag2str
+	    FPTR IAmiSSL_i2d_ASN1_HEADER
+	    FPTR IAmiSSL_d2i_ASN1_HEADER
+	    FPTR IAmiSSL_ASN1_HEADER_new
+	    FPTR IAmiSSL_ASN1_HEADER_free
 	    FPTR IAmiSSL_ASN1_UNIVERSALSTRING_to_string
+	    FPTR IAmiSSL_X509_asn1_meth
+	    FPTR IAmiSSL_RSAPrivateKey_asn1_meth
+	    FPTR IAmiSSL_ASN1_IA5STRING_asn1_meth
+	    FPTR IAmiSSL_ASN1_BIT_STRING_asn1_meth
 	    FPTR IAmiSSL_ASN1_TYPE_set_octetstring
 	    FPTR IAmiSSL_ASN1_TYPE_get_octetstring
 	    FPTR IAmiSSL_ASN1_TYPE_set_int_octetstring
@@ -962,6 +970,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OBJ_ln2nid
 	    FPTR IAmiSSL_OBJ_sn2nid
 	    FPTR IAmiSSL_OBJ_cmp
+	    FPTR IAmiSSL_OBJ_bsearch
 	    FPTR IAmiSSL_OBJ_new_nid
 	    FPTR IAmiSSL_OBJ_add_object
 	    FPTR IAmiSSL_OBJ_create
@@ -1000,6 +1009,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OCSP_basic_add1_status
 	    FPTR IAmiSSL_OCSP_basic_add1_cert
 	    FPTR IAmiSSL_OCSP_basic_sign
+	    FPTR IAmiSSL_ASN1_STRING_encode
 	    FPTR IAmiSSL_OCSP_crlID_new
 	    FPTR IAmiSSL_OCSP_accept_responses_new
 	    FPTR IAmiSSL_OCSP_archive_cutoff_new
@@ -1127,11 +1137,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_PEM_read_bio
 	    FPTR IAmiSSL_PEM_write_bio
 	    FPTR IAmiSSL_PEM_bytes_read_bio
-	    FPTR IAmiSSL_PEM_ASN1_read
 	    FPTR IAmiSSL_PEM_ASN1_read_bio
-	    FPTR IAmiSSL_PEM_ASN1_write
 	    FPTR IAmiSSL_PEM_ASN1_write_bio
-	    FPTR IAmiSSL_PEM_X509_INFO_read
 	    FPTR IAmiSSL_PEM_X509_INFO_read_bio
 	    FPTR IAmiSSL_PEM_X509_INFO_write_bio
 	    FPTR IAmiSSL_PEM_SealInit
@@ -1142,14 +1149,12 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_PEM_SignFinal
 	    FPTR IAmiSSL_PEM_def_callback
 	    FPTR IAmiSSL_PEM_proc_type
-	    FPTR IAmiSSL_PEM_read
 	    FPTR IAmiSSL_PEM_dek_info
 	    FPTR IAmiSSL_PEM_read_bio_X509
 	    FPTR IAmiSSL_PEM_write_bio_X509
 	    FPTR IAmiSSL_PEM_read_bio_X509_AUX
 	    FPTR IAmiSSL_PEM_write_bio_X509_AUX
 	    FPTR IAmiSSL_PEM_read_bio_X509_REQ
-	    FPTR IAmiSSL_PEM_write
 	    FPTR IAmiSSL_PEM_write_bio_X509_REQ
 	    FPTR IAmiSSL_PEM_write_bio_X509_REQ_NEW
 	    FPTR IAmiSSL_PEM_read_bio_X509_CRL
@@ -1442,8 +1447,9 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SSL_SESSION_set_timeout
 	    FPTR IAmiSSL_SSL_copy_session_id
 	    FPTR IAmiSSL_SSL_SESSION_new
+	    FPTR IAmiSSL_SSL_SESSION_hash
+	    FPTR IAmiSSL_SSL_SESSION_cmp
 	    FPTR IAmiSSL_SSL_SESSION_print
-	    FPTR IAmiSSL_SSL_SESSION_print_fp
 	    FPTR IAmiSSL_SSL_SESSION_free
 	    FPTR IAmiSSL_i2d_SSL_SESSION
 	    FPTR IAmiSSL_SSL_set_session
@@ -1581,8 +1587,12 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_sk_set_cmp_func
 	    FPTR IAmiSSL_sk_dup
 	    FPTR IAmiSSL_sk_sort
-	    FPTR IAmiSSL_FIPS_mode
 	    FPTR IAmiSSL_sk_is_sorted
+	    FPTR IAmiSSL_ms_time_new
+	    FPTR IAmiSSL_ms_time_free
+	    FPTR IAmiSSL_ms_time_get
+	    FPTR IAmiSSL_ms_time_diff
+	    FPTR IAmiSSL_ms_time_cmp
 	    FPTR IAmiSSL_TXT_DB_read
 	    FPTR IAmiSSL_TXT_DB_write
 	    FPTR IAmiSSL_TXT_DB_create_index
@@ -2260,6 +2270,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_AES_cfb128_encrypt
 	    FPTR IAmiSSL_AES_cfb1_encrypt
 	    FPTR IAmiSSL_AES_cfb8_encrypt
+	    FPTR IAmiSSL_AES_cfbr_encrypt_block
 	    FPTR IAmiSSL_AES_ofb128_encrypt
 	    FPTR IAmiSSL_AES_ctr128_encrypt
 	    FPTR IAmiSSL_BF_set_key
@@ -2277,6 +2288,9 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_CAST_cbc_encrypt
 	    FPTR IAmiSSL_CAST_cfb64_encrypt
 	    FPTR IAmiSSL_CAST_ofb64_encrypt
+	    FPTR IAmiSSL__shadow_DES_check_key
+	    FPTR IAmiSSL__shadow_DES_rw_mode
+	    FPTR IAmiSSL_DES_options
 	    FPTR IAmiSSL_DES_ecb3_encrypt
 	    FPTR IAmiSSL_DES_cbc_cksum
 	    FPTR IAmiSSL_DES_cbc_encrypt
@@ -2293,6 +2307,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_DES_ede3_cfb64_encrypt
 	    FPTR IAmiSSL_DES_ede3_cfb_encrypt
 	    FPTR IAmiSSL_DES_ede3_ofb64_encrypt
+	    FPTR IAmiSSL_DES_xwhite_in2out
 	    FPTR IAmiSSL_DES_enc_read
 	    FPTR IAmiSSL_DES_enc_write
 	    FPTR IAmiSSL_DES_fcrypt
@@ -2329,6 +2344,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL__ossl_old_des_ede3_cbc_encrypt
 	    FPTR IAmiSSL__ossl_old_des_ede3_cfb64_encrypt
 	    FPTR IAmiSSL__ossl_old_des_ede3_ofb64_encrypt
+	    FPTR IAmiSSL__ossl_old_des_xwhite_in2out
 	    FPTR IAmiSSL__ossl_old_des_enc_read
 	    FPTR IAmiSSL__ossl_old_des_enc_write
 	    FPTR IAmiSSL__ossl_old_des_fcrypt
@@ -2517,7 +2533,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_UI_read_string_lib
 	    FPTR IAmiSSL_UI_write_string_lib
 	    FPTR IAmiSSL_HMAC_CTX_set_flags
-	    FPTR IAmiSSL_private_RC4_set_key
 	    FPTR IAmiSSL_X509_check_ca
 	    FPTR IAmiSSL_PROXY_POLICY_new
 	    FPTR IAmiSSL_PROXY_POLICY_free
@@ -2529,6 +2544,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_d2i_PROXY_CERT_INFO_EXTENSION
 	    FPTR IAmiSSL_i2d_PROXY_CERT_INFO_EXTENSION
 	    FPTR IAmiSSL_PROXY_CERT_INFO_EXTENSION_it
+	    FPTR IAmiSSL_FIPS_mode
+	    FPTR IAmiSSL_private_RC4_set_key
 	    FPTR IAmiSSL_BN_mod_exp_mont_consttime
 	    FPTR IAmiSSL_BN_MONT_CTX_set_locked
 	    FPTR IAmiSSL_PKCS1_MGF1

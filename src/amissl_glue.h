@@ -1596,7 +1596,6 @@ void SAVEDS ASM LIB_sk_zero(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
 int  SAVEDS ASM (*LIB_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, int (*c)(const void *, const void *))))(const void *, const void *);
 _STACK * SAVEDS ASM LIB_sk_dup(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
 void SAVEDS ASM LIB_sk_sort(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
-int SAVEDS ASM LIB_FIPS_mode(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_sk_is_sorted(REG(a6, __IFACE_OR_BASE), REG(a0, const _STACK * st));
 TXT_DB * SAVEDS ASM LIB_TXT_DB_read(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * in), REG(d0, int num));
 long SAVEDS ASM LIB_TXT_DB_write(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * out), REG(a1, TXT_DB * db));
@@ -2532,7 +2531,6 @@ void SAVEDS ASM LIB_SHA1_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, SHA_CTX * c
 int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
 int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
 void SAVEDS ASM LIB_HMAC_CTX_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx), REG(d0, unsigned long flags));
-void SAVEDS ASM LIB_private_RC4_set_key(REG(a6, __IFACE_OR_BASE), REG(a0, RC4_KEY * key), REG(d0, int len), REG(a1, const unsigned char * data));
 int SAVEDS ASM LIB_X509_check_ca(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 PROXY_POLICY * SAVEDS ASM LIB_PROXY_POLICY_new(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_PROXY_POLICY_free(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_POLICY * a));
@@ -2544,6 +2542,8 @@ void SAVEDS ASM LIB_PROXY_CERT_INFO_EXTENSION_free(REG(a6, __IFACE_OR_BASE), REG
 PROXY_CERT_INFO_EXTENSION * SAVEDS ASM LIB_d2i_PROXY_CERT_INFO_EXTENSION(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_CERT_INFO_EXTENSION ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
 int SAVEDS ASM LIB_i2d_PROXY_CERT_INFO_EXTENSION(REG(a6, __IFACE_OR_BASE), REG(a0, PROXY_CERT_INFO_EXTENSION * a), REG(a1, unsigned char ** out));
 const ASN1_ITEM * SAVEDS ASM LIB_PROXY_CERT_INFO_EXTENSION_it(REG(a6, __IFACE_OR_BASE));
+int SAVEDS ASM LIB_FIPS_mode(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_private_RC4_set_key(REG(a6, __IFACE_OR_BASE), REG(a0, RC4_KEY * key), REG(d0, int len), REG(a1, const unsigned char * data));
 int SAVEDS ASM LIB_BN_mod_exp_mont_consttime(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNUM * rr), REG(a1, const BIGNUM * a), REG(a2, const BIGNUM * p), REG(a3, const BIGNUM * m), REG(d0, BN_CTX * ctx), REG(d1, BN_MONT_CTX * in_mont));
 BN_MONT_CTX * SAVEDS ASM LIB_BN_MONT_CTX_set_locked(REG(a6, __IFACE_OR_BASE), REG(a0, BN_MONT_CTX ** pmont), REG(d0, int lock), REG(a1, const BIGNUM * mod), REG(a2, BN_CTX * ctx));
 int SAVEDS ASM LIB_PKCS1_MGF1(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char * mask), REG(d0, long len), REG(a1, const unsigned char * seed), REG(d1, long seedlen), REG(a2, const EVP_MD * dgst));
@@ -4164,7 +4164,15 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(ASN1_parse) \
     LFUNC_FA_(ASN1_parse_dump) \
     LFUNC_FA_(ASN1_tag2str) \
+    LFUNC_FA_(UNIMPLEMENTED) /* i2d_ASN1_HEADER */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* d2i_ASN1_HEADER */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ASN1_HEADER_new */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ASN1_HEADER_free */ \
     LFUNC_FA_(ASN1_UNIVERSALSTRING_to_string) \
+    LFUNC_FA_(UNIMPLEMENTED) /* X509_asn1_meth */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* RSAPrivateKey_asn1_meth */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ASN1_IA5STRING_asn1_meth */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ASN1_BIT_STRING_asn1_meth */ \
     LFUNC_FA_(ASN1_TYPE_set_octetstring) \
     LFUNC_FA_(ASN1_TYPE_get_octetstring) \
     LFUNC_FA_(ASN1_TYPE_set_int_octetstring) \
@@ -4905,6 +4913,7 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(OBJ_ln2nid) \
     LFUNC_FA_(OBJ_sn2nid) \
     LFUNC_FA_(OBJ_cmp) \
+    LFUNC_FA_(UNIMPLEMENTED) /* OBJ_bsearch */ \
     LFUNC_FA_(OBJ_new_nid) \
     LFUNC_FA_(OBJ_add_object) \
     LFUNC_FA_(OBJ_create) \
@@ -4943,6 +4952,7 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(OCSP_basic_add1_status) \
     LFUNC_FA_(OCSP_basic_add1_cert) \
     LFUNC_FA_(OCSP_basic_sign) \
+    LFUNC_FA_(UNIMPLEMENTED) /* ASN1_STRING_encode */ \
     LFUNC_FA_(OCSP_crlID_new) \
     LFUNC_FA_(OCSP_accept_responses_new) \
     LFUNC_FA_(OCSP_archive_cutoff_new) \
@@ -5070,11 +5080,8 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(PEM_read_bio) \
     LFUNC_FA_(PEM_write_bio) \
     LFUNC_FA_(PEM_bytes_read_bio) \
-    LFUNC_FA_(UNIMPLEMENTED) /* PEM_ASN1_read */ \
     LFUNC_FA_(PEM_ASN1_read_bio) \
-    LFUNC_FA_(UNIMPLEMENTED) /* PEM_ASN1_write */ \
     LFUNC_FA_(PEM_ASN1_write_bio) \
-    LFUNC_FA_(UNIMPLEMENTED) /* PEM_X509_INFO_read */ \
     LFUNC_FA_(PEM_X509_INFO_read_bio) \
     LFUNC_FA_(PEM_X509_INFO_write_bio) \
     LFUNC_FA_(PEM_SealInit) \
@@ -5085,14 +5092,12 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(PEM_SignFinal) \
     LFUNC_FA_(PEM_def_callback) \
     LFUNC_FA_(PEM_proc_type) \
-    LFUNC_FA_(UNIMPLEMENTED) /* PEM_read */ \
     LFUNC_FA_(PEM_dek_info) \
     LFUNC_FA_(PEM_read_bio_X509) \
     LFUNC_FA_(PEM_write_bio_X509) \
     LFUNC_FA_(PEM_read_bio_X509_AUX) \
     LFUNC_FA_(PEM_write_bio_X509_AUX) \
     LFUNC_FA_(PEM_read_bio_X509_REQ) \
-    LFUNC_FA_(UNIMPLEMENTED) /* PEM_write */ \
     LFUNC_FA_(PEM_write_bio_X509_REQ) \
     LFUNC_FA_(PEM_write_bio_X509_REQ_NEW) \
     LFUNC_FA_(PEM_read_bio_X509_CRL) \
@@ -5385,8 +5390,9 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(SSL_SESSION_set_timeout) \
     LFUNC_FA_(SSL_copy_session_id) \
     LFUNC_FA_(SSL_SESSION_new) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_SESSION_hash */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_SESSION_cmp */ \
     LFUNC_FA_(SSL_SESSION_print) \
-    LFUNC_FA_(UNIMPLEMENTED) /* SSL_SESSION_print_fp */ \
     LFUNC_FA_(SSL_SESSION_free) \
     LFUNC_FA_(i2d_SSL_SESSION) \
     LFUNC_FA_(SSL_set_session) \
@@ -5524,8 +5530,12 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(sk_set_cmp_func) \
     LFUNC_FA_(sk_dup) \
     LFUNC_FA_(sk_sort) \
-    LFUNC_FA_(FIPS_mode) \
     LFUNC_FA_(sk_is_sorted) \
+    LFUNC_FA_(UNIMPLEMENTED) /* ms_time_new */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ms_time_free */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ms_time_get */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ms_time_diff */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* ms_time_cmp */ \
     LFUNC_FA_(TXT_DB_read) \
     LFUNC_FA_(TXT_DB_write) \
     LFUNC_FA_(TXT_DB_create_index) \
@@ -6203,6 +6213,7 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(AES_cfb128_encrypt) \
     LFUNC_FA_(AES_cfb1_encrypt) \
     LFUNC_FA_(AES_cfb8_encrypt) \
+    LFUNC_FA_(UNIMPLEMENTED) /* AES_cfbr_encrypt_block */ \
     LFUNC_FA_(AES_ofb128_encrypt) \
     LFUNC_FA_(AES_ctr128_encrypt) \
     LFUNC_FA_(BF_set_key) \
@@ -6220,6 +6231,9 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(CAST_cbc_encrypt) \
     LFUNC_FA_(CAST_cfb64_encrypt) \
     LFUNC_FA_(CAST_ofb64_encrypt) \
+    LFUNC_FA_(UNIMPLEMENTED) /* _shadow_DES_check_key */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* _shadow_DES_rw_mode */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* DES_options */ \
     LFUNC_FA_(DES_ecb3_encrypt) \
     LFUNC_FA_(DES_cbc_cksum) \
     LFUNC_FA_(DES_cbc_encrypt) \
@@ -6236,6 +6250,7 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(DES_ede3_cfb64_encrypt) \
     LFUNC_FA_(DES_ede3_cfb_encrypt) \
     LFUNC_FA_(DES_ede3_ofb64_encrypt) \
+    LFUNC_FA_(UNIMPLEMENTED) /* DES_xwhite_in2out */ \
     LFUNC_FA_(DES_enc_read) \
     LFUNC_FA_(DES_enc_write) \
     LFUNC_FA_(DES_fcrypt) \
@@ -6272,6 +6287,7 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(_ossl_old_des_ede3_cbc_encrypt) \
     LFUNC_FA_(_ossl_old_des_ede3_cfb64_encrypt) \
     LFUNC_FA_(_ossl_old_des_ede3_ofb64_encrypt) \
+    LFUNC_FA_(UNIMPLEMENTED) /* _ossl_old_des_xwhite_in2out */ \
     LFUNC_FA_(_ossl_old_des_enc_read) \
     LFUNC_FA_(_ossl_old_des_enc_write) \
     LFUNC_FA_(_ossl_old_des_fcrypt) \
@@ -6460,7 +6476,6 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(UI_read_string_lib) \
     LFUNC_FA_(UI_write_string_lib) \
     LFUNC_FA_(HMAC_CTX_set_flags) \
-    LFUNC_FA_(private_RC4_set_key) \
     LFUNC_FA_(X509_check_ca) \
     LFUNC_FA_(PROXY_POLICY_new) \
     LFUNC_FA_(PROXY_POLICY_free) \
@@ -6472,6 +6487,8 @@ int SAVEDS ASM LIB_SSL_get_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), R
     LFUNC_FA_(d2i_PROXY_CERT_INFO_EXTENSION) \
     LFUNC_FA_(i2d_PROXY_CERT_INFO_EXTENSION) \
     LFUNC_FA_(PROXY_CERT_INFO_EXTENSION_it) \
+    LFUNC_FA_(FIPS_mode) \
+    LFUNC_FA_(private_RC4_set_key) \
     LFUNC_FA_(BN_mod_exp_mont_consttime) \
     LFUNC_FA_(BN_MONT_CTX_set_locked) \
     LFUNC_FA_(PKCS1_MGF1) \

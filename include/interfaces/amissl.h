@@ -245,7 +245,15 @@ struct AmiSSLIFace
 	int APICALL (*ASN1_parse)(struct AmiSSLIFace *Self, BIO * bp, unsigned char * pp, long len, int indent);
 	int APICALL (*ASN1_parse_dump)(struct AmiSSLIFace *Self, BIO * bp, unsigned char * pp, long len, int indent, int dump);
 	const char * APICALL (*ASN1_tag2str)(struct AmiSSLIFace *Self, int tag);
+	int APICALL (*i2d_ASN1_HEADER)(struct AmiSSLIFace *Self, ASN1_HEADER * a, unsigned char ** pp);
+	ASN1_HEADER * APICALL (*d2i_ASN1_HEADER)(struct AmiSSLIFace *Self, ASN1_HEADER ** a, unsigned char ** pp, long length);
+	ASN1_HEADER * APICALL (*ASN1_HEADER_new)(struct AmiSSLIFace *Self);
+	void APICALL (*ASN1_HEADER_free)(struct AmiSSLIFace *Self, ASN1_HEADER * a);
 	int APICALL (*ASN1_UNIVERSALSTRING_to_string)(struct AmiSSLIFace *Self, ASN1_UNIVERSALSTRING * s);
+	ASN1_METHOD * APICALL (*X509_asn1_meth)(struct AmiSSLIFace *Self);
+	ASN1_METHOD * APICALL (*RSAPrivateKey_asn1_meth)(struct AmiSSLIFace *Self);
+	ASN1_METHOD * APICALL (*ASN1_IA5STRING_asn1_meth)(struct AmiSSLIFace *Self);
+	ASN1_METHOD * APICALL (*ASN1_BIT_STRING_asn1_meth)(struct AmiSSLIFace *Self);
 	int APICALL (*ASN1_TYPE_set_octetstring)(struct AmiSSLIFace *Self, ASN1_TYPE * a, unsigned char * data, int len);
 	int APICALL (*ASN1_TYPE_get_octetstring)(struct AmiSSLIFace *Self, ASN1_TYPE * a, unsigned char * data, int max_len);
 	int APICALL (*ASN1_TYPE_set_int_octetstring)(struct AmiSSLIFace *Self, ASN1_TYPE * a, long num, unsigned char * data, int len);
@@ -986,6 +994,7 @@ struct AmiSSLIFace
 	int APICALL (*OBJ_ln2nid)(struct AmiSSLIFace *Self, const char * s);
 	int APICALL (*OBJ_sn2nid)(struct AmiSSLIFace *Self, const char * s);
 	int APICALL (*OBJ_cmp)(struct AmiSSLIFace *Self, const ASN1_OBJECT * a, const ASN1_OBJECT * b);
+	const char * APICALL (*OBJ_bsearch)(struct AmiSSLIFace *Self, const char * key, const char * base, int num, size size, (*cmp)(const void *, const void *));
 	int APICALL (*OBJ_new_nid)(struct AmiSSLIFace *Self, int num);
 	int APICALL (*OBJ_add_object)(struct AmiSSLIFace *Self, const ASN1_OBJECT * obj);
 	int APICALL (*OBJ_create)(struct AmiSSLIFace *Self, const char * oid, const char * sn, const char * ln);
@@ -1024,6 +1033,7 @@ struct AmiSSLIFace
 	OCSP_SINGLERESP * APICALL (*OCSP_basic_add1_status)(struct AmiSSLIFace *Self, OCSP_BASICRESP * rsp, OCSP_CERTID * cid, int status, int reason, ASN1_TIME * revtime, ASN1_TIME * thisupd, ASN1_TIME * nextupd);
 	int APICALL (*OCSP_basic_add1_cert)(struct AmiSSLIFace *Self, OCSP_BASICRESP * resp, X509 * cert);
 	int APICALL (*OCSP_basic_sign)(struct AmiSSLIFace *Self, OCSP_BASICRESP * brsp, X509 * signer, EVP_PKEY * key, const EVP_MD * dgst, STACK_OF(X509) * certs, unsigned long flags);
+	ASN1_STRING * APICALL (*ASN1_STRING_encode)(struct AmiSSLIFace *Self, ASN1_STRING * s, int (*i2d)(void), char * data, STACK_OF(ASN1_OT) * sk);
 	X509_EXTENSION * APICALL (*OCSP_crlID_new)(struct AmiSSLIFace *Self, char * url, long * n, char * tim);
 	X509_EXTENSION * APICALL (*OCSP_accept_responses_new)(struct AmiSSLIFace *Self, char ** oids);
 	X509_EXTENSION * APICALL (*OCSP_archive_cutoff_new)(struct AmiSSLIFace *Self, char * tim);
@@ -1151,11 +1161,8 @@ struct AmiSSLIFace
 	int APICALL (*PEM_read_bio)(struct AmiSSLIFace *Self, BIO * bp, char ** name, char ** header, unsigned char ** data, long * len);
 	int APICALL (*PEM_write_bio)(struct AmiSSLIFace *Self, BIO * bp, const char * name, const char * hdr, const unsigned char * data, long len);
 	int APICALL (*PEM_bytes_read_bio)(struct AmiSSLIFace *Self, unsigned char ** pdata, long * plen, char ** pnm, const char * name, BIO * bp, pem_password_cb * cb, void * u);
-	void * APICALL (*PEM_ASN1_read)(struct AmiSSLIFace *Self, d2i_of_void * d2i, const char * name, FILE * fp, void ** x, pem_password_cb * cb, void * u);
 	void * APICALL (*PEM_ASN1_read_bio)(struct AmiSSLIFace *Self, d2i_of_void * d2i, const char * name, BIO * bp, void ** x, pem_password_cb * cb, void * u);
-	int APICALL (*PEM_ASN1_write)(struct AmiSSLIFace *Self, i2d_of_void * i2d, const char * name, FILE * fp, char * x, const EVP_CIPHER * enc, unsigned char * kstr, int klen, pem_password_cb * callback, void * u);
 	int APICALL (*PEM_ASN1_write_bio)(struct AmiSSLIFace *Self, i2d_of_void * i2d, const char * name, BIO * bp, char * x, const EVP_CIPHER * enc, unsigned char * kstr, int klen, pem_password_cb * cb, void * u);
-	STACK_OF(X509_INFO) * APICALL (*PEM_X509_INFO_read)(struct AmiSSLIFace *Self, FILE * fp, STACK_OF(X509_INFO) * sk, pem_password_cb * cb, void * u);
 	STACK_OF(X509_INFO) * APICALL (*PEM_X509_INFO_read_bio)(struct AmiSSLIFace *Self, BIO * bp, STACK_OF(X509_INFO) * sk, pem_password_cb * cb, void * u);
 	int APICALL (*PEM_X509_INFO_write_bio)(struct AmiSSLIFace *Self, BIO * bp, X509_INFO * xi, EVP_CIPHER * enc, unsigned char * kstr, int klen, pem_password_cb * cd, void * u);
 	int APICALL (*PEM_SealInit)(struct AmiSSLIFace *Self, PEM_ENCODE_SEAL_CTX * ctx, EVP_CIPHER * type, EVP_MD * md_type, unsigned char ** ek, int * ekl, unsigned char * iv, EVP_PKEY ** pubk, int npubk);
@@ -1166,14 +1173,12 @@ struct AmiSSLIFace
 	int APICALL (*PEM_SignFinal)(struct AmiSSLIFace *Self, EVP_MD_CTX * ctx, unsigned char * sigret, unsigned int * siglen, EVP_PKEY * pkey);
 	int APICALL (*PEM_def_callback)(struct AmiSSLIFace *Self, char * buf, int num, int w, void * key);
 	void APICALL (*PEM_proc_type)(struct AmiSSLIFace *Self, char * buf, int type);
-	int APICALL (*PEM_read)(struct AmiSSLIFace *Self, FILE * fp, char ** name, char ** header, unsigned char ** data, long * len);
 	void APICALL (*PEM_dek_info)(struct AmiSSLIFace *Self, char * buf, const char * type, int len, char * str);
 	X509 * APICALL (*PEM_read_bio_X509)(struct AmiSSLIFace *Self, BIO * bp, X509 ** x, pem_password_cb * cb, void * u);
 	int APICALL (*PEM_write_bio_X509)(struct AmiSSLIFace *Self, BIO * bp, X509 * x);
 	X509 * APICALL (*PEM_read_bio_X509_AUX)(struct AmiSSLIFace *Self, BIO * bp, X509 ** x, pem_password_cb * cb, void * u);
 	int APICALL (*PEM_write_bio_X509_AUX)(struct AmiSSLIFace *Self, BIO * bp, X509 * x);
 	X509_REQ * APICALL (*PEM_read_bio_X509_REQ)(struct AmiSSLIFace *Self, BIO * bp, X509_REQ ** x, pem_password_cb * cb, void * u);
-	int APICALL (*PEM_write)(struct AmiSSLIFace *Self, FILE * fp, const char * name, const char * hdr, const unsigned char * data, long len);
 	int APICALL (*PEM_write_bio_X509_REQ)(struct AmiSSLIFace *Self, BIO * bp, X509_REQ * x);
 	int APICALL (*PEM_write_bio_X509_REQ_NEW)(struct AmiSSLIFace *Self, BIO * bp, X509_REQ * x);
 	X509_CRL * APICALL (*PEM_read_bio_X509_CRL)(struct AmiSSLIFace *Self, BIO * bp, X509_CRL ** x, pem_password_cb * cb, void * u);
@@ -1466,8 +1471,9 @@ struct AmiSSLIFace
 	long APICALL (*SSL_SESSION_set_timeout)(struct AmiSSLIFace *Self, SSL_SESSION * s, long t);
 	void APICALL (*SSL_copy_session_id)(struct AmiSSLIFace *Self, SSL * to, const SSL * from);
 	SSL_SESSION * APICALL (*SSL_SESSION_new)(struct AmiSSLIFace *Self);
+	unsigned long APICALL (*SSL_SESSION_hash)(struct AmiSSLIFace *Self, const SSL_SESSION * a);
+	int APICALL (*SSL_SESSION_cmp)(struct AmiSSLIFace *Self, const SSL_SESSION * a, const SSL_SESSION * b);
 	int APICALL (*SSL_SESSION_print)(struct AmiSSLIFace *Self, BIO * fp, const SSL_SESSION * ses);
-	int APICALL (*SSL_SESSION_print_fp)(struct AmiSSLIFace *Self, FILE * fp, SSL_SESSION * ses);
 	void APICALL (*SSL_SESSION_free)(struct AmiSSLIFace *Self, SSL_SESSION * ses);
 	int APICALL (*i2d_SSL_SESSION)(struct AmiSSLIFace *Self, SSL_SESSION * in, unsigned char ** pp);
 	int APICALL (*SSL_set_session)(struct AmiSSLIFace *Self, SSL * to, SSL_SESSION * session);
@@ -1605,8 +1611,12 @@ struct AmiSSLIFace
 	int APICALL (*(*sk_set_cmp_func)(struct AmiSSLIFace *Self, _STACK * sk, int (*c)(const void *, const void *)))(const void *, const void *);
 	_STACK * APICALL (*sk_dup)(struct AmiSSLIFace *Self, _STACK * st);
 	void APICALL (*sk_sort)(struct AmiSSLIFace *Self, _STACK * st);
-	int APICALL (*FIPS_mode)(struct AmiSSLIFace *Self);
 	int APICALL (*sk_is_sorted)(struct AmiSSLIFace *Self, const _STACK * st);
+	char * APICALL (*ms_time_new)(struct AmiSSLIFace *Self);
+	void APICALL (*ms_time_free)(struct AmiSSLIFace *Self, char * a);
+	void APICALL (*ms_time_get)(struct AmiSSLIFace *Self, char * a);
+	double APICALL (*ms_time_diff)(struct AmiSSLIFace *Self, char * start, char * end);
+	int APICALL (*ms_time_cmp)(struct AmiSSLIFace *Self, char * ap, char * bp);
 	TXT_DB * APICALL (*TXT_DB_read)(struct AmiSSLIFace *Self, BIO * in, int num);
 	long APICALL (*TXT_DB_write)(struct AmiSSLIFace *Self, BIO * out, TXT_DB * db);
 	int APICALL (*TXT_DB_create_index)(struct AmiSSLIFace *Self, TXT_DB * db, int field, int (*qual)(), LHASH_HASH_FN_TYPE hash, LHASH_COMP_FN_TYPE cmp);
@@ -2284,6 +2294,7 @@ struct AmiSSLIFace
 	void APICALL (*AES_cfb128_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const unsigned long length, const AES_KEY * key, unsigned char * ivec, int * num, const int enc);
 	void APICALL (*AES_cfb1_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const unsigned long length, const AES_KEY * key, unsigned char * ivec, int * num, const int enc);
 	void APICALL (*AES_cfb8_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const unsigned long length, const AES_KEY * key, unsigned char * ivec, int * num, const int enc);
+	void APICALL (*AES_cfbr_encrypt_block)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const int nbits, const AES_KEY * key, unsigned char * ivec, const int enc);
 	void APICALL (*AES_ofb128_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const unsigned long length, const AES_KEY * key, unsigned char * ivec, int * num);
 	void APICALL (*AES_ctr128_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, const unsigned long length, const AES_KEY * key, unsigned char * ivec, unsigned char * ecount_buf, unsigned int * num);
 	void APICALL (*BF_set_key)(struct AmiSSLIFace *Self, BF_KEY * key, int len, const unsigned char * data);
@@ -2301,6 +2312,9 @@ struct AmiSSLIFace
 	void APICALL (*CAST_cbc_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, CAST_KEY * ks, unsigned char * iv, int enc);
 	void APICALL (*CAST_cfb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, CAST_KEY * schedule, unsigned char * ivec, int * num, int enc);
 	void APICALL (*CAST_ofb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, CAST_KEY * schedule, unsigned char * ivec, int * num);
+	int * APICALL (*_shadow_DES_check_key)(struct AmiSSLIFace *Self);
+	int * APICALL (*_shadow_DES_rw_mode)(struct AmiSSLIFace *Self);
+	const char * APICALL (*DES_options)(struct AmiSSLIFace *Self);
 	void APICALL (*DES_ecb3_encrypt)(struct AmiSSLIFace *Self, const_DES_cblock * input, DES_cblock * output, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, int enc);
 	DES_LONG APICALL (*DES_cbc_cksum)(struct AmiSSLIFace *Self, const unsigned char * input, DES_cblock * output, long length, DES_key_schedule * schedule, const_DES_cblock * ivec);
 	void APICALL (*DES_cbc_encrypt)(struct AmiSSLIFace *Self, const unsigned char * input, unsigned char * output, long length, DES_key_schedule * schedule, DES_cblock * ivec, int enc);
@@ -2317,6 +2331,7 @@ struct AmiSSLIFace
 	void APICALL (*DES_ede3_cfb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int * num, int enc);
 	void APICALL (*DES_ede3_cfb_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, int numbits, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int enc);
 	void APICALL (*DES_ede3_ofb64_encrypt)(struct AmiSSLIFace *Self, const unsigned char * in, unsigned char * out, long length, DES_key_schedule * ks1, DES_key_schedule * ks2, DES_key_schedule * ks3, DES_cblock * ivec, int * num);
+	void APICALL (*DES_xwhite_in2out)(struct AmiSSLIFace *Self, const_DES_cblock * DES_key, const_DES_cblock * in_white, const_DES_cblock * out_white);
 	int APICALL (*DES_enc_read)(struct AmiSSLIFace *Self, int fd, void * buf, int len, DES_key_schedule * sched, DES_cblock * iv);
 	int APICALL (*DES_enc_write)(struct AmiSSLIFace *Self, int fd, const void * buf, int len, DES_key_schedule * sched, DES_cblock * iv);
 	char * APICALL (*DES_fcrypt)(struct AmiSSLIFace *Self, const char * buf, const char * salt, char * ret);
@@ -2353,6 +2368,7 @@ struct AmiSSLIFace
 	void APICALL (*_ossl_old_des_ede3_cbc_encrypt)(struct AmiSSLIFace *Self, _ossl_old_des_cblock * input, _ossl_old_des_cblock * output, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int enc);
 	void APICALL (*_ossl_old_des_ede3_cfb64_encrypt)(struct AmiSSLIFace *Self, unsigned char * in, unsigned char * out, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int * num, int enc);
 	void APICALL (*_ossl_old_des_ede3_ofb64_encrypt)(struct AmiSSLIFace *Self, unsigned char * in, unsigned char * out, long length, _ossl_old_des_key_schedule ks1, _ossl_old_des_key_schedule ks2, _ossl_old_des_key_schedule ks3, _ossl_old_des_cblock * ivec, int * num);
+	void APICALL (*_ossl_old_des_xwhite_in2out)(struct AmiSSLIFace *Self, _ossl_old_des_cblock * des_key, _ossl_old_des_cblock * in_white, _ossl_old_des_cblock * out_white);
 	int APICALL (*_ossl_old_des_enc_read)(struct AmiSSLIFace *Self, int fd, char * buf, int len, _ossl_old_des_key_schedule sched, _ossl_old_des_cblock * iv);
 	int APICALL (*_ossl_old_des_enc_write)(struct AmiSSLIFace *Self, int fd, char * buf, int len, _ossl_old_des_key_schedule sched, _ossl_old_des_cblock * iv);
 	char * APICALL (*_ossl_old_des_fcrypt)(struct AmiSSLIFace *Self, const char * buf, const char * salt, char * ret);
@@ -2541,7 +2557,6 @@ struct AmiSSLIFace
 	int APICALL (*UI_read_string_lib)(struct AmiSSLIFace *Self, UI * ui, UI_STRING * uis);
 	int APICALL (*UI_write_string_lib)(struct AmiSSLIFace *Self, UI * ui, UI_STRING * uis);
 	void APICALL (*HMAC_CTX_set_flags)(struct AmiSSLIFace *Self, HMAC_CTX * ctx, unsigned long flags);
-	void APICALL (*private_RC4_set_key)(struct AmiSSLIFace *Self, RC4_KEY * key, int len, const unsigned char * data);
 	int APICALL (*X509_check_ca)(struct AmiSSLIFace *Self, X509 * x);
 	PROXY_POLICY * APICALL (*PROXY_POLICY_new)(struct AmiSSLIFace *Self);
 	void APICALL (*PROXY_POLICY_free)(struct AmiSSLIFace *Self, PROXY_POLICY * a);
@@ -2553,6 +2568,8 @@ struct AmiSSLIFace
 	PROXY_CERT_INFO_EXTENSION * APICALL (*d2i_PROXY_CERT_INFO_EXTENSION)(struct AmiSSLIFace *Self, PROXY_CERT_INFO_EXTENSION ** a, const unsigned char ** in, long len);
 	int APICALL (*i2d_PROXY_CERT_INFO_EXTENSION)(struct AmiSSLIFace *Self, PROXY_CERT_INFO_EXTENSION * a, unsigned char ** out);
 	const ASN1_ITEM * APICALL (*PROXY_CERT_INFO_EXTENSION_it)(struct AmiSSLIFace *Self);
+	int APICALL (*FIPS_mode)(struct AmiSSLIFace *Self);
+	void APICALL (*private_RC4_set_key)(struct AmiSSLIFace *Self, RC4_KEY * key, int len, const unsigned char * data);
 	int APICALL (*BN_mod_exp_mont_consttime)(struct AmiSSLIFace *Self, BIGNUM * rr, const BIGNUM * a, const BIGNUM * p, const BIGNUM * m, BN_CTX * ctx, BN_MONT_CTX * in_mont);
 	BN_MONT_CTX * APICALL (*BN_MONT_CTX_set_locked)(struct AmiSSLIFace *Self, BN_MONT_CTX ** pmont, int lock, const BIGNUM * mod, BN_CTX * ctx);
 	int APICALL (*PKCS1_MGF1)(struct AmiSSLIFace *Self, unsigned char * mask, long len, const unsigned char * seed, long seedlen, const EVP_MD * dgst);

@@ -22898,18 +22898,6 @@ STATIC CONST struct EmuTrap stub_main_sk_sort = { TRAPINST, TRAPTYPE, (uint32 (*
 
 // ---
 
-STATIC int stub_main_FIPS_mode_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->FIPS_mode();
-}
-STATIC CONST struct EmuTrap stub_main_FIPS_mode = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_FIPS_mode_PPC };
-
-// ---
-
 STATIC int stub_main_sk_is_sorted_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -37127,22 +37115,6 @@ STATIC CONST struct EmuTrap stub_main_HMAC_CTX_set_flags = { TRAPINST, TRAPTYPE,
 
 // ---
 
-STATIC void stub_main_private_RC4_set_key_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->private_RC4_set_key(
-		(RC4_KEY *)regarray[REG68K_A0/4],
-		(int)regarray[REG68K_D0/4],
-		(const unsigned char *)regarray[REG68K_A1/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_private_RC4_set_key = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_private_RC4_set_key_PPC };
-
-// ---
-
 STATIC int stub_main_X509_check_ca_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -37292,6 +37264,34 @@ STATIC const ASN1_ITEM * stub_main_PROXY_CERT_INFO_EXTENSION_it_PPC(uint32 *rega
 	return Self->PROXY_CERT_INFO_EXTENSION_it();
 }
 STATIC CONST struct EmuTrap stub_main_PROXY_CERT_INFO_EXTENSION_it = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_PROXY_CERT_INFO_EXTENSION_it_PPC };
+
+// ---
+
+STATIC int stub_main_FIPS_mode_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->FIPS_mode();
+}
+STATIC CONST struct EmuTrap stub_main_FIPS_mode = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_FIPS_mode_PPC };
+
+// ---
+
+STATIC void stub_main_private_RC4_set_key_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->private_RC4_set_key(
+		(RC4_KEY *)regarray[REG68K_A0/4],
+		(int)regarray[REG68K_D0/4],
+		(const unsigned char *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_private_RC4_set_key = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_private_RC4_set_key_PPC };
 
 // ---
 
@@ -58689,7 +58689,15 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_ASN1_parse,
 	&stub_main_ASN1_parse_dump,
 	&stub_main_ASN1_tag2str,
+	&stub_main_UNIMPLEMENTED, /* i2d_ASN1_HEADER */
+	&stub_main_UNIMPLEMENTED, /* d2i_ASN1_HEADER */
+	&stub_main_UNIMPLEMENTED, /* ASN1_HEADER_new */
+	&stub_main_UNIMPLEMENTED, /* ASN1_HEADER_free */
 	&stub_main_ASN1_UNIVERSALSTRING_to_string,
+	&stub_main_UNIMPLEMENTED, /* X509_asn1_meth */
+	&stub_main_UNIMPLEMENTED, /* RSAPrivateKey_asn1_meth */
+	&stub_main_UNIMPLEMENTED, /* ASN1_IA5STRING_asn1_meth */
+	&stub_main_UNIMPLEMENTED, /* ASN1_BIT_STRING_asn1_meth */
 	&stub_main_ASN1_TYPE_set_octetstring,
 	&stub_main_ASN1_TYPE_get_octetstring,
 	&stub_main_ASN1_TYPE_set_int_octetstring,
@@ -59427,6 +59435,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_OBJ_ln2nid,
 	&stub_main_OBJ_sn2nid,
 	&stub_main_OBJ_cmp,
+	&stub_main_UNIMPLEMENTED, /* OBJ_bsearch */
 	&stub_main_OBJ_new_nid,
 	&stub_main_OBJ_add_object,
 	&stub_main_OBJ_create,
@@ -59465,6 +59474,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_OCSP_basic_add1_status,
 	&stub_main_OCSP_basic_add1_cert,
 	&stub_main_OCSP_basic_sign,
+	&stub_main_UNIMPLEMENTED, /* ASN1_STRING_encode */
 	&stub_main_OCSP_crlID_new,
 	&stub_main_OCSP_accept_responses_new,
 	&stub_main_OCSP_archive_cutoff_new,
@@ -59592,11 +59602,8 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_PEM_read_bio,
 	&stub_main_PEM_write_bio,
 	&stub_main_PEM_bytes_read_bio,
-	&stub_main_UNIMPLEMENTED, /* PEM_ASN1_read */
 	&stub_main_PEM_ASN1_read_bio,
-	&stub_main_UNIMPLEMENTED, /* PEM_ASN1_write */
 	&stub_main_PEM_ASN1_write_bio,
-	&stub_main_UNIMPLEMENTED, /* PEM_X509_INFO_read */
 	&stub_main_PEM_X509_INFO_read_bio,
 	&stub_main_PEM_X509_INFO_write_bio,
 	&stub_main_PEM_SealInit,
@@ -59607,14 +59614,12 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_PEM_SignFinal,
 	&stub_main_PEM_def_callback,
 	&stub_main_PEM_proc_type,
-	&stub_main_UNIMPLEMENTED, /* PEM_read */
 	&stub_main_PEM_dek_info,
 	&stub_main_PEM_read_bio_X509,
 	&stub_main_PEM_write_bio_X509,
 	&stub_main_PEM_read_bio_X509_AUX,
 	&stub_main_PEM_write_bio_X509_AUX,
 	&stub_main_PEM_read_bio_X509_REQ,
-	&stub_main_UNIMPLEMENTED, /* PEM_write */
 	&stub_main_PEM_write_bio_X509_REQ,
 	&stub_main_PEM_write_bio_X509_REQ_NEW,
 	&stub_main_PEM_read_bio_X509_CRL,
@@ -59907,8 +59912,9 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_SSL_SESSION_set_timeout,
 	&stub_main_SSL_copy_session_id,
 	&stub_main_SSL_SESSION_new,
+	&stub_main_UNIMPLEMENTED, /* SSL_SESSION_hash */
+	&stub_main_UNIMPLEMENTED, /* SSL_SESSION_cmp */
 	&stub_main_SSL_SESSION_print,
-	&stub_main_UNIMPLEMENTED, /* SSL_SESSION_print_fp */
 	&stub_main_SSL_SESSION_free,
 	&stub_main_i2d_SSL_SESSION,
 	&stub_main_SSL_set_session,
@@ -60046,8 +60052,12 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_sk_set_cmp_func,
 	&stub_main_sk_dup,
 	&stub_main_sk_sort,
-	&stub_main_FIPS_mode,
 	&stub_main_sk_is_sorted,
+	&stub_main_UNIMPLEMENTED, /* ms_time_new */
+	&stub_main_UNIMPLEMENTED, /* ms_time_free */
+	&stub_main_UNIMPLEMENTED, /* ms_time_get */
+	&stub_main_UNIMPLEMENTED, /* ms_time_diff */
+	&stub_main_UNIMPLEMENTED, /* ms_time_cmp */
 	&stub_main_TXT_DB_read,
 	&stub_main_TXT_DB_write,
 	&stub_main_TXT_DB_create_index,
@@ -60725,6 +60735,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_AES_cfb128_encrypt,
 	&stub_main_AES_cfb1_encrypt,
 	&stub_main_AES_cfb8_encrypt,
+	&stub_main_UNIMPLEMENTED, /* AES_cfbr_encrypt_block */
 	&stub_main_AES_ofb128_encrypt,
 	&stub_main_AES_ctr128_encrypt,
 	&stub_main_BF_set_key,
@@ -60742,6 +60753,9 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_CAST_cbc_encrypt,
 	&stub_main_CAST_cfb64_encrypt,
 	&stub_main_CAST_ofb64_encrypt,
+	&stub_main_UNIMPLEMENTED, /* _shadow_DES_check_key */
+	&stub_main_UNIMPLEMENTED, /* _shadow_DES_rw_mode */
+	&stub_main_UNIMPLEMENTED, /* DES_options */
 	&stub_main_DES_ecb3_encrypt,
 	&stub_main_DES_cbc_cksum,
 	&stub_main_DES_cbc_encrypt,
@@ -60758,6 +60772,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_DES_ede3_cfb64_encrypt,
 	&stub_main_DES_ede3_cfb_encrypt,
 	&stub_main_DES_ede3_ofb64_encrypt,
+	&stub_main_UNIMPLEMENTED, /* DES_xwhite_in2out */
 	&stub_main_DES_enc_read,
 	&stub_main_DES_enc_write,
 	&stub_main_DES_fcrypt,
@@ -60794,6 +60809,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main__ossl_old_des_ede3_cbc_encrypt,
 	&stub_main__ossl_old_des_ede3_cfb64_encrypt,
 	&stub_main__ossl_old_des_ede3_ofb64_encrypt,
+	&stub_main_UNIMPLEMENTED, /* _ossl_old_des_xwhite_in2out */
 	&stub_main__ossl_old_des_enc_read,
 	&stub_main__ossl_old_des_enc_write,
 	&stub_main__ossl_old_des_fcrypt,
@@ -60982,7 +60998,6 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_UI_read_string_lib,
 	&stub_main_UI_write_string_lib,
 	&stub_main_HMAC_CTX_set_flags,
-	&stub_main_private_RC4_set_key,
 	&stub_main_X509_check_ca,
 	&stub_main_PROXY_POLICY_new,
 	&stub_main_PROXY_POLICY_free,
@@ -60994,6 +61009,8 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_d2i_PROXY_CERT_INFO_EXTENSION,
 	&stub_main_i2d_PROXY_CERT_INFO_EXTENSION,
 	&stub_main_PROXY_CERT_INFO_EXTENSION_it,
+	&stub_main_FIPS_mode,
+	&stub_main_private_RC4_set_key,
 	&stub_main_BN_mod_exp_mont_consttime,
 	&stub_main_BN_MONT_CTX_set_locked,
 	&stub_main_PKCS1_MGF1,

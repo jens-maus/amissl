@@ -10896,13 +10896,6 @@ void SAVEDS ASM LIB_sk_sort(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st
 
 // ---
 
-int SAVEDS ASM LIB_FIPS_mode(REG(a6, UNUSED __IFACE_OR_BASE))
-{
-	return FIPS_mode();
-}
-
-// ---
-
 int SAVEDS ASM LIB_sk_is_sorted(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * st))
 {
 	return sk_is_sorted(st);
@@ -17448,13 +17441,6 @@ void SAVEDS ASM LIB_HMAC_CTX_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void SAVEDS ASM LIB_private_RC4_set_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RC4_KEY * key), REG(d0, int len), REG(a1, const unsigned char * data))
-{
-	private_RC4_set_key(key, len, data);
-}
-
-// ---
-
 int SAVEDS ASM LIB_X509_check_ca(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
 {
 	return X509_check_ca(x);
@@ -17528,6 +17514,20 @@ int SAVEDS ASM LIB_i2d_PROXY_CERT_INFO_EXTENSION(REG(a6, UNUSED __IFACE_OR_BASE)
 const ASN1_ITEM * SAVEDS ASM LIB_PROXY_CERT_INFO_EXTENSION_it(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return PROXY_CERT_INFO_EXTENSION_it();
+}
+
+// ---
+
+int SAVEDS ASM LIB_FIPS_mode(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return FIPS_mode();
+}
+
+// ---
+
+void SAVEDS ASM LIB_private_RC4_set_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RC4_KEY * key), REG(d0, int len), REG(a1, const unsigned char * data))
+{
+	private_RC4_set_key(key, len, data);
 }
 
 // ---
