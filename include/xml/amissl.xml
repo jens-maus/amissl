@@ -35,6 +35,9 @@
 		<method name="Reserved6" result="void" status="unimplemented"/>
 		<method name="Reserved7" result="void" status="unimplemented"/>
 		<method name="Reserved8" result="void" status="unimplemented"/>
+
+    <!-- AmiSSL v3.6 - OpenSSL 0.9.7g -->
+
 		<method name="ASN1_TYPE_new" result="ASN1_TYPE *">
 		</method>
 		<method name="ASN1_TYPE_free" result="void">
@@ -768,8 +771,30 @@
 		<method name="ASN1_tag2str" result="const char *">
 			<arg name="tag" type="int" m68kreg="d0"/>
 		</method>
+		<method name="i2d_ASN1_HEADER" result="int" status="unimplemented">
+			<arg name="a" type="ASN1_HEADER *" m68kreg="a0"/>
+			<arg name="pp" type="unsigned char **" m68kreg="a1"/>
+		</method>
+		<method name="d2i_ASN1_HEADER" result="ASN1_HEADER *" status="unimplemented">
+			<arg name="a" type="ASN1_HEADER **" m68kreg="a0"/>
+			<arg name="pp" type="unsigned char **" m68kreg="a1"/>
+			<arg name="length" type="long" m68kreg="d0"/>
+		</method>
+		<method name="ASN1_HEADER_new" result="ASN1_HEADER *" status="unimplemented">
+		</method>
+		<method name="ASN1_HEADER_free" result="void" status="unimplemented">
+			<arg name="a" type="ASN1_HEADER *" m68kreg="a0"/>
+		</method>
 		<method name="ASN1_UNIVERSALSTRING_to_string" result="int">
 			<arg name="s" type="ASN1_UNIVERSALSTRING *" m68kreg="a0"/>
+		</method>
+		<method name="X509_asn1_meth" result="ASN1_METHOD *" status="unimplemented">
+		</method>
+		<method name="RSAPrivateKey_asn1_meth" result="ASN1_METHOD *" status="unimplemented">
+		</method>
+		<method name="ASN1_IA5STRING_asn1_meth" result="ASN1_METHOD *" status="unimplemented">
+		</method>
+		<method name="ASN1_BIT_STRING_asn1_meth" result="ASN1_METHOD *" status="unimplemented">
 		</method>
 		<method name="ASN1_TYPE_set_octetstring" result="int">
 			<arg name="a" type="ASN1_TYPE *" m68kreg="a0"/>
@@ -3656,6 +3681,13 @@
 			<arg name="a" type="const ASN1_OBJECT *" m68kreg="a0"/>
 			<arg name="b" type="const ASN1_OBJECT *" m68kreg="a1"/>
 		</method>
+		<method name="OBJ_bsearch" result="const char *" status="unimplemented">
+			<arg name="key" type="const char *" m68kreg="a0"/>
+			<arg name="base" type="const char *" m68kreg="a1"/>
+			<arg name="num" type="int" m68kreg="d0"/>
+			<arg name="size" type="size" m68kreg="d1"/>
+      <arg name="cmp" type="(*)(const void *, const void *)" m68kreg="a2"/>
+		</method>
 		<method name="OBJ_new_nid" result="int">
 			<arg name="num" type="int" m68kreg="d0"/>
 		</method>
@@ -3834,6 +3866,12 @@
 			<arg name="certs" type="STACK_OF(X509) *" m68kreg="d0"/>
 			<arg name="flags" type="unsigned long" m68kreg="d1"/>
 		</method>
+    <method name="ASN1_STRING_encode" result="ASN1_STRING *" status="unimplemented">
+			<arg name="s" type="ASN1_STRING *" m68kreg="a0"/>
+			<arg name="i2d" type="int (*)(void)" m68kreg="a1"/>
+			<arg name="data" type="char *" m68kreg="a2"/>
+			<arg name="sk" type="STACK_OF(ASN1_OT) *" m68kreg="a3"/>
+    </method>
 		<method name="OCSP_crlID_new" result="X509_EXTENSION *">
 			<arg name="url" type="char *" m68kreg="a0"/>
 			<arg name="n" type="long *" m68kreg="a1"/>
@@ -4326,14 +4364,6 @@
 			<arg name="cb" type="pem_password_cb *" m68kreg="d1"/>
 			<arg name="u" type="void *" m68kreg="d2"/>
 		</method>
-		<method name="PEM_ASN1_read" result="void *" status="unimplemented">
-			<arg name="d2i" type="d2i_of_void *" m68kreg="a0"/>
-			<arg name="name" type="const char *" m68kreg="a1"/>
-			<arg name="fp" type="FILE *" m68kreg="a2"/>
-			<arg name="x" type="void **" m68kreg="a3"/>
-			<arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
-			<arg name="u" type="void *" m68kreg="d1"/>
-		</method>
 		<method name="PEM_ASN1_read_bio" result="void *">
 			<arg name="d2i" type="d2i_of_void *" m68kreg="a0"/>
 			<arg name="name" type="const char *" m68kreg="a1"/>
@@ -4341,17 +4371,6 @@
 			<arg name="x" type="void **" m68kreg="a3"/>
 			<arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
 			<arg name="u" type="void *" m68kreg="d1"/>
-		</method>
-		<method name="PEM_ASN1_write" result="int" status="unimplemented">
-			<arg name="i2d" type="i2d_of_void *" m68kreg="a0"/>
-			<arg name="name" type="const char *" m68kreg="a1"/>
-			<arg name="fp" type="FILE *" m68kreg="a2"/>
-			<arg name="x" type="char *" m68kreg="a3"/>
-			<arg name="enc" type="const EVP_CIPHER *" m68kreg="d0"/>
-			<arg name="kstr" type="unsigned char *" m68kreg="d1"/>
-			<arg name="klen" type="int" m68kreg="d2"/>
-			<arg name="callback" type="pem_password_cb *" m68kreg="d3"/>
-			<arg name="u" type="void *" m68kreg="d4"/>
 		</method>
 		<method name="PEM_ASN1_write_bio" result="int">
 			<arg name="i2d" type="i2d_of_void *" m68kreg="a0"/>
@@ -4363,12 +4382,6 @@
 			<arg name="klen" type="int" m68kreg="d2"/>
 			<arg name="cb" type="pem_password_cb *" m68kreg="d3"/>
 			<arg name="u" type="void *" m68kreg="d4"/>
-		</method>
-		<method name="PEM_X509_INFO_read" result="STACK_OF(X509_INFO) *" status="unimplemented">
-			<arg name="fp" type="FILE *" m68kreg="a0"/>
-			<arg name="sk" type="STACK_OF(X509_INFO) *" m68kreg="a1"/>
-			<arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
-			<arg name="u" type="void *" m68kreg="a3"/>
 		</method>
 		<method name="PEM_X509_INFO_read_bio" result="STACK_OF(X509_INFO) *">
 			<arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -4435,13 +4448,6 @@
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="type" type="int" m68kreg="d0"/>
 		</method>
-		<method name="PEM_read" result="int" status="unimplemented">
-			<arg name="fp" type="FILE *" m68kreg="a0"/>
-			<arg name="name" type="char **" m68kreg="a1"/>
-			<arg name="header" type="char **" m68kreg="a2"/>
-			<arg name="data" type="unsigned char **" m68kreg="a3"/>
-			<arg name="len" type="long *" m68kreg="d0"/>
-		</method>
 		<method name="PEM_dek_info" result="void">
 			<arg name="buf" type="char *" m68kreg="a0"/>
 			<arg name="type" type="const char *" m68kreg="a1"/>
@@ -4473,13 +4479,6 @@
 			<arg name="x" type="X509_REQ **" m68kreg="a1"/>
 			<arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
 			<arg name="u" type="void *" m68kreg="a3"/>
-		</method>
-		<method name="PEM_write" result="int" status="unimplemented">
-			<arg name="fp" type="FILE *" m68kreg="a0"/>
-			<arg name="name" type="const char *" m68kreg="a1"/>
-			<arg name="hdr" type="const char *" m68kreg="a2"/>
-			<arg name="data" type="const unsigned char *" m68kreg="a3"/>
-			<arg name="len" type="long" m68kreg="d0"/>
 		</method>
 		<method name="PEM_write_bio_X509_REQ" result="int">
 			<arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -5709,13 +5708,16 @@
 		</method>
 		<method name="SSL_SESSION_new" result="SSL_SESSION *">
 		</method>
+		<method name="SSL_SESSION_hash" result="unsigned long" status="unimplemented">
+			<arg name="a" type="const SSL_SESSION *" m68kreg="a0"/>
+		</method>
+		<method name="SSL_SESSION_cmp" result="int" status="unimplemented">
+			<arg name="a" type="const SSL_SESSION *" m68kreg="a0"/>
+			<arg name="b" type="const SSL_SESSION *" m68kreg="a1"/>
+		</method>
 		<method name="SSL_SESSION_print" result="int">
 			<arg name="fp" type="BIO *" m68kreg="a0"/>
 			<arg name="ses" type="const SSL_SESSION *" m68kreg="a1"/>
-		</method>
-		<method name="SSL_SESSION_print_fp" result="int" status="unimplemented">
-			<arg name="fp" type="FILE *" m68kreg="a0"/>
-			<arg name="ses" type="SSL_SESSION *" m68kreg="a1"/>
 		</method>
 		<method name="SSL_SESSION_free" result="void">
 			<arg name="ses" type="SSL_SESSION *" m68kreg="a0"/>
@@ -6217,10 +6219,24 @@
 		<method name="sk_sort" result="void">
 			<arg name="st" type="_STACK *" m68kreg="a0"/>
 		</method>
-		<method name="FIPS_mode" result="int">
-		</method>
 		<method name="sk_is_sorted" result="int">
 			<arg name="st" type="const _STACK *" m68kreg="a0"/>
+		</method>
+		<method name="ms_time_new" result="char *" status="unimplemented">
+		</method>
+		<method name="ms_time_free" result="void" status="unimplemented">
+			<arg name="a" type="char *" m68kreg="a0"/>
+		</method>
+		<method name="ms_time_get" result="void" status="unimplemented">
+			<arg name="a" type="char *" m68kreg="a0"/>
+		</method>
+		<method name="ms_time_diff" result="double" status="unimplemented">
+			<arg name="start" type="char *" m68kreg="a0"/>
+			<arg name="end" type="char *" m68kreg="a1"/>
+		</method>
+		<method name="ms_time_cmp" result="int" status="unimplemented">
+			<arg name="ap" type="char *" m68kreg="a0"/>
+			<arg name="bp" type="char *" m68kreg="a1"/>
 		</method>
 		<method name="TXT_DB_read" result="TXT_DB *">
 			<arg name="in" type="BIO *" m68kreg="a0"/>
@@ -8943,6 +8959,14 @@
 			<arg name="num" type="int *" m68kreg="d1"/>
 			<arg name="enc" type="const int" m68kreg="d2"/>
 		</method>
+		<method name="AES_cfbr_encrypt_block" result="void" status="unimplemented">
+			<arg name="in" type="const unsigned char *" m68kreg="a0"/>
+			<arg name="out" type="unsigned char *" m68kreg="a1"/>
+			<arg name="nbits" type="const int" m68kreg="d0"/>
+			<arg name="key" type="const AES_KEY *" m68kreg="a2"/>
+			<arg name="ivec" type="unsigned char *" m68kreg="a3"/>
+			<arg name="enc" type="const int" m68kreg="d1"/>
+		</method>
 		<method name="AES_ofb128_encrypt" result="void">
 			<arg name="in" type="const unsigned char *" m68kreg="a0"/>
 			<arg name="out" type="unsigned char *" m68kreg="a1"/>
@@ -9050,6 +9074,12 @@
 			<arg name="ivec" type="unsigned char *" m68kreg="a3"/>
 			<arg name="num" type="int *" m68kreg="d1"/>
 		</method>
+    <method name="_shadow_DES_check_key" result="int *" status="unimplemented">
+    </method>
+    <method name="_shadow_DES_rw_mode" result="int *" status="unimplemented">
+    </method>
+    <method name="DES_options" result="const char *" status="unimplemented">
+    </method>
 		<method name="DES_ecb3_encrypt" result="void">
 			<arg name="input" type="const_DES_cblock *" m68kreg="a0"/>
 			<arg name="output" type="DES_cblock *" m68kreg="a1"/>
@@ -9181,6 +9211,11 @@
 			<arg name="ivec" type="DES_cblock *" m68kreg="d2"/>
 			<arg name="num" type="int *" m68kreg="d3"/>
 		</method>
+    <method name="DES_xwhite_in2out" result="void" status="unimplemented">
+      <arg name="DES_key" type="const_DES_cblock *" m68kreg="a0">
+      <arg name="in_white" type="const_DES_cblock *" m68kreg="a1">
+      <arg name="out_white" type="const_DES_cblock *" m68kreg="a2">
+    </method>
 		<method name="DES_enc_read" result="int">
 			<arg name="fd" type="int" m68kreg="d0"/>
 			<arg name="buf" type="void *" m68kreg="a0"/>
@@ -9403,6 +9438,11 @@
 			<arg name="ivec" type="_ossl_old_des_cblock *" m68kreg="a2"/>
 			<arg name="num" type="int *" m68kreg="a3"/>
 		</method>
+    <method name="_ossl_old_des_xwhite_in2out" result="void" status="unimplemented">
+      <arg name="des_key" type="_ossl_old_des_cblock *" m68kreg="a0"/>
+      <arg name="in_white" type="_ossl_old_des_cblock *" m68kreg="a1"/>
+      <arg name="out_white" type="_ossl_old_des_cblock *" m68kreg="a1"/>
+    </method>
 		<method name="_ossl_old_des_enc_read" result="int">
 			<arg name="fd" type="int" m68kreg="d0"/>
 			<arg name="buf" type="char *" m68kreg="a0"/>
@@ -10284,12 +10324,7 @@
 			<arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
 			<arg name="flags" type="unsigned long" m68kreg="d0"/>
 		</method>
-		<method name="private_RC4_set_key" result="void">
-			<arg name="key" type="RC4_KEY *" m68kreg="a0"/>
-			<arg name="len" type="int" m68kreg="d0"/>
-			<arg name="data" type="const unsigned char *" m68kreg="a1"/>
-		</method>
-		<method name="X509_check_ca" result="int">
+	  <method name="X509_check_ca" result="int">
 			<arg name="x" type="X509 *" m68kreg="a0"/>
 		</method>
 		<method name="PROXY_POLICY_new" result="PROXY_POLICY *">
@@ -10324,7 +10359,16 @@
 		</method>
 		<method name="PROXY_CERT_INFO_EXTENSION_it" result="const ASN1_ITEM *">
 		</method>
-    <!-- OpenSSL 0.9.7m -->
+
+    <!-- AmiSSL v3.7 - OpenSSL 0.9.7g -->
+
+		<method name="FIPS_mode" result="int">
+		</method>
+		<method name="private_RC4_set_key" result="void">
+			<arg name="key" type="RC4_KEY *" m68kreg="a0"/>
+			<arg name="len" type="int" m68kreg="d0"/>
+			<arg name="data" type="const unsigned char *" m68kreg="a1"/>
+		</method>
 		<method name="BN_mod_exp_mont_consttime" result="int">
 			<arg name="rr" type="BIGNUM *" m68kreg="a0"/>
 			<arg name="a" type="const BIGNUM *" m68kreg="a1"/>
@@ -10376,7 +10420,9 @@
 			<arg name="Hash" type="const EVP_MD *" m68kreg="a3"/>
 			<arg name="sLen" type="int" m68kreg="d0"/>
     </method>
-    <!-- OpenSSL 0.9.8y -->
+
+    <!-- AmiSSL v3.x - OpenSSL 0.9.8y -->
+
 		<method name="EVP_sha224" result="const EVP_MD *">
 		</method>
 		<method name="EVP_sha256" result="const EVP_MD *">
@@ -16253,7 +16299,9 @@
     </method>
     <method name="ENGINE_load_gost" result="void">
     </method>
-    <!-- OpenSSL 1.0.2f additions -->
+
+    <!-- AmiSSL v3.x - OpenSSL 1.0.2f -->
+
 		<method name="PEM_write_bio_DHxparams" result="int">
 			<arg name="bp" type="BIO *" m68kreg="a0"/>
 			<arg name="x" type="DH *" m68kreg="a1"/>
