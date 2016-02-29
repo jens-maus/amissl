@@ -687,7 +687,7 @@ printf OUT <<EOF;
 #ifdef $platform_cpp_symbol
   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
   #define CFLAGS "compiler: $cc $cflags"
-  #define PLATFORM "$platform"
+  #define PLATFORM "platform: $platform"
 EOF
 printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
 printf OUT "#endif\n";

@@ -78,37 +78,25 @@ const char *SSLeay_version(int t)
 #endif
     }
     if (t == SSLEAY_CFLAGS) {
-#ifndef OPENSSL_SYS_AMIGA
 #ifdef CFLAGS
         return (CFLAGS);
 #else
         return ("compiler: information not available");
 #endif
-#else /* !OPENSSL_SYS_AMIGA */
-    return("compiler: information not available");
-#endif /* !OPENSSL_SYS_AMIGA */
     }
     if (t == SSLEAY_PLATFORM) {
-#ifndef OPENSSL_SYS_AMIGA
 #ifdef PLATFORM
         return (PLATFORM);
 #else
         return ("platform: information not available");
 #endif
-#else /* !OPENSSL_SYS_AMIGA */
-    return("platform: Amiga");
-#endif /* !OPENSSL_SYS_AMIGA */
     }
     if (t == SSLEAY_DIR) {
-#ifndef OPENSSL_SYS_AMIGA
 #ifdef OPENSSLDIR
         return "OPENSSLDIR: \"" OPENSSLDIR "\"";
 #else
         return "OPENSSLDIR: N/A";
 #endif
-#else /* !OPENSSL_SYS_AMIGA */
-    return("OPENSSLDIR: AmiSSL:");
-#endif /* !OPENSSL_SYS_AMIGA */
     }
     return ("not available");
 }

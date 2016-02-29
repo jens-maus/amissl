@@ -1214,7 +1214,7 @@ chop $openssldir if $openssldir =~ /\/$/;
 chop $prefix if $prefix =~ /.\/$/;
 
 $openssldir=$prefix . "/ssl" if $openssldir eq "";
-$openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/])/;
+$openssldir=$prefix . "/" . $openssldir if $openssldir !~ /(^\/|^[a-zA-Z]:[\\\/]|^.*:$)/;
 
 
 print "IsMK1MF=$IsMK1MF\n";
