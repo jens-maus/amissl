@@ -233,9 +233,12 @@
 #      define HOST_l2c(l,c)      (*((unsigned int *)(c))=(l), (c)+=4, (l))
 #     endif
 #    endif
+#   elif defined(__mc68020)
+#    define HOST_c2l(c,l) ({ asm ("movel %0@+,%1" : "=a"(c), "=d"(l) : "0"(c)); })
+#    define HOST_l2c(l,c) ({ asm ("movel %1,%0@+" : "=a"(c) : "d"(l), "0"(c)); })
 #   endif
 #  endif
-#  if defined(__s390__) || defined(__s390x__) || defined(__mc68020)
+#  if defined(__s390__) || defined(__s390x__)
 #   define HOST_c2l(c,l) ((l)=*((const unsigned int *)(c)), (c)+=4, (l))
 #   define HOST_l2c(l,c) (*((unsigned int *)(c))=(l), (c)+=4, (l))
 #  endif
@@ -266,6 +269,22 @@
 #    define HOST_l2c(l,c)        ({ asm ("strv   %1,%0"                  \
                                    :"=m"(*(unsigned int *)(c)) :"d"(l));\
                                    (c)+=4; (l);                         })
+#   elif defined(__mc68020)
+#    define HOST_c2l(c,l)        ({ unsigned int r;                      \
+                                    asm ("movel  %1@+,%0\n"              \
+                                         "rorw   #8,%0\n"                \
+                                         "swap   %0\n"                   \
+                                         "rorw   #8,%0\n"                \
+                                    : "=d"(r), "=a"(c)                   \
+                                    : "1"(c));                           \
+                                    (l)=r; })
+#    define HOST_l2c(l,c)        ({ unsigned int r=(l);                  \
+                                    asm ("rorw   #8,%0\n"                \
+                                         "swap   %0\n"                   \
+                                         "rorw   #8,%0\n"                \
+                                         "movel  %0,%1@+\n"              \
+                                    : "=d"(r), "=a"(c)                   \
+                                    : "0"(r), "1"(c)); })
 #   endif
 #  endif
 #  if defined(__i386) || defined(__i386__) || defined(__x86_64) || defined(__x86_64__)
