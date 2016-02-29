@@ -1,4 +1,3 @@
-/* v3_purp.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2001.
@@ -58,9 +57,11 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
+#include "internal/numbers.h"
 #include <openssl/x509v3.h>
 #include <openssl/x509_vfy.h>
+#include "internal/x509_int.h"
 
 static void x509v3_cache_extensions(X509 *x);
 
@@ -108,9 +109,7 @@ static X509_PURPOSE xstandard[] = {
      NULL},
 };
 
-#define X509_PURPOSE_COUNT (sizeof(xstandard)/sizeof(X509_PURPOSE))
-
-IMPLEMENT_STACK_OF(X509_PURPOSE)
+#define X509_PURPOSE_COUNT OSSL_NELEM(xstandard)
 
 static STACK_OF(X509_PURPOSE) *xptable = NULL;
 
@@ -133,6 +132,7 @@ int X509_check_purpose(X509 *x, int id, int ca)
         x509v3_cache_extensions(x);
         CRYPTO_w_unlock(CRYPTO_LOCK_X509);
     }
+    /* Return if side-effect only call */
     if (id == -1)
         return 1;
     idx = X509_PURPOSE_get_by_id(id);
@@ -174,7 +174,7 @@ int X509_PURPOSE_get_by_sname(char *sname)
     X509_PURPOSE *xptmp;
     for (i = 0; i < X509_PURPOSE_get_count(); i++) {
         xptmp = X509_PURPOSE_get0(i);
-        if (!strcmp(xptmp->sname, sname))
+        if (strcmp(xptmp->sname, sname) == 0)
             return i;
     }
     return -1;
@@ -211,7 +211,7 @@ int X509_PURPOSE_add(int id, int trust, int flags,
     idx = X509_PURPOSE_get_by_id(id);
     /* Need a new entry */
     if (idx == -1) {
-        if (!(ptmp = OPENSSL_malloc(sizeof(X509_PURPOSE)))) {
+        if ((ptmp = OPENSSL_malloc(sizeof(*ptmp))) == NULL) {
             X509V3err(X509V3_F_X509_PURPOSE_ADD, ERR_R_MALLOC_FAILURE);
             return 0;
         }
@@ -225,8 +225,8 @@ int X509_PURPOSE_add(int id, int trust, int flags,
         OPENSSL_free(ptmp->sname);
     }
     /* dup supplied name */
-    ptmp->name = BUF_strdup(name);
-    ptmp->sname = BUF_strdup(sname);
+    ptmp->name = OPENSSL_strdup(name);
+    ptmp->sname = OPENSSL_strdup(sname);
     if (!ptmp->name || !ptmp->sname) {
         X509V3err(X509V3_F_X509_PURPOSE_ADD, ERR_R_MALLOC_FAILURE);
         return 0;
@@ -243,7 +243,8 @@ int X509_PURPOSE_add(int id, int trust, int flags,
 
     /* If its a new entry manage the dynamic table */
     if (idx == -1) {
-        if (!xptable && !(xptable = sk_X509_PURPOSE_new(xp_cmp))) {
+        if (xptable == NULL
+            && (xptable = sk_X509_PURPOSE_new(xp_cmp)) == NULL) {
             X509V3err(X509V3_F_X509_PURPOSE_ADD, ERR_R_MALLOC_FAILURE);
             return 0;
         }
@@ -338,8 +339,7 @@ int X509_supported_extension(X509_EXTENSION *ex)
     if (ex_nid == NID_undef)
         return 0;
 
-    if (OBJ_bsearch_nid(&ex_nid, supported_nids,
-                        sizeof(supported_nids) / sizeof(int)))
+    if (OBJ_bsearch_nid(&ex_nid, supported_nids, OSSL_NELEM(supported_nids)))
         return 1;
     return 0;
 }
@@ -400,9 +400,7 @@ static void x509v3_cache_extensions(X509 *x)
     int i;
     if (x->ex_flags & EXFLAG_SET)
         return;
-#ifndef OPENSSL_NO_SHA
     X509_digest(x, EVP_sha1(), x->sha1_hash, NULL);
-#endif
     /* V1 should mean no extensions ... */
     if (!X509_get_version(x))
         x->ex_flags |= EXFLAG_V1;
@@ -849,4 +847,36 @@ int X509_check_akid(X509 *issuer, AUTHORITY_KEYID *akid)
             return X509_V_ERR_AKID_ISSUER_SERIAL_MISMATCH;
     }
     return X509_V_OK;
+}
+
+uint32_t X509_get_extension_flags(X509 *x)
+{
+    /* Call for side-effect of computing hash and caching extensions */
+    X509_check_purpose(x, -1, -1);
+    return x->ex_flags;
+}
+
+uint32_t X509_get_key_usage(X509 *x)
+{
+    /* Call for side-effect of computing hash and caching extensions */
+    X509_check_purpose(x, -1, -1);
+    if (x->ex_flags & EXFLAG_KUSAGE)
+        return x->ex_kusage;
+    return UINT32_MAX;
+}
+
+uint32_t X509_get_extended_key_usage(X509 *x)
+{
+    /* Call for side-effect of computing hash and caching extensions */
+    X509_check_purpose(x, -1, -1);
+    if (x->ex_flags & EXFLAG_XKUSAGE)
+        return x->ex_xkusage;
+    return UINT32_MAX;
+}
+
+const ASN1_OCTET_STRING *X509_get0_subject_key_id(X509 *x)
+{
+    /* Call for side-effect of computing hash and caching extensions */
+    X509_check_purpose(x, -1, -1);
+    return x->skid;
 }

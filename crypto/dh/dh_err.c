@@ -1,6 +1,5 @@
-/* crypto/dh/dh_err.c */
 /* ====================================================================
- * Copyright (c) 1999-2013 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2015 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -70,26 +69,23 @@
 # define ERR_REASON(reason) ERR_PACK(ERR_LIB_DH,0,reason)
 
 static ERR_STRING_DATA DH_str_functs[] = {
-    {ERR_FUNC(DH_F_COMPUTE_KEY), "COMPUTE_KEY"},
+    {ERR_FUNC(DH_F_COMPUTE_KEY), "compute_key"},
     {ERR_FUNC(DH_F_DHPARAMS_PRINT_FP), "DHparams_print_fp"},
-    {ERR_FUNC(DH_F_DH_BUILTIN_GENPARAMS), "DH_BUILTIN_GENPARAMS"},
-    {ERR_FUNC(DH_F_DH_CMS_DECRYPT), "DH_CMS_DECRYPT"},
-    {ERR_FUNC(DH_F_DH_CMS_SET_PEERKEY), "DH_CMS_SET_PEERKEY"},
-    {ERR_FUNC(DH_F_DH_CMS_SET_SHARED_INFO), "DH_CMS_SET_SHARED_INFO"},
-    {ERR_FUNC(DH_F_DH_COMPUTE_KEY), "DH_compute_key"},
-    {ERR_FUNC(DH_F_DH_GENERATE_KEY), "DH_generate_key"},
-    {ERR_FUNC(DH_F_DH_GENERATE_PARAMETERS_EX), "DH_generate_parameters_ex"},
+    {ERR_FUNC(DH_F_DH_BUILTIN_GENPARAMS), "dh_builtin_genparams"},
+    {ERR_FUNC(DH_F_DH_CMS_DECRYPT), "dh_cms_decrypt"},
+    {ERR_FUNC(DH_F_DH_CMS_SET_PEERKEY), "dh_cms_set_peerkey"},
+    {ERR_FUNC(DH_F_DH_CMS_SET_SHARED_INFO), "dh_cms_set_shared_info"},
     {ERR_FUNC(DH_F_DH_NEW_METHOD), "DH_new_method"},
-    {ERR_FUNC(DH_F_DH_PARAM_DECODE), "DH_PARAM_DECODE"},
-    {ERR_FUNC(DH_F_DH_PRIV_DECODE), "DH_PRIV_DECODE"},
-    {ERR_FUNC(DH_F_DH_PRIV_ENCODE), "DH_PRIV_ENCODE"},
-    {ERR_FUNC(DH_F_DH_PUB_DECODE), "DH_PUB_DECODE"},
-    {ERR_FUNC(DH_F_DH_PUB_ENCODE), "DH_PUB_ENCODE"},
-    {ERR_FUNC(DH_F_DO_DH_PRINT), "DO_DH_PRINT"},
-    {ERR_FUNC(DH_F_GENERATE_KEY), "GENERATE_KEY"},
+    {ERR_FUNC(DH_F_DH_PARAM_DECODE), "dh_param_decode"},
+    {ERR_FUNC(DH_F_DH_PRIV_DECODE), "dh_priv_decode"},
+    {ERR_FUNC(DH_F_DH_PRIV_ENCODE), "dh_priv_encode"},
+    {ERR_FUNC(DH_F_DH_PUB_DECODE), "dh_pub_decode"},
+    {ERR_FUNC(DH_F_DH_PUB_ENCODE), "dh_pub_encode"},
+    {ERR_FUNC(DH_F_DO_DH_PRINT), "do_dh_print"},
+    {ERR_FUNC(DH_F_GENERATE_KEY), "generate_key"},
     {ERR_FUNC(DH_F_GENERATE_PARAMETERS), "GENERATE_PARAMETERS"},
-    {ERR_FUNC(DH_F_PKEY_DH_DERIVE), "PKEY_DH_DERIVE"},
-    {ERR_FUNC(DH_F_PKEY_DH_KEYGEN), "PKEY_DH_KEYGEN"},
+    {ERR_FUNC(DH_F_PKEY_DH_DERIVE), "pkey_dh_derive"},
+    {ERR_FUNC(DH_F_PKEY_DH_KEYGEN), "pkey_dh_keygen"},
     {0, NULL}
 };
 
@@ -103,7 +99,6 @@ static ERR_STRING_DATA DH_str_reasons[] = {
     {ERR_REASON(DH_R_KEYS_NOT_SET), "keys not set"},
     {ERR_REASON(DH_R_KEY_SIZE_TOO_SMALL), "key size too small"},
     {ERR_REASON(DH_R_MODULUS_TOO_LARGE), "modulus too large"},
-    {ERR_REASON(DH_R_NON_FIPS_METHOD), "non fips method"},
     {ERR_REASON(DH_R_NO_PARAMETERS_SET), "no parameters set"},
     {ERR_REASON(DH_R_NO_PRIVATE_VALUE), "no private value"},
     {ERR_REASON(DH_R_PARAMETER_ENCODING_ERROR), "parameter encoding error"},

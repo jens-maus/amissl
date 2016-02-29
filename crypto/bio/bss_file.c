@@ -1,4 +1,3 @@
-/* crypto/bio/bss_file.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -85,7 +84,6 @@
 
 # include <stdio.h>
 # include <errno.h>
-# include "cryptlib.h"
 # include "bio_lcl.h"
 # include <openssl/err.h>
 
@@ -95,13 +93,13 @@
 
 # if !defined(OPENSSL_NO_STDIO)
 
-static int MS_CALLBACK file_write(BIO *h, const char *buf, int num);
-static int MS_CALLBACK file_read(BIO *h, char *buf, int size);
-static int MS_CALLBACK file_puts(BIO *h, const char *str);
-static int MS_CALLBACK file_gets(BIO *h, char *str, int size);
-static long MS_CALLBACK file_ctrl(BIO *h, int cmd, long arg1, void *arg2);
-static int MS_CALLBACK file_new(BIO *h);
-static int MS_CALLBACK file_free(BIO *data);
+static int file_write(BIO *h, const char *buf, int num);
+static int file_read(BIO *h, char *buf, int size);
+static int file_puts(BIO *h, const char *str);
+static int file_gets(BIO *h, char *str, int size);
+static long file_ctrl(BIO *h, int cmd, long arg1, void *arg2);
+static int file_new(BIO *h);
+static int file_free(BIO *data);
 static BIO_METHOD methods_filep = {
     BIO_TYPE_FILE,
     "FILE pointer",
@@ -147,7 +145,7 @@ static FILE *file_fopen(const char *filename, const char *mode)
         if (MultiByteToWideChar(CP_UTF8, flags,
                                 filename, len_0, wfilename, sz) &&
             MultiByteToWideChar(CP_UTF8, 0, mode, strlen(mode) + 1,
-                                wmode, sizeof(wmode) / sizeof(wmode[0])) &&
+                                wmode, OSSL_NELEM(wmode)) &&
             (file = _wfopen(wfilename, wmode)) == NULL &&
             (errno == ENOENT || errno == EBADF)
             ) {
@@ -198,8 +196,8 @@ BIO *BIO_new_fp(FILE *stream, int close_flag)
     if ((ret = BIO_new(BIO_s_file())) == NULL)
         return (NULL);
 
-    BIO_set_flags(ret, BIO_FLAGS_UPLINK); /* redundant, left for
-                                           * documentation puposes */
+    /* redundant flag, left for documentation purposes */
+    BIO_set_flags(ret, BIO_FLAGS_UPLINK);
     BIO_set_fp(ret, stream, close_flag);
     return (ret);
 }
@@ -209,7 +207,7 @@ BIO_METHOD *BIO_s_file(void)
     return (&methods_filep);
 }
 
-static int MS_CALLBACK file_new(BIO *bi)
+static int file_new(BIO *bi)
 {
     bi->init = 0;
     bi->num = 0;
@@ -218,7 +216,7 @@ static int MS_CALLBACK file_new(BIO *bi)
     return (1);
 }
 
-static int MS_CALLBACK file_free(BIO *a)
+static int file_free(BIO *a)
 {
     if (a == NULL)
         return (0);
@@ -236,7 +234,7 @@ static int MS_CALLBACK file_free(BIO *a)
     return (1);
 }
 
-static int MS_CALLBACK file_read(BIO *b, char *out, int outl)
+static int file_read(BIO *b, char *out, int outl)
 {
     int ret = 0;
 
@@ -256,7 +254,7 @@ static int MS_CALLBACK file_read(BIO *b, char *out, int outl)
     return (ret);
 }
 
-static int MS_CALLBACK file_write(BIO *b, const char *in, int inl)
+static int file_write(BIO *b, const char *in, int inl)
 {
     int ret = 0;
 
@@ -277,7 +275,7 @@ static int MS_CALLBACK file_write(BIO *b, const char *in, int inl)
     return (ret);
 }
 
-static long MS_CALLBACK file_ctrl(BIO *b, int cmd, long num, void *ptr)
+static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 {
     long ret = 1;
     FILE *fp = (FILE *)b->ptr;
@@ -367,15 +365,15 @@ static long MS_CALLBACK file_ctrl(BIO *b, int cmd, long num, void *ptr)
         b->shutdown = (int)num & BIO_CLOSE;
         if (num & BIO_FP_APPEND) {
             if (num & BIO_FP_READ)
-                BUF_strlcpy(p, "a+", sizeof p);
+                OPENSSL_strlcpy(p, "a+", sizeof p);
             else
-                BUF_strlcpy(p, "a", sizeof p);
+                OPENSSL_strlcpy(p, "a", sizeof p);
         } else if ((num & BIO_FP_READ) && (num & BIO_FP_WRITE))
-            BUF_strlcpy(p, "r+", sizeof p);
+            OPENSSL_strlcpy(p, "r+", sizeof p);
         else if (num & BIO_FP_WRITE)
-            BUF_strlcpy(p, "w", sizeof p);
+            OPENSSL_strlcpy(p, "w", sizeof p);
         else if (num & BIO_FP_READ)
-            BUF_strlcpy(p, "r", sizeof p);
+            OPENSSL_strlcpy(p, "r", sizeof p);
         else {
             BIOerr(BIO_F_FILE_CTRL, BIO_R_BAD_FOPEN_MODE);
             ret = 0;
@@ -440,7 +438,7 @@ static long MS_CALLBACK file_ctrl(BIO *b, int cmd, long num, void *ptr)
     return (ret);
 }
 
-static int MS_CALLBACK file_gets(BIO *bp, char *buf, int size)
+static int file_gets(BIO *bp, char *buf, int size)
 {
     int ret = 0;
 
@@ -458,13 +456,67 @@ static int MS_CALLBACK file_gets(BIO *bp, char *buf, int size)
     return (ret);
 }
 
-static int MS_CALLBACK file_puts(BIO *bp, const char *str)
+static int file_puts(BIO *bp, const char *str)
 {
     int n, ret;
 
     n = strlen(str);
     ret = file_write(bp, str, n);
     return (ret);
+}
+
+#else
+
+static int file_write(BIO *b, const char *in, int inl)
+{
+    return -1;
+}
+static int file_read(BIO *b, char *out, int outl)
+{
+    return -1;
+}
+static int file_puts(BIO *bp, const char *str)
+{
+    return -1;
+}
+static int file_gets(BIO *bp, char *buf, int size)
+{
+    return 0;
+}
+static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
+{
+    return 0;
+}
+static int file_new(BIO *bi)
+{
+    return 0;
+}
+static int file_free(BIO *a)
+{
+    return 0;
+}
+
+static BIO_METHOD methods_filep = {
+    BIO_TYPE_FILE,
+    "FILE pointer",
+    file_write,
+    file_read,
+    file_puts,
+    file_gets,
+    file_ctrl,
+    file_new,
+    file_free,
+    NULL,
+};
+
+BIO_METHOD *BIO_s_file(void)
+{
+    return (&methods_filep);
+}
+
+BIO *BIO_new_file(const char *filename, const char *mode)
+{
+    return NULL;
 }
 
 # endif                         /* OPENSSL_NO_STDIO */

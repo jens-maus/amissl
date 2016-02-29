@@ -1,4 +1,3 @@
-/* dso_vms.c */
 /*
  * Written by Richard Levitte (richard@levitte.org) for the OpenSSL project
  * 2000.
@@ -60,7 +59,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/dso.h>
 
 #ifndef OPENSSL_SYS_VMS
@@ -76,7 +75,7 @@ DSO_METHOD *DSO_METHOD_vms(void)
 # include <stsdef.h>
 # include <descrip.h>
 # include <starlet.h>
-# include "vms_rms.h"
+# include "../vms_rms.h"
 
 /* Some compiler options may mask the declaration of "_malloc32". */
 # if __INITIAL_POINTER_SIZE && defined _ANSI_C_SOURCE
@@ -95,13 +94,6 @@ static int vms_load(DSO *dso);
 static int vms_unload(DSO *dso);
 static void *vms_bind_var(DSO *dso, const char *symname);
 static DSO_FUNC_TYPE vms_bind_func(DSO *dso, const char *symname);
-# if 0
-static int vms_unbind_var(DSO *dso, char *symname, void *symptr);
-static int vms_unbind_func(DSO *dso, char *symname, DSO_FUNC_TYPE symptr);
-static int vms_init(DSO *dso);
-static int vms_finish(DSO *dso);
-static long vms_ctrl(DSO *dso, int cmd, long larg, void *parg);
-# endif
 static char *vms_name_converter(DSO *dso, const char *filename);
 static char *vms_merger(DSO *dso, const char *filespec1,
                         const char *filespec2);
@@ -112,11 +104,6 @@ static DSO_METHOD dso_meth_vms = {
     NULL,                       /* unload */
     vms_bind_var,
     vms_bind_func,
-/* For now, "unbind" doesn't exist */
-# if 0
-    NULL,                       /* unbind_var */
-    NULL,                       /* unbind_func */
-# endif
     NULL,                       /* ctrl */
     vms_name_converter,
     vms_merger,
@@ -242,7 +229,7 @@ static int vms_load(DSO *dso)
         goto err;
     }
 
-    p = DSO_MALLOC(sizeof(DSO_VMS_INTERNAL));
+    p = DSO_MALLOC(sizeof(*p));
     if (p == NULL) {
         DSOerr(DSO_F_VMS_LOAD, ERR_R_MALLOC_FAILURE);
         goto err;
@@ -279,10 +266,8 @@ static int vms_load(DSO *dso)
     return (1);
  err:
     /* Cleanup! */
-    if (p != NULL)
-        OPENSSL_free(p);
-    if (filename != NULL)
-        OPENSSL_free(filename);
+    OPENSSL_free(p);
+    OPENSSL_free(filename);
     return (0);
 }
 
@@ -526,7 +511,7 @@ static char *vms_merger(DSO *dso, const char *filespec1,
     }
 
     merged = OPENSSL_malloc(nam.NAMX_ESL + 1);
-    if (!merged)
+    if (merged == NULL)
         goto malloc_err;
     strncpy(merged, nam.NAMX_ESA, nam.NAMX_ESL);
     merged[nam.NAMX_ESL] = '\0';
@@ -539,7 +524,7 @@ static char *vms_name_converter(DSO *dso, const char *filename)
 {
     int len = strlen(filename);
     char *not_translated = OPENSSL_malloc(len + 1);
-    if (not_translated)
+    if (not_translated != NULL)
         strcpy(not_translated, filename);
     return (not_translated);
 }

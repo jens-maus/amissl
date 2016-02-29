@@ -1,4 +1,3 @@
-/* a_strex.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2000.
@@ -59,7 +58,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
 #include <openssl/asn1.h>
@@ -83,18 +82,6 @@
  * Three IO functions for sending data to memory, a BIO and and a FILE
  * pointer.
  */
-#if 0                           /* never used */
-static int send_mem_chars(void *arg, const void *buf, int len)
-{
-    unsigned char **out = arg;
-    if (!out)
-        return 1;
-    memcpy(*out, buf, len);
-    *out += len;
-    return 1;
-}
-#endif
-
 static int send_bio_chars(void *arg, const void *buf, int len)
 {
     if (!arg)
@@ -104,6 +91,7 @@ static int send_bio_chars(void *arg, const void *buf, int len)
     return 1;
 }
 
+#ifndef OPENSSL_NO_STDIO
 static int send_fp_chars(void *arg, const void *buf, int len)
 {
     if (!arg)
@@ -112,6 +100,7 @@ static int send_fp_chars(void *arg, const void *buf, int len)
         return 0;
     return 1;
 }
+#endif
 
 typedef int char_io (void *arg, const void *buf, int len);
 
@@ -315,7 +304,7 @@ static int do_dump(unsigned long lflags, char_io *io_ch, void *arg,
     t.value.ptr = (char *)str;
     der_len = i2d_ASN1_TYPE(&t, NULL);
     der_buf = OPENSSL_malloc(der_len);
-    if (!der_buf)
+    if (der_buf == NULL)
         return -1;
     p = der_buf;
     i2d_ASN1_TYPE(&t, &p);
@@ -513,7 +502,7 @@ static int do_name_ex(char_io *io_ch, void *arg, X509_NAME *n,
         else
             ent = X509_NAME_get_entry(n, i);
         if (prev != -1) {
-            if (prev == ent->set) {
+            if (prev == X509_NAME_ENTRY_set(ent)) {
                 if (!io_ch(arg, sep_mv, sep_mv_len))
                     return -1;
                 outlen += sep_mv_len;
@@ -526,7 +515,7 @@ static int do_name_ex(char_io *io_ch, void *arg, X509_NAME *n,
                 outlen += indent;
             }
         }
-        prev = ent->set;
+        prev = X509_NAME_ENTRY_set(ent);
         fn = X509_NAME_ENTRY_get_object(ent);
         val = X509_NAME_ENTRY_get_data(ent);
         fn_nid = OBJ_obj2nid(fn);
@@ -588,7 +577,7 @@ int X509_NAME_print_ex(BIO *out, X509_NAME *nm, int indent,
     return do_name_ex(send_bio_chars, out, nm, indent, flags);
 }
 
-#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_NO_STDIO
 int X509_NAME_print_ex_fp(FILE *fp, X509_NAME *nm, int indent,
                           unsigned long flags)
 {
@@ -611,7 +600,7 @@ int ASN1_STRING_print_ex(BIO *out, ASN1_STRING *str, unsigned long flags)
     return do_print_ex(send_bio_chars, out, flags, str);
 }
 
-#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_NO_STDIO
 int ASN1_STRING_print_ex_fp(FILE *fp, ASN1_STRING *str, unsigned long flags)
 {
     return do_print_ex(send_fp_chars, fp, flags, str);

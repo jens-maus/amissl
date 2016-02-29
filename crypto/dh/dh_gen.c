@@ -1,4 +1,3 @@
-/* crypto/dh/dh_gen.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -62,13 +61,9 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/dh.h>
-
-#ifdef OPENSSL_FIPS
-# include <openssl/fips.h>
-#endif
 
 static int dh_builtin_genparams(DH *ret, int prime_len, int generator,
                                 BN_GENCB *cb);
@@ -76,19 +71,8 @@ static int dh_builtin_genparams(DH *ret, int prime_len, int generator,
 int DH_generate_parameters_ex(DH *ret, int prime_len, int generator,
                               BN_GENCB *cb)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(ret->meth->flags & DH_FLAG_FIPS_METHOD)
-        && !(ret->flags & DH_FLAG_NON_FIPS_ALLOW)) {
-        DHerr(DH_F_DH_GENERATE_PARAMETERS_EX, DH_R_NON_FIPS_METHOD);
-        return 0;
-    }
-#endif
     if (ret->meth->generate_params)
         return ret->meth->generate_params(ret, prime_len, generator, cb);
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode())
-        return FIPS_dh_generate_parameters_ex(ret, prime_len, generator, cb);
-#endif
     return dh_builtin_genparams(ret, prime_len, generator, cb);
 }
 
@@ -151,17 +135,7 @@ static int dh_builtin_genparams(DH *ret, int prime_len, int generator,
         if (!BN_set_word(t2, 11))
             goto err;
         g = 2;
-    }
-#if 0                           /* does not work for safe primes */
-    else if (generator == DH_GENERATOR_3) {
-        if (!BN_set_word(t1, 12))
-            goto err;
-        if (!BN_set_word(t2, 5))
-            goto err;
-        g = 3;
-    }
-#endif
-    else if (generator == DH_GENERATOR_5) {
+    } else if (generator == DH_GENERATOR_5) {
         if (!BN_set_word(t1, 10))
             goto err;
         if (!BN_set_word(t2, 3))

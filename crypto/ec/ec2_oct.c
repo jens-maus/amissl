@@ -1,4 +1,3 @@
-/* crypto/ec/ec2_oct.c */
 /* ====================================================================
  * Copyright 2002 Sun Microsystems, Inc. ALL RIGHTS RESERVED.
  *
@@ -120,14 +119,14 @@ int ec_GF2m_simple_set_compressed_coordinates(const EC_GROUP *group,
     if (!BN_GF2m_mod_arr(x, x_, group->poly))
         goto err;
     if (BN_is_zero(x)) {
-        if (!BN_GF2m_mod_sqrt_arr(y, &group->b, group->poly, ctx))
+        if (!BN_GF2m_mod_sqrt_arr(y, group->b, group->poly, ctx))
             goto err;
     } else {
         if (!group->meth->field_sqr(group, tmp, x, ctx))
             goto err;
-        if (!group->meth->field_div(group, tmp, &group->b, tmp, ctx))
+        if (!group->meth->field_div(group, tmp, group->b, tmp, ctx))
             goto err;
-        if (!BN_GF2m_add(tmp, &group->a, tmp))
+        if (!BN_GF2m_add(tmp, group->a, tmp))
             goto err;
         if (!BN_GF2m_add(tmp, x, tmp))
             goto err;
@@ -160,8 +159,7 @@ int ec_GF2m_simple_set_compressed_coordinates(const EC_GROUP *group,
 
  err:
     BN_CTX_end(ctx);
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
+    BN_CTX_free(new_ctx);
     return ret;
 }
 
@@ -278,15 +276,13 @@ size_t ec_GF2m_simple_point2oct(const EC_GROUP *group, const EC_POINT *point,
 
     if (used_ctx)
         BN_CTX_end(ctx);
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
+    BN_CTX_free(new_ctx);
     return ret;
 
  err:
     if (used_ctx)
         BN_CTX_end(ctx);
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
+    BN_CTX_free(new_ctx);
     return 0;
 }
 
@@ -357,7 +353,7 @@ int ec_GF2m_simple_oct2point(const EC_GROUP *group, EC_POINT *point,
 
     if (!BN_bin2bn(buf + 1, field_len, x))
         goto err;
-    if (BN_ucmp(x, &group->field) >= 0) {
+    if (BN_ucmp(x, group->field) >= 0) {
         ECerr(EC_F_EC_GF2M_SIMPLE_OCT2POINT, EC_R_INVALID_ENCODING);
         goto err;
     }
@@ -369,7 +365,7 @@ int ec_GF2m_simple_oct2point(const EC_GROUP *group, EC_POINT *point,
     } else {
         if (!BN_bin2bn(buf + 1 + field_len, field_len, y))
             goto err;
-        if (BN_ucmp(y, &group->field) >= 0) {
+        if (BN_ucmp(y, group->field) >= 0) {
             ECerr(EC_F_EC_GF2M_SIMPLE_OCT2POINT, EC_R_INVALID_ENCODING);
             goto err;
         }
@@ -396,8 +392,7 @@ int ec_GF2m_simple_oct2point(const EC_GROUP *group, EC_POINT *point,
 
  err:
     BN_CTX_end(ctx);
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
+    BN_CTX_free(new_ctx);
     return ret;
 }
 #endif

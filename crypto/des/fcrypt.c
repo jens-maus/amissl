@@ -22,6 +22,7 @@
  * changed. I have defined 24.
  */
 
+#include <openssl/crypto.h>
 #include "des_locl.h"
 
 /*

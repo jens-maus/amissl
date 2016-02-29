@@ -1,4 +1,3 @@
-/* crypto/bn/bn_sqr.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,8 +55,7 @@
  * [including the GNU Public Licence.]
  */
 
-#include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 /* r must not be a */
@@ -70,9 +68,6 @@ int BN_sqr(BIGNUM *r, const BIGNUM *a, BN_CTX *ctx)
     int ret = 0;
     BIGNUM *tmp, *rr;
 
-#ifdef BN_COUNT
-    fprintf(stderr, "BN_sqr %d * %d\n", a->top, a->top);
-#endif
     bn_check_top(a);
 
     al = a->top;
@@ -207,9 +202,6 @@ void bn_sqr_recursive(BN_ULONG *r, const BN_ULONG *a, int n2, BN_ULONG *t)
     int zero, c1;
     BN_ULONG ln, lo, *p;
 
-# ifdef BN_COUNT
-    fprintf(stderr, " bn_sqr_recursive %d * %d\n", n2, n2);
-# endif
     if (n2 == 4) {
 # ifndef BN_SQR_COMBA
         bn_sqr_normal(r, a, 4, t);
@@ -245,7 +237,7 @@ void bn_sqr_recursive(BN_ULONG *r, const BN_ULONG *a, int n2, BN_ULONG *t)
     if (!zero)
         bn_sqr_recursive(&(t[n2]), t, n, p);
     else
-        memset(&(t[n2]), 0, n2 * sizeof(BN_ULONG));
+        memset(&t[n2], 0, sizeof(*t) * n2);
     bn_sqr_recursive(r, a, n, p);
     bn_sqr_recursive(&(r[n2]), &(a[n]), n, p);
 

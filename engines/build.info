@@ -1,0 +1,29 @@
+{- use File::Spec::Functions qw/:DEFAULT rel2abs/; -}
+IF[{- $config{no_shared} -}]
+ LIBS=../libcrypto
+ SOURCE[../libcrypto]=\
+        e_padlock.c {- $target{padlock_asm_src} -} \
+        e_capi.c \
+        e_dasync.c
+ELSE
+ ENGINES=libpadlock libcapi libdasync libossltest
+ SOURCE[libpadlock]=e_padlock.c {- $target{padlock_asm_src} -}
+ DEPEND[libpadlock]=../libcrypto
+ INCLUDE[libpadlock]={- rel2abs(catdir($builddir,"../include")) -} ../include
+ SOURCE[libcapi]=e_capi.c
+ DEPEND[libcapi]=../libcrypto
+ INCLUDE[libcapi]={- rel2abs(catdir($builddir,"../include")) -} ../include
+ SOURCE[libdasync]=e_dasync.c
+ DEPEND[libdasync]=../libcrypto
+ INCLUDE[libdasync]={- rel2abs(catdir($builddir,"../include")) -} ../include
+ SOURCE[libossltest]=e_ossltest.c
+ DEPEND[libossltest]=../libcrypto
+ INCLUDE[libossltest]={- rel2abs(catdir($builddir,"../include")) -} ../include
+ENDIF
+
+BEGINRAW[Makefile]
+{- $builddir -}/e_padlock-x86.s:	{- $sourcedir -}/asm/e_padlock-x86.pl
+	CC="$(CC)" $(PERL) {- $sourcedir -}/asm/e_padlock-x86.pl $(PERLASM_SCHEME) $(CFLAGS) $(PROCESSOR) > $@
+{- $builddir -}/e_padlock-x86_64.s:	{- $sourcedir -}/asm/e_padlock-x86_64.pl
+	CC="$(CC)" $(PERL) {- $sourcedir -}/asm/e_padlock-x86_64.pl $(PERLASM_SCHEME) > $@
+ENDRAW[Makefile]

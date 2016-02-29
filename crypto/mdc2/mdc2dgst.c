@@ -1,4 +1,3 @@
-/* crypto/mdc2/mdc2dgst.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -76,7 +75,7 @@
                         *((c)++)=(unsigned char)(((l)>>24L)&0xff))
 
 static void mdc2_body(MDC2_CTX *c, const unsigned char *in, size_t len);
-fips_md_init(MDC2)
+int MDC2_Init(MDC2_CTX *c)
 {
     c->num = 0;
     c->pad_type = 1;

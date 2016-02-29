@@ -1,4 +1,3 @@
-/* crypto/err/err_prn.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,7 +56,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/lhash.h>
 #include <openssl/crypto.h>
 #include <openssl/buffer.h>
@@ -85,7 +84,7 @@ void ERR_print_errors_cb(int (*cb) (const char *str, size_t len, void *u),
     }
 }
 
-#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_NO_STDIO
 static int print_fp(const char *str, size_t len, void *fp)
 {
     BIO bio;

@@ -1,4 +1,3 @@
-/* crypto/rsa/rsa_sign.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,7 +56,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
 #include <openssl/objects.h>
@@ -77,13 +76,6 @@ int RSA_sign(int type, const unsigned char *m, unsigned int m_len,
     const unsigned char *s = NULL;
     X509_ALGOR algor;
     ASN1_OCTET_STRING digest;
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_SIGN, RSA_R_NON_FIPS_RSA_METHOD);
-        return 0;
-    }
-#endif
     if (rsa->meth->rsa_sign) {
         return rsa->meth->rsa_sign(type, m, m_len, sigret, siglen, rsa);
     }
@@ -102,7 +94,7 @@ int RSA_sign(int type, const unsigned char *m, unsigned int m_len,
             RSAerr(RSA_F_RSA_SIGN, RSA_R_UNKNOWN_ALGORITHM_TYPE);
             return (0);
         }
-        if (sig.algor->algorithm->length == 0) {
+        if (OBJ_length(sig.algor->algorithm) == 0) {
             RSAerr(RSA_F_RSA_SIGN,
                    RSA_R_THE_ASN1_OBJECT_IDENTIFIER_IS_NOT_KNOWN_FOR_THIS_MD);
             return (0);
@@ -123,7 +115,7 @@ int RSA_sign(int type, const unsigned char *m, unsigned int m_len,
         return (0);
     }
     if (type != NID_md5_sha1) {
-        tmps = (unsigned char *)OPENSSL_malloc((unsigned int)j + 1);
+        tmps = OPENSSL_malloc((unsigned int)j + 1);
         if (tmps == NULL) {
             RSAerr(RSA_F_RSA_SIGN, ERR_R_MALLOC_FAILURE);
             return (0);
@@ -138,10 +130,8 @@ int RSA_sign(int type, const unsigned char *m, unsigned int m_len,
     else
         *siglen = i;
 
-    if (type != NID_md5_sha1) {
-        OPENSSL_cleanse(tmps, (unsigned int)j + 1);
-        OPENSSL_free(tmps);
-    }
+    if (type != NID_md5_sha1)
+        OPENSSL_clear_free(tmps, (unsigned int)j + 1);
     return (ret);
 }
 
@@ -160,8 +150,7 @@ static int rsa_check_digestinfo(X509_SIG *sig, const unsigned char *dinfo,
         return 0;
     if (derlen == dinfolen && !memcmp(dinfo, der, derlen))
         ret = 1;
-    OPENSSL_cleanse(der, derlen);
-    OPENSSL_free(der);
+    OPENSSL_clear_free(der, derlen);
     return ret;
 }
 
@@ -173,14 +162,6 @@ int int_rsa_verify(int dtype, const unsigned char *m,
     int i, ret = 0, sigtype;
     unsigned char *s;
     X509_SIG *sig = NULL;
-
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_INT_RSA_VERIFY, RSA_R_NON_FIPS_RSA_METHOD);
-        return 0;
-    }
-#endif
 
     if (siglen != (unsigned int)RSA_size(rsa)) {
         RSAerr(RSA_F_INT_RSA_VERIFY, RSA_R_WRONG_SIGNATURE_LENGTH);
@@ -196,7 +177,7 @@ int int_rsa_verify(int dtype, const unsigned char *m,
         return 1;
     }
 
-    s = (unsigned char *)OPENSSL_malloc((unsigned int)siglen);
+    s = OPENSSL_malloc((unsigned int)siglen);
     if (s == NULL) {
         RSAerr(RSA_F_INT_RSA_VERIFY, ERR_R_MALLOC_FAILURE);
         goto err;
@@ -280,12 +261,8 @@ int int_rsa_verify(int dtype, const unsigned char *m,
             ret = 1;
     }
  err:
-    if (sig != NULL)
-        X509_SIG_free(sig);
-    if (s != NULL) {
-        OPENSSL_cleanse(s, (unsigned int)siglen);
-        OPENSSL_free(s);
-    }
+    X509_SIG_free(sig);
+    OPENSSL_clear_free(s, (unsigned int)siglen);
     return (ret);
 }
 

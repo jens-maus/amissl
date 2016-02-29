@@ -21,10 +21,6 @@ The following strings can be returned:
 
 =over 4
 
-=item SSLv2
-
-The connection uses the SSLv2 protocol.
-
 =item SSLv3
 
 The connection uses the SSLv3 protocol.
@@ -49,6 +45,6 @@ This indicates that no version has been set (no connection established).
 
 =head1 SEE ALSO
 
-L<ssl(3)|ssl(3)>
+L<ssl(3)>
 
 =cut

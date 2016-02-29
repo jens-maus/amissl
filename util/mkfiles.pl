@@ -15,7 +15,6 @@ my @dirs = (
 "crypto/sha",
 "crypto/mdc2",
 "crypto/hmac",
-"crypto/cmac",
 "crypto/ripemd",
 "crypto/des",
 "crypto/rc2",
@@ -28,14 +27,13 @@ my @dirs = (
 "crypto/camellia",
 "crypto/seed",
 "crypto/modes",
+"crypto/cmac",
 "crypto/bn",
 "crypto/rsa",
 "crypto/dsa",
 "crypto/dso",
 "crypto/dh",
 "crypto/ec",
-"crypto/ecdh",
-"crypto/ecdsa",
 "crypto/buffer",
 "crypto/bio",
 "crypto/stack",
@@ -58,23 +56,28 @@ my @dirs = (
 "crypto/engine",
 "crypto/ocsp",
 "crypto/ui",
-"crypto/krb5",
 #"crypto/store",
-"crypto/pqueue",
 "crypto/whrlpool",
 "crypto/ts",
 "crypto/srp",
+"crypto/ct",
+"crypto/async",
+"crypto/chacha",
+"crypto/poly1305",
+"crypto/kdf",
 "ssl",
 "apps",
 "engines",
-"engines/ccgost",
 "test",
 "tools"
 );
 
 %top;
 
+my $fipscanisteronly = 0;
+
 foreach (@dirs) {
+	next if ($fipscanisteronly && !(-d $_));
 	&files_dir ($_, "Makefile");
 }
 
@@ -92,9 +95,9 @@ my $s="";
 
 while (<IN>)
 	{
-	chop;
+	s|\R$||;
 	s/#.*//;
-	if (/^(\S+)\s*=\s*(.*)$/)
+	if (/^([^\s=]+)\s*=\s*(.*)$/)
 		{
 		$o="";
 		($s,$b)=($1,$2);
@@ -102,10 +105,10 @@ while (<IN>)
 			{
 			if ($b =~ /\\$/)
 				{
-				chop($b);
+				$b=$`;
 				$o.=$b." ";
-				$b=<IN>;
-				chop($b);
+				$b = "" unless defined($b = <IN>);
+				$b =~ s{\R$}{};
 				}
 			else
 				{
@@ -140,4 +143,8 @@ if ($dir eq "." && defined($sym{"BUILDENV"}))
 print "RELATIVE_DIRECTORY=\n";
 
 close (IN);
+if ($dir eq "." && $sym{FIPSCANISTERONLY} eq "y")
+	{
+	$fipscanisteronly = 1;
+	}
 }

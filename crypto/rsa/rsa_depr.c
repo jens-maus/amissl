@@ -1,4 +1,3 @@
-/* crypto/rsa/rsa_depr.c */
 /* ====================================================================
  * Copyright (c) 1998-2002 The OpenSSL Project.  All rights reserved.
  *
@@ -58,27 +57,27 @@
  * "new" versions).
  */
 
-#include <stdio.h>
-#include <time.h>
-#include "cryptlib.h"
-#include <openssl/bn.h>
-#include <openssl/rsa.h>
-
-#ifdef OPENSSL_NO_DEPRECATED
-
-static void *dummy = &dummy;
+#include <openssl/opensslconf.h>
+#if OPENSSL_API_COMPAT >= 0x00908000L
+NON_EMPTY_TRANSLATION_UNIT
 
 #else
+
+# include <stdio.h>
+# include <time.h>
+# include "internal/cryptlib.h"
+# include <openssl/bn.h>
+# include <openssl/rsa.h>
 
 RSA *RSA_generate_key(int bits, unsigned long e_value,
                       void (*callback) (int, int, void *), void *cb_arg)
 {
-    BN_GENCB cb;
     int i;
+    BN_GENCB *cb = BN_GENCB_new();
     RSA *rsa = RSA_new();
     BIGNUM *e = BN_new();
 
-    if (!rsa || !e)
+    if (cb == NULL || rsa == NULL || e == NULL)
         goto err;
 
     /*
@@ -91,17 +90,17 @@ RSA *RSA_generate_key(int bits, unsigned long e_value,
                 goto err;
     }
 
-    BN_GENCB_set_old(&cb, callback, cb_arg);
+    BN_GENCB_set_old(cb, callback, cb_arg);
 
-    if (RSA_generate_key_ex(rsa, bits, e, &cb)) {
+    if (RSA_generate_key_ex(rsa, bits, e, cb)) {
         BN_free(e);
+        BN_GENCB_free(cb);
         return rsa;
     }
  err:
-    if (e)
-        BN_free(e);
-    if (rsa)
-        RSA_free(rsa);
+    BN_free(e);
+    RSA_free(rsa);
+    BN_GENCB_free(cb);
     return 0;
 }
 #endif

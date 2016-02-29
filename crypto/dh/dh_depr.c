@@ -1,4 +1,3 @@
-/* crypto/dh/dh_depr.c */
 /* ====================================================================
  * Copyright (c) 1998-2002 The OpenSSL Project.  All rights reserved.
  *
@@ -55,27 +54,37 @@
 
 /* This file contains deprecated functions as wrappers to the new ones */
 
-#include <stdio.h>
-#include "cryptlib.h"
-#include <openssl/bn.h>
-#include <openssl/dh.h>
+#include <openssl/opensslconf.h>
+#if OPENSSL_API_COMPAT >= 0x00908000L
+NON_EMPTY_TRANSLATION_UNIT
+#else
 
-static void *dummy = &dummy;
+# include <stdio.h>
+# include "internal/cryptlib.h"
+# include <openssl/bn.h>
+# include <openssl/dh.h>
 
-#ifndef OPENSSL_NO_DEPRECATED
 DH *DH_generate_parameters(int prime_len, int generator,
                            void (*callback) (int, int, void *), void *cb_arg)
 {
-    BN_GENCB cb;
+    BN_GENCB *cb;
     DH *ret = NULL;
 
     if ((ret = DH_new()) == NULL)
         return NULL;
+    cb = BN_GENCB_new();
+    if (cb == NULL) {
+        DH_free(ret);
+        return NULL;
+    }
 
-    BN_GENCB_set_old(&cb, callback, cb_arg);
+    BN_GENCB_set_old(cb, callback, cb_arg);
 
-    if (DH_generate_parameters_ex(ret, prime_len, generator, &cb))
+    if (DH_generate_parameters_ex(ret, prime_len, generator, cb)) {
+        BN_GENCB_free(cb);
         return ret;
+    }
+    BN_GENCB_free(cb);
     DH_free(ret);
     return NULL;
 }

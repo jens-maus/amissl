@@ -1,4 +1,3 @@
-/* dso_null.c */
 /*
  * Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL project
  * 2000.
@@ -63,7 +62,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/dso.h>
 
 static DSO_METHOD dso_meth_null = {
@@ -72,11 +71,6 @@ static DSO_METHOD dso_meth_null = {
     NULL,                       /* unload */
     NULL,                       /* bind_var */
     NULL,                       /* bind_func */
-/* For now, "unbind" doesn't exist */
-#if 0
-    NULL,                       /* unbind_var */
-    NULL,                       /* unbind_func */
-#endif
     NULL,                       /* ctrl */
     NULL,                       /* dso_name_converter */
     NULL,                       /* dso_merger */

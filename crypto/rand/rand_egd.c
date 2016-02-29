@@ -1,4 +1,3 @@
-/* crypto/rand/rand_egd.c */
 /* Written by Ulf Moeller and Lutz Jaenicke for the OpenSSL project. */
 /* ====================================================================
  * Copyright (c) 1998-2000 The OpenSSL Project.  All rights reserved.
@@ -54,9 +53,14 @@
  *
  */
 
-#include <openssl/e_os2.h>
-#include <openssl/rand.h>
-#include <openssl/buffer.h>
+#include <openssl/opensslconf.h>
+#ifdef OPENSSL_NO_EGD
+NON_EMPTY_TRANSLATION_UNIT
+#else
+
+# include <openssl/crypto.h>
+# include <openssl/e_os2.h>
+# include <openssl/rand.h>
 
 /*-
  * Query the EGD <URL: http://www.lothar.com/tech/crypto/>.
@@ -72,7 +76,7 @@
  *   of entropy bytes are requested. The connection is left open until the
  *   query is competed.
  *   RAND_query_egd_bytes() returns with
- *     -1  if an error occured during connection or communication.
+ *     -1  if an error occurred during connection or communication.
  *     num the number of bytes read from the EGD socket. This number is either
  *         the number of bytes requested or smaller, if the EGD pool is
  *         drained and the daemon signals that the pool is empty.
@@ -84,7 +88,7 @@
  *   RAND_egd_bytes() is a wrapper for RAND_query_egd_bytes() with buf=NULL.
  *   Unlike RAND_query_egd_bytes(), RAND_status() is used to test the
  *   seed status so that the return value can reflect the seed state:
- *     -1  if an error occured during connection or communication _or_
+ *     -1  if an error occurred during connection or communication _or_
  *         if the PRNG has still not received the required seeding.
  *     num the number of bytes read from the EGD socket. This number is either
  *         the number of bytes requested or smaller, if the EGD pool is
@@ -95,7 +99,7 @@
  *   RAND_egd() is a wrapper for RAND_egd_bytes() with numbytes=255.
  */
 
-#if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_VOS) || defined(OPENSSL_SYS_BEOS)
+# if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_VOS) || defined(OPENSSL_SYS_UEFI)
 int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
 {
     return (-1);
@@ -110,30 +114,26 @@ int RAND_egd_bytes(const char *path, int bytes)
 {
     return (-1);
 }
-#else
-# include <openssl/opensslconf.h>
-# include OPENSSL_UNISTD
-# include <stddef.h>
-# include <sys/types.h>
-# include <sys/socket.h>
-# ifndef NO_SYS_UN_H
-#  ifdef OPENSSL_SYS_VXWORKS
-#   include <streams/un.h>
-#  else
-#   include <sys/un.h>
-#  endif
 # else
+#  include <openssl/opensslconf.h>
+#  include OPENSSL_UNISTD
+#  include <stddef.h>
+#  include <sys/types.h>
+#  include <sys/socket.h>
+#  ifndef NO_SYS_UN_H
+#   ifdef OPENSSL_SYS_VXWORKS
+#    include <streams/un.h>
+#   else
+#    include <sys/un.h>
+#   endif
+#  else
 struct sockaddr_un {
     short sun_family;           /* AF_UNIX */
     char sun_path[108];         /* path name (gag) */
 };
-# endif                         /* NO_SYS_UN_H */
-# include <string.h>
-# include <errno.h>
-
-# ifndef offsetof
-#  define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-# endif
+#  endif                         /* NO_SYS_UN_H */
+#  include <string.h>
+#  include <errno.h>
 
 int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
 {
@@ -148,7 +148,7 @@ int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
     addr.sun_family = AF_UNIX;
     if (strlen(path) >= sizeof(addr.sun_path))
         return (-1);
-    BUF_strlcpy(addr.sun_path, path, sizeof addr.sun_path);
+    OPENSSL_strlcpy(addr.sun_path, path, sizeof addr.sun_path);
     len = offsetof(struct sockaddr_un, sun_path) + strlen(path);
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (fd == -1)
@@ -159,25 +159,25 @@ int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
             success = 1;
         else {
             switch (errno) {
-# ifdef EINTR
+#  ifdef EINTR
             case EINTR:
-# endif
-# ifdef EAGAIN
+#  endif
+#  ifdef EAGAIN
             case EAGAIN:
-# endif
-# ifdef EINPROGRESS
+#  endif
+#  ifdef EINPROGRESS
             case EINPROGRESS:
-# endif
-# ifdef EALREADY
+#  endif
+#  ifdef EALREADY
             case EALREADY:
-# endif
+#  endif
                 /* No error, try again */
                 break;
-# ifdef EISCONN
+#  ifdef EISCONN
             case EISCONN:
                 success = 1;
                 break;
-# endif
+#  endif
             default:
                 goto err;       /* failure */
             }
@@ -194,12 +194,12 @@ int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
                 numbytes += num;
             else {
                 switch (errno) {
-# ifdef EINTR
+#  ifdef EINTR
                 case EINTR:
-# endif
-# ifdef EAGAIN
+#  endif
+#  ifdef EAGAIN
                 case EAGAIN:
-# endif
+#  endif
                     /* No error, try again */
                     break;
                 default:
@@ -217,12 +217,12 @@ int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
                 numbytes += num;
             else {
                 switch (errno) {
-# ifdef EINTR
+#  ifdef EINTR
                 case EINTR:
-# endif
-# ifdef EAGAIN
+#  endif
+#  ifdef EAGAIN
                 case EAGAIN:
-# endif
+#  endif
                     /* No error, try again */
                     break;
                 default:
@@ -246,12 +246,12 @@ int RAND_query_egd_bytes(const char *path, unsigned char *buf, int bytes)
                 numbytes += num;
             else {
                 switch (errno) {
-# ifdef EINTR
+#  ifdef EINTR
                 case EINTR:
-# endif
-# ifdef EAGAIN
+#  endif
+#  ifdef EAGAIN
                 case EAGAIN:
-# endif
+#  endif
                     /* No error, try again */
                     break;
                 default:
@@ -288,5 +288,7 @@ int RAND_egd(const char *path)
 {
     return (RAND_egd_bytes(path, 255));
 }
+
+# endif
 
 #endif

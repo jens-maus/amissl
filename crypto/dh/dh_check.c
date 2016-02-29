@@ -1,4 +1,3 @@
-/* crypto/dh/dh_check.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,7 +56,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/dh.h>
 
@@ -116,15 +115,7 @@ int DH_check(const DH *dh, int *ret)
         l = BN_mod_word(dh->p, 24);
         if (l != 11)
             *ret |= DH_NOT_SUITABLE_GENERATOR;
-    }
-#if 0
-    else if (BN_is_word(dh->g, DH_GENERATOR_3)) {
-        l = BN_mod_word(dh->p, 12);
-        if (l != 5)
-            *ret |= DH_NOT_SUITABLE_GENERATOR;
-    }
-#endif
-    else if (BN_is_word(dh->g, DH_GENERATOR_5)) {
+    } else if (BN_is_word(dh->g, DH_GENERATOR_5)) {
         l = BN_mod_word(dh->p, 10);
         if ((l != 3) && (l != 7))
             *ret |= DH_NOT_SUITABLE_GENERATOR;
@@ -160,13 +151,12 @@ int DH_check_pub_key(const DH *dh, const BIGNUM *pub_key, int *ret)
         goto err;
     BN_CTX_start(ctx);
     tmp = BN_CTX_get(ctx);
-    if (tmp == NULL)
+    if (tmp == NULL || !BN_set_word(tmp, 1))
         goto err;
-    BN_set_word(tmp, 1);
     if (BN_cmp(pub_key, tmp) <= 0)
         *ret |= DH_CHECK_PUBKEY_TOO_SMALL;
-    BN_copy(tmp, dh->p);
-    BN_sub_word(tmp, 1);
+    if (BN_copy(tmp, dh->p) == NULL || !BN_sub_word(tmp, 1))
+        goto err;
     if (BN_cmp(pub_key, tmp) >= 0)
         *ret |= DH_CHECK_PUBKEY_TOO_LARGE;
 

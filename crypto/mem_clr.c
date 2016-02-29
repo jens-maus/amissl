@@ -1,4 +1,3 @@
-/* crypto/mem_clr.c */
 /*
  * Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL project
  * 2002.
@@ -60,6 +59,7 @@
 #include <string.h>
 #include <openssl/crypto.h>
 
+extern unsigned char cleanse_ctr;
 unsigned char cleanse_ctr = 0;
 
 void OPENSSL_cleanse(void *ptr, size_t len)

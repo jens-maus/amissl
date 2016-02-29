@@ -1,4 +1,3 @@
-/* crypto/idea/i_skey.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,21 +55,11 @@
  * [including the GNU Public Licence.]
  */
 
-#include <openssl/crypto.h>
 #include <openssl/idea.h>
 #include "idea_lcl.h"
 
 static IDEA_INT inverse(unsigned int xin);
 void idea_set_encrypt_key(const unsigned char *key, IDEA_KEY_SCHEDULE *ks)
-#ifdef OPENSSL_FIPS
-{
-    fips_cipher_abort(IDEA);
-    private_idea_set_encrypt_key(key, ks);
-}
-
-void private_idea_set_encrypt_key(const unsigned char *key,
-                                  IDEA_KEY_SCHEDULE *ks)
-#endif
 {
     int i;
     register IDEA_INT *kt, *kf, r0, r1, r2;

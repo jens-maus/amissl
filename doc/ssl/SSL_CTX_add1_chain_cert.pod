@@ -138,10 +138,9 @@ a verification error occurs then 2 is returned.
 
 All other functions return 1 for success and 0 for failure.
 
-
 =head1 SEE ALSO
 
-L<SSL_CTX_add_extra_chain_cert(3)|SSL_CTX_add_extra_chain_cert(3)>
+L<SSL_CTX_add_extra_chain_cert(3)>
 
 =head1 HISTORY
 

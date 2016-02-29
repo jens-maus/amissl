@@ -1,4 +1,3 @@
-/* crypto/bf/bf_skey.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -58,20 +57,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <openssl/crypto.h>
 #include <openssl/blowfish.h>
 #include "bf_locl.h"
 #include "bf_pi.h"
 
 void BF_set_key(BF_KEY *key, int len, const unsigned char *data)
-#ifdef OPENSSL_FIPS
-{
-    fips_cipher_abort(BLOWFISH);
-    private_BF_set_key(key, len, data);
-}
-
-void private_BF_set_key(BF_KEY *key, int len, const unsigned char *data)
-#endif
 {
     int i;
     BF_LONG *p, ri, in[2];

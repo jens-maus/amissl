@@ -16,6 +16,7 @@ int main()
     X509 *x509 = NULL;
     EVP_PKEY *pkey = NULL;
 
+    CRYPTO_set_mem_debug(1);
     CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
 
     bio_err = BIO_new_fp(stderr, BIO_NOCLOSE);
@@ -42,15 +43,7 @@ int main()
     return (0);
 }
 
-#ifdef WIN16
-# define MS_CALLBACK   _far _loadds
-# define MS_FAR        _far
-#else
-# define MS_CALLBACK
-# define MS_FAR
-#endif
-
-static void MS_CALLBACK callback(p, n, arg)
+static void callback(p, n, arg)
 int p;
 int n;
 void *arg;
@@ -144,7 +137,7 @@ int days;
     X509_add_ext(x, ex, -1);
     X509_EXTENSION_free(ex);
 
-#if 0
+#ifdef ADD_CA_CONSTRAINT
     /* might want something like this too.... */
     ex = X509V3_EXT_conf_nid(NULL, NULL, NID_basic_constraints,
                              "critical,CA:TRUE");
@@ -153,7 +146,7 @@ int days;
     X509_EXTENSION_free(ex);
 #endif
 
-#ifdef CUSTOM_EXT
+#ifdef ADD_A_CUSTOM_EXTENSION
     /* Maybe even add our own extension based on existing */
     {
         int nid;

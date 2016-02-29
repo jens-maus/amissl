@@ -1,4 +1,3 @@
-/* crypto/camellia/camellia_misc.c */
 /* ====================================================================
  * Copyright (c) 2006 The OpenSSL Project.  All rights reserved.
  *
@@ -50,14 +49,11 @@
  */
 
 #include <openssl/opensslv.h>
-#include <openssl/crypto.h>
 #include <openssl/camellia.h>
 #include "cmll_locl.h"
 
-const char CAMELLIA_version[] = "CAMELLIA" OPENSSL_VERSION_PTEXT;
-
-int private_Camellia_set_key(const unsigned char *userKey, const int bits,
-                             CAMELLIA_KEY *key)
+int Camellia_set_key(const unsigned char *userKey, const int bits,
+                     CAMELLIA_KEY *key)
 {
     if (!userKey || !key)
         return -1;

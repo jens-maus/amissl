@@ -61,13 +61,15 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/conf.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/x509v3.h>
 #include <openssl/x509.h>
+#include "internal/x509_int.h"
 #include <openssl/bn.h>
+#include "ext_dat.h"
 
 #ifndef OPENSSL_NO_RFC3779
 
@@ -162,7 +164,7 @@ static int i2r_ASIdentifiers(const X509V3_EXT_METHOD *method,
 }
 
 /*
- * Sort comparision function for a sequence of ASIdOrRange elements.
+ * Sort comparison function for a sequence of ASIdOrRange elements.
  */
 static int ASIdOrRange_cmp(const ASIdOrRange *const *a_,
                            const ASIdOrRange *const *b_)
@@ -322,7 +324,8 @@ static int ASIdentifierChoice_is_canonical(ASIdentifierChoice *choice)
     for (i = 0; i < sk_ASIdOrRange_num(choice->u.asIdsOrRanges) - 1; i++) {
         ASIdOrRange *a = sk_ASIdOrRange_value(choice->u.asIdsOrRanges, i);
         ASIdOrRange *b = sk_ASIdOrRange_value(choice->u.asIdsOrRanges, i + 1);
-        ASN1_INTEGER *a_min, *a_max, *b_min, *b_max;
+        ASN1_INTEGER *a_min = NULL, *a_max = NULL, *b_min = NULL, *b_max =
+            NULL;
 
         extract_min_max(a, &a_min, &a_max);
         extract_min_max(b, &b_min, &b_max);
@@ -424,7 +427,8 @@ static int ASIdentifierChoice_canonize(ASIdentifierChoice *choice)
     for (i = 0; i < sk_ASIdOrRange_num(choice->u.asIdsOrRanges) - 1; i++) {
         ASIdOrRange *a = sk_ASIdOrRange_value(choice->u.asIdsOrRanges, i);
         ASIdOrRange *b = sk_ASIdOrRange_value(choice->u.asIdsOrRanges, i + 1);
-        ASN1_INTEGER *a_min, *a_max, *b_min, *b_max;
+        ASN1_INTEGER *a_min = NULL, *a_max = NULL, *b_min = NULL, *b_max =
+            NULL;
 
         extract_min_max(a, &a_min, &a_max);
         extract_min_max(b, &b_min, &b_max);
@@ -470,7 +474,7 @@ static int ASIdentifierChoice_canonize(ASIdentifierChoice *choice)
             ASRange *r;
             switch (a->type) {
             case ASIdOrRange_id:
-                if ((r = OPENSSL_malloc(sizeof(ASRange))) == NULL) {
+                if ((r = OPENSSL_malloc(sizeof(*r))) == NULL) {
                     X509V3err(X509V3_F_ASIDENTIFIERCHOICE_CANONIZE,
                               ERR_R_MALLOC_FAILURE);
                     goto done;
@@ -552,7 +556,7 @@ static void *v2i_ASIdentifiers(const struct v3_ext_method *method,
 
     for (i = 0; i < sk_CONF_VALUE_num(values); i++) {
         CONF_VALUE *val = sk_CONF_VALUE_value(values, i);
-        int i1, i2, i3, is_range, which;
+        int i1 = 0, i2 = 0, i3 = 0, is_range = 0, which = 0;
 
         /*
          * Figure out whether this is an AS or an RDI.
@@ -571,7 +575,7 @@ static void *v2i_ASIdentifiers(const struct v3_ext_method *method,
         /*
          * Handle inheritance.
          */
-        if (!strcmp(val->value, "inherit")) {
+        if (strcmp(val->value, "inherit") == 0) {
             if (v3_asid_add_inherit(asid, which))
                 continue;
             X509V3err(X509V3_F_V2I_ASIDENTIFIERS,
@@ -615,7 +619,7 @@ static void *v2i_ASIdentifiers(const struct v3_ext_method *method,
                 goto err;
             }
         } else {
-            char *s = BUF_strdup(val->value);
+            char *s = OPENSSL_strdup(val->value);
             if (s == NULL) {
                 X509V3err(X509V3_F_V2I_ASIDENTIFIERS, ERR_R_MALLOC_FAILURE);
                 goto err;
@@ -689,7 +693,7 @@ int v3_asid_inherits(ASIdentifiers *asid)
  */
 static int asid_contains(ASIdOrRanges *parent, ASIdOrRanges *child)
 {
-    ASN1_INTEGER *p_min, *p_max, *c_min, *c_max;
+    ASN1_INTEGER *p_min = NULL, *p_max = NULL, *c_min = NULL, *c_max = NULL;
     int p, c;
 
     if (child == NULL || parent == child)
@@ -716,7 +720,7 @@ static int asid_contains(ASIdOrRanges *parent, ASIdOrRanges *child)
 }
 
 /*
- * Test whether a is a subet of b.
+ * Test whether a is a subset of b.
  */
 int v3_asid_subset(ASIdentifiers *a, ASIdentifiers *b)
 {
@@ -734,7 +738,7 @@ int v3_asid_subset(ASIdentifiers *a, ASIdentifiers *b)
 /*
  * Validation error handling via callback.
  */
-# define validation_err(_err_)           \
+#define validation_err(_err_)           \
   do {                                  \
     if (ctx != NULL) {                  \
       ctx->error = _err_;               \
@@ -867,7 +871,7 @@ static int v3_asid_validate_path_internal(X509_STORE_CTX *ctx,
     return ret;
 }
 
-# undef validation_err
+#undef validation_err
 
 /*
  * RFC 3779 3.3 path validation -- called from X509_verify_cert().

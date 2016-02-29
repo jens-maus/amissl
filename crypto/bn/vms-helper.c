@@ -1,4 +1,3 @@
-/* vms-helper.c */
 /* ====================================================================
  * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
  *
@@ -54,13 +53,13 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 bn_div_words_abort(int i)
 {
 #ifdef BN_DEBUG
-# if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_WIN16)
+# if !defined(OPENSSL_NO_STDIO)
     fprintf(stderr, "Division would overflow (%d)\n", i);
 # endif
     abort();

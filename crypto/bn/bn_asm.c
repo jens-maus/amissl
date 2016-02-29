@@ -1,4 +1,3 @@
-/* crypto/bn/bn_asm.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -61,9 +60,9 @@
 # define NDEBUG
 #endif
 
-#include <stdio.h>
 #include <assert.h>
-#include "cryptlib.h"
+#include <openssl/crypto.h>
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 #if defined(BN_LLONG) || defined(BN_UMULT_HIGH)
@@ -1005,13 +1004,13 @@ int bn_mul_mont(BN_ULONG *rp, const BN_ULONG *ap, const BN_ULONG *bp,
 
 /* hmm... is it faster just to do a multiply? */
 # undef bn_sqr_comba4
+# undef bn_sqr_comba8
 void bn_sqr_comba4(BN_ULONG *r, const BN_ULONG *a)
 {
     BN_ULONG t[8];
     bn_sqr_normal(r, a, 4, t);
 }
 
-# undef bn_sqr_comba8
 void bn_sqr_comba8(BN_ULONG *r, const BN_ULONG *a)
 {
     BN_ULONG t[16];

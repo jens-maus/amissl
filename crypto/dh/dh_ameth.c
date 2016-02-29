@@ -57,17 +57,16 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/x509.h>
 #include <openssl/asn1.h>
 #include <openssl/dh.h>
 #include <openssl/bn.h>
-#include "asn1_locl.h"
+#include "internal/asn1_int.h"
+#include "internal/evp_int.h"
 #ifndef OPENSSL_NO_CMS
 # include <openssl/cms.h>
 #endif
-
-extern const EVP_PKEY_ASN1_METHOD dhx_asn1_meth;
 
 /*
  * i2d/d2i like DH parameter functions which use the appropriate routine for
@@ -119,18 +118,18 @@ static int dh_pub_decode(EVP_PKEY *pkey, X509_PUBKEY *pubkey)
     pm = pstr->data;
     pmlen = pstr->length;
 
-    if (!(dh = d2i_dhp(pkey, &pm, pmlen))) {
+    if ((dh = d2i_dhp(pkey, &pm, pmlen)) == NULL) {
         DHerr(DH_F_DH_PUB_DECODE, DH_R_DECODE_ERROR);
         goto err;
     }
 
-    if (!(public_key = d2i_ASN1_INTEGER(NULL, &p, pklen))) {
+    if ((public_key = d2i_ASN1_INTEGER(NULL, &p, pklen)) == NULL) {
         DHerr(DH_F_DH_PUB_DECODE, DH_R_DECODE_ERROR);
         goto err;
     }
 
     /* We have parameters now set public key */
-    if (!(dh->pub_key = ASN1_INTEGER_to_BN(public_key, NULL))) {
+    if ((dh->pub_key = ASN1_INTEGER_to_BN(public_key, NULL)) == NULL) {
         DHerr(DH_F_DH_PUB_DECODE, DH_R_BN_DECODE_ERROR);
         goto err;
     }
@@ -140,10 +139,8 @@ static int dh_pub_decode(EVP_PKEY *pkey, X509_PUBKEY *pubkey)
     return 1;
 
  err:
-    if (public_key)
-        ASN1_INTEGER_free(public_key);
-    if (dh)
-        DH_free(dh);
+    ASN1_INTEGER_free(public_key);
+    DH_free(dh);
     return 0;
 
 }
@@ -160,7 +157,7 @@ static int dh_pub_encode(X509_PUBKEY *pk, const EVP_PKEY *pkey)
     dh = pkey->pkey.dh;
 
     str = ASN1_STRING_new();
-    if (!str) {
+    if (str == NULL) {
         DHerr(DH_F_DH_PUB_ENCODE, ERR_R_MALLOC_FAILURE);
         goto err;
     }
@@ -189,18 +186,16 @@ static int dh_pub_encode(X509_PUBKEY *pk, const EVP_PKEY *pkey)
         return 1;
 
  err:
-    if (penc)
-        OPENSSL_free(penc);
-    if (str)
-        ASN1_STRING_free(str);
+    OPENSSL_free(penc);
+    ASN1_STRING_free(str);
 
     return 0;
 }
 
 /*
  * PKCS#8 DH is defined in PKCS#11 of all places. It is similar to DH in that
- * the AlgorithmIdentifier contains the paramaters, the private key is
- * explcitly included and the pubkey must be recalculated.
+ * the AlgorithmIdentifier contains the parameters, the private key is
+ * explicitly included and the pubkey must be recalculated.
  */
 
 static int dh_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8)
@@ -222,17 +217,18 @@ static int dh_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8)
 
     if (ptype != V_ASN1_SEQUENCE)
         goto decerr;
-
-    if (!(privkey = d2i_ASN1_INTEGER(NULL, &p, pklen)))
+    if ((privkey = d2i_ASN1_INTEGER(NULL, &p, pklen)) == NULL)
         goto decerr;
 
     pstr = pval;
     pm = pstr->data;
     pmlen = pstr->length;
-    if (!(dh = d2i_dhp(pkey, &pm, pmlen)))
+    if ((dh = d2i_dhp(pkey, &pm, pmlen)) == NULL)
         goto decerr;
+
     /* We have parameters now set private key */
-    if (!(dh->priv_key = ASN1_INTEGER_to_BN(privkey, NULL))) {
+    if ((dh->priv_key = BN_secure_new()) == NULL
+        || !ASN1_INTEGER_to_BN(privkey, dh->priv_key)) {
         DHerr(DH_F_DH_PRIV_DECODE, DH_R_BN_ERROR);
         goto dherr;
     }
@@ -263,7 +259,7 @@ static int dh_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pkey)
 
     params = ASN1_STRING_new();
 
-    if (!params) {
+    if (params == NULL) {
         DHerr(DH_F_DH_PRIV_ENCODE, ERR_R_MALLOC_FAILURE);
         goto err;
     }
@@ -295,12 +291,9 @@ static int dh_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pkey)
     return 1;
 
  err:
-    if (dp != NULL)
-        OPENSSL_free(dp);
-    if (params != NULL)
-        ASN1_STRING_free(params);
-    if (prkey != NULL)
-        ASN1_STRING_clear_free(prkey);
+    OPENSSL_free(dp);
+    ASN1_STRING_free(params);
+    ASN1_STRING_clear_free(prkey);
     return 0;
 }
 
@@ -317,7 +310,8 @@ static int dh_param_decode(EVP_PKEY *pkey,
                            const unsigned char **pder, int derlen)
 {
     DH *dh;
-    if (!(dh = d2i_dhp(pkey, pder, derlen))) {
+
+    if ((dh = d2i_dhp(pkey, pder, derlen)) == NULL) {
         DHerr(DH_F_DH_PARAM_DECODE, ERR_R_DH_LIB);
         return 0;
     }
@@ -334,7 +328,7 @@ static int do_dh_print(BIO *bp, const DH *x, int indent,
                        ASN1_PCTX *ctx, int ptype)
 {
     unsigned char *m = NULL;
-    int reason = ERR_R_BUF_LIB, ret = 0;
+    int reason = ERR_R_BUF_LIB;
     size_t buf_len = 0;
 
     const char *ktype = NULL;
@@ -422,14 +416,13 @@ static int do_dh_print(BIO *bp, const DH *x, int indent,
             goto err;
     }
 
-    ret = 1;
-    if (0) {
+    OPENSSL_free(m);
+    return 1;
+
  err:
-        DHerr(DH_F_DO_DH_PRINT, reason);
-    }
-    if (m != NULL)
-        OPENSSL_free(m);
-    return (ret);
+    DHerr(DH_F_DO_DH_PRINT, reason);
+    OPENSSL_free(m);
+    return 0;
 }
 
 static int int_dh_size(const EVP_PKEY *pkey)
@@ -440,6 +433,11 @@ static int int_dh_size(const EVP_PKEY *pkey)
 static int dh_bits(const EVP_PKEY *pkey)
 {
     return BN_num_bits(pkey->pkey.dh->p);
+}
+
+static int dh_security_bits(const EVP_PKEY *pkey)
+{
+    return DH_security_bits(pkey->pkey.dh);
 }
 
 static int dh_cmp_parameters(const EVP_PKEY *a, const EVP_PKEY *b)
@@ -463,8 +461,7 @@ static int int_dh_bn_cpy(BIGNUM **dst, const BIGNUM *src)
             return 0;
     } else
         a = NULL;
-    if (*dst)
-        BN_free(*dst);
+    BN_free(*dst);
     *dst = a;
     return 1;
 }
@@ -482,13 +479,11 @@ static int int_dh_param_copy(DH *to, const DH *from, int is_x942)
             return 0;
         if (!int_dh_bn_cpy(&to->j, from->j))
             return 0;
-        if (to->seed) {
-            OPENSSL_free(to->seed);
-            to->seed = NULL;
-            to->seedlen = 0;
-        }
+        OPENSSL_free(to->seed);
+        to->seed = NULL;
+        to->seedlen = 0;
         if (from->seed) {
-            to->seed = BUF_memdup(from->seed, from->seedlen);
+            to->seed = OPENSSL_memdup(from->seed, from->seedlen);
             if (!to->seed)
                 return 0;
             to->seedlen = from->seedlen;
@@ -502,7 +497,7 @@ DH *DHparams_dup(DH *dh)
 {
     DH *ret;
     ret = DH_new();
-    if (!ret)
+    if (ret == NULL)
         return NULL;
     if (!int_dh_param_copy(ret, dh, -1)) {
         DH_free(ret);
@@ -513,6 +508,11 @@ DH *DHparams_dup(DH *dh)
 
 static int dh_copy_parameters(EVP_PKEY *to, const EVP_PKEY *from)
 {
+    if (to->pkey.dh == NULL) {
+        to->pkey.dh = DH_new();
+        if (to->pkey.dh == NULL)
+            return 0;
+    }
     return int_dh_param_copy(to->pkey.dh, from->pkey.dh,
                              from->ameth == &dhx_asn1_meth);
 }
@@ -603,6 +603,7 @@ const EVP_PKEY_ASN1_METHOD dh_asn1_meth = {
 
     int_dh_size,
     dh_bits,
+    dh_security_bits,
 
     dh_param_decode,
     dh_param_encode,
@@ -635,6 +636,7 @@ const EVP_PKEY_ASN1_METHOD dhx_asn1_meth = {
 
     int_dh_size,
     dh_bits,
+    dh_security_bits,
 
     dh_param_decode,
     dh_param_encode,
@@ -683,31 +685,28 @@ static int dh_cms_set_peerkey(EVP_PKEY_CTX *pctx,
     if (!p || !plen)
         goto err;
 
-    if (!(public_key = d2i_ASN1_INTEGER(NULL, &p, plen))) {
+    if ((public_key = d2i_ASN1_INTEGER(NULL, &p, plen)) == NULL) {
         DHerr(DH_F_DH_CMS_SET_PEERKEY, DH_R_DECODE_ERROR);
         goto err;
     }
 
     /* We have parameters now set public key */
-    if (!(dhpeer->pub_key = ASN1_INTEGER_to_BN(public_key, NULL))) {
+    if ((dhpeer->pub_key = ASN1_INTEGER_to_BN(public_key, NULL)) == NULL) {
         DHerr(DH_F_DH_CMS_SET_PEERKEY, DH_R_BN_DECODE_ERROR);
         goto err;
     }
 
     pkpeer = EVP_PKEY_new();
-    if (!pkpeer)
+    if (pkpeer == NULL)
         goto err;
     EVP_PKEY_assign(pkpeer, pk->ameth->pkey_id, dhpeer);
     dhpeer = NULL;
     if (EVP_PKEY_derive_set_peer(pctx, pkpeer) > 0)
         rv = 1;
  err:
-    if (public_key)
-        ASN1_INTEGER_free(public_key);
-    if (pkpeer)
-        EVP_PKEY_free(pkpeer);
-    if (dhpeer)
-        DH_free(dhpeer);
+    ASN1_INTEGER_free(public_key);
+    EVP_PKEY_free(pkpeer);
+    DH_free(dhpeer);
     return rv;
 }
 
@@ -772,7 +771,7 @@ static int dh_cms_set_shared_info(EVP_PKEY_CTX *pctx, CMS_RecipientInfo *ri)
 
     if (ukm) {
         dukmlen = ASN1_STRING_length(ukm);
-        dukm = BUF_memdup(ASN1_STRING_data(ukm), dukmlen);
+        dukm = OPENSSL_memdup(ASN1_STRING_data(ukm), dukmlen);
         if (!dukm)
             goto err;
     }
@@ -783,10 +782,8 @@ static int dh_cms_set_shared_info(EVP_PKEY_CTX *pctx, CMS_RecipientInfo *ri)
 
     rv = 1;
  err:
-    if (kekalg)
-        X509_ALGOR_free(kekalg);
-    if (dukm)
-        OPENSSL_free(dukm);
+    X509_ALGOR_free(kekalg);
+    OPENSSL_free(dukm);
     return rv;
 }
 
@@ -846,8 +843,7 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
     X509_ALGOR_get0(&aoid, NULL, NULL, talg);
     /* Is everything uninitialised? */
     if (aoid == OBJ_nid2obj(NID_undef)) {
-        ASN1_INTEGER *pubk;
-        pubk = BN_to_ASN1_INTEGER(pkey->pkey.dh->pub_key, NULL);
+        ASN1_INTEGER *pubk = BN_to_ASN1_INTEGER(pkey->pkey.dh->pub_key, NULL);
         if (!pubk)
             goto err;
         /* Set the key */
@@ -865,7 +861,7 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
                         V_ASN1_UNDEF, NULL);
     }
 
-    /* See if custom paraneters set */
+    /* See if custom parameters set */
     kdf_type = EVP_PKEY_CTX_get_dh_kdf_type(pctx);
     if (kdf_type <= 0)
         goto err;
@@ -901,11 +897,11 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
     /* Package wrap algorithm in an AlgorithmIdentifier */
 
     wrap_alg = X509_ALGOR_new();
-    if (!wrap_alg)
+    if (wrap_alg == NULL)
         goto err;
     wrap_alg->algorithm = OBJ_nid2obj(wrap_nid);
     wrap_alg->parameter = ASN1_TYPE_new();
-    if (!wrap_alg->parameter)
+    if (wrap_alg->parameter == NULL)
         goto err;
     if (EVP_CIPHER_param_to_asn1(ctx, wrap_alg->parameter) <= 0)
         goto err;
@@ -919,7 +915,7 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
 
     if (ukm) {
         dukmlen = ASN1_STRING_length(ukm);
-        dukm = BUF_memdup(ASN1_STRING_data(ukm), dukmlen);
+        dukm = OPENSSL_memdup(ASN1_STRING_data(ukm), dukmlen);
         if (!dukm)
             goto err;
     }
@@ -937,7 +933,7 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
     if (!penc || !penclen)
         goto err;
     wrap_str = ASN1_STRING_new();
-    if (!wrap_str)
+    if (wrap_str == NULL)
         goto err;
     ASN1_STRING_set0(wrap_str, penc, penclen);
     penc = NULL;
@@ -947,10 +943,8 @@ static int dh_cms_encrypt(CMS_RecipientInfo *ri)
     rv = 1;
 
  err:
-    if (penc)
-        OPENSSL_free(penc);
-    if (wrap_alg)
-        X509_ALGOR_free(wrap_alg);
+    OPENSSL_free(penc);
+    X509_ALGOR_free(wrap_alg);
     return rv;
 }
 

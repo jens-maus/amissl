@@ -21,6 +21,9 @@ HERE="`dirname $0`"
 
 set -e
 
+INDENT=indent
+uname -s | grep BSD > /dev/null && type gindent > /dev/null 2>&1 && INDENT=gindent
+
 if [ $# -eq 0 ]; then
   echo "usage: $0 [-v] [-n] [-c] [sourcefile|sourcedir] ..." >&2
   exit 1
@@ -30,6 +33,7 @@ VERBOSE=false
 DONT=false
 STOPARGS=false
 COMMENTS=false
+CHANGED=false
 DEBUG=""
 
 # for this exercise, we want to force the openssl style, so we roll
@@ -82,10 +86,6 @@ do
       fi
     fi
 
-    if [ "$VERBOSE" = "true" ]; then
-      echo "$j"
-    fi
-
     if [ "$DONT" = "false" ]; then
       tmp=$(mktemp /tmp/indent.XXXXXX)
       trap 'rm -f "$tmp"' HUP INT TERM EXIT
@@ -123,11 +123,11 @@ do
 	      -e '/ASN1_(ITEM_ref|ITEM_ptr|ITEM_rptr|PCTX)/ || s/^((ASN1|ADB)_[^\*]*[){=,]+[ \t]*)$/\/**INDENT-OFF**\/\n$1/;' \
 	      -e 's/^(} (ASN1|ADB)_[^\*]*[\){=,;]+)$/$1\n\/**INDENT-ON**\//;' \
 	      | \
-	      $DEBUG indent $INDENT_ARGS | \
+	      $DEBUG $INDENT $INDENT_ARGS | \
 	      perl -np \
 		-e 's/^([ \t]*)\/\*-(.*)\*\/[ \t]*$/$1\/*$2*\//;' \
 		-e 's/^\/\*-((Copyright|=|----).*)$/\/* $1/;' \
-	      | indent | \
+	      | $INDENT | \
 	      perl -0 -np \
 		-e 's/\/\*\*INDENT-(ON|OFF)\*\*\/\n//g;' \
 	      | perl -np \
@@ -136,9 +136,20 @@ do
 	      | perl "$HERE"/su-filter.pl \
 	      > "$tmp"
 	  else
-	    expand "$j" | indent $INDENT_ARGS > "$tmp"
+	    expand "$j" | $INDENT $INDENT_ARGS > "$tmp"
 	  fi;
-	  mv "$tmp" "$j"
+	  if cmp -s "$tmp" "$j"; then
+	    if [ "$VERBOSE" = "true" ]; then
+	      echo "$j unchanged"
+	    fi
+	    rm "$tmp"
+	  else
+	    if [ "$VERBOSE" = "true" ]; then
+	      echo "$j changed"
+	    fi
+	    CHANGED=true
+	    mv "$tmp" "$j"
+	  fi
 	  ;;
       esac
     fi
@@ -146,3 +157,11 @@ do
 done
 
 
+if [ "$VERBOSE" = "true" ]; then
+  echo
+  if [ "$CHANGED" = "true" ]; then
+    echo "SOURCE WAS MODIFIED"
+  else
+    echo "SOURCE WAS NOT MODIFIED"
+  fi
+fi
