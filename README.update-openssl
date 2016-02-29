@@ -30,7 +30,6 @@ HowTo update the OpenSSL version in "openssl/":
    within a working copy of the AmiSSL repository:
    
    $ git subtree pull --prefix openssl --squash https://github.com/openssl/openssl.git OpenSSL_1_0_2f 
-  
    Note, that "OpenSSL_1_0_2f" can be replaced by any branch or tag of
    the OpenSSL git repository at github.com.
 
@@ -43,7 +42,7 @@ HowTo update the OpenSSL version in "openssl/":
 
 3. Check "include/amissl/amissl.h" to directly include all existing header files
    stored in "openssl/outinc". Due to some header file changes of newer versions
-   amissl.sh needs usually some tuning.
+   amissl.h needs usually some tuning.
 
 4. Check "openssl/util/ssleay.num" and "openssl/util/libeay.num" for public
    function changes and make sure to add them to our "include/xml/amissl.xml"
@@ -67,6 +66,24 @@ HowTo update the OpenSSL version in "openssl/":
 7. Review all changes with "git status" and make sure to commit everything
    properly.
 
+
+
+HowTo generate a diff file of our OpenSSL changes:
+
+1. Add a remote 'openssl' branch to your git working copy and fetch all branches
+   and tags accordingly:
+
+   $ git remote add openssl https://github.com/openssl/openssl.git
+   $ git fetch openssl
+   $ git fetch -t openssl
+
+2. Generate the diff from the top-level dir of your working copy.
+
+   $ git diff OpenSSL_1_0_2f master:openssl
+  
+   to generate a diff to a remote branch use the following command instead:
+
+   $ git diff master:openssl remotes/openssl/master
 
 References:
 
