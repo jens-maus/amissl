@@ -40,6 +40,10 @@ HowTo update the OpenSSL version in "openssl/":
 2. In many cases the above command will result in merge conflicts which you
    need to resolve accordingly before you can commit the changes accordingly.
 
+   Use the following command to display a list of files still in conflict:
+
+   $ git diff --name-only --diff-filter=U
+
 3. Check "include/amissl/amissl.h" to directly include all existing header files
    stored in "openssl/outinc". Due to some header file changes of newer versions
    amissl.h needs usually some tuning.
