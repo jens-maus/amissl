@@ -2785,7 +2785,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_d2i_X509_CRL_fp
 	    FPTR IAmiSSL_d2i_X509_REQ_fp
 	    FPTR IAmiSSL_d2i_X509_fp
-	    FPTR IAmiSSL_DES_options
 	    FPTR IAmiSSL_i2d_DSAPrivateKey_fp
 	    FPTR IAmiSSL_i2d_PKCS7_fp
 	    FPTR IAmiSSL_i2d_RSAPrivateKey_fp
@@ -3947,8 +3946,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_NETSCAPE_X509_it
 	    FPTR IAmiSSL_ISSUING_DIST_POINT_it
 	    FPTR IAmiSSL_RSA_PSS_PARAMS_it
-	    FPTR IAmiSSL__shadow_DES_rw_mode
-	    FPTR IAmiSSL__shadow_DES_check_key
 	    FPTR IAmiSSL_ENGINE_load_gost
 	    FPTR IAmiSSL_PEM_write_bio_DHxparams
 	    FPTR IAmiSSL_X509_ALGOR_cmp

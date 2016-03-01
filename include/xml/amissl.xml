@@ -9074,11 +9074,11 @@
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
     </method>
-    <method name="_shadow_DES_check_key" result="int *" status="unimplemented">
+    <method name="_shadow_DES_check_key" result="int *">
     </method>
-    <method name="_shadow_DES_rw_mode" result="int *" status="unimplemented">
+    <method name="_shadow_DES_rw_mode" result="int *">
     </method>
-    <method name="DES_options" result="const char *" status="unimplemented">
+    <method name="DES_options" result="const char *">
     </method>
     <method name="DES_ecb3_encrypt" result="void">
       <arg name="input" type="const_DES_cblock *" m68kreg="a0"/>
@@ -11375,8 +11375,6 @@
     <method name="d2i_X509_fp" result="X509 *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x509" type="X509 **" m68kreg="a1"/>
-    </method>
-    <method name="DES_options" result="const char *">
     </method>
     <method name="i2d_DSAPrivateKey_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
@@ -16292,10 +16290,6 @@
     <method name="ISSUING_DIST_POINT_it" result="const ASN1_ITEM *">
     </method>
     <method name="RSA_PSS_PARAMS_it" result="const ASN1_ITEM *">
-    </method>
-    <method name="_shadow_DES_rw_mode" result="int *">
-    </method>
-    <method name="_shadow_DES_check_key" result="int *">
     </method>
     <method name="ENGINE_load_gost" result="void">
     </method>
