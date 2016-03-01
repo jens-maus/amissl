@@ -119,7 +119,7 @@
     <method name="ASN1_BIT_STRING_new" result="ASN1_BIT_STRING *">
     </method>
     <method name="ASN1_BIT_STRING_free" result="void">
-      <arg name="a" type="ASN1_BIT_STRING *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_BIT_STRING *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_BIT_STRING" result="ASN1_BIT_STRING *">
       <arg name="a" type="ASN1_BIT_STRING **" m68kreg="a0"/>
@@ -152,7 +152,7 @@
       <arg name="value" type="int" m68kreg="d1"/>
     </method>
     <method name="ASN1_BIT_STRING_get_bit" result="int">
-      <arg name="a" type="ASN1_BIT_STRING *" m68kreg="a0"/>
+      <arg name="a" type="const ASN1_BIT_STRING *" m68kreg="a0"/>
       <arg name="n" type="int" m68kreg="d0"/>
     </method>
     <method name="ASN1_BIT_STRING_name_print" result="int">
@@ -183,7 +183,7 @@
     <method name="ASN1_INTEGER_new" result="ASN1_INTEGER *">
     </method>
     <method name="ASN1_INTEGER_free" result="void">
-      <arg name="a" type="ASN1_INTEGER *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_INTEGER *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_INTEGER" result="ASN1_INTEGER *">
       <arg name="a" type="ASN1_INTEGER **" m68kreg="a0"/>
@@ -220,7 +220,7 @@
     <method name="ASN1_ENUMERATED_new" result="ASN1_ENUMERATED *">
     </method>
     <method name="ASN1_ENUMERATED_free" result="void">
-      <arg name="a" type="ASN1_ENUMERATED *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_ENUMERATED *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_ENUMERATED" result="ASN1_ENUMERATED *">
       <arg name="a" type="ASN1_ENUMERATED **" m68kreg="a0"/>
@@ -262,7 +262,7 @@
     <method name="ASN1_OCTET_STRING_new" result="ASN1_OCTET_STRING *">
     </method>
     <method name="ASN1_OCTET_STRING_free" result="void">
-      <arg name="a" type="ASN1_OCTET_STRING *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_OCTET_STRING *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_OCTET_STRING" result="ASN1_OCTET_STRING *">
       <arg name="a" type="ASN1_OCTET_STRING **" m68kreg="a0"/>
@@ -322,7 +322,7 @@
     <method name="ASN1_UTF8STRING_new" result="ASN1_UTF8STRING *">
     </method>
     <method name="ASN1_UTF8STRING_free" result="void">
-      <arg name="a" type="ASN1_UTF8STRING *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_UTF8STRING *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_UTF8STRING" result="ASN1_UTF8STRING *">
       <arg name="a" type="ASN1_UTF8STRING **" m68kreg="a0"/>
@@ -508,7 +508,7 @@
     <method name="ASN1_GENERALIZEDTIME_new" result="ASN1_GENERALIZEDTIME *">
     </method>
     <method name="ASN1_GENERALIZEDTIME_free" result="void">
-      <arg name="a" type="ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
+      <arg name="x" type="ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
     </method>
     <method name="d2i_ASN1_GENERALIZEDTIME" result="ASN1_GENERALIZEDTIME *">
       <arg name="a" type="ASN1_GENERALIZEDTIME **" m68kreg="a0"/>
@@ -542,7 +542,7 @@
       <arg name="t" type="time_t" m68kreg="d0"/>
     </method>
     <method name="ASN1_TIME_check" result="int">
-      <arg name="t" type="ASN1_TIME *" m68kreg="a0"/>
+      <arg name="t" type="const ASN1_TIME *" m68kreg="a0"/>
     </method>
     <method name="ASN1_TIME_to_generalizedtime" result="ASN1_GENERALIZEDTIME *">
       <arg name="t" type="ASN1_TIME *" m68kreg="a0"/>
@@ -641,11 +641,11 @@
       <arg name="a" type="ASN1_ENUMERATED *" m68kreg="a0"/>
     </method>
     <method name="BN_to_ASN1_ENUMERATED" result="ASN1_ENUMERATED *">
-      <arg name="bn" type="BIGNUM *" m68kreg="a0"/>
+      <arg name="bn" type="const BIGNUM *" m68kreg="a0"/>
       <arg name="ai" type="ASN1_ENUMERATED *" m68kreg="a1"/>
     </method>
     <method name="ASN1_ENUMERATED_to_BN" result="BIGNUM *">
-      <arg name="ai" type="ASN1_ENUMERATED *" m68kreg="a0"/>
+      <arg name="ai" type="const ASN1_ENUMERATED *" m68kreg="a0"/>
       <arg name="bn" type="BIGNUM *" m68kreg="a1"/>
     </method>
     <method name="ASN1_PRINTABLE_type" result="int">
@@ -1077,10 +1077,10 @@
       <arg name="dup_func" type="CRYPTO_EX_dup *" m68kreg="a2"/>
       <arg name="free_func" type="CRYPTO_EX_free *" m68kreg="a3"/>
     </method>
-    <method name="BIO_number_read" result="unsigned long">
+    <method name="BIO_number_read" result="uint64_t">
       <arg name="bio" type="BIO *" m68kreg="a0"/>
     </method>
-    <method name="BIO_number_written" result="unsigned long">
+    <method name="BIO_number_written" result="uint64_t">
       <arg name="bio" type="BIO *" m68kreg="a0"/>
     </method>
     <method name="BIO_s_file" result="BIO_METHOD *">
@@ -1141,7 +1141,7 @@
       <arg name="cmd" type="int" m68kreg="d0"/>
       <arg name="fp" type="void (*)(struct bio_st *, int, const char *, int, long, long)" m68kreg="a1"/>
     </method>
-    <method name="BIO_ptr_ctrl" result="char *">
+    <method name="BIO_ptr_ctrl" result="void *">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="cmd" type="int" m68kreg="d0"/>
       <arg name="larg" type="long" m68kreg="d1"/>
@@ -1208,7 +1208,7 @@
     <method name="BIO_s_mem" result="BIO_METHOD *">
     </method>
     <method name="BIO_new_mem_buf" result="BIO *">
-      <arg name="buf" type="void *" m68kreg="a0"/>
+      <arg name="buf" type="const void *" m68kreg="a0"/>
       <arg name="len" type="int" m68kreg="d0"/>
     </method>
     <method name="BIO_s_socket" result="BIO_METHOD *">
@@ -1873,13 +1873,13 @@
     <method name="BUF_MEM_free" result="void">
       <arg name="a" type="BUF_MEM *" m68kreg="a0"/>
     </method>
-    <method name="BUF_MEM_grow" result="int">
+    <method name="BUF_MEM_grow" result="size_t">
       <arg name="str" type="BUF_MEM *" m68kreg="a0"/>
-      <arg name="len" type="int" m68kreg="d0"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
     </method>
-    <method name="BUF_MEM_grow_clean" result="int">
+    <method name="BUF_MEM_grow_clean" result="size_t">
       <arg name="str" type="BUF_MEM *" m68kreg="a0"/>
-      <arg name="len" type="int" m68kreg="d0"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
     </method>
     <method name="BUF_strdup" result="char *" status="unimplemented">
       <arg name="str" type="const char *" m68kreg="a0"/>
@@ -2215,8 +2215,8 @@
     <method name="CRYPTO_get_dynlock_destroy_callback" result="void (*)(struct CRYPTO_dynlock_value *l, const char *file, int line)">
     </method>
     <method name="CRYPTO_set_mem_functions" result="int">
-      <arg name="m" type="void * (*)(size_t)" m68kreg="a0"/>
-      <arg name="r" type="void * (*)(void *, size_t)" m68kreg="a1"/>
+      <arg name="m" type="void * (*)(size_t, const char *, int)" m68kreg="a0"/>
+      <arg name="r" type="void * (*)(void *, size_t, const char *, int)" m68kreg="a1"/>
       <arg name="f" type="void (*)(void *)" m68kreg="a2"/>
     </method>
     <method name="CRYPTO_set_locked_mem_functions" result="int" status="unimplemented">
@@ -2240,8 +2240,8 @@
       <arg name="go" type="long (*)(void)" m68kreg="d0"/>
     </method>
     <method name="CRYPTO_get_mem_functions" result="void">
-      <arg name="m" type="void * (**)(size_t)" m68kreg="a0"/>
-      <arg name="r" type="void * (**)(void *, size_t)" m68kreg="a1"/>
+      <arg name="m" type="void * (**)(size_t, const char *, int)" m68kreg="a0"/>
+      <arg name="r" type="void * (**)(void *, size_t, const char *, int)" m68kreg="a1"/>
       <arg name="f" type="void (**)(void *)" m68kreg="a2"/>
     </method>
     <method name="CRYPTO_get_locked_mem_functions" result="void" status="unimplemented">
@@ -2273,7 +2273,7 @@
       <arg name="a" type="void *" m68kreg="a0"/>
     </method>
     <method name="CRYPTO_malloc" result="void *">
-      <arg name="num" type="int" m68kreg="d0"/>
+      <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
     </method>
@@ -2282,7 +2282,7 @@
     </method>
     <method name="CRYPTO_realloc" result="void *">
       <arg name="addr" type="void *" m68kreg="a0"/>
-      <arg name="num" type="int" m68kreg="d0"/>
+      <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d1"/>
     </method>
@@ -3017,11 +3017,11 @@
     </method>
     <method name="BIO_f_reliable" result="BIO_METHOD *">
     </method>
-    <method name="BIO_set_cipher" result="void">
+    <method name="BIO_set_cipher" result="int">
       <arg name="b" type="BIO *" m68kreg="a0"/>
       <arg name="c" type="const EVP_CIPHER *" m68kreg="a1"/>
-      <arg name="k" type="unsigned char *" m68kreg="a2"/>
-      <arg name="i" type="unsigned char *" m68kreg="a3"/>
+      <arg name="k" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="i" type="const unsigned char *" m68kreg="a3"/>
       <arg name="enc" type="int" m68kreg="d0"/>
     </method>
     <method name="EVP_md_null" result="const EVP_MD *">
@@ -4423,11 +4423,11 @@
       <arg name="outl" type="int *" m68kreg="d0"/>
       <arg name="priv" type="EVP_PKEY *" m68kreg="d1"/>
     </method>
-    <method name="PEM_SignInit" result="void">
+    <method name="PEM_SignInit" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
       <arg name="type" type="EVP_MD *" m68kreg="a1"/>
     </method>
-    <method name="PEM_SignUpdate" result="void">
+    <method name="PEM_SignUpdate" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
       <arg name="d" type="unsigned char *" m68kreg="a1"/>
       <arg name="cnt" type="unsigned int" m68kreg="d0"/>
@@ -8079,7 +8079,7 @@
     </method>
     <method name="X509_STORE_get_by_subject" result="int">
       <arg name="vs" type="X509_STORE_CTX *" m68kreg="a0"/>
-      <arg name="type" type="int" m68kreg="d0"/>
+      <arg name="type" type="enum X509_LOOKUP_TYPE" m68kreg="d0"/>
       <arg name="name" type="X509_NAME *" m68kreg="a1"/>
       <arg name="ret" type="X509_OBJECT *" m68kreg="a2"/>
     </method>
@@ -9630,7 +9630,7 @@
     <method name="DSA_SIG_new" result="DSA_SIG *">
     </method>
     <method name="DSA_SIG_free" result="void">
-      <arg name="sig" type="DSA_SIG *" m68kreg="a0"/>
+      <arg name="a" type="DSA_SIG *" m68kreg="a0"/>
     </method>
     <method name="i2d_DSA_SIG" result="int">
       <arg name="a" type="const DSA_SIG *" m68kreg="a0"/>
@@ -10644,7 +10644,7 @@
       <arg name="out" type="void *" m68kreg="a0"/>
       <arg name="outlen" type="size_t" m68kreg="d0"/>
       <arg name="pub_key" type="const EC_POINT *" m68kreg="a1"/>
-      <arg name="ecdh" type="EC_KEY *" m68kreg="a2"/>
+      <arg name="eckey" type="const EC_KEY *" m68kreg="a2"/>
       <arg name="KDF" type="void *(*)(const void *, size_t, void *, size_t *)" m68kreg="a3"/>
     </method>
     <method name="EC_KEY_get0_private_key" result="const BIGNUM *">
@@ -10722,7 +10722,7 @@
       <arg name="u" type="void *" m68kreg="a3"/>
     </method>
     <method name="EC_KEY_dup" result="EC_KEY *">
-      <arg name="ec_key" type="const EC_KEY *" m68kreg="a0"/>
+      <arg name="ec_key" type="EC_KEY *" m68kreg="a0"/>
     </method>
     <method name="BIO_set_callback" result="void">
       <arg name="b" type="BIO *" m68kreg="a0"/>
@@ -11807,7 +11807,7 @@
     </method>
     <method name="EC_KEY_copy" result="EC_KEY *">
       <arg name="dst" type="EC_KEY *" m68kreg="a0"/>
-      <arg name="src" type="const EC_KEY *" m68kreg="a1"/>
+      <arg name="src" type="EC_KEY *" m68kreg="a1"/>
     </method>
     <method name="BIO_dump_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
@@ -13121,15 +13121,15 @@
       <arg name="pass" type="const char *" m68kreg="a1"/>
       <arg name="salt" type="BIGNUM **" m68kreg="a2"/>
       <arg name="verifier" type="BIGNUM **" m68kreg="a3"/>
-      <arg name="N" type="BIGNUM *" m68kreg="d0"/>
-      <arg name="g" type="BIGNUM *" m68kreg="d1"/>
+      <arg name="N" type="const BIGNUM *" m68kreg="d0"/>
+      <arg name="g" type="const BIGNUM *" m68kreg="d1"/>
     </method>
     <method name="SRP_Calc_u" result="BIGNUM *">
       <arg name="A" type="BIGNUM *" m68kreg="a0"/>
       <arg name="B" type="BIGNUM *" m68kreg="a1"/>
       <arg name="N" type="BIGNUM *" m68kreg="a2"/>
     </method>
-    <method name="SRP_VBASE_free" result="int">
+    <method name="SRP_VBASE_free" result="void">
       <arg name="vb" type="SRP_VBASE *" m68kreg="a0"/>
     </method>
     <method name="SRP_Calc_client_key" result="BIGNUM *">
@@ -13696,7 +13696,7 @@
     <method name="X509_policy_tree_free" result="void">
       <arg name="tree" type="X509_POLICY_TREE *" m68kreg="a0"/>
     </method>
-    <method name="OPENSSL_ia32cap_loc" result="unsigned long *">
+    <method name="OPENSSL_ia32cap_loc" result="unsigned int *">
     </method>
     <method name="BN_get0_nist_prime_224" result="const BIGNUM *">
     </method>
@@ -14115,8 +14115,8 @@
       <arg name="ctx" type="const EVP_CIPHER_CTX *" m68kreg="a0"/>
     </method>
     <method name="CRYPTO_memcmp" result="int">
-      <arg name="a" type="const void *" m68kreg="a0"/>
-      <arg name="b" type="const void *" m68kreg="a1"/>
+      <arg name="in_a" type="const void volatile *" m68kreg="a0"/>
+      <arg name="in_b" type="const void volatile *" m68kreg="a1"/>
       <arg name="len" type="size_t" m68kreg="d0"/>
     </method>
     <method name="BN_consttime_swap" result="void">
@@ -14466,7 +14466,7 @@
       <arg name="pkey_free" type="void (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
     <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *">
-      <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
+      <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *">
       <arg name="a" type="NETSCAPE_X509 **" m68kreg="a0"/>
@@ -14917,8 +14917,8 @@
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="number" type="const char *" m68kreg="a1"/>
       <arg name="num" type="const BIGNUM *" m68kreg="a2"/>
-      <arg name="buf" type="unsigned char *" m68kreg="a3"/>
-      <arg name="off" type="int" m68kreg="d0"/>
+      <arg name="ign" type="unsigned char *" m68kreg="a3"/>
+      <arg name="indent" type="int" m68kreg="d0"/>
     </method>
     <method name="EVP_PKEY_asn1_get_count" result="int">
     </method>
@@ -15664,8 +15664,8 @@
       <arg name="nc" type="NAME_CONSTRAINTS *" m68kreg="a1"/>
     </method>
     <method name="ASN1_BIT_STRING_check" result="int">
-      <arg name="a" type="ASN1_BIT_STRING *" m68kreg="a0"/>
-      <arg name="flags" type="unsigned char *" m68kreg="a1"/>
+      <arg name="a" type="const ASN1_BIT_STRING *" m68kreg="a0"/>
+      <arg name="flags" type="const unsigned char *" m68kreg="a1"/>
       <arg name="flags_len" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_check_akid" result="int">
@@ -16604,7 +16604,7 @@
     <method name="X509_get0_signature" result="void">
       <arg name="psig" type="ASN1_BIT_STRING **" m68kreg="a0"/>
       <arg name="palg" type="X509_ALGOR **" m68kreg="a1"/>
-      <arg name="x" type="const X509 *" m68kreg="a2"/>
+      <arg name="x" type="X509 *" m68kreg="a2"/>
     </method>
     <method name="X509_get_signature_nid" result="int">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
