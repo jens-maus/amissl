@@ -6,7 +6,8 @@ Release: 1
 
 Summary: Secure Sockets Layer and cryptography libraries and tools
 Name: openssl
-Version: 1.0.2f
+Version: 1.1.0
+#Version: %{libmaj}.%{libmin}.%{librel}%{librev}
 Source0: ftp://ftp.openssl.org/source/%{name}-%{version}.tar.gz
 License: OpenSSL
 Group: System Environment/Libraries
@@ -102,7 +103,7 @@ LD_LIBRARY_PATH=`pwd` make test
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make MANDIR=/usr/man MANSUFFIX=ssl INSTALL_PREFIX="$RPM_BUILD_ROOT" install
+make MANDIR=/usr/man MANSUFFIX=ssl DESTDIR="$RPM_BUILD_ROOT" install
 
 # Make backwards-compatibility symlink to ssleay
 ln -sf /usr/bin/openssl $RPM_BUILD_ROOT/usr/bin/ssleay
@@ -161,7 +162,7 @@ ldconfig
 - Make sure symlinks are created by using -f flag to ln.
   Otherwise some .so libraries are copied rather than
   linked in the resulting binary RPM. This causes the package
-  to be larger than neccessary and makes ldconfig complain.
+  to be larger than necessary and makes ldconfig complain.
 * Fri Oct 13 2000 Horms <horms@vergenet.net>
 - Make defattr is set for files in all packages so packages built as
   non-root will still be installed with files owned by root.

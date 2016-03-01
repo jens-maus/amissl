@@ -1,4 +1,3 @@
-/* File : /crypto/engine/vendor_defns/hw_zencod.h */
 /* ====================================================================
  * Written by Donnat Frederic (frederic.donnat@zencod.com) from ZENCOD
  * for "zencod" ENGINE integration in OpenSSL project.
@@ -131,7 +130,7 @@ extern "C" {
 /* index_1 : value of index x from RC4 key structure */
 /* index_2 : value of index y from RC4 key structure */
     /*
-     * Be carefull : RC4 key should be expanded before calling this method
+     * Be careful : RC4 key should be expanded before calling this method
      * (Should we provide an expand function ??)
      */
     typedef int t_zencod_rc4_cipher(KEY * output, const KEY * input,
@@ -145,7 +144,7 @@ extern "C" {
 /* key_3 : des third key data */
 /* iv : initial vector */
 /* mode : xdes mode (encrypt or decrypt) */
-/* Be carefull : In DES mode key_1 = key_2 = key_3 (as far as i can see !!) */
+/* Be careful : In DES mode key_1 = key_2 = key_3 (as far as i can see !!) */
     typedef int t_zencod_xdes_cipher(KEY * output, const KEY * input,
                                      const KEY * key_1, const KEY * key_2,
                                      const KEY * key_3, const KEY * iv,

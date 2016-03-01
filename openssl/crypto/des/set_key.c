@@ -1,4 +1,3 @@
-/* crypto/des/set_key.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -359,15 +358,6 @@ int DES_set_key_checked(const_DES_cblock *key, DES_key_schedule *schedule)
 }
 
 void DES_set_key_unchecked(const_DES_cblock *key, DES_key_schedule *schedule)
-#ifdef OPENSSL_FIPS
-{
-    fips_cipher_abort(DES);
-    private_DES_set_key_unchecked(key, schedule);
-}
-
-void private_DES_set_key_unchecked(const_DES_cblock *key,
-                                   DES_key_schedule *schedule)
-#endif
 {
     static const int shifts2[16] =
         { 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0 };

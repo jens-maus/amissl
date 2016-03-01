@@ -1,4 +1,3 @@
-/* crypto/stack/stack.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -55,26 +54,21 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-
-/*-
- * Code for stacks
- * Author - Eric Young v 1.0
- * 1.2 eay 12-Mar-97 -  Modified sk_find so that it _DOES_ return the
- *                      lowest index for the searched item.
- *
- * 1.1 eay - Take from netdb and added to SSLeay
- *
- * 1.0 eay - First version 29/07/92
- */
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/stack.h>
 #include <openssl/objects.h>
 
+struct stack_st {
+    int num;
+    char **data;
+    int sorted;
+    int num_alloc;
+    int (*comp) (const void *, const void *);
+};
+
 #undef MIN_NODES
 #define MIN_NODES       4
-
-const char STACK_version[] = "Stack" OPENSSL_VERSION_PTEXT;
 
 #include <errno.h>
 
@@ -96,9 +90,8 @@ _STACK *sk_dup(_STACK *sk)
 
     if ((ret = sk_new(sk->comp)) == NULL)
         goto err;
-    s = (char **)OPENSSL_realloc((char *)ret->data,
-                                 (unsigned int)sizeof(char *) *
-                                 sk->num_alloc);
+    s = OPENSSL_realloc((char *)ret->data,
+                        (unsigned int)sizeof(char *) * sk->num_alloc);
     if (s == NULL)
         goto err;
     ret->data = s;
@@ -110,8 +103,7 @@ _STACK *sk_dup(_STACK *sk)
     ret->comp = sk->comp;
     return (ret);
  err:
-    if (ret)
-        sk_free(ret);
+    sk_free(ret);
     return (NULL);
 }
 
@@ -127,7 +119,7 @@ _STACK *sk_deep_copy(_STACK *sk, void *(*copy_func) (void *),
     ret->sorted = sk->sorted;
     ret->num = sk->num;
     ret->num_alloc = sk->num > MIN_NODES ? sk->num : MIN_NODES;
-    ret->data = OPENSSL_malloc(sizeof(char *) * ret->num_alloc);
+    ret->data = OPENSSL_malloc(sizeof(*ret->data) * ret->num_alloc);
     if (ret->data == NULL) {
         OPENSSL_free(ret);
         return NULL;
@@ -157,22 +149,17 @@ _STACK *sk_new_null(void)
 _STACK *sk_new(int (*c) (const void *, const void *))
 {
     _STACK *ret;
-    int i;
 
-    if ((ret = OPENSSL_malloc(sizeof(_STACK))) == NULL)
+    if ((ret = OPENSSL_zalloc(sizeof(_STACK))) == NULL)
         goto err;
-    if ((ret->data = OPENSSL_malloc(sizeof(char *) * MIN_NODES)) == NULL)
+    if ((ret->data = OPENSSL_zalloc(sizeof(*ret->data) * MIN_NODES)) == NULL)
         goto err;
-    for (i = 0; i < MIN_NODES; i++)
-        ret->data[i] = NULL;
     ret->comp = c;
     ret->num_alloc = MIN_NODES;
-    ret->num = 0;
-    ret->sorted = 0;
     return (ret);
+
  err:
-    if (ret)
-        OPENSSL_free(ret);
+    OPENSSL_free(ret);
     return (NULL);
 }
 
@@ -193,18 +180,8 @@ int sk_insert(_STACK *st, void *data, int loc)
     if ((loc >= (int)st->num) || (loc < 0))
         st->data[st->num] = data;
     else {
-        int i;
-        char **f, **t;
-
-        f = st->data;
-        t = &(st->data[1]);
-        for (i = st->num; i >= loc; i--)
-            t[i] = f[i];
-
-#ifdef undef                    /* no memmove on sunos :-( */
         memmove(&(st->data[loc + 1]),
                 &(st->data[loc]), sizeof(char *) * (st->num - loc));
-#endif
         st->data[loc] = data;
     }
     st->num++;
@@ -312,7 +289,7 @@ void sk_zero(_STACK *st)
         return;
     if (st->num <= 0)
         return;
-    memset((char *)st->data, 0, sizeof(*st->data) * st->num);
+    memset(st->data, 0, sizeof(*st->data) * st->num);
     st->num = 0;
 }
 
@@ -332,8 +309,7 @@ void sk_free(_STACK *st)
 {
     if (st == NULL)
         return;
-    if (st->data != NULL)
-        OPENSSL_free(st->data);
+    OPENSSL_free(st->data);
     OPENSSL_free(st);
 }
 
@@ -360,7 +336,7 @@ void *sk_set(_STACK *st, int i, void *value)
 
 void sk_sort(_STACK *st)
 {
-    if (st && !st->sorted) {
+    if (st && !st->sorted && st->comp != NULL) {
         int (*comp_func) (const void *, const void *);
 
         /*

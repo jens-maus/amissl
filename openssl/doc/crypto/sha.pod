@@ -44,7 +44,7 @@ SHA512_Final - Secure Hash Algorithm
 =head1 DESCRIPTION
 
 Applications should use the higher level functions
-L<EVP_DigestInit(3)|EVP_DigestInit(3)> etc. instead of calling the hash
+L<EVP_DigestInit(3)> etc. instead of calling the hash
 functions directly.
 
 SHA-1 (Secure Hash Algorithm) is a cryptographic hash function with a
@@ -94,11 +94,6 @@ ANSI X9.30
 
 =head1 SEE ALSO
 
-L<ripemd(3)|ripemd(3)>, L<hmac(3)|hmac(3)>, L<EVP_DigestInit(3)|EVP_DigestInit(3)>
-
-=head1 HISTORY
-
-SHA1(), SHA1_Init(), SHA1_Update() and SHA1_Final() are available in all
-versions of SSLeay and OpenSSL.
+L<EVP_DigestInit(3)>
 
 =cut

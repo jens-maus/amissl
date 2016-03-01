@@ -1,4 +1,3 @@
-/* crypto/ripemd/rmd_locl.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -61,10 +60,6 @@
 #include <openssl/opensslconf.h>
 #include <openssl/ripemd.h>
 
-#ifndef RIPEMD160_LONG_LOG2
-# define RIPEMD160_LONG_LOG2 2  /* default to 32 bits */
-#endif
-
 /*
  * DO EXAMINE COMMENTS IN crypto/md5/md5_locl.h & crypto/md5/md5_dgst.c
  * FOR EXPLANATIONS ON FOLLOWING "CODE."
@@ -96,24 +91,16 @@ void ripemd160_block_data_order(RIPEMD160_CTX *c, const void *p, size_t num);
         } while (0)
 #define HASH_BLOCK_DATA_ORDER   ripemd160_block_data_order
 
-#include "md32_common.h"
+#include "internal/md32_common.h"
 
-#if 0
-# define F1(x,y,z)        ((x)^(y)^(z))
-# define F2(x,y,z)       (((x)&(y))|((~x)&z))
-# define F3(x,y,z)       (((x)|(~y))^(z))
-# define F4(x,y,z)       (((x)&(z))|((y)&(~(z))))
-# define F5(x,y,z)        ((x)^((y)|(~(z))))
-#else
 /*
  * Transformed F2 and F4 are courtesy of Wei Dai <weidai@eskimo.com>
  */
-# define F1(x,y,z)       ((x) ^ (y) ^ (z))
-# define F2(x,y,z)       ((((y) ^ (z)) & (x)) ^ (z))
-# define F3(x,y,z)       (((~(y)) | (x)) ^ (z))
-# define F4(x,y,z)       ((((x) ^ (y)) & (z)) ^ (y))
-# define F5(x,y,z)       (((~(z)) | (y)) ^ (x))
-#endif
+#define F1(x,y,z)       ((x) ^ (y) ^ (z))
+#define F2(x,y,z)       ((((y) ^ (z)) & (x)) ^ (z))
+#define F3(x,y,z)       (((~(y)) | (x)) ^ (z))
+#define F4(x,y,z)       ((((x) ^ (y)) & (z)) ^ (y))
+#define F5(x,y,z)       (((~(z)) | (y)) ^ (x))
 
 #define RIPEMD160_A     0x67452301L
 #define RIPEMD160_B     0xEFCDAB89L

@@ -1,4 +1,3 @@
-/* crypto/evp/p_seal.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,7 +56,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/rand.h>
 #ifndef OPENSSL_NO_RSA
 # include <openssl/rsa.h>
@@ -74,7 +73,7 @@ int EVP_SealInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
     int i;
 
     if (type) {
-        EVP_CIPHER_CTX_init(ctx);
+        EVP_CIPHER_CTX_reset(ctx);
         if (!EVP_EncryptInit_ex(ctx, type, NULL, NULL, NULL))
             return 0;
     }

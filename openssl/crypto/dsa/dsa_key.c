@@ -1,4 +1,3 @@
-/* crypto/dsa/dsa_key.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -58,33 +57,17 @@
 
 #include <stdio.h>
 #include <time.h>
-#include "cryptlib.h"
-#ifndef OPENSSL_NO_SHA
-# include <openssl/bn.h>
-# include <openssl/dsa.h>
-# include <openssl/rand.h>
-
-# ifdef OPENSSL_FIPS
-#  include <openssl/fips.h>
-# endif
+#include "internal/cryptlib.h"
+#include <openssl/bn.h>
+#include <openssl/dsa.h>
+#include <openssl/rand.h>
 
 static int dsa_builtin_keygen(DSA *dsa);
 
 int DSA_generate_key(DSA *dsa)
 {
-# ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(dsa->meth->flags & DSA_FLAG_FIPS_METHOD)
-        && !(dsa->flags & DSA_FLAG_NON_FIPS_ALLOW)) {
-        DSAerr(DSA_F_DSA_GENERATE_KEY, DSA_R_NON_FIPS_DSA_METHOD);
-        return 0;
-    }
-# endif
     if (dsa->meth->dsa_keygen)
         return dsa->meth->dsa_keygen(dsa);
-# ifdef OPENSSL_FIPS
-    if (FIPS_mode())
-        return FIPS_dsa_generate_key(dsa);
-# endif
     return dsa_builtin_keygen(dsa);
 }
 
@@ -98,7 +81,7 @@ static int dsa_builtin_keygen(DSA *dsa)
         goto err;
 
     if (dsa->priv_key == NULL) {
-        if ((priv_key = BN_new()) == NULL)
+        if ((priv_key = BN_secure_new()) == NULL)
             goto err;
     } else
         priv_key = dsa->priv_key;
@@ -115,18 +98,24 @@ static int dsa_builtin_keygen(DSA *dsa)
         pub_key = dsa->pub_key;
 
     {
-        BIGNUM local_prk;
+        BIGNUM *local_prk = NULL;
         BIGNUM *prk;
 
         if ((dsa->flags & DSA_FLAG_NO_EXP_CONSTTIME) == 0) {
-            BN_init(&local_prk);
-            prk = &local_prk;
+            local_prk = prk = BN_new();
+            if (local_prk == NULL)
+                goto err;
             BN_with_flags(prk, priv_key, BN_FLG_CONSTTIME);
-        } else
+        } else {
             prk = priv_key;
+        }
 
-        if (!BN_mod_exp(pub_key, dsa->g, prk, dsa->p, ctx))
+        if (!BN_mod_exp(pub_key, dsa->g, prk, dsa->p, ctx)) {
+            BN_free(local_prk);
             goto err;
+        }
+        /* We MUST free local_prk before any further use of priv_key */
+        BN_free(local_prk);
     }
 
     dsa->priv_key = priv_key;
@@ -134,12 +123,10 @@ static int dsa_builtin_keygen(DSA *dsa)
     ok = 1;
 
  err:
-    if ((pub_key != NULL) && (dsa->pub_key == NULL))
+    if (pub_key != dsa->pub_key)
         BN_free(pub_key);
-    if ((priv_key != NULL) && (dsa->priv_key == NULL))
+    if (priv_key != dsa->priv_key)
         BN_free(priv_key);
-    if (ctx != NULL)
-        BN_CTX_free(ctx);
+    BN_CTX_free(ctx);
     return (ok);
 }
-#endif

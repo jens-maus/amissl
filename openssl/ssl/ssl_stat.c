@@ -1,4 +1,3 @@
-/* ssl/ssl_stat.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -89,369 +88,107 @@ const char *SSL_state_string_long(const SSL *s)
 {
     const char *str;
 
-    switch (s->state) {
-    case SSL_ST_BEFORE:
+    if (ossl_statem_in_error(s)) {
+        return "error";
+    }
+
+    switch (SSL_get_state(s)) {
+    case TLS_ST_BEFORE:
         str = "before SSL initialization";
         break;
-    case SSL_ST_ACCEPT:
-        str = "before accept initialization";
-        break;
-    case SSL_ST_CONNECT:
-        str = "before connect initialization";
-        break;
-    case SSL_ST_OK:
+    case TLS_ST_OK:
         str = "SSL negotiation finished successfully";
         break;
-    case SSL_ST_RENEGOTIATE:
-        str = "SSL renegotiate ciphers";
-        break;
-    case SSL_ST_BEFORE | SSL_ST_CONNECT:
-        str = "before/connect initialization";
-        break;
-    case SSL_ST_OK | SSL_ST_CONNECT:
-        str = "ok/connect SSL initialization";
-        break;
-    case SSL_ST_BEFORE | SSL_ST_ACCEPT:
-        str = "before/accept initialization";
-        break;
-    case SSL_ST_OK | SSL_ST_ACCEPT:
-        str = "ok/accept SSL initialization";
-        break;
-    case SSL_ST_ERR:
-        str = "error";
-        break;
-#ifndef OPENSSL_NO_SSL2
-    case SSL2_ST_CLIENT_START_ENCRYPTION:
-        str = "SSLv2 client start encryption";
-        break;
-    case SSL2_ST_SERVER_START_ENCRYPTION:
-        str = "SSLv2 server start encryption";
-        break;
-    case SSL2_ST_SEND_CLIENT_HELLO_A:
-        str = "SSLv2 write client hello A";
-        break;
-    case SSL2_ST_SEND_CLIENT_HELLO_B:
-        str = "SSLv2 write client hello B";
-        break;
-    case SSL2_ST_GET_SERVER_HELLO_A:
-        str = "SSLv2 read server hello A";
-        break;
-    case SSL2_ST_GET_SERVER_HELLO_B:
-        str = "SSLv2 read server hello B";
-        break;
-    case SSL2_ST_SEND_CLIENT_MASTER_KEY_A:
-        str = "SSLv2 write client master key A";
-        break;
-    case SSL2_ST_SEND_CLIENT_MASTER_KEY_B:
-        str = "SSLv2 write client master key B";
-        break;
-    case SSL2_ST_SEND_CLIENT_FINISHED_A:
-        str = "SSLv2 write client finished A";
-        break;
-    case SSL2_ST_SEND_CLIENT_FINISHED_B:
-        str = "SSLv2 write client finished B";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_A:
-        str = "SSLv2 write client certificate A";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_B:
-        str = "SSLv2 write client certificate B";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_C:
-        str = "SSLv2 write client certificate C";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_D:
-        str = "SSLv2 write client certificate D";
-        break;
-    case SSL2_ST_GET_SERVER_VERIFY_A:
-        str = "SSLv2 read server verify A";
-        break;
-    case SSL2_ST_GET_SERVER_VERIFY_B:
-        str = "SSLv2 read server verify B";
-        break;
-    case SSL2_ST_GET_SERVER_FINISHED_A:
-        str = "SSLv2 read server finished A";
-        break;
-    case SSL2_ST_GET_SERVER_FINISHED_B:
-        str = "SSLv2 read server finished B";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_A:
-        str = "SSLv2 read client hello A";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_B:
-        str = "SSLv2 read client hello B";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_C:
-        str = "SSLv2 read client hello C";
-        break;
-    case SSL2_ST_SEND_SERVER_HELLO_A:
-        str = "SSLv2 write server hello A";
-        break;
-    case SSL2_ST_SEND_SERVER_HELLO_B:
-        str = "SSLv2 write server hello B";
-        break;
-    case SSL2_ST_GET_CLIENT_MASTER_KEY_A:
-        str = "SSLv2 read client master key A";
-        break;
-    case SSL2_ST_GET_CLIENT_MASTER_KEY_B:
-        str = "SSLv2 read client master key B";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_A:
-        str = "SSLv2 write server verify A";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_B:
-        str = "SSLv2 write server verify B";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_C:
-        str = "SSLv2 write server verify C";
-        break;
-    case SSL2_ST_GET_CLIENT_FINISHED_A:
-        str = "SSLv2 read client finished A";
-        break;
-    case SSL2_ST_GET_CLIENT_FINISHED_B:
-        str = "SSLv2 read client finished B";
-        break;
-    case SSL2_ST_SEND_SERVER_FINISHED_A:
-        str = "SSLv2 write server finished A";
-        break;
-    case SSL2_ST_SEND_SERVER_FINISHED_B:
-        str = "SSLv2 write server finished B";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_A:
-        str = "SSLv2 write request certificate A";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_B:
-        str = "SSLv2 write request certificate B";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_C:
-        str = "SSLv2 write request certificate C";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_D:
-        str = "SSLv2 write request certificate D";
-        break;
-    case SSL2_ST_X509_GET_SERVER_CERTIFICATE:
-        str = "SSLv2 X509 read server certificate";
-        break;
-    case SSL2_ST_X509_GET_CLIENT_CERTIFICATE:
-        str = "SSLv2 X509 read client certificate";
-        break;
-#endif
 
-#ifndef OPENSSL_NO_SSL3
 /* SSLv3 additions */
-    case SSL3_ST_CW_CLNT_HELLO_A:
-        str = "SSLv3 write client hello A";
+    case TLS_ST_CW_CLNT_HELLO:
+        str = "SSLv3/TLS write client hello";
         break;
-    case SSL3_ST_CW_CLNT_HELLO_B:
-        str = "SSLv3 write client hello B";
+    case TLS_ST_CR_SRVR_HELLO:
+        str = "SSLv3/TLS read server hello";
         break;
-    case SSL3_ST_CR_SRVR_HELLO_A:
-        str = "SSLv3 read server hello A";
+    case TLS_ST_CR_CERT:
+        str = "SSLv3/TLS read server certificate";
         break;
-    case SSL3_ST_CR_SRVR_HELLO_B:
-        str = "SSLv3 read server hello B";
+    case TLS_ST_CR_KEY_EXCH:
+        str = "SSLv3/TLS read server key exchange";
         break;
-    case SSL3_ST_CR_CERT_A:
-        str = "SSLv3 read server certificate A";
+    case TLS_ST_CR_CERT_REQ:
+        str = "SSLv3/TLS read server certificate request";
         break;
-    case SSL3_ST_CR_CERT_B:
-        str = "SSLv3 read server certificate B";
+    case TLS_ST_CR_SESSION_TICKET:
+        str = "SSLv3/TLS read server session ticket";
         break;
-    case SSL3_ST_CR_KEY_EXCH_A:
-        str = "SSLv3 read server key exchange A";
+    case TLS_ST_CR_SRVR_DONE:
+        str = "SSLv3/TLS read server done";
         break;
-    case SSL3_ST_CR_KEY_EXCH_B:
-        str = "SSLv3 read server key exchange B";
+    case TLS_ST_CW_CERT:
+        str = "SSLv3/TLS write client certificate";
         break;
-    case SSL3_ST_CR_CERT_REQ_A:
-        str = "SSLv3 read server certificate request A";
+    case TLS_ST_CW_KEY_EXCH:
+        str = "SSLv3/TLS write client key exchange";
         break;
-    case SSL3_ST_CR_CERT_REQ_B:
-        str = "SSLv3 read server certificate request B";
-        break;
-    case SSL3_ST_CR_SESSION_TICKET_A:
-        str = "SSLv3 read server session ticket A";
-        break;
-    case SSL3_ST_CR_SESSION_TICKET_B:
-        str = "SSLv3 read server session ticket B";
-        break;
-    case SSL3_ST_CR_SRVR_DONE_A:
-        str = "SSLv3 read server done A";
-        break;
-    case SSL3_ST_CR_SRVR_DONE_B:
-        str = "SSLv3 read server done B";
-        break;
-    case SSL3_ST_CW_CERT_A:
-        str = "SSLv3 write client certificate A";
-        break;
-    case SSL3_ST_CW_CERT_B:
-        str = "SSLv3 write client certificate B";
-        break;
-    case SSL3_ST_CW_CERT_C:
-        str = "SSLv3 write client certificate C";
-        break;
-    case SSL3_ST_CW_CERT_D:
-        str = "SSLv3 write client certificate D";
-        break;
-    case SSL3_ST_CW_KEY_EXCH_A:
-        str = "SSLv3 write client key exchange A";
-        break;
-    case SSL3_ST_CW_KEY_EXCH_B:
-        str = "SSLv3 write client key exchange B";
-        break;
-    case SSL3_ST_CW_CERT_VRFY_A:
-        str = "SSLv3 write certificate verify A";
-        break;
-    case SSL3_ST_CW_CERT_VRFY_B:
-        str = "SSLv3 write certificate verify B";
+    case TLS_ST_CW_CERT_VRFY:
+        str = "SSLv3/TLS write certificate verify";
         break;
 
-    case SSL3_ST_CW_CHANGE_A:
-    case SSL3_ST_SW_CHANGE_A:
-        str = "SSLv3 write change cipher spec A";
+    case TLS_ST_CW_CHANGE:
+    case TLS_ST_SW_CHANGE:
+        str = "SSLv3/TLS write change cipher spec";
         break;
-    case SSL3_ST_CW_CHANGE_B:
-    case SSL3_ST_SW_CHANGE_B:
-        str = "SSLv3 write change cipher spec B";
+    case TLS_ST_CW_FINISHED:
+    case TLS_ST_SW_FINISHED:
+        str = "SSLv3/TLS write finished";
         break;
-    case SSL3_ST_CW_FINISHED_A:
-    case SSL3_ST_SW_FINISHED_A:
-        str = "SSLv3 write finished A";
+    case TLS_ST_CR_CHANGE:
+    case TLS_ST_SR_CHANGE:
+        str = "SSLv3/TLS read change cipher spec";
         break;
-    case SSL3_ST_CW_FINISHED_B:
-    case SSL3_ST_SW_FINISHED_B:
-        str = "SSLv3 write finished B";
-        break;
-    case SSL3_ST_CR_CHANGE_A:
-    case SSL3_ST_SR_CHANGE_A:
-        str = "SSLv3 read change cipher spec A";
-        break;
-    case SSL3_ST_CR_CHANGE_B:
-    case SSL3_ST_SR_CHANGE_B:
-        str = "SSLv3 read change cipher spec B";
-        break;
-    case SSL3_ST_CR_FINISHED_A:
-    case SSL3_ST_SR_FINISHED_A:
-        str = "SSLv3 read finished A";
-        break;
-    case SSL3_ST_CR_FINISHED_B:
-    case SSL3_ST_SR_FINISHED_B:
-        str = "SSLv3 read finished B";
+    case TLS_ST_CR_FINISHED:
+    case TLS_ST_SR_FINISHED:
+        str = "SSLv3/TLS read finished";
         break;
 
-    case SSL3_ST_CW_FLUSH:
-    case SSL3_ST_SW_FLUSH:
-        str = "SSLv3 flush data";
+    case TLS_ST_SR_CLNT_HELLO:
+        str = "SSLv3/TLS read client hello";
         break;
-
-    case SSL3_ST_SR_CLNT_HELLO_A:
-        str = "SSLv3 read client hello A";
+    case TLS_ST_SW_HELLO_REQ:
+        str = "SSLv3/TLS write hello request";
         break;
-    case SSL3_ST_SR_CLNT_HELLO_B:
-        str = "SSLv3 read client hello B";
+    case TLS_ST_SW_SRVR_HELLO:
+        str = "SSLv3/TLS write server hello";
         break;
-    case SSL3_ST_SR_CLNT_HELLO_C:
-        str = "SSLv3 read client hello C";
+    case TLS_ST_SW_CERT:
+        str = "SSLv3/TLS write certificate";
         break;
-    case SSL3_ST_SW_HELLO_REQ_A:
-        str = "SSLv3 write hello request A";
+    case TLS_ST_SW_KEY_EXCH:
+        str = "SSLv3/TLS write key exchange";
         break;
-    case SSL3_ST_SW_HELLO_REQ_B:
-        str = "SSLv3 write hello request B";
+    case TLS_ST_SW_CERT_REQ:
+        str = "SSLv3/TLS write certificate request";
         break;
-    case SSL3_ST_SW_HELLO_REQ_C:
-        str = "SSLv3 write hello request C";
+    case TLS_ST_SW_SESSION_TICKET:
+        str = "SSLv3/TLS write session ticket";
         break;
-    case SSL3_ST_SW_SRVR_HELLO_A:
-        str = "SSLv3 write server hello A";
+    case TLS_ST_SW_SRVR_DONE:
+        str = "SSLv3/TLS write server done";
         break;
-    case SSL3_ST_SW_SRVR_HELLO_B:
-        str = "SSLv3 write server hello B";
+    case TLS_ST_SR_CERT:
+        str = "SSLv3/TLS read client certificate";
         break;
-    case SSL3_ST_SW_CERT_A:
-        str = "SSLv3 write certificate A";
+    case TLS_ST_SR_KEY_EXCH:
+        str = "SSLv3/TLS read client key exchange";
         break;
-    case SSL3_ST_SW_CERT_B:
-        str = "SSLv3 write certificate B";
-        break;
-    case SSL3_ST_SW_KEY_EXCH_A:
-        str = "SSLv3 write key exchange A";
-        break;
-    case SSL3_ST_SW_KEY_EXCH_B:
-        str = "SSLv3 write key exchange B";
-        break;
-    case SSL3_ST_SW_CERT_REQ_A:
-        str = "SSLv3 write certificate request A";
-        break;
-    case SSL3_ST_SW_CERT_REQ_B:
-        str = "SSLv3 write certificate request B";
-        break;
-    case SSL3_ST_SW_SESSION_TICKET_A:
-        str = "SSLv3 write session ticket A";
-        break;
-    case SSL3_ST_SW_SESSION_TICKET_B:
-        str = "SSLv3 write session ticket B";
-        break;
-    case SSL3_ST_SW_SRVR_DONE_A:
-        str = "SSLv3 write server done A";
-        break;
-    case SSL3_ST_SW_SRVR_DONE_B:
-        str = "SSLv3 write server done B";
-        break;
-    case SSL3_ST_SR_CERT_A:
-        str = "SSLv3 read client certificate A";
-        break;
-    case SSL3_ST_SR_CERT_B:
-        str = "SSLv3 read client certificate B";
-        break;
-    case SSL3_ST_SR_KEY_EXCH_A:
-        str = "SSLv3 read client key exchange A";
-        break;
-    case SSL3_ST_SR_KEY_EXCH_B:
-        str = "SSLv3 read client key exchange B";
-        break;
-    case SSL3_ST_SR_CERT_VRFY_A:
-        str = "SSLv3 read certificate verify A";
-        break;
-    case SSL3_ST_SR_CERT_VRFY_B:
-        str = "SSLv3 read certificate verify B";
-        break;
-#endif
-
-/* SSLv2/v3 compatibility states */
-/* client */
-    case SSL23_ST_CW_CLNT_HELLO_A:
-        str = "SSLv2/v3 write client hello A";
-        break;
-    case SSL23_ST_CW_CLNT_HELLO_B:
-        str = "SSLv2/v3 write client hello B";
-        break;
-    case SSL23_ST_CR_SRVR_HELLO_A:
-        str = "SSLv2/v3 read server hello A";
-        break;
-    case SSL23_ST_CR_SRVR_HELLO_B:
-        str = "SSLv2/v3 read server hello B";
-        break;
-/* server */
-    case SSL23_ST_SR_CLNT_HELLO_A:
-        str = "SSLv2/v3 read client hello A";
-        break;
-    case SSL23_ST_SR_CLNT_HELLO_B:
-        str = "SSLv2/v3 read client hello B";
+    case TLS_ST_SR_CERT_VRFY:
+        str = "SSLv3/TLS read certificate verify";
         break;
 
 /* DTLS */
-    case DTLS1_ST_CR_HELLO_VERIFY_REQUEST_A:
-        str = "DTLS1 read hello verify request A";
+    case DTLS_ST_CR_HELLO_VERIFY_REQUEST:
+        str = "DTLS1 read hello verify request";
         break;
-    case DTLS1_ST_CR_HELLO_VERIFY_REQUEST_B:
-        str = "DTLS1 read hello verify request B";
-        break;
-    case DTLS1_ST_SW_HELLO_VERIFY_REQUEST_A:
-        str = "DTLS1 write hello verify request A";
-        break;
-    case DTLS1_ST_SW_HELLO_VERIFY_REQUEST_B:
-        str = "DTLS1 write hello verify request B";
+    case DTLS_ST_SW_HELLO_VERIFY_REQUEST:
+        str = "DTLS1 write hello verify request";
         break;
 
     default:
@@ -461,366 +198,105 @@ const char *SSL_state_string_long(const SSL *s)
     return (str);
 }
 
-const char *SSL_rstate_string_long(const SSL *s)
-{
-    const char *str;
-
-    switch (s->rstate) {
-    case SSL_ST_READ_HEADER:
-        str = "read header";
-        break;
-    case SSL_ST_READ_BODY:
-        str = "read body";
-        break;
-    case SSL_ST_READ_DONE:
-        str = "read done";
-        break;
-    default:
-        str = "unknown";
-        break;
-    }
-    return (str);
-}
 
 const char *SSL_state_string(const SSL *s)
 {
     const char *str;
 
-    switch (s->state) {
-    case SSL_ST_BEFORE:
+    if (ossl_statem_in_error(s)) {
+        return "SSLERR";
+    }
+
+    switch (SSL_get_state(s)) {
+    case TLS_ST_BEFORE:
         str = "PINIT ";
         break;
-    case SSL_ST_ACCEPT:
-        str = "AINIT ";
-        break;
-    case SSL_ST_CONNECT:
-        str = "CINIT ";
-        break;
-    case SSL_ST_OK:
+    case TLS_ST_OK:
         str = "SSLOK ";
         break;
-    case SSL_ST_ERR:
-        str = "SSLERR";
-        break;
-#ifndef OPENSSL_NO_SSL2
-    case SSL2_ST_CLIENT_START_ENCRYPTION:
-        str = "2CSENC";
-        break;
-    case SSL2_ST_SERVER_START_ENCRYPTION:
-        str = "2SSENC";
-        break;
-    case SSL2_ST_SEND_CLIENT_HELLO_A:
-        str = "2SCH_A";
-        break;
-    case SSL2_ST_SEND_CLIENT_HELLO_B:
-        str = "2SCH_B";
-        break;
-    case SSL2_ST_GET_SERVER_HELLO_A:
-        str = "2GSH_A";
-        break;
-    case SSL2_ST_GET_SERVER_HELLO_B:
-        str = "2GSH_B";
-        break;
-    case SSL2_ST_SEND_CLIENT_MASTER_KEY_A:
-        str = "2SCMKA";
-        break;
-    case SSL2_ST_SEND_CLIENT_MASTER_KEY_B:
-        str = "2SCMKB";
-        break;
-    case SSL2_ST_SEND_CLIENT_FINISHED_A:
-        str = "2SCF_A";
-        break;
-    case SSL2_ST_SEND_CLIENT_FINISHED_B:
-        str = "2SCF_B";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_A:
-        str = "2SCC_A";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_B:
-        str = "2SCC_B";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_C:
-        str = "2SCC_C";
-        break;
-    case SSL2_ST_SEND_CLIENT_CERTIFICATE_D:
-        str = "2SCC_D";
-        break;
-    case SSL2_ST_GET_SERVER_VERIFY_A:
-        str = "2GSV_A";
-        break;
-    case SSL2_ST_GET_SERVER_VERIFY_B:
-        str = "2GSV_B";
-        break;
-    case SSL2_ST_GET_SERVER_FINISHED_A:
-        str = "2GSF_A";
-        break;
-    case SSL2_ST_GET_SERVER_FINISHED_B:
-        str = "2GSF_B";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_A:
-        str = "2GCH_A";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_B:
-        str = "2GCH_B";
-        break;
-    case SSL2_ST_GET_CLIENT_HELLO_C:
-        str = "2GCH_C";
-        break;
-    case SSL2_ST_SEND_SERVER_HELLO_A:
-        str = "2SSH_A";
-        break;
-    case SSL2_ST_SEND_SERVER_HELLO_B:
-        str = "2SSH_B";
-        break;
-    case SSL2_ST_GET_CLIENT_MASTER_KEY_A:
-        str = "2GCMKA";
-        break;
-    case SSL2_ST_GET_CLIENT_MASTER_KEY_B:
-        str = "2GCMKA";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_A:
-        str = "2SSV_A";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_B:
-        str = "2SSV_B";
-        break;
-    case SSL2_ST_SEND_SERVER_VERIFY_C:
-        str = "2SSV_C";
-        break;
-    case SSL2_ST_GET_CLIENT_FINISHED_A:
-        str = "2GCF_A";
-        break;
-    case SSL2_ST_GET_CLIENT_FINISHED_B:
-        str = "2GCF_B";
-        break;
-    case SSL2_ST_SEND_SERVER_FINISHED_A:
-        str = "2SSF_A";
-        break;
-    case SSL2_ST_SEND_SERVER_FINISHED_B:
-        str = "2SSF_B";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_A:
-        str = "2SRC_A";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_B:
-        str = "2SRC_B";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_C:
-        str = "2SRC_C";
-        break;
-    case SSL2_ST_SEND_REQUEST_CERTIFICATE_D:
-        str = "2SRC_D";
-        break;
-    case SSL2_ST_X509_GET_SERVER_CERTIFICATE:
-        str = "2X9GSC";
-        break;
-    case SSL2_ST_X509_GET_CLIENT_CERTIFICATE:
-        str = "2X9GCC";
-        break;
-#endif
 
-#ifndef OPENSSL_NO_SSL3
-/* SSLv3 additions */
-    case SSL3_ST_SW_FLUSH:
-    case SSL3_ST_CW_FLUSH:
-        str = "3FLUSH";
+    case TLS_ST_CW_CLNT_HELLO:
+        str = "TWCH";
         break;
-    case SSL3_ST_CW_CLNT_HELLO_A:
-        str = "3WCH_A";
+    case TLS_ST_CR_SRVR_HELLO:
+        str = "TRSH";
         break;
-    case SSL3_ST_CW_CLNT_HELLO_B:
-        str = "3WCH_B";
+    case TLS_ST_CR_CERT:
+        str = "TRSC";
         break;
-    case SSL3_ST_CR_SRVR_HELLO_A:
-        str = "3RSH_A";
+    case TLS_ST_CR_KEY_EXCH:
+        str = "TRSKE";
         break;
-    case SSL3_ST_CR_SRVR_HELLO_B:
-        str = "3RSH_B";
+    case TLS_ST_CR_CERT_REQ:
+        str = "TRCR";
         break;
-    case SSL3_ST_CR_CERT_A:
-        str = "3RSC_A";
+    case TLS_ST_CR_SRVR_DONE:
+        str = "TRSD";
         break;
-    case SSL3_ST_CR_CERT_B:
-        str = "3RSC_B";
+    case TLS_ST_CW_CERT:
+        str = "TWCC";
         break;
-    case SSL3_ST_CR_KEY_EXCH_A:
-        str = "3RSKEA";
+    case TLS_ST_CW_KEY_EXCH:
+        str = "TWCKE";
         break;
-    case SSL3_ST_CR_KEY_EXCH_B:
-        str = "3RSKEB";
-        break;
-    case SSL3_ST_CR_CERT_REQ_A:
-        str = "3RCR_A";
-        break;
-    case SSL3_ST_CR_CERT_REQ_B:
-        str = "3RCR_B";
-        break;
-    case SSL3_ST_CR_SRVR_DONE_A:
-        str = "3RSD_A";
-        break;
-    case SSL3_ST_CR_SRVR_DONE_B:
-        str = "3RSD_B";
-        break;
-    case SSL3_ST_CW_CERT_A:
-        str = "3WCC_A";
-        break;
-    case SSL3_ST_CW_CERT_B:
-        str = "3WCC_B";
-        break;
-    case SSL3_ST_CW_CERT_C:
-        str = "3WCC_C";
-        break;
-    case SSL3_ST_CW_CERT_D:
-        str = "3WCC_D";
-        break;
-    case SSL3_ST_CW_KEY_EXCH_A:
-        str = "3WCKEA";
-        break;
-    case SSL3_ST_CW_KEY_EXCH_B:
-        str = "3WCKEB";
-        break;
-    case SSL3_ST_CW_CERT_VRFY_A:
-        str = "3WCV_A";
-        break;
-    case SSL3_ST_CW_CERT_VRFY_B:
-        str = "3WCV_B";
+    case TLS_ST_CW_CERT_VRFY:
+        str = "TWCV";
         break;
 
-    case SSL3_ST_SW_CHANGE_A:
-    case SSL3_ST_CW_CHANGE_A:
-        str = "3WCCSA";
+    case TLS_ST_SW_CHANGE:
+    case TLS_ST_CW_CHANGE:
+        str = "TWCCS";
         break;
-    case SSL3_ST_SW_CHANGE_B:
-    case SSL3_ST_CW_CHANGE_B:
-        str = "3WCCSB";
+    case TLS_ST_SW_FINISHED:
+    case TLS_ST_CW_FINISHED:
+        str = "TWFIN";
         break;
-    case SSL3_ST_SW_FINISHED_A:
-    case SSL3_ST_CW_FINISHED_A:
-        str = "3WFINA";
+    case TLS_ST_SR_CHANGE:
+    case TLS_ST_CR_CHANGE:
+        str = "TRCCS";
         break;
-    case SSL3_ST_SW_FINISHED_B:
-    case SSL3_ST_CW_FINISHED_B:
-        str = "3WFINB";
-        break;
-    case SSL3_ST_SR_CHANGE_A:
-    case SSL3_ST_CR_CHANGE_A:
-        str = "3RCCSA";
-        break;
-    case SSL3_ST_SR_CHANGE_B:
-    case SSL3_ST_CR_CHANGE_B:
-        str = "3RCCSB";
-        break;
-    case SSL3_ST_SR_FINISHED_A:
-    case SSL3_ST_CR_FINISHED_A:
-        str = "3RFINA";
-        break;
-    case SSL3_ST_SR_FINISHED_B:
-    case SSL3_ST_CR_FINISHED_B:
-        str = "3RFINB";
+    case TLS_ST_SR_FINISHED:
+    case TLS_ST_CR_FINISHED:
+        str = "TRFIN";
         break;
 
-    case SSL3_ST_SW_HELLO_REQ_A:
-        str = "3WHR_A";
+    case TLS_ST_SW_HELLO_REQ:
+        str = "TWHR";
         break;
-    case SSL3_ST_SW_HELLO_REQ_B:
-        str = "3WHR_B";
+    case TLS_ST_SR_CLNT_HELLO:
+        str = "TRCH";
         break;
-    case SSL3_ST_SW_HELLO_REQ_C:
-        str = "3WHR_C";
+    case TLS_ST_SW_SRVR_HELLO:
+        str = "TWSH";
         break;
-    case SSL3_ST_SR_CLNT_HELLO_A:
-        str = "3RCH_A";
+    case TLS_ST_SW_CERT:
+        str = "TWSC";
         break;
-    case SSL3_ST_SR_CLNT_HELLO_B:
-        str = "3RCH_B";
+    case TLS_ST_SW_KEY_EXCH:
+        str = "TWSKE";
         break;
-    case SSL3_ST_SR_CLNT_HELLO_C:
-        str = "3RCH_C";
+    case TLS_ST_SW_CERT_REQ:
+        str = "TWCR";
         break;
-    case SSL3_ST_SW_SRVR_HELLO_A:
-        str = "3WSH_A";
+    case TLS_ST_SW_SRVR_DONE:
+        str = "TWSD";
         break;
-    case SSL3_ST_SW_SRVR_HELLO_B:
-        str = "3WSH_B";
+    case TLS_ST_SR_CERT:
+        str = "TRCC";
         break;
-    case SSL3_ST_SW_CERT_A:
-        str = "3WSC_A";
+    case TLS_ST_SR_KEY_EXCH:
+        str = "TRCKE";
         break;
-    case SSL3_ST_SW_CERT_B:
-        str = "3WSC_B";
-        break;
-    case SSL3_ST_SW_KEY_EXCH_A:
-        str = "3WSKEA";
-        break;
-    case SSL3_ST_SW_KEY_EXCH_B:
-        str = "3WSKEB";
-        break;
-    case SSL3_ST_SW_CERT_REQ_A:
-        str = "3WCR_A";
-        break;
-    case SSL3_ST_SW_CERT_REQ_B:
-        str = "3WCR_B";
-        break;
-    case SSL3_ST_SW_SRVR_DONE_A:
-        str = "3WSD_A";
-        break;
-    case SSL3_ST_SW_SRVR_DONE_B:
-        str = "3WSD_B";
-        break;
-    case SSL3_ST_SR_CERT_A:
-        str = "3RCC_A";
-        break;
-    case SSL3_ST_SR_CERT_B:
-        str = "3RCC_B";
-        break;
-    case SSL3_ST_SR_KEY_EXCH_A:
-        str = "3RCKEA";
-        break;
-    case SSL3_ST_SR_KEY_EXCH_B:
-        str = "3RCKEB";
-        break;
-    case SSL3_ST_SR_CERT_VRFY_A:
-        str = "3RCV_A";
-        break;
-    case SSL3_ST_SR_CERT_VRFY_B:
-        str = "3RCV_B";
-        break;
-#endif
-
-/* SSLv2/v3 compatibility states */
-/* client */
-    case SSL23_ST_CW_CLNT_HELLO_A:
-        str = "23WCHA";
-        break;
-    case SSL23_ST_CW_CLNT_HELLO_B:
-        str = "23WCHB";
-        break;
-    case SSL23_ST_CR_SRVR_HELLO_A:
-        str = "23RSHA";
-        break;
-    case SSL23_ST_CR_SRVR_HELLO_B:
-        str = "23RSHA";
-        break;
-/* server */
-    case SSL23_ST_SR_CLNT_HELLO_A:
-        str = "23RCHA";
-        break;
-    case SSL23_ST_SR_CLNT_HELLO_B:
-        str = "23RCHB";
+    case TLS_ST_SR_CERT_VRFY:
+        str = "TRCV";
         break;
 
 /* DTLS */
-    case DTLS1_ST_CR_HELLO_VERIFY_REQUEST_A:
-        str = "DRCHVA";
+    case DTLS_ST_CR_HELLO_VERIFY_REQUEST:
+        str = "DRCHV";
         break;
-    case DTLS1_ST_CR_HELLO_VERIFY_REQUEST_B:
-        str = "DRCHVB";
-        break;
-    case DTLS1_ST_SW_HELLO_VERIFY_REQUEST_A:
-        str = "DWCHVA";
-        break;
-    case DTLS1_ST_SW_HELLO_VERIFY_REQUEST_B:
-        str = "DWCHVB";
+    case DTLS_ST_SW_HELLO_VERIFY_REQUEST:
+        str = "DWCHV";
         break;
 
     default:
@@ -1048,27 +524,6 @@ const char *SSL_alert_desc_string_long(int value)
         break;
     case TLS1_AD_UNKNOWN_PSK_IDENTITY:
         str = "unknown PSK identity";
-        break;
-    default:
-        str = "unknown";
-        break;
-    }
-    return (str);
-}
-
-const char *SSL_rstate_string(const SSL *s)
-{
-    const char *str;
-
-    switch (s->rstate) {
-    case SSL_ST_READ_HEADER:
-        str = "RH";
-        break;
-    case SSL_ST_READ_BODY:
-        str = "RB";
-        break;
-    case SSL_ST_READ_DONE:
-        str = "RD";
         break;
     default:
         str = "unknown";

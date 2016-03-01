@@ -1,4 +1,3 @@
-/* crypto/ripemd/rmd_dgst.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -59,9 +58,6 @@
 #include <stdio.h>
 #include "rmd_locl.h"
 #include <openssl/opensslv.h>
-#include <openssl/crypto.h>
-
-const char RMD160_version[] = "RIPE-MD160" OPENSSL_VERSION_PTEXT;
 
 #ifdef RMD160_ASM
 void ripemd160_block_x86(RIPEMD160_CTX *c, unsigned long *p, size_t num);
@@ -70,7 +66,7 @@ void ripemd160_block_x86(RIPEMD160_CTX *c, unsigned long *p, size_t num);
 void ripemd160_block(RIPEMD160_CTX *c, unsigned long *p, size_t num);
 #endif
 
-fips_md_init(RIPEMD160)
+int RIPEMD160_Init(RIPEMD160_CTX *c)
 {
     memset(c, 0, sizeof(*c));
     c->A = RIPEMD160_A;

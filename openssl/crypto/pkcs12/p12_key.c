@@ -1,4 +1,3 @@
-/* p12_key.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -58,7 +57,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/pkcs12.h>
 #include <openssl/bn.h>
 
@@ -96,10 +95,7 @@ int PKCS12_key_gen_asc(const char *pass, int passlen, unsigned char *salt,
                              id, iter, n, out, md_type);
     if (ret <= 0)
         return 0;
-    if (unipass) {
-        OPENSSL_cleanse(unipass, uniplen); /* Clear password from memory */
-        OPENSSL_free(unipass);
-    }
+    OPENSSL_clear_free(unipass, uniplen);
     return ret;
 }
 
@@ -107,25 +103,21 @@ int PKCS12_key_gen_uni(unsigned char *pass, int passlen, unsigned char *salt,
                        int saltlen, int id, int iter, int n,
                        unsigned char *out, const EVP_MD *md_type)
 {
-    unsigned char *B, *D, *I, *p, *Ai;
+    unsigned char *B = NULL, *D = NULL, *I = NULL, *p = NULL, *Ai = NULL;
     int Slen, Plen, Ilen, Ijlen;
     int i, j, u, v;
     int ret = 0;
-    BIGNUM *Ij, *Bpl1;          /* These hold Ij and B + 1 */
-    EVP_MD_CTX ctx;
+    BIGNUM *Ij = NULL, *Bpl1 = NULL; /* These hold Ij and B + 1 */
+    EVP_MD_CTX *ctx = NULL;
 #ifdef  DEBUG_KEYGEN
     unsigned char *tmpout = out;
     int tmpn = n;
 #endif
 
-#if 0
-    if (!pass) {
-        PKCS12err(PKCS12_F_PKCS12_KEY_GEN_UNI, ERR_R_PASSED_NULL_PARAMETER);
-        return 0;
-    }
-#endif
+    ctx = EVP_MD_CTX_new();
+    if (ctx == NULL)
+        goto err;
 
-    EVP_MD_CTX_init(&ctx);
 #ifdef  DEBUG_KEYGEN
     fprintf(stderr, "KEYGEN DEBUG\n");
     fprintf(stderr, "ID %d, ITER %d\n", id, iter);
@@ -150,7 +142,8 @@ int PKCS12_key_gen_uni(unsigned char *pass, int passlen, unsigned char *salt,
     I = OPENSSL_malloc(Ilen);
     Ij = BN_new();
     Bpl1 = BN_new();
-    if (!D || !Ai || !B || !I || !Ij || !Bpl1)
+    if (D == NULL || Ai == NULL || B == NULL || I == NULL || Ij == NULL
+            || Bpl1 == NULL)
         goto err;
     for (i = 0; i < v; i++)
         D[i] = id;
@@ -160,15 +153,15 @@ int PKCS12_key_gen_uni(unsigned char *pass, int passlen, unsigned char *salt,
     for (i = 0; i < Plen; i++)
         *p++ = pass[i % passlen];
     for (;;) {
-        if (!EVP_DigestInit_ex(&ctx, md_type, NULL)
-            || !EVP_DigestUpdate(&ctx, D, v)
-            || !EVP_DigestUpdate(&ctx, I, Ilen)
-            || !EVP_DigestFinal_ex(&ctx, Ai, NULL))
+        if (!EVP_DigestInit_ex(ctx, md_type, NULL)
+            || !EVP_DigestUpdate(ctx, D, v)
+            || !EVP_DigestUpdate(ctx, I, Ilen)
+            || !EVP_DigestFinal_ex(ctx, Ai, NULL))
             goto err;
         for (j = 1; j < iter; j++) {
-            if (!EVP_DigestInit_ex(&ctx, md_type, NULL)
-                || !EVP_DigestUpdate(&ctx, Ai, u)
-                || !EVP_DigestFinal_ex(&ctx, Ai, NULL))
+            if (!EVP_DigestInit_ex(ctx, md_type, NULL)
+                || !EVP_DigestUpdate(ctx, Ai, u)
+                || !EVP_DigestFinal_ex(ctx, Ai, NULL))
                 goto err;
         }
         memcpy(out, Ai, min(n, u));
@@ -224,7 +217,7 @@ int PKCS12_key_gen_uni(unsigned char *pass, int passlen, unsigned char *salt,
     OPENSSL_free(I);
     BN_free(Ij);
     BN_free(Bpl1);
-    EVP_MD_CTX_cleanup(&ctx);
+    EVP_MD_CTX_free(ctx);
     return ret;
 }
 

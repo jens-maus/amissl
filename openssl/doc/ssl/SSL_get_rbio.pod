@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SSL_get_rbio - get BIO linked to an SSL object
+SSL_get_rbio, SSL_get_wbio - get BIO linked to an SSL object
 
 =head1 SYNOPSIS
 
@@ -35,6 +35,6 @@ The BIO linked to B<ssl>.
 
 =head1 SEE ALSO
 
-L<SSL_set_bio(3)|SSL_set_bio(3)>, L<ssl(3)|ssl(3)> , L<bio(3)|bio(3)>
+L<SSL_set_bio(3)>, L<ssl(3)> , L<bio(3)>
 
 =cut

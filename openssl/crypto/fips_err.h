@@ -1,4 +1,3 @@
-/* crypto/fips_err.h */
 /* ====================================================================
  * Copyright (c) 1999-2011 The OpenSSL Project.  All rights reserved.
  *
@@ -77,6 +76,10 @@ static ERR_STRING_DATA FIPS_str_functs[] = {
     {ERR_FUNC(FIPS_F_DSA_BUILTIN_PARAMGEN2), "DSA_BUILTIN_PARAMGEN2"},
     {ERR_FUNC(FIPS_F_DSA_DO_SIGN), "DSA_do_sign"},
     {ERR_FUNC(FIPS_F_DSA_DO_VERIFY), "DSA_do_verify"},
+    {ERR_FUNC(FIPS_F_ECDH_COMPUTE_KEY), "ECDH_compute_key"},
+    {ERR_FUNC(FIPS_F_ECDSA_DO_SIGN), "ECDSA_do_sign"},
+    {ERR_FUNC(FIPS_F_ECDSA_DO_VERIFY), "ECDSA_do_verify"},
+    {ERR_FUNC(FIPS_F_EC_KEY_GENERATE_KEY), "EC_KEY_generate_key"},
     {ERR_FUNC(FIPS_F_FIPS_CHECK_DSA), "FIPS_CHECK_DSA"},
     {ERR_FUNC(FIPS_F_FIPS_CHECK_DSA_PRNG), "fips_check_dsa_prng"},
     {ERR_FUNC(FIPS_F_FIPS_CHECK_EC), "FIPS_CHECK_EC"},

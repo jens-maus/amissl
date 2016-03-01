@@ -36,9 +36,6 @@ static const char *engine_rsaref_name = "RSAref engine support";
 static int rsaref_destroy(ENGINE *e);
 static int rsaref_init(ENGINE *e);
 static int rsaref_finish(ENGINE *e);
-#if 0
-static int rsaref_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) ());
-#endif
 
 /*****************************************************************************
  * Engine commands
@@ -324,31 +321,6 @@ static int RSAref_bn2bin(BIGNUM *from, unsigned char *to, int max)
     return (1);
 }
 
-#ifdef undef
-/* unsigned char *from:  [max]    */
-static BIGNUM *RSAref_bin2bn(unsigned char *from, BIGNUM *to, int max)
-{
-    int i;
-    BIGNUM *ret;
-
-    for (i = 0; i < max; i++)
-        if (from[i])
-            break;
-
-    ret = BN_bin2bn(&(from[i]), max - i, to);
-    return (ret);
-}
-
-static int RSAref_Public_ref2eay(RSArefPublicKey * from, RSA *to)
-{
-    to->n = RSAref_bin2bn(from->m, NULL, RSAref_MAX_LEN);
-    to->e = RSAref_bin2bn(from->e, NULL, RSAref_MAX_LEN);
-    if ((to->n == NULL) || (to->e == NULL))
-        return (0);
-    return (1);
-}
-#endif
-
 static int RSAref_Public_eay2ref(RSA *from, R_RSA_PUBLIC_KEY * to)
 {
     to->bits = BN_num_bits(from->n);
@@ -358,33 +330,6 @@ static int RSAref_Public_eay2ref(RSA *from, R_RSA_PUBLIC_KEY * to)
         return (0);
     return (1);
 }
-
-#ifdef undef
-static int RSAref_Private_ref2eay(RSArefPrivateKey * from, RSA *to)
-{
-    if ((to->n = RSAref_bin2bn(from->m, NULL, RSAref_MAX_LEN)) == NULL)
-        return (0);
-    if ((to->e = RSAref_bin2bn(from->e, NULL, RSAref_MAX_LEN)) == NULL)
-        return (0);
-    if ((to->d = RSAref_bin2bn(from->d, NULL, RSAref_MAX_LEN)) == NULL)
-        return (0);
-    if ((to->p =
-         RSAref_bin2bn(from->prime[0], NULL, RSAref_MAX_PLEN)) == NULL)
-        return (0);
-    if ((to->q =
-         RSAref_bin2bn(from->prime[1], NULL, RSAref_MAX_PLEN)) == NULL)
-        return (0);
-    if ((to->dmp1 = RSAref_bin2bn(from->pexp[0], NULL, RSAref_MAX_PLEN))
-        == NULL)
-        return (0);
-    if ((to->dmq1 = RSAref_bin2bn(from->pexp[1], NULL, RSAref_MAX_PLEN))
-        == NULL)
-        return (0);
-    if ((to->iqmp = RSAref_bin2bn(from->coef, NULL, RSAref_MAX_PLEN)) == NULL)
-        return (0);
-    return (1);
-}
-#endif
 
 static int RSAref_Private_eay2ref(RSA *from, R_RSA_PRIVATE_KEY * to)
 {

@@ -1,4 +1,3 @@
-/* crypto/dh/dh_key.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,10 +56,10 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
-#include <openssl/bn.h>
+#include "internal/cryptlib.h"
 #include <openssl/rand.h>
 #include <openssl/dh.h>
+#include "internal/bn_int.h"
 
 static int generate_key(DH *dh);
 static int compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh);
@@ -72,25 +71,11 @@ static int dh_finish(DH *dh);
 
 int DH_generate_key(DH *dh)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(dh->meth->flags & DH_FLAG_FIPS_METHOD)
-        && !(dh->flags & DH_FLAG_NON_FIPS_ALLOW)) {
-        DHerr(DH_F_DH_GENERATE_KEY, DH_R_NON_FIPS_METHOD);
-        return 0;
-    }
-#endif
     return dh->meth->generate_key(dh);
 }
 
 int DH_compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(dh->meth->flags & DH_FLAG_FIPS_METHOD)
-        && !(dh->flags & DH_FLAG_NON_FIPS_ALLOW)) {
-        DHerr(DH_F_DH_COMPUTE_KEY, DH_R_NON_FIPS_METHOD);
-        return 0;
-    }
-#endif
     return dh->meth->compute_key(key, pub_key, dh);
 }
 
@@ -115,7 +100,7 @@ static const DH_METHOD dh_ossl = {
     dh_bn_mod_exp,
     dh_init,
     dh_finish,
-    0,
+    DH_FLAG_FIPS_METHOD,
     NULL,
     NULL
 };
@@ -139,7 +124,7 @@ static int generate_key(DH *dh)
         goto err;
 
     if (dh->priv_key == NULL) {
-        priv_key = BN_new();
+        priv_key = BN_secure_new();
         if (priv_key == NULL)
             goto err;
         generate_new_key = 1;
@@ -176,18 +161,24 @@ static int generate_key(DH *dh)
     }
 
     {
-        BIGNUM local_prk;
+        BIGNUM *local_prk = NULL;
         BIGNUM *prk;
 
         if ((dh->flags & DH_FLAG_NO_EXP_CONSTTIME) == 0) {
-            BN_init(&local_prk);
-            prk = &local_prk;
+            local_prk = prk = BN_new();
+            if (local_prk == NULL)
+                goto err;
             BN_with_flags(prk, priv_key, BN_FLG_CONSTTIME);
-        } else
+        } else {
             prk = priv_key;
+        }
 
-        if (!dh->meth->bn_mod_exp(dh, pub_key, dh->g, prk, dh->p, ctx, mont))
+        if (!dh->meth->bn_mod_exp(dh, pub_key, dh->g, prk, dh->p, ctx, mont)) {
+            BN_free(local_prk);
             goto err;
+        }
+        /* We MUST free local_prk before any further use of priv_key */
+        BN_free(local_prk);
     }
 
     dh->pub_key = pub_key;
@@ -197,9 +188,9 @@ static int generate_key(DH *dh)
     if (ok != 1)
         DHerr(DH_F_GENERATE_KEY, ERR_R_BN_LIB);
 
-    if ((pub_key != NULL) && (dh->pub_key == NULL))
+    if (pub_key != dh->pub_key)
         BN_free(pub_key);
-    if ((priv_key != NULL) && (dh->priv_key == NULL))
+    if (priv_key != dh->priv_key)
         BN_free(priv_key);
     BN_CTX_free(ctx);
     return (ok);
@@ -266,10 +257,10 @@ static int dh_bn_mod_exp(const DH *dh, BIGNUM *r,
 {
     /*
      * If a is only one word long and constant time is false, use the faster
-     * exponenentiation function.
+     * exponentiation function.
      */
-    if (a->top == 1 && ((dh->flags & DH_FLAG_NO_EXP_CONSTTIME) != 0)) {
-        BN_ULONG A = a->d[0];
+    if (bn_get_top(a) == 1 && ((dh->flags & DH_FLAG_NO_EXP_CONSTTIME) != 0)) {
+        BN_ULONG A = bn_get_words(a)[0];
         return BN_mod_exp_mont_word(r, A, p, m, ctx, m_ctx);
     } else
         return BN_mod_exp_mont(r, a, p, m, ctx, m_ctx);
@@ -283,7 +274,6 @@ static int dh_init(DH *dh)
 
 static int dh_finish(DH *dh)
 {
-    if (dh->method_mont_p)
-        BN_MONT_CTX_free(dh->method_mont_p);
+    BN_MONT_CTX_free(dh->method_mont_p);
     return (1);
 }

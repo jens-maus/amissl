@@ -1,4 +1,3 @@
-/* crypto/asn1/a_i2d_fp.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,13 +56,13 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/buffer.h>
 #include <openssl/asn1.h>
 
 #ifndef NO_OLD_ASN1
 
-# ifndef OPENSSL_NO_FP_API
+# ifndef OPENSSL_NO_STDIO
 int ASN1_i2d_fp(i2d_of_void *i2d, FILE *out, void *x)
 {
     BIO *b;
@@ -87,7 +86,7 @@ int ASN1_i2d_bio(i2d_of_void *i2d, BIO *out, unsigned char *x)
     int i, j = 0, n, ret = 1;
 
     n = i2d(x, NULL);
-    b = (char *)OPENSSL_malloc(n);
+    b = OPENSSL_malloc(n);
     if (b == NULL) {
         ASN1err(ASN1_F_ASN1_I2D_BIO, ERR_R_MALLOC_FAILURE);
         return (0);
@@ -113,7 +112,7 @@ int ASN1_i2d_bio(i2d_of_void *i2d, BIO *out, unsigned char *x)
 
 #endif
 
-#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_NO_STDIO
 int ASN1_item_i2d_fp(const ASN1_ITEM *it, FILE *out, void *x)
 {
     BIO *b;

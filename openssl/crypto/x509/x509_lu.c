@@ -1,4 +1,3 @@
-/* crypto/x509/x509_lu.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,24 +56,22 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/lhash.h>
 #include <openssl/x509.h>
+#include "internal/x509_int.h"
 #include <openssl/x509v3.h>
+#include "x509_lcl.h"
 
 X509_LOOKUP *X509_LOOKUP_new(X509_LOOKUP_METHOD *method)
 {
     X509_LOOKUP *ret;
 
-    ret = (X509_LOOKUP *)OPENSSL_malloc(sizeof(X509_LOOKUP));
+    ret = OPENSSL_zalloc(sizeof(*ret));
     if (ret == NULL)
         return NULL;
 
-    ret->init = 0;
-    ret->skip = 0;
     ret->method = method;
-    ret->method_data = NULL;
-    ret->store_ctx = NULL;
     if ((method->new_item != NULL) && !method->new_item(ret)) {
         OPENSSL_free(ret);
         return NULL;
@@ -183,35 +180,28 @@ X509_STORE *X509_STORE_new(void)
 {
     X509_STORE *ret;
 
-    if ((ret = (X509_STORE *)OPENSSL_malloc(sizeof(X509_STORE))) == NULL)
+    if ((ret = OPENSSL_zalloc(sizeof(*ret))) == NULL)
         return NULL;
-    ret->objs = sk_X509_OBJECT_new(x509_object_cmp);
+    if ((ret->objs = sk_X509_OBJECT_new(x509_object_cmp)) == NULL)
+        goto err;
     ret->cache = 1;
-    ret->get_cert_methods = sk_X509_LOOKUP_new_null();
-    ret->verify = 0;
-    ret->verify_cb = 0;
+    if ((ret->get_cert_methods = sk_X509_LOOKUP_new_null()) == NULL)
+        goto err;
 
     if ((ret->param = X509_VERIFY_PARAM_new()) == NULL)
-        return NULL;
+        goto err;
 
-    ret->get_issuer = 0;
-    ret->check_issued = 0;
-    ret->check_revocation = 0;
-    ret->get_crl = 0;
-    ret->check_crl = 0;
-    ret->cert_crl = 0;
-    ret->lookup_certs = 0;
-    ret->lookup_crls = 0;
-    ret->cleanup = 0;
-
-    if (!CRYPTO_new_ex_data(CRYPTO_EX_INDEX_X509_STORE, ret, &ret->ex_data)) {
-        sk_X509_OBJECT_free(ret->objs);
-        OPENSSL_free(ret);
-        return NULL;
-    }
+    if (!CRYPTO_new_ex_data(CRYPTO_EX_INDEX_X509_STORE, ret, &ret->ex_data))
+        goto err;
 
     ret->references = 1;
     return ret;
+err:
+    X509_VERIFY_PARAM_free(ret->param);
+    sk_X509_OBJECT_free(ret->objs);
+    sk_X509_LOOKUP_free(ret->get_cert_methods);
+    OPENSSL_free(ret);
+    return NULL;
 }
 
 static void cleanup(X509_OBJECT *a)
@@ -239,17 +229,10 @@ void X509_STORE_free(X509_STORE *vfy)
         return;
 
     i = CRYPTO_add(&vfy->references, -1, CRYPTO_LOCK_X509_STORE);
-#ifdef REF_PRINT
-    REF_PRINT("X509_STORE", vfy);
-#endif
+    REF_PRINT_COUNT("X509_STORE", vfy);
     if (i > 0)
         return;
-#ifdef REF_CHECK
-    if (i < 0) {
-        fprintf(stderr, "X509_STORE_free, bad reference count\n");
-        abort();                /* ok */
-    }
-#endif
+    REF_ASSERT_ISNT(i < 0);
 
     sk = vfy->get_cert_methods;
     for (i = 0; i < sk_X509_LOOKUP_num(sk); i++) {
@@ -261,8 +244,7 @@ void X509_STORE_free(X509_STORE *vfy)
     sk_X509_OBJECT_pop_free(vfy->objs, cleanup);
 
     CRYPTO_free_ex_data(CRYPTO_EX_INDEX_X509_STORE, vfy, &vfy->ex_data);
-    if (vfy->param)
-        X509_VERIFY_PARAM_free(vfy->param);
+    X509_VERIFY_PARAM_free(vfy->param);
     OPENSSL_free(vfy);
 }
 
@@ -294,8 +276,8 @@ X509_LOOKUP *X509_STORE_add_lookup(X509_STORE *v, X509_LOOKUP_METHOD *m)
     }
 }
 
-int X509_STORE_get_by_subject(X509_STORE_CTX *vs, int type, X509_NAME *name,
-                              X509_OBJECT *ret)
+int X509_STORE_get_by_subject(X509_STORE_CTX *vs, X509_LOOKUP_TYPE type,
+                              X509_NAME *name, X509_OBJECT *ret)
 {
     X509_STORE *ctx = vs->ctx;
     X509_LOOKUP *lu;
@@ -342,7 +324,7 @@ int X509_STORE_add_cert(X509_STORE *ctx, X509 *x)
 
     if (x == NULL)
         return 0;
-    obj = (X509_OBJECT *)OPENSSL_malloc(sizeof(X509_OBJECT));
+    obj = OPENSSL_malloc(sizeof(*obj));
     if (obj == NULL) {
         X509err(X509_F_X509_STORE_ADD_CERT, ERR_R_MALLOC_FAILURE);
         return 0;
@@ -375,7 +357,7 @@ int X509_STORE_add_crl(X509_STORE *ctx, X509_CRL *x)
 
     if (x == NULL)
         return 0;
-    obj = (X509_OBJECT *)OPENSSL_malloc(sizeof(X509_OBJECT));
+    obj = OPENSSL_malloc(sizeof(*obj));
     if (obj == NULL) {
         X509err(X509_F_X509_STORE_ADD_CRL, ERR_R_MALLOC_FAILURE);
         return 0;
@@ -403,18 +385,24 @@ int X509_STORE_add_crl(X509_STORE *ctx, X509_CRL *x)
 void X509_OBJECT_up_ref_count(X509_OBJECT *a)
 {
     switch (a->type) {
+    default:
+        break;
     case X509_LU_X509:
-        CRYPTO_add(&a->data.x509->references, 1, CRYPTO_LOCK_X509);
+        X509_up_ref(a->data.x509);
         break;
     case X509_LU_CRL:
-        CRYPTO_add(&a->data.crl->references, 1, CRYPTO_LOCK_X509_CRL);
+        X509_CRL_up_ref(a->data.crl);
         break;
     }
 }
 
 void X509_OBJECT_free_contents(X509_OBJECT *a)
 {
+    if (!a)
+        return;
     switch (a->type) {
+    default:
+        break;
     case X509_LU_X509:
         X509_free(a->data.x509);
         break;
@@ -429,22 +417,18 @@ static int x509_object_idx_cnt(STACK_OF(X509_OBJECT) *h, int type,
 {
     X509_OBJECT stmp;
     X509 x509_s;
-    X509_CINF cinf_s;
     X509_CRL crl_s;
-    X509_CRL_INFO crl_info_s;
     int idx;
 
     stmp.type = type;
     switch (type) {
     case X509_LU_X509:
         stmp.data.x509 = &x509_s;
-        x509_s.cert_info = &cinf_s;
-        cinf_s.subject = name;
+        x509_s.cert_info.subject = name;
         break;
     case X509_LU_CRL:
         stmp.data.crl = &crl_s;
-        crl_s.crl = &crl_info_s;
-        crl_info_s.issuer = name;
+        crl_s.crl.issuer = name;
         break;
     default:
         /* abort(); */
@@ -515,7 +499,7 @@ STACK_OF(X509) *X509_STORE_get1_certs(X509_STORE_CTX *ctx, X509_NAME *nm)
     for (i = 0; i < cnt; i++, idx++) {
         obj = sk_X509_OBJECT_value(ctx->ctx->objs, idx);
         x = obj->data.x509;
-        CRYPTO_add(&x->references, 1, CRYPTO_LOCK_X509);
+        X509_up_ref(x);
         if (!sk_X509_push(sk, x)) {
             CRYPTO_w_unlock(CRYPTO_LOCK_X509_STORE);
             X509_free(x);
@@ -535,12 +519,10 @@ STACK_OF(X509_CRL) *X509_STORE_get1_crls(X509_STORE_CTX *ctx, X509_NAME *nm)
     X509_CRL *x;
     X509_OBJECT *obj, xobj;
     sk = sk_X509_CRL_new_null();
-    CRYPTO_w_lock(CRYPTO_LOCK_X509_STORE);
 
     /*
      * Always do lookup to possibly add new CRLs to cache
      */
-    CRYPTO_w_unlock(CRYPTO_LOCK_X509_STORE);
     if (!X509_STORE_get_by_subject(ctx, X509_LU_CRL, nm, &xobj)) {
         sk_X509_CRL_free(sk);
         return NULL;
@@ -557,7 +539,7 @@ STACK_OF(X509_CRL) *X509_STORE_get1_crls(X509_STORE_CTX *ctx, X509_NAME *nm)
     for (i = 0; i < cnt; i++, idx++) {
         obj = sk_X509_OBJECT_value(ctx->ctx->objs, idx);
         x = obj->data.crl;
-        CRYPTO_add(&x->references, 1, CRYPTO_LOCK_X509_CRL);
+        X509_CRL_up_ref(x);
         if (!sk_X509_CRL_push(sk, x)) {
             CRYPTO_w_unlock(CRYPTO_LOCK_X509_STORE);
             X509_CRL_free(x);
@@ -613,6 +595,7 @@ int X509_STORE_CTX_get1_issuer(X509 **issuer, X509_STORE_CTX *ctx, X509 *x)
     X509_NAME *xn;
     X509_OBJECT obj, *pobj;
     int i, ok, idx, ret;
+    *issuer = NULL;
     xn = X509_get_issuer_name(x);
     ok = X509_STORE_get_by_subject(ctx, X509_LU_X509, xn, &obj);
     if (ok != X509_LU_X509) {
@@ -629,8 +612,10 @@ int X509_STORE_CTX_get1_issuer(X509 **issuer, X509_STORE_CTX *ctx, X509 *x)
     }
     /* If certificate matches all OK */
     if (ctx->check_issued(ctx, x, obj.data.x509)) {
-        *issuer = obj.data.x509;
-        return 1;
+        if (x509_check_cert_time(ctx, obj.data.x509, 1)) {
+            *issuer = obj.data.x509;
+            return 1;
+        }
     }
     X509_OBJECT_free_contents(&obj);
 
@@ -650,13 +635,22 @@ int X509_STORE_CTX_get1_issuer(X509 **issuer, X509_STORE_CTX *ctx, X509 *x)
                 break;
             if (ctx->check_issued(ctx, x, pobj->data.x509)) {
                 *issuer = pobj->data.x509;
-                X509_OBJECT_up_ref_count(pobj);
                 ret = 1;
-                break;
+                /*
+                 * If times check, exit with match,
+                 * otherwise keep looking. Leave last
+                 * match in issuer so we return nearest
+                 * match if no certificate time is OK.
+                 */
+
+                if (x509_check_cert_time(ctx, *issuer, 1))
+                    break;
             }
         }
     }
     CRYPTO_w_unlock(CRYPTO_LOCK_X509_STORE);
+    if (*issuer)
+        X509_up_ref(*issuer);
     return ret;
 }
 
@@ -704,7 +698,3 @@ X509_STORE *X509_STORE_CTX_get0_store(X509_STORE_CTX *ctx)
 {
     return ctx->ctx;
 }
-
-IMPLEMENT_STACK_OF(X509_LOOKUP)
-
-IMPLEMENT_STACK_OF(X509_OBJECT)

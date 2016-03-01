@@ -1,4 +1,3 @@
-/* bn_x931p.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2005.
@@ -59,6 +58,7 @@
 
 #include <stdio.h>
 #include <openssl/bn.h>
+#include "bn_lcl.h"
 
 /* X9.31 routines for prime derivation */
 
@@ -78,7 +78,7 @@ static int bn_x931_derive_pi(BIGNUM *pi, const BIGNUM *Xpi, BN_CTX *ctx,
     for (;;) {
         i++;
         BN_GENCB_call(cb, 0, i);
-        /* NB 27 MR is specificed in X9.31 */
+        /* NB 27 MR is specified in X9.31 */
         if (BN_is_prime_fasttest_ex(pi, 27, ctx, 1, cb))
             break;
         if (!BN_add_word(pi, 2))
@@ -192,8 +192,8 @@ int BN_X931_derive_prime_ex(BIGNUM *p, BIGNUM *p1, BIGNUM *p2,
 }
 
 /*
- * Generate pair of paramters Xp, Xq for X9.31 prime generation. Note: nbits
- * paramter is sum of number of bits in both.
+ * Generate pair of parameters Xp, Xq for X9.31 prime generation. Note: nbits
+ * parameter is sum of number of bits in both.
  */
 
 int BN_X931_generate_Xpq(BIGNUM *Xp, BIGNUM *Xq, int nbits, BN_CTX *ctx)

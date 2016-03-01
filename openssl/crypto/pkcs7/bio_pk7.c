@@ -1,4 +1,3 @@
-/* bio_pk7.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -57,7 +56,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/bio.h>
 
-#if !defined(OPENSSL_SYSNAME_NETWARE) && !defined(OPENSSL_SYSNAME_VXWORKS) && !defined(OPENSSL_SYSNAME_AMIGA)
+#if !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
 # include <memory.h>
 #endif
 #include <stdio.h>

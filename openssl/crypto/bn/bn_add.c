@@ -1,4 +1,3 @@
-/* crypto/bn/bn_add.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,8 +55,7 @@
  * [including the GNU Public Licence.]
  */
 
-#include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 /* r can == a or b */
@@ -107,7 +105,8 @@ int BN_add(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
 int BN_uadd(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
 {
     int max, min, dif;
-    BN_ULONG *ap, *bp, *rp, carry, t1, t2;
+    const BN_ULONG *ap, *bp;
+    BN_ULONG *rp, carry, t1, t2;
     const BIGNUM *tmp;
 
     bn_check_top(a);
@@ -166,11 +165,9 @@ int BN_uadd(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
 int BN_usub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
 {
     int max, min, dif;
-    register BN_ULONG t1, t2, *ap, *bp, *rp;
+    register BN_ULONG t1, t2, *rp;
+    register const BN_ULONG *ap, *bp;
     int i, carry;
-#if defined(IRIX_CC_BUG) && !defined(LINT)
-    int dummy;
-#endif
 
     bn_check_top(a);
     bn_check_top(b);
@@ -203,9 +200,6 @@ int BN_usub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
             carry = (t1 < t2);
             t1 = (t1 - t2) & BN_MASK2;
         }
-# if defined(IRIX_CC_BUG) && !defined(LINT)
-        dummy = t1;
-# endif
         *(rp++) = t1 & BN_MASK2;
     }
 #else
@@ -227,28 +221,8 @@ int BN_usub(BIGNUM *r, const BIGNUM *a, const BIGNUM *b)
                 break;
         }
     }
-#if 0
-    memcpy(rp, ap, sizeof(*rp) * (max - i));
-#else
-    if (rp != ap) {
-        for (;;) {
-            if (!dif--)
-                break;
-            rp[0] = ap[0];
-            if (!dif--)
-                break;
-            rp[1] = ap[1];
-            if (!dif--)
-                break;
-            rp[2] = ap[2];
-            if (!dif--)
-                break;
-            rp[3] = ap[3];
-            rp += 4;
-            ap += 4;
-        }
-    }
-#endif
+    if (dif && ap != rp)
+        memcpy(rp, ap, sizeof(*rp) * dif);
 
     r->top = max;
     r->neg = 0;

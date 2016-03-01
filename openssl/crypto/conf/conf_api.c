@@ -1,4 +1,3 @@
-/* conf_api.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -70,12 +69,8 @@
 #include <openssl/conf_api.h>
 #include "e_os.h"
 
-static void value_free_hash_doall_arg(CONF_VALUE *a,
-                                      LHASH_OF(CONF_VALUE) *conf);
+static void value_free_hash(const CONF_VALUE *a, LHASH_OF(CONF_VALUE) *conf);
 static void value_free_stack_doall(CONF_VALUE *a);
-static IMPLEMENT_LHASH_DOALL_ARG_FN(value_free_hash, CONF_VALUE,
-                                    LHASH_OF(CONF_VALUE))
-static IMPLEMENT_LHASH_DOALL_FN(value_free_stack, CONF_VALUE)
 
 /* Up until OpenSSL 0.9.5a, this was get_section */
 CONF_VALUE *_CONF_get_section(const CONF *conf, const char *section)
@@ -157,34 +152,10 @@ char *_CONF_get_string(const CONF *conf, const char *section,
         return (getenv(name));
 }
 
-#if 0                           /* There's no way to provide error checking
-                                 * with this function, so force implementors
-                                 * of the higher levels to get a string and
-                                 * read the number themselves. */
-long _CONF_get_number(CONF *conf, char *section, char *name)
-{
-    char *str;
-    long ret = 0;
-
-    str = _CONF_get_string(conf, section, name);
-    if (str == NULL)
-        return (0);
-    for (;;) {
-        if (conf->meth->is_number(conf, *str))
-            ret = ret * 10 + conf->meth->to_int(conf, *str);
-        else
-            return (ret);
-        str++;
-    }
-}
-#endif
-
 static unsigned long conf_value_hash(const CONF_VALUE *v)
 {
     return (lh_strhash(v->section) << 2) ^ lh_strhash(v->name);
 }
-
-static IMPLEMENT_LHASH_HASH_FN(conf_value, CONF_VALUE)
 
 static int conf_value_cmp(const CONF_VALUE *a, const CONF_VALUE *b)
 {
@@ -205,43 +176,42 @@ static int conf_value_cmp(const CONF_VALUE *a, const CONF_VALUE *b)
         return ((a->name == NULL) ? -1 : 1);
 }
 
-static IMPLEMENT_LHASH_COMP_FN(conf_value, CONF_VALUE)
-
 int _CONF_new_data(CONF *conf)
 {
     if (conf == NULL) {
         return 0;
     }
-    if (conf->data == NULL)
-        if ((conf->data = lh_CONF_VALUE_new()) == NULL) {
+    if (conf->data == NULL) {
+        conf->data = lh_CONF_VALUE_new(conf_value_hash, conf_value_cmp);
+        if (conf->data == NULL)
             return 0;
-        }
+    }
     return 1;
 }
+
+typedef LHASH_OF(CONF_VALUE) LH_CONF_VALUE;
+
+IMPLEMENT_LHASH_DOALL_ARG_CONST(CONF_VALUE, LH_CONF_VALUE);
 
 void _CONF_free_data(CONF *conf)
 {
     if (conf == NULL || conf->data == NULL)
         return;
 
-    lh_CONF_VALUE_down_load(conf->data) = 0; /* evil thing to make * sure the
-                                              * 'OPENSSL_free()' works as *
-                                              * expected */
-    lh_CONF_VALUE_doall_arg(conf->data,
-                            LHASH_DOALL_ARG_FN(value_free_hash),
-                            LHASH_OF(CONF_VALUE), conf->data);
+    /* evil thing to make sure the 'OPENSSL_free()' works as expected */
+    lh_CONF_VALUE_set_down_load(conf->data, 0);
+    lh_CONF_VALUE_doall_LH_CONF_VALUE(conf->data, value_free_hash, conf->data);
 
     /*
      * We now have only 'section' entries in the hash table. Due to problems
      * with
      */
 
-    lh_CONF_VALUE_doall(conf->data, LHASH_DOALL_FN(value_free_stack));
+    lh_CONF_VALUE_doall(conf->data, value_free_stack_doall);
     lh_CONF_VALUE_free(conf->data);
 }
 
-static void value_free_hash_doall_arg(CONF_VALUE *a,
-                                      LHASH_OF(CONF_VALUE) *conf)
+static void value_free_hash(const CONF_VALUE *a, LHASH_OF(CONF_VALUE) *conf)
 {
     if (a->name != NULL)
         (void)lh_CONF_VALUE_delete(conf, a);
@@ -263,8 +233,7 @@ static void value_free_stack_doall(CONF_VALUE *a)
         OPENSSL_free(vv->name);
         OPENSSL_free(vv);
     }
-    if (sk != NULL)
-        sk_CONF_VALUE_free(sk);
+    sk_CONF_VALUE_free(sk);
     OPENSSL_free(a->section);
     OPENSSL_free(a);
 }
@@ -273,12 +242,12 @@ static void value_free_stack_doall(CONF_VALUE *a)
 CONF_VALUE *_CONF_new_section(CONF *conf, const char *section)
 {
     STACK_OF(CONF_VALUE) *sk = NULL;
-    int ok = 0, i;
+    int i;
     CONF_VALUE *v = NULL, *vv;
 
     if ((sk = sk_CONF_VALUE_new_null()) == NULL)
         goto err;
-    if ((v = OPENSSL_malloc(sizeof(CONF_VALUE))) == NULL)
+    if ((v = OPENSSL_malloc(sizeof(*v))) == NULL)
         goto err;
     i = strlen(section) + 1;
     if ((v->section = OPENSSL_malloc(i)) == NULL)
@@ -290,16 +259,10 @@ CONF_VALUE *_CONF_new_section(CONF *conf, const char *section)
 
     vv = lh_CONF_VALUE_insert(conf->data, v);
     OPENSSL_assert(vv == NULL);
-    ok = 1;
- err:
-    if (!ok) {
-        if (sk != NULL)
-            sk_CONF_VALUE_free(sk);
-        if (v != NULL)
-            OPENSSL_free(v);
-        v = NULL;
-    }
-    return (v);
-}
+    return v;
 
-IMPLEMENT_STACK_OF(CONF_VALUE)
+ err:
+    sk_CONF_VALUE_free(sk);
+    OPENSSL_free(v);
+    return NULL;
+}

@@ -20,16 +20,16 @@
 # Be as similar to the output of config.guess/config.sub
 # as possible.
 
-PREFIX=""
 SUFFIX=""
 TEST="false"
 EXE=""
+THERE=`dirname $0`
 
 # pick up any command line args to config
 for i
 do
 case "$i" in 
--d*) PREFIX="debug-";;
+-d*) options=$options" --debug";;
 -t*) TEST="true";;
 -h*) TEST="true"; cat <<EOF
 Usage: config [options]
@@ -102,10 +102,6 @@ fi
 # Now we simply scan though... In most cases, the SYSTEM info is enough
 #
 case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
-    MPE/iX:*)
-	MACHINE=`echo "$MACHINE" | sed -e 's/-/_/g'`
-	echo "parisc-hp-MPE/iX"; exit 0
-	;;
     A/UX:*)
 	echo "m68k-apple-aux3"; exit 0
 	;;
@@ -120,18 +116,6 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 
     AIX:*)
 	echo "${MACHINE}-ibm-aix3"; exit 0
-	;;
-
-    BeOS:*:BePC)
-    if [ -e /boot/develop/headers/be/bone ]; then
-		echo "beos-x86-bone"; exit 0
-	else
-		echo "beos-x86-r5"; exit 0
-	fi
-	;;
-
-    dgux:*)
-	echo "${MACHINE}-dg-dgux"; exit 0
 	;;
 
     HI-UX:*)
@@ -320,10 +304,6 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	echo "${MACHINE}-unknown-ultrix"; exit 0
 	;;
 
-    SINIX*|ReliantUNIX*)
-	echo "${MACHINE}-siemens-sysv4"; exit 0
-	;;
-
     POSIX-BC*)
 	echo "${MACHINE}-siemens-sysv4"; exit 0   # Here, $MACHINE == "BS2000"
 	;;
@@ -340,36 +320,12 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	echo "${MACHINE}-v11-${SYSTEM}"; exit 0;
 	;;
 
-    NEWS-OS:4.*)
-	echo "mips-sony-newsos4"; exit 0;
-	;;
-
     MINGW*)
 	echo "${MACHINE}-whatever-mingw"; exit 0;
 	;;
     CYGWIN*)
-	case "$RELEASE" in
-	    [bB]*|1.0|1.[12].*)
-		echo "${MACHINE}-whatever-cygwin_pre1.3"
-		;;
-	    *)
-		echo "${MACHINE}-whatever-cygwin"
-		;;
-	esac
-	exit 0
+	echo "${MACHINE}-pc-cygwin"; exit 0
 	;;
-
-    *"CRAY T3E")
-       echo "t3e-cray-unicosmk"; exit 0;
-       ;;
-
-    *CRAY*)
-       echo "j90-cray-unicos"; exit 0;
-       ;;
-
-    NONSTOP_KERNEL*)
-       echo "nsr-tandem-nsk"; exit 0;
-       ;;
 
     vxworks*)
        echo "${MACHINE}-whatever-vxworks"; exit 0;
@@ -382,7 +338,7 @@ esac
 #
 
 # Do the Apollo stuff first. Here, we just simply assume
-# that the existance of the /usr/apollo directory is proof
+# that the existence of the /usr/apollo directory is proof
 # enough
 if [ -d /usr/apollo ]; then
     echo "whatever-apollo-whatever"
@@ -521,7 +477,7 @@ case "$GUESSOS" in
 	;;
   mips4-sgi-irix64)
 	echo "WARNING! If you wish to build 64-bit library, then you have to"
-	echo "         invoke './Configure irix64-mips4-$CC' *manually*."
+	echo "         invoke '$THERE/Configure irix64-mips4-$CC' *manually*."
 	if [ "$TEST" = "false" -a -t 1 ]; then
 	  echo "         You have about 5 seconds to press Ctrl-C to abort."
 	  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -540,7 +496,7 @@ case "$GUESSOS" in
 	ISA64=`(sysctl -n hw.optional.64bitops) 2>/dev/null`
 	if [ "$ISA64" = "1" -a -z "$KERNEL_BITS" ]; then
 	    echo "WARNING! If you wish to build 64-bit library, then you have to"
-	    echo "         invoke './Configure darwin64-ppc-cc' *manually*."
+	    echo "         invoke '$THERE/Configure darwin64-ppc-cc' *manually*."
 	    if [ "$TEST" = "false" -a -t 1 ]; then
 	      echo "         You have about 5 seconds to press Ctrl-C to abort."
 	      (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -555,10 +511,12 @@ case "$GUESSOS" in
 	ISA64=`(sysctl -n hw.optional.x86_64) 2>/dev/null`
 	if [ "$ISA64" = "1" -a -z "$KERNEL_BITS" ]; then
 	    echo "WARNING! If you wish to build 64-bit library, then you have to"
-	    echo "         invoke './Configure darwin64-x86_64-cc' *manually*."
+	    echo "         invoke '$THERE/Configure darwin64-x86_64-cc $options' *manually*."
 	    if [ "$TEST" = "false" -a -t 1 ]; then
 	      echo "         You have about 5 seconds to press Ctrl-C to abort."
-	      (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
+	      # The stty technique used elsewhere doesn't work on
+	      # MacOS. At least, right now on this Mac.
+	      sleep 5
 	    fi
 	fi
 	if [ "$ISA64" = "1" -a "$KERNEL_BITS" = "64" ]; then
@@ -572,6 +530,8 @@ case "$GUESSOS" in
   *-*-iphoneos)
 	options="$options -arch%20${MACHINE}"
 	OUT="iphoneos-cross" ;;
+  arm64-*-iphoneos|*-*-ios64)
+	OUT="ios64-cross" ;;
   alpha-*-linux2)
         ISA=`awk '/cpu model/{print$4;exit(0);}' /proc/cpuinfo`
 	case ${ISA:-generic} in
@@ -589,7 +549,7 @@ case "$GUESSOS" in
   ppc64-*-linux2)
 	if [ -z "$KERNEL_BITS" ]; then
 	    echo "WARNING! If you wish to build 64-bit library, then you have to"
-	    echo "         invoke './Configure linux-ppc64' *manually*."
+	    echo "         invoke '$THERE/Configure linux-ppc64' *manually*."
 	    if [ "$TEST" = "false" -a -t 1 ]; then
 		echo "         You have about 5 seconds to press Ctrl-C to abort."
 		(trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -606,7 +566,7 @@ case "$GUESSOS" in
   ppc-*-linux2) OUT="linux-ppc" ;;
   mips64*-*-linux2)
 	echo "WARNING! If you wish to build 64-bit library, then you have to"
-	echo "         invoke './Configure linux64-mips64' *manually*."
+	echo "         invoke '$THERE/Configure linux64-mips64' *manually*."
 	if [ "$TEST" = "false" -a -t 1 ]; then
 	    echo "         You have about 5 seconds to press Ctrl-C to abort."
 	    (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -623,7 +583,7 @@ case "$GUESSOS" in
   sparc64-*-linux2)
 	echo "WARNING! If you *know* that your GNU C supports 64-bit/V9 ABI"
 	echo "         and wish to build 64-bit library, then you have to"
-	echo "         invoke './Configure linux64-sparcv9' *manually*."
+	echo "         invoke '$THERE/Configure linux64-sparcv9' *manually*."
 	if [ "$TEST" = "false" -a -t 1 ]; then
 	  echo "          You have about 5 seconds to press Ctrl-C to abort."
 	  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -696,11 +656,11 @@ case "$GUESSOS" in
   *-*-linux2) OUT="linux-generic32" ;;
   sun4[uv]*-*-solaris2)
 	OUT="solaris-sparcv9-$CC"
-	ISA64=`(isalist) 2>/dev/null | grep sparcv9`
+	ISA64=`(isainfo) 2>/dev/null | grep sparcv9`
 	if [ "$ISA64" != "" -a "$KERNEL_BITS" = "" ]; then
 	    if [ "$CC" = "cc" -a $CCVER -ge 50 ]; then
 		echo "WARNING! If you wish to build 64-bit library, then you have to"
-		echo "         invoke './Configure solaris64-sparcv9-cc' *manually*."
+		echo "         invoke '$THERE/Configure solaris64-sparcv9-cc' *manually*."
 		if [ "$TEST" = "false" -a -t 1 ]; then
 		  echo "         You have about 5 seconds to press Ctrl-C to abort."
 		  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -712,7 +672,7 @@ case "$GUESSOS" in
 		# and therefore switch over to 64-bit. <appro>
 		OUT="solaris64-sparcv9-gcc"
 		echo "WARNING! If you wish to build 32-bit library, then you have to"
-		echo "         invoke './Configure solaris-sparcv9-gcc' *manually*."
+		echo "         invoke '$THERE/Configure solaris-sparcv9-gcc' *manually*."
 		if [ "$TEST" = "false" -a -t 1 ]; then
 		  echo "         You have about 5 seconds to press Ctrl-C to abort."
 		  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -720,7 +680,7 @@ case "$GUESSOS" in
 	    elif [ "$GCC_ARCH" = "-m32" ]; then
 		echo "NOTICE! If you *know* that your GNU C supports 64-bit/V9 ABI"
 		echo "        and wish to build 64-bit library, then you have to"
-		echo "        invoke './Configure solaris64-sparcv9-gcc' *manually*."
+		echo "        invoke '$THERE/Configure solaris64-sparcv9-gcc' *manually*."
 		if [ "$TEST" = "false" -a -t 1 ]; then
 		  echo "         You have about 5 seconds to press Ctrl-C to abort."
 		  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -735,7 +695,7 @@ case "$GUESSOS" in
   sun4d-*-solaris2)	OUT="solaris-sparcv8-$CC" ;;
   sun4*-*-solaris2)	OUT="solaris-sparcv7-$CC" ;;
   *86*-*-solaris2)
-	ISA64=`(isalist) 2>/dev/null | grep amd64`
+	ISA64=`(isainfo) 2>/dev/null | grep amd64`
 	if [ "$ISA64" != "" -a ${KERNEL_BITS:-64} -eq 64 ]; then
 	    OUT="solaris64-x86_64-$CC"
 	else
@@ -782,8 +742,6 @@ case "$GUESSOS" in
 	EXE=".pm"
 	OUT="vos-$CC" ;;
   BS2000-siemens-sysv4) OUT="BS2000-OSD" ;;
-  RM*-siemens-sysv4) OUT="ReliantUNIX" ;;
-  *-siemens-sysv4) OUT="SINIX" ;;
   *-hpux1*)
 	if [ $CC = "gcc" -a $GCC_BITS = "64" ]; then
 	    OUT="hpux64-parisc2-gcc"
@@ -803,7 +761,7 @@ case "$GUESSOS" in
 	     OUT=${OUT:-"hpux-parisc2-${CC}"}
 	     if [ $KERNEL_BITS -eq 64 -a "$CC" = "cc" ]; then
 		echo "WARNING! If you wish to build 64-bit library then you have to"
-		echo "         invoke './Configure hpux64-parisc2-cc' *manually*."
+		echo "         invoke '$THERE/Configure hpux64-parisc2-cc' *manually*."
 		if [ "$TEST" = "false" -a -t 1 ]; then
 		  echo "         You have about 5 seconds to press Ctrl-C to abort."
 		  (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -835,7 +793,7 @@ case "$GUESSOS" in
 	    OUT="aix-cc"
 	    if [ $KERNEL_BITS -eq 64 ]; then
 		echo "WARNING! If you wish to build 64-bit kit, then you have to"
-		echo "         invoke './Configure aix64-cc' *manually*."
+		echo "         invoke '$THERE/Configure aix64-cc' *manually*."
 		if [ "$TEST" = "false" -a -t 1 ]; then
 		    echo "         You have ~5 seconds to press Ctrl-C to abort."
 		    (trap "stty `stty -g`" 2 0; stty -icanon min 0 time 50; read waste) <&1
@@ -849,14 +807,8 @@ case "$GUESSOS" in
 	fi
 	;;
   # these are all covered by the catchall below
-  # *-dgux) OUT="dgux" ;;
-  mips-sony-newsos4) OUT="newsos4-gcc" ;;
-  *-*-cygwin_pre1.3) OUT="Cygwin-pre1.3" ;;
-  *-*-cygwin) OUT="Cygwin" ;;
-  t3e-cray-unicosmk) OUT="cray-t3e" ;;
-  j90-cray-unicos) OUT="cray-j90" ;;
-  nsr-tandem-nsk) OUT="tandem-c89" ;;
-  beos-*) OUT="$GUESSOS" ;;
+  i[3456]86-*-cygwin) OUT="Cygwin-x86" ;;
+  *-*-cygwin) OUT="Cygwin-${MACHINE}" ;;
   x86pc-*-qnx6) OUT="QNX6-i386" ;;
   *-*-qnx6) OUT="QNX6" ;;
   x86-*-android|i?86-*-android) OUT="android-x86" ;;
@@ -864,7 +816,7 @@ case "$GUESSOS" in
   *) OUT=`echo $GUESSOS | awk -F- '{print $3}'`;;
 esac
 
-# NB: This atalla support has been superceded by the ENGINE support
+# NB: This atalla support has been superseded by the ENGINE support
 # That contains its own header and definitions anyway. Support can
 # be enabled or disabled on any supported platform without external
 # headers, eg. by adding the "hw-atalla" switch to ./config or
@@ -875,6 +827,10 @@ esac
 #then
 #  options="$options -DATALLA"
 #fi
+
+if [ -n "$CONFIG_OPTIONS" ]; then
+  options="$options $CONFIG_OPTIONS"
+fi
 
 if expr "$options" : '.*no\-asm' > /dev/null; then :; else
   sh -c "$CROSS_COMPILE${CC:-gcc} -Wa,--help -c -o /tmp/null.$$.o -x assembler /dev/null && rm /tmp/null.$$.o" 2>&1 | \
@@ -904,32 +860,11 @@ esac
 
 for i in aes bf camellia cast des dh dsa ec hmac idea md2 md5 mdc2 rc2 rc4 rc5 ripemd rsa seed sha
 do
-  if [ ! -d crypto/$i ]
+  if [ ! -d $THERE/crypto/$i ]
   then
     options="$options no-$i"
   fi
 done
-
-# Discover Kerberos 5 (since it's still a prototype, we don't
-# do any guesses yet, that's why this section is commented away.
-#if [ -d /usr/kerberos ]; then
-#    krb5_dir=/usr/kerberos
-#    if [ \( -f $krb5_dir/lib/libgssapi_krb5.a -o -f $krb5_dir/lib/libgssapi_krb5.so* \)\
-#	-a \( -f $krb5_dir/lib/libkrb5.a -o -f $krb5_dir/lib/libkrb5.so* \)\
-#	-a \( -f $krb5_dir/lib/libcom_err.a -o -f $krb5_dir/lib/libcom_err.so* \)\
-#	-a \( -f $krb5_dir/lib/libk5crypto.a -o -f $krb5_dir/lib/libk5crypto.so* \)\
-#	-a \( -f $krb5_dir/include/krb5.h \) ]; then
-#	options="$options --with-krb5-flavor=MIT"
-#    fi
-#elif [ -d /usr/heimdal ]; then
-#    krb5_dir=/usr/heimdal
-#    if [ \( -f $krb5_dir/lib/libgssapi.a -o -f $krb5_dir/lib/libgssapi.so* \)\
-#	-a \( -f $krb5_dir/lib/libkrb5.a -o -f $krb5_dir/lib/libkrb5.so* \)\
-#	-a \( -f $krb5_dir/lib/libcom_err.a -o -f $krb5_dir/lib/libcom_err.so* \)\
-#	-a \( -f $krb5_dir/include/krb5.h \) ]; then
-#	options="$options --with-krb5-flavor=Heimdal"
-#    fi
-#fi
 
 if [ -z "$OUT" ]; then
   OUT="$CC"
@@ -964,21 +899,21 @@ fi
 # compiler for the platform ... in which case we add it on
 # the end ... otherwise we leave it off
 
-$PERL ./Configure LIST | grep "$OUT-$CC" > /dev/null
+$PERL $THERE/Configure LIST | grep "$OUT-$CC" > /dev/null
 if [ $? = "0" ]; then
   OUT="$OUT-$CC"
 fi
 
-OUT="$PREFIX$OUT"
+OUT="$OUT"
 
-$PERL ./Configure LIST | grep "$OUT" > /dev/null
+$PERL $THERE/Configure LIST | grep "$OUT" > /dev/null
 if [ $? = "0" ]; then
   echo Configuring for $OUT
 
   if [ "$TEST" = "true" ]; then
-    echo $PERL ./Configure $OUT $options
+    echo $PERL $THERE/Configure $OUT $options
   else
-    $PERL ./Configure $OUT $options
+    $PERL $THERE/Configure $OUT $options
   fi
 else
   echo "This system ($OUT) is not supported. See file INSTALL for details."

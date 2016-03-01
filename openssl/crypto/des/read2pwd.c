@@ -1,4 +1,3 @@
-/* crypto/des/read2pwd.c */
 /* ====================================================================
  * Copyright (c) 2001-2002 The OpenSSL Project.  All rights reserved.
  *
@@ -114,8 +113,8 @@
 #include <openssl/ui.h>
 #include <openssl/crypto.h>
 
-#ifdef OPENSSL_NO_FP_API
-#define BUFSIZ 8192
+#ifndef BUFSIZ
+#define BUFSIZ 256
 #endif
 
 int DES_read_password(DES_cblock *key, const char *prompt, int verify)
