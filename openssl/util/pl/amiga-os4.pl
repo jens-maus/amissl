@@ -19,7 +19,7 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
+$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -DOPENSSLDIR=\\\"AmiSSL:\\\" -DENGINESDIR=\\\"AmiSSL:engines\\\" -W -Wall";
 $app_cflag="-I\$(AmiSSL)/openssl";
 $lib_cflag="-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
 $obj='.o';
@@ -81,5 +81,29 @@ sub do_link_rule
 	$ret.="\t\$(LINK) ${efile}$target \$(LFLAGS) $files $libs\n\n";
 	return($ret);
 	}
+
+sub do_rehash_rule {
+    my ($target, $deps) = @_;
+    my $ret = <<"EOF";
+$target: $deps
+	(OPENSSL="`pwd`/util/opensslwrap.sh"; \\
+	OPENSSL_DEBUG_MEMORY=on; \\
+	export OPENSSL OPENSSL_DEBUG_MEMORY; \\
+	\$(PERL) \$(BIN_D)${o}c_rehash certs/demo; \\
+	touch $target)
+EOF
+    return $ret
+}
+sub do_test_rule {
+    my ($target, $deps, $test_cmd) = @_;
+    my $ret = <<"EOF";
+$target: $deps force.$target
+	TOP=. BIN_D=\$(BIN_D) TEST_D=\$(TEST_D) \\
+	    PERL=\$(PERL) \$(PERL) test/$test_cmd \$(TESTS)
+force.$target:
+
+EOF
+    return $ret;
+}
 
 1;

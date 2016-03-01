@@ -106,7 +106,6 @@ DEFINE_LHASH_OF(MEM);
 #  define X509_CERT_FILE          "SSLCERTS:cert.pem"
 #  define X509_PRIVATE_DIR        "SSLPRIVATE:"
 # endif
-#endif /* OPENSSL_SYS_AMIGA */
 
 # define X509_CERT_DIR_EVP        "SSL_CERT_DIR"
 # define X509_CERT_FILE_EVP       "SSL_CERT_FILE"

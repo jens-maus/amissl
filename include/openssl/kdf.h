@@ -1,13 +1,12 @@
 #ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/pqueue/pqueue.h */
+#endif
 /*
- * DTLS implementation written by Nagendra Modadugu
- * (nagendra@cs.stanford.edu) for the OpenSSL project 2005.
+ * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
+ * project.
  */
 /* ====================================================================
- * Copyright (c) 1999-2005 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 2016 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,7 +28,7 @@
  * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
  *    endorse or promote products derived from this software without
  *    prior written permission. For written permission, please contact
- *    openssl-core@OpenSSL.org.
+ *    licensing@OpenSSL.org.
  *
  * 5. Products derived from this software may not be called "OpenSSL"
  *    nor may "OpenSSL" appear in their names without prior written
@@ -53,50 +52,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
  */
 
-#ifndef HEADER_PQUEUE_H
-# define HEADER_PQUEUE_H
+#ifndef HEADER_KDF_H
+# define HEADER_KDF_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct _pqueue *pqueue;
 
-typedef struct _pitem {
-    unsigned char priority[8];  /* 64-bit value in big-endian encoding */
-    void *data;
-    struct _pitem *next;
-} pitem;
+# define EVP_PKEY_CTRL_TLS_MD       (EVP_PKEY_ALG_CTRL)
+# define EVP_PKEY_CTRL_TLS_SECRET   (EVP_PKEY_ALG_CTRL + 1)
+# define EVP_PKEY_CTRL_TLS_SEED     (EVP_PKEY_ALG_CTRL + 2)
 
-typedef struct _pitem *piterator;
+# define EVP_PKEY_CTX_set_tls1_prf_md(pctx, md) \
+            EVP_PKEY_CTX_ctrl(pctx, -1, EVP_PKEY_OP_DERIVE, \
+                              EVP_PKEY_CTRL_TLS_MD, 0, (void *)md)
 
-pitem *pitem_new(unsigned char *prio64be, void *data);
-void pitem_free(pitem *item);
+# define EVP_PKEY_CTX_set1_tls1_prf_secret(pctx, sec, seclen) \
+            EVP_PKEY_CTX_ctrl(pctx, -1, EVP_PKEY_OP_DERIVE, \
+                              EVP_PKEY_CTRL_TLS_SECRET, seclen, (void *)sec)
 
-pqueue pqueue_new(void);
-void pqueue_free(pqueue pq);
-
-pitem *pqueue_insert(pqueue pq, pitem *item);
-pitem *pqueue_peek(pqueue pq);
-pitem *pqueue_pop(pqueue pq);
-pitem *pqueue_find(pqueue pq, unsigned char *prio64be);
-pitem *pqueue_iterator(pqueue pq);
-pitem *pqueue_next(piterator *iter);
-
-void pqueue_print(pqueue pq);
-int pqueue_size(pqueue pq);
+# define EVP_PKEY_CTX_add1_tls1_prf_seed(pctx, seed, seedlen) \
+            EVP_PKEY_CTX_ctrl(pctx, -1, EVP_PKEY_OP_DERIVE, \
+                              EVP_PKEY_CTRL_TLS_SEED, seedlen, (void *)seed)
 
 #ifdef  __cplusplus
 }
 #endif
-#endif                          /* ! HEADER_PQUEUE_H */
+#endif

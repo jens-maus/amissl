@@ -121,6 +121,7 @@ extern "C" {
 #  ifdef __CLIB2__
 #    define __USE_NETINET_IN_H
 #    define NO_SYS_PARAM_H
+#    define NO_SYS_UN_H
 #  endif
 #endif
 

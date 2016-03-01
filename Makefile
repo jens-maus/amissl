@@ -187,13 +187,17 @@ ifeq ($(OS), os4)
   ##############################
   # AmigaOS4
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-os4
+
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS4)
-    CC      = ppc-amigaos-gcc-4.0.3
-    STRIP   = ppc-amigaos-strip
-    OBJDUMP = ppc-amigaos-objdump
-    AR      = ppc-amigaos-ar
-    RANLIB  = ppc-amigaos-ranlib
+    CROSS_PREFIX = ppc-amigaos-
+    CC      = $(CROSS_PREFIX)gcc-4.0.3
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -207,8 +211,6 @@ ifeq ($(OS), os4)
   CDUP     = ../
   CDTHIS   = ./
 
-  OPENSSL_T = amiga-os4
-
   EXTRALIBOBJS = $(OBJ_D)/amissl_library_os4.o \
                  $(OBJ_D)/amissl_glue.o \
                  $(OBJ_D)/amissl_m68k.o
@@ -221,13 +223,17 @@ ifeq ($(OS), os3)
   ##############################
   # AmigaOS3
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-os3
+
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS)
-    CC      = m68k-amigaos-gcc
-    STRIP   = m68k-amigaos-strip
-    OBJDUMP = m68k-amigaos-objdump
-    AR      = m68k-amigaos-ar
-    RANLIB  = m68k-amigaos-ranlib
+    CROSS_PREFIX = m68k-amigaos-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -240,8 +246,6 @@ ifeq ($(OS), os3)
   BRELLIB = -mrestore-a4
   GCCVER  = 2
 
-  OPENSSL_T = amiga-os3
-
   EXTRALIBOBJS = $(OBJ_D)/amissl_glue.o
 
 else
@@ -250,13 +254,17 @@ ifeq ($(OS), mos)
   ##############################
   # MorphOS
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-mos
+
   # Compiler/link/strip commands
   ifneq ($(HOST), MorphOS)
-    CC      = ppc-morphos-gcc
-    STRIP   = ppc-morphos-strip
-    OBJDUMP = ppc-morphos-objdump
-    AR      = ppc-morphos-ar
-    RANLIB  = ppc-morphos-ranlib
+    CROSS_PREFIX = ppc-morphos-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -266,20 +274,22 @@ ifeq ($(OS), mos)
   LDLIBS  +=
   GCCVER  = 2
 
-  OPENSSL_T = amiga-mos
-
 else
 ifeq ($(OS), aros-i386)
 
   ##############################
   # AROS (i386)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-i386
+
   ifneq ($(HOST), AROS)
-    CC      = i386-aros-gcc
-    STRIP   = i386-aros-strip
-    OBJDUMP = i386-aros-objdump
-    AR      = i386-aros-ar
-    RANLIB  = i386-aros-ranlib
+    CROSS_PREFIX = i386-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -292,12 +302,16 @@ ifeq ($(OS), aros-ppc)
   ##############################
   # AROS (PPC)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-ppc
+
   ifneq ($(HOST), AROS)
-    CC      = ppc-aros-gcc
-    STRIP   = ppc-aros-strip
-    OBJDUMP = ppc-aros-objdump
-    AR      = ppc-aros-ar
-    RANLIB  = ppc-aros-ranlib
+    CROSS_PREFIX = ppc-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -310,12 +324,16 @@ ifeq ($(OS), aros-x86_64)
   ##############################
   # AROS (x86_64)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-x86_64
+
   ifneq ($(HOST), AROS)
-    CC      = x86_64-aros-gcc
-    STRIP   = x86_64-aros-strip
-    OBJDUMP = x86_64-aros-objdump
-    AR      = x86_64-aros-ar
-    RANLIB  = x86_64-aros-ranlib
+    CROSS_PREFIX = x86_64-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -326,14 +344,18 @@ else
 ifeq ($(OS), aros-arm)
 
   ##############################
-  # AROS (x86_64)
+  # AROS (arm)
+
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-arm
 
   ifneq ($(HOST), AROS)
-    CC      = arm-aros-gcc
-    STRIP   = arm-aros-strip
-    OBJDUMP = arm-aros-objdump
-    AR      = arm-aros-ar
-    RANLIB  = arm-aros-ranlib
+    CROSS_PREFIX = arm-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -369,7 +391,7 @@ LIBS = -L$(BIN_D)/openssl $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
+all: $(OBJ_D) $(BIN_D) $(LIBCRYPTO) $(LIBSSL) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
 
 # make the object directory
 $(OBJ_D):
@@ -401,20 +423,21 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 --openssldir=AmiSSL: $(DEBUG))
+	@(cd openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 --openssldir=AmiSSL: $(DEBUG))
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)
 
 $(OBJ_D)/openssl/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
-	@(cd openssl; perl util/mk1mf.pl SRC= TMP=../$(OBJ_D)/openssl OUT=../$(BIN_D)/openssl $(OPENSSL_T) > ../$(OBJ_D)/Makefile.ossl)
+	@(cd openssl; perl util/mk1mf.pl SRC=. TMP=../$(OBJ_D)/openssl OUT=../$(BIN_D)/openssl INC=../$(OBJ_D)/openssl/include $(OPENSSL_T) > ../$(OBJ_D)/Makefile.ossl)
 
-$(OBJ_D)/openssl/outinc: $(OBJ_D)/openssl/Makefile.ossl
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC) outinc outinc/openssl headers
+$(OBJ_D)/openssl/include: $(OBJ_D)/openssl/Makefile.ossl
+	@$(MKDIR) $(OBJ_D)/openssl/include
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC) init
 	@sh tools/cpheaders.sh
 
-$(LIBCRYPTO): $(OBJ_D)/openssl/outinc
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC)
+$(LIBCRYPTO): $(OBJ_D)/openssl/include
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC)
 
 $(LIBSSL): $(LIBCRYPTO)
 
@@ -510,7 +533,6 @@ distclean: clean
 	-rm -f openssl/crypto/opensslconf.h
 	-rm -f openssl/openssl.pc
 	-rm -f openssl/crypto/buildinf.h
-	-rm -rf openssl/outinc
 	-rm -rf $(OBJ_D) $(BIN_D)
 	-rm -rf *.library *.map
 

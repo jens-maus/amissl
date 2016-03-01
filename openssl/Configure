@@ -1014,7 +1014,7 @@ if ($builder ne "mk1mf")
 	if ($config{no_shared})
 		{
 		push @{$config{openssl_other_defines}}, "OPENSSL_NO_DYNAMIC_ENGINE";
-		$config{options}.=" static-engine";
+		$config{options}.=" enable-static-engine";
 		}
 	else
 		{

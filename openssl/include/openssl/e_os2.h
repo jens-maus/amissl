@@ -191,10 +191,8 @@ extern "C" {
 # endif
 
 /* -------------------------------- Amiga --------------------------------- */
-# if defined(OPENSSL_SYSNAME_AMIGA)
-#  if !defined(OPENSSL_SYS_AMIGA)
-#   define OPENSSL_SYS_AMIGA
-#  endif
+# if defined(OPENSSL_SYS_AMIGA) || defined(__amigaos3__) || defined(__amigaos4__) || defined(__MORPHOS__)
+#  undef OPENSSL_SYS_UNIX
 #  if defined(AMISSL_COMPILE)
 #   include <internal/amissl_compiler.h>
 #  endif

@@ -1,6 +1,6 @@
 #ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
+#endif
 /* ====================================================================
  * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
  *

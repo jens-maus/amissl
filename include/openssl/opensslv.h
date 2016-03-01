@@ -1,6 +1,6 @@
 #ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
+#endif
 #ifndef HEADER_OPENSSLV_H
 # define HEADER_OPENSSLV_H
 
@@ -33,13 +33,12 @@ extern "C" {
  * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
  *  major minor fix final patch/beta)
  */
-# define OPENSSL_VERSION_NUMBER  0x1000206fL
+# define OPENSSL_VERSION_NUMBER  0x10100003L
 # ifdef OPENSSL_FIPS
-#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.0.2f-fips  28 Jan 2016"
+#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre3-fips (alpha) 15 Feb 2016"
 # else
-#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.0.2f  28 Jan 2016"
+#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre3 (alpha) 15 Feb 2016"
 # endif
-# define OPENSSL_VERSION_PTEXT   " part of " OPENSSL_VERSION_TEXT
 
 /*-
  * The macros below are to be used for shared library (.so, .dll, ...)
@@ -91,7 +90,7 @@ extern "C" {
  * should only keep the versions that are binary compatible with the current.
  */
 # define SHLIB_VERSION_HISTORY ""
-# define SHLIB_VERSION_NUMBER "1.0.0"
+# define SHLIB_VERSION_NUMBER "1.1"
 
 
 #ifdef  __cplusplus

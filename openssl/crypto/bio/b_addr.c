@@ -746,7 +746,11 @@ int BIO_lookup(const char *host, const char *service,
             he = &he_fallback;
             switch(lookup_type) {
             case BIO_LOOKUP_CLIENT:
+#ifdef OPENSSL_SYS_AMIGA
+                he_fallback_address = INADDR_ANY;
+#else
                 he_fallback_address = INADDR_LOOPBACK;
+#endif
                 break;
             case BIO_LOOKUP_SERVER:
                 he_fallback_address = INADDR_ANY;

@@ -151,7 +151,7 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag)
 	return(ret);
 }
 
-#if !defined(OPENSSL_NO_FP_API)
+#if !defined(OPENSSL_NO_STDIO)
 /* Only stdin, stdout and stderr are used in OpenSSL test applications
  * and openssl program, so the following function should cover all cases.
  */

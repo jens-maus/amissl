@@ -1,12 +1,10 @@
 #!/bin/sh
-for header in openssl/outinc/openssl/*; do
-  outfile=`basename ${header}`
-  cat > include/openssl/${outfile} << EOF
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-EOF
-
-  cat ${header} >>include/openssl/${outfile}
-  echo "copied+patched ${outfile} to include/openssl"
+rm -f include/openssl/*
+for header in openssl/include/openssl/*.h; do
+  file=$(basename ${header})
+  if echo "${file}" | grep -qv "__"; then
+    cp -a ${header} include/openssl/
+    sed -i '1s/^/#ifndef PROTO_AMISSL_H\n#include <proto\/amissl.h>\n#endif\n/' include/openssl/${file}
+    echo "copied+patched ${header} to include/openssl"
+  fi
 done

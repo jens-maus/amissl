@@ -27,7 +27,7 @@
 /*
  * Undefine AF_UNIX on systems that define it but don't support it.
  */
-# if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_VMS)
+# if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_AMIGA)
 #  undef AF_UNIX
 # endif
 

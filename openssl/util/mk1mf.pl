@@ -833,9 +833,9 @@ $rules .= &do_rehash_rule("rehash.time", "certs/demo apps tools");
 $rules .= &do_test_rule("test", "rehash.time", "run_tests.pl");
 
 $rules .= <<"EOF";
-crypto${o}buildinf.h : MINFO
-	\$(PERL) util${o}mkbuildinf.pl "\$(CC) \$(CFLAG_Q)" "\$(PLATFORM)" > crypto${o}buildinf.h
-$(OBJ_D)${o}cversion${obj} : crypto${o}buildinf.h
+\$(SRC_D)crypto${o}buildinf.h : MINFO
+	\$(PERL) util${o}mkbuildinf.pl "\$(CC) \$(CFLAG_Q)" "\$(PLATFORM)" > \$(SRC_D)crypto${o}buildinf.h
+\$(OBJ_D)${o}cversion${obj} : crypto${o}buildinf.h
 EOF
 
 # Strip off trailing ' '
