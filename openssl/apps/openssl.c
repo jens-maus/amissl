@@ -216,7 +216,7 @@ static void lock_dbg_cb(int mode, int type, const char *file, int line)
 #endif
 
 #if defined(OPENSSL_SYS_AMIGA)
-const char *ProgramVersion = "\0$VER: OpenSSL 1.0.2f (04.03.2016)\r\n";
+const char * const ProgramVersion = "\0$VER: " OPENSSL_VERSION_TEXT "\r\n";
 #endif /* OPENSSL_SYS_AMIGA */
 
 int main(int Argc, char *ARGV[])
