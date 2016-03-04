@@ -5607,7 +5607,7 @@
     </method>
     <method name="SSL_use_RSAPrivateKey_ASN1" result="int">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
-      <arg name="d" type="unsigned char *" m68kreg="a1"/>
+      <arg name="d" type="const unsigned char *" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
     <method name="SSL_use_PrivateKey" result="int">
@@ -5674,9 +5674,9 @@
       <arg name="stackCAs" type="STACK_OF(X509_NAME) *" m68kreg="a0"/>
       <arg name="dir" type="const char *" m68kreg="a1"/>
     </method>
-    <method name="SSL_load_error_strings" result="void">
+    <method name="SSL_load_error_strings" result="void" status="unimplemented">
     </method>
-    <method name="SSL_state_string" result="const char *">
+    <method name="SSL_state_string" result="const char *" status="unimplemented">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_rstate_string" result="const char *">
@@ -5702,7 +5702,7 @@
       <arg name="s" type="SSL_SESSION *" m68kreg="a0"/>
       <arg name="t" type="long" m68kreg="d0"/>
     </method>
-    <method name="SSL_copy_session_id" result="void">
+    <method name="SSL_copy_session_id" result="int">
       <arg name="to" type="SSL *" m68kreg="a0"/>
       <arg name="from" type="const SSL *" m68kreg="a1"/>
     </method>
@@ -5913,11 +5913,11 @@
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="meth" type="const SSL_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="SSLv2_method" result="const SSL_METHOD *">
+    <method name="SSLv2_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
-    <method name="SSLv2_server_method" result="const SSL_METHOD *">
+    <method name="SSLv2_server_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
-    <method name="SSLv2_client_method" result="const SSL_METHOD *">
+    <method name="SSLv2_client_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
     <method name="SSLv3_method" result="const SSL_METHOD *">
     </method>
@@ -5925,11 +5925,11 @@
     </method>
     <method name="SSLv3_client_method" result="const SSL_METHOD *">
     </method>
-    <method name="SSLv23_method" result="const SSL_METHOD *">
+    <method name="SSLv23_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
-    <method name="SSLv23_server_method" result="const SSL_METHOD *">
+    <method name="SSLv23_server_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
-    <method name="SSLv23_client_method" result="const SSL_METHOD *">
+    <method name="SSLv23_client_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
     <method name="TLSv1_method" result="const SSL_METHOD *">
     </method>
@@ -6002,7 +6002,7 @@
     <method name="SSL_get_default_timeout" result="long">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
-    <method name="SSL_library_init" result="int">
+    <method name="SSL_library_init" result="int" status="unimplemented">
     </method>
     <method name="SSL_CIPHER_description" result="char *">
       <arg name="a1" type="SSL_CIPHER *" m68kreg="a0"/>
@@ -6088,7 +6088,7 @@
       <arg name="ssl" type="const SSL *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
-    <method name="SSL_get_ex_new_index" result="int">
+    <method name="SSL_get_ex_new_index" result="int" status="unimplemented">
       <arg name="argl" type="long" m68kreg="d0"/>
       <arg name="argp" type="void *" m68kreg="a0"/>
       <arg name="new_func" type="CRYPTO_EX_new *" m68kreg="a1"/>
@@ -6104,7 +6104,7 @@
       <arg name="ss" type="const SSL_SESSION *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
-    <method name="SSL_SESSION_get_ex_new_index" result="int">
+    <method name="SSL_SESSION_get_ex_new_index" result="int" status="unimplemented">
       <arg name="argl" type="long" m68kreg="d0"/>
       <arg name="argp" type="void *" m68kreg="a0"/>
       <arg name="new_func" type="CRYPTO_EX_new *" m68kreg="a1"/>
@@ -6120,7 +6120,7 @@
       <arg name="ssl" type="const SSL_CTX *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
-    <method name="SSL_CTX_get_ex_new_index" result="int">
+    <method name="SSL_CTX_get_ex_new_index" result="int" status="unimplemented">
       <arg name="argl" type="long" m68kreg="d0"/>
       <arg name="argp" type="void *" m68kreg="a0"/>
       <arg name="new_func" type="CRYPTO_EX_new *" m68kreg="a1"/>
@@ -6129,11 +6129,11 @@
     </method>
     <method name="SSL_get_ex_data_X509_STORE_CTX_idx" result="int">
     </method>
-    <method name="SSL_CTX_set_tmp_rsa_callback" result="void">
+    <method name="SSL_CTX_set_tmp_rsa_callback" result="void" status="unimplemented">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="cb" type="RSA * (*)(SSL *ssl, int is_export, int keylength)" m68kreg="a1"/>
     </method>
-    <method name="SSL_set_tmp_rsa_callback" result="void">
+    <method name="SSL_set_tmp_rsa_callback" result="void" status="unimplemented">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
       <arg name="cb" type="RSA * (*)(SSL *ssl, int is_export, int keylength)" m68kreg="a1"/>
     </method>
@@ -10863,7 +10863,7 @@
     </method>
     <method name="SSL_CTX_set_cookie_verify_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="app_verify_cookie_cb" type="int (*)(SSL *ssl, unsigned char *cookie, unsigned int cookie_len)" m68kreg="a1"/>
+      <arg name="app_verify_cookie_cb" type="int (*)(SSL *, const unsigned char *, unsigned int)" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_set_info_callback" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -11074,7 +11074,7 @@
     </method>
     <method name="SSL_set_session_secret_cb" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="tls_session_secret_cb" type="tls_session_secret_cb_fn" m68kreg="a1"/>
+      <arg name="tls_session_secret_cb" type="int (*)(SSL *, void *, int *, STACK_OF(SSL_CIPHER) *, const SSL_CIPHER **, void *)" m68kreg="a1"/>
       <arg name="arg" type="void *" m68kreg="a2"/>
     </method>
     <method name="SSL_set_session_ticket_ext_cb" result="int">
@@ -11159,14 +11159,14 @@
     <method name="SRP_Calc_A_param" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
-    <method name="SRP_generate_server_master_secret" result="int">
+    <method name="SRP_generate_server_master_secret" result="int" status="unimplemented">
       <arg name="s" type="SSL *" m68kreg="a0"/>
       <arg name="master_key" type="unsigned char *" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_SRP_CTX_free" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
     </method>
-    <method name="SRP_generate_client_master_secret" result="int">
+    <method name="SRP_generate_client_master_secret" result="int" status="unimplemented">
       <arg name="s" type="SSL *" m68kreg="a0"/>
       <arg name="master_key" type="unsigned char *" m68kreg="a1"/>
     </method>
@@ -11193,14 +11193,14 @@
     </method>
     <method name="TLSv1_2_server_method" result="const SSL_METHOD *">
     </method>
-    <method name="SSL_cache_hit" result="int">
+    <method name="SSL_cache_hit" result="int" status="unimplemented">
       <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
-    <method name="SSL_set_state" result="void">
+    <method name="SSL_set_state" result="void" status="unimplemented">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
       <arg name="state" type="int" m68kreg="d0"/>
     </method>
-    <method name="SSL_CIPHER_get_id" result="unsigned long">
+    <method name="SSL_CIPHER_get_id" result="uint32_t">
       <arg name="c" type="const SSL_CIPHER *" m68kreg="a0"/>
     </method>
     <method name="TLSv1_2_method" result="const SSL_METHOD *">
@@ -11255,11 +11255,11 @@
     <method name="SSL_SESSION_get_compress_id" result="unsigned int">
       <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
     </method>
-    <method name="SSL_CTX_set_tmp_ecdh_callback" result="void">
+    <method name="SSL_CTX_set_tmp_ecdh_callback" result="void" status="unimplemented">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="ecdh" type="EC_KEY *(*)(SSL *ssl, int is_export, int keylength)" m68kreg="a1"/>
     </method>
-    <method name="SSL_set_tmp_ecdh_callback" result="void">
+    <method name="SSL_set_tmp_ecdh_callback" result="void" status="unimplemented">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
       <arg name="ecdh" type="EC_KEY *(*)(SSL *ssl, int is_export, int keylength)" m68kreg="a1"/>
     </method>
@@ -13295,12 +13295,12 @@
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="new_session_cb" type="int (*)(struct ssl_st *ssl, SSL_SESSION *sess)" m68kreg="a1"/>
     </method>
-    <method name="SSL_CTX_sess_get_get_cb" result="SSL_SESSION *(*)(struct ssl_st *ssl, unsigned char *Data, int len, int *copy)">
+    <method name="SSL_CTX_sess_get_get_cb" result="SSL_SESSION *(*)(SSL *, const unsigned char *, int, int *)">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
     </method>
     <method name="SSL_CTX_sess_set_get_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="get_session_cb" type="SSL_SESSION *(*)(struct ssl_st *ssl, unsigned char *data,int len,int *copy)" m68kreg="a1"/>
+      <arg name="get_session_cb" type="SSL_SESSION *(*)(SSL *, const unsigned char *, int, int *)" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_get_info_callback" result="void (*)(const SSL *ssl,int type,int val)">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>

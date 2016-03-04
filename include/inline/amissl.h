@@ -5106,7 +5106,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_use_RSAPrivateKey_ASN1(___ssl, ___d, ___len) \
-	LP3(0x20fa, int, SSL_use_RSAPrivateKey_ASN1 , SSL *, ___ssl, a0, unsigned char *, ___d, a1, long, ___len, d0,\
+	LP3(0x20fa, int, SSL_use_RSAPrivateKey_ASN1 , SSL *, ___ssl, a0, const unsigned char *, ___d, a1, long, ___len, d0,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_use_PrivateKey(___ssl, ___pkey) \
@@ -5165,14 +5165,6 @@ typedef ULONG _sfdc_vararg;
 	LP2(0x214e, int, SSL_add_dir_cert_subjects_to_stack , STACK_OF(X509_NAME) *, ___stackCAs, a0, const char *, ___dir, a1,\
 	, AMISSL_BASE_NAME)
 
-#define SSL_load_error_strings() \
-	LP0NR(0x2154, SSL_load_error_strings ,\
-	, AMISSL_BASE_NAME)
-
-#define SSL_state_string(___s) \
-	LP1(0x215a, const char *, SSL_state_string , const SSL *, ___s, a0,\
-	, AMISSL_BASE_NAME)
-
 #define SSL_rstate_string(___s) \
 	LP1(0x2160, const char *, SSL_rstate_string , const SSL *, ___s, a0,\
 	, AMISSL_BASE_NAME)
@@ -5202,7 +5194,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_copy_session_id(___to, ___from) \
-	LP2NR(0x218a, SSL_copy_session_id , SSL *, ___to, a0, const SSL *, ___from, a1,\
+	LP2(0x218a, int, SSL_copy_session_id , SSL *, ___to, a0, const SSL *, ___from, a1,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_SESSION_new() \
@@ -5401,18 +5393,6 @@ typedef ULONG _sfdc_vararg;
 	LP2(0x22bc, int, SSL_CTX_set_ssl_version , SSL_CTX *, ___ctx, a0, const SSL_METHOD *, ___meth, a1,\
 	, AMISSL_BASE_NAME)
 
-#define SSLv2_method() \
-	LP0(0x22c2, const SSL_METHOD *, SSLv2_method ,\
-	, AMISSL_BASE_NAME)
-
-#define SSLv2_server_method() \
-	LP0(0x22c8, const SSL_METHOD *, SSLv2_server_method ,\
-	, AMISSL_BASE_NAME)
-
-#define SSLv2_client_method() \
-	LP0(0x22ce, const SSL_METHOD *, SSLv2_client_method ,\
-	, AMISSL_BASE_NAME)
-
 #define SSLv3_method() \
 	LP0(0x22d4, const SSL_METHOD *, SSLv3_method ,\
 	, AMISSL_BASE_NAME)
@@ -5423,18 +5403,6 @@ typedef ULONG _sfdc_vararg;
 
 #define SSLv3_client_method() \
 	LP0(0x22e0, const SSL_METHOD *, SSLv3_client_method ,\
-	, AMISSL_BASE_NAME)
-
-#define SSLv23_method() \
-	LP0(0x22e6, const SSL_METHOD *, SSLv23_method ,\
-	, AMISSL_BASE_NAME)
-
-#define SSLv23_server_method() \
-	LP0(0x22ec, const SSL_METHOD *, SSLv23_server_method ,\
-	, AMISSL_BASE_NAME)
-
-#define SSLv23_client_method() \
-	LP0(0x22f2, const SSL_METHOD *, SSLv23_client_method ,\
 	, AMISSL_BASE_NAME)
 
 #define TLSv1_method() \
@@ -5527,10 +5495,6 @@ typedef ULONG _sfdc_vararg;
 
 #define SSL_get_default_timeout(___s) \
 	LP1(0x237c, long, SSL_get_default_timeout , const SSL *, ___s, a0,\
-	, AMISSL_BASE_NAME)
-
-#define SSL_library_init() \
-	LP0(0x2382, int, SSL_library_init ,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_CIPHER_description(___a1, ___buf, ___size) \
@@ -5629,20 +5593,12 @@ typedef ULONG _sfdc_vararg;
 	LP2(0x2412, void *, SSL_get_ex_data , const SSL *, ___ssl, a0, int, ___idx, d0,\
 	, AMISSL_BASE_NAME)
 
-#define SSL_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
-	LP5(0x2418, int, SSL_get_ex_new_index , long, ___argl, d0, void *, ___argp, a0, CRYPTO_EX_new *, ___new_func, a1, CRYPTO_EX_dup *, ___dup_func, a2, CRYPTO_EX_free *, ___free_func, a3,\
-	, AMISSL_BASE_NAME)
-
 #define SSL_SESSION_set_ex_data(___ss, ___idx, ___data) \
 	LP3(0x241e, int, SSL_SESSION_set_ex_data , SSL_SESSION *, ___ss, a0, int, ___idx, d0, void *, ___data, a1,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_SESSION_get_ex_data(___ss, ___idx) \
 	LP2(0x2424, void *, SSL_SESSION_get_ex_data , const SSL_SESSION *, ___ss, a0, int, ___idx, d0,\
-	, AMISSL_BASE_NAME)
-
-#define SSL_SESSION_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
-	LP5(0x242a, int, SSL_SESSION_get_ex_new_index , long, ___argl, d0, void *, ___argp, a0, CRYPTO_EX_new *, ___new_func, a1, CRYPTO_EX_dup *, ___dup_func, a2, CRYPTO_EX_free *, ___free_func, a3,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_CTX_set_ex_data(___ssl, ___idx, ___data) \
@@ -5653,21 +5609,9 @@ typedef ULONG _sfdc_vararg;
 	LP2(0x2436, void *, SSL_CTX_get_ex_data , const SSL_CTX *, ___ssl, a0, int, ___idx, d0,\
 	, AMISSL_BASE_NAME)
 
-#define SSL_CTX_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
-	LP5(0x243c, int, SSL_CTX_get_ex_new_index , long, ___argl, d0, void *, ___argp, a0, CRYPTO_EX_new *, ___new_func, a1, CRYPTO_EX_dup *, ___dup_func, a2, CRYPTO_EX_free *, ___free_func, a3,\
-	, AMISSL_BASE_NAME)
-
 #define SSL_get_ex_data_X509_STORE_CTX_idx() \
 	LP0(0x2442, int, SSL_get_ex_data_X509_STORE_CTX_idx ,\
 	, AMISSL_BASE_NAME)
-
-#define SSL_CTX_set_tmp_rsa_callback(___ctx, ___cb) \
-	LP2NRFP(0x2448, SSL_CTX_set_tmp_rsa_callback , SSL_CTX *, ___ctx, a0, __fpt, ___cb, a1,\
-	, AMISSL_BASE_NAME, RSA * (*__fpt)(SSL *ssl,int is_export,int keylength))
-
-#define SSL_set_tmp_rsa_callback(___ssl, ___cb) \
-	LP2NRFP(0x244e, SSL_set_tmp_rsa_callback , SSL *, ___ssl, a0, __fpt, ___cb, a1,\
-	, AMISSL_BASE_NAME, RSA * (*__fpt)(SSL *ssl,int is_export,int keylength))
 
 #define SSL_CTX_set_tmp_dh_callback(___ctx, ___dh) \
 	LP2NRFP(0x2454, SSL_CTX_set_tmp_dh_callback , SSL_CTX *, ___ctx, a0, __fpt, ___dh, a1,\
@@ -9763,7 +9707,7 @@ typedef ULONG _sfdc_vararg;
 
 #define SSL_CTX_set_cookie_verify_cb(___ctx, ___app_verify_cookie_cb) \
 	LP2NRFP(0x3df2, SSL_CTX_set_cookie_verify_cb , SSL_CTX *, ___ctx, a0, __fpt, ___app_verify_cookie_cb, a1,\
-	, AMISSL_BASE_NAME, int (*__fpt)(SSL *ssl,unsigned char *cookie,unsigned int cookie_len))
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,const unsigned char *,unsigned int))
 
 #define SSL_CTX_set_info_callback(___ctx, ___cb) \
 	LP2NRFP(0x3df8, SSL_CTX_set_info_callback , SSL_CTX *, ___ctx, a0, __fpt, ___cb, a1,\
@@ -9978,8 +9922,8 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_set_session_secret_cb(___s, ___tls_session_secret_cb, ___arg) \
-	LP3(0x3f36, int, SSL_set_session_secret_cb , SSL *, ___s, a0, tls_session_secret_cb_fn, ___tls_session_secret_cb, a1, void *, ___arg, a2,\
-	, AMISSL_BASE_NAME)
+	LP3FP(0x3f36, int, SSL_set_session_secret_cb , SSL *, ___s, a0, __fpt, ___tls_session_secret_cb, a1, void *, ___arg, a2,\
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,void *,int *,STACK_OF(SSL_CIPHER) *,const SSL_CIPHER **,void *))
 
 #define SSL_set_session_ticket_ext_cb(___s, ___cb, ___arg) \
 	LP3(0x3f3c, int, SSL_set_session_ticket_ext_cb , SSL *, ___s, a0, tls_session_ticket_ext_cb_fn, ___cb, a1, void *, ___arg, a2,\
@@ -10069,16 +10013,8 @@ typedef ULONG _sfdc_vararg;
 	LP1(0x3fba, int, SRP_Calc_A_param , SSL *, ___s, a0,\
 	, AMISSL_BASE_NAME)
 
-#define SRP_generate_server_master_secret(___s, ___master_key) \
-	LP2(0x3fc0, int, SRP_generate_server_master_secret , SSL *, ___s, a0, unsigned char *, ___master_key, a1,\
-	, AMISSL_BASE_NAME)
-
 #define SSL_CTX_SRP_CTX_free(___ctx) \
 	LP1(0x3fc6, int, SSL_CTX_SRP_CTX_free , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME)
-
-#define SRP_generate_client_master_secret(___s, ___master_key) \
-	LP2(0x3fcc, int, SRP_generate_client_master_secret , SSL *, ___s, a0, unsigned char *, ___master_key, a1,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_srp_server_param_with_username(___s, ___ad) \
@@ -10109,16 +10045,8 @@ typedef ULONG _sfdc_vararg;
 	LP0(0x3ff6, const SSL_METHOD *, TLSv1_2_server_method ,\
 	, AMISSL_BASE_NAME)
 
-#define SSL_cache_hit(___s) \
-	LP1(0x3ffc, int, SSL_cache_hit , SSL *, ___s, a0,\
-	, AMISSL_BASE_NAME)
-
-#define SSL_set_state(___ssl, ___state) \
-	LP2NR(0x4002, SSL_set_state , SSL *, ___ssl, a0, int, ___state, d0,\
-	, AMISSL_BASE_NAME)
-
 #define SSL_CIPHER_get_id(___c) \
-	LP1(0x4008, unsigned long, SSL_CIPHER_get_id , const SSL_CIPHER *, ___c, a0,\
+	LP1(0x4008, uint32_t, SSL_CIPHER_get_id , const SSL_CIPHER *, ___c, a0,\
 	, AMISSL_BASE_NAME)
 
 #define TLSv1_2_method() \
@@ -10164,14 +10092,6 @@ typedef ULONG _sfdc_vararg;
 #define SSL_SESSION_get_compress_id(___s) \
 	LP1(0x404a, unsigned int, SSL_SESSION_get_compress_id , const SSL_SESSION *, ___s, a0,\
 	, AMISSL_BASE_NAME)
-
-#define SSL_CTX_set_tmp_ecdh_callback(___ctx, ___ecdh) \
-	LP2NRFP(0x4050, SSL_CTX_set_tmp_ecdh_callback , SSL_CTX *, ___ctx, a0, __fpt, ___ecdh, a1,\
-	, AMISSL_BASE_NAME, EC_KEY *(*__fpt)(SSL *ssl,int is_export,int keylength))
-
-#define SSL_set_tmp_ecdh_callback(___ssl, ___ecdh) \
-	LP2NRFP(0x4056, SSL_set_tmp_ecdh_callback , SSL *, ___ssl, a0, __fpt, ___ecdh, a1,\
-	, AMISSL_BASE_NAME, EC_KEY *(*__fpt)(SSL *ssl,int is_export,int keylength))
 
 #define SSL_SRP_CTX_init(___s) \
 	LP1(0x405c, int, SSL_SRP_CTX_init , SSL *, ___s, a0,\
@@ -11667,11 +11587,11 @@ typedef ULONG _sfdc_vararg;
 
 #define SSL_CTX_sess_get_get_cb(___ctx) \
 	LP1FR(0x4bea, __fpr, SSL_CTX_sess_get_get_cb , SSL_CTX *, ___ctx, a0,\
-	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpr)(struct ssl_st *ssl, unsigned char *Data, int len, int *copy))
+	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpr)(SSL *, const unsigned char *, int, int *))
 
 #define SSL_CTX_sess_set_get_cb(___ctx, ___get_session_cb) \
 	LP2NRFP(0x4bf0, SSL_CTX_sess_set_get_cb , SSL_CTX *, ___ctx, a0, __fpt, ___get_session_cb, a1,\
-	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpt)(struct ssl_st *ssl,unsigned char *data,int len,int *copy))
+	, AMISSL_BASE_NAME, SSL_SESSION *(*__fpt)(SSL *,const unsigned char *,int,int *))
 
 #define SSL_CTX_get_info_callback(___ctx) \
 	LP1FR(0x4bf6, __fpr, SSL_CTX_get_info_callback , SSL_CTX *, ___ctx, a0,\

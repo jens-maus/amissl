@@ -1445,7 +1445,7 @@ struct AmiSSLIFace
 	void APICALL (*SSL_set_verify)(struct AmiSSLIFace *Self, SSL * s, int mode, int (*callback)(int ok, X509_STORE_CTX *ctx));
 	void APICALL (*SSL_set_verify_depth)(struct AmiSSLIFace *Self, SSL * s, int depth);
 	int APICALL (*SSL_use_RSAPrivateKey)(struct AmiSSLIFace *Self, SSL * ssl, RSA * rsa);
-	int APICALL (*SSL_use_RSAPrivateKey_ASN1)(struct AmiSSLIFace *Self, SSL * ssl, unsigned char * d, long len);
+	int APICALL (*SSL_use_RSAPrivateKey_ASN1)(struct AmiSSLIFace *Self, SSL * ssl, const unsigned char * d, long len);
 	int APICALL (*SSL_use_PrivateKey)(struct AmiSSLIFace *Self, SSL * ssl, EVP_PKEY * pkey);
 	int APICALL (*SSL_use_PrivateKey_ASN1)(struct AmiSSLIFace *Self, int pk, SSL * ssl, unsigned char * d, long len);
 	int APICALL (*SSL_use_certificate)(struct AmiSSLIFace *Self, SSL * ssl, X509 * x);
@@ -1460,8 +1460,8 @@ struct AmiSSLIFace
 	STACK_OF(X509_NAME) * APICALL (*SSL_load_client_CA_file)(struct AmiSSLIFace *Self, const char * file);
 	int APICALL (*SSL_add_file_cert_subjects_to_stack)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * stackCAs, const char * file);
 	int APICALL (*SSL_add_dir_cert_subjects_to_stack)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * stackCAs, const char * dir);
-	void APICALL (*SSL_load_error_strings)(struct AmiSSLIFace *Self);
-	const char * APICALL (*SSL_state_string)(struct AmiSSLIFace *Self, const SSL * s);
+	APTR SSL_load_error_strings; /* unimplemented */
+	APTR SSL_state_string; /* unimplemented */
 	const char * APICALL (*SSL_rstate_string)(struct AmiSSLIFace *Self, const SSL * s);
 	const char * APICALL (*SSL_state_string_long)(struct AmiSSLIFace *Self, const SSL * s);
 	const char * APICALL (*SSL_rstate_string_long)(struct AmiSSLIFace *Self, const SSL * s);
@@ -1469,7 +1469,7 @@ struct AmiSSLIFace
 	long APICALL (*SSL_SESSION_set_time)(struct AmiSSLIFace *Self, SSL_SESSION * s, long t);
 	long APICALL (*SSL_SESSION_get_timeout)(struct AmiSSLIFace *Self, const SSL_SESSION * s);
 	long APICALL (*SSL_SESSION_set_timeout)(struct AmiSSLIFace *Self, SSL_SESSION * s, long t);
-	void APICALL (*SSL_copy_session_id)(struct AmiSSLIFace *Self, SSL * to, const SSL * from);
+	int APICALL (*SSL_copy_session_id)(struct AmiSSLIFace *Self, SSL * to, const SSL * from);
 	SSL_SESSION * APICALL (*SSL_SESSION_new)(struct AmiSSLIFace *Self);
 	APTR SSL_SESSION_hash; /* unimplemented */
 	APTR SSL_SESSION_cmp; /* unimplemented */
@@ -1521,15 +1521,15 @@ struct AmiSSLIFace
 	int APICALL (*SSL_get_error)(struct AmiSSLIFace *Self, const SSL * s, int ret_code);
 	const char * APICALL (*SSL_get_version)(struct AmiSSLIFace *Self, const SSL * s);
 	int APICALL (*SSL_CTX_set_ssl_version)(struct AmiSSLIFace *Self, SSL_CTX * ctx, const SSL_METHOD * meth);
-	const SSL_METHOD * APICALL (*SSLv2_method)(struct AmiSSLIFace *Self);
-	const SSL_METHOD * APICALL (*SSLv2_server_method)(struct AmiSSLIFace *Self);
-	const SSL_METHOD * APICALL (*SSLv2_client_method)(struct AmiSSLIFace *Self);
+	APTR SSLv2_method; /* unimplemented */
+	APTR SSLv2_server_method; /* unimplemented */
+	APTR SSLv2_client_method; /* unimplemented */
 	const SSL_METHOD * APICALL (*SSLv3_method)(struct AmiSSLIFace *Self);
 	const SSL_METHOD * APICALL (*SSLv3_server_method)(struct AmiSSLIFace *Self);
 	const SSL_METHOD * APICALL (*SSLv3_client_method)(struct AmiSSLIFace *Self);
-	const SSL_METHOD * APICALL (*SSLv23_method)(struct AmiSSLIFace *Self);
-	const SSL_METHOD * APICALL (*SSLv23_server_method)(struct AmiSSLIFace *Self);
-	const SSL_METHOD * APICALL (*SSLv23_client_method)(struct AmiSSLIFace *Self);
+	APTR SSLv23_method; /* unimplemented */
+	APTR SSLv23_server_method; /* unimplemented */
+	APTR SSLv23_client_method; /* unimplemented */
 	const SSL_METHOD * APICALL (*TLSv1_method)(struct AmiSSLIFace *Self);
 	const SSL_METHOD * APICALL (*TLSv1_server_method)(struct AmiSSLIFace *Self);
 	const SSL_METHOD * APICALL (*TLSv1_client_method)(struct AmiSSLIFace *Self);
@@ -1553,7 +1553,7 @@ struct AmiSSLIFace
 	void APICALL (*SSL_set_connect_state)(struct AmiSSLIFace *Self, SSL * s);
 	void APICALL (*SSL_set_accept_state)(struct AmiSSLIFace *Self, SSL * s);
 	long APICALL (*SSL_get_default_timeout)(struct AmiSSLIFace *Self, const SSL * s);
-	int APICALL (*SSL_library_init)(struct AmiSSLIFace *Self);
+	APTR SSL_library_init; /* unimplemented */
 	char * APICALL (*SSL_CIPHER_description)(struct AmiSSLIFace *Self, SSL_CIPHER * a1, char * buf, int size);
 	STACK_OF(X509_NAME) * APICALL (*SSL_dup_CA_list)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * sk);
 	SSL * APICALL (*SSL_dup)(struct AmiSSLIFace *Self, SSL * ssl);
@@ -1578,16 +1578,16 @@ struct AmiSSLIFace
 	long APICALL (*SSL_get_verify_result)(struct AmiSSLIFace *Self, const SSL * ssl);
 	int APICALL (*SSL_set_ex_data)(struct AmiSSLIFace *Self, SSL * ssl, int idx, void * data);
 	void * APICALL (*SSL_get_ex_data)(struct AmiSSLIFace *Self, const SSL * ssl, int idx);
-	int APICALL (*SSL_get_ex_new_index)(struct AmiSSLIFace *Self, long argl, void * argp, CRYPTO_EX_new * new_func, CRYPTO_EX_dup * dup_func, CRYPTO_EX_free * free_func);
+	APTR SSL_get_ex_new_index; /* unimplemented */
 	int APICALL (*SSL_SESSION_set_ex_data)(struct AmiSSLIFace *Self, SSL_SESSION * ss, int idx, void * data);
 	void * APICALL (*SSL_SESSION_get_ex_data)(struct AmiSSLIFace *Self, const SSL_SESSION * ss, int idx);
-	int APICALL (*SSL_SESSION_get_ex_new_index)(struct AmiSSLIFace *Self, long argl, void * argp, CRYPTO_EX_new * new_func, CRYPTO_EX_dup * dup_func, CRYPTO_EX_free * free_func);
+	APTR SSL_SESSION_get_ex_new_index; /* unimplemented */
 	int APICALL (*SSL_CTX_set_ex_data)(struct AmiSSLIFace *Self, SSL_CTX * ssl, int idx, void * data);
 	void * APICALL (*SSL_CTX_get_ex_data)(struct AmiSSLIFace *Self, const SSL_CTX * ssl, int idx);
-	int APICALL (*SSL_CTX_get_ex_new_index)(struct AmiSSLIFace *Self, long argl, void * argp, CRYPTO_EX_new * new_func, CRYPTO_EX_dup * dup_func, CRYPTO_EX_free * free_func);
+	APTR SSL_CTX_get_ex_new_index; /* unimplemented */
 	int APICALL (*SSL_get_ex_data_X509_STORE_CTX_idx)(struct AmiSSLIFace *Self);
-	void APICALL (*SSL_CTX_set_tmp_rsa_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx, RSA * (*cb)(SSL *ssl, int is_export, int keylength));
-	void APICALL (*SSL_set_tmp_rsa_callback)(struct AmiSSLIFace *Self, SSL * ssl, RSA * (*cb)(SSL *ssl, int is_export, int keylength));
+	APTR SSL_CTX_set_tmp_rsa_callback; /* unimplemented */
+	APTR SSL_set_tmp_rsa_callback; /* unimplemented */
 	void APICALL (*SSL_CTX_set_tmp_dh_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx, DH * (*dh)(SSL *ssl, int is_export, int keylength));
 	void APICALL (*SSL_set_tmp_dh_callback)(struct AmiSSLIFace *Self, SSL * ssl, DH * (*dh)(SSL *ssl, int is_export, int keylength));
 	int APICALL (*SSL_COMP_add_compression_method)(struct AmiSSLIFace *Self, int id, COMP_METHOD * cm);
@@ -2681,7 +2681,7 @@ struct AmiSSLIFace
 	const char * APICALL (*SSL_get_servername)(struct AmiSSLIFace *Self, const SSL * s, const int type);
 	SSL_CTX * APICALL (*SSL_set_SSL_CTX)(struct AmiSSLIFace *Self, SSL * ssl, SSL_CTX * ctx);
 	void APICALL (*SSL_CTX_set_cookie_generate_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, int (*app_gen_cookie_cb)(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len));
-	void APICALL (*SSL_CTX_set_cookie_verify_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, int (*app_verify_cookie_cb)(SSL *ssl, unsigned char *cookie, unsigned int cookie_len));
+	void APICALL (*SSL_CTX_set_cookie_verify_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, int (*app_verify_cookie_cb)(SSL *, const unsigned char *, unsigned int));
 	void APICALL (*SSL_CTX_set_info_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx, void (*cb)(const SSL *ssl, int type, int val));
 	const SSL_METHOD * APICALL (*DTLSv1_server_method)(struct AmiSSLIFace *Self);
 	BIO * APICALL (*BIO_new_dgram)(struct AmiSSLIFace *Self, int fd, int close_flag);
@@ -2735,7 +2735,7 @@ struct AmiSSLIFace
 	void APICALL (*SSL_CTX_set_psk_server_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx, unsigned int (*psk_server_callback)(SSL *ssl, const char *identity, unsigned char *psk, unsigned int max_psk_len));
 	const char * APICALL (*SSL_get_psk_identity)(struct AmiSSLIFace *Self, const SSL * s);
 	int APICALL (*SSL_set_session_ticket_ext)(struct AmiSSLIFace *Self, SSL * s, void * ext_data, int ext_len);
-	int APICALL (*SSL_set_session_secret_cb)(struct AmiSSLIFace *Self, SSL * s, tls_session_secret_cb_fn tls_session_secret_cb, void * arg);
+	int APICALL (*SSL_set_session_secret_cb)(struct AmiSSLIFace *Self, SSL * s, int (*tls_session_secret_cb)(SSL *, void *, int *, STACK_OF(SSL_CIPHER) *, const SSL_CIPHER **, void *), void * arg);
 	int APICALL (*SSL_set_session_ticket_ext_cb)(struct AmiSSLIFace *Self, SSL * s, tls_session_ticket_ext_cb_fn cb, void * arg);
 	int APICALL (*SSL_set1_param)(struct AmiSSLIFace *Self, SSL * ssl, X509_VERIFY_PARAM * vpm);
 	int APICALL (*SSL_CTX_set1_param)(struct AmiSSLIFace *Self, SSL_CTX * ctx, X509_VERIFY_PARAM * vpm);
@@ -2758,9 +2758,9 @@ struct AmiSSLIFace
 	int APICALL (*SSL_CTX_set_srp_username)(struct AmiSSLIFace *Self, SSL_CTX * ctx, char * name);
 	int APICALL (*SSL_CTX_SRP_CTX_init)(struct AmiSSLIFace *Self, SSL_CTX * ctx);
 	int APICALL (*SRP_Calc_A_param)(struct AmiSSLIFace *Self, SSL * s);
-	int APICALL (*SRP_generate_server_master_secret)(struct AmiSSLIFace *Self, SSL * s, unsigned char * master_key);
+	APTR SRP_generate_server_master_secret; /* unimplemented */
 	int APICALL (*SSL_CTX_SRP_CTX_free)(struct AmiSSLIFace *Self, SSL_CTX * ctx);
-	int APICALL (*SRP_generate_client_master_secret)(struct AmiSSLIFace *Self, SSL * s, unsigned char * master_key);
+	APTR SRP_generate_client_master_secret; /* unimplemented */
 	int APICALL (*SSL_srp_server_param_with_username)(struct AmiSSLIFace *Self, SSL * s, int * ad);
 	int APICALL (*SSL_SRP_CTX_free)(struct AmiSSLIFace *Self, SSL * ctx);
 	void APICALL (*SSL_set_debug)(struct AmiSSLIFace *Self, SSL * s, int debug);
@@ -2768,9 +2768,9 @@ struct AmiSSLIFace
 	const SSL_METHOD * APICALL (*TLSv1_2_client_method)(struct AmiSSLIFace *Self);
 	int APICALL (*SSL_SESSION_set1_id_context)(struct AmiSSLIFace *Self, SSL_SESSION * s, const unsigned char * sid_ctx, unsigned int sid_ctx_len);
 	const SSL_METHOD * APICALL (*TLSv1_2_server_method)(struct AmiSSLIFace *Self);
-	int APICALL (*SSL_cache_hit)(struct AmiSSLIFace *Self, SSL * s);
-	void APICALL (*SSL_set_state)(struct AmiSSLIFace *Self, SSL * ssl, int state);
-	unsigned long APICALL (*SSL_CIPHER_get_id)(struct AmiSSLIFace *Self, const SSL_CIPHER * c);
+	APTR SSL_cache_hit; /* unimplemented */
+	APTR SSL_set_state; /* unimplemented */
+	uint32_t APICALL (*SSL_CIPHER_get_id)(struct AmiSSLIFace *Self, const SSL_CIPHER * c);
 	const SSL_METHOD * APICALL (*TLSv1_2_method)(struct AmiSSLIFace *Self);
 	int APICALL (*SSL_export_keying_material)(struct AmiSSLIFace *Self, SSL * s, unsigned char * out, size_t olen, const char * label, size_t llen, const unsigned char * p, size_t plen, int use_context);
 	int APICALL (*SSL_set_tlsext_use_srtp)(struct AmiSSLIFace *Self, SSL * ctx, const char * profiles);
@@ -2782,8 +2782,8 @@ struct AmiSSLIFace
 	STACK_OF(SRTP_PROTECTION_PROFILE) * APICALL (*SSL_get_srtp_profiles)(struct AmiSSLIFace *Self, SSL * s);
 	void APICALL (*SSL_CTX_set_next_proto_select_cb)(struct AmiSSLIFace *Self, SSL_CTX * s, int (*cb)(SSL *ssl, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg), void * arg);
 	unsigned int APICALL (*SSL_SESSION_get_compress_id)(struct AmiSSLIFace *Self, const SSL_SESSION * s);
-	void APICALL (*SSL_CTX_set_tmp_ecdh_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx, EC_KEY *(*ecdh)(SSL *ssl, int is_export, int keylength));
-	void APICALL (*SSL_set_tmp_ecdh_callback)(struct AmiSSLIFace *Self, SSL * ssl, EC_KEY *(*ecdh)(SSL *ssl, int is_export, int keylength));
+	APTR SSL_CTX_set_tmp_ecdh_callback; /* unimplemented */
+	APTR SSL_set_tmp_ecdh_callback; /* unimplemented */
 	int APICALL (*SSL_SRP_CTX_init)(struct AmiSSLIFace *Self, SSL * s);
 	APTR ASN1_d2i_fp; /* unimplemented */
 	APTR ASN1_i2d_fp; /* unimplemented */
@@ -3277,8 +3277,8 @@ struct AmiSSLIFace
 	void APICALL (*X509_STORE_CTX_set0_crls)(struct AmiSSLIFace *Self, X509_STORE_CTX * ctx, STACK_OF(X509_CRL) * sk);
 	const unsigned char * APICALL (*SSL_SESSION_get_id)(struct AmiSSLIFace *Self, const SSL_SESSION * s, unsigned int * len);
 	void APICALL (*SSL_CTX_sess_set_new_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, int (*new_session_cb)(struct ssl_st *ssl, SSL_SESSION *sess));
-	SSL_SESSION *APICALL (*(*SSL_CTX_sess_get_get_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx))(struct ssl_st *ssl, unsigned char *Data, int len, int *copy);
-	void APICALL (*SSL_CTX_sess_set_get_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, SSL_SESSION *(*get_session_cb)(struct ssl_st *ssl, unsigned char *data,int len,int *copy));
+	SSL_SESSION *APICALL (*(*SSL_CTX_sess_get_get_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx))(SSL *, const unsigned char *, int, int *);
+	void APICALL (*SSL_CTX_sess_set_get_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, SSL_SESSION *(*get_session_cb)(SSL *, const unsigned char *, int, int *));
 	void APICALL (*(*SSL_CTX_get_info_callback)(struct AmiSSLIFace *Self, SSL_CTX * ctx))(const SSL *ssl,int type,int val);
 	void APICALL (*SSL_CTX_set_client_cert_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, int (*client_cert_cb)(SSL *ssl, X509 **x509, EVP_PKEY **pkey));
 	void APICALL (*SSL_CTX_sess_set_remove_cb)(struct AmiSSLIFace *Self, SSL_CTX * ctx, void (*remove_session_cb)(struct ssl_ctx_st *ctx,SSL_SESSION *sess));

@@ -1315,7 +1315,7 @@ int  SAVEDS ASM (*LIB_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, 
 void SAVEDS ASM LIB_SSL_set_verify(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int mode), REG(a1, int (*callback)(int ok, X509_STORE_CTX *ctx)));
 void SAVEDS ASM LIB_SSL_set_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int depth));
 int SAVEDS ASM LIB_SSL_use_RSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, RSA * rsa));
-int SAVEDS ASM LIB_SSL_use_RSAPrivateKey_ASN1(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, unsigned char * d), REG(d0, long len));
+int SAVEDS ASM LIB_SSL_use_RSAPrivateKey_ASN1(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, const unsigned char * d), REG(d0, long len));
 int SAVEDS ASM LIB_SSL_use_PrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, EVP_PKEY * pkey));
 int SAVEDS ASM LIB_SSL_use_PrivateKey_ASN1(REG(a6, __IFACE_OR_BASE), REG(d0, int pk), REG(a0, SSL * ssl), REG(a1, unsigned char * d), REG(d1, long len));
 int SAVEDS ASM LIB_SSL_use_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, X509 * x));
@@ -1330,8 +1330,6 @@ int SAVEDS ASM LIB_SSL_CTX_use_certificate_chain_file(REG(a6, __IFACE_OR_BASE), 
 STACK_OF(X509_NAME) * SAVEDS ASM LIB_SSL_load_client_CA_file(REG(a6, __IFACE_OR_BASE), REG(a0, const char * file));
 int SAVEDS ASM LIB_SSL_add_file_cert_subjects_to_stack(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * stackCAs), REG(a1, const char * file));
 int SAVEDS ASM LIB_SSL_add_dir_cert_subjects_to_stack(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * stackCAs), REG(a1, const char * dir));
-void SAVEDS ASM LIB_SSL_load_error_strings(REG(a6, __IFACE_OR_BASE));
-const char * SAVEDS ASM LIB_SSL_state_string(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_rstate_string(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_state_string_long(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_rstate_string_long(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
@@ -1339,7 +1337,7 @@ long SAVEDS ASM LIB_SSL_SESSION_get_time(REG(a6, __IFACE_OR_BASE), REG(a0, const
 long SAVEDS ASM LIB_SSL_SESSION_set_time(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION * s), REG(d0, long t));
 long SAVEDS ASM LIB_SSL_SESSION_get_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
 long SAVEDS ASM LIB_SSL_SESSION_set_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION * s), REG(d0, long t));
-void SAVEDS ASM LIB_SSL_copy_session_id(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * to), REG(a1, const SSL * from));
+int SAVEDS ASM LIB_SSL_copy_session_id(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * to), REG(a1, const SSL * from));
 SSL_SESSION * SAVEDS ASM LIB_SSL_SESSION_new(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_SSL_SESSION_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * fp), REG(a1, const SSL_SESSION * ses));
 void SAVEDS ASM LIB_SSL_SESSION_free(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION * ses));
@@ -1389,15 +1387,9 @@ long SAVEDS ASM LIB_SSL_CTX_callback_ctrl(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_
 int SAVEDS ASM LIB_SSL_get_error(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s), REG(d0, int ret_code));
 const char * SAVEDS ASM LIB_SSL_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 int SAVEDS ASM LIB_SSL_CTX_set_ssl_version(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, const SSL_METHOD * meth));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv2_method(REG(a6, __IFACE_OR_BASE));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv2_server_method(REG(a6, __IFACE_OR_BASE));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv2_client_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_SSLv3_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_SSLv3_server_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_SSLv3_client_method(REG(a6, __IFACE_OR_BASE));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv23_method(REG(a6, __IFACE_OR_BASE));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv23_server_method(REG(a6, __IFACE_OR_BASE));
-const SSL_METHOD * SAVEDS ASM LIB_SSLv23_client_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_server_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_client_method(REG(a6, __IFACE_OR_BASE));
@@ -1421,7 +1413,6 @@ int SAVEDS ASM LIB_SSL_CTX_add_client_CA(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_C
 void SAVEDS ASM LIB_SSL_set_connect_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 void SAVEDS ASM LIB_SSL_set_accept_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 long SAVEDS ASM LIB_SSL_get_default_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
-int SAVEDS ASM LIB_SSL_library_init(REG(a6, __IFACE_OR_BASE));
 char * SAVEDS ASM LIB_SSL_CIPHER_description(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CIPHER * a1), REG(a1, char * buf), REG(d0, int size));
 STACK_OF(X509_NAME) * SAVEDS ASM LIB_SSL_dup_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * sk));
 SSL * SAVEDS ASM LIB_SSL_dup(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl));
@@ -1446,16 +1437,11 @@ void SAVEDS ASM LIB_SSL_set_verify_result(REG(a6, __IFACE_OR_BASE), REG(a0, SSL 
 long SAVEDS ASM LIB_SSL_get_verify_result(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl));
 int SAVEDS ASM LIB_SSL_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(d0, int idx), REG(a1, void * data));
 void * SAVEDS ASM LIB_SSL_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl), REG(d0, int idx));
-int SAVEDS ASM LIB_SSL_get_ex_new_index(REG(a6, __IFACE_OR_BASE), REG(d0, long argl), REG(a0, void * argp), REG(a1, CRYPTO_EX_new * new_func), REG(a2, CRYPTO_EX_dup * dup_func), REG(a3, CRYPTO_EX_free * free_func));
 int SAVEDS ASM LIB_SSL_SESSION_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION * ss), REG(d0, int idx), REG(a1, void * data));
 void * SAVEDS ASM LIB_SSL_SESSION_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * ss), REG(d0, int idx));
-int SAVEDS ASM LIB_SSL_SESSION_get_ex_new_index(REG(a6, __IFACE_OR_BASE), REG(d0, long argl), REG(a0, void * argp), REG(a1, CRYPTO_EX_new * new_func), REG(a2, CRYPTO_EX_dup * dup_func), REG(a3, CRYPTO_EX_free * free_func));
 int SAVEDS ASM LIB_SSL_CTX_set_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ssl), REG(d0, int idx), REG(a1, void * data));
 void * SAVEDS ASM LIB_SSL_CTX_get_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ssl), REG(d0, int idx));
-int SAVEDS ASM LIB_SSL_CTX_get_ex_new_index(REG(a6, __IFACE_OR_BASE), REG(d0, long argl), REG(a0, void * argp), REG(a1, CRYPTO_EX_new * new_func), REG(a2, CRYPTO_EX_dup * dup_func), REG(a3, CRYPTO_EX_free * free_func));
 int SAVEDS ASM LIB_SSL_get_ex_data_X509_STORE_CTX_idx(REG(a6, __IFACE_OR_BASE));
-void SAVEDS ASM LIB_SSL_CTX_set_tmp_rsa_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, RSA * (*cb)(SSL *ssl, int is_export, int keylength)));
-void SAVEDS ASM LIB_SSL_set_tmp_rsa_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, RSA * (*cb)(SSL *ssl, int is_export, int keylength)));
 void SAVEDS ASM LIB_SSL_CTX_set_tmp_dh_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, DH * (*dh)(SSL *ssl, int is_export, int keylength)));
 void SAVEDS ASM LIB_SSL_set_tmp_dh_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, DH * (*dh)(SSL *ssl, int is_export, int keylength)));
 int SAVEDS ASM LIB_SSL_COMP_add_compression_method(REG(a6, __IFACE_OR_BASE), REG(d0, int id), REG(a0, COMP_METHOD * cm));
@@ -2481,7 +2467,7 @@ STACK_OF(OPENSSL_STRING) * SAVEDS ASM LIB_X509_get1_ocsp(REG(a6, __IFACE_OR_BASE
 const char * SAVEDS ASM LIB_SSL_get_servername(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s), REG(d0, const int type));
 SSL_CTX * SAVEDS ASM LIB_SSL_set_SSL_CTX(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, SSL_CTX * ctx));
 void SAVEDS ASM LIB_SSL_CTX_set_cookie_generate_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*app_gen_cookie_cb)(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)));
-void SAVEDS ASM LIB_SSL_CTX_set_cookie_verify_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*app_verify_cookie_cb)(SSL *ssl, unsigned char *cookie, unsigned int cookie_len)));
+void SAVEDS ASM LIB_SSL_CTX_set_cookie_verify_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*app_verify_cookie_cb)(SSL *, const unsigned char *, unsigned int)));
 void SAVEDS ASM LIB_SSL_CTX_set_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, void (*cb)(const SSL *ssl, int type, int val)));
 const SSL_METHOD * SAVEDS ASM LIB_DTLSv1_server_method(REG(a6, __IFACE_OR_BASE));
 BIO * SAVEDS ASM LIB_BIO_new_dgram(REG(a6, __IFACE_OR_BASE), REG(d0, int fd), REG(d1, int close_flag));
@@ -2535,7 +2521,7 @@ void SAVEDS ASM LIB_SSL_set_psk_client_callback(REG(a6, __IFACE_OR_BASE), REG(a0
 void SAVEDS ASM LIB_SSL_CTX_set_psk_server_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, unsigned int (*psk_server_callback)(SSL *ssl, const char *identity, unsigned char *psk, unsigned int max_psk_len)));
 const char * SAVEDS ASM LIB_SSL_get_psk_identity(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 int SAVEDS ASM LIB_SSL_set_session_ticket_ext(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, void * ext_data), REG(d0, int ext_len));
-int SAVEDS ASM LIB_SSL_set_session_secret_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, tls_session_secret_cb_fn tls_session_secret_cb), REG(a2, void * arg));
+int SAVEDS ASM LIB_SSL_set_session_secret_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, int (*tls_session_secret_cb)(SSL *, void *, int *, STACK_OF(SSL_CIPHER) *, const SSL_CIPHER **, void *)), REG(a2, void * arg));
 int SAVEDS ASM LIB_SSL_set_session_ticket_ext_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, tls_session_ticket_ext_cb_fn cb), REG(a2, void * arg));
 int SAVEDS ASM LIB_SSL_set1_param(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, X509_VERIFY_PARAM * vpm));
 int SAVEDS ASM LIB_SSL_CTX_set1_param(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, X509_VERIFY_PARAM * vpm));
@@ -2558,9 +2544,7 @@ int SAVEDS ASM LIB_SSL_CTX_set_srp_cb_arg(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_
 int SAVEDS ASM LIB_SSL_CTX_set_srp_username(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, char * name));
 int SAVEDS ASM LIB_SSL_CTX_SRP_CTX_init(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
 int SAVEDS ASM LIB_SRP_Calc_A_param(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
-int SAVEDS ASM LIB_SRP_generate_server_master_secret(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, unsigned char * master_key));
 int SAVEDS ASM LIB_SSL_CTX_SRP_CTX_free(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
-int SAVEDS ASM LIB_SRP_generate_client_master_secret(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, unsigned char * master_key));
 int SAVEDS ASM LIB_SSL_srp_server_param_with_username(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, int * ad));
 int SAVEDS ASM LIB_SSL_SRP_CTX_free(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ctx));
 void SAVEDS ASM LIB_SSL_set_debug(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int debug));
@@ -2568,9 +2552,7 @@ X509 * SAVEDS ASM LIB_SSL_SESSION_get0_peer(REG(a6, __IFACE_OR_BASE), REG(a0, SS
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_2_client_method(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_SSL_SESSION_set1_id_context(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_SESSION * s), REG(a1, const unsigned char * sid_ctx), REG(d0, unsigned int sid_ctx_len));
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_2_server_method(REG(a6, __IFACE_OR_BASE));
-int SAVEDS ASM LIB_SSL_cache_hit(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
-void SAVEDS ASM LIB_SSL_set_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(d0, int state));
-unsigned long SAVEDS ASM LIB_SSL_CIPHER_get_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
+uint32_t SAVEDS ASM LIB_SSL_CIPHER_get_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
 const SSL_METHOD * SAVEDS ASM LIB_TLSv1_2_method(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_SSL_export_keying_material(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, unsigned char * out), REG(d0, size_t olen), REG(a2, const char * label), REG(d1, size_t llen), REG(a3, const unsigned char * p), REG(d2, size_t plen), REG(d3, int use_context));
 int SAVEDS ASM LIB_SSL_set_tlsext_use_srtp(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ctx), REG(a1, const char * profiles));
@@ -2582,8 +2564,6 @@ int SAVEDS ASM LIB_SSL_select_next_proto(REG(a6, __IFACE_OR_BASE), REG(a0, unsig
 STACK_OF(SRTP_PROTECTION_PROFILE) * SAVEDS ASM LIB_SSL_get_srtp_profiles(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 void SAVEDS ASM LIB_SSL_CTX_set_next_proto_select_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * s), REG(a1, int (*cb)(SSL *ssl, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)), REG(a2, void * arg));
 unsigned int SAVEDS ASM LIB_SSL_SESSION_get_compress_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
-void SAVEDS ASM LIB_SSL_CTX_set_tmp_ecdh_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, EC_KEY *(*ecdh)(SSL *ssl, int is_export, int keylength)));
-void SAVEDS ASM LIB_SSL_set_tmp_ecdh_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, EC_KEY *(*ecdh)(SSL *ssl, int is_export, int keylength)));
 int SAVEDS ASM LIB_SSL_SRP_CTX_init(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 void SAVEDS ASM LIB_ERR_load_ENGINE_strings(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_ENGINE_set_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, const DSA_METHOD * dsa_meth));
@@ -2957,8 +2937,8 @@ void SAVEDS ASM LIB_ERR_remove_thread_state(REG(a6, __IFACE_OR_BASE), REG(a0, co
 void SAVEDS ASM LIB_X509_STORE_CTX_set0_crls(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(a1, STACK_OF(X509_CRL) * sk));
 const unsigned char * SAVEDS ASM LIB_SSL_SESSION_get_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s), REG(a1, unsigned int * len));
 void SAVEDS ASM LIB_SSL_CTX_sess_set_new_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*new_session_cb)(struct ssl_st *ssl, SSL_SESSION *sess)));
-SSL_SESSION * SAVEDS ASM (*LIB_SSL_CTX_sess_get_get_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx)))(struct ssl_st *ssl, unsigned char *Data, int len, int *copy);
-void SAVEDS ASM LIB_SSL_CTX_sess_set_get_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, SSL_SESSION *(*get_session_cb)(struct ssl_st *ssl, unsigned char *data,int len,int *copy)));
+SSL_SESSION * SAVEDS ASM (*LIB_SSL_CTX_sess_get_get_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx)))(SSL *, const unsigned char *, int, int *);
+void SAVEDS ASM LIB_SSL_CTX_sess_set_get_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, SSL_SESSION *(*get_session_cb)(SSL *, const unsigned char *, int, int *)));
 void  SAVEDS ASM (*LIB_SSL_CTX_get_info_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx)))(const SSL *ssl,int type,int val);
 void SAVEDS ASM LIB_SSL_CTX_set_client_cert_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*client_cert_cb)(SSL *ssl, X509 **x509, EVP_PKEY **pkey)));
 void SAVEDS ASM LIB_SSL_CTX_sess_set_remove_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, void (*remove_session_cb)(struct ssl_ctx_st *ctx,SSL_SESSION *sess)));
@@ -5502,8 +5482,8 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_load_client_CA_file) \
     LFUNC_FA_(SSL_add_file_cert_subjects_to_stack) \
     LFUNC_FA_(SSL_add_dir_cert_subjects_to_stack) \
-    LFUNC_FA_(SSL_load_error_strings) \
-    LFUNC_FA_(SSL_state_string) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_load_error_strings */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_state_string */ \
     LFUNC_FA_(SSL_rstate_string) \
     LFUNC_FA_(SSL_state_string_long) \
     LFUNC_FA_(SSL_rstate_string_long) \
@@ -5563,15 +5543,15 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_get_error) \
     LFUNC_FA_(SSL_get_version) \
     LFUNC_FA_(SSL_CTX_set_ssl_version) \
-    LFUNC_FA_(SSLv2_method) \
-    LFUNC_FA_(SSLv2_server_method) \
-    LFUNC_FA_(SSLv2_client_method) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv2_method */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv2_server_method */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv2_client_method */ \
     LFUNC_FA_(SSLv3_method) \
     LFUNC_FA_(SSLv3_server_method) \
     LFUNC_FA_(SSLv3_client_method) \
-    LFUNC_FA_(SSLv23_method) \
-    LFUNC_FA_(SSLv23_server_method) \
-    LFUNC_FA_(SSLv23_client_method) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv23_method */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv23_server_method */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSLv23_client_method */ \
     LFUNC_FA_(TLSv1_method) \
     LFUNC_FA_(TLSv1_server_method) \
     LFUNC_FA_(TLSv1_client_method) \
@@ -5595,7 +5575,7 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_set_connect_state) \
     LFUNC_FA_(SSL_set_accept_state) \
     LFUNC_FA_(SSL_get_default_timeout) \
-    LFUNC_FA_(SSL_library_init) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_library_init */ \
     LFUNC_FA_(SSL_CIPHER_description) \
     LFUNC_FA_(SSL_dup_CA_list) \
     LFUNC_FA_(SSL_dup) \
@@ -5620,16 +5600,16 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_get_verify_result) \
     LFUNC_FA_(SSL_set_ex_data) \
     LFUNC_FA_(SSL_get_ex_data) \
-    LFUNC_FA_(SSL_get_ex_new_index) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_get_ex_new_index */ \
     LFUNC_FA_(SSL_SESSION_set_ex_data) \
     LFUNC_FA_(SSL_SESSION_get_ex_data) \
-    LFUNC_FA_(SSL_SESSION_get_ex_new_index) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_SESSION_get_ex_new_index */ \
     LFUNC_FA_(SSL_CTX_set_ex_data) \
     LFUNC_FA_(SSL_CTX_get_ex_data) \
-    LFUNC_FA_(SSL_CTX_get_ex_new_index) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_CTX_get_ex_new_index */ \
     LFUNC_FA_(SSL_get_ex_data_X509_STORE_CTX_idx) \
-    LFUNC_FA_(SSL_CTX_set_tmp_rsa_callback) \
-    LFUNC_FA_(SSL_set_tmp_rsa_callback) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_CTX_set_tmp_rsa_callback */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_set_tmp_rsa_callback */ \
     LFUNC_FA_(SSL_CTX_set_tmp_dh_callback) \
     LFUNC_FA_(SSL_set_tmp_dh_callback) \
     LFUNC_FA_(SSL_COMP_add_compression_method) \
@@ -6800,9 +6780,9 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_CTX_set_srp_username) \
     LFUNC_FA_(SSL_CTX_SRP_CTX_init) \
     LFUNC_FA_(SRP_Calc_A_param) \
-    LFUNC_FA_(SRP_generate_server_master_secret) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SRP_generate_server_master_secret */ \
     LFUNC_FA_(SSL_CTX_SRP_CTX_free) \
-    LFUNC_FA_(SRP_generate_client_master_secret) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SRP_generate_client_master_secret */ \
     LFUNC_FA_(SSL_srp_server_param_with_username) \
     LFUNC_FA_(SSL_SRP_CTX_free) \
     LFUNC_FA_(SSL_set_debug) \
@@ -6810,8 +6790,8 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(TLSv1_2_client_method) \
     LFUNC_FA_(SSL_SESSION_set1_id_context) \
     LFUNC_FA_(TLSv1_2_server_method) \
-    LFUNC_FA_(SSL_cache_hit) \
-    LFUNC_FA_(SSL_set_state) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_cache_hit */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_set_state */ \
     LFUNC_FA_(SSL_CIPHER_get_id) \
     LFUNC_FA_(TLSv1_2_method) \
     LFUNC_FA_(SSL_export_keying_material) \
@@ -6824,8 +6804,8 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(SSL_get_srtp_profiles) \
     LFUNC_FA_(SSL_CTX_set_next_proto_select_cb) \
     LFUNC_FA_(SSL_SESSION_get_compress_id) \
-    LFUNC_FA_(SSL_CTX_set_tmp_ecdh_callback) \
-    LFUNC_FA_(SSL_set_tmp_ecdh_callback) \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_CTX_set_tmp_ecdh_callback */ \
+    LFUNC_FA_(UNIMPLEMENTED) /* SSL_set_tmp_ecdh_callback */ \
     LFUNC_FA_(SSL_SRP_CTX_init) \
     LFUNC_FA_(UNIMPLEMENTED) /* ASN1_d2i_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* ASN1_i2d_fp */ \
