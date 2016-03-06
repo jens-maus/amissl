@@ -145,6 +145,7 @@
 # include <time.h>
 # include <string.h>
 # include <errno.h>
+# include <sys/time.h>
 
 # include "e_os.h"
 

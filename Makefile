@@ -423,7 +423,7 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 --openssldir=AmiSSL: $(DEBUG))
+	@(cd openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa --openssldir=AmiSSL: $(DEBUG))
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)
@@ -440,6 +440,7 @@ $(LIBCRYPTO): $(OBJ_D)/openssl/include
 	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC)
 
 $(LIBSSL): $(LIBCRYPTO)
+	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC) .././bin_os4/openssl/libssl.a
 
 ## LIBCMT BUILD RULES ##
 

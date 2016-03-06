@@ -548,7 +548,7 @@
       <arg name="t" type="ASN1_TIME *" m68kreg="a0"/>
       <arg name="out" type="ASN1_GENERALIZEDTIME **" m68kreg="a1"/>
     </method>
-    <method name="i2d_ASN1_SET" result="int">
+    <method name="i2d_ASN1_SET" result="int" status="unimplemented">
       <arg name="a" type="STACK_OF(OPENSSL_BLOCK) *" m68kreg="a0"/>
       <arg name="pp" type="unsigned char **" m68kreg="a1"/>
       <arg name="i2d" type="i2d_of_void *" m68kreg="a2"/>
@@ -556,7 +556,7 @@
       <arg name="ex_class" type="int" m68kreg="d1"/>
       <arg name="is_set" type="int" m68kreg="d2"/>
     </method>
-    <method name="d2i_ASN1_SET" result="STACK_OF(OPENSSL_BLOCK) *">
+    <method name="d2i_ASN1_SET" result="STACK_OF(OPENSSL_BLOCK) *" status="unimplemented">
       <arg name="a" type="STACK_OF(OPENSSL_BLOCK) **" m68kreg="a0"/>
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
@@ -818,13 +818,13 @@
       <arg name="data" type="unsigned char *" m68kreg="a2"/>
       <arg name="max_len" type="int" m68kreg="d0"/>
     </method>
-    <method name="ASN1_seq_unpack" result="STACK_OF(OPENSSL_BLOCK) *">
+    <method name="ASN1_seq_unpack" result="STACK_OF(OPENSSL_BLOCK) *" status="unimplemented">
       <arg name="buf" type="const unsigned char *" m68kreg="a0"/>
       <arg name="len" type="int" m68kreg="d0"/>
       <arg name="d2i" type="d2i_of_void *" m68kreg="a1"/>
       <arg name="free_func" type="void (*)(OPENSSL_BLOCK)" m68kreg="a2"/>
     </method>
-    <method name="ASN1_seq_pack" result="unsigned char *">
+    <method name="ASN1_seq_pack" result="unsigned char *" status="unimplemented">
       <arg name="safes" type="STACK_OF(OPENSSL_BLOCK) *" m68kreg="a0"/>
       <arg name="i2d" type="i2d_of_void *" m68kreg="a1"/>
       <arg name="buf" type="unsigned char **" m68kreg="a2"/>
@@ -3388,181 +3388,181 @@
       <arg name="md" type="unsigned char *" m68kreg="a3"/>
       <arg name="md_len" type="unsigned int *" m68kreg="d2"/>
     </method>
-    <method name="KRB5_ENCDATA_new" result="KRB5_ENCDATA *">
+    <method name="KRB5_ENCDATA_new" result="KRB5_ENCDATA *" status="unimplemented">
     </method>
-    <method name="KRB5_ENCDATA_free" result="void">
+    <method name="KRB5_ENCDATA_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_ENCDATA *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_ENCDATA" result="KRB5_ENCDATA *">
+    <method name="d2i_KRB5_ENCDATA" result="KRB5_ENCDATA *" status="unimplemented">
       <arg name="a" type="KRB5_ENCDATA **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_ENCDATA" result="int">
+    <method name="i2d_KRB5_ENCDATA" result="int" status="unimplemented">
       <arg name="a" type="KRB5_ENCDATA *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_ENCDATA_it" result="const ASN1_ITEM *">
+    <method name="KRB5_ENCDATA_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_PRINCNAME_new" result="KRB5_PRINCNAME *">
+    <method name="KRB5_PRINCNAME_new" result="KRB5_PRINCNAME *" status="unimplemented">
     </method>
-    <method name="KRB5_PRINCNAME_free" result="void">
+    <method name="KRB5_PRINCNAME_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_PRINCNAME *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_PRINCNAME" result="KRB5_PRINCNAME *">
+    <method name="d2i_KRB5_PRINCNAME" result="KRB5_PRINCNAME *" status="unimplemented">
       <arg name="a" type="KRB5_PRINCNAME **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_PRINCNAME" result="int">
+    <method name="i2d_KRB5_PRINCNAME" result="int" status="unimplemented">
       <arg name="a" type="KRB5_PRINCNAME *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_PRINCNAME_it" result="const ASN1_ITEM *">
+    <method name="KRB5_PRINCNAME_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_TKTBODY_new" result="KRB5_TKTBODY *">
+    <method name="KRB5_TKTBODY_new" result="KRB5_TKTBODY *" status="unimplemented">
     </method>
-    <method name="KRB5_TKTBODY_free" result="void">
+    <method name="KRB5_TKTBODY_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_TKTBODY *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_TKTBODY" result="KRB5_TKTBODY *">
+    <method name="d2i_KRB5_TKTBODY" result="KRB5_TKTBODY *" status="unimplemented">
       <arg name="a" type="KRB5_TKTBODY **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_TKTBODY" result="int">
+    <method name="i2d_KRB5_TKTBODY" result="int" status="unimplemented">
       <arg name="a" type="KRB5_TKTBODY *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_TKTBODY_it" result="const ASN1_ITEM *">
+    <method name="KRB5_TKTBODY_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_APREQBODY_new" result="KRB5_APREQBODY *">
+    <method name="KRB5_APREQBODY_new" result="KRB5_APREQBODY *" status="unimplemented">
     </method>
-    <method name="KRB5_APREQBODY_free" result="void">
+    <method name="KRB5_APREQBODY_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_APREQBODY *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_APREQBODY" result="KRB5_APREQBODY *">
+    <method name="d2i_KRB5_APREQBODY" result="KRB5_APREQBODY *" status="unimplemented">
       <arg name="a" type="KRB5_APREQBODY **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_APREQBODY" result="int">
+    <method name="i2d_KRB5_APREQBODY" result="int" status="unimplemented">
       <arg name="a" type="KRB5_APREQBODY *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_APREQBODY_it" result="const ASN1_ITEM *">
+    <method name="KRB5_APREQBODY_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_TICKET_new" result="KRB5_TICKET *">
+    <method name="KRB5_TICKET_new" result="KRB5_TICKET *" status="unimplemented">
     </method>
-    <method name="KRB5_TICKET_free" result="void">
+    <method name="KRB5_TICKET_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_TICKET *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_TICKET" result="KRB5_TICKET *">
+    <method name="d2i_KRB5_TICKET" result="KRB5_TICKET *" status="unimplemented">
       <arg name="a" type="KRB5_TICKET **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_TICKET" result="int">
+    <method name="i2d_KRB5_TICKET" result="int" status="unimplemented">
       <arg name="a" type="KRB5_TICKET *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_TICKET_it" result="const ASN1_ITEM *">
+    <method name="KRB5_TICKET_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_APREQ_new" result="KRB5_APREQ *">
+    <method name="KRB5_APREQ_new" result="KRB5_APREQ *" status="unimplemented">
     </method>
-    <method name="KRB5_APREQ_free" result="void">
+    <method name="KRB5_APREQ_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_APREQ *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_APREQ" result="KRB5_APREQ *">
+    <method name="d2i_KRB5_APREQ" result="KRB5_APREQ *" status="unimplemented">
       <arg name="a" type="KRB5_APREQ **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_APREQ" result="int">
+    <method name="i2d_KRB5_APREQ" result="int" status="unimplemented">
       <arg name="a" type="KRB5_APREQ *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_APREQ_it" result="const ASN1_ITEM *">
+    <method name="KRB5_APREQ_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_CHECKSUM_new" result="KRB5_CHECKSUM *">
+    <method name="KRB5_CHECKSUM_new" result="KRB5_CHECKSUM *" status="unimplemented">
     </method>
-    <method name="KRB5_CHECKSUM_free" result="void">
+    <method name="KRB5_CHECKSUM_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_CHECKSUM *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_CHECKSUM" result="KRB5_CHECKSUM *">
+    <method name="d2i_KRB5_CHECKSUM" result="KRB5_CHECKSUM *" status="unimplemented">
       <arg name="a" type="KRB5_CHECKSUM **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_CHECKSUM" result="int">
+    <method name="i2d_KRB5_CHECKSUM" result="int" status="unimplemented">
       <arg name="a" type="KRB5_CHECKSUM *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_CHECKSUM_it" result="const ASN1_ITEM *">
+    <method name="KRB5_CHECKSUM_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_ENCKEY_new" result="KRB5_ENCKEY *">
+    <method name="KRB5_ENCKEY_new" result="KRB5_ENCKEY *" status="unimplemented">
     </method>
-    <method name="KRB5_ENCKEY_free" result="void">
+    <method name="KRB5_ENCKEY_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_ENCKEY *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_ENCKEY" result="KRB5_ENCKEY *">
+    <method name="d2i_KRB5_ENCKEY" result="KRB5_ENCKEY *" status="unimplemented">
       <arg name="a" type="KRB5_ENCKEY **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_ENCKEY" result="int">
+    <method name="i2d_KRB5_ENCKEY" result="int" status="unimplemented">
       <arg name="a" type="KRB5_ENCKEY *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_ENCKEY_it" result="const ASN1_ITEM *">
+    <method name="KRB5_ENCKEY_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHDATA_new" result="KRB5_AUTHDATA *">
+    <method name="KRB5_AUTHDATA_new" result="KRB5_AUTHDATA *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHDATA_free" result="void">
+    <method name="KRB5_AUTHDATA_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_AUTHDATA *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_AUTHDATA" result="KRB5_AUTHDATA *">
+    <method name="d2i_KRB5_AUTHDATA" result="KRB5_AUTHDATA *" status="unimplemented">
       <arg name="a" type="KRB5_AUTHDATA **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_AUTHDATA" result="int">
+    <method name="i2d_KRB5_AUTHDATA" result="int" status="unimplemented">
       <arg name="a" type="KRB5_AUTHDATA *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_AUTHDATA_it" result="const ASN1_ITEM *">
+    <method name="KRB5_AUTHDATA_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHENTBODY_new" result="KRB5_AUTHENTBODY *">
+    <method name="KRB5_AUTHENTBODY_new" result="KRB5_AUTHENTBODY *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHENTBODY_free" result="void">
+    <method name="KRB5_AUTHENTBODY_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENTBODY *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_AUTHENTBODY" result="KRB5_AUTHENTBODY *">
+    <method name="d2i_KRB5_AUTHENTBODY" result="KRB5_AUTHENTBODY *" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENTBODY **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_AUTHENTBODY" result="int">
+    <method name="i2d_KRB5_AUTHENTBODY" result="int" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENTBODY *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_AUTHENTBODY_it" result="const ASN1_ITEM *">
+    <method name="KRB5_AUTHENTBODY_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHENT_new" result="KRB5_AUTHENT *">
+    <method name="KRB5_AUTHENT_new" result="KRB5_AUTHENT *" status="unimplemented">
     </method>
-    <method name="KRB5_AUTHENT_free" result="void">
+    <method name="KRB5_AUTHENT_free" result="void" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENT *" m68kreg="a0"/>
     </method>
-    <method name="d2i_KRB5_AUTHENT" result="KRB5_AUTHENT *">
+    <method name="d2i_KRB5_AUTHENT" result="KRB5_AUTHENT *" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENT **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
-    <method name="i2d_KRB5_AUTHENT" result="int">
+    <method name="i2d_KRB5_AUTHENT" result="int" status="unimplemented">
       <arg name="a" type="KRB5_AUTHENT *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="KRB5_AUTHENT_it" result="const ASN1_ITEM *">
+    <method name="KRB5_AUTHENT_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
     <method name="lh_new" result="_LHASH *">
       <arg name="h" type="LHASH_HASH_FN_TYPE" m68kreg="d0"/>
@@ -5376,7 +5376,7 @@
     </method>
     <method name="RAND_get_rand_method" result="const RAND_METHOD *">
     </method>
-    <method name="RAND_SSLeay" result="RAND_METHOD *">
+    <method name="RAND_SSLeay" result="RAND_METHOD *" status="unimplemented">
     </method>
     <method name="RAND_cleanup" result="void">
     </method>
@@ -5525,7 +5525,7 @@
     <method name="SSL_CIPHER_get_key_exchange" result="const char *">
       <arg name="cipher" type="const SSL_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="SSL_CIPHER_get_export" result="const char *">
+    <method name="SSL_CIPHER_get_export" result="const char *" status="unimplemented">
       <arg name="cipher" type="const SSL_CIPHER *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_fd" result="int">
@@ -6069,7 +6069,7 @@
     <method name="SSL_get_info_callback" result="void (*)(const SSL *ssl, int type, int val)">
       <arg name="ssl" type="const SSL *" m68kreg="a0"/>
     </method>
-    <method name="SSL_state" result="int">
+    <method name="SSL_state" result="int" status="unimplemented">
       <arg name="ssl" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_set_verify_result" result="void">
@@ -8079,7 +8079,7 @@
     </method>
     <method name="X509_STORE_get_by_subject" result="int">
       <arg name="vs" type="X509_STORE_CTX *" m68kreg="a0"/>
-      <arg name="type" type="enum X509_LOOKUP_TYPE" m68kreg="d0"/>
+      <arg name="type" type="X509_LOOKUP_TYPE" m68kreg="d0"/>
       <arg name="name" type="X509_NAME *" m68kreg="a1"/>
       <arg name="ret" type="X509_OBJECT *" m68kreg="a2"/>
     </method>
@@ -10287,7 +10287,7 @@
       <arg name="n" type="unsigned long" m68kreg="d0"/>
       <arg name="md" type="unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="SHA_Transform" result="void">
+    <method name="SHA_Transform" result="void" status="unimplemented">
       <arg name="c" type="SHA_CTX *" m68kreg="a0"/>
       <arg name="data" type="const unsigned char *" m68kreg="a1"/>
     </method>
@@ -11595,7 +11595,7 @@
     <method name="ENGINE_register_ciphers" result="int">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_load_ubsec" result="void">
+    <method name="ENGINE_load_ubsec" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_load_openssl" result="void" status="unimplemented">
     </method>
@@ -11707,7 +11707,7 @@
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
       <arg name="cflag" type="unsigned long" m68kreg="d1"/>
     </method>
-    <method name="ENGINE_load_cswift" result="void">
+    <method name="ENGINE_load_cswift" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_set_default_ciphers" result="int">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
@@ -11715,12 +11715,12 @@
     <method name="ENGINE_unregister_RAND" result="void">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_load_nuron" result="void">
+    <method name="ENGINE_load_nuron" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_set_table_flags" result="void">
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_load_chil" result="void">
+    <method name="ENGINE_load_chil" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_get_destroy_function" result="ENGINE_GEN_INT_FUNC_PTR">
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
@@ -11730,7 +11730,7 @@
       <arg name="out" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
     </method>
-    <method name="ENGINE_load_atalla" result="void">
+    <method name="ENGINE_load_atalla" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_get_table_flags" result="unsigned int">
     </method>
@@ -11747,11 +11747,11 @@
     </method>
     <method name="ENGINE_add_conf_module" result="void">
     </method>
-    <method name="ENGINE_load_aep" result="void">
+    <method name="ENGINE_load_aep" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_load_sureware" result="void">
+    <method name="ENGINE_load_sureware" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_load_4758cca" result="void">
+    <method name="ENGINE_load_4758cca" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_up_ref" result="int">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
@@ -13651,7 +13651,7 @@
     <method name="pqueue_print" result="void" status="unimplemented">
       <arg name="pq" type="pqueue" m68kreg="a0"/>
     </method>
-    <method name="PEM_write_bio_X509_CERT_PAIR" result="int">
+    <method name="PEM_write_bio_X509_CERT_PAIR" result="int" status="unimplemented">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="x" type="X509_CERT_PAIR *" m68kreg="a1"/>
     </method>
@@ -13777,7 +13777,7 @@
     <method name="X509_policy_tree_level_count" result="int">
       <arg name="tree" type="const X509_POLICY_TREE *" m68kreg="a0"/>
     </method>
-    <method name="X509_CERT_PAIR_free" result="void">
+    <method name="X509_CERT_PAIR_free" result="void" status="unimplemented">
       <arg name="pair" type="X509_CERT_PAIR *" m68kreg="a0"/>
     </method>
     <method name="BN_nist_mod_224" result="int">
@@ -13840,7 +13840,7 @@
       <arg name="p" type="const BIGNUM *" m68kreg="a2"/>
       <arg name="ctx" type="BN_CTX *" m68kreg="a3"/>
     </method>
-    <method name="i2d_X509_CERT_PAIR" result="int">
+    <method name="i2d_X509_CERT_PAIR" result="int" status="unimplemented">
       <arg name="a" type="X509_CERT_PAIR *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
@@ -13855,7 +13855,7 @@
     <method name="X509_VERIFY_PARAM_lookup" result="const X509_VERIFY_PARAM *">
       <arg name="name" type="const char *" m68kreg="a0"/>
     </method>
-    <method name="X509_CERT_PAIR_new" result="X509_CERT_PAIR *">
+    <method name="X509_CERT_PAIR_new" result="X509_CERT_PAIR *" status="unimplemented">
     </method>
     <method name="X509V3_NAME_from_section" result="int">
       <arg name="nm" type="X509_NAME *" m68kreg="a0"/>
@@ -13877,7 +13877,7 @@
       <arg name="len" type="int" m68kreg="d0"/>
       <arg name="indent" type="int" m68kreg="d1"/>
     </method>
-    <method name="d2i_X509_CERT_PAIR" result="X509_CERT_PAIR *">
+    <method name="d2i_X509_CERT_PAIR" result="X509_CERT_PAIR *" status="unimplemented">
       <arg name="a" type="X509_CERT_PAIR **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
@@ -13951,7 +13951,7 @@
       <arg name="type" type="int" m68kreg="d0"/>
       <arg name="other" type="ASN1_TYPE *" m68kreg="a1"/>
     </method>
-    <method name="PEM_read_bio_X509_CERT_PAIR" result="X509_CERT_PAIR *">
+    <method name="PEM_read_bio_X509_CERT_PAIR" result="X509_CERT_PAIR *" status="unimplemented">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
       <arg name="x" type="X509_CERT_PAIR **" m68kreg="a1"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
@@ -14466,7 +14466,7 @@
     <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *">
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
-    <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *">
+    <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *" status="unimplemented">
       <arg name="a" type="NETSCAPE_X509 **" m68kreg="a0"/>
       <arg name="in" type="unsigned char const **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
@@ -14718,7 +14718,7 @@
     <method name="EVP_PKEY_decrypt_init" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
-    <method name="NETSCAPE_X509_free" result="void">
+    <method name="NETSCAPE_X509_free" result="void" status="unimplemented">
       <arg name="a" type="NETSCAPE_X509 *" m68kreg="a0"/>
     </method>
     <method name="i2b_PVK_bio" result="int">
@@ -15405,7 +15405,7 @@
     <method name="TS_RESP_CTX_get_request" result="TS_REQ *">
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a0"/>
     </method>
-    <method name="i2d_NETSCAPE_X509" result="int">
+    <method name="i2d_NETSCAPE_X509" result="int" status="unimplemented">
       <arg name="a" type="NETSCAPE_X509 *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
@@ -15627,7 +15627,7 @@
       <arg name="offset_day" type="int" m68kreg="d1"/>
       <arg name="offset_sec" type="long" m68kreg="d2"/>
     </method>
-    <method name="NETSCAPE_X509_new" result="NETSCAPE_X509 *">
+    <method name="NETSCAPE_X509_new" result="NETSCAPE_X509 *" status="unimplemented">
     </method>
     <method name="TS_ACCURACY_free" result="void">
       <arg name="a" type="TS_ACCURACY *" m68kreg="a0"/>
@@ -16253,7 +16253,7 @@
       <arg name="a" type="RSA_PSS_PARAMS *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="OPENSSL_stderr" result="void *">
+    <method name="OPENSSL_stderr" result="void *" status="unimplemented">
     </method>
     <method name="OPENSSL_showfatal" result="void">
       <arg name="fmta" type="const char *" m68kreg="a0"/>
@@ -16265,7 +16265,7 @@
     </method>
     <method name="ASN1_OCTET_STRING_NDEF_it" result="const ASN1_ITEM *">
     </method>
-    <method name="X509_CERT_PAIR_it" result="const ASN1_ITEM *">
+    <method name="X509_CERT_PAIR_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
     <method name="POLICY_CONSTRAINTS_it" result="const ASN1_ITEM *">
     </method>
@@ -16285,13 +16285,13 @@
     </method>
     <method name="ASN1_SET_ANY_it" result="const ASN1_ITEM *">
     </method>
-    <method name="NETSCAPE_X509_it" result="const ASN1_ITEM *">
+    <method name="NETSCAPE_X509_it" result="const ASN1_ITEM *" status="unimplemented">
     </method>
     <method name="ISSUING_DIST_POINT_it" result="const ASN1_ITEM *">
     </method>
     <method name="RSA_PSS_PARAMS_it" result="const ASN1_ITEM *">
     </method>
-    <method name="ENGINE_load_gost" result="void">
+    <method name="ENGINE_load_gost" result="void" status="unimplemented">
     </method>
 
     <!-- AmiSSL v3.x - OpenSSL 1.0.2f -->
@@ -17288,9 +17288,6 @@
     </method>
     <method name="EC_KEY_get_default_method" result="const EC_KEY_METHOD *">
     </method>
-    <method name="EC_GROUP_order_bits" result="int">
-      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
-    </method>
     <method name="EC_KEY_get_ex_data" result="void *">
       <arg name="key" type="const EC_KEY *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
@@ -17300,7 +17297,7 @@
     </method>
     <method name="EC_KEY_key2buf" result="size_t">
       <arg name="key" type="const EC_KEY *" m68kreg="a0"/>
-      <arg name="form" type="enum point_conversion_form_t" m68kreg="d0"/>
+      <arg name="form" type="point_conversion_form_t" m68kreg="d0"/>
       <arg name="pbuf" type="unsigned char **" m68kreg="a1"/>
       <arg name="ctx" type="BN_CTX *" m68kreg="a2"/>
     </method>
@@ -17309,7 +17306,7 @@
     </method>
     <method name="EC_KEY_METHOD_get_compute_key" result="void">
       <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
-      <arg name="pck" type="int (**)(void *, size_t, const EC_POINT *, const EC_KEY *, void *(*)(const void *, size_t, void *, size_t *))" m68kreg="a1"/>
+      <arg name="pck" type="int (**)(void *, size_t, const EC_POINT *, const EC_KEY *, void *(*KDF)(const void *, size_t, void *, size_t *))" m68kreg="a1"/>
     </method>
     <method name="EC_KEY_METHOD_get_init" result="void">
       <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
@@ -17481,7 +17478,7 @@
     <method name="EVP_CIPHER_CTX_reset" result="int">
       <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_CTX_set_num" result="int">
+    <method name="EVP_CIPHER_CTX_set_num" result="void">
       <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
       <arg name="num" type="int" m68kreg="d0"/>
     </method>
@@ -17750,11 +17747,6 @@
       <arg name="psign_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="psign" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_sign" result="void">
-      <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
-      <arg name="psign_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
-      <arg name="psign" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
-    </method>
     <method name="EVP_PKEY_meth_get_signctx" result="void">
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="psignctx_init" type="int (**)(EVP_PKEY_CTX *, EVP_MD_CTX *)" m68kreg="a1"/>
@@ -17817,7 +17809,7 @@
       <arg name="out" type="unsigned char *" m68kreg="a2"/>
       <arg name="in" type="const unsigned char *" m68kreg="a3"/>
       <arg name="inlen" type="size_t" m68kreg="d0"/>
-      <arg name="block" type="block128_t" m68kreg="d1"/>
+      <arg name="block" type="block128_f" m68kreg="d1"/>
     </method>
     <method name="CRYPTO_128_wrap_pad" result="size_t">
       <arg name="key" type="void *" m68kreg="a0"/>
@@ -17825,7 +17817,7 @@
       <arg name="out" type="unsigned char *" m68kreg="a2"/>
       <arg name="in" type="const unsigned char *" m68kreg="a3"/>
       <arg name="inlen" type="size_t" m68kreg="d0"/>
-      <arg name="block" type="block128_t" m68kreg="d1"/>
+      <arg name="block" type="block128_f" m68kreg="d1"/>
     </method>
     <method name="CRYPTO_ocb128_aad" result="int">
       <arg name="ctx" type="OCB128_CONTEXT *" m68kreg="a0"/>
@@ -17862,15 +17854,15 @@
       <arg name="ctx" type="OCB128_CONTEXT *" m68kreg="a0"/>
       <arg name="keyenc" type="void *" m68kreg="a1"/>
       <arg name="keydec" type="void *" m68kreg="a2"/>
-      <arg name="encrypt" type="block128_t" m68kreg="d0"/>
-      <arg name="decrypt" type="block128_t" m68kreg="d1"/>
+      <arg name="encrypt" type="block128_f" m68kreg="d0"/>
+      <arg name="decrypt" type="block128_f" m68kreg="d1"/>
       <arg name="stream" type="ocb128_f" m68kreg="d2"/>
     </method>
     <method name="CRYPTO_ocb128_new" result="OCB128_CONTEXT *">
       <arg name="keyenc" type="void *" m68kreg="a0"/>
       <arg name="keydec" type="void *" m68kreg="a1"/>
-      <arg name="encrypt" type="block128_t" m68kreg="d0"/>
-      <arg name="decrypt" type="block128_t" m68kreg="d1"/>
+      <arg name="encrypt" type="block128_f" m68kreg="d0"/>
+      <arg name="decrypt" type="block128_f" m68kreg="d1"/>
       <arg name="stream" type="ocb128_f" m68kreg="d2"/>
     </method>
     <method name="CRYPTO_ocb128_setiv" result="int">
@@ -18004,7 +17996,7 @@
       <arg name="cb" type="BN_GENCB *" m68kreg="d1"/>
     </method>
     <method name="TS_CONF_set_signer_digest" result="int">
-      <arg name="conf" type="CONG *" m68kreg="a0"/>
+      <arg name="conf" type="CONF *" m68kreg="a0"/>
       <arg name="section" type="const char *" m68kreg="a1"/>
       <arg name="md" type="const char *" m68kreg="a2"/>
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a3"/>
@@ -18035,7 +18027,7 @@
       <arg name="ctx" type="TS_VERIFY_CTX *" m68kreg="a0"/>
       <arg name="f" type="int" m68kreg="d0"/>
     </method>
-    <method name="TS_VERIFY_CTX_set_flags" result="unsigned char *">
+    <method name="TS_VERIFY_CTX_set_imprint" result="unsigned char *">
       <arg name="ctx" type="TS_VERIFY_CTX *" m68kreg="a0"/>
       <arg name="hexstr" type="unsigned char *" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
@@ -18130,9 +18122,8 @@
     <method name="X509_get_X509_PUBKEY" result="X509_PUBKEY *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
-    <method name="X509_NAME_ENTRY_set_object" result="int">
-      <arg name="ne" type="X509_NAME_ENTRY *" m68kreg="a0"/>
-      <arg name="obj" type="ASN1_OBJECT *" m68kreg="a1"/>
+    <method name="X509_NAME_ENTRY_set" result="int">
+      <arg name="ne" type="const X509_NAME_ENTRY *" m68kreg="a0"/>
     </method>
     <method name="X509_NAME_get0_der" result="int">
       <arg name="pder" type="const unsigned char **" m68kreg="a0"/>
@@ -18322,8 +18313,8 @@
     <method name="SSL_CTX_dane_mtype_set" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="md" type="const EVP_MD *" m68kreg="a1"/>
-      <arg name="mtype" type="unit8_t" m68kreg="d0"/>
-      <arg name="ord" type="unit8_t" m68kreg="d1"/>
+      <arg name="mtype" type="uint8_t" m68kreg="d0"/>
+      <arg name="ord" type="uint8_t" m68kreg="d1"/>
     </method>
     <method name="SSL_CTX_get0_security_ex_data" result="void *">
       <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
