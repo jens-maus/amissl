@@ -16066,4 +16066,260 @@ typedef ULONG _sfdc_vararg;
 	LP1(0x67f8, uint32_t, X509_get_key_usage , X509 *, ___x, a0,\
 	, AMISSL_BASE_NAME)
 
+#define DTLSv1_listen(___s, ___client) \
+	LP2(0x67fe, int, DTLSv1_listen , SSL *, ___s, a0, BIO_ADDR *, ___client, a1,\
+	, AMISSL_BASE_NAME)
+
+#define OPENSSL_init_ssl(___opts, ___settings) \
+	LP2(0x6804, int, OPENSSL_init_ssl , uint64_t, ___opts, d0, const OPENSSL_INIT_SETTINGS *, ___settings, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_add1_host(___s, ___hostname) \
+	LP2(0x680a, int, SSL_add1_host , SSL *, ___s, a0, const char *, ___hostname, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_add_ssl_module() \
+	LP0NR(0x6810, SSL_add_ssl_module ,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CIPHER_get_cipher_nid(___c) \
+	LP1(0x6816, int, SSL_CIPHER_get_cipher_nid , const SSL_CIPHER *, ___c, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CIPHER_get_digest_nid(___c) \
+	LP1(0x681c, int, SSL_CIPHER_get_digest_nid , const SSL_CIPHER *, ___c, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_clear_options(___s, ___op) \
+	LP2(0x6822, unsigned long, SSL_clear_options , SSL *, ___s, a0, unsigned long, ___op, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_config(___s, ___name) \
+	LP2(0x6828, int, SSL_config , SSL *, ___s, a0, const char *, ___name, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_clear_options(___ctx, ___op) \
+	LP2(0x682e, unsigned long, SSL_CTX_clear_options , SSL_CTX *, ___ctx, a0, unsigned long, ___op, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_config(___ctx, ___name) \
+	LP2(0x6834, int, SSL_CTX_config , SSL_CTX *, ___ctx, a0, const char *, ___name, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_dane_enable(___ctx) \
+	LP1(0x683a, int, SSL_CTX_dane_enable , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_dane_mtype_set(___ctx, ___md, ___mtype, ___ord) \
+	LP4(0x6840, int, SSL_CTX_dane_mtype_set , SSL_CTX *, ___ctx, a0, const EVP_MD *, ___md, a1, unit8_t, ___mtype, d0, unit8_t, ___ord, d1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_get0_security_ex_data(___ctx) \
+	LP1(0x6846, void *, SSL_CTX_get0_security_ex_data , const SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_get_options(___ctx) \
+	LP1(0x684c, unsigned long, SSL_CTX_get_options , const SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_get_security_callback(___ctx) \
+	LP1FR(0x6852, __fpr, SSL_CTX_get_security_callback , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(SSL *, SSL_CTX *, int, int, int, void *, void *))
+
+#define SSL_CTX_get_security_level(___ctx) \
+	LP1(0x6858, int, SSL_CTX_get_security_level , const SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_set0_security_ex_data(___ctx, ___ex) \
+	LP2NR(0x685e, SSL_CTX_set0_security_ex_data , SSL_CTX *, ___ctx, a0, void *, ___ex, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_set_default_verify_dir(___ctx) \
+	LP1(0x6864, int, SSL_CTX_set_default_verify_dir , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_set_default_verify_file(___ctx) \
+	LP1(0x686a, int, SSL_CTX_set_default_verify_file , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_set_not_resumable_session_callback(___ctx, ___cb) \
+	LP2NRFP(0x6870, SSL_CTX_set_not_resumable_session_callback , SSL_CTX *, ___ctx, a0, __fpt, ___cb, a1,\
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,int))
+
+#define SSL_CTX_set_options(___ctx, ___op) \
+	LP2(0x6876, unsigned long, SSL_CTX_set_options , SSL_CTX *, ___ctx, a0, unsigned long, ___op, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_set_security_callback(___ctx, ___cb) \
+	LP2NRFP(0x687c, SSL_CTX_set_security_callback , SSL_CTX *, ___ctx, a0, __fpt, ___cb, a1,\
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,SSL_CTX *,int,int,int,void *,void *))
+
+#define SSL_CTX_set_security_level(___ctx, ___level) \
+	LP2NR(0x6882, SSL_CTX_set_security_level , SSL_CTX *, ___ctx, a0, int, ___level, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_CTX_up_ref(___ctx) \
+	LP1NR(0x6888, SSL_CTX_up_ref , SSL_CTX *, ___ctx, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_dane_enable(___s, ___basedomain) \
+	LP2(0x688e, int, SSL_dane_enable , SSL *, ___s, a0, const char *, ___basedomain, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_dane_tlsa_add(___s, ___usage, ___selector, ___mtype, ___data, ___dlen) \
+	LP6(0x6894, int, SSL_dane_tlsa_add , SSL *, ___s, a0, uint8_t, ___usage, d0, uint8_t, ___selector, d1, uint8_t, ___mtype, d2, unsigned char *, ___data, a1, size_t, ___dlen, d3,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get0_dane(___ssl) \
+	LP1(0x689a, struct dane_st *, SSL_get0_dane , SSL *, ___ssl, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get0_dane_authority(___s, ___mcert, ___mspki) \
+	LP3(0x68a0, int, SSL_get0_dane_authority , SSL *, ___s, a0, X509 **, ___mcert, a1, EVP_PKEY **, ___mspki, a2,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get0_dane_tlsa(___s, ___usage, ___selector, ___mtype, ___data, ___dlen) \
+	LP6(0x68a6, int, SSL_get0_dane_tlsa , SSL *, ___s, a0, uint8_t *, ___usage, a1, uint8_t *, ___selector, a2, uint8_t *, ___mtype, a3, unsigned char **, ___data, d0, size_t *, ___dlen, d1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get0_peername(___s) \
+	LP1(0x68ac, const char *, SSL_get0_peername , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get0_security_ex_data(___s) \
+	LP1(0x68b2, void *, SSL_get0_security_ex_data , const SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_async_wait_fd(___s) \
+	LP1(0x68b8, int, SSL_get_async_wait_fd , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_client_random(___s, ___out, ___outlen) \
+	LP3(0x68be, size_t, SSL_get_client_random , const SSL *, ___s, a0, unsigned char *, ___out, a1, size_t, ___outlen, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_options(___s) \
+	LP1(0x68c4, unsigned long, SSL_get_options , const SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_security_callback(___s) \
+	LP1FR(0x68ca, __fpr, SSL_get_security_callback , const SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME, int (*__fpr)(SSL *, SSL_CTX *, int, int, int, void *, void *))
+
+#define SSL_get_security_level(___s) \
+	LP1(0x68d0, int, SSL_get_security_level , const SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_server_random(___s, ___out, ___outlen) \
+	LP3(0x68d6, size_t, SSL_get_server_random , const SSL *, ___s, a0, unsigned char *, ___out, a1, size_t, ___outlen, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_get_state(___ssl) \
+	LP1(0x68dc, OSSL_HANDSHAKE_STATE, SSL_get_state , const SSL *, ___ssl, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_in_before(___s) \
+	LP1(0x68e2, int, SSL_in_before , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_in_init(___s) \
+	LP1(0x68e8, int, SSL_in_init , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_is_init_finished(___s) \
+	LP1(0x68ee, int, SSL_is_init_finished , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_SESSION_get0_ticket(___s, ___tick, ___len) \
+	LP3NR(0x68f4, SSL_SESSION_get0_ticket , const SSL_SESSION *, ___s, a0, unsigned char **, ___tick, a1, size_t *, ___len, a2,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_SESSION_get_master_key(___ssl, ___out, ___outlen) \
+	LP3(0x68fa, size_t, SSL_SESSION_get_master_key , const SSL_SESSION *, ___ssl, a0, unsigned char *, ___out, a1, size_t, ___outlen, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_SESSION_get_ticket_lifetime_hint(___s) \
+	LP1(0x6900, unsigned long, SSL_SESSION_get_ticket_lifetime_hint , const SSL_SESSION *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_SESSION_has_ticket(___s) \
+	LP1(0x6906, int, SSL_SESSION_has_ticket , const SSL_SESSION *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_SESSION_print_keylog(___bp, ___x) \
+	LP2(0x690c, int, SSL_SESSION_print_keylog , BIO *, ___bp, a0, const SSL_SESSION *, ___x, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_session_reused(___s) \
+	LP1(0x6912, int, SSL_session_reused , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set0_security_ex_data(___s, ___ex) \
+	LP2NR(0x6918, SSL_set0_security_ex_data , SSL *, ___s, a0, void *, ___ex, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set1_host(___s, ___hostname) \
+	LP2(0x691e, int, SSL_set1_host , SSL *, ___s, a0, const char *, ___hostname, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_default_passwd_cb(___s, ___cb) \
+	LP2NR(0x6924, SSL_set_default_passwd_cb , SSL *, ___s, a0, pem_password_cb *, ___cb, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_default_passwd_cb_userdata(___s, ___u) \
+	LP2NR(0x692a, SSL_set_default_passwd_cb_userdata , SSL *, ___s, a0, void *, ___u, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_hostflags(___s, ___flags) \
+	LP2NR(0x6930, SSL_set_hostflags , SSL *, ___s, a0, unsigned int, ___flags, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_not_resumable_session_callback(___ssl, ___cb) \
+	LP2NRFP(0x6936, SSL_set_not_resumable_session_callback , SSL *, ___ssl, a0, __fpt, ___cb, a1,\
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,int))
+
+#define SSL_set_options(___s, ___op) \
+	LP2(0x693c, unsigned long, SSL_set_options , SSL *, ___s, a0, unsigned long, ___op, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_rbio(___s, ___rbio) \
+	LP2NR(0x6942, SSL_set_rbio , SSL *, ___s, a0, BIO *, ___rbio, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_security_callback(___s, ___cb) \
+	LP2NRFP(0x6948, SSL_set_security_callback , SSL *, ___s, a0, __fpt, ___cb, a1,\
+	, AMISSL_BASE_NAME, int (*__fpt)(SSL *,SSL_CTX *,int,int,int,void *,void *))
+
+#define SSL_set_security_level(___s, ___level) \
+	LP2NR(0x694e, SSL_set_security_level , SSL *, ___s, a0, int, ___level, d0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_set_wbio(___s, ___wbio) \
+	LP2NR(0x6954, SSL_set_wbio , SSL *, ___s, a0, BIO *, ___wbio, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_up_ref(___s) \
+	LP1NR(0x695a, SSL_up_ref , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_use_certificate_chain_file(___ssl, ___file) \
+	LP2(0x6960, int, SSL_use_certificate_chain_file , SSL *, ___ssl, a0, const char *, ___file, a1,\
+	, AMISSL_BASE_NAME)
+
+#define SSL_waiting_for_async(___s) \
+	LP1(0x6966, int, SSL_waiting_for_async , SSL *, ___s, a0,\
+	, AMISSL_BASE_NAME)
+
+#define TLS_client_method() \
+	LP0(0x696c, const SSL_METHOD *, TLS_client_method ,\
+	, AMISSL_BASE_NAME)
+
+#define TLS_method() \
+	LP0(0x6972, const SSL_METHOD *, TLS_method ,\
+	, AMISSL_BASE_NAME)
+
+#define TLS_server_method() \
+	LP0(0x6978, const SSL_METHOD *, TLS_server_method ,\
+	, AMISSL_BASE_NAME)
+
 #endif /* !_INLINE_AMISSL_H */

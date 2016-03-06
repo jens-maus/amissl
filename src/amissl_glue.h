@@ -4057,6 +4057,70 @@ const ASN1_OCTET_STRING * SAVEDS ASM LIB_X509_get0_subject_key_id(REG(a6, __IFAC
 uint32_t SAVEDS ASM LIB_X509_get_extended_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 uint32_t SAVEDS ASM LIB_X509_get_extension_flags(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
+int SAVEDS ASM LIB_DTLSv1_listen(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO_ADDR * client));
+int SAVEDS ASM LIB_OPENSSL_init_ssl(REG(a6, __IFACE_OR_BASE), REG(d0, uint64_t opts), REG(a0, const OPENSSL_INIT_SETTINGS * settings));
+int SAVEDS ASM LIB_SSL_add1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * hostname));
+void SAVEDS ASM LIB_SSL_add_ssl_module(REG(a6, __IFACE_OR_BASE));
+int SAVEDS ASM LIB_SSL_CIPHER_get_cipher_nid(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
+int SAVEDS ASM LIB_SSL_CIPHER_get_digest_nid(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
+unsigned long SAVEDS ASM LIB_SSL_clear_options(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, unsigned long op));
+int SAVEDS ASM LIB_SSL_config(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * name));
+unsigned long SAVEDS ASM LIB_SSL_CTX_clear_options(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, unsigned long op));
+int SAVEDS ASM LIB_SSL_CTX_config(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, const char * name));
+int SAVEDS ASM LIB_SSL_CTX_dane_enable(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
+int SAVEDS ASM LIB_SSL_CTX_dane_mtype_set(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, const EVP_MD * md), REG(d0, unit8_t mtype), REG(d1, unit8_t ord));
+void * SAVEDS ASM LIB_SSL_CTX_get0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ctx));
+unsigned long SAVEDS ASM LIB_SSL_CTX_get_options(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ctx));
+int  SAVEDS ASM (*LIB_SSL_CTX_get_security_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx)))(SSL *, SSL_CTX *, int, int, int, void *, void *);
+int SAVEDS ASM LIB_SSL_CTX_get_security_level(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CTX * ctx));
+void SAVEDS ASM LIB_SSL_CTX_set0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, void * ex));
+int SAVEDS ASM LIB_SSL_CTX_set_default_verify_dir(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
+int SAVEDS ASM LIB_SSL_CTX_set_default_verify_file(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
+void SAVEDS ASM LIB_SSL_CTX_set_not_resumable_session_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*cb)(SSL *, int)));
+unsigned long SAVEDS ASM LIB_SSL_CTX_set_options(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, unsigned long op));
+void SAVEDS ASM LIB_SSL_CTX_set_security_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(a1, int (*cb)(SSL *, SSL_CTX *, int, int, int, void *, void *)));
+void SAVEDS ASM LIB_SSL_CTX_set_security_level(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, int level));
+void SAVEDS ASM LIB_SSL_CTX_up_ref(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx));
+int SAVEDS ASM LIB_SSL_dane_enable(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * basedomain));
+int SAVEDS ASM LIB_SSL_dane_tlsa_add(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, uint8_t usage), REG(d1, uint8_t selector), REG(d2, uint8_t mtype), REG(a1, unsigned char * data), REG(d3, size_t dlen));
+struct dane_st * SAVEDS ASM LIB_SSL_get0_dane(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl));
+int SAVEDS ASM LIB_SSL_get0_dane_authority(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, X509 ** mcert), REG(a2, EVP_PKEY ** mspki));
+int SAVEDS ASM LIB_SSL_get0_dane_tlsa(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, uint8_t * usage), REG(a2, uint8_t * selector), REG(a3, uint8_t * mtype), REG(d0, unsigned char ** data), REG(d1, size_t * dlen));
+const char * SAVEDS ASM LIB_SSL_get0_peername(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+void * SAVEDS ASM LIB_SSL_get0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
+int SAVEDS ASM LIB_SSL_get_async_wait_fd(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+size_t SAVEDS ASM LIB_SSL_get_client_random(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s), REG(a1, unsigned char * out), REG(d0, size_t outlen));
+unsigned long SAVEDS ASM LIB_SSL_get_options(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
+int  SAVEDS ASM (*LIB_SSL_get_security_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s)))(SSL *, SSL_CTX *, int, int, int, void *, void *);
+int SAVEDS ASM LIB_SSL_get_security_level(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
+size_t SAVEDS ASM LIB_SSL_get_server_random(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s), REG(a1, unsigned char * out), REG(d0, size_t outlen));
+OSSL_HANDSHAKE_STATE SAVEDS ASM LIB_SSL_get_state(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl));
+int SAVEDS ASM LIB_SSL_in_before(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+int SAVEDS ASM LIB_SSL_in_init(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+int SAVEDS ASM LIB_SSL_is_init_finished(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+void SAVEDS ASM LIB_SSL_SESSION_get0_ticket(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s), REG(a1, unsigned char ** tick), REG(a2, size_t * len));
+size_t SAVEDS ASM LIB_SSL_SESSION_get_master_key(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * ssl), REG(a1, unsigned char * out), REG(d0, size_t outlen));
+unsigned long SAVEDS ASM LIB_SSL_SESSION_get_ticket_lifetime_hint(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
+int SAVEDS ASM LIB_SSL_SESSION_has_ticket(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
+int SAVEDS ASM LIB_SSL_SESSION_print_keylog(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const SSL_SESSION * x));
+int SAVEDS ASM LIB_SSL_session_reused(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+void SAVEDS ASM LIB_SSL_set0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, void * ex));
+int SAVEDS ASM LIB_SSL_set1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * hostname));
+void SAVEDS ASM LIB_SSL_set_default_passwd_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, pem_password_cb * cb));
+void SAVEDS ASM LIB_SSL_set_default_passwd_cb_userdata(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, void * u));
+void SAVEDS ASM LIB_SSL_set_hostflags(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, unsigned int flags));
+void SAVEDS ASM LIB_SSL_set_not_resumable_session_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, int (*cb)(SSL *, int)));
+unsigned long SAVEDS ASM LIB_SSL_set_options(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, unsigned long op));
+void SAVEDS ASM LIB_SSL_set_rbio(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * rbio));
+void SAVEDS ASM LIB_SSL_set_security_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, int (*cb)(SSL *, SSL_CTX *, int, int, int, void *, void *)));
+void SAVEDS ASM LIB_SSL_set_security_level(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int level));
+void SAVEDS ASM LIB_SSL_set_wbio(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * wbio));
+void SAVEDS ASM LIB_SSL_up_ref(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+int SAVEDS ASM LIB_SSL_use_certificate_chain_file(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, const char * file));
+int SAVEDS ASM LIB_SSL_waiting_for_async(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+const SSL_METHOD * SAVEDS ASM LIB_TLS_client_method(REG(a6, __IFACE_OR_BASE));
+const SSL_METHOD * SAVEDS ASM LIB_TLS_method(REG(a6, __IFACE_OR_BASE));
+const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR \
@@ -8497,7 +8561,71 @@ uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X50
     LFUNC_FA_(X509_get0_subject_key_id) \
     LFUNC_FA_(X509_get_extended_key_usage) \
     LFUNC_FA_(X509_get_extension_flags) \
-    LFUNC_FA_(X509_get_key_usage)
+    LFUNC_FA_(X509_get_key_usage) \
+    LFUNC_FA_(DTLSv1_listen) \
+    LFUNC_FA_(OPENSSL_init_ssl) \
+    LFUNC_FA_(SSL_add1_host) \
+    LFUNC_FA_(SSL_add_ssl_module) \
+    LFUNC_FA_(SSL_CIPHER_get_cipher_nid) \
+    LFUNC_FA_(SSL_CIPHER_get_digest_nid) \
+    LFUNC_FA_(SSL_clear_options) \
+    LFUNC_FA_(SSL_config) \
+    LFUNC_FA_(SSL_CTX_clear_options) \
+    LFUNC_FA_(SSL_CTX_config) \
+    LFUNC_FA_(SSL_CTX_dane_enable) \
+    LFUNC_FA_(SSL_CTX_dane_mtype_set) \
+    LFUNC_FA_(SSL_CTX_get0_security_ex_data) \
+    LFUNC_FA_(SSL_CTX_get_options) \
+    LFUNC_FA_(SSL_CTX_get_security_callback) \
+    LFUNC_FA_(SSL_CTX_get_security_level) \
+    LFUNC_FA_(SSL_CTX_set0_security_ex_data) \
+    LFUNC_FA_(SSL_CTX_set_default_verify_dir) \
+    LFUNC_FA_(SSL_CTX_set_default_verify_file) \
+    LFUNC_FA_(SSL_CTX_set_not_resumable_session_callback) \
+    LFUNC_FA_(SSL_CTX_set_options) \
+    LFUNC_FA_(SSL_CTX_set_security_callback) \
+    LFUNC_FA_(SSL_CTX_set_security_level) \
+    LFUNC_FA_(SSL_CTX_up_ref) \
+    LFUNC_FA_(SSL_dane_enable) \
+    LFUNC_FA_(SSL_dane_tlsa_add) \
+    LFUNC_FA_(SSL_get0_dane) \
+    LFUNC_FA_(SSL_get0_dane_authority) \
+    LFUNC_FA_(SSL_get0_dane_tlsa) \
+    LFUNC_FA_(SSL_get0_peername) \
+    LFUNC_FA_(SSL_get0_security_ex_data) \
+    LFUNC_FA_(SSL_get_async_wait_fd) \
+    LFUNC_FA_(SSL_get_client_random) \
+    LFUNC_FA_(SSL_get_options) \
+    LFUNC_FA_(SSL_get_security_callback) \
+    LFUNC_FA_(SSL_get_security_level) \
+    LFUNC_FA_(SSL_get_server_random) \
+    LFUNC_FA_(SSL_get_state) \
+    LFUNC_FA_(SSL_in_before) \
+    LFUNC_FA_(SSL_in_init) \
+    LFUNC_FA_(SSL_is_init_finished) \
+    LFUNC_FA_(SSL_SESSION_get0_ticket) \
+    LFUNC_FA_(SSL_SESSION_get_master_key) \
+    LFUNC_FA_(SSL_SESSION_get_ticket_lifetime_hint) \
+    LFUNC_FA_(SSL_SESSION_has_ticket) \
+    LFUNC_FA_(SSL_SESSION_print_keylog) \
+    LFUNC_FA_(SSL_session_reused) \
+    LFUNC_FA_(SSL_set0_security_ex_data) \
+    LFUNC_FA_(SSL_set1_host) \
+    LFUNC_FA_(SSL_set_default_passwd_cb) \
+    LFUNC_FA_(SSL_set_default_passwd_cb_userdata) \
+    LFUNC_FA_(SSL_set_hostflags) \
+    LFUNC_FA_(SSL_set_not_resumable_session_callback) \
+    LFUNC_FA_(SSL_set_options) \
+    LFUNC_FA_(SSL_set_rbio) \
+    LFUNC_FA_(SSL_set_security_callback) \
+    LFUNC_FA_(SSL_set_security_level) \
+    LFUNC_FA_(SSL_set_wbio) \
+    LFUNC_FA_(SSL_up_ref) \
+    LFUNC_FA_(SSL_use_certificate_chain_file) \
+    LFUNC_FA_(SSL_waiting_for_async) \
+    LFUNC_FA_(TLS_client_method) \
+    LFUNC_FA_(TLS_method) \
+    LFUNC_FA_(TLS_server_method)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSL_H */

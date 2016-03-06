@@ -4452,6 +4452,70 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_get_extended_key_usage
 	    FPTR IAmiSSL_X509_get_extension_flags
 	    FPTR IAmiSSL_X509_get_key_usage
+	    FPTR IAmiSSL_DTLSv1_listen
+	    FPTR IAmiSSL_OPENSSL_init_ssl
+	    FPTR IAmiSSL_SSL_add1_host
+	    FPTR IAmiSSL_SSL_add_ssl_module
+	    FPTR IAmiSSL_SSL_CIPHER_get_cipher_nid
+	    FPTR IAmiSSL_SSL_CIPHER_get_digest_nid
+	    FPTR IAmiSSL_SSL_clear_options
+	    FPTR IAmiSSL_SSL_config
+	    FPTR IAmiSSL_SSL_CTX_clear_options
+	    FPTR IAmiSSL_SSL_CTX_config
+	    FPTR IAmiSSL_SSL_CTX_dane_enable
+	    FPTR IAmiSSL_SSL_CTX_dane_mtype_set
+	    FPTR IAmiSSL_SSL_CTX_get0_security_ex_data
+	    FPTR IAmiSSL_SSL_CTX_get_options
+	    FPTR IAmiSSL_SSL_CTX_get_security_callback
+	    FPTR IAmiSSL_SSL_CTX_get_security_level
+	    FPTR IAmiSSL_SSL_CTX_set0_security_ex_data
+	    FPTR IAmiSSL_SSL_CTX_set_default_verify_dir
+	    FPTR IAmiSSL_SSL_CTX_set_default_verify_file
+	    FPTR IAmiSSL_SSL_CTX_set_not_resumable_session_callback
+	    FPTR IAmiSSL_SSL_CTX_set_options
+	    FPTR IAmiSSL_SSL_CTX_set_security_callback
+	    FPTR IAmiSSL_SSL_CTX_set_security_level
+	    FPTR IAmiSSL_SSL_CTX_up_ref
+	    FPTR IAmiSSL_SSL_dane_enable
+	    FPTR IAmiSSL_SSL_dane_tlsa_add
+	    FPTR IAmiSSL_SSL_get0_dane
+	    FPTR IAmiSSL_SSL_get0_dane_authority
+	    FPTR IAmiSSL_SSL_get0_dane_tlsa
+	    FPTR IAmiSSL_SSL_get0_peername
+	    FPTR IAmiSSL_SSL_get0_security_ex_data
+	    FPTR IAmiSSL_SSL_get_async_wait_fd
+	    FPTR IAmiSSL_SSL_get_client_random
+	    FPTR IAmiSSL_SSL_get_options
+	    FPTR IAmiSSL_SSL_get_security_callback
+	    FPTR IAmiSSL_SSL_get_security_level
+	    FPTR IAmiSSL_SSL_get_server_random
+	    FPTR IAmiSSL_SSL_get_state
+	    FPTR IAmiSSL_SSL_in_before
+	    FPTR IAmiSSL_SSL_in_init
+	    FPTR IAmiSSL_SSL_is_init_finished
+	    FPTR IAmiSSL_SSL_SESSION_get0_ticket
+	    FPTR IAmiSSL_SSL_SESSION_get_master_key
+	    FPTR IAmiSSL_SSL_SESSION_get_ticket_lifetime_hint
+	    FPTR IAmiSSL_SSL_SESSION_has_ticket
+	    FPTR IAmiSSL_SSL_SESSION_print_keylog
+	    FPTR IAmiSSL_SSL_session_reused
+	    FPTR IAmiSSL_SSL_set0_security_ex_data
+	    FPTR IAmiSSL_SSL_set1_host
+	    FPTR IAmiSSL_SSL_set_default_passwd_cb
+	    FPTR IAmiSSL_SSL_set_default_passwd_cb_userdata
+	    FPTR IAmiSSL_SSL_set_hostflags
+	    FPTR IAmiSSL_SSL_set_not_resumable_session_callback
+	    FPTR IAmiSSL_SSL_set_options
+	    FPTR IAmiSSL_SSL_set_rbio
+	    FPTR IAmiSSL_SSL_set_security_callback
+	    FPTR IAmiSSL_SSL_set_security_level
+	    FPTR IAmiSSL_SSL_set_wbio
+	    FPTR IAmiSSL_SSL_up_ref
+	    FPTR IAmiSSL_SSL_use_certificate_chain_file
+	    FPTR IAmiSSL_SSL_waiting_for_async
+	    FPTR IAmiSSL_TLS_client_method
+	    FPTR IAmiSSL_TLS_method
+	    FPTR IAmiSSL_TLS_server_method
 	LABEL AmiSSLIFace_SIZE
 
 #endif

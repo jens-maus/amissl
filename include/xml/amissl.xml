@@ -18280,5 +18280,242 @@
     <method name="X509_get_key_usage" result="uint32_t">
       <arg name="x" type="X509 *" m68kreg="a0"/>
     </method>
+    <method name="DTLSv1_listen" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="client" type="BIO_ADDR *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_init_ssl" result="int">
+      <arg name="opts" type="uint64_t" m68kreg="d0"/>
+      <arg name="settings" type="const OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_add1_host" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="hostname" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_add_ssl_module" result="void">
+    </method>
+    <method name="SSL_CIPHER_get_cipher_nid" result="int">
+      <arg name="c" type="const SSL_CIPHER *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CIPHER_get_digest_nid" result="int">
+      <arg name="c" type="const SSL_CIPHER *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_clear_options" result="unsigned long">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="op" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="SSL_config" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_clear_options" result="unsigned long">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="op" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="SSL_CTX_config" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_dane_enable" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_dane_mtype_set" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="a1"/>
+      <arg name="mtype" type="unit8_t" m68kreg="d0"/>
+      <arg name="ord" type="unit8_t" m68kreg="d1"/>
+    </method>
+    <method name="SSL_CTX_get0_security_ex_data" result="void *">
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_get_options" result="unsigned long">
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_get_security_callback" result="int (*)(SSL *, SSL_CTX *, int, int, int, void *, void *)">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_get_security_level" result="int">
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_set0_security_ex_data" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="ex" type="void *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_set_default_verify_dir" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_set_default_verify_file" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_set_not_resumable_session_callback" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="cb" type="int (*)(SSL *, int)" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_set_options" result="unsigned long">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="op" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="SSL_CTX_set_security_callback" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="cb" type="int (*)(SSL *, SSL_CTX *, int, int, int, void *, void *)" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_set_security_level" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="level" type="int" m68kreg="d0"/>
+    </method>
+    <method name="SSL_CTX_up_ref" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_dane_enable" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="basedomain" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_dane_tlsa_add" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="usage" type="uint8_t" m68kreg="d0"/>
+      <arg name="selector" type="uint8_t" m68kreg="d1"/>
+      <arg name="mtype" type="uint8_t" m68kreg="d2"/>
+      <arg name="data" type="unsigned char *" m68kreg="a1"/>
+      <arg name="dlen" type="size_t" m68kreg="d3"/>
+    </method>
+    <method name="SSL_get0_dane" result="struct dane_st *">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get0_dane_authority" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="mcert" type="X509 **" m68kreg="a1"/>
+      <arg name="mspki" type="EVP_PKEY **" m68kreg="a2"/>
+    </method>
+    <method name="SSL_get0_dane_tlsa" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="usage" type="uint8_t *" m68kreg="a1"/>
+      <arg name="selector" type="uint8_t *" m68kreg="a2"/>
+      <arg name="mtype" type="uint8_t *" m68kreg="a3"/>
+      <arg name="data" type="unsigned char **" m68kreg="d0"/>
+      <arg name="dlen" type="size_t *" m68kreg="d1"/>
+    </method>
+    <method name="SSL_get0_peername" result="const char *">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get0_security_ex_data" result="void *">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get_async_wait_fd" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get_client_random" result="size_t">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char *" m68kreg="a1"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_get_options" result="unsigned long">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get_security_callback" result="int (*)(SSL *, SSL_CTX *, int, int, int, void *, void *)">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get_security_level" result="int">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get_server_random" result="size_t">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char *" m68kreg="a1"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_get_state" result="OSSL_HANDSHAKE_STATE">
+      <arg name="ssl" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_in_before" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_in_init" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_is_init_finished" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_SESSION_get0_ticket" result="void">
+      <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
+      <arg name="tick" type="unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_SESSION_get_master_key" result="size_t">
+      <arg name="ssl" type="const SSL_SESSION *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char *" m68kreg="a1"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_SESSION_get_ticket_lifetime_hint" result="unsigned long">
+      <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_SESSION_has_ticket" result="int">
+      <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_SESSION_print_keylog" result="int">
+      <arg name="bp" type="BIO *" m68kreg="a0"/>
+      <arg name="x" type="const SSL_SESSION *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_session_reused" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_set0_security_ex_data" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="ex" type="void *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set1_host" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="hostname" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_default_passwd_cb" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_default_passwd_cb_userdata" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="u" type="void *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_hostflags" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="flags" type="unsigned int" m68kreg="d0"/>
+    </method>
+    <method name="SSL_set_not_resumable_session_callback" result="void">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="cb" type="int (*)(SSL *, int)" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_options" result="unsigned long">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="op" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="SSL_set_rbio" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="rbio" type="BIO *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_security_callback" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="cb" type="int (*)(SSL *, SSL_CTX *, int, int, int, void *, void *)" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_security_level" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="level" type="int" m68kreg="d0"/>
+    </method>
+    <method name="SSL_set_wbio" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="wbio" type="BIO *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_up_ref" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_use_certificate_chain_file" result="int">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="file" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_waiting_for_async" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="TLS_client_method" result="const SSL_METHOD *">
+    </method>
+    <method name="TLS_method" result="const SSL_METHOD *">
+    </method>
+    <method name="TLS_server_method" result="const SSL_METHOD *">
+    </method>
   </interface>
 </library>
