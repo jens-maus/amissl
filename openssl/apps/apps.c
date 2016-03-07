@@ -169,6 +169,7 @@ static int set_multi_opts(unsigned long *flags, const char *arg,
 int app_init(long mesgwin);
 
 #if defined(OPENSSL_SYS_AMIGA)
+#include <sys/select.h>
 #include <internal/amissl.h>
 
 #define XMKSTR(x) #x
@@ -194,6 +195,7 @@ static const char USED_VAR openssl_stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE)
   long __stack = MIN_STACKSIZE;
 #else
   #error "initial stack/memory specification failed"
+#endif
 #endif
 
 int chopup_args(ARGS *arg, char *buf)

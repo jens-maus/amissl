@@ -2928,6 +2928,12 @@
  #pragma amicall(AmiSSLBase, 0xd92, OPENSSL_cleanse(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase CRYPTO_mem_leaks dd4 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0xdd4, CRYPTO_mem_leaks(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OpenSSLDie de0 90803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
@@ -3462,12 +3468,6 @@
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0xff0, ERR_load_ERR_strings())
-#endif /* __CLIB_PRAGMA_AMICALL */
-#ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ERR_load_crypto_strings ff6 00
-#endif /* __CLIB_PRAGMA_LIBCALL */
-#ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0xff6, ERR_load_crypto_strings())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase ERR_free_strings ffc 00
@@ -14768,6 +14768,12 @@
  #pragma amicall(AmiSSLBase, 0x405c, SSL_SRP_CTX_init(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase CRYPTO_mem_leaks_fp 407a 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x407a, CRYPTO_mem_leaks_fp(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase ERR_load_ENGINE_strings 41ac 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
@@ -15366,12 +15372,6 @@
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0x44be, EC_GFp_nist_method())
-#endif /* __CLIB_PRAGMA_AMICALL */
-#ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ENGINE_load_padlock 44c4 00
-#endif /* __CLIB_PRAGMA_LIBCALL */
-#ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x44c4, ENGINE_load_padlock())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase EC_GROUP_set_curve_name 44ca 0802
@@ -16452,12 +16452,6 @@
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0x49da, ENGINE_load_ssl_client_cert(a0,a1,a2,a3,d0,d1,d2,d3))
-#endif /* __CLIB_PRAGMA_AMICALL */
-#ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ENGINE_load_capi 49e0 00
-#endif /* __CLIB_PRAGMA_LIBCALL */
-#ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x49e0, ENGINE_load_capi())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase ENGINE_register_pkey_meths 49e6 801
@@ -23032,934 +23026,952 @@
  #pragma amicall(AmiSSLBase, 0x65ca, PKCS12_SAFEBAG_get0_attr(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_p8inf 65d0 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_attrs 65d0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65d0, PKCS12_SAFEBAG_get0_p8inf(a0))
+ #pragma amicall(AmiSSLBase, 0x65d0, PKCS12_SAFEBAG_get0_attrs(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_pkcs8 65d6 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_p8inf 65d6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65d6, PKCS12_SAFEBAG_get0_pkcs8(a0))
+ #pragma amicall(AmiSSLBase, 0x65d6, PKCS12_SAFEBAG_get0_p8inf(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_safes 65dc 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_pkcs8 65dc 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65dc, PKCS12_SAFEBAG_get0_safes(a0))
+ #pragma amicall(AmiSSLBase, 0x65dc, PKCS12_SAFEBAG_get0_pkcs8(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_type 65e2 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_safes 65e2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65e2, PKCS12_SAFEBAG_get0_type(a0))
+ #pragma amicall(AmiSSLBase, 0x65e2, PKCS12_SAFEBAG_get0_safes(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get1_cert 65e8 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get0_type 65e8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65e8, PKCS12_SAFEBAG_get1_cert(a0))
+ #pragma amicall(AmiSSLBase, 0x65e8, PKCS12_SAFEBAG_get0_type(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get1_crl 65ee 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get1_cert 65ee 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65ee, PKCS12_SAFEBAG_get1_crl(a0))
+ #pragma amicall(AmiSSLBase, 0x65ee, PKCS12_SAFEBAG_get1_cert(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get_bag_nid 65f4 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get1_crl 65f4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65f4, PKCS12_SAFEBAG_get_bag_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x65f4, PKCS12_SAFEBAG_get1_crl(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get_nid 65fa 801
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get_bag_nid 65fa 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65fa, PKCS12_SAFEBAG_get_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x65fa, PKCS12_SAFEBAG_get_bag_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS8_get_attr 6600 0802
+ #pragma libcall AmiSSLBase PKCS12_SAFEBAG_get_nid 6600 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6600, PKCS8_get_attr(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6600, PKCS12_SAFEBAG_get_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS8_set0_pbe 6606 a90804
+ #pragma libcall AmiSSLBase PKCS8_get_attr 6606 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6606, PKCS8_set0_pbe(a0,d0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x6606, PKCS8_get_attr(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_OpenSSL 660c 00
+ #pragma libcall AmiSSLBase PKCS8_set0_pbe 660c a90804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x660c, RAND_OpenSSL())
+ #pragma amicall(AmiSSLBase, 0x660c, PKCS8_set0_pbe(a0,d0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_bits 6612 801
+ #pragma libcall AmiSSLBase RAND_OpenSSL 6612 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6612, RSA_bits(a0))
+ #pragma amicall(AmiSSLBase, 0x6612, RAND_OpenSSL())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_check_key_ex 6618 9802
+ #pragma libcall AmiSSLBase RSA_bits 6618 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6618, RSA_check_key_ex(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6618, RSA_bits(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_PKCS1_OpenSSL 661e 00
+ #pragma libcall AmiSSLBase RSA_check_key_ex 661e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x661e, RSA_PKCS1_OpenSSL())
+ #pragma amicall(AmiSSLBase, 0x661e, RSA_check_key_ex(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_security_bits 6624 801
+ #pragma libcall AmiSSLBase RSA_PKCS1_OpenSSL 6624 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6624, RSA_security_bits(a0))
+ #pragma amicall(AmiSSLBase, 0x6624, RSA_PKCS1_OpenSSL())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_X931_derive_ex 662a 76543210dba98013
+ #pragma libcall AmiSSLBase RSA_security_bits 662a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x662a, RSA_X931_derive_ex(a0,a1,a2,a3,a5,d0,d1,d2,d3,d4,d5,d6,d7))
+ #pragma amicall(AmiSSLBase, 0x662a, RSA_security_bits(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_X931_generate_key_ex 6630 190804
+ #pragma libcall AmiSSLBase RSA_X931_derive_ex 6630 76543210dba98013
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6630, RSA_X931_generate_key_ex(a0,d0,a1,d1))
+ #pragma amicall(AmiSSLBase, 0x6630, RSA_X931_derive_ex(a0,a1,a2,a3,a5,d0,d1,d2,d3,d4,d5,d6,d7))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_CONF_set_signer_digest 6636 ba9804
+ #pragma libcall AmiSSLBase RSA_X931_generate_key_ex 6636 190804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6636, TS_CONF_set_signer_digest(a0,a1,a2,a3))
+ #pragma amicall(AmiSSLBase, 0x6636, RSA_X931_generate_key_ex(a0,d0,a1,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_RESP_CTX_set_signer_digest 663c 9802
+ #pragma libcall AmiSSLBase TS_CONF_set_signer_digest 663c ba9804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x663c, TS_RESP_CTX_set_signer_digest(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x663c, TS_CONF_set_signer_digest(a0,a1,a2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_STATUS_INFO_get0_failure_info 6642 801
+ #pragma libcall AmiSSLBase TS_RESP_CTX_set_signer_digest 6642 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6642, TS_STATUS_INFO_get0_failure_info(a0))
+ #pragma amicall(AmiSSLBase, 0x6642, TS_RESP_CTX_set_signer_digest(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_STATUS_INFO_get0_status 6648 801
+ #pragma libcall AmiSSLBase TS_STATUS_INFO_get0_failure_info 6648 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6648, TS_STATUS_INFO_get0_status(a0))
+ #pragma amicall(AmiSSLBase, 0x6648, TS_STATUS_INFO_get0_failure_info(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_STATUS_INFO_set_status 664e 0802
+ #pragma libcall AmiSSLBase TS_STATUS_INFO_get0_status 664e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x664e, TS_STATUS_INFO_set_status(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x664e, TS_STATUS_INFO_get0_status(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_VERIFY_CTX_add_flags 6654 0802
+ #pragma libcall AmiSSLBase TS_STATUS_INFO_set_status 6654 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6654, TS_VERIFY_CTX_add_flags(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6654, TS_STATUS_INFO_set_status(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_data 665a 9802
+ #pragma libcall AmiSSLBase TS_VERIFY_CTX_add_flags 665a 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x665a, TS_VERIFY_CTX_set_data(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x665a, TS_VERIFY_CTX_add_flags(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_flags 6660 0802
+ #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_data 6660 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6660, TS_VERIFY_CTX_set_flags(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6660, TS_VERIFY_CTX_set_data(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_imprint 6666 09803
+ #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_flags 6666 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6666, TS_VERIFY_CTX_set_imprint(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x6666, TS_VERIFY_CTX_set_flags(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_store 666c 9802
+ #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_imprint 666c 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x666c, TS_VERIFY_CTX_set_store(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x666c, TS_VERIFY_CTX_set_imprint(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_re_X509_CRL_tbs 6672 9802
+ #pragma libcall AmiSSLBase TS_VERIFY_CTX_set_store 6672 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6672, i2d_re_X509_CRL_tbs(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6672, TS_VERIFY_CTX_set_store(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_re_X509_REQ_tbs 6678 9802
+ #pragma libcall AmiSSLBase TS_VERIFY_CTS_set_certs 6678 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6678, i2d_re_X509_REQ_tbs(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6678, TS_VERIFY_CTS_set_certs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 667e 221a09807
+ #pragma libcall AmiSSLBase i2d_re_X509_CRL_tbs 667e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x667e, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d1,d2,d2))
+ #pragma amicall(AmiSSLBase, 0x667e, i2d_re_X509_CRL_tbs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_aux_print 6684 09803
+ #pragma libcall AmiSSLBase i2d_re_X509_REQ_tbs 6684 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6684, X509_aux_print(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x6684, i2d_re_X509_REQ_tbs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get0_extensions 668a 801
+ #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 668a 221a09807
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x668a, X509_CRL_get0_extensions(a0))
+ #pragma amicall(AmiSSLBase, 0x668a, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d1,d2,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get0_signature 6690 a9803
+ #pragma libcall AmiSSLBase X509_aux_print 6690 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6690, X509_CRL_get0_signature(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x6690, X509_aux_print(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_issuer 6696 801
+ #pragma libcall AmiSSLBase X509_CRL_get0_extensions 6696 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6696, X509_CRL_get_issuer(a0))
+ #pragma amicall(AmiSSLBase, 0x6696, X509_CRL_get0_extensions(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_lastUpdate 669c 801
+ #pragma libcall AmiSSLBase X509_CRL_get0_signature 669c a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x669c, X509_CRL_get_lastUpdate(a0))
+ #pragma amicall(AmiSSLBase, 0x669c, X509_CRL_get0_signature(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_nextUpdate 66a2 801
+ #pragma libcall AmiSSLBase X509_CRL_get_issuer 66a2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66a2, X509_CRL_get_nextUpdate(a0))
+ #pragma amicall(AmiSSLBase, 0x66a2, X509_CRL_get_issuer(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_REVOKED 66a8 801
+ #pragma libcall AmiSSLBase X509_CRL_get_lastUpdate 66a8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66a8, X509_CRL_get_REVOKED(a0))
+ #pragma amicall(AmiSSLBase, 0x66a8, X509_CRL_get_lastUpdate(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_signature_nid 66ae 801
+ #pragma libcall AmiSSLBase X509_CRL_get_nextUpdate 66ae 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66ae, X509_CRL_get_signature_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x66ae, X509_CRL_get_nextUpdate(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_get_version 66b4 801
+ #pragma libcall AmiSSLBase X509_CRL_get_REVOKED 66b4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66b4, X509_CRL_get_version(a0))
+ #pragma amicall(AmiSSLBase, 0x66b4, X509_CRL_get_REVOKED(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_CRL_up_ref 66ba 801
+ #pragma libcall AmiSSLBase X509_CRL_get_signature_nid 66ba 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66ba, X509_CRL_up_ref(a0))
+ #pragma amicall(AmiSSLBase, 0x66ba, X509_CRL_get_signature_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_extensions 66c0 801
+ #pragma libcall AmiSSLBase X509_CRL_get_version 66c0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66c0, X509_get0_extensions(a0))
+ #pragma amicall(AmiSSLBase, 0x66c0, X509_CRL_get_version(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_pubkey 66c6 801
+ #pragma libcall AmiSSLBase X509_CRL_up_ref 66c6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66c6, X509_get0_pubkey(a0))
+ #pragma amicall(AmiSSLBase, 0x66c6, X509_CRL_up_ref(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_reject_objects 66cc 801
+ #pragma libcall AmiSSLBase X509_get0_extensions 66cc 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66cc, X509_get0_reject_objects(a0))
+ #pragma amicall(AmiSSLBase, 0x66cc, X509_get0_extensions(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_tbs_sigalg 66d2 801
+ #pragma libcall AmiSSLBase X509_get0_pubkey 66d2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66d2, X509_get0_tbs_sigalg(a0))
+ #pragma amicall(AmiSSLBase, 0x66d2, X509_get0_pubkey(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_trust_objects 66d8 801
+ #pragma libcall AmiSSLBase X509_get0_reject_objects 66d8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66d8, X509_get0_trust_objects(a0))
+ #pragma amicall(AmiSSLBase, 0x66d8, X509_get0_reject_objects(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_uids 66de a9803
+ #pragma libcall AmiSSLBase X509_get0_tbs_sigalg 66de 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66de, X509_get0_uids(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x66de, X509_get0_tbs_sigalg(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_notAfter 66e4 801
+ #pragma libcall AmiSSLBase X509_get0_trust_objects 66e4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66e4, X509_get_notAfter(a0))
+ #pragma amicall(AmiSSLBase, 0x66e4, X509_get0_trust_objects(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_notBefore 66ea 801
+ #pragma libcall AmiSSLBase X509_get0_uids 66ea a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66ea, X509_get_notBefore(a0))
+ #pragma amicall(AmiSSLBase, 0x66ea, X509_get0_uids(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_signature_type 66f0 801
+ #pragma libcall AmiSSLBase X509_get_notAfter 66f0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66f0, X509_get_signature_type(a0))
+ #pragma amicall(AmiSSLBase, 0x66f0, X509_get_notAfter(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_version 66f6 801
+ #pragma libcall AmiSSLBase X509_get_notBefore 66f6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66f6, X509_get_version(a0))
+ #pragma amicall(AmiSSLBase, 0x66f6, X509_get_notBefore(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_X509_PUBKEY 66fc 801
+ #pragma libcall AmiSSLBase X509_get_signature_type 66fc 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x66fc, X509_get_X509_PUBKEY(a0))
+ #pragma amicall(AmiSSLBase, 0x66fc, X509_get_signature_type(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_NAME_ENTRY_set 6702 801
+ #pragma libcall AmiSSLBase X509_get_version 6702 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6702, X509_NAME_ENTRY_set(a0))
+ #pragma amicall(AmiSSLBase, 0x6702, X509_get_version(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_NAME_get0_der 6708 a9803
+ #pragma libcall AmiSSLBase X509_get_X509_PUBKEY 6708 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6708, X509_NAME_get0_der(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x6708, X509_get_X509_PUBKEY(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_PUBKEY_get0 670e 801
+ #pragma libcall AmiSSLBase X509_NAME_ENTRY_set 670e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x670e, X509_PUBKEY_get0(a0))
+ #pragma amicall(AmiSSLBase, 0x670e, X509_NAME_ENTRY_set(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REQ_get0_signature 6714 a9803
+ #pragma libcall AmiSSLBase X509_NAME_get0_der 6714 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6714, X509_REQ_get0_signature(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x6714, X509_NAME_get0_der(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REQ_get_signature_nid 671a 801
+ #pragma libcall AmiSSLBase X509_PUBKEY_get0 671a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x671a, X509_REQ_get_signature_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x671a, X509_PUBKEY_get0(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REQ_get_subject_name 6720 801
+ #pragma libcall AmiSSLBase X509_REQ_get0_signature 6720 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6720, X509_REQ_get_subject_name(a0))
+ #pragma amicall(AmiSSLBase, 0x6720, X509_REQ_get0_signature(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REQ_get_version 6726 801
+ #pragma libcall AmiSSLBase X509_REQ_get_signature_nid 6726 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6726, X509_REQ_get_version(a0))
+ #pragma amicall(AmiSSLBase, 0x6726, X509_REQ_get_signature_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REQ_get_X509_PUBKEY 672c 801
+ #pragma libcall AmiSSLBase X509_REQ_get_subject_name 672c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x672c, X509_REQ_get_X509_PUBKEY(a0))
+ #pragma amicall(AmiSSLBase, 0x672c, X509_REQ_get_subject_name(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REVOKED_get0_extensions 6732 801
+ #pragma libcall AmiSSLBase X509_REQ_get_version 6732 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6732, X509_REVOKED_get0_extensions(a0))
+ #pragma amicall(AmiSSLBase, 0x6732, X509_REQ_get_version(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REVOKED_get0_revocationDate 6738 801
+ #pragma libcall AmiSSLBase X509_REQ_get_X509_PUBKEY 6738 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6738, X509_REVOKED_get0_revocationDate(a0))
+ #pragma amicall(AmiSSLBase, 0x6738, X509_REQ_get_X509_PUBKEY(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_REVOKED_get0_serialNumber 673e 801
+ #pragma libcall AmiSSLBase X509_REVOKED_get0_extensions 673e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x673e, X509_REVOKED_get0_serialNumber(a0))
+ #pragma amicall(AmiSSLBase, 0x673e, X509_REVOKED_get0_extensions(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_trusted 6744 801
+ #pragma libcall AmiSSLBase X509_REVOKED_get0_revocationDate 6744 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6744, X509_trusted(a0))
+ #pragma amicall(AmiSSLBase, 0x6744, X509_REVOKED_get0_revocationDate(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_up_ref 674a 801
+ #pragma libcall AmiSSLBase X509_REVOKED_get0_serialNumber 674a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x674a, X509_up_ref(a0))
+ #pragma amicall(AmiSSLBase, 0x674a, X509_REVOKED_get0_serialNumber(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_STORE_CTX_get_num_untrusted 6750 801
+ #pragma libcall AmiSSLBase X509_trusted 6750 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6750, X509_STORE_CTX_get_num_untrusted(a0))
+ #pragma amicall(AmiSSLBase, 0x6750, X509_trusted(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_STORE_CTX_set0_dane 6756 9802
+ #pragma libcall AmiSSLBase X509_up_ref 6756 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6756, X509_STORE_CTX_set0_dane(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6756, X509_up_ref(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_VERIFY_PARAM_move_peername 675c 9802
+ #pragma libcall AmiSSLBase X509_STORE_CTX_get_num_untrusted 675c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x675c, X509_VERIFY_PARAM_move_peername(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x675c, X509_STORE_CTX_get_num_untrusted(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ASIdentifiers_free 6762 801
+ #pragma libcall AmiSSLBase X509_STORE_CTX_set0_dane 6762 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6762, ASIdentifiers_free(a0))
+ #pragma amicall(AmiSSLBase, 0x6762, X509_STORE_CTX_set0_dane(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2s_ASN1_IA5STRING 6768 9802
+ #pragma libcall AmiSSLBase X509_VERIFY_PARAM_move_peername 6768 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6768, i2s_ASN1_IA5STRING(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6768, X509_VERIFY_PARAM_move_peername(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase s2i_ASN1_IA5STRING 676e 99803
+ #pragma libcall AmiSSLBase ASIdentifiers_free 676e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x676e, s2i_ASN1_IA5STRING(a0,a1,a1))
+ #pragma amicall(AmiSSLBase, 0x676e, ASIdentifiers_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_add_inherit 6774 90803
+ #pragma libcall AmiSSLBase i2s_ASN1_IA5STRING 6774 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6774, v3_addr_add_inherit(a0,d0,a1))
+ #pragma amicall(AmiSSLBase, 0x6774, i2s_ASN1_IA5STRING(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_add_prefix 677a 1a90805
+ #pragma libcall AmiSSLBase s2i_ASN1_IA5STRING 677a 99803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x677a, v3_addr_add_prefix(a0,d0,a1,a2,d1))
+ #pragma amicall(AmiSSLBase, 0x677a, s2i_ASN1_IA5STRING(a0,a1,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_add_range 6780 ba90805
+ #pragma libcall AmiSSLBase v3_addr_add_inherit 6780 90803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6780, v3_addr_add_range(a0,d0,a1,a2,a3))
+ #pragma amicall(AmiSSLBase, 0x6780, v3_addr_add_inherit(a0,d0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_canonize 6786 801
+ #pragma libcall AmiSSLBase v3_addr_add_prefix 6786 1a90805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6786, v3_addr_canonize(a0))
+ #pragma amicall(AmiSSLBase, 0x6786, v3_addr_add_prefix(a0,d0,a1,a2,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_get_afi 678c 801
+ #pragma libcall AmiSSLBase v3_addr_add_range 678c ba90805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x678c, v3_addr_get_afi(a0))
+ #pragma amicall(AmiSSLBase, 0x678c, v3_addr_add_range(a0,d0,a1,a2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_get_range 6792 1a90805
+ #pragma libcall AmiSSLBase v3_addr_canonize 6792 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6792, v3_addr_get_range(a0,d0,a1,a2,d1))
+ #pragma amicall(AmiSSLBase, 0x6792, v3_addr_canonize(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_inherits 6798 801
+ #pragma libcall AmiSSLBase v3_addr_get_afi 6798 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6798, v3_addr_inherits(a0))
+ #pragma amicall(AmiSSLBase, 0x6798, v3_addr_get_afi(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_is_canonical 679e 801
+ #pragma libcall AmiSSLBase v3_addr_get_range 679e 1a90805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x679e, v3_addr_is_canonical(a0))
+ #pragma amicall(AmiSSLBase, 0x679e, v3_addr_get_range(a0,d0,a1,a2,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_subset 67a4 9802
+ #pragma libcall AmiSSLBase v3_addr_inherits 67a4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67a4, v3_addr_subset(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x67a4, v3_addr_inherits(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_addr_validate_path 67aa 801
+ #pragma libcall AmiSSLBase v3_addr_is_canonical 67aa 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67aa, v3_addr_validate_path(a0))
+ #pragma amicall(AmiSSLBase, 0x67aa, v3_addr_is_canonical(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_add_id_or_range 67b0 a90804
+ #pragma libcall AmiSSLBase v3_addr_subset 67b0 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67b0, v3_asid_add_id_or_range(a0,d0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x67b0, v3_addr_subset(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_add_inherit 67b6 0802
+ #pragma libcall AmiSSLBase v3_addr_validate_path 67b6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67b6, v3_asid_add_inherit(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x67b6, v3_addr_validate_path(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_canonize 67bc 801
+ #pragma libcall AmiSSLBase v3_asid_add_id_or_range 67bc a90804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67bc, v3_asid_canonize(a0))
+ #pragma amicall(AmiSSLBase, 0x67bc, v3_asid_add_id_or_range(a0,d0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_inherits 67c2 801
+ #pragma libcall AmiSSLBase v3_asid_add_inherit 67c2 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67c2, v3_asid_inherits(a0))
+ #pragma amicall(AmiSSLBase, 0x67c2, v3_asid_add_inherit(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_is_canonical 67c8 801
+ #pragma libcall AmiSSLBase v3_asid_canonize 67c8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67c8, v3_asid_is_canonical(a0))
+ #pragma amicall(AmiSSLBase, 0x67c8, v3_asid_canonize(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_subset 67ce 9802
+ #pragma libcall AmiSSLBase v3_asid_inherits 67ce 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67ce, v3_asid_subset(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x67ce, v3_asid_inherits(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase v3_asid_validate_path 67d4 801
+ #pragma libcall AmiSSLBase v3_asid_is_canonical 67d4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67d4, v3_asid_validate_path(a0))
+ #pragma amicall(AmiSSLBase, 0x67d4, v3_asid_is_canonical(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get0_subject_key_id 67da 801
+ #pragma libcall AmiSSLBase v3_asid_subset 67da 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67da, X509_get0_subject_key_id(a0))
+ #pragma amicall(AmiSSLBase, 0x67da, v3_asid_subset(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_extended_key_usage 67e0 801
+ #pragma libcall AmiSSLBase v3_asid_validate_path 67e0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67e0, X509_get_extended_key_usage(a0))
+ #pragma amicall(AmiSSLBase, 0x67e0, v3_asid_validate_path(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_extension_flags 67e6 801
+ #pragma libcall AmiSSLBase X509_get0_subject_key_id 67e6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67e6, X509_get_extension_flags(a0))
+ #pragma amicall(AmiSSLBase, 0x67e6, X509_get0_subject_key_id(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_get_key_usage 67ec 801
+ #pragma libcall AmiSSLBase X509_get_extended_key_usage 67ec 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67ec, X509_get_key_usage(a0))
+ #pragma amicall(AmiSSLBase, 0x67ec, X509_get_extended_key_usage(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DTLSv1_listen 67f2 9802
+ #pragma libcall AmiSSLBase X509_get_extension_flags 67f2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67f2, DTLSv1_listen(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x67f2, X509_get_extension_flags(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OPENSSL_init_ssl 67f8 8002
+ #pragma libcall AmiSSLBase X509_get_key_usage 67f8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67f8, OPENSSL_init_ssl(d0,a0))
+ #pragma amicall(AmiSSLBase, 0x67f8, X509_get_key_usage(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_add1_host 67fe 9802
+ #pragma libcall AmiSSLBase DTLSv1_listen 67fe 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x67fe, SSL_add1_host(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x67fe, DTLSv1_listen(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_add_ssl_module 6804 00
+ #pragma libcall AmiSSLBase OPENSSL_init_ssl 6804 8002
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6804, SSL_add_ssl_module())
+ #pragma amicall(AmiSSLBase, 0x6804, OPENSSL_init_ssl(d0,a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CIPHER_get_cipher_nid 680a 801
+ #pragma libcall AmiSSLBase SSL_add1_host 680a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x680a, SSL_CIPHER_get_cipher_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x680a, SSL_add1_host(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CIPHER_get_digest_nid 6810 801
+ #pragma libcall AmiSSLBase SSL_add_ssl_module 6810 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6810, SSL_CIPHER_get_digest_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x6810, SSL_add_ssl_module())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_clear_options 6816 0802
+ #pragma libcall AmiSSLBase SSL_CIPHER_get_cipher_nid 6816 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6816, SSL_clear_options(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6816, SSL_CIPHER_get_cipher_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_config 681c 9802
+ #pragma libcall AmiSSLBase SSL_CIPHER_get_digest_nid 681c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x681c, SSL_config(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x681c, SSL_CIPHER_get_digest_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_clear_options 6822 0802
+ #pragma libcall AmiSSLBase SSL_clear_options 6822 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6822, SSL_CTX_clear_options(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6822, SSL_clear_options(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_config 6828 9802
+ #pragma libcall AmiSSLBase SSL_config 6828 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6828, SSL_CTX_config(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6828, SSL_config(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_dane_enable 682e 801
+ #pragma libcall AmiSSLBase SSL_CTX_clear_options 682e 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x682e, SSL_CTX_dane_enable(a0))
+ #pragma amicall(AmiSSLBase, 0x682e, SSL_CTX_clear_options(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_dane_mtype_set 6834 109804
+ #pragma libcall AmiSSLBase SSL_CTX_config 6834 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6834, SSL_CTX_dane_mtype_set(a0,a1,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x6834, SSL_CTX_config(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_get0_security_ex_data 683a 801
+ #pragma libcall AmiSSLBase SSL_CTX_dane_enable 683a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x683a, SSL_CTX_get0_security_ex_data(a0))
+ #pragma amicall(AmiSSLBase, 0x683a, SSL_CTX_dane_enable(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_get_options 6840 801
+ #pragma libcall AmiSSLBase SSL_CTX_dane_mtype_set 6840 109804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6840, SSL_CTX_get_options(a0))
+ #pragma amicall(AmiSSLBase, 0x6840, SSL_CTX_dane_mtype_set(a0,a1,d0,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_get_security_callback 6846 801
+ #pragma libcall AmiSSLBase SSL_CTX_get0_security_ex_data 6846 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6846, SSL_CTX_get_security_callback(a0))
+ #pragma amicall(AmiSSLBase, 0x6846, SSL_CTX_get0_security_ex_data(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_get_security_level 684c 801
+ #pragma libcall AmiSSLBase SSL_CTX_get_options 684c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x684c, SSL_CTX_get_security_level(a0))
+ #pragma amicall(AmiSSLBase, 0x684c, SSL_CTX_get_options(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set0_security_ex_data 6852 9802
+ #pragma libcall AmiSSLBase SSL_CTX_get_security_callback 6852 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6852, SSL_CTX_set0_security_ex_data(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6852, SSL_CTX_get_security_callback(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_default_verify_dir 6858 801
+ #pragma libcall AmiSSLBase SSL_CTX_get_security_level 6858 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6858, SSL_CTX_set_default_verify_dir(a0))
+ #pragma amicall(AmiSSLBase, 0x6858, SSL_CTX_get_security_level(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_default_verify_file 685e 801
+ #pragma libcall AmiSSLBase SSL_CTX_set0_security_ex_data 685e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x685e, SSL_CTX_set_default_verify_file(a0))
+ #pragma amicall(AmiSSLBase, 0x685e, SSL_CTX_set0_security_ex_data(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_not_resumable_session_callback 6864 9802
+ #pragma libcall AmiSSLBase SSL_CTX_set_default_verify_dir 6864 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6864, SSL_CTX_set_not_resumable_session_callback(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6864, SSL_CTX_set_default_verify_dir(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_options 686a 0802
+ #pragma libcall AmiSSLBase SSL_CTX_set_default_verify_file 686a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x686a, SSL_CTX_set_options(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x686a, SSL_CTX_set_default_verify_file(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_security_callback 6870 9802
+ #pragma libcall AmiSSLBase SSL_CTX_set_not_resumable_session_callback 6870 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6870, SSL_CTX_set_security_callback(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6870, SSL_CTX_set_not_resumable_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_security_level 6876 0802
+ #pragma libcall AmiSSLBase SSL_CTX_set_options 6876 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6876, SSL_CTX_set_security_level(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6876, SSL_CTX_set_options(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_up_ref 687c 801
+ #pragma libcall AmiSSLBase SSL_CTX_set_security_callback 687c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x687c, SSL_CTX_up_ref(a0))
+ #pragma amicall(AmiSSLBase, 0x687c, SSL_CTX_set_security_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_dane_enable 6882 9802
+ #pragma libcall AmiSSLBase SSL_CTX_set_security_level 6882 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6882, SSL_dane_enable(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6882, SSL_CTX_set_security_level(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_dane_tlsa_add 6888 39210806
+ #pragma libcall AmiSSLBase SSL_CTX_up_ref 6888 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6888, SSL_dane_tlsa_add(a0,d0,d1,d2,a1,d3))
+ #pragma amicall(AmiSSLBase, 0x6888, SSL_CTX_up_ref(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get0_dane 688e 801
+ #pragma libcall AmiSSLBase SSL_dane_enable 688e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x688e, SSL_get0_dane(a0))
+ #pragma amicall(AmiSSLBase, 0x688e, SSL_dane_enable(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get0_dane_authority 6894 a9803
+ #pragma libcall AmiSSLBase SSL_dane_tlsa_add 6894 39210806
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6894, SSL_get0_dane_authority(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x6894, SSL_dane_tlsa_add(a0,d0,d1,d2,a1,d3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get0_dane_tlsa 689a 10ba9806
+ #pragma libcall AmiSSLBase SSL_get0_dane 689a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x689a, SSL_get0_dane_tlsa(a0,a1,a2,a3,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x689a, SSL_get0_dane(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get0_peername 68a0 801
+ #pragma libcall AmiSSLBase SSL_get0_dane_authority 68a0 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68a0, SSL_get0_peername(a0))
+ #pragma amicall(AmiSSLBase, 0x68a0, SSL_get0_dane_authority(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get0_security_ex_data 68a6 801
+ #pragma libcall AmiSSLBase SSL_get0_dane_tlsa 68a6 10ba9806
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68a6, SSL_get0_security_ex_data(a0))
+ #pragma amicall(AmiSSLBase, 0x68a6, SSL_get0_dane_tlsa(a0,a1,a2,a3,d0,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_async_wait_fd 68ac 801
+ #pragma libcall AmiSSLBase SSL_get0_peername 68ac 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68ac, SSL_get_async_wait_fd(a0))
+ #pragma amicall(AmiSSLBase, 0x68ac, SSL_get0_peername(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_client_random 68b2 09803
+ #pragma libcall AmiSSLBase SSL_get0_security_ex_data 68b2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68b2, SSL_get_client_random(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x68b2, SSL_get0_security_ex_data(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_options 68b8 801
+ #pragma libcall AmiSSLBase SSL_get1_supported_ciphers 68b8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68b8, SSL_get_options(a0))
+ #pragma amicall(AmiSSLBase, 0x68b8, SSL_get1_supported_ciphers(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_security_callback 68be 801
+ #pragma libcall AmiSSLBase SSL_get_async_wait_fd 68be 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68be, SSL_get_security_callback(a0))
+ #pragma amicall(AmiSSLBase, 0x68be, SSL_get_async_wait_fd(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_security_level 68c4 801
+ #pragma libcall AmiSSLBase SSL_get_client_random 68c4 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68c4, SSL_get_security_level(a0))
+ #pragma amicall(AmiSSLBase, 0x68c4, SSL_get_client_random(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_server_random 68ca 09803
+ #pragma libcall AmiSSLBase SSL_get_options 68ca 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68ca, SSL_get_server_random(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x68ca, SSL_get_options(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_get_state 68d0 801
+ #pragma libcall AmiSSLBase SSL_get_security_callback 68d0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68d0, SSL_get_state(a0))
+ #pragma amicall(AmiSSLBase, 0x68d0, SSL_get_security_callback(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_in_before 68d6 801
+ #pragma libcall AmiSSLBase SSL_get_security_level 68d6 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68d6, SSL_in_before(a0))
+ #pragma amicall(AmiSSLBase, 0x68d6, SSL_get_security_level(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_in_init 68dc 801
+ #pragma libcall AmiSSLBase SSL_get_server_random 68dc 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68dc, SSL_in_init(a0))
+ #pragma amicall(AmiSSLBase, 0x68dc, SSL_get_server_random(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_is_init_finished 68e2 801
+ #pragma libcall AmiSSLBase SSL_get_state 68e2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68e2, SSL_is_init_finished(a0))
+ #pragma amicall(AmiSSLBase, 0x68e2, SSL_get_state(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_SESSION_get0_ticket 68e8 a9803
+ #pragma libcall AmiSSLBase SSL_in_before 68e8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68e8, SSL_SESSION_get0_ticket(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x68e8, SSL_in_before(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_SESSION_get_master_key 68ee 09803
+ #pragma libcall AmiSSLBase SSL_in_init 68ee 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68ee, SSL_SESSION_get_master_key(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x68ee, SSL_in_init(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_SESSION_get_ticket_lifetime_hint 68f4 801
+ #pragma libcall AmiSSLBase SSL_is_init_finished 68f4 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68f4, SSL_SESSION_get_ticket_lifetime_hint(a0))
+ #pragma amicall(AmiSSLBase, 0x68f4, SSL_is_init_finished(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_SESSION_has_ticket 68fa 801
+ #pragma libcall AmiSSLBase SSL_SESSION_get0_ticket 68fa a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x68fa, SSL_SESSION_has_ticket(a0))
+ #pragma amicall(AmiSSLBase, 0x68fa, SSL_SESSION_get0_ticket(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_SESSION_print_keylog 6900 9802
+ #pragma libcall AmiSSLBase SSL_SESSION_get_master_key 6900 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6900, SSL_SESSION_print_keylog(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6900, SSL_SESSION_get_master_key(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_session_reused 6906 801
+ #pragma libcall AmiSSLBase SSL_SESSION_get_ticket_lifetime_hint 6906 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6906, SSL_session_reused(a0))
+ #pragma amicall(AmiSSLBase, 0x6906, SSL_SESSION_get_ticket_lifetime_hint(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set0_security_ex_data 690c 9802
+ #pragma libcall AmiSSLBase SSL_SESSION_has_ticket 690c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x690c, SSL_set0_security_ex_data(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x690c, SSL_SESSION_has_ticket(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set1_host 6912 9802
+ #pragma libcall AmiSSLBase SSL_SESSION_print_keylog 6912 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6912, SSL_set1_host(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6912, SSL_SESSION_print_keylog(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_default_passwd_cb 6918 9802
+ #pragma libcall AmiSSLBase SSL_session_reused 6918 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6918, SSL_set_default_passwd_cb(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6918, SSL_session_reused(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_default_passwd_cb_userdata 691e 9802
+ #pragma libcall AmiSSLBase SSL_set0_security_ex_data 691e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x691e, SSL_set_default_passwd_cb_userdata(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x691e, SSL_set0_security_ex_data(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_hostflags 6924 0802
+ #pragma libcall AmiSSLBase SSL_set1_host 6924 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6924, SSL_set_hostflags(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6924, SSL_set1_host(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_not_resumable_session_callback 692a 9802
+ #pragma libcall AmiSSLBase SSL_set_default_passwd_cb 692a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x692a, SSL_set_not_resumable_session_callback(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x692a, SSL_set_default_passwd_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_options 6930 0802
+ #pragma libcall AmiSSLBase SSL_set_default_passwd_cb_userdata 6930 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6930, SSL_set_options(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6930, SSL_set_default_passwd_cb_userdata(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_rbio 6936 9802
+ #pragma libcall AmiSSLBase SSL_set_hostflags 6936 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6936, SSL_set_rbio(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6936, SSL_set_hostflags(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_security_callback 693c 9802
+ #pragma libcall AmiSSLBase SSL_set_not_resumable_session_callback 693c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x693c, SSL_set_security_callback(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x693c, SSL_set_not_resumable_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_security_level 6942 0802
+ #pragma libcall AmiSSLBase SSL_set_options 6942 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6942, SSL_set_security_level(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x6942, SSL_set_options(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_wbio 6948 9802
+ #pragma libcall AmiSSLBase SSL_set_rbio 6948 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6948, SSL_set_wbio(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6948, SSL_set_rbio(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_up_ref 694e 801
+ #pragma libcall AmiSSLBase SSL_set_security_callback 694e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x694e, SSL_up_ref(a0))
+ #pragma amicall(AmiSSLBase, 0x694e, SSL_set_security_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_use_certificate_chain_file 6954 9802
+ #pragma libcall AmiSSLBase SSL_set_security_level 6954 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6954, SSL_use_certificate_chain_file(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x6954, SSL_set_security_level(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_waiting_for_async 695a 801
+ #pragma libcall AmiSSLBase SSL_set_wbio 695a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x695a, SSL_waiting_for_async(a0))
+ #pragma amicall(AmiSSLBase, 0x695a, SSL_set_wbio(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TLS_client_method 6960 00
+ #pragma libcall AmiSSLBase SSL_up_ref 6960 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6960, TLS_client_method())
+ #pragma amicall(AmiSSLBase, 0x6960, SSL_up_ref(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TLS_method 6966 00
+ #pragma libcall AmiSSLBase SSL_use_certificate_chain_file 6966 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6966, TLS_method())
+ #pragma amicall(AmiSSLBase, 0x6966, SSL_use_certificate_chain_file(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase TLS_server_method 696c 00
+ #pragma libcall AmiSSLBase SSL_waiting_for_async 696c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x696c, TLS_server_method())
+ #pragma amicall(AmiSSLBase, 0x696c, SSL_waiting_for_async(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase TLS_client_method 6972 00
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x6972, TLS_client_method())
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase TLS_method 6978 00
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x6978, TLS_method())
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase TLS_server_method 697e 00
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x697e, TLS_server_method())
 #endif /* __CLIB_PRAGMA_AMICALL */
 
 #endif /* PRAGMAS_AMISSL_PRAGMAS_H */

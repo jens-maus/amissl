@@ -7132,6 +7132,20 @@ STATIC CONST struct EmuTrap stub_main_OPENSSL_cleanse = { TRAPINST, TRAPTYPE, (u
 
 // ---
 
+STATIC int stub_main_CRYPTO_mem_leaks_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->CRYPTO_mem_leaks(
+		(BIO *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_CRYPTO_mem_leaks = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CRYPTO_mem_leaks_PPC };
+
+// ---
+
 STATIC void stub_main_OpenSSLDie_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -8450,18 +8464,6 @@ STATIC void stub_main_ERR_load_ERR_strings_PPC(uint32 *regarray)
 	Self->ERR_load_ERR_strings();
 }
 STATIC CONST struct EmuTrap stub_main_ERR_load_ERR_strings = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ERR_load_ERR_strings_PPC };
-
-// ---
-
-STATIC void stub_main_ERR_load_crypto_strings_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->ERR_load_crypto_strings();
-}
-STATIC CONST struct EmuTrap stub_main_ERR_load_crypto_strings = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ERR_load_crypto_strings_PPC };
 
 // ---
 
@@ -36626,6 +36628,20 @@ STATIC CONST struct EmuTrap stub_main_SSL_SRP_CTX_init = { TRAPINST, TRAPTYPE, (
 
 // ---
 
+STATIC int stub_main_CRYPTO_mem_leaks_fp_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->CRYPTO_mem_leaks_fp(
+		(FILE *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_CRYPTO_mem_leaks_fp = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CRYPTO_mem_leaks_fp_PPC };
+
+// ---
+
 STATIC void stub_main_ERR_load_ENGINE_strings_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -38069,18 +38085,6 @@ STATIC const EC_METHOD * stub_main_EC_GFp_nist_method_PPC(uint32 *regarray)
 	return Self->EC_GFp_nist_method();
 }
 STATIC CONST struct EmuTrap stub_main_EC_GFp_nist_method = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EC_GFp_nist_method_PPC };
-
-// ---
-
-STATIC void stub_main_ENGINE_load_padlock_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->ENGINE_load_padlock();
-}
-STATIC CONST struct EmuTrap stub_main_ENGINE_load_padlock = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ENGINE_load_padlock_PPC };
 
 // ---
 
@@ -40871,18 +40875,6 @@ STATIC int stub_main_ENGINE_load_ssl_client_cert_PPC(uint32 *regarray)
 	);
 }
 STATIC CONST struct EmuTrap stub_main_ENGINE_load_ssl_client_cert = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ENGINE_load_ssl_client_cert_PPC };
-
-// ---
-
-STATIC void stub_main_ENGINE_load_capi_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	Self->ENGINE_load_capi();
-}
-STATIC CONST struct EmuTrap stub_main_ENGINE_load_capi = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ENGINE_load_capi_PPC };
 
 // ---
 
@@ -57319,6 +57311,20 @@ STATIC CONST struct EmuTrap stub_main_PKCS12_SAFEBAG_get0_attr = { TRAPINST, TRA
 
 // ---
 
+STATIC STACK_OF(X509_ATTRIBUTE) * stub_main_PKCS12_SAFEBAG_get0_attrs_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->PKCS12_SAFEBAG_get0_attrs(
+		(PKCS12_SAFEBAG *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_PKCS12_SAFEBAG_get0_attrs = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_PKCS12_SAFEBAG_get0_attrs_PPC };
+
+// ---
+
 STATIC PKCS8_PRIV_KEY_INFO * stub_main_PKCS12_SAFEBAG_get0_p8inf_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -57721,6 +57727,21 @@ STATIC X509_STORE * stub_main_TS_VERIFY_CTX_set_store_PPC(uint32 *regarray)
 	);
 }
 STATIC CONST struct EmuTrap stub_main_TS_VERIFY_CTX_set_store = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_TS_VERIFY_CTX_set_store_PPC };
+
+// ---
+
+STATIC STACK_OF(X509) * stub_main_TS_VERIFY_CTS_set_certs_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->TS_VERIFY_CTS_set_certs(
+		(TS_VERIFY_CTX *)regarray[REG68K_A0/4],
+		(STACK_OF(X509) *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_TS_VERIFY_CTS_set_certs = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_TS_VERIFY_CTS_set_certs_PPC };
 
 // ---
 
@@ -59123,6 +59144,20 @@ STATIC CONST struct EmuTrap stub_main_SSL_get0_security_ex_data = { TRAPINST, TR
 
 // ---
 
+STATIC STACK_OF(SSL_CIPHER) * stub_main_SSL_get1_supported_ciphers_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->SSL_get1_supported_ciphers(
+		(SSL *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_SSL_get1_supported_ciphers = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_get1_supported_ciphers_PPC };
+
+// ---
+
 STATIC int stub_main_SSL_get_async_wait_fd_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -60191,7 +60226,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_free */
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_set_options */
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_get_options */
-	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks */
+	&stub_main_CRYPTO_mem_leaks,
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks_cb */
 	&stub_main_OpenSSLDie,
 	&stub_main_UNIMPLEMENTED, /* ERR_load_CRYPTO_strings */
@@ -60282,7 +60317,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_ERR_load_strings,
 	&stub_main_ERR_unload_strings,
 	&stub_main_ERR_load_ERR_strings,
-	&stub_main_ERR_load_crypto_strings,
+	&stub_main_UNIMPLEMENTED, /* ERR_load_crypto_strings */
 	&stub_main_ERR_free_strings,
 	&stub_main_ERR_remove_state,
 	&stub_main_ERR_get_state,
@@ -62352,7 +62387,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_UNIMPLEMENTED, /* ASN1_i2d_fp */
 	&stub_main_UNIMPLEMENTED, /* BIO_new_fp */
 	&stub_main_UNIMPLEMENTED, /* BN_print_fp */
-	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks_fp */
+	&stub_main_CRYPTO_mem_leaks_fp,
 	&stub_main_UNIMPLEMENTED, /* DHparams_print_fp */
 	&stub_main_UNIMPLEMENTED, /* DSA_print_fp */
 	&stub_main_UNIMPLEMENTED, /* DSAparams_print_fp */
@@ -62535,7 +62570,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_i2d_EC_PUBKEY,
 	&stub_main_UNIMPLEMENTED, /* ECDSA_get_default_method */
 	&stub_main_EC_GFp_nist_method,
-	&stub_main_ENGINE_load_padlock,
+	&stub_main_UNIMPLEMENTED, /* ENGINE_load_padlock */
 	&stub_main_EC_GROUP_set_curve_name,
 	&stub_main_BN_GF2m_mod_sqr_arr,
 	&stub_main_BIO_s_datagram,
@@ -62753,7 +62788,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_ENGINE_set_load_ssl_client_cert_function,
 	&stub_main_ENGINE_get_ssl_client_cert_function,
 	&stub_main_ENGINE_load_ssl_client_cert,
-	&stub_main_ENGINE_load_capi,
+	&stub_main_UNIMPLEMENTED, /* ENGINE_load_capi */
 	&stub_main_ENGINE_register_pkey_meths,
 	&stub_main_ENGINE_get_pkey_asn1_meth_engine,
 	&stub_main_WHIRLPOOL_Init,
@@ -63945,6 +63980,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_PKCS12_SAFEBAG_create_crl,
 	&stub_main_PKCS12_SAFEBAG_create_pkcs8_encrypt,
 	&stub_main_PKCS12_SAFEBAG_get0_attr,
+	&stub_main_PKCS12_SAFEBAG_get0_attrs,
 	&stub_main_PKCS12_SAFEBAG_get0_p8inf,
 	&stub_main_PKCS12_SAFEBAG_get0_pkcs8,
 	&stub_main_PKCS12_SAFEBAG_get0_safes,
@@ -63972,6 +64008,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_TS_VERIFY_CTX_set_flags,
 	&stub_main_TS_VERIFY_CTX_set_imprint,
 	&stub_main_TS_VERIFY_CTX_set_store,
+	&stub_main_TS_VERIFY_CTS_set_certs,
 	&stub_main_i2d_re_X509_CRL_tbs,
 	&stub_main_i2d_re_X509_REQ_tbs,
 	&stub_main_PKCS5_pbe2_set_scrypt,
@@ -64067,6 +64104,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_SSL_get0_dane_tlsa,
 	&stub_main_SSL_get0_peername,
 	&stub_main_SSL_get0_security_ex_data,
+	&stub_main_SSL_get1_supported_ciphers,
 	&stub_main_SSL_get_async_wait_fd,
 	&stub_main_SSL_get_client_random,
 	&stub_main_SSL_get_options,

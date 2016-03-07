@@ -1,4 +1,4 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
 #endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
@@ -504,14 +504,14 @@ struct bio_dgram_sctp_prinfo {
 
 /* BIO_s_file() */
 # ifndef OPENSSL_SYS_AMIGA
-# ifndef OPENSSL_NO_FP_API
-# define BIO_set_fp(b,fp,c)      BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
-# define BIO_get_fp(b,fpp)       BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-# endif /* !OPENSSL_NO_FP_API */
-# else /* !OPENSSL_SYS_AMIGA */
-# define BIO_set_fp_amiga(b,fp,c) BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
-# define BIO_get_fp_amiga(b,fpp)  BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#endif /* !OPENSSL_SYS_AMIGA */
+#  ifndef OPENSSL_NO_STDIO
+#   define BIO_set_fp(b,fp,c)      BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
+#   define BIO_get_fp(b,fpp)       BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+#  endif
+# else
+#  define BIO_set_fp_amiga(b,fp,c) BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
+#  define BIO_get_fp_amiga(b,fpp)  BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+# endif
 
 /* BIO_s_fd() and BIO_s_file() */
 # define BIO_seek(b,ofs) (int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)

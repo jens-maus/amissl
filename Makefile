@@ -434,13 +434,12 @@ $(OBJ_D)/openssl/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
 $(OBJ_D)/openssl/include: $(OBJ_D)/openssl/Makefile.ossl
 	@$(MKDIR) $(OBJ_D)/openssl/include
 	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC) init
-	@sh tools/cpheaders.sh
+	@sh tools/cpheaders.sh $(OBJ_D)
 
 $(LIBCRYPTO): $(OBJ_D)/openssl/include
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC)
+	$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC) APP_CFLAGS="\$$(CFLAG) \$$(APP_CFLAG)" all
 
 $(LIBSSL): $(LIBCRYPTO)
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl INCL_D=../$(OBJ_D)/openssl/include AmiSSL=.. CC=$(CC) .././bin_os4/openssl/libssl.a
 
 ## LIBCMT BUILD RULES ##
 

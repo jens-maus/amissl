@@ -627,7 +627,7 @@ struct AmiSSLIFace
 	APTR CRYPTO_dbg_free_UNIMPLEMENTED;
 	APTR CRYPTO_dbg_set_options_UNIMPLEMENTED;
 	APTR CRYPTO_dbg_get_options_UNIMPLEMENTED;
-	APTR CRYPTO_mem_leaks_UNIMPLEMENTED;
+	int APICALL (*CRYPTO_mem_leaks)(struct AmiSSLIFace *Self, BIO * bio);
 	APTR CRYPTO_mem_leaks_cb_UNIMPLEMENTED;
 	void APICALL (*OpenSSLDie)(struct AmiSSLIFace *Self, const char * file, int line, const char * assertion);
 	APTR ERR_load_CRYPTO_strings_UNIMPLEMENTED;
@@ -719,7 +719,7 @@ struct AmiSSLIFace
 	void APICALL (*ERR_load_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);
 	void APICALL (*ERR_unload_strings)(struct AmiSSLIFace *Self, int lib, ERR_STRING_DATA * str);
 	void APICALL (*ERR_load_ERR_strings)(struct AmiSSLIFace *Self);
-	void APICALL (*ERR_load_crypto_strings)(struct AmiSSLIFace *Self);
+	APTR ERR_load_crypto_strings_UNIMPLEMENTED;
 	void APICALL (*ERR_free_strings)(struct AmiSSLIFace *Self);
 	void APICALL (*ERR_remove_state)(struct AmiSSLIFace *Self, unsigned long pid);
 	ERR_STATE * APICALL (*ERR_get_state)(struct AmiSSLIFace *Self);
@@ -2789,7 +2789,7 @@ struct AmiSSLIFace
 	APTR ASN1_i2d_fp_UNIMPLEMENTED;
 	APTR BIO_new_fp_UNIMPLEMENTED;
 	APTR BN_print_fp_UNIMPLEMENTED;
-	APTR CRYPTO_mem_leaks_fp_UNIMPLEMENTED;
+	int APICALL (*CRYPTO_mem_leaks_fp)(struct AmiSSLIFace *Self, FILE * fp);
 	APTR DHparams_print_fp_UNIMPLEMENTED;
 	APTR DSA_print_fp_UNIMPLEMENTED;
 	APTR DSAparams_print_fp_UNIMPLEMENTED;
@@ -2972,7 +2972,7 @@ struct AmiSSLIFace
 	int APICALL (*i2d_EC_PUBKEY)(struct AmiSSLIFace *Self, EC_KEY * a, unsigned char ** pp);
 	APTR ECDSA_get_default_method_UNIMPLEMENTED;
 	const EC_METHOD * APICALL (*EC_GFp_nist_method)(struct AmiSSLIFace *Self);
-	void APICALL (*ENGINE_load_padlock)(struct AmiSSLIFace *Self);
+	APTR ENGINE_load_padlock_UNIMPLEMENTED;
 	void APICALL (*EC_GROUP_set_curve_name)(struct AmiSSLIFace *Self, EC_GROUP * group, int nid);
 	int APICALL (*BN_GF2m_mod_sqr_arr)(struct AmiSSLIFace *Self, BIGNUM * r, const BIGNUM * a, const int * p, BN_CTX * ctx);
 	BIO_METHOD * APICALL (*BIO_s_datagram)(struct AmiSSLIFace *Self);
@@ -3190,7 +3190,7 @@ struct AmiSSLIFace
 	int APICALL (*ENGINE_set_load_ssl_client_cert_function)(struct AmiSSLIFace *Self, ENGINE * e, ENGINE_SSL_CLIENT_CERT_PTR loadssl_f);
 	ENGINE_SSL_CLIENT_CERT_PTR APICALL (*ENGINE_get_ssl_client_cert_function)(struct AmiSSLIFace *Self, const ENGINE * e);
 	int APICALL (*ENGINE_load_ssl_client_cert)(struct AmiSSLIFace *Self, ENGINE * e, SSL * s, STACK_OF(X509_NAME) * ca_dn, X509 ** pcert, EVP_PKEY ** ppkey, STACK_OF(X509) ** pother, UI_METHOD * ui_method, void * callback_data);
-	void APICALL (*ENGINE_load_capi)(struct AmiSSLIFace *Self);
+	APTR ENGINE_load_capi_UNIMPLEMENTED;
 	int APICALL (*ENGINE_register_pkey_meths)(struct AmiSSLIFace *Self, ENGINE * e);
 	ENGINE * APICALL (*ENGINE_get_pkey_asn1_meth_engine)(struct AmiSSLIFace *Self, int nid);
 	int APICALL (*WHIRLPOOL_Init)(struct AmiSSLIFace *Self, WHIRLPOOL_CTX * c);
@@ -4383,6 +4383,7 @@ struct AmiSSLIFace
 	PKCS12_SAFEBAG * APICALL (*PKCS12_SAFEBAG_create_crl)(struct AmiSSLIFace *Self, X509_CRL * crl);
 	PKCS12_SAFEBAG * APICALL (*PKCS12_SAFEBAG_create_pkcs8_encrypt)(struct AmiSSLIFace *Self, int pbe_nid, const char * pass, int passlen, unsigned char * salt, int saltlen, int iter, PKCS8_PRIV_KEY_INFO * p8inf);
 	ASN1_TYPE * APICALL (*PKCS12_SAFEBAG_get0_attr)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag, int attr_nid);
+	STACK_OF(X509_ATTRIBUTE) * APICALL (*PKCS12_SAFEBAG_get0_attrs)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag);
 	PKCS8_PRIV_KEY_INFO * APICALL (*PKCS12_SAFEBAG_get0_p8inf)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag);
 	X509_SIG * APICALL (*PKCS12_SAFEBAG_get0_pkcs8)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag);
 	STACK_OF(PKCS12_SAFEBAG) * APICALL (*PKCS12_SAFEBAG_get0_safes)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag);
@@ -4410,6 +4411,7 @@ struct AmiSSLIFace
 	int APICALL (*TS_VERIFY_CTX_set_flags)(struct AmiSSLIFace *Self, TS_VERIFY_CTX * ctx, int f);
 	unsigned char * APICALL (*TS_VERIFY_CTX_set_imprint)(struct AmiSSLIFace *Self, TS_VERIFY_CTX * ctx, unsigned char * hexstr, long len);
 	X509_STORE * APICALL (*TS_VERIFY_CTX_set_store)(struct AmiSSLIFace *Self, TS_VERIFY_CTX * ctx, X509_STORE * s);
+	STACK_OF(X509) * APICALL (*TS_VERIFY_CTS_set_certs)(struct AmiSSLIFace *Self, TS_VERIFY_CTX * ctx, STACK_OF(X509) * certs);
 	int APICALL (*i2d_re_X509_CRL_tbs)(struct AmiSSLIFace *Self, X509_CRL * req, unsigned char ** pp);
 	int APICALL (*i2d_re_X509_REQ_tbs)(struct AmiSSLIFace *Self, X509_REQ * req, unsigned char ** pp);
 	X509_ALGOR * APICALL (*PKCS5_pbe2_set_scrypt)(struct AmiSSLIFace *Self, const EVP_CIPHER * cipher, const unsigned char * salt, int saltlen, unsigned char * aiv, uint64_t N, uint64_t r, uint64_t p);
@@ -4505,6 +4507,7 @@ struct AmiSSLIFace
 	int APICALL (*SSL_get0_dane_tlsa)(struct AmiSSLIFace *Self, SSL * s, uint8_t * usage, uint8_t * selector, uint8_t * mtype, unsigned char ** data, size_t * dlen);
 	const char * APICALL (*SSL_get0_peername)(struct AmiSSLIFace *Self, SSL * s);
 	void * APICALL (*SSL_get0_security_ex_data)(struct AmiSSLIFace *Self, const SSL * s);
+	STACK_OF(SSL_CIPHER) * APICALL (*SSL_get1_supported_ciphers)(struct AmiSSLIFace *Self, SSL * s);
 	int APICALL (*SSL_get_async_wait_fd)(struct AmiSSLIFace *Self, SSL * s);
 	size_t APICALL (*SSL_get_client_random)(struct AmiSSLIFace *Self, const SSL * s, unsigned char * out, size_t outlen);
 	unsigned long APICALL (*SSL_get_options)(struct AmiSSLIFace *Self, const SSL * s);

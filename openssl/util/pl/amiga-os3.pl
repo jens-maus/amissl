@@ -9,7 +9,7 @@ $rm='-rm -f';
 $mkdir='mkdir';
 
 # C compiler stuff
-$cc="\$(CC)";
+$cc='$(CC)';
 $cfile="-c ";
 
 if ($debug)
@@ -19,16 +19,16 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -m68020-60 -msoft-float -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -DNO_INLINE_VARARGS -I\$(AmiSSL)/include -I\$(AmiSSL)/include/netinclude -DOPENSSLDIR=\\\"AmiSSL:\\\" -DENGINESDIR=\\\"AmiSSL:engines\\\" -W -Wall";
-$app_cflag="-I\$(AmiSSL)/openssl";
-$lib_cflag="-resident32 -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
+$cflags.=' -m68020-60 -msoft-float -DNDEBUG -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -DNO_INLINE_VARARGS -I$(AmiSSL)/include -I$(AmiSSL)/include/netinclude -DOPENSSLDIR=\"AmiSSL:\" -DENGINESDIR=\"AmiSSL:engines\" -W -Wall';
+$app_cflag='-I$(AmiSSL)/openssl/crypto/include -I$(AmiSSL)/openssl';
+$lib_cflag='-resident32 -DAMISSL_COMPILE';
 $obj='.o';
 $ofile='-o ';
 $define='-D';
 $include='-I';
 
 # EXE linking stuff
-$link='${CC}';
+$link='$(CC)';
 $lflags='-resident32';
 $efile='-o ';
 $exep='';
@@ -45,8 +45,8 @@ $lfile='';
 
 $asm='m68k-amigaos-as';
 $afile='-o ';
-$bn_asm_obj="\$(OBJ_D)/bn_asm_amigaos3_m68k32.o";
-$bn_asm_src="\$(TMP_D)/bn_asm_amigaos3_m68k32.s";
+$bn_asm_obj='$(OBJ_D)/bn_asm_amigaos3_m68k32.o';
+$bn_asm_src='$(TMP_D)/bn_asm_amigaos3_m68k32.s';
 $des_enc_obj="";
 $des_enc_src="";
 $bf_enc_obj="";
@@ -78,7 +78,7 @@ sub do_link_rule
 	$file =~ s/\//$o/g if $o ne '/';
 	$n=&bname($target);
 	$ret.="$target: $files $dep_libs\n";
-	$ret.="\t\$(LINK) ${efile}$target \$(LFLAGS) $files $libs\n\n";
+	$ret.="\t\$(LINK_CMD) ${efile}$target \$(LFLAGS) $files $libs\n\n";
 	return($ret);
 	}
 

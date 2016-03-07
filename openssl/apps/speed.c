@@ -310,8 +310,10 @@ static double Time_F(int s)
 static double Time_F(int s)
 {
     double ret = app_tminterval(s, usertime);
+#ifdef SIGALRM
     if (s == STOP)
         alarm(0);
+#endif
     return ret;
 }
 #endif

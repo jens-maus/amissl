@@ -525,7 +525,9 @@ void CRYPTO_free(void * a) (a0)
 void * CRYPTO_realloc(void * addr, size_t num, const char * file, int line) (a0,d0,a1,d1)
 ==reserve 2
 void OPENSSL_cleanse(void * ptr, size_t len) (a0,d0)
-==reserve 12
+==reserve 10
+int CRYPTO_mem_leaks(BIO * bio) (a0)
+==reserve 1
 void OpenSSLDie(const char * file, int line, const char * assertion) (a0,d0,a1)
 ==reserve 1
 DSO * DSO_new() ()
@@ -617,7 +619,7 @@ void ERR_add_error_data(int num, long dummy, ...) (d0,a0)
 void ERR_load_strings(int lib, ERR_STRING_DATA * str) (d0,a0)
 void ERR_unload_strings(int lib, ERR_STRING_DATA * str) (d0,a0)
 void ERR_load_ERR_strings() ()
-void ERR_load_crypto_strings() ()
+==reserve 1
 void ERR_free_strings() ()
 void ERR_remove_state(unsigned long pid) (d0)
 ERR_STATE * ERR_get_state() ()
@@ -2556,7 +2558,9 @@ void SSL_CTX_set_next_proto_select_cb(SSL_CTX * s, int (*cb)(SSL *ssl, unsigned 
 unsigned int SSL_SESSION_get_compress_id(const SSL_SESSION * s) (a0)
 ==reserve 2
 int SSL_SRP_CTX_init(SSL * s) (a0)
-==reserve 55
+==reserve 4
+int CRYPTO_mem_leaks_fp(FILE * fp) (a0)
+==reserve 50
 void ERR_load_ENGINE_strings() ()
 int ENGINE_set_DSA(ENGINE * e, const DSA_METHOD * dsa_meth) (a0,a1)
 ENGINE_GEN_INT_FUNC_PTR ENGINE_get_finish_function(const ENGINE * e) (a0)
@@ -2680,7 +2684,7 @@ size_t EC_GROUP_get_seed_len(const EC_GROUP * ecgroup) (a0)
 int i2d_EC_PUBKEY(EC_KEY * a, unsigned char ** pp) (a0,a1)
 ==reserve 1
 const EC_METHOD * EC_GFp_nist_method() ()
-void ENGINE_load_padlock() ()
+==reserve 1
 void EC_GROUP_set_curve_name(EC_GROUP * group, int nid) (a0,d0)
 int BN_GF2m_mod_sqr_arr(BIGNUM * r, const BIGNUM * a, const int * p, BN_CTX * ctx) (a0,a1,a2,a3)
 BIO_METHOD * BIO_s_datagram() ()
@@ -2883,7 +2887,7 @@ int CMS_RecipientInfo_set0_pkey(CMS_RecipientInfo * ri, EVP_PKEY * pkey) (a0,a1)
 int ENGINE_set_load_ssl_client_cert_function(ENGINE * e, ENGINE_SSL_CLIENT_CERT_PTR loadssl_f) (a0,a1)
 ENGINE_SSL_CLIENT_CERT_PTR ENGINE_get_ssl_client_cert_function(const ENGINE * e) (a0)
 int ENGINE_load_ssl_client_cert(ENGINE * e, SSL * s, STACK_OF(X509_NAME) * ca_dn, X509 ** pcert, EVP_PKEY ** ppkey, STACK_OF(X509) ** pother, UI_METHOD * ui_method, void * callback_data) (a0,a1,a2,a3,d0,d1,d2,d3)
-void ENGINE_load_capi() ()
+==reserve 1
 int ENGINE_register_pkey_meths(ENGINE * e) (a0)
 ENGINE * ENGINE_get_pkey_asn1_meth_engine(int nid) (d0)
 int WHIRLPOOL_Init(WHIRLPOOL_CTX * c) (a0)
@@ -4024,6 +4028,7 @@ PKCS12_SAFEBAG * PKCS12_SAFEBAG_create_cert(X509 * x509) (a0)
 PKCS12_SAFEBAG * PKCS12_SAFEBAG_create_crl(X509_CRL * crl) (a0)
 PKCS12_SAFEBAG * PKCS12_SAFEBAG_create_pkcs8_encrypt(int pbe_nid, const char * pass, int passlen, unsigned char * salt, int saltlen, int iter, PKCS8_PRIV_KEY_INFO * p8inf) (d0,a0,d1,a1,d2,d3,a2)
 ASN1_TYPE * PKCS12_SAFEBAG_get0_attr(PKCS12_SAFEBAG * bag, int attr_nid) (a0,d0)
+STACK_OF(X509_ATTRIBUTE) * PKCS12_SAFEBAG_get0_attrs(PKCS12_SAFEBAG * bag) (a0)
 PKCS8_PRIV_KEY_INFO * PKCS12_SAFEBAG_get0_p8inf(PKCS12_SAFEBAG * bag) (a0)
 X509_SIG * PKCS12_SAFEBAG_get0_pkcs8(PKCS12_SAFEBAG * bag) (a0)
 STACK_OF(PKCS12_SAFEBAG) * PKCS12_SAFEBAG_get0_safes(PKCS12_SAFEBAG * bag) (a0)
@@ -4051,6 +4056,7 @@ BIO * TS_VERIFY_CTX_set_data(TS_VERIFY_CTX * ctx, BIO * b) (a0,a1)
 int TS_VERIFY_CTX_set_flags(TS_VERIFY_CTX * ctx, int f) (a0,d0)
 unsigned char * TS_VERIFY_CTX_set_imprint(TS_VERIFY_CTX * ctx, unsigned char * hexstr, long len) (a0,a1,d0)
 X509_STORE * TS_VERIFY_CTX_set_store(TS_VERIFY_CTX * ctx, X509_STORE * s) (a0,a1)
+STACK_OF(X509) * TS_VERIFY_CTS_set_certs(TS_VERIFY_CTX * ctx, STACK_OF(X509) * certs) (a0,a1)
 int i2d_re_X509_CRL_tbs(X509_CRL * req, unsigned char ** pp) (a0,a1)
 int i2d_re_X509_REQ_tbs(X509_REQ * req, unsigned char ** pp) (a0,a1)
 X509_ALGOR * PKCS5_pbe2_set_scrypt(const EVP_CIPHER * cipher, const unsigned char * salt, int saltlen, unsigned char * aiv, uint64_t N, uint64_t r, uint64_t p) (a0,a1,d0,a2,d1,d2,d2)
@@ -4146,6 +4152,7 @@ int SSL_get0_dane_authority(SSL * s, X509 ** mcert, EVP_PKEY ** mspki) (a0,a1,a2
 int SSL_get0_dane_tlsa(SSL * s, uint8_t * usage, uint8_t * selector, uint8_t * mtype, unsigned char ** data, size_t * dlen) (a0,a1,a2,a3,d0,d1)
 const char * SSL_get0_peername(SSL * s) (a0)
 void * SSL_get0_security_ex_data(const SSL * s) (a0)
+STACK_OF(SSL_CIPHER) * SSL_get1_supported_ciphers(SSL * s) (a0)
 int SSL_get_async_wait_fd(SSL * s) (a0)
 size_t SSL_get_client_random(const SSL * s, unsigned char * out, size_t outlen) (a0,a1,d0)
 unsigned long SSL_get_options(const SSL * s) (a0)

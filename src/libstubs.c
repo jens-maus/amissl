@@ -115,20 +115,21 @@ int (X509_NAME_print_ex_fp)(FILE *fp, X509_NAME *nm, int indent, unsigned long f
   return ret;
 }
 
-void (CRYPTO_mem_leaks_fp)(FILE *fp)
+int (CRYPTO_mem_leaks_fp)(FILE *fp)
 {
   BIO *b;
+  int ret = 1;
 
-  MemCheck_off();
+  CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_DISABLE);
   b = BIO_new(BIO_s_file());
-  MemCheck_on();
+  CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ENABLE);
+  if(b == NULL)
+    return -1;
 
-  if (b)
-  {
-    BIO_set_fp(b, fp, BIO_NOCLOSE);
-    CRYPTO_mem_leaks(b);
-    BIO_free(b);
-  }
+  BIO_set_fp(b, fp, BIO_NOCLOSE);
+  ret = CRYPTO_mem_leaks(b);
+  BIO_free(b);
+  return ret;
 }
 
 void SAVEDS (ASN1_OBJECT_free)(ASN1_OBJECT *a)

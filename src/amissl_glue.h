@@ -523,6 +523,7 @@ void * SAVEDS ASM LIB_CRYPTO_malloc(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num
 void SAVEDS ASM LIB_CRYPTO_free(REG(a6, __IFACE_OR_BASE), REG(a0, void * a));
 void * SAVEDS ASM LIB_CRYPTO_realloc(REG(a6, __IFACE_OR_BASE), REG(a0, void * addr), REG(d0, size_t num), REG(a1, const char * file), REG(d1, int line));
 void SAVEDS ASM LIB_OPENSSL_cleanse(REG(a6, __IFACE_OR_BASE), REG(a0, void * ptr), REG(d0, size_t len));
+int SAVEDS ASM LIB_CRYPTO_mem_leaks(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio));
 void SAVEDS ASM LIB_OpenSSLDie(REG(a6, __IFACE_OR_BASE), REG(a0, const char * file), REG(d0, int line), REG(a1, const char * assertion));
 DSO * SAVEDS ASM LIB_DSO_new(REG(a6, __IFACE_OR_BASE));
 DSO * SAVEDS ASM LIB_DSO_new_method(REG(a6, __IFACE_OR_BASE), REG(a0, DSO_METHOD * method));
@@ -616,7 +617,6 @@ void SAVEDS ASM LIB_ERR_add_error_data(REG(a6, __IFACE_OR_BASE), REG(d0, int num
 void SAVEDS ASM LIB_ERR_load_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_unload_strings(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str));
 void SAVEDS ASM LIB_ERR_load_ERR_strings(REG(a6, __IFACE_OR_BASE));
-void SAVEDS ASM LIB_ERR_load_crypto_strings(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_ERR_free_strings(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_ERR_remove_state(REG(a6, __IFACE_OR_BASE), REG(d0, unsigned long pid));
 ERR_STATE * SAVEDS ASM LIB_ERR_get_state(REG(a6, __IFACE_OR_BASE));
@@ -2502,6 +2502,7 @@ STACK_OF(SRTP_PROTECTION_PROFILE) * SAVEDS ASM LIB_SSL_get_srtp_profiles(REG(a6,
 void SAVEDS ASM LIB_SSL_CTX_set_next_proto_select_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * s), REG(a1, int (*cb)(SSL *ssl, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)), REG(a2, void * arg));
 unsigned int SAVEDS ASM LIB_SSL_SESSION_get_compress_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
 int SAVEDS ASM LIB_SSL_SRP_CTX_init(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
+int SAVEDS ASM LIB_CRYPTO_mem_leaks_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp));
 void SAVEDS ASM LIB_ERR_load_ENGINE_strings(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_ENGINE_set_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, const DSA_METHOD * dsa_meth));
 ENGINE_GEN_INT_FUNC_PTR SAVEDS ASM LIB_ENGINE_get_finish_function(REG(a6, __IFACE_OR_BASE), REG(a0, const ENGINE * e));
@@ -2602,7 +2603,6 @@ unsigned char * SAVEDS ASM LIB_SHA224(REG(a6, __IFACE_OR_BASE), REG(a0, const un
 size_t SAVEDS ASM LIB_EC_GROUP_get_seed_len(REG(a6, __IFACE_OR_BASE), REG(a0, const EC_GROUP * ecgroup));
 int SAVEDS ASM LIB_i2d_EC_PUBKEY(REG(a6, __IFACE_OR_BASE), REG(a0, EC_KEY * a), REG(a1, unsigned char ** pp));
 const EC_METHOD * SAVEDS ASM LIB_EC_GFp_nist_method(REG(a6, __IFACE_OR_BASE));
-void SAVEDS ASM LIB_ENGINE_load_padlock(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_EC_GROUP_set_curve_name(REG(a6, __IFACE_OR_BASE), REG(a0, EC_GROUP * group), REG(d0, int nid));
 int SAVEDS ASM LIB_BN_GF2m_mod_sqr_arr(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNUM * r), REG(a1, const BIGNUM * a), REG(a2, const int * p), REG(a3, BN_CTX * ctx));
 BIO_METHOD * SAVEDS ASM LIB_BIO_s_datagram(REG(a6, __IFACE_OR_BASE));
@@ -2783,7 +2783,6 @@ int SAVEDS ASM LIB_CMS_RecipientInfo_set0_pkey(REG(a6, __IFACE_OR_BASE), REG(a0,
 int SAVEDS ASM LIB_ENGINE_set_load_ssl_client_cert_function(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, ENGINE_SSL_CLIENT_CERT_PTR loadssl_f));
 ENGINE_SSL_CLIENT_CERT_PTR SAVEDS ASM LIB_ENGINE_get_ssl_client_cert_function(REG(a6, __IFACE_OR_BASE), REG(a0, const ENGINE * e));
 int SAVEDS ASM LIB_ENGINE_load_ssl_client_cert(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, SSL * s), REG(a2, STACK_OF(X509_NAME) * ca_dn), REG(a3, X509 ** pcert), REG(d0, EVP_PKEY ** ppkey), REG(d1, STACK_OF(X509) ** pother), REG(d2, UI_METHOD * ui_method), REG(d3, void * callback_data));
-void SAVEDS ASM LIB_ENGINE_load_capi(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_ENGINE_register_pkey_meths(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e));
 ENGINE * SAVEDS ASM LIB_ENGINE_get_pkey_asn1_meth_engine(REG(a6, __IFACE_OR_BASE), REG(d0, int nid));
 int SAVEDS ASM LIB_WHIRLPOOL_Init(REG(a6, __IFACE_OR_BASE), REG(a0, WHIRLPOOL_CTX * c));
@@ -3879,6 +3878,7 @@ PKCS12_SAFEBAG * SAVEDS ASM LIB_PKCS12_SAFEBAG_create_cert(REG(a6, __IFACE_OR_BA
 PKCS12_SAFEBAG * SAVEDS ASM LIB_PKCS12_SAFEBAG_create_crl(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * crl));
 PKCS12_SAFEBAG * SAVEDS ASM LIB_PKCS12_SAFEBAG_create_pkcs8_encrypt(REG(a6, __IFACE_OR_BASE), REG(d0, int pbe_nid), REG(a0, const char * pass), REG(d1, int passlen), REG(a1, unsigned char * salt), REG(d2, int saltlen), REG(d3, int iter), REG(a2, PKCS8_PRIV_KEY_INFO * p8inf));
 ASN1_TYPE * SAVEDS ASM LIB_PKCS12_SAFEBAG_get0_attr(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag), REG(d0, int attr_nid));
+STACK_OF(X509_ATTRIBUTE) * SAVEDS ASM LIB_PKCS12_SAFEBAG_get0_attrs(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag));
 PKCS8_PRIV_KEY_INFO * SAVEDS ASM LIB_PKCS12_SAFEBAG_get0_p8inf(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag));
 X509_SIG * SAVEDS ASM LIB_PKCS12_SAFEBAG_get0_pkcs8(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag));
 STACK_OF(PKCS12_SAFEBAG) * SAVEDS ASM LIB_PKCS12_SAFEBAG_get0_safes(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag));
@@ -3906,6 +3906,7 @@ BIO * SAVEDS ASM LIB_TS_VERIFY_CTX_set_data(REG(a6, __IFACE_OR_BASE), REG(a0, TS
 int SAVEDS ASM LIB_TS_VERIFY_CTX_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(d0, int f));
 unsigned char * SAVEDS ASM LIB_TS_VERIFY_CTX_set_imprint(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, unsigned char * hexstr), REG(d0, long len));
 X509_STORE * SAVEDS ASM LIB_TS_VERIFY_CTX_set_store(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, X509_STORE * s));
+STACK_OF(X509) * SAVEDS ASM LIB_TS_VERIFY_CTS_set_certs(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, STACK_OF(X509) * certs));
 int SAVEDS ASM LIB_i2d_re_X509_CRL_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * req), REG(a1, unsigned char ** pp));
 int SAVEDS ASM LIB_i2d_re_X509_REQ_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, unsigned char ** pp));
 X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d2, uint64_t p));
@@ -4001,6 +4002,7 @@ int SAVEDS ASM LIB_SSL_get0_dane_authority(REG(a6, __IFACE_OR_BASE), REG(a0, SSL
 int SAVEDS ASM LIB_SSL_get0_dane_tlsa(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, uint8_t * usage), REG(a2, uint8_t * selector), REG(a3, uint8_t * mtype), REG(d0, unsigned char ** data), REG(d1, size_t * dlen));
 const char * SAVEDS ASM LIB_SSL_get0_peername(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 void * SAVEDS ASM LIB_SSL_get0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
+STACK_OF(SSL_CIPHER) * SAVEDS ASM LIB_SSL_get1_supported_ciphers(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 int SAVEDS ASM LIB_SSL_get_async_wait_fd(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 size_t SAVEDS ASM LIB_SSL_get_client_random(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s), REG(a1, unsigned char * out), REG(d0, size_t outlen));
 unsigned long SAVEDS ASM LIB_SSL_get_options(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
@@ -4626,7 +4628,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_free */ \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_set_options */ \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_get_options */ \
-    LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks */ \
+    LFUNC_FA_(CRYPTO_mem_leaks) \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks_cb */ \
     LFUNC_FA_(OpenSSLDie) \
     LFUNC_FA_(UNIMPLEMENTED) /* ERR_load_CRYPTO_strings */ \
@@ -4718,7 +4720,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(ERR_load_strings) \
     LFUNC_FA_(ERR_unload_strings) \
     LFUNC_FA_(ERR_load_ERR_strings) \
-    LFUNC_FA_(ERR_load_crypto_strings) \
+    LFUNC_FA_(UNIMPLEMENTED) /* ERR_load_crypto_strings */ \
     LFUNC_FA_(ERR_free_strings) \
     LFUNC_FA_(ERR_remove_state) \
     LFUNC_FA_(ERR_get_state) \
@@ -6788,7 +6790,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(UNIMPLEMENTED) /* ASN1_i2d_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* BIO_new_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* BN_print_fp */ \
-    LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks_fp */ \
+    LFUNC_FA_(CRYPTO_mem_leaks_fp) \
     LFUNC_FA_(UNIMPLEMENTED) /* DHparams_print_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* DSA_print_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* DSAparams_print_fp */ \
@@ -6971,7 +6973,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(i2d_EC_PUBKEY) \
     LFUNC_FA_(UNIMPLEMENTED) /* ECDSA_get_default_method */ \
     LFUNC_FA_(EC_GFp_nist_method) \
-    LFUNC_FA_(ENGINE_load_padlock) \
+    LFUNC_FA_(UNIMPLEMENTED) /* ENGINE_load_padlock */ \
     LFUNC_FA_(EC_GROUP_set_curve_name) \
     LFUNC_FA_(BN_GF2m_mod_sqr_arr) \
     LFUNC_FA_(BIO_s_datagram) \
@@ -7189,7 +7191,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(ENGINE_set_load_ssl_client_cert_function) \
     LFUNC_FA_(ENGINE_get_ssl_client_cert_function) \
     LFUNC_FA_(ENGINE_load_ssl_client_cert) \
-    LFUNC_FA_(ENGINE_load_capi) \
+    LFUNC_FA_(UNIMPLEMENTED) /* ENGINE_load_capi */ \
     LFUNC_FA_(ENGINE_register_pkey_meths) \
     LFUNC_FA_(ENGINE_get_pkey_asn1_meth_engine) \
     LFUNC_FA_(WHIRLPOOL_Init) \
@@ -8382,6 +8384,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(PKCS12_SAFEBAG_create_crl) \
     LFUNC_FA_(PKCS12_SAFEBAG_create_pkcs8_encrypt) \
     LFUNC_FA_(PKCS12_SAFEBAG_get0_attr) \
+    LFUNC_FA_(PKCS12_SAFEBAG_get0_attrs) \
     LFUNC_FA_(PKCS12_SAFEBAG_get0_p8inf) \
     LFUNC_FA_(PKCS12_SAFEBAG_get0_pkcs8) \
     LFUNC_FA_(PKCS12_SAFEBAG_get0_safes) \
@@ -8409,6 +8412,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(TS_VERIFY_CTX_set_flags) \
     LFUNC_FA_(TS_VERIFY_CTX_set_imprint) \
     LFUNC_FA_(TS_VERIFY_CTX_set_store) \
+    LFUNC_FA_(TS_VERIFY_CTS_set_certs) \
     LFUNC_FA_(i2d_re_X509_CRL_tbs) \
     LFUNC_FA_(i2d_re_X509_REQ_tbs) \
     LFUNC_FA_(PKCS5_pbe2_set_scrypt) \
@@ -8504,6 +8508,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(SSL_get0_dane_tlsa) \
     LFUNC_FA_(SSL_get0_peername) \
     LFUNC_FA_(SSL_get0_security_ex_data) \
+    LFUNC_FA_(SSL_get1_supported_ciphers) \
     LFUNC_FA_(SSL_get_async_wait_fd) \
     LFUNC_FA_(SSL_get_client_random) \
     LFUNC_FA_(SSL_get_options) \

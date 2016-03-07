@@ -2341,8 +2341,8 @@
     </method>
     <method name="CRYPTO_dbg_get_options" result="long" status="unimplemented">
     </method>
-    <method name="CRYPTO_mem_leaks" result="void" status="unimplemented">
-      <arg name="bio" type="struct bio_st *" m68kreg="a0"/>
+    <method name="CRYPTO_mem_leaks" result="int">
+      <arg name="bio" type="BIO *" m68kreg="a0"/>
     </method>
     <method name="CRYPTO_mem_leaks_cb" result="void" status="unimplemented">
       <arg name="cb" type="CRYPTO_MEM_LEAK_CB *" m68kreg="a0"/>
@@ -2723,7 +2723,7 @@
     </method>
     <method name="ERR_load_ERR_strings" result="void">
     </method>
-    <method name="ERR_load_crypto_strings" result="void">
+    <method name="ERR_load_crypto_strings" result="void" status="unimplemented">
     </method>
     <method name="ERR_free_strings" result="void">
     </method>
@@ -11285,7 +11285,7 @@
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="const BIGNUM *" m68kreg="a1"/>
     </method>
-    <method name="CRYPTO_mem_leaks_fp" result="void" status="unimplemented">
+    <method name="CRYPTO_mem_leaks_fp" result="int">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
     </method>
     <method name="DHparams_print_fp" result="int" status="unimplemented">
@@ -11976,7 +11976,7 @@
     </method>
     <method name="EC_GFp_nist_method" result="const EC_METHOD *">
     </method>
-    <method name="ENGINE_load_padlock" result="void">
+    <method name="ENGINE_load_padlock" result="void" status="unimplemented">
     </method>
     <method name="EC_GROUP_set_curve_name" result="void">
       <arg name="group" type="EC_GROUP *" m68kreg="a0"/>
@@ -12963,7 +12963,7 @@
       <arg name="ui_method" type="UI_METHOD *" m68kreg="d2"/>
       <arg name="callback_data" type="void *" m68kreg="d3"/>
     </method>
-    <method name="ENGINE_load_capi" result="void">
+    <method name="ENGINE_load_capi" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_register_pkey_meths" result="int">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
@@ -17926,6 +17926,9 @@
       <arg name="bag" type="PKCS12_SAFEBAG *" m68kreg="a0"/>
       <arg name="attr_nid" type="int" m68kreg="d0"/>
     </method>
+    <method name="PKCS12_SAFEBAG_get0_attrs" result="STACK_OF(X509_ATTRIBUTE) *">
+      <arg name="bag" type="PKCS12_SAFEBAG *" m68kreg="a0"/>
+    </method>
     <method name="PKCS12_SAFEBAG_get0_p8inf" result="PKCS8_PRIV_KEY_INFO *">
       <arg name="bag" type="PKCS12_SAFEBAG *" m68kreg="a0"/>
     </method>
@@ -18035,6 +18038,10 @@
     <method name="TS_VERIFY_CTX_set_store" result="X509_STORE *">
       <arg name="ctx" type="TS_VERIFY_CTX *" m68kreg="a0"/>
       <arg name="s" type="X509_STORE *" m68kreg="a1"/>
+    </method>
+    <method name="TS_VERIFY_CTS_set_certs" result="STACK_OF(X509) *">
+      <arg name="ctx" type="TS_VERIFY_CTX *" m68kreg="a0"/>
+      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
     </method>
     <method name="i2d_re_X509_CRL_tbs" result="int">
       <arg name="req" type="X509_CRL *" m68kreg="a0"/>
@@ -18390,6 +18397,9 @@
     </method>
     <method name="SSL_get0_security_ex_data" result="void *">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get1_supported_ciphers" result="STACK_OF(SSL_CIPHER) *">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_async_wait_fd" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>

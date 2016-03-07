@@ -603,7 +603,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_CRYPTO_dbg_free_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_dbg_set_options_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_dbg_get_options_UNIMPLEMENTED
-	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_UNIMPLEMENTED
+	    FPTR IAmiSSL_CRYPTO_mem_leaks
 	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_cb_UNIMPLEMENTED
 	    FPTR IAmiSSL_OpenSSLDie
 	    FPTR AmiSSLIFace_ERR_load_CRYPTO_strings_UNIMPLEMENTED
@@ -695,7 +695,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ERR_load_strings
 	    FPTR IAmiSSL_ERR_unload_strings
 	    FPTR IAmiSSL_ERR_load_ERR_strings
-	    FPTR IAmiSSL_ERR_load_crypto_strings
+	    FPTR AmiSSLIFace_ERR_load_crypto_strings_UNIMPLEMENTED
 	    FPTR IAmiSSL_ERR_free_strings
 	    FPTR IAmiSSL_ERR_remove_state
 	    FPTR IAmiSSL_ERR_get_state
@@ -2765,7 +2765,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_ASN1_i2d_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_BIO_new_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_BN_print_fp_UNIMPLEMENTED
-	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_fp_UNIMPLEMENTED
+	    FPTR IAmiSSL_CRYPTO_mem_leaks_fp
 	    FPTR AmiSSLIFace_DHparams_print_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DSA_print_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DSAparams_print_fp_UNIMPLEMENTED
@@ -2948,7 +2948,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_i2d_EC_PUBKEY
 	    FPTR AmiSSLIFace_ECDSA_get_default_method_UNIMPLEMENTED
 	    FPTR IAmiSSL_EC_GFp_nist_method
-	    FPTR IAmiSSL_ENGINE_load_padlock
+	    FPTR AmiSSLIFace_ENGINE_load_padlock_UNIMPLEMENTED
 	    FPTR IAmiSSL_EC_GROUP_set_curve_name
 	    FPTR IAmiSSL_BN_GF2m_mod_sqr_arr
 	    FPTR IAmiSSL_BIO_s_datagram
@@ -3166,7 +3166,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ENGINE_set_load_ssl_client_cert_function
 	    FPTR IAmiSSL_ENGINE_get_ssl_client_cert_function
 	    FPTR IAmiSSL_ENGINE_load_ssl_client_cert
-	    FPTR IAmiSSL_ENGINE_load_capi
+	    FPTR AmiSSLIFace_ENGINE_load_capi_UNIMPLEMENTED
 	    FPTR IAmiSSL_ENGINE_register_pkey_meths
 	    FPTR IAmiSSL_ENGINE_get_pkey_asn1_meth_engine
 	    FPTR IAmiSSL_WHIRLPOOL_Init
@@ -4359,6 +4359,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_create_crl
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_create_pkcs8_encrypt
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_get0_attr
+	    FPTR IAmiSSL_PKCS12_SAFEBAG_get0_attrs
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_get0_p8inf
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_get0_pkcs8
 	    FPTR IAmiSSL_PKCS12_SAFEBAG_get0_safes
@@ -4386,6 +4387,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_VERIFY_CTX_set_flags
 	    FPTR IAmiSSL_TS_VERIFY_CTX_set_imprint
 	    FPTR IAmiSSL_TS_VERIFY_CTX_set_store
+	    FPTR IAmiSSL_TS_VERIFY_CTS_set_certs
 	    FPTR IAmiSSL_i2d_re_X509_CRL_tbs
 	    FPTR IAmiSSL_i2d_re_X509_REQ_tbs
 	    FPTR IAmiSSL_PKCS5_pbe2_set_scrypt
@@ -4481,6 +4483,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SSL_get0_dane_tlsa
 	    FPTR IAmiSSL_SSL_get0_peername
 	    FPTR IAmiSSL_SSL_get0_security_ex_data
+	    FPTR IAmiSSL_SSL_get1_supported_ciphers
 	    FPTR IAmiSSL_SSL_get_async_wait_fd
 	    FPTR IAmiSSL_SSL_get_client_random
 	    FPTR IAmiSSL_SSL_get_options

@@ -1,4 +1,4 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
 #endif
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
