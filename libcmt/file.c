@@ -321,7 +321,7 @@ void
 setbuf(FILE *stream,char *buf)
 {
 	if(buf == NULL)
-		setvbuf(stream,NULL,IOBF_BUFFER_MODE_NONE,0);
+		setvbuf(stream,NULL,_IONBF,0);
 	else
-		setvbuf(stream,buf,IOBF_BUFFER_MODE_FULL,BUFSIZ);
+		setvbuf(stream,buf,_IOFBF,BUFSIZ);
 }
