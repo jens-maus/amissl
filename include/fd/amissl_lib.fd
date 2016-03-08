@@ -513,8 +513,6 @@ CRYPTO_free(a)(a0)
 CRYPTO_realloc(addr,num,file,line)(a0,d0,a1,d1)
 ##bias 3474
 OPENSSL_cleanse(ptr,len)(a0,d0)
-##bias 3540
-CRYPTO_mem_leaks(bio)(a0)
 ##bias 3552
 OpenSSLDie(file,line,assertion)(a0,d0,a1)
 ##bias 3564
@@ -2543,8 +2541,6 @@ SSL_CTX_set_next_proto_select_cb(s,cb,arg)(a0,a1,a2)
 SSL_SESSION_get_compress_id(s)(a0)
 ##bias 16476
 SSL_SRP_CTX_init(s)(a0)
-##bias 16506
-CRYPTO_mem_leaks_fp(fp)(a0)
 ##bias 16812
 ERR_load_ENGINE_strings()()
 ENGINE_set_DSA(e,dsa_meth)(a0,a1)

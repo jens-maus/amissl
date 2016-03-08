@@ -603,7 +603,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_CRYPTO_dbg_free_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_dbg_set_options_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_dbg_get_options_UNIMPLEMENTED
-	    FPTR IAmiSSL_CRYPTO_mem_leaks
+	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_cb_UNIMPLEMENTED
 	    FPTR IAmiSSL_OpenSSLDie
 	    FPTR AmiSSLIFace_ERR_load_CRYPTO_strings_UNIMPLEMENTED
@@ -2765,7 +2765,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_ASN1_i2d_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_BIO_new_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_BN_print_fp_UNIMPLEMENTED
-	    FPTR IAmiSSL_CRYPTO_mem_leaks_fp
+	    FPTR AmiSSLIFace_CRYPTO_mem_leaks_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DHparams_print_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DSA_print_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DSAparams_print_fp_UNIMPLEMENTED

@@ -627,7 +627,7 @@ struct AmiSSLIFace
 	APTR CRYPTO_dbg_free_UNIMPLEMENTED;
 	APTR CRYPTO_dbg_set_options_UNIMPLEMENTED;
 	APTR CRYPTO_dbg_get_options_UNIMPLEMENTED;
-	int APICALL (*CRYPTO_mem_leaks)(struct AmiSSLIFace *Self, BIO * bio);
+	APTR CRYPTO_mem_leaks_UNIMPLEMENTED;
 	APTR CRYPTO_mem_leaks_cb_UNIMPLEMENTED;
 	void APICALL (*OpenSSLDie)(struct AmiSSLIFace *Self, const char * file, int line, const char * assertion);
 	APTR ERR_load_CRYPTO_strings_UNIMPLEMENTED;
@@ -2789,7 +2789,7 @@ struct AmiSSLIFace
 	APTR ASN1_i2d_fp_UNIMPLEMENTED;
 	APTR BIO_new_fp_UNIMPLEMENTED;
 	APTR BN_print_fp_UNIMPLEMENTED;
-	int APICALL (*CRYPTO_mem_leaks_fp)(struct AmiSSLIFace *Self, FILE * fp);
+	APTR CRYPTO_mem_leaks_fp_UNIMPLEMENTED;
 	APTR DHparams_print_fp_UNIMPLEMENTED;
 	APTR DSA_print_fp_UNIMPLEMENTED;
 	APTR DSAparams_print_fp_UNIMPLEMENTED;

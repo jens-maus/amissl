@@ -525,9 +525,7 @@ void CRYPTO_free(void * a) (a0)
 void * CRYPTO_realloc(void * addr, size_t num, const char * file, int line) (a0,d0,a1,d1)
 ==reserve 2
 void OPENSSL_cleanse(void * ptr, size_t len) (a0,d0)
-==reserve 10
-int CRYPTO_mem_leaks(BIO * bio) (a0)
-==reserve 1
+==reserve 12
 void OpenSSLDie(const char * file, int line, const char * assertion) (a0,d0,a1)
 ==reserve 1
 DSO * DSO_new() ()
@@ -2558,9 +2556,7 @@ void SSL_CTX_set_next_proto_select_cb(SSL_CTX * s, int (*cb)(SSL *ssl, unsigned 
 unsigned int SSL_SESSION_get_compress_id(const SSL_SESSION * s) (a0)
 ==reserve 2
 int SSL_SRP_CTX_init(SSL * s) (a0)
-==reserve 4
-int CRYPTO_mem_leaks_fp(FILE * fp) (a0)
-==reserve 50
+==reserve 55
 void ERR_load_ENGINE_strings() ()
 int ENGINE_set_DSA(ENGINE * e, const DSA_METHOD * dsa_meth) (a0,a1)
 ENGINE_GEN_INT_FUNC_PTR ENGINE_get_finish_function(const ENGINE * e) (a0)

@@ -3410,13 +3410,6 @@ void SAVEDS ASM LIB_OPENSSL_cleanse(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, voi
 
 // ---
 
-int SAVEDS ASM LIB_CRYPTO_mem_leaks(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bio))
-{
-	return CRYPTO_mem_leaks(bio);
-}
-
-// ---
-
 void SAVEDS ASM LIB_OpenSSLDie(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * file), REG(d0, int line), REG(a1, const char * assertion))
 {
 	OpenSSLDie(file, line, assertion);
@@ -17234,13 +17227,6 @@ unsigned int SAVEDS ASM LIB_SSL_SESSION_get_compress_id(REG(a6, UNUSED __IFACE_O
 int SAVEDS ASM LIB_SSL_SRP_CTX_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s))
 {
 	return SSL_SRP_CTX_init(s);
-}
-
-// ---
-
-int SAVEDS ASM LIB_CRYPTO_mem_leaks_fp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, FILE * fp))
-{
-	return CRYPTO_mem_leaks_fp(fp);
 }
 
 // ---

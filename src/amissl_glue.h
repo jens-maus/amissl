@@ -523,7 +523,6 @@ void * SAVEDS ASM LIB_CRYPTO_malloc(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num
 void SAVEDS ASM LIB_CRYPTO_free(REG(a6, __IFACE_OR_BASE), REG(a0, void * a));
 void * SAVEDS ASM LIB_CRYPTO_realloc(REG(a6, __IFACE_OR_BASE), REG(a0, void * addr), REG(d0, size_t num), REG(a1, const char * file), REG(d1, int line));
 void SAVEDS ASM LIB_OPENSSL_cleanse(REG(a6, __IFACE_OR_BASE), REG(a0, void * ptr), REG(d0, size_t len));
-int SAVEDS ASM LIB_CRYPTO_mem_leaks(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bio));
 void SAVEDS ASM LIB_OpenSSLDie(REG(a6, __IFACE_OR_BASE), REG(a0, const char * file), REG(d0, int line), REG(a1, const char * assertion));
 DSO * SAVEDS ASM LIB_DSO_new(REG(a6, __IFACE_OR_BASE));
 DSO * SAVEDS ASM LIB_DSO_new_method(REG(a6, __IFACE_OR_BASE), REG(a0, DSO_METHOD * method));
@@ -2502,7 +2501,6 @@ STACK_OF(SRTP_PROTECTION_PROFILE) * SAVEDS ASM LIB_SSL_get_srtp_profiles(REG(a6,
 void SAVEDS ASM LIB_SSL_CTX_set_next_proto_select_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * s), REG(a1, int (*cb)(SSL *ssl, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)), REG(a2, void * arg));
 unsigned int SAVEDS ASM LIB_SSL_SESSION_get_compress_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s));
 int SAVEDS ASM LIB_SSL_SRP_CTX_init(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
-int SAVEDS ASM LIB_CRYPTO_mem_leaks_fp(REG(a6, __IFACE_OR_BASE), REG(a0, FILE * fp));
 void SAVEDS ASM LIB_ERR_load_ENGINE_strings(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_ENGINE_set_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, ENGINE * e), REG(a1, const DSA_METHOD * dsa_meth));
 ENGINE_GEN_INT_FUNC_PTR SAVEDS ASM LIB_ENGINE_get_finish_function(REG(a6, __IFACE_OR_BASE), REG(a0, const ENGINE * e));
@@ -4628,7 +4626,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_free */ \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_set_options */ \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_dbg_get_options */ \
-    LFUNC_FA_(CRYPTO_mem_leaks) \
+    LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks */ \
     LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks_cb */ \
     LFUNC_FA_(OpenSSLDie) \
     LFUNC_FA_(UNIMPLEMENTED) /* ERR_load_CRYPTO_strings */ \
@@ -6790,7 +6788,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(UNIMPLEMENTED) /* ASN1_i2d_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* BIO_new_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* BN_print_fp */ \
-    LFUNC_FA_(CRYPTO_mem_leaks_fp) \
+    LFUNC_FA_(UNIMPLEMENTED) /* CRYPTO_mem_leaks_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* DHparams_print_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* DSA_print_fp */ \
     LFUNC_FA_(UNIMPLEMENTED) /* DSAparams_print_fp */ \

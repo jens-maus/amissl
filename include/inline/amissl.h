@@ -1952,10 +1952,6 @@ typedef ULONG _sfdc_vararg;
 	LP2NR(0xd92, OPENSSL_cleanse , void *, ___ptr, a0, size_t, ___len, d0,\
 	, AMISSL_BASE_NAME)
 
-#define CRYPTO_mem_leaks(___bio) \
-	LP1(0xdd4, int, CRYPTO_mem_leaks , BIO *, ___bio, a0,\
-	, AMISSL_BASE_NAME)
-
 #define OpenSSLDie(___file, ___line, ___assertion) \
 	LP3NR(0xde0, OpenSSLDie , const char *, ___file, a0, int, ___line, d0, const char *, ___assertion, a1,\
 	, AMISSL_BASE_NAME)
@@ -9843,10 +9839,6 @@ typedef ULONG _sfdc_vararg;
 
 #define SSL_SRP_CTX_init(___s) \
 	LP1(0x405c, int, SSL_SRP_CTX_init , SSL *, ___s, a0,\
-	, AMISSL_BASE_NAME)
-
-#define CRYPTO_mem_leaks_fp(___fp) \
-	LP1(0x407a, int, CRYPTO_mem_leaks_fp , FILE *, ___fp, a0,\
 	, AMISSL_BASE_NAME)
 
 #define ERR_load_ENGINE_strings() \

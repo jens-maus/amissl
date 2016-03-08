@@ -7132,20 +7132,6 @@ STATIC CONST struct EmuTrap stub_main_OPENSSL_cleanse = { TRAPINST, TRAPTYPE, (u
 
 // ---
 
-STATIC int stub_main_CRYPTO_mem_leaks_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->CRYPTO_mem_leaks(
-		(BIO *)regarray[REG68K_A0/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_CRYPTO_mem_leaks = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CRYPTO_mem_leaks_PPC };
-
-// ---
-
 STATIC void stub_main_OpenSSLDie_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -36628,20 +36614,6 @@ STATIC CONST struct EmuTrap stub_main_SSL_SRP_CTX_init = { TRAPINST, TRAPTYPE, (
 
 // ---
 
-STATIC int stub_main_CRYPTO_mem_leaks_fp_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->CRYPTO_mem_leaks_fp(
-		(FILE *)regarray[REG68K_A0/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_CRYPTO_mem_leaks_fp = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CRYPTO_mem_leaks_fp_PPC };
-
-// ---
-
 STATIC void stub_main_ERR_load_ENGINE_strings_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -60226,7 +60198,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_free */
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_set_options */
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_dbg_get_options */
-	&stub_main_CRYPTO_mem_leaks,
+	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks */
 	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks_cb */
 	&stub_main_OpenSSLDie,
 	&stub_main_UNIMPLEMENTED, /* ERR_load_CRYPTO_strings */
@@ -62387,7 +62359,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_UNIMPLEMENTED, /* ASN1_i2d_fp */
 	&stub_main_UNIMPLEMENTED, /* BIO_new_fp */
 	&stub_main_UNIMPLEMENTED, /* BN_print_fp */
-	&stub_main_CRYPTO_mem_leaks_fp,
+	&stub_main_UNIMPLEMENTED, /* CRYPTO_mem_leaks_fp */
 	&stub_main_UNIMPLEMENTED, /* DHparams_print_fp */
 	&stub_main_UNIMPLEMENTED, /* DSA_print_fp */
 	&stub_main_UNIMPLEMENTED, /* DSAparams_print_fp */

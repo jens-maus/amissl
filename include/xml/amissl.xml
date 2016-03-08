@@ -2341,7 +2341,7 @@
     </method>
     <method name="CRYPTO_dbg_get_options" result="long" status="unimplemented">
     </method>
-    <method name="CRYPTO_mem_leaks" result="int">
+    <method name="CRYPTO_mem_leaks" result="int" status="unimplemented">
       <arg name="bio" type="BIO *" m68kreg="a0"/>
     </method>
     <method name="CRYPTO_mem_leaks_cb" result="void" status="unimplemented">
@@ -11285,7 +11285,7 @@
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="const BIGNUM *" m68kreg="a1"/>
     </method>
-    <method name="CRYPTO_mem_leaks_fp" result="int">
+    <method name="CRYPTO_mem_leaks_fp" result="int" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
     </method>
     <method name="DHparams_print_fp" result="int" status="unimplemented">
