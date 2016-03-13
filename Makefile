@@ -406,14 +406,17 @@ openssl/Makefile:
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)
 
-$(OBJ_D)/openssl/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
+$(OBJ_D)/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
 	@(cd openssl; perl util/mk1mf.pl SRC= TMP=../$(OBJ_D)/openssl OUT=../$(BIN_D)/openssl $(OPENSSL_T) > ../$(OBJ_D)/Makefile.ossl)
 
-$(OBJ_D)/openssl/outinc: $(OBJ_D)/openssl/Makefile.ossl
+$(OBJ_D)/openssl/outinc: $(OBJ_D)/Makefile.ossl
 	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC) outinc outinc/openssl headers
 	@sh tools/cpheaders.sh
 
-$(LIBCRYPTO): $(OBJ_D)/openssl/outinc
+$(OBJ_D)/openssl/ppc_arch.h: openssl/crypto/ppc_arch.h
+	@cp $< $@
+
+$(LIBCRYPTO): $(OBJ_D)/openssl/outinc $(OBJ_D)/openssl/ppc_arch.h
 	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC)
 
 $(LIBSSL): $(LIBCRYPTO)

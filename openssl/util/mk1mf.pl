@@ -53,6 +53,7 @@ my %mf_import = (
 	BASEADDR       => \$baseaddr,
 	FIPSDIR        => \$fipsdir,
 	EC_ASM	       => \$mf_ec_asm,
+	PERLASM_SCHEME => \$asmtype,
 );
 
 open(IN,"<Makefile") || die "unable to open Makefile!\n";
@@ -841,14 +842,6 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
-elsif ($platform eq "amiga-os4")
-	{
-	$rules .= <<"EOF";
-\$(TMP_D)/bn_asm_amigaos4_ppc32.s: \$(SRC_D)crypto/bn/asm/ppc.pl
-	perl \$< \$@
-
-EOF
-	}
 
 print "###################################################################\n";
 print $rules;
@@ -1096,7 +1089,7 @@ sub perlasm_compile_target
 
 	$bname =~ s/(.*)\.[^\.]$/$1/;
 	$ret ="\$(TMP_D)$o$bname.asm: $source\n";
-	$ret.="\t\$(PERL) $source $asmtype \$(CFLAG) >\$\@\n\n";
+	$ret.="\t\$(PERL) $source $asmtype \$\@ >\$\@\n\n";
 	$ret.="$target: \$(TMP_D)$o$bname.asm\n";
 	$ret.="\t\$(ASM) $afile\$\@ \$(TMP_D)$o$bname.asm\n\n";
 	return($ret);
@@ -1156,7 +1149,7 @@ sub do_asm_rule
 			my $plasm = $objfile;
 			$plasm =~ s/${obj}/.pl/;
 			$ret.="$srcfile: $plasm\n";
-			$ret.="\t\$(PERL) $plasm $asmtype \$(CFLAG) >$srcfile\n\n";
+			$ret.="\t\$(PERL) $plasm $asmtype $srcfile >$srcfile\n\n";
 			}
 
 		$ret.="$objfile: $srcfile\n";

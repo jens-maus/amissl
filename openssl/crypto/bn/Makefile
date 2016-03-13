@@ -145,7 +145,7 @@ armv4-mont.o:	armv4-mont.S
 armv4-gf2m.o:	armv4-gf2m.S
 
 files:
-	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
+	$(PERL) $(TOP)/util/files.pl "BN_ASM=$(BN_ASM)" Makefile >> $(TOP)/MINFO
 
 links:
 	@$(PERL) $(TOP)/util/mklink.pl ../../include/openssl $(EXHEADER)
