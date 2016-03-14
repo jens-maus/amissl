@@ -391,7 +391,7 @@ LIBS = -L$(BIN_D)/openssl $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(LIBCRYPTO) $(LIBSSL) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
+all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(LIBCRYPTO) $(LIBSSL) $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
 
 # make the object directory
 $(OBJ_D):
