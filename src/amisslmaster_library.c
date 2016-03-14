@@ -178,7 +178,16 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  if(LibAPIVersion == AMISSL_V10x)
+  if(LibAPIVersion == AMISSL_V11x)
+  {
+    D(DBF_STARTUP, "About to open amissl v11x library");
+
+    // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
+    // known 1.1.X amissl library as OpenSSL defines binary/api compatibility when only
+    // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
+    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110-pre3.library", 4);
+  }
+  else if(LibAPIVersion == AMISSL_V10x)
   {
     D(DBF_STARTUP, "About to open amissl v10x library");
 

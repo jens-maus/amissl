@@ -21,7 +21,7 @@
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 #define LIBNAME "AmiSSL/amissl_v" MKSTR(VERSIONNAME) ".library"
-#define AMISSL_CURRENT_VERSION   AMISSL_V10x
+#define AMISSL_CURRENT_VERSION   AMISSL_V11x
 
 int main(void)
 {
