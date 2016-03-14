@@ -199,6 +199,7 @@ NWLIBOBJS = $(OBJ_D)/setsockopt.o \
             $(OBJ_D)/shutdown.o \
             $(OBJ_D)/closesocket.o \
             $(OBJ_D)/getsockopt.o \
+            $(OBJ_D)/getsockname.o \
             $(OBJ_D)/socket.o \
             $(OBJ_D)/connect.o \
             $(OBJ_D)/ioctlsocket.o \
