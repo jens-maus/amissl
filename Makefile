@@ -514,7 +514,7 @@ $(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 
 $(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
+	@$(CC) $(CFLAGS) -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
 
 # cleanup target
 .PHONY: clean
