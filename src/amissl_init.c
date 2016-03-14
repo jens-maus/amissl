@@ -93,11 +93,13 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
 ULONG closeBase(UNUSED struct LibraryHeader *lib)
 {
+#if 0
   SETUPSTATE();
 #if defined(__amigaos4__)
   struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
 #else
   struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif
 #endif
 
   ENTER();
@@ -114,7 +116,8 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
 
   // we call OPENSSL_cleanup to clean everything for the
   // current instance.
-  OPENSSL_cleanup();
+  //OPENSSL_cleanup();
+  #warning where to call OPENSSL_cleanup()? here it crashes!
 
   RETURN(TRUE);
   return TRUE;
