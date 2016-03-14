@@ -765,7 +765,11 @@ int BIO_lookup(const char *host, const char *service,
             if (he == NULL) {
 #ifndef OPENSSL_SYS_WINDOWS
                 BIOerr(BIO_F_BIO_LOOKUP, ERR_R_SYS_LIB);
+#ifndef OPENSSL_SYS_AMIGA
                 ERR_add_error_data(1, hstrerror(h_errno));
+#else
+                ERR_add_error_data(1, "gethostbyname() error");
+#endif
 #else
                 SYSerr(SYS_F_GETHOSTBYNAME, WSAGetLastError());
 #endif
@@ -801,7 +805,11 @@ int BIO_lookup(const char *host, const char *service,
                 if (se == NULL) {
 #ifndef OPENSSL_SYS_WINDOWS
                     BIOerr(BIO_F_BIO_LOOKUP, ERR_R_SYS_LIB);
+#ifndef OPENSSL_SYS_AMIGA
                     ERR_add_error_data(1, hstrerror(h_errno));
+#else
+                    ERR_add_error_data(1, "getservbyname() error");
+#endif
 #else
                     SYSerr(SYS_F_GETSERVBYNAME, WSAGetLastError());
 #endif
