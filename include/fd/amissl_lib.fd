@@ -3541,6 +3541,7 @@ OPENSSL_memcmp(p1,p2,n)(a0,a1,d0)
 OPENSSL_strncasecmp(str1,str2,n)(a0,a1,d0)
 OPENSSL_gmtime(timer,result)(a0,a1)
 OPENSSL_gmtime_adj(tm,offset_day,offset_sec)(a0,d0,d1)
+OPENSSL_gmtime_diff(pday,psec,from,to)(a0,a1,a2,a3)
 EVP_PKEY_meth_get0_info(ppkey_id,pflags,meth)(a0,a1,a2)
 EVP_PKEY_meth_copy(dst,src)(a0,a1)
 RSA_padding_add_PKCS1_PSS_mgf1(rsa,EM,mHash,Hash,mgf1Hash,sLen)(a0,a1,a2,a3,d0,d1)
@@ -3585,11 +3586,11 @@ RSA_PSS_PARAMS_new()()
 d2i_RSA_PSS_PARAMS(a,pp,length)(a0,a1,d0)
 RSA_PSS_PARAMS_free(a)(a0)
 i2d_RSA_PSS_PARAMS(a,out)(a0,a1)
-##bias 23490
+##bias 23496
 POLICY_MAPPING_it()()
 NAME_CONSTRAINTS_it()()
 ASN1_OCTET_STRING_NDEF_it()()
-##bias 23514
+##bias 23520
 POLICY_CONSTRAINTS_it()()
 POLICY_MAPPINGS_it()()
 GENERAL_SUBTREE_it()()
@@ -3599,16 +3600,16 @@ CMS_ContentInfo_it()()
 CMS_ReceiptRequest_it()()
 ASN1_SEQUENCE_ANY_it()()
 ASN1_SET_ANY_it()()
-##bias 23574
+##bias 23580
 ISSUING_DIST_POINT_it()()
 RSA_PSS_PARAMS_it()()
-##bias 23592
+##bias 23598
 PEM_write_bio_DHxparams(bp,x)(a0,a1)
 X509_ALGOR_cmp(a,b)(a0,a1)
 ASN1_STRING_clear_free(a)(a0)
 ASN1_TIME_diff(pday,psec,from,to)(a0,a1,a2,a3)
 BIO_hex_string(out,indent,width,data,datalen)(a0,d0,d1,a1,d2)
-##bias 23628
+##bias 23634
 CMS_RecipientEncryptedKey_cert_cmp(rek,cert)(a0,a1)
 CMS_RecipientEncryptedKey_get0_id(rek,keyid,tm,other,issuer,sno)(a0,a1,a2,a3,d0,d1)
 CMS_RecipientInfo_encrypt(cms,ri)(a0,a1)
@@ -3635,7 +3636,7 @@ EC_curve_nid2nist(nid)(d0)
 EC_curve_nist2nid(name)(a0)
 EC_GROUP_get_mont_data(group)(a0)
 ECDH_KDF_X9_62(out,outlen,Z,Zlen,sinfo,sinfolen,md)(a0,d0,a1,d1,a2,d2,d3)
-##bias 23838
+##bias 23844
 EVP_aes_128_cbc_hmac_sha256()()
 EVP_aes_128_wrap()()
 EVP_aes_192_wrap()()
@@ -3684,7 +3685,7 @@ X509_check_email(x,chk,chklen,flags)(a0,a1,d0,d1)
 X509_check_host(x,chk,chklen,flags,peername)(a0,a1,d0,d1,a2)
 X509_check_ip(x,chk,chklen,flags)(a0,a1,d0,d1)
 X509_check_ip_asc(x,ipasc,flags)(a0,a1,d1)
-##bias 24132
+##bias 24138
 EVP_PKEY_asn1_set_item(ameth,item_verify,item_sign)(a0,a1,a2)
 DTLS_client_method()()
 DTLS_method()()

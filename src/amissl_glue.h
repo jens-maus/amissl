@@ -1384,20 +1384,20 @@ void SAVEDS ASM LIB_SSL_set_tmp_dh_callback(REG(a6, __IFACE_OR_BASE), REG(a0, SS
 int SAVEDS ASM LIB_SSL_COMP_add_compression_method(REG(a6, __IFACE_OR_BASE), REG(d0, int id), REG(a0, COMP_METHOD * cm));
 void SAVEDS ASM LIB_ERR_load_SSL_strings(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_sk_num(REG(a6, __IFACE_OR_BASE), REG(a0, const _STACK * a));
-char * SAVEDS ASM LIB_sk_value(REG(a6, __IFACE_OR_BASE), REG(a0, const _STACK * a), REG(d0, int b));
-char * SAVEDS ASM LIB_sk_set(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * a), REG(d0, int b), REG(a1, char * c));
+void * SAVEDS ASM LIB_sk_value(REG(a6, __IFACE_OR_BASE), REG(a0, const _STACK * a), REG(d0, int b));
+void * SAVEDS ASM LIB_sk_set(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * a), REG(d0, int b), REG(a1, void * c));
 _STACK * SAVEDS ASM LIB_sk_new(REG(a6, __IFACE_OR_BASE), REG(a0, int (*cmp)(const void *, const void *)));
 _STACK * SAVEDS ASM LIB_sk_new_null(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_sk_free(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * a));
 void SAVEDS ASM LIB_sk_pop_free(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void (*func)(void *)));
-int SAVEDS ASM LIB_sk_insert(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, char * data), REG(d0, int where));
-char * SAVEDS ASM LIB_sk_delete(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(d0, int loc));
-char * SAVEDS ASM LIB_sk_delete_ptr(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * p));
-int SAVEDS ASM LIB_sk_find(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data));
-int SAVEDS ASM LIB_sk_push(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data));
-int SAVEDS ASM LIB_sk_unshift(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data));
-char * SAVEDS ASM LIB_sk_shift(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
-char * SAVEDS ASM LIB_sk_pop(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
+int SAVEDS ASM LIB_sk_insert(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, void * data), REG(d0, int where));
+void * SAVEDS ASM LIB_sk_delete(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(d0, int loc));
+void * SAVEDS ASM LIB_sk_delete_ptr(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * p));
+int SAVEDS ASM LIB_sk_find(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data));
+int SAVEDS ASM LIB_sk_push(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data));
+int SAVEDS ASM LIB_sk_unshift(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data));
+void * SAVEDS ASM LIB_sk_shift(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
+void * SAVEDS ASM LIB_sk_pop(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
 void SAVEDS ASM LIB_sk_zero(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
 int  SAVEDS ASM (*LIB_sk_set_cmp_func(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, int (*c)(const void *, const void *))))(const void *, const void *);
 _STACK * SAVEDS ASM LIB_sk_dup(REG(a6, __IFACE_OR_BASE), REG(a0, _STACK * st));
@@ -3416,6 +3416,7 @@ int SAVEDS ASM LIB_OPENSSL_memcmp(REG(a6, __IFACE_OR_BASE), REG(a0, const void *
 int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * str1), REG(a1, const char * str2), REG(d0, size_t n));
 struct tm * SAVEDS ASM LIB_OPENSSL_gmtime(REG(a6, __IFACE_OR_BASE), REG(a0, const time_t * timer), REG(a1, struct tm * result));
 int SAVEDS ASM LIB_OPENSSL_gmtime_adj(REG(a6, __IFACE_OR_BASE), REG(a0, struct tm * tm), REG(d0, int offset_day), REG(d1, long offset_sec));
+int SAVEDS ASM LIB_OPENSSL_gmtime_diff(REG(a6, __IFACE_OR_BASE), REG(a0, int * pday), REG(a1, int * psec), REG(a2, const struct tm * from), REG(a3, const struct tm * to));
 void SAVEDS ASM LIB_EVP_PKEY_meth_get0_info(REG(a6, __IFACE_OR_BASE), REG(a0, int * ppkey_id), REG(a1, int * pflags), REG(a2, const EVP_PKEY_METHOD * meth));
 void SAVEDS ASM LIB_EVP_PKEY_meth_copy(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * dst), REG(a1, const EVP_PKEY_METHOD * src));
 int SAVEDS ASM LIB_RSA_padding_add_PKCS1_PSS_mgf1(REG(a6, __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, unsigned char * EM), REG(a2, const unsigned char * mHash), REG(a3, const EVP_MD * Hash), REG(d0, const EVP_MD * mgf1Hash), REG(d1, int sLen));
@@ -7907,6 +7908,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
     LFUNC_FA_(OPENSSL_strncasecmp) \
     LFUNC_FA_(OPENSSL_gmtime) \
     LFUNC_FA_(OPENSSL_gmtime_adj) \
+    LFUNC_FA_(OPENSSL_gmtime_diff) \
     LFUNC_FA_(EVP_PKEY_meth_get0_info) \
     LFUNC_FA_(EVP_PKEY_meth_copy) \
     LFUNC_FA_(RSA_padding_add_PKCS1_PSS_mgf1) \

@@ -6154,14 +6154,14 @@
     <method name="sk_num" result="int">
       <arg name="a" type="const _STACK *" m68kreg="a0"/>
     </method>
-    <method name="sk_value" result="char *">
+    <method name="sk_value" result="void *">
       <arg name="a" type="const _STACK *" m68kreg="a0"/>
       <arg name="b" type="int" m68kreg="d0"/>
     </method>
-    <method name="sk_set" result="char *">
+    <method name="sk_set" result="void *">
       <arg name="a" type="_STACK *" m68kreg="a0"/>
       <arg name="b" type="int" m68kreg="d0"/>
-      <arg name="c" type="char *" m68kreg="a1"/>
+      <arg name="c" type="void *" m68kreg="a1"/>
     </method>
     <method name="sk_new" result="_STACK *">
       <arg name="cmp" type="int (*)(const void *, const void *)" m68kreg="a0"/>
@@ -6177,33 +6177,33 @@
     </method>
     <method name="sk_insert" result="int">
       <arg name="sk" type="_STACK *" m68kreg="a0"/>
-      <arg name="data" type="char *" m68kreg="a1"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
       <arg name="where" type="int" m68kreg="d0"/>
     </method>
-    <method name="sk_delete" result="char *">
+    <method name="sk_delete" result="void *">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
-    <method name="sk_delete_ptr" result="char *">
+    <method name="sk_delete_ptr" result="void *">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
       <arg name="p" type="char *" m68kreg="a1"/>
     </method>
     <method name="sk_find" result="int">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
-      <arg name="data" type="char *" m68kreg="a1"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
     </method>
     <method name="sk_push" result="int">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
-      <arg name="data" type="char *" m68kreg="a1"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
     </method>
     <method name="sk_unshift" result="int">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
-      <arg name="data" type="char *" m68kreg="a1"/>
+      <arg name="data" type="void *" m68kreg="a1"/>
     </method>
-    <method name="sk_shift" result="char *">
+    <method name="sk_shift" result="void *">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
     </method>
-    <method name="sk_pop" result="char *">
+    <method name="sk_pop" result="void *">
       <arg name="st" type="_STACK *" m68kreg="a0"/>
     </method>
     <method name="sk_zero" result="void">
@@ -16010,6 +16010,12 @@
       <arg name="tm" type="struct tm *" m68kreg="a0"/>
       <arg name="offset_day" type="int" m68kreg="d0"/>
       <arg name="offset_sec" type="long" m68kreg="d1"/>
+    </method>
+    <method name="OPENSSL_gmtime_diff" result="int">
+      <arg name="pday" type="int *" m68kreg="a0"/>
+      <arg name="psec" type="int *" m68kreg="a1"/>
+      <arg name="from" type="const struct tm *" m68kreg="a2"/>
+      <arg name="to" type="const struct tm *" m68kreg="a3"/>
     </method>
     <method name="EVP_PKEY_meth_get0_info" result="void">
       <arg name="ppkey_id" type="int *" m68kreg="a0"/>

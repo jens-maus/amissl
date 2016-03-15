@@ -9412,14 +9412,14 @@ int SAVEDS ASM LIB_sk_num(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK 
 
 // ---
 
-char * SAVEDS ASM LIB_sk_value(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * a), REG(d0, int b))
+void * SAVEDS ASM LIB_sk_value(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * a), REG(d0, int b))
 {
 	return sk_value(a, b);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_sk_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * a), REG(d0, int b), REG(a1, char * c))
+void * SAVEDS ASM LIB_sk_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * a), REG(d0, int b), REG(a1, void * c))
 {
 	return sk_set(a, b, c);
 }
@@ -9454,56 +9454,56 @@ void SAVEDS ASM LIB_sk_pop_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK 
 
 // ---
 
-int SAVEDS ASM LIB_sk_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, char * data), REG(d0, int where))
+int SAVEDS ASM LIB_sk_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, void * data), REG(d0, int where))
 {
 	return sk_insert(sk, data, where);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_sk_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(d0, int loc))
+void * SAVEDS ASM LIB_sk_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(d0, int loc))
 {
 	return sk_delete(st, loc);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_sk_delete_ptr(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * p))
+void * SAVEDS ASM LIB_sk_delete_ptr(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * p))
 {
 	return sk_delete_ptr(st, p);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_find(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data))
+int SAVEDS ASM LIB_sk_find(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
 {
 	return sk_find(st, data);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_push(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data))
+int SAVEDS ASM LIB_sk_push(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
 {
 	return sk_push(st, data);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_unshift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * data))
+int SAVEDS ASM LIB_sk_unshift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
 {
 	return sk_unshift(st, data);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_sk_shift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void * SAVEDS ASM LIB_sk_shift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
 {
 	return sk_shift(st);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_sk_pop(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void * SAVEDS ASM LIB_sk_pop(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
 {
 	return sk_pop(st);
 }
@@ -23632,6 +23632,13 @@ struct tm * SAVEDS ASM LIB_OPENSSL_gmtime(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 int SAVEDS ASM LIB_OPENSSL_gmtime_adj(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct tm * tm), REG(d0, int offset_day), REG(d1, long offset_sec))
 {
 	return OPENSSL_gmtime_adj(tm, offset_day, offset_sec);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OPENSSL_gmtime_diff(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, int * pday), REG(a1, int * psec), REG(a2, const struct tm * from), REG(a3, const struct tm * to))
+{
+	return OPENSSL_gmtime_diff(pday, psec, from, to);
 }
 
 // ---

@@ -20,7 +20,7 @@ else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
 $cflags.=' -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -I$(AmiSSL)/include -DOPENSSLDIR=\"AmiSSL:\" -DENGINESDIR=\"AmiSSL:engines\" -W -Wall';
-$app_cflag='-I$(AmiSSL)/.obj_os4/crypto/include/ -I$(AmiSSL)/openssl';
+$app_cflag='-I$(AmiSSL)/.obj_os4/crypto/include/ -I$(AmiSSL)/openssl -I$(AmiSSL)/openssl/include';
 $lib_cflag='-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE';
 $obj='.o';
 $ofile='-o ';

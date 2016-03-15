@@ -3884,6 +3884,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OPENSSL_strncasecmp
 	    FPTR IAmiSSL_OPENSSL_gmtime
 	    FPTR IAmiSSL_OPENSSL_gmtime_adj
+	    FPTR IAmiSSL_OPENSSL_gmtime_diff
 	    FPTR IAmiSSL_EVP_PKEY_meth_get0_info
 	    FPTR IAmiSSL_EVP_PKEY_meth_copy
 	    FPTR IAmiSSL_RSA_padding_add_PKCS1_PSS_mgf1

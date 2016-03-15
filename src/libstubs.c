@@ -115,23 +115,6 @@ int (X509_NAME_print_ex_fp)(FILE *fp, X509_NAME *nm, int indent, unsigned long f
   return ret;
 }
 
-int (CRYPTO_mem_leaks_fp)(FILE *fp)
-{
-  BIO *b;
-  int ret = 1;
-
-  CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_DISABLE);
-  b = BIO_new(BIO_s_file());
-  CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ENABLE);
-  if(b == NULL)
-    return -1;
-
-  BIO_set_fp(b, fp, BIO_NOCLOSE);
-  ret = CRYPTO_mem_leaks(b);
-  BIO_free(b);
-  return ret;
-}
-
 void SAVEDS (ASN1_OBJECT_free)(ASN1_OBJECT *a)
 {
   ASN1_OBJECT_free(a);
@@ -320,6 +303,117 @@ void SAVEDS (AES_encrypt)(const unsigned char * in, unsigned char * out, const A
 void SAVEDS (GENERAL_NAMES_free)(GENERAL_NAMES * a)
 {
   GENERAL_NAMES_free(a);
+}
+
+_STACK * (sk_new_null)(void)
+{
+  return sk_new_null();
+}
+
+void (sk_free)(_STACK *st)
+{
+  sk_free(st);
+}
+
+int (sk_push)(_STACK *st, void *data)
+{
+  return sk_push(st, data);
+}
+
+int (sk_num)(const _STACK *st)
+{
+  return sk_num(st);
+}
+
+void *(sk_value)(const _STACK *st, int idx)
+{
+  return sk_value(st, idx);
+}
+
+void (sk_pop_free)(_STACK *st, void (*func) (void *))
+{
+  sk_pop_free(st, func);
+}
+
+void *(sk_shift)(_STACK *st)
+{
+  return sk_shift(st);
+}
+
+void *(sk_delete)(_STACK *st, int loc)
+{
+  return sk_delete(st, loc);
+}
+
+void (lh_node_stats_bio)(const _LHASH *lh, BIO *out)
+{
+  lh_node_stats_bio(lh, out);
+}
+
+void (lh_stats_bio)(const _LHASH *lh, BIO *out)
+{
+  lh_stats_bio(lh, out);
+}
+
+void (lh_node_usage_stats_bio)(const _LHASH *lh, BIO *out)
+{
+  lh_node_usage_stats_bio(lh, out);
+}
+
+X509 * (d2i_X509_AUX)(X509 ** a, const unsigned char ** pp, long length)
+{
+  return d2i_X509_AUX(a, pp, length);
+}
+
+X509 * (d2i_X509)(X509 ** a, const unsigned char ** in, long len)
+{
+  return d2i_X509(a, in, len);
+}
+
+int (EVP_PKEY_sign_init)(EVP_PKEY_CTX *ctx)
+{
+  return EVP_PKEY_sign_init(ctx);
+}
+
+int (EVP_PKEY_sign)(EVP_PKEY_CTX *ctx,
+                    unsigned char *sig, size_t *siglen,
+                    const unsigned char *tbs, size_t tbslen)
+{
+  return EVP_PKEY_sign(ctx, sig, siglen, tbs, tbslen);
+}
+
+int (EVP_PKEY_verify_init)(EVP_PKEY_CTX *ctx)
+{
+  return EVP_PKEY_verify_init(ctx);
+}
+
+int (EVP_PKEY_decrypt_init)(EVP_PKEY_CTX *ctx)
+{
+  return EVP_PKEY_decrypt_init(ctx);
+}
+
+int (EVP_PKEY_decrypt)(EVP_PKEY_CTX *ctx,
+                       unsigned char *out, size_t *outlen,
+                       const unsigned char *in, size_t inlen)
+{
+  return EVP_PKEY_decrypt(ctx, out, outlen, in, inlen);
+}
+
+int (EVP_PKEY_verify_recover_init)(EVP_PKEY_CTX *ctx)
+{
+  return EVP_PKEY_verify_recover_init(ctx);
+}
+
+int (EVP_PKEY_verify_recover)(EVP_PKEY_CTX *ctx,
+                              unsigned char *rout, size_t *routlen,
+                              const unsigned char *sig, size_t siglen)
+{
+  return EVP_PKEY_verify_recover(ctx, rout, routlen, sig, siglen);
+}
+
+int (EVP_PKEY_derive_init)(EVP_PKEY_CTX *ctx)
+{
+  return EVP_PKEY_derive_init(ctx);
 }
 
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))

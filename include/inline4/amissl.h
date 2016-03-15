@@ -3421,6 +3421,7 @@
 #define OPENSSL_strncasecmp(str1, str2, n) IAmiSSL->OPENSSL_strncasecmp((str1), (str2), (n))
 #define OPENSSL_gmtime(timer, result) IAmiSSL->OPENSSL_gmtime((timer), (result))
 #define OPENSSL_gmtime_adj(tm, offset_day, offset_sec) IAmiSSL->OPENSSL_gmtime_adj((tm), (offset_day), (offset_sec))
+#define OPENSSL_gmtime_diff(pday, psec, from, to) IAmiSSL->OPENSSL_gmtime_diff((pday), (psec), (from), (to))
 #define EVP_PKEY_meth_get0_info(ppkey_id, pflags, meth) IAmiSSL->EVP_PKEY_meth_get0_info((ppkey_id), (pflags), (meth))
 #define EVP_PKEY_meth_copy(dst, src) IAmiSSL->EVP_PKEY_meth_copy((dst), (src))
 #define RSA_padding_add_PKCS1_PSS_mgf1(rsa, EM, mHash, Hash, mgf1Hash, sLen) IAmiSSL->RSA_padding_add_PKCS1_PSS_mgf1((rsa), (EM), (mHash), (Hash), (mgf1Hash), (sLen))

@@ -146,6 +146,7 @@ static int verify_chain(SSL *ssl, STACK_OF(X509) *chain)
     return (ret);
 }
 
+#ifndef OPENSSL_NO_STDIO
 static STACK_OF(X509) *load_chain(FILE *fp, int nelem)
 {
     int count;
@@ -210,7 +211,9 @@ err:
     print_errors();
     return NULL;
 }
+#endif
 
+#ifndef OPENSSL_NO_STDIO
 static char *read_to_eol(FILE *f)
 {
     static char buf[1024];
@@ -236,6 +239,7 @@ static char *read_to_eol(FILE *f)
 
     return buf;
 }
+#endif
 
 /*
  * Hex decoder that tolerates optional whitespace
@@ -358,6 +362,7 @@ static int allws(const char *cp)
     return 1;
 }
 
+#ifndef OPENSSL_NO_STDIO
 static int test_tlsafile(SSL_CTX *ctx, const char *basename,
                          FILE *f, const char *path)
 {
@@ -460,6 +465,7 @@ static int test_tlsafile(SSL_CTX *ctx, const char *basename,
 
     return ret;
 }
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -514,10 +520,12 @@ int main(int argc, char *argv[])
         goto end;
     }
 
+#ifndef OPENSSL_NO_STDIO
     if (test_tlsafile(ctx, basedomain, f, tlsafile) <= 0) {
         print_errors();
         goto end;
     }
+#endif
 
     ret = 0;
 
