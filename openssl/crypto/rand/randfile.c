@@ -157,7 +157,11 @@ int RAND_load_file(const char *file, long bytes)
          * because we will waste system entropy.
          */
         bytes = (bytes == -1) ? 2048 : bytes; /* ok, is 2048 enough? */
+#ifndef OPENSSL_SYS_AMIGA
         setbuf(stdin, NULL); /* don't do buffered reads */
+#else
+        setbuf(in, NULL); /* don't do buffered reads */
+#endif
     }
 #endif
     for (;;) {
