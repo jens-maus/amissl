@@ -461,6 +461,7 @@ static int process_test(struct evp_test *t, char *buf, int verbose)
         fputs(buf, stdout);
     if (!parse_line(&keyword, &value, buf))
         return 1;
+#ifndef OPENSSL_NO_STDIO
     if (strcmp(keyword, "PrivateKey") == 0) {
         save_pos = ftell(t->in);
         pk = PEM_read_PrivateKey(t->in, NULL, 0, NULL);
@@ -483,6 +484,7 @@ static int process_test(struct evp_test *t, char *buf, int verbose)
         lst = &t->public;
         add_key = 1;
     }
+#endif
     /* If we have a key add to list */
     if (add_key) {
         char tmpbuf[80];
