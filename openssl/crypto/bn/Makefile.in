@@ -131,7 +131,7 @@ armv4-gf2m.o:	armv4-gf2m.S
 armv8-mont.o:	armv8-mont.S
 
 files:
-	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
+	$(PERL) $(TOP)/util/files.pl "BN_ASM=$(BN_ASM)" Makefile >> $(TOP)/MINFO
 
 div:
 	rm -f a.out

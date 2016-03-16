@@ -1031,14 +1031,6 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
-elsif ($platform eq "amiga-os4")
-	{
-	$rules .= <<"EOF";
-\$(TMP_D)/bn_asm_amigaos4_ppc32.s: \$(SRC_D)crypto/bn/asm/ppc.pl
-	perl \$< \$@
-
-EOF
-	}
 
 print "###################################################################\n";
 print $rules;
@@ -1278,7 +1270,7 @@ sub perlasm_compile_target
 	my($ret);
 	$bname =~ s/(.*)\.[^\.]$/$1/;
 	$ret ="\$(TMP_D)$o$bname$asm_suffix: $source\n";
-	$ret.="\t\$(PERL) $source $asmtype \$(CFLAG) >\$\@\n";
+	$ret.="\t\$(PERL) $source $mf_perlasm_scheme \$\@ >\$\@\n";
 	if ($fipscanisteronly)
 		{
 		$ret .= "\t\$(PERL) util$o.pl . \$@ norunasm \$(CFLAG)\n";
@@ -1343,7 +1335,7 @@ sub do_asm_rule
 			my $plasm = $objfile;
 			$plasm =~ s/${obj}/.pl/;
 			$ret.="$srcfile: $plasm\n";
-			$ret.="\t\$(PERL) $plasm $asmtype \$(CFLAG) >$srcfile\n\n";
+			$ret.="\t\$(PERL) $plasm $mf_perlasm_scheme $srcfile >$srcfile\n\n";
 			}
 
 		$ret.="$objfile: $srcfile\n";

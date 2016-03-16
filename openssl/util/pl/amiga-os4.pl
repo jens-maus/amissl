@@ -20,6 +20,10 @@ else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
 $cflags.=' -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -I$(AmiSSL)/include -DOPENSSLDIR=\"AmiSSL:\" -DENGINESDIR=\"AmiSSL:engines\" -W -Wall';
+if(!$no_asm)
+{
+  $cflags.=' -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DVPAES_ASM';
+}
 $app_cflag='-I$(AmiSSL)/.obj_os4/crypto/include/ -I$(AmiSSL)/openssl -I$(AmiSSL)/openssl/include';
 $lib_cflag='-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE';
 $obj='.o';
@@ -45,8 +49,6 @@ $lfile='';
 
 $asm='ppc-amigaos-as';
 $afile='-o ';
-$bn_asm_obj='$(OBJ_D)/bn_asm_amigaos4_ppc32.o';
-$bn_asm_src='$(TMP_D)/bn_asm_amigaos4_ppc32.s';
 $des_enc_obj="";
 $des_enc_src="";
 $bf_enc_obj="";
@@ -104,6 +106,18 @@ force.$target:
 
 EOF
     return $ret;
+}
+
+sub special_compile_target
+{
+  local($target) = @_;
+
+  if($target eq 'crypto/bn/bn-ppc')
+  {
+    return &perlasm_compile_target("$to${o}$n$obj","crypto/bn/asm/ppc.pl","bn-ppc");
+  }
+
+  return 0;
 }
 
 1;
