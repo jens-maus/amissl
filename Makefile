@@ -170,12 +170,12 @@ OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
 INCLUDE  = -I./include
-CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
+APPCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+CFLAGS   = $(APPCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
-           -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
-           $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+           -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS)
 LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
 LIBSSL   = $(BIN_D)/openssl/libssl.a
 LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
@@ -201,15 +201,16 @@ ifeq ($(OS), os4)
   endif
 
   # Compiler/Linker flags
-  CRT      = clib2
-  CPU      = -mcpu=powerpc -mstrict-align
-  WARN     += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
-  CFLAGS   += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
-  LDFLAGS  += -mcrt=$(CRT)
-  BASEREL  = -mbaserel
-  NOBASEREL= -mno-baserel
-  CDUP     = ../
-  CDTHIS   = ./
+  CRT       = clib2
+  CPU       = -mcpu=powerpc -mstrict-align
+  WARN      += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
+  APPCFLAGS += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS    += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  LDFLAGS   += -mcrt=$(CRT)
+  BASEREL   = -mbaserel
+  NOBASEREL = -mno-baserel
+  CDUP      = ../
+  CDTHIS    = ./
 
   EXTRALIBOBJS = $(OBJ_D)/amissl_library_os4.o \
                  $(OBJ_D)/amissl_glue.o \
@@ -237,14 +238,15 @@ ifeq ($(OS), os3)
   endif
 
   # Compiler/Linker flags
-  CPU     = -m68020-60 -msoft-float
-  CFLAGS  += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS += -noixemul
-  LDLIBS  += -ldebug -lc -lm -lgcc -lamiga
-  BASEREL = -resident32
+  CPU       = -m68020-60 -msoft-float
+  APPCFLAGS += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  CFLAGS    += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS   += -noixemul
+  LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
+  BASEREL   = -resident32
   NOBASEREL = -fno-baserel
-  BRELLIB = -mrestore-a4
-  GCCVER  = 2
+  BRELLIB   = -mrestore-a4
+  GCCVER    = 2
 
   EXTRALIBOBJS = $(OBJ_D)/amissl_glue.o
 
@@ -466,27 +468,27 @@ $(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
 	@$(AR) r $@ $(OBJ_D)/libstubs.o
 	@$(RANLIB) $@
 
+## AMISSL TESTCASE BINARIES ##
+
 $(BIN_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
 	@echo "  CC/LD $@"
-	@$(CC) -o $@ -I./include $^
-
-## AMISSL TESTCASE BINARIES ##
+	@$(CC) $(APPCFLAGS) -o $@ $^
 
 $(BIN_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
+	@$(CC) $(APPCFLAGS) -o $@ -DVERSIONNAME=$(VERSIONNAME) $^
 
 $(BIN_D)/https: $(TEST_D)/https.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 $(BIN_D)/uitest: $(TEST_D)/uitest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 $(BIN_D)/vatest: $(TEST_D)/vatest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BIN_D) -lamisslauto -lamisslstubs
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
