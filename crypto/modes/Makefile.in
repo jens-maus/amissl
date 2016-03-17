@@ -12,8 +12,8 @@ AR=		ar r
 
 MODES_ASM_OBJ=
 
-CFLAGS= $(INCLUDES) $(CFLAG)
-ASFLAGS= $(INCLUDES) $(ASFLAG)
+CFLAGS= $(INCLUDES) $(CFLAG) $(SHARED_CFLAG)
+ASFLAGS= $(INCLUDES) $(ASFLAG) $(SHARED_CFLAG)
 AFLAGS= $(ASFLAGS)
 
 GENERAL=Makefile
@@ -41,18 +41,18 @@ lib:	$(LIBOBJ)
 	@touch lib
 
 ghash-ia64.s:	asm/ghash-ia64.pl
-	$(PERL) asm/ghash-ia64.pl $@ $(CFLAGS)
+	$(PERL) asm/ghash-ia64.pl $(CFLAGS) $@
 ghash-x86.s:	asm/ghash-x86.pl
-	$(PERL) asm/ghash-x86.pl $(PERLASM_SCHEME) $(CFLAGS) $(PROCESSOR) > $@
+	$(PERL) asm/ghash-x86.pl $(PERLASM_SCHEME) $(CFLAGS) $(PROCESSOR) $@
 ghash-x86_64.s:	asm/ghash-x86_64.pl
-	$(PERL) asm/ghash-x86_64.pl $(PERLASM_SCHEME) > $@
+	$(PERL) asm/ghash-x86_64.pl $(PERLASM_SCHEME) $@
 aesni-gcm-x86_64.s:	asm/aesni-gcm-x86_64.pl
-	$(PERL) asm/aesni-gcm-x86_64.pl $(PERLASM_SCHEME) > $@
-ghash-sparcv9.s:	asm/ghash-sparcv9.pl
-	$(PERL) asm/ghash-sparcv9.pl $@ $(CFLAGS)
+	$(PERL) asm/aesni-gcm-x86_64.pl $(PERLASM_SCHEME) $@
+ghash-sparcv9.S:	asm/ghash-sparcv9.pl
+	$(PERL) asm/ghash-sparcv9.pl $(PERLASM_SCHEME) $@
 ghash-alpha.s:	asm/ghash-alpha.pl
 	(preproc=$$$$.$@.S; trap "rm $$preproc" INT; \
-	$(PERL) asm/ghash-alpha.pl > $$preproc && \
+	$(PERL) asm/ghash-alpha.pl $$preproc && \
 	$(CC) -E -P $$preproc > $@ && rm $$preproc)
 ghash-parisc.s:	asm/ghash-parisc.pl
 	$(PERL) asm/ghash-parisc.pl $(PERLASM_SCHEME) $@
@@ -71,7 +71,7 @@ files:
 	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
 
 depend:
-	$(TOP)/util/domd $(CFLAG) $(INCLUDES) $(DEPFLAG) -- $(PROGS) $(LIBSRC)
+	$(TOP)/util/domd $(CFLAG) $(INCLUDES) -- $(PROGS) $(LIBSRC)
 
 clean:
 	rm -f *.s *.o */*.o *.obj lib tags core .pure .nfs* *.old *.bak fluff
