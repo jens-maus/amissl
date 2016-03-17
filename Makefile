@@ -425,7 +425,7 @@ $(OBJ_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 openssl/Makefile:
-	@(cd openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa --openssldir=AmiSSL: $(DEBUG))
+	@(cd openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-asm --openssldir=AmiSSL: $(DEBUG))
 
 openssl/MINFO: openssl/Makefile
 	@(cd openssl; $(MAKE) files)

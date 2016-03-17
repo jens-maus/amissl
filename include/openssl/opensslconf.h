@@ -54,6 +54,9 @@ extern "C" {
 #endif /* OPENSSL_DOING_MAKEDEPEND */
 
 
+#ifndef OPENSSL_NO_ASM
+# define OPENSSL_NO_ASM
+#endif
 #ifndef OPENSSL_NO_DYNAMIC_ENGINE
 # define OPENSSL_NO_DYNAMIC_ENGINE
 #endif
@@ -106,7 +109,7 @@ extern "C" {
 # define DEPRECATEDIN_0_9_8(f)
 #endif
 
-#define OPENSSL_CPUID_OBJ
+
 
 /* Generate 80386 code? */
 #undef I386_ONLY
