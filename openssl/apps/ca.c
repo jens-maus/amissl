@@ -157,8 +157,7 @@ static int certify_cert(X509 **xret, char *infile, EVP_PKEY *pkey, X509 *x509,
                         int multirdn, int email_dn, char *startdate,
                         char *enddate, long days, int batch, char *ext_sect,
                         CONF *conf, int verbose, unsigned long certopt,
-                        unsigned long nameopt, int default_op, int ext_copy,
-                        ENGINE *e);
+                        unsigned long nameopt, int default_op, int ext_copy);
 static int certify_spkac(X509 **xret, char *infile, EVP_PKEY *pkey,
                          X509 *x509, const EVP_MD *dgst,
                          STACK_OF(OPENSSL_STRING) *sigopts,
@@ -611,7 +610,7 @@ end_of_options:
             lookup_fail(section, ENV_CERTIFICATE);
             goto end;
         }
-        x509 = load_cert(certfile, FORMAT_PEM, NULL, e, "CA certificate");
+        x509 = load_cert(certfile, FORMAT_PEM, "CA certificate");
         if (x509 == NULL)
             goto end;
 
@@ -968,7 +967,7 @@ end_of_options:
                              db, serial, subj, chtype, multirdn, email_dn,
                              startdate, enddate, days, batch, extensions,
                              conf, verbose, certopt, nameopt, default_op,
-                             ext_copy, e);
+                             ext_copy);
             if (j < 0)
                 goto end;
             if (j > 0) {
@@ -1279,7 +1278,7 @@ end_of_options:
             goto end;
         } else {
             X509 *revcert;
-            revcert = load_cert(infile, FORMAT_PEM, NULL, e, infile);
+            revcert = load_cert(infile, FORMAT_PEM, infile);
             if (revcert == NULL)
                 goto end;
             if (dorevoke == 2)
@@ -1405,15 +1404,14 @@ static int certify_cert(X509 **xret, char *infile, EVP_PKEY *pkey, X509 *x509,
                         int multirdn, int email_dn, char *startdate,
                         char *enddate, long days, int batch, char *ext_sect,
                         CONF *lconf, int verbose, unsigned long certopt,
-                        unsigned long nameopt, int default_op, int ext_copy,
-                        ENGINE *e)
+                        unsigned long nameopt, int default_op, int ext_copy)
 {
     X509 *req = NULL;
     X509_REQ *rreq = NULL;
     EVP_PKEY *pktmp = NULL;
     int ok = -1, i;
 
-    if ((req = load_cert(infile, FORMAT_PEM, NULL, e, infile)) == NULL)
+    if ((req = load_cert(infile, FORMAT_PEM, infile)) == NULL)
         goto end;
     if (verbose)
         X509_print(bio_err, req);

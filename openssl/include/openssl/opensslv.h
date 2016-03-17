@@ -30,11 +30,11 @@ extern "C" {
  * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
  *  major minor fix final patch/beta)
  */
-# define OPENSSL_VERSION_NUMBER  0x10100003L
+# define OPENSSL_VERSION_NUMBER  0x10100004L
 # ifdef OPENSSL_FIPS
-#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre3-fips (alpha) 15 Feb 2016"
+#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre4-fips (beta) 16 Mar 2016"
 # else
-#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre3 (alpha) 15 Feb 2016"
+#  define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.0-pre4 (beta) 16 Mar 2016"
 # endif
 
 /*-
@@ -48,7 +48,7 @@ extern "C" {
  *
  *      libcrypto.so.0.9
  *
- * Some unixen also make a softlink with the major verson number only:
+ * Some unixen also make a softlink with the major version number only:
  *
  *      libcrypto.so.0
  *

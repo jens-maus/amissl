@@ -25,10 +25,9 @@
 # include <sys/param.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include "internal/threads.h"
 #endif
 
-#define LOCK()      CRYPTO_w_lock(CRYPTO_LOCK_MALLOC)
-#define UNLOCK()    CRYPTO_w_unlock(CRYPTO_LOCK_MALLOC)
 #define CLEAR(p, s) OPENSSL_cleanse(p, s)
 #ifndef PAGE_SIZE
 # define PAGE_SIZE    4096
@@ -39,6 +38,8 @@ static size_t secure_mem_used;
 
 static int secure_mem_initialized;
 static int too_late;
+
+static CRYPTO_RWLOCK *sec_malloc_lock = NULL;
 
 /*
  * These are the functions that must be implemented by a secure heap (sh).
@@ -58,13 +59,16 @@ int CRYPTO_secure_malloc_init(size_t size, int minsize)
 
     if (too_late)
         return ret;
-    LOCK();
+
     OPENSSL_assert(!secure_mem_initialized);
     if (!secure_mem_initialized) {
+        sec_malloc_lock = CRYPTO_THREAD_lock_new();
+        if (sec_malloc_lock == NULL)
+            return 0;
         ret = sh_init(size, minsize);
         secure_mem_initialized = 1;
     }
-    UNLOCK();
+
     return ret;
 #else
     return 0;
@@ -74,10 +78,9 @@ int CRYPTO_secure_malloc_init(size_t size, int minsize)
 void CRYPTO_secure_malloc_done()
 {
 #ifdef IMPLEMENTED
-    LOCK();
     sh_done();
     secure_mem_initialized = 0;
-    UNLOCK();
+    CRYPTO_THREAD_lock_free(sec_malloc_lock);
 #endif /* IMPLEMENTED */
 }
 
@@ -100,11 +103,11 @@ void *CRYPTO_secure_malloc(size_t num, const char *file, int line)
         too_late = 1;
         return CRYPTO_malloc(num, file, line);
     }
-    LOCK();
+    CRYPTO_THREAD_write_lock(sec_malloc_lock);
     ret = sh_malloc(num);
     actual_size = ret ? sh_actual_size(ret) : 0;
     secure_mem_used += actual_size;
-    UNLOCK();
+    CRYPTO_THREAD_unlock(sec_malloc_lock);
     return ret;
 #else
     return CRYPTO_malloc(num, file, line);
@@ -120,7 +123,7 @@ void *CRYPTO_secure_zalloc(size_t num, const char *file, int line)
     return ret;
 }
 
-void CRYPTO_secure_free(void *ptr)
+void CRYPTO_secure_free(void *ptr, const char *file, int line)
 {
 #ifdef IMPLEMENTED
     size_t actual_size;
@@ -128,17 +131,17 @@ void CRYPTO_secure_free(void *ptr)
     if (ptr == NULL)
         return;
     if (!secure_mem_initialized) {
-        CRYPTO_free(ptr);
+        CRYPTO_free(ptr, file, line);
         return;
     }
-    LOCK();
+    CRYPTO_THREAD_write_lock(sec_malloc_lock);
     actual_size = sh_actual_size(ptr);
     CLEAR(ptr, actual_size);
     secure_mem_used -= actual_size;
     sh_free(ptr);
-    UNLOCK();
+    CRYPTO_THREAD_unlock(sec_malloc_lock);
 #else
-    CRYPTO_free(ptr);
+    CRYPTO_free(ptr, file, line);
 #endif /* IMPLEMENTED */
 }
 
@@ -149,9 +152,9 @@ int CRYPTO_secure_allocated(const void *ptr)
 
     if (!secure_mem_initialized)
         return 0;
-    LOCK();
+    CRYPTO_THREAD_write_lock(sec_malloc_lock);
     ret = sh_allocated(ptr);
-    UNLOCK();
+    CRYPTO_THREAD_unlock(sec_malloc_lock);
     return ret;
 #else
     return 0;
@@ -172,9 +175,9 @@ size_t CRYPTO_secure_actual_size(void *ptr)
 #ifdef IMPLEMENTED
     size_t actual_size;
 
-    LOCK();
+    CRYPTO_THREAD_write_lock(sec_malloc_lock);
     actual_size = sh_actual_size(ptr);
-    UNLOCK();
+    CRYPTO_THREAD_unlock(sec_malloc_lock);
     return actual_size;
 #else
     return 0;
@@ -307,7 +310,7 @@ static void sh_add_to_list(char **list, char *ptr)
     *list = ptr;
 }
 
-static void sh_remove_from_list(char *ptr, char *list)
+static void sh_remove_from_list(char *ptr)
 {
     SH_LIST *temp, *temp2;
 
@@ -484,7 +487,7 @@ static char *sh_malloc(size_t size)
         /* remove from bigger list */
         OPENSSL_assert(!sh_testbit(temp, slist, sh.bitmalloc));
         sh_clearbit(temp, slist, sh.bittable);
-        sh_remove_from_list(temp, sh.freelist[slist]);
+        sh_remove_from_list(temp);
         OPENSSL_assert(temp != sh.freelist[slist]);
 
         /* done with bigger list */
@@ -510,7 +513,7 @@ static char *sh_malloc(size_t size)
     chunk = sh.freelist[list];
     OPENSSL_assert(sh_testbit(chunk, list, sh.bittable));
     sh_setbit(chunk, list, sh.bitmalloc);
-    sh_remove_from_list(chunk, sh.freelist[list]);
+    sh_remove_from_list(chunk);
 
     OPENSSL_assert(WITHIN_ARENA(chunk));
 
@@ -539,10 +542,10 @@ static void sh_free(char *ptr)
         OPENSSL_assert(ptr != NULL);
         OPENSSL_assert(!sh_testbit(ptr, list, sh.bitmalloc));
         sh_clearbit(ptr, list, sh.bittable);
-        sh_remove_from_list(ptr, sh.freelist[list]);
+        sh_remove_from_list(ptr);
         OPENSSL_assert(!sh_testbit(ptr, list, sh.bitmalloc));
         sh_clearbit(buddy, list, sh.bittable);
-        sh_remove_from_list(buddy, sh.freelist[list]);
+        sh_remove_from_list(buddy);
 
         list--;
 

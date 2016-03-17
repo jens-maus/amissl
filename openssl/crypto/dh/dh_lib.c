@@ -88,10 +88,8 @@ int DH_set_method(DH *dh, const DH_METHOD *meth)
     if (mtmp->finish)
         mtmp->finish(dh);
 #ifndef OPENSSL_NO_ENGINE
-    if (dh->engine) {
-        ENGINE_finish(dh->engine);
-        dh->engine = NULL;
-    }
+    ENGINE_finish(dh->engine);
+    dh->engine = NULL;
 #endif
     dh->meth = meth;
     if (meth->init)
@@ -110,7 +108,7 @@ DH *DH_new_method(ENGINE *engine)
 
     if (ret == NULL) {
         DHerr(DH_F_DH_NEW_METHOD, ERR_R_MALLOC_FAILURE);
-        return (NULL);
+        return NULL;
     }
 
     ret->meth = DH_get_default_method();
@@ -126,7 +124,7 @@ DH *DH_new_method(ENGINE *engine)
         ret->engine = ENGINE_get_default_DH();
     if (ret->engine) {
         ret->meth = ENGINE_get_DH(ret->engine);
-        if (!ret->meth) {
+        if (ret->meth == NULL) {
             DHerr(DH_F_DH_NEW_METHOD, ERR_R_ENGINE_LIB);
             ENGINE_finish(ret->engine);
             OPENSSL_free(ret);
@@ -137,17 +135,25 @@ DH *DH_new_method(ENGINE *engine)
 
     ret->references = 1;
     ret->flags = ret->meth->flags;
+
     CRYPTO_new_ex_data(CRYPTO_EX_INDEX_DH, ret, &ret->ex_data);
-    if ((ret->meth->init != NULL) && !ret->meth->init(ret)) {
+
+    ret->lock = CRYPTO_THREAD_lock_new();
+    if (ret->lock == NULL) {
 #ifndef OPENSSL_NO_ENGINE
-        if (ret->engine)
-            ENGINE_finish(ret->engine);
+        ENGINE_finish(ret->engine);
 #endif
         CRYPTO_free_ex_data(CRYPTO_EX_INDEX_DH, ret, &ret->ex_data);
         OPENSSL_free(ret);
+        return NULL;
+    }
+
+    if ((ret->meth->init != NULL) && !ret->meth->init(ret)) {
+        DH_free(ret);
         ret = NULL;
     }
-    return (ret);
+
+    return ret;
 }
 
 void DH_free(DH *r)
@@ -156,7 +162,8 @@ void DH_free(DH *r)
 
     if (r == NULL)
         return;
-    i = CRYPTO_add(&r->references, -1, CRYPTO_LOCK_DH);
+
+    CRYPTO_atomic_add(&r->references, -1, &i, r->lock);
     REF_PRINT_COUNT("DH", r);
     if (i > 0)
         return;
@@ -165,11 +172,12 @@ void DH_free(DH *r)
     if (r->meth->finish)
         r->meth->finish(r);
 #ifndef OPENSSL_NO_ENGINE
-    if (r->engine)
-        ENGINE_finish(r->engine);
+    ENGINE_finish(r->engine);
 #endif
 
     CRYPTO_free_ex_data(CRYPTO_EX_INDEX_DH, r, &r->ex_data);
+
+    CRYPTO_THREAD_lock_free(r->lock);
 
     BN_clear_free(r->p);
     BN_clear_free(r->g);
@@ -184,7 +192,10 @@ void DH_free(DH *r)
 
 int DH_up_ref(DH *r)
 {
-    int i = CRYPTO_add(&r->references, 1, CRYPTO_LOCK_DH);
+    int i;
+
+    if (CRYPTO_atomic_add(&r->references, 1, &i, r->lock) <= 0)
+        return 0;
 
     REF_PRINT_COUNT("DH", r);
     REF_ASSERT_ISNT(i < 2);

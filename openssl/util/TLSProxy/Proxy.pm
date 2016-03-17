@@ -52,6 +52,7 @@
 # Hudson (tjh@cryptsoft.com).
 
 use strict;
+use POSIX ":sys_wait_h";
 
 package TLSProxy::Proxy;
 
@@ -86,6 +87,7 @@ sub new
         serverflags => "",
         clientflags => "",
         serverconnects => 1,
+        serverpid => 0,
 
         #Public read
         execute => $execute,
@@ -138,21 +140,29 @@ sub new
     return bless $self, $class;
 }
 
-sub clear
+sub clearClient
 {
     my $self = shift;
 
     $self->{cipherc} = "";
-    $self->{ciphers} = "AES128-SHA";
     $self->{flight} = 0;
     $self->{record_list} = [];
     $self->{message_list} = [];
-    $self->{serverflags} = "";
     $self->{clientflags} = "";
-    $self->{serverconnects} = 1;
 
     TLSProxy::Message->clear();
     TLSProxy::Record->clear();
+}
+
+sub clear
+{
+    my $self = shift;
+
+    $self->clearClient;
+    $self->{ciphers} = "AES128-SHA";
+    $self->{serverflags} = "";
+    $self->{serverconnects} = 1;
+    $self->{serverpid} = 0;
 }
 
 sub restart
@@ -178,9 +188,11 @@ sub start
 
     $pid = fork();
     if ($pid == 0) {
-        open(STDOUT, ">", File::Spec->devnull())
-            or die "Failed to redirect stdout: $!";
-        open(STDERR, ">&STDOUT");
+        if (!$self->debug) {
+            open(STDOUT, ">", File::Spec->devnull())
+                or die "Failed to redirect stdout: $!";
+            open(STDERR, ">&STDOUT");
+        }
         my $execcmd = $self->execute
             ." s_server -no_comp -rev -engine ossltest -accept "
             .($self->server_port)
@@ -193,6 +205,7 @@ sub start
         }
         exec($execcmd);
     }
+    $self->serverpid($pid);
 
     $self->clientstart;
 }
@@ -227,9 +240,11 @@ sub clientstart
     if ($self->execute) {
         my $pid = fork();
         if ($pid == 0) {
-            open(STDOUT, ">", File::Spec->devnull())
-                or die "Failed to redirect stdout: $!";
-            open(STDERR, ">&STDOUT");
+            if (!$self->debug) {
+                open(STDOUT, ">", File::Spec->devnull())
+                    or die "Failed to redirect stdout: $!";
+                open(STDERR, ">&STDOUT");
+            }
             my $execcmd = "echo test | ".$self->execute
                  ." s_client -engine ossltest -connect "
                  .($self->proxy_addr).":".($self->proxy_port);
@@ -265,7 +280,9 @@ sub clientstart
         );
 
         $retry--;
-        if (!$server_sock) {
+        if ($@ || !defined($server_sock)) {
+            $server_sock->close() if defined($server_sock);
+            undef $server_sock;
             if ($retry) {
                 #Sleep for a short while
                 select(undef, undef, undef, 0.1);
@@ -312,6 +329,13 @@ sub clientstart
     }
     if(!$self->debug) {
         select($oldstdout);
+    }
+    $self->serverconnects($self->serverconnects - 1);
+    if ($self->serverconnects == 0) {
+        die "serverpid is zero\n" if $self->serverpid == 0;
+        print "Waiting for server process to close: "
+              .$self->serverpid."\n";
+        waitpid( $self->serverpid, 0);
     }
 }
 
@@ -496,5 +520,13 @@ sub message_list
         $self->{message_list} = shift;
     }
     return $self->{message_list};
+}
+sub serverpid
+{
+    my $self = shift;
+    if (@_) {
+      $self->{serverpid} = shift;
+    }
+    return $self->{serverpid};
 }
 1;

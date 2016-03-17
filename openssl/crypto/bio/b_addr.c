@@ -55,10 +55,15 @@
 #include <string.h>
 
 #include "bio_lcl.h"
+#include "internal/threads.h"
 
+#ifndef OPENSSL_NO_SOCK
 #include <openssl/err.h>
 #include <openssl/buffer.h>
 #include <ctype.h>
+
+static CRYPTO_RWLOCK *bio_lookup_lock;
+static CRYPTO_ONCE bio_lookup_init = CRYPTO_ONCE_STATIC_INIT;
 
 /*
  * Throughout this file and bio_lcl.h, the existence of the macro
@@ -100,18 +105,18 @@ void BIO_ADDR_clear(BIO_ADDR *ap)
 int BIO_ADDR_make(BIO_ADDR *ap, const struct sockaddr *sa)
 {
     if (sa->sa_family == AF_INET) {
-        ap->sin = *(const struct sockaddr_in *)sa;
+        ap->s_in = *(const struct sockaddr_in *)sa;
         return 1;
     }
 #ifdef AF_INET6
     if (sa->sa_family == AF_INET6) {
-        ap->sin6 = *(const struct sockaddr_in6 *)sa;
+        ap->s_in6 = *(const struct sockaddr_in6 *)sa;
         return 1;
     }
 #endif
 #ifdef AF_UNIX
     if (ap->sa.sa_family == AF_UNIX) {
-        ap->sun = *(const struct sockaddr_un *)sa;
+        ap->s_un = *(const struct sockaddr_un *)sa;
         return 1;
     }
 #endif
@@ -125,31 +130,31 @@ int BIO_ADDR_rawmake(BIO_ADDR *ap, int family,
 {
 #ifdef AF_UNIX
     if (family == AF_UNIX) {
-        if (wherelen + 1 > sizeof(ap->sun.sun_path))
+        if (wherelen + 1 > sizeof(ap->s_un.sun_path))
             return 0;
-        memset(&ap->sun, 0, sizeof(ap->sun));
-        ap->sun.sun_family = family;
-        strncpy(ap->sun.sun_path, where, sizeof(ap->sun.sun_path) - 1);
+        memset(&ap->s_un, 0, sizeof(ap->s_un));
+        ap->s_un.sun_family = family;
+        strncpy(ap->s_un.sun_path, where, sizeof(ap->s_un.sun_path) - 1);
         return 1;
     }
 #endif
     if (family == AF_INET) {
         if (wherelen != sizeof(struct in_addr))
             return 0;
-        memset(&ap->sin, 0, sizeof(ap->sin));
-        ap->sin.sin_family = family;
-        ap->sin.sin_port = port;
-        ap->sin.sin_addr = *(struct in_addr *)where;
+        memset(&ap->s_in, 0, sizeof(ap->s_in));
+        ap->s_in.sin_family = family;
+        ap->s_in.sin_port = port;
+        ap->s_in.sin_addr = *(struct in_addr *)where;
         return 1;
     }
 #ifdef AF_INET6
     if (family == AF_INET6) {
         if (wherelen != sizeof(struct in6_addr))
             return 0;
-        memset(&ap->sin6, 0, sizeof(ap->sin6));
-        ap->sin6.sin6_family = family;
-        ap->sin6.sin6_port = port;
-        ap->sin6.sin6_addr = *(struct in6_addr *)where;
+        memset(&ap->s_in6, 0, sizeof(ap->s_in6));
+        ap->s_in6.sin6_family = family;
+        ap->s_in6.sin6_port = port;
+        ap->s_in6.sin6_addr = *(struct in6_addr *)where;
         return 1;
     }
 #endif
@@ -168,19 +173,19 @@ int BIO_ADDR_rawaddress(const BIO_ADDR *ap, void *p, size_t *l)
     const void *addrptr = NULL;
 
     if (ap->sa.sa_family == AF_INET) {
-        len = sizeof(ap->sin.sin_addr);
-        addrptr = &ap->sin.sin_addr;
+        len = sizeof(ap->s_in.sin_addr);
+        addrptr = &ap->s_in.sin_addr;
     }
 #ifdef AF_INET6
     else if (ap->sa.sa_family == AF_INET6) {
-        len = sizeof(ap->sin6.sin6_addr);
-        addrptr = &ap->sin6.sin6_addr;
+        len = sizeof(ap->s_in6.sin6_addr);
+        addrptr = &ap->s_in6.sin6_addr;
     }
 #endif
 #ifdef AF_UNIX
     else if (ap->sa.sa_family == AF_UNIX) {
-        len = strlen(ap->sun.sun_path);
-        addrptr = &ap->sun.sun_path;
+        len = strlen(ap->s_un.sun_path);
+        addrptr = &ap->s_un.sun_path;
     }
 #endif
 
@@ -199,10 +204,10 @@ int BIO_ADDR_rawaddress(const BIO_ADDR *ap, void *p, size_t *l)
 unsigned short BIO_ADDR_rawport(const BIO_ADDR *ap)
 {
     if (ap->sa.sa_family == AF_INET)
-        return ap->sin.sin_port;
+        return ap->s_in.sin_port;
 #ifdef AF_INET6
     if (ap->sa.sa_family == AF_INET6)
-        return ap->sin6.sin6_port;
+        return ap->s_in6.sin6_port;
 #endif
     return 0;
 }
@@ -270,10 +275,10 @@ static int addr_strings(const BIO_ADDR *ap, int numeric,
     } else {
 #endif
         if (hostname)
-            *hostname = OPENSSL_strdup(inet_ntoa(ap->sin.sin_addr));
+            *hostname = OPENSSL_strdup(inet_ntoa(ap->s_in.sin_addr));
         if (service) {
             char serv[6];        /* port is 16 bits => max 5 decimal digits */
-            BIO_snprintf(serv, sizeof(serv), "%d", ntohs(ap->sin.sin_port));
+            BIO_snprintf(serv, sizeof(serv), "%d", ntohs(ap->s_in.sin_port));
             *service = OPENSSL_strdup(serv);
         }
     }
@@ -305,7 +310,7 @@ char *BIO_ADDR_path_string(const BIO_ADDR *ap)
 {
 #ifdef AF_UNIX
     if (ap->sa.sa_family == AF_UNIX)
-        return OPENSSL_strdup(ap->sun.sun_path);
+        return OPENSSL_strdup(ap->s_un.sun_path);
 #endif
     return NULL;
 }
@@ -340,14 +345,14 @@ struct sockaddr *BIO_ADDR_sockaddr_noconst(BIO_ADDR *ap)
 socklen_t BIO_ADDR_sockaddr_size(const BIO_ADDR *ap)
 {
     if (ap->sa.sa_family == AF_INET)
-        return sizeof(ap->sin);
+        return sizeof(ap->s_in);
 #ifdef AF_INET6
     if (ap->sa.sa_family == AF_INET6)
-        return sizeof(ap->sin6);
+        return sizeof(ap->s_in6);
 #endif
 #ifdef AF_UNIX
     if (ap->sa.sa_family == AF_UNIX)
-        return sizeof(ap->sun);
+        return sizeof(ap->s_un);
 #endif
     return sizeof(*ap);
 }
@@ -622,6 +627,11 @@ static int addrinfo_wrap(int family, int socktype,
     return 1;
 }
 
+static void do_bio_lookup_init(void)
+{
+    bio_lookup_lock = CRYPTO_THREAD_lock_new();
+}
+
 /*-
  * BIO_lookup - look up the node and service you want to connect to.
  * @node: the node you want to connect to.
@@ -680,18 +690,13 @@ int BIO_lookup(const char *host, const char *service,
         int gai_ret = 0;
 #ifdef AI_PASSIVE
         struct addrinfo hints;
+        memset(&hints, 0, sizeof hints);
 
-        hints.ai_flags = 0;
 # ifdef AI_ADDRCONFIG
         hints.ai_flags = AI_ADDRCONFIG;
 # endif
         hints.ai_family = family;
         hints.ai_socktype = socktype;
-        hints.ai_protocol = 0;
-        hints.ai_addrlen = 0;
-        hints.ai_addr = NULL;
-        hints.ai_canonname = NULL;
-        hints.ai_next = NULL;
 
         if (lookup_type == BIO_LOOKUP_SERVER)
             hints.ai_flags |= AI_PASSIVE;
@@ -739,8 +744,9 @@ int BIO_lookup(const char *host, const char *service,
 #endif
         char *proto = NULL;
 
-        CRYPTO_w_lock(CRYPTO_LOCK_GETHOSTBYNAME);
-        CRYPTO_w_lock(CRYPTO_LOCK_GETSERVBYNAME);
+        CRYPTO_THREAD_run_once(&bio_lookup_init, do_bio_lookup_init);
+
+        CRYPTO_THREAD_write_lock(bio_lookup_lock);
         he_fallback_address = INADDR_ANY;
         if (host == NULL) {
             he = &he_fallback;
@@ -854,9 +860,9 @@ int BIO_lookup(const char *host, const char *service,
             ret = 1;
         }
      err:
-        CRYPTO_w_unlock(CRYPTO_LOCK_GETSERVBYNAME);
-        CRYPTO_w_unlock(CRYPTO_LOCK_GETHOSTBYNAME);
+        CRYPTO_THREAD_unlock(bio_lookup_lock);
     }
 
     return ret;
 }
+#endif /* OPENSSL_NO_SOCK */
