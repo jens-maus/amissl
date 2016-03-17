@@ -119,7 +119,7 @@ static void ossl_init_base(void)
      * when the thread is going to stop (where that feature is available)
      */
     CRYPTO_THREAD_init_local(&threadstopkey, ossl_init_thread_stop_wrap);
-#ifndef OPENSSL_SYS_UEFI && !defined(OPENSSL_SYS_AMIGA)
+#if !defined(OPENSSL_SYS_UEFI) && !defined(OPENSSL_SYS_AMIGA)
     atexit(OPENSSL_cleanup);
 #endif
     init_lock = CRYPTO_THREAD_lock_new();

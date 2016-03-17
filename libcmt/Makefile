@@ -20,15 +20,13 @@
 #
 #***************************************************************************/
 
-AmiSSL=..
-OBJ_D=$(AmiSSL)/.obj_$(OS)/libcmt
-BIN_D=$(AmiSSL)/bin_$(OS)
+BUILD_D=../build_$(OS)/libcmt
 
 WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-aliasing #-Wunreachable-code
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
-CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I$(AmiSSL)/include -D__NO_NET_API
+CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I../include -D__NO_NET_API
 
 # different options per target OS
 ifeq ($(OS), os4)
@@ -68,7 +66,7 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU	    = -m68020-60 -msoft-float
-  CFLAGS  += -resident32 -I$(AmiSSL)/include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
+  CFLAGS  += -resident32 -I../include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
   LDFLAGS += -noixemul
   LDLIBS  += -lm
 
@@ -113,106 +111,102 @@ endif
 endif
 endif
 
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libcmt.a
+all: $(BUILD_D) $(BUILD_D)/libcmt.a
 
 clean:
-	rm -f $(OBJ_D)/* $(BIN_D)/libcmt.a
+	rm -f $(BUILD_D)/*
 
 # make the binary directories
-$(BIN_D):
+$(BUILD_D):
 	@echo "  MKDIR $@"
-	@$(MKDIR) $(BIN_D)
+	@$(MKDIR) $(BUILD_D)
 
-$(OBJ_D):
-	@echo "  MKDIR $@"
-	@$(MKDIR) $(OBJ_D)
-
-$(OBJ_D)/%.o: %.c
+$(BUILD_D)/%.o: %.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 libobjs: $(LIBOBJS)
 
-CLIB2OBJS = $(OBJ_D)/string_memset.o \
-            $(OBJ_D)/string_memcmp.o \
-            $(OBJ_D)/string_memcpy.o \
-            $(OBJ_D)/string_bcopy.o \
-            $(OBJ_D)/string_memmove.o \
-            $(OBJ_D)/string_memchr.o \
-            $(OBJ_D)/string_bzero.o \
-            $(OBJ_D)/string_strpbrk.o \
-            $(OBJ_D)/string_strcmp.o \
-            $(OBJ_D)/string_strdup.o \
-            $(OBJ_D)/string_strlen.o \
-            $(OBJ_D)/string_strchr.o \
-            $(OBJ_D)/string_strrchr.o \
-            $(OBJ_D)/string_strcpy.o \
-            $(OBJ_D)/string_strncpy.o \
-            $(OBJ_D)/string_strncmp.o \
-            $(OBJ_D)/string_strlcpy.o \
-            $(OBJ_D)/string_strlcat.o \
-            $(OBJ_D)/string_strcat.o \
-            $(OBJ_D)/string_strspn.o \
-            $(OBJ_D)/strings_strncasecmp.o \
-            $(OBJ_D)/stdlib_atoi.o \
-            $(OBJ_D)/stdlib_strtoul.o \
-            $(OBJ_D)/stdlib_strtol.o \
-            $(OBJ_D)/stdlib_qsort.o \
-            $(OBJ_D)/ctype_table.o
+CLIB2OBJS = $(BUILD_D)/string_memset.o \
+            $(BUILD_D)/string_memcmp.o \
+            $(BUILD_D)/string_memcpy.o \
+            $(BUILD_D)/string_bcopy.o \
+            $(BUILD_D)/string_memmove.o \
+            $(BUILD_D)/string_memchr.o \
+            $(BUILD_D)/string_bzero.o \
+            $(BUILD_D)/string_strpbrk.o \
+            $(BUILD_D)/string_strcmp.o \
+            $(BUILD_D)/string_strdup.o \
+            $(BUILD_D)/string_strlen.o \
+            $(BUILD_D)/string_strchr.o \
+            $(BUILD_D)/string_strrchr.o \
+            $(BUILD_D)/string_strcpy.o \
+            $(BUILD_D)/string_strncpy.o \
+            $(BUILD_D)/string_strncmp.o \
+            $(BUILD_D)/string_strlcpy.o \
+            $(BUILD_D)/string_strlcat.o \
+            $(BUILD_D)/string_strcat.o \
+            $(BUILD_D)/string_strspn.o \
+            $(BUILD_D)/strings_strncasecmp.o \
+            $(BUILD_D)/stdlib_atoi.o \
+            $(BUILD_D)/stdlib_strtoul.o \
+            $(BUILD_D)/stdlib_strtol.o \
+            $(BUILD_D)/stdlib_qsort.o \
+            $(BUILD_D)/ctype_table.o
 
-STDIOOBJS = $(OBJ_D)/malloc.o \
-            $(OBJ_D)/free.o \
-            $(OBJ_D)/realloc.o \
-            $(OBJ_D)/time.o \
-            $(OBJ_D)/gmtime.o \
-            $(OBJ_D)/getenv.o \
-            $(OBJ_D)/stat.o \
-            $(OBJ_D)/dirent.o \
-            $(OBJ_D)/file.o \
-            $(OBJ_D)/fread.o \
-            $(OBJ_D)/fwrite.o \
-            $(OBJ_D)/refill.o \
-            $(OBJ_D)/putc.o \
-            $(OBJ_D)/fflush.o \
-            $(OBJ_D)/sscanf.o \
-            $(OBJ_D)/vsscanf.o \
-            $(OBJ_D)/sscanf.o \
-            $(OBJ_D)/getpid.o \
-            $(OBJ_D)/fprintf.o \
-            $(OBJ_D)/perror.o \
-            $(OBJ_D)/abort.o \
-            $(OBJ_D)/exit.o \
-            $(OBJ_D)/clock.o \
-            $(OBJ_D)/error.o \
-            $(OBJ_D)/errno.o \
-            $(OBJ_D)/math.o \
-            $(OBJ_D)/gettimeofday.o \
-            $(OBJ_D)/vsnprintf.o
+STDIOOBJS = $(BUILD_D)/malloc.o \
+            $(BUILD_D)/free.o \
+            $(BUILD_D)/realloc.o \
+            $(BUILD_D)/time.o \
+            $(BUILD_D)/gmtime.o \
+            $(BUILD_D)/getenv.o \
+            $(BUILD_D)/stat.o \
+            $(BUILD_D)/dirent.o \
+            $(BUILD_D)/file.o \
+            $(BUILD_D)/fread.o \
+            $(BUILD_D)/fwrite.o \
+            $(BUILD_D)/refill.o \
+            $(BUILD_D)/putc.o \
+            $(BUILD_D)/fflush.o \
+            $(BUILD_D)/sscanf.o \
+            $(BUILD_D)/vsscanf.o \
+            $(BUILD_D)/sscanf.o \
+            $(BUILD_D)/getpid.o \
+            $(BUILD_D)/fprintf.o \
+            $(BUILD_D)/perror.o \
+            $(BUILD_D)/abort.o \
+            $(BUILD_D)/exit.o \
+            $(BUILD_D)/clock.o \
+            $(BUILD_D)/error.o \
+            $(BUILD_D)/errno.o \
+            $(BUILD_D)/math.o \
+            $(BUILD_D)/gettimeofday.o \
+            $(BUILD_D)/vsnprintf.o
 
-NWLIBOBJS = $(OBJ_D)/setsockopt.o \
-            $(OBJ_D)/accept.o \
-            $(OBJ_D)/gethostbyname.o \
-            $(OBJ_D)/listen.o \
-            $(OBJ_D)/send.o \
-            $(OBJ_D)/bind.o \
-            $(OBJ_D)/getservbyname.o \
-            $(OBJ_D)/shutdown.o \
-            $(OBJ_D)/closesocket.o \
-            $(OBJ_D)/getsockopt.o \
-            $(OBJ_D)/getsockname.o \
-            $(OBJ_D)/inet_ntoa.o \
-            $(OBJ_D)/socket.o \
-            $(OBJ_D)/connect.o \
-            $(OBJ_D)/ioctlsocket.o \
-            $(OBJ_D)/recv.o \
-            $(OBJ_D)/setsockopt.o \
-            $(OBJ_D)/getuid.o \
-            $(OBJ_D)/sendto.o \
-            $(OBJ_D)/recvfrom.o
+NWLIBOBJS = $(BUILD_D)/setsockopt.o \
+            $(BUILD_D)/accept.o \
+            $(BUILD_D)/gethostbyname.o \
+            $(BUILD_D)/listen.o \
+            $(BUILD_D)/send.o \
+            $(BUILD_D)/bind.o \
+            $(BUILD_D)/getservbyname.o \
+            $(BUILD_D)/shutdown.o \
+            $(BUILD_D)/closesocket.o \
+            $(BUILD_D)/getsockopt.o \
+            $(BUILD_D)/getsockname.o \
+            $(BUILD_D)/inet_ntoa.o \
+            $(BUILD_D)/socket.o \
+            $(BUILD_D)/connect.o \
+            $(BUILD_D)/ioctlsocket.o \
+            $(BUILD_D)/recv.o \
+            $(BUILD_D)/setsockopt.o \
+            $(BUILD_D)/getuid.o \
+            $(BUILD_D)/sendto.o \
+            $(BUILD_D)/recvfrom.o
 
-LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(OBJ_D)/threadhash.o $(NWLIBOBJS) $(OBJ_D)/localtime.o $(OBJ_D)/libcmt.o
+LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(BUILD_D)/threadhash.o $(NWLIBOBJS) $(BUILD_D)/localtime.o $(BUILD_D)/libcmt.o
 
-$(BIN_D)/libcmt.a: $(LIBOBJS)
+$(BUILD_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"
 	@$(AR) r $@ $(LIBOBJS)
 	@$(RANLIB) $@

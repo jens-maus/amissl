@@ -18,47 +18,47 @@ extern "C" {
  * OpenSSL was configured with the following options:
  */
 
-#ifndef OPENSSL_DOING_MAKEDEPEND
-
 #ifndef OPENSSL_SYS_AMIGA
 # define OPENSSL_SYS_AMIGA 1
 #endif
-# ifndef OPENSSL_NO_CRYPTO_MDEBUG
-#  define OPENSSL_NO_CRYPTO_MDEBUG
-# endif
-# ifndef OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
-#  define OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
-# endif
-# ifndef OPENSSL_NO_EC_NISTP_64_GCC_128
-#  define OPENSSL_NO_EC_NISTP_64_GCC_128
-# endif
-# ifndef OPENSSL_NO_EGD
-#  define OPENSSL_NO_EGD
-# endif
-# ifndef OPENSSL_NO_HEARTBEATS
-#  define OPENSSL_NO_HEARTBEATS
-# endif
-# ifndef OPENSSL_NO_JPAKE
-#  define OPENSSL_NO_JPAKE
-# endif
-# ifndef OPENSSL_NO_SCTP
-#  define OPENSSL_NO_SCTP
-# endif
-# ifndef OPENSSL_NO_SSL_TRACE
-#  define OPENSSL_NO_SSL_TRACE
-# endif
-# ifndef OPENSSL_NO_UNIT_TEST
-#  define OPENSSL_NO_UNIT_TEST
-# endif
-
-#endif /* OPENSSL_DOING_MAKEDEPEND */
-
-
+#ifndef OPENSSL_NO_CRYPTO_MDEBUG
+# define OPENSSL_NO_CRYPTO_MDEBUG
+#endif
+#ifndef OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
+# define OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
+#endif
+#ifndef OPENSSL_NO_EC_NISTP_64_GCC_128
+# define OPENSSL_NO_EC_NISTP_64_GCC_128
+#endif
+#ifndef OPENSSL_NO_EGD
+# define OPENSSL_NO_EGD
+#endif
+#ifndef OPENSSL_NO_HEARTBEATS
+# define OPENSSL_NO_HEARTBEATS
+#endif
+#ifndef OPENSSL_NO_SCTP
+# define OPENSSL_NO_SCTP
+#endif
+#ifndef OPENSSL_NO_SSL_TRACE
+# define OPENSSL_NO_SSL_TRACE
+#endif
+#ifndef OPENSSL_NO_SSL3
+# define OPENSSL_NO_SSL3
+#endif
+#ifndef OPENSSL_NO_SSL3_METHOD
+# define OPENSSL_NO_SSL3_METHOD
+#endif
+#ifndef OPENSSL_NO_UNIT_TEST
+# define OPENSSL_NO_UNIT_TEST
+#endif
+#ifndef OPENSSL_NO_WEAK_SSL_CIPHERS
+# define OPENSSL_NO_WEAK_SSL_CIPHERS
+#endif
 #ifndef OPENSSL_NO_ASM
 # define OPENSSL_NO_ASM
 #endif
-#ifndef OPENSSL_NO_DYNAMIC_ENGINE
-# define OPENSSL_NO_DYNAMIC_ENGINE
+#ifndef OPENSSL_NO_AFALGENG
+# define OPENSSL_NO_AFALGENG
 #endif
 
 
@@ -80,6 +80,16 @@ extern "C" {
 # define DECLARE_DEPRECATED(f)    f __attribute__ ((deprecated));
 #else
 # define DECLARE_DEPRECATED(f)   f;
+#endif
+
+#ifndef OPENSSL_FILE
+# ifdef OPENSSL_NO_FILENAMES
+#  define OPENSSL_FILE ""
+#  define OPENSSL_LINE 0
+# else
+#  define OPENSSL_FILE __FILE__
+#  define OPENSSL_LINE __LINE__
+# endif
 #endif
 
 #ifndef OPENSSL_MIN_API

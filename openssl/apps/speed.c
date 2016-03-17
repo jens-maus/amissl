@@ -644,7 +644,7 @@ static OPT_PAIR ecdh_choices[] = {
 };
 #endif
 
-#ifndef SIGALRM
+#if !defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
 # define COND(d) (count < (d))
 # define COUNT(d) (d)
 #else

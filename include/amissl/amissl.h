@@ -43,6 +43,9 @@
 #include <openssl/conf.h>
 #include <openssl/conf_api.h>
 #include <openssl/crypto.h>
+#ifndef OPENSSL_NO_CT
+#include <openssl/ct.h>
+#endif
 #ifndef OPENSSL_NO_DES
 #include <openssl/des.h>
 #endif
@@ -74,9 +77,6 @@
 #endif
 #ifndef OPENSSL_NO_IDEA
 #include <openssl/idea.h>
-#endif
-#ifndef OPENSSL_NO_JPAKE
-#include <openssl/jpake.h>
 #endif
 #include <openssl/kdf.h>
 #include <openssl/lhash.h>

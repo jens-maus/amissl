@@ -144,52 +144,6 @@ static AMISSL_STATE *CreateAmiSSLState(void)
   return ret;
 }
 
-struct CRYPTO_dynlock_value
-{
-  struct SignalSemaphore lock_cs;
-};
-
-static struct CRYPTO_dynlock_value *amigaos_dyn_create_function(UNUSED const char *file, UNUSED int line)
-{
-  struct CRYPTO_dynlock_value *value;
-
-  if((value = SB_AllocVec(sizeof(*value), MEMF_CLEAR)) != NULL)
-    InitSemaphore(&value->lock_cs);
-
-  return value;
-}
-
-static void amigaos_dyn_lock_function(int mode, struct CRYPTO_dynlock_value *l,
-                                      UNUSED const char *file, UNUSED int line)
-{
-  if(mode & CRYPTO_LOCK)
-    ObtainSemaphore(&l->lock_cs);
-  else
-    ReleaseSemaphore(&l->lock_cs);
-}
-
-static void amigaos_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
-                                         UNUSED const char *file, UNUSED int line)
-{
-  InitSemaphore(&l->lock_cs);
-  FreeVec(l);
-}
-
-static void amigaos_locking_callback(int mode, int type, UNUSED const char *file, UNUSED int line)
-{
-  if(mode & CRYPTO_LOCK)
-    ObtainSemaphore(&ownBase->lock_cs[type]);
-  else
-    ReleaseSemaphore(&ownBase->lock_cs[type]);
-}
-
-static void amigaos_threadid_callback(CRYPTO_THREADID *id)
-{
-  ObtainSemaphore(&parentBase->openssl_cs);
-  CRYPTO_THREADID_set_pointer(id, (void*)FindTask(NULL));
-  ReleaseSemaphore(&parentBase->openssl_cs);
-}
-
 static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
 {
   if(a->ThreadGroupID == ownBase->ThreadGroupID)
@@ -532,15 +486,6 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
       InitSemaphore(&ownBase->lock_cs[i]);
       D(DBF_STARTUP, "initialized lockcs[%ld]: %08lx", i, &ownBase->lock_cs[i]);
     }
-
-    // set static locks callbacks
-    CRYPTO_set_locking_callback((void (*)())amigaos_locking_callback);
-    CRYPTO_THREADID_set_callback(amigaos_threadid_callback);
-
-    // set dynamic locks callbacks
-    CRYPTO_set_dynlock_create_callback(amigaos_dyn_create_function);
-    CRYPTO_set_dynlock_lock_callback(amigaos_dyn_lock_function);
-    CRYPTO_set_dynlock_destroy_callback(amigaos_dyn_destroy_function);
 
 #if defined(__amigaos4__)
     if ((DOSBase = OpenLibrary("dos.library", 50))

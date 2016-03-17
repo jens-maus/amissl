@@ -416,6 +416,16 @@ int (EVP_PKEY_derive_init)(EVP_PKEY_CTX *ctx)
   return EVP_PKEY_derive_init(ctx);
 }
 
+int (CT_verify_no_bad_scts)(const CT_POLICY_EVAL_CTX *ctx, const STACK_OF(SCT) *scts, void *arg)
+{
+  return CT_verify_no_bad_scts(ctx, scts, arg);
+}
+
+int (CT_verify_at_least_one_good_sct)(const CT_POLICY_EVAL_CTX * ctx, const STACK_OF(SCT) * scts, void * arg)
+{
+  return CT_verify_at_least_one_good_sct(ctx, scts, arg);
+}
+
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
 #include <proto/dos.h>

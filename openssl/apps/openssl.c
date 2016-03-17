@@ -219,7 +219,7 @@ extern char **copy_argv(int *argc, char **argv);
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
-const char *ProgramVersion = "\0$VER: OpenSSL 1.1.0-pre3 (15.02.2016)\r\n";
+const char *ProgramVersion = "\0$VER: OpenSSL 1.1.0-pre4 (16.03.2016)\r\n";
 
 struct Library *AmiSSLBase, *AmiSSLMasterBase, *SocketBase;
 

@@ -231,6 +231,7 @@ struct dso_st {
      * loaded.
      */
     char *loaded_filename;
+    CRYPTO_RWLOCK *lock;
 };
 
 DSO *DSO_new(void);
