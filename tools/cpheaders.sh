@@ -1,7 +1,7 @@
 #!/bin/sh
 BUILD_D=$1
 rm -f include/openssl/*
-for header in openssl/include/openssl/*.h; do
+for header in ${BUILD_D}/openssl/include/openssl/*.h openssl/include/openssl/*.h; do
   file=$(basename ${header})
   if echo "${file}" | grep -qv "__"; then
     cp -a ${header} include/openssl/

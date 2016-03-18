@@ -168,7 +168,7 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachabl
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include
+INCLUDE  = -I./include -I$(BUILD_D)/openssl/include
 APPCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
 CFLAGS   = $(APPCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
@@ -415,7 +415,7 @@ $(BUILD_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 $(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads no-asm $(DEBUG))
+	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads $(DEBUG))
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
@@ -510,13 +510,9 @@ clean:
 # distclean target
 .PHONY: distclean
 distclean: clean
-	-rm -f openssl/MINFO
-	-rm -f openssl/Makefile
-	-rm -f openssl/crypto/opensslconf.h
-	-rm -f openssl/openssl.pc
-	-rm -f openssl/crypto/buildinf.h
+	-rm -f openssl/configdata.pm
+	-rm -f openssl/include/openssl/opensslconf.h
 	-rm -rf $(BUILD_D) $(BUILD_D)
-	-rm -rf *.library *.map
 
 # for creating a .dump file
 .PHONY: dump
