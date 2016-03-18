@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.5)! Do not edit! */
+/* Automatically generated header (sfdc 1.6)! Do not edit! */
 
 #ifndef _INLINE_AMISSL_H
 #define _INLINE_AMISSL_H
@@ -16242,8 +16242,8 @@ typedef ULONG _sfdc_vararg;
 	LP1(0x6c6c, ct_validation_cb, SSL_CTX_get_ct_validation_callback , const SSL_CTX *, ___ctx, a0,\
 	, AMISSL_BASE_NAME)
 
-#define STACK_OF(___s) \
-	LP1(0x6c72, const, STACK_OF , SCT) * SSL_get0_peer_scts(SSL *, ___s, a0,\
+#define SSL_get0_peer_scts(___s) \
+	LP1(0x6c72, const STACK_OF(SCT) *, SSL_get0_peer_scts , SSL *, ___s, a0,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_CTX_set_default_ctlog_list_file(___ctx) \

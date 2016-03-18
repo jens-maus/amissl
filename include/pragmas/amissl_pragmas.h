@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.5)! Do not edit! */
+/* Automatically generated header (sfdc 1.6)! Do not edit! */
 #ifndef PRAGMAS_AMISSL_PRAGMAS_H
 #define PRAGMAS_AMISSL_PRAGMAS_H
 
@@ -24364,10 +24364,10 @@
  #pragma amicall(AmiSSLBase, 0x6c6c, SSL_CTX_get_ct_validation_callback(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase STACK_OF 6c72 801
+ #pragma libcall AmiSSLBase SSL_get0_peer_scts 6c72 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6c72, STACK_OF(a0))
+ #pragma amicall(AmiSSLBase, 0x6c72, SSL_get0_peer_scts(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_CTX_set_default_ctlog_list_file 6c78 801

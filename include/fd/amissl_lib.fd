@@ -1,5 +1,5 @@
 * "amissl.library"
-* Automatically generated FD (sfdc 1.5)! Do not edit!
+* Automatically generated FD (sfdc 1.6)! Do not edit!
 ##base _AmiSSLBase
 ##bias 30
 ##private
@@ -4254,7 +4254,7 @@ SSL_set_ct_validation_callback(s,callback,arg)(a0,a1,a2)
 SSL_CTX_set_ct_validation_callback(ctx,callback,arg)(a0,a1,a2)
 SSL_get_ct_validation_callback(s)(a0)
 SSL_CTX_get_ct_validation_callback(ctx)(a0)
-STACK_OF(s)(a0)
+SSL_get0_peer_scts(s)(a0)
 SSL_CTX_set_default_ctlog_list_file(ctx)(a0)
 SSL_CTX_set_ctlog_list_file(ctx,path)(a0,a1)
 SSL_CTX_set0_ctlog_store(ctx,logs)(a0,a1)

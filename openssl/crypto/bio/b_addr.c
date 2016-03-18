@@ -840,7 +840,7 @@ int BIO_lookup(const char *host, const char *service,
                 addrlistp++)
                 ;
 
-            for(addresses = addrlistp - he->h_addr_list;
+            for(addresses = addrlistp - (char **)he->h_addr_list;
                 addrlistp--, addresses-- > 0; ) {
                 if (!addrinfo_wrap(he->h_addrtype, socktype,
                                    *addrlistp, he->h_length,

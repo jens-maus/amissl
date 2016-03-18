@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.5)! Do not edit! */
+/* Automatically generated header (sfdc 1.6)! Do not edit! */
 
 #ifndef _INLINE_AMISSLMASTER_H
 #define _INLINE_AMISSLMASTER_H
