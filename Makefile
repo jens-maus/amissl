@@ -392,7 +392,7 @@ LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # make the object directory
 $(BUILD_D):
@@ -419,7 +419,7 @@ $(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
-	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines RANLIB=$(RANLIB)
+	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines RANLIB=$(RANLIB) all build_tests_nodep
 
 $(LIBSSL): $(LIBCRYPTO)
 

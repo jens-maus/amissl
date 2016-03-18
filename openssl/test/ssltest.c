@@ -191,7 +191,10 @@
 # include <openssl/ct.h>
 #endif
 
+#ifndef OPENSSL_SYS_AMIGA
 #include "internal/threads.h"
+#endif
+
 #include "../ssl/ssl_locl.h"
 
 /*

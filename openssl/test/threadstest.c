@@ -50,7 +50,9 @@
 #include <stdio.h>
 
 #include <openssl/crypto.h>
+#ifndef OPENSSL_SYS_AMIGA
 #include "internal/threads.h"
+#endif
 
 #if !defined(OPENSSL_THREADS) || defined(CRYPTO_TDEBUG)
 

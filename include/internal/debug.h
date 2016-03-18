@@ -35,6 +35,7 @@
 #undef D
 #undef E
 #undef W
+#undef assert
 #undef ASSERT
 
 #if defined(DEBUG)
