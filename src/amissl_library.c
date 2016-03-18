@@ -423,10 +423,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
     DOSBase = NULL;
   }
 
-  CRYPTO_set_locking_callback(NULL);
-
-  FreeVec(libBase->lock_cs);
-
   // make sure to free all resources of libcmt
   __free_libcmt();
 }
@@ -476,32 +472,20 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
 
   ReleaseSemaphore(&parentBase->openssl_cs);
 
-  if((ownBase->lock_cs = SB_AllocVec(CRYPTO_num_locks() * sizeof(*(ownBase->lock_cs)), MEMF_CLEAR)) != NULL)
-  {
-    int i;
-
-    // lets init all semaphores
-    for (i=0; i<CRYPTO_num_locks(); i++)
-    {
-      InitSemaphore(&ownBase->lock_cs[i]);
-      D(DBF_STARTUP, "initialized lockcs[%ld]: %08lx", i, &ownBase->lock_cs[i]);
-    }
-
 #if defined(__amigaos4__)
-    if ((DOSBase = OpenLibrary("dos.library", 50))
-      && (IntuitionBase = OpenLibrary("intuition.library", 50))
-      && (UtilityBase = OpenLibrary("utility.library", 50))
-      && (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
-      && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
-      && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
+  if ((DOSBase = OpenLibrary("dos.library", 50))
+    && (IntuitionBase = OpenLibrary("intuition.library", 50))
+    && (UtilityBase = OpenLibrary("utility.library", 50))
+    && (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
+    && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
+    && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
 #else
-    if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
-      && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-      && (UtilityBase = OpenLibrary("utility.library", 37)))
+  if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
+    && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
+    && (UtilityBase = OpenLibrary("utility.library", 37)))
 #endif
-    {
-      err = 0;
-    }
+  {
+    err = 0;
   }
 
   D(DBF_STARTUP, "Userlib err: %d %08lx", err, SysBase);

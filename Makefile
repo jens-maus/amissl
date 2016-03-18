@@ -415,7 +415,7 @@ $(BUILD_D)/%.o: $(SRC_D)/%.c
 ## OPENSSL BUILD RULES ##
 
 $(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-asm $(DEBUG))
+	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads no-asm $(DEBUG))
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
