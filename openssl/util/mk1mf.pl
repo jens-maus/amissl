@@ -115,9 +115,6 @@ $infile="MINFO";
 	"netware-clib-bsdsock", "CodeWarrior for NetWare - CLib - with BSD Sockets",
 	"netware-libc", "CodeWarrior for NetWare - LibC - with WinSock Sockets",
 	"netware-libc-bsdsock", "CodeWarrior for NetWare - LibC - with BSD Sockets",
-	"amiga-os3", "Amiga OS3",
-	"amiga-os4", "Amiga OS4",
-	"amiga-mos", "Amiga MorphOS",
 	"default","cc under unix",
 	"auto", "auto detect from top level Makefile",
         "copy", "copy from top level Makefile"
@@ -200,10 +197,6 @@ $cc=(defined($VARS{'CC'}))?$VARS{'CC'}:'cc';
 $src_dir=(defined($VARS{'SRC'}))?$VARS{'SRC'}: $platform eq 'copy' ? getcwd() : '.';
 $bin_dir=(defined($VARS{'BIN'}))?$VARS{'BIN'}:'';
 
-$define='-D';
-$include='-I';
-$cfile='-c ';
-
 # $bin_dir.=$o causes a core dump on my sparc :-(
 
 
@@ -265,18 +258,6 @@ elsif (($platform eq "netware-clib") || ($platform eq "netware-libc") ||
 	$BSDSOCK=1 if ($platform eq "netware-libc-bsdsock") || ($platform eq "netware-clib-bsdsock");
 	require 'netware.pl';
 	}
-elsif ($platform eq "amiga-os3")
-	{
-	require "amiga-os3.pl";
-	}
-elsif ($platform eq "amiga-os4")
-	{
-	require "amiga-os4.pl";
-	}
-elsif ($platform eq "amiga-mos")
-	{
-	require "amiga-mos.pl";
-	}
 else
 	{
 	require "unix.pl";
@@ -332,11 +313,11 @@ $cflags.=" -DOPENSSL_PIC";
 
 if ($no_static_engine)
 	{
-	$cflags .= " " . $define . "OPENSSL_NO_STATIC_ENGINE";
+	$cflags .= " -DOPENSSL_NO_STATIC_ENGINE";
 	}
 else
 	{
-	$cflags .= " " . $define . "OPENSSL_NO_DYNAMIC_ENGINE";
+	$cflags .= " -DOPENSSL_NO_DYNAMIC_ENGINE";
 	}
 
 #$cflags.=" -DRSAref"  if $rsaref ne "";
@@ -353,12 +334,13 @@ if ($orig_platform eq 'copy') {
 
 $ex_libs="$l_flags$ex_libs" if ($l_flags ne "");
 
-%shlib_ex_cflags=("SSL" => $define . "OPENSSL_BUILD_SHLIBSSL",
-		  "CRYPTO" => $define . "OPENSSL_BUILD_SHLIBCRYPTO");
+
+%shlib_ex_cflags=("SSL" => " -DOPENSSL_BUILD_SHLIBSSL",
+		  "CRYPTO" => " -DOPENSSL_BUILD_SHLIBCRYPTO");
 
 if ($msdos)
 	{
-	$banner ="\t\@echo Make sure you have run \'perl Configure $platform\' in the\n";
+	$banner ="\t\@echo Make sure you have run 'perl Configure $platform' in the\n";
 	$banner.="\t\@echo top level directory, if you don't have perl, you will\n";
 	$banner.="\t\@echo need to probably edit crypto/bn/bn.h, check the\n";
 	$banner.="\t\@echo documentation for details.\n";
@@ -369,8 +351,6 @@ $link="$bin_dir$link" if ($link !~ /^\$/);
 
 $INSTALLTOP =~ s|/|$o|g;
 $OPENSSLDIR =~ s|/|$o|g;
-
-$inc= $include . "\$(INC_D) " . $include . "\$(INCL_D)";
 
 #############################################
 # We parse in input file and 'store' info for later printing.
@@ -757,8 +737,7 @@ SO_CRYPTO= $plib\$(CRYPTO)$so_shlibp
 L_SSL=     \$(LIB_D)$o$plib\$(SSL)$libp
 L_CRYPTO=  \$(LIB_D)$o$plib\$(CRYPTO)$libp
 
-#L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
-L_LIBS= # AMIGA doesn't require L_LIBS
+L_LIBS= \$(L_SSL) \$(L_CRYPTO) $ex_l_libs
 
 ######################################################
 # Don't touch anything below this point
@@ -832,9 +811,9 @@ $rules .= &do_rehash_rule("rehash.time", "apps tools");
 $rules .= &do_test_rule("test", "rehash.time", "run_tests.pl");
 
 $rules .= <<"EOF";
-\$(SRC_D)crypto${o}buildinf.h : MINFO
-	\$(PERL) util${o}mkbuildinf.pl "\$(CC) \$(CFLAG_Q)" "\$(PLATFORM)" > \$(SRC_D)crypto${o}buildinf.h
-\$(OBJ_D)${o}cversion${obj} : crypto${o}buildinf.h
+crypto${o}buildinf.h : MINFO
+	\$(PERL) util${o}mkbuildinf.pl "\$(CC) \$(CFLAG_Q)" "\$(PLATFORM)" > crypto${o}buildinf.h
+$(OBJ_D)${o}cversion${obj} : crypto${o}buildinf.h
 EOF
 
 # Strip off trailing ' '
@@ -850,7 +829,7 @@ $defs.=&do_defs("T_OBJ",$test,"\$(OBJ_D)",$obj);
 $rules.=&do_compile_rule("\$(OBJ_D)",$test,"\$(APP_CFLAGS)");
 
 $defs.=&do_defs("E_OBJ",$e_exe,"\$(OBJ_D)",$obj);
-$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,$define . "MONOLITH \$(APP_CFLAGS)");
+$rules.=&do_compile_rule("\$(OBJ_D)",$e_exe,'-DMONOLITH $(APP_CFLAGS)');
 
 # Special case rules for fips_start and fips_end fips_premain_dso
 
@@ -1030,7 +1009,6 @@ if ($platform eq "linux-elf") {
 	(cd \$(\@D)/..; PERL=perl make -f Makefile asm/\$(\@F))
 EOF
 }
-
 print "###################################################################\n";
 print $rules;
 
@@ -1138,15 +1116,13 @@ sub clean_up_ws
 sub do_defs
 	{
 	local($var,$files,$location,$postfix)=@_;
-	local($_,$ret,$pf,$m);
+	local($_,$ret,$pf);
 	local(*OUT,$tmp,$t);
 
 	$files =~ s/\//$o/g if $o ne '/';
+	$ret="$var="; 
 	$n=1;
 	$Vars{$var}.="";
-	if (length $files > $maxchars) { $m=1; $ret="${var}1="; }
-	else { $ret="$var="; }
-	$total=0;
 	foreach (split(/ /,$files))
 		{
 		$orig=$_;
@@ -1176,13 +1152,6 @@ sub do_defs
 
 		$Vars{$var}.="$t ";
 		$ret.=$t;
-		$total+=length $t;
-		if ($total > $maxchars && length $files > $maxchars)
-			{
-			$total=0;
-			++$m;
-			$ret.="\n\n${var}$m=";
-			}
 		}
 	# hack to add version info on MSVC
 	if ($shlib && (($platform eq "VC-WIN32") || ($platfrom eq "VC-WIN64I") || ($platform eq "VC-WIN64A") || ($platform eq "VC-NT")))
@@ -1194,12 +1163,6 @@ sub do_defs
 		}
 	chomp($ret);            # Does this actually do something? /RL
 	$ret.="\n\n";
-	if (length $files > $maxchars)
-		{
-		$ret.="$var=";
-		for (1..$m) { $ret.="\$(${var}$_) "; }
-		$ret.="\n\n";
-		}
 	return($ret);
 	}
 
@@ -1269,7 +1232,7 @@ sub perlasm_compile_target
 	my($ret);
 	$bname =~ s/(.*)\.[^\.]$/$1/;
 	$ret ="\$(TMP_D)$o$bname$asm_suffix: $source\n";
-	$ret.="\t\$(PERL) $source $mf_perlasm_scheme \$\@ \$\@\n";
+	$ret.="\t\$(PERL) $source $asmtype \$(CFLAG) \$\@\n";
 	if ($fipscanisteronly)
 		{
 		$ret .= "\t\$(PERL) util$o.pl . \$@ norunasm \$(CFLAG)\n";
@@ -1334,11 +1297,11 @@ sub do_asm_rule
 			my $plasm = $objfile;
 			$plasm =~ s/${obj}/.pl/;
 			$ret.="$srcfile: $plasm\n";
-			$ret.="\t\$(PERL) $plasm $mf_perlasm_scheme $srcfile $srcfile\n\n";
+			$ret.="\t\$(PERL) $plasm $asmtype \$(CFLAG) $srcfile\n\n";
 			}
 
 		$ret.="$objfile: $srcfile\n";
-		$ret.="\t\$(ASM) $afile$objfile \$(SRC_D)$srcfile\n\n";
+		$ret.="\t\$(ASM) $afile$objfile \$(SRC_D)$o$srcfile\n\n";
 		}
 	return($ret);
 	}
@@ -1373,7 +1336,7 @@ sub do_copy_rule
 		if ($n =~ /bss_file/)
 			{ $pp=".c"; }
 		else	{ $pp=$p; }
-		$ret.="$to${o}$n$pp: \$(SRC_D)$_$pp\n\t\$(PERL) \$(SRC_D)${o}util${o}copy-if-different.pl \"\$(SRC_D)$_$pp\" \"$to${o}$n$pp\"\n\n";
+		$ret.="$to${o}$n$pp: \$(SRC_D)$o$_$pp\n\t\$(PERL) \$(SRC_D)${o}util${o}copy-if-different.pl \"\$(SRC_D)$o$_$pp\" \"$to${o}$n$pp\"\n\n";
 		}
 	return($ret);
 	}

@@ -98,7 +98,7 @@ sha256-armv8.o:		sha256-armv8.S
 sha512-armv8.o:		sha512-armv8.S
 
 files:
-	$(PERL) $(TOP)/util/files.pl "SHA1_ASM_OBJ=$(SHA1_ASM_OBJ)" Makefile >> $(TOP)/MINFO
+	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
 
 depend:
 	$(TOP)/util/domd $(CFLAG) $(INCLUDES) -- $(PROGS) $(LIBSRC)

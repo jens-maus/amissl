@@ -49,7 +49,7 @@ chacha-armv4.o:	chacha-armv4.S
 chacha-armv8.o:	chacha-armv8.S
 
 files:
-	$(PERL) $(TOP)/util/files.pl "CHACHA_ENC=$(CHACHA_ENC)" Makefile >> $(TOP)/MINFO
+	$(PERL) $(TOP)/util/files.pl Makefile >> $(TOP)/MINFO
 
 depend:
 	$(TOP)/util/domd $(CFLAG) $(INCLUDES) -- $(PROGS) $(LIBSRC)
