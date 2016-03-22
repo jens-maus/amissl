@@ -26688,7 +26688,7 @@ int SAVEDS ASM LIB_i2d_re_X509_REQ_tbs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d2, uint64_t p))
+X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d3, uint64_t p))
 {
 	return PKCS5_pbe2_set_scrypt(cipher, salt, saltlen, aiv, N, r, p);
 }
@@ -26961,7 +26961,7 @@ char * SAVEDS ASM LIB_i2s_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a1, char * str))
+ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a2, char * str))
 {
 	return s2i_ASN1_IA5STRING(method, ctx, str);
 }
@@ -27577,7 +27577,7 @@ void SAVEDS ASM LIB_ASYNC_WAIT_CTX_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-int SAVEDS ASM LIB_ASYNC_WAIT_CTX_set_wait_fd(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, const void * key), REG(d0, OSSL_ASYNC_FD fd), REG(a2, void * custom_data), REG(a2, void (*cleanup)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)))
+int SAVEDS ASM LIB_ASYNC_WAIT_CTX_set_wait_fd(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, const void * key), REG(d0, OSSL_ASYNC_FD fd), REG(a2, void * custom_data), REG(a3, void (*cleanup)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)))
 {
 	return ASYNC_WAIT_CTX_set_wait_fd(ctx, key, fd, custom_data, cleanup);
 }

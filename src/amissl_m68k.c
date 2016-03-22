@@ -57048,7 +57048,7 @@ STATIC X509_ALGOR * stub_main_PKCS5_pbe2_set_scrypt_PPC(uint32 *regarray)
 		(unsigned char *)regarray[REG68K_A2/4],
 		(uint64_t)regarray[REG68K_D1/4],
 		(uint64_t)regarray[REG68K_D2/4],
-		(uint64_t)regarray[REG68K_D2/4]
+		(uint64_t)regarray[REG68K_D3/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_PKCS5_pbe2_set_scrypt = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_PKCS5_pbe2_set_scrypt_PPC };
@@ -57607,7 +57607,7 @@ STATIC ASN1_IA5STRING * stub_main_s2i_ASN1_IA5STRING_PPC(uint32 *regarray)
 	return Self->s2i_ASN1_IA5STRING(
 		(X509V3_EXT_METHOD *)regarray[REG68K_A0/4],
 		(X509V3_CTX *)regarray[REG68K_A1/4],
-		(char *)regarray[REG68K_A1/4]
+		(char *)regarray[REG68K_A2/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_s2i_ASN1_IA5STRING = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_s2i_ASN1_IA5STRING_PPC };
@@ -58902,7 +58902,7 @@ STATIC int stub_main_ASYNC_WAIT_CTX_set_wait_fd_PPC(uint32 *regarray)
 		(const void *)regarray[REG68K_A1/4],
 		(OSSL_ASYNC_FD)regarray[REG68K_D0/4],
 		(void *)regarray[REG68K_A2/4],
-		(void (*)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *))regarray[REG68K_A2/4]
+		(void (*)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *))regarray[REG68K_A3/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_ASYNC_WAIT_CTX_set_wait_fd = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_ASYNC_WAIT_CTX_set_wait_fd_PPC };

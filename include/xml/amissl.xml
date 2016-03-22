@@ -18074,7 +18074,7 @@
       <arg name="aiv" type="unsigned char *" m68kreg="a2"/>
       <arg name="N" type="uint64_t" m68kreg="d1"/>
       <arg name="r" type="uint64_t" m68kreg="d2"/>
-      <arg name="p" type="uint64_t" m68kreg="d2"/>
+      <arg name="p" type="uint64_t" m68kreg="d3"/>
     </method>
     <method name="X509_aux_print" result="int" status="unimplemented">
       <arg name="out" type="BIO *" m68kreg="a0"/>
@@ -18209,7 +18209,7 @@
     <method name="s2i_ASN1_IA5STRING" result="ASN1_IA5STRING *">
       <arg name="method" type="X509V3_EXT_METHOD *" m68kreg="a0"/>
       <arg name="ctx" type="X509V3_CTX *" m68kreg="a1"/>
-      <arg name="str" type="char *" m68kreg="a1"/>
+      <arg name="str" type="char *" m68kreg="a2"/>
     </method>
     <method name="v3_addr_add_inherit" result="int">
       <arg name="addr" type="IPAddrBlocks *" m68kreg="a0"/>
@@ -18544,7 +18544,7 @@
       <arg name="key" type="const void *" m68kreg="a1"/>
       <arg name="fd" type="OSSL_ASYNC_FD" m68kreg="d0"/>
       <arg name="custom_data" type="void *" m68kreg="a2"/>
-      <arg name="cleanup" type="void (*)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)" m68kreg="a2"/>
+      <arg name="cleanup" type="void (*)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)" m68kreg="a3"/>
     </method>
     <method name="ASYNC_WAIT_CTX_get_fd" result="int">
       <arg name="ctx" type="ASYNC_WAIT_CTX *" m68kreg="a0"/>

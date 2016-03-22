@@ -3853,7 +3853,7 @@ X509_STORE * SAVEDS ASM LIB_TS_VERIFY_CTX_set_store(REG(a6, __IFACE_OR_BASE), RE
 STACK_OF(X509) * SAVEDS ASM LIB_TS_VERIFY_CTS_set_certs(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, STACK_OF(X509) * certs));
 int SAVEDS ASM LIB_i2d_re_X509_CRL_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * req), REG(a1, unsigned char ** pp));
 int SAVEDS ASM LIB_i2d_re_X509_REQ_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, unsigned char ** pp));
-X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d2, uint64_t p));
+X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d3, uint64_t p));
 STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509_CRL_get0_extensions(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * crl));
 void SAVEDS ASM LIB_X509_CRL_get0_signature(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_BIT_STRING ** psig), REG(a1, X509_ALGOR ** palg), REG(a2, X509_CRL * crl));
 X509_NAME * SAVEDS ASM LIB_X509_CRL_get_issuer(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * crl));
@@ -3892,7 +3892,7 @@ void SAVEDS ASM LIB_X509_STORE_CTX_set0_dane(REG(a6, __IFACE_OR_BASE), REG(a0, X
 void SAVEDS ASM LIB_X509_VERIFY_PARAM_move_peername(REG(a6, __IFACE_OR_BASE), REG(a0, X509_VERIFY_PARAM * to), REG(a1, X509_VERIFY_PARAM * from));
 void SAVEDS ASM LIB_ASIdentifiers_free(REG(a6, __IFACE_OR_BASE), REG(a0, ASIdentifiers * a));
 char * SAVEDS ASM LIB_i2s_ASN1_IA5STRING(REG(a6, __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, ASN1_IA5STRING * ia5));
-ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a1, char * str));
+ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a2, char * str));
 int SAVEDS ASM LIB_v3_addr_add_inherit(REG(a6, __IFACE_OR_BASE), REG(a0, IPAddrBlocks * addr), REG(d0, const unsigned afi), REG(a1, const unsigned * safi));
 int SAVEDS ASM LIB_v3_addr_add_prefix(REG(a6, __IFACE_OR_BASE), REG(a0, IPAddrBlocks * addr), REG(d0, const unsigned afi), REG(a1, const unsigned * safi), REG(a2, unsigned char * a), REG(d1, const int prefixlen));
 int SAVEDS ASM LIB_v3_addr_add_range(REG(a6, __IFACE_OR_BASE), REG(a0, IPAddrBlocks * addr), REG(d0, const unsigned afi), REG(a1, const unsigned * safi), REG(a2, unsigned char * min), REG(a3, unsigned char * max));
@@ -3980,7 +3980,7 @@ const SSL_METHOD * SAVEDS ASM LIB_TLS_method(REG(a6, __IFACE_OR_BASE));
 const SSL_METHOD * SAVEDS ASM LIB_TLS_server_method(REG(a6, __IFACE_OR_BASE));
 ASYNC_WAIT_CTX * SAVEDS ASM LIB_ASYNC_WAIT_CTX_new(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_ASYNC_WAIT_CTX_free(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx));
-int SAVEDS ASM LIB_ASYNC_WAIT_CTX_set_wait_fd(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, const void * key), REG(d0, OSSL_ASYNC_FD fd), REG(a2, void * custom_data), REG(a2, void (*cleanup)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)));
+int SAVEDS ASM LIB_ASYNC_WAIT_CTX_set_wait_fd(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, const void * key), REG(d0, OSSL_ASYNC_FD fd), REG(a2, void * custom_data), REG(a3, void (*cleanup)(ASYNC_WAIT_CTX *, const void *, OSSL_ASYNC_FD, void *)));
 int SAVEDS ASM LIB_ASYNC_WAIT_CTX_get_fd(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, const void * key), REG(a2, OSSL_ASYNC_FD * fd), REG(a3, void ** custom_data));
 int SAVEDS ASM LIB_ASYNC_WAIT_CTX_get_all_fds(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, OSSL_ASYNC_FD * fd), REG(a2, size_t * numfds));
 int SAVEDS ASM LIB_ASYNC_WAIT_CTX_get_changed_fds(REG(a6, __IFACE_OR_BASE), REG(a0, ASYNC_WAIT_CTX * ctx), REG(a1, OSSL_ASYNC_FD * addfd), REG(a2, size_t * numaddfds), REG(a3, OSSL_ASYNC_FD * delfd), REG(d0, size_t * numdelfds));

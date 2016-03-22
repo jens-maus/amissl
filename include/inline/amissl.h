@@ -15251,7 +15251,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define PKCS5_pbe2_set_scrypt(___cipher, ___salt, ___saltlen, ___aiv, ___N, ___r, ___p) \
-	LP7(0x6696, X509_ALGOR *, PKCS5_pbe2_set_scrypt , const EVP_CIPHER *, ___cipher, a0, const unsigned char *, ___salt, a1, int, ___saltlen, d0, unsigned char *, ___aiv, a2, uint64_t, ___N, d1, uint64_t, ___r, d2, uint64_t, ___p, d2,\
+	LP7(0x6696, X509_ALGOR *, PKCS5_pbe2_set_scrypt , const EVP_CIPHER *, ___cipher, a0, const unsigned char *, ___salt, a1, int, ___saltlen, d0, unsigned char *, ___aiv, a2, uint64_t, ___N, d1, uint64_t, ___r, d2, uint64_t, ___p, d3,\
 	, AMISSL_BASE_NAME)
 
 #define X509_CRL_get0_extensions(___crl) \
@@ -15407,7 +15407,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define s2i_ASN1_IA5STRING(___method, ___ctx, ___str) \
-	LP3(0x6786, ASN1_IA5STRING *, s2i_ASN1_IA5STRING , X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, char *, ___str, a1,\
+	LP3(0x6786, ASN1_IA5STRING *, s2i_ASN1_IA5STRING , X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, char *, ___str, a2,\
 	, AMISSL_BASE_NAME)
 
 #define v3_addr_add_inherit(___addr, ___afi, ___safi) \
@@ -15759,7 +15759,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define ASYNC_WAIT_CTX_set_wait_fd(___ctx, ___key, ___fd, ___custom_data, ___cleanup) \
-	LP5FP(0x699c, int, ASYNC_WAIT_CTX_set_wait_fd , ASYNC_WAIT_CTX *, ___ctx, a0, const void *, ___key, a1, OSSL_ASYNC_FD, ___fd, d0, void *, ___custom_data, a2, __fpt, ___cleanup, a2,\
+	LP5FP(0x699c, int, ASYNC_WAIT_CTX_set_wait_fd , ASYNC_WAIT_CTX *, ___ctx, a0, const void *, ___key, a1, OSSL_ASYNC_FD, ___fd, d0, void *, ___custom_data, a2, __fpt, ___cleanup, a3,\
 	, AMISSL_BASE_NAME, void (*__fpt)(ASYNC_WAIT_CTX *,const void *,OSSL_ASYNC_FD,void *))
 
 #define ASYNC_WAIT_CTX_get_fd(___ctx, ___key, ___fd, ___custom_data) \

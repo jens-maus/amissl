@@ -7,7 +7,7 @@
 **
 **	Direct ROM interface (pragma) definitions.
 **
-**	Copyright © 2001 Amiga, Inc.
+**	Copyright (c) 2001 Amiga, Inc.
 **	    All Rights Reserved
 */
 
@@ -22876,10 +22876,10 @@
  #pragma amicall(AmiSSLBase, 0x6690, i2d_re_X509_REQ_tbs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 6696 221a09807
+ #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 6696 321a09807
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6696, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d1,d2,d2))
+ #pragma amicall(AmiSSLBase, 0x6696, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d1,d2,d3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_CRL_get0_extensions 66a2 801
@@ -23110,10 +23110,10 @@
  #pragma amicall(AmiSSLBase, 0x6780, i2s_ASN1_IA5STRING(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase s2i_ASN1_IA5STRING 6786 99803
+ #pragma libcall AmiSSLBase s2i_ASN1_IA5STRING 6786 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6786, s2i_ASN1_IA5STRING(a0,a1,a1))
+ #pragma amicall(AmiSSLBase, 0x6786, s2i_ASN1_IA5STRING(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase v3_addr_add_inherit 678c 90803
@@ -23638,10 +23638,10 @@
  #pragma amicall(AmiSSLBase, 0x6996, ASYNC_WAIT_CTX_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ASYNC_WAIT_CTX_set_wait_fd 699c aa09805
+ #pragma libcall AmiSSLBase ASYNC_WAIT_CTX_set_wait_fd 699c ba09805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x699c, ASYNC_WAIT_CTX_set_wait_fd(a0,a1,d0,a2,a2))
+ #pragma amicall(AmiSSLBase, 0x699c, ASYNC_WAIT_CTX_set_wait_fd(a0,a1,d0,a2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase ASYNC_WAIT_CTX_get_fd 69a2 ba9804
