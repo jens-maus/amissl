@@ -126,6 +126,7 @@ extern "C" {
 #    define NO_SYS_PARAM_H
 #    define NO_SYS_UN_H
 #  endif
+#  include <internal/debug.h>
 #endif
 
 /********************************************************************
