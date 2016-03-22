@@ -55724,9 +55724,9 @@ STATIC int stub_main_EVP_PBE_scrypt_PPC(uint32 *regarray)
 		(size_t)regarray[REG68K_D0/4],
 		(const unsigned char *)regarray[REG68K_A1/4],
 		(size_t)regarray[REG68K_D1/4],
-		(uint64_t)regarray[REG68K_D2/4],
-		(uint64_t)regarray[REG68K_D3/4],
-		(uint64_t)regarray[REG68K_D4/4],
+		(unsigned long)regarray[REG68K_D2/4],
+		(unsigned long)regarray[REG68K_D3/4],
+		(unsigned long)regarray[REG68K_D4/4],
 		(uint64_t)regarray[REG68K_D5/4],
 		(unsigned char *)regarray[REG68K_A2/4],
 		(size_t)regarray[REG68K_A3/4]
@@ -57046,8 +57046,8 @@ STATIC X509_ALGOR * stub_main_PKCS5_pbe2_set_scrypt_PPC(uint32 *regarray)
 		(const unsigned char *)regarray[REG68K_A1/4],
 		(int)regarray[REG68K_D0/4],
 		(unsigned char *)regarray[REG68K_A2/4],
-		(uint64_t)regarray[REG68K_D1/4],
-		(uint64_t)regarray[REG68K_D2/4],
+		(unsigned long)regarray[REG68K_D1/4],
+		(unsigned long)regarray[REG68K_D2/4],
 		(uint64_t)regarray[REG68K_D3/4]
 	);
 }

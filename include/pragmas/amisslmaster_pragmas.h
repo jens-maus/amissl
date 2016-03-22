@@ -7,7 +7,7 @@
 **
 **	Direct ROM interface (pragma) definitions.
 **
-**	Copyright (c) 2001 Amiga, Inc.
+**	Copyright © 2001 Amiga, Inc.
 **	    All Rights Reserved
 */
 

@@ -8,7 +8,7 @@
 **
 **	C prototypes. For use with 32 bit integers only.
 **
-**	Copyright (c) 2001 Amiga, Inc.
+**	Copyright © 2001 Amiga, Inc.
 **	    All Rights Reserved
 */
 

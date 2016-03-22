@@ -17693,9 +17693,9 @@
       <arg name="passlen" type="size_t" m68kreg="d0"/>
       <arg name="salt" type="const unsigned char *" m68kreg="a1"/>
       <arg name="saltlen" type="size_t" m68kreg="d1"/>
-      <arg name="N" type="uint64_t" m68kreg="d2"/>
-      <arg name="r" type="uint64_t" m68kreg="d3"/>
-      <arg name="p" type="uint64_t" m68kreg="d4"/>
+      <arg name="N" type="unsigned long" m68kreg="d2"/>
+      <arg name="r" type="unsigned long" m68kreg="d3"/>
+      <arg name="p" type="unsigned long" m68kreg="d4"/>
       <arg name="maxmem" type="uint64_t" m68kreg="d5"/>
       <arg name="key" type="unsigned char *" m68kreg="a2"/>
       <arg name="keylen" type="size_t" m68kreg="a3"/>
@@ -18072,8 +18072,8 @@
       <arg name="salt" type="const unsigned char *" m68kreg="a1"/>
       <arg name="saltlen" type="int" m68kreg="d0"/>
       <arg name="aiv" type="unsigned char *" m68kreg="a2"/>
-      <arg name="N" type="uint64_t" m68kreg="d1"/>
-      <arg name="r" type="uint64_t" m68kreg="d2"/>
+      <arg name="N" type="unsigned long" m68kreg="d1"/>
+      <arg name="r" type="unsigned long" m68kreg="d2"/>
       <arg name="p" type="uint64_t" m68kreg="d3"/>
     </method>
     <method name="X509_aux_print" result="int" status="unimplemented">

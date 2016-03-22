@@ -3767,7 +3767,7 @@ int SAVEDS ASM LIB_EVP_MD_meth_set_input_blocksize(REG(a6, __IFACE_OR_BASE), REG
 int SAVEDS ASM LIB_EVP_MD_meth_set_result_size(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_MD * md), REG(d0, int resultsize));
 int SAVEDS ASM LIB_EVP_MD_meth_set_update(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_MD * md), REG(a1, int (*update)(EVP_MD_CTX *, const void *, size_t)));
 int SAVEDS ASM LIB_EVP_PBE_get(REG(a6, __IFACE_OR_BASE), REG(a0, int * ptype), REG(a1, int * ppbe_nid), REG(d0, size_t num));
-int SAVEDS ASM LIB_EVP_PBE_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, uint64_t N), REG(d3, uint64_t r), REG(d4, uint64_t p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen));
+int SAVEDS ASM LIB_EVP_PBE_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen));
 void SAVEDS ASM LIB_EVP_PKEY_asn1_set_security_bits(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_ASN1_METHOD * ameth), REG(a1, int (*pkey_security_bits)(const EVP_PKEY *)));
 DH * SAVEDS ASM LIB_EVP_PKEY_get0_DH(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey));
 DSA * SAVEDS ASM LIB_EVP_PKEY_get0_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey));
@@ -3853,7 +3853,7 @@ X509_STORE * SAVEDS ASM LIB_TS_VERIFY_CTX_set_store(REG(a6, __IFACE_OR_BASE), RE
 STACK_OF(X509) * SAVEDS ASM LIB_TS_VERIFY_CTS_set_certs(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, STACK_OF(X509) * certs));
 int SAVEDS ASM LIB_i2d_re_X509_CRL_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * req), REG(a1, unsigned char ** pp));
 int SAVEDS ASM LIB_i2d_re_X509_REQ_tbs(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, unsigned char ** pp));
-X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d3, uint64_t p));
+X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, unsigned long N), REG(d2, unsigned long r), REG(d3, uint64_t p));
 STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509_CRL_get0_extensions(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * crl));
 void SAVEDS ASM LIB_X509_CRL_get0_signature(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_BIT_STRING ** psig), REG(a1, X509_ALGOR ** palg), REG(a2, X509_CRL * crl));
 X509_NAME * SAVEDS ASM LIB_X509_CRL_get_issuer(REG(a6, __IFACE_OR_BASE), REG(a0, X509_CRL * crl));

@@ -26086,7 +26086,7 @@ int SAVEDS ASM LIB_EVP_PBE_get(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, int * pt
 
 // ---
 
-int SAVEDS ASM LIB_EVP_PBE_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, uint64_t N), REG(d3, uint64_t r), REG(d4, uint64_t p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen))
+int SAVEDS ASM LIB_EVP_PBE_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen))
 {
 	return EVP_PBE_scrypt(pass, passlen, salt, saltlen, N, r, p, maxmem, key, keylen);
 }
@@ -26688,7 +26688,7 @@ int SAVEDS ASM LIB_i2d_re_X509_REQ_tbs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, uint64_t N), REG(d2, uint64_t r), REG(d3, uint64_t p))
+X509_ALGOR * SAVEDS ASM LIB_PKCS5_pbe2_set_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher), REG(a1, const unsigned char * salt), REG(d0, int saltlen), REG(a2, unsigned char * aiv), REG(d1, unsigned long N), REG(d2, unsigned long r), REG(d3, uint64_t p))
 {
 	return PKCS5_pbe2_set_scrypt(cipher, salt, saltlen, aiv, N, r, p);
 }

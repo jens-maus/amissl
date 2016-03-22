@@ -4330,7 +4330,7 @@ struct AmiSSLIFace
 	int APICALL (*EVP_MD_meth_set_result_size)(struct AmiSSLIFace *Self, EVP_MD * md, int resultsize);
 	int APICALL (*EVP_MD_meth_set_update)(struct AmiSSLIFace *Self, EVP_MD * md, int (*update)(EVP_MD_CTX *, const void *, size_t));
 	int APICALL (*EVP_PBE_get)(struct AmiSSLIFace *Self, int * ptype, int * ppbe_nid, size_t num);
-	int APICALL (*EVP_PBE_scrypt)(struct AmiSSLIFace *Self, const char * pass, size_t passlen, const unsigned char * salt, size_t saltlen, uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem, unsigned char * key, size_t keylen);
+	int APICALL (*EVP_PBE_scrypt)(struct AmiSSLIFace *Self, const char * pass, size_t passlen, const unsigned char * salt, size_t saltlen, unsigned long N, unsigned long r, unsigned long p, uint64_t maxmem, unsigned char * key, size_t keylen);
 	void APICALL (*EVP_PKEY_asn1_set_security_bits)(struct AmiSSLIFace *Self, EVP_PKEY_ASN1_METHOD * ameth, int (*pkey_security_bits)(const EVP_PKEY *));
 	DH * APICALL (*EVP_PKEY_get0_DH)(struct AmiSSLIFace *Self, EVP_PKEY * pkey);
 	DSA * APICALL (*EVP_PKEY_get0_DSA)(struct AmiSSLIFace *Self, EVP_PKEY * pkey);
@@ -4416,7 +4416,7 @@ struct AmiSSLIFace
 	STACK_OF(X509) * APICALL (*TS_VERIFY_CTS_set_certs)(struct AmiSSLIFace *Self, TS_VERIFY_CTX * ctx, STACK_OF(X509) * certs);
 	int APICALL (*i2d_re_X509_CRL_tbs)(struct AmiSSLIFace *Self, X509_CRL * req, unsigned char ** pp);
 	int APICALL (*i2d_re_X509_REQ_tbs)(struct AmiSSLIFace *Self, X509_REQ * req, unsigned char ** pp);
-	X509_ALGOR * APICALL (*PKCS5_pbe2_set_scrypt)(struct AmiSSLIFace *Self, const EVP_CIPHER * cipher, const unsigned char * salt, int saltlen, unsigned char * aiv, uint64_t N, uint64_t r, uint64_t p);
+	X509_ALGOR * APICALL (*PKCS5_pbe2_set_scrypt)(struct AmiSSLIFace *Self, const EVP_CIPHER * cipher, const unsigned char * salt, int saltlen, unsigned char * aiv, unsigned long N, unsigned long r, uint64_t p);
 	APTR X509_aux_print_UNIMPLEMENTED;
 	STACK_OF(X509_EXTENSION) * APICALL (*X509_CRL_get0_extensions)(struct AmiSSLIFace *Self, X509_CRL * crl);
 	void APICALL (*X509_CRL_get0_signature)(struct AmiSSLIFace *Self, ASN1_BIT_STRING ** psig, X509_ALGOR ** palg, X509_CRL * crl);
