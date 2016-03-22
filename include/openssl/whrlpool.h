@@ -1,6 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
+#endif
 #ifndef HEADER_WHRLPOOL_H
 # define HEADER_WHRLPOOL_H
 
@@ -27,9 +27,6 @@ typedef struct {
 } WHIRLPOOL_CTX;
 
 # ifndef OPENSSL_NO_WHIRLPOOL
-#  ifdef OPENSSL_FIPS
-int private_WHIRLPOOL_Init(WHIRLPOOL_CTX *c);
-#  endif
 int WHIRLPOOL_Init(WHIRLPOOL_CTX *c);
 int WHIRLPOOL_Update(WHIRLPOOL_CTX *c, const void *inp, size_t bytes);
 void WHIRLPOOL_BitUpdate(WHIRLPOOL_CTX *c, const void *inp, size_t bits);

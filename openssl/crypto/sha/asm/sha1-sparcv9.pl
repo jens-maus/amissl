@@ -25,7 +25,7 @@
 # single-process result on 8-core processor, or ~9GBps per 2.85GHz
 # socket.
 
-$output=shift;
+$output=pop;
 open STDOUT,">$output";
 
 @X=("%o0","%o1","%o2","%o3","%o4","%o5","%g1","%o7");
@@ -368,7 +368,7 @@ ___
 
 # Purpose of these subroutines is to explicitly encode VIS instructions,
 # so that one can compile the module without having to specify VIS
-# extentions on compiler command line, e.g. -xarch=v9 vs. -xarch=v9a.
+# extensions on compiler command line, e.g. -xarch=v9 vs. -xarch=v9a.
 # Idea is to reserve for option to produce "universal" binary and let
 # programmer detect if current CPU is VIS capable at run-time.
 sub unvis {

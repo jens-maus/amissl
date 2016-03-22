@@ -1,4 +1,3 @@
-/* crypto/asn1/asn1_par.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,7 +56,7 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/buffer.h>
 #include <openssl/objects.h>
 #include <openssl/asn1.h>
@@ -125,28 +124,20 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
     ASN1_OBJECT *o = NULL;
     ASN1_OCTET_STRING *os = NULL;
     /* ASN1_BMPSTRING *bmp=NULL; */
-    int dump_indent;
-
-#if 0
-    dump_indent = indent;
-#else
-    dump_indent = 6;            /* Because we know BIO_dump_indent() */
-#endif
+    int dump_indent, dump_cont = 0;
 
     if (depth > ASN1_PARSE_MAXDEPTH) {
             BIO_puts(bp, "BAD RECURSION DEPTH\n");
             return 0;
     }
 
+    dump_indent = 6;            /* Because we know BIO_dump_indent() */
     p = *pp;
     tot = p + length;
     op = p - 1;
     while ((p < tot) && (op < p)) {
         op = p;
         j = ASN1_get_object(&p, &len, &tag, &xclass, length);
-#ifdef LINT
-        j = j;
-#endif
         if (j & 0x80) {
             if (BIO_write(bp, "Error in encoding\n", 18) <= 0)
                 goto end;
@@ -228,19 +219,17 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                         goto end;
                     i2a_ASN1_OBJECT(bp, o);
                 } else {
-                    if (BIO_write(bp, ":BAD OBJECT", 11) <= 0)
+                    if (BIO_puts(bp, ":BAD OBJECT") <= 0)
                         goto end;
+                    dump_cont = 1;
                 }
             } else if (tag == V_ASN1_BOOLEAN) {
-                int ii;
-
-                opp = op;
-                ii = d2i_ASN1_BOOLEAN(NULL, &opp, len + hl);
-                if (ii < 0) {
-                    if (BIO_write(bp, "Bad boolean\n", 12) <= 0)
+                if (len != 1) {
+                    if (BIO_puts(bp, ":BAD BOOLEAN") <= 0)
                         goto end;
+                    dump_cont = 1;
                 }
-                BIO_printf(bp, ":%d", ii);
+                BIO_printf(bp, ":%u", p[0]);
             } else if (tag == V_ASN1_BMPSTRING) {
                 /* do the BMP thang */
             } else if (tag == V_ASN1_OCTET_STRING) {
@@ -297,10 +286,8 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                         nl = 1;
                     }
                 }
-                if (os != NULL) {
-                    M_ASN1_OCTET_STRING_free(os);
-                    os = NULL;
-                }
+                ASN1_OCTET_STRING_free(os);
+                os = NULL;
             } else if (tag == V_ASN1_INTEGER) {
                 ASN1_INTEGER *bs;
                 int i;
@@ -322,10 +309,11 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                             goto end;
                     }
                 } else {
-                    if (BIO_write(bp, "BAD INTEGER", 11) <= 0)
+                    if (BIO_puts(bp, ":BAD INTEGER") <= 0)
                         goto end;
+                    dump_cont = 1;
                 }
-                M_ASN1_INTEGER_free(bs);
+                ASN1_INTEGER_free(bs);
             } else if (tag == V_ASN1_ENUMERATED) {
                 ASN1_ENUMERATED *bs;
                 int i;
@@ -347,10 +335,11 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                             goto end;
                     }
                 } else {
-                    if (BIO_write(bp, "BAD ENUMERATED", 14) <= 0)
+                    if (BIO_puts(bp, ":BAD ENUMERATED") <= 0)
                         goto end;
+                    dump_cont = 1;
                 }
-                M_ASN1_ENUMERATED_free(bs);
+                ASN1_ENUMERATED_free(bs);
             } else if (len > 0 && dump) {
                 if (!nl) {
                     if (BIO_write(bp, "\n", 1) <= 0)
@@ -361,6 +350,18 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                                     dump_indent) <= 0)
                     goto end;
                 nl = 1;
+            }
+            if (dump_cont) {
+                int i;
+                const unsigned char *tmp = op + hl;
+                if (BIO_puts(bp, ":[") <= 0)
+                    goto end;
+                for (i = 0; i < len; i++) {
+                    if (BIO_printf(bp, "%02X", tmp[i]) <= 0)
+                        goto end;
+                }
+                if (BIO_puts(bp, "]") <= 0)
+                    goto end;
             }
 
             if (!nl) {
@@ -377,10 +378,8 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
     }
     ret = 1;
  end:
-    if (o != NULL)
-        ASN1_OBJECT_free(o);
-    if (os != NULL)
-        M_ASN1_OCTET_STRING_free(os);
+    ASN1_OBJECT_free(o);
+    ASN1_OCTET_STRING_free(os);
     *pp = p;
     return (ret);
 }

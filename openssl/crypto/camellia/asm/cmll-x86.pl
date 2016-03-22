@@ -42,6 +42,9 @@ require "x86asm.pl";
 
 $OPENSSL=1;
 
+$output = pop;
+open STDOUT,">$output";
+
 &asm_init($ARGV[0],"cmll-586.pl",$ARGV[$#ARGV] eq "386");
 
 @T=("eax","ebx","ecx","edx");
@@ -723,11 +726,11 @@ my $bias=int(@T[0])?shift(@T):0;
 &function_end("Camellia_Ekeygen");
 
 if ($OPENSSL) {
-# int private_Camellia_set_key (
+# int Camellia_set_key (
 #		const unsigned char *userKey,
 #		int bits,
 #		CAMELLIA_KEY *key)
-&function_begin_B("private_Camellia_set_key");
+&function_begin_B("Camellia_set_key");
 	&push	("ebx");
 	&mov	("ecx",&wparam(0));	# pull arguments
 	&mov	("ebx",&wparam(1));
@@ -760,7 +763,7 @@ if ($OPENSSL) {
 &set_label("done",4);
 	&pop	("ebx");
 	&ret	();
-&function_end_B("private_Camellia_set_key");
+&function_end_B("Camellia_set_key");
 }
 
 @SBOX=(
@@ -1136,3 +1139,5 @@ my ($s0,$s1,$s2,$s3) = @T;
 &asciz("Camellia for x86 by <appro\@openssl.org>");
 
 &asm_finish();
+
+close STDOUT;

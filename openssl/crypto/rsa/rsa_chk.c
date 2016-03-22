@@ -1,4 +1,3 @@
-/* crypto/rsa/rsa_chk.c  */
 /* ====================================================================
  * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
  *
@@ -54,13 +53,18 @@
 
 int RSA_check_key(const RSA *key)
 {
+    return RSA_check_key_ex(key, NULL);
+}
+
+int RSA_check_key_ex(const RSA *key, BN_GENCB *cb)
+{
     BIGNUM *i, *j, *k, *l, *m;
     BN_CTX *ctx;
     int r;
     int ret = 1;
 
     if (!key->p || !key->q || !key->n || !key->e || !key->d) {
-        RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_VALUE_MISSING);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_VALUE_MISSING);
         return 0;
     }
 
@@ -73,26 +77,26 @@ int RSA_check_key(const RSA *key)
     if (i == NULL || j == NULL || k == NULL || l == NULL ||
         m == NULL || ctx == NULL) {
         ret = -1;
-        RSAerr(RSA_F_RSA_CHECK_KEY, ERR_R_MALLOC_FAILURE);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, ERR_R_MALLOC_FAILURE);
         goto err;
     }
 
     /* p prime? */
-    r = BN_is_prime_ex(key->p, BN_prime_checks, NULL, NULL);
+    r = BN_is_prime_ex(key->p, BN_prime_checks, NULL, cb);
     if (r != 1) {
         ret = r;
         if (r != 0)
             goto err;
-        RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_P_NOT_PRIME);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_P_NOT_PRIME);
     }
 
     /* q prime? */
-    r = BN_is_prime_ex(key->q, BN_prime_checks, NULL, NULL);
+    r = BN_is_prime_ex(key->q, BN_prime_checks, NULL, cb);
     if (r != 1) {
         ret = r;
         if (r != 0)
             goto err;
-        RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_Q_NOT_PRIME);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_Q_NOT_PRIME);
     }
 
     /* n = p*q? */
@@ -104,7 +108,7 @@ int RSA_check_key(const RSA *key)
 
     if (BN_cmp(i, key->n) != 0) {
         ret = 0;
-        RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_N_DOES_NOT_EQUAL_P_Q);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_N_DOES_NOT_EQUAL_P_Q);
     }
 
     /* d*e = 1  mod lcm(p-1,q-1)? */
@@ -145,7 +149,7 @@ int RSA_check_key(const RSA *key)
 
     if (!BN_is_one(i)) {
         ret = 0;
-        RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_D_E_NOT_CONGRUENT_TO_1);
+        RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_D_E_NOT_CONGRUENT_TO_1);
     }
 
     if (key->dmp1 != NULL && key->dmq1 != NULL && key->iqmp != NULL) {
@@ -164,7 +168,7 @@ int RSA_check_key(const RSA *key)
 
         if (BN_cmp(j, key->dmp1) != 0) {
             ret = 0;
-            RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_DMP1_NOT_CONGRUENT_TO_D);
+            RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_DMP1_NOT_CONGRUENT_TO_D);
         }
 
         /* dmq1 = d mod (q-1)? */
@@ -182,7 +186,7 @@ int RSA_check_key(const RSA *key)
 
         if (BN_cmp(j, key->dmq1) != 0) {
             ret = 0;
-            RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_DMQ1_NOT_CONGRUENT_TO_D);
+            RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_DMQ1_NOT_CONGRUENT_TO_D);
         }
 
         /* iqmp = q^-1 mod p? */
@@ -193,22 +197,16 @@ int RSA_check_key(const RSA *key)
 
         if (BN_cmp(i, key->iqmp) != 0) {
             ret = 0;
-            RSAerr(RSA_F_RSA_CHECK_KEY, RSA_R_IQMP_NOT_INVERSE_OF_Q);
+            RSAerr(RSA_F_RSA_CHECK_KEY_EX, RSA_R_IQMP_NOT_INVERSE_OF_Q);
         }
     }
 
  err:
-    if (i != NULL)
-        BN_free(i);
-    if (j != NULL)
-        BN_free(j);
-    if (k != NULL)
-        BN_free(k);
-    if (l != NULL)
-        BN_free(l);
-    if (m != NULL)
-        BN_free(m);
-    if (ctx != NULL)
-        BN_CTX_free(ctx);
+    BN_free(i);
+    BN_free(j);
+    BN_free(k);
+    BN_free(l);
+    BN_free(m);
+    BN_CTX_free(ctx);
     return (ret);
 }

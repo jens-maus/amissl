@@ -1,4 +1,3 @@
-/* crypto/rsa/rsa_lib.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -58,14 +57,16 @@
 
 #include <stdio.h>
 #include <openssl/crypto.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/lhash.h>
-#include <openssl/bn.h>
+#include "internal/bn_int.h"
 #include <openssl/rsa.h>
 #include <openssl/rand.h>
-#ifndef OPENSSL_NO_ENGINE
-# include <openssl/engine.h>
-#endif
+
+int RSA_bits(const RSA *r)
+{
+    return (BN_num_bits(r->n));
+}
 
 int RSA_size(const RSA *r)
 {
@@ -75,52 +76,24 @@ int RSA_size(const RSA *r)
 int RSA_public_encrypt(int flen, const unsigned char *from, unsigned char *to,
                        RSA *rsa, int padding)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_PUBLIC_ENCRYPT, RSA_R_NON_FIPS_RSA_METHOD);
-        return -1;
-    }
-#endif
     return (rsa->meth->rsa_pub_enc(flen, from, to, rsa, padding));
 }
 
 int RSA_private_encrypt(int flen, const unsigned char *from,
                         unsigned char *to, RSA *rsa, int padding)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_PRIVATE_ENCRYPT, RSA_R_NON_FIPS_RSA_METHOD);
-        return -1;
-    }
-#endif
     return (rsa->meth->rsa_priv_enc(flen, from, to, rsa, padding));
 }
 
 int RSA_private_decrypt(int flen, const unsigned char *from,
                         unsigned char *to, RSA *rsa, int padding)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_PRIVATE_DECRYPT, RSA_R_NON_FIPS_RSA_METHOD);
-        return -1;
-    }
-#endif
     return (rsa->meth->rsa_priv_dec(flen, from, to, rsa, padding));
 }
 
 int RSA_public_decrypt(int flen, const unsigned char *from, unsigned char *to,
                        RSA *rsa, int padding)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_PUBLIC_DECRYPT, RSA_R_NON_FIPS_RSA_METHOD);
-        return -1;
-    }
-#endif
     return (rsa->meth->rsa_pub_dec(flen, from, to, rsa, padding));
 }
 
@@ -131,10 +104,8 @@ int RSA_flags(const RSA *r)
 
 void RSA_blinding_off(RSA *rsa)
 {
-    if (rsa->blinding != NULL) {
-        BN_BLINDING_free(rsa->blinding);
-        rsa->blinding = NULL;
-    }
+    BN_BLINDING_free(rsa->blinding);
+    rsa->blinding = NULL;
     rsa->flags &= ~RSA_FLAG_BLINDING;
     rsa->flags |= RSA_FLAG_NO_BLINDING;
 }
@@ -187,8 +158,7 @@ static BIGNUM *rsa_get_public_exp(const BIGNUM *d, const BIGNUM *p,
 
 BN_BLINDING *RSA_setup_blinding(RSA *rsa, BN_CTX *in_ctx)
 {
-    BIGNUM local_n;
-    BIGNUM *e, *n;
+    BIGNUM *e;
     BN_CTX *ctx;
     BN_BLINDING *ret = NULL;
 
@@ -214,33 +184,47 @@ BN_BLINDING *RSA_setup_blinding(RSA *rsa, BN_CTX *in_ctx)
     } else
         e = rsa->e;
 
-    if ((RAND_status() == 0) && rsa->d != NULL && rsa->d->d != NULL) {
+    if ((RAND_status() == 0) && rsa->d != NULL
+        && bn_get_words(rsa->d) != NULL) {
         /*
          * if PRNG is not properly seeded, resort to secret exponent as
          * unpredictable seed
          */
-        RAND_add(rsa->d->d, rsa->d->dmax * sizeof rsa->d->d[0], 0.0);
+        RAND_add(bn_get_words(rsa->d), bn_get_dmax(rsa->d) * sizeof(BN_ULONG),
+                 0.0);
     }
 
-    if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
-        /* Set BN_FLG_CONSTTIME flag */
-        n = &local_n;
-        BN_with_flags(n, rsa->n, BN_FLG_CONSTTIME);
-    } else
-        n = rsa->n;
+    {
+        BIGNUM *local_n = NULL, *n;
+        if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
+            /* Set BN_FLG_CONSTTIME flag */
+            local_n = n = BN_new();
+            if (local_n == NULL) {
+                RSAerr(RSA_F_RSA_SETUP_BLINDING, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+            BN_with_flags(n, rsa->n, BN_FLG_CONSTTIME);
+        } else {
+            n = rsa->n;
+        }
 
-    ret = BN_BLINDING_create_param(NULL, e, n, ctx,
-                                   rsa->meth->bn_mod_exp, rsa->_method_mod_n);
+        ret = BN_BLINDING_create_param(NULL, e, n, ctx, rsa->meth->bn_mod_exp,
+                                       rsa->_method_mod_n);
+        /* We MUST free local_n before any further use of rsa->n */
+        BN_free(local_n);
+    }
     if (ret == NULL) {
         RSAerr(RSA_F_RSA_SETUP_BLINDING, ERR_R_BN_LIB);
         goto err;
     }
-    CRYPTO_THREADID_current(BN_BLINDING_thread_id(ret));
+
+    BN_BLINDING_set_current_thread(ret);
+
  err:
     BN_CTX_end(ctx);
-    if (in_ctx == NULL)
+    if (ctx != in_ctx)
         BN_CTX_free(ctx);
-    if (rsa->e == NULL)
+    if (e != rsa->e)
         BN_free(e);
 
     return ret;

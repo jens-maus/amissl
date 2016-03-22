@@ -1,7 +1,3 @@
-#if defined(__amigaos4__)
-#define __USE_INLINE__
-#endif
-
 #include <proto/exec.h>
 #include <proto/amisslmaster.h>
 #include <libraries/amisslmaster.h>

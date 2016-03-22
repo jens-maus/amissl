@@ -9,7 +9,7 @@ $rm='-rm -f';
 $mkdir='mkdir';
 
 # C compiler stuff
-$cc="\$(CC)";
+$cc='$(CC)';
 $cfile="-c ";
 
 if ($debug)
@@ -19,18 +19,20 @@ elsif ($profile)
 else
   { $cflags="-O3 -fomit-frame-pointer"; }
 
-$cflags.=" -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_FP_API -DOPENSSL_SYS_AMIGA -I\$(AmiSSL)/include -W -Wall -Wno-unused-parameter";
-if (!$no_asm)
-  { $cflags.=" -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DVPAES_ASM"; }
-$app_cflag="-I\$(AmiSSL)/openssl";
-$lib_cflag="-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE -I\$(AmiSSL)/libcmt/include";
+$cflags.=' -mcrt=clib2 -mcpu=powerpc -mstrict-align -DNDEBUG -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__NO_NET_API -DB_ENDIAN -DOPENSSL_NO_STDIO -DOPENSSL_SYS_AMIGA -I$(AmiSSL)/include -DOPENSSLDIR=\"AmiSSL:\" -DENGINESDIR=\"AmiSSL:engines\" -W -Wall';
+if(!$no_asm)
+{
+  $cflags.=' -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DVPAES_ASM';
+}
+$app_cflag='-I$(AmiSSL)/.obj_os4/crypto/include/ -I$(AmiSSL)/openssl -I$(AmiSSL)/openssl/include';
+$lib_cflag='-mbaserel -mcheck68kfuncptr -DAMISSL_COMPILE';
 $obj='.o';
 $ofile='-o ';
 $define='-D';
 $include='-I';
 
 # EXE linking stuff
-$link='${CC}';
+$link='$(CC)';
 $lflags='-mcrt=clib2';
 $efile='-o ';
 $exep='';
@@ -78,20 +80,44 @@ sub do_link_rule
 	$file =~ s/\//$o/g if $o ne '/';
 	$n=&bname($target);
 	$ret.="$target: $files $dep_libs\n";
-	$ret.="\t\$(LINK) ${efile}$target \$(LFLAGS) $files $libs\n\n";
+	$ret.="\t\$(LINK_CMD) ${efile}$target \$(LFLAGS) $files $libs\n\n";
 	return($ret);
 	}
 
+sub do_rehash_rule {
+    my ($target, $deps) = @_;
+    my $ret = <<"EOF";
+$target: $deps
+	(OPENSSL="`pwd`/util/opensslwrap.sh"; \\
+	OPENSSL_DEBUG_MEMORY=on; \\
+	export OPENSSL OPENSSL_DEBUG_MEMORY; \\
+	\$(PERL) \$(BIN_D)${o}c_rehash certs/demo; \\
+	touch $target)
+EOF
+    return $ret
+}
+sub do_test_rule {
+    my ($target, $deps, $test_cmd) = @_;
+    my $ret = <<"EOF";
+$target: $deps force.$target
+	TOP=. BIN_D=\$(BIN_D) TEST_D=\$(TEST_D) \\
+	    PERL=\$(PERL) \$(PERL) test/$test_cmd \$(TESTS)
+force.$target:
+
+EOF
+    return $ret;
+}
+
 sub special_compile_target
-	{
-	local($target) = @_;
+{
+  local($target) = @_;
 
-	if ($target eq 'crypto/bn/bn-ppc')
-	{
-		return &perlasm_compile_target("$to${o}$n$obj","crypto/bn/asm/ppc.pl","bn-ppc");
-	}
+  if($target eq 'crypto/bn/bn-ppc')
+  {
+    return &perlasm_compile_target("$to${o}$n$obj","crypto/bn/asm/ppc.pl","bn-ppc");
+  }
 
-	return 0;
-	}
+  return 0;
+}
 
 1;

@@ -1,4 +1,3 @@
-/* ssl/ssl_txt.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -86,13 +85,13 @@
 #include <openssl/buffer.h>
 #include "ssl_locl.h"
 
-#ifndef OPENSSL_NO_FP_API
+#ifndef OPENSSL_NO_STDIO
 int SSL_SESSION_print_fp(FILE *fp, const SSL_SESSION *x)
 {
     BIO *b;
     int ret;
 
-    if ((b = BIO_new(BIO_s_file_internal())) == NULL) {
+    if ((b = BIO_new(BIO_s_file())) == NULL) {
         SSLerr(SSL_F_SSL_SESSION_PRINT_FP, ERR_R_BUF_LIB);
         return (0);
     }
@@ -112,24 +111,7 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
         goto err;
     if (BIO_puts(bp, "SSL-Session:\n") <= 0)
         goto err;
-    if (x->ssl_version == SSL2_VERSION)
-        s = "SSLv2";
-    else if (x->ssl_version == SSL3_VERSION)
-        s = "SSLv3";
-    else if (x->ssl_version == TLS1_2_VERSION)
-        s = "TLSv1.2";
-    else if (x->ssl_version == TLS1_1_VERSION)
-        s = "TLSv1.1";
-    else if (x->ssl_version == TLS1_VERSION)
-        s = "TLSv1";
-    else if (x->ssl_version == DTLS1_VERSION)
-        s = "DTLSv1";
-    else if (x->ssl_version == DTLS1_2_VERSION)
-        s = "DTLSv1.2";
-    else if (x->ssl_version == DTLS1_BAD_VER)
-        s = "DTLSv1-bad";
-    else
-        s = "unknown";
+    s = ssl_protocol_to_string(x->ssl_version);
     if (BIO_printf(bp, "    Protocol  : %s\n", s) <= 0)
         goto err;
 
@@ -167,28 +149,6 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
         if (BIO_printf(bp, "%02X", x->master_key[i]) <= 0)
             goto err;
     }
-    if (BIO_puts(bp, "\n    Key-Arg   : ") <= 0)
-        goto err;
-    if (x->key_arg_length == 0) {
-        if (BIO_puts(bp, "None") <= 0)
-            goto err;
-    } else
-        for (i = 0; i < x->key_arg_length; i++) {
-            if (BIO_printf(bp, "%02X", x->key_arg[i]) <= 0)
-                goto err;
-        }
-#ifndef OPENSSL_NO_KRB5
-    if (BIO_puts(bp, "\n    Krb5 Principal: ") <= 0)
-        goto err;
-    if (x->krb5_client_princ_len == 0) {
-        if (BIO_puts(bp, "None") <= 0)
-            goto err;
-    } else
-        for (i = 0; i < x->krb5_client_princ_len; i++) {
-            if (BIO_printf(bp, "%02X", x->krb5_client_princ[i]) <= 0)
-                goto err;
-        }
-#endif                          /* OPENSSL_NO_KRB5 */
 #ifndef OPENSSL_NO_PSK
     if (BIO_puts(bp, "\n    PSK identity: ") <= 0)
         goto err;
@@ -206,7 +166,6 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
     if (BIO_printf(bp, "%s", x->srp_username ? x->srp_username : "None") <= 0)
         goto err;
 #endif
-#ifndef OPENSSL_NO_TLSEXT
     if (x->tlsext_tick_lifetime_hint) {
         if (BIO_printf(bp,
                        "\n    TLS session ticket lifetime hint: %ld (seconds)",
@@ -220,21 +179,20 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
             <= 0)
             goto err;
     }
-#endif
 
 #ifndef OPENSSL_NO_COMP
     if (x->compress_meth != 0) {
         SSL_COMP *comp = NULL;
 
-        ssl_cipher_get_evp(x, NULL, NULL, NULL, NULL, &comp);
+        if (!ssl_cipher_get_evp(x, NULL, NULL, NULL, NULL, &comp, 0))
+            goto err;
         if (comp == NULL) {
             if (BIO_printf(bp, "\n    Compression: %d", x->compress_meth) <=
                 0)
                 goto err;
         } else {
-            if (BIO_printf
-                (bp, "\n    Compression: %d (%s)", comp->id,
-                 comp->method->name) <= 0)
+            if (BIO_printf(bp, "\n    Compression: %d (%s)", comp->id,
+                 comp->name) <= 0)
                 goto err;
         }
     }
@@ -254,6 +212,51 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
         goto err;
     if (BIO_printf(bp, "%ld (%s)\n", x->verify_result,
                    X509_verify_cert_error_string(x->verify_result)) <= 0)
+        goto err;
+
+    if (BIO_printf(bp, "    Extended master secret: %s\n",
+                   x->flags & SSL_SESS_FLAG_EXTMS ? "yes" : "no") <= 0)
+        goto err;
+
+    return (1);
+ err:
+    return (0);
+}
+
+/*
+ * print session id and master key in NSS keylog format (RSA
+ * Session-ID:<session id> Master-Key:<master key>)
+ */
+int SSL_SESSION_print_keylog(BIO *bp, const SSL_SESSION *x)
+{
+    unsigned int i;
+
+    if (x == NULL)
+        goto err;
+    if (x->session_id_length == 0 || x->master_key_length == 0)
+        goto err;
+
+    /*
+     * the RSA prefix is required by the format's definition although there's
+     * nothing RSA-specifc in the output, therefore, we don't have to check if
+     * the cipher suite is based on RSA
+     */
+    if (BIO_puts(bp, "RSA ") <= 0)
+        goto err;
+
+    if (BIO_puts(bp, "Session-ID:") <= 0)
+        goto err;
+    for (i = 0; i < x->session_id_length; i++) {
+        if (BIO_printf(bp, "%02X", x->session_id[i]) <= 0)
+            goto err;
+    }
+    if (BIO_puts(bp, " Master-Key:") <= 0)
+        goto err;
+    for (i = 0; i < (unsigned int)x->master_key_length; i++) {
+        if (BIO_printf(bp, "%02X", x->master_key[i]) <= 0)
+            goto err;
+    }
+    if (BIO_puts(bp, "\n") <= 0)
         goto err;
 
     return (1);

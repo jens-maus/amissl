@@ -1,4 +1,3 @@
-/* crypto/err/err_all.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -57,6 +56,7 @@
  */
 
 #include <stdio.h>
+#include <internal/err.h>
 #include <openssl/asn1.h>
 #include <openssl/bn.h>
 #ifndef OPENSSL_NO_EC
@@ -75,12 +75,6 @@
 #endif
 #ifndef OPENSSL_NO_DSA
 # include <openssl/dsa.h>
-#endif
-#ifndef OPENSSL_NO_ECDSA
-# include <openssl/ecdsa.h>
-#endif
-#ifndef OPENSSL_NO_ECDH
-# include <openssl/ecdh.h>
 #endif
 #include <openssl/evp.h>
 #include <openssl/objects.h>
@@ -104,12 +98,17 @@
 #ifndef OPENSSL_NO_CMS
 # include <openssl/cms.h>
 #endif
-#ifndef OPENSSL_NO_JPAKE
-# include <openssl/jpake.h>
+#ifndef OPENSSL_NO_CT
+# include <openssl/ct.h>
 #endif
+#include <openssl/async.h>
+#include <openssl/kdf.h>
 
-void ERR_load_crypto_strings(void)
+void err_load_crypto_strings_intern(void)
 {
+#ifdef OPENSSL_FIPS
+    FIPS_set_error_callbacks(ERR_put_error, ERR_add_error_vdata);
+#endif
 #ifndef OPENSSL_NO_ERR
     ERR_load_ERR_strings();     /* include error strings for SYSerr */
     ERR_load_BN_strings();
@@ -136,12 +135,6 @@ void ERR_load_crypto_strings(void)
 # ifndef OPENSSL_NO_EC
     ERR_load_EC_strings();
 # endif
-# ifndef OPENSSL_NO_ECDSA
-    ERR_load_ECDSA_strings();
-# endif
-# ifndef OPENSSL_NO_ECDH
-    ERR_load_ECDH_strings();
-# endif
     /* skip ERR_load_SSL_strings() because it is not in this library */
     ERR_load_BIO_strings();
     ERR_load_PKCS7_strings();
@@ -161,8 +154,10 @@ void ERR_load_crypto_strings(void)
 # ifndef OPENSSL_NO_CMS
     ERR_load_CMS_strings();
 # endif
-# ifndef OPENSSL_NO_JPAKE
-    ERR_load_JPAKE_strings();
+# ifndef OPENSSL_NO_CT
+    ERR_load_CT_strings();
 # endif
+    ERR_load_ASYNC_strings();
 #endif
+    ERR_load_KDF_strings();
 }

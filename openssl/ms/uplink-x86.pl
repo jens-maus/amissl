@@ -6,6 +6,9 @@ require "x86asm.pl";
 
 require "uplink-common.pl";
 
+$output = pop;
+open STDOUT,">$output";
+
 &asm_init($ARGV[0],"uplink-x86");
 
 &external_label("OPENSSL_Uplink");
@@ -14,11 +17,11 @@ require "uplink-common.pl";
 for ($i=1;$i<=$N;$i++) {
 &function_begin_B("_\$lazy${i}");
 	&lea	("eax",&DWP(&label("OPENSSL_UplinkTable")));
-	&push	("eax");
 	&push	($i);
+	&push	("eax");
 	&call	(&label("OPENSSL_Uplink"));
-	&add	("esp",8);
 	&pop	("eax");
+	&add	("esp",4);
 	&jmp_ptr(&DWP(4*$i,"eax"));
 &function_end_B("_\$lazy${i}");
 }
@@ -31,3 +34,5 @@ for ($i=1;$i<=$N;$i++) {
 &data_word(&label("_\$lazy${i}"));
 }
 &asm_finish();
+
+close OUTPUT;

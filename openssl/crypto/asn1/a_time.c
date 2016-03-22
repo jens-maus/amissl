@@ -1,4 +1,3 @@
-/* crypto/asn1/a_time.c */
 /* ====================================================================
  * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
  *
@@ -63,41 +62,13 @@
 
 #include <stdio.h>
 #include <time.h>
-#include "cryptlib.h"
-#include "o_time.h"
+#include "internal/cryptlib.h"
 #include <openssl/asn1t.h>
 #include "asn1_locl.h"
 
 IMPLEMENT_ASN1_MSTRING(ASN1_TIME, B_ASN1_TIME)
 
 IMPLEMENT_ASN1_FUNCTIONS(ASN1_TIME)
-
-#if 0
-int i2d_ASN1_TIME(ASN1_TIME *a, unsigned char **pp)
-{
-# ifdef CHARSET_EBCDIC
-    /* KLUDGE! We convert to ascii before writing DER */
-    char tmp[24];
-    ASN1_STRING tmpstr;
-
-    if (a->type == V_ASN1_UTCTIME || a->type == V_ASN1_GENERALIZEDTIME) {
-        int len;
-
-        tmpstr = *(ASN1_STRING *)a;
-        len = tmpstr.length;
-        ebcdic2ascii(tmp, tmpstr.data,
-                     (len >= sizeof tmp) ? sizeof tmp : len);
-        tmpstr.data = tmp;
-        a = (ASN1_GENERALIZEDTIME *)&tmpstr;
-    }
-# endif
-    if (a->type == V_ASN1_UTCTIME || a->type == V_ASN1_GENERALIZEDTIME)
-        return (i2d_ASN1_bytes((ASN1_STRING *)a, pp,
-                               a->type, V_ASN1_UNIVERSAL));
-    ASN1err(ASN1_F_I2D_ASN1_TIME, ASN1_R_EXPECTING_A_TIME);
-    return -1;
-}
-#endif
 
 ASN1_TIME *ASN1_TIME_set(ASN1_TIME *s, time_t t)
 {
@@ -124,7 +95,7 @@ ASN1_TIME *ASN1_TIME_adj(ASN1_TIME *s, time_t t,
     return ASN1_GENERALIZEDTIME_adj(s, t, offset_day, offset_sec);
 }
 
-int ASN1_TIME_check(ASN1_TIME *t)
+int ASN1_TIME_check(const ASN1_TIME *t)
 {
     if (t->type == V_ASN1_GENERALIZEDTIME)
         return ASN1_GENERALIZEDTIME_check(t);
@@ -144,8 +115,8 @@ ASN1_GENERALIZEDTIME *ASN1_TIME_to_generalizedtime(ASN1_TIME *t,
     if (!ASN1_TIME_check(t))
         return NULL;
 
-    if (!out || !*out) {
-        if (!(ret = ASN1_GENERALIZEDTIME_new()))
+    if (out == NULL || *out == NULL) {
+        if ((ret = ASN1_GENERALIZEDTIME_new()) == NULL)
             return NULL;
         if (out)
             *out = ret;
@@ -167,11 +138,11 @@ ASN1_GENERALIZEDTIME *ASN1_TIME_to_generalizedtime(ASN1_TIME *t,
     str = (char *)ret->data;
     /* Work out the century and prepend */
     if (t->data[0] >= '5')
-        BUF_strlcpy(str, "19", newlen);
+        OPENSSL_strlcpy(str, "19", newlen);
     else
-        BUF_strlcpy(str, "20", newlen);
+        OPENSSL_strlcpy(str, "20", newlen);
 
-    BUF_strlcat(str, (char *)t->data, newlen);
+    OPENSSL_strlcat(str, (char *)t->data, newlen);
 
     return ret;
 }
@@ -225,4 +196,14 @@ int ASN1_TIME_diff(int *pday, int *psec,
     if (!asn1_time_to_tm(&tm_to, to))
         return 0;
     return OPENSSL_gmtime_diff(pday, psec, &tm_from, &tm_to);
+}
+
+int ASN1_TIME_print(BIO *bp, const ASN1_TIME *tm)
+{
+    if (tm->type == V_ASN1_UTCTIME)
+        return ASN1_UTCTIME_print(bp, tm);
+    if (tm->type == V_ASN1_GENERALIZEDTIME)
+        return ASN1_GENERALIZEDTIME_print(bp, tm);
+    BIO_write(bp, "Bad time value", 14);
+    return (0);
 }

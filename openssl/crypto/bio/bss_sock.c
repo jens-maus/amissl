@@ -1,4 +1,3 @@
-/* crypto/bio/bss_sock.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -59,7 +58,7 @@
 #include <stdio.h>
 #include <errno.h>
 #define USE_SOCKETS
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 
 #ifndef OPENSSL_NO_SOCK
 
@@ -123,7 +122,7 @@ static int sock_free(BIO *a)
         return (0);
     if (a->shutdown) {
         if (a->init) {
-            SHUTDOWN2(a->num);
+            BIO_closesocket(a->num);
         }
         a->init = 0;
         a->flags = 0;
@@ -215,12 +214,6 @@ int BIO_sock_should_retry(int i)
     if ((i == 0) || (i == -1)) {
         err = get_last_socket_error();
 
-# if defined(OPENSSL_SYS_WINDOWS) && 0/* more microsoft stupidity? perhaps
-                                       * not? Ben 4/1/99 */
-        if ((i == -1) && (err == 0))
-            return (1);
-# endif
-
         return (BIO_sock_non_fatal_error(err));
     }
     return (0);
@@ -232,12 +225,6 @@ int BIO_sock_non_fatal_error(int err)
 # if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_NETWARE)
 #  if defined(WSAEWOULDBLOCK)
     case WSAEWOULDBLOCK:
-#  endif
-
-#  if 0                         /* This appears to always be an error */
-#   if defined(WSAENOTCONN)
-    case WSAENOTCONN:
-#   endif
 #  endif
 # endif
 

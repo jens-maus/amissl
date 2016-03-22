@@ -12,8 +12,8 @@
 STRUCTURE AmiSSLMasterIFace, InterfaceData_SIZE
 	    FPTR IAmiSSLMaster_Obtain
 	    FPTR IAmiSSLMaster_Release
-	    FPTR IAmiSSLMaster_Expunge
-	    FPTR IAmiSSLMaster_Clone
+	    FPTR AmiSSLMasterIFace_Expunge_UNIMPLEMENTED
+	    FPTR AmiSSLMasterIFace_Clone_UNIMPLEMENTED
 	    FPTR IAmiSSLMaster_InitAmiSSLMaster
 	    FPTR IAmiSSLMaster_OpenAmiSSL
 	    FPTR IAmiSSLMaster_CloseAmiSSL

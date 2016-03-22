@@ -93,6 +93,15 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
 ULONG closeBase(UNUSED struct LibraryHeader *lib)
 {
+#if 0
+  SETUPSTATE();
+#if defined(__amigaos4__)
+  struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+#else
+  struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif
+#endif
+
   ENTER();
 
   SHOWPOINTER(DBF_STARTUP, SysBase);
@@ -104,6 +113,11 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
   #if defined(__amigaos4__)
   SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
+
+  // we call OPENSSL_cleanup to clean everything for the
+  // current instance.
+  //OPENSSL_cleanup();
+  #warning where to call OPENSSL_cleanup()? here it crashes!
 
   RETURN(TRUE);
   return TRUE;

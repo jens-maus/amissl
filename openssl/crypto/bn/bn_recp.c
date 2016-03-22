@@ -1,4 +1,3 @@
-/* crypto/bn/bn_recp.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,14 +55,13 @@
  * [including the GNU Public Licence.]
  */
 
-#include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 void BN_RECP_CTX_init(BN_RECP_CTX *recp)
 {
-    BN_init(&(recp->N));
-    BN_init(&(recp->Nr));
+    bn_init(&(recp->N));
+    bn_init(&(recp->Nr));
     recp->num_bits = 0;
     recp->flags = 0;
 }
@@ -72,7 +70,7 @@ BN_RECP_CTX *BN_RECP_CTX_new(void)
 {
     BN_RECP_CTX *ret;
 
-    if ((ret = (BN_RECP_CTX *)OPENSSL_malloc(sizeof(BN_RECP_CTX))) == NULL)
+    if ((ret = OPENSSL_zalloc(sizeof(*ret))) == NULL)
         return (NULL);
 
     BN_RECP_CTX_init(ret);
@@ -198,7 +196,6 @@ int BN_div_recp(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m,
         goto err;
     r->neg = 0;
 
-#if 1
     j = 0;
     while (BN_ucmp(r, &(recp->N)) >= 0) {
         if (j++ > 2) {
@@ -210,7 +207,6 @@ int BN_div_recp(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m,
         if (!BN_add_word(d, 1))
             goto err;
     }
-#endif
 
     r->neg = BN_is_zero(r) ? 0 : m->neg;
     d->neg = m->neg ^ recp->N.neg;

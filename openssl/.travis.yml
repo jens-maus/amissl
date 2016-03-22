@@ -1,9 +1,18 @@
 language: c
+cache: ccache
 
 addons:
-    apt_packages:
-        - binutils-mingw-w64
-        - gcc-mingw-w64
+    apt:
+        packages:
+            - ccache
+            - clang-3.6
+            - gcc-5
+            - binutils-mingw-w64
+            - gcc-mingw-w64
+            - wine
+        sources:
+            - llvm-toolchain-precise-3.6
+            - ubuntu-toolchain-r-test
 
 os:
     - linux
@@ -12,49 +21,85 @@ os:
 compiler:
     - clang
     - gcc
-    - i686-w64-mingw32-gcc
-    - x86_64-w64-mingw32-gcc
 
 env:
-    - CONFIG_OPTS=""
     - CONFIG_OPTS="shared"
-    - CONFIG_OPTS="-d --strict-warnings"
+    - CONFIG_OPTS="--debug --strict-warnings enable-crypto-mdebug enable-rc5 enable-md2"
+    - CONFIG_OPTS="" BUILDONLY="yes"
+    - CONFIG_OPTS="--classic" BUILDONLY="yes"
+    - CONFIG_OPTS="--classic shared" BUILDONLY="yes"
+    - CONFIG_OPTS="no-pic" BUILDONLY="yes"
+    - CONFIG_OPTS="no-engine" BUILDONLY="yes"
 
 matrix:
-    exclude:
-        - os: osx
+    include:
+        - os: linux
+          compiler: clang-3.6
+          env: CONFIG_OPTS="-fsanitize=address"
+        - os: linux
+          compiler: clang-3.6
+          env: CONFIG_OPTS="no-asm --strict-warnings -fno-sanitize-recover -fsanitize=address -fsanitize=undefined enable-rc5 enable-md2"
+        - os: linux
+          compiler: gcc-5
+          env: CONFIG_OPTS="-fsanitize=address"
+        - os: linux
+          compiler: gcc-5
+          env: CONFIG_OPTS="no-asm --strict-warnings -fno-sanitize-recover -fsanitize=address -fsanitize=undefined enable-rc5 enable-md2"
+        - os: linux
           compiler: i686-w64-mingw32-gcc
-        - os: osx
+          env: CONFIG_OPTS="no-pic"
+        - os: linux
           compiler: x86_64-w64-mingw32-gcc
-        - compiler: i686-w64-mingw32-gcc
-          env: CONFIG_OPTS="-d --strict-warnings"
-        - compiler: x86_64-w64-mingw32-gcc
-          env: CONFIG_OPTS="-d --strict-warnings"
+          env: CONFIG_OPTS="no-pic"
+    exclude:
+        - os: linux
+          compiler: clang
+        - os: osx
+          compiler: gcc
 
 before_script:
     - sh .travis-create-release.sh $TRAVIS_OS_NAME
     - tar -xvzf _srcdist.tar.gz
-    - cd _srcdist
+    - if echo "$CONFIG_OPTS" | grep -e "--classic" >/dev/null; then
+          srcdir=.;
+          cd _srcdist;
+      else
+          srcdir=../_srcdist;
+          mkdir _build;
+          cd _build;
+      fi
     - if [ "$CC" == i686-w64-mingw32-gcc ]; then
           export CROSS_COMPILE=${CC%%gcc}; unset CC;
-          ./Configure mingw $CONFIG_OPTS;
+          $srcdir/Configure mingw $CONFIG_OPTS -Wno-pedantic-ms-format;
       elif [ "$CC" == x86_64-w64-mingw32-gcc ]; then
           export CROSS_COMPILE=${CC%%gcc}; unset CC;
-          ./Configure mingw64 $CONFIG_OPTS;
+          $srcdir/Configure mingw64 $CONFIG_OPTS -Wno-pedantic-ms-format;
       else
-          if [ "$CC" == gcc ]; then
-              export CONFIG_OPTS="$CONFIG_OPTS -Wno-error=shadow";
+          if which ccache >/dev/null && [ "$CC" != clang-3.6 ]; then
+              CC="ccache $CC";
           fi;
-          ./config $CONFIG_OPTS;
+          $srcdir/config $CONFIG_OPTS;
       fi
     - cd ..
 
 script:
-    - cd _srcdist
+    - if echo "$CONFIG_OPTS" | grep -e "--classic" >/dev/null; then
+          cd _srcdist;
+      else
+          cd _build;
+      fi
     - make
-    - if [ -z "$CROSS_COMPILE" ]; then make test; fi
+    - if [ -z "$BUILDONLY" ]; then
+          if [ -n "$CROSS_COMPILE" ]; then
+              export EXE_SHELL="wine" WINEPREFIX=`pwd`;
+          fi;
+          HARNESS_VERBOSE=yes make test;
+      else
+          make build_tests;
+      fi
     - cd ..
 
 notifications:
     email:
         - openssl-commits@openssl.org
+

@@ -1,4 +1,3 @@
-/* crypto/bn/bn_mont.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -116,8 +115,7 @@
  * sections 3.8 and 4.2 in http://security.ece.orst.edu/koc/papers/r01rsasw.pdf
  */
 
-#include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 
 #define MONT_WORD               /* use the faster word-based algorithm */
@@ -197,36 +195,15 @@ static int BN_from_montgomery_word(BIGNUM *ret, BIGNUM *r, BN_MONT_CTX *mont)
     rp = r->d;
 
     /* clear the top words of T */
-# if 1
-    for (i = r->top; i < max; i++) /* memset? XXX */
-        rp[i] = 0;
-# else
-    memset(&(rp[r->top]), 0, (max - r->top) * sizeof(BN_ULONG));
-# endif
+    i = max - r->top;
+    if (i)
+        memset(&rp[r->top], 0, sizeof(*rp) * i);
 
     r->top = max;
     n0 = mont->n0[0];
 
-# ifdef BN_COUNT
-    fprintf(stderr, "word BN_from_montgomery_word %d * %d\n", nl, nl);
-# endif
     for (carry = 0, i = 0; i < nl; i++, rp++) {
-# ifdef __TANDEM
-        {
-            long long t1;
-            long long t2;
-            long long t3;
-            t1 = rp[0] * (n0 & 0177777);
-            t2 = 037777600000l;
-            t2 = n0 & t2;
-            t3 = rp[0] & 0177777;
-            t2 = (t3 * t2) & BN_MASK2;
-            t1 = t1 + t2;
-            v = bn_mul_add_words(rp, np, nl, (BN_ULONG)t1);
-        }
-# else
         v = bn_mul_add_words(rp, np, nl, (rp[0] * n0) & BN_MASK2);
-# endif
         v = (v + carry + rp[nl]) & BN_MASK2;
         carry |= (v != rp[nl]);
         carry &= (v <= rp[nl]);
@@ -338,7 +315,7 @@ BN_MONT_CTX *BN_MONT_CTX_new(void)
 {
     BN_MONT_CTX *ret;
 
-    if ((ret = (BN_MONT_CTX *)OPENSSL_malloc(sizeof(BN_MONT_CTX))) == NULL)
+    if ((ret = OPENSSL_malloc(sizeof(*ret))) == NULL)
         return (NULL);
 
     BN_MONT_CTX_init(ret);
@@ -349,9 +326,9 @@ BN_MONT_CTX *BN_MONT_CTX_new(void)
 void BN_MONT_CTX_init(BN_MONT_CTX *ctx)
 {
     ctx->ri = 0;
-    BN_init(&(ctx->RR));
-    BN_init(&(ctx->N));
-    BN_init(&(ctx->Ni));
+    bn_init(&(ctx->RR));
+    bn_init(&(ctx->N));
+    bn_init(&(ctx->Ni));
     ctx->n0[0] = ctx->n0[1] = 0;
     ctx->flags = 0;
 }
@@ -389,7 +366,7 @@ int BN_MONT_CTX_set(BN_MONT_CTX *mont, const BIGNUM *mod, BN_CTX *ctx)
         BIGNUM tmod;
         BN_ULONG buf[2];
 
-        BN_init(&tmod);
+        bn_init(&tmod);
         tmod.d = buf;
         tmod.dmax = 2;
         tmod.neg = 0;
@@ -519,14 +496,14 @@ BN_MONT_CTX *BN_MONT_CTX_copy(BN_MONT_CTX *to, BN_MONT_CTX *from)
     return (to);
 }
 
-BN_MONT_CTX *BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, int lock,
+BN_MONT_CTX *BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, CRYPTO_RWLOCK *lock,
                                     const BIGNUM *mod, BN_CTX *ctx)
 {
     BN_MONT_CTX *ret;
 
-    CRYPTO_r_lock(lock);
+    CRYPTO_THREAD_read_lock(lock);
     ret = *pmont;
-    CRYPTO_r_unlock(lock);
+    CRYPTO_THREAD_unlock(lock);
     if (ret)
         return ret;
 
@@ -539,7 +516,7 @@ BN_MONT_CTX *BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, int lock,
      * (the losers throw away the work they've done).
      */
     ret = BN_MONT_CTX_new();
-    if (!ret)
+    if (ret == NULL)
         return NULL;
     if (!BN_MONT_CTX_set(ret, mod, ctx)) {
         BN_MONT_CTX_free(ret);
@@ -547,12 +524,12 @@ BN_MONT_CTX *BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, int lock,
     }
 
     /* The locked compare-and-set, after the local work is done. */
-    CRYPTO_w_lock(lock);
+    CRYPTO_THREAD_write_lock(lock);
     if (*pmont) {
         BN_MONT_CTX_free(ret);
         ret = *pmont;
     } else
         *pmont = ret;
-    CRYPTO_w_unlock(lock);
+    CRYPTO_THREAD_unlock(lock);
     return ret;
 }

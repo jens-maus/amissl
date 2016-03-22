@@ -1,4 +1,3 @@
-/* crypto/bn/bn_err.c */
 /* ====================================================================
  * Copyright (c) 1999-2015 The OpenSSL Project.  All rights reserved.
  *
@@ -70,7 +69,7 @@
 # define ERR_REASON(reason) ERR_PACK(ERR_LIB_BN,0,reason)
 
 static ERR_STRING_DATA BN_str_functs[] = {
-    {ERR_FUNC(BN_F_BNRAND), "BNRAND"},
+    {ERR_FUNC(BN_F_BNRAND), "bnrand"},
     {ERR_FUNC(BN_F_BN_BLINDING_CONVERT_EX), "BN_BLINDING_convert_ex"},
     {ERR_FUNC(BN_F_BN_BLINDING_CREATE_PARAM), "BN_BLINDING_create_param"},
     {ERR_FUNC(BN_F_BN_BLINDING_INVERT_EX), "BN_BLINDING_invert_ex"},
@@ -78,6 +77,7 @@ static ERR_STRING_DATA BN_str_functs[] = {
     {ERR_FUNC(BN_F_BN_BLINDING_UPDATE), "BN_BLINDING_update"},
     {ERR_FUNC(BN_F_BN_BN2DEC), "BN_bn2dec"},
     {ERR_FUNC(BN_F_BN_BN2HEX), "BN_bn2hex"},
+    {ERR_FUNC(BN_F_BN_COMPUTE_WNAF), "bn_compute_wNAF"},
     {ERR_FUNC(BN_F_BN_CTX_GET), "BN_CTX_get"},
     {ERR_FUNC(BN_F_BN_CTX_NEW), "BN_CTX_new"},
     {ERR_FUNC(BN_F_BN_CTX_START), "BN_CTX_start"},
@@ -86,7 +86,10 @@ static ERR_STRING_DATA BN_str_functs[] = {
     {ERR_FUNC(BN_F_BN_DIV_RECP), "BN_div_recp"},
     {ERR_FUNC(BN_F_BN_EXP), "BN_exp"},
     {ERR_FUNC(BN_F_BN_EXPAND2), "bn_expand2"},
-    {ERR_FUNC(BN_F_BN_EXPAND_INTERNAL), "BN_EXPAND_INTERNAL"},
+    {ERR_FUNC(BN_F_BN_EXPAND_INTERNAL), "bn_expand_internal"},
+    {ERR_FUNC(BN_F_BN_GENCB_NEW), "BN_GENCB_new"},
+    {ERR_FUNC(BN_F_BN_GENERATE_DSA_NONCE), "BN_generate_dsa_nonce"},
+    {ERR_FUNC(BN_F_BN_GENERATE_PRIME_EX), "BN_generate_prime_ex"},
     {ERR_FUNC(BN_F_BN_GF2M_MOD), "BN_GF2m_mod"},
     {ERR_FUNC(BN_F_BN_GF2M_MOD_EXP), "BN_GF2m_mod_exp"},
     {ERR_FUNC(BN_F_BN_GF2M_MOD_MUL), "BN_GF2m_mod_mul"},
@@ -111,6 +114,7 @@ static ERR_STRING_DATA BN_str_functs[] = {
     {ERR_FUNC(BN_F_BN_RAND), "BN_rand"},
     {ERR_FUNC(BN_F_BN_RAND_RANGE), "BN_rand_range"},
     {ERR_FUNC(BN_F_BN_RSHIFT), "BN_rshift"},
+    {ERR_FUNC(BN_F_BN_SET_WORDS), "bn_set_words"},
     {ERR_FUNC(BN_F_BN_USUB), "BN_usub"},
     {0, NULL}
 };
@@ -133,6 +137,7 @@ static ERR_STRING_DATA BN_str_reasons[] = {
     {ERR_REASON(BN_R_NOT_INITIALIZED), "not initialized"},
     {ERR_REASON(BN_R_NO_INVERSE), "no inverse"},
     {ERR_REASON(BN_R_NO_SOLUTION), "no solution"},
+    {ERR_REASON(BN_R_PRIVATE_KEY_TOO_LARGE), "private key too large"},
     {ERR_REASON(BN_R_P_IS_NOT_PRIME), "p is not prime"},
     {ERR_REASON(BN_R_TOO_MANY_ITERATIONS), "too many iterations"},
     {ERR_REASON(BN_R_TOO_MANY_TEMPORARY_VARIABLES),

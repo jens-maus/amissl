@@ -1,4 +1,3 @@
-/* test/testutil.h */
 /*-
  * Utilities for writing OpenSSL unit tests.
  *
@@ -114,5 +113,14 @@
 # else
 #  define TEST_CASE_NAME __func__
 # endif                         /* __STDC_VERSION__ */
+
+/*
+ * In main(), call ADD_TEST to register each test case function, then call
+ * run_tests() to execute all tests and report the results. The result
+ * returned from run_tests() should be used as the return value for main().
+ */
+# define ADD_TEST(test_function) add_test(#test_function, test_function)
+void add_test(const char *test_case_name, int (*test_fn) ());
+int run_tests(const char *test_prog_name);
 
 #endif                          /* HEADER_TESTUTIL_H */

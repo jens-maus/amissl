@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/objects/objects.h */
+#endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1109,6 +1108,9 @@ int OBJ_add_object(const ASN1_OBJECT *obj);
 int OBJ_create(const char *oid, const char *sn, const char *ln);
 void OBJ_cleanup(void);
 int OBJ_create_objects(BIO *in);
+
+size_t OBJ_length(const ASN1_OBJECT *obj);
+const unsigned char *OBJ_get0_data(const ASN1_OBJECT *obj);
 
 int OBJ_find_sigid_algs(int signid, int *pdig_nid, int *ppkey_nid);
 int OBJ_find_sigid_by_algs(int *psignid, int dig_nid, int pkey_nid);

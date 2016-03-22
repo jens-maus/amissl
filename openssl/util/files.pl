@@ -4,7 +4,7 @@
 # It is basically a list of all variables from the passed makefile
 #
 
-while ($ARGV[0] =~ /^(\S+)\s*=(.*)$/)
+while ($ARGV[0] =~ /^([^\s=]+)\s*=\s*(.*)$/)
 	{
 	$sym{$1} = $2;
 	shift;
@@ -13,9 +13,9 @@ while ($ARGV[0] =~ /^(\S+)\s*=(.*)$/)
 $s="";
 while (<>)
 	{
-	chop;
+	s|\R$||;
 	s/#.*//;
-	if (/^(\S+)\s*=\s*(.*)$/)
+	if (/^([^\s=]+)\s*=\s*(.*)$/)
 		{
 		$o="";
 		($s,$b)=($1,$2);
@@ -23,10 +23,10 @@ while (<>)
 			{
 			if ($b =~ /\\$/)
 				{
-				chop($b);
+				$b=$`; # Keep what is before the backslash
 				$o.=$b." ";
-				$b=<>;
-				chop($b);
+				$b = "" unless defined($b = <>);
+				$b =~ s{\R$}{};
 				}
 			else
 				{
@@ -43,7 +43,7 @@ while (<>)
 		}
 	}
 
-$pwd=`pwd`; chop($pwd);
+($pwd=`pwd`) =~ s{\R$}{};
 
 if ($sym{'TOP'} eq ".")
 	{
@@ -55,7 +55,7 @@ else	{
 	@_=split(/\//,$pwd);
 	$z=$#_-$n+1;
 	foreach $i ($z .. $#_) { $dir.=$_[$i]."/"; }
-	chop($dir);
+	chop($dir);             # Remove the last slash
 	}
 
 print "RELATIVE_DIRECTORY=$dir\n";

@@ -1,4 +1,3 @@
-/* crypto/camellia/camellia.c */
 /* ====================================================================
  * Copyright 2006 NTT (Nippon Telegraph and Telephone Corporation) .
  * ALL RIGHTS RESERVED.
@@ -82,7 +81,7 @@
  * words reasonable performance even with not so modern compilers.
  */
 
-#include "camellia.h"
+#include <openssl/camellia.h>
 #include "cmll_locl.h"
 #include <string.h>
 #include <stdlib.h>

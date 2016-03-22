@@ -1,4 +1,3 @@
-/* crypto/rand/randfile.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,6 +55,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include "e_os.h"
+
 /* We need to define this to get macros like S_IFBLK and S_IFCHR */
 #if !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
 # define _XOPEN_SOURCE 500
@@ -66,7 +67,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "e_os.h"
 #include <openssl/crypto.h>
 #include <openssl/rand.h>
 #include <openssl/buffer.h>
@@ -103,7 +103,7 @@ static FILE *(*const vms_fopen)(const char *, const char *, ...) =
 # define VMS_OPEN_ATTRS "shr=get,put,upd,del","ctx=bin,stm","rfm=stm","rat=none","mrs=0"
 #endif
 
-/* #define RFILE ".rnd" - defined in ../../e_os.h */
+#define RFILE ".rnd"
 
 /*
  * Note that these functions are intended for seed files only. Entropy
@@ -117,7 +117,7 @@ int RAND_load_file(const char *file, long bytes)
      * if bytes == -1, read complete file.
      */
 
-    MS_STATIC unsigned char buf[BUFSIZE];
+    unsigned char buf[BUFSIZE];
 #ifndef OPENSSL_NO_POSIX_IO
     struct stat sb;
 #endif
@@ -128,7 +128,6 @@ int RAND_load_file(const char *file, long bytes)
         return (0);
 
 #ifndef OPENSSL_NO_POSIX_IO
-# ifdef PURIFY
     /*
      * struct stat can have padding and unused fields that may not be
      * initialized in the call to stat(). We need to clear the entire
@@ -136,7 +135,6 @@ int RAND_load_file(const char *file, long bytes)
      * applications such as Valgrind.
      */
     memset(&sb, 0, sizeof(sb));
-# endif
     if (stat(file, &sb) < 0)
         return (0);
     RAND_add(&sb, sizeof(sb), 0.0);
@@ -159,9 +157,11 @@ int RAND_load_file(const char *file, long bytes)
          * because we will waste system entropy.
          */
         bytes = (bytes == -1) ? 2048 : bytes; /* ok, is 2048 enough? */
-# ifndef OPENSSL_NO_SETVBUF_IONBF
-        setvbuf(in, NULL, _IONBF, 0); /* don't do buffered reads */
-# endif                         /* ndef OPENSSL_NO_SETVBUF_IONBF */
+#ifndef OPENSSL_SYS_AMIGA
+        setbuf(stdin, NULL); /* don't do buffered reads */
+#else
+        setbuf(in, NULL); /* don't do buffered reads */
+#endif
     }
 #endif
     for (;;) {
@@ -172,12 +172,8 @@ int RAND_load_file(const char *file, long bytes)
         i = fread(buf, 1, n, in);
         if (i <= 0)
             break;
-#ifdef PURIFY
+
         RAND_add(buf, i, (double)i);
-#else
-        /* even if n != i, use the full array */
-        RAND_add(buf, n, (double)i);
-#endif
         ret += i;
         if (bytes > 0) {
             bytes -= n;
@@ -299,7 +295,7 @@ const char *RAND_file_name(char *buf, size_t size)
     if (OPENSSL_issetugid() == 0)
         s = getenv("RANDFILE");
     if (s != NULL && *s && strlen(s) + 1 < size) {
-        if (BUF_strlcpy(buf, s, size) >= size)
+        if (OPENSSL_strlcpy(buf, s, size) >= size)
             return NULL;
     } else {
         if (OPENSSL_issetugid() == 0)
@@ -310,15 +306,15 @@ const char *RAND_file_name(char *buf, size_t size)
         }
 #endif
         if (s && *s && strlen(s) + strlen(RFILE) + 2 < size) {
-            BUF_strlcpy(buf, s, size);
+            OPENSSL_strlcpy(buf, s, size);
 #ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_VMS
-            BUF_strlcat(buf, "/", size);
+            OPENSSL_strlcat(buf, "/", size);
 #endif
-            BUF_strlcat(buf, RFILE, size);
-#else /* !OPENSSL_SYS_AMIGA */
+            OPENSSL_strlcat(buf, RFILE, size);
+#else
             AddPart(buf, RFILE, size);
-#endif /* !OPENSSL_SYS_AMIGA */
+#endif
         } else
             buf[0] = '\0';      /* no file name */
     }
@@ -333,11 +329,11 @@ const char *RAND_file_name(char *buf, size_t size)
      */
 
     if (!buf[0])
-        if (BUF_strlcpy(buf, "/dev/arandom", size) >= size) {
+        if (OPENSSL_strlcpy(buf, "/dev/arandom", size) >= size) {
             return (NULL);
         }
     if (stat(buf, &sb) == -1)
-        if (BUF_strlcpy(buf, "/dev/arandom", size) >= size) {
+        if (OPENSSL_strlcpy(buf, "/dev/arandom", size) >= size) {
             return (NULL);
         }
 #endif

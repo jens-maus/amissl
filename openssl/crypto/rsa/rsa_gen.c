@@ -1,4 +1,3 @@
-/* crypto/rsa/rsa_gen.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -64,14 +63,9 @@
 
 #include <stdio.h>
 #include <time.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
-#ifdef OPENSSL_FIPS
-# include <openssl/fips.h>
-extern int FIPS_rsa_x931_generate_key_ex(RSA *rsa, int bits, BIGNUM *e,
-                                         BN_GENCB *cb);
-#endif
 
 static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
                               BN_GENCB *cb);
@@ -85,19 +79,8 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
  */
 int RSA_generate_key_ex(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb)
 {
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
-        && !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW)) {
-        RSAerr(RSA_F_RSA_GENERATE_KEY_EX, RSA_R_NON_FIPS_RSA_METHOD);
-        return 0;
-    }
-#endif
     if (rsa->meth->rsa_keygen)
         return rsa->meth->rsa_keygen(rsa, bits, e_value, cb);
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode())
-        return FIPS_rsa_x931_generate_key_ex(rsa, bits, e_value, cb);
-#endif
     return rsa_builtin_keygen(rsa, bits, e_value, cb);
 }
 
@@ -105,8 +88,6 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
                               BN_GENCB *cb)
 {
     BIGNUM *r0 = NULL, *r1 = NULL, *r2 = NULL, *r3 = NULL, *tmp;
-    BIGNUM local_r0, local_d, local_p;
-    BIGNUM *pr0, *d, *p;
     int bitsp, bitsq, ok = -1, n = 0;
     BN_CTX *ctx = NULL;
 
@@ -127,19 +108,19 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
     /* We need the RSA components non-NULL */
     if (!rsa->n && ((rsa->n = BN_new()) == NULL))
         goto err;
-    if (!rsa->d && ((rsa->d = BN_new()) == NULL))
+    if (!rsa->d && ((rsa->d = BN_secure_new()) == NULL))
         goto err;
     if (!rsa->e && ((rsa->e = BN_new()) == NULL))
         goto err;
-    if (!rsa->p && ((rsa->p = BN_new()) == NULL))
+    if (!rsa->p && ((rsa->p = BN_secure_new()) == NULL))
         goto err;
-    if (!rsa->q && ((rsa->q = BN_new()) == NULL))
+    if (!rsa->q && ((rsa->q = BN_secure_new()) == NULL))
         goto err;
-    if (!rsa->dmp1 && ((rsa->dmp1 = BN_new()) == NULL))
+    if (!rsa->dmp1 && ((rsa->dmp1 = BN_secure_new()) == NULL))
         goto err;
-    if (!rsa->dmq1 && ((rsa->dmq1 = BN_new()) == NULL))
+    if (!rsa->dmq1 && ((rsa->dmq1 = BN_secure_new()) == NULL))
         goto err;
-    if (!rsa->iqmp && ((rsa->iqmp = BN_new()) == NULL))
+    if (!rsa->iqmp && ((rsa->iqmp = BN_secure_new()) == NULL))
         goto err;
 
     BN_copy(rsa->e, e_value);
@@ -203,37 +184,66 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
         goto err;               /* q-1 */
     if (!BN_mul(r0, r1, r2, ctx))
         goto err;               /* (p-1)(q-1) */
-    if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
-        pr0 = &local_r0;
-        BN_with_flags(pr0, r0, BN_FLG_CONSTTIME);
-    } else
-        pr0 = r0;
-    if (!BN_mod_inverse(rsa->d, rsa->e, pr0, ctx))
-        goto err;               /* d */
+    {
+        BIGNUM *local_r0 = NULL, *pr0;
+        if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
+            pr0 = local_r0 = BN_new();
+            if (local_r0 == NULL)
+                goto err;
+            BN_with_flags(pr0, r0, BN_FLG_CONSTTIME);
+        } else {
+            pr0 = r0;
+        }
+        if (!BN_mod_inverse(rsa->d, rsa->e, pr0, ctx)) {
+            BN_free(local_r0);
+            goto err;               /* d */
+        }
+        /* We MUST free local_r0 before any further use of r0 */
+        BN_free(local_r0);
+    }
 
-    /* set up d for correct BN_FLG_CONSTTIME flag */
-    if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
-        d = &local_d;
-        BN_with_flags(d, rsa->d, BN_FLG_CONSTTIME);
-    } else
-        d = rsa->d;
+    {
+        BIGNUM *local_d = NULL, *d;
+        /* set up d for correct BN_FLG_CONSTTIME flag */
+        if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
+            d = local_d = BN_new();
+            if (local_d == NULL)
+                goto err;
+            BN_with_flags(d, rsa->d, BN_FLG_CONSTTIME);
+        } else {
+            d = rsa->d;
+        }
 
-    /* calculate d mod (p-1) */
-    if (!BN_mod(rsa->dmp1, d, r1, ctx))
-        goto err;
+        if (   /* calculate d mod (p-1) */
+               !BN_mod(rsa->dmp1, d, r1, ctx)
+               /* calculate d mod (q-1) */
+            || !BN_mod(rsa->dmq1, d, r2, ctx)) {
+            BN_free(local_d);
+            goto err;
+        }
+        /* We MUST free local_d before any further use of rsa->d */
+        BN_free(local_d);
+    }
 
-    /* calculate d mod (q-1) */
-    if (!BN_mod(rsa->dmq1, d, r2, ctx))
-        goto err;
+    {
+        BIGNUM *local_p = NULL, *p;
 
-    /* calculate inverse of q mod p */
-    if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
-        p = &local_p;
-        BN_with_flags(p, rsa->p, BN_FLG_CONSTTIME);
-    } else
-        p = rsa->p;
-    if (!BN_mod_inverse(rsa->iqmp, rsa->q, p, ctx))
-        goto err;
+        /* calculate inverse of q mod p */
+        if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME)) {
+            p = local_p = BN_new();
+            if (local_p == NULL)
+                goto err;
+            BN_with_flags(p, rsa->p, BN_FLG_CONSTTIME);
+        } else {
+            p = rsa->p;
+        }
+        if (!BN_mod_inverse(rsa->iqmp, rsa->q, p, ctx)) {
+            BN_free(local_p);
+            goto err;
+        }
+        /* We MUST free local_p before any further use of rsa->p */
+        BN_free(local_p);
+    }
 
     ok = 1;
  err:
@@ -241,10 +251,9 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value,
         RSAerr(RSA_F_RSA_BUILTIN_KEYGEN, ERR_LIB_BN);
         ok = 0;
     }
-    if (ctx != NULL) {
+    if (ctx != NULL)
         BN_CTX_end(ctx);
-        BN_CTX_free(ctx);
-    }
+    BN_CTX_free(ctx);
 
     return ok;
 }

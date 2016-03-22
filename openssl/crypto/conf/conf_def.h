@@ -1,4 +1,3 @@
-/* crypto/conf/conf_def.h */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -79,7 +78,7 @@
 #define CONF_ALPHA_NUMERIC_PUNCT (CONF_ALPHA|CONF_NUMBER|CONF_UNDER| \
                                         CONF_PUNCTUATION)
 
-#define KEYTYPES(c)             ((unsigned short *)((c)->meth_data))
+#define KEYTYPES(c)             ((const unsigned short *)((c)->meth_data))
 #ifndef CHARSET_EBCDIC
 # define IS_COMMENT(c,a)         (KEYTYPES(c)[(a)&0xff]&CONF_COMMENT)
 # define IS_FCOMMENT(c,a)        (KEYTYPES(c)[(a)&0xff]&CONF_FCOMMENT)
@@ -110,7 +109,7 @@
 # define IS_HIGHBIT(c,a)         (KEYTYPES(c)[os_toascii[a]&0xff]&CONF_HIGHBIT)
 #endif                          /* CHARSET_EBCDIC */
 
-static unsigned short CONF_type_default[256] = {
+static const unsigned short CONF_type_default[256] = {
     0x0008, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0010, 0x0010, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -145,7 +144,7 @@ static unsigned short CONF_type_default[256] = {
     0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0x1000,
 };
 
-static unsigned short CONF_type_win32[256] = {
+static const unsigned short CONF_type_win32[256] = {
     0x0008, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0010, 0x0010, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,

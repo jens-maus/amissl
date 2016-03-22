@@ -1,7 +1,3 @@
-#if defined(__amigaos4__)
-#define __USE_INLINE__
-#endif
-
 #include <proto/exec.h>
 #include <proto/amissl.h>
 #include <proto/amisslmaster.h>
@@ -21,7 +17,7 @@
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 #define LIBNAME "AmiSSL/amissl_v" MKSTR(VERSIONNAME) ".library"
-#define AMISSL_CURRENT_VERSION   AMISSL_V10x
+#define AMISSL_CURRENT_VERSION   AMISSL_V11x
 
 int main(void)
 {

@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* ssl/srtp.h */
+#endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -133,13 +132,17 @@ extern "C" {
 # define SRTP_NULL_SHA1_80      0x0005
 # define SRTP_NULL_SHA1_32      0x0006
 
+/* AEAD SRTP protection profiles from RFC 7714 */
+# define SRTP_AEAD_AES_128_GCM  0x0007
+# define SRTP_AEAD_AES_256_GCM  0x0008
+
 # ifndef OPENSSL_NO_SRTP
 
-int SSL_CTX_set_tlsext_use_srtp(SSL_CTX *ctx, const char *profiles);
-int SSL_set_tlsext_use_srtp(SSL *ctx, const char *profiles);
+__owur int SSL_CTX_set_tlsext_use_srtp(SSL_CTX *ctx, const char *profiles);
+__owur int SSL_set_tlsext_use_srtp(SSL *ctx, const char *profiles);
 
-STACK_OF(SRTP_PROTECTION_PROFILE) *SSL_get_srtp_profiles(SSL *ssl);
-SRTP_PROTECTION_PROFILE *SSL_get_selected_srtp_profile(SSL *s);
+__owur STACK_OF(SRTP_PROTECTION_PROFILE) *SSL_get_srtp_profiles(SSL *ssl);
+__owur SRTP_PROTECTION_PROFILE *SSL_get_selected_srtp_profile(SSL *s);
 
 # endif
 

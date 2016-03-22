@@ -64,6 +64,7 @@
 # Ivy Bridge	1.80(+7%)
 # Haswell	0.55(+93%) (if system doesn't support AVX)
 # Broadwell	0.45(+110%)(if system doesn't support AVX)
+# Skylake	0.44(+110%)(if system doesn't support AVX)
 # Bulldozer	1.49(+27%)
 # Silvermont	2.88(+13%)
 
@@ -74,8 +75,8 @@
 # CPUs such as Sandy and Ivy Bridge can execute it, the code performs
 # sub-optimally in comparison to above mentioned version. But thanks
 # to Ilya Albrekht and Max Locktyukhin of Intel Corp. we knew that
-# it performs in 0.41 cycles per byte on Haswell processor, and in
-# 0.29 on Broadwell.
+# it performs in 0.41 cycles per byte on Haswell processor, in
+# 0.29 on Broadwell, and in 0.36 on Skylake.
 #
 # [1] http://rt.openssl.org/Ticket/Display.html?id=2900&user=guest&pass=guest
 
@@ -92,7 +93,7 @@ die "can't locate x86_64-xlate.pl";
 
 if (`$ENV{CC} -Wa,-v -c -o /dev/null -x assembler /dev/null 2>&1`
 		=~ /GNU assembler version ([2-9]\.[0-9]+)/) {
-	$avx = ($1>=2.19) + ($1>=2.22);
+	$avx = ($1>=2.20) + ($1>=2.22);
 }
 
 if (!$avx && $win64 && ($flavour =~ /nasm/ || $ENV{ASM} =~ /nasm/) &&

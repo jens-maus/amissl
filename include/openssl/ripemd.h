@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/ripemd/ripemd.h */
+#endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -69,18 +68,11 @@
 extern "C" {
 #endif
 
-# ifdef OPENSSL_NO_RIPEMD
-#  error RIPEMD is disabled.
+# ifdef OPENSSL_NO_RMD160
+#  error RMD160 is disabled.
 # endif
 
-# if defined(__LP32__)
-#  define RIPEMD160_LONG unsigned long
-# elif defined(OPENSSL_SYS_CRAY) || defined(__ILP64__)
-#  define RIPEMD160_LONG unsigned long
-#  define RIPEMD160_LONG_LOG2 3
-# else
-#  define RIPEMD160_LONG unsigned int
-# endif
+# define RIPEMD160_LONG unsigned int
 
 # define RIPEMD160_CBLOCK        64
 # define RIPEMD160_LBLOCK        (RIPEMD160_CBLOCK/4)
@@ -93,9 +85,6 @@ typedef struct RIPEMD160state_st {
     unsigned int num;
 } RIPEMD160_CTX;
 
-# ifdef OPENSSL_FIPS
-int private_RIPEMD160_Init(RIPEMD160_CTX *c);
-# endif
 int RIPEMD160_Init(RIPEMD160_CTX *c);
 int RIPEMD160_Update(RIPEMD160_CTX *c, const void *data, size_t len);
 int RIPEMD160_Final(unsigned char *md, RIPEMD160_CTX *c);

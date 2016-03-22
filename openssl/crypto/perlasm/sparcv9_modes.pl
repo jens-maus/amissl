@@ -16,6 +16,10 @@
 # block sizes [though few percent better for not so long ones]. All
 # this based on suggestions from David Miller.
 
+$::bias="STACK_BIAS";
+$::frame="STACK_FRAME";
+$::size_t_cc="SIZE_T_CC";
+
 sub asm_init {		# to be called with @ARGV as argument
     for (@_)		{ $::abibits=64 if (/\-m64/ || /\-xarch\=v9/); }
     if ($::abibits==64)	{ $::bias=2047; $::frame=192; $::size_t_cc="%xcc"; }
@@ -1383,7 +1387,7 @@ ___
 
 # Purpose of these subroutines is to explicitly encode VIS instructions,
 # so that one can compile the module without having to specify VIS
-# extentions on compiler command line, e.g. -xarch=v9 vs. -xarch=v9a.
+# extensions on compiler command line, e.g. -xarch=v9 vs. -xarch=v9a.
 # Idea is to reserve for option to produce "universal" binary and let
 # programmer detect if current CPU is VIS capable at run-time.
 sub unvis {

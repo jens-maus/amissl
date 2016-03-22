@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/cmac/cmac.h */
+#endif
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.

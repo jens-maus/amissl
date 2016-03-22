@@ -70,7 +70,7 @@ if ($flavour =~ /64|n32/i) {
 
 $big_endian=(`echo MIPSEL | $ENV{CC} -E -`=~/MIPSEL/)?1:0 if ($ENV{CC});
 
-for (@ARGV) {	$output=$_ if (/^\w[\w\-]*\.\w+$/);   }
+for (@ARGV) {	$output=$_ if (/\w[\w\-]*\.\w+$/);   }
 open STDOUT,">$output";
 
 if (!defined($big_endian))
@@ -325,7 +325,7 @@ $code.=<<___ if ($i<79);
 ___
 }
 
-$FRAMESIZE=16;	# large enough to accomodate NUBI saved registers
+$FRAMESIZE=16;	# large enough to accommodate NUBI saved registers
 $SAVED_REGS_MASK = ($flavour =~ /nubi/i) ? 0xc0fff008 : 0xc0ff0000;
 
 $code=<<___;

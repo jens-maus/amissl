@@ -148,20 +148,19 @@ endif
 # ignored warnings are:
 # none - because we want to compile with -Wall all the time
 
-VERSION=3
-VERSIONNAME=102f
-AMISSLREVISION=8
-AMISSLMASTERREVISION=8
-AMISSLDATE=12.02.2016
-AMISSLMASTERDATE=12.02.2016
+VERSION=4
+VERSIONNAME=110-pre4
+AMISSLREVISION=0
+AMISSLMASTERREVISION=0
+AMISSLDATE=16.03.2016
+AMISSLMASTERDATE=16.03.2016
 
 # Common Directories
 PREFIX    = $(CDTHIS)
-OBJ_D     = $(PREFIX).obj_$(OS)
-BIN_D     = $(PREFIX)bin_$(OS)
+BUILD_D   = $(PREFIX)build_$(OS)
 SRC_D     = $(PREFIX)src
 TEST_D    = $(PREFIX)test
-VPATH     = $(OBJ_D)
+VPATH     = $(BUILD_D)
 GCCVER    = 4
 
 # Common compiler/linker flags
@@ -169,17 +168,17 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachabl
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include
-CFLAGS   = $(CPU) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
+INCLUDE  = -I./include -I$(BUILD_D)/openssl/include
+APPCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+CFLAGS   = $(APPCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
-           -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS) \
-           $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+           -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS)
 LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
-LIBSSL   = $(BIN_D)/openssl/libssl.a
-LIBCRYPTO= $(BIN_D)/openssl/libcrypto.a
-LIBCMT   = $(BIN_D)/libcmt.a
+LIBSSL   = $(BUILD_D)/openssl/libssl.a
+LIBCRYPTO= $(BUILD_D)/openssl/libcrypto.a
+LIBCMT   = $(BUILD_D)/libcmt/libcmt.a
 
 # different options per target OS
 ifeq ($(OS), os4)
@@ -187,33 +186,36 @@ ifeq ($(OS), os4)
   ##############################
   # AmigaOS4
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-os4
+
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS4)
-    CC      = ppc-amigaos-gcc-4.0.3
-    STRIP   = ppc-amigaos-strip
-    OBJDUMP = ppc-amigaos-objdump
-    AR      = ppc-amigaos-ar
-    RANLIB  = ppc-amigaos-ranlib
+    CROSS_PREFIX = ppc-amigaos-
+    CC      = $(CROSS_PREFIX)gcc-4.0.4
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
-  CRT      = clib2
-  CPU      = -mcpu=powerpc -mstrict-align
-  WARN     += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
-  CFLAGS   += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
-  LDFLAGS  += -mcrt=$(CRT)
-  BASEREL  = -mbaserel
-  NOBASEREL= -mno-baserel
-  CDUP     = ../
-  CDTHIS   = ./
+  CRT       = clib2
+  CPU       = -mcpu=powerpc -mstrict-align
+  WARN      += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
+  APPCFLAGS += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS    += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  LDFLAGS   += -mcrt=$(CRT)
+  BASEREL   = -mbaserel
+  NOBASEREL = -mno-baserel
+  CDUP      = ../
+  CDTHIS    = ./
 
-  OPENSSL_T = amiga-os4
+  EXTRALIBOBJS = $(BUILD_D)/amissl_library_os4.o \
+                 $(BUILD_D)/amissl_glue.o \
+                 $(BUILD_D)/amissl_m68k.o
 
-  EXTRALIBOBJS = $(OBJ_D)/amissl_library_os4.o \
-                 $(OBJ_D)/amissl_glue.o \
-                 $(OBJ_D)/amissl_m68k.o
-
-  EXTRAMASTEROBJS = $(OBJ_D)/amisslmaster_m68k.o
+  EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_m68k.o
 
 else
 ifeq ($(OS), os3)
@@ -221,28 +223,31 @@ ifeq ($(OS), os3)
   ##############################
   # AmigaOS3
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-os3
+
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS)
-    CC      = m68k-amigaos-gcc
-    STRIP   = m68k-amigaos-strip
-    OBJDUMP = m68k-amigaos-objdump
-    AR      = m68k-amigaos-ar
-    RANLIB  = m68k-amigaos-ranlib
+    CROSS_PREFIX = m68k-amigaos-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
-  CPU     = -m68020-60 -msoft-float
-  CFLAGS  += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS += -noixemul
-  LDLIBS  += -ldebug -lc -lm -lgcc -lamiga
-  BASEREL = -resident32
+  CPU       = -m68020-60 -msoft-float
+  APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
+  CFLAGS    += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS   += -noixemul
+  LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
+  BASEREL   = -resident32
   NOBASEREL = -fno-baserel
-  BRELLIB = -mrestore-a4
-  GCCVER  = 2
+  BRELLIB   = -mrestore-a4
+  GCCVER    = 2
 
-  OPENSSL_T = amiga-os3
-
-  EXTRALIBOBJS = $(OBJ_D)/amissl_glue.o
+  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o
 
 else
 ifeq ($(OS), mos)
@@ -250,13 +255,17 @@ ifeq ($(OS), mos)
   ##############################
   # MorphOS
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-mos
+
   # Compiler/link/strip commands
   ifneq ($(HOST), MorphOS)
-    CC      = ppc-morphos-gcc
-    STRIP   = ppc-morphos-strip
-    OBJDUMP = ppc-morphos-objdump
-    AR      = ppc-morphos-ar
-    RANLIB  = ppc-morphos-ranlib
+    CROSS_PREFIX = ppc-morphos-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -266,20 +275,22 @@ ifeq ($(OS), mos)
   LDLIBS  +=
   GCCVER  = 2
 
-  OPENSSL_T = amiga-mos
-
 else
 ifeq ($(OS), aros-i386)
 
   ##############################
   # AROS (i386)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-i386
+
   ifneq ($(HOST), AROS)
-    CC      = i386-aros-gcc
-    STRIP   = i386-aros-strip
-    OBJDUMP = i386-aros-objdump
-    AR      = i386-aros-ar
-    RANLIB  = i386-aros-ranlib
+    CROSS_PREFIX = i386-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -292,12 +303,16 @@ ifeq ($(OS), aros-ppc)
   ##############################
   # AROS (PPC)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-ppc
+
   ifneq ($(HOST), AROS)
-    CC      = ppc-aros-gcc
-    STRIP   = ppc-aros-strip
-    OBJDUMP = ppc-aros-objdump
-    AR      = ppc-aros-ar
-    RANLIB  = ppc-aros-ranlib
+    CROSS_PREFIX = ppc-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -310,12 +325,16 @@ ifeq ($(OS), aros-x86_64)
   ##############################
   # AROS (x86_64)
 
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-x86_64
+
   ifneq ($(HOST), AROS)
-    CC      = x86_64-aros-gcc
-    STRIP   = x86_64-aros-strip
-    OBJDUMP = x86_64-aros-objdump
-    AR      = x86_64-aros-ar
-    RANLIB  = x86_64-aros-ranlib
+    CROSS_PREFIX = x86_64-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -326,14 +345,18 @@ else
 ifeq ($(OS), aros-arm)
 
   ##############################
-  # AROS (x86_64)
+  # AROS (arm)
+
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-aros-arm
 
   ifneq ($(HOST), AROS)
-    CC      = arm-aros-gcc
-    STRIP   = arm-aros-strip
-    OBJDUMP = arm-aros-objdump
-    AR      = arm-aros-ar
-    RANLIB  = arm-aros-ranlib
+    CROSS_PREFIX = arm-aros-
+    CC      = $(CROSS_PREFIX)gcc
+    STRIP   = $(CROSS_PREFIX)strip
+    OBJDUMP = $(CROSS_PREFIX)objdump
+    AR      = $(CROSS_PREFIX)ar
+    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -352,183 +375,165 @@ endif
 # Here starts all stuff that is common for all target platforms and
 # hosts.
 
-LIBOBJS = $(OBJ_D)/amissl_libinit.o \
-          $(OBJ_D)/amissl_library.o \
-          $(OBJ_D)/amissl_norestore.o \
-          $(OBJ_D)/amissl_init.o \
-          $(OBJ_D)/debug.o \
+LIBOBJS = $(BUILD_D)/amissl_libinit.o \
+          $(BUILD_D)/amissl_library.o \
+          $(BUILD_D)/amissl_norestore.o \
+          $(BUILD_D)/amissl_init.o \
+          $(BUILD_D)/debug.o \
           $(EXTRALIBOBJS)
 
-MASTEROBJS = $(OBJ_D)/amisslmaster_libinit.o \
-             $(OBJ_D)/amisslmaster_library.o \
-             $(OBJ_D)/amisslmaster_init.o \
-             $(OBJ_D)/debug.o \
+MASTEROBJS = $(BUILD_D)/amisslmaster_libinit.o \
+             $(BUILD_D)/amisslmaster_library.o \
+             $(BUILD_D)/amisslmaster_init.o \
+             $(BUILD_D)/debug.o \
              $(EXTRAMASTEROBJS)
 
-LIBS = -L$(BIN_D)/openssl $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
+LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(OBJ_D) $(BIN_D) $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a $(BIN_D)/amissl_v$(VERSIONNAME).library $(BIN_D)/amissl_v$(VERSIONNAME)_test $(BIN_D)/amisslmaster.library $(BIN_D)/amisslmaster_test $(BIN_D)/https $(BIN_D)/uitest $(BIN_D)/vatest
+all: $(BUILD_D) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # make the object directory
-$(OBJ_D):
-	@echo "  MK $@"
+$(BUILD_D):
+	@echo "  MKDIR $@"
 	@$(MKDIR) $@
 
-$(OBJ_D)/openssl:
-	@echo "  MK $@"
+$(BUILD_D)/libcmt: $(BUILD_D)
+	@echo "  MKDIR $@"
 	@$(MKDIR) $@
 
-$(OBJ_D)/libcmt:
-	@echo "  MK $@"
-	@$(MKDIR) $@
-
-# make the bin directory
-$(BIN_D):
-	@echo "  MK $@"
-	@$(MKDIR) $@
-
-$(BIN_D)/openssl:
-	@echo "  MK $@"
+$(BUILD_D)/openssl: $(BUILD_D)
+	@echo "  MKDIR $@"
 	@$(MKDIR) $@
 
 # for compiling single .c files
-$(OBJ_D)/%.o: $(SRC_D)/%.c
+$(BUILD_D)/%.o: $(SRC_D)/%.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 ## OPENSSL BUILD RULES ##
 
-openssl/Makefile:
-	@(cd openssl; perl Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-krb5 --openssldir=AmiSSL: $(DEBUG))
+ifeq ($(DEBUG),)
+  OPENSSL_MODE="--release"
+else
+  OPENSSL_MODE="--debug"
+endif
 
-openssl/MINFO: openssl/Makefile
-	@(cd openssl; $(MAKE) files)
+$(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
+	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads no-makedepend $(OPENSSL_MODE))
+	@sh tools/cpheaders.sh $(BUILD_D)
 
-$(OBJ_D)/Makefile.ossl: openssl/MINFO $(OBJ_D)/openssl $(BIN_D)/openssl
-	@(cd openssl; perl util/mk1mf.pl SRC= TMP=../$(OBJ_D)/openssl OUT=../$(BIN_D)/openssl $(OPENSSL_T) > ../$(OBJ_D)/Makefile.ossl)
-
-$(OBJ_D)/openssl/outinc: $(OBJ_D)/Makefile.ossl
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC) outinc outinc/openssl headers
-	@sh tools/cpheaders.sh
-
-$(OBJ_D)/openssl/ppc_arch.h: openssl/crypto/ppc_arch.h
-	@cp $< $@
-
-$(LIBCRYPTO): $(OBJ_D)/openssl/outinc $(OBJ_D)/openssl/ppc_arch.h
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. CC=$(CC)
+$(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
+	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines RANLIB=$(RANLIB) all build_tests_nodep
 
 $(LIBSSL): $(LIBCRYPTO)
 
 ## LIBCMT BUILD RULES ##
 
-$(LIBCMT): $(OBJ_D)/libcmt
-	@$(MAKE) -C libcmt AmiSSL=.. CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS)
+$(LIBCMT): $(BUILD_D)/libcmt
+	@$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) BUILD_D=../$(BUILD_D)/libcmt
 
 ## AMISSL BUILD RULES ##
 
-$(BIN_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
+$(BUILD_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
 	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,-Map=$@.map
 
-$(BIN_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
+$(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
 	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,-Map=$@.map
 
-$(BIN_D)/libamisslauto.a: $(OBJ_D)/autoinit_amissl_main.o
+$(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_amissl_main.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(OBJ_D)/autoinit_amissl_main.o
+	@$(AR) r $@ $(BUILD_D)/autoinit_amissl_main.o
 	@$(RANLIB) $@
 
-$(BIN_D)/libamisslstubs.a: $(OBJ_D)/libstubs.o
+$(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(OBJ_D)/libstubs.o
+	@$(AR) r $@ $(BUILD_D)/libstubs.o
 	@$(RANLIB) $@
 
-$(BIN_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
-	@echo "  CC/LD $@"
-	@$(CC) -o $@ -I./include $^
+$(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
+	@echo "  AR $@"
+	@$(AR) r $@ $(BUILD_D)/debug.o
+	@$(RANLIB) $@
 
 ## AMISSL TESTCASE BINARIES ##
 
-$(BIN_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
+$(BUILD_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -DVERSIONNAME=$(VERSIONNAME) -I./include $^
+	@$(CC) $(APPCFLAGS) -o $@ $^
 
-$(BIN_D)/https: $(TEST_D)/https.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
+$(BUILD_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
-	$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ -DVERSIONNAME=$(VERSIONNAME) $^
 
-$(BIN_D)/uitest: $(TEST_D)/uitest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
+$(BUILD_D)/https: $(TEST_D)/https.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -DNO_INLINE_STDARG -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
 
-$(BIN_D)/vatest: $(TEST_D)/vatest.c $(BIN_D)/libamisslauto.a $(BIN_D)/libamisslstubs.a
+$(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(CPU) $(DEBUGSYM) -o $@ -I./include -I./include/netinclude -D__USE_INLINE__ -DNO_INLINE_STDARG -DNO_INLINE_VARARGS $^ -L$(BIN_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+
+$(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
+	@echo "  CC/LD $@"
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
-$(OBJ_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
+$(BUILD_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
-$(OBJ_D)/libstubs.o: $(SRC_D)/libstubs.c
+$(BUILD_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL $(INCLUDE)
 
-$(OBJ_D)/debug.o: $(SRC_D)/debug.c
+$(BUILD_D)/debug.o: $(SRC_D)/debug.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@
 
 ## SOURCES COMPILED WITH restore-a4 ##
 
-$(OBJ_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
+$(BUILD_D)/amisslmaster_library.o: $(SRC_D)/amisslmaster_library.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
 
-$(OBJ_D)/amissl_library.o: $(SRC_D)/amissl_library.c
+$(BUILD_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
 
-$(OBJ_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
+$(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) $(BRELLIB) -c $< -o $@
+	@$(CC) $(CFLAGS) -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
 
 # cleanup target
 .PHONY: clean
 clean:
-	-rm -f $(OBJ_D)/*.o $(BIN_D)/*.a
-	-rm -f $(BIN_D)/amissl_v$(VERSIONNAME).library*
-	-rm -f $(BIN_D)/amisslmaster.library*
-	-rm -rf $(BIN_D)/openssl $(OBJ_D)/openssl
-	-rm -rf $(BIN_D)/libcmt.a $(OBJ_D)/libcmt
+	-rm -f $(BUILD_D)/*.o $(BUILD_D)/*.a
+	-rm -f $(BUILD_D)/amissl_v$(VERSIONNAME).library*
+	-rm -f $(BUILD_D)/amisslmaster.library*
+	-rm -rf $(BUILD_D)/openssl
+	-rm -rf $(BUILD_D)/libcmt
 
 # distclean target
 .PHONY: distclean
 distclean: clean
-	-rm -f openssl/MINFO
-	-rm -f openssl/Makefile
-	-rm -f openssl/crypto/opensslconf.h
-	-rm -f openssl/openssl.pc
-	-rm -f openssl/crypto/buildinf.h
-	-rm -rf openssl/outinc
-	-rm -rf $(OBJ_D) $(BIN_D)
-	-rm -rf *.library *.map
+	-rm -f openssl/configdata.pm
+	-rm -f openssl/include/openssl/opensslconf.h
+	-rm -rf $(BUILD_D) $(BUILD_D)
 
 # for creating a .dump file
 .PHONY: dump
 dump:
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amisslmaster.library > $(BIN_D)/amisslmaster.library.dump
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/amissl_v$(VERSIONNAME).library > $(BIN_D)/amissl_v$(VERSIONNAME).library.dump
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/https > $(BIN_D)/https.dump
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/uitest > $(BIN_D)/uitest.dump
-	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BIN_D)/vatest > $(BIN_D)/vatest.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/amisslmaster.library > $(BUILD_D)/amisslmaster.library.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/amissl_v$(VERSIONNAME).library > $(BUILD_D)/amissl_v$(VERSIONNAME).library.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/https > $(BUILD_D)/https.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/uitest > $(BUILD_D)/uitest.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/vatest > $(BUILD_D)/vatest.dump
 
 testing:
 	@echo "  LD $<"
 	@$(CC) basereltest.c -o basereltest -mbaserel -Wl,-M,-Map=$@.map -nostdlib
-
-tests:
-	@$(MAKE) -C openssl -f ../$(OBJ_D)/Makefile.ossl AmiSSL=.. exe

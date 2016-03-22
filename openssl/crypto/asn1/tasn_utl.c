@@ -1,4 +1,3 @@
-/* tasn_utl.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2000.
@@ -59,10 +58,12 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <internal/cryptlib.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/objects.h>
 #include <openssl/err.h>
+#include "asn1_locl.h"
 
 /* Utility functions for manipulating fields and offsets */
 
@@ -96,14 +97,15 @@ int asn1_set_choice_selector(ASN1_VALUE **pval, int value,
 /*
  * Do reference counting. The value 'op' decides what to do. if it is +1
  * then the count is incremented. If op is 0 count is set to 1. If op is -1
- * count is decremented and the return value is the current refrence count or
- * 0 if no reference count exists.
+ * count is decremented and the return value is the current reference count
+ * or 0 if no reference count exists.
  */
 
 int asn1_do_lock(ASN1_VALUE **pval, int op, const ASN1_ITEM *it)
 {
     const ASN1_AUX *aux;
     int *lck, ret;
+    CRYPTO_RWLOCK **lock;
     if ((it->itype != ASN1_ITYPE_SEQUENCE)
         && (it->itype != ASN1_ITYPE_NDEF_SEQUENCE))
         return 0;
@@ -111,18 +113,21 @@ int asn1_do_lock(ASN1_VALUE **pval, int op, const ASN1_ITEM *it)
     if (!aux || !(aux->flags & ASN1_AFLG_REFCOUNT))
         return 0;
     lck = offset2ptr(*pval, aux->ref_offset);
+    lock = offset2ptr(*pval, aux->ref_lock);
     if (op == 0) {
         *lck = 1;
+        *lock = CRYPTO_THREAD_lock_new();
+        if (*lock == NULL)
+            return 0;
         return 1;
     }
-    ret = CRYPTO_add(lck, op, aux->ref_lock);
+    CRYPTO_atomic_add(lck, op, &ret, *lock);
 #ifdef REF_PRINT
-    fprintf(stderr, "%s: Reference Count: %d\n", it->sname, *lck);
+    fprintf(stderr, "%p:%4d:%s\n", it, *lck, it->sname);
 #endif
-#ifdef REF_CHECK
-    if (ret < 0)
-        fprintf(stderr, "%s, bad reference count\n", it->sname);
-#endif
+    REF_ASSERT_ISNT(ret < 0);
+    if (ret == 0)
+        CRYPTO_THREAD_lock_free(*lock);
     return ret;
 }
 
@@ -153,8 +158,7 @@ void asn1_enc_free(ASN1_VALUE **pval, const ASN1_ITEM *it)
     ASN1_ENCODING *enc;
     enc = asn1_get_enc_ptr(pval, it);
     if (enc) {
-        if (enc->enc)
-            OPENSSL_free(enc->enc);
+        OPENSSL_free(enc->enc);
         enc->enc = NULL;
         enc->len = 0;
         enc->modified = 1;
@@ -169,10 +173,9 @@ int asn1_enc_save(ASN1_VALUE **pval, const unsigned char *in, int inlen,
     if (!enc)
         return 1;
 
-    if (enc->enc)
-        OPENSSL_free(enc->enc);
+    OPENSSL_free(enc->enc);
     enc->enc = OPENSSL_malloc(inlen);
-    if (!enc->enc)
+    if (enc->enc == NULL)
         return 0;
     memcpy(enc->enc, in, inlen);
     enc->len = inlen;
@@ -201,8 +204,6 @@ int asn1_enc_restore(int *len, unsigned char **out, ASN1_VALUE **pval,
 ASN1_VALUE **asn1_get_field_ptr(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt)
 {
     ASN1_VALUE **pvaltmp;
-    if (tt->flags & ASN1_TFLG_COMBINE)
-        return pval;
     pvaltmp = offset2ptr(*pval, tt->offset);
     /*
      * NOTE for BOOLEAN types the field is just a plain int so we can't
@@ -248,6 +249,12 @@ const ASN1_TEMPLATE *asn1_do_adb(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt,
         selector = OBJ_obj2nid((ASN1_OBJECT *)*sfld);
     else
         selector = ASN1_INTEGER_get((ASN1_INTEGER *)*sfld);
+
+    /* Let application callback translate value */
+    if (adb->adb_cb != NULL && adb->adb_cb(&selector) == 0) {
+        ASN1err(ASN1_F_ASN1_DO_ADB, ASN1_R_UNSUPPORTED_ANY_DEFINED_BY_TYPE);
+        return NULL;
+    }
 
     /*
      * Try to find matching entry in table Maybe should check application

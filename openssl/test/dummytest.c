@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <openssl/crypto.h>
 #include <openssl/e_os2.h>
 #include <openssl/buffer.h>
-#include <openssl/crypto.h>
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         q = p + strlen(p);
 
     if (!p)
-        program = BUF_strdup("(unknown)");
+        program = OPENSSL_strdup("(unknown)");
     else {
         program = OPENSSL_malloc((q - p) + 1);
         strncpy(program, p, q - p);

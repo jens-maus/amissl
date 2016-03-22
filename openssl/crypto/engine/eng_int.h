@@ -1,4 +1,3 @@
-/* crypto/engine/eng_int.h */
 /*
  * Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL project
  * 2000.
@@ -65,13 +64,15 @@
 #ifndef HEADER_ENGINE_INT_H
 # define HEADER_ENGINE_INT_H
 
-# include "cryptlib.h"
-/* Take public definitions from engine.h */
-# include <openssl/engine.h>
+# include "internal/cryptlib.h"
+# include "internal/threads.h"
+# include <internal/engine.h>
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+extern CRYPTO_RWLOCK *global_engine_lock;
 
 /*
  * If we compile with this symbol defined, then both reference counts in the
@@ -88,7 +89,7 @@ extern "C" {
                 (unsigned int)(e), (isfunct ? "funct" : "struct"), \
                 ((isfunct) ? ((e)->funct_ref - (diff)) : ((e)->struct_ref - (diff))), \
                 ((isfunct) ? (e)->funct_ref : (e)->struct_ref), \
-                (__FILE__), (__LINE__));
+                (OPENSSL_FILE), (OPENSSL_LINE))
 
 # else
 
@@ -99,19 +100,19 @@ extern "C" {
 /*
  * Any code that will need cleanup operations should use these functions to
  * register callbacks. ENGINE_cleanup() will call all registered callbacks in
- * order. NB: both the "add" functions assume CRYPTO_LOCK_ENGINE to already be
+ * order. NB: both the "add" functions assume the engine lock to already be
  * held (in "write" mode).
  */
 typedef void (ENGINE_CLEANUP_CB) (void);
 typedef struct st_engine_cleanup_item {
     ENGINE_CLEANUP_CB *cb;
 } ENGINE_CLEANUP_ITEM;
-DECLARE_STACK_OF(ENGINE_CLEANUP_ITEM)
+DEFINE_STACK_OF(ENGINE_CLEANUP_ITEM)
 void engine_cleanup_add_first(ENGINE_CLEANUP_CB *cb);
 void engine_cleanup_add_last(ENGINE_CLEANUP_CB *cb);
 
 /* We need stacks of ENGINEs for use in eng_table.c */
-DECLARE_STACK_OF(ENGINE)
+DEFINE_STACK_OF(ENGINE)
 
 /*
  * If this symbol is defined then engine_table_select(), the function that is
@@ -136,7 +137,7 @@ ENGINE *engine_table_select(ENGINE_TABLE **table, int nid);
 # else
 ENGINE *engine_table_select_tmp(ENGINE_TABLE **table, int nid, const char *f,
                                 int l);
-#  define engine_table_select(t,n) engine_table_select_tmp(t,n,__FILE__,__LINE__)
+#  define engine_table_select(t,n) engine_table_select_tmp(t,n,OPENSSL_FILE,OPENSSL_LINE)
 # endif
 typedef void (engine_table_doall_cb) (int nid, STACK_OF(ENGINE) *sk,
                                       ENGINE *def, void *arg);
@@ -146,7 +147,7 @@ void engine_table_doall(ENGINE_TABLE *table, engine_table_doall_cb *cb,
 /*
  * Internal versions of API functions that have control over locking. These
  * are used between C files when functionality needs to be shared but the
- * caller may already be controlling of the CRYPTO_LOCK_ENGINE lock.
+ * caller may already be controlling of the engine lock.
  */
 int engine_unlocked_init(ENGINE *e);
 int engine_unlocked_finish(ENGINE *e, int unlock_for_handlers);
@@ -169,6 +170,10 @@ void engine_set_all_null(ENGINE *e);
 void engine_pkey_meths_free(ENGINE *e);
 void engine_pkey_asn1_meths_free(ENGINE *e);
 
+/* Once initialisation function */
+extern CRYPTO_ONCE engine_lock_init;
+void do_engine_lock_init(void);
+
 /*
  * This is a structure for storing implementations of various crypto
  * algorithms and functions.
@@ -179,10 +184,8 @@ struct engine_st {
     const RSA_METHOD *rsa_meth;
     const DSA_METHOD *dsa_meth;
     const DH_METHOD *dh_meth;
-    const ECDH_METHOD *ecdh_meth;
-    const ECDSA_METHOD *ecdsa_meth;
+    const EC_KEY_METHOD *ec_meth;
     const RAND_METHOD *rand_meth;
-    const STORE_METHOD *store_meth;
     /* Cipher handling is via this callback */
     ENGINE_CIPHERS_PTR ciphers;
     /* Digest handling is via this callback */
@@ -216,6 +219,10 @@ struct engine_st {
     struct engine_st *prev;
     struct engine_st *next;
 };
+
+typedef struct st_engine_pile ENGINE_PILE;
+
+DEFINE_LHASH_OF(ENGINE_PILE);
 
 #ifdef  __cplusplus
 }

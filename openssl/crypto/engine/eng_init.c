@@ -1,4 +1,3 @@
-/* crypto/engine/eng_init.c */
 /* ====================================================================
  * Copyright (c) 1999-2001 The OpenSSL Project.  All rights reserved.
  *
@@ -76,8 +75,8 @@ int engine_unlocked_init(ENGINE *e)
          */
         e->struct_ref++;
         e->funct_ref++;
-        engine_ref_debug(e, 0, 1)
-            engine_ref_debug(e, 1, 1)
+        engine_ref_debug(e, 0, 1);
+        engine_ref_debug(e, 1, 1);
     }
     return to_return;
 }
@@ -102,19 +101,14 @@ int engine_unlocked_finish(ENGINE *e, int unlock_for_handlers)
     engine_ref_debug(e, 1, -1);
     if ((e->funct_ref == 0) && e->finish) {
         if (unlock_for_handlers)
-            CRYPTO_w_unlock(CRYPTO_LOCK_ENGINE);
+            CRYPTO_THREAD_unlock(global_engine_lock);
         to_return = e->finish(e);
         if (unlock_for_handlers)
-            CRYPTO_w_lock(CRYPTO_LOCK_ENGINE);
+            CRYPTO_THREAD_write_lock(global_engine_lock);
         if (!to_return)
             return 0;
     }
-#ifdef REF_CHECK
-    if (e->funct_ref < 0) {
-        fprintf(stderr, "ENGINE_finish, bad functional reference count\n");
-        abort();
-    }
-#endif
+    REF_ASSERT_ISNT(e->funct_ref < 0);
     /* Release the structural reference too */
     if (!engine_free_util(e, 0)) {
         ENGINEerr(ENGINE_F_ENGINE_UNLOCKED_FINISH, ENGINE_R_FINISH_FAILED);
@@ -131,9 +125,10 @@ int ENGINE_init(ENGINE *e)
         ENGINEerr(ENGINE_F_ENGINE_INIT, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-    CRYPTO_w_lock(CRYPTO_LOCK_ENGINE);
+    CRYPTO_THREAD_run_once(&engine_lock_init, do_engine_lock_init);
+    CRYPTO_THREAD_write_lock(global_engine_lock);
     ret = engine_unlocked_init(e);
-    CRYPTO_w_unlock(CRYPTO_LOCK_ENGINE);
+    CRYPTO_THREAD_unlock(global_engine_lock);
     return ret;
 }
 
@@ -142,13 +137,11 @@ int ENGINE_finish(ENGINE *e)
 {
     int to_return = 1;
 
-    if (e == NULL) {
-        ENGINEerr(ENGINE_F_ENGINE_FINISH, ERR_R_PASSED_NULL_PARAMETER);
-        return 0;
-    }
-    CRYPTO_w_lock(CRYPTO_LOCK_ENGINE);
+    if (e == NULL)
+        return 1;
+    CRYPTO_THREAD_write_lock(global_engine_lock);
     to_return = engine_unlocked_finish(e, 1);
-    CRYPTO_w_unlock(CRYPTO_LOCK_ENGINE);
+    CRYPTO_THREAD_unlock(global_engine_lock);
     if (!to_return) {
         ENGINEerr(ENGINE_F_ENGINE_FINISH, ENGINE_R_FINISH_FAILED);
         return 0;

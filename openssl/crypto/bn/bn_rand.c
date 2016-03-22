@@ -1,4 +1,3 @@
-/* crypto/bn/bn_rand.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -111,9 +110,10 @@
 
 #include <stdio.h>
 #include <time.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include "bn_lcl.h"
 #include <openssl/rand.h>
+#include <openssl/sha.h>
 
 static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
 {
@@ -135,7 +135,7 @@ static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
     bit = (bits - 1) % 8;
     mask = 0xff << (bit + 1);
 
-    buf = (unsigned char *)OPENSSL_malloc(bytes);
+    buf = OPENSSL_malloc(bytes);
     if (buf == NULL) {
         BNerr(BN_F_BNRAND, ERR_R_MALLOC_FAILURE);
         goto err;
@@ -146,14 +146,13 @@ static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
     RAND_add(&tim, sizeof(tim), 0.0);
 
     if (pseudorand) {
-        if (RAND_pseudo_bytes(buf, bytes) == -1)
+        if (RAND_bytes(buf, bytes) <= 0)
             goto err;
     } else {
         if (RAND_bytes(buf, bytes) <= 0)
             goto err;
     }
 
-#if 1
     if (pseudorand == 2) {
         /*
          * generate patterns that are more likely to trigger BN library bugs
@@ -162,7 +161,7 @@ static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
         unsigned char c;
 
         for (i = 0; i < bytes; i++) {
-            if (RAND_pseudo_bytes(&c, 1) < 0)
+            if (RAND_bytes(&c, 1) <= 0)
                 goto err;
             if (c >= 128 && i > 0)
                 buf[i] = buf[i - 1];
@@ -172,7 +171,6 @@ static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
                 buf[i] = 255;
         }
     }
-#endif
 
     if (top >= 0) {
         if (top) {
@@ -193,10 +191,7 @@ static int bnrand(int pseudorand, BIGNUM *rnd, int bits, int top, int bottom)
         goto err;
     ret = 1;
  err:
-    if (buf != NULL) {
-        OPENSSL_cleanse(buf, bytes);
-        OPENSSL_free(buf);
-    }
+    OPENSSL_clear_free(buf, bytes);
     bn_check_top(rnd);
     return (ret);
 }
@@ -211,12 +206,10 @@ int BN_pseudo_rand(BIGNUM *rnd, int bits, int top, int bottom)
     return bnrand(1, rnd, bits, top, bottom);
 }
 
-#if 1
 int BN_bntest_rand(BIGNUM *rnd, int bits, int top, int bottom)
 {
     return bnrand(2, rnd, bits, top, bottom);
 }
-#endif
 
 /* random number r:  0 <= r < range */
 static int bn_rand_range(int pseudo, BIGNUM *r, const BIGNUM *range)
@@ -292,4 +285,76 @@ int BN_rand_range(BIGNUM *r, const BIGNUM *range)
 int BN_pseudo_rand_range(BIGNUM *r, const BIGNUM *range)
 {
     return bn_rand_range(1, r, range);
+}
+
+/*
+ * BN_generate_dsa_nonce generates a random number 0 <= out < range. Unlike
+ * BN_rand_range, it also includes the contents of |priv| and |message| in
+ * the generation so that an RNG failure isn't fatal as long as |priv|
+ * remains secret. This is intended for use in DSA and ECDSA where an RNG
+ * weakness leads directly to private key exposure unless this function is
+ * used.
+ */
+int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range,
+                          const BIGNUM *priv, const unsigned char *message,
+                          size_t message_len, BN_CTX *ctx)
+{
+    SHA512_CTX sha;
+    /*
+     * We use 512 bits of random data per iteration to ensure that we have at
+     * least |range| bits of randomness.
+     */
+    unsigned char random_bytes[64];
+    unsigned char digest[SHA512_DIGEST_LENGTH];
+    unsigned done, todo;
+    /* We generate |range|+8 bytes of random output. */
+    const unsigned num_k_bytes = BN_num_bytes(range) + 8;
+    unsigned char private_bytes[96];
+    unsigned char *k_bytes;
+    int ret = 0;
+
+    k_bytes = OPENSSL_malloc(num_k_bytes);
+    if (k_bytes == NULL)
+        goto err;
+
+    /* We copy |priv| into a local buffer to avoid exposing its length. */
+    todo = sizeof(priv->d[0]) * priv->top;
+    if (todo > sizeof(private_bytes)) {
+        /*
+         * No reasonable DSA or ECDSA key should have a private key this
+         * large and we don't handle this case in order to avoid leaking the
+         * length of the private key.
+         */
+        BNerr(BN_F_BN_GENERATE_DSA_NONCE, BN_R_PRIVATE_KEY_TOO_LARGE);
+        goto err;
+    }
+    memcpy(private_bytes, priv->d, todo);
+    memset(private_bytes + todo, 0, sizeof(private_bytes) - todo);
+
+    for (done = 0; done < num_k_bytes;) {
+        if (RAND_bytes(random_bytes, sizeof(random_bytes)) != 1)
+            goto err;
+        SHA512_Init(&sha);
+        SHA512_Update(&sha, &done, sizeof(done));
+        SHA512_Update(&sha, private_bytes, sizeof(private_bytes));
+        SHA512_Update(&sha, message, message_len);
+        SHA512_Update(&sha, random_bytes, sizeof(random_bytes));
+        SHA512_Final(digest, &sha);
+
+        todo = num_k_bytes - done;
+        if (todo > SHA512_DIGEST_LENGTH)
+            todo = SHA512_DIGEST_LENGTH;
+        memcpy(k_bytes + done, digest, todo);
+        done += todo;
+    }
+
+    if (!BN_bin2bn(k_bytes, num_k_bytes, out))
+        goto err;
+    if (BN_mod(out, out, range, ctx) != 1)
+        goto err;
+    ret = 1;
+
+ err:
+    OPENSSL_free(k_bytes);
+    return ret;
 }

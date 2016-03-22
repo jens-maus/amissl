@@ -1,12 +1,21 @@
 #!/bin/sh
-for header in openssl/outinc/openssl/*; do
-  outfile=`basename ${header}`
-  cat > include/openssl/${outfile} << EOF
-#ifndef PROTO_AMISSL_H
-#include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-EOF
-
-  cat ${header} >>include/openssl/${outfile}
-  echo "copied+patched ${outfile} to include/openssl"
+BUILD_D=$1
+rm -f include/openssl/*
+for header in ${BUILD_D}/openssl/include/openssl/*.h openssl/include/openssl/*.h; do
+  file=$(basename ${header})
+  if echo "${file}" | grep -qv "__"; then
+    cp -a ${header} include/openssl/
+    sed -i '1s/^/#if !defined(PROTO_AMISSL_H) \&\& !defined(AMISSL_COMPILE)\n#include <proto\/amissl.h>\n#endif\n/' include/openssl/${file}
+    echo "copied+patched ${header} to include/openssl"
+  fi
+done
+mkdir -p ${BUILD_D}/crypto/include/internal
+rm -f ${BUILD_D}/cryptol/include/internal/*.h
+for header in openssl/crypto/include/internal/*.h; do
+  file=$(basename ${header})
+  if echo "${file}" | grep -qv "__"; then
+    cp -a ${header} ${BUILD_D}/crypto/include/internal/
+    sed -i '1s/^/#if !defined(PROTO_AMISSL_H) \&\& !defined(AMISSL_COMPILE)\n#include <proto\/amissl.h>\n#endif\n/' ${BUILD_D}/crypto/include/internal/${file}
+    echo "copied+patched ${header} ${BUILD_D}/crypto/include/internal"
+  fi
 done

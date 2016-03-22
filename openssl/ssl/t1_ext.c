@@ -1,4 +1,3 @@
-/* ssl/t1_ext.c */
 /* ====================================================================
  * Copyright (c) 2014 The OpenSSL Project.  All rights reserved.
  *
@@ -55,12 +54,14 @@
 
 /* Custom extension utility functions */
 
+#ifndef OPENSSL_NO_CT
+# include <openssl/ct.h>
+#endif
 #include "ssl_locl.h"
 
-#ifndef OPENSSL_NO_TLSEXT
 
 /* Find a custom extension from the list. */
-static custom_ext_method *custom_ext_find(custom_ext_methods *exts,
+static custom_ext_method *custom_ext_find(const custom_ext_methods *exts,
                                           unsigned int ext_type)
 {
     size_t i;
@@ -184,7 +185,7 @@ int custom_exts_copy(custom_ext_methods *dst, const custom_ext_methods *src)
 {
     if (src->meths_count) {
         dst->meths =
-            BUF_memdup(src->meths,
+            OPENSSL_memdup(src->meths,
                        sizeof(custom_ext_method) * src->meths_count);
         if (dst->meths == NULL)
             return 0;
@@ -195,8 +196,7 @@ int custom_exts_copy(custom_ext_methods *dst, const custom_ext_methods *src)
 
 void custom_exts_free(custom_ext_methods *exts)
 {
-    if (exts->meths)
-        OPENSSL_free(exts->meths);
+    OPENSSL_free(exts->meths);
 }
 
 /* Set callbacks for a custom extension. */
@@ -214,8 +214,12 @@ static int custom_ext_meth_add(custom_ext_methods *exts,
      */
     if (!add_cb && free_cb)
         return 0;
-    /* Don't add if extension supported internally. */
-    if (SSL_extension_supported(ext_type))
+    /*
+     * Don't add if extension supported internally, but make exception
+     * for extension types that previously were not supported, but now are.
+     */
+    if (SSL_extension_supported(ext_type) &&
+        ext_type != TLSEXT_TYPE_signed_certificate_timestamp)
         return 0;
     /* Extension type must fit in 16 bits */
     if (ext_type > 0xffff)
@@ -233,7 +237,7 @@ static int custom_ext_meth_add(custom_ext_methods *exts,
     }
 
     meth = exts->meths + exts->meths_count;
-    memset(meth, 0, sizeof(custom_ext_method));
+    memset(meth, 0, sizeof(*meth));
     meth->parse_cb = parse_cb;
     meth->add_cb = add_cb;
     meth->free_cb = free_cb;
@@ -244,6 +248,12 @@ static int custom_ext_meth_add(custom_ext_methods *exts,
     return 1;
 }
 
+/* Return true if a client custom extension exists, false otherwise */
+int SSL_CTX_has_client_custom_ext(const SSL_CTX *ctx, unsigned int ext_type)
+{
+    return custom_ext_find(&ctx->cert->cli_ext, ext_type) != NULL;
+}
+
 /* Application level functions to add custom extension callbacks */
 int SSL_CTX_add_client_custom_ext(SSL_CTX *ctx, unsigned int ext_type,
                                   custom_ext_add_cb add_cb,
@@ -252,8 +262,25 @@ int SSL_CTX_add_client_custom_ext(SSL_CTX *ctx, unsigned int ext_type,
                                   custom_ext_parse_cb parse_cb,
                                   void *parse_arg)
 {
-    return custom_ext_meth_add(&ctx->cert->cli_ext, ext_type,
-                               add_cb, free_cb, add_arg, parse_cb, parse_arg);
+    int ret = custom_ext_meth_add(&ctx->cert->cli_ext, ext_type, add_cb,
+                                  free_cb, add_arg, parse_cb, parse_arg);
+
+    if (ret != 1)
+        goto end;
+
+#ifndef OPENSSL_NO_CT
+    /*
+     * We don't want applications registering callbacks for SCT extensions
+     * whilst simultaneously using the built-in SCT validation features, as
+     * these two things may not play well together.
+     */
+    if (ext_type == TLSEXT_TYPE_signed_certificate_timestamp &&
+        SSL_CTX_get_ct_validation_callback(ctx) != NULL) {
+        ret = 0;
+    }
+#endif
+end:
+    return ret;
 }
 
 int SSL_CTX_add_server_custom_ext(SSL_CTX *ctx, unsigned int ext_type,
@@ -283,16 +310,13 @@ int SSL_extension_supported(unsigned int ext_type)
     case TLSEXT_TYPE_signature_algorithms:
     case TLSEXT_TYPE_srp:
     case TLSEXT_TYPE_status_request:
+    case TLSEXT_TYPE_signed_certificate_timestamp:
     case TLSEXT_TYPE_use_srtp:
-# ifdef TLSEXT_TYPE_opaque_prf_input
-    case TLSEXT_TYPE_opaque_prf_input:
-# endif
-# ifdef TLSEXT_TYPE_encrypt_then_mac
+#ifdef TLSEXT_TYPE_encrypt_then_mac
     case TLSEXT_TYPE_encrypt_then_mac:
-# endif
+#endif
         return 1;
     default:
         return 0;
     }
 }
-#endif

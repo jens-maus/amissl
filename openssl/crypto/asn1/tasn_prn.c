@@ -1,4 +1,3 @@
-/* tasn_prn.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2000.
@@ -58,13 +57,14 @@
  */
 
 #include <stddef.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/objects.h>
 #include <openssl/buffer.h>
 #include <openssl/err.h>
 #include <openssl/x509v3.h>
+#include "internal/asn1_int.h"
 #include "asn1_locl.h"
 
 /*
@@ -73,7 +73,7 @@
 
 /* ASN1_PCTX routines */
 
-ASN1_PCTX default_pctx = {
+static ASN1_PCTX default_pctx = {
     ASN1_PCTX_FLAGS_SHOW_ABSENT, /* flags */
     0,                          /* nm_flags */
     0,                          /* cert_flags */
@@ -84,16 +84,12 @@ ASN1_PCTX default_pctx = {
 ASN1_PCTX *ASN1_PCTX_new(void)
 {
     ASN1_PCTX *ret;
-    ret = OPENSSL_malloc(sizeof(ASN1_PCTX));
+
+    ret = OPENSSL_zalloc(sizeof(*ret));
     if (ret == NULL) {
         ASN1err(ASN1_F_ASN1_PCTX_NEW, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
-    ret->flags = 0;
-    ret->nm_flags = 0;
-    ret->cert_flags = 0;
-    ret->oid_flags = 0;
-    ret->str_flags = 0;
     return ret;
 }
 
@@ -246,10 +242,6 @@ static int asn1_item_print_ctx(BIO *out, ASN1_VALUE **fld, int indent,
         break;
 
     case ASN1_ITYPE_CHOICE:
-#if 0
-        if (!nohdr && !asn1_print_fsname(out, indent, fname, sname, pctx))
-            return 0;
-#endif
         /* CHOICE type, get selector */
         i = asn1_get_choice_selector(fld, it);
         /* This should never happen... */
@@ -376,13 +368,8 @@ static int asn1_print_fsname(BIO *out, int indent,
                              const char *fname, const char *sname,
                              const ASN1_PCTX *pctx)
 {
-    static char spaces[] = "                    ";
-    const int nspaces = sizeof(spaces) - 1;
-
-#if 0
-    if (!sname && !fname)
-        return 1;
-#endif
+    static const char spaces[] = "                    ";
+    static const int nspaces = sizeof(spaces) - 1;
 
     while (indent > nspaces) {
         if (BIO_write(out, spaces, nspaces) != nspaces)
@@ -415,8 +402,7 @@ static int asn1_print_fsname(BIO *out, int indent,
     return 1;
 }
 
-static int asn1_print_boolean_ctx(BIO *out, int boolval,
-                                  const ASN1_PCTX *pctx)
+static int asn1_print_boolean(BIO *out, int boolval)
 {
     const char *str;
     switch (boolval) {
@@ -440,8 +426,7 @@ static int asn1_print_boolean_ctx(BIO *out, int boolval,
 
 }
 
-static int asn1_print_integer_ctx(BIO *out, ASN1_INTEGER *str,
-                                  const ASN1_PCTX *pctx)
+static int asn1_print_integer(BIO *out, ASN1_INTEGER *str)
 {
     char *s;
     int ret = 1;
@@ -452,8 +437,7 @@ static int asn1_print_integer_ctx(BIO *out, ASN1_INTEGER *str,
     return ret;
 }
 
-static int asn1_print_oid_ctx(BIO *out, const ASN1_OBJECT *oid,
-                              const ASN1_PCTX *pctx)
+static int asn1_print_oid(BIO *out, const ASN1_OBJECT *oid)
 {
     char objbuf[80];
     const char *ln;
@@ -466,8 +450,7 @@ static int asn1_print_oid_ctx(BIO *out, const ASN1_OBJECT *oid,
     return 1;
 }
 
-static int asn1_print_obstring_ctx(BIO *out, ASN1_STRING *str, int indent,
-                                   const ASN1_PCTX *pctx)
+static int asn1_print_obstring(BIO *out, ASN1_STRING *str, int indent)
 {
     if (str->type == V_ASN1_BIT_STRING) {
         if (BIO_printf(out, " (%ld unused bits)\n", str->flags & 0x7) <= 0)
@@ -536,13 +519,13 @@ static int asn1_primitive_print(BIO *out, ASN1_VALUE **fld,
             int boolval = *(int *)fld;
             if (boolval == -1)
                 boolval = it->size;
-            ret = asn1_print_boolean_ctx(out, boolval, pctx);
+            ret = asn1_print_boolean(out, boolval);
         }
         break;
 
     case V_ASN1_INTEGER:
     case V_ASN1_ENUMERATED:
-        ret = asn1_print_integer_ctx(out, str, pctx);
+        ret = asn1_print_integer(out, str);
         break;
 
     case V_ASN1_UTCTIME:
@@ -554,12 +537,12 @@ static int asn1_primitive_print(BIO *out, ASN1_VALUE **fld,
         break;
 
     case V_ASN1_OBJECT:
-        ret = asn1_print_oid_ctx(out, (const ASN1_OBJECT *)*fld, pctx);
+        ret = asn1_print_oid(out, (const ASN1_OBJECT *)*fld);
         break;
 
     case V_ASN1_OCTET_STRING:
     case V_ASN1_BIT_STRING:
-        ret = asn1_print_obstring_ctx(out, str, indent, pctx);
+        ret = asn1_print_obstring(out, str, indent);
         needlf = 0;
         break;
 

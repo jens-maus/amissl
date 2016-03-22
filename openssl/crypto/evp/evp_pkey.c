@@ -1,4 +1,3 @@
-/* evp_pkey.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -59,10 +58,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/x509.h>
 #include <openssl/rand.h>
-#include "asn1_locl.h"
+#include "internal/asn1_int.h"
+#include "internal/evp_int.h"
+#include "internal/x509_int.h"
 
 /* Extract a private key from a PKCS8 structure */
 
@@ -75,7 +76,7 @@ EVP_PKEY *EVP_PKCS82PKEY(PKCS8_PRIV_KEY_INFO *p8)
     if (!PKCS8_pkey_get0(&algoid, NULL, NULL, NULL, p8))
         return NULL;
 
-    if (!(pkey = EVP_PKEY_new())) {
+    if ((pkey = EVP_PKEY_new()) == NULL) {
         EVPerr(EVP_F_EVP_PKCS82PKEY, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
@@ -104,66 +105,35 @@ EVP_PKEY *EVP_PKCS82PKEY(PKCS8_PRIV_KEY_INFO *p8)
     return NULL;
 }
 
-PKCS8_PRIV_KEY_INFO *EVP_PKEY2PKCS8(EVP_PKEY *pkey)
-{
-    return EVP_PKEY2PKCS8_broken(pkey, PKCS8_OK);
-}
-
 /* Turn a private key into a PKCS8 structure */
 
-PKCS8_PRIV_KEY_INFO *EVP_PKEY2PKCS8_broken(EVP_PKEY *pkey, int broken)
+PKCS8_PRIV_KEY_INFO *EVP_PKEY2PKCS8(EVP_PKEY *pkey)
 {
-    PKCS8_PRIV_KEY_INFO *p8;
-
-    if (!(p8 = PKCS8_PRIV_KEY_INFO_new())) {
-        EVPerr(EVP_F_EVP_PKEY2PKCS8_BROKEN, ERR_R_MALLOC_FAILURE);
+    PKCS8_PRIV_KEY_INFO *p8 = PKCS8_PRIV_KEY_INFO_new();
+    if (p8  == NULL) {
+        EVPerr(EVP_F_EVP_PKEY2PKCS8, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
-    p8->broken = broken;
 
     if (pkey->ameth) {
         if (pkey->ameth->priv_encode) {
             if (!pkey->ameth->priv_encode(p8, pkey)) {
-                EVPerr(EVP_F_EVP_PKEY2PKCS8_BROKEN,
-                       EVP_R_PRIVATE_KEY_ENCODE_ERROR);
+                EVPerr(EVP_F_EVP_PKEY2PKCS8, EVP_R_PRIVATE_KEY_ENCODE_ERROR);
                 goto error;
             }
         } else {
-            EVPerr(EVP_F_EVP_PKEY2PKCS8_BROKEN, EVP_R_METHOD_NOT_SUPPORTED);
+            EVPerr(EVP_F_EVP_PKEY2PKCS8, EVP_R_METHOD_NOT_SUPPORTED);
             goto error;
         }
     } else {
-        EVPerr(EVP_F_EVP_PKEY2PKCS8_BROKEN,
-               EVP_R_UNSUPPORTED_PRIVATE_KEY_ALGORITHM);
+        EVPerr(EVP_F_EVP_PKEY2PKCS8, EVP_R_UNSUPPORTED_PRIVATE_KEY_ALGORITHM);
         goto error;
     }
-    RAND_add(p8->pkey->value.octet_string->data,
-             p8->pkey->value.octet_string->length, 0.0);
+    RAND_add(p8->pkey->data, p8->pkey->length, 0.0);
     return p8;
  error:
     PKCS8_PRIV_KEY_INFO_free(p8);
     return NULL;
-}
-
-PKCS8_PRIV_KEY_INFO *PKCS8_set_broken(PKCS8_PRIV_KEY_INFO *p8, int broken)
-{
-    switch (broken) {
-
-    case PKCS8_OK:
-        p8->broken = PKCS8_OK;
-        return p8;
-        break;
-
-    case PKCS8_NO_OCTET:
-        p8->broken = PKCS8_NO_OCTET;
-        p8->pkey->type = V_ASN1_SEQUENCE;
-        return p8;
-        break;
-
-    default:
-        EVPerr(EVP_F_PKCS8_SET_BROKEN, EVP_R_PKCS8_UNKNOWN_BROKEN_TYPE);
-        return NULL;
-    }
 }
 
 /* EVP_PKEY attribute functions */

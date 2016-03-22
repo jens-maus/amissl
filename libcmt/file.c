@@ -316,3 +316,12 @@ setvbuf(FILE *stream,char *buf,int bufmode,size_t size)
 
 	return(result);
 }
+
+void
+setbuf(FILE *stream,char *buf)
+{
+	if(buf == NULL)
+		setvbuf(stream,NULL,_IONBF,0);
+	else
+		setvbuf(stream,buf,_IOFBF,BUFSIZ);
+}

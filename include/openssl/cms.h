@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/cms/cms.h */
+#endif
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -59,6 +58,7 @@
 # define HEADER_CMS_H
 
 # include <openssl/x509.h>
+# include <openssl/x509v3.h>
 
 # ifdef OPENSSL_NO_CMS
 #  error CMS is disabled.
@@ -78,9 +78,10 @@ typedef struct CMS_Receipt_st CMS_Receipt;
 typedef struct CMS_RecipientEncryptedKey_st CMS_RecipientEncryptedKey;
 typedef struct CMS_OtherKeyAttribute_st CMS_OtherKeyAttribute;
 
-DECLARE_STACK_OF(CMS_SignerInfo)
-DECLARE_STACK_OF(GENERAL_NAMES)
-DECLARE_STACK_OF(CMS_RecipientEncryptedKey)
+DEFINE_STACK_OF(CMS_SignerInfo)
+DEFINE_STACK_OF(CMS_RecipientEncryptedKey)
+DEFINE_STACK_OF(CMS_RecipientInfo)
+DEFINE_STACK_OF(CMS_RevocationInfoChoice)
 DECLARE_ASN1_FUNCTIONS(CMS_ContentInfo)
 DECLARE_ASN1_FUNCTIONS(CMS_ReceiptRequest)
 DECLARE_ASN1_PRINT_FUNCTION(CMS_ContentInfo)
@@ -119,6 +120,7 @@ DECLARE_ASN1_PRINT_FUNCTION(CMS_ContentInfo)
 # define CMS_USE_KEYID                   0x10000
 # define CMS_DEBUG_DECRYPT               0x20000
 # define CMS_KEY_PARAM                   0x40000
+# define CMS_ASCIICRLF                   0x80000
 
 const ASN1_OBJECT *CMS_get0_type(CMS_ContentInfo *cms);
 

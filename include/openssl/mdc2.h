@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/mdc2/mdc2.h */
+#endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -82,9 +81,6 @@ typedef struct mdc2_ctx_st {
     int pad_type;               /* either 1 or 2, default 1 */
 } MDC2_CTX;
 
-# ifdef OPENSSL_FIPS
-int private_MDC2_Init(MDC2_CTX *c);
-# endif
 int MDC2_Init(MDC2_CTX *c);
 int MDC2_Update(MDC2_CTX *c, const unsigned char *data, size_t len);
 int MDC2_Final(unsigned char *md, MDC2_CTX *c);

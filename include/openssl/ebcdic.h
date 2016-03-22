@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/ebcdic.h */
+#endif
 
 #ifndef HEADER_EBCDIC_H
 # define HEADER_EBCDIC_H

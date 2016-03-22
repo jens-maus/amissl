@@ -1,4 +1,3 @@
-/* crypto/ec/ecp_nist.c */
 /*
  * Written by Nils Larsch for the OpenSSL project.
  */
@@ -67,10 +66,6 @@
 #include <openssl/obj_mac.h>
 #include "ec_lcl.h"
 
-#ifdef OPENSSL_FIPS
-# include <openssl/fips.h>
-#endif
-
 const EC_METHOD *EC_GFp_nist_method(void)
 {
     static const EC_METHOD ret = {
@@ -83,6 +78,7 @@ const EC_METHOD *EC_GFp_nist_method(void)
         ec_GFp_nist_group_set_curve,
         ec_GFp_simple_group_get_curve,
         ec_GFp_simple_group_get_degree,
+        ec_group_simple_order_bits,
         ec_GFp_simple_group_check_discriminant,
         ec_GFp_simple_point_init,
         ec_GFp_simple_point_finish,
@@ -110,13 +106,17 @@ const EC_METHOD *EC_GFp_nist_method(void)
         0 /* field_div */ ,
         0 /* field_encode */ ,
         0 /* field_decode */ ,
-        0                       /* field_set_to_one */
+        0,                      /* field_set_to_one */
+        ec_key_simple_priv2oct,
+        ec_key_simple_oct2priv,
+        0, /* set private */
+        ec_key_simple_generate_key,
+        ec_key_simple_check_key,
+        ec_key_simple_generate_public_key,
+        0, /* keycopy */
+        0, /* keyfinish */
+        ecdh_simple_compute_key
     };
-
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode())
-        return fips_ec_gfp_nist_method();
-#endif
 
     return &ret;
 }
@@ -133,15 +133,12 @@ int ec_GFp_nist_group_set_curve(EC_GROUP *group, const BIGNUM *p,
 {
     int ret = 0;
     BN_CTX *new_ctx = NULL;
-    BIGNUM *tmp_bn;
 
     if (ctx == NULL)
         if ((ctx = new_ctx = BN_CTX_new()) == NULL)
             return 0;
 
     BN_CTX_start(ctx);
-    if ((tmp_bn = BN_CTX_get(ctx)) == NULL)
-        goto err;
 
     if (BN_ucmp(BN_get0_nist_prime_192(), p) == 0)
         group->field_mod_func = BN_nist_mod_192;
@@ -162,8 +159,7 @@ int ec_GFp_nist_group_set_curve(EC_GROUP *group, const BIGNUM *p,
 
  err:
     BN_CTX_end(ctx);
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
+    BN_CTX_free(new_ctx);
     return ret;
 }
 
@@ -183,13 +179,12 @@ int ec_GFp_nist_field_mul(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a,
 
     if (!BN_mul(r, a, b, ctx))
         goto err;
-    if (!group->field_mod_func(r, r, &group->field, ctx))
+    if (!group->field_mod_func(r, r, group->field, ctx))
         goto err;
 
     ret = 1;
  err:
-    if (ctx_new)
-        BN_CTX_free(ctx_new);
+    BN_CTX_free(ctx_new);
     return ret;
 }
 
@@ -209,12 +204,11 @@ int ec_GFp_nist_field_sqr(const EC_GROUP *group, BIGNUM *r, const BIGNUM *a,
 
     if (!BN_sqr(r, a, ctx))
         goto err;
-    if (!group->field_mod_func(r, r, &group->field, ctx))
+    if (!group->field_mod_func(r, r, group->field, ctx))
         goto err;
 
     ret = 1;
  err:
-    if (ctx_new)
-        BN_CTX_free(ctx_new);
+    BN_CTX_free(ctx_new);
     return ret;
 }

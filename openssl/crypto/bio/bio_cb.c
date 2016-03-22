@@ -1,4 +1,3 @@
-/* crypto/bio/bio_cb.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -59,15 +58,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
-long MS_CALLBACK BIO_debug_callback(BIO *bio, int cmd, const char *argp,
-                                    int argi, long argl, long ret)
+long BIO_debug_callback(BIO *bio, int cmd, const char *argp,
+                        int argi, long argl, long ret)
 {
     BIO *b;
-    MS_STATIC char buf[256];
+    char buf[256];
     char *p;
     long r = 1;
     int len;
@@ -78,6 +77,9 @@ long MS_CALLBACK BIO_debug_callback(BIO *bio, int cmd, const char *argp,
 
     len = BIO_snprintf(buf,sizeof buf,"BIO[%p]: ",(void *)bio);
 
+    /* Ignore errors and continue printing the other information. */
+    if (len < 0)
+        len = 0;
     p = buf + len;
     p_maxlen = sizeof(buf) - len;
 
@@ -137,7 +139,7 @@ long MS_CALLBACK BIO_debug_callback(BIO *bio, int cmd, const char *argp,
     b = (BIO *)bio->cb_arg;
     if (b != NULL)
         BIO_write(b, buf, strlen(buf));
-#if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_WIN16) && !defined(OPENSSL_SYS_AMIGA)
+#if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_AMIGA)
     else
         fputs(buf, stderr);
 #endif

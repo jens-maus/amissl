@@ -1,4 +1,3 @@
-/* crypto/des/cfb64ede.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -126,16 +125,6 @@ void DES_ede3_cfb64_encrypt(const unsigned char *in, unsigned char *out,
     v0 = v1 = ti[0] = ti[1] = c = cc = 0;
     *num = n;
 }
-
-#ifdef undef                    /* MACRO */
-void DES_ede2_cfb64_encrypt(unsigned char *in, unsigned char *out,
-                            long length, DES_key_schedule ks1,
-                            DES_key_schedule ks2, DES_cblock (*ivec),
-                            int *num, int enc)
-{
-    DES_ede3_cfb64_encrypt(in, out, length, ks1, ks2, ks1, ivec, num, enc);
-}
-#endif
 
 /*
  * This is compatible with the single key CFB-r for DES, even thought that's

@@ -35,6 +35,7 @@
 #undef D
 #undef E
 #undef W
+#undef assert
 #undef ASSERT
 
 #if defined(DEBUG)
@@ -96,6 +97,7 @@ void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int 
 	  )                           \
 	 )                            \
 	)
+#define assert(expression)   ASSERT(expression)
 
 #if defined(__amigaos4__)
  #define kprintf (IExec->DebugPrintF)

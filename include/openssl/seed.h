@@ -1,6 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
+#endif
 /*
  * Copyright (c) 2007 KISA(Korea Information Security Agency). All rights reserved.
  *
@@ -118,10 +118,6 @@ typedef struct seed_key_st {
 # endif
 } SEED_KEY_SCHEDULE;
 
-# ifdef OPENSSL_FIPS
-void private_SEED_set_key(const unsigned char rawkey[SEED_KEY_LENGTH],
-                          SEED_KEY_SCHEDULE *ks);
-# endif
 void SEED_set_key(const unsigned char rawkey[SEED_KEY_LENGTH],
                   SEED_KEY_SCHEDULE *ks);
 

@@ -1,4 +1,3 @@
-/* ssl/bio_ssl.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -63,7 +62,7 @@
 #include <openssl/crypto.h>
 #include <openssl/bio.h>
 #include <openssl/err.h>
-#include <openssl/ssl.h>
+#include "ssl_locl.h"
 
 static int ssl_write(BIO *h, const char *buf, int num);
 static int ssl_read(BIO *h, char *buf, int size);
@@ -101,14 +100,12 @@ BIO_METHOD *BIO_f_ssl(void)
 
 static int ssl_new(BIO *bi)
 {
-    BIO_SSL *bs;
+    BIO_SSL *bs = OPENSSL_zalloc(sizeof(*bs));
 
-    bs = (BIO_SSL *)OPENSSL_malloc(sizeof(BIO_SSL));
     if (bs == NULL) {
         BIOerr(BIO_F_SSL_NEW, ERR_R_MALLOC_FAILURE);
         return (0);
     }
-    memset(bs, 0, sizeof(BIO_SSL));
     bi->init = 0;
     bi->ptr = (char *)bs;
     bi->flags = 0;
@@ -125,13 +122,12 @@ static int ssl_free(BIO *a)
     if (bs->ssl != NULL)
         SSL_shutdown(bs->ssl);
     if (a->shutdown) {
-        if (a->init && (bs->ssl != NULL))
+        if (a->init)
             SSL_free(bs->ssl);
         a->init = 0;
         a->flags = 0;
     }
-    if (a->ptr != NULL)
-        OPENSSL_free(a->ptr);
+    OPENSSL_free(a->ptr);
     return (1);
 }
 
@@ -150,18 +146,6 @@ static int ssl_read(BIO *b, char *out, int outl)
 
     BIO_clear_retry_flags(b);
 
-#if 0
-    if (!SSL_is_init_finished(ssl)) {
-/*              ret=SSL_do_handshake(ssl); */
-        if (ret > 0) {
-
-            outflags = (BIO_FLAGS_READ | BIO_FLAGS_SHOULD_RETRY);
-            ret = -1;
-            goto end;
-        }
-    }
-#endif
-/*      if (ret > 0) */
     ret = SSL_read(ssl, out, outl);
 
     switch (SSL_get_error(ssl, ret)) {
@@ -304,7 +288,10 @@ static long ssl_ctrl(BIO *b, int cmd, long num, void *ptr)
         else if (ssl->handshake_func == ssl->method->ssl_accept)
             SSL_set_accept_state(ssl);
 
-        SSL_clear(ssl);
+        if (!SSL_clear(ssl)) {
+            ret = 0;
+            break;
+        }
 
         if (b->next_bio != NULL)
             ret = BIO_ctrl(b->next_bio, cmd, num, ptr);
@@ -351,7 +338,7 @@ static long ssl_ctrl(BIO *b, int cmd, long num, void *ptr)
             if (b->next_bio != NULL)
                 BIO_push(bio, b->next_bio);
             b->next_bio = bio;
-            CRYPTO_add(&bio->references, 1, CRYPTO_LOCK_BIO);
+            BIO_up_ref(bio);
         }
         b->init = 1;
         break;
@@ -384,7 +371,7 @@ static long ssl_ctrl(BIO *b, int cmd, long num, void *ptr)
     case BIO_CTRL_PUSH:
         if ((b->next_bio != NULL) && (b->next_bio != ssl->rbio)) {
             SSL_set_bio(ssl, b->next_bio, b->next_bio);
-            CRYPTO_add(&b->next_bio->references, 1, CRYPTO_LOCK_BIO);
+            BIO_up_ref(b);
         }
         break;
     case BIO_CTRL_POP:
@@ -397,7 +384,7 @@ static long ssl_ctrl(BIO *b, int cmd, long num, void *ptr)
             if (ssl->rbio != ssl->wbio)
                 BIO_free_all(ssl->wbio);
             if (b->next_bio != NULL)
-                CRYPTO_add(&b->next_bio->references, -1, CRYPTO_LOCK_BIO);
+                BIO_free(b->next_bio);
             ssl->wbio = NULL;
             ssl->rbio = NULL;
         }
@@ -429,8 +416,7 @@ static long ssl_ctrl(BIO *b, int cmd, long num, void *ptr)
         break;
     case BIO_CTRL_DUP:
         dbio = (BIO *)ptr;
-        if (((BIO_SSL *)dbio->ptr)->ssl != NULL)
-            SSL_free(((BIO_SSL *)dbio->ptr)->ssl);
+        SSL_free(((BIO_SSL *)dbio->ptr)->ssl);
         ((BIO_SSL *)dbio->ptr)->ssl = SSL_dup(ssl);
         ((BIO_SSL *)dbio->ptr)->renegotiate_count =
             ((BIO_SSL *)b->ptr)->renegotiate_count;
@@ -516,10 +502,8 @@ BIO *BIO_new_buffer_ssl_connect(SSL_CTX *ctx)
         goto err;
     return (ret);
  err:
-    if (buf != NULL)
-        BIO_free(buf);
-    if (ssl != NULL)
-        BIO_free(ssl);
+    BIO_free(buf);
+    BIO_free(ssl);
 #endif
     return (NULL);
 }
@@ -537,8 +521,7 @@ BIO *BIO_new_ssl_connect(SSL_CTX *ctx)
         goto err;
     return (ret);
  err:
-    if (con != NULL)
-        BIO_free(con);
+    BIO_free(con);
 #endif
     return (NULL);
 }
@@ -572,7 +555,8 @@ int BIO_ssl_copy_session_id(BIO *t, BIO *f)
     if ((((BIO_SSL *)t->ptr)->ssl == NULL) ||
         (((BIO_SSL *)f->ptr)->ssl == NULL))
         return (0);
-    SSL_copy_session_id(((BIO_SSL *)t->ptr)->ssl, ((BIO_SSL *)f->ptr)->ssl);
+    if (!SSL_copy_session_id(((BIO_SSL *)t->ptr)->ssl, ((BIO_SSL *)f->ptr)->ssl))
+        return 0;
     return (1);
 }
 

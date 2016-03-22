@@ -90,8 +90,8 @@ $include_path = join(" -I", split(/;/, $include_path));
 # check for gcc compiler
 $gnuc = $ENV{"GNUC"};
 
-#$ssl=   "ssleay32";
-#$crypto="libeay32";
+#$ssl=   "libssl32";
+#$crypto="libcrypto32";
 
 if ($gnuc)
 {
@@ -126,6 +126,8 @@ else
    $cp='copy >nul:';
    # rm command
    $rm='del /f /q';
+   # mv command
+   $mv='move /y';
 }
 
 # assembler
@@ -222,7 +224,7 @@ else
 }
 
 # common defines
-$cflags.=" -DL_ENDIAN -DOPENSSL_SYSNAME_NETWARE -U_WIN32";
+$cflags.=" -DL_ENDIAN -DOPENSSL_SYS_NETWARE -U_WIN32";
 
 # If LibC build add in NKS_LIBC define and set the entry/exit
 # routines - The default entry/exit routines are for CLib and don't exist
@@ -506,22 +508,22 @@ sub do_link_rule
       if ($gnuc)
       {
          $ret.="\t\$(MKLIB) $lib_flags \$(TMP_D)${o}\$(E_EXE).a \$(filter-out \$(TMP_D)${o}\$(E_EXE)${obj},$files)\n";
-         $ret.="\t\$(LINK) \$(LFLAGS) $def_file2\n";
+         $ret.="\t\$(LINK_CMD) \$(LFLAGS) $def_file2\n";
          $ret.="\t\@$mv \$(E_EXE)2.nlm \$(TEST_D)\n";
       }
       else
       {
-         $ret.="\t\$(LINK) \$(LFLAGS) $def_file2 $files \"$prelude\" $libs -o $target2\n";
+         $ret.="\t\$(LINK_CMD) \$(LFLAGS) $def_file2 $files \"$prelude\" $libs -o $target2\n";
       }
    }
    if ($gnuc)
    {
-      $ret.="\t\$(LINK) \$(LFLAGS) $def_file\n";
+      $ret.="\t\$(LINK_CMD) \$(LFLAGS) $def_file\n";
       $ret.="\t\@$mv \$(\@F) \$(TEST_D)\n";
    }
    else
    {
-      $ret.="\t\$(LINK) \$(LFLAGS) $def_file $files \"$prelude\" $libs -o $target\n";
+      $ret.="\t\$(LINK_CMD) \$(LFLAGS) $def_file $files \"$prelude\" $libs -o $target\n";
    }
 
    $ret.="\n";

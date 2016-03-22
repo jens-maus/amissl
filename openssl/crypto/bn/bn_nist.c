@@ -1,4 +1,3 @@
-/* crypto/bn/bn_nist.c */
 /*
  * Written by Nils Larsch for the OpenSSL project
  */
@@ -57,7 +56,7 @@
  */
 
 #include "bn_lcl.h"
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 
 #define BN_NIST_192_TOP (192+BN_BITS2-1)/BN_BITS2
 #define BN_NIST_224_TOP (224+BN_BITS2-1)/BN_BITS2
@@ -379,8 +378,8 @@ int BN_nist_mod_192(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     PTR_SIZE_INT mask;
     static const BIGNUM _bignum_nist_p_192_sqr = {
         (BN_ULONG *)_nist_p_192_sqr,
-        sizeof(_nist_p_192_sqr) / sizeof(_nist_p_192_sqr[0]),
-        sizeof(_nist_p_192_sqr) / sizeof(_nist_p_192_sqr[0]),
+        OSSL_NELEM(_nist_p_192_sqr),
+        OSSL_NELEM(_nist_p_192_sqr),
         0, BN_FLG_STATIC_DATA
     };
 
@@ -524,8 +523,8 @@ int BN_nist_mod_224(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     } u;
     static const BIGNUM _bignum_nist_p_224_sqr = {
         (BN_ULONG *)_nist_p_224_sqr,
-        sizeof(_nist_p_224_sqr) / sizeof(_nist_p_224_sqr[0]),
-        sizeof(_nist_p_224_sqr) / sizeof(_nist_p_224_sqr[0]),
+        OSSL_NELEM(_nist_p_224_sqr),
+        OSSL_NELEM(_nist_p_224_sqr),
         0, BN_FLG_STATIC_DATA
     };
 
@@ -645,7 +644,7 @@ int BN_nist_mod_224(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
 #endif
     } else if (carry < 0) {
         /*
-         * it's a bit more comlicated logic in this case. if bn_add_words
+         * it's a bit more complicated logic in this case. if bn_add_words
          * yields no carry, then result has to be adjusted by unconditionally
          * *adding* the modulus. but if it does, then result has to be
          * compared to the modulus and conditionally adjusted by
@@ -705,8 +704,8 @@ int BN_nist_mod_256(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     } u;
     static const BIGNUM _bignum_nist_p_256_sqr = {
         (BN_ULONG *)_nist_p_256_sqr,
-        sizeof(_nist_p_256_sqr) / sizeof(_nist_p_256_sqr[0]),
-        sizeof(_nist_p_256_sqr) / sizeof(_nist_p_256_sqr[0]),
+        OSSL_NELEM(_nist_p_256_sqr),
+        OSSL_NELEM(_nist_p_256_sqr),
         0, BN_FLG_STATIC_DATA
     };
 
@@ -951,8 +950,8 @@ int BN_nist_mod_384(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     } u;
     static const BIGNUM _bignum_nist_p_384_sqr = {
         (BN_ULONG *)_nist_p_384_sqr,
-        sizeof(_nist_p_384_sqr) / sizeof(_nist_p_384_sqr[0]),
-        sizeof(_nist_p_384_sqr) / sizeof(_nist_p_384_sqr[0]),
+        OSSL_NELEM(_nist_p_384_sqr),
+        OSSL_NELEM(_nist_p_384_sqr),
         0, BN_FLG_STATIC_DATA
     };
 
@@ -1209,8 +1208,8 @@ int BN_nist_mod_521(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     PTR_SIZE_INT mask;
     static const BIGNUM _bignum_nist_p_521_sqr = {
         (BN_ULONG *)_nist_p_521_sqr,
-        sizeof(_nist_p_521_sqr) / sizeof(_nist_p_521_sqr[0]),
-        sizeof(_nist_p_521_sqr) / sizeof(_nist_p_521_sqr[0]),
+        OSSL_NELEM(_nist_p_521_sqr),
+        OSSL_NELEM(_nist_p_521_sqr),
         0, BN_FLG_STATIC_DATA
     };
 
@@ -1239,9 +1238,20 @@ int BN_nist_mod_521(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
                  top - (BN_NIST_521_TOP - 1), BN_NIST_521_TOP);
     /* ... and right shift */
     for (val = t_d[0], i = 0; i < BN_NIST_521_TOP - 1; i++) {
+#if 0
+        /*
+         * MSC ARM compiler [version 2013, presumably even earlier,
+         * much earlier] miscompiles this code, but not one in
+         * #else section. See RT#3541.
+         */
+        tmp = val >> BN_NIST_521_RSHIFT;
+        val = t_d[i + 1];
+        t_d[i] = (tmp | val << BN_NIST_521_LSHIFT) & BN_MASK2;
+#else
         t_d[i] = (val >> BN_NIST_521_RSHIFT |
                   (tmp = t_d[i + 1]) << BN_NIST_521_LSHIFT) & BN_MASK2;
         val = tmp;
+#endif
     }
     t_d[i] = val >> BN_NIST_521_RSHIFT;
     /* lower 521 bits */
@@ -1259,4 +1269,19 @@ int BN_nist_mod_521(BIGNUM *r, const BIGNUM *a, const BIGNUM *field,
     bn_correct_top(r);
 
     return 1;
+}
+
+int (*BN_nist_mod_func(const BIGNUM *p)) (BIGNUM *r, const BIGNUM *a,
+                                          const BIGNUM *field, BN_CTX *ctx) {
+    if (BN_ucmp(&_bignum_nist_p_192, p) == 0)
+        return BN_nist_mod_192;
+    if (BN_ucmp(&_bignum_nist_p_224, p) == 0)
+        return BN_nist_mod_224;
+    if (BN_ucmp(&_bignum_nist_p_256, p) == 0)
+        return BN_nist_mod_256;
+    if (BN_ucmp(&_bignum_nist_p_384, p) == 0)
+        return BN_nist_mod_384;
+    if (BN_ucmp(&_bignum_nist_p_521, p) == 0)
+        return BN_nist_mod_521;
+    return 0;
 }

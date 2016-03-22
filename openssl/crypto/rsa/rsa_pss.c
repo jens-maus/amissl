@@ -1,4 +1,3 @@
-/* rsa_pss.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2005.
@@ -58,12 +57,13 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include "rsa_locl.h"
 
 static const unsigned char zeroes[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -87,9 +87,12 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
     int hLen, maskedDBLen, MSBits, emLen;
     const unsigned char *H;
     unsigned char *DB = NULL;
-    EVP_MD_CTX ctx;
+    EVP_MD_CTX *ctx = EVP_MD_CTX_new();
     unsigned char H_[EVP_MAX_MD_SIZE];
-    EVP_MD_CTX_init(&ctx);
+
+
+    if (ctx == NULL)
+        goto err;
 
     if (mgf1Hash == NULL)
         mgf1Hash = Hash;
@@ -133,7 +136,7 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
     maskedDBLen = emLen - hLen - 1;
     H = EM + maskedDBLen;
     DB = OPENSSL_malloc(maskedDBLen);
-    if (!DB) {
+    if (DB == NULL) {
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, ERR_R_MALLOC_FAILURE);
         goto err;
     }
@@ -152,15 +155,15 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_SLEN_CHECK_FAILED);
         goto err;
     }
-    if (!EVP_DigestInit_ex(&ctx, Hash, NULL)
-        || !EVP_DigestUpdate(&ctx, zeroes, sizeof zeroes)
-        || !EVP_DigestUpdate(&ctx, mHash, hLen))
+    if (!EVP_DigestInit_ex(ctx, Hash, NULL)
+        || !EVP_DigestUpdate(ctx, zeroes, sizeof zeroes)
+        || !EVP_DigestUpdate(ctx, mHash, hLen))
         goto err;
     if (maskedDBLen - i) {
-        if (!EVP_DigestUpdate(&ctx, DB + i, maskedDBLen - i))
+        if (!EVP_DigestUpdate(ctx, DB + i, maskedDBLen - i))
             goto err;
     }
-    if (!EVP_DigestFinal_ex(&ctx, H_, NULL))
+    if (!EVP_DigestFinal_ex(ctx, H_, NULL))
         goto err;
     if (memcmp(H_, H, hLen)) {
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_BAD_SIGNATURE);
@@ -169,9 +172,8 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
         ret = 1;
 
  err:
-    if (DB)
-        OPENSSL_free(DB);
-    EVP_MD_CTX_cleanup(&ctx);
+    OPENSSL_free(DB);
+    EVP_MD_CTX_free(ctx);
 
     return ret;
 
@@ -193,7 +195,7 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
     int ret = 0;
     int hLen, maskedDBLen, MSBits, emLen;
     unsigned char *H, *salt = NULL, *p;
-    EVP_MD_CTX ctx;
+    EVP_MD_CTX *ctx = NULL;
 
     if (mgf1Hash == NULL)
         mgf1Hash = Hash;
@@ -231,7 +233,7 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
     }
     if (sLen > 0) {
         salt = OPENSSL_malloc(sLen);
-        if (!salt) {
+        if (salt == NULL) {
             RSAerr(RSA_F_RSA_PADDING_ADD_PKCS1_PSS_MGF1,
                    ERR_R_MALLOC_FAILURE);
             goto err;
@@ -241,16 +243,17 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
     }
     maskedDBLen = emLen - hLen - 1;
     H = EM + maskedDBLen;
-    EVP_MD_CTX_init(&ctx);
-    if (!EVP_DigestInit_ex(&ctx, Hash, NULL)
-        || !EVP_DigestUpdate(&ctx, zeroes, sizeof zeroes)
-        || !EVP_DigestUpdate(&ctx, mHash, hLen))
+    ctx = EVP_MD_CTX_new();
+    if (ctx == NULL)
         goto err;
-    if (sLen && !EVP_DigestUpdate(&ctx, salt, sLen))
+    if (!EVP_DigestInit_ex(ctx, Hash, NULL)
+        || !EVP_DigestUpdate(ctx, zeroes, sizeof zeroes)
+        || !EVP_DigestUpdate(ctx, mHash, hLen))
         goto err;
-    if (!EVP_DigestFinal_ex(&ctx, H, NULL))
+    if (sLen && !EVP_DigestUpdate(ctx, salt, sLen))
         goto err;
-    EVP_MD_CTX_cleanup(&ctx);
+    if (!EVP_DigestFinal_ex(ctx, H, NULL))
+        goto err;
 
     /* Generate dbMask in place then perform XOR on it */
     if (PKCS1_MGF1(EM, maskedDBLen, H, hLen, mgf1Hash))
@@ -278,8 +281,8 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
     ret = 1;
 
  err:
-    if (salt)
-        OPENSSL_free(salt);
+    EVP_MD_CTX_free(ctx);
+    OPENSSL_free(salt);
 
     return ret;
 

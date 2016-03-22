@@ -46,6 +46,14 @@ struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
+#if defined(__amigaos4__)
+// define IIntuition and BIO_vsnprintf so that
+// the build doesn't complain about missing symbols in fprintf()
+#warning TODO: Why is this required?
+APTR IIntuition = NULL;
+APTR BIO_vsnprintf = NULL;
+#endif
+
 // on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
 // applied to non-static functions in this file. Thus, be careful to change
@@ -178,7 +186,16 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  if(LibAPIVersion == AMISSL_V10x)
+  if(LibAPIVersion == AMISSL_V11x)
+  {
+    D(DBF_STARTUP, "About to open amissl v11x library");
+
+    // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
+    // known 1.1.X amissl library as OpenSSL defines binary/api compatibility when only
+    // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
+    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110-pre4.library", 4);
+  }
+  else if(LibAPIVersion == AMISSL_V10x)
   {
     D(DBF_STARTUP, "About to open amissl v10x library");
 

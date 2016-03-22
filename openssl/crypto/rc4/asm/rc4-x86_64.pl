@@ -92,6 +92,9 @@
 # Westmere	4.2/+60%
 # Sandy Bridge	4.2/+120%
 # Atom		9.3/+80%
+# VIA Nano	6.4/+4%
+# Ivy Bridge	4.1/+30%
+# Bulldozer	4.5/+30%(*)
 #
 # (*)	But corresponding loop has less instructions, which should have
 #	positive effect on upcoming Bulldozer, which has one less ALU.
@@ -430,10 +433,10 @@ $idx="%r8";
 $ido="%r9";
 
 $code.=<<___;
-.globl	private_RC4_set_key
-.type	private_RC4_set_key,\@function,3
+.globl	RC4_set_key
+.type	RC4_set_key,\@function,3
 .align	16
-private_RC4_set_key:
+RC4_set_key:
 	lea	8($dat),$dat
 	lea	($inp,$len),$inp
 	neg	$len
@@ -500,7 +503,7 @@ private_RC4_set_key:
 	mov	%eax,-8($dat)
 	mov	%eax,-4($dat)
 	ret
-.size	private_RC4_set_key,.-private_RC4_set_key
+.size	RC4_set_key,.-RC4_set_key
 
 .globl	RC4_options
 .type	RC4_options,\@abi-omnipotent
@@ -645,16 +648,16 @@ key_se_handler:
 	.rva	.LSEH_end_RC4
 	.rva	.LSEH_info_RC4
 
-	.rva	.LSEH_begin_private_RC4_set_key
-	.rva	.LSEH_end_private_RC4_set_key
-	.rva	.LSEH_info_private_RC4_set_key
+	.rva	.LSEH_begin_RC4_set_key
+	.rva	.LSEH_end_RC4_set_key
+	.rva	.LSEH_info_RC4_set_key
 
 .section	.xdata
 .align	8
 .LSEH_info_RC4:
 	.byte	9,0,0,0
 	.rva	stream_se_handler
-.LSEH_info_private_RC4_set_key:
+.LSEH_info_RC4_set_key:
 	.byte	9,0,0,0
 	.rva	key_se_handler
 ___

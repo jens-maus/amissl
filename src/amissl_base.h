@@ -49,7 +49,6 @@ struct LibraryHeader
   //////////////////////////////////////
   // local variables which are valid only
   // for this particular libbase
-  struct SignalSemaphore *lock_cs;
   ULONG ThreadGroupID;
 
   //////////////////////////////////////

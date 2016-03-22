@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/rc5/rc5.h */
+#endif
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -75,8 +74,7 @@ extern "C" {
 # define RC5_ENCRYPT     1
 # define RC5_DECRYPT     0
 
-/* 32 bit.  For Alpha, things may get weird */
-# define RC5_32_INT unsigned long
+# define RC5_32_INT unsigned int
 
 # define RC5_32_BLOCK            8
 # define RC5_32_KEY_LENGTH       16/* This is a default, max is 255 */

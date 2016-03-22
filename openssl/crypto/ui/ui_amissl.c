@@ -2,7 +2,6 @@
 #include <openssl/e_os2.h>
 
 #include "ui_locl.h"
-#include "cryptlib.h"
 
 #include <stdio.h> /* for BUFSIZ */
 

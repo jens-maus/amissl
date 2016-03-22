@@ -1,7 +1,6 @@
-#ifndef PROTO_AMISSL_H
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
-#endif /* PROTO_AMISSL_H */
-/* crypto/rc4/rc4.h */
+#endif
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -80,7 +79,6 @@ typedef struct rc4_key_st {
 
 const char *RC4_options(void);
 void RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
-void private_RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
 void RC4(RC4_KEY *key, size_t len, const unsigned char *indata,
          unsigned char *outdata);
 

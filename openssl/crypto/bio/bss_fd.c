@@ -1,4 +1,3 @@
-/* crypto/bio/bss_fd.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -58,8 +57,8 @@
 
 #include <stdio.h>
 #include <errno.h>
-#define USE_SOCKETS
-#include "cryptlib.h"
+
+#include "bio_lcl.h"
 
 #if defined(OPENSSL_NO_POSIX_IO)
 /*
@@ -97,8 +96,6 @@ BIO_METHOD *BIO_s_fd(void)
  * file descriptors can only be provided by application. Therefore
  * "UPLINK" calls are due...
  */
-# include "bio_lcl.h"
-
 static int fd_write(BIO *h, const char *buf, int num);
 static int fd_read(BIO *h, char *buf, int size);
 static int fd_puts(BIO *h, const char *str);
@@ -269,12 +266,6 @@ int BIO_fd_should_retry(int i)
 
     if ((i == 0) || (i == -1)) {
         err = get_last_sys_error();
-
-# if defined(OPENSSL_SYS_WINDOWS) && 0/* more microsoft stupidity? perhaps
-                                       * not? Ben 4/1/99 */
-        if ((i == -1) && (err == 0))
-            return (1);
-# endif
 
         return (BIO_fd_non_fatal_error(err));
     }

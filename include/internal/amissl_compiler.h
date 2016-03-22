@@ -4,10 +4,7 @@
 #include <internal/SDI_compiler.h>
 #include <internal/SDI_stdarg.h>
 #include <internal/SDI_lib.h>
-
-//#if defined(DEBUG)
 #include <internal/debug.h>
-//#endif
 
 #if defined(__amigaos4__)
 

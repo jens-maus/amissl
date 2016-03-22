@@ -1,4 +1,3 @@
-/* crypto/ec/ecp_mont.c */
 /*
  * Originally written by Bodo Moeller for the OpenSSL project.
  */
@@ -63,10 +62,6 @@
 
 #include <openssl/err.h>
 
-#ifdef OPENSSL_FIPS
-# include <openssl/fips.h>
-#endif
-
 #include "ec_lcl.h"
 
 const EC_METHOD *EC_GFp_mont_method(void)
@@ -81,6 +76,7 @@ const EC_METHOD *EC_GFp_mont_method(void)
         ec_GFp_mont_group_set_curve,
         ec_GFp_simple_group_get_curve,
         ec_GFp_simple_group_get_degree,
+        ec_group_simple_order_bits,
         ec_GFp_simple_group_check_discriminant,
         ec_GFp_simple_point_init,
         ec_GFp_simple_point_finish,
@@ -108,13 +104,17 @@ const EC_METHOD *EC_GFp_mont_method(void)
         0 /* field_div */ ,
         ec_GFp_mont_field_encode,
         ec_GFp_mont_field_decode,
-        ec_GFp_mont_field_set_to_one
+        ec_GFp_mont_field_set_to_one,
+        ec_key_simple_priv2oct,
+        ec_key_simple_oct2priv,
+        0, /* set private */
+        ec_key_simple_generate_key,
+        ec_key_simple_check_key,
+        ec_key_simple_generate_public_key,
+        0, /* keycopy */
+        0, /* keyfinish */
+        ecdh_simple_compute_key
     };
-
-#ifdef OPENSSL_FIPS
-    if (FIPS_mode())
-        return fips_ec_gfp_mont_method();
-#endif
 
     return &ret;
 }
@@ -131,40 +131,28 @@ int ec_GFp_mont_group_init(EC_GROUP *group)
 
 void ec_GFp_mont_group_finish(EC_GROUP *group)
 {
-    if (group->field_data1 != NULL) {
-        BN_MONT_CTX_free(group->field_data1);
-        group->field_data1 = NULL;
-    }
-    if (group->field_data2 != NULL) {
-        BN_free(group->field_data2);
-        group->field_data2 = NULL;
-    }
+    BN_MONT_CTX_free(group->field_data1);
+    group->field_data1 = NULL;
+    BN_free(group->field_data2);
+    group->field_data2 = NULL;
     ec_GFp_simple_group_finish(group);
 }
 
 void ec_GFp_mont_group_clear_finish(EC_GROUP *group)
 {
-    if (group->field_data1 != NULL) {
-        BN_MONT_CTX_free(group->field_data1);
-        group->field_data1 = NULL;
-    }
-    if (group->field_data2 != NULL) {
-        BN_clear_free(group->field_data2);
-        group->field_data2 = NULL;
-    }
+    BN_MONT_CTX_free(group->field_data1);
+    group->field_data1 = NULL;
+    BN_clear_free(group->field_data2);
+    group->field_data2 = NULL;
     ec_GFp_simple_group_clear_finish(group);
 }
 
 int ec_GFp_mont_group_copy(EC_GROUP *dest, const EC_GROUP *src)
 {
-    if (dest->field_data1 != NULL) {
-        BN_MONT_CTX_free(dest->field_data1);
-        dest->field_data1 = NULL;
-    }
-    if (dest->field_data2 != NULL) {
-        BN_clear_free(dest->field_data2);
-        dest->field_data2 = NULL;
-    }
+    BN_MONT_CTX_free(dest->field_data1);
+    dest->field_data1 = NULL;
+    BN_clear_free(dest->field_data2);
+    dest->field_data2 = NULL;
 
     if (!ec_GFp_simple_group_copy(dest, src))
         return 0;
@@ -185,10 +173,8 @@ int ec_GFp_mont_group_copy(EC_GROUP *dest, const EC_GROUP *src)
     return 1;
 
  err:
-    if (dest->field_data1 != NULL) {
-        BN_MONT_CTX_free(dest->field_data1);
-        dest->field_data1 = NULL;
-    }
+    BN_MONT_CTX_free(dest->field_data1);
+    dest->field_data1 = NULL;
     return 0;
 }
 
@@ -200,14 +186,10 @@ int ec_GFp_mont_group_set_curve(EC_GROUP *group, const BIGNUM *p,
     BIGNUM *one = NULL;
     int ret = 0;
 
-    if (group->field_data1 != NULL) {
-        BN_MONT_CTX_free(group->field_data1);
-        group->field_data1 = NULL;
-    }
-    if (group->field_data2 != NULL) {
-        BN_free(group->field_data2);
-        group->field_data2 = NULL;
-    }
+    BN_MONT_CTX_free(group->field_data1);
+    group->field_data1 = NULL;
+    BN_free(group->field_data2);
+    group->field_data2 = NULL;
 
     if (ctx == NULL) {
         ctx = new_ctx = BN_CTX_new();
@@ -243,10 +225,8 @@ int ec_GFp_mont_group_set_curve(EC_GROUP *group, const BIGNUM *p,
     }
 
  err:
-    if (new_ctx != NULL)
-        BN_CTX_free(new_ctx);
-    if (mont != NULL)
-        BN_MONT_CTX_free(mont);
+    BN_CTX_free(new_ctx);
+    BN_MONT_CTX_free(mont);
     return ret;
 }
 

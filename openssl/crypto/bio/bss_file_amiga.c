@@ -122,7 +122,7 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 
 	if((file = FOpenFromMode((char *)filename, (char *)mode)))
 	{
-		if((ret = BIO_new(BIO_s_file_internal())))
+		if((ret = BIO_new(BIO_s_file())))
 			BIO_set_fp_amiga(ret, file, BIO_CLOSE);
 	}
 	else
@@ -151,7 +151,7 @@ BIO *BIO_new_fp_amiga(BPTR stream, int close_flag)
 	return(ret);
 }
 
-#if !defined(OPENSSL_NO_FP_API)
+#if !defined(OPENSSL_NO_STDIO)
 /* Only stdin, stdout and stderr are used in OpenSSL test applications
  * and openssl program, so the following function should cover all cases.
  */

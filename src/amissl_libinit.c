@@ -955,7 +955,6 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->parent = base;
 
     // initialize the user variables to their default values
-    child->lock_cs = NULL;
     child->ThreadGroupID = 0;
 
     #if defined(__amigaos4__)

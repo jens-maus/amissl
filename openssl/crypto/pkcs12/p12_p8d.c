@@ -1,4 +1,3 @@
-/* p12_p8d.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2001.
@@ -58,13 +57,16 @@
  */
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/pkcs12.h>
 
 PKCS8_PRIV_KEY_INFO *PKCS8_decrypt(X509_SIG *p8, const char *pass,
                                    int passlen)
 {
-    return PKCS12_item_decrypt_d2i(p8->algor,
+    X509_ALGOR *dalg;
+    ASN1_OCTET_STRING *doct;
+    X509_SIG_get0(&dalg, &doct, p8);
+    return PKCS12_item_decrypt_d2i(dalg,
                                    ASN1_ITEM_rptr(PKCS8_PRIV_KEY_INFO), pass,
-                                   passlen, p8->digest, 1);
+                                   passlen, doct, 1);
 }

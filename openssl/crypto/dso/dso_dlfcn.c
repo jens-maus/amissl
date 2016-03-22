@@ -1,4 +1,3 @@
-/* dso_dlfcn.c */
 /*
  * Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL project
  * 2000.
@@ -67,8 +66,9 @@
 #endif
 
 #include <stdio.h>
-#include "cryptlib.h"
+#include "internal/cryptlib.h"
 #include <openssl/dso.h>
+#include "internal/dso_conf.h"
 
 #ifndef DSO_DLFCN
 DSO_METHOD *DSO_METHOD_dlfcn(void)
@@ -99,12 +99,6 @@ static int dlfcn_load(DSO *dso);
 static int dlfcn_unload(DSO *dso);
 static void *dlfcn_bind_var(DSO *dso, const char *symname);
 static DSO_FUNC_TYPE dlfcn_bind_func(DSO *dso, const char *symname);
-# if 0
-static int dlfcn_unbind(DSO *dso, char *symname, void *symptr);
-static int dlfcn_init(DSO *dso);
-static int dlfcn_finish(DSO *dso);
-static long dlfcn_ctrl(DSO *dso, int cmd, long larg, void *parg);
-# endif
 static char *dlfcn_name_converter(DSO *dso, const char *filename);
 static char *dlfcn_merger(DSO *dso, const char *filespec1,
                           const char *filespec2);
@@ -117,11 +111,6 @@ static DSO_METHOD dso_meth_dlfcn = {
     dlfcn_unload,
     dlfcn_bind_var,
     dlfcn_bind_func,
-/* For now, "unbind" doesn't exist */
-# if 0
-    NULL,                       /* unbind_var */
-    NULL,                       /* unbind_func */
-# endif
     NULL,                       /* ctrl */
     dlfcn_name_converter,
     dlfcn_merger,
@@ -155,11 +144,7 @@ DSO_METHOD *DSO_METHOD_dlfcn(void)
 #   endif
 #  endif
 # else
-#  ifdef OPENSSL_SYS_SUNOS
-#   define DLOPEN_FLAG 1
-#  else
-#   define DLOPEN_FLAG RTLD_NOW /* Hope this works everywhere else */
-#  endif
+#  define DLOPEN_FLAG RTLD_NOW  /* Hope this works everywhere else */
 # endif
 
 /*
@@ -197,8 +182,7 @@ static int dlfcn_load(DSO *dso)
     return (1);
  err:
     /* Cleanup! */
-    if (filename != NULL)
-        OPENSSL_free(filename);
+    OPENSSL_free(filename);
     if (ptr != NULL)
         dlclose(ptr);
     return (0);
@@ -297,23 +281,21 @@ static char *dlfcn_merger(DSO *dso, const char *filespec1,
      * if the second file specification is missing.
      */
     if (!filespec2 || (filespec1 != NULL && filespec1[0] == '/')) {
-        merged = OPENSSL_malloc(strlen(filespec1) + 1);
-        if (!merged) {
+        merged = OPENSSL_strdup(filespec1);
+        if (merged == NULL) {
             DSOerr(DSO_F_DLFCN_MERGER, ERR_R_MALLOC_FAILURE);
             return (NULL);
         }
-        strcpy(merged, filespec1);
     }
     /*
      * If the first file specification is missing, the second one rules.
      */
     else if (!filespec1) {
-        merged = OPENSSL_malloc(strlen(filespec2) + 1);
-        if (!merged) {
+        merged = OPENSSL_strdup(filespec2);
+        if (merged == NULL) {
             DSOerr(DSO_F_DLFCN_MERGER, ERR_R_MALLOC_FAILURE);
             return (NULL);
         }
-        strcpy(merged, filespec2);
     } else {
         /*
          * This part isn't as trivial as it looks.  It assumes that the
@@ -332,7 +314,7 @@ static char *dlfcn_merger(DSO *dso, const char *filespec1,
             len--;
         }
         merged = OPENSSL_malloc(len + 2);
-        if (!merged) {
+        if (merged == NULL) {
             DSOerr(DSO_F_DLFCN_MERGER, ERR_R_MALLOC_FAILURE);
             return (NULL);
         }
@@ -342,14 +324,6 @@ static char *dlfcn_merger(DSO *dso, const char *filespec1,
     }
     return (merged);
 }
-
-# ifdef OPENSSL_SYS_MACOSX
-#  define DSO_ext ".dylib"
-#  define DSO_extlen 6
-# else
-#  define DSO_ext ".so"
-#  define DSO_extlen 3
-# endif
 
 static char *dlfcn_name_converter(DSO *dso, const char *filename)
 {
@@ -361,7 +335,7 @@ static char *dlfcn_name_converter(DSO *dso, const char *filename)
     transform = (strstr(filename, "/") == NULL);
     if (transform) {
         /* We will convert this to "%s.so" or "lib%s.so" etc */
-        rsize += DSO_extlen;    /* The length of ".so" */
+        rsize += strlen(DSO_EXTENSION);    /* The length of ".so" */
         if ((DSO_flags(dso) & DSO_FLAG_NAME_TRANSLATION_EXT_ONLY) == 0)
             rsize += 3;         /* The length of "lib" */
     }
@@ -372,9 +346,9 @@ static char *dlfcn_name_converter(DSO *dso, const char *filename)
     }
     if (transform) {
         if ((DSO_flags(dso) & DSO_FLAG_NAME_TRANSLATION_EXT_ONLY) == 0)
-            sprintf(translated, "lib%s" DSO_ext, filename);
+            sprintf(translated, "lib%s" DSO_EXTENSION, filename);
         else
-            sprintf(translated, "%s" DSO_ext, filename);
+            sprintf(translated, "%s" DSO_EXTENSION, filename);
     } else
         sprintf(translated, "%s", filename);
     return (translated);
