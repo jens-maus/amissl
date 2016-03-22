@@ -226,9 +226,6 @@ int main(int argc, char *argv[])
     ARGS arg;
     int first, n, i, ret = 0;
 
-    arg.data = NULL;
-    arg.count = 0;
-
     arg.argv = NULL;
     arg.size = 0;
 
