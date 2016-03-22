@@ -30,13 +30,13 @@ getsockname(int sockfd, struct sockaddr *name, socklen_t *namelen)
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_GetSockName(sockfs, name, namelen);
+				return amitcp_GetSockName(sockfd, name, namelen);
 				break;
 			case TCPIP_IN225:
-				return in225_getsockname(sockfs, name, namelen);
+				return in225_getsockname(sockfd, name, namelen);
 				break;
 			case TCPIP_Termite:
-        return termite_getsockname(sockfs, name, namelen);
+        return termite_getsockname(sockfd, name, namelen);
 				break;
 		}
 	}

@@ -635,7 +635,7 @@ void in225_ConfigureInet( ULONG, ... );
 	, state->SocketBase)
 
 #define in225_inet_ntoa(in) \
-	LP1(0xb4, char *, in225_inet_ntoa, struct, in, d1, \
+	LP1(0xb4, char *, in225_inet_ntoa, struct in_addr, in, d1, \
 	, state->SocketBase)
 
 #define in225_inherit(sp) \

@@ -19,7 +19,7 @@ inet_ntoa(struct in_addr in)
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->Inet_NtoA(in.s_addr);
-  else return -1;
+  else return NULL;
 #else
 	GETSTATE();
 
@@ -33,7 +33,7 @@ inet_ntoa(struct in_addr in)
 				return amitcp_Inet_NtoA(in.s_addr);
 				break;
 			case TCPIP_IN225:
-				return in225_inet_ntoa(in.s_addr);
+				return in225_inet_ntoa(in);
 				break;
 			case TCPIP_Termite:
         return termite_inet_ntoa(in.s_addr);
@@ -41,6 +41,6 @@ inet_ntoa(struct in_addr in)
 		}
 	}
 
-	return(-1);
+	return(NULL);
 #endif
 }
