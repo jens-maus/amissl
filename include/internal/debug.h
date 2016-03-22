@@ -82,7 +82,6 @@ void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int 
 #define E(f, s, vargs...)	   _DPRINTF(DBC_ERROR, f, __FILE__, __LINE__, s, ## vargs)
 #define W(f, s, vargs...)	   _DPRINTF(DBC_WARNING, f, __FILE__, __LINE__, s, ## vargs)
 #define TRACELINE()          _DPRINTF(DBC_DEBUG, DBF_ALWAYS, __FILE__, __LINE__, "Task: %08lx", FindTask(NULL))
-#define assert(expression)   ASSERT(expression)
 #define ASSERT(expression)      \
 	((void)                       \
 	 ((expression) ? 0 :          \
@@ -98,6 +97,7 @@ void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int 
 	  )                           \
 	 )                            \
 	)
+#define assert(expression)   ASSERT(expression)
 
 #if defined(__amigaos4__)
  #define kprintf (IExec->DebugPrintF)
