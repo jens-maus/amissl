@@ -238,7 +238,7 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU       = -m68020-60 -msoft-float
-  APPCFLAGS += -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
   CFLAGS    += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS   += -noixemul
   LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
@@ -392,7 +392,7 @@ LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # make the object directory
 $(BUILD_D):
@@ -421,7 +421,7 @@ else
 endif
 
 $(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads $(OPENSSL_MODE))
+	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 enable-rsa no-threads no-makedepend $(OPENSSL_MODE))
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
@@ -454,6 +454,11 @@ $(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o
 	@$(AR) r $@ $(BUILD_D)/libstubs.o
 	@$(RANLIB) $@
 
+$(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
+	@echo "  AR $@"
+	@$(AR) r $@ $(BUILD_D)/debug.o
+	@$(RANLIB) $@
+
 ## AMISSL TESTCASE BINARIES ##
 
 $(BUILD_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
@@ -466,7 +471,7 @@ $(BUILD_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 
 $(BUILD_D)/https: $(TEST_D)/https.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -DNO_INLINE_STDARG -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
 
 $(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
