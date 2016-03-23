@@ -125,31 +125,6 @@ long SAVEDS (BIO_debug_callback)(BIO *bio, int cmd, const char *argp, int argi, 
   return(BIO_debug_callback(bio, cmd, argp, argi, argl, ret));
 }
 
-void SAVEDS (CRYPTO_dbg_free)(void *addr, int before_p)
-{
-  CRYPTO_dbg_free(addr, before_p);
-}
-
-long SAVEDS (CRYPTO_dbg_get_options)(void)
-{
-  return(CRYPTO_dbg_get_options());
-}
-
-void SAVEDS (CRYPTO_dbg_malloc)(void *addr, int num, const char *file, int line, int before_p)
-{
-  CRYPTO_dbg_malloc(addr, num, file, line, before_p);
-}
-
-void SAVEDS (CRYPTO_dbg_realloc)(void *addr1, void *addr2, int num, const char *file, int line, int before_p)
-{
-  CRYPTO_dbg_realloc(addr1, addr2, num, file, line, before_p);
-}
-
-void SAVEDS (CRYPTO_dbg_set_options)(long bits)
-{
-  CRYPTO_dbg_set_options(bits);
-}
-
 DH * SAVEDS (DH_new)(void)
 {
   return(DH_new());
@@ -265,31 +240,6 @@ int SAVEDS (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
   return(i2d_ECPKParameters(a, out));
 }
 
-int SAVEDS (ssl_init_wbio_buffer)(SSL *s, int push)
-{
-  return(ssl_init_wbio_buffer)(s, push);
-}
-
-int SAVEDS (ssl3_setup_buffers)(SSL *s)
-{
-  return(ssl3_setup_buffers(s));
-}
-
-char * SAVEDS (BUF_strndup)(const char *str, size_t siz)
-{
-  return(BUF_strndup(str, siz));
-}
-
-int SAVEDS (dtls1_process_heartbeat)(SSL *s)
-{
-  return(dtls1_process_heartbeat(s));
-}
-
-int SAVEDS (tls1_process_heartbeat)(SSL *s)
-{
-  return(tls1_process_heartbeat(s));
-}
-
 void SAVEDS (X509_CRL_free)(X509_CRL * a)
 {
   X509_CRL_free(a);
@@ -303,71 +253,6 @@ void SAVEDS (AES_encrypt)(const unsigned char * in, unsigned char * out, const A
 void SAVEDS (GENERAL_NAMES_free)(GENERAL_NAMES * a)
 {
   GENERAL_NAMES_free(a);
-}
-
-_STACK * (sk_new_null)(void)
-{
-  return sk_new_null();
-}
-
-void (sk_free)(_STACK *st)
-{
-  sk_free(st);
-}
-
-int (sk_push)(_STACK *st, void *data)
-{
-  return sk_push(st, data);
-}
-
-int (sk_num)(const _STACK *st)
-{
-  return sk_num(st);
-}
-
-void *(sk_value)(const _STACK *st, int idx)
-{
-  return sk_value(st, idx);
-}
-
-void (sk_pop_free)(_STACK *st, void (*func) (void *))
-{
-  sk_pop_free(st, func);
-}
-
-void *(sk_shift)(_STACK *st)
-{
-  return sk_shift(st);
-}
-
-void *(sk_delete)(_STACK *st, int loc)
-{
-  return sk_delete(st, loc);
-}
-
-void (lh_node_stats_bio)(const _LHASH *lh, BIO *out)
-{
-  lh_node_stats_bio(lh, out);
-}
-
-void (lh_stats_bio)(const _LHASH *lh, BIO *out)
-{
-  lh_stats_bio(lh, out);
-}
-
-void (lh_node_usage_stats_bio)(const _LHASH *lh, BIO *out)
-{
-  lh_node_usage_stats_bio(lh, out);
-}
-
-X509 * (d2i_X509_AUX)(X509 ** a, const unsigned char ** pp, long length)
-{
-  return d2i_X509_AUX(a, pp, length);
-}
-
-X509 * (d2i_X509)(X509 ** a, const unsigned char ** in, long len)
-{
-  return d2i_X509(a, in, len);
 }
 
 int (EVP_PKEY_sign_init)(EVP_PKEY_CTX *ctx)
