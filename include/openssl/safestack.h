@@ -91,6 +91,10 @@ extern "C" {
 
 # define STACK_OF(type) struct stack_st_##type
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define SKM_DEFINE_STACK_OF(t1, t2, t3) \
+    STACK_OF(t1);
+#else
 # define SKM_DEFINE_STACK_OF(t1, t2, t3) \
     STACK_OF(t1); \
     static ossl_inline int sk_##t1##_num(const STACK_OF(t1) *sk) \
@@ -185,6 +189,7 @@ extern "C" {
     { \
         return (int (*)(const t3 * const *,const t3 * const *))sk_set_cmp_func((_STACK *)sk, (int (*)(const void *a, const void *b))cmpf); \
     }
+#endif
 
 # define DEFINE_SPECIAL_STACK_OF(t1, t2) SKM_DEFINE_STACK_OF(t1, t2, t2)
 # define DEFINE_STACK_OF(t) SKM_DEFINE_STACK_OF(t, t, t)

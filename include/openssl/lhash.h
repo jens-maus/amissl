@@ -186,6 +186,10 @@ void lh_node_usage_stats_bio(const _LHASH *lh, BIO *out);
 
 # define LHASH_OF(type) struct lhash_st_##type
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define DEFINE_LHASH_OF(type) \
+    LHASH_OF(type)
+# else
 # define DEFINE_LHASH_OF(type) \
     LHASH_OF(type) { int dummy; }; \
     static ossl_inline LHASH_OF(type) * \
@@ -245,6 +249,7 @@ void lh_node_usage_stats_bio(const _LHASH *lh, BIO *out);
         lh_doall((_LHASH *)lh, (LHASH_DOALL_FN_TYPE)doall); \
     } \
     LHASH_OF(type)
+#endif
 
 #define IMPLEMENT_LHASH_DOALL_ARG_CONST(type, argtype) \
     int_implement_lhash_doall(type, argtype, const type)
