@@ -297,6 +297,8 @@ void OPENSSL_cpuid_setup(void)
 
     GetCPUInfoTags(GCIT_Family, &family, GCIT_VectorUnit, &vec, TAG_DONE);
 
+    OPENSSL_ppccap_P = PPC_FPU;
+
     if((family == CPUFAMILY_PA6T) || (family == CPUFAMILY_E5500))
         OPENSSL_ppccap_P |= PPC_FPU64;
 
