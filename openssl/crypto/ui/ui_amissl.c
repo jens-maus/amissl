@@ -126,10 +126,14 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 #ifndef __amigaos4__
 	else if ((ReqToolsBase = OpenLibrary("reqtools.library", 38)) != NULL)
 	{
+    #ifndef __MORPHOS__
 		ret = rtGetString(buffer, max_string_len, (char *)body, NULL,
 		                  RTGS_AllowEmpty, TRUE,
 		                  RTGS_Invisible, !visible,
 		                  TAG_DONE) != 0;
+    #else
+      #warning MORPHOS support missing
+    #endif
 
 		CloseLibrary(ReqToolsBase);
 	}

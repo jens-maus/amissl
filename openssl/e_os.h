@@ -583,7 +583,9 @@ struct servent *PASCAL getservbyname(const char *, const char *);
 #   endif
 
 #   ifdef OPENSSL_SYS_AMIGA
-#    include <sys/select.h>
+#    ifndef __MORPHOS__
+#     include <sys/select.h>
+#    endif
 #   endif
 
 #   ifndef VMS

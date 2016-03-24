@@ -22,16 +22,26 @@ cp ${tmp}/include/interfaces/amisslmaster.* ../include/interfaces/
 cp ${tmp}/include/proto/amisslmaster.h ../include/proto/
 rm -rf ${tmp}
 
-# os3/m68k stuff
+# create sfd files from our xml file
 idltool -d ../include/xml/amissl.xml -o ../include/sfd
 idltool -d ../include/xml/amisslmaster.xml -o ../include/sfd
+
+# create fd files from sfd files
 sfdc --mode=fd ../include/sfd/amissl_lib.sfd -o ../include/fd/amissl_lib.fd
 sfdc --mode=fd ../include/sfd/amisslmaster_lib.sfd -o ../include/fd/amisslmaster_lib.fd
+
+# create generic proto file
+#sfdc --mode=proto ../include/sfd/amissl_lib.sfd -o ../include/proto/amissl.h
+#sfdc --mode=proto ../include/sfd/amisslmaster_lib.sfd -o ../include/proto/amisslmaster.h
+
+# os3/m68k header creation
 #sfdc --mode=clib ../include/sfd/amissl_lib.sfd -o ../include/clib/amissl_protos.h
 sfdc --mode=clib ../include/sfd/amisslmaster_lib.sfd -o ../include/clib/amisslmaster_protos.h
 sfdc --mode=macros ../include/sfd/amissl_lib.sfd -o ../include/inline/amissl.h
 sfdc --mode=macros ../include/sfd/amisslmaster_lib.sfd -o ../include/inline/amisslmaster.h
 sfdc --mode=pragmas ../include/sfd/amissl_lib.sfd -o ../include/pragmas/amissl_pragmas.h
 sfdc --mode=pragmas ../include/sfd/amisslmaster_lib.sfd -o ../include/pragmas/amisslmaster_pragmas.h
-#sfdc --mode=proto ../include/sfd/amissl_lib.sfd -o ../include/proto/amissl.h
-#sfdc --mode=proto ../include/sfd/amisslmaster_lib.sfd -o ../include/proto/amisslmaster.h
+
+# mos/ppc specific header creation
+sfdc --mode=macros --target ppc-morphos ../include/sfd/amissl_lib.sfd -o ../include/ppcinline/amissl.h
+sfdc --mode=macros --target ppc-morphos ../include/sfd/amisslmaster_lib.sfd -o ../include/ppcinline/amisslmaster.h

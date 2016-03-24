@@ -208,8 +208,6 @@ ifeq ($(OS), os4)
   LDFLAGS   += -mcrt=$(CRT)
   BASEREL   = -mbaserel
   NOBASEREL = -mno-baserel
-  CDUP      = ../
-  CDTHIS    = ./
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_library_os4.o \
                  $(BUILD_D)/amissl_glue.o \
@@ -269,10 +267,14 @@ ifeq ($(OS), mos)
   endif
 
   # Compiler/Linker flags
-  CPU     = -mcpu=powerpc
-  CFLAGS  += -noixemul -I./include/netinclude
-  LDFLAGS += -noixemul
-  LDLIBS  +=
+  CPU       = -mcpu=powerpc -mstrict-align
+  APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__MORPHOS__
+  CFLAGS    += -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
+  LDFLAGS   += -noixemul
+  LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
+  BASEREL   = -mbaserel
+  NOBASEREL = #-mno-baserel
+  BRELLIB   = -mrestore-a4
   GCCVER  = 2
 
 else

@@ -2,7 +2,7 @@
 #define LIBCMT_H
 
 #include <stdio.h>
-#include <dos.h>
+#include <proto/dos.h>
 #include <proto/exec.h>
 
 #include <internal/amissl.h>

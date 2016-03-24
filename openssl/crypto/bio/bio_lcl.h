@@ -71,6 +71,10 @@ union bio_addr_st {
 # ifdef OPENSSL_SYS_VMS
 typedef unsigned int socklen_t;
 # endif
+# if defined(OPENSSL_SYS_AMIGA) && defined(__MORPHOS__)
+typedef unsigned long socklen_t;
+typedef unsigned long in_addr_t;
+# endif
 
 int BIO_ADDR_make(BIO_ADDR *ap, const struct sockaddr *sa);
 const struct sockaddr *BIO_ADDR_sockaddr(const BIO_ADDR *ap);
