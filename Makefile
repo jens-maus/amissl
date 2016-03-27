@@ -113,6 +113,8 @@ CP      = copy
 CC      = gcc
 STRIP   = strip
 OBJDUMP = objdump
+AR      = ar
+RANLIB  = ranlib
 
 # path definitions
 CDUP  = /
@@ -192,12 +194,12 @@ ifeq ($(OS), os4)
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS4)
     CROSS_PREFIX = ppc-amigaos-
-    CC      = $(CROSS_PREFIX)gcc-4.0.4
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
+  CC      = $(CROSS_PREFIX)gcc-4.0.4
+  STRIP   = $(CROSS_PREFIX)strip
+  OBJDUMP = $(CROSS_PREFIX)objdump
+  AR      = $(CROSS_PREFIX)ar
+  RANLIB  = $(CROSS_PREFIX)ranlib
 
   # Compiler/Linker flags
   CRT       = clib2
