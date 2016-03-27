@@ -2,6 +2,9 @@
 #include <proto/exec.h>
 #include <proto/dos.h>
 #include <proto/locale.h>
+#if defined(__amigaos4__)
+#include <proto/timezone.h>
+#endif
 
 #include "libcmt.h"
 
@@ -21,6 +24,29 @@ struct SignalSemaphore __mem_cs;
 void *__mem_pool = NULL;
 ULONG __clock_base = 0;
 LONG __gmt_offset = 0;
+
+#if defined(__amigaos4__)
+static int timezone_get_offset(void)
+{
+  struct Library *TimezoneBase;
+  struct TimezoneIFace *ITimezone = NULL;
+
+  if ((TimezoneBase = OpenLibrary("timezone.library", 52)))
+  {
+    if ((ITimezone = (struct TimezoneIFace *)GetInterface(TimezoneBase,"main",1,NULL)))
+    {
+      GetTimezoneAttrs(NULL,TZA_UTCOffset,&__gmt_offset,TAG_DONE);
+      SHOWVALUE(DBF_STARTUP, __gmt_offset);
+      DropInterface((struct Interface *)ITimezone);
+    }
+    CloseLibrary(TimezoneBase);
+  }
+
+  return (ITimezone != NULL);
+}
+#else
+#define timezone_get_offset() 0
+#endif
 
 void __init_libcmt(void)
 {
@@ -61,15 +87,17 @@ void __init_libcmt(void)
     struct Locale *locale;
     struct DateStamp ds;
 
-    if((locale = OpenLocale(NULL)) != NULL)
+    if (!timezone_get_offset())
     {
-      __gmt_offset = locale->loc_GMTOffset;
-      SHOWVALUE(DBF_STARTUP, __gmt_offset);
-      CloseLocale(locale);
+      if ((locale = OpenLocale(NULL)) != NULL)
+      {
+        __gmt_offset = locale->loc_GMTOffset;
+        SHOWVALUE(DBF_STARTUP, __gmt_offset);
+        CloseLocale(locale);
+      }
+      else
+        E(DBF_STARTUP, "ERROR on OpenLocale()");
     }
-    else
-      E(DBF_STARTUP, "ERROR on OpenLocale()");
-
     DateStamp(&ds);
 
     __clock_base = ((ULONG)ds.ds_Tick + TICKS_PER_SECOND * 60 * ((ULONG)ds.ds_Minute + 24 * 60 * (ULONG)ds.ds_Days))
