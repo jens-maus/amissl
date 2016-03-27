@@ -272,7 +272,7 @@ ifeq ($(OS), mos)
   CFLAGS    += -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
   LDFLAGS   += -noixemul
   LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
-  BASEREL   = -mbaserel
+  BASEREL   = -mbaserel32
   NOBASEREL = #-mno-baserel
   BRELLIB   = -mrestore-a4
   GCCVER  = 2
