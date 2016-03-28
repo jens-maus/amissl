@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args);
-
 struct iob ** __iob = NULL;
 
 int fprintf(UNUSED FILE *stream, const char *format, ...)
@@ -16,7 +14,7 @@ int fprintf(UNUSED FILE *stream, const char *format, ...)
   char error[512];
 
   va_start(ap, format);
-  BIO_vsnprintf(error, sizeof(error), format, ap);
+  vsnprintf(error, sizeof(error), format, ap);
   va_end(ap);
 
   ErrReq.es_StructSize   = sizeof(struct EasyStruct);

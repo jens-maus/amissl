@@ -4,17 +4,14 @@
 #define __NOLIBBASE__
 #define __NOGLOBALIFACE__
 #include <proto/exec.h>
+#include <proto/intuition.h>
 #include <proto/amisslmaster.h>
-
-//
 
 #include "amisslmaster_lib_protos.h"
 
-//
-
 #include "amisslinit.h"
 
-//#define DEBUG
+#include <internal/SDI_lib.h>
 #include <internal/debug.h>
 
 #ifdef __amigaos4__
@@ -33,9 +30,12 @@ struct AmiSSLIFace * IAmiSSL = NULL;
 #endif
 
 #if defined(__amigaos4__)
+struct Library *IntuitionBase = NULL;
+struct IntuitionIFace *IIntuition = NULL;
 extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
+struct IntuitionBase *IntuitionBase = NULL;
 extern struct ExecBase *SysBase;
 #endif
 
@@ -45,14 +45,6 @@ LONG LibUsesOpenSSLStructs = 0;
 struct SignalSemaphore AmiSSLMasterLock;
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
-
-#if defined(__amigaos4__)
-// define IIntuition and BIO_vsnprintf so that
-// the build doesn't complain about missing symbols in fprintf()
-#warning TODO: Why is this required?
-APTR IIntuition = NULL;
-APTR BIO_vsnprintf = NULL;
-#endif
 
 // on AmigaOS3 we use the restore_a4 feature set of the GCC to actually
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
@@ -423,6 +415,20 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
     FlushLib(CASTBase);
     FlushLib(BlowFishBase);
   }
+
+#if defined(__amigaos4__)
+  if(IIntuition != NULL)
+  {
+    DropInterface((struct Interface *)IIntuition);
+    IIntuition = NULL;
+  }
+#endif
+
+  if(IntuitionBase != NULL)
+  {
+    CloseLibrary((struct Library *)IntuitionBase);
+    IntuitionBase = NULL;
+  }
 }
 
 LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
@@ -432,10 +438,27 @@ LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 {
+  int err = 1; // Assume error condition
+
   ENTER();
 
   InitSemaphore(&AmiSSLMasterLock);
 
-  RETURN(0);
-  return(0);
+#if defined(__amigaos4__)
+  if((IntuitionBase = OpenLibrary("intuition.library", 50)) != NULL
+     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL) != NULL))
+#else
+  if((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL)
+#endif
+  {
+    err = 0;
+  }
+
+  D(DBF_STARTUP, "Userlib err: %d %08lx", err, SysBase);
+
+  if(err != 0)
+    CALL_LFUNC_NP(__UserLibCleanup);
+
+  RETURN(err);
+  return(err);
 }
