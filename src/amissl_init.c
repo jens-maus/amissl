@@ -114,11 +114,6 @@ ULONG closeBase(UNUSED struct LibraryHeader *lib)
   SHOWPOINTER(DBF_STARTUP, IDOS);
   #endif
 
-  // we call OPENSSL_cleanup to clean everything for the
-  // current instance.
-  //OPENSSL_cleanup();
-  #warning where to call OPENSSL_cleanup()? here it crashes!
-
   RETURN(TRUE);
   return TRUE;
 }

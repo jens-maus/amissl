@@ -378,6 +378,10 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
 {
   TRACELINE();
 
+  // we call OPENSSL_cleanup to clean everything for the
+  // current instance.
+  OPENSSL_cleanup();
+
   if(libBase->parent->thread_hash)
   {
     D(DBF_STARTUP, "Performing unfreed states cleanup for %08lx (group %lu)", FindTask(NULL), libBase->ThreadGroupID);
