@@ -78,11 +78,11 @@ int main(int argc, char *argv[])
 		SSL_load_error_strings();
 
 		/* Note: BIO writing routines are prepared for NULL BIO handle */
-		if (bio_err = BIO_new(BIO_s_file()))
+		if((bio_err = BIO_new(BIO_s_file())) != NULL)
 			BIO_set_fp_amiga(bio_err, GetStdErr(), BIO_NOCLOSE | BIO_FP_TEXT);
 
 		/* Get a new SSL context */
-		if (ctx = SSL_CTX_new(SSLv23_client_method()))
+		if((ctx = SSL_CTX_new(SSLv23_client_method())) != NULL)
 		{
 			/* Basic certificate handling. OpenSSL documentation has more
 			 * information on this.
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 			                   NULL);
 
 			/* The following needs to be done once per socket */
-			if (ssl = SSL_new(ctx))
+			if((ssl = SSL_new(ctx)) != NULL)
 			{
 				int sock;
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 					sock = ConnectToServer(argv[1], atol(argv[2]), argv[3],
 					                       atol(argv[4]));
 				else
-					sock = ConnectToServer(argv[1] ? argv[1] : "127.0.0.1",
+					sock = ConnectToServer(argv[1] ? argv[1] : (char *)"127.0.0.1",
 					                       argc > 2 ? atol(argv[2]) : 443,
 					                       NULL, 0);
 
@@ -133,8 +133,8 @@ int main(int argc, char *argv[])
 							else
 								FPrintf(GetStdErr(), "Warning: couldn't read subject name in certificate!\n");
 
-							if (str = X509_NAME_oneline(X509_get_issuer_name(server_cert),
-							                            0, 0))
+							if((str = X509_NAME_oneline(X509_get_issuer_name(server_cert),
+							                            0, 0)) != NULL)
 							{
 								Printf("\tIssuer: %s\n", str);
 								OPENSSL_free(str);

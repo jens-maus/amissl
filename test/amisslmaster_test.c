@@ -44,8 +44,8 @@ int main(void)
 	struct Library *base1;
 	struct Library *base2;
   #if defined(__amigaos4__)
-  struct AmiSSLMasterIFace *ibase1;
-  struct AmiSSLMasterIFace *ibase2;
+  struct AmiSSLMasterIFace *ibase1 = NULL;
+  struct AmiSSLMasterIFace *ibase2 = NULL;
   #endif
 
 	printf("multi base test\n");

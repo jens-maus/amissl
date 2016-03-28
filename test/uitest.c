@@ -84,7 +84,7 @@ int main(void)
 
 	printf("Testing UI with default UI method:\n");
 
-	if (ui = UI_new())
+	if((ui = UI_new()) != NULL)
 	{
 		TestUI(ui);
 		UI_free(ui);
@@ -94,9 +94,9 @@ int main(void)
 
 	printf("Testing UI with UI method with wrappers:\n");
 
-	if (ui_method = UI_create_method("Test method"))
+	if((ui_method = UI_create_method((char *)"Test method")) != NULL)
 	{
-		if (ui = UI_new_method(ui_method))
+		if((ui = UI_new_method(ui_method)) != NULL)
 		{
 			UI_method_set_opener(ui_method, ui_open);
 			UI_method_set_reader(ui_method, ui_read);

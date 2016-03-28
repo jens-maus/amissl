@@ -9,7 +9,7 @@
 #include <openssl/err.h>
 
 
-int main(int argc, char *argv[])
+int main(int argc UNUSED, char **argv UNUSED)
 {
 	BIO *out;
 	double floatval = 3.3;
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	BIO_vsnprintf(buffer,16,"Test %s of %d in %f",arglist);
 	printf("Buffer: >>%s<<\n",buffer);
 
-	if (out = BIO_new(BIO_s_file()))
+	if((out = BIO_new(BIO_s_file())) != NULL)
 	{
 		BIO_set_fp_amiga(out, Output(), BIO_NOCLOSE | BIO_FP_TEXT);
 		BIO_vprintf(out,"Test %s of %d in %f\n",arglist);
@@ -46,4 +46,6 @@ int main(int argc, char *argv[])
 		ERR_print_errors(out);
 		BIO_free(out);
 	}
+
+  return 0;
 }
