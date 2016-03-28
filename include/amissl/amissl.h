@@ -11,8 +11,7 @@
 #endif
 
 #ifdef __SASC
-#define ossl_ssize_t int
-#define OPENSSL_NO_SHA512 // uses long long, which SAS/C doesn't have
+#define ssize_t int
 #endif
 
 #include <openssl/opensslconf.h>

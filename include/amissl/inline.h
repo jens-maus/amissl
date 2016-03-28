@@ -23,7 +23,6 @@
 
 # undef SKM_DEFINE_STACK_OF
 # define SKM_DEFINE_STACK_OF(t1, t2, t3) \
-    STACK_OF(t1); \
     static ossl_inline int sk_##t1##_num(const STACK_OF(t1) *sk) \
     { \
         return sk_num((_STACK *)sk); \
@@ -185,7 +184,6 @@ DEFINE_SPECIAL_STACK_OF(OPENSSL_BLOCK, void)
 
 # undef DEFINE_LHASH_OF
 # define DEFINE_LHASH_OF(type) \
-    LHASH_OF(type) { int dummy; }; \
     static ossl_inline LHASH_OF(type) * \
         lh_##type##_new(unsigned long (*hfn)(const type *), \
                         int (*cfn)(const type *, const type *)) \
@@ -241,11 +239,10 @@ DEFINE_SPECIAL_STACK_OF(OPENSSL_BLOCK, void)
                                          void (*doall)(type *)) \
     { \
         lh_doall((_LHASH *)lh, (LHASH_DOALL_FN_TYPE)doall); \
-    } \
-    LHASH_OF(type)
+    }
 
-DEFINE_LHASH_OF(CONF_VALUE);
-DEFINE_LHASH_OF(ERR_STRING_DATA);
-DEFINE_LHASH_OF(OPENSSL_CSTRING);
+DEFINE_LHASH_OF(CONF_VALUE)
+DEFINE_LHASH_OF(ERR_STRING_DATA)
+DEFINE_LHASH_OF(OPENSSL_CSTRING)
 
 #endif
