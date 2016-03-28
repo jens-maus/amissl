@@ -4,6 +4,7 @@
 #include "ui_locl.h"
 
 #include <stdio.h> /* for BUFSIZ */
+#include <string.h>
 
 #include <proto/exec.h>
 #include <proto/intuition.h>
