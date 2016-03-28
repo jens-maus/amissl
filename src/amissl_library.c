@@ -362,14 +362,6 @@ LIBPROTOVA(CleanupAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 }
 #endif
 
-#warning AmiSSLAbort() not required?
-#if 0
-void AmiSSLAbort(void)
-{
-  OpenSSLDie("unknown", 0, "abort() or similar function called");
-}
-#endif
-
 void openlog(void) {}
 void closelog(void) {}
 void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
