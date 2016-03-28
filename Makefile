@@ -110,11 +110,11 @@ MKDIR   = mkdir -p #makedir force
 CHMOD   = protect FLAGS=rwed
 SED     = sed
 CP      = copy
-CC      = gcc
-STRIP   = strip
-OBJDUMP = objdump
-AR      = ar
-RANLIB  = ranlib
+CC      = $(CROSS_PREFIX)gcc
+STRIP   = $(CROSS_PREFIX)strip
+OBJDUMP = $(CROSS_PREFIX)objdump
+AR      = $(CROSS_PREFIX)ar
+RANLIB  = $(CROSS_PREFIX)ranlib
 
 # path definitions
 CDUP  = /
@@ -195,11 +195,10 @@ ifeq ($(OS), os4)
   ifneq ($(HOST), AmigaOS4)
     CROSS_PREFIX = ppc-amigaos-
   endif
-  CC      = $(CROSS_PREFIX)gcc-4.0.4
-  STRIP   = $(CROSS_PREFIX)strip
-  OBJDUMP = $(CROSS_PREFIX)objdump
-  AR      = $(CROSS_PREFIX)ar
-  RANLIB  = $(CROSS_PREFIX)ranlib
+
+  # force to use GCC 4.0.4 which is the only latest GCC version with
+  # working baserel support.
+  CC = $(CROSS_PREFIX)gcc-4.0.4
 
   # Compiler/Linker flags
   CRT       = clib2
@@ -229,11 +228,6 @@ ifeq ($(OS), os3)
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS)
     CROSS_PREFIX = m68k-amigaos-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -261,11 +255,6 @@ ifeq ($(OS), mos)
   # Compiler/link/strip commands
   ifneq ($(HOST), MorphOS)
     CROSS_PREFIX = ppc-morphos-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -290,11 +279,6 @@ ifeq ($(OS), aros-i386)
 
   ifneq ($(HOST), AROS)
     CROSS_PREFIX = i386-aros-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -312,11 +296,6 @@ ifeq ($(OS), aros-ppc)
 
   ifneq ($(HOST), AROS)
     CROSS_PREFIX = ppc-aros-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -334,11 +313,6 @@ ifeq ($(OS), aros-x86_64)
 
   ifneq ($(HOST), AROS)
     CROSS_PREFIX = x86_64-aros-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
@@ -356,11 +330,6 @@ ifeq ($(OS), aros-arm)
 
   ifneq ($(HOST), AROS)
     CROSS_PREFIX = arm-aros-
-    CC      = $(CROSS_PREFIX)gcc
-    STRIP   = $(CROSS_PREFIX)strip
-    OBJDUMP = $(CROSS_PREFIX)objdump
-    AR      = $(CROSS_PREFIX)ar
-    RANLIB  = $(CROSS_PREFIX)ranlib
   endif
 
   # Compiler/Linker flags
