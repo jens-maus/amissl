@@ -287,7 +287,7 @@ extern "C" {
 
 # ifndef ossl_ssize_t
 #  define ossl_ssize_t ssize_t
-#  if defined(OPENSSL_SYS_AMIGA) && defined(__MORPHOS__)
+#  if defined(OPENSSL_SYS_AMIGA) && (defined(__MORPHOS__) || defined(__SASC))
 #   define OSSL_SSIZE_MAX INT_MAX
 #  else
 #   define OSSL_SSIZE_MAX SSIZE_MAX
