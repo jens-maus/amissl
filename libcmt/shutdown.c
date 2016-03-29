@@ -13,14 +13,11 @@
 
 #include "libcmt.h"
 
-long
-shutdown(
-	 long s,
-	 long how)
+int shutdown(int sockfd, int how)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->shutdown(s,how);
+  if(ISocket) return ISocket->shutdown(sockfd, how);
   else return -1;
 #else
 	GETSTATE();
@@ -32,13 +29,13 @@ shutdown(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_Shutdown(s, how);
+				return amitcp_Shutdown(sockfd, how);
 				break;
 			case TCPIP_IN225:
-				return in225_shutdown(s, how);
+				return in225_shutdown(sockfd, how);
 				break;
 			case TCPIP_Termite:
-				return termite_shutdown(s, how);
+				return termite_shutdown(sockfd, how);
 				break;
 		}
 	}

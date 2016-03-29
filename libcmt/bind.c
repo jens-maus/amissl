@@ -13,15 +13,11 @@
 
 #include "libcmt.h"
 
-long
-bind(
-     long s,
-     const struct sockaddr *name,
-     long namelen)
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->bind(s,(struct sockaddr *)name,namelen);
+  if(ISocket) return ISocket->bind(sockfd, (struct sockaddr *)addr, addrlen);
   else return -1;
 #else
 	GETSTATE();
@@ -33,13 +29,13 @@ bind(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_Bind(s,name,namelen);
+				return amitcp_Bind(sockfd, addr, addrlen);
 				break;
 			case TCPIP_IN225:
-				return in225_bind(s,(struct sockaddr *)name,namelen);
+				return in225_bind(sockfd, (struct sockaddr *)addr, addrlen);
 				break;
 			case TCPIP_Termite:
-				return termite_bind(s,(char *)name,namelen);
+				return termite_bind(sockfd, (char *)addr, addrlen);
 				break;
 		}
 	}

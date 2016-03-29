@@ -13,14 +13,11 @@
 
 #include "libcmt.h"
 
-long
-listen(
-       long s,
-       long backlog)
+int listen(int sockfd, int backlog)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->listen(s,backlog);
+  if(ISocket) return ISocket->listen(sockfd, backlog);
   else return -1;
 #else
 	GETSTATE();
@@ -32,13 +29,13 @@ listen(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_Listen(s,backlog);
+				return amitcp_Listen(sockfd, backlog);
 				break;
 			case TCPIP_IN225:
-				return in225_listen(s,backlog);
+				return in225_listen(sockfd, backlog);
 				break;
 			case TCPIP_Termite:
-				return termite_listen(s,backlog);
+				return termite_listen(sockfd, backlog);
 				break;
 		}
 	}

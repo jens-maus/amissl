@@ -446,7 +446,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 
 #if defined(__amigaos4__)
   if((IntuitionBase = OpenLibrary("intuition.library", 50)) != NULL
-     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL) != NULL))
+     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL)) != NULL)
 #else
   if((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL)
 #endif

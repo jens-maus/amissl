@@ -13,7 +13,7 @@ typedef ULONG _sfdc_vararg;
 #endif /* _SFDC_VARARG_DEFINED */
 
 #ifndef __INLINE_MACROS_H
-#include <ppcinline/macros.h>
+#include <inline/macros.h>
 #endif /* !__INLINE_MACROS_H */
 
 #ifndef AMISSL_BASE_NAME
@@ -7886,7 +7886,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define string_to_hex(___str, ___len) \
-	LP2(0x341a, unsigned char *, string_to_hex, char *, ___str, a0, long *, ___len, a1,\
+	LP2(0x341a, unsigned char *, string_to_hex, const char *, ___str, a0, long *, ___len, a1,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define name_cmp(___name, ___cmp) \
@@ -11946,7 +11946,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_PKEY_get0_asn1(___pkey) \
-	LP1(0x5256, const EVP_PKEY_ASN1_METHOD *, EVP_PKEY_get0_asn1, const EVP_PKEY *, ___pkey, a0,\
+	LP1(0x5256, const EVP_PKEY_ASN1_METHOD *, EVP_PKEY_get0_asn1, EVP_PKEY *, ___pkey, a0,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_PKEY_verify_recover_init(___ctx) \
@@ -14287,7 +14287,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define BN_nist_mod_func(___p) \
-	LP1(0x60ea, BIGNUM *, BN_nist_mod_func, const BIGNUM *, ___p, a0,\
+	LP1(0x60ea, int (*)(BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *), BN_nist_mod_func, const BIGNUM *, ___p, a0,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define BN_secure_new() \
@@ -14363,7 +14363,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define CRYPTO_secure_malloc(___num, ___file, ___line) \
-	LP3(0x615c, int, CRYPTO_secure_malloc, size_t, ___num, d0, const char *, ___file, a0, int, ___line, d1,\
+	LP3(0x615c, void *, CRYPTO_secure_malloc, size_t, ___num, d0, const char *, ___file, a0, int, ___line, d1,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define CRYPTO_secure_malloc_done() \
@@ -14491,7 +14491,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EC_KEY_METHOD_get_init(___meth, ___pinit, ___pfinish, ___pcopy, ___pset_group, ___pset_private, ___pset_public) \
-	LP7NR(0x6222, EC_KEY_METHOD_get_init, EC_KEY_METHOD *, ___meth, a0, int (*)(EC_KEY *), ___pinit, a1, int (*)(EC_KEY *), ___pfinish, a2, int (*)(EC_KEY *,const EC_KEY *), ___pcopy, a3, int (*)(EC_KEY *,const EC_GROUP *), ___pset_group, d0, int (*)(EC_KEY *,const BIGNUM *), ___pset_private, d1, int (*)(EC_KEY *,const EC_POINT *), ___pset_public, d2,\
+	LP7NR(0x6222, EC_KEY_METHOD_get_init, EC_KEY_METHOD *, ___meth, a0, int (*)(EC_KEY *), ___pinit, a1, void (*)(EC_KEY *), ___pfinish, a2, int (*)(EC_KEY *,const EC_KEY *), ___pcopy, a3, int (*)(EC_KEY *,const EC_GROUP *), ___pset_group, d0, int (*)(EC_KEY *,const BIGNUM *), ___pset_private, d1, int (*)(EC_KEY *,const EC_POINT *), ___pset_public, d2,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EC_KEY_METHOD_get_keygen(___meth, ___pkeygen) \
@@ -14515,7 +14515,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EC_KEY_METHOD_set_init(___meth, ___init, ___finish, ___copy, ___set_group, ___set_private, ___set_public) \
-	LP7NR(0x6246, EC_KEY_METHOD_set_init, EC_KEY_METHOD *, ___meth, a0, int (*)(EC_KEY *), ___init, a1, int (*)(EC_KEY *), ___finish, a2, int (*)(EC_KEY *,const EC_KEY *), ___copy, a3, int (*)(EC_KEY *,const EC_GROUP *), ___set_group, d0, int (*)(EC_KEY *,const BIGNUM *), ___set_private, d1, int (*)(EC_KEY *,const EC_POINT *), ___set_public, d2,\
+	LP7NR(0x6246, EC_KEY_METHOD_set_init, EC_KEY_METHOD *, ___meth, a0, int (*)(EC_KEY *), ___init, a1, void (*)(EC_KEY *), ___finish, a2, int (*)(EC_KEY *,const EC_KEY *), ___copy, a3, int (*)(EC_KEY *,const EC_GROUP *), ___set_group, d0, int (*)(EC_KEY *,const BIGNUM *), ___set_private, d1, int (*)(EC_KEY *,const EC_POINT *), ___set_public, d2,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EC_KEY_METHOD_set_keygen(___meth, ___keygen) \
@@ -14823,7 +14823,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_MD_meth_get_cleanup(___md) \
-	LP1(0x6414, int, EVP_MD_meth_get_cleanup, const EVP_MD *, ___md, a0,\
+	LP1(0x6414, int (*)(EVP_MD_CTX *), EVP_MD_meth_get_cleanup, const EVP_MD *, ___md, a0,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_MD_meth_get_copy(___md) \
@@ -14939,7 +14939,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_PKEY_meth_get_ctrl(___pmeth, ___pctrl, ___pctrl_str) \
-	LP3NR(0x64c2, EVP_PKEY_meth_get_ctrl, EVP_PKEY_METHOD *, ___pmeth, a0, int (*)(EVP_PKEY_CTX *), ___pctrl, a1, int (*)(EVP_PKEY_CTX *,const char *,const char *), ___pctrl_str, a2,\
+	LP3NR(0x64c2, EVP_PKEY_meth_get_ctrl, EVP_PKEY_METHOD *, ___pmeth, a0, int (*)(EVP_PKEY_CTX *,int,int,void *), ___pctrl, a1, int (*)(EVP_PKEY_CTX *,const char *,const char *), ___pctrl_str, a2,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define EVP_PKEY_meth_get_decrypt(___pmeth, ___pdecrypt_init, ___pdecrypt) \
@@ -15607,7 +15607,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define SSL_get0_dane_tlsa(___s, ___usage, ___selector, ___mtype, ___data, ___dlen) \
-	LP6(0x68b2, int, SSL_get0_dane_tlsa, SSL *, ___s, a0, uint8_t *, ___usage, a1, uint8_t *, ___selector, a2, uint8_t *, ___mtype, a3, unsigned char **, ___data, d0, size_t *, ___dlen, d1,\
+	LP6(0x68b2, int, SSL_get0_dane_tlsa, SSL *, ___s, a0, uint8_t *, ___usage, a1, uint8_t *, ___selector, a2, uint8_t *, ___mtype, a3, unsigned const char **, ___data, d0, size_t *, ___dlen, d1,\
 	, AMISSL_BASE_NAME, IF_CACHEFLUSHALL, NULL, 0, IF_CACHEFLUSHALL, NULL, 0)
 
 #define SSL_get0_peername(___s) \

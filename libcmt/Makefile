@@ -202,7 +202,10 @@ NWLIBOBJS = $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/getuid.o \
             $(BUILD_D)/sendto.o \
-            $(BUILD_D)/recvfrom.o
+            $(BUILD_D)/recvfrom.o \
+            $(BUILD_D)/openlog.o \
+            $(BUILD_D)/closelog.o \
+            $(BUILD_D)/syslog.o
 
 LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(BUILD_D)/threadhash.o $(NWLIBOBJS) $(BUILD_D)/localtime.o $(BUILD_D)/libcmt.o
 

@@ -119,7 +119,7 @@ LONG amitcp_RecvFrom(LONG s, void *buf, LONG len, LONG flags, struct sockaddr *f
 LONG amitcp_RecvMsg(LONG s, struct msghdr * msg, LONG flags);	/* V3 */
 LONG amitcp_Shutdown(LONG s, LONG how);
 LONG amitcp_SetSockOpt(LONG s, LONG level, LONG optname, const void *optval, LONG optlen);
-LONG amitcp_GetSockOpt(LONG s, LONG level, LONG optname, void *optval, int *optlen);
+LONG amitcp_GetSockOpt(LONG s, LONG level, LONG optname, void *optval, socklen_t *optlen);
 LONG amitcp_GetSockName(LONG s, struct sockaddr *name, socklen_t *namelen);
 LONG amitcp_GetPeerName(LONG s, struct sockaddr *name, LONG *namelen);
 
@@ -248,7 +248,7 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 	, state->SocketBase)
 
 #define amitcp_GetSockOpt(sock, level, optname, optval, optlen) \
-	LP5(0x60, LONG, amitcp_GetSockOpt, LONG, sock, d0, LONG, level, d1, LONG, optname, d2, void *, optval, a0, int *, optlen, a1, \
+	LP5(0x60, LONG, amitcp_GetSockOpt, LONG, sock, d0, LONG, level, d1, LONG, optname, d2, void *, optval, a0, socklen_t *, optlen, a1, \
 	, state->SocketBase)
 
 #define amitcp_GetSocketEvents(eventmaskp) \
@@ -370,7 +370,7 @@ void amitcp_Syslog(ULONG pri, const char *fmt, ...);
 #define u_long ULONG
 #endif
 
-int in225_accept (int, struct sockaddr *, int *);
+int in225_accept (int, struct sockaddr *, socklen_t *);
 int in225_bind (int, struct sockaddr *, int );
 void in225_cleanup_sockets ( void ) ;
 int in225_connect (int, struct sockaddr *, int);
@@ -403,7 +403,7 @@ struct servent *in225_getservent ( void );
 struct servent *in225_getservbyname ( char *, char * );
 struct servent *in225_getservbyport ( u_short, char * );
 int in225_getsockname ( int, struct sockaddr *, socklen_t * );
-int in225_getsockopt ( int, int, int, char *, int * );
+int in225_getsockopt ( int, int, int, char *, socklen_t * );
 uid_t in225_getuid (void);
 mode_t in225_getumask (void);
 short in225_get_tz(void);
@@ -417,7 +417,7 @@ char *in225_inet_ntoa ( struct in_addr );
 int in225_listen (int , int);
 int in225_rcmd( char **, u_short, char *, char *, char *, int *);
 int in225_recv(int, char *, int, int );
-int in225_recvfrom( int, char *, int, int, struct sockaddr *, int *);
+int in225_recvfrom( int, char *, int, int, struct sockaddr *, socklen_t *);
 int in225_recvmsg(int, struct msghdr *, int );
 int in225_s_close (int);
 STRPTR in225_s_crypt (STRPTR, STRPTR, STRPTR);
@@ -463,7 +463,7 @@ void in225_ConfigureInetA( struct TagItem * );
 void in225_ConfigureInet( ULONG, ... );
 
 #define in225_accept(sock, name, lenp) \
-	LP3(0xba, int, in225_accept, int, sock, d0, struct sockaddr *, name, a0, int *, lenp, a1, \
+	LP3(0xba, int, in225_accept, int, sock, d0, struct sockaddr *, name, a0, socklen_t *, lenp, a1, \
 	, state->SocketBase)
 
 #define in225_bind(sock, name, namelen) \
@@ -603,7 +603,7 @@ void in225_ConfigureInet( ULONG, ... );
 	, state->SocketBase)
 
 #define in225_getsockopt(sock, level, optname, optval, optlenp) \
-	LP5(0x114, int, in225_getsockopt, int, sock, d0, int, level, d1, int, optname, d2, char *, optval, a0, int *, optlenp, a1, \
+	LP5(0x114, int, in225_getsockopt, int, sock, d0, int, level, d1, int, optname, d2, char *, optval, a0, socklen_t *, optlenp, a1, \
 	, state->SocketBase)
 
 #define in225_getuid() \
@@ -663,7 +663,7 @@ void in225_ConfigureInet( ULONG, ... );
 	, state->SocketBase)
 
 #define in225_recvfrom(sock, buf, len, flags, from, fromlen) \
-	LP6(0xde, int, in225_recvfrom, int, sock, d0, char *, buf, a0, int, len, d1, int, flags, d2, struct sockaddr *, from, a1, int *, fromlen, a2, \
+	LP6(0xde, int, in225_recvfrom, int, sock, d0, char *, buf, a0, int, len, d1, int, flags, d2, struct sockaddr *, from, a1, socklen_t *, fromlen, a2, \
 	, state->SocketBase)
 
 #define in225_recvmsg(sock, msg, flags) \
@@ -747,7 +747,7 @@ void in225_ConfigureInet( ULONG, ... );
 int termite_accept(
         int                   Socket,
         struct sockaddr      *Addr,
-        int                  *AddrLen);
+        socklen_t            *AddrLen);
 int termite_bind(
         int                   Socket,
         char                 *Name,
@@ -841,7 +841,7 @@ int termite_shutdown(int s, int how);
 	, state->SocketBase)
 
 #define termite_accept(__pD0, __pA0, __pA1) \
-	LP3(0x1e, int, accept, int, __pD0, d0, struct sockaddr      *, __pA0, a0, int                  *, __pA1, a1, \
+	LP3(0x1e, int, accept, int, __pD0, d0, struct sockaddr      *, __pA0, a0, socklen_t *, __pA1, a1, \
 	, state->SocketBase)
 
 #define termite_bind(__pD0, __pA0, __pD1) \
@@ -901,7 +901,7 @@ int termite_shutdown(int s, int how);
 	, state->SocketBase)
 
 #define termite_recvfrom(__pD0, __pA0, __pD1, __pD2, __pA1, __pA2) \
-	LP6(0x84, int, recvfrom, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, struct sockaddr *, __pA1, a1, int                  *, __pA2, a2, \
+	LP6(0x84, int, recvfrom, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, struct sockaddr *, __pA1, a1, socklen_t *, __pA2, a2, \
 	, state->SocketBase)
 
 #define termite_send(__pD0, __pA0, __pD1, __pD2) \
@@ -909,7 +909,7 @@ int termite_shutdown(int s, int how);
 	, state->SocketBase)
 
 #define termite_sendto(__pD0, __pA0, __pD1, __pD2, __pA1, __pD3) \
-	LP6(0x90, int, sendto, int, __pD0, d0, char                 *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, char                 *, __pA1, a1, int, __pD3, d3, \
+	LP6(0x90, int, sendto, int, __pD0, d0, const void *, __pA0, a0, int, __pD1, d1, int, __pD2, d2, const struct sockaddr *, __pA1, a1, socklen_t, __pD3, d3, \
 	, state->SocketBase)
 
 #define termite_setsockopt(__pD0, __pD1, __pD2, __pA0, __pD3) \

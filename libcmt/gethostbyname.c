@@ -13,9 +13,7 @@
 
 #include "libcmt.h"
 
-struct hostent *
-gethostbyname(
-	      const unsigned char *name)
+struct hostent *gethostbyname(const char *name)
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // h_errno isn't used by openssl
@@ -40,7 +38,7 @@ gethostbyname(
 				return amitcp_GetHostByName(name);
 				break;
 			case TCPIP_IN225:
-				return in225_gethostbyname((char *)name);
+				return in225_gethostbyname(name);
 				break;
 			case TCPIP_Termite:
 				return termite_gethostbyname((char *)name);

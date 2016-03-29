@@ -13,14 +13,11 @@
 
 #include "libcmt.h"
 
-struct servent *
-getservbyname(
-	      const unsigned char *name,
-	      const unsigned char *proto)
+struct servent *getservbyname(const char *name, const char *proto)
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // openssl does not care about the error code for getservbyname
-  if(ISocket) return ISocket->getservbyname((char *)name,(char *)proto);
+  if(ISocket) return ISocket->getservbyname((char *)name, (char *)proto);
   else return NULL;
 #else
 	GETSTATE();
@@ -41,7 +38,7 @@ getservbyname(
 				return amitcp_GetServByName(name, proto);
 				break;
 			case TCPIP_IN225:
-				return in225_getservbyname((char *)name, (char *)proto);
+				return in225_getservbyname(name, proto);
 				break;
 			case TCPIP_Termite:
 				return termite_getservbyname((char *)name, (char *)proto);

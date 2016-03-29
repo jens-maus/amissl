@@ -154,7 +154,7 @@ extern "C" {
 #   define WIN_CONSOLE_BUG
 #  endif
 # elif defined(AMISSL_COMPILE)
-STDARGS void SetAmiSSLerrno(int errno);
+STDARGS void SetAmiSSLerrno(int);
 STDARGS int GetAmiSSLerrno(void);
 #  define get_last_sys_error()    GetAmiSSLerrno()
 #  define clear_sys_error()       SetAmiSSLerrno(0)
@@ -651,6 +651,9 @@ struct servent *PASCAL getservbyname(const char *, const char *);
 #   define strncasecmp strnicmp
 #  endif                        /* NETWARE_CLIB */
 # elif defined(OPENSSL_SYS_AMIGA)
+#  if defined(AMISSL_COMPILE)
+#   include "internal/o_str.h"
+#  endif
 #  define strcasecmp OPENSSL_strcasecmp
 #  define strncasecmp OPENSSL_strncasecmp
 #  define OPENSSL_IMPLEMENTS_strncasecmp

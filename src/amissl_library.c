@@ -362,10 +362,6 @@ LIBPROTOVA(CleanupAmiSSL, LONG, REG(a6, __BASE_OR_IFACE), ...)
 }
 #endif
 
-void openlog(void) {}
-void closelog(void) {}
-void syslog(UNUSED int priority, UNUSED const char *message, ...) {}
-
 LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct LibraryHeader *libBase))
 {
   TRACELINE();

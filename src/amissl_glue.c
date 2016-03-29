@@ -6,6 +6,10 @@
 
 #include "amissl_glue.h"
 
+#include <internal/cryptlib.h>
+#include <internal/o_str.h>
+#include <internal/threads.h>
+
 /***************************************************************************/
 
 #if defined(BASEREL)
@@ -13794,7 +13798,7 @@ char * SAVEDS ASM LIB_hex_to_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, uns
 
 // ---
 
-unsigned char * SAVEDS ASM LIB_string_to_hex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * str), REG(a1, long * len))
+unsigned char * SAVEDS ASM LIB_string_to_hex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * str), REG(a1, long * len))
 {
 	return string_to_hex(str, len);
 }
@@ -15463,20 +15467,6 @@ unsigned char * SAVEDS ASM LIB_SHA1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, con
 void SAVEDS ASM LIB_SHA1_Transform(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SHA_CTX * c), REG(a1, const unsigned char * data))
 {
 	SHA1_Transform(c, data);
-}
-
-// ---
-
-int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
-{
-	return UI_read_string_lib(ui, uis);
-}
-
-// ---
-
-int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
-{
-	return UI_write_string_lib(ui, uis);
 }
 
 // ---
@@ -20913,7 +20903,7 @@ void SAVEDS ASM LIB_EVP_PKEY_asn1_set_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-const EVP_PKEY_ASN1_METHOD * SAVEDS ASM LIB_EVP_PKEY_get0_asn1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey))
+const EVP_PKEY_ASN1_METHOD * SAVEDS ASM LIB_EVP_PKEY_get0_asn1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey))
 {
 	return EVP_PKEY_get0_asn1(pkey);
 }
@@ -25001,7 +24991,7 @@ BIGNUM * SAVEDS ASM LIB_BN_lebin2bn(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, con
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_BN_nist_mod_func(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * p))
+int  SAVEDS ASM (*LIB_BN_nist_mod_func(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * p)))(BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *)
 {
 	return BN_nist_mod_func(p);
 }
@@ -25134,7 +25124,7 @@ void SAVEDS ASM LIB_CRYPTO_secure_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int SAVEDS ASM LIB_CRYPTO_secure_malloc(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, size_t num), REG(a0, const char * file), REG(d1, int line))
+void * SAVEDS ASM LIB_CRYPTO_secure_malloc(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, size_t num), REG(a0, const char * file), REG(d1, int line))
 {
 	return CRYPTO_secure_malloc(num, file, line);
 }
@@ -25358,7 +25348,7 @@ void SAVEDS ASM LIB_EC_KEY_METHOD_get_compute_key(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pinit)(EC_KEY *)), REG(a2, int (**pfinish)(EC_KEY *)), REG(a3, int (**pcopy)(EC_KEY *, const EC_KEY *)), REG(d0, int (**pset_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (**pset_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (**pset_public)(EC_KEY *, const EC_POINT *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pinit)(EC_KEY *)), REG(a2, void (**pfinish)(EC_KEY *)), REG(a3, int (**pcopy)(EC_KEY *, const EC_KEY *)), REG(d0, int (**pset_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (**pset_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (**pset_public)(EC_KEY *, const EC_POINT *)))
 {
 	EC_KEY_METHOD_get_init(meth, pinit, pfinish, pcopy, pset_group, pset_private, pset_public);
 }
@@ -25400,7 +25390,7 @@ void SAVEDS ASM LIB_EC_KEY_METHOD_set_compute_key(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_set_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (*init)(EC_KEY *)), REG(a2, int (*finish)(EC_KEY *)), REG(a3, int (*copy)(EC_KEY *, const EC_KEY *)), REG(d0, int (*set_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (*set_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (*set_public)(EC_KEY *, const EC_POINT *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_set_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (*init)(EC_KEY *)), REG(a2, void (*finish)(EC_KEY *)), REG(a3, int (*copy)(EC_KEY *, const EC_KEY *)), REG(d0, int (*set_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (*set_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (*set_public)(EC_KEY *, const EC_POINT *)))
 {
 	EC_KEY_METHOD_set_init(meth, init, finish, copy, set_group, set_private, set_public);
 }
@@ -25939,7 +25929,7 @@ int SAVEDS ASM LIB_EVP_MD_meth_get_app_datasize(REG(a6, UNUSED __IFACE_OR_BASE),
 
 // ---
 
-int SAVEDS ASM LIB_EVP_MD_meth_get_cleanup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_MD * md))
+int  SAVEDS ASM (*LIB_EVP_MD_meth_get_cleanup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_MD * md)))(EVP_MD_CTX *)
 {
 	return EVP_MD_meth_get_cleanup(md);
 }
@@ -26142,7 +26132,7 @@ void SAVEDS ASM LIB_EVP_PKEY_meth_get_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-void SAVEDS ASM LIB_EVP_PKEY_meth_get_ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**pctrl)(EVP_PKEY_CTX *)), REG(a2, int (**pctrl_str)(EVP_PKEY_CTX *, const char *, const char *)))
+void SAVEDS ASM LIB_EVP_PKEY_meth_get_ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**pctrl)(EVP_PKEY_CTX *, int, int, void *)), REG(a2, int (**pctrl_str)(EVP_PKEY_CTX *, const char *, const char *)))
 {
 	EVP_PKEY_meth_get_ctrl(pmeth, pctrl, pctrl_str);
 }
@@ -27311,7 +27301,7 @@ int SAVEDS ASM LIB_SSL_get0_dane_authority(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-int SAVEDS ASM LIB_SSL_get0_dane_tlsa(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, uint8_t * usage), REG(a2, uint8_t * selector), REG(a3, uint8_t * mtype), REG(d0, unsigned char ** data), REG(d1, size_t * dlen))
+int SAVEDS ASM LIB_SSL_get0_dane_tlsa(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, uint8_t * usage), REG(a2, uint8_t * selector), REG(a3, uint8_t * mtype), REG(d0, unsigned const char ** data), REG(d1, size_t * dlen))
 {
 	return SSL_get0_dane_tlsa(s, usage, selector, mtype, data, dlen);
 }

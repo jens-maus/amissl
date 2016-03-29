@@ -2,7 +2,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
-# Copyright (C) 2006-2014 AmiSSL Open Source Team
+# Copyright (C) 2006-2016 AmiSSL Open Source Team
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -436,11 +436,11 @@ $(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
 
 $(BUILD_D)/amisslmaster_test: $(TEST_D)/amisslmaster_test.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^
+	@$(CC) $(APPCFLAGS) -Wno-format -o $@ $^
 
 $(BUILD_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ -DVERSIONNAME=$(VERSIONNAME) $^
+	@$(CC) $(APPCFLAGS) -Wno-format -o $@ -DVERSIONNAME=$(VERSIONNAME) $^
 
 $(BUILD_D)/https: $(TEST_D)/https.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
@@ -452,7 +452,7 @@ $(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/liba
 
 $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -fno-strict-aliasing -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
@@ -480,7 +480,7 @@ $(BUILD_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 
 $(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
+	@$(CC) $(CFLAGS) -I./openssl/crypto/include -I./openssl -I./openssl/include -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
 
 # cleanup target
 .PHONY: clean

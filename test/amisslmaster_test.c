@@ -11,13 +11,13 @@
 #define DROPINTERFACE(iface)
 #endif
 
+struct Library *AmiSSLMasterBase = NULL;
+#if defined(__amigaos4__)
+struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
+#endif
+
 int main(void)
 {
-	struct Library *AmiSSLMasterBase;
-  #if defined(__amigaos4__)
-  struct AmiSSLMasterIFace *IAmiSSLMaster;
-  #endif
-
 #if 1
 {
 	printf("single base test\n");

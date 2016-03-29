@@ -13,12 +13,11 @@
 
 #include "libcmt.h"
 
-int
-getsockname(int sockfd, struct sockaddr *name, socklen_t *namelen)
+int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->getsockname(sockfd, name, namelen);
+  if(ISocket) return ISocket->getsockname(sockfd, addr, addrlen);
   else return -1;
 #else
 	GETSTATE();
@@ -30,13 +29,13 @@ getsockname(int sockfd, struct sockaddr *name, socklen_t *namelen)
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_GetSockName(sockfd, name, namelen);
+				return amitcp_GetSockName(sockfd, addr, addrlen);
 				break;
 			case TCPIP_IN225:
-				return in225_getsockname(sockfd, name, namelen);
+				return in225_getsockname(sockfd, addr, addrlen);
 				break;
 			case TCPIP_Termite:
-        return termite_getsockname(sockfd, name, namelen);
+        return termite_getsockname(sockfd, addr, addrlen);
 				break;
 		}
 	}

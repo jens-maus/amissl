@@ -13,16 +13,11 @@
 
 #include "libcmt.h"
 
-long
-send(
-     long s,
-     const void *buf,
-     long len,
-     long flags)
+ssize_t send(int sockfd, const void *buf, size_t len, int flags)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->send(s,(void *)buf,len,flags);
+  if(ISocket) return ISocket->send(sockfd, (void *)buf, len, flags);
   else return -1;
 #else
 	GETSTATE();
@@ -34,13 +29,13 @@ send(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_Send(s,(void *)buf,len,flags);
+				return amitcp_Send(sockfd, buf, len, flags);
 				break;
 			case TCPIP_IN225:
-				return in225_send(s,(void *)buf,len,flags);
+				return in225_send(sockfd, buf, len, flags);
 				break;
 			case TCPIP_Termite:
-				return termite_send(s,(void *)buf,len,flags);
+				return termite_send(sockfd, (void *)buf, len, flags);
 				break;
 		}
 	}

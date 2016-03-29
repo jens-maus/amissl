@@ -156,7 +156,7 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 }
 
 /* This is modeled per OpenSSL write_string. The design *is* a bit weird... */
-int UI_write_string_lib(UI *ui, UI_STRING *uis)
+static int UI_write_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type;
 
@@ -172,7 +172,7 @@ int UI_write_string_lib(UI *ui, UI_STRING *uis)
 	return(1);
 }
 
-int UI_read_string_lib(UI *ui, UI_STRING *uis)
+static int UI_read_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
 
@@ -279,23 +279,11 @@ UI_METHOD *UI_OpenSSL(void)
 
 int read_string_cb(UI *ui, UI_STRING *uis)
 {
-	SETUPSTATE();
-#ifdef __amigaos4__
-	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
-#else
-	struct Library *AmiSSLBase=state->AmiSSLBase;
-#endif
 	return UI_read_string_lib(ui,uis);
 }
 
 int write_string_cb(UI *ui, UI_STRING *uis)
 {
-	SETUPSTATE();
-#ifdef __amigaos4__
-	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
-#else
-	struct Library *AmiSSLBase=state->AmiSSLBase;
-#endif
 	return UI_write_string_lib(ui,uis);
 }
 

@@ -118,7 +118,7 @@
  */
 # include <openssl/opensslconf.h>
 
-# if !defined(OPENSSL_SYS_UEFI)
+# if !defined(OPENSSL_SYS_UEFI) && !defined(OPENSSL_SYS_AMIGA)
 #  include "internal/bn_conf.h"
 # endif
 

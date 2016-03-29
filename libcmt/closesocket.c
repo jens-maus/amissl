@@ -13,9 +13,7 @@
 
 #include "libcmt.h"
 
-int
-closesocket(
-	    int s)
+int closesocket(int s)
 {
 #ifdef __amigaos4__
   GETISOCKET();

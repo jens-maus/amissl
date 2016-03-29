@@ -83,4 +83,31 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 # endif
 #endif
 
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+struct hostent * gethostbyname(const char *name);
+struct servent * getservbyname(const char *name, const char *proto);
+char *inet_ntoa(struct in_addr in);
+int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
+int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+int shutdown(int sockfd, int how);
+int closesocket(int s);
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
+               const struct sockaddr *dest_addr, socklen_t addrlen);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
+                 struct sockaddr *src_addr, socklen_t *addrlen);
+int socket(int domain, int type, int protocol);
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int listen(int sockfd, int backlog);
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+int ioctlsocket(int sockfd, long request, char *arg);
+void openlog(const char *ident, int option, int facility);
+void syslog(int priority, const char *format, ...);
+void closelog(void);
+
 #endif /* !LIBCMT_H */

@@ -19,15 +19,15 @@
 #define LIBNAME "AmiSSL/amissl_v" MKSTR(VERSIONNAME) ".library"
 #define AMISSL_CURRENT_VERSION   AMISSL_V11x
 
+struct Library *AmiSSLBase = NULL;
+struct Library *AmiSSLMasterBase = NULL;
+#if defined(__amigaos4__)
+struct AmiSSLIFace *IAmiSSL = NULL;
+struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
+#endif
+
 int main(void)
 {
-	struct Library *AmiSSLBase;
-  struct Library *AmiSSLMasterBase;
-  #if defined(__amigaos4__)
-  struct AmiSSLIFace *IAmiSSL;
-  struct AmiSSLMasterIFace *IAmiSSLMaster;
-  #endif
-
 #if 1
 {
 	printf("single base test\n");
@@ -52,11 +52,11 @@ int main(void)
 
 #if 1
 {
-	struct Library *base1;
-	struct Library *base2;
+	struct Library *base1 = NULL;
+	struct Library *base2 = NULL;
   #if defined(__amigaos4__)
-  struct AmiSSLIFace *ibase1;
-  struct AmiSSLIFace *ibase2;
+  struct AmiSSLIFace *ibase1 = NULL;
+  struct AmiSSLIFace *ibase2 = NULL;
   #endif
 
 	printf("multi base test\n");
@@ -173,7 +173,7 @@ int main(void)
       {
         char tmp[24+1];
 
-        printf("successfully opened AmiSSL library %d.%d (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, AmiSSLBase->lib_IdString, AmiSSLBase);
+        printf("successfully opened AmiSSL library %d.%d (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, (char *)AmiSSLBase->lib_IdString, AmiSSLBase);
 
         // initialize AmiSSL/OpenSSL related stuff
         printf("initializing internal OpenSSL strings:\n");

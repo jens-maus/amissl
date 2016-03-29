@@ -35,9 +35,6 @@
 #include <openssl/cast.h>
 #endif
 #include <openssl/cmac.h>
-#ifndef OPENSSL_NO_CMS
-#include <openssl/cms.h>
-#endif
 #include <openssl/comp.h>
 #include <openssl/conf.h>
 #include <openssl/conf_api.h>
@@ -143,6 +140,11 @@
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>
+
+// order dependent header files
+#ifndef OPENSSL_NO_CMS
+#include <openssl/cms.h>
+#endif
 
 #include <amissl/tags.h>
 

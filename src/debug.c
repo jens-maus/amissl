@@ -97,12 +97,6 @@ void InitDebug(void)
 void SetupDebug(const char *libName, int version, int revision)
 {
   char var[256];
-  #if defined(__amigaos4__)
-  struct Library *DOSBase = NULL;
-  struct DOSIFace *IDOS = NULL;
-  #else
-  struct DosLibrary *DOSBase = NULL;
-  #endif
 
   _DBPRINTF("** AmiSSL: %s (%ld.%ld) startup ****************************\n", libName, version, revision);
   _DBPRINTF("Initializing runtime debugging:\n");

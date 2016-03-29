@@ -1,6 +1,17 @@
---- amissl_glue.c_org	2016-02-19 12:03:40.359698209 +0100
-+++ amissl_glue.c	2016-02-19 12:04:22.706676938 +0100
-@@ -14,9 +14,10 @@
+--- amissl_glue.c_org	2016-03-29 13:27:32.249592414 +0200
++++ amissl_glue.c	2016-03-29 13:28:10.320683798 +0200
+@@ -6,6 +6,10 @@
+ 
+ #include "amissl_glue.h"
+ 
++#include <internal/cryptlib.h>
++#include <internal/o_str.h>
++#include <internal/threads.h>
++
+ /***************************************************************************/
+ 
+ #if defined(BASEREL)
+@@ -14,9 +17,10 @@
  #undef SAVEDS
  #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
  #elif defined(__amigaos3__)
@@ -12,7 +23,7 @@
  static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
  #endif // __amigaos3__
  #endif // BASEREL
-@@ -30,24 +31,30 @@
+@@ -30,24 +34,30 @@
  
  // ---
  

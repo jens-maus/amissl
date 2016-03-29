@@ -13,15 +13,11 @@
 
 #include "libcmt.h"
 
-int
-ioctlsocket(
-	    int s,
-	    unsigned long request,
-	    char *argp)
+int ioctlsocket(int sockfd, long request, char *arg)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->IoctlSocket(s,request,argp);
+  if(ISocket) return ISocket->IoctlSocket(sockfd, request, arg);
   else return -1;
 #else
 	GETSTATE();
@@ -33,7 +29,7 @@ ioctlsocket(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_IoctlSocket(s, request, argp);
+				return amitcp_IoctlSocket(sockfd, request, arg);
 				break;
 			case TCPIP_IN225:
 				switch (request)
@@ -71,10 +67,10 @@ ioctlsocket(
 					case SIOCSPGRP	     : request = ('m'<<8)|25; break;
 					case SIOCGPGRP	     : request = ('m'<<8)|26; break;
 				}
-				return in225_s_ioctl(s, request, argp);
+				return in225_s_ioctl(sockfd, request, arg);
 				break;
 			case TCPIP_Termite:
-				return termite_IoctlSocket(s, request, argp);
+				return termite_IoctlSocket(sockfd, request, arg);
 				break;
 		}
 	}

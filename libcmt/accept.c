@@ -13,15 +13,11 @@
 
 #include "libcmt.h"
 
-long
-accept(
-       long s,
-       struct sockaddr *addr,
-       long *addrlen)
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->accept(s,addr,(ULONG *)addrlen);
+  if(ISocket) return ISocket->accept(sockfd, addr, addrlen);
   else return -1;
 #else
 	GETSTATE();
@@ -33,13 +29,13 @@ accept(
 			case TCPIP_Miami:
 			case TCPIP_MLink:
 			case TCPIP_AmiTCP:
-				return amitcp_Accept(s,addr,(LONG *)addrlen);
+				return amitcp_Accept(sockfd, addr, addrlen);
 				break;
 			case TCPIP_IN225:
-				return in225_accept(s,addr,(int *)addrlen);
+				return in225_accept(sockfd, addr, addrlen);
 				break;
 			case TCPIP_Termite:
-				return termite_accept(s,addr,(int *)addrlen);
+				return termite_accept(sockfd, addr, addrlen);
 				break;
 		}
 	}

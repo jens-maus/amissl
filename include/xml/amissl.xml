@@ -6007,7 +6007,7 @@
     <method name="SSL_library_init" result="int" status="unimplemented">
     </method>
     <method name="SSL_CIPHER_description" result="char *">
-      <arg name="a1" type="SSL_CIPHER *" m68kreg="a0"/>
+      <arg name="a1" type="const SSL_CIPHER *" m68kreg="a0"/>
       <arg name="buf" type="char *" m68kreg="a1"/>
       <arg name="size" type="int" m68kreg="d0"/>
     </method>
@@ -8811,7 +8811,7 @@
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
     <method name="string_to_hex" result="unsigned char *">
-      <arg name="str" type="char *" m68kreg="a0"/>
+      <arg name="str" type="const char *" m68kreg="a0"/>
       <arg name="len" type="long *" m68kreg="a1"/>
     </method>
     <method name="name_cmp" result="int">
@@ -10314,11 +10314,11 @@
       <arg name="c" type="SHA_CTX *" m68kreg="a0"/>
       <arg name="data" type="const unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="UI_read_string_lib" result="int" status="private">
+    <method name="UI_read_string_lib" result="int" status="unimplemented">
       <arg name="ui" type="UI *" m68kreg="a0"/>
       <arg name="uis" type="UI_STRING *" m68kreg="a1"/>
     </method>
-    <method name="UI_write_string_lib" result="int" status="private">
+    <method name="UI_write_string_lib" result="int" status="unimplemented">
       <arg name="ui" type="UI *" m68kreg="a0"/>
       <arg name="uis" type="UI_STRING *" m68kreg="a1"/>
     </method>
@@ -14465,7 +14465,7 @@
       <arg name="pkey_free" type="void (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
     <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *">
-      <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
+      <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *" status="unimplemented">
       <arg name="a" type="NETSCAPE_X509 **" m68kreg="a0"/>
@@ -17131,7 +17131,7 @@
       <arg name="len" type="int" m68kreg="d0"/>
       <arg name="ret" type="BIGNUM *" m68kreg="a1"/>
     </method>
-    <method name="BN_nist_mod_func" result="BIGNUM *">
+    <method name="BN_nist_mod_func" result="int (*)(BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *)">
       <arg name="p" type="const BIGNUM *" m68kreg="a0"/>
     </method>
     <method name="BN_secure_new" result="BIGNUM *">
@@ -17207,7 +17207,7 @@
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d0"/>
     </method>
-    <method name="CRYPTO_secure_malloc" result="int">
+    <method name="CRYPTO_secure_malloc" result="void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
@@ -17323,7 +17323,7 @@
     <method name="EC_KEY_METHOD_get_init" result="void">
       <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="pinit" type="int (**)(EC_KEY *)" m68kreg="a1"/>
-      <arg name="pfinish" type="int (**)(EC_KEY *)" m68kreg="a2"/>
+      <arg name="pfinish" type="void (**)(EC_KEY *)" m68kreg="a2"/>
       <arg name="pcopy" type="int (**)(EC_KEY *, const EC_KEY *)" m68kreg="a3"/>
       <arg name="pset_group" type="int (**)(EC_KEY *, const EC_GROUP *)" m68kreg="d0"/>
       <arg name="pset_private" type="int (**)(EC_KEY *, const BIGNUM *)" m68kreg="d1"/>
@@ -17354,7 +17354,7 @@
     <method name="EC_KEY_METHOD_set_init" result="void">
       <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="init" type="int (*)(EC_KEY *)" m68kreg="a1"/>
-      <arg name="finish" type="int (*)(EC_KEY *)" m68kreg="a2"/>
+      <arg name="finish" type="void (*)(EC_KEY *)" m68kreg="a2"/>
       <arg name="copy" type="int (*)(EC_KEY *, const EC_KEY *)" m68kreg="a3"/>
       <arg name="set_group" type="int (*)(EC_KEY *, const EC_GROUP *)" m68kreg="d0"/>
       <arg name="set_private" type="int (*)(EC_KEY *, const BIGNUM *)" m68kreg="d1"/>
@@ -17612,7 +17612,7 @@
     <method name="EVP_MD_meth_get_app_datasize" result="int">
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_cleanup" result="int">
+    <method name="EVP_MD_meth_get_cleanup" result="int (*)(EVP_MD_CTX *)">
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
     <method name="EVP_MD_meth_get_copy" result="int (*)(EVP_MD_CTX *, const EVP_MD_CTX *)">
@@ -17726,7 +17726,7 @@
     </method>
     <method name="EVP_PKEY_meth_get_ctrl" result="void">
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
-      <arg name="pctrl" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
+      <arg name="pctrl" type="int (**)(EVP_PKEY_CTX *, int, int, void *)" m68kreg="a1"/>
       <arg name="pctrl_str" type="int (**)(EVP_PKEY_CTX *, const char *, const char *)" m68kreg="a2"/>
     </method>
     <method name="EVP_PKEY_meth_get_decrypt" result="void">
@@ -18405,7 +18405,7 @@
       <arg name="usage" type="uint8_t *" m68kreg="a1"/>
       <arg name="selector" type="uint8_t *" m68kreg="a2"/>
       <arg name="mtype" type="uint8_t *" m68kreg="a3"/>
-      <arg name="data" type="unsigned char **" m68kreg="d0"/>
+      <arg name="data" type="unsigned const char **" m68kreg="d0"/>
       <arg name="dlen" type="size_t *" m68kreg="d1"/>
     </method>
     <method name="SSL_get0_peername" result="const char *">

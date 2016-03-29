@@ -29110,7 +29110,7 @@ STATIC unsigned char * stub_main_string_to_hex_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->string_to_hex(
-		(char *)regarray[REG68K_A0/4],
+		(const char *)regarray[REG68K_A0/4],
 		(long *)regarray[REG68K_A1/4]
 	);
 }
@@ -32880,36 +32880,6 @@ STATIC void stub_main_SHA1_Transform_PPC(uint32 *regarray)
 	);
 }
 STATIC CONST struct EmuTrap stub_main_SHA1_Transform = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SHA1_Transform_PPC };
-
-// ---
-
-STATIC int stub_main_UI_read_string_lib_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->UI_read_string_lib(
-		(UI *)regarray[REG68K_A0/4],
-		(UI_STRING *)regarray[REG68K_A1/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_UI_read_string_lib = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_read_string_lib_PPC };
-
-// ---
-
-STATIC int stub_main_UI_write_string_lib_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->UI_write_string_lib(
-		(UI *)regarray[REG68K_A0/4],
-		(UI_STRING *)regarray[REG68K_A1/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_UI_write_string_lib = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_write_string_lib_PPC };
 
 // ---
 
@@ -44593,7 +44563,7 @@ STATIC const EVP_PKEY_ASN1_METHOD * stub_main_EVP_PKEY_get0_asn1_PPC(uint32 *reg
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->EVP_PKEY_get0_asn1(
-		(const EVP_PKEY *)regarray[REG68K_A0/4]
+		(EVP_PKEY *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_EVP_PKEY_get0_asn1 = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_get0_asn1_PPC };
@@ -53481,7 +53451,7 @@ STATIC CONST struct EmuTrap stub_main_BN_lebin2bn = { TRAPINST, TRAPTYPE, (uint3
 
 // ---
 
-STATIC BIGNUM * stub_main_BN_nist_mod_func_PPC(uint32 *regarray)
+STATIC int  (*stub_main_BN_nist_mod_func_PPC(uint32 *regarray))(BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -53765,7 +53735,7 @@ STATIC CONST struct EmuTrap stub_main_CRYPTO_secure_free = { TRAPINST, TRAPTYPE,
 
 // ---
 
-STATIC int stub_main_CRYPTO_secure_malloc_PPC(uint32 *regarray)
+STATIC void * stub_main_CRYPTO_secure_malloc_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -54227,7 +54197,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_init_PPC(uint32 *regarray)
 	Self->EC_KEY_METHOD_get_init(
 		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(EC_KEY *))regarray[REG68K_A1/4],
-		(int (**)(EC_KEY *))regarray[REG68K_A2/4],
+		(void (**)(EC_KEY *))regarray[REG68K_A2/4],
 		(int (**)(EC_KEY *, const EC_KEY *))regarray[REG68K_A3/4],
 		(int (**)(EC_KEY *, const EC_GROUP *))regarray[REG68K_D0/4],
 		(int (**)(EC_KEY *, const BIGNUM *))regarray[REG68K_D1/4],
@@ -54324,7 +54294,7 @@ STATIC void stub_main_EC_KEY_METHOD_set_init_PPC(uint32 *regarray)
 	Self->EC_KEY_METHOD_set_init(
 		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (*)(EC_KEY *))regarray[REG68K_A1/4],
-		(int (*)(EC_KEY *))regarray[REG68K_A2/4],
+		(void (*)(EC_KEY *))regarray[REG68K_A2/4],
 		(int (*)(EC_KEY *, const EC_KEY *))regarray[REG68K_A3/4],
 		(int (*)(EC_KEY *, const EC_GROUP *))regarray[REG68K_D0/4],
 		(int (*)(EC_KEY *, const BIGNUM *))regarray[REG68K_D1/4],
@@ -55406,7 +55376,7 @@ STATIC CONST struct EmuTrap stub_main_EVP_MD_meth_get_app_datasize = { TRAPINST,
 
 // ---
 
-STATIC int stub_main_EVP_MD_meth_get_cleanup_PPC(uint32 *regarray)
+STATIC int  (*stub_main_EVP_MD_meth_get_cleanup_PPC(uint32 *regarray))(EVP_MD_CTX *)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -55845,7 +55815,7 @@ STATIC void stub_main_EVP_PKEY_meth_get_ctrl_PPC(uint32 *regarray)
 
 	Self->EVP_PKEY_meth_get_ctrl(
 		(EVP_PKEY_METHOD *)regarray[REG68K_A0/4],
-		(int (**)(EVP_PKEY_CTX *))regarray[REG68K_A1/4],
+		(int (**)(EVP_PKEY_CTX *, int, int, void *))regarray[REG68K_A1/4],
 		(int (**)(EVP_PKEY_CTX *, const char *, const char *))regarray[REG68K_A2/4]
 	);
 }
@@ -58352,7 +58322,7 @@ STATIC int stub_main_SSL_get0_dane_tlsa_PPC(uint32 *regarray)
 		(uint8_t *)regarray[REG68K_A1/4],
 		(uint8_t *)regarray[REG68K_A2/4],
 		(uint8_t *)regarray[REG68K_A3/4],
-		(unsigned char **)regarray[REG68K_D0/4],
+		(unsigned const char **)regarray[REG68K_D0/4],
 		(size_t *)regarray[REG68K_D1/4]
 	);
 }
@@ -63318,8 +63288,8 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_SHA1_Final,
 	&stub_main_SHA1,
 	&stub_main_SHA1_Transform,
-	&stub_main_UI_read_string_lib,
-	&stub_main_UI_write_string_lib,
+	&stub_main_UNIMPLEMENTED, /* UI_read_string_lib */
+	&stub_main_UNIMPLEMENTED, /* UI_write_string_lib */
 	&stub_main_HMAC_CTX_set_flags,
 	&stub_main_X509_check_ca,
 	&stub_main_PROXY_POLICY_new,

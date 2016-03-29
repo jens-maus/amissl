@@ -13,17 +13,11 @@
 
 #include "libcmt.h"
 
-long
-setsockopt(
-     long s,
-     long level,
-     long optname,
-     char *optval,
-     long optlen)
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->setsockopt(s,level,optname,optval,optlen);
+  if(ISocket) return ISocket->setsockopt(sockfd, level, optname, (void *)optval, optlen);
   else return -1;
 #else
 	GETSTATE();
@@ -35,13 +29,13 @@ setsockopt(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_SetSockOpt(s,level,optname,optval,optlen);
+				return amitcp_SetSockOpt(sockfd, level, optname, optval, optlen);
 				break;
 			case TCPIP_IN225:
-				return in225_setsockopt(s,level,optname,optval,optlen);
+				return in225_setsockopt(sockfd, level, optname, optval, optlen);
 				break;
 			case TCPIP_Termite:
-				return termite_setsockopt(s,level,optname,optval,optlen);
+				return termite_setsockopt(sockfd, level, optname, (void *)optval, optlen);
 				break;
 		}
 	}

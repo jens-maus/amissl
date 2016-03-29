@@ -13,18 +13,12 @@
 
 #include "libcmt.h"
 
-long
-sendto(
-     long s,
-     const void *buf,
-     long len,
-     long flags,
-     struct sockaddr *to,
-     long tolen)
+ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
+               const struct sockaddr *dest_addr, socklen_t addrlen)
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->sendto(s,(void *)buf,len,flags,to,tolen);
+  if(ISocket) return ISocket->sendto(sockfd, (void *)buf, len, flags, (struct sockaddr *)dest_addr, addrlen);
   else return -1;
 #else
 	GETSTATE();
@@ -36,13 +30,13 @@ sendto(
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:
-				return amitcp_SendTo(s,(void *)buf,len,flags,to,tolen);
+				return amitcp_SendTo(sockfd, buf, len, flags, dest_addr, addrlen);
 				break;
 			case TCPIP_IN225:
-				return in225_sendto(s,(void *)buf,len,flags,to,tolen);
+				return in225_sendto(sockfd, buf, len, flags, dest_addr, addrlen);
 				break;
 			case TCPIP_Termite:
-				return termite_sendto(s,(void *)buf,len,flags,(char *)to,tolen);
+				return termite_sendto(sockfd, buf, len, flags, dest_addr, addrlen);
 				break;
 		}
 	}

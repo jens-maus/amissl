@@ -2530,8 +2530,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SHA1_Final
 	    FPTR IAmiSSL_SHA1
 	    FPTR IAmiSSL_SHA1_Transform
-	    FPTR IAmiSSL_UI_read_string_lib
-	    FPTR IAmiSSL_UI_write_string_lib
+	    FPTR AmiSSLIFace_UI_read_string_lib_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_UI_write_string_lib_UNIMPLEMENTED
 	    FPTR IAmiSSL_HMAC_CTX_set_flags
 	    FPTR IAmiSSL_X509_check_ca
 	    FPTR IAmiSSL_PROXY_POLICY_new
