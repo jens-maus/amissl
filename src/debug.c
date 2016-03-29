@@ -273,7 +273,7 @@ void SetupDebug(const char *libName, int version, int revision)
 
 /****************************************************************************/
 
-inline void _INDENT(void)
+static inline void _INDENT(void)
 {
   int i;
   for(i=0; i < indent_level; i++)
