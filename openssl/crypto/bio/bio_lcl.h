@@ -72,7 +72,7 @@ union bio_addr_st {
 typedef unsigned int socklen_t;
 # endif
 # if defined(OPENSSL_SYS_AMIGA) && defined(__MORPHOS__)
-typedef unsigned long socklen_t;
+typedef int socklen_t;
 typedef unsigned long in_addr_t;
 # endif
 

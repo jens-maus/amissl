@@ -18975,7 +18975,7 @@ STATIC char * stub_main_SSL_CIPHER_description_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->SSL_CIPHER_description(
-		(SSL_CIPHER *)regarray[REG68K_A0/4],
+		(const SSL_CIPHER *)regarray[REG68K_A0/4],
 		(char *)regarray[REG68K_A1/4],
 		(int)regarray[REG68K_D0/4]
 	);

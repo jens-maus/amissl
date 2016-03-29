@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.7)! Do not edit! */
+/* Automatically generated header (sfdc 1.8)! Do not edit! */
 
 #ifndef CLIB_AMISSLMASTER_PROTOS_H
 #define CLIB_AMISSLMASTER_PROTOS_H

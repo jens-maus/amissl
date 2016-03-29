@@ -219,7 +219,9 @@ STDARGS int GetAmiSSLerrno(void);
 #   define get_last_socket_error()   errno
 #   define clear_socket_error()      errno = 0
 #   include <stdio.h>
-#   include <proto/socket.h>
+#   if !defined(__MORPHOS__)
+#    include <proto/socket.h>
+#   endif
 #   define ioctlsocket(a,b,c)        IoctlSocket((a),(b),(c))
 #   define closesocket(s)            CloseSocket((s))
 #   undef select

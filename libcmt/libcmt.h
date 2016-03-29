@@ -86,6 +86,10 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+#if defined(__MORPHOS__)
+typedef int socklen_t;
+#endif
+
 struct hostent * gethostbyname(const char *name);
 struct servent * getservbyname(const char *name, const char *proto);
 char *inet_ntoa(struct in_addr in);

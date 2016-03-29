@@ -166,7 +166,11 @@ static int set_multi_opts(unsigned long *flags, const char *arg,
 int app_init(long mesgwin);
 
 #if defined(OPENSSL_SYS_AMIGA)
+
+#if !defined(__MORPHOS__)
 #include <sys/select.h>
+#endif
+
 #include <internal/amissl.h>
 
 #define XMKSTR(x) #x
