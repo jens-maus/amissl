@@ -8996,7 +8996,7 @@ long SAVEDS ASM LIB_SSL_get_default_timeout(REG(a6, UNUSED __IFACE_OR_BASE), REG
 
 // ---
 
-char * SAVEDS ASM LIB_SSL_CIPHER_description(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_CIPHER * a1), REG(a1, char * buf), REG(d0, int size))
+char * SAVEDS ASM LIB_SSL_CIPHER_description(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * a1), REG(a1, char * buf), REG(d0, int size))
 {
 	return SSL_CIPHER_description(a1, buf, size);
 }

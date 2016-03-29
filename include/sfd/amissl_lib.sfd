@@ -1347,7 +1347,7 @@ void SSL_set_connect_state(SSL * s) (a0)
 void SSL_set_accept_state(SSL * s) (a0)
 long SSL_get_default_timeout(const SSL * s) (a0)
 ==reserve 1
-char * SSL_CIPHER_description(SSL_CIPHER * a1, char * buf, int size) (a0,a1,d0)
+char * SSL_CIPHER_description(const SSL_CIPHER * a1, char * buf, int size) (a0,a1,d0)
 STACK_OF(X509_NAME) * SSL_dup_CA_list(STACK_OF(X509_NAME) * sk) (a0)
 SSL * SSL_dup(SSL * ssl) (a0)
 X509 * SSL_get_certificate(const SSL * ssl) (a0)

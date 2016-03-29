@@ -5142,7 +5142,7 @@ typedef ULONG _sfdc_vararg;
 	, AMISSL_BASE_NAME)
 
 #define SSL_CIPHER_description(___a1, ___buf, ___size) \
-	LP3(0x2388, char *, SSL_CIPHER_description , SSL_CIPHER *, ___a1, a0, char *, ___buf, a1, int, ___size, d0,\
+	LP3(0x2388, char *, SSL_CIPHER_description , const SSL_CIPHER *, ___a1, a0, char *, ___buf, a1, int, ___size, d0,\
 	, AMISSL_BASE_NAME)
 
 #define SSL_dup_CA_list(___sk) \

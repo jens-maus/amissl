@@ -1554,7 +1554,7 @@ struct AmiSSLIFace
 	void APICALL (*SSL_set_accept_state)(struct AmiSSLIFace *Self, SSL * s);
 	long APICALL (*SSL_get_default_timeout)(struct AmiSSLIFace *Self, const SSL * s);
 	APTR SSL_library_init_UNIMPLEMENTED;
-	char * APICALL (*SSL_CIPHER_description)(struct AmiSSLIFace *Self, SSL_CIPHER * a1, char * buf, int size);
+	char * APICALL (*SSL_CIPHER_description)(struct AmiSSLIFace *Self, const SSL_CIPHER * a1, char * buf, int size);
 	STACK_OF(X509_NAME) * APICALL (*SSL_dup_CA_list)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * sk);
 	SSL * APICALL (*SSL_dup)(struct AmiSSLIFace *Self, SSL * ssl);
 	X509 * APICALL (*SSL_get_certificate)(struct AmiSSLIFace *Self, const SSL * ssl);

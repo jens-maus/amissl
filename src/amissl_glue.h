@@ -1324,7 +1324,7 @@ int SAVEDS ASM LIB_SSL_CTX_add_client_CA(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_C
 void SAVEDS ASM LIB_SSL_set_connect_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 void SAVEDS ASM LIB_SSL_set_accept_state(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s));
 long SAVEDS ASM LIB_SSL_get_default_timeout(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
-char * SAVEDS ASM LIB_SSL_CIPHER_description(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CIPHER * a1), REG(a1, char * buf), REG(d0, int size));
+char * SAVEDS ASM LIB_SSL_CIPHER_description(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * a1), REG(a1, char * buf), REG(d0, int size));
 STACK_OF(X509_NAME) * SAVEDS ASM LIB_SSL_dup_CA_list(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * sk));
 SSL * SAVEDS ASM LIB_SSL_dup(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl));
 X509 * SAVEDS ASM LIB_SSL_get_certificate(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * ssl));
