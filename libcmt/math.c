@@ -227,7 +227,7 @@ INLINE double __sqrt(double x)
 	    t  = s0;
 	    if((t<ix0)||((t==ix0)&&(t1<=ix1))) {
 		s1  = t1+r;
-		if(((t1&sign)==sign)&&(s1&sign)==0) s0 += 1;
+		if(((int)(t1&sign)==sign)&&(s1&sign)==0) s0 += 1;
 		ix0 -= t;
 		if (ix1 < t1) ix0 -= 1;
 		ix1 -= t1;
@@ -323,7 +323,7 @@ INLINE double __floor(double x)
 				else
 				{
 					j = i1+(1<<(52-j0));
-					if(j<i1)
+					if((int)j < i1)
 						i0 +=1;
 					i1=j;
 				}
@@ -401,7 +401,7 @@ INLINE double __pow(double x,double y)
 			k = (iy>>20)-0x3ff;	   /* exponent */
 			if(k>20) {
 				j = ly>>(52-k);
-				if((j<<(52-k))==ly) yisint = 2-(j&1);
+				if((j<<(52-k))==(int)ly) yisint = 2-(j&1);
 			} else if(ly==0) {
 				j = iy>>(20-k);
 				if((j<<(20-k))==iy) yisint = 2-(j&1);

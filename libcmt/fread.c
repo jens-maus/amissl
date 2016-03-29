@@ -22,7 +22,7 @@ size_t fread(void *buf,size_t size,size_t count,FILE *fp)
 		TOFILE(fp)->_rcnt = 0;
 	total = resid;
 	p = buf;
-	while (resid > (r = TOFILE(fp)->_rcnt)) {
+	while (resid > (size_t)(r = TOFILE(fp)->_rcnt)) {
 		(void)memcpy((void *)p, (void *)TOFILE(fp)->_ptr, (size_t)r);
 		TOFILE(fp)->_ptr += r;
 		/* fp->_rcnt = 0 ... done in __srefill */

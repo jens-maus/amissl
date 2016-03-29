@@ -67,7 +67,7 @@ strspn(const char *s, const char *set)
 
 	result = (size_t)(s - start);
 
- out:
+/* out: */
 
 	return(result);
 }

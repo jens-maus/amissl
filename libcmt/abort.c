@@ -7,4 +7,6 @@ void abort(void)
   perror("abort() called");
 
   Wait(0);
+
+  exit(EXIT_FAILURE);
 }

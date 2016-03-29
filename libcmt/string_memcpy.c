@@ -366,7 +366,7 @@ memcpy(void *dst, const void *src, size_t len)
 		#endif
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

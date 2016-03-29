@@ -58,7 +58,7 @@ atoi(const char *str)
 
 	result = (int)strtol(str, (char **)NULL, 10);
 
- out:
+/* out: */
 
 	return(result);
 }

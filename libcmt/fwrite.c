@@ -8,7 +8,7 @@
 size_t fwrite(const void *ptr,size_t size,size_t nmemb,FILE *stream)
 {
 	signed long subsize;
-	unsigned long total;
+	size_t total;
 	unsigned char *b=(unsigned char *)ptr;
 	if(!(total=size*nmemb)) /* Just in case size==0 */
 		return total;
@@ -16,7 +16,7 @@ size_t fwrite(const void *ptr,size_t size,size_t nmemb,FILE *stream)
 	{
 		if(TOFILE(stream)->_wcnt<TOFILE(stream)->_size)
 		{
-			subsize=total>TOFILE(stream)->_size-TOFILE(stream)->_wcnt?TOFILE(stream)->_size-TOFILE(stream)->_wcnt:total;
+			subsize = total > (size_t)(TOFILE(stream)->_size-TOFILE(stream)->_wcnt) ? (size_t)(TOFILE(stream)->_size-TOFILE(stream)->_wcnt) : total;
 			memcpy(TOFILE(stream)->_ptr,b,subsize);
 			TOFILE(stream)->_ptr+=subsize;
 			TOFILE(stream)->_wcnt+=subsize;

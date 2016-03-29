@@ -24,7 +24,7 @@ recvfrom(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->recvfrom(s,buf,len,flags,from,fromlen);
+  if(ISocket) return ISocket->recvfrom(s,buf,len,flags,from,(ULONG *)fromlen);
   else return -1;
 #else
 	GETSTATE();
@@ -39,10 +39,10 @@ recvfrom(
 				return amitcp_RecvFrom(s,buf,len,flags,from,fromlen);
 				break;
 			case TCPIP_IN225:
-				return in225_recvfrom(s,buf,len,flags,from,fromlen);
+				return in225_recvfrom(s,buf,len,flags,from,(int *)fromlen);
 				break;
 			case TCPIP_Termite:
-				return termite_recvfrom(s,buf,len,flags,from,fromlen);
+				return termite_recvfrom(s,buf,len,flags,from,(int *)fromlen);
 				break;
 		}
 	}

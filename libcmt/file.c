@@ -110,7 +110,7 @@ FILE *fopen(const char *name, const char *mode)
 	if((node=(struct filenode *)malloc(sizeof(struct filenode)))!=NULL)
 	{
 		memset(node,0,sizeof(struct filenode));
-		if((node->FILE._base=(char *)malloc(BUFSIZ))!=NULL)
+		if((node->FILE._base = (unsigned char *)malloc(BUFSIZ))!=NULL)
 		{
 			node->FILE._size=BUFSIZ;
 			node->FILE._ptr = node->FILE._base;
@@ -292,12 +292,12 @@ setvbuf(FILE *stream,char *buf,int bufmode,size_t size)
 	}
 	else if (buf)
 	{
-		file->_base = buf;
+		file->_base = (unsigned char *)buf;
 		file->_size = size;
 	}
 	else
 	{
-		file->_base = new_buffer;
+		file->_base = (unsigned char *)new_buffer;
 		file->_size = size;
 		file->_flag |= _IOALLOCBUF;
 	}

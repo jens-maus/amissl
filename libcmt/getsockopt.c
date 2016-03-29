@@ -23,7 +23,7 @@ getsockopt(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->getsockopt(s,level,optname,optval,(long *)optlen);
+  if(ISocket) return ISocket->getsockopt(s,level,optname,optval,(ULONG *)optlen);
   else return -1;
 #else
 	GETSTATE();

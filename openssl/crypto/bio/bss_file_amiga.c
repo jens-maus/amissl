@@ -78,7 +78,7 @@ static BPTR FOpenFromMode(char *name, char *mode)
 {
 	BOOL mode_is_valid = TRUE, seek_to_end = FALSE;
 	BPTR file = (BPTR)NULL;
-	LONG type;
+	LONG type = MODE_OLDFILE;
 
 	if (*mode == 'r')
 		type = MODE_OLDFILE;

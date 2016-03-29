@@ -42,7 +42,7 @@ sendto(
 				return in225_sendto(s,(void *)buf,len,flags,to,tolen);
 				break;
 			case TCPIP_Termite:
-				return termite_sendto(s,(void *)buf,len,flags,to,tolen);
+				return termite_sendto(s,(void *)buf,len,flags,(char *)to,tolen);
 				break;
 		}
 	}

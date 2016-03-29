@@ -281,7 +281,7 @@ qsort(void * base, size_t count, size_t size, int (*comp)(const void * element1,
 		}
 	}
 
- out:
+/* out: */
 
 	LEAVE();
 }

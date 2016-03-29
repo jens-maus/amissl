@@ -74,7 +74,7 @@ strchr(const char *s, int c)
 		us++;
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

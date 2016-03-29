@@ -77,7 +77,7 @@ strcmp(const char *s1, const char * s2)
 		result = c1 - c2;
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

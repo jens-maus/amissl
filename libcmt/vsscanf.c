@@ -42,7 +42,7 @@ int vsscanf(const char *s,const char *format,va_list args)
     {
       size_t width=ULONG_MAX;
       char type,subtype='i',ignore=0;
-      const unsigned char *ptr=format+1;
+      const char *ptr=format+1;
       size_t i;
 
       if(isdigit(*ptr))
@@ -68,7 +68,7 @@ int vsscanf(const char *s,const char *format,va_list args)
 
       switch(type)
       { case 'c':
-	{ unsigned char *bp;
+	{ char *bp;
 
 	  if(width==ULONG_MAX) /* Default */
 	    width=1;
@@ -91,7 +91,7 @@ int vsscanf(const char *s,const char *format,va_list args)
 	  break;
 	}
 	case '[':
-	{ unsigned char *bp;
+	{ char *bp;
 	  unsigned char tab[32],a,b;
 	  char circflag=0;
 
@@ -136,7 +136,7 @@ int vsscanf(const char *s,const char *format,va_list args)
 	  break;
 	}
 	case 's':
-	{ unsigned char *bp;
+	{ char *bp;
 
 	  if(!ignore)
 	    bp=va_arg(args,char *);
@@ -209,7 +209,7 @@ int vsscanf(const char *s,const char *format,va_list args)
 	      { v=v+dp*(c-'0');
 		dp=dp/10.0;
 		NEXT(c); }
-	      if(size==2+(min!=0)) /* No number read till now -> malformatted */
+	      if(size == (size_t)(2+(min != 0))) /* No number read till now -> malformatted */
 	      { PREV(c);
 		c=__decimalpoint[0]; }
 	    }

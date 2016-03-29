@@ -62,7 +62,7 @@ strcat(char *dest, const char *src)
 	while(((*dest++) = (*src++)) != '\0')
 		DO_NOTHING;
 
- out:
+/* out: */
 
 	return(result);
 }

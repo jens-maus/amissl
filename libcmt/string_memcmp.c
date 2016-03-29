@@ -209,7 +209,7 @@ memcmp(const void *ptr1, const void *ptr2, size_t len)
 		#endif
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

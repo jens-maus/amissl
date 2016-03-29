@@ -128,7 +128,7 @@ strlcat(char *dst, const char *src, size_t siz)
 		result = dlen + (s - src); /* count does not include NUL */
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

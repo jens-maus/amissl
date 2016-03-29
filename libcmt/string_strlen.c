@@ -62,7 +62,7 @@ strlen(const char *s)
 
 	result = (size_t)(s - start);
 
- out:
+/* out: */
 
 	return(result);
 }

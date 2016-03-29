@@ -209,7 +209,7 @@ memchr(const void * ptr, int val, size_t len)
 		#endif
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

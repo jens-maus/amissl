@@ -8,6 +8,7 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
+#include <internal/amissl_compiler.h>
 
 int main(int argc UNUSED, char **argv UNUSED)
 {
@@ -29,16 +30,16 @@ int main(int argc UNUSED, char **argv UNUSED)
 	arglist[2] = ((int *)&floatval)[0];
 	arglist[3] = ((int *)&floatval)[1];
 
-	BIO_vsnprintf(buffer,128,"Test %s of %d in %f",arglist);
+	BIO_vsnprintf(buffer, sizeof(buffer), "Test %s of %d in %f", (void *)arglist);
 	printf("Buffer: >>%s<<\n",buffer);
 
-	BIO_vsnprintf(buffer,16,"Test %s of %d in %f",arglist);
+	BIO_vsnprintf(buffer, 16, "Test %s of %d in %f", (void *)arglist);
 	printf("Buffer: >>%s<<\n",buffer);
 
 	if((out = BIO_new(BIO_s_file())) != NULL)
 	{
 		BIO_set_fp_amiga(out, Output(), BIO_NOCLOSE | BIO_FP_TEXT);
-		BIO_vprintf(out,"Test %s of %d in %f\n",arglist);
+		BIO_vprintf(out, "Test %s of %d in %f\n", (void *)arglist);
 
 		BIO_printf(out,"Error test: \n");
 		SYSerr(43,42);

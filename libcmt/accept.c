@@ -21,7 +21,7 @@ accept(
 {
 #ifdef __amigaos4__
   GETISOCKET();
-  if(ISocket) return ISocket->accept(s,addr,(LONG *)addrlen);
+  if(ISocket) return ISocket->accept(s,addr,(ULONG *)addrlen);
   else return -1;
 #else
 	GETSTATE();

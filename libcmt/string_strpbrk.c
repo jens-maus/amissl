@@ -68,7 +68,7 @@ strpbrk(const char *s, const char *set)
 		s++;
 	}
 
- out:
+/* out: */
 
 	return(result);
 }

@@ -45,7 +45,7 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
   #else
   if((port = CreateMsgPort()) != NULL)
   {
-     if((tr = (struct IOStdReq *)CreateIORequest(port, sizeof(*tr))) != NULL)
+     if((tr = (struct TimeRequest *)CreateIORequest(port, sizeof(*tr))) != NULL)
      {
   #endif
       if(OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *)tr, 0) == 0)

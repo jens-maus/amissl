@@ -62,7 +62,7 @@ strcpy(char *dest, const char *src)
 			DO_NOTHING;
 	}
 
- out:
+/* out: */
 
 	return(result);
 }
