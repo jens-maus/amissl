@@ -3,6 +3,15 @@
 #ifndef _PPCINLINE_AMISSL_H
 #define _PPCINLINE_AMISSL_H
 
+#ifndef _SFDC_VARARG_DEFINED
+#define _SFDC_VARARG_DEFINED
+#ifdef __HAVE_IPTR_ATTR__
+typedef APTR _sfdc_vararg __attribute__((iptr));
+#else
+typedef ULONG _sfdc_vararg;
+#endif /* __HAVE_IPTR_ATTR__ */
+#endif /* _SFDC_VARARG_DEFINED */
+
 #ifndef __PPCINLINE_MACROS_H
 #include <ppcinline/macros.h>
 #endif /* !__PPCINLINE_MACROS_H */
@@ -1178,21 +1187,21 @@
 	, AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_vprintf(___bio, ___format, ___args) \
-	LP3(0x82e, int, BIO_vprintf , BIO *, ___bio, a0, const char *, ___format, a1, va_list, ___args, a2,\
+	LP3(0x82e, int, BIO_vprintf , BIO *, ___bio, a0, const char *, ___format, a1, long *, ___args, a2,\
 	, AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #ifndef NO_INLINE_VARARGS
 #define BIO_printf(___bio, ___format, ___dummy, ...) \
-	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; BIO_vprintf((___bio), (___format), (va_list) _message); })
+	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; BIO_vprintf((___bio), (___format), (long *) _message); })
 #endif /* !NO_INLINE_VARARGS */
 
 #define BIO_vsnprintf(___buf, ___n, ___format, ___args) \
-	LP4(0x834, int, BIO_vsnprintf , char *, ___buf, a0, size_t, ___n, d0, const char *, ___format, a1, va_list, ___args, a2,\
+	LP4(0x834, int, BIO_vsnprintf , char *, ___buf, a0, size_t, ___n, d0, const char *, ___format, a1, long *, ___args, a2,\
 	, AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #ifndef NO_INLINE_VARARGS
 #define BIO_snprintf(___buf, ___n, ___format, ___dummy, ...) \
-	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; BIO_vsnprintf((___buf), (___n), (___format), (va_list) _message); })
+	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; BIO_vsnprintf((___buf), (___n), (___format), (long *) _message); })
 #endif /* !NO_INLINE_VARARGS */
 
 #define ERR_load_BIO_strings() \
@@ -2192,12 +2201,12 @@
 	, AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ERR_add_error_vdata(___num, ___args) \
-	LP2NR(0xfde, ERR_add_error_vdata , int, ___num, d0, va_list, ___args, a0,\
+	LP2NR(0xfde, ERR_add_error_vdata , int, ___num, d0, long *, ___args, a0,\
 	, AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #ifndef NO_INLINE_VARARGS
 #define ERR_add_error_data(___num, ___dummy, ...) \
-	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; ERR_add_error_vdata((___num), (va_list) _message); })
+	({_sfdc_vararg _message[] = { ___dummy, __VA_ARGS__ }; ERR_add_error_vdata((___num), (long *) _message); })
 #endif /* !NO_INLINE_VARARGS */
 
 #define ERR_load_strings(___lib, ___str) \
