@@ -334,7 +334,7 @@ void (ERR_add_error_data)(int num, ...)
 
 #elif defined(__MORPHOS__)
 
-int BIO_printf(BIO *bio, const char *format, ...)
+int (BIO_printf)(BIO *bio, const char *format, ...)
 {
   va_list args;
   int ret;
