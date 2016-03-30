@@ -458,7 +458,9 @@ extern int kbhit(void);
 #  else
      /* !defined VMS */
 #   ifdef OPENSSL_UNISTD
-#    include OPENSSL_UNISTD
+#    if !defined(OPENSSL_SYS_AMIGA) && !defined(__MORPHOS__)
+#     include OPENSSL_UNISTD
+#    endif
 #   else
 #    include <unistd.h>
 #   endif
