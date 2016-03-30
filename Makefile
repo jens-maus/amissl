@@ -265,7 +265,7 @@ ifeq ($(OS), mos)
   LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
   BASEREL   = -mbaserel32
   NOBASEREL = #-mno-baserel
-  BRELLIB   = -mrestore-a4
+  BRELLIB   = #-mrestore-a4
   GCCVER  = 2
 
 else
