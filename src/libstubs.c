@@ -317,16 +317,13 @@ int (CT_verify_at_least_one_good_sct)(const CT_POLICY_EVAL_CTX * ctx, const STAC
 LONG Printf( CONST_STRPTR format, ... )
 { return VPrintf(format, (CONST APTR)((ULONG)&format + sizeof(CONST_STRPTR))); }
 
-#undef BIO_printf
-int BIO_printf( BIO *bio, const char *format, ... )
+int (BIO_printf)( BIO *bio, const char *format, ... )
 { return BIO_vprintf(bio, format, (long *)((ULONG)&format + sizeof(const char *))); }
 
-#undef BIO_snprintf
-int BIO_snprintf( char *buf, size_t n, const char *format, ... )
+int (BIO_snprintf)( char *buf, size_t n, const char *format, ... )
 { return BIO_vsnprintf(buf, n, format, (long *)((ULONG)&format + sizeof(const char *))); }
 
-#undef ERR_add_error_data
-void ERR_add_error_data(int num, ...)
+void (ERR_add_error_data)(int num, ...)
 {
   va_list args;
   SHOWREGISTERS();
@@ -335,5 +332,28 @@ void ERR_add_error_data(int num, ...)
   va_end(args);
 }
 
+#elif defined(__MORPHOS__)
+
+int BIO_printf(BIO *bio, const char *format, ...)
+{
+  va_list args;
+  int ret;
+  va_start(args, format);
+  ret = BIO_vprintf(bio, format, (long *)args);
+  va_end(args);
+  return ret;
+}
+
+int (BIO_snprintf)(char *buf, size_t n, const char *format, ...)
+{ 
+  va_list args;
+  int ret;
+  va_start(args, format);
+  ret = BIO_vsnprintf(buf, n, format, (long *)args);
+  va_end(args);
+  return ret;
+}
+
 #endif
+
 #endif
