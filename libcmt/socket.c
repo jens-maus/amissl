@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -10,16 +12,27 @@
 #include "multitcp.h"
 #endif
 
-#include <bsdsocket/socketbasetags.h> /* <amitcp/socketbasetags.h> for AmiTCP includes */
+#if !defined(__MORPHOS__)
+#include <bsdsocket/socketbasetags.h>
+#else
+#include <amitcp/socketbasetags.h>
+#endif
+
 #include <internal/amissl.h>
 
-#include "libcmt.h"
-
-int socket(int domain, int type, int protocol)
+#if !defined(__MORPHOS__)
+int (socket)(int domain, int type, int protocol)
+#else
+LONG (socket)(LONG domain, LONG type, LONG protocol)
+#endif
 {
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->socket(domain,type,protocol);
+  else return -1;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return socket(domain, type, protocol);
   else return -1;
 #else
 	GETSTATE();
@@ -78,6 +91,19 @@ void initialize_socket_errno(AMISSL_STATE *state)
 
 			if (ISocket)
 				ISocket->SocketBaseTagList(tags);
+		}
+	}
+#elif defined(__MORPHOS__)
+	if (!state->socket_errno_initialized)
+	{
+		/* Done this early to prevent infinite recursion with the following GETISOCKET() */
+		state->socket_errno_initialized = 1;
+
+		{
+			GETSOCKET();
+
+			if (SocketBase)
+				SocketBaseTagList(tags);
 		}
 	}
 #else

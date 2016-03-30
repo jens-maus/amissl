@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -11,13 +13,15 @@
 #include <internal/amissl.h>
 #endif
 
-#include "libcmt.h"
-
-int closesocket(int s)
+int (closesocket)(int s)
 {
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->CloseSocket(s);
+  else return -1;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return closesocket(s);
   else return -1;
 #else
 	GETSTATE();

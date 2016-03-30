@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -11,13 +13,19 @@
 #include <internal/amissl.h>
 #endif
 
-#include "libcmt.h"
-
-int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen)
+#if !defined(__MORPHOS__)
+int (getsockopt)(int sockfd, int level, int optname, void *optval, socklen_t *optlen)
+#else
+LONG (getsockopt)(LONG sockfd, LONG level, LONG optname, void *optval, LONG *optlen)
+#endif
 {
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->getsockopt(sockfd, level, optname, optval, optlen);
+  else return -1;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return getsockopt(sockfd, level, optname, optval, optlen);
   else return -1;
 #else
 	GETSTATE();

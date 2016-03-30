@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -11,13 +13,19 @@
 #include <internal/amissl.h>
 #endif
 
-#include "libcmt.h"
-
-struct servent *getservbyname(const char *name, const char *proto)
+#if !defined(__MORPHOS__)
+struct servent *(getservbyname)(const char *name, const char *proto)
+#else
+struct servent *(getservbyname)(const UBYTE *name, const UBYTE *proto)
+#endif
 {
 #ifdef __amigaos4__
   GETISOCKET_NOERRNO(); // openssl does not care about the error code for getservbyname
   if(ISocket) return ISocket->getservbyname((char *)name, (char *)proto);
+  else return NULL;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return getservbyname(name, proto);
   else return NULL;
 #else
 	GETSTATE();

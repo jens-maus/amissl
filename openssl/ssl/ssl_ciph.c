@@ -1633,7 +1633,9 @@ char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf, int len)
 {
     const char *ver;
     const char *kx, *au, *enc, *mac;
+#if !defined(OPENSSL_SYS_AMIGA)
     uint32_t alg_mkey, alg_auth, alg_enc, alg_mac;
+#endif
     static const char *format =
         "%-23s %s Kx=%-8s Au=%-4s Enc=%-9s Mac=%-4s\n";
 
@@ -1645,10 +1647,12 @@ char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf, int len)
     } else if (len < 128)
         return NULL;
 
+#if !defined(OPENSSL_SYS_AMIGA)
     alg_mkey = cipher->algorithm_mkey;
     alg_auth = cipher->algorithm_auth;
     alg_enc = cipher->algorithm_enc;
     alg_mac = cipher->algorithm_mac;
+#endif
 
     ver = ssl_protocol_to_string(cipher->min_tls);
 

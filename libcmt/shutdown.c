@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -11,13 +13,19 @@
 #include <internal/amissl.h>
 #endif
 
-#include "libcmt.h"
-
-int shutdown(int sockfd, int how)
+#if !defined(__MORPHOS__)
+int (shutdown)(int sockfd, int how)
+#else
+LONG (shutdown)(LONG sockfd, LONG how)
+#endif
 {
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->shutdown(sockfd, how);
+  else return -1;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return shutdown(sockfd, how);
   else return -1;
 #else
 	GETSTATE();

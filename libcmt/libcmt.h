@@ -22,6 +22,14 @@ extern void __free_libcmt(void) __attribute__((destructor));
 #if !defined(_IOFBF) || !defined(_IOLBF) || !defined(_IONBF)
 #error _IOFBF, _IOLBF and _IONBF should be defined in stdio.h
 #endif
+#if defined(__MORPHOS__)
+#define __FILE_EOF      (1<<2)  /* EOF reached */
+#define __FILE_READABLE (1<<3)  /* File is readable */
+#define __FILE_WRITABLE (1<<4)  /* File is writable */
+#define __FILE_IN_USE   (1<<5)  /* File is in use */
+#define __FILE_ERROR    (1<<6)  /* Error detected */
+#endif
+
 #define _IOREAD     __FILE_READABLE /* read flag */
 #define _IOWRT      __FILE_WRITABLE /* write flag */
 #define _IOEOF      __FILE_EOF      /* end-of-file flag */
@@ -69,6 +77,7 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define GETISOCKET() struct SocketIFace *ISocket = GetSocketIFace(1)
 #define GETISOCKET_NOERRNO() struct SocketIFace *ISocket = GetSocketIFace(0)
 #define GETSTATE() AMISSL_STATE *state = GetAmiSSLState()
+#define GETSOCKET() struct Library *SocketBase = GetAmiSSLState()->SocketBase
 
 #define DO_NOTHING     ((void)0)
 
@@ -83,12 +92,13 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 # endif
 #endif
 
-#include <netinet/in.h>
-#include <sys/socket.h>
-
 #if defined(__MORPHOS__)
 typedef int socklen_t;
 #endif
+
+#if !defined(__MORPHOS__)
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 struct hostent * gethostbyname(const char *name);
 struct servent * getservbyname(const char *name, const char *proto);
@@ -113,5 +123,6 @@ int ioctlsocket(int sockfd, long request, char *arg);
 void openlog(const char *ident, int option, int facility);
 void syslog(int priority, const char *format, ...);
 void closelog(void);
+#endif
 
 #endif /* !LIBCMT_H */

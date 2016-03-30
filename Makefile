@@ -260,7 +260,7 @@ ifeq ($(OS), mos)
   # Compiler/Linker flags
   CPU       = -mcpu=powerpc -mstrict-align
   APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__MORPHOS__
-  CFLAGS    += -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
+  CFLAGS    += -noixemul -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
   LDFLAGS   += -noixemul
   LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
   BASEREL   = -mbaserel32
@@ -365,7 +365,7 @@ LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # make the object directory
 $(BUILD_D):

@@ -393,7 +393,7 @@ static double Time_F(int s)
 static double Time_F(int s)
 {
     double ret = app_tminterval(s, usertime);
-#ifdef SIGALRM
+#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
     if (s == STOP)
         alarm(0);
 #endif
@@ -2875,7 +2875,7 @@ int speed_main(int argc, char **argv)
 
 static void print_message(const char *s, long num, int length)
 {
-#ifdef SIGALRM
+#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
     BIO_printf(bio_err,
                mr ? "+DT:%s:%d:%d\n"
                : "Doing %s for %ds on %d size blocks: ", s, SECONDS, length);
@@ -2892,7 +2892,7 @@ static void print_message(const char *s, long num, int length)
 static void pkey_print_message(const char *str, const char *str2, long num,
                                int bits, int tm)
 {
-#ifdef SIGALRM
+#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
     BIO_printf(bio_err,
                mr ? "+DTP:%d:%s:%s:%d\n"
                : "Doing %d bit %s %s's for %ds: ", bits, str, str2, tm);

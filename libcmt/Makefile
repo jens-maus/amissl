@@ -28,6 +28,12 @@ DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
 CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I../include -D__NO_NET_API
 
+CC      = $(CROSS_PREFIX)gcc
+STRIP   = $(CROSS_PREFIX)strip
+OBJDUMP = $(CROSS_PREFIX)objdump
+AR      = $(CROSS_PREFIX)ar
+RANLIB  = $(CROSS_PREFIX)ranlib
+
 # different options per target OS
 ifeq ($(OS), os4)
 
@@ -36,9 +42,7 @@ ifeq ($(OS), os4)
 
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS4)
-    CC      = ppc-amigaos-gcc
-    STRIP   = ppc-amigaos-strip
-    OBJDUMP = ppc-amigaos-objdump
+    CROSS_PREFIX = ppc-amigaos-
   else
     HCFLAGS += -mcrt=clib2
   endif
@@ -59,9 +63,7 @@ ifeq ($(OS), os3)
 
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS)
-    CC      = m68k-amigaos-gcc
-    STRIP   = m68k-amigaos-strip
-    OBJDUMP = m68k-amigaos-objdump
+    CROSS_PREFIX = m68k-amigaos-
   endif
 
   # Compiler/Linker flags
@@ -78,9 +80,7 @@ ifeq ($(OS), mos)
 
   # Compiler/link/strip commands
   ifneq ($(HOST), MorphOS)
-    CC      = ppc-morphos-gcc
-    STRIP   = ppc-morphos-strip
-    OBJDUMP = ppc-morphos-objdump
+    CROSS_PREFIX = ppc-morphos-
   endif
 
   # Compiler/Linker flags

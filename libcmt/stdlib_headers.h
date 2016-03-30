@@ -53,11 +53,13 @@
 
 /****************************************************************************/
 
+#ifndef __MORPHOS__
 #if (INCLUDE_VERSION >= 50)
 #ifndef DOS_ANCHORPATH_H
 #include <dos/anchorpath.h>
 #endif /* DOS_ANCHORPATH_H */
 #endif /* (INCLUDE_VERSION >= 50) */
+#endif
 
 /****************************************************************************/
 

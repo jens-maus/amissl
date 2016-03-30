@@ -163,7 +163,7 @@ double __scalbn (double x, int n)
 
 static	const double	one	= 1.0/*, tiny=1.0e-300 */;
 
-INLINE double __sqrt(double x)
+static INLINE double __sqrt(double x)
 {
 	double z;
 	int sign = (int)0x80000000;
@@ -259,7 +259,7 @@ INLINE double __sqrt(double x)
 	return z;
 }
 
-INLINE double __floor(double x)
+static INLINE double __floor(double x)
 {
 	int i0,i1,j0;
 	unsigned int i,j;
@@ -369,7 +369,7 @@ ivln2    =  1.44269504088896338700e+00, /* 0x3FF71547, 0x652B82FE =1/ln2 */
 ivln2_h  =  1.44269502162933349609e+00, /* 0x3FF71547, 0x60000000 =24b 1/ln2*/
 ivln2_l  =  1.92596299112661746887e-08; /* 0x3E54AE0B, 0xF85DDF44 =1/ln2 tail*/
 
-INLINE double __pow(double x,double y)
+static INLINE double __pow(double x,double y)
 {
 	double z,ax,z_h,z_l,p_h,p_l;
 	double y1,t1,t2,r,s,t,u,v,w;
@@ -573,7 +573,7 @@ INLINE double __pow(double x,double y)
 	return s*z;
 }
 
-INLINE double __get_huge_val()
+static INLINE double __get_huge_val()
 {
 	double ret;
 	union ieee_double *double_x = (union ieee_double *)&ret;
@@ -590,7 +590,7 @@ INLINE double __get_huge_val()
 #include <proto/mathieeedoubbas.h>
 #include <proto/mathieeedoubtrans.h>
 
-INLINE double __sqrt(double x)
+static INLINE double __sqrt(double x)
 {
 	double result;
 
@@ -599,7 +599,7 @@ INLINE double __sqrt(double x)
 	return(result);
 }
 
-INLINE double __floor(double x)
+static INLINE double __floor(double x)
 {
 	double result;
 
@@ -608,7 +608,7 @@ INLINE double __floor(double x)
 	return(result);
 }
 
-INLINE double __exp(double x)
+static INLINE double __exp(double x)
 {
 	double result;
 
@@ -617,7 +617,7 @@ INLINE double __exp(double x)
 	return(result);
 }
 
-INLINE double __log(double x)
+static INLINE double __log(double x)
 {
 	double result;
 
@@ -626,7 +626,7 @@ INLINE double __log(double x)
 	return(result);
 }
 
-INLINE double __pow(double x,double y)
+static INLINE double __pow(double x,double y)
 {
 	double result;
 
@@ -647,7 +647,7 @@ INLINE double __pow(double x,double y)
 	return(result);
 }
 
-INLINE double __get_huge_val()
+static INLINE double __get_huge_val()
 {
 	double ret;
 	union ieee_double *double_x = (union ieee_double *)&ret;

@@ -23,8 +23,10 @@ char *__getenv(const char *name)
     return state->getenv_var;
 }
 
+#if !defined(__MORPHOS__)
 char *getenv(const char *name)
 {
 	return __getenv(name);
 }
+#endif
 

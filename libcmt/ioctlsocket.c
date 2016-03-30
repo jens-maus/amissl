@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "libcmt.h"
+
 #ifdef __amigaos4__
 #undef __USE_INLINE__
 #include <proto/bsdsocket.h>
@@ -11,13 +13,15 @@
 #include <internal/amissl.h>
 #endif
 
-#include "libcmt.h"
-
 int ioctlsocket(int sockfd, long request, char *arg)
 {
 #ifdef __amigaos4__
   GETISOCKET();
   if(ISocket) return ISocket->IoctlSocket(sockfd, request, arg);
+  else return -1;
+#elif __MORPHOS__
+  GETSOCKET();
+  if(SocketBase) return IoctlSocket(sockfd, request, arg);
   else return -1;
 #else
 	GETSTATE();

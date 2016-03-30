@@ -408,7 +408,7 @@ char *hex_to_string(const unsigned char *buffer, long len)
     char *tmp, *q;
     const unsigned char *p;
     int i;
-    const static char hexdig[] = "0123456789ABCDEF";
+    static const char hexdig[] = "0123456789ABCDEF";
     if (!buffer || !len)
         return NULL;
     if ((tmp = OPENSSL_malloc(len * 3 + 1)) == NULL) {

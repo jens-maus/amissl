@@ -6,7 +6,7 @@
 #define INLINE4_USERGROUP_H
 #include <proto/usergroup.h>
 
-#ifndef __amigaos4__
+#if !defined(__amigaos4__) && !defined(__MORPHOS__)
 #define USERGROUP_BASE_NAME UserGroupBase
 #define _getuid() ({ \
   LONG __getuid__re = \
@@ -23,7 +23,11 @@
 })
 #endif
 
-long getuid(void)
+#if !defined(__MORPHOS__)
+long (getuid)(void)
+#else
+uid_t (getuid)(void)
+#endif
 {
 	struct Library *UserGroupBase;
 #ifdef __amigaos4__
@@ -33,8 +37,12 @@ long getuid(void)
 
 	if ((UserGroupBase = OpenLibrary("usergroup.library", 1)) || (UserGroupBase = OpenLibrary("AmiTCP:Libs/usergroup.library", 1)))
 	{
-#ifndef __amigaos4__
+#if !defined(__amigaos4__)
+ #if !defined(__MORPHOS__)
 		ret = _getuid();
+ #else
+    ret = getuid();
+ #endif
 #else
 		if ( (IUserGroup = (struct UserGroupIFace *)GetInterface(UserGroupBase, "main", 1, NULL)) )
 		{
