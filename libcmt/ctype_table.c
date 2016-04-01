@@ -31,8 +31,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef __C_MACROS__
 #define __C_MACROS__
-#include <ctype.h>
+#endif
+
+#include "ctype.h"
 
 /****************************************************************************/
 

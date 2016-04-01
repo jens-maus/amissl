@@ -67,7 +67,34 @@ long InitAmiSSL(Tag tag1, ...)
 { return InitAmiSSLA((struct TagItem *)&tag1); }
 long CleanupAmiSSL(Tag tag1, ...)
 { return CleanupAmiSSLA((struct TagItem *)&tag1); }
+
+#elif defined(__MORPHOS__)
+
+#warning are these vararg functions correct?
+
+long InitAmiSSL(Tag tag1, ...)
+{
+  va_list args;
+  long ret;
+  va_start(args, tag1);
+  ret = InitAmiSSLA(args);
+  va_end(args);
+  return ret;
+}
+
+long CleanupAmiSSL(Tag tag1, ...)
+{
+  va_list args;
+  long ret;
+  va_start(args, tag1);
+  ret = CleanupAmiSSLA(args);
+  va_end(args);
+  return ret;
+}
+
+
 #endif
+
 #endif
 
 #define XMKSTR(x) #x

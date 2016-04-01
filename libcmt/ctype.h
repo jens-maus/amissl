@@ -87,11 +87,6 @@ extern const unsigned char __ctype_table[];
 
 /****************************************************************************/
 
-#define tolower(c)  (isupper(c) ? (c - 'A' + 'a') : c)
-#define toupper(c)  (islower(c) ? (c - 'a' + 'A') : c)
-
-/****************************************************************************/
-
 /* The following is not part of the ISO 'C' (1994) standard. */
 
 #define isascii(c) ((unsigned)(c) <= 127)

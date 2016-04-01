@@ -51,7 +51,7 @@ ifeq ($(OS), os4)
   CRT      = clib2
   CPU      = -mcpu=powerpc -mstrict-align
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization
-  CFLAGS   += -mcrt=$(CRT) -mbaserel -D__USE_INLINE__ \
+  CFLAGS   += -mcrt=$(CRT) -mbaserel -D__USE_INLINE__ -D__C_MACROS__ \
               $(REDEFINE) -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
 
@@ -181,7 +181,9 @@ STDIOOBJS = $(BUILD_D)/malloc.o \
             $(BUILD_D)/errno.o \
             $(BUILD_D)/math.o \
             $(BUILD_D)/gettimeofday.o \
-            $(BUILD_D)/vsnprintf.o
+            $(BUILD_D)/vsnprintf.o \
+            $(BUILD_D)/tolower.o \
+            $(BUILD_D)/toupper.o
 
 NWLIBOBJS = $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/accept.o \
