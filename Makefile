@@ -266,7 +266,10 @@ ifeq ($(OS), mos)
   BASEREL   = -mbaserel32
   NOBASEREL = #-mno-baserel
   BRELLIB   = #-mrestore-a4
-  GCCVER  = 2
+
+  EXTRALIBOBJS = $(BUILD_D)/amissl_stubs_mos.o
+
+  EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_stubs_mos.o
 
 else
 ifeq ($(OS), aros-i386)

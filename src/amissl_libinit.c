@@ -22,6 +22,10 @@
 #include "amissl_base.h"
 #include "amissl_glue.h"
 
+#if defined(__MORPHOS__)
+#include "amissl_stubs_mos.h"
+#endif
+
 //
 
 #include <internal/debug.h>
