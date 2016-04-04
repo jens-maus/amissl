@@ -3,12 +3,12 @@
 #define PRAGMAS_AMISSL_PRAGMAS_H
 
 /*
-**	$VER: amissl_pragmas.h $Id$ $Id$
+**   $VER: amissl_pragmas.h $Id$ $Id$
 **
-**	Direct ROM interface (pragma) definitions.
+**   Direct ROM interface (pragma) definitions.
 **
-**	Copyright © 2001 Amiga, Inc.
-**	    All Rights Reserved
+**   Copyright © 2001 Amiga, Inc.
+**       All Rights Reserved
 */
 
 #if defined(LATTICE) || defined(__SASC) || defined(_DCC)

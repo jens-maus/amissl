@@ -21,23 +21,23 @@ typedef ULONG _sfdc_vararg;
 #endif /* !AMISSLMASTER_BASE_NAME */
 
 #define InitAmiSSLMaster(___APIVersion, ___UsesOpenSSLStructs) \
-	LP2(0x1e, LONG, InitAmiSSLMaster , LONG, ___APIVersion, d0, LONG, ___UsesOpenSSLStructs, d1,\
-	, AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
+      LP2(0x1e, LONG, InitAmiSSLMaster , LONG, ___APIVersion, d0, LONG, ___UsesOpenSSLStructs, d1,\
+      , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OpenAmiSSL() \
-	LP0(0x24, struct Library *, OpenAmiSSL ,\
-	, AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
+      LP0(0x24, struct Library *, OpenAmiSSL ,\
+      , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define CloseAmiSSL() \
-	LP0NR(0x2a, CloseAmiSSL ,\
-	, AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
+      LP0NR(0x2a, CloseAmiSSL ,\
+      , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OpenAmiSSLCipher(___Cipher) \
-	LP1(0x30, struct Library *, OpenAmiSSLCipher , LONG, ___Cipher, d0,\
-	, AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
+      LP1(0x30, struct Library *, OpenAmiSSLCipher , LONG, ___Cipher, d0,\
+      , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define CloseAmiSSLCipher(___CipherBase) \
-	LP1NR(0x36, CloseAmiSSLCipher , struct Library *, ___CipherBase, a0,\
-	, AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
+      LP1NR(0x36, CloseAmiSSLCipher , struct Library *, ___CipherBase, a0,\
+      , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #endif /* !_PPCINLINE_AMISSLMASTER_H */

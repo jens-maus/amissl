@@ -4,12 +4,12 @@
 #define CLIB_AMISSLMASTER_PROTOS_H
 
 /*
-**	$VER: amisslmaster_protos.h $Id$ $Id$
+**   $VER: amisslmaster_protos.h $Id$ $Id$
 **
-**	C prototypes. For use with 32 bit integers only.
+**   C prototypes. For use with 32 bit integers only.
 **
-**	Copyright © 2001 Amiga, Inc.
-**	    All Rights Reserved
+**   Copyright © 2001 Amiga, Inc.
+**       All Rights Reserved
 */
 
 #include <exec/types.h>
