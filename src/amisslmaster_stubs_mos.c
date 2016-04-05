@@ -1,4 +1,4 @@
-/* Automatically generated gatestubs (sfdc 1.8)! Do not edit! */
+/* Automatically generated gatestubs (sfdc 1.9)! Do not edit! */
 
 #include <exec/types.h>
 
@@ -9,60 +9,42 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <emul/emulregs.h>
+#include <SDI_lib.h>
 
-LONG
-LIB_InitAmiSSLMaster(struct Library * _base, LONG ___APIVersion, LONG ___UsesOpenSSLStructs);
-
-LONG
-LIBSTUB_InitAmiSSLMaster(void)
+LIBSTUB(UNIMPLEMENTED, int)
 {
-  LONG ___APIVersion = (LONG) REG_D0;
-  LONG ___UsesOpenSSLStructs = (LONG) REG_D1;
-  struct Library * _base = (struct Library *) REG_A6;
-  return LIB_InitAmiSSLMaster(_base, ___APIVersion, ___UsesOpenSSLStructs);
+  // nothing
+  return 0;
 }
 
-struct Library *
-LIB_OpenAmiSSL(struct Library * _base);
-
-struct Library *
-LIBSTUB_OpenAmiSSL(void)
+LIBSTUB(InitAmiSSLMaster, LONG)
 {
-  struct Library * _base = (struct Library *) REG_A6;
-  return LIB_OpenAmiSSL(_base);
+  __BASE_OR_IFACE = (__BASE_OR_IFACE_TYPE)REG_A6;
+  return CALL_LFUNC(InitAmiSSLMaster, (LONG)REG_D0, (LONG)REG_D1);
 }
 
-void
-LIB_CloseAmiSSL(struct Library * _base);
-
-void
-LIBSTUB_CloseAmiSSL(void)
+LIBSTUB(OpenAmiSSL, struct Library *)
 {
-  struct Library * _base = (struct Library *) REG_A6;
-  return LIB_CloseAmiSSL(_base);
+  __BASE_OR_IFACE = (__BASE_OR_IFACE_TYPE)REG_A6;
+  return CALL_LFUNC(OpenAmiSSL);
 }
 
-struct Library *
-LIB_OpenAmiSSLCipher(struct Library * _base, LONG ___Cipher);
-
-struct Library *
-LIBSTUB_OpenAmiSSLCipher(void)
+LIBSTUB(CloseAmiSSL, void)
 {
-  LONG ___Cipher = (LONG) REG_D0;
-  struct Library * _base = (struct Library *) REG_A6;
-  return LIB_OpenAmiSSLCipher(_base, ___Cipher);
+  __BASE_OR_IFACE = (__BASE_OR_IFACE_TYPE)REG_A6;
+  return CALL_LFUNC(CloseAmiSSL);
 }
 
-void
-LIB_CloseAmiSSLCipher(struct Library * _base, struct Library * ___CipherBase);
-
-void
-LIBSTUB_CloseAmiSSLCipher(void)
+LIBSTUB(OpenAmiSSLCipher, struct Library *)
 {
-  struct Library * ___CipherBase = (struct Library *) REG_A0;
-  struct Library * _base = (struct Library *) REG_A6;
-  return LIB_CloseAmiSSLCipher(_base, ___CipherBase);
+  __BASE_OR_IFACE = (__BASE_OR_IFACE_TYPE)REG_A6;
+  return CALL_LFUNC(OpenAmiSSLCipher, (LONG)REG_D0);
+}
+
+LIBSTUB(CloseAmiSSLCipher, void)
+{
+  __BASE_OR_IFACE = (__BASE_OR_IFACE_TYPE)REG_A6;
+  return CALL_LFUNC(CloseAmiSSLCipher, (struct Library *)REG_A0);
 }
 
 

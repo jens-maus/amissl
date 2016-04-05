@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.8)! Do not edit! */
+/* Automatically generated header (sfdc 1.9)! Do not edit! */
 
 #ifndef _GATEPROTO_AMISSL_H
 #define _GATEPROTO_AMISSL_H
@@ -14,12182 +14,4067 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <emul/emulregs.h>
-
-void
-LIBSTUB_InternalInitAmiSSL(void);
-
-long
-LIBSTUB_InitAmiSSLA(void);
-
-long
-LIBSTUB_CleanupAmiSSLA(void);
-
-ASN1_TYPE *
-LIBSTUB_ASN1_TYPE_new(void);
-
-void
-LIBSTUB_ASN1_TYPE_free(void);
-
-ASN1_TYPE *
-LIBSTUB_d2i_ASN1_TYPE(void);
-
-int
-LIBSTUB_i2d_ASN1_TYPE(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_ANY_it(void);
-
-int
-LIBSTUB_ASN1_TYPE_get(void);
-
-void
-LIBSTUB_ASN1_TYPE_set(void);
-
-ASN1_OBJECT *
-LIBSTUB_ASN1_OBJECT_new(void);
-
-void
-LIBSTUB_ASN1_OBJECT_free(void);
-
-int
-LIBSTUB_i2d_ASN1_OBJECT(void);
-
-ASN1_OBJECT *
-LIBSTUB_d2i_ASN1_OBJECT(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_OBJECT_it(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_STRING_new(void);
-
-void
-LIBSTUB_ASN1_STRING_free(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_STRING_dup(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_STRING_type_new(void);
-
-int
-LIBSTUB_ASN1_STRING_cmp(void);
-
-int
-LIBSTUB_ASN1_STRING_set(void);
-
-int
-LIBSTUB_ASN1_STRING_length(void);
-
-void
-LIBSTUB_ASN1_STRING_length_set(void);
-
-int
-LIBSTUB_ASN1_STRING_type(void);
-
-unsigned char *
-LIBSTUB_ASN1_STRING_data(void);
-
-ASN1_BIT_STRING *
-LIBSTUB_ASN1_BIT_STRING_new(void);
-
-void
-LIBSTUB_ASN1_BIT_STRING_free(void);
-
-ASN1_BIT_STRING *
-LIBSTUB_d2i_ASN1_BIT_STRING(void);
-
-int
-LIBSTUB_i2d_ASN1_BIT_STRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_BIT_STRING_it(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_set(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_set_bit(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_get_bit(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_name_print(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_num_asc(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_set_asc(void);
-
-ASN1_INTEGER *
-LIBSTUB_ASN1_INTEGER_new(void);
-
-void
-LIBSTUB_ASN1_INTEGER_free(void);
-
-ASN1_INTEGER *
-LIBSTUB_d2i_ASN1_INTEGER(void);
-
-int
-LIBSTUB_i2d_ASN1_INTEGER(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_INTEGER_it(void);
-
-ASN1_INTEGER *
-LIBSTUB_d2i_ASN1_UINTEGER(void);
-
-ASN1_INTEGER *
-LIBSTUB_ASN1_INTEGER_dup(void);
-
-int
-LIBSTUB_ASN1_INTEGER_cmp(void);
-
-ASN1_ENUMERATED *
-LIBSTUB_ASN1_ENUMERATED_new(void);
-
-void
-LIBSTUB_ASN1_ENUMERATED_free(void);
-
-ASN1_ENUMERATED *
-LIBSTUB_d2i_ASN1_ENUMERATED(void);
-
-int
-LIBSTUB_i2d_ASN1_ENUMERATED(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_ENUMERATED_it(void);
-
-int
-LIBSTUB_ASN1_UTCTIME_check(void);
-
-ASN1_UTCTIME *
-LIBSTUB_ASN1_UTCTIME_set(void);
-
-int
-LIBSTUB_ASN1_UTCTIME_set_string(void);
-
-int
-LIBSTUB_ASN1_UTCTIME_cmp_time_t(void);
-
-int
-LIBSTUB_ASN1_GENERALIZEDTIME_check(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_ASN1_GENERALIZEDTIME_set(void);
-
-int
-LIBSTUB_ASN1_GENERALIZEDTIME_set_string(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_ASN1_OCTET_STRING_new(void);
-
-void
-LIBSTUB_ASN1_OCTET_STRING_free(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_d2i_ASN1_OCTET_STRING(void);
-
-int
-LIBSTUB_i2d_ASN1_OCTET_STRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_OCTET_STRING_it(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_ASN1_OCTET_STRING_dup(void);
-
-int
-LIBSTUB_ASN1_OCTET_STRING_cmp(void);
-
-int
-LIBSTUB_ASN1_OCTET_STRING_set(void);
-
-ASN1_VISIBLESTRING *
-LIBSTUB_ASN1_VISIBLESTRING_new(void);
-
-void
-LIBSTUB_ASN1_VISIBLESTRING_free(void);
-
-ASN1_VISIBLESTRING *
-LIBSTUB_d2i_ASN1_VISIBLESTRING(void);
-
-int
-LIBSTUB_i2d_ASN1_VISIBLESTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_VISIBLESTRING_it(void);
-
-ASN1_UNIVERSALSTRING *
-LIBSTUB_ASN1_UNIVERSALSTRING_new(void);
-
-void
-LIBSTUB_ASN1_UNIVERSALSTRING_free(void);
-
-ASN1_UNIVERSALSTRING *
-LIBSTUB_d2i_ASN1_UNIVERSALSTRING(void);
-
-int
-LIBSTUB_i2d_ASN1_UNIVERSALSTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_UNIVERSALSTRING_it(void);
-
-ASN1_UTF8STRING *
-LIBSTUB_ASN1_UTF8STRING_new(void);
-
-void
-LIBSTUB_ASN1_UTF8STRING_free(void);
-
-ASN1_UTF8STRING *
-LIBSTUB_d2i_ASN1_UTF8STRING(void);
-
-int
-LIBSTUB_i2d_ASN1_UTF8STRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_UTF8STRING_it(void);
-
-ASN1_NULL *
-LIBSTUB_ASN1_NULL_new(void);
-
-void
-LIBSTUB_ASN1_NULL_free(void);
-
-ASN1_NULL *
-LIBSTUB_d2i_ASN1_NULL(void);
-
-int
-LIBSTUB_i2d_ASN1_NULL(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_NULL_it(void);
-
-ASN1_BMPSTRING *
-LIBSTUB_ASN1_BMPSTRING_new(void);
-
-void
-LIBSTUB_ASN1_BMPSTRING_free(void);
-
-ASN1_BMPSTRING *
-LIBSTUB_d2i_ASN1_BMPSTRING(void);
-
-int
-LIBSTUB_i2d_ASN1_BMPSTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_BMPSTRING_it(void);
-
-int
-LIBSTUB_UTF8_getc(void);
-
-int
-LIBSTUB_UTF8_putc(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_PRINTABLE_new(void);
-
-void
-LIBSTUB_ASN1_PRINTABLE_free(void);
-
-ASN1_STRING *
-LIBSTUB_d2i_ASN1_PRINTABLE(void);
-
-int
-LIBSTUB_i2d_ASN1_PRINTABLE(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_PRINTABLE_it(void);
-
-ASN1_STRING *
-LIBSTUB_DIRECTORYSTRING_new(void);
-
-void
-LIBSTUB_DIRECTORYSTRING_free(void);
-
-ASN1_STRING *
-LIBSTUB_d2i_DIRECTORYSTRING(void);
-
-int
-LIBSTUB_i2d_DIRECTORYSTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_DIRECTORYSTRING_it(void);
-
-ASN1_STRING *
-LIBSTUB_DISPLAYTEXT_new(void);
-
-void
-LIBSTUB_DISPLAYTEXT_free(void);
-
-ASN1_STRING *
-LIBSTUB_d2i_DISPLAYTEXT(void);
-
-int
-LIBSTUB_i2d_DISPLAYTEXT(void);
-
-const ASN1_ITEM *
-LIBSTUB_DISPLAYTEXT_it(void);
-
-ASN1_PRINTABLESTRING *
-LIBSTUB_ASN1_PRINTABLESTRING_new(void);
-
-void
-LIBSTUB_ASN1_PRINTABLESTRING_free(void);
-
-ASN1_PRINTABLESTRING *
-LIBSTUB_d2i_ASN1_PRINTABLESTRING(void);
-
-int
-LIBSTUB_i2d_ASN1_PRINTABLESTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_PRINTABLESTRING_it(void);
-
-ASN1_T61STRING *
-LIBSTUB_ASN1_T61STRING_new(void);
-
-void
-LIBSTUB_ASN1_T61STRING_free(void);
-
-ASN1_T61STRING *
-LIBSTUB_d2i_ASN1_T61STRING(void);
-
-int
-LIBSTUB_i2d_ASN1_T61STRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_T61STRING_it(void);
-
-ASN1_IA5STRING *
-LIBSTUB_ASN1_IA5STRING_new(void);
-
-void
-LIBSTUB_ASN1_IA5STRING_free(void);
-
-ASN1_IA5STRING *
-LIBSTUB_d2i_ASN1_IA5STRING(void);
-
-int
-LIBSTUB_i2d_ASN1_IA5STRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_IA5STRING_it(void);
-
-ASN1_GENERALSTRING *
-LIBSTUB_ASN1_GENERALSTRING_new(void);
-
-void
-LIBSTUB_ASN1_GENERALSTRING_free(void);
-
-ASN1_GENERALSTRING *
-LIBSTUB_d2i_ASN1_GENERALSTRING(void);
-
-int
-LIBSTUB_i2d_ASN1_GENERALSTRING(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_GENERALSTRING_it(void);
-
-ASN1_UTCTIME *
-LIBSTUB_ASN1_UTCTIME_new(void);
-
-void
-LIBSTUB_ASN1_UTCTIME_free(void);
-
-ASN1_UTCTIME *
-LIBSTUB_d2i_ASN1_UTCTIME(void);
-
-int
-LIBSTUB_i2d_ASN1_UTCTIME(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_UTCTIME_it(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_ASN1_GENERALIZEDTIME_new(void);
-
-void
-LIBSTUB_ASN1_GENERALIZEDTIME_free(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_d2i_ASN1_GENERALIZEDTIME(void);
-
-int
-LIBSTUB_i2d_ASN1_GENERALIZEDTIME(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_GENERALIZEDTIME_it(void);
-
-ASN1_TIME *
-LIBSTUB_ASN1_TIME_new(void);
-
-void
-LIBSTUB_ASN1_TIME_free(void);
-
-ASN1_TIME *
-LIBSTUB_d2i_ASN1_TIME(void);
-
-int
-LIBSTUB_i2d_ASN1_TIME(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_TIME_it(void);
-
-ASN1_TIME *
-LIBSTUB_ASN1_TIME_set(void);
-
-int
-LIBSTUB_ASN1_TIME_check(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_ASN1_TIME_to_generalizedtime(void);
-
-int
-LIBSTUB_i2a_ASN1_INTEGER(void);
-
-int
-LIBSTUB_a2i_ASN1_INTEGER(void);
-
-int
-LIBSTUB_i2a_ASN1_ENUMERATED(void);
-
-int
-LIBSTUB_a2i_ASN1_ENUMERATED(void);
-
-int
-LIBSTUB_i2a_ASN1_OBJECT(void);
-
-int
-LIBSTUB_a2i_ASN1_STRING(void);
-
-int
-LIBSTUB_i2a_ASN1_STRING(void);
-
-int
-LIBSTUB_i2t_ASN1_OBJECT(void);
-
-int
-LIBSTUB_a2d_ASN1_OBJECT(void);
-
-ASN1_OBJECT *
-LIBSTUB_ASN1_OBJECT_create(void);
-
-int
-LIBSTUB_ASN1_INTEGER_set(void);
-
-long
-LIBSTUB_ASN1_INTEGER_get(void);
-
-ASN1_INTEGER *
-LIBSTUB_BN_to_ASN1_INTEGER(void);
-
-BIGNUM *
-LIBSTUB_ASN1_INTEGER_to_BN(void);
-
-int
-LIBSTUB_ASN1_ENUMERATED_set(void);
-
-long
-LIBSTUB_ASN1_ENUMERATED_get(void);
-
-ASN1_ENUMERATED *
-LIBSTUB_BN_to_ASN1_ENUMERATED(void);
-
-BIGNUM *
-LIBSTUB_ASN1_ENUMERATED_to_BN(void);
-
-int
-LIBSTUB_ASN1_PRINTABLE_type(void);
-
-unsigned long
-LIBSTUB_ASN1_tag2bit(void);
-
-int
-LIBSTUB_ASN1_get_object(void);
-
-int
-LIBSTUB_ASN1_check_infinite_end(void);
-
-void
-LIBSTUB_ASN1_put_object(void);
-
-int
-LIBSTUB_ASN1_object_size(void);
-
-void *
-LIBSTUB_ASN1_dup(void);
-
-void *
-LIBSTUB_ASN1_item_dup(void);
-
-int
-LIBSTUB_ASN1_STRING_to_UTF8(void);
-
-void *
-LIBSTUB_ASN1_d2i_bio(void);
-
-void *
-LIBSTUB_ASN1_item_d2i_bio(void);
-
-int
-LIBSTUB_ASN1_i2d_bio(void);
-
-int
-LIBSTUB_ASN1_item_i2d_bio(void);
-
-int
-LIBSTUB_ASN1_UTCTIME_print(void);
-
-int
-LIBSTUB_ASN1_GENERALIZEDTIME_print(void);
-
-int
-LIBSTUB_ASN1_TIME_print(void);
-
-int
-LIBSTUB_ASN1_STRING_print(void);
-
-int
-LIBSTUB_ASN1_STRING_print_ex(void);
-
-int
-LIBSTUB_ASN1_parse(void);
-
-int
-LIBSTUB_ASN1_parse_dump(void);
-
-const char *
-LIBSTUB_ASN1_tag2str(void);
-
-int
-LIBSTUB_ASN1_UNIVERSALSTRING_to_string(void);
-
-int
-LIBSTUB_ASN1_TYPE_set_octetstring(void);
-
-int
-LIBSTUB_ASN1_TYPE_get_octetstring(void);
-
-int
-LIBSTUB_ASN1_TYPE_set_int_octetstring(void);
-
-int
-LIBSTUB_ASN1_TYPE_get_int_octetstring(void);
-
-void *
-LIBSTUB_ASN1_item_unpack(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_item_pack(void);
-
-void
-LIBSTUB_ASN1_STRING_set_default_mask(void);
-
-int
-LIBSTUB_ASN1_STRING_set_default_mask_asc(void);
-
-unsigned long
-LIBSTUB_ASN1_STRING_get_default_mask(void);
-
-int
-LIBSTUB_ASN1_mbstring_copy(void);
-
-int
-LIBSTUB_ASN1_mbstring_ncopy(void);
-
-ASN1_STRING *
-LIBSTUB_ASN1_STRING_set_by_NID(void);
-
-ASN1_STRING_TABLE *
-LIBSTUB_ASN1_STRING_TABLE_get(void);
-
-int
-LIBSTUB_ASN1_STRING_TABLE_add(void);
-
-void
-LIBSTUB_ASN1_STRING_TABLE_cleanup(void);
-
-ASN1_VALUE *
-LIBSTUB_ASN1_item_new(void);
-
-void
-LIBSTUB_ASN1_item_free(void);
-
-ASN1_VALUE *
-LIBSTUB_ASN1_item_d2i(void);
-
-int
-LIBSTUB_ASN1_item_i2d(void);
-
-void
-LIBSTUB_ASN1_add_oid_module(void);
-
-void
-LIBSTUB_ERR_load_ASN1_strings(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_BOOLEAN_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_TBOOLEAN_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_FBOOLEAN_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_SEQUENCE_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_CBIGNUM_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_BIGNUM_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_LONG_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ZLONG_it(void);
-
-int
-LIBSTUB_ASN1_item_ex_new(void);
-
-void
-LIBSTUB_ASN1_item_ex_free(void);
-
-int
-LIBSTUB_ASN1_item_ex_d2i(void);
-
-int
-LIBSTUB_ASN1_item_ex_i2d(void);
-
-size_t
-LIBSTUB_BIO_ctrl_pending(void);
-
-size_t
-LIBSTUB_BIO_ctrl_wpending(void);
-
-size_t
-LIBSTUB_BIO_ctrl_get_write_guarantee(void);
-
-size_t
-LIBSTUB_BIO_ctrl_get_read_request(void);
-
-int
-LIBSTUB_BIO_ctrl_reset_read_request(void);
-
-int
-LIBSTUB_BIO_set_ex_data(void);
-
-void *
-LIBSTUB_BIO_get_ex_data(void);
-
-uint64_t
-LIBSTUB_BIO_number_read(void);
-
-uint64_t
-LIBSTUB_BIO_number_written(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_file(void);
-
-BIO *
-LIBSTUB_BIO_new_file(void);
-
-BIO *
-LIBSTUB_BIO_new_fp_amiga(void);
-
-BIO *
-LIBSTUB_BIO_new(void);
-
-int
-LIBSTUB_BIO_set(void);
-
-int
-LIBSTUB_BIO_free(void);
-
-void
-LIBSTUB_BIO_vfree(void);
-
-int
-LIBSTUB_BIO_read(void);
-
-int
-LIBSTUB_BIO_gets(void);
-
-int
-LIBSTUB_BIO_write(void);
-
-int
-LIBSTUB_BIO_puts(void);
-
-int
-LIBSTUB_BIO_indent(void);
-
-long
-LIBSTUB_BIO_ctrl(void);
-
-long
-LIBSTUB_BIO_callback_ctrl(void);
-
-void *
-LIBSTUB_BIO_ptr_ctrl(void);
-
-long
-LIBSTUB_BIO_int_ctrl(void);
-
-BIO *
-LIBSTUB_BIO_push(void);
-
-BIO *
-LIBSTUB_BIO_pop(void);
-
-void
-LIBSTUB_BIO_free_all(void);
-
-BIO *
-LIBSTUB_BIO_find_type(void);
-
-BIO *
-LIBSTUB_BIO_next(void);
-
-BIO *
-LIBSTUB_BIO_get_retry_BIO(void);
-
-int
-LIBSTUB_BIO_get_retry_reason(void);
-
-BIO *
-LIBSTUB_BIO_dup_chain(void);
-
-int
-LIBSTUB_BIO_nread0(void);
-
-int
-LIBSTUB_BIO_nread(void);
-
-int
-LIBSTUB_BIO_nwrite0(void);
-
-int
-LIBSTUB_BIO_nwrite(void);
-
-long
-LIBSTUB_BIO_debug_callback(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_mem(void);
-
-BIO *
-LIBSTUB_BIO_new_mem_buf(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_socket(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_connect(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_accept(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_fd(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_log(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_bio(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_null(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_null(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_buffer(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_nbio_test(void);
-
-int
-LIBSTUB_BIO_sock_should_retry(void);
-
-int
-LIBSTUB_BIO_sock_non_fatal_error(void);
-
-int
-LIBSTUB_BIO_fd_should_retry(void);
-
-int
-LIBSTUB_BIO_fd_non_fatal_error(void);
-
-int
-LIBSTUB_BIO_dump(void);
-
-int
-LIBSTUB_BIO_dump_indent(void);
-
-struct hostent *
-LIBSTUB_BIO_gethostbyname(void);
-
-int
-LIBSTUB_BIO_sock_error(void);
-
-int
-LIBSTUB_BIO_socket_ioctl(void);
-
-int
-LIBSTUB_BIO_socket_nbio(void);
-
-int
-LIBSTUB_BIO_get_port(void);
-
-int
-LIBSTUB_BIO_get_host_ip(void);
-
-int
-LIBSTUB_BIO_get_accept_socket(void);
-
-int
-LIBSTUB_BIO_accept(void);
-
-int
-LIBSTUB_BIO_sock_init(void);
-
-void
-LIBSTUB_BIO_sock_cleanup(void);
-
-int
-LIBSTUB_BIO_set_tcp_ndelay(void);
-
-BIO *
-LIBSTUB_BIO_new_socket(void);
-
-BIO *
-LIBSTUB_BIO_new_fd(void);
-
-BIO *
-LIBSTUB_BIO_new_connect(void);
-
-BIO *
-LIBSTUB_BIO_new_accept(void);
-
-int
-LIBSTUB_BIO_new_bio_pair(void);
-
-void
-LIBSTUB_BIO_copy_next_retry(void);
-
-int
-LIBSTUB_BIO_vprintf(void);
-
-int
-LIBSTUB_BIO_vsnprintf(void);
-
-void
-LIBSTUB_ERR_load_BIO_strings(void);
-
-const BIGNUM *
-LIBSTUB_BN_value_one(void);
-
-char *
-LIBSTUB_BN_options(void);
-
-BN_CTX *
-LIBSTUB_BN_CTX_new(void);
-
-void
-LIBSTUB_BN_CTX_free(void);
-
-void
-LIBSTUB_BN_CTX_start(void);
-
-BIGNUM *
-LIBSTUB_BN_CTX_get(void);
-
-void
-LIBSTUB_BN_CTX_end(void);
-
-int
-LIBSTUB_BN_rand(void);
-
-int
-LIBSTUB_BN_pseudo_rand(void);
-
-int
-LIBSTUB_BN_rand_range(void);
-
-int
-LIBSTUB_BN_pseudo_rand_range(void);
-
-int
-LIBSTUB_BN_num_bits(void);
-
-int
-LIBSTUB_BN_num_bits_word(void);
-
-BIGNUM *
-LIBSTUB_BN_new(void);
-
-void
-LIBSTUB_BN_clear_free(void);
-
-BIGNUM *
-LIBSTUB_BN_copy(void);
-
-void
-LIBSTUB_BN_swap(void);
-
-BIGNUM *
-LIBSTUB_BN_bin2bn(void);
-
-int
-LIBSTUB_BN_bn2bin(void);
-
-BIGNUM *
-LIBSTUB_BN_mpi2bn(void);
-
-int
-LIBSTUB_BN_bn2mpi(void);
-
-int
-LIBSTUB_BN_sub(void);
-
-int
-LIBSTUB_BN_usub(void);
-
-int
-LIBSTUB_BN_uadd(void);
-
-int
-LIBSTUB_BN_add(void);
-
-int
-LIBSTUB_BN_mul(void);
-
-int
-LIBSTUB_BN_sqr(void);
-
-int
-LIBSTUB_BN_div(void);
-
-int
-LIBSTUB_BN_nnmod(void);
-
-int
-LIBSTUB_BN_mod_add(void);
-
-int
-LIBSTUB_BN_mod_add_quick(void);
-
-int
-LIBSTUB_BN_mod_sub(void);
-
-int
-LIBSTUB_BN_mod_sub_quick(void);
-
-int
-LIBSTUB_BN_mod_mul(void);
-
-int
-LIBSTUB_BN_mod_sqr(void);
-
-int
-LIBSTUB_BN_mod_lshift1(void);
-
-int
-LIBSTUB_BN_mod_lshift1_quick(void);
-
-int
-LIBSTUB_BN_mod_lshift(void);
-
-int
-LIBSTUB_BN_mod_lshift_quick(void);
-
-BN_ULONG
-LIBSTUB_BN_mod_word(void);
-
-BN_ULONG
-LIBSTUB_BN_div_word(void);
-
-int
-LIBSTUB_BN_mul_word(void);
-
-int
-LIBSTUB_BN_add_word(void);
-
-int
-LIBSTUB_BN_sub_word(void);
-
-int
-LIBSTUB_BN_set_word(void);
-
-BN_ULONG
-LIBSTUB_BN_get_word(void);
-
-int
-LIBSTUB_BN_cmp(void);
-
-void
-LIBSTUB_BN_free(void);
-
-int
-LIBSTUB_BN_is_bit_set(void);
-
-int
-LIBSTUB_BN_lshift(void);
-
-int
-LIBSTUB_BN_lshift1(void);
-
-int
-LIBSTUB_BN_exp(void);
-
-int
-LIBSTUB_BN_mod_exp(void);
-
-int
-LIBSTUB_BN_mod_exp_mont(void);
-
-int
-LIBSTUB_BN_mod_exp_mont_word(void);
-
-int
-LIBSTUB_BN_mod_exp2_mont(void);
-
-int
-LIBSTUB_BN_mod_exp_simple(void);
-
-int
-LIBSTUB_BN_mask_bits(void);
-
-int
-LIBSTUB_BN_print(void);
-
-int
-LIBSTUB_BN_reciprocal(void);
-
-int
-LIBSTUB_BN_rshift(void);
-
-int
-LIBSTUB_BN_rshift1(void);
-
-void
-LIBSTUB_BN_clear(void);
-
-BIGNUM *
-LIBSTUB_BN_dup(void);
-
-int
-LIBSTUB_BN_ucmp(void);
-
-int
-LIBSTUB_BN_set_bit(void);
-
-int
-LIBSTUB_BN_clear_bit(void);
-
-char *
-LIBSTUB_BN_bn2hex(void);
-
-char *
-LIBSTUB_BN_bn2dec(void);
-
-int
-LIBSTUB_BN_hex2bn(void);
-
-int
-LIBSTUB_BN_dec2bn(void);
-
-int
-LIBSTUB_BN_gcd(void);
-
-int
-LIBSTUB_BN_kronecker(void);
-
-BIGNUM *
-LIBSTUB_BN_mod_inverse(void);
-
-BIGNUM *
-LIBSTUB_BN_mod_sqrt(void);
-
-BIGNUM *
-LIBSTUB_BN_generate_prime(void);
-
-int
-LIBSTUB_BN_is_prime(void);
-
-int
-LIBSTUB_BN_is_prime_fasttest(void);
-
-BN_MONT_CTX *
-LIBSTUB_BN_MONT_CTX_new(void);
-
-int
-LIBSTUB_BN_mod_mul_montgomery(void);
-
-int
-LIBSTUB_BN_from_montgomery(void);
-
-void
-LIBSTUB_BN_MONT_CTX_free(void);
-
-int
-LIBSTUB_BN_MONT_CTX_set(void);
-
-BN_MONT_CTX *
-LIBSTUB_BN_MONT_CTX_copy(void);
-
-BN_BLINDING *
-LIBSTUB_BN_BLINDING_new(void);
-
-void
-LIBSTUB_BN_BLINDING_free(void);
-
-int
-LIBSTUB_BN_BLINDING_update(void);
-
-int
-LIBSTUB_BN_BLINDING_convert(void);
-
-int
-LIBSTUB_BN_BLINDING_invert(void);
-
-void
-LIBSTUB_BN_set_params(void);
-
-int
-LIBSTUB_BN_get_params(void);
-
-BN_RECP_CTX *
-LIBSTUB_BN_RECP_CTX_new(void);
-
-void
-LIBSTUB_BN_RECP_CTX_free(void);
-
-int
-LIBSTUB_BN_RECP_CTX_set(void);
-
-int
-LIBSTUB_BN_mod_mul_reciprocal(void);
-
-int
-LIBSTUB_BN_mod_exp_recp(void);
-
-int
-LIBSTUB_BN_div_recp(void);
-
-int
-LIBSTUB_BN_bntest_rand(void);
-
-void
-LIBSTUB_ERR_load_BN_strings(void);
-
-BUF_MEM *
-LIBSTUB_BUF_MEM_new(void);
-
-void
-LIBSTUB_BUF_MEM_free(void);
-
-size_t
-LIBSTUB_BUF_MEM_grow(void);
-
-size_t
-LIBSTUB_BUF_MEM_grow_clean(void);
-
-void
-LIBSTUB_ERR_load_BUF_strings(void);
-
-COMP_CTX *
-LIBSTUB_COMP_CTX_new(void);
-
-void
-LIBSTUB_COMP_CTX_free(void);
-
-int
-LIBSTUB_COMP_compress_block(void);
-
-int
-LIBSTUB_COMP_expand_block(void);
-
-COMP_METHOD *
-LIBSTUB_COMP_zlib(void);
-
-void
-LIBSTUB_ERR_load_COMP_strings(void);
-
-int
-LIBSTUB_CONF_set_default_method(void);
-
-void
-LIBSTUB_CONF_set_nconf(void);
-
-LHASH_OF(CONF_VALUE) *
-LIBSTUB_CONF_load(void);
-
-LHASH_OF(CONF_VALUE) *
-LIBSTUB_CONF_load_bio(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_CONF_get_section(void);
-
-char *
-LIBSTUB_CONF_get_string(void);
-
-long
-LIBSTUB_CONF_get_number(void);
-
-void
-LIBSTUB_CONF_free(void);
-
-int
-LIBSTUB_CONF_dump_bio(void);
-
-void
-LIBSTUB_OPENSSL_config(void);
-
-CONF *
-LIBSTUB_NCONF_new(void);
-
-CONF_METHOD *
-LIBSTUB_NCONF_default(void);
-
-CONF_METHOD *
-LIBSTUB_NCONF_WIN32(void);
-
-void
-LIBSTUB_NCONF_free(void);
-
-void
-LIBSTUB_NCONF_free_data(void);
-
-int
-LIBSTUB_NCONF_load(void);
-
-int
-LIBSTUB_NCONF_load_bio(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_NCONF_get_section(void);
-
-char *
-LIBSTUB_NCONF_get_string(void);
-
-int
-LIBSTUB_NCONF_get_number_e(void);
-
-int
-LIBSTUB_NCONF_dump_bio(void);
-
-int
-LIBSTUB_CONF_modules_load(void);
-
-int
-LIBSTUB_CONF_modules_load_file(void);
-
-void
-LIBSTUB_CONF_modules_unload(void);
-
-void
-LIBSTUB_CONF_modules_finish(void);
-
-void
-LIBSTUB_CONF_modules_free(void);
-
-int
-LIBSTUB_CONF_module_add(void);
-
-const char *
-LIBSTUB_CONF_imodule_get_name(void);
-
-const char *
-LIBSTUB_CONF_imodule_get_value(void);
-
-void *
-LIBSTUB_CONF_imodule_get_usr_data(void);
-
-void
-LIBSTUB_CONF_imodule_set_usr_data(void);
-
-CONF_MODULE *
-LIBSTUB_CONF_imodule_get_module(void);
-
-unsigned long
-LIBSTUB_CONF_imodule_get_flags(void);
-
-void
-LIBSTUB_CONF_imodule_set_flags(void);
-
-void *
-LIBSTUB_CONF_module_get_usr_data(void);
-
-void
-LIBSTUB_CONF_module_set_usr_data(void);
-
-char *
-LIBSTUB_CONF_get1_default_config_file(void);
-
-int
-LIBSTUB_CONF_parse_list(void);
-
-void
-LIBSTUB_OPENSSL_load_builtin_modules(void);
-
-void
-LIBSTUB_ERR_load_CONF_strings(void);
-
-int
-LIBSTUB_CRYPTO_mem_ctrl(void);
-
-int
-LIBSTUB_OPENSSL_issetugid(void);
-
-int
-LIBSTUB_CRYPTO_get_ex_new_index(void);
-
-int
-LIBSTUB_CRYPTO_new_ex_data(void);
-
-int
-LIBSTUB_CRYPTO_dup_ex_data(void);
-
-void
-LIBSTUB_CRYPTO_free_ex_data(void);
-
-int
-LIBSTUB_CRYPTO_set_ex_data(void);
-
-void *
-LIBSTUB_CRYPTO_get_ex_data(void);
-
-void
-LIBSTUB_CRYPTO_cleanup_all_ex_data(void);
-
-int
-LIBSTUB_CRYPTO_set_mem_functions(void);
-
-void
-LIBSTUB_CRYPTO_get_mem_functions(void);
-
-void *
-LIBSTUB_CRYPTO_malloc(void);
-
-void
-LIBSTUB_CRYPTO_free(void);
-
-void *
-LIBSTUB_CRYPTO_realloc(void);
-
-void
-LIBSTUB_OPENSSL_cleanse(void);
-
-DSO *
-LIBSTUB_DSO_new(void);
-
-DSO *
-LIBSTUB_DSO_new_method(void);
-
-int
-LIBSTUB_DSO_free(void);
-
-int
-LIBSTUB_DSO_flags(void);
-
-int
-LIBSTUB_DSO_up_ref(void);
-
-long
-LIBSTUB_DSO_ctrl(void);
-
-int
-LIBSTUB_DSO_set_name_converter(void);
-
-const char *
-LIBSTUB_DSO_get_filename(void);
-
-int
-LIBSTUB_DSO_set_filename(void);
-
-char *
-LIBSTUB_DSO_convert_filename(void);
-
-const char *
-LIBSTUB_DSO_get_loaded_filename(void);
-
-void
-LIBSTUB_DSO_set_default_method(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_get_default_method(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_get_method(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_set_method(void);
-
-DSO *
-LIBSTUB_DSO_load(void);
-
-void *
-LIBSTUB_DSO_bind_var(void);
-
-DSO_FUNC_TYPE
-LIBSTUB_DSO_bind_func(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_openssl(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_null(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_dlfcn(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_dl(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_win32(void);
-
-DSO_METHOD *
-LIBSTUB_DSO_METHOD_vms(void);
-
-void
-LIBSTUB_ERR_load_DSO_strings(void);
-
-const EC_METHOD *
-LIBSTUB_EC_GFp_simple_method(void);
-
-const EC_METHOD *
-LIBSTUB_EC_GFp_mont_method(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new(void);
-
-void
-LIBSTUB_EC_GROUP_free(void);
-
-void
-LIBSTUB_EC_GROUP_clear_free(void);
-
-int
-LIBSTUB_EC_GROUP_copy(void);
-
-const EC_METHOD *
-LIBSTUB_EC_GROUP_method_of(void);
-
-int
-LIBSTUB_EC_GROUP_set_curve_GFp(void);
-
-int
-LIBSTUB_EC_GROUP_get_curve_GFp(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new_curve_GFp(void);
-
-int
-LIBSTUB_EC_GROUP_set_generator(void);
-
-const EC_POINT *
-LIBSTUB_EC_GROUP_get0_generator(void);
-
-int
-LIBSTUB_EC_GROUP_get_order(void);
-
-int
-LIBSTUB_EC_GROUP_get_cofactor(void);
-
-EC_POINT *
-LIBSTUB_EC_POINT_new(void);
-
-void
-LIBSTUB_EC_POINT_free(void);
-
-void
-LIBSTUB_EC_POINT_clear_free(void);
-
-int
-LIBSTUB_EC_POINT_copy(void);
-
-const EC_METHOD *
-LIBSTUB_EC_POINT_method_of(void);
-
-int
-LIBSTUB_EC_POINT_set_to_infinity(void);
-
-int
-LIBSTUB_EC_POINT_set_Jprojective_coordinates_GFp(void);
-
-int
-LIBSTUB_EC_POINT_get_Jprojective_coordinates_GFp(void);
-
-int
-LIBSTUB_EC_POINT_set_affine_coordinates_GFp(void);
-
-int
-LIBSTUB_EC_POINT_get_affine_coordinates_GFp(void);
-
-int
-LIBSTUB_EC_POINT_set_compressed_coordinates_GFp(void);
-
-size_t
-LIBSTUB_EC_POINT_point2oct(void);
-
-int
-LIBSTUB_EC_POINT_oct2point(void);
-
-int
-LIBSTUB_EC_POINT_add(void);
-
-int
-LIBSTUB_EC_POINT_dbl(void);
-
-int
-LIBSTUB_EC_POINT_invert(void);
-
-int
-LIBSTUB_EC_POINT_is_at_infinity(void);
-
-int
-LIBSTUB_EC_POINT_is_on_curve(void);
-
-int
-LIBSTUB_EC_POINT_cmp(void);
-
-int
-LIBSTUB_EC_POINT_make_affine(void);
-
-int
-LIBSTUB_EC_POINTs_make_affine(void);
-
-int
-LIBSTUB_EC_POINTs_mul(void);
-
-int
-LIBSTUB_EC_POINT_mul(void);
-
-int
-LIBSTUB_EC_GROUP_precompute_mult(void);
-
-void
-LIBSTUB_ERR_load_EC_strings(void);
-
-void
-LIBSTUB_ERR_put_error(void);
-
-void
-LIBSTUB_ERR_set_error_data(void);
-
-unsigned long
-LIBSTUB_ERR_get_error(void);
-
-unsigned long
-LIBSTUB_ERR_get_error_line(void);
-
-unsigned long
-LIBSTUB_ERR_get_error_line_data(void);
-
-unsigned long
-LIBSTUB_ERR_peek_error(void);
-
-unsigned long
-LIBSTUB_ERR_peek_error_line(void);
-
-unsigned long
-LIBSTUB_ERR_peek_error_line_data(void);
-
-unsigned long
-LIBSTUB_ERR_peek_last_error(void);
-
-unsigned long
-LIBSTUB_ERR_peek_last_error_line(void);
-
-unsigned long
-LIBSTUB_ERR_peek_last_error_line_data(void);
-
-void
-LIBSTUB_ERR_clear_error(void);
-
-char *
-LIBSTUB_ERR_error_string(void);
-
-void
-LIBSTUB_ERR_error_string_n(void);
-
-const char *
-LIBSTUB_ERR_lib_error_string(void);
-
-const char *
-LIBSTUB_ERR_func_error_string(void);
-
-const char *
-LIBSTUB_ERR_reason_error_string(void);
-
-void
-LIBSTUB_ERR_print_errors_cb(void);
-
-void
-LIBSTUB_ERR_print_errors(void);
-
-void
-LIBSTUB_ERR_add_error_vdata(void);
-
-void
-LIBSTUB_ERR_load_strings(void);
-
-void
-LIBSTUB_ERR_unload_strings(void);
-
-void
-LIBSTUB_ERR_load_ERR_strings(void);
-
-void
-LIBSTUB_ERR_free_strings(void);
-
-void
-LIBSTUB_ERR_remove_state(void);
-
-ERR_STATE *
-LIBSTUB_ERR_get_state(void);
-
-LHASH_OF(ERR_STRING_DATA) *
-LIBSTUB_ERR_get_string_table(void);
-
-int
-LIBSTUB_ERR_get_next_error_library(void);
-
-int
-LIBSTUB_EVP_MD_CTX_copy_ex(void);
-
-int
-LIBSTUB_EVP_DigestInit_ex(void);
-
-int
-LIBSTUB_EVP_DigestUpdate(void);
-
-int
-LIBSTUB_EVP_DigestFinal_ex(void);
-
-int
-LIBSTUB_EVP_Digest(void);
-
-int
-LIBSTUB_EVP_MD_CTX_copy(void);
-
-int
-LIBSTUB_EVP_DigestInit(void);
-
-int
-LIBSTUB_EVP_DigestFinal(void);
-
-int
-LIBSTUB_EVP_read_pw_string(void);
-
-void
-LIBSTUB_EVP_set_pw_prompt(void);
-
-char *
-LIBSTUB_EVP_get_pw_prompt(void);
-
-int
-LIBSTUB_EVP_BytesToKey(void);
-
-int
-LIBSTUB_EVP_EncryptInit(void);
-
-int
-LIBSTUB_EVP_EncryptInit_ex(void);
-
-int
-LIBSTUB_EVP_EncryptUpdate(void);
-
-int
-LIBSTUB_EVP_EncryptFinal_ex(void);
-
-int
-LIBSTUB_EVP_EncryptFinal(void);
-
-int
-LIBSTUB_EVP_DecryptInit(void);
-
-int
-LIBSTUB_EVP_DecryptInit_ex(void);
-
-int
-LIBSTUB_EVP_DecryptUpdate(void);
-
-int
-LIBSTUB_EVP_DecryptFinal(void);
-
-int
-LIBSTUB_EVP_DecryptFinal_ex(void);
-
-int
-LIBSTUB_EVP_CipherInit(void);
-
-int
-LIBSTUB_EVP_CipherInit_ex(void);
-
-int
-LIBSTUB_EVP_CipherUpdate(void);
-
-int
-LIBSTUB_EVP_CipherFinal(void);
-
-int
-LIBSTUB_EVP_CipherFinal_ex(void);
-
-int
-LIBSTUB_EVP_SignFinal(void);
-
-int
-LIBSTUB_EVP_VerifyFinal(void);
-
-int
-LIBSTUB_EVP_OpenInit(void);
-
-int
-LIBSTUB_EVP_OpenFinal(void);
-
-int
-LIBSTUB_EVP_SealInit(void);
-
-int
-LIBSTUB_EVP_SealFinal(void);
-
-void
-LIBSTUB_EVP_EncodeInit(void);
-
-void
-LIBSTUB_EVP_EncodeUpdate(void);
-
-void
-LIBSTUB_EVP_EncodeFinal(void);
-
-int
-LIBSTUB_EVP_EncodeBlock(void);
-
-void
-LIBSTUB_EVP_DecodeInit(void);
-
-int
-LIBSTUB_EVP_DecodeUpdate(void);
-
-int
-LIBSTUB_EVP_DecodeFinal(void);
-
-int
-LIBSTUB_EVP_DecodeBlock(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_set_key_length(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_set_padding(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_ctrl(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_md(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_base64(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_cipher(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_reliable(void);
-
-int
-LIBSTUB_BIO_set_cipher(void);
-
-const EVP_MD *
-LIBSTUB_EVP_md_null(void);
-
-const EVP_MD *
-LIBSTUB_EVP_md2(void);
-
-const EVP_MD *
-LIBSTUB_EVP_md4(void);
-
-const EVP_MD *
-LIBSTUB_EVP_md5(void);
-
-const EVP_MD *
-LIBSTUB_EVP_sha1(void);
-
-const EVP_MD *
-LIBSTUB_EVP_mdc2(void);
-
-const EVP_MD *
-LIBSTUB_EVP_ripemd160(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_enc_null(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_desx_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc4(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc4_40(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_idea_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_idea_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_idea_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_idea_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_40_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_64_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc2_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_bf_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_bf_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_bf_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_bf_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_cast5_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_cast5_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_cast5_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_cast5_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc5_32_12_16_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc5_32_12_16_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc5_32_12_16_cfb64(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc5_32_12_16_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_ofb(void);
-
-int
-LIBSTUB_EVP_add_cipher(void);
-
-int
-LIBSTUB_EVP_add_digest(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_get_cipherbyname(void);
-
-const EVP_MD *
-LIBSTUB_EVP_get_digestbyname(void);
-
-void
-LIBSTUB_EVP_cleanup(void);
-
-int
-LIBSTUB_EVP_PKEY_decrypt(void);
-
-int
-LIBSTUB_EVP_PKEY_encrypt(void);
-
-int
-LIBSTUB_EVP_PKEY_type(void);
-
-int
-LIBSTUB_EVP_PKEY_bits(void);
-
-int
-LIBSTUB_EVP_PKEY_size(void);
-
-int
-LIBSTUB_EVP_PKEY_assign(void);
-
-int
-LIBSTUB_EVP_PKEY_set1_RSA(void);
-
-struct rsa_st *
-LIBSTUB_EVP_PKEY_get1_RSA(void);
-
-int
-LIBSTUB_EVP_PKEY_set1_DSA(void);
-
-struct dsa_st *
-LIBSTUB_EVP_PKEY_get1_DSA(void);
-
-int
-LIBSTUB_EVP_PKEY_set1_DH(void);
-
-struct dh_st *
-LIBSTUB_EVP_PKEY_get1_DH(void);
-
-EVP_PKEY *
-LIBSTUB_EVP_PKEY_new(void);
-
-void
-LIBSTUB_EVP_PKEY_free(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PublicKey(void);
-
-int
-LIBSTUB_i2d_PublicKey(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PrivateKey(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_AutoPrivateKey(void);
-
-int
-LIBSTUB_i2d_PrivateKey(void);
-
-int
-LIBSTUB_EVP_PKEY_copy_parameters(void);
-
-int
-LIBSTUB_EVP_PKEY_missing_parameters(void);
-
-int
-LIBSTUB_EVP_PKEY_save_parameters(void);
-
-int
-LIBSTUB_EVP_PKEY_cmp_parameters(void);
-
-int
-LIBSTUB_EVP_CIPHER_type(void);
-
-int
-LIBSTUB_EVP_CIPHER_param_to_asn1(void);
-
-int
-LIBSTUB_EVP_CIPHER_asn1_to_param(void);
-
-int
-LIBSTUB_EVP_CIPHER_set_asn1_iv(void);
-
-int
-LIBSTUB_EVP_CIPHER_get_asn1_iv(void);
-
-int
-LIBSTUB_PKCS5_PBE_keyivgen(void);
-
-int
-LIBSTUB_PKCS5_PBKDF2_HMAC_SHA1(void);
-
-int
-LIBSTUB_PKCS5_v2_PBE_keyivgen(void);
-
-void
-LIBSTUB_PKCS5_PBE_add(void);
-
-int
-LIBSTUB_EVP_PBE_CipherInit(void);
-
-int
-LIBSTUB_EVP_PBE_alg_add(void);
-
-void
-LIBSTUB_EVP_PBE_cleanup(void);
-
-void
-LIBSTUB_ERR_load_EVP_strings(void);
-
-int
-LIBSTUB_HMAC_Init(void);
-
-int
-LIBSTUB_HMAC_Init_ex(void);
-
-int
-LIBSTUB_HMAC_Update(void);
-
-int
-LIBSTUB_HMAC_Final(void);
-
-unsigned char *
-LIBSTUB_HMAC(void);
-
-_LHASH *
-LIBSTUB_lh_new(void);
-
-void
-LIBSTUB_lh_free(void);
-
-void *
-LIBSTUB_lh_insert(void);
-
-void *
-LIBSTUB_lh_delete(void);
-
-void *
-LIBSTUB_lh_retrieve(void);
-
-void
-LIBSTUB_lh_doall(void);
-
-void
-LIBSTUB_lh_doall_arg(void);
-
-unsigned long
-LIBSTUB_lh_strhash(void);
-
-unsigned long
-LIBSTUB_lh_num_items(void);
-
-void
-LIBSTUB_lh_stats_bio(void);
-
-void
-LIBSTUB_lh_node_stats_bio(void);
-
-void
-LIBSTUB_lh_node_usage_stats_bio(void);
-
-int
-LIBSTUB_OBJ_NAME_init(void);
-
-int
-LIBSTUB_OBJ_NAME_new_index(void);
-
-const char *
-LIBSTUB_OBJ_NAME_get(void);
-
-int
-LIBSTUB_OBJ_NAME_add(void);
-
-int
-LIBSTUB_OBJ_NAME_remove(void);
-
-void
-LIBSTUB_OBJ_NAME_cleanup(void);
-
-void
-LIBSTUB_OBJ_NAME_do_all(void);
-
-void
-LIBSTUB_OBJ_NAME_do_all_sorted(void);
-
-ASN1_OBJECT *
-LIBSTUB_OBJ_dup(void);
-
-ASN1_OBJECT *
-LIBSTUB_OBJ_nid2obj(void);
-
-const char *
-LIBSTUB_OBJ_nid2ln(void);
-
-const char *
-LIBSTUB_OBJ_nid2sn(void);
-
-int
-LIBSTUB_OBJ_obj2nid(void);
-
-ASN1_OBJECT *
-LIBSTUB_OBJ_txt2obj(void);
-
-int
-LIBSTUB_OBJ_obj2txt(void);
-
-int
-LIBSTUB_OBJ_txt2nid(void);
-
-int
-LIBSTUB_OBJ_ln2nid(void);
-
-int
-LIBSTUB_OBJ_sn2nid(void);
-
-int
-LIBSTUB_OBJ_cmp(void);
-
-int
-LIBSTUB_OBJ_new_nid(void);
-
-int
-LIBSTUB_OBJ_add_object(void);
-
-int
-LIBSTUB_OBJ_create(void);
-
-void
-LIBSTUB_OBJ_cleanup(void);
-
-int
-LIBSTUB_OBJ_create_objects(void);
-
-void
-LIBSTUB_ERR_load_OBJ_strings(void);
-
-OCSP_RESPONSE *
-LIBSTUB_OCSP_sendreq_bio(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_cert_to_id(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_cert_id_new(void);
-
-OCSP_ONEREQ *
-LIBSTUB_OCSP_request_add0_id(void);
-
-int
-LIBSTUB_OCSP_request_add1_nonce(void);
-
-int
-LIBSTUB_OCSP_basic_add1_nonce(void);
-
-int
-LIBSTUB_OCSP_check_nonce(void);
-
-int
-LIBSTUB_OCSP_copy_nonce(void);
-
-int
-LIBSTUB_OCSP_request_set1_name(void);
-
-int
-LIBSTUB_OCSP_request_add1_cert(void);
-
-int
-LIBSTUB_OCSP_request_sign(void);
-
-int
-LIBSTUB_OCSP_response_status(void);
-
-OCSP_BASICRESP *
-LIBSTUB_OCSP_response_get1_basic(void);
-
-int
-LIBSTUB_OCSP_resp_count(void);
-
-OCSP_SINGLERESP *
-LIBSTUB_OCSP_resp_get0(void);
-
-int
-LIBSTUB_OCSP_resp_find(void);
-
-int
-LIBSTUB_OCSP_single_get0_status(void);
-
-int
-LIBSTUB_OCSP_resp_find_status(void);
-
-int
-LIBSTUB_OCSP_check_validity(void);
-
-int
-LIBSTUB_OCSP_request_verify(void);
-
-int
-LIBSTUB_OCSP_parse_url(void);
-
-int
-LIBSTUB_OCSP_id_issuer_cmp(void);
-
-int
-LIBSTUB_OCSP_id_cmp(void);
-
-int
-LIBSTUB_OCSP_request_onereq_count(void);
-
-OCSP_ONEREQ *
-LIBSTUB_OCSP_request_onereq_get0(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_onereq_get0_id(void);
-
-int
-LIBSTUB_OCSP_id_get0_info(void);
-
-int
-LIBSTUB_OCSP_request_is_signed(void);
-
-OCSP_RESPONSE *
-LIBSTUB_OCSP_response_create(void);
-
-OCSP_SINGLERESP *
-LIBSTUB_OCSP_basic_add1_status(void);
-
-int
-LIBSTUB_OCSP_basic_add1_cert(void);
-
-int
-LIBSTUB_OCSP_basic_sign(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_crlID_new(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_accept_responses_new(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_archive_cutoff_new(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_url_svcloc_new(void);
-
-int
-LIBSTUB_OCSP_REQUEST_get_ext_count(void);
-
-int
-LIBSTUB_OCSP_REQUEST_get_ext_by_NID(void);
-
-int
-LIBSTUB_OCSP_REQUEST_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_OCSP_REQUEST_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_REQUEST_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_REQUEST_delete_ext(void);
-
-void *
-LIBSTUB_OCSP_REQUEST_get1_ext_d2i(void);
-
-int
-LIBSTUB_OCSP_REQUEST_add1_ext_i2d(void);
-
-int
-LIBSTUB_OCSP_REQUEST_add_ext(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_get_ext_count(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_get_ext_by_NID(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_ONEREQ_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_ONEREQ_delete_ext(void);
-
-void *
-LIBSTUB_OCSP_ONEREQ_get1_ext_d2i(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_add1_ext_i2d(void);
-
-int
-LIBSTUB_OCSP_ONEREQ_add_ext(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_get_ext_count(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_get_ext_by_NID(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_BASICRESP_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_BASICRESP_delete_ext(void);
-
-void *
-LIBSTUB_OCSP_BASICRESP_get1_ext_d2i(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_add1_ext_i2d(void);
-
-int
-LIBSTUB_OCSP_BASICRESP_add_ext(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_get_ext_count(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_get_ext_by_NID(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_SINGLERESP_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_OCSP_SINGLERESP_delete_ext(void);
-
-void *
-LIBSTUB_OCSP_SINGLERESP_get1_ext_d2i(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_add1_ext_i2d(void);
-
-int
-LIBSTUB_OCSP_SINGLERESP_add_ext(void);
-
-OCSP_SINGLERESP *
-LIBSTUB_OCSP_SINGLERESP_new(void);
-
-void
-LIBSTUB_OCSP_SINGLERESP_free(void);
-
-OCSP_SINGLERESP *
-LIBSTUB_d2i_OCSP_SINGLERESP(void);
-
-int
-LIBSTUB_i2d_OCSP_SINGLERESP(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_SINGLERESP_it(void);
-
-OCSP_CERTSTATUS *
-LIBSTUB_OCSP_CERTSTATUS_new(void);
-
-void
-LIBSTUB_OCSP_CERTSTATUS_free(void);
-
-OCSP_CERTSTATUS *
-LIBSTUB_d2i_OCSP_CERTSTATUS(void);
-
-int
-LIBSTUB_i2d_OCSP_CERTSTATUS(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_CERTSTATUS_it(void);
-
-OCSP_REVOKEDINFO *
-LIBSTUB_OCSP_REVOKEDINFO_new(void);
-
-void
-LIBSTUB_OCSP_REVOKEDINFO_free(void);
-
-OCSP_REVOKEDINFO *
-LIBSTUB_d2i_OCSP_REVOKEDINFO(void);
-
-int
-LIBSTUB_i2d_OCSP_REVOKEDINFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_REVOKEDINFO_it(void);
-
-OCSP_BASICRESP *
-LIBSTUB_OCSP_BASICRESP_new(void);
-
-void
-LIBSTUB_OCSP_BASICRESP_free(void);
-
-OCSP_BASICRESP *
-LIBSTUB_d2i_OCSP_BASICRESP(void);
-
-int
-LIBSTUB_i2d_OCSP_BASICRESP(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_BASICRESP_it(void);
-
-OCSP_RESPDATA *
-LIBSTUB_OCSP_RESPDATA_new(void);
-
-void
-LIBSTUB_OCSP_RESPDATA_free(void);
-
-OCSP_RESPDATA *
-LIBSTUB_d2i_OCSP_RESPDATA(void);
-
-int
-LIBSTUB_i2d_OCSP_RESPDATA(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_RESPDATA_it(void);
-
-OCSP_RESPID *
-LIBSTUB_OCSP_RESPID_new(void);
-
-void
-LIBSTUB_OCSP_RESPID_free(void);
-
-OCSP_RESPID *
-LIBSTUB_d2i_OCSP_RESPID(void);
-
-int
-LIBSTUB_i2d_OCSP_RESPID(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_RESPID_it(void);
-
-OCSP_RESPONSE *
-LIBSTUB_OCSP_RESPONSE_new(void);
-
-void
-LIBSTUB_OCSP_RESPONSE_free(void);
-
-OCSP_RESPONSE *
-LIBSTUB_d2i_OCSP_RESPONSE(void);
-
-int
-LIBSTUB_i2d_OCSP_RESPONSE(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_RESPONSE_it(void);
-
-OCSP_RESPBYTES *
-LIBSTUB_OCSP_RESPBYTES_new(void);
-
-void
-LIBSTUB_OCSP_RESPBYTES_free(void);
-
-OCSP_RESPBYTES *
-LIBSTUB_d2i_OCSP_RESPBYTES(void);
-
-int
-LIBSTUB_i2d_OCSP_RESPBYTES(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_RESPBYTES_it(void);
-
-OCSP_ONEREQ *
-LIBSTUB_OCSP_ONEREQ_new(void);
-
-void
-LIBSTUB_OCSP_ONEREQ_free(void);
-
-OCSP_ONEREQ *
-LIBSTUB_d2i_OCSP_ONEREQ(void);
-
-int
-LIBSTUB_i2d_OCSP_ONEREQ(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_ONEREQ_it(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_CERTID_new(void);
-
-void
-LIBSTUB_OCSP_CERTID_free(void);
-
-OCSP_CERTID *
-LIBSTUB_d2i_OCSP_CERTID(void);
-
-int
-LIBSTUB_i2d_OCSP_CERTID(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_CERTID_it(void);
-
-OCSP_REQUEST *
-LIBSTUB_OCSP_REQUEST_new(void);
-
-void
-LIBSTUB_OCSP_REQUEST_free(void);
-
-OCSP_REQUEST *
-LIBSTUB_d2i_OCSP_REQUEST(void);
-
-int
-LIBSTUB_i2d_OCSP_REQUEST(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_REQUEST_it(void);
-
-OCSP_SIGNATURE *
-LIBSTUB_OCSP_SIGNATURE_new(void);
-
-void
-LIBSTUB_OCSP_SIGNATURE_free(void);
-
-OCSP_SIGNATURE *
-LIBSTUB_d2i_OCSP_SIGNATURE(void);
-
-int
-LIBSTUB_i2d_OCSP_SIGNATURE(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_SIGNATURE_it(void);
-
-OCSP_REQINFO *
-LIBSTUB_OCSP_REQINFO_new(void);
-
-void
-LIBSTUB_OCSP_REQINFO_free(void);
-
-OCSP_REQINFO *
-LIBSTUB_d2i_OCSP_REQINFO(void);
-
-int
-LIBSTUB_i2d_OCSP_REQINFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_REQINFO_it(void);
-
-OCSP_CRLID *
-LIBSTUB_OCSP_CRLID_new(void);
-
-void
-LIBSTUB_OCSP_CRLID_free(void);
-
-OCSP_CRLID *
-LIBSTUB_d2i_OCSP_CRLID(void);
-
-int
-LIBSTUB_i2d_OCSP_CRLID(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_CRLID_it(void);
-
-OCSP_SERVICELOC *
-LIBSTUB_OCSP_SERVICELOC_new(void);
-
-void
-LIBSTUB_OCSP_SERVICELOC_free(void);
-
-OCSP_SERVICELOC *
-LIBSTUB_d2i_OCSP_SERVICELOC(void);
-
-int
-LIBSTUB_i2d_OCSP_SERVICELOC(void);
-
-const ASN1_ITEM *
-LIBSTUB_OCSP_SERVICELOC_it(void);
-
-const char *
-LIBSTUB_OCSP_response_status_str(void);
-
-const char *
-LIBSTUB_OCSP_cert_status_str(void);
-
-const char *
-LIBSTUB_OCSP_crl_reason_str(void);
-
-int
-LIBSTUB_OCSP_REQUEST_print(void);
-
-int
-LIBSTUB_OCSP_RESPONSE_print(void);
-
-int
-LIBSTUB_OCSP_basic_verify(void);
-
-void
-LIBSTUB_ERR_load_OCSP_strings(void);
-
-int
-LIBSTUB_PEM_get_EVP_CIPHER_INFO(void);
-
-int
-LIBSTUB_PEM_do_header(void);
-
-int
-LIBSTUB_PEM_read_bio(void);
-
-int
-LIBSTUB_PEM_write_bio(void);
-
-int
-LIBSTUB_PEM_bytes_read_bio(void);
-
-void *
-LIBSTUB_PEM_ASN1_read_bio(void);
-
-int
-LIBSTUB_PEM_ASN1_write_bio(void);
-
-STACK_OF(X509_INFO) *
-LIBSTUB_PEM_X509_INFO_read_bio(void);
-
-int
-LIBSTUB_PEM_X509_INFO_write_bio(void);
-
-int
-LIBSTUB_PEM_SignInit(void);
-
-int
-LIBSTUB_PEM_SignUpdate(void);
-
-int
-LIBSTUB_PEM_SignFinal(void);
-
-int
-LIBSTUB_PEM_def_callback(void);
-
-void
-LIBSTUB_PEM_proc_type(void);
-
-void
-LIBSTUB_PEM_dek_info(void);
-
-X509 *
-LIBSTUB_PEM_read_bio_X509(void);
-
-int
-LIBSTUB_PEM_write_bio_X509(void);
-
-X509 *
-LIBSTUB_PEM_read_bio_X509_AUX(void);
-
-int
-LIBSTUB_PEM_write_bio_X509_AUX(void);
-
-X509_REQ *
-LIBSTUB_PEM_read_bio_X509_REQ(void);
-
-int
-LIBSTUB_PEM_write_bio_X509_REQ(void);
-
-int
-LIBSTUB_PEM_write_bio_X509_REQ_NEW(void);
-
-X509_CRL *
-LIBSTUB_PEM_read_bio_X509_CRL(void);
-
-int
-LIBSTUB_PEM_write_bio_X509_CRL(void);
-
-PKCS7 *
-LIBSTUB_PEM_read_bio_PKCS7(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS7(void);
-
-NETSCAPE_CERT_SEQUENCE *
-LIBSTUB_PEM_read_bio_NETSCAPE_CERT_SEQUENCE(void);
-
-int
-LIBSTUB_PEM_write_bio_NETSCAPE_CERT_SEQUENCE(void);
-
-X509_SIG *
-LIBSTUB_PEM_read_bio_PKCS8(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS8(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_PEM_read_bio_PKCS8_PRIV_KEY_INFO(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS8_PRIV_KEY_INFO(void);
-
-RSA *
-LIBSTUB_PEM_read_bio_RSAPrivateKey(void);
-
-int
-LIBSTUB_PEM_write_bio_RSAPrivateKey(void);
-
-RSA *
-LIBSTUB_PEM_read_bio_RSAPublicKey(void);
-
-int
-LIBSTUB_PEM_write_bio_RSAPublicKey(void);
-
-RSA *
-LIBSTUB_PEM_read_bio_RSA_PUBKEY(void);
-
-int
-LIBSTUB_PEM_write_bio_RSA_PUBKEY(void);
-
-DSA *
-LIBSTUB_PEM_read_bio_DSAPrivateKey(void);
-
-int
-LIBSTUB_PEM_write_bio_DSAPrivateKey(void);
-
-DSA *
-LIBSTUB_PEM_read_bio_DSA_PUBKEY(void);
-
-int
-LIBSTUB_PEM_write_bio_DSA_PUBKEY(void);
-
-DSA *
-LIBSTUB_PEM_read_bio_DSAparams(void);
-
-int
-LIBSTUB_PEM_write_bio_DSAparams(void);
-
-DH *
-LIBSTUB_PEM_read_bio_DHparams(void);
-
-int
-LIBSTUB_PEM_write_bio_DHparams(void);
-
-EVP_PKEY *
-LIBSTUB_PEM_read_bio_PrivateKey(void);
-
-int
-LIBSTUB_PEM_write_bio_PrivateKey(void);
-
-EVP_PKEY *
-LIBSTUB_PEM_read_bio_PUBKEY(void);
-
-int
-LIBSTUB_PEM_write_bio_PUBKEY(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS8PrivateKey_nid(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS8PrivateKey(void);
-
-int
-LIBSTUB_i2d_PKCS8PrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_PKCS8PrivateKey_nid_bio(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PKCS8PrivateKey_bio(void);
-
-void
-LIBSTUB_ERR_load_PEM_strings(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_item_pack_safebag(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_PKCS8_decrypt(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_PKCS12_decrypt_skey(void);
-
-X509_SIG *
-LIBSTUB_PKCS8_encrypt(void);
-
-PKCS7 *
-LIBSTUB_PKCS12_pack_p7data(void);
-
-STACK_OF(PKCS12_SAFEBAG) *
-LIBSTUB_PKCS12_unpack_p7data(void);
-
-PKCS7 *
-LIBSTUB_PKCS12_pack_p7encdata(void);
-
-STACK_OF(PKCS12_SAFEBAG) *
-LIBSTUB_PKCS12_unpack_p7encdata(void);
-
-int
-LIBSTUB_PKCS12_pack_authsafes(void);
-
-STACK_OF(PKCS7) *
-LIBSTUB_PKCS12_unpack_authsafes(void);
-
-int
-LIBSTUB_PKCS12_add_localkeyid(void);
-
-int
-LIBSTUB_PKCS12_add_friendlyname_asc(void);
-
-int
-LIBSTUB_PKCS12_add_CSPName_asc(void);
-
-int
-LIBSTUB_PKCS12_add_friendlyname_uni(void);
-
-int
-LIBSTUB_PKCS8_add_keyusage(void);
-
-ASN1_TYPE *
-LIBSTUB_PKCS12_get_attr_gen(void);
-
-char *
-LIBSTUB_PKCS12_get_friendlyname(void);
-
-unsigned char *
-LIBSTUB_PKCS12_pbe_crypt(void);
-
-void *
-LIBSTUB_PKCS12_item_decrypt_d2i(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_PKCS12_item_i2d_encrypt(void);
-
-PKCS12 *
-LIBSTUB_PKCS12_init(void);
-
-int
-LIBSTUB_PKCS12_key_gen_asc(void);
-
-int
-LIBSTUB_PKCS12_key_gen_uni(void);
-
-int
-LIBSTUB_PKCS12_PBE_keyivgen(void);
-
-int
-LIBSTUB_PKCS12_gen_mac(void);
-
-int
-LIBSTUB_PKCS12_verify_mac(void);
-
-int
-LIBSTUB_PKCS12_set_mac(void);
-
-int
-LIBSTUB_PKCS12_setup_mac(void);
-
-unsigned char *
-LIBSTUB_OPENSSL_asc2uni(void);
-
-char *
-LIBSTUB_OPENSSL_uni2asc(void);
-
-PKCS12 *
-LIBSTUB_PKCS12_new(void);
-
-void
-LIBSTUB_PKCS12_free(void);
-
-PKCS12 *
-LIBSTUB_d2i_PKCS12(void);
-
-int
-LIBSTUB_i2d_PKCS12(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_it(void);
-
-PKCS12_MAC_DATA *
-LIBSTUB_PKCS12_MAC_DATA_new(void);
-
-void
-LIBSTUB_PKCS12_MAC_DATA_free(void);
-
-PKCS12_MAC_DATA *
-LIBSTUB_d2i_PKCS12_MAC_DATA(void);
-
-int
-LIBSTUB_i2d_PKCS12_MAC_DATA(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_MAC_DATA_it(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_new(void);
-
-void
-LIBSTUB_PKCS12_SAFEBAG_free(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_d2i_PKCS12_SAFEBAG(void);
-
-int
-LIBSTUB_i2d_PKCS12_SAFEBAG(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_SAFEBAG_it(void);
-
-PKCS12_BAGS *
-LIBSTUB_PKCS12_BAGS_new(void);
-
-void
-LIBSTUB_PKCS12_BAGS_free(void);
-
-PKCS12_BAGS *
-LIBSTUB_d2i_PKCS12_BAGS(void);
-
-int
-LIBSTUB_i2d_PKCS12_BAGS(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_BAGS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_SAFEBAGS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS12_AUTHSAFES_it(void);
-
-void
-LIBSTUB_PKCS12_PBE_add(void);
-
-int
-LIBSTUB_PKCS12_parse(void);
-
-PKCS12 *
-LIBSTUB_PKCS12_create(void);
-
-int
-LIBSTUB_i2d_PKCS12_bio(void);
-
-PKCS12 *
-LIBSTUB_d2i_PKCS12_bio(void);
-
-int
-LIBSTUB_PKCS12_newpass(void);
-
-void
-LIBSTUB_ERR_load_PKCS12_strings(void);
-
-int
-LIBSTUB_PKCS7_ISSUER_AND_SERIAL_digest(void);
-
-PKCS7 *
-LIBSTUB_PKCS7_dup(void);
-
-PKCS7 *
-LIBSTUB_d2i_PKCS7_bio(void);
-
-int
-LIBSTUB_i2d_PKCS7_bio(void);
-
-PKCS7_ISSUER_AND_SERIAL *
-LIBSTUB_PKCS7_ISSUER_AND_SERIAL_new(void);
-
-void
-LIBSTUB_PKCS7_ISSUER_AND_SERIAL_free(void);
-
-PKCS7_ISSUER_AND_SERIAL *
-LIBSTUB_d2i_PKCS7_ISSUER_AND_SERIAL(void);
-
-int
-LIBSTUB_i2d_PKCS7_ISSUER_AND_SERIAL(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ISSUER_AND_SERIAL_it(void);
-
-PKCS7_SIGNER_INFO *
-LIBSTUB_PKCS7_SIGNER_INFO_new(void);
-
-void
-LIBSTUB_PKCS7_SIGNER_INFO_free(void);
-
-PKCS7_SIGNER_INFO *
-LIBSTUB_d2i_PKCS7_SIGNER_INFO(void);
-
-int
-LIBSTUB_i2d_PKCS7_SIGNER_INFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_SIGNER_INFO_it(void);
-
-PKCS7_RECIP_INFO *
-LIBSTUB_PKCS7_RECIP_INFO_new(void);
-
-void
-LIBSTUB_PKCS7_RECIP_INFO_free(void);
-
-PKCS7_RECIP_INFO *
-LIBSTUB_d2i_PKCS7_RECIP_INFO(void);
-
-int
-LIBSTUB_i2d_PKCS7_RECIP_INFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_RECIP_INFO_it(void);
-
-PKCS7_SIGNED *
-LIBSTUB_PKCS7_SIGNED_new(void);
-
-void
-LIBSTUB_PKCS7_SIGNED_free(void);
-
-PKCS7_SIGNED *
-LIBSTUB_d2i_PKCS7_SIGNED(void);
-
-int
-LIBSTUB_i2d_PKCS7_SIGNED(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_SIGNED_it(void);
-
-PKCS7_ENC_CONTENT *
-LIBSTUB_PKCS7_ENC_CONTENT_new(void);
-
-void
-LIBSTUB_PKCS7_ENC_CONTENT_free(void);
-
-PKCS7_ENC_CONTENT *
-LIBSTUB_d2i_PKCS7_ENC_CONTENT(void);
-
-int
-LIBSTUB_i2d_PKCS7_ENC_CONTENT(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ENC_CONTENT_it(void);
-
-PKCS7_ENVELOPE *
-LIBSTUB_PKCS7_ENVELOPE_new(void);
-
-void
-LIBSTUB_PKCS7_ENVELOPE_free(void);
-
-PKCS7_ENVELOPE *
-LIBSTUB_d2i_PKCS7_ENVELOPE(void);
-
-int
-LIBSTUB_i2d_PKCS7_ENVELOPE(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ENVELOPE_it(void);
-
-PKCS7_SIGN_ENVELOPE *
-LIBSTUB_PKCS7_SIGN_ENVELOPE_new(void);
-
-void
-LIBSTUB_PKCS7_SIGN_ENVELOPE_free(void);
-
-PKCS7_SIGN_ENVELOPE *
-LIBSTUB_d2i_PKCS7_SIGN_ENVELOPE(void);
-
-int
-LIBSTUB_i2d_PKCS7_SIGN_ENVELOPE(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_SIGN_ENVELOPE_it(void);
-
-PKCS7_DIGEST *
-LIBSTUB_PKCS7_DIGEST_new(void);
-
-void
-LIBSTUB_PKCS7_DIGEST_free(void);
-
-PKCS7_DIGEST *
-LIBSTUB_d2i_PKCS7_DIGEST(void);
-
-int
-LIBSTUB_i2d_PKCS7_DIGEST(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_DIGEST_it(void);
-
-PKCS7_ENCRYPT *
-LIBSTUB_PKCS7_ENCRYPT_new(void);
-
-void
-LIBSTUB_PKCS7_ENCRYPT_free(void);
-
-PKCS7_ENCRYPT *
-LIBSTUB_d2i_PKCS7_ENCRYPT(void);
-
-int
-LIBSTUB_i2d_PKCS7_ENCRYPT(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ENCRYPT_it(void);
-
-PKCS7 *
-LIBSTUB_PKCS7_new(void);
-
-void
-LIBSTUB_PKCS7_free(void);
-
-PKCS7 *
-LIBSTUB_d2i_PKCS7(void);
-
-int
-LIBSTUB_i2d_PKCS7(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ATTR_SIGN_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS7_ATTR_VERIFY_it(void);
-
-long
-LIBSTUB_PKCS7_ctrl(void);
-
-int
-LIBSTUB_PKCS7_set_type(void);
-
-int
-LIBSTUB_PKCS7_set_content(void);
-
-int
-LIBSTUB_PKCS7_SIGNER_INFO_set(void);
-
-int
-LIBSTUB_PKCS7_add_signer(void);
-
-int
-LIBSTUB_PKCS7_add_certificate(void);
-
-int
-LIBSTUB_PKCS7_add_crl(void);
-
-int
-LIBSTUB_PKCS7_content_new(void);
-
-int
-LIBSTUB_PKCS7_dataVerify(void);
-
-int
-LIBSTUB_PKCS7_signatureVerify(void);
-
-BIO *
-LIBSTUB_PKCS7_dataInit(void);
-
-int
-LIBSTUB_PKCS7_dataFinal(void);
-
-BIO *
-LIBSTUB_PKCS7_dataDecode(void);
-
-PKCS7_SIGNER_INFO *
-LIBSTUB_PKCS7_add_signature(void);
-
-X509 *
-LIBSTUB_PKCS7_cert_from_signer_info(void);
-
-STACK_OF(PKCS7_SIGNER_INFO) *
-LIBSTUB_PKCS7_get_signer_info(void);
-
-PKCS7_RECIP_INFO *
-LIBSTUB_PKCS7_add_recipient(void);
-
-int
-LIBSTUB_PKCS7_add_recipient_info(void);
-
-int
-LIBSTUB_PKCS7_RECIP_INFO_set(void);
-
-int
-LIBSTUB_PKCS7_set_cipher(void);
-
-PKCS7_ISSUER_AND_SERIAL *
-LIBSTUB_PKCS7_get_issuer_and_serial(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_PKCS7_digest_from_attributes(void);
-
-int
-LIBSTUB_PKCS7_add_signed_attribute(void);
-
-int
-LIBSTUB_PKCS7_add_attribute(void);
-
-ASN1_TYPE *
-LIBSTUB_PKCS7_get_attribute(void);
-
-ASN1_TYPE *
-LIBSTUB_PKCS7_get_signed_attribute(void);
-
-int
-LIBSTUB_PKCS7_set_signed_attributes(void);
-
-int
-LIBSTUB_PKCS7_set_attributes(void);
-
-PKCS7 *
-LIBSTUB_PKCS7_sign(void);
-
-int
-LIBSTUB_PKCS7_verify(void);
-
-STACK_OF(X509) *
-LIBSTUB_PKCS7_get0_signers(void);
-
-PKCS7 *
-LIBSTUB_PKCS7_encrypt(void);
-
-int
-LIBSTUB_PKCS7_decrypt(void);
-
-int
-LIBSTUB_PKCS7_add_attrib_smimecap(void);
-
-STACK_OF(X509_ALGOR) *
-LIBSTUB_PKCS7_get_smimecap(void);
-
-int
-LIBSTUB_PKCS7_simple_smimecap(void);
-
-int
-LIBSTUB_SMIME_write_PKCS7(void);
-
-PKCS7 *
-LIBSTUB_SMIME_read_PKCS7(void);
-
-int
-LIBSTUB_SMIME_crlf_copy(void);
-
-int
-LIBSTUB_SMIME_text(void);
-
-void
-LIBSTUB_ERR_load_PKCS7_strings(void);
-
-int
-LIBSTUB_RAND_set_rand_method(void);
-
-const RAND_METHOD *
-LIBSTUB_RAND_get_rand_method(void);
-
-void
-LIBSTUB_RAND_cleanup(void);
-
-int
-LIBSTUB_RAND_bytes(void);
-
-int
-LIBSTUB_RAND_pseudo_bytes(void);
-
-void
-LIBSTUB_RAND_seed(void);
-
-void
-LIBSTUB_RAND_add(void);
-
-int
-LIBSTUB_RAND_load_file(void);
-
-int
-LIBSTUB_RAND_write_file(void);
-
-const char *
-LIBSTUB_RAND_file_name(void);
-
-int
-LIBSTUB_RAND_status(void);
-
-int
-LIBSTUB_RAND_poll(void);
-
-void
-LIBSTUB_ERR_load_RAND_strings(void);
-
-void
-LIBSTUB_SSL_CTX_set_msg_callback(void);
-
-void
-LIBSTUB_SSL_set_msg_callback(void);
-
-LHASH_OF(SSL_SESSION) *
-LIBSTUB_SSL_CTX_sessions(void);
-
-size_t
-LIBSTUB_SSL_get_finished(void);
-
-size_t
-LIBSTUB_SSL_get_peer_finished(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_ssl(void);
-
-BIO *
-LIBSTUB_BIO_new_ssl(void);
-
-BIO *
-LIBSTUB_BIO_new_ssl_connect(void);
-
-BIO *
-LIBSTUB_BIO_new_buffer_ssl_connect(void);
-
-int
-LIBSTUB_BIO_ssl_copy_session_id(void);
-
-void
-LIBSTUB_BIO_ssl_shutdown(void);
-
-int
-LIBSTUB_SSL_CTX_set_cipher_list(void);
-
-SSL_CTX *
-LIBSTUB_SSL_CTX_new(void);
-
-void
-LIBSTUB_SSL_CTX_free(void);
-
-long
-LIBSTUB_SSL_CTX_set_timeout(void);
-
-long
-LIBSTUB_SSL_CTX_get_timeout(void);
-
-X509_STORE *
-LIBSTUB_SSL_CTX_get_cert_store(void);
-
-void
-LIBSTUB_SSL_CTX_set_cert_store(void);
-
-int
-LIBSTUB_SSL_want(void);
-
-int
-LIBSTUB_SSL_clear(void);
-
-void
-LIBSTUB_SSL_CTX_flush_sessions(void);
-
-const SSL_CIPHER *
-LIBSTUB_SSL_get_current_cipher(void);
-
-int
-LIBSTUB_SSL_CIPHER_get_bits(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_version(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_name(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_mac(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_encryption(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_authentication(void);
-
-const char *
-LIBSTUB_SSL_CIPHER_get_key_exchange(void);
-
-int
-LIBSTUB_SSL_get_fd(void);
-
-int
-LIBSTUB_SSL_get_rfd(void);
-
-int
-LIBSTUB_SSL_get_wfd(void);
-
-const char *
-LIBSTUB_SSL_get_cipher_list(void);
-
-char *
-LIBSTUB_SSL_get_shared_ciphers(void);
-
-int
-LIBSTUB_SSL_get_read_ahead(void);
-
-int
-LIBSTUB_SSL_pending(void);
-
-int
-LIBSTUB_SSL_set_fd(void);
-
-int
-LIBSTUB_SSL_set_rfd(void);
-
-int
-LIBSTUB_SSL_set_wfd(void);
-
-void
-LIBSTUB_SSL_set_bio(void);
-
-BIO *
-LIBSTUB_SSL_get_rbio(void);
-
-BIO *
-LIBSTUB_SSL_get_wbio(void);
-
-int
-LIBSTUB_SSL_set_cipher_list(void);
-
-void
-LIBSTUB_SSL_set_read_ahead(void);
-
-int
-LIBSTUB_SSL_get_verify_mode(void);
-
-int
-LIBSTUB_SSL_get_verify_depth(void);
-
-int (*)(int, X509_STORE_CTX *)
-LIBSTUB_SSL_get_verify_callback(void);
-
-void
-LIBSTUB_SSL_set_verify(void);
-
-void
-LIBSTUB_SSL_set_verify_depth(void);
-
-int
-LIBSTUB_SSL_use_RSAPrivateKey(void);
-
-int
-LIBSTUB_SSL_use_RSAPrivateKey_ASN1(void);
-
-int
-LIBSTUB_SSL_use_PrivateKey(void);
-
-int
-LIBSTUB_SSL_use_PrivateKey_ASN1(void);
-
-int
-LIBSTUB_SSL_use_certificate(void);
-
-int
-LIBSTUB_SSL_use_certificate_ASN1(void);
-
-int
-LIBSTUB_SSL_use_RSAPrivateKey_file(void);
-
-int
-LIBSTUB_SSL_use_PrivateKey_file(void);
-
-int
-LIBSTUB_SSL_use_certificate_file(void);
-
-int
-LIBSTUB_SSL_CTX_use_RSAPrivateKey_file(void);
-
-int
-LIBSTUB_SSL_CTX_use_PrivateKey_file(void);
-
-int
-LIBSTUB_SSL_CTX_use_certificate_file(void);
-
-int
-LIBSTUB_SSL_CTX_use_certificate_chain_file(void);
-
-STACK_OF(X509_NAME) *
-LIBSTUB_SSL_load_client_CA_file(void);
-
-int
-LIBSTUB_SSL_add_file_cert_subjects_to_stack(void);
-
-int
-LIBSTUB_SSL_add_dir_cert_subjects_to_stack(void);
-
-const char *
-LIBSTUB_SSL_rstate_string(void);
-
-const char *
-LIBSTUB_SSL_state_string_long(void);
-
-const char *
-LIBSTUB_SSL_rstate_string_long(void);
-
-long
-LIBSTUB_SSL_SESSION_get_time(void);
-
-long
-LIBSTUB_SSL_SESSION_set_time(void);
-
-long
-LIBSTUB_SSL_SESSION_get_timeout(void);
-
-long
-LIBSTUB_SSL_SESSION_set_timeout(void);
-
-int
-LIBSTUB_SSL_copy_session_id(void);
-
-SSL_SESSION *
-LIBSTUB_SSL_SESSION_new(void);
-
-int
-LIBSTUB_SSL_SESSION_print(void);
-
-void
-LIBSTUB_SSL_SESSION_free(void);
-
-int
-LIBSTUB_i2d_SSL_SESSION(void);
-
-int
-LIBSTUB_SSL_set_session(void);
-
-int
-LIBSTUB_SSL_CTX_add_session(void);
-
-int
-LIBSTUB_SSL_CTX_remove_session(void);
-
-int
-LIBSTUB_SSL_CTX_set_generate_session_id(void);
-
-int
-LIBSTUB_SSL_set_generate_session_id(void);
-
-int
-LIBSTUB_SSL_has_matching_session_id(void);
-
-SSL_SESSION *
-LIBSTUB_d2i_SSL_SESSION(void);
-
-X509 *
-LIBSTUB_SSL_get_peer_certificate(void);
-
-STACK_OF(X509) *
-LIBSTUB_SSL_get_peer_cert_chain(void);
-
-int
-LIBSTUB_SSL_CTX_get_verify_mode(void);
-
-int
-LIBSTUB_SSL_CTX_get_verify_depth(void);
-
-int (*)(int, X509_STORE_CTX *)
-LIBSTUB_SSL_CTX_get_verify_callback(void);
-
-void
-LIBSTUB_SSL_CTX_set_verify(void);
-
-void
-LIBSTUB_SSL_CTX_set_verify_depth(void);
-
-void
-LIBSTUB_SSL_CTX_set_cert_verify_callback(void);
-
-int
-LIBSTUB_SSL_CTX_use_RSAPrivateKey(void);
-
-int
-LIBSTUB_SSL_CTX_use_RSAPrivateKey_ASN1(void);
-
-int
-LIBSTUB_SSL_CTX_use_PrivateKey(void);
-
-int
-LIBSTUB_SSL_CTX_use_PrivateKey_ASN1(void);
-
-int
-LIBSTUB_SSL_CTX_use_certificate(void);
-
-int
-LIBSTUB_SSL_CTX_use_certificate_ASN1(void);
-
-void
-LIBSTUB_SSL_CTX_set_default_passwd_cb(void);
-
-void
-LIBSTUB_SSL_CTX_set_default_passwd_cb_userdata(void);
-
-int
-LIBSTUB_SSL_CTX_check_private_key(void);
-
-int
-LIBSTUB_SSL_check_private_key(void);
-
-int
-LIBSTUB_SSL_CTX_set_session_id_context(void);
-
-SSL *
-LIBSTUB_SSL_new(void);
-
-int
-LIBSTUB_SSL_set_session_id_context(void);
-
-int
-LIBSTUB_SSL_CTX_set_purpose(void);
-
-int
-LIBSTUB_SSL_set_purpose(void);
-
-int
-LIBSTUB_SSL_CTX_set_trust(void);
-
-int
-LIBSTUB_SSL_set_trust(void);
-
-void
-LIBSTUB_SSL_free(void);
-
-int
-LIBSTUB_SSL_accept(void);
-
-int
-LIBSTUB_SSL_connect(void);
-
-int
-LIBSTUB_SSL_read(void);
-
-int
-LIBSTUB_SSL_peek(void);
-
-int
-LIBSTUB_SSL_write(void);
-
-long
-LIBSTUB_SSL_ctrl(void);
-
-long
-LIBSTUB_SSL_callback_ctrl(void);
-
-long
-LIBSTUB_SSL_CTX_ctrl(void);
-
-long
-LIBSTUB_SSL_CTX_callback_ctrl(void);
-
-int
-LIBSTUB_SSL_get_error(void);
-
-const char *
-LIBSTUB_SSL_get_version(void);
-
-int
-LIBSTUB_SSL_CTX_set_ssl_version(void);
-
-const SSL_METHOD *
-LIBSTUB_TLSv1_method(void);
-
-const SSL_METHOD *
-LIBSTUB_TLSv1_server_method(void);
-
-const SSL_METHOD *
-LIBSTUB_TLSv1_client_method(void);
-
-STACK_OF(SSL_CIPHER) *
-LIBSTUB_SSL_get_ciphers(void);
-
-int
-LIBSTUB_SSL_do_handshake(void);
-
-int
-LIBSTUB_SSL_renegotiate(void);
-
-int
-LIBSTUB_SSL_renegotiate_pending(void);
-
-int
-LIBSTUB_SSL_shutdown(void);
-
-const SSL_METHOD *
-LIBSTUB_SSL_get_ssl_method(void);
-
-int
-LIBSTUB_SSL_set_ssl_method(void);
-
-const char *
-LIBSTUB_SSL_alert_type_string_long(void);
-
-const char *
-LIBSTUB_SSL_alert_type_string(void);
-
-const char *
-LIBSTUB_SSL_alert_desc_string_long(void);
-
-const char *
-LIBSTUB_SSL_alert_desc_string(void);
-
-void
-LIBSTUB_SSL_set_client_CA_list(void);
-
-void
-LIBSTUB_SSL_CTX_set_client_CA_list(void);
-
-STACK_OF(X509_NAME) *
-LIBSTUB_SSL_get_client_CA_list(void);
-
-STACK_OF(X509_NAME) *
-LIBSTUB_SSL_CTX_get_client_CA_list(void);
-
-int
-LIBSTUB_SSL_add_client_CA(void);
-
-int
-LIBSTUB_SSL_CTX_add_client_CA(void);
-
-void
-LIBSTUB_SSL_set_connect_state(void);
-
-void
-LIBSTUB_SSL_set_accept_state(void);
-
-long
-LIBSTUB_SSL_get_default_timeout(void);
-
-char *
-LIBSTUB_SSL_CIPHER_description(void);
-
-STACK_OF(X509_NAME) *
-LIBSTUB_SSL_dup_CA_list(void);
-
-SSL *
-LIBSTUB_SSL_dup(void);
-
-X509 *
-LIBSTUB_SSL_get_certificate(void);
-
-struct evp_pkey_st *
-LIBSTUB_SSL_get_privatekey(void);
-
-void
-LIBSTUB_SSL_CTX_set_quiet_shutdown(void);
-
-int
-LIBSTUB_SSL_CTX_get_quiet_shutdown(void);
-
-void
-LIBSTUB_SSL_set_quiet_shutdown(void);
-
-int
-LIBSTUB_SSL_get_quiet_shutdown(void);
-
-void
-LIBSTUB_SSL_set_shutdown(void);
-
-int
-LIBSTUB_SSL_get_shutdown(void);
-
-int
-LIBSTUB_SSL_version(void);
-
-int
-LIBSTUB_SSL_CTX_set_default_verify_paths(void);
-
-int
-LIBSTUB_SSL_CTX_load_verify_locations(void);
-
-SSL_SESSION *
-LIBSTUB_SSL_get_session(void);
-
-SSL_SESSION *
-LIBSTUB_SSL_get1_session(void);
-
-SSL_CTX *
-LIBSTUB_SSL_get_SSL_CTX(void);
-
-void
-LIBSTUB_SSL_set_info_callback(void);
-
-void (*)(const SSL *ssl, int type, int val)
-LIBSTUB_SSL_get_info_callback(void);
-
-void
-LIBSTUB_SSL_set_verify_result(void);
-
-long
-LIBSTUB_SSL_get_verify_result(void);
-
-int
-LIBSTUB_SSL_set_ex_data(void);
-
-void *
-LIBSTUB_SSL_get_ex_data(void);
-
-int
-LIBSTUB_SSL_SESSION_set_ex_data(void);
-
-void *
-LIBSTUB_SSL_SESSION_get_ex_data(void);
-
-int
-LIBSTUB_SSL_CTX_set_ex_data(void);
-
-void *
-LIBSTUB_SSL_CTX_get_ex_data(void);
-
-int
-LIBSTUB_SSL_get_ex_data_X509_STORE_CTX_idx(void);
-
-void
-LIBSTUB_SSL_CTX_set_tmp_dh_callback(void);
-
-void
-LIBSTUB_SSL_set_tmp_dh_callback(void);
-
-int
-LIBSTUB_SSL_COMP_add_compression_method(void);
-
-void
-LIBSTUB_ERR_load_SSL_strings(void);
-
-int
-LIBSTUB_sk_num(void);
-
-void *
-LIBSTUB_sk_value(void);
-
-void *
-LIBSTUB_sk_set(void);
-
-_STACK *
-LIBSTUB_sk_new(void);
-
-_STACK *
-LIBSTUB_sk_new_null(void);
-
-void
-LIBSTUB_sk_free(void);
-
-void
-LIBSTUB_sk_pop_free(void);
-
-int
-LIBSTUB_sk_insert(void);
-
-void *
-LIBSTUB_sk_delete(void);
-
-void *
-LIBSTUB_sk_delete_ptr(void);
-
-int
-LIBSTUB_sk_find(void);
-
-int
-LIBSTUB_sk_push(void);
-
-int
-LIBSTUB_sk_unshift(void);
-
-void *
-LIBSTUB_sk_shift(void);
-
-void *
-LIBSTUB_sk_pop(void);
-
-void
-LIBSTUB_sk_zero(void);
-
-int (*)(const void *, const void *)
-LIBSTUB_sk_set_cmp_func(void);
-
-_STACK *
-LIBSTUB_sk_dup(void);
-
-void
-LIBSTUB_sk_sort(void);
-
-int
-LIBSTUB_sk_is_sorted(void);
-
-TXT_DB *
-LIBSTUB_TXT_DB_read(void);
-
-long
-LIBSTUB_TXT_DB_write(void);
-
-int
-LIBSTUB_TXT_DB_create_index(void);
-
-void
-LIBSTUB_TXT_DB_free(void);
-
-char **
-LIBSTUB_TXT_DB_get_by_index(void);
-
-int
-LIBSTUB_TXT_DB_insert(void);
-
-UI *
-LIBSTUB_UI_new(void);
-
-UI *
-LIBSTUB_UI_new_method(void);
-
-void
-LIBSTUB_UI_free(void);
-
-int
-LIBSTUB_UI_add_input_string(void);
-
-int
-LIBSTUB_UI_dup_input_string(void);
-
-int
-LIBSTUB_UI_add_verify_string(void);
-
-int
-LIBSTUB_UI_dup_verify_string(void);
-
-int
-LIBSTUB_UI_add_input_boolean(void);
-
-int
-LIBSTUB_UI_dup_input_boolean(void);
-
-int
-LIBSTUB_UI_add_info_string(void);
-
-int
-LIBSTUB_UI_dup_info_string(void);
-
-int
-LIBSTUB_UI_add_error_string(void);
-
-int
-LIBSTUB_UI_dup_error_string(void);
-
-char *
-LIBSTUB_UI_construct_prompt(void);
-
-void *
-LIBSTUB_UI_add_user_data(void);
-
-void *
-LIBSTUB_UI_get0_user_data(void);
-
-const char *
-LIBSTUB_UI_get0_result(void);
-
-int
-LIBSTUB_UI_process(void);
-
-int
-LIBSTUB_UI_ctrl(void);
-
-int
-LIBSTUB_UI_set_ex_data(void);
-
-void *
-LIBSTUB_UI_get_ex_data(void);
-
-void
-LIBSTUB_UI_set_default_method(void);
-
-const UI_METHOD *
-LIBSTUB_UI_get_default_method(void);
-
-const UI_METHOD *
-LIBSTUB_UI_get_method(void);
-
-const UI_METHOD *
-LIBSTUB_UI_set_method(void);
-
-UI_METHOD *
-LIBSTUB_UI_OpenSSL(void);
-
-UI_METHOD *
-LIBSTUB_UI_create_method(void);
-
-void
-LIBSTUB_UI_destroy_method(void);
-
-int
-LIBSTUB_UI_method_set_opener(void);
-
-int
-LIBSTUB_UI_method_set_writer(void);
-
-int
-LIBSTUB_UI_method_set_flusher(void);
-
-int
-LIBSTUB_UI_method_set_reader(void);
-
-int
-LIBSTUB_UI_method_set_closer(void);
-
-int (*)(UI *)
-LIBSTUB_UI_method_get_opener(void);
-
-int (*)(UI *, UI_STRING *)
-LIBSTUB_UI_method_get_writer(void);
-
-int (*)(UI *)
-LIBSTUB_UI_method_get_flusher(void);
-
-int (*)(UI *, UI_STRING *)
-LIBSTUB_UI_method_get_reader(void);
-
-int (*)(UI *)
-LIBSTUB_UI_method_get_closer(void);
-
-enum UI_string_types
-LIBSTUB_UI_get_string_type(void);
-
-int
-LIBSTUB_UI_get_input_flags(void);
-
-const char *
-LIBSTUB_UI_get0_output_string(void);
-
-const char *
-LIBSTUB_UI_get0_action_string(void);
-
-const char *
-LIBSTUB_UI_get0_result_string(void);
-
-const char *
-LIBSTUB_UI_get0_test_string(void);
-
-int
-LIBSTUB_UI_get_result_minsize(void);
-
-int
-LIBSTUB_UI_get_result_maxsize(void);
-
-int
-LIBSTUB_UI_set_result(void);
-
-int
-LIBSTUB_UI_UTIL_read_pw_string(void);
-
-int
-LIBSTUB_UI_UTIL_read_pw(void);
-
-void
-LIBSTUB_ERR_load_UI_strings(void);
-
-const char *
-LIBSTUB_X509_verify_cert_error_string(void);
-
-int
-LIBSTUB_X509_verify(void);
-
-int
-LIBSTUB_X509_REQ_verify(void);
-
-int
-LIBSTUB_X509_CRL_verify(void);
-
-int
-LIBSTUB_NETSCAPE_SPKI_verify(void);
-
-NETSCAPE_SPKI *
-LIBSTUB_NETSCAPE_SPKI_b64_decode(void);
-
-char *
-LIBSTUB_NETSCAPE_SPKI_b64_encode(void);
-
-EVP_PKEY *
-LIBSTUB_NETSCAPE_SPKI_get_pubkey(void);
-
-int
-LIBSTUB_NETSCAPE_SPKI_set_pubkey(void);
-
-int
-LIBSTUB_NETSCAPE_SPKI_print(void);
-
-int
-LIBSTUB_X509_signature_print(void);
-
-int
-LIBSTUB_X509_sign(void);
-
-int
-LIBSTUB_X509_REQ_sign(void);
-
-int
-LIBSTUB_X509_CRL_sign(void);
-
-int
-LIBSTUB_NETSCAPE_SPKI_sign(void);
-
-int
-LIBSTUB_X509_pubkey_digest(void);
-
-int
-LIBSTUB_X509_digest(void);
-
-int
-LIBSTUB_X509_CRL_digest(void);
-
-int
-LIBSTUB_X509_REQ_digest(void);
-
-int
-LIBSTUB_X509_NAME_digest(void);
-
-X509 *
-LIBSTUB_d2i_X509_bio(void);
-
-int
-LIBSTUB_i2d_X509_bio(void);
-
-X509_CRL *
-LIBSTUB_d2i_X509_CRL_bio(void);
-
-int
-LIBSTUB_i2d_X509_CRL_bio(void);
-
-X509_REQ *
-LIBSTUB_d2i_X509_REQ_bio(void);
-
-int
-LIBSTUB_i2d_X509_REQ_bio(void);
-
-RSA *
-LIBSTUB_d2i_RSAPrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_RSAPrivateKey_bio(void);
-
-RSA *
-LIBSTUB_d2i_RSAPublicKey_bio(void);
-
-int
-LIBSTUB_i2d_RSAPublicKey_bio(void);
-
-RSA *
-LIBSTUB_d2i_RSA_PUBKEY_bio(void);
-
-int
-LIBSTUB_i2d_RSA_PUBKEY_bio(void);
-
-DSA *
-LIBSTUB_d2i_DSA_PUBKEY_bio(void);
-
-int
-LIBSTUB_i2d_DSA_PUBKEY_bio(void);
-
-DSA *
-LIBSTUB_d2i_DSAPrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_DSAPrivateKey_bio(void);
-
-X509_SIG *
-LIBSTUB_d2i_PKCS8_bio(void);
-
-int
-LIBSTUB_i2d_PKCS8_bio(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_d2i_PKCS8_PRIV_KEY_INFO_bio(void);
-
-int
-LIBSTUB_i2d_PKCS8_PRIV_KEY_INFO_bio(void);
-
-int
-LIBSTUB_i2d_PKCS8PrivateKeyInfo_bio(void);
-
-int
-LIBSTUB_i2d_PrivateKey_bio(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_PUBKEY_bio(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PUBKEY_bio(void);
-
-X509 *
-LIBSTUB_X509_dup(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_dup(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_EXTENSION_dup(void);
-
-X509_CRL *
-LIBSTUB_X509_CRL_dup(void);
-
-X509_REQ *
-LIBSTUB_X509_REQ_dup(void);
-
-X509_ALGOR *
-LIBSTUB_X509_ALGOR_dup(void);
-
-X509_NAME *
-LIBSTUB_X509_NAME_dup(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_ENTRY_dup(void);
-
-int
-LIBSTUB_X509_cmp_time(void);
-
-int
-LIBSTUB_X509_cmp_current_time(void);
-
-ASN1_TIME *
-LIBSTUB_X509_time_adj(void);
-
-ASN1_TIME *
-LIBSTUB_X509_gmtime_adj(void);
-
-const char *
-LIBSTUB_X509_get_default_cert_area(void);
-
-const char *
-LIBSTUB_X509_get_default_cert_dir(void);
-
-const char *
-LIBSTUB_X509_get_default_cert_file(void);
-
-const char *
-LIBSTUB_X509_get_default_cert_dir_env(void);
-
-const char *
-LIBSTUB_X509_get_default_cert_file_env(void);
-
-const char *
-LIBSTUB_X509_get_default_private_dir(void);
-
-X509_REQ *
-LIBSTUB_X509_to_X509_REQ(void);
-
-X509 *
-LIBSTUB_X509_REQ_to_X509(void);
-
-X509_ALGOR *
-LIBSTUB_X509_ALGOR_new(void);
-
-void
-LIBSTUB_X509_ALGOR_free(void);
-
-X509_ALGOR *
-LIBSTUB_d2i_X509_ALGOR(void);
-
-int
-LIBSTUB_i2d_X509_ALGOR(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_ALGOR_it(void);
-
-X509_VAL *
-LIBSTUB_X509_VAL_new(void);
-
-void
-LIBSTUB_X509_VAL_free(void);
-
-X509_VAL *
-LIBSTUB_d2i_X509_VAL(void);
-
-int
-LIBSTUB_i2d_X509_VAL(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_VAL_it(void);
-
-X509_PUBKEY *
-LIBSTUB_X509_PUBKEY_new(void);
-
-void
-LIBSTUB_X509_PUBKEY_free(void);
-
-X509_PUBKEY *
-LIBSTUB_d2i_X509_PUBKEY(void);
-
-int
-LIBSTUB_i2d_X509_PUBKEY(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_PUBKEY_it(void);
-
-int
-LIBSTUB_X509_PUBKEY_set(void);
-
-EVP_PKEY *
-LIBSTUB_X509_PUBKEY_get(void);
-
-int
-LIBSTUB_X509_get_pubkey_parameters(void);
-
-int
-LIBSTUB_i2d_PUBKEY(void);
-
-EVP_PKEY *
-LIBSTUB_d2i_PUBKEY(void);
-
-int
-LIBSTUB_i2d_RSA_PUBKEY(void);
-
-RSA *
-LIBSTUB_d2i_RSA_PUBKEY(void);
-
-int
-LIBSTUB_i2d_DSA_PUBKEY(void);
-
-DSA *
-LIBSTUB_d2i_DSA_PUBKEY(void);
-
-X509_SIG *
-LIBSTUB_X509_SIG_new(void);
-
-void
-LIBSTUB_X509_SIG_free(void);
-
-X509_SIG *
-LIBSTUB_d2i_X509_SIG(void);
-
-int
-LIBSTUB_i2d_X509_SIG(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_SIG_it(void);
-
-X509_REQ_INFO *
-LIBSTUB_X509_REQ_INFO_new(void);
-
-void
-LIBSTUB_X509_REQ_INFO_free(void);
-
-X509_REQ_INFO *
-LIBSTUB_d2i_X509_REQ_INFO(void);
-
-int
-LIBSTUB_i2d_X509_REQ_INFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_REQ_INFO_it(void);
-
-X509_REQ *
-LIBSTUB_X509_REQ_new(void);
-
-void
-LIBSTUB_X509_REQ_free(void);
-
-X509_REQ *
-LIBSTUB_d2i_X509_REQ(void);
-
-int
-LIBSTUB_i2d_X509_REQ(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_REQ_it(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_new(void);
-
-void
-LIBSTUB_X509_ATTRIBUTE_free(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_d2i_X509_ATTRIBUTE(void);
-
-int
-LIBSTUB_i2d_X509_ATTRIBUTE(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_ATTRIBUTE_it(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_create(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_EXTENSION_new(void);
-
-void
-LIBSTUB_X509_EXTENSION_free(void);
-
-X509_EXTENSION *
-LIBSTUB_d2i_X509_EXTENSION(void);
-
-int
-LIBSTUB_i2d_X509_EXTENSION(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_EXTENSION_it(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_ENTRY_new(void);
-
-void
-LIBSTUB_X509_NAME_ENTRY_free(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_d2i_X509_NAME_ENTRY(void);
-
-int
-LIBSTUB_i2d_X509_NAME_ENTRY(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_NAME_ENTRY_it(void);
-
-X509_NAME *
-LIBSTUB_X509_NAME_new(void);
-
-void
-LIBSTUB_X509_NAME_free(void);
-
-X509_NAME *
-LIBSTUB_d2i_X509_NAME(void);
-
-int
-LIBSTUB_i2d_X509_NAME(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_NAME_it(void);
-
-int
-LIBSTUB_X509_NAME_set(void);
-
-X509_CINF *
-LIBSTUB_X509_CINF_new(void);
-
-void
-LIBSTUB_X509_CINF_free(void);
-
-X509_CINF *
-LIBSTUB_d2i_X509_CINF(void);
-
-int
-LIBSTUB_i2d_X509_CINF(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_CINF_it(void);
-
-X509 *
-LIBSTUB_X509_new(void);
-
-void
-LIBSTUB_X509_free(void);
-
-X509 *
-LIBSTUB_d2i_X509(void);
-
-int
-LIBSTUB_i2d_X509(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_it(void);
-
-X509_CERT_AUX *
-LIBSTUB_X509_CERT_AUX_new(void);
-
-void
-LIBSTUB_X509_CERT_AUX_free(void);
-
-X509_CERT_AUX *
-LIBSTUB_d2i_X509_CERT_AUX(void);
-
-int
-LIBSTUB_i2d_X509_CERT_AUX(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_CERT_AUX_it(void);
-
-int
-LIBSTUB_X509_set_ex_data(void);
-
-void *
-LIBSTUB_X509_get_ex_data(void);
-
-int
-LIBSTUB_i2d_X509_AUX(void);
-
-X509 *
-LIBSTUB_d2i_X509_AUX(void);
-
-int
-LIBSTUB_X509_alias_set1(void);
-
-int
-LIBSTUB_X509_keyid_set1(void);
-
-unsigned char *
-LIBSTUB_X509_alias_get0(void);
-
-int (*)(int, X509 *, int)
-LIBSTUB_X509_TRUST_set_default(void);
-
-int
-LIBSTUB_X509_TRUST_set(void);
-
-int
-LIBSTUB_X509_add1_trust_object(void);
-
-int
-LIBSTUB_X509_add1_reject_object(void);
-
-void
-LIBSTUB_X509_trust_clear(void);
-
-void
-LIBSTUB_X509_reject_clear(void);
-
-X509_REVOKED *
-LIBSTUB_X509_REVOKED_new(void);
-
-void
-LIBSTUB_X509_REVOKED_free(void);
-
-X509_REVOKED *
-LIBSTUB_d2i_X509_REVOKED(void);
-
-int
-LIBSTUB_i2d_X509_REVOKED(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_REVOKED_it(void);
-
-X509_CRL_INFO *
-LIBSTUB_X509_CRL_INFO_new(void);
-
-void
-LIBSTUB_X509_CRL_INFO_free(void);
-
-X509_CRL_INFO *
-LIBSTUB_d2i_X509_CRL_INFO(void);
-
-int
-LIBSTUB_i2d_X509_CRL_INFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_CRL_INFO_it(void);
-
-X509_CRL *
-LIBSTUB_X509_CRL_new(void);
-
-void
-LIBSTUB_X509_CRL_free(void);
-
-X509_CRL *
-LIBSTUB_d2i_X509_CRL(void);
-
-int
-LIBSTUB_i2d_X509_CRL(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_CRL_it(void);
-
-int
-LIBSTUB_X509_CRL_add0_revoked(void);
-
-X509_PKEY *
-LIBSTUB_X509_PKEY_new(void);
-
-void
-LIBSTUB_X509_PKEY_free(void);
-
-NETSCAPE_SPKI *
-LIBSTUB_NETSCAPE_SPKI_new(void);
-
-void
-LIBSTUB_NETSCAPE_SPKI_free(void);
-
-NETSCAPE_SPKI *
-LIBSTUB_d2i_NETSCAPE_SPKI(void);
-
-int
-LIBSTUB_i2d_NETSCAPE_SPKI(void);
-
-const ASN1_ITEM *
-LIBSTUB_NETSCAPE_SPKI_it(void);
-
-NETSCAPE_SPKAC *
-LIBSTUB_NETSCAPE_SPKAC_new(void);
-
-void
-LIBSTUB_NETSCAPE_SPKAC_free(void);
-
-NETSCAPE_SPKAC *
-LIBSTUB_d2i_NETSCAPE_SPKAC(void);
-
-int
-LIBSTUB_i2d_NETSCAPE_SPKAC(void);
-
-const ASN1_ITEM *
-LIBSTUB_NETSCAPE_SPKAC_it(void);
-
-NETSCAPE_CERT_SEQUENCE *
-LIBSTUB_NETSCAPE_CERT_SEQUENCE_new(void);
-
-void
-LIBSTUB_NETSCAPE_CERT_SEQUENCE_free(void);
-
-NETSCAPE_CERT_SEQUENCE *
-LIBSTUB_d2i_NETSCAPE_CERT_SEQUENCE(void);
-
-int
-LIBSTUB_i2d_NETSCAPE_CERT_SEQUENCE(void);
-
-const ASN1_ITEM *
-LIBSTUB_NETSCAPE_CERT_SEQUENCE_it(void);
-
-X509_INFO *
-LIBSTUB_X509_INFO_new(void);
-
-void
-LIBSTUB_X509_INFO_free(void);
-
-char *
-LIBSTUB_X509_NAME_oneline(void);
-
-int
-LIBSTUB_ASN1_verify(void);
-
-int
-LIBSTUB_ASN1_digest(void);
-
-int
-LIBSTUB_ASN1_sign(void);
-
-int
-LIBSTUB_ASN1_item_digest(void);
-
-int
-LIBSTUB_ASN1_item_verify(void);
-
-int
-LIBSTUB_ASN1_item_sign(void);
-
-int
-LIBSTUB_X509_set_version(void);
-
-int
-LIBSTUB_X509_set_serialNumber(void);
-
-ASN1_INTEGER *
-LIBSTUB_X509_get_serialNumber(void);
-
-int
-LIBSTUB_X509_set_issuer_name(void);
-
-X509_NAME *
-LIBSTUB_X509_get_issuer_name(void);
-
-int
-LIBSTUB_X509_set_subject_name(void);
-
-X509_NAME *
-LIBSTUB_X509_get_subject_name(void);
-
-int
-LIBSTUB_X509_set_notBefore(void);
-
-int
-LIBSTUB_X509_set_notAfter(void);
-
-int
-LIBSTUB_X509_set_pubkey(void);
-
-EVP_PKEY *
-LIBSTUB_X509_get_pubkey(void);
-
-ASN1_BIT_STRING *
-LIBSTUB_X509_get0_pubkey_bitstr(void);
-
-int
-LIBSTUB_X509_certificate_type(void);
-
-int
-LIBSTUB_X509_REQ_set_version(void);
-
-int
-LIBSTUB_X509_REQ_set_subject_name(void);
-
-int
-LIBSTUB_X509_REQ_set_pubkey(void);
-
-EVP_PKEY *
-LIBSTUB_X509_REQ_get_pubkey(void);
-
-int
-LIBSTUB_X509_REQ_extension_nid(void);
-
-int *
-LIBSTUB_X509_REQ_get_extension_nids(void);
-
-void
-LIBSTUB_X509_REQ_set_extension_nids(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_X509_REQ_get_extensions(void);
-
-int
-LIBSTUB_X509_REQ_add_extensions_nid(void);
-
-int
-LIBSTUB_X509_REQ_add_extensions(void);
-
-int
-LIBSTUB_X509_REQ_get_attr_count(void);
-
-int
-LIBSTUB_X509_REQ_get_attr_by_NID(void);
-
-int
-LIBSTUB_X509_REQ_get_attr_by_OBJ(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_REQ_get_attr(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_REQ_delete_attr(void);
-
-int
-LIBSTUB_X509_REQ_add1_attr(void);
-
-int
-LIBSTUB_X509_REQ_add1_attr_by_OBJ(void);
-
-int
-LIBSTUB_X509_REQ_add1_attr_by_NID(void);
-
-int
-LIBSTUB_X509_REQ_add1_attr_by_txt(void);
-
-int
-LIBSTUB_X509_CRL_set_version(void);
-
-int
-LIBSTUB_X509_CRL_set_issuer_name(void);
-
-int
-LIBSTUB_X509_CRL_set_lastUpdate(void);
-
-int
-LIBSTUB_X509_CRL_set_nextUpdate(void);
-
-int
-LIBSTUB_X509_CRL_sort(void);
-
-int
-LIBSTUB_X509_REVOKED_set_serialNumber(void);
-
-int
-LIBSTUB_X509_REVOKED_set_revocationDate(void);
-
-int
-LIBSTUB_X509_check_private_key(void);
-
-int
-LIBSTUB_X509_issuer_and_serial_cmp(void);
-
-unsigned long
-LIBSTUB_X509_issuer_and_serial_hash(void);
-
-int
-LIBSTUB_X509_issuer_name_cmp(void);
-
-unsigned long
-LIBSTUB_X509_issuer_name_hash(void);
-
-int
-LIBSTUB_X509_subject_name_cmp(void);
-
-unsigned long
-LIBSTUB_X509_subject_name_hash(void);
-
-int
-LIBSTUB_X509_cmp(void);
-
-int
-LIBSTUB_X509_NAME_cmp(void);
-
-unsigned long
-LIBSTUB_X509_NAME_hash(void);
-
-int
-LIBSTUB_X509_CRL_cmp(void);
-
-int
-LIBSTUB_X509_NAME_print(void);
-
-int
-LIBSTUB_X509_NAME_print_ex(void);
-
-int
-LIBSTUB_X509_print_ex(void);
-
-int
-LIBSTUB_X509_print(void);
-
-int
-LIBSTUB_X509_ocspid_print(void);
-
-int
-LIBSTUB_X509_CRL_print(void);
-
-int
-LIBSTUB_X509_REQ_print_ex(void);
-
-int
-LIBSTUB_X509_REQ_print(void);
-
-int
-LIBSTUB_X509_NAME_entry_count(void);
-
-int
-LIBSTUB_X509_NAME_get_text_by_NID(void);
-
-int
-LIBSTUB_X509_NAME_get_text_by_OBJ(void);
-
-int
-LIBSTUB_X509_NAME_get_index_by_NID(void);
-
-int
-LIBSTUB_X509_NAME_get_index_by_OBJ(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_get_entry(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_delete_entry(void);
-
-int
-LIBSTUB_X509_NAME_add_entry(void);
-
-int
-LIBSTUB_X509_NAME_add_entry_by_OBJ(void);
-
-int
-LIBSTUB_X509_NAME_add_entry_by_NID(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_ENTRY_create_by_txt(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_ENTRY_create_by_NID(void);
-
-int
-LIBSTUB_X509_NAME_add_entry_by_txt(void);
-
-X509_NAME_ENTRY *
-LIBSTUB_X509_NAME_ENTRY_create_by_OBJ(void);
-
-int
-LIBSTUB_X509_NAME_ENTRY_set_object(void);
-
-int
-LIBSTUB_X509_NAME_ENTRY_set_data(void);
-
-ASN1_OBJECT *
-LIBSTUB_X509_NAME_ENTRY_get_object(void);
-
-ASN1_STRING *
-LIBSTUB_X509_NAME_ENTRY_get_data(void);
-
-int
-LIBSTUB_X509v3_get_ext_count(void);
-
-int
-LIBSTUB_X509v3_get_ext_by_NID(void);
-
-int
-LIBSTUB_X509v3_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_X509v3_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_X509v3_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_X509v3_delete_ext(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_X509v3_add_ext(void);
-
-int
-LIBSTUB_X509_get_ext_count(void);
-
-int
-LIBSTUB_X509_get_ext_by_NID(void);
-
-int
-LIBSTUB_X509_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_X509_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_delete_ext(void);
-
-int
-LIBSTUB_X509_add_ext(void);
-
-void *
-LIBSTUB_X509_get_ext_d2i(void);
-
-int
-LIBSTUB_X509_add1_ext_i2d(void);
-
-int
-LIBSTUB_X509_CRL_get_ext_count(void);
-
-int
-LIBSTUB_X509_CRL_get_ext_by_NID(void);
-
-int
-LIBSTUB_X509_CRL_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_X509_CRL_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_CRL_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_CRL_delete_ext(void);
-
-int
-LIBSTUB_X509_CRL_add_ext(void);
-
-void *
-LIBSTUB_X509_CRL_get_ext_d2i(void);
-
-int
-LIBSTUB_X509_CRL_add1_ext_i2d(void);
-
-int
-LIBSTUB_X509_REVOKED_get_ext_count(void);
-
-int
-LIBSTUB_X509_REVOKED_get_ext_by_NID(void);
-
-int
-LIBSTUB_X509_REVOKED_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_X509_REVOKED_get_ext_by_critical(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_REVOKED_get_ext(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_REVOKED_delete_ext(void);
-
-int
-LIBSTUB_X509_REVOKED_add_ext(void);
-
-void *
-LIBSTUB_X509_REVOKED_get_ext_d2i(void);
-
-int
-LIBSTUB_X509_REVOKED_add1_ext_i2d(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_EXTENSION_create_by_NID(void);
-
-X509_EXTENSION *
-LIBSTUB_X509_EXTENSION_create_by_OBJ(void);
-
-int
-LIBSTUB_X509_EXTENSION_set_object(void);
-
-int
-LIBSTUB_X509_EXTENSION_set_critical(void);
-
-int
-LIBSTUB_X509_EXTENSION_set_data(void);
-
-ASN1_OBJECT *
-LIBSTUB_X509_EXTENSION_get_object(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_X509_EXTENSION_get_data(void);
-
-int
-LIBSTUB_X509_EXTENSION_get_critical(void);
-
-int
-LIBSTUB_X509at_get_attr_count(void);
-
-int
-LIBSTUB_X509at_get_attr_by_NID(void);
-
-int
-LIBSTUB_X509at_get_attr_by_OBJ(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509at_get_attr(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509at_delete_attr(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_X509at_add1_attr(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_X509at_add1_attr_by_OBJ(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_X509at_add1_attr_by_NID(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_X509at_add1_attr_by_txt(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_create_by_NID(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_create_by_OBJ(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_X509_ATTRIBUTE_create_by_txt(void);
-
-int
-LIBSTUB_X509_ATTRIBUTE_set1_object(void);
-
-int
-LIBSTUB_X509_ATTRIBUTE_set1_data(void);
-
-void *
-LIBSTUB_X509_ATTRIBUTE_get0_data(void);
-
-int
-LIBSTUB_X509_ATTRIBUTE_count(void);
-
-ASN1_OBJECT *
-LIBSTUB_X509_ATTRIBUTE_get0_object(void);
-
-ASN1_TYPE *
-LIBSTUB_X509_ATTRIBUTE_get0_type(void);
-
-int
-LIBSTUB_X509_verify_cert(void);
-
-X509 *
-LIBSTUB_X509_find_by_issuer_and_serial(void);
-
-X509 *
-LIBSTUB_X509_find_by_subject(void);
-
-PBEPARAM *
-LIBSTUB_PBEPARAM_new(void);
-
-void
-LIBSTUB_PBEPARAM_free(void);
-
-PBEPARAM *
-LIBSTUB_d2i_PBEPARAM(void);
-
-int
-LIBSTUB_i2d_PBEPARAM(void);
-
-const ASN1_ITEM *
-LIBSTUB_PBEPARAM_it(void);
-
-PBE2PARAM *
-LIBSTUB_PBE2PARAM_new(void);
-
-void
-LIBSTUB_PBE2PARAM_free(void);
-
-PBE2PARAM *
-LIBSTUB_d2i_PBE2PARAM(void);
-
-int
-LIBSTUB_i2d_PBE2PARAM(void);
-
-const ASN1_ITEM *
-LIBSTUB_PBE2PARAM_it(void);
-
-PBKDF2PARAM *
-LIBSTUB_PBKDF2PARAM_new(void);
-
-void
-LIBSTUB_PBKDF2PARAM_free(void);
-
-PBKDF2PARAM *
-LIBSTUB_d2i_PBKDF2PARAM(void);
-
-int
-LIBSTUB_i2d_PBKDF2PARAM(void);
-
-const ASN1_ITEM *
-LIBSTUB_PBKDF2PARAM_it(void);
-
-X509_ALGOR *
-LIBSTUB_PKCS5_pbe_set(void);
-
-X509_ALGOR *
-LIBSTUB_PKCS5_pbe2_set(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_PKCS8_PRIV_KEY_INFO_new(void);
-
-void
-LIBSTUB_PKCS8_PRIV_KEY_INFO_free(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_d2i_PKCS8_PRIV_KEY_INFO(void);
-
-int
-LIBSTUB_i2d_PKCS8_PRIV_KEY_INFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKCS8_PRIV_KEY_INFO_it(void);
-
-EVP_PKEY *
-LIBSTUB_EVP_PKCS82PKEY(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_EVP_PKEY2PKCS8(void);
-
-int
-LIBSTUB_X509_check_trust(void);
-
-int
-LIBSTUB_X509_TRUST_get_count(void);
-
-X509_TRUST *
-LIBSTUB_X509_TRUST_get0(void);
-
-int
-LIBSTUB_X509_TRUST_get_by_id(void);
-
-int
-LIBSTUB_X509_TRUST_add(void);
-
-void
-LIBSTUB_X509_TRUST_cleanup(void);
-
-int
-LIBSTUB_X509_TRUST_get_flags(void);
-
-char *
-LIBSTUB_X509_TRUST_get0_name(void);
-
-int
-LIBSTUB_X509_TRUST_get_trust(void);
-
-void
-LIBSTUB_ERR_load_X509_strings(void);
-
-int
-LIBSTUB_X509_OBJECT_idx_by_subject(void);
-
-X509_OBJECT *
-LIBSTUB_X509_OBJECT_retrieve_by_subject(void);
-
-X509_OBJECT *
-LIBSTUB_X509_OBJECT_retrieve_match(void);
-
-void
-LIBSTUB_X509_OBJECT_up_ref_count(void);
-
-void
-LIBSTUB_X509_OBJECT_free_contents(void);
-
-X509_STORE *
-LIBSTUB_X509_STORE_new(void);
-
-void
-LIBSTUB_X509_STORE_free(void);
-
-void
-LIBSTUB_X509_STORE_set_flags(void);
-
-int
-LIBSTUB_X509_STORE_set_purpose(void);
-
-int
-LIBSTUB_X509_STORE_set_trust(void);
-
-X509_STORE_CTX *
-LIBSTUB_X509_STORE_CTX_new(void);
-
-int
-LIBSTUB_X509_STORE_CTX_get1_issuer(void);
-
-void
-LIBSTUB_X509_STORE_CTX_free(void);
-
-int
-LIBSTUB_X509_STORE_CTX_init(void);
-
-void
-LIBSTUB_X509_STORE_CTX_trusted_stack(void);
-
-void
-LIBSTUB_X509_STORE_CTX_cleanup(void);
-
-X509_LOOKUP *
-LIBSTUB_X509_STORE_add_lookup(void);
-
-X509_LOOKUP_METHOD *
-LIBSTUB_X509_LOOKUP_hash_dir(void);
-
-X509_LOOKUP_METHOD *
-LIBSTUB_X509_LOOKUP_file(void);
-
-int
-LIBSTUB_X509_STORE_add_cert(void);
-
-int
-LIBSTUB_X509_STORE_add_crl(void);
-
-int
-LIBSTUB_X509_STORE_get_by_subject(void);
-
-int
-LIBSTUB_X509_LOOKUP_ctrl(void);
-
-int
-LIBSTUB_X509_load_cert_file(void);
-
-int
-LIBSTUB_X509_load_crl_file(void);
-
-int
-LIBSTUB_X509_load_cert_crl_file(void);
-
-X509_LOOKUP *
-LIBSTUB_X509_LOOKUP_new(void);
-
-void
-LIBSTUB_X509_LOOKUP_free(void);
-
-int
-LIBSTUB_X509_LOOKUP_init(void);
-
-int
-LIBSTUB_X509_LOOKUP_by_subject(void);
-
-int
-LIBSTUB_X509_LOOKUP_by_issuer_serial(void);
-
-int
-LIBSTUB_X509_LOOKUP_by_fingerprint(void);
-
-int
-LIBSTUB_X509_LOOKUP_by_alias(void);
-
-int
-LIBSTUB_X509_LOOKUP_shutdown(void);
-
-int
-LIBSTUB_X509_STORE_load_locations(void);
-
-int
-LIBSTUB_X509_STORE_set_default_paths(void);
-
-int
-LIBSTUB_X509_STORE_CTX_set_ex_data(void);
-
-void *
-LIBSTUB_X509_STORE_CTX_get_ex_data(void);
-
-int
-LIBSTUB_X509_STORE_CTX_get_error(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_error(void);
-
-int
-LIBSTUB_X509_STORE_CTX_get_error_depth(void);
-
-X509 *
-LIBSTUB_X509_STORE_CTX_get_current_cert(void);
-
-STACK_OF(X509) *
-LIBSTUB_X509_STORE_CTX_get_chain(void);
-
-STACK_OF(X509) *
-LIBSTUB_X509_STORE_CTX_get1_chain(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_cert(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_chain(void);
-
-int
-LIBSTUB_X509_STORE_CTX_set_purpose(void);
-
-int
-LIBSTUB_X509_STORE_CTX_set_trust(void);
-
-int
-LIBSTUB_X509_STORE_CTX_purpose_inherit(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_flags(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_time(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_verify_cb(void);
-
-BASIC_CONSTRAINTS *
-LIBSTUB_BASIC_CONSTRAINTS_new(void);
-
-void
-LIBSTUB_BASIC_CONSTRAINTS_free(void);
-
-BASIC_CONSTRAINTS *
-LIBSTUB_d2i_BASIC_CONSTRAINTS(void);
-
-int
-LIBSTUB_i2d_BASIC_CONSTRAINTS(void);
-
-const ASN1_ITEM *
-LIBSTUB_BASIC_CONSTRAINTS_it(void);
-
-SXNET *
-LIBSTUB_SXNET_new(void);
-
-void
-LIBSTUB_SXNET_free(void);
-
-SXNET *
-LIBSTUB_d2i_SXNET(void);
-
-int
-LIBSTUB_i2d_SXNET(void);
-
-const ASN1_ITEM *
-LIBSTUB_SXNET_it(void);
-
-SXNETID *
-LIBSTUB_SXNETID_new(void);
-
-void
-LIBSTUB_SXNETID_free(void);
-
-SXNETID *
-LIBSTUB_d2i_SXNETID(void);
-
-int
-LIBSTUB_i2d_SXNETID(void);
-
-const ASN1_ITEM *
-LIBSTUB_SXNETID_it(void);
-
-int
-LIBSTUB_SXNET_add_id_asc(void);
-
-int
-LIBSTUB_SXNET_add_id_ulong(void);
-
-int
-LIBSTUB_SXNET_add_id_INTEGER(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_SXNET_get_id_asc(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_SXNET_get_id_ulong(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_SXNET_get_id_INTEGER(void);
-
-AUTHORITY_KEYID *
-LIBSTUB_AUTHORITY_KEYID_new(void);
-
-void
-LIBSTUB_AUTHORITY_KEYID_free(void);
-
-AUTHORITY_KEYID *
-LIBSTUB_d2i_AUTHORITY_KEYID(void);
-
-int
-LIBSTUB_i2d_AUTHORITY_KEYID(void);
-
-const ASN1_ITEM *
-LIBSTUB_AUTHORITY_KEYID_it(void);
-
-PKEY_USAGE_PERIOD *
-LIBSTUB_PKEY_USAGE_PERIOD_new(void);
-
-void
-LIBSTUB_PKEY_USAGE_PERIOD_free(void);
-
-PKEY_USAGE_PERIOD *
-LIBSTUB_d2i_PKEY_USAGE_PERIOD(void);
-
-int
-LIBSTUB_i2d_PKEY_USAGE_PERIOD(void);
-
-const ASN1_ITEM *
-LIBSTUB_PKEY_USAGE_PERIOD_it(void);
-
-GENERAL_NAME *
-LIBSTUB_GENERAL_NAME_new(void);
-
-void
-LIBSTUB_GENERAL_NAME_free(void);
-
-GENERAL_NAME *
-LIBSTUB_d2i_GENERAL_NAME(void);
-
-int
-LIBSTUB_i2d_GENERAL_NAME(void);
-
-const ASN1_ITEM *
-LIBSTUB_GENERAL_NAME_it(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_i2v_GENERAL_NAME(void);
-
-int
-LIBSTUB_GENERAL_NAME_print(void);
-
-GENERAL_NAMES *
-LIBSTUB_GENERAL_NAMES_new(void);
-
-void
-LIBSTUB_GENERAL_NAMES_free(void);
-
-GENERAL_NAMES *
-LIBSTUB_d2i_GENERAL_NAMES(void);
-
-int
-LIBSTUB_i2d_GENERAL_NAMES(void);
-
-const ASN1_ITEM *
-LIBSTUB_GENERAL_NAMES_it(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_i2v_GENERAL_NAMES(void);
-
-GENERAL_NAMES *
-LIBSTUB_v2i_GENERAL_NAMES(void);
-
-OTHERNAME *
-LIBSTUB_OTHERNAME_new(void);
-
-void
-LIBSTUB_OTHERNAME_free(void);
-
-OTHERNAME *
-LIBSTUB_d2i_OTHERNAME(void);
-
-int
-LIBSTUB_i2d_OTHERNAME(void);
-
-const ASN1_ITEM *
-LIBSTUB_OTHERNAME_it(void);
-
-EDIPARTYNAME *
-LIBSTUB_EDIPARTYNAME_new(void);
-
-void
-LIBSTUB_EDIPARTYNAME_free(void);
-
-EDIPARTYNAME *
-LIBSTUB_d2i_EDIPARTYNAME(void);
-
-int
-LIBSTUB_i2d_EDIPARTYNAME(void);
-
-const ASN1_ITEM *
-LIBSTUB_EDIPARTYNAME_it(void);
-
-char *
-LIBSTUB_i2s_ASN1_OCTET_STRING(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_s2i_ASN1_OCTET_STRING(void);
-
-EXTENDED_KEY_USAGE *
-LIBSTUB_EXTENDED_KEY_USAGE_new(void);
-
-void
-LIBSTUB_EXTENDED_KEY_USAGE_free(void);
-
-EXTENDED_KEY_USAGE *
-LIBSTUB_d2i_EXTENDED_KEY_USAGE(void);
-
-int
-LIBSTUB_i2d_EXTENDED_KEY_USAGE(void);
-
-const ASN1_ITEM *
-LIBSTUB_EXTENDED_KEY_USAGE_it(void);
-
-int
-LIBSTUB_i2a_ACCESS_DESCRIPTION(void);
-
-CERTIFICATEPOLICIES *
-LIBSTUB_CERTIFICATEPOLICIES_new(void);
-
-void
-LIBSTUB_CERTIFICATEPOLICIES_free(void);
-
-CERTIFICATEPOLICIES *
-LIBSTUB_d2i_CERTIFICATEPOLICIES(void);
-
-int
-LIBSTUB_i2d_CERTIFICATEPOLICIES(void);
-
-const ASN1_ITEM *
-LIBSTUB_CERTIFICATEPOLICIES_it(void);
-
-POLICYINFO *
-LIBSTUB_POLICYINFO_new(void);
-
-void
-LIBSTUB_POLICYINFO_free(void);
-
-POLICYINFO *
-LIBSTUB_d2i_POLICYINFO(void);
-
-int
-LIBSTUB_i2d_POLICYINFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_POLICYINFO_it(void);
-
-POLICYQUALINFO *
-LIBSTUB_POLICYQUALINFO_new(void);
-
-void
-LIBSTUB_POLICYQUALINFO_free(void);
-
-POLICYQUALINFO *
-LIBSTUB_d2i_POLICYQUALINFO(void);
-
-int
-LIBSTUB_i2d_POLICYQUALINFO(void);
-
-const ASN1_ITEM *
-LIBSTUB_POLICYQUALINFO_it(void);
-
-USERNOTICE *
-LIBSTUB_USERNOTICE_new(void);
-
-void
-LIBSTUB_USERNOTICE_free(void);
-
-USERNOTICE *
-LIBSTUB_d2i_USERNOTICE(void);
-
-int
-LIBSTUB_i2d_USERNOTICE(void);
-
-const ASN1_ITEM *
-LIBSTUB_USERNOTICE_it(void);
-
-NOTICEREF *
-LIBSTUB_NOTICEREF_new(void);
-
-void
-LIBSTUB_NOTICEREF_free(void);
-
-NOTICEREF *
-LIBSTUB_d2i_NOTICEREF(void);
-
-int
-LIBSTUB_i2d_NOTICEREF(void);
-
-const ASN1_ITEM *
-LIBSTUB_NOTICEREF_it(void);
-
-CRL_DIST_POINTS *
-LIBSTUB_CRL_DIST_POINTS_new(void);
-
-void
-LIBSTUB_CRL_DIST_POINTS_free(void);
-
-CRL_DIST_POINTS *
-LIBSTUB_d2i_CRL_DIST_POINTS(void);
-
-int
-LIBSTUB_i2d_CRL_DIST_POINTS(void);
-
-const ASN1_ITEM *
-LIBSTUB_CRL_DIST_POINTS_it(void);
-
-DIST_POINT *
-LIBSTUB_DIST_POINT_new(void);
-
-void
-LIBSTUB_DIST_POINT_free(void);
-
-DIST_POINT *
-LIBSTUB_d2i_DIST_POINT(void);
-
-int
-LIBSTUB_i2d_DIST_POINT(void);
-
-const ASN1_ITEM *
-LIBSTUB_DIST_POINT_it(void);
-
-DIST_POINT_NAME *
-LIBSTUB_DIST_POINT_NAME_new(void);
-
-void
-LIBSTUB_DIST_POINT_NAME_free(void);
-
-DIST_POINT_NAME *
-LIBSTUB_d2i_DIST_POINT_NAME(void);
-
-int
-LIBSTUB_i2d_DIST_POINT_NAME(void);
-
-const ASN1_ITEM *
-LIBSTUB_DIST_POINT_NAME_it(void);
-
-ACCESS_DESCRIPTION *
-LIBSTUB_ACCESS_DESCRIPTION_new(void);
-
-void
-LIBSTUB_ACCESS_DESCRIPTION_free(void);
-
-ACCESS_DESCRIPTION *
-LIBSTUB_d2i_ACCESS_DESCRIPTION(void);
-
-int
-LIBSTUB_i2d_ACCESS_DESCRIPTION(void);
-
-const ASN1_ITEM *
-LIBSTUB_ACCESS_DESCRIPTION_it(void);
-
-AUTHORITY_INFO_ACCESS *
-LIBSTUB_AUTHORITY_INFO_ACCESS_new(void);
-
-void
-LIBSTUB_AUTHORITY_INFO_ACCESS_free(void);
-
-AUTHORITY_INFO_ACCESS *
-LIBSTUB_d2i_AUTHORITY_INFO_ACCESS(void);
-
-int
-LIBSTUB_i2d_AUTHORITY_INFO_ACCESS(void);
-
-const ASN1_ITEM *
-LIBSTUB_AUTHORITY_INFO_ACCESS_it(void);
-
-GENERAL_NAME *
-LIBSTUB_v2i_GENERAL_NAME(void);
-
-void
-LIBSTUB_X509V3_conf_free(void);
-
-X509_EXTENSION *
-LIBSTUB_X509V3_EXT_nconf_nid(void);
-
-X509_EXTENSION *
-LIBSTUB_X509V3_EXT_nconf(void);
-
-int
-LIBSTUB_X509V3_EXT_add_nconf_sk(void);
-
-int
-LIBSTUB_X509V3_EXT_add_nconf(void);
-
-int
-LIBSTUB_X509V3_EXT_REQ_add_nconf(void);
-
-int
-LIBSTUB_X509V3_EXT_CRL_add_nconf(void);
-
-X509_EXTENSION *
-LIBSTUB_X509V3_EXT_conf_nid(void);
-
-X509_EXTENSION *
-LIBSTUB_X509V3_EXT_conf(void);
-
-int
-LIBSTUB_X509V3_EXT_add_conf(void);
-
-int
-LIBSTUB_X509V3_EXT_REQ_add_conf(void);
-
-int
-LIBSTUB_X509V3_EXT_CRL_add_conf(void);
-
-int
-LIBSTUB_X509V3_add_value_bool_nf(void);
-
-int
-LIBSTUB_X509V3_get_value_bool(void);
-
-int
-LIBSTUB_X509V3_get_value_int(void);
-
-void
-LIBSTUB_X509V3_set_nconf(void);
-
-void
-LIBSTUB_X509V3_set_conf_lhash(void);
-
-char *
-LIBSTUB_X509V3_get_string(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_X509V3_get_section(void);
-
-void
-LIBSTUB_X509V3_string_free(void);
-
-void
-LIBSTUB_X509V3_section_free(void);
-
-void
-LIBSTUB_X509V3_set_ctx(void);
-
-int
-LIBSTUB_X509V3_add_value(void);
-
-int
-LIBSTUB_X509V3_add_value_uchar(void);
-
-int
-LIBSTUB_X509V3_add_value_bool(void);
-
-int
-LIBSTUB_X509V3_add_value_int(void);
-
-char *
-LIBSTUB_i2s_ASN1_INTEGER(void);
-
-ASN1_INTEGER *
-LIBSTUB_s2i_ASN1_INTEGER(void);
-
-char *
-LIBSTUB_i2s_ASN1_ENUMERATED(void);
-
-char *
-LIBSTUB_i2s_ASN1_ENUMERATED_TABLE(void);
-
-int
-LIBSTUB_X509V3_EXT_add(void);
-
-int
-LIBSTUB_X509V3_EXT_add_list(void);
-
-int
-LIBSTUB_X509V3_EXT_add_alias(void);
-
-void
-LIBSTUB_X509V3_EXT_cleanup(void);
-
-const X509V3_EXT_METHOD *
-LIBSTUB_X509V3_EXT_get(void);
-
-const X509V3_EXT_METHOD *
-LIBSTUB_X509V3_EXT_get_nid(void);
-
-int
-LIBSTUB_X509V3_add_standard_extensions(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_X509V3_parse_list(void);
-
-void *
-LIBSTUB_X509V3_EXT_d2i(void);
-
-void *
-LIBSTUB_X509V3_get_d2i(void);
-
-X509_EXTENSION *
-LIBSTUB_X509V3_EXT_i2d(void);
-
-int
-LIBSTUB_X509V3_add1_i2d(void);
-
-char *
-LIBSTUB_hex_to_string(void);
-
-unsigned char *
-LIBSTUB_string_to_hex(void);
-
-int
-LIBSTUB_name_cmp(void);
-
-void
-LIBSTUB_X509V3_EXT_val_prn(void);
-
-int
-LIBSTUB_X509V3_EXT_print(void);
-
-int
-LIBSTUB_X509V3_extensions_print(void);
-
-int
-LIBSTUB_X509_check_purpose(void);
-
-int
-LIBSTUB_X509_supported_extension(void);
-
-int
-LIBSTUB_X509_PURPOSE_set(void);
-
-int
-LIBSTUB_X509_check_issued(void);
-
-int
-LIBSTUB_X509_PURPOSE_get_count(void);
-
-X509_PURPOSE *
-LIBSTUB_X509_PURPOSE_get0(void);
-
-int
-LIBSTUB_X509_PURPOSE_get_by_sname(void);
-
-int
-LIBSTUB_X509_PURPOSE_get_by_id(void);
-
-int
-LIBSTUB_X509_PURPOSE_add(void);
-
-char *
-LIBSTUB_X509_PURPOSE_get0_name(void);
-
-char *
-LIBSTUB_X509_PURPOSE_get0_sname(void);
-
-int
-LIBSTUB_X509_PURPOSE_get_trust(void);
-
-void
-LIBSTUB_X509_PURPOSE_cleanup(void);
-
-int
-LIBSTUB_X509_PURPOSE_get_id(void);
-
-STACK_OF(OPENSSL_STRING) *
-LIBSTUB_X509_get1_email(void);
-
-STACK_OF(OPENSSL_STRING) *
-LIBSTUB_X509_REQ_get1_email(void);
-
-void
-LIBSTUB_X509_email_free(void);
-
-void
-LIBSTUB_ERR_load_X509V3_strings(void);
-
-const char *
-LIBSTUB_AES_options(void);
-
-int
-LIBSTUB_AES_set_encrypt_key(void);
-
-int
-LIBSTUB_AES_set_decrypt_key(void);
-
-void
-LIBSTUB_AES_encrypt(void);
-
-void
-LIBSTUB_AES_decrypt(void);
-
-void
-LIBSTUB_AES_ecb_encrypt(void);
-
-void
-LIBSTUB_AES_cbc_encrypt(void);
-
-void
-LIBSTUB_AES_cfb128_encrypt(void);
-
-void
-LIBSTUB_AES_cfb1_encrypt(void);
-
-void
-LIBSTUB_AES_cfb8_encrypt(void);
-
-void
-LIBSTUB_AES_ofb128_encrypt(void);
-
-void
-LIBSTUB_BF_set_key(void);
-
-void
-LIBSTUB_BF_encrypt(void);
-
-void
-LIBSTUB_BF_decrypt(void);
-
-void
-LIBSTUB_BF_ecb_encrypt(void);
-
-void
-LIBSTUB_BF_cbc_encrypt(void);
-
-void
-LIBSTUB_BF_cfb64_encrypt(void);
-
-void
-LIBSTUB_BF_ofb64_encrypt(void);
-
-const char *
-LIBSTUB_BF_options(void);
-
-void
-LIBSTUB_CAST_set_key(void);
-
-void
-LIBSTUB_CAST_ecb_encrypt(void);
-
-void
-LIBSTUB_CAST_encrypt(void);
-
-void
-LIBSTUB_CAST_decrypt(void);
-
-void
-LIBSTUB_CAST_cbc_encrypt(void);
-
-void
-LIBSTUB_CAST_cfb64_encrypt(void);
-
-void
-LIBSTUB_CAST_ofb64_encrypt(void);
-
-int *
-LIBSTUB__shadow_DES_check_key(void);
-
-int *
-LIBSTUB__shadow_DES_rw_mode(void);
-
-const char *
-LIBSTUB_DES_options(void);
-
-void
-LIBSTUB_DES_ecb3_encrypt(void);
-
-DES_LONG
-LIBSTUB_DES_cbc_cksum(void);
-
-void
-LIBSTUB_DES_cbc_encrypt(void);
-
-void
-LIBSTUB_DES_ncbc_encrypt(void);
-
-void
-LIBSTUB_DES_xcbc_encrypt(void);
-
-void
-LIBSTUB_DES_cfb_encrypt(void);
-
-void
-LIBSTUB_DES_ecb_encrypt(void);
-
-void
-LIBSTUB_DES_encrypt1(void);
-
-void
-LIBSTUB_DES_encrypt2(void);
-
-void
-LIBSTUB_DES_encrypt3(void);
-
-void
-LIBSTUB_DES_decrypt3(void);
-
-void
-LIBSTUB_DES_ede3_cbc_encrypt(void);
-
-void
-LIBSTUB_DES_ede3_cfb64_encrypt(void);
-
-void
-LIBSTUB_DES_ede3_cfb_encrypt(void);
-
-void
-LIBSTUB_DES_ede3_ofb64_encrypt(void);
-
-int
-LIBSTUB_DES_enc_read(void);
-
-int
-LIBSTUB_DES_enc_write(void);
-
-char *
-LIBSTUB_DES_fcrypt(void);
-
-char *
-LIBSTUB_DES_crypt(void);
-
-void
-LIBSTUB_DES_ofb_encrypt(void);
-
-void
-LIBSTUB_DES_pcbc_encrypt(void);
-
-DES_LONG
-LIBSTUB_DES_quad_cksum(void);
-
-int
-LIBSTUB_DES_random_key(void);
-
-void
-LIBSTUB_DES_set_odd_parity(void);
-
-int
-LIBSTUB_DES_check_key_parity(void);
-
-int
-LIBSTUB_DES_is_weak_key(void);
-
-int
-LIBSTUB_DES_set_key(void);
-
-int
-LIBSTUB_DES_key_sched(void);
-
-int
-LIBSTUB_DES_set_key_checked(void);
-
-void
-LIBSTUB_DES_set_key_unchecked(void);
-
-void
-LIBSTUB_DES_string_to_key(void);
-
-void
-LIBSTUB_DES_string_to_2keys(void);
-
-void
-LIBSTUB_DES_cfb64_encrypt(void);
-
-void
-LIBSTUB_DES_ofb64_encrypt(void);
-
-int
-LIBSTUB_DES_read_password(void);
-
-int
-LIBSTUB_DES_read_2passwords(void);
-
-const DH_METHOD *
-LIBSTUB_DH_OpenSSL(void);
-
-void
-LIBSTUB_DH_set_default_method(void);
-
-const DH_METHOD *
-LIBSTUB_DH_get_default_method(void);
-
-int
-LIBSTUB_DH_set_method(void);
-
-DH *
-LIBSTUB_DH_new_method(void);
-
-DH *
-LIBSTUB_DH_new(void);
-
-void
-LIBSTUB_DH_free(void);
-
-int
-LIBSTUB_DH_up_ref(void);
-
-int
-LIBSTUB_DH_size(void);
-
-int
-LIBSTUB_DH_set_ex_data(void);
-
-void *
-LIBSTUB_DH_get_ex_data(void);
-
-DH *
-LIBSTUB_DH_generate_parameters(void);
-
-int
-LIBSTUB_DH_check(void);
-
-int
-LIBSTUB_DH_generate_key(void);
-
-int
-LIBSTUB_DH_compute_key(void);
-
-DH *
-LIBSTUB_d2i_DHparams(void);
-
-int
-LIBSTUB_i2d_DHparams(void);
-
-int
-LIBSTUB_DHparams_print(void);
-
-void
-LIBSTUB_ERR_load_DH_strings(void);
-
-DSA_SIG *
-LIBSTUB_DSA_SIG_new(void);
-
-void
-LIBSTUB_DSA_SIG_free(void);
-
-int
-LIBSTUB_i2d_DSA_SIG(void);
-
-DSA_SIG *
-LIBSTUB_d2i_DSA_SIG(void);
-
-DSA_SIG *
-LIBSTUB_DSA_do_sign(void);
-
-int
-LIBSTUB_DSA_do_verify(void);
-
-const DSA_METHOD *
-LIBSTUB_DSA_OpenSSL(void);
-
-void
-LIBSTUB_DSA_set_default_method(void);
-
-const DSA_METHOD *
-LIBSTUB_DSA_get_default_method(void);
-
-int
-LIBSTUB_DSA_set_method(void);
-
-DSA *
-LIBSTUB_DSA_new(void);
-
-DSA *
-LIBSTUB_DSA_new_method(void);
-
-void
-LIBSTUB_DSA_free(void);
-
-int
-LIBSTUB_DSA_up_ref(void);
-
-int
-LIBSTUB_DSA_size(void);
-
-int
-LIBSTUB_DSA_sign_setup(void);
-
-int
-LIBSTUB_DSA_sign(void);
-
-int
-LIBSTUB_DSA_verify(void);
-
-int
-LIBSTUB_DSA_set_ex_data(void);
-
-void *
-LIBSTUB_DSA_get_ex_data(void);
-
-DSA *
-LIBSTUB_d2i_DSAPublicKey(void);
-
-DSA *
-LIBSTUB_d2i_DSAPrivateKey(void);
-
-DSA *
-LIBSTUB_d2i_DSAparams(void);
-
-DSA *
-LIBSTUB_DSA_generate_parameters(void);
-
-int
-LIBSTUB_DSA_generate_key(void);
-
-int
-LIBSTUB_i2d_DSAPublicKey(void);
-
-int
-LIBSTUB_i2d_DSAPrivateKey(void);
-
-int
-LIBSTUB_i2d_DSAparams(void);
-
-int
-LIBSTUB_DSAparams_print(void);
-
-int
-LIBSTUB_DSA_print(void);
-
-DH *
-LIBSTUB_DSA_dup_DH(void);
-
-void
-LIBSTUB_ERR_load_DSA_strings(void);
-
-const char *
-LIBSTUB_idea_options(void);
-
-void
-LIBSTUB_idea_ecb_encrypt(void);
-
-void
-LIBSTUB_idea_set_encrypt_key(void);
-
-void
-LIBSTUB_idea_set_decrypt_key(void);
-
-void
-LIBSTUB_idea_cbc_encrypt(void);
-
-void
-LIBSTUB_idea_cfb64_encrypt(void);
-
-void
-LIBSTUB_idea_ofb64_encrypt(void);
-
-void
-LIBSTUB_idea_encrypt(void);
-
-const char *
-LIBSTUB_MD2_options(void);
-
-int
-LIBSTUB_MD2_Init(void);
-
-int
-LIBSTUB_MD2_Update(void);
-
-int
-LIBSTUB_MD2_Final(void);
-
-unsigned char *
-LIBSTUB_MD2(void);
-
-int
-LIBSTUB_MD4_Init(void);
-
-int
-LIBSTUB_MD4_Update(void);
-
-int
-LIBSTUB_MD4_Final(void);
-
-unsigned char *
-LIBSTUB_MD4(void);
-
-void
-LIBSTUB_MD4_Transform(void);
-
-int
-LIBSTUB_MD5_Init(void);
-
-int
-LIBSTUB_MD5_Update(void);
-
-int
-LIBSTUB_MD5_Final(void);
-
-unsigned char *
-LIBSTUB_MD5(void);
-
-void
-LIBSTUB_MD5_Transform(void);
-
-int
-LIBSTUB_MDC2_Init(void);
-
-int
-LIBSTUB_MDC2_Update(void);
-
-int
-LIBSTUB_MDC2_Final(void);
-
-unsigned char *
-LIBSTUB_MDC2(void);
-
-void
-LIBSTUB_RC2_set_key(void);
-
-void
-LIBSTUB_RC2_ecb_encrypt(void);
-
-void
-LIBSTUB_RC2_encrypt(void);
-
-void
-LIBSTUB_RC2_decrypt(void);
-
-void
-LIBSTUB_RC2_cbc_encrypt(void);
-
-void
-LIBSTUB_RC2_cfb64_encrypt(void);
-
-void
-LIBSTUB_RC2_ofb64_encrypt(void);
-
-const char *
-LIBSTUB_RC4_options(void);
-
-void
-LIBSTUB_RC4_set_key(void);
-
-void
-LIBSTUB_RC4(void);
-
-void
-LIBSTUB_RC5_32_set_key(void);
-
-void
-LIBSTUB_RC5_32_ecb_encrypt(void);
-
-void
-LIBSTUB_RC5_32_encrypt(void);
-
-void
-LIBSTUB_RC5_32_decrypt(void);
-
-void
-LIBSTUB_RC5_32_cbc_encrypt(void);
-
-void
-LIBSTUB_RC5_32_cfb64_encrypt(void);
-
-void
-LIBSTUB_RC5_32_ofb64_encrypt(void);
-
-int
-LIBSTUB_RIPEMD160_Init(void);
-
-int
-LIBSTUB_RIPEMD160_Update(void);
-
-int
-LIBSTUB_RIPEMD160_Final(void);
-
-unsigned char *
-LIBSTUB_RIPEMD160(void);
-
-void
-LIBSTUB_RIPEMD160_Transform(void);
-
-RSA *
-LIBSTUB_RSA_new(void);
-
-RSA *
-LIBSTUB_RSA_new_method(void);
-
-int
-LIBSTUB_RSA_size(void);
-
-RSA *
-LIBSTUB_RSA_generate_key(void);
-
-int
-LIBSTUB_RSA_check_key(void);
-
-int
-LIBSTUB_RSA_public_encrypt(void);
-
-int
-LIBSTUB_RSA_private_encrypt(void);
-
-int
-LIBSTUB_RSA_public_decrypt(void);
-
-int
-LIBSTUB_RSA_private_decrypt(void);
-
-void
-LIBSTUB_RSA_free(void);
-
-int
-LIBSTUB_RSA_up_ref(void);
-
-int
-LIBSTUB_RSA_flags(void);
-
-void
-LIBSTUB_RSA_set_default_method(void);
-
-const RSA_METHOD *
-LIBSTUB_RSA_get_default_method(void);
-
-const RSA_METHOD *
-LIBSTUB_RSA_get_method(void);
-
-int
-LIBSTUB_RSA_set_method(void);
-
-int
-LIBSTUB_RSA_memory_lock(void);
-
-const RSA_METHOD *
-LIBSTUB_RSA_null_method(void);
-
-RSA *
-LIBSTUB_d2i_RSAPublicKey(void);
-
-int
-LIBSTUB_i2d_RSAPublicKey(void);
-
-const ASN1_ITEM *
-LIBSTUB_RSAPublicKey_it(void);
-
-RSA *
-LIBSTUB_d2i_RSAPrivateKey(void);
-
-int
-LIBSTUB_i2d_RSAPrivateKey(void);
-
-const ASN1_ITEM *
-LIBSTUB_RSAPrivateKey_it(void);
-
-int
-LIBSTUB_RSA_print(void);
-
-int
-LIBSTUB_RSA_sign(void);
-
-int
-LIBSTUB_RSA_verify(void);
-
-int
-LIBSTUB_RSA_sign_ASN1_OCTET_STRING(void);
-
-int
-LIBSTUB_RSA_verify_ASN1_OCTET_STRING(void);
-
-int
-LIBSTUB_RSA_blinding_on(void);
-
-void
-LIBSTUB_RSA_blinding_off(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_type_1(void);
-
-int
-LIBSTUB_RSA_padding_check_PKCS1_type_1(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_type_2(void);
-
-int
-LIBSTUB_RSA_padding_check_PKCS1_type_2(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_OAEP(void);
-
-int
-LIBSTUB_RSA_padding_check_PKCS1_OAEP(void);
-
-int
-LIBSTUB_RSA_padding_add_SSLv23(void);
-
-int
-LIBSTUB_RSA_padding_check_SSLv23(void);
-
-int
-LIBSTUB_RSA_padding_add_none(void);
-
-int
-LIBSTUB_RSA_padding_check_none(void);
-
-int
-LIBSTUB_RSA_set_ex_data(void);
-
-void *
-LIBSTUB_RSA_get_ex_data(void);
-
-RSA *
-LIBSTUB_RSAPublicKey_dup(void);
-
-RSA *
-LIBSTUB_RSAPrivateKey_dup(void);
-
-void
-LIBSTUB_ERR_load_RSA_strings(void);
-
-int
-LIBSTUB_SHA1_Init(void);
-
-int
-LIBSTUB_SHA1_Update(void);
-
-int
-LIBSTUB_SHA1_Final(void);
-
-unsigned char *
-LIBSTUB_SHA1(void);
-
-void
-LIBSTUB_SHA1_Transform(void);
-
-void
-LIBSTUB_HMAC_CTX_set_flags(void);
-
-int
-LIBSTUB_X509_check_ca(void);
-
-PROXY_POLICY *
-LIBSTUB_PROXY_POLICY_new(void);
-
-void
-LIBSTUB_PROXY_POLICY_free(void);
-
-PROXY_POLICY *
-LIBSTUB_d2i_PROXY_POLICY(void);
-
-int
-LIBSTUB_i2d_PROXY_POLICY(void);
-
-const ASN1_ITEM *
-LIBSTUB_PROXY_POLICY_it(void);
-
-PROXY_CERT_INFO_EXTENSION *
-LIBSTUB_PROXY_CERT_INFO_EXTENSION_new(void);
-
-void
-LIBSTUB_PROXY_CERT_INFO_EXTENSION_free(void);
-
-PROXY_CERT_INFO_EXTENSION *
-LIBSTUB_d2i_PROXY_CERT_INFO_EXTENSION(void);
-
-int
-LIBSTUB_i2d_PROXY_CERT_INFO_EXTENSION(void);
-
-const ASN1_ITEM *
-LIBSTUB_PROXY_CERT_INFO_EXTENSION_it(void);
-
-int
-LIBSTUB_FIPS_mode(void);
-
-int
-LIBSTUB_BN_mod_exp_mont_consttime(void);
-
-BN_MONT_CTX *
-LIBSTUB_BN_MONT_CTX_set_locked(void);
-
-int
-LIBSTUB_PKCS1_MGF1(void);
-
-int
-LIBSTUB_RSA_padding_add_X931(void);
-
-int
-LIBSTUB_RSA_padding_check_X931(void);
-
-int
-LIBSTUB_RSA_X931_hash_id(void);
-
-int
-LIBSTUB_RSA_verify_PKCS1_PSS(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_PSS(void);
-
-const EVP_MD *
-LIBSTUB_EVP_sha224(void);
-
-const EVP_MD *
-LIBSTUB_EVP_sha256(void);
-
-const EVP_MD *
-LIBSTUB_EVP_sha384(void);
-
-const EVP_MD *
-LIBSTUB_EVP_sha512(void);
-
-int
-LIBSTUB_BN_GF2m_add(void);
-
-int
-LIBSTUB_BN_GF2m_arr2poly(void);
-
-int
-LIBSTUB_BN_GF2m_mod(void);
-
-int
-LIBSTUB_BN_GF2m_mod_mul(void);
-
-int
-LIBSTUB_BN_GF2m_mod_sqr(void);
-
-int
-LIBSTUB_BN_GF2m_mod_inv(void);
-
-int
-LIBSTUB_BN_GF2m_mod_div(void);
-
-int
-LIBSTUB_BN_GF2m_mod_exp(void);
-
-int
-LIBSTUB_BN_GF2m_mod_sqrt(void);
-
-int
-LIBSTUB_BN_GF2m_mod_solve_quad(void);
-
-int
-LIBSTUB_BN_generate_prime_ex(void);
-
-int
-LIBSTUB_BN_is_prime_ex(void);
-
-void
-LIBSTUB_BN_set_negative(void);
-
-int
-LIBSTUB_EC_GROUP_get_degree(void);
-
-const EC_METHOD *
-LIBSTUB_EC_GF2m_simple_method(void);
-
-int
-LIBSTUB_EC_GROUP_set_curve_GF2m(void);
-
-int
-LIBSTUB_EC_GROUP_get_curve_GF2m(void);
-
-int
-LIBSTUB_EC_POINT_set_affine_coordinates_GF2m(void);
-
-int
-LIBSTUB_EC_POINT_get_affine_coordinates_GF2m(void);
-
-size_t
-LIBSTUB_EC_get_builtin_curves(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new_by_curve_name(void);
-
-int
-LIBSTUB_EC_GROUP_check(void);
-
-void
-LIBSTUB_ENGINE_cleanup(void);
-
-int
-LIBSTUB_DSA_generate_parameters_ex(void);
-
-EC_KEY *
-LIBSTUB_EC_KEY_new_by_curve_name(void);
-
-int
-LIBSTUB_EC_KEY_generate_key(void);
-
-void
-LIBSTUB_EC_KEY_free(void);
-
-void
-LIBSTUB_ECDSA_SIG_free(void);
-
-ECDSA_SIG *
-LIBSTUB_ECDSA_do_sign(void);
-
-int
-LIBSTUB_ECDSA_do_verify(void);
-
-EC_KEY *
-LIBSTUB_EC_KEY_new(void);
-
-int
-LIBSTUB_EC_KEY_set_group(void);
-
-const EC_GROUP *
-LIBSTUB_EC_KEY_get0_group(void);
-
-int
-LIBSTUB_EC_KEY_check_key(void);
-
-int
-LIBSTUB_ECDSA_size(void);
-
-int
-LIBSTUB_ECDSA_sign(void);
-
-int
-LIBSTUB_ECDSA_verify(void);
-
-ECDSA_SIG *
-LIBSTUB_d2i_ECDSA_SIG(void);
-
-int
-LIBSTUB_i2d_ECDSA_SIG(void);
-
-int
-LIBSTUB_DH_generate_parameters_ex(void);
-
-int
-LIBSTUB_EC_METHOD_get_field_type(void);
-
-const EC_POINT *
-LIBSTUB_EC_KEY_get0_public_key(void);
-
-int
-LIBSTUB_ECDH_compute_key(void);
-
-const BIGNUM *
-LIBSTUB_EC_KEY_get0_private_key(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_first(void);
-
-const char *
-LIBSTUB_ENGINE_get_id(void);
-
-const char *
-LIBSTUB_ENGINE_get_name(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_next(void);
-
-int
-LIBSTUB_ENGINE_free(void);
-
-ENGINE *
-LIBSTUB_ENGINE_new(void);
-
-int
-LIBSTUB_ENGINE_set_id(void);
-
-int
-LIBSTUB_ENGINE_set_name(void);
-
-int
-LIBSTUB_ENGINE_add(void);
-
-int
-LIBSTUB_ENGINE_remove(void);
-
-void
-LIBSTUB_ENGINE_load_builtin_engines(void);
-
-void
-LIBSTUB_ENGINE_register_all_ciphers(void);
-
-int
-LIBSTUB_EVP_CIPHER_nid(void);
-
-int
-LIBSTUB_EVP_MD_type(void);
-
-void
-LIBSTUB_ENGINE_register_all_digests(void);
-
-int
-LIBSTUB_BIO_test_flags(void);
-
-STACK_OF(SSL_COMP) *
-LIBSTUB_SSL_COMP_get_compression_methods(void);
-
-int
-LIBSTUB_RSA_generate_key_ex(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_free(void);
-
-int
-LIBSTUB_X509_STORE_set1_param(void);
-
-ASN1_TYPE *
-LIBSTUB_ASN1_generate_nconf(void);
-
-EC_GROUP *
-LIBSTUB_PEM_read_bio_ECPKParameters(void);
-
-EC_KEY *
-LIBSTUB_EC_KEY_dup(void);
-
-void
-LIBSTUB_BIO_set_callback(void);
-
-void
-LIBSTUB_BIO_set_callback_arg(void);
-
-void
-LIBSTUB_EVP_MD_CTX_set_flags(void);
-
-void
-LIBSTUB_BIO_set_flags(void);
-
-void
-LIBSTUB_EVP_CIPHER_CTX_set_flags(void);
-
-int
-LIBSTUB_EVP_CIPHER_iv_length(void);
-
-int
-LIBSTUB_X509_REQ_check_private_key(void);
-
-EC_KEY *
-LIBSTUB_PEM_read_bio_EC_PUBKEY(void);
-
-EC_KEY *
-LIBSTUB_PEM_read_bio_ECPrivateKey(void);
-
-int
-LIBSTUB_PEM_write_bio_EC_PUBKEY(void);
-
-EC_KEY *
-LIBSTUB_d2i_EC_PUBKEY_bio(void);
-
-void
-LIBSTUB_EC_KEY_set_asn1_flag(void);
-
-void
-LIBSTUB_EC_KEY_set_conv_form(void);
-
-int
-LIBSTUB_EC_KEY_print(void);
-
-EC_KEY *
-LIBSTUB_d2i_ECPrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_EC_PUBKEY_bio(void);
-
-int
-LIBSTUB_PEM_write_bio_ECPrivateKey(void);
-
-int
-LIBSTUB_PEM_write_bio_ECPKParameters(void);
-
-int
-LIBSTUB_i2d_ECPrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_ECPKParameters(void);
-
-void
-LIBSTUB_EC_GROUP_set_asn1_flag(void);
-
-void
-LIBSTUB_EC_GROUP_set_point_conversion_form(void);
-
-point_conversion_form_t
-LIBSTUB_EC_GROUP_get_point_conversion_form(void);
-
-int
-LIBSTUB_ECPKParameters_print(void);
-
-size_t
-LIBSTUB_EC_GROUP_set_seed(void);
-
-EC_GROUP *
-LIBSTUB_d2i_ECPKParameters(void);
-
-BIGNUM *
-LIBSTUB_EC_POINT_point2bn(void);
-
-STACK_OF(OPENSSL_STRING) *
-LIBSTUB_X509_get1_ocsp(void);
-
-const char *
-LIBSTUB_SSL_get_servername(void);
-
-SSL_CTX *
-LIBSTUB_SSL_set_SSL_CTX(void);
-
-void
-LIBSTUB_SSL_CTX_set_cookie_generate_cb(void);
-
-void
-LIBSTUB_SSL_CTX_set_cookie_verify_cb(void);
-
-void
-LIBSTUB_SSL_CTX_set_info_callback(void);
-
-BIO *
-LIBSTUB_BIO_new_dgram(void);
-
-int
-LIBSTUB_SSL_get_servername_type(void);
-
-const COMP_METHOD *
-LIBSTUB_SSL_get_current_compression(void);
-
-const COMP_METHOD *
-LIBSTUB_SSL_get_current_expansion(void);
-
-const char *
-LIBSTUB_SSL_COMP_get_name(void);
-
-ENGINE *
-LIBSTUB_ENGINE_by_id(void);
-
-int
-LIBSTUB_SSL_CTX_set_client_cert_engine(void);
-
-unsigned char *
-LIBSTUB_SHA256(void);
-
-unsigned char *
-LIBSTUB_SHA512(void);
-
-void
-LIBSTUB_AES_ige_encrypt(void);
-
-int
-LIBSTUB_EC_KEY_precompute_mult(void);
-
-EVP_PKEY *
-LIBSTUB_ENGINE_load_private_key(void);
-
-EVP_PKEY *
-LIBSTUB_ENGINE_load_public_key(void);
-
-int
-LIBSTUB_ENGINE_ctrl_cmd(void);
-
-int
-LIBSTUB_ENGINE_set_default(void);
-
-int
-LIBSTUB_ENGINE_ctrl(void);
-
-int
-LIBSTUB_ENGINE_register_all_complete(void);
-
-int
-LIBSTUB_ENGINE_ctrl_cmd_string(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_add0_policy(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set_purpose(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set_flags(void);
-
-X509_VERIFY_PARAM *
-LIBSTUB_X509_VERIFY_PARAM_new(void);
-
-void
-LIBSTUB_X509_POLICY_NODE_print(void);
-
-X509_POLICY_TREE *
-LIBSTUB_X509_STORE_CTX_get0_policy_tree(void);
-
-int
-LIBSTUB_X509_STORE_CTX_get_explicit_policy(void);
-
-STACK_OF(X509_POLICY_NODE) *
-LIBSTUB_X509_policy_tree_get0_policies(void);
-
-STACK_OF(X509_POLICY_NODE) *
-LIBSTUB_X509_policy_tree_get0_user_policies(void);
-
-char *
-LIBSTUB_BIO_get_callback_arg(void);
-
-int
-LIBSTUB_EVP_PKEY_add1_attr_by_NID(void);
-
-const RSA_METHOD *
-LIBSTUB_ENGINE_get_RSA(void);
-
-const DSA_METHOD *
-LIBSTUB_ENGINE_get_DSA(void);
-
-const DH_METHOD *
-LIBSTUB_ENGINE_get_DH(void);
-
-const RAND_METHOD *
-LIBSTUB_ENGINE_get_RAND(void);
-
-ENGINE_CIPHERS_PTR
-LIBSTUB_ENGINE_get_ciphers(void);
-
-ENGINE_DIGESTS_PTR
-LIBSTUB_ENGINE_get_digests(void);
-
-int
-LIBSTUB_ENGINE_init(void);
-
-int
-LIBSTUB_ENGINE_finish(void);
-
-OCSP_REQ_CTX *
-LIBSTUB_OCSP_sendreq_new(void);
-
-int
-LIBSTUB_OCSP_sendreq_nbio(void);
-
-void
-LIBSTUB_OCSP_REQ_CTX_free(void);
-
-int
-LIBSTUB_SSL_CTX_use_psk_identity_hint(void);
-
-void
-LIBSTUB_SSL_CTX_set_psk_client_callback(void);
-
-const char *
-LIBSTUB_SSL_get_psk_identity_hint(void);
-
-void
-LIBSTUB_SSL_set_psk_server_callback(void);
-
-int
-LIBSTUB_SSL_use_psk_identity_hint(void);
-
-void
-LIBSTUB_SSL_set_psk_client_callback(void);
-
-void
-LIBSTUB_SSL_CTX_set_psk_server_callback(void);
-
-const char *
-LIBSTUB_SSL_get_psk_identity(void);
-
-int
-LIBSTUB_SSL_set_session_ticket_ext(void);
-
-int
-LIBSTUB_SSL_set_session_secret_cb(void);
-
-int
-LIBSTUB_SSL_set_session_ticket_ext_cb(void);
-
-int
-LIBSTUB_SSL_set1_param(void);
-
-int
-LIBSTUB_SSL_CTX_set1_param(void);
-
-int
-LIBSTUB_SSL_renegotiate_abbreviated(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_client_pwd_callback(void);
-
-BIGNUM *
-LIBSTUB_SSL_get_srp_g(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_username_callback(void);
-
-char *
-LIBSTUB_SSL_get_srp_userinfo(void);
-
-int
-LIBSTUB_SSL_set_srp_server_param(void);
-
-int
-LIBSTUB_SSL_set_srp_server_param_pw(void);
-
-BIGNUM *
-LIBSTUB_SSL_get_srp_N(void);
-
-char *
-LIBSTUB_SSL_get_srp_username(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_password(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_strength(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_verify_param_callback(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_cb_arg(void);
-
-int
-LIBSTUB_SSL_CTX_set_srp_username(void);
-
-int
-LIBSTUB_SSL_CTX_SRP_CTX_init(void);
-
-int
-LIBSTUB_SRP_Calc_A_param(void);
-
-int
-LIBSTUB_SSL_CTX_SRP_CTX_free(void);
-
-int
-LIBSTUB_SSL_srp_server_param_with_username(void);
-
-int
-LIBSTUB_SSL_SRP_CTX_free(void);
-
-void
-LIBSTUB_SSL_set_debug(void);
-
-X509 *
-LIBSTUB_SSL_SESSION_get0_peer(void);
-
-int
-LIBSTUB_SSL_SESSION_set1_id_context(void);
-
-uint32_t
-LIBSTUB_SSL_CIPHER_get_id(void);
-
-int
-LIBSTUB_SSL_export_keying_material(void);
-
-int
-LIBSTUB_SSL_set_tlsext_use_srtp(void);
-
-void
-LIBSTUB_SSL_CTX_set_next_protos_advertised_cb(void);
-
-void
-LIBSTUB_SSL_get0_next_proto_negotiated(void);
-
-SRTP_PROTECTION_PROFILE *
-LIBSTUB_SSL_get_selected_srtp_profile(void);
-
-int
-LIBSTUB_SSL_CTX_set_tlsext_use_srtp(void);
-
-int
-LIBSTUB_SSL_select_next_proto(void);
-
-STACK_OF(SRTP_PROTECTION_PROFILE) *
-LIBSTUB_SSL_get_srtp_profiles(void);
-
-void
-LIBSTUB_SSL_CTX_set_next_proto_select_cb(void);
-
-unsigned int
-LIBSTUB_SSL_SESSION_get_compress_id(void);
-
-int
-LIBSTUB_SSL_SRP_CTX_init(void);
-
-void
-LIBSTUB_ERR_load_ENGINE_strings(void);
-
-int
-LIBSTUB_ENGINE_set_DSA(void);
-
-ENGINE_GEN_INT_FUNC_PTR
-LIBSTUB_ENGINE_get_finish_function(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_default_RSA(void);
-
-int
-LIBSTUB_ENGINE_set_DH(void);
-
-ENGINE_GEN_INT_FUNC_PTR
-LIBSTUB_ENGINE_get_init_function(void);
-
-int
-LIBSTUB_ENGINE_set_init_function(void);
-
-int
-LIBSTUB_ENGINE_set_default_DSA(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_last(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_prev(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_default_DH(void);
-
-int
-LIBSTUB_ENGINE_set_finish_function(void);
-
-int
-LIBSTUB_ENGINE_set_RSA(void);
-
-int
-LIBSTUB_ENGINE_set_default_RAND(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_default_DSA(void);
-
-int
-LIBSTUB_ENGINE_set_default_RSA(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_default_RAND(void);
-
-int
-LIBSTUB_ENGINE_set_RAND(void);
-
-int
-LIBSTUB_ENGINE_set_default_DH(void);
-
-ENGINE_CTRL_FUNC_PTR
-LIBSTUB_ENGINE_get_ctrl_function(void);
-
-int
-LIBSTUB_ENGINE_set_ctrl_function(void);
-
-void
-LIBSTUB_ENGINE_unregister_ciphers(void);
-
-void
-LIBSTUB_ENGINE_unregister_RSA(void);
-
-void
-LIBSTUB_ENGINE_register_all_RAND(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_digest_engine(void);
-
-int
-LIBSTUB_ENGINE_register_DH(void);
-
-int
-LIBSTUB_ENGINE_register_RAND(void);
-
-int
-LIBSTUB_ENGINE_register_ciphers(void);
-
-const ENGINE_CMD_DEFN *
-LIBSTUB_ENGINE_get_cmd_defns(void);
-
-int
-LIBSTUB_ENGINE_set_load_privkey_function(void);
-
-int
-LIBSTUB_ENGINE_set_default_digests(void);
-
-int
-LIBSTUB_ENGINE_register_RSA(void);
-
-void
-LIBSTUB_ENGINE_unregister_DSA(void);
-
-int
-LIBSTUB_ENGINE_set_ciphers(void);
-
-int
-LIBSTUB_RAND_set_rand_engine(void);
-
-const EVP_MD *
-LIBSTUB_ENGINE_get_digest(void);
-
-const EVP_CIPHER *
-LIBSTUB_ENGINE_get_cipher(void);
-
-int
-LIBSTUB_ENGINE_cmd_is_executable(void);
-
-int
-LIBSTUB_ENGINE_register_DSA(void);
-
-int
-LIBSTUB_ENGINE_set_load_pubkey_function(void);
-
-ENGINE_LOAD_KEY_PTR
-LIBSTUB_ENGINE_get_load_pubkey_function(void);
-
-void
-LIBSTUB_ENGINE_register_all_RSA(void);
-
-void
-LIBSTUB_ENGINE_unregister_digests(void);
-
-void *
-LIBSTUB_ENGINE_get_ex_data(void);
-
-int
-LIBSTUB_ENGINE_set_cmd_defns(void);
-
-int
-LIBSTUB_ENGINE_register_digests(void);
-
-void
-LIBSTUB_ENGINE_register_all_DH(void);
-
-int
-LIBSTUB_ENGINE_get_flags(void);
-
-void
-LIBSTUB_ENGINE_unregister_DH(void);
-
-void
-LIBSTUB_ENGINE_register_all_DSA(void);
-
-int
-LIBSTUB_ENGINE_set_digests(void);
-
-int
-LIBSTUB_ENGINE_register_complete(void);
-
-int
-LIBSTUB_ENGINE_set_ex_data(void);
-
-int
-LIBSTUB_ENGINE_set_destroy_function(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_cipher_engine(void);
-
-int
-LIBSTUB_ENGINE_set_default_ciphers(void);
-
-void
-LIBSTUB_ENGINE_unregister_RAND(void);
-
-void
-LIBSTUB_ENGINE_set_table_flags(void);
-
-ENGINE_GEN_INT_FUNC_PTR
-LIBSTUB_ENGINE_get_destroy_function(void);
-
-unsigned int
-LIBSTUB_ENGINE_get_table_flags(void);
-
-int
-LIBSTUB_ENGINE_set_flags(void);
-
-ENGINE_LOAD_KEY_PTR
-LIBSTUB_ENGINE_get_load_privkey_function(void);
-
-int
-LIBSTUB_ENGINE_set_default_string(void);
-
-void
-LIBSTUB_ENGINE_add_conf_module(void);
-
-int
-LIBSTUB_ENGINE_up_ref(void);
-
-int
-LIBSTUB_EC_GROUP_get_trinomial_basis(void);
-
-int
-LIBSTUB_SHA512_Update(void);
-
-int
-LIBSTUB_i2d_ECPrivateKey(void);
-
-int
-LIBSTUB_BN_GF2m_mod_exp_arr(void);
-
-int
-LIBSTUB_BN_GF2m_mod_mul_arr(void);
-
-EC_KEY *
-LIBSTUB_o2i_ECPublicKey(void);
-
-EC_KEY *
-LIBSTUB_EC_KEY_copy(void);
-
-int
-LIBSTUB_EC_GROUP_check_discriminant(void);
-
-int
-LIBSTUB_i2o_ECPublicKey(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new_curve_GF2m(void);
-
-struct ec_key_st *
-LIBSTUB_EVP_PKEY_get1_EC_KEY(void);
-
-point_conversion_form_t
-LIBSTUB_EC_KEY_get_conv_form(void);
-
-void *
-LIBSTUB_ENGINE_get_static_state(void);
-
-ECDSA_SIG *
-LIBSTUB_ECDSA_SIG_new(void);
-
-EC_POINT *
-LIBSTUB_EC_POINT_bn2point(void);
-
-int
-LIBSTUB_ECDSA_sign_ex(void);
-
-int
-LIBSTUB_EC_GROUP_get_pentanomial_basis(void);
-
-int
-LIBSTUB_ECDSA_sign_setup(void);
-
-int
-LIBSTUB_BN_GF2m_mod_solve_quad_arr(void);
-
-int
-LIBSTUB_EC_KEY_up_ref(void);
-
-EC_KEY *
-LIBSTUB_d2i_EC_PUBKEY(void);
-
-int
-LIBSTUB_EC_GROUP_have_precompute_mult(void);
-
-int
-LIBSTUB_BN_GF2m_mod_arr(void);
-
-EC_POINT *
-LIBSTUB_EC_POINT_dup(void);
-
-int
-LIBSTUB_EVP_PKEY_set1_EC_KEY(void);
-
-int
-LIBSTUB_BN_GF2m_mod_sqrt_arr(void);
-
-int
-LIBSTUB_EC_KEY_set_private_key(void);
-
-int
-LIBSTUB_BN_GF2m_poly2arr(void);
-
-int
-LIBSTUB_i2d_ECParameters(void);
-
-int
-LIBSTUB_SHA256_Init(void);
-
-unsigned char *
-LIBSTUB_SHA224(void);
-
-size_t
-LIBSTUB_EC_GROUP_get_seed_len(void);
-
-int
-LIBSTUB_i2d_EC_PUBKEY(void);
-
-const EC_METHOD *
-LIBSTUB_EC_GFp_nist_method(void);
-
-void
-LIBSTUB_EC_GROUP_set_curve_name(void);
-
-int
-LIBSTUB_BN_GF2m_mod_sqr_arr(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_datagram(void);
-
-int
-LIBSTUB_SHA384_Update(void);
-
-int
-LIBSTUB_SHA224_Final(void);
-
-int
-LIBSTUB_SHA224_Update(void);
-
-EC_KEY *
-LIBSTUB_d2i_ECPrivateKey(void);
-
-int
-LIBSTUB_SHA512_Final(void);
-
-int
-LIBSTUB_EC_GROUP_get_asn1_flag(void);
-
-unsigned char *
-LIBSTUB_EC_GROUP_get0_seed(void);
-
-int
-LIBSTUB_BN_GF2m_mod_div_arr(void);
-
-unsigned
-LIBSTUB_EC_KEY_get_enc_flags(void);
-
-int
-LIBSTUB_EC_POINT_set_compressed_coordinates_GF2m(void);
-
-int
-LIBSTUB_EC_GROUP_cmp(void);
-
-int
-LIBSTUB_SHA224_Init(void);
-
-int
-LIBSTUB_SHA512_Init(void);
-
-int
-LIBSTUB_EC_GROUP_get_basis_type(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_dup(void);
-
-void
-LIBSTUB_SHA256_Transform(void);
-
-void
-LIBSTUB_EC_KEY_set_enc_flags(void);
-
-char *
-LIBSTUB_EC_POINT_point2hex(void);
-
-ECDSA_SIG *
-LIBSTUB_ECDSA_do_sign_ex(void);
-
-void
-LIBSTUB_SHA512_Transform(void);
-
-int
-LIBSTUB_EC_KEY_set_public_key(void);
-
-int
-LIBSTUB_EC_GROUP_get_curve_name(void);
-
-int
-LIBSTUB_SHA256_Final(void);
-
-EC_KEY *
-LIBSTUB_d2i_ECParameters(void);
-
-int
-LIBSTUB_SHA384_Init(void);
-
-int
-LIBSTUB_SHA384_Final(void);
-
-unsigned char *
-LIBSTUB_SHA384(void);
-
-EC_POINT *
-LIBSTUB_EC_POINT_hex2point(void);
-
-int
-LIBSTUB_SHA256_Update(void);
-
-int
-LIBSTUB_BN_GF2m_mod_inv_arr(void);
-
-int
-LIBSTUB_DH_check_pub_key(void);
-
-void
-LIBSTUB_Camellia_cbc_encrypt(void);
-
-void
-LIBSTUB_Camellia_cfb128_encrypt(void);
-
-void
-LIBSTUB_Camellia_cfb1_encrypt(void);
-
-void
-LIBSTUB_Camellia_cfb8_encrypt(void);
-
-void
-LIBSTUB_Camellia_ctr128_encrypt(void);
-
-void
-LIBSTUB_Camellia_decrypt(void);
-
-void
-LIBSTUB_Camellia_ecb_encrypt(void);
-
-void
-LIBSTUB_Camellia_encrypt(void);
-
-void
-LIBSTUB_Camellia_ofb128_encrypt(void);
-
-int
-LIBSTUB_Camellia_set_key(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_ofb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_cbc(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_cfb128(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_cfb1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_cfb8(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_ecb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_ofb(void);
-
-void
-LIBSTUB_AES_bi_ige_encrypt(void);
-
-void
-LIBSTUB_SEED_decrypt(void);
-
-void
-LIBSTUB_SEED_encrypt(void);
-
-void
-LIBSTUB_SEED_cbc_encrypt(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_seed_ofb(void);
-
-void
-LIBSTUB_SEED_cfb128_encrypt(void);
-
-void
-LIBSTUB_SEED_ofb128_encrypt(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_seed_cbc(void);
-
-void
-LIBSTUB_SEED_ecb_encrypt(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_seed_ecb(void);
-
-void
-LIBSTUB_SEED_set_key(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_seed_cfb128(void);
-
-int
-LIBSTUB_AES_unwrap_key(void);
-
-int
-LIBSTUB_AES_wrap_key(void);
-
-void
-LIBSTUB_CMS_ReceiptRequest_free(void);
-
-CMS_CertificateChoices *
-LIBSTUB_CMS_add0_CertificateChoices(void);
-
-int
-LIBSTUB_CMS_unsigned_add1_attr_by_OBJ(void);
-
-void
-LIBSTUB_ERR_load_CMS_strings(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_sign_receipt(void);
-
-int
-LIBSTUB_i2d_CMS_ContentInfo(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_CMS_signed_delete_attr(void);
-
-CMS_ContentInfo *
-LIBSTUB_d2i_CMS_bio(void);
-
-int
-LIBSTUB_CMS_unsigned_get_attr_by_NID(void);
-
-int
-LIBSTUB_CMS_verify(void);
-
-CMS_ContentInfo *
-LIBSTUB_SMIME_read_CMS(void);
-
-int
-LIBSTUB_CMS_decrypt_set1_key(void);
-
-void
-LIBSTUB_CMS_SignerInfo_get0_algs(void);
-
-int
-LIBSTUB_CMS_add1_cert(void);
-
-int
-LIBSTUB_CMS_set_detached(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_encrypt(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_EnvelopedData_create(void);
-
-int
-LIBSTUB_CMS_uncompress(void);
-
-int
-LIBSTUB_CMS_add0_crl(void);
-
-int
-LIBSTUB_CMS_SignerInfo_verify_content(void);
-
-void *
-LIBSTUB_CMS_unsigned_get0_data_by_OBJ(void);
-
-int
-LIBSTUB_PEM_write_bio_CMS(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_CMS_unsigned_get_attr(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_ktri_cert_cmp(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_ktri_get0_algs(void);
-
-void
-LIBSTUB_CMS_ContentInfo_free(void);
-
-int
-LIBSTUB_CMS_final(void);
-
-int
-LIBSTUB_CMS_add_simple_smimecap(void);
-
-int
-LIBSTUB_CMS_SignerInfo_verify(void);
-
-int
-LIBSTUB_CMS_data(void);
-
-CMS_ReceiptRequest *
-LIBSTUB_d2i_CMS_ReceiptRequest(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_compress(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_digest_create(void);
-
-int
-LIBSTUB_CMS_SignerInfo_cert_cmp(void);
-
-int
-LIBSTUB_CMS_SignerInfo_sign(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_data_create(void);
-
-int
-LIBSTUB_i2d_CMS_bio(void);
-
-int
-LIBSTUB_CMS_EncryptedData_set1_key(void);
-
-int
-LIBSTUB_CMS_decrypt(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_CMS_unsigned_delete_attr(void);
-
-int
-LIBSTUB_CMS_unsigned_get_attr_count(void);
-
-int
-LIBSTUB_CMS_add_smimecap(void);
-
-int
-LIBSTUB_CMS_signed_get_attr_by_OBJ(void);
-
-CMS_ContentInfo *
-LIBSTUB_d2i_CMS_ContentInfo(void);
-
-int
-LIBSTUB_CMS_add_standard_smimecap(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_ContentInfo_new(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_type(void);
-
-const ASN1_OBJECT *
-LIBSTUB_CMS_get0_type(void);
-
-int
-LIBSTUB_CMS_is_detached(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_sign(void);
-
-int
-LIBSTUB_CMS_signed_add1_attr(void);
-
-int
-LIBSTUB_CMS_unsigned_get_attr_by_OBJ(void);
-
-int
-LIBSTUB_SMIME_write_CMS(void);
-
-int
-LIBSTUB_CMS_EncryptedData_decrypt(void);
-
-STACK_OF(CMS_RecipientInfo) *
-LIBSTUB_CMS_get0_RecipientInfos(void);
-
-CMS_RevocationInfoChoice *
-LIBSTUB_CMS_add0_RevocationInfoChoice(void);
-
-int
-LIBSTUB_CMS_decrypt_set1_pkey(void);
-
-void
-LIBSTUB_CMS_SignerInfo_set1_signer_cert(void);
-
-STACK_OF(X509) *
-LIBSTUB_CMS_get0_signers(void);
-
-void
-LIBSTUB_CMS_ReceiptRequest_get0_values(void);
-
-void *
-LIBSTUB_CMS_signed_get0_data_by_OBJ(void);
-
-STACK_OF(CMS_SignerInfo) *
-LIBSTUB_CMS_get0_SignerInfos(void);
-
-int
-LIBSTUB_CMS_add0_cert(void);
-
-CMS_ContentInfo *
-LIBSTUB_CMS_EncryptedData_encrypt(void);
-
-int
-LIBSTUB_CMS_digest_verify(void);
-
-int
-LIBSTUB_CMS_set1_signers_certs(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_CMS_signed_get_attr(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_set0_key(void);
-
-int
-LIBSTUB_CMS_SignedData_init(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kekri_get0_id(void);
-
-int
-LIBSTUB_CMS_verify_receipt(void);
-
-CMS_ContentInfo *
-LIBSTUB_PEM_read_bio_CMS(void);
-
-STACK_OF(X509_CRL) *
-LIBSTUB_CMS_get1_crls(void);
-
-CMS_RecipientInfo *
-LIBSTUB_CMS_add0_recipient_key(void);
-
-CMS_ReceiptRequest *
-LIBSTUB_CMS_ReceiptRequest_new(void);
-
-ASN1_OCTET_STRING **
-LIBSTUB_CMS_get0_content(void);
-
-int
-LIBSTUB_CMS_get1_ReceiptRequest(void);
-
-int
-LIBSTUB_CMS_signed_add1_attr_by_OBJ(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kekri_id_cmp(void);
-
-int
-LIBSTUB_CMS_add1_ReceiptRequest(void);
-
-int
-LIBSTUB_CMS_SignerInfo_get0_signer_id(void);
-
-int
-LIBSTUB_CMS_unsigned_add1_attr_by_NID(void);
-
-int
-LIBSTUB_CMS_unsigned_add1_attr(void);
-
-int
-LIBSTUB_CMS_signed_get_attr_by_NID(void);
-
-STACK_OF(X509) *
-LIBSTUB_CMS_get1_certs(void);
-
-int
-LIBSTUB_CMS_signed_add1_attr_by_NID(void);
-
-int
-LIBSTUB_CMS_unsigned_add1_attr_by_txt(void);
-
-int
-LIBSTUB_CMS_dataFinal(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_ktri_get0_signer_id(void);
-
-int
-LIBSTUB_i2d_CMS_ReceiptRequest(void);
-
-CMS_RecipientInfo *
-LIBSTUB_CMS_add1_recipient_cert(void);
-
-BIO *
-LIBSTUB_CMS_dataInit(void);
-
-int
-LIBSTUB_CMS_signed_add1_attr_by_txt(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_decrypt(void);
-
-int
-LIBSTUB_CMS_signed_get_attr_count(void);
-
-const ASN1_OBJECT *
-LIBSTUB_CMS_get0_eContentType(void);
-
-int
-LIBSTUB_CMS_set1_eContentType(void);
-
-CMS_ReceiptRequest *
-LIBSTUB_CMS_ReceiptRequest_create0(void);
-
-CMS_SignerInfo *
-LIBSTUB_CMS_add1_signer(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_set0_pkey(void);
-
-int
-LIBSTUB_ENGINE_set_load_ssl_client_cert_function(void);
-
-ENGINE_SSL_CLIENT_CERT_PTR
-LIBSTUB_ENGINE_get_ssl_client_cert_function(void);
-
-int
-LIBSTUB_ENGINE_load_ssl_client_cert(void);
-
-int
-LIBSTUB_ENGINE_register_pkey_meths(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_pkey_asn1_meth_engine(void);
-
-int
-LIBSTUB_WHIRLPOOL_Init(void);
-
-unsigned char *
-LIBSTUB_WHIRLPOOL(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_ENGINE_get_pkey_asn1_meth(void);
-
-const EVP_PKEY_METHOD *
-LIBSTUB_ENGINE_get_pkey_meth(void);
-
-BIO *
-LIBSTUB_BIO_new_CMS(void);
-
-int
-LIBSTUB_ENGINE_set_default_pkey_asn1_meths(void);
-
-void
-LIBSTUB_WHIRLPOOL_BitUpdate(void);
-
-int
-LIBSTUB_i2d_CMS_bio_stream(void);
-
-int
-LIBSTUB_CMS_stream(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_ENGINE_pkey_asn1_find_str(void);
-
-ENGINE_PKEY_METHS_PTR
-LIBSTUB_ENGINE_get_pkey_meths(void);
-
-int
-LIBSTUB_ENGINE_register_pkey_asn1_meths(void);
-
-int
-LIBSTUB_ENGINE_set_default_pkey_meths(void);
-
-int
-LIBSTUB_HMAC_CTX_copy(void);
-
-ENGINE_PKEY_ASN1_METHS_PTR
-LIBSTUB_ENGINE_get_pkey_asn1_meths(void);
-
-const EVP_MD *
-LIBSTUB_EVP_whirlpool(void);
-
-void
-LIBSTUB_ENGINE_register_all_pkey_meths(void);
-
-int
-LIBSTUB_WHIRLPOOL_Final(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_ENGINE_get_pkey_asn1_meth_str(void);
-
-void
-LIBSTUB_ENGINE_register_all_pkey_asn1_meths(void);
-
-void
-LIBSTUB_CMS_ContentInfo_print_ctx(void);
-
-int
-LIBSTUB_CMS_add1_crl(void);
-
-int
-LIBSTUB_ENGINE_set_pkey_asn1_meths(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_pkey_meth_engine(void);
-
-int
-LIBSTUB_WHIRLPOOL_Update(void);
-
-int
-LIBSTUB_PEM_write_bio_CMS_stream(void);
-
-void
-LIBSTUB_ENGINE_unregister_pkey_meths(void);
-
-void
-LIBSTUB_ENGINE_unregister_pkey_asn1_meths(void);
-
-int
-LIBSTUB_ENGINE_set_pkey_meths(void);
-
-DSA *
-LIBSTUB_DSAparams_dup(void);
-
-DH *
-LIBSTUB_DHparams_dup(void);
-
-unsigned long
-LIBSTUB_X509_issuer_name_hash_old(void);
-
-unsigned long
-LIBSTUB_X509_subject_name_hash_old(void);
-
-SRP_user_pwd *
-LIBSTUB_SRP_VBASE_get_by_user(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_server_key(void);
-
-char *
-LIBSTUB_SRP_create_verifier(void);
-
-int
-LIBSTUB_SRP_create_verifier_BN(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_u(void);
-
-void
-LIBSTUB_SRP_VBASE_free(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_client_key(void);
-
-SRP_gN *
-LIBSTUB_SRP_get_default_gN(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_x(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_B(void);
-
-SRP_VBASE *
-LIBSTUB_SRP_VBASE_new(void);
-
-char *
-LIBSTUB_SRP_check_known_gN_param(void);
-
-BIGNUM *
-LIBSTUB_SRP_Calc_A(void);
-
-int
-LIBSTUB_SRP_Verify_A_mod_N(void);
-
-int
-LIBSTUB_SRP_VBASE_init(void);
-
-int
-LIBSTUB_SRP_Verify_B_mod_N(void);
-
-int
-LIBSTUB_EC_KEY_set_public_key_affine_coordinates(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_ctr(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_ctr(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_ctr(void);
-
-int
-LIBSTUB_EC_KEY_get_flags(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_xts(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_xts(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_gcm(void);
-
-void
-LIBSTUB_EC_KEY_clear_flags(void);
-
-void
-LIBSTUB_EC_KEY_set_flags(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_ccm(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_ccm(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_gcm(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_gcm(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_ccm(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_rc4_hmac_md5(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cbc_hmac_sha1(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cbc_hmac_sha1(void);
-
-CMS_RecipientInfo *
-LIBSTUB_CMS_add0_recipient_password(void);
-
-int
-LIBSTUB_CMS_decrypt_set1_password(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_set0_password(void);
-
-int
-LIBSTUB_X509_REQ_sign_ctx(void);
-
-int
-LIBSTUB_X509_CRL_sign_ctx(void);
-
-int
-LIBSTUB_X509_signature_dump(void);
-
-int
-LIBSTUB_X509_sign_ctx(void);
-
-int
-LIBSTUB_ASN1_item_sign_ctx(void);
-
-void
-LIBSTUB_OPENSSL_cpuid_setup(void);
-
-void
-LIBSTUB_ERR_remove_thread_state(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set0_crls(void);
-
-const unsigned char *
-LIBSTUB_SSL_SESSION_get_id(void);
-
-void
-LIBSTUB_SSL_CTX_sess_set_new_cb(void);
-
-SSL_SESSION *(*)(SSL *, const unsigned char *, int, int *)
-LIBSTUB_SSL_CTX_sess_get_get_cb(void);
-
-void
-LIBSTUB_SSL_CTX_sess_set_get_cb(void);
-
-void (*)(const SSL *ssl,int type,int val)
-LIBSTUB_SSL_CTX_get_info_callback(void);
-
-void
-LIBSTUB_SSL_CTX_set_client_cert_cb(void);
-
-void
-LIBSTUB_SSL_CTX_sess_set_remove_cb(void);
-
-int (*)(struct ssl_st *ssl, SSL_SESSION *sess)
-LIBSTUB_SSL_CTX_sess_get_new_cb(void);
-
-int (*)(SSL *ssl, X509 **x509, EVP_PKEY **pkey)
-LIBSTUB_SSL_CTX_get_client_cert_cb(void);
-
-void (*)(struct ssl_ctx_st *ctx, SSL_SESSION *sess)
-LIBSTUB_SSL_CTX_sess_get_remove_cb(void);
-
-int
-LIBSTUB_PEM_write_bio_SSL_SESSION(void);
-
-SSL_SESSION *
-LIBSTUB_PEM_read_bio_SSL_SESSION(void);
-
-int
-LIBSTUB_FIPS_mode_set(void);
-
-int
-LIBSTUB_BN_X931_generate_Xpq(void);
-
-const BIGNUM *
-LIBSTUB_BN_get0_nist_prime_384(void);
-
-int
-LIBSTUB_ERR_set_mark(void);
-
-int
-LIBSTUB_BN_BLINDING_invert_ex(void);
-
-void
-LIBSTUB_NAME_CONSTRAINTS_free(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set0_param(void);
-
-void
-LIBSTUB_POLICY_CONSTRAINTS_free(void);
-
-int
-LIBSTUB_BN_nist_mod_192(void);
-
-void
-LIBSTUB_GENERAL_SUBTREE_free(void);
-
-int
-LIBSTUB_PKCS12_add_safe(void);
-
-const BIGNUM *
-LIBSTUB_BN_get0_nist_prime_192(void);
-
-unsigned char *
-LIBSTUB_X509_keyid_get0(void);
-
-const X509_POLICY_NODE *
-LIBSTUB_X509_policy_node_get0_parent(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_a2i_IPADDRESS(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set_depth(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_inherit(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_set_depth(void);
-
-int
-LIBSTUB_EVP_PKEY_add1_attr_by_txt(void);
-
-void
-LIBSTUB_BN_BLINDING_set_flags(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_policies(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_name(void);
-
-void
-LIBSTUB_POLICY_MAPPING_free(void);
-
-int
-LIBSTUB_EVP_PKEY_cmp(void);
-
-int
-LIBSTUB_X509_policy_level_node_count(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_EVP_PKEY_get_attr(void);
-
-GENERAL_SUBTREE *
-LIBSTUB_GENERAL_SUBTREE_new(void);
-
-STACK_OF(POLICYQUALINFO) *
-LIBSTUB_X509_policy_node_get0_qualifiers(void);
-
-const ASN1_OBJECT *
-LIBSTUB_X509_policy_node_get0_policy(void);
-
-PKCS12 *
-LIBSTUB_PKCS12_add_safes(void);
-
-int
-LIBSTUB_BN_BLINDING_convert_ex(void);
-
-void
-LIBSTUB_X509_policy_tree_free(void);
-
-unsigned int *
-LIBSTUB_OPENSSL_ia32cap_loc(void);
-
-const BIGNUM *
-LIBSTUB_BN_get0_nist_prime_224(void);
-
-int
-LIBSTUB_BN_GENCB_call(void);
-
-NAME_CONSTRAINTS *
-LIBSTUB_NAME_CONSTRAINTS_new(void);
-
-int
-LIBSTUB_ECParameters_print(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set_trust(void);
-
-int
-LIBSTUB_EVP_PKEY_get_attr_count(void);
-
-X509_VERIFY_PARAM *
-LIBSTUB_X509_STORE_CTX_get0_param(void);
-
-int
-LIBSTUB_X509_STORE_set_depth(void);
-
-int
-LIBSTUB_ASN1_put_eoc(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_table_cleanup(void);
-
-BN_BLINDING *
-LIBSTUB_RSA_setup_blinding(void);
-
-int
-LIBSTUB_sk_find_ex(void);
-
-POLICY_CONSTRAINTS *
-LIBSTUB_POLICY_CONSTRAINTS_new(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_get_depth(void);
-
-int
-LIBSTUB_ASN1_item_ndef_i2d(void);
-
-int
-LIBSTUB_ERR_pop_to_mark(void);
-
-X509_POLICY_NODE *
-LIBSTUB_X509_policy_level_get0_node(void);
-
-int
-LIBSTUB_i2d_PKCS7_NDEF(void);
-
-ASN1_TYPE *
-LIBSTUB_ASN1_generate_v3(void);
-
-int
-LIBSTUB_X509_policy_tree_level_count(void);
-
-int
-LIBSTUB_BN_nist_mod_224(void);
-
-int
-LIBSTUB_BIO_dgram_non_fatal_error(void);
-
-ASN1_BIT_STRING *
-LIBSTUB_v2i_ASN1_BIT_STRING(void);
-
-int
-LIBSTUB_X509_STORE_CTX_set_default(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1(void);
-
-GENERAL_NAME *
-LIBSTUB_v2i_GENERAL_NAME_ex(void);
-
-int
-LIBSTUB_BN_nist_mod_521(void);
-
-X509_POLICY_LEVEL *
-LIBSTUB_X509_policy_tree_get0_level(void);
-
-int
-LIBSTUB_ASN1_const_check_infinite_end(void);
-
-X509_ATTRIBUTE *
-LIBSTUB_EVP_PKEY_delete_attr(void);
-
-const BIGNUM *
-LIBSTUB_BN_get0_nist_prime_256(void);
-
-STACK_OF(CONF_VALUE) *
-LIBSTUB_i2v_ASN1_BIT_STRING(void);
-
-int
-LIBSTUB_BN_nist_mod_384(void);
-
-int
-LIBSTUB_EVP_PKEY_get_attr_by_OBJ(void);
-
-const X509_VERIFY_PARAM *
-LIBSTUB_X509_VERIFY_PARAM_lookup(void);
-
-int
-LIBSTUB_X509V3_NAME_from_section(void);
-
-int
-LIBSTUB_EVP_PKEY_add1_attr(void);
-
-int
-LIBSTUB_BIO_dump_indent_cb(void);
-
-int
-LIBSTUB_BN_nist_mod_256(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_add0_table(void);
-
-BN_BLINDING *
-LIBSTUB_BN_BLINDING_create_param(void);
-
-const BIGNUM *
-LIBSTUB_BN_get0_nist_prime_521(void);
-
-int
-LIBSTUB_BN_is_prime_fasttest_ex(void);
-
-int
-LIBSTUB_X509_policy_check(void);
-
-int
-LIBSTUB_EVP_PKEY_get_attr_by_NID(void);
-
-unsigned long
-LIBSTUB_BN_BLINDING_get_flags(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_add_cert(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_rand_key(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_a2i_IPADDRESS_NC(void);
-
-int
-LIBSTUB_PKCS7_set_digest(void);
-
-POLICY_MAPPING *
-LIBSTUB_POLICY_MAPPING_new(void);
-
-int
-LIBSTUB_PKCS7_set0_type_other(void);
-
-int
-LIBSTUB_EVP_PKEY_add1_attr_by_OBJ(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_set_time(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_add_key(void);
-
-char *
-LIBSTUB_DSO_merge(void);
-
-int
-LIBSTUB_BIO_dump_cb(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_8192(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_clear_flags(void);
-
-BIGNUM *
-LIBSTUB_get_rfc2409_prime_1024(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_2048(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_6144(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_1536(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_3072(void);
-
-BIGNUM *
-LIBSTUB_get_rfc3526_prime_4096(void);
-
-BIGNUM *
-LIBSTUB_get_rfc2409_prime_768(void);
-
-unsigned long
-LIBSTUB_X509_VERIFY_PARAM_get_flags(void);
-
-EVP_CIPHER_CTX *
-LIBSTUB_EVP_CIPHER_CTX_new(void);
-
-void
-LIBSTUB_EVP_CIPHER_CTX_free(void);
-
-int
-LIBSTUB_a2i_ipadd(void);
-
-int
-LIBSTUB_EVP_CIPHER_block_size(void);
-
-void
-LIBSTUB_EVP_CIPHER_CTX_set_app_data(void);
-
-int
-LIBSTUB_BIO_method_type(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_nid(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_key_length(void);
-
-int
-LIBSTUB_EVP_MD_size(void);
-
-int
-LIBSTUB_EVP_MD_CTX_test_flags(void);
-
-void
-LIBSTUB_BIO_clear_flags(void);
-
-int
-LIBSTUB_EVP_MD_pkey_type(void);
-
-void
-LIBSTUB_EVP_MD_CTX_clear_flags(void);
-
-unsigned long
-LIBSTUB_EVP_CIPHER_flags(void);
-
-long (*)(struct bio_st *,int,const char *,int, long,long)
-LIBSTUB_BIO_get_callback(void);
-
-int
-LIBSTUB_EVP_CIPHER_key_length(void);
-
-int
-LIBSTUB_EVP_Cipher(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_block_size(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_CIPHER_CTX_cipher(void);
-
-void *
-LIBSTUB_EVP_CIPHER_CTX_get_app_data(void);
-
-int
-LIBSTUB_EVP_MD_block_size(void);
-
-const EVP_MD *
-LIBSTUB_EVP_MD_CTX_md(void);
-
-const char *
-LIBSTUB_BIO_method_name(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_iv_length(void);
-
-int
-LIBSTUB_CRYPTO_memcmp(void);
-
-void
-LIBSTUB_BN_consttime_swap(void);
-
-int
-LIBSTUB_i2d_X509_EXTENSIONS(void);
-
-X509_EXTENSIONS *
-LIBSTUB_d2i_X509_EXTENSIONS(void);
-
-void
-LIBSTUB_X509_ALGOR_get0(void);
-
-int
-LIBSTUB_X509_ALGOR_set0(void);
-
-void *
-LIBSTUB_X509at_get0_data_by_OBJ(void);
-
-int
-LIBSTUB_ASN1_TYPE_set1(void);
-
-void
-LIBSTUB_ASN1_STRING_set0(void);
-
-int
-LIBSTUB_i2d_X509_ALGORS(void);
-
-void
-LIBSTUB_COMP_zlib_cleanup(void);
-
-X509_ALGORS *
-LIBSTUB_d2i_X509_ALGORS(void);
-
-ASN1_VALUE *
-LIBSTUB_SMIME_read_ASN1(void);
-
-int
-LIBSTUB_OPENSSL_isservice(void);
-
-void
-LIBSTUB_EVP_CIPHER_CTX_clear_flags(void);
-
-int
-LIBSTUB_BN_X931_generate_prime_ex(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_test_flags(void);
-
-void
-LIBSTUB_EVP_add_alg_module(void);
-
-int
-LIBSTUB_BN_X931_derive_prime_ex(void);
-
-void
-LIBSTUB_OPENSSL_init(void);
-
-char *
-LIBSTUB_CRYPTO_strdup(void);
-
-int
-LIBSTUB_i2d_TS_ACCURACY(void);
-
-int
-LIBSTUB_i2d_TS_MSG_IMPRINT(void);
-
-int
-LIBSTUB_EVP_PKEY_print_public(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_EVP_PKEY_CTX_new(void);
-
-int
-LIBSTUB_i2d_TS_TST_INFO(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_EVP_PKEY_asn1_find(void);
-
-X509 *
-LIBSTUB_TS_CONF_load_cert(void);
-
-X509_EXTENSION *
-LIBSTUB_TS_REQ_get_ext(void);
-
-int
-LIBSTUB_EVP_PKEY_sign_init(void);
-
-int
-LIBSTUB_ASN1_item_print(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_nonce(void);
-
-TS_RESP *
-LIBSTUB_TS_RESP_dup(void);
-
-int
-LIBSTUB_EVP_PKEY_asn1_add0(void);
-
-int
-LIBSTUB_PKCS7_add0_attrib_signing_time(void);
-
-int
-LIBSTUB_BIO_asn1_get_prefix(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_time(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_decrypt(void);
-
-int
-LIBSTUB_EVP_PKEY_set_type_str(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_get_keygen_info(void);
-
-int
-LIBSTUB_TS_REQ_set_policy_id(void);
-
-int
-LIBSTUB_TS_RESP_set_status_info(void);
-
-int
-LIBSTUB_EVP_PKEY_keygen(void);
-
-int
-LIBSTUB_EVP_DigestSignInit(void);
-
-int
-LIBSTUB_TS_ACCURACY_set_millis(void);
-
-TS_REQ *
-LIBSTUB_TS_REQ_dup(void);
-
-GENERAL_NAME *
-LIBSTUB_GENERAL_NAME_dup(void);
-
-STACK_OF(X509_CRL) *
-LIBSTUB_X509_STORE_get1_crls(void);
-
-EVP_PKEY_ASN1_METHOD *
-LIBSTUB_EVP_PKEY_asn1_new(void);
-
-BIO *
-LIBSTUB_BIO_new_NDEF(void);
-
-int
-LIBSTUB_TS_MSG_IMPRINT_set_algo(void);
-
-int
-LIBSTUB_i2d_TS_TST_INFO_bio(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_ordering(void);
-
-int
-LIBSTUB_TS_TST_INFO_get_ext_by_OBJ(void);
-
-const char *
-LIBSTUB_TS_CONF_get_tsa_section(void);
-
-int
-LIBSTUB_SMIME_write_ASN1(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_signer_key(void);
-
-int
-LIBSTUB_EVP_PKEY_encrypt_old(void);
-
-int
-LIBSTUB_EVP_PKEY_encrypt_init(void);
-
-unsigned long
-LIBSTUB_ASN1_PCTX_get_cert_flags(void);
-
-int
-LIBSTUB_i2d_ESS_SIGNING_CERT(void);
-
-EVP_PKEY *
-LIBSTUB_TS_CONF_load_key(void);
-
-int
-LIBSTUB_i2d_ASN1_SEQUENCE_ANY(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_d2i_TS_MSG_IMPRINT_bio(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_public(void);
-
-EVP_PKEY *
-LIBSTUB_b2i_PublicKey_bio(void);
-
-int
-LIBSTUB_BIO_asn1_set_prefix(void);
-
-EVP_PKEY *
-LIBSTUB_EVP_PKEY_new_mac_key(void);
-
-void
-LIBSTUB_TS_REQ_ext_free(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_free(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_EVP_PKEY_get0_asn1(void);
-
-int
-LIBSTUB_EVP_PKEY_verify_recover_init(void);
-
-void
-LIBSTUB_EVP_PKEY_CTX_set_data(void);
-
-int
-LIBSTUB_EVP_PKEY_keygen_init(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_status_info(void);
-
-X509_ALGOR *
-LIBSTUB_TS_MSG_IMPRINT_get_algo(void);
-
-int
-LIBSTUB_TS_REQ_print_bio(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_ctrl_str(void);
-
-int
-LIBSTUB_EVP_PKEY_get_default_digest_nid(void);
-
-int
-LIBSTUB_PEM_write_bio_PKCS7_stream(void);
-
-int
-LIBSTUB_TS_MSG_IMPRINT_print_bio(void);
-
-int
-LIBSTUB_BN_asc2bn(void);
-
-ASN1_OBJECT *
-LIBSTUB_TS_REQ_get_policy_id(void);
-
-TS_ACCURACY *
-LIBSTUB_d2i_TS_ACCURACY(void);
-
-void *
-LIBSTUB_DSO_global_lookup(void);
-
-int
-LIBSTUB_TS_CONF_set_tsa_name(void);
-
-unsigned long
-LIBSTUB_ASN1_PCTX_get_flags(void);
-
-int
-LIBSTUB_TS_TST_INFO_get_ext_by_NID(void);
-
-TS_RESP *
-LIBSTUB_TS_RESP_new(void);
-
-ESS_CERT_ID *
-LIBSTUB_ESS_CERT_ID_dup(void);
-
-TS_STATUS_INFO *
-LIBSTUB_TS_STATUS_INFO_dup(void);
-
-X509_EXTENSION *
-LIBSTUB_TS_REQ_delete_ext(void);
-
-int
-LIBSTUB_EVP_DigestVerifyFinal(void);
-
-int
-LIBSTUB_EVP_PKEY_print_params(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_TS_REQ_get_msg_imprint(void);
-
-int
-LIBSTUB_OBJ_find_sigid_by_algs(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_TST_INFO_get_serial(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_REQ_get_nonce(void);
-
-int
-LIBSTUB_X509_PUBKEY_set0_param(void);
-
-void
-LIBSTUB_EVP_PKEY_CTX_set0_keygen_info(void);
-
-int
-LIBSTUB_DIST_POINT_set_dpname(void);
-
-int
-LIBSTUB_i2d_ISSUING_DIST_POINT(void);
-
-void *
-LIBSTUB_EVP_PKEY_CTX_get_data(void);
-
-int
-LIBSTUB_TS_STATUS_INFO_print_bio(void);
-
-int
-LIBSTUB_EVP_PKEY_derive_init(void);
-
-TS_TST_INFO *
-LIBSTUB_d2i_TS_TST_INFO(void);
-
-int
-LIBSTUB_EVP_PKEY_asn1_add_alias(void);
-
-TS_RESP *
-LIBSTUB_d2i_TS_RESP_bio(void);
-
-int
-LIBSTUB_OTHERNAME_cmp(void);
-
-void
-LIBSTUB_GENERAL_NAME_set0_value(void);
-
-void
-LIBSTUB_PKCS7_RECIP_INFO_get0_alg(void);
-
-TS_RESP_CTX *
-LIBSTUB_TS_RESP_CTX_new(void);
-
-void
-LIBSTUB_TS_RESP_set_tst_info(void);
-
-int
-LIBSTUB_PKCS7_final(void);
-
-int
-LIBSTUB_EVP_PKEY_base_id(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_signer_cert(void);
-
-int
-LIBSTUB_TS_REQ_set_msg_imprint(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_ctrl(void);
-
-int
-LIBSTUB_TS_CONF_set_digests(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_d2i_TS_MSG_IMPRINT(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_ctrl(void);
-
-int
-LIBSTUB_TS_REQ_get_ext_by_NID(void);
-
-int
-LIBSTUB_PKCS5_pbe_set0_algor(void);
-
-TS_ACCURACY *
-LIBSTUB_TS_ACCURACY_new(void);
-
-void
-LIBSTUB_X509_CRL_METHOD_free(void);
-
-unsigned long
-LIBSTUB_ASN1_PCTX_get_nm_flags(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_sign(void);
-
-int
-LIBSTUB_EVP_PKEY_decrypt_init(void);
-
-int
-LIBSTUB_i2b_PVK_bio(void);
-
-int
-LIBSTUB_EVP_PKEY_print_private(void);
-
-void *
-LIBSTUB_GENERAL_NAME_get0_value(void);
-
-EVP_PKEY *
-LIBSTUB_b2i_PVK_bio(void);
-
-ASN1_UTCTIME *
-LIBSTUB_ASN1_UTCTIME_adj(void);
-
-TS_TST_INFO *
-LIBSTUB_TS_TST_INFO_new(void);
-
-void
-LIBSTUB_EVP_MD_do_all_sorted(void);
-
-int
-LIBSTUB_TS_CONF_set_default_engine(void);
-
-int
-LIBSTUB_TS_ACCURACY_set_seconds(void);
-
-const ASN1_GENERALIZEDTIME *
-LIBSTUB_TS_TST_INFO_get_time(void);
-
-int
-LIBSTUB_PKCS8_pkey_get0(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_EVP_PKEY_asn1_get0(void);
-
-int
-LIBSTUB_OBJ_add_sigid(void);
-
-int
-LIBSTUB_PKCS7_SIGNER_INFO_sign(void);
-
-int
-LIBSTUB_EVP_PKEY_paramgen_init(void);
-
-int
-LIBSTUB_EVP_PKEY_sign(void);
-
-void
-LIBSTUB_OBJ_sigid_free(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_init(void);
-
-ESS_ISSUER_SERIAL *
-LIBSTUB_d2i_ESS_ISSUER_SERIAL(void);
-
-ISSUING_DIST_POINT *
-LIBSTUB_ISSUING_DIST_POINT_new(void);
-
-ASN1_TIME *
-LIBSTUB_ASN1_TIME_adj(void);
-
-int
-LIBSTUB_TS_OBJ_print_bio(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_verify_recover(void);
-
-TS_STATUS_INFO *
-LIBSTUB_TS_RESP_get_status_info(void);
-
-void
-LIBSTUB_EVP_PKEY_CTX_set_cb(void);
-
-TS_TST_INFO *
-LIBSTUB_PKCS7_to_TS_TST_INFO(void);
-
-unsigned long
-LIBSTUB_ASN1_PCTX_get_oid_flags(void);
-
-int
-LIBSTUB_TS_TST_INFO_add_ext(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_derive(void);
-
-int
-LIBSTUB_i2d_TS_MSG_IMPRINT_bio(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_accuracy(void);
-
-int
-LIBSTUB_TS_REQ_set_nonce(void);
-
-ESS_CERT_ID *
-LIBSTUB_ESS_CERT_ID_new(void);
-
-int
-LIBSTUB_TS_REQ_get_ext_count(void);
-
-void
-LIBSTUB_BUF_reverse(void);
-
-int
-LIBSTUB_TS_TST_INFO_print_bio(void);
-
-ISSUING_DIST_POINT *
-LIBSTUB_d2i_ISSUING_DIST_POINT(void);
-
-int
-LIBSTUB_i2b_PrivateKey_bio(void);
-
-int
-LIBSTUB_i2d_TS_RESP(void);
-
-EVP_PKEY *
-LIBSTUB_b2i_PublicKey(void);
-
-void
-LIBSTUB_TS_VERIFY_CTX_cleanup(void);
-
-void
-LIBSTUB_TS_STATUS_INFO_free(void);
-
-int
-LIBSTUB_TS_RESP_verify_token(void);
-
-const void *
-LIBSTUB_OBJ_bsearch_ex_(void);
-
-int
-LIBSTUB_ASN1_bn_print(void);
-
-int
-LIBSTUB_EVP_PKEY_asn1_get_count(void);
-
-void
-LIBSTUB_ASN1_PCTX_set_nm_flags(void);
-
-int
-LIBSTUB_EVP_DigestVerifyInit(void);
-
-ASN1_OBJECT *
-LIBSTUB_TS_TST_INFO_get_policy_id(void);
-
-int
-LIBSTUB_TS_REQ_get_cert_req(void);
-
-void
-LIBSTUB_X509_CRL_set_meth_data(void);
-
-int
-LIBSTUB_PKCS8_pkey_set0(void);
-
-int
-LIBSTUB_ASN1_STRING_copy(void);
-
-int
-LIBSTUB_X509_CRL_match(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_private(void);
-
-void *
-LIBSTUB_TS_TST_INFO_get_ext_d2i(void);
-
-int
-LIBSTUB_TS_RESP_CTX_add_policy(void);
-
-TS_RESP *
-LIBSTUB_d2i_TS_RESP(void);
-
-STACK_OF(X509) *
-LIBSTUB_TS_CONF_load_certs(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_TS_TST_INFO_get_msg_imprint(void);
-
-void
-LIBSTUB_ERR_load_TS_strings(void);
-
-long
-LIBSTUB_TS_TST_INFO_get_version(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_EVP_PKEY_CTX_dup(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_verify(void);
-
-int
-LIBSTUB_i2b_PublicKey_bio(void);
-
-int
-LIBSTUB_TS_CONF_set_certs(void);
-
-int
-LIBSTUB_EVP_PKEY_asn1_get0_info(void);
-
-void
-LIBSTUB_TS_VERIFY_CTX_free(void);
-
-int
-LIBSTUB_TS_REQ_get_ext_by_critical(void);
-
-void
-LIBSTUB_TS_RESP_CTX_set_serial_cb(void);
-
-void *
-LIBSTUB_X509_CRL_get_meth_data(void);
-
-void
-LIBSTUB_TS_RESP_CTX_set_time_cb(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_TS_MSG_IMPRINT_get_msg(void);
-
-void
-LIBSTUB_TS_TST_INFO_ext_free(void);
-
-long
-LIBSTUB_TS_REQ_get_version(void);
-
-int
-LIBSTUB_TS_REQ_add_ext(void);
-
-void
-LIBSTUB_EVP_PKEY_CTX_set_app_data(void);
-
-const void *
-LIBSTUB_OBJ_bsearch_(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_verifyctx(void);
-
-int
-LIBSTUB_i2d_PKCS7_bio_stream(void);
-
-PKCS7_SIGNER_INFO *
-LIBSTUB_PKCS7_sign_add_signer(void);
-
-TS_TST_INFO *
-LIBSTUB_d2i_TS_TST_INFO_bio(void);
-
-int
-LIBSTUB_TS_TST_INFO_get_ordering(void);
-
-int
-LIBSTUB_TS_RESP_print_bio(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_TS_TST_INFO_get_exts(void);
-
-X509_ALGOR *
-LIBSTUB_PKCS5_pbe2_set_iv(void);
-
-EVP_PKEY *
-LIBSTUB_b2i_PrivateKey(void);
-
-void *
-LIBSTUB_EVP_PKEY_CTX_get_app_data(void);
-
-int
-LIBSTUB_TS_REQ_set_cert_req(void);
-
-int
-LIBSTUB_TS_CONF_set_serial(void);
-
-void
-LIBSTUB_TS_TST_INFO_free(void);
-
-int
-LIBSTUB_TS_RESP_verify_response(void);
-
-int
-LIBSTUB_i2d_ESS_ISSUER_SERIAL(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_ACCURACY_get_seconds(void);
-
-void
-LIBSTUB_EVP_CIPHER_do_all(void);
-
-EVP_PKEY *
-LIBSTUB_b2i_PrivateKey_bio(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_CERTID_dup(void);
-
-int
-LIBSTUB_X509_PUBKEY_get0_param(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_TS_MSG_IMPRINT_dup(void);
-
-void
-LIBSTUB_PKCS7_print_ctx(void);
-
-int
-LIBSTUB_i2d_TS_REQ_bio(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_param(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_encrypt(void);
-
-void
-LIBSTUB_ASN1_PCTX_set_flags(void);
-
-int
-LIBSTUB_i2d_ESS_CERT_ID(void);
-
-TS_VERIFY_CTX *
-LIBSTUB_TS_VERIFY_CTX_new(void);
-
-void
-LIBSTUB_TS_RESP_CTX_set_extension_cb(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_status_info_cond(void);
-
-int
-LIBSTUB_EVP_PKEY_verify(void);
-
-X509_CRL_METHOD *
-LIBSTUB_X509_CRL_METHOD_new(void);
-
-int
-LIBSTUB_EVP_DigestSignFinal(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_def_policy(void);
-
-TS_RESP *
-LIBSTUB_TS_RESP_create_response(void);
-
-void
-LIBSTUB_PKCS7_SIGNER_INFO_get0_algs(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_TST_INFO_get_nonce(void);
-
-int
-LIBSTUB_EVP_PKEY_decrypt_old(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_policy_id(void);
-
-int
-LIBSTUB_TS_CONF_set_ess_cert_id_chain(void);
-
-EVP_PKEY *
-LIBSTUB_EVP_PKEY_CTX_get0_pkey(void);
-
-TS_REQ *
-LIBSTUB_d2i_TS_REQ(void);
-
-const EVP_PKEY_ASN1_METHOD *
-LIBSTUB_EVP_PKEY_asn1_find_str(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_f_asn1(void);
-
-ESS_SIGNING_CERT *
-LIBSTUB_ESS_SIGNING_CERT_new(void);
-
-int
-LIBSTUB_EVP_PBE_find(void);
-
-int
-LIBSTUB_X509_CRL_get0_by_cert(void);
-
-int
-LIBSTUB_EVP_PKEY_derive(void);
-
-int
-LIBSTUB_i2d_TS_REQ(void);
-
-X509_EXTENSION *
-LIBSTUB_TS_TST_INFO_delete_ext(void);
-
-void
-LIBSTUB_ESS_ISSUER_SERIAL_free(void);
-
-void
-LIBSTUB_ASN1_PCTX_set_str_flags(void);
-
-int
-LIBSTUB_TS_CONF_set_signer_key(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_ACCURACY_get_millis(void);
-
-PKCS7 *
-LIBSTUB_TS_RESP_get_token(void);
-
-TS_ACCURACY *
-LIBSTUB_TS_ACCURACY_dup(void);
-
-void
-LIBSTUB_X509_CRL_set_default_method(void);
-
-void
-LIBSTUB_TS_RESP_free(void);
-
-void
-LIBSTUB_ISSUING_DIST_POINT_free(void);
-
-ESS_ISSUER_SERIAL *
-LIBSTUB_ESS_ISSUER_SERIAL_new(void);
-
-int
-LIBSTUB_PKCS7_add1_attrib_digest(void);
-
-int
-LIBSTUB_TS_RESP_CTX_add_md(void);
-
-TS_TST_INFO *
-LIBSTUB_TS_TST_INFO_dup(void);
-
-int
-LIBSTUB_PEM_write_bio_Parameters(void);
-
-TS_ACCURACY *
-LIBSTUB_TS_TST_INFO_get_accuracy(void);
-
-int
-LIBSTUB_X509_CRL_get0_by_serial(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_version(void);
-
-TS_TST_INFO *
-LIBSTUB_TS_RESP_CTX_get_tst_info(void);
-
-int
-LIBSTUB_TS_RESP_verify_signature(void);
-
-GENERAL_NAME *
-LIBSTUB_TS_TST_INFO_get_tsa(void);
-
-TS_STATUS_INFO *
-LIBSTUB_TS_STATUS_INFO_new(void);
-
-int (*)(EVP_PKEY_CTX *ctx)
-LIBSTUB_EVP_PKEY_CTX_get_cb(void);
-
-void *
-LIBSTUB_TS_REQ_get_ext_d2i(void);
-
-int
-LIBSTUB_GENERAL_NAME_set0_othername(void);
-
-int
-LIBSTUB_TS_TST_INFO_get_ext_count(void);
-
-TS_REQ *
-LIBSTUB_TS_RESP_CTX_get_request(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_signctx(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_copy(void);
-
-int
-LIBSTUB_ASN1_TYPE_cmp(void);
-
-void
-LIBSTUB_EVP_CIPHER_do_all_sorted(void);
-
-void
-LIBSTUB_EVP_PKEY_CTX_free(void);
-
-STACK_OF(X509) *
-LIBSTUB_X509_STORE_get1_certs(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_get_operation(void);
-
-ESS_SIGNING_CERT *
-LIBSTUB_d2i_ESS_SIGNING_CERT(void);
-
-int
-LIBSTUB_TS_CONF_set_ordering(void);
-
-int
-LIBSTUB_EVP_PBE_alg_add_type(void);
-
-int
-LIBSTUB_TS_REQ_set_version(void);
-
-void *
-LIBSTUB_EVP_PKEY_get0(void);
-
-int
-LIBSTUB_BIO_asn1_set_suffix(void);
-
-int
-LIBSTUB_i2d_TS_STATUS_INFO(void);
-
-void
-LIBSTUB_EVP_MD_do_all(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_accuracy(void);
-
-int
-LIBSTUB_PKCS7_add_attrib_content_type(void);
-
-int
-LIBSTUB_EVP_PKEY_meth_add0(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_tsa(void);
-
-EVP_PKEY_METHOD *
-LIBSTUB_EVP_PKEY_meth_new(void);
-
-int
-LIBSTUB_TS_CONF_set_accuracy(void);
-
-void
-LIBSTUB_ASN1_PCTX_set_oid_flags(void);
-
-ESS_SIGNING_CERT *
-LIBSTUB_ESS_SIGNING_CERT_dup(void);
-
-TS_REQ *
-LIBSTUB_d2i_TS_REQ_bio(void);
-
-ASN1_TIME *
-LIBSTUB_X509_time_adj_ex(void);
-
-void
-LIBSTUB_TS_RESP_CTX_add_flags(void);
-
-TS_STATUS_INFO *
-LIBSTUB_d2i_TS_STATUS_INFO(void);
-
-int
-LIBSTUB_TS_MSG_IMPRINT_set_msg(void);
-
-int
-LIBSTUB_BIO_asn1_get_suffix(void);
-
-void
-LIBSTUB_TS_REQ_free(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_free(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_TS_REQ_get_exts(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_clock_precision_digits(void);
-
-int
-LIBSTUB_TS_RESP_CTX_add_failure_info(void);
-
-int
-LIBSTUB_i2d_TS_RESP_bio(void);
-
-EVP_PKEY *
-LIBSTUB_EVP_PKEY_CTX_get0_peerkey(void);
-
-TS_REQ *
-LIBSTUB_TS_REQ_new(void);
-
-TS_MSG_IMPRINT *
-LIBSTUB_TS_MSG_IMPRINT_new(void);
-
-const EVP_PKEY_METHOD *
-LIBSTUB_EVP_PKEY_meth_find(void);
-
-int
-LIBSTUB_EVP_PKEY_id(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_serial(void);
-
-GENERAL_NAME *
-LIBSTUB_a2i_GENERAL_NAME(void);
-
-int
-LIBSTUB_TS_CONF_set_crypto_device(void);
-
-int
-LIBSTUB_EVP_PKEY_verify_init(void);
-
-int
-LIBSTUB_TS_CONF_set_policies(void);
-
-ASN1_PCTX *
-LIBSTUB_ASN1_PCTX_new(void);
-
-void
-LIBSTUB_ESS_CERT_ID_free(void);
-
-void
-LIBSTUB_TS_MSG_IMPRINT_free(void);
-
-void
-LIBSTUB_TS_VERIFY_CTX_init(void);
-
-int
-LIBSTUB_PKCS7_stream(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_certs(void);
-
-int
-LIBSTUB_TS_CONF_set_def_policy(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_ASN1_GENERALIZEDTIME_adj(void);
-
-void
-LIBSTUB_TS_ACCURACY_free(void);
-
-TS_TST_INFO *
-LIBSTUB_TS_RESP_get_tst_info(void);
-
-int
-LIBSTUB_EVP_PKEY_derive_set_peer(void);
-
-EVP_PKEY *
-LIBSTUB_PEM_read_bio_Parameters(void);
-
-int
-LIBSTUB_TS_CONF_set_clock_precision_digits(void);
-
-ESS_ISSUER_SERIAL *
-LIBSTUB_ESS_ISSUER_SERIAL_dup(void);
-
-const ASN1_INTEGER *
-LIBSTUB_TS_ACCURACY_get_micros(void);
-
-unsigned long
-LIBSTUB_ASN1_PCTX_get_str_flags(void);
-
-int
-LIBSTUB_NAME_CONSTRAINTS_check(void);
-
-int
-LIBSTUB_ASN1_BIT_STRING_check(void);
-
-int
-LIBSTUB_X509_check_akid(void);
-
-void
-LIBSTUB_ASN1_PCTX_free(void);
-
-int
-LIBSTUB_PEM_write_bio_ASN1_stream(void);
-
-int
-LIBSTUB_i2d_ASN1_bio_stream(void);
-
-int
-LIBSTUB_TS_X509_ALGOR_print_bio(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_cleanup(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_free(void);
-
-void
-LIBSTUB_ESS_SIGNING_CERT_free(void);
-
-int
-LIBSTUB_TS_TST_INFO_set_msg_imprint(void);
-
-int
-LIBSTUB_GENERAL_NAME_cmp(void);
-
-ASN1_SEQUENCE_ANY *
-LIBSTUB_d2i_ASN1_SEQUENCE_ANY(void);
-
-int
-LIBSTUB_GENERAL_NAME_get0_otherName(void);
-
-ESS_CERT_ID *
-LIBSTUB_d2i_ESS_CERT_ID(void);
-
-int
-LIBSTUB_OBJ_find_sigid_algs(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_keygen(void);
-
-int
-LIBSTUB_PKCS5_PBKDF2_HMAC(void);
-
-int
-LIBSTUB_EVP_PKEY_paramgen(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_paramgen(void);
-
-BIO *
-LIBSTUB_BIO_new_PKCS7(void);
-
-int
-LIBSTUB_EVP_PKEY_verify_recover(void);
-
-int
-LIBSTUB_TS_ext_print_bio(void);
-
-int
-LIBSTUB_TS_ASN1_INTEGER_print_bio(void);
-
-void
-LIBSTUB_check_defer(void);
-
-int
-LIBSTUB_DSO_pathbyaddr(void);
-
-int
-LIBSTUB_EVP_PKEY_set_type(void);
-
-int
-LIBSTUB_TS_ACCURACY_set_micros(void);
-
-TS_VERIFY_CTX *
-LIBSTUB_TS_REQ_to_TS_VERIFY_CTX(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_set_copy(void);
-
-void
-LIBSTUB_ASN1_PCTX_set_cert_flags(void);
-
-X509_EXTENSION *
-LIBSTUB_TS_TST_INFO_get_ext(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_ctrl(void);
-
-int
-LIBSTUB_TS_TST_INFO_get_ext_by_critical(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_EVP_PKEY_CTX_new_id(void);
-
-int
-LIBSTUB_TS_REQ_get_ext_by_OBJ(void);
-
-int
-LIBSTUB_TS_CONF_set_signer_cert(void);
-
-unsigned long
-LIBSTUB_X509_NAME_hash_old(void);
-
-int
-LIBSTUB_ASN1_TIME_set_string(void);
-
-unsigned long
-LIBSTUB_EVP_MD_flags(void);
-
-void
-LIBSTUB_TS_RESP_CTX_free(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_add1_header(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_set1_req(void);
-
-void
-LIBSTUB_X509_STORE_set_verify_cb(void);
-
-X509_CRL *
-LIBSTUB_X509_STORE_CTX_get0_current_crl(void);
-
-X509_STORE_CTX *
-LIBSTUB_X509_STORE_CTX_get0_parent_ctx(void);
-
-X509 *
-LIBSTUB_X509_STORE_CTX_get0_current_issuer(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_copy(void);
-
-char *(*)(UI*, const char*, const char*)
-LIBSTUB_UI_method_get_prompt_constructor(void);
-
-int
-LIBSTUB_UI_method_set_prompt_constructor(void);
-
-int
-LIBSTUB_EVP_read_pw_string_min(void);
-
-size_t
-LIBSTUB_CRYPTO_cts128_encrypt(void);
-
-size_t
-LIBSTUB_CRYPTO_cts128_decrypt_block(void);
-
-void
-LIBSTUB_CRYPTO_cfb128_1_encrypt(void);
-
-void
-LIBSTUB_CRYPTO_cbc128_encrypt(void);
-
-void
-LIBSTUB_CRYPTO_ctr128_encrypt(void);
-
-void
-LIBSTUB_CRYPTO_ofb128_encrypt(void);
-
-size_t
-LIBSTUB_CRYPTO_cts128_decrypt(void);
-
-size_t
-LIBSTUB_CRYPTO_cts128_encrypt_block(void);
-
-void
-LIBSTUB_CRYPTO_cbc128_decrypt(void);
-
-void
-LIBSTUB_CRYPTO_cfb128_encrypt(void);
-
-void
-LIBSTUB_CRYPTO_cfb128_8_encrypt(void);
-
-int
-LIBSTUB_OPENSSL_strcasecmp(void);
-
-int
-LIBSTUB_OPENSSL_memcmp(void);
-
-int
-LIBSTUB_OPENSSL_strncasecmp(void);
-
-struct tm *
-LIBSTUB_OPENSSL_gmtime(void);
-
-int
-LIBSTUB_OPENSSL_gmtime_adj(void);
-
-int
-LIBSTUB_OPENSSL_gmtime_diff(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get0_info(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_copy(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_PSS_mgf1(void);
-
-int
-LIBSTUB_RSA_verify_PKCS1_PSS_mgf1(void);
-
-void
-LIBSTUB_X509_ALGOR_set_md(void);
-
-int
-LIBSTUB_CMAC_CTX_copy(void);
-
-void
-LIBSTUB_CMAC_CTX_free(void);
-
-EVP_CIPHER_CTX *
-LIBSTUB_CMAC_CTX_get0_cipher_ctx(void);
-
-void
-LIBSTUB_CMAC_CTX_cleanup(void);
-
-int
-LIBSTUB_CMAC_Init(void);
-
-int
-LIBSTUB_CMAC_Update(void);
-
-int
-LIBSTUB_CMAC_resume(void);
-
-CMAC_CTX *
-LIBSTUB_CMAC_CTX_new(void);
-
-int
-LIBSTUB_CMAC_Final(void);
-
-void
-LIBSTUB_CRYPTO_ctr128_encrypt_ctr32(void);
-
-void
-LIBSTUB_CRYPTO_gcm128_release(void);
-
-int
-LIBSTUB_CRYPTO_ccm128_decrypt_ccm64(void);
-
-int
-LIBSTUB_CRYPTO_ccm128_encrypt(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_encrypt(void);
-
-int
-LIBSTUB_CRYPTO_xts128_encrypt(void);
-
-size_t
-LIBSTUB_CRYPTO_nistcts128_decrypt_block(void);
-
-void
-LIBSTUB_CRYPTO_gcm128_setiv(void);
-
-size_t
-LIBSTUB_CRYPTO_nistcts128_encrypt(void);
-
-void
-LIBSTUB_CRYPTO_gcm128_tag(void);
-
-int
-LIBSTUB_CRYPTO_ccm128_encrypt_ccm64(void);
-
-int
-LIBSTUB_CRYPTO_ccm128_setiv(void);
-
-size_t
-LIBSTUB_CRYPTO_nistcts128_encrypt_block(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_aad(void);
-
-void
-LIBSTUB_CRYPTO_ccm128_init(void);
-
-size_t
-LIBSTUB_CRYPTO_nistcts128_decrypt(void);
-
-GCM128_CONTEXT *
-LIBSTUB_CRYPTO_gcm128_new(void);
-
-size_t
-LIBSTUB_CRYPTO_ccm128_tag(void);
-
-int
-LIBSTUB_CRYPTO_ccm128_decrypt(void);
-
-void
-LIBSTUB_CRYPTO_ccm128_aad(void);
-
-void
-LIBSTUB_CRYPTO_gcm128_init(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_decrypt(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_decrypt_ctr32(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_encrypt_ctr32(void);
-
-int
-LIBSTUB_CRYPTO_gcm128_finish(void);
-
-X509_ALGOR *
-LIBSTUB_PKCS5_pbkdf2_set(void);
-
-RSA_PSS_PARAMS *
-LIBSTUB_RSA_PSS_PARAMS_new(void);
-
-RSA_PSS_PARAMS *
-LIBSTUB_d2i_RSA_PSS_PARAMS(void);
-
-void
-LIBSTUB_RSA_PSS_PARAMS_free(void);
-
-int
-LIBSTUB_i2d_RSA_PSS_PARAMS(void);
-
-const ASN1_ITEM *
-LIBSTUB_POLICY_MAPPING_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_NAME_CONSTRAINTS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_OCTET_STRING_NDEF_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_POLICY_CONSTRAINTS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_POLICY_MAPPINGS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_GENERAL_SUBTREE_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_EXTENSIONS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_X509_ALGORS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_CMS_ContentInfo_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_CMS_ReceiptRequest_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_SEQUENCE_ANY_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_SET_ANY_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ISSUING_DIST_POINT_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_RSA_PSS_PARAMS_it(void);
-
-int
-LIBSTUB_PEM_write_bio_DHxparams(void);
-
-int
-LIBSTUB_X509_ALGOR_cmp(void);
-
-void
-LIBSTUB_ASN1_STRING_clear_free(void);
-
-int
-LIBSTUB_ASN1_TIME_diff(void);
-
-int
-LIBSTUB_BIO_hex_string(void);
-
-int
-LIBSTUB_CMS_RecipientEncryptedKey_cert_cmp(void);
-
-int
-LIBSTUB_CMS_RecipientEncryptedKey_get0_id(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_encrypt(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_CMS_RecipientInfo_get0_pkey_ctx(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kari_decrypt(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kari_get0_alg(void);
-
-EVP_CIPHER_CTX *
-LIBSTUB_CMS_RecipientInfo_kari_get0_ctx(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kari_get0_orig_id(void);
-
-STACK_OF(CMS_RecipientEncryptedKey) *
-LIBSTUB_CMS_RecipientInfo_kari_get0_reks(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kari_orig_id_cmp(void);
-
-int
-LIBSTUB_CMS_RecipientInfo_kari_set0_pkey(void);
-
-int
-LIBSTUB_CMS_SharedInfo_encode(void);
-
-EVP_MD_CTX *
-LIBSTUB_CMS_SignerInfo_get0_md_ctx(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_CMS_SignerInfo_get0_pkey_ctx(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_CMS_SignerInfo_get0_signature(void);
-
-DH *
-LIBSTUB_d2i_DHxparams(void);
-
-int
-LIBSTUB_i2d_DHxparams(void);
-
-int
-LIBSTUB_DH_compute_key_padded(void);
-
-DH *
-LIBSTUB_DH_get_1024_160(void);
-
-DH *
-LIBSTUB_DH_get_2048_224(void);
-
-DH *
-LIBSTUB_DH_get_2048_256(void);
-
-int
-LIBSTUB_DH_KDF_X9_42(void);
-
-const char *
-LIBSTUB_EC_curve_nid2nist(void);
-
-int
-LIBSTUB_EC_curve_nist2nid(void);
-
-BN_MONT_CTX *
-LIBSTUB_EC_GROUP_get_mont_data(void);
-
-int
-LIBSTUB_ECDH_KDF_X9_62(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_cbc_hmac_sha256(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_wrap(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_wrap(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_cbc_hmac_sha256(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_wrap(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_des_ede3_wrap(void);
-
-size_t
-LIBSTUB_CRYPTO_128_unwrap(void);
-
-size_t
-LIBSTUB_CRYPTO_128_wrap(void);
-
-BIO *
-LIBSTUB_OCSP_REQ_CTX_get0_mem_bio(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_http(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_i2d(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_nbio(void);
-
-int
-LIBSTUB_OCSP_REQ_CTX_nbio_d2i(void);
-
-OCSP_REQ_CTX *
-LIBSTUB_OCSP_REQ_CTX_new(void);
-
-void
-LIBSTUB_OCSP_set_max_response_length(void);
-
-RSA_OAEP_PARAMS *
-LIBSTUB_d2i_RSA_OAEP_PARAMS(void);
-
-void
-LIBSTUB_RSA_OAEP_PARAMS_free(void);
-
-const ASN1_ITEM *
-LIBSTUB_RSA_OAEP_PARAMS_it(void);
-
-RSA_OAEP_PARAMS *
-LIBSTUB_RSA_OAEP_PARAMS_new(void);
-
-int
-LIBSTUB_RSA_padding_add_PKCS1_OAEP_mgf1(void);
-
-int
-LIBSTUB_RSA_padding_check_PKCS1_OAEP_mgf1(void);
-
-_STACK *
-LIBSTUB_sk_deep_copy(void);
-
-int
-LIBSTUB_i2d_re_X509_tbs(void);
-
-int
-LIBSTUB_X509_chain_check_suiteb(void);
-
-STACK_OF(X509) *
-LIBSTUB_X509_chain_up_ref(void);
-
-int
-LIBSTUB_X509_CRL_check_suiteb(void);
-
-X509_CRL *
-LIBSTUB_X509_CRL_diff(void);
-
-int
-LIBSTUB_X509_CRL_http_nbio(void);
-
-void
-LIBSTUB_X509_get0_signature(void);
-
-int
-LIBSTUB_X509_get_signature_nid(void);
-
-int
-LIBSTUB_X509_http_nbio(void);
-
-X509_REVOKED *
-LIBSTUB_X509_REVOKED_dup(void);
-
-X509_STORE *
-LIBSTUB_X509_STORE_CTX_get0_store(void);
-
-void
-LIBSTUB_X509_STORE_set_lookup_crls_cb(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_add1_host(void);
-
-const X509_VERIFY_PARAM *
-LIBSTUB_X509_VERIFY_PARAM_get0(void);
-
-const char *
-LIBSTUB_X509_VERIFY_PARAM_get0_name(void);
-
-char *
-LIBSTUB_X509_VERIFY_PARAM_get0_peername(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_get_count(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_email(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_host(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_ip(void);
-
-int
-LIBSTUB_X509_VERIFY_PARAM_set1_ip_asc(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_set_hostflags(void);
-
-int
-LIBSTUB_X509_check_email(void);
-
-int
-LIBSTUB_X509_check_host(void);
-
-int
-LIBSTUB_X509_check_ip(void);
-
-int
-LIBSTUB_X509_check_ip_asc(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_item(void);
-
-const SSL_METHOD *
-LIBSTUB_DTLS_client_method(void);
-
-const SSL_METHOD *
-LIBSTUB_DTLS_method(void);
-
-const SSL_METHOD *
-LIBSTUB_DTLS_server_method(void);
-
-void
-LIBSTUB_SSL_certs_clear(void);
-
-const SSL_CIPHER *
-LIBSTUB_SSL_CIPHER_find(void);
-
-void
-LIBSTUB_SSL_COMP_free_compression_methods(void);
-
-int
-LIBSTUB_SSL_CONF_cmd(void);
-
-int
-LIBSTUB_SSL_CONF_cmd_argv(void);
-
-int
-LIBSTUB_SSL_CONF_cmd_value_type(void);
-
-unsigned int
-LIBSTUB_SSL_CONF_CTX_clear_flags(void);
-
-int
-LIBSTUB_SSL_CONF_CTX_finish(void);
-
-void
-LIBSTUB_SSL_CONF_CTX_free(void);
-
-SSL_CONF_CTX *
-LIBSTUB_SSL_CONF_CTX_new(void);
-
-int
-LIBSTUB_SSL_CONF_CTX_set1_prefix(void);
-
-unsigned int
-LIBSTUB_SSL_CONF_CTX_set_flags(void);
-
-void
-LIBSTUB_SSL_CONF_CTX_set_ssl(void);
-
-void
-LIBSTUB_SSL_CONF_CTX_set_ssl_ctx(void);
-
-int
-LIBSTUB_SSL_CTX_add_client_custom_ext(void);
-
-int
-LIBSTUB_SSL_CTX_add_server_custom_ext(void);
-
-X509 *
-LIBSTUB_SSL_CTX_get0_certificate(void);
-
-X509_VERIFY_PARAM *
-LIBSTUB_SSL_CTX_get0_param(void);
-
-EVP_PKEY *
-LIBSTUB_SSL_CTX_get0_privatekey(void);
-
-const SSL_METHOD *
-LIBSTUB_SSL_CTX_get_ssl_method(void);
-
-int
-LIBSTUB_SSL_CTX_set_alpn_protos(void);
-
-void
-LIBSTUB_SSL_CTX_set_alpn_select_cb(void);
-
-void
-LIBSTUB_SSL_CTX_set_cert_cb(void);
-
-int
-LIBSTUB_SSL_CTX_use_serverinfo(void);
-
-int
-LIBSTUB_SSL_CTX_use_serverinfo_file(void);
-
-int
-LIBSTUB_SSL_extension_supported(void);
-
-void
-LIBSTUB_SSL_get0_alpn_selected(void);
-
-X509_VERIFY_PARAM *
-LIBSTUB_SSL_get0_param(void);
-
-int
-LIBSTUB_SSL_is_server(void);
-
-int
-LIBSTUB_SSL_set_alpn_protos(void);
-
-void
-LIBSTUB_SSL_set_cert_cb(void);
-
-int
-LIBSTUB_SSL_check_chain(void);
-
-int
-LIBSTUB_SSL_get_shared_sigalgs(void);
-
-int
-LIBSTUB_SSL_get_sigalgs(void);
-
-void
-LIBSTUB_ASN1_add_stable_module(void);
-
-int
-LIBSTUB_ASN1_buf_print(void);
-
-int
-LIBSTUB_ASN1_ENUMERATED_get_int64(void);
-
-int
-LIBSTUB_ASN1_ENUMERATED_set_int64(void);
-
-int
-LIBSTUB_ASN1_INTEGER_get_int64(void);
-
-int
-LIBSTUB_ASN1_INTEGER_get_uint64(void);
-
-int
-LIBSTUB_ASN1_INTEGER_set_int64(void);
-
-int
-LIBSTUB_ASN1_INTEGER_set_uint64(void);
-
-void
-LIBSTUB_ASN1_SCTX_free(void);
-
-void *
-LIBSTUB_ASN1_SCTX_get_app_data(void);
-
-unsigned long
-LIBSTUB_ASN1_SCTX_get_flags(void);
-
-const ASN1_ITEM *
-LIBSTUB_ASN1_SCTX_get_item(void);
-
-const ASN1_TEMPLATE *
-LIBSTUB_ASN1_SCTX_get_template(void);
-
-ASN1_SCTX *
-LIBSTUB_ASN1_SCTX_new(void);
-
-void
-LIBSTUB_ASN1_SCTX_set_app_data(void);
-
-int
-LIBSTUB_ASN1_str2mask(void);
-
-ASN1_TYPE *
-LIBSTUB_ASN1_TYPE_pack_sequence(void);
-
-void *
-LIBSTUB_ASN1_TYPE_unpack_sequence(void);
-
-void
-LIBSTUB_ASYNC_block_pause(void);
-
-void
-LIBSTUB_ASYNC_cleanup_thread(void);
-
-ASYNC_JOB *
-LIBSTUB_ASYNC_get_current_job(void);
-
-int
-LIBSTUB_ASYNC_init_thread(void);
-
-int
-LIBSTUB_ASYNC_pause_job(void);
-
-int
-LIBSTUB_ASYNC_start_job(void);
-
-void
-LIBSTUB_ASYNC_unblock_pause(void);
-
-void
-LIBSTUB_ERR_load_ASYNC_strings(void);
-
-int
-LIBSTUB_BIO_accept_ex(void);
-
-void
-LIBSTUB_BIO_ADDR_clear(void);
-
-int
-LIBSTUB_BIO_ADDR_family(void);
-
-void
-LIBSTUB_BIO_ADDR_free(void);
-
-char *
-LIBSTUB_BIO_ADDR_hostname_string(void);
-
-BIO_ADDR *
-LIBSTUB_BIO_ADDR_new(void);
-
-char *
-LIBSTUB_BIO_ADDR_path_string(void);
-
-int
-LIBSTUB_BIO_ADDR_rawaddress(void);
-
-int
-LIBSTUB_BIO_ADDR_rawmake(void);
-
-unsigned short
-LIBSTUB_BIO_ADDR_rawport(void);
-
-char *
-LIBSTUB_BIO_ADDR_service_string(void);
-
-const BIO_ADDR *
-LIBSTUB_BIO_ADDRINFO_address(void);
-
-int
-LIBSTUB_BIO_ADDRINFO_family(void);
-
-void
-LIBSTUB_BIO_ADDRINFO_free(void);
-
-const BIO_ADDRINFO *
-LIBSTUB_BIO_ADDRINFO_next(void);
-
-int
-LIBSTUB_BIO_ADDRINFO_protocol(void);
-
-int
-LIBSTUB_BIO_ADDRINFO_socktype(void);
-
-int
-LIBSTUB_BIO_closesocket(void);
-
-int
-LIBSTUB_BIO_connect(void);
-
-int
-LIBSTUB_BIO_listen(void);
-
-int
-LIBSTUB_BIO_lookup(void);
-
-int
-LIBSTUB_BIO_parse_hostserv(void);
-
-BIO_METHOD *
-LIBSTUB_BIO_s_secmem(void);
-
-int
-LIBSTUB_BIO_sock_info(void);
-
-int
-LIBSTUB_BIO_socket(void);
-
-int
-LIBSTUB_BN_abs_is_word(void);
-
-int
-LIBSTUB_BN_bn2binpad(void);
-
-int
-LIBSTUB_BN_bn2lebinpad(void);
-
-BN_CTX *
-LIBSTUB_BN_CTX_secure_new(void);
-
-void
-LIBSTUB_BN_GENCB_free(void);
-
-void *
-LIBSTUB_BN_GENCB_get_arg(void);
-
-BN_GENCB *
-LIBSTUB_BN_GENCB_new(void);
-
-void
-LIBSTUB_BN_GENCB_set(void);
-
-void
-LIBSTUB_BN_GENCB_set_old(void);
-
-int
-LIBSTUB_BN_generate_dsa_nonce(void);
-
-int
-LIBSTUB_BN_get_flags(void);
-
-int
-LIBSTUB_BN_is_negative(void);
-
-int
-LIBSTUB_BN_is_odd(void);
-
-int
-LIBSTUB_BN_is_one(void);
-
-int
-LIBSTUB_BN_is_word(void);
-
-int
-LIBSTUB_BN_is_zero(void);
-
-BIGNUM *
-LIBSTUB_BN_lebin2bn(void);
-
-int (*)(BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *)
-LIBSTUB_BN_nist_mod_func(void);
-
-BIGNUM *
-LIBSTUB_BN_secure_new(void);
-
-int
-LIBSTUB_BN_security_bits(void);
-
-void
-LIBSTUB_BN_set_flags(void);
-
-int
-LIBSTUB_BN_to_montgomery(void);
-
-void
-LIBSTUB_BN_with_flags(void);
-
-void
-LIBSTUB_BN_zero_ex(void);
-
-BUF_MEM *
-LIBSTUB_BUF_MEM_new_ex(void);
-
-const COMP_METHOD *
-LIBSTUB_COMP_CTX_get_method(void);
-
-int
-LIBSTUB_COMP_CTX_get_type(void);
-
-const char *
-LIBSTUB_COMP_get_name(void);
-
-int
-LIBSTUB_COMP_get_type(void);
-
-void
-LIBSTUB_CRYPTO_clear_free(void);
-
-void *
-LIBSTUB_CRYPTO_clear_realloc(void);
-
-int
-LIBSTUB_CRYPTO_free_ex_index(void);
-
-void *
-LIBSTUB_CRYPTO_memdup(void);
-
-size_t
-LIBSTUB_CRYPTO_secure_actual_size(void);
-
-int
-LIBSTUB_CRYPTO_secure_allocated(void);
-
-void
-LIBSTUB_CRYPTO_secure_free(void);
-
-void *
-LIBSTUB_CRYPTO_secure_malloc(void);
-
-void
-LIBSTUB_CRYPTO_secure_malloc_done(void);
-
-int
-LIBSTUB_CRYPTO_secure_malloc_init(void);
-
-int
-LIBSTUB_CRYPTO_secure_malloc_initialized(void);
-
-size_t
-LIBSTUB_CRYPTO_secure_used(void);
-
-void *
-LIBSTUB_CRYPTO_secure_zalloc(void);
-
-int
-LIBSTUB_CRYPTO_set_mem_debug(void);
-
-char *
-LIBSTUB_CRYPTO_strndup(void);
-
-void *
-LIBSTUB_CRYPTO_zalloc(void);
-
-int
-LIBSTUB_OPENSSL_atexit(void);
-
-void
-LIBSTUB_OPENSSL_cleanup(void);
-
-int
-LIBSTUB_OPENSSL_init_crypto(void);
-
-void
-LIBSTUB_OPENSSL_INIT_free(void);
-
-OPENSSL_INIT_SETTINGS *
-LIBSTUB_OPENSSL_INIT_new(void);
-
-size_t
-LIBSTUB_OPENSSL_strlcat(void);
-
-size_t
-LIBSTUB_OPENSSL_strlcpy(void);
-
-size_t
-LIBSTUB_OPENSSL_strnlen(void);
-
-void
-LIBSTUB_OPENSSL_thread_stop(void);
-
-const char *
-LIBSTUB_OpenSSL_version(void);
-
-unsigned long
-LIBSTUB_OpenSSL_version_num(void);
-
-int
-LIBSTUB_DH_bits(void);
-
-int
-LIBSTUB_DH_security_bits(void);
-
-int
-LIBSTUB_DSA_security_bits(void);
-
-const BIGNUM *
-LIBSTUB_EC_GROUP_get0_cofactor(void);
-
-const BIGNUM *
-LIBSTUB_EC_GROUP_get0_order(void);
-
-int
-LIBSTUB_EC_GROUP_order_bits(void);
-
-const EC_KEY_METHOD *
-LIBSTUB_EC_KEY_get_default_method(void);
-
-void *
-LIBSTUB_EC_KEY_get_ex_data(void);
-
-const EC_KEY_METHOD *
-LIBSTUB_EC_KEY_get_method(void);
-
-size_t
-LIBSTUB_EC_KEY_key2buf(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_free(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_get_compute_key(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_get_init(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_get_keygen(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_get_sign(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_get_verify(void);
-
-EC_KEY_METHOD *
-LIBSTUB_EC_KEY_METHOD_new(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_set_compute_key(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_set_init(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_set_keygen(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_set_sign(void);
-
-void
-LIBSTUB_EC_KEY_METHOD_set_verify(void);
-
-EC_KEY *
-LIBSTUB_EC_KEY_new_method(void);
-
-int
-LIBSTUB_EC_KEY_oct2key(void);
-
-int
-LIBSTUB_EC_KEY_oct2priv(void);
-
-const EC_KEY_METHOD *
-LIBSTUB_EC_KEY_OpenSSL(void);
-
-size_t
-LIBSTUB_EC_KEY_priv2buf(void);
-
-size_t
-LIBSTUB_EC_KEY_priv2oct(void);
-
-void
-LIBSTUB_EC_KEY_set_default_method(void);
-
-int
-LIBSTUB_EC_KEY_set_ex_data(void);
-
-int
-LIBSTUB_EC_KEY_set_method(void);
-
-size_t
-LIBSTUB_EC_POINT_point2buf(void);
-
-void
-LIBSTUB_ECDSA_SIG_get0(void);
-
-ENGINE *
-LIBSTUB_ENGINE_get_default_EC(void);
-
-const EC_KEY_METHOD *
-LIBSTUB_ENGINE_get_EC(void);
-
-void
-LIBSTUB_ENGINE_register_all_EC(void);
-
-int
-LIBSTUB_ENGINE_register_EC(void);
-
-int
-LIBSTUB_ENGINE_set_default_EC(void);
-
-int
-LIBSTUB_ENGINE_set_EC(void);
-
-void
-LIBSTUB_ENGINE_unregister_EC(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_ocb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_128_wrap_pad(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_ocb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_192_wrap_pad(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_ocb(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_aes_256_wrap_pad(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_128_ctr(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_192_ctr(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_camellia_256_ctr(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_chacha20(void);
-
-const EVP_CIPHER *
-LIBSTUB_EVP_chacha20_poly1305(void);
-
-unsigned char *
-LIBSTUB_EVP_CIPHER_CTX_buf_noconst(void);
-
-void *
-LIBSTUB_EVP_CIPHER_CTX_get_cipher_data(void);
-
-void *
-LIBSTUB_EVP_CIPHER_CTX_set_cipher_data(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_encrypting(void);
-
-const unsigned char *
-LIBSTUB_EVP_CIPHER_CTX_iv(void);
-
-unsigned char *
-LIBSTUB_EVP_CIPHER_CTX_iv_noconst(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_num(void);
-
-const unsigned char *
-LIBSTUB_EVP_CIPHER_CTX_original_iv(void);
-
-int
-LIBSTUB_EVP_CIPHER_CTX_reset(void);
-
-void
-LIBSTUB_EVP_CIPHER_CTX_set_num(void);
-
-int
-LIBSTUB_EVP_CIPHER_impl_ctx_size(void);
-
-EVP_CIPHER *
-LIBSTUB_EVP_CIPHER_meth_dup(void);
-
-void
-LIBSTUB_EVP_CIPHER_meth_free(void);
-
-int (*)(EVP_CIPHER_CTX *)
-LIBSTUB_EVP_CIPHER_meth_get_cleanup(void);
-
-int (*)(EVP_CIPHER_CTX *, int, int, void *)
-LIBSTUB_EVP_CIPHER_meth_get_ctrl(void);
-
-int (*)(EVP_CIPHER_CTX *, unsigned char *, const unsigned char *, size_t)
-LIBSTUB_EVP_CIPHER_meth_get_do_cipher(void);
-
-int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)
-LIBSTUB_EVP_CIPHER_meth_get_get_asn1_params(void);
-
-int (*)(EVP_CIPHER_CTX *, const unsigned char *, const unsigned char *, int)
-LIBSTUB_EVP_CIPHER_meth_get_init(void);
-
-int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)
-LIBSTUB_EVP_CIPHER_meth_get_set_asn1_params(void);
-
-EVP_CIPHER *
-LIBSTUB_EVP_CIPHER_meth_new(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_cleanup(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_ctrl(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_do_cipher(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_flags(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_get_asn1_params(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_impl_ctx_size(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_init(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_iv_length(void);
-
-int
-LIBSTUB_EVP_CIPHER_meth_set_set_asn1_params(void);
-
-void
-LIBSTUB_EVP_ENCODE_CTX_free(void);
-
-EVP_ENCODE_CTX *
-LIBSTUB_EVP_ENCODE_CTX_new(void);
-
-int
-LIBSTUB_EVP_ENCODE_CTX_num(void);
-
-const EVP_MD *
-LIBSTUB_EVP_md5_sha1(void);
-
-int
-LIBSTUB_EVP_MD_CTX_ctrl(void);
-
-void
-LIBSTUB_EVP_MD_CTX_free(void);
-
-void *
-LIBSTUB_EVP_MD_CTX_md_data(void);
-
-EVP_MD_CTX *
-LIBSTUB_EVP_MD_CTX_new(void);
-
-EVP_PKEY_CTX *
-LIBSTUB_EVP_MD_CTX_pkey_ctx(void);
-
-int
-LIBSTUB_EVP_MD_CTX_reset(void);
-
-void
-LIBSTUB_EVP_MD_CTX_set_update_fn(void);
-
-int (*)(EVP_MD_CTX *, const void *, size_t)
-LIBSTUB_EVP_MD_CTX_update_fn(void);
-
-EVP_MD *
-LIBSTUB_EVP_MD_meth_dup(void);
-
-void
-LIBSTUB_EVP_MD_meth_free(void);
-
-int
-LIBSTUB_EVP_MD_meth_get_app_datasize(void);
-
-int (*)(EVP_MD_CTX *)
-LIBSTUB_EVP_MD_meth_get_cleanup(void);
-
-int (*)(EVP_MD_CTX *, const EVP_MD_CTX *)
-LIBSTUB_EVP_MD_meth_get_copy(void);
-
-int (*)(EVP_MD_CTX *, int, int, void *)
-LIBSTUB_EVP_MD_meth_get_ctrl(void);
-
-int (*)(EVP_MD_CTX *, unsigned char *)
-LIBSTUB_EVP_MD_meth_get_final(void);
-
-unsigned long
-LIBSTUB_EVP_MD_meth_get_flags(void);
-
-int (*)(EVP_MD_CTX *)
-LIBSTUB_EVP_MD_meth_get_init(void);
-
-int
-LIBSTUB_EVP_MD_meth_get_input_blocksize(void);
-
-int
-LIBSTUB_EVP_MD_meth_get_result_size(void);
-
-int (*)(EVP_MD_CTX *, const void *, size_t)
-LIBSTUB_EVP_MD_meth_get_update(void);
-
-EVP_MD *
-LIBSTUB_EVP_MD_meth_new(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_app_datasize(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_cleanup(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_copy(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_ctrl(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_final(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_flags(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_init(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_input_blocksize(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_result_size(void);
-
-int
-LIBSTUB_EVP_MD_meth_set_update(void);
-
-int
-LIBSTUB_EVP_PBE_get(void);
-
-int
-LIBSTUB_EVP_PBE_scrypt(void);
-
-void
-LIBSTUB_EVP_PKEY_asn1_set_security_bits(void);
-
-DH *
-LIBSTUB_EVP_PKEY_get0_DH(void);
-
-DSA *
-LIBSTUB_EVP_PKEY_get0_DSA(void);
-
-EC_KEY *
-LIBSTUB_EVP_PKEY_get0_EC_KEY(void);
-
-RSA *
-LIBSTUB_EVP_PKEY_get0_RSA(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_cleanup(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_copy(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_ctrl(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_decrypt(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_derive(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_encrypt(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_init(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_keygen(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_paramgen(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_sign(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_signctx(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_verify(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_verify_recover(void);
-
-void
-LIBSTUB_EVP_PKEY_meth_get_verifyctx(void);
-
-int
-LIBSTUB_EVP_PKEY_security_bits(void);
-
-void
-LIBSTUB_EVP_PKEY_up_ref(void);
-
-int
-LIBSTUB_PKCS5_v2_scrypt_keyivgen(void);
-
-void
-LIBSTUB_HMAC_CTX_free(void);
-
-HMAC_CTX *
-LIBSTUB_HMAC_CTX_new(void);
-
-int
-LIBSTUB_HMAC_CTX_reset(void);
-
-size_t
-LIBSTUB_HMAC_size(void);
-
-int
-LIBSTUB_lh_error(void);
-
-unsigned long
-LIBSTUB_lh_get_down_load(void);
-
-void
-LIBSTUB_lh_set_down_load(void);
-
-size_t
-LIBSTUB_CRYPTO_128_unwrap_pad(void);
-
-size_t
-LIBSTUB_CRYPTO_128_wrap_pad(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_aad(void);
-
-void
-LIBSTUB_CRYPTO_ocb128_cleanup(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_copy_ctx(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_decrypt(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_encrypt(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_finish(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_init(void);
-
-OCB128_CONTEXT *
-LIBSTUB_CRYPTO_ocb128_new(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_setiv(void);
-
-int
-LIBSTUB_CRYPTO_ocb128_tag(void);
-
-const unsigned char *
-LIBSTUB_OBJ_get0_data(void);
-
-size_t
-LIBSTUB_OBJ_length(void);
-
-ASN1_GENERALIZEDTIME *
-LIBSTUB_OCSP_resp_get0_produced_at(void);
-
-ASN1_OCTET_STRING *
-LIBSTUB_OCSP_resp_get0_signature(void);
-
-OCSP_CERTID *
-LIBSTUB_OCSP_SINGLERESP_get0_id(void);
-
-void
-LIBSTUB_PKCS12_get0_mac(void);
-
-int
-LIBSTUB_PKCS12_mac_present(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_create0_p8inf(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_create0_pkcs8(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_create_cert(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_create_crl(void);
-
-PKCS12_SAFEBAG *
-LIBSTUB_PKCS12_SAFEBAG_create_pkcs8_encrypt(void);
-
-ASN1_TYPE *
-LIBSTUB_PKCS12_SAFEBAG_get0_attr(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_PKCS12_SAFEBAG_get0_attrs(void);
-
-PKCS8_PRIV_KEY_INFO *
-LIBSTUB_PKCS12_SAFEBAG_get0_p8inf(void);
-
-X509_SIG *
-LIBSTUB_PKCS12_SAFEBAG_get0_pkcs8(void);
-
-STACK_OF(PKCS12_SAFEBAG) *
-LIBSTUB_PKCS12_SAFEBAG_get0_safes(void);
-
-ASN1_OBJECT *
-LIBSTUB_PKCS12_SAFEBAG_get0_type(void);
-
-X509 *
-LIBSTUB_PKCS12_SAFEBAG_get1_cert(void);
-
-X509_CRL *
-LIBSTUB_PKCS12_SAFEBAG_get1_crl(void);
-
-int
-LIBSTUB_PKCS12_SAFEBAG_get_bag_nid(void);
-
-int
-LIBSTUB_PKCS12_SAFEBAG_get_nid(void);
-
-ASN1_TYPE *
-LIBSTUB_PKCS8_get_attr(void);
-
-X509_SIG *
-LIBSTUB_PKCS8_set0_pbe(void);
-
-RAND_METHOD *
-LIBSTUB_RAND_OpenSSL(void);
-
-int
-LIBSTUB_RSA_bits(void);
-
-int
-LIBSTUB_RSA_check_key_ex(void);
-
-const RSA_METHOD *
-LIBSTUB_RSA_PKCS1_OpenSSL(void);
-
-int
-LIBSTUB_RSA_security_bits(void);
-
-int
-LIBSTUB_RSA_X931_derive_ex(void);
-
-int
-LIBSTUB_RSA_X931_generate_key_ex(void);
-
-int
-LIBSTUB_TS_CONF_set_signer_digest(void);
-
-int
-LIBSTUB_TS_RESP_CTX_set_signer_digest(void);
-
-ASN1_BIT_STRING *
-LIBSTUB_TS_STATUS_INFO_get0_failure_info(void);
-
-ASN1_INTEGER *
-LIBSTUB_TS_STATUS_INFO_get0_status(void);
-
-int
-LIBSTUB_TS_STATUS_INFO_set_status(void);
-
-int
-LIBSTUB_TS_VERIFY_CTX_add_flags(void);
-
-BIO *
-LIBSTUB_TS_VERIFY_CTX_set_data(void);
-
-int
-LIBSTUB_TS_VERIFY_CTX_set_flags(void);
-
-unsigned char *
-LIBSTUB_TS_VERIFY_CTX_set_imprint(void);
-
-X509_STORE *
-LIBSTUB_TS_VERIFY_CTX_set_store(void);
-
-STACK_OF(X509) *
-LIBSTUB_TS_VERIFY_CTS_set_certs(void);
-
-int
-LIBSTUB_i2d_re_X509_CRL_tbs(void);
-
-int
-LIBSTUB_i2d_re_X509_REQ_tbs(void);
-
-X509_ALGOR *
-LIBSTUB_PKCS5_pbe2_set_scrypt(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_X509_CRL_get0_extensions(void);
-
-void
-LIBSTUB_X509_CRL_get0_signature(void);
-
-X509_NAME *
-LIBSTUB_X509_CRL_get_issuer(void);
-
-ASN1_TIME *
-LIBSTUB_X509_CRL_get_lastUpdate(void);
-
-ASN1_TIME *
-LIBSTUB_X509_CRL_get_nextUpdate(void);
-
-STACK_OF(X509_REVOKED) *
-LIBSTUB_X509_CRL_get_REVOKED(void);
-
-int
-LIBSTUB_X509_CRL_get_signature_nid(void);
-
-long
-LIBSTUB_X509_CRL_get_version(void);
-
-void
-LIBSTUB_X509_CRL_up_ref(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_X509_get0_extensions(void);
-
-EVP_PKEY *
-LIBSTUB_X509_get0_pubkey(void);
-
-STACK_OF(ASN1_OBJECT) *
-LIBSTUB_X509_get0_reject_objects(void);
-
-X509_ALGOR *
-LIBSTUB_X509_get0_tbs_sigalg(void);
-
-STACK_OF(ASN1_OBJECT) *
-LIBSTUB_X509_get0_trust_objects(void);
-
-void
-LIBSTUB_X509_get0_uids(void);
-
-ASN1_TIME *
-LIBSTUB_X509_get_notAfter(void);
-
-ASN1_TIME *
-LIBSTUB_X509_get_notBefore(void);
-
-int
-LIBSTUB_X509_get_signature_type(void);
-
-long
-LIBSTUB_X509_get_version(void);
-
-X509_PUBKEY *
-LIBSTUB_X509_get_X509_PUBKEY(void);
-
-int
-LIBSTUB_X509_NAME_ENTRY_set(void);
-
-int
-LIBSTUB_X509_NAME_get0_der(void);
-
-EVP_PKEY *
-LIBSTUB_X509_PUBKEY_get0(void);
-
-void
-LIBSTUB_X509_REQ_get0_signature(void);
-
-int
-LIBSTUB_X509_REQ_get_signature_nid(void);
-
-X509_NAME *
-LIBSTUB_X509_REQ_get_subject_name(void);
-
-long
-LIBSTUB_X509_REQ_get_version(void);
-
-X509_PUBKEY *
-LIBSTUB_X509_REQ_get_X509_PUBKEY(void);
-
-STACK_OF(X509_EXTENSION) *
-LIBSTUB_X509_REVOKED_get0_extensions(void);
-
-ASN1_TIME *
-LIBSTUB_X509_REVOKED_get0_revocationDate(void);
-
-ASN1_INTEGER *
-LIBSTUB_X509_REVOKED_get0_serialNumber(void);
-
-int
-LIBSTUB_X509_trusted(void);
-
-void
-LIBSTUB_X509_up_ref(void);
-
-int
-LIBSTUB_X509_STORE_CTX_get_num_untrusted(void);
-
-void
-LIBSTUB_X509_STORE_CTX_set0_dane(void);
-
-void
-LIBSTUB_X509_VERIFY_PARAM_move_peername(void);
-
-void
-LIBSTUB_ASIdentifiers_free(void);
-
-char *
-LIBSTUB_i2s_ASN1_IA5STRING(void);
-
-ASN1_IA5STRING *
-LIBSTUB_s2i_ASN1_IA5STRING(void);
-
-int
-LIBSTUB_v3_addr_add_inherit(void);
-
-int
-LIBSTUB_v3_addr_add_prefix(void);
-
-int
-LIBSTUB_v3_addr_add_range(void);
-
-int
-LIBSTUB_v3_addr_canonize(void);
-
-unsigned
-LIBSTUB_v3_addr_get_afi(void);
-
-int
-LIBSTUB_v3_addr_get_range(void);
-
-int
-LIBSTUB_v3_addr_inherits(void);
-
-int
-LIBSTUB_v3_addr_is_canonical(void);
-
-int
-LIBSTUB_v3_addr_subset(void);
-
-int
-LIBSTUB_v3_addr_validate_path(void);
-
-int
-LIBSTUB_v3_asid_add_id_or_range(void);
-
-int
-LIBSTUB_v3_asid_add_inherit(void);
-
-int
-LIBSTUB_v3_asid_canonize(void);
-
-int
-LIBSTUB_v3_asid_inherits(void);
-
-int
-LIBSTUB_v3_asid_is_canonical(void);
-
-int
-LIBSTUB_v3_asid_subset(void);
-
-int
-LIBSTUB_v3_asid_validate_path(void);
-
-const ASN1_OCTET_STRING *
-LIBSTUB_X509_get0_subject_key_id(void);
-
-uint32_t
-LIBSTUB_X509_get_extended_key_usage(void);
-
-uint32_t
-LIBSTUB_X509_get_extension_flags(void);
-
-uint32_t
-LIBSTUB_X509_get_key_usage(void);
-
-int
-LIBSTUB_DTLSv1_listen(void);
-
-int
-LIBSTUB_OPENSSL_init_ssl(void);
-
-int
-LIBSTUB_SSL_add1_host(void);
-
-void
-LIBSTUB_SSL_add_ssl_module(void);
-
-int
-LIBSTUB_SSL_CIPHER_get_cipher_nid(void);
-
-int
-LIBSTUB_SSL_CIPHER_get_digest_nid(void);
-
-unsigned long
-LIBSTUB_SSL_clear_options(void);
-
-int
-LIBSTUB_SSL_config(void);
-
-unsigned long
-LIBSTUB_SSL_CTX_clear_options(void);
-
-int
-LIBSTUB_SSL_CTX_config(void);
-
-int
-LIBSTUB_SSL_CTX_dane_enable(void);
-
-int
-LIBSTUB_SSL_CTX_dane_mtype_set(void);
-
-void *
-LIBSTUB_SSL_CTX_get0_security_ex_data(void);
-
-unsigned long
-LIBSTUB_SSL_CTX_get_options(void);
-
-int (*)(const SSL *, const SSL_CTX *, int, int, int, void *, void *)
-LIBSTUB_SSL_CTX_get_security_callback(void);
-
-int
-LIBSTUB_SSL_CTX_get_security_level(void);
-
-void
-LIBSTUB_SSL_CTX_set0_security_ex_data(void);
-
-int
-LIBSTUB_SSL_CTX_set_default_verify_dir(void);
-
-int
-LIBSTUB_SSL_CTX_set_default_verify_file(void);
-
-void
-LIBSTUB_SSL_CTX_set_not_resumable_session_callback(void);
-
-unsigned long
-LIBSTUB_SSL_CTX_set_options(void);
-
-void
-LIBSTUB_SSL_CTX_set_security_callback(void);
-
-void
-LIBSTUB_SSL_CTX_set_security_level(void);
-
-void
-LIBSTUB_SSL_CTX_up_ref(void);
-
-int
-LIBSTUB_SSL_dane_enable(void);
-
-int
-LIBSTUB_SSL_dane_tlsa_add(void);
-
-struct dane_st *
-LIBSTUB_SSL_get0_dane(void);
-
-int
-LIBSTUB_SSL_get0_dane_authority(void);
-
-int
-LIBSTUB_SSL_get0_dane_tlsa(void);
-
-const char *
-LIBSTUB_SSL_get0_peername(void);
-
-void *
-LIBSTUB_SSL_get0_security_ex_data(void);
-
-STACK_OF(SSL_CIPHER) *
-LIBSTUB_SSL_get1_supported_ciphers(void);
-
-size_t
-LIBSTUB_SSL_get_client_random(void);
-
-unsigned long
-LIBSTUB_SSL_get_options(void);
-
-int (*)(const SSL *, const SSL_CTX *, int, int, int, void *, void *)
-LIBSTUB_SSL_get_security_callback(void);
-
-int
-LIBSTUB_SSL_get_security_level(void);
-
-size_t
-LIBSTUB_SSL_get_server_random(void);
-
-OSSL_HANDSHAKE_STATE
-LIBSTUB_SSL_get_state(void);
-
-int
-LIBSTUB_SSL_in_before(void);
-
-int
-LIBSTUB_SSL_in_init(void);
-
-int
-LIBSTUB_SSL_is_init_finished(void);
-
-void
-LIBSTUB_SSL_SESSION_get0_ticket(void);
-
-size_t
-LIBSTUB_SSL_SESSION_get_master_key(void);
-
-unsigned long
-LIBSTUB_SSL_SESSION_get_ticket_lifetime_hint(void);
-
-int
-LIBSTUB_SSL_SESSION_has_ticket(void);
-
-int
-LIBSTUB_SSL_SESSION_print_keylog(void);
-
-int
-LIBSTUB_SSL_session_reused(void);
-
-void
-LIBSTUB_SSL_set0_security_ex_data(void);
-
-int
-LIBSTUB_SSL_set1_host(void);
-
-void
-LIBSTUB_SSL_set_default_passwd_cb(void);
-
-void
-LIBSTUB_SSL_set_default_passwd_cb_userdata(void);
-
-void
-LIBSTUB_SSL_set_hostflags(void);
-
-void
-LIBSTUB_SSL_set_not_resumable_session_callback(void);
-
-unsigned long
-LIBSTUB_SSL_set_options(void);
-
-void
-LIBSTUB_SSL_set_rbio(void);
-
-void
-LIBSTUB_SSL_set_security_callback(void);
-
-void
-LIBSTUB_SSL_set_security_level(void);
-
-void
-LIBSTUB_SSL_set_wbio(void);
-
-void
-LIBSTUB_SSL_up_ref(void);
-
-int
-LIBSTUB_SSL_use_certificate_chain_file(void);
-
-int
-LIBSTUB_SSL_waiting_for_async(void);
-
-const SSL_METHOD *
-LIBSTUB_TLS_client_method(void);
-
-const SSL_METHOD *
-LIBSTUB_TLS_method(void);
-
-const SSL_METHOD *
-LIBSTUB_TLS_server_method(void);
-
-ASYNC_WAIT_CTX *
-LIBSTUB_ASYNC_WAIT_CTX_new(void);
-
-void
-LIBSTUB_ASYNC_WAIT_CTX_free(void);
-
-int
-LIBSTUB_ASYNC_WAIT_CTX_set_wait_fd(void);
-
-int
-LIBSTUB_ASYNC_WAIT_CTX_get_fd(void);
-
-int
-LIBSTUB_ASYNC_WAIT_CTX_get_all_fds(void);
-
-int
-LIBSTUB_ASYNC_WAIT_CTX_get_changed_fds(void);
-
-int
-LIBSTUB_ASYNC_WAIT_CTX_clear_fd(void);
-
-int
-LIBSTUB_ASYNC_is_capable(void);
-
-ASYNC_WAIT_CTX *
-LIBSTUB_ASYNC_get_wait_ctx(void);
-
-int
-LIBSTUB_BIO_up_ref(void);
-
-int
-LIBSTUB_BN_BLINDING_is_current_thread(void);
-
-void
-LIBSTUB_BN_BLINDING_set_current_thread(void);
-
-int
-LIBSTUB_BN_BLINDING_lock(void);
-
-int
-LIBSTUB_BN_BLINDING_unlock(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_run_once(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_init_local(void);
-
-void *
-LIBSTUB_CRYPTO_THREAD_get_local(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_set_local(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_cleanup_local(void);
-
-CRYPTO_THREAD_ID
-LIBSTUB_CRYPTO_THREAD_get_current_id(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_compare_id(void);
-
-CRYPTO_RWLOCK *
-LIBSTUB_CRYPTO_THREAD_lock_new(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_read_lock(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_write_lock(void);
-
-int
-LIBSTUB_CRYPTO_THREAD_unlock(void);
-
-void
-LIBSTUB_CRYPTO_THREAD_lock_free(void);
-
-int
-LIBSTUB_CRYPTO_atomic_add(void);
-
-void
-LIBSTUB_OPENSSL_die(void);
-
-CT_POLICY_EVAL_CTX *
-LIBSTUB_CT_POLICY_EVAL_CTX_new(void);
-
-void
-LIBSTUB_CT_POLICY_EVAL_CTX_free(void);
-
-X509 *
-LIBSTUB_CT_POLICY_EVAL_CTX_get0_cert(void);
-
-void
-LIBSTUB_CT_POLICY_EVAL_CTX_set0_cert(void);
-
-X509 *
-LIBSTUB_CT_POLICY_EVAL_CTX_get0_issuer(void);
-
-void
-LIBSTUB_CT_POLICY_EVAL_CTX_set0_issuer(void);
-
-const CTLOG_STORE *
-LIBSTUB_CT_POLICY_EVAL_CTX_get0_log_store(void);
-
-void
-LIBSTUB_CT_POLICY_EVAL_CTX_set0_log_store(void);
-
-int
-LIBSTUB_CT_verify_no_bad_scts(void);
-
-int
-LIBSTUB_CT_verify_at_least_one_good_sct(void);
-
-SCT *
-LIBSTUB_SCT_new(void);
-
-SCT *
-LIBSTUB_SCT_new_from_base64(void);
-
-void
-LIBSTUB_SCT_free(void);
-
-void
-LIBSTUB_SCT_LIST_free(void);
-
-sct_version_t
-LIBSTUB_SCT_get_version(void);
-
-int
-LIBSTUB_SCT_set_version(void);
-
-ct_log_entry_type_t
-LIBSTUB_SCT_get_log_entry_type(void);
-
-int
-LIBSTUB_SCT_set_log_entry_type(void);
-
-size_t
-LIBSTUB_SCT_get0_log_id(void);
-
-int
-LIBSTUB_SCT_set0_log_id(void);
-
-int
-LIBSTUB_SCT_set1_log_id(void);
-
-uint64_t
-LIBSTUB_SCT_get_timestamp(void);
-
-void
-LIBSTUB_SCT_set_timestamp(void);
-
-int
-LIBSTUB_SCT_get_signature_nid(void);
-
-int
-LIBSTUB_SCT_set_signature_nid(void);
-
-size_t
-LIBSTUB_SCT_get0_extensions(void);
-
-void
-LIBSTUB_SCT_set0_extensions(void);
-
-int
-LIBSTUB_SCT_set1_extensions(void);
-
-size_t
-LIBSTUB_SCT_get0_signature(void);
-
-void
-LIBSTUB_SCT_set0_signature(void);
-
-int
-LIBSTUB_SCT_set1_signature(void);
-
-sct_source_t
-LIBSTUB_SCT_get_source(void);
-
-int
-LIBSTUB_SCT_set_source(void);
-
-void
-LIBSTUB_SCT_print(void);
-
-void
-LIBSTUB_SCT_LIST_print(void);
-
-int
-LIBSTUB_SCT_verify(void);
-
-int
-LIBSTUB_SCT_verify_v1(void);
-
-sct_validation_status_t
-LIBSTUB_SCT_get_validation_status(void);
-
-int
-LIBSTUB_SCT_validate(void);
-
-int
-LIBSTUB_SCT_LIST_validate(void);
-
-int
-LIBSTUB_i2o_SCT_LIST(void);
-
-STACK_OF(SCT) *
-LIBSTUB_o2i_SCT_LIST(void);
-
-int
-LIBSTUB_i2d_SCT_LIST(void);
-
-STACK_OF(SCT) *
-LIBSTUB_d2i_SCT_LIST(void);
-
-int
-LIBSTUB_i2o_SCT(void);
-
-SCT *
-LIBSTUB_o2i_SCT(void);
-
-int
-LIBSTUB_i2o_SCT_signature(void);
-
-int
-LIBSTUB_o2i_SCT_signature(void);
-
-CTLOG *
-LIBSTUB_CTLOG_new(void);
-
-CTLOG *
-LIBSTUB_CTLOG_new_null(void);
-
-CTLOG *
-LIBSTUB_CTLOG_new_from_base64(void);
-
-void
-LIBSTUB_CTLOG_free(void);
-
-const char *
-LIBSTUB_CTLOG_get0_name(void);
-
-void
-LIBSTUB_CTLOG_get0_log_id(void);
-
-EVP_PKEY *
-LIBSTUB_CTLOG_get0_public_key(void);
-
-CTLOG_STORE *
-LIBSTUB_CTLOG_STORE_new(void);
-
-void
-LIBSTUB_CTLOG_STORE_free(void);
-
-const CTLOG *
-LIBSTUB_CTLOG_STORE_get0_log_by_id(void);
-
-int
-LIBSTUB_CTLOG_STORE_load_file(void);
-
-int
-LIBSTUB_CTLOG_STORE_load_default_file(void);
-
-void
-LIBSTUB_ERR_load_CT_strings(void);
-
-const ASN1_ITEM *
-LIBSTUB_DHparams_it(void);
-
-void
-LIBSTUB_DSA_SIG_get0(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new_from_ecparameters(void);
-
-ECPARAMETERS *
-LIBSTUB_EC_GROUP_get_ecparameters(void);
-
-EC_GROUP *
-LIBSTUB_EC_GROUP_new_from_ecpkparameters(void);
-
-ECPKPARAMETERS *
-LIBSTUB_EC_GROUP_get_ecpkparameters(void);
-
-const ASN1_ITEM *
-LIBSTUB_ECPKPARAMETERS_it(void);
-
-const ASN1_ITEM *
-LIBSTUB_ECPARAMETERS_it(void);
-
-int
-LIBSTUB_EC_KEY_can_sign(void);
-
-const EVP_MD *
-LIBSTUB_EVP_blake2b512(void);
-
-const EVP_MD *
-LIBSTUB_EVP_blake2s256(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_str2ctrl(void);
-
-int
-LIBSTUB_EVP_PKEY_CTX_hex2ctrl(void);
-
-void
-LIBSTUB_ERR_load_KDF_strings(void);
-
-void
-LIBSTUB_SRP_user_pwd_free(void);
-
-SRP_user_pwd *
-LIBSTUB_SRP_VBASE_get1_by_user(void);
-
-int
-LIBSTUB_SSL_CTX_has_client_custom_ext(void);
-
-int
-LIBSTUB_SSL_CIPHER_get_kx_nid(void);
-
-int
-LIBSTUB_SSL_CIPHER_get_auth_nid(void);
-
-int
-LIBSTUB_SSL_CIPHER_is_aead(void);
-
-int
-LIBSTUB_SSL_has_pending(void);
-
-int
-LIBSTUB_SSL_SESSION_up_ref(void);
-
-int (*)(char *, int, int, void *)
-LIBSTUB_SSL_CTX_get_default_passwd_cb(void);
-
-void *
-LIBSTUB_SSL_CTX_get_default_passwd_cb_userdata(void);
-
-int (*)(char *, int, int, void *)
-LIBSTUB_SSL_get_default_passwd_cb(void);
-
-void *
-LIBSTUB_SSL_get_default_passwd_cb_userdata(void);
-
-int
-LIBSTUB_SSL_get_all_async_fds(void);
-
-int
-LIBSTUB_SSL_get_changed_async_fds(void);
-
-void
-LIBSTUB_SSL_CTX_set_default_read_buffer_len(void);
-
-void
-LIBSTUB_SSL_set_default_read_buffer_len(void);
-
-int
-LIBSTUB_SSL_set_ct_validation_callback(void);
-
-int
-LIBSTUB_SSL_CTX_set_ct_validation_callback(void);
-
-ct_validation_cb
-LIBSTUB_SSL_get_ct_validation_callback(void);
-
-ct_validation_cb
-LIBSTUB_SSL_CTX_get_ct_validation_callback(void);
-
-const STACK_OF(SCT) *
-LIBSTUB_SSL_get0_peer_scts(void);
-
-int
-LIBSTUB_SSL_CTX_set_default_ctlog_list_file(void);
-
-int
-LIBSTUB_SSL_CTX_set_ctlog_list_file(void);
-
-void
-LIBSTUB_SSL_CTX_set0_ctlog_store(void);
-
-const CTLOG_STORE *
-LIBSTUB_SSL_CTX_get0_ctlog_store(void);
-
-void
-LIBSTUB_X509_SIG_get0(void);
-
-STACK_OF(X509_ATTRIBUTE) *
-LIBSTUB_PKCS8_pkey_get0_attrs(void);
-
-int
-LIBSTUB_PKCS8_pkey_add1_attr_by_NID(void);
-
-int
-LIBSTUB_X509_STORE_up_ref(void);
-
+#include <SDI_lib.h>
+
+LIBSTUB(UNIMPLEMENTED, int);
+LIBSTUB(InternalInitAmiSSL, void);
+LIBSTUB(InitAmiSSLA, long);
+LIBSTUB(CleanupAmiSSLA, long);
+LIBSTUB(ASN1_TYPE_new, ASN1_TYPE *);
+LIBSTUB(ASN1_TYPE_free, void);
+LIBSTUB(d2i_ASN1_TYPE, ASN1_TYPE *);
+LIBSTUB(i2d_ASN1_TYPE, int);
+LIBSTUB(ASN1_ANY_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_TYPE_get, int);
+LIBSTUB(ASN1_TYPE_set, void);
+LIBSTUB(ASN1_OBJECT_new, ASN1_OBJECT *);
+LIBSTUB(ASN1_OBJECT_free, void);
+LIBSTUB(i2d_ASN1_OBJECT, int);
+LIBSTUB(d2i_ASN1_OBJECT, ASN1_OBJECT *);
+LIBSTUB(ASN1_OBJECT_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_STRING_new, ASN1_STRING *);
+LIBSTUB(ASN1_STRING_free, void);
+LIBSTUB(ASN1_STRING_dup, ASN1_STRING *);
+LIBSTUB(ASN1_STRING_type_new, ASN1_STRING *);
+LIBSTUB(ASN1_STRING_cmp, int);
+LIBSTUB(ASN1_STRING_set, int);
+LIBSTUB(ASN1_STRING_length, int);
+LIBSTUB(ASN1_STRING_length_set, void);
+LIBSTUB(ASN1_STRING_type, int);
+LIBSTUB(ASN1_STRING_data, unsigned char *);
+LIBSTUB(ASN1_BIT_STRING_new, ASN1_BIT_STRING *);
+LIBSTUB(ASN1_BIT_STRING_free, void);
+LIBSTUB(d2i_ASN1_BIT_STRING, ASN1_BIT_STRING *);
+LIBSTUB(i2d_ASN1_BIT_STRING, int);
+LIBSTUB(ASN1_BIT_STRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_BIT_STRING_set, int);
+LIBSTUB(ASN1_BIT_STRING_set_bit, int);
+LIBSTUB(ASN1_BIT_STRING_get_bit, int);
+LIBSTUB(ASN1_BIT_STRING_name_print, int);
+LIBSTUB(ASN1_BIT_STRING_num_asc, int);
+LIBSTUB(ASN1_BIT_STRING_set_asc, int);
+LIBSTUB(ASN1_INTEGER_new, ASN1_INTEGER *);
+LIBSTUB(ASN1_INTEGER_free, void);
+LIBSTUB(d2i_ASN1_INTEGER, ASN1_INTEGER *);
+LIBSTUB(i2d_ASN1_INTEGER, int);
+LIBSTUB(ASN1_INTEGER_it, const ASN1_ITEM *);
+LIBSTUB(d2i_ASN1_UINTEGER, ASN1_INTEGER *);
+LIBSTUB(ASN1_INTEGER_dup, ASN1_INTEGER *);
+LIBSTUB(ASN1_INTEGER_cmp, int);
+LIBSTUB(ASN1_ENUMERATED_new, ASN1_ENUMERATED *);
+LIBSTUB(ASN1_ENUMERATED_free, void);
+LIBSTUB(d2i_ASN1_ENUMERATED, ASN1_ENUMERATED *);
+LIBSTUB(i2d_ASN1_ENUMERATED, int);
+LIBSTUB(ASN1_ENUMERATED_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_UTCTIME_check, int);
+LIBSTUB(ASN1_UTCTIME_set, ASN1_UTCTIME *);
+LIBSTUB(ASN1_UTCTIME_set_string, int);
+LIBSTUB(ASN1_UTCTIME_cmp_time_t, int);
+LIBSTUB(ASN1_GENERALIZEDTIME_check, int);
+LIBSTUB(ASN1_GENERALIZEDTIME_set, ASN1_GENERALIZEDTIME *);
+LIBSTUB(ASN1_GENERALIZEDTIME_set_string, int);
+LIBSTUB(ASN1_OCTET_STRING_new, ASN1_OCTET_STRING *);
+LIBSTUB(ASN1_OCTET_STRING_free, void);
+LIBSTUB(d2i_ASN1_OCTET_STRING, ASN1_OCTET_STRING *);
+LIBSTUB(i2d_ASN1_OCTET_STRING, int);
+LIBSTUB(ASN1_OCTET_STRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_OCTET_STRING_dup, ASN1_OCTET_STRING *);
+LIBSTUB(ASN1_OCTET_STRING_cmp, int);
+LIBSTUB(ASN1_OCTET_STRING_set, int);
+LIBSTUB(ASN1_VISIBLESTRING_new, ASN1_VISIBLESTRING *);
+LIBSTUB(ASN1_VISIBLESTRING_free, void);
+LIBSTUB(d2i_ASN1_VISIBLESTRING, ASN1_VISIBLESTRING *);
+LIBSTUB(i2d_ASN1_VISIBLESTRING, int);
+LIBSTUB(ASN1_VISIBLESTRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_UNIVERSALSTRING_new, ASN1_UNIVERSALSTRING *);
+LIBSTUB(ASN1_UNIVERSALSTRING_free, void);
+LIBSTUB(d2i_ASN1_UNIVERSALSTRING, ASN1_UNIVERSALSTRING *);
+LIBSTUB(i2d_ASN1_UNIVERSALSTRING, int);
+LIBSTUB(ASN1_UNIVERSALSTRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_UTF8STRING_new, ASN1_UTF8STRING *);
+LIBSTUB(ASN1_UTF8STRING_free, void);
+LIBSTUB(d2i_ASN1_UTF8STRING, ASN1_UTF8STRING *);
+LIBSTUB(i2d_ASN1_UTF8STRING, int);
+LIBSTUB(ASN1_UTF8STRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_NULL_new, ASN1_NULL *);
+LIBSTUB(ASN1_NULL_free, void);
+LIBSTUB(d2i_ASN1_NULL, ASN1_NULL *);
+LIBSTUB(i2d_ASN1_NULL, int);
+LIBSTUB(ASN1_NULL_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_BMPSTRING_new, ASN1_BMPSTRING *);
+LIBSTUB(ASN1_BMPSTRING_free, void);
+LIBSTUB(d2i_ASN1_BMPSTRING, ASN1_BMPSTRING *);
+LIBSTUB(i2d_ASN1_BMPSTRING, int);
+LIBSTUB(ASN1_BMPSTRING_it, const ASN1_ITEM *);
+LIBSTUB(UTF8_getc, int);
+LIBSTUB(UTF8_putc, int);
+LIBSTUB(ASN1_PRINTABLE_new, ASN1_STRING *);
+LIBSTUB(ASN1_PRINTABLE_free, void);
+LIBSTUB(d2i_ASN1_PRINTABLE, ASN1_STRING *);
+LIBSTUB(i2d_ASN1_PRINTABLE, int);
+LIBSTUB(ASN1_PRINTABLE_it, const ASN1_ITEM *);
+LIBSTUB(DIRECTORYSTRING_new, ASN1_STRING *);
+LIBSTUB(DIRECTORYSTRING_free, void);
+LIBSTUB(d2i_DIRECTORYSTRING, ASN1_STRING *);
+LIBSTUB(i2d_DIRECTORYSTRING, int);
+LIBSTUB(DIRECTORYSTRING_it, const ASN1_ITEM *);
+LIBSTUB(DISPLAYTEXT_new, ASN1_STRING *);
+LIBSTUB(DISPLAYTEXT_free, void);
+LIBSTUB(d2i_DISPLAYTEXT, ASN1_STRING *);
+LIBSTUB(i2d_DISPLAYTEXT, int);
+LIBSTUB(DISPLAYTEXT_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_PRINTABLESTRING_new, ASN1_PRINTABLESTRING *);
+LIBSTUB(ASN1_PRINTABLESTRING_free, void);
+LIBSTUB(d2i_ASN1_PRINTABLESTRING, ASN1_PRINTABLESTRING *);
+LIBSTUB(i2d_ASN1_PRINTABLESTRING, int);
+LIBSTUB(ASN1_PRINTABLESTRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_T61STRING_new, ASN1_T61STRING *);
+LIBSTUB(ASN1_T61STRING_free, void);
+LIBSTUB(d2i_ASN1_T61STRING, ASN1_T61STRING *);
+LIBSTUB(i2d_ASN1_T61STRING, int);
+LIBSTUB(ASN1_T61STRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_IA5STRING_new, ASN1_IA5STRING *);
+LIBSTUB(ASN1_IA5STRING_free, void);
+LIBSTUB(d2i_ASN1_IA5STRING, ASN1_IA5STRING *);
+LIBSTUB(i2d_ASN1_IA5STRING, int);
+LIBSTUB(ASN1_IA5STRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_GENERALSTRING_new, ASN1_GENERALSTRING *);
+LIBSTUB(ASN1_GENERALSTRING_free, void);
+LIBSTUB(d2i_ASN1_GENERALSTRING, ASN1_GENERALSTRING *);
+LIBSTUB(i2d_ASN1_GENERALSTRING, int);
+LIBSTUB(ASN1_GENERALSTRING_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_UTCTIME_new, ASN1_UTCTIME *);
+LIBSTUB(ASN1_UTCTIME_free, void);
+LIBSTUB(d2i_ASN1_UTCTIME, ASN1_UTCTIME *);
+LIBSTUB(i2d_ASN1_UTCTIME, int);
+LIBSTUB(ASN1_UTCTIME_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_GENERALIZEDTIME_new, ASN1_GENERALIZEDTIME *);
+LIBSTUB(ASN1_GENERALIZEDTIME_free, void);
+LIBSTUB(d2i_ASN1_GENERALIZEDTIME, ASN1_GENERALIZEDTIME *);
+LIBSTUB(i2d_ASN1_GENERALIZEDTIME, int);
+LIBSTUB(ASN1_GENERALIZEDTIME_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_TIME_new, ASN1_TIME *);
+LIBSTUB(ASN1_TIME_free, void);
+LIBSTUB(d2i_ASN1_TIME, ASN1_TIME *);
+LIBSTUB(i2d_ASN1_TIME, int);
+LIBSTUB(ASN1_TIME_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_TIME_set, ASN1_TIME *);
+LIBSTUB(ASN1_TIME_check, int);
+LIBSTUB(ASN1_TIME_to_generalizedtime, ASN1_GENERALIZEDTIME *);
+LIBSTUB(i2a_ASN1_INTEGER, int);
+LIBSTUB(a2i_ASN1_INTEGER, int);
+LIBSTUB(i2a_ASN1_ENUMERATED, int);
+LIBSTUB(a2i_ASN1_ENUMERATED, int);
+LIBSTUB(i2a_ASN1_OBJECT, int);
+LIBSTUB(a2i_ASN1_STRING, int);
+LIBSTUB(i2a_ASN1_STRING, int);
+LIBSTUB(i2t_ASN1_OBJECT, int);
+LIBSTUB(a2d_ASN1_OBJECT, int);
+LIBSTUB(ASN1_OBJECT_create, ASN1_OBJECT *);
+LIBSTUB(ASN1_INTEGER_set, int);
+LIBSTUB(ASN1_INTEGER_get, long);
+LIBSTUB(BN_to_ASN1_INTEGER, ASN1_INTEGER *);
+LIBSTUB(ASN1_INTEGER_to_BN, BIGNUM *);
+LIBSTUB(ASN1_ENUMERATED_set, int);
+LIBSTUB(ASN1_ENUMERATED_get, long);
+LIBSTUB(BN_to_ASN1_ENUMERATED, ASN1_ENUMERATED *);
+LIBSTUB(ASN1_ENUMERATED_to_BN, BIGNUM *);
+LIBSTUB(ASN1_PRINTABLE_type, int);
+LIBSTUB(ASN1_tag2bit, unsigned long);
+LIBSTUB(ASN1_get_object, int);
+LIBSTUB(ASN1_check_infinite_end, int);
+LIBSTUB(ASN1_put_object, void);
+LIBSTUB(ASN1_object_size, int);
+LIBSTUB(ASN1_dup, void *);
+LIBSTUB(ASN1_item_dup, void *);
+LIBSTUB(ASN1_STRING_to_UTF8, int);
+LIBSTUB(ASN1_d2i_bio, void *);
+LIBSTUB(ASN1_item_d2i_bio, void *);
+LIBSTUB(ASN1_i2d_bio, int);
+LIBSTUB(ASN1_item_i2d_bio, int);
+LIBSTUB(ASN1_UTCTIME_print, int);
+LIBSTUB(ASN1_GENERALIZEDTIME_print, int);
+LIBSTUB(ASN1_TIME_print, int);
+LIBSTUB(ASN1_STRING_print, int);
+LIBSTUB(ASN1_STRING_print_ex, int);
+LIBSTUB(ASN1_parse, int);
+LIBSTUB(ASN1_parse_dump, int);
+LIBSTUB(ASN1_tag2str, const char *);
+LIBSTUB(ASN1_UNIVERSALSTRING_to_string, int);
+LIBSTUB(ASN1_TYPE_set_octetstring, int);
+LIBSTUB(ASN1_TYPE_get_octetstring, int);
+LIBSTUB(ASN1_TYPE_set_int_octetstring, int);
+LIBSTUB(ASN1_TYPE_get_int_octetstring, int);
+LIBSTUB(ASN1_item_unpack, void *);
+LIBSTUB(ASN1_item_pack, ASN1_STRING *);
+LIBSTUB(ASN1_STRING_set_default_mask, void);
+LIBSTUB(ASN1_STRING_set_default_mask_asc, int);
+LIBSTUB(ASN1_STRING_get_default_mask, unsigned long);
+LIBSTUB(ASN1_mbstring_copy, int);
+LIBSTUB(ASN1_mbstring_ncopy, int);
+LIBSTUB(ASN1_STRING_set_by_NID, ASN1_STRING *);
+LIBSTUB(ASN1_STRING_TABLE_get, ASN1_STRING_TABLE *);
+LIBSTUB(ASN1_STRING_TABLE_add, int);
+LIBSTUB(ASN1_STRING_TABLE_cleanup, void);
+LIBSTUB(ASN1_item_new, ASN1_VALUE *);
+LIBSTUB(ASN1_item_free, void);
+LIBSTUB(ASN1_item_d2i, ASN1_VALUE *);
+LIBSTUB(ASN1_item_i2d, int);
+LIBSTUB(ASN1_add_oid_module, void);
+LIBSTUB(ERR_load_ASN1_strings, void);
+LIBSTUB(ASN1_BOOLEAN_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_TBOOLEAN_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_FBOOLEAN_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_SEQUENCE_it, const ASN1_ITEM *);
+LIBSTUB(CBIGNUM_it, const ASN1_ITEM *);
+LIBSTUB(BIGNUM_it, const ASN1_ITEM *);
+LIBSTUB(LONG_it, const ASN1_ITEM *);
+LIBSTUB(ZLONG_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_item_ex_new, int);
+LIBSTUB(ASN1_item_ex_free, void);
+LIBSTUB(ASN1_item_ex_d2i, int);
+LIBSTUB(ASN1_item_ex_i2d, int);
+LIBSTUB(BIO_ctrl_pending, size_t);
+LIBSTUB(BIO_ctrl_wpending, size_t);
+LIBSTUB(BIO_ctrl_get_write_guarantee, size_t);
+LIBSTUB(BIO_ctrl_get_read_request, size_t);
+LIBSTUB(BIO_ctrl_reset_read_request, int);
+LIBSTUB(BIO_set_ex_data, int);
+LIBSTUB(BIO_get_ex_data, void *);
+LIBSTUB(BIO_number_read, uint64_t);
+LIBSTUB(BIO_number_written, uint64_t);
+LIBSTUB(BIO_s_file, BIO_METHOD *);
+LIBSTUB(BIO_new_file, BIO *);
+LIBSTUB(BIO_new_fp_amiga, BIO *);
+LIBSTUB(BIO_new, BIO *);
+LIBSTUB(BIO_set, int);
+LIBSTUB(BIO_free, int);
+LIBSTUB(BIO_vfree, void);
+LIBSTUB(BIO_read, int);
+LIBSTUB(BIO_gets, int);
+LIBSTUB(BIO_write, int);
+LIBSTUB(BIO_puts, int);
+LIBSTUB(BIO_indent, int);
+LIBSTUB(BIO_ctrl, long);
+LIBSTUB(BIO_callback_ctrl, long);
+LIBSTUB(BIO_ptr_ctrl, void *);
+LIBSTUB(BIO_int_ctrl, long);
+LIBSTUB(BIO_push, BIO *);
+LIBSTUB(BIO_pop, BIO *);
+LIBSTUB(BIO_free_all, void);
+LIBSTUB(BIO_find_type, BIO *);
+LIBSTUB(BIO_next, BIO *);
+LIBSTUB(BIO_get_retry_BIO, BIO *);
+LIBSTUB(BIO_get_retry_reason, int);
+LIBSTUB(BIO_dup_chain, BIO *);
+LIBSTUB(BIO_nread0, int);
+LIBSTUB(BIO_nread, int);
+LIBSTUB(BIO_nwrite0, int);
+LIBSTUB(BIO_nwrite, int);
+LIBSTUB(BIO_debug_callback, long);
+LIBSTUB(BIO_s_mem, BIO_METHOD *);
+LIBSTUB(BIO_new_mem_buf, BIO *);
+LIBSTUB(BIO_s_socket, BIO_METHOD *);
+LIBSTUB(BIO_s_connect, BIO_METHOD *);
+LIBSTUB(BIO_s_accept, BIO_METHOD *);
+LIBSTUB(BIO_s_fd, BIO_METHOD *);
+LIBSTUB(BIO_s_log, BIO_METHOD *);
+LIBSTUB(BIO_s_bio, BIO_METHOD *);
+LIBSTUB(BIO_s_null, BIO_METHOD *);
+LIBSTUB(BIO_f_null, BIO_METHOD *);
+LIBSTUB(BIO_f_buffer, BIO_METHOD *);
+LIBSTUB(BIO_f_nbio_test, BIO_METHOD *);
+LIBSTUB(BIO_sock_should_retry, int);
+LIBSTUB(BIO_sock_non_fatal_error, int);
+LIBSTUB(BIO_fd_should_retry, int);
+LIBSTUB(BIO_fd_non_fatal_error, int);
+LIBSTUB(BIO_dump, int);
+LIBSTUB(BIO_dump_indent, int);
+LIBSTUB(BIO_gethostbyname, struct hostent *);
+LIBSTUB(BIO_sock_error, int);
+LIBSTUB(BIO_socket_ioctl, int);
+LIBSTUB(BIO_socket_nbio, int);
+LIBSTUB(BIO_get_port, int);
+LIBSTUB(BIO_get_host_ip, int);
+LIBSTUB(BIO_get_accept_socket, int);
+LIBSTUB(BIO_accept, int);
+LIBSTUB(BIO_sock_init, int);
+LIBSTUB(BIO_sock_cleanup, void);
+LIBSTUB(BIO_set_tcp_ndelay, int);
+LIBSTUB(BIO_new_socket, BIO *);
+LIBSTUB(BIO_new_fd, BIO *);
+LIBSTUB(BIO_new_connect, BIO *);
+LIBSTUB(BIO_new_accept, BIO *);
+LIBSTUB(BIO_new_bio_pair, int);
+LIBSTUB(BIO_copy_next_retry, void);
+LIBSTUB(BIO_vprintf, int);
+LIBSTUB(BIO_vsnprintf, int);
+LIBSTUB(ERR_load_BIO_strings, void);
+LIBSTUB(BN_value_one, const BIGNUM *);
+LIBSTUB(BN_options, char *);
+LIBSTUB(BN_CTX_new, BN_CTX *);
+LIBSTUB(BN_CTX_free, void);
+LIBSTUB(BN_CTX_start, void);
+LIBSTUB(BN_CTX_get, BIGNUM *);
+LIBSTUB(BN_CTX_end, void);
+LIBSTUB(BN_rand, int);
+LIBSTUB(BN_pseudo_rand, int);
+LIBSTUB(BN_rand_range, int);
+LIBSTUB(BN_pseudo_rand_range, int);
+LIBSTUB(BN_num_bits, int);
+LIBSTUB(BN_num_bits_word, int);
+LIBSTUB(BN_new, BIGNUM *);
+LIBSTUB(BN_clear_free, void);
+LIBSTUB(BN_copy, BIGNUM *);
+LIBSTUB(BN_swap, void);
+LIBSTUB(BN_bin2bn, BIGNUM *);
+LIBSTUB(BN_bn2bin, int);
+LIBSTUB(BN_mpi2bn, BIGNUM *);
+LIBSTUB(BN_bn2mpi, int);
+LIBSTUB(BN_sub, int);
+LIBSTUB(BN_usub, int);
+LIBSTUB(BN_uadd, int);
+LIBSTUB(BN_add, int);
+LIBSTUB(BN_mul, int);
+LIBSTUB(BN_sqr, int);
+LIBSTUB(BN_div, int);
+LIBSTUB(BN_nnmod, int);
+LIBSTUB(BN_mod_add, int);
+LIBSTUB(BN_mod_add_quick, int);
+LIBSTUB(BN_mod_sub, int);
+LIBSTUB(BN_mod_sub_quick, int);
+LIBSTUB(BN_mod_mul, int);
+LIBSTUB(BN_mod_sqr, int);
+LIBSTUB(BN_mod_lshift1, int);
+LIBSTUB(BN_mod_lshift1_quick, int);
+LIBSTUB(BN_mod_lshift, int);
+LIBSTUB(BN_mod_lshift_quick, int);
+LIBSTUB(BN_mod_word, BN_ULONG);
+LIBSTUB(BN_div_word, BN_ULONG);
+LIBSTUB(BN_mul_word, int);
+LIBSTUB(BN_add_word, int);
+LIBSTUB(BN_sub_word, int);
+LIBSTUB(BN_set_word, int);
+LIBSTUB(BN_get_word, BN_ULONG);
+LIBSTUB(BN_cmp, int);
+LIBSTUB(BN_free, void);
+LIBSTUB(BN_is_bit_set, int);
+LIBSTUB(BN_lshift, int);
+LIBSTUB(BN_lshift1, int);
+LIBSTUB(BN_exp, int);
+LIBSTUB(BN_mod_exp, int);
+LIBSTUB(BN_mod_exp_mont, int);
+LIBSTUB(BN_mod_exp_mont_word, int);
+LIBSTUB(BN_mod_exp2_mont, int);
+LIBSTUB(BN_mod_exp_simple, int);
+LIBSTUB(BN_mask_bits, int);
+LIBSTUB(BN_print, int);
+LIBSTUB(BN_reciprocal, int);
+LIBSTUB(BN_rshift, int);
+LIBSTUB(BN_rshift1, int);
+LIBSTUB(BN_clear, void);
+LIBSTUB(BN_dup, BIGNUM *);
+LIBSTUB(BN_ucmp, int);
+LIBSTUB(BN_set_bit, int);
+LIBSTUB(BN_clear_bit, int);
+LIBSTUB(BN_bn2hex, char *);
+LIBSTUB(BN_bn2dec, char *);
+LIBSTUB(BN_hex2bn, int);
+LIBSTUB(BN_dec2bn, int);
+LIBSTUB(BN_gcd, int);
+LIBSTUB(BN_kronecker, int);
+LIBSTUB(BN_mod_inverse, BIGNUM *);
+LIBSTUB(BN_mod_sqrt, BIGNUM *);
+LIBSTUB(BN_generate_prime, BIGNUM *);
+LIBSTUB(BN_is_prime, int);
+LIBSTUB(BN_is_prime_fasttest, int);
+LIBSTUB(BN_MONT_CTX_new, BN_MONT_CTX *);
+LIBSTUB(BN_mod_mul_montgomery, int);
+LIBSTUB(BN_from_montgomery, int);
+LIBSTUB(BN_MONT_CTX_free, void);
+LIBSTUB(BN_MONT_CTX_set, int);
+LIBSTUB(BN_MONT_CTX_copy, BN_MONT_CTX *);
+LIBSTUB(BN_BLINDING_new, BN_BLINDING *);
+LIBSTUB(BN_BLINDING_free, void);
+LIBSTUB(BN_BLINDING_update, int);
+LIBSTUB(BN_BLINDING_convert, int);
+LIBSTUB(BN_BLINDING_invert, int);
+LIBSTUB(BN_set_params, void);
+LIBSTUB(BN_get_params, int);
+LIBSTUB(BN_RECP_CTX_new, BN_RECP_CTX *);
+LIBSTUB(BN_RECP_CTX_free, void);
+LIBSTUB(BN_RECP_CTX_set, int);
+LIBSTUB(BN_mod_mul_reciprocal, int);
+LIBSTUB(BN_mod_exp_recp, int);
+LIBSTUB(BN_div_recp, int);
+LIBSTUB(BN_bntest_rand, int);
+LIBSTUB(ERR_load_BN_strings, void);
+LIBSTUB(BUF_MEM_new, BUF_MEM *);
+LIBSTUB(BUF_MEM_free, void);
+LIBSTUB(BUF_MEM_grow, size_t);
+LIBSTUB(BUF_MEM_grow_clean, size_t);
+LIBSTUB(ERR_load_BUF_strings, void);
+LIBSTUB(COMP_CTX_new, COMP_CTX *);
+LIBSTUB(COMP_CTX_free, void);
+LIBSTUB(COMP_compress_block, int);
+LIBSTUB(COMP_expand_block, int);
+LIBSTUB(COMP_zlib, COMP_METHOD *);
+LIBSTUB(ERR_load_COMP_strings, void);
+LIBSTUB(CONF_set_default_method, int);
+LIBSTUB(CONF_set_nconf, void);
+LIBSTUB(CONF_load, LHASH_OF(CONF_VALUE) *);
+LIBSTUB(CONF_load_bio, LHASH_OF(CONF_VALUE) *);
+LIBSTUB(CONF_get_section, STACK_OF(CONF_VALUE) *);
+LIBSTUB(CONF_get_string, char *);
+LIBSTUB(CONF_get_number, long);
+LIBSTUB(CONF_free, void);
+LIBSTUB(CONF_dump_bio, int);
+LIBSTUB(OPENSSL_config, void);
+LIBSTUB(NCONF_new, CONF *);
+LIBSTUB(NCONF_default, CONF_METHOD *);
+LIBSTUB(NCONF_WIN32, CONF_METHOD *);
+LIBSTUB(NCONF_free, void);
+LIBSTUB(NCONF_free_data, void);
+LIBSTUB(NCONF_load, int);
+LIBSTUB(NCONF_load_bio, int);
+LIBSTUB(NCONF_get_section, STACK_OF(CONF_VALUE) *);
+LIBSTUB(NCONF_get_string, char *);
+LIBSTUB(NCONF_get_number_e, int);
+LIBSTUB(NCONF_dump_bio, int);
+LIBSTUB(CONF_modules_load, int);
+LIBSTUB(CONF_modules_load_file, int);
+LIBSTUB(CONF_modules_unload, void);
+LIBSTUB(CONF_modules_finish, void);
+LIBSTUB(CONF_modules_free, void);
+LIBSTUB(CONF_module_add, int);
+LIBSTUB(CONF_imodule_get_name, const char *);
+LIBSTUB(CONF_imodule_get_value, const char *);
+LIBSTUB(CONF_imodule_get_usr_data, void *);
+LIBSTUB(CONF_imodule_set_usr_data, void);
+LIBSTUB(CONF_imodule_get_module, CONF_MODULE *);
+LIBSTUB(CONF_imodule_get_flags, unsigned long);
+LIBSTUB(CONF_imodule_set_flags, void);
+LIBSTUB(CONF_module_get_usr_data, void *);
+LIBSTUB(CONF_module_set_usr_data, void);
+LIBSTUB(CONF_get1_default_config_file, char *);
+LIBSTUB(CONF_parse_list, int);
+LIBSTUB(OPENSSL_load_builtin_modules, void);
+LIBSTUB(ERR_load_CONF_strings, void);
+LIBSTUB(CRYPTO_mem_ctrl, int);
+LIBSTUB(OPENSSL_issetugid, int);
+LIBSTUB(CRYPTO_get_ex_new_index, int);
+LIBSTUB(CRYPTO_new_ex_data, int);
+LIBSTUB(CRYPTO_dup_ex_data, int);
+LIBSTUB(CRYPTO_free_ex_data, void);
+LIBSTUB(CRYPTO_set_ex_data, int);
+LIBSTUB(CRYPTO_get_ex_data, void *);
+LIBSTUB(CRYPTO_cleanup_all_ex_data, void);
+LIBSTUB(CRYPTO_set_mem_functions, int);
+LIBSTUB(CRYPTO_get_mem_functions, void);
+LIBSTUB(CRYPTO_malloc, void *);
+LIBSTUB(CRYPTO_free, void);
+LIBSTUB(CRYPTO_realloc, void *);
+LIBSTUB(OPENSSL_cleanse, void);
+LIBSTUB(DSO_new, DSO *);
+LIBSTUB(DSO_new_method, DSO *);
+LIBSTUB(DSO_free, int);
+LIBSTUB(DSO_flags, int);
+LIBSTUB(DSO_up_ref, int);
+LIBSTUB(DSO_ctrl, long);
+LIBSTUB(DSO_set_name_converter, int);
+LIBSTUB(DSO_get_filename, const char *);
+LIBSTUB(DSO_set_filename, int);
+LIBSTUB(DSO_convert_filename, char *);
+LIBSTUB(DSO_get_loaded_filename, const char *);
+LIBSTUB(DSO_set_default_method, void);
+LIBSTUB(DSO_get_default_method, DSO_METHOD *);
+LIBSTUB(DSO_get_method, DSO_METHOD *);
+LIBSTUB(DSO_set_method, DSO_METHOD *);
+LIBSTUB(DSO_load, DSO *);
+LIBSTUB(DSO_bind_var, void *);
+LIBSTUB(DSO_bind_func, DSO_FUNC_TYPE);
+LIBSTUB(DSO_METHOD_openssl, DSO_METHOD *);
+LIBSTUB(DSO_METHOD_null, DSO_METHOD *);
+LIBSTUB(DSO_METHOD_dlfcn, DSO_METHOD *);
+LIBSTUB(DSO_METHOD_dl, DSO_METHOD *);
+LIBSTUB(DSO_METHOD_win32, DSO_METHOD *);
+LIBSTUB(DSO_METHOD_vms, DSO_METHOD *);
+LIBSTUB(ERR_load_DSO_strings, void);
+LIBSTUB(EC_GFp_simple_method, const EC_METHOD *);
+LIBSTUB(EC_GFp_mont_method, const EC_METHOD *);
+LIBSTUB(EC_GROUP_new, EC_GROUP *);
+LIBSTUB(EC_GROUP_free, void);
+LIBSTUB(EC_GROUP_clear_free, void);
+LIBSTUB(EC_GROUP_copy, int);
+LIBSTUB(EC_GROUP_method_of, const EC_METHOD *);
+LIBSTUB(EC_GROUP_set_curve_GFp, int);
+LIBSTUB(EC_GROUP_get_curve_GFp, int);
+LIBSTUB(EC_GROUP_new_curve_GFp, EC_GROUP *);
+LIBSTUB(EC_GROUP_set_generator, int);
+LIBSTUB(EC_GROUP_get0_generator, const EC_POINT *);
+LIBSTUB(EC_GROUP_get_order, int);
+LIBSTUB(EC_GROUP_get_cofactor, int);
+LIBSTUB(EC_POINT_new, EC_POINT *);
+LIBSTUB(EC_POINT_free, void);
+LIBSTUB(EC_POINT_clear_free, void);
+LIBSTUB(EC_POINT_copy, int);
+LIBSTUB(EC_POINT_method_of, const EC_METHOD *);
+LIBSTUB(EC_POINT_set_to_infinity, int);
+LIBSTUB(EC_POINT_set_Jprojective_coordinates_GFp, int);
+LIBSTUB(EC_POINT_get_Jprojective_coordinates_GFp, int);
+LIBSTUB(EC_POINT_set_affine_coordinates_GFp, int);
+LIBSTUB(EC_POINT_get_affine_coordinates_GFp, int);
+LIBSTUB(EC_POINT_set_compressed_coordinates_GFp, int);
+LIBSTUB(EC_POINT_point2oct, size_t);
+LIBSTUB(EC_POINT_oct2point, int);
+LIBSTUB(EC_POINT_add, int);
+LIBSTUB(EC_POINT_dbl, int);
+LIBSTUB(EC_POINT_invert, int);
+LIBSTUB(EC_POINT_is_at_infinity, int);
+LIBSTUB(EC_POINT_is_on_curve, int);
+LIBSTUB(EC_POINT_cmp, int);
+LIBSTUB(EC_POINT_make_affine, int);
+LIBSTUB(EC_POINTs_make_affine, int);
+LIBSTUB(EC_POINTs_mul, int);
+LIBSTUB(EC_POINT_mul, int);
+LIBSTUB(EC_GROUP_precompute_mult, int);
+LIBSTUB(ERR_load_EC_strings, void);
+LIBSTUB(ERR_put_error, void);
+LIBSTUB(ERR_set_error_data, void);
+LIBSTUB(ERR_get_error, unsigned long);
+LIBSTUB(ERR_get_error_line, unsigned long);
+LIBSTUB(ERR_get_error_line_data, unsigned long);
+LIBSTUB(ERR_peek_error, unsigned long);
+LIBSTUB(ERR_peek_error_line, unsigned long);
+LIBSTUB(ERR_peek_error_line_data, unsigned long);
+LIBSTUB(ERR_peek_last_error, unsigned long);
+LIBSTUB(ERR_peek_last_error_line, unsigned long);
+LIBSTUB(ERR_peek_last_error_line_data, unsigned long);
+LIBSTUB(ERR_clear_error, void);
+LIBSTUB(ERR_error_string, char *);
+LIBSTUB(ERR_error_string_n, void);
+LIBSTUB(ERR_lib_error_string, const char *);
+LIBSTUB(ERR_func_error_string, const char *);
+LIBSTUB(ERR_reason_error_string, const char *);
+LIBSTUB(ERR_print_errors_cb, void);
+LIBSTUB(ERR_print_errors, void);
+LIBSTUB(ERR_add_error_vdata, void);
+LIBSTUB(ERR_load_strings, void);
+LIBSTUB(ERR_unload_strings, void);
+LIBSTUB(ERR_load_ERR_strings, void);
+LIBSTUB(ERR_free_strings, void);
+LIBSTUB(ERR_remove_state, void);
+LIBSTUB(ERR_get_state, ERR_STATE *);
+LIBSTUB(ERR_get_string_table, LHASH_OF(ERR_STRING_DATA) *);
+LIBSTUB(ERR_get_next_error_library, int);
+LIBSTUB(EVP_MD_CTX_copy_ex, int);
+LIBSTUB(EVP_DigestInit_ex, int);
+LIBSTUB(EVP_DigestUpdate, int);
+LIBSTUB(EVP_DigestFinal_ex, int);
+LIBSTUB(EVP_Digest, int);
+LIBSTUB(EVP_MD_CTX_copy, int);
+LIBSTUB(EVP_DigestInit, int);
+LIBSTUB(EVP_DigestFinal, int);
+LIBSTUB(EVP_read_pw_string, int);
+LIBSTUB(EVP_set_pw_prompt, void);
+LIBSTUB(EVP_get_pw_prompt, char *);
+LIBSTUB(EVP_BytesToKey, int);
+LIBSTUB(EVP_EncryptInit, int);
+LIBSTUB(EVP_EncryptInit_ex, int);
+LIBSTUB(EVP_EncryptUpdate, int);
+LIBSTUB(EVP_EncryptFinal_ex, int);
+LIBSTUB(EVP_EncryptFinal, int);
+LIBSTUB(EVP_DecryptInit, int);
+LIBSTUB(EVP_DecryptInit_ex, int);
+LIBSTUB(EVP_DecryptUpdate, int);
+LIBSTUB(EVP_DecryptFinal, int);
+LIBSTUB(EVP_DecryptFinal_ex, int);
+LIBSTUB(EVP_CipherInit, int);
+LIBSTUB(EVP_CipherInit_ex, int);
+LIBSTUB(EVP_CipherUpdate, int);
+LIBSTUB(EVP_CipherFinal, int);
+LIBSTUB(EVP_CipherFinal_ex, int);
+LIBSTUB(EVP_SignFinal, int);
+LIBSTUB(EVP_VerifyFinal, int);
+LIBSTUB(EVP_OpenInit, int);
+LIBSTUB(EVP_OpenFinal, int);
+LIBSTUB(EVP_SealInit, int);
+LIBSTUB(EVP_SealFinal, int);
+LIBSTUB(EVP_EncodeInit, void);
+LIBSTUB(EVP_EncodeUpdate, void);
+LIBSTUB(EVP_EncodeFinal, void);
+LIBSTUB(EVP_EncodeBlock, int);
+LIBSTUB(EVP_DecodeInit, void);
+LIBSTUB(EVP_DecodeUpdate, int);
+LIBSTUB(EVP_DecodeFinal, int);
+LIBSTUB(EVP_DecodeBlock, int);
+LIBSTUB(EVP_CIPHER_CTX_set_key_length, int);
+LIBSTUB(EVP_CIPHER_CTX_set_padding, int);
+LIBSTUB(EVP_CIPHER_CTX_ctrl, int);
+LIBSTUB(BIO_f_md, BIO_METHOD *);
+LIBSTUB(BIO_f_base64, BIO_METHOD *);
+LIBSTUB(BIO_f_cipher, BIO_METHOD *);
+LIBSTUB(BIO_f_reliable, BIO_METHOD *);
+LIBSTUB(BIO_set_cipher, int);
+LIBSTUB(EVP_md_null, const EVP_MD *);
+LIBSTUB(EVP_md2, const EVP_MD *);
+LIBSTUB(EVP_md4, const EVP_MD *);
+LIBSTUB(EVP_md5, const EVP_MD *);
+LIBSTUB(EVP_sha1, const EVP_MD *);
+LIBSTUB(EVP_mdc2, const EVP_MD *);
+LIBSTUB(EVP_ripemd160, const EVP_MD *);
+LIBSTUB(EVP_enc_null, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_des_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_des_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_des_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_desx_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc4, const EVP_CIPHER *);
+LIBSTUB(EVP_rc4_40, const EVP_CIPHER *);
+LIBSTUB(EVP_idea_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_idea_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_idea_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_idea_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_40_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_64_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_rc2_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_bf_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_bf_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_bf_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_bf_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_cast5_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_cast5_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_cast5_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_cast5_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_rc5_32_12_16_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_rc5_32_12_16_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_rc5_32_12_16_cfb64, const EVP_CIPHER *);
+LIBSTUB(EVP_rc5_32_12_16_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_add_cipher, int);
+LIBSTUB(EVP_add_digest, int);
+LIBSTUB(EVP_get_cipherbyname, const EVP_CIPHER *);
+LIBSTUB(EVP_get_digestbyname, const EVP_MD *);
+LIBSTUB(EVP_cleanup, void);
+LIBSTUB(EVP_PKEY_decrypt, int);
+LIBSTUB(EVP_PKEY_encrypt, int);
+LIBSTUB(EVP_PKEY_type, int);
+LIBSTUB(EVP_PKEY_bits, int);
+LIBSTUB(EVP_PKEY_size, int);
+LIBSTUB(EVP_PKEY_assign, int);
+LIBSTUB(EVP_PKEY_set1_RSA, int);
+LIBSTUB(EVP_PKEY_get1_RSA, struct rsa_st *);
+LIBSTUB(EVP_PKEY_set1_DSA, int);
+LIBSTUB(EVP_PKEY_get1_DSA, struct dsa_st *);
+LIBSTUB(EVP_PKEY_set1_DH, int);
+LIBSTUB(EVP_PKEY_get1_DH, struct dh_st *);
+LIBSTUB(EVP_PKEY_new, EVP_PKEY *);
+LIBSTUB(EVP_PKEY_free, void);
+LIBSTUB(d2i_PublicKey, EVP_PKEY *);
+LIBSTUB(i2d_PublicKey, int);
+LIBSTUB(d2i_PrivateKey, EVP_PKEY *);
+LIBSTUB(d2i_AutoPrivateKey, EVP_PKEY *);
+LIBSTUB(i2d_PrivateKey, int);
+LIBSTUB(EVP_PKEY_copy_parameters, int);
+LIBSTUB(EVP_PKEY_missing_parameters, int);
+LIBSTUB(EVP_PKEY_save_parameters, int);
+LIBSTUB(EVP_PKEY_cmp_parameters, int);
+LIBSTUB(EVP_CIPHER_type, int);
+LIBSTUB(EVP_CIPHER_param_to_asn1, int);
+LIBSTUB(EVP_CIPHER_asn1_to_param, int);
+LIBSTUB(EVP_CIPHER_set_asn1_iv, int);
+LIBSTUB(EVP_CIPHER_get_asn1_iv, int);
+LIBSTUB(PKCS5_PBE_keyivgen, int);
+LIBSTUB(PKCS5_PBKDF2_HMAC_SHA1, int);
+LIBSTUB(PKCS5_v2_PBE_keyivgen, int);
+LIBSTUB(PKCS5_PBE_add, void);
+LIBSTUB(EVP_PBE_CipherInit, int);
+LIBSTUB(EVP_PBE_alg_add, int);
+LIBSTUB(EVP_PBE_cleanup, void);
+LIBSTUB(ERR_load_EVP_strings, void);
+LIBSTUB(HMAC_Init, int);
+LIBSTUB(HMAC_Init_ex, int);
+LIBSTUB(HMAC_Update, int);
+LIBSTUB(HMAC_Final, int);
+LIBSTUB(HMAC, unsigned char *);
+LIBSTUB(lh_new, _LHASH *);
+LIBSTUB(lh_free, void);
+LIBSTUB(lh_insert, void *);
+LIBSTUB(lh_delete, void *);
+LIBSTUB(lh_retrieve, void *);
+LIBSTUB(lh_doall, void);
+LIBSTUB(lh_doall_arg, void);
+LIBSTUB(lh_strhash, unsigned long);
+LIBSTUB(lh_num_items, unsigned long);
+LIBSTUB(lh_stats_bio, void);
+LIBSTUB(lh_node_stats_bio, void);
+LIBSTUB(lh_node_usage_stats_bio, void);
+LIBSTUB(OBJ_NAME_init, int);
+LIBSTUB(OBJ_NAME_new_index, int);
+LIBSTUB(OBJ_NAME_get, const char *);
+LIBSTUB(OBJ_NAME_add, int);
+LIBSTUB(OBJ_NAME_remove, int);
+LIBSTUB(OBJ_NAME_cleanup, void);
+LIBSTUB(OBJ_NAME_do_all, void);
+LIBSTUB(OBJ_NAME_do_all_sorted, void);
+LIBSTUB(OBJ_dup, ASN1_OBJECT *);
+LIBSTUB(OBJ_nid2obj, ASN1_OBJECT *);
+LIBSTUB(OBJ_nid2ln, const char *);
+LIBSTUB(OBJ_nid2sn, const char *);
+LIBSTUB(OBJ_obj2nid, int);
+LIBSTUB(OBJ_txt2obj, ASN1_OBJECT *);
+LIBSTUB(OBJ_obj2txt, int);
+LIBSTUB(OBJ_txt2nid, int);
+LIBSTUB(OBJ_ln2nid, int);
+LIBSTUB(OBJ_sn2nid, int);
+LIBSTUB(OBJ_cmp, int);
+LIBSTUB(OBJ_new_nid, int);
+LIBSTUB(OBJ_add_object, int);
+LIBSTUB(OBJ_create, int);
+LIBSTUB(OBJ_cleanup, void);
+LIBSTUB(OBJ_create_objects, int);
+LIBSTUB(ERR_load_OBJ_strings, void);
+LIBSTUB(OCSP_sendreq_bio, OCSP_RESPONSE *);
+LIBSTUB(OCSP_cert_to_id, OCSP_CERTID *);
+LIBSTUB(OCSP_cert_id_new, OCSP_CERTID *);
+LIBSTUB(OCSP_request_add0_id, OCSP_ONEREQ *);
+LIBSTUB(OCSP_request_add1_nonce, int);
+LIBSTUB(OCSP_basic_add1_nonce, int);
+LIBSTUB(OCSP_check_nonce, int);
+LIBSTUB(OCSP_copy_nonce, int);
+LIBSTUB(OCSP_request_set1_name, int);
+LIBSTUB(OCSP_request_add1_cert, int);
+LIBSTUB(OCSP_request_sign, int);
+LIBSTUB(OCSP_response_status, int);
+LIBSTUB(OCSP_response_get1_basic, OCSP_BASICRESP *);
+LIBSTUB(OCSP_resp_count, int);
+LIBSTUB(OCSP_resp_get0, OCSP_SINGLERESP *);
+LIBSTUB(OCSP_resp_find, int);
+LIBSTUB(OCSP_single_get0_status, int);
+LIBSTUB(OCSP_resp_find_status, int);
+LIBSTUB(OCSP_check_validity, int);
+LIBSTUB(OCSP_request_verify, int);
+LIBSTUB(OCSP_parse_url, int);
+LIBSTUB(OCSP_id_issuer_cmp, int);
+LIBSTUB(OCSP_id_cmp, int);
+LIBSTUB(OCSP_request_onereq_count, int);
+LIBSTUB(OCSP_request_onereq_get0, OCSP_ONEREQ *);
+LIBSTUB(OCSP_onereq_get0_id, OCSP_CERTID *);
+LIBSTUB(OCSP_id_get0_info, int);
+LIBSTUB(OCSP_request_is_signed, int);
+LIBSTUB(OCSP_response_create, OCSP_RESPONSE *);
+LIBSTUB(OCSP_basic_add1_status, OCSP_SINGLERESP *);
+LIBSTUB(OCSP_basic_add1_cert, int);
+LIBSTUB(OCSP_basic_sign, int);
+LIBSTUB(OCSP_crlID_new, X509_EXTENSION *);
+LIBSTUB(OCSP_accept_responses_new, X509_EXTENSION *);
+LIBSTUB(OCSP_archive_cutoff_new, X509_EXTENSION *);
+LIBSTUB(OCSP_url_svcloc_new, X509_EXTENSION *);
+LIBSTUB(OCSP_REQUEST_get_ext_count, int);
+LIBSTUB(OCSP_REQUEST_get_ext_by_NID, int);
+LIBSTUB(OCSP_REQUEST_get_ext_by_OBJ, int);
+LIBSTUB(OCSP_REQUEST_get_ext_by_critical, int);
+LIBSTUB(OCSP_REQUEST_get_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_REQUEST_delete_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_REQUEST_get1_ext_d2i, void *);
+LIBSTUB(OCSP_REQUEST_add1_ext_i2d, int);
+LIBSTUB(OCSP_REQUEST_add_ext, int);
+LIBSTUB(OCSP_ONEREQ_get_ext_count, int);
+LIBSTUB(OCSP_ONEREQ_get_ext_by_NID, int);
+LIBSTUB(OCSP_ONEREQ_get_ext_by_OBJ, int);
+LIBSTUB(OCSP_ONEREQ_get_ext_by_critical, int);
+LIBSTUB(OCSP_ONEREQ_get_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_ONEREQ_delete_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_ONEREQ_get1_ext_d2i, void *);
+LIBSTUB(OCSP_ONEREQ_add1_ext_i2d, int);
+LIBSTUB(OCSP_ONEREQ_add_ext, int);
+LIBSTUB(OCSP_BASICRESP_get_ext_count, int);
+LIBSTUB(OCSP_BASICRESP_get_ext_by_NID, int);
+LIBSTUB(OCSP_BASICRESP_get_ext_by_OBJ, int);
+LIBSTUB(OCSP_BASICRESP_get_ext_by_critical, int);
+LIBSTUB(OCSP_BASICRESP_get_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_BASICRESP_delete_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_BASICRESP_get1_ext_d2i, void *);
+LIBSTUB(OCSP_BASICRESP_add1_ext_i2d, int);
+LIBSTUB(OCSP_BASICRESP_add_ext, int);
+LIBSTUB(OCSP_SINGLERESP_get_ext_count, int);
+LIBSTUB(OCSP_SINGLERESP_get_ext_by_NID, int);
+LIBSTUB(OCSP_SINGLERESP_get_ext_by_OBJ, int);
+LIBSTUB(OCSP_SINGLERESP_get_ext_by_critical, int);
+LIBSTUB(OCSP_SINGLERESP_get_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_SINGLERESP_delete_ext, X509_EXTENSION *);
+LIBSTUB(OCSP_SINGLERESP_get1_ext_d2i, void *);
+LIBSTUB(OCSP_SINGLERESP_add1_ext_i2d, int);
+LIBSTUB(OCSP_SINGLERESP_add_ext, int);
+LIBSTUB(OCSP_SINGLERESP_new, OCSP_SINGLERESP *);
+LIBSTUB(OCSP_SINGLERESP_free, void);
+LIBSTUB(d2i_OCSP_SINGLERESP, OCSP_SINGLERESP *);
+LIBSTUB(i2d_OCSP_SINGLERESP, int);
+LIBSTUB(OCSP_SINGLERESP_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_CERTSTATUS_new, OCSP_CERTSTATUS *);
+LIBSTUB(OCSP_CERTSTATUS_free, void);
+LIBSTUB(d2i_OCSP_CERTSTATUS, OCSP_CERTSTATUS *);
+LIBSTUB(i2d_OCSP_CERTSTATUS, int);
+LIBSTUB(OCSP_CERTSTATUS_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_REVOKEDINFO_new, OCSP_REVOKEDINFO *);
+LIBSTUB(OCSP_REVOKEDINFO_free, void);
+LIBSTUB(d2i_OCSP_REVOKEDINFO, OCSP_REVOKEDINFO *);
+LIBSTUB(i2d_OCSP_REVOKEDINFO, int);
+LIBSTUB(OCSP_REVOKEDINFO_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_BASICRESP_new, OCSP_BASICRESP *);
+LIBSTUB(OCSP_BASICRESP_free, void);
+LIBSTUB(d2i_OCSP_BASICRESP, OCSP_BASICRESP *);
+LIBSTUB(i2d_OCSP_BASICRESP, int);
+LIBSTUB(OCSP_BASICRESP_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_RESPDATA_new, OCSP_RESPDATA *);
+LIBSTUB(OCSP_RESPDATA_free, void);
+LIBSTUB(d2i_OCSP_RESPDATA, OCSP_RESPDATA *);
+LIBSTUB(i2d_OCSP_RESPDATA, int);
+LIBSTUB(OCSP_RESPDATA_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_RESPID_new, OCSP_RESPID *);
+LIBSTUB(OCSP_RESPID_free, void);
+LIBSTUB(d2i_OCSP_RESPID, OCSP_RESPID *);
+LIBSTUB(i2d_OCSP_RESPID, int);
+LIBSTUB(OCSP_RESPID_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_RESPONSE_new, OCSP_RESPONSE *);
+LIBSTUB(OCSP_RESPONSE_free, void);
+LIBSTUB(d2i_OCSP_RESPONSE, OCSP_RESPONSE *);
+LIBSTUB(i2d_OCSP_RESPONSE, int);
+LIBSTUB(OCSP_RESPONSE_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_RESPBYTES_new, OCSP_RESPBYTES *);
+LIBSTUB(OCSP_RESPBYTES_free, void);
+LIBSTUB(d2i_OCSP_RESPBYTES, OCSP_RESPBYTES *);
+LIBSTUB(i2d_OCSP_RESPBYTES, int);
+LIBSTUB(OCSP_RESPBYTES_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_ONEREQ_new, OCSP_ONEREQ *);
+LIBSTUB(OCSP_ONEREQ_free, void);
+LIBSTUB(d2i_OCSP_ONEREQ, OCSP_ONEREQ *);
+LIBSTUB(i2d_OCSP_ONEREQ, int);
+LIBSTUB(OCSP_ONEREQ_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_CERTID_new, OCSP_CERTID *);
+LIBSTUB(OCSP_CERTID_free, void);
+LIBSTUB(d2i_OCSP_CERTID, OCSP_CERTID *);
+LIBSTUB(i2d_OCSP_CERTID, int);
+LIBSTUB(OCSP_CERTID_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_REQUEST_new, OCSP_REQUEST *);
+LIBSTUB(OCSP_REQUEST_free, void);
+LIBSTUB(d2i_OCSP_REQUEST, OCSP_REQUEST *);
+LIBSTUB(i2d_OCSP_REQUEST, int);
+LIBSTUB(OCSP_REQUEST_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_SIGNATURE_new, OCSP_SIGNATURE *);
+LIBSTUB(OCSP_SIGNATURE_free, void);
+LIBSTUB(d2i_OCSP_SIGNATURE, OCSP_SIGNATURE *);
+LIBSTUB(i2d_OCSP_SIGNATURE, int);
+LIBSTUB(OCSP_SIGNATURE_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_REQINFO_new, OCSP_REQINFO *);
+LIBSTUB(OCSP_REQINFO_free, void);
+LIBSTUB(d2i_OCSP_REQINFO, OCSP_REQINFO *);
+LIBSTUB(i2d_OCSP_REQINFO, int);
+LIBSTUB(OCSP_REQINFO_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_CRLID_new, OCSP_CRLID *);
+LIBSTUB(OCSP_CRLID_free, void);
+LIBSTUB(d2i_OCSP_CRLID, OCSP_CRLID *);
+LIBSTUB(i2d_OCSP_CRLID, int);
+LIBSTUB(OCSP_CRLID_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_SERVICELOC_new, OCSP_SERVICELOC *);
+LIBSTUB(OCSP_SERVICELOC_free, void);
+LIBSTUB(d2i_OCSP_SERVICELOC, OCSP_SERVICELOC *);
+LIBSTUB(i2d_OCSP_SERVICELOC, int);
+LIBSTUB(OCSP_SERVICELOC_it, const ASN1_ITEM *);
+LIBSTUB(OCSP_response_status_str, const char *);
+LIBSTUB(OCSP_cert_status_str, const char *);
+LIBSTUB(OCSP_crl_reason_str, const char *);
+LIBSTUB(OCSP_REQUEST_print, int);
+LIBSTUB(OCSP_RESPONSE_print, int);
+LIBSTUB(OCSP_basic_verify, int);
+LIBSTUB(ERR_load_OCSP_strings, void);
+LIBSTUB(PEM_get_EVP_CIPHER_INFO, int);
+LIBSTUB(PEM_do_header, int);
+LIBSTUB(PEM_read_bio, int);
+LIBSTUB(PEM_write_bio, int);
+LIBSTUB(PEM_bytes_read_bio, int);
+LIBSTUB(PEM_ASN1_read_bio, void *);
+LIBSTUB(PEM_ASN1_write_bio, int);
+LIBSTUB(PEM_X509_INFO_read_bio, STACK_OF(X509_INFO) *);
+LIBSTUB(PEM_X509_INFO_write_bio, int);
+LIBSTUB(PEM_SignInit, int);
+LIBSTUB(PEM_SignUpdate, int);
+LIBSTUB(PEM_SignFinal, int);
+LIBSTUB(PEM_def_callback, int);
+LIBSTUB(PEM_proc_type, void);
+LIBSTUB(PEM_dek_info, void);
+LIBSTUB(PEM_read_bio_X509, X509 *);
+LIBSTUB(PEM_write_bio_X509, int);
+LIBSTUB(PEM_read_bio_X509_AUX, X509 *);
+LIBSTUB(PEM_write_bio_X509_AUX, int);
+LIBSTUB(PEM_read_bio_X509_REQ, X509_REQ *);
+LIBSTUB(PEM_write_bio_X509_REQ, int);
+LIBSTUB(PEM_write_bio_X509_REQ_NEW, int);
+LIBSTUB(PEM_read_bio_X509_CRL, X509_CRL *);
+LIBSTUB(PEM_write_bio_X509_CRL, int);
+LIBSTUB(PEM_read_bio_PKCS7, PKCS7 *);
+LIBSTUB(PEM_write_bio_PKCS7, int);
+LIBSTUB(PEM_read_bio_NETSCAPE_CERT_SEQUENCE, NETSCAPE_CERT_SEQUENCE *);
+LIBSTUB(PEM_write_bio_NETSCAPE_CERT_SEQUENCE, int);
+LIBSTUB(PEM_read_bio_PKCS8, X509_SIG *);
+LIBSTUB(PEM_write_bio_PKCS8, int);
+LIBSTUB(PEM_read_bio_PKCS8_PRIV_KEY_INFO, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(PEM_write_bio_PKCS8_PRIV_KEY_INFO, int);
+LIBSTUB(PEM_read_bio_RSAPrivateKey, RSA *);
+LIBSTUB(PEM_write_bio_RSAPrivateKey, int);
+LIBSTUB(PEM_read_bio_RSAPublicKey, RSA *);
+LIBSTUB(PEM_write_bio_RSAPublicKey, int);
+LIBSTUB(PEM_read_bio_RSA_PUBKEY, RSA *);
+LIBSTUB(PEM_write_bio_RSA_PUBKEY, int);
+LIBSTUB(PEM_read_bio_DSAPrivateKey, DSA *);
+LIBSTUB(PEM_write_bio_DSAPrivateKey, int);
+LIBSTUB(PEM_read_bio_DSA_PUBKEY, DSA *);
+LIBSTUB(PEM_write_bio_DSA_PUBKEY, int);
+LIBSTUB(PEM_read_bio_DSAparams, DSA *);
+LIBSTUB(PEM_write_bio_DSAparams, int);
+LIBSTUB(PEM_read_bio_DHparams, DH *);
+LIBSTUB(PEM_write_bio_DHparams, int);
+LIBSTUB(PEM_read_bio_PrivateKey, EVP_PKEY *);
+LIBSTUB(PEM_write_bio_PrivateKey, int);
+LIBSTUB(PEM_read_bio_PUBKEY, EVP_PKEY *);
+LIBSTUB(PEM_write_bio_PUBKEY, int);
+LIBSTUB(PEM_write_bio_PKCS8PrivateKey_nid, int);
+LIBSTUB(PEM_write_bio_PKCS8PrivateKey, int);
+LIBSTUB(i2d_PKCS8PrivateKey_bio, int);
+LIBSTUB(i2d_PKCS8PrivateKey_nid_bio, int);
+LIBSTUB(d2i_PKCS8PrivateKey_bio, EVP_PKEY *);
+LIBSTUB(ERR_load_PEM_strings, void);
+LIBSTUB(PKCS12_item_pack_safebag, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS8_decrypt, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(PKCS12_decrypt_skey, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(PKCS8_encrypt, X509_SIG *);
+LIBSTUB(PKCS12_pack_p7data, PKCS7 *);
+LIBSTUB(PKCS12_unpack_p7data, STACK_OF(PKCS12_SAFEBAG) *);
+LIBSTUB(PKCS12_pack_p7encdata, PKCS7 *);
+LIBSTUB(PKCS12_unpack_p7encdata, STACK_OF(PKCS12_SAFEBAG) *);
+LIBSTUB(PKCS12_pack_authsafes, int);
+LIBSTUB(PKCS12_unpack_authsafes, STACK_OF(PKCS7) *);
+LIBSTUB(PKCS12_add_localkeyid, int);
+LIBSTUB(PKCS12_add_friendlyname_asc, int);
+LIBSTUB(PKCS12_add_CSPName_asc, int);
+LIBSTUB(PKCS12_add_friendlyname_uni, int);
+LIBSTUB(PKCS8_add_keyusage, int);
+LIBSTUB(PKCS12_get_attr_gen, ASN1_TYPE *);
+LIBSTUB(PKCS12_get_friendlyname, char *);
+LIBSTUB(PKCS12_pbe_crypt, unsigned char *);
+LIBSTUB(PKCS12_item_decrypt_d2i, void *);
+LIBSTUB(PKCS12_item_i2d_encrypt, ASN1_OCTET_STRING *);
+LIBSTUB(PKCS12_init, PKCS12 *);
+LIBSTUB(PKCS12_key_gen_asc, int);
+LIBSTUB(PKCS12_key_gen_uni, int);
+LIBSTUB(PKCS12_PBE_keyivgen, int);
+LIBSTUB(PKCS12_gen_mac, int);
+LIBSTUB(PKCS12_verify_mac, int);
+LIBSTUB(PKCS12_set_mac, int);
+LIBSTUB(PKCS12_setup_mac, int);
+LIBSTUB(OPENSSL_asc2uni, unsigned char *);
+LIBSTUB(OPENSSL_uni2asc, char *);
+LIBSTUB(PKCS12_new, PKCS12 *);
+LIBSTUB(PKCS12_free, void);
+LIBSTUB(d2i_PKCS12, PKCS12 *);
+LIBSTUB(i2d_PKCS12, int);
+LIBSTUB(PKCS12_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_MAC_DATA_new, PKCS12_MAC_DATA *);
+LIBSTUB(PKCS12_MAC_DATA_free, void);
+LIBSTUB(d2i_PKCS12_MAC_DATA, PKCS12_MAC_DATA *);
+LIBSTUB(i2d_PKCS12_MAC_DATA, int);
+LIBSTUB(PKCS12_MAC_DATA_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_SAFEBAG_new, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_free, void);
+LIBSTUB(d2i_PKCS12_SAFEBAG, PKCS12_SAFEBAG *);
+LIBSTUB(i2d_PKCS12_SAFEBAG, int);
+LIBSTUB(PKCS12_SAFEBAG_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_BAGS_new, PKCS12_BAGS *);
+LIBSTUB(PKCS12_BAGS_free, void);
+LIBSTUB(d2i_PKCS12_BAGS, PKCS12_BAGS *);
+LIBSTUB(i2d_PKCS12_BAGS, int);
+LIBSTUB(PKCS12_BAGS_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_SAFEBAGS_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_AUTHSAFES_it, const ASN1_ITEM *);
+LIBSTUB(PKCS12_PBE_add, void);
+LIBSTUB(PKCS12_parse, int);
+LIBSTUB(PKCS12_create, PKCS12 *);
+LIBSTUB(i2d_PKCS12_bio, int);
+LIBSTUB(d2i_PKCS12_bio, PKCS12 *);
+LIBSTUB(PKCS12_newpass, int);
+LIBSTUB(ERR_load_PKCS12_strings, void);
+LIBSTUB(PKCS7_ISSUER_AND_SERIAL_digest, int);
+LIBSTUB(PKCS7_dup, PKCS7 *);
+LIBSTUB(d2i_PKCS7_bio, PKCS7 *);
+LIBSTUB(i2d_PKCS7_bio, int);
+LIBSTUB(PKCS7_ISSUER_AND_SERIAL_new, PKCS7_ISSUER_AND_SERIAL *);
+LIBSTUB(PKCS7_ISSUER_AND_SERIAL_free, void);
+LIBSTUB(d2i_PKCS7_ISSUER_AND_SERIAL, PKCS7_ISSUER_AND_SERIAL *);
+LIBSTUB(i2d_PKCS7_ISSUER_AND_SERIAL, int);
+LIBSTUB(PKCS7_ISSUER_AND_SERIAL_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_SIGNER_INFO_new, PKCS7_SIGNER_INFO *);
+LIBSTUB(PKCS7_SIGNER_INFO_free, void);
+LIBSTUB(d2i_PKCS7_SIGNER_INFO, PKCS7_SIGNER_INFO *);
+LIBSTUB(i2d_PKCS7_SIGNER_INFO, int);
+LIBSTUB(PKCS7_SIGNER_INFO_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_RECIP_INFO_new, PKCS7_RECIP_INFO *);
+LIBSTUB(PKCS7_RECIP_INFO_free, void);
+LIBSTUB(d2i_PKCS7_RECIP_INFO, PKCS7_RECIP_INFO *);
+LIBSTUB(i2d_PKCS7_RECIP_INFO, int);
+LIBSTUB(PKCS7_RECIP_INFO_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_SIGNED_new, PKCS7_SIGNED *);
+LIBSTUB(PKCS7_SIGNED_free, void);
+LIBSTUB(d2i_PKCS7_SIGNED, PKCS7_SIGNED *);
+LIBSTUB(i2d_PKCS7_SIGNED, int);
+LIBSTUB(PKCS7_SIGNED_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ENC_CONTENT_new, PKCS7_ENC_CONTENT *);
+LIBSTUB(PKCS7_ENC_CONTENT_free, void);
+LIBSTUB(d2i_PKCS7_ENC_CONTENT, PKCS7_ENC_CONTENT *);
+LIBSTUB(i2d_PKCS7_ENC_CONTENT, int);
+LIBSTUB(PKCS7_ENC_CONTENT_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ENVELOPE_new, PKCS7_ENVELOPE *);
+LIBSTUB(PKCS7_ENVELOPE_free, void);
+LIBSTUB(d2i_PKCS7_ENVELOPE, PKCS7_ENVELOPE *);
+LIBSTUB(i2d_PKCS7_ENVELOPE, int);
+LIBSTUB(PKCS7_ENVELOPE_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_SIGN_ENVELOPE_new, PKCS7_SIGN_ENVELOPE *);
+LIBSTUB(PKCS7_SIGN_ENVELOPE_free, void);
+LIBSTUB(d2i_PKCS7_SIGN_ENVELOPE, PKCS7_SIGN_ENVELOPE *);
+LIBSTUB(i2d_PKCS7_SIGN_ENVELOPE, int);
+LIBSTUB(PKCS7_SIGN_ENVELOPE_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_DIGEST_new, PKCS7_DIGEST *);
+LIBSTUB(PKCS7_DIGEST_free, void);
+LIBSTUB(d2i_PKCS7_DIGEST, PKCS7_DIGEST *);
+LIBSTUB(i2d_PKCS7_DIGEST, int);
+LIBSTUB(PKCS7_DIGEST_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ENCRYPT_new, PKCS7_ENCRYPT *);
+LIBSTUB(PKCS7_ENCRYPT_free, void);
+LIBSTUB(d2i_PKCS7_ENCRYPT, PKCS7_ENCRYPT *);
+LIBSTUB(i2d_PKCS7_ENCRYPT, int);
+LIBSTUB(PKCS7_ENCRYPT_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_new, PKCS7 *);
+LIBSTUB(PKCS7_free, void);
+LIBSTUB(d2i_PKCS7, PKCS7 *);
+LIBSTUB(i2d_PKCS7, int);
+LIBSTUB(PKCS7_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ATTR_SIGN_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ATTR_VERIFY_it, const ASN1_ITEM *);
+LIBSTUB(PKCS7_ctrl, long);
+LIBSTUB(PKCS7_set_type, int);
+LIBSTUB(PKCS7_set_content, int);
+LIBSTUB(PKCS7_SIGNER_INFO_set, int);
+LIBSTUB(PKCS7_add_signer, int);
+LIBSTUB(PKCS7_add_certificate, int);
+LIBSTUB(PKCS7_add_crl, int);
+LIBSTUB(PKCS7_content_new, int);
+LIBSTUB(PKCS7_dataVerify, int);
+LIBSTUB(PKCS7_signatureVerify, int);
+LIBSTUB(PKCS7_dataInit, BIO *);
+LIBSTUB(PKCS7_dataFinal, int);
+LIBSTUB(PKCS7_dataDecode, BIO *);
+LIBSTUB(PKCS7_add_signature, PKCS7_SIGNER_INFO *);
+LIBSTUB(PKCS7_cert_from_signer_info, X509 *);
+LIBSTUB(PKCS7_get_signer_info, STACK_OF(PKCS7_SIGNER_INFO) *);
+LIBSTUB(PKCS7_add_recipient, PKCS7_RECIP_INFO *);
+LIBSTUB(PKCS7_add_recipient_info, int);
+LIBSTUB(PKCS7_RECIP_INFO_set, int);
+LIBSTUB(PKCS7_set_cipher, int);
+LIBSTUB(PKCS7_get_issuer_and_serial, PKCS7_ISSUER_AND_SERIAL *);
+LIBSTUB(PKCS7_digest_from_attributes, ASN1_OCTET_STRING *);
+LIBSTUB(PKCS7_add_signed_attribute, int);
+LIBSTUB(PKCS7_add_attribute, int);
+LIBSTUB(PKCS7_get_attribute, ASN1_TYPE *);
+LIBSTUB(PKCS7_get_signed_attribute, ASN1_TYPE *);
+LIBSTUB(PKCS7_set_signed_attributes, int);
+LIBSTUB(PKCS7_set_attributes, int);
+LIBSTUB(PKCS7_sign, PKCS7 *);
+LIBSTUB(PKCS7_verify, int);
+LIBSTUB(PKCS7_get0_signers, STACK_OF(X509) *);
+LIBSTUB(PKCS7_encrypt, PKCS7 *);
+LIBSTUB(PKCS7_decrypt, int);
+LIBSTUB(PKCS7_add_attrib_smimecap, int);
+LIBSTUB(PKCS7_get_smimecap, STACK_OF(X509_ALGOR) *);
+LIBSTUB(PKCS7_simple_smimecap, int);
+LIBSTUB(SMIME_write_PKCS7, int);
+LIBSTUB(SMIME_read_PKCS7, PKCS7 *);
+LIBSTUB(SMIME_crlf_copy, int);
+LIBSTUB(SMIME_text, int);
+LIBSTUB(ERR_load_PKCS7_strings, void);
+LIBSTUB(RAND_set_rand_method, int);
+LIBSTUB(RAND_get_rand_method, const RAND_METHOD *);
+LIBSTUB(RAND_cleanup, void);
+LIBSTUB(RAND_bytes, int);
+LIBSTUB(RAND_pseudo_bytes, int);
+LIBSTUB(RAND_seed, void);
+LIBSTUB(RAND_add, void);
+LIBSTUB(RAND_load_file, int);
+LIBSTUB(RAND_write_file, int);
+LIBSTUB(RAND_file_name, const char *);
+LIBSTUB(RAND_status, int);
+LIBSTUB(RAND_poll, int);
+LIBSTUB(ERR_load_RAND_strings, void);
+LIBSTUB(SSL_CTX_set_msg_callback, void);
+LIBSTUB(SSL_set_msg_callback, void);
+LIBSTUB(SSL_CTX_sessions, LHASH_OF(SSL_SESSION) *);
+LIBSTUB(SSL_get_finished, size_t);
+LIBSTUB(SSL_get_peer_finished, size_t);
+LIBSTUB(BIO_f_ssl, BIO_METHOD *);
+LIBSTUB(BIO_new_ssl, BIO *);
+LIBSTUB(BIO_new_ssl_connect, BIO *);
+LIBSTUB(BIO_new_buffer_ssl_connect, BIO *);
+LIBSTUB(BIO_ssl_copy_session_id, int);
+LIBSTUB(BIO_ssl_shutdown, void);
+LIBSTUB(SSL_CTX_set_cipher_list, int);
+LIBSTUB(SSL_CTX_new, SSL_CTX *);
+LIBSTUB(SSL_CTX_free, void);
+LIBSTUB(SSL_CTX_set_timeout, long);
+LIBSTUB(SSL_CTX_get_timeout, long);
+LIBSTUB(SSL_CTX_get_cert_store, X509_STORE *);
+LIBSTUB(SSL_CTX_set_cert_store, void);
+LIBSTUB(SSL_want, int);
+LIBSTUB(SSL_clear, int);
+LIBSTUB(SSL_CTX_flush_sessions, void);
+LIBSTUB(SSL_get_current_cipher, const SSL_CIPHER *);
+LIBSTUB(SSL_CIPHER_get_bits, int);
+LIBSTUB(SSL_CIPHER_get_version, const char *);
+LIBSTUB(SSL_CIPHER_get_name, const char *);
+LIBSTUB(SSL_CIPHER_get_mac, const char *);
+LIBSTUB(SSL_CIPHER_get_encryption, const char *);
+LIBSTUB(SSL_CIPHER_get_authentication, const char *);
+LIBSTUB(SSL_CIPHER_get_key_exchange, const char *);
+LIBSTUB(SSL_get_fd, int);
+LIBSTUB(SSL_get_rfd, int);
+LIBSTUB(SSL_get_wfd, int);
+LIBSTUB(SSL_get_cipher_list, const char *);
+LIBSTUB(SSL_get_shared_ciphers, char *);
+LIBSTUB(SSL_get_read_ahead, int);
+LIBSTUB(SSL_pending, int);
+LIBSTUB(SSL_set_fd, int);
+LIBSTUB(SSL_set_rfd, int);
+LIBSTUB(SSL_set_wfd, int);
+LIBSTUB(SSL_set_bio, void);
+LIBSTUB(SSL_get_rbio, BIO *);
+LIBSTUB(SSL_get_wbio, BIO *);
+LIBSTUB(SSL_set_cipher_list, int);
+LIBSTUB(SSL_set_read_ahead, void);
+LIBSTUB(SSL_get_verify_mode, int);
+LIBSTUB(SSL_get_verify_depth, int);
+LIBSTUB(SSL_get_verify_callback, void *);
+LIBSTUB(SSL_set_verify, void);
+LIBSTUB(SSL_set_verify_depth, void);
+LIBSTUB(SSL_use_RSAPrivateKey, int);
+LIBSTUB(SSL_use_RSAPrivateKey_ASN1, int);
+LIBSTUB(SSL_use_PrivateKey, int);
+LIBSTUB(SSL_use_PrivateKey_ASN1, int);
+LIBSTUB(SSL_use_certificate, int);
+LIBSTUB(SSL_use_certificate_ASN1, int);
+LIBSTUB(SSL_use_RSAPrivateKey_file, int);
+LIBSTUB(SSL_use_PrivateKey_file, int);
+LIBSTUB(SSL_use_certificate_file, int);
+LIBSTUB(SSL_CTX_use_RSAPrivateKey_file, int);
+LIBSTUB(SSL_CTX_use_PrivateKey_file, int);
+LIBSTUB(SSL_CTX_use_certificate_file, int);
+LIBSTUB(SSL_CTX_use_certificate_chain_file, int);
+LIBSTUB(SSL_load_client_CA_file, STACK_OF(X509_NAME) *);
+LIBSTUB(SSL_add_file_cert_subjects_to_stack, int);
+LIBSTUB(SSL_add_dir_cert_subjects_to_stack, int);
+LIBSTUB(SSL_rstate_string, const char *);
+LIBSTUB(SSL_state_string_long, const char *);
+LIBSTUB(SSL_rstate_string_long, const char *);
+LIBSTUB(SSL_SESSION_get_time, long);
+LIBSTUB(SSL_SESSION_set_time, long);
+LIBSTUB(SSL_SESSION_get_timeout, long);
+LIBSTUB(SSL_SESSION_set_timeout, long);
+LIBSTUB(SSL_copy_session_id, int);
+LIBSTUB(SSL_SESSION_new, SSL_SESSION *);
+LIBSTUB(SSL_SESSION_print, int);
+LIBSTUB(SSL_SESSION_free, void);
+LIBSTUB(i2d_SSL_SESSION, int);
+LIBSTUB(SSL_set_session, int);
+LIBSTUB(SSL_CTX_add_session, int);
+LIBSTUB(SSL_CTX_remove_session, int);
+LIBSTUB(SSL_CTX_set_generate_session_id, int);
+LIBSTUB(SSL_set_generate_session_id, int);
+LIBSTUB(SSL_has_matching_session_id, int);
+LIBSTUB(d2i_SSL_SESSION, SSL_SESSION *);
+LIBSTUB(SSL_get_peer_certificate, X509 *);
+LIBSTUB(SSL_get_peer_cert_chain, STACK_OF(X509) *);
+LIBSTUB(SSL_CTX_get_verify_mode, int);
+LIBSTUB(SSL_CTX_get_verify_depth, int);
+LIBSTUB(SSL_CTX_get_verify_callback, void *);
+LIBSTUB(SSL_CTX_set_verify, void);
+LIBSTUB(SSL_CTX_set_verify_depth, void);
+LIBSTUB(SSL_CTX_set_cert_verify_callback, void);
+LIBSTUB(SSL_CTX_use_RSAPrivateKey, int);
+LIBSTUB(SSL_CTX_use_RSAPrivateKey_ASN1, int);
+LIBSTUB(SSL_CTX_use_PrivateKey, int);
+LIBSTUB(SSL_CTX_use_PrivateKey_ASN1, int);
+LIBSTUB(SSL_CTX_use_certificate, int);
+LIBSTUB(SSL_CTX_use_certificate_ASN1, int);
+LIBSTUB(SSL_CTX_set_default_passwd_cb, void);
+LIBSTUB(SSL_CTX_set_default_passwd_cb_userdata, void);
+LIBSTUB(SSL_CTX_check_private_key, int);
+LIBSTUB(SSL_check_private_key, int);
+LIBSTUB(SSL_CTX_set_session_id_context, int);
+LIBSTUB(SSL_new, SSL *);
+LIBSTUB(SSL_set_session_id_context, int);
+LIBSTUB(SSL_CTX_set_purpose, int);
+LIBSTUB(SSL_set_purpose, int);
+LIBSTUB(SSL_CTX_set_trust, int);
+LIBSTUB(SSL_set_trust, int);
+LIBSTUB(SSL_free, void);
+LIBSTUB(SSL_accept, int);
+LIBSTUB(SSL_connect, int);
+LIBSTUB(SSL_read, int);
+LIBSTUB(SSL_peek, int);
+LIBSTUB(SSL_write, int);
+LIBSTUB(SSL_ctrl, long);
+LIBSTUB(SSL_callback_ctrl, long);
+LIBSTUB(SSL_CTX_ctrl, long);
+LIBSTUB(SSL_CTX_callback_ctrl, long);
+LIBSTUB(SSL_get_error, int);
+LIBSTUB(SSL_get_version, const char *);
+LIBSTUB(SSL_CTX_set_ssl_version, int);
+LIBSTUB(TLSv1_method, const SSL_METHOD *);
+LIBSTUB(TLSv1_server_method, const SSL_METHOD *);
+LIBSTUB(TLSv1_client_method, const SSL_METHOD *);
+LIBSTUB(SSL_get_ciphers, STACK_OF(SSL_CIPHER) *);
+LIBSTUB(SSL_do_handshake, int);
+LIBSTUB(SSL_renegotiate, int);
+LIBSTUB(SSL_renegotiate_pending, int);
+LIBSTUB(SSL_shutdown, int);
+LIBSTUB(SSL_get_ssl_method, const SSL_METHOD *);
+LIBSTUB(SSL_set_ssl_method, int);
+LIBSTUB(SSL_alert_type_string_long, const char *);
+LIBSTUB(SSL_alert_type_string, const char *);
+LIBSTUB(SSL_alert_desc_string_long, const char *);
+LIBSTUB(SSL_alert_desc_string, const char *);
+LIBSTUB(SSL_set_client_CA_list, void);
+LIBSTUB(SSL_CTX_set_client_CA_list, void);
+LIBSTUB(SSL_get_client_CA_list, STACK_OF(X509_NAME) *);
+LIBSTUB(SSL_CTX_get_client_CA_list, STACK_OF(X509_NAME) *);
+LIBSTUB(SSL_add_client_CA, int);
+LIBSTUB(SSL_CTX_add_client_CA, int);
+LIBSTUB(SSL_set_connect_state, void);
+LIBSTUB(SSL_set_accept_state, void);
+LIBSTUB(SSL_get_default_timeout, long);
+LIBSTUB(SSL_CIPHER_description, char *);
+LIBSTUB(SSL_dup_CA_list, STACK_OF(X509_NAME) *);
+LIBSTUB(SSL_dup, SSL *);
+LIBSTUB(SSL_get_certificate, X509 *);
+LIBSTUB(SSL_get_privatekey, struct evp_pkey_st *);
+LIBSTUB(SSL_CTX_set_quiet_shutdown, void);
+LIBSTUB(SSL_CTX_get_quiet_shutdown, int);
+LIBSTUB(SSL_set_quiet_shutdown, void);
+LIBSTUB(SSL_get_quiet_shutdown, int);
+LIBSTUB(SSL_set_shutdown, void);
+LIBSTUB(SSL_get_shutdown, int);
+LIBSTUB(SSL_version, int);
+LIBSTUB(SSL_CTX_set_default_verify_paths, int);
+LIBSTUB(SSL_CTX_load_verify_locations, int);
+LIBSTUB(SSL_get_session, SSL_SESSION *);
+LIBSTUB(SSL_get1_session, SSL_SESSION *);
+LIBSTUB(SSL_get_SSL_CTX, SSL_CTX *);
+LIBSTUB(SSL_set_info_callback, void);
+LIBSTUB(SSL_get_info_callback, void *);
+LIBSTUB(SSL_set_verify_result, void);
+LIBSTUB(SSL_get_verify_result, long);
+LIBSTUB(SSL_set_ex_data, int);
+LIBSTUB(SSL_get_ex_data, void *);
+LIBSTUB(SSL_SESSION_set_ex_data, int);
+LIBSTUB(SSL_SESSION_get_ex_data, void *);
+LIBSTUB(SSL_CTX_set_ex_data, int);
+LIBSTUB(SSL_CTX_get_ex_data, void *);
+LIBSTUB(SSL_get_ex_data_X509_STORE_CTX_idx, int);
+LIBSTUB(SSL_CTX_set_tmp_dh_callback, void);
+LIBSTUB(SSL_set_tmp_dh_callback, void);
+LIBSTUB(SSL_COMP_add_compression_method, int);
+LIBSTUB(ERR_load_SSL_strings, void);
+LIBSTUB(sk_num, int);
+LIBSTUB(sk_value, void *);
+LIBSTUB(sk_set, void *);
+LIBSTUB(sk_new, _STACK *);
+LIBSTUB(sk_new_null, _STACK *);
+LIBSTUB(sk_free, void);
+LIBSTUB(sk_pop_free, void);
+LIBSTUB(sk_insert, int);
+LIBSTUB(sk_delete, void *);
+LIBSTUB(sk_delete_ptr, void *);
+LIBSTUB(sk_find, int);
+LIBSTUB(sk_push, int);
+LIBSTUB(sk_unshift, int);
+LIBSTUB(sk_shift, void *);
+LIBSTUB(sk_pop, void *);
+LIBSTUB(sk_zero, void);
+LIBSTUB(sk_set_cmp_func, void *);
+LIBSTUB(sk_dup, _STACK *);
+LIBSTUB(sk_sort, void);
+LIBSTUB(sk_is_sorted, int);
+LIBSTUB(TXT_DB_read, TXT_DB *);
+LIBSTUB(TXT_DB_write, long);
+LIBSTUB(TXT_DB_create_index, int);
+LIBSTUB(TXT_DB_free, void);
+LIBSTUB(TXT_DB_get_by_index, char **);
+LIBSTUB(TXT_DB_insert, int);
+LIBSTUB(UI_new, UI *);
+LIBSTUB(UI_new_method, UI *);
+LIBSTUB(UI_free, void);
+LIBSTUB(UI_add_input_string, int);
+LIBSTUB(UI_dup_input_string, int);
+LIBSTUB(UI_add_verify_string, int);
+LIBSTUB(UI_dup_verify_string, int);
+LIBSTUB(UI_add_input_boolean, int);
+LIBSTUB(UI_dup_input_boolean, int);
+LIBSTUB(UI_add_info_string, int);
+LIBSTUB(UI_dup_info_string, int);
+LIBSTUB(UI_add_error_string, int);
+LIBSTUB(UI_dup_error_string, int);
+LIBSTUB(UI_construct_prompt, char *);
+LIBSTUB(UI_add_user_data, void *);
+LIBSTUB(UI_get0_user_data, void *);
+LIBSTUB(UI_get0_result, const char *);
+LIBSTUB(UI_process, int);
+LIBSTUB(UI_ctrl, int);
+LIBSTUB(UI_set_ex_data, int);
+LIBSTUB(UI_get_ex_data, void *);
+LIBSTUB(UI_set_default_method, void);
+LIBSTUB(UI_get_default_method, const UI_METHOD *);
+LIBSTUB(UI_get_method, const UI_METHOD *);
+LIBSTUB(UI_set_method, const UI_METHOD *);
+LIBSTUB(UI_OpenSSL, UI_METHOD *);
+LIBSTUB(UI_create_method, UI_METHOD *);
+LIBSTUB(UI_destroy_method, void);
+LIBSTUB(UI_method_set_opener, int);
+LIBSTUB(UI_method_set_writer, int);
+LIBSTUB(UI_method_set_flusher, int);
+LIBSTUB(UI_method_set_reader, int);
+LIBSTUB(UI_method_set_closer, int);
+LIBSTUB(UI_method_get_opener, void *);
+LIBSTUB(UI_method_get_writer, void *);
+LIBSTUB(UI_method_get_flusher, void *);
+LIBSTUB(UI_method_get_reader, void *);
+LIBSTUB(UI_method_get_closer, void *);
+LIBSTUB(UI_get_string_type, enum UI_string_types);
+LIBSTUB(UI_get_input_flags, int);
+LIBSTUB(UI_get0_output_string, const char *);
+LIBSTUB(UI_get0_action_string, const char *);
+LIBSTUB(UI_get0_result_string, const char *);
+LIBSTUB(UI_get0_test_string, const char *);
+LIBSTUB(UI_get_result_minsize, int);
+LIBSTUB(UI_get_result_maxsize, int);
+LIBSTUB(UI_set_result, int);
+LIBSTUB(UI_UTIL_read_pw_string, int);
+LIBSTUB(UI_UTIL_read_pw, int);
+LIBSTUB(ERR_load_UI_strings, void);
+LIBSTUB(X509_verify_cert_error_string, const char *);
+LIBSTUB(X509_verify, int);
+LIBSTUB(X509_REQ_verify, int);
+LIBSTUB(X509_CRL_verify, int);
+LIBSTUB(NETSCAPE_SPKI_verify, int);
+LIBSTUB(NETSCAPE_SPKI_b64_decode, NETSCAPE_SPKI *);
+LIBSTUB(NETSCAPE_SPKI_b64_encode, char *);
+LIBSTUB(NETSCAPE_SPKI_get_pubkey, EVP_PKEY *);
+LIBSTUB(NETSCAPE_SPKI_set_pubkey, int);
+LIBSTUB(NETSCAPE_SPKI_print, int);
+LIBSTUB(X509_signature_print, int);
+LIBSTUB(X509_sign, int);
+LIBSTUB(X509_REQ_sign, int);
+LIBSTUB(X509_CRL_sign, int);
+LIBSTUB(NETSCAPE_SPKI_sign, int);
+LIBSTUB(X509_pubkey_digest, int);
+LIBSTUB(X509_digest, int);
+LIBSTUB(X509_CRL_digest, int);
+LIBSTUB(X509_REQ_digest, int);
+LIBSTUB(X509_NAME_digest, int);
+LIBSTUB(d2i_X509_bio, X509 *);
+LIBSTUB(i2d_X509_bio, int);
+LIBSTUB(d2i_X509_CRL_bio, X509_CRL *);
+LIBSTUB(i2d_X509_CRL_bio, int);
+LIBSTUB(d2i_X509_REQ_bio, X509_REQ *);
+LIBSTUB(i2d_X509_REQ_bio, int);
+LIBSTUB(d2i_RSAPrivateKey_bio, RSA *);
+LIBSTUB(i2d_RSAPrivateKey_bio, int);
+LIBSTUB(d2i_RSAPublicKey_bio, RSA *);
+LIBSTUB(i2d_RSAPublicKey_bio, int);
+LIBSTUB(d2i_RSA_PUBKEY_bio, RSA *);
+LIBSTUB(i2d_RSA_PUBKEY_bio, int);
+LIBSTUB(d2i_DSA_PUBKEY_bio, DSA *);
+LIBSTUB(i2d_DSA_PUBKEY_bio, int);
+LIBSTUB(d2i_DSAPrivateKey_bio, DSA *);
+LIBSTUB(i2d_DSAPrivateKey_bio, int);
+LIBSTUB(d2i_PKCS8_bio, X509_SIG *);
+LIBSTUB(i2d_PKCS8_bio, int);
+LIBSTUB(d2i_PKCS8_PRIV_KEY_INFO_bio, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(i2d_PKCS8_PRIV_KEY_INFO_bio, int);
+LIBSTUB(i2d_PKCS8PrivateKeyInfo_bio, int);
+LIBSTUB(i2d_PrivateKey_bio, int);
+LIBSTUB(d2i_PrivateKey_bio, EVP_PKEY *);
+LIBSTUB(i2d_PUBKEY_bio, int);
+LIBSTUB(d2i_PUBKEY_bio, EVP_PKEY *);
+LIBSTUB(X509_dup, X509 *);
+LIBSTUB(X509_ATTRIBUTE_dup, X509_ATTRIBUTE *);
+LIBSTUB(X509_EXTENSION_dup, X509_EXTENSION *);
+LIBSTUB(X509_CRL_dup, X509_CRL *);
+LIBSTUB(X509_REQ_dup, X509_REQ *);
+LIBSTUB(X509_ALGOR_dup, X509_ALGOR *);
+LIBSTUB(X509_NAME_dup, X509_NAME *);
+LIBSTUB(X509_NAME_ENTRY_dup, X509_NAME_ENTRY *);
+LIBSTUB(X509_cmp_time, int);
+LIBSTUB(X509_cmp_current_time, int);
+LIBSTUB(X509_time_adj, ASN1_TIME *);
+LIBSTUB(X509_gmtime_adj, ASN1_TIME *);
+LIBSTUB(X509_get_default_cert_area, const char *);
+LIBSTUB(X509_get_default_cert_dir, const char *);
+LIBSTUB(X509_get_default_cert_file, const char *);
+LIBSTUB(X509_get_default_cert_dir_env, const char *);
+LIBSTUB(X509_get_default_cert_file_env, const char *);
+LIBSTUB(X509_get_default_private_dir, const char *);
+LIBSTUB(X509_to_X509_REQ, X509_REQ *);
+LIBSTUB(X509_REQ_to_X509, X509 *);
+LIBSTUB(X509_ALGOR_new, X509_ALGOR *);
+LIBSTUB(X509_ALGOR_free, void);
+LIBSTUB(d2i_X509_ALGOR, X509_ALGOR *);
+LIBSTUB(i2d_X509_ALGOR, int);
+LIBSTUB(X509_ALGOR_it, const ASN1_ITEM *);
+LIBSTUB(X509_VAL_new, X509_VAL *);
+LIBSTUB(X509_VAL_free, void);
+LIBSTUB(d2i_X509_VAL, X509_VAL *);
+LIBSTUB(i2d_X509_VAL, int);
+LIBSTUB(X509_VAL_it, const ASN1_ITEM *);
+LIBSTUB(X509_PUBKEY_new, X509_PUBKEY *);
+LIBSTUB(X509_PUBKEY_free, void);
+LIBSTUB(d2i_X509_PUBKEY, X509_PUBKEY *);
+LIBSTUB(i2d_X509_PUBKEY, int);
+LIBSTUB(X509_PUBKEY_it, const ASN1_ITEM *);
+LIBSTUB(X509_PUBKEY_set, int);
+LIBSTUB(X509_PUBKEY_get, EVP_PKEY *);
+LIBSTUB(X509_get_pubkey_parameters, int);
+LIBSTUB(i2d_PUBKEY, int);
+LIBSTUB(d2i_PUBKEY, EVP_PKEY *);
+LIBSTUB(i2d_RSA_PUBKEY, int);
+LIBSTUB(d2i_RSA_PUBKEY, RSA *);
+LIBSTUB(i2d_DSA_PUBKEY, int);
+LIBSTUB(d2i_DSA_PUBKEY, DSA *);
+LIBSTUB(X509_SIG_new, X509_SIG *);
+LIBSTUB(X509_SIG_free, void);
+LIBSTUB(d2i_X509_SIG, X509_SIG *);
+LIBSTUB(i2d_X509_SIG, int);
+LIBSTUB(X509_SIG_it, const ASN1_ITEM *);
+LIBSTUB(X509_REQ_INFO_new, X509_REQ_INFO *);
+LIBSTUB(X509_REQ_INFO_free, void);
+LIBSTUB(d2i_X509_REQ_INFO, X509_REQ_INFO *);
+LIBSTUB(i2d_X509_REQ_INFO, int);
+LIBSTUB(X509_REQ_INFO_it, const ASN1_ITEM *);
+LIBSTUB(X509_REQ_new, X509_REQ *);
+LIBSTUB(X509_REQ_free, void);
+LIBSTUB(d2i_X509_REQ, X509_REQ *);
+LIBSTUB(i2d_X509_REQ, int);
+LIBSTUB(X509_REQ_it, const ASN1_ITEM *);
+LIBSTUB(X509_ATTRIBUTE_new, X509_ATTRIBUTE *);
+LIBSTUB(X509_ATTRIBUTE_free, void);
+LIBSTUB(d2i_X509_ATTRIBUTE, X509_ATTRIBUTE *);
+LIBSTUB(i2d_X509_ATTRIBUTE, int);
+LIBSTUB(X509_ATTRIBUTE_it, const ASN1_ITEM *);
+LIBSTUB(X509_ATTRIBUTE_create, X509_ATTRIBUTE *);
+LIBSTUB(X509_EXTENSION_new, X509_EXTENSION *);
+LIBSTUB(X509_EXTENSION_free, void);
+LIBSTUB(d2i_X509_EXTENSION, X509_EXTENSION *);
+LIBSTUB(i2d_X509_EXTENSION, int);
+LIBSTUB(X509_EXTENSION_it, const ASN1_ITEM *);
+LIBSTUB(X509_NAME_ENTRY_new, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_ENTRY_free, void);
+LIBSTUB(d2i_X509_NAME_ENTRY, X509_NAME_ENTRY *);
+LIBSTUB(i2d_X509_NAME_ENTRY, int);
+LIBSTUB(X509_NAME_ENTRY_it, const ASN1_ITEM *);
+LIBSTUB(X509_NAME_new, X509_NAME *);
+LIBSTUB(X509_NAME_free, void);
+LIBSTUB(d2i_X509_NAME, X509_NAME *);
+LIBSTUB(i2d_X509_NAME, int);
+LIBSTUB(X509_NAME_it, const ASN1_ITEM *);
+LIBSTUB(X509_NAME_set, int);
+LIBSTUB(X509_CINF_new, X509_CINF *);
+LIBSTUB(X509_CINF_free, void);
+LIBSTUB(d2i_X509_CINF, X509_CINF *);
+LIBSTUB(i2d_X509_CINF, int);
+LIBSTUB(X509_CINF_it, const ASN1_ITEM *);
+LIBSTUB(X509_new, X509 *);
+LIBSTUB(X509_free, void);
+LIBSTUB(d2i_X509, X509 *);
+LIBSTUB(i2d_X509, int);
+LIBSTUB(X509_it, const ASN1_ITEM *);
+LIBSTUB(X509_CERT_AUX_new, X509_CERT_AUX *);
+LIBSTUB(X509_CERT_AUX_free, void);
+LIBSTUB(d2i_X509_CERT_AUX, X509_CERT_AUX *);
+LIBSTUB(i2d_X509_CERT_AUX, int);
+LIBSTUB(X509_CERT_AUX_it, const ASN1_ITEM *);
+LIBSTUB(X509_set_ex_data, int);
+LIBSTUB(X509_get_ex_data, void *);
+LIBSTUB(i2d_X509_AUX, int);
+LIBSTUB(d2i_X509_AUX, X509 *);
+LIBSTUB(X509_alias_set1, int);
+LIBSTUB(X509_keyid_set1, int);
+LIBSTUB(X509_alias_get0, unsigned char *);
+LIBSTUB(X509_TRUST_set_default, void *);
+LIBSTUB(X509_TRUST_set, int);
+LIBSTUB(X509_add1_trust_object, int);
+LIBSTUB(X509_add1_reject_object, int);
+LIBSTUB(X509_trust_clear, void);
+LIBSTUB(X509_reject_clear, void);
+LIBSTUB(X509_REVOKED_new, X509_REVOKED *);
+LIBSTUB(X509_REVOKED_free, void);
+LIBSTUB(d2i_X509_REVOKED, X509_REVOKED *);
+LIBSTUB(i2d_X509_REVOKED, int);
+LIBSTUB(X509_REVOKED_it, const ASN1_ITEM *);
+LIBSTUB(X509_CRL_INFO_new, X509_CRL_INFO *);
+LIBSTUB(X509_CRL_INFO_free, void);
+LIBSTUB(d2i_X509_CRL_INFO, X509_CRL_INFO *);
+LIBSTUB(i2d_X509_CRL_INFO, int);
+LIBSTUB(X509_CRL_INFO_it, const ASN1_ITEM *);
+LIBSTUB(X509_CRL_new, X509_CRL *);
+LIBSTUB(X509_CRL_free, void);
+LIBSTUB(d2i_X509_CRL, X509_CRL *);
+LIBSTUB(i2d_X509_CRL, int);
+LIBSTUB(X509_CRL_it, const ASN1_ITEM *);
+LIBSTUB(X509_CRL_add0_revoked, int);
+LIBSTUB(X509_PKEY_new, X509_PKEY *);
+LIBSTUB(X509_PKEY_free, void);
+LIBSTUB(NETSCAPE_SPKI_new, NETSCAPE_SPKI *);
+LIBSTUB(NETSCAPE_SPKI_free, void);
+LIBSTUB(d2i_NETSCAPE_SPKI, NETSCAPE_SPKI *);
+LIBSTUB(i2d_NETSCAPE_SPKI, int);
+LIBSTUB(NETSCAPE_SPKI_it, const ASN1_ITEM *);
+LIBSTUB(NETSCAPE_SPKAC_new, NETSCAPE_SPKAC *);
+LIBSTUB(NETSCAPE_SPKAC_free, void);
+LIBSTUB(d2i_NETSCAPE_SPKAC, NETSCAPE_SPKAC *);
+LIBSTUB(i2d_NETSCAPE_SPKAC, int);
+LIBSTUB(NETSCAPE_SPKAC_it, const ASN1_ITEM *);
+LIBSTUB(NETSCAPE_CERT_SEQUENCE_new, NETSCAPE_CERT_SEQUENCE *);
+LIBSTUB(NETSCAPE_CERT_SEQUENCE_free, void);
+LIBSTUB(d2i_NETSCAPE_CERT_SEQUENCE, NETSCAPE_CERT_SEQUENCE *);
+LIBSTUB(i2d_NETSCAPE_CERT_SEQUENCE, int);
+LIBSTUB(NETSCAPE_CERT_SEQUENCE_it, const ASN1_ITEM *);
+LIBSTUB(X509_INFO_new, X509_INFO *);
+LIBSTUB(X509_INFO_free, void);
+LIBSTUB(X509_NAME_oneline, char *);
+LIBSTUB(ASN1_verify, int);
+LIBSTUB(ASN1_digest, int);
+LIBSTUB(ASN1_sign, int);
+LIBSTUB(ASN1_item_digest, int);
+LIBSTUB(ASN1_item_verify, int);
+LIBSTUB(ASN1_item_sign, int);
+LIBSTUB(X509_set_version, int);
+LIBSTUB(X509_set_serialNumber, int);
+LIBSTUB(X509_get_serialNumber, ASN1_INTEGER *);
+LIBSTUB(X509_set_issuer_name, int);
+LIBSTUB(X509_get_issuer_name, X509_NAME *);
+LIBSTUB(X509_set_subject_name, int);
+LIBSTUB(X509_get_subject_name, X509_NAME *);
+LIBSTUB(X509_set_notBefore, int);
+LIBSTUB(X509_set_notAfter, int);
+LIBSTUB(X509_set_pubkey, int);
+LIBSTUB(X509_get_pubkey, EVP_PKEY *);
+LIBSTUB(X509_get0_pubkey_bitstr, ASN1_BIT_STRING *);
+LIBSTUB(X509_certificate_type, int);
+LIBSTUB(X509_REQ_set_version, int);
+LIBSTUB(X509_REQ_set_subject_name, int);
+LIBSTUB(X509_REQ_set_pubkey, int);
+LIBSTUB(X509_REQ_get_pubkey, EVP_PKEY *);
+LIBSTUB(X509_REQ_extension_nid, int);
+LIBSTUB(X509_REQ_get_extension_nids, int *);
+LIBSTUB(X509_REQ_set_extension_nids, void);
+LIBSTUB(X509_REQ_get_extensions, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(X509_REQ_add_extensions_nid, int);
+LIBSTUB(X509_REQ_add_extensions, int);
+LIBSTUB(X509_REQ_get_attr_count, int);
+LIBSTUB(X509_REQ_get_attr_by_NID, int);
+LIBSTUB(X509_REQ_get_attr_by_OBJ, int);
+LIBSTUB(X509_REQ_get_attr, X509_ATTRIBUTE *);
+LIBSTUB(X509_REQ_delete_attr, X509_ATTRIBUTE *);
+LIBSTUB(X509_REQ_add1_attr, int);
+LIBSTUB(X509_REQ_add1_attr_by_OBJ, int);
+LIBSTUB(X509_REQ_add1_attr_by_NID, int);
+LIBSTUB(X509_REQ_add1_attr_by_txt, int);
+LIBSTUB(X509_CRL_set_version, int);
+LIBSTUB(X509_CRL_set_issuer_name, int);
+LIBSTUB(X509_CRL_set_lastUpdate, int);
+LIBSTUB(X509_CRL_set_nextUpdate, int);
+LIBSTUB(X509_CRL_sort, int);
+LIBSTUB(X509_REVOKED_set_serialNumber, int);
+LIBSTUB(X509_REVOKED_set_revocationDate, int);
+LIBSTUB(X509_check_private_key, int);
+LIBSTUB(X509_issuer_and_serial_cmp, int);
+LIBSTUB(X509_issuer_and_serial_hash, unsigned long);
+LIBSTUB(X509_issuer_name_cmp, int);
+LIBSTUB(X509_issuer_name_hash, unsigned long);
+LIBSTUB(X509_subject_name_cmp, int);
+LIBSTUB(X509_subject_name_hash, unsigned long);
+LIBSTUB(X509_cmp, int);
+LIBSTUB(X509_NAME_cmp, int);
+LIBSTUB(X509_NAME_hash, unsigned long);
+LIBSTUB(X509_CRL_cmp, int);
+LIBSTUB(X509_NAME_print, int);
+LIBSTUB(X509_NAME_print_ex, int);
+LIBSTUB(X509_print_ex, int);
+LIBSTUB(X509_print, int);
+LIBSTUB(X509_ocspid_print, int);
+LIBSTUB(X509_CRL_print, int);
+LIBSTUB(X509_REQ_print_ex, int);
+LIBSTUB(X509_REQ_print, int);
+LIBSTUB(X509_NAME_entry_count, int);
+LIBSTUB(X509_NAME_get_text_by_NID, int);
+LIBSTUB(X509_NAME_get_text_by_OBJ, int);
+LIBSTUB(X509_NAME_get_index_by_NID, int);
+LIBSTUB(X509_NAME_get_index_by_OBJ, int);
+LIBSTUB(X509_NAME_get_entry, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_delete_entry, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_add_entry, int);
+LIBSTUB(X509_NAME_add_entry_by_OBJ, int);
+LIBSTUB(X509_NAME_add_entry_by_NID, int);
+LIBSTUB(X509_NAME_ENTRY_create_by_txt, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_ENTRY_create_by_NID, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_add_entry_by_txt, int);
+LIBSTUB(X509_NAME_ENTRY_create_by_OBJ, X509_NAME_ENTRY *);
+LIBSTUB(X509_NAME_ENTRY_set_object, int);
+LIBSTUB(X509_NAME_ENTRY_set_data, int);
+LIBSTUB(X509_NAME_ENTRY_get_object, ASN1_OBJECT *);
+LIBSTUB(X509_NAME_ENTRY_get_data, ASN1_STRING *);
+LIBSTUB(X509v3_get_ext_count, int);
+LIBSTUB(X509v3_get_ext_by_NID, int);
+LIBSTUB(X509v3_get_ext_by_OBJ, int);
+LIBSTUB(X509v3_get_ext_by_critical, int);
+LIBSTUB(X509v3_get_ext, X509_EXTENSION *);
+LIBSTUB(X509v3_delete_ext, X509_EXTENSION *);
+LIBSTUB(X509v3_add_ext, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(X509_get_ext_count, int);
+LIBSTUB(X509_get_ext_by_NID, int);
+LIBSTUB(X509_get_ext_by_OBJ, int);
+LIBSTUB(X509_get_ext_by_critical, int);
+LIBSTUB(X509_get_ext, X509_EXTENSION *);
+LIBSTUB(X509_delete_ext, X509_EXTENSION *);
+LIBSTUB(X509_add_ext, int);
+LIBSTUB(X509_get_ext_d2i, void *);
+LIBSTUB(X509_add1_ext_i2d, int);
+LIBSTUB(X509_CRL_get_ext_count, int);
+LIBSTUB(X509_CRL_get_ext_by_NID, int);
+LIBSTUB(X509_CRL_get_ext_by_OBJ, int);
+LIBSTUB(X509_CRL_get_ext_by_critical, int);
+LIBSTUB(X509_CRL_get_ext, X509_EXTENSION *);
+LIBSTUB(X509_CRL_delete_ext, X509_EXTENSION *);
+LIBSTUB(X509_CRL_add_ext, int);
+LIBSTUB(X509_CRL_get_ext_d2i, void *);
+LIBSTUB(X509_CRL_add1_ext_i2d, int);
+LIBSTUB(X509_REVOKED_get_ext_count, int);
+LIBSTUB(X509_REVOKED_get_ext_by_NID, int);
+LIBSTUB(X509_REVOKED_get_ext_by_OBJ, int);
+LIBSTUB(X509_REVOKED_get_ext_by_critical, int);
+LIBSTUB(X509_REVOKED_get_ext, X509_EXTENSION *);
+LIBSTUB(X509_REVOKED_delete_ext, X509_EXTENSION *);
+LIBSTUB(X509_REVOKED_add_ext, int);
+LIBSTUB(X509_REVOKED_get_ext_d2i, void *);
+LIBSTUB(X509_REVOKED_add1_ext_i2d, int);
+LIBSTUB(X509_EXTENSION_create_by_NID, X509_EXTENSION *);
+LIBSTUB(X509_EXTENSION_create_by_OBJ, X509_EXTENSION *);
+LIBSTUB(X509_EXTENSION_set_object, int);
+LIBSTUB(X509_EXTENSION_set_critical, int);
+LIBSTUB(X509_EXTENSION_set_data, int);
+LIBSTUB(X509_EXTENSION_get_object, ASN1_OBJECT *);
+LIBSTUB(X509_EXTENSION_get_data, ASN1_OCTET_STRING *);
+LIBSTUB(X509_EXTENSION_get_critical, int);
+LIBSTUB(X509at_get_attr_count, int);
+LIBSTUB(X509at_get_attr_by_NID, int);
+LIBSTUB(X509at_get_attr_by_OBJ, int);
+LIBSTUB(X509at_get_attr, X509_ATTRIBUTE *);
+LIBSTUB(X509at_delete_attr, X509_ATTRIBUTE *);
+LIBSTUB(X509at_add1_attr, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(X509at_add1_attr_by_OBJ, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(X509at_add1_attr_by_NID, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(X509at_add1_attr_by_txt, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(X509_ATTRIBUTE_create_by_NID, X509_ATTRIBUTE *);
+LIBSTUB(X509_ATTRIBUTE_create_by_OBJ, X509_ATTRIBUTE *);
+LIBSTUB(X509_ATTRIBUTE_create_by_txt, X509_ATTRIBUTE *);
+LIBSTUB(X509_ATTRIBUTE_set1_object, int);
+LIBSTUB(X509_ATTRIBUTE_set1_data, int);
+LIBSTUB(X509_ATTRIBUTE_get0_data, void *);
+LIBSTUB(X509_ATTRIBUTE_count, int);
+LIBSTUB(X509_ATTRIBUTE_get0_object, ASN1_OBJECT *);
+LIBSTUB(X509_ATTRIBUTE_get0_type, ASN1_TYPE *);
+LIBSTUB(X509_verify_cert, int);
+LIBSTUB(X509_find_by_issuer_and_serial, X509 *);
+LIBSTUB(X509_find_by_subject, X509 *);
+LIBSTUB(PBEPARAM_new, PBEPARAM *);
+LIBSTUB(PBEPARAM_free, void);
+LIBSTUB(d2i_PBEPARAM, PBEPARAM *);
+LIBSTUB(i2d_PBEPARAM, int);
+LIBSTUB(PBEPARAM_it, const ASN1_ITEM *);
+LIBSTUB(PBE2PARAM_new, PBE2PARAM *);
+LIBSTUB(PBE2PARAM_free, void);
+LIBSTUB(d2i_PBE2PARAM, PBE2PARAM *);
+LIBSTUB(i2d_PBE2PARAM, int);
+LIBSTUB(PBE2PARAM_it, const ASN1_ITEM *);
+LIBSTUB(PBKDF2PARAM_new, PBKDF2PARAM *);
+LIBSTUB(PBKDF2PARAM_free, void);
+LIBSTUB(d2i_PBKDF2PARAM, PBKDF2PARAM *);
+LIBSTUB(i2d_PBKDF2PARAM, int);
+LIBSTUB(PBKDF2PARAM_it, const ASN1_ITEM *);
+LIBSTUB(PKCS5_pbe_set, X509_ALGOR *);
+LIBSTUB(PKCS5_pbe2_set, X509_ALGOR *);
+LIBSTUB(PKCS8_PRIV_KEY_INFO_new, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(PKCS8_PRIV_KEY_INFO_free, void);
+LIBSTUB(d2i_PKCS8_PRIV_KEY_INFO, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(i2d_PKCS8_PRIV_KEY_INFO, int);
+LIBSTUB(PKCS8_PRIV_KEY_INFO_it, const ASN1_ITEM *);
+LIBSTUB(EVP_PKCS82PKEY, EVP_PKEY *);
+LIBSTUB(EVP_PKEY2PKCS8, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(X509_check_trust, int);
+LIBSTUB(X509_TRUST_get_count, int);
+LIBSTUB(X509_TRUST_get0, X509_TRUST *);
+LIBSTUB(X509_TRUST_get_by_id, int);
+LIBSTUB(X509_TRUST_add, int);
+LIBSTUB(X509_TRUST_cleanup, void);
+LIBSTUB(X509_TRUST_get_flags, int);
+LIBSTUB(X509_TRUST_get0_name, char *);
+LIBSTUB(X509_TRUST_get_trust, int);
+LIBSTUB(ERR_load_X509_strings, void);
+LIBSTUB(X509_OBJECT_idx_by_subject, int);
+LIBSTUB(X509_OBJECT_retrieve_by_subject, X509_OBJECT *);
+LIBSTUB(X509_OBJECT_retrieve_match, X509_OBJECT *);
+LIBSTUB(X509_OBJECT_up_ref_count, void);
+LIBSTUB(X509_OBJECT_free_contents, void);
+LIBSTUB(X509_STORE_new, X509_STORE *);
+LIBSTUB(X509_STORE_free, void);
+LIBSTUB(X509_STORE_set_flags, void);
+LIBSTUB(X509_STORE_set_purpose, int);
+LIBSTUB(X509_STORE_set_trust, int);
+LIBSTUB(X509_STORE_CTX_new, X509_STORE_CTX *);
+LIBSTUB(X509_STORE_CTX_get1_issuer, int);
+LIBSTUB(X509_STORE_CTX_free, void);
+LIBSTUB(X509_STORE_CTX_init, int);
+LIBSTUB(X509_STORE_CTX_trusted_stack, void);
+LIBSTUB(X509_STORE_CTX_cleanup, void);
+LIBSTUB(X509_STORE_add_lookup, X509_LOOKUP *);
+LIBSTUB(X509_LOOKUP_hash_dir, X509_LOOKUP_METHOD *);
+LIBSTUB(X509_LOOKUP_file, X509_LOOKUP_METHOD *);
+LIBSTUB(X509_STORE_add_cert, int);
+LIBSTUB(X509_STORE_add_crl, int);
+LIBSTUB(X509_STORE_get_by_subject, int);
+LIBSTUB(X509_LOOKUP_ctrl, int);
+LIBSTUB(X509_load_cert_file, int);
+LIBSTUB(X509_load_crl_file, int);
+LIBSTUB(X509_load_cert_crl_file, int);
+LIBSTUB(X509_LOOKUP_new, X509_LOOKUP *);
+LIBSTUB(X509_LOOKUP_free, void);
+LIBSTUB(X509_LOOKUP_init, int);
+LIBSTUB(X509_LOOKUP_by_subject, int);
+LIBSTUB(X509_LOOKUP_by_issuer_serial, int);
+LIBSTUB(X509_LOOKUP_by_fingerprint, int);
+LIBSTUB(X509_LOOKUP_by_alias, int);
+LIBSTUB(X509_LOOKUP_shutdown, int);
+LIBSTUB(X509_STORE_load_locations, int);
+LIBSTUB(X509_STORE_set_default_paths, int);
+LIBSTUB(X509_STORE_CTX_set_ex_data, int);
+LIBSTUB(X509_STORE_CTX_get_ex_data, void *);
+LIBSTUB(X509_STORE_CTX_get_error, int);
+LIBSTUB(X509_STORE_CTX_set_error, void);
+LIBSTUB(X509_STORE_CTX_get_error_depth, int);
+LIBSTUB(X509_STORE_CTX_get_current_cert, X509 *);
+LIBSTUB(X509_STORE_CTX_get_chain, STACK_OF(X509) *);
+LIBSTUB(X509_STORE_CTX_get1_chain, STACK_OF(X509) *);
+LIBSTUB(X509_STORE_CTX_set_cert, void);
+LIBSTUB(X509_STORE_CTX_set_chain, void);
+LIBSTUB(X509_STORE_CTX_set_purpose, int);
+LIBSTUB(X509_STORE_CTX_set_trust, int);
+LIBSTUB(X509_STORE_CTX_purpose_inherit, int);
+LIBSTUB(X509_STORE_CTX_set_flags, void);
+LIBSTUB(X509_STORE_CTX_set_time, void);
+LIBSTUB(X509_STORE_CTX_set_verify_cb, void);
+LIBSTUB(BASIC_CONSTRAINTS_new, BASIC_CONSTRAINTS *);
+LIBSTUB(BASIC_CONSTRAINTS_free, void);
+LIBSTUB(d2i_BASIC_CONSTRAINTS, BASIC_CONSTRAINTS *);
+LIBSTUB(i2d_BASIC_CONSTRAINTS, int);
+LIBSTUB(BASIC_CONSTRAINTS_it, const ASN1_ITEM *);
+LIBSTUB(SXNET_new, SXNET *);
+LIBSTUB(SXNET_free, void);
+LIBSTUB(d2i_SXNET, SXNET *);
+LIBSTUB(i2d_SXNET, int);
+LIBSTUB(SXNET_it, const ASN1_ITEM *);
+LIBSTUB(SXNETID_new, SXNETID *);
+LIBSTUB(SXNETID_free, void);
+LIBSTUB(d2i_SXNETID, SXNETID *);
+LIBSTUB(i2d_SXNETID, int);
+LIBSTUB(SXNETID_it, const ASN1_ITEM *);
+LIBSTUB(SXNET_add_id_asc, int);
+LIBSTUB(SXNET_add_id_ulong, int);
+LIBSTUB(SXNET_add_id_INTEGER, int);
+LIBSTUB(SXNET_get_id_asc, ASN1_OCTET_STRING *);
+LIBSTUB(SXNET_get_id_ulong, ASN1_OCTET_STRING *);
+LIBSTUB(SXNET_get_id_INTEGER, ASN1_OCTET_STRING *);
+LIBSTUB(AUTHORITY_KEYID_new, AUTHORITY_KEYID *);
+LIBSTUB(AUTHORITY_KEYID_free, void);
+LIBSTUB(d2i_AUTHORITY_KEYID, AUTHORITY_KEYID *);
+LIBSTUB(i2d_AUTHORITY_KEYID, int);
+LIBSTUB(AUTHORITY_KEYID_it, const ASN1_ITEM *);
+LIBSTUB(PKEY_USAGE_PERIOD_new, PKEY_USAGE_PERIOD *);
+LIBSTUB(PKEY_USAGE_PERIOD_free, void);
+LIBSTUB(d2i_PKEY_USAGE_PERIOD, PKEY_USAGE_PERIOD *);
+LIBSTUB(i2d_PKEY_USAGE_PERIOD, int);
+LIBSTUB(PKEY_USAGE_PERIOD_it, const ASN1_ITEM *);
+LIBSTUB(GENERAL_NAME_new, GENERAL_NAME *);
+LIBSTUB(GENERAL_NAME_free, void);
+LIBSTUB(d2i_GENERAL_NAME, GENERAL_NAME *);
+LIBSTUB(i2d_GENERAL_NAME, int);
+LIBSTUB(GENERAL_NAME_it, const ASN1_ITEM *);
+LIBSTUB(i2v_GENERAL_NAME, STACK_OF(CONF_VALUE) *);
+LIBSTUB(GENERAL_NAME_print, int);
+LIBSTUB(GENERAL_NAMES_new, GENERAL_NAMES *);
+LIBSTUB(GENERAL_NAMES_free, void);
+LIBSTUB(d2i_GENERAL_NAMES, GENERAL_NAMES *);
+LIBSTUB(i2d_GENERAL_NAMES, int);
+LIBSTUB(GENERAL_NAMES_it, const ASN1_ITEM *);
+LIBSTUB(i2v_GENERAL_NAMES, STACK_OF(CONF_VALUE) *);
+LIBSTUB(v2i_GENERAL_NAMES, GENERAL_NAMES *);
+LIBSTUB(OTHERNAME_new, OTHERNAME *);
+LIBSTUB(OTHERNAME_free, void);
+LIBSTUB(d2i_OTHERNAME, OTHERNAME *);
+LIBSTUB(i2d_OTHERNAME, int);
+LIBSTUB(OTHERNAME_it, const ASN1_ITEM *);
+LIBSTUB(EDIPARTYNAME_new, EDIPARTYNAME *);
+LIBSTUB(EDIPARTYNAME_free, void);
+LIBSTUB(d2i_EDIPARTYNAME, EDIPARTYNAME *);
+LIBSTUB(i2d_EDIPARTYNAME, int);
+LIBSTUB(EDIPARTYNAME_it, const ASN1_ITEM *);
+LIBSTUB(i2s_ASN1_OCTET_STRING, char *);
+LIBSTUB(s2i_ASN1_OCTET_STRING, ASN1_OCTET_STRING *);
+LIBSTUB(EXTENDED_KEY_USAGE_new, EXTENDED_KEY_USAGE *);
+LIBSTUB(EXTENDED_KEY_USAGE_free, void);
+LIBSTUB(d2i_EXTENDED_KEY_USAGE, EXTENDED_KEY_USAGE *);
+LIBSTUB(i2d_EXTENDED_KEY_USAGE, int);
+LIBSTUB(EXTENDED_KEY_USAGE_it, const ASN1_ITEM *);
+LIBSTUB(i2a_ACCESS_DESCRIPTION, int);
+LIBSTUB(CERTIFICATEPOLICIES_new, CERTIFICATEPOLICIES *);
+LIBSTUB(CERTIFICATEPOLICIES_free, void);
+LIBSTUB(d2i_CERTIFICATEPOLICIES, CERTIFICATEPOLICIES *);
+LIBSTUB(i2d_CERTIFICATEPOLICIES, int);
+LIBSTUB(CERTIFICATEPOLICIES_it, const ASN1_ITEM *);
+LIBSTUB(POLICYINFO_new, POLICYINFO *);
+LIBSTUB(POLICYINFO_free, void);
+LIBSTUB(d2i_POLICYINFO, POLICYINFO *);
+LIBSTUB(i2d_POLICYINFO, int);
+LIBSTUB(POLICYINFO_it, const ASN1_ITEM *);
+LIBSTUB(POLICYQUALINFO_new, POLICYQUALINFO *);
+LIBSTUB(POLICYQUALINFO_free, void);
+LIBSTUB(d2i_POLICYQUALINFO, POLICYQUALINFO *);
+LIBSTUB(i2d_POLICYQUALINFO, int);
+LIBSTUB(POLICYQUALINFO_it, const ASN1_ITEM *);
+LIBSTUB(USERNOTICE_new, USERNOTICE *);
+LIBSTUB(USERNOTICE_free, void);
+LIBSTUB(d2i_USERNOTICE, USERNOTICE *);
+LIBSTUB(i2d_USERNOTICE, int);
+LIBSTUB(USERNOTICE_it, const ASN1_ITEM *);
+LIBSTUB(NOTICEREF_new, NOTICEREF *);
+LIBSTUB(NOTICEREF_free, void);
+LIBSTUB(d2i_NOTICEREF, NOTICEREF *);
+LIBSTUB(i2d_NOTICEREF, int);
+LIBSTUB(NOTICEREF_it, const ASN1_ITEM *);
+LIBSTUB(CRL_DIST_POINTS_new, CRL_DIST_POINTS *);
+LIBSTUB(CRL_DIST_POINTS_free, void);
+LIBSTUB(d2i_CRL_DIST_POINTS, CRL_DIST_POINTS *);
+LIBSTUB(i2d_CRL_DIST_POINTS, int);
+LIBSTUB(CRL_DIST_POINTS_it, const ASN1_ITEM *);
+LIBSTUB(DIST_POINT_new, DIST_POINT *);
+LIBSTUB(DIST_POINT_free, void);
+LIBSTUB(d2i_DIST_POINT, DIST_POINT *);
+LIBSTUB(i2d_DIST_POINT, int);
+LIBSTUB(DIST_POINT_it, const ASN1_ITEM *);
+LIBSTUB(DIST_POINT_NAME_new, DIST_POINT_NAME *);
+LIBSTUB(DIST_POINT_NAME_free, void);
+LIBSTUB(d2i_DIST_POINT_NAME, DIST_POINT_NAME *);
+LIBSTUB(i2d_DIST_POINT_NAME, int);
+LIBSTUB(DIST_POINT_NAME_it, const ASN1_ITEM *);
+LIBSTUB(ACCESS_DESCRIPTION_new, ACCESS_DESCRIPTION *);
+LIBSTUB(ACCESS_DESCRIPTION_free, void);
+LIBSTUB(d2i_ACCESS_DESCRIPTION, ACCESS_DESCRIPTION *);
+LIBSTUB(i2d_ACCESS_DESCRIPTION, int);
+LIBSTUB(ACCESS_DESCRIPTION_it, const ASN1_ITEM *);
+LIBSTUB(AUTHORITY_INFO_ACCESS_new, AUTHORITY_INFO_ACCESS *);
+LIBSTUB(AUTHORITY_INFO_ACCESS_free, void);
+LIBSTUB(d2i_AUTHORITY_INFO_ACCESS, AUTHORITY_INFO_ACCESS *);
+LIBSTUB(i2d_AUTHORITY_INFO_ACCESS, int);
+LIBSTUB(AUTHORITY_INFO_ACCESS_it, const ASN1_ITEM *);
+LIBSTUB(v2i_GENERAL_NAME, GENERAL_NAME *);
+LIBSTUB(X509V3_conf_free, void);
+LIBSTUB(X509V3_EXT_nconf_nid, X509_EXTENSION *);
+LIBSTUB(X509V3_EXT_nconf, X509_EXTENSION *);
+LIBSTUB(X509V3_EXT_add_nconf_sk, int);
+LIBSTUB(X509V3_EXT_add_nconf, int);
+LIBSTUB(X509V3_EXT_REQ_add_nconf, int);
+LIBSTUB(X509V3_EXT_CRL_add_nconf, int);
+LIBSTUB(X509V3_EXT_conf_nid, X509_EXTENSION *);
+LIBSTUB(X509V3_EXT_conf, X509_EXTENSION *);
+LIBSTUB(X509V3_EXT_add_conf, int);
+LIBSTUB(X509V3_EXT_REQ_add_conf, int);
+LIBSTUB(X509V3_EXT_CRL_add_conf, int);
+LIBSTUB(X509V3_add_value_bool_nf, int);
+LIBSTUB(X509V3_get_value_bool, int);
+LIBSTUB(X509V3_get_value_int, int);
+LIBSTUB(X509V3_set_nconf, void);
+LIBSTUB(X509V3_set_conf_lhash, void);
+LIBSTUB(X509V3_get_string, char *);
+LIBSTUB(X509V3_get_section, STACK_OF(CONF_VALUE) *);
+LIBSTUB(X509V3_string_free, void);
+LIBSTUB(X509V3_section_free, void);
+LIBSTUB(X509V3_set_ctx, void);
+LIBSTUB(X509V3_add_value, int);
+LIBSTUB(X509V3_add_value_uchar, int);
+LIBSTUB(X509V3_add_value_bool, int);
+LIBSTUB(X509V3_add_value_int, int);
+LIBSTUB(i2s_ASN1_INTEGER, char *);
+LIBSTUB(s2i_ASN1_INTEGER, ASN1_INTEGER *);
+LIBSTUB(i2s_ASN1_ENUMERATED, char *);
+LIBSTUB(i2s_ASN1_ENUMERATED_TABLE, char *);
+LIBSTUB(X509V3_EXT_add, int);
+LIBSTUB(X509V3_EXT_add_list, int);
+LIBSTUB(X509V3_EXT_add_alias, int);
+LIBSTUB(X509V3_EXT_cleanup, void);
+LIBSTUB(X509V3_EXT_get, const X509V3_EXT_METHOD *);
+LIBSTUB(X509V3_EXT_get_nid, const X509V3_EXT_METHOD *);
+LIBSTUB(X509V3_add_standard_extensions, int);
+LIBSTUB(X509V3_parse_list, STACK_OF(CONF_VALUE) *);
+LIBSTUB(X509V3_EXT_d2i, void *);
+LIBSTUB(X509V3_get_d2i, void *);
+LIBSTUB(X509V3_EXT_i2d, X509_EXTENSION *);
+LIBSTUB(X509V3_add1_i2d, int);
+LIBSTUB(hex_to_string, char *);
+LIBSTUB(string_to_hex, unsigned char *);
+LIBSTUB(name_cmp, int);
+LIBSTUB(X509V3_EXT_val_prn, void);
+LIBSTUB(X509V3_EXT_print, int);
+LIBSTUB(X509V3_extensions_print, int);
+LIBSTUB(X509_check_purpose, int);
+LIBSTUB(X509_supported_extension, int);
+LIBSTUB(X509_PURPOSE_set, int);
+LIBSTUB(X509_check_issued, int);
+LIBSTUB(X509_PURPOSE_get_count, int);
+LIBSTUB(X509_PURPOSE_get0, X509_PURPOSE *);
+LIBSTUB(X509_PURPOSE_get_by_sname, int);
+LIBSTUB(X509_PURPOSE_get_by_id, int);
+LIBSTUB(X509_PURPOSE_add, int);
+LIBSTUB(X509_PURPOSE_get0_name, char *);
+LIBSTUB(X509_PURPOSE_get0_sname, char *);
+LIBSTUB(X509_PURPOSE_get_trust, int);
+LIBSTUB(X509_PURPOSE_cleanup, void);
+LIBSTUB(X509_PURPOSE_get_id, int);
+LIBSTUB(X509_get1_email, STACK_OF(OPENSSL_STRING) *);
+LIBSTUB(X509_REQ_get1_email, STACK_OF(OPENSSL_STRING) *);
+LIBSTUB(X509_email_free, void);
+LIBSTUB(ERR_load_X509V3_strings, void);
+LIBSTUB(AES_options, const char *);
+LIBSTUB(AES_set_encrypt_key, int);
+LIBSTUB(AES_set_decrypt_key, int);
+LIBSTUB(AES_encrypt, void);
+LIBSTUB(AES_decrypt, void);
+LIBSTUB(AES_ecb_encrypt, void);
+LIBSTUB(AES_cbc_encrypt, void);
+LIBSTUB(AES_cfb128_encrypt, void);
+LIBSTUB(AES_cfb1_encrypt, void);
+LIBSTUB(AES_cfb8_encrypt, void);
+LIBSTUB(AES_ofb128_encrypt, void);
+LIBSTUB(BF_set_key, void);
+LIBSTUB(BF_encrypt, void);
+LIBSTUB(BF_decrypt, void);
+LIBSTUB(BF_ecb_encrypt, void);
+LIBSTUB(BF_cbc_encrypt, void);
+LIBSTUB(BF_cfb64_encrypt, void);
+LIBSTUB(BF_ofb64_encrypt, void);
+LIBSTUB(BF_options, const char *);
+LIBSTUB(CAST_set_key, void);
+LIBSTUB(CAST_ecb_encrypt, void);
+LIBSTUB(CAST_encrypt, void);
+LIBSTUB(CAST_decrypt, void);
+LIBSTUB(CAST_cbc_encrypt, void);
+LIBSTUB(CAST_cfb64_encrypt, void);
+LIBSTUB(CAST_ofb64_encrypt, void);
+LIBSTUB(_shadow_DES_check_key, int *);
+LIBSTUB(_shadow_DES_rw_mode, int *);
+LIBSTUB(DES_options, const char *);
+LIBSTUB(DES_ecb3_encrypt, void);
+LIBSTUB(DES_cbc_cksum, DES_LONG);
+LIBSTUB(DES_cbc_encrypt, void);
+LIBSTUB(DES_ncbc_encrypt, void);
+LIBSTUB(DES_xcbc_encrypt, void);
+LIBSTUB(DES_cfb_encrypt, void);
+LIBSTUB(DES_ecb_encrypt, void);
+LIBSTUB(DES_encrypt1, void);
+LIBSTUB(DES_encrypt2, void);
+LIBSTUB(DES_encrypt3, void);
+LIBSTUB(DES_decrypt3, void);
+LIBSTUB(DES_ede3_cbc_encrypt, void);
+LIBSTUB(DES_ede3_cfb64_encrypt, void);
+LIBSTUB(DES_ede3_cfb_encrypt, void);
+LIBSTUB(DES_ede3_ofb64_encrypt, void);
+LIBSTUB(DES_enc_read, int);
+LIBSTUB(DES_enc_write, int);
+LIBSTUB(DES_fcrypt, char *);
+LIBSTUB(DES_crypt, char *);
+LIBSTUB(DES_ofb_encrypt, void);
+LIBSTUB(DES_pcbc_encrypt, void);
+LIBSTUB(DES_quad_cksum, DES_LONG);
+LIBSTUB(DES_random_key, int);
+LIBSTUB(DES_set_odd_parity, void);
+LIBSTUB(DES_check_key_parity, int);
+LIBSTUB(DES_is_weak_key, int);
+LIBSTUB(DES_set_key, int);
+LIBSTUB(DES_key_sched, int);
+LIBSTUB(DES_set_key_checked, int);
+LIBSTUB(DES_set_key_unchecked, void);
+LIBSTUB(DES_string_to_key, void);
+LIBSTUB(DES_string_to_2keys, void);
+LIBSTUB(DES_cfb64_encrypt, void);
+LIBSTUB(DES_ofb64_encrypt, void);
+LIBSTUB(DES_read_password, int);
+LIBSTUB(DES_read_2passwords, int);
+LIBSTUB(DH_OpenSSL, const DH_METHOD *);
+LIBSTUB(DH_set_default_method, void);
+LIBSTUB(DH_get_default_method, const DH_METHOD *);
+LIBSTUB(DH_set_method, int);
+LIBSTUB(DH_new_method, DH *);
+LIBSTUB(DH_new, DH *);
+LIBSTUB(DH_free, void);
+LIBSTUB(DH_up_ref, int);
+LIBSTUB(DH_size, int);
+LIBSTUB(DH_set_ex_data, int);
+LIBSTUB(DH_get_ex_data, void *);
+LIBSTUB(DH_generate_parameters, DH *);
+LIBSTUB(DH_check, int);
+LIBSTUB(DH_generate_key, int);
+LIBSTUB(DH_compute_key, int);
+LIBSTUB(d2i_DHparams, DH *);
+LIBSTUB(i2d_DHparams, int);
+LIBSTUB(DHparams_print, int);
+LIBSTUB(ERR_load_DH_strings, void);
+LIBSTUB(DSA_SIG_new, DSA_SIG *);
+LIBSTUB(DSA_SIG_free, void);
+LIBSTUB(i2d_DSA_SIG, int);
+LIBSTUB(d2i_DSA_SIG, DSA_SIG *);
+LIBSTUB(DSA_do_sign, DSA_SIG *);
+LIBSTUB(DSA_do_verify, int);
+LIBSTUB(DSA_OpenSSL, const DSA_METHOD *);
+LIBSTUB(DSA_set_default_method, void);
+LIBSTUB(DSA_get_default_method, const DSA_METHOD *);
+LIBSTUB(DSA_set_method, int);
+LIBSTUB(DSA_new, DSA *);
+LIBSTUB(DSA_new_method, DSA *);
+LIBSTUB(DSA_free, void);
+LIBSTUB(DSA_up_ref, int);
+LIBSTUB(DSA_size, int);
+LIBSTUB(DSA_sign_setup, int);
+LIBSTUB(DSA_sign, int);
+LIBSTUB(DSA_verify, int);
+LIBSTUB(DSA_set_ex_data, int);
+LIBSTUB(DSA_get_ex_data, void *);
+LIBSTUB(d2i_DSAPublicKey, DSA *);
+LIBSTUB(d2i_DSAPrivateKey, DSA *);
+LIBSTUB(d2i_DSAparams, DSA *);
+LIBSTUB(DSA_generate_parameters, DSA *);
+LIBSTUB(DSA_generate_key, int);
+LIBSTUB(i2d_DSAPublicKey, int);
+LIBSTUB(i2d_DSAPrivateKey, int);
+LIBSTUB(i2d_DSAparams, int);
+LIBSTUB(DSAparams_print, int);
+LIBSTUB(DSA_print, int);
+LIBSTUB(DSA_dup_DH, DH *);
+LIBSTUB(ERR_load_DSA_strings, void);
+LIBSTUB(idea_options, const char *);
+LIBSTUB(idea_ecb_encrypt, void);
+LIBSTUB(idea_set_encrypt_key, void);
+LIBSTUB(idea_set_decrypt_key, void);
+LIBSTUB(idea_cbc_encrypt, void);
+LIBSTUB(idea_cfb64_encrypt, void);
+LIBSTUB(idea_ofb64_encrypt, void);
+LIBSTUB(idea_encrypt, void);
+LIBSTUB(MD2_options, const char *);
+LIBSTUB(MD2_Init, int);
+LIBSTUB(MD2_Update, int);
+LIBSTUB(MD2_Final, int);
+LIBSTUB(MD2, unsigned char *);
+LIBSTUB(MD4_Init, int);
+LIBSTUB(MD4_Update, int);
+LIBSTUB(MD4_Final, int);
+LIBSTUB(MD4, unsigned char *);
+LIBSTUB(MD4_Transform, void);
+LIBSTUB(MD5_Init, int);
+LIBSTUB(MD5_Update, int);
+LIBSTUB(MD5_Final, int);
+LIBSTUB(MD5, unsigned char *);
+LIBSTUB(MD5_Transform, void);
+LIBSTUB(MDC2_Init, int);
+LIBSTUB(MDC2_Update, int);
+LIBSTUB(MDC2_Final, int);
+LIBSTUB(MDC2, unsigned char *);
+LIBSTUB(RC2_set_key, void);
+LIBSTUB(RC2_ecb_encrypt, void);
+LIBSTUB(RC2_encrypt, void);
+LIBSTUB(RC2_decrypt, void);
+LIBSTUB(RC2_cbc_encrypt, void);
+LIBSTUB(RC2_cfb64_encrypt, void);
+LIBSTUB(RC2_ofb64_encrypt, void);
+LIBSTUB(RC4_options, const char *);
+LIBSTUB(RC4_set_key, void);
+LIBSTUB(RC4, void);
+LIBSTUB(RC5_32_set_key, void);
+LIBSTUB(RC5_32_ecb_encrypt, void);
+LIBSTUB(RC5_32_encrypt, void);
+LIBSTUB(RC5_32_decrypt, void);
+LIBSTUB(RC5_32_cbc_encrypt, void);
+LIBSTUB(RC5_32_cfb64_encrypt, void);
+LIBSTUB(RC5_32_ofb64_encrypt, void);
+LIBSTUB(RIPEMD160_Init, int);
+LIBSTUB(RIPEMD160_Update, int);
+LIBSTUB(RIPEMD160_Final, int);
+LIBSTUB(RIPEMD160, unsigned char *);
+LIBSTUB(RIPEMD160_Transform, void);
+LIBSTUB(RSA_new, RSA *);
+LIBSTUB(RSA_new_method, RSA *);
+LIBSTUB(RSA_size, int);
+LIBSTUB(RSA_generate_key, RSA *);
+LIBSTUB(RSA_check_key, int);
+LIBSTUB(RSA_public_encrypt, int);
+LIBSTUB(RSA_private_encrypt, int);
+LIBSTUB(RSA_public_decrypt, int);
+LIBSTUB(RSA_private_decrypt, int);
+LIBSTUB(RSA_free, void);
+LIBSTUB(RSA_up_ref, int);
+LIBSTUB(RSA_flags, int);
+LIBSTUB(RSA_set_default_method, void);
+LIBSTUB(RSA_get_default_method, const RSA_METHOD *);
+LIBSTUB(RSA_get_method, const RSA_METHOD *);
+LIBSTUB(RSA_set_method, int);
+LIBSTUB(RSA_memory_lock, int);
+LIBSTUB(RSA_null_method, const RSA_METHOD *);
+LIBSTUB(d2i_RSAPublicKey, RSA *);
+LIBSTUB(i2d_RSAPublicKey, int);
+LIBSTUB(RSAPublicKey_it, const ASN1_ITEM *);
+LIBSTUB(d2i_RSAPrivateKey, RSA *);
+LIBSTUB(i2d_RSAPrivateKey, int);
+LIBSTUB(RSAPrivateKey_it, const ASN1_ITEM *);
+LIBSTUB(RSA_print, int);
+LIBSTUB(RSA_sign, int);
+LIBSTUB(RSA_verify, int);
+LIBSTUB(RSA_sign_ASN1_OCTET_STRING, int);
+LIBSTUB(RSA_verify_ASN1_OCTET_STRING, int);
+LIBSTUB(RSA_blinding_on, int);
+LIBSTUB(RSA_blinding_off, void);
+LIBSTUB(RSA_padding_add_PKCS1_type_1, int);
+LIBSTUB(RSA_padding_check_PKCS1_type_1, int);
+LIBSTUB(RSA_padding_add_PKCS1_type_2, int);
+LIBSTUB(RSA_padding_check_PKCS1_type_2, int);
+LIBSTUB(RSA_padding_add_PKCS1_OAEP, int);
+LIBSTUB(RSA_padding_check_PKCS1_OAEP, int);
+LIBSTUB(RSA_padding_add_SSLv23, int);
+LIBSTUB(RSA_padding_check_SSLv23, int);
+LIBSTUB(RSA_padding_add_none, int);
+LIBSTUB(RSA_padding_check_none, int);
+LIBSTUB(RSA_set_ex_data, int);
+LIBSTUB(RSA_get_ex_data, void *);
+LIBSTUB(RSAPublicKey_dup, RSA *);
+LIBSTUB(RSAPrivateKey_dup, RSA *);
+LIBSTUB(ERR_load_RSA_strings, void);
+LIBSTUB(SHA1_Init, int);
+LIBSTUB(SHA1_Update, int);
+LIBSTUB(SHA1_Final, int);
+LIBSTUB(SHA1, unsigned char *);
+LIBSTUB(SHA1_Transform, void);
+LIBSTUB(HMAC_CTX_set_flags, void);
+LIBSTUB(X509_check_ca, int);
+LIBSTUB(PROXY_POLICY_new, PROXY_POLICY *);
+LIBSTUB(PROXY_POLICY_free, void);
+LIBSTUB(d2i_PROXY_POLICY, PROXY_POLICY *);
+LIBSTUB(i2d_PROXY_POLICY, int);
+LIBSTUB(PROXY_POLICY_it, const ASN1_ITEM *);
+LIBSTUB(PROXY_CERT_INFO_EXTENSION_new, PROXY_CERT_INFO_EXTENSION *);
+LIBSTUB(PROXY_CERT_INFO_EXTENSION_free, void);
+LIBSTUB(d2i_PROXY_CERT_INFO_EXTENSION, PROXY_CERT_INFO_EXTENSION *);
+LIBSTUB(i2d_PROXY_CERT_INFO_EXTENSION, int);
+LIBSTUB(PROXY_CERT_INFO_EXTENSION_it, const ASN1_ITEM *);
+LIBSTUB(FIPS_mode, int);
+LIBSTUB(BN_mod_exp_mont_consttime, int);
+LIBSTUB(BN_MONT_CTX_set_locked, BN_MONT_CTX *);
+LIBSTUB(PKCS1_MGF1, int);
+LIBSTUB(RSA_padding_add_X931, int);
+LIBSTUB(RSA_padding_check_X931, int);
+LIBSTUB(RSA_X931_hash_id, int);
+LIBSTUB(RSA_verify_PKCS1_PSS, int);
+LIBSTUB(RSA_padding_add_PKCS1_PSS, int);
+LIBSTUB(EVP_sha224, const EVP_MD *);
+LIBSTUB(EVP_sha256, const EVP_MD *);
+LIBSTUB(EVP_sha384, const EVP_MD *);
+LIBSTUB(EVP_sha512, const EVP_MD *);
+LIBSTUB(BN_GF2m_add, int);
+LIBSTUB(BN_GF2m_arr2poly, int);
+LIBSTUB(BN_GF2m_mod, int);
+LIBSTUB(BN_GF2m_mod_mul, int);
+LIBSTUB(BN_GF2m_mod_sqr, int);
+LIBSTUB(BN_GF2m_mod_inv, int);
+LIBSTUB(BN_GF2m_mod_div, int);
+LIBSTUB(BN_GF2m_mod_exp, int);
+LIBSTUB(BN_GF2m_mod_sqrt, int);
+LIBSTUB(BN_GF2m_mod_solve_quad, int);
+LIBSTUB(BN_generate_prime_ex, int);
+LIBSTUB(BN_is_prime_ex, int);
+LIBSTUB(BN_set_negative, void);
+LIBSTUB(EC_GROUP_get_degree, int);
+LIBSTUB(EC_GF2m_simple_method, const EC_METHOD *);
+LIBSTUB(EC_GROUP_set_curve_GF2m, int);
+LIBSTUB(EC_GROUP_get_curve_GF2m, int);
+LIBSTUB(EC_POINT_set_affine_coordinates_GF2m, int);
+LIBSTUB(EC_POINT_get_affine_coordinates_GF2m, int);
+LIBSTUB(EC_get_builtin_curves, size_t);
+LIBSTUB(EC_GROUP_new_by_curve_name, EC_GROUP *);
+LIBSTUB(EC_GROUP_check, int);
+LIBSTUB(ENGINE_cleanup, void);
+LIBSTUB(DSA_generate_parameters_ex, int);
+LIBSTUB(EC_KEY_new_by_curve_name, EC_KEY *);
+LIBSTUB(EC_KEY_generate_key, int);
+LIBSTUB(EC_KEY_free, void);
+LIBSTUB(ECDSA_SIG_free, void);
+LIBSTUB(ECDSA_do_sign, ECDSA_SIG *);
+LIBSTUB(ECDSA_do_verify, int);
+LIBSTUB(EC_KEY_new, EC_KEY *);
+LIBSTUB(EC_KEY_set_group, int);
+LIBSTUB(EC_KEY_get0_group, const EC_GROUP *);
+LIBSTUB(EC_KEY_check_key, int);
+LIBSTUB(ECDSA_size, int);
+LIBSTUB(ECDSA_sign, int);
+LIBSTUB(ECDSA_verify, int);
+LIBSTUB(d2i_ECDSA_SIG, ECDSA_SIG *);
+LIBSTUB(i2d_ECDSA_SIG, int);
+LIBSTUB(DH_generate_parameters_ex, int);
+LIBSTUB(EC_METHOD_get_field_type, int);
+LIBSTUB(EC_KEY_get0_public_key, const EC_POINT *);
+LIBSTUB(ECDH_compute_key, int);
+LIBSTUB(EC_KEY_get0_private_key, const BIGNUM *);
+LIBSTUB(ENGINE_get_first, ENGINE *);
+LIBSTUB(ENGINE_get_id, const char *);
+LIBSTUB(ENGINE_get_name, const char *);
+LIBSTUB(ENGINE_get_next, ENGINE *);
+LIBSTUB(ENGINE_free, int);
+LIBSTUB(ENGINE_new, ENGINE *);
+LIBSTUB(ENGINE_set_id, int);
+LIBSTUB(ENGINE_set_name, int);
+LIBSTUB(ENGINE_add, int);
+LIBSTUB(ENGINE_remove, int);
+LIBSTUB(ENGINE_load_builtin_engines, void);
+LIBSTUB(ENGINE_register_all_ciphers, void);
+LIBSTUB(EVP_CIPHER_nid, int);
+LIBSTUB(EVP_MD_type, int);
+LIBSTUB(ENGINE_register_all_digests, void);
+LIBSTUB(BIO_test_flags, int);
+LIBSTUB(SSL_COMP_get_compression_methods, STACK_OF(SSL_COMP) *);
+LIBSTUB(RSA_generate_key_ex, int);
+LIBSTUB(X509_VERIFY_PARAM_free, void);
+LIBSTUB(X509_STORE_set1_param, int);
+LIBSTUB(ASN1_generate_nconf, ASN1_TYPE *);
+LIBSTUB(PEM_read_bio_ECPKParameters, EC_GROUP *);
+LIBSTUB(EC_KEY_dup, EC_KEY *);
+LIBSTUB(BIO_set_callback, void);
+LIBSTUB(BIO_set_callback_arg, void);
+LIBSTUB(EVP_MD_CTX_set_flags, void);
+LIBSTUB(BIO_set_flags, void);
+LIBSTUB(EVP_CIPHER_CTX_set_flags, void);
+LIBSTUB(EVP_CIPHER_iv_length, int);
+LIBSTUB(X509_REQ_check_private_key, int);
+LIBSTUB(PEM_read_bio_EC_PUBKEY, EC_KEY *);
+LIBSTUB(PEM_read_bio_ECPrivateKey, EC_KEY *);
+LIBSTUB(PEM_write_bio_EC_PUBKEY, int);
+LIBSTUB(d2i_EC_PUBKEY_bio, EC_KEY *);
+LIBSTUB(EC_KEY_set_asn1_flag, void);
+LIBSTUB(EC_KEY_set_conv_form, void);
+LIBSTUB(EC_KEY_print, int);
+LIBSTUB(d2i_ECPrivateKey_bio, EC_KEY *);
+LIBSTUB(i2d_EC_PUBKEY_bio, int);
+LIBSTUB(PEM_write_bio_ECPrivateKey, int);
+LIBSTUB(PEM_write_bio_ECPKParameters, int);
+LIBSTUB(i2d_ECPrivateKey_bio, int);
+LIBSTUB(i2d_ECPKParameters, int);
+LIBSTUB(EC_GROUP_set_asn1_flag, void);
+LIBSTUB(EC_GROUP_set_point_conversion_form, void);
+LIBSTUB(EC_GROUP_get_point_conversion_form, point_conversion_form_t);
+LIBSTUB(ECPKParameters_print, int);
+LIBSTUB(EC_GROUP_set_seed, size_t);
+LIBSTUB(d2i_ECPKParameters, EC_GROUP *);
+LIBSTUB(EC_POINT_point2bn, BIGNUM *);
+LIBSTUB(X509_get1_ocsp, STACK_OF(OPENSSL_STRING) *);
+LIBSTUB(SSL_get_servername, const char *);
+LIBSTUB(SSL_set_SSL_CTX, SSL_CTX *);
+LIBSTUB(SSL_CTX_set_cookie_generate_cb, void);
+LIBSTUB(SSL_CTX_set_cookie_verify_cb, void);
+LIBSTUB(SSL_CTX_set_info_callback, void);
+LIBSTUB(BIO_new_dgram, BIO *);
+LIBSTUB(SSL_get_servername_type, int);
+LIBSTUB(SSL_get_current_compression, const COMP_METHOD *);
+LIBSTUB(SSL_get_current_expansion, const COMP_METHOD *);
+LIBSTUB(SSL_COMP_get_name, const char *);
+LIBSTUB(ENGINE_by_id, ENGINE *);
+LIBSTUB(SSL_CTX_set_client_cert_engine, int);
+LIBSTUB(SHA256, unsigned char *);
+LIBSTUB(SHA512, unsigned char *);
+LIBSTUB(AES_ige_encrypt, void);
+LIBSTUB(EC_KEY_precompute_mult, int);
+LIBSTUB(ENGINE_load_private_key, EVP_PKEY *);
+LIBSTUB(ENGINE_load_public_key, EVP_PKEY *);
+LIBSTUB(ENGINE_ctrl_cmd, int);
+LIBSTUB(ENGINE_set_default, int);
+LIBSTUB(ENGINE_ctrl, int);
+LIBSTUB(ENGINE_register_all_complete, int);
+LIBSTUB(ENGINE_ctrl_cmd_string, int);
+LIBSTUB(X509_VERIFY_PARAM_add0_policy, int);
+LIBSTUB(X509_VERIFY_PARAM_set_purpose, int);
+LIBSTUB(X509_VERIFY_PARAM_set_flags, int);
+LIBSTUB(X509_VERIFY_PARAM_new, X509_VERIFY_PARAM *);
+LIBSTUB(X509_POLICY_NODE_print, void);
+LIBSTUB(X509_STORE_CTX_get0_policy_tree, X509_POLICY_TREE *);
+LIBSTUB(X509_STORE_CTX_get_explicit_policy, int);
+LIBSTUB(X509_policy_tree_get0_policies, STACK_OF(X509_POLICY_NODE) *);
+LIBSTUB(X509_policy_tree_get0_user_policies, STACK_OF(X509_POLICY_NODE) *);
+LIBSTUB(BIO_get_callback_arg, char *);
+LIBSTUB(EVP_PKEY_add1_attr_by_NID, int);
+LIBSTUB(ENGINE_get_RSA, const RSA_METHOD *);
+LIBSTUB(ENGINE_get_DSA, const DSA_METHOD *);
+LIBSTUB(ENGINE_get_DH, const DH_METHOD *);
+LIBSTUB(ENGINE_get_RAND, const RAND_METHOD *);
+LIBSTUB(ENGINE_get_ciphers, ENGINE_CIPHERS_PTR);
+LIBSTUB(ENGINE_get_digests, ENGINE_DIGESTS_PTR);
+LIBSTUB(ENGINE_init, int);
+LIBSTUB(ENGINE_finish, int);
+LIBSTUB(OCSP_sendreq_new, OCSP_REQ_CTX *);
+LIBSTUB(OCSP_sendreq_nbio, int);
+LIBSTUB(OCSP_REQ_CTX_free, void);
+LIBSTUB(SSL_CTX_use_psk_identity_hint, int);
+LIBSTUB(SSL_CTX_set_psk_client_callback, void);
+LIBSTUB(SSL_get_psk_identity_hint, const char *);
+LIBSTUB(SSL_set_psk_server_callback, void);
+LIBSTUB(SSL_use_psk_identity_hint, int);
+LIBSTUB(SSL_set_psk_client_callback, void);
+LIBSTUB(SSL_CTX_set_psk_server_callback, void);
+LIBSTUB(SSL_get_psk_identity, const char *);
+LIBSTUB(SSL_set_session_ticket_ext, int);
+LIBSTUB(SSL_set_session_secret_cb, int);
+LIBSTUB(SSL_set_session_ticket_ext_cb, int);
+LIBSTUB(SSL_set1_param, int);
+LIBSTUB(SSL_CTX_set1_param, int);
+LIBSTUB(SSL_renegotiate_abbreviated, int);
+LIBSTUB(SSL_CTX_set_srp_client_pwd_callback, int);
+LIBSTUB(SSL_get_srp_g, BIGNUM *);
+LIBSTUB(SSL_CTX_set_srp_username_callback, int);
+LIBSTUB(SSL_get_srp_userinfo, char *);
+LIBSTUB(SSL_set_srp_server_param, int);
+LIBSTUB(SSL_set_srp_server_param_pw, int);
+LIBSTUB(SSL_get_srp_N, BIGNUM *);
+LIBSTUB(SSL_get_srp_username, char *);
+LIBSTUB(SSL_CTX_set_srp_password, int);
+LIBSTUB(SSL_CTX_set_srp_strength, int);
+LIBSTUB(SSL_CTX_set_srp_verify_param_callback, int);
+LIBSTUB(SSL_CTX_set_srp_cb_arg, int);
+LIBSTUB(SSL_CTX_set_srp_username, int);
+LIBSTUB(SSL_CTX_SRP_CTX_init, int);
+LIBSTUB(SRP_Calc_A_param, int);
+LIBSTUB(SSL_CTX_SRP_CTX_free, int);
+LIBSTUB(SSL_srp_server_param_with_username, int);
+LIBSTUB(SSL_SRP_CTX_free, int);
+LIBSTUB(SSL_set_debug, void);
+LIBSTUB(SSL_SESSION_get0_peer, X509 *);
+LIBSTUB(SSL_SESSION_set1_id_context, int);
+LIBSTUB(SSL_CIPHER_get_id, uint32_t);
+LIBSTUB(SSL_export_keying_material, int);
+LIBSTUB(SSL_set_tlsext_use_srtp, int);
+LIBSTUB(SSL_CTX_set_next_protos_advertised_cb, void);
+LIBSTUB(SSL_get0_next_proto_negotiated, void);
+LIBSTUB(SSL_get_selected_srtp_profile, SRTP_PROTECTION_PROFILE *);
+LIBSTUB(SSL_CTX_set_tlsext_use_srtp, int);
+LIBSTUB(SSL_select_next_proto, int);
+LIBSTUB(SSL_get_srtp_profiles, STACK_OF(SRTP_PROTECTION_PROFILE) *);
+LIBSTUB(SSL_CTX_set_next_proto_select_cb, void);
+LIBSTUB(SSL_SESSION_get_compress_id, unsigned int);
+LIBSTUB(SSL_SRP_CTX_init, int);
+LIBSTUB(ERR_load_ENGINE_strings, void);
+LIBSTUB(ENGINE_set_DSA, int);
+LIBSTUB(ENGINE_get_finish_function, ENGINE_GEN_INT_FUNC_PTR);
+LIBSTUB(ENGINE_get_default_RSA, ENGINE *);
+LIBSTUB(ENGINE_set_DH, int);
+LIBSTUB(ENGINE_get_init_function, ENGINE_GEN_INT_FUNC_PTR);
+LIBSTUB(ENGINE_set_init_function, int);
+LIBSTUB(ENGINE_set_default_DSA, int);
+LIBSTUB(ENGINE_get_last, ENGINE *);
+LIBSTUB(ENGINE_get_prev, ENGINE *);
+LIBSTUB(ENGINE_get_default_DH, ENGINE *);
+LIBSTUB(ENGINE_set_finish_function, int);
+LIBSTUB(ENGINE_set_RSA, int);
+LIBSTUB(ENGINE_set_default_RAND, int);
+LIBSTUB(ENGINE_get_default_DSA, ENGINE *);
+LIBSTUB(ENGINE_set_default_RSA, int);
+LIBSTUB(ENGINE_get_default_RAND, ENGINE *);
+LIBSTUB(ENGINE_set_RAND, int);
+LIBSTUB(ENGINE_set_default_DH, int);
+LIBSTUB(ENGINE_get_ctrl_function, ENGINE_CTRL_FUNC_PTR);
+LIBSTUB(ENGINE_set_ctrl_function, int);
+LIBSTUB(ENGINE_unregister_ciphers, void);
+LIBSTUB(ENGINE_unregister_RSA, void);
+LIBSTUB(ENGINE_register_all_RAND, void);
+LIBSTUB(ENGINE_get_digest_engine, ENGINE *);
+LIBSTUB(ENGINE_register_DH, int);
+LIBSTUB(ENGINE_register_RAND, int);
+LIBSTUB(ENGINE_register_ciphers, int);
+LIBSTUB(ENGINE_get_cmd_defns, const ENGINE_CMD_DEFN *);
+LIBSTUB(ENGINE_set_load_privkey_function, int);
+LIBSTUB(ENGINE_set_default_digests, int);
+LIBSTUB(ENGINE_register_RSA, int);
+LIBSTUB(ENGINE_unregister_DSA, void);
+LIBSTUB(ENGINE_set_ciphers, int);
+LIBSTUB(RAND_set_rand_engine, int);
+LIBSTUB(ENGINE_get_digest, const EVP_MD *);
+LIBSTUB(ENGINE_get_cipher, const EVP_CIPHER *);
+LIBSTUB(ENGINE_cmd_is_executable, int);
+LIBSTUB(ENGINE_register_DSA, int);
+LIBSTUB(ENGINE_set_load_pubkey_function, int);
+LIBSTUB(ENGINE_get_load_pubkey_function, ENGINE_LOAD_KEY_PTR);
+LIBSTUB(ENGINE_register_all_RSA, void);
+LIBSTUB(ENGINE_unregister_digests, void);
+LIBSTUB(ENGINE_get_ex_data, void *);
+LIBSTUB(ENGINE_set_cmd_defns, int);
+LIBSTUB(ENGINE_register_digests, int);
+LIBSTUB(ENGINE_register_all_DH, void);
+LIBSTUB(ENGINE_get_flags, int);
+LIBSTUB(ENGINE_unregister_DH, void);
+LIBSTUB(ENGINE_register_all_DSA, void);
+LIBSTUB(ENGINE_set_digests, int);
+LIBSTUB(ENGINE_register_complete, int);
+LIBSTUB(ENGINE_set_ex_data, int);
+LIBSTUB(ENGINE_set_destroy_function, int);
+LIBSTUB(ENGINE_get_cipher_engine, ENGINE *);
+LIBSTUB(ENGINE_set_default_ciphers, int);
+LIBSTUB(ENGINE_unregister_RAND, void);
+LIBSTUB(ENGINE_set_table_flags, void);
+LIBSTUB(ENGINE_get_destroy_function, ENGINE_GEN_INT_FUNC_PTR);
+LIBSTUB(ENGINE_get_table_flags, unsigned int);
+LIBSTUB(ENGINE_set_flags, int);
+LIBSTUB(ENGINE_get_load_privkey_function, ENGINE_LOAD_KEY_PTR);
+LIBSTUB(ENGINE_set_default_string, int);
+LIBSTUB(ENGINE_add_conf_module, void);
+LIBSTUB(ENGINE_up_ref, int);
+LIBSTUB(EC_GROUP_get_trinomial_basis, int);
+LIBSTUB(SHA512_Update, int);
+LIBSTUB(i2d_ECPrivateKey, int);
+LIBSTUB(BN_GF2m_mod_exp_arr, int);
+LIBSTUB(BN_GF2m_mod_mul_arr, int);
+LIBSTUB(o2i_ECPublicKey, EC_KEY *);
+LIBSTUB(EC_KEY_copy, EC_KEY *);
+LIBSTUB(EC_GROUP_check_discriminant, int);
+LIBSTUB(i2o_ECPublicKey, int);
+LIBSTUB(EC_GROUP_new_curve_GF2m, EC_GROUP *);
+LIBSTUB(EVP_PKEY_get1_EC_KEY, struct ec_key_st *);
+LIBSTUB(EC_KEY_get_conv_form, point_conversion_form_t);
+LIBSTUB(ENGINE_get_static_state, void *);
+LIBSTUB(ECDSA_SIG_new, ECDSA_SIG *);
+LIBSTUB(EC_POINT_bn2point, EC_POINT *);
+LIBSTUB(ECDSA_sign_ex, int);
+LIBSTUB(EC_GROUP_get_pentanomial_basis, int);
+LIBSTUB(ECDSA_sign_setup, int);
+LIBSTUB(BN_GF2m_mod_solve_quad_arr, int);
+LIBSTUB(EC_KEY_up_ref, int);
+LIBSTUB(d2i_EC_PUBKEY, EC_KEY *);
+LIBSTUB(EC_GROUP_have_precompute_mult, int);
+LIBSTUB(BN_GF2m_mod_arr, int);
+LIBSTUB(EC_POINT_dup, EC_POINT *);
+LIBSTUB(EVP_PKEY_set1_EC_KEY, int);
+LIBSTUB(BN_GF2m_mod_sqrt_arr, int);
+LIBSTUB(EC_KEY_set_private_key, int);
+LIBSTUB(BN_GF2m_poly2arr, int);
+LIBSTUB(i2d_ECParameters, int);
+LIBSTUB(SHA256_Init, int);
+LIBSTUB(SHA224, unsigned char *);
+LIBSTUB(EC_GROUP_get_seed_len, size_t);
+LIBSTUB(i2d_EC_PUBKEY, int);
+LIBSTUB(EC_GFp_nist_method, const EC_METHOD *);
+LIBSTUB(EC_GROUP_set_curve_name, void);
+LIBSTUB(BN_GF2m_mod_sqr_arr, int);
+LIBSTUB(BIO_s_datagram, BIO_METHOD *);
+LIBSTUB(SHA384_Update, int);
+LIBSTUB(SHA224_Final, int);
+LIBSTUB(SHA224_Update, int);
+LIBSTUB(d2i_ECPrivateKey, EC_KEY *);
+LIBSTUB(SHA512_Final, int);
+LIBSTUB(EC_GROUP_get_asn1_flag, int);
+LIBSTUB(EC_GROUP_get0_seed, unsigned char *);
+LIBSTUB(BN_GF2m_mod_div_arr, int);
+LIBSTUB(EC_KEY_get_enc_flags, unsigned);
+LIBSTUB(EC_POINT_set_compressed_coordinates_GF2m, int);
+LIBSTUB(EC_GROUP_cmp, int);
+LIBSTUB(SHA224_Init, int);
+LIBSTUB(SHA512_Init, int);
+LIBSTUB(EC_GROUP_get_basis_type, int);
+LIBSTUB(EC_GROUP_dup, EC_GROUP *);
+LIBSTUB(SHA256_Transform, void);
+LIBSTUB(EC_KEY_set_enc_flags, void);
+LIBSTUB(EC_POINT_point2hex, char *);
+LIBSTUB(ECDSA_do_sign_ex, ECDSA_SIG *);
+LIBSTUB(SHA512_Transform, void);
+LIBSTUB(EC_KEY_set_public_key, int);
+LIBSTUB(EC_GROUP_get_curve_name, int);
+LIBSTUB(SHA256_Final, int);
+LIBSTUB(d2i_ECParameters, EC_KEY *);
+LIBSTUB(SHA384_Init, int);
+LIBSTUB(SHA384_Final, int);
+LIBSTUB(SHA384, unsigned char *);
+LIBSTUB(EC_POINT_hex2point, EC_POINT *);
+LIBSTUB(SHA256_Update, int);
+LIBSTUB(BN_GF2m_mod_inv_arr, int);
+LIBSTUB(DH_check_pub_key, int);
+LIBSTUB(Camellia_cbc_encrypt, void);
+LIBSTUB(Camellia_cfb128_encrypt, void);
+LIBSTUB(Camellia_cfb1_encrypt, void);
+LIBSTUB(Camellia_cfb8_encrypt, void);
+LIBSTUB(Camellia_ctr128_encrypt, void);
+LIBSTUB(Camellia_decrypt, void);
+LIBSTUB(Camellia_ecb_encrypt, void);
+LIBSTUB(Camellia_encrypt, void);
+LIBSTUB(Camellia_ofb128_encrypt, void);
+LIBSTUB(Camellia_set_key, int);
+LIBSTUB(EVP_camellia_128_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_ofb, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_cbc, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_cfb128, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_cfb1, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_cfb8, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_ecb, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_ofb, const EVP_CIPHER *);
+LIBSTUB(AES_bi_ige_encrypt, void);
+LIBSTUB(SEED_decrypt, void);
+LIBSTUB(SEED_encrypt, void);
+LIBSTUB(SEED_cbc_encrypt, void);
+LIBSTUB(EVP_seed_ofb, const EVP_CIPHER *);
+LIBSTUB(SEED_cfb128_encrypt, void);
+LIBSTUB(SEED_ofb128_encrypt, void);
+LIBSTUB(EVP_seed_cbc, const EVP_CIPHER *);
+LIBSTUB(SEED_ecb_encrypt, void);
+LIBSTUB(EVP_seed_ecb, const EVP_CIPHER *);
+LIBSTUB(SEED_set_key, void);
+LIBSTUB(EVP_seed_cfb128, const EVP_CIPHER *);
+LIBSTUB(AES_unwrap_key, int);
+LIBSTUB(AES_wrap_key, int);
+LIBSTUB(CMS_ReceiptRequest_free, void);
+LIBSTUB(CMS_add0_CertificateChoices, CMS_CertificateChoices *);
+LIBSTUB(CMS_unsigned_add1_attr_by_OBJ, int);
+LIBSTUB(ERR_load_CMS_strings, void);
+LIBSTUB(CMS_sign_receipt, CMS_ContentInfo *);
+LIBSTUB(i2d_CMS_ContentInfo, int);
+LIBSTUB(CMS_signed_delete_attr, X509_ATTRIBUTE *);
+LIBSTUB(d2i_CMS_bio, CMS_ContentInfo *);
+LIBSTUB(CMS_unsigned_get_attr_by_NID, int);
+LIBSTUB(CMS_verify, int);
+LIBSTUB(SMIME_read_CMS, CMS_ContentInfo *);
+LIBSTUB(CMS_decrypt_set1_key, int);
+LIBSTUB(CMS_SignerInfo_get0_algs, void);
+LIBSTUB(CMS_add1_cert, int);
+LIBSTUB(CMS_set_detached, int);
+LIBSTUB(CMS_encrypt, CMS_ContentInfo *);
+LIBSTUB(CMS_EnvelopedData_create, CMS_ContentInfo *);
+LIBSTUB(CMS_uncompress, int);
+LIBSTUB(CMS_add0_crl, int);
+LIBSTUB(CMS_SignerInfo_verify_content, int);
+LIBSTUB(CMS_unsigned_get0_data_by_OBJ, void *);
+LIBSTUB(PEM_write_bio_CMS, int);
+LIBSTUB(CMS_unsigned_get_attr, X509_ATTRIBUTE *);
+LIBSTUB(CMS_RecipientInfo_ktri_cert_cmp, int);
+LIBSTUB(CMS_RecipientInfo_ktri_get0_algs, int);
+LIBSTUB(CMS_ContentInfo_free, void);
+LIBSTUB(CMS_final, int);
+LIBSTUB(CMS_add_simple_smimecap, int);
+LIBSTUB(CMS_SignerInfo_verify, int);
+LIBSTUB(CMS_data, int);
+LIBSTUB(d2i_CMS_ReceiptRequest, CMS_ReceiptRequest *);
+LIBSTUB(CMS_compress, CMS_ContentInfo *);
+LIBSTUB(CMS_digest_create, CMS_ContentInfo *);
+LIBSTUB(CMS_SignerInfo_cert_cmp, int);
+LIBSTUB(CMS_SignerInfo_sign, int);
+LIBSTUB(CMS_data_create, CMS_ContentInfo *);
+LIBSTUB(i2d_CMS_bio, int);
+LIBSTUB(CMS_EncryptedData_set1_key, int);
+LIBSTUB(CMS_decrypt, int);
+LIBSTUB(CMS_unsigned_delete_attr, X509_ATTRIBUTE *);
+LIBSTUB(CMS_unsigned_get_attr_count, int);
+LIBSTUB(CMS_add_smimecap, int);
+LIBSTUB(CMS_signed_get_attr_by_OBJ, int);
+LIBSTUB(d2i_CMS_ContentInfo, CMS_ContentInfo *);
+LIBSTUB(CMS_add_standard_smimecap, int);
+LIBSTUB(CMS_ContentInfo_new, CMS_ContentInfo *);
+LIBSTUB(CMS_RecipientInfo_type, int);
+LIBSTUB(CMS_get0_type, const ASN1_OBJECT *);
+LIBSTUB(CMS_is_detached, int);
+LIBSTUB(CMS_sign, CMS_ContentInfo *);
+LIBSTUB(CMS_signed_add1_attr, int);
+LIBSTUB(CMS_unsigned_get_attr_by_OBJ, int);
+LIBSTUB(SMIME_write_CMS, int);
+LIBSTUB(CMS_EncryptedData_decrypt, int);
+LIBSTUB(CMS_get0_RecipientInfos, STACK_OF(CMS_RecipientInfo) *);
+LIBSTUB(CMS_add0_RevocationInfoChoice, CMS_RevocationInfoChoice *);
+LIBSTUB(CMS_decrypt_set1_pkey, int);
+LIBSTUB(CMS_SignerInfo_set1_signer_cert, void);
+LIBSTUB(CMS_get0_signers, STACK_OF(X509) *);
+LIBSTUB(CMS_ReceiptRequest_get0_values, void);
+LIBSTUB(CMS_signed_get0_data_by_OBJ, void *);
+LIBSTUB(CMS_get0_SignerInfos, STACK_OF(CMS_SignerInfo) *);
+LIBSTUB(CMS_add0_cert, int);
+LIBSTUB(CMS_EncryptedData_encrypt, CMS_ContentInfo *);
+LIBSTUB(CMS_digest_verify, int);
+LIBSTUB(CMS_set1_signers_certs, int);
+LIBSTUB(CMS_signed_get_attr, X509_ATTRIBUTE *);
+LIBSTUB(CMS_RecipientInfo_set0_key, int);
+LIBSTUB(CMS_SignedData_init, int);
+LIBSTUB(CMS_RecipientInfo_kekri_get0_id, int);
+LIBSTUB(CMS_verify_receipt, int);
+LIBSTUB(PEM_read_bio_CMS, CMS_ContentInfo *);
+LIBSTUB(CMS_get1_crls, STACK_OF(X509_CRL) *);
+LIBSTUB(CMS_add0_recipient_key, CMS_RecipientInfo *);
+LIBSTUB(CMS_ReceiptRequest_new, CMS_ReceiptRequest *);
+LIBSTUB(CMS_get0_content, ASN1_OCTET_STRING **);
+LIBSTUB(CMS_get1_ReceiptRequest, int);
+LIBSTUB(CMS_signed_add1_attr_by_OBJ, int);
+LIBSTUB(CMS_RecipientInfo_kekri_id_cmp, int);
+LIBSTUB(CMS_add1_ReceiptRequest, int);
+LIBSTUB(CMS_SignerInfo_get0_signer_id, int);
+LIBSTUB(CMS_unsigned_add1_attr_by_NID, int);
+LIBSTUB(CMS_unsigned_add1_attr, int);
+LIBSTUB(CMS_signed_get_attr_by_NID, int);
+LIBSTUB(CMS_get1_certs, STACK_OF(X509) *);
+LIBSTUB(CMS_signed_add1_attr_by_NID, int);
+LIBSTUB(CMS_unsigned_add1_attr_by_txt, int);
+LIBSTUB(CMS_dataFinal, int);
+LIBSTUB(CMS_RecipientInfo_ktri_get0_signer_id, int);
+LIBSTUB(i2d_CMS_ReceiptRequest, int);
+LIBSTUB(CMS_add1_recipient_cert, CMS_RecipientInfo *);
+LIBSTUB(CMS_dataInit, BIO *);
+LIBSTUB(CMS_signed_add1_attr_by_txt, int);
+LIBSTUB(CMS_RecipientInfo_decrypt, int);
+LIBSTUB(CMS_signed_get_attr_count, int);
+LIBSTUB(CMS_get0_eContentType, const ASN1_OBJECT *);
+LIBSTUB(CMS_set1_eContentType, int);
+LIBSTUB(CMS_ReceiptRequest_create0, CMS_ReceiptRequest *);
+LIBSTUB(CMS_add1_signer, CMS_SignerInfo *);
+LIBSTUB(CMS_RecipientInfo_set0_pkey, int);
+LIBSTUB(ENGINE_set_load_ssl_client_cert_function, int);
+LIBSTUB(ENGINE_get_ssl_client_cert_function, ENGINE_SSL_CLIENT_CERT_PTR);
+LIBSTUB(ENGINE_load_ssl_client_cert, int);
+LIBSTUB(ENGINE_register_pkey_meths, int);
+LIBSTUB(ENGINE_get_pkey_asn1_meth_engine, ENGINE *);
+LIBSTUB(WHIRLPOOL_Init, int);
+LIBSTUB(WHIRLPOOL, unsigned char *);
+LIBSTUB(ENGINE_get_pkey_asn1_meth, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(ENGINE_get_pkey_meth, const EVP_PKEY_METHOD *);
+LIBSTUB(BIO_new_CMS, BIO *);
+LIBSTUB(ENGINE_set_default_pkey_asn1_meths, int);
+LIBSTUB(WHIRLPOOL_BitUpdate, void);
+LIBSTUB(i2d_CMS_bio_stream, int);
+LIBSTUB(CMS_stream, int);
+LIBSTUB(ENGINE_pkey_asn1_find_str, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(ENGINE_get_pkey_meths, ENGINE_PKEY_METHS_PTR);
+LIBSTUB(ENGINE_register_pkey_asn1_meths, int);
+LIBSTUB(ENGINE_set_default_pkey_meths, int);
+LIBSTUB(HMAC_CTX_copy, int);
+LIBSTUB(ENGINE_get_pkey_asn1_meths, ENGINE_PKEY_ASN1_METHS_PTR);
+LIBSTUB(EVP_whirlpool, const EVP_MD *);
+LIBSTUB(ENGINE_register_all_pkey_meths, void);
+LIBSTUB(WHIRLPOOL_Final, int);
+LIBSTUB(ENGINE_get_pkey_asn1_meth_str, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(ENGINE_register_all_pkey_asn1_meths, void);
+LIBSTUB(CMS_ContentInfo_print_ctx, void);
+LIBSTUB(CMS_add1_crl, int);
+LIBSTUB(ENGINE_set_pkey_asn1_meths, int);
+LIBSTUB(ENGINE_get_pkey_meth_engine, ENGINE *);
+LIBSTUB(WHIRLPOOL_Update, int);
+LIBSTUB(PEM_write_bio_CMS_stream, int);
+LIBSTUB(ENGINE_unregister_pkey_meths, void);
+LIBSTUB(ENGINE_unregister_pkey_asn1_meths, void);
+LIBSTUB(ENGINE_set_pkey_meths, int);
+LIBSTUB(DSAparams_dup, DSA *);
+LIBSTUB(DHparams_dup, DH *);
+LIBSTUB(X509_issuer_name_hash_old, unsigned long);
+LIBSTUB(X509_subject_name_hash_old, unsigned long);
+LIBSTUB(SRP_VBASE_get_by_user, SRP_user_pwd *);
+LIBSTUB(SRP_Calc_server_key, BIGNUM *);
+LIBSTUB(SRP_create_verifier, char *);
+LIBSTUB(SRP_create_verifier_BN, int);
+LIBSTUB(SRP_Calc_u, BIGNUM *);
+LIBSTUB(SRP_VBASE_free, void);
+LIBSTUB(SRP_Calc_client_key, BIGNUM *);
+LIBSTUB(SRP_get_default_gN, SRP_gN *);
+LIBSTUB(SRP_Calc_x, BIGNUM *);
+LIBSTUB(SRP_Calc_B, BIGNUM *);
+LIBSTUB(SRP_VBASE_new, SRP_VBASE *);
+LIBSTUB(SRP_check_known_gN_param, char *);
+LIBSTUB(SRP_Calc_A, BIGNUM *);
+LIBSTUB(SRP_Verify_A_mod_N, int);
+LIBSTUB(SRP_VBASE_init, int);
+LIBSTUB(SRP_Verify_B_mod_N, int);
+LIBSTUB(EC_KEY_set_public_key_affine_coordinates, int);
+LIBSTUB(EVP_aes_192_ctr, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_ctr, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_ctr, const EVP_CIPHER *);
+LIBSTUB(EC_KEY_get_flags, int);
+LIBSTUB(EVP_aes_128_xts, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_xts, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_gcm, const EVP_CIPHER *);
+LIBSTUB(EC_KEY_clear_flags, void);
+LIBSTUB(EC_KEY_set_flags, void);
+LIBSTUB(EVP_aes_256_ccm, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_ccm, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_gcm, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_gcm, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_ccm, const EVP_CIPHER *);
+LIBSTUB(EVP_rc4_hmac_md5, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_cbc_hmac_sha1, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cbc_hmac_sha1, const EVP_CIPHER *);
+LIBSTUB(CMS_add0_recipient_password, CMS_RecipientInfo *);
+LIBSTUB(CMS_decrypt_set1_password, int);
+LIBSTUB(CMS_RecipientInfo_set0_password, int);
+LIBSTUB(X509_REQ_sign_ctx, int);
+LIBSTUB(X509_CRL_sign_ctx, int);
+LIBSTUB(X509_signature_dump, int);
+LIBSTUB(X509_sign_ctx, int);
+LIBSTUB(ASN1_item_sign_ctx, int);
+LIBSTUB(OPENSSL_cpuid_setup, void);
+LIBSTUB(ERR_remove_thread_state, void);
+LIBSTUB(X509_STORE_CTX_set0_crls, void);
+LIBSTUB(SSL_SESSION_get_id, const unsigned char *);
+LIBSTUB(SSL_CTX_sess_set_new_cb, void);
+LIBSTUB(SSL_CTX_sess_get_get_cb, void *);
+LIBSTUB(SSL_CTX_sess_set_get_cb, void);
+LIBSTUB(SSL_CTX_get_info_callback, void *);
+LIBSTUB(SSL_CTX_set_client_cert_cb, void);
+LIBSTUB(SSL_CTX_sess_set_remove_cb, void);
+LIBSTUB(SSL_CTX_sess_get_new_cb, void *);
+LIBSTUB(SSL_CTX_get_client_cert_cb, void *);
+LIBSTUB(SSL_CTX_sess_get_remove_cb, void *);
+LIBSTUB(PEM_write_bio_SSL_SESSION, int);
+LIBSTUB(PEM_read_bio_SSL_SESSION, SSL_SESSION *);
+LIBSTUB(FIPS_mode_set, int);
+LIBSTUB(BN_X931_generate_Xpq, int);
+LIBSTUB(BN_get0_nist_prime_384, const BIGNUM *);
+LIBSTUB(ERR_set_mark, int);
+LIBSTUB(BN_BLINDING_invert_ex, int);
+LIBSTUB(NAME_CONSTRAINTS_free, void);
+LIBSTUB(X509_STORE_CTX_set0_param, void);
+LIBSTUB(POLICY_CONSTRAINTS_free, void);
+LIBSTUB(BN_nist_mod_192, int);
+LIBSTUB(GENERAL_SUBTREE_free, void);
+LIBSTUB(PKCS12_add_safe, int);
+LIBSTUB(BN_get0_nist_prime_192, const BIGNUM *);
+LIBSTUB(X509_keyid_get0, unsigned char *);
+LIBSTUB(X509_policy_node_get0_parent, const X509_POLICY_NODE *);
+LIBSTUB(a2i_IPADDRESS, ASN1_OCTET_STRING *);
+LIBSTUB(X509_STORE_CTX_set_depth, void);
+LIBSTUB(X509_VERIFY_PARAM_inherit, int);
+LIBSTUB(X509_VERIFY_PARAM_set_depth, void);
+LIBSTUB(EVP_PKEY_add1_attr_by_txt, int);
+LIBSTUB(BN_BLINDING_set_flags, void);
+LIBSTUB(X509_VERIFY_PARAM_set1_policies, int);
+LIBSTUB(X509_VERIFY_PARAM_set1_name, int);
+LIBSTUB(POLICY_MAPPING_free, void);
+LIBSTUB(EVP_PKEY_cmp, int);
+LIBSTUB(X509_policy_level_node_count, int);
+LIBSTUB(EVP_PKEY_get_attr, X509_ATTRIBUTE *);
+LIBSTUB(GENERAL_SUBTREE_new, GENERAL_SUBTREE *);
+LIBSTUB(X509_policy_node_get0_qualifiers, STACK_OF(POLICYQUALINFO) *);
+LIBSTUB(X509_policy_node_get0_policy, const ASN1_OBJECT *);
+LIBSTUB(PKCS12_add_safes, PKCS12 *);
+LIBSTUB(BN_BLINDING_convert_ex, int);
+LIBSTUB(X509_policy_tree_free, void);
+LIBSTUB(OPENSSL_ia32cap_loc, unsigned int *);
+LIBSTUB(BN_get0_nist_prime_224, const BIGNUM *);
+LIBSTUB(BN_GENCB_call, int);
+LIBSTUB(NAME_CONSTRAINTS_new, NAME_CONSTRAINTS *);
+LIBSTUB(ECParameters_print, int);
+LIBSTUB(X509_VERIFY_PARAM_set_trust, int);
+LIBSTUB(EVP_PKEY_get_attr_count, int);
+LIBSTUB(X509_STORE_CTX_get0_param, X509_VERIFY_PARAM *);
+LIBSTUB(X509_STORE_set_depth, int);
+LIBSTUB(ASN1_put_eoc, int);
+LIBSTUB(X509_VERIFY_PARAM_table_cleanup, void);
+LIBSTUB(RSA_setup_blinding, BN_BLINDING *);
+LIBSTUB(sk_find_ex, int);
+LIBSTUB(POLICY_CONSTRAINTS_new, POLICY_CONSTRAINTS *);
+LIBSTUB(X509_VERIFY_PARAM_get_depth, int);
+LIBSTUB(ASN1_item_ndef_i2d, int);
+LIBSTUB(ERR_pop_to_mark, int);
+LIBSTUB(X509_policy_level_get0_node, X509_POLICY_NODE *);
+LIBSTUB(i2d_PKCS7_NDEF, int);
+LIBSTUB(ASN1_generate_v3, ASN1_TYPE *);
+LIBSTUB(X509_policy_tree_level_count, int);
+LIBSTUB(BN_nist_mod_224, int);
+LIBSTUB(BIO_dgram_non_fatal_error, int);
+LIBSTUB(v2i_ASN1_BIT_STRING, ASN1_BIT_STRING *);
+LIBSTUB(X509_STORE_CTX_set_default, int);
+LIBSTUB(X509_VERIFY_PARAM_set1, int);
+LIBSTUB(v2i_GENERAL_NAME_ex, GENERAL_NAME *);
+LIBSTUB(BN_nist_mod_521, int);
+LIBSTUB(X509_policy_tree_get0_level, X509_POLICY_LEVEL *);
+LIBSTUB(ASN1_const_check_infinite_end, int);
+LIBSTUB(EVP_PKEY_delete_attr, X509_ATTRIBUTE *);
+LIBSTUB(BN_get0_nist_prime_256, const BIGNUM *);
+LIBSTUB(i2v_ASN1_BIT_STRING, STACK_OF(CONF_VALUE) *);
+LIBSTUB(BN_nist_mod_384, int);
+LIBSTUB(EVP_PKEY_get_attr_by_OBJ, int);
+LIBSTUB(X509_VERIFY_PARAM_lookup, const X509_VERIFY_PARAM *);
+LIBSTUB(X509V3_NAME_from_section, int);
+LIBSTUB(EVP_PKEY_add1_attr, int);
+LIBSTUB(BIO_dump_indent_cb, int);
+LIBSTUB(BN_nist_mod_256, int);
+LIBSTUB(X509_VERIFY_PARAM_add0_table, int);
+LIBSTUB(BN_BLINDING_create_param, BN_BLINDING *);
+LIBSTUB(BN_get0_nist_prime_521, const BIGNUM *);
+LIBSTUB(BN_is_prime_fasttest_ex, int);
+LIBSTUB(X509_policy_check, int);
+LIBSTUB(EVP_PKEY_get_attr_by_NID, int);
+LIBSTUB(BN_BLINDING_get_flags, unsigned long);
+LIBSTUB(PKCS12_add_cert, PKCS12_SAFEBAG *);
+LIBSTUB(EVP_CIPHER_CTX_rand_key, int);
+LIBSTUB(a2i_IPADDRESS_NC, ASN1_OCTET_STRING *);
+LIBSTUB(PKCS7_set_digest, int);
+LIBSTUB(POLICY_MAPPING_new, POLICY_MAPPING *);
+LIBSTUB(PKCS7_set0_type_other, int);
+LIBSTUB(EVP_PKEY_add1_attr_by_OBJ, int);
+LIBSTUB(X509_VERIFY_PARAM_set_time, void);
+LIBSTUB(PKCS12_add_key, PKCS12_SAFEBAG *);
+LIBSTUB(DSO_merge, char *);
+LIBSTUB(BIO_dump_cb, int);
+LIBSTUB(get_rfc3526_prime_8192, BIGNUM *);
+LIBSTUB(X509_VERIFY_PARAM_clear_flags, int);
+LIBSTUB(get_rfc2409_prime_1024, BIGNUM *);
+LIBSTUB(get_rfc3526_prime_2048, BIGNUM *);
+LIBSTUB(get_rfc3526_prime_6144, BIGNUM *);
+LIBSTUB(get_rfc3526_prime_1536, BIGNUM *);
+LIBSTUB(get_rfc3526_prime_3072, BIGNUM *);
+LIBSTUB(get_rfc3526_prime_4096, BIGNUM *);
+LIBSTUB(get_rfc2409_prime_768, BIGNUM *);
+LIBSTUB(X509_VERIFY_PARAM_get_flags, unsigned long);
+LIBSTUB(EVP_CIPHER_CTX_new, EVP_CIPHER_CTX *);
+LIBSTUB(EVP_CIPHER_CTX_free, void);
+LIBSTUB(a2i_ipadd, int);
+LIBSTUB(EVP_CIPHER_block_size, int);
+LIBSTUB(EVP_CIPHER_CTX_set_app_data, void);
+LIBSTUB(BIO_method_type, int);
+LIBSTUB(EVP_CIPHER_CTX_nid, int);
+LIBSTUB(EVP_CIPHER_CTX_key_length, int);
+LIBSTUB(EVP_MD_size, int);
+LIBSTUB(EVP_MD_CTX_test_flags, int);
+LIBSTUB(BIO_clear_flags, void);
+LIBSTUB(EVP_MD_pkey_type, int);
+LIBSTUB(EVP_MD_CTX_clear_flags, void);
+LIBSTUB(EVP_CIPHER_flags, unsigned long);
+LIBSTUB(BIO_get_callback, void *);
+LIBSTUB(EVP_CIPHER_key_length, int);
+LIBSTUB(EVP_Cipher, int);
+LIBSTUB(EVP_CIPHER_CTX_block_size, int);
+LIBSTUB(EVP_CIPHER_CTX_cipher, const EVP_CIPHER *);
+LIBSTUB(EVP_CIPHER_CTX_get_app_data, void *);
+LIBSTUB(EVP_MD_block_size, int);
+LIBSTUB(EVP_MD_CTX_md, const EVP_MD *);
+LIBSTUB(BIO_method_name, const char *);
+LIBSTUB(EVP_CIPHER_CTX_iv_length, int);
+LIBSTUB(CRYPTO_memcmp, int);
+LIBSTUB(BN_consttime_swap, void);
+LIBSTUB(i2d_X509_EXTENSIONS, int);
+LIBSTUB(d2i_X509_EXTENSIONS, X509_EXTENSIONS *);
+LIBSTUB(X509_ALGOR_get0, void);
+LIBSTUB(X509_ALGOR_set0, int);
+LIBSTUB(X509at_get0_data_by_OBJ, void *);
+LIBSTUB(ASN1_TYPE_set1, int);
+LIBSTUB(ASN1_STRING_set0, void);
+LIBSTUB(i2d_X509_ALGORS, int);
+LIBSTUB(COMP_zlib_cleanup, void);
+LIBSTUB(d2i_X509_ALGORS, X509_ALGORS *);
+LIBSTUB(SMIME_read_ASN1, ASN1_VALUE *);
+LIBSTUB(OPENSSL_isservice, int);
+LIBSTUB(EVP_CIPHER_CTX_clear_flags, void);
+LIBSTUB(BN_X931_generate_prime_ex, int);
+LIBSTUB(EVP_CIPHER_CTX_test_flags, int);
+LIBSTUB(EVP_add_alg_module, void);
+LIBSTUB(BN_X931_derive_prime_ex, int);
+LIBSTUB(OPENSSL_init, void);
+LIBSTUB(CRYPTO_strdup, char *);
+LIBSTUB(i2d_TS_ACCURACY, int);
+LIBSTUB(i2d_TS_MSG_IMPRINT, int);
+LIBSTUB(EVP_PKEY_print_public, int);
+LIBSTUB(EVP_PKEY_CTX_new, EVP_PKEY_CTX *);
+LIBSTUB(i2d_TS_TST_INFO, int);
+LIBSTUB(EVP_PKEY_asn1_find, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(TS_CONF_load_cert, X509 *);
+LIBSTUB(TS_REQ_get_ext, X509_EXTENSION *);
+LIBSTUB(EVP_PKEY_sign_init, int);
+LIBSTUB(ASN1_item_print, int);
+LIBSTUB(TS_TST_INFO_set_nonce, int);
+LIBSTUB(TS_RESP_dup, TS_RESP *);
+LIBSTUB(EVP_PKEY_asn1_add0, int);
+LIBSTUB(PKCS7_add0_attrib_signing_time, int);
+LIBSTUB(BIO_asn1_get_prefix, int);
+LIBSTUB(TS_TST_INFO_set_time, int);
+LIBSTUB(EVP_PKEY_meth_set_decrypt, void);
+LIBSTUB(EVP_PKEY_set_type_str, int);
+LIBSTUB(EVP_PKEY_CTX_get_keygen_info, int);
+LIBSTUB(TS_REQ_set_policy_id, int);
+LIBSTUB(TS_RESP_set_status_info, int);
+LIBSTUB(EVP_PKEY_keygen, int);
+LIBSTUB(EVP_DigestSignInit, int);
+LIBSTUB(TS_ACCURACY_set_millis, int);
+LIBSTUB(TS_REQ_dup, TS_REQ *);
+LIBSTUB(GENERAL_NAME_dup, GENERAL_NAME *);
+LIBSTUB(X509_STORE_get1_crls, STACK_OF(X509_CRL) *);
+LIBSTUB(EVP_PKEY_asn1_new, EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(BIO_new_NDEF, BIO *);
+LIBSTUB(TS_MSG_IMPRINT_set_algo, int);
+LIBSTUB(i2d_TS_TST_INFO_bio, int);
+LIBSTUB(TS_TST_INFO_set_ordering, int);
+LIBSTUB(TS_TST_INFO_get_ext_by_OBJ, int);
+LIBSTUB(TS_CONF_get_tsa_section, const char *);
+LIBSTUB(SMIME_write_ASN1, int);
+LIBSTUB(TS_RESP_CTX_set_signer_key, int);
+LIBSTUB(EVP_PKEY_encrypt_old, int);
+LIBSTUB(EVP_PKEY_encrypt_init, int);
+LIBSTUB(ASN1_PCTX_get_cert_flags, unsigned long);
+LIBSTUB(i2d_ESS_SIGNING_CERT, int);
+LIBSTUB(TS_CONF_load_key, EVP_PKEY *);
+LIBSTUB(i2d_ASN1_SEQUENCE_ANY, int);
+LIBSTUB(d2i_TS_MSG_IMPRINT_bio, TS_MSG_IMPRINT *);
+LIBSTUB(EVP_PKEY_asn1_set_public, void);
+LIBSTUB(b2i_PublicKey_bio, EVP_PKEY *);
+LIBSTUB(BIO_asn1_set_prefix, int);
+LIBSTUB(EVP_PKEY_new_mac_key, EVP_PKEY *);
+LIBSTUB(TS_REQ_ext_free, void);
+LIBSTUB(EVP_PKEY_asn1_set_free, void);
+LIBSTUB(EVP_PKEY_get0_asn1, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(EVP_PKEY_verify_recover_init, int);
+LIBSTUB(EVP_PKEY_CTX_set_data, void);
+LIBSTUB(EVP_PKEY_keygen_init, int);
+LIBSTUB(TS_RESP_CTX_set_status_info, int);
+LIBSTUB(TS_MSG_IMPRINT_get_algo, X509_ALGOR *);
+LIBSTUB(TS_REQ_print_bio, int);
+LIBSTUB(EVP_PKEY_CTX_ctrl_str, int);
+LIBSTUB(EVP_PKEY_get_default_digest_nid, int);
+LIBSTUB(PEM_write_bio_PKCS7_stream, int);
+LIBSTUB(TS_MSG_IMPRINT_print_bio, int);
+LIBSTUB(BN_asc2bn, int);
+LIBSTUB(TS_REQ_get_policy_id, ASN1_OBJECT *);
+LIBSTUB(d2i_TS_ACCURACY, TS_ACCURACY *);
+LIBSTUB(DSO_global_lookup, void *);
+LIBSTUB(TS_CONF_set_tsa_name, int);
+LIBSTUB(ASN1_PCTX_get_flags, unsigned long);
+LIBSTUB(TS_TST_INFO_get_ext_by_NID, int);
+LIBSTUB(TS_RESP_new, TS_RESP *);
+LIBSTUB(ESS_CERT_ID_dup, ESS_CERT_ID *);
+LIBSTUB(TS_STATUS_INFO_dup, TS_STATUS_INFO *);
+LIBSTUB(TS_REQ_delete_ext, X509_EXTENSION *);
+LIBSTUB(EVP_DigestVerifyFinal, int);
+LIBSTUB(EVP_PKEY_print_params, int);
+LIBSTUB(TS_REQ_get_msg_imprint, TS_MSG_IMPRINT *);
+LIBSTUB(OBJ_find_sigid_by_algs, int);
+LIBSTUB(TS_TST_INFO_get_serial, const ASN1_INTEGER *);
+LIBSTUB(TS_REQ_get_nonce, const ASN1_INTEGER *);
+LIBSTUB(X509_PUBKEY_set0_param, int);
+LIBSTUB(EVP_PKEY_CTX_set0_keygen_info, void);
+LIBSTUB(DIST_POINT_set_dpname, int);
+LIBSTUB(i2d_ISSUING_DIST_POINT, int);
+LIBSTUB(EVP_PKEY_CTX_get_data, void *);
+LIBSTUB(TS_STATUS_INFO_print_bio, int);
+LIBSTUB(EVP_PKEY_derive_init, int);
+LIBSTUB(d2i_TS_TST_INFO, TS_TST_INFO *);
+LIBSTUB(EVP_PKEY_asn1_add_alias, int);
+LIBSTUB(d2i_TS_RESP_bio, TS_RESP *);
+LIBSTUB(OTHERNAME_cmp, int);
+LIBSTUB(GENERAL_NAME_set0_value, void);
+LIBSTUB(PKCS7_RECIP_INFO_get0_alg, void);
+LIBSTUB(TS_RESP_CTX_new, TS_RESP_CTX *);
+LIBSTUB(TS_RESP_set_tst_info, void);
+LIBSTUB(PKCS7_final, int);
+LIBSTUB(EVP_PKEY_base_id, int);
+LIBSTUB(TS_RESP_CTX_set_signer_cert, int);
+LIBSTUB(TS_REQ_set_msg_imprint, int);
+LIBSTUB(EVP_PKEY_CTX_ctrl, int);
+LIBSTUB(TS_CONF_set_digests, int);
+LIBSTUB(d2i_TS_MSG_IMPRINT, TS_MSG_IMPRINT *);
+LIBSTUB(EVP_PKEY_meth_set_ctrl, void);
+LIBSTUB(TS_REQ_get_ext_by_NID, int);
+LIBSTUB(PKCS5_pbe_set0_algor, int);
+LIBSTUB(TS_ACCURACY_new, TS_ACCURACY *);
+LIBSTUB(X509_CRL_METHOD_free, void);
+LIBSTUB(ASN1_PCTX_get_nm_flags, unsigned long);
+LIBSTUB(EVP_PKEY_meth_set_sign, void);
+LIBSTUB(EVP_PKEY_decrypt_init, int);
+LIBSTUB(i2b_PVK_bio, int);
+LIBSTUB(EVP_PKEY_print_private, int);
+LIBSTUB(GENERAL_NAME_get0_value, void *);
+LIBSTUB(b2i_PVK_bio, EVP_PKEY *);
+LIBSTUB(ASN1_UTCTIME_adj, ASN1_UTCTIME *);
+LIBSTUB(TS_TST_INFO_new, TS_TST_INFO *);
+LIBSTUB(EVP_MD_do_all_sorted, void);
+LIBSTUB(TS_CONF_set_default_engine, int);
+LIBSTUB(TS_ACCURACY_set_seconds, int);
+LIBSTUB(TS_TST_INFO_get_time, const ASN1_GENERALIZEDTIME *);
+LIBSTUB(PKCS8_pkey_get0, int);
+LIBSTUB(EVP_PKEY_asn1_get0, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(OBJ_add_sigid, int);
+LIBSTUB(PKCS7_SIGNER_INFO_sign, int);
+LIBSTUB(EVP_PKEY_paramgen_init, int);
+LIBSTUB(EVP_PKEY_sign, int);
+LIBSTUB(OBJ_sigid_free, void);
+LIBSTUB(EVP_PKEY_meth_set_init, void);
+LIBSTUB(d2i_ESS_ISSUER_SERIAL, ESS_ISSUER_SERIAL *);
+LIBSTUB(ISSUING_DIST_POINT_new, ISSUING_DIST_POINT *);
+LIBSTUB(ASN1_TIME_adj, ASN1_TIME *);
+LIBSTUB(TS_OBJ_print_bio, int);
+LIBSTUB(EVP_PKEY_meth_set_verify_recover, void);
+LIBSTUB(TS_RESP_get_status_info, TS_STATUS_INFO *);
+LIBSTUB(EVP_PKEY_CTX_set_cb, void);
+LIBSTUB(PKCS7_to_TS_TST_INFO, TS_TST_INFO *);
+LIBSTUB(ASN1_PCTX_get_oid_flags, unsigned long);
+LIBSTUB(TS_TST_INFO_add_ext, int);
+LIBSTUB(EVP_PKEY_meth_set_derive, void);
+LIBSTUB(i2d_TS_MSG_IMPRINT_bio, int);
+LIBSTUB(TS_RESP_CTX_set_accuracy, int);
+LIBSTUB(TS_REQ_set_nonce, int);
+LIBSTUB(ESS_CERT_ID_new, ESS_CERT_ID *);
+LIBSTUB(TS_REQ_get_ext_count, int);
+LIBSTUB(BUF_reverse, void);
+LIBSTUB(TS_TST_INFO_print_bio, int);
+LIBSTUB(d2i_ISSUING_DIST_POINT, ISSUING_DIST_POINT *);
+LIBSTUB(i2b_PrivateKey_bio, int);
+LIBSTUB(i2d_TS_RESP, int);
+LIBSTUB(b2i_PublicKey, EVP_PKEY *);
+LIBSTUB(TS_VERIFY_CTX_cleanup, void);
+LIBSTUB(TS_STATUS_INFO_free, void);
+LIBSTUB(TS_RESP_verify_token, int);
+LIBSTUB(OBJ_bsearch_ex_, const void *);
+LIBSTUB(ASN1_bn_print, int);
+LIBSTUB(EVP_PKEY_asn1_get_count, int);
+LIBSTUB(ASN1_PCTX_set_nm_flags, void);
+LIBSTUB(EVP_DigestVerifyInit, int);
+LIBSTUB(TS_TST_INFO_get_policy_id, ASN1_OBJECT *);
+LIBSTUB(TS_REQ_get_cert_req, int);
+LIBSTUB(X509_CRL_set_meth_data, void);
+LIBSTUB(PKCS8_pkey_set0, int);
+LIBSTUB(ASN1_STRING_copy, int);
+LIBSTUB(X509_CRL_match, int);
+LIBSTUB(EVP_PKEY_asn1_set_private, void);
+LIBSTUB(TS_TST_INFO_get_ext_d2i, void *);
+LIBSTUB(TS_RESP_CTX_add_policy, int);
+LIBSTUB(d2i_TS_RESP, TS_RESP *);
+LIBSTUB(TS_CONF_load_certs, STACK_OF(X509) *);
+LIBSTUB(TS_TST_INFO_get_msg_imprint, TS_MSG_IMPRINT *);
+LIBSTUB(ERR_load_TS_strings, void);
+LIBSTUB(TS_TST_INFO_get_version, long);
+LIBSTUB(EVP_PKEY_CTX_dup, EVP_PKEY_CTX *);
+LIBSTUB(EVP_PKEY_meth_set_verify, void);
+LIBSTUB(i2b_PublicKey_bio, int);
+LIBSTUB(TS_CONF_set_certs, int);
+LIBSTUB(EVP_PKEY_asn1_get0_info, int);
+LIBSTUB(TS_VERIFY_CTX_free, void);
+LIBSTUB(TS_REQ_get_ext_by_critical, int);
+LIBSTUB(TS_RESP_CTX_set_serial_cb, void);
+LIBSTUB(X509_CRL_get_meth_data, void *);
+LIBSTUB(TS_RESP_CTX_set_time_cb, void);
+LIBSTUB(TS_MSG_IMPRINT_get_msg, ASN1_OCTET_STRING *);
+LIBSTUB(TS_TST_INFO_ext_free, void);
+LIBSTUB(TS_REQ_get_version, long);
+LIBSTUB(TS_REQ_add_ext, int);
+LIBSTUB(EVP_PKEY_CTX_set_app_data, void);
+LIBSTUB(OBJ_bsearch_, const void *);
+LIBSTUB(EVP_PKEY_meth_set_verifyctx, void);
+LIBSTUB(i2d_PKCS7_bio_stream, int);
+LIBSTUB(PKCS7_sign_add_signer, PKCS7_SIGNER_INFO *);
+LIBSTUB(d2i_TS_TST_INFO_bio, TS_TST_INFO *);
+LIBSTUB(TS_TST_INFO_get_ordering, int);
+LIBSTUB(TS_RESP_print_bio, int);
+LIBSTUB(TS_TST_INFO_get_exts, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(PKCS5_pbe2_set_iv, X509_ALGOR *);
+LIBSTUB(b2i_PrivateKey, EVP_PKEY *);
+LIBSTUB(EVP_PKEY_CTX_get_app_data, void *);
+LIBSTUB(TS_REQ_set_cert_req, int);
+LIBSTUB(TS_CONF_set_serial, int);
+LIBSTUB(TS_TST_INFO_free, void);
+LIBSTUB(TS_RESP_verify_response, int);
+LIBSTUB(i2d_ESS_ISSUER_SERIAL, int);
+LIBSTUB(TS_ACCURACY_get_seconds, const ASN1_INTEGER *);
+LIBSTUB(EVP_CIPHER_do_all, void);
+LIBSTUB(b2i_PrivateKey_bio, EVP_PKEY *);
+LIBSTUB(OCSP_CERTID_dup, OCSP_CERTID *);
+LIBSTUB(X509_PUBKEY_get0_param, int);
+LIBSTUB(TS_MSG_IMPRINT_dup, TS_MSG_IMPRINT *);
+LIBSTUB(PKCS7_print_ctx, void);
+LIBSTUB(i2d_TS_REQ_bio, int);
+LIBSTUB(EVP_PKEY_asn1_set_param, void);
+LIBSTUB(EVP_PKEY_meth_set_encrypt, void);
+LIBSTUB(ASN1_PCTX_set_flags, void);
+LIBSTUB(i2d_ESS_CERT_ID, int);
+LIBSTUB(TS_VERIFY_CTX_new, TS_VERIFY_CTX *);
+LIBSTUB(TS_RESP_CTX_set_extension_cb, void);
+LIBSTUB(TS_RESP_CTX_set_status_info_cond, int);
+LIBSTUB(EVP_PKEY_verify, int);
+LIBSTUB(X509_CRL_METHOD_new, X509_CRL_METHOD *);
+LIBSTUB(EVP_DigestSignFinal, int);
+LIBSTUB(TS_RESP_CTX_set_def_policy, int);
+LIBSTUB(TS_RESP_create_response, TS_RESP *);
+LIBSTUB(PKCS7_SIGNER_INFO_get0_algs, void);
+LIBSTUB(TS_TST_INFO_get_nonce, const ASN1_INTEGER *);
+LIBSTUB(EVP_PKEY_decrypt_old, int);
+LIBSTUB(TS_TST_INFO_set_policy_id, int);
+LIBSTUB(TS_CONF_set_ess_cert_id_chain, int);
+LIBSTUB(EVP_PKEY_CTX_get0_pkey, EVP_PKEY *);
+LIBSTUB(d2i_TS_REQ, TS_REQ *);
+LIBSTUB(EVP_PKEY_asn1_find_str, const EVP_PKEY_ASN1_METHOD *);
+LIBSTUB(BIO_f_asn1, BIO_METHOD *);
+LIBSTUB(ESS_SIGNING_CERT_new, ESS_SIGNING_CERT *);
+LIBSTUB(EVP_PBE_find, int);
+LIBSTUB(X509_CRL_get0_by_cert, int);
+LIBSTUB(EVP_PKEY_derive, int);
+LIBSTUB(i2d_TS_REQ, int);
+LIBSTUB(TS_TST_INFO_delete_ext, X509_EXTENSION *);
+LIBSTUB(ESS_ISSUER_SERIAL_free, void);
+LIBSTUB(ASN1_PCTX_set_str_flags, void);
+LIBSTUB(TS_CONF_set_signer_key, int);
+LIBSTUB(TS_ACCURACY_get_millis, const ASN1_INTEGER *);
+LIBSTUB(TS_RESP_get_token, PKCS7 *);
+LIBSTUB(TS_ACCURACY_dup, TS_ACCURACY *);
+LIBSTUB(X509_CRL_set_default_method, void);
+LIBSTUB(TS_RESP_free, void);
+LIBSTUB(ISSUING_DIST_POINT_free, void);
+LIBSTUB(ESS_ISSUER_SERIAL_new, ESS_ISSUER_SERIAL *);
+LIBSTUB(PKCS7_add1_attrib_digest, int);
+LIBSTUB(TS_RESP_CTX_add_md, int);
+LIBSTUB(TS_TST_INFO_dup, TS_TST_INFO *);
+LIBSTUB(PEM_write_bio_Parameters, int);
+LIBSTUB(TS_TST_INFO_get_accuracy, TS_ACCURACY *);
+LIBSTUB(X509_CRL_get0_by_serial, int);
+LIBSTUB(TS_TST_INFO_set_version, int);
+LIBSTUB(TS_RESP_CTX_get_tst_info, TS_TST_INFO *);
+LIBSTUB(TS_RESP_verify_signature, int);
+LIBSTUB(TS_TST_INFO_get_tsa, GENERAL_NAME *);
+LIBSTUB(TS_STATUS_INFO_new, TS_STATUS_INFO *);
+LIBSTUB(EVP_PKEY_CTX_get_cb, void *);
+LIBSTUB(TS_REQ_get_ext_d2i, void *);
+LIBSTUB(GENERAL_NAME_set0_othername, int);
+LIBSTUB(TS_TST_INFO_get_ext_count, int);
+LIBSTUB(TS_RESP_CTX_get_request, TS_REQ *);
+LIBSTUB(EVP_PKEY_meth_set_signctx, void);
+LIBSTUB(EVP_PKEY_asn1_copy, void);
+LIBSTUB(ASN1_TYPE_cmp, int);
+LIBSTUB(EVP_CIPHER_do_all_sorted, void);
+LIBSTUB(EVP_PKEY_CTX_free, void);
+LIBSTUB(X509_STORE_get1_certs, STACK_OF(X509) *);
+LIBSTUB(EVP_PKEY_CTX_get_operation, int);
+LIBSTUB(d2i_ESS_SIGNING_CERT, ESS_SIGNING_CERT *);
+LIBSTUB(TS_CONF_set_ordering, int);
+LIBSTUB(EVP_PBE_alg_add_type, int);
+LIBSTUB(TS_REQ_set_version, int);
+LIBSTUB(EVP_PKEY_get0, void *);
+LIBSTUB(BIO_asn1_set_suffix, int);
+LIBSTUB(i2d_TS_STATUS_INFO, int);
+LIBSTUB(EVP_MD_do_all, void);
+LIBSTUB(TS_TST_INFO_set_accuracy, int);
+LIBSTUB(PKCS7_add_attrib_content_type, int);
+LIBSTUB(EVP_PKEY_meth_add0, int);
+LIBSTUB(TS_TST_INFO_set_tsa, int);
+LIBSTUB(EVP_PKEY_meth_new, EVP_PKEY_METHOD *);
+LIBSTUB(TS_CONF_set_accuracy, int);
+LIBSTUB(ASN1_PCTX_set_oid_flags, void);
+LIBSTUB(ESS_SIGNING_CERT_dup, ESS_SIGNING_CERT *);
+LIBSTUB(d2i_TS_REQ_bio, TS_REQ *);
+LIBSTUB(X509_time_adj_ex, ASN1_TIME *);
+LIBSTUB(TS_RESP_CTX_add_flags, void);
+LIBSTUB(d2i_TS_STATUS_INFO, TS_STATUS_INFO *);
+LIBSTUB(TS_MSG_IMPRINT_set_msg, int);
+LIBSTUB(BIO_asn1_get_suffix, int);
+LIBSTUB(TS_REQ_free, void);
+LIBSTUB(EVP_PKEY_meth_free, void);
+LIBSTUB(TS_REQ_get_exts, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(TS_RESP_CTX_set_clock_precision_digits, int);
+LIBSTUB(TS_RESP_CTX_add_failure_info, int);
+LIBSTUB(i2d_TS_RESP_bio, int);
+LIBSTUB(EVP_PKEY_CTX_get0_peerkey, EVP_PKEY *);
+LIBSTUB(TS_REQ_new, TS_REQ *);
+LIBSTUB(TS_MSG_IMPRINT_new, TS_MSG_IMPRINT *);
+LIBSTUB(EVP_PKEY_meth_find, const EVP_PKEY_METHOD *);
+LIBSTUB(EVP_PKEY_id, int);
+LIBSTUB(TS_TST_INFO_set_serial, int);
+LIBSTUB(a2i_GENERAL_NAME, GENERAL_NAME *);
+LIBSTUB(TS_CONF_set_crypto_device, int);
+LIBSTUB(EVP_PKEY_verify_init, int);
+LIBSTUB(TS_CONF_set_policies, int);
+LIBSTUB(ASN1_PCTX_new, ASN1_PCTX *);
+LIBSTUB(ESS_CERT_ID_free, void);
+LIBSTUB(TS_MSG_IMPRINT_free, void);
+LIBSTUB(TS_VERIFY_CTX_init, void);
+LIBSTUB(PKCS7_stream, int);
+LIBSTUB(TS_RESP_CTX_set_certs, int);
+LIBSTUB(TS_CONF_set_def_policy, int);
+LIBSTUB(ASN1_GENERALIZEDTIME_adj, ASN1_GENERALIZEDTIME *);
+LIBSTUB(TS_ACCURACY_free, void);
+LIBSTUB(TS_RESP_get_tst_info, TS_TST_INFO *);
+LIBSTUB(EVP_PKEY_derive_set_peer, int);
+LIBSTUB(PEM_read_bio_Parameters, EVP_PKEY *);
+LIBSTUB(TS_CONF_set_clock_precision_digits, int);
+LIBSTUB(ESS_ISSUER_SERIAL_dup, ESS_ISSUER_SERIAL *);
+LIBSTUB(TS_ACCURACY_get_micros, const ASN1_INTEGER *);
+LIBSTUB(ASN1_PCTX_get_str_flags, unsigned long);
+LIBSTUB(NAME_CONSTRAINTS_check, int);
+LIBSTUB(ASN1_BIT_STRING_check, int);
+LIBSTUB(X509_check_akid, int);
+LIBSTUB(ASN1_PCTX_free, void);
+LIBSTUB(PEM_write_bio_ASN1_stream, int);
+LIBSTUB(i2d_ASN1_bio_stream, int);
+LIBSTUB(TS_X509_ALGOR_print_bio, int);
+LIBSTUB(EVP_PKEY_meth_set_cleanup, void);
+LIBSTUB(EVP_PKEY_asn1_free, void);
+LIBSTUB(ESS_SIGNING_CERT_free, void);
+LIBSTUB(TS_TST_INFO_set_msg_imprint, int);
+LIBSTUB(GENERAL_NAME_cmp, int);
+LIBSTUB(d2i_ASN1_SEQUENCE_ANY, ASN1_SEQUENCE_ANY *);
+LIBSTUB(GENERAL_NAME_get0_otherName, int);
+LIBSTUB(d2i_ESS_CERT_ID, ESS_CERT_ID *);
+LIBSTUB(OBJ_find_sigid_algs, int);
+LIBSTUB(EVP_PKEY_meth_set_keygen, void);
+LIBSTUB(PKCS5_PBKDF2_HMAC, int);
+LIBSTUB(EVP_PKEY_paramgen, int);
+LIBSTUB(EVP_PKEY_meth_set_paramgen, void);
+LIBSTUB(BIO_new_PKCS7, BIO *);
+LIBSTUB(EVP_PKEY_verify_recover, int);
+LIBSTUB(TS_ext_print_bio, int);
+LIBSTUB(TS_ASN1_INTEGER_print_bio, int);
+LIBSTUB(check_defer, void);
+LIBSTUB(DSO_pathbyaddr, int);
+LIBSTUB(EVP_PKEY_set_type, int);
+LIBSTUB(TS_ACCURACY_set_micros, int);
+LIBSTUB(TS_REQ_to_TS_VERIFY_CTX, TS_VERIFY_CTX *);
+LIBSTUB(EVP_PKEY_meth_set_copy, void);
+LIBSTUB(ASN1_PCTX_set_cert_flags, void);
+LIBSTUB(TS_TST_INFO_get_ext, X509_EXTENSION *);
+LIBSTUB(EVP_PKEY_asn1_set_ctrl, void);
+LIBSTUB(TS_TST_INFO_get_ext_by_critical, int);
+LIBSTUB(EVP_PKEY_CTX_new_id, EVP_PKEY_CTX *);
+LIBSTUB(TS_REQ_get_ext_by_OBJ, int);
+LIBSTUB(TS_CONF_set_signer_cert, int);
+LIBSTUB(X509_NAME_hash_old, unsigned long);
+LIBSTUB(ASN1_TIME_set_string, int);
+LIBSTUB(EVP_MD_flags, unsigned long);
+LIBSTUB(TS_RESP_CTX_free, void);
+LIBSTUB(OCSP_REQ_CTX_add1_header, int);
+LIBSTUB(OCSP_REQ_CTX_set1_req, int);
+LIBSTUB(X509_STORE_set_verify_cb, void);
+LIBSTUB(X509_STORE_CTX_get0_current_crl, X509_CRL *);
+LIBSTUB(X509_STORE_CTX_get0_parent_ctx, X509_STORE_CTX *);
+LIBSTUB(X509_STORE_CTX_get0_current_issuer, X509 *);
+LIBSTUB(EVP_CIPHER_CTX_copy, int);
+LIBSTUB(UI_method_get_prompt_constructor, void *);
+LIBSTUB(UI_method_set_prompt_constructor, int);
+LIBSTUB(EVP_read_pw_string_min, int);
+LIBSTUB(CRYPTO_cts128_encrypt, size_t);
+LIBSTUB(CRYPTO_cts128_decrypt_block, size_t);
+LIBSTUB(CRYPTO_cfb128_1_encrypt, void);
+LIBSTUB(CRYPTO_cbc128_encrypt, void);
+LIBSTUB(CRYPTO_ctr128_encrypt, void);
+LIBSTUB(CRYPTO_ofb128_encrypt, void);
+LIBSTUB(CRYPTO_cts128_decrypt, size_t);
+LIBSTUB(CRYPTO_cts128_encrypt_block, size_t);
+LIBSTUB(CRYPTO_cbc128_decrypt, void);
+LIBSTUB(CRYPTO_cfb128_encrypt, void);
+LIBSTUB(CRYPTO_cfb128_8_encrypt, void);
+LIBSTUB(OPENSSL_strcasecmp, int);
+LIBSTUB(OPENSSL_memcmp, int);
+LIBSTUB(OPENSSL_strncasecmp, int);
+LIBSTUB(OPENSSL_gmtime, struct tm *);
+LIBSTUB(OPENSSL_gmtime_adj, int);
+LIBSTUB(OPENSSL_gmtime_diff, int);
+LIBSTUB(EVP_PKEY_meth_get0_info, void);
+LIBSTUB(EVP_PKEY_meth_copy, void);
+LIBSTUB(RSA_padding_add_PKCS1_PSS_mgf1, int);
+LIBSTUB(RSA_verify_PKCS1_PSS_mgf1, int);
+LIBSTUB(X509_ALGOR_set_md, void);
+LIBSTUB(CMAC_CTX_copy, int);
+LIBSTUB(CMAC_CTX_free, void);
+LIBSTUB(CMAC_CTX_get0_cipher_ctx, EVP_CIPHER_CTX *);
+LIBSTUB(CMAC_CTX_cleanup, void);
+LIBSTUB(CMAC_Init, int);
+LIBSTUB(CMAC_Update, int);
+LIBSTUB(CMAC_resume, int);
+LIBSTUB(CMAC_CTX_new, CMAC_CTX *);
+LIBSTUB(CMAC_Final, int);
+LIBSTUB(CRYPTO_ctr128_encrypt_ctr32, void);
+LIBSTUB(CRYPTO_gcm128_release, void);
+LIBSTUB(CRYPTO_ccm128_decrypt_ccm64, int);
+LIBSTUB(CRYPTO_ccm128_encrypt, int);
+LIBSTUB(CRYPTO_gcm128_encrypt, int);
+LIBSTUB(CRYPTO_xts128_encrypt, int);
+LIBSTUB(CRYPTO_nistcts128_decrypt_block, size_t);
+LIBSTUB(CRYPTO_gcm128_setiv, void);
+LIBSTUB(CRYPTO_nistcts128_encrypt, size_t);
+LIBSTUB(CRYPTO_gcm128_tag, void);
+LIBSTUB(CRYPTO_ccm128_encrypt_ccm64, int);
+LIBSTUB(CRYPTO_ccm128_setiv, int);
+LIBSTUB(CRYPTO_nistcts128_encrypt_block, size_t);
+LIBSTUB(CRYPTO_gcm128_aad, int);
+LIBSTUB(CRYPTO_ccm128_init, void);
+LIBSTUB(CRYPTO_nistcts128_decrypt, size_t);
+LIBSTUB(CRYPTO_gcm128_new, GCM128_CONTEXT *);
+LIBSTUB(CRYPTO_ccm128_tag, size_t);
+LIBSTUB(CRYPTO_ccm128_decrypt, int);
+LIBSTUB(CRYPTO_ccm128_aad, void);
+LIBSTUB(CRYPTO_gcm128_init, void);
+LIBSTUB(CRYPTO_gcm128_decrypt, int);
+LIBSTUB(CRYPTO_gcm128_decrypt_ctr32, int);
+LIBSTUB(CRYPTO_gcm128_encrypt_ctr32, int);
+LIBSTUB(CRYPTO_gcm128_finish, int);
+LIBSTUB(PKCS5_pbkdf2_set, X509_ALGOR *);
+LIBSTUB(RSA_PSS_PARAMS_new, RSA_PSS_PARAMS *);
+LIBSTUB(d2i_RSA_PSS_PARAMS, RSA_PSS_PARAMS *);
+LIBSTUB(RSA_PSS_PARAMS_free, void);
+LIBSTUB(i2d_RSA_PSS_PARAMS, int);
+LIBSTUB(POLICY_MAPPING_it, const ASN1_ITEM *);
+LIBSTUB(NAME_CONSTRAINTS_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_OCTET_STRING_NDEF_it, const ASN1_ITEM *);
+LIBSTUB(POLICY_CONSTRAINTS_it, const ASN1_ITEM *);
+LIBSTUB(POLICY_MAPPINGS_it, const ASN1_ITEM *);
+LIBSTUB(GENERAL_SUBTREE_it, const ASN1_ITEM *);
+LIBSTUB(X509_EXTENSIONS_it, const ASN1_ITEM *);
+LIBSTUB(X509_ALGORS_it, const ASN1_ITEM *);
+LIBSTUB(CMS_ContentInfo_it, const ASN1_ITEM *);
+LIBSTUB(CMS_ReceiptRequest_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_SEQUENCE_ANY_it, const ASN1_ITEM *);
+LIBSTUB(ASN1_SET_ANY_it, const ASN1_ITEM *);
+LIBSTUB(ISSUING_DIST_POINT_it, const ASN1_ITEM *);
+LIBSTUB(RSA_PSS_PARAMS_it, const ASN1_ITEM *);
+LIBSTUB(PEM_write_bio_DHxparams, int);
+LIBSTUB(X509_ALGOR_cmp, int);
+LIBSTUB(ASN1_STRING_clear_free, void);
+LIBSTUB(ASN1_TIME_diff, int);
+LIBSTUB(BIO_hex_string, int);
+LIBSTUB(CMS_RecipientEncryptedKey_cert_cmp, int);
+LIBSTUB(CMS_RecipientEncryptedKey_get0_id, int);
+LIBSTUB(CMS_RecipientInfo_encrypt, int);
+LIBSTUB(CMS_RecipientInfo_get0_pkey_ctx, EVP_PKEY_CTX *);
+LIBSTUB(CMS_RecipientInfo_kari_decrypt, int);
+LIBSTUB(CMS_RecipientInfo_kari_get0_alg, int);
+LIBSTUB(CMS_RecipientInfo_kari_get0_ctx, EVP_CIPHER_CTX *);
+LIBSTUB(CMS_RecipientInfo_kari_get0_orig_id, int);
+LIBSTUB(CMS_RecipientInfo_kari_get0_reks, STACK_OF(CMS_RecipientEncryptedKey) *);
+LIBSTUB(CMS_RecipientInfo_kari_orig_id_cmp, int);
+LIBSTUB(CMS_RecipientInfo_kari_set0_pkey, int);
+LIBSTUB(CMS_SharedInfo_encode, int);
+LIBSTUB(CMS_SignerInfo_get0_md_ctx, EVP_MD_CTX *);
+LIBSTUB(CMS_SignerInfo_get0_pkey_ctx, EVP_PKEY_CTX *);
+LIBSTUB(CMS_SignerInfo_get0_signature, ASN1_OCTET_STRING *);
+LIBSTUB(d2i_DHxparams, DH *);
+LIBSTUB(i2d_DHxparams, int);
+LIBSTUB(DH_compute_key_padded, int);
+LIBSTUB(DH_get_1024_160, DH *);
+LIBSTUB(DH_get_2048_224, DH *);
+LIBSTUB(DH_get_2048_256, DH *);
+LIBSTUB(DH_KDF_X9_42, int);
+LIBSTUB(EC_curve_nid2nist, const char *);
+LIBSTUB(EC_curve_nist2nid, int);
+LIBSTUB(EC_GROUP_get_mont_data, BN_MONT_CTX *);
+LIBSTUB(ECDH_KDF_X9_62, int);
+LIBSTUB(EVP_aes_128_cbc_hmac_sha256, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_wrap, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_wrap, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_cbc_hmac_sha256, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_wrap, const EVP_CIPHER *);
+LIBSTUB(EVP_des_ede3_wrap, const EVP_CIPHER *);
+LIBSTUB(CRYPTO_128_unwrap, size_t);
+LIBSTUB(CRYPTO_128_wrap, size_t);
+LIBSTUB(OCSP_REQ_CTX_get0_mem_bio, BIO *);
+LIBSTUB(OCSP_REQ_CTX_http, int);
+LIBSTUB(OCSP_REQ_CTX_i2d, int);
+LIBSTUB(OCSP_REQ_CTX_nbio, int);
+LIBSTUB(OCSP_REQ_CTX_nbio_d2i, int);
+LIBSTUB(OCSP_REQ_CTX_new, OCSP_REQ_CTX *);
+LIBSTUB(OCSP_set_max_response_length, void);
+LIBSTUB(d2i_RSA_OAEP_PARAMS, RSA_OAEP_PARAMS *);
+LIBSTUB(RSA_OAEP_PARAMS_free, void);
+LIBSTUB(RSA_OAEP_PARAMS_it, const ASN1_ITEM *);
+LIBSTUB(RSA_OAEP_PARAMS_new, RSA_OAEP_PARAMS *);
+LIBSTUB(RSA_padding_add_PKCS1_OAEP_mgf1, int);
+LIBSTUB(RSA_padding_check_PKCS1_OAEP_mgf1, int);
+LIBSTUB(sk_deep_copy, _STACK *);
+LIBSTUB(i2d_re_X509_tbs, int);
+LIBSTUB(X509_chain_check_suiteb, int);
+LIBSTUB(X509_chain_up_ref, STACK_OF(X509) *);
+LIBSTUB(X509_CRL_check_suiteb, int);
+LIBSTUB(X509_CRL_diff, X509_CRL *);
+LIBSTUB(X509_CRL_http_nbio, int);
+LIBSTUB(X509_get0_signature, void);
+LIBSTUB(X509_get_signature_nid, int);
+LIBSTUB(X509_http_nbio, int);
+LIBSTUB(X509_REVOKED_dup, X509_REVOKED *);
+LIBSTUB(X509_STORE_CTX_get0_store, X509_STORE *);
+LIBSTUB(X509_STORE_set_lookup_crls_cb, void);
+LIBSTUB(X509_VERIFY_PARAM_add1_host, int);
+LIBSTUB(X509_VERIFY_PARAM_get0, const X509_VERIFY_PARAM *);
+LIBSTUB(X509_VERIFY_PARAM_get0_name, const char *);
+LIBSTUB(X509_VERIFY_PARAM_get0_peername, char *);
+LIBSTUB(X509_VERIFY_PARAM_get_count, int);
+LIBSTUB(X509_VERIFY_PARAM_set1_email, int);
+LIBSTUB(X509_VERIFY_PARAM_set1_host, int);
+LIBSTUB(X509_VERIFY_PARAM_set1_ip, int);
+LIBSTUB(X509_VERIFY_PARAM_set1_ip_asc, int);
+LIBSTUB(X509_VERIFY_PARAM_set_hostflags, void);
+LIBSTUB(X509_check_email, int);
+LIBSTUB(X509_check_host, int);
+LIBSTUB(X509_check_ip, int);
+LIBSTUB(X509_check_ip_asc, int);
+LIBSTUB(EVP_PKEY_asn1_set_item, void);
+LIBSTUB(DTLS_client_method, const SSL_METHOD *);
+LIBSTUB(DTLS_method, const SSL_METHOD *);
+LIBSTUB(DTLS_server_method, const SSL_METHOD *);
+LIBSTUB(SSL_certs_clear, void);
+LIBSTUB(SSL_CIPHER_find, const SSL_CIPHER *);
+LIBSTUB(SSL_COMP_free_compression_methods, void);
+LIBSTUB(SSL_CONF_cmd, int);
+LIBSTUB(SSL_CONF_cmd_argv, int);
+LIBSTUB(SSL_CONF_cmd_value_type, int);
+LIBSTUB(SSL_CONF_CTX_clear_flags, unsigned int);
+LIBSTUB(SSL_CONF_CTX_finish, int);
+LIBSTUB(SSL_CONF_CTX_free, void);
+LIBSTUB(SSL_CONF_CTX_new, SSL_CONF_CTX *);
+LIBSTUB(SSL_CONF_CTX_set1_prefix, int);
+LIBSTUB(SSL_CONF_CTX_set_flags, unsigned int);
+LIBSTUB(SSL_CONF_CTX_set_ssl, void);
+LIBSTUB(SSL_CONF_CTX_set_ssl_ctx, void);
+LIBSTUB(SSL_CTX_add_client_custom_ext, int);
+LIBSTUB(SSL_CTX_add_server_custom_ext, int);
+LIBSTUB(SSL_CTX_get0_certificate, X509 *);
+LIBSTUB(SSL_CTX_get0_param, X509_VERIFY_PARAM *);
+LIBSTUB(SSL_CTX_get0_privatekey, EVP_PKEY *);
+LIBSTUB(SSL_CTX_get_ssl_method, const SSL_METHOD *);
+LIBSTUB(SSL_CTX_set_alpn_protos, int);
+LIBSTUB(SSL_CTX_set_alpn_select_cb, void);
+LIBSTUB(SSL_CTX_set_cert_cb, void);
+LIBSTUB(SSL_CTX_use_serverinfo, int);
+LIBSTUB(SSL_CTX_use_serverinfo_file, int);
+LIBSTUB(SSL_extension_supported, int);
+LIBSTUB(SSL_get0_alpn_selected, void);
+LIBSTUB(SSL_get0_param, X509_VERIFY_PARAM *);
+LIBSTUB(SSL_is_server, int);
+LIBSTUB(SSL_set_alpn_protos, int);
+LIBSTUB(SSL_set_cert_cb, void);
+LIBSTUB(SSL_check_chain, int);
+LIBSTUB(SSL_get_shared_sigalgs, int);
+LIBSTUB(SSL_get_sigalgs, int);
+LIBSTUB(ASN1_add_stable_module, void);
+LIBSTUB(ASN1_buf_print, int);
+LIBSTUB(ASN1_ENUMERATED_get_int64, int);
+LIBSTUB(ASN1_ENUMERATED_set_int64, int);
+LIBSTUB(ASN1_INTEGER_get_int64, int);
+LIBSTUB(ASN1_INTEGER_get_uint64, int);
+LIBSTUB(ASN1_INTEGER_set_int64, int);
+LIBSTUB(ASN1_INTEGER_set_uint64, int);
+LIBSTUB(ASN1_SCTX_free, void);
+LIBSTUB(ASN1_SCTX_get_app_data, void *);
+LIBSTUB(ASN1_SCTX_get_flags, unsigned long);
+LIBSTUB(ASN1_SCTX_get_item, const ASN1_ITEM *);
+LIBSTUB(ASN1_SCTX_get_template, const ASN1_TEMPLATE *);
+LIBSTUB(ASN1_SCTX_new, ASN1_SCTX *);
+LIBSTUB(ASN1_SCTX_set_app_data, void);
+LIBSTUB(ASN1_str2mask, int);
+LIBSTUB(ASN1_TYPE_pack_sequence, ASN1_TYPE *);
+LIBSTUB(ASN1_TYPE_unpack_sequence, void *);
+LIBSTUB(ASYNC_block_pause, void);
+LIBSTUB(ASYNC_cleanup_thread, void);
+LIBSTUB(ASYNC_get_current_job, ASYNC_JOB *);
+LIBSTUB(ASYNC_init_thread, int);
+LIBSTUB(ASYNC_pause_job, int);
+LIBSTUB(ASYNC_start_job, int);
+LIBSTUB(ASYNC_unblock_pause, void);
+LIBSTUB(ERR_load_ASYNC_strings, void);
+LIBSTUB(BIO_accept_ex, int);
+LIBSTUB(BIO_ADDR_clear, void);
+LIBSTUB(BIO_ADDR_family, int);
+LIBSTUB(BIO_ADDR_free, void);
+LIBSTUB(BIO_ADDR_hostname_string, char *);
+LIBSTUB(BIO_ADDR_new, BIO_ADDR *);
+LIBSTUB(BIO_ADDR_path_string, char *);
+LIBSTUB(BIO_ADDR_rawaddress, int);
+LIBSTUB(BIO_ADDR_rawmake, int);
+LIBSTUB(BIO_ADDR_rawport, unsigned short);
+LIBSTUB(BIO_ADDR_service_string, char *);
+LIBSTUB(BIO_ADDRINFO_address, const BIO_ADDR *);
+LIBSTUB(BIO_ADDRINFO_family, int);
+LIBSTUB(BIO_ADDRINFO_free, void);
+LIBSTUB(BIO_ADDRINFO_next, const BIO_ADDRINFO *);
+LIBSTUB(BIO_ADDRINFO_protocol, int);
+LIBSTUB(BIO_ADDRINFO_socktype, int);
+LIBSTUB(BIO_closesocket, int);
+LIBSTUB(BIO_connect, int);
+LIBSTUB(BIO_listen, int);
+LIBSTUB(BIO_lookup, int);
+LIBSTUB(BIO_parse_hostserv, int);
+LIBSTUB(BIO_s_secmem, BIO_METHOD *);
+LIBSTUB(BIO_sock_info, int);
+LIBSTUB(BIO_socket, int);
+LIBSTUB(BN_abs_is_word, int);
+LIBSTUB(BN_bn2binpad, int);
+LIBSTUB(BN_bn2lebinpad, int);
+LIBSTUB(BN_CTX_secure_new, BN_CTX *);
+LIBSTUB(BN_GENCB_free, void);
+LIBSTUB(BN_GENCB_get_arg, void *);
+LIBSTUB(BN_GENCB_new, BN_GENCB *);
+LIBSTUB(BN_GENCB_set, void);
+LIBSTUB(BN_GENCB_set_old, void);
+LIBSTUB(BN_generate_dsa_nonce, int);
+LIBSTUB(BN_get_flags, int);
+LIBSTUB(BN_is_negative, int);
+LIBSTUB(BN_is_odd, int);
+LIBSTUB(BN_is_one, int);
+LIBSTUB(BN_is_word, int);
+LIBSTUB(BN_is_zero, int);
+LIBSTUB(BN_lebin2bn, BIGNUM *);
+LIBSTUB(BN_nist_mod_func, void *);
+LIBSTUB(BN_secure_new, BIGNUM *);
+LIBSTUB(BN_security_bits, int);
+LIBSTUB(BN_set_flags, void);
+LIBSTUB(BN_to_montgomery, int);
+LIBSTUB(BN_with_flags, void);
+LIBSTUB(BN_zero_ex, void);
+LIBSTUB(BUF_MEM_new_ex, BUF_MEM *);
+LIBSTUB(COMP_CTX_get_method, const COMP_METHOD *);
+LIBSTUB(COMP_CTX_get_type, int);
+LIBSTUB(COMP_get_name, const char *);
+LIBSTUB(COMP_get_type, int);
+LIBSTUB(CRYPTO_clear_free, void);
+LIBSTUB(CRYPTO_clear_realloc, void *);
+LIBSTUB(CRYPTO_free_ex_index, int);
+LIBSTUB(CRYPTO_memdup, void *);
+LIBSTUB(CRYPTO_secure_actual_size, size_t);
+LIBSTUB(CRYPTO_secure_allocated, int);
+LIBSTUB(CRYPTO_secure_free, void);
+LIBSTUB(CRYPTO_secure_malloc, void *);
+LIBSTUB(CRYPTO_secure_malloc_done, void);
+LIBSTUB(CRYPTO_secure_malloc_init, int);
+LIBSTUB(CRYPTO_secure_malloc_initialized, int);
+LIBSTUB(CRYPTO_secure_used, size_t);
+LIBSTUB(CRYPTO_secure_zalloc, void *);
+LIBSTUB(CRYPTO_set_mem_debug, int);
+LIBSTUB(CRYPTO_strndup, char *);
+LIBSTUB(CRYPTO_zalloc, void *);
+LIBSTUB(OPENSSL_atexit, int);
+LIBSTUB(OPENSSL_cleanup, void);
+LIBSTUB(OPENSSL_init_crypto, int);
+LIBSTUB(OPENSSL_INIT_free, void);
+LIBSTUB(OPENSSL_INIT_new, OPENSSL_INIT_SETTINGS *);
+LIBSTUB(OPENSSL_strlcat, size_t);
+LIBSTUB(OPENSSL_strlcpy, size_t);
+LIBSTUB(OPENSSL_strnlen, size_t);
+LIBSTUB(OPENSSL_thread_stop, void);
+LIBSTUB(OpenSSL_version, const char *);
+LIBSTUB(OpenSSL_version_num, unsigned long);
+LIBSTUB(DH_bits, int);
+LIBSTUB(DH_security_bits, int);
+LIBSTUB(DSA_security_bits, int);
+LIBSTUB(EC_GROUP_get0_cofactor, const BIGNUM *);
+LIBSTUB(EC_GROUP_get0_order, const BIGNUM *);
+LIBSTUB(EC_GROUP_order_bits, int);
+LIBSTUB(EC_KEY_get_default_method, const EC_KEY_METHOD *);
+LIBSTUB(EC_KEY_get_ex_data, void *);
+LIBSTUB(EC_KEY_get_method, const EC_KEY_METHOD *);
+LIBSTUB(EC_KEY_key2buf, size_t);
+LIBSTUB(EC_KEY_METHOD_free, void);
+LIBSTUB(EC_KEY_METHOD_get_compute_key, void);
+LIBSTUB(EC_KEY_METHOD_get_init, void);
+LIBSTUB(EC_KEY_METHOD_get_keygen, void);
+LIBSTUB(EC_KEY_METHOD_get_sign, void);
+LIBSTUB(EC_KEY_METHOD_get_verify, void);
+LIBSTUB(EC_KEY_METHOD_new, EC_KEY_METHOD *);
+LIBSTUB(EC_KEY_METHOD_set_compute_key, void);
+LIBSTUB(EC_KEY_METHOD_set_init, void);
+LIBSTUB(EC_KEY_METHOD_set_keygen, void);
+LIBSTUB(EC_KEY_METHOD_set_sign, void);
+LIBSTUB(EC_KEY_METHOD_set_verify, void);
+LIBSTUB(EC_KEY_new_method, EC_KEY *);
+LIBSTUB(EC_KEY_oct2key, int);
+LIBSTUB(EC_KEY_oct2priv, int);
+LIBSTUB(EC_KEY_OpenSSL, const EC_KEY_METHOD *);
+LIBSTUB(EC_KEY_priv2buf, size_t);
+LIBSTUB(EC_KEY_priv2oct, size_t);
+LIBSTUB(EC_KEY_set_default_method, void);
+LIBSTUB(EC_KEY_set_ex_data, int);
+LIBSTUB(EC_KEY_set_method, int);
+LIBSTUB(EC_POINT_point2buf, size_t);
+LIBSTUB(ECDSA_SIG_get0, void);
+LIBSTUB(ENGINE_get_default_EC, ENGINE *);
+LIBSTUB(ENGINE_get_EC, const EC_KEY_METHOD *);
+LIBSTUB(ENGINE_register_all_EC, void);
+LIBSTUB(ENGINE_register_EC, int);
+LIBSTUB(ENGINE_set_default_EC, int);
+LIBSTUB(ENGINE_set_EC, int);
+LIBSTUB(ENGINE_unregister_EC, void);
+LIBSTUB(EVP_aes_128_ocb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_128_wrap_pad, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_ocb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_192_wrap_pad, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_ocb, const EVP_CIPHER *);
+LIBSTUB(EVP_aes_256_wrap_pad, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_128_ctr, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_192_ctr, const EVP_CIPHER *);
+LIBSTUB(EVP_camellia_256_ctr, const EVP_CIPHER *);
+LIBSTUB(EVP_chacha20, const EVP_CIPHER *);
+LIBSTUB(EVP_chacha20_poly1305, const EVP_CIPHER *);
+LIBSTUB(EVP_CIPHER_CTX_buf_noconst, unsigned char *);
+LIBSTUB(EVP_CIPHER_CTX_get_cipher_data, void *);
+LIBSTUB(EVP_CIPHER_CTX_set_cipher_data, void *);
+LIBSTUB(EVP_CIPHER_CTX_encrypting, int);
+LIBSTUB(EVP_CIPHER_CTX_iv, const unsigned char *);
+LIBSTUB(EVP_CIPHER_CTX_iv_noconst, unsigned char *);
+LIBSTUB(EVP_CIPHER_CTX_num, int);
+LIBSTUB(EVP_CIPHER_CTX_original_iv, const unsigned char *);
+LIBSTUB(EVP_CIPHER_CTX_reset, int);
+LIBSTUB(EVP_CIPHER_CTX_set_num, void);
+LIBSTUB(EVP_CIPHER_impl_ctx_size, int);
+LIBSTUB(EVP_CIPHER_meth_dup, EVP_CIPHER *);
+LIBSTUB(EVP_CIPHER_meth_free, void);
+LIBSTUB(EVP_CIPHER_meth_get_cleanup, void *);
+LIBSTUB(EVP_CIPHER_meth_get_ctrl, void *);
+LIBSTUB(EVP_CIPHER_meth_get_do_cipher, void *);
+LIBSTUB(EVP_CIPHER_meth_get_get_asn1_params, void *);
+LIBSTUB(EVP_CIPHER_meth_get_init, void *);
+LIBSTUB(EVP_CIPHER_meth_get_set_asn1_params, void *);
+LIBSTUB(EVP_CIPHER_meth_new, EVP_CIPHER *);
+LIBSTUB(EVP_CIPHER_meth_set_cleanup, int);
+LIBSTUB(EVP_CIPHER_meth_set_ctrl, int);
+LIBSTUB(EVP_CIPHER_meth_set_do_cipher, int);
+LIBSTUB(EVP_CIPHER_meth_set_flags, int);
+LIBSTUB(EVP_CIPHER_meth_set_get_asn1_params, int);
+LIBSTUB(EVP_CIPHER_meth_set_impl_ctx_size, int);
+LIBSTUB(EVP_CIPHER_meth_set_init, int);
+LIBSTUB(EVP_CIPHER_meth_set_iv_length, int);
+LIBSTUB(EVP_CIPHER_meth_set_set_asn1_params, int);
+LIBSTUB(EVP_ENCODE_CTX_free, void);
+LIBSTUB(EVP_ENCODE_CTX_new, EVP_ENCODE_CTX *);
+LIBSTUB(EVP_ENCODE_CTX_num, int);
+LIBSTUB(EVP_md5_sha1, const EVP_MD *);
+LIBSTUB(EVP_MD_CTX_ctrl, int);
+LIBSTUB(EVP_MD_CTX_free, void);
+LIBSTUB(EVP_MD_CTX_md_data, void *);
+LIBSTUB(EVP_MD_CTX_new, EVP_MD_CTX *);
+LIBSTUB(EVP_MD_CTX_pkey_ctx, EVP_PKEY_CTX *);
+LIBSTUB(EVP_MD_CTX_reset, int);
+LIBSTUB(EVP_MD_CTX_set_update_fn, void);
+LIBSTUB(EVP_MD_CTX_update_fn, void *);
+LIBSTUB(EVP_MD_meth_dup, EVP_MD *);
+LIBSTUB(EVP_MD_meth_free, void);
+LIBSTUB(EVP_MD_meth_get_app_datasize, int);
+LIBSTUB(EVP_MD_meth_get_cleanup, void *);
+LIBSTUB(EVP_MD_meth_get_copy, void *);
+LIBSTUB(EVP_MD_meth_get_ctrl, void *);
+LIBSTUB(EVP_MD_meth_get_final, void *);
+LIBSTUB(EVP_MD_meth_get_flags, unsigned long);
+LIBSTUB(EVP_MD_meth_get_init, void *);
+LIBSTUB(EVP_MD_meth_get_input_blocksize, int);
+LIBSTUB(EVP_MD_meth_get_result_size, int);
+LIBSTUB(EVP_MD_meth_get_update, void *);
+LIBSTUB(EVP_MD_meth_new, EVP_MD *);
+LIBSTUB(EVP_MD_meth_set_app_datasize, int);
+LIBSTUB(EVP_MD_meth_set_cleanup, int);
+LIBSTUB(EVP_MD_meth_set_copy, int);
+LIBSTUB(EVP_MD_meth_set_ctrl, int);
+LIBSTUB(EVP_MD_meth_set_final, int);
+LIBSTUB(EVP_MD_meth_set_flags, int);
+LIBSTUB(EVP_MD_meth_set_init, int);
+LIBSTUB(EVP_MD_meth_set_input_blocksize, int);
+LIBSTUB(EVP_MD_meth_set_result_size, int);
+LIBSTUB(EVP_MD_meth_set_update, int);
+LIBSTUB(EVP_PBE_get, int);
+LIBSTUB(EVP_PBE_scrypt, int);
+LIBSTUB(EVP_PKEY_asn1_set_security_bits, void);
+LIBSTUB(EVP_PKEY_get0_DH, DH *);
+LIBSTUB(EVP_PKEY_get0_DSA, DSA *);
+LIBSTUB(EVP_PKEY_get0_EC_KEY, EC_KEY *);
+LIBSTUB(EVP_PKEY_get0_RSA, RSA *);
+LIBSTUB(EVP_PKEY_meth_get_cleanup, void);
+LIBSTUB(EVP_PKEY_meth_get_copy, void);
+LIBSTUB(EVP_PKEY_meth_get_ctrl, void);
+LIBSTUB(EVP_PKEY_meth_get_decrypt, void);
+LIBSTUB(EVP_PKEY_meth_get_derive, void);
+LIBSTUB(EVP_PKEY_meth_get_encrypt, void);
+LIBSTUB(EVP_PKEY_meth_get_init, void);
+LIBSTUB(EVP_PKEY_meth_get_keygen, void);
+LIBSTUB(EVP_PKEY_meth_get_paramgen, void);
+LIBSTUB(EVP_PKEY_meth_get_sign, void);
+LIBSTUB(EVP_PKEY_meth_get_signctx, void);
+LIBSTUB(EVP_PKEY_meth_get_verify, void);
+LIBSTUB(EVP_PKEY_meth_get_verify_recover, void);
+LIBSTUB(EVP_PKEY_meth_get_verifyctx, void);
+LIBSTUB(EVP_PKEY_security_bits, int);
+LIBSTUB(EVP_PKEY_up_ref, void);
+LIBSTUB(PKCS5_v2_scrypt_keyivgen, int);
+LIBSTUB(HMAC_CTX_free, void);
+LIBSTUB(HMAC_CTX_new, HMAC_CTX *);
+LIBSTUB(HMAC_CTX_reset, int);
+LIBSTUB(HMAC_size, size_t);
+LIBSTUB(lh_error, int);
+LIBSTUB(lh_get_down_load, unsigned long);
+LIBSTUB(lh_set_down_load, void);
+LIBSTUB(CRYPTO_128_unwrap_pad, size_t);
+LIBSTUB(CRYPTO_128_wrap_pad, size_t);
+LIBSTUB(CRYPTO_ocb128_aad, int);
+LIBSTUB(CRYPTO_ocb128_cleanup, void);
+LIBSTUB(CRYPTO_ocb128_copy_ctx, int);
+LIBSTUB(CRYPTO_ocb128_decrypt, int);
+LIBSTUB(CRYPTO_ocb128_encrypt, int);
+LIBSTUB(CRYPTO_ocb128_finish, int);
+LIBSTUB(CRYPTO_ocb128_init, int);
+LIBSTUB(CRYPTO_ocb128_new, OCB128_CONTEXT *);
+LIBSTUB(CRYPTO_ocb128_setiv, int);
+LIBSTUB(CRYPTO_ocb128_tag, int);
+LIBSTUB(OBJ_get0_data, const unsigned char *);
+LIBSTUB(OBJ_length, size_t);
+LIBSTUB(OCSP_resp_get0_produced_at, ASN1_GENERALIZEDTIME *);
+LIBSTUB(OCSP_resp_get0_signature, ASN1_OCTET_STRING *);
+LIBSTUB(OCSP_SINGLERESP_get0_id, OCSP_CERTID *);
+LIBSTUB(PKCS12_get0_mac, void);
+LIBSTUB(PKCS12_mac_present, int);
+LIBSTUB(PKCS12_SAFEBAG_create0_p8inf, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_create0_pkcs8, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_create_cert, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_create_crl, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_create_pkcs8_encrypt, PKCS12_SAFEBAG *);
+LIBSTUB(PKCS12_SAFEBAG_get0_attr, ASN1_TYPE *);
+LIBSTUB(PKCS12_SAFEBAG_get0_attrs, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(PKCS12_SAFEBAG_get0_p8inf, PKCS8_PRIV_KEY_INFO *);
+LIBSTUB(PKCS12_SAFEBAG_get0_pkcs8, X509_SIG *);
+LIBSTUB(PKCS12_SAFEBAG_get0_safes, STACK_OF(PKCS12_SAFEBAG) *);
+LIBSTUB(PKCS12_SAFEBAG_get0_type, ASN1_OBJECT *);
+LIBSTUB(PKCS12_SAFEBAG_get1_cert, X509 *);
+LIBSTUB(PKCS12_SAFEBAG_get1_crl, X509_CRL *);
+LIBSTUB(PKCS12_SAFEBAG_get_bag_nid, int);
+LIBSTUB(PKCS12_SAFEBAG_get_nid, int);
+LIBSTUB(PKCS8_get_attr, ASN1_TYPE *);
+LIBSTUB(PKCS8_set0_pbe, X509_SIG *);
+LIBSTUB(RAND_OpenSSL, RAND_METHOD *);
+LIBSTUB(RSA_bits, int);
+LIBSTUB(RSA_check_key_ex, int);
+LIBSTUB(RSA_PKCS1_OpenSSL, const RSA_METHOD *);
+LIBSTUB(RSA_security_bits, int);
+LIBSTUB(RSA_X931_derive_ex, int);
+LIBSTUB(RSA_X931_generate_key_ex, int);
+LIBSTUB(TS_CONF_set_signer_digest, int);
+LIBSTUB(TS_RESP_CTX_set_signer_digest, int);
+LIBSTUB(TS_STATUS_INFO_get0_failure_info, ASN1_BIT_STRING *);
+LIBSTUB(TS_STATUS_INFO_get0_status, ASN1_INTEGER *);
+LIBSTUB(TS_STATUS_INFO_set_status, int);
+LIBSTUB(TS_VERIFY_CTX_add_flags, int);
+LIBSTUB(TS_VERIFY_CTX_set_data, BIO *);
+LIBSTUB(TS_VERIFY_CTX_set_flags, int);
+LIBSTUB(TS_VERIFY_CTX_set_imprint, unsigned char *);
+LIBSTUB(TS_VERIFY_CTX_set_store, X509_STORE *);
+LIBSTUB(TS_VERIFY_CTS_set_certs, STACK_OF(X509) *);
+LIBSTUB(i2d_re_X509_CRL_tbs, int);
+LIBSTUB(i2d_re_X509_REQ_tbs, int);
+LIBSTUB(PKCS5_pbe2_set_scrypt, X509_ALGOR *);
+LIBSTUB(X509_CRL_get0_extensions, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(X509_CRL_get0_signature, void);
+LIBSTUB(X509_CRL_get_issuer, X509_NAME *);
+LIBSTUB(X509_CRL_get_lastUpdate, ASN1_TIME *);
+LIBSTUB(X509_CRL_get_nextUpdate, ASN1_TIME *);
+LIBSTUB(X509_CRL_get_REVOKED, STACK_OF(X509_REVOKED) *);
+LIBSTUB(X509_CRL_get_signature_nid, int);
+LIBSTUB(X509_CRL_get_version, long);
+LIBSTUB(X509_CRL_up_ref, void);
+LIBSTUB(X509_get0_extensions, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(X509_get0_pubkey, EVP_PKEY *);
+LIBSTUB(X509_get0_reject_objects, STACK_OF(ASN1_OBJECT) *);
+LIBSTUB(X509_get0_tbs_sigalg, X509_ALGOR *);
+LIBSTUB(X509_get0_trust_objects, STACK_OF(ASN1_OBJECT) *);
+LIBSTUB(X509_get0_uids, void);
+LIBSTUB(X509_get_notAfter, ASN1_TIME *);
+LIBSTUB(X509_get_notBefore, ASN1_TIME *);
+LIBSTUB(X509_get_signature_type, int);
+LIBSTUB(X509_get_version, long);
+LIBSTUB(X509_get_X509_PUBKEY, X509_PUBKEY *);
+LIBSTUB(X509_NAME_ENTRY_set, int);
+LIBSTUB(X509_NAME_get0_der, int);
+LIBSTUB(X509_PUBKEY_get0, EVP_PKEY *);
+LIBSTUB(X509_REQ_get0_signature, void);
+LIBSTUB(X509_REQ_get_signature_nid, int);
+LIBSTUB(X509_REQ_get_subject_name, X509_NAME *);
+LIBSTUB(X509_REQ_get_version, long);
+LIBSTUB(X509_REQ_get_X509_PUBKEY, X509_PUBKEY *);
+LIBSTUB(X509_REVOKED_get0_extensions, STACK_OF(X509_EXTENSION) *);
+LIBSTUB(X509_REVOKED_get0_revocationDate, ASN1_TIME *);
+LIBSTUB(X509_REVOKED_get0_serialNumber, ASN1_INTEGER *);
+LIBSTUB(X509_trusted, int);
+LIBSTUB(X509_up_ref, void);
+LIBSTUB(X509_STORE_CTX_get_num_untrusted, int);
+LIBSTUB(X509_STORE_CTX_set0_dane, void);
+LIBSTUB(X509_VERIFY_PARAM_move_peername, void);
+LIBSTUB(ASIdentifiers_free, void);
+LIBSTUB(i2s_ASN1_IA5STRING, char *);
+LIBSTUB(s2i_ASN1_IA5STRING, ASN1_IA5STRING *);
+LIBSTUB(v3_addr_add_inherit, int);
+LIBSTUB(v3_addr_add_prefix, int);
+LIBSTUB(v3_addr_add_range, int);
+LIBSTUB(v3_addr_canonize, int);
+LIBSTUB(v3_addr_get_afi, unsigned);
+LIBSTUB(v3_addr_get_range, int);
+LIBSTUB(v3_addr_inherits, int);
+LIBSTUB(v3_addr_is_canonical, int);
+LIBSTUB(v3_addr_subset, int);
+LIBSTUB(v3_addr_validate_path, int);
+LIBSTUB(v3_asid_add_id_or_range, int);
+LIBSTUB(v3_asid_add_inherit, int);
+LIBSTUB(v3_asid_canonize, int);
+LIBSTUB(v3_asid_inherits, int);
+LIBSTUB(v3_asid_is_canonical, int);
+LIBSTUB(v3_asid_subset, int);
+LIBSTUB(v3_asid_validate_path, int);
+LIBSTUB(X509_get0_subject_key_id, const ASN1_OCTET_STRING *);
+LIBSTUB(X509_get_extended_key_usage, uint32_t);
+LIBSTUB(X509_get_extension_flags, uint32_t);
+LIBSTUB(X509_get_key_usage, uint32_t);
+LIBSTUB(DTLSv1_listen, int);
+LIBSTUB(OPENSSL_init_ssl, int);
+LIBSTUB(SSL_add1_host, int);
+LIBSTUB(SSL_add_ssl_module, void);
+LIBSTUB(SSL_CIPHER_get_cipher_nid, int);
+LIBSTUB(SSL_CIPHER_get_digest_nid, int);
+LIBSTUB(SSL_clear_options, unsigned long);
+LIBSTUB(SSL_config, int);
+LIBSTUB(SSL_CTX_clear_options, unsigned long);
+LIBSTUB(SSL_CTX_config, int);
+LIBSTUB(SSL_CTX_dane_enable, int);
+LIBSTUB(SSL_CTX_dane_mtype_set, int);
+LIBSTUB(SSL_CTX_get0_security_ex_data, void *);
+LIBSTUB(SSL_CTX_get_options, unsigned long);
+LIBSTUB(SSL_CTX_get_security_callback, void *);
+LIBSTUB(SSL_CTX_get_security_level, int);
+LIBSTUB(SSL_CTX_set0_security_ex_data, void);
+LIBSTUB(SSL_CTX_set_default_verify_dir, int);
+LIBSTUB(SSL_CTX_set_default_verify_file, int);
+LIBSTUB(SSL_CTX_set_not_resumable_session_callback, void);
+LIBSTUB(SSL_CTX_set_options, unsigned long);
+LIBSTUB(SSL_CTX_set_security_callback, void);
+LIBSTUB(SSL_CTX_set_security_level, void);
+LIBSTUB(SSL_CTX_up_ref, void);
+LIBSTUB(SSL_dane_enable, int);
+LIBSTUB(SSL_dane_tlsa_add, int);
+LIBSTUB(SSL_get0_dane, struct dane_st *);
+LIBSTUB(SSL_get0_dane_authority, int);
+LIBSTUB(SSL_get0_dane_tlsa, int);
+LIBSTUB(SSL_get0_peername, const char *);
+LIBSTUB(SSL_get0_security_ex_data, void *);
+LIBSTUB(SSL_get1_supported_ciphers, STACK_OF(SSL_CIPHER) *);
+LIBSTUB(SSL_get_client_random, size_t);
+LIBSTUB(SSL_get_options, unsigned long);
+LIBSTUB(SSL_get_security_callback, void *);
+LIBSTUB(SSL_get_security_level, int);
+LIBSTUB(SSL_get_server_random, size_t);
+LIBSTUB(SSL_get_state, OSSL_HANDSHAKE_STATE);
+LIBSTUB(SSL_in_before, int);
+LIBSTUB(SSL_in_init, int);
+LIBSTUB(SSL_is_init_finished, int);
+LIBSTUB(SSL_SESSION_get0_ticket, void);
+LIBSTUB(SSL_SESSION_get_master_key, size_t);
+LIBSTUB(SSL_SESSION_get_ticket_lifetime_hint, unsigned long);
+LIBSTUB(SSL_SESSION_has_ticket, int);
+LIBSTUB(SSL_SESSION_print_keylog, int);
+LIBSTUB(SSL_session_reused, int);
+LIBSTUB(SSL_set0_security_ex_data, void);
+LIBSTUB(SSL_set1_host, int);
+LIBSTUB(SSL_set_default_passwd_cb, void);
+LIBSTUB(SSL_set_default_passwd_cb_userdata, void);
+LIBSTUB(SSL_set_hostflags, void);
+LIBSTUB(SSL_set_not_resumable_session_callback, void);
+LIBSTUB(SSL_set_options, unsigned long);
+LIBSTUB(SSL_set_rbio, void);
+LIBSTUB(SSL_set_security_callback, void);
+LIBSTUB(SSL_set_security_level, void);
+LIBSTUB(SSL_set_wbio, void);
+LIBSTUB(SSL_up_ref, void);
+LIBSTUB(SSL_use_certificate_chain_file, int);
+LIBSTUB(SSL_waiting_for_async, int);
+LIBSTUB(TLS_client_method, const SSL_METHOD *);
+LIBSTUB(TLS_method, const SSL_METHOD *);
+LIBSTUB(TLS_server_method, const SSL_METHOD *);
+LIBSTUB(ASYNC_WAIT_CTX_new, ASYNC_WAIT_CTX *);
+LIBSTUB(ASYNC_WAIT_CTX_free, void);
+LIBSTUB(ASYNC_WAIT_CTX_set_wait_fd, int);
+LIBSTUB(ASYNC_WAIT_CTX_get_fd, int);
+LIBSTUB(ASYNC_WAIT_CTX_get_all_fds, int);
+LIBSTUB(ASYNC_WAIT_CTX_get_changed_fds, int);
+LIBSTUB(ASYNC_WAIT_CTX_clear_fd, int);
+LIBSTUB(ASYNC_is_capable, int);
+LIBSTUB(ASYNC_get_wait_ctx, ASYNC_WAIT_CTX *);
+LIBSTUB(BIO_up_ref, int);
+LIBSTUB(BN_BLINDING_is_current_thread, int);
+LIBSTUB(BN_BLINDING_set_current_thread, void);
+LIBSTUB(BN_BLINDING_lock, int);
+LIBSTUB(BN_BLINDING_unlock, int);
+LIBSTUB(CRYPTO_THREAD_run_once, int);
+LIBSTUB(CRYPTO_THREAD_init_local, int);
+LIBSTUB(CRYPTO_THREAD_get_local, void *);
+LIBSTUB(CRYPTO_THREAD_set_local, int);
+LIBSTUB(CRYPTO_THREAD_cleanup_local, int);
+LIBSTUB(CRYPTO_THREAD_get_current_id, CRYPTO_THREAD_ID);
+LIBSTUB(CRYPTO_THREAD_compare_id, int);
+LIBSTUB(CRYPTO_THREAD_lock_new, CRYPTO_RWLOCK *);
+LIBSTUB(CRYPTO_THREAD_read_lock, int);
+LIBSTUB(CRYPTO_THREAD_write_lock, int);
+LIBSTUB(CRYPTO_THREAD_unlock, int);
+LIBSTUB(CRYPTO_THREAD_lock_free, void);
+LIBSTUB(CRYPTO_atomic_add, int);
+LIBSTUB(OPENSSL_die, void);
+LIBSTUB(CT_POLICY_EVAL_CTX_new, CT_POLICY_EVAL_CTX *);
+LIBSTUB(CT_POLICY_EVAL_CTX_free, void);
+LIBSTUB(CT_POLICY_EVAL_CTX_get0_cert, X509 *);
+LIBSTUB(CT_POLICY_EVAL_CTX_set0_cert, void);
+LIBSTUB(CT_POLICY_EVAL_CTX_get0_issuer, X509 *);
+LIBSTUB(CT_POLICY_EVAL_CTX_set0_issuer, void);
+LIBSTUB(CT_POLICY_EVAL_CTX_get0_log_store, const CTLOG_STORE *);
+LIBSTUB(CT_POLICY_EVAL_CTX_set0_log_store, void);
+LIBSTUB(CT_verify_no_bad_scts, int);
+LIBSTUB(CT_verify_at_least_one_good_sct, int);
+LIBSTUB(SCT_new, SCT *);
+LIBSTUB(SCT_new_from_base64, SCT *);
+LIBSTUB(SCT_free, void);
+LIBSTUB(SCT_LIST_free, void);
+LIBSTUB(SCT_get_version, sct_version_t);
+LIBSTUB(SCT_set_version, int);
+LIBSTUB(SCT_get_log_entry_type, ct_log_entry_type_t);
+LIBSTUB(SCT_set_log_entry_type, int);
+LIBSTUB(SCT_get0_log_id, size_t);
+LIBSTUB(SCT_set0_log_id, int);
+LIBSTUB(SCT_set1_log_id, int);
+LIBSTUB(SCT_get_timestamp, uint64_t);
+LIBSTUB(SCT_set_timestamp, void);
+LIBSTUB(SCT_get_signature_nid, int);
+LIBSTUB(SCT_set_signature_nid, int);
+LIBSTUB(SCT_get0_extensions, size_t);
+LIBSTUB(SCT_set0_extensions, void);
+LIBSTUB(SCT_set1_extensions, int);
+LIBSTUB(SCT_get0_signature, size_t);
+LIBSTUB(SCT_set0_signature, void);
+LIBSTUB(SCT_set1_signature, int);
+LIBSTUB(SCT_get_source, sct_source_t);
+LIBSTUB(SCT_set_source, int);
+LIBSTUB(SCT_print, void);
+LIBSTUB(SCT_LIST_print, void);
+LIBSTUB(SCT_verify, int);
+LIBSTUB(SCT_verify_v1, int);
+LIBSTUB(SCT_get_validation_status, sct_validation_status_t);
+LIBSTUB(SCT_validate, int);
+LIBSTUB(SCT_LIST_validate, int);
+LIBSTUB(i2o_SCT_LIST, int);
+LIBSTUB(o2i_SCT_LIST, STACK_OF(SCT) *);
+LIBSTUB(i2d_SCT_LIST, int);
+LIBSTUB(d2i_SCT_LIST, STACK_OF(SCT) *);
+LIBSTUB(i2o_SCT, int);
+LIBSTUB(o2i_SCT, SCT *);
+LIBSTUB(i2o_SCT_signature, int);
+LIBSTUB(o2i_SCT_signature, int);
+LIBSTUB(CTLOG_new, CTLOG *);
+LIBSTUB(CTLOG_new_null, CTLOG *);
+LIBSTUB(CTLOG_new_from_base64, CTLOG *);
+LIBSTUB(CTLOG_free, void);
+LIBSTUB(CTLOG_get0_name, const char *);
+LIBSTUB(CTLOG_get0_log_id, void);
+LIBSTUB(CTLOG_get0_public_key, EVP_PKEY *);
+LIBSTUB(CTLOG_STORE_new, CTLOG_STORE *);
+LIBSTUB(CTLOG_STORE_free, void);
+LIBSTUB(CTLOG_STORE_get0_log_by_id, const CTLOG *);
+LIBSTUB(CTLOG_STORE_load_file, int);
+LIBSTUB(CTLOG_STORE_load_default_file, int);
+LIBSTUB(ERR_load_CT_strings, void);
+LIBSTUB(DHparams_it, const ASN1_ITEM *);
+LIBSTUB(DSA_SIG_get0, void);
+LIBSTUB(EC_GROUP_new_from_ecparameters, EC_GROUP *);
+LIBSTUB(EC_GROUP_get_ecparameters, ECPARAMETERS *);
+LIBSTUB(EC_GROUP_new_from_ecpkparameters, EC_GROUP *);
+LIBSTUB(EC_GROUP_get_ecpkparameters, ECPKPARAMETERS *);
+LIBSTUB(ECPKPARAMETERS_it, const ASN1_ITEM *);
+LIBSTUB(ECPARAMETERS_it, const ASN1_ITEM *);
+LIBSTUB(EC_KEY_can_sign, int);
+LIBSTUB(EVP_blake2b512, const EVP_MD *);
+LIBSTUB(EVP_blake2s256, const EVP_MD *);
+LIBSTUB(EVP_PKEY_CTX_str2ctrl, int);
+LIBSTUB(EVP_PKEY_CTX_hex2ctrl, int);
+LIBSTUB(ERR_load_KDF_strings, void);
+LIBSTUB(SRP_user_pwd_free, void);
+LIBSTUB(SRP_VBASE_get1_by_user, SRP_user_pwd *);
+LIBSTUB(SSL_CTX_has_client_custom_ext, int);
+LIBSTUB(SSL_CIPHER_get_kx_nid, int);
+LIBSTUB(SSL_CIPHER_get_auth_nid, int);
+LIBSTUB(SSL_CIPHER_is_aead, int);
+LIBSTUB(SSL_has_pending, int);
+LIBSTUB(SSL_SESSION_up_ref, int);
+LIBSTUB(SSL_CTX_get_default_passwd_cb, void *);
+LIBSTUB(SSL_CTX_get_default_passwd_cb_userdata, void *);
+LIBSTUB(SSL_get_default_passwd_cb, void *);
+LIBSTUB(SSL_get_default_passwd_cb_userdata, void *);
+LIBSTUB(SSL_get_all_async_fds, int);
+LIBSTUB(SSL_get_changed_async_fds, int);
+LIBSTUB(SSL_CTX_set_default_read_buffer_len, void);
+LIBSTUB(SSL_set_default_read_buffer_len, void);
+LIBSTUB(SSL_set_ct_validation_callback, int);
+LIBSTUB(SSL_CTX_set_ct_validation_callback, int);
+LIBSTUB(SSL_get_ct_validation_callback, ct_validation_cb);
+LIBSTUB(SSL_CTX_get_ct_validation_callback, ct_validation_cb);
+LIBSTUB(SSL_get0_peer_scts, const STACK_OF(SCT) *);
+LIBSTUB(SSL_CTX_set_default_ctlog_list_file, int);
+LIBSTUB(SSL_CTX_set_ctlog_list_file, int);
+LIBSTUB(SSL_CTX_set0_ctlog_store, void);
+LIBSTUB(SSL_CTX_get0_ctlog_store, const CTLOG_STORE *);
+LIBSTUB(X509_SIG_get0, void);
+LIBSTUB(PKCS8_pkey_get0_attrs, STACK_OF(X509_ATTRIBUTE) *);
+LIBSTUB(PKCS8_pkey_add1_attr_by_NID, int);
+LIBSTUB(X509_STORE_up_ref, int);
 
 #ifdef __cplusplus
 }

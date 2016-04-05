@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.8)! Do not edit! */
+/* Automatically generated header (sfdc 1.9)! Do not edit! */
 
 #ifndef _GATEPROTO_AMISSLMASTER_H
 #define _GATEPROTO_AMISSLMASTER_H
@@ -12,23 +12,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <emul/emulregs.h>
+#include <SDI_lib.h>
 
-LONG
-LIBSTUB_InitAmiSSLMaster(void);
-
-struct Library *
-LIBSTUB_OpenAmiSSL(void);
-
-void
-LIBSTUB_CloseAmiSSL(void);
-
-struct Library *
-LIBSTUB_OpenAmiSSLCipher(void);
-
-void
-LIBSTUB_CloseAmiSSLCipher(void);
-
+LIBSTUB(UNIMPLEMENTED, int);
+LIBSTUB(InitAmiSSLMaster, LONG);
+LIBSTUB(OpenAmiSSL, struct Library *);
+LIBSTUB(CloseAmiSSL, void);
+LIBSTUB(OpenAmiSSLCipher, struct Library *);
+LIBSTUB(CloseAmiSSLCipher, void);
 
 #ifdef __cplusplus
 }

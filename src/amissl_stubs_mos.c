@@ -1,4 +1,4 @@
-/* Automatically generated gatestubs (sfdc 1.8)! Do not edit! */
+/* Automatically generated gatestubs (sfdc 1.9)! Do not edit! */
 
 #include <exec/types.h>
 #include <dos/dos.h>

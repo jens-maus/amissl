@@ -170,7 +170,7 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachabl
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include -I$(BUILD_D)/openssl/include
+INCLUDE  = -I./include -I$(BUILD_D)/openssl/include -I./include/internal
 APPCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
 CFLAGS   = $(APPCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
