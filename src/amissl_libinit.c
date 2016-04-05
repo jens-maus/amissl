@@ -883,6 +883,7 @@ struct LibraryHeader * LibOpen(struct LibraryManagerInterface *Self, ULONG versi
 struct LibraryHeader * LibOpen(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
+  ULONG version = REG_D0;
 #elif defined(__AROS__)
 AROS_LH1(struct LibraryHeader *, LibOpen,
                 AROS_LHA(UNUSED ULONG, version, D0),
