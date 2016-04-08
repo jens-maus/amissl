@@ -106,7 +106,11 @@ void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int 
 #else
  #include <exec/types.h>
  extern VOID kprintf( CONST_STRPTR formatString, ... );
- #define SHOWREGISTERS() { APTR a4,a6; __asm volatile ("movel a4,%0" : "=r" (a4)); __asm volatile ("movel a6,%0" : "=r" (a6)); _DPRINTF(DBC_DEBUG, DBF_ALWAYS, __FILE__, __LINE__, "a4: %08lx a6: %08lx\n", a4, a6); }
+ #if defined(__amigaos3__)
+   #define SHOWREGISTERS() { APTR a4,a6; __asm volatile ("movel a4,%0" : "=r" (a4)); __asm volatile ("movel a6,%0" : "=r" (a6)); _DPRINTF(DBC_DEBUG, DBF_ALWAYS, __FILE__, __LINE__, "a4: %08lx a6: %08lx\n", a4, a6); }
+ #else
+   #define SHOWREGISTERS() ((void)0)
+ #endif
 #endif
 
 #else // DEBUG

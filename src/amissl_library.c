@@ -63,12 +63,25 @@ struct LibraryHeader *parentBase = NULL;
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
 // applied to non-static functions in this file. Thus, be careful to change
 // the static/non-static parameter of functions in here.
-#if defined(__amigaos3__)
-#if defined(MULTIBASE) && defined(BASEREL)
+#if defined(__amigaos3__) && defined(MULTIBASE) && defined(BASEREL)
 #include "amissl_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
-#endif // MULTIBASE + BASEREL
-#endif // __amigaos3__
+#endif
+
+// on MorphOS we have to use a asm construct to restore r13
+#if defined(__MORPHOS__) && defined(MULTIBASE) && defined(BASEREL)
+// This function must preserve all registers except r13
+asm("                                                       \n\
+  .section  \".text\"                                       \n\
+  .align 2                                                  \n\
+  .type  __restore_r13, @function                           \n\
+__restore_r13:                                              \n\
+  lwz 13, 36(3) # r13 = MyLibBase->DataSeg                  \n\
+  blr                                                       \n\
+__end__restore_r13:                                         \n\
+  .size __restore_r13, __end__restore_r13 - __restore_r13   \n\
+");
+#endif
 
 #ifdef __amigaos4__
   #define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)
