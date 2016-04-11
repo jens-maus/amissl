@@ -131,7 +131,7 @@ static const char UserLibID[]   = LIB_REV_STRING;
 extern const char __r13_init;
 extern int __datadata_relocs(void);
 
-extern ULONG __sdata_size, __sbss_size;
+extern const ULONG __sdata_size, __sbss_size;
 static __inline ULONG __dbsize(void)
 {
   static const ULONG size[] = { (ULONG)&__sdata_size, (ULONG)&__sbss_size };
