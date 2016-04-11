@@ -102,6 +102,40 @@ static const char UserLibID[]   = LIB_REV_STRING;
 
 /****************************************************************************/
 
+#if defined(__MORPHOS__)
+
+/*** We must not access any globals here, since r13 hasn't been set up yet! ***/
+#define SysBase base->sysBase
+
+#define R13_OFFSET  0x8000  /* Space for negative offset smalldata */
+
+extern const char __r13_init;
+extern int __datadata_relocs(void);
+
+extern const ULONG __sdata_size, __sbss_size;
+static __inline ULONG __dbsize(void)
+{
+  static const ULONG size[] = { (ULONG)&__sdata_size, (ULONG)&__sbss_size };
+  return size[0] + size[1];
+}
+
+/* This function must preserve all registers except r13 */
+asm ("                                                                                          \n\
+  .section  \".text\"                                                                           \n\
+  .align 2                                                                                      \n\
+  .type  __restore_r13, @function                                                               \n\
+  .globl __restore_r13  # Remove this line if you want the function to be local (see libdata.c) \n\
+__restore_r13:                                                                                  \n\
+  lwz 13, 56(2) # MyEmulHandle->An[6] (REG_A6)                                                  \n\
+  lwz 13, 36(13)  # r13 = MyLibBase->DataSeg                                                    \n\
+  blr                                                                                           \n\
+__end__restore_r13:                                                                             \n\
+  .size __restore_r13, __end__restore_r13 - __restore_r13                                       \n\
+");
+#endif
+
+/****************************************************************************/
+
 #if defined(__amigaos4__)
 
 struct LibraryHeader * LibInit    (struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec);
@@ -356,11 +390,11 @@ const USED_VAR ULONG __abox__ = 1;
 #if defined(__MORPHOS__)
 ULONG stackswap_call(struct StackSwapStruct *stack,
                      ULONG (*function)(struct LibraryHeader *),
-                     struct LibraryHeader *arg)
+                     struct LibraryHeader *base)
 {
    struct PPCStackSwapArgs swapargs;
 
-   swapargs.Args[0] = (ULONG)arg;
+   swapargs.Args[0] = (ULONG)base;
 
    return NewPPCStackSwap(stack, function, &swapargs);
 }
@@ -431,7 +465,7 @@ asm(".text                    \n\
 #error Bogus operating system
 #endif
 
-BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *arg)
+BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHeader *base)
 {
   BOOL success = FALSE;
   struct Task *tc;
@@ -480,7 +514,7 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
 
       D(DBF_STARTUP, "call with swapped stack");
       // call routine but with embedding it into a [NewPPC]StackSwap()
-      success = stackswap_call(&stack->ctrl, function, arg);
+      success = stackswap_call(&stack->ctrl, function, base);
       D(DBF_STARTUP, "done");
 
       FreeVec(stack);
@@ -489,7 +523,7 @@ BOOL callLibFunction(ULONG (*function)(struct LibraryHeader *), struct LibraryHe
   else
   {
     D(DBF_STARTUP, "call directly");
-    success = function(arg);
+    success = function(base);
     D(DBF_STARTUP, "done");
   }
 
@@ -572,9 +606,11 @@ struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, 
 {
   struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
   IExec = pIExec;
+  SysBase = (APTR)sb;
 #elif defined(__MORPHOS__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
+  const char *r13 = &__r13_init;
 #elif defined(__AROS__)
 AROS_UFH3(struct LibraryHeader *, LibInit,
                  AROS_UFHA(struct LibraryHeader *, base, D0),
@@ -583,12 +619,13 @@ AROS_UFH3(struct LibraryHeader *, LibInit,
 )
 {
   AROS_USERFUNC_INIT
+  SysBase = (APTR)sb;
 #else
 struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
 {
-#endif
 
   SysBase = (APTR)sb;
+#endif
 
   // cleanup the library header structure beginning with the
   // library base.
@@ -638,8 +675,7 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       base->parent   = base;
       base->dataSeg  = __GetDataSeg();
       base->dataSize = __GetDataSize();
-      #endif /* __amigaos3__ */
-      #if defined(__amigaos4__)
+      #elif defined(__amigaos4__)
       if((DOSBase = OpenLibrary("dos.library", 52)))
         IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
 
@@ -657,7 +693,12 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         else
           D(DBF_STARTUP, "OpenElfTags NO success!");
       }
-      #endif /* __amigaos4__ */
+      #elif defined(__MORPHOS__)
+      base->dataSeg = (char *)r13 - R13_OFFSET;
+      base->dataSize = __dbsize();
+      base->parent = base;
+      #endif
+
       #if defined(BASEREL)
       #if defined(__amigaos3__)
       base->a4 = __GetA4();
@@ -839,6 +880,7 @@ struct LibraryHeader * LibOpen(struct LibraryManagerInterface *Self, ULONG versi
 struct LibraryHeader * LibOpen(void)
 {
   struct LibraryHeader *base = (struct LibraryHeader*)REG_A6;
+  ULONG version = REG_D0;
 #elif defined(__AROS__)
 AROS_LH1(struct LibraryHeader *, LibOpen,
                 AROS_LHA(UNUSED ULONG, version, D0),
@@ -853,6 +895,9 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   struct LibraryHeader *res = NULL;
   #if defined(MULTIBASE)
   struct LibraryHeader *child = NULL;
+  #if defined(__MORPHOS__)
+  struct LibraryHeader *newLib = NULL;
+  #endif
   #endif
 
   D(DBF_STARTUP, "LibOpen(%ld, %08lx), opencnt: %ld", version, base, base->libBase.lib_OpenCnt);
@@ -884,8 +929,20 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   #if defined(MULTIBASE)
   #if defined(__amigaos4__)
   child = (struct LibraryHeader *)CreateLibrary((struct TagItem *)LibInitTab);
-  #else
+  #elif defined(__amigaos3__)
   child = (struct LibraryHeader *)MakeLibrary((APTR)&LibVectors[0], NULL, NULL, sizeof(*child) + base->dataSize, 0);
+  #elif defined(__MORPHOS__)
+  newLib = AllocVec(base->libBase.lib_NegSize + base->libBase.lib_PosSize + base->dataSize + 15, MEMF_PUBLIC);
+  if(newLib != NULL)
+  {
+    // Copy master library base 
+    CopyMem((APTR)((ULONG)base - (ULONG)base->libBase.lib_NegSize), newLib, base->libBase.lib_NegSize + base->libBase.lib_PosSize);
+
+    // Set child library base
+    child = (APTR)((ULONG)newLib + (ULONG)base->libBase.lib_NegSize);
+  }
+  #else
+    #error PLATFORM not supported
   #endif
 
   SHOWPOINTER(DBF_STARTUP, child);
@@ -898,9 +955,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     ULONG numRelocs;
     #endif
 
-    child->libBase.lib_OpenCnt++;
-
-    #if !defined(__amigaos4__) // CreateLibrary/LibInit has already done this
+    #if defined(__amigaos3__) // CreateLibrary/LibInit has already done this
     // lets clone the child library header
     child->libBase.lib_Node.ln_Type = NT_LIBRARY;
     child->libBase.lib_Node.ln_Pri  = 0;
@@ -927,6 +982,9 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
         SHOWVALUE(DBF_STARTUP, extlib->MainIFace->Data.EnvironmentVector);
 
+        // Reset the child's counter
+        child->libBase.lib_OpenCnt = 1;
+
         if(!LIB___UserLibInit((struct AmiSSLMasterIFace *)extlib->MainIFace))
         {
           SHOWPOINTER(DBF_STARTUP, child);
@@ -946,7 +1004,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         child = NULL;
       }
     }
-    #else
+    #elif defined(__amigaos3__)
     child->dataSize = __GetDataSize();
     dataSeg = (unsigned char *)(child + 1);
     CopyMem(base->dataSeg, dataSeg, child->dataSize);
@@ -970,11 +1028,53 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
     dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
-    SHOWPOINTER(DBF_STARTUP, child),
-    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
-    #endif // !__amigaos4__
 
-    if (child)
+    // Reset the child's counter
+    child->libBase.lib_OpenCnt = 1;
+
+    D(DBF_STARTUP, "Calling __UserLibInit(%08lx)", child);
+    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
+    #elif defined(__MORPHOS__)
+    if(base->dataSize)
+    {
+      char *origmem = base->dataSeg;
+      long *relocs  = (long *)__datadata_relocs;
+      int mem       = ((int)newLib + base->libBase.lib_NegSize + base->libBase.lib_PosSize + 15) & (unsigned int) ~15;
+
+      // Copy data segment
+      CopyMem(origmem, (char *)mem, base->dataSize);
+
+      // Relocate
+      if(relocs[0] > 0)
+      {
+        int i, num_relocs = relocs[0];
+
+        for(i=0, relocs++; i < num_relocs; ++i, ++relocs)
+        {
+          *(long *)(mem + *relocs) -= (int)origmem - mem;
+        }
+      }
+
+      // Save child's data segment base
+      child->dataSeg = (char *)mem + R13_OFFSET;
+
+      // Flush JIT "cache" for the area
+      CacheClearE(newLib, base->libBase.lib_NegSize + base->libBase.lib_PosSize + 15, CACRF_ClearI);
+
+      // Set child's parent library base
+      child->parent = base;
+
+      // Reset the child's counter
+      child->libBase.lib_OpenCnt = 1;
+
+      D(DBF_STARTUP, "Calling __UserLibInit(%08lx)", child);
+      LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child);
+    }
+    #else
+      #error PLATFORM not supported
+    #endif
+
+    if(child)
     {
       // assume openBase won't fail
       base->libBase.lib_OpenCnt++;
@@ -1069,9 +1169,14 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
     base->baserelData = NULL;
     DeleteLibrary(&base->libBase);
-    #else
+    #elif defined(__amigaos3__)
     LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
     FreeMem((UBYTE *)base-base->libBase.lib_NegSize, base->libBase.lib_NegSize+sizeof(*base)+base->dataSize);
+    #elif defined(__MORPHOS__)
+    LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)base);
+    FreeVec((APTR)((ULONG)(base) - (ULONG)(base->libBase.lib_NegSize)));
+    #else
+      #error PLATFORM not supported
     #endif
 
     parent->libBase.lib_OpenCnt--;

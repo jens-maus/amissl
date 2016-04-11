@@ -23,7 +23,19 @@
 // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
 #include "amissl_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
-#endif // __amigaos3__
+#elif defined(__MORPHOS__)
+// This function must preserve all registers except r13
+asm("                                                       \n\
+  .section  \".text\"                                       \n\
+  .align 2                                                  \n\
+  .type  __restore_r13, @function                           \n\
+__restore_r13:                                              \n\
+  lwz 13, 36(3) # r13 = MyLibBase->DataSeg                  \n\
+  blr                                                       \n\
+__end__restore_r13:                                         \n\
+  .size __restore_r13, __end__restore_r13 - __restore_r13   \n\
+");
+#endif // __MORPHOS__
 #endif // BASEREL
 
 /***************************************************************************/

@@ -50,12 +50,25 @@ struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers w
 // implement BASEREL/MULTIBASE support. Please note that restore_a4 is ONLY
 // applied to non-static functions in this file. Thus, be careful to change
 // the static/non-static parameter of functions in here.
-#if defined(__amigaos3__)
-#if defined(MULTIBASE) && defined(BASEREL)
+#if defined(__amigaos3__) && defined(MULTIBASE) && defined(BASEREL)
 #include "amisslmaster_base.h"
 static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
-#endif // MULTIBASE + BASEREL
-#endif // __amigaos3__
+#endif
+
+// on MorphOS we have to use a asm construct to restore r13
+#if defined(__MORPHOS__) && defined(MULTIBASE) && defined(BASEREL)
+// This function must preserve all registers except r13
+asm("                                                       \n\
+  .section  \".text\"                                       \n\
+  .align 2                                                  \n\
+  .type  __restore_r13, @function                           \n\
+__restore_r13:                                              \n\
+  lwz 13, 36(3) # r13 = MyLibBase->DataSeg                  \n\
+  blr                                                       \n\
+__end__restore_r13:                                         \n\
+  .size __restore_r13, __end__restore_r13 - __restore_r13   \n\
+");
+#endif
 
 static void FlushLib(struct Library *LibBase)
 {
@@ -256,10 +269,23 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
         ET_RegisterA0,&amisslinit,
         ET_RegisterA6,AmiSSLBase,
         TAG_DONE);
-#else
+#elif defined(__amigaos3__)
       // Internal function of amissl v2
+      #define InternalInitAmiSSL(___amisslinit) \
+            LP1NR(0x1e, InternalInitAmiSSL , void *, ___amisslinit, a0,\
+            , AmiSSLBase)
+
       #define InternalInitAmiSSL(init) LP1NR(0x1e, InternalInitAmiSSL, void *, init, a0, , AmiSSLBase)
       InternalInitAmiSSL(&amisslinit);
+#elif defined(__MORPHOS__)
+      // Internal function of amissl v2
+      #define InternalInitAmiSSL(___amisslinit) \
+            LP1NR(0x1e, InternalInitAmiSSL , void *, ___amisslinit, a0,\
+            , AmiSSLBase, 0, 0, 0, 0, 0, 0)
+
+      InternalInitAmiSSL(&amisslinit);
+#else
+  #error "PLATFORM missing"
 #endif
     }
   }

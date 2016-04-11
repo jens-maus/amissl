@@ -354,6 +354,15 @@ int (BIO_snprintf)(char *buf, size_t n, const char *format, ...)
   return ret;
 }
 
+void (ERR_add_error_data)(int num, ...)
+{
+  va_list args;
+  SHOWREGISTERS();
+  va_start(args, num);
+  ERR_add_error_vdata(num, (long *)args);
+  va_end(args);
+}
+
 #endif
 
 #endif
