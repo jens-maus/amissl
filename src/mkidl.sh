@@ -36,7 +36,7 @@ sfdc --mode=fd ../include/sfd/amisslmaster_lib.sfd -o ../include/fd/amisslmaster
 
 # os3/m68k header creation
 #sfdc --mode=clib ../include/sfd/amissl_lib.sfd -o ../include/clib/amissl_protos.h
-sfdc --mode=clib ../include/sfd/amisslmaster_lib.sfd -o ../include/clib/amisslmaster_protos.h
+#sfdc --mode=clib ../include/sfd/amisslmaster_lib.sfd -o ../include/clib/amisslmaster_protos.h
 sfdc --mode=macros ../include/sfd/amissl_lib.sfd -o ../include/inline/amissl.h
 sfdc --mode=macros ../include/sfd/amisslmaster_lib.sfd -o ../include/inline/amisslmaster.h
 sfdc --mode=pragmas ../include/sfd/amissl_lib.sfd -o ../include/pragmas/amissl_pragmas.h
