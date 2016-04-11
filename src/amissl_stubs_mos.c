@@ -1,4 +1,4 @@
-/* Automatically generated gatestubs (sfdc 1.9)! Do not edit! */
+/* Automatically generated gatestubs (sfdc 1.10)! Do not edit! */
 
 #include <exec/types.h>
 #include <dos/dos.h>
@@ -12,6 +12,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <emul/emulregs.h>
+
+int LIBSTUB_UNIMPLEMENTED(void)
+{
+  // nothing
+  return 0;
+}
 
 void LIB_InternalInitAmiSSL(struct Library * _base, void * ___amisslinit);
 

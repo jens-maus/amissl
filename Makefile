@@ -263,11 +263,12 @@ ifeq ($(OS), mos)
   CFLAGS    += -noixemul -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
   LDFLAGS   += -noixemul
   LDLIBS    += -ldebug -lc -lm -lgcc
-  BASEREL   = -mbaserel32
+  BASEREL   = -mresident32
   NOBASEREL = #-mno-baserel
   BRELLIB   = #-mrestore-a4
 
-  EXTRALIBOBJS = $(BUILD_D)/amissl_stubs_mos.o
+  EXTRALIBOBJS = $(BUILD_D)/amissl_stubs_mos.o \
+                 $(BUILD_D)/amissl_glue.o
 
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_stubs_mos.o
 

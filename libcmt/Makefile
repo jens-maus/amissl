@@ -85,7 +85,7 @@ ifeq ($(OS), mos)
 
   # Compiler/Linker flags
   CPU     = -mcpu=powerpc
-  CFLAGS  += -noixemul -I./include/netinclude
+  CFLAGS  += -noixemul -mbaserel32 -I./include/netinclude
   LDFLAGS += -noixemul
 
 endif
