@@ -26,7 +26,7 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-a
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
-CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I../include -D__NO_NET_API
+CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I. -I../include -D__NO_NET_API
 
 CC      = $(CROSS_PREFIX)gcc
 STRIP   = $(CROSS_PREFIX)strip
@@ -152,6 +152,7 @@ CLIB2OBJS = $(BUILD_D)/string_memset.o \
             $(BUILD_D)/stdlib_strtoul.o \
             $(BUILD_D)/stdlib_strtol.o \
             $(BUILD_D)/stdlib_qsort.o \
+            $(BUILD_D)/stdlib_calloc.o \
             $(BUILD_D)/ctype_table.o
 
 STDIOOBJS = $(BUILD_D)/malloc.o \

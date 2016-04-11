@@ -5,6 +5,10 @@
 #include <libraries/amisslmaster.h>
 #include <stdio.h>
 
+#if !defined(__amigaos4__)
+#include <clib/debug_protos.h>
+#endif
+
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base)	(iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
 #define DROPINTERFACE(iface)			(DropInterface((struct Interface *)iface), iface = NULL)
@@ -12,6 +16,11 @@
 #else
 #define GETINTERFACE(iface, base)	TRUE
 #define DROPINTERFACE(iface)
+#endif
+
+#if defined(__MORPHOS__)
+  #warning "Why is the following required to link properly?"
+  #define kprintf(...) ((void)0)
 #endif
 
 #define XMKSTR(x) #x
@@ -40,7 +49,7 @@ int main(void)
     #if defined(__amigaos4__)
 		printf(" iface %08lx...", IAmiSSL);
     #endif
-		InitAmiSSL(NULL);
+		InitAmiSSL(TAG_DONE);
 		CleanupAmiSSL(TAG_DONE);
 		printf(" done\n");
     DROPINTERFACE(IAmiSSL);

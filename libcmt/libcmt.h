@@ -95,6 +95,7 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 
 #if defined(__MORPHOS__)
 typedef int socklen_t;
+#define strnicmp(s1, s2, len) strncasecmp((s1), (s2), (len))
 #endif
 
 #if !defined(__MORPHOS__)

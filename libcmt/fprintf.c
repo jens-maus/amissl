@@ -6,6 +6,7 @@
 #include <string.h>
 
 struct iob ** __iob = NULL;
+FILE **__sF = NULL;
 
 int fprintf(UNUSED FILE *stream, const char *format, ...)
 {

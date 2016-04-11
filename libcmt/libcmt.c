@@ -79,9 +79,12 @@ void __init_libcmt(void)
      (LocaleBase = OpenLibrary("locale.library", 50)) &&
      (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL)) &&
      (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL)))
-#else
+#elif defined(__amigaos3__)
   if(((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) &&
       (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))))
+#elif defined(__MORPHOS__)
+  if(((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) &&
+      (LocaleBase = (struct Library *)OpenLibrary("locale.library", 38))))
 #endif
   {
     struct Locale *locale;

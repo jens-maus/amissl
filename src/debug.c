@@ -36,6 +36,10 @@
  #undef kprintf
 #endif
 
+#if defined(__MORPHOS__)
+#define strnicmp(s1, s2, len) strncasecmp((s1), (s2), (len))
+#endif
+
 #if defined(__MORPHOS__) || defined(__AROS__)
 #include <exec/rawfmt.h>
 #else
