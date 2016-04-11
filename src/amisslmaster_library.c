@@ -275,7 +275,6 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
             LP1NR(0x1e, InternalInitAmiSSL , void *, ___amisslinit, a0,\
             , AmiSSLBase)
 
-      #define InternalInitAmiSSL(init) LP1NR(0x1e, InternalInitAmiSSL, void *, init, a0, , AmiSSLBase)
       InternalInitAmiSSL(&amisslinit);
 #elif defined(__MORPHOS__)
       // Internal function of amissl v2
