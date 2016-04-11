@@ -70,28 +70,69 @@ long CleanupAmiSSL(Tag tag1, ...)
 
 #elif defined(__MORPHOS__)
 
-#warning are these vararg functions correct?
+#warning "replace pure ASM stubs by ASM+C stubs"
 
-long InitAmiSSL(Tag tag1, ...)
+long v_InitAmiSSLA(struct TagItem *tags)
 {
-  va_list args;
-  long ret;
-  va_start(args, tag1);
-  ret = InitAmiSSLA(args);
-  va_end(args);
-  return ret;
+  return InitAmiSSLA(tags);
 }
 
-long CleanupAmiSSL(Tag tag1, ...)
+asm (".align 2                     \n\
+      .globl InitAmiSSL            \n\
+      .type  InitAmiSSL,@function  \n\
+ InitAmiSSL:                       \n\
+      lwz 12,0(1)                  \n\
+      mflr  0                      \n\
+      stwu  1,-48(1)               \n\
+      stw 12,16(1)                 \n\
+      stw 0,20(1)                  \n\
+      stw 3,24(1)                  \n\
+      stw 4,28(1)                  \n\
+      stw 5,32(1)                  \n\
+      stw 6,36(1)                  \n\
+      stw 7,40(1)                  \n\
+      stw 8,44(1)                  \n\
+      stw 9,48(1)                  \n\
+      stw 10,52(1)                 \n\
+      addi  3,1,24                 \n\
+      bl v_InitAmiSSLA             \n\
+      lwz 0,20(1)                  \n\
+      lwz 11,16(1)                 \n\
+      mtlr  0                      \n\
+      stwu  11,48(1)               \n\
+      blr                          \n\
+     ");
+
+long v_CleanupAmiSSLA(struct TagItem *tags)
 {
-  va_list args;
-  long ret;
-  va_start(args, tag1);
-  ret = CleanupAmiSSLA(args);
-  va_end(args);
-  return ret;
+  return CleanupAmiSSLA(tags);
 }
 
+asm (".align 2                        \n\
+      .globl CleanupAmiSSL            \n\
+      .type  CleanupAmiSSL,@function  \n\
+ CleanupAmiSSL:                       \n\
+      lwz 12,0(1)                     \n\
+      mflr  0                         \n\
+      stwu  1,-48(1)                  \n\
+      stw 12,16(1)                    \n\
+      stw 0,20(1)                     \n\
+      stw 3,24(1)                     \n\
+      stw 4,28(1)                     \n\
+      stw 5,32(1)                     \n\
+      stw 6,36(1)                     \n\
+      stw 7,40(1)                     \n\
+      stw 8,44(1)                     \n\
+      stw 9,48(1)                     \n\
+      stw 10,52(1)                    \n\
+      addi  3,1,24                    \n\
+      bl v_CleanupAmiSSLA             \n\
+      lwz 0,20(1)                     \n\
+      lwz 11,16(1)                    \n\
+      mtlr  0                         \n\
+      stwu  11,48(1)                  \n\
+      blr                             \n\
+     ");
 
 #endif
 
