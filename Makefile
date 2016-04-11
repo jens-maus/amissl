@@ -259,7 +259,7 @@ ifeq ($(OS), mos)
 
   # Compiler/Linker flags
   CPU       = -mcpu=powerpc -mstrict-align
-  APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__MORPHOS__
+  APPCFLAGS += -noixemul -I./include/netinclude -DNO_INLINE_VARARGS -D__MORPHOS__
   CFLAGS    += -noixemul -DMULTIBASE -DBASEREL -noixemul -I./include/netinclude -DNO_INLINE_STDARG -D__MORPHOS__
   LDFLAGS   += -noixemul
   LDLIBS    += -ldebug -lm -lgcc -labox -laboxstubs
