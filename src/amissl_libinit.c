@@ -609,15 +609,6 @@ INLINE ULONG __GetBSSSize(void)
 
   return res;
 }
-
-INLINE APTR __GetA4(void)
-{
-  APTR res;
-
-  __asm volatile ("movel a4,%0" : "=r" (res));
-
-  return res;
-}
 #endif // __amigaos3__
 
 #if defined(__amigaos4__)
@@ -723,13 +714,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       base->dataSize = __dbsize();
       base->parent = base;
       #endif
-
-      #if defined(BASEREL)
-      #if defined(__amigaos3__)
-      base->a4 = __GetA4();
-      SHOWVALUE(DBF_STARTUP, base->a4);
-      #endif /* __amigaos3__ */
-      #endif /* BASEREL */
       #endif /* MULTIBASE */
 
       #if defined(__amigaos3__) && defined(__CLIB2__)
@@ -758,19 +742,6 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
         // set the initialized value and contiue
         // with the class open phase
         D(DBF_STARTUP, "success: %08lx", base);
-
-        #if defined(__amigaos3__) && 0
-        D(DBF_STARTUP, ".data size %ld %08lx %08lx", __data_size, __data_size, &__data_size);
-        D(DBF_STARTUP, ".bss size  %ld %08lx %08lx", __bss_size, __bss_size, &__bss_size);
-        D(DBF_STARTUP, "dbsize     %ld %08lx", __dbsize(), __dbsize());
-        D(DBF_STARTUP, "a4_init    %08lx %08lx", __a4_init, &__a4_init);
-        D(DBF_STARTUP, "relocs     %08lx %08lx", __datadata_relocs, &__datadata_relocs);
-        D(DBF_STARTUP, "stext      %08lx %08lx", _stext, &_stext);
-        D(DBF_STARTUP, "etext      %08lx %08lx", _etext, &_etext);
-        D(DBF_STARTUP, "sdata      %08lx %08lx", _sdata, &_sdata);
-        D(DBF_STARTUP, "edata      %08lx %08lx", _edata, &_edata);
-        D(DBF_STARTUP, "data size  %08lx %ld", (char *)&_edata - (char *)&_sdata, (char *)&_edata - (char *)&_sdata);
-        #endif
 
         // return the library base as success
         return base;
@@ -978,7 +949,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   newLib = AllocVec(base->libBase.lib_NegSize + base->libBase.lib_PosSize + base->dataSize + 15, MEMF_PUBLIC);
   if(newLib != NULL)
   {
-    // Copy master library base 
+    // Copy master library base
     CopyMem((APTR)((ULONG)base - (ULONG)base->libBase.lib_NegSize), newLib, base->libBase.lib_NegSize + base->libBase.lib_PosSize);
 
     // Set child library base

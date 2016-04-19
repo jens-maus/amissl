@@ -21,36 +21,23 @@ struct LibraryHeader
 {
   struct Library          libBase;
   UWORD                   pad1;
-  #if defined(__MORPHOS__) && defined(MULTIBASE)
-  APTR                    dataSeg; // Don't change the position of this. The offset must stay
-                                   // at 36, or __restore_r13 must be adjusted.
-  #endif
-  BPTR                    segList;
-  struct Library          *sysBase;
-  struct SignalSemaphore  libSem;
-  UWORD                   pad2;
+
   #if defined(MULTIBASE)
+  APTR                    dataSeg; // Don't change the position of this. The offset must stay
+                                   // at 36 for MorphOS, or __restore_r13 must be adjusted.
+  ULONG                   dataSize;
   struct LibraryHeader    *parent;
-  #if defined(__amigaos3__)
-  APTR                    dataSeg;
-  ULONG                   dataSize;
-  #elif defined(__MORPHOS__)
-  ULONG                   dataSize;
-  #endif
   #if defined(__amigaos4__)
   struct Library          *ElfBase;
   struct ElfIFace         *IElf;
   Elf32_Handle            elfHandle;
-  #endif /* __amigaos4__ */
-  #if defined(BASEREL)
-  #if defined(__amigaos3__)
-  APTR                    a4;
-  #endif /* __amigaos3__ */
-  #if defined(__amigaos4__)
   uint8                   *baserelData;
   #endif /* __amigaos4__ */
-  #endif /* BASEREL */
   #endif /* MULTIBASE */
+
+  BPTR                    segList;
+  struct Library          *sysBase;
+  struct SignalSemaphore  libSem;
 };
 
 #endif /* BASE_H */
