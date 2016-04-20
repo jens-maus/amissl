@@ -191,7 +191,7 @@ static int cert_select_simple(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);
 static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);
 # endif
 
-void engine_load_capi_internal(void);
+void engine_load_capi_int(void);
 
 typedef PCCERT_CONTEXT(WINAPI *CERTDLG) (HCERTSTORE, HWND, LPCWSTR,
                                          LPCWSTR, DWORD, DWORD, void *);
@@ -431,36 +431,8 @@ static int capi_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) (void))
 
 }
 
-static RSA_METHOD capi_rsa_method = {
-    "CryptoAPI RSA method",
-    0,                          /* pub_enc */
-    0,                          /* pub_dec */
-    capi_rsa_priv_enc,          /* priv_enc */
-    capi_rsa_priv_dec,          /* priv_dec */
-    0,                          /* rsa_mod_exp */
-    0,                          /* bn_mod_exp */
-    0,                          /* init */
-    capi_rsa_free,              /* finish */
-    0,                          /* flags */
-    NULL,                       /* app_data */
-    capi_rsa_sign,              /* rsa_sign */
-    0                           /* rsa_verify */
-};
-
-static DSA_METHOD capi_dsa_method = {
-    "CryptoAPI DSA method",
-    capi_dsa_do_sign,           /* dsa_do_sign */
-    0,                          /* dsa_sign_setup */
-    0,                          /* dsa_do_verify */
-    0,                          /* dsa_mod_exp */
-    0,                          /* bn_mod_exp */
-    0,                          /* init */
-    capi_dsa_free,              /* finish */
-    0,                          /* flags */
-    NULL,                       /* app_data */
-    0,                          /* dsa_paramgen */
-    0                           /* dsa_keygen */
-};
+static RSA_METHOD *capi_rsa_method = NULL;
+static DSA_METHOD *capi_dsa_method = NULL;
 
 static int use_aes_csp = 0;
 
@@ -481,17 +453,34 @@ static int capi_init(ENGINE *e)
         /* Setup RSA_METHOD */
         rsa_capi_idx = RSA_get_ex_new_index(0, NULL, NULL, NULL, 0);
         ossl_rsa_meth = RSA_PKCS1_OpenSSL();
-        capi_rsa_method.rsa_pub_enc = ossl_rsa_meth->rsa_pub_enc;
-        capi_rsa_method.rsa_pub_dec = ossl_rsa_meth->rsa_pub_dec;
-        capi_rsa_method.rsa_mod_exp = ossl_rsa_meth->rsa_mod_exp;
-        capi_rsa_method.bn_mod_exp = ossl_rsa_meth->bn_mod_exp;
+        if (   !RSA_meth_set_pub_enc(capi_rsa_method,
+                                     RSA_meth_get_pub_enc(ossl_rsa_meth))
+            || !RSA_meth_set_pub_dec(capi_rsa_method,
+                                     RSA_meth_get_pub_dec(ossl_rsa_meth))
+            || !RSA_meth_set_priv_enc(capi_rsa_method, capi_rsa_priv_enc)
+            || !RSA_meth_set_priv_dec(capi_rsa_method, capi_rsa_priv_dec)
+            || !RSA_meth_set_mod_exp(capi_rsa_method,
+                                     RSA_meth_get_mod_exp(ossl_rsa_meth))
+            || !RSA_meth_set_bn_mod_exp(capi_rsa_method,
+                                        RSA_meth_get_bn_mod_exp(ossl_rsa_meth))
+            || !RSA_meth_set_finish(capi_rsa_method, capi_rsa_free)
+            || !RSA_meth_set_sign(capi_rsa_method, capi_rsa_sign)) {
+            goto memerr;
+        }
 
         /* Setup DSA Method */
         dsa_capi_idx = DSA_get_ex_new_index(0, NULL, NULL, NULL, 0);
         ossl_dsa_meth = DSA_OpenSSL();
-        capi_dsa_method.dsa_do_verify = ossl_dsa_meth->dsa_do_verify;
-        capi_dsa_method.dsa_mod_exp = ossl_dsa_meth->dsa_mod_exp;
-        capi_dsa_method.bn_mod_exp = ossl_dsa_meth->bn_mod_exp;
+        if (   !DSA_meth_set_sign(capi_dsa_method, capi_dsa_do_sign)
+            || !DSA_meth_set_verify(capi_dsa_method,
+                                    DSA_meth_get_verify(ossl_dsa_meth))
+            || !DSA_meth_set_finish(capi_dsa_method, capi_dsa_free)
+            || !DSA_meth_set_mod_exp(capi_dsa_method,
+                                     DSA_meth_get_mod_exp(ossl_dsa_meth))
+            || !DSA_meth_set_bn_mod_exp(capi_dsa_method,
+                                    DSA_meth_get_bn_mod_exp(ossl_dsa_meth))) {
+            goto memerr;
+        }
     }
 
     ctx = capi_ctx_new();
@@ -535,6 +524,10 @@ static int capi_init(ENGINE *e)
 
 static int capi_destroy(ENGINE *e)
 {
+    RSA_meth_free(capi_rsa_method);
+    capi_rsa_method = NULL;
+    DSA_meth_free(capi_dsa_method);
+    capi_dsa_method = NULL;
     ERR_unload_CAPI_strings();
     return 1;
 }
@@ -564,24 +557,35 @@ struct CAPI_KEY_st {
 
 static int bind_capi(ENGINE *e)
 {
+    capi_rsa_method = RSA_meth_new("CryptoAPI RSA method", 0);
+    if (capi_rsa_method == NULL)
+        return 0;
+    capi_dsa_method = DSA_meth_new("CryptoAPI DSA method", 0);
+    if (capi_dsa_method == NULL)
+        goto memerr;
     if (!ENGINE_set_id(e, engine_capi_id)
         || !ENGINE_set_name(e, engine_capi_name)
         || !ENGINE_set_flags(e, ENGINE_FLAGS_NO_REGISTER_ALL)
         || !ENGINE_set_init_function(e, capi_init)
         || !ENGINE_set_finish_function(e, capi_finish)
         || !ENGINE_set_destroy_function(e, capi_destroy)
-        || !ENGINE_set_RSA(e, &capi_rsa_method)
-        || !ENGINE_set_DSA(e, &capi_dsa_method)
+        || !ENGINE_set_RSA(e, capi_rsa_method)
+        || !ENGINE_set_DSA(e, capi_dsa_method)
         || !ENGINE_set_load_privkey_function(e, capi_load_privkey)
         || !ENGINE_set_load_ssl_client_cert_function(e,
                                                      capi_load_ssl_client_cert)
         || !ENGINE_set_cmd_defns(e, capi_cmd_defns)
         || !ENGINE_set_ctrl_function(e, capi_ctrl))
-        return 0;
+        goto memerr;
     ERR_load_CAPI_strings();
 
     return 1;
-
+ memerr:
+    RSA_meth_free(capi_rsa_method);
+    capi_rsa_method = NULL;
+    DSA_meth_free(capi_dsa_method);
+    capi_dsa_method = NULL;
+    return 0;
 }
 
 # ifndef OPENSSL_NO_DYNAMIC_ENGINE
@@ -609,7 +613,7 @@ static ENGINE *engine_capi(void)
     return ret;
 }
 
-void engine_load_capi_internal(void)
+void engine_load_capi_int(void)
 {
     /* Copied from eng_[openssl|dyn].c */
     ENGINE *toadd = engine_capi();
@@ -676,6 +680,7 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
     if (bh->aiKeyAlg == CALG_RSA_SIGN || bh->aiKeyAlg == CALG_RSA_KEYX) {
         RSAPUBKEY *rp;
         DWORD rsa_modlen;
+        BIGNUM *e = NULL, *n = NULL;
         unsigned char *rsa_modulus;
         rp = (RSAPUBKEY *) (bh + 1);
         if (rp->magic != 0x31415352) {
@@ -691,17 +696,22 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
         if (!rkey)
             goto memerr;
 
-        rkey->e = BN_new();
-        rkey->n = BN_new();
+        e = BN_new();
+        n = BN_new();
 
-        if (rkey->e == NULL || rkey->n == NULL)
+        if (e == NULL || n == NULL) {
+            BN_free(e);
+            BN_free(n);
             goto memerr;
+        }
 
-        if (!BN_set_word(rkey->e, rp->pubexp))
+        RSA_set0_key(rkey, n, e, NULL);
+
+        if (!BN_set_word(e, rp->pubexp))
             goto memerr;
 
         rsa_modlen = rp->bitlen / 8;
-        if (!lend_tobn(rkey->n, rsa_modulus, rsa_modlen))
+        if (!lend_tobn(n, rsa_modulus, rsa_modlen))
             goto memerr;
 
         RSA_set_ex_data(rkey, rsa_capi_idx, key);
@@ -716,6 +726,7 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
         DSSPUBKEY *dp;
         DWORD dsa_plen;
         unsigned char *btmp;
+        BIGNUM *p, *q, *g, *pub_key;
         dp = (DSSPUBKEY *) (bh + 1);
         if (dp->magic != 0x31535344) {
             char magstr[10];
@@ -730,23 +741,29 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
         dkey = DSA_new_method(eng);
         if (!dkey)
             goto memerr;
-        dkey->p = BN_new();
-        dkey->q = BN_new();
-        dkey->g = BN_new();
-        dkey->pub_key = BN_new();
-        if (dkey->p == NULL || dkey->q == NULL || dkey->g == NULL
-                || dkey->pub_key == NULL)
+        p = BN_new();
+        q = BN_new();
+        g = BN_new();
+        pub_key = BN_new();
+        if (p == NULL || q == NULL || g == NULL || pub_key == NULL) {
+            BN_free(p);
+            BN_free(q);
+            BN_free(g);
+            BN_free(pub_key);
             goto memerr;
-        if (!lend_tobn(dkey->p, btmp, dsa_plen))
+        }
+        DSA_set0_pqg(dkey, p, q, g);
+        DSA_set0_key(dkey, pub_key, NULL);
+        if (!lend_tobn(p, btmp, dsa_plen))
             goto memerr;
         btmp += dsa_plen;
-        if (!lend_tobn(dkey->q, btmp, 20))
+        if (!lend_tobn(q, btmp, 20))
             goto memerr;
         btmp += 20;
-        if (!lend_tobn(dkey->g, btmp, dsa_plen))
+        if (!lend_tobn(g, btmp, dsa_plen))
             goto memerr;
         btmp += dsa_plen;
-        if (!lend_tobn(dkey->pub_key, btmp, dsa_plen))
+        if (!lend_tobn(pub_key, btmp, dsa_plen))
             goto memerr;
         btmp += dsa_plen;
 
@@ -827,7 +844,7 @@ int capi_rsa_sign(int dtype, const unsigned char *m, unsigned int m_len,
     CAPI_KEY *capi_key;
     CAPI_CTX *ctx;
 
-    ctx = ENGINE_get_ex_data(rsa->engine, capi_idx);
+    ctx = ENGINE_get_ex_data(RSA_get0_engine(rsa), capi_idx);
 
     CAPI_trace(ctx, "Called CAPI_rsa_sign()\n");
 
@@ -923,7 +940,7 @@ int capi_rsa_priv_dec(int flen, const unsigned char *from,
     if (flen <= 0)
         return flen;
 
-    ctx = ENGINE_get_ex_data(rsa->engine, capi_idx);
+    ctx = ENGINE_get_ex_data(RSA_get0_engine(rsa), capi_idx);
 
     CAPI_trace(ctx, "Called capi_rsa_priv_dec()\n");
 
@@ -985,7 +1002,7 @@ static DSA_SIG *capi_dsa_do_sign(const unsigned char *digest, int dlen,
     CAPI_CTX *ctx;
     unsigned char csigbuf[40];
 
-    ctx = ENGINE_get_ex_data(dsa->engine, capi_idx);
+    ctx = ENGINE_get_ex_data(DSA_get0_engine(dsa), capi_idx);
 
     CAPI_trace(ctx, "Called CAPI_dsa_do_sign()\n");
 
@@ -1894,8 +1911,8 @@ OPENSSL_EXPORT
 
 IMPLEMENT_DYNAMIC_CHECK_FN()
 # else
-void engine_load_capi_internal(void);
-void engine_load_capi_internal(void)
+void engine_load_capi_int(void);
+void engine_load_capi_int(void)
 {
 }
 # endif

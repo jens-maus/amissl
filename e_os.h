@@ -72,15 +72,12 @@ extern "C" {
 
 /* Used to checking reference counts, most while doing perl5 stuff :-) */
 # if defined(OPENSSL_NO_STDIO)
-#  if defined(REF_DEBUG)
-#   error "REF_DEBUG requires stdio"
-#  endif
 #  if defined(REF_PRINT)
 #   error "REF_PRINT requires stdio"
 #  endif
 # endif
 
-# if defined(REF_DEBUG)
+# if !defined(NDEBUG) && !defined(OPENSSL_NO_STDIO)
 #  define REF_ASSERT_ISNT(test) \
     (void)((test) ? (OPENSSL_die("refcount error", __FILE__, __LINE__), 1) : 0)
 # else
@@ -173,25 +170,6 @@ extern "C" {
 #  define closesocket(s)              close(s)
 #  define readsocket(s,b,n)           read((s),(b),(n))
 #  define writesocket(s,b,n)          write((s),(char *)(b),(n))
-# elif defined(OPENSSL_SYS_NETWARE)
-#  if defined(NETWARE_BSDSOCK)
-#   define get_last_socket_error() errno
-#   define clear_socket_error()    errno=0
-#   define closesocket(s)          close(s)
-#   define ioctlsocket(a,b,c)      ioctl(a,b,c)
-#   if defined(NETWARE_LIBC)
-#    define readsocket(s,b,n)       recv((s),(b),(n),0)
-#    define writesocket(s,b,n)      send((s),(b),(n),0)
-#   else
-#    define readsocket(s,b,n)       recv((s),(char*)(b),(n),0)
-#    define writesocket(s,b,n)      send((s),(char*)(b),(n),0)
-#   endif
-#  else
-#   define get_last_socket_error() WSAGetLastError()
-#   define clear_socket_error()    WSASetLastError(0)
-#   define readsocket(s,b,n)               recv((s),(b),(n),0)
-#   define writesocket(s,b,n)              send((s),(b),(n),0)
-#  endif
 # else
 #  define get_last_socket_error() errno
 #  define clear_socket_error()    errno=0
@@ -319,14 +297,6 @@ extern FILE *_imp___iob;
 #   define OPENSSL_NO_POSIX_IO
 #  endif
 
-#  if defined (__BORLANDC__)
-#   define _setmode setmode
-#   define _O_TEXT O_TEXT
-#   define _O_BINARY O_BINARY
-#   define _int64 __int64
-#   define _kbhit kbhit
-#  endif
-
 #  define EXIT(n) exit(n)
 #  define LIST_SEPARATOR_CHAR ';'
 #  ifndef X_OK
@@ -399,27 +369,6 @@ extern FILE *_imp___iob;
 #   define NO_SYS_PARAM_H
 #   define NO_SYS_UN_H
 
-#  elif defined(OPENSSL_SYS_NETWARE)
-#   include <fcntl.h>
-#   include <unistd.h>
-#   define NO_SYS_TYPES_H
-#   undef  DEVRANDOM
-#   ifdef NETWARE_CLIB
-#    define getpid GetThreadID
-extern int GetThreadID(void);
-/* #      include <conio.h> */
-extern int kbhit(void);
-#   else
-#    include <screen.h>
-#   endif
-#   define NO_SYSLOG
-#   define _setmode setmode
-#   define _kbhit kbhit
-#   define _O_TEXT O_TEXT
-#   define _O_BINARY O_BINARY
-#   define LIST_SEPARATOR_CHAR ';'
-#   define EXIT(n)  { if (n) printf("ERROR: %d\n", (int)n); exit(n); }
-
 #  else
      /* !defined VMS */
 #   ifdef OPENSSL_UNISTD
@@ -477,26 +426,6 @@ struct servent *PASCAL getservbyname(const char *, const char *);
 #     define accept(s,f,l)   ((int)accept(s,f,l))
 #    endif
 #   else
-#   endif
-
-#  elif defined(OPENSSL_SYS_NETWARE)
-         /*
-          * NetWare uses the WinSock2 interfaces by default, but can be
-          * configured for BSD
-          */
-#   if defined(NETWARE_BSDSOCK)
-#    include <netdb.h>
-#    include <sys/socket.h>
-#    include <netinet/in.h>
-#    include <sys/time.h>
-#    if defined(NETWARE_CLIB)
-#     include <sys/bsdskt.h>
-#    else
-#     include <sys/select.h>
-#    endif
-#    define INVALID_SOCKET (int)(~0)
-#   else
-#    include <novsock2.h>
 #   endif
 
 #  else
@@ -594,21 +523,6 @@ struct servent *PASCAL getservbyname(const char *, const char *);
 #  define strcasecmp OPENSSL_strcasecmp
 #  define strncasecmp OPENSSL_strncasecmp
 #  define OPENSSL_IMPLEMENTS_strncasecmp
-# elif defined(OPENSSL_SYS_OS2) && defined(__EMX__)
-#  define strcasecmp stricmp
-#  define strncasecmp strnicmp
-# elif defined(OPENSSL_SYS_NETWARE)
-#  include <string.h>
-#  if defined(NETWARE_CLIB)
-#   define strcasecmp stricmp
-#   define strncasecmp strnicmp
-#  endif                        /* NETWARE_CLIB */
-# endif
-
-# if defined(OPENSSL_SYS_OS2) && defined(__EMX__)
-#  include <io.h>
-#  include <fcntl.h>
-#  define NO_SYSLOG
 # endif
 
 /* vxworks */
@@ -637,6 +551,13 @@ struct servent *getservbyname(const char *name, const char *proto);
 
 # endif
 /* end vxworks */
+
+/* haiku */
+# if defined(OPENSSL_SYS_HAIKU)
+#  include <sys/select.h>
+#  include <sys/time.h>
+# endif
+/* end haiku */
 
 #define OSSL_NELEM(x)    (sizeof(x)/sizeof(x[0]))
 

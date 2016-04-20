@@ -67,7 +67,9 @@ plan skip_all => "TLSProxy isn't usable on $^O"
 plan skip_all => "$test_name needs the dynamic engine feature enabled"
     if disabled("engine") || disabled("dynamic-engine");
 
-$ENV{OPENSSL_ENGINES} = bldtop_dir("engines");
+plan skip_all => "$test_name needs the sock feature enabled"
+    if disabled("sock");
+
 $ENV{OPENSSL_ia32cap} = '~0x200000200000000';
 
 sub checkmessages($$$$$);
@@ -82,7 +84,7 @@ my $fullhand = 0;
 
 my $proxy = TLSProxy::Proxy->new(
     \&extms_filter,
-    cmdstr(app(["openssl"])),
+    cmdstr(app(["openssl"]), display => 1),
     srctop_file("apps", "server.pem"),
     (!$ENV{HARNESS_ACTIVE} || $ENV{HARNESS_VERBOSE})
 );
