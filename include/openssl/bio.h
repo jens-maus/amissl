@@ -219,10 +219,12 @@ extern "C" {
 # define BIO_FLAGS_BASE64_NO_NL  0x100
 
 /*
- * This is used with memory BIOs: it means we shouldn't free up or change the
- * data in any way.
+ * This is used with memory BIOs:
+ * BIO_FLAGS_MEM_RDONLY means we shouldn't free up or change the data in any way;
+ * BIO_FLAGS_NONCLEAR_RST means we should't clear data on reset.
  */
 # define BIO_FLAGS_MEM_RDONLY    0x200
+# define BIO_FLAGS_NONCLEAR_RST  0x400
 
 typedef union bio_addr_st BIO_ADDR;
 typedef struct bio_addrinfo_st BIO_ADDRINFO;
@@ -293,69 +295,15 @@ void BIO_set_callback(BIO *b,
 char *BIO_get_callback_arg(const BIO *b);
 void BIO_set_callback_arg(BIO *b, char *arg);
 
+typedef struct bio_method_st BIO_METHOD;
+
 const char *BIO_method_name(const BIO *b);
 int BIO_method_type(const BIO *b);
 
 typedef void bio_info_cb (struct bio_st *, int, const char *, int, long,
                           long);
 
-typedef struct bio_method_st {
-    int type;
-    const char *name;
-    int (*bwrite) (BIO *, const char *, int);
-    int (*bread) (BIO *, char *, int);
-    int (*bputs) (BIO *, const char *);
-    int (*bgets) (BIO *, char *, int);
-    long (*ctrl) (BIO *, int, long, void *);
-    int (*create) (BIO *);
-    int (*destroy) (BIO *);
-    long (*callback_ctrl) (BIO *, int, bio_info_cb *);
-} BIO_METHOD;
-
-struct bio_st {
-    BIO_METHOD *method;
-    /* bio, mode, argp, argi, argl, ret */
-    long (*callback) (struct bio_st *, int, const char *, int, long, long);
-    char *cb_arg;               /* first argument for the callback */
-    int init;
-    int shutdown;
-    int flags;                  /* extra storage */
-    int retry_reason;
-    int num;
-    void *ptr;
-    struct bio_st *next_bio;    /* used by filter BIOs */
-    struct bio_st *prev_bio;    /* used by filter BIOs */
-    int references;
-    uint64_t num_read;
-    uint64_t num_write;
-    CRYPTO_EX_DATA ex_data;
-    CRYPTO_RWLOCK *lock;
-};
-
 DEFINE_STACK_OF(BIO)
-
-typedef struct bio_f_buffer_ctx_struct {
-    /*-
-     * Buffers are setup like this:
-     *
-     * <---------------------- size ----------------------->
-     * +---------------------------------------------------+
-     * | consumed | remaining          | free space        |
-     * +---------------------------------------------------+
-     * <-- off --><------- len ------->
-     */
-    /*- BIO *bio; *//*
-     * this is now in the BIO struct
-     */
-    int ibuf_size;              /* how big is the input buffer */
-    int obuf_size;              /* how big is the output buffer */
-    char *ibuf;                 /* the char array */
-    int ibuf_len;               /* how many bytes are in it */
-    int ibuf_off;               /* write/read offset */
-    char *obuf;                 /* the char array */
-    int obuf_len;               /* how many bytes are in it */
-    int obuf_off;               /* write/read offset */
-} BIO_F_BUFFER_CTX;
 
 /* Prefix and suffix callback in ASN1 BIO */
 typedef int asn1_ps_func (BIO *b, unsigned char **pbuf, int *plen,
@@ -529,14 +477,14 @@ struct bio_dgram_sctp_prinfo {
  */
 int BIO_read_filename(BIO *b, const char *name);
 # else
-#  define BIO_read_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+#  define BIO_read_filename(b,name) (int)BIO_ctrl(b,BIO_C_SET_FILENAME, \
                 BIO_CLOSE|BIO_FP_READ,(char *)name)
 # endif
-# define BIO_write_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+# define BIO_write_filename(b,name) (int)BIO_ctrl(b,BIO_C_SET_FILENAME, \
                 BIO_CLOSE|BIO_FP_WRITE,name)
-# define BIO_append_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+# define BIO_append_filename(b,name) (int)BIO_ctrl(b,BIO_C_SET_FILENAME, \
                 BIO_CLOSE|BIO_FP_APPEND,name)
-# define BIO_rw_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+# define BIO_rw_filename(b,name) (int)BIO_ctrl(b,BIO_C_SET_FILENAME, \
                 BIO_CLOSE|BIO_FP_READ|BIO_FP_WRITE,name)
 
 /*
@@ -637,7 +585,7 @@ int BIO_asn1_set_suffix(BIO *b, asn1_ps_func *suffix,
 int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
                         asn1_ps_func **psuffix_free);
 
-BIO_METHOD *BIO_s_file(void);
+const BIO_METHOD *BIO_s_file(void);
 BIO *BIO_new_file(const char *filename, const char *mode);
 # ifndef OPENSSL_NO_STDIO
 BIO *BIO_new_fp(FILE *stream, int close_flag);
@@ -646,9 +594,15 @@ BIO *BIO_new_fp(FILE *stream, int close_flag);
 #  include <dos/dos.h>
 BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
 # endif
-BIO *BIO_new(BIO_METHOD *type);
-int BIO_set(BIO *a, BIO_METHOD *type);
+BIO *BIO_new(const BIO_METHOD *type);
+int BIO_set(BIO *a, const BIO_METHOD *type);
 int BIO_free(BIO *a);
+void BIO_set_data(BIO *a, void *ptr);
+void *BIO_get_data(BIO *a);
+void BIO_set_init(BIO *a, int init);
+int BIO_get_init(BIO *a);
+void BIO_set_shutdown(BIO *a, int shut);
+int BIO_get_shutdown(BIO *a);
 void BIO_vfree(BIO *a);
 int BIO_up_ref(BIO *a);
 int BIO_read(BIO *b, void *data, int len);
@@ -667,8 +621,10 @@ BIO *BIO_pop(BIO *b);
 void BIO_free_all(BIO *a);
 BIO *BIO_find_type(BIO *b, int bio_type);
 BIO *BIO_next(BIO *b);
+void BIO_set_next(BIO *b, BIO *next);
 BIO *BIO_get_retry_BIO(BIO *bio, int *reason);
 int BIO_get_retry_reason(BIO *bio);
+void BIO_set_retry_reason(BIO *bio, int reason);
 BIO *BIO_dup_chain(BIO *in);
 
 int BIO_nread0(BIO *bio, char **buf);
@@ -679,32 +635,26 @@ int BIO_nwrite(BIO *bio, char **buf, int num);
 long BIO_debug_callback(BIO *bio, int cmd, const char *argp, int argi,
                         long argl, long ret);
 
-BIO_METHOD *BIO_s_mem(void);
-BIO_METHOD *BIO_s_secmem(void);
+const BIO_METHOD *BIO_s_mem(void);
+const BIO_METHOD *BIO_s_secmem(void);
 BIO *BIO_new_mem_buf(const void *buf, int len);
-BIO_METHOD *BIO_s_socket(void);
-BIO_METHOD *BIO_s_connect(void);
-BIO_METHOD *BIO_s_accept(void);
-BIO_METHOD *BIO_s_fd(void);
-# ifndef OPENSSL_SYS_OS2
-BIO_METHOD *BIO_s_log(void);
-# endif
-BIO_METHOD *BIO_s_bio(void);
-BIO_METHOD *BIO_s_null(void);
-BIO_METHOD *BIO_f_null(void);
-BIO_METHOD *BIO_f_buffer(void);
-# ifdef OPENSSL_SYS_VMS
-BIO_METHOD *BIO_f_linebuffer(void);
-# endif
-BIO_METHOD *BIO_f_nbio_test(void);
+const BIO_METHOD *BIO_s_socket(void);
+const BIO_METHOD *BIO_s_connect(void);
+const BIO_METHOD *BIO_s_accept(void);
+const BIO_METHOD *BIO_s_fd(void);
+const BIO_METHOD *BIO_s_log(void);
+const BIO_METHOD *BIO_s_bio(void);
+const BIO_METHOD *BIO_s_null(void);
+const BIO_METHOD *BIO_f_null(void);
+const BIO_METHOD *BIO_f_buffer(void);
+const BIO_METHOD *BIO_f_linebuffer(void);
+const BIO_METHOD *BIO_f_nbio_test(void);
 # ifndef OPENSSL_NO_DGRAM
-BIO_METHOD *BIO_s_datagram(void);
+const BIO_METHOD *BIO_s_datagram(void);
 #  ifndef OPENSSL_NO_SCTP
-BIO_METHOD *BIO_s_datagram_sctp(void);
+const BIO_METHOD *BIO_s_datagram_sctp(void);
 #  endif
 # endif
-
-/* BIO_METHOD *BIO_f_ber(void); */
 
 int BIO_sock_should_retry(int i);
 int BIO_sock_non_fatal_error(int error);
@@ -759,7 +709,9 @@ int BIO_sock_error(int sock);
 int BIO_socket_ioctl(int fd, long type, void *arg);
 int BIO_socket_nbio(int fd, int mode);
 int BIO_sock_init(void);
-void BIO_sock_cleanup(void);
+#if OPENSSL_API_COMPAT < 0x10100000L
+# define BIO_sock_cleanup() while(0) continue
+#endif
 int BIO_set_tcp_ndelay(int sock, int turn_on);
 
 DEPRECATEDIN_1_1_0(struct hostent *BIO_gethostbyname(const char *name))
@@ -845,6 +797,34 @@ int BIO_vsnprintf(char *buf, size_t n, const char *format, long * args)
 __bio_h__attr__((__format__(__printf__, 3, 0)));
 # endif
 # undef __bio_h__attr__
+
+
+BIO_METHOD *BIO_meth_new(int type, const char *name);
+void BIO_meth_free(BIO_METHOD *biom);
+int (*BIO_meth_get_write(BIO_METHOD *biom)) (BIO *, const char *, int);
+int BIO_meth_set_write(BIO_METHOD *biom,
+                       int (*write) (BIO *, const char *, int));
+int (*BIO_meth_get_read(BIO_METHOD *biom)) (BIO *, char *, int);
+int BIO_meth_set_read(BIO_METHOD *biom,
+                      int (*read) (BIO *, char *, int));
+int (*BIO_meth_get_puts(BIO_METHOD *biom)) (BIO *, const char *);
+int BIO_meth_set_puts(BIO_METHOD *biom,
+                      int (*func) (BIO *, const char *));
+int (*BIO_meth_get_gets(BIO_METHOD *biom)) (BIO *, char *, int);
+int BIO_meth_set_gets(BIO_METHOD *biom,
+                      int (*func) (BIO *, char *, int));
+long (*BIO_meth_get_ctrl(BIO_METHOD *biom)) (BIO *, int, long, void *);
+int BIO_meth_set_ctrl(BIO_METHOD *biom,
+                      long (*ctrl) (BIO *, int, long, void *));
+int (*BIO_meth_get_create(BIO_METHOD *bion)) (BIO *);
+int BIO_meth_set_create(BIO_METHOD *biom, int (*create) (BIO *));
+int (*BIO_meth_get_destroy(BIO_METHOD *biom)) (BIO *);
+int BIO_meth_set_destroy(BIO_METHOD *biom, int (*destroy) (BIO *));
+long (*BIO_meth_get_callback_ctrl(BIO_METHOD *biom))
+                                 (BIO *, int, bio_info_cb *);
+int BIO_meth_set_callback_ctrl(BIO_METHOD *biom,
+                               long (*callback_ctrl) (BIO *, int,
+                                                      bio_info_cb *));
 
 /* BEGIN ERROR CODES */
 /*

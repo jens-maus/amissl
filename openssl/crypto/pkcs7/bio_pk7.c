@@ -56,7 +56,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/bio.h>
 
-#if !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
+#if !defined(OPENSSL_SYS_VXWORKS) && !defined(OPENSSL_SYS_AMIGA)
 # include <memory.h>
 #endif
 #include <stdio.h>

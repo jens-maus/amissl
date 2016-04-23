@@ -147,10 +147,7 @@
 
 #include <openssl/e_os2.h>
 
-/* conflicts with winsock2 stuff on netware */
-#if !defined(OPENSSL_SYS_NETWARE)
-# include <sys/types.h>
-#endif
+#ifndef OPENSSL_NO_SOCK
 
 /*
  * With IPv6, it looks like Digital has mixed up the proper order of
@@ -233,7 +230,6 @@ static BIO *bio_s_msg = NULL;
 static int s_debug = 0;
 static int s_tlsextdebug = 0;
 static int s_tlsextstatus = 0;
-static int cert_status_cb(SSL *s, void *arg);
 static int no_resume_ephemeral = 0;
 static int s_msg = 0;
 static int s_quiet = 0;
@@ -429,7 +425,7 @@ static int ebcdic_gets(BIO *bp, char *buf, int size);
 static int ebcdic_puts(BIO *bp, const char *str);
 
 # define BIO_TYPE_EBCDIC_FILTER  (18|0x0200)
-static BIO_METHOD methods_ebcdic = {
+static const BIO_METHOD methods_ebcdic = {
     BIO_TYPE_EBCDIC_FILTER,
     "EBCDIC/ASCII filter",
     ebcdic_write,
@@ -447,7 +443,7 @@ typedef struct {
     char buff[1];
 } EBCDIC_OUTBUFF;
 
-BIO_METHOD *BIO_f_ebcdic_filter()
+const BIO_METHOD *BIO_f_ebcdic_filter()
 {
     return (&methods_ebcdic);
 }
@@ -612,6 +608,7 @@ typedef struct tlsextstatusctx_st {
 
 static tlsextstatusctx tlscstatp = { NULL, NULL, NULL, 0, -1, 0 };
 
+#ifndef OPENSSL_NO_OCSP
 /*
  * Certificate Status callback. This is called when a client includes a
  * certificate status request extension. This is a simplified version. It
@@ -630,8 +627,8 @@ static int cert_status_cb(SSL *s, void *arg)
     int rspderlen;
     STACK_OF(OPENSSL_STRING) *aia = NULL;
     X509 *x = NULL;
-    X509_STORE_CTX inctx;
-    X509_OBJECT obj;
+    X509_STORE_CTX *inctx = NULL;
+    X509_OBJECT *obj;
     OCSP_REQUEST *req = NULL;
     OCSP_RESPONSE *resp = NULL;
     OCSP_CERTID *id = NULL;
@@ -665,22 +662,24 @@ static int cert_status_cb(SSL *s, void *arg)
         use_ssl = srctx->use_ssl;
     }
 
-    if (!X509_STORE_CTX_init(&inctx,
+    inctx = X509_STORE_CTX_new();
+    if (inctx == NULL)
+        goto err;
+    if (!X509_STORE_CTX_init(inctx,
                              SSL_CTX_get_cert_store(SSL_get_SSL_CTX(s)),
                              NULL, NULL))
         goto err;
-    if (X509_STORE_get_by_subject(&inctx, X509_LU_X509,
-                                  X509_get_issuer_name(x), &obj) <= 0) {
+    obj = X509_STORE_get_X509_by_subject(inctx, X509_LU_X509,
+                                         X509_get_issuer_name(x));
+    if (obj == NULL) {
         BIO_puts(bio_err, "cert_status: Can't retrieve issuer certificate.\n");
-        X509_STORE_CTX_cleanup(&inctx);
         goto done;
     }
     req = OCSP_REQUEST_new();
     if (req == NULL)
         goto err;
-    id = OCSP_cert_to_id(NULL, x, obj.data.x509);
-    X509_free(obj.data.x509);
-    X509_STORE_CTX_cleanup(&inctx);
+    id = OCSP_cert_to_id(NULL, x, X509_OBJECT_get0_X509(obj));
+    X509_OBJECT_free(obj);
     if (!id)
         goto err;
     if (!OCSP_request_add0_id(req, id))
@@ -708,6 +707,10 @@ static int cert_status_cb(SSL *s, void *arg)
         OCSP_RESPONSE_print(bio_err, resp, 2);
     }
     ret = SSL_TLSEXT_ERR_OK;
+    goto done;
+
+ err:
+    ret = SSL_TLSEXT_ERR_ALERT_FATAL;
  done:
     if (ret != SSL_TLSEXT_ERR_OK)
         ERR_print_errors(bio_err);
@@ -720,11 +723,10 @@ static int cert_status_cb(SSL *s, void *arg)
     OCSP_CERTID_free(id);
     OCSP_REQUEST_free(req);
     OCSP_RESPONSE_free(resp);
+    X509_STORE_CTX_free(inctx);
     return ret;
- err:
-    ret = SSL_TLSEXT_ERR_ALERT_FATAL;
-    goto done;
 }
+#endif
 
 #ifndef OPENSSL_NO_NEXTPROTONEG
 /* This is the context that we pass to next_proto_cb */
@@ -927,12 +929,14 @@ OPTIONS s_server_options[] = {
      "CA file for certificate verification (PEM format)"},
     {"ign_eof", OPT_IGN_EOF, '-', "ignore input eof (default when -quiet)"},
     {"no_ign_eof", OPT_NO_IGN_EOF, '-', "Do not ignore input eof"},
+#ifndef OPENSSL_NO_OCSP
     {"status", OPT_STATUS, '-', "Request certificate status from server"},
     {"status_verbose", OPT_STATUS_VERBOSE, '-',
      "Print more output in certificate status callback"},
     {"status_timeout", OPT_STATUS_TIMEOUT, 'n',
      "Status request responder timeout"},
     {"status_url", OPT_STATUS_URL, 's', "Status request fallback URL"},
+#endif
 #ifndef OPENSSL_NO_SSL_TRACE
     {"trace", OPT_TRACE, '-', "trace protocol messages"},
 #endif
@@ -1331,6 +1335,7 @@ int s_server_main(int argc, char *argv[])
             tlscstatp.timeout = atoi(opt_arg());
             break;
         case OPT_STATUS_URL:
+#ifndef OPENSSL_NO_OCSP
             s_tlsextstatus = 1;
             if (!OCSP_parse_url(opt_arg(),
                                 &tlscstatp.host,
@@ -1339,6 +1344,7 @@ int s_server_main(int argc, char *argv[])
                 BIO_printf(bio_err, "Error parsing URL\n");
                 goto end;
             }
+#endif
             break;
         case OPT_MSG:
             s_msg = 1;
@@ -2017,6 +2023,7 @@ int s_server_main(int argc, char *argv[])
         if (ctx2)
             SSL_CTX_set_client_CA_list(ctx2, SSL_load_client_CA_file(CAfile));
     }
+#ifndef OPENSSL_NO_OCSP
     if (s_tlsextstatus) {
         SSL_CTX_set_tlsext_status_cb(ctx, cert_status_cb);
         SSL_CTX_set_tlsext_status_arg(ctx, &tlscstatp);
@@ -2025,6 +2032,7 @@ int s_server_main(int argc, char *argv[])
             SSL_CTX_set_tlsext_status_arg(ctx2, &tlscstatp);
         }
     }
+#endif
 
     BIO_printf(bio_s_out, "ACCEPT\n");
     (void)BIO_flush(bio_s_out);
@@ -2117,7 +2125,7 @@ static int sv_body(int s, int stype, unsigned char *context)
     SSL *con = NULL;
     BIO *sbio;
     struct timeval timeout;
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
     struct timeval tv;
 #else
     struct timeval *timeoutp;
@@ -2233,7 +2241,7 @@ static int sv_body(int s, int stype, unsigned char *context)
 
         if (!read_from_sslcon) {
             FD_ZERO(&readfds);
-#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_NETWARE) && !defined(OPENSSL_SYS_AMIGA)
+#if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_AMIGA)
             openssl_fdset(fileno(stdin), &readfds);
 #endif
             openssl_fdset(s, &readfds);
@@ -2244,7 +2252,7 @@ static int sv_body(int s, int stype, unsigned char *context)
              * if you do have a cast then you can either go for (int *) or
              * (void *).
              */
-#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_NETWARE) || defined(OPENSSL_SYS_AMIGA)
+#if defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
             /*
              * Under DOS (non-djgpp) and Windows we can't select on stdin:
              * only on sockets. As a workaround we timeout the select every
@@ -2798,9 +2806,7 @@ static int www_body(int s, int stype, unsigned char *context)
                     continue;
                 }
 #endif
-#if defined(OPENSSL_SYS_NETWARE)
-                delay(1000);
-#elif !defined(OPENSSL_SYS_MSDOS)
+#if !defined(OPENSSL_SYS_MSDOS)
                 sleep(1);
 #endif
                 continue;
@@ -3191,9 +3197,7 @@ static int rev_body(int s, int stype, unsigned char *context)
                     continue;
                 }
 #endif
-#if defined(OPENSSL_SYS_NETWARE)
-                delay(1000);
-#elif !defined(OPENSSL_SYS_MSDOS)
+#if !defined(OPENSSL_SYS_MSDOS)
                 sleep(1);
 #endif
                 continue;
@@ -3377,3 +3381,5 @@ static void free_sessions(void)
     }
     first = NULL;
 }
+
+#endif

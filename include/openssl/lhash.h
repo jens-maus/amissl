@@ -66,10 +66,6 @@
 # define HEADER_LHASH_H
 
 # include <openssl/e_os2.h>
-# ifndef OPENSSL_NO_STDIO
-#  include <stdio.h>
-# endif
-
 # include <openssl/bio.h>
 
 #ifdef  __cplusplus
@@ -191,7 +187,7 @@ void lh_node_usage_stats_bio(const _LHASH *lh, BIO *out);
     LHASH_OF(type)
 # else
 # define DEFINE_LHASH_OF(type) \
-    LHASH_OF(type) { int dummy; }; \
+    LHASH_OF(type) { union lh_##type##_dummy { void* d1; unsigned long d2; int d3; } dummy; }; \
     static ossl_inline LHASH_OF(type) * \
         lh_##type##_new(unsigned long (*hfn)(const type *), \
                         int (*cfn)(const type *, const type *)) \

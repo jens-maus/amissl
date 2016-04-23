@@ -56,25 +56,29 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "apps.h"
-#include <openssl/bio.h>
-#include <openssl/err.h>
-#include <openssl/pem.h>
-#include <openssl/rand.h>
-#include <openssl/ts.h>
-#include <openssl/bn.h>
+#include <openssl/opensslconf.h>
+#ifdef OPENSSL_NO_TS
+NON_EMPTY_TRANSLATION_UNIT
+#else
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include "apps.h"
+# include <openssl/bio.h>
+# include <openssl/err.h>
+# include <openssl/pem.h>
+# include <openssl/rand.h>
+# include <openssl/ts.h>
+# include <openssl/bn.h>
 
 /* Request nonce length, in bits (must be a multiple of 8). */
-#define NONCE_LENGTH            64
+# define NONCE_LENGTH            64
 
 /* Name of config entry that defines the OID file. */
-#define ENV_OID_FILE            "oid_file"
+# define ENV_OID_FILE            "oid_file"
 
 /* Is |EXACTLY_ONE| of three pointers set? */
-#define EXACTLY_ONE(a, b, c) \
+# define EXACTLY_ONE(a, b, c) \
         (( a && !b && !c) || \
          ( b && !a && !c) || \
          ( c && !a && !b))
@@ -159,9 +163,9 @@ OPTIONS ts_options[] = {
     {"CAfile", OPT_CAFILE, '<', "File with trusted CA certs"},
     {"untrusted", OPT_UNTRUSTED, '<', "File with untrusted certs"},
     {"", OPT_MD, '-', "Any supported digest"},
-#ifndef OPENSSL_NO_ENGINE
+# ifndef OPENSSL_NO_ENGINE
     {"engine", OPT_ENGINE, 's', "Use engine, possibly a hardware device"},
-#endif
+# endif
     {OPT_HELP_STR, 1, '-', "\nOptions specific to 'ts -verify': \n"},
     OPT_V_OPTIONS,
     {OPT_HELP_STR, 1, '-', "\n"},
@@ -182,11 +186,11 @@ static char* opt_helplist[] = {
     "          [-signer tsa_cert.pem] [-inkey private_key.pem]",
     "          [-chain certs_file.pem] [-tspolicy oid]",
     "          [-in file] [-token_in] [-out file] [-token_out]",
-#ifndef OPENSSL_NO_ENGINE
+# ifndef OPENSSL_NO_ENGINE
     "          [-text]",
-#else
+# else
     "          [-text] [-engine id]",
-#endif
+# endif
     "  or",
     "ts -verify -CApath dir -CAfile file.pem -untrusted file.pem",
     "           [-data file] [-digest hexstring]",
@@ -379,7 +383,6 @@ int ts_main(int argc, char **argv)
     app_RAND_write_file(NULL);
     NCONF_free(conf);
     OPENSSL_free(password);
-    OBJ_cleanup();
     return (ret);
 }
 
@@ -564,7 +567,7 @@ static int create_digest(BIO *input, char *digest, const EVP_MD *md,
         EVP_MD_CTX_free(md_ctx);
     } else {
         long digest_len;
-        *md_value = string_to_hex(digest, &digest_len);
+        *md_value = OPENSSL_hexstr2buf(digest, &digest_len);
         if (!*md_value || md_value_len != digest_len) {
             OPENSSL_free(*md_value);
             *md_value = NULL;
@@ -735,10 +738,10 @@ static TS_RESP *create_response(CONF *conf, const char *section, char *engine,
         goto end;
     if (!TS_CONF_set_serial(conf, section, serial_cb, resp_ctx))
         goto end;
-#ifndef OPENSSL_NO_ENGINE
+# ifndef OPENSSL_NO_ENGINE
     if (!TS_CONF_set_crypto_device(conf, section, engine))
         goto end;
-#endif
+# endif
     if (!TS_CONF_set_signer_cert(conf, section, signer, resp_ctx))
         goto end;
     if (!TS_CONF_set_certs(conf, section, chain, resp_ctx))
@@ -936,7 +939,7 @@ static TS_VERIFY_CTX *create_verify_ctx(char *data, char *digest,
                 goto err;
         } else if (digest != NULL) {
             long imprint_len;
-            unsigned char *hexstr = string_to_hex(digest, &imprint_len);
+            unsigned char *hexstr = OPENSSL_hexstr2buf(digest, &imprint_len);
             f |= TS_VFY_IMPRINT;
             if (TS_VERIFY_CTX_set_imprint(ctx, hexstr, imprint_len) == NULL) {
                 BIO_printf(bio_err, "invalid digest string\n");
@@ -1026,3 +1029,4 @@ static int verify_cb(int ok, X509_STORE_CTX *ctx)
 {
     return ok;
 }
+#endif

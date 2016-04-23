@@ -146,8 +146,7 @@ static int verify_chain(SSL *ssl, STACK_OF(X509) *chain)
     return (ret);
 }
 
-#ifndef OPENSSL_NO_STDIO
-static STACK_OF(X509) *load_chain(FILE *fp, int nelem)
+static STACK_OF(X509) *load_chain(BIO *fp, int nelem)
 {
     int count;
     char *name = 0;
@@ -165,16 +164,18 @@ static STACK_OF(X509) *load_chain(FILE *fp, int nelem)
 
     for (count = 0;
 	 count < nelem && errtype == 0
-         && PEM_read(fp, &name, &header, &data, &len);
+         && PEM_read_bio(fp, &name, &header, &data, &len);
 	 ++count) {
 	const unsigned char *p = data;
 
 	if (strcmp(name, PEM_STRING_X509) == 0
 	    || strcmp(name, PEM_STRING_X509_TRUSTED) == 0
 	    || strcmp(name, PEM_STRING_X509_OLD) == 0) {
-	    d2i_X509_t d = strcmp(name, PEM_STRING_X509_TRUSTED) ?
-		d2i_X509_AUX : d2i_X509;
-	    X509 *cert = d(0, &p, len);
+	    X509 *cert;
+	    if (strcmp(name, PEM_STRING_X509_TRUSTED) == 0)
+	      cert = d2i_X509(0, &p, len);
+	    else
+	      cert = d2i_X509_AUX(0, &p, len);
 
 	    if (cert == 0 || (p - data) != len)
 		errtype = "certificate";
@@ -211,15 +212,13 @@ err:
     print_errors();
     return NULL;
 }
-#endif
 
-#ifndef OPENSSL_NO_STDIO
-static char *read_to_eol(FILE *f)
+static char *read_to_eol(BIO *f)
 {
     static char buf[1024];
     int n;
 
-    if (fgets(buf, sizeof(buf), f)== NULL)
+    if (!BIO_gets(f, buf, sizeof(buf)))
         return NULL;
 
     n = strlen(buf);
@@ -239,7 +238,6 @@ static char *read_to_eol(FILE *f)
 
     return buf;
 }
-#endif
 
 /*
  * Hex decoder that tolerates optional whitespace
@@ -364,7 +362,7 @@ static int allws(const char *cp)
 
 #ifndef OPENSSL_NO_STDIO
 static int test_tlsafile(SSL_CTX *ctx, const char *basename,
-                         FILE *f, const char *path)
+                         BIO *f, const char *path)
 {
     char *line;
     int testno = 0;
@@ -469,7 +467,7 @@ static int test_tlsafile(SSL_CTX *ctx, const char *basename,
 
 int main(int argc, char *argv[])
 {
-    FILE *f;
+    BIO *f;
     BIO *bio_err;
     SSL_CTX *ctx = NULL;
     const char *basedomain;
@@ -494,7 +492,7 @@ int main(int argc, char *argv[])
         CRYPTO_set_mem_debug(1);
     CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
 
-    f = fopen(tlsafile, "r");
+    f = BIO_new_file(tlsafile, "r");
     if (f == NULL) {
         fprintf(stderr, "%s: Error opening tlsa record file: '%s': %s\n",
                 progname, tlsafile, strerror(errno));
@@ -531,7 +529,7 @@ int main(int argc, char *argv[])
 
 end:
 
-    (void) fclose(f);
+    BIO_free(f);
     SSL_CTX_free(ctx);
 
 #ifndef OPENSSL_NO_CRYPTO_MDEBUG

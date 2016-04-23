@@ -51,7 +51,6 @@
 #ifndef OPENSSL_NO_DSA
 #include <openssl/dsa.h>
 #endif
-#include <openssl/dso.h>
 #include <openssl/dtls1.h>
 #include <openssl/ebcdic.h>
 #ifndef OPENSSL_NO_EC

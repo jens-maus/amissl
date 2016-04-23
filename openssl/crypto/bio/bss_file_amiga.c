@@ -10,7 +10,7 @@
 #include <dos/stdio.h>
 #include <string.h>
 
-#include <openssl/bio.h>
+#include "bio_lcl.h"
 #include <openssl/err.h>
 #include <openssl/buffer.h>
 
@@ -24,7 +24,7 @@ static long file_ctrl(BIO *h, int cmd, long arg1, void *arg2);
 static int file_new(BIO *h);
 static int file_free(BIO *data);
 
-static BIO_METHOD methods_filep =
+static const BIO_METHOD methods_filep =
 {
 	BIO_TYPE_FILE,
 	"FILE pointer (Amiga)",
@@ -37,8 +37,6 @@ static BIO_METHOD methods_filep =
 	file_free,
 	NULL
 };
-
-BIO_METHOD *BIO_s_file(void);
 
 #ifdef __amigaos4__
 #define FSeek(file, pos, offset) Seek(file, pos, offset)
@@ -199,7 +197,7 @@ BIO *(BIO_new_fp)(FILE *stream, int closeflag)
 }
 #endif
 
-BIO_METHOD *BIO_s_file(void)
+const BIO_METHOD *BIO_s_file(void)
 {
 	return(&methods_filep);
 }

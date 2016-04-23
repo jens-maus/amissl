@@ -152,6 +152,7 @@ static unsigned long (*getauxval) (unsigned long) = NULL;
 
 #define HWCAP2                  26      /* AT_HWCAP2 */
 #define HWCAP_VEC_CRYPTO        (1U << 25)
+#define HWCAP_ARCH_3_00         (1U << 23)
 
 # if defined(__GNUC__) && __GNUC__>=2
 __attribute__ ((constructor))
@@ -209,6 +210,9 @@ void OPENSSL_cpuid_setup(void)
     if (__power_set(0xffffffffU<<16))           /* POWER8 and later */
         OPENSSL_ppccap_P |= PPC_CRYPTO207;
 
+    if (__power_set(0xffffffffU<<17))           /* POWER9 and later */
+        OPENSSL_ppccap_P |= PPC_MADD300;
+
     return;
 # endif
 #endif
@@ -235,6 +239,10 @@ void OPENSSL_cpuid_setup(void)
 
             if ((hwcap & HWCAP_VSX) && (getauxval(HWCAP2) & HWCAP_VEC_CRYPTO))
                 OPENSSL_ppccap_P |= PPC_CRYPTO207;
+        }
+
+        if (hwcap & HWCAP_ARCH_3_00) {
+            OPENSSL_ppccap_P |= PPC_MADD300;
         }
 
         return;
@@ -284,6 +292,11 @@ void OPENSSL_cpuid_setup(void)
             OPENSSL_crypto207_probe();
             OPENSSL_ppccap_P |= PPC_CRYPTO207;
         }
+    }
+
+    if (sigsetjmp(ill_jmp, 1) == 0) {
+        OPENSSL_madd300_probe();
+        OPENSSL_ppccap_P |= PPC_MADD300;
     }
 
     sigaction(SIGILL, &ill_oact, NULL);

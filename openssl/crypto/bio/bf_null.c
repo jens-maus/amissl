@@ -57,8 +57,8 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include "bio_lcl.h"
 #include "internal/cryptlib.h"
-#include <openssl/bio.h>
 
 /*
  * BIO_put and BIO_get both add to the digest, BIO_gets returns the digest
@@ -85,7 +85,7 @@ static const BIO_METHOD methods_nullf = {
     nullf_callback_ctrl,
 };
 
-BIO_METHOD *BIO_f_null(void)
+const BIO_METHOD *BIO_f_null(void)
 {
     return (&methods_nullf);
 }

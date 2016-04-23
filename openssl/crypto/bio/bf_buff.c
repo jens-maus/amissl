@@ -57,8 +57,8 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include "bio_lcl.h"
 #include "internal/cryptlib.h"
-#include <openssl/bio.h>
 
 static int buffer_write(BIO *h, const char *buf, int num);
 static int buffer_read(BIO *h, char *buf, int size);
@@ -83,7 +83,7 @@ static const BIO_METHOD methods_buffer = {
     buffer_callback_ctrl,
 };
 
-BIO_METHOD *BIO_f_buffer(void)
+const BIO_METHOD *BIO_f_buffer(void)
 {
     return (&methods_buffer);
 }

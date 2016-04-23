@@ -64,9 +64,7 @@
 #include <string.h>
 #include "ec_lcl.h"
 #include <openssl/err.h>
-#ifndef OPENSSL_NO_ENGINE
-# include <openssl/engine.h>
-#endif
+#include <openssl/engine.h>
 
 EC_KEY *EC_KEY_new(void)
 {
@@ -609,7 +607,7 @@ size_t ec_key_simple_priv2oct(const EC_KEY *eckey,
 {
     size_t buf_len;
 
-    buf_len = (EC_GROUP_get_degree(eckey->group) + 7) / 8;
+    buf_len = (EC_GROUP_order_bits(eckey->group) + 7) / 8;
     if (eckey->priv_key == NULL)
         return 0;
     if (buf == NULL)
