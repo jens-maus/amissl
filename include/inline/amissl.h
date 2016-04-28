@@ -943,11 +943,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_new(___type) \
-      LP1(0x6c0, BIO *, BIO_new , BIO_METHOD *, ___type, a0,\
+      LP1(0x6c0, BIO *, BIO_new , const BIO_METHOD *, ___type, a0,\
       , AMISSL_BASE_NAME)
 
 #define BIO_set(___a, ___type) \
-      LP2(0x6c6, int, BIO_set , BIO *, ___a, a0, BIO_METHOD *, ___type, a1,\
+      LP2(0x6c6, int, BIO_set , BIO *, ___a, a0, const BIO_METHOD *, ___type, a1,\
       , AMISSL_BASE_NAME)
 
 #define BIO_free(___a) \

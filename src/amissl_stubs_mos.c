@@ -2244,21 +2244,21 @@ BIO * LIBSTUB_BIO_new_fp_amiga(void)
   return LIB_BIO_new_fp_amiga(_base, ___stream, ___close_flag);
 }
 
-BIO * LIB_BIO_new(struct Library * _base, BIO_METHOD * ___type);
+BIO * LIB_BIO_new(struct Library * _base, const BIO_METHOD * ___type);
 
 BIO * LIBSTUB_BIO_new(void)
 {
-  BIO_METHOD * ___type = (BIO_METHOD *)REG_A0;
+  const BIO_METHOD * ___type = (const BIO_METHOD *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_BIO_new(_base, ___type);
 }
 
-int LIB_BIO_set(struct Library * _base, BIO * ___a, BIO_METHOD * ___type);
+int LIB_BIO_set(struct Library * _base, BIO * ___a, const BIO_METHOD * ___type);
 
 int LIBSTUB_BIO_set(void)
 {
   BIO * ___a = (BIO *)REG_A0;
-  BIO_METHOD * ___type = (BIO_METHOD *)REG_A1;
+  const BIO_METHOD * ___type = (const BIO_METHOD *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_BIO_set(_base, ___a, ___type);
 }

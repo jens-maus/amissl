@@ -1656,14 +1656,14 @@ BIO * SAVEDS ASM LIB_BIO_new_fp_amiga(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, B
 
 // ---
 
-BIO * SAVEDS ASM LIB_BIO_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO_METHOD * type))
+BIO * SAVEDS ASM LIB_BIO_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO_METHOD * type))
 {
 	return BIO_new(type);
 }
 
 // ---
 
-int SAVEDS ASM LIB_BIO_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * a), REG(a1, BIO_METHOD * type))
+int SAVEDS ASM LIB_BIO_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * a), REG(a1, const BIO_METHOD * type))
 {
 	return BIO_set(a, type);
 }

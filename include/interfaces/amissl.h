@@ -323,8 +323,8 @@ struct AmiSSLIFace
 	const BIO_METHOD * APICALL (*BIO_s_file)(struct AmiSSLIFace *Self);
 	BIO * APICALL (*BIO_new_file)(struct AmiSSLIFace *Self, const char * filename, const char * mode);
 	BIO * APICALL (*BIO_new_fp_amiga)(struct AmiSSLIFace *Self, BPTR stream, int close_flag);
-	BIO * APICALL (*BIO_new)(struct AmiSSLIFace *Self, BIO_METHOD * type);
-	int APICALL (*BIO_set)(struct AmiSSLIFace *Self, BIO * a, BIO_METHOD * type);
+	BIO * APICALL (*BIO_new)(struct AmiSSLIFace *Self, const BIO_METHOD * type);
+	int APICALL (*BIO_set)(struct AmiSSLIFace *Self, BIO * a, const BIO_METHOD * type);
 	int APICALL (*BIO_free)(struct AmiSSLIFace *Self, BIO * a);
 	void APICALL (*BIO_vfree)(struct AmiSSLIFace *Self, BIO * a);
 	int APICALL (*BIO_read)(struct AmiSSLIFace *Self, BIO * b, void * data, int len);

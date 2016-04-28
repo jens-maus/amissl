@@ -3407,7 +3407,7 @@ STATIC BIO * stub_main_BIO_new_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->BIO_new(
-		(BIO_METHOD *)regarray[REG68K_A0/4]
+		(const BIO_METHOD *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_BIO_new = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_BIO_new_PPC };
@@ -3422,7 +3422,7 @@ STATIC int stub_main_BIO_set_PPC(uint32 *regarray)
 
 	return Self->BIO_set(
 		(BIO *)regarray[REG68K_A0/4],
-		(BIO_METHOD *)regarray[REG68K_A1/4]
+		(const BIO_METHOD *)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_BIO_set = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_BIO_set_PPC };

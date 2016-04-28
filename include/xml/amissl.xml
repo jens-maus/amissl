@@ -1094,11 +1094,11 @@
       <arg name="close_flag" type="int" m68kreg="d0"/>
     </method>
     <method name="BIO_new" result="BIO *">
-      <arg name="type" type="BIO_METHOD *" m68kreg="a0"/>
+      <arg name="type" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_set" result="int">
       <arg name="a" type="BIO *" m68kreg="a0"/>
-      <arg name="type" type="BIO_METHOD *" m68kreg="a1"/>
+      <arg name="type" type="const BIO_METHOD *" m68kreg="a1"/>
     </method>
     <method name="BIO_free" result="int">
       <arg name="a" type="BIO *" m68kreg="a0"/>

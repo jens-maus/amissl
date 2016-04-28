@@ -263,8 +263,8 @@ uint64_t SAVEDS ASM LIB_BIO_number_written(REG(a6, __IFACE_OR_BASE), REG(a0, BIO
 const BIO_METHOD * SAVEDS ASM LIB_BIO_s_file(REG(a6, __IFACE_OR_BASE));
 BIO * SAVEDS ASM LIB_BIO_new_file(REG(a6, __IFACE_OR_BASE), REG(a0, const char * filename), REG(a1, const char * mode));
 BIO * SAVEDS ASM LIB_BIO_new_fp_amiga(REG(a6, __IFACE_OR_BASE), REG(a0, BPTR stream), REG(d0, int close_flag));
-BIO * SAVEDS ASM LIB_BIO_new(REG(a6, __IFACE_OR_BASE), REG(a0, BIO_METHOD * type));
-int SAVEDS ASM LIB_BIO_set(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * a), REG(a1, BIO_METHOD * type));
+BIO * SAVEDS ASM LIB_BIO_new(REG(a6, __IFACE_OR_BASE), REG(a0, const BIO_METHOD * type));
+int SAVEDS ASM LIB_BIO_set(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * a), REG(a1, const BIO_METHOD * type));
 int SAVEDS ASM LIB_BIO_free(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * a));
 void SAVEDS ASM LIB_BIO_vfree(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * a));
 int SAVEDS ASM LIB_BIO_read(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * b), REG(a1, void * data), REG(d0, int len));
