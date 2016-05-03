@@ -39,4 +39,4 @@ env:
 
 # the build command to execute for each test
 script:
-  - make OS=${OS} -j1
+  - make OS=${OS} -j3
