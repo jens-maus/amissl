@@ -3,6 +3,14 @@ dist: trusty
 
 language: c
 
+# send build/failure notifications
+# only on a status change
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+# download and install our required cross compilers
 install:
   # Make sure we can install i386 packages as some adtools binaries
   # requires i386 libraries being installed to work in the 64bit env
@@ -11,24 +19,22 @@ install:
   - sudo apt-get -qq update || true
   - sudo apt-get -qq install libc6:i386
   # Install all adtools related stuff we need
-  - wget https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2
-  - wget https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2
-  - wget https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2
-  - wget https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2
-  - sudo tar xf adtools-utils.tar.bz2 -C /
-  - sudo tar xf adtools-m68k-amigaos.tar.bz2 -C /
-  - sudo tar xf adtools-ppc-amigaos-legacy.tar.bz2 -C /
-  - sudo tar xf adtools-ppc-morphos.tar.bz2 -C /
+  - curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
+  - if [[ "${OS}" == "os3" ]]; curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ "${OS}" == "os4" ]]; curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ "${OS}" == "mos" ]]; curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
 
-notifications:
-  email:
-    on_success: change
-    on_failure: change
-
+# set the PATH variable to the directories the cross compilers are installed.
 before_script:
   - export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
 
+# specify a list of variables to test (here we test the build for our supported
+# list of operating systems).
+env:
+  - OS=os4
+  - OS=os3
+  - OS=mos
+
+# the build command to execute for each test
 script:
-  #- make OS=os4 -j3
-  - make OS=os3 -j1
-  #- make OS=mos -j3
+  - make OS=${OS} -j1
