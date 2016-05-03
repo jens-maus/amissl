@@ -22,9 +22,9 @@ install:
   - sudo apt-get -qq install libc6:i386
   # Install all adtools related stuff we need
   - curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
-  - test "${OS}" == "os3" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
-  - test "${OS}" == "os4" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
-  - test "${OS}" == "mos" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
+  - if [[ "${OS}" == "os3" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ "${OS}" == "os4" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ "${OS}" == "mos" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
 
 # set the PATH variable to the directories the cross compilers are installed.
 before_script:
