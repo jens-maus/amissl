@@ -1,4 +1,4 @@
-# AmiSSL library – OpenSSL for Amiga systems
+# AmiSSL library – OpenSSL for Amiga systems [![Build Status](https://travis-ci.org/jens-maus/amissl.svg?branch=master)](https://travis-ci.org/jens-maus/amissl) [![Code Climate](https://codeclimate.com/github/jens-maus/amissl/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/amissl)
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic
@@ -68,6 +68,7 @@ script used accordingly.
 
 ## Legal information
 
+```
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
 AmiSSL v4    Copyright (c) 2014-2016 AmiSSL Open Source Team.
@@ -88,6 +89,7 @@ This product includes cryptographic software written by Eric Young
 (eay@cryptsoft.com). This product includes software written by Tim Hudson
 (tjh@cryptsoft.com). Please refer to the complete license information of
 the OpenSSL project (www.openssl.org) for more information.
+```
 
 ## Authors
 
