@@ -29,6 +29,6 @@ before_script:
   - export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
 
 script:
-  - make OS=os4 -j3
-  - make OS=os3 -j3
-  - make OS=mos -j3
+  #- make OS=os4 -j3
+  - make OS=os3 -j1
+  #- make OS=mos -j3
