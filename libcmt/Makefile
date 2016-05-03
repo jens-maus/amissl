@@ -16,8 +16,6 @@
 #
 # AmiSSL Official Support Site :  http://sf.net/p/amissl
 #
-# $Id$
-#
 #***************************************************************************/
 
 BUILD_D=../build_$(OS)/libcmt
@@ -123,7 +121,7 @@ $(BUILD_D):
 
 $(BUILD_D)/%.o: %.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 libobjs: $(LIBOBJS)
 
