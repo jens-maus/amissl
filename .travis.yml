@@ -34,10 +34,12 @@ before_script:
 # list of operating systems).
 env:
   - OS=os4
+  - OS=os4 DEBUG=
   - OS=os3
+  - OS=os3 DEBUG=
   - OS=mos
+  - OS=mos DEBUG=
 
 # the build command to execute for each test
 script:
   - make OS=${OS} -j1
-  - make OS=${OS} DEBUG= -j1
