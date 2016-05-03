@@ -33,13 +33,13 @@ before_script:
 # specify a list of variables to test (here we test the build for our supported
 # list of operating systems).
 env:
-  - OS=os4
-  - OS=os4 DEBUG=
-  - OS=os3
-  - OS=os3 DEBUG=
-  - OS=mos
-  - OS=mos DEBUG=
+  - BUILD="OS=os4"
+  - BUILD="OS=os4 DEBUG="
+  - BUILD="OS=os3"
+  - BUILD="OS=os3 DEBUG="
+  - BUILD="OS=mos"
+  - BUILD="OS=mos DEBUG="
 
 # the build command to execute for each test
 script:
-  - make OS=${OS} -j1
+  - make ${BUILD} -j1
