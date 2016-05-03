@@ -1,0 +1,18 @@
+---
+engines:
+  duplication:
+    enabled: false
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+  phpmd:
+    enabled: false
+ratings:
+  paths:
+  - "**.c"
+  - "**.h"
+  - "**.l"
+  - "**.md"
+exclude_paths:
+  - "openssl/**/*"

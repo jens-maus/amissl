@@ -1,0 +1,34 @@
+sudo: required
+dist: trusty
+
+language: c
+
+install:
+  # Make sure we can install i386 packages as some adtools binaries
+  # requires i386 libraries being installed to work in the 64bit env
+  # of Travis
+  - sudo dpkg --add-architecture i386
+  - sudo apt-get -qq update || true
+  - sudo apt-get -qq install libc6:i386
+  # Install all adtools related stuff we need
+  - wget https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2
+  - wget https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2
+  - wget https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2
+  - wget https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2
+  - sudo tar xf adtools-utils.tar.bz2 -C /
+  - sudo tar xf adtools-m68k-amigaos.tar.bz2 -C /
+  - sudo tar xf adtools-ppc-amigaos-legacy.tar.bz2 -C /
+  - sudo tar xf adtools-ppc-morphos.tar.bz2 -C /
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+before_script:
+  - export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
+
+script:
+  - make OS=os4 -j3
+  - make OS=os3 -j3
+  - make OS=mos -j3
