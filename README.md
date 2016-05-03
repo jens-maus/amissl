@@ -1,4 +1,6 @@
-# AmiSSL library – OpenSSL for Amiga systems [![Build Status](https://travis-ci.org/jens-maus/amissl.svg?branch=master)](https://travis-ci.org/jens-maus/amissl) [![Code Climate](https://codeclimate.com/github/jens-maus/amissl/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/amissl)
+# AmiSSL library – OpenSSL for Amiga systems
+
+[![Build Status](https://travis-ci.org/jens-maus/amissl.svg?branch=master)](https://travis-ci.org/jens-maus/amissl) [![Code Climate](https://codeclimate.com/github/jens-maus/amissl/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/amissl)
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic

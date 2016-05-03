@@ -121,7 +121,7 @@ $(BUILD_D):
 
 $(BUILD_D)/%.o: %.c
 	@echo "  CC $<"
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 libobjs: $(LIBOBJS)
 
