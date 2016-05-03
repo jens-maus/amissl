@@ -12,6 +12,8 @@ notifications:
 
 # download and install our required cross compilers
 install:
+  # unset CC or our build will break
+  - test -n ${CC} && unset CC
   # Make sure we can install i386 packages as some adtools binaries
   # requires i386 libraries being installed to work in the 64bit env
   # of Travis
@@ -20,9 +22,9 @@ install:
   - sudo apt-get -qq install libc6:i386
   # Install all adtools related stuff we need
   - curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
-  - if [[ "${OS}" == "os3" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
-  - if [[ "${OS}" == "os4" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
-  - if [[ "${OS}" == "mos" ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
+  - test "${OS}" == "os3" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
+  - test "${OS}" == "os4" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
+  - test "${OS}" == "mos" && curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
 
 # set the PATH variable to the directories the cross compilers are installed.
 before_script:
