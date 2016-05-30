@@ -153,7 +153,7 @@
   #define LFUNC_NULL      ,NULL
   #define LFUNC(name)     LIB_##name
 #elif defined(__MORPHOS__)
-  #define LIBFUNC
+  #define LIBFUNC SAVEDS
   #if (__STDC_VERSION__ >= 199901L || __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
     #define LIBPROTO(name, ret, ...) LIBFUNC ret LIBSTUB_##name(void); LIBFUNC ret LIB_##name(__VA_ARGS__)
     #define LIBPROTOVA(name, ret, ...)

@@ -149,7 +149,9 @@
     #define LREG(reg,arg) register REG(reg,arg)
   #else
     #define REG(reg,arg) arg
-    #define SAVEDS
+    #if !defined(__MORPHOS__)
+      #define SAVEDS
+    #endif
     #define STDARGS
     #define REGARGS
     #define STACKEXT

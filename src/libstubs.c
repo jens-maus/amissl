@@ -1,8 +1,3 @@
-#ifndef __amigaos4__
-#define SAVEDS __saveds
-#define FFlush Flush
-#endif /* !__amigaos4__ */
-
 #include <stdio.h>
 #include <string.h>
 #include <proto/exec.h>
@@ -38,7 +33,13 @@ static BPTR GetFileBPTR(const char *func_name, FILE *fp)
   }
 
   if (ret)
+  {
+    #if defined(__amigaos4__)
     FFlush(ret);
+    #else
+    Flush(ret);
+    #endif
+  }
 
   return(ret);
 }
@@ -115,142 +116,142 @@ int (X509_NAME_print_ex_fp)(FILE *fp, X509_NAME *nm, int indent, unsigned long f
   return ret;
 }
 
-void SAVEDS (ASN1_OBJECT_free)(ASN1_OBJECT *a)
+void (ASN1_OBJECT_free)(ASN1_OBJECT *a)
 {
   ASN1_OBJECT_free(a);
 }
 
-long SAVEDS (BIO_debug_callback)(BIO *bio, int cmd, const char *argp, int argi, long argl, long ret)
+long (BIO_debug_callback)(BIO *bio, int cmd, const char *argp, int argi, long argl, long ret)
 {
   return(BIO_debug_callback(bio, cmd, argp, argi, argl, ret));
 }
 
-DH * SAVEDS (DH_new)(void)
+DH * (DH_new)(void)
 {
   return(DH_new());
 }
 
-DSA * SAVEDS (DSA_new)(void)
+DSA * (DSA_new)(void)
 {
   return(DSA_new());
 }
 
-OCSP_REQUEST * SAVEDS (OCSP_REQUEST_new)(void)
+OCSP_REQUEST * (OCSP_REQUEST_new)(void)
 {
   return(OCSP_REQUEST_new());
 }
 
-OCSP_RESPONSE * SAVEDS (OCSP_RESPONSE_new)(void)
+OCSP_RESPONSE * (OCSP_RESPONSE_new)(void)
 {
   return(OCSP_RESPONSE_new());
 }
 
-void SAVEDS (PKCS12_SAFEBAG_free)(PKCS12_SAFEBAG *a)
+void (PKCS12_SAFEBAG_free)(PKCS12_SAFEBAG *a)
 {
   PKCS12_SAFEBAG_free(a);
 }
 
-void SAVEDS (PKCS7_free)(PKCS7 *a)
+void (PKCS7_free)(PKCS7 *a)
 {
   PKCS7_free(a);
 }
 
-SSL_SESSION * SAVEDS (SSL_SESSION_new)(void)
+SSL_SESSION * (SSL_SESSION_new)(void)
 {
   return(SSL_SESSION_new());
 }
 
-void SAVEDS (X509V3_conf_free)(CONF_VALUE *val)
+void (X509V3_conf_free)(CONF_VALUE *val)
 {
   X509V3_conf_free(val);
 }
 
-void SAVEDS (X509_EXTENSION_free)(X509_EXTENSION *a)
+void (X509_EXTENSION_free)(X509_EXTENSION *a)
 {
   X509_EXTENSION_free(a);
 }
 
-void SAVEDS (X509_INFO_free)(X509_INFO *a)
+void (X509_INFO_free)(X509_INFO *a)
 {
   X509_INFO_free(a);
 }
 
-void SAVEDS (X509_free)(X509 *a)
+void (X509_free)(X509 *a)
 {
   X509_free(a);
 }
 
-DH * SAVEDS (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
+DH * (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
 {
   return(d2i_DHparams(a, pp, length));
 }
 
-DSA * SAVEDS (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
+DSA * (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
 {
   return(d2i_DSAparams(a, pp, length));
 }
 
-OCSP_REQUEST * SAVEDS (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, const unsigned char **in, long len)
+OCSP_REQUEST * (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, const unsigned char **in, long len)
 {
   return(d2i_OCSP_REQUEST(a, in, len));
 }
 
-OCSP_RESPONSE * SAVEDS (d2i_OCSP_RESPONSE)(OCSP_RESPONSE **a, const unsigned char **in, long len)
+OCSP_RESPONSE * (d2i_OCSP_RESPONSE)(OCSP_RESPONSE **a, const unsigned char **in, long len)
 {
   return(d2i_OCSP_RESPONSE(a, in, len));
 }
 
-SSL_SESSION * SAVEDS (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char **pp, long length)
+SSL_SESSION * (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char **pp, long length)
 {
   return(d2i_SSL_SESSION(a, pp, length));
 }
 
-EC_GROUP * SAVEDS (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, long len)
+EC_GROUP * (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, long len)
 {
   return(d2i_ECPKParameters(a, in, len));
 }
 
-int SAVEDS (i2d_DHparams)(const DH *a, unsigned char **pp)
+int (i2d_DHparams)(const DH *a, unsigned char **pp)
 {
   return(i2d_DHparams(a, pp));
 }
 
-int SAVEDS (i2d_DSAparams)(const DSA *a, unsigned char **pp)
+int (i2d_DSAparams)(const DSA *a, unsigned char **pp)
 {
   return(i2d_DSAparams(a, pp));
 }
 
-int SAVEDS (i2d_OCSP_REQUEST)(OCSP_REQUEST *a, unsigned char **out)
+int (i2d_OCSP_REQUEST)(OCSP_REQUEST *a, unsigned char **out)
 {
   return(i2d_OCSP_REQUEST(a, out));
 }
 
-int SAVEDS (i2d_OCSP_RESPONSE)(OCSP_RESPONSE *a, unsigned char **out)
+int (i2d_OCSP_RESPONSE)(OCSP_RESPONSE *a, unsigned char **out)
 {
   return(i2d_OCSP_RESPONSE(a, out));
 }
 
-int SAVEDS (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
+int (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
 {
   return(i2d_SSL_SESSION(in, pp));
 }
 
-int SAVEDS (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
+int (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
 {
   return(i2d_ECPKParameters(a, out));
 }
 
-void SAVEDS (X509_CRL_free)(X509_CRL * a)
+void (X509_CRL_free)(X509_CRL * a)
 {
   X509_CRL_free(a);
 }
 
-void SAVEDS (AES_encrypt)(const unsigned char * in, unsigned char * out, const AES_KEY * key)
+void (AES_encrypt)(const unsigned char * in, unsigned char * out, const AES_KEY * key)
 {
   AES_encrypt(in, out, key);
 }
 
-void SAVEDS (GENERAL_NAMES_free)(GENERAL_NAMES * a)
+void (GENERAL_NAMES_free)(GENERAL_NAMES * a)
 {
   GENERAL_NAMES_free(a);
 }
