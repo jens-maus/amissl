@@ -1,59 +1,10 @@
 /*
- * Written by Zoltan Glozik (zglozik@stones.com) for the OpenSSL project
- * 2002.
- */
-/* ====================================================================
- * Copyright (c) 2006 The OpenSSL Project.  All rights reserved.
+ * Copyright 2006-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    licensing@OpenSSL.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdio.h>
@@ -396,36 +347,43 @@ static int int_ts_RESP_verify_token(TS_VERIFY_CTX *ctx,
     unsigned char *imprint = NULL;
     unsigned imprint_len = 0;
     int ret = 0;
+    int flags = ctx->flags;
 
-    if ((ctx->flags & TS_VFY_SIGNATURE)
+    /* Some options require us to also check the signature */
+    if (((flags & TS_VFY_SIGNER) && tsa_name != NULL)
+            || (flags & TS_VFY_TSA_NAME)) {
+        flags |= TS_VFY_SIGNATURE;
+    }
+
+    if ((flags & TS_VFY_SIGNATURE)
         && !TS_RESP_verify_signature(token, ctx->certs, ctx->store, &signer))
         goto err;
-    if ((ctx->flags & TS_VFY_VERSION)
+    if ((flags & TS_VFY_VERSION)
         && TS_TST_INFO_get_version(tst_info) != 1) {
         TSerr(TS_F_INT_TS_RESP_VERIFY_TOKEN, TS_R_UNSUPPORTED_VERSION);
         goto err;
     }
-    if ((ctx->flags & TS_VFY_POLICY)
+    if ((flags & TS_VFY_POLICY)
         && !ts_check_policy(ctx->policy, tst_info))
         goto err;
-    if ((ctx->flags & TS_VFY_IMPRINT)
+    if ((flags & TS_VFY_IMPRINT)
         && !ts_check_imprints(ctx->md_alg, ctx->imprint, ctx->imprint_len,
                               tst_info))
         goto err;
-    if ((ctx->flags & TS_VFY_DATA)
+    if ((flags & TS_VFY_DATA)
         && (!ts_compute_imprint(ctx->data, tst_info,
                                 &md_alg, &imprint, &imprint_len)
             || !ts_check_imprints(md_alg, imprint, imprint_len, tst_info)))
         goto err;
-    if ((ctx->flags & TS_VFY_NONCE)
+    if ((flags & TS_VFY_NONCE)
         && !ts_check_nonces(ctx->nonce, tst_info))
         goto err;
-    if ((ctx->flags & TS_VFY_SIGNER)
+    if ((flags & TS_VFY_SIGNER)
         && tsa_name && !ts_check_signer_name(tsa_name, signer)) {
         TSerr(TS_F_INT_TS_RESP_VERIFY_TOKEN, TS_R_TSA_NAME_MISMATCH);
         goto err;
     }
-    if ((ctx->flags & TS_VFY_TSA_NAME)
+    if ((flags & TS_VFY_TSA_NAME)
         && !ts_check_signer_name(ctx->tsa_name, signer)) {
         TSerr(TS_F_INT_TS_RESP_VERIFY_TOKEN, TS_R_TSA_UNTRUSTED);
         goto err;
@@ -505,7 +463,7 @@ static char *ts_get_status_text(STACK_OF(ASN1_UTF8STRING) *text)
         TSerr(TS_F_TS_GET_STATUS_TEXT, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
-    
+
     for (i = 0, p = result; i < sk_ASN1_UTF8STRING_num(text); ++i) {
         ASN1_UTF8STRING *current = sk_ASN1_UTF8STRING_value(text, i);
         length = ASN1_STRING_length(current);

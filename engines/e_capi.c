@@ -1,80 +1,35 @@
 /*
- * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
- * project.
- */
-/* ====================================================================
- * Copyright (c) 2008 The OpenSSL Project.  All rights reserved.
+ * Copyright 2008-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    licensing@OpenSSL.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#ifdef _WIN32
+# ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0400
+# endif
+# include <windows.h>
+# include <wincrypt.h>
 
-#include <openssl/crypto.h>
+# include <stdio.h>
+# include <string.h>
+# include <stdlib.h>
+# include <malloc.h>
+# ifndef alloca
+#  define alloca _alloca
+# endif
 
-#ifdef OPENSSL_SYS_WIN32
+# include <openssl/crypto.h>
+
 # ifndef OPENSSL_NO_CAPIENG
 
 #  include <openssl/buffer.h>
 #  include <openssl/bn.h>
 #  include <openssl/rsa.h>
 #  include <openssl/dsa.h>
-
-#  ifndef _WIN32_WINNT
-#   define _WIN32_WINNT 0x0400
-#  endif
-
-#  include <windows.h>
-#  include <wincrypt.h>
-#  include <malloc.h>
-#  ifndef alloca
-#   define alloca _alloca
-#  endif
 
 /*
  * This module uses several "new" interfaces, among which is
@@ -94,7 +49,7 @@
 #   define __COMPILE_CAPIENG
 #  endif                        /* CERT_KEY_PROV_INFO_PROP_ID */
 # endif                         /* OPENSSL_NO_CAPIENG */
-#endif                          /* OPENSSL_SYS_WIN32 */
+#endif                          /* _WIN32 */
 
 #ifdef __COMPILE_CAPIENG
 
@@ -176,9 +131,11 @@ static int capi_rsa_priv_dec(int flen, const unsigned char *from,
                              unsigned char *to, RSA *rsa, int padding);
 static int capi_rsa_free(RSA *rsa);
 
+# ifndef OPENSSL_NO_DSA
 static DSA_SIG *capi_dsa_do_sign(const unsigned char *digest, int dlen,
                                  DSA *dsa);
 static int capi_dsa_free(DSA *dsa);
+# endif
 
 static int capi_load_ssl_client_cert(ENGINE *e, SSL *ssl,
                                      STACK_OF(X509_NAME) *ca_dn, X509 **pcert,
@@ -337,6 +294,7 @@ static int capi_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) (void))
     int ret = 1;
     CAPI_CTX *ctx;
     BIO *out;
+    LPSTR tmpstr;
     if (capi_idx == -1) {
         CAPIerr(CAPI_F_CAPI_CTRL, CAPI_R_ENGINE_NOT_INITIALIZED);
         return 0;
@@ -365,9 +323,15 @@ static int capi_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) (void))
         break;
 
     case CAPI_CMD_STORE_NAME:
-        OPENSSL_free(ctx->storename);
-        ctx->storename = OPENSSL_strdup(p);
-        CAPI_trace(ctx, "Setting store name to %s\n", p);
+        tmpstr = OPENSSL_strdup(p);
+        if (tmpstr != NULL) {
+            OPENSSL_free(ctx->storename);
+            ctx->storename = tmpstr;
+            CAPI_trace(ctx, "Setting store name to %s\n", p);
+        } else {
+            CAPIerr(CAPI_F_CAPI_CTRL, ERR_R_MALLOC_FAILURE);
+            ret = 0;
+        }
         break;
 
     case CAPI_CMD_STORE_FLAGS:
@@ -387,8 +351,14 @@ static int capi_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) (void))
         break;
 
     case CAPI_CMD_DEBUG_FILE:
-        ctx->debug_file = OPENSSL_strdup(p);
-        CAPI_trace(ctx, "Setting debug file to %s\n", ctx->debug_file);
+        tmpstr = OPENSSL_strdup(p);
+        if (tmpstr != NULL) {
+            ctx->debug_file = tmpstr;
+            CAPI_trace(ctx, "Setting debug file to %s\n", ctx->debug_file);
+        } else {
+            CAPIerr(CAPI_F_CAPI_CTRL, ERR_R_MALLOC_FAILURE);
+            ret = 0;
+        }
         break;
 
     case CAPI_CMD_KEYTYPE:
@@ -432,7 +402,9 @@ static int capi_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f) (void))
 }
 
 static RSA_METHOD *capi_rsa_method = NULL;
+# ifndef OPENSSL_NO_DSA
 static DSA_METHOD *capi_dsa_method = NULL;
+# endif
 
 static int use_aes_csp = 0;
 
@@ -440,7 +412,9 @@ static int capi_init(ENGINE *e)
 {
     CAPI_CTX *ctx;
     const RSA_METHOD *ossl_rsa_meth;
+# ifndef OPENSSL_NO_DSA
     const DSA_METHOD *ossl_dsa_meth;
+# endif
     HCRYPTPROV hprov;
 
     if (capi_idx < 0) {
@@ -468,6 +442,7 @@ static int capi_init(ENGINE *e)
             goto memerr;
         }
 
+# ifndef OPENSSL_NO_DSA
         /* Setup DSA Method */
         dsa_capi_idx = DSA_get_ex_new_index(0, NULL, NULL, NULL, 0);
         ossl_dsa_meth = DSA_OpenSSL();
@@ -481,6 +456,7 @@ static int capi_init(ENGINE *e)
                                     DSA_meth_get_bn_mod_exp(ossl_dsa_meth))) {
             goto memerr;
         }
+# endif
     }
 
     ctx = capi_ctx_new();
@@ -526,8 +502,10 @@ static int capi_destroy(ENGINE *e)
 {
     RSA_meth_free(capi_rsa_method);
     capi_rsa_method = NULL;
+# ifndef OPENSSL_NO_DSA
     DSA_meth_free(capi_dsa_method);
     capi_dsa_method = NULL;
+# endif
     ERR_unload_CAPI_strings();
     return 1;
 }
@@ -560,9 +538,11 @@ static int bind_capi(ENGINE *e)
     capi_rsa_method = RSA_meth_new("CryptoAPI RSA method", 0);
     if (capi_rsa_method == NULL)
         return 0;
+# ifndef OPENSSL_NO_DSA
     capi_dsa_method = DSA_meth_new("CryptoAPI DSA method", 0);
     if (capi_dsa_method == NULL)
         goto memerr;
+# endif
     if (!ENGINE_set_id(e, engine_capi_id)
         || !ENGINE_set_name(e, engine_capi_name)
         || !ENGINE_set_flags(e, ENGINE_FLAGS_NO_REGISTER_ALL)
@@ -570,7 +550,9 @@ static int bind_capi(ENGINE *e)
         || !ENGINE_set_finish_function(e, capi_finish)
         || !ENGINE_set_destroy_function(e, capi_destroy)
         || !ENGINE_set_RSA(e, capi_rsa_method)
+# ifndef OPENSSL_NO_DSA
         || !ENGINE_set_DSA(e, capi_dsa_method)
+# endif
         || !ENGINE_set_load_privkey_function(e, capi_load_privkey)
         || !ENGINE_set_load_ssl_client_cert_function(e,
                                                      capi_load_ssl_client_cert)
@@ -583,8 +565,10 @@ static int bind_capi(ENGINE *e)
  memerr:
     RSA_meth_free(capi_rsa_method);
     capi_rsa_method = NULL;
+# ifndef OPENSSL_NO_DSA
     DSA_meth_free(capi_dsa_method);
     capi_dsa_method = NULL;
+# endif
     return 0;
 }
 
@@ -722,6 +706,7 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
         EVP_PKEY_assign_RSA(ret, rkey);
         rkey = NULL;
 
+# ifndef OPENSSL_NO_DSA
     } else if (bh->aiKeyAlg == CALG_DSS_SIGN) {
         DSSPUBKEY *dp;
         DWORD dsa_plen;
@@ -774,6 +759,7 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
 
         EVP_PKEY_assign_DSA(ret, dkey);
         dkey = NULL;
+# endif
     } else {
         char algstr[10];
         BIO_snprintf(algstr, 10, "%ux", bh->aiKeyAlg);
@@ -787,7 +773,9 @@ static EVP_PKEY *capi_get_pkey(ENGINE *eng, CAPI_KEY * key)
     OPENSSL_free(pubkey);
     if (!ret) {
         RSA_free(rkey);
+# ifndef OPENSSL_NO_DSA
         DSA_free(dkey);
+# endif
     }
 
     return ret;
@@ -990,6 +978,7 @@ static int capi_rsa_free(RSA *rsa)
     return 1;
 }
 
+# ifndef OPENSSL_NO_DSA
 /* CryptoAPI DSA operations */
 
 static DSA_SIG *capi_dsa_do_sign(const unsigned char *digest, int dlen,
@@ -1039,17 +1028,17 @@ static DSA_SIG *capi_dsa_do_sign(const unsigned char *digest, int dlen,
         capi_addlasterror();
         goto err;
     } else {
-        BIGNUM *r = NULL, *s = NULL;
-        ret = DSA_SIG_new();
-        if (ret == NULL)
-            goto err;
-        DSA_SIG_get0(&r, &s, ret);
-        if (!lend_tobn(r, csigbuf, 20)
-            || !lend_tobn(s, csigbuf + 20, 20)) {
-            DSA_SIG_free(ret);
-            ret = NULL;
+        BIGNUM *r = BN_new(), *s = BN_new();
+
+        if (r == NULL || s == NULL
+            || !lend_tobn(r, csigbuf, 20)
+            || !lend_tobn(s, csigbuf + 20, 20)
+            || (ret = DSA_SIG_new()) == NULL) {
+            BN_free(r); /* BN_free checks for BIGNUM * being NULL */
+            BN_free(s);
             goto err;
         }
+        DSA_SIG_set0(ret, r, s);
     }
 
     /* Now cleanup */
@@ -1068,6 +1057,7 @@ static int capi_dsa_free(DSA *dsa)
     DSA_set_ex_data(dsa, dsa_capi_idx, 0);
     return 1;
 }
+# endif
 
 static void capi_vtrace(CAPI_CTX * ctx, int level, char *format,
                         va_list argptr)
@@ -1647,6 +1637,8 @@ static void capi_ctx_free(CAPI_CTX * ctx)
 static int capi_ctx_set_provname(CAPI_CTX * ctx, LPSTR pname, DWORD type,
                                  int check)
 {
+    LPSTR tmpcspname;
+
     CAPI_trace(ctx, "capi_ctx_set_provname, name=%s, type=%d\n", pname, type);
     if (check) {
         HCRYPTPROV hprov;
@@ -1670,8 +1662,13 @@ static int capi_ctx_set_provname(CAPI_CTX * ctx, LPSTR pname, DWORD type,
         }
         CryptReleaseContext(hprov, 0);
     }
+    tmpcspname = OPENSSL_strdup(pname);
+    if (tmpcspname == NULL) {
+        CAPIerr(CAPI_F_CAPI_CTX_SET_PROVNAME, ERR_R_MALLOC_FAILURE);
+        return 0;
+    }
     OPENSSL_free(ctx->cspname);
-    ctx->cspname = OPENSSL_strdup(pname);
+    ctx->cspname = tmpcspname;
     ctx->csptype = type;
     return 1;
 }

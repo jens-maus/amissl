@@ -1,16 +1,15 @@
 /*
  * Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Licensed under the OpenSSL licenses, (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
- * or in the file LICENSE in the source distribution.
  */
-
 
 #include "dh_locl.h"
 #include <string.h>
+#include <openssl/err.h>
 
 DH_METHOD *DH_meth_new(const char *name, int flags)
 {
@@ -18,6 +17,11 @@ DH_METHOD *DH_meth_new(const char *name, int flags)
 
     if (dhm != NULL) {
         dhm->name = OPENSSL_strdup(name);
+        if (dhm->name == NULL) {
+            OPENSSL_free(dhm);
+            DHerr(DH_F_DH_METH_NEW, ERR_R_MALLOC_FAILURE);
+            return NULL;
+        }
         dhm->flags = flags;
     }
 
@@ -27,8 +31,7 @@ DH_METHOD *DH_meth_new(const char *name, int flags)
 void DH_meth_free(DH_METHOD *dhm)
 {
     if (dhm != NULL) {
-        if (dhm->name != NULL)
-            OPENSSL_free(dhm->name);
+        OPENSSL_free(dhm->name);
         OPENSSL_free(dhm);
     }
 }
@@ -42,6 +45,11 @@ DH_METHOD *DH_meth_dup(const DH_METHOD *dhm)
     if (ret != NULL) {
         memcpy(ret, dhm, sizeof(*dhm));
         ret->name = OPENSSL_strdup(dhm->name);
+        if (ret->name == NULL) {
+            OPENSSL_free(ret);
+            DHerr(DH_F_DH_METH_DUP, ERR_R_MALLOC_FAILURE);
+            return NULL;
+        }
     }
 
     return ret;
@@ -54,10 +62,18 @@ const char *DH_meth_get0_name(const DH_METHOD *dhm)
 
 int DH_meth_set1_name(DH_METHOD *dhm, const char *name)
 {
-    OPENSSL_free(dhm->name);
-    dhm->name = OPENSSL_strdup(name);
+    char *tmpname;
 
-    return dhm->name != NULL;
+    tmpname = OPENSSL_strdup(name);
+    if (tmpname == NULL) {
+        DHerr(DH_F_DH_METH_SET1_NAME, ERR_R_MALLOC_FAILURE);
+        return 0;
+    }
+
+    OPENSSL_free(dhm->name);
+    dhm->name = tmpname;
+
+    return 1;
 }
 
 int DH_meth_get_flags(DH_METHOD *dhm)

@@ -1,16 +1,15 @@
 /*
- * Copyright 2012, Samuel Neves <sneves@dei.uc.pt>.
  * Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Licensed under the OpenSSL licenses, (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
- * or in the file LICENSE in the source distribution.
  */
 
 /*
  * Derived from the BLAKE2 reference implementation written by Samuel Neves.
+ * Copyright 2012, Samuel Neves <sneves@dei.uc.pt>
  * More information about the BLAKE2 hash function and its implementations
  * can be found at https://blake2.net.
  */
@@ -229,8 +228,8 @@ int BLAKE2b_Update(BLAKE2B_CTX *c, const void *data, size_t datalen)
         if (datalen > BLAKE2B_BLOCKBYTES) {
             size_t stashlen = datalen % BLAKE2B_BLOCKBYTES;
             /*
-	     * If |datalen| is a multiple of the blocksize, stash
-	     * last complete block, it can be final one...
+             * If |datalen| is a multiple of the blocksize, stash
+             * last complete block, it can be final one...
              */
             stashlen = stashlen ? stashlen : BLAKE2B_BLOCKBYTES;
             datalen -= stashlen;

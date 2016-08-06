@@ -1,111 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
- */
-/* ====================================================================
- * Copyright (c) 1998-2002 The OpenSSL Project.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    openssl-core@openssl.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdio.h>
@@ -125,8 +24,7 @@
 #if     defined(OPENSSL_SMALL_FOOTPRINT) || \
         !(      defined(AES_ASM) &&     ( \
                 defined(__x86_64)       || defined(__x86_64__)  || \
-                defined(_M_AMD64)       || defined(_M_X64)      || \
-                defined(__INTEL__)      ) \
+                defined(_M_AMD64)       || defined(_M_X64)      ) \
         )
 # undef EVP_CIPH_FLAG_TLS1_1_MULTIBLOCK
 # define EVP_CIPH_FLAG_TLS1_1_MULTIBLOCK 0
@@ -162,14 +60,15 @@ void RECORD_LAYER_clear(RECORD_LAYER *rl)
     rl->wpend_buf = NULL;
 
     SSL3_BUFFER_clear(&rl->rbuf);
-    for(pipes = 0; pipes < rl->numwpipes; pipes++)
+    for (pipes = 0; pipes < rl->numwpipes; pipes++)
         SSL3_BUFFER_clear(&rl->wbuf[pipes]);
     rl->numwpipes = 0;
+    rl->numrpipes = 0;
     SSL3_RECORD_clear(rl->rrec, SSL_MAX_PIPELINES);
 
     RECORD_LAYER_reset_read_sequence(rl);
     RECORD_LAYER_reset_write_sequence(rl);
-    
+
     if (rl->d)
         DTLS_RECORD_LAYER_clear(rl);
 }
@@ -303,7 +202,7 @@ int ssl3_read_n(SSL *s, int n, int max, int extend, int clearold)
     left = rb->left;
 #if defined(SSL3_ALIGN_PAYLOAD) && SSL3_ALIGN_PAYLOAD!=0
     align = (size_t)rb->buf + SSL3_RT_HEADER_LENGTH;
-    align = (0-align) & (SSL3_ALIGN_PAYLOAD - 1);
+    align = SSL3_ALIGN_PAYLOAD - 1 - ((align - 1) % SSL3_ALIGN_PAYLOAD);
 #endif
 
     if (!extend) {
@@ -495,7 +394,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
     /*
      * Depending on platform multi-block can deliver several *times*
      * better performance. Downside is that it has to allocate
-     * jumbo buffer to accomodate up to 8 records, but the
+     * jumbo buffer to accommodate up to 8 records, but the
      * compromise is considered worthy.
      */
     if (type == SSL3_RT_APPLICATION_DATA &&
@@ -524,23 +423,21 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
             else
                 packlen *= 4;
 
-            wb->buf = OPENSSL_malloc(packlen);
-            if (wb->buf == NULL) {
+            if (!ssl3_setup_write_buffer(s, 1, packlen)) {
                 SSLerr(SSL_F_SSL3_WRITE_BYTES, ERR_R_MALLOC_FAILURE);
                 return -1;
             }
-            wb->len = packlen;
         } else if (tot == len) { /* done? */
-            OPENSSL_free(wb->buf); /* free jumbo buffer */
-            wb->buf = NULL;
+            /* free jumbo buffer */
+            ssl3_release_write_buffer(s);
             return tot;
         }
 
         n = (len - tot);
         for (;;) {
             if (n < 4 * max_send_fragment) {
-                OPENSSL_free(wb->buf); /* free jumbo buffer */
-                wb->buf = NULL;
+                /* free jumbo buffer */
+                ssl3_release_write_buffer(s);
                 break;
             }
 
@@ -572,8 +469,8 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
                                           sizeof(mb_param), &mb_param);
 
             if (packlen <= 0 || packlen > (int)wb->len) { /* never happens */
-                OPENSSL_free(wb->buf); /* free jumbo buffer */
-                wb->buf = NULL;
+                /* free jumbo buffer */
+                ssl3_release_write_buffer(s);
                 break;
             }
 
@@ -603,15 +500,15 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
             i = ssl3_write_pending(s, type, &buf[tot], nw);
             if (i <= 0) {
                 if (i < 0 && (!s->wbio || !BIO_should_retry(s->wbio))) {
-                    OPENSSL_free(wb->buf);
-                    wb->buf = NULL;
+                    /* free jumbo buffer */
+                    ssl3_release_write_buffer(s);
                 }
                 s->rlayer.wnum = tot;
                 return i;
             }
             if (i == (int)n) {
-                OPENSSL_free(wb->buf); /* free jumbo buffer */
-                wb->buf = NULL;
+                /* free jumbo buffer */
+                ssl3_release_write_buffer(s);
                 return tot + i;
             }
             n -= i;
@@ -631,7 +528,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
     split_send_fragment = s->split_send_fragment;
     /*
      * If max_pipelines is 0 then this means "undefined" and we default to
-     * 1 pipeline. Similaraly if the cipher does not support pipelined
+     * 1 pipeline. Similarly if the cipher does not support pipelined
      * processing then we also only use 1 pipeline, or if we're not using
      * explicit IVs
      */
@@ -751,7 +648,7 @@ int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
     }
 
     if (s->rlayer.numwpipes < numpipes)
-        if (!ssl3_setup_write_buffer(s, numpipes))
+        if (!ssl3_setup_write_buffer(s, numpipes, 0))
             return -1;
 
     if (totlen == 0 && !create_empty_fragment)
@@ -810,10 +707,10 @@ int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
         /*
          * extra fragment would be couple of cipher blocks, which would be
          * multiple of SSL3_ALIGN_PAYLOAD, so if we want to align the real
-         * payload, then we can just pretent we simply have two headers.
+         * payload, then we can just pretend we simply have two headers.
          */
         align = (size_t)SSL3_BUFFER_get_buf(wb) + 2 * SSL3_RT_HEADER_LENGTH;
-        align = (0-align) & (SSL3_ALIGN_PAYLOAD - 1);
+        align = SSL3_ALIGN_PAYLOAD - 1 - ((align - 1) % SSL3_ALIGN_PAYLOAD);
 #endif
         outbuf[0] = SSL3_BUFFER_get_buf(wb) + align;
         SSL3_BUFFER_set_offset(wb, align);
@@ -826,7 +723,7 @@ int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
             wb = &s->rlayer.wbuf[j];
 #if defined(SSL3_ALIGN_PAYLOAD) && SSL3_ALIGN_PAYLOAD!=0
             align = (size_t)SSL3_BUFFER_get_buf(wb) + SSL3_RT_HEADER_LENGTH;
-            align = (-align) & (SSL3_ALIGN_PAYLOAD - 1);
+            align = SSL3_ALIGN_PAYLOAD - 1 - ((align - 1) % SSL3_ALIGN_PAYLOAD);
 #endif
             outbuf[j] = SSL3_BUFFER_get_buf(wb) + align;
             SSL3_BUFFER_set_offset(wb, align);
@@ -862,7 +759,7 @@ int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 
         *(outbuf[j]++) = (s->version >> 8);
         /*
-         * Some servers hang if iniatial client hello is larger than 256 bytes
+         * Some servers hang if initial client hello is larger than 256 bytes
          * and record version number > TLS 1.0
          */
         if (SSL_get_state(s) == TLS_ST_CW_CLNT_HELLO
@@ -1158,9 +1055,9 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
                 goto f_err;
             }
         }
-        /* Skip over any records we have already used or are zero in length */
+        /* Skip over any records we have already read */
         for (curr_rec = 0;
-             curr_rec < num_recs && SSL3_RECORD_get_length(&rr[curr_rec]) == 0;
+             curr_rec < num_recs && SSL3_RECORD_is_read(&rr[curr_rec]);
              curr_rec++);
         if (curr_rec == num_recs) {
             RECORD_LAYER_set_numrpipes(&s->rlayer, 0);
@@ -1233,11 +1130,12 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
             memcpy(buf, &(rr->data[rr->off]), n);
             buf += n;
             if (!peek) {
-                SSL3_RECORD_add_length(rr, -n);
+                SSL3_RECORD_sub_length(rr, n);
                 SSL3_RECORD_add_off(rr, n);
                 if (SSL3_RECORD_get_length(rr) == 0) {
                     s->rlayer.rstate = SSL_ST_READ_HEADER;
                     SSL3_RECORD_set_off(rr, 0);
+                    SSL3_RECORD_set_read(rr);
                 }
             }
             if (SSL3_RECORD_get_length(rr) == 0
@@ -1248,6 +1146,10 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
             read_bytes += n;
         } while (type == SSL3_RT_APPLICATION_DATA && curr_rec < num_recs
                  && read_bytes < (unsigned int)len);
+        if (read_bytes == 0) {
+            /* We must have read empty records. Get more data */
+            goto start;
+        }
         if (!peek && curr_rec == num_recs
                 && (s->mode & SSL_MODE_RELEASE_BUFFERS)
                 && SSL3_BUFFER_get_left(rbuf) == 0)
@@ -1282,7 +1184,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
         goto f_err;
     }
 
-    if(s->method->version == TLS_ANY_VERSION
+    if (s->method->version == TLS_ANY_VERSION
             && (s->server || rr->type != SSL3_RT_ALERT)) {
         /*
          * If we've got this far and still haven't decided on what version
@@ -1328,8 +1230,10 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
                 SSL3_RECORD_add_length(rr, -1);
             }
 
-            if (*dest_len < dest_maxlen)
+            if (*dest_len < dest_maxlen) {
+                SSL3_RECORD_set_read(rr);
                 goto start;     /* fragment was too small */
+            }
         }
     }
 
@@ -1412,6 +1316,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
         (s->session != NULL) && (s->session->cipher != NULL) &&
         !(s->ctx->options & SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION)) {
         SSL3_RECORD_set_length(rr, 0);
+        SSL3_RECORD_set_read(rr);
         ssl3_send_alert(s, SSL3_AL_WARNING, SSL_AD_NO_RENEGOTIATION);
         goto start;
     }
@@ -1438,6 +1343,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
 
         if (alert_level == SSL3_AL_WARNING) {
             s->s3->warn_alert = alert_descr;
+            SSL3_RECORD_set_read(rr);
             if (alert_descr == SSL_AD_CLOSE_NOTIFY) {
                 s->shutdown |= SSL_RECEIVED_SHUTDOWN;
                 return (0);
@@ -1445,7 +1351,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
             /*
              * This is a warning but we receive it if we requested
              * renegotiation and the peer denied it. Terminate with a fatal
-             * alert because if application tried to renegotiatie it
+             * alert because if application tried to renegotiate it
              * presumably had a good reason and expects it to succeed. In
              * future we might have a renegotiation where we don't care if
              * the peer refused it where we carry on.
@@ -1468,7 +1374,8 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
             BIO_snprintf(tmp, sizeof tmp, "%d", alert_descr);
             ERR_add_error_data(2, "SSL alert number ", tmp);
             s->shutdown |= SSL_RECEIVED_SHUTDOWN;
-            SSL_CTX_remove_session(s->ctx, s->session);
+            SSL3_RECORD_set_read(rr);
+            SSL_CTX_remove_session(s->session_ctx, s->session);
             return (0);
         } else {
             al = SSL_AD_ILLEGAL_PARAMETER;
@@ -1483,6 +1390,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
                                             * shutdown */
         s->rwstate = SSL_NOTHING;
         SSL3_RECORD_set_length(rr, 0);
+        SSL3_RECORD_set_read(rr);
         return (0);
     }
 
@@ -1539,6 +1447,7 @@ int ssl3_read_bytes(SSL *s, int type, int *recvd_type, unsigned char *buf,
          */
         if (s->version >= TLS1_VERSION && s->version <= TLS1_1_VERSION) {
             SSL3_RECORD_set_length(rr, 0);
+            SSL3_RECORD_set_read(rr);
             goto start;
         }
         al = SSL_AD_UNEXPECTED_MESSAGE;

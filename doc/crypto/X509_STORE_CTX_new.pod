@@ -7,12 +7,11 @@ X509_STORE_CTX_init, X509_STORE_CTX_set0_trusted_stack, X509_STORE_CTX_set_cert,
 X509_STORE_CTX_set0_crls,
 X509_STORE_CTX_get0_chain, X509_STORE_CTX_set0_verified_chain,
 X509_STORE_CTX_get0_param, X509_STORE_CTX_set0_param,
-X509_STORE_CTX_get0_cert,
 X509_STORE_CTX_get0_untrusted, X509_STORE_CTX_set0_untrusted,
 X509_STORE_CTX_get_num_untrusted,
 X509_STORE_CTX_set_default,
-X509_STORE_CTX_get_verify_cb,
 X509_STORE_CTX_set_verify,
+X509_STORE_set_verify,
 X509_STORE_CTX_get_verify - X509_STORE_CTX initialisation
 
 =head1 SYNOPSIS
@@ -24,11 +23,11 @@ X509_STORE_CTX_get_verify - X509_STORE_CTX initialisation
  void X509_STORE_CTX_free(X509_STORE_CTX *ctx);
 
  int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store,
-			 X509 *x509, STACK_OF(X509) *chain);
+                         X509 *x509, STACK_OF(X509) *chain);
 
  void X509_STORE_CTX_set0_trusted_stack(X509_STORE_CTX *ctx, STACK_OF(X509) *sk);
 
- void X509_STORE_CTX_set_cert(X509_STORE_CTX *ctx,X509 *x);
+ void X509_STORE_CTX_set_cert(X509_STORE_CTX *ctx, X509 *x);
  STACK_OF(X509) *X509_STORE_CTX_get0_chain(X609_STORE_CTX *ctx);
  void X509_STORE_CTX_set0_verified_chain(X509_STORE_CTX *ctx, STACK_OF(X509) *chain);
  void X509_STORE_CTX_set0_crls(X509_STORE_CTX *ctx, STACK_OF(X509_CRL) *sk);
@@ -37,7 +36,6 @@ X509_STORE_CTX_get_verify - X509_STORE_CTX initialisation
  void X509_STORE_CTX_set0_param(X509_STORE_CTX *ctx, X509_VERIFY_PARAM *param);
  int X509_STORE_CTX_set_default(X509_STORE_CTX *ctx, const char *name);
 
- X509 *X509_STORE_CTX_get0_cert(X509_STORE_CTX *ctx);
  STACK_OF(X509)* X509_STORE_CTX_get0_untrusted(X509_STORE_CTX *ctx);
  void X509_STORE_CTX_set0_untrusted(X509_STORE_CTX *ctx, STACK_OF(X509) *sk);
 
@@ -47,6 +45,7 @@ X509_STORE_CTX_get_verify - X509_STORE_CTX initialisation
  X509_STORE_CTX_verify X509_STORE_CTX_get_verify(X509_STORE_CTX *ctx);
  void X509_STORE_CTX_set_verify(X509_STORE_CTX *ctx, X509_STORE_CTX_verify verify);
 
+ void X509_STORE_set_verify(X509_STORE *ctx, X509_STORE_CTX_verify verify);
 
 =head1 DESCRIPTION
 
@@ -96,14 +95,11 @@ for example in a PKCS#7 structure.
 X509_STORE_CTX_get0_param() retrieves an internal pointer
 to the verification parameters associated with B<ctx>.
 
-X509_STORE_CTX_get0_cert() retrieves an internal pointer to the
-certificate being verified by the B<ctx>.
-
 X509_STORE_CTX_get0_untrusted() retrieves an internal pointer to the
-stack of untrusted certifieds associated with B<ctx>.
+stack of untrusted certificates associated with B<ctx>.
 
 X509_STORE_CTX_set0_untrusted() sets the internal point to the stack
-of unstrusted certificates associated with B<ctx> to B<sk>.
+of untrusted certificates associated with B<ctx> to B<sk>.
 
 X509_STORE_CTX_set0_param() sets the internal verification parameter pointer
 to B<param>. After this call B<param> should not be used.
@@ -114,6 +110,23 @@ find an appropriate set of parameters from B<name>.
 
 X509_STORE_CTX_get_num_untrusted() returns the number of untrusted certificates
 that were used in building the chain following a call to X509_verify_cert().
+
+X509_STORE_CTX_set_verify() provides the capability for overriding the default
+verify function. This function is responsible for verifying chain signatures and
+expiration times. X509_STORE_CTX_get_verify() obtains the current verify
+function being used.
+
+X509_STORE_set_verify() works in the same way as for X509_STORE_CTX_set_verify()
+but sets the default verify function to be used by all X509_STORE_CTX objects
+created for this X509_STORE.
+
+A verify function is defined as an X509_STORE_CTX_verify type which has the
+following signature:
+
+ int (*verify)(X509_STORE_CTX *);
+
+This function should receive the current X509_STORE_CTX as a parameter and
+return 1 on success or 0 on failure.
 
 =head1 NOTES
 
@@ -147,6 +160,9 @@ X509_STORE_CTX_set_default() returns 1 for success or 0 if an error occurred.
 X509_STORE_CTX_get_num_untrusted() returns the number of untrusted certificates
 used.
 
+X509_STORE_CTX_get_verify() returns the current verify function in use for this
+X509_STORE_CTX.
+
 =head1 SEE ALSO
 
 L<X509_verify_cert(3)>
@@ -156,5 +172,17 @@ L<X509_VERIFY_PARAM_set_flags(3)>
 
 X509_STORE_CTX_set0_crls() was first added to OpenSSL 1.0.0
 X509_STORE_CTX_get_num_untrusted() was first added to OpenSSL 1.1.0
+X509_STORE_set_verify() was first added to OpenSSL 1.1.0. It was previously
+available as a macro X509_STORE_set_verify_func(). This macro still exists but
+simply calls this function.
+
+=head1 COPYRIGHT
+
+Copyright 2009-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+Licensed under the OpenSSL license (the "License").  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+L<https://www.openssl.org/source/license.html>.
 
 =cut

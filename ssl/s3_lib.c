@@ -1,112 +1,12 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
-/* ====================================================================
- * Copyright (c) 1998-2007 The OpenSSL Project.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    openssl-core@openssl.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
- */
+
 /* ====================================================================
  * Copyright 2002 Sun Microsystems, Inc. ALL RIGHTS RESERVED.
  *
@@ -208,7 +108,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -223,7 +123,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_NOT_DEFAULT | SSL_HIGH | SSL_FIPS,
+     SSL_NOT_DEFAULT | SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -238,7 +138,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -253,7 +153,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_NOT_DEFAULT | SSL_HIGH | SSL_FIPS,
+     SSL_NOT_DEFAULT | SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -960,7 +860,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1020,7 +920,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1080,7 +980,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_NOT_DEFAULT | SSL_HIGH | SSL_FIPS,
+     SSL_NOT_DEFAULT | SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1293,7 +1193,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1338,7 +1238,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1383,7 +1283,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1699,7 +1599,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH | SSL_FIPS,
+     SSL_MEDIUM | SSL_FIPS,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1823,7 +1723,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH,
+     SSL_MEDIUM,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1838,7 +1738,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_HIGH,
+     SSL_MEDIUM,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -1853,7 +1753,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_SHA1,
      SSL3_VERSION, TLS1_2_VERSION,
      DTLS1_VERSION, DTLS1_2_VERSION,
-     SSL_NOT_DEFAULT | SSL_HIGH,
+     SSL_NOT_DEFAULT | SSL_MEDIUM,
      SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF,
      112,
      168,
@@ -2506,7 +2406,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_eGOST2814789CNT,
      SSL_GOST89MAC,
      TLS1_VERSION, TLS1_2_VERSION,
-     DTLS1_VERSION, DTLS1_2_VERSION,
+     0, 0,
      SSL_HIGH,
      SSL_HANDSHAKE_MAC_GOST94 | TLS1_PRF_GOST94 | TLS1_STREAM_MAC,
      256,
@@ -2521,7 +2421,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_eNULL,
      SSL_GOST94,
      TLS1_VERSION, TLS1_2_VERSION,
-     DTLS1_VERSION, DTLS1_2_VERSION,
+     0, 0,
      SSL_STRONG_NONE,
      SSL_HANDSHAKE_MAC_GOST94 | TLS1_PRF_GOST94,
      0,
@@ -2536,7 +2436,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_eGOST2814789CNT12,
      SSL_GOST89MAC12,
      TLS1_VERSION, TLS1_2_VERSION,
-     DTLS1_VERSION, DTLS1_2_VERSION,
+     0, 0,
      SSL_HIGH,
      SSL_HANDSHAKE_MAC_GOST12_256 | TLS1_PRF_GOST12_256 | TLS1_STREAM_MAC,
      256,
@@ -2551,7 +2451,7 @@ static SSL_CIPHER ssl3_ciphers[] =
      SSL_eNULL,
      SSL_GOST12_256,
      TLS1_VERSION, TLS1_2_VERSION,
-     DTLS1_VERSION, DTLS1_2_VERSION,
+     0, 0,
      SSL_STRONG_NONE,
      SSL_HANDSHAKE_MAC_GOST12_256 | TLS1_PRF_GOST12_256 | TLS1_STREAM_MAC,
      0,
@@ -3071,6 +2971,10 @@ long ssl3_ctrl(SSL *s, int cmd, long larg, void *parg)
         ret = 1;
         break;
 
+    case SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE:
+        ret = s->tlsext_status_type;
+        break;
+
     case SSL_CTRL_SET_TLSEXT_STATUS_REQ_TYPE:
         s->tlsext_status_type = larg;
         ret = 1;
@@ -3395,23 +3299,42 @@ long ssl3_ctx_ctrl(SSL_CTX *ctx, int cmd, long larg, void *parg)
     case SSL_CTRL_GET_TLSEXT_TICKET_KEYS:
         {
             unsigned char *keys = parg;
-            if (!keys)
-                return 48;
-            if (larg != 48) {
+            long tlsext_tick_keylen = (sizeof(ctx->tlsext_tick_key_name) +
+                sizeof(ctx->tlsext_tick_hmac_key) + sizeof(ctx->tlsext_tick_aes_key));
+            if (keys == NULL)
+                return tlsext_tick_keylen;
+            if (larg != tlsext_tick_keylen) {
                 SSLerr(SSL_F_SSL3_CTX_CTRL, SSL_R_INVALID_TICKET_KEYS_LENGTH);
                 return 0;
             }
             if (cmd == SSL_CTRL_SET_TLSEXT_TICKET_KEYS) {
-                memcpy(ctx->tlsext_tick_key_name, keys, 16);
-                memcpy(ctx->tlsext_tick_hmac_key, keys + 16, 16);
-                memcpy(ctx->tlsext_tick_aes_key, keys + 32, 16);
+                memcpy(ctx->tlsext_tick_key_name, keys,
+                       sizeof(ctx->tlsext_tick_key_name));
+                memcpy(ctx->tlsext_tick_hmac_key,
+                       keys + sizeof(ctx->tlsext_tick_key_name),
+                       sizeof(ctx->tlsext_tick_hmac_key));
+                memcpy(ctx->tlsext_tick_aes_key,
+                       keys + sizeof(ctx->tlsext_tick_key_name) + sizeof(ctx->tlsext_tick_hmac_key),
+                       sizeof(ctx->tlsext_tick_aes_key));
             } else {
-                memcpy(keys, ctx->tlsext_tick_key_name, 16);
-                memcpy(keys + 16, ctx->tlsext_tick_hmac_key, 16);
-                memcpy(keys + 32, ctx->tlsext_tick_aes_key, 16);
+                memcpy(keys, ctx->tlsext_tick_key_name,
+                       sizeof(ctx->tlsext_tick_key_name));
+                memcpy(keys + sizeof(ctx->tlsext_tick_key_name),
+                       ctx->tlsext_tick_hmac_key,
+                       sizeof(ctx->tlsext_tick_hmac_key));
+                memcpy(keys + sizeof(ctx->tlsext_tick_key_name) + sizeof(ctx->tlsext_tick_hmac_key),
+                       ctx->tlsext_tick_aes_key,
+                       sizeof(ctx->tlsext_tick_aes_key));
             }
             return 1;
         }
+
+    case SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE:
+        return ctx->tlsext_status_type;
+
+    case SSL_CTRL_SET_TLSEXT_STATUS_REQ_TYPE:
+        ctx->tlsext_status_type = larg;
+        break;
 
     case SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB_ARG:
         ctx->tlsext_status_arg = parg;
@@ -3487,10 +3410,15 @@ long ssl3_ctx_ctrl(SSL_CTX *ctx, int cmd, long larg, void *parg)
         /* A Thawte special :-) */
     case SSL_CTRL_EXTRA_CHAIN_CERT:
         if (ctx->extra_certs == NULL) {
-            if ((ctx->extra_certs = sk_X509_new_null()) == NULL)
-                return (0);
+            if ((ctx->extra_certs = sk_X509_new_null()) == NULL) {
+                SSLerr(SSL_F_SSL3_CTX_CTRL, ERR_R_MALLOC_FAILURE);
+                return 0;
+            }
         }
-        sk_X509_push(ctx->extra_certs, (X509 *)parg);
+        if (!sk_X509_push(ctx->extra_certs, (X509 *)parg)) {
+            SSLerr(SSL_F_SSL3_CTX_CTRL, ERR_R_MALLOC_FAILURE);
+            return 0;
+        }
         break;
 
     case SSL_CTRL_GET_EXTRA_CHAIN_CERTS:
@@ -3839,7 +3767,7 @@ int ssl3_shutdown(SSL *s)
         if (ret == -1) {
             /*
              * we only get to return -1 here the 2nd/Nth invocation, we must
-             * have already signalled return 0 upon a previous invoation,
+             * have already signalled return 0 upon a previous invocation,
              * return WANT_WRITE
              */
             return (ret);
@@ -3954,7 +3882,10 @@ int ssl3_renegotiate_check(SSL *s)
  */
 long ssl_get_algorithm2(SSL *s)
 {
-    long alg2 = s->s3->tmp.new_cipher->algorithm2;
+    long alg2;
+    if (s->s3 == NULL || s->s3->tmp.new_cipher == NULL)
+        return -1;
+    alg2 = s->s3->tmp.new_cipher->algorithm2;
     if (s->method->ssl3_enc->enc_flags & SSL_ENC_FLAG_SHA256_PRF) {
         if (alg2 == (SSL_HANDSHAKE_MAC_DEFAULT | TLS1_PRF))
             return SSL_HANDSHAKE_MAC_SHA256 | TLS1_PRF_SHA256;
@@ -3991,9 +3922,9 @@ int ssl_fill_hello_random(SSL *s, int server, unsigned char *result, int len)
 int ssl_generate_master_secret(SSL *s, unsigned char *pms, size_t pmslen,
                                int free_pms)
 {
-#ifndef OPENSSL_NO_PSK
     unsigned long alg_k = s->s3->tmp.new_cipher->algorithm_mkey;
     if (alg_k & SSL_PSK) {
+#ifndef OPENSSL_NO_PSK
         unsigned char *pskpms, *t;
         size_t psklen = s->s3->tmp.psklen;
         size_t pskpmslen;
@@ -4027,15 +3958,19 @@ int ssl_generate_master_secret(SSL *s, unsigned char *pms, size_t pmslen,
                                                         s->session->master_key,
                                                         pskpms, pskpmslen);
         OPENSSL_clear_free(pskpms, pskpmslen);
-    } else
+#else
+        /* Should never happen */
+        s->session->master_key_length = 0;
+        goto err;
 #endif
+    } else {
         s->session->master_key_length =
             s->method->ssl3_enc->generate_master_secret(s,
                                                         s->session->master_key,
                                                         pms, pmslen);
-#ifndef OPENSSL_NO_PSK
-    err:
-#endif
+    }
+
+ err:
     if (pms) {
         if (free_pms)
             OPENSSL_clear_free(pms, pmslen);

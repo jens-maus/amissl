@@ -10,9 +10,11 @@ DH_set_length - Routines for getting and setting data in a DH object
 
  #include <openssl/dh.h>
 
- void DH_get0_pqg(const DH *dh, BIGNUM **p, BIGNUM **q, BIGNUM **g);
+ void DH_get0_pqg(const DH *dh,
+                  const BIGNUM **p, const BIGNUM **q, const BIGNUM **g);
  int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g);
- void DH_get0_key(const DH *dh, BIGNUM **pub_key, BIGNUM **priv_key);
+ void DH_get0_key(const DH *dh,
+                  const BIGNUM **pub_key, const BIGNUM **priv_key);
  int DH_set0_key(DH *dh, BIGNUM *pub_key, BIGNUM *priv_key);
  void DH_clear_flags(DH *dh, int flags);
  int DH_test_flags(const DH *dh, int flags);
@@ -47,7 +49,9 @@ be. The values point to the internal representation of the public key and
 private key values. This memory should not be freed directly.
 
 The public and private key values can be set using DH_set0_key(). The public
-key must always be non-NULL. The private key may be NULL. As for DH_set0_pqg()
+key must be non-NULL the first time this function is called on a given DH
+object. The private key may be NULL.  On subsequent calls, either may be NULL,
+which means the corresponding DH field is left untouched. As for DH_set0_pqg()
 this function transfers the memory management of the key values to the DH
 object, and therefore they should not be freed directly after this function has
 been called.
@@ -67,6 +71,13 @@ The DH_get_length() and DH_set_length() functions get and set the optional
 length parameter associated with this DH object. If the length is non-zero then
 it is used, otherwise it is ignored. The B<length> parameter indicates the
 length of the secret exponent (private key) in bits.
+
+=head1 NOTES
+
+Values retrieved with DH_get0_key() are owned by the DH object used
+in the call and may therefore I<not> be passed to DH_set0_key().  If
+needed, duplicate the received value using BN_dup() and pass the
+duplicate.  The same applies to DH_get0_pqg() and DH_set0_pqg().
 
 =head1 RETURN VALUES
 
@@ -88,5 +99,14 @@ L<DH_set_method(3)>, L<DH_size(3)>, L<DH_meth_new(3)>
 =head1 HISTORY
 
 The functions described here were added in OpenSSL version 1.1.0.
+
+=head1 COPYRIGHT
+
+Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
+
+Licensed under the OpenSSL license (the "License").  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+L<https://www.openssl.org/source/license.html>.
 
 =cut

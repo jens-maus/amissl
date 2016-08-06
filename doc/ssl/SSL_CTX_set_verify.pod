@@ -12,7 +12,7 @@ SSL_CTX_set_verify, SSL_set_verify, SSL_CTX_set_verify_depth, SSL_set_verify_dep
                          int (*verify_callback)(int, X509_STORE_CTX *));
  void SSL_set_verify(SSL *s, int mode,
                      int (*verify_callback)(int, X509_STORE_CTX *));
- void SSL_CTX_set_verify_depth(SSL_CTX *ctx,int depth);
+ void SSL_CTX_set_verify_depth(SSL_CTX *ctx, int depth);
  void SSL_set_verify_depth(SSL *s, int depth);
 
  int verify_callback(int preverify_ok, X509_STORE_CTX *x509_ctx);
@@ -208,7 +208,7 @@ L<SSL_get_ex_data_X509_STORE_CTX_idx(3)>).
         preverify_ok = 0;
         err = X509_V_ERR_CERT_CHAIN_TOO_LONG;
         X509_STORE_CTX_set_error(ctx, err);
-    } 
+    }
     if (!preverify_ok) {
         printf("verify error:num=%d:%s:depth=%d:%s\n", err,
                  X509_verify_cert_error_string(err), depth, buf);
@@ -256,9 +256,9 @@ L<SSL_get_ex_data_X509_STORE_CTX_idx(3)>).
   */
  mydata.verify_depth = verify_depth; ...
  SSL_set_ex_data(ssl, mydata_index, &mydata);
-					     
+
  ...
- SSL_accept(ssl);	/* check of success left out for clarity */
+ SSL_accept(ssl);       /* check of success left out for clarity */
  if (peer = SSL_get_peer_certificate(ssl))
  {
    if (SSL_get_verify_result(ssl) == X509_V_OK)
@@ -277,5 +277,14 @@ L<SSL_get_peer_certificate(3)>,
 L<SSL_CTX_set_cert_verify_callback(3)>,
 L<SSL_get_ex_data_X509_STORE_CTX_idx(3)>,
 L<SSL_get_ex_new_index(3)>
+
+=head1 COPYRIGHT
+
+Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+Licensed under the OpenSSL license (the "License").  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+L<https://www.openssl.org/source/license.html>.
 
 =cut

@@ -187,10 +187,7 @@
 -T CRYPTO_EX_DATA_FUNCS
 -T CRYPTO_EX_DATA_IMPL
 -T CRYPTO_EX_dup
--T CRYPTO_EX_dup
 -T CRYPTO_EX_free
--T CRYPTO_EX_free
--T CRYPTO_EX_new
 -T CRYPTO_EX_new
 -T CRYPTO_MEM_LEAK_CB
 -T CRYPTO_THREADID
@@ -574,6 +571,7 @@
 -T asn1_ps_func
 -T bio_dgram_data
 -T bio_info_cb
+-T BIO_callack_fn
 -T char_io
 -T conf_finish_func
 -T conf_init_func

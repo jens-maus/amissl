@@ -1,11 +1,10 @@
 /*
  * Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Licensed under the OpenSSL licenses, (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
- * or in the file LICENSE in the source distribution.
  */
 
 /*
@@ -14,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "e_os.h"
 #include "ssl_test_ctx.h"
@@ -37,29 +37,102 @@ static int SSL_TEST_CTX_equal(SSL_TEST_CTX *ctx, SSL_TEST_CTX *ctx2)
 {
     if (ctx->expected_result != ctx2->expected_result) {
         fprintf(stderr, "ExpectedResult mismatch: %s vs %s.\n",
-                ssl_test_result_t_name(ctx->expected_result),
-                ssl_test_result_t_name(ctx2->expected_result));
+                ssl_test_result_name(ctx->expected_result),
+                ssl_test_result_name(ctx2->expected_result));
         return 0;
     }
     if (ctx->client_alert != ctx2->client_alert) {
         fprintf(stderr, "ClientAlert mismatch: %s vs %s.\n",
-                ssl_alert_name(ctx->expected_result),
-                ssl_alert_name(ctx2->expected_result));
+                ssl_alert_name(ctx->client_alert),
+                ssl_alert_name(ctx2->client_alert));
         return 0;
     }
     if (ctx->server_alert != ctx2->server_alert) {
         fprintf(stderr, "ServerAlert mismatch: %s vs %s.\n",
-                ssl_alert_name(ctx->expected_result),
-                ssl_alert_name(ctx2->expected_result));
+                ssl_alert_name(ctx->server_alert),
+                ssl_alert_name(ctx2->server_alert));
         return 0;
     }
     if (ctx->protocol != ctx2->protocol) {
         fprintf(stderr, "ClientAlert mismatch: %s vs %s.\n",
-                ssl_protocol_name(ctx->expected_result),
-                ssl_protocol_name(ctx2->expected_result));
+                ssl_protocol_name(ctx->protocol),
+                ssl_protocol_name(ctx2->protocol));
         return 0;
     }
+    if (ctx->client_verify_callback != ctx2->client_verify_callback) {
+        fprintf(stderr, "ClientVerifyCallback mismatch: %s vs %s.\n",
+                ssl_verify_callback_name(ctx->client_verify_callback),
+                ssl_verify_callback_name(ctx2->client_verify_callback));
+        return 0;
+    }
+    if (ctx->servername != ctx2->servername) {
+        fprintf(stderr, "ServerName mismatch: %s vs %s.\n",
+                ssl_servername_name(ctx->servername),
+                ssl_servername_name(ctx2->servername));
+        return 0;
+    }
+    if (ctx->expected_servername != ctx2->expected_servername) {
+        fprintf(stderr, "ExpectedServerName mismatch: %s vs %s.\n",
+                ssl_servername_name(ctx->expected_servername),
+                ssl_servername_name(ctx2->expected_servername));
+        return 0;
+    }
+    if (ctx->servername_callback != ctx2->servername_callback) {
+        fprintf(stderr, "ServerNameCallback mismatch: %s vs %s.\n",
+                ssl_servername_callback_name(ctx->servername_callback),
+                ssl_servername_callback_name(ctx2->servername_callback));
+        return 0;
+    }
+    if (ctx->session_ticket_expected != ctx2->session_ticket_expected) {
+        fprintf(stderr, "SessionTicketExpected mismatch: %s vs %s.\n",
+                ssl_session_ticket_name(ctx->session_ticket_expected),
+                ssl_session_ticket_name(ctx2->session_ticket_expected));
+        return 0;
+    }
+#ifndef OPENSSL_NO_NEXTPROTONEG
+    if (!strings_equal("ClientNPNProtocols", ctx->client_npn_protocols,
+                       ctx2->client_npn_protocols))
+        return 0;
+    if (ctx->method != ctx2->method) {
+        fprintf(stderr, "Method mismatch: %s vs %s.\n",
+                ssl_test_method_name(ctx->method),
+                ssl_test_method_name(ctx2->method));
+        return 0;
+    }
+    if (!strings_equal("ServerNPNProtocols", ctx->server_npn_protocols,
+                       ctx2->server_npn_protocols))
+        return 0;
+    if (!strings_equal("Server2NPNProtocols", ctx->server_npn_protocols,
+                       ctx2->server_npn_protocols))
+        return 0;
+    if (!strings_equal("ExpectedNPNProtocol", ctx->expected_npn_protocol,
+                       ctx2->expected_npn_protocol))
+        return 0;
+    if (!strings_equal("ClientALPNProtocols", ctx->client_alpn_protocols,
+                       ctx2->client_alpn_protocols))
+        return 0;
 
+    if (!strings_equal("ServerALPNProtocols", ctx->server_alpn_protocols,
+                       ctx2->server_alpn_protocols))
+        return 0;
+    if (!strings_equal("Server2ALPNProtocols", ctx->server_alpn_protocols,
+                       ctx2->server_alpn_protocols))
+        return 0;
+    if (!strings_equal("ExpectedALPNProtocol", ctx->expected_alpn_protocol,
+                       ctx2->expected_alpn_protocol))
+        return 0;
+#endif
+    if (ctx->handshake_mode != ctx2->handshake_mode) {
+        fprintf(stderr, "HandshakeMode mismatch: %s vs %s.\n",
+                ssl_handshake_mode_name(ctx->handshake_mode),
+                ssl_handshake_mode_name(ctx2->handshake_mode));
+        return 0;
+    }
+    if (ctx->resumption_expected != ctx2->resumption_expected) {
+        fprintf(stderr, "ResumptionExpected mismatch: %d vs %d.\n",
+                ctx->resumption_expected, ctx2->resumption_expected);
+        return 0;
+    }
     return 1;
 }
 
@@ -136,6 +209,21 @@ static int test_good_configuration()
     fixture.expected_ctx->client_alert = SSL_AD_UNKNOWN_CA;
     fixture.expected_ctx->server_alert = 0;  /* No alert. */
     fixture.expected_ctx->protocol = TLS1_1_VERSION;
+    fixture.expected_ctx->client_verify_callback = SSL_TEST_VERIFY_REJECT_ALL;
+    fixture.expected_ctx->servername = SSL_TEST_SERVERNAME_SERVER2;
+    fixture.expected_ctx->expected_servername = SSL_TEST_SERVERNAME_SERVER2;
+    fixture.expected_ctx->servername_callback =
+        SSL_TEST_SERVERNAME_IGNORE_MISMATCH;
+    fixture.expected_ctx->session_ticket_expected = SSL_TEST_SESSION_TICKET_YES;
+    fixture.expected_ctx->method = SSL_TEST_METHOD_DTLS;
+#ifndef OPENSSL_NO_NEXTPROTONEG
+    fixture.expected_ctx->client_npn_protocols = OPENSSL_strdup("foo,bar");
+    fixture.expected_ctx->server2_alpn_protocols = OPENSSL_strdup("baz");
+    OPENSSL_assert(fixture.expected_ctx->client_npn_protocols != NULL);
+    OPENSSL_assert(fixture.expected_ctx->server2_alpn_protocols != NULL);
+#endif
+    fixture.expected_ctx->handshake_mode = SSL_TEST_HANDSHAKE_RESUME;
+    fixture.expected_ctx->resumption_expected = 1;
     EXECUTE_SSL_TEST_CTX_TEST();
 }
 
@@ -144,6 +232,13 @@ static const char *bad_configurations[] = {
     "ssltest_unknown_expected_result",
     "ssltest_unknown_alert",
     "ssltest_unknown_protocol",
+    "ssltest_unknown_verify_callback",
+    "ssltest_unknown_servername",
+    "ssltest_unknown_servername_callback",
+    "ssltest_unknown_session_ticket_expected",
+    "ssltest_unknown_method",
+    "ssltest_unknown_handshake_mode",
+    "ssltest_unknown_resumption_expected",
 };
 
 static int test_bad_configuration(int idx)

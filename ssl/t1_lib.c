@@ -1,111 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
- */
-/* ====================================================================
- * Copyright (c) 1998-2007 The OpenSSL Project.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    openssl-core@openssl.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdio.h>
@@ -114,7 +13,8 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 #include <openssl/ocsp.h>
-#include <openssl/rand.h>
+#include <openssl/conf.h>
+#include <openssl/x509v3.h>
 #include <openssl/dh.h>
 #include <openssl/bn.h>
 #include "ssl_locl.h"
@@ -767,7 +667,7 @@ static int tls1_check_cert_param(SSL *s, X509 *x, int set_ee_md)
 
 # ifndef OPENSSL_NO_EC
 /*
- * tls1_check_ec_tmp_key - Check EC temporary key compatiblity
+ * tls1_check_ec_tmp_key - Check EC temporary key compatibility
  * @s: SSL connection
  * @cid: Cipher ID we're considering using
  *
@@ -1179,7 +1079,7 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
 
         /*-
          * check for enough space.
-         * 4 for the servername type and entension length
+         * 4 for the servername type and extension length
          * 2 for servernamelist length
          * 1 for the hostname type
          * 2 for hostname length
@@ -1217,7 +1117,7 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
 
         /*-
          * check for enough space.
-         * 4 for the srp type type and entension length
+         * 4 for the srp type type and extension length
          * 1 for the srp user identity
          * + srp user identity length
          */
@@ -1329,7 +1229,7 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
     }
  skip_ext:
 
-    if (SSL_USE_SIGALGS(s)) {
+    if (SSL_CLIENT_USE_SIGALGS(s)) {
         size_t salglen;
         const unsigned char *salg;
         unsigned char *etmp;
@@ -1414,7 +1314,7 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
 #ifndef OPENSSL_NO_NEXTPROTONEG
     if (s->ctx->next_proto_select_cb && !s->s3->tmp.finish_md_len) {
         /*
-         * The client advertises an emtpy extension to indicate its support
+         * The client advertises an empty extension to indicate its support
          * for Next Protocol Negotiation
          */
         if (limit - ret - 4 < 0)
@@ -1466,10 +1366,8 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
     /* Add custom TLS Extensions to ClientHello */
     if (!custom_ext_add(s, 0, &ret, limit, al))
         return NULL;
-#ifdef TLSEXT_TYPE_encrypt_then_mac
     s2n(TLSEXT_TYPE_encrypt_then_mac, ret);
     s2n(0, ret);
-#endif
 #ifndef OPENSSL_NO_CT
     if (s->ct_validation_callback != NULL) {
         s2n(TLSEXT_TYPE_signed_certificate_timestamp, ret);
@@ -1603,6 +1501,9 @@ unsigned char *ssl_add_serverhello_tlsext(SSL *s, unsigned char *buf,
             return NULL;
         s2n(TLSEXT_TYPE_session_ticket, ret);
         s2n(0, ret);
+    } else {
+        /* if we don't add the above TLSEXT, we can't add a session ticket later */
+        s->tlsext_ticket_expected = 0;
     }
 
     if (s->tlsext_status_expected) {
@@ -1696,7 +1597,6 @@ unsigned char *ssl_add_serverhello_tlsext(SSL *s, unsigned char *buf,
 #endif
     if (!custom_ext_add(s, 1, &ret, limit, al))
         return NULL;
-#ifdef TLSEXT_TYPE_encrypt_then_mac
     if (s->s3->flags & TLS1_FLAGS_ENCRYPT_THEN_MAC) {
         /*
          * Don't use encrypt_then_mac if AEAD or RC4 might want to disable
@@ -1712,7 +1612,6 @@ unsigned char *ssl_add_serverhello_tlsext(SSL *s, unsigned char *buf,
             s2n(0, ret);
         }
     }
-#endif
     if (s->s3->flags & TLS1_FLAGS_RECEIVED_EXTMS) {
         s2n(TLSEXT_TYPE_extended_master_secret, ret);
         s2n(0, ret);
@@ -1779,11 +1678,10 @@ static int tls1_alpn_handle_client_hello(SSL *s, PACKET *pkt, int *al)
 
 /*
  * Process the ALPN extension in a ClientHello.
- * ret: a pointer to the TLSEXT return value: SSL_TLSEXT_ERR_*
  * al: a pointer to the alert value to send in the event of a failure.
- * returns 1 on success, 0
+ * returns 1 on success, 0 on error.
  */
-static int tls1_alpn_handle_client_hello_late(SSL *s, int *ret, int *al)
+static int tls1_alpn_handle_client_hello_late(SSL *s, int *al)
 {
     const unsigned char *selected = NULL;
     unsigned char selected_len = 0;
@@ -1799,7 +1697,6 @@ static int tls1_alpn_handle_client_hello_late(SSL *s, int *ret, int *al)
             s->s3->alpn_selected = OPENSSL_memdup(selected, selected_len);
             if (s->s3->alpn_selected == NULL) {
                 *al = SSL_AD_INTERNAL_ERROR;
-                *ret = SSL_TLSEXT_ERR_ALERT_FATAL;
                 return 0;
             }
             s->s3->alpn_selected_len = selected_len;
@@ -1809,7 +1706,6 @@ static int tls1_alpn_handle_client_hello_late(SSL *s, int *ret, int *al)
 #endif
         } else {
             *al = SSL_AD_NO_APPLICATION_PROTOCOL;
-            *ret = SSL_TLSEXT_ERR_ALERT_FATAL;
             return 0;
         }
     }
@@ -1925,9 +1821,7 @@ static int ssl_scan_clienthello_tlsext(SSL *s, PACKET *pkt, int *al)
     /* Clear any signature algorithms extension received */
     OPENSSL_free(s->s3->tmp.peer_sigalgs);
     s->s3->tmp.peer_sigalgs = NULL;
-#ifdef TLSEXT_TYPE_encrypt_then_mac
     s->s3->flags &= ~TLS1_FLAGS_ENCRYPT_THEN_MAC;
-#endif
 
 #ifndef OPENSSL_NO_SRP
     OPENSSL_free(s->srp_ctx.login);
@@ -2004,7 +1898,7 @@ static int ssl_scan_clienthello_tlsext(SSL *s, PACKET *pkt, int *al)
             /*
              * Although the server_name extension was intended to be
              * extensible to new name types, RFC 4366 defined the
-             * syntax inextensibly and OpenSSL 1.0.x parses it as
+             * syntax inextensibility and OpenSSL 1.0.x parses it as
              * such.
              * RFC 6066 corrected the mistake but adding new name types
              * is nevertheless no longer feasible, so act as if no other
@@ -2235,7 +2129,7 @@ static int ssl_scan_clienthello_tlsext(SSL *s, PACKET *pkt, int *al)
              *
              * s->new_session will be set on renegotiation, but we
              * probably shouldn't rely that it couldn't be set on
-             * the initial renegotation too in certain cases (when
+             * the initial renegotiation too in certain cases (when
              * there's some other reason to disallow resuming an
              * earlier session -- the current code won't be doing
              * anything like that, but this might change).
@@ -2264,10 +2158,8 @@ static int ssl_scan_clienthello_tlsext(SSL *s, PACKET *pkt, int *al)
                 return 0;
         }
 #endif
-#ifdef TLSEXT_TYPE_encrypt_then_mac
         else if (type == TLSEXT_TYPE_encrypt_then_mac)
             s->s3->flags |= TLS1_FLAGS_ENCRYPT_THEN_MAC;
-#endif
         /*
          * Note: extended master secret extension handled in
          * tls_check_serverhello_tlsext_early()
@@ -2337,11 +2229,11 @@ int ssl_parse_clienthello_tlsext(SSL *s, PACKET *pkt)
  */
 static char ssl_next_proto_validate(PACKET *pkt)
 {
-    unsigned int len;
+    PACKET tmp_protocol;
 
     while (PACKET_remaining(pkt)) {
-        if (!PACKET_get_1(pkt, &len)
-                || !PACKET_forward(pkt, len))
+        if (!PACKET_get_length_prefixed_1(pkt, &tmp_protocol)
+                || PACKET_remaining(&tmp_protocol) == 0)
             return 0;
     }
 
@@ -2367,9 +2259,7 @@ static int ssl_scan_serverhello_tlsext(SSL *s, PACKET *pkt, int *al)
                              SSL_DTLSEXT_HB_DONT_SEND_REQUESTS);
 #endif
 
-#ifdef TLSEXT_TYPE_encrypt_then_mac
     s->s3->flags &= ~TLS1_FLAGS_ENCRYPT_THEN_MAC;
-#endif
 
     s->s3->flags &= ~TLS1_FLAGS_RECEIVED_EXTMS;
 
@@ -2581,14 +2471,12 @@ static int ssl_scan_serverhello_tlsext(SSL *s, PACKET *pkt, int *al)
                 return 0;
         }
 #endif
-#ifdef TLSEXT_TYPE_encrypt_then_mac
         else if (type == TLSEXT_TYPE_encrypt_then_mac) {
             /* Ignore if inappropriate ciphersuite */
             if (s->s3->tmp.new_cipher->algorithm_mac != SSL_AEAD
                 && s->s3->tmp.new_cipher->algorithm_enc != SSL_RC4)
                 s->s3->flags |= TLS1_FLAGS_ENCRYPT_THEN_MAC;
         }
-#endif
         else if (type == TLSEXT_TYPE_extended_master_secret) {
             s->s3->flags |= TLS1_FLAGS_RECEIVED_EXTMS;
             if (!s->hit)
@@ -2629,8 +2517,7 @@ static int ssl_scan_serverhello_tlsext(SSL *s, PACKET *pkt, int *al)
      * an attack we should *always* see RI even on initial server hello
      * because the client doesn't see any renegotiation during an attack.
      * However this would mean we could not connect to any server which
-     * doesn't support RI so for the immediate future tolerate RI absence on
-     * initial connect only.
+     * doesn't support RI so for the immediate future tolerate RI absence
      */
     if (!renegotiate_seen && !(s->options & SSL_OP_LEGACY_SERVER_CONNECT)
         && !(s->options & SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION)) {
@@ -2737,7 +2624,8 @@ int tls1_set_server_sigalgs(SSL *s)
 {
     int al;
     size_t i;
-    /* Clear any shared sigtnature algorithms */
+
+    /* Clear any shared signature algorithms */
     OPENSSL_free(s->cert->shared_sigalgs);
     s->cert->shared_sigalgs = NULL;
     s->cert->shared_sigalgslen = 0;
@@ -2757,7 +2645,7 @@ int tls1_set_server_sigalgs(SSL *s)
         /* Fatal error is no shared signature algorithms */
         if (!s->cert->shared_sigalgs) {
             SSLerr(SSL_F_TLS1_SET_SERVER_SIGALGS,
-                   SSL_R_NO_SHARED_SIGATURE_ALGORITHMS);
+                   SSL_R_NO_SHARED_SIGNATURE_ALGORITHMS);
             al = SSL_AD_ILLEGAL_PARAMETER;
             goto err;
         }
@@ -2770,10 +2658,13 @@ int tls1_set_server_sigalgs(SSL *s)
     return 0;
 }
 
-int ssl_check_clienthello_tlsext_late(SSL *s)
+/*
+ * Upon success, returns 1.
+ * Upon failure, returns 0 and sets |al| to the appropriate fatal alert.
+ */
+int ssl_check_clienthello_tlsext_late(SSL *s, int *al)
 {
-    int ret = SSL_TLSEXT_ERR_OK;
-    int al = SSL_AD_INTERNAL_ERROR;
+    s->tlsext_status_expected = 0;
 
     /*
      * If status request then ask callback what to do. Note: this must be
@@ -2782,58 +2673,41 @@ int ssl_check_clienthello_tlsext_late(SSL *s)
      * influence which certificate is sent
      */
     if ((s->tlsext_status_type != -1) && s->ctx && s->ctx->tlsext_status_cb) {
-        int r;
+        int ret;
         CERT_PKEY *certpkey;
         certpkey = ssl_get_server_send_pkey(s);
         /* If no certificate can't return certificate status */
-        if (certpkey == NULL) {
-            s->tlsext_status_expected = 0;
-            return 1;
-        }
-        /*
-         * Set current certificate to one we will use so SSL_get_certificate
-         * et al can pick it up.
-         */
-        s->cert->key = certpkey;
-        r = s->ctx->tlsext_status_cb(s, s->ctx->tlsext_status_arg);
-        switch (r) {
-            /* We don't want to send a status request response */
-        case SSL_TLSEXT_ERR_NOACK:
-            s->tlsext_status_expected = 0;
-            break;
-            /* status request response should be sent */
-        case SSL_TLSEXT_ERR_OK:
-            if (s->tlsext_ocsp_resp)
-                s->tlsext_status_expected = 1;
-            else
+        if (certpkey != NULL) {
+            /*
+             * Set current certificate to one we will use so SSL_get_certificate
+             * et al can pick it up.
+             */
+            s->cert->key = certpkey;
+            ret = s->ctx->tlsext_status_cb(s, s->ctx->tlsext_status_arg);
+            switch (ret) {
+                /* We don't want to send a status request response */
+            case SSL_TLSEXT_ERR_NOACK:
                 s->tlsext_status_expected = 0;
-            break;
-            /* something bad happened */
-        case SSL_TLSEXT_ERR_ALERT_FATAL:
-            ret = SSL_TLSEXT_ERR_ALERT_FATAL;
-            al = SSL_AD_INTERNAL_ERROR;
-            goto err;
+                break;
+                /* status request response should be sent */
+            case SSL_TLSEXT_ERR_OK:
+                if (s->tlsext_ocsp_resp)
+                    s->tlsext_status_expected = 1;
+                break;
+                /* something bad happened */
+            case SSL_TLSEXT_ERR_ALERT_FATAL:
+            default:
+                *al = SSL_AD_INTERNAL_ERROR;
+                return 0;
+            }
         }
-    } else
-        s->tlsext_status_expected = 0;
-
-    if (!tls1_alpn_handle_client_hello_late(s, &ret, &al)) {
-        goto err;
     }
 
- err:
-    switch (ret) {
-    case SSL_TLSEXT_ERR_ALERT_FATAL:
-        ssl3_send_alert(s, SSL3_AL_FATAL, al);
-        return -1;
-
-    case SSL_TLSEXT_ERR_ALERT_WARNING:
-        ssl3_send_alert(s, SSL3_AL_WARNING, al);
-        return 1;
-
-    default:
-        return 1;
+    if (!tls1_alpn_handle_client_hello_late(s, al)) {
+        return 0;
     }
+
+    return 1;
 }
 
 int ssl_check_serverhello_tlsext(SSL *s)
@@ -3075,7 +2949,7 @@ end:
  * tls_decrypt_ticket attempts to decrypt a session ticket.
  *
  *   etick: points to the body of the session ticket extension.
- *   eticklen: the length of the session tickets extenion.
+ *   eticklen: the length of the session tickets extension.
  *   sess_id: points at the session ID.
  *   sesslen: the length of the session ID.
  *   psess: (output) on return, if a ticket was decrypted, then this is set to
@@ -3126,15 +3000,17 @@ static int tls_decrypt_ticket(SSL *s, const unsigned char *etick,
             renew_ticket = 1;
     } else {
         /* Check key name matches */
-        if (memcmp(etick, tctx->tlsext_tick_key_name, 16)) {
+        if (memcmp(etick, tctx->tlsext_tick_key_name,
+                   sizeof(tctx->tlsext_tick_key_name)) != 0) {
             ret = 2;
             goto err;
         }
-        if (HMAC_Init_ex(hctx, tctx->tlsext_tick_hmac_key, 16,
+        if (HMAC_Init_ex(hctx, tctx->tlsext_tick_hmac_key,
+                         sizeof(tctx->tlsext_tick_hmac_key),
                          EVP_sha256(), NULL) <= 0
-                || EVP_DecryptInit_ex(ctx, EVP_aes_128_cbc(), NULL,
+                || EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL,
                                       tctx->tlsext_tick_aes_key,
-                                      etick + 16) <= 0) {
+                                      etick + sizeof(tctx->tlsext_tick_key_name)) <= 0) {
             goto err;
        }
     }
@@ -3711,7 +3587,7 @@ static int sig_cb(const char *elem, int len, void *arg)
 }
 
 /*
- * Set suppored signature algorithms based on a colon separated list of the
+ * Set supported signature algorithms based on a colon separated list of the
  * form sig+hash e.g. RSA+SHA512:DSA+SHA512
  */
 int tls1_set_sigalgs_list(CERT *c, const char *str, int client)

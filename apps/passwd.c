@@ -1,50 +1,10 @@
-/* ====================================================================
- * Copyright (c) 2000-2015 The OpenSSL Project.  All rights reserved.
+/*
+ * Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    licensing@OpenSSL.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #if defined OPENSSL_NO_MD5 || defined CHARSET_EBCDIC
@@ -175,6 +135,7 @@ int passwd_main(int argc, char **argv)
             if (pw_source_defined)
                 goto opthelp;
             in_stdin = 1;
+            pw_source_defined = 1;
             break;
         }
     }
@@ -326,69 +287,93 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
     char *salt_out;
     int n;
     unsigned int i;
-    EVP_MD_CTX *md, *md2;
-    size_t passwd_len, salt_len;
+    EVP_MD_CTX *md = NULL, *md2 = NULL;
+    size_t passwd_len, salt_len, magic_len;
 
     passwd_len = strlen(passwd);
     out_buf[0] = '$';
     out_buf[1] = 0;
-    assert(strlen(magic) <= 4); /* "1" or "apr1" */
+    magic_len = strlen(magic);
+
+    if (magic_len > 4)    /* assert it's  "1" or "apr1" */
+        return NULL;
+
     OPENSSL_strlcat(out_buf, magic, sizeof out_buf);
     OPENSSL_strlcat(out_buf, "$", sizeof out_buf);
     OPENSSL_strlcat(out_buf, salt, sizeof out_buf);
-    assert(strlen(out_buf) <= 6 + 8); /* "$apr1$..salt.." */
-    salt_out = out_buf + 2 + strlen(magic);
+
+    if (strlen(out_buf) > 6 + 8) /* assert "$apr1$..salt.." */
+        return NULL;
+
+    salt_out = out_buf + 2 + magic_len;
     salt_len = strlen(salt_out);
-    assert(salt_len <= 8);
+
+    if (salt_len > 8)
+        return NULL;
 
     md = EVP_MD_CTX_new();
-    if (md == NULL)
-        return NULL;
-    EVP_DigestInit_ex(md, EVP_md5(), NULL);
-    EVP_DigestUpdate(md, passwd, passwd_len);
-    EVP_DigestUpdate(md, "$", 1);
-    EVP_DigestUpdate(md, magic, strlen(magic));
-    EVP_DigestUpdate(md, "$", 1);
-    EVP_DigestUpdate(md, salt_out, salt_len);
+    if (md == NULL
+        || !EVP_DigestInit_ex(md, EVP_md5(), NULL)
+        || !EVP_DigestUpdate(md, passwd, passwd_len)
+        || !EVP_DigestUpdate(md, "$", 1)
+        || !EVP_DigestUpdate(md, magic, magic_len)
+        || !EVP_DigestUpdate(md, "$", 1)
+        || !EVP_DigestUpdate(md, salt_out, salt_len))
 
     md2 = EVP_MD_CTX_new();
-    if (md2 == NULL)
-        return NULL;
-    EVP_DigestInit_ex(md2, EVP_md5(), NULL);
-    EVP_DigestUpdate(md2, passwd, passwd_len);
-    EVP_DigestUpdate(md2, salt_out, salt_len);
-    EVP_DigestUpdate(md2, passwd, passwd_len);
-    EVP_DigestFinal_ex(md2, buf, NULL);
+    if (md2 == NULL
+        || !EVP_DigestInit_ex(md2, EVP_md5(), NULL)
+        || !EVP_DigestUpdate(md2, passwd, passwd_len)
+        || !EVP_DigestUpdate(md2, salt_out, salt_len)
+        || !EVP_DigestUpdate(md2, passwd, passwd_len)
+        || !EVP_DigestFinal_ex(md2, buf, NULL))
+        goto err;
 
-    for (i = passwd_len; i > sizeof buf; i -= sizeof buf)
-        EVP_DigestUpdate(md, buf, sizeof buf);
-    EVP_DigestUpdate(md, buf, i);
+    for (i = passwd_len; i > sizeof buf; i -= sizeof buf) {
+        if (!EVP_DigestUpdate(md, buf, sizeof buf))
+            goto err;
+    }
+    if (!EVP_DigestUpdate(md, buf, i))
+        goto err;
 
     n = passwd_len;
     while (n) {
-        EVP_DigestUpdate(md, (n & 1) ? "\0" : passwd, 1);
+        if (!EVP_DigestUpdate(md, (n & 1) ? "\0" : passwd, 1))
+            goto err;
         n >>= 1;
     }
-    EVP_DigestFinal_ex(md, buf, NULL);
+    if (!EVP_DigestFinal_ex(md, buf, NULL))
+        return NULL;
 
     for (i = 0; i < 1000; i++) {
-        EVP_DigestInit_ex(md2, EVP_md5(), NULL);
-        EVP_DigestUpdate(md2, (i & 1) ? (unsigned const char *)passwd : buf,
-                         (i & 1) ? passwd_len : sizeof buf);
-        if (i % 3)
-            EVP_DigestUpdate(md2, salt_out, salt_len);
-        if (i % 7)
-            EVP_DigestUpdate(md2, passwd, passwd_len);
-        EVP_DigestUpdate(md2, (i & 1) ? buf : (unsigned const char *)passwd,
-                         (i & 1) ? sizeof buf : passwd_len);
-        EVP_DigestFinal_ex(md2, buf, NULL);
+        if (!EVP_DigestInit_ex(md2, EVP_md5(), NULL))
+            goto err;
+        if (!EVP_DigestUpdate(md2,
+                              (i & 1) ? (unsigned const char *)passwd : buf,
+                              (i & 1) ? passwd_len : sizeof buf))
+            goto err;
+        if (i % 3) {
+            if (!EVP_DigestUpdate(md2, salt_out, salt_len))
+                goto err;
+        }
+        if (i % 7) {
+            if (!EVP_DigestUpdate(md2, passwd, passwd_len))
+                goto err;
+        }
+        if (!EVP_DigestUpdate(md2,
+                              (i & 1) ? buf : (unsigned const char *)passwd,
+                              (i & 1) ? sizeof buf : passwd_len))
+                goto err;
+        if (!EVP_DigestFinal_ex(md2, buf, NULL))
+                goto err;
     }
     EVP_MD_CTX_free(md2);
     EVP_MD_CTX_free(md);
+    md2 = NULL;
+    md = NULL;
 
     {
         /* transform buf into output string */
-
         unsigned char buf_perm[sizeof buf];
         int dest, source;
         char *output;
@@ -425,6 +410,11 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
     }
 
     return out_buf;
+
+ err:
+    EVP_MD_CTX_free(md2);
+    EVP_MD_CTX_free(md);
+    return NULL;
 }
 # endif
 
@@ -506,10 +496,10 @@ static int do_passwd(int passed_salt, char **salt_p, char **salt_malloc_p,
         BIO_printf(out, "%s\t%s\n", hash, passwd);
     else
         BIO_printf(out, "%s\n", hash);
-    return 0;
+    return 1;
 
  end:
-    return 1;
+    return 0;
 }
 #else
 

@@ -1,4 +1,11 @@
-#!/usr/bin/env perl
+#! /usr/bin/env perl
+# Copyright 2015-2016 The OpenSSL Project Authors. All Rights Reserved.
+#
+# Licensed under the OpenSSL license (the "License").  You may not use
+# this file except in compliance with the License.  You can obtain a copy
+# in the file LICENSE in the source distribution or at
+# https://www.openssl.org/source/license.html
+
 
 # ====================================================================
 # Written by Andy Polyakov <appro@openssl.org> for the OpenSSL
@@ -94,6 +101,7 @@ my ($bi,$a0,$mask,$carry)=(map("%i$_",(3..5)),"%g1");
 my ($rp_real,$ap_real)=("%g2","%g3");
 
 $code.=<<___;
+.type	ecp_nistz256_precomputed,#object
 .size	ecp_nistz256_precomputed,.-ecp_nistz256_precomputed
 .align	64
 .LRR:	! 2^512 mod P precomputed for NIST P256 polynomial
@@ -115,6 +123,7 @@ ecp_nistz256_to_mont:
 	nop
 	ret
 	restore
+.type	ecp_nistz256_to_mont,#function
 .size	ecp_nistz256_to_mont,.-ecp_nistz256_to_mont
 
 ! void	ecp_nistz256_from_mont(BN_ULONG %i0[8],const BN_ULONG %i1[8]);
@@ -129,6 +138,7 @@ ecp_nistz256_from_mont:
 	nop
 	ret
 	restore
+.type	ecp_nistz256_from_mont,#function
 .size	ecp_nistz256_from_mont,.-ecp_nistz256_from_mont
 
 ! void	ecp_nistz256_mul_mont(BN_ULONG %i0[8],const BN_ULONG %i1[8],
@@ -142,6 +152,7 @@ ecp_nistz256_mul_mont:
 	nop
 	ret
 	restore
+.type	ecp_nistz256_mul_mont,#function
 .size	ecp_nistz256_mul_mont,.-ecp_nistz256_mul_mont
 
 ! void	ecp_nistz256_sqr_mont(BN_ULONG %i0[8],const BN_ULONG %i2[8]);
@@ -154,6 +165,7 @@ ecp_nistz256_sqr_mont:
 	nop
 	ret
 	restore
+.type	ecp_nistz256_sqr_mont,#function
 .size	ecp_nistz256_sqr_mont,.-ecp_nistz256_sqr_mont
 ___
 
@@ -353,6 +365,7 @@ $code.=<<___;
 	st	@acc[6],[$rp+24]
 	retl
 	st	@acc[7],[$rp+28]
+.type	__ecp_nistz256_mul_mont,#function
 .size	__ecp_nistz256_mul_mont,.-__ecp_nistz256_mul_mont
 
 ! void	ecp_nistz256_add(BN_ULONG %i0[8],const BN_ULONG %i1[8],
@@ -372,6 +385,7 @@ ecp_nistz256_add:
 	ld	[$ap+28],@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_add,#function
 .size	ecp_nistz256_add,.-ecp_nistz256_add
 
 .align	32
@@ -422,6 +436,7 @@ __ecp_nistz256_add:
 	st	@acc[6],[$rp+24]
 	retl
 	st	@acc[7],[$rp+28]
+.type	__ecp_nistz256_add,#function
 .size	__ecp_nistz256_add,.-__ecp_nistz256_add
 
 ! void	ecp_nistz256_mul_by_2(BN_ULONG %i0[8],const BN_ULONG %i1[8]);
@@ -440,6 +455,7 @@ ecp_nistz256_mul_by_2:
 	ld	[$ap+28],@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_mul_by_2,#function
 .size	ecp_nistz256_mul_by_2,.-ecp_nistz256_mul_by_2
 
 .align	32
@@ -454,6 +470,7 @@ __ecp_nistz256_mul_by_2:
 	addccc	@acc[7],@acc[7],@acc[7]
 	b	.Lreduce_by_sub
 	subc	%g0,%g0,$carry		! broadcast carry bit
+.type	__ecp_nistz256_mul_by_2,#function
 .size	__ecp_nistz256_mul_by_2,.-__ecp_nistz256_mul_by_2
 
 ! void	ecp_nistz256_mul_by_3(BN_ULONG %i0[8],const BN_ULONG %i1[8]);
@@ -472,6 +489,7 @@ ecp_nistz256_mul_by_3:
 	ld	[$ap+28],@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_mul_by_3,#function
 .size	ecp_nistz256_mul_by_3,.-ecp_nistz256_mul_by_3
 
 .align	32
@@ -506,6 +524,7 @@ __ecp_nistz256_mul_by_3:
 	addccc	$t7,@acc[7],@acc[7]
 	b	.Lreduce_by_sub
 	subc	%g0,%g0,$carry		! broadcast carry bit
+.type	__ecp_nistz256_mul_by_3,#function
 .size	__ecp_nistz256_mul_by_3,.-__ecp_nistz256_mul_by_3
 
 ! void	ecp_nistz256_sub(BN_ULONG %i0[8],const BN_ULONG %i1[8],
@@ -525,6 +544,7 @@ ecp_nistz256_sub:
 	ld	[$ap+28],@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_sub,#function
 .size	ecp_nistz256_sub,.-ecp_nistz256_sub
 
 ! void	ecp_nistz256_neg(BN_ULONG %i0[8],const BN_ULONG %i1[8]);
@@ -544,6 +564,7 @@ ecp_nistz256_neg:
 	mov	0,@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_neg,#function
 .size	ecp_nistz256_neg,.-ecp_nistz256_neg
 
 .align	32
@@ -594,6 +615,7 @@ __ecp_nistz256_sub_from:
 	st	@acc[6],[$rp+24]
 	retl
 	st	@acc[7],[$rp+28]
+.type	__ecp_nistz256_sub_from,#function
 .size	__ecp_nistz256_sub_from,.-__ecp_nistz256_sub_from
 
 .align	32
@@ -616,6 +638,7 @@ __ecp_nistz256_sub_morf:
 	subccc	$t7,@acc[7],@acc[7]
 	b	.Lreduce_by_add
 	subc	%g0,%g0,$carry		! broadcast borrow bit
+.type	__ecp_nistz256_sub_morf,#function
 .size	__ecp_nistz256_sub_morf,.-__ecp_nistz256_sub_morf
 
 ! void	ecp_nistz256_div_by_2(BN_ULONG %i0[8],const BN_ULONG %i1[8]);
@@ -634,6 +657,7 @@ ecp_nistz256_div_by_2:
 	ld	[$ap+28],@acc[7]
 	ret
 	restore
+.type	ecp_nistz256_div_by_2,#function
 .size	ecp_nistz256_div_by_2,.-ecp_nistz256_div_by_2
 
 .align	32
@@ -687,6 +711,7 @@ __ecp_nistz256_div_by_2:
 	st	@acc[6],[$rp+24]
 	retl
 	st	@acc[7],[$rp+28]
+.type	__ecp_nistz256_div_by_2,#function
 .size	__ecp_nistz256_div_by_2,.-__ecp_nistz256_div_by_2
 ___
 
@@ -816,6 +841,7 @@ ecp_nistz256_point_double:
 
 	ret
 	restore
+.type	ecp_nistz256_point_double,#function
 .size	ecp_nistz256_point_double,.-ecp_nistz256_point_double
 ___
 }
@@ -1118,6 +1144,7 @@ $code.=<<___;
 .Ladd_done:
 	ret
 	restore
+.type	ecp_nistz256_point_add,#function
 .size	ecp_nistz256_point_add,.-ecp_nistz256_point_add
 ___
 }
@@ -1341,6 +1368,7 @@ ___
 $code.=<<___;
 	ret
 	restore
+.type	ecp_nistz256_point_add_affine,#function
 .size	ecp_nistz256_point_add_affine,.-ecp_nistz256_point_add_affine
 ___
 }								}}}
@@ -1416,6 +1444,7 @@ ecp_nistz256_scatter_w5:
 
 	ret
 	restore
+.type	ecp_nistz256_scatter_w5,#function
 .size	ecp_nistz256_scatter_w5,.-ecp_nistz256_scatter_w5
 
 ! void	ecp_nistz256_gather_w5(P256_POINT *%i0,const void *%i1,
@@ -1513,6 +1542,7 @@ ecp_nistz256_gather_w5:
 
 	ret
 	restore
+.type	ecp_nistz256_gather_w5,#function
 .size	ecp_nistz256_gather_w5,.-ecp_nistz256_gather_w5
 
 ! void	ecp_nistz256_scatter_w7(void *%i0,const P256_POINT_AFFINE *%i1,
@@ -1540,6 +1570,7 @@ ecp_nistz256_scatter_w7:
 
 	ret
 	restore
+.type	ecp_nistz256_scatter_w7,#function
 .size	ecp_nistz256_scatter_w7,.-ecp_nistz256_scatter_w7
 
 ! void	ecp_nistz256_gather_w7(P256_POINT_AFFINE *%i0,const void *%i1,
@@ -1580,6 +1611,7 @@ ecp_nistz256_gather_w7:
 
 	ret
 	restore
+.type	ecp_nistz256_gather_w7,#function
 .size	ecp_nistz256_gather_w7,.-ecp_nistz256_gather_w7
 ___
 }}}
@@ -1607,6 +1639,7 @@ __ecp_nistz256_mul_by_2_vis3:
 	addxccc	$acc3,$acc3,$acc3
 	b	.Lreduce_by_sub_vis3
 	addxc	%g0,%g0,$acc4		! did it carry?
+.type	__ecp_nistz256_mul_by_2_vis3,#function
 .size	__ecp_nistz256_mul_by_2_vis3,.-__ecp_nistz256_mul_by_2_vis3
 
 .align	32
@@ -1640,6 +1673,7 @@ __ecp_nistz256_add_noload_vis3:
 	stx	$acc2,[$rp+16]
 	retl
 	stx	$acc3,[$rp+24]
+.type	__ecp_nistz256_add_vis3,#function
 .size	__ecp_nistz256_add_vis3,.-__ecp_nistz256_add_vis3
 
 ! Trouble with subtraction is that there is no subtraction with 64-bit
@@ -1686,6 +1720,7 @@ __ecp_nistz256_sub_from_vis3:
 	subc	%g0,%g0,$acc4		! did it borrow?
 	b	.Lreduce_by_add_vis3
 	or	$acc3,$acc5,$acc3
+.type	__ecp_nistz256_sub_from_vis3,#function
 .size	__ecp_nistz256_sub_from_vis3,.-__ecp_nistz256_sub_from_vis3
 
 .align	32
@@ -1744,6 +1779,7 @@ __ecp_nistz256_sub_morf_vis3:
 	stx	$acc2,[$rp+16]
 	retl
 	stx	$acc3,[$rp+24]
+.type	__ecp_nistz256_sub_morf_vis3,#function
 .size	__ecp_nistz256_sub_morf_vis3,.-__ecp_nistz256_sub_morf_vis3
 
 .align	32
@@ -1784,6 +1820,7 @@ __ecp_nistz256_div_by_2_vis3:
 	stx	$acc2,[$rp+16]
 	retl
 	stx	$acc3,[$rp+24]
+.type	__ecp_nistz256_div_by_2_vis3,#function
 .size	__ecp_nistz256_div_by_2_vis3,.-__ecp_nistz256_div_by_2_vis3
 
 ! compared to __ecp_nistz256_mul_mont it's almost 4x smaller and
@@ -1881,6 +1918,7 @@ $code.=<<___;
 	addxccc	$acc4,$t3,$acc3
 	b	.Lmul_final_vis3	! see below
 	addxc	$acc5,%g0,$acc4
+.type	__ecp_nistz256_mul_mont_vis3,#function
 .size	__ecp_nistz256_mul_mont_vis3,.-__ecp_nistz256_mul_mont_vis3
 
 ! compared to above __ecp_nistz256_mul_mont_vis3 it's 21% less
@@ -2005,6 +2043,7 @@ $code.=<<___;
 	stx	$acc2,[$rp+16]
 	retl
 	stx	$acc3,[$rp+24]
+.type	__ecp_nistz256_sqr_mont_vis3,#function
 .size	__ecp_nistz256_sqr_mont_vis3,.-__ecp_nistz256_sqr_mont_vis3
 ___
 
@@ -2268,6 +2307,7 @@ ecp_nistz256_point_double_vis3:
 
 	ret
 	restore
+.type	ecp_nistz256_point_double_vis3,#function
 .size	ecp_nistz256_point_double_vis3,.-ecp_nistz256_point_double_vis3
 ___
 }
@@ -2688,6 +2728,7 @@ $code.=<<___;
 .Ladd_done_vis3:
 	ret
 	restore
+.type	ecp_nistz256_point_add_vis3,#function
 .size	ecp_nistz256_point_add_vis3,.-ecp_nistz256_point_add_vis3
 ___
 }
@@ -3006,6 +3047,7 @@ ___
 $code.=<<___;
 	ret
 	restore
+.type	ecp_nistz256_point_add_affine_vis3,#function
 .size	ecp_nistz256_point_add_affine_vis3,.-ecp_nistz256_point_add_affine_vis3
 .align	64
 .Lone_mont_vis3:

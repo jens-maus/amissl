@@ -1,117 +1,19 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
- */
-/* ====================================================================
- * Copyright (c) 1998-2001 The OpenSSL Project.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    openssl-core@openssl.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #ifndef HEADER_APPS_H
 # define HEADER_APPS_H
 
 # include "e_os.h"
+# if defined(__unix) || defined(__unix__)
+#  include <sys/time.h> /* struct timeval for DTLS */
+# endif
 # include <assert.h>
 
 # include <openssl/e_os2.h>
@@ -165,6 +67,9 @@ CONF *app_load_config_quiet(const char *filename);
 int app_load_modules(const CONF *config);
 void unbuffer(FILE *fp);
 void wait_for_async(SSL *s);
+# if defined(OPENSSL_SYS_MSDOS)
+int has_stdin_waiting(void);
+# endif
 
 /*
  * Common verification options.
@@ -180,7 +85,7 @@ void wait_for_async(SSL *s);
         OPT_V_POLICY_PRINT, OPT_V_CHECK_SS_SIG, OPT_V_TRUSTED_FIRST, \
         OPT_V_SUITEB_128_ONLY, OPT_V_SUITEB_128, OPT_V_SUITEB_192, \
         OPT_V_PARTIAL_CHAIN, OPT_V_NO_ALT_CHAINS, OPT_V_NO_CHECK_TIME, \
-        OPT_V_VERIFY_AUTH_LEVEL, \
+        OPT_V_VERIFY_AUTH_LEVEL, OPT_V_ALLOW_PROXY_CERTS, \
         OPT_V__LAST
 
 # define OPT_V_OPTIONS \
@@ -208,9 +113,9 @@ void wait_for_async(SSL *s);
         { "explicit_policy", OPT_V_EXPLICIT_POLICY, '-', \
             "set policy variable require-explicit-policy"}, \
         { "inhibit_any", OPT_V_INHIBIT_ANY, '-', \
-            "set policy variable inihibit-any-policy"}, \
+            "set policy variable inhibit-any-policy"}, \
         { "inhibit_map", OPT_V_INHIBIT_MAP, '-', \
-            "set policy variable inihibit-policy-mapping"}, \
+            "set policy variable inhibit-policy-mapping"}, \
         { "x509_strict", OPT_V_X509_STRICT, '-', \
             "disable certificate compatibility work-arounds"}, \
         { "extended_crl", OPT_V_EXTENDED_CRL, '-', \
@@ -230,7 +135,8 @@ void wait_for_async(SSL *s);
         { "partial_chain", OPT_V_PARTIAL_CHAIN, '-', \
             "accept chains anchored by intermediate trust-store CAs"}, \
         { "no_alt_chains", OPT_V_NO_ALT_CHAINS, '-', "(deprecated)" }, \
-        { "no_check_time", OPT_V_NO_CHECK_TIME, '-', "ignore certificate validity time" }
+        { "no_check_time", OPT_V_NO_CHECK_TIME, '-', "ignore certificate validity time" }, \
+        { "allow_proxy_certs", OPT_V_ALLOW_PROXY_CERTS, '-', "allow the use of proxy certificates" }
 
 # define OPT_V_CASES \
         OPT_V__FIRST: case OPT_V__LAST: break; \
@@ -262,7 +168,8 @@ void wait_for_async(SSL *s);
         case OPT_V_SUITEB_192: \
         case OPT_V_PARTIAL_CHAIN: \
         case OPT_V_NO_ALT_CHAINS: \
-        case OPT_V_NO_CHECK_TIME
+        case OPT_V_NO_CHECK_TIME: \
+        case OPT_V_ALLOW_PROXY_CERTS
 
 /*
  * Common "extended"? options.
@@ -282,7 +189,7 @@ void wait_for_async(SSL *s);
         { "xcertform", OPT_X_CERTFORM, 'F', \
             "format of Extended certificate (PEM or DER) PEM default " }, \
         { "xkeyform", OPT_X_KEYFORM, 'F', \
-            "format of Exnteded certificate's key (PEM or DER) PEM default"}
+            "format of Extended certificate's key (PEM or DER) PEM default"}
 
 # define OPT_X_CASES \
         OPT_X__FIRST: case OPT_X__LAST: break; \
@@ -367,6 +274,10 @@ void wait_for_async(SSL *s);
         case OPT_S_DHPARAM: \
         case OPT_S_DEBUGBROKE
 
+#define IS_NO_PROT_FLAG(o) \
+ (o == OPT_S_NOSSL3 || o == OPT_S_NOTLS1 || o == OPT_S_NOTLS1_1 \
+  || o == OPT_S_NOTLS1_2)
+
 /*
  * Option parsing.
  */
@@ -407,6 +318,7 @@ typedef struct string_int_pair_st {
 # define OPT_FMT_HTTP            (1L <<  9)
 # define OPT_FMT_PVK             (1L << 10)
 # define OPT_FMT_PDE     (OPT_FMT_PEMDER | OPT_FMT_ENGINE)
+# define OPT_FMT_PDS     (OPT_FMT_PEMDER | OPT_FMT_SMIME)
 # define OPT_FMT_ANY     ( \
         OPT_FMT_PEMDER | OPT_FMT_PKCS12 | OPT_FMT_SMIME | \
         OPT_FMT_ENGINE | OPT_FMT_MSBLOB | OPT_FMT_NETSCAPE | \
@@ -455,6 +367,11 @@ typedef struct args_st {
  * can be re-used.
  */
 char **copy_argv(int *argc, char *argv[]);
+/*
+ * Win32-specific argv initialization that splits OS-supplied UNICODE
+ * command line string to array of UTF8-encoded strings.
+ */
+void win32_utf8argv(int *argc, char **argv[]);
 
 
 # define PW_MIN_LENGTH 4
@@ -474,7 +391,8 @@ int dump_cert_text(BIO *out, X509 *x);
 void print_name(BIO *out, const char *title, X509_NAME *nm,
                 unsigned long lflags);
 # endif
-void print_bignum_var(BIO *, BIGNUM *, const char*, int, unsigned char *);
+void print_bignum_var(BIO *, const BIGNUM *, const char*,
+                      int, unsigned char *);
 void print_array(BIO *, const char *, int, const unsigned char *);
 int set_cert_ex(unsigned long *flags, const char *arg);
 int set_name_ex(unsigned long *flags, const char *arg);
