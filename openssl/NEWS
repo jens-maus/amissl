@@ -5,8 +5,9 @@
   This file gives a brief overview of the major changes between each OpenSSL
   release. For more details please read the CHANGES file.
 
-  Major changes between OpenSSL 1.0.2g and OpenSSL 1.1.0 [in pre-release]
+  Major changes between OpenSSL 1.0.2h and OpenSSL 1.1.0 [in pre-release]
 
+      o Copyright text was shrunk to a boilerplate that points to the license
       o "shared" builds are now the default when possible
       o Added support for "pipelining"
       o Added the AFALG engine
@@ -45,6 +46,19 @@
       o KDF algorithm support. Implement TLS PRF as a KDF.
       o Support for Certificate Transparency
       o HKDF support.
+
+  Major changes between OpenSSL 1.0.2g and OpenSSL 1.0.2h [3 May 2016]
+
+      o Prevent padding oracle in AES-NI CBC MAC check (CVE-2016-2107)
+      o Fix EVP_EncodeUpdate overflow (CVE-2016-2105)
+      o Fix EVP_EncryptUpdate overflow (CVE-2016-2106)
+      o Prevent ASN.1 BIO excessive memory allocation (CVE-2016-2109)
+      o EBCDIC overread (CVE-2016-2176)
+      o Modify behavior of ALPN to invoke callback after SNI/servername
+        callback, such that updates to the SSL_CTX affect ALPN.
+      o Remove LOW from the DEFAULT cipher list.  This removes singles DES from
+        the default.
+      o Only remove the SSLv2 methods with the no-ssl2-method option.
 
   Major changes between OpenSSL 1.0.2f and OpenSSL 1.0.2g [1 Mar 2016]
 
@@ -416,8 +430,8 @@
       o New STORE structure and library to provide an interface to all
         sorts of data repositories.  Supports storage of public and
         private keys, certificates, CRLs, numbers and arbitrary blobs.
-	This library is unfortunately unfinished and unused withing
-	OpenSSL.
+        This library is unfortunately unfinished and unused within
+        OpenSSL.
       o New control functions for the error stack.
       o Changed the PKCS#7 library to support one-pass S/MIME
         processing.
@@ -433,7 +447,7 @@
       o Major overhaul of RC4 performance on Intel P4, IA-64 and
         AMD64.
       o Changed the Configure script to have some algorithms disabled
-        by default.  Those can be explicitely enabled with the new
+        by default.  Those can be explicitly enabled with the new
         argument form 'enable-xxx'.
       o Change the default digest in 'openssl' commands from MD5 to
         SHA-1.

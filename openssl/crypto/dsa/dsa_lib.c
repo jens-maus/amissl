@@ -1,58 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 /* Original version from Steven Schoch <schoch@sheba.arc.nasa.gov> */
@@ -111,20 +63,28 @@ const DSA_METHOD *DSA_get_method(DSA *d)
 
 DSA *DSA_new_method(ENGINE *engine)
 {
-    DSA *ret;
+    DSA *ret = OPENSSL_zalloc(sizeof(*ret));
 
-    ret = OPENSSL_zalloc(sizeof(*ret));
     if (ret == NULL) {
         DSAerr(DSA_F_DSA_NEW_METHOD, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
+
+    ret->references = 1;
+    ret->lock = CRYPTO_THREAD_lock_new();
+    if (ret->lock == NULL) {
+        DSAerr(DSA_F_DSA_NEW_METHOD, ERR_R_MALLOC_FAILURE);
+        OPENSSL_free(ret);
+        return NULL;
+    }
+
     ret->meth = DSA_get_default_method();
 #ifndef OPENSSL_NO_ENGINE
+    ret->flags = ret->meth->flags & ~DSA_FLAG_NON_FIPS_ALLOW; /* early default init */
     if (engine) {
         if (!ENGINE_init(engine)) {
             DSAerr(DSA_F_DSA_NEW_METHOD, ERR_R_ENGINE_LIB);
-            OPENSSL_free(ret);
-            return NULL;
+            goto err;
         }
         ret->engine = engine;
     } else
@@ -133,29 +93,19 @@ DSA *DSA_new_method(ENGINE *engine)
         ret->meth = ENGINE_get_DSA(ret->engine);
         if (ret->meth == NULL) {
             DSAerr(DSA_F_DSA_NEW_METHOD, ERR_R_ENGINE_LIB);
-            ENGINE_finish(ret->engine);
-            OPENSSL_free(ret);
-            return NULL;
+            goto err;
         }
     }
 #endif
 
-    ret->references = 1;
     ret->flags = ret->meth->flags & ~DSA_FLAG_NON_FIPS_ALLOW;
 
-    CRYPTO_new_ex_data(CRYPTO_EX_INDEX_DSA, ret, &ret->ex_data);
-
-    ret->lock = CRYPTO_THREAD_lock_new();
-    if (ret->lock == NULL) {
-#ifndef OPENSSL_NO_ENGINE
-        ENGINE_finish(ret->engine);
-#endif
-        CRYPTO_free_ex_data(CRYPTO_EX_INDEX_DSA, ret, &ret->ex_data);
-        OPENSSL_free(ret);
-        return NULL;
-    }
+    if (!CRYPTO_new_ex_data(CRYPTO_EX_INDEX_DSA, ret, &ret->ex_data))
+        goto err;
 
     if ((ret->meth->init != NULL) && !ret->meth->init(ret)) {
+        DSAerr(DSA_F_DSA_NEW_METHOD, ERR_R_INIT_FAIL);
+err:
         DSA_free(ret);
         ret = NULL;
     }
@@ -303,7 +253,8 @@ DH *DSA_dup_DH(const DSA *r)
 }
 #endif
 
-void DSA_get0_pqg(const DSA *d, BIGNUM **p, BIGNUM **q, BIGNUM **g)
+void DSA_get0_pqg(const DSA *d,
+                  const BIGNUM **p, const BIGNUM **q, const BIGNUM **g)
 {
     if (p != NULL)
         *p = d->p;
@@ -315,19 +266,32 @@ void DSA_get0_pqg(const DSA *d, BIGNUM **p, BIGNUM **q, BIGNUM **g)
 
 int DSA_set0_pqg(DSA *d, BIGNUM *p, BIGNUM *q, BIGNUM *g)
 {
-    if (p == NULL || q == NULL || g == NULL)
+    /* If the fields p, q and g in d are NULL, the corresponding input
+     * parameters MUST be non-NULL.
+     */
+    if ((d->p == NULL && p == NULL)
+        || (d->q == NULL && q == NULL)
+        || (d->g == NULL && g == NULL))
         return 0;
-    BN_free(d->p);
-    BN_free(d->q);
-    BN_free(d->g);
-    d->p = p;
-    d->q = q;
-    d->g = g;
+
+    if (p != NULL) {
+        BN_free(d->p);
+        d->p = p;
+    }
+    if (q != NULL) {
+        BN_free(d->q);
+        d->q = q;
+    }
+    if (g != NULL) {
+        BN_free(d->g);
+        d->g = g;
+    }
 
     return 1;
 }
 
-void DSA_get0_key(const DSA *d, BIGNUM **pub_key, BIGNUM **priv_key)
+void DSA_get0_key(const DSA *d,
+                  const BIGNUM **pub_key, const BIGNUM **priv_key)
 {
     if (pub_key != NULL)
         *pub_key = d->pub_key;
@@ -337,14 +301,21 @@ void DSA_get0_key(const DSA *d, BIGNUM **pub_key, BIGNUM **priv_key)
 
 int DSA_set0_key(DSA *d, BIGNUM *pub_key, BIGNUM *priv_key)
 {
-    /* Note that it is valid for priv_key to be NULL */
-    if (pub_key == NULL)
+    /* If the field pub_key in d is NULL, the corresponding input
+     * parameters MUST be non-NULL.  The priv_key field may
+     * be left NULL.
+     */
+    if (d->pub_key == NULL && pub_key == NULL)
         return 0;
 
-    BN_free(d->pub_key);
-    BN_free(d->priv_key);
-    d->pub_key = pub_key;
-    d->priv_key = priv_key;
+    if (pub_key != NULL) {
+        BN_free(d->pub_key);
+        d->pub_key = pub_key;
+    }
+    if (priv_key != NULL) {
+        BN_free(d->priv_key);
+        d->priv_key = priv_key;
+    }
 
     return 1;
 }
@@ -367,4 +338,9 @@ void DSA_set_flags(DSA *d, int flags)
 ENGINE *DSA_get0_engine(DSA *d)
 {
     return d->engine;
+}
+
+int DSA_bits(const DSA *dsa)
+{
+    return BN_num_bits(dsa->p);
 }

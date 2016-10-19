@@ -1,12 +1,13 @@
 --- amissl_glue.c	2016-04-11 17:04:46.797355856 +0200
 +++ amissl_glue.c_patched	2016-04-11 17:07:33.165651386 +0200
-@@ -6,6 +6,10 @@
+@@ -6,6 +6,11 @@
  
  #include "amissl_glue.h"
  
 +#include <internal/cryptlib.h>
 +#include <internal/o_str.h>
-+#include <internal/threads.h>
++#include <internal/dso.h>
++#include <internal/err.h>
 +
  /***************************************************************************/
  

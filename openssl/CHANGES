@@ -2,7 +2,77 @@
  OpenSSL CHANGES
  _______________
 
- Changes between 1.0.2g and 1.1.0  [xx XXX xxxx]
+ Changes between 1.0.2h and 1.1.0  [xx XXX xxxx]
+
+  *) The method for finding the storage location for the Windows RAND seed file
+     has changed. First we check %RANDFILE%. If that is not set then we check
+     the directories %HOME%, %USERPROFILE% and %SYSTEMROOT% in that order. If
+     all else fails we fall back to C:\.
+     [Matt Caswell]
+
+  *) The EVP_EncryptUpdate() function has had its return type changed from void
+     to int. A return of 0 indicates and error while a return of 1 indicates
+     success.
+     [Matt Caswell]
+
+  *) The flags RSA_FLAG_NO_CONSTTIME, DSA_FLAG_NO_EXP_CONSTTIME and
+     DH_FLAG_NO_EXP_CONSTTIME which previously provided the ability to switch
+     off the constant time implementation for RSA, DSA and DH have been made
+     no-ops and deprecated.
+     [Matt Caswell]
+
+  *) Windows RAND implementation was simplified to only get entropy by
+     calling CryptGenRandom(). Various other RAND-related tickets
+     were also closed.
+     [Joseph Wylie Yandle, Rich Salz]
+
+  *) The stack and lhash API's were renamed to start with OPENSSL_SK_
+     and OPENSSL_LH_, respectively.  The old names are available
+     with API compatibility.  They new names are now completely documented.
+     [Rich Salz]
+
+  *) Unify TYPE_up_ref(obj) methods signature.
+     SSL_CTX_up_ref(), SSL_up_ref(), X509_up_ref(), EVP_PKEY_up_ref(),
+     X509_CRL_up_ref(), X509_OBJECT_up_ref_count() methods are now returning an
+     int (instead of void) like all others TYPE_up_ref() methods.
+     So now these methods also check the return value of CRYPTO_atomic_add(),
+     and the validity of object reference counter.
+     [fdasilvayy@gmail.com]
+
+  *) With Windows Visual Studio builds, the .pdb files are installed
+     alongside the installed libraries and executables.  For a static
+     library installation, ossl_static.pdb is the associate compiler
+     generated .pdb file to be used when linking programs.
+     [Richard Levitte]
+
+  *) Remove openssl.spec.  Packaging files belong with the packagers.
+     [Richard Levitte]
+
+  *) Automatic Darwin/OSX configuration has had a refresh, it will now
+     recognise x86_64 architectures automatically.  You can still decide
+     to build for a different bitness with the environment variable
+     KERNEL_BITS (can be 32 or 64), for example:
+
+         KERNEL_BITS=32 ./config
+
+     [Richard Levitte]
+
+  *) Change default algorithms in pkcs8 utility to use PKCS#5 v2.0,
+     256 bit AES and HMAC with SHA256.
+     [Steve Henson]
+
+  *) Remove support for MIPS o32 ABI on IRIX (and IRIX only).
+     [Andy Polyakov]
+
+  *) Triple-DES ciphers have been moved from HIGH to MEDIUM.
+     [Rich Salz]
+
+  *) To enable users to have their own config files and build file templates,
+     Configure looks in the directory indicated by the environment variable
+     OPENSSL_LOCAL_CONFIG_DIR as well as the in-source Configurations/
+     directory.  On VMS, OPENSSL_LOCAL_CONFIG_DIR is expected to be a logical
+     name and is used as is.
+     [Richard Levitte]
 
   *) The following datatypes were made opaque: X509_OBJECT, X509_STORE_CTX,
      X509_STORE, X509_LOOKUP, and X509_LOOKUP_METHOD.  The unused type
@@ -988,6 +1058,103 @@
      validated when establishing a connection.
      [Rob Percival <robpercival@google.com>]
 
+ Changes between 1.0.2g and 1.0.2h [3 May 2016]
+
+  *) Prevent padding oracle in AES-NI CBC MAC check
+
+     A MITM attacker can use a padding oracle attack to decrypt traffic
+     when the connection uses an AES CBC cipher and the server support
+     AES-NI.
+
+     This issue was introduced as part of the fix for Lucky 13 padding
+     attack (CVE-2013-0169). The padding check was rewritten to be in
+     constant time by making sure that always the same bytes are read and
+     compared against either the MAC or padding bytes. But it no longer
+     checked that there was enough data to have both the MAC and padding
+     bytes.
+
+     This issue was reported by Juraj Somorovsky using TLS-Attacker.
+     (CVE-2016-2107)
+     [Kurt Roeckx]
+
+  *) Fix EVP_EncodeUpdate overflow
+
+     An overflow can occur in the EVP_EncodeUpdate() function which is used for
+     Base64 encoding of binary data. If an attacker is able to supply very large
+     amounts of input data then a length check can overflow resulting in a heap
+     corruption.
+
+     Internally to OpenSSL the EVP_EncodeUpdate() function is primarily used by
+     the PEM_write_bio* family of functions. These are mainly used within the
+     OpenSSL command line applications, so any application which processes data
+     from an untrusted source and outputs it as a PEM file should be considered
+     vulnerable to this issue. User applications that call these APIs directly
+     with large amounts of untrusted data may also be vulnerable.
+
+     This issue was reported by Guido Vranken.
+     (CVE-2016-2105)
+     [Matt Caswell]
+
+  *) Fix EVP_EncryptUpdate overflow
+
+     An overflow can occur in the EVP_EncryptUpdate() function. If an attacker
+     is able to supply very large amounts of input data after a previous call to
+     EVP_EncryptUpdate() with a partial block then a length check can overflow
+     resulting in a heap corruption. Following an analysis of all OpenSSL
+     internal usage of the EVP_EncryptUpdate() function all usage is one of two
+     forms. The first form is where the EVP_EncryptUpdate() call is known to be
+     the first called function after an EVP_EncryptInit(), and therefore that
+     specific call must be safe. The second form is where the length passed to
+     EVP_EncryptUpdate() can be seen from the code to be some small value and
+     therefore there is no possibility of an overflow. Since all instances are
+     one of these two forms, it is believed that there can be no overflows in
+     internal code due to this problem. It should be noted that
+     EVP_DecryptUpdate() can call EVP_EncryptUpdate() in certain code paths.
+     Also EVP_CipherUpdate() is a synonym for EVP_EncryptUpdate(). All instances
+     of these calls have also been analysed too and it is believed there are no
+     instances in internal usage where an overflow could occur.
+
+     This issue was reported by Guido Vranken.
+     (CVE-2016-2106)
+     [Matt Caswell]
+
+  *) Prevent ASN.1 BIO excessive memory allocation
+
+     When ASN.1 data is read from a BIO using functions such as d2i_CMS_bio()
+     a short invalid encoding can cause allocation of large amounts of memory
+     potentially consuming excessive resources or exhausting memory.
+
+     Any application parsing untrusted data through d2i BIO functions is
+     affected. The memory based functions such as d2i_X509() are *not* affected.
+     Since the memory based functions are used by the TLS library, TLS
+     applications are not affected.
+
+     This issue was reported by Brian Carpenter.
+     (CVE-2016-2109)
+     [Stephen Henson]
+
+  *) EBCDIC overread
+
+     ASN1 Strings that are over 1024 bytes can cause an overread in applications
+     using the X509_NAME_oneline() function on EBCDIC systems. This could result
+     in arbitrary stack data being returned in the buffer.
+
+     This issue was reported by Guido Vranken.
+     (CVE-2016-2176)
+     [Matt Caswell]
+
+  *) Modify behavior of ALPN to invoke callback after SNI/servername
+     callback, such that updates to the SSL_CTX affect ALPN.
+     [Todd Short]
+
+  *) Remove LOW from the DEFAULT cipher list.  This removes singles DES from the
+     default.
+     [Kurt Roeckx]
+
+  *) Only remove the SSLv2 methods with the no-ssl2-method option. When the
+     methods are enabled and ssl2 is disabled the methods return NULL.
+     [Kurt Roeckx]
+
  Changes between 1.0.2f and 1.0.2g [1 Mar 2016]
 
   * Disable weak ciphers in SSLv3 and up in default builds of OpenSSL.
@@ -1226,7 +1393,7 @@
 
   *) Alternate chains certificate forgery
 
-     During certificate verfification, OpenSSL will attempt to find an
+     During certificate verification, OpenSSL will attempt to find an
      alternative certificate chain if the first attempt to build such a chain
      fails. An error in the implementation of this logic can mean that an
      attacker could cause certain checks on untrusted certificates to be
@@ -1484,7 +1651,7 @@
 
   *) Facilitate "universal" ARM builds targeting range of ARM ISAs, e.g.
      ARMv5 through ARMv8, as opposite to "locking" it to single one.
-     So far those who have to target multiple plaforms would compromise
+     So far those who have to target multiple platforms would compromise
      and argue that binary targeting say ARMv5 would still execute on
      ARMv8. "Universal" build resolves this compromise by providing
      near-optimal performance even on newer platforms.
@@ -1544,7 +1711,7 @@
      [Steve Henson]
 
   *) Use algorithm specific chains in SSL_CTX_use_certificate_chain_file():
-     this fixes a limiation in previous versions of OpenSSL.
+     this fixes a limitation in previous versions of OpenSSL.
      [Steve Henson]
 
   *) Extended RSA OAEP support via EVP_PKEY API. Options to specify digest,
@@ -1653,7 +1820,7 @@
 
   *) Add support for certificate stores in CERT structure. This makes it
      possible to have different stores per SSL structure or one store in
-     the parent SSL_CTX. Include distint stores for certificate chain
+     the parent SSL_CTX. Include distinct stores for certificate chain
      verification and chain building. New ctrl SSL_CTRL_BUILD_CERT_CHAIN
      to build and store a certificate chain in CERT structure: returing
      an error if the chain cannot be built: this will allow applications
@@ -1716,7 +1883,7 @@
      [Steve Henson]
 
   *) Integrate hostname, email address and IP address checking with certificate
-     verification. New verify options supporting checking in opensl utility.
+     verification. New verify options supporting checking in openssl utility.
      [Steve Henson]
 
   *) Fixes and wildcard matching support to hostname and email checking

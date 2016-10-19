@@ -1,4 +1,11 @@
-#!/usr/bin/env perl
+#! /usr/bin/env perl
+# Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
+#
+# Licensed under the OpenSSL license (the "License").  You may not use
+# this file except in compliance with the License.  You can obtain a copy
+# in the file LICENSE in the source distribution or at
+# https://www.openssl.org/source/license.html
+
 #
 # ====================================================================
 # Written by Andy Polyakov <appro@openssl.org> for the OpenSSL
@@ -74,8 +81,8 @@ poly1305_init:
 	SPARC_LOAD_ADDRESS(OPENSSL_sparcv9cap_P,%g1)
 	ld	[%g1],%g1
 
-	and	%g1,SPARCV9_FMADD|SPARCV9_PREFER_FPU|SPARCV9_VIS3,%g1
-	cmp	%g1,SPARCV9_FMADD|SPARCV9_PREFER_FPU
+	and	%g1,SPARCV9_FMADD|SPARCV9_VIS3,%g1
+	cmp	%g1,SPARCV9_FMADD
 	be	.Lpoly1305_init_fma
 	nop
 
@@ -132,13 +139,14 @@ poly1305_init:
 .Lno_key:
 	ret
 	restore	%g0,%g0,%o0		! return 0
+.type	poly1305_init,#function
 .size	poly1305_init,.-poly1305_init
 
 .globl	poly1305_blocks
 .align	32
 poly1305_blocks:
 	save	%sp,-STACK_FRAME,%sp
-	andn	$len,15,$len
+	srln	$len,4,$len
 
 	brz,pn	$len,.Lno_data
 	nop
@@ -194,7 +202,7 @@ poly1305_blocks:
 	umul	$r1,$h0,$d1
 	umul	$r2,$h0,$d2
 	umul	$r3,$h0,$d3
-	 sub	$len,16,$len
+	 sub	$len,1,$len
 	 add	$inp,16,$inp
 
 	umul	$s3,$h1,$t0
@@ -264,6 +272,7 @@ poly1305_blocks:
 .Lno_data:
 	ret
 	restore
+.type	poly1305_blocks,#function
 .size	poly1305_blocks,.-poly1305_blocks
 ___
 ########################################################################
@@ -276,7 +285,7 @@ $code.=<<___;
 .align	32
 poly1305_blocks_vis3:
 	save	%sp,-STACK_FRAME,%sp
-	andn	$len,15,$len
+	srln	$len,4,$len
 
 	brz,pn	$len,.Lno_data
 	nop
@@ -314,7 +323,7 @@ poly1305_blocks_vis3:
 
 .Linp_aligned_vis3:
 	addcc	$D0,$H0,$H0		! accumulate input
-	 sub	$len,16,$len
+	 sub	$len,1,$len
 	addxccc	$D1,$H1,$H1
 	 add	$inp,16,$inp
 
@@ -354,6 +363,7 @@ poly1305_blocks_vis3:
 
 	ret
 	restore
+.type	poly1305_blocks_vis3,#function
 .size	poly1305_blocks_vis3,.-poly1305_blocks_vis3
 ___
 }
@@ -426,6 +436,7 @@ poly1305_emit:
 
 	ret
 	restore
+.type	poly1305_emit,#function
 .size	poly1305_emit,.-poly1305_emit
 ___
 
@@ -591,12 +602,13 @@ poly1305_init_fma:
 .Lno_key_fma:
 	ret
 	restore	%g0,%g0,%o0			! return 0
+.type	poly1305_init_fma,#function
 .size	poly1305_init_fma,.-poly1305_init_fma
 
 .align	32
 poly1305_blocks_fma:
 	save	%sp,-STACK_FRAME-48,%sp
-	srlx	$len,4,$len
+	srln	$len,4,$len
 
 	brz,pn	$len,.Labort
 	sub	$len,1,$len
@@ -898,6 +910,7 @@ poly1305_blocks_fma:
 .Labort:
 	ret
 	restore
+.type	poly1305_blocks_fma,#function
 .size	poly1305_blocks_fma,.-poly1305_blocks_fma
 ___
 {
@@ -1004,6 +1017,7 @@ poly1305_emit_fma:
 
 	ret
 	restore
+.type	poly1305_emit_fma,#function
 .size	poly1305_emit_fma,.-poly1305_emit_fma
 ___
 }

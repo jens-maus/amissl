@@ -1,59 +1,10 @@
 /*
- * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
- * project.
- */
-/* ====================================================================
- * Copyright (c) 1999-2006 The OpenSSL Project.  All rights reserved.
+ * Copyright 1999-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    licensing@OpenSSL.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <openssl/opensslconf.h>
@@ -571,9 +522,13 @@ int pkcs12_main(int argc, char **argv)
 
     if ((options & INFO) && PKCS12_mac_present(p12)) {
         ASN1_INTEGER *tmaciter;
-
-        PKCS12_get0_mac(NULL, NULL, NULL, &tmaciter, p12);
-        BIO_printf(bio_err, "MAC Iteration %ld\n",
+        X509_ALGOR *macalgid;
+        ASN1_OBJECT *macobj;
+        PKCS12_get0_mac(NULL, &macalgid, NULL, &tmaciter, p12);
+        X509_ALGOR_get0(&macobj, NULL, NULL, macalgid);
+        BIO_puts(bio_err, "MAC:");
+        i2a_ASN1_OBJECT(bio_err, macobj);
+        BIO_printf(bio_err, " Iteration %ld\n",
                    tmaciter  != NULL ? ASN1_INTEGER_get(tmaciter) : 1L);
     }
     if (macver) {
@@ -674,6 +629,7 @@ int dump_certs_pkeys_bag(BIO *out, PKCS12_SAFEBAG *bag, char *pass,
     PKCS8_PRIV_KEY_INFO *p8;
     X509 *x509;
     STACK_OF(X509_ATTRIBUTE) *attrs;
+    int ret = 0;
 
     attrs = PKCS12_SAFEBAG_get0_attrs(bag);
 
@@ -688,7 +644,7 @@ int dump_certs_pkeys_bag(BIO *out, PKCS12_SAFEBAG *bag, char *pass,
         if ((pkey = EVP_PKCS82PKEY(p8)) == NULL)
             return 0;
         print_attribs(out, PKCS8_pkey_get0_attrs(p8), "Key Attributes");
-        PEM_write_bio_PrivateKey(out, pkey, enc, NULL, 0, NULL, pempass);
+        ret = PEM_write_bio_PrivateKey(out, pkey, enc, NULL, 0, NULL, pempass);
         EVP_PKEY_free(pkey);
         break;
 
@@ -713,7 +669,7 @@ int dump_certs_pkeys_bag(BIO *out, PKCS12_SAFEBAG *bag, char *pass,
         }
         print_attribs(out, PKCS8_pkey_get0_attrs(p8), "Key Attributes");
         PKCS8_PRIV_KEY_INFO_free(p8);
-        PEM_write_bio_PrivateKey(out, pkey, enc, NULL, 0, NULL, pempass);
+        ret = PEM_write_bio_PrivateKey(out, pkey, enc, NULL, 0, NULL, pempass);
         EVP_PKEY_free(pkey);
         break;
 
@@ -733,7 +689,7 @@ int dump_certs_pkeys_bag(BIO *out, PKCS12_SAFEBAG *bag, char *pass,
         if ((x509 = PKCS12_SAFEBAG_get1_cert(bag)) == NULL)
             return 0;
         dump_cert_text(out, x509);
-        PEM_write_bio_X509(out, x509);
+        ret = PEM_write_bio_X509(out, x509);
         X509_free(x509);
         break;
 
@@ -750,7 +706,7 @@ int dump_certs_pkeys_bag(BIO *out, PKCS12_SAFEBAG *bag, char *pass,
         BIO_printf(bio_err, "\n");
         return 1;
     }
-    return 1;
+    return ret;
 }
 
 /* Given a single certificate return a verified chain or NULL if error */
@@ -786,16 +742,70 @@ end:
 
 static int alg_print(X509_ALGOR *alg)
 {
-    PBEPARAM *pbe;
-    const unsigned char *p = alg->parameter->value.sequence->data;
+    int pbenid, aparamtype;
+    ASN1_OBJECT *aoid;
+    void *aparam;
+    PBEPARAM *pbe = NULL;
 
-    pbe = d2i_PBEPARAM(NULL, &p, alg->parameter->value.sequence->length);
-    if (!pbe)
-        return 1;
-    BIO_printf(bio_err, "%s, Iteration %ld\n",
-               OBJ_nid2ln(OBJ_obj2nid(alg->algorithm)),
-               ASN1_INTEGER_get(pbe->iter));
-    PBEPARAM_free(pbe);
+    X509_ALGOR_get0(&aoid, &aparamtype, &aparam, alg);
+
+    pbenid = OBJ_obj2nid(aoid);
+
+    BIO_printf(bio_err, "%s", OBJ_nid2ln(pbenid));
+
+    /*
+     * If PBE algorithm is PBES2 decode algorithm parameters
+     * for additional details.
+     */
+    if (pbenid == NID_pbes2) {
+        PBE2PARAM *pbe2 = NULL;
+        int encnid;
+        if (aparamtype == V_ASN1_SEQUENCE)
+            pbe2 = ASN1_item_unpack(aparam, ASN1_ITEM_rptr(PBE2PARAM));
+        if (pbe2 == NULL) {
+            BIO_puts(bio_err, "<unsupported parameters>");
+            goto done;
+        }
+        X509_ALGOR_get0(&aoid, &aparamtype, &aparam, pbe2->keyfunc);
+        pbenid = OBJ_obj2nid(aoid);
+        X509_ALGOR_get0(&aoid, NULL, NULL, pbe2->encryption);
+        encnid = OBJ_obj2nid(aoid);
+        BIO_printf(bio_err, ", %s, %s", OBJ_nid2ln(pbenid),
+                   OBJ_nid2sn(encnid));
+        /* If KDF is PBKDF2 decode parameters */
+        if (pbenid == NID_id_pbkdf2) {
+            PBKDF2PARAM *kdf = NULL;
+            int prfnid;
+            if (aparamtype == V_ASN1_SEQUENCE)
+                kdf = ASN1_item_unpack(aparam, ASN1_ITEM_rptr(PBKDF2PARAM));
+            if (kdf == NULL) {
+                BIO_puts(bio_err, "<unsupported parameters>");
+                goto done;
+            }
+
+            if (kdf->prf == NULL) {
+                prfnid = NID_hmacWithSHA1;
+            } else {
+                X509_ALGOR_get0(&aoid, NULL, NULL, kdf->prf);
+                prfnid = OBJ_obj2nid(aoid);
+            }
+            BIO_printf(bio_err, ", Iteration %ld, PRF %s",
+                       ASN1_INTEGER_get(kdf->iter), OBJ_nid2sn(prfnid));
+            PBKDF2PARAM_free(kdf);
+        }
+        PBE2PARAM_free(pbe2);
+    } else {
+        if (aparamtype == V_ASN1_SEQUENCE)
+            pbe = ASN1_item_unpack(aparam, ASN1_ITEM_rptr(PBEPARAM));
+        if (pbe == NULL) {
+            BIO_puts(bio_err, "<unsupported parameters>");
+            goto done;
+        }
+        BIO_printf(bio_err, ", Iteration %ld", ASN1_INTEGER_get(pbe->iter));
+        PBEPARAM_free(pbe);
+    }
+ done:
+    BIO_puts(bio_err, "\n");
     return 1;
 }
 

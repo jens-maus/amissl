@@ -144,7 +144,9 @@ CLIB2OBJS = $(BUILD_D)/string_memset.o \
             $(BUILD_D)/string_strlcpy.o \
             $(BUILD_D)/string_strlcat.o \
             $(BUILD_D)/string_strcat.o \
+            $(BUILD_D)/string_strcspn.o \
             $(BUILD_D)/string_strspn.o \
+            $(BUILD_D)/strings_strcasecmp.o \
             $(BUILD_D)/strings_strncasecmp.o \
             $(BUILD_D)/stdlib_atoi.o \
             $(BUILD_D)/stdlib_strtoul.o \

@@ -92,11 +92,11 @@ const ASN1_ITEM * LIBSTUB_ASN1_ANY_it(void)
   return LIB_ASN1_ANY_it(_base);
 }
 
-int LIB_ASN1_TYPE_get(struct Library * _base, ASN1_TYPE * ___a);
+int LIB_ASN1_TYPE_get(struct Library * _base, const ASN1_TYPE * ___a);
 
 int LIBSTUB_ASN1_TYPE_get(void)
 {
-  ASN1_TYPE * ___a = (ASN1_TYPE *)REG_A0;
+  const ASN1_TYPE * ___a = (const ASN1_TYPE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_TYPE_get(_base, ___a);
 }
@@ -129,11 +129,11 @@ void LIBSTUB_ASN1_OBJECT_free(void)
   return LIB_ASN1_OBJECT_free(_base, ___a);
 }
 
-int LIB_i2d_ASN1_OBJECT(struct Library * _base, ASN1_OBJECT * ___a, unsigned char ** ___pp);
+int LIB_i2d_ASN1_OBJECT(struct Library * _base, const ASN1_OBJECT * ___a, unsigned char ** ___pp);
 
 int LIBSTUB_i2d_ASN1_OBJECT(void)
 {
-  ASN1_OBJECT * ___a = (ASN1_OBJECT *)REG_A0;
+  const ASN1_OBJECT * ___a = (const ASN1_OBJECT *)REG_A0;
   unsigned char ** ___pp = (unsigned char **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2d_ASN1_OBJECT(_base, ___a, ___pp);
@@ -233,11 +233,11 @@ void LIBSTUB_ASN1_STRING_length_set(void)
   return LIB_ASN1_STRING_length_set(_base, ___x, ___n);
 }
 
-int LIB_ASN1_STRING_type(struct Library * _base, ASN1_STRING * ___x);
+int LIB_ASN1_STRING_type(struct Library * _base, const ASN1_STRING * ___x);
 
 int LIBSTUB_ASN1_STRING_type(void)
 {
-  ASN1_STRING * ___x = (ASN1_STRING *)REG_A0;
+  const ASN1_STRING * ___x = (const ASN1_STRING *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_STRING_type(_base, ___x);
 }
@@ -341,22 +341,22 @@ int LIBSTUB_ASN1_BIT_STRING_name_print(void)
   return LIB_ASN1_BIT_STRING_name_print(_base, ___out, ___bs, ___tbl, ___indent);
 }
 
-int LIB_ASN1_BIT_STRING_num_asc(struct Library * _base, char * ___name, BIT_STRING_BITNAME * ___tbl);
+int LIB_ASN1_BIT_STRING_num_asc(struct Library * _base, const char * ___name, BIT_STRING_BITNAME * ___tbl);
 
 int LIBSTUB_ASN1_BIT_STRING_num_asc(void)
 {
-  char * ___name = (char *)REG_A0;
+  const char * ___name = (const char *)REG_A0;
   BIT_STRING_BITNAME * ___tbl = (BIT_STRING_BITNAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_BIT_STRING_num_asc(_base, ___name, ___tbl);
 }
 
-int LIB_ASN1_BIT_STRING_set_asc(struct Library * _base, ASN1_BIT_STRING * ___bs, char * ___name, int ___value, BIT_STRING_BITNAME * ___tbl);
+int LIB_ASN1_BIT_STRING_set_asc(struct Library * _base, ASN1_BIT_STRING * ___bs, const char * ___name, int ___value, BIT_STRING_BITNAME * ___tbl);
 
 int LIBSTUB_ASN1_BIT_STRING_set_asc(void)
 {
   ASN1_BIT_STRING * ___bs = (ASN1_BIT_STRING *)REG_A0;
-  char * ___name = (char *)REG_A1;
+  const char * ___name = (const char *)REG_A1;
   int ___value = (int)REG_D0;
   BIT_STRING_BITNAME * ___tbl = (BIT_STRING_BITNAME *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
@@ -1414,12 +1414,12 @@ int LIBSTUB_a2i_ASN1_ENUMERATED(void)
   return LIB_a2i_ASN1_ENUMERATED(_base, ___bp, ___bs, ___buf, ___size);
 }
 
-int LIB_i2a_ASN1_OBJECT(struct Library * _base, BIO * ___bp, ASN1_OBJECT * ___a);
+int LIB_i2a_ASN1_OBJECT(struct Library * _base, BIO * ___bp, const ASN1_OBJECT * ___a);
 
 int LIBSTUB_i2a_ASN1_OBJECT(void)
 {
   BIO * ___bp = (BIO *)REG_A0;
-  ASN1_OBJECT * ___a = (ASN1_OBJECT *)REG_A1;
+  const ASN1_OBJECT * ___a = (const ASN1_OBJECT *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2a_ASN1_OBJECT(_base, ___bp, ___a);
 }
@@ -1447,13 +1447,13 @@ int LIBSTUB_i2a_ASN1_STRING(void)
   return LIB_i2a_ASN1_STRING(_base, ___bp, ___a, ___type);
 }
 
-int LIB_i2t_ASN1_OBJECT(struct Library * _base, char * ___buf, int ___buf_len, ASN1_OBJECT * ___a);
+int LIB_i2t_ASN1_OBJECT(struct Library * _base, char * ___buf, int ___buf_len, const ASN1_OBJECT * ___a);
 
 int LIBSTUB_i2t_ASN1_OBJECT(void)
 {
   char * ___buf = (char *)REG_A0;
   int ___buf_len = (int)REG_D0;
-  ASN1_OBJECT * ___a = (ASN1_OBJECT *)REG_A1;
+  const ASN1_OBJECT * ___a = (const ASN1_OBJECT *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2t_ASN1_OBJECT(_base, ___buf, ___buf_len, ___a);
 }
@@ -1648,12 +1648,12 @@ void * LIBSTUB_ASN1_item_dup(void)
   return LIB_ASN1_item_dup(_base, ___it, ___x);
 }
 
-int LIB_ASN1_STRING_to_UTF8(struct Library * _base, unsigned char ** ___out, ASN1_STRING * ___in);
+int LIB_ASN1_STRING_to_UTF8(struct Library * _base, unsigned char ** ___out, const ASN1_STRING * ___in);
 
 int LIBSTUB_ASN1_STRING_to_UTF8(void)
 {
   unsigned char ** ___out = (unsigned char **)REG_A0;
-  ASN1_STRING * ___in = (ASN1_STRING *)REG_A1;
+  const ASN1_STRING * ___in = (const ASN1_STRING *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_STRING_to_UTF8(_base, ___out, ___in);
 }
@@ -1808,11 +1808,11 @@ int LIBSTUB_ASN1_TYPE_set_octetstring(void)
   return LIB_ASN1_TYPE_set_octetstring(_base, ___a, ___data, ___len);
 }
 
-int LIB_ASN1_TYPE_get_octetstring(struct Library * _base, ASN1_TYPE * ___a, unsigned char * ___data, int ___max_len);
+int LIB_ASN1_TYPE_get_octetstring(struct Library * _base, const ASN1_TYPE * ___a, unsigned char * ___data, int ___max_len);
 
 int LIBSTUB_ASN1_TYPE_get_octetstring(void)
 {
-  ASN1_TYPE * ___a = (ASN1_TYPE *)REG_A0;
+  const ASN1_TYPE * ___a = (const ASN1_TYPE *)REG_A0;
   unsigned char * ___data = (unsigned char *)REG_A1;
   int ___max_len = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -1831,11 +1831,11 @@ int LIBSTUB_ASN1_TYPE_set_int_octetstring(void)
   return LIB_ASN1_TYPE_set_int_octetstring(_base, ___a, ___num, ___data, ___len);
 }
 
-int LIB_ASN1_TYPE_get_int_octetstring(struct Library * _base, ASN1_TYPE * ___a, long * ___num, unsigned char * ___data, int ___max_len);
+int LIB_ASN1_TYPE_get_int_octetstring(struct Library * _base, const ASN1_TYPE * ___a, long * ___num, unsigned char * ___data, int ___max_len);
 
 int LIBSTUB_ASN1_TYPE_get_int_octetstring(void)
 {
-  ASN1_TYPE * ___a = (ASN1_TYPE *)REG_A0;
+  const ASN1_TYPE * ___a = (const ASN1_TYPE *)REG_A0;
   long * ___num = (long *)REG_A1;
   unsigned char * ___data = (unsigned char *)REG_A2;
   int ___max_len = (int)REG_D0;
@@ -2011,9 +2011,9 @@ void LIBSTUB_ASN1_add_oid_module(void)
   return LIB_ASN1_add_oid_module(_base);
 }
 
-void LIB_ERR_load_ASN1_strings(struct Library * _base);
+int LIB_ERR_load_ASN1_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_ASN1_strings(void)
+int LIBSTUB_ERR_load_ASN1_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_ASN1_strings(_base);
@@ -2253,16 +2253,6 @@ BIO * LIBSTUB_BIO_new(void)
   return LIB_BIO_new(_base, ___type);
 }
 
-int LIB_BIO_set(struct Library * _base, BIO * ___a, const BIO_METHOD * ___type);
-
-int LIBSTUB_BIO_set(void)
-{
-  BIO * ___a = (BIO *)REG_A0;
-  const BIO_METHOD * ___type = (const BIO_METHOD *)REG_A1;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_BIO_set(_base, ___a, ___type);
-}
-
 int LIB_BIO_free(struct Library * _base, BIO * ___a);
 
 int LIBSTUB_BIO_free(void)
@@ -2347,13 +2337,13 @@ long LIBSTUB_BIO_ctrl(void)
   return LIB_BIO_ctrl(_base, ___bp, ___cmd, ___larg, ___parg);
 }
 
-long LIB_BIO_callback_ctrl(struct Library * _base, BIO * ___b, int ___cmd, void (*___fp)(struct bio_st *,int,const char *,int,long,long));
+long LIB_BIO_callback_ctrl(struct Library * _base, BIO * ___b, int ___cmd, void (*___fp)(BIO *,int,const char *,int,long,long));
 
 long LIBSTUB_BIO_callback_ctrl(void)
 {
   BIO * ___b = (BIO *)REG_A0;
   int ___cmd = (int)REG_D0;
-  void (*___fp)(struct bio_st *,int,const char *,int,long,long) = (void (*)(struct bio_st *,int,const char *,int,long,long))REG_A1;
+  void (*___fp)(BIO *,int,const char *,int,long,long) = (void (*)(BIO *,int,const char *,int,long,long))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_BIO_callback_ctrl(_base, ___b, ___cmd, ___fp);
 }
@@ -2848,9 +2838,9 @@ int LIBSTUB_BIO_vsnprintf(void)
   return LIB_BIO_vsnprintf(_base, ___buf, ___n, ___format, ___args);
 }
 
-void LIB_ERR_load_BIO_strings(struct Library * _base);
+int LIB_ERR_load_BIO_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_BIO_strings(void)
+int LIBSTUB_ERR_load_BIO_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_BIO_strings(_base);
@@ -3916,9 +3906,9 @@ int LIBSTUB_BN_bntest_rand(void)
   return LIB_BN_bntest_rand(_base, ___rnd, ___bits, ___top, ___bottom);
 }
 
-void LIB_ERR_load_BN_strings(struct Library * _base);
+int LIB_ERR_load_BN_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_BN_strings(void)
+int LIBSTUB_ERR_load_BN_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_BN_strings(_base);
@@ -3961,9 +3951,9 @@ size_t LIBSTUB_BUF_MEM_grow_clean(void)
   return LIB_BUF_MEM_grow_clean(_base, ___str, ___len);
 }
 
-void LIB_ERR_load_BUF_strings(struct Library * _base);
+int LIB_ERR_load_BUF_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_BUF_strings(void)
+int LIBSTUB_ERR_load_BUF_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_BUF_strings(_base);
@@ -4021,9 +4011,9 @@ COMP_METHOD * LIBSTUB_COMP_zlib(void)
   return LIB_COMP_zlib(_base);
 }
 
-void LIB_ERR_load_COMP_strings(struct Library * _base);
+int LIB_ERR_load_COMP_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_COMP_strings(void)
+int LIBSTUB_ERR_load_COMP_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_COMP_strings(_base);
@@ -4401,9 +4391,9 @@ void LIBSTUB_OPENSSL_load_builtin_modules(void)
   return LIB_OPENSSL_load_builtin_modules(_base);
 }
 
-void LIB_ERR_load_CONF_strings(struct Library * _base);
+int LIB_ERR_load_CONF_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_CONF_strings(void)
+int LIBSTUB_ERR_load_CONF_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_CONF_strings(_base);
@@ -4451,13 +4441,13 @@ int LIBSTUB_CRYPTO_new_ex_data(void)
   return LIB_CRYPTO_new_ex_data(_base, ___class_index, ___obj, ___ad);
 }
 
-int LIB_CRYPTO_dup_ex_data(struct Library * _base, int ___class_index, CRYPTO_EX_DATA * ___to, CRYPTO_EX_DATA * ___from);
+int LIB_CRYPTO_dup_ex_data(struct Library * _base, int ___class_index, CRYPTO_EX_DATA * ___to, const CRYPTO_EX_DATA * ___from);
 
 int LIBSTUB_CRYPTO_dup_ex_data(void)
 {
   int ___class_index = (int)REG_D0;
   CRYPTO_EX_DATA * ___to = (CRYPTO_EX_DATA *)REG_A0;
-  CRYPTO_EX_DATA * ___from = (CRYPTO_EX_DATA *)REG_A1;
+  const CRYPTO_EX_DATA * ___from = (const CRYPTO_EX_DATA *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_CRYPTO_dup_ex_data(_base, ___class_index, ___to, ___from);
 }
@@ -4558,6 +4548,14 @@ void LIBSTUB_OPENSSL_cleanse(void)
   size_t ___len = (size_t)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OPENSSL_cleanse(_base, ___ptr, ___len);
+}
+
+int LIB_ERR_load_CRYPTO_strings(struct Library * _base);
+
+int LIBSTUB_ERR_load_CRYPTO_strings(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ERR_load_CRYPTO_strings(_base);
 }
 
 void LIB_ERR_load_DSO_strings(struct Library * _base);
@@ -4992,9 +4990,9 @@ int LIBSTUB_EC_GROUP_precompute_mult(void)
   return LIB_EC_GROUP_precompute_mult(_base, ___a, ___b);
 }
 
-void LIB_ERR_load_EC_strings(struct Library * _base);
+int LIB_ERR_load_EC_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_EC_strings(void)
+int LIBSTUB_ERR_load_EC_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_EC_strings(_base);
@@ -5198,9 +5196,9 @@ void LIBSTUB_ERR_add_error_vdata(void)
   return LIB_ERR_add_error_vdata(_base, ___num, ___args);
 }
 
-void LIB_ERR_load_strings(struct Library * _base, int ___lib, ERR_STRING_DATA * ___str);
+int LIB_ERR_load_strings(struct Library * _base, int ___lib, ERR_STRING_DATA * ___str);
 
-void LIBSTUB_ERR_load_strings(void)
+int LIBSTUB_ERR_load_strings(void)
 {
   int ___lib = (int)REG_D0;
   ERR_STRING_DATA * ___str = (ERR_STRING_DATA *)REG_A0;
@@ -5208,9 +5206,9 @@ void LIBSTUB_ERR_load_strings(void)
   return LIB_ERR_load_strings(_base, ___lib, ___str);
 }
 
-void LIB_ERR_unload_strings(struct Library * _base, int ___lib, ERR_STRING_DATA * ___str);
+int LIB_ERR_unload_strings(struct Library * _base, int ___lib, ERR_STRING_DATA * ___str);
 
-void LIBSTUB_ERR_unload_strings(void)
+int LIBSTUB_ERR_unload_strings(void)
 {
   int ___lib = (int)REG_D0;
   ERR_STRING_DATA * ___str = (ERR_STRING_DATA *)REG_A0;
@@ -5218,29 +5216,12 @@ void LIBSTUB_ERR_unload_strings(void)
   return LIB_ERR_unload_strings(_base, ___lib, ___str);
 }
 
-void LIB_ERR_load_ERR_strings(struct Library * _base);
+int LIB_ERR_load_ERR_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_ERR_strings(void)
+int LIBSTUB_ERR_load_ERR_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_ERR_strings(_base);
-}
-
-void LIB_err_free_strings_int(struct Library * _base);
-
-void LIBSTUB_err_free_strings_int(void)
-{
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_err_free_strings_int(_base);
-}
-
-void LIB_ERR_remove_state(struct Library * _base, unsigned long ___pid);
-
-void LIBSTUB_ERR_remove_state(void)
-{
-  unsigned long ___pid = (unsigned long)REG_D0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_ERR_remove_state(_base, ___pid);
 }
 
 ERR_STATE * LIB_ERR_get_state(struct Library * _base);
@@ -5666,14 +5647,14 @@ void LIBSTUB_EVP_EncodeInit(void)
   return LIB_EVP_EncodeInit(_base, ___ctx);
 }
 
-void LIB_EVP_EncodeUpdate(struct Library * _base, EVP_ENCODE_CTX * ___ctx, unsigned char * ___out, int * ___outl, unsigned char * ___in, int ___inl);
+int LIB_EVP_EncodeUpdate(struct Library * _base, EVP_ENCODE_CTX * ___ctx, unsigned char * ___out, int * ___outl, const unsigned char * ___in, int ___inl);
 
-void LIBSTUB_EVP_EncodeUpdate(void)
+int LIBSTUB_EVP_EncodeUpdate(void)
 {
   EVP_ENCODE_CTX * ___ctx = (EVP_ENCODE_CTX *)REG_A0;
   unsigned char * ___out = (unsigned char *)REG_A1;
   int * ___outl = (int *)REG_A2;
-  unsigned char * ___in = (unsigned char *)REG_A3;
+  const unsigned char * ___in = (const unsigned char *)REG_A3;
   int ___inl = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_EncodeUpdate(_base, ___ctx, ___out, ___outl, ___in, ___inl);
@@ -6778,9 +6759,9 @@ void LIBSTUB_EVP_PBE_cleanup(void)
   return LIB_EVP_PBE_cleanup(_base);
 }
 
-void LIB_ERR_load_EVP_strings(struct Library * _base);
+int LIB_ERR_load_EVP_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_EVP_strings(void)
+int LIBSTUB_ERR_load_EVP_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_EVP_strings(_base);
@@ -6848,122 +6829,122 @@ unsigned char * LIBSTUB_HMAC(void)
   return LIB_HMAC(_base, ___evp_md, ___key, ___key_len, ___d, ___n, ___md, ___md_len);
 }
 
-_LHASH * LIB_lh_new(struct Library * _base, LHASH_HASH_FN_TYPE ___h, LHASH_COMP_FN_TYPE ___c);
+OPENSSL_LHASH * LIB_OPENSSL_LH_new(struct Library * _base, OPENSSL_LH_HASHFUNC ___h, OPENSSL_LH_COMPFUNC ___c);
 
-_LHASH * LIBSTUB_lh_new(void)
+OPENSSL_LHASH * LIBSTUB_OPENSSL_LH_new(void)
 {
-  LHASH_HASH_FN_TYPE ___h = (LHASH_HASH_FN_TYPE)REG_D0;
-  LHASH_COMP_FN_TYPE ___c = (LHASH_COMP_FN_TYPE)REG_D1;
+  OPENSSL_LH_HASHFUNC ___h = (OPENSSL_LH_HASHFUNC)REG_A0;
+  OPENSSL_LH_COMPFUNC ___c = (OPENSSL_LH_COMPFUNC)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_new(_base, ___h, ___c);
+  return LIB_OPENSSL_LH_new(_base, ___h, ___c);
 }
 
-void LIB_lh_free(struct Library * _base, _LHASH * ___lh);
+void LIB_OPENSSL_LH_free(struct Library * _base, OPENSSL_LHASH * ___lh);
 
-void LIBSTUB_lh_free(void)
+void LIBSTUB_OPENSSL_LH_free(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_free(_base, ___lh);
+  return LIB_OPENSSL_LH_free(_base, ___lh);
 }
 
-void * LIB_lh_insert(struct Library * _base, _LHASH * ___lh, void * ___data);
+void * LIB_OPENSSL_LH_insert(struct Library * _base, OPENSSL_LHASH * ___lh, void * ___data);
 
-void * LIBSTUB_lh_insert(void)
+void * LIBSTUB_OPENSSL_LH_insert(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   void * ___data = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_insert(_base, ___lh, ___data);
+  return LIB_OPENSSL_LH_insert(_base, ___lh, ___data);
 }
 
-void * LIB_lh_delete(struct Library * _base, _LHASH * ___lh, const void * ___data);
+void * LIB_OPENSSL_LH_delete(struct Library * _base, OPENSSL_LHASH * ___lh, const void * ___data);
 
-void * LIBSTUB_lh_delete(void)
+void * LIBSTUB_OPENSSL_LH_delete(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   const void * ___data = (const void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_delete(_base, ___lh, ___data);
+  return LIB_OPENSSL_LH_delete(_base, ___lh, ___data);
 }
 
-void * LIB_lh_retrieve(struct Library * _base, _LHASH * ___lh, const void * ___data);
+void * LIB_OPENSSL_LH_retrieve(struct Library * _base, OPENSSL_LHASH * ___lh, const void * ___data);
 
-void * LIBSTUB_lh_retrieve(void)
+void * LIBSTUB_OPENSSL_LH_retrieve(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   const void * ___data = (const void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_retrieve(_base, ___lh, ___data);
+  return LIB_OPENSSL_LH_retrieve(_base, ___lh, ___data);
 }
 
-void LIB_lh_doall(struct Library * _base, _LHASH * ___lh, LHASH_DOALL_FN_TYPE ___func);
+void LIB_OPENSSL_LH_doall(struct Library * _base, OPENSSL_LHASH * ___lh, OPENSSL_LH_DOALL_FUNC ___func);
 
-void LIBSTUB_lh_doall(void)
+void LIBSTUB_OPENSSL_LH_doall(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
-  LHASH_DOALL_FN_TYPE ___func = (LHASH_DOALL_FN_TYPE)REG_D0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
+  OPENSSL_LH_DOALL_FUNC ___func = (OPENSSL_LH_DOALL_FUNC)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_doall(_base, ___lh, ___func);
+  return LIB_OPENSSL_LH_doall(_base, ___lh, ___func);
 }
 
-void LIB_lh_doall_arg(struct Library * _base, _LHASH * ___lh, LHASH_DOALL_ARG_FN_TYPE ___func, void * ___arg);
+void LIB_OPENSSL_LH_doall_arg(struct Library * _base, OPENSSL_LHASH * ___lh, OPENSSL_LH_DOALL_FUNCARG ___func, void * ___arg);
 
-void LIBSTUB_lh_doall_arg(void)
+void LIBSTUB_OPENSSL_LH_doall_arg(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
-  LHASH_DOALL_ARG_FN_TYPE ___func = (LHASH_DOALL_ARG_FN_TYPE)REG_D0;
-  void * ___arg = (void *)REG_A1;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
+  OPENSSL_LH_DOALL_FUNCARG ___func = (OPENSSL_LH_DOALL_FUNCARG)REG_A1;
+  void * ___arg = (void *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_doall_arg(_base, ___lh, ___func, ___arg);
+  return LIB_OPENSSL_LH_doall_arg(_base, ___lh, ___func, ___arg);
 }
 
-unsigned long LIB_lh_strhash(struct Library * _base, const char * ___c);
+unsigned long LIB_OPENSSL_LH_strhash(struct Library * _base, const char * ___c);
 
-unsigned long LIBSTUB_lh_strhash(void)
+unsigned long LIBSTUB_OPENSSL_LH_strhash(void)
 {
   const char * ___c = (const char *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_strhash(_base, ___c);
+  return LIB_OPENSSL_LH_strhash(_base, ___c);
 }
 
-unsigned long LIB_lh_num_items(struct Library * _base, const _LHASH * ___lh);
+unsigned long LIB_OPENSSL_LH_num_items(struct Library * _base, const OPENSSL_LHASH * ___lh);
 
-unsigned long LIBSTUB_lh_num_items(void)
+unsigned long LIBSTUB_OPENSSL_LH_num_items(void)
 {
-  const _LHASH * ___lh = (const _LHASH *)REG_A0;
+  const OPENSSL_LHASH * ___lh = (const OPENSSL_LHASH *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_num_items(_base, ___lh);
+  return LIB_OPENSSL_LH_num_items(_base, ___lh);
 }
 
-void LIB_lh_stats_bio(struct Library * _base, const _LHASH * ___lh, BIO * ___out);
+void LIB_OPENSSL_LH_stats_bio(struct Library * _base, const OPENSSL_LHASH * ___lh, BIO * ___out);
 
-void LIBSTUB_lh_stats_bio(void)
+void LIBSTUB_OPENSSL_LH_stats_bio(void)
 {
-  const _LHASH * ___lh = (const _LHASH *)REG_A0;
+  const OPENSSL_LHASH * ___lh = (const OPENSSL_LHASH *)REG_A0;
   BIO * ___out = (BIO *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_stats_bio(_base, ___lh, ___out);
+  return LIB_OPENSSL_LH_stats_bio(_base, ___lh, ___out);
 }
 
-void LIB_lh_node_stats_bio(struct Library * _base, const _LHASH * ___lh, BIO * ___out);
+void LIB_OPENSSL_LH_node_stats_bio(struct Library * _base, const OPENSSL_LHASH * ___lh, BIO * ___out);
 
-void LIBSTUB_lh_node_stats_bio(void)
+void LIBSTUB_OPENSSL_LH_node_stats_bio(void)
 {
-  const _LHASH * ___lh = (const _LHASH *)REG_A0;
+  const OPENSSL_LHASH * ___lh = (const OPENSSL_LHASH *)REG_A0;
   BIO * ___out = (BIO *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_node_stats_bio(_base, ___lh, ___out);
+  return LIB_OPENSSL_LH_node_stats_bio(_base, ___lh, ___out);
 }
 
-void LIB_lh_node_usage_stats_bio(struct Library * _base, const _LHASH * ___lh, BIO * ___out);
+void LIB_OPENSSL_LH_node_usage_stats_bio(struct Library * _base, const OPENSSL_LHASH * ___lh, BIO * ___out);
 
-void LIBSTUB_lh_node_usage_stats_bio(void)
+void LIBSTUB_OPENSSL_LH_node_usage_stats_bio(void)
 {
-  const _LHASH * ___lh = (const _LHASH *)REG_A0;
+  const OPENSSL_LHASH * ___lh = (const OPENSSL_LHASH *)REG_A0;
   BIO * ___out = (BIO *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_node_usage_stats_bio(_base, ___lh, ___out);
+  return LIB_OPENSSL_LH_node_usage_stats_bio(_base, ___lh, ___out);
 }
 
 int LIB_OBJ_NAME_init(struct Library * _base);
@@ -7189,9 +7170,9 @@ int LIBSTUB_OBJ_create_objects(void)
   return LIB_OBJ_create_objects(_base, ___in);
 }
 
-void LIB_ERR_load_OBJ_strings(struct Library * _base);
+int LIB_ERR_load_OBJ_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_OBJ_strings(void)
+int LIBSTUB_ERR_load_OBJ_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_OBJ_strings(_base);
@@ -8731,9 +8712,9 @@ int LIBSTUB_OCSP_basic_verify(void)
   return LIB_OCSP_basic_verify(_base, ___bs, ___certs, ___st, ___flags);
 }
 
-void LIB_ERR_load_OCSP_strings(struct Library * _base);
+int LIB_ERR_load_OCSP_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_OCSP_strings(void)
+int LIBSTUB_ERR_load_OCSP_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_OCSP_strings(_base);
@@ -9399,9 +9380,9 @@ EVP_PKEY * LIBSTUB_d2i_PKCS8PrivateKey_bio(void)
   return LIB_d2i_PKCS8PrivateKey_bio(_base, ___bp, ___x, ___cb, ___u);
 }
 
-void LIB_ERR_load_PEM_strings(struct Library * _base);
+int LIB_ERR_load_PEM_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_PEM_strings(void)
+int LIBSTUB_ERR_load_PEM_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_PEM_strings(_base);
@@ -9990,12 +9971,12 @@ int LIBSTUB_PKCS12_parse(void)
   return LIB_PKCS12_parse(_base, ___p12, ___pass, ___pkey, ___cert, ___ca);
 }
 
-PKCS12 * LIB_PKCS12_create(struct Library * _base, char * ___pass, char * ___name, EVP_PKEY * ___pkey, X509 * ___cert, STACK_OF(X509) * ___ca, int ___nid_key, int ___nid_cert, int ___iter, int ___mac_iter, int ___keytype);
+PKCS12 * LIB_PKCS12_create(struct Library * _base, const char * ___pass, const char * ___name, EVP_PKEY * ___pkey, X509 * ___cert, STACK_OF(X509) * ___ca, int ___nid_key, int ___nid_cert, int ___iter, int ___mac_iter, int ___keytype);
 
 PKCS12 * LIBSTUB_PKCS12_create(void)
 {
-  char * ___pass = (char *)REG_A0;
-  char * ___name = (char *)REG_A1;
+  const char * ___pass = (const char *)REG_A0;
+  const char * ___name = (const char *)REG_A1;
   EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A2;
   X509 * ___cert = (X509 *)REG_A3;
   STACK_OF(X509) * ___ca = (STACK_OF(X509) *)REG_D0;
@@ -10028,20 +10009,20 @@ PKCS12 * LIBSTUB_d2i_PKCS12_bio(void)
   return LIB_d2i_PKCS12_bio(_base, ___bp, ___p12);
 }
 
-int LIB_PKCS12_newpass(struct Library * _base, PKCS12 * ___p12, char * ___oldpass, char * ___newpass);
+int LIB_PKCS12_newpass(struct Library * _base, PKCS12 * ___p12, const char * ___oldpass, const char * ___newpass);
 
 int LIBSTUB_PKCS12_newpass(void)
 {
   PKCS12 * ___p12 = (PKCS12 *)REG_A0;
-  char * ___oldpass = (char *)REG_A1;
-  char * ___newpass = (char *)REG_A2;
+  const char * ___oldpass = (const char *)REG_A1;
+  const char * ___newpass = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS12_newpass(_base, ___p12, ___oldpass, ___newpass);
 }
 
-void LIB_ERR_load_PKCS12_strings(struct Library * _base);
+int LIB_ERR_load_PKCS12_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_PKCS12_strings(void)
+int LIBSTUB_ERR_load_PKCS12_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_PKCS12_strings(_base);
@@ -10995,9 +10976,9 @@ int LIBSTUB_SMIME_text(void)
   return LIB_SMIME_text(_base, ___in, ___out);
 }
 
-void LIB_ERR_load_PKCS7_strings(struct Library * _base);
+int LIB_ERR_load_PKCS7_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_PKCS7_strings(void)
+int LIBSTUB_ERR_load_PKCS7_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_PKCS7_strings(_base);
@@ -11106,9 +11087,9 @@ int LIBSTUB_RAND_poll(void)
   return LIB_RAND_poll(_base);
 }
 
-void LIB_ERR_load_RAND_strings(struct Library * _base);
+int LIB_ERR_load_RAND_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_RAND_strings(void)
+int LIBSTUB_ERR_load_RAND_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_RAND_strings(_base);
@@ -12826,203 +12807,203 @@ int LIBSTUB_SSL_COMP_add_compression_method(void)
   return LIB_SSL_COMP_add_compression_method(_base, ___id, ___cm);
 }
 
-void LIB_ERR_load_SSL_strings(struct Library * _base);
+int LIB_ERR_load_SSL_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_SSL_strings(void)
+int LIBSTUB_ERR_load_SSL_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_SSL_strings(_base);
 }
 
-int LIB_sk_num(struct Library * _base, const _STACK * ___a);
+int LIB_OPENSSL_sk_num(struct Library * _base, const OPENSSL_STACK * ___a);
 
-int LIBSTUB_sk_num(void)
+int LIBSTUB_OPENSSL_sk_num(void)
 {
-  const _STACK * ___a = (const _STACK *)REG_A0;
+  const OPENSSL_STACK * ___a = (const OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_num(_base, ___a);
+  return LIB_OPENSSL_sk_num(_base, ___a);
 }
 
-void * LIB_sk_value(struct Library * _base, const _STACK * ___a, int ___b);
+void * LIB_OPENSSL_sk_value(struct Library * _base, const OPENSSL_STACK * ___a, int ___b);
 
-void * LIBSTUB_sk_value(void)
+void * LIBSTUB_OPENSSL_sk_value(void)
 {
-  const _STACK * ___a = (const _STACK *)REG_A0;
+  const OPENSSL_STACK * ___a = (const OPENSSL_STACK *)REG_A0;
   int ___b = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_value(_base, ___a, ___b);
+  return LIB_OPENSSL_sk_value(_base, ___a, ___b);
 }
 
-void * LIB_sk_set(struct Library * _base, _STACK * ___a, int ___b, void * ___c);
+void * LIB_OPENSSL_sk_set(struct Library * _base, OPENSSL_STACK * ___a, int ___b, void * ___c);
 
-void * LIBSTUB_sk_set(void)
+void * LIBSTUB_OPENSSL_sk_set(void)
 {
-  _STACK * ___a = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___a = (OPENSSL_STACK *)REG_A0;
   int ___b = (int)REG_D0;
   void * ___c = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_set(_base, ___a, ___b, ___c);
+  return LIB_OPENSSL_sk_set(_base, ___a, ___b, ___c);
 }
 
-_STACK * LIB_sk_new(struct Library * _base, int (*___cmp)(const void *,const void *));
+OPENSSL_STACK * LIB_OPENSSL_sk_new(struct Library * _base, int (*___cmp)(const void *,const void *));
 
-_STACK * LIBSTUB_sk_new(void)
+OPENSSL_STACK * LIBSTUB_OPENSSL_sk_new(void)
 {
   int (*___cmp)(const void *,const void *) = (int (*)(const void *,const void *))REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_new(_base, ___cmp);
+  return LIB_OPENSSL_sk_new(_base, ___cmp);
 }
 
-_STACK * LIB_sk_new_null(struct Library * _base);
+OPENSSL_STACK * LIB_OPENSSL_sk_new_null(struct Library * _base);
 
-_STACK * LIBSTUB_sk_new_null(void)
+OPENSSL_STACK * LIBSTUB_OPENSSL_sk_new_null(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_new_null(_base);
+  return LIB_OPENSSL_sk_new_null(_base);
 }
 
-void LIB_sk_free(struct Library * _base, _STACK * ___a);
+void LIB_OPENSSL_sk_free(struct Library * _base, OPENSSL_STACK * ___a);
 
-void LIBSTUB_sk_free(void)
+void LIBSTUB_OPENSSL_sk_free(void)
 {
-  _STACK * ___a = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___a = (OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_free(_base, ___a);
+  return LIB_OPENSSL_sk_free(_base, ___a);
 }
 
-void LIB_sk_pop_free(struct Library * _base, _STACK * ___st, void (*___func)(void *));
+void LIB_OPENSSL_sk_pop_free(struct Library * _base, OPENSSL_STACK * ___st, void (*___func)(void *));
 
-void LIBSTUB_sk_pop_free(void)
+void LIBSTUB_OPENSSL_sk_pop_free(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   void (*___func)(void *) = (void (*)(void *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_pop_free(_base, ___st, ___func);
+  return LIB_OPENSSL_sk_pop_free(_base, ___st, ___func);
 }
 
-int LIB_sk_insert(struct Library * _base, _STACK * ___sk, void * ___data, int ___where);
+int LIB_OPENSSL_sk_insert(struct Library * _base, OPENSSL_STACK * ___sk, void * ___data, int ___where);
 
-int LIBSTUB_sk_insert(void)
+int LIBSTUB_OPENSSL_sk_insert(void)
 {
-  _STACK * ___sk = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___sk = (OPENSSL_STACK *)REG_A0;
   void * ___data = (void *)REG_A1;
   int ___where = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_insert(_base, ___sk, ___data, ___where);
+  return LIB_OPENSSL_sk_insert(_base, ___sk, ___data, ___where);
 }
 
-void * LIB_sk_delete(struct Library * _base, _STACK * ___st, int ___loc);
+void * LIB_OPENSSL_sk_delete(struct Library * _base, OPENSSL_STACK * ___st, int ___loc);
 
-void * LIBSTUB_sk_delete(void)
+void * LIBSTUB_OPENSSL_sk_delete(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   int ___loc = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_delete(_base, ___st, ___loc);
+  return LIB_OPENSSL_sk_delete(_base, ___st, ___loc);
 }
 
-void * LIB_sk_delete_ptr(struct Library * _base, _STACK * ___st, char * ___p);
+void * LIB_OPENSSL_sk_delete_ptr(struct Library * _base, OPENSSL_STACK * ___st, const void * ___p);
 
-void * LIBSTUB_sk_delete_ptr(void)
+void * LIBSTUB_OPENSSL_sk_delete_ptr(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
-  char * ___p = (char *)REG_A1;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
+  const void * ___p = (const void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_delete_ptr(_base, ___st, ___p);
+  return LIB_OPENSSL_sk_delete_ptr(_base, ___st, ___p);
 }
 
-int LIB_sk_find(struct Library * _base, _STACK * ___st, void * ___data);
+int LIB_OPENSSL_sk_find(struct Library * _base, OPENSSL_STACK * ___st, const void * ___data);
 
-int LIBSTUB_sk_find(void)
+int LIBSTUB_OPENSSL_sk_find(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
+  const void * ___data = (const void *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_sk_find(_base, ___st, ___data);
+}
+
+int LIB_OPENSSL_sk_push(struct Library * _base, OPENSSL_STACK * ___st, void * ___data);
+
+int LIBSTUB_OPENSSL_sk_push(void)
+{
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   void * ___data = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_find(_base, ___st, ___data);
+  return LIB_OPENSSL_sk_push(_base, ___st, ___data);
 }
 
-int LIB_sk_push(struct Library * _base, _STACK * ___st, void * ___data);
+int LIB_OPENSSL_sk_unshift(struct Library * _base, OPENSSL_STACK * ___st, void * ___data);
 
-int LIBSTUB_sk_push(void)
+int LIBSTUB_OPENSSL_sk_unshift(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   void * ___data = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_push(_base, ___st, ___data);
+  return LIB_OPENSSL_sk_unshift(_base, ___st, ___data);
 }
 
-int LIB_sk_unshift(struct Library * _base, _STACK * ___st, void * ___data);
+void * LIB_OPENSSL_sk_shift(struct Library * _base, OPENSSL_STACK * ___st);
 
-int LIBSTUB_sk_unshift(void)
+void * LIBSTUB_OPENSSL_sk_shift(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
-  void * ___data = (void *)REG_A1;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_unshift(_base, ___st, ___data);
+  return LIB_OPENSSL_sk_shift(_base, ___st);
 }
 
-void * LIB_sk_shift(struct Library * _base, _STACK * ___st);
+void * LIB_OPENSSL_sk_pop(struct Library * _base, OPENSSL_STACK * ___st);
 
-void * LIBSTUB_sk_shift(void)
+void * LIBSTUB_OPENSSL_sk_pop(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_shift(_base, ___st);
+  return LIB_OPENSSL_sk_pop(_base, ___st);
 }
 
-void * LIB_sk_pop(struct Library * _base, _STACK * ___st);
+void LIB_OPENSSL_sk_zero(struct Library * _base, OPENSSL_STACK * ___st);
 
-void * LIBSTUB_sk_pop(void)
+void LIBSTUB_OPENSSL_sk_zero(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_pop(_base, ___st);
+  return LIB_OPENSSL_sk_zero(_base, ___st);
 }
 
-void LIB_sk_zero(struct Library * _base, _STACK * ___st);
+int (* LIB_OPENSSL_sk_set_cmp_func(struct Library * _base, OPENSSL_STACK * ___sk, int (*___c)(const void *,const void *)))(const void *, const void *);
 
-void LIBSTUB_sk_zero(void)
+int (* LIBSTUB_OPENSSL_sk_set_cmp_func(void))(const void *, const void *)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_zero(_base, ___st);
-}
-
-int (* LIB_sk_set_cmp_func(struct Library * _base, _STACK * ___sk, int (*___c)(const void *,const void *)))(const void *, const void *);
-
-int (* LIBSTUB_sk_set_cmp_func(void))(const void *, const void *)
-{
-  _STACK * ___sk = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___sk = (OPENSSL_STACK *)REG_A0;
   int (*___c)(const void *,const void *) = (int (*)(const void *,const void *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_set_cmp_func(_base, ___sk, ___c);
+  return LIB_OPENSSL_sk_set_cmp_func(_base, ___sk, ___c);
 }
 
-_STACK * LIB_sk_dup(struct Library * _base, _STACK * ___st);
+OPENSSL_STACK * LIB_OPENSSL_sk_dup(struct Library * _base, const OPENSSL_STACK * ___st);
 
-_STACK * LIBSTUB_sk_dup(void)
+OPENSSL_STACK * LIBSTUB_OPENSSL_sk_dup(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  const OPENSSL_STACK * ___st = (const OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_dup(_base, ___st);
+  return LIB_OPENSSL_sk_dup(_base, ___st);
 }
 
-void LIB_sk_sort(struct Library * _base, _STACK * ___st);
+void LIB_OPENSSL_sk_sort(struct Library * _base, OPENSSL_STACK * ___st);
 
-void LIBSTUB_sk_sort(void)
+void LIBSTUB_OPENSSL_sk_sort(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_sort(_base, ___st);
+  return LIB_OPENSSL_sk_sort(_base, ___st);
 }
 
-int LIB_sk_is_sorted(struct Library * _base, const _STACK * ___st);
+int LIB_OPENSSL_sk_is_sorted(struct Library * _base, const OPENSSL_STACK * ___st);
 
-int LIBSTUB_sk_is_sorted(void)
+int LIBSTUB_OPENSSL_sk_is_sorted(void)
 {
-  const _STACK * ___st = (const _STACK *)REG_A0;
+  const OPENSSL_STACK * ___st = (const OPENSSL_STACK *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_is_sorted(_base, ___st);
+  return LIB_OPENSSL_sk_is_sorted(_base, ___st);
 }
 
 TXT_DB * LIB_TXT_DB_read(struct Library * _base, BIO * ___in, int ___num);
@@ -13045,15 +13026,15 @@ long LIBSTUB_TXT_DB_write(void)
   return LIB_TXT_DB_write(_base, ___out, ___db);
 }
 
-int LIB_TXT_DB_create_index(struct Library * _base, TXT_DB * ___db, int ___field, int (*___qual)(), LHASH_HASH_FN_TYPE ___hash, LHASH_COMP_FN_TYPE ___cmp);
+int LIB_TXT_DB_create_index(struct Library * _base, TXT_DB * ___db, int ___field, int (*___qual)(OPENSSL_STRING *), OPENSSL_LH_HASHFUNC ___hash, OPENSSL_LH_COMPFUNC ___cmp);
 
 int LIBSTUB_TXT_DB_create_index(void)
 {
   TXT_DB * ___db = (TXT_DB *)REG_A0;
   int ___field = (int)REG_D0;
-  int (*___qual)() = (int (*)())REG_A1;
-  LHASH_HASH_FN_TYPE ___hash = (LHASH_HASH_FN_TYPE)REG_D1;
-  LHASH_COMP_FN_TYPE ___cmp = (LHASH_COMP_FN_TYPE)REG_D2;
+  int (*___qual)(OPENSSL_STRING *) = (int (*)(OPENSSL_STRING *))REG_A1;
+  OPENSSL_LH_HASHFUNC ___hash = (OPENSSL_LH_HASHFUNC)REG_D1;
+  OPENSSL_LH_COMPFUNC ___cmp = (OPENSSL_LH_COMPFUNC)REG_D2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_TXT_DB_create_index(_base, ___db, ___field, ___qual, ___hash, ___cmp);
 }
@@ -13369,11 +13350,11 @@ UI_METHOD * LIBSTUB_UI_OpenSSL(void)
   return LIB_UI_OpenSSL(_base);
 }
 
-UI_METHOD * LIB_UI_create_method(struct Library * _base, char * ___name);
+UI_METHOD * LIB_UI_create_method(struct Library * _base, const char * ___name);
 
 UI_METHOD * LIBSTUB_UI_create_method(void)
 {
-  char * ___name = (char *)REG_A0;
+  const char * ___name = (const char *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_UI_create_method(_base, ___name);
 }
@@ -13590,9 +13571,9 @@ int LIBSTUB_UI_UTIL_read_pw(void)
   return LIB_UI_UTIL_read_pw(_base, ___buf, ___buff, ___size, ___prompt, ___verify);
 }
 
-void LIB_ERR_load_UI_strings(struct Library * _base);
+int LIB_ERR_load_UI_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_UI_strings(void)
+int LIBSTUB_ERR_load_UI_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_UI_strings(_base);
@@ -15536,11 +15517,11 @@ int LIBSTUB_X509_set_issuer_name(void)
   return LIB_X509_set_issuer_name(_base, ___x, ___name);
 }
 
-X509_NAME * LIB_X509_get_issuer_name(struct Library * _base, X509 * ___a);
+X509_NAME * LIB_X509_get_issuer_name(struct Library * _base, const X509 * ___a);
 
 X509_NAME * LIBSTUB_X509_get_issuer_name(void)
 {
-  X509 * ___a = (X509 *)REG_A0;
+  const X509 * ___a = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_issuer_name(_base, ___a);
 }
@@ -15555,11 +15536,11 @@ int LIBSTUB_X509_set_subject_name(void)
   return LIB_X509_set_subject_name(_base, ___x, ___name);
 }
 
-X509_NAME * LIB_X509_get_subject_name(struct Library * _base, X509 * ___a);
+X509_NAME * LIB_X509_get_subject_name(struct Library * _base, const X509 * ___a);
 
 X509_NAME * LIBSTUB_X509_get_subject_name(void)
 {
-  X509 * ___a = (X509 *)REG_A0;
+  const X509 * ___a = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_subject_name(_base, ___a);
 }
@@ -15886,12 +15867,12 @@ int LIBSTUB_X509_REVOKED_set_revocationDate(void)
   return LIB_X509_REVOKED_set_revocationDate(_base, ___r, ___tm);
 }
 
-int LIB_X509_check_private_key(struct Library * _base, X509 * ___x509, EVP_PKEY * ___pkey);
+int LIB_X509_check_private_key(struct Library * _base, const X509 * ___x509, const EVP_PKEY * ___pkey);
 
 int LIBSTUB_X509_check_private_key(void)
 {
-  X509 * ___x509 = (X509 *)REG_A0;
-  EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A1;
+  const X509 * ___x509 = (const X509 *)REG_A0;
+  const EVP_PKEY * ___pkey = (const EVP_PKEY *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_check_private_key(_base, ___x509, ___pkey);
 }
@@ -16079,11 +16060,11 @@ int LIBSTUB_X509_REQ_print(void)
   return LIB_X509_REQ_print(_base, ___bp, ___req);
 }
 
-int LIB_X509_NAME_entry_count(struct Library * _base, X509_NAME * ___name);
+int LIB_X509_NAME_entry_count(struct Library * _base, const X509_NAME * ___name);
 
 int LIBSTUB_X509_NAME_entry_count(void)
 {
-  X509_NAME * ___name = (X509_NAME *)REG_A0;
+  const X509_NAME * ___name = (const X509_NAME *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_NAME_entry_count(_base, ___name);
 }
@@ -16166,12 +16147,12 @@ int LIBSTUB_X509_NAME_add_entry(void)
   return LIB_X509_NAME_add_entry(_base, ___name, ___ne, ___loc, ___set);
 }
 
-int LIB_X509_NAME_add_entry_by_OBJ(struct Library * _base, X509_NAME * ___name, ASN1_OBJECT * ___obj, int ___type, unsigned char * ___bytes, int ___len, int ___loc, int ___set);
+int LIB_X509_NAME_add_entry_by_OBJ(struct Library * _base, X509_NAME * ___name, const ASN1_OBJECT * ___obj, int ___type, unsigned char * ___bytes, int ___len, int ___loc, int ___set);
 
 int LIBSTUB_X509_NAME_add_entry_by_OBJ(void)
 {
   X509_NAME * ___name = (X509_NAME *)REG_A0;
-  ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
+  const ASN1_OBJECT * ___obj = (const ASN1_OBJECT *)REG_A1;
   int ___type = (int)REG_D0;
   unsigned char * ___bytes = (unsigned char *)REG_A2;
   int ___len = (int)REG_D1;
@@ -16237,12 +16218,12 @@ int LIBSTUB_X509_NAME_add_entry_by_txt(void)
   return LIB_X509_NAME_add_entry_by_txt(_base, ___name, ___field, ___type, ___bytes, ___len, ___loc, ___set);
 }
 
-X509_NAME_ENTRY * LIB_X509_NAME_ENTRY_create_by_OBJ(struct Library * _base, X509_NAME_ENTRY ** ___ne, ASN1_OBJECT * ___obj, int ___type, const unsigned char * ___bytes, int ___len);
+X509_NAME_ENTRY * LIB_X509_NAME_ENTRY_create_by_OBJ(struct Library * _base, X509_NAME_ENTRY ** ___ne, const ASN1_OBJECT * ___obj, int ___type, const unsigned char * ___bytes, int ___len);
 
 X509_NAME_ENTRY * LIBSTUB_X509_NAME_ENTRY_create_by_OBJ(void)
 {
   X509_NAME_ENTRY ** ___ne = (X509_NAME_ENTRY **)REG_A0;
-  ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
+  const ASN1_OBJECT * ___obj = (const ASN1_OBJECT *)REG_A1;
   int ___type = (int)REG_D0;
   const unsigned char * ___bytes = (const unsigned char *)REG_A2;
   int ___len = (int)REG_D1;
@@ -16250,12 +16231,12 @@ X509_NAME_ENTRY * LIBSTUB_X509_NAME_ENTRY_create_by_OBJ(void)
   return LIB_X509_NAME_ENTRY_create_by_OBJ(_base, ___ne, ___obj, ___type, ___bytes, ___len);
 }
 
-int LIB_X509_NAME_ENTRY_set_object(struct Library * _base, X509_NAME_ENTRY * ___ne, ASN1_OBJECT * ___obj);
+int LIB_X509_NAME_ENTRY_set_object(struct Library * _base, X509_NAME_ENTRY * ___ne, const ASN1_OBJECT * ___obj);
 
 int LIBSTUB_X509_NAME_ENTRY_set_object(void)
 {
   X509_NAME_ENTRY * ___ne = (X509_NAME_ENTRY *)REG_A0;
-  ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
+  const ASN1_OBJECT * ___obj = (const ASN1_OBJECT *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_NAME_ENTRY_set_object(_base, ___ne, ___obj);
 }
@@ -16363,53 +16344,53 @@ STACK_OF(X509_EXTENSION) * LIBSTUB_X509v3_add_ext(void)
   return LIB_X509v3_add_ext(_base, ___x, ___ex, ___loc);
 }
 
-int LIB_X509_get_ext_count(struct Library * _base, X509 * ___x);
+int LIB_X509_get_ext_count(struct Library * _base, const X509 * ___x);
 
 int LIBSTUB_X509_get_ext_count(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_ext_count(_base, ___x);
 }
 
-int LIB_X509_get_ext_by_NID(struct Library * _base, X509 * ___x, int ___nid, int ___lastpos);
+int LIB_X509_get_ext_by_NID(struct Library * _base, const X509 * ___x, int ___nid, int ___lastpos);
 
 int LIBSTUB_X509_get_ext_by_NID(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   int ___nid = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_ext_by_NID(_base, ___x, ___nid, ___lastpos);
 }
 
-int LIB_X509_get_ext_by_OBJ(struct Library * _base, X509 * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
+int LIB_X509_get_ext_by_OBJ(struct Library * _base, const X509 * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
 
 int LIBSTUB_X509_get_ext_by_OBJ(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
   int ___lastpos = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_ext_by_OBJ(_base, ___x, ___obj, ___lastpos);
 }
 
-int LIB_X509_get_ext_by_critical(struct Library * _base, X509 * ___x, int ___crit, int ___lastpos);
+int LIB_X509_get_ext_by_critical(struct Library * _base, const X509 * ___x, int ___crit, int ___lastpos);
 
 int LIBSTUB_X509_get_ext_by_critical(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   int ___crit = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_ext_by_critical(_base, ___x, ___crit, ___lastpos);
 }
 
-X509_EXTENSION * LIB_X509_get_ext(struct Library * _base, X509 * ___x, int ___loc);
+X509_EXTENSION * LIB_X509_get_ext(struct Library * _base, const X509 * ___x, int ___loc);
 
 X509_EXTENSION * LIBSTUB_X509_get_ext(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   int ___loc = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_ext(_base, ___x, ___loc);
@@ -16436,11 +16417,11 @@ int LIBSTUB_X509_add_ext(void)
   return LIB_X509_add_ext(_base, ___x, ___ex, ___loc);
 }
 
-void * LIB_X509_get_ext_d2i(struct Library * _base, X509 * ___x, int ___nid, int * ___crit, int * ___idx);
+void * LIB_X509_get_ext_d2i(struct Library * _base, const X509 * ___x, int ___nid, int * ___crit, int * ___idx);
 
 void * LIBSTUB_X509_get_ext_d2i(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   int ___nid = (int)REG_D0;
   int * ___crit = (int *)REG_A1;
   int * ___idx = (int *)REG_A2;
@@ -16461,53 +16442,53 @@ int LIBSTUB_X509_add1_ext_i2d(void)
   return LIB_X509_add1_ext_i2d(_base, ___x, ___nid, ___value, ___crit, ___flags);
 }
 
-int LIB_X509_CRL_get_ext_count(struct Library * _base, X509_CRL * ___x);
+int LIB_X509_CRL_get_ext_count(struct Library * _base, const X509_CRL * ___x);
 
 int LIBSTUB_X509_CRL_get_ext_count(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_ext_count(_base, ___x);
 }
 
-int LIB_X509_CRL_get_ext_by_NID(struct Library * _base, X509_CRL * ___x, int ___nid, int ___lastpos);
+int LIB_X509_CRL_get_ext_by_NID(struct Library * _base, const X509_CRL * ___x, int ___nid, int ___lastpos);
 
 int LIBSTUB_X509_CRL_get_ext_by_NID(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   int ___nid = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_ext_by_NID(_base, ___x, ___nid, ___lastpos);
 }
 
-int LIB_X509_CRL_get_ext_by_OBJ(struct Library * _base, X509_CRL * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
+int LIB_X509_CRL_get_ext_by_OBJ(struct Library * _base, const X509_CRL * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
 
 int LIBSTUB_X509_CRL_get_ext_by_OBJ(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
   int ___lastpos = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_ext_by_OBJ(_base, ___x, ___obj, ___lastpos);
 }
 
-int LIB_X509_CRL_get_ext_by_critical(struct Library * _base, X509_CRL * ___x, int ___crit, int ___lastpos);
+int LIB_X509_CRL_get_ext_by_critical(struct Library * _base, const X509_CRL * ___x, int ___crit, int ___lastpos);
 
 int LIBSTUB_X509_CRL_get_ext_by_critical(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   int ___crit = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_ext_by_critical(_base, ___x, ___crit, ___lastpos);
 }
 
-X509_EXTENSION * LIB_X509_CRL_get_ext(struct Library * _base, X509_CRL * ___x, int ___loc);
+X509_EXTENSION * LIB_X509_CRL_get_ext(struct Library * _base, const X509_CRL * ___x, int ___loc);
 
 X509_EXTENSION * LIBSTUB_X509_CRL_get_ext(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   int ___loc = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_ext(_base, ___x, ___loc);
@@ -16534,11 +16515,11 @@ int LIBSTUB_X509_CRL_add_ext(void)
   return LIB_X509_CRL_add_ext(_base, ___x, ___ex, ___loc);
 }
 
-void * LIB_X509_CRL_get_ext_d2i(struct Library * _base, X509_CRL * ___x, int ___nid, int * ___crit, int * ___idx);
+void * LIB_X509_CRL_get_ext_d2i(struct Library * _base, const X509_CRL * ___x, int ___nid, int * ___crit, int * ___idx);
 
 void * LIBSTUB_X509_CRL_get_ext_d2i(void)
 {
-  X509_CRL * ___x = (X509_CRL *)REG_A0;
+  const X509_CRL * ___x = (const X509_CRL *)REG_A0;
   int ___nid = (int)REG_D0;
   int * ___crit = (int *)REG_A1;
   int * ___idx = (int *)REG_A2;
@@ -16559,53 +16540,53 @@ int LIBSTUB_X509_CRL_add1_ext_i2d(void)
   return LIB_X509_CRL_add1_ext_i2d(_base, ___x, ___nid, ___value, ___crit, ___flags);
 }
 
-int LIB_X509_REVOKED_get_ext_count(struct Library * _base, X509_REVOKED * ___x);
+int LIB_X509_REVOKED_get_ext_count(struct Library * _base, const X509_REVOKED * ___x);
 
 int LIBSTUB_X509_REVOKED_get_ext_count(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get_ext_count(_base, ___x);
 }
 
-int LIB_X509_REVOKED_get_ext_by_NID(struct Library * _base, X509_REVOKED * ___x, int ___nid, int ___lastpos);
+int LIB_X509_REVOKED_get_ext_by_NID(struct Library * _base, const X509_REVOKED * ___x, int ___nid, int ___lastpos);
 
 int LIBSTUB_X509_REVOKED_get_ext_by_NID(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   int ___nid = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get_ext_by_NID(_base, ___x, ___nid, ___lastpos);
 }
 
-int LIB_X509_REVOKED_get_ext_by_OBJ(struct Library * _base, X509_REVOKED * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
+int LIB_X509_REVOKED_get_ext_by_OBJ(struct Library * _base, const X509_REVOKED * ___x, ASN1_OBJECT * ___obj, int ___lastpos);
 
 int LIBSTUB_X509_REVOKED_get_ext_by_OBJ(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   ASN1_OBJECT * ___obj = (ASN1_OBJECT *)REG_A1;
   int ___lastpos = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get_ext_by_OBJ(_base, ___x, ___obj, ___lastpos);
 }
 
-int LIB_X509_REVOKED_get_ext_by_critical(struct Library * _base, X509_REVOKED * ___x, int ___crit, int ___lastpos);
+int LIB_X509_REVOKED_get_ext_by_critical(struct Library * _base, const X509_REVOKED * ___x, int ___crit, int ___lastpos);
 
 int LIBSTUB_X509_REVOKED_get_ext_by_critical(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   int ___crit = (int)REG_D0;
   int ___lastpos = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get_ext_by_critical(_base, ___x, ___crit, ___lastpos);
 }
 
-X509_EXTENSION * LIB_X509_REVOKED_get_ext(struct Library * _base, X509_REVOKED * ___x, int ___loc);
+X509_EXTENSION * LIB_X509_REVOKED_get_ext(struct Library * _base, const X509_REVOKED * ___x, int ___loc);
 
 X509_EXTENSION * LIBSTUB_X509_REVOKED_get_ext(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   int ___loc = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get_ext(_base, ___x, ___loc);
@@ -16632,11 +16613,11 @@ int LIBSTUB_X509_REVOKED_add_ext(void)
   return LIB_X509_REVOKED_add_ext(_base, ___x, ___ex, ___loc);
 }
 
-void * LIB_X509_REVOKED_get_ext_d2i(struct Library * _base, X509_REVOKED * ___x, int ___nid, int * ___crit, int * ___idx);
+void * LIB_X509_REVOKED_get_ext_d2i(struct Library * _base, const X509_REVOKED * ___x, int ___nid, int * ___crit, int * ___idx);
 
 void * LIBSTUB_X509_REVOKED_get_ext_d2i(void)
 {
-  X509_REVOKED * ___x = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___x = (const X509_REVOKED *)REG_A0;
   int ___nid = (int)REG_D0;
   int * ___crit = (int *)REG_A1;
   int * ___idx = (int *)REG_A2;
@@ -16729,11 +16710,11 @@ ASN1_OCTET_STRING * LIBSTUB_X509_EXTENSION_get_data(void)
   return LIB_X509_EXTENSION_get_data(_base, ___ne);
 }
 
-int LIB_X509_EXTENSION_get_critical(struct Library * _base, X509_EXTENSION * ___ex);
+int LIB_X509_EXTENSION_get_critical(struct Library * _base, const X509_EXTENSION * ___ex);
 
 int LIBSTUB_X509_EXTENSION_get_critical(void)
 {
-  X509_EXTENSION * ___ex = (X509_EXTENSION *)REG_A0;
+  const X509_EXTENSION * ___ex = (const X509_EXTENSION *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_EXTENSION_get_critical(_base, ___ex);
 }
@@ -16911,11 +16892,11 @@ void * LIBSTUB_X509_ATTRIBUTE_get0_data(void)
   return LIB_X509_ATTRIBUTE_get0_data(_base, ___attr, ___idx, ___atrtype, ___data);
 }
 
-int LIB_X509_ATTRIBUTE_count(struct Library * _base, X509_ATTRIBUTE * ___attr);
+int LIB_X509_ATTRIBUTE_count(struct Library * _base, const X509_ATTRIBUTE * ___attr);
 
 int LIBSTUB_X509_ATTRIBUTE_count(void)
 {
-  X509_ATTRIBUTE * ___attr = (X509_ATTRIBUTE *)REG_A0;
+  const X509_ATTRIBUTE * ___attr = (const X509_ATTRIBUTE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_ATTRIBUTE_count(_base, ___attr);
 }
@@ -17232,14 +17213,14 @@ int LIBSTUB_X509_TRUST_get_by_id(void)
   return LIB_X509_TRUST_get_by_id(_base, ___id);
 }
 
-int LIB_X509_TRUST_add(struct Library * _base, int ___id, int ___flags, int (*___ck)(X509_TRUST *,X509 *,int), char * ___name, int ___arg1, void * ___arg2);
+int LIB_X509_TRUST_add(struct Library * _base, int ___id, int ___flags, int (*___ck)(X509_TRUST *,X509 *,int), const char * ___name, int ___arg1, void * ___arg2);
 
 int LIBSTUB_X509_TRUST_add(void)
 {
   int ___id = (int)REG_D0;
   int ___flags = (int)REG_D1;
   int (*___ck)(X509_TRUST *,X509 *,int) = (int (*)(X509_TRUST *,X509 *,int))REG_A0;
-  char * ___name = (char *)REG_A1;
+  const char * ___name = (const char *)REG_A1;
   int ___arg1 = (int)REG_D2;
   void * ___arg2 = (void *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
@@ -17254,58 +17235,58 @@ void LIBSTUB_X509_TRUST_cleanup(void)
   return LIB_X509_TRUST_cleanup(_base);
 }
 
-int LIB_X509_TRUST_get_flags(struct Library * _base, X509_TRUST * ___xp);
+int LIB_X509_TRUST_get_flags(struct Library * _base, const X509_TRUST * ___xp);
 
 int LIBSTUB_X509_TRUST_get_flags(void)
 {
-  X509_TRUST * ___xp = (X509_TRUST *)REG_A0;
+  const X509_TRUST * ___xp = (const X509_TRUST *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_TRUST_get_flags(_base, ___xp);
 }
 
-char * LIB_X509_TRUST_get0_name(struct Library * _base, X509_TRUST * ___xp);
+char * LIB_X509_TRUST_get0_name(struct Library * _base, const X509_TRUST * ___xp);
 
 char * LIBSTUB_X509_TRUST_get0_name(void)
 {
-  X509_TRUST * ___xp = (X509_TRUST *)REG_A0;
+  const X509_TRUST * ___xp = (const X509_TRUST *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_TRUST_get0_name(_base, ___xp);
 }
 
-int LIB_X509_TRUST_get_trust(struct Library * _base, X509_TRUST * ___xp);
+int LIB_X509_TRUST_get_trust(struct Library * _base, const X509_TRUST * ___xp);
 
 int LIBSTUB_X509_TRUST_get_trust(void)
 {
-  X509_TRUST * ___xp = (X509_TRUST *)REG_A0;
+  const X509_TRUST * ___xp = (const X509_TRUST *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_TRUST_get_trust(_base, ___xp);
 }
 
-void LIB_ERR_load_X509_strings(struct Library * _base);
+int LIB_ERR_load_X509_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_X509_strings(void)
+int LIBSTUB_ERR_load_X509_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_X509_strings(_base);
 }
 
-int LIB_X509_OBJECT_idx_by_subject(struct Library * _base, STACK_OF(X509_OBJECT) * ___h, int ___type, X509_NAME * ___name);
+int LIB_X509_OBJECT_idx_by_subject(struct Library * _base, STACK_OF(X509_OBJECT) * ___h, X509_LOOKUP_TYPE ___type, X509_NAME * ___name);
 
 int LIBSTUB_X509_OBJECT_idx_by_subject(void)
 {
   STACK_OF(X509_OBJECT) * ___h = (STACK_OF(X509_OBJECT) *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_OBJECT_idx_by_subject(_base, ___h, ___type, ___name);
 }
 
-X509_OBJECT * LIB_X509_OBJECT_retrieve_by_subject(struct Library * _base, STACK_OF(X509_OBJECT) * ___h, int ___type, X509_NAME * ___name);
+X509_OBJECT * LIB_X509_OBJECT_retrieve_by_subject(struct Library * _base, STACK_OF(X509_OBJECT) * ___h, X509_LOOKUP_TYPE ___type, X509_NAME * ___name);
 
 X509_OBJECT * LIBSTUB_X509_OBJECT_retrieve_by_subject(void)
 {
   STACK_OF(X509_OBJECT) * ___h = (STACK_OF(X509_OBJECT) *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_OBJECT_retrieve_by_subject(_base, ___h, ___type, ___name);
@@ -17321,22 +17302,13 @@ X509_OBJECT * LIBSTUB_X509_OBJECT_retrieve_match(void)
   return LIB_X509_OBJECT_retrieve_match(_base, ___h, ___x);
 }
 
-void LIB_X509_OBJECT_up_ref_count(struct Library * _base, X509_OBJECT * ___a);
+int LIB_X509_OBJECT_up_ref_count(struct Library * _base, X509_OBJECT * ___a);
 
-void LIBSTUB_X509_OBJECT_up_ref_count(void)
+int LIBSTUB_X509_OBJECT_up_ref_count(void)
 {
   X509_OBJECT * ___a = (X509_OBJECT *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_OBJECT_up_ref_count(_base, ___a);
-}
-
-void LIB_X509_OBJECT_free_contents(struct Library * _base, X509_OBJECT * ___a);
-
-void LIBSTUB_X509_OBJECT_free_contents(void)
-{
-  X509_OBJECT * ___a = (X509_OBJECT *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_OBJECT_free_contents(_base, ___a);
 }
 
 X509_STORE * LIB_X509_STORE_new(struct Library * _base);
@@ -17491,16 +17463,16 @@ int LIBSTUB_X509_STORE_add_crl(void)
   return LIB_X509_STORE_add_crl(_base, ___ctx, ___x);
 }
 
-int LIB_X509_STORE_get_by_subject(struct Library * _base, X509_STORE_CTX * ___vs, X509_LOOKUP_TYPE ___type, X509_NAME * ___name, X509_OBJECT * ___ret);
+int LIB_X509_STORE_CTX_get_by_subject(struct Library * _base, X509_STORE_CTX * ___vs, X509_LOOKUP_TYPE ___type, X509_NAME * ___name, X509_OBJECT * ___ret);
 
-int LIBSTUB_X509_STORE_get_by_subject(void)
+int LIBSTUB_X509_STORE_CTX_get_by_subject(void)
 {
   X509_STORE_CTX * ___vs = (X509_STORE_CTX *)REG_A0;
   X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   X509_OBJECT * ___ret = (X509_OBJECT *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_by_subject(_base, ___vs, ___type, ___name, ___ret);
+  return LIB_X509_STORE_CTX_get_by_subject(_base, ___vs, ___type, ___name, ___ret);
 }
 
 int LIB_X509_LOOKUP_ctrl(struct Library * _base, X509_LOOKUP * ___ctx, int ___cmd, const char * ___argc, long ___argl, char ** ___ret);
@@ -17576,24 +17548,24 @@ int LIBSTUB_X509_LOOKUP_init(void)
   return LIB_X509_LOOKUP_init(_base, ___ctx);
 }
 
-int LIB_X509_LOOKUP_by_subject(struct Library * _base, X509_LOOKUP * ___ctx, int ___type, X509_NAME * ___name, X509_OBJECT * ___ret);
+int LIB_X509_LOOKUP_by_subject(struct Library * _base, X509_LOOKUP * ___ctx, X509_LOOKUP_TYPE ___type, X509_NAME * ___name, X509_OBJECT * ___ret);
 
 int LIBSTUB_X509_LOOKUP_by_subject(void)
 {
   X509_LOOKUP * ___ctx = (X509_LOOKUP *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   X509_OBJECT * ___ret = (X509_OBJECT *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_LOOKUP_by_subject(_base, ___ctx, ___type, ___name, ___ret);
 }
 
-int LIB_X509_LOOKUP_by_issuer_serial(struct Library * _base, X509_LOOKUP * ___ctx, int ___type, X509_NAME * ___name, ASN1_INTEGER * ___serial, X509_OBJECT * ___ret);
+int LIB_X509_LOOKUP_by_issuer_serial(struct Library * _base, X509_LOOKUP * ___ctx, X509_LOOKUP_TYPE ___type, X509_NAME * ___name, ASN1_INTEGER * ___serial, X509_OBJECT * ___ret);
 
 int LIBSTUB_X509_LOOKUP_by_issuer_serial(void)
 {
   X509_LOOKUP * ___ctx = (X509_LOOKUP *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   ASN1_INTEGER * ___serial = (ASN1_INTEGER *)REG_A2;
   X509_OBJECT * ___ret = (X509_OBJECT *)REG_A3;
@@ -17601,12 +17573,12 @@ int LIBSTUB_X509_LOOKUP_by_issuer_serial(void)
   return LIB_X509_LOOKUP_by_issuer_serial(_base, ___ctx, ___type, ___name, ___serial, ___ret);
 }
 
-int LIB_X509_LOOKUP_by_fingerprint(struct Library * _base, X509_LOOKUP * ___ctx, int ___type, unsigned char * ___bytes, int ___len, X509_OBJECT * ___ret);
+int LIB_X509_LOOKUP_by_fingerprint(struct Library * _base, X509_LOOKUP * ___ctx, X509_LOOKUP_TYPE ___type, unsigned char * ___bytes, int ___len, X509_OBJECT * ___ret);
 
 int LIBSTUB_X509_LOOKUP_by_fingerprint(void)
 {
   X509_LOOKUP * ___ctx = (X509_LOOKUP *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   unsigned char * ___bytes = (unsigned char *)REG_A1;
   int ___len = (int)REG_D1;
   X509_OBJECT * ___ret = (X509_OBJECT *)REG_A2;
@@ -17614,12 +17586,12 @@ int LIBSTUB_X509_LOOKUP_by_fingerprint(void)
   return LIB_X509_LOOKUP_by_fingerprint(_base, ___ctx, ___type, ___bytes, ___len, ___ret);
 }
 
-int LIB_X509_LOOKUP_by_alias(struct Library * _base, X509_LOOKUP * ___ctx, int ___type, char * ___str, int ___len, X509_OBJECT * ___ret);
+int LIB_X509_LOOKUP_by_alias(struct Library * _base, X509_LOOKUP * ___ctx, X509_LOOKUP_TYPE ___type, char * ___str, int ___len, X509_OBJECT * ___ret);
 
 int LIBSTUB_X509_LOOKUP_by_alias(void)
 {
   X509_LOOKUP * ___ctx = (X509_LOOKUP *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   char * ___str = (char *)REG_A1;
   int ___len = (int)REG_D1;
   X509_OBJECT * ___ret = (X509_OBJECT *)REG_A2;
@@ -17943,48 +17915,48 @@ const ASN1_ITEM * LIBSTUB_SXNETID_it(void)
   return LIB_SXNETID_it(_base);
 }
 
-int LIB_SXNET_add_id_asc(struct Library * _base, SXNET ** ___psx, char * ___zone, char * ___user, int ___userlen);
+int LIB_SXNET_add_id_asc(struct Library * _base, SXNET ** ___psx, const char * ___zone, const char * ___user, int ___userlen);
 
 int LIBSTUB_SXNET_add_id_asc(void)
 {
   SXNET ** ___psx = (SXNET **)REG_A0;
-  char * ___zone = (char *)REG_A1;
-  char * ___user = (char *)REG_A2;
+  const char * ___zone = (const char *)REG_A1;
+  const char * ___user = (const char *)REG_A2;
   int ___userlen = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SXNET_add_id_asc(_base, ___psx, ___zone, ___user, ___userlen);
 }
 
-int LIB_SXNET_add_id_ulong(struct Library * _base, SXNET ** ___psx, unsigned long ___lzone, char * ___user, int ___userlen);
+int LIB_SXNET_add_id_ulong(struct Library * _base, SXNET ** ___psx, unsigned long ___lzone, const char * ___user, int ___userlen);
 
 int LIBSTUB_SXNET_add_id_ulong(void)
 {
   SXNET ** ___psx = (SXNET **)REG_A0;
   unsigned long ___lzone = (unsigned long)REG_D0;
-  char * ___user = (char *)REG_A1;
+  const char * ___user = (const char *)REG_A1;
   int ___userlen = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SXNET_add_id_ulong(_base, ___psx, ___lzone, ___user, ___userlen);
 }
 
-int LIB_SXNET_add_id_INTEGER(struct Library * _base, SXNET ** ___psx, ASN1_INTEGER * ___izone, char * ___user, int ___userlen);
+int LIB_SXNET_add_id_INTEGER(struct Library * _base, SXNET ** ___psx, ASN1_INTEGER * ___izone, const char * ___user, int ___userlen);
 
 int LIBSTUB_SXNET_add_id_INTEGER(void)
 {
   SXNET ** ___psx = (SXNET **)REG_A0;
   ASN1_INTEGER * ___izone = (ASN1_INTEGER *)REG_A1;
-  char * ___user = (char *)REG_A2;
+  const char * ___user = (const char *)REG_A2;
   int ___userlen = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SXNET_add_id_INTEGER(_base, ___psx, ___izone, ___user, ___userlen);
 }
 
-ASN1_OCTET_STRING * LIB_SXNET_get_id_asc(struct Library * _base, SXNET * ___sx, char * ___zone);
+ASN1_OCTET_STRING * LIB_SXNET_get_id_asc(struct Library * _base, SXNET * ___sx, const char * ___zone);
 
 ASN1_OCTET_STRING * LIBSTUB_SXNET_get_id_asc(void)
 {
   SXNET * ___sx = (SXNET *)REG_A0;
-  char * ___zone = (char *)REG_A1;
+  const char * ___zone = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SXNET_get_id_asc(_base, ___sx, ___zone);
 }
@@ -18897,131 +18869,131 @@ X509_EXTENSION * LIBSTUB_X509V3_EXT_nconf_nid(void)
   return LIB_X509V3_EXT_nconf_nid(_base, ___conf, ___ctx, ___ext_nid, ___value);
 }
 
-X509_EXTENSION * LIB_X509V3_EXT_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, char * ___name, char * ___value);
+X509_EXTENSION * LIB_X509V3_EXT_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, const char * ___name, const char * ___value);
 
 X509_EXTENSION * LIBSTUB_X509V3_EXT_nconf(void)
 {
   CONF * ___conf = (CONF *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___name = (char *)REG_A2;
-  char * ___value = (char *)REG_A3;
+  const char * ___name = (const char *)REG_A2;
+  const char * ___value = (const char *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_nconf(_base, ___conf, ___ctx, ___name, ___value);
 }
 
-int LIB_X509V3_EXT_add_nconf_sk(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, char * ___section, STACK_OF(X509_EXTENSION) ** ___sk);
+int LIB_X509V3_EXT_add_nconf_sk(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, const char * ___section, STACK_OF(X509_EXTENSION) ** ___sk);
 
 int LIBSTUB_X509V3_EXT_add_nconf_sk(void)
 {
   CONF * ___conf = (CONF *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   STACK_OF(X509_EXTENSION) ** ___sk = (STACK_OF(X509_EXTENSION) **)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_add_nconf_sk(_base, ___conf, ___ctx, ___section, ___sk);
 }
 
-int LIB_X509V3_EXT_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, char * ___section, X509 * ___cert);
+int LIB_X509V3_EXT_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509 * ___cert);
 
 int LIBSTUB_X509V3_EXT_add_nconf(void)
 {
   CONF * ___conf = (CONF *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509 * ___cert = (X509 *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_add_nconf(_base, ___conf, ___ctx, ___section, ___cert);
 }
 
-int LIB_X509V3_EXT_REQ_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, char * ___section, X509_REQ * ___req);
+int LIB_X509V3_EXT_REQ_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509_REQ * ___req);
 
 int LIBSTUB_X509V3_EXT_REQ_add_nconf(void)
 {
   CONF * ___conf = (CONF *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509_REQ * ___req = (X509_REQ *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_REQ_add_nconf(_base, ___conf, ___ctx, ___section, ___req);
 }
 
-int LIB_X509V3_EXT_CRL_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, char * ___section, X509_CRL * ___crl);
+int LIB_X509V3_EXT_CRL_add_nconf(struct Library * _base, CONF * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509_CRL * ___crl);
 
 int LIBSTUB_X509V3_EXT_CRL_add_nconf(void)
 {
   CONF * ___conf = (CONF *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509_CRL * ___crl = (X509_CRL *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_CRL_add_nconf(_base, ___conf, ___ctx, ___section, ___crl);
 }
 
-X509_EXTENSION * LIB_X509V3_EXT_conf_nid(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, int ___ext_nid, char * ___value);
+X509_EXTENSION * LIB_X509V3_EXT_conf_nid(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, int ___ext_nid, const char * ___value);
 
 X509_EXTENSION * LIBSTUB_X509V3_EXT_conf_nid(void)
 {
   LHASH_OF(CONF_VALUE) * ___conf = (LHASH_OF(CONF_VALUE) *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
   int ___ext_nid = (int)REG_D0;
-  char * ___value = (char *)REG_A2;
+  const char * ___value = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_conf_nid(_base, ___conf, ___ctx, ___ext_nid, ___value);
 }
 
-X509_EXTENSION * LIB_X509V3_EXT_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, char * ___name, char * ___value);
+X509_EXTENSION * LIB_X509V3_EXT_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, const char * ___name, const char * ___value);
 
 X509_EXTENSION * LIBSTUB_X509V3_EXT_conf(void)
 {
   LHASH_OF(CONF_VALUE) * ___conf = (LHASH_OF(CONF_VALUE) *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___name = (char *)REG_A2;
-  char * ___value = (char *)REG_A3;
+  const char * ___name = (const char *)REG_A2;
+  const char * ___value = (const char *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_conf(_base, ___conf, ___ctx, ___name, ___value);
 }
 
-int LIB_X509V3_EXT_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, char * ___section, X509 * ___cert);
+int LIB_X509V3_EXT_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509 * ___cert);
 
 int LIBSTUB_X509V3_EXT_add_conf(void)
 {
   LHASH_OF(CONF_VALUE) * ___conf = (LHASH_OF(CONF_VALUE) *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509 * ___cert = (X509 *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_add_conf(_base, ___conf, ___ctx, ___section, ___cert);
 }
 
-int LIB_X509V3_EXT_REQ_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, char * ___section, X509_REQ * ___req);
+int LIB_X509V3_EXT_REQ_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509_REQ * ___req);
 
 int LIBSTUB_X509V3_EXT_REQ_add_conf(void)
 {
   LHASH_OF(CONF_VALUE) * ___conf = (LHASH_OF(CONF_VALUE) *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509_REQ * ___req = (X509_REQ *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_REQ_add_conf(_base, ___conf, ___ctx, ___section, ___req);
 }
 
-int LIB_X509V3_EXT_CRL_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, char * ___section, X509_CRL * ___crl);
+int LIB_X509V3_EXT_CRL_add_conf(struct Library * _base, LHASH_OF(CONF_VALUE) * ___conf, X509V3_CTX * ___ctx, const char * ___section, X509_CRL * ___crl);
 
 int LIBSTUB_X509V3_EXT_CRL_add_conf(void)
 {
   LHASH_OF(CONF_VALUE) * ___conf = (LHASH_OF(CONF_VALUE) *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___section = (const char *)REG_A2;
   X509_CRL * ___crl = (X509_CRL *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_EXT_CRL_add_conf(_base, ___conf, ___ctx, ___section, ___crl);
 }
 
-int LIB_X509V3_add_value_bool_nf(struct Library * _base, char * ___name, int ___asn1_bool, STACK_OF(CONF_VALUE) ** ___extlist);
+int LIB_X509V3_add_value_bool_nf(struct Library * _base, const char * ___name, int ___asn1_bool, STACK_OF(CONF_VALUE) ** ___extlist);
 
 int LIBSTUB_X509V3_add_value_bool_nf(void)
 {
-  char * ___name = (char *)REG_A0;
+  const char * ___name = (const char *)REG_A0;
   int ___asn1_bool = (int)REG_D0;
   STACK_OF(CONF_VALUE) ** ___extlist = (STACK_OF(CONF_VALUE) **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
@@ -19068,23 +19040,23 @@ void LIBSTUB_X509V3_set_conf_lhash(void)
   return LIB_X509V3_set_conf_lhash(_base, ___ctx, ___lhash);
 }
 
-char * LIB_X509V3_get_string(struct Library * _base, X509V3_CTX * ___ctx, char * ___name, char * ___section);
+char * LIB_X509V3_get_string(struct Library * _base, X509V3_CTX * ___ctx, const char * ___name, const char * ___section);
 
 char * LIBSTUB_X509V3_get_string(void)
 {
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A0;
-  char * ___name = (char *)REG_A1;
-  char * ___section = (char *)REG_A2;
+  const char * ___name = (const char *)REG_A1;
+  const char * ___section = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_get_string(_base, ___ctx, ___name, ___section);
 }
 
-STACK_OF(CONF_VALUE) * LIB_X509V3_get_section(struct Library * _base, X509V3_CTX * ___ctx, char * ___section);
+STACK_OF(CONF_VALUE) * LIB_X509V3_get_section(struct Library * _base, X509V3_CTX * ___ctx, const char * ___section);
 
 STACK_OF(CONF_VALUE) * LIBSTUB_X509V3_get_section(void)
 {
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A0;
-  char * ___section = (char *)REG_A1;
+  const char * ___section = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509V3_get_section(_base, ___ctx, ___section);
 }
@@ -19167,22 +19139,22 @@ int LIBSTUB_X509V3_add_value_int(void)
   return LIB_X509V3_add_value_int(_base, ___name, ___aint, ___extlist);
 }
 
-char * LIB_i2s_ASN1_INTEGER(struct Library * _base, X509V3_EXT_METHOD * ___meth, ASN1_INTEGER * ___aint);
+char * LIB_i2s_ASN1_INTEGER(struct Library * _base, X509V3_EXT_METHOD * ___meth, const ASN1_INTEGER * ___aint);
 
 char * LIBSTUB_i2s_ASN1_INTEGER(void)
 {
   X509V3_EXT_METHOD * ___meth = (X509V3_EXT_METHOD *)REG_A0;
-  ASN1_INTEGER * ___aint = (ASN1_INTEGER *)REG_A1;
+  const ASN1_INTEGER * ___aint = (const ASN1_INTEGER *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2s_ASN1_INTEGER(_base, ___meth, ___aint);
 }
 
-ASN1_INTEGER * LIB_s2i_ASN1_INTEGER(struct Library * _base, X509V3_EXT_METHOD * ___meth, char * ___value);
+ASN1_INTEGER * LIB_s2i_ASN1_INTEGER(struct Library * _base, X509V3_EXT_METHOD * ___meth, const char * ___value);
 
 ASN1_INTEGER * LIBSTUB_s2i_ASN1_INTEGER(void)
 {
   X509V3_EXT_METHOD * ___meth = (X509V3_EXT_METHOD *)REG_A0;
-  char * ___value = (char *)REG_A1;
+  const char * ___value = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_s2i_ASN1_INTEGER(_base, ___meth, ___value);
 }
@@ -19287,11 +19259,11 @@ void * LIBSTUB_X509V3_EXT_d2i(void)
   return LIB_X509V3_EXT_d2i(_base, ___ext);
 }
 
-void * LIB_X509V3_get_d2i(struct Library * _base, STACK_OF(X509_EXTENSION) * ___x, int ___nid, int * ___crit, int * ___idx);
+void * LIB_X509V3_get_d2i(struct Library * _base, const STACK_OF(X509_EXTENSION) * ___x, int ___nid, int * ___crit, int * ___idx);
 
 void * LIBSTUB_X509V3_get_d2i(void)
 {
-  STACK_OF(X509_EXTENSION) * ___x = (STACK_OF(X509_EXTENSION) *)REG_A0;
+  const STACK_OF(X509_EXTENSION) * ___x = (const STACK_OF(X509_EXTENSION) *)REG_A0;
   int ___nid = (int)REG_D0;
   int * ___crit = (int *)REG_A1;
   int * ___idx = (int *)REG_A2;
@@ -19437,11 +19409,11 @@ X509_PURPOSE * LIBSTUB_X509_PURPOSE_get0(void)
   return LIB_X509_PURPOSE_get0(_base, ___idx);
 }
 
-int LIB_X509_PURPOSE_get_by_sname(struct Library * _base, char * ___sname);
+int LIB_X509_PURPOSE_get_by_sname(struct Library * _base, const char * ___sname);
 
 int LIBSTUB_X509_PURPOSE_get_by_sname(void)
 {
-  char * ___sname = (char *)REG_A0;
+  const char * ___sname = (const char *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_get_by_sname(_base, ___sname);
 }
@@ -19455,7 +19427,7 @@ int LIBSTUB_X509_PURPOSE_get_by_id(void)
   return LIB_X509_PURPOSE_get_by_id(_base, ___id);
 }
 
-int LIB_X509_PURPOSE_add(struct Library * _base, int ___id, int ___trust, int ___flags, int (*___ck)(const X509_PURPOSE *,const X509 *,int), char * ___name, char * ___sname, void * ___arg);
+int LIB_X509_PURPOSE_add(struct Library * _base, int ___id, int ___trust, int ___flags, int (*___ck)(const X509_PURPOSE *,const X509 *,int), const char * ___name, const char * ___sname, void * ___arg);
 
 int LIBSTUB_X509_PURPOSE_add(void)
 {
@@ -19463,36 +19435,36 @@ int LIBSTUB_X509_PURPOSE_add(void)
   int ___trust = (int)REG_D1;
   int ___flags = (int)REG_D2;
   int (*___ck)(const X509_PURPOSE *,const X509 *,int) = (int (*)(const X509_PURPOSE *,const X509 *,int))REG_A0;
-  char * ___name = (char *)REG_A1;
-  char * ___sname = (char *)REG_A2;
+  const char * ___name = (const char *)REG_A1;
+  const char * ___sname = (const char *)REG_A2;
   void * ___arg = (void *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_add(_base, ___id, ___trust, ___flags, ___ck, ___name, ___sname, ___arg);
 }
 
-char * LIB_X509_PURPOSE_get0_name(struct Library * _base, X509_PURPOSE * ___xp);
+char * LIB_X509_PURPOSE_get0_name(struct Library * _base, const X509_PURPOSE * ___xp);
 
 char * LIBSTUB_X509_PURPOSE_get0_name(void)
 {
-  X509_PURPOSE * ___xp = (X509_PURPOSE *)REG_A0;
+  const X509_PURPOSE * ___xp = (const X509_PURPOSE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_get0_name(_base, ___xp);
 }
 
-char * LIB_X509_PURPOSE_get0_sname(struct Library * _base, X509_PURPOSE * ___xp);
+char * LIB_X509_PURPOSE_get0_sname(struct Library * _base, const X509_PURPOSE * ___xp);
 
 char * LIBSTUB_X509_PURPOSE_get0_sname(void)
 {
-  X509_PURPOSE * ___xp = (X509_PURPOSE *)REG_A0;
+  const X509_PURPOSE * ___xp = (const X509_PURPOSE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_get0_sname(_base, ___xp);
 }
 
-int LIB_X509_PURPOSE_get_trust(struct Library * _base, X509_PURPOSE * ___xp);
+int LIB_X509_PURPOSE_get_trust(struct Library * _base, const X509_PURPOSE * ___xp);
 
 int LIBSTUB_X509_PURPOSE_get_trust(void)
 {
-  X509_PURPOSE * ___xp = (X509_PURPOSE *)REG_A0;
+  const X509_PURPOSE * ___xp = (const X509_PURPOSE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_get_trust(_base, ___xp);
 }
@@ -19505,11 +19477,11 @@ void LIBSTUB_X509_PURPOSE_cleanup(void)
   return LIB_X509_PURPOSE_cleanup(_base);
 }
 
-int LIB_X509_PURPOSE_get_id(struct Library * _base, X509_PURPOSE * ___a);
+int LIB_X509_PURPOSE_get_id(struct Library * _base, const X509_PURPOSE * ___a);
 
 int LIBSTUB_X509_PURPOSE_get_id(void)
 {
-  X509_PURPOSE * ___a = (X509_PURPOSE *)REG_A0;
+  const X509_PURPOSE * ___a = (const X509_PURPOSE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_PURPOSE_get_id(_base, ___a);
 }
@@ -19541,9 +19513,9 @@ void LIBSTUB_X509_email_free(void)
   return LIB_X509_email_free(_base, ___sk);
 }
 
-void LIB_ERR_load_X509V3_strings(struct Library * _base);
+int LIB_ERR_load_X509V3_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_X509V3_strings(void)
+int LIBSTUB_ERR_load_X509V3_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_X509V3_strings(_base);
@@ -19874,14 +19846,6 @@ int * LIBSTUB__shadow_DES_check_key(void)
   return LIB__shadow_DES_check_key(_base);
 }
 
-int * LIB__shadow_DES_rw_mode(struct Library * _base);
-
-int * LIBSTUB__shadow_DES_rw_mode(void)
-{
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB__shadow_DES_rw_mode(_base);
-}
-
 const char * LIB_DES_options(struct Library * _base);
 
 const char * LIBSTUB_DES_options(void)
@@ -20100,32 +20064,6 @@ void LIBSTUB_DES_ede3_ofb64_encrypt(void)
   return LIB_DES_ede3_ofb64_encrypt(_base, ___in, ___out, ___length, ___ks1, ___ks2, ___ks3, ___ivec, ___num);
 }
 
-int LIB_DES_enc_read(struct Library * _base, int ___fd, void * ___buf, int ___len, DES_key_schedule * ___sched, DES_cblock * ___iv);
-
-int LIBSTUB_DES_enc_read(void)
-{
-  int ___fd = (int)REG_D0;
-  void * ___buf = (void *)REG_A0;
-  int ___len = (int)REG_D1;
-  DES_key_schedule * ___sched = (DES_key_schedule *)REG_A1;
-  DES_cblock * ___iv = (DES_cblock *)REG_A2;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_DES_enc_read(_base, ___fd, ___buf, ___len, ___sched, ___iv);
-}
-
-int LIB_DES_enc_write(struct Library * _base, int ___fd, const void * ___buf, int ___len, DES_key_schedule * ___sched, DES_cblock * ___iv);
-
-int LIBSTUB_DES_enc_write(void)
-{
-  int ___fd = (int)REG_D0;
-  const void * ___buf = (const void *)REG_A0;
-  int ___len = (int)REG_D1;
-  DES_key_schedule * ___sched = (DES_key_schedule *)REG_A1;
-  DES_cblock * ___iv = (DES_cblock *)REG_A2;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_DES_enc_write(_base, ___fd, ___buf, ___len, ___sched, ___iv);
-}
-
 char * LIB_DES_fcrypt(struct Library * _base, const char * ___buf, const char * ___salt, char * ___ret);
 
 char * LIBSTUB_DES_fcrypt(void)
@@ -20314,29 +20252,6 @@ void LIBSTUB_DES_ofb64_encrypt(void)
   return LIB_DES_ofb64_encrypt(_base, ___in, ___out, ___length, ___schedule, ___ivec, ___num);
 }
 
-int LIB_DES_read_password(struct Library * _base, DES_cblock * ___key, const char * ___prompt, int ___verify);
-
-int LIBSTUB_DES_read_password(void)
-{
-  DES_cblock * ___key = (DES_cblock *)REG_A0;
-  const char * ___prompt = (const char *)REG_A1;
-  int ___verify = (int)REG_D0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_DES_read_password(_base, ___key, ___prompt, ___verify);
-}
-
-int LIB_DES_read_2passwords(struct Library * _base, DES_cblock * ___key1, DES_cblock * ___key2, const char * ___prompt, int ___verify);
-
-int LIBSTUB_DES_read_2passwords(void)
-{
-  DES_cblock * ___key1 = (DES_cblock *)REG_A0;
-  DES_cblock * ___key2 = (DES_cblock *)REG_A1;
-  const char * ___prompt = (const char *)REG_A2;
-  int ___verify = (int)REG_D0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_DES_read_2passwords(_base, ___key1, ___key2, ___prompt, ___verify);
-}
-
 const DH_METHOD * LIB_DH_OpenSSL(struct Library * _base);
 
 const DH_METHOD * LIBSTUB_DH_OpenSSL(void)
@@ -20510,9 +20425,9 @@ int LIBSTUB_DHparams_print(void)
   return LIB_DHparams_print(_base, ___bp, ___x);
 }
 
-void LIB_ERR_load_DH_strings(struct Library * _base);
+int LIB_ERR_load_DH_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_DH_strings(void)
+int LIBSTUB_ERR_load_DH_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_DH_strings(_base);
@@ -20836,9 +20751,9 @@ DH * LIBSTUB_DSA_dup_DH(void)
   return LIB_DSA_dup_DH(_base, ___r);
 }
 
-void LIB_ERR_load_DSA_strings(struct Library * _base);
+int LIB_ERR_load_DSA_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_DSA_strings(void)
+int LIBSTUB_ERR_load_DSA_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_DSA_strings(_base);
@@ -21546,15 +21461,6 @@ int LIBSTUB_RSA_set_method(void)
   return LIB_RSA_set_method(_base, ___rsa, ___meth);
 }
 
-int LIB_RSA_memory_lock(struct Library * _base, RSA * ___r);
-
-int LIBSTUB_RSA_memory_lock(void)
-{
-  RSA * ___r = (RSA *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_RSA_memory_lock(_base, ___r);
-}
-
 const RSA_METHOD * LIB_RSA_null_method(struct Library * _base);
 
 const RSA_METHOD * LIBSTUB_RSA_null_method(void)
@@ -21875,9 +21781,9 @@ RSA * LIBSTUB_RSAPrivateKey_dup(void)
   return LIB_RSAPrivateKey_dup(_base, ___rsa);
 }
 
-void LIB_ERR_load_RSA_strings(struct Library * _base);
+int LIB_ERR_load_RSA_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_RSA_strings(void)
+int LIBSTUB_ERR_load_RSA_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_RSA_strings(_base);
@@ -22838,11 +22744,11 @@ int LIBSTUB_X509_STORE_set1_param(void)
   return LIB_X509_STORE_set1_param(_base, ___ctx, ___pm);
 }
 
-ASN1_TYPE * LIB_ASN1_generate_nconf(struct Library * _base, char * ___str, CONF * ___nconf);
+ASN1_TYPE * LIB_ASN1_generate_nconf(struct Library * _base, const char * ___str, CONF * ___nconf);
 
 ASN1_TYPE * LIBSTUB_ASN1_generate_nconf(void)
 {
-  char * ___str = (char *)REG_A0;
+  const char * ___str = (const char *)REG_A0;
   CONF * ___nconf = (CONF *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_generate_nconf(_base, ___str, ___nconf);
@@ -22860,21 +22766,21 @@ EC_GROUP * LIBSTUB_PEM_read_bio_ECPKParameters(void)
   return LIB_PEM_read_bio_ECPKParameters(_base, ___bp, ___x, ___cb, ___u);
 }
 
-EC_KEY * LIB_EC_KEY_dup(struct Library * _base, EC_KEY * ___ec_key);
+EC_KEY * LIB_EC_KEY_dup(struct Library * _base, const EC_KEY * ___ec_key);
 
 EC_KEY * LIBSTUB_EC_KEY_dup(void)
 {
-  EC_KEY * ___ec_key = (EC_KEY *)REG_A0;
+  const EC_KEY * ___ec_key = (const EC_KEY *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_dup(_base, ___ec_key);
 }
 
-void LIB_BIO_set_callback(struct Library * _base, BIO * ___b, long (*___callback)(struct bio_st *,int,const char *,int,long,long));
+void LIB_BIO_set_callback(struct Library * _base, BIO * ___b, BIO_callback_fn ___callback);
 
 void LIBSTUB_BIO_set_callback(void)
 {
   BIO * ___b = (BIO *)REG_A0;
-  long (*___callback)(struct bio_st *,int,const char *,int,long,long) = (long (*)(struct bio_st *,int,const char *,int,long,long))REG_A1;
+  BIO_callback_fn ___callback = (BIO_callback_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_BIO_set_callback(_base, ___b, ___callback);
 }
@@ -24090,9 +23996,9 @@ int LIBSTUB_SSL_SRP_CTX_init(void)
   return LIB_SSL_SRP_CTX_init(_base, ___s);
 }
 
-void LIB_ERR_load_ENGINE_strings(struct Library * _base);
+int LIB_ERR_load_ENGINE_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_ENGINE_strings(void)
+int LIBSTUB_ERR_load_ENGINE_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_ENGINE_strings(_base);
@@ -24752,12 +24658,12 @@ EC_KEY * LIBSTUB_o2i_ECPublicKey(void)
   return LIB_o2i_ECPublicKey(_base, ___key, ___in, ___len);
 }
 
-EC_KEY * LIB_EC_KEY_copy(struct Library * _base, EC_KEY * ___dst, EC_KEY * ___src);
+EC_KEY * LIB_EC_KEY_copy(struct Library * _base, EC_KEY * ___dst, const EC_KEY * ___src);
 
 EC_KEY * LIBSTUB_EC_KEY_copy(void)
 {
   EC_KEY * ___dst = (EC_KEY *)REG_A0;
-  EC_KEY * ___src = (EC_KEY *)REG_A1;
+  const EC_KEY * ___src = (const EC_KEY *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_copy(_base, ___dst, ___src);
 }
@@ -25864,9 +25770,9 @@ int LIBSTUB_CMS_unsigned_add1_attr_by_OBJ(void)
   return LIB_CMS_unsigned_add1_attr_by_OBJ(_base, ___si, ___obj, ___type, ___bytes, ___len);
 }
 
-void LIB_ERR_load_CMS_strings(struct Library * _base);
+int LIB_ERR_load_CMS_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_CMS_strings(void)
+int LIBSTUB_ERR_load_CMS_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_CMS_strings(_base);
@@ -25950,14 +25856,14 @@ CMS_ContentInfo * LIBSTUB_SMIME_read_CMS(void)
   return LIB_SMIME_read_CMS(_base, ___bio, ___biocont);
 }
 
-int LIB_CMS_decrypt_set1_key(struct Library * _base, CMS_ContentInfo * ___cms, unsigned char * ___key, size_t ___keylen, unsigned char * ___id, size_t ___idlen);
+int LIB_CMS_decrypt_set1_key(struct Library * _base, CMS_ContentInfo * ___cms, unsigned char * ___key, size_t ___keylen, const unsigned char * ___id, size_t ___idlen);
 
 int LIBSTUB_CMS_decrypt_set1_key(void)
 {
   CMS_ContentInfo * ___cms = (CMS_ContentInfo *)REG_A0;
   unsigned char * ___key = (unsigned char *)REG_A1;
   size_t ___keylen = (size_t)REG_D0;
-  unsigned char * ___id = (unsigned char *)REG_A2;
+  const unsigned char * ___id = (const unsigned char *)REG_A2;
   size_t ___idlen = (size_t)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_CMS_decrypt_set1_key(_base, ___cms, ___key, ___keylen, ___id, ___idlen);
@@ -26330,11 +26236,11 @@ int LIBSTUB_CMS_RecipientInfo_type(void)
   return LIB_CMS_RecipientInfo_type(_base, ___ri);
 }
 
-const ASN1_OBJECT * LIB_CMS_get0_type(struct Library * _base, CMS_ContentInfo * ___cms);
+const ASN1_OBJECT * LIB_CMS_get0_type(struct Library * _base, const CMS_ContentInfo * ___cms);
 
 const ASN1_OBJECT * LIBSTUB_CMS_get0_type(void)
 {
-  CMS_ContentInfo * ___cms = (CMS_ContentInfo *)REG_A0;
+  const CMS_ContentInfo * ___cms = (const CMS_ContentInfo *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_CMS_get0_type(_base, ___cms);
 }
@@ -27298,15 +27204,15 @@ SRP_user_pwd * LIBSTUB_SRP_VBASE_get_by_user(void)
   return LIB_SRP_VBASE_get_by_user(_base, ___vb, ___username);
 }
 
-BIGNUM * LIB_SRP_Calc_server_key(struct Library * _base, BIGNUM * ___A, BIGNUM * ___v, BIGNUM * ___u, BIGNUM * ___b, BIGNUM * ___N);
+BIGNUM * LIB_SRP_Calc_server_key(struct Library * _base, const BIGNUM * ___A, const BIGNUM * ___v, const BIGNUM * ___u, const BIGNUM * ___b, const BIGNUM * ___N);
 
 BIGNUM * LIBSTUB_SRP_Calc_server_key(void)
 {
-  BIGNUM * ___A = (BIGNUM *)REG_A0;
-  BIGNUM * ___v = (BIGNUM *)REG_A1;
-  BIGNUM * ___u = (BIGNUM *)REG_A2;
-  BIGNUM * ___b = (BIGNUM *)REG_A3;
-  BIGNUM * ___N = (BIGNUM *)REG_D0;
+  const BIGNUM * ___A = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___v = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___u = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___b = (const BIGNUM *)REG_A3;
+  const BIGNUM * ___N = (const BIGNUM *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_server_key(_base, ___A, ___v, ___u, ___b, ___N);
 }
@@ -27339,13 +27245,13 @@ int LIBSTUB_SRP_create_verifier_BN(void)
   return LIB_SRP_create_verifier_BN(_base, ___user, ___pass, ___salt, ___verifier, ___N, ___g);
 }
 
-BIGNUM * LIB_SRP_Calc_u(struct Library * _base, BIGNUM * ___A, BIGNUM * ___B, BIGNUM * ___N);
+BIGNUM * LIB_SRP_Calc_u(struct Library * _base, const BIGNUM * ___A, const BIGNUM * ___B, const BIGNUM * ___N);
 
 BIGNUM * LIBSTUB_SRP_Calc_u(void)
 {
-  BIGNUM * ___A = (BIGNUM *)REG_A0;
-  BIGNUM * ___B = (BIGNUM *)REG_A1;
-  BIGNUM * ___N = (BIGNUM *)REG_A2;
+  const BIGNUM * ___A = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___B = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_u(_base, ___A, ___B, ___N);
 }
@@ -27359,16 +27265,16 @@ void LIBSTUB_SRP_VBASE_free(void)
   return LIB_SRP_VBASE_free(_base, ___vb);
 }
 
-BIGNUM * LIB_SRP_Calc_client_key(struct Library * _base, BIGNUM * ___N, BIGNUM * ___B, BIGNUM * ___g, BIGNUM * ___x, BIGNUM * ___a, BIGNUM * ___u);
+BIGNUM * LIB_SRP_Calc_client_key(struct Library * _base, const BIGNUM * ___N, const BIGNUM * ___B, const BIGNUM * ___g, const BIGNUM * ___x, const BIGNUM * ___a, const BIGNUM * ___u);
 
 BIGNUM * LIBSTUB_SRP_Calc_client_key(void)
 {
-  BIGNUM * ___N = (BIGNUM *)REG_A0;
-  BIGNUM * ___B = (BIGNUM *)REG_A1;
-  BIGNUM * ___g = (BIGNUM *)REG_A2;
-  BIGNUM * ___x = (BIGNUM *)REG_A3;
-  BIGNUM * ___a = (BIGNUM *)REG_D0;
-  BIGNUM * ___u = (BIGNUM *)REG_D1;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___B = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___g = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___x = (const BIGNUM *)REG_A3;
+  const BIGNUM * ___a = (const BIGNUM *)REG_D0;
+  const BIGNUM * ___u = (const BIGNUM *)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_client_key(_base, ___N, ___B, ___g, ___x, ___a, ___u);
 }
@@ -27382,25 +27288,25 @@ SRP_gN * LIBSTUB_SRP_get_default_gN(void)
   return LIB_SRP_get_default_gN(_base, ___id);
 }
 
-BIGNUM * LIB_SRP_Calc_x(struct Library * _base, BIGNUM * ___s, const char * ___user, const char * ___pass);
+BIGNUM * LIB_SRP_Calc_x(struct Library * _base, const BIGNUM * ___s, const char * ___user, const char * ___pass);
 
 BIGNUM * LIBSTUB_SRP_Calc_x(void)
 {
-  BIGNUM * ___s = (BIGNUM *)REG_A0;
+  const BIGNUM * ___s = (const BIGNUM *)REG_A0;
   const char * ___user = (const char *)REG_A1;
   const char * ___pass = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_x(_base, ___s, ___user, ___pass);
 }
 
-BIGNUM * LIB_SRP_Calc_B(struct Library * _base, BIGNUM * ___b, BIGNUM * ___N, BIGNUM * ___g, BIGNUM * ___v);
+BIGNUM * LIB_SRP_Calc_B(struct Library * _base, const BIGNUM * ___b, const BIGNUM * ___N, const BIGNUM * ___g, const BIGNUM * ___v);
 
 BIGNUM * LIBSTUB_SRP_Calc_B(void)
 {
-  BIGNUM * ___b = (BIGNUM *)REG_A0;
-  BIGNUM * ___N = (BIGNUM *)REG_A1;
-  BIGNUM * ___g = (BIGNUM *)REG_A2;
-  BIGNUM * ___v = (BIGNUM *)REG_A3;
+  const BIGNUM * ___b = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___g = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___v = (const BIGNUM *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_B(_base, ___b, ___N, ___g, ___v);
 }
@@ -27414,33 +27320,33 @@ SRP_VBASE * LIBSTUB_SRP_VBASE_new(void)
   return LIB_SRP_VBASE_new(_base, ___seed_key);
 }
 
-char * LIB_SRP_check_known_gN_param(struct Library * _base, BIGNUM * ___g, BIGNUM * ___N);
+char * LIB_SRP_check_known_gN_param(struct Library * _base, const BIGNUM * ___g, const BIGNUM * ___N);
 
 char * LIBSTUB_SRP_check_known_gN_param(void)
 {
-  BIGNUM * ___g = (BIGNUM *)REG_A0;
-  BIGNUM * ___N = (BIGNUM *)REG_A1;
+  const BIGNUM * ___g = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_check_known_gN_param(_base, ___g, ___N);
 }
 
-BIGNUM * LIB_SRP_Calc_A(struct Library * _base, BIGNUM * ___a, BIGNUM * ___N, BIGNUM * ___g);
+BIGNUM * LIB_SRP_Calc_A(struct Library * _base, const BIGNUM * ___a, const BIGNUM * ___N, const BIGNUM * ___g);
 
 BIGNUM * LIBSTUB_SRP_Calc_A(void)
 {
-  BIGNUM * ___a = (BIGNUM *)REG_A0;
-  BIGNUM * ___N = (BIGNUM *)REG_A1;
-  BIGNUM * ___g = (BIGNUM *)REG_A2;
+  const BIGNUM * ___a = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___g = (const BIGNUM *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Calc_A(_base, ___a, ___N, ___g);
 }
 
-int LIB_SRP_Verify_A_mod_N(struct Library * _base, BIGNUM * ___A, BIGNUM * ___N);
+int LIB_SRP_Verify_A_mod_N(struct Library * _base, const BIGNUM * ___A, const BIGNUM * ___N);
 
 int LIBSTUB_SRP_Verify_A_mod_N(void)
 {
-  BIGNUM * ___A = (BIGNUM *)REG_A0;
-  BIGNUM * ___N = (BIGNUM *)REG_A1;
+  const BIGNUM * ___A = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Verify_A_mod_N(_base, ___A, ___N);
 }
@@ -27455,12 +27361,12 @@ int LIBSTUB_SRP_VBASE_init(void)
   return LIB_SRP_VBASE_init(_base, ___vb, ___verifier_file);
 }
 
-int LIB_SRP_Verify_B_mod_N(struct Library * _base, BIGNUM * ___B, BIGNUM * ___N);
+int LIB_SRP_Verify_B_mod_N(struct Library * _base, const BIGNUM * ___B, const BIGNUM * ___N);
 
 int LIBSTUB_SRP_Verify_B_mod_N(void)
 {
-  BIGNUM * ___B = (BIGNUM *)REG_A0;
-  BIGNUM * ___N = (BIGNUM *)REG_A1;
+  const BIGNUM * ___B = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___N = (const BIGNUM *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SRP_Verify_B_mod_N(_base, ___B, ___N);
 }
@@ -27717,14 +27623,6 @@ void LIBSTUB_OPENSSL_cpuid_setup(void)
   return LIB_OPENSSL_cpuid_setup(_base);
 }
 
-void LIB_ERR_remove_thread_state(struct Library * _base);
-
-void LIBSTUB_ERR_remove_thread_state(void)
-{
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_ERR_remove_thread_state(_base);
-}
-
 void LIB_X509_STORE_CTX_set0_crls(struct Library * _base, X509_STORE_CTX * ___ctx, STACK_OF(X509_CRL) * ___sk);
 
 void LIBSTUB_X509_STORE_CTX_set0_crls(void)
@@ -27950,7 +27848,7 @@ void LIBSTUB_GENERAL_SUBTREE_free(void)
   return LIB_GENERAL_SUBTREE_free(_base, ___sub);
 }
 
-int LIB_PKCS12_add_safe(struct Library * _base, STACK_OF(PKCS7) ** ___psafes, STACK_OF(PKCS12_SAFEBAG) * ___bags, int ___safe_nid, int ___iter, char * ___pass);
+int LIB_PKCS12_add_safe(struct Library * _base, STACK_OF(PKCS7) ** ___psafes, STACK_OF(PKCS12_SAFEBAG) * ___bags, int ___safe_nid, int ___iter, const char * ___pass);
 
 int LIBSTUB_PKCS12_add_safe(void)
 {
@@ -27958,7 +27856,7 @@ int LIBSTUB_PKCS12_add_safe(void)
   STACK_OF(PKCS12_SAFEBAG) * ___bags = (STACK_OF(PKCS12_SAFEBAG) *)REG_A1;
   int ___safe_nid = (int)REG_D0;
   int ___iter = (int)REG_D1;
-  char * ___pass = (char *)REG_A2;
+  const char * ___pass = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS12_add_safe(_base, ___psafes, ___bags, ___safe_nid, ___iter, ___pass);
 }
@@ -28167,14 +28065,6 @@ void LIBSTUB_X509_policy_tree_free(void)
   return LIB_X509_policy_tree_free(_base, ___tree);
 }
 
-unsigned int * LIB_OPENSSL_ia32cap_loc(struct Library * _base);
-
-unsigned int * LIBSTUB_OPENSSL_ia32cap_loc(void)
-{
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_OPENSSL_ia32cap_loc(_base);
-}
-
 const BIGNUM * LIB_BN_get0_nist_prime_224(struct Library * _base);
 
 const BIGNUM * LIBSTUB_BN_get0_nist_prime_224(void)
@@ -28277,14 +28167,14 @@ BN_BLINDING * LIBSTUB_RSA_setup_blinding(void)
   return LIB_RSA_setup_blinding(_base, ___rsa, ___ctx);
 }
 
-int LIB_sk_find_ex(struct Library * _base, _STACK * ___st, void * ___data);
+int LIB_OPENSSL_sk_find_ex(struct Library * _base, OPENSSL_STACK * ___st, const void * ___data);
 
-int LIBSTUB_sk_find_ex(void)
+int LIBSTUB_OPENSSL_sk_find_ex(void)
 {
-  _STACK * ___st = (_STACK *)REG_A0;
-  void * ___data = (void *)REG_A1;
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
+  const void * ___data = (const void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_find_ex(_base, ___st, ___data);
+  return LIB_OPENSSL_sk_find_ex(_base, ___st, ___data);
 }
 
 POLICY_CONSTRAINTS * LIB_POLICY_CONSTRAINTS_new(struct Library * _base);
@@ -28343,11 +28233,11 @@ int LIBSTUB_i2d_PKCS7_NDEF(void)
   return LIB_i2d_PKCS7_NDEF(_base, ___a, ___out);
 }
 
-ASN1_TYPE * LIB_ASN1_generate_v3(struct Library * _base, char * ___str, X509V3_CTX * ___cnf);
+ASN1_TYPE * LIB_ASN1_generate_v3(struct Library * _base, const char * ___str, X509V3_CTX * ___cnf);
 
 ASN1_TYPE * LIBSTUB_ASN1_generate_v3(void)
 {
-  char * ___str = (char *)REG_A0;
+  const char * ___str = (const char *)REG_A0;
   X509V3_CTX * ___cnf = (X509V3_CTX *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_generate_v3(_base, ___str, ___cnf);
@@ -28724,7 +28614,7 @@ void LIBSTUB_X509_VERIFY_PARAM_set_time(void)
   return LIB_X509_VERIFY_PARAM_set_time(_base, ___param, ___t);
 }
 
-PKCS12_SAFEBAG * LIB_PKCS12_add_key(struct Library * _base, STACK_OF(PKCS12_SAFEBAG) ** ___pbags, EVP_PKEY * ___key, int ___key_usage, int ___iter, int ___key_nid, char * ___pass);
+PKCS12_SAFEBAG * LIB_PKCS12_add_key(struct Library * _base, STACK_OF(PKCS12_SAFEBAG) ** ___pbags, EVP_PKEY * ___key, int ___key_usage, int ___iter, int ___key_nid, const char * ___pass);
 
 PKCS12_SAFEBAG * LIBSTUB_PKCS12_add_key(void)
 {
@@ -28733,7 +28623,7 @@ PKCS12_SAFEBAG * LIBSTUB_PKCS12_add_key(void)
   int ___key_usage = (int)REG_D0;
   int ___iter = (int)REG_D1;
   int ___key_nid = (int)REG_D2;
-  char * ___pass = (char *)REG_A2;
+  const char * ___pass = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS12_add_key(_base, ___pbags, ___key, ___key_usage, ___iter, ___key_nid, ___pass);
 }
@@ -28858,16 +28748,6 @@ void LIBSTUB_EVP_CIPHER_CTX_free(void)
   return LIB_EVP_CIPHER_CTX_free(_base, ___a);
 }
 
-int LIB_a2i_ipadd(struct Library * _base, unsigned char * ___ipout, const char * ___ipasc);
-
-int LIBSTUB_a2i_ipadd(void)
-{
-  unsigned char * ___ipout = (unsigned char *)REG_A0;
-  const char * ___ipasc = (const char *)REG_A1;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_a2i_ipadd(_base, ___ipout, ___ipasc);
-}
-
 int LIB_EVP_CIPHER_block_size(struct Library * _base, const EVP_CIPHER * ___cipher);
 
 int LIBSTUB_EVP_CIPHER_block_size(void)
@@ -28971,9 +28851,9 @@ unsigned long LIBSTUB_EVP_CIPHER_flags(void)
   return LIB_EVP_CIPHER_flags(_base, ___cipher);
 }
 
-long (* LIB_BIO_get_callback(struct Library * _base, const BIO * ___b))(struct bio_st *,int,const char *,int, long,long);
+BIO_callback_fn LIB_BIO_get_callback(struct Library * _base, const BIO * ___b);
 
-long (* LIBSTUB_BIO_get_callback(void))(struct bio_st *,int,const char *,int, long,long)
+BIO_callback_fn LIBSTUB_BIO_get_callback(void)
 {
   const BIO * ___b = (const BIO *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -29552,14 +29432,14 @@ GENERAL_NAME * LIBSTUB_GENERAL_NAME_dup(void)
   return LIB_GENERAL_NAME_dup(_base, ___a);
 }
 
-STACK_OF(X509_CRL) * LIB_X509_STORE_get1_crls(struct Library * _base, X509_STORE_CTX * ___st, X509_NAME * ___nm);
+STACK_OF(X509_CRL) * LIB_X509_STORE_CTX_get1_crls(struct Library * _base, X509_STORE_CTX * ___st, X509_NAME * ___nm);
 
-STACK_OF(X509_CRL) * LIBSTUB_X509_STORE_get1_crls(void)
+STACK_OF(X509_CRL) * LIBSTUB_X509_STORE_CTX_get1_crls(void)
 {
   X509_STORE_CTX * ___st = (X509_STORE_CTX *)REG_A0;
   X509_NAME * ___nm = (X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get1_crls(_base, ___st, ___nm);
+  return LIB_X509_STORE_CTX_get1_crls(_base, ___st, ___nm);
 }
 
 EVP_PKEY_ASN1_METHOD * LIB_EVP_PKEY_asn1_new(struct Library * _base, int ___id, int ___flags, const char * ___pem_str, const char * ___info);
@@ -29956,6 +29836,16 @@ int LIBSTUB_TS_CONF_set_tsa_name(void)
   TS_RESP_CTX * ___ctx = (TS_RESP_CTX *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_TS_CONF_set_tsa_name(_base, ___conf, ___section, ___ctx);
+}
+
+int LIB_i2d_ASN1_SET_ANY(struct Library * _base, const ASN1_SEQUENCE_ANY * ___a, unsigned char ** ___pp);
+
+int LIBSTUB_i2d_ASN1_SET_ANY(void)
+{
+  const ASN1_SEQUENCE_ANY * ___a = (const ASN1_SEQUENCE_ANY *)REG_A0;
+  unsigned char ** ___pp = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_ASN1_SET_ANY(_base, ___a, ___pp);
 }
 
 unsigned long LIB_ASN1_PCTX_get_flags(struct Library * _base, ASN1_PCTX * ___p);
@@ -31006,9 +30896,9 @@ TS_MSG_IMPRINT * LIBSTUB_TS_TST_INFO_get_msg_imprint(void)
   return LIB_TS_TST_INFO_get_msg_imprint(_base, ___a);
 }
 
-void LIB_ERR_load_TS_strings(struct Library * _base);
+int LIB_ERR_load_TS_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_TS_strings(void)
+int LIBSTUB_ERR_load_TS_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_TS_strings(_base);
@@ -32020,14 +31910,14 @@ void LIBSTUB_EVP_PKEY_CTX_free(void)
   return LIB_EVP_PKEY_CTX_free(_base, ___ctx);
 }
 
-STACK_OF(X509) * LIB_X509_STORE_get1_certs(struct Library * _base, X509_STORE_CTX * ___st, X509_NAME * ___nm);
+STACK_OF(X509) * LIB_X509_STORE_CTX_get1_certs(struct Library * _base, X509_STORE_CTX * ___st, X509_NAME * ___nm);
 
-STACK_OF(X509) * LIBSTUB_X509_STORE_get1_certs(void)
+STACK_OF(X509) * LIBSTUB_X509_STORE_CTX_get1_certs(void)
 {
   X509_STORE_CTX * ___st = (X509_STORE_CTX *)REG_A0;
   X509_NAME * ___nm = (X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get1_certs(_base, ___st, ___nm);
+  return LIB_X509_STORE_CTX_get1_certs(_base, ___st, ___nm);
 }
 
 int LIB_EVP_PKEY_CTX_get_operation(struct Library * _base, EVP_PKEY_CTX * ___ctx);
@@ -32378,7 +32268,7 @@ int LIBSTUB_TS_TST_INFO_set_serial(void)
   return LIB_TS_TST_INFO_set_serial(_base, ___a, ___serial);
 }
 
-GENERAL_NAME * LIB_a2i_GENERAL_NAME(struct Library * _base, GENERAL_NAME * ___out, const X509V3_EXT_METHOD * ___method, X509V3_CTX * ___ctx, int ___gen_type, char * ___value, int ___is_nc);
+GENERAL_NAME * LIB_a2i_GENERAL_NAME(struct Library * _base, GENERAL_NAME * ___out, const X509V3_EXT_METHOD * ___method, X509V3_CTX * ___ctx, int ___gen_type, const char * ___value, int ___is_nc);
 
 GENERAL_NAME * LIBSTUB_a2i_GENERAL_NAME(void)
 {
@@ -32386,7 +32276,7 @@ GENERAL_NAME * LIBSTUB_a2i_GENERAL_NAME(void)
   const X509V3_EXT_METHOD * ___method = (const X509V3_EXT_METHOD *)REG_A1;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A2;
   int ___gen_type = (int)REG_D0;
-  char * ___value = (char *)REG_A3;
+  const char * ___value = (const char *)REG_A3;
   int ___is_nc = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_a2i_GENERAL_NAME(_base, ___out, ___method, ___ctx, ___gen_type, ___value, ___is_nc);
@@ -32703,6 +32593,17 @@ int LIBSTUB_GENERAL_NAME_cmp(void)
   return LIB_GENERAL_NAME_cmp(_base, ___a, ___b);
 }
 
+ASN1_SEQUENCE_ANY * LIB_d2i_ASN1_SET_ANY(struct Library * _base, ASN1_SEQUENCE_ANY ** ___a, const unsigned char ** ___pp, long ___length);
+
+ASN1_SEQUENCE_ANY * LIBSTUB_d2i_ASN1_SET_ANY(void)
+{
+  ASN1_SEQUENCE_ANY ** ___a = (ASN1_SEQUENCE_ANY **)REG_A0;
+  const unsigned char ** ___pp = (const unsigned char **)REG_A1;
+  long ___length = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_ASN1_SET_ANY(_base, ___a, ___pp, ___length);
+}
+
 ASN1_SEQUENCE_ANY * LIB_d2i_ASN1_SEQUENCE_ANY(struct Library * _base, ASN1_SEQUENCE_ANY ** ___a, const unsigned char ** ___pp, long ___length);
 
 ASN1_SEQUENCE_ANY * LIBSTUB_d2i_ASN1_SEQUENCE_ANY(void)
@@ -33010,12 +32911,12 @@ int LIBSTUB_OCSP_REQ_CTX_set1_req(void)
   return LIB_OCSP_REQ_CTX_set1_req(_base, ___rctx, ___req);
 }
 
-void LIB_X509_STORE_set_verify_cb(struct Library * _base, X509_STORE * ___ctx, int (*___verify_cb)(int,X509_STORE_CTX *));
+void LIB_X509_STORE_set_verify_cb(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_verify_cb ___verify_cb);
 
 void LIBSTUB_X509_STORE_set_verify_cb(void)
 {
   X509_STORE * ___ctx = (X509_STORE *)REG_A0;
-  int (*___verify_cb)(int,X509_STORE_CTX *) = (int (*)(int,X509_STORE_CTX *))REG_A1;
+  X509_STORE_CTX_verify_cb ___verify_cb = (X509_STORE_CTX_verify_cb)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_STORE_set_verify_cb(_base, ___ctx, ___verify_cb);
 }
@@ -33252,16 +33153,6 @@ void LIBSTUB_CRYPTO_cfb128_8_encrypt(void)
   return LIB_CRYPTO_cfb128_8_encrypt(_base, ___in, ___out, ___length, ___key, ___ivec, ___num, ___enc, ___block);
 }
 
-int LIB_OPENSSL_strcasecmp(struct Library * _base, const char * ___str1, const char * ___str2);
-
-int LIBSTUB_OPENSSL_strcasecmp(void)
-{
-  const char * ___str1 = (const char *)REG_A0;
-  const char * ___str2 = (const char *)REG_A1;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_OPENSSL_strcasecmp(_base, ___str1, ___str2);
-}
-
 int LIB_OPENSSL_memcmp(struct Library * _base, const void * ___p1, const void * ___p2, size_t ___n);
 
 int LIBSTUB_OPENSSL_memcmp(void)
@@ -33271,17 +33162,6 @@ int LIBSTUB_OPENSSL_memcmp(void)
   size_t ___n = (size_t)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OPENSSL_memcmp(_base, ___p1, ___p2, ___n);
-}
-
-int LIB_OPENSSL_strncasecmp(struct Library * _base, const char * ___str1, const char * ___str2, size_t ___n);
-
-int LIBSTUB_OPENSSL_strncasecmp(void)
-{
-  const char * ___str1 = (const char *)REG_A0;
-  const char * ___str2 = (const char *)REG_A1;
-  size_t ___n = (size_t)REG_D0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_OPENSSL_strncasecmp(_base, ___str1, ___str2, ___n);
 }
 
 struct tm * LIB_OPENSSL_gmtime(struct Library * _base, const time_t * ___timer, struct tm * ___result);
@@ -34475,15 +34355,15 @@ int LIBSTUB_RSA_padding_check_PKCS1_OAEP_mgf1(void)
   return LIB_RSA_padding_check_PKCS1_OAEP_mgf1(_base, ___to, ___tlen, ___from, ___flen, ___num, ___param, ___plen, ___md, ___mgf1md);
 }
 
-_STACK * LIB_sk_deep_copy(struct Library * _base, _STACK * ___sk, void * (*___copy_func)(void *), void (*___free_func)(void *));
+OPENSSL_STACK * LIB_OPENSSL_sk_deep_copy(struct Library * _base, const OPENSSL_STACK * ___sk, OPENSSL_sk_copyfunc ___c, OPENSSL_sk_freefunc ___f);
 
-_STACK * LIBSTUB_sk_deep_copy(void)
+OPENSSL_STACK * LIBSTUB_OPENSSL_sk_deep_copy(void)
 {
-  _STACK * ___sk = (_STACK *)REG_A0;
-  void * (*___copy_func)(void *) = (void * (*)(void *))REG_A1;
-  void (*___free_func)(void *) = (void (*)(void *))REG_A2;
+  const OPENSSL_STACK * ___sk = (const OPENSSL_STACK *)REG_A0;
+  OPENSSL_sk_copyfunc ___c = (OPENSSL_sk_copyfunc)REG_A1;
+  OPENSSL_sk_freefunc ___f = (OPENSSL_sk_freefunc)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_sk_deep_copy(_base, ___sk, ___copy_func, ___free_func);
+  return LIB_OPENSSL_sk_deep_copy(_base, ___sk, ___c, ___f);
 }
 
 int LIB_i2d_re_X509_tbs(struct Library * _base, X509 * ___x, unsigned char ** ___pp);
@@ -34597,16 +34477,6 @@ X509_STORE * LIBSTUB_X509_STORE_CTX_get0_store(void)
   X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_STORE_CTX_get0_store(_base, ___ctx);
-}
-
-void LIB_X509_STORE_set_lookup_crls_cb(struct Library * _base, X509_STORE * ___ctx, STACK_OF(X509_CRL) *(*___cb)(X509_STORE_CTX *ctx,X509_NAME *nm));
-
-void LIBSTUB_X509_STORE_set_lookup_crls_cb(void)
-{
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
-  STACK_OF(X509_CRL) *(*___cb)(X509_STORE_CTX *ctx,X509_NAME *nm) = (STACK_OF(X509_CRL) *(*)(X509_STORE_CTX *ctx,X509_NAME *nm))REG_A1;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_lookup_crls_cb(_base, ___ctx, ___cb);
 }
 
 int LIB_X509_VERIFY_PARAM_add1_host(struct Library * _base, X509_VERIFY_PARAM * ___param, const char * ___name, size_t ___namelen);
@@ -35148,16 +35018,16 @@ void LIBSTUB_ASN1_add_stable_module(void)
   return LIB_ASN1_add_stable_module(_base);
 }
 
-int LIB_ASN1_buf_print(struct Library * _base, BIO * ___bp, unsigned char * ___buf, size_t ___buflen, int ___indent);
+int LIB_ASN1_buf_print(struct Library * _base, BIO * ___bp, const unsigned char * ___buf, size_t ___buflen, int ___off);
 
 int LIBSTUB_ASN1_buf_print(void)
 {
   BIO * ___bp = (BIO *)REG_A0;
-  unsigned char * ___buf = (unsigned char *)REG_A1;
+  const unsigned char * ___buf = (const unsigned char *)REG_A1;
   size_t ___buflen = (size_t)REG_A2;
-  int ___indent = (int)REG_D0;
+  int ___off = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_ASN1_buf_print(_base, ___bp, ___buf, ___buflen, ___indent);
+  return LIB_ASN1_buf_print(_base, ___bp, ___buf, ___buflen, ___off);
 }
 
 int LIB_ASN1_ENUMERATED_get_int64(struct Library * _base, int64_t * ___pr, const ASN1_ENUMERATED * ___a);
@@ -35379,9 +35249,9 @@ void LIBSTUB_ASYNC_unblock_pause(void)
   return LIB_ASYNC_unblock_pause(_base);
 }
 
-void LIB_ERR_load_ASYNC_strings(struct Library * _base);
+int LIB_ERR_load_ASYNC_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_ASYNC_strings(void)
+int LIBSTUB_ERR_load_ASYNC_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_ASYNC_strings(_base);
@@ -36007,9 +35877,9 @@ void * LIBSTUB_CRYPTO_secure_malloc(void)
   return LIB_CRYPTO_secure_malloc(_base, ___num, ___file, ___line);
 }
 
-void LIB_CRYPTO_secure_malloc_done(struct Library * _base);
+int LIB_CRYPTO_secure_malloc_done(struct Library * _base);
 
-void LIBSTUB_CRYPTO_secure_malloc_done(void)
+int LIBSTUB_CRYPTO_secure_malloc_done(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_CRYPTO_secure_malloc_done(_base);
@@ -36433,12 +36303,12 @@ int LIBSTUB_EC_KEY_oct2key(void)
   return LIB_EC_KEY_oct2key(_base, ___key, ___buf, ___len, ___ctx);
 }
 
-int LIB_EC_KEY_oct2priv(struct Library * _base, EC_KEY * ___key, unsigned char * ___buf, size_t ___len);
+int LIB_EC_KEY_oct2priv(struct Library * _base, EC_KEY * ___key, const unsigned char * ___buf, size_t ___len);
 
 int LIBSTUB_EC_KEY_oct2priv(void)
 {
   EC_KEY * ___key = (EC_KEY *)REG_A0;
-  unsigned char * ___buf = (unsigned char *)REG_A1;
+  const unsigned char * ___buf = (const unsigned char *)REG_A1;
   size_t ___len = (size_t)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_oct2priv(_base, ___key, ___buf, ___len);
@@ -36516,15 +36386,15 @@ size_t LIBSTUB_EC_POINT_point2buf(void)
   return LIB_EC_POINT_point2buf(_base, ___group, ___point, ___form, ___pbuf, ___ctx);
 }
 
-void LIB_ECDSA_SIG_get0(struct Library * _base, BIGNUM ** ___pr, BIGNUM ** ___ps, ECDSA_SIG * ___sig);
+void LIB_ECDSA_SIG_get0(struct Library * _base, const ECDSA_SIG * ___sig, const BIGNUM ** ___pr, const BIGNUM ** ___ps);
 
 void LIBSTUB_ECDSA_SIG_get0(void)
 {
-  BIGNUM ** ___pr = (BIGNUM **)REG_A0;
-  BIGNUM ** ___ps = (BIGNUM **)REG_A1;
-  ECDSA_SIG * ___sig = (ECDSA_SIG *)REG_A2;
+  const ECDSA_SIG * ___sig = (const ECDSA_SIG *)REG_A0;
+  const BIGNUM ** ___pr = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___ps = (const BIGNUM **)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_ECDSA_SIG_get0(_base, ___pr, ___ps, ___sig);
+  return LIB_ECDSA_SIG_get0(_base, ___sig, ___pr, ___ps);
 }
 
 ENGINE * LIB_ENGINE_get_default_EC(struct Library * _base);
@@ -37513,9 +37383,9 @@ int LIBSTUB_EVP_PKEY_security_bits(void)
   return LIB_EVP_PKEY_security_bits(_base, ___pkey);
 }
 
-void LIB_EVP_PKEY_up_ref(struct Library * _base, EVP_PKEY * ___pkey);
+int LIB_EVP_PKEY_up_ref(struct Library * _base, EVP_PKEY * ___pkey);
 
-void LIBSTUB_EVP_PKEY_up_ref(void)
+int LIBSTUB_EVP_PKEY_up_ref(void)
 {
   EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -37563,41 +37433,41 @@ int LIBSTUB_HMAC_CTX_reset(void)
   return LIB_HMAC_CTX_reset(_base, ___ctx);
 }
 
-size_t LIB_HMAC_size(struct Library * _base, HMAC_CTX * ___ctx);
+size_t LIB_HMAC_size(struct Library * _base, const HMAC_CTX * ___ctx);
 
 size_t LIBSTUB_HMAC_size(void)
 {
-  HMAC_CTX * ___ctx = (HMAC_CTX *)REG_A0;
+  const HMAC_CTX * ___ctx = (const HMAC_CTX *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_HMAC_size(_base, ___ctx);
 }
 
-int LIB_lh_error(struct Library * _base, _LHASH * ___lh);
+int LIB_OPENSSL_LH_error(struct Library * _base, OPENSSL_LHASH * ___lh);
 
-int LIBSTUB_lh_error(void)
+int LIBSTUB_OPENSSL_LH_error(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_error(_base, ___lh);
+  return LIB_OPENSSL_LH_error(_base, ___lh);
 }
 
-unsigned long LIB_lh_get_down_load(struct Library * _base, const _LHASH * ___lh);
+unsigned long LIB_OPENSSL_LH_get_down_load(struct Library * _base, const OPENSSL_LHASH * ___lh);
 
-unsigned long LIBSTUB_lh_get_down_load(void)
+unsigned long LIBSTUB_OPENSSL_LH_get_down_load(void)
 {
-  const _LHASH * ___lh = (const _LHASH *)REG_A0;
+  const OPENSSL_LHASH * ___lh = (const OPENSSL_LHASH *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_get_down_load(_base, ___lh);
+  return LIB_OPENSSL_LH_get_down_load(_base, ___lh);
 }
 
-void LIB_lh_set_down_load(struct Library * _base, _LHASH * ___lh, unsigned long ___down_load);
+void LIB_OPENSSL_LH_set_down_load(struct Library * _base, OPENSSL_LHASH * ___lh, unsigned long ___down_load);
 
-void LIBSTUB_lh_set_down_load(void)
+void LIBSTUB_OPENSSL_LH_set_down_load(void)
 {
-  _LHASH * ___lh = (_LHASH *)REG_A0;
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
   unsigned long ___down_load = (unsigned long)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_lh_set_down_load(_base, ___lh, ___down_load);
+  return LIB_OPENSSL_LH_set_down_load(_base, ___lh, ___down_load);
 }
 
 size_t LIB_CRYPTO_128_unwrap_pad(struct Library * _base, void * ___key, const unsigned char * ___icv, unsigned char * ___out, const unsigned char * ___in, size_t ___inlen, block128_f ___block);
@@ -38219,29 +38089,29 @@ void LIBSTUB_X509_CRL_get0_signature(void)
   return LIB_X509_CRL_get0_signature(_base, ___psig, ___palg, ___crl);
 }
 
-X509_NAME * LIB_X509_CRL_get_issuer(struct Library * _base, X509_CRL * ___crl);
+X509_NAME * LIB_X509_CRL_get_issuer(struct Library * _base, const X509_CRL * ___crl);
 
 X509_NAME * LIBSTUB_X509_CRL_get_issuer(void)
 {
-  X509_CRL * ___crl = (X509_CRL *)REG_A0;
+  const X509_CRL * ___crl = (const X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_issuer(_base, ___crl);
 }
 
-ASN1_TIME * LIB_X509_CRL_get_lastUpdate(struct Library * _base, X509_CRL * ___crl);
+ASN1_TIME * LIB_X509_CRL_get_lastUpdate(struct Library * _base, const X509_CRL * ___crl);
 
 ASN1_TIME * LIBSTUB_X509_CRL_get_lastUpdate(void)
 {
-  X509_CRL * ___crl = (X509_CRL *)REG_A0;
+  const X509_CRL * ___crl = (const X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_lastUpdate(_base, ___crl);
 }
 
-ASN1_TIME * LIB_X509_CRL_get_nextUpdate(struct Library * _base, X509_CRL * ___crl);
+ASN1_TIME * LIB_X509_CRL_get_nextUpdate(struct Library * _base, const X509_CRL * ___crl);
 
 ASN1_TIME * LIBSTUB_X509_CRL_get_nextUpdate(void)
 {
-  X509_CRL * ___crl = (X509_CRL *)REG_A0;
+  const X509_CRL * ___crl = (const X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_nextUpdate(_base, ___crl);
 }
@@ -38264,18 +38134,18 @@ int LIBSTUB_X509_CRL_get_signature_nid(void)
   return LIB_X509_CRL_get_signature_nid(_base, ___crl);
 }
 
-long LIB_X509_CRL_get_version(struct Library * _base, X509_CRL * ___crl);
+long LIB_X509_CRL_get_version(struct Library * _base, const X509_CRL * ___crl);
 
 long LIBSTUB_X509_CRL_get_version(void)
 {
-  X509_CRL * ___crl = (X509_CRL *)REG_A0;
+  const X509_CRL * ___crl = (const X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_CRL_get_version(_base, ___crl);
 }
 
-void LIB_X509_CRL_up_ref(struct Library * _base, X509_CRL * ___crl);
+int LIB_X509_CRL_up_ref(struct Library * _base, X509_CRL * ___crl);
 
-void LIBSTUB_X509_CRL_up_ref(void)
+int LIBSTUB_X509_CRL_up_ref(void)
 {
   X509_CRL * ___crl = (X509_CRL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -38291,11 +38161,11 @@ STACK_OF(X509_EXTENSION) * LIBSTUB_X509_get0_extensions(void)
   return LIB_X509_get0_extensions(_base, ___x);
 }
 
-EVP_PKEY * LIB_X509_get0_pubkey(struct Library * _base, X509 * ___x);
+EVP_PKEY * LIB_X509_get0_pubkey(struct Library * _base, const X509 * ___x);
 
 EVP_PKEY * LIBSTUB_X509_get0_pubkey(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get0_pubkey(_base, ___x);
 }
@@ -38338,20 +38208,20 @@ void LIBSTUB_X509_get0_uids(void)
   return LIB_X509_get0_uids(_base, ___piuid, ___psuid, ___x);
 }
 
-ASN1_TIME * LIB_X509_get_notAfter(struct Library * _base, X509 * ___x);
+ASN1_TIME * LIB_X509_get_notAfter(struct Library * _base, const X509 * ___x);
 
 ASN1_TIME * LIBSTUB_X509_get_notAfter(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_notAfter(_base, ___x);
 }
 
-ASN1_TIME * LIB_X509_get_notBefore(struct Library * _base, X509 * ___x);
+ASN1_TIME * LIB_X509_get_notBefore(struct Library * _base, const X509 * ___x);
 
 ASN1_TIME * LIBSTUB_X509_get_notBefore(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_notBefore(_base, ___x);
 }
@@ -38365,11 +38235,11 @@ int LIBSTUB_X509_get_signature_type(void)
   return LIB_X509_get_signature_type(_base, ___x);
 }
 
-long LIB_X509_get_version(struct Library * _base, X509 * ___x);
+long LIB_X509_get_version(struct Library * _base, const X509 * ___x);
 
 long LIBSTUB_X509_get_version(void)
 {
-  X509 * ___x = (X509 *)REG_A0;
+  const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_version(_base, ___x);
 }
@@ -38432,20 +38302,20 @@ int LIBSTUB_X509_REQ_get_signature_nid(void)
   return LIB_X509_REQ_get_signature_nid(_base, ___req);
 }
 
-X509_NAME * LIB_X509_REQ_get_subject_name(struct Library * _base, X509_REQ * ___req);
+X509_NAME * LIB_X509_REQ_get_subject_name(struct Library * _base, const X509_REQ * ___req);
 
 X509_NAME * LIBSTUB_X509_REQ_get_subject_name(void)
 {
-  X509_REQ * ___req = (X509_REQ *)REG_A0;
+  const X509_REQ * ___req = (const X509_REQ *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REQ_get_subject_name(_base, ___req);
 }
 
-long LIB_X509_REQ_get_version(struct Library * _base, X509_REQ * ___req);
+long LIB_X509_REQ_get_version(struct Library * _base, const X509_REQ * ___req);
 
 long LIBSTUB_X509_REQ_get_version(void)
 {
-  X509_REQ * ___req = (X509_REQ *)REG_A0;
+  const X509_REQ * ___req = (const X509_REQ *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REQ_get_version(_base, ___req);
 }
@@ -38459,11 +38329,11 @@ X509_PUBKEY * LIBSTUB_X509_REQ_get_X509_PUBKEY(void)
   return LIB_X509_REQ_get_X509_PUBKEY(_base, ___req);
 }
 
-STACK_OF(X509_EXTENSION) * LIB_X509_REVOKED_get0_extensions(struct Library * _base, X509_REVOKED * ___r);
+STACK_OF(X509_EXTENSION) * LIB_X509_REVOKED_get0_extensions(struct Library * _base, const X509_REVOKED * ___r);
 
 STACK_OF(X509_EXTENSION) * LIBSTUB_X509_REVOKED_get0_extensions(void)
 {
-  X509_REVOKED * ___r = (X509_REVOKED *)REG_A0;
+  const X509_REVOKED * ___r = (const X509_REVOKED *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REVOKED_get0_extensions(_base, ___r);
 }
@@ -38495,9 +38365,9 @@ int LIBSTUB_X509_trusted(void)
   return LIB_X509_trusted(_base, ___x);
 }
 
-void LIB_X509_up_ref(struct Library * _base, X509 * ___x);
+int LIB_X509_up_ref(struct Library * _base, X509 * ___x);
 
-void LIBSTUB_X509_up_ref(void)
+int LIBSTUB_X509_up_ref(void)
 {
   X509 * ___x = (X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -38533,15 +38403,6 @@ void LIBSTUB_X509_VERIFY_PARAM_move_peername(void)
   return LIB_X509_VERIFY_PARAM_move_peername(_base, ___to, ___from);
 }
 
-void LIB_ASIdentifiers_free(struct Library * _base, ASIdentifiers * ___a);
-
-void LIBSTUB_ASIdentifiers_free(void)
-{
-  ASIdentifiers * ___a = (ASIdentifiers *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_ASIdentifiers_free(_base, ___a);
-}
-
 char * LIB_i2s_ASN1_IA5STRING(struct Library * _base, X509V3_EXT_METHOD * ___method, ASN1_IA5STRING * ___ia5);
 
 char * LIBSTUB_i2s_ASN1_IA5STRING(void)
@@ -38552,13 +38413,13 @@ char * LIBSTUB_i2s_ASN1_IA5STRING(void)
   return LIB_i2s_ASN1_IA5STRING(_base, ___method, ___ia5);
 }
 
-ASN1_IA5STRING * LIB_s2i_ASN1_IA5STRING(struct Library * _base, X509V3_EXT_METHOD * ___method, X509V3_CTX * ___ctx, char * ___str);
+ASN1_IA5STRING * LIB_s2i_ASN1_IA5STRING(struct Library * _base, X509V3_EXT_METHOD * ___method, X509V3_CTX * ___ctx, const char * ___str);
 
 ASN1_IA5STRING * LIBSTUB_s2i_ASN1_IA5STRING(void)
 {
   X509V3_EXT_METHOD * ___method = (X509V3_EXT_METHOD *)REG_A0;
   X509V3_CTX * ___ctx = (X509V3_CTX *)REG_A1;
-  char * ___str = (char *)REG_A2;
+  const char * ___str = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_s2i_ASN1_IA5STRING(_base, ___method, ___ctx, ___str);
 }
@@ -39015,9 +38876,9 @@ void LIBSTUB_SSL_CTX_set_security_level(void)
   return LIB_SSL_CTX_set_security_level(_base, ___ctx, ___level);
 }
 
-void LIB_SSL_CTX_up_ref(struct Library * _base, SSL_CTX * ___ctx);
+int LIB_SSL_CTX_up_ref(struct Library * _base, SSL_CTX * ___ctx);
 
-void LIBSTUB_SSL_CTX_up_ref(void)
+int LIBSTUB_SSL_CTX_up_ref(void)
 {
   SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -39323,14 +39184,14 @@ unsigned long LIBSTUB_SSL_set_options(void)
   return LIB_SSL_set_options(_base, ___s, ___op);
 }
 
-void LIB_SSL_set_rbio(struct Library * _base, SSL * ___s, BIO * ___rbio);
+void LIB_SSL_set0_rbio(struct Library * _base, SSL * ___s, BIO * ___rbio);
 
-void LIBSTUB_SSL_set_rbio(void)
+void LIBSTUB_SSL_set0_rbio(void)
 {
   SSL * ___s = (SSL *)REG_A0;
   BIO * ___rbio = (BIO *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_set_rbio(_base, ___s, ___rbio);
+  return LIB_SSL_set0_rbio(_base, ___s, ___rbio);
 }
 
 void LIB_SSL_set_security_callback(struct Library * _base, SSL * ___s, int (*___cb)(const SSL *,const SSL_CTX *,int,int,int,void *,void *));
@@ -39353,19 +39214,19 @@ void LIBSTUB_SSL_set_security_level(void)
   return LIB_SSL_set_security_level(_base, ___s, ___level);
 }
 
-void LIB_SSL_set_wbio(struct Library * _base, SSL * ___s, BIO * ___wbio);
+void LIB_SSL_set0_wbio(struct Library * _base, SSL * ___s, BIO * ___wbio);
 
-void LIBSTUB_SSL_set_wbio(void)
+void LIBSTUB_SSL_set0_wbio(void)
 {
   SSL * ___s = (SSL *)REG_A0;
   BIO * ___wbio = (BIO *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_set_wbio(_base, ___s, ___wbio);
+  return LIB_SSL_set0_wbio(_base, ___s, ___wbio);
 }
 
-void LIB_SSL_up_ref(struct Library * _base, SSL * ___s);
+int LIB_SSL_up_ref(struct Library * _base, SSL * ___s);
 
-void LIBSTUB_SSL_up_ref(void)
+int LIBSTUB_SSL_up_ref(void)
 {
   SSL * ___s = (SSL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -40170,14 +40031,15 @@ CTLOG * LIBSTUB_CTLOG_new_null(void)
   return LIB_CTLOG_new_null(_base);
 }
 
-CTLOG * LIB_CTLOG_new_from_base64(struct Library * _base, const char * ___pkey_base64, const char * ___name);
+int LIB_CTLOG_new_from_base64(struct Library * _base, CTLOG ** ___ct_log, const char * ___pkey_base64, const char * ___name);
 
-CTLOG * LIBSTUB_CTLOG_new_from_base64(void)
+int LIBSTUB_CTLOG_new_from_base64(void)
 {
-  const char * ___pkey_base64 = (const char *)REG_A0;
-  const char * ___name = (const char *)REG_A1;
+  CTLOG ** ___ct_log = (CTLOG **)REG_A0;
+  const char * ___pkey_base64 = (const char *)REG_A1;
+  const char * ___name = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_CTLOG_new_from_base64(_base, ___pkey_base64, ___name);
+  return LIB_CTLOG_new_from_base64(_base, ___ct_log, ___pkey_base64, ___name);
 }
 
 void LIB_CTLOG_free(struct Library * _base, CTLOG * ___log);
@@ -40265,9 +40127,9 @@ int LIBSTUB_CTLOG_STORE_load_default_file(void)
   return LIB_CTLOG_STORE_load_default_file(_base, ___store);
 }
 
-void LIB_ERR_load_CT_strings(struct Library * _base);
+int LIB_ERR_load_CT_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_CT_strings(void)
+int LIBSTUB_ERR_load_CT_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_CT_strings(_base);
@@ -40281,15 +40143,15 @@ const ASN1_ITEM * LIBSTUB_DHparams_it(void)
   return LIB_DHparams_it(_base);
 }
 
-void LIB_DSA_SIG_get0(struct Library * _base, BIGNUM ** ___pr, BIGNUM ** ___ps, DSA_SIG * ___sig);
+void LIB_DSA_SIG_get0(struct Library * _base, const DSA_SIG * ___sig, const BIGNUM ** ___pr, const BIGNUM ** ___ps);
 
 void LIBSTUB_DSA_SIG_get0(void)
 {
-  BIGNUM ** ___pr = (BIGNUM **)REG_A0;
-  BIGNUM ** ___ps = (BIGNUM **)REG_A1;
-  DSA_SIG * ___sig = (DSA_SIG *)REG_A2;
+  const DSA_SIG * ___sig = (const DSA_SIG *)REG_A0;
+  const BIGNUM ** ___pr = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___ps = (const BIGNUM **)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_DSA_SIG_get0(_base, ___pr, ___ps, ___sig);
+  return LIB_DSA_SIG_get0(_base, ___sig, ___pr, ___ps);
 }
 
 EC_GROUP * LIB_EC_GROUP_new_from_ecparameters(struct Library * _base, const ECPARAMETERS * ___params);
@@ -40393,9 +40255,9 @@ int LIBSTUB_EVP_PKEY_CTX_hex2ctrl(void)
   return LIB_EVP_PKEY_CTX_hex2ctrl(_base, ___ctx, ___cmd, ___hex);
 }
 
-void LIB_ERR_load_KDF_strings(struct Library * _base);
+int LIB_ERR_load_KDF_strings(struct Library * _base);
 
-void LIBSTUB_ERR_load_KDF_strings(void)
+int LIBSTUB_ERR_load_KDF_strings(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ERR_load_KDF_strings(_base);
@@ -40979,12 +40841,12 @@ void LIBSTUB_BIO_meth_free(void)
   return LIB_BIO_meth_free(_base, ___biom);
 }
 
-int LIB_DSA_meth_set_bn_mod_exp(struct Library * _base, DSA_METHOD * ___dsam, int (*___bn_mod_exp)(DSA *,BIGNUM *,BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *));
+int LIB_DSA_meth_set_bn_mod_exp(struct Library * _base, DSA_METHOD * ___dsam, int (*___bn_mod_exp)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *));
 
 int LIBSTUB_DSA_meth_set_bn_mod_exp(void)
 {
   DSA_METHOD * ___dsam = (DSA_METHOD *)REG_A0;
-  int (*___bn_mod_exp)(DSA *,BIGNUM *,BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *) = (int (*)(DSA *,BIGNUM *,BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *))REG_A1;
+  int (*___bn_mod_exp)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *) = (int (*)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DSA_meth_set_bn_mod_exp(_base, ___dsam, ___bn_mod_exp);
 }
@@ -41008,12 +40870,12 @@ void LIBSTUB_DSA_meth_free(void)
   return LIB_DSA_meth_free(_base, ___dsam);
 }
 
-int LIB_DSA_meth_set_mod_exp(struct Library * _base, DSA_METHOD * ___dsam, int (*___mod_exp)(DSA *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BN_CTX *,BN_MONT_CTX *));
+int LIB_DSA_meth_set_mod_exp(struct Library * _base, DSA_METHOD * ___dsam, int (*___mod_exp)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *));
 
 int LIBSTUB_DSA_meth_set_mod_exp(void)
 {
   DSA_METHOD * ___dsam = (DSA_METHOD *)REG_A0;
-  int (*___mod_exp)(DSA *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BN_CTX *,BN_MONT_CTX *) = (int (*)(DSA *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BIGNUM *,BN_CTX *,BN_MONT_CTX *))REG_A1;
+  int (*___mod_exp)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *) = (int (*)(DSA *,BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,const BIGNUM *,BN_CTX *,BN_MONT_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DSA_meth_set_mod_exp(_base, ___dsam, ___mod_exp);
 }
@@ -41047,14 +40909,14 @@ void LIBSTUB_DSA_set_flags(void)
   return LIB_DSA_set_flags(_base, ___d, ___flags);
 }
 
-void LIB_DSA_get0_pqg(struct Library * _base, const DSA * ___d, BIGNUM ** ___p, BIGNUM ** ___q, BIGNUM ** ___g);
+void LIB_DSA_get0_pqg(struct Library * _base, const DSA * ___d, const BIGNUM ** ___p, const BIGNUM ** ___q, const BIGNUM ** ___g);
 
 void LIBSTUB_DSA_get0_pqg(void)
 {
   const DSA * ___d = (const DSA *)REG_A0;
-  BIGNUM ** ___p = (BIGNUM **)REG_A1;
-  BIGNUM ** ___q = (BIGNUM **)REG_A2;
-  BIGNUM ** ___g = (BIGNUM **)REG_A3;
+  const BIGNUM ** ___p = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___q = (const BIGNUM **)REG_A2;
+  const BIGNUM ** ___g = (const BIGNUM **)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DSA_get0_pqg(_base, ___d, ___p, ___q, ___g);
 }
@@ -41154,20 +41016,20 @@ int LIBSTUB_DSA_meth_set1_name(void)
   return LIB_DSA_meth_set1_name(_base, ___dsam, ___name);
 }
 
-void LIB_DSA_get0_key(struct Library * _base, const DSA * ___d, BIGNUM ** ___pub_key, BIGNUM ** ___priv_key);
+void LIB_DSA_get0_key(struct Library * _base, const DSA * ___d, const BIGNUM ** ___pub_key, const BIGNUM ** ___priv_key);
 
 void LIBSTUB_DSA_get0_key(void)
 {
   const DSA * ___d = (const DSA *)REG_A0;
-  BIGNUM ** ___pub_key = (BIGNUM **)REG_A1;
-  BIGNUM ** ___priv_key = (BIGNUM **)REG_A2;
+  const BIGNUM ** ___pub_key = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___priv_key = (const BIGNUM **)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DSA_get0_key(_base, ___d, ___pub_key, ___priv_key);
 }
 
-int (* LIB_DSA_meth_get_mod_exp(struct Library * _base, const DSA_METHOD * ___dsam))(DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BN_CTX *, BN_MONT_CTX *);
+int (* LIB_DSA_meth_get_mod_exp(struct Library * _base, const DSA_METHOD * ___dsam))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *);
 
-int (* LIBSTUB_DSA_meth_get_mod_exp(void))(DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BN_CTX *, BN_MONT_CTX *)
+int (* LIBSTUB_DSA_meth_get_mod_exp(void))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
 {
   const DSA_METHOD * ___dsam = (const DSA_METHOD *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -41273,9 +41135,9 @@ int LIBSTUB_DSA_meth_set_sign_setup(void)
   return LIB_DSA_meth_set_sign_setup(_base, ___dsam, ___sign_setup);
 }
 
-int (* LIB_DSA_meth_get_bn_mod_exp(struct Library * _base, const DSA_METHOD * ___dsam))(DSA *, BIGNUM *, BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *);
+int (* LIB_DSA_meth_get_bn_mod_exp(struct Library * _base, const DSA_METHOD * ___dsam))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *);
 
-int (* LIBSTUB_DSA_meth_get_bn_mod_exp(void))(DSA *, BIGNUM *, BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
+int (* LIBSTUB_DSA_meth_get_bn_mod_exp(void))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
 {
   const DSA_METHOD * ___dsam = (const DSA_METHOD *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -41541,23 +41403,23 @@ int (* LIBSTUB_RSA_meth_get_finish(void))(RSA *rsa)
   return LIB_RSA_meth_get_finish(_base, ___meth);
 }
 
-void LIB_RSA_get0_key(struct Library * _base, const RSA * ___r, BIGNUM ** ___n, BIGNUM ** ___e, BIGNUM ** ___d);
+void LIB_RSA_get0_key(struct Library * _base, const RSA * ___r, const BIGNUM ** ___n, const BIGNUM ** ___e, const BIGNUM ** ___d);
 
 void LIBSTUB_RSA_get0_key(void)
 {
   const RSA * ___r = (const RSA *)REG_A0;
-  BIGNUM ** ___n = (BIGNUM **)REG_A1;
-  BIGNUM ** ___e = (BIGNUM **)REG_A2;
-  BIGNUM ** ___d = (BIGNUM **)REG_A3;
+  const BIGNUM ** ___n = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___e = (const BIGNUM **)REG_A2;
+  const BIGNUM ** ___d = (const BIGNUM **)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_get0_key(_base, ___r, ___n, ___e, ___d);
 }
 
-ENGINE * LIB_RSA_get0_engine(struct Library * _base, RSA * ___r);
+ENGINE * LIB_RSA_get0_engine(struct Library * _base, const RSA * ___r);
 
 ENGINE * LIBSTUB_RSA_get0_engine(void)
 {
-  RSA * ___r = (RSA *)REG_A0;
+  const RSA * ___r = (const RSA *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_get0_engine(_base, ___r);
 }
@@ -41582,13 +41444,13 @@ int LIBSTUB_RSA_meth_set_verify(void)
   return LIB_RSA_meth_set_verify(_base, ___rsa, ___verify);
 }
 
-void LIB_RSA_get0_factors(struct Library * _base, const RSA * ___r, BIGNUM ** ___p, BIGNUM ** ___q);
+void LIB_RSA_get0_factors(struct Library * _base, const RSA * ___r, const BIGNUM ** ___p, const BIGNUM ** ___q);
 
 void LIBSTUB_RSA_get0_factors(void)
 {
   const RSA * ___r = (const RSA *)REG_A0;
-  BIGNUM ** ___p = (BIGNUM **)REG_A1;
-  BIGNUM ** ___q = (BIGNUM **)REG_A2;
+  const BIGNUM ** ___p = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___q = (const BIGNUM **)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_get0_factors(_base, ___r, ___p, ___q);
 }
@@ -41748,14 +41610,14 @@ int LIBSTUB_RSA_set0_crt_params(void)
   return LIB_RSA_set0_crt_params(_base, ___r, ___dmp1, ___dmq1, ___iqmp);
 }
 
-void LIB_RSA_get0_crt_params(struct Library * _base, const RSA * ___r, BIGNUM ** ___dmp1, BIGNUM ** ___dmq1, BIGNUM ** ___iqmp);
+void LIB_RSA_get0_crt_params(struct Library * _base, const RSA * ___r, const BIGNUM ** ___dmp1, const BIGNUM ** ___dmq1, const BIGNUM ** ___iqmp);
 
 void LIBSTUB_RSA_get0_crt_params(void)
 {
   const RSA * ___r = (const RSA *)REG_A0;
-  BIGNUM ** ___dmp1 = (BIGNUM **)REG_A1;
-  BIGNUM ** ___dmq1 = (BIGNUM **)REG_A2;
-  BIGNUM ** ___iqmp = (BIGNUM **)REG_A3;
+  const BIGNUM ** ___dmp1 = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___dmq1 = (const BIGNUM **)REG_A2;
+  const BIGNUM ** ___iqmp = (const BIGNUM **)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_get0_crt_params(_base, ___r, ___dmp1, ___dmq1, ___iqmp);
 }
@@ -41782,13 +41644,13 @@ void LIBSTUB_DH_clear_flags(void)
   return LIB_DH_clear_flags(_base, ___dh, ___flags);
 }
 
-void LIB_DH_get0_key(struct Library * _base, const DH * ___dh, BIGNUM ** ___pub_key, BIGNUM ** ___priv_key);
+void LIB_DH_get0_key(struct Library * _base, const DH * ___dh, const BIGNUM ** ___pub_key, const BIGNUM ** ___priv_key);
 
 void LIBSTUB_DH_get0_key(void)
 {
   const DH * ___dh = (const DH *)REG_A0;
-  BIGNUM ** ___pub_key = (BIGNUM **)REG_A1;
-  BIGNUM ** ___priv_key = (BIGNUM **)REG_A2;
+  const BIGNUM ** ___pub_key = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___priv_key = (const BIGNUM **)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DH_get0_key(_base, ___dh, ___pub_key, ___priv_key);
 }
@@ -41842,14 +41704,14 @@ long LIBSTUB_DH_get_length(void)
   return LIB_DH_get_length(_base, ___dh);
 }
 
-void LIB_DH_get0_pqg(struct Library * _base, const DH * ___dh, BIGNUM ** ___p, BIGNUM ** ___q, BIGNUM ** ___g);
+void LIB_DH_get0_pqg(struct Library * _base, const DH * ___dh, const BIGNUM ** ___p, const BIGNUM ** ___q, const BIGNUM ** ___g);
 
 void LIBSTUB_DH_get0_pqg(void)
 {
   const DH * ___dh = (const DH *)REG_A0;
-  BIGNUM ** ___p = (BIGNUM **)REG_A1;
-  BIGNUM ** ___q = (BIGNUM **)REG_A2;
-  BIGNUM ** ___g = (BIGNUM **)REG_A3;
+  const BIGNUM ** ___p = (const BIGNUM **)REG_A1;
+  const BIGNUM ** ___q = (const BIGNUM **)REG_A2;
+  const BIGNUM ** ___g = (const BIGNUM **)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_DH_get0_pqg(_base, ___dh, ___p, ___q, ___g);
 }
@@ -42063,15 +41925,15 @@ void LIBSTUB_DH_set_flags(void)
   return LIB_DH_set_flags(_base, ___dh, ___flags);
 }
 
-X509_OBJECT * LIB_X509_STORE_get_X509_by_subject(struct Library * _base, X509_STORE_CTX * ___vs, int ___type, X509_NAME * ___name);
+X509_OBJECT * LIB_X509_STORE_CTX_get_obj_by_subject(struct Library * _base, X509_STORE_CTX * ___vs, X509_LOOKUP_TYPE ___type, X509_NAME * ___name);
 
-X509_OBJECT * LIBSTUB_X509_STORE_get_X509_by_subject(void)
+X509_OBJECT * LIBSTUB_X509_STORE_CTX_get_obj_by_subject(void)
 {
   X509_STORE_CTX * ___vs = (X509_STORE_CTX *)REG_A0;
-  int ___type = (int)REG_D0;
+  X509_LOOKUP_TYPE ___type = (X509_LOOKUP_TYPE)REG_D0;
   X509_NAME * ___name = (X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_X509_by_subject(_base, ___vs, ___type, ___name);
+  return LIB_X509_STORE_CTX_get_obj_by_subject(_base, ___vs, ___type, ___name);
 }
 
 void LIB_X509_OBJECT_free(struct Library * _base, X509_OBJECT * ___a);
@@ -42083,11 +41945,11 @@ void LIBSTUB_X509_OBJECT_free(void)
   return LIB_X509_OBJECT_free(_base, ___a);
 }
 
-X509 * LIB_X509_OBJECT_get0_X509(struct Library * _base, X509_OBJECT * ___a);
+X509 * LIB_X509_OBJECT_get0_X509(struct Library * _base, const X509_OBJECT * ___a);
 
 X509 * LIBSTUB_X509_OBJECT_get0_X509(void)
 {
-  X509_OBJECT * ___a = (X509_OBJECT *)REG_A0;
+  const X509_OBJECT * ___a = (const X509_OBJECT *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_OBJECT_get0_X509(_base, ___a);
 }
@@ -42110,19 +41972,9 @@ X509 * LIBSTUB_X509_STORE_CTX_get0_cert(void)
   return LIB_X509_STORE_CTX_get0_cert(_base, ___ctx);
 }
 
-void LIB_X509_STORE_CTX_set_verify(struct Library * _base, X509_STORE_CTX * ___ctx, X509_STORE_CTX_verify ___verify);
+X509_STORE_CTX_verify_fn LIB_X509_STORE_CTX_get_verify(struct Library * _base, X509_STORE_CTX * ___ctx);
 
-void LIBSTUB_X509_STORE_CTX_set_verify(void)
-{
-  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
-  X509_STORE_CTX_verify ___verify = (X509_STORE_CTX_verify)REG_A1;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_CTX_set_verify(_base, ___ctx, ___verify);
-}
-
-X509_STORE_CTX_verify LIB_X509_STORE_CTX_get_verify(struct Library * _base, X509_STORE_CTX * ___ctx);
-
-X509_STORE_CTX_verify LIBSTUB_X509_STORE_CTX_get_verify(void)
+X509_STORE_CTX_verify_fn LIBSTUB_X509_STORE_CTX_get_verify(void)
 {
   X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
@@ -42165,6 +42017,940 @@ int LIBSTUB_OPENSSL_hexchar2int(void)
   unsigned char ___c = (unsigned char)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OPENSSL_hexchar2int(_base, ___c);
+}
+
+int LIB_DSA_SIG_set0(struct Library * _base, DSA_SIG * ___sig, BIGNUM * ___r, BIGNUM * ___s);
+
+int LIBSTUB_DSA_SIG_set0(void)
+{
+  DSA_SIG * ___sig = (DSA_SIG *)REG_A0;
+  BIGNUM * ___r = (BIGNUM *)REG_A1;
+  BIGNUM * ___s = (BIGNUM *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_DSA_SIG_set0(_base, ___sig, ___r, ___s);
+}
+
+int LIB_DSA_bits(struct Library * _base, const DSA * ___d);
+
+int LIBSTUB_DSA_bits(void)
+{
+  const DSA * ___d = (const DSA *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_DSA_bits(_base, ___d);
+}
+
+int LIB_ECDSA_SIG_set0(struct Library * _base, ECDSA_SIG * ___sig, BIGNUM * ___r, BIGNUM * ___s);
+
+int LIBSTUB_ECDSA_SIG_set0(void)
+{
+  ECDSA_SIG * ___sig = (ECDSA_SIG *)REG_A0;
+  BIGNUM * ___r = (BIGNUM *)REG_A1;
+  BIGNUM * ___s = (BIGNUM *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ECDSA_SIG_set0(_base, ___sig, ___r, ___s);
+}
+
+int LIB_EVP_ENCODE_CTX_copy(struct Library * _base, EVP_ENCODE_CTX * ___dctx, EVP_ENCODE_CTX * ___sctx);
+
+int LIBSTUB_EVP_ENCODE_CTX_copy(void)
+{
+  EVP_ENCODE_CTX * ___dctx = (EVP_ENCODE_CTX *)REG_A0;
+  EVP_ENCODE_CTX * ___sctx = (EVP_ENCODE_CTX *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_ENCODE_CTX_copy(_base, ___dctx, ___sctx);
+}
+
+const unsigned char * LIB_EVP_PKEY_get0_hmac(struct Library * _base, const EVP_PKEY * ___pkey, size_t * ___len);
+
+const unsigned char * LIBSTUB_EVP_PKEY_get0_hmac(void)
+{
+  const EVP_PKEY * ___pkey = (const EVP_PKEY *)REG_A0;
+  size_t * ___len = (size_t *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_get0_hmac(_base, ___pkey, ___len);
+}
+
+const EVP_MD * LIB_HMAC_CTX_get_md(struct Library * _base, const HMAC_CTX * ___ctx);
+
+const EVP_MD * LIBSTUB_HMAC_CTX_get_md(void)
+{
+  const HMAC_CTX * ___ctx = (const HMAC_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_HMAC_CTX_get_md(_base, ___ctx);
+}
+
+const STACK_OF(X509) * LIB_OCSP_resp_get0_certs(struct Library * _base, const OCSP_BASICRESP * ___bs);
+
+const STACK_OF(X509) * LIBSTUB_OCSP_resp_get0_certs(void)
+{
+  const OCSP_BASICRESP * ___bs = (const OCSP_BASICRESP *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OCSP_resp_get0_certs(_base, ___bs);
+}
+
+int LIB_OCSP_resp_get0_id(struct Library * _base, const OCSP_BASICRESP * ___bs, const ASN1_OCTET_STRING ** ___pid, const X509_NAME ** ___pname);
+
+int LIBSTUB_OCSP_resp_get0_id(void)
+{
+  const OCSP_BASICRESP * ___bs = (const OCSP_BASICRESP *)REG_A0;
+  const ASN1_OCTET_STRING ** ___pid = (const ASN1_OCTET_STRING **)REG_A1;
+  const X509_NAME ** ___pname = (const X509_NAME **)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OCSP_resp_get0_id(_base, ___bs, ___pid, ___pname);
+}
+
+int LIB_PEM_write_bio_PrivateKey_traditional(struct Library * _base, BIO * ___bp, EVP_PKEY * ___x, const EVP_CIPHER * ___enc, unsigned char * ___kstr, int ___klen, pem_password_cb * ___cb, void * ___u);
+
+int LIBSTUB_PEM_write_bio_PrivateKey_traditional(void)
+{
+  BIO * ___bp = (BIO *)REG_A0;
+  EVP_PKEY * ___x = (EVP_PKEY *)REG_A1;
+  const EVP_CIPHER * ___enc = (const EVP_CIPHER *)REG_A2;
+  unsigned char * ___kstr = (unsigned char *)REG_A3;
+  int ___klen = (int)REG_D0;
+  pem_password_cb * ___cb = (pem_password_cb *)REG_D1;
+  void * ___u = (void *)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_PEM_write_bio_PrivateKey_traditional(_base, ___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u);
+}
+
+int LIB_SSL_SESSION_get_protocol_version(struct Library * _base, const SSL_SESSION * ___s);
+
+int LIBSTUB_SSL_SESSION_get_protocol_version(void)
+{
+  const SSL_SESSION * ___s = (const SSL_SESSION *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_SESSION_get_protocol_version(_base, ___s);
+}
+
+int LIB_SSL_is_dtls(struct Library * _base, const SSL * ___s);
+
+int LIBSTUB_SSL_is_dtls(void)
+{
+  const SSL * ___s = (const SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_is_dtls(_base, ___s);
+}
+
+unsigned long LIB_SSL_CTX_dane_set_flags(struct Library * _base, SSL_CTX * ___ctx, unsigned long ___flags);
+
+unsigned long LIBSTUB_SSL_CTX_dane_set_flags(void)
+{
+  SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
+  unsigned long ___flags = (unsigned long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_CTX_dane_set_flags(_base, ___ctx, ___flags);
+}
+
+unsigned long LIB_SSL_CTX_dane_clear_flags(struct Library * _base, SSL_CTX * ___ctx, unsigned long ___flags);
+
+unsigned long LIBSTUB_SSL_CTX_dane_clear_flags(void)
+{
+  SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
+  unsigned long ___flags = (unsigned long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_CTX_dane_clear_flags(_base, ___ctx, ___flags);
+}
+
+unsigned long LIB_SSL_dane_set_flags(struct Library * _base, SSL * ___ssl, unsigned long ___flags);
+
+unsigned long LIBSTUB_SSL_dane_set_flags(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  unsigned long ___flags = (unsigned long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_dane_set_flags(_base, ___ssl, ___flags);
+}
+
+unsigned long LIB_SSL_dane_clear_flags(struct Library * _base, SSL * ___ssl, unsigned long ___flags);
+
+unsigned long LIBSTUB_SSL_dane_clear_flags(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  unsigned long ___flags = (unsigned long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_dane_clear_flags(_base, ___ssl, ___flags);
+}
+
+int LIB_SSL_client_version(struct Library * _base, const SSL * ___s);
+
+int LIBSTUB_SSL_client_version(void)
+{
+  const SSL * ___s = (const SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_client_version(_base, ___s);
+}
+
+long LIB_X509_get_pathlen(struct Library * _base, X509 * ___x);
+
+long LIBSTUB_X509_get_pathlen(void)
+{
+  X509 * ___x = (X509 *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_get_pathlen(_base, ___x);
+}
+
+X509_LOOKUP_TYPE LIB_X509_OBJECT_get_type(struct Library * _base, const X509_OBJECT * ___a);
+
+X509_LOOKUP_TYPE LIBSTUB_X509_OBJECT_get_type(void)
+{
+  const X509_OBJECT * ___a = (const X509_OBJECT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_OBJECT_get_type(_base, ___a);
+}
+
+X509_CRL * LIB_X509_OBJECT_get0_X509_CRL(struct Library * _base, X509_OBJECT * ___a);
+
+X509_CRL * LIBSTUB_X509_OBJECT_get0_X509_CRL(void)
+{
+  X509_OBJECT * ___a = (X509_OBJECT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_OBJECT_get0_X509_CRL(_base, ___a);
+}
+
+int LIB_X509_STORE_lock(struct Library * _base, X509_STORE * ___ctx);
+
+int LIBSTUB_X509_STORE_lock(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_lock(_base, ___ctx);
+}
+
+int LIB_X509_STORE_unlock(struct Library * _base, X509_STORE * ___ctx);
+
+int LIBSTUB_X509_STORE_unlock(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_unlock(_base, ___ctx);
+}
+
+STACK_OF(X509_OBJECT) * LIB_X509_STORE_get0_objects(struct Library * _base, X509_STORE * ___v);
+
+STACK_OF(X509_OBJECT) * LIBSTUB_X509_STORE_get0_objects(void)
+{
+  X509_STORE * ___v = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get0_objects(_base, ___v);
+}
+
+X509_VERIFY_PARAM * LIB_X509_STORE_get0_param(struct Library * _base, X509_STORE * ___ctx);
+
+X509_VERIFY_PARAM * LIBSTUB_X509_STORE_get0_param(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get0_param(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_verify(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_verify_fn ___verify);
+
+void LIBSTUB_X509_STORE_set_verify(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_verify_fn ___verify = (X509_STORE_CTX_verify_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_verify(_base, ___ctx, ___verify);
+}
+
+X509_STORE_CTX_verify_fn LIB_X509_STORE_get_verify(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_verify_fn LIBSTUB_X509_STORE_get_verify(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_verify(_base, ___ctx);
+}
+
+X509_STORE_CTX_verify_cb LIB_X509_STORE_get_verify_cb(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_verify_cb LIBSTUB_X509_STORE_get_verify_cb(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_verify_cb(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_get_issuer(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_get_issuer_fn ___get_issuer);
+
+void LIBSTUB_X509_STORE_set_get_issuer(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_get_issuer_fn ___get_issuer = (X509_STORE_CTX_get_issuer_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_get_issuer(_base, ___ctx, ___get_issuer);
+}
+
+X509_STORE_CTX_get_issuer_fn LIB_X509_STORE_get_get_issuer(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_get_issuer_fn LIBSTUB_X509_STORE_get_get_issuer(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_get_issuer(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_check_issued(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_issued_fn ___check_issued);
+
+void LIBSTUB_X509_STORE_set_check_issued(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_check_issued_fn ___check_issued = (X509_STORE_CTX_check_issued_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_check_issued(_base, ___ctx, ___check_issued);
+}
+
+X509_STORE_CTX_check_issued_fn LIB_X509_STORE_get_check_issued(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_check_issued_fn LIBSTUB_X509_STORE_get_check_issued(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_check_issued(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_check_revocation(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_revocation_fn ___check_revocation);
+
+void LIBSTUB_X509_STORE_set_check_revocation(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_check_revocation_fn ___check_revocation = (X509_STORE_CTX_check_revocation_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_check_revocation(_base, ___ctx, ___check_revocation);
+}
+
+X509_STORE_CTX_check_revocation_fn LIB_X509_STORE_get_check_revocation(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_check_revocation_fn LIBSTUB_X509_STORE_get_check_revocation(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_check_revocation(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_get_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_get_crl_fn ___get_crl);
+
+void LIBSTUB_X509_STORE_set_get_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_get_crl_fn ___get_crl = (X509_STORE_CTX_get_crl_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_get_crl(_base, ___ctx, ___get_crl);
+}
+
+X509_STORE_CTX_get_crl_fn LIB_X509_STORE_get_get_crl(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_get_crl_fn LIBSTUB_X509_STORE_get_get_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_get_crl(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_check_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_crl_fn ___check_crl);
+
+void LIBSTUB_X509_STORE_set_check_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_check_crl_fn ___check_crl = (X509_STORE_CTX_check_crl_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_check_crl(_base, ___ctx, ___check_crl);
+}
+
+X509_STORE_CTX_check_crl_fn LIB_X509_STORE_get_check_crl(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_check_crl_fn LIBSTUB_X509_STORE_get_check_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_check_crl(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_cert_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_cert_crl_fn ___cert_crl);
+
+void LIBSTUB_X509_STORE_set_cert_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_cert_crl_fn ___cert_crl = (X509_STORE_CTX_cert_crl_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_cert_crl(_base, ___ctx, ___cert_crl);
+}
+
+X509_STORE_CTX_cert_crl_fn LIB_X509_STORE_get_cert_crl(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_cert_crl_fn LIBSTUB_X509_STORE_get_cert_crl(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_cert_crl(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_check_policy(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_policy_fn ___check_policy);
+
+void LIBSTUB_X509_STORE_set_check_policy(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_check_policy_fn ___check_policy = (X509_STORE_CTX_check_policy_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_check_policy(_base, ___ctx, ___check_policy);
+}
+
+X509_STORE_CTX_check_policy_fn LIB_X509_STORE_get_check_policy(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_check_policy_fn LIBSTUB_X509_STORE_get_check_policy(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_check_policy(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_lookup_certs(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_lookup_certs_fn ___lookup_certs);
+
+void LIBSTUB_X509_STORE_set_lookup_certs(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_lookup_certs_fn ___lookup_certs = (X509_STORE_CTX_lookup_certs_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_lookup_certs(_base, ___ctx, ___lookup_certs);
+}
+
+X509_STORE_CTX_lookup_certs_fn LIB_X509_STORE_get_lookup_certs(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_lookup_certs_fn LIBSTUB_X509_STORE_get_lookup_certs(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_lookup_certs(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_lookup_crls(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_lookup_crls_fn ___lookup_crls);
+
+void LIBSTUB_X509_STORE_set_lookup_crls(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_lookup_crls_fn ___lookup_crls = (X509_STORE_CTX_lookup_crls_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_lookup_crls(_base, ___ctx, ___lookup_crls);
+}
+
+X509_STORE_CTX_lookup_crls_fn LIB_X509_STORE_get_lookup_crls(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_lookup_crls_fn LIBSTUB_X509_STORE_get_lookup_crls(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_lookup_crls(_base, ___ctx);
+}
+
+void LIB_X509_STORE_set_cleanup(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_cleanup_fn ___cleanup);
+
+void LIBSTUB_X509_STORE_set_cleanup(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE_CTX_cleanup_fn ___cleanup = (X509_STORE_CTX_cleanup_fn)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_cleanup(_base, ___ctx, ___cleanup);
+}
+
+X509_STORE_CTX_cleanup_fn LIB_X509_STORE_get_cleanup(struct Library * _base, X509_STORE * ___ctx);
+
+X509_STORE_CTX_cleanup_fn LIBSTUB_X509_STORE_get_cleanup(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_cleanup(_base, ___ctx);
+}
+
+int LIB_X509_STORE_set_ex_data(struct Library * _base, X509_STORE * ___ctx, int ___idx, void * ___data);
+
+int LIBSTUB_X509_STORE_set_ex_data(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  int ___idx = (int)REG_D0;
+  void * ___data = (void *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_set_ex_data(_base, ___ctx, ___idx, ___data);
+}
+
+void * LIB_X509_STORE_get_ex_data(struct Library * _base, X509_STORE * ___ctx, int ___idx);
+
+void * LIBSTUB_X509_STORE_get_ex_data(void)
+{
+  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  int ___idx = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get_ex_data(_base, ___ctx, ___idx);
+}
+
+X509_STORE_CTX_get_issuer_fn LIB_X509_STORE_CTX_get_get_issuer(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_get_issuer_fn LIBSTUB_X509_STORE_CTX_get_get_issuer(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_get_issuer(_base, ___ctx);
+}
+
+X509_STORE_CTX_check_issued_fn LIB_X509_STORE_CTX_get_check_issued(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_check_issued_fn LIBSTUB_X509_STORE_CTX_get_check_issued(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_check_issued(_base, ___ctx);
+}
+
+X509_STORE_CTX_check_revocation_fn LIB_X509_STORE_CTX_get_check_revocation(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_check_revocation_fn LIBSTUB_X509_STORE_CTX_get_check_revocation(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_check_revocation(_base, ___ctx);
+}
+
+X509_STORE_CTX_get_crl_fn LIB_X509_STORE_CTX_get_get_crl(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_get_crl_fn LIBSTUB_X509_STORE_CTX_get_get_crl(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_get_crl(_base, ___ctx);
+}
+
+X509_STORE_CTX_check_crl_fn LIB_X509_STORE_CTX_get_check_crl(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_check_crl_fn LIBSTUB_X509_STORE_CTX_get_check_crl(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_check_crl(_base, ___ctx);
+}
+
+X509_STORE_CTX_cert_crl_fn LIB_X509_STORE_CTX_get_cert_crl(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_cert_crl_fn LIBSTUB_X509_STORE_CTX_get_cert_crl(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_cert_crl(_base, ___ctx);
+}
+
+X509_STORE_CTX_check_policy_fn LIB_X509_STORE_CTX_get_check_policy(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_check_policy_fn LIBSTUB_X509_STORE_CTX_get_check_policy(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_check_policy(_base, ___ctx);
+}
+
+X509_STORE_CTX_lookup_certs_fn LIB_X509_STORE_CTX_get_lookup_certs(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_lookup_certs_fn LIBSTUB_X509_STORE_CTX_get_lookup_certs(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_lookup_certs(_base, ___ctx);
+}
+
+X509_STORE_CTX_lookup_crls_fn LIB_X509_STORE_CTX_get_lookup_crls(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_lookup_crls_fn LIBSTUB_X509_STORE_CTX_get_lookup_crls(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_lookup_crls(_base, ___ctx);
+}
+
+X509_STORE_CTX_cleanup_fn LIB_X509_STORE_CTX_get_cleanup(struct Library * _base, X509_STORE_CTX * ___ctx);
+
+X509_STORE_CTX_cleanup_fn LIBSTUB_X509_STORE_CTX_get_cleanup(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_get_cleanup(_base, ___ctx);
+}
+
+void LIB_X509_STORE_CTX_set_error_depth(struct Library * _base, X509_STORE_CTX * ___ctx, int ___depth);
+
+void LIBSTUB_X509_STORE_CTX_set_error_depth(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  int ___depth = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_set_error_depth(_base, ___ctx, ___depth);
+}
+
+void LIB_X509_STORE_CTX_set_current_cert(struct Library * _base, X509_STORE_CTX * ___ctx, X509 * ___x);
+
+void LIBSTUB_X509_STORE_CTX_set_current_cert(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  X509 * ___x = (X509 *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_set_current_cert(_base, ___ctx, ___x);
+}
+
+int LIB_NAME_CONSTRAINTS_check_CN(struct Library * _base, X509 * ___x, NAME_CONSTRAINTS * ___nc);
+
+int LIBSTUB_NAME_CONSTRAINTS_check_CN(void)
+{
+  X509 * ___x = (X509 *)REG_A0;
+  NAME_CONSTRAINTS * ___nc = (NAME_CONSTRAINTS *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_NAME_CONSTRAINTS_check_CN(_base, ___x, ___nc);
+}
+
+void LIB_X509_set_proxy_flag(struct Library * _base, X509 * ___x);
+
+void LIBSTUB_X509_set_proxy_flag(void)
+{
+  X509 * ___x = (X509 *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_set_proxy_flag(_base, ___x);
+}
+
+void LIB_X509_set_proxy_pathlen(struct Library * _base, X509 * ___x, long ___l);
+
+void LIBSTUB_X509_set_proxy_pathlen(void)
+{
+  X509 * ___x = (X509 *)REG_A0;
+  long ___l = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_set_proxy_pathlen(_base, ___x, ___l);
+}
+
+long LIB_X509_get_proxy_pathlen(struct Library * _base, X509 * ___x);
+
+long LIBSTUB_X509_get_proxy_pathlen(void)
+{
+  X509 * ___x = (X509 *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_get_proxy_pathlen(_base, ___x);
+}
+
+ASIdentifierChoice * LIB_ASIdentifierChoice_new(struct Library * _base);
+
+ASIdentifierChoice * LIBSTUB_ASIdentifierChoice_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifierChoice_new(_base);
+}
+
+void LIB_ASIdentifierChoice_free(struct Library * _base, ASIdentifierChoice * ___a);
+
+void LIBSTUB_ASIdentifierChoice_free(void)
+{
+  ASIdentifierChoice * ___a = (ASIdentifierChoice *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifierChoice_free(_base, ___a);
+}
+
+ASIdentifierChoice * LIB_d2i_ASIdentifierChoice(struct Library * _base, ASIdentifierChoice ** ___a, const unsigned char ** ___in, long ___len);
+
+ASIdentifierChoice * LIBSTUB_d2i_ASIdentifierChoice(void)
+{
+  ASIdentifierChoice ** ___a = (ASIdentifierChoice **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_ASIdentifierChoice(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_ASIdentifierChoice(struct Library * _base, ASIdentifierChoice * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_ASIdentifierChoice(void)
+{
+  ASIdentifierChoice * ___a = (ASIdentifierChoice *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_ASIdentifierChoice(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_ASIdentifierChoice_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_ASIdentifierChoice_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifierChoice_it(_base);
+}
+
+ASIdentifiers * LIB_ASIdentifiers_new(struct Library * _base);
+
+ASIdentifiers * LIBSTUB_ASIdentifiers_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifiers_new(_base);
+}
+
+void LIB_ASIdentifiers_free(struct Library * _base, ASIdentifiers * ___a);
+
+void LIBSTUB_ASIdentifiers_free(void)
+{
+  ASIdentifiers * ___a = (ASIdentifiers *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifiers_free(_base, ___a);
+}
+
+ASIdentifiers * LIB_d2i_ASIdentifiers(struct Library * _base, ASIdentifiers ** ___a, const unsigned char ** ___in, long ___len);
+
+ASIdentifiers * LIBSTUB_d2i_ASIdentifiers(void)
+{
+  ASIdentifiers ** ___a = (ASIdentifiers **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_ASIdentifiers(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_ASIdentifiers(struct Library * _base, ASIdentifiers * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_ASIdentifiers(void)
+{
+  ASIdentifiers * ___a = (ASIdentifiers *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_ASIdentifiers(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_ASIdentifiers_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_ASIdentifiers_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdentifiers_it(_base);
+}
+
+ASIdOrRange * LIB_ASIdOrRange_new(struct Library * _base);
+
+ASIdOrRange * LIBSTUB_ASIdOrRange_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdOrRange_new(_base);
+}
+
+void LIB_ASIdOrRange_free(struct Library * _base, ASIdOrRange * ___a);
+
+void LIBSTUB_ASIdOrRange_free(void)
+{
+  ASIdOrRange * ___a = (ASIdOrRange *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdOrRange_free(_base, ___a);
+}
+
+ASIdOrRange * LIB_d2i_ASIdOrRange(struct Library * _base, ASIdOrRange ** ___a, const unsigned char ** ___in, long ___len);
+
+ASIdOrRange * LIBSTUB_d2i_ASIdOrRange(void)
+{
+  ASIdOrRange ** ___a = (ASIdOrRange **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_ASIdOrRange(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_ASIdOrRange(struct Library * _base, ASIdOrRange * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_ASIdOrRange(void)
+{
+  ASIdOrRange * ___a = (ASIdOrRange *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_ASIdOrRange(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_ASIdOrRange_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_ASIdOrRange_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASIdOrRange_it(_base);
+}
+
+ASRange * LIB_ASRange_new(struct Library * _base);
+
+ASRange * LIBSTUB_ASRange_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASRange_new(_base);
+}
+
+void LIB_ASRange_free(struct Library * _base, ASRange * ___a);
+
+void LIBSTUB_ASRange_free(void)
+{
+  ASRange * ___a = (ASRange *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASRange_free(_base, ___a);
+}
+
+ASRange * LIB_d2i_ASRange(struct Library * _base, ASRange ** ___a, const unsigned char ** ___in, long ___len);
+
+ASRange * LIBSTUB_d2i_ASRange(void)
+{
+  ASRange ** ___a = (ASRange **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_ASRange(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_ASRange(struct Library * _base, ASRange * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_ASRange(void)
+{
+  ASRange * ___a = (ASRange *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_ASRange(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_ASRange_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_ASRange_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ASRange_it(_base);
+}
+
+IPAddressChoice * LIB_IPAddressChoice_new(struct Library * _base);
+
+IPAddressChoice * LIBSTUB_IPAddressChoice_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressChoice_new(_base);
+}
+
+void LIB_IPAddressChoice_free(struct Library * _base, IPAddressChoice * ___a);
+
+void LIBSTUB_IPAddressChoice_free(void)
+{
+  IPAddressChoice * ___a = (IPAddressChoice *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressChoice_free(_base, ___a);
+}
+
+IPAddressChoice * LIB_d2i_IPAddressChoice(struct Library * _base, IPAddressChoice ** ___a, const unsigned char ** ___in, long ___len);
+
+IPAddressChoice * LIBSTUB_d2i_IPAddressChoice(void)
+{
+  IPAddressChoice ** ___a = (IPAddressChoice **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_IPAddressChoice(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_IPAddressChoice(struct Library * _base, IPAddressChoice * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_IPAddressChoice(void)
+{
+  IPAddressChoice * ___a = (IPAddressChoice *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_IPAddressChoice(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_IPAddressChoice_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_IPAddressChoice_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressChoice_it(_base);
+}
+
+IPAddressFamily * LIB_IPAddressFamily_new(struct Library * _base);
+
+IPAddressFamily * LIBSTUB_IPAddressFamily_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressFamily_new(_base);
+}
+
+void LIB_IPAddressFamily_free(struct Library * _base, IPAddressFamily * ___a);
+
+void LIBSTUB_IPAddressFamily_free(void)
+{
+  IPAddressFamily * ___a = (IPAddressFamily *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressFamily_free(_base, ___a);
+}
+
+IPAddressFamily * LIB_d2i_IPAddressFamily(struct Library * _base, IPAddressFamily ** ___a, const unsigned char ** ___in, long ___len);
+
+IPAddressFamily * LIBSTUB_d2i_IPAddressFamily(void)
+{
+  IPAddressFamily ** ___a = (IPAddressFamily **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_IPAddressFamily(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_IPAddressFamily(struct Library * _base, IPAddressFamily * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_IPAddressFamily(void)
+{
+  IPAddressFamily * ___a = (IPAddressFamily *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_IPAddressFamily(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_IPAddressFamily_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_IPAddressFamily_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressFamily_it(_base);
+}
+
+IPAddressOrRange * LIB_IPAddressOrRange_new(struct Library * _base);
+
+IPAddressOrRange * LIBSTUB_IPAddressOrRange_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressOrRange_new(_base);
+}
+
+void LIB_IPAddressOrRange_free(struct Library * _base, IPAddressOrRange * ___a);
+
+void LIBSTUB_IPAddressOrRange_free(void)
+{
+  IPAddressOrRange * ___a = (IPAddressOrRange *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressOrRange_free(_base, ___a);
+}
+
+IPAddressOrRange * LIB_d2i_IPAddressOrRange(struct Library * _base, IPAddressOrRange ** ___a, const unsigned char ** ___in, long ___len);
+
+IPAddressOrRange * LIBSTUB_d2i_IPAddressOrRange(void)
+{
+  IPAddressOrRange ** ___a = (IPAddressOrRange **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_IPAddressOrRange(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_IPAddressOrRange(struct Library * _base, IPAddressOrRange * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_IPAddressOrRange(void)
+{
+  IPAddressOrRange * ___a = (IPAddressOrRange *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_IPAddressOrRange(_base, ___a, ___out);
+}
+
+const ASN1_ITEM * LIB_IPAddressOrRange_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_IPAddressOrRange_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_IPAddressOrRange_it(_base);
 }
 
 

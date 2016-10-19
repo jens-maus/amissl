@@ -1,58 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdio.h>
@@ -82,6 +34,7 @@ static void show_ciphers(const OBJ_NAME *name, void *bio_);
 
 typedef enum OPTION_choice {
     OPT_ERR = -1, OPT_EOF = 0, OPT_HELP,
+    OPT_LIST,
     OPT_E, OPT_IN, OPT_OUT, OPT_PASS, OPT_ENGINE, OPT_D, OPT_P, OPT_V,
     OPT_NOPAD, OPT_SALT, OPT_NOSALT, OPT_DEBUG, OPT_UPPER_P, OPT_UPPER_A,
     OPT_A, OPT_Z, OPT_BUFSIZE, OPT_K, OPT_KFILE, OPT_UPPER_K, OPT_NONE,
@@ -90,6 +43,7 @@ typedef enum OPTION_choice {
 
 OPTIONS enc_options[] = {
     {"help", OPT_HELP, '-', "Display this summary"},
+    {"ciphers", OPT_LIST, '-', "List ciphers"},
     {"in", OPT_IN, '<', "Input file"},
     {"out", OPT_OUT, '>', "Output file"},
     {"pass", OPT_PASS, 's', "Passphrase source"},
@@ -108,11 +62,11 @@ OPTIONS enc_options[] = {
      "Used with -[base64|a] to specify base64 buffer as a single line"},
     {"bufsize", OPT_BUFSIZE, 's', "Buffer size"},
     {"k", OPT_K, 's', "Passphrase"},
-    {"kfile", OPT_KFILE, '<', "Fead passphrase from file"},
+    {"kfile", OPT_KFILE, '<', "Read passphrase from file"},
     {"K", OPT_UPPER_K, 's', "Raw key, in hex"},
     {"S", OPT_UPPER_S, 's', "Salt, in hex"},
     {"iv", OPT_IV, 's', "IV in hex"},
-    {"md", OPT_MD, 's', "Use specified digest to create key from passphrase"},
+    {"md", OPT_MD, 's', "Use specified digest to create a key from the passphrase"},
     {"none", OPT_NONE, '-', "Don't encrypt"},
     {"", OPT_CIPHER, '-', "Any supported cipher"},
 #ifdef ZLIB
@@ -177,7 +131,9 @@ int enc_main(int argc, char **argv)
         case OPT_HELP:
             opt_help(enc_options);
             ret = 0;
-            BIO_printf(bio_err, "Cipher Types\n");
+            goto end;
+        case OPT_LIST:
+            BIO_printf(bio_err, "Supported ciphers:\n");
             OBJ_NAME_do_all_sorted(OBJ_NAME_TYPE_CIPHER_METH,
                                    show_ciphers, bio_err);
             BIO_printf(bio_err, "\n");
@@ -291,8 +247,6 @@ int enc_main(int argc, char **argv)
             break;
         }
     }
-    argc = opt_num_rest();
-    argv = opt_rest();
 
     if (cipher && EVP_CIPHER_flags(cipher) & EVP_CIPH_FLAG_AEAD_CIPHER) {
         BIO_printf(bio_err, "%s: AEAD ciphers not supported\n", prog);
@@ -428,6 +382,8 @@ int enc_main(int argc, char **argv)
              * output BIO. If decrypting read salt from input BIO.
              */
             unsigned char *sptr;
+            size_t str_len = strlen(str);
+
             if (nosalt)
                 sptr = NULL;
             else {
@@ -467,7 +423,7 @@ int enc_main(int argc, char **argv)
 
             if (!EVP_BytesToKey(cipher, dgst, sptr,
                                 (unsigned char *)str,
-                                strlen(str), 1, key, iv)) {
+                                str_len, 1, key, iv)) {
                 BIO_printf(bio_err, "EVP_BytesToKey failed\n");
                 goto end;
             }
@@ -478,7 +434,7 @@ int enc_main(int argc, char **argv)
             if (str == strbuf)
                 OPENSSL_cleanse(str, SIZE);
             else
-                OPENSSL_cleanse(str, strlen(str));
+                OPENSSL_cleanse(str, str_len);
         }
         if (hiv != NULL) {
             int siz = EVP_CIPHER_iv_length(cipher);

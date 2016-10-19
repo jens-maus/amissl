@@ -2,57 +2,13 @@
 #include <proto/amissl.h>
 #endif
 /*
-* Public API for Certificate Transparency (CT).
-* Written by Rob Percival (robpercival@google.com) for the OpenSSL project.
-*/
-/* ====================================================================
-* Copyright (c) 2016 The OpenSSL Project.  All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions
-* are met:
-*
-* 1. Redistributions of source code must retain the above copyright
-*    notice, this list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright
-*    notice, this list of conditions and the following disclaimer in
-*    the documentation and/or other materials provided with the
-*    distribution.
-*
-* 3. All advertising materials mentioning features or use of this
-*    software must display the following acknowledgment:
-*    "This product includes software developed by the OpenSSL Project
-*    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
-*
-* 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
-*    endorse or promote products derived from this software without
-*    prior written permission. For written permission, please contact
-*    licensing@OpenSSL.org.
-*
-* 5. Products derived from this software may not be called "OpenSSL"
-*    nor may "OpenSSL" appear in their names without prior written
-*    permission of the OpenSSL Project.
-*
-* 6. Redistributions of any form whatsoever must retain the following
-*    acknowledgment:
-*    "This product includes software developed by the OpenSSL Project
-*    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
-*
-* THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
-* EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-* PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
-* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-* NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
-* OF THE POSSIBILITY OF SUCH DAMAGE.
-* ====================================================================
-*/
+ * Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
+ *
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
+ */
 
 #ifndef HEADER_CT_H
 # define HEADER_CT_H
@@ -360,7 +316,7 @@ __owur int SCT_LIST_validate(const STACK_OF(SCT) *scts,
  * for data that caller is responsible for freeing (only if function returns
  * successfully).
  * If "pp" is NULL and "*pp" is not NULL, caller is responsible for ensuring
- * that "*pp" is large enough to accept all of the serializied data.
+ * that "*pp" is large enough to accept all of the serialized data.
  * Returns < 0 on error, >= 0 indicating bytes written (or would have been)
  * on success.
  */
@@ -387,7 +343,7 @@ STACK_OF(SCT) *o2i_SCT_LIST(STACK_OF(SCT) **a, const unsigned char **pp,
  * for data that caller is responsible for freeing (only if function returns
  * successfully).
  * If "pp" is NULL and "*pp" is not NULL, caller is responsible for ensuring
- * that "*pp" is large enough to accept all of the serializied data.
+ * that "*pp" is large enough to accept all of the serialized data.
  * Returns < 0 on error, >= 0 indicating bytes written (or would have been)
  * on success.
  */
@@ -421,7 +377,7 @@ __owur int i2o_SCT(const SCT *sct, unsigned char **out);
  * Parses an SCT in TLS format and returns it.
  * If |psct| is not null, it will end up pointing to the parsed SCT. If it
  * already points to a non-null pointer, the pointer will be free'd.
- * |in| should be a pointer to a string contianing the TLS-format SCT.
+ * |in| should be a pointer to a string containing the TLS-format SCT.
  * |in| will be advanced to the end of the SCT if parsing succeeds.
  * |len| should be the length of the SCT in |in|.
  * Returns NULL if an error occurs.
@@ -442,7 +398,7 @@ __owur int i2o_SCT_signature(const SCT *sct, unsigned char **out);
 
 /*
 * Parses an SCT signature in TLS format and populates the |sct| with it.
-* |in| should be a pointer to a string contianing the TLS-format signature.
+* |in| should be a pointer to a string containing the TLS-format signature.
 * |in| will be advanced to the end of the signature if parsing succeeds.
 * |len| should be the length of the signature in |in|.
 * Returns the number of bytes parsed, or a negative integer if an error occurs.
@@ -466,10 +422,11 @@ CTLOG *CTLOG_new(EVP_PKEY *public_key, const char *name);
 CTLOG *CTLOG_new_null(void);
 
 /*
- * Creates a new CT log instance with the given base64 public_key and |name|.
+ * Creates a new CT |ct_log| instance with the given base64 public_key and |name|.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
-CTLOG *CTLOG_new_from_base64(const char *pkey_base64, const char *name);
+int CTLOG_new_from_base64(CTLOG ** ct_log,
+                          const char *pkey_base64, const char *name);
 
 /*
  * Deletes a CT log instance and its fields.
@@ -526,7 +483,8 @@ __owur int CTLOG_STORE_load_default_file(CTLOG_STORE *store);
  * The following lines are auto generated by the script mkerr.pl. Any changes
  * made after this point may be overwritten when the script is next run.
  */
-void ERR_load_CT_strings(void);
+
+int ERR_load_CT_strings(void);
 
 /* Error codes for the CT functions. */
 
@@ -535,20 +493,13 @@ void ERR_load_CT_strings(void);
 # define CT_F_CTLOG_NEW_FROM_BASE64                       118
 # define CT_F_CTLOG_NEW_FROM_CONF                         119
 # define CT_F_CTLOG_NEW_NULL                              120
-# define CT_F_CTLOG_STORE_GET0_LOG_BY_ID                  121
 # define CT_F_CTLOG_STORE_LOAD_CTX_NEW                    122
 # define CT_F_CTLOG_STORE_LOAD_FILE                       123
+# define CT_F_CTLOG_STORE_LOAD_LOG                        130
+# define CT_F_CTLOG_STORE_NEW                             131
 # define CT_F_CT_BASE64_DECODE                            124
-# define CT_F_CT_POLICY_EVAL_CTX_GET0_CERT                130
-# define CT_F_CT_POLICY_EVAL_CTX_GET0_ISSUER              131
-# define CT_F_CT_POLICY_EVAL_CTX_GET0_LOG_STORE           132
 # define CT_F_CT_POLICY_EVAL_CTX_NEW                      133
-# define CT_F_CT_POLICY_EVAL_CTX_SET0_CERT                134
-# define CT_F_CT_POLICY_EVAL_CTX_SET0_ISSUER              135
-# define CT_F_CT_POLICY_EVAL_CTX_SET0_LOG_STORE           136
 # define CT_F_CT_V1_LOG_ID_FROM_PKEY                      125
-# define CT_F_D2I_SCT_LIST                                105
-# define CT_F_I2D_SCT_LIST                                106
 # define CT_F_I2O_SCT                                     107
 # define CT_F_I2O_SCT_LIST                                108
 # define CT_F_I2O_SCT_SIGNATURE                           109
@@ -556,7 +507,6 @@ void ERR_load_CT_strings(void);
 # define CT_F_O2I_SCT_LIST                                111
 # define CT_F_O2I_SCT_SIGNATURE                           112
 # define CT_F_SCT_CTX_NEW                                 126
-# define CT_F_SCT_LIST_VALIDATE                           139
 # define CT_F_SCT_NEW                                     100
 # define CT_F_SCT_NEW_FROM_BASE64                         127
 # define CT_F_SCT_SET0_LOG_ID                             101
@@ -566,8 +516,6 @@ void ERR_load_CT_strings(void);
 # define CT_F_SCT_SET_LOG_ENTRY_TYPE                      102
 # define CT_F_SCT_SET_SIGNATURE_NID                       103
 # define CT_F_SCT_SET_VERSION                             104
-# define CT_F_SCT_SIGNATURE_IS_VALID                      113
-# define CT_F_SCT_VALIDATE                                140
 # define CT_F_SCT_VERIFY                                  128
 # define CT_F_SCT_VERIFY_V1                               129
 
@@ -579,21 +527,18 @@ void ERR_load_CT_strings(void);
 # define CT_R_LOG_CONF_MISSING_DESCRIPTION                111
 # define CT_R_LOG_CONF_MISSING_KEY                        112
 # define CT_R_LOG_KEY_INVALID                             113
-# define CT_R_NOT_ENOUGH_SCTS                             116
 # define CT_R_SCT_INVALID                                 104
 # define CT_R_SCT_INVALID_SIGNATURE                       107
 # define CT_R_SCT_LIST_INVALID                            105
 # define CT_R_SCT_LOG_ID_MISMATCH                         114
 # define CT_R_SCT_NOT_SET                                 106
 # define CT_R_SCT_UNSUPPORTED_VERSION                     115
-# define CT_R_SCT_VALIDATION_STATUS_NOT_SET               117
 # define CT_R_UNRECOGNIZED_SIGNATURE_NID                  101
 # define CT_R_UNSUPPORTED_ENTRY_TYPE                      102
 # define CT_R_UNSUPPORTED_VERSION                         103
 
-# ifdef  __cplusplus
+#  ifdef  __cplusplus
 }
+#  endif
 # endif
-# endif
-
 #endif

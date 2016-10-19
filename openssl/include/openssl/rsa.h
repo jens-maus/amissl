@@ -1,58 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #ifndef HEADER_RSA_H
@@ -114,18 +66,12 @@ extern "C" {
  * but other engines might not need it
  */
 # define RSA_FLAG_NO_BLINDING            0x0080
+# if OPENSSL_API_COMPAT < 0x10100000L
 /*
- * new with 0.9.8f; the built-in RSA
- * implementation now uses constant time
- * operations by default in private key operations,
- * e.g., constant time modular exponentiation,
- * modular inverse without leaking branches,
- * division without leaking branches. This
- * flag disables these constant time
- * operations and results in faster RSA
- * private key operations.
+ * Does nothing. Previously this switched off constant time behaviour.
  */
-# define RSA_FLAG_NO_CONSTTIME           0x0100
+#  define RSA_FLAG_NO_CONSTTIME           0x0000
+# endif
 # if OPENSSL_API_COMPAT < 0x00908000L
 /* deprecated name for the flag*/
 /*
@@ -232,14 +178,16 @@ int RSA_security_bits(const RSA *rsa);
 int RSA_set0_key(RSA *r, BIGNUM *n, BIGNUM *e, BIGNUM *d);
 int RSA_set0_factors(RSA *r, BIGNUM *p, BIGNUM *q);
 int RSA_set0_crt_params(RSA *r,BIGNUM *dmp1, BIGNUM *dmq1, BIGNUM *iqmp);
-void RSA_get0_key(const RSA *r, BIGNUM **n, BIGNUM **e, BIGNUM **d);
-void RSA_get0_factors(const RSA *r, BIGNUM **p, BIGNUM **q);
+void RSA_get0_key(const RSA *r,
+                  const BIGNUM **n, const BIGNUM **e, const BIGNUM **d);
+void RSA_get0_factors(const RSA *r, const BIGNUM **p, const BIGNUM **q);
 void RSA_get0_crt_params(const RSA *r,
-                         BIGNUM **dmp1, BIGNUM **dmq1, BIGNUM **iqmp);
+                         const BIGNUM **dmp1, const BIGNUM **dmq1,
+                         const BIGNUM **iqmp);
 void RSA_clear_flags(RSA *r, int flags);
 int RSA_test_flags(const RSA *r, int flags);
 void RSA_set_flags(RSA *r, int flags);
-ENGINE *RSA_get0_engine(RSA *r);
+ENGINE *RSA_get0_engine(const RSA *r);
 
 /* Deprecated version */
 DEPRECATEDIN_0_9_8(RSA *RSA_generate_key(int bits, unsigned long e, void
@@ -277,9 +225,6 @@ void RSA_set_default_method(const RSA_METHOD *meth);
 const RSA_METHOD *RSA_get_default_method(void);
 const RSA_METHOD *RSA_get_method(const RSA *rsa);
 int RSA_set_method(RSA *rsa, const RSA_METHOD *meth);
-
-/* This function needs the memory locking malloc callbacks to be installed */
-int RSA_memory_lock(RSA *r);
 
 /* these are the actual RSA functions */
 const RSA_METHOD *RSA_PKCS1_OpenSSL(void);
@@ -510,18 +455,14 @@ int RSA_meth_set_keygen(RSA_METHOD *rsa,
  * The following lines are auto generated by the script mkerr.pl. Any changes
  * made after this point may be overwritten when the script is next run.
  */
-void ERR_load_RSA_strings(void);
+
+int ERR_load_RSA_strings(void);
 
 /* Error codes for the RSA functions. */
 
 /* Function codes. */
 # define RSA_F_CHECK_PADDING_MD                           140
-# define RSA_F_DO_RSA_PRINT                               146
-# define RSA_F_FIPS_RSA_SIGN_DIGEST                       149
-# define RSA_F_FIPS_RSA_VERIFY                            150
-# define RSA_F_FIPS_RSA_VERIFY_DIGEST                     151
 # define RSA_F_INT_RSA_VERIFY                             145
-# define RSA_F_MEMORY_LOCK                                100
 # define RSA_F_OLD_RSA_PRIV_DECODE                        147
 # define RSA_F_PKEY_RSA_CTRL                              143
 # define RSA_F_PKEY_RSA_CTRL_STR                          144
@@ -532,22 +473,21 @@ void ERR_load_RSA_strings(void);
 # define RSA_F_RSA_CHECK_KEY                              123
 # define RSA_F_RSA_CHECK_KEY_EX                           160
 # define RSA_F_RSA_CMS_DECRYPT                            159
-# define RSA_F_RSA_OSSL_PRIVATE_DECRYPT                   101
-# define RSA_F_RSA_OSSL_PRIVATE_ENCRYPT                   102
-# define RSA_F_RSA_OSSL_PUBLIC_DECRYPT                    103
-# define RSA_F_RSA_OSSL_PUBLIC_ENCRYPT                    104
-# define RSA_F_RSA_GENERATE_KEY                           105
 # define RSA_F_RSA_ITEM_VERIFY                            148
-# define RSA_F_RSA_MEMORY_LOCK                            130
+# define RSA_F_RSA_METH_DUP                               161
+# define RSA_F_RSA_METH_NEW                               162
+# define RSA_F_RSA_METH_SET1_NAME                         163
 # define RSA_F_RSA_MGF1_TO_MD                             157
 # define RSA_F_RSA_NEW_METHOD                             106
 # define RSA_F_RSA_NULL                                   124
-# define RSA_F_RSA_NULL_MOD_EXP                           131
 # define RSA_F_RSA_NULL_PRIVATE_DECRYPT                   132
 # define RSA_F_RSA_NULL_PRIVATE_ENCRYPT                   133
 # define RSA_F_RSA_NULL_PUBLIC_DECRYPT                    134
 # define RSA_F_RSA_NULL_PUBLIC_ENCRYPT                    135
-# define RSA_F_RSA_OAEP_TO_CTX                            158
+# define RSA_F_RSA_OSSL_PRIVATE_DECRYPT                   101
+# define RSA_F_RSA_OSSL_PRIVATE_ENCRYPT                   102
+# define RSA_F_RSA_OSSL_PUBLIC_DECRYPT                    103
+# define RSA_F_RSA_OSSL_PUBLIC_ENCRYPT                    104
 # define RSA_F_RSA_PADDING_ADD_NONE                       107
 # define RSA_F_RSA_PADDING_ADD_PKCS1_OAEP                 121
 # define RSA_F_RSA_PADDING_ADD_PKCS1_OAEP_MGF1            154
@@ -566,7 +506,6 @@ void ERR_load_RSA_strings(void);
 # define RSA_F_RSA_PADDING_CHECK_X931                     128
 # define RSA_F_RSA_PRINT                                  115
 # define RSA_F_RSA_PRINT_FP                               116
-# define RSA_F_RSA_PRIV_DECODE                            137
 # define RSA_F_RSA_PRIV_ENCODE                            138
 # define RSA_F_RSA_PSS_TO_CTX                             155
 # define RSA_F_RSA_PUB_DECODE                             139
@@ -601,7 +540,6 @@ void ERR_load_RSA_strings(void);
 # define RSA_R_INVALID_DIGEST                             157
 # define RSA_R_INVALID_DIGEST_LENGTH                      143
 # define RSA_R_INVALID_HEADER                             137
-# define RSA_R_INVALID_KEYBITS                            145
 # define RSA_R_INVALID_LABEL                              160
 # define RSA_R_INVALID_MESSAGE_LENGTH                     131
 # define RSA_R_INVALID_MGF1_MD                            156
@@ -635,7 +573,6 @@ void ERR_load_RSA_strings(void);
 # define RSA_R_UNKNOWN_DIGEST                             166
 # define RSA_R_UNKNOWN_MASK_DIGEST                        151
 # define RSA_R_UNKNOWN_PADDING_TYPE                       118
-# define RSA_R_UNKNOWN_PSS_DIGEST                         152
 # define RSA_R_UNSUPPORTED_ENCRYPTION_TYPE                162
 # define RSA_R_UNSUPPORTED_LABEL_SOURCE                   163
 # define RSA_R_UNSUPPORTED_MASK_ALGORITHM                 153
@@ -644,9 +581,8 @@ void ERR_load_RSA_strings(void);
 # define RSA_R_VALUE_MISSING                              147
 # define RSA_R_WRONG_SIGNATURE_LENGTH                     119
 
-# ifdef  __cplusplus
+#  ifdef  __cplusplus
 }
+#  endif
 # endif
-# endif
-
 #endif

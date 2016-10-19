@@ -1,54 +1,10 @@
 /*
- * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
- * project.
- */
-/* ====================================================================
- * Copyright (c) 2008 The OpenSSL Project.  All rights reserved.
+ * Copyright 2008-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    licensing@OpenSSL.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 /* CMS utility function */
@@ -134,15 +90,15 @@ OPTIONS cms_options[] = {
         "  cert.pem... recipient certs for encryption\n"},
     {OPT_HELP_STR, 1, '-', "Valid options are:\n"},
     {"help", OPT_HELP, '-', "Display this summary"},
-    {"inform", OPT_INFORM, 'F', "Input format SMIME (default), PEM or DER"},
-    {"outform", OPT_OUTFORM, 'F',
+    {"inform", OPT_INFORM, 'c', "Input format SMIME (default), PEM or DER"},
+    {"outform", OPT_OUTFORM, 'c',
      "Output format SMIME (default), PEM or DER"},
     {"in", OPT_IN, '<', "Input file"},
     {"out", OPT_OUT, '>', "Output file"},
     {"encrypt", OPT_ENCRYPT, '-', "Encrypt message"},
     {"decrypt", OPT_DECRYPT, '-', "Decrypt encrypted message"},
     {"sign", OPT_SIGN, '-', "Sign message"},
-    {"sign_receipt", OPT_SIGN_RECEIPT, '-'},
+    {"sign_receipt", OPT_SIGN_RECEIPT, '-', "Generate a signed receipt for the message"},
     {"resign", OPT_RESIGN, '-'},
     {"verify", OPT_VERIFY, '-', "Verify signed message"},
     {"verify_retcode", OPT_VERIFY_RETCODE, '-'},
@@ -177,7 +133,7 @@ OPTIONS cms_options[] = {
     {"noindef", OPT_NOINDEF, '-'},
     {"nooldmime", OPT_NOOLDMIME, '-'},
     {"crlfeol", OPT_CRLFEOL, '-'},
-    {"noout", OPT_NOOUT, '-'},
+    {"noout", OPT_NOOUT, '-', "For the -cmsout operation do not output the parsed CMS structure"},
     {"receipt_request_print", OPT_RR_PRINT, '-'},
     {"receipt_request_all", OPT_RR_ALL, '-'},
     {"receipt_request_first", OPT_RR_FIRST, '-'},
@@ -191,7 +147,7 @@ OPTIONS cms_options[] = {
      "Do not load certificates from the default certificates directory"},
     {"content", OPT_CONTENT, '<',
      "Supply or override content for detached signature"},
-    {"print", OPT_PRINT, '-'},
+    {"print", OPT_PRINT, '-', "For the -cmsout operation print out all fields of the CMS structure"},
     {"secretkey", OPT_SECRETKEY, 's'},
     {"secretkeyid", OPT_SECRETKEYID, 's'},
     {"pwri_password", OPT_PWRI_PASSWORD, 's'},
@@ -205,7 +161,7 @@ OPTIONS cms_options[] = {
     {"signer", OPT_SIGNER, 's', "Signer certificate file"},
     {"recip", OPT_RECIP, '<', "Recipient cert file for decryption"},
     {"certsout", OPT_CERTSOUT, '>', "Certificate output file"},
-    {"md", OPT_MD, 's'},
+    {"md", OPT_MD, 's', "Digest algorithm to use when signing or resigning"},
     {"inkey", OPT_INKEY, 's',
      "Input private key (if not signer or recipient)"},
     {"keyform", OPT_KEYFORM, 'f', "Input private key format (PEM or ENGINE)"},
@@ -260,6 +216,7 @@ int cms_main(int argc, char **argv)
     unsigned char *pwri_pass = NULL, *pwri_tmp = NULL;
     unsigned char *secret_key = NULL, *secret_keyid = NULL;
     long ltmp;
+    const char *mime_eol = "\n";
     OPTION_CHOICE o;
 
     if ((vpm = X509_VERIFY_PARAM_new()) == NULL)
@@ -278,11 +235,11 @@ int cms_main(int argc, char **argv)
             ret = 0;
             goto end;
         case OPT_INFORM:
-            if (!opt_format(opt_arg(), OPT_FMT_PEMDER, &informat))
+            if (!opt_format(opt_arg(), OPT_FMT_PDS, &informat))
                 goto opthelp;
             break;
         case OPT_OUTFORM:
-            if (!opt_format(opt_arg(), OPT_FMT_PEMDER, &outformat))
+            if (!opt_format(opt_arg(), OPT_FMT_PDS, &outformat))
                 goto opthelp;
             break;
         case OPT_OUT:
@@ -392,6 +349,7 @@ int cms_main(int argc, char **argv)
             flags |= CMS_NOOLDMIMETYPE;
             break;
         case OPT_CRLFEOL:
+            mime_eol = "\r\n";
             flags |= CMS_CRLFEOL;
             break;
         case OPT_NOOUT:
@@ -522,7 +480,7 @@ int cms_main(int argc, char **argv)
             signerfile = opt_arg();
             break;
         case OPT_INKEY:
-            /* If previous -inkey arument add signer to list */
+            /* If previous -inkey argument add signer to list */
             if (keyfile) {
                 if (signerfile == NULL) {
                     BIO_puts(bio_err, "Illegal -inkey without -signer\n");
@@ -1084,11 +1042,11 @@ int cms_main(int argc, char **argv)
                 CMS_ContentInfo_print_ctx(out, cms, 0, NULL);
         } else if (outformat == FORMAT_SMIME) {
             if (to)
-                BIO_printf(out, "To: %s\n", to);
+                BIO_printf(out, "To: %s%s", to, mime_eol);
             if (from)
-                BIO_printf(out, "From: %s\n", from);
+                BIO_printf(out, "From: %s%s", from, mime_eol);
             if (subject)
-                BIO_printf(out, "Subject: %s\n", subject);
+                BIO_printf(out, "Subject: %s%s", subject, mime_eol);
             if (operation == SMIME_RESIGN)
                 ret = SMIME_write_CMS(out, cms, indata, flags);
             else
@@ -1282,7 +1240,7 @@ static CMS_ReceiptRequest *make_receipt_request(STACK_OF(OPENSSL_STRING)
                                                 *rr_to, int rr_allorfirst, STACK_OF(OPENSSL_STRING)
                                                 *rr_from)
 {
-    STACK_OF(GENERAL_NAMES) *rct_to, *rct_from;
+    STACK_OF(GENERAL_NAMES) *rct_to = NULL, *rct_from = NULL;
     CMS_ReceiptRequest *rr;
     rct_to = make_names_stack(rr_to);
     if (!rct_to)
@@ -1297,6 +1255,7 @@ static CMS_ReceiptRequest *make_receipt_request(STACK_OF(OPENSSL_STRING)
                                     rct_to);
     return rr;
  err:
+    sk_GENERAL_NAMES_pop_free(rct_to, GENERAL_NAMES_free);
     return NULL;
 }
 

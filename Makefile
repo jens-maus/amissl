@@ -151,11 +151,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=4
-VERSIONNAME=110-pre5
+VERSIONNAME=110-pre6
 AMISSLREVISION=0
 AMISSLMASTERREVISION=0
-AMISSLDATE=19.04.2016
-AMISSLMASTERDATE=19.04.2016
+AMISSLDATE=04.08.2016
+AMISSLMASTERDATE=04.08.2016
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -397,8 +397,8 @@ else
   OPENSSL_MODE="--debug"
 endif
 
-$(BUILD_D)/openssl/Makefile: openssl/Makefile.in $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; CROSS_COMPILE=$(CROSS_PREFIX) perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-threads no-makedepend no-shared $(OPENSSL_MODE))
+$(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
+	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-threads no-makedepend no-shared --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make include/openssl/opensslconf.h)
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile

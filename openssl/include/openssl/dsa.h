@@ -1,58 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 /*
@@ -86,17 +38,17 @@ extern "C" {
 # define OPENSSL_DSA_FIPS_MIN_MODULUS_BITS 1024
 
 # define DSA_FLAG_CACHE_MONT_P   0x01
+# if OPENSSL_API_COMPAT < 0x10100000L
 /*
- * new with 0.9.7h; the built-in DSA implementation now uses constant time
- * modular exponentiation for secret exponents by default. This flag causes
- * the faster variable sliding window method to be used for all exponents.
+ * Does nothing. Previously this switched off constant time behaviour.
  */
-# define DSA_FLAG_NO_EXP_CONSTTIME       0x02
+#  define DSA_FLAG_NO_EXP_CONSTTIME       0x00
+# endif
 
 /*
  * If this flag is set the DSA method is FIPS compliant and can be used in
  * FIPS mode. This is set in the validated module method. If an application
- * sets this flag in its own methods it is its reposibility to ensure the
+ * sets this flag in its own methods it is its responsibility to ensure the
  * result is compliant.
  */
 
@@ -129,7 +81,8 @@ DSA_SIG *DSA_SIG_new(void);
 void DSA_SIG_free(DSA_SIG *a);
 int i2d_DSA_SIG(const DSA_SIG *a, unsigned char **pp);
 DSA_SIG *d2i_DSA_SIG(DSA_SIG **v, const unsigned char **pp, long length);
-void DSA_SIG_get0(BIGNUM **pr, BIGNUM **ps, const DSA_SIG *sig);
+void DSA_SIG_get0(const DSA_SIG *sig, const BIGNUM **pr, const BIGNUM **ps);
+int DSA_SIG_set0(DSA_SIG *sig, BIGNUM *r, BIGNUM *s);
 
 DSA_SIG *DSA_do_sign(const unsigned char *dgst, int dlen, DSA *dsa);
 int DSA_do_verify(const unsigned char *dgst, int dgst_len,
@@ -148,6 +101,7 @@ void DSA_free(DSA *r);
 /* "up" the DSA object's reference count */
 int DSA_up_ref(DSA *r);
 int DSA_size(const DSA *);
+int DSA_bits(const DSA *d);
 int DSA_security_bits(const DSA *d);
         /* next 4 return -1 on error */
 int DSA_sign_setup(DSA *dsa, BN_CTX *ctx_in, BIGNUM **kinvp, BIGNUM **rp);
@@ -216,9 +170,11 @@ DH *DSA_dup_DH(const DSA *r);
 # define EVP_PKEY_CTRL_DSA_PARAMGEN_Q_BITS       (EVP_PKEY_ALG_CTRL + 2)
 # define EVP_PKEY_CTRL_DSA_PARAMGEN_MD           (EVP_PKEY_ALG_CTRL + 3)
 
-void DSA_get0_pqg(const DSA *d, BIGNUM **p, BIGNUM **q, BIGNUM **g);
+void DSA_get0_pqg(const DSA *d,
+                  const BIGNUM **p, const BIGNUM **q, const BIGNUM **g);
 int DSA_set0_pqg(DSA *d, BIGNUM *p, BIGNUM *q, BIGNUM *g);
-void DSA_get0_key(const DSA *d, BIGNUM **pub_key, BIGNUM **priv_key);
+void DSA_get0_key(const DSA *d,
+                  const BIGNUM **pub_key, const BIGNUM **priv_key);
 int DSA_set0_key(DSA *d, BIGNUM *pub_key, BIGNUM *priv_key);
 void DSA_clear_flags(DSA *d, int flags);
 int DSA_test_flags(const DSA *d, int flags);
@@ -247,16 +203,17 @@ int (*DSA_meth_get_verify(const DSA_METHOD *dsam))
 int DSA_meth_set_verify(DSA_METHOD *dsam,
     int (*verify) (const unsigned char *, int, DSA_SIG *, DSA *));
 int (*DSA_meth_get_mod_exp(const DSA_METHOD *dsam))
-        (DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *,
-         BN_CTX *, BN_MONT_CTX *);
+        (DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *,
+         const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *);
 int DSA_meth_set_mod_exp(DSA_METHOD *dsam,
-    int (*mod_exp) (DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *,
-                    BIGNUM *, BN_CTX *, BN_MONT_CTX *));
+    int (*mod_exp) (DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *,
+                    const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *,
+                    BN_MONT_CTX *));
 int (*DSA_meth_get_bn_mod_exp(const DSA_METHOD *dsam))
-    (DSA *, BIGNUM *, BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *,
-     BN_MONT_CTX *);
+    (DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *,
+     BN_CTX *, BN_MONT_CTX *);
 int DSA_meth_set_bn_mod_exp(DSA_METHOD *dsam,
-    int (*bn_mod_exp) (DSA *, BIGNUM *, BIGNUM *, const BIGNUM *,
+    int (*bn_mod_exp) (DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *,
                        const BIGNUM *, BN_CTX *, BN_MONT_CTX *));
 int (*DSA_meth_get_init(const DSA_METHOD *dsam))(DSA *);
 int DSA_meth_set_init(DSA_METHOD *dsam, int (*init)(DSA *));
@@ -276,20 +233,21 @@ int DSA_meth_set_keygen(DSA_METHOD *dsam, int (*keygen) (DSA *));
  * The following lines are auto generated by the script mkerr.pl. Any changes
  * made after this point may be overwritten when the script is next run.
  */
-void ERR_load_DSA_strings(void);
+
+int ERR_load_DSA_strings(void);
 
 /* Error codes for the DSA functions. */
 
 /* Function codes. */
-# define DSA_F_D2I_DSA_SIG                                110
-# define DSA_F_DO_DSA_PRINT                               104
 # define DSA_F_DSAPARAMS_PRINT                            100
 # define DSA_F_DSAPARAMS_PRINT_FP                         101
-# define DSA_F_DSA_BUILTIN_KEYGEN                         124
 # define DSA_F_DSA_BUILTIN_PARAMGEN                       125
 # define DSA_F_DSA_BUILTIN_PARAMGEN2                      126
 # define DSA_F_DSA_DO_SIGN                                112
 # define DSA_F_DSA_DO_VERIFY                              113
+# define DSA_F_DSA_METH_DUP                               127
+# define DSA_F_DSA_METH_NEW                               128
+# define DSA_F_DSA_METH_SET1_NAME                         129
 # define DSA_F_DSA_NEW_METHOD                             103
 # define DSA_F_DSA_PARAM_DECODE                           119
 # define DSA_F_DSA_PRINT_FP                               105
@@ -299,34 +257,26 @@ void ERR_load_DSA_strings(void);
 # define DSA_F_DSA_PUB_ENCODE                             118
 # define DSA_F_DSA_SIGN                                   106
 # define DSA_F_DSA_SIGN_SETUP                             107
-# define DSA_F_DSA_SIG_NEW                                109
-# define DSA_F_DSA_SIG_PRINT                              123
-# define DSA_F_DSA_VERIFY                                 108
-# define DSA_F_I2D_DSA_SIG                                111
+# define DSA_F_DSA_SIG_NEW                                102
 # define DSA_F_OLD_DSA_PRIV_DECODE                        122
 # define DSA_F_PKEY_DSA_CTRL                              120
 # define DSA_F_PKEY_DSA_KEYGEN                            121
-# define DSA_F_SIG_CB                                     114
 
 /* Reason codes. */
 # define DSA_R_BAD_Q_VALUE                                102
 # define DSA_R_BN_DECODE_ERROR                            108
 # define DSA_R_BN_ERROR                                   109
-# define DSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE                100
 # define DSA_R_DECODE_ERROR                               104
 # define DSA_R_INVALID_DIGEST_TYPE                        106
 # define DSA_R_INVALID_PARAMETERS                         112
-# define DSA_R_KEY_SIZE_TOO_SMALL                         111
 # define DSA_R_MISSING_PARAMETERS                         101
 # define DSA_R_MODULUS_TOO_LARGE                          103
-# define DSA_R_NEED_NEW_SETUP_VALUES                      110
 # define DSA_R_NO_PARAMETERS_SET                          107
 # define DSA_R_PARAMETER_ENCODING_ERROR                   105
 # define DSA_R_Q_NOT_PRIME                                113
 
-# ifdef  __cplusplus
+#  ifdef  __cplusplus
 }
+#  endif
 # endif
-# endif
-
 #endif

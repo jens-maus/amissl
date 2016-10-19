@@ -1,12 +1,15 @@
-/* ====================================================================
- * Copyright (c) 2015 The OpenSSL Project. All rights reserved.
+/*
+ * Copyright 2015-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Rights for redistribution and usage in source and binary
- * forms are granted according to the OpenSSL license.
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdlib.h>
 #include <string.h>
+#include <openssl/crypto.h>
 
 #include "internal/poly1305.h"
 
@@ -94,7 +97,7 @@ typedef unsigned int u32;
  * POLY1305_BLOCK_SIZE and |padbit| to 0. In all other cases |padbit|
  * should be set to 1 to perform implicit padding with 128th bit.
  * poly1305_blocks does not actually check for this constraint though,
- * it's caller(*)'s resposibility to comply.
+ * it's caller(*)'s responsibility to comply.
  *
  * (*)  In the context "caller" is not application code, but higher
  *      level Poly1305_* from this very module, so that quirks are
@@ -185,9 +188,9 @@ poly1305_blocks(void *ctx, const unsigned char *inp, size_t len, u32 padbit)
         h0 = (u64)(d0 = (u128)h0 + U8TOU64(inp + 0));
         h1 = (u64)(d1 = (u128)h1 + (d0 >> 64) + U8TOU64(inp + 8));
         /*
-	 * padbit can be zero only when original len was
-	 * POLY1306_BLOCK_SIZE, but we don't check
-	 */
+         * padbit can be zero only when original len was
+         * POLY1306_BLOCK_SIZE, but we don't check
+         */
         h2 += (u64)(d1 >> 64) + padbit;
 
         /* h *= r "%" p, where "%" stands for "partial remainder" */
@@ -195,7 +198,7 @@ poly1305_blocks(void *ctx, const unsigned char *inp, size_t len, u32 padbit)
              ((u128)h1 * s1);
         d1 = ((u128)h0 * r1) +
              ((u128)h1 * r0) +
-	     (h2 * s1);
+             (h2 * s1);
         h2 = (h2 * r0);
 
         /* last reduction step: */
@@ -543,7 +546,7 @@ void Poly1305_Final(POLY1305 *ctx, unsigned char mac[16])
     poly1305_emit(ctx->opaque, mac, ctx->nonce);
 
     /* zero out the state */
-    memset(ctx, 0, sizeof(*ctx));
+    OPENSSL_cleanse(ctx, sizeof(*ctx));
 }
 
 #ifdef SELFTEST
@@ -590,7 +593,8 @@ static const struct poly1305_test poly1305_tests[] = {
      "5154ad0d2cb26e01274fc51148491f1b"
     },
     /*
-     * self-generated
+     * self-generated vectors exercise "significant" lengths, such that
+     * are handled by different code paths
      */
     {
      "ab0812724a7f1e342742cbed374d94d136c6b8795d45b3819830f2c04491faf0"
@@ -671,6 +675,21 @@ static const struct poly1305_test poly1305_tests[] = {
      "812059a5da198637cac7c4a631bee4665b88d7f6228b11e2e28579a5c0c1f761",
      "12976a08c4426d0ce8a82407c4f48207""80f8c20aa71202d1e29179cbcb555a57",
      "b846d44e9bbd53cedffbfbb6b7fa4933"
+    },
+    /*
+     * 4th power of the key spills to 131th bit in SIMD key setup
+     */
+    {
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+     "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+     "ad628107e8351d0f2c231a05dc4a4106""00000000000000000000000000000000",
+     "07145a4c02fe5fa32036de68fabe9066"
     },
     {
     /*
@@ -855,14 +874,11 @@ static const struct poly1305_test poly1305_tests[] = {
 
 static unsigned char hex_digit(char h)
 {
-    if (h >= '0' && h <= '9')
-        return h - '0';
-    else if (h >= 'a' && h <= 'f')
-        return h - 'a' + 10;
-    else if (h >= 'A' && h <= 'F')
-        return h - 'A' + 10;
-    else
+    int i = OPENSSL_hexchar2int(h);
+
+    if (i < 0)
         abort();
+    return i;
 }
 
 static void hex_decode(unsigned char *out, const char *hex)
@@ -996,14 +1012,14 @@ int main()
         Poly1305_Init(&poly1305, key);
 
         for (i=0;i<100000;i++)
-	    Poly1305_Update(&poly1305,buf,sizeof(buf));
+            Poly1305_Update(&poly1305,buf,sizeof(buf));
 
-	stopwatch = OPENSSL_rdtsc();
+        stopwatch = OPENSSL_rdtsc();
         for (i=0;i<10000;i++)
-	    Poly1305_Update(&poly1305,buf,sizeof(buf));
-	stopwatch = OPENSSL_rdtsc() - stopwatch;
+            Poly1305_Update(&poly1305,buf,sizeof(buf));
+        stopwatch = OPENSSL_rdtsc() - stopwatch;
 
-	printf("%g\n",stopwatch/(double)(i*sizeof(buf)));
+        printf("%g\n",stopwatch/(double)(i*sizeof(buf)));
 
         stopwatch = OPENSSL_rdtsc();
         for (i=0;i<10000;i++) {

@@ -1,115 +1,10 @@
 /*
- * DTLS implementation written by Nagendra Modadugu
- * (nagendra@cs.stanford.edu) for the OpenSSL project 2005.
- */
-/* ====================================================================
- * Copyright (c) 1998-2005 The OpenSSL Project.  All rights reserved.
+ * Copyright 2005-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. All advertising materials mentioning features or use of this
- *    software must display the following acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
- *
- * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
- *    endorse or promote products derived from this software without
- *    prior written permission. For written permission, please contact
- *    openssl-core@openssl.org.
- *
- * 5. Products derived from this software may not be called "OpenSSL"
- *    nor may "OpenSSL" appear in their names without prior written
- *    permission of the OpenSSL Project.
- *
- * 6. Redistributions of any form whatsoever must retain the following
- *    acknowledgment:
- *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
- *
- * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
- * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * ====================================================================
- *
- * This product includes cryptographic software written by Eric Young
- * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com).
- *
- */
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
- *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <limits.h>
@@ -118,7 +13,6 @@
 #include "../ssl_locl.h"
 #include "statem_locl.h"
 #include <openssl/buffer.h>
-#include <openssl/rand.h>
 #include <openssl/objects.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
@@ -224,8 +118,9 @@ int dtls1_do_write(SSL *s, int type)
     if (!dtls1_query_mtu(s))
         return -1;
 
-    OPENSSL_assert(s->d1->mtu >= dtls1_min_mtu(s)); /* should have something
-                                                     * reasonable now */
+    if (s->d1->mtu < dtls1_min_mtu(s))
+        /* should have something reasonable now */
+        return -1;
 
     if (s->init_off == 0 && type == SSL3_RT_HANDSHAKE)
         OPENSSL_assert(s->init_num ==
@@ -287,7 +182,7 @@ int dtls1_do_write(SSL *s, int type)
             }
         }
 
-        used_len = BIO_wpending(SSL_get_wbio(s)) + DTLS1_RT_HEADER_LENGTH
+        used_len = BIO_wpending(s->wbio) + DTLS1_RT_HEADER_LENGTH
             + mac_size + blocksize;
         if (s->d1->mtu > used_len)
             curr_mtu = s->d1->mtu - used_len;
@@ -298,7 +193,7 @@ int dtls1_do_write(SSL *s, int type)
             /*
              * grr.. we could get an error if MTU picked was wrong
              */
-            ret = BIO_flush(SSL_get_wbio(s));
+            ret = BIO_flush(s->wbio);
             if (ret <= 0) {
                 s->rwstate = SSL_WRITING;
                 return ret;
@@ -399,7 +294,8 @@ int dtls1_do_write(SSL *s, int type)
                     xlen = ret - DTLS1_HM_HEADER_LENGTH;
                 }
 
-                ssl3_finish_mac(s, p, xlen);
+                if (!ssl3_finish_mac(s, p, xlen))
+                    return -1;
             }
 
             if (ret == s->init_num) {
@@ -480,7 +376,8 @@ int dtls_get_message(SSL *s, int *mt, unsigned long *len)
         msg_len += DTLS1_HM_HEADER_LENGTH;
     }
 
-    ssl3_finish_mac(s, p, msg_len);
+    if (!ssl3_finish_mac(s, p, msg_len))
+        return 0;
     if (s->msg_callback)
         s->msg_callback(0, s->version, SSL3_RT_HANDSHAKE,
                         p, msg_len, s, s->msg_callback_arg);
@@ -831,7 +728,7 @@ static int dtls_get_reassembled_message(SSL *s, long *len)
         *len = i;
         return 0;
     }
-    if(recvd_type == SSL3_RT_CHANGE_CIPHER_SPEC) {
+    if (recvd_type == SSL3_RT_CHANGE_CIPHER_SPEC) {
         if (wire[0] != SSL3_MT_CCS) {
             al = SSL_AD_UNEXPECTED_MESSAGE;
             SSLerr(SSL_F_DTLS_GET_REASSEMBLED_MESSAGE,
@@ -1022,7 +919,7 @@ WORK_STATE dtls_wait_for_dry(SSL *s)
 int dtls1_read_failed(SSL *s, int code)
 {
     if (code > 0) {
-        fprintf(stderr, "dtls1_read_failed(); invalid state reached\n");
+        SSLerr(SSL_F_DTLS1_READ_FAILED, ERR_R_INTERNAL_ERROR);
         return 1;
     }
 
@@ -1079,10 +976,8 @@ int dtls1_retransmit_buffered_messages(SSL *s)
                                      dtls1_get_queue_priority
                                      (frag->msg_header.seq,
                                       frag->msg_header.is_ccs),
-                                     &found) <= 0 && found) {
-            fprintf(stderr, "dtls1_retransmit_message() failed\n");
+                                     &found) <= 0)
             return -1;
-        }
     }
 
     return 1;
@@ -1174,7 +1069,7 @@ dtls1_retransmit_message(SSL *s, unsigned short seq, int *found)
 
     item = pqueue_find(s->d1->sent_messages, seq64be);
     if (item == NULL) {
-        fprintf(stderr, "retransmit:  message %d non-existant\n", seq);
+        SSLerr(SSL_F_DTLS1_RETRANSMIT_MESSAGE, ERR_R_INTERNAL_ERROR);
         *found = 0;
         return 0;
     }
@@ -1225,7 +1120,7 @@ dtls1_retransmit_message(SSL *s, unsigned short seq, int *found)
 
     s->d1->retransmitting = 0;
 
-    (void)BIO_flush(SSL_get_wbio(s));
+    (void)BIO_flush(s->wbio);
     return ret;
 }
 

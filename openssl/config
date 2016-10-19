@@ -1,25 +1,15 @@
 #!/bin/sh
+# Copyright 1998-2016 The OpenSSL Project Authors. All Rights Reserved.
 #
+# Licensed under the OpenSSL license (the "License").  You may not use
+# this file except in compliance with the License.  You can obtain a copy
+# in the file LICENSE in the source distribution or at
+# https://www.openssl.org/source/license.html
+
 # OpenSSL config: determine the operating system and run ./Configure
+# Derived from minarch and GuessOS from Apache.
 #
-# "config -h" for usage information.
-#
-#          this is a merge of minarch and GuessOS from the Apache Group.
-#          Originally written by Tim Hudson <tjh@cryptsoft.com>.
-
-# Original Apache Group comments on GuessOS
-
-# Simple OS/Platform guesser. Similar to config.guess but
-# much, much smaller. Since it was developed for use with
-# Apache, it follows under Apache's regular licensing
-# with one specific addition: Any changes or additions
-# to this script should be Emailed to the Apache
-# group (apache@apache.org) in general and to
-# Jim Jagielski (jim@jaguNET.com) in specific.
-#
-# Be as similar to the output of config.guess/config.sub
-# as possible.
-
+# Do "config -h" for usage information.
 SUFFIX=""
 TEST="false"
 EXE=""
@@ -132,10 +122,6 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 		echo "${MACHINE}-hp-hpux"; exit 0
 		;;
 	esac
-	;;
-
-    IRIX:5.*)
-	echo "mips2-sgi-irix"; exit 0
 	;;
 
     IRIX:6.*)
@@ -264,6 +250,9 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 	case "$MACHINE" in
 	    Power*)
 		echo "ppc-apple-darwin${VERSION}"
+		;;
+	    x86_64)
+		echo "x86_64-apple-darwin${VERSION}"
 		;;
 	    *)
 		echo "i686-apple-darwin${VERSION}"
@@ -427,19 +416,6 @@ if [ "$SYSTEM" = "SunOS" ]; then
   fi
 fi
 
-if [ "${SYSTEM}-${MACHINE}" = "Linux-alpha" ]; then
-  # check for Compaq C, expected output is "blah-blah C Vx.x"
-  CCCVER=`(ccc -V 2>&1) 2>/dev/null | \
-	egrep -e '.* C V[0-9]\.[0-9]' | \
-	sed 's/.* C V\([0-9]\)\.\([0-9]\).*/\1\2/'`
-  CCCVER=${CCCVER:-0}
-  if [ $CCCVER -gt 60 ]; then
-    CC=ccc	# overrides gcc!!! well, ccc outperforms inoticeably
-		# only on hash routines and des, otherwise gcc (2.95)
-		# keeps along rather tight...
-  fi
-fi
-
 if [ "${SYSTEM}" = "AIX" ]; then	# favor vendor cc over gcc
     (cc) 2>&1 | grep -iv "not found" > /dev/null && CC=cc
 fi
@@ -460,14 +436,6 @@ case "$GUESSOS" in
 	;;
   uClinux*)
     OUT=uClinux-dist
-	;;
-  mips2-sgi-irix)
-	CPU=`(hinv -t cpu) 2>/dev/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
-	CPU=${CPU:-0}
-	if [ $CPU -ge 4000 ]; then
-		options="$options -mips2"
-	fi
-	OUT="irix-$CC"
 	;;
   mips3-sgi-irix)
 	#CPU=`(hinv -t cpu) 2>/dev/null | head -1 | sed 's/^CPU:[^R]*R\([0-9]*\).*/\1/'`
@@ -515,7 +483,7 @@ case "$GUESSOS" in
 	ISA64=`(sysctl -n hw.optional.x86_64) 2>/dev/null`
 	if [ "$ISA64" = "1" -a -z "$KERNEL_BITS" ]; then
 	    echo "WARNING! If you wish to build 64-bit library, then you have to"
-	    echo "         invoke '$THERE/Configure darwin64-x86_64-cc $options' *manually*."
+	    echo "         invoke 'KERNEL_BITS=64 $THERE/config $options'."
 	    if [ "$TEST" = "false" -a -t 1 ]; then
 	      echo "         You have about 5 seconds to press Ctrl-C to abort."
 	      # The stty technique used elsewhere doesn't work on
@@ -527,6 +495,22 @@ case "$GUESSOS" in
 	    OUT="darwin64-x86_64-cc"
 	else
 	    OUT="darwin-i386-cc"
+	fi ;;
+  x86_64-apple-darwin*)
+	if [ -z "$KERNEL_BITS" ]; then
+	    echo "WARNING! If you wish to build 32-bit library, then you have to"
+	    echo "         invoke 'KERNEL_BITS=32 $THERE/config $options'."
+	    if [ "$TEST" = "false" -a -t 1 ]; then
+	      echo "         You have about 5 seconds to press Ctrl-C to abort."
+	      # The stty technique used elsewhere doesn't work on
+	      # MacOS. At least, right now on this Mac.
+	      sleep 5
+	    fi
+	fi
+	if [ "$KERNEL_BITS" = "32" ]; then
+	    OUT="darwin-i386-cc"
+	else
+	    OUT="darwin64-x86_64-cc"
 	fi ;;
   armv6+7-*-iphoneos)
 	options="$options -arch%20armv6 -arch%20armv7"
@@ -643,21 +627,15 @@ case "$GUESSOS" in
 	#fi
 	OUT="linux64-s390x"
 	;;
-  x86_64-*-linux?) OUT="linux-x86_64" ;;
-  *86-*-linux2) OUT="linux-elf"
-	if [ "$GCCVER" -gt 28 ]; then
-          if grep '^model.*Pentium' /proc/cpuinfo >/dev/null ; then
-	    options="$options -march=pentium"
-          fi
-          if grep '^model.*Pentium Pro' /proc/cpuinfo >/dev/null ; then
-	    options="$options -march=pentiumpro"
-          fi
-          if grep '^model.*K6' /proc/cpuinfo >/dev/null ; then
-	    options="$options -march=k6"
-          fi
-        fi ;;
-  *-*-linux1) OUT="linux-aout" ;;
-  *-*-linux2) OUT="linux-generic32" ;;
+  x86_64-*-linux?)
+	if $CC -dM -E -x c /dev/null 2>&1 | grep -q ILP32 > /dev/null; then
+	    OUT="linux-x32"
+	else
+	    OUT="linux-x86_64"
+	fi ;;
+  *86-*-linux2) OUT="linux-elf" ;;
+  *86-*-linux1) OUT="linux-aout" ;;
+  *-*-linux?) OUT="linux-generic32" ;;
   sun4[uv]*-*-solaris2)
 	OUT="solaris-sparcv9-$CC"
 	ISA64=`(isainfo) 2>/dev/null | grep sparcv9`
@@ -728,9 +706,10 @@ case "$GUESSOS" in
 			*ELF*)	OUT="BSD-x86-elf" ;;
 			*)	OUT="BSD-x86"; options="$options no-sse2" ;;
 			esac ;;
+  *-*-*bsd*)		OUT="BSD-generic32" ;;
+
   x86_64-*-haiku)	OUT="haiku-x86_64" ;;
   *-*-haiku)		OUT="haiku-x86" ;;
-  *-*-*bsd*)		OUT="BSD-generic32" ;;
 
   *-*-osf)		OUT="osf1-alpha-cc" ;;
   *-*-tru64)		OUT="tru64-alpha-cc" ;;

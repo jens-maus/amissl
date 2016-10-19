@@ -59,6 +59,49 @@ The test section supports the following options:
 * Protocol - expected negotiated protocol. One of
   SSLv3, TLSv1, TLSv1.1, TLSv1.2.
 
+* ClientVerifyCallback - the client's custom certificate verify callback.
+  Used to test callback behaviour. One of
+  - None - no custom callback (default)
+  - AcceptAll - accepts all certificates.
+  - RejectAll - rejects all certificates.
+
+* Method - the method to test. One of DTLS or TLS.
+
+* ServerName - the server the client should attempt to connect to. One of
+  - None - do not use SNI (default)
+  - server1 - the initial context
+  - server2 - the secondary context
+  - invalid - an unknown context
+
+* ServerNameCallback - the SNI switching callback to use
+  - None - no callback (default)
+  - IgnoreMismatch - continue the handshake on SNI mismatch
+  - RejectMismatch - abort the handshake on SNI mismatch
+
+* SessionTicketExpected - whether or not a session ticket is expected
+  - Ignore - do not check for a session ticket (default)
+  - Yes - a session ticket is expected
+  - No - a session ticket is not expected
+  - Broken - a special test case where the session ticket callback does not
+    initialize crypto
+
+* HandshakeMode - which handshake flavour to test:
+  - Simple - plain handshake (default)
+  - Resume - test resumption
+  - (Renegotiate - test renegotiation, not yet implemented)
+
+* ResumptionExpected - whether or not resumption is expected (Resume mode only)
+  - Yes - resumed handshake
+  - No - full handshake (default)
+
+When HandshakeMode is Resume or Renegotiate, the original handshake is expected
+to succeed. All configured test expectations are verified against the second handshake.
+
+* ServerNPNProtocols, Server2NPNProtocols, ClientNPNProtocols, ExpectedNPNProtocol,
+  ServerALPNProtocols, Server2ALPNProtocols, ClientALPNProtocols, ExpectedALPNProtocol -
+  NPN and ALPN settings. Server and client protocols can be specified as a comma-separated list,
+  and a callback with the recommended behaviour will be installed automatically.
+
 ## Configuring the client and server
 
 The client and server configurations can be any valid `SSL_CTX`
@@ -72,6 +115,22 @@ server => {
     "MinProtocol" => "TLSv1",
 }
 ```
+
+The following sections may optionally be defined:
+
+* server2 - this section configures a secondary context that is selected via the
+  ServerName test option. This context is used whenever a ServerNameCallback is
+  specified. If the server2 section is not present, then the configuration
+  matches server.
+* resume_server - this section configures the client to resume its session
+  against a different server. This context is used whenever HandshakeMode is
+  Resume. If the resume_server section is not present, then the configuration
+  matches server.
+* resume_client - this section configures the client to resume its session with
+  a different configuration. In practice this may occur when, for example,
+  upgraded clients reuse sessions persisted on disk.  This context is used
+  whenever HandshakeMode is Resume. If the resume_client section is not present,
+  then the configuration matches client.
 
 ### Default server and client configurations
 

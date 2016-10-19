@@ -8,7 +8,8 @@
 
 #include <internal/cryptlib.h>
 #include <internal/o_str.h>
-#include <internal/threads.h>
+#include <internal/dso.h>
+#include <internal/err.h>
 
 /***************************************************************************/
 
@@ -109,7 +110,7 @@ const ASN1_ITEM * SAVEDS ASM LIB_ASN1_ANY_it(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_TYPE_get(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_TYPE * a))
+int SAVEDS ASM LIB_ASN1_TYPE_get(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_TYPE * a))
 {
 	return ASN1_TYPE_get(a);
 }
@@ -137,7 +138,7 @@ void SAVEDS ASM LIB_ASN1_OBJECT_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, AS
 
 // ---
 
-int SAVEDS ASM LIB_i2d_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_OBJECT * a), REG(a1, unsigned char ** pp))
+int SAVEDS ASM LIB_i2d_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_OBJECT * a), REG(a1, unsigned char ** pp))
 {
 	return i2d_ASN1_OBJECT(a, pp);
 }
@@ -214,7 +215,7 @@ void SAVEDS ASM LIB_ASN1_STRING_length_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_STRING_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_STRING * x))
+int SAVEDS ASM LIB_ASN1_STRING_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_STRING * x))
 {
 	return ASN1_STRING_type(x);
 }
@@ -291,14 +292,14 @@ int SAVEDS ASM LIB_ASN1_BIT_STRING_name_print(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_BIT_STRING_num_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * name), REG(a1, BIT_STRING_BITNAME * tbl))
+int SAVEDS ASM LIB_ASN1_BIT_STRING_num_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * name), REG(a1, BIT_STRING_BITNAME * tbl))
 {
 	return ASN1_BIT_STRING_num_asc(name, tbl);
 }
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_BIT_STRING_set_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_BIT_STRING * bs), REG(a1, char * name), REG(d0, int value), REG(a2, BIT_STRING_BITNAME * tbl))
+int SAVEDS ASM LIB_ASN1_BIT_STRING_set_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_BIT_STRING * bs), REG(a1, const char * name), REG(d0, int value), REG(a2, BIT_STRING_BITNAME * tbl))
 {
 	return ASN1_BIT_STRING_set_asc(bs, name, value, tbl);
 }
@@ -1089,7 +1090,7 @@ int SAVEDS ASM LIB_a2i_ASN1_ENUMERATED(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int SAVEDS ASM LIB_i2a_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, ASN1_OBJECT * a))
+int SAVEDS ASM LIB_i2a_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const ASN1_OBJECT * a))
 {
 	return i2a_ASN1_OBJECT(bp, a);
 }
@@ -1110,7 +1111,7 @@ int SAVEDS ASM LIB_i2a_ASN1_STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO 
 
 // ---
 
-int SAVEDS ASM LIB_i2t_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, int buf_len), REG(a1, ASN1_OBJECT * a))
+int SAVEDS ASM LIB_i2t_ASN1_OBJECT(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * buf), REG(d0, int buf_len), REG(a1, const ASN1_OBJECT * a))
 {
 	return i2t_ASN1_OBJECT(buf, buf_len, a);
 }
@@ -1243,7 +1244,7 @@ void * SAVEDS ASM LIB_ASN1_item_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, con
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_STRING_to_UTF8(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, unsigned char ** out), REG(a1, ASN1_STRING * in))
+int SAVEDS ASM LIB_ASN1_STRING_to_UTF8(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, unsigned char ** out), REG(a1, const ASN1_STRING * in))
 {
 	return ASN1_STRING_to_UTF8(out, in);
 }
@@ -1348,7 +1349,7 @@ int SAVEDS ASM LIB_ASN1_TYPE_set_octetstring(REG(a6, UNUSED __IFACE_OR_BASE), RE
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_TYPE_get_octetstring(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_TYPE * a), REG(a1, unsigned char * data), REG(d0, int max_len))
+int SAVEDS ASM LIB_ASN1_TYPE_get_octetstring(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_TYPE * a), REG(a1, unsigned char * data), REG(d0, int max_len))
 {
 	return ASN1_TYPE_get_octetstring(a, data, max_len);
 }
@@ -1362,7 +1363,7 @@ int SAVEDS ASM LIB_ASN1_TYPE_set_int_octetstring(REG(a6, UNUSED __IFACE_OR_BASE)
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_TYPE_get_int_octetstring(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_TYPE * a), REG(a1, long * num), REG(a2, unsigned char * data), REG(d0, int max_len))
+int SAVEDS ASM LIB_ASN1_TYPE_get_int_octetstring(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_TYPE * a), REG(a1, long * num), REG(a2, unsigned char * data), REG(d0, int max_len))
 {
 	return ASN1_TYPE_get_int_octetstring(a, num, data, max_len);
 }
@@ -1481,9 +1482,9 @@ void SAVEDS ASM LIB_ASN1_add_oid_module(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_ASN1_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_ASN1_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_ASN1_strings();
+	return ERR_load_ASN1_strings();
 }
 
 // ---
@@ -1663,13 +1664,6 @@ BIO * SAVEDS ASM LIB_BIO_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO_
 
 // ---
 
-int SAVEDS ASM LIB_BIO_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * a), REG(a1, const BIO_METHOD * type))
-{
-	return BIO_set(a, type);
-}
-
-// ---
-
 int SAVEDS ASM LIB_BIO_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * a))
 {
 	return BIO_free(a);
@@ -1726,7 +1720,7 @@ long SAVEDS ASM LIB_BIO_ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp),
 
 // ---
 
-long SAVEDS ASM LIB_BIO_callback_ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * b), REG(d0, int cmd), REG(a1, void (*fp)(struct bio_st *, int, const char *, int, long, long)))
+long SAVEDS ASM LIB_BIO_callback_ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * b), REG(d0, int cmd), REG(a1, void (*fp)(BIO *, int, const char *, int, long, long)))
 {
 	return BIO_callback_ctrl(b, cmd, fp);
 }
@@ -2110,9 +2104,9 @@ int SAVEDS ASM LIB_BIO_vsnprintf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char *
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_BIO_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_BIO_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_BIO_strings();
+	return ERR_load_BIO_strings();
 }
 
 // ---
@@ -2803,9 +2797,9 @@ int SAVEDS ASM LIB_BN_bntest_rand(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNU
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_BN_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_BN_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_BN_strings();
+	return ERR_load_BN_strings();
 }
 
 // ---
@@ -2838,9 +2832,9 @@ size_t SAVEDS ASM LIB_BUF_MEM_grow_clean(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_BUF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_BUF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_BUF_strings();
+	return ERR_load_BUF_strings();
 }
 
 // ---
@@ -2880,9 +2874,9 @@ COMP_METHOD * SAVEDS ASM LIB_COMP_zlib(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_COMP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_COMP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_COMP_strings();
+	return ERR_load_COMP_strings();
 }
 
 // ---
@@ -3153,9 +3147,9 @@ void SAVEDS ASM LIB_OPENSSL_load_builtin_modules(REG(a6, UNUSED __IFACE_OR_BASE)
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_CONF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_CONF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_CONF_strings();
+	return ERR_load_CONF_strings();
 }
 
 // ---
@@ -3188,7 +3182,7 @@ int SAVEDS ASM LIB_CRYPTO_new_ex_data(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, i
 
 // ---
 
-int SAVEDS ASM LIB_CRYPTO_dup_ex_data(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int class_index), REG(a0, CRYPTO_EX_DATA * to), REG(a1, CRYPTO_EX_DATA * from))
+int SAVEDS ASM LIB_CRYPTO_dup_ex_data(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int class_index), REG(a0, CRYPTO_EX_DATA * to), REG(a1, const CRYPTO_EX_DATA * from))
 {
 	return CRYPTO_dup_ex_data(class_index, to, from);
 }
@@ -3254,6 +3248,13 @@ void * SAVEDS ASM LIB_CRYPTO_realloc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, vo
 void SAVEDS ASM LIB_OPENSSL_cleanse(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, void * ptr), REG(d0, size_t len))
 {
 	OPENSSL_cleanse(ptr, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_ERR_load_CRYPTO_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ERR_load_CRYPTO_strings();
 }
 
 // ---
@@ -3531,9 +3532,9 @@ int SAVEDS ASM LIB_EC_GROUP_precompute_mult(REG(a6, UNUSED __IFACE_OR_BASE), REG
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_EC_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_EC_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_EC_strings();
+	return ERR_load_EC_strings();
 }
 
 // ---
@@ -3688,37 +3689,23 @@ void SAVEDS ASM LIB_ERR_add_error_vdata(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0,
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_strings(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str))
+int SAVEDS ASM LIB_ERR_load_strings(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str))
 {
-	ERR_load_strings(lib, str);
+	return ERR_load_strings(lib, str);
 }
 
 // ---
 
-void SAVEDS ASM LIB_ERR_unload_strings(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str))
+int SAVEDS ASM LIB_ERR_unload_strings(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int lib), REG(a0, ERR_STRING_DATA * str))
 {
-	ERR_unload_strings(lib, str);
+	return ERR_unload_strings(lib, str);
 }
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_ERR_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_ERR_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_ERR_strings();
-}
-
-// ---
-
-void SAVEDS ASM LIB_err_free_strings_int(REG(a6, UNUSED __IFACE_OR_BASE))
-{
-	err_free_strings_int();
-}
-
-// ---
-
-void SAVEDS ASM LIB_ERR_remove_state(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, unsigned long pid))
-{
-	ERR_remove_state(pid);
+	return ERR_load_ERR_strings();
 }
 
 // ---
@@ -3982,9 +3969,9 @@ void SAVEDS ASM LIB_EVP_EncodeInit(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_
 
 // ---
 
-void SAVEDS ASM LIB_EVP_EncodeUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_ENCODE_CTX * ctx), REG(a1, unsigned char * out), REG(a2, int * outl), REG(a3, unsigned char * in), REG(d0, int inl))
+int SAVEDS ASM LIB_EVP_EncodeUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_ENCODE_CTX * ctx), REG(a1, unsigned char * out), REG(a2, int * outl), REG(a3, const unsigned char * in), REG(d0, int inl))
 {
-	EVP_EncodeUpdate(ctx, out, outl, in, inl);
+	return EVP_EncodeUpdate(ctx, out, outl, in, inl);
 }
 
 // ---
@@ -4843,9 +4830,9 @@ void SAVEDS ASM LIB_EVP_PBE_cleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_EVP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_EVP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_EVP_strings();
+	return ERR_load_EVP_strings();
 }
 
 // ---
@@ -4885,86 +4872,86 @@ unsigned char * SAVEDS ASM LIB_HMAC(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, con
 
 // ---
 
-_LHASH * SAVEDS ASM LIB_lh_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, LHASH_HASH_FN_TYPE h), REG(d1, LHASH_COMP_FN_TYPE c))
+OPENSSL_LHASH * SAVEDS ASM LIB_OPENSSL_LH_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LH_HASHFUNC h), REG(a1, OPENSSL_LH_COMPFUNC c))
 {
-	return lh_new(h, c);
+	return OPENSSL_LH_new(h, c);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh))
+void SAVEDS ASM LIB_OPENSSL_LH_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh))
 {
-	lh_free(lh);
+	OPENSSL_LH_free(lh);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_lh_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(a1, void * data))
+void * SAVEDS ASM LIB_OPENSSL_LH_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, void * data))
 {
-	return lh_insert(lh, data);
+	return OPENSSL_LH_insert(lh, data);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_lh_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(a1, const void * data))
+void * SAVEDS ASM LIB_OPENSSL_LH_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, const void * data))
 {
-	return lh_delete(lh, data);
+	return OPENSSL_LH_delete(lh, data);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_lh_retrieve(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(a1, const void * data))
+void * SAVEDS ASM LIB_OPENSSL_LH_retrieve(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, const void * data))
 {
-	return lh_retrieve(lh, data);
+	return OPENSSL_LH_retrieve(lh, data);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_doall(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(d0, LHASH_DOALL_FN_TYPE func))
+void SAVEDS ASM LIB_OPENSSL_LH_doall(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, OPENSSL_LH_DOALL_FUNC func))
 {
-	lh_doall(lh, func);
+	OPENSSL_LH_doall(lh, func);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_doall_arg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(d0, LHASH_DOALL_ARG_FN_TYPE func), REG(a1, void * arg))
+void SAVEDS ASM LIB_OPENSSL_LH_doall_arg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, OPENSSL_LH_DOALL_FUNCARG func), REG(a2, void * arg))
 {
-	lh_doall_arg(lh, func, arg);
+	OPENSSL_LH_doall_arg(lh, func, arg);
 }
 
 // ---
 
-unsigned long SAVEDS ASM LIB_lh_strhash(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * c))
+unsigned long SAVEDS ASM LIB_OPENSSL_LH_strhash(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * c))
 {
-	return lh_strhash(c);
+	return OPENSSL_LH_strhash(c);
 }
 
 // ---
 
-unsigned long SAVEDS ASM LIB_lh_num_items(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _LHASH * lh))
+unsigned long SAVEDS ASM LIB_OPENSSL_LH_num_items(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_LHASH * lh))
 {
-	return lh_num_items(lh);
+	return OPENSSL_LH_num_items(lh);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, BIO * out))
+void SAVEDS ASM LIB_OPENSSL_LH_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_LHASH * lh), REG(a1, BIO * out))
 {
-	lh_stats_bio(lh, out);
+	OPENSSL_LH_stats_bio(lh, out);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_node_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, BIO * out))
+void SAVEDS ASM LIB_OPENSSL_LH_node_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_LHASH * lh), REG(a1, BIO * out))
 {
-	lh_node_stats_bio(lh, out);
+	OPENSSL_LH_node_stats_bio(lh, out);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_node_usage_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _LHASH * lh), REG(a1, BIO * out))
+void SAVEDS ASM LIB_OPENSSL_LH_node_usage_stats_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_LHASH * lh), REG(a1, BIO * out))
 {
-	lh_node_usage_stats_bio(lh, out);
+	OPENSSL_LH_node_usage_stats_bio(lh, out);
 }
 
 // ---
@@ -5130,9 +5117,9 @@ int SAVEDS ASM LIB_OBJ_create_objects(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, B
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_OBJ_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_OBJ_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_OBJ_strings();
+	return ERR_load_OBJ_strings();
 }
 
 // ---
@@ -6208,9 +6195,9 @@ int SAVEDS ASM LIB_OCSP_basic_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OC
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_OCSP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_OCSP_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_OCSP_strings();
+	return ERR_load_OCSP_strings();
 }
 
 // ---
@@ -6600,9 +6587,9 @@ EVP_PKEY * SAVEDS ASM LIB_d2i_PKCS8PrivateKey_bio(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_PEM_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_PEM_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_PEM_strings();
+	return ERR_load_PEM_strings();
 }
 
 // ---
@@ -6985,7 +6972,7 @@ int SAVEDS ASM LIB_PKCS12_parse(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS12 
 
 // ---
 
-PKCS12 * SAVEDS ASM LIB_PKCS12_create(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * pass), REG(a1, char * name), REG(a2, EVP_PKEY * pkey), REG(a3, X509 * cert), REG(d0, STACK_OF(X509) * ca), REG(d1, int nid_key), REG(d2, int nid_cert), REG(d3, int iter), REG(d4, int mac_iter), REG(d5, int keytype))
+PKCS12 * SAVEDS ASM LIB_PKCS12_create(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(a1, const char * name), REG(a2, EVP_PKEY * pkey), REG(a3, X509 * cert), REG(d0, STACK_OF(X509) * ca), REG(d1, int nid_key), REG(d2, int nid_cert), REG(d3, int iter), REG(d4, int mac_iter), REG(d5, int keytype))
 {
 	return PKCS12_create(pass, name, pkey, cert, ca, nid_key, nid_cert, iter, mac_iter, keytype);
 }
@@ -7006,16 +6993,16 @@ PKCS12 * SAVEDS ASM LIB_d2i_PKCS12_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int SAVEDS ASM LIB_PKCS12_newpass(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS12 * p12), REG(a1, char * oldpass), REG(a2, char * newpass))
+int SAVEDS ASM LIB_PKCS12_newpass(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS12 * p12), REG(a1, const char * oldpass), REG(a2, const char * newpass))
 {
 	return PKCS12_newpass(p12, oldpass, newpass);
 }
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_PKCS12_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_PKCS12_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_PKCS12_strings();
+	return ERR_load_PKCS12_strings();
 }
 
 // ---
@@ -7692,9 +7679,9 @@ int SAVEDS ASM LIB_SMIME_text(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * in)
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_PKCS7_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_PKCS7_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_PKCS7_strings();
+	return ERR_load_PKCS7_strings();
 }
 
 // ---
@@ -7776,9 +7763,9 @@ int SAVEDS ASM LIB_RAND_poll(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_RAND_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_RAND_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_RAND_strings();
+	return ERR_load_RAND_strings();
 }
 
 // ---
@@ -9015,149 +9002,149 @@ int SAVEDS ASM LIB_SSL_COMP_add_compression_method(REG(a6, UNUSED __IFACE_OR_BAS
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_SSL_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_SSL_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_SSL_strings();
+	return ERR_load_SSL_strings();
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_num(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * a))
+int SAVEDS ASM LIB_OPENSSL_sk_num(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_STACK * a))
 {
-	return sk_num(a);
+	return OPENSSL_sk_num(a);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_value(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * a), REG(d0, int b))
+void * SAVEDS ASM LIB_OPENSSL_sk_value(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_STACK * a), REG(d0, int b))
 {
-	return sk_value(a, b);
+	return OPENSSL_sk_value(a, b);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * a), REG(d0, int b), REG(a1, void * c))
+void * SAVEDS ASM LIB_OPENSSL_sk_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * a), REG(d0, int b), REG(a1, void * c))
 {
-	return sk_set(a, b, c);
+	return OPENSSL_sk_set(a, b, c);
 }
 
 // ---
 
-_STACK * SAVEDS ASM LIB_sk_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, int (*cmp)(const void *, const void *)))
+OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, int (*cmp)(const void *, const void *)))
 {
-	return sk_new(cmp);
+	return OPENSSL_sk_new(cmp);
 }
 
 // ---
 
-_STACK * SAVEDS ASM LIB_sk_new_null(REG(a6, UNUSED __IFACE_OR_BASE))
+OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_new_null(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	return sk_new_null();
+	return OPENSSL_sk_new_null();
 }
 
 // ---
 
-void SAVEDS ASM LIB_sk_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * a))
+void SAVEDS ASM LIB_OPENSSL_sk_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * a))
 {
-	sk_free(a);
+	OPENSSL_sk_free(a);
 }
 
 // ---
 
-void SAVEDS ASM LIB_sk_pop_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void (*func)(void *)))
+void SAVEDS ASM LIB_OPENSSL_sk_pop_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, void (*func)(void *)))
 {
-	sk_pop_free(st, func);
+	OPENSSL_sk_pop_free(st, func);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, void * data), REG(d0, int where))
+int SAVEDS ASM LIB_OPENSSL_sk_insert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * sk), REG(a1, void * data), REG(d0, int where))
 {
-	return sk_insert(sk, data, where);
+	return OPENSSL_sk_insert(sk, data, where);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(d0, int loc))
+void * SAVEDS ASM LIB_OPENSSL_sk_delete(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(d0, int loc))
 {
-	return sk_delete(st, loc);
+	return OPENSSL_sk_delete(st, loc);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_delete_ptr(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, char * p))
+void * SAVEDS ASM LIB_OPENSSL_sk_delete_ptr(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, const void * p))
 {
-	return sk_delete_ptr(st, p);
+	return OPENSSL_sk_delete_ptr(st, p);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_find(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
+int SAVEDS ASM LIB_OPENSSL_sk_find(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, const void * data))
 {
-	return sk_find(st, data);
+	return OPENSSL_sk_find(st, data);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_push(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
+int SAVEDS ASM LIB_OPENSSL_sk_push(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, void * data))
 {
-	return sk_push(st, data);
+	return OPENSSL_sk_push(st, data);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_unshift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
+int SAVEDS ASM LIB_OPENSSL_sk_unshift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, void * data))
 {
-	return sk_unshift(st, data);
+	return OPENSSL_sk_unshift(st, data);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_shift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void * SAVEDS ASM LIB_OPENSSL_sk_shift(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st))
 {
-	return sk_shift(st);
+	return OPENSSL_sk_shift(st);
 }
 
 // ---
 
-void * SAVEDS ASM LIB_sk_pop(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void * SAVEDS ASM LIB_OPENSSL_sk_pop(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st))
 {
-	return sk_pop(st);
+	return OPENSSL_sk_pop(st);
 }
 
 // ---
 
-void SAVEDS ASM LIB_sk_zero(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void SAVEDS ASM LIB_OPENSSL_sk_zero(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st))
 {
-	sk_zero(st);
+	OPENSSL_sk_zero(st);
 }
 
 // ---
 
-int  SAVEDS ASM (*LIB_sk_set_cmp_func(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, int (*c)(const void *, const void *))))(const void *, const void *)
+int  SAVEDS ASM (*LIB_OPENSSL_sk_set_cmp_func(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * sk), REG(a1, int (*c)(const void *, const void *))))(const void *, const void *)
 {
-	return sk_set_cmp_func(sk, c);
+	return OPENSSL_sk_set_cmp_func(sk, c);
 }
 
 // ---
 
-_STACK * SAVEDS ASM LIB_sk_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_STACK * st))
 {
-	return sk_dup(st);
+	return OPENSSL_sk_dup(st);
 }
 
 // ---
 
-void SAVEDS ASM LIB_sk_sort(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st))
+void SAVEDS ASM LIB_OPENSSL_sk_sort(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st))
 {
-	sk_sort(st);
+	OPENSSL_sk_sort(st);
 }
 
 // ---
 
-int SAVEDS ASM LIB_sk_is_sorted(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _STACK * st))
+int SAVEDS ASM LIB_OPENSSL_sk_is_sorted(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_STACK * st))
 {
-	return sk_is_sorted(st);
+	return OPENSSL_sk_is_sorted(st);
 }
 
 // ---
@@ -9176,7 +9163,7 @@ long SAVEDS ASM LIB_TXT_DB_write(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * 
 
 // ---
 
-int SAVEDS ASM LIB_TXT_DB_create_index(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, TXT_DB * db), REG(d0, int field), REG(a1, int (*qual)()), REG(d1, LHASH_HASH_FN_TYPE hash), REG(d2, LHASH_COMP_FN_TYPE cmp))
+int SAVEDS ASM LIB_TXT_DB_create_index(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, TXT_DB * db), REG(d0, int field), REG(a1, int (*qual)(OPENSSL_STRING *)), REG(d1, OPENSSL_LH_HASHFUNC hash), REG(d2, OPENSSL_LH_COMPFUNC cmp))
 {
 	return TXT_DB_create_index(db, field, qual, hash, cmp);
 }
@@ -9386,7 +9373,7 @@ UI_METHOD * SAVEDS ASM LIB_UI_OpenSSL(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-UI_METHOD * SAVEDS ASM LIB_UI_create_method(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * name))
+UI_METHOD * SAVEDS ASM LIB_UI_create_method(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * name))
 {
 	return UI_create_method(name);
 }
@@ -9547,9 +9534,9 @@ int SAVEDS ASM LIB_UI_UTIL_read_pw(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_UI_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_UI_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_UI_strings();
+	return ERR_load_UI_strings();
 }
 
 // ---
@@ -10954,7 +10941,7 @@ int SAVEDS ASM LIB_X509_set_issuer_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-X509_NAME * SAVEDS ASM LIB_X509_get_issuer_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * a))
+X509_NAME * SAVEDS ASM LIB_X509_get_issuer_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * a))
 {
 	return X509_get_issuer_name(a);
 }
@@ -10968,7 +10955,7 @@ int SAVEDS ASM LIB_X509_set_subject_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-X509_NAME * SAVEDS ASM LIB_X509_get_subject_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * a))
+X509_NAME * SAVEDS ASM LIB_X509_get_subject_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * a))
 {
 	return X509_get_subject_name(a);
 }
@@ -11199,7 +11186,7 @@ int SAVEDS ASM LIB_X509_REVOKED_set_revocationDate(REG(a6, UNUSED __IFACE_OR_BAS
 
 // ---
 
-int SAVEDS ASM LIB_X509_check_private_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x509), REG(a1, EVP_PKEY * pkey))
+int SAVEDS ASM LIB_X509_check_private_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x509), REG(a1, const EVP_PKEY * pkey))
 {
 	return X509_check_private_key(x509, pkey);
 }
@@ -11332,7 +11319,7 @@ int SAVEDS ASM LIB_X509_REQ_print(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO *
 
 // ---
 
-int SAVEDS ASM LIB_X509_NAME_entry_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME * name))
+int SAVEDS ASM LIB_X509_NAME_entry_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_NAME * name))
 {
 	return X509_NAME_entry_count(name);
 }
@@ -11388,7 +11375,7 @@ int SAVEDS ASM LIB_X509_NAME_add_entry(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-int SAVEDS ASM LIB_X509_NAME_add_entry_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME * name), REG(a1, ASN1_OBJECT * obj), REG(d0, int type), REG(a2, unsigned char * bytes), REG(d1, int len), REG(d2, int loc), REG(d3, int set))
+int SAVEDS ASM LIB_X509_NAME_add_entry_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME * name), REG(a1, const ASN1_OBJECT * obj), REG(d0, int type), REG(a2, unsigned char * bytes), REG(d1, int len), REG(d2, int loc), REG(d3, int set))
 {
 	return X509_NAME_add_entry_by_OBJ(name, obj, type, bytes, len, loc, set);
 }
@@ -11423,14 +11410,14 @@ int SAVEDS ASM LIB_X509_NAME_add_entry_by_txt(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-X509_NAME_ENTRY * SAVEDS ASM LIB_X509_NAME_ENTRY_create_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY ** ne), REG(a1, ASN1_OBJECT * obj), REG(d0, int type), REG(a2, const unsigned char * bytes), REG(d1, int len))
+X509_NAME_ENTRY * SAVEDS ASM LIB_X509_NAME_ENTRY_create_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY ** ne), REG(a1, const ASN1_OBJECT * obj), REG(d0, int type), REG(a2, const unsigned char * bytes), REG(d1, int len))
 {
 	return X509_NAME_ENTRY_create_by_OBJ(ne, obj, type, bytes, len);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_NAME_ENTRY_set_object(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY * ne), REG(a1, ASN1_OBJECT * obj))
+int SAVEDS ASM LIB_X509_NAME_ENTRY_set_object(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_NAME_ENTRY * ne), REG(a1, const ASN1_OBJECT * obj))
 {
 	return X509_NAME_ENTRY_set_object(ne, obj);
 }
@@ -11507,35 +11494,35 @@ STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509v3_add_ext(REG(a6, UNUSED __IFACE_
 
 // ---
 
-int SAVEDS ASM LIB_X509_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+int SAVEDS ASM LIB_X509_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get_ext_count(x);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(d0, int nid), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x), REG(d0, int nid), REG(d1, int lastpos))
 {
 	return X509_get_ext_by_NID(x, nid, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
+int SAVEDS ASM LIB_X509_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
 {
 	return X509_get_ext_by_OBJ(x, obj, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(d0, int crit), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x), REG(d0, int crit), REG(d1, int lastpos))
 {
 	return X509_get_ext_by_critical(x, crit, lastpos);
 }
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(d0, int loc))
+X509_EXTENSION * SAVEDS ASM LIB_X509_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x), REG(d0, int loc))
 {
 	return X509_get_ext(x, loc);
 }
@@ -11556,7 +11543,7 @@ int SAVEDS ASM LIB_X509_add_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * 
 
 // ---
 
-void * SAVEDS ASM LIB_X509_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
+void * SAVEDS ASM LIB_X509_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
 {
 	return X509_get_ext_d2i(x, nid, crit, idx);
 }
@@ -11570,35 +11557,35 @@ int SAVEDS ASM LIB_X509_add1_ext_i2d(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X5
 
 // ---
 
-int SAVEDS ASM LIB_X509_CRL_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x))
+int SAVEDS ASM LIB_X509_CRL_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x))
 {
 	return X509_CRL_get_ext_count(x);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_CRL_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x), REG(d0, int nid), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_CRL_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x), REG(d0, int nid), REG(d1, int lastpos))
 {
 	return X509_CRL_get_ext_by_NID(x, nid, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_CRL_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
+int SAVEDS ASM LIB_X509_CRL_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
 {
 	return X509_CRL_get_ext_by_OBJ(x, obj, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_CRL_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x), REG(d0, int crit), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_CRL_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x), REG(d0, int crit), REG(d1, int lastpos))
 {
 	return X509_CRL_get_ext_by_critical(x, crit, lastpos);
 }
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509_CRL_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x), REG(d0, int loc))
+X509_EXTENSION * SAVEDS ASM LIB_X509_CRL_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x), REG(d0, int loc))
 {
 	return X509_CRL_get_ext(x, loc);
 }
@@ -11619,7 +11606,7 @@ int SAVEDS ASM LIB_X509_CRL_add_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X50
 
 // ---
 
-void * SAVEDS ASM LIB_X509_CRL_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
+void * SAVEDS ASM LIB_X509_CRL_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
 {
 	return X509_CRL_get_ext_d2i(x, nid, crit, idx);
 }
@@ -11633,35 +11620,35 @@ int SAVEDS ASM LIB_X509_CRL_add1_ext_i2d(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-int SAVEDS ASM LIB_X509_REVOKED_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x))
+int SAVEDS ASM LIB_X509_REVOKED_get_ext_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x))
 {
 	return X509_REVOKED_get_ext_count(x);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x), REG(d0, int nid), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_NID(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x), REG(d0, int nid), REG(d1, int lastpos))
 {
 	return X509_REVOKED_get_ext_by_NID(x, nid, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
+int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x), REG(a1, ASN1_OBJECT * obj), REG(d0, int lastpos))
 {
 	return X509_REVOKED_get_ext_by_OBJ(x, obj, lastpos);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x), REG(d0, int crit), REG(d1, int lastpos))
+int SAVEDS ASM LIB_X509_REVOKED_get_ext_by_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x), REG(d0, int crit), REG(d1, int lastpos))
 {
 	return X509_REVOKED_get_ext_by_critical(x, crit, lastpos);
 }
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509_REVOKED_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x), REG(d0, int loc))
+X509_EXTENSION * SAVEDS ASM LIB_X509_REVOKED_get_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x), REG(d0, int loc))
 {
 	return X509_REVOKED_get_ext(x, loc);
 }
@@ -11682,7 +11669,7 @@ int SAVEDS ASM LIB_X509_REVOKED_add_ext(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-void * SAVEDS ASM LIB_X509_REVOKED_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
+void * SAVEDS ASM LIB_X509_REVOKED_get_ext_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
 {
 	return X509_REVOKED_get_ext_d2i(x, nid, crit, idx);
 }
@@ -11745,7 +11732,7 @@ ASN1_OCTET_STRING * SAVEDS ASM LIB_X509_EXTENSION_get_data(REG(a6, UNUSED __IFAC
 
 // ---
 
-int SAVEDS ASM LIB_X509_EXTENSION_get_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_EXTENSION * ex))
+int SAVEDS ASM LIB_X509_EXTENSION_get_critical(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_EXTENSION * ex))
 {
 	return X509_EXTENSION_get_critical(ex);
 }
@@ -11857,7 +11844,7 @@ void * SAVEDS ASM LIB_X509_ATTRIBUTE_get0_data(REG(a6, UNUSED __IFACE_OR_BASE), 
 
 // ---
 
-int SAVEDS ASM LIB_X509_ATTRIBUTE_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_ATTRIBUTE * attr))
+int SAVEDS ASM LIB_X509_ATTRIBUTE_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_ATTRIBUTE * attr))
 {
 	return X509_ATTRIBUTE_count(attr);
 }
@@ -12095,7 +12082,7 @@ int SAVEDS ASM LIB_X509_TRUST_get_by_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0,
 
 // ---
 
-int SAVEDS ASM LIB_X509_TRUST_add(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int id), REG(d1, int flags), REG(a0, int (*ck)(X509_TRUST *, X509 *, int)), REG(a1, char * name), REG(d2, int arg1), REG(a2, void * arg2))
+int SAVEDS ASM LIB_X509_TRUST_add(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int id), REG(d1, int flags), REG(a0, int (*ck)(X509_TRUST *, X509 *, int)), REG(a1, const char * name), REG(d2, int arg1), REG(a2, void * arg2))
 {
 	return X509_TRUST_add(id, flags, ck, name, arg1, arg2);
 }
@@ -12109,42 +12096,42 @@ void SAVEDS ASM LIB_X509_TRUST_cleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int SAVEDS ASM LIB_X509_TRUST_get_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_TRUST * xp))
+int SAVEDS ASM LIB_X509_TRUST_get_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_TRUST * xp))
 {
 	return X509_TRUST_get_flags(xp);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_X509_TRUST_get0_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_TRUST * xp))
+char * SAVEDS ASM LIB_X509_TRUST_get0_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_TRUST * xp))
 {
 	return X509_TRUST_get0_name(xp);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_TRUST_get_trust(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_TRUST * xp))
+int SAVEDS ASM LIB_X509_TRUST_get_trust(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_TRUST * xp))
 {
 	return X509_TRUST_get_trust(xp);
 }
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_X509_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_X509_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_X509_strings();
+	return ERR_load_X509_strings();
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_OBJECT_idx_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509_OBJECT) * h), REG(d0, int type), REG(a1, X509_NAME * name))
+int SAVEDS ASM LIB_X509_OBJECT_idx_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509_OBJECT) * h), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name))
 {
 	return X509_OBJECT_idx_by_subject(h, type, name);
 }
 
 // ---
 
-X509_OBJECT * SAVEDS ASM LIB_X509_OBJECT_retrieve_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509_OBJECT) * h), REG(d0, int type), REG(a1, X509_NAME * name))
+X509_OBJECT * SAVEDS ASM LIB_X509_OBJECT_retrieve_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509_OBJECT) * h), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name))
 {
 	return X509_OBJECT_retrieve_by_subject(h, type, name);
 }
@@ -12158,16 +12145,9 @@ X509_OBJECT * SAVEDS ASM LIB_X509_OBJECT_retrieve_match(REG(a6, UNUSED __IFACE_O
 
 // ---
 
-void SAVEDS ASM LIB_X509_OBJECT_up_ref_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_OBJECT * a))
+int SAVEDS ASM LIB_X509_OBJECT_up_ref_count(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_OBJECT * a))
 {
-	X509_OBJECT_up_ref_count(a);
-}
-
-// ---
-
-void SAVEDS ASM LIB_X509_OBJECT_free_contents(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_OBJECT * a))
-{
-	X509_OBJECT_free_contents(a);
+	return X509_OBJECT_up_ref_count(a);
 }
 
 // ---
@@ -12284,9 +12264,9 @@ int SAVEDS ASM LIB_X509_STORE_add_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X
 
 // ---
 
-int SAVEDS ASM LIB_X509_STORE_get_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * vs), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name), REG(a2, X509_OBJECT * ret))
+int SAVEDS ASM LIB_X509_STORE_CTX_get_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * vs), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name), REG(a2, X509_OBJECT * ret))
 {
-	return X509_STORE_get_by_subject(vs, type, name, ret);
+	return X509_STORE_CTX_get_by_subject(vs, type, name, ret);
 }
 
 // ---
@@ -12340,28 +12320,28 @@ int SAVEDS ASM LIB_X509_LOOKUP_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X50
 
 // ---
 
-int SAVEDS ASM LIB_X509_LOOKUP_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, int type), REG(a1, X509_NAME * name), REG(a2, X509_OBJECT * ret))
+int SAVEDS ASM LIB_X509_LOOKUP_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name), REG(a2, X509_OBJECT * ret))
 {
 	return X509_LOOKUP_by_subject(ctx, type, name, ret);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_LOOKUP_by_issuer_serial(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, int type), REG(a1, X509_NAME * name), REG(a2, ASN1_INTEGER * serial), REG(a3, X509_OBJECT * ret))
+int SAVEDS ASM LIB_X509_LOOKUP_by_issuer_serial(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name), REG(a2, ASN1_INTEGER * serial), REG(a3, X509_OBJECT * ret))
 {
 	return X509_LOOKUP_by_issuer_serial(ctx, type, name, serial, ret);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_LOOKUP_by_fingerprint(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, int type), REG(a1, unsigned char * bytes), REG(d1, int len), REG(a2, X509_OBJECT * ret))
+int SAVEDS ASM LIB_X509_LOOKUP_by_fingerprint(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, X509_LOOKUP_TYPE type), REG(a1, unsigned char * bytes), REG(d1, int len), REG(a2, X509_OBJECT * ret))
 {
 	return X509_LOOKUP_by_fingerprint(ctx, type, bytes, len, ret);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_LOOKUP_by_alias(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, int type), REG(a1, char * str), REG(d1, int len), REG(a2, X509_OBJECT * ret))
+int SAVEDS ASM LIB_X509_LOOKUP_by_alias(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP * ctx), REG(d0, X509_LOOKUP_TYPE type), REG(a1, char * str), REG(d1, int len), REG(a2, X509_OBJECT * ret))
 {
 	return X509_LOOKUP_by_alias(ctx, type, str, len, ret);
 }
@@ -12599,28 +12579,28 @@ const ASN1_ITEM * SAVEDS ASM LIB_SXNETID_it(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int SAVEDS ASM LIB_SXNET_add_id_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(a1, char * zone), REG(a2, char * user), REG(d0, int userlen))
+int SAVEDS ASM LIB_SXNET_add_id_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(a1, const char * zone), REG(a2, const char * user), REG(d0, int userlen))
 {
 	return SXNET_add_id_asc(psx, zone, user, userlen);
 }
 
 // ---
 
-int SAVEDS ASM LIB_SXNET_add_id_ulong(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(d0, unsigned long lzone), REG(a1, char * user), REG(d1, int userlen))
+int SAVEDS ASM LIB_SXNET_add_id_ulong(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(d0, unsigned long lzone), REG(a1, const char * user), REG(d1, int userlen))
 {
 	return SXNET_add_id_ulong(psx, lzone, user, userlen);
 }
 
 // ---
 
-int SAVEDS ASM LIB_SXNET_add_id_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(a1, ASN1_INTEGER * izone), REG(a2, char * user), REG(d0, int userlen))
+int SAVEDS ASM LIB_SXNET_add_id_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET ** psx), REG(a1, ASN1_INTEGER * izone), REG(a2, const char * user), REG(d0, int userlen))
 {
 	return SXNET_add_id_INTEGER(psx, izone, user, userlen);
 }
 
 // ---
 
-ASN1_OCTET_STRING * SAVEDS ASM LIB_SXNET_get_id_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET * sx), REG(a1, char * zone))
+ASN1_OCTET_STRING * SAVEDS ASM LIB_SXNET_get_id_asc(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SXNET * sx), REG(a1, const char * zone))
 {
 	return SXNET_get_id_asc(sx, zone);
 }
@@ -13306,77 +13286,77 @@ X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_nconf_nid(REG(a6, UNUSED __IFACE_OR_B
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * name), REG(a3, char * value))
+X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * name), REG(a3, const char * value))
 {
 	return X509V3_EXT_nconf(conf, ctx, name, value);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_add_nconf_sk(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, STACK_OF(X509_EXTENSION) ** sk))
+int SAVEDS ASM LIB_X509V3_EXT_add_nconf_sk(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, STACK_OF(X509_EXTENSION) ** sk))
 {
 	return X509V3_EXT_add_nconf_sk(conf, ctx, section, sk);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509 * cert))
+int SAVEDS ASM LIB_X509V3_EXT_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509 * cert))
 {
 	return X509V3_EXT_add_nconf(conf, ctx, section, cert);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_REQ_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509_REQ * req))
+int SAVEDS ASM LIB_X509V3_EXT_REQ_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509_REQ * req))
 {
 	return X509V3_EXT_REQ_add_nconf(conf, ctx, section, req);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_CRL_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509_CRL * crl))
+int SAVEDS ASM LIB_X509V3_EXT_CRL_add_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509_CRL * crl))
 {
 	return X509V3_EXT_CRL_add_nconf(conf, ctx, section, crl);
 }
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_conf_nid(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(d0, int ext_nid), REG(a2, char * value))
+X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_conf_nid(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(d0, int ext_nid), REG(a2, const char * value))
 {
 	return X509V3_EXT_conf_nid(conf, ctx, ext_nid, value);
 }
 
 // ---
 
-X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * name), REG(a3, char * value))
+X509_EXTENSION * SAVEDS ASM LIB_X509V3_EXT_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * name), REG(a3, const char * value))
 {
 	return X509V3_EXT_conf(conf, ctx, name, value);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509 * cert))
+int SAVEDS ASM LIB_X509V3_EXT_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509 * cert))
 {
 	return X509V3_EXT_add_conf(conf, ctx, section, cert);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_REQ_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509_REQ * req))
+int SAVEDS ASM LIB_X509V3_EXT_REQ_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509_REQ * req))
 {
 	return X509V3_EXT_REQ_add_conf(conf, ctx, section, req);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_EXT_CRL_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, char * section), REG(a3, X509_CRL * crl))
+int SAVEDS ASM LIB_X509V3_EXT_CRL_add_conf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, LHASH_OF(CONF_VALUE) * conf), REG(a1, X509V3_CTX * ctx), REG(a2, const char * section), REG(a3, X509_CRL * crl))
 {
 	return X509V3_EXT_CRL_add_conf(conf, ctx, section, crl);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509V3_add_value_bool_nf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * name), REG(d0, int asn1_bool), REG(a1, STACK_OF(CONF_VALUE) ** extlist))
+int SAVEDS ASM LIB_X509V3_add_value_bool_nf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * name), REG(d0, int asn1_bool), REG(a1, STACK_OF(CONF_VALUE) ** extlist))
 {
 	return X509V3_add_value_bool_nf(name, asn1_bool, extlist);
 }
@@ -13411,14 +13391,14 @@ void SAVEDS ASM LIB_X509V3_set_conf_lhash(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-char * SAVEDS ASM LIB_X509V3_get_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_CTX * ctx), REG(a1, char * name), REG(a2, char * section))
+char * SAVEDS ASM LIB_X509V3_get_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_CTX * ctx), REG(a1, const char * name), REG(a2, const char * section))
 {
 	return X509V3_get_string(ctx, name, section);
 }
 
 // ---
 
-STACK_OF(CONF_VALUE) * SAVEDS ASM LIB_X509V3_get_section(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_CTX * ctx), REG(a1, char * section))
+STACK_OF(CONF_VALUE) * SAVEDS ASM LIB_X509V3_get_section(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_CTX * ctx), REG(a1, const char * section))
 {
 	return X509V3_get_section(ctx, section);
 }
@@ -13474,14 +13454,14 @@ int SAVEDS ASM LIB_X509V3_add_value_int(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-char * SAVEDS ASM LIB_i2s_ASN1_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * meth), REG(a1, ASN1_INTEGER * aint))
+char * SAVEDS ASM LIB_i2s_ASN1_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * meth), REG(a1, const ASN1_INTEGER * aint))
 {
 	return i2s_ASN1_INTEGER(meth, aint);
 }
 
 // ---
 
-ASN1_INTEGER * SAVEDS ASM LIB_s2i_ASN1_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * meth), REG(a1, char * value))
+ASN1_INTEGER * SAVEDS ASM LIB_s2i_ASN1_INTEGER(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * meth), REG(a1, const char * value))
 {
 	return s2i_ASN1_INTEGER(meth, value);
 }
@@ -13565,7 +13545,7 @@ void * SAVEDS ASM LIB_X509V3_EXT_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X5
 
 // ---
 
-void * SAVEDS ASM LIB_X509V3_get_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509_EXTENSION) * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
+void * SAVEDS ASM LIB_X509V3_get_d2i(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const STACK_OF(X509_EXTENSION) * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx))
 {
 	return X509V3_get_d2i(x, nid, crit, idx);
 }
@@ -13663,7 +13643,7 @@ X509_PURPOSE * SAVEDS ASM LIB_X509_PURPOSE_get0(REG(a6, UNUSED __IFACE_OR_BASE),
 
 // ---
 
-int SAVEDS ASM LIB_X509_PURPOSE_get_by_sname(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * sname))
+int SAVEDS ASM LIB_X509_PURPOSE_get_by_sname(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * sname))
 {
 	return X509_PURPOSE_get_by_sname(sname);
 }
@@ -13677,28 +13657,28 @@ int SAVEDS ASM LIB_X509_PURPOSE_get_by_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(d
 
 // ---
 
-int SAVEDS ASM LIB_X509_PURPOSE_add(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int id), REG(d1, int trust), REG(d2, int flags), REG(a0, int (*ck)(const X509_PURPOSE *, const X509 *, int)), REG(a1, char * name), REG(a2, char * sname), REG(a3, void * arg))
+int SAVEDS ASM LIB_X509_PURPOSE_add(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int id), REG(d1, int trust), REG(d2, int flags), REG(a0, int (*ck)(const X509_PURPOSE *, const X509 *, int)), REG(a1, const char * name), REG(a2, const char * sname), REG(a3, void * arg))
 {
 	return X509_PURPOSE_add(id, trust, flags, ck, name, sname, arg);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_X509_PURPOSE_get0_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_PURPOSE * xp))
+char * SAVEDS ASM LIB_X509_PURPOSE_get0_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_PURPOSE * xp))
 {
 	return X509_PURPOSE_get0_name(xp);
 }
 
 // ---
 
-char * SAVEDS ASM LIB_X509_PURPOSE_get0_sname(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_PURPOSE * xp))
+char * SAVEDS ASM LIB_X509_PURPOSE_get0_sname(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_PURPOSE * xp))
 {
 	return X509_PURPOSE_get0_sname(xp);
 }
 
 // ---
 
-int SAVEDS ASM LIB_X509_PURPOSE_get_trust(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_PURPOSE * xp))
+int SAVEDS ASM LIB_X509_PURPOSE_get_trust(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_PURPOSE * xp))
 {
 	return X509_PURPOSE_get_trust(xp);
 }
@@ -13712,7 +13692,7 @@ void SAVEDS ASM LIB_X509_PURPOSE_cleanup(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int SAVEDS ASM LIB_X509_PURPOSE_get_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_PURPOSE * a))
+int SAVEDS ASM LIB_X509_PURPOSE_get_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_PURPOSE * a))
 {
 	return X509_PURPOSE_get_id(a);
 }
@@ -13740,9 +13720,9 @@ void SAVEDS ASM LIB_X509_email_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STA
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_X509V3_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_X509V3_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_X509V3_strings();
+	return ERR_load_X509V3_strings();
 }
 
 // ---
@@ -13936,13 +13916,6 @@ int * SAVEDS ASM LIB__shadow_DES_check_key(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int * SAVEDS ASM LIB__shadow_DES_rw_mode(REG(a6, UNUSED __IFACE_OR_BASE))
-{
-	return _shadow_DES_rw_mode();
-}
-
-// ---
-
 const char * SAVEDS ASM LIB_DES_options(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return DES_options();
@@ -14051,20 +14024,6 @@ void SAVEDS ASM LIB_DES_ede3_cfb_encrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 void SAVEDS ASM LIB_DES_ede3_ofb64_encrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const unsigned char * in), REG(a1, unsigned char * out), REG(d0, long length), REG(a2, DES_key_schedule * ks1), REG(a3, DES_key_schedule * ks2), REG(d1, DES_key_schedule * ks3), REG(d2, DES_cblock * ivec), REG(d3, int * num))
 {
 	DES_ede3_ofb64_encrypt(in, out, length, ks1, ks2, ks3, ivec, num);
-}
-
-// ---
-
-int SAVEDS ASM LIB_DES_enc_read(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int fd), REG(a0, void * buf), REG(d1, int len), REG(a1, DES_key_schedule * sched), REG(a2, DES_cblock * iv))
-{
-	return DES_enc_read(fd, buf, len, sched, iv);
-}
-
-// ---
-
-int SAVEDS ASM LIB_DES_enc_write(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, int fd), REG(a0, const void * buf), REG(d1, int len), REG(a1, DES_key_schedule * sched), REG(a2, DES_cblock * iv))
-{
-	return DES_enc_write(fd, buf, len, sched, iv);
 }
 
 // ---
@@ -14184,20 +14143,6 @@ void SAVEDS ASM LIB_DES_cfb64_encrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, c
 void SAVEDS ASM LIB_DES_ofb64_encrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const unsigned char * in), REG(a1, unsigned char * out), REG(d0, long length), REG(a2, DES_key_schedule * schedule), REG(a3, DES_cblock * ivec), REG(d1, int * num))
 {
 	DES_ofb64_encrypt(in, out, length, schedule, ivec, num);
-}
-
-// ---
-
-int SAVEDS ASM LIB_DES_read_password(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DES_cblock * key), REG(a1, const char * prompt), REG(d0, int verify))
-{
-	return DES_read_password(key, prompt, verify);
-}
-
-// ---
-
-int SAVEDS ASM LIB_DES_read_2passwords(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DES_cblock * key1), REG(a1, DES_cblock * key2), REG(a2, const char * prompt), REG(d0, int verify))
-{
-	return DES_read_2passwords(key1, key2, prompt, verify);
 }
 
 // ---
@@ -14328,9 +14273,9 @@ int SAVEDS ASM LIB_DHparams_print(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO *
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_DH_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_DH_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_DH_strings();
+	return ERR_load_DH_strings();
 }
 
 // ---
@@ -14552,9 +14497,9 @@ DH * SAVEDS ASM LIB_DSA_dup_DH(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DS
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_DSA_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_DSA_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_DSA_strings();
+	return ERR_load_DSA_strings();
 }
 
 // ---
@@ -15014,13 +14959,6 @@ int SAVEDS ASM LIB_RSA_set_method(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA *
 
 // ---
 
-int SAVEDS ASM LIB_RSA_memory_lock(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * r))
-{
-	return RSA_memory_lock(r);
-}
-
-// ---
-
 const RSA_METHOD * SAVEDS ASM LIB_RSA_null_method(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return RSA_null_method();
@@ -15217,9 +15155,9 @@ RSA * SAVEDS ASM LIB_RSAPrivateKey_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_RSA_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_RSA_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_RSA_strings();
+	return ERR_load_RSA_strings();
 }
 
 // ---
@@ -15875,7 +15813,7 @@ int SAVEDS ASM LIB_X509_STORE_set1_param(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-ASN1_TYPE * SAVEDS ASM LIB_ASN1_generate_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * str), REG(a1, CONF * nconf))
+ASN1_TYPE * SAVEDS ASM LIB_ASN1_generate_nconf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * str), REG(a1, CONF * nconf))
 {
 	return ASN1_generate_nconf(str, nconf);
 }
@@ -15889,14 +15827,14 @@ EC_GROUP * SAVEDS ASM LIB_PEM_read_bio_ECPKParameters(REG(a6, UNUSED __IFACE_OR_
 
 // ---
 
-EC_KEY * SAVEDS ASM LIB_EC_KEY_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY * ec_key))
+EC_KEY * SAVEDS ASM LIB_EC_KEY_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY * ec_key))
 {
 	return EC_KEY_dup(ec_key);
 }
 
 // ---
 
-void SAVEDS ASM LIB_BIO_set_callback(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * b), REG(a1, long (*callback)(struct bio_st *, int, const char *, int, long, long)))
+void SAVEDS ASM LIB_BIO_set_callback(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * b), REG(a1, BIO_callback_fn callback))
 {
 	BIO_set_callback(b, callback);
 }
@@ -16736,9 +16674,9 @@ int SAVEDS ASM LIB_SSL_SRP_CTX_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_ENGINE_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_ENGINE_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_ENGINE_strings();
+	return ERR_load_ENGINE_strings();
 }
 
 // ---
@@ -17233,7 +17171,7 @@ EC_KEY * SAVEDS ASM LIB_o2i_ECPublicKey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-EC_KEY * SAVEDS ASM LIB_EC_KEY_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY * dst), REG(a1, EC_KEY * src))
+EC_KEY * SAVEDS ASM LIB_EC_KEY_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY * dst), REG(a1, const EC_KEY * src))
 {
 	return EC_KEY_copy(dst, src);
 }
@@ -17982,9 +17920,9 @@ int SAVEDS ASM LIB_CMS_unsigned_add1_attr_by_OBJ(REG(a6, UNUSED __IFACE_OR_BASE)
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_CMS_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_CMS_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_CMS_strings();
+	return ERR_load_CMS_strings();
 }
 
 // ---
@@ -18038,7 +17976,7 @@ CMS_ContentInfo * SAVEDS ASM LIB_SMIME_read_CMS(REG(a6, UNUSED __IFACE_OR_BASE),
 
 // ---
 
-int SAVEDS ASM LIB_CMS_decrypt_set1_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CMS_ContentInfo * cms), REG(a1, unsigned char * key), REG(d0, size_t keylen), REG(a2, unsigned char * id), REG(d1, size_t idlen))
+int SAVEDS ASM LIB_CMS_decrypt_set1_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CMS_ContentInfo * cms), REG(a1, unsigned char * key), REG(d0, size_t keylen), REG(a2, const unsigned char * id), REG(d1, size_t idlen))
 {
 	return CMS_decrypt_set1_key(cms, key, keylen, id, idlen);
 }
@@ -18290,7 +18228,7 @@ int SAVEDS ASM LIB_CMS_RecipientInfo_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-const ASN1_OBJECT * SAVEDS ASM LIB_CMS_get0_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CMS_ContentInfo * cms))
+const ASN1_OBJECT * SAVEDS ASM LIB_CMS_get0_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const CMS_ContentInfo * cms))
 {
 	return CMS_get0_type(cms);
 }
@@ -18934,7 +18872,7 @@ SRP_user_pwd * SAVEDS ASM LIB_SRP_VBASE_get_by_user(REG(a6, UNUSED __IFACE_OR_BA
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_server_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * A), REG(a1, BIGNUM * v), REG(a2, BIGNUM * u), REG(a3, BIGNUM * b), REG(d0, BIGNUM * N))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_server_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * A), REG(a1, const BIGNUM * v), REG(a2, const BIGNUM * u), REG(a3, const BIGNUM * b), REG(d0, const BIGNUM * N))
 {
 	return SRP_Calc_server_key(A, v, u, b, N);
 }
@@ -18955,7 +18893,7 @@ int SAVEDS ASM LIB_SRP_create_verifier_BN(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_u(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * A), REG(a1, BIGNUM * B), REG(a2, BIGNUM * N))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_u(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * A), REG(a1, const BIGNUM * B), REG(a2, const BIGNUM * N))
 {
 	return SRP_Calc_u(A, B, N);
 }
@@ -18969,7 +18907,7 @@ void SAVEDS ASM LIB_SRP_VBASE_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SRP_
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_client_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * N), REG(a1, BIGNUM * B), REG(a2, BIGNUM * g), REG(a3, BIGNUM * x), REG(d0, BIGNUM * a), REG(d1, BIGNUM * u))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_client_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * N), REG(a1, const BIGNUM * B), REG(a2, const BIGNUM * g), REG(a3, const BIGNUM * x), REG(d0, const BIGNUM * a), REG(d1, const BIGNUM * u))
 {
 	return SRP_Calc_client_key(N, B, g, x, a, u);
 }
@@ -18983,14 +18921,14 @@ SRP_gN * SAVEDS ASM LIB_SRP_get_default_gN(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_x(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * s), REG(a1, const char * user), REG(a2, const char * pass))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_x(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * s), REG(a1, const char * user), REG(a2, const char * pass))
 {
 	return SRP_Calc_x(s, user, pass);
 }
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_B(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * b), REG(a1, BIGNUM * N), REG(a2, BIGNUM * g), REG(a3, BIGNUM * v))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_B(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * b), REG(a1, const BIGNUM * N), REG(a2, const BIGNUM * g), REG(a3, const BIGNUM * v))
 {
 	return SRP_Calc_B(b, N, g, v);
 }
@@ -19004,21 +18942,21 @@ SRP_VBASE * SAVEDS ASM LIB_SRP_VBASE_new(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-char * SAVEDS ASM LIB_SRP_check_known_gN_param(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * g), REG(a1, BIGNUM * N))
+char * SAVEDS ASM LIB_SRP_check_known_gN_param(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * g), REG(a1, const BIGNUM * N))
 {
 	return SRP_check_known_gN_param(g, N);
 }
 
 // ---
 
-BIGNUM * SAVEDS ASM LIB_SRP_Calc_A(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * a), REG(a1, BIGNUM * N), REG(a2, BIGNUM * g))
+BIGNUM * SAVEDS ASM LIB_SRP_Calc_A(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * a), REG(a1, const BIGNUM * N), REG(a2, const BIGNUM * g))
 {
 	return SRP_Calc_A(a, N, g);
 }
 
 // ---
 
-int SAVEDS ASM LIB_SRP_Verify_A_mod_N(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * A), REG(a1, BIGNUM * N))
+int SAVEDS ASM LIB_SRP_Verify_A_mod_N(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * A), REG(a1, const BIGNUM * N))
 {
 	return SRP_Verify_A_mod_N(A, N);
 }
@@ -19032,7 +18970,7 @@ int SAVEDS ASM LIB_SRP_VBASE_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SRP_V
 
 // ---
 
-int SAVEDS ASM LIB_SRP_Verify_B_mod_N(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * B), REG(a1, BIGNUM * N))
+int SAVEDS ASM LIB_SRP_Verify_B_mod_N(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIGNUM * B), REG(a1, const BIGNUM * N))
 {
 	return SRP_Verify_B_mod_N(B, N);
 }
@@ -19228,13 +19166,6 @@ void SAVEDS ASM LIB_OPENSSL_cpuid_setup(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_remove_thread_state(REG(a6, UNUSED __IFACE_OR_BASE))
-{
-	ERR_remove_thread_state();
-}
-
-// ---
-
 void SAVEDS ASM LIB_X509_STORE_CTX_set0_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(a1, STACK_OF(X509_CRL) * sk))
 {
 	X509_STORE_CTX_set0_crls(ctx, sk);
@@ -19396,7 +19327,7 @@ void SAVEDS ASM LIB_GENERAL_SUBTREE_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-int SAVEDS ASM LIB_PKCS12_add_safe(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(PKCS7) ** psafes), REG(a1, STACK_OF(PKCS12_SAFEBAG) * bags), REG(d0, int safe_nid), REG(d1, int iter), REG(a2, char * pass))
+int SAVEDS ASM LIB_PKCS12_add_safe(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(PKCS7) ** psafes), REG(a1, STACK_OF(PKCS12_SAFEBAG) * bags), REG(d0, int safe_nid), REG(d1, int iter), REG(a2, const char * pass))
 {
 	return PKCS12_add_safe(psafes, bags, safe_nid, iter, pass);
 }
@@ -19550,13 +19481,6 @@ void SAVEDS ASM LIB_X509_policy_tree_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-unsigned int * SAVEDS ASM LIB_OPENSSL_ia32cap_loc(REG(a6, UNUSED __IFACE_OR_BASE))
-{
-	return OPENSSL_ia32cap_loc();
-}
-
-// ---
-
 const BIGNUM * SAVEDS ASM LIB_BN_get0_nist_prime_224(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return BN_get0_nist_prime_224();
@@ -19634,9 +19558,9 @@ BN_BLINDING * SAVEDS ASM LIB_RSA_setup_blinding(REG(a6, UNUSED __IFACE_OR_BASE),
 
 // ---
 
-int SAVEDS ASM LIB_sk_find_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * st), REG(a1, void * data))
+int SAVEDS ASM LIB_OPENSSL_sk_find_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(a1, const void * data))
 {
-	return sk_find_ex(st, data);
+	return OPENSSL_sk_find_ex(st, data);
 }
 
 // ---
@@ -19683,7 +19607,7 @@ int SAVEDS ASM LIB_i2d_PKCS7_NDEF(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS7
 
 // ---
 
-ASN1_TYPE * SAVEDS ASM LIB_ASN1_generate_v3(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * str), REG(a1, X509V3_CTX * cnf))
+ASN1_TYPE * SAVEDS ASM LIB_ASN1_generate_v3(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * str), REG(a1, X509V3_CTX * cnf))
 {
 	return ASN1_generate_v3(str, cnf);
 }
@@ -19935,7 +19859,7 @@ void SAVEDS ASM LIB_X509_VERIFY_PARAM_set_time(REG(a6, UNUSED __IFACE_OR_BASE), 
 
 // ---
 
-PKCS12_SAFEBAG * SAVEDS ASM LIB_PKCS12_add_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(PKCS12_SAFEBAG) ** pbags), REG(a1, EVP_PKEY * key), REG(d0, int key_usage), REG(d1, int iter), REG(d2, int key_nid), REG(a2, char * pass))
+PKCS12_SAFEBAG * SAVEDS ASM LIB_PKCS12_add_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(PKCS12_SAFEBAG) ** pbags), REG(a1, EVP_PKEY * key), REG(d0, int key_usage), REG(d1, int iter), REG(d2, int key_nid), REG(a2, const char * pass))
 {
 	return PKCS12_add_key(pbags, key, key_usage, iter, key_nid, pass);
 }
@@ -20033,13 +19957,6 @@ void SAVEDS ASM LIB_EVP_CIPHER_CTX_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-int SAVEDS ASM LIB_a2i_ipadd(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, unsigned char * ipout), REG(a1, const char * ipasc))
-{
-	return a2i_ipadd(ipout, ipasc);
-}
-
-// ---
-
 int SAVEDS ASM LIB_EVP_CIPHER_block_size(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER * cipher))
 {
 	return EVP_CIPHER_block_size(cipher);
@@ -20117,7 +20034,7 @@ unsigned long SAVEDS ASM LIB_EVP_CIPHER_flags(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-long  SAVEDS ASM (*LIB_BIO_get_callback(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO * b)))(struct bio_st *,int,const char *,int, long,long)
+BIO_callback_fn SAVEDS ASM LIB_BIO_get_callback(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO * b))
 {
 	return BIO_get_callback(b);
 }
@@ -20509,9 +20426,9 @@ GENERAL_NAME * SAVEDS ASM LIB_GENERAL_NAME_dup(REG(a6, UNUSED __IFACE_OR_BASE), 
 
 // ---
 
-STACK_OF(X509_CRL) * SAVEDS ASM LIB_X509_STORE_get1_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * st), REG(a1, X509_NAME * nm))
+STACK_OF(X509_CRL) * SAVEDS ASM LIB_X509_STORE_CTX_get1_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * st), REG(a1, X509_NAME * nm))
 {
-	return X509_STORE_get1_crls(st, nm);
+	return X509_STORE_CTX_get1_crls(st, nm);
 }
 
 // ---
@@ -20778,6 +20695,13 @@ void * SAVEDS ASM LIB_DSO_global_lookup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 int SAVEDS ASM LIB_TS_CONF_set_tsa_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, const char * section), REG(a2, TS_RESP_CTX * ctx))
 {
 	return TS_CONF_set_tsa_name(conf, section, ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_ASN1_SET_ANY(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_SEQUENCE_ANY * a), REG(a1, unsigned char ** pp))
+{
+	return i2d_ASN1_SET_ANY(a, pp);
 }
 
 // ---
@@ -21496,9 +21420,9 @@ TS_MSG_IMPRINT * SAVEDS ASM LIB_TS_TST_INFO_get_msg_imprint(REG(a6, UNUSED __IFA
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_TS_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_TS_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_TS_strings();
+	return ERR_load_TS_strings();
 }
 
 // ---
@@ -22189,9 +22113,9 @@ void SAVEDS ASM LIB_EVP_PKEY_CTX_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, E
 
 // ---
 
-STACK_OF(X509) * SAVEDS ASM LIB_X509_STORE_get1_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * st), REG(a1, X509_NAME * nm))
+STACK_OF(X509) * SAVEDS ASM LIB_X509_STORE_CTX_get1_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * st), REG(a1, X509_NAME * nm))
 {
-	return X509_STORE_get1_certs(st, nm);
+	return X509_STORE_CTX_get1_certs(st, nm);
 }
 
 // ---
@@ -22441,7 +22365,7 @@ int SAVEDS ASM LIB_TS_TST_INFO_set_serial(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-GENERAL_NAME * SAVEDS ASM LIB_a2i_GENERAL_NAME(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, GENERAL_NAME * out), REG(a1, const X509V3_EXT_METHOD * method), REG(a2, X509V3_CTX * ctx), REG(d0, int gen_type), REG(a3, char * value), REG(d1, int is_nc))
+GENERAL_NAME * SAVEDS ASM LIB_a2i_GENERAL_NAME(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, GENERAL_NAME * out), REG(a1, const X509V3_EXT_METHOD * method), REG(a2, X509V3_CTX * ctx), REG(d0, int gen_type), REG(a3, const char * value), REG(d1, int is_nc))
 {
 	return a2i_GENERAL_NAME(out, method, ctx, gen_type, value, is_nc);
 }
@@ -22665,6 +22589,13 @@ int SAVEDS ASM LIB_GENERAL_NAME_cmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, GEN
 
 // ---
 
+ASN1_SEQUENCE_ANY * SAVEDS ASM LIB_d2i_ASN1_SET_ANY(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_SEQUENCE_ANY ** a), REG(a1, const unsigned char ** pp), REG(d0, long length))
+{
+	return d2i_ASN1_SET_ANY(a, pp, length);
+}
+
+// ---
+
 ASN1_SEQUENCE_ANY * SAVEDS ASM LIB_d2i_ASN1_SEQUENCE_ANY(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_SEQUENCE_ANY ** a), REG(a1, const unsigned char ** pp), REG(d0, long length))
 {
 	return d2i_ASN1_SEQUENCE_ANY(a, pp, length);
@@ -22868,7 +22799,7 @@ int SAVEDS ASM LIB_OCSP_REQ_CTX_set1_req(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void SAVEDS ASM LIB_X509_STORE_set_verify_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, int (*verify_cb)(int, X509_STORE_CTX *)))
+void SAVEDS ASM LIB_X509_STORE_set_verify_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_verify_cb verify_cb))
 {
 	X509_STORE_set_verify_cb(ctx, verify_cb);
 }
@@ -23001,23 +22932,9 @@ void SAVEDS ASM LIB_CRYPTO_cfb128_8_encrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG
 
 // ---
 
-int SAVEDS ASM LIB_OPENSSL_strcasecmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * str1), REG(a1, const char * str2))
-{
-	return OPENSSL_strcasecmp(str1, str2);
-}
-
-// ---
-
 int SAVEDS ASM LIB_OPENSSL_memcmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const void * p1), REG(a1, const void * p2), REG(d0, size_t n))
 {
 	return OPENSSL_memcmp(p1, p2, n);
-}
-
-// ---
-
-int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * str1), REG(a1, const char * str2), REG(d0, size_t n))
-{
-	return OPENSSL_strncasecmp(str1, str2, n);
 }
 
 // ---
@@ -23813,9 +23730,9 @@ int SAVEDS ASM LIB_RSA_padding_check_PKCS1_OAEP_mgf1(REG(a6, UNUSED __IFACE_OR_B
 
 // ---
 
-_STACK * SAVEDS ASM LIB_sk_deep_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _STACK * sk), REG(a1, void * (*copy_func)(void *)), REG(a2, void (*free_func)(void *)))
+OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_deep_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_STACK * sk), REG(a1, OPENSSL_sk_copyfunc c), REG(a2, OPENSSL_sk_freefunc f))
 {
-	return sk_deep_copy(sk, copy_func, free_func);
+	return OPENSSL_sk_deep_copy(sk, c, f);
 }
 
 // ---
@@ -23893,13 +23810,6 @@ X509_REVOKED * SAVEDS ASM LIB_X509_REVOKED_dup(REG(a6, UNUSED __IFACE_OR_BASE), 
 X509_STORE * SAVEDS ASM LIB_X509_STORE_CTX_get0_store(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
 {
 	return X509_STORE_CTX_get0_store(ctx);
-}
-
-// ---
-
-void SAVEDS ASM LIB_X509_STORE_set_lookup_crls_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, STACK_OF(X509_CRL) *(*cb)(X509_STORE_CTX *ctx, X509_NAME *nm)))
-{
-	X509_STORE_set_lookup_crls_cb(ctx, cb);
 }
 
 // ---
@@ -24268,9 +24178,9 @@ void SAVEDS ASM LIB_ASN1_add_stable_module(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_buf_print(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, unsigned char * buf), REG(a2, size_t buflen), REG(d0, int indent))
+int SAVEDS ASM LIB_ASN1_buf_print(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const unsigned char * buf), REG(a2, size_t buflen), REG(d0, int off))
 {
-	return ASN1_buf_print(bp, buf, buflen, indent);
+	return ASN1_buf_print(bp, buf, buflen, off);
 }
 
 // ---
@@ -24436,9 +24346,9 @@ void SAVEDS ASM LIB_ASYNC_unblock_pause(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_ASYNC_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_ASYNC_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_ASYNC_strings();
+	return ERR_load_ASYNC_strings();
 }
 
 // ---
@@ -24877,9 +24787,9 @@ void * SAVEDS ASM LIB_CRYPTO_secure_malloc(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-void SAVEDS ASM LIB_CRYPTO_secure_malloc_done(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_CRYPTO_secure_malloc_done(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	CRYPTO_secure_malloc_done();
+	return CRYPTO_secure_malloc_done();
 }
 
 // ---
@@ -25178,7 +25088,7 @@ int SAVEDS ASM LIB_EC_KEY_oct2key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KE
 
 // ---
 
-int SAVEDS ASM LIB_EC_KEY_oct2priv(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY * key), REG(a1, unsigned char * buf), REG(d0, size_t len))
+int SAVEDS ASM LIB_EC_KEY_oct2priv(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY * key), REG(a1, const unsigned char * buf), REG(d0, size_t len))
 {
 	return EC_KEY_oct2priv(key, buf, len);
 }
@@ -25234,9 +25144,9 @@ size_t SAVEDS ASM LIB_EC_POINT_point2buf(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void SAVEDS ASM LIB_ECDSA_SIG_get0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM ** pr), REG(a1, BIGNUM ** ps), REG(a2, ECDSA_SIG * sig))
+void SAVEDS ASM LIB_ECDSA_SIG_get0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ECDSA_SIG * sig), REG(a1, const BIGNUM ** pr), REG(a2, const BIGNUM ** ps))
 {
-	ECDSA_SIG_get0(pr, ps, sig);
+	ECDSA_SIG_get0(sig, pr, ps);
 }
 
 // ---
@@ -25969,9 +25879,9 @@ int SAVEDS ASM LIB_EVP_PKEY_security_bits(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-void SAVEDS ASM LIB_EVP_PKEY_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey))
+int SAVEDS ASM LIB_EVP_PKEY_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey))
 {
-	EVP_PKEY_up_ref(pkey);
+	return EVP_PKEY_up_ref(pkey);
 }
 
 // ---
@@ -26004,30 +25914,30 @@ int SAVEDS ASM LIB_HMAC_CTX_reset(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, HMAC_
 
 // ---
 
-size_t SAVEDS ASM LIB_HMAC_size(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx))
+size_t SAVEDS ASM LIB_HMAC_size(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const HMAC_CTX * ctx))
 {
 	return HMAC_size(ctx);
 }
 
 // ---
 
-int SAVEDS ASM LIB_lh_error(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh))
+int SAVEDS ASM LIB_OPENSSL_LH_error(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh))
 {
-	return lh_error(lh);
+	return OPENSSL_LH_error(lh);
 }
 
 // ---
 
-unsigned long SAVEDS ASM LIB_lh_get_down_load(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const _LHASH * lh))
+unsigned long SAVEDS ASM LIB_OPENSSL_LH_get_down_load(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OPENSSL_LHASH * lh))
 {
-	return lh_get_down_load(lh);
+	return OPENSSL_LH_get_down_load(lh);
 }
 
 // ---
 
-void SAVEDS ASM LIB_lh_set_down_load(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, _LHASH * lh), REG(d0, unsigned long down_load))
+void SAVEDS ASM LIB_OPENSSL_LH_set_down_load(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(d0, unsigned long down_load))
 {
-	lh_set_down_load(lh, down_load);
+	OPENSSL_LH_set_down_load(lh, down_load);
 }
 
 // ---
@@ -26445,21 +26355,21 @@ void SAVEDS ASM LIB_X509_CRL_get0_signature(REG(a6, UNUSED __IFACE_OR_BASE), REG
 
 // ---
 
-X509_NAME * SAVEDS ASM LIB_X509_CRL_get_issuer(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
+X509_NAME * SAVEDS ASM LIB_X509_CRL_get_issuer(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * crl))
 {
 	return X509_CRL_get_issuer(crl);
 }
 
 // ---
 
-ASN1_TIME * SAVEDS ASM LIB_X509_CRL_get_lastUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
+ASN1_TIME * SAVEDS ASM LIB_X509_CRL_get_lastUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * crl))
 {
 	return X509_CRL_get_lastUpdate(crl);
 }
 
 // ---
 
-ASN1_TIME * SAVEDS ASM LIB_X509_CRL_get_nextUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
+ASN1_TIME * SAVEDS ASM LIB_X509_CRL_get_nextUpdate(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * crl))
 {
 	return X509_CRL_get_nextUpdate(crl);
 }
@@ -26480,16 +26390,16 @@ int SAVEDS ASM LIB_X509_CRL_get_signature_nid(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-long SAVEDS ASM LIB_X509_CRL_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
+long SAVEDS ASM LIB_X509_CRL_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_CRL * crl))
 {
 	return X509_CRL_get_version(crl);
 }
 
 // ---
 
-void SAVEDS ASM LIB_X509_CRL_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
+int SAVEDS ASM LIB_X509_CRL_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_CRL * crl))
 {
-	X509_CRL_up_ref(crl);
+	return X509_CRL_up_ref(crl);
 }
 
 // ---
@@ -26501,7 +26411,7 @@ STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509_get0_extensions(REG(a6, UNUSED __
 
 // ---
 
-EVP_PKEY * SAVEDS ASM LIB_X509_get0_pubkey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+EVP_PKEY * SAVEDS ASM LIB_X509_get0_pubkey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get0_pubkey(x);
 }
@@ -26536,14 +26446,14 @@ void SAVEDS ASM LIB_X509_get0_uids(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1
 
 // ---
 
-ASN1_TIME * SAVEDS ASM LIB_X509_get_notAfter(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+ASN1_TIME * SAVEDS ASM LIB_X509_get_notAfter(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get_notAfter(x);
 }
 
 // ---
 
-ASN1_TIME * SAVEDS ASM LIB_X509_get_notBefore(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+ASN1_TIME * SAVEDS ASM LIB_X509_get_notBefore(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get_notBefore(x);
 }
@@ -26557,7 +26467,7 @@ int SAVEDS ASM LIB_X509_get_signature_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-long SAVEDS ASM LIB_X509_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+long SAVEDS ASM LIB_X509_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get_version(x);
 }
@@ -26606,14 +26516,14 @@ int SAVEDS ASM LIB_X509_REQ_get_signature_nid(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-X509_NAME * SAVEDS ASM LIB_X509_REQ_get_subject_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REQ * req))
+X509_NAME * SAVEDS ASM LIB_X509_REQ_get_subject_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REQ * req))
 {
 	return X509_REQ_get_subject_name(req);
 }
 
 // ---
 
-long SAVEDS ASM LIB_X509_REQ_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REQ * req))
+long SAVEDS ASM LIB_X509_REQ_get_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REQ * req))
 {
 	return X509_REQ_get_version(req);
 }
@@ -26627,7 +26537,7 @@ X509_PUBKEY * SAVEDS ASM LIB_X509_REQ_get_X509_PUBKEY(REG(a6, UNUSED __IFACE_OR_
 
 // ---
 
-STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509_REVOKED_get0_extensions(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REVOKED * r))
+STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509_REVOKED_get0_extensions(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_REVOKED * r))
 {
 	return X509_REVOKED_get0_extensions(r);
 }
@@ -26655,9 +26565,9 @@ int SAVEDS ASM LIB_X509_trusted(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X
 
 // ---
 
-void SAVEDS ASM LIB_X509_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+int SAVEDS ASM LIB_X509_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
 {
-	X509_up_ref(x);
+	return X509_up_ref(x);
 }
 
 // ---
@@ -26683,13 +26593,6 @@ void SAVEDS ASM LIB_X509_VERIFY_PARAM_move_peername(REG(a6, UNUSED __IFACE_OR_BA
 
 // ---
 
-void SAVEDS ASM LIB_ASIdentifiers_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifiers * a))
-{
-	ASIdentifiers_free(a);
-}
-
-// ---
-
 char * SAVEDS ASM LIB_i2s_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, ASN1_IA5STRING * ia5))
 {
 	return i2s_ASN1_IA5STRING(method, ia5);
@@ -26697,7 +26600,7 @@ char * SAVEDS ASM LIB_i2s_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a2, char * str))
+ASN1_IA5STRING * SAVEDS ASM LIB_s2i_ASN1_IA5STRING(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509V3_EXT_METHOD * method), REG(a1, X509V3_CTX * ctx), REG(a2, const char * str))
 {
 	return s2i_ASN1_IA5STRING(method, ctx, str);
 }
@@ -27026,9 +26929,9 @@ void SAVEDS ASM LIB_SSL_CTX_set_security_level(REG(a6, UNUSED __IFACE_OR_BASE), 
 
 // ---
 
-void SAVEDS ASM LIB_SSL_CTX_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx))
+int SAVEDS ASM LIB_SSL_CTX_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx))
 {
-	SSL_CTX_up_ref(ctx);
+	return SSL_CTX_up_ref(ctx);
 }
 
 // ---
@@ -27243,9 +27146,9 @@ unsigned long SAVEDS ASM LIB_SSL_set_options(REG(a6, UNUSED __IFACE_OR_BASE), RE
 
 // ---
 
-void SAVEDS ASM LIB_SSL_set_rbio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * rbio))
+void SAVEDS ASM LIB_SSL_set0_rbio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * rbio))
 {
-	SSL_set_rbio(s, rbio);
+	SSL_set0_rbio(s, rbio);
 }
 
 // ---
@@ -27264,16 +27167,16 @@ void SAVEDS ASM LIB_SSL_set_security_level(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-void SAVEDS ASM LIB_SSL_set_wbio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * wbio))
+void SAVEDS ASM LIB_SSL_set0_wbio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO * wbio))
 {
-	SSL_set_wbio(s, wbio);
+	SSL_set0_wbio(s, wbio);
 }
 
 // ---
 
-void SAVEDS ASM LIB_SSL_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s))
+int SAVEDS ASM LIB_SSL_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s))
 {
-	SSL_up_ref(s);
+	return SSL_up_ref(s);
 }
 
 // ---
@@ -27845,9 +27748,9 @@ CTLOG * SAVEDS ASM LIB_CTLOG_new_null(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-CTLOG * SAVEDS ASM LIB_CTLOG_new_from_base64(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pkey_base64), REG(a1, const char * name))
+int SAVEDS ASM LIB_CTLOG_new_from_base64(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CTLOG ** ct_log), REG(a1, const char * pkey_base64), REG(a2, const char * name))
 {
-	return CTLOG_new_from_base64(pkey_base64, name);
+	return CTLOG_new_from_base64(ct_log, pkey_base64, name);
 }
 
 // ---
@@ -27915,9 +27818,9 @@ int SAVEDS ASM LIB_CTLOG_STORE_load_default_file(REG(a6, UNUSED __IFACE_OR_BASE)
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_CT_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_CT_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_CT_strings();
+	return ERR_load_CT_strings();
 }
 
 // ---
@@ -27929,9 +27832,9 @@ const ASN1_ITEM * SAVEDS ASM LIB_DHparams_it(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-void SAVEDS ASM LIB_DSA_SIG_get0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM ** pr), REG(a1, BIGNUM ** ps), REG(a2, DSA_SIG * sig))
+void SAVEDS ASM LIB_DSA_SIG_get0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA_SIG * sig), REG(a1, const BIGNUM ** pr), REG(a2, const BIGNUM ** ps))
 {
-	DSA_SIG_get0(pr, ps, sig);
+	DSA_SIG_get0(sig, pr, ps);
 }
 
 // ---
@@ -28013,9 +27916,9 @@ int SAVEDS ASM LIB_EVP_PKEY_CTX_hex2ctrl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void SAVEDS ASM LIB_ERR_load_KDF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
+int SAVEDS ASM LIB_ERR_load_KDF_strings(REG(a6, UNUSED __IFACE_OR_BASE))
 {
-	ERR_load_KDF_strings();
+	return ERR_load_KDF_strings();
 }
 
 // ---
@@ -28440,7 +28343,7 @@ void SAVEDS ASM LIB_BIO_meth_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO_M
 
 // ---
 
-int SAVEDS ASM LIB_DSA_meth_set_bn_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_METHOD * dsam), REG(a1, int (*bn_mod_exp)(DSA *, BIGNUM *, BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)))
+int SAVEDS ASM LIB_DSA_meth_set_bn_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_METHOD * dsam), REG(a1, int (*bn_mod_exp)(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)))
 {
 	return DSA_meth_set_bn_mod_exp(dsam, bn_mod_exp);
 }
@@ -28461,7 +28364,7 @@ void SAVEDS ASM LIB_DSA_meth_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_M
 
 // ---
 
-int SAVEDS ASM LIB_DSA_meth_set_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_METHOD * dsam), REG(a1, int (*mod_exp)(DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BN_CTX *, BN_MONT_CTX *)))
+int SAVEDS ASM LIB_DSA_meth_set_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_METHOD * dsam), REG(a1, int (*mod_exp)(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)))
 {
 	return DSA_meth_set_mod_exp(dsam, mod_exp);
 }
@@ -28489,7 +28392,7 @@ void SAVEDS ASM LIB_DSA_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA *
 
 // ---
 
-void SAVEDS ASM LIB_DSA_get0_pqg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d), REG(a1, BIGNUM ** p), REG(a2, BIGNUM ** q), REG(a3, BIGNUM ** g))
+void SAVEDS ASM LIB_DSA_get0_pqg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d), REG(a1, const BIGNUM ** p), REG(a2, const BIGNUM ** q), REG(a3, const BIGNUM ** g))
 {
 	DSA_get0_pqg(d, p, q, g);
 }
@@ -28566,14 +28469,14 @@ int SAVEDS ASM LIB_DSA_meth_set1_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, D
 
 // ---
 
-void SAVEDS ASM LIB_DSA_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d), REG(a1, BIGNUM ** pub_key), REG(a2, BIGNUM ** priv_key))
+void SAVEDS ASM LIB_DSA_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d), REG(a1, const BIGNUM ** pub_key), REG(a2, const BIGNUM ** priv_key))
 {
 	DSA_get0_key(d, pub_key, priv_key);
 }
 
 // ---
 
-int  SAVEDS ASM (*LIB_DSA_meth_get_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA_METHOD * dsam)))(DSA *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BIGNUM *, BN_CTX *, BN_MONT_CTX *)
+int  SAVEDS ASM (*LIB_DSA_meth_get_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA_METHOD * dsam)))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
 {
 	return DSA_meth_get_mod_exp(dsam);
 }
@@ -28650,7 +28553,7 @@ int SAVEDS ASM LIB_DSA_meth_set_sign_setup(REG(a6, UNUSED __IFACE_OR_BASE), REG(
 
 // ---
 
-int  SAVEDS ASM (*LIB_DSA_meth_get_bn_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA_METHOD * dsam)))(DSA *, BIGNUM *, BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
+int  SAVEDS ASM (*LIB_DSA_meth_get_bn_mod_exp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA_METHOD * dsam)))(DSA *, BIGNUM *, const BIGNUM *, const BIGNUM *, const BIGNUM *, BN_CTX *, BN_MONT_CTX *)
 {
 	return DSA_meth_get_bn_mod_exp(dsam);
 }
@@ -28846,14 +28749,14 @@ int  SAVEDS ASM (*LIB_RSA_meth_get_finish(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-void SAVEDS ASM LIB_RSA_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, BIGNUM ** n), REG(a2, BIGNUM ** e), REG(a3, BIGNUM ** d))
+void SAVEDS ASM LIB_RSA_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, const BIGNUM ** n), REG(a2, const BIGNUM ** e), REG(a3, const BIGNUM ** d))
 {
 	RSA_get0_key(r, n, e, d);
 }
 
 // ---
 
-ENGINE * SAVEDS ASM LIB_RSA_get0_engine(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * r))
+ENGINE * SAVEDS ASM LIB_RSA_get0_engine(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r))
 {
 	return RSA_get0_engine(r);
 }
@@ -28874,7 +28777,7 @@ int SAVEDS ASM LIB_RSA_meth_set_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void SAVEDS ASM LIB_RSA_get0_factors(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, BIGNUM ** p), REG(a2, BIGNUM ** q))
+void SAVEDS ASM LIB_RSA_get0_factors(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, const BIGNUM ** p), REG(a2, const BIGNUM ** q))
 {
 	RSA_get0_factors(r, p, q);
 }
@@ -28993,7 +28896,7 @@ int SAVEDS ASM LIB_RSA_set0_crt_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void SAVEDS ASM LIB_RSA_get0_crt_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, BIGNUM ** dmp1), REG(a2, BIGNUM ** dmq1), REG(a3, BIGNUM ** iqmp))
+void SAVEDS ASM LIB_RSA_get0_crt_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r), REG(a1, const BIGNUM ** dmp1), REG(a2, const BIGNUM ** dmq1), REG(a3, const BIGNUM ** iqmp))
 {
 	RSA_get0_crt_params(r, dmp1, dmq1, iqmp);
 }
@@ -29014,7 +28917,7 @@ void SAVEDS ASM LIB_DH_clear_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DH *
 
 // ---
 
-void SAVEDS ASM LIB_DH_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, BIGNUM ** pub_key), REG(a2, BIGNUM ** priv_key))
+void SAVEDS ASM LIB_DH_get0_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, const BIGNUM ** pub_key), REG(a2, const BIGNUM ** priv_key))
 {
 	DH_get0_key(dh, pub_key, priv_key);
 }
@@ -29056,7 +28959,7 @@ long SAVEDS ASM LIB_DH_get_length(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const
 
 // ---
 
-void SAVEDS ASM LIB_DH_get0_pqg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, BIGNUM ** p), REG(a2, BIGNUM ** q), REG(a3, BIGNUM ** g))
+void SAVEDS ASM LIB_DH_get0_pqg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, const BIGNUM ** p), REG(a2, const BIGNUM ** q), REG(a3, const BIGNUM ** g))
 {
 	DH_get0_pqg(dh, p, q, g);
 }
@@ -29217,9 +29120,9 @@ void SAVEDS ASM LIB_DH_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DH * d
 
 // ---
 
-X509_OBJECT * SAVEDS ASM LIB_X509_STORE_get_X509_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * vs), REG(d0, int type), REG(a1, X509_NAME * name))
+X509_OBJECT * SAVEDS ASM LIB_X509_STORE_CTX_get_obj_by_subject(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * vs), REG(d0, X509_LOOKUP_TYPE type), REG(a1, X509_NAME * name))
 {
-	return X509_STORE_get_X509_by_subject(vs, type, name);
+	return X509_STORE_CTX_get_obj_by_subject(vs, type, name);
 }
 
 // ---
@@ -29231,7 +29134,7 @@ void SAVEDS ASM LIB_X509_OBJECT_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X5
 
 // ---
 
-X509 * SAVEDS ASM LIB_X509_OBJECT_get0_X509(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_OBJECT * a))
+X509 * SAVEDS ASM LIB_X509_OBJECT_get0_X509(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_OBJECT * a))
 {
 	return X509_OBJECT_get0_X509(a);
 }
@@ -29252,14 +29155,7 @@ X509 * SAVEDS ASM LIB_X509_STORE_CTX_get0_cert(REG(a6, UNUSED __IFACE_OR_BASE), 
 
 // ---
 
-void SAVEDS ASM LIB_X509_STORE_CTX_set_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(a1, X509_STORE_CTX_verify verify))
-{
-	X509_STORE_CTX_set_verify(ctx, verify);
-}
-
-// ---
-
-X509_STORE_CTX_verify SAVEDS ASM LIB_X509_STORE_CTX_get_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+X509_STORE_CTX_verify_fn SAVEDS ASM LIB_X509_STORE_CTX_get_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
 {
 	return X509_STORE_CTX_get_verify(ctx);
 }
@@ -29290,6 +29186,699 @@ void SAVEDS ASM LIB_X509_STORE_CTX_set0_untrusted(REG(a6, UNUSED __IFACE_OR_BASE
 int SAVEDS ASM LIB_OPENSSL_hexchar2int(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, unsigned char c))
 {
 	return OPENSSL_hexchar2int(c);
+}
+
+// ---
+
+int SAVEDS ASM LIB_DSA_SIG_set0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, DSA_SIG * sig), REG(a1, BIGNUM * r), REG(a2, BIGNUM * s))
+{
+	return DSA_SIG_set0(sig, r, s);
+}
+
+// ---
+
+int SAVEDS ASM LIB_DSA_bits(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d))
+{
+	return DSA_bits(d);
+}
+
+// ---
+
+int SAVEDS ASM LIB_ECDSA_SIG_set0(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ECDSA_SIG * sig), REG(a1, BIGNUM * r), REG(a2, BIGNUM * s))
+{
+	return ECDSA_SIG_set0(sig, r, s);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EVP_ENCODE_CTX_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_ENCODE_CTX * dctx), REG(a1, EVP_ENCODE_CTX * sctx))
+{
+	return EVP_ENCODE_CTX_copy(dctx, sctx);
+}
+
+// ---
+
+const unsigned char * SAVEDS ASM LIB_EVP_PKEY_get0_hmac(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey), REG(a2, size_t * len))
+{
+	return EVP_PKEY_get0_hmac(pkey, len);
+}
+
+// ---
+
+const EVP_MD * SAVEDS ASM LIB_HMAC_CTX_get_md(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const HMAC_CTX * ctx))
+{
+	return HMAC_CTX_get_md(ctx);
+}
+
+// ---
+
+const STACK_OF(X509) * SAVEDS ASM LIB_OCSP_resp_get0_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OCSP_BASICRESP * bs))
+{
+	return OCSP_resp_get0_certs(bs);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OCSP_resp_get0_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OCSP_BASICRESP * bs), REG(a1, const ASN1_OCTET_STRING ** pid), REG(a2, const X509_NAME ** pname))
+{
+	return OCSP_resp_get0_id(bs, pid, pname);
+}
+
+// ---
+
+int SAVEDS ASM LIB_PEM_write_bio_PrivateKey_traditional(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, EVP_PKEY * x), REG(a2, const EVP_CIPHER * enc), REG(a3, unsigned char * kstr), REG(d0, int klen), REG(d1, pem_password_cb * cb), REG(d2, void * u))
+{
+	return PEM_write_bio_PrivateKey_traditional(bp, x, enc, kstr, klen, cb, u);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_SESSION_get_protocol_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s))
+{
+	return SSL_SESSION_get_protocol_version(s);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_is_dtls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL * s))
+{
+	return SSL_is_dtls(s);
+}
+
+// ---
+
+unsigned long SAVEDS ASM LIB_SSL_CTX_dane_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, unsigned long flags))
+{
+	return SSL_CTX_dane_set_flags(ctx, flags);
+}
+
+// ---
+
+unsigned long SAVEDS ASM LIB_SSL_CTX_dane_clear_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, unsigned long flags))
+{
+	return SSL_CTX_dane_clear_flags(ctx, flags);
+}
+
+// ---
+
+unsigned long SAVEDS ASM LIB_SSL_dane_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(d0, unsigned long flags))
+{
+	return SSL_dane_set_flags(ssl, flags);
+}
+
+// ---
+
+unsigned long SAVEDS ASM LIB_SSL_dane_clear_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(d0, unsigned long flags))
+{
+	return SSL_dane_clear_flags(ssl, flags);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_client_version(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL * s))
+{
+	return SSL_client_version(s);
+}
+
+// ---
+
+long SAVEDS ASM LIB_X509_get_pathlen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+{
+	return X509_get_pathlen(x);
+}
+
+// ---
+
+X509_LOOKUP_TYPE SAVEDS ASM LIB_X509_OBJECT_get_type(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_OBJECT * a))
+{
+	return X509_OBJECT_get_type(a);
+}
+
+// ---
+
+X509_CRL * SAVEDS ASM LIB_X509_OBJECT_get0_X509_CRL(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_OBJECT * a))
+{
+	return X509_OBJECT_get0_X509_CRL(a);
+}
+
+// ---
+
+int SAVEDS ASM LIB_X509_STORE_lock(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_lock(ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_X509_STORE_unlock(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_unlock(ctx);
+}
+
+// ---
+
+STACK_OF(X509_OBJECT) * SAVEDS ASM LIB_X509_STORE_get0_objects(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * v))
+{
+	return X509_STORE_get0_objects(v);
+}
+
+// ---
+
+X509_VERIFY_PARAM * SAVEDS ASM LIB_X509_STORE_get0_param(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get0_param(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_verify_fn verify))
+{
+	X509_STORE_set_verify(ctx, verify);
+}
+
+// ---
+
+X509_STORE_CTX_verify_fn SAVEDS ASM LIB_X509_STORE_get_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_verify(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_verify_cb SAVEDS ASM LIB_X509_STORE_get_verify_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_verify_cb(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_get_issuer(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_get_issuer_fn get_issuer))
+{
+	X509_STORE_set_get_issuer(ctx, get_issuer);
+}
+
+// ---
+
+X509_STORE_CTX_get_issuer_fn SAVEDS ASM LIB_X509_STORE_get_get_issuer(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_get_issuer(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_check_issued(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_check_issued_fn check_issued))
+{
+	X509_STORE_set_check_issued(ctx, check_issued);
+}
+
+// ---
+
+X509_STORE_CTX_check_issued_fn SAVEDS ASM LIB_X509_STORE_get_check_issued(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_check_issued(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_check_revocation(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_check_revocation_fn check_revocation))
+{
+	X509_STORE_set_check_revocation(ctx, check_revocation);
+}
+
+// ---
+
+X509_STORE_CTX_check_revocation_fn SAVEDS ASM LIB_X509_STORE_get_check_revocation(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_check_revocation(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_get_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_get_crl_fn get_crl))
+{
+	X509_STORE_set_get_crl(ctx, get_crl);
+}
+
+// ---
+
+X509_STORE_CTX_get_crl_fn SAVEDS ASM LIB_X509_STORE_get_get_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_get_crl(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_check_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_check_crl_fn check_crl))
+{
+	X509_STORE_set_check_crl(ctx, check_crl);
+}
+
+// ---
+
+X509_STORE_CTX_check_crl_fn SAVEDS ASM LIB_X509_STORE_get_check_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_check_crl(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_cert_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_cert_crl_fn cert_crl))
+{
+	X509_STORE_set_cert_crl(ctx, cert_crl);
+}
+
+// ---
+
+X509_STORE_CTX_cert_crl_fn SAVEDS ASM LIB_X509_STORE_get_cert_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_cert_crl(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_check_policy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_check_policy_fn check_policy))
+{
+	X509_STORE_set_check_policy(ctx, check_policy);
+}
+
+// ---
+
+X509_STORE_CTX_check_policy_fn SAVEDS ASM LIB_X509_STORE_get_check_policy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_check_policy(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_lookup_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_lookup_certs_fn lookup_certs))
+{
+	X509_STORE_set_lookup_certs(ctx, lookup_certs);
+}
+
+// ---
+
+X509_STORE_CTX_lookup_certs_fn SAVEDS ASM LIB_X509_STORE_get_lookup_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_lookup_certs(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_lookup_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_lookup_crls_fn lookup_crls))
+{
+	X509_STORE_set_lookup_crls(ctx, lookup_crls);
+}
+
+// ---
+
+X509_STORE_CTX_lookup_crls_fn SAVEDS ASM LIB_X509_STORE_get_lookup_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_lookup_crls(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_set_cleanup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(a1, X509_STORE_CTX_cleanup_fn cleanup))
+{
+	X509_STORE_set_cleanup(ctx, cleanup);
+}
+
+// ---
+
+X509_STORE_CTX_cleanup_fn SAVEDS ASM LIB_X509_STORE_get_cleanup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx))
+{
+	return X509_STORE_get_cleanup(ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_X509_STORE_set_ex_data(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, int idx), REG(a1, void * data))
+{
+	return X509_STORE_set_ex_data(ctx, idx, data);
+}
+
+// ---
+
+void * SAVEDS ASM LIB_X509_STORE_get_ex_data(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, int idx))
+{
+	return X509_STORE_get_ex_data(ctx, idx);
+}
+
+// ---
+
+X509_STORE_CTX_get_issuer_fn SAVEDS ASM LIB_X509_STORE_CTX_get_get_issuer(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_get_issuer(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_check_issued_fn SAVEDS ASM LIB_X509_STORE_CTX_get_check_issued(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_check_issued(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_check_revocation_fn SAVEDS ASM LIB_X509_STORE_CTX_get_check_revocation(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_check_revocation(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_get_crl_fn SAVEDS ASM LIB_X509_STORE_CTX_get_get_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_get_crl(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_check_crl_fn SAVEDS ASM LIB_X509_STORE_CTX_get_check_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_check_crl(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_cert_crl_fn SAVEDS ASM LIB_X509_STORE_CTX_get_cert_crl(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_cert_crl(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_check_policy_fn SAVEDS ASM LIB_X509_STORE_CTX_get_check_policy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_check_policy(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_lookup_certs_fn SAVEDS ASM LIB_X509_STORE_CTX_get_lookup_certs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_lookup_certs(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_lookup_crls_fn SAVEDS ASM LIB_X509_STORE_CTX_get_lookup_crls(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_lookup_crls(ctx);
+}
+
+// ---
+
+X509_STORE_CTX_cleanup_fn SAVEDS ASM LIB_X509_STORE_CTX_get_cleanup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx))
+{
+	return X509_STORE_CTX_get_cleanup(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_CTX_set_error_depth(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(d0, int depth))
+{
+	X509_STORE_CTX_set_error_depth(ctx, depth);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_STORE_CTX_set_current_cert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(a1, X509 * x))
+{
+	X509_STORE_CTX_set_current_cert(ctx, x);
+}
+
+// ---
+
+int SAVEDS ASM LIB_NAME_CONSTRAINTS_check_CN(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(a1, NAME_CONSTRAINTS * nc))
+{
+	return NAME_CONSTRAINTS_check_CN(x, nc);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_set_proxy_flag(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+{
+	X509_set_proxy_flag(x);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_set_proxy_pathlen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x), REG(d0, long l))
+{
+	X509_set_proxy_pathlen(x, l);
+}
+
+// ---
+
+long SAVEDS ASM LIB_X509_get_proxy_pathlen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509 * x))
+{
+	return X509_get_proxy_pathlen(x);
+}
+
+// ---
+
+ASIdentifierChoice * SAVEDS ASM LIB_ASIdentifierChoice_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdentifierChoice_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_ASIdentifierChoice_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifierChoice * a))
+{
+	ASIdentifierChoice_free(a);
+}
+
+// ---
+
+ASIdentifierChoice * SAVEDS ASM LIB_d2i_ASIdentifierChoice(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifierChoice ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_ASIdentifierChoice(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_ASIdentifierChoice(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifierChoice * a), REG(a1, unsigned char ** out))
+{
+	return i2d_ASIdentifierChoice(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_ASIdentifierChoice_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdentifierChoice_it();
+}
+
+// ---
+
+ASIdentifiers * SAVEDS ASM LIB_ASIdentifiers_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdentifiers_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_ASIdentifiers_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifiers * a))
+{
+	ASIdentifiers_free(a);
+}
+
+// ---
+
+ASIdentifiers * SAVEDS ASM LIB_d2i_ASIdentifiers(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifiers ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_ASIdentifiers(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_ASIdentifiers(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdentifiers * a), REG(a1, unsigned char ** out))
+{
+	return i2d_ASIdentifiers(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_ASIdentifiers_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdentifiers_it();
+}
+
+// ---
+
+ASIdOrRange * SAVEDS ASM LIB_ASIdOrRange_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdOrRange_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_ASIdOrRange_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdOrRange * a))
+{
+	ASIdOrRange_free(a);
+}
+
+// ---
+
+ASIdOrRange * SAVEDS ASM LIB_d2i_ASIdOrRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdOrRange ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_ASIdOrRange(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_ASIdOrRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASIdOrRange * a), REG(a1, unsigned char ** out))
+{
+	return i2d_ASIdOrRange(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_ASIdOrRange_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASIdOrRange_it();
+}
+
+// ---
+
+ASRange * SAVEDS ASM LIB_ASRange_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASRange_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_ASRange_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASRange * a))
+{
+	ASRange_free(a);
+}
+
+// ---
+
+ASRange * SAVEDS ASM LIB_d2i_ASRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASRange ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_ASRange(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_ASRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASRange * a), REG(a1, unsigned char ** out))
+{
+	return i2d_ASRange(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_ASRange_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ASRange_it();
+}
+
+// ---
+
+IPAddressChoice * SAVEDS ASM LIB_IPAddressChoice_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressChoice_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_IPAddressChoice_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressChoice * a))
+{
+	IPAddressChoice_free(a);
+}
+
+// ---
+
+IPAddressChoice * SAVEDS ASM LIB_d2i_IPAddressChoice(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressChoice ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_IPAddressChoice(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_IPAddressChoice(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressChoice * a), REG(a1, unsigned char ** out))
+{
+	return i2d_IPAddressChoice(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_IPAddressChoice_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressChoice_it();
+}
+
+// ---
+
+IPAddressFamily * SAVEDS ASM LIB_IPAddressFamily_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressFamily_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_IPAddressFamily_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressFamily * a))
+{
+	IPAddressFamily_free(a);
+}
+
+// ---
+
+IPAddressFamily * SAVEDS ASM LIB_d2i_IPAddressFamily(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressFamily ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_IPAddressFamily(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_IPAddressFamily(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressFamily * a), REG(a1, unsigned char ** out))
+{
+	return i2d_IPAddressFamily(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_IPAddressFamily_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressFamily_it();
+}
+
+// ---
+
+IPAddressOrRange * SAVEDS ASM LIB_IPAddressOrRange_new(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressOrRange_new();
+}
+
+// ---
+
+void SAVEDS ASM LIB_IPAddressOrRange_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressOrRange * a))
+{
+	IPAddressOrRange_free(a);
+}
+
+// ---
+
+IPAddressOrRange * SAVEDS ASM LIB_d2i_IPAddressOrRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressOrRange ** a), REG(a1, const unsigned char ** in), REG(d0, long len))
+{
+	return d2i_IPAddressOrRange(a, in, len);
+}
+
+// ---
+
+int SAVEDS ASM LIB_i2d_IPAddressOrRange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, IPAddressOrRange * a), REG(a1, unsigned char ** out))
+{
+	return i2d_IPAddressOrRange(a, out);
+}
+
+// ---
+
+const ASN1_ITEM * SAVEDS ASM LIB_IPAddressOrRange_it(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return IPAddressOrRange_it();
 }
 
 // ---

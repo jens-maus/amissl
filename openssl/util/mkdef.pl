@@ -1,4 +1,11 @@
-#!/usr/local/bin/perl -w
+#! /usr/bin/env perl
+# Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
+#
+# Licensed under the OpenSSL license (the "License").  You may not use
+# this file except in compliance with the License.  You can obtain a copy
+# in the file LICENSE in the source distribution or at
+# https://www.openssl.org/source/license.html
+
 #
 # generate a .def file
 #
@@ -66,7 +73,7 @@ my $linux=0;
 my $safe_stack_def = 0;
 
 my @known_platforms = ( "__FreeBSD__", "PERL5",
-			"EXPORT_VAR_AS_FUNCTION", "ZLIB"
+			"EXPORT_VAR_AS_FUNCTION", "ZLIB", "_WIN32"
 			);
 my @known_ossl_platforms = ( "VMS", "WIN32", "WINNT", "OS2" );
 my @known_algorithms = ( "RC2", "RC4", "RC5", "IDEA", "DES", "BF",
@@ -122,6 +129,7 @@ my @known_algorithms = ( "RC2", "RC4", "RC5", "IDEA", "DES", "BF",
 			 "TS",
 			 # OCB mode
 			 "OCB",
+			 "CMAC",
                          # APPLINK (win build feature?)
                          "APPLINK"
                      );
@@ -239,7 +247,6 @@ $ssl.=" include/openssl/srtp.h";
 my $crypto ="include/openssl/crypto.h";
 $crypto.=" include/internal/o_dir.h";
 $crypto.=" include/internal/o_str.h";
-$crypto.=" include/internal/threads.h";
 $crypto.=" include/internal/err.h";
 $crypto.=" include/openssl/des.h" ; # unless $no_des;
 $crypto.=" include/openssl/idea.h" ; # unless $no_idea;
@@ -1114,6 +1121,7 @@ sub is_valid
 			if ($keyword eq "VMSNonVAX" && $VMSNonVAX) { return 1; }
 			if ($keyword eq "VMS" && $VMS) { return 1; }
 			if ($keyword eq "WIN32" && $W32) { return 1; }
+			if ($keyword eq "_WIN32" && $W32) { return 1; }
 			if ($keyword eq "WINNT" && $NT) { return 1; }
 			# Special platforms:
 			# EXPORT_VAR_AS_FUNCTION means that global variables
@@ -1317,11 +1325,11 @@ EOF
                                             print OUT $symline;
                                             $symvtextcount += length($symline) - 2;
 					} elsif($v) {
-						printf OUT "    %s%-39s @%-8d DATA\n",
-								($W32)?"":"_",$s2,$n;
+						printf OUT "    %s%-39s DATA\n",
+								($W32)?"":"_",$s2;
 					} else {
-						printf OUT "    %s%-39s @%d\n",
-								($W32)?"":"_",$s2,$n;
+						printf OUT "    %s%s\n",
+								($W32)?"":"_",$s2;
 					}
 				}
 			}

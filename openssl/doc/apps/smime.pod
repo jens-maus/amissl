@@ -14,6 +14,8 @@ B<openssl> B<smime>
 [B<-resign>]
 [B<-verify>]
 [B<-pk7out>]
+[B<-binary>]
+[B<-crlfeol>]
 [B<-[cipher]>]
 [B<-in file>]
 [B<-CAfile file>]
@@ -168,7 +170,7 @@ is S/MIME and it uses the multipart/signed MIME content type.
 
 this option adds plain text (text/plain) MIME headers to the supplied
 message if encrypting or signing. If decrypting or verifying it strips
-off text headers: if the decrypted or verified message is not of MIME 
+off text headers: if the decrypted or verified message is not of MIME
 type text/plain then an error occurs.
 
 =item B<-CAfile file>
@@ -199,7 +201,7 @@ default digest algorithm for the signing key will be used (usually SHA1).
 
 the encryption algorithm to use. For example DES  (56 bits) - B<-des>,
 triple DES (168 bits) - B<-des3>,
-EVP_get_cipherbyname() function) can also be used preceded by a dash, for 
+EVP_get_cipherbyname() function) can also be used preceded by a dash, for
 example B<-aes-128-cbc>. See L<B<enc>|enc(1)> for list of ciphers
 supported by your version of OpenSSL.
 
@@ -244,6 +246,11 @@ normally the input message is converted to "canonical" format which is
 effectively using CR and LF as end of line: as required by the S/MIME
 specification. When this option is present no translation occurs. This
 is useful when handling binary data which may not be in MIME format.
+
+=item B<-crlfeol>
+
+normally the output file uses a single B<LF> as end of line. When this
+option is present B<CRLF> is used instead.
 
 =item B<-nodetach>
 
@@ -294,7 +301,7 @@ all others.
 =item B<cert.pem...>
 
 one or more certificates of message recipients: used when encrypting
-a message. 
+a message.
 
 =item B<-to, -from, -subject>
 
@@ -391,29 +398,29 @@ the signers certificates.
 Create a cleartext signed message:
 
  openssl smime -sign -in message.txt -text -out mail.msg \
-	-signer mycert.pem
+        -signer mycert.pem
 
 Create an opaque signed message:
 
  openssl smime -sign -in message.txt -text -out mail.msg -nodetach \
-	-signer mycert.pem
+        -signer mycert.pem
 
 Create a signed message, include some additional certificates and
 read the private key from another file:
 
  openssl smime -sign -in in.txt -text -out mail.msg \
-	-signer mycert.pem -inkey mykey.pem -certfile mycerts.pem
+        -signer mycert.pem -inkey mykey.pem -certfile mycerts.pem
 
 Create a signed message with two signers:
 
  openssl smime -sign -in message.txt -text -out mail.msg \
-	-signer mycert.pem -signer othercert.pem
+        -signer mycert.pem -signer othercert.pem
 
 Send a signed message under Unix directly to sendmail, including headers:
 
  openssl smime -sign -in in.txt -text -signer mycert.pem \
-	-from steve@openssl.org -to someone@somewhere \
-	-subject "Signed message" | sendmail someone@somewhere
+        -from steve@openssl.org -to someone@somewhere \
+        -subject "Signed message" | sendmail someone@somewhere
 
 Verify a message and extract the signer's certificate if successful:
 
@@ -422,15 +429,15 @@ Verify a message and extract the signer's certificate if successful:
 Send encrypted mail using triple DES:
 
  openssl smime -encrypt -in in.txt -from steve@openssl.org \
-	-to someone@somewhere -subject "Encrypted message" \
-	-des3 user.pem -out mail.msg
+        -to someone@somewhere -subject "Encrypted message" \
+        -des3 user.pem -out mail.msg
 
 Sign and encrypt mail:
 
  openssl smime -sign -in ml.txt -signer my.pem -text \
-	| openssl smime -encrypt -out mail.msg \
-	-from steve@openssl.org -to someone@somewhere \
-	-subject "Signed and Encrypted message" -des3 user.pem
+        | openssl smime -encrypt -out mail.msg \
+        -from steve@openssl.org -to someone@somewhere \
+        -subject "Signed and Encrypted message" -des3 user.pem
 
 Note: the encryption command does not include the B<-text> option because the
 message being encrypted already has MIME headers.
@@ -447,7 +454,7 @@ it with:
  -----BEGIN PKCS7-----
  -----END PKCS7-----
 
-and using the command: 
+and using the command:
 
  openssl smime -verify -inform PEM -in signature.pem -content content.txt
 
@@ -492,5 +499,14 @@ The use of multiple B<-signer> options and the B<-resign> command were first
 added in OpenSSL 1.0.0
 
 The -no_alt_chains options was first added to OpenSSL 1.1.0.
+
+=head1 COPYRIGHT
+
+Copyright 2000-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+Licensed under the OpenSSL license (the "License").  You may not use
+this file except in compliance with the License.  You can obtain a copy
+in the file LICENSE in the source distribution or at
+L<https://www.openssl.org/source/license.html>.
 
 =cut

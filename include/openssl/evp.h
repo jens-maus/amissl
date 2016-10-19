@@ -1,61 +1,13 @@
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
 #include <proto/amissl.h>
 #endif
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #ifndef HEADER_ENVELOPE_H
@@ -551,22 +503,22 @@ void EVP_MD_CTX_free(EVP_MD_CTX *ctx);
 # define EVP_MD_CTX_create()     EVP_MD_CTX_new()
 # define EVP_MD_CTX_init(ctx)    EVP_MD_CTX_reset((ctx))
 # define EVP_MD_CTX_destroy(ctx) EVP_MD_CTX_free((ctx))
-/*__owur*/ int EVP_MD_CTX_copy_ex(EVP_MD_CTX *out, const EVP_MD_CTX *in);
+__owur int EVP_MD_CTX_copy_ex(EVP_MD_CTX *out, const EVP_MD_CTX *in);
 void EVP_MD_CTX_set_flags(EVP_MD_CTX *ctx, int flags);
 void EVP_MD_CTX_clear_flags(EVP_MD_CTX *ctx, int flags);
 int EVP_MD_CTX_test_flags(const EVP_MD_CTX *ctx, int flags);
-/*__owur*/ int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type,
+__owur int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type,
                                  ENGINE *impl);
-/*__owur*/ int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d,
+__owur int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d,
                                 size_t cnt);
-/*__owur*/ int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md,
+__owur int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md,
                                   unsigned int *s);
-/*__owur*/ int EVP_Digest(const void *data, size_t count,
+__owur int EVP_Digest(const void *data, size_t count,
                           unsigned char *md, unsigned int *size,
                           const EVP_MD *type, ENGINE *impl);
 
-/*__owur*/ int EVP_MD_CTX_copy(EVP_MD_CTX *out, const EVP_MD_CTX *in);
-/*__owur*/ int EVP_DigestInit(EVP_MD_CTX *ctx, const EVP_MD *type);
+__owur int EVP_MD_CTX_copy(EVP_MD_CTX *out, const EVP_MD_CTX *in);
+__owur int EVP_DigestInit(EVP_MD_CTX *ctx, const EVP_MD *type);
 __owur int EVP_DigestFinal(EVP_MD_CTX *ctx, unsigned char *md,
                            unsigned int *s);
 
@@ -659,10 +611,11 @@ __owur int EVP_SealFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 
 EVP_ENCODE_CTX *EVP_ENCODE_CTX_new(void);
 void EVP_ENCODE_CTX_free(EVP_ENCODE_CTX *ctx);
+int EVP_ENCODE_CTX_copy(EVP_ENCODE_CTX *dctx, EVP_ENCODE_CTX *sctx);
 int EVP_ENCODE_CTX_num(EVP_ENCODE_CTX *ctx);
 void EVP_EncodeInit(EVP_ENCODE_CTX *ctx);
-void EVP_EncodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
-                      const unsigned char *in, int inl);
+int EVP_EncodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
+                     const unsigned char *in, int inl);
 void EVP_EncodeFinal(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl);
 int EVP_EncodeBlock(unsigned char *t, const unsigned char *f, int n);
 
@@ -952,6 +905,7 @@ int EVP_PKEY_set_type(EVP_PKEY *pkey, int type);
 int EVP_PKEY_set_type_str(EVP_PKEY *pkey, const char *str, int len);
 int EVP_PKEY_assign(EVP_PKEY *pkey, int type, void *key);
 void *EVP_PKEY_get0(const EVP_PKEY *pkey);
+const unsigned char *EVP_PKEY_get0_hmac(const EVP_PKEY *pkey, size_t *len);
 
 # ifndef OPENSSL_NO_RSA
 struct rsa_st;
@@ -979,7 +933,7 @@ struct ec_key_st *EVP_PKEY_get1_EC_KEY(EVP_PKEY *pkey);
 # endif
 
 EVP_PKEY *EVP_PKEY_new(void);
-void EVP_PKEY_up_ref(EVP_PKEY *pkey);
+int EVP_PKEY_up_ref(EVP_PKEY *pkey);
 void EVP_PKEY_free(EVP_PKEY *pkey);
 
 EVP_PKEY *d2i_PublicKey(int type, EVP_PKEY **a, const unsigned char **pp,
@@ -1489,35 +1443,29 @@ void EVP_add_alg_module(void);
  * The following lines are auto generated by the script mkerr.pl. Any changes
  * made after this point may be overwritten when the script is next run.
  */
-void ERR_load_EVP_strings(void);
+
+int ERR_load_EVP_strings(void);
 
 /* Error codes for the EVP functions. */
 
 /* Function codes. */
 # define EVP_F_AESNI_INIT_KEY                             165
-# define EVP_F_AESNI_XTS_CIPHER                           176
 # define EVP_F_AES_INIT_KEY                               133
 # define EVP_F_AES_T4_INIT_KEY                            178
-# define EVP_F_AES_XTS                                    172
-# define EVP_F_AES_XTS_CIPHER                             175
 # define EVP_F_ALG_MODULE_INIT                            177
 # define EVP_F_CAMELLIA_INIT_KEY                          159
 # define EVP_F_CHACHA20_POLY1305_CTRL                     182
-# define EVP_F_CMAC_INIT                                  173
 # define EVP_F_CMLL_T4_INIT_KEY                           179
-# define EVP_F_D2I_PKEY                                   100
 # define EVP_F_DO_SIGVER_INIT                             161
-# define EVP_F_DSAPKEY2PKCS8                              134
-# define EVP_F_DSA_PKEY2PKCS8                             135
-# define EVP_F_ECDSA_PKEY2PKCS8                           129
-# define EVP_F_ECKEY_PKEY2PKCS8                           132
 # define EVP_F_EVP_CIPHERINIT_EX                          123
 # define EVP_F_EVP_CIPHER_CTX_COPY                        163
 # define EVP_F_EVP_CIPHER_CTX_CTRL                        124
 # define EVP_F_EVP_CIPHER_CTX_SET_KEY_LENGTH              122
 # define EVP_F_EVP_DECRYPTFINAL_EX                        101
+# define EVP_F_EVP_DECRYPTUPDATE                          166
 # define EVP_F_EVP_DIGESTINIT_EX                          128
 # define EVP_F_EVP_ENCRYPTFINAL_EX                        127
+# define EVP_F_EVP_ENCRYPTUPDATE                          167
 # define EVP_F_EVP_MD_CTX_COPY_EX                         110
 # define EVP_F_EVP_MD_SIZE                                162
 # define EVP_F_EVP_OPENINIT                               102
@@ -1542,8 +1490,8 @@ void ERR_load_EVP_strings(void);
 # define EVP_F_EVP_PKEY_ENCRYPT_OLD                       152
 # define EVP_F_EVP_PKEY_GET0_DH                           119
 # define EVP_F_EVP_PKEY_GET0_DSA                          120
-# define EVP_F_EVP_PKEY_GET0_ECDSA                        130
 # define EVP_F_EVP_PKEY_GET0_EC_KEY                       131
+# define EVP_F_EVP_PKEY_GET0_HMAC                         183
 # define EVP_F_EVP_PKEY_GET0_RSA                          121
 # define EVP_F_EVP_PKEY_KEYGEN                            146
 # define EVP_F_EVP_PKEY_KEYGEN_INIT                       147
@@ -1556,35 +1504,20 @@ void ERR_load_EVP_strings(void);
 # define EVP_F_EVP_PKEY_VERIFY_INIT                       143
 # define EVP_F_EVP_PKEY_VERIFY_RECOVER                    144
 # define EVP_F_EVP_PKEY_VERIFY_RECOVER_INIT               145
-# define EVP_F_EVP_RIJNDAEL                               126
 # define EVP_F_EVP_SIGNFINAL                              107
 # define EVP_F_EVP_VERIFYFINAL                            108
-# define EVP_F_FIPS_CIPHERINIT                            166
-# define EVP_F_FIPS_CIPHER_CTX_COPY                       170
-# define EVP_F_FIPS_CIPHER_CTX_CTRL                       167
-# define EVP_F_FIPS_CIPHER_CTX_SET_KEY_LENGTH             171
-# define EVP_F_FIPS_DIGESTINIT                            168
-# define EVP_F_FIPS_MD_CTX_COPY                           169
-# define EVP_F_HMAC_INIT_EX                               174
 # define EVP_F_INT_CTX_NEW                                157
 # define EVP_F_PKCS5_PBE_KEYIVGEN                         117
 # define EVP_F_PKCS5_V2_PBE_KEYIVGEN                      118
 # define EVP_F_PKCS5_V2_PBKDF2_KEYIVGEN                   164
 # define EVP_F_PKCS5_V2_SCRYPT_KEYIVGEN                   180
-# define EVP_F_PKCS8_SET_BROKEN                           112
 # define EVP_F_PKEY_SET_TYPE                              158
 # define EVP_F_RC2_MAGIC_TO_METH                          109
 # define EVP_F_RC5_CTRL                                   125
 
 /* Reason codes. */
-# define EVP_R_AES_IV_SETUP_FAILED                        162
 # define EVP_R_AES_KEY_SETUP_FAILED                       143
-# define EVP_R_ASN1_LIB                                   140
-# define EVP_R_BAD_BLOCK_LENGTH                           136
 # define EVP_R_BAD_DECRYPT                                100
-# define EVP_R_BAD_KEY_LENGTH                             137
-# define EVP_R_BN_DECODE_ERROR                            112
-# define EVP_R_BN_PUBKEY_ERROR                            113
 # define EVP_R_BUFFER_TOO_SMALL                           155
 # define EVP_R_CAMELLIA_KEY_SETUP_FAILED                  157
 # define EVP_R_CIPHER_PARAMETER_ERROR                     122
@@ -1596,15 +1529,12 @@ void ERR_load_EVP_strings(void);
 # define EVP_R_DECODE_ERROR                               114
 # define EVP_R_DIFFERENT_KEY_TYPES                        101
 # define EVP_R_DIFFERENT_PARAMETERS                       153
-# define EVP_R_DISABLED_FOR_FIPS                          163
-# define EVP_R_ENCODE_ERROR                               115
 # define EVP_R_ERROR_LOADING_SECTION                      165
 # define EVP_R_ERROR_SETTING_FIPS_MODE                    166
-# define EVP_R_EVP_PBE_CIPHERINIT_ERROR                   119
+# define EVP_R_EXPECTING_AN_HMAC_KEY                      174
 # define EVP_R_EXPECTING_AN_RSA_KEY                       127
 # define EVP_R_EXPECTING_A_DH_KEY                         128
 # define EVP_R_EXPECTING_A_DSA_KEY                        129
-# define EVP_R_EXPECTING_A_ECDSA_KEY                      141
 # define EVP_R_EXPECTING_A_EC_KEY                         142
 # define EVP_R_FIPS_MODE_NOT_SUPPORTED                    167
 # define EVP_R_ILLEGAL_SCRYPT_PARAMETERS                  171
@@ -1614,7 +1544,6 @@ void ERR_load_EVP_strings(void);
 # define EVP_R_INVALID_FIPS_MODE                          168
 # define EVP_R_INVALID_KEY_LENGTH                         130
 # define EVP_R_INVALID_OPERATION                          148
-# define EVP_R_IV_TOO_LARGE                               102
 # define EVP_R_KEYGEN_FAILURE                             120
 # define EVP_R_MEMORY_LIMIT_EXCEEDED                      172
 # define EVP_R_MESSAGE_DIGEST_IS_NULL                     159
@@ -1623,18 +1552,14 @@ void ERR_load_EVP_strings(void);
 # define EVP_R_NO_CIPHER_SET                              131
 # define EVP_R_NO_DEFAULT_DIGEST                          158
 # define EVP_R_NO_DIGEST_SET                              139
-# define EVP_R_NO_DSA_PARAMETERS                          116
 # define EVP_R_NO_KEY_SET                                 154
 # define EVP_R_NO_OPERATION_SET                           149
-# define EVP_R_NO_SIGN_FUNCTION_CONFIGURED                104
-# define EVP_R_NO_VERIFY_FUNCTION_CONFIGURED              105
 # define EVP_R_OPERATION_NOT_SUPPORTED_FOR_THIS_KEYTYPE   150
 # define EVP_R_OPERATON_NOT_INITIALIZED                   151
-# define EVP_R_PKCS8_UNKNOWN_BROKEN_TYPE                  117
+# define EVP_R_PARTIALLY_OVERLAPPING                      162
 # define EVP_R_PRIVATE_KEY_DECODE_ERROR                   145
 # define EVP_R_PRIVATE_KEY_ENCODE_ERROR                   146
 # define EVP_R_PUBLIC_KEY_NOT_RSA                         106
-# define EVP_R_TOO_LARGE                                  164
 # define EVP_R_UNKNOWN_CIPHER                             160
 # define EVP_R_UNKNOWN_DIGEST                             161
 # define EVP_R_UNKNOWN_OPTION                             169
@@ -1650,9 +1575,8 @@ void ERR_load_EVP_strings(void);
 # define EVP_R_UNSUPPORTED_SALT_TYPE                      126
 # define EVP_R_WRAP_MODE_NOT_ALLOWED                      170
 # define EVP_R_WRONG_FINAL_BLOCK_LENGTH                   109
-# define EVP_R_WRONG_PUBLIC_KEY_TYPE                      110
 
-#ifdef  __cplusplus
+# ifdef  __cplusplus
 }
-#endif
+# endif
 #endif

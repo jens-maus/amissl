@@ -250,7 +250,7 @@ BIO_s_file()()
 BIO_new_file(filename,mode)(a0,a1)
 BIO_new_fp_amiga(stream,close_flag)(a0,d0)
 BIO_new(type)(a0)
-BIO_set(a,type)(a0,a1)
+##bias 1740
 BIO_free(a)(a0)
 BIO_vfree(a)(a0)
 BIO_read(b,data,len)(a0,a1,d0)
@@ -492,6 +492,8 @@ CRYPTO_free(str,file,line)(a0,a1,d0)
 CRYPTO_realloc(addr,num,file,line)(a0,d0,a1,d1)
 ##bias 3474
 OPENSSL_cleanse(ptr,len)(a0,d0)
+##bias 3558
+ERR_load_CRYPTO_strings()()
 ##bias 3708
 ERR_load_DSO_strings()()
 EC_GFp_simple_method()()
@@ -556,9 +558,7 @@ ERR_add_error_vdata(num,args)(d0,a0)
 ERR_load_strings(lib,str)(d0,a0)
 ERR_unload_strings(lib,str)(d0,a0)
 ERR_load_ERR_strings()()
-##bias 4092
-err_free_strings_int()()
-ERR_remove_state(pid)(d0)
+##bias 4104
 ERR_get_state()()
 ERR_get_string_table()()
 ##bias 4128
@@ -734,18 +734,18 @@ HMAC_Update(ctx,data,len)(a0,a1,d0)
 HMAC_Final(ctx,md,len)(a0,a1,a2)
 HMAC(evp_md,key,key_len,d,n,md,md_len)(a0,a1,d0,a2,d1,a3,d2)
 ##bias 5550
-lh_new(h,c)(d0,d1)
-lh_free(lh)(a0)
-lh_insert(lh,data)(a0,a1)
-lh_delete(lh,data)(a0,a1)
-lh_retrieve(lh,data)(a0,a1)
-lh_doall(lh,func)(a0,d0)
-lh_doall_arg(lh,func,arg)(a0,d0,a1)
-lh_strhash(c)(a0)
-lh_num_items(lh)(a0)
-lh_stats_bio(lh,out)(a0,a1)
-lh_node_stats_bio(lh,out)(a0,a1)
-lh_node_usage_stats_bio(lh,out)(a0,a1)
+OPENSSL_LH_new(h,c)(a0,a1)
+OPENSSL_LH_free(lh)(a0)
+OPENSSL_LH_insert(lh,data)(a0,a1)
+OPENSSL_LH_delete(lh,data)(a0,a1)
+OPENSSL_LH_retrieve(lh,data)(a0,a1)
+OPENSSL_LH_doall(lh,func)(a0,a1)
+OPENSSL_LH_doall_arg(lh,func,arg)(a0,a1,a2)
+OPENSSL_LH_strhash(c)(a0)
+OPENSSL_LH_num_items(lh)(a0)
+OPENSSL_LH_stats_bio(lh,out)(a0,a1)
+OPENSSL_LH_node_stats_bio(lh,out)(a0,a1)
+OPENSSL_LH_node_usage_stats_bio(lh,out)(a0,a1)
 OBJ_NAME_init()()
 OBJ_NAME_new_index(hash_func,cmp_func,free_func)(a0,a1,a2)
 OBJ_NAME_get(name,type)(a0,d0)
@@ -1344,26 +1344,26 @@ SSL_CTX_set_tmp_dh_callback(ctx,dh)(a0,a1)
 SSL_set_tmp_dh_callback(ssl,dh)(a0,a1)
 SSL_COMP_add_compression_method(id,cm)(d0,a0)
 ERR_load_SSL_strings()()
-sk_num(a)(a0)
-sk_value(a,b)(a0,d0)
-sk_set(a,b,c)(a0,d0,a1)
-sk_new(cmp)(a0)
-sk_new_null()()
-sk_free(a)(a0)
-sk_pop_free(st,func)(a0,a1)
-sk_insert(sk,data,where)(a0,a1,d0)
-sk_delete(st,loc)(a0,d0)
-sk_delete_ptr(st,p)(a0,a1)
-sk_find(st,data)(a0,a1)
-sk_push(st,data)(a0,a1)
-sk_unshift(st,data)(a0,a1)
-sk_shift(st)(a0)
-sk_pop(st)(a0)
-sk_zero(st)(a0)
-sk_set_cmp_func(sk,c)(a0,a1)
-sk_dup(st)(a0)
-sk_sort(st)(a0)
-sk_is_sorted(st)(a0)
+OPENSSL_sk_num(a)(a0)
+OPENSSL_sk_value(a,b)(a0,d0)
+OPENSSL_sk_set(a,b,c)(a0,d0,a1)
+OPENSSL_sk_new(cmp)(a0)
+OPENSSL_sk_new_null()()
+OPENSSL_sk_free(a)(a0)
+OPENSSL_sk_pop_free(st,func)(a0,a1)
+OPENSSL_sk_insert(sk,data,where)(a0,a1,d0)
+OPENSSL_sk_delete(st,loc)(a0,d0)
+OPENSSL_sk_delete_ptr(st,p)(a0,a1)
+OPENSSL_sk_find(st,data)(a0,a1)
+OPENSSL_sk_push(st,data)(a0,a1)
+OPENSSL_sk_unshift(st,data)(a0,a1)
+OPENSSL_sk_shift(st)(a0)
+OPENSSL_sk_pop(st)(a0)
+OPENSSL_sk_zero(st)(a0)
+OPENSSL_sk_set_cmp_func(sk,c)(a0,a1)
+OPENSSL_sk_dup(st)(a0)
+OPENSSL_sk_sort(st)(a0)
+OPENSSL_sk_is_sorted(st)(a0)
 ##bias 9474
 TXT_DB_read(in,num)(a0,d0)
 TXT_DB_write(out,db)(a0,a1)
@@ -1800,7 +1800,6 @@ X509_OBJECT_idx_by_subject(h,type,name)(a0,d0,a1)
 X509_OBJECT_retrieve_by_subject(h,type,name)(a0,d0,a1)
 X509_OBJECT_retrieve_match(h,x)(a0,a1)
 X509_OBJECT_up_ref_count(a)(a0)
-X509_OBJECT_free_contents(a)(a0)
 X509_STORE_new()()
 X509_STORE_free(v)(a0)
 X509_STORE_set_flags(ctx,flags)(a0,d0)
@@ -1817,7 +1816,7 @@ X509_LOOKUP_hash_dir()()
 X509_LOOKUP_file()()
 X509_STORE_add_cert(ctx,x)(a0,a1)
 X509_STORE_add_crl(ctx,x)(a0,a1)
-X509_STORE_get_by_subject(vs,type,name,ret)(a0,d0,a1,a2)
+X509_STORE_CTX_get_by_subject(vs,type,name,ret)(a0,d0,a1,a2)
 X509_LOOKUP_ctrl(ctx,cmd,argc,argl,ret)(a0,d0,a1,d1,a2)
 X509_load_cert_file(ctx,file,type)(a0,a1,d0)
 X509_load_crl_file(ctx,file,type)(a0,a1,d0)
@@ -1832,7 +1831,7 @@ X509_LOOKUP_by_alias(ctx,type,str,len,ret)(a0,d0,a1,d1,a2)
 X509_LOOKUP_shutdown(ctx)(a0)
 X509_STORE_load_locations(ctx,file,dir)(a0,a1,a2)
 X509_STORE_set_default_paths(ctx)(a0)
-##bias 12300
+##bias 12294
 X509_STORE_CTX_set_ex_data(ctx,idx,data)(a0,d0,a1)
 X509_STORE_CTX_get_ex_data(ctx,idx)(a0,d0)
 X509_STORE_CTX_get_error(ctx)(a0)
@@ -2037,9 +2036,9 @@ AES_cbc_encrypt(in,out,length,key,ivec,enc)(a0,a1,d0,a2,a3,d1)
 AES_cfb128_encrypt(in,out,length,key,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
 AES_cfb1_encrypt(in,out,length,key,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
 AES_cfb8_encrypt(in,out,length,key,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
-##bias 13530
+##bias 13524
 AES_ofb128_encrypt(in,out,length,key,ivec,num)(a0,a1,d0,a2,a3,d1)
-##bias 13542
+##bias 13536
 BF_set_key(key,len,data)(a0,d0,a1)
 BF_encrypt(data,key)(a0,a1)
 BF_decrypt(data,key)(a0,a1)
@@ -2056,7 +2055,6 @@ CAST_cbc_encrypt(in,out,length,ks,iv,enc)(a0,a1,d0,a2,a3,d1)
 CAST_cfb64_encrypt(in,out,length,schedule,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
 CAST_ofb64_encrypt(in,out,length,schedule,ivec,num)(a0,a1,d0,a2,a3,d1)
 _shadow_DES_check_key()()
-_shadow_DES_rw_mode()()
 DES_options()()
 DES_ecb3_encrypt(input,output,ks1,ks2,ks3,enc)(a0,a1,a2,a3,d0,d1)
 DES_cbc_cksum(input,output,length,schedule,ivec)(a0,a1,d0,a2,a3)
@@ -2070,13 +2068,11 @@ DES_encrypt2(data,ks,enc)(a0,a1,d0)
 DES_encrypt3(data,ks1,ks2,ks3)(a0,a1,a2,a3)
 DES_decrypt3(data,ks1,ks2,ks3)(a0,a1,a2,a3)
 DES_ede3_cbc_encrypt(input,output,length,ks1,ks2,ks3,ivec,enc)(a0,a1,d0,a2,a3,d1,d2,d3)
-##bias 13728
+##bias 13716
 DES_ede3_cfb64_encrypt(in,out,length,ks1,ks2,ks3,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2,d3,d4)
 DES_ede3_cfb_encrypt(in,out,numbits,length,ks1,ks2,ks3,ivec,enc)(a0,a1,d0,d1,a2,a3,d2,d3,d4)
 DES_ede3_ofb64_encrypt(in,out,length,ks1,ks2,ks3,ivec,num)(a0,a1,d0,a2,a3,d1,d2,d3)
-##bias 13752
-DES_enc_read(fd,buf,len,sched,iv)(d0,a0,d1,a1,a2)
-DES_enc_write(fd,buf,len,sched,iv)(d0,a0,d1,a1,a2)
+##bias 13740
 DES_fcrypt(buf,salt,ret)(a0,a1,a2)
 DES_crypt(buf,salt)(a0,a1)
 DES_ofb_encrypt(in,out,numbits,length,schedule,ivec)(a0,a1,d0,d1,a2,a3)
@@ -2094,9 +2090,7 @@ DES_string_to_key(str,key)(a0,a1)
 DES_string_to_2keys(str,key1,key2)(a0,a1,a2)
 DES_cfb64_encrypt(in,out,length,schedule,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
 DES_ofb64_encrypt(in,out,length,schedule,ivec,num)(a0,a1,d0,a2,a3,d1)
-DES_read_password(key,prompt,verify)(a0,a1,d0)
-DES_read_2passwords(key1,key2,prompt,verify)(a0,a1,a2,d0)
-##bias 14100
+##bias 14064
 DH_OpenSSL()()
 DH_set_default_method(meth)(a0)
 DH_get_default_method()()
@@ -2106,7 +2100,7 @@ DH_new()()
 DH_free(dh)(a0)
 DH_up_ref(dh)(a0)
 DH_size(dh)(a0)
-##bias 14160
+##bias 14124
 DH_set_ex_data(d,idx,arg)(a0,d0,a1)
 DH_get_ex_data(d,idx)(a0,d0)
 DH_generate_parameters(prime_len,generator,callback,cb_arg)(d0,d1,a0,a1)
@@ -2135,7 +2129,7 @@ DSA_size(a)(a0)
 DSA_sign_setup(dsa,ctx_in,kinvp,rp)(a0,a1,a2,a3)
 DSA_sign(type,dgst,dlen,sig,siglen,dsa)(d0,a0,d1,a1,a2,a3)
 DSA_verify(type,dgst,dgst_len,sigbuf,siglen,dsa)(d0,a0,d1,a1,d2,a2)
-##bias 14334
+##bias 14298
 DSA_set_ex_data(d,idx,arg)(a0,d0,a1)
 DSA_get_ex_data(d,idx)(a0,d0)
 d2i_DSAPublicKey(a,pp,length)(a0,a1,d0)
@@ -2215,8 +2209,7 @@ RSA_set_default_method(meth)(a0)
 RSA_get_default_method()()
 RSA_get_method(rsa)(a0)
 RSA_set_method(rsa,meth)(a0,a1)
-RSA_memory_lock(r)(a0)
-##bias 14820
+##bias 14778
 RSA_null_method()()
 d2i_RSAPublicKey(a,in,len)(a0,a1,d0)
 i2d_RSAPublicKey(a,out)(a0,a1)
@@ -2225,7 +2218,7 @@ d2i_RSAPrivateKey(a,in,len)(a0,a1,d0)
 i2d_RSAPrivateKey(a,out)(a0,a1)
 RSAPrivateKey_it()()
 RSA_print(bp,r,offset)(a0,a1,d0)
-##bias 14892
+##bias 14850
 RSA_sign(type,m,m_length,sigret,siglen,rsa)(d0,a0,d1,a1,a2,a3)
 RSA_verify(type,m,m_length,sigbuf,siglen,rsa)(d0,a0,d1,a1,d2,a2)
 RSA_sign_ASN1_OCTET_STRING(type,m,m_length,sigret,siglen,rsa)(d0,a0,d1,a1,a2,a3)
@@ -2242,19 +2235,19 @@ RSA_padding_add_SSLv23(to,tlen,f,fl)(a0,d0,a1,d1)
 RSA_padding_check_SSLv23(to,tlen,f,fl,rsa_len)(a0,d0,a1,d1,d2)
 RSA_padding_add_none(to,tlen,f,fl)(a0,d0,a1,d1)
 RSA_padding_check_none(to,tlen,f,fl,rsa_len)(a0,d0,a1,d1,d2)
-##bias 14994
+##bias 14952
 RSA_set_ex_data(r,idx,arg)(a0,d0,a1)
 RSA_get_ex_data(r,idx)(a0,d0)
 RSAPublicKey_dup(rsa)(a0)
 RSAPrivateKey_dup(rsa)(a0)
 ERR_load_RSA_strings()()
-##bias 15054
+##bias 15012
 SHA1_Init(c)(a0)
 SHA1_Update(c,data,len)(a0,a1,d0)
 SHA1_Final(md,c)(a0,a1)
 SHA1(d,n,md)(a0,d0,a1)
 SHA1_Transform(c,data)(a0,a1)
-##bias 15096
+##bias 15054
 HMAC_CTX_set_flags(ctx,flags)(a0,d0)
 X509_check_ca(x)(a0)
 PROXY_POLICY_new()()
@@ -2268,7 +2261,7 @@ d2i_PROXY_CERT_INFO_EXTENSION(a,in,len)(a0,a1,d0)
 i2d_PROXY_CERT_INFO_EXTENSION(a,out)(a0,a1)
 PROXY_CERT_INFO_EXTENSION_it()()
 FIPS_mode()()
-##bias 15180
+##bias 15138
 BN_mod_exp_mont_consttime(rr,a,p,m,ctx,in_mont)(a0,a1,a2,a3,d0,d1)
 BN_MONT_CTX_set_locked(pmont,lock,mod,ctx)(a0,a1,a2,a3)
 PKCS1_MGF1(mask,len,seed,seedlen,dgst)(a0,d0,a1,d1,a2)
@@ -2303,9 +2296,9 @@ EC_POINT_get_affine_coordinates_GF2m(group,point,x,y,ctx)(a0,a1,a2,a3,d0)
 EC_get_builtin_curves(r,nitems)(a0,d0)
 EC_GROUP_new_by_curve_name(nid)(d0)
 EC_GROUP_check(group,ctx)(a0,a1)
-##bias 15390
+##bias 15348
 DSA_generate_parameters_ex(dsa,bits,seed,seed_len,counter_ret,h_ret,cb)(a0,d0,a1,d1,a2,a3,d2)
-##bias 15402
+##bias 15360
 EC_KEY_new_by_curve_name(nid)(d0)
 EC_KEY_generate_key(key)(a0)
 EC_KEY_free(key)(a0)
@@ -2382,7 +2375,7 @@ SSL_set_SSL_CTX(ssl,ctx)(a0,a1)
 SSL_CTX_set_cookie_generate_cb(ctx,app_gen_cookie_cb)(a0,a1)
 SSL_CTX_set_cookie_verify_cb(ctx,app_verify_cookie_cb)(a0,a1)
 SSL_CTX_set_info_callback(ctx,cb)(a0,a1)
-##bias 15864
+##bias 15822
 BIO_new_dgram(fd,close_flag)(d0,d1)
 SSL_get_servername_type(s)(a0)
 SSL_get_current_compression(s)(a0)
@@ -2390,7 +2383,7 @@ SSL_get_current_expansion(s)(a0)
 SSL_COMP_get_name(comp)(a0)
 ENGINE_by_id(id)(a0)
 SSL_CTX_set_client_cert_engine(ctx,e)(a0,a1)
-##bias 15918
+##bias 15876
 SHA256(d,n,md)(a0,d0,a1)
 SHA512(d,n,md)(a0,d0,a1)
 AES_ige_encrypt(in,out,length,key,ivec,enc)(a0,a1,d0,a2,a3,d1)
@@ -2438,7 +2431,7 @@ SSL_set_session_ticket_ext_cb(s,cb,arg)(a0,a1,a2)
 SSL_set1_param(ssl,vpm)(a0,a1)
 SSL_CTX_set1_param(ctx,vpm)(a0,a1)
 SSL_renegotiate_abbreviated(s)(a0)
-##bias 16218
+##bias 16176
 SSL_CTX_set_srp_client_pwd_callback(ctx,cb)(a0,a1)
 SSL_get_srp_g(s)(a0)
 SSL_CTX_set_srp_username_callback(ctx,cb)(a0,a1)
@@ -2454,18 +2447,18 @@ SSL_CTX_set_srp_cb_arg(ctx,arg)(a0,a1)
 SSL_CTX_set_srp_username(ctx,name)(a0,a1)
 SSL_CTX_SRP_CTX_init(ctx)(a0)
 SRP_Calc_A_param(s)(a0)
-##bias 16314
+##bias 16272
 SSL_CTX_SRP_CTX_free(ctx)(a0)
-##bias 16326
+##bias 16284
 SSL_srp_server_param_with_username(s,ad)(a0,a1)
 SSL_SRP_CTX_free(ctx)(a0)
 SSL_set_debug(s,debug)(a0,d0)
 SSL_SESSION_get0_peer(s)(a0)
-##bias 16356
+##bias 16314
 SSL_SESSION_set1_id_context(s,sid_ctx,sid_ctx_len)(a0,a1,d0)
-##bias 16380
+##bias 16338
 SSL_CIPHER_get_id(c)(a0)
-##bias 16392
+##bias 16350
 SSL_export_keying_material(s,out,olen,label,llen,p,plen,use_context)(a0,a1,d0,a2,d1,a3,d2,d3)
 SSL_set_tlsext_use_srtp(ctx,profiles)(a0,a1)
 SSL_CTX_set_next_protos_advertised_cb(s,cb,arg)(a0,a1,a2)
@@ -2476,9 +2469,9 @@ SSL_select_next_proto(out,outlen,in,inlen,client,client_len)(a0,a1,a2,d0,a3,d1)
 SSL_get_srtp_profiles(s)(a0)
 SSL_CTX_set_next_proto_select_cb(s,cb,arg)(a0,a1,a2)
 SSL_SESSION_get_compress_id(s)(a0)
-##bias 16464
+##bias 16422
 SSL_SRP_CTX_init(s)(a0)
-##bias 16800
+##bias 16758
 ERR_load_ENGINE_strings()()
 ENGINE_set_DSA(e,dsa_meth)(a0,a1)
 ENGINE_get_finish_function(e)(a0)
@@ -2503,13 +2496,13 @@ ENGINE_set_ctrl_function(e,ctrl_f)(a0,a1)
 ENGINE_unregister_ciphers(e)(a0)
 ENGINE_unregister_RSA(e)(a0)
 ENGINE_register_all_RAND()()
-##bias 16950
+##bias 16908
 ENGINE_get_digest_engine(nid)(d0)
 ENGINE_register_DH(e)(a0)
 ENGINE_register_RAND(e)(a0)
-##bias 16974
+##bias 16932
 ENGINE_register_ciphers(e)(a0)
-##bias 16992
+##bias 16950
 ENGINE_get_cmd_defns(e)(a0)
 ENGINE_set_load_privkey_function(e,loadpriv_f)(a0,a1)
 ENGINE_set_default_digests(e)(a0)
@@ -2525,9 +2518,9 @@ ENGINE_set_load_pubkey_function(e,loadpub_f)(a0,a1)
 ENGINE_get_load_pubkey_function(e)(a0)
 ENGINE_register_all_RSA()()
 ENGINE_unregister_digests(e)(a0)
-##bias 17088
+##bias 17046
 ENGINE_get_ex_data(e,idx)(a0,d0)
-##bias 17100
+##bias 17058
 ENGINE_set_cmd_defns(e,defns)(a0,a1)
 ENGINE_register_digests(e)(a0)
 ENGINE_register_all_DH()()
@@ -2539,42 +2532,42 @@ ENGINE_register_complete(e)(a0)
 ENGINE_set_ex_data(e,idx,arg)(a0,d0,a1)
 ENGINE_set_destroy_function(e,destroy_f)(a0,a1)
 ENGINE_get_cipher_engine(nid)(d0)
-##bias 17178
+##bias 17136
 ENGINE_set_default_ciphers(e)(a0)
 ENGINE_unregister_RAND(e)(a0)
-##bias 17196
+##bias 17154
 ENGINE_set_table_flags(flags)(d0)
-##bias 17208
+##bias 17166
 ENGINE_get_destroy_function(e)(a0)
-##bias 17226
+##bias 17184
 ENGINE_get_table_flags()()
 ENGINE_set_flags(e,flags)(a0,d0)
 ENGINE_get_load_privkey_function(e)(a0)
 ENGINE_set_default_string(e,def_list)(a0,a1)
 ENGINE_add_conf_module()()
-##bias 17274
+##bias 17232
 ENGINE_up_ref(e)(a0)
-##bias 17298
+##bias 17256
 EC_GROUP_get_trinomial_basis(eg,k)(a0,a1)
-##bias 17316
+##bias 17274
 SHA512_Update(c,data,len)(a0,a1,d0)
 i2d_ECPrivateKey(key,out)(a0,a1)
 BN_GF2m_mod_exp_arr(r,a,b,p,ctx)(a0,a1,a2,a3,d0)
 BN_GF2m_mod_mul_arr(r,a,b,p,ctx)(a0,a1,a2,a3,d0)
 o2i_ECPublicKey(key,in,len)(a0,a1,d0)
 EC_KEY_copy(dst,src)(a0,a1)
-##bias 17358
+##bias 17316
 EC_GROUP_check_discriminant(group,ctx)(a0,a1)
 i2o_ECPublicKey(key,out)(a0,a1)
 EC_GROUP_new_curve_GF2m(p,a,b,ctx)(a0,a1,a2,a3)
-##bias 17382
+##bias 17340
 EVP_PKEY_get1_EC_KEY(pkey)(a0)
-##bias 17394
+##bias 17352
 EC_KEY_get_conv_form(key)(a0)
 ENGINE_get_static_state()()
 ECDSA_SIG_new()()
 EC_POINT_bn2point(g,b,p,ctx)(a0,a1,a2,a3)
-##bias 17424
+##bias 17382
 ECDSA_sign_ex(type,dgst,dgstlen,sig,siglen,kinv,rp,eckey)(d0,a0,d1,a1,a2,a3,d2,d3)
 EC_GROUP_get_pentanomial_basis(ecgroup,k1,k2,k3)(a0,a1,a2,a3)
 ECDSA_sign_setup(eckey,ctx,kinv,rp)(a0,a1,a2,a3)
@@ -2582,79 +2575,79 @@ BN_GF2m_mod_solve_quad_arr(r,a,p,ctx)(a0,a1,a2,a3)
 EC_KEY_up_ref(key)(a0)
 d2i_EC_PUBKEY(a,pp,length)(a0,a1,a2)
 EC_GROUP_have_precompute_mult(group)(a0)
-##bias 17472
+##bias 17430
 BN_GF2m_mod_arr(r,a,p)(a0,a1,a2)
-##bias 17496
+##bias 17454
 EC_POINT_dup(src,group)(a0,a1)
 EVP_PKEY_set1_EC_KEY(pkey,key)(a0,a1)
 BN_GF2m_mod_sqrt_arr(r,a,p,ctx)(a0,a1,a2,a3)
-##bias 17520
+##bias 17478
 EC_KEY_set_private_key(key,prv)(a0,a1)
 BN_GF2m_poly2arr(a,p,max)(a0,a1,d0)
 i2d_ECParameters(key,out)(a0,a1)
-##bias 17544
+##bias 17502
 SHA256_Init(c)(a0)
-##bias 17556
+##bias 17514
 SHA224(d,n,md)(a0,d0,a1)
-##bias 17568
+##bias 17526
 EC_GROUP_get_seed_len(ecgroup)(a0)
 i2d_EC_PUBKEY(a,pp)(a0,a1)
-##bias 17586
+##bias 17544
 EC_GFp_nist_method()()
-##bias 17598
+##bias 17556
 EC_GROUP_set_curve_name(group,nid)(a0,d0)
 BN_GF2m_mod_sqr_arr(r,a,p,ctx)(a0,a1,a2,a3)
 BIO_s_datagram()()
-##bias 17628
+##bias 17586
 SHA384_Update(c,data,len)(a0,a1,d0)
-##bias 17640
+##bias 17598
 SHA224_Final(md,c)(a0,a1)
 SHA224_Update(c,data,len)(a0,a1,d0)
 d2i_ECPrivateKey(key,in,len)(a0,a1,d0)
-##bias 17664
+##bias 17622
 SHA512_Final(md,c)(a0,a1)
 EC_GROUP_get_asn1_flag(group)(a0)
-##bias 17682
+##bias 17640
 EC_GROUP_get0_seed(x)(a0)
 BN_GF2m_mod_div_arr(r,a,b,p,ctx)(a0,a1,a2,a3,d0)
-##bias 17730
+##bias 17688
 EC_KEY_get_enc_flags(key)(a0)
-##bias 17742
+##bias 17700
 EC_POINT_set_compressed_coordinates_GF2m(group,p,x,y_bit,ctx)(a0,a1,a2,d0,a3)
 EC_GROUP_cmp(a,b,ctx)(a0,a1,a2)
 SHA224_Init(c)(a0)
-##bias 17766
+##bias 17724
 SHA512_Init(c)(a0)
-##bias 17778
+##bias 17736
 EC_GROUP_get_basis_type(group)(a0)
-##bias 17808
+##bias 17766
 EC_GROUP_dup(src)(a0)
-##bias 17820
+##bias 17778
 SHA256_Transform(c,data)(a0,a1)
 EC_KEY_set_enc_flags(eckey,flags)(a0,d0)
 EC_POINT_point2hex(group,point,form,ctx)(a0,a1,d0,a2)
-##bias 17844
+##bias 17802
 ECDSA_do_sign_ex(dgst,dgstlen,kinv,rp,eckey)(a0,d0,a1,a2,a3)
-##bias 17856
+##bias 17814
 SHA512_Transform(c,data)(a0,a1)
-##bias 17868
+##bias 17826
 EC_KEY_set_public_key(key,pub)(a0,a1)
-##bias 17892
+##bias 17850
 EC_GROUP_get_curve_name(group)(a0)
-##bias 17904
+##bias 17862
 SHA256_Final(md,c)(a0,a1)
-##bias 17934
+##bias 17892
 d2i_ECParameters(key,in,len)(a0,a1,d0)
 SHA384_Init(c)(a0)
-##bias 17952
+##bias 17910
 SHA384_Final(md,c)(a0,a1)
-##bias 17964
+##bias 17922
 SHA384(d,n,md)(a0,d0,a1)
-##bias 17982
+##bias 17940
 EC_POINT_hex2point(group,c,p,ctx)(a0,a1,a2,a3)
 SHA256_Update(c,data,len)(a0,a1,d0)
 BN_GF2m_mod_inv_arr(r,b,p,ctx)(a0,a1,a2,a3)
-##bias 18012
+##bias 17970
 DH_check_pub_key(dh,pub_key,codes)(a0,a1,a2)
 Camellia_cbc_encrypt(in,out,length,key,ivec,enc)(a0,a1,d0,a2,a3,d1)
 Camellia_cfb128_encrypt(in,out,length,key,ivec,num,enc)(a0,a1,d0,a2,a3,d1,d2)
@@ -2699,7 +2692,7 @@ EVP_seed_cfb128()()
 AES_unwrap_key(key,iv,out,in,inlen)(a0,a1,a2,a3,d0)
 AES_wrap_key(key,iv,out,in,inlen)(a0,a1,a2,a3,d0)
 CMS_ReceiptRequest_free(rr)(a0)
-##bias 18282
+##bias 18240
 CMS_add0_CertificateChoices(cms)(a0)
 CMS_unsigned_add1_attr_by_OBJ(si,obj,type,bytes,len)(a0,a1,d0,a2,d1)
 ERR_load_CMS_strings()()
@@ -2741,7 +2734,7 @@ CMS_decrypt(cms,pkey,cert,dcont,out,flags)(a0,a1,a2,a3,d0,d1)
 CMS_unsigned_delete_attr(si,loc)(a0,d0)
 CMS_unsigned_get_attr_count(si)(a0)
 CMS_add_smimecap(si,algs)(a0,a1)
-##bias 18534
+##bias 18492
 CMS_signed_get_attr_by_OBJ(si,obj,lastpos)(a0,a1,d0)
 d2i_CMS_ContentInfo(a,in,len)(a0,a1,a2)
 CMS_add_standard_smimecap(smcap)(a0)
@@ -2803,7 +2796,7 @@ CMS_RecipientInfo_set0_pkey(ri,pkey)(a0,a1)
 ENGINE_set_load_ssl_client_cert_function(e,loadssl_f)(a0,a1)
 ENGINE_get_ssl_client_cert_function(e)(a0)
 ENGINE_load_ssl_client_cert(e,s,ca_dn,pcert,ppkey,pother,ui_method,callback_data)(a0,a1,a2,a3,d0,d1,d2,d3)
-##bias 18906
+##bias 18864
 ENGINE_register_pkey_meths(e)(a0)
 ENGINE_get_pkey_asn1_meth_engine(nid)(d0)
 WHIRLPOOL_Init(c)(a0)
@@ -2861,20 +2854,20 @@ EVP_aes_128_ctr()()
 EVP_aes_256_ctr()()
 EC_KEY_get_flags(key)(a0)
 EVP_aes_128_xts()()
-##bias 19254
+##bias 19212
 EVP_aes_256_xts()()
 EVP_aes_128_gcm()()
 EC_KEY_clear_flags(key,flags)(a0,d0)
 EC_KEY_set_flags(key,flags)(a0,d0)
 EVP_aes_256_ccm()()
-##bias 19290
+##bias 19248
 EVP_aes_128_ccm()()
 EVP_aes_192_gcm()()
 EVP_aes_256_gcm()()
 EVP_aes_192_ccm()()
 EVP_rc4_hmac_md5()()
 EVP_aes_128_cbc_hmac_sha1()()
-##bias 19338
+##bias 19296
 EVP_aes_256_cbc_hmac_sha1()()
 CMS_add0_recipient_password(cms,iter,wrap_nid,pbe_nid,pass,passlen,kekciph)(a0,d0,d1,d2,a1,d3,a2)
 CMS_decrypt_set1_password(cms,pass,passlen)(a0,a1,d0)
@@ -2885,7 +2878,7 @@ X509_signature_dump(bp,sig,indent)(a0,a1,d0)
 X509_sign_ctx(x,ctx)(a0,a1)
 ASN1_item_sign_ctx(it,algor1,algor2,signature,asn,ctx)(a0,a1,a2,a3,d0,d1)
 OPENSSL_cpuid_setup()()
-ERR_remove_thread_state()()
+##bias 19362
 X509_STORE_CTX_set0_crls(ctx,sk)(a0,a1)
 SSL_SESSION_get_id(s,len)(a0,a1)
 SSL_CTX_sess_set_new_cb(ctx,new_session_cb)(a0,a1)
@@ -2898,9 +2891,9 @@ SSL_CTX_sess_get_new_cb(ctx)(a0)
 SSL_CTX_get_client_cert_cb(ctx)(a0)
 SSL_CTX_sess_get_remove_cb(ctx)(a0)
 PEM_write_bio_SSL_SESSION(bp,x)(a0,a1)
-##bias 19482
+##bias 19440
 PEM_read_bio_SSL_SESSION(bp,x,cb,u)(a0,a1,a2,a3)
-##bias 19716
+##bias 19674
 FIPS_mode_set(r)(d0)
 BN_X931_generate_Xpq(Xp,Xq,nbits,ctx)(a0,a1,d0,a2)
 BN_get0_nist_prime_384()()
@@ -2914,45 +2907,45 @@ GENERAL_SUBTREE_free(sub)(a0)
 PKCS12_add_safe(psafes,bags,safe_nid,iter,pass)(a0,a1,d0,d1,a2)
 BN_get0_nist_prime_192()()
 X509_keyid_get0(x,len)(a0,a1)
-##bias 19800
+##bias 19758
 X509_policy_node_get0_parent(node)(a0)
 a2i_IPADDRESS(ipasc)(a0)
 X509_STORE_CTX_set_depth(ctx,depth)(a0,d0)
 X509_VERIFY_PARAM_inherit(to,from)(a0,a1)
-##bias 19830
+##bias 19788
 X509_VERIFY_PARAM_set_depth(param,depth)(a0,d0)
 EVP_PKEY_add1_attr_by_txt(key,attrname,type,bytes,len)(a0,a1,d0,a2,d1)
 BN_BLINDING_set_flags(b,l)(a0,d0)
 X509_VERIFY_PARAM_set1_policies(param,policies)(a0,a1)
 X509_VERIFY_PARAM_set1_name(param,name)(a0,a1)
 POLICY_MAPPING_free(pmap)(a0)
-##bias 19878
+##bias 19836
 EVP_PKEY_cmp(a,b)(a0,a1)
 X509_policy_level_node_count(level)(a0)
 EVP_PKEY_get_attr(key,loc)(a0,d0)
 GENERAL_SUBTREE_new()()
 X509_policy_node_get0_qualifiers(node)(a0)
-##bias 19920
+##bias 19878
 X509_policy_node_get0_policy(node)(a0)
 PKCS12_add_safes(safes,p7_nid)(a0,d0)
 BN_BLINDING_convert_ex(n,r,b,ctx)(a0,a1,a2,a3)
 X509_policy_tree_free(tree)(a0)
-OPENSSL_ia32cap_loc()()
+##bias 19908
 BN_get0_nist_prime_224()()
 BN_GENCB_call(cb,a,b)(a0,d0,d1)
 NAME_CONSTRAINTS_new()()
 ECParameters_print(bp,key)(a0,a1)
-##bias 19980
+##bias 19938
 X509_VERIFY_PARAM_set_trust(param,trust)(a0,d0)
 EVP_PKEY_get_attr_count(key)(a0)
 X509_STORE_CTX_get0_param(ctx)(a0)
-##bias 20004
+##bias 19962
 X509_STORE_set_depth(store,depth)(a0,d0)
-##bias 20016
+##bias 19974
 ASN1_put_eoc(pp)(a0)
 X509_VERIFY_PARAM_table_cleanup()()
 RSA_setup_blinding(rsa,ctx)(a0,a1)
-sk_find_ex(st,data)(a0,a1)
+OPENSSL_sk_find_ex(st,data)(a0,a1)
 POLICY_CONSTRAINTS_new()()
 X509_VERIFY_PARAM_get_depth(param)(a0)
 ASN1_item_ndef_i2d(val,out,it)(a0,a1,a2)
@@ -2961,7 +2954,7 @@ X509_policy_level_get0_node(level,i)(a0,d0)
 i2d_PKCS7_NDEF(a,out)(a0,a1)
 ASN1_generate_v3(str,cnf)(a0,a1)
 X509_policy_tree_level_count(tree)(a0)
-##bias 20094
+##bias 20052
 BN_nist_mod_224(r,a,p,ctx)(a0,a1,a2,a3)
 BIO_dgram_non_fatal_error(error)(d0)
 v2i_ASN1_BIT_STRING(method,ctx,nval)(a0,a1,a2)
@@ -2975,18 +2968,18 @@ EVP_PKEY_delete_attr(key,loc)(a0,d0)
 BN_get0_nist_prime_256()()
 i2v_ASN1_BIT_STRING(method,bits,extlist)(a0,a1,a2)
 BN_nist_mod_384(r,a,p,ctx)(a0,a1,a2,a3)
-##bias 20184
+##bias 20142
 EVP_PKEY_get_attr_by_OBJ(key,obj,lastpos)(a0,a1,d0)
 X509_VERIFY_PARAM_lookup(name)(a0)
-##bias 20202
+##bias 20160
 X509V3_NAME_from_section(nm,dn_sk,chtype)(a0,a1,a2)
 EVP_PKEY_add1_attr(key,attr)(a0,a1)
-##bias 20220
+##bias 20178
 BIO_dump_indent_cb(cb,u,s,len,indent)(a0,a1,a2,d0,d1)
-##bias 20238
+##bias 20196
 BN_nist_mod_256(r,a,p,ctx)(a0,a1,a2,a3)
 X509_VERIFY_PARAM_add0_table(param)(a0)
-##bias 20256
+##bias 20214
 BN_BLINDING_create_param(b,e,m,ctx,bn_mod_exp,m_ctx)(a0,a1,a2,a3,d0,d1)
 BN_get0_nist_prime_521()()
 BN_is_prime_fasttest_ex(p,nchecks,ctx,do_trial_devision,cb)(a0,d0,a1,d1,a2)
@@ -2999,14 +2992,14 @@ a2i_IPADDRESS_NC(ipasc)(a0)
 PKCS7_set_digest(p7,md)(a0,a1)
 POLICY_MAPPING_new()()
 PKCS7_set0_type_other(p7,type,other)(a0,d0,a1)
-##bias 20340
+##bias 20298
 EVP_PKEY_add1_attr_by_OBJ(key,obj,type,bytes,len)(a0,a1,d0,a2,d1)
 X509_VERIFY_PARAM_set_time(param,t)(a0,d0)
-##bias 20358
+##bias 20316
 PKCS12_add_key(pbags,key,key_usage,iter,key_nid,pass)(a0,a1,d0,d1,d2,a2)
-##bias 20370
+##bias 20328
 BIO_dump_cb(cb,u,s,len)(a0,a1,a2,a3)
-##bias 20388
+##bias 20346
 BN_get_rfc3526_prime_8192(bn)(a0)
 X509_VERIFY_PARAM_clear_flags(param,flags)(a0,d0)
 BN_get_rfc2409_prime_1024(bn)(a0)
@@ -3019,7 +3012,6 @@ BN_get_rfc2409_prime_768(bn)(a0)
 X509_VERIFY_PARAM_get_flags(param)(a0)
 EVP_CIPHER_CTX_new()()
 EVP_CIPHER_CTX_free(a)(a0)
-a2i_ipadd(ipout,ipasc)(a0,a1)
 EVP_CIPHER_block_size(cipher)(a0)
 EVP_CIPHER_CTX_set_app_data(ctx,data)(a0,a1)
 BIO_method_type(b)(a0)
@@ -3038,7 +3030,7 @@ EVP_CIPHER_CTX_block_size(ctx)(a0)
 EVP_CIPHER_CTX_cipher(ctx)(a0)
 EVP_CIPHER_CTX_get_app_data(ctx)(a0)
 EVP_MD_block_size(md)(a0)
-##bias 20580
+##bias 20532
 EVP_MD_CTX_md(ctx)(a0)
 BIO_method_name(b)(a0)
 EVP_CIPHER_CTX_iv_length(ctx)(a0)
@@ -3052,7 +3044,7 @@ X509at_get0_data_by_OBJ(x,obj,lastpos,type)(a0,a1,d0,d1)
 ASN1_TYPE_set1(a,type,value)(a0,d0,a1)
 ASN1_STRING_set0(str,data,len)(a0,a1,d0)
 i2d_X509_ALGORS(a,out)(a0,a1)
-##bias 20664
+##bias 20616
 d2i_X509_ALGORS(a,in,len)(a0,a1,d0)
 SMIME_read_ASN1(bio,bcont,it)(a0,a1,a2)
 OPENSSL_isservice()()
@@ -3063,15 +3055,15 @@ EVP_add_alg_module()()
 BN_X931_derive_prime_ex(p,p1,p2,Xp,Xp1,Xp2,e,ctx,cb)(a0,a1,a2,d0,a3,d1,d2,d3,d4)
 OPENSSL_init()()
 CRYPTO_strdup(str,file,line)(a0,a1,d0)
-##bias 20730
+##bias 20682
 i2d_TS_ACCURACY(a,pp)(a0,a1)
-##bias 20742
+##bias 20694
 i2d_TS_MSG_IMPRINT(a,pp)(a0,a1)
 EVP_PKEY_print_public(out,pkey,indent,pctx)(a0,a1,d0,a2)
 EVP_PKEY_CTX_new(pkey,e)(a0,a1)
 i2d_TS_TST_INFO(a,pp)(a0,a1)
 EVP_PKEY_asn1_find(pe,type)(a0,a1)
-##bias 20778
+##bias 20730
 TS_CONF_load_cert(file)(a0)
 TS_REQ_get_ext(a,loc)(a0,d0)
 EVP_PKEY_sign_init(ctx)(a0)
@@ -3080,34 +3072,34 @@ TS_TST_INFO_set_nonce(a,nonce)(a0,a1)
 TS_RESP_dup(a)(a0)
 EVP_PKEY_asn1_add0(ameth)(a0)
 PKCS7_add0_attrib_signing_time(si,t)(a0,a1)
-##bias 20832
+##bias 20784
 BIO_asn1_get_prefix(b,pprefix,pprefix_free)(a0,a1,a2)
 TS_TST_INFO_set_time(a,gtime)(a0,a1)
 EVP_PKEY_meth_set_decrypt(pmeth,decrypt_init,decrypt)(a0,a1,a2)
 EVP_PKEY_set_type_str(pkey,str,len)(a0,a1,d0)
 EVP_PKEY_CTX_get_keygen_info(ctx,idx)(a0,d0)
 TS_REQ_set_policy_id(a,policy)(a0,a1)
-##bias 20874
+##bias 20826
 TS_RESP_set_status_info(a,info)(a0,a1)
 EVP_PKEY_keygen(ctx,ppkey)(a0,a1)
 EVP_DigestSignInit(ctx,pctx,type,e,pkey)(a0,a1,a2,a3,d0)
 TS_ACCURACY_set_millis(a,millis)(a0,a1)
 TS_REQ_dup(a)(a0)
 GENERAL_NAME_dup(a)(a0)
-X509_STORE_get1_crls(st,nm)(a0,a1)
+X509_STORE_CTX_get1_crls(st,nm)(a0,a1)
 EVP_PKEY_asn1_new(id,flags,pem_str,info)(d0,d1,a0,a1)
 BIO_new_NDEF(out,val,it)(a0,a1,a2)
 TS_MSG_IMPRINT_set_algo(a,alg)(a0,a1)
 i2d_TS_TST_INFO_bio(fp,a)(a0,a1)
 TS_TST_INFO_set_ordering(a,ordering)(a0,d0)
 TS_TST_INFO_get_ext_by_OBJ(a,obj,lastpos)(a0,a1,d0)
-##bias 20958
+##bias 20910
 TS_CONF_get_tsa_section(conf,section)(a0,a1)
 SMIME_write_ASN1(bio,val,data,flags,ctype_nid,econt_nid,mdalgs,it)(a0,a1,a2,a3,d0,d1,d2,d3)
 TS_RESP_CTX_set_signer_key(ctx,key)(a0,a1)
 EVP_PKEY_encrypt_old(enc_key,key,key_len,pub_key)(a0,a1,d0,a2)
 EVP_PKEY_encrypt_init(ctx)(a0)
-##bias 20994
+##bias 20946
 ASN1_PCTX_get_cert_flags(p)(a0)
 i2d_ESS_SIGNING_CERT(a,pp)(a0,a1)
 TS_CONF_load_key(file,pass)(a0,a1)
@@ -3117,11 +3109,11 @@ EVP_PKEY_asn1_set_public(ameth,pub_decode,pub_encode,pub_cmp,pub_print,pkey_size
 b2i_PublicKey_bio(in)(a0)
 BIO_asn1_set_prefix(b,prefix,prefix_free)(a0,a1,a2)
 EVP_PKEY_new_mac_key(type,e,key,keylen)(a0,a1,a2,d0)
-##bias 21054
+##bias 21006
 TS_REQ_ext_free(a)(a0)
 EVP_PKEY_asn1_set_free(ameth,pkey_free)(a0,a1)
 EVP_PKEY_get0_asn1(pkey)(a0)
-##bias 21078
+##bias 21030
 EVP_PKEY_verify_recover_init(ctx)(a0)
 EVP_PKEY_CTX_set_data(ctx,data)(a0,a1)
 EVP_PKEY_keygen_init(ctx)(a0)
@@ -3137,7 +3129,7 @@ TS_REQ_get_policy_id(a)(a0)
 d2i_TS_ACCURACY(a,pp,length)(a0,a1,d0)
 DSO_global_lookup(name)(a0)
 TS_CONF_set_tsa_name(conf,section,ctx)(a0,a1,a2)
-##bias 21174
+i2d_ASN1_SET_ANY(a,pp)(a0,a1)
 ASN1_PCTX_get_flags(p)(a0)
 TS_TST_INFO_get_ext_by_NID(a,nid,lastpos)(a0,d0,d1)
 TS_RESP_new()()
@@ -3175,14 +3167,14 @@ d2i_TS_MSG_IMPRINT(a,pp,length)(a0,a1,d0)
 EVP_PKEY_meth_set_ctrl(pmeth,ctrl,ctrl_str)(a0,a1,a2)
 TS_REQ_get_ext_by_NID(a,nid,lastpos)(a0,d0,d1)
 PKCS5_pbe_set0_algor(algor,alg,iter,salt,saltlen)(a0,d0,d1,a1,d2)
-##bias 21402
+##bias 21354
 TS_ACCURACY_new()()
 X509_CRL_METHOD_free(m)(a0)
 ASN1_PCTX_get_nm_flags(p)(a0)
 EVP_PKEY_meth_set_sign(pmeth,sign_init,sign)(a0,a1,a2)
-##bias 21432
+##bias 21384
 EVP_PKEY_decrypt_init(ctx)(a0)
-##bias 21444
+##bias 21396
 i2b_PVK_bio(out,pk,enclevel,cb,u)(a0,a1,d0,a2,a3)
 EVP_PKEY_print_private(out,pkey,indent,pctx)(a0,a1,d0,a2)
 GENERAL_NAME_get0_value(a,ptype)(a0,a1)
@@ -3212,7 +3204,7 @@ PKCS7_to_TS_TST_INFO(token)(a0)
 ASN1_PCTX_get_oid_flags(p)(a0)
 TS_TST_INFO_add_ext(a,ex,loc)(a0,a1,d0)
 EVP_PKEY_meth_set_derive(pmeth,derive_init,derive)(a0,a1,a2)
-##bias 21624
+##bias 21576
 i2d_TS_MSG_IMPRINT_bio(fp,a)(a0,a1)
 TS_RESP_CTX_set_accuracy(ctx,secs,millis,micros)(a0,d0,d1,d2)
 TS_REQ_set_nonce(a,nonce)(a0,a1)
@@ -3237,7 +3229,7 @@ TS_REQ_get_cert_req(a)(a0)
 X509_CRL_set_meth_data(crl,dat)(a0,a1)
 PKCS8_pkey_set0(priv,aobj,version,ptype,pval,penc,penclen)(a0,a1,d0,d1,a2,a3,d2)
 ASN1_STRING_copy(dst,str)(a0,a1)
-##bias 21774
+##bias 21726
 X509_CRL_match(a,b)(a0,a1)
 EVP_PKEY_asn1_set_private(ameth,priv_decode,priv_encode,priv_print)(a0,a1,a2,a3)
 TS_TST_INFO_get_ext_d2i(a,nid,crit,idx)(a0,d0,a1,a2)
@@ -3265,7 +3257,7 @@ EVP_PKEY_CTX_set_app_data(ctx,data)(a0,a1)
 OBJ_bsearch_(key,base,num,size,cmp)(a0,a1,d0,d1,a2)
 EVP_PKEY_meth_set_verifyctx(pmeth,verifyctx_init,verifyctx)(a0,a1,a2)
 i2d_PKCS7_bio_stream(out,p7,in,flags)(a0,a1,a2,d0)
-##bias 21942
+##bias 21894
 PKCS7_sign_add_signer(p7,signcert,pkey,md,flags)(a0,a1,a2,a3,d0)
 d2i_TS_TST_INFO_bio(bp,a)(a0,a1)
 TS_TST_INFO_get_ordering(a)(a0)
@@ -3275,10 +3267,10 @@ PKCS5_pbe2_set_iv(cipher,iter,salt,saltlen,aiv,prf_nid)(a0,d0,a1,d1,a2,d2)
 b2i_PrivateKey(in,length)(a0,d0)
 EVP_PKEY_CTX_get_app_data(ctx)(a0)
 TS_REQ_set_cert_req(a,cert_req)(a0,d0)
-##bias 22002
+##bias 21954
 TS_CONF_set_serial(conf,section,cb,ctx)(a0,a1,a2,a3)
 TS_TST_INFO_free(a)(a0)
-##bias 22020
+##bias 21972
 TS_RESP_verify_response(ctx,response)(a0,a1)
 i2d_ESS_ISSUER_SERIAL(a,pp)(a0,a1)
 TS_ACCURACY_get_seconds(a)(a0)
@@ -3323,7 +3315,7 @@ TS_ACCURACY_get_millis(a)(a0)
 TS_RESP_get_token(a)(a0)
 TS_ACCURACY_dup(a)(a0)
 X509_CRL_set_default_method(meth)(a0)
-##bias 22290
+##bias 22242
 TS_RESP_free(a)(a0)
 ISSUING_DIST_POINT_free(a)(a0)
 ESS_ISSUER_SERIAL_new()()
@@ -3336,7 +3328,7 @@ X509_CRL_get0_by_serial(crl,ret,serial)(a0,a1,a2)
 TS_TST_INFO_set_version(a,version)(a0,d0)
 TS_RESP_CTX_get_tst_info(ctx)(a0)
 TS_RESP_verify_signature(token,certs,store,signer_out)(a0,a1,a2,a3)
-##bias 22368
+##bias 22320
 TS_TST_INFO_get_tsa(a)(a0)
 TS_STATUS_INFO_new()()
 EVP_PKEY_CTX_get_cb(ctx)(a0)
@@ -3344,14 +3336,14 @@ TS_REQ_get_ext_d2i(a,nid,crit,idx)(a0,d0,a1,d1)
 GENERAL_NAME_set0_othername(gen,oid,value)(a0,a1,a2)
 TS_TST_INFO_get_ext_count(a)(a0)
 TS_RESP_CTX_get_request(ctx)(a0)
-##bias 22416
+##bias 22368
 EVP_PKEY_meth_set_signctx(pmeth,signctx_init,signctx)(a0,a1,a2)
 EVP_PKEY_asn1_copy(dst,src)(a0,a1)
 ASN1_TYPE_cmp(a,b)(a0,a1)
 EVP_CIPHER_do_all_sorted(fn,arg)(a0,a1)
 EVP_PKEY_CTX_free(ctx)(a0)
-##bias 22452
-X509_STORE_get1_certs(st,nm)(a0,a1)
+##bias 22404
+X509_STORE_CTX_get1_certs(st,nm)(a0,a1)
 EVP_PKEY_CTX_get_operation(ctx)(a0)
 d2i_ESS_SIGNING_CERT(a,pp,length)(a0,a1,d0)
 TS_CONF_set_ordering(conf,section,ctx)(a0,a1,a2)
@@ -3399,7 +3391,7 @@ PKCS7_stream(boundary,p7)(a0,a1)
 TS_RESP_CTX_set_certs(ctx,certs)(a0,a1)
 TS_CONF_set_def_policy(conf,section,policy,ctx)(a0,a1,a2,a3)
 ASN1_GENERALIZEDTIME_adj(s,t,offset_day,offset_sec)(a0,d0,d1,d2)
-##bias 22746
+##bias 22698
 TS_ACCURACY_free(a)(a0)
 TS_RESP_get_tst_info(a)(a0)
 EVP_PKEY_derive_set_peer(ctx,peer)(a0,a1)
@@ -3420,7 +3412,8 @@ EVP_PKEY_asn1_free(ameth)(a0)
 ESS_SIGNING_CERT_free(a)(a0)
 TS_TST_INFO_set_msg_imprint(a,msg_imprint)(a0,a1)
 GENERAL_NAME_cmp(a,b)(a0,a1)
-##bias 22878
+d2i_ASN1_SET_ANY(a,pp,length)(a0,a1,d0)
+##bias 22830
 d2i_ASN1_SEQUENCE_ANY(a,pp,length)(a0,a1,d0)
 GENERAL_NAME_get0_otherName(gen,poid,pvalue)(a0,a1,a2)
 d2i_ESS_CERT_ID(a,pp,length)(a0,a1,d0)
@@ -3433,7 +3426,7 @@ BIO_new_PKCS7(out,p7)(a0,a1)
 EVP_PKEY_verify_recover(ctx,rout,routlen,sig,siglen)(a0,a1,a2,a3,d0)
 TS_ext_print_bio(bio,extensions)(a0,a1)
 TS_ASN1_INTEGER_print_bio(bio,num)(a0,a1)
-##bias 22962
+##bias 22914
 EVP_PKEY_set_type(pkey,type)(a0,d0)
 TS_ACCURACY_set_micros(a,micros)(a0,a1)
 TS_REQ_to_TS_VERIFY_CTX(req,ctx)(a0,a1)
@@ -3470,9 +3463,7 @@ CRYPTO_cts128_encrypt_block(in,out,len,key,ivec,block)(a0,a1,d0,a2,a3,d1)
 CRYPTO_cbc128_decrypt(in,out,len,key,ivec,block)(a0,a1,d0,a2,a3,d1)
 CRYPTO_cfb128_encrypt(in,out,len,key,ivec,num,enc,block)(a0,a1,d0,a2,a3,d1,d2,d3)
 CRYPTO_cfb128_8_encrypt(in,out,length,key,ivec,num,enc,block)(a0,a1,d0,a2,a3,d1,d2,d3)
-OPENSSL_strcasecmp(str1,str2)(a0,a1)
 OPENSSL_memcmp(p1,p2,n)(a0,a1,d0)
-OPENSSL_strncasecmp(str1,str2,n)(a0,a1,d0)
 OPENSSL_gmtime(timer,result)(a0,a1)
 OPENSSL_gmtime_adj(tm,offset_day,offset_sec)(a0,d0,d1)
 OPENSSL_gmtime_diff(pday,psec,from,to)(a0,a1,a2,a3)
@@ -3520,11 +3511,11 @@ RSA_PSS_PARAMS_new()()
 d2i_RSA_PSS_PARAMS(a,pp,length)(a0,a1,d0)
 RSA_PSS_PARAMS_free(a)(a0)
 i2d_RSA_PSS_PARAMS(a,out)(a0,a1)
-##bias 23484
+##bias 23424
 POLICY_MAPPING_it()()
 NAME_CONSTRAINTS_it()()
 ASN1_OCTET_STRING_NDEF_it()()
-##bias 23508
+##bias 23448
 POLICY_CONSTRAINTS_it()()
 POLICY_MAPPINGS_it()()
 GENERAL_SUBTREE_it()()
@@ -3534,16 +3525,16 @@ CMS_ContentInfo_it()()
 CMS_ReceiptRequest_it()()
 ASN1_SEQUENCE_ANY_it()()
 ASN1_SET_ANY_it()()
-##bias 23568
+##bias 23508
 ISSUING_DIST_POINT_it()()
 RSA_PSS_PARAMS_it()()
-##bias 23586
+##bias 23526
 PEM_write_bio_DHxparams(bp,x)(a0,a1)
 X509_ALGOR_cmp(a,b)(a0,a1)
 ASN1_STRING_clear_free(a)(a0)
 ASN1_TIME_diff(pday,psec,from,to)(a0,a1,a2,a3)
 BIO_hex_string(out,indent,width,data,datalen)(a0,d0,d1,a1,d2)
-##bias 23622
+##bias 23562
 CMS_RecipientEncryptedKey_cert_cmp(rek,cert)(a0,a1)
 CMS_RecipientEncryptedKey_get0_id(rek,keyid,tm,other,issuer,sno)(a0,a1,a2,a3,d0,d1)
 CMS_RecipientInfo_encrypt(cms,ri)(a0,a1)
@@ -3570,7 +3561,7 @@ EC_curve_nid2nist(nid)(d0)
 EC_curve_nist2nid(name)(a0)
 EC_GROUP_get_mont_data(group)(a0)
 ECDH_KDF_X9_62(out,outlen,Z,Zlen,sinfo,sinfolen,md)(a0,d0,a1,d1,a2,d2,d3)
-##bias 23832
+##bias 23772
 EVP_aes_128_cbc_hmac_sha256()()
 EVP_aes_128_wrap()()
 EVP_aes_192_wrap()()
@@ -3592,7 +3583,7 @@ RSA_OAEP_PARAMS_it()()
 RSA_OAEP_PARAMS_new()()
 RSA_padding_add_PKCS1_OAEP_mgf1(to,tlen,from,flen,param,plen,md,mgf1md)(a0,d0,a1,d1,a2,d2,a3,d3)
 RSA_padding_check_PKCS1_OAEP_mgf1(to,tlen,from,flen,num,param,plen,md,mgf1md)(a0,d0,a1,d1,d2,a2,d3,a3,d4)
-sk_deep_copy(sk,copy_func,free_func)(a0,a1,a2)
+OPENSSL_sk_deep_copy(sk,c,f)(a0,a1,a2)
 i2d_re_X509_tbs(x,pp)(a0,a1)
 X509_chain_check_suiteb(perror_depth,x,chain,flags)(a0,a1,a2,d0)
 X509_chain_up_ref(chain)(a0)
@@ -3604,7 +3595,6 @@ X509_get_signature_nid(x)(a0)
 X509_http_nbio(rctx,pcert)(a0,a1)
 X509_REVOKED_dup(rev)(a0)
 X509_STORE_CTX_get0_store(ctx)(a0)
-X509_STORE_set_lookup_crls_cb(ctx,cb)(a0,a1)
 X509_VERIFY_PARAM_add1_host(param,name,namelen)(a0,a1,d0)
 X509_VERIFY_PARAM_get0(id)(d0)
 X509_VERIFY_PARAM_get0_name(param)(a0)
@@ -3619,15 +3609,15 @@ X509_check_email(x,chk,chklen,flags)(a0,a1,d0,d1)
 X509_check_host(x,chk,chklen,flags,peername)(a0,a1,d0,d1,a2)
 X509_check_ip(x,chk,chklen,flags)(a0,a1,d0,d1)
 X509_check_ip_asc(x,ipasc,flags)(a0,a1,d1)
-##bias 24126
+##bias 24060
 EVP_PKEY_asn1_set_item(ameth,item_verify,item_sign)(a0,a1,a2)
 DTLS_client_method()()
 DTLS_method()()
 DTLS_server_method()()
-##bias 24168
+##bias 24102
 SSL_certs_clear(s)(a0)
 SSL_CIPHER_find(ssl,ptr)(a0,a1)
-##bias 24186
+##bias 24120
 SSL_CONF_cmd(ctx,cmd,value)(a0,a1,a2)
 SSL_CONF_cmd_argv(cctx,pargc,pargv)(a0,a1,a2)
 SSL_CONF_cmd_value_type(cctx,cmd)(a0,a1)
@@ -3660,7 +3650,7 @@ SSL_check_chain(s,x,pk,chain)(a0,a1,a2,a3)
 SSL_get_shared_sigalgs(s,idx,psign,phash,psignandhash,rsig,rhash)(a0,d0,a1,a2,a3,d1,d2)
 SSL_get_sigalgs(s,idx,psign,phash,psignandhash,rsig,rhash)(a0,d0,a1,a2,a3,d1,d2)
 ASN1_add_stable_module()()
-ASN1_buf_print(bp,buf,buflen,indent)(a0,a1,a2,d0)
+ASN1_buf_print(bp,buf,buflen,off)(a0,a1,a2,d0)
 ASN1_ENUMERATED_get_int64(pr,a)(a0,a1)
 ASN1_ENUMERATED_set_int64(a,r)(a0,d0)
 ASN1_INTEGER_get_int64(pr,a)(a0,a1)
@@ -3679,14 +3669,14 @@ ASN1_TYPE_pack_sequence(it,s,t)(a0,a1,a2)
 ASN1_TYPE_unpack_sequence(it,t)(a0,a1)
 ASYNC_block_pause()()
 ASYNC_cleanup_thread()()
-##bias 24498
+##bias 24432
 ASYNC_get_current_job()()
-##bias 24510
+##bias 24444
 ASYNC_init_thread(max_size,init_size)(d0,d1)
 ASYNC_pause_job()()
 ASYNC_start_job(job,ctx,ret,func,args,size)(a0,a1,a2,a3,d0,d1)
 ASYNC_unblock_pause()()
-##bias 24540
+##bias 24474
 ERR_load_ASYNC_strings()()
 BIO_accept_ex(accept_sock,addr,options)(d0,a0,d1)
 BIO_ADDR_clear(ap)(a0)
@@ -3763,7 +3753,7 @@ OPENSSL_cleanup()()
 OPENSSL_init_crypto(opts,settings)(d0,a0)
 OPENSSL_INIT_free(settings)(a0)
 OPENSSL_INIT_new()()
-##bias 25002
+##bias 24936
 OPENSSL_strlcat(dst,src,size)(a0,a1,d0)
 OPENSSL_strlcpy(dst,src,size)(a0,a1,d0)
 OPENSSL_strnlen(str,maxlen)(a0,d0)
@@ -3802,7 +3792,7 @@ EC_KEY_set_default_method(meth)(a0)
 EC_KEY_set_ex_data(key,idx,arg)(a0,d0,a1)
 EC_KEY_set_method(key,meth)(a0,a1)
 EC_POINT_point2buf(group,point,form,pbuf,ctx)(a0,a1,d0,a2,a3)
-ECDSA_SIG_get0(pr,ps,sig)(a0,a1,a2)
+ECDSA_SIG_get0(sig,pr,ps)(a0,a1,a2)
 ENGINE_get_default_EC()()
 ENGINE_get_EC(e)(a0)
 ENGINE_register_all_EC()()
@@ -3913,9 +3903,9 @@ HMAC_CTX_free(ctx)(a0)
 HMAC_CTX_new()()
 HMAC_CTX_reset(ctx)(a0)
 HMAC_size(ctx)(a0)
-lh_error(lh)(a0)
-lh_get_down_load(lh)(a0)
-lh_set_down_load(lh,down_load)(a0,d0)
+OPENSSL_LH_error(lh)(a0)
+OPENSSL_LH_get_down_load(lh)(a0)
+OPENSSL_LH_set_down_load(lh,down_load)(a0,d0)
 CRYPTO_128_unwrap_pad(key,icv,out,in,inlen,block)(a0,a1,a2,a3,d0,d1)
 CRYPTO_128_wrap_pad(key,icv,out,in,inlen,block)(a0,a1,a2,a3,d0,d1)
 CRYPTO_ocb128_aad(ctx,aad,len)(a0,a1,d0)
@@ -3973,7 +3963,7 @@ TS_VERIFY_CTS_set_certs(ctx,certs)(a0,a1)
 i2d_re_X509_CRL_tbs(req,pp)(a0,a1)
 i2d_re_X509_REQ_tbs(req,pp)(a0,a1)
 PKCS5_pbe2_set_scrypt(cipher,salt,saltlen,aiv,N,r,p)(a0,a1,d0,a2,d1,d2,d3)
-##bias 26262
+##bias 26196
 X509_CRL_get0_extensions(crl)(a0)
 X509_CRL_get0_signature(psig,palg,crl)(a0,a1,a2)
 X509_CRL_get_issuer(crl)(a0)
@@ -4010,7 +4000,6 @@ X509_up_ref(x)(a0)
 X509_STORE_CTX_get_num_untrusted(ctx)(a0)
 X509_STORE_CTX_set0_dane(ctx,dane)(a0,a1)
 X509_VERIFY_PARAM_move_peername(to,from)(a0,a1)
-ASIdentifiers_free(a)(a0)
 i2s_ASN1_IA5STRING(method,ia5)(a0,a1)
 s2i_ASN1_IA5STRING(method,ctx,str)(a0,a1,a2)
 X509v3_addr_add_inherit(addr,afi,safi)(a0,d0,a1)
@@ -4068,7 +4057,7 @@ SSL_get0_dane_tlsa(s,usage,selector,mtype,data,dlen)(a0,a1,a2,a3,d0,d1)
 SSL_get0_peername(s)(a0)
 SSL_get0_security_ex_data(s)(a0)
 SSL_get1_supported_ciphers(s)(a0)
-##bias 26832
+##bias 26760
 SSL_get_client_random(s,out,outlen)(a0,a1,d0)
 SSL_get_options(s)(a0)
 SSL_get_security_callback(s)(a0)
@@ -4091,10 +4080,10 @@ SSL_set_default_passwd_cb_userdata(s,u)(a0,a1)
 SSL_set_hostflags(s,flags)(a0,d0)
 SSL_set_not_resumable_session_callback(ssl,cb)(a0,a1)
 SSL_set_options(s,op)(a0,d0)
-SSL_set_rbio(s,rbio)(a0,a1)
+SSL_set0_rbio(s,rbio)(a0,a1)
 SSL_set_security_callback(s,cb)(a0,a1)
 SSL_set_security_level(s,level)(a0,d0)
-SSL_set_wbio(s,wbio)(a0,a1)
+SSL_set0_wbio(s,wbio)(a0,a1)
 SSL_up_ref(s)(a0)
 SSL_use_certificate_chain_file(ssl,file)(a0,a1)
 SSL_waiting_for_async(s)(a0)
@@ -4177,7 +4166,7 @@ i2o_SCT_signature(sct,out)(a0,a1)
 o2i_SCT_signature(sct,in,len)(a0,a1,d0)
 CTLOG_new(public_key,name)(a0,a1)
 CTLOG_new_null()()
-CTLOG_new_from_base64(pkey_base64,name)(a0,a1)
+CTLOG_new_from_base64(ct_log,pkey_base64,name)(a0,a1,a2)
 CTLOG_free(log)(a0)
 CTLOG_get0_name(log)(a0)
 CTLOG_get0_log_id(log,log_id,log_id_len)(a0,a1,a2)
@@ -4189,7 +4178,7 @@ CTLOG_STORE_load_file(store,file)(a0,a1)
 CTLOG_STORE_load_default_file(store)(a0)
 ERR_load_CT_strings()()
 DHparams_it()()
-DSA_SIG_get0(pr,ps,sig)(a0,a1,a2)
+DSA_SIG_get0(sig,pr,ps)(a0,a1,a2)
 EC_GROUP_new_from_ecparameters(params)(a0)
 EC_GROUP_get_ecparameters(group,params)(a0,a1)
 EC_GROUP_new_from_ecpkparameters(params)(a0)
@@ -4373,15 +4362,115 @@ DH_meth_set_generate_key(dhm,generate_key)(a0,a1)
 DH_meth_free(dhm)(a0)
 DH_meth_get_generate_key(dhm)(a0)
 DH_set_flags(dh,flags)(a0,d0)
-X509_STORE_get_X509_by_subject(vs,type,name)(a0,d0,a1)
+X509_STORE_CTX_get_obj_by_subject(vs,type,name)(a0,d0,a1)
 X509_OBJECT_free(a)(a0)
 X509_OBJECT_get0_X509(a)(a0)
 X509_STORE_CTX_get0_untrusted(ctx)(a0)
 X509_STORE_CTX_get0_cert(ctx)(a0)
-X509_STORE_CTX_set_verify(ctx,verify)(a0,a1)
+##bias 28620
 X509_STORE_CTX_get_verify(ctx)(a0)
 X509_STORE_CTX_get_verify_cb(ctx)(a0)
 X509_STORE_CTX_set0_verified_chain(ctx,sk)(a0,a1)
 X509_STORE_CTX_set0_untrusted(ctx,sk)(a0,a1)
 OPENSSL_hexchar2int(c)(d0)
+##bias 28680
+DSA_SIG_set0(sig,r,s)(a0,a1,a2)
+DSA_bits(d)(a0)
+ECDSA_SIG_set0(sig,r,s)(a0,a1,a2)
+EVP_ENCODE_CTX_copy(dctx,sctx)(a0,a1)
+EVP_PKEY_get0_hmac(pkey,len)(a0,a2)
+HMAC_CTX_get_md(ctx)(a0)
+OCSP_resp_get0_certs(bs)(a0)
+OCSP_resp_get0_id(bs,pid,pname)(a0,a1,a2)
+PEM_write_bio_PrivateKey_traditional(bp,x,enc,kstr,klen,cb,u)(a0,a1,a2,a3,d0,d1,d2)
+SSL_SESSION_get_protocol_version(s)(a0)
+SSL_is_dtls(s)(a0)
+SSL_CTX_dane_set_flags(ctx,flags)(a0,d0)
+SSL_CTX_dane_clear_flags(ctx,flags)(a0,d0)
+SSL_dane_set_flags(ssl,flags)(a0,d0)
+SSL_dane_clear_flags(ssl,flags)(a0,d0)
+SSL_client_version(s)(a0)
+X509_get_pathlen(x)(a0)
+X509_OBJECT_get_type(a)(a0)
+X509_OBJECT_get0_X509_CRL(a)(a0)
+X509_STORE_lock(ctx)(a0)
+X509_STORE_unlock(ctx)(a0)
+X509_STORE_get0_objects(v)(a0)
+X509_STORE_get0_param(ctx)(a0)
+X509_STORE_set_verify(ctx,verify)(a0,a1)
+X509_STORE_get_verify(ctx)(a0)
+X509_STORE_get_verify_cb(ctx)(a0)
+X509_STORE_set_get_issuer(ctx,get_issuer)(a0,a1)
+X509_STORE_get_get_issuer(ctx)(a0)
+X509_STORE_set_check_issued(ctx,check_issued)(a0,a1)
+X509_STORE_get_check_issued(ctx)(a0)
+X509_STORE_set_check_revocation(ctx,check_revocation)(a0,a1)
+X509_STORE_get_check_revocation(ctx)(a0)
+X509_STORE_set_get_crl(ctx,get_crl)(a0,a1)
+X509_STORE_get_get_crl(ctx)(a0)
+X509_STORE_set_check_crl(ctx,check_crl)(a0,a1)
+X509_STORE_get_check_crl(ctx)(a0)
+X509_STORE_set_cert_crl(ctx,cert_crl)(a0,a1)
+X509_STORE_get_cert_crl(ctx)(a0)
+X509_STORE_set_check_policy(ctx,check_policy)(a0,a1)
+X509_STORE_get_check_policy(ctx)(a0)
+X509_STORE_set_lookup_certs(ctx,lookup_certs)(a0,a1)
+X509_STORE_get_lookup_certs(ctx)(a0)
+X509_STORE_set_lookup_crls(ctx,lookup_crls)(a0,a1)
+X509_STORE_get_lookup_crls(ctx)(a0)
+X509_STORE_set_cleanup(ctx,cleanup)(a0,a1)
+X509_STORE_get_cleanup(ctx)(a0)
+X509_STORE_set_ex_data(ctx,idx,data)(a0,d0,a1)
+X509_STORE_get_ex_data(ctx,idx)(a0,d0)
+X509_STORE_CTX_get_get_issuer(ctx)(a0)
+X509_STORE_CTX_get_check_issued(ctx)(a0)
+X509_STORE_CTX_get_check_revocation(ctx)(a0)
+X509_STORE_CTX_get_get_crl(ctx)(a0)
+X509_STORE_CTX_get_check_crl(ctx)(a0)
+X509_STORE_CTX_get_cert_crl(ctx)(a0)
+X509_STORE_CTX_get_check_policy(ctx)(a0)
+X509_STORE_CTX_get_lookup_certs(ctx)(a0)
+X509_STORE_CTX_get_lookup_crls(ctx)(a0)
+X509_STORE_CTX_get_cleanup(ctx)(a0)
+X509_STORE_CTX_set_error_depth(ctx,depth)(a0,d0)
+X509_STORE_CTX_set_current_cert(ctx,x)(a0,a1)
+NAME_CONSTRAINTS_check_CN(x,nc)(a0,a1)
+X509_set_proxy_flag(x)(a0)
+X509_set_proxy_pathlen(x,l)(a0,d0)
+X509_get_proxy_pathlen(x)(a0)
+ASIdentifierChoice_new()()
+ASIdentifierChoice_free(a)(a0)
+d2i_ASIdentifierChoice(a,in,len)(a0,a1,d0)
+i2d_ASIdentifierChoice(a,out)(a0,a1)
+ASIdentifierChoice_it()()
+ASIdentifiers_new()()
+ASIdentifiers_free(a)(a0)
+d2i_ASIdentifiers(a,in,len)(a0,a1,d0)
+i2d_ASIdentifiers(a,out)(a0,a1)
+ASIdentifiers_it()()
+ASIdOrRange_new()()
+ASIdOrRange_free(a)(a0)
+d2i_ASIdOrRange(a,in,len)(a0,a1,d0)
+i2d_ASIdOrRange(a,out)(a0,a1)
+ASIdOrRange_it()()
+ASRange_new()()
+ASRange_free(a)(a0)
+d2i_ASRange(a,in,len)(a0,a1,d0)
+i2d_ASRange(a,out)(a0,a1)
+ASRange_it()()
+IPAddressChoice_new()()
+IPAddressChoice_free(a)(a0)
+d2i_IPAddressChoice(a,in,len)(a0,a1,d0)
+i2d_IPAddressChoice(a,out)(a0,a1)
+IPAddressChoice_it()()
+IPAddressFamily_new()()
+IPAddressFamily_free(a)(a0)
+d2i_IPAddressFamily(a,in,len)(a0,a1,d0)
+i2d_IPAddressFamily(a,out)(a0,a1)
+IPAddressFamily_it()()
+IPAddressOrRange_new()()
+IPAddressOrRange_free(a)(a0)
+d2i_IPAddressOrRange(a,in,len)(a0,a1,d0)
+i2d_IPAddressOrRange(a,out)(a0,a1)
+IPAddressOrRange_it()()
 ##end

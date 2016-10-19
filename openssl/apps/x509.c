@@ -1,58 +1,10 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
+/*
+ * Copyright 1995-2016 The OpenSSL Project Authors. All Rights Reserved.
  *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.]
+ * Licensed under the OpenSSL license (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
  */
 
 #include <stdio.h>
@@ -116,7 +68,7 @@ OPTIONS x509_options[] = {
      "Output format - default PEM (one of DER, NET or PEM)"},
     {"out", OPT_OUT, '>', "Output file - default stdout"},
     {"keyform", OPT_KEYFORM, 'F', "Private key format - default PEM"},
-    {"passin", OPT_PASSIN, 's', "Private key password source"},
+    {"passin", OPT_PASSIN, 's', "Private key password/pass-phrase source"},
     {"serial", OPT_SERIAL, '-', "Print serial number value"},
     {"subject_hash", OPT_HASH, '-', "Print subject hash value"},
     {"issuer_hash", OPT_ISSUER_HASH, '-', "Print issuer hash value"},
@@ -172,11 +124,11 @@ OPTIONS x509_options[] = {
     {"checkip", OPT_CHECKIP, 's', "Check certificate matches ipaddr"},
     {"CAform", OPT_CAFORM, 'F', "CA format - default PEM"},
     {"CAkeyform", OPT_CAKEYFORM, 'F', "CA key format - default PEM"},
-    {"sigopt", OPT_SIGOPT, 's'},
+    {"sigopt", OPT_SIGOPT, 's', "Signature parameter in n:v form"},
     {"force_pubkey", OPT_FORCE_PUBKEY, '<'},
     {"next_serial", OPT_NEXT_SERIAL, '-'},
     {"clrreject", OPT_CLRREJECT, '-'},
-    {"badsig", OPT_BADSIG, '-'},
+    {"badsig", OPT_BADSIG, '-', "Corrupt last byte of certificate signature (for test)"},
     {"", OPT_MD, '-', "Any supported digest"},
 #ifndef OPENSSL_NO_MD5
     {"subject_hash_old", OPT_SUBJECT_HASH_OLD, '-',
@@ -193,7 +145,7 @@ OPTIONS x509_options[] = {
 int x509_main(int argc, char **argv)
 {
     ASN1_INTEGER *sno = NULL;
-    ASN1_OBJECT *objtmp;
+    ASN1_OBJECT *objtmp = NULL;
     BIO *out = NULL;
     CONF *extconf = NULL;
     EVP_PKEY *Upkey = NULL, *CApkey = NULL, *fkey = NULL;
@@ -325,6 +277,7 @@ int x509_main(int argc, char **argv)
             if (trust == NULL && (trust = sk_ASN1_OBJECT_new_null()) == NULL)
                 goto end;
             sk_ASN1_OBJECT_push(trust, objtmp);
+            objtmp = NULL;
             trustout = 1;
             break;
         case OPT_ADDREJECT:
@@ -338,6 +291,7 @@ int x509_main(int argc, char **argv)
                 && (reject = sk_ASN1_OBJECT_new_null()) == NULL)
                 goto end;
             sk_ASN1_OBJECT_push(reject, objtmp);
+            objtmp = NULL;
             trustout = 1;
             break;
         case OPT_SETALIAS:
@@ -638,6 +592,7 @@ int x509_main(int argc, char **argv)
             objtmp = sk_ASN1_OBJECT_value(trust, i);
             X509_add1_trust_object(x, objtmp);
         }
+        objtmp = NULL;
     }
 
     if (reject) {
@@ -645,14 +600,15 @@ int x509_main(int argc, char **argv)
             objtmp = sk_ASN1_OBJECT_value(reject, i);
             X509_add1_reject_object(x, objtmp);
         }
+        objtmp = NULL;
     }
 
     if (num) {
         for (i = 1; i <= num; i++) {
             if (issuer == i) {
-                print_name(out, "issuer= ", X509_get_issuer_name(x), nmflag);
+                print_name(out, "issuer=", X509_get_issuer_name(x), nmflag);
             } else if (subject == i) {
-                print_name(out, "subject= ",
+                print_name(out, "subject=",
                            X509_get_subject_name(x), nmflag);
             } else if (serial == i) {
                 BIO_printf(out, "serial=");
@@ -728,14 +684,14 @@ int x509_main(int argc, char **argv)
                 BIO_printf(out, "Modulus=");
 #ifndef OPENSSL_NO_RSA
                 if (EVP_PKEY_id(pkey) == EVP_PKEY_RSA) {
-                    BIGNUM *n;
+                    const BIGNUM *n;
                     RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, NULL, NULL);
                     BN_print(out, n);
                 } else
 #endif
 #ifndef OPENSSL_NO_DSA
                 if (EVP_PKEY_id(pkey) == EVP_PKEY_DSA) {
-                    BIGNUM *dsapub = NULL;
+                    const BIGNUM *dsapub = NULL;
                     DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &dsapub, NULL);
                     BN_print(out, dsapub);
                 } else
@@ -763,7 +719,7 @@ int x509_main(int argc, char **argv)
                 BIO_printf(out, "/*\n"
                                 " * Subject: %s\n", buf);
 
-                m = X509_NAME_oneline(X509_get_issuer_name(x), buf, sizeof buf);
+                X509_NAME_oneline(X509_get_issuer_name(x), buf, sizeof buf);
                 BIO_printf(out, " * Issuer:  %s\n"
                                 " */\n", buf);
 
@@ -933,6 +889,7 @@ int x509_main(int argc, char **argv)
     ASN1_INTEGER_free(sno);
     sk_ASN1_OBJECT_pop_free(trust, ASN1_OBJECT_free);
     sk_ASN1_OBJECT_pop_free(reject, ASN1_OBJECT_free);
+    ASN1_OBJECT_free(objtmp);
     OPENSSL_free(passin);
     return (ret);
 }
@@ -991,6 +948,10 @@ static int x509_certify(X509_STORE *ctx, char *CAfile, const EVP_MD *digest,
     EVP_PKEY *upkey;
 
     upkey = X509_get0_pubkey(xca);
+    if (upkey == NULL) {
+        BIO_printf(bio_err, "Error obtaining CA X509 public key\n");
+        goto end;
+    }
     EVP_PKEY_copy_parameters(upkey, pkey);
 
     xsc = X509_STORE_CTX_new();
@@ -1127,7 +1088,7 @@ static int sign(X509 *x, EVP_PKEY *pkey, int days, int clrext,
 static int purpose_print(BIO *bio, X509 *cert, X509_PURPOSE *pt)
 {
     int id, i, idret;
-    char *pname;
+    const char *pname;
     id = X509_PURPOSE_get_id(pt);
     pname = X509_PURPOSE_get0_name(pt);
     for (i = 0; i < 2; i++) {
