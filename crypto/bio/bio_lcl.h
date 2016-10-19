@@ -146,6 +146,8 @@ socklen_t BIO_ADDRINFO_sockaddr_size(const BIO_ADDRINFO *bai);
 const struct sockaddr *BIO_ADDRINFO_sockaddr(const BIO_ADDRINFO *bai);
 #endif
 
+extern CRYPTO_RWLOCK *bio_type_lock;
+
 void bio_sock_cleanup_int(void);
 
 #if BIO_FLAGS_UPLINK==0

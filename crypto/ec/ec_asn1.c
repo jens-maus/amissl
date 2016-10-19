@@ -512,13 +512,11 @@ ECPARAMETERS *EC_GROUP_get_ecparameters(const EC_GROUP *group,
         goto err;
     }
     if (ret->base == NULL && (ret->base = ASN1_OCTET_STRING_new()) == NULL) {
+        OPENSSL_free(buffer);
         ECerr(EC_F_EC_GROUP_GET_ECPARAMETERS, ERR_R_MALLOC_FAILURE);
         goto err;
     }
-    if (!ASN1_OCTET_STRING_set(ret->base, buffer, len)) {
-        ECerr(EC_F_EC_GROUP_GET_ECPARAMETERS, ERR_R_ASN1_LIB);
-        goto err;
-    }
+    ASN1_STRING_set0(ret->base, buffer, len);
 
     /* set the order */
     tmp = EC_GROUP_get0_order(group);
@@ -547,7 +545,6 @@ ECPARAMETERS *EC_GROUP_get_ecparameters(const EC_GROUP *group,
  err:
     if (params == NULL)
         ECPARAMETERS_free(ret);
-    OPENSSL_free(buffer);
     return NULL;
 }
 
@@ -948,7 +945,7 @@ EC_KEY *d2i_ECPrivateKey(EC_KEY **a, const unsigned char **in, long len)
 
     if (priv_key->privateKey) {
         ASN1_OCTET_STRING *pkey = priv_key->privateKey;
-        if (EC_KEY_oct2priv(ret, ASN1_STRING_data(pkey),
+        if (EC_KEY_oct2priv(ret, ASN1_STRING_get0_data(pkey),
                             ASN1_STRING_length(pkey)) == 0)
             goto err;
     } else {
@@ -967,7 +964,7 @@ EC_KEY *d2i_ECPrivateKey(EC_KEY **a, const unsigned char **in, long len)
         const unsigned char *pub_oct;
         int pub_oct_len;
 
-        pub_oct = ASN1_STRING_data(priv_key->publicKey);
+        pub_oct = ASN1_STRING_get0_data(priv_key->publicKey);
         pub_oct_len = ASN1_STRING_length(priv_key->publicKey);
         if (!EC_KEY_oct2key(ret, pub_oct, pub_oct_len, NULL)) {
             ECerr(EC_F_D2I_ECPRIVATEKEY, ERR_R_EC_LIB);
@@ -1125,7 +1122,7 @@ EC_KEY *o2i_ECPublicKey(EC_KEY **a, const unsigned char **in, long len)
     return ret;
 }
 
-int i2o_ECPublicKey(EC_KEY *a, unsigned char **out)
+int i2o_ECPublicKey(const EC_KEY *a, unsigned char **out)
 {
     size_t buf_len = 0;
     int new_buffer = 0;

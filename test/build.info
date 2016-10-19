@@ -11,12 +11,12 @@ IF[{- !$disabled{tests} -}]
           randtest dhtest enginetest casttest \
           bftest ssltest_old dsatest exptest rsa_test \
           evp_test evp_extra_test igetest v3nametest v3ext \
-          danetest heartbeat_test p5_crpt2_test \
+          danetest heartbeat_test p5_crpt2_test bad_dtls_test \
           constant_time_test verify_extra_test clienthellotest \
           packettest asynctest secmemtest srptest memleaktest \
           dtlsv1listentest ct_test threadstest afalgtest d2i_test \
           ssl_test_ctx_test ssl_test x509aux cipherlist_test asynciotest \
-          bioprinttest sslapitest
+          bioprinttest sslapitest dtlstest bio_enc_test
 
   SOURCE[aborttest]=aborttest.c
   INCLUDE[aborttest]=../include
@@ -190,6 +190,10 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[clienthellotest]=../include
   DEPEND[clienthellotest]=../libcrypto ../libssl
 
+  SOURCE[bad_dtls_test]=bad_dtls_test.c
+  INCLUDE[bad_dtls_test]=../include
+  DEPEND[bad_dtls_test]=../libcrypto ../libssl
+
   SOURCE[packettest]=packettest.c
   INCLUDE[packettest]=../include
   DEPEND[packettest]=../libcrypto
@@ -258,7 +262,21 @@ IF[{- !$disabled{tests} -}]
   SOURCE[bioprinttest]=bioprinttest.c
   INCLUDE[bioprinttest]=../include
   DEPEND[bioprinttest]=../libcrypto
-  {-
+
+  SOURCE[sslapitest]=sslapitest.c ssltestlib.c testutil.c
+  INCLUDE[sslapitest]=../include
+  DEPEND[sslapitest]=../libcrypto ../libssl
+
+  SOURCE[dtlstest]=dtlstest.c ssltestlib.c testutil.c
+  INCLUDE[dtlstest]=../include .
+  DEPEND[dtlstest]=../libcrypto ../libssl
+
+  SOURCE[bio_enc_test]=bio_enc_test.c
+  INCLUDE[bio_enc_test]=../include
+  DEPEND[bio_enc_test]=../libcrypto
+ENDIF
+
+{-
    use File::Spec::Functions;
    use File::Basename;
    use if $^O ne "VMS", 'File::Glob' => qw/glob/;
@@ -282,9 +300,4 @@ IF[{- !$disabled{tests} -}]
   DEPEND[buildtest_$name]=../libssl ../libcrypto
 _____
    }
-  -}
-
-  SOURCE[sslapitest]=sslapitest.c ssltestlib.c testutil.c
-  INCLUDE[sslapitest]=../include
-  DEPEND[sslapitest]=../libcrypto ../libssl
-ENDIF
+-}

@@ -320,9 +320,9 @@ int password_callback(char *buf, int bufsiz, int verify, PW_CB_DATA *cb_tmp)
     return res;
 }
 
-static char *app_get_pass(char *arg, int keepbio);
+static char *app_get_pass(const char *arg, int keepbio);
 
-int app_passwd(char *arg1, char *arg2, char **pass1, char **pass2)
+int app_passwd(const char *arg1, const char *arg2, char **pass1, char **pass2)
 {
     int same;
     if (!arg2 || !arg1 || strcmp(arg1, arg2))
@@ -344,7 +344,7 @@ int app_passwd(char *arg1, char *arg2, char **pass1, char **pass2)
     return 1;
 }
 
-static char *app_get_pass(char *arg, int keepbio)
+static char *app_get_pass(const char *arg, int keepbio)
 {
     char *tmp, tpass[APP_PASS_LEN];
     static BIO *pwdbio = NULL;
@@ -1185,7 +1185,7 @@ void print_array(BIO *out, const char* title, int len, const unsigned char* d)
     BIO_printf(out, "\n};\n");
 }
 
-X509_STORE *setup_verify(char *CAfile, char *CApath, int noCAfile, int noCApath)
+X509_STORE *setup_verify(const char *CAfile, const char *CApath, int noCAfile, int noCApath)
 {
     X509_STORE *store = X509_STORE_new();
     X509_LOOKUP *lookup;
@@ -1318,7 +1318,7 @@ static IMPLEMENT_LHASH_HASH_FN(index_name, OPENSSL_CSTRING)
 static IMPLEMENT_LHASH_COMP_FN(index_name, OPENSSL_CSTRING)
 #undef BSIZE
 #define BSIZE 256
-BIGNUM *load_serial(char *serialfile, int create, ASN1_INTEGER **retai)
+BIGNUM *load_serial(const char *serialfile, int create, ASN1_INTEGER **retai)
 {
     BIO *in = NULL;
     BIGNUM *ret = NULL;
@@ -1363,7 +1363,7 @@ BIGNUM *load_serial(char *serialfile, int create, ASN1_INTEGER **retai)
     return (ret);
 }
 
-int save_serial(char *serialfile, char *suffix, BIGNUM *serial,
+int save_serial(const char *serialfile, const char *suffix, const BIGNUM *serial,
                 ASN1_INTEGER **retai)
 {
     char buf[1][BSIZE];
@@ -1413,7 +1413,8 @@ int save_serial(char *serialfile, char *suffix, BIGNUM *serial,
     return (ret);
 }
 
-int rotate_serial(char *serialfile, char *new_suffix, char *old_suffix)
+int rotate_serial(const char *serialfile, const char *new_suffix,
+                  const char *old_suffix)
 {
     char buf[2][BSIZE];
     int i, j;
@@ -1483,7 +1484,7 @@ int rand_serial(BIGNUM *b, ASN1_INTEGER *ai)
     return ret;
 }
 
-CA_DB *load_index(char *dbfile, DB_ATTR *db_attr)
+CA_DB *load_index(const char *dbfile, DB_ATTR *db_attr)
 {
     CA_DB *retdb = NULL;
     TXT_DB *tmpdb = NULL;
@@ -1938,7 +1939,7 @@ static const char *get_dp_url(DIST_POINT *dp)
         gen = sk_GENERAL_NAME_value(gens, i);
         uri = GENERAL_NAME_get0_value(gen, &gtype);
         if (gtype == GEN_URI && ASN1_STRING_length(uri) > 6) {
-            char *uptr = (char *)ASN1_STRING_data(uri);
+            const char *uptr = (const char *)ASN1_STRING_get0_data(uri);
             if (strncmp(uptr, "http://", 7) == 0)
                 return uptr;
         }
@@ -2299,6 +2300,36 @@ int app_isdir(const char *name)
 #endif
 
 /* raw_read|write section */
+#if defined(__VMS)
+# include "vms_term_sock.h"
+static int stdin_sock = -1;
+
+static void close_stdin_sock(void)
+{
+    TerminalSocket (TERM_SOCK_DELETE, &stdin_sock);
+}
+
+int fileno_stdin(void)
+{
+    if (stdin_sock == -1) {
+        TerminalSocket(TERM_SOCK_CREATE, &stdin_sock);
+        atexit(close_stdin_sock);
+    }
+
+    return stdin_sock;
+}
+#else
+int fileno_stdin(void)
+{
+    return fileno(stdin);
+}
+#endif
+
+int fileno_stdout(void)
+{
+    return fileno(stdout);
+}
+
 #if defined(_WIN32) && defined(STD_INPUT_HANDLE)
 int raw_read_stdin(void *buf, int siz)
 {
@@ -2308,10 +2339,17 @@ int raw_read_stdin(void *buf, int siz)
     else
         return (-1);
 }
+#elif defined(__VMS)
+#include <sys/socket.h>
+
+int raw_read_stdin(void *buf, int siz)
+{
+    return recv(fileno_stdin(), buf, siz, 0);
+}
 #else
 int raw_read_stdin(void *buf, int siz)
 {
-    return read(fileno(stdin), buf, siz);
+    return read(fileno_stdin(), buf, siz);
 }
 #endif
 
@@ -2327,7 +2365,7 @@ int raw_write_stdout(const void *buf, int siz)
 #else
 int raw_write_stdout(const void *buf, int siz)
 {
-    return write(fileno(stdout), buf, siz);
+    return write(fileno_stdout(), buf, siz);
 }
 #endif
 
@@ -2581,3 +2619,30 @@ int has_stdin_waiting(void)
     return _kbhit();
 }
 #endif
+
+/* Corrupt a signature by modifying final byte */
+void corrupt_signature(const ASN1_STRING *signature)
+{
+        unsigned char *s = signature->data;
+        s[signature->length - 1] ^= 0x1;
+}
+
+int set_cert_times(X509 *x, const char *startdate, const char *enddate,
+                   int days)
+{
+    if (startdate == NULL || strcmp(startdate, "today") == 0) {
+        if (X509_gmtime_adj(X509_getm_notBefore(x), 0) == NULL)
+            return 0;
+    } else {
+        if (!ASN1_TIME_set_string(X509_getm_notBefore(x), startdate))
+            return 0;
+    }
+    if (enddate == NULL) {
+        if (X509_time_adj_ex(X509_getm_notAfter(x), days, 0, NULL)
+            == NULL)
+            return 0;
+    } else if (!ASN1_TIME_set_string(X509_getm_notAfter(x), enddate)) {
+        return 0;
+    }
+    return 1;
+}

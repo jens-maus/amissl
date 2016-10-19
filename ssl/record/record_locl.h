@@ -14,6 +14,8 @@
  *                                                                           *
  *****************************************************************************/
 
+#define MAX_WARN_ALERT_COUNT    5
+
 /* Functions/macros provided by the RECORD_LAYER component */
 
 #define RECORD_LAYER_get_rbuf(rl)               (&(rl)->rbuf)
@@ -31,24 +33,25 @@
 #define RECORD_LAYER_reset_empty_record_count(rl) \
                                                 ((rl)->empty_record_count = 0)
 #define RECORD_LAYER_get_empty_record_count(rl) ((rl)->empty_record_count)
+#define RECORD_LAYER_is_first_record(rl)        ((rl)->is_first_record)
+#define RECORD_LAYER_set_first_record(rl)       ((rl)->is_first_record = 1)
+#define RECORD_LAYER_clear_first_record(rl)     ((rl)->is_first_record = 0)
 #define DTLS_RECORD_LAYER_get_r_epoch(rl)       ((rl)->d->r_epoch)
 
 __owur int ssl3_read_n(SSL *s, int n, int max, int extend, int clearold);
 
 void RECORD_LAYER_set_write_sequence(RECORD_LAYER *rl, const unsigned char *ws);
 DTLS1_BITMAP *dtls1_get_bitmap(SSL *s, SSL3_RECORD *rr,
-                                      unsigned int *is_next_epoch);
+                               unsigned int *is_next_epoch);
 int dtls1_process_buffered_records(SSL *s);
 int dtls1_retrieve_buffered_record(SSL *s, record_pqueue *queue);
-int dtls1_buffer_record(SSL *s, record_pqueue *q,
-                               unsigned char *priority);
+int dtls1_buffer_record(SSL *s, record_pqueue *q, unsigned char *priority);
 void ssl3_record_sequence_update(unsigned char *seq);
 
 /* Functions provided by the DTLS1_BITMAP component */
 
 int dtls1_record_replay_check(SSL *s, DTLS1_BITMAP *bitmap);
 void dtls1_record_bitmap_update(SSL *s, DTLS1_BITMAP *bitmap);
-
 
 /* Macros/functions provided by the SSL3_BUFFER component */
 
@@ -105,9 +108,9 @@ __owur int ssl3_do_uncompress(SSL *ssl, SSL3_RECORD *rr);
 void ssl3_cbc_copy_mac(unsigned char *out,
                        const SSL3_RECORD *rec, unsigned md_size);
 __owur int ssl3_cbc_remove_padding(SSL3_RECORD *rec,
-                            unsigned block_size, unsigned mac_size);
+                                   unsigned block_size, unsigned mac_size);
 __owur int tls1_cbc_remove_padding(const SSL *s,
-                            SSL3_RECORD *rec,
-                            unsigned block_size, unsigned mac_size);
-int dtls1_process_record(SSL *s);
+                                   SSL3_RECORD *rec,
+                                   unsigned block_size, unsigned mac_size);
+int dtls1_process_record(SSL *s, DTLS1_BITMAP *bitmap);
 __owur int dtls1_get_record(SSL *s);
