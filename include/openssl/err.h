@@ -136,11 +136,13 @@ typedef struct err_state_st {
 # define ASYNCerr(f,r) ERR_PUT_error(ERR_LIB_ASYNC,(f),(r),OPENSSL_FILE,OPENSSL_LINE)
 # define KDFerr(f,r) ERR_PUT_error(ERR_LIB_KDF,(f),(r),OPENSSL_FILE,OPENSSL_LINE)
 
-# define ERR_PACK(l,f,r) \
-  ( ((unsigned int)((l) & 0x0FF) << 24L) | (((f) & 0xFFF) << 12L) | ((r) & 0xFFF) )
-# define ERR_GET_LIB(l)          (int)((((unsigned long)l)>>24L)&0xffL)
-# define ERR_GET_FUNC(l)         (int)((((unsigned long)l)>>12L)&0xfffL)
-# define ERR_GET_REASON(l)       (int)((l)&0xfffL)
+# define ERR_PACK(l,f,r) ( \
+        (((unsigned int)(l) & 0x0FF) << 24L) | \
+        (((unsigned int)(f) & 0xFFF) << 12L) | \
+        (((unsigned int)(r) & 0xFFF)       ) )
+# define ERR_GET_LIB(l)          (int)(((l) >> 24L) & 0x0FFL)
+# define ERR_GET_FUNC(l)         (int)(((l) >> 12L) & 0xFFFL)
+# define ERR_GET_REASON(l)       (int)( (l)         & 0xFFFL)
 
 /* OS functions */
 # define SYS_F_FOPEN             1
@@ -228,7 +230,7 @@ const char *ERR_func_error_string(unsigned long e);
 const char *ERR_reason_error_string(unsigned long e);
 void ERR_print_errors_cb(int (*cb) (const char *str, size_t len, void *u),
                          void *u);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 void ERR_print_errors_fp(FILE *fp);
 # endif
 void ERR_print_errors(BIO *bp);
@@ -247,8 +249,6 @@ int ERR_load_ERR_strings(void);
 DEPRECATEDIN_1_1_0(void ERR_remove_thread_state(void *))
 DEPRECATEDIN_1_0_0(void ERR_remove_state(unsigned long pid))
 ERR_STATE *ERR_get_state(void);
-
-LHASH_OF(ERR_STRING_DATA) *ERR_get_string_table(void);
 
 int ERR_get_next_error_library(void);
 

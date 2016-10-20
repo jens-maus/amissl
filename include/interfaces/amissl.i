@@ -699,7 +699,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_err_free_strings_int_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_remove_state_UNIMPLEMENTED
 	    FPTR IAmiSSL_ERR_get_state
-	    FPTR IAmiSSL_ERR_get_string_table
+	    FPTR AmiSSLIFace_ERR_get_string_table_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_get_err_state_table_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_release_err_state_table_UNIMPLEMENTED
 	    FPTR IAmiSSL_ERR_get_next_error_library
@@ -1858,8 +1858,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_get_issuer_name
 	    FPTR IAmiSSL_X509_set_subject_name
 	    FPTR IAmiSSL_X509_get_subject_name
-	    FPTR IAmiSSL_X509_set_notBefore
-	    FPTR IAmiSSL_X509_set_notAfter
+	    FPTR IAmiSSL_X509_set1_notBefore
+	    FPTR IAmiSSL_X509_set1_notAfter
 	    FPTR IAmiSSL_X509_set_pubkey
 	    FPTR IAmiSSL_X509_get_pubkey
 	    FPTR IAmiSSL_X509_get0_pubkey_bitstr
@@ -1885,8 +1885,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_REQ_add1_attr_by_txt
 	    FPTR IAmiSSL_X509_CRL_set_version
 	    FPTR IAmiSSL_X509_CRL_set_issuer_name
-	    FPTR IAmiSSL_X509_CRL_set_lastUpdate
-	    FPTR IAmiSSL_X509_CRL_set_nextUpdate
+	    FPTR IAmiSSL_X509_CRL_set1_lastUpdate
+	    FPTR IAmiSSL_X509_CRL_set1_nextUpdate
 	    FPTR IAmiSSL_X509_CRL_sort
 	    FPTR IAmiSSL_X509_REVOKED_set_serialNumber
 	    FPTR IAmiSSL_X509_REVOKED_set_revocationDate
@@ -4396,8 +4396,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_get0_tbs_sigalg
 	    FPTR IAmiSSL_X509_get0_trust_objects
 	    FPTR IAmiSSL_X509_get0_uids
-	    FPTR IAmiSSL_X509_get_notAfter
-	    FPTR IAmiSSL_X509_get_notBefore
+	    FPTR IAmiSSL_X509_getm_notAfter
+	    FPTR IAmiSSL_X509_getm_notBefore
 	    FPTR IAmiSSL_X509_get_signature_type
 	    FPTR IAmiSSL_X509_get_version
 	    FPTR IAmiSSL_X509_get_X509_PUBKEY
@@ -4538,11 +4538,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_new
 	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_free
 	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_get0_cert
-	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set0_cert
 	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_get0_issuer
-	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set0_issuer
 	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_get0_log_store
-	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set0_log_store
 	    FPTR IAmiSSL_SCT_new
 	    FPTR IAmiSSL_SCT_new_from_base64
 	    FPTR IAmiSSL_SCT_free
@@ -4568,8 +4565,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SCT_set_source
 	    FPTR IAmiSSL_SCT_print
 	    FPTR IAmiSSL_SCT_LIST_print
-	    FPTR IAmiSSL_SCT_verify
-	    FPTR IAmiSSL_SCT_verify_v1
 	    FPTR IAmiSSL_SCT_get_validation_status
 	    FPTR IAmiSSL_SCT_validate
 	    FPTR IAmiSSL_SCT_LIST_validate
@@ -4579,10 +4574,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_d2i_SCT_LIST
 	    FPTR IAmiSSL_i2o_SCT
 	    FPTR IAmiSSL_o2i_SCT
-	    FPTR IAmiSSL_i2o_SCT_signature
-	    FPTR IAmiSSL_o2i_SCT_signature
 	    FPTR IAmiSSL_CTLOG_new
-	    FPTR IAmiSSL_CTLOG_new_null
 	    FPTR IAmiSSL_CTLOG_new_from_base64
 	    FPTR IAmiSSL_CTLOG_free
 	    FPTR IAmiSSL_CTLOG_get0_name
@@ -4784,7 +4776,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_OBJECT_get0_X509
 	    FPTR IAmiSSL_X509_STORE_CTX_get0_untrusted
 	    FPTR IAmiSSL_X509_STORE_CTX_get0_cert
-	    FPTR AmiSSLIFace_X509_STORE_CTX_set_verify_UNIMPLEMENTED
+	    FPTR IAmiSSL_X509_STORE_CTX_set_verify
 	    FPTR IAmiSSL_X509_STORE_CTX_get_verify
 	    FPTR IAmiSSL_X509_STORE_CTX_get_verify_cb
 	    FPTR IAmiSSL_X509_STORE_CTX_set0_verified_chain
@@ -4894,6 +4886,32 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_d2i_IPAddressOrRange
 	    FPTR IAmiSSL_i2d_IPAddressOrRange
 	    FPTR IAmiSSL_IPAddressOrRange_it
+	    FPTR IAmiSSL_ASN1_STRING_get0_data
+	    FPTR IAmiSSL_X509_get0_notBefore
+	    FPTR IAmiSSL_X509_get0_notAfter
+	    FPTR IAmiSSL_X509_CRL_get0_lastUpdate
+	    FPTR IAmiSSL_X509_CRL_get0_nextUpdate
+	    FPTR IAmiSSL_OPENSSL_uni2utf8
+	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE
+	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set1_cert
+	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set1_issuer
+	    FPTR IAmiSSL_ECPARAMETERS_new
+	    FPTR IAmiSSL_ECPARAMETERS_free
+	    FPTR IAmiSSL_BIO_get_new_index
+	    FPTR IAmiSSL_EVP_PKEY_set1_tls_encodedpoint
+	    FPTR IAmiSSL_EVP_PKEY_get1_tls_encodedpoint
+	    FPTR IAmiSSL_OCSP_RESPID_set_by_name
+	    FPTR IAmiSSL_OCSP_RESPID_set_by_key
+	    FPTR IAmiSSL_OCSP_RESPID_match
+	    FPTR IAmiSSL_PKCS12_add_friendlyname_utf8
+	    FPTR IAmiSSL_PKCS12_key_gen_utf8
+	    FPTR IAmiSSL_OPENSSL_utf82uni
+	    FPTR IAmiSSL_SSL_SESSION_get0_cipher
+	    FPTR IAmiSSL_SSL_SESSION_set1_id
+	    FPTR IAmiSSL_SSL_SESSION_get0_id_context
+	    FPTR IAmiSSL_TS_STATUS_INFO_get0_text
+	    FPTR IAmiSSL_X509_SIG_getm
+	    FPTR IAmiSSL_X509_get0_serialNumber
 	LABEL AmiSSLIFace_SIZE
 
 #endif

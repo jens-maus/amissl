@@ -64,30 +64,42 @@ DEFINE_STACK_OF(CTLOG)
  * CT policy evaluation context functions *
  ******************************************/
 
-/* Creates a new, empty policy evaluation context */
+/*
+ * Creates a new, empty policy evaluation context.
+ * The caller is responsible for calling CT_POLICY_EVAL_CTX_free when finished
+ * with the CT_POLICY_EVAL_CTX.
+ */
 CT_POLICY_EVAL_CTX *CT_POLICY_EVAL_CTX_new(void);
 
-/* Deletes a policy evaluation context */
+/* Deletes a policy evaluation context and anything it owns. */
 void CT_POLICY_EVAL_CTX_free(CT_POLICY_EVAL_CTX *ctx);
 
 /* Gets the peer certificate that the SCTs are for */
 X509* CT_POLICY_EVAL_CTX_get0_cert(const CT_POLICY_EVAL_CTX *ctx);
 
-/* Sets the certificate associated with the received SCTs */
-void CT_POLICY_EVAL_CTX_set0_cert(CT_POLICY_EVAL_CTX *ctx, X509 *cert);
+/*
+ * Sets the certificate associated with the received SCTs.
+ * Increments the reference count of cert.
+ * Returns 1 on success, 0 otherwise.
+ */
+int CT_POLICY_EVAL_CTX_set1_cert(CT_POLICY_EVAL_CTX *ctx, X509 *cert);
 
 /* Gets the issuer of the aforementioned certificate */
 X509* CT_POLICY_EVAL_CTX_get0_issuer(const CT_POLICY_EVAL_CTX *ctx);
 
-/* Sets the issuer of the certificate associated with the received SCTs */
-void CT_POLICY_EVAL_CTX_set0_issuer(CT_POLICY_EVAL_CTX *ctx, X509 *issuer);
+/*
+ * Sets the issuer of the certificate associated with the received SCTs.
+ * Increments the reference count of issuer.
+ * Returns 1 on success, 0 otherwise.
+ */
+int CT_POLICY_EVAL_CTX_set1_issuer(CT_POLICY_EVAL_CTX *ctx, X509 *issuer);
 
 /* Gets the CT logs that are trusted sources of SCTs */
 const CTLOG_STORE *CT_POLICY_EVAL_CTX_get0_log_store(const CT_POLICY_EVAL_CTX *ctx);
 
-/* Sets the log store that is in use */
-void CT_POLICY_EVAL_CTX_set0_log_store(CT_POLICY_EVAL_CTX *ctx,
-                                       CTLOG_STORE *log_store);
+/* Sets the log store that is in use. It must outlive the CT_POLICY_EVAL_CTX. */
+void CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE(CT_POLICY_EVAL_CTX *ctx,
+                                               CTLOG_STORE *log_store);
 
 /*****************
  * SCT functions *
@@ -266,19 +278,6 @@ void SCT_LIST_print(const STACK_OF(SCT) *sct_list, BIO *out, int indent,
                     const char *separator, const CTLOG_STORE *logs);
 
 /*
- * Verifies an SCT with the given context.
- * Returns 1 if the SCT verifies successfully, 0 otherwise.
- */
-__owur int SCT_verify(const SCT_CTX *sctx, const SCT *sct);
-
-/*
- * Verifies an SCT against the provided data.
- * Returns 1 if the SCT verifies successfully, 0 otherwise.
- */
-__owur int SCT_verify_v1(SCT *sct, X509 *cert, X509 *preissuer,
-                  X509_PUBKEY *log_pubkey, X509 *issuer_cert);
-
-/*
  * Gets the last result of validating this SCT.
  * If it has not been validated yet, returns SCT_VALIDATION_STATUS_NOT_SET.
  */
@@ -295,7 +294,7 @@ __owur int SCT_validate(SCT *sct, const CT_POLICY_EVAL_CTX *ctx);
 
 /*
  * Validates the given list of SCTs with the provided context.
- * Populates the "good_scts" and "bad_scts" of the evaluation context.
+ * Sets the "validation_status" field of each SCT.
  * Returns 1 if there are no invalid SCTs and all signatures verify.
  * Returns 0 if at least one SCT is invalid or could not be verified.
  * Returns a negative integer if an error occurs.
@@ -386,43 +385,22 @@ __owur int i2o_SCT(const SCT *sct, unsigned char **out);
  */
 SCT *o2i_SCT(SCT **psct, const unsigned char **in, size_t len);
 
-/*
-* Serialize (to TLS format) an |sct| signature and write it to |out|.
-* If |out| is null, no signature will be output but the length will be returned.
-* If |out| points to a null pointer, a string will be allocated to hold the
-* TLS-format signature. It is the responsibility of the caller to free it.
-* If |out| points to an allocated string, the signature will be written to it.
-* The length of the signature in TLS format will be returned.
-*/
-__owur int i2o_SCT_signature(const SCT *sct, unsigned char **out);
-
-/*
-* Parses an SCT signature in TLS format and populates the |sct| with it.
-* |in| should be a pointer to a string containing the TLS-format signature.
-* |in| will be advanced to the end of the signature if parsing succeeds.
-* |len| should be the length of the signature in |in|.
-* Returns the number of bytes parsed, or a negative integer if an error occurs.
-*/
-__owur int o2i_SCT_signature(SCT *sct, const unsigned char **in, size_t len);
-
 /********************
  * CT log functions *
  ********************/
 
 /*
  * Creates a new CT log instance with the given |public_key| and |name|.
+ * Takes ownership of |public_key| but copies |name|.
+ * Returns NULL if malloc fails or if |public_key| cannot be converted to DER.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
 CTLOG *CTLOG_new(EVP_PKEY *public_key, const char *name);
 
 /*
- * Creates a new, blank CT log instance.
- * Should be deleted by the caller using CTLOG_free when no longer needed.
- */
-CTLOG *CTLOG_new_null(void);
-
-/*
- * Creates a new CT |ct_log| instance with the given base64 public_key and |name|.
+ * Creates a new CTLOG instance with the base64-encoded SubjectPublicKeyInfo DER
+ * in |pkey_base64|. The |name| is a string to help users identify this log.
+ * Returns 1 on success, 0 on failure.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
 int CTLOG_new_from_base64(CTLOG ** ct_log,
@@ -516,8 +494,7 @@ int ERR_load_CT_strings(void);
 # define CT_F_SCT_SET_LOG_ENTRY_TYPE                      102
 # define CT_F_SCT_SET_SIGNATURE_NID                       103
 # define CT_F_SCT_SET_VERSION                             104
-# define CT_F_SCT_VERIFY                                  128
-# define CT_F_SCT_VERIFY_V1                               129
+# define CT_F_SCT_CTX_VERIFY                              128
 
 /* Reason codes. */
 # define CT_R_BASE64_DECODE_ERROR                         108

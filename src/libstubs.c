@@ -98,7 +98,7 @@ BIO *(BIO_new_fp)(FILE *stream, int closeflag)
   return(ret);
 }
 
-int (X509_NAME_print_ex_fp)(FILE *fp, X509_NAME *nm, int indent, unsigned long flags)
+int (X509_NAME_print_ex_fp)(FILE *fp, const X509_NAME *nm, int indent, unsigned long flags)
 {
   int ret=0;
   BIO *out;
@@ -386,6 +386,11 @@ void (ERR_add_error_data)(int num, ...)
 
 #endif
 #endif
+
+void (OCSP_RESPID_free)(OCSP_RESPID *a)
+{
+  OCSP_RESPID_free(a);
+}
 
 // declare stub functions for the ASN1 iterator functions so that within openssl we
 // can directly reference e.g. "ASN1_ANY" and have it calling "IAmiSSL->ASN1_ANY_it()" instead.

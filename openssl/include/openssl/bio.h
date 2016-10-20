@@ -12,7 +12,7 @@
 
 # include <openssl/e_os2.h>
 
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 #  include <stdio.h>
 # endif
 # include <stdarg.h>
@@ -411,6 +411,8 @@ struct bio_dgram_sctp_prinfo {
 # else
 #  define BIO_set_fp_amiga(b,fp,c) BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #  define BIO_get_fp_amiga(b,fpp)  BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
+#  define BIO_set_fp               BIO_set_fp_amiga
+#  define BIO_get_fp               BIO_get_fp_amiga
 # endif
 
 /* BIO_s_fd() and BIO_s_file() */
@@ -538,7 +540,7 @@ int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
 
 const BIO_METHOD *BIO_s_file(void);
 BIO *BIO_new_file(const char *filename, const char *mode);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 BIO *BIO_new_fp(FILE *stream, int close_flag);
 # endif
 # ifdef OPENSSL_SYS_AMIGA

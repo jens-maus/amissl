@@ -198,7 +198,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
     // known 1.1.X amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
-    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110-pre6.library", 4);
+    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110b.library", 4);
   }
   else if(LibAPIVersion == AMISSL_V10x)
   {

@@ -25,7 +25,7 @@
 # define HEADER_BN_H
 
 # include <openssl/e_os2.h>
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 #  include <stdio.h>
 # endif
 # include <openssl/opensslconf.h>
@@ -253,7 +253,7 @@ int BN_mod_exp_simple(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
                       const BIGNUM *m, BN_CTX *ctx);
 
 int BN_mask_bits(BIGNUM *a, int n);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 int BN_print_fp(FILE *fp, const BIGNUM *a);
 # endif
 int BN_print(BIO *bio, const BIGNUM *a);
