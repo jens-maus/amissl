@@ -38,9 +38,6 @@
  * #define TEST_CERT "client.pem"
  */
 
-#undef BUFSIZZ
-#define BUFSIZZ 1024*10
-
 #undef min
 #undef max
 #define min(a,b) (((a) < (b)) ? (a) : (b))
@@ -49,9 +46,6 @@
 #undef SECONDS
 #define SECONDS 30
 #define SECONDSSTR "30"
-
-extern int verify_depth;
-extern int verify_error;
 
 static SSL *doConnection(SSL *scon, const char *host, SSL_CTX *ctx);
 
@@ -116,8 +110,6 @@ int s_time_main(int argc, char **argv)
     size_t buf_size;
 
     meth = TLS_client_method();
-    verify_depth = 0;
-    verify_error = X509_V_OK;
 
     prog = opt_init(argc, argv, s_time_options);
     while ((o = opt_next()) != OPT_EOF) {
@@ -141,10 +133,10 @@ int s_time_main(int argc, char **argv)
             perform = 1;
             break;
         case OPT_VERIFY:
-            if (!opt_int(opt_arg(), &verify_depth))
+            if (!opt_int(opt_arg(), &verify_args.depth))
                 goto opthelp;
             BIO_printf(bio_err, "%s: verify depth is %d\n",
-                       prog, verify_depth);
+                       prog, verify_args.depth);
             break;
         case OPT_CERT:
             certfile = opt_arg();
@@ -415,9 +407,9 @@ static SSL *doConnection(SSL *scon, const char *host, SSL_CTX *ctx)
     }
     if (i <= 0) {
         BIO_printf(bio_err, "ERROR\n");
-        if (verify_error != X509_V_OK)
+        if (verify_args.error != X509_V_OK)
             BIO_printf(bio_err, "verify error:%s\n",
-                       X509_verify_cert_error_string(verify_error));
+                       X509_verify_cert_error_string(verify_args.error));
         else
             ERR_print_errors(bio_err);
         if (scon == NULL)

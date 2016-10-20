@@ -46,7 +46,7 @@
  */
 
 /* Sub state machine return values */
-typedef enum  {
+typedef enum {
     /* Something bad happened or NBIO */
     SUB_STATE_ERROR,
     /* Sub state finished go to the next sub state */
@@ -165,7 +165,8 @@ void ossl_statem_set_hello_verify_done(SSL *s)
     s->statem.hand_state = TLS_ST_SR_CLNT_HELLO;
 }
 
-int ossl_statem_connect(SSL *s) {
+int ossl_statem_connect(SSL *s)
+{
     return state_machine(s, 0);
 }
 
@@ -174,7 +175,9 @@ int ossl_statem_accept(SSL *s)
     return state_machine(s, 1);
 }
 
-static void (*get_callback(SSL *s))(const SSL *, int, int)
+typedef void (*info_cb) (const SSL *, int, int);
+
+static info_cb get_callback(SSL *s)
 {
     if (s->info_callback != NULL)
         return s->info_callback;
@@ -237,7 +240,6 @@ static int state_machine(SSL *s, int server)
         if (!SSL_clear(s))
             return -1;
     }
-
 #ifndef OPENSSL_NO_SCTP
     if (SSL_IS_DTLS(s)) {
         /*
@@ -282,8 +284,7 @@ static int state_machine(SSL *s, int server)
 
         if (SSL_IS_DTLS(s)) {
             if ((s->version & 0xff00) != (DTLS1_VERSION & 0xff00) &&
-                    (server
-                    || (s->version & 0xff00) != (DTLS1_BAD_VER & 0xff00))) {
+                (server || (s->version & 0xff00) != (DTLS1_BAD_VER & 0xff00))) {
                 SSLerr(SSL_F_STATE_MACHINE, ERR_R_INTERNAL_ERROR);
                 goto end;
             }
@@ -319,7 +320,6 @@ static int state_machine(SSL *s, int server)
          * Should have been reset by tls_process_finished, too.
          */
         s->s3->change_cipher_spec = 0;
-
 
         /*
          * Ok, we now need to push on a buffering BIO ...but not with
@@ -445,6 +445,21 @@ static void init_read_state_machine(SSL *s)
     st->read_state = READ_STATE_HEADER;
 }
 
+static int grow_init_buf(SSL *s, size_t size) {
+
+    size_t msg_offset = (char *)s->init_msg - s->init_buf->data;
+
+    if (!BUF_MEM_grow_clean(s->init_buf, (int)size))
+        return 0;
+
+    if (size < msg_offset)
+        return 0;
+
+    s->init_msg = s->init_buf->data + msg_offset;
+
+    return 1;
+}
+
 /*
  * This function implements the sub-state machine when the message flow is in
  * MSG_FLOW_READING. The valid sub-states and transitions are:
@@ -471,15 +486,16 @@ static void init_read_state_machine(SSL *s)
  * control returns to the calling application. When this function is recalled we
  * will resume in the same state where we left off.
  */
-static SUB_STATE_RETURN read_state_machine(SSL *s) {
+static SUB_STATE_RETURN read_state_machine(SSL *s)
+{
     OSSL_STATEM *st = &s->statem;
     int ret, mt;
     unsigned long len = 0;
-    int (*transition)(SSL *s, int mt);
+    int (*transition) (SSL *s, int mt);
     PACKET pkt;
-    MSG_PROCESS_RETURN (*process_message)(SSL *s, PACKET *pkt);
-    WORK_STATE (*post_process_message)(SSL *s, WORK_STATE wst);
-    unsigned long (*max_message_size)(SSL *s);
+    MSG_PROCESS_RETURN(*process_message) (SSL *s, PACKET *pkt);
+    WORK_STATE(*post_process_message) (SSL *s, WORK_STATE wst);
+    unsigned long (*max_message_size) (SSL *s);
     void (*cb) (const SSL *ssl, int type, int val) = NULL;
 
     cb = get_callback(s);
@@ -541,6 +557,16 @@ static SUB_STATE_RETURN read_state_machine(SSL *s) {
                 return SUB_STATE_ERROR;
             }
 
+            /* dtls_get_message already did this */
+            if (!SSL_IS_DTLS(s)
+                    && s->s3->tmp.message_size > 0
+                    && !grow_init_buf(s, s->s3->tmp.message_size
+                                         + SSL3_HM_HEADER_LENGTH)) {
+                ssl3_send_alert(s, SSL3_AL_FATAL, SSL_AD_INTERNAL_ERROR);
+                SSLerr(SSL_F_READ_STATE_MACHINE, ERR_R_BUF_LIB);
+                return SUB_STATE_ERROR;
+            }
+
             st->read_state = READ_STATE_BODY;
             /* Fall through */
 
@@ -565,22 +591,24 @@ static SUB_STATE_RETURN read_state_machine(SSL *s) {
             /* Discard the packet data */
             s->init_num = 0;
 
-            if (ret == MSG_PROCESS_ERROR) {
+            switch (ret) {
+            case MSG_PROCESS_ERROR:
                 return SUB_STATE_ERROR;
-            }
 
-            if (ret == MSG_PROCESS_FINISHED_READING) {
+            case MSG_PROCESS_FINISHED_READING:
                 if (SSL_IS_DTLS(s)) {
                     dtls1_stop_timer(s);
                 }
                 return SUB_STATE_FINISHED;
-            }
 
-            if (ret == MSG_PROCESS_CONTINUE_PROCESSING) {
+            case MSG_PROCESS_CONTINUE_PROCESSING:
                 st->read_state = READ_STATE_POST_PROCESS;
                 st->read_state_work = WORK_MORE_A;
-            } else {
+                break;
+
+            default:
                 st->read_state = READ_STATE_HEADER;
+                break;
             }
             break;
 
@@ -620,7 +648,7 @@ static int statem_do_write(SSL *s)
     OSSL_STATEM *st = &s->statem;
 
     if (st->hand_state == TLS_ST_CW_CHANGE
-            || st->hand_state == TLS_ST_SW_CHANGE) {
+        || st->hand_state == TLS_ST_SW_CHANGE) {
         if (SSL_IS_DTLS(s))
             return dtls1_do_write(s, SSL3_RT_CHANGE_CIPHER_SPEC);
         else
@@ -675,10 +703,10 @@ static SUB_STATE_RETURN write_state_machine(SSL *s)
 {
     OSSL_STATEM *st = &s->statem;
     int ret;
-    WRITE_TRAN (*transition)(SSL *s);
-    WORK_STATE (*pre_work)(SSL *s, WORK_STATE wst);
-    WORK_STATE (*post_work)(SSL *s, WORK_STATE wst);
-    int (*construct_message)(SSL *s);
+    WRITE_TRAN(*transition) (SSL *s);
+    WORK_STATE(*pre_work) (SSL *s, WORK_STATE wst);
+    WORK_STATE(*post_work) (SSL *s, WORK_STATE wst);
+    int (*construct_message) (SSL *s);
     void (*cb) (const SSL *ssl, int type, int val) = NULL;
 
     cb = get_callback(s);
@@ -807,7 +835,7 @@ int ossl_statem_app_data_allowed(SSL *s)
          * ServerHello yet then we allow app data
          */
         if (st->hand_state == TLS_ST_BEFORE
-                || st->hand_state == TLS_ST_SR_CLNT_HELLO)
+            || st->hand_state == TLS_ST_SR_CLNT_HELLO)
             return 1;
     } else {
         /*

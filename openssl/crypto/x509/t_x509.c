@@ -110,7 +110,7 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags,
     }
 
     if (!(cflag & X509_FLAG_NO_SIGNAME)) {
-        X509_ALGOR *tsig_alg = X509_get0_tbs_sigalg(x);
+        const X509_ALGOR *tsig_alg = X509_get0_tbs_sigalg(x);
         if (X509_signature_print(bp, tsig_alg, NULL) <= 0)
             goto err;
     }
@@ -129,11 +129,11 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags,
             goto err;
         if (BIO_write(bp, "            Not Before: ", 24) <= 0)
             goto err;
-        if (!ASN1_TIME_print(bp, X509_get_notBefore(x)))
+        if (!ASN1_TIME_print(bp, X509_get0_notBefore(x)))
             goto err;
         if (BIO_write(bp, "\n            Not After : ", 25) <= 0)
             goto err;
-        if (!ASN1_TIME_print(bp, X509_get_notAfter(x)))
+        if (!ASN1_TIME_print(bp, X509_get0_notAfter(x)))
             goto err;
         if (BIO_write(bp, "\n", 1) <= 0)
             goto err;
@@ -170,8 +170,8 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags,
     }
 
     if (!(cflag & X509_FLAG_NO_IDS)) {
-        ASN1_BIT_STRING *iuid, *suid;
-        X509_get0_uids(&iuid, &suid, x);
+        const ASN1_BIT_STRING *iuid, *suid;
+        X509_get0_uids(x, &iuid, &suid);
         if (iuid != NULL) {
             if (BIO_printf(bp, "%8sIssuer Unique ID: ", "") <= 0)
                 goto err;
@@ -191,8 +191,8 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags,
                                 X509_get0_extensions(x), cflag, 8);
 
     if (!(cflag & X509_FLAG_NO_SIGDUMP)) {
-        X509_ALGOR *sig_alg;
-        ASN1_BIT_STRING *sig;
+        const X509_ALGOR *sig_alg;
+        const ASN1_BIT_STRING *sig;
         X509_get0_signature(&sig, &sig_alg, x);
         if (X509_signature_print(bp, sig_alg, sig) <= 0)
             goto err;
@@ -248,8 +248,9 @@ int X509_ocspid_print(BIO *bp, X509 *x)
     if (keybstr == NULL)
         goto err;
 
-    if (!EVP_Digest(ASN1_STRING_data(keybstr), ASN1_STRING_length(keybstr),
-                    SHA1md, NULL, EVP_sha1(), NULL))
+    if (!EVP_Digest(ASN1_STRING_get0_data(keybstr),
+                    ASN1_STRING_length(keybstr), SHA1md, NULL, EVP_sha1(),
+                    NULL))
         goto err;
     for (i = 0; i < SHA_DIGEST_LENGTH; i++) {
         if (BIO_printf(bp, "%02X", SHA1md[i]) <= 0)
@@ -286,7 +287,8 @@ int X509_signature_dump(BIO *bp, const ASN1_STRING *sig, int indent)
     return 1;
 }
 
-int X509_signature_print(BIO *bp, X509_ALGOR *sigalg, ASN1_STRING *sig)
+int X509_signature_print(BIO *bp, const X509_ALGOR *sigalg,
+                         const ASN1_STRING *sig)
 {
     int sig_nid;
     if (BIO_puts(bp, "    Signature Algorithm: ") <= 0)

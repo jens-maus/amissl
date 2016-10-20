@@ -889,7 +889,7 @@ static int check_cert(X509_STORE_CTX *ctx)
         crl = NULL;
         dcrl = NULL;
         /*
-         * If reasons not updated we wont get anywhere by another iteration,
+         * If reasons not updated we won't get anywhere by another iteration,
          * so exit loop.
          */
         if (last_reasons == ctx->current_reasons) {
@@ -921,7 +921,7 @@ static int check_crl_time(X509_STORE_CTX *ctx, X509_CRL *crl, int notify)
     else
         ptime = NULL;
 
-    i = X509_cmp_time(X509_CRL_get_lastUpdate(crl), ptime);
+    i = X509_cmp_time(X509_CRL_get0_lastUpdate(crl), ptime);
     if (i == 0) {
         if (!notify)
             return 0;
@@ -936,8 +936,8 @@ static int check_crl_time(X509_STORE_CTX *ctx, X509_CRL *crl, int notify)
             return 0;
     }
 
-    if (X509_CRL_get_nextUpdate(crl)) {
-        i = X509_cmp_time(X509_CRL_get_nextUpdate(crl), ptime);
+    if (X509_CRL_get0_nextUpdate(crl)) {
+        i = X509_cmp_time(X509_CRL_get0_nextUpdate(crl), ptime);
 
         if (i == 0) {
             if (!notify)
@@ -974,13 +974,13 @@ static int get_crl_sk(X509_STORE_CTX *ctx, X509_CRL **pcrl, X509_CRL **pdcrl,
         crl = sk_X509_CRL_value(crls, i);
         reasons = *preasons;
         crl_score = get_crl_score(ctx, &crl_issuer, &reasons, crl, x);
-        if (crl_score < best_score)
+        if (crl_score < best_score || crl_score == 0)
             continue;
         /* If current CRL is equivalent use it if it is newer */
-        if (crl_score == best_score) {
+        if (crl_score == best_score && best_crl != NULL) {
             int day, sec;
-            if (ASN1_TIME_diff(&day, &sec, X509_CRL_get_lastUpdate(best_crl),
-                               X509_CRL_get_lastUpdate(crl)) == 0)
+            if (ASN1_TIME_diff(&day, &sec, X509_CRL_get0_lastUpdate(best_crl),
+                               X509_CRL_get0_lastUpdate(crl)) == 0)
                 continue;
             /*
              * ASN1_TIME_diff never returns inconsistent signs for |day|
@@ -1646,7 +1646,7 @@ int x509_check_cert_time(X509_STORE_CTX *ctx, X509 *x, int depth)
     else
         ptime = NULL;
 
-    i = X509_cmp_time(X509_get_notBefore(x), ptime);
+    i = X509_cmp_time(X509_get0_notBefore(x), ptime);
     if (i >= 0 && depth < 0)
         return 0;
     if (i == 0 && !verify_cb_cert(ctx, x, depth,
@@ -1655,7 +1655,7 @@ int x509_check_cert_time(X509_STORE_CTX *ctx, X509 *x, int depth)
     if (i > 0 && !verify_cb_cert(ctx, x, depth, X509_V_ERR_CERT_NOT_YET_VALID))
         return 0;
 
-    i = X509_cmp_time(X509_get_notAfter(x), ptime);
+    i = X509_cmp_time(X509_get0_notAfter(x), ptime);
     if (i <= 0 && depth < 0)
         return 0;
     if (i == 0 && !verify_cb_cert(ctx, x, depth,
@@ -1983,9 +1983,9 @@ X509_CRL *X509_CRL_diff(X509_CRL *base, X509_CRL *newer,
     if (!X509_CRL_set_issuer_name(crl, X509_CRL_get_issuer(newer)))
         goto memerr;
 
-    if (!X509_CRL_set_lastUpdate(crl, X509_CRL_get_lastUpdate(newer)))
+    if (!X509_CRL_set1_lastUpdate(crl, X509_CRL_get0_lastUpdate(newer)))
         goto memerr;
-    if (!X509_CRL_set_nextUpdate(crl, X509_CRL_get_nextUpdate(newer)))
+    if (!X509_CRL_set1_nextUpdate(crl, X509_CRL_get0_nextUpdate(newer)))
         goto memerr;
 
     /* Set base CRL number: must be critical */
@@ -2438,6 +2438,12 @@ void X509_STORE_CTX_set_verify_cb(X509_STORE_CTX *ctx,
 X509_STORE_CTX_verify_cb X509_STORE_CTX_get_verify_cb(X509_STORE_CTX *ctx)
 {
     return ctx->verify_cb;
+}
+
+void X509_STORE_CTX_set_verify(X509_STORE_CTX *ctx,
+                               X509_STORE_CTX_verify_fn verify)
+{
+    ctx->verify = verify;
 }
 
 X509_STORE_CTX_verify_fn X509_STORE_CTX_get_verify(X509_STORE_CTX *ctx)

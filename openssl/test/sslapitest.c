@@ -7,10 +7,13 @@
  * https://www.openssl.org/source/license.html
  */
 
+#include <string.h>
+
 #include <openssl/opensslconf.h>
 #include <openssl/bio.h>
 #include <openssl/crypto.h>
 #include <openssl/ssl.h>
+#include <openssl/ocsp.h>
 
 #include "ssltestlib.h"
 #include "testutil.h"
@@ -18,63 +21,325 @@
 static char *cert = NULL;
 static char *privkey = NULL;
 
-static int test_tlsext_status_type(void)
+static const unsigned char orespder[] = "Dummy OCSP Response";
+static int ocsp_server_called = 0;
+static int ocsp_client_called = 0;
+
+static int cdummyarg = 1;
+static X509 *ocspcert = NULL;
+
+#define NUM_EXTRA_CERTS 40
+
+static int execute_test_large_message(const SSL_METHOD *smeth,
+                                      const SSL_METHOD *cmeth)
 {
-    SSL_CTX *ctx = NULL;
-    SSL *con = NULL;
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
     int testresult = 0;
+    int i;
+    BIO *certbio = BIO_new_file(cert, "r");
+    X509 *chaincert = NULL;
+    int certlen;
 
-    /* Test tlsext_status_type */
-    ctx = SSL_CTX_new(TLS_method());
+    if (certbio == NULL) {
+        printf("Can't load the certficate file\n");
+        goto end;
+    }
+    chaincert = PEM_read_bio_X509(certbio, NULL, NULL, NULL);
 
-    if (SSL_CTX_get_tlsext_status_type(ctx) != -1) {
-        printf("Unexpected initial value for "
-               "SSL_CTX_get_tlsext_status_type()\n");
+    if (!create_ssl_ctx_pair(smeth, cmeth, &sctx,
+                             &cctx, cert, privkey)) {
+        printf("Unable to create SSL_CTX pair\n");
+        goto end;
+    }
+    BIO_free(certbio);
+    certbio = NULL;
+
+    /*
+     * We assume the supplied certificate is big enough so that if we add
+     * NUM_EXTRA_CERTS it will make the overall message large enough. The
+     * default buffer size is requested to be 16k, but due to the way BUF_MEM
+     * works, it ends up allocing a little over 21k (16 * 4/3). So, in this test
+     * we need to have a message larger than that.
+     */
+    certlen = i2d_X509(chaincert, NULL);
+    OPENSSL_assert((certlen * NUM_EXTRA_CERTS)
+                   > ((SSL3_RT_MAX_PLAIN_LENGTH * 4) / 3));
+    for (i = 0; i < NUM_EXTRA_CERTS; i++) {
+        if (!X509_up_ref(chaincert)) {
+            printf("Unable to up ref cert\n");
+            goto end;
+        }
+        if (!SSL_CTX_add_extra_chain_cert(sctx, chaincert)) {
+            printf("Unable to add extra chain cert %d\n", i);
+            X509_free(chaincert);
+            goto end;
+        }
+    }
+
+    if (!create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)) {
+        printf("Unable to create SSL objects\n");
         goto end;
     }
 
-    con = SSL_new(ctx);
-
-    if (SSL_get_tlsext_status_type(con) != -1) {
-        printf("Unexpected initial value for SSL_get_tlsext_status_type()\n");
-        goto end;
-    }
-
-    if (!SSL_set_tlsext_status_type(con, TLSEXT_STATUSTYPE_ocsp)) {
-        printf("Unexpected fail for SSL_set_tlsext_status_type()\n");
-        goto end;
-    }
-
-    if (SSL_get_tlsext_status_type(con) != TLSEXT_STATUSTYPE_ocsp) {
-        printf("Unexpected result for SSL_get_tlsext_status_type()\n");
-        goto end;
-    }
-
-    SSL_free(con);
-    con = NULL;
-
-    if (!SSL_CTX_set_tlsext_status_type(ctx, TLSEXT_STATUSTYPE_ocsp)) {
-        printf("Unexpected fail for SSL_CTX_set_tlsext_status_type()\n");
-        goto end;
-    }
-
-    if (SSL_CTX_get_tlsext_status_type(ctx) != TLSEXT_STATUSTYPE_ocsp) {
-        printf("Unexpected result for SSL_CTX_get_tlsext_status_type()\n");
-        goto end;
-    }
-
-    con = SSL_new(ctx);
-
-    if (SSL_get_tlsext_status_type(con) != TLSEXT_STATUSTYPE_ocsp) {
-        printf("Unexpected result for SSL_get_tlsext_status_type() (test 2)\n");
+    if (!create_ssl_connection(serverssl, clientssl)) {
+        printf("Unable to create SSL connection\n");
         goto end;
     }
 
     testresult = 1;
 
  end:
-    SSL_free(con);
-    SSL_CTX_free(ctx);
+    X509_free(chaincert);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+
+    return testresult;
+}
+
+static int test_large_message_tls(void)
+{
+    return execute_test_large_message(TLS_server_method(), TLS_client_method());
+}
+
+static int test_large_message_dtls(void)
+{
+    return execute_test_large_message(DTLS_server_method(),
+                                      DTLS_client_method());
+}
+
+static int ocsp_server_cb(SSL *s, void *arg)
+{
+    int *argi = (int *)arg;
+    unsigned char *orespdercopy = NULL;
+    STACK_OF(OCSP_RESPID) *ids = NULL;
+    OCSP_RESPID *id = NULL;
+
+    if (*argi == 2) {
+        /* In this test we are expecting exactly 1 OCSP_RESPID */
+        SSL_get_tlsext_status_ids(s, &ids);
+        if (ids == NULL || sk_OCSP_RESPID_num(ids) != 1)
+            return SSL_TLSEXT_ERR_ALERT_FATAL;
+
+        id = sk_OCSP_RESPID_value(ids, 0);
+        if (id == NULL || !OCSP_RESPID_match(id, ocspcert))
+            return SSL_TLSEXT_ERR_ALERT_FATAL;
+    } else if (*argi != 1) {
+        return SSL_TLSEXT_ERR_ALERT_FATAL;
+    }
+
+
+    orespdercopy = OPENSSL_memdup(orespder, sizeof(orespder));
+    if (orespdercopy == NULL)
+        return SSL_TLSEXT_ERR_ALERT_FATAL;
+
+    SSL_set_tlsext_status_ocsp_resp(s, orespdercopy, sizeof(orespder));
+
+    ocsp_server_called = 1;
+
+    return SSL_TLSEXT_ERR_OK;
+}
+
+static int ocsp_client_cb(SSL *s, void *arg)
+{
+    int *argi = (int *)arg;
+    const unsigned char *respderin;
+    size_t len;
+
+    if (*argi != 1 && *argi != 2)
+        return 0;
+
+    len = SSL_get_tlsext_status_ocsp_resp(s, &respderin);
+
+    if (memcmp(orespder, respderin, len) != 0)
+        return 0;
+
+    ocsp_client_called = 1;
+
+    return 1;
+}
+
+static int test_tlsext_status_type(void)
+{
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0;
+    STACK_OF(OCSP_RESPID) *ids = NULL;
+    OCSP_RESPID *id = NULL;
+    BIO *certbio = NULL;
+
+    if (!create_ssl_ctx_pair(TLS_server_method(), TLS_client_method(), &sctx,
+                             &cctx, cert, privkey)) {
+        printf("Unable to create SSL_CTX pair\n");
+        return 0;
+    }
+
+    if (SSL_CTX_get_tlsext_status_type(cctx) != -1) {
+        printf("Unexpected initial value for "
+               "SSL_CTX_get_tlsext_status_type()\n");
+        goto end;
+    }
+
+    /* First just do various checks getting and setting tlsext_status_type */
+
+    clientssl = SSL_new(cctx);
+    if (SSL_get_tlsext_status_type(clientssl) != -1) {
+        printf("Unexpected initial value for SSL_get_tlsext_status_type()\n");
+        goto end;
+    }
+
+    if (!SSL_set_tlsext_status_type(clientssl, TLSEXT_STATUSTYPE_ocsp)) {
+        printf("Unexpected fail for SSL_set_tlsext_status_type()\n");
+        goto end;
+    }
+
+    if (SSL_get_tlsext_status_type(clientssl) != TLSEXT_STATUSTYPE_ocsp) {
+        printf("Unexpected result for SSL_get_tlsext_status_type()\n");
+        goto end;
+    }
+
+    SSL_free(clientssl);
+    clientssl = NULL;
+
+    if (!SSL_CTX_set_tlsext_status_type(cctx, TLSEXT_STATUSTYPE_ocsp)) {
+        printf("Unexpected fail for SSL_CTX_set_tlsext_status_type()\n");
+        goto end;
+    }
+
+    if (SSL_CTX_get_tlsext_status_type(cctx) != TLSEXT_STATUSTYPE_ocsp) {
+        printf("Unexpected result for SSL_CTX_get_tlsext_status_type()\n");
+        goto end;
+    }
+
+    clientssl = SSL_new(cctx);
+
+    if (SSL_get_tlsext_status_type(clientssl) != TLSEXT_STATUSTYPE_ocsp) {
+        printf("Unexpected result for SSL_get_tlsext_status_type() (test 2)\n");
+        goto end;
+    }
+
+    SSL_free(clientssl);
+    clientssl = NULL;
+
+    /*
+     * Now actually do a handshake and check OCSP information is exchanged and
+     * the callbacks get called
+     */
+
+    SSL_CTX_set_tlsext_status_cb(cctx, ocsp_client_cb);
+    SSL_CTX_set_tlsext_status_arg(cctx, &cdummyarg);
+    SSL_CTX_set_tlsext_status_cb(sctx, ocsp_server_cb);
+    SSL_CTX_set_tlsext_status_arg(sctx, &cdummyarg);
+
+    if (!create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)) {
+        printf("Unable to create SSL objects\n");
+        goto end;
+    }
+
+    if (!create_ssl_connection(serverssl, clientssl)) {
+        printf("Unable to create SSL connection\n");
+        goto end;
+    }
+
+    if (!ocsp_client_called || !ocsp_server_called) {
+        printf("OCSP callbacks not called\n");
+        goto end;
+    }
+
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    serverssl = NULL;
+    clientssl = NULL;
+
+    /* Try again but this time force the server side callback to fail */
+    ocsp_client_called = 0;
+    ocsp_server_called = 0;
+    cdummyarg = 0;
+
+    if (!create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)) {
+        printf("Unable to create SSL objects\n");
+        goto end;
+    }
+
+    /* This should fail because the callback will fail */
+    if (create_ssl_connection(serverssl, clientssl)) {
+        printf("Unexpected success creating the connection\n");
+        goto end;
+    }
+
+    if (ocsp_client_called || ocsp_server_called) {
+        printf("OCSP callbacks successfully called unexpectedly\n");
+        goto end;
+    }
+
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    serverssl = NULL;
+    clientssl = NULL;
+
+    /*
+     * This time we'll get the client to send an OCSP_RESPID that it will
+     * accept.
+     */
+    ocsp_client_called = 0;
+    ocsp_server_called = 0;
+    cdummyarg = 2;
+
+    if (!create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)) {
+        printf("Unable to create SSL objects\n");
+        goto end;
+    }
+
+    /*
+     * We'll just use any old cert for this test - it doesn't have to be an OCSP
+     * specifc one. We'll use the server cert.
+     */
+    certbio = BIO_new_file(cert, "r");
+    if (certbio == NULL) {
+        printf("Can't load the certficate file\n");
+        goto end;
+    }
+    id = OCSP_RESPID_new();
+    ids = sk_OCSP_RESPID_new_null();
+    ocspcert = PEM_read_bio_X509(certbio, NULL, NULL, NULL);
+    if (id == NULL || ids == NULL || ocspcert == NULL
+            || !OCSP_RESPID_set_by_key(id, ocspcert)
+            || !sk_OCSP_RESPID_push(ids, id)) {
+        printf("Unable to set OCSP_RESPIDs\n");
+        goto end;
+    }
+    id = NULL;
+    SSL_set_tlsext_status_ids(clientssl, ids);
+    /* Control has been transferred */
+    ids = NULL;
+
+    BIO_free(certbio);
+    certbio = NULL;
+
+    if (!create_ssl_connection(serverssl, clientssl)) {
+        printf("Unable to create SSL connection\n");
+        goto end;
+    }
+
+    if (!ocsp_client_called || !ocsp_server_called) {
+        printf("OCSP callbacks not called\n");
+        goto end;
+    }
+
+    testresult = 1;
+
+ end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+    sk_OCSP_RESPID_pop_free(ids, OCSP_RESPID_free);
+    OCSP_RESPID_free(id);
+    BIO_free(certbio);
+    X509_free(ocspcert);
+    ocspcert = NULL;
 
     return testresult;
 }
@@ -122,7 +387,9 @@ static int execute_test_session(SSL_SESSION_TEST_FIXTURE fix)
     SSL_CTX *sctx = NULL, *cctx = NULL;
     SSL *serverssl1 = NULL, *clientssl1 = NULL;
     SSL *serverssl2 = NULL, *clientssl2 = NULL;
+#ifndef OPENSSL_NO_TLS1_1
     SSL *serverssl3 = NULL, *clientssl3 = NULL;
+#endif
     SSL_SESSION *sess1 = NULL, *sess2 = NULL;
     int testresult = 0;
 
@@ -151,8 +418,13 @@ static int execute_test_session(SSL_SESSION_TEST_FIXTURE fix)
                                        | SSL_SESS_CACHE_NO_INTERNAL_STORE);
     }
 
-    if (!create_ssl_connection(sctx, cctx, &serverssl1, &clientssl1, NULL,
+    if (!create_ssl_objects(sctx, cctx, &serverssl1, &clientssl1, NULL,
                                NULL)) {
+        printf("Unable to create SSL objects\n");
+        goto end;
+    }
+
+    if (!create_ssl_connection(serverssl1, clientssl1)) {
         printf("Unable to create SSL connection\n");
         goto end;
     }
@@ -173,8 +445,12 @@ static int execute_test_session(SSL_SESSION_TEST_FIXTURE fix)
         goto end;
     }
 
-    if (!create_ssl_connection(sctx, cctx, &serverssl2, &clientssl2, NULL,
-                               NULL)) {
+    if (!create_ssl_objects(sctx, cctx, &serverssl2, &clientssl2, NULL, NULL)) {
+        printf("Unable to create second SSL objects\n");
+        goto end;
+    }
+
+    if (!create_ssl_connection(serverssl2, clientssl2)) {
         printf("Unable to create second SSL connection\n");
         goto end;
     }
@@ -245,22 +521,23 @@ static int execute_test_session(SSL_SESSION_TEST_FIXTURE fix)
 #if !defined(OPENSSL_NO_TLS1_1) && !defined(OPENSSL_NO_TLS1_2)
     /* Force a connection failure */
     SSL_CTX_set_max_proto_version(sctx, TLS1_1_VERSION);
-    clientssl3 = SSL_new(cctx);
-    if (clientssl3 == NULL) {
-        printf("Malloc failure\n");
+
+    if (!create_ssl_objects(sctx, cctx, &serverssl3, &clientssl3, NULL, NULL)) {
+        printf("Unable to create third SSL objects\n");
         goto end;
     }
+
     if (!SSL_set_session(clientssl3, sess1)) {
         printf("Unable to set session for third connection\n");
         goto end;
     }
 
     /* This should fail because of the mismatched protocol versions */
-    if (create_ssl_connection(sctx, cctx, &serverssl3, &clientssl3, NULL,
-                               NULL)) {
-        printf("Unexpected success creating SSL connection\n");
+    if (create_ssl_connection(serverssl3, clientssl3)) {
+        printf("Unable to create third SSL connection\n");
         goto end;
     }
+
 
     /* We should have automatically removed the session from the cache */
     if (fix.use_ext_cache && (new_called != 2 || remove_called != 3)) {
@@ -284,8 +561,10 @@ static int execute_test_session(SSL_SESSION_TEST_FIXTURE fix)
     SSL_free(clientssl1);
     SSL_free(serverssl2);
     SSL_free(clientssl2);
+#ifndef OPENSSL_NO_TLS1_1
     SSL_free(serverssl3);
     SSL_free(clientssl3);
+#endif
     SSL_SESSION_free(sess1);
     SSL_SESSION_free(sess2);
     /*
@@ -453,6 +732,7 @@ static SSL_BIO_TEST_FIXTURE ssl_bio_set_up(const char *const test_case_name)
 
     fixture.test_case_name = test_case_name;
     fixture.pop_ssl = 0;
+    fixture.change_bio = NO_BIO_CHANGE;
 
     return fixture;
 }
@@ -576,6 +856,8 @@ int main(int argc, char *argv[])
     CRYPTO_set_mem_debug(1);
     CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
 
+    ADD_TEST(test_large_message_tls);
+    ADD_TEST(test_large_message_dtls);
     ADD_TEST(test_tlsext_status_type);
     ADD_TEST(test_session_with_only_int_cache);
     ADD_TEST(test_session_with_only_ext_cache);

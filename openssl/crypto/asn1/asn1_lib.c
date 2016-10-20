@@ -271,7 +271,7 @@ int ASN1_STRING_set(ASN1_STRING *str, const void *_data, int len)
         else
             len = strlen(data);
     }
-    if ((str->length < len) || (str->data == NULL)) {
+    if ((str->length <= len) || (str->data == NULL)) {
         c = str->data;
         str->data = OPENSSL_realloc(c, len + 1);
         if (str->data == NULL) {
@@ -363,7 +363,14 @@ int ASN1_STRING_type(const ASN1_STRING *x)
     return x->type;
 }
 
+const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *x)
+{
+    return x->data;
+}
+
+# if OPENSSL_API_COMPAT < 0x10100000L
 unsigned char *ASN1_STRING_data(ASN1_STRING *x)
 {
     return x->data;
 }
+#endif

@@ -89,11 +89,11 @@ static int eckey_pub_encode(X509_PUBKEY *pk, const EVP_PKEY *pkey)
     return 0;
 }
 
-static EC_KEY *eckey_type2param(int ptype, void *pval)
+static EC_KEY *eckey_type2param(int ptype, const void *pval)
 {
     EC_KEY *eckey = NULL;
     if (ptype == V_ASN1_SEQUENCE) {
-        ASN1_STRING *pstr = pval;
+        const ASN1_STRING *pstr = pval;
         const unsigned char *pm = NULL;
         int pmlen;
         pm = pstr->data;
@@ -103,7 +103,7 @@ static EC_KEY *eckey_type2param(int ptype, void *pval)
             goto ecerr;
         }
     } else if (ptype == V_ASN1_OBJECT) {
-        ASN1_OBJECT *poid = pval;
+        const ASN1_OBJECT *poid = pval;
         EC_GROUP *group;
 
         /*
@@ -135,7 +135,7 @@ static EC_KEY *eckey_type2param(int ptype, void *pval)
 static int eckey_pub_decode(EVP_PKEY *pkey, X509_PUBKEY *pubkey)
 {
     const unsigned char *p = NULL;
-    void *pval;
+    const void *pval;
     int ptype, pklen;
     EC_KEY *eckey = NULL;
     X509_ALGOR *palg;
@@ -171,6 +171,8 @@ static int eckey_pub_cmp(const EVP_PKEY *a, const EVP_PKEY *b)
     const EC_GROUP *group = EC_KEY_get0_group(b->pkey.ec);
     const EC_POINT *pa = EC_KEY_get0_public_key(a->pkey.ec),
         *pb = EC_KEY_get0_public_key(b->pkey.ec);
+    if (group == NULL || pa == NULL || pb == NULL)
+        return -2;
     r = EC_POINT_cmp(group, pa, pb, NULL);
     if (r == 0)
         return 1;
@@ -179,13 +181,13 @@ static int eckey_pub_cmp(const EVP_PKEY *a, const EVP_PKEY *b)
     return -2;
 }
 
-static int eckey_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8)
+static int eckey_priv_decode(EVP_PKEY *pkey, const PKCS8_PRIV_KEY_INFO *p8)
 {
     const unsigned char *p = NULL;
-    void *pval;
+    const void *pval;
     int ptype, pklen;
     EC_KEY *eckey = NULL;
-    X509_ALGOR *palg;
+    const X509_ALGOR *palg;
 
     if (!PKCS8_pkey_get0(NULL, &p, &pklen, &palg, p8))
         return 0;
@@ -311,6 +313,8 @@ static int ec_cmp_parameters(const EVP_PKEY *a, const EVP_PKEY *b)
 {
     const EC_GROUP *group_a = EC_KEY_get0_group(a->pkey.ec),
         *group_b = EC_KEY_get0_group(b->pkey.ec);
+    if (group_a == NULL || group_b == NULL)
+        return -2;
     if (EC_GROUP_cmp(group_a, group_b, NULL))
         return 0;
     else
@@ -341,7 +345,7 @@ static int do_EC_KEY_print(BIO *bp, const EC_KEY *x, int off, ec_print_t ktype)
         return 0;
     }
 
-    if (ktype != EC_KEY_PRINT_PARAM) {
+    if (ktype != EC_KEY_PRINT_PARAM && EC_KEY_get0_public_key(x) != NULL) {
         publen = EC_KEY_key2buf(x, EC_KEY_get_conv_form(x), &pub, NULL);
         if (publen == 0)
             goto err;
@@ -496,6 +500,13 @@ static int ec_pkey_ctrl(EVP_PKEY *pkey, int op, long arg1, void *arg2)
         *(int *)arg2 = NID_sha256;
         return 2;
 
+    case ASN1_PKEY_CTRL_SET1_TLS_ENCPT:
+        return EC_KEY_oct2key(EVP_PKEY_get0_EC_KEY(pkey), arg2, arg1, NULL);
+
+    case ASN1_PKEY_CTRL_GET1_TLS_ENCPT:
+        return EC_KEY_key2buf(EVP_PKEY_get0_EC_KEY(pkey),
+                              POINT_CONVERSION_UNCOMPRESSED, arg2, NULL);
+
     default:
         return -2;
 
@@ -555,9 +566,9 @@ int ECParameters_print(BIO *bp, const EC_KEY *x)
 static int ecdh_cms_set_peerkey(EVP_PKEY_CTX *pctx,
                                 X509_ALGOR *alg, ASN1_BIT_STRING *pubkey)
 {
-    ASN1_OBJECT *aoid;
+    const ASN1_OBJECT *aoid;
     int atype;
-    void *aval;
+    const void *aval;
     int rv = 0;
     EVP_PKEY *pkpeer = NULL;
     EC_KEY *ecpeer = NULL;
@@ -586,7 +597,7 @@ static int ecdh_cms_set_peerkey(EVP_PKEY_CTX *pctx,
     }
     /* We have parameters now set public key */
     plen = ASN1_STRING_length(pubkey);
-    p = ASN1_STRING_data(pubkey);
+    p = ASN1_STRING_get0_data(pubkey);
     if (!p || !plen)
         goto err;
     if (!o2i_ECPublicKey(&ecpeer, &p, plen))
@@ -731,7 +742,7 @@ static int ecdh_cms_encrypt(CMS_RecipientInfo *ri)
     EVP_CIPHER_CTX *ctx;
     int keylen;
     X509_ALGOR *talg, *wrap_alg = NULL;
-    ASN1_OBJECT *aoid;
+    const ASN1_OBJECT *aoid;
     ASN1_BIT_STRING *pubkey;
     ASN1_STRING *wrap_str;
     ASN1_OCTET_STRING *ukm;

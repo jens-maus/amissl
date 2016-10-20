@@ -24,7 +24,7 @@
 
 static void EVP_PKEY_free_it(EVP_PKEY *x);
 
-int EVP_PKEY_bits(EVP_PKEY *pkey)
+int EVP_PKEY_bits(const EVP_PKEY *pkey)
 {
     if (pkey && pkey->ameth && pkey->ameth->pkey_bits)
         return pkey->ameth->pkey_bits(pkey);
@@ -398,6 +398,7 @@ void EVP_PKEY_free(EVP_PKEY *x)
         return;
     REF_ASSERT_ISNT(i < 0);
     EVP_PKEY_free_it(x);
+    CRYPTO_THREAD_lock_free(x->lock);
     sk_X509_ATTRIBUTE_pop_free(x->attributes, X509_ATTRIBUTE_free);
     OPENSSL_free(x);
 }
@@ -413,7 +414,6 @@ static void EVP_PKEY_free_it(EVP_PKEY *x)
     ENGINE_finish(x->engine);
     x->engine = NULL;
 #endif
-    CRYPTO_THREAD_lock_free(x->lock);
 }
 
 static int unsup_alg(BIO *out, const EVP_PKEY *pkey, int indent,
@@ -451,10 +451,34 @@ int EVP_PKEY_print_params(BIO *out, const EVP_PKEY *pkey,
     return unsup_alg(out, pkey, indent, "Parameters");
 }
 
+static int evp_pkey_asn1_ctrl(EVP_PKEY *pkey, int op, int arg1, void *arg2)
+{
+    if (pkey->ameth == NULL || pkey->ameth->pkey_ctrl == NULL)
+        return -2;
+    return pkey->ameth->pkey_ctrl(pkey, op, arg1, arg2);
+}
+
 int EVP_PKEY_get_default_digest_nid(EVP_PKEY *pkey, int *pnid)
 {
-    if (!pkey->ameth || !pkey->ameth->pkey_ctrl)
-        return -2;
-    return pkey->ameth->pkey_ctrl(pkey, ASN1_PKEY_CTRL_DEFAULT_MD_NID,
-                                  0, pnid);
+    return evp_pkey_asn1_ctrl(pkey, ASN1_PKEY_CTRL_DEFAULT_MD_NID, 0, pnid);
+}
+
+int EVP_PKEY_set1_tls_encodedpoint(EVP_PKEY *pkey,
+                               const unsigned char *pt, size_t ptlen)
+{
+    if (ptlen > INT_MAX)
+        return 0;
+    if (evp_pkey_asn1_ctrl(pkey, ASN1_PKEY_CTRL_SET1_TLS_ENCPT, ptlen,
+                           (void *)pt) <= 0)
+        return 0;
+    return 1;
+}
+
+size_t EVP_PKEY_get1_tls_encodedpoint(EVP_PKEY *pkey, unsigned char **ppt)
+{
+    int rv;
+    rv = evp_pkey_asn1_ctrl(pkey, ASN1_PKEY_CTRL_GET1_TLS_ENCPT, 0, ppt);
+    if (rv <= 0)
+        return 0;
+    return rv;
 }

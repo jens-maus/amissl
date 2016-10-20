@@ -76,11 +76,20 @@ extern "C" {
 # if OPENSSL_API_COMPAT < 0x00908000L
 /* deprecated name for the flag */
 #  define BN_FLG_EXP_CONSTTIME BN_FLG_CONSTTIME
-#  define BN_FLG_FREE            0x8000 /* used for debuging */
+#  define BN_FLG_FREE            0x8000 /* used for debugging */
 # endif
 
 void BN_set_flags(BIGNUM *b, int n);
 int BN_get_flags(const BIGNUM *b, int n);
+
+/* Values for |top| in BN_rand() */
+#define BN_RAND_TOP_ANY    -1
+#define BN_RAND_TOP_ONE     0
+#define BN_RAND_TOP_TWO     1
+
+/* Values for |bottom| in BN_rand() */
+#define BN_RAND_BOTTOM_ANY  0
+#define BN_RAND_BOTTOM_ODD  1
 
 /*
  * get a clone of a BIGNUM with changed flags, for *temporary* use only (the

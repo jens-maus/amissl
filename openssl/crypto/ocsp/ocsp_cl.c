@@ -161,7 +161,7 @@ OCSP_BASICRESP *OCSP_response_get1_basic(OCSP_RESPONSE *resp)
     return ASN1_item_unpack(rb->response, ASN1_ITEM_rptr(OCSP_BASICRESP));
 }
 
-ASN1_OCTET_STRING *OCSP_resp_get0_signature(OCSP_BASICRESP *bs)
+const ASN1_OCTET_STRING *OCSP_resp_get0_signature(const OCSP_BASICRESP *bs)
 {
     return bs->signature;
 }
@@ -186,10 +186,8 @@ OCSP_SINGLERESP *OCSP_resp_get0(OCSP_BASICRESP *bs, int idx)
     return sk_OCSP_SINGLERESP_value(bs->tbsResponseData.responses, idx);
 }
 
-ASN1_GENERALIZEDTIME *OCSP_resp_get0_produced_at(OCSP_BASICRESP* bs)
+const ASN1_GENERALIZEDTIME *OCSP_resp_get0_produced_at(const OCSP_BASICRESP* bs)
 {
-    if (!bs)
-        return NULL;
     return bs->tbsResponseData.producedAt;
 }
 
@@ -299,7 +297,7 @@ int OCSP_resp_find_status(OCSP_BASICRESP *bs, OCSP_CERTID *id, int *status,
 
 /*
  * Check validity of thisUpdate and nextUpdate fields. It is possible that
- * the request will take a few seconds to process and/or the time wont be
+ * the request will take a few seconds to process and/or the time won't be
  * totally accurate. Therefore to avoid rejecting otherwise valid time we
  * allow the times to be within 'nsec' of the current time. Also to avoid
  * accepting very old responses without a nextUpdate field an optional maxage
@@ -361,7 +359,7 @@ int OCSP_check_validity(ASN1_GENERALIZEDTIME *thisupd,
     return ret;
 }
 
-OCSP_CERTID *OCSP_SINGLERESP_get0_id(OCSP_SINGLERESP *single)
+const OCSP_CERTID *OCSP_SINGLERESP_get0_id(const OCSP_SINGLERESP *single)
 {
     return single->certId;
 }

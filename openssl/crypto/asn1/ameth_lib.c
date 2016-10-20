@@ -39,7 +39,10 @@ static const EVP_PKEY_ASN1_METHOD *standard_methods[] = {
     &cmac_asn1_meth,
 #endif
 #ifndef OPENSSL_NO_DH
-    &dhx_asn1_meth
+    &dhx_asn1_meth,
+#endif
+#ifndef OPENSSL_NO_EC
+    &ecx25519_asn1_meth
 #endif
 };
 
@@ -218,7 +221,7 @@ int EVP_PKEY_asn1_get0_info(int *ppkey_id, int *ppkey_base_id,
     return 1;
 }
 
-const EVP_PKEY_ASN1_METHOD *EVP_PKEY_get0_asn1(EVP_PKEY *pkey)
+const EVP_PKEY_ASN1_METHOD *EVP_PKEY_get0_asn1(const EVP_PKEY *pkey)
 {
     return pkey->ameth;
 }
@@ -321,7 +324,7 @@ void EVP_PKEY_asn1_set_public(EVP_PKEY_ASN1_METHOD *ameth,
 
 void EVP_PKEY_asn1_set_private(EVP_PKEY_ASN1_METHOD *ameth,
                                int (*priv_decode) (EVP_PKEY *pk,
-                                                   PKCS8_PRIV_KEY_INFO
+                                                   const PKCS8_PRIV_KEY_INFO
                                                    *p8inf),
                                int (*priv_encode) (PKCS8_PRIV_KEY_INFO *p8,
                                                    const EVP_PKEY *pk),

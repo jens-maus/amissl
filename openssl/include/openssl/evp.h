@@ -895,7 +895,7 @@ int EVP_PKEY_encrypt_old(unsigned char *enc_key,
 int EVP_PKEY_type(int type);
 int EVP_PKEY_id(const EVP_PKEY *pkey);
 int EVP_PKEY_base_id(const EVP_PKEY *pkey);
-int EVP_PKEY_bits(EVP_PKEY *pkey);
+int EVP_PKEY_bits(const EVP_PKEY *pkey);
 int EVP_PKEY_security_bits(const EVP_PKEY *pkey);
 int EVP_PKEY_size(EVP_PKEY *pkey);
 int EVP_PKEY_set_type(EVP_PKEY *pkey, int type);
@@ -958,6 +958,10 @@ int EVP_PKEY_print_params(BIO *out, const EVP_PKEY *pkey,
                           int indent, ASN1_PCTX *pctx);
 
 int EVP_PKEY_get_default_digest_nid(EVP_PKEY *pkey, int *pnid);
+
+int EVP_PKEY_set1_tls_encodedpoint(EVP_PKEY *pkey,
+                                   const unsigned char *pt, size_t ptlen);
+size_t EVP_PKEY_get1_tls_encodedpoint(EVP_PKEY *pkey, unsigned char **ppt);
 
 int EVP_CIPHER_type(const EVP_CIPHER *ctx);
 
@@ -1028,6 +1032,9 @@ int EVP_PBE_get(int *ptype, int *ppbe_nid, size_t num);
 # define ASN1_PKEY_CTRL_CMS_ENVELOPE     0x7
 # define ASN1_PKEY_CTRL_CMS_RI_TYPE      0x8
 
+# define ASN1_PKEY_CTRL_SET1_TLS_ENCPT   0x9
+# define ASN1_PKEY_CTRL_GET1_TLS_ENCPT   0xa
+
 int EVP_PKEY_asn1_get_count(void);
 const EVP_PKEY_ASN1_METHOD *EVP_PKEY_asn1_get0(int idx);
 const EVP_PKEY_ASN1_METHOD *EVP_PKEY_asn1_find(ENGINE **pe, int type);
@@ -1040,7 +1047,7 @@ int EVP_PKEY_asn1_get0_info(int *ppkey_id, int *pkey_base_id,
                             const char **ppem_str,
                             const EVP_PKEY_ASN1_METHOD *ameth);
 
-const EVP_PKEY_ASN1_METHOD *EVP_PKEY_get0_asn1(EVP_PKEY *pkey);
+const EVP_PKEY_ASN1_METHOD *EVP_PKEY_get0_asn1(const EVP_PKEY *pkey);
 EVP_PKEY_ASN1_METHOD *EVP_PKEY_asn1_new(int id, int flags,
                                         const char *pem_str,
                                         const char *info);
@@ -1061,7 +1068,7 @@ void EVP_PKEY_asn1_set_public(EVP_PKEY_ASN1_METHOD *ameth,
                               int (*pkey_bits) (const EVP_PKEY *pk));
 void EVP_PKEY_asn1_set_private(EVP_PKEY_ASN1_METHOD *ameth,
                                int (*priv_decode) (EVP_PKEY *pk,
-                                                   PKCS8_PRIV_KEY_INFO
+                                                   const PKCS8_PRIV_KEY_INFO
                                                    *p8inf),
                                int (*priv_encode) (PKCS8_PRIV_KEY_INFO *p8,
                                                    const EVP_PKEY *pk),
@@ -1561,7 +1568,7 @@ int ERR_load_EVP_strings(void);
 # define EVP_R_UNKNOWN_DIGEST                             161
 # define EVP_R_UNKNOWN_OPTION                             169
 # define EVP_R_UNKNOWN_PBE_ALGORITHM                      121
-# define EVP_R_UNSUPORTED_NUMBER_OF_ROUNDS                135
+# define EVP_R_UNSUPPORTED_NUMBER_OF_ROUNDS               135
 # define EVP_R_UNSUPPORTED_ALGORITHM                      156
 # define EVP_R_UNSUPPORTED_CIPHER                         107
 # define EVP_R_UNSUPPORTED_KEYLENGTH                      123

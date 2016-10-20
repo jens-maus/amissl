@@ -79,6 +79,7 @@ extern const EVP_PKEY_METHOD dh_pkey_meth;
 extern const EVP_PKEY_METHOD dhx_pkey_meth;
 extern const EVP_PKEY_METHOD dsa_pkey_meth;
 extern const EVP_PKEY_METHOD ec_pkey_meth;
+extern const EVP_PKEY_METHOD ecx25519_pkey_meth;
 extern const EVP_PKEY_METHOD hmac_pkey_meth;
 extern const EVP_PKEY_METHOD rsa_pkey_meth;
 extern const EVP_PKEY_METHOD tls1_prf_pkey_meth;
@@ -356,7 +357,7 @@ struct evp_pkey_st {
     const EVP_PKEY_ASN1_METHOD *ameth;
     ENGINE *engine;
     union {
-        char *ptr;
+        void *ptr;
 # ifndef OPENSSL_NO_RSA
         struct rsa_st *rsa;     /* RSA */
 # endif

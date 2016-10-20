@@ -26,10 +26,8 @@
 
 #define COOKIE_SECRET_LENGTH    16
 
-int verify_depth = 0;
-int verify_quiet = 0;
-int verify_error = X509_V_OK;
-int verify_return_error = 0;
+VERIFY_CB_ARGS verify_args = { 0, 0, X509_V_OK, 0 };
+
 #ifndef OPENSSL_NO_SOCK
 static unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
 static int cookie_initialized = 0;
@@ -52,7 +50,7 @@ int verify_callback(int ok, X509_STORE_CTX *ctx)
     err = X509_STORE_CTX_get_error(ctx);
     depth = X509_STORE_CTX_get_error_depth(ctx);
 
-    if (!verify_quiet || !ok) {
+    if (!verify_args.quiet || !ok) {
         BIO_printf(bio_err, "depth=%d ", depth);
         if (err_cert) {
             X509_NAME_print_ex(bio_err,
@@ -65,13 +63,13 @@ int verify_callback(int ok, X509_STORE_CTX *ctx)
     if (!ok) {
         BIO_printf(bio_err, "verify error:num=%d:%s\n", err,
                    X509_verify_cert_error_string(err));
-        if (verify_depth >= depth) {
-            if (!verify_return_error)
+        if (verify_args.depth >= depth) {
+            if (!verify_args.return_error)
                 ok = 1;
-            verify_error = err;
+            verify_args.error = err;
         } else {
             ok = 0;
-            verify_error = X509_V_ERR_CERT_CHAIN_TOO_LONG;
+            verify_args.error = X509_V_ERR_CERT_CHAIN_TOO_LONG;
         }
     }
     switch (err) {
@@ -84,23 +82,23 @@ int verify_callback(int ok, X509_STORE_CTX *ctx)
     case X509_V_ERR_CERT_NOT_YET_VALID:
     case X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD:
         BIO_printf(bio_err, "notBefore=");
-        ASN1_TIME_print(bio_err, X509_get_notBefore(err_cert));
+        ASN1_TIME_print(bio_err, X509_get0_notBefore(err_cert));
         BIO_printf(bio_err, "\n");
         break;
     case X509_V_ERR_CERT_HAS_EXPIRED:
     case X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD:
         BIO_printf(bio_err, "notAfter=");
-        ASN1_TIME_print(bio_err, X509_get_notAfter(err_cert));
+        ASN1_TIME_print(bio_err, X509_get0_notAfter(err_cert));
         BIO_printf(bio_err, "\n");
         break;
     case X509_V_ERR_NO_EXPLICIT_POLICY:
-        if (!verify_quiet)
+        if (!verify_args.quiet)
             policies_print(ctx);
         break;
     }
-    if (err == X509_V_OK && ok == 2 && !verify_quiet)
+    if (err == X509_V_OK && ok == 2 && !verify_args.quiet)
         policies_print(ctx);
-    if (ok && !verify_quiet)
+    if (ok && !verify_args.quiet)
         BIO_printf(bio_err, "verify return:%d\n", ok);
     return (ok);
 }
@@ -385,7 +383,11 @@ int ssl_print_tmp_key(BIO *out, SSL *s)
                 cname = OBJ_nid2sn(nid);
             BIO_printf(out, "ECDH, %s, %d bits\n", cname, EVP_PKEY_bits(key));
         }
+    break;
 #endif
+    default:
+        BIO_printf(out, "%s, %d bits\n", OBJ_nid2sn(EVP_PKEY_id(key)),
+                   EVP_PKEY_bits(key));
     }
     EVP_PKEY_free(key);
     return 1;
