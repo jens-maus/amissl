@@ -39,7 +39,7 @@
 #include <internal/amissl.h>
 #include <internal/debug.h>
 
-#ifdef __amigaos4__
+#if defined(__amigaos4__)
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
 struct Library *UtilityBase = NULL;
@@ -48,7 +48,11 @@ extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct IntuitionBase *IntuitionBase = NULL;
+#if defined(__amigaos3__)
+struct UtilityBase *UtilityBase = NULL;
+#else
 struct Library *UtilityBase = NULL;
+#endif
 #endif
 
 //////////////////////////////////////////////////////////////////////////

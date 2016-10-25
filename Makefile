@@ -232,9 +232,9 @@ ifeq ($(OS), os3)
 
   # Compiler/Linker flags
   CPU       = -m68020-60 -msoft-float
-  APPCFLAGS += -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
-  CFLAGS    += -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
-  LDFLAGS   += -noixemul
+  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
+  CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS   += -mcrt=clib2
   LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
   BASEREL   = -resident32
   NOBASEREL = -fno-baserel
