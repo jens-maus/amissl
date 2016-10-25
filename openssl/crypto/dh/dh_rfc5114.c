@@ -11,7 +11,6 @@
 #include "internal/cryptlib.h"
 #include "dh_locl.h"
 #include <openssl/bn.h>
-#include "crypto/bn/bn_lcl.h"
 #include "internal/bn_dh.h"
 
 /*

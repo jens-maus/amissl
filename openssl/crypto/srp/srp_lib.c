@@ -12,7 +12,6 @@
 # include <openssl/sha.h>
 # include <openssl/srp.h>
 # include <openssl/evp.h>
-# include "crypto/bn/bn_lcl.h"
 # include "internal/bn_srp.h"
 
 static BIGNUM *srp_Calc_k(const BIGNUM *N, const BIGNUM *g)
