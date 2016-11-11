@@ -414,8 +414,6 @@ struct bio_dgram_sctp_prinfo {
 # else
 #  define BIO_set_fp_amiga(b,fp,c) BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)fp)
 #  define BIO_get_fp_amiga(b,fpp)  BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)fpp)
-#  define BIO_set_fp               BIO_set_fp_amiga
-#  define BIO_get_fp               BIO_get_fp_amiga
 # endif
 
 /* BIO_s_fd() and BIO_s_file() */
