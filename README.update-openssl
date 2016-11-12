@@ -45,36 +45,83 @@ HowTo update the OpenSSL version in "openssl/":
 
    $ git diff --name-only --diff-filter=U
 
-3. Check "include/amissl/amissl.h" to directly include all existing header files
-   stored in "include/openssl/". Due to some header file changes of newer versions
-   amissl.h needs usually some tuning.
+3. Do a "git diff HEAD" to check what has actually changed in OpenSSL since the last
+   version:
 
-4. Check "openssl/util/libssl.num" and "openssl/util/libcrypto.num" for public
-   function changes and make sure to add them to our "include/xml/amissl.xml"
-   file.
+   $ git diff HEAD
 
-   -> do a 'git diff':
-      $ git diff HEAD openssl/util/libssl.num
-      $ git diff HEAD openssl/util/libcrypto.num
+   Especially interesting are changes to:
 
-   -> use the online ABI tracker to review API/ABI changes:
+   $ git diff HEAD openssl/util/libssl.num
+   $ git diff HEAD openssl/util/libcrypto.num
+
+   In there the OpenSSL crew usually registered changes to the internal+external API,
+   e.g. removal or addition of functions. Note, however, that changes to existing
+   functions have to be looked up by reviewing all changes in the   
+   'openssl/include/openssl' path. Thus, a simple command like
+
+   $ git diff HEAD openssl/include/openssl
+
+   should reveal changes to the public API.
+
+   -> use also the online ABI tracker to review API/ABI changes:
       http://abi-laboratory.pro/tracker/timeline/openssl/index.html
+  
+4. If you identified changes to the public API you will have to adapt the following
+   xml description file:
 
-5. When changing the "include/xml/amissl.xml" file the following rules apply:
+   include/xml/amissl.xml
+
+   When changing the "include/xml/amissl.xml" file the following rules apply:
    -> don't remove any function but flag them as "unimplemented"
    -> only add new functions to the bottom of the xml file and not between
       existing function definitions.
    -> 'va_list' types won't work, have a look at how "long *" is used instead
       (e.g. for BIO_printf)
 
-6. Go to "src/" directoy an execute the "mkidl.sh" script which takes care
-   to regenerate our own Amiga-specific proto files, etc:
+5. Afterwards you will have to regenerate all interface description files (sfd, fd,
+   protos, etc.) using the following command-line:
 
-   $ cd src/
+   $ cd src
    $ ./mkidl.sh
 
-7. Review all changes with "git status" and make sure to commit everything
-   properly.
+   Please note that this will only work if you have the latest idltool, etc. installed
+   in your cross compiler environment.
+
+6. Check "include/amissl/amissl.h" to directly include all existing header files
+   located in "include/openssl/". Due to some header file changes of newer versions
+   amissl.h needs usually some tuning.
+
+7. Modify the top-level 'Makefile' and change the following sections:
+
+     VERSION=4
+     VERSIONNAME=110b
+     AMISSLREVISION=0
+     AMISSLMASTERREVISION=0
+     AMISSLDATE=26.09.2016
+     AMISSLMASTERDATE=26.09.2016
+
+   Modify VERSIONNAME to match the OpenSSL version. Also set AMISSLDATE and
+   AMISSLMASTERDATE to the release date of the OpenSSL version you just merged.
+
+8. Modify the "src/amisslmaster_library.c" file and have a look for the following
+   type of sections in OpenAmiSSL():
+
+   -- cut here --
+   if(LibAPIVersion == AMISSL_V11x)
+   {
+    [...]
+    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110b.library", 4);
+    [...]
+   }
+   -- cut here --
+
+  Make sure you add a new OpenLib() call in the right section (and with the correct
+  logic) so that the newly created "amissl_vXXX.library" can be opneed by the
+  amisslmaster.library.
+
+9. Review all changes with "git status" and make sure to commit everything
+   properly. Also use "git diff HEAD" at the end again to double check your changes.
 
 
 
