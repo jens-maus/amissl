@@ -2279,7 +2279,6 @@ int speed_main(int argc, char **argv)
 #endif
 
     if (doit[D_EVP]) {
-#ifdef EVP_CIPH_FLAG_TLS1_1_MULTIBLOCK
         if (multiblock && evp_cipher) {
             if (!
                 (EVP_CIPHER_flags(evp_cipher) &
@@ -2296,7 +2295,6 @@ int speed_main(int argc, char **argv)
             ret = 0;
             goto end;
         }
-#endif
         for (testnum = 0; testnum < SIZE_NUM; testnum++) {
             if (evp_cipher) {
 
