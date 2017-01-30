@@ -4619,7 +4619,7 @@ typedef ULONG _sfdc_vararg;
 
 #define SSL_set_verify(___s, ___mode, ___callback) \
       LP3NRFP(0x20e8, SSL_set_verify , SSL *, ___s, a0, int, ___mode, d0, __fpt, ___callback, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(int ok,X509_STORE_CTX *ctx), 0, 0, 0, 0, 0, 0)
+      , AMISSL_BASE_NAME, int (*__fpt)(int,X509_STORE_CTX *), 0, 0, 0, 0, 0, 0)
 
 #define SSL_set_verify_depth(___s, ___depth) \
       LP2NR(0x20ee, SSL_set_verify_depth , SSL *, ___s, a0, int, ___depth, d0,\
@@ -6942,7 +6942,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_set_flags(___ctx, ___flags) \
-      LP2NR(0x2f52, X509_STORE_set_flags , X509_STORE *, ___ctx, a0, long, ___flags, d0,\
+      LP2(0x2f52, int, X509_STORE_set_flags , X509_STORE *, ___ctx, a0, unsigned long, ___flags, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_set_purpose(___ctx, ___purpose) \
@@ -17144,6 +17144,38 @@ typedef ULONG _sfdc_vararg;
 
 #define X509_get0_serialNumber(___x) \
       LP1(0x72c0, const ASN1_INTEGER *, X509_get0_serialNumber , const X509 *, ___x, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CT_POLICY_EVAL_CTX_get_time(___ctx) \
+      LP1(0x72c6, uint64_t, CT_POLICY_EVAL_CTX_get_time , const CT_POLICY_EVAL_CTX *, ___ctx, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CT_POLICY_EVAL_CTX_set_time(___ctx, ___time_in_ms) \
+      LP2NR(0x72cc, CT_POLICY_EVAL_CTX_set_time , CT_POLICY_EVAL_CTX *, ___ctx, a0, uint64_t, ___time_in_ms, d0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define DH_check_params(___dh, ___ret) \
+      LP2(0x72d2, int, DH_check_params , const DH *, ___dh, a0, int *, ___ret, a1,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define SSL_COMP_get0_name(___comp) \
+      LP1(0x72d8, const char *, SSL_COMP_get0_name , const SSL_COMP *, ___comp, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define SSL_COMP_get_id(___comp) \
+      LP1(0x72de, int, SSL_COMP_get_id , const SSL_COMP *, ___comp, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_VERIFY_PARAM_get_time(___param) \
+      LP1(0x72e4, time_t, X509_VERIFY_PARAM_get_time , const X509_VERIFY_PARAM *, ___param, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_VERIFY_PARAM_set_inh_flags(___param, ___flags) \
+      LP2(0x72ea, int, X509_VERIFY_PARAM_set_inh_flags , X509_VERIFY_PARAM *, ___param, a0, uint32_t, ___flags, d0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_VERIFY_PARAM_get_inh_flags(___param) \
+      LP1(0x72f0, uint32_t, X509_VERIFY_PARAM_get_inh_flags , const X509_VERIFY_PARAM *, ___param, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #endif /* !_PPCINLINE_AMISSL_H */

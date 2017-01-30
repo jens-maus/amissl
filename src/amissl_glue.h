@@ -1193,7 +1193,7 @@ void SAVEDS ASM LIB_SSL_set_read_ahead(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s
 int SAVEDS ASM LIB_SSL_get_verify_mode(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 int SAVEDS ASM LIB_SSL_get_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 int  SAVEDS ASM (*LIB_SSL_get_verify_callback(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s)))(int, X509_STORE_CTX *);
-void SAVEDS ASM LIB_SSL_set_verify(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int mode), REG(a1, int (*callback)(int ok, X509_STORE_CTX *ctx)));
+void SAVEDS ASM LIB_SSL_set_verify(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int mode), REG(a1, int (*callback)(int, X509_STORE_CTX *)));
 void SAVEDS ASM LIB_SSL_set_verify_depth(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int depth));
 int SAVEDS ASM LIB_SSL_use_RSAPrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, RSA * rsa));
 int SAVEDS ASM LIB_SSL_use_RSAPrivateKey_ASN1(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, const unsigned char * d), REG(d0, long len));
@@ -1774,7 +1774,7 @@ X509_OBJECT * SAVEDS ASM LIB_X509_OBJECT_retrieve_match(REG(a6, __IFACE_OR_BASE)
 int SAVEDS ASM LIB_X509_OBJECT_up_ref_count(REG(a6, __IFACE_OR_BASE), REG(a0, X509_OBJECT * a));
 X509_STORE * SAVEDS ASM LIB_X509_STORE_new(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_X509_STORE_free(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * v));
-void SAVEDS ASM LIB_X509_STORE_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, long flags));
+int SAVEDS ASM LIB_X509_STORE_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, unsigned long flags));
 int SAVEDS ASM LIB_X509_STORE_set_purpose(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, int purpose));
 int SAVEDS ASM LIB_X509_STORE_set_trust(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, int trust));
 X509_STORE_CTX * SAVEDS ASM LIB_X509_STORE_CTX_new(REG(a6, __IFACE_OR_BASE));
@@ -4325,6 +4325,14 @@ const unsigned char * SAVEDS ASM LIB_SSL_SESSION_get0_id_context(REG(a6, __IFACE
 const STACK_OF(ASN1_UTF8STRING) * SAVEDS ASM LIB_TS_STATUS_INFO_get0_text(REG(a6, __IFACE_OR_BASE), REG(a0, const TS_STATUS_INFO * a));
 void SAVEDS ASM LIB_X509_SIG_getm(REG(a6, __IFACE_OR_BASE), REG(a0, X509_SIG * sig), REG(a1, X509_ALGOR ** palg), REG(a2, ASN1_OCTET_STRING ** pdigest));
 const ASN1_INTEGER * SAVEDS ASM LIB_X509_get0_serialNumber(REG(a6, __IFACE_OR_BASE), REG(a0, const X509 * x));
+uint64_t SAVEDS ASM LIB_CT_POLICY_EVAL_CTX_get_time(REG(a6, __IFACE_OR_BASE), REG(a0, const CT_POLICY_EVAL_CTX * ctx));
+void SAVEDS ASM LIB_CT_POLICY_EVAL_CTX_set_time(REG(a6, __IFACE_OR_BASE), REG(a0, CT_POLICY_EVAL_CTX * ctx), REG(d0, uint64_t time_in_ms));
+int SAVEDS ASM LIB_DH_check_params(REG(a6, __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, int * ret));
+const char * SAVEDS ASM LIB_SSL_COMP_get0_name(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_COMP * comp));
+int SAVEDS ASM LIB_SSL_COMP_get_id(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_COMP * comp));
+time_t SAVEDS ASM LIB_X509_VERIFY_PARAM_get_time(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_VERIFY_PARAM * param));
+int SAVEDS ASM LIB_X509_VERIFY_PARAM_set_inh_flags(REG(a6, __IFACE_OR_BASE), REG(a0, X509_VERIFY_PARAM * param), REG(d0, uint32_t flags));
+uint32_t SAVEDS ASM LIB_X509_VERIFY_PARAM_get_inh_flags(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_VERIFY_PARAM * param));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR \
@@ -9225,7 +9233,15 @@ const ASN1_INTEGER * SAVEDS ASM LIB_X509_get0_serialNumber(REG(a6, __IFACE_OR_BA
     LFUNC_FA_(SSL_SESSION_get0_id_context) \
     LFUNC_FA_(TS_STATUS_INFO_get0_text) \
     LFUNC_FA_(X509_SIG_getm) \
-    LFUNC_FA_(X509_get0_serialNumber)
+    LFUNC_FA_(X509_get0_serialNumber) \
+    LFUNC_FA_(CT_POLICY_EVAL_CTX_get_time) \
+    LFUNC_FA_(CT_POLICY_EVAL_CTX_set_time) \
+    LFUNC_FA_(DH_check_params) \
+    LFUNC_FA_(SSL_COMP_get0_name) \
+    LFUNC_FA_(SSL_COMP_get_id) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get_time) \
+    LFUNC_FA_(X509_VERIFY_PARAM_set_inh_flags) \
+    LFUNC_FA_(X509_VERIFY_PARAM_get_inh_flags)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSL_H */

@@ -14,9 +14,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
 #
-# AmiSSL Official Support Site :  http://sf.net/p/amissl
-#
-# $Id$
+# AmiSSL Official Support Site :  https://github.com/jens-maus/amissl
 #
 #***************************************************************************/
 
@@ -151,11 +149,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=4
-VERSIONNAME=110c
+VERSIONNAME=110d
 AMISSLREVISION=0
 AMISSLMASTERREVISION=0
-AMISSLDATE=10.11.2016
-AMISSLMASTERDATE=10.11.2016
+AMISSLDATE=26.01.2017
+AMISSLMASTERDATE=26.01.2017
 
 # Common Directories
 PREFIX    = $(CDTHIS)

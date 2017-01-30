@@ -11532,13 +11532,13 @@ int (* LIBSTUB_SSL_get_verify_callback(void))(int, X509_STORE_CTX *)
   return LIB_SSL_get_verify_callback(_base, ___s);
 }
 
-void LIB_SSL_set_verify(struct Library * _base, SSL * ___s, int ___mode, int (*___callback)(int ok,X509_STORE_CTX *ctx));
+void LIB_SSL_set_verify(struct Library * _base, SSL * ___s, int ___mode, int (*___callback)(int,X509_STORE_CTX *));
 
 void LIBSTUB_SSL_set_verify(void)
 {
   SSL * ___s = (SSL *)REG_A0;
   int ___mode = (int)REG_D0;
-  int (*___callback)(int ok,X509_STORE_CTX *ctx) = (int (*)(int ok,X509_STORE_CTX *ctx))REG_A1;
+  int (*___callback)(int,X509_STORE_CTX *) = (int (*)(int,X509_STORE_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SSL_set_verify(_base, ___s, ___mode, ___callback);
 }
@@ -17320,12 +17320,12 @@ void LIBSTUB_X509_STORE_free(void)
   return LIB_X509_STORE_free(_base, ___v);
 }
 
-void LIB_X509_STORE_set_flags(struct Library * _base, X509_STORE * ___ctx, long ___flags);
+int LIB_X509_STORE_set_flags(struct Library * _base, X509_STORE * ___ctx, unsigned long ___flags);
 
-void LIBSTUB_X509_STORE_set_flags(void)
+int LIBSTUB_X509_STORE_set_flags(void)
 {
   X509_STORE * ___ctx = (X509_STORE *)REG_A0;
-  long ___flags = (long)REG_D0;
+  unsigned long ___flags = (unsigned long)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_STORE_set_flags(_base, ___ctx, ___flags);
 }
@@ -43131,6 +43131,81 @@ const ASN1_INTEGER * LIBSTUB_X509_get0_serialNumber(void)
   const X509 * ___x = (const X509 *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get0_serialNumber(_base, ___x);
+}
+
+uint64_t LIB_CT_POLICY_EVAL_CTX_get_time(struct Library * _base, const CT_POLICY_EVAL_CTX * ___ctx);
+
+uint64_t LIBSTUB_CT_POLICY_EVAL_CTX_get_time(void)
+{
+  const CT_POLICY_EVAL_CTX * ___ctx = (const CT_POLICY_EVAL_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CT_POLICY_EVAL_CTX_get_time(_base, ___ctx);
+}
+
+void LIB_CT_POLICY_EVAL_CTX_set_time(struct Library * _base, CT_POLICY_EVAL_CTX * ___ctx, uint64_t ___time_in_ms);
+
+void LIBSTUB_CT_POLICY_EVAL_CTX_set_time(void)
+{
+  CT_POLICY_EVAL_CTX * ___ctx = (CT_POLICY_EVAL_CTX *)REG_A0;
+  uint64_t ___time_in_ms = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CT_POLICY_EVAL_CTX_set_time(_base, ___ctx, ___time_in_ms);
+}
+
+int LIB_DH_check_params(struct Library * _base, const DH * ___dh, int * ___ret);
+
+int LIBSTUB_DH_check_params(void)
+{
+  const DH * ___dh = (const DH *)REG_A0;
+  int * ___ret = (int *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_DH_check_params(_base, ___dh, ___ret);
+}
+
+const char * LIB_SSL_COMP_get0_name(struct Library * _base, const SSL_COMP * ___comp);
+
+const char * LIBSTUB_SSL_COMP_get0_name(void)
+{
+  const SSL_COMP * ___comp = (const SSL_COMP *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_COMP_get0_name(_base, ___comp);
+}
+
+int LIB_SSL_COMP_get_id(struct Library * _base, const SSL_COMP * ___comp);
+
+int LIBSTUB_SSL_COMP_get_id(void)
+{
+  const SSL_COMP * ___comp = (const SSL_COMP *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_COMP_get_id(_base, ___comp);
+}
+
+time_t LIB_X509_VERIFY_PARAM_get_time(struct Library * _base, const X509_VERIFY_PARAM * ___param);
+
+time_t LIBSTUB_X509_VERIFY_PARAM_get_time(void)
+{
+  const X509_VERIFY_PARAM * ___param = (const X509_VERIFY_PARAM *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_VERIFY_PARAM_get_time(_base, ___param);
+}
+
+int LIB_X509_VERIFY_PARAM_set_inh_flags(struct Library * _base, X509_VERIFY_PARAM * ___param, uint32_t ___flags);
+
+int LIBSTUB_X509_VERIFY_PARAM_set_inh_flags(void)
+{
+  X509_VERIFY_PARAM * ___param = (X509_VERIFY_PARAM *)REG_A0;
+  uint32_t ___flags = (uint32_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_VERIFY_PARAM_set_inh_flags(_base, ___param, ___flags);
+}
+
+uint32_t LIB_X509_VERIFY_PARAM_get_inh_flags(struct Library * _base, const X509_VERIFY_PARAM * ___param);
+
+uint32_t LIBSTUB_X509_VERIFY_PARAM_get_inh_flags(void)
+{
+  const X509_VERIFY_PARAM * ___param = (const X509_VERIFY_PARAM *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_VERIFY_PARAM_get_inh_flags(_base, ___param);
 }
 
 

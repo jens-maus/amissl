@@ -8092,7 +8092,7 @@ int  SAVEDS ASM (*LIB_SSL_get_verify_callback(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-void SAVEDS ASM LIB_SSL_set_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int mode), REG(a1, int (*callback)(int ok, X509_STORE_CTX *ctx)))
+void SAVEDS ASM LIB_SSL_set_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, int mode), REG(a1, int (*callback)(int, X509_STORE_CTX *)))
 {
 	SSL_set_verify(s, mode, callback);
 }
@@ -12159,9 +12159,9 @@ void SAVEDS ASM LIB_X509_STORE_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X50
 
 // ---
 
-void SAVEDS ASM LIB_X509_STORE_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, long flags))
+int SAVEDS ASM LIB_X509_STORE_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * ctx), REG(d0, unsigned long flags))
 {
-	X509_STORE_set_flags(ctx, flags);
+	return X509_STORE_set_flags(ctx, flags);
 }
 
 // ---
@@ -30005,6 +30005,62 @@ void SAVEDS ASM LIB_X509_SIG_getm(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_
 const ASN1_INTEGER * SAVEDS ASM LIB_X509_get0_serialNumber(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
 {
 	return X509_get0_serialNumber(x);
+}
+
+// ---
+
+uint64_t SAVEDS ASM LIB_CT_POLICY_EVAL_CTX_get_time(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const CT_POLICY_EVAL_CTX * ctx))
+{
+	return CT_POLICY_EVAL_CTX_get_time(ctx);
+}
+
+// ---
+
+void SAVEDS ASM LIB_CT_POLICY_EVAL_CTX_set_time(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CT_POLICY_EVAL_CTX * ctx), REG(d0, uint64_t time_in_ms))
+{
+	CT_POLICY_EVAL_CTX_set_time(ctx, time_in_ms);
+}
+
+// ---
+
+int SAVEDS ASM LIB_DH_check_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh), REG(a1, int * ret))
+{
+	return DH_check_params(dh, ret);
+}
+
+// ---
+
+const char * SAVEDS ASM LIB_SSL_COMP_get0_name(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL_COMP * comp))
+{
+	return SSL_COMP_get0_name(comp);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_COMP_get_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL_COMP * comp))
+{
+	return SSL_COMP_get_id(comp);
+}
+
+// ---
+
+time_t SAVEDS ASM LIB_X509_VERIFY_PARAM_get_time(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_VERIFY_PARAM * param))
+{
+	return X509_VERIFY_PARAM_get_time(param);
+}
+
+// ---
+
+int SAVEDS ASM LIB_X509_VERIFY_PARAM_set_inh_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_VERIFY_PARAM * param), REG(d0, uint32_t flags))
+{
+	return X509_VERIFY_PARAM_set_inh_flags(param, flags);
+}
+
+// ---
+
+uint32_t SAVEDS ASM LIB_X509_VERIFY_PARAM_get_inh_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_VERIFY_PARAM * param))
+{
+	return X509_VERIFY_PARAM_get_inh_flags(param);
 }
 
 // ---

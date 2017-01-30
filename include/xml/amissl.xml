@@ -5597,7 +5597,7 @@
     <method name="SSL_set_verify" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
       <arg name="mode" type="int" m68kreg="d0"/>
-      <arg name="callback" type="int (*)(int ok, X509_STORE_CTX *ctx)" m68kreg="a1"/>
+      <arg name="callback" type="int (*)(int, X509_STORE_CTX *)" m68kreg="a1"/>
     </method>
     <method name="SSL_set_verify_depth" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -8025,9 +8025,9 @@
     <method name="X509_STORE_free" result="void">
       <arg name="v" type="X509_STORE *" m68kreg="a0"/>
     </method>
-    <method name="X509_STORE_set_flags" result="void">
+    <method name="X509_STORE_set_flags" result="int">
       <arg name="ctx" type="X509_STORE *" m68kreg="a0"/>
-      <arg name="flags" type="long" m68kreg="d0"/>
+      <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
     <method name="X509_STORE_set_purpose" result="int">
       <arg name="ctx" type="X509_STORE *" m68kreg="a0"/>
@@ -19966,5 +19966,35 @@
     <method name="X509_get0_serialNumber" result="const ASN1_INTEGER *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
+
+    <!-- AmiSSL v4.x - OpenSSL 1.1.0d -->
+    <method name="CT_POLICY_EVAL_CTX_get_time" result="uint64_t">
+      <arg name="ctx" type="const CT_POLICY_EVAL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="CT_POLICY_EVAL_CTX_set_time" result="void">
+      <arg name="ctx" type="CT_POLICY_EVAL_CTX *" m68kreg="a0"/>
+      <arg name="time_in_ms" type="uint64_t" m68kreg="d0"/>
+    </method>
+    <method name="DH_check_params" result="int">
+      <arg name="dh" type="const DH *" m68kreg="a0"/>
+      <arg name="ret" type="int *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_COMP_get0_name" result="const char *">
+      <arg name="comp" type="const SSL_COMP *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_COMP_get_id" result="int">
+      <arg name="comp" type="const SSL_COMP *" m68kreg="a0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_get_time" result="time_t">
+      <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set_inh_flags" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="flags" type="uint32_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_get_inh_flags" result="uint32_t">
+      <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+    </method>
+
   </interface>
 </library>

@@ -1442,7 +1442,7 @@ struct AmiSSLIFace
 	int APICALL (*SSL_get_verify_mode)(struct AmiSSLIFace *Self, const SSL * s);
 	int APICALL (*SSL_get_verify_depth)(struct AmiSSLIFace *Self, const SSL * s);
 	int APICALL (*(*SSL_get_verify_callback)(struct AmiSSLIFace *Self, const SSL * s))(int, X509_STORE_CTX *);
-	void APICALL (*SSL_set_verify)(struct AmiSSLIFace *Self, SSL * s, int mode, int (*callback)(int ok, X509_STORE_CTX *ctx));
+	void APICALL (*SSL_set_verify)(struct AmiSSLIFace *Self, SSL * s, int mode, int (*callback)(int, X509_STORE_CTX *));
 	void APICALL (*SSL_set_verify_depth)(struct AmiSSLIFace *Self, SSL * s, int depth);
 	int APICALL (*SSL_use_RSAPrivateKey)(struct AmiSSLIFace *Self, SSL * ssl, RSA * rsa);
 	int APICALL (*SSL_use_RSAPrivateKey_ASN1)(struct AmiSSLIFace *Self, SSL * ssl, const unsigned char * d, long len);
@@ -2057,7 +2057,7 @@ struct AmiSSLIFace
 	int APICALL (*X509_OBJECT_up_ref_count)(struct AmiSSLIFace *Self, X509_OBJECT * a);
 	X509_STORE * APICALL (*X509_STORE_new)(struct AmiSSLIFace *Self);
 	void APICALL (*X509_STORE_free)(struct AmiSSLIFace *Self, X509_STORE * v);
-	void APICALL (*X509_STORE_set_flags)(struct AmiSSLIFace *Self, X509_STORE * ctx, long flags);
+	int APICALL (*X509_STORE_set_flags)(struct AmiSSLIFace *Self, X509_STORE * ctx, unsigned long flags);
 	int APICALL (*X509_STORE_set_purpose)(struct AmiSSLIFace *Self, X509_STORE * ctx, int purpose);
 	int APICALL (*X509_STORE_set_trust)(struct AmiSSLIFace *Self, X509_STORE * ctx, int trust);
 	X509_STORE_CTX * APICALL (*X509_STORE_CTX_new)(struct AmiSSLIFace *Self);
@@ -4936,6 +4936,14 @@ struct AmiSSLIFace
 	const STACK_OF(ASN1_UTF8STRING) * APICALL (*TS_STATUS_INFO_get0_text)(struct AmiSSLIFace *Self, const TS_STATUS_INFO * a);
 	void APICALL (*X509_SIG_getm)(struct AmiSSLIFace *Self, X509_SIG * sig, X509_ALGOR ** palg, ASN1_OCTET_STRING ** pdigest);
 	const ASN1_INTEGER * APICALL (*X509_get0_serialNumber)(struct AmiSSLIFace *Self, const X509 * x);
+	uint64_t APICALL (*CT_POLICY_EVAL_CTX_get_time)(struct AmiSSLIFace *Self, const CT_POLICY_EVAL_CTX * ctx);
+	void APICALL (*CT_POLICY_EVAL_CTX_set_time)(struct AmiSSLIFace *Self, CT_POLICY_EVAL_CTX * ctx, uint64_t time_in_ms);
+	int APICALL (*DH_check_params)(struct AmiSSLIFace *Self, const DH * dh, int * ret);
+	const char * APICALL (*SSL_COMP_get0_name)(struct AmiSSLIFace *Self, const SSL_COMP * comp);
+	int APICALL (*SSL_COMP_get_id)(struct AmiSSLIFace *Self, const SSL_COMP * comp);
+	time_t APICALL (*X509_VERIFY_PARAM_get_time)(struct AmiSSLIFace *Self, const X509_VERIFY_PARAM * param);
+	int APICALL (*X509_VERIFY_PARAM_set_inh_flags)(struct AmiSSLIFace *Self, X509_VERIFY_PARAM * param, uint32_t flags);
+	uint32_t APICALL (*X509_VERIFY_PARAM_get_inh_flags)(struct AmiSSLIFace *Self, const X509_VERIFY_PARAM * param);
 };
 
 #ifdef __cplusplus

@@ -4334,5 +4334,13 @@
 #define TS_STATUS_INFO_get0_text(a) IAmiSSL->TS_STATUS_INFO_get0_text((a))
 #define X509_SIG_getm(sig, palg, pdigest) IAmiSSL->X509_SIG_getm((sig), (palg), (pdigest))
 #define X509_get0_serialNumber(x) IAmiSSL->X509_get0_serialNumber((x))
+#define CT_POLICY_EVAL_CTX_get_time(ctx) IAmiSSL->CT_POLICY_EVAL_CTX_get_time((ctx))
+#define CT_POLICY_EVAL_CTX_set_time(ctx, time_in_ms) IAmiSSL->CT_POLICY_EVAL_CTX_set_time((ctx), (time_in_ms))
+#define DH_check_params(dh, ret) IAmiSSL->DH_check_params((dh), (ret))
+#define SSL_COMP_get0_name(comp) IAmiSSL->SSL_COMP_get0_name((comp))
+#define SSL_COMP_get_id(comp) IAmiSSL->SSL_COMP_get_id((comp))
+#define X509_VERIFY_PARAM_get_time(param) IAmiSSL->X509_VERIFY_PARAM_get_time((param))
+#define X509_VERIFY_PARAM_set_inh_flags(param, flags) IAmiSSL->X509_VERIFY_PARAM_set_inh_flags((param), (flags))
+#define X509_VERIFY_PARAM_get_inh_flags(param) IAmiSSL->X509_VERIFY_PARAM_get_inh_flags((param))
 
 #endif /* INLINE4_AMISSL_H */

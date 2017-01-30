@@ -4912,6 +4912,14 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_STATUS_INFO_get0_text
 	    FPTR IAmiSSL_X509_SIG_getm
 	    FPTR IAmiSSL_X509_get0_serialNumber
+	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_get_time
+	    FPTR IAmiSSL_CT_POLICY_EVAL_CTX_set_time
+	    FPTR IAmiSSL_DH_check_params
+	    FPTR IAmiSSL_SSL_COMP_get0_name
+	    FPTR IAmiSSL_SSL_COMP_get_id
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_time
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_inh_flags
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_inh_flags
 	LABEL AmiSSLIFace_SIZE
 
 #endif

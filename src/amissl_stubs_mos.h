@@ -1742,7 +1742,7 @@ LIBSTUB(X509_OBJECT_retrieve_match, X509_OBJECT *);
 LIBSTUB(X509_OBJECT_up_ref_count, int);
 LIBSTUB(X509_STORE_new, X509_STORE *);
 LIBSTUB(X509_STORE_free, void);
-LIBSTUB(X509_STORE_set_flags, void);
+LIBSTUB(X509_STORE_set_flags, int);
 LIBSTUB(X509_STORE_set_purpose, int);
 LIBSTUB(X509_STORE_set_trust, int);
 LIBSTUB(X509_STORE_CTX_new, X509_STORE_CTX *);
@@ -4292,6 +4292,14 @@ LIBSTUB(SSL_SESSION_get0_id_context, const unsigned char *);
 LIBSTUB(TS_STATUS_INFO_get0_text, const STACK_OF(ASN1_UTF8STRING) *);
 LIBSTUB(X509_SIG_getm, void);
 LIBSTUB(X509_get0_serialNumber, const ASN1_INTEGER *);
+LIBSTUB(CT_POLICY_EVAL_CTX_get_time, uint64_t);
+LIBSTUB(CT_POLICY_EVAL_CTX_set_time, void);
+LIBSTUB(DH_check_params, int);
+LIBSTUB(SSL_COMP_get0_name, const char *);
+LIBSTUB(SSL_COMP_get_id, int);
+LIBSTUB(X509_VERIFY_PARAM_get_time, time_t);
+LIBSTUB(X509_VERIFY_PARAM_set_inh_flags, int);
+LIBSTUB(X509_VERIFY_PARAM_get_inh_flags, uint32_t);
 
 #ifdef __cplusplus
 }

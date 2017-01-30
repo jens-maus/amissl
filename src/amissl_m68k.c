@@ -17077,7 +17077,7 @@ STATIC void stub_main_SSL_set_verify_PPC(uint32 *regarray)
 	Self->SSL_set_verify(
 		(SSL *)regarray[REG68K_A0/4],
 		(int)regarray[REG68K_D0/4],
-		(int (*)(int ok, X509_STORE_CTX *ctx))regarray[REG68K_A1/4]
+		(int (*)(int, X509_STORE_CTX *))regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_SSL_set_verify = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_set_verify_PPC };
@@ -25691,15 +25691,15 @@ STATIC CONST struct EmuTrap stub_main_X509_STORE_free = { TRAPINST, TRAPTYPE, (u
 
 // ---
 
-STATIC void stub_main_X509_STORE_set_flags_PPC(uint32 *regarray)
+STATIC int stub_main_X509_STORE_set_flags_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
-	Self->X509_STORE_set_flags(
+	return Self->X509_STORE_set_flags(
 		(X509_STORE *)regarray[REG68K_A0/4],
-		(long)regarray[REG68K_D0/4]
+		(unsigned long)regarray[REG68K_D0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_X509_STORE_set_flags = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_STORE_set_flags_PPC };
@@ -63967,6 +63967,121 @@ STATIC CONST struct EmuTrap stub_main_X509_get0_serialNumber = { TRAPINST, TRAPT
 
 // ---
 
+STATIC uint64_t stub_main_CT_POLICY_EVAL_CTX_get_time_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->CT_POLICY_EVAL_CTX_get_time(
+		(const CT_POLICY_EVAL_CTX *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_CT_POLICY_EVAL_CTX_get_time = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CT_POLICY_EVAL_CTX_get_time_PPC };
+
+// ---
+
+STATIC void stub_main_CT_POLICY_EVAL_CTX_set_time_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->CT_POLICY_EVAL_CTX_set_time(
+		(CT_POLICY_EVAL_CTX *)regarray[REG68K_A0/4],
+		(uint64_t)regarray[REG68K_D0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_CT_POLICY_EVAL_CTX_set_time = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CT_POLICY_EVAL_CTX_set_time_PPC };
+
+// ---
+
+STATIC int stub_main_DH_check_params_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->DH_check_params(
+		(const DH *)regarray[REG68K_A0/4],
+		(int *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_DH_check_params = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_DH_check_params_PPC };
+
+// ---
+
+STATIC const char * stub_main_SSL_COMP_get0_name_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->SSL_COMP_get0_name(
+		(const SSL_COMP *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_SSL_COMP_get0_name = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_COMP_get0_name_PPC };
+
+// ---
+
+STATIC int stub_main_SSL_COMP_get_id_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->SSL_COMP_get_id(
+		(const SSL_COMP *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_SSL_COMP_get_id = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_COMP_get_id_PPC };
+
+// ---
+
+STATIC time_t stub_main_X509_VERIFY_PARAM_get_time_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->X509_VERIFY_PARAM_get_time(
+		(const X509_VERIFY_PARAM *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_VERIFY_PARAM_get_time = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_VERIFY_PARAM_get_time_PPC };
+
+// ---
+
+STATIC int stub_main_X509_VERIFY_PARAM_set_inh_flags_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->X509_VERIFY_PARAM_set_inh_flags(
+		(X509_VERIFY_PARAM *)regarray[REG68K_A0/4],
+		(uint32_t)regarray[REG68K_D0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_VERIFY_PARAM_set_inh_flags = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_VERIFY_PARAM_set_inh_flags_PPC };
+
+// ---
+
+STATIC uint32_t stub_main_X509_VERIFY_PARAM_get_inh_flags_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->X509_VERIFY_PARAM_get_inh_flags(
+		(const X509_VERIFY_PARAM *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_VERIFY_PARAM_get_inh_flags = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_VERIFY_PARAM_get_inh_flags_PPC };
+
+// ---
+
 CONST CONST_APTR main_VecTable68K[] =
 {
 	&stub_main_Open,
@@ -68865,6 +68980,14 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_TS_STATUS_INFO_get0_text,
 	&stub_main_X509_SIG_getm,
 	&stub_main_X509_get0_serialNumber,
+	&stub_main_CT_POLICY_EVAL_CTX_get_time,
+	&stub_main_CT_POLICY_EVAL_CTX_set_time,
+	&stub_main_DH_check_params,
+	&stub_main_SSL_COMP_get0_name,
+	&stub_main_SSL_COMP_get_id,
+	&stub_main_X509_VERIFY_PARAM_get_time,
+	&stub_main_X509_VERIFY_PARAM_set_inh_flags,
+	&stub_main_X509_VERIFY_PARAM_get_inh_flags,
 	(CONST_APTR)-1
 };
 
