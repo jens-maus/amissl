@@ -369,6 +369,28 @@ LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 .PHONY: all
 all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
+# for making a release we compile ALL target with no debug
+release:
+	@echo "  CC $<"
+	make OS=os4 clean
+	make OS=os4 DEBUG=
+	@echo "  CC $<"
+	make OS=os3 clean
+	make OS=os3 DEBUG=
+	@echo "  CC $<"
+	make OS=mos clean
+	make OS=mos DEBUG=
+	@echo "  CC $<"
+	make OS=aros-i386 clean
+	make OS=aros-i386 DEBUG=
+	@echo "  CC $<"
+	make OS=aros-ppc clean
+	make OS=aros-ppc DEBUG=
+	@echo "  CC $<"
+	make OS=aros-x86_64 clean
+	make OS=aros-x86_64 DEBUG=
+	@sh tools/mkrelease.sh
+
 # make the object directory
 $(BUILD_D):
 	@echo "  MKDIR $@"
