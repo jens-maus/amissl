@@ -41,8 +41,11 @@ for os in os3 os4 mos aros-i386 aros-ppc aros-x86_64; do
 	cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
 done
 
-cp -a dist/Install-AmiSSL "release/AmiSSL/"
-cp -a dist/*.doc "release/AmiSSL/Doc/"
+cp -a dist/AmiSSL.info "release/"
+cp -a dist/Install-AmiSSL* "release/AmiSSL/"
+cp -a dist/*.doc* "release/AmiSSL/Doc/"
+cp -a dist/Doc.info "release/AmiSSL/"
+cp -a dist/Developer.info "release/AmiSSL/"
 cp -a certs/* "release/AmiSSL/Certs/"
 cp -a dist/README-SDK "release/AmiSSL/Developer/Doc/README"
 cp -a test/https.c "release/AmiSSL/Developer/Examples/"
