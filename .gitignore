@@ -1,3 +1,5 @@
 /build_*
 /release
+/*.lha
+/*.readme
 .DS_Store

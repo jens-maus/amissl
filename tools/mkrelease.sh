@@ -20,7 +20,10 @@ mkdir -p "release/AmiSSL/Libs"
 
 versionname=`grep ^VERSIONNAME= Makefile | awk -F= '{ print $2 }'`
 
-for os in os3 os4 mos aros-i386 aros-ppc aros-x86_64; do
+#OS="os3 os4 mos aros-i386 aros-ppc aros-x86_64"
+OS="os3 os4"
+
+for os in ${OS}; do
 	case $os in
 	    os3)         fullsys="AmigaOS3";;
 	    os4)         fullsys="AmigaOS4";;
@@ -34,7 +37,7 @@ for os in os3 os4 mos aros-i386 aros-ppc aros-x86_64; do
 	mkdir -p "release/AmiSSL/Libs/$fullsys/AmiSSL"
 	cp -a build_$os/amissl_v$versionname.library "release/AmiSSL/Libs/$fullsys/AmiSSL/"
 	mkdir -p "release/AmiSSL/C/$fullsys"
-	cp -a build_$os/openssl/apps/openssl "release/AmiSSL/C/$fullsys/OpenSSL"
+	cp -a build_$os/openssl/apps/openssl "release/AmiSSL/C/$fullsys/"
 	mkdir -p "release/AmiSSL/Developer/Examples/$fullsys"
 	cp -a build_$os/https "release/AmiSSL/Developer/Examples/$fullsys/"
 	mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
@@ -46,14 +49,19 @@ cp -a dist/Install-AmiSSL* "release/AmiSSL/"
 cp -a dist/*.doc* "release/AmiSSL/Doc/"
 cp -a dist/Doc.info "release/AmiSSL/"
 cp -a dist/Developer.info "release/AmiSSL/"
-cp -a certs/* "release/AmiSSL/Certs/"
-cp -a dist/README-SDK "release/AmiSSL/Developer/Doc/README"
+cp -a certs/*.? "release/AmiSSL/Certs/"
+cp -a dist/README-SDK "release/AmiSSL/Developer/README"
 cp -a test/https.c "release/AmiSSL/Developer/Examples/"
-cp -a include/fd/* "release/AmiSSL/Developer/fd/"
-cp -a include/sfd/* "release/AmiSSL/Developer/sfd/"
-cp -a include/xml/* "release/AmiSSL/Developer/xml/"
-for incdir in amissl clib inline inline4 interfaces libraries openssl ppcinline pragmas proto; do
-	cp -a -R include/$incdir "release/AmiSSL/Developer/include/"
+cp -a include/fd/amissl* "release/AmiSSL/Developer/fd/"
+cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
+cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
+
+# copy SDK relevant files
+cp -a include/amissl "release/AmiSSL/Developer/include/"
+cp -a include/openssl "release/AmiSSL/Developer/include/"
+for incdir in clib inline inline4 interfaces libraries ppcinline pragmas proto; do
+  mkdir -p "release/AmiSSL/Developer/include/${incdir}"
+	cp -a -R include/${incdir}/amissl* "release/AmiSSL/Developer/include/${incdir}/"
 done
 
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
@@ -61,6 +69,7 @@ releaserev=`grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }'`
 
 echo "  MK AmiSSL-$releasever.$releaserev.lha"
 cd release
+rm -f ../AmiSSL-$releasever.$releaserev.lha
 lha -ao5q ../AmiSSL-$releasever.$releaserev.lha *
-# cp dist/ReadMe ../AmiSSL-$releasever.$releaserev.readme
+cp ../dist/AmiSSL.readme ../AmiSSL-$releasever.$releaserev.readme
 cd ..
