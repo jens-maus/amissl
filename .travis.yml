@@ -24,7 +24,8 @@ install:
   - curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
   - if [[ ${BUILD} =~ os3 ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
   - if [[ ${BUILD} =~ os4 ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
-  - if [[ ${BUILD} =~ mos ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi  - if [[ ${BUILD} =~ aros-ppc|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-aros.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ ${BUILD} =~ mos ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ ${BUILD} =~ aros-ppc|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-aros.tar.bz2 | sudo tar xj -C / ; fi
   - if [[ ${BUILD} =~ aros-i386|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-i386-aros.tar.bz2 | sudo tar xj -C / ; fi
   - if [[ ${BUILD} =~ aros-x86_64|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C / ; fi
 
