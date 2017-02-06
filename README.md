@@ -77,7 +77,7 @@ script used accordingly.
 ```
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2016 AmiSSL Open Source Team.
+AmiSSL v4    Copyright (c) 2014-2017 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
