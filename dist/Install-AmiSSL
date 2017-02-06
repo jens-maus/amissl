@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.2 (06.02.2017)
+; $VER: Install-AmiSSL 4.0.3 (06.02.2017)
 
 (set @app-name "AmiSSL")
 
@@ -47,7 +47,7 @@
 )
 (set #str-success (cat
 	"AmiSSL installation finished succesfully. Enjoy!\n\n"
-	"(Please reboot for User-Startup modifications to take effect)")
+	"(Please reboot for modifications to take effect)")
 )
 
 ; ///
@@ -87,10 +87,10 @@
         (help @askchoice-help)
         (choices "AmigaOS 3.x"
                  "AmigaOS 4.x"
-                 "MorphOS 1.x/2.x/3.x"
-                 "AROS i386"
-                 "AROS PPC"
-                 "AROS x86_64"
+                 ;"MorphOS 1.x/2.x/3.x"
+                 ;"AROS i386"
+                 ;"AROS PPC"
+                 ;"AROS x86_64"
         )
         (default #detectedSystem)
     )
@@ -190,7 +190,7 @@
 (set #old-lib-ver (getversion "LIBS:amisslmaster.library"))
 (set #new-lib-ver (getversion (tackon #libs-src-dir "amisslmaster.library")))
 
-(copylib
+(copyfiles
 	(source (tackon #libs-src-dir "amisslmaster.library"))
 	(dest #libs-dir)
 )
@@ -198,7 +198,7 @@
 (complete 10)
 
 (foreach (tackon #libs-src-dir "AmiSSL") "#?.library"
-	(copylib
+	(copyfiles
 		(source (tackon (tackon #libs-src-dir "AmiSSL") @each-name))
 		(dest (tackon #libs-dir "AmiSSL"))
 	)
@@ -209,7 +209,7 @@
 ;----------------------------------------------------------------------------
 ; /// Install documentation
 
-(copylib
+(copyfiles
 	(source "Doc/AmiSSL.doc")
 	(dest #docs-dir)
 	(infos)
@@ -217,7 +217,7 @@
 
 (complete 40)
 
-(copylib
+(copyfiles
 	(source "Doc/OpenSSL.doc")
 	(dest #docs-dir)
 	(infos)
@@ -228,10 +228,9 @@
 ;----------------------------------------------------------------------------
 ; /// Install OpenSSL tool
 
-(copylib
+(copyfiles
 	(source (tackon "C" (tackon #src-os-dir "OpenSSL")))
 	(dest #cmd-dir)
-	(infos)
 )
 
 (complete 60)
@@ -240,7 +239,7 @@
 ; /// Install Certificates
 
 (set #certs-dir (tackon #storage-dir "Certs"))
-(set #delete-old-certs 0)
+(set #delete-old-certs 1)
 (set #copy-certs 1)
 
 (set #ask-about-certs (exists #certs-dir (noreq)))
@@ -301,13 +300,13 @@
 	(set #startup-command
 		(cat #startup-command
 			"If Exists AmiSSL:Libs\n"
-			"\tAssign LIBS: AmiSSL:Libs ADD\n"
+			"  Assign LIBS: AmiSSL:Libs ADD\n"
 			"EndIf\n"
 		)
 	)
 )
 
-(if #selfContained
+(if (and #selfContained (not (if #amissl-assign 1 0)))
 	(if
 		(askbool
 			(prompt #str-add-path)
@@ -318,7 +317,7 @@
 	)
 )
 
-(if (or #selfContained (not (if #amissl-assign 1 0)))
+(if (and #selfContained (not (if #amissl-assign 1 0)))
 	(startup @app-name
 		(prompt #str-add-assign)
 		(help @startup-help)
