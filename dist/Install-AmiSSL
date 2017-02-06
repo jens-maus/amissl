@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.1 (1.2.2017)
+; $VER: Install-AmiSSL 4.0.2 (06.02.2017)
 
 (set @app-name "AmiSSL")
 
@@ -32,16 +32,6 @@
 	"certificates from this, older version and keep the "
 	"currently installed certificates from the newer version.\n\n"
 	"Would you like to keep the currently installed "
-	"certificates?")
-)
-(set #str-certs-newer-over-older (cat
-	"The \"%s\" directory which you selected for AmiSSL "
-	"certificates already contains the directory with certificates "
-	"from what appears to be an earlier AmiSSL release.\n\n"
-	"It is suggested that you let the Installer remove the "
-	"contents of \"%s\" directory and copy the "
-	"certificates from this version of AmiSSL.\n\n"
-	"Would you like to replace the currently installed "
 	"certificates?")
 )
 (set #str-certs-keep "Keep installed certificates")
@@ -277,26 +267,6 @@
 			(set #delete-old-certs 1)
 			(set #copy-certs 1)
 			(set #ask-about-certs 0)
-		)
-	)
-)
-
-(if #ask-about-certs
-	(if
-		(askbool
-			(prompt (#str-certs-newer-over-older #storage-dir #certs-dir))
-			(choices #str-certs-replace #str-certs-keep)
-			(help #str-no-help)
-			(default 1)
-		)
-		(
-			(set #delete-old-certs 1)
-			(set #copy-certs 1)
-		)
-		; else
-		(
-			(set #delete-old-certs 0)
-			(set #copy-certs 0)
 		)
 	)
 )
