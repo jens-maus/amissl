@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.3 (06.02.2017)
+; $VER: Install-AmiSSL 4.0.4 (07.02.2017)
 
 (set @app-name "AmiSSL")
 
@@ -49,6 +49,13 @@
 	"AmiSSL installation finished succesfully. Enjoy!\n\n"
 	"(Please reboot for modifications to take effect)")
 )
+(set #str-reboot-before-install (cat
+	"The installer has detected that a running application is using "
+	"AmiSSL. Please close all applications that are using AmiSSL and "
+	"run the installer again.\n\n"
+	"If this message persists, reboot and try again.")
+)
+(set #str-deleting-certs "Deleting old certificates")
 
 ; ///
 ; /// ***** Deutsch
@@ -190,6 +197,36 @@
 (set #old-lib-ver (getversion "LIBS:amisslmaster.library"))
 (set #new-lib-ver (getversion (tackon #libs-src-dir "amisslmaster.library")))
 
+(if (= #detectedSystem "os4")
+	(
+		; /// Try to force ramlib to expunge libraries to release exclusive file locks
+		(foreach (tackon #libs-dir "AmiSSL") "amissl_v#?.library"
+			(
+				(set #resident-lib-ver (getversion @each-name (resident)))
+				(if (> #resident-lib-ver 0)
+					(
+						(set #lib-name ((tackon (tackon #libs-dir "AmiSSL") @each-name)))
+						(rename #lib-name (cat #lib-name "-expunge"))
+						(rename (cat #lib-name "-expunge") #lib-name)
+					)
+				)
+			)
+		)
+		(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
+		(if (> #resident-lib-ver 0)
+			(
+				(set #lib-name (tackon #libs-dir "amisslmaster.library"))
+				(rename #lib-name (cat #lib-name "-expunge"))
+				(rename (cat #lib-name "-expunge") #lib-name)
+			)
+		)
+		(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
+		(if (> #resident-lib-ver 0)
+			(abort #str-reboot-before-install)
+		)
+	)
+)
+
 (copyfiles
 	(source (tackon #libs-src-dir "amisslmaster.library"))
 	(dest #libs-dir)
@@ -271,8 +308,11 @@
 )
 
 (if #delete-old-certs
-	(foreach #certs-dir "#?"
-		(delete (tackon #certs-dir @each-name))
+	(
+		(working #str-deleting-certs)
+		(foreach #certs-dir "#?"
+			(delete (tackon #certs-dir @each-name))
+		)
 	)
 )
 
