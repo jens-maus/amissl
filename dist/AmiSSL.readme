@@ -1,108 +1,137 @@
-Short:        Amiga port of OpenSSL as shared library
+Short:        AmiSSL - OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Jens Maus <mail@jens-maus.de>
 Type:         util/libs
 Version:      4.0
-Requires:     AmigaOS 3.0+, 68020+
-Architecture: ppc-amigaos >= 4.0.5, ,m68k-amigaos >= 3.0
+Replaces:     util/libs/AmiSSL-*
+Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
+Architecture: ppc-amigaos >= 4.0.5, m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
+This is version 4.0 of the AmiSSL library for Amiga based operating systems
+and the first public open-source based release of AmiSSL. Version 4.0 is a new
+major release which comes with full compatibility to the OpenSSL 1.1.x line
+which includes important security related fixes and comes with new encryption
+ciphers which are required nowadays to connect to modern SSL-based services
+(e.g.  HTTPS). However, due to fundamental changes in the API between the old
+AmiSSLv3 and new v4 versions and the large changes between the old OpenSSL
+0.9.x and the new OpenSSL 1.1.x line applications have to be recompiled with
+the updated AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x
+API. Besides that fundamental change, AmiSSLv4 can be installed on top of a
+AmiSSLv3 installation while still ensuring that applications compiled for
+AmiSSLv3 will continue to work properly.
+
+IMPORTANT NOTE:
+--------------
+This release comes with binaries for the AmigaOS4/PPC and AmigaOS3/m68k
+platform only.  Unfortunately, due to lack of motivated developers we couldn't
+provide working binaries for the MorphOS/PPC or AROS (PPC, i386, x86_64)
+platform in time. If you are, however, interested in seeing AmiSSL v4 being
+ported for these other Amiga-based platforms, please try to find motivated and
+talented developers who could join our team as proper maintainers for these
+alternative platforms. In addition, if you are a MorphOS or AROS developer
+yourself, feel free to send proper pull requests to see your platform
+supported in one of the next releases or please consider joining our team.
+
+Requirements:
+------------
+- AmigaOS 4.0+/PPC or AmigaOS 3.0+/68020+
+
+Changes:
+-------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.0d (26 Jan 2017) version.
+- Updated root certificate bundle to latest Mozilla-based bundle
+  provided by https://curl.haxx.se/ca/
+- Removed whole IsCipherAvailable() API and reenabled IDEA, MDC2 and RC5
+  ciphers as the protecting patents have expired during 2012 and 2015.
+- Enabled all PPC ASM optimizations in OpenSSL.
+- Switched build system to exclusively use GCC-based cross compilers for all
+  platforms using proper baserel support for using the amissl shared library
+  in a multi-application environment.
 
 General
 -------
-
-AmiSSL is a shared library package, port of OpenSSL which is "a collaborative
-effort to develop a robust, commercial-grade, full-featured, and Open Source
-toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer
-Security (TLS v1) protocols as well as a full-strength general purpose
-cryptography library".
+AmiSSL is a shared library package, port of OpenSSL which is "an open source
+project that provides a robust, commercial-grade, and full-featured toolkit
+for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL)
+protocols. It is also a general-purpose cryptography library."
 
 AmiSSL contains three major components: the libraries, the certificate files
 and a port of the OpenSSL tool.
 
 Libraries
 ---------
-
-The main library is amisslmaster.library which acts as a proxy which opens
-the appropriate AmiSSL library for the programs using AmiSSL. It is possible
-to have different AmiSSL versions installed at the same time since
-amisslmaster.library will make sure that the correct libraries are opened.
-However, since a certain version of amisslmaster.library cannot know about
-the future releases of AmiSSL, it is important that the latest version of
-amisslmaster.library is installed.
+The main library is "amisslmaster.library" which acts as a proxy which opens
+the appropriate AmiSSL library (with compatibility to a certain OpenSSL
+version) for the programs using AmiSSL. It is possible to have different
+AmiSSL versions installed at the same time since amisslmaster.library will
+make sure that the correct libraries are opened.  However, since a certain
+version of amisslmaster.library cannot know about the future releases of
+AmiSSL, it is important that the latest version of amisslmaster.library is
+always installed.
 
 The amisslmaster.library was introduced with AmiSSL v2, but since none of
 AmiSSL v1 file names collide with later AmiSSL releases, they can coexist on
 the same system with the later versions.
 
-The rest of the libraries are found inside amissl directory. With the exception
-of AmiSSL v1 libraries there, none of them should be opened directly, but
-through amisslmaster.library. The technical details on this can be found in
-AmiSSL SDK documentation.
+The rest of the libraries are found inside the AmiSSL directory (assigned to
+AMISSL:Libs/AmiSSL). With the exception of AmiSSL v1 libraries there, none of
+them should be opened directly, but through amisslmaster.library. The
+technical details on this can be found in AmiSSL SDK documentation (see
+https://github.com/jens-maus/amissl/blob/master/dist/README-SDK).
 
-The previous versions of libraries in amissl directory should be kept there
-when a new version of AmiSSL is released since they may still be used. For
-example, IBrowse v2.3 uses AmiSSL v2 libraries through amisslmaster.library.
-These libraries are named amissl/amissl_v2.library,
-amissl/blowfish_v2.library etc and are based on OpenSSL 0.9.6g. The first
-release of AmiSSL v3 is based on OpenSSL 0.9.7g, latest available at the
-time. It includes amissl/amissl_v097g.library (all other libraries like
-blowfish, cast etc are now included in it and the name reflects the OpenSSL
-version number). Since OpenSSL 0.9.6g and 0.9.7g have incompatible API's and
-public structures, when IBrowse v2.3 tries to open AmiSSL through
-amisslmaster.library v3, amisslmaster.library will honor its request and and
-open AmiSSL v2 libraries even though AmiSSL v3 library is available.
+The previous versions of libraries in AmiSSL directory should be kept when a
+new version of AmiSSL is released since they may still be used. For example,
+IBrowse v2.3 uses AmiSSLv2 libraries through amisslmaster.library.  These
+libraries are named "AmiSSL:Libs/AmiSSL/amissl_v2.library",
+"AmiSSL:Libs/AmiSSL/blowfish_v2.library", etc. and are based on OpenSSL
+0.9.6g. The first release of AmiSSLv3 is based on OpenSSL 0.9.7g, latest
+available at the time. It includes "AmiSSL:Libs/AmiSSL/amissl_v097g.library"
+(all other libraries like blowfish, cast etc are now included in it and the
+name reflects the OpenSSL version number). Since OpenSSL 0.9.6g and 0.9.7g
+have incompatible API's and public structures, when IBrowse v2.3 tries to open
+AmiSSL through amisslmaster.library v3, amisslmaster.library will honor its
+request and open AmiSSLv2 libraries even though AmiSSLv3 library is available.
+The same applies to AmiSSLv4, the successor of AmiSSLv3.
 
 Another example: suppose that a program is compiled for OpenSSL 0.9.7g API.
 When it asks amisslmaster.library to open AmiSSL with that API,
-amisslmaster.library will open amissl/amissl_097g.library. If a bugfix
-version of OpenSSL 0.9.7g called 0.9.7h with compatible API is released,
-AmiSSL could be updated to include amissl/amissl_097h.library. The
-amisslmaster.library would then open amissl/amissl_097h.library on behalf of
-the program even though it was compiled for and asked for version 0.9.7g. The
-program would thus benefit from the fixed version without recompilation.
-
-Even though amissl/amissl_v097g.library includes IDEA and RC5 ciphers and
-MDC2 message digest, AmiSSL will make them unavailable depending on the
-country selected in the Locale settings (for example, none of IDEA, RC5 and
-MDC2 are available in the USA due to licensing issues). When downloading
-AmiSSL, you should have been presented with a license which specifies that
-you agree to select the correct country in the Locale settings. AmiSSL
-authors take no responsibility for potential legal problems if the incorrect
-country is selected.
+amisslmaster.library will open "AmiSSL:Libs/AmiSSL/amissl_097g.library". If a
+bugfix version of OpenSSL 0.9.7g called 0.9.7h with compatible API is
+released, AmiSSL could be updated to include
+"AmiSSL:Libs/AmiSSL/amissl_097h.library". The amisslmaster.library would then
+open "amissl_097h.library" on behalf of the program even though it was
+compiled for and asked for version 0.9.7g. The program would thus benefit from
+the fixed version without having to be recompiled.
 
 Certificates
 ------------
+AmiSSL includes root certificate files which are installed into "AmiSSL:Certs"
+directory (Note: the AmiSSL: assign must exist - it is usually added to
+S:User-Startup by the install script).
 
-AmiSSL includes the certificate files which are installed into
-AmiSSL:certs directory (Note: the AmiSSL: assign must exist - it is usually
-added to user-startup by the install script).
+Each AmiSSL version comes with a full set of root certificates and has those
+that have expired removed. If you had some earlier versions of AmiSSL
+installed, it is suggested that the old AmiSSL:Certs directory is replaced
+with the certs directory from the latest AmiSSL archive (The installer script
+should usually take care of that). Please note that it is not suggested to
+manually add own certificates to "AmiSSL:Certs". You should rather add and
+maintain them in "AmiSSL:UserCerts" so that no future AmiSSL release will
+delete your own certificates. In addition, please note that usually
+applications providing SSL/TLS functionality should provide you a way to
+install your own certificates in this directory path. 
 
-Each AmiSSL version comes with full set of certificates and has those that
-have expired removed. If you had some earlier versions of AmiSSL installed,
-it is suggested that the old AmiSSL:certs directory is replaced with the
-certs directory from the latest AmiSSL archive. If you added some
-certificates to the AmiSSL:certs directory, you should back them up and, if
-they haven't expired, copy them back after installing the latest AmiSSL certs
-directory.
-
-Note: "OpenSSL x509 -in cert_file_name -enddate -noout" will output the
-certificate expiration date.
-
-Besides AmiSSL:certs directory, the usercerts and private directories can be
-found inside AmiSSL: These are not used by AmiSSL, they are meant to be used
-by the application software.
-
-The OpenSSL tool
-----------------
-
-A port of the OpenSSL tool is also included. It is a "command line tool for
-using the various cryptography functions of OpenSSL's crypto library from the
-shell". The documentation for the OpenSSL tool is included in the archive.
+The OpenSSL command-line tool
+-----------------------------
+A port of the OpenSSL command-line tool is also included and usually installed
+to AMISSL: during installatiopn. It is a "command line tool for using the
+various cryptography functions of OpenSSL's crypto library from the shell".
+The documentation for the OpenSSL tool is included in the archive and can also
+be reviewed online: https://www.openssl.org/docs/man1.1.0/apps/openssl.html
 
 Legal information
 -----------------
-
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
 AmiSSL v4    Copyright (c) 2014-2017 AmiSSL Open Source Team.
@@ -125,7 +154,6 @@ the toolkit. See below for the actual license texts.
 
 OpenSSL License
 ---------------
-
 ====================================================================
 Copyright (c) 1998-2016 The OpenSSL Project.  All rights reserved.
 
@@ -180,7 +208,6 @@ Hudson (tjh@cryptsoft.com).
 
 Original SSLeay License
 -----------------------
-
 Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
 All rights reserved.
 
@@ -236,4 +263,3 @@ The licence and distribution terms for any publically available version or
 derivative of this code cannot be changed.  i.e. this code cannot simply be
 copied and put under another distribution licence
 [including the GNU Public Licence.]
-

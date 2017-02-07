@@ -1,40 +1,40 @@
 Introduction
 ------------
-
-This archive contains developer files and an example program which should
-make it possible to add AmiSSL v3 support to clients and servers.
+This archive contains developer files and an example program which should make
+it possible to add AmiSSL support to client and server applications interested
+in providing SSL/TLS functionality to end users.
 
 The information is mostly AmiSSL specific. For more information on SSL
-programming, check OpenSSL documentation and examples (http://www.openssl.org/).
-Some outdated documentation for SSLeay, predecessor to OpenSSL, can be found
-at http://psych.psy.uq.oz.au/~ftp/Crypto/ssl.html .
+programming, check OpenSSL documentation and examples
+(http://www.openssl.org/).
 
-The provided example, https.c, is an example of a very simple client. It
-shows how to get a https:// document by connecting directly to the site, and
-also by connecting through a proxy server (SSL tunneling).
+The provided example, https.c, is an example of a very simple client. It shows
+how to retrieve a document from a "https://" server by connecting directly to
+the site, and also by connecting through a proxy server (SSL tunneling).
 
-AmiSSL gives the same functionality as OpenSSL, but there are a few
-differences as a result of the shared library model.
+AmiSSL provides essentially the same functionality as OpenSSL, but there are a
+few differences as a result of the limited Amiga shared library model.
 
 AmiSSL API
 ----------
+AmiSSL v3/v4 API is slightly different from v1 API. Nevertheless, the procedure
+in using AmiSSL should be something like the following pseudo-code:
 
-AmiSSL v3 API is slightly different from v1 API:
-
+-- cut here --
 #include <proto/amisslmaster.h>
 #include <proto/amissl.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 #include <amissl/amissl.h>
 
-if (AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
-                                   AMISSLMASTER_MIN_VERSION))
+if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
+                                   AMISSLMASTER_MIN_VERSION)))
 {
-	if (InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE or FALSE))
+	if(InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE or FALSE))
 	{
-		if (AmiSSLBase = OpenAmiSSL())
+		if((AmiSSLBase = OpenAmiSSL()))
 		{
-			if (InitAmiSSL(..., TAG_DONE) == 0)
+			if(InitAmiSSL(..., TAG_DONE) == 0)
 			{
 				/* Initialization successfully completed, proceed */
 
@@ -43,41 +43,44 @@ if (AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 				CleanupAmiSSL(TAG_DONE);
 			}
 			else
-				print_error("Couldn't initialize AmiSSL!");
+				printf("ERROR: Couldn't initialize AmiSSL!");
 
 			CloseAmiSSL();
 		}
 		else
-			print_error("Couldn't open AmiSSL!");
+			printf("ERROR: Couldn't open AmiSSL!");
 	}
 	else
-		print_error("AmiSSL version is too old!");
+		printf("ERROR: AmiSSL version is too old!");
 
 	CloseLibrary(AmiSSLMasterBase);
 }
 else
-	print_error("Couldn't open amisslmaster.library!");
+	printf("ERROR: Couldn't open amisslmaster.library!");
+-- cut here --
 
 The first step is to open amisslmaster.library requesting at least
 AMISSLMASTER_MIN_VERSION version. Then, amisslmaster.library/InitAmiSSLMaster()
-needs to be called specifying which API version was the program compiled for
-and whether it uses OpenSSL structures in some way (ie. if it accesses some of
-the fields directly and not through AmiSSL API or if it includes OpenSSL
-structures in its own structures - if unsure, specify TRUE).
+have to be called specifying which API version the program was compiled for and
+whether it uses OpenSSL structures in some way (ie. if it accesses some of the
+fields directly and not through AmiSSL API or if it includes OpenSSL structures
+in its own structures - if unsure, specify TRUE).
 
 If you need to compile a program specifically for f. ex. OpenSSL 0.9.7g API,
-you need to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V097g.
+you need to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V097g. If
+your are, however, always using the latest AmiSSL SDK version you can keep
+using AMISSL_CURRENT_VERSION.
 
-InitAmiSSLMaster() returns a boolean value indicating its success. It will
-only fail if a program requests a newer version of amissl.library than the
-program is aware of.
+InitAmiSSLMaster() returns a boolean value indicating its success. It will only
+fail if a program requests a newer version of amissl.library than the program
+is aware of.
 
 Now the appropriate amissl.library needs to be opened by calling the
 amisslmaster.library/OpenAmiSSL() function. It will either return the library
 base if it was possible to open it or NULL otherwise.
 
-On OS4, it is also required to call GetInterface() to get "main" interfaces
-for the libraries after OpenLibrary()/OpenAmiSSL() calls in the
+On AmigaOS4, it is of course also required to call GetInterface() to get "main"
+interfaces for the libraries after OpenLibrary()/OpenAmiSSL() calls in the
 initialization phase and then call DropInterface() for them in the cleanup
 phase.
 
@@ -86,15 +89,9 @@ called. It will return zero on success or a non-zero value on failure.
 
 The following tags are currently available for InitAmiSSL() call:
 
-- AmiSSL_SocketBase/AmiSSL_ISocket: Pointer to socket base or interface on OS4.
-  If the caller doesn't need any networking functionality, this can be omitted
-  (defaults to NULL).
-
-- AmiSSL_SSLVersionApp: if non-zero, disables the usage of environment
-  variables AmiSSL/SSL_SERVER_VERSION, AmiSSL/SSL_CLIENT_VERSION and
-  AmiSSL/SSL_VERSION (defaults to 0). These environment variables allow the
-  user to tell AmiSSL whether to use ssl2, ssl3 or tls1 when no method is
-  explicitly specified .
+- AmiSSL_SocketBase/AmiSSL_ISocket: Pointer to socket base and/or interface on
+  OS4. If the caller doesn't need any networking functionality, this can be
+  omitted (defaults to NULL).
 
 - AmiSSL_SocketBaseBrand, AmiSSL_MLinkLock: these two are useful only if you
   are using MultiTCP linker library by Stefan Burstroem, you can ignore them
@@ -112,53 +109,58 @@ The following tags are currently available for InitAmiSSL() call:
   use an internal errno pointer and thus errno changes will not be propagated
   to your program.
 
-Linker libraries that automatically open and set up AmiSSL are available for
-some OS/compiler versions.
+Linker libraries that automatically open and set up AmiSSL are also available
+as part of the AmiSSL SDK.
 
-Note that, unlike in AmiSSL v1, AmiSSLBase can be shared between different
+Note, that unlike in AmiSSL v1, AmiSSLBase can be shared between different
 subprocesses. Furthermore, this is encouraged since it allows the cache of
 server certificates to be used by all subprocesses that share the same AmiSSL
 base resulting in speed increase. Each subprocess must call InitAmiSSL() with
 appropriate arguments before using any other amissl.library calls and
-CleanupAmiSSL() before it exits.
+CleanupAmiSSL() before it exits. AmiSSL then ensures due to its baserel-based
+environment that any caller receives an own baserel based library base.
 
-The addition of amisslmaster.library makes it possible to have multiple
-versions of amissl.library with incompatible APIs installed keeping the
-programs compiled with an older amissl.library working. This is necessary
-since OpenSSL API changes from time to time. Also, when when a new version of
-AmiSSL is released with amissl.library API that is backwards compatible to
-some previous version, a program requesting the old version of amissl.library
-will automatically get the new version and the old version can be deleted.
+The use of amisslmaster.library makes it possible to have multiple versions of
+amissl.library with incompatible APIs installed keeping the programs compiled
+with an older amissl.library working. This is necessary since OpenSSL API
+changes from time to time. Also, when a new version of AmiSSL is released with
+amissl.library API that is backwards compatible to some previous version, a
+program requesting the old version of amissl.library will automatically get the
+new version and the old version can be deleted.
 
 Differences to OpenSSL
 ----------------------
-
-Unlike AmiSSL v1, AmiSSL v3 uses #include <openssl/xxx.h> scheme instead of
-#include <amissl/xxx.h> scheme. This and some other changes should make it
+Unlike AmiSSL v1, AmiSSL v3/v4 uses "#include <openssl/xxx.h>" scheme instead
+of "#include <amissl/xxx.h>" scheme. This and some other changes should make it
 possible to compile most OpenSSL programs out of the box. There are some
 differences to OpenSSL, though.
 
-The functions BIO_set_fp(), BIO_get_fp() and BIO_new_fp() are not available
-since they require a FILE * argument which is C runtime library specific.
-However, there are replacement functions which have _amiga added to their
-name and take a BPTR instead of FILE * argument. For example,
+The functions, e.g., BIO_set_fp(), BIO_get_fp() and BIO_new_fp() are not
+available since they require a FILE * argument which is C runtime library
+specific.  However, there are replacement functions which have _amiga added to
+their name and take a BPTR instead of FILE * argument. For example,
 BIO_set_fp(bio_out, stdout, BIO_NOCLOSE) can be replaced by
 BIO_set_fp_amiga(bio_out, Output(), BIO_NOCLOSE);
 
 Also, all other functions that have a FILE * argument are not available.
 However, all these functions have an equivalent that accepts BIO * instead of
-FILE * so these functions can be used instead. The fp = fopen(file, mode);
-openssl_func_fp(fp, ...); fclose(fp) sequence can be replaced with the
-bio = BIO_new_file(file, mode); openssl_func(bio, ...); BIO_free(bio);
-sequence.
+FILE * so these functions can be used instead. The simple sequence
 
-In some countries, IDEA and/or RC5 ciphers and/or MDC2 message digest are not
-available. Their presence can be checked using amissl.library/IsCipherAvailable()
-function which takes one argument - cipher or message digest whose
-availability should be checked (f. ex. CIPHER_IDEA) and returns a boolean
-value. All ciphers are listed in libraries/amissl.h include file.
+-- cut here --
+fp = fopen(file, mode);
+openssl_func_fp(fp, ...);
+fclose(fp)
+-- cut here --
 
-AmiSSL adds several functions which deal with OpenSSL ciphers:
+sequence can be replaced with the following:
+
+-- cut here --
+bio = BIO_new_file(file, mode);
+openssl_func(bio, ...);
+BIO_free(bio);
+-- cut here --
+
+In addition, AmiSSL adds several functions which deal with OpenSSL ciphers:
 
 const char *SSL_CIPHER_get_mac(SSL_CIPHER *cipher);
 const char *SSL_CIPHER_get_encryption(SSL_CIPHER *cipher);
@@ -166,23 +168,12 @@ const char *SSL_CIPHER_get_authentication(SSL_CIPHER *cipher);
 const char *SSL_CIPHER_get_key_exchange(SSL_CIPHER *cipher);
 const char *SSL_CIPHER_get_export(SSL_CIPHER *cipher);
 
-These will return textual representation of requested cipher data. For
-example, SSL_CIPHER_get_encryption() will return "AES(256)" when 256-bit AES
-cipher is used.
+These will return textual representation of requested cipher data. For example,
+SSL_CIPHER_get_encryption() will return "AES(256)" when 256-bit AES cipher is
+used.
 
 Compiler issues
 ---------------
-
-Some identifiers in OpenSSL includes have very long names which makes it
-necessary to use f. ex. IDLEN=100 for SAS/C. GCC doesn't need any special
-handling in this regard.
-
-Some of OpenSSL's functions have a function pointer arguments. The functions
-passed as function pointer arguments must be compiled with NOSTACKCHECK and
-SAVEDS, or equivalents. Also, they receive their arguments on stack, so it
-is necessary to use STDARGS when compiling source with SAS/C using
-PARAMS=REGISTER option, for example.
-
 Sometimes it is necessary to pass an AmiSSL function as a function pointer
 argument. Since AmiSSL functions are inside the library, it is not possible
 directly. In these cases, it is possible to use a stub function:
@@ -194,9 +185,8 @@ void NOSTACKCHECK /* STDARGS */ SAVEDS (ASN1_OBJECT_free)(ASN1_OBJECT *a)
 
 In newly written code it is better to use a different name for the function,
 but when working with already existing code it might be easier to use the same
-name than to change many occurrences of f. ex. ASN1_OBJECT_free to
-f. ex. ASN1_OBJECT_free_stub whenever ASN1_OBJECT_free is passed as a function
+name than to change many occurrences of f. ex. ASN1_OBJECT_free to f. ex.
+ASN1_OBJECT_free_stub whenever ASN1_OBJECT_free is passed as a function
 pointer.
 
-This SDK release provides include files for SAS/C and GCC on 68k and also OS4
-includes.
+This SDK release provides include files for GCC on 68k and also OS4 includes.
