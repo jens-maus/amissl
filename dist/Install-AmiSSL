@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.4 (07.02.2017)
+; $VER: Install-AmiSSL 4.0.5 (09.02.2017)
 
 (set @app-name "AmiSSL")
 
@@ -94,7 +94,7 @@
         (help @askchoice-help)
         (choices "AmigaOS 3.x"
                  "AmigaOS 4.x"
-                 ;"MorphOS 1.x/2.x/3.x"
+                 "MorphOS 1.x/2.x/3.x"
                  ;"AROS i386"
                  ;"AROS PPC"
                  ;"AROS x86_64"
@@ -132,7 +132,8 @@
 	)
 )
 (if (= #detectedSystem "mos")
-	(set #src-os-dir "MorphOS")
+	;(set #src-os-dir "MorphOS")
+	(set #src-os-dir "AmigaOS3")
 )
 (if (= #detectedSystem "aros-i386")
 	(set #src-os-dir "AROS-i386")
