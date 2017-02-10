@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.5 (09.02.2017)
+; $VER: Install-AmiSSL 4.0.6 (10.02.2017)
 
 (set @app-name "AmiSSL")
 
@@ -277,14 +277,13 @@
 ; /// Install Certificates
 
 (set #certs-dir (tackon #storage-dir "Certs"))
-(set #delete-old-certs 1)
+(set #certs-dir-exists (exists #certs-dir (noreq)))
+(set #delete-old-certs #certs-dir-exists)
 (set #copy-certs 1)
-
-(set #ask-about-certs (exists #certs-dir (noreq)))
 
 (if
 	(and
-		#ask-about-certs
+		#certs-dir-exists
 		(> #old-lib-ver #new-lib-ver)
 	)
 	(if
@@ -297,13 +296,11 @@
 		(
 			(set #delete-old-certs 0)
 			(set #copy-certs 0)
-			(set #ask-about-certs 0)
 		)
 		; else
 		(
 			(set #delete-old-certs 1)
 			(set #copy-certs 1)
-			(set #ask-about-certs 0)
 		)
 	)
 )
