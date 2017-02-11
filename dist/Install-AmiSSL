@@ -1,10 +1,14 @@
-; $VER: Install-AmiSSL 4.0.6 (10.02.2017)
+; $VER: Install-AmiSSL 4.0.7 (11.02.2017)
+
+(if (= @app-name "AmiUpdate") (set #AmiUpdate 1))
 
 (set @app-name "AmiSSL")
 
 (if (= (exists "Env:Language") 1)
 	(set @language (getenv "Language"))
 )
+
+(if (<> #AmiUpdate 1) (welcome))
 
 ;----------------------------------------------------------------------------
 ; /// ***** English
@@ -56,6 +60,7 @@
 	"If this message persists, reboot and try again.")
 )
 (set #str-deleting-certs "Deleting old certificates")
+(set #str-amiupdate-copyfile "Copying file via AmiUpdate:\n%s\n\nTo drawer:\n%s")
 
 ; ///
 ; /// ***** Deutsch
@@ -88,18 +93,22 @@
     )
 )
 
-(set #detectedSystem
-    (askchoice
-        (prompt #str-acknowledgeOS)
-        (help @askchoice-help)
-        (choices "AmigaOS 3.x"
-                 "AmigaOS 4.x"
-                 "MorphOS 1.x/2.x/3.x"
-                 ;"AROS i386"
-                 ;"AROS PPC"
-                 ;"AROS x86_64"
+(if (= #AmiUpdate 1)
+    (set #detectedSystem 1)
+    ; else
+    (set #detectedSystem
+        (askchoice
+            (prompt #str-acknowledgeOS)
+            (help @askchoice-help)
+            (choices "AmigaOS 3.x"
+                     "AmigaOS 4.x"
+                     "MorphOS 1.x/2.x/3.x"
+                     ;"AROS i386"
+                     ;"AROS PPC"
+                     ;"AROS x86_64"
+            )
+            (default #detectedSystem)
         )
-        (default #detectedSystem)
     )
 )
 ; finally convert the system number into a string for easier understanding
@@ -228,17 +237,31 @@
 	)
 )
 
-(copyfiles
-	(source (tackon #libs-src-dir "amisslmaster.library"))
-	(dest #libs-dir)
+(if (= #AmiUpdate 1)
+	(
+		(working (#str-amiupdate-copyfile (tackon #libs-src-dir "amisslmaster.library")  #libs-dir))
+		(run "CopyStore " (tackon #libs-src-dir "amisslmaster.library") " "  #libs-dir)
+	)
+	; else
+	(copyfiles
+		(source (tackon #libs-src-dir "amisslmaster.library"))
+		(dest #libs-dir)
+	)
 )
 
 (complete 10)
 
 (foreach (tackon #libs-src-dir "AmiSSL") "#?.library"
-	(copyfiles
-		(source (tackon (tackon #libs-src-dir "AmiSSL") @each-name))
-		(dest (tackon #libs-dir "AmiSSL"))
+	(if (= #AmiUpdate 1)
+		(
+			(working (#str-amiupdate-copyfile (tackon (tackon #libs-src-dir "AmiSSL") @each-name) (tackon #libs-dir "AmiSSL")))
+			(run "CopyStore " (tackon (tackon #libs-src-dir "AmiSSL") @each-name) " " (tackon #libs-dir "AmiSSL"))
+		)
+		; else
+		(copyfiles
+			(source (tackon (tackon #libs-src-dir "AmiSSL") @each-name))
+			(dest (tackon #libs-dir "AmiSSL"))
+		)
 	)
 )
 
@@ -266,9 +289,16 @@
 ;----------------------------------------------------------------------------
 ; /// Install OpenSSL tool
 
-(copyfiles
-	(source (tackon "C" (tackon #src-os-dir "OpenSSL")))
-	(dest #cmd-dir)
+(if (= #AmiUpdate 1)
+	(
+		(working (#str-amiupdate-copyfile (tackon "C" (tackon #src-os-dir "OpenSSL")) #cmd-dir))
+		(run "CopyStore " (tackon "C" (tackon #src-os-dir "OpenSSL")) " " #cmd-dir)
+	)
+	; else
+	(copyfiles
+		(source (tackon "C" (tackon #src-os-dir "OpenSSL")))
+		(dest #cmd-dir)
+	)
 )
 
 (complete 60)
@@ -368,4 +398,4 @@
 
 (complete 100)
 (set @default-dest #dest-dir)
-(exit #str-success)
+(if (= #AmiUpdate 1) (exit (quiet)) (exit #str-success))

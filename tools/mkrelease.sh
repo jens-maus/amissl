@@ -44,6 +44,7 @@ for os in ${OS}; do
 done
 
 cp -a dist/AmiSSL.info "release/"
+cp -a dist/AutoInstall "release/"
 cp -a dist/Install-AmiSSL* "release/AmiSSL/"
 cp -a dist/*.doc* "release/AmiSSL/Doc/"
 cp -a dist/AmiSSL.readme "release/AmiSSL/Doc/AmiSSL.doc"
