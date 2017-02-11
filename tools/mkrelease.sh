@@ -64,6 +64,12 @@ for incdir in clib inline inline4 interfaces libraries ppcinline pragmas proto; 
 	cp -a -R include/${incdir}/amissl* "release/AmiSSL/Developer/include/${incdir}/"
 done
 
+# OS4 specific clib2/newlib autoinit lib handling
+mkdir -p "release/AmiSSL/Developer/lib/AmigaOS4/clib2"
+mkdir -p "release/AmiSSL/Developer/lib/AmigaOS4/newlib"
+mv release/AmiSSL/Developer/lib/AmigaOS4/libamisslauto.a "release/AmiSSL/Developer/lib/AmigaOS4/clib2/"
+cp -a build_os4/libamisslauto_newlib.a "release/AmiSSL/Developer/lib/AmigaOS4/newlib/libamisslauto.a"
+
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
 releaserev=`grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }'`
 

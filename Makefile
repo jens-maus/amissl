@@ -214,6 +214,8 @@ ifeq ($(OS), os4)
 
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_m68k.o
 
+  EXTRALINKLIBS = $(BUILD_D)/libamisslauto_newlib.a
+
 else
 ifeq ($(OS), os3)
 
@@ -363,11 +365,16 @@ MASTEROBJS = $(BUILD_D)/amisslmaster_libinit.o \
              $(BUILD_D)/debug.o \
              $(EXTRAMASTEROBJS)
 
+LINKLIBS = $(BUILD_D)/libamisslauto.a \
+           $(BUILD_D)/libamisslstubs.a \
+           $(BUILD_D)/libamissldebug.a \
+           $(EXTRALINKLIBS)
+
 LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a $(BUILD_D)/libamissldebug.a $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # for making a release we compile ALL target with no debug
 .PHONY: release
@@ -447,6 +454,11 @@ $(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_amissl_main.o
 	@$(AR) r $@ $(BUILD_D)/autoinit_amissl_main.o
 	@$(RANLIB) $@
 
+$(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_amissl_main_newlib.o
+	@echo "  AR $@"
+	@$(AR) r $@ $(BUILD_D)/autoinit_amissl_main_newlib.o
+	@$(RANLIB) $@
+
 $(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o
 	@echo "  AR $@"
 	@$(AR) r $@ $(BUILD_D)/libstubs.o
@@ -484,6 +496,10 @@ $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/liba
 $(BUILD_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
+
+$(BUILD_D)/autoinit_amissl_main_newlib.o: $(SRC_D)/autoinit_amissl_main.c
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -mcrt=newlib
 
 $(BUILD_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
