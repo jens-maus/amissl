@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.7 (11.02.2017)
+; $VER: Install-AmiSSL 4.0.8 (11.02.2017)
 
 (if (= @app-name "AmiUpdate") (set #AmiUpdate 1))
 
@@ -374,7 +374,7 @@
 	)
 )
 
-(if (and #selfContained (not (if #amissl-assign 1 0)))
+(if #selfContained
 	(if
 		(askbool
 			(prompt #str-add-path)
@@ -385,7 +385,7 @@
 	)
 )
 
-(if (and #selfContained (not (if #amissl-assign 1 0)))
+(if (or #selfContained (not (if #amissl-assign 1 0)))
 	(startup @app-name
 		(prompt #str-add-assign)
 		(help @startup-help)
