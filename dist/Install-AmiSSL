@@ -1,6 +1,6 @@
-; $VER: Install-AmiSSL 4.0.8 (11.02.2017)
+; $VER: Install-AmiSSL 4.0.9 (12.02.2017)
 
-(if (= @app-name "AmiUpdate") (set #AmiUpdate 1))
+(set #AmiUpdate (= @app-name "AmiUpdate"))
 
 (set @app-name "AmiSSL")
 
@@ -8,7 +8,7 @@
 	(set @language (getenv "Language"))
 )
 
-(if (<> #AmiUpdate 1) (welcome))
+(if (not #AmiUpdate) (welcome))
 
 ;----------------------------------------------------------------------------
 ; /// ***** English
@@ -18,8 +18,8 @@
 )
 (set #str-amissl-assign (cat
 	"The Installer has detected that you already have the "
-	"AmiSSL: assign pointing to \"%s\". Would "
-	"you like to install AmiSSL there?\n\n"
+	"AmiSSL: assign pointing to \"%s\". Would you like to install and "
+	"upgrade AmiSSL there using your previous installation choices?\n\n"
 	"Note: It is strongly recommended to have all AmiSSL releases "
 	"installed into the same directory. Installations in different "
 	"directories will most likely require manual intervention in "
@@ -93,7 +93,7 @@
     )
 )
 
-(if (= #AmiUpdate 1)
+(if #AmiUpdate
     (set #detectedSystem 1)
     ; else
     (set #detectedSystem
@@ -126,6 +126,19 @@
 ; Standard install - everything goes in AmiSSL:
 (set #selfContained 1)
 
+; Default install path
+(if #amissl-assign
+	(
+		(set #dest-dir #amissl-assign)
+		(set #updateInstall 1)
+	)
+	; else
+	(
+		(set #dest-dir (tackon (if (exists "Work:" (noreq)) "Work:" "SYS:") "AmiSSL"))
+		(set #updateInstall 0)
+	)
+)
+
 ; Set up the source and destination path
 (if (= #detectedSystem "os3")
 	(set #src-os-dir "AmigaOS3")
@@ -134,6 +147,7 @@
 	(
 		(set #src-os-dir "AmigaOS4")
 		(set #selfContained 0)
+		(set #updateInstall 1)
 		(set #dest-dir "SYS:")
 		(set #storage-dir (if #amissl-assign (#amissl-assign) "DEVS:AmiSSL"))
 		(set #cmd-dir "SYS:C")
@@ -156,31 +170,24 @@
 
 ;----------------------------------------------------------------------------
 ; /// For an existing install, check if to update or start afresh
-(if (and (if #amissl-assign 1 0) #selfContained)
-	(if
+(if (and #updateInstall #selfContained)
+	(set #updateInstall
 		(askbool
 			(prompt (#str-amissl-assign #amissl-assign))
 			(help #str-no-help)
 			(default 1)
 		)
-		(set #dest-dir #amissl-assign)
 	)
 )
 
 ;----------------------------------------------------------------------------
 ; /// Ask for new installation dir, if required
-(if (not (if #dest-dir 1 0))
+(if (not #updateInstall)
 	(set #dest-dir
 		(tackon
 			(askdir
 				(prompt #str-dest-dir)
-				(default
-					(if (exists "Work:" (noreq))
-						"Work:"
-						; else
-						"SYS:"
-					)
-				)
+				(default (pathonly #dest-dir))
 				(help @askdir-help)
 			)
 			"AmiSSL"
@@ -237,7 +244,7 @@
 	)
 )
 
-(if (= #AmiUpdate 1)
+(if #AmiUpdate
 	(
 		(working (#str-amiupdate-copyfile (tackon #libs-src-dir "amisslmaster.library")  #libs-dir))
 		(run "CopyStore " (tackon #libs-src-dir "amisslmaster.library") " "  #libs-dir)
@@ -252,7 +259,7 @@
 (complete 10)
 
 (foreach (tackon #libs-src-dir "AmiSSL") "#?.library"
-	(if (= #AmiUpdate 1)
+	(if #AmiUpdate
 		(
 			(working (#str-amiupdate-copyfile (tackon (tackon #libs-src-dir "AmiSSL") @each-name) (tackon #libs-dir "AmiSSL")))
 			(run "CopyStore " (tackon (tackon #libs-src-dir "AmiSSL") @each-name) " " (tackon #libs-dir "AmiSSL"))
@@ -289,7 +296,7 @@
 ;----------------------------------------------------------------------------
 ; /// Install OpenSSL tool
 
-(if (= #AmiUpdate 1)
+(if #AmiUpdate
 	(
 		(working (#str-amiupdate-copyfile (tackon "C" (tackon #src-os-dir "OpenSSL")) #cmd-dir))
 		(run "CopyStore " (tackon "C" (tackon #src-os-dir "OpenSSL")) " " #cmd-dir)
@@ -362,9 +369,12 @@
 ;----------------------------------------------------------------------------
 ; /// S:User-Startup additions
 
-(set #startup-command (cat "Assign AmiSSL: \"" #dest-dir "\"\n"))
+; If assign missing (OS4 install) or new install
+(if (or (not #updateInstall) (if #amissl-assign 0 1))
+	(set #startup-command (cat "Assign AmiSSL: \"" #storage-dir "\"\n"))
+)
 
-(if #selfContained
+(if (not #updateInstall)
 	(set #startup-command
 		(cat #startup-command
 			"If Exists AmiSSL:Libs\n"
@@ -374,9 +384,8 @@
 	)
 )
 
-(if #selfContained
-	(if
-		(askbool
+(if (not #updateInstall)
+	(if	(askbool
 			(prompt #str-add-path)
 			(help #str-no-help)
 			(default 1)
@@ -385,7 +394,7 @@
 	)
 )
 
-(if (or #selfContained (not (if #amissl-assign 1 0)))
+(if #startup-command
 	(startup @app-name
 		(prompt #str-add-assign)
 		(help @startup-help)
@@ -398,4 +407,4 @@
 
 (complete 100)
 (set @default-dest #dest-dir)
-(if (= #AmiUpdate 1) (exit (quiet)) (exit #str-success))
+(if #AmiUpdate (exit (quiet)) (exit #str-success))
