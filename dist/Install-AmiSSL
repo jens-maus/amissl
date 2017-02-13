@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.9 (12.02.2017)
+; $VER: Install-AmiSSL 4.0.10 (13.02.2017)
 
 (set #AmiUpdate (= @app-name "AmiUpdate"))
 
@@ -151,7 +151,7 @@
 		(set #dest-dir "SYS:")
 		(set #storage-dir (if #amissl-assign (#amissl-assign) "DEVS:AmiSSL"))
 		(set #cmd-dir "SYS:C")
-		(set #docs-dir "SYS:Documentation")
+		(set #docs-dir "SYS:Documentation/AmiSSL")
 	)
 )
 (if (= #detectedSystem "mos")
@@ -276,6 +276,8 @@
 
 ;----------------------------------------------------------------------------
 ; /// Install documentation
+
+(makedir #docs-dir (infos))
 
 (copyfiles
 	(source "Doc/AmiSSL.doc")
