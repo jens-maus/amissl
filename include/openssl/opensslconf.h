@@ -138,7 +138,7 @@ extern "C" {
 # define DEPRECATEDIN_0_9_8(f)
 #endif
 
-
+#define OPENSSL_CPUID_OBJ
 
 /* Generate 80386 code? */
 #undef I386_ONLY
