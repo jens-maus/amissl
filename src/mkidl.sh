@@ -19,7 +19,7 @@ cp ${tmp}/amisslmaster_glue.h .
 cp ${tmp}/amisslmaster_m68k.c .
 cp ${tmp}/include/inline4/amisslmaster.h ../include/inline4/
 cp ${tmp}/include/interfaces/amisslmaster.* ../include/interfaces/
-cp ${tmp}/include/proto/amisslmaster.h ../include/proto/
+#cp ${tmp}/include/proto/amisslmaster.h ../include/proto/
 rm -rf ${tmp}
 
 # create sfd files from our xml file
@@ -49,3 +49,7 @@ sfdc --mode=gatestubs --target ppc-morphos ../include/sfd/amissl_lib.sfd --gatep
 sfdc --mode=gatestubs --target ppc-morphos ../include/sfd/amisslmaster_lib.sfd --gateprefix LIBSTUB_ --libprefix LIB_ --libarg first -o amisslmaster_stubs_mos.c
 sfdc --mode=gateproto --target ppc-morphos ../include/sfd/amissl_lib.sfd --gateprefix LIBSTUB_ --libprefix LIB_ --libarg first --sdi -o amissl_stubs_mos.h
 sfdc --mode=gateproto --target ppc-morphos ../include/sfd/amisslmaster_lib.sfd --gateprefix LIBSTUB_ --libprefix LIB_ --libarg first --sdi -o amisslmaster_stubs_mos.h
+
+# aros specific header creation
+sfdc --mode=macros --target i386-aros ../include/sfd/amissl_lib.sfd -o ../include/defines/amissl.h
+sfdc --mode=macros --target i386-aros ../include/sfd/amisslmaster_lib.sfd -o ../include/defines/amisslmaster.h

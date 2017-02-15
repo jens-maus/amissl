@@ -60,7 +60,7 @@ cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
 # copy SDK relevant files
 cp -a include/amissl "release/AmiSSL/Developer/include/"
 cp -a include/openssl "release/AmiSSL/Developer/include/"
-for incdir in clib inline inline4 interfaces libraries ppcinline pragmas proto; do
+for incdir in clib defines inline inline4 interfaces libraries ppcinline pragmas proto; do
   mkdir -p "release/AmiSSL/Developer/include/${incdir}"
 	cp -a -R include/${incdir}/amissl* "release/AmiSSL/Developer/include/${incdir}/"
 done

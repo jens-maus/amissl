@@ -1,14 +1,25 @@
 #ifndef PROTO_AMISSLMASTER_H
 #define PROTO_AMISSLMASTER_H
 
-/*
-**	$Id$
-**
-**	Prototype/inline/pragma header file combo
-**
-**	Copyright (c) 2010 Hyperion Entertainment CVBA.
-**	All Rights Reserved.
-*/
+/***************************************************************************
+
+ AmiSSL - OpenSSL wrapper for AmigaOS-based systems
+ Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
+ Copyright (C) 2006-2017 AmiSSL Open Source Team
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ AmiSSL Official Support Site:  https://github.com/jens-maus/amissl
+
+***************************************************************************/
 
 #ifndef EXEC_TYPES_H
 #include <exec/types.h>
@@ -42,11 +53,15 @@
   #include <clib/amisslmaster_protos.h>
  #endif /* CLIB_AMISSLMASTER_PROTOS_H */
  #if defined(__GNUC__)
-  #ifndef __PPC__
-   #include <inline/amisslmaster.h>
-  #else /* __PPC__ */
-   #include <ppcinline/amisslmaster.h>
-  #endif /* __PPC__ */
+  #ifdef __AROS__
+   #include <defines/amisslmaster.h>
+  #else
+   #ifndef __PPC__
+    #include <inline/amisslmaster.h>
+   #else /* __PPC__ */
+    #include <ppcinline/amisslmaster.h>
+   #endif /* __PPC__ */
+  #endif /* __AROS__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/amisslmaster_protos.h>

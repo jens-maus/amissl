@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2016 AmiSSL Open Source Team
+ Copyright (C) 2006-2017 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -55,11 +55,15 @@
   #include <clib/amissl_protos.h>
  #endif /* CLIB_AMISSL_PROTOS_H */
  #if defined(__GNUC__)
-  #ifndef __PPC__
-   #include <inline/amissl.h>
-  #else /* __PPC__ */
-   #include <ppcinline/amissl.h>
-  #endif /* __PPC__ */
+  #ifdef __AROS__
+   #include <defines/amissl.h>
+  #else
+   #ifndef __PPC__
+    #include <inline/amissl.h>
+   #else /* __PPC__ */
+    #include <ppcinline/amissl.h>
+   #endif /* __PPC__ */
+  #endif /* __AROS__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/amissl_protos.h>
