@@ -231,7 +231,7 @@ ifeq ($(OS), os3)
   endif
 
   # Compiler/Linker flags
-  CPU       = -m68020-60 -msoft-float
+  CPU       = -m68020-60
   APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
