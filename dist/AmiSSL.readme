@@ -2,14 +2,14 @@ Short:        AmiSSL - OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Jens Maus <mail@jens-maus.de>
 Type:         util/libs
-Version:      4.0
+Version:      4.1
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
-Architecture: ppc-amigaos >= 4.0.5, m68k-amigaos >= 3.0
+Architecture: ppc-amigaos >= 4.0.5, m68k-amigaos >= 3.0, ppc-morphos >= 1.4.5
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.0 of the AmiSSL library for Amiga based operating systems
-and the first public open-source based release of AmiSSL. Version 4.0 is a new
+This is version 4.1 of the AmiSSL library for Amiga based operating systems
+and the first public open-source based release of AmiSSL. Version 4.x is a new
 major release which comes with full compatibility to the OpenSSL 1.1.x line
 which includes important security related fixes and comes with new encryption
 ciphers which are required nowadays to connect to modern SSL-based services
@@ -25,7 +25,7 @@ IMPORTANT NOTE:
 --------------
 This release comes with binaries for the AmigaOS4/PPC and AmigaOS3/m68k
 platform only.  Unfortunately, due to lack of motivated developers we couldn't
-provide working binaries for the MorphOS/PPC or AROS (PPC, i386, x86_64)
+provide native binaries for the MorphOS/PPC or AROS (PPC, i386, x86_64)
 platform in time. If you are, however, interested in seeing AmiSSL v4 being
 ported for these other Amiga-based platforms, please try to find motivated and
 talented developers who could join our team as proper maintainers for these
@@ -35,10 +35,23 @@ supported in one of the next releases or please consider joining our team.
 
 Requirements:
 ------------
-- AmigaOS 4.0+/PPC or AmigaOS 3.0+/68020+
+- AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
-Changes:
--------
+Version 4.1 (13.03.2017):
+------------------------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.0e (16.02.2017) version.
+- MorphOS can now be selected as an install target with the OS3/m68k version
+  being installed. For a native PPC version we would require some work to be
+  done by some talented MorphOS developers.
+- Added some m68k asm replacement code for potentially speeding up BN
+  calculation routines.
+- Added AmiUpdate compatibility.
+- included a newlib compiled version of libamisslauto.a.
+- Minor improvements/Fixes for install script.
+
+Version 4.0 (07.02.2017):
+------------------------
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.0d (26 Jan 2017) version.
 - Updated root certificate bundle to latest Mozilla-based bundle
