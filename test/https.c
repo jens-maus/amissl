@@ -266,6 +266,8 @@ static void Cleanup(void)
 			DropInterface((struct Interface *)IAmiSSL);
 			IAmiSSL = NULL;
 		}
+    #else
+		CleanupAmiSSL(TAG_DONE);
     #endif
 
 		CloseAmiSSL();
