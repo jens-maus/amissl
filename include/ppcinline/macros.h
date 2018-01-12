@@ -4,7 +4,8 @@
 /*
 	MorphOS PowerPC inline macros
 
-	Copyright © 1999-2007 The MorphOS Development Team, All Rights Reserved.
+	This is the same version as distributed with the MorphOS SDK, but this one
+	has certain required but missing macros added, i.e. LP2NRFP().
 */
 
 #ifndef EMUL_EMULINTERFACE_H
