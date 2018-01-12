@@ -61,9 +61,12 @@ cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
 cp -a include/amissl "release/AmiSSL/Developer/include/"
 cp -a include/openssl "release/AmiSSL/Developer/include/"
 for incdir in clib defines inline inline4 interfaces libraries ppcinline pragmas proto; do
-  mkdir -p "release/AmiSSL/Developer/include/${incdir}"
+	mkdir -p "release/AmiSSL/Developer/include/${incdir}"
 	cp -a -R include/${incdir}/amissl* "release/AmiSSL/Developer/include/${incdir}/"
 done
+# copy the extended ppcinline/macros.h for MorphOS
+# the one distributed with MorphOS lacks certain macros, i.e. LP2NRFP()
+cp -a include/ppcinline/macros.h "release/AmiSSL/Developer/include/ppcinline/"
 
 # OS4 specific clib2/newlib autoinit lib handling
 mkdir -p "release/AmiSSL/Developer/lib/AmigaOS4/clib2"
