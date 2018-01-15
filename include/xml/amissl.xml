@@ -2388,7 +2388,7 @@
       <arg name="dso" type="DSO *" m68kreg="a0"/>
       <arg name="filename" type="const char *" m68kreg="a1"/>
     </method>
-    <method name="DSO_convert_filename" result="char *" status="unimplemented"> 
+    <method name="DSO_convert_filename" result="char *" status="unimplemented">
       <arg name="dso" type="DSO *" m68kreg="a0"/>
       <arg name="filename" type="const char *" m68kreg="a1"/>
     </method>
@@ -5397,7 +5397,7 @@
     <method name="RAND_add" result="void">
       <arg name="buf" type="const void *" m68kreg="a0"/>
       <arg name="num" type="int" m68kreg="d0"/>
-      <arg name="entropy" type="double" m68kreg="d1"/>
+      <arg name="entropy" type="double" m68kreg="d1-d2"/>
     </method>
     <method name="RAND_load_file" result="int">
       <arg name="file" type="const char *" m68kreg="a0"/>
