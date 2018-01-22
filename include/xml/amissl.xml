@@ -5397,7 +5397,7 @@
     <method name="RAND_add" result="void">
       <arg name="buf" type="const void *" m68kreg="a0"/>
       <arg name="num" type="int" m68kreg="d0"/>
-      <arg name="entropy" type="double" m68kreg="d1-d2"/>
+      <arg name="entropy" type="double" m68kreg="d1"/>
     </method>
     <method name="RAND_load_file" result="int">
       <arg name="file" type="const char *" m68kreg="a0"/>
