@@ -93,6 +93,10 @@ __end__restore_r13:                                         \n\
   #define SB_AllocVec(s,t)    AllocVec(s, t)
 #endif
 
+/* in openssl/crypto/threads_amissl.c */
+extern int CRYPTO_THREAD_init(void);
+extern int CRYPTO_THREAD_cleanup(void);
+
 #if !defined(__amigaos4__)
 
 #include <intuition/intuition.h>
@@ -387,6 +391,8 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
   // current instance.
   OPENSSL_cleanup();
 
+  CRYPTO_THREAD_cleanup();
+
   if(libBase->parent->thread_hash)
   {
     D(DBF_STARTUP, "Performing unfreed states cleanup for %08lx (group %lu)", FindTask(NULL), libBase->ThreadGroupID);
@@ -480,6 +486,8 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
   SHOWVALUE(DBF_STARTUP, ownBase->ThreadGroupID);
 
   ReleaseSemaphore(&parentBase->openssl_cs);
+
+  CRYPTO_THREAD_init();
 
 #if defined(__amigaos4__)
   if ((DOSBase = OpenLibrary("dos.library", 50))

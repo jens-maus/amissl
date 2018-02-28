@@ -426,7 +426,7 @@ else
 endif
 
 $(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-threads no-makedepend no-shared --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make include/openssl/opensslconf.h)
+	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-makedepend no-shared --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make include/openssl/opensslconf.h)
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile

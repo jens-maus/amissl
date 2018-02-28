@@ -9,7 +9,7 @@
 
 #include <openssl/crypto.h>
 
-#if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG) && !defined(OPENSSL_SYS_WINDOWS)
+#if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG) && !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_AMIGA)
 
 # ifdef PTHREAD_RWLOCK_INITIALIZER
 #  define USE_RWLOCK
