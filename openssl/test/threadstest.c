@@ -32,6 +32,7 @@ static int wait_for_thread(thread_t thread)
 
 #elif defined(OPENSSL_SYS_AMIGA)
 
+#include <dos/dostags.h>
 #include <proto/exec.h>
 #include <proto/dos.h>
 
