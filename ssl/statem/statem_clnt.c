@@ -664,21 +664,6 @@ WORK_STATE ossl_statem_client_post_process_message(SSL *s, WORK_STATE wst)
     case TLS_ST_CR_CERT_REQ:
         return tls_prepare_client_certificate(s, wst);
 
-#ifndef OPENSSL_NO_SCTP
-    case TLS_ST_CR_SRVR_DONE:
-        /* We only get here if we are using SCTP and we are renegotiating */
-        if (BIO_dgram_sctp_msg_waiting(SSL_get_rbio(s))) {
-            s->s3->in_read_app_data = 2;
-            s->rwstate = SSL_READING;
-            BIO_clear_retry_flags(SSL_get_rbio(s));
-            BIO_set_retry_read(SSL_get_rbio(s));
-            ossl_statem_set_sctp_read_sock(s, 1);
-            return WORK_MORE_A;
-        }
-        ossl_statem_set_sctp_read_sock(s, 0);
-        return WORK_FINISHED_STOP;
-#endif
-
     default:
         break;
     }
@@ -1053,7 +1038,7 @@ MSG_PROCESS_RETURN tls_process_server_hello(SSL *s, PACKET *pkt)
      * If it is a disabled cipher we either didn't send it in client hello,
      * or it's not allowed for the selected protocol. So we return an error.
      */
-    if (ssl_cipher_disabled(s, c, SSL_SECOP_CIPHER_CHECK)) {
+    if (ssl_cipher_disabled(s, c, SSL_SECOP_CIPHER_CHECK, 1)) {
         al = SSL_AD_ILLEGAL_PARAMETER;
         SSLerr(SSL_F_TLS_PROCESS_SERVER_HELLO, SSL_R_WRONG_CIPHER_RETURNED);
         goto f_err;
@@ -1259,9 +1244,6 @@ MSG_PROCESS_RETURN tls_process_server_certificate(SSL *s, PACKET *pkt)
      */
     x = sk_X509_value(sk, 0);
     sk = NULL;
-    /*
-     * VRS 19990621: possible memory leak; sk=null ==> !sk_pop_free() @end
-     */
 
     pkey = X509_get0_pubkey(x);
 
@@ -1443,7 +1425,7 @@ static int tls_process_ske_dhe(SSL *s, PACKET *pkt, EVP_PKEY **pkey, int *al)
         goto err;
     }
 
-    /* test non-zero pupkey */
+    /* test non-zero pubkey */
     if (BN_is_zero(bnpub_key)) {
         *al = SSL_AD_DECODE_ERROR;
         SSLerr(SSL_F_TLS_PROCESS_SKE_DHE, SSL_R_BAD_DH_VALUE);
@@ -2078,14 +2060,7 @@ MSG_PROCESS_RETURN tls_process_server_done(SSL *s, PACKET *pkt)
     }
 #endif
 
-#ifndef OPENSSL_NO_SCTP
-    /* Only applies to renegotiation */
-    if (SSL_IS_DTLS(s) && BIO_dgram_is_sctp(SSL_get_wbio(s))
-        && s->renegotiate != 0)
-        return MSG_PROCESS_CONTINUE_PROCESSING;
-    else
-#endif
-        return MSG_PROCESS_FINISHED_READING;
+    return MSG_PROCESS_FINISHED_READING;
 }
 
 static int tls_construct_cke_psk_preamble(SSL *s, unsigned char **p,
@@ -2373,7 +2348,7 @@ static int tls_construct_cke_gost(SSL *s, unsigned char **p, int *len, int *al)
         dgst_nid = NID_id_GostR3411_2012_256;
 
     /*
-     * Get server sertificate PKEY and create ctx from it
+     * Get server certificate PKEY and create ctx from it
      */
     peer_cert = s->session->peer;
     if (!peer_cert) {
@@ -2941,7 +2916,7 @@ int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk, unsigned char *p)
     for (i = 0; i < sk_SSL_CIPHER_num(sk); i++) {
         c = sk_SSL_CIPHER_value(sk, i);
         /* Skip disabled ciphers */
-        if (ssl_cipher_disabled(s, c, SSL_SECOP_CIPHER_SUPPORTED))
+        if (ssl_cipher_disabled(s, c, SSL_SECOP_CIPHER_SUPPORTED, 0))
             continue;
         j = s->method->put_cipher_by_char(c, p);
         p += j;

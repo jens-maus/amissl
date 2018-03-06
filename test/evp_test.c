@@ -127,6 +127,8 @@ static int test_bin(const char *value, unsigned char **buf, size_t *buflen)
     long len;
 
     *buflen = 0;
+
+    /* Check for empty value */
     if (!*value) {
         /*
          * Don't return NULL for zero length buffer.
@@ -141,6 +143,14 @@ static int test_bin(const char *value, unsigned char **buf, size_t *buflen)
         *buflen = 0;
         return 1;
     }
+
+    /* Check for NULL literal */
+    if (strcmp(value, "NULL") == 0) {
+        *buf = NULL;
+        *buflen = 0;
+        return 1;
+    }
+
     /* Check for string literal */
     if (value[0] == '"') {
         size_t vlen;
@@ -155,6 +165,7 @@ static int test_bin(const char *value, unsigned char **buf, size_t *buflen)
         return 1;
     }
 
+    /* Otherwise assume as hex literal and convert it to binary buffer */
     *buf = OPENSSL_hexstr2buf(value, &len);
     if (!*buf) {
         fprintf(stderr, "Value=%s\n", value);
@@ -262,6 +273,7 @@ static const struct evp_test_method pderive_test_method;
 static const struct evp_test_method pbe_test_method;
 static const struct evp_test_method encode_test_method;
 static const struct evp_test_method kdf_test_method;
+static const struct evp_test_method keypair_test_method;
 
 static const struct evp_test_method *evp_test_list[] = {
     &digest_test_method,
@@ -275,6 +287,7 @@ static const struct evp_test_method *evp_test_list[] = {
     &pbe_test_method,
     &encode_test_method,
     &kdf_test_method,
+    &keypair_test_method,
     NULL
 };
 
@@ -458,6 +471,18 @@ static int check_unsupported()
         ERR_clear_error();
         return 1;
     }
+#ifndef OPENSSL_NO_EC
+    /*
+     * If EC support is enabled we should catch also EC_R_UNKNOWN_GROUP as an
+     * hint to an unsupported algorithm/curve (e.g. if binary EC support is
+     * disabled).
+     */
+    if (ERR_GET_LIB(err) == ERR_LIB_EC
+        && ERR_GET_REASON(err) == EC_R_UNKNOWN_GROUP) {
+        ERR_clear_error();
+        return 1;
+    }
+#endif /* OPENSSL_NO_EC */
     return 0;
 }
 
@@ -640,7 +665,7 @@ int main(int argc, char **argv)
 
     memset(&t, 0, sizeof(t));
     t.start_line = -1;
-    in = BIO_new_file(argv[1], "r");
+    in = BIO_new_file(argv[1], "rb");
     if (in == NULL) {
         fprintf(stderr, "Can't open %s for reading\n", argv[1]);
         return 1;
@@ -2017,3 +2042,131 @@ static const struct evp_test_method kdf_test_method = {
     kdf_test_parse,
     kdf_test_run
 };
+
+struct keypair_test_data {
+    EVP_PKEY *privk;
+    EVP_PKEY *pubk;
+};
+
+static int keypair_test_init(struct evp_test *t, const char *pair)
+{
+    int rv = 0;
+    EVP_PKEY *pk = NULL, *pubk = NULL;
+    char *pub, *priv = NULL;
+    const char *err = "INTERNAL_ERROR";
+    struct keypair_test_data *data;
+
+    priv = OPENSSL_strdup(pair);
+    if (priv == NULL)
+        return 0;
+    pub = strchr(priv, ':');
+    if ( pub == NULL ) {
+        fprintf(stderr, "Wrong syntax \"%s\"\n", pair);
+        goto end;
+    }
+    *pub++ = 0; /* split priv and pub strings */
+
+    if (find_key(&pk, priv, t->private) == 0) {
+        fprintf(stderr, "Cannot find private key: %s\n", priv);
+        err = "MISSING_PRIVATE_KEY";
+        goto end;
+    }
+    if (find_key(&pubk, pub, t->public) == 0) {
+        fprintf(stderr, "Cannot find public key: %s\n", pub);
+        err = "MISSING_PUBLIC_KEY";
+        goto end;
+    }
+
+    if (pk == NULL && pubk == NULL) {
+        /* Both keys are listed but unsupported: skip this test */
+        t->skip = 1;
+        rv = 1;
+        goto end;
+    }
+
+    data = OPENSSL_malloc(sizeof(*data));
+    if (data == NULL )
+        goto end;
+
+    data->privk = pk;
+    data->pubk = pubk;
+    t->data = data;
+
+    rv = 1;
+    err = NULL;
+
+end:
+    if (priv)
+        OPENSSL_free(priv);
+    t->err = err;
+    return rv;
+}
+
+static void keypair_test_cleanup(struct evp_test *t)
+{
+    struct keypair_test_data *data = t->data;
+    t->data = NULL;
+    if (data)
+        test_free(data);
+    return;
+}
+
+/* For test that do not accept any custom keyword:
+ *      return 0 if called
+ */
+static int void_test_parse(struct evp_test *t, const char *keyword, const char *value)
+{
+    return 0;
+}
+
+static int keypair_test_run(struct evp_test *t)
+{
+    int rv = 0;
+    const struct keypair_test_data *pair = t->data;
+    const char *err = "INTERNAL_ERROR";
+
+    if (pair == NULL)
+        goto end;
+
+    if (pair->privk == NULL || pair->pubk == NULL) {
+        /* this can only happen if only one of the keys is not set
+         * which means that one of them was unsupported while the
+         * other isn't: hence a key type mismatch.
+         */
+        err = "KEYPAIR_TYPE_MISMATCH";
+        rv = 1;
+        goto end;
+    }
+
+    if ((rv = EVP_PKEY_cmp(pair->privk, pair->pubk)) != 1 ) {
+        if ( 0 == rv ) {
+            err = "KEYPAIR_MISMATCH";
+        } else if ( -1 == rv ) {
+            err = "KEYPAIR_TYPE_MISMATCH";
+        } else if ( -2 == rv ) {
+            err = "UNSUPPORTED_KEY_COMPARISON";
+        } else {
+            fprintf(stderr, "Unexpected error in key comparison\n");
+            rv = 0;
+            goto end;
+        }
+        rv = 1;
+        goto end;
+    }
+
+    rv = 1;
+    err = NULL;
+
+end:
+    t->err = err;
+    return rv;
+}
+
+static const struct evp_test_method keypair_test_method = {
+    "PrivPubKeyPair",
+    keypair_test_init,
+    keypair_test_cleanup,
+    void_test_parse,
+    keypair_test_run
+};
+

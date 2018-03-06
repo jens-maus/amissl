@@ -193,7 +193,7 @@ unsigned char *OPENSSL_hexstr2buf(const char *str, long *len)
  */
 char *OPENSSL_buf2hexstr(const unsigned char *buffer, long len)
 {
-    const static char hexdig[] = "0123456789ABCDEF";
+    static const char hexdig[] = "0123456789ABCDEF";
     char *tmp, *q;
     const unsigned char *p;
     int i;
@@ -227,7 +227,8 @@ int openssl_strerror_r(int errnum, char *buf, size_t buflen)
     return !strerror_s(buf, buflen, errnum);
 #elif defined(_GNU_SOURCE)
     return strerror_r(errnum, buf, buflen) != NULL;
-#elif (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600)
+#elif (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || \
+      (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600)
     /*
      * We can use "real" strerror_r. The OpenSSL version differs in that it
      * gives 1 on success and 0 on failure for consistency with other OpenSSL

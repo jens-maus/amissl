@@ -2070,7 +2070,7 @@ __owur size_t tls12_get_psigalgs(SSL *s, int sent, const unsigned char **psigs);
 __owur int tls12_check_peer_sigalg(const EVP_MD **pmd, SSL *s,
                                    const unsigned char *sig, EVP_PKEY *pkey);
 void ssl_set_client_disabled(SSL *s);
-__owur int ssl_cipher_disabled(SSL *s, const SSL_CIPHER *c, int op);
+__owur int ssl_cipher_disabled(SSL *s, const SSL_CIPHER *c, int op, int echde);
 
 __owur int ssl_add_clienthello_use_srtp_ext(SSL *s, unsigned char *p, int *len,
                                             int maxlen);
@@ -2117,6 +2117,8 @@ __owur int custom_ext_add(SSL *s, int server, unsigned char **pret,
 
 __owur int custom_exts_copy(custom_ext_methods *dst,
                             const custom_ext_methods *src);
+__owur int custom_exts_copy_flags(custom_ext_methods *dst,
+                                  const custom_ext_methods *src);
 void custom_exts_free(custom_ext_methods *exts);
 
 void ssl_comp_free_compression_methods_int(void);

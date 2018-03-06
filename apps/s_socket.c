@@ -75,11 +75,12 @@ int init_client(int *sock, const char *host, const char *port,
         /* Admittedly, these checks are quite paranoid, we should not get
          * anything in the BIO_ADDRINFO chain that we haven't
          * asked for. */
-        OPENSSL_assert((family == AF_UNSPEC || family == BIO_ADDRINFO_family(res))
-                       && (type == 0 || type == BIO_ADDRINFO_socktype(res)));
+        OPENSSL_assert((family == AF_UNSPEC
+                        || family == BIO_ADDRINFO_family(ai))
+                       && (type == 0 || type == BIO_ADDRINFO_socktype(ai)));
 
         *sock = BIO_socket(BIO_ADDRINFO_family(ai), BIO_ADDRINFO_socktype(ai),
-                           BIO_ADDRINFO_protocol(res), 0);
+                           BIO_ADDRINFO_protocol(ai), 0);
         if (*sock == INVALID_SOCKET) {
             /* Maybe the kernel doesn't support the socket family, even if
              * BIO_lookup() added it in the returned result...
@@ -170,13 +171,30 @@ int do_server(int *accept_sock, const char *host, const char *port,
         if (type == SOCK_STREAM) {
             do {
                 sock = BIO_accept_ex(asock, NULL, 0);
-            } while (sock < 0 && BIO_sock_should_retry(ret));
+            } while (sock < 0 && BIO_sock_should_retry(sock));
             if (sock < 0) {
                 ERR_print_errors(bio_err);
                 BIO_closesocket(asock);
                 break;
             }
             i = (*cb)(sock, type, context);
+            /*
+             * If we ended with an alert being sent, but still with data in the
+             * network buffer to be read, then calling BIO_closesocket() will
+             * result in a TCP-RST being sent. On some platforms (notably
+             * Windows) then this will result in the peer immediately abandoning
+             * the connection including any buffered alert data before it has
+             * had a chance to be read. Shutting down the sending side first,
+             * and then closing the socket sends TCP-FIN first followed by
+             * TCP-RST. This seems to allow the peer to read the alert data.
+             */
+#ifdef _WIN32
+# ifdef SD_SEND
+            shutdown(sock, SD_SEND);
+# endif
+#elif defined(SHUT_WR)
+            shutdown(sock, SHUT_WR);
+#endif
             BIO_closesocket(sock);
         } else {
             i = (*cb)(asock, type, context);

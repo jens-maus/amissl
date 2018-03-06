@@ -1719,7 +1719,6 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509,
     /* Lets add the extensions, if there are any */
     if (ext_sect) {
         X509V3_CTX ctx;
-        X509_set_version(ret, 2);
 
         /* Initialize the context structure */
         if (selfsign)
@@ -1772,6 +1771,15 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509,
         BIO_printf(bio_err, "ERROR: adding extensions from request\n");
         ERR_print_errors(bio_err);
         goto end;
+    }
+
+    {
+        const STACK_OF(X509_EXTENSION) *exts = X509_get0_extensions(ret);
+
+        if (exts != NULL && sk_X509_EXTENSION_num(exts) > 0)
+            /* Make it an X509 v3 certificate. */
+            if (!X509_set_version(ret, 2))
+                goto end;
     }
 
     /* Set the right value for the noemailDN option */
@@ -1838,10 +1846,8 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509,
     }
 
     irow = app_malloc(sizeof(*irow) * (DB_NUMBER + 1), "row space");
-    for (i = 0; i < DB_NUMBER; i++) {
+    for (i = 0; i < DB_NUMBER; i++)
         irow[i] = row[i];
-        row[i] = NULL;
-    }
     irow[DB_NUMBER] = NULL;
 
     if (!TXT_DB_insert(db->db, irow)) {
@@ -1849,10 +1855,14 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509,
         BIO_printf(bio_err, "TXT_DB error number %ld\n", db->db->error);
         goto end;
     }
+    irow = NULL;
     ok = 1;
  end:
-    for (i = 0; i < DB_NUMBER; i++)
-        OPENSSL_free(row[i]);
+    if (irow != NULL) {
+        for (i = 0; i < DB_NUMBER; i++)
+            OPENSSL_free(row[i]);
+        OPENSSL_free(irow);
+    }
 
     X509_NAME_free(CAname);
     X509_NAME_free(subject);
@@ -2061,18 +2071,25 @@ static int do_revoke(X509 *x509, CA_DB *db, int type, char *value)
         row[DB_rev_date] = NULL;
         row[DB_file] = OPENSSL_strdup("unknown");
 
-        irow = app_malloc(sizeof(*irow) * (DB_NUMBER + 1), "row ptr");
-        for (i = 0; i < DB_NUMBER; i++) {
-            irow[i] = row[i];
-            row[i] = NULL;
+        if (row[DB_type] == NULL || row[DB_file] == NULL) {
+            BIO_printf(bio_err, "Memory allocation failure\n");
+            goto end;
         }
+
+        irow = app_malloc(sizeof(*irow) * (DB_NUMBER + 1), "row ptr");
+        for (i = 0; i < DB_NUMBER; i++)
+            irow[i] = row[i];
         irow[DB_NUMBER] = NULL;
 
         if (!TXT_DB_insert(db->db, irow)) {
             BIO_printf(bio_err, "failed to update database\n");
             BIO_printf(bio_err, "TXT_DB error number %ld\n", db->db->error);
+            OPENSSL_free(irow);
             goto end;
         }
+
+        for (i = 0; i < DB_NUMBER; i++)
+            row[i] = NULL;
 
         /* Revoke Certificate */
         if (type == -1)
@@ -2106,9 +2123,8 @@ static int do_revoke(X509 *x509, CA_DB *db, int type, char *value)
     }
     ok = 1;
  end:
-    for (i = 0; i < DB_NUMBER; i++) {
+    for (i = 0; i < DB_NUMBER; i++)
         OPENSSL_free(row[i]);
-    }
     return (ok);
 }
 

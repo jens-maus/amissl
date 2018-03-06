@@ -7,6 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
+#include <stdio.h>
 #include <openssl/crypto.h>
 
 #define perror_line()    perror_line1(__LINE__)
@@ -18,8 +19,18 @@ int main(int argc, char **argv)
 #if defined(OPENSSL_SYS_LINUX) || defined(OPENSSL_SYS_UNIX)
     char *p = NULL, *q = NULL, *r = NULL, *s = NULL;
 
+    s = OPENSSL_secure_malloc(20);
+    /* s = non-secure 20 */
+    if (s == NULL) {
+        perror_line();
+        return 1;
+    }
+    if (CRYPTO_secure_allocated(s)) {
+        perror_line();
+        return 1;
+    }
     r = OPENSSL_secure_malloc(20);
-    /* r = non-secure 20 */
+    /* r = non-secure 20, s = non-secure 20 */
     if (r == NULL) {
         perror_line();
         return 1;
@@ -33,7 +44,7 @@ int main(int argc, char **argv)
         return 1;
     }
     p = OPENSSL_secure_malloc(20);
-    /* r = non-secure 20, p = secure 20 */
+    /* r = non-secure 20, p = secure 20, s = non-secure 20 */
     if (!CRYPTO_secure_allocated(p)) {
         perror_line();
         return 1;
@@ -44,11 +55,12 @@ int main(int argc, char **argv)
         return 1;
     }
     q = OPENSSL_malloc(20);
-    /* r = non-secure 20, p = secure 20, q = non-secure 20 */
+    /* r = non-secure 20, p = secure 20, q = non-secure 20, s = non-secure 20 */
     if (CRYPTO_secure_allocated(q)) {
         perror_line();
         return 1;
     }
+    OPENSSL_secure_clear_free(s, 20);
     s = OPENSSL_secure_malloc(20);
     /* r = non-secure 20, p = secure 20, q = non-secure 20, s = secure 20 */
     if (!CRYPTO_secure_allocated(s)) {
@@ -60,7 +72,7 @@ int main(int argc, char **argv)
         perror_line();
         return 1;
     }
-    OPENSSL_secure_free(p);
+    OPENSSL_secure_clear_free(p, 20);
     /* 20 secure -> 32 bytes allocated */
     if (CRYPTO_secure_used() != 32) {
         perror_line();
@@ -90,6 +102,67 @@ int main(int argc, char **argv)
         perror_line();
         return 1;
     }
+
+    fprintf(stderr, "Possible infinite loop: allocate more than available\n");
+    if (!CRYPTO_secure_malloc_init(32768, 16)) {
+        perror_line();
+        return 1;
+    }
+    if (OPENSSL_secure_malloc((size_t)-1) != NULL) {
+        perror_line();
+        return 1;
+    }
+    if (!CRYPTO_secure_malloc_done()) {
+        perror_line();
+        return 1;
+    }
+
+    /*
+     * If init fails, then initialized should be false, if not, this
+     * could cause an infinite loop secure_malloc, but we don't test it
+     */
+    if (!CRYPTO_secure_malloc_init(16, 16) &&
+        CRYPTO_secure_malloc_initialized()) {
+        CRYPTO_secure_malloc_done();
+        perror_line();
+        return 1;
+    }
+
+    /*-
+     * There was also a possible infinite loop when the number of
+     * elements was 1<<31, as |int i| was set to that, which is a
+     * negative number. However, it requires minimum input values:
+     *
+     * CRYPTO_secure_malloc_init((size_t)1<<34, (size_t)1<<4);
+     *
+     * Which really only works on 64-bit systems, since it took 16 GB
+     * secure memory arena to trigger the problem. It naturally takes
+     * corresponding amount of available virtual and physical memory
+     * for test to be feasible/representative. Since we can't assume
+     * that every system is equipped with that much memory, the test
+     * remains disabled. If the reader of this comment really wants
+     * to make sure that infinite loop is fixed, they can enable the
+     * code below.
+     */
+# if 0
+    /*-
+     * On Linux and BSD this test has a chance to complete in minimal
+     * time and with minimum side effects, because mlock is likely to
+     * fail because of RLIMIT_MEMLOCK, which is customarily [much]
+     * smaller than 16GB. In other words Linux and BSD users can be
+     * limited by virtual space alone...
+     */
+    if (sizeof(size_t) > 4) {
+        fprintf(stderr, "Possible infinite loop: 1<<31 limit\n");
+        if (CRYPTO_secure_malloc_init((size_t)1<<34, (size_t)1<<4) == 0) {
+            perror_line();
+        } else if (!CRYPTO_secure_malloc_done()) {
+            perror_line();
+            return 1;
+        }
+    }
+# endif
+
     /* this can complete - it was not really secure */
     OPENSSL_secure_free(r);
 #else

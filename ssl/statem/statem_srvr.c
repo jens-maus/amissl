@@ -448,7 +448,7 @@ WORK_STATE ossl_statem_server_pre_work(SSL *s, WORK_STATE wst)
     case TLS_ST_SW_SRVR_HELLO:
         if (SSL_IS_DTLS(s)) {
             /*
-             * Messages we write from now on should be bufferred and
+             * Messages we write from now on should be buffered and
              * retransmitted if necessary, so we need to use the timer now
              */
             st->use_timer = 1;
@@ -785,24 +785,6 @@ WORK_STATE ossl_statem_server_post_process_message(SSL *s, WORK_STATE wst)
 
     case TLS_ST_SR_KEY_EXCH:
         return tls_post_process_client_key_exchange(s, wst);
-
-    case TLS_ST_SR_CERT_VRFY:
-#ifndef OPENSSL_NO_SCTP
-        if (                    /* Is this SCTP? */
-               BIO_dgram_is_sctp(SSL_get_wbio(s))
-               /* Are we renegotiating? */
-               && s->renegotiate && BIO_dgram_sctp_msg_waiting(SSL_get_rbio(s))) {
-            s->s3->in_read_app_data = 2;
-            s->rwstate = SSL_READING;
-            BIO_clear_retry_flags(SSL_get_rbio(s));
-            BIO_set_retry_read(SSL_get_rbio(s));
-            ossl_statem_set_sctp_read_sock(s, 1);
-            return WORK_MORE_A;
-        } else {
-            ossl_statem_set_sctp_read_sock(s, 0);
-        }
-#endif
-        return WORK_FINISHED_CONTINUE;
 
     default:
         break;
@@ -2638,25 +2620,6 @@ WORK_STATE tls_post_process_client_key_exchange(SSL *s, WORK_STATE wst)
             BIO_ctrl(SSL_get_wbio(s), BIO_CTRL_DGRAM_SCTP_ADD_AUTH_KEY,
                      sizeof(sctpauthkey), sctpauthkey);
         }
-        wst = WORK_MORE_B;
-    }
-
-    if ((wst == WORK_MORE_B)
-        /* Is this SCTP? */
-        && BIO_dgram_is_sctp(SSL_get_wbio(s))
-        /* Are we renegotiating? */
-        && s->renegotiate
-        /* Are we going to skip the CertificateVerify? */
-        && (s->session->peer == NULL || s->statem.no_cert_verify)
-        && BIO_dgram_sctp_msg_waiting(SSL_get_rbio(s))) {
-        s->s3->in_read_app_data = 2;
-        s->rwstate = SSL_READING;
-        BIO_clear_retry_flags(SSL_get_rbio(s));
-        BIO_set_retry_read(SSL_get_rbio(s));
-        ossl_statem_set_sctp_read_sock(s, 1);
-        return WORK_MORE_B;
-    } else {
-        ossl_statem_set_sctp_read_sock(s, 0);
     }
 #endif
 
@@ -2729,53 +2692,56 @@ MSG_PROCESS_RETURN tls_process_cert_verify(SSL *s, PACKET *pkt)
         goto f_err;
     }
 
-    /* Check for broken implementations of GOST ciphersuites */
-    /*
-     * If key is GOST and n is exactly 64, it is bare signature without
-     * length field (CryptoPro implementations at least till CSP 4.0)
-     */
-#ifndef OPENSSL_NO_GOST
-    if (PACKET_remaining(pkt) == 64
-        && EVP_PKEY_id(pkey) == NID_id_GostR3410_2001) {
-        len = 64;
-    } else
-#endif
-    {
-        if (SSL_USE_SIGALGS(s)) {
-            int rv;
+    if (SSL_USE_SIGALGS(s)) {
+        int rv;
 
-            if (!PACKET_get_bytes(pkt, &sig, 2)) {
-                al = SSL_AD_DECODE_ERROR;
-                goto f_err;
-            }
-            rv = tls12_check_peer_sigalg(&md, s, sig, pkey);
-            if (rv == -1) {
-                al = SSL_AD_INTERNAL_ERROR;
-                goto f_err;
-            } else if (rv == 0) {
-                al = SSL_AD_DECODE_ERROR;
-                goto f_err;
-            }
-#ifdef SSL_DEBUG
-            fprintf(stderr, "USING TLSv1.2 HASH %s\n", EVP_MD_name(md));
-#endif
-        } else {
-            /* Use default digest for this key type */
-            int idx = ssl_cert_type(NULL, pkey);
-            if (idx >= 0)
-                md = s->s3->tmp.md[idx];
-            if (md == NULL) {
-                al = SSL_AD_INTERNAL_ERROR;
-                goto f_err;
-            }
-        }
-
-        if (!PACKET_get_net_2(pkt, &len)) {
-            SSLerr(SSL_F_TLS_PROCESS_CERT_VERIFY, SSL_R_LENGTH_MISMATCH);
+        if (!PACKET_get_bytes(pkt, &sig, 2)) {
             al = SSL_AD_DECODE_ERROR;
             goto f_err;
         }
+        rv = tls12_check_peer_sigalg(&md, s, sig, pkey);
+        if (rv == -1) {
+            al = SSL_AD_INTERNAL_ERROR;
+            goto f_err;
+        } else if (rv == 0) {
+            al = SSL_AD_DECODE_ERROR;
+            goto f_err;
+        }
+#ifdef SSL_DEBUG
+        fprintf(stderr, "USING TLSv1.2 HASH %s\n", EVP_MD_name(md));
+#endif
+    } else {
+        /* Use default digest for this key type */
+        int idx = ssl_cert_type(NULL, pkey);
+        if (idx >= 0)
+            md = s->s3->tmp.md[idx];
+        if (md == NULL) {
+            al = SSL_AD_INTERNAL_ERROR;
+            goto f_err;
+        }
     }
+
+    /* Check for broken implementations of GOST ciphersuites */
+    /*
+     * If key is GOST and len is exactly 64 or 128, it is signature without
+     * length field (CryptoPro implementations at least till TLS 1.2)
+     */
+#ifndef OPENSSL_NO_GOST
+    if (!SSL_USE_SIGALGS(s)
+        && ((PACKET_remaining(pkt) == 64
+             && (EVP_PKEY_id(pkey) == NID_id_GostR3410_2001
+                 || EVP_PKEY_id(pkey) == NID_id_GostR3410_2012_256))
+            || (PACKET_remaining(pkt) == 128
+                && EVP_PKEY_id(pkey) == NID_id_GostR3410_2012_512))) {
+        len = PACKET_remaining(pkt);
+    } else
+#endif
+    if (!PACKET_get_net_2(pkt, &len)) {
+        SSLerr(SSL_F_TLS_PROCESS_CERT_VERIFY, SSL_R_LENGTH_MISMATCH);
+        al = SSL_AD_DECODE_ERROR;
+        goto f_err;
+    }
+
     j = EVP_PKEY_size(pkey);
     if (((int)len > j) || ((int)PACKET_remaining(pkt) > j)
         || (PACKET_remaining(pkt) == 0)) {
@@ -2836,7 +2802,7 @@ MSG_PROCESS_RETURN tls_process_cert_verify(SSL *s, PACKET *pkt)
         goto f_err;
     }
 
-    ret = MSG_PROCESS_CONTINUE_PROCESSING;
+    ret = MSG_PROCESS_CONTINUE_READING;
     if (0) {
  f_err:
         ssl3_send_alert(s, SSL3_AL_FATAL, al);

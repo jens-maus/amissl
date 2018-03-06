@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1999-2017 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -149,6 +149,7 @@ static const ASN1_STRING_TABLE tbl_standard[] = {
     {NID_ms_csp_name, -1, -1, B_ASN1_BMPSTRING, STABLE_NO_MASK},
     {NID_rfc822Mailbox, 1, ub_rfc822_mailbox, B_ASN1_IA5STRING,
      STABLE_NO_MASK},
+    {NID_jurisdictionCountryName, 2, 2, B_ASN1_PRINTABLESTRING, STABLE_NO_MASK},
     {NID_INN, 1, 12, B_ASN1_NUMERICSTRING, STABLE_NO_MASK},
     {NID_OGRN, 1, 13, B_ASN1_NUMERICSTRING, STABLE_NO_MASK},
     {NID_SNILS, 1, 11, B_ASN1_NUMERICSTRING, STABLE_NO_MASK}
@@ -213,6 +214,7 @@ static ASN1_STRING_TABLE *stable_get(int nid)
         rv->mask = tmp->mask;
         rv->flags = tmp->flags | STABLE_FLAGS_MALLOC;
     } else {
+        rv->nid = nid;
         rv->minsize = -1;
         rv->maxsize = -1;
         rv->flags = STABLE_FLAGS_MALLOC;

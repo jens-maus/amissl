@@ -685,13 +685,16 @@ int OBJ_create(const char *oid, const char *sn, const char *ln)
     int ok = 0;
 
     /* Check to see if short or long name already present */
-    if (OBJ_sn2nid(sn) != NID_undef || OBJ_ln2nid(ln) != NID_undef) {
+    if ((sn != NULL && OBJ_sn2nid(sn) != NID_undef)
+            || (ln != NULL && OBJ_ln2nid(ln) != NID_undef)) {
         OBJerr(OBJ_F_OBJ_CREATE, OBJ_R_OID_EXISTS);
         return 0;
     }
 
     /* Convert numerical OID string to an ASN1_OBJECT structure */
     tmpoid = OBJ_txt2obj(oid, 1);
+    if (tmpoid == NULL)
+        return 0;
 
     /* If NID is not NID_undef then object already exists */
     if (OBJ_obj2nid(tmpoid) != NID_undef) {

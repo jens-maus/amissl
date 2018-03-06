@@ -24,7 +24,7 @@
 #define K_MAJ   4
 #define K_MIN1  1
 #define K_MIN2  0
-#if LINUX_VERSION_CODE <= KERNEL_VERSION(K_MAJ, K_MIN1, K_MIN2) || \
+#if LINUX_VERSION_CODE < KERNEL_VERSION(K_MAJ, K_MIN1, K_MIN2) || \
     !defined(AF_ALG)
 # ifndef PEDANTIC
 #  warning "AFALG ENGINE requires Kernel Headers >= 4.1.0"
@@ -107,7 +107,7 @@ static ossl_inline int io_setup(unsigned n, aio_context_t *ctx)
 
 static ossl_inline int eventfd(int n)
 {
-    return syscall(__NR_eventfd, n);
+    return syscall(__NR_eventfd2, n, 0);
 }
 
 static ossl_inline int io_destroy(aio_context_t ctx)
@@ -236,15 +236,11 @@ int afalg_fin_cipher_aio(afalg_aio *aio, int sfd, unsigned char *buf,
     memset(cb, '\0', sizeof(*cb));
     cb->aio_fildes = sfd;
     cb->aio_lio_opcode = IOCB_CMD_PREAD;
-    if (sizeof(buf) != sizeof(cb->aio_buf)) {
-        /*
-         * The pointer has to be converted to 32 bit unsigned value first
-         * to avoid sign extension on cast to 64 bit value
-         */
-        cb->aio_buf = (uint64_t)(unsigned long)buf;
-    } else {
-        cb->aio_buf = (uint64_t)buf;
-    }
+    /*
+     * The pointer has to be converted to unsigned value first to avoid
+     * sign extension on cast to 64 bit value in 32-bit builds
+     */
+    cb->aio_buf = (size_t)buf;
     cb->aio_offset = 0;
     cb->aio_data = 0;
     cb->aio_nbytes = len;
@@ -364,9 +360,9 @@ static int afalg_create_sk(afalg_ctx *actx, const char *ciphertype,
                                 const char *ciphername)
 {
     struct sockaddr_alg sa;
+    int r = -1;
 
     actx->bfd = actx->sfd = -1;
-    int r = -1;
 
     memset(&sa, 0, sizeof(sa));
     sa.salg_family = AF_ALG;

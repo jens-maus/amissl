@@ -29,6 +29,16 @@ extern "C" {
 #  endif
 # endif
 
+/*
+ * BIO_printf format modifier for [u]int64_t.
+ */
+# if defined(__LP64__) || (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__==8)
+#  define BIO_PRI64 "l"     /* 'll' does work "universally", but 'l' is
+                             * here to shut -Wformat warnings in LP64... */
+# else
+#  define BIO_PRI64 "ll"
+# endif
+
 # if !defined(NDEBUG) && !defined(OPENSSL_NO_STDIO)
 #  define REF_ASSERT_ISNT(test) \
     (void)((test) ? (OPENSSL_die("refcount error", __FILE__, __LINE__), 1) : 0)
@@ -161,7 +171,6 @@ extern "C" {
 #  if !defined(WINNT) && !defined(__DJGPP__)
 #   define NO_SYSLOG
 #  endif
-#  define NO_DIRENT
 
 #  ifdef WINDOWS
 #   if !defined(_WIN32_WCE) && !defined(_WIN32_WINNT)
@@ -334,9 +343,7 @@ extern FILE *_imp___iob;
 #   else
 #    include <unistd.h>
 #   endif
-#   ifndef NO_SYS_TYPES_H
-#    include <sys/types.h>
-#   endif
+#   include <sys/types.h>
 #   ifdef OPENSSL_SYS_WIN32_CYGWIN
 #    include <io.h>
 #    include <fcntl.h>
@@ -511,7 +518,7 @@ struct servent *getservbyname(const char *name, const char *proto);
 # endif
 /* end vxworks */
 
-#define OSSL_NELEM(x)    (sizeof(x)/sizeof(x[0]))
+#define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
 #ifdef  __cplusplus
 }
