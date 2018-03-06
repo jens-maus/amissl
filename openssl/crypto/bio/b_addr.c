@@ -772,7 +772,12 @@ int BIO_lookup(const char *host, const char *service,
                  * anyway [above getaddrinfo/gai_strerror is]. We just let
                  * system administrator figure this out...
                  */
+#ifndef OPENSSL_SYS_AMIGA
                 SYSerr(SYS_F_GETHOSTBYNAME, 1000 + h_errno);
+#else
+                #warning is there a way to get h_errno for AmigaOS?
+                SYSerr(SYS_F_GETHOSTBYNAME, 1000);
+#endif
 #else
                 SYSerr(SYS_F_GETHOSTBYNAME, WSAGetLastError());
 #endif

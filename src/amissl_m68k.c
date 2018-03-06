@@ -2106,7 +2106,7 @@ STATIC ASN1_GENERALIZEDTIME * stub_main_ASN1_TIME_to_generalizedtime_PPC(uint32 
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->ASN1_TIME_to_generalizedtime(
-		(ASN1_TIME *)regarray[REG68K_A0/4],
+		(const ASN1_TIME *)regarray[REG68K_A0/4],
 		(ASN1_GENERALIZEDTIME **)regarray[REG68K_A1/4]
 	);
 }
@@ -51639,7 +51639,7 @@ STATIC int stub_main_SSL_is_server_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->SSL_is_server(
-		(SSL *)regarray[REG68K_A0/4]
+		(const SSL *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_SSL_is_server = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_is_server_PPC };
@@ -53459,7 +53459,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_compute_key_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->EC_KEY_METHOD_get_compute_key(
-		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
+		(const EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(unsigned char **, size_t *, const EC_POINT *, const EC_KEY *))regarray[REG68K_A1/4]
 	);
 }
@@ -53474,7 +53474,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_init_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->EC_KEY_METHOD_get_init(
-		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
+		(const EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(EC_KEY *))regarray[REG68K_A1/4],
 		(void (**)(EC_KEY *))regarray[REG68K_A2/4],
 		(int (**)(EC_KEY *, const EC_KEY *))regarray[REG68K_A3/4],
@@ -53494,7 +53494,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_keygen_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->EC_KEY_METHOD_get_keygen(
-		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
+		(const EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(EC_KEY *))regarray[REG68K_A1/4]
 	);
 }
@@ -53509,7 +53509,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_sign_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->EC_KEY_METHOD_get_sign(
-		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
+		(const EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(int, const unsigned char *, int, unsigned char *, unsigned int *, const BIGNUM *, const BIGNUM *, EC_KEY *))regarray[REG68K_A1/4],
 		(int (**)(EC_KEY *, BN_CTX *, BIGNUM **, BIGNUM **))regarray[REG68K_A2/4],
 		(ECDSA_SIG * (**)(const unsigned char *, int, const BIGNUM *, const BIGNUM *, EC_KEY *))regarray[REG68K_A3/4]
@@ -53526,7 +53526,7 @@ STATIC void stub_main_EC_KEY_METHOD_get_verify_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->EC_KEY_METHOD_get_verify(
-		(EC_KEY_METHOD *)regarray[REG68K_A0/4],
+		(const EC_KEY_METHOD *)regarray[REG68K_A0/4],
 		(int (**)(int, const unsigned char *, int, const unsigned char *, int, EC_KEY *))regarray[REG68K_A1/4],
 		(int (**)(const unsigned char *, int, const ECDSA_SIG *, EC_KEY *))regarray[REG68K_A2/4]
 	);
@@ -64082,6 +64082,38 @@ STATIC CONST struct EmuTrap stub_main_X509_VERIFY_PARAM_get_inh_flags = { TRAPIN
 
 // ---
 
+STATIC void stub_main_CRYPTO_secure_clear_free_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->CRYPTO_secure_clear_free(
+		(void *)regarray[REG68K_A0/4],
+		(size_t)regarray[REG68K_D0/4],
+		(const char *)regarray[REG68K_A1/4],
+		(int)regarray[REG68K_D1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_CRYPTO_secure_clear_free = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_CRYPTO_secure_clear_free_PPC };
+
+// ---
+
+STATIC int stub_main_EVP_PKEY_set1_engine_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EVP_PKEY_set1_engine(
+		(EVP_PKEY *)regarray[REG68K_A0/4],
+		(ENGINE *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EVP_PKEY_set1_engine = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_set1_engine_PPC };
+
+// ---
+
 CONST CONST_APTR main_VecTable68K[] =
 {
 	&stub_main_Open,
@@ -68988,6 +69020,8 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_X509_VERIFY_PARAM_get_time,
 	&stub_main_X509_VERIFY_PARAM_set_inh_flags,
 	&stub_main_X509_VERIFY_PARAM_get_inh_flags,
+	&stub_main_CRYPTO_secure_clear_free,
+	&stub_main_EVP_PKEY_set1_engine,
 	(CONST_APTR)-1
 };
 

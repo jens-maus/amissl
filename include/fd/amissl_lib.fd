@@ -2458,8 +2458,8 @@ SSL_SESSION_set1_id_context(s,sid_ctx,sid_ctx_len)(a0,a1,d0)
 ##bias 16338
 SSL_CIPHER_get_id(c)(a0)
 ##bias 16350
-SSL_export_keying_material(s,out,olen,label,llen,p,plen,use_context)(a0,a1,d0,a2,d1,a3,d2,d3)
-SSL_set_tlsext_use_srtp(ctx,profiles)(a0,a1)
+SSL_export_keying_material(s,out,olen,label,llen,context,contextlen,use_context)(a0,a1,d0,a2,d1,a3,d2,d3)
+SSL_set_tlsext_use_srtp(ssl,profiles)(a0,a1)
 SSL_CTX_set_next_protos_advertised_cb(s,cb,arg)(a0,a1,a2)
 SSL_get0_next_proto_negotiated(s,data,len)(a0,a1,a2)
 SSL_get_selected_srtp_profile(s)(a0)
@@ -4498,4 +4498,6 @@ SSL_COMP_get_id(comp)(a0)
 X509_VERIFY_PARAM_get_time(param)(a0)
 X509_VERIFY_PARAM_set_inh_flags(param,flags)(a0,d0)
 X509_VERIFY_PARAM_get_inh_flags(param)(a0)
+CRYPTO_secure_clear_free(ptr,num,file,line)(a0,d0,a1,d1)
+EVP_PKEY_set1_engine(pkey,e)(a0,a1)
 ##end

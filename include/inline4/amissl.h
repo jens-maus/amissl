@@ -2412,8 +2412,8 @@
 #define SSL_SESSION_get0_peer(s) IAmiSSL->SSL_SESSION_get0_peer((s))
 #define SSL_SESSION_set1_id_context(s, sid_ctx, sid_ctx_len) IAmiSSL->SSL_SESSION_set1_id_context((s), (sid_ctx), (sid_ctx_len))
 #define SSL_CIPHER_get_id(c) IAmiSSL->SSL_CIPHER_get_id((c))
-#define SSL_export_keying_material(s, out, olen, label, llen, p, plen, use_context) IAmiSSL->SSL_export_keying_material((s), (out), (olen), (label), (llen), (p), (plen), (use_context))
-#define SSL_set_tlsext_use_srtp(ctx, profiles) IAmiSSL->SSL_set_tlsext_use_srtp((ctx), (profiles))
+#define SSL_export_keying_material(s, out, olen, label, llen, context, contextlen, use_context) IAmiSSL->SSL_export_keying_material((s), (out), (olen), (label), (llen), (context), (contextlen), (use_context))
+#define SSL_set_tlsext_use_srtp(ssl, profiles) IAmiSSL->SSL_set_tlsext_use_srtp((ssl), (profiles))
 #define SSL_CTX_set_next_protos_advertised_cb(s, cb, arg) IAmiSSL->SSL_CTX_set_next_protos_advertised_cb((s), (cb), (arg))
 #define SSL_get0_next_proto_negotiated(s, data, len) IAmiSSL->SSL_get0_next_proto_negotiated((s), (data), (len))
 #define SSL_get_selected_srtp_profile(s) IAmiSSL->SSL_get_selected_srtp_profile((s))
@@ -4342,5 +4342,7 @@
 #define X509_VERIFY_PARAM_get_time(param) IAmiSSL->X509_VERIFY_PARAM_get_time((param))
 #define X509_VERIFY_PARAM_set_inh_flags(param, flags) IAmiSSL->X509_VERIFY_PARAM_set_inh_flags((param), (flags))
 #define X509_VERIFY_PARAM_get_inh_flags(param) IAmiSSL->X509_VERIFY_PARAM_get_inh_flags((param))
+#define CRYPTO_secure_clear_free(ptr, num, file, line) IAmiSSL->CRYPTO_secure_clear_free((ptr), (num), (file), (line))
+#define EVP_PKEY_set1_engine(pkey, e) IAmiSSL->EVP_PKEY_set1_engine((pkey), (e))
 
 #endif /* INLINE4_AMISSL_H */

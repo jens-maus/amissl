@@ -268,6 +268,18 @@ static UI_METHOD ui_amissl =
 	NULL, /* construct prompt */
 };
 
+static const UI_METHOD *default_UI_meth = &ui_amissl;
+
+void UI_set_default_method(const UI_METHOD *meth)
+{
+    default_UI_meth = meth;
+}
+
+const UI_METHOD *UI_get_default_method(void)
+{
+    return default_UI_meth;
+}
+
 UI_METHOD *UI_OpenSSL(void)
 {
 	return(&ui_amissl);

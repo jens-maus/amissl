@@ -1360,11 +1360,11 @@ int LIBSTUB_ASN1_TIME_check(void)
   return LIB_ASN1_TIME_check(_base, ___t);
 }
 
-ASN1_GENERALIZEDTIME * LIB_ASN1_TIME_to_generalizedtime(struct Library * _base, ASN1_TIME * ___t, ASN1_GENERALIZEDTIME ** ___out);
+ASN1_GENERALIZEDTIME * LIB_ASN1_TIME_to_generalizedtime(struct Library * _base, const ASN1_TIME * ___t, ASN1_GENERALIZEDTIME ** ___out);
 
 ASN1_GENERALIZEDTIME * LIBSTUB_ASN1_TIME_to_generalizedtime(void)
 {
-  ASN1_TIME * ___t = (ASN1_TIME *)REG_A0;
+  const ASN1_TIME * ___t = (const ASN1_TIME *)REG_A0;
   ASN1_GENERALIZEDTIME ** ___out = (ASN1_GENERALIZEDTIME **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_TIME_to_generalizedtime(_base, ___t, ___out);
@@ -23869,7 +23869,7 @@ uint32_t LIBSTUB_SSL_CIPHER_get_id(void)
   return LIB_SSL_CIPHER_get_id(_base, ___c);
 }
 
-int LIB_SSL_export_keying_material(struct Library * _base, SSL * ___s, unsigned char * ___out, size_t ___olen, const char * ___label, size_t ___llen, const unsigned char * ___p, size_t ___plen, int ___use_context);
+int LIB_SSL_export_keying_material(struct Library * _base, SSL * ___s, unsigned char * ___out, size_t ___olen, const char * ___label, size_t ___llen, const unsigned char * ___context, size_t ___contextlen, int ___use_context);
 
 int LIBSTUB_SSL_export_keying_material(void)
 {
@@ -23878,21 +23878,21 @@ int LIBSTUB_SSL_export_keying_material(void)
   size_t ___olen = (size_t)REG_D0;
   const char * ___label = (const char *)REG_A2;
   size_t ___llen = (size_t)REG_D1;
-  const unsigned char * ___p = (const unsigned char *)REG_A3;
-  size_t ___plen = (size_t)REG_D2;
+  const unsigned char * ___context = (const unsigned char *)REG_A3;
+  size_t ___contextlen = (size_t)REG_D2;
   int ___use_context = (int)REG_D3;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_export_keying_material(_base, ___s, ___out, ___olen, ___label, ___llen, ___p, ___plen, ___use_context);
+  return LIB_SSL_export_keying_material(_base, ___s, ___out, ___olen, ___label, ___llen, ___context, ___contextlen, ___use_context);
 }
 
-int LIB_SSL_set_tlsext_use_srtp(struct Library * _base, SSL * ___ctx, const char * ___profiles);
+int LIB_SSL_set_tlsext_use_srtp(struct Library * _base, SSL * ___ssl, const char * ___profiles);
 
 int LIBSTUB_SSL_set_tlsext_use_srtp(void)
 {
-  SSL * ___ctx = (SSL *)REG_A0;
+  SSL * ___ssl = (SSL *)REG_A0;
   const char * ___profiles = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_set_tlsext_use_srtp(_base, ___ctx, ___profiles);
+  return LIB_SSL_set_tlsext_use_srtp(_base, ___ssl, ___profiles);
 }
 
 void LIB_SSL_CTX_set_next_protos_advertised_cb(struct Library * _base, SSL_CTX * ___s, int (*___cb)(SSL *ssl,const unsigned char **out,unsigned int *outlen,void *arg), void * ___arg);
@@ -34929,11 +34929,11 @@ X509_VERIFY_PARAM * LIBSTUB_SSL_get0_param(void)
   return LIB_SSL_get0_param(_base, ___ssl);
 }
 
-int LIB_SSL_is_server(struct Library * _base, SSL * ___s);
+int LIB_SSL_is_server(struct Library * _base, const SSL * ___s);
 
 int LIBSTUB_SSL_is_server(void)
 {
-  SSL * ___s = (SSL *)REG_A0;
+  const SSL * ___s = (const SSL *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SSL_is_server(_base, ___s);
 }
@@ -36149,21 +36149,21 @@ void LIBSTUB_EC_KEY_METHOD_free(void)
   return LIB_EC_KEY_METHOD_free(_base, ___meth);
 }
 
-void LIB_EC_KEY_METHOD_get_compute_key(struct Library * _base, EC_KEY_METHOD * ___meth, int (*___pck)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *));
+void LIB_EC_KEY_METHOD_get_compute_key(struct Library * _base, const EC_KEY_METHOD * ___meth, int (*___pck)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *));
 
 void LIBSTUB_EC_KEY_METHOD_get_compute_key(void)
 {
-  EC_KEY_METHOD * ___meth = (EC_KEY_METHOD *)REG_A0;
+  const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
   int (*___pck)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *) = (int (*)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_compute_key(_base, ___meth, ___pck);
 }
 
-void LIB_EC_KEY_METHOD_get_init(struct Library * _base, EC_KEY_METHOD * ___meth, int (*___pinit)(EC_KEY *), void (*___pfinish)(EC_KEY *), int (*___pcopy)(EC_KEY *,const EC_KEY *), int (*___pset_group)(EC_KEY *,const EC_GROUP *), int (*___pset_private)(EC_KEY *,const BIGNUM *), int (*___pset_public)(EC_KEY *,const EC_POINT *));
+void LIB_EC_KEY_METHOD_get_init(struct Library * _base, const EC_KEY_METHOD * ___meth, int (*___pinit)(EC_KEY *), void (*___pfinish)(EC_KEY *), int (*___pcopy)(EC_KEY *,const EC_KEY *), int (*___pset_group)(EC_KEY *,const EC_GROUP *), int (*___pset_private)(EC_KEY *,const BIGNUM *), int (*___pset_public)(EC_KEY *,const EC_POINT *));
 
 void LIBSTUB_EC_KEY_METHOD_get_init(void)
 {
-  EC_KEY_METHOD * ___meth = (EC_KEY_METHOD *)REG_A0;
+  const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
   int (*___pinit)(EC_KEY *) = (int (*)(EC_KEY *))REG_A1;
   void (*___pfinish)(EC_KEY *) = (void (*)(EC_KEY *))REG_A2;
   int (*___pcopy)(EC_KEY *,const EC_KEY *) = (int (*)(EC_KEY *,const EC_KEY *))REG_A3;
@@ -36174,21 +36174,21 @@ void LIBSTUB_EC_KEY_METHOD_get_init(void)
   return LIB_EC_KEY_METHOD_get_init(_base, ___meth, ___pinit, ___pfinish, ___pcopy, ___pset_group, ___pset_private, ___pset_public);
 }
 
-void LIB_EC_KEY_METHOD_get_keygen(struct Library * _base, EC_KEY_METHOD * ___meth, int (*___pkeygen)(EC_KEY *));
+void LIB_EC_KEY_METHOD_get_keygen(struct Library * _base, const EC_KEY_METHOD * ___meth, int (*___pkeygen)(EC_KEY *));
 
 void LIBSTUB_EC_KEY_METHOD_get_keygen(void)
 {
-  EC_KEY_METHOD * ___meth = (EC_KEY_METHOD *)REG_A0;
+  const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
   int (*___pkeygen)(EC_KEY *) = (int (*)(EC_KEY *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_keygen(_base, ___meth, ___pkeygen);
 }
 
-void LIB_EC_KEY_METHOD_get_sign(struct Library * _base, EC_KEY_METHOD * ___meth, int (*___psign)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), int (*___psign_setup)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), ECDSA_SIG * (*___psign_sig)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *));
+void LIB_EC_KEY_METHOD_get_sign(struct Library * _base, const EC_KEY_METHOD * ___meth, int (*___psign)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), int (*___psign_setup)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), ECDSA_SIG * (*___psign_sig)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *));
 
 void LIBSTUB_EC_KEY_METHOD_get_sign(void)
 {
-  EC_KEY_METHOD * ___meth = (EC_KEY_METHOD *)REG_A0;
+  const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
   int (*___psign)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *) = (int (*)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A1;
   int (*___psign_setup)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **) = (int (*)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **))REG_A2;
   ECDSA_SIG * (*___psign_sig)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *) = (ECDSA_SIG * (*)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A3;
@@ -36196,11 +36196,11 @@ void LIBSTUB_EC_KEY_METHOD_get_sign(void)
   return LIB_EC_KEY_METHOD_get_sign(_base, ___meth, ___psign, ___psign_setup, ___psign_sig);
 }
 
-void LIB_EC_KEY_METHOD_get_verify(struct Library * _base, EC_KEY_METHOD * ___meth, int (*___pverify)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), int (*___pverify_sig)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *));
+void LIB_EC_KEY_METHOD_get_verify(struct Library * _base, const EC_KEY_METHOD * ___meth, int (*___pverify)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), int (*___pverify_sig)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *));
 
 void LIBSTUB_EC_KEY_METHOD_get_verify(void)
 {
-  EC_KEY_METHOD * ___meth = (EC_KEY_METHOD *)REG_A0;
+  const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
   int (*___pverify)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *) = (int (*)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *))REG_A1;
   int (*___pverify_sig)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *) = (int (*)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
@@ -43206,6 +43206,28 @@ uint32_t LIBSTUB_X509_VERIFY_PARAM_get_inh_flags(void)
   const X509_VERIFY_PARAM * ___param = (const X509_VERIFY_PARAM *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_VERIFY_PARAM_get_inh_flags(_base, ___param);
+}
+
+void LIB_CRYPTO_secure_clear_free(struct Library * _base, void * ___ptr, size_t ___num, const char * ___file, int ___line);
+
+void LIBSTUB_CRYPTO_secure_clear_free(void)
+{
+  void * ___ptr = (void *)REG_A0;
+  size_t ___num = (size_t)REG_D0;
+  const char * ___file = (const char *)REG_A1;
+  int ___line = (int)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_secure_clear_free(_base, ___ptr, ___num, ___file, ___line);
+}
+
+int LIB_EVP_PKEY_set1_engine(struct Library * _base, EVP_PKEY * ___pkey, ENGINE * ___e);
+
+int LIBSTUB_EVP_PKEY_set1_engine(void)
+{
+  EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A0;
+  ENGINE * ___e = (ENGINE *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_set1_engine(_base, ___pkey, ___e);
 }
 
 

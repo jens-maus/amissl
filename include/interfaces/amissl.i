@@ -4920,6 +4920,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_time
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_inh_flags
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_inh_flags
+	    FPTR IAmiSSL_CRYPTO_secure_clear_free
+	    FPTR IAmiSSL_EVP_PKEY_set1_engine
 	LABEL AmiSSLIFace_SIZE
 
 #endif

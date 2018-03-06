@@ -4300,6 +4300,8 @@ LIBSTUB(SSL_COMP_get_id, int);
 LIBSTUB(X509_VERIFY_PARAM_get_time, time_t);
 LIBSTUB(X509_VERIFY_PARAM_set_inh_flags, int);
 LIBSTUB(X509_VERIFY_PARAM_get_inh_flags, uint32_t);
+LIBSTUB(CRYPTO_secure_clear_free, void);
+LIBSTUB(EVP_PKEY_set1_engine, int);
 
 #ifdef __cplusplus
 }

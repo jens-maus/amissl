@@ -196,6 +196,11 @@ DH * (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
   return(d2i_DHparams(a, pp, length));
 }
 
+DH * (d2i_DHxparams)(DH **a, const unsigned char **pp, long length)
+{
+  return(d2i_DHxparams(a, pp, length));
+}
+
 DSA * (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
 {
   return(d2i_DSAparams(a, pp, length));
@@ -234,6 +239,11 @@ int (i2d_X509)(X509 *a, unsigned char **pp)
 int (i2d_DHparams)(const DH *a, unsigned char **pp)
 {
   return(i2d_DHparams(a, pp));
+}
+
+int (i2d_DHxparams)(const DH *dh, unsigned char **pp)
+{
+  return(i2d_DHxparams(dh, pp));
 }
 
 int (i2d_DSAparams)(const DSA *a, unsigned char **pp)

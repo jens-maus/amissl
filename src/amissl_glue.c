@@ -1055,7 +1055,7 @@ int SAVEDS ASM LIB_ASN1_TIME_check(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, cons
 
 // ---
 
-ASN1_GENERALIZEDTIME * SAVEDS ASM LIB_ASN1_TIME_to_generalizedtime(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_TIME * t), REG(a1, ASN1_GENERALIZEDTIME ** out))
+ASN1_GENERALIZEDTIME * SAVEDS ASM LIB_ASN1_TIME_to_generalizedtime(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_TIME * t), REG(a1, ASN1_GENERALIZEDTIME ** out))
 {
 	return ASN1_TIME_to_generalizedtime(t, out);
 }
@@ -16590,16 +16590,16 @@ uint32_t SAVEDS ASM LIB_SSL_CIPHER_get_id(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-int SAVEDS ASM LIB_SSL_export_keying_material(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, unsigned char * out), REG(d0, size_t olen), REG(a2, const char * label), REG(d1, size_t llen), REG(a3, const unsigned char * p), REG(d2, size_t plen), REG(d3, int use_context))
+int SAVEDS ASM LIB_SSL_export_keying_material(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, unsigned char * out), REG(d0, size_t olen), REG(a2, const char * label), REG(d1, size_t llen), REG(a3, const unsigned char * context), REG(d2, size_t contextlen), REG(d3, int use_context))
 {
-	return SSL_export_keying_material(s, out, olen, label, llen, p, plen, use_context);
+	return SSL_export_keying_material(s, out, olen, label, llen, context, contextlen, use_context);
 }
 
 // ---
 
-int SAVEDS ASM LIB_SSL_set_tlsext_use_srtp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * ctx), REG(a1, const char * profiles))
+int SAVEDS ASM LIB_SSL_set_tlsext_use_srtp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(a1, const char * profiles))
 {
-	return SSL_set_tlsext_use_srtp(ctx, profiles);
+	return SSL_set_tlsext_use_srtp(ssl, profiles);
 }
 
 // ---
@@ -24122,7 +24122,7 @@ X509_VERIFY_PARAM * SAVEDS ASM LIB_SSL_get0_param(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
-int SAVEDS ASM LIB_SSL_is_server(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s))
+int SAVEDS ASM LIB_SSL_is_server(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL * s))
 {
 	return SSL_is_server(s);
 }
@@ -24990,35 +24990,35 @@ void SAVEDS ASM LIB_EC_KEY_METHOD_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_compute_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pck)(unsigned char **, size_t *, const EC_POINT *, const EC_KEY *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_compute_key(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY_METHOD * meth), REG(a1, int (**pck)(unsigned char **, size_t *, const EC_POINT *, const EC_KEY *)))
 {
 	EC_KEY_METHOD_get_compute_key(meth, pck);
 }
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pinit)(EC_KEY *)), REG(a2, void (**pfinish)(EC_KEY *)), REG(a3, int (**pcopy)(EC_KEY *, const EC_KEY *)), REG(d0, int (**pset_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (**pset_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (**pset_public)(EC_KEY *, const EC_POINT *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY_METHOD * meth), REG(a1, int (**pinit)(EC_KEY *)), REG(a2, void (**pfinish)(EC_KEY *)), REG(a3, int (**pcopy)(EC_KEY *, const EC_KEY *)), REG(d0, int (**pset_group)(EC_KEY *, const EC_GROUP *)), REG(d1, int (**pset_private)(EC_KEY *, const BIGNUM *)), REG(d2, int (**pset_public)(EC_KEY *, const EC_POINT *)))
 {
 	EC_KEY_METHOD_get_init(meth, pinit, pfinish, pcopy, pset_group, pset_private, pset_public);
 }
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_keygen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pkeygen)(EC_KEY *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_keygen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY_METHOD * meth), REG(a1, int (**pkeygen)(EC_KEY *)))
 {
 	EC_KEY_METHOD_get_keygen(meth, pkeygen);
 }
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_sign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**psign)(int, const unsigned char *, int, unsigned char *, unsigned int *, const BIGNUM *, const BIGNUM *, EC_KEY *)), REG(a2, int (**psign_setup)(EC_KEY *, BN_CTX *, BIGNUM **, BIGNUM **)), REG(a3, ECDSA_SIG * (**psign_sig)(const unsigned char *, int, const BIGNUM *, const BIGNUM *, EC_KEY *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_sign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY_METHOD * meth), REG(a1, int (**psign)(int, const unsigned char *, int, unsigned char *, unsigned int *, const BIGNUM *, const BIGNUM *, EC_KEY *)), REG(a2, int (**psign_setup)(EC_KEY *, BN_CTX *, BIGNUM **, BIGNUM **)), REG(a3, ECDSA_SIG * (**psign_sig)(const unsigned char *, int, const BIGNUM *, const BIGNUM *, EC_KEY *)))
 {
 	EC_KEY_METHOD_get_sign(meth, psign, psign_setup, psign_sig);
 }
 
 // ---
 
-void SAVEDS ASM LIB_EC_KEY_METHOD_get_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_KEY_METHOD * meth), REG(a1, int (**pverify)(int, const unsigned char *, int, const unsigned char *, int, EC_KEY *)), REG(a2, int (**pverify_sig)(const unsigned char *, int, const ECDSA_SIG *, EC_KEY *)))
+void SAVEDS ASM LIB_EC_KEY_METHOD_get_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY_METHOD * meth), REG(a1, int (**pverify)(int, const unsigned char *, int, const unsigned char *, int, EC_KEY *)), REG(a2, int (**pverify_sig)(const unsigned char *, int, const ECDSA_SIG *, EC_KEY *)))
 {
 	EC_KEY_METHOD_get_verify(meth, pverify, pverify_sig);
 }
@@ -30061,6 +30061,20 @@ int SAVEDS ASM LIB_X509_VERIFY_PARAM_set_inh_flags(REG(a6, UNUSED __IFACE_OR_BAS
 uint32_t SAVEDS ASM LIB_X509_VERIFY_PARAM_get_inh_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509_VERIFY_PARAM * param))
 {
 	return X509_VERIFY_PARAM_get_inh_flags(param);
+}
+
+// ---
+
+void SAVEDS ASM LIB_CRYPTO_secure_clear_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, void * ptr), REG(d0, size_t num), REG(a1, const char * file), REG(d1, int line))
+{
+	CRYPTO_secure_clear_free(ptr, num, file, line);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EVP_PKEY_set1_engine(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(a1, ENGINE * e))
+{
+	return EVP_PKEY_set1_engine(pkey, e);
 }
 
 // ---

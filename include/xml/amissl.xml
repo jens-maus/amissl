@@ -545,7 +545,7 @@
       <arg name="t" type="const ASN1_TIME *" m68kreg="a0"/>
     </method>
     <method name="ASN1_TIME_to_generalizedtime" result="ASN1_GENERALIZEDTIME *">
-      <arg name="t" type="ASN1_TIME *" m68kreg="a0"/>
+      <arg name="t" type="const ASN1_TIME *" m68kreg="a0"/>
       <arg name="out" type="ASN1_GENERALIZEDTIME **" m68kreg="a1"/>
     </method>
     <method name="i2d_ASN1_SET" result="int" status="unimplemented">
@@ -11172,12 +11172,12 @@
       <arg name="olen" type="size_t" m68kreg="d0"/>
       <arg name="label" type="const char *" m68kreg="a2"/>
       <arg name="llen" type="size_t" m68kreg="d1"/>
-      <arg name="p" type="const unsigned char *" m68kreg="a3"/>
-      <arg name="plen" type="size_t" m68kreg="d2"/>
+      <arg name="context" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="contextlen" type="size_t" m68kreg="d2"/>
       <arg name="use_context" type="int" m68kreg="d3"/>
     </method>
     <method name="SSL_set_tlsext_use_srtp" result="int">
-      <arg name="ctx" type="SSL *" m68kreg="a0"/>
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
       <arg name="profiles" type="const char *" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_set_next_protos_advertised_cb" result="void">
@@ -16767,7 +16767,7 @@
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_is_server" result="int">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_set_alpn_protos" result="int">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
@@ -17259,11 +17259,11 @@
       <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
     </method>
     <method name="EC_KEY_METHOD_get_compute_key" result="void">
-      <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
+      <arg name="meth" type="const EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="pck" type="int (**)(unsigned char **, size_t *, const EC_POINT *, const EC_KEY *)" m68kreg="a1"/>
     </method>
     <method name="EC_KEY_METHOD_get_init" result="void">
-      <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
+      <arg name="meth" type="const EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="pinit" type="int (**)(EC_KEY *)" m68kreg="a1"/>
       <arg name="pfinish" type="void (**)(EC_KEY *)" m68kreg="a2"/>
       <arg name="pcopy" type="int (**)(EC_KEY *, const EC_KEY *)" m68kreg="a3"/>
@@ -17272,17 +17272,17 @@
       <arg name="pset_public" type="int (**)(EC_KEY *, const EC_POINT *)" m68kreg="d2"/>
     </method>
     <method name="EC_KEY_METHOD_get_keygen" result="void">
-      <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
+      <arg name="meth" type="const EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="pkeygen" type="int (**)(EC_KEY *)" m68kreg="a1"/>
     </method>
     <method name="EC_KEY_METHOD_get_sign" result="void">
-      <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
+      <arg name="meth" type="const EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="psign" type="int (**)(int, const unsigned char *, int, unsigned char *, unsigned int *, const BIGNUM *, const BIGNUM *, EC_KEY *)" m68kreg="a1"/>
       <arg name="psign_setup" type="int (**)(EC_KEY *, BN_CTX *, BIGNUM **, BIGNUM **)" m68kreg="a2"/>
       <arg name="psign_sig" type="ECDSA_SIG * (**)(const unsigned char *, int, const BIGNUM *, const BIGNUM *, EC_KEY *)" m68kreg="a3"/>
     </method>
     <method name="EC_KEY_METHOD_get_verify" result="void">
-      <arg name="meth" type="EC_KEY_METHOD *" m68kreg="a0"/>
+      <arg name="meth" type="const EC_KEY_METHOD *" m68kreg="a0"/>
       <arg name="pverify" type="int (**)(int, const unsigned char *, int, const unsigned char *, int, EC_KEY *)" m68kreg="a1"/>
       <arg name="pverify_sig" type="int (**)(const unsigned char *, int, const ECDSA_SIG *, EC_KEY *)" m68kreg="a2"/>
     </method>
@@ -19994,6 +19994,18 @@
     </method>
     <method name="X509_VERIFY_PARAM_get_inh_flags" result="uint32_t">
       <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+    </method>
+
+    <!-- AmiSSL v4.x - OpenSSL 1.1.0g -->
+    <method name="CRYPTO_secure_clear_free" result="void">
+      <arg name="ptr" type="void *" m68kreg="a0"/>
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="file" type="const char *" m68kreg="a1"/>
+      <arg name="line" type="int" m68kreg="d1"/>
+    </method>
+    <method name="EVP_PKEY_set1_engine" result="int">
+      <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
+      <arg name="e" type="ENGINE *" m68kreg="a1"/>
     </method>
 
   </interface>
