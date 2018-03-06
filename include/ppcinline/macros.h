@@ -238,6 +238,20 @@
 	(void) (*MyEmulHandle->EmulCallDirectOS)(-offs);  \
 })
 
+#define LP3NRFP2(offs, name, t1, v1, r1, t2, v2, r2, t3, v3, r3, bt, bn, fpt1, fpt2, cm1, cs1, cl1, cm2, cs2, cl2 ) \
+({                                                        \
+	typedef fpt1;                                     \
+	typedef fpt2;                                     \
+	t1 _##name##_v1 = v1;                             \
+	t2 _##name##_v2 = v2;                             \
+	t3 _##name##_v3 = v3;                             \
+	REG_##r1           = (ULONG) _##name##_v1;        \
+	REG_##r2           = (ULONG) _##name##_v2;        \
+	REG_##r3           = (ULONG) _##name##_v3;        \
+	REG_A6             = (ULONG) (bn);                \
+	(void) (*MyEmulHandle->EmulCallDirectOS)(-offs);  \
+})
+
 #define LP4(offs, rt, name, t1, v1, r1, t2, v2, r2, t3, v3, r3, t4, v4, r4, bt, bn, cm1, cs1, cl1, cm2, cs2, cl2 ) \
 ({                                                        \
 	t1 _##name##_v1 = v1;                             \
