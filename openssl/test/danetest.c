@@ -320,7 +320,7 @@ static int allws(const char *cp)
 }
 
 #ifndef OPENSSL_NO_STDIO
-static int test_tlsafile(SSL_CTX *ctx, const char *basename,
+static int test_tlsafile(SSL_CTX *ctx, const char *base_name,
                          BIO *f, const char *path)
 {
     char *line;
@@ -356,7 +356,7 @@ static int test_tlsafile(SSL_CTX *ctx, const char *basename,
         if ((ssl = SSL_new(ctx)) == NULL)
             return -1;
         SSL_set_connect_state(ssl);
-        if (SSL_dane_enable(ssl, basename) <= 0) {
+        if (SSL_dane_enable(ssl, base_name) <= 0) {
             SSL_free(ssl);
             return -1;
         }

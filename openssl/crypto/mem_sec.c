@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2015-2017 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -68,8 +68,12 @@ int CRYPTO_secure_malloc_init(size_t size, int minsize)
         sec_malloc_lock = CRYPTO_THREAD_lock_new();
         if (sec_malloc_lock == NULL)
             return 0;
-        ret = sh_init(size, minsize);
-        secure_mem_initialized = 1;
+        if ((ret = sh_init(size, minsize)) != 0) {
+            secure_mem_initialized = 1;
+        } else {
+            CRYPTO_THREAD_lock_free(sec_malloc_lock);
+            sec_malloc_lock = NULL;
+        }
     }
 
     return ret;
@@ -85,6 +89,7 @@ int CRYPTO_secure_malloc_done()
         sh_done();
         secure_mem_initialized = 0;
         CRYPTO_THREAD_lock_free(sec_malloc_lock);
+        sec_malloc_lock = NULL;
         return 1;
     }
 #endif /* IMPLEMENTED */
@@ -147,6 +152,33 @@ void CRYPTO_secure_free(void *ptr, const char *file, int line)
     sh_free(ptr);
     CRYPTO_THREAD_unlock(sec_malloc_lock);
 #else
+    CRYPTO_free(ptr, file, line);
+#endif /* IMPLEMENTED */
+}
+
+void CRYPTO_secure_clear_free(void *ptr, size_t num,
+                              const char *file, int line)
+{
+#ifdef IMPLEMENTED
+    size_t actual_size;
+
+    if (ptr == NULL)
+        return;
+    if (!CRYPTO_secure_allocated(ptr)) {
+        OPENSSL_cleanse(ptr, num);
+        CRYPTO_free(ptr, file, line);
+        return;
+    }
+    CRYPTO_THREAD_write_lock(sec_malloc_lock);
+    actual_size = sh_actual_size(ptr);
+    CLEAR(ptr, actual_size);
+    secure_mem_used -= actual_size;
+    sh_free(ptr);
+    CRYPTO_THREAD_unlock(sec_malloc_lock);
+#else
+    if (ptr == NULL)
+        return;
+    OPENSSL_cleanse(ptr, num);
     CRYPTO_free(ptr, file, line);
 #endif /* IMPLEMENTED */
 }
@@ -336,7 +368,8 @@ static void sh_remove_from_list(char *ptr)
 
 static int sh_init(size_t size, int minsize)
 {
-    int i, ret;
+    int ret;
+    size_t i;
     size_t pgsize;
     size_t aligned;
 
@@ -351,6 +384,9 @@ static int sh_init(size_t size, int minsize)
         goto err;
     if (minsize <= 0 || (minsize & (minsize - 1)) != 0)
         goto err;
+
+    while (minsize < (int)sizeof(SH_LIST))
+        minsize *= 2;
 
     sh.arena_size = size;
     sh.minsize = minsize;
@@ -411,7 +447,6 @@ static int sh_init(size_t size, int minsize)
             close(fd);
         }
     }
-    OPENSSL_assert(sh.map_result != MAP_FAILED);
     if (sh.map_result == MAP_FAILED)
         goto err;
     sh.arena = (char *)(sh.map_result + pgsize);
@@ -478,6 +513,9 @@ static char *sh_malloc(size_t size)
     ossl_ssize_t list, slist;
     size_t i;
     char *chunk;
+
+    if (size > sh.arena_size)
+        return NULL;
 
     list = sh.freelist_size - 1;
     for (i = sh.minsize; i < size; i <<= 1)

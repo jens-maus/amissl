@@ -863,19 +863,31 @@ void ssl_set_client_disabled(SSL *s)
  * @s: SSL connection that you want to use the cipher on
  * @c: cipher to check
  * @op: Security check that you want to do
+ * @ecdhe: If set to 1 then TLSv1 ECDHE ciphers are also allowed in SSLv3
  *
  * Returns 1 when it's disabled, 0 when enabled.
  */
-int ssl_cipher_disabled(SSL *s, const SSL_CIPHER *c, int op)
+int ssl_cipher_disabled(SSL *s, const SSL_CIPHER *c, int op, int ecdhe)
 {
     if (c->algorithm_mkey & s->s3->tmp.mask_k
         || c->algorithm_auth & s->s3->tmp.mask_a)
         return 1;
     if (s->s3->tmp.max_ver == 0)
         return 1;
-    if (!SSL_IS_DTLS(s) && ((c->min_tls > s->s3->tmp.max_ver)
-                            || (c->max_tls < s->s3->tmp.min_ver)))
-        return 1;
+    if (!SSL_IS_DTLS(s)) {
+        int min_tls = c->min_tls;
+
+        /*
+         * For historical reasons we will allow ECHDE to be selected by a server
+         * in SSLv3 if we are a client
+         */
+        if (min_tls == TLS1_VERSION && ecdhe
+                && (c->algorithm_mkey & (SSL_kECDHE | SSL_kECDHEPSK)) != 0)
+            min_tls = SSL3_VERSION;
+
+        if ((min_tls > s->s3->tmp.max_ver) || (c->max_tls < s->s3->tmp.min_ver))
+            return 1;
+    }
     if (SSL_IS_DTLS(s) && (DTLS_VERSION_GT(c->min_dtls, s->s3->tmp.max_ver)
                            || DTLS_VERSION_LT(c->max_dtls, s->s3->tmp.min_ver)))
         return 1;
@@ -1185,30 +1197,6 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
     }
  skip_ext:
 
-    if (SSL_CLIENT_USE_SIGALGS(s)) {
-        size_t salglen;
-        const unsigned char *salg;
-        unsigned char *etmp;
-        salglen = tls12_get_psigalgs(s, 1, &salg);
-
-        /*-
-         * check for enough space.
-         * 4 bytes for the sigalgs type and extension length
-         * 2 bytes for the sigalg list length
-         * + sigalg list length
-         */
-        if (CHECKLEN(ret, salglen + 6, limit))
-            return NULL;
-        s2n(TLSEXT_TYPE_signature_algorithms, ret);
-        etmp = ret;
-        /* Skip over lengths for now */
-        ret += 4;
-        salglen = tls12_copy_sigalgs(s, ret, salg, salglen);
-        /* Fill in lengths */
-        s2n(salglen + 2, etmp);
-        s2n(salglen, etmp);
-        ret += salglen;
-    }
 #ifndef OPENSSL_NO_OCSP
     if (s->tlsext_status_type == TLSEXT_STATUSTYPE_ocsp) {
         int i;
@@ -1368,8 +1356,9 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
      * silently failed to actually do it. It is fixed in 1.1.1 but to
      * ease the transition especially from 1.1.0b to 1.1.0c, we just
      * disable it in 1.1.0.
+     * Also skip if SSL_OP_NO_ENCRYPT_THEN_MAC is set.
      */
-    if (!SSL_IS_DTLS(s)) {
+    if (!SSL_IS_DTLS(s) && !(s->options & SSL_OP_NO_ENCRYPT_THEN_MAC)) {
         /*-
          * check for enough space.
          * 4 bytes for the ETM type and extension length
@@ -1404,10 +1393,41 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
     s2n(0, ret);
 
     /*
+     * WebSphere application server can not handle having the
+     * last extension be 0-length (e.g. EMS, EtM), so keep those
+     * before SigAlgs
+     */
+    if (SSL_CLIENT_USE_SIGALGS(s)) {
+        size_t salglen;
+        const unsigned char *salg;
+        unsigned char *etmp;
+        salglen = tls12_get_psigalgs(s, 1, &salg);
+
+        /*-
+         * check for enough space.
+         * 4 bytes for the sigalgs type and extension length
+         * 2 bytes for the sigalg list length
+         * + sigalg list length
+         */
+        if (CHECKLEN(ret, salglen + 6, limit))
+            return NULL;
+        s2n(TLSEXT_TYPE_signature_algorithms, ret);
+        etmp = ret;
+        /* Skip over lengths for now */
+        ret += 4;
+        salglen = tls12_copy_sigalgs(s, ret, salg, salglen);
+        /* Fill in lengths */
+        s2n(salglen + 2, etmp);
+        s2n(salglen, etmp);
+        ret += salglen;
+    }
+
+    /*
      * Add padding to workaround bugs in F5 terminators. See
      * https://tools.ietf.org/html/draft-agl-tls-padding-03 NB: because this
      * code works out the length of all existing extensions it MUST always
-     * appear last.
+     * appear last. WebSphere 7.x/8.x is intolerant of empty extensions
+     * being last, so minimum length of 1.
      */
     if (s->options & SSL_OP_TLSEXT_PADDING) {
         int hlen = ret - (unsigned char *)s->init_buf->data;
@@ -1417,7 +1437,7 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
             if (hlen >= 4)
                 hlen -= 4;
             else
-                hlen = 0;
+                hlen = 1;
 
             /*-
              * check for enough space. Strictly speaking we know we've already
@@ -1799,6 +1819,9 @@ static int tls1_alpn_handle_client_hello_late(SSL *s, int *al)
             /* ALPN takes precedence over NPN. */
             s->s3->next_proto_neg_seen = 0;
 #endif
+        } else if (r == SSL_TLSEXT_ERR_NOACK) {
+            /* Behave as if no callback was present. */
+            return 1;
         } else {
             *al = SSL_AD_NO_APPLICATION_PROTOCOL;
             return 0;
@@ -2263,7 +2286,8 @@ static int ssl_scan_clienthello_tlsext(SSL *s, PACKET *pkt, int *al)
                 return 0;
         }
 #endif
-        else if (type == TLSEXT_TYPE_encrypt_then_mac)
+        else if (type == TLSEXT_TYPE_encrypt_then_mac &&
+                 !(s->options & SSL_OP_NO_ENCRYPT_THEN_MAC))
             s->tlsext_use_etm = 1;
         /*
          * Note: extended master secret extension handled in
@@ -2583,7 +2607,8 @@ static int ssl_scan_serverhello_tlsext(SSL *s, PACKET *pkt, int *al)
 #endif
         else if (type == TLSEXT_TYPE_encrypt_then_mac) {
             /* Ignore if inappropriate ciphersuite */
-            if (s->s3->tmp.new_cipher->algorithm_mac != SSL_AEAD
+            if (!(s->options & SSL_OP_NO_ENCRYPT_THEN_MAC) &&
+                s->s3->tmp.new_cipher->algorithm_mac != SSL_AEAD
                 && s->s3->tmp.new_cipher->algorithm_enc != SSL_RC4)
                 s->tlsext_use_etm = 1;
         } else if (type == TLSEXT_TYPE_extended_master_secret) {
@@ -2702,6 +2727,7 @@ static int ssl_check_clienthello_tlsext_early(SSL *s)
 
     case SSL_TLSEXT_ERR_NOACK:
         s->servername_done = 0;
+        /* fall thru */
     default:
         return 1;
     }
@@ -2889,6 +2915,7 @@ int ssl_check_serverhello_tlsext(SSL *s)
 
     case SSL_TLSEXT_ERR_NOACK:
         s->servername_done = 0;
+        /* fall thru */
     default:
         return 1;
     }
@@ -3170,8 +3197,14 @@ static int tls_decrypt_ticket(SSL *s, const unsigned char *etick,
     p = sdec;
 
     sess = d2i_SSL_SESSION(NULL, &p, slen);
+    slen -= p - sdec;
     OPENSSL_free(sdec);
     if (sess) {
+        /* Some additional consistency checks */
+        if (slen != 0 || sess->session_id_length != 0) {
+            SSL_SESSION_free(sess);
+            return 2;
+        }
         /*
          * The session ID, if non-empty, is used by some clients to detect
          * that the ticket has been accepted. So we copy it to the session
@@ -3789,7 +3822,7 @@ static int ssl_check_ca_name(STACK_OF(X509_NAME) *names, X509 *x)
  * attempting to use them.
  */
 
-/* Flags which need to be set for a certificate when stict mode not set */
+/* Flags which need to be set for a certificate when strict mode not set */
 
 #define CERT_PKEY_VALID_FLAGS \
         (CERT_PKEY_EE_SIGNATURE|CERT_PKEY_EE_PARAM)
@@ -4057,7 +4090,7 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_GOST12_512);
 }
 
-/* User level utiity function to check a chain is suitable */
+/* User level utility function to check a chain is suitable */
 int SSL_check_chain(SSL *s, X509 *x, EVP_PKEY *pk, STACK_OF(X509) *chain)
 {
     return tls1_check_chain(s, x, pk, chain, -1);
@@ -4160,8 +4193,8 @@ int ssl_security_cert(SSL *s, SSL_CTX *ctx, X509 *x, int vfy, int is_ee)
 }
 
 /*
- * Check security of a chain, if sk includes the end entity certificate then
- * x is NULL. If vfy is 1 then we are verifying a peer chain and not sending
+ * Check security of a chain, if |sk| includes the end entity certificate then
+ * |x| is NULL. If |vfy| is 1 then we are verifying a peer chain and not sending
  * one to the peer. Return values: 1 if ok otherwise error code to use
  */
 

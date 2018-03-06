@@ -297,7 +297,8 @@ static SIGRETTYPE sig_done(int sig)
 # if !defined(SIGALRM)
 #  define SIGALRM
 # endif
-static unsigned int lapse, schlock;
+static unsigned int lapse;
+static volatile unsigned int schlock;
 static void alarm_win32(unsigned int secs)
 {
     lapse = secs * 1000;
@@ -1241,7 +1242,7 @@ int speed_main(int argc, char **argv)
 #ifndef NO_FORK
     int multi = 0;
 #endif
-    int async_jobs = 0;
+    unsigned int async_jobs = 0;
 #if !defined(OPENSSL_NO_RSA) || !defined(OPENSSL_NO_DSA) \
     || !defined(OPENSSL_NO_EC)
     long rsa_count = 1;
@@ -1384,6 +1385,7 @@ int speed_main(int argc, char **argv)
             usertime = 0;
             break;
         case OPT_EVP:
+            evp_md = NULL;
             evp_cipher = EVP_get_cipherbyname(opt_arg());
             if (evp_cipher == NULL)
                 evp_md = EVP_get_digestbyname(opt_arg());
@@ -1417,6 +1419,12 @@ int speed_main(int argc, char **argv)
             if (!ASYNC_is_capable()) {
                 BIO_printf(bio_err,
                            "%s: async_jobs specified but async not supported\n",
+                           prog);
+                goto opterr;
+            }
+            if (async_jobs > 99999) {
+                BIO_printf(bio_err,
+                           "%s: too many async_jobs\n",
                            prog);
                 goto opterr;
             }
@@ -1465,12 +1473,8 @@ int speed_main(int argc, char **argv)
             continue;
         }
 #ifndef OPENSSL_NO_RSA
-# ifndef RSA_NULL
-        if (strcmp(*argv, "openssl") == 0) {
-            RSA_set_default_method(RSA_PKCS1_OpenSSL());
+        if (strcmp(*argv, "openssl") == 0)
             continue;
-        }
-# endif
         if (strcmp(*argv, "rsa") == 0) {
             rsa_doit[R_RSA_512] = rsa_doit[R_RSA_1024] =
                 rsa_doit[R_RSA_2048] = rsa_doit[R_RSA_3072] =

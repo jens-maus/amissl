@@ -82,6 +82,7 @@ static ERR_STRING_DATA ERR_str_functs[] = {
     {ERR_PACK(0, SYS_F_GETSOCKOPT, 0), "getsockopt"},
     {ERR_PACK(0, SYS_F_GETSOCKNAME, 0), "getsockname"},
     {ERR_PACK(0, SYS_F_GETHOSTBYNAME, 0), "gethostbyname"},
+    {ERR_PACK(0, SYS_F_FFLUSH, 0), "fflush"},
     {0, NULL},
 };
 
@@ -121,6 +122,7 @@ static ERR_STRING_DATA ERR_str_reasons[] = {
 #endif
 
 static CRYPTO_ONCE err_init = CRYPTO_ONCE_STATIC_INIT;
+static int set_err_thread_local;
 static CRYPTO_THREAD_LOCAL err_thread_local;
 
 static CRYPTO_ONCE err_string_init = CRYPTO_ONCE_STATIC_INIT;
@@ -259,6 +261,8 @@ DEFINE_RUN_ONCE_STATIC(do_err_strings_init)
 
 void err_cleanup(void)
 {
+    if (set_err_thread_local != 0)
+        CRYPTO_THREAD_cleanup_local(&err_thread_local);
     CRYPTO_THREAD_lock_free(err_string_lock);
     err_string_lock = NULL;
 }
@@ -357,6 +361,8 @@ void ERR_put_error(int lib, int func, int reason, const char *file, int line)
     }
 #endif
     es = ERR_get_state();
+    if (es == NULL)
+        return;
 
     es->top = (es->top + 1) % ERR_NUM_ERRORS;
     if (es->top == es->bottom)
@@ -374,6 +380,8 @@ void ERR_clear_error(void)
     ERR_STATE *es;
 
     es = ERR_get_state();
+    if (es == NULL)
+        return;
 
     for (i = 0; i < ERR_NUM_ERRORS; i++) {
         err_clear(es, i);
@@ -438,6 +446,8 @@ static unsigned long get_error_values(int inc, int top, const char **file,
     unsigned long ret;
 
     es = ERR_get_state();
+    if (es == NULL)
+        return 0;
 
     if (inc && top) {
         if (file)
@@ -615,7 +625,7 @@ const char *ERR_reason_error_string(unsigned long e)
 
 void err_delete_thread_state(void)
 {
-    ERR_STATE *state = ERR_get_state();
+    ERR_STATE *state = CRYPTO_THREAD_get_local(&err_thread_local);
     if (state == NULL)
         return;
 
@@ -637,6 +647,7 @@ void ERR_remove_state(unsigned long pid)
 
 DEFINE_RUN_ONCE_STATIC(err_do_init)
 {
+    set_err_thread_local = 1;
     return CRYPTO_THREAD_init_local(&err_thread_local, NULL);
 }
 
@@ -654,14 +665,14 @@ ERR_STATE *ERR_get_state(void)
         if (state == NULL)
             return NULL;
 
-        if (!CRYPTO_THREAD_set_local(&err_thread_local, state)) {
+        if (!ossl_init_thread_start(OPENSSL_INIT_THREAD_ERR_STATE)
+            || !CRYPTO_THREAD_set_local(&err_thread_local, state)) {
             ERR_STATE_free(state);
             return NULL;
         }
 
         /* Ignore failures from these */
         OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
-        ossl_init_thread_start(OPENSSL_INIT_THREAD_ERR_STATE);
     }
 
     return state;
@@ -687,10 +698,10 @@ void ERR_set_error_data(char *data, int flags)
     int i;
 
     es = ERR_get_state();
+    if (es == NULL)
+        return;
 
     i = es->top;
-    if (i == 0)
-        i = ERR_NUM_ERRORS - 1;
 
     err_clear_data(es, i);
     es->err_data[i] = data;
@@ -742,6 +753,8 @@ int ERR_set_mark(void)
     ERR_STATE *es;
 
     es = ERR_get_state();
+    if (es == NULL)
+        return 0;
 
     if (es->bottom == es->top)
         return 0;
@@ -754,6 +767,8 @@ int ERR_pop_to_mark(void)
     ERR_STATE *es;
 
     es = ERR_get_state();
+    if (es == NULL)
+        return 0;
 
     while (es->bottom != es->top
            && (es->err_flags[es->top] & ERR_FLAG_MARK) == 0) {

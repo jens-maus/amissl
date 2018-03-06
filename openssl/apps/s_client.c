@@ -175,7 +175,7 @@ static unsigned int psk_client_cb(SSL *ssl, const char *hint, char *identity,
                    psk_key);
         return 0;
     }
-    if (key_len > max_psk_len) {
+    if (max_psk_len > INT_MAX || key_len > (long)max_psk_len) {
         BIO_printf(bio_err,
                    "psk buffer of callback is too small (%d) for key (%ld)\n",
                    max_psk_len, key_len);
@@ -1370,11 +1370,13 @@ int s_client_main(int argc, char **argv)
         }
     }
 
+#ifdef AF_UNIX
     if (socket_family == AF_UNIX && socket_type != SOCK_STREAM) {
         BIO_printf(bio_err,
                    "Can't use unix sockets and datagrams together\n");
         goto end;
     }
+#endif
 
     if (split_send_fragment > SSL3_RT_MAX_PLAIN_LENGTH) {
         BIO_printf(bio_err, "Bad split send fragment size\n");
@@ -2124,12 +2126,6 @@ int s_client_main(int argc, char **argv)
             if (in_init) {
                 in_init = 0;
 
-                if (servername != NULL && !SSL_session_reused(con)) {
-                    BIO_printf(bio_c_out,
-                               "Server did %sacknowledge servername extension.\n",
-                               tlsextcbp.ack ? "" : "not ");
-                }
-
                 if (sess_out) {
                     BIO *stmp = BIO_new_file(sess_out, "w");
                     if (stmp) {
@@ -2615,8 +2611,8 @@ static void print_stuff(BIO *bio, SSL *s, int full)
 #endif
 
         BIO_printf(bio,
-                   "---\nSSL handshake has read %" PRIu64
-                   " bytes and written %" PRIu64 " bytes\n",
+                   "---\nSSL handshake has read %"BIO_PRI64"u"
+                   " bytes and written %"BIO_PRI64"u bytes\n",
                    BIO_number_read(SSL_get_rbio(s)),
                    BIO_number_written(SSL_get_wbio(s)));
     }
