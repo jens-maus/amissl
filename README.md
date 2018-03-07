@@ -19,17 +19,17 @@ shared library nature it can be used by several Amiga applications at the same t
 ## General
 
 AmiSSL consists of three major components: the shared libraries, public root certificates
-and a port of the "openssl" command-line tool to generate certificates accordingly.
+and a port of the `openssl` command-line tool to generate certificates accordingly.
 
 ### Libraries
 
-The main library of AmiSSL is 'amisslmaster.library' which acts as a proxy and
+The main library of AmiSSL is `amisslmaster.library` which acts as a proxy and
 opens the appropriate AmiSSL library for applications using AmiSSL. This mechanism
 allow to have different AmiSSL versions installed in parallel due to different
 applications potentially requiring different versions. amisslmaster.library makes
-sure that the correct 'amissl_vXXXX.library' versions are opened.
+sure that the correct `amissl_vXXXX.library` versions are opened.
 
-Other shared libraries are usually stored inside the "AmiSSL:Libs/AmiSSL" directory.
+Other shared libraries are usually stored inside the `AmiSSL:Libs/AmiSSL` directory.
 None of these libraries have to be opened directly by any third party application
 but only by 'amisslmaster.library'. The technical details on this can be found in
 the AmiSSL SDK documentation.
@@ -37,21 +37,21 @@ the AmiSSL SDK documentation.
 ### Root Certificates
 
 AmiSSL ships with a bunch of default root certificates and are usually stored in the
-"AmiSSL:certs" directory with every new AmiSSL installation.
+`AmiSSL:certs` directory with every new AmiSSL installation.
 
 Each AmiSSL version comes with full set of root certificates which have been
 synchronized to the ones the Mozilla group is usually distributing with their products
 (e.g. Mozilla Firefox, etc.). And with every new updated AmiSSL version these
 certificates are updated and expired ones are being removed.
 Thus, if you had some earlier versions of AmiSSL installed,
-it is suggested that the old AmiSSL:certs directory is replaced with the
+it is suggested that the old `AmiSSL:certs` directory is replaced with the
 certs directory from the latest AmiSSL archive. If you added some
-certificates to the AmiSSL:certs directory, you should back them up and, if
+certificates to the `AmiSSL:certs` directory, you should back them up and, if
 they haven't expired, copy them back after installing the latest AmiSSL certs
 directory.
 
-Besides the "AmiSSL:certs" directory, a "AmiSSL:usercerts" and "AmiSSL:private"
-directory can be found inside "AmiSSL:" These are not used by AmiSSL, they are meant
+Besides the `AmiSSL:certs` directory, a `AmiSSL:usercerts` and `AmiSSL:private`
+directory can be found inside `AmiSSL:` These are not used by AmiSSL, they are meant
 to be used any application software using AmiSSL.
 
 ### The 'openssl' tool
