@@ -2,13 +2,13 @@ Short:        AmiSSL - OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Jens Maus <mail@jens-maus.de>
 Type:         util/libs
-Version:      4.1
+Version:      4.2
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5, m68k-amigaos >= 3.0, ppc-morphos >= 1.4.5
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.1 of the AmiSSL library for Amiga based operating systems
+This is version 4.2 of the AmiSSL library for Amiga based operating systems
 and the first public open-source based release of AmiSSL. Version 4.x is a new
 major release which comes with full compatibility to the OpenSSL 1.1.x line
 which includes important security related fixes and comes with new encryption
@@ -36,6 +36,19 @@ supported in one of the next releases or please consider joining our team.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.2 (07.03.2018):
+------------------------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.0g (02.11.2017) version.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.haxx.se/ca/
+- Fixed https.c example cleanup code for non-OS4 targets (#18)
+- Reinstated AmigaOS multithreading support and semaphore protection, using
+  the new thread API introduced in OpenSSL 1.1.0 (#17)
+- Include `ppcinline/macros.h` which contains all `LPXX()` macros to use the
+  AmiSSL includes for MorphOS.
+- Minor improvements/fixes.
 
 Version 4.1 (13.03.2017):
 ------------------------
@@ -147,7 +160,7 @@ Legal information
 -----------------
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2017 AmiSSL Open Source Team.
+AmiSSL v4    Copyright (c) 2014-2018 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
