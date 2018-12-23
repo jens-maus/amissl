@@ -39,7 +39,19 @@ static const BIO_METHOD methods_filep =
 };
 
 #ifdef __amigaos4__
-#define FSeek(file, pos, offset) Seek(file, pos, offset)
+#define FSeek(file, pos, mode) Seek(file, pos, mode)
+
+static LONG Seek(BPTR file, LONG pos, LONG mode)
+{
+	int64 ret = GetFilePosition(file);
+
+	if (ret != -1LL)
+	{
+		if (ChangeFilePosition(file,pos,mode) == 0) ret = -1LL;
+	}
+
+	return((LONG)ret);
+}
 #else /* __amigaos4__ */
 #define FFlush(file) Flush(file)
 
