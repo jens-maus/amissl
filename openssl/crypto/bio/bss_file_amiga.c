@@ -41,7 +41,7 @@ static const BIO_METHOD methods_filep =
 #ifdef __amigaos4__
 #define FSeek(file, pos, mode) Seek(file, pos, mode)
 
-static LONG Seek(BPTR file, LONG pos, LONG mode)
+static LONG (Seek)(BPTR file, LONG pos, LONG mode)
 {
 	int64 ret = GetFilePosition(file);
 

@@ -71,6 +71,11 @@ mask_t gf_deserialize(gf x, const uint8_t serial[SER_BYTES], int with_hibit,
 # define LIMBPERM(i) (i)
 # define LIMB_MASK(i) (((1)<<LIMB_PLACE_VALUE(i))-1)
 
+#if defined(OPENSSL_SYS_AMIGA)
+#undef ZERO
+#undef ONE
+#endif
+
 static const gf ZERO = {{{0}}}, ONE = {{{1}}};
 
 /* Square x, n times. */

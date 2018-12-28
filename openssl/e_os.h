@@ -86,6 +86,8 @@
 # elif defined(AMISSL_COMPILE)
 STDARGS void SetAmiSSLerrno(int);
 STDARGS int GetAmiSSLerrno(void);
+#  undef get_last_sys_error
+#  undef clear_sys_error
 #  define get_last_sys_error()    GetAmiSSLerrno()
 #  define clear_sys_error()       SetAmiSSLerrno(0)
 # endif
