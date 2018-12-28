@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2015-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -25,7 +25,7 @@
 #include <openssl/ssl.h>
 #include <openssl/modes.h>
 
-#if (defined(OPENSSL_SYS_UNIX) || defined(OPENSSL_SYS_CYGWIN)) && defined(OPENSSL_THREADS)
+#if defined(OPENSSL_SYS_UNIX) && defined(OPENSSL_THREADS)
 # undef ASYNC_POSIX
 # define ASYNC_POSIX
 # include <unistd.h>
@@ -34,7 +34,6 @@
 # define ASYNC_WIN
 #endif
 
-#define DASYNC_LIB_NAME "DASYNC"
 #include "e_dasync_err.c"
 
 /* Engine Id and Name */
@@ -438,8 +437,8 @@ static void dummy_pause_job(void) {
 #endif
         *writefd = pipefds[1];
 
-        if(!ASYNC_WAIT_CTX_set_wait_fd(waitctx, engine_dasync_id, pipefds[0],
-                                       writefd, wait_cleanup)) {
+        if (!ASYNC_WAIT_CTX_set_wait_fd(waitctx, engine_dasync_id, pipefds[0],
+                                        writefd, wait_cleanup)) {
             wait_cleanup(waitctx, engine_dasync_id, pipefds[0], writefd);
             return;
         }

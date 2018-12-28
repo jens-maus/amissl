@@ -12,7 +12,6 @@ use warnings;
 
 use File::Compare qw/compare_text/;
 use File::Copy;
-use lib 'testlib';
 use OpenSSL::Test qw/:DEFAULT/;
 
 my %conversionforms = (
@@ -24,7 +23,7 @@ my %conversionforms = (
 sub tconversion {
     my $testtype = shift;
     my $t = shift;
-    my @conversionforms = 
+    my @conversionforms =
 	defined($conversionforms{$testtype}) ?
 	@{$conversionforms{$testtype}} :
 	@{$conversionforms{"*"}};
