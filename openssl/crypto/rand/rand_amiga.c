@@ -1,6 +1,7 @@
 #include <openssl/rand.h>
 #include <openssl/sha.h>
 #include "rand_lcl.h"
+#include "internal/rand_int.h"
 
 #ifdef OPENSSL_SYS_AMIGA
 
@@ -38,11 +39,11 @@
 
 #endif /* !__amigaos4__ */
 
-int RAND_poll(void)
+size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 {
 	unsigned char temp_buffer[SHA_DIGEST_LENGTH], data_buffer[SHA_DIGEST_LENGTH];
 	struct MsgPort *port = NULL;
-	double entropy_added = 0;
+	size_t bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
 	struct TimeRequest *time_request = NULL;
 #ifdef __amigaos4__
 	struct IOStdReq *entropy_request = NULL;
@@ -52,7 +53,7 @@ int RAND_poll(void)
 	{
 		if (OpenDevice(TIMERNAME, UNIT_ENTROPY, (struct IORequest *)entropy_request, 0) == 0)
 		{
-			while(entropy_added < ENTROPY_NEEDED)
+			while(bytes_needed > 0)
 			{
 				entropy_request->io_Command = TR_READENTROPY;
 				entropy_request->io_Data = &temp_buffer[0];
@@ -60,9 +61,11 @@ int RAND_poll(void)
 
 				if (DoIO((struct IORequest *)entropy_request) == 0)
 				{
+					size_t bytes_read = entropy_request->io_Actual;
+					if (bytes_read > bytes_needed) bytes_read = bytes_needed;
 					SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-					RAND_add(&data_buffer[0], sizeof(data_buffer), sizeof(data_buffer));
-					entropy_added += sizeof(data_buffer);
+					rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
+					bytes_needed -= bytes_read;
 				}
 				else
 					break;
@@ -79,7 +82,7 @@ int RAND_poll(void)
 	 * a high degree of randomness, but it does the job since RAND_poll is
 	 * called only once by OpenSSL to generate a 32 byte seed.
 	 */
-	if (entropy_added < ENTROPY_NEEDED
+	if (bytes_needed > 0
 	    && (port || (port = CreateMsgPort()))
 	    && (time_request = (struct TimeRequest *)CreateIORequest(port, sizeof(*time_request))))
 	{
@@ -105,7 +108,7 @@ int RAND_poll(void)
 				ReadEClock(&curr_eclock);
 				aborted = FALSE;
 
-				while(!aborted && entropy_added < ENTROPY_NEEDED)
+				while(!aborted && bytes_needed > 0)
 				{
 					for(i = 0;
 					    !aborted && i < (int)sizeof(temp_buffer) - (int)sizeof(ULONG);
@@ -151,9 +154,11 @@ int RAND_poll(void)
 					 */
 					if (!aborted)
 					{
+						size_t bytes_read = sizeof(data_buffer) / 4;
+						if (bytes_read > bytes_needed) bytes_read = bytes_needed;
 						SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-						RAND_add(&data_buffer[0], sizeof(data_buffer), (double)sizeof(data_buffer) / 4);
-						entropy_added += sizeof(data_buffer) / 4;
+						rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
+						bytes_needed -= bytes_read;
 					}
 				}
 			}
@@ -169,7 +174,7 @@ int RAND_poll(void)
 
 	DeleteMsgPort(port);
 
-	return(entropy_added >= ENTROPY_NEEDED);
+	return rand_pool_entropy_available(pool);
 }
 
 #endif /* OPENSSL_SYS_AMIGA */

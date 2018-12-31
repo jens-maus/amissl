@@ -39,6 +39,7 @@
 # ifdef OPENSSL_SYS_AMIGA
 #  define fstat   stat
 #  define fileno
+# endif
 #endif
 
 /*
