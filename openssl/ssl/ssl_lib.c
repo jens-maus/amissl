@@ -5155,13 +5155,13 @@ static int nss_keylog_int(const char *prefix,
     *cursor++ = ' ';
 
     for (i = 0; i < parameter_1_len; i++) {
-        BIO_snprintf(cursor, 2, "%02x", parameter_1[i]);
+        BIO_snprintf(cursor, 3, "%02x", parameter_1[i]);
         cursor += 2;
     }
     *cursor++ = ' ';
 
     for (i = 0; i < parameter_2_len; i++) {
-        BIO_snprintf(cursor, 2, "%02x", parameter_2[i]);
+        BIO_snprintf(cursor, 3, "%02x", parameter_2[i]);
         cursor += 2;
     }
     *cursor = '\0';
