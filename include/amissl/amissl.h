@@ -98,6 +98,7 @@
 #include <openssl/pkcs12.h>
 #include <openssl/pkcs7.h>
 #include <openssl/rand.h>
+#include <openssl/rand_drbg.h>
 #ifndef OPENSSL_NO_RC2
 #include <openssl/rc2.h>
 #endif
@@ -128,6 +129,7 @@
 #include <openssl/ssl2.h>
 #include <openssl/ssl3.h>
 #include <openssl/stack.h>
+#include <openssl/store.h>
 #include <openssl/symhacks.h>
 #include <openssl/tls1.h>
 #include <openssl/ts.h>

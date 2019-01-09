@@ -86,6 +86,18 @@ LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, .
   VA_END(args);
 }
 
+LIBPROTOVA(OSSL_STORE_ctrl, int, UNUSED struct AmiSSLIFace *Self, OSSL_STORE_CTX *ctx, int cmd, ...)
+{
+  VA_LIST args;
+  int ret;
+
+  VA_START(args, cmd);
+  ret = OSSL_STORE_vctrl(ctx,cmd,args);
+  VA_END(args);
+
+  return ret;
+}
+
 int __amigaos4_check68k_check(int (*func)())
 {
   return IExec->IsNative(func);
