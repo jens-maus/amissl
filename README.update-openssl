@@ -79,6 +79,11 @@ HowTo update the OpenSSL version in "openssl/":
    -> 'va_list' types won't work, have a look at how "long *" is used instead
       (e.g. for BIO_printf)
 
+   NOTE: tools/newXMLhelper.pl can be used to help with this, cross-referencing
+   various files and finally generating the required xml output which you may
+   then manually add to the end of amissl.xml - however, the output should
+   still be verified manually as it might not handle every single case.
+
 5. Afterwards you will have to regenerate all interface description files (sfd, fd,
    protos, etc.) using the following command-line:
 
