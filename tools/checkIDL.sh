@@ -1,14 +1,14 @@
 #!/bin/sh
 
-NUM_FILES="../openssl/util/ssleay.num ../openssl/util/libeay.num"
+NUM_FILES="../openssl/util/libssl.num ../openssl/util/libcrypto.num"
 IDL_FILE="../include/xml/amissl.xml"
-OUTINC="../openssl/outinc"
+OUTINC="../include/openssl"
 itest="(\!WIN16.*|\!VMS.*|\!VMSVAX.*|\!EXPORT_VAR_AS_FUNCTION.*|\!NeXT.*|\!OS2.*)"
 
 SYMBOLS=`awk '{
-  if(($3 ~ /^EXIST:\!.*:FUNCTION:.*/ ||
-      $3 ~ /^EXIST:EXPORT_VAR_AS_FUNCTION.*:FUNCTION:.*/ ||
-      $3 ~ /^EXIST::FUNCTION:.*/) && $3 !~ /(KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128|RFC3779)/) print $1
+  if(($4 ~ /^EXIST:\!.*:FUNCTION:.*/ ||
+      $4 ~ /^EXIST:EXPORT_VAR_AS_FUNCTION.*:FUNCTION:.*/ ||
+      $4 ~ /^EXIST::FUNCTION:.*/) && $4 !~ /(KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128|RFC3779)/) print $1
 }' ${NUM_FILES}`
 
 HEADERS=`find ${OUTINC} -name "*.h"`
@@ -26,7 +26,7 @@ for symbol in ${SYMBOLS}; do
     # search in outinc for the prototype
     for header in ${HEADERS}; do
       #awk "/${symbol}\(/,/\);/ {print; count++; if(count=1) exit}" ${header} >>missing_func.xml
-      awk "/${symbol}\(/,/\);/" ${header} >>missing_func.xml
+      awk "/${symbol}\(.*\);/" ${header} >>missing_func.xml
       grep -q "${symbol}(" ${header}
       if [ $? -eq 0 ]; then
         break
