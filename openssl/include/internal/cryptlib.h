@@ -84,7 +84,9 @@ DEFINE_LHASH_OF(MEM);
 
 void OPENSSL_cpuid_setup(void);
 extern unsigned int OPENSSL_ia32cap_P[];
+#if defined(AMISSL_COMPILE)
 void OPENSSL_showfatal(const char *fmta, ...);
+#endif
 void crypto_cleanup_all_ex_data_int(void);
 int openssl_init_fork_handlers(void);
 
