@@ -1074,10 +1074,17 @@ $obj$objext: $deps
 	fi
 EOF
       } else {
-          $recipe .= <<"EOF";
+          if ($config{target} =~ /amiga/) {
+	      $recipe .= <<"EOF";
+$obj$objext: $deps
+	$cmd $cmdflags $incs $cmdcompile -o \$\@ $srcs
+EOF
+	  } else {
+	      $recipe .= <<"EOF";
 $obj$objext: $deps
 	$cmd $incs $cmdflags $cmdcompile -o \$\@ $srcs
 EOF
+	  }
           if (defined $makedepprog  && $makedepprog =~ /\/makedepend/) {
               $recipe .= <<"EOF";
 	\$(MAKEDEPEND) -f- -Y -- $incs $cmdflags -- $srcs 2>/dev/null \\
@@ -1213,6 +1220,10 @@ EOF
                                         " -l$l"
                                     }
                                   } @{$args{deps}});
+      if ($config{target} =~ /amiga/) {
+          $linklibs =~ s/\slib(crypto|ssl)\.a//g;
+          $linklibs =~ s/\s-l(crypto|ssl)//g;
+      }
       my $cmd = '$(CC)';
       my $cmdflags = '$(BIN_CFLAGS)';
       if (grep /_cc\.o$/, @{$args{objs}}) {

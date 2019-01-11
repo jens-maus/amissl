@@ -141,7 +141,11 @@
      $OUT .= obj2lib(lib => $lib,
                      objs => [ @{$unified_info{sources}->{$lib}} ]);
      foreach (@{$unified_info{sources}->{$lib}}) {
-         doobj($_, $lib, intent => "lib", installed => is_installed($lib));
+         if ($config{target} =~ /amiga/ && $lib =~ /\.a$/) {
+            doobj($_, $lib, intent => "bin", installed => is_installed($lib));
+         } else {
+            doobj($_, $lib, intent => "lib", installed => is_installed($lib));
+         }
      }
      $cache{$lib} = 1;
  }
