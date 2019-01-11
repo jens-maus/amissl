@@ -402,6 +402,11 @@ void (OCSP_RESPID_free)(OCSP_RESPID *a)
   OCSP_RESPID_free(a);
 }
 
+void (X509_NAME_free)(X509_NAME *a)
+{
+  X509_NAME_free(a);
+}
+
 // declare stub functions for the ASN1 iterator functions so that within openssl we
 // can directly reference e.g. "ASN1_ANY" and have it calling "IAmiSSL->ASN1_ANY_it()" instead.
 
@@ -542,3 +547,11 @@ ASN1_STUB_FUNC(X509_REVOKED)
 ASN1_STUB_FUNC(X509_SIG)
 ASN1_STUB_FUNC(X509_VAL)
 ASN1_STUB_FUNC(ZLONG)
+ASN1_STUB_FUNC(INT32)
+ASN1_STUB_FUNC(INT64)
+ASN1_STUB_FUNC(UINT32)
+ASN1_STUB_FUNC(UINT64)
+ASN1_STUB_FUNC(ZINT32)
+ASN1_STUB_FUNC(ZINT64)
+ASN1_STUB_FUNC(ZUINT32)
+ASN1_STUB_FUNC(ZUINT64)
