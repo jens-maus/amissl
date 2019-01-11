@@ -1,18 +1,19 @@
---- amissl_glue.c	2016-04-11 17:04:46.797355856 +0200
-+++ amissl_glue.c_patched	2016-04-11 17:07:33.165651386 +0200
-@@ -6,6 +6,11 @@
+--- amissl_glue.c	2019-01-11 19:52:28.000000000 
++++ amissl_glue.c_patched	2019-01-11 19:53:05.000000000 
+@@ -4,6 +4,12 @@
  
- #include "amissl_glue.h"
+ /***************************************************************************/
  
 +#include <internal/cryptlib.h>
 +#include <internal/o_str.h>
++#include <internal/o_dir.h>
 +#include <internal/dso.h>
 +#include <internal/err.h>
 +
- /***************************************************************************/
+ #include "amissl_glue.h"
  
- #if defined(BASEREL)
-@@ -14,11 +18,24 @@
+ /***************************************************************************/
+@@ -14,11 +20,24 @@
  #undef SAVEDS
  #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
  #elif defined(__amigaos3__)
@@ -39,7 +40,7 @@
  #endif // BASEREL
  
  /***************************************************************************/
-@@ -30,24 +47,30 @@
+@@ -30,24 +49,30 @@
  
  // ---
  

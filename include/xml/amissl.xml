@@ -104,7 +104,7 @@
       <arg name="len" type="int" m68kreg="d0"/>
     </method>
     <method name="ASN1_STRING_length" result="int">
-      <arg name="x" type="ASN1_STRING *" m68kreg="a0"/>
+      <arg name="x" type="const ASN1_STRING *" m68kreg="a0"/>
     </method>
     <method name="ASN1_STRING_length_set" result="void">
       <arg name="x" type="ASN1_STRING *" m68kreg="a0"/>
@@ -257,7 +257,7 @@
     </method>
     <method name="ASN1_GENERALIZEDTIME_set_string" result="int">
       <arg name="s" type="ASN1_GENERALIZEDTIME *" m68kreg="a0"/>
-      <arg name="str" type="char *" m68kreg="a1"/>
+      <arg name="str" type="const char *" m68kreg="a1"/>
     </method>
     <method name="ASN1_OCTET_STRING_new" result="ASN1_OCTET_STRING *">
     </method>
@@ -20419,16 +20419,55 @@
     </method>
     <method name="TLS_FEATURE_new" result="TLS_FEATURE *">
     </method>
+    <method name="PEM_write" result="int" status="unimplemented">
+      <arg name="fp" type="FILE *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="hdr" type="const char *" m68kreg="a2"/>
+      <arg name="data" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
     <method name="BIO_f_linebuffer" result="const BIO_METHOD *">
+    </method>
+    <method name="PEM_read" result="int" status="unimplemented">
+      <arg name="fp" type="FILE *" m68kreg="a0"/>
+      <arg name="name" type="char **" m68kreg="a1"/>
+      <arg name="header" type="char **" m68kreg="a2"/>
+      <arg name="data" type="unsigned char **" m68kreg="a3"/>
+      <arg name="len" type="long *" m68kreg="a5"/>
     </method>
     <method name="IPAddressRange_new" result="IPAddressRange *">
     </method>
     <method name="IPAddressRange_it" result="const ASN1_ITEM *">
     </method>
+    <method name="PEM_X509_INFO_read" result="STACK_OF(X509_INFO) *" status="unimplemented">
+      <arg name="fp" type="FILE *" m68kreg="a0"/>
+      <arg name="sk" type="STACK_OF(X509_INFO) *" m68kreg="a1"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="a2"/>
+      <arg name="u" type="void *" m68kreg="a3"/>
+    </method>
     <method name="d2i_IPAddressRange" result="IPAddressRange *">
       <arg name="a" type="IPAddressRange **" m68kreg="a0"/>
       <arg name="in" type="const unsigned char **" m68kreg="a1"/>
       <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="PEM_ASN1_write" result="int" status="unimplemented">
+      <arg name="i2d" type="i2d_of_void *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="fp" type="FILE *" m68kreg="a2"/>
+      <arg name="x" type="void *" m68kreg="a3"/>
+      <arg name="enc" type="const EVP_CIPHER *" m68kreg="a5"/>
+      <arg name="kstr" type="unsigned char *" m68kreg="d0"/>
+      <arg name="klen" type="int" m68kreg="d1"/>
+      <arg name="callback" type="pem_password_cb *" m68kreg="d2"/>
+      <arg name="u" type="void *" m68kreg="d3"/>
+    </method>
+    <method name="PEM_ASN1_read" result="void *" status="unimplemented">
+      <arg name="d2i" type="d2i_of_void *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="fp" type="FILE *" m68kreg="a2"/>
+      <arg name="x" type="void **" m68kreg="a3"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="a5"/>
+      <arg name="u" type="void *" m68kreg="d0"/>
     </method>
     <method name="TLS_FEATURE_free" result="void">
       <arg name="a" type="TLS_FEATURE *" m68kreg="a0"/>
@@ -20446,6 +20485,10 @@
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
     <method name="X509_OBJECT_new" result="X509_OBJECT *">
+    </method>
+    <method name="PKCS12_get_attr" result="ASN1_TYPE *">
+      <arg name="bag" type="const PKCS12_SAFEBAG *" m68kreg="a0"/>
+      <arg name="attr_nid" type="int" m68kreg="d0"/>
     </method>
     <method name="ECPKPARAMETERS_free" result="void">
       <arg name="a" type="ECPKPARAMETERS *" m68kreg="a0"/>
@@ -20682,6 +20725,20 @@
       <arg name="bp" type="BIO *" m68kreg="a5"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
       <arg name="u" type="void *" m68kreg="d1"/>
+    </method>
+    <method name="EVP_DigestSign" result="int">
+      <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
+      <arg name="sigret" type="unsigned char *" m68kreg="a1"/>
+      <arg name="siglen" type="size_t *" m68kreg="a2"/>
+      <arg name="tbs" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="tbslen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="EVP_DigestVerify" result="int">
+      <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
+      <arg name="sigret" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="siglen" type="size_t" m68kreg="d0"/>
+      <arg name="tbs" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="tbslen" type="size_t" m68kreg="d1"/>
     </method>
     <method name="UI_method_get_data_duplicator" result="void *(*)(UI *, void *)">
       <arg name="method" type="const UI_METHOD *" m68kreg="a0"/>
@@ -20933,6 +20990,9 @@
       <arg name="len" type="long" m68kreg="d0"/>
     </method>
     <method name="SCRYPT_PARAMS_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="EVP_PKEY_meth_get0" result="const EVP_PKEY_METHOD *">
+      <arg name="idx" type="size_t" m68kreg="d0"/>
     </method>
     <method name="EVP_PKEY_meth_get_count" result="size_t">
     </method>
@@ -21424,6 +21484,9 @@
     <method name="X509_VERIFY_PARAM_get_hostflags" result="unsigned int">
       <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
     </method>
+    <method name="DH_get0_p" result="const BIGNUM *">
+      <arg name="dh" type="const DH *" m68kreg="a0"/>
+    </method>
     <method name="DH_get0_q" result="const BIGNUM *">
       <arg name="dh" type="const DH *" m68kreg="a0"/>
     </method>
@@ -21445,6 +21508,9 @@
     <method name="DSA_get0_q" result="const BIGNUM *">
       <arg name="d" type="const DSA *" m68kreg="a0"/>
     </method>
+    <method name="DSA_get0_p" result="const BIGNUM *">
+      <arg name="d" type="const DSA *" m68kreg="a0"/>
+    </method>
     <method name="DSA_get0_g" result="const BIGNUM *">
       <arg name="d" type="const DSA *" m68kreg="a0"/>
     </method>
@@ -21459,6 +21525,9 @@
     </method>
     <method name="RSA_get0_dmq1" result="const BIGNUM *">
       <arg name="r" type="const RSA *" m68kreg="a0"/>
+    </method>
+    <method name="RSA_get0_e" result="const BIGNUM *">
+      <arg name="d" type="const RSA *" m68kreg="a0"/>
     </method>
     <method name="RSA_get0_q" result="const BIGNUM *">
       <arg name="d" type="const RSA *" m68kreg="a0"/>
@@ -21493,7 +21562,7 @@
     </method>
     <method name="X509_LOOKUP_meth_set_shutdown" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="shutdown" type="int (*)(X509_LOOKUP *ctx)" m68kreg="a1"/>
+      <arg name="__shutdown" type="int (*)(X509_LOOKUP *ctx)" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_meth_get_new_item" result="int (*)(X509_LOOKUP *ctx)">
       <arg name="method" type="const X509_LOOKUP_METHOD*" m68kreg="a0"/>
@@ -21587,6 +21656,41 @@
     <method name="RAND_keep_random_devices_open" result="void">
       <arg name="keep" type="int" m68kreg="d0"/>
     </method>
+    <method name="EC_POINT_set_compressed_coordinates" result="int">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+      <arg name="p" type="EC_POINT *" m68kreg="a1"/>
+      <arg name="x" type="const BIGNUM *" m68kreg="a2"/>
+      <arg name="y_bit" type="int" m68kreg="d0"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="a3"/>
+    </method>
+    <method name="EC_POINT_set_affine_coordinates" result="int">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+      <arg name="p" type="EC_POINT *" m68kreg="a1"/>
+      <arg name="x" type="const BIGNUM *" m68kreg="a2"/>
+      <arg name="y" type="const BIGNUM *" m68kreg="a3"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+    </method>
+    <method name="EC_POINT_get_affine_coordinates" result="int">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+      <arg name="p" type="const EC_POINT *" m68kreg="a1"/>
+      <arg name="x" type="BIGNUM *" m68kreg="a2"/>
+      <arg name="y" type="BIGNUM *" m68kreg="a3"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+    </method>
+    <method name="EC_GROUP_set_curve" result="int">
+      <arg name="group" type="EC_GROUP *" m68kreg="a0"/>
+      <arg name="p" type="const BIGNUM *" m68kreg="a1"/>
+      <arg name="a" type="const BIGNUM *" m68kreg="a2"/>
+      <arg name="b" type="const BIGNUM *" m68kreg="a3"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+    </method>
+    <method name="EC_GROUP_get_curve" result="int">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+      <arg name="p" type="BIGNUM *" m68kreg="a1"/>
+      <arg name="a" type="BIGNUM *" m68kreg="a2"/>
+      <arg name="b" type="BIGNUM *" m68kreg="a3"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+    </method>
     <method name="OCSP_resp_get0_tbs_sigalg" result="const X509_ALGOR *">
       <arg name="bs" type="const OCSP_BASICRESP *" m68kreg="a0"/>
     </method>
@@ -21604,6 +21708,13 @@
     <method name="EVP_PKEY_meth_get_digest_custom" result="void">
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pdigest_custom" type="int (**)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_DIR_read" result="const char *">
+      <arg name="ctx" type="OPENSSL_DIR_CTX **" m68kreg="a0"/>
+      <arg name="directory" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_DIR_end" result="int">
+      <arg name="ctx" type="OPENSSL_DIR_CTX **" m68kreg="a0"/>
     </method>
 
   </interface>

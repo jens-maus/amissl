@@ -214,11 +214,11 @@ int LIBSTUB_ASN1_STRING_set(void)
   return LIB_ASN1_STRING_set(_base, ___str, ___data, ___len);
 }
 
-int LIB_ASN1_STRING_length(struct Library * _base, ASN1_STRING * ___x);
+int LIB_ASN1_STRING_length(struct Library * _base, const ASN1_STRING * ___x);
 
 int LIBSTUB_ASN1_STRING_length(void)
 {
-  ASN1_STRING * ___x = (ASN1_STRING *)REG_A0;
+  const ASN1_STRING * ___x = (const ASN1_STRING *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_STRING_length(_base, ___x);
 }
@@ -543,12 +543,12 @@ ASN1_GENERALIZEDTIME * LIBSTUB_ASN1_GENERALIZEDTIME_set(void)
   return LIB_ASN1_GENERALIZEDTIME_set(_base, ___s, ___t);
 }
 
-int LIB_ASN1_GENERALIZEDTIME_set_string(struct Library * _base, ASN1_GENERALIZEDTIME * ___s, char * ___str);
+int LIB_ASN1_GENERALIZEDTIME_set_string(struct Library * _base, ASN1_GENERALIZEDTIME * ___s, const char * ___str);
 
 int LIBSTUB_ASN1_GENERALIZEDTIME_set_string(void)
 {
   ASN1_GENERALIZEDTIME * ___s = (ASN1_GENERALIZEDTIME *)REG_A0;
-  char * ___str = (char *)REG_A1;
+  const char * ___str = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_ASN1_GENERALIZEDTIME_set_string(_base, ___s, ___str);
 }
@@ -44294,6 +44294,16 @@ X509_OBJECT * LIBSTUB_X509_OBJECT_new(void)
   return LIB_X509_OBJECT_new(_base);
 }
 
+ASN1_TYPE * LIB_PKCS12_get_attr(struct Library * _base, const PKCS12_SAFEBAG * ___bag, int ___attr_nid);
+
+ASN1_TYPE * LIBSTUB_PKCS12_get_attr(void)
+{
+  const PKCS12_SAFEBAG * ___bag = (const PKCS12_SAFEBAG *)REG_A0;
+  int ___attr_nid = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_PKCS12_get_attr(_base, ___bag, ___attr_nid);
+}
+
 void LIB_ECPKPARAMETERS_free(struct Library * _base, ECPKPARAMETERS * ___a);
 
 void LIBSTUB_ECPKPARAMETERS_free(void)
@@ -44942,6 +44952,32 @@ int LIBSTUB_PEM_bytes_read_bio_secmem(void)
   void * ___u = (void *)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PEM_bytes_read_bio_secmem(_base, ___pdata, ___plen, ___pnm, ___name, ___bp, ___cb, ___u);
+}
+
+int LIB_EVP_DigestSign(struct Library * _base, EVP_MD_CTX * ___ctx, unsigned char * ___sigret, size_t * ___siglen, const unsigned char * ___tbs, size_t ___tbslen);
+
+int LIBSTUB_EVP_DigestSign(void)
+{
+  EVP_MD_CTX * ___ctx = (EVP_MD_CTX *)REG_A0;
+  unsigned char * ___sigret = (unsigned char *)REG_A1;
+  size_t * ___siglen = (size_t *)REG_A2;
+  const unsigned char * ___tbs = (const unsigned char *)REG_A3;
+  size_t ___tbslen = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_DigestSign(_base, ___ctx, ___sigret, ___siglen, ___tbs, ___tbslen);
+}
+
+int LIB_EVP_DigestVerify(struct Library * _base, EVP_MD_CTX * ___ctx, const unsigned char * ___sigret, size_t ___siglen, const unsigned char * ___tbs, size_t ___tbslen);
+
+int LIBSTUB_EVP_DigestVerify(void)
+{
+  EVP_MD_CTX * ___ctx = (EVP_MD_CTX *)REG_A0;
+  const unsigned char * ___sigret = (const unsigned char *)REG_A1;
+  size_t ___siglen = (size_t)REG_D0;
+  const unsigned char * ___tbs = (const unsigned char *)REG_A2;
+  size_t ___tbslen = (size_t)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_DigestVerify(_base, ___ctx, ___sigret, ___siglen, ___tbs, ___tbslen);
 }
 
 void *(* LIB_UI_method_get_data_duplicator(struct Library * _base, const UI_METHOD * ___method))(UI *, void *);
@@ -45608,6 +45644,15 @@ const ASN1_ITEM * LIBSTUB_SCRYPT_PARAMS_it(void)
 {
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_SCRYPT_PARAMS_it(_base);
+}
+
+const EVP_PKEY_METHOD * LIB_EVP_PKEY_meth_get0(struct Library * _base, size_t ___idx);
+
+const EVP_PKEY_METHOD * LIBSTUB_EVP_PKEY_meth_get0(void)
+{
+  size_t ___idx = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_meth_get0(_base, ___idx);
 }
 
 size_t LIB_EVP_PKEY_meth_get_count(struct Library * _base);
@@ -46922,6 +46967,15 @@ unsigned int LIBSTUB_X509_VERIFY_PARAM_get_hostflags(void)
   return LIB_X509_VERIFY_PARAM_get_hostflags(_base, ___param);
 }
 
+const BIGNUM * LIB_DH_get0_p(struct Library * _base, const DH * ___dh);
+
+const BIGNUM * LIBSTUB_DH_get0_p(void)
+{
+  const DH * ___dh = (const DH *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_DH_get0_p(_base, ___dh);
+}
+
 const BIGNUM * LIB_DH_get0_q(struct Library * _base, const DH * ___dh);
 
 const BIGNUM * LIBSTUB_DH_get0_q(void)
@@ -46985,6 +47039,15 @@ const BIGNUM * LIBSTUB_DSA_get0_q(void)
   return LIB_DSA_get0_q(_base, ___d);
 }
 
+const BIGNUM * LIB_DSA_get0_p(struct Library * _base, const DSA * ___d);
+
+const BIGNUM * LIBSTUB_DSA_get0_p(void)
+{
+  const DSA * ___d = (const DSA *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_DSA_get0_p(_base, ___d);
+}
+
 const BIGNUM * LIB_DSA_get0_g(struct Library * _base, const DSA * ___d);
 
 const BIGNUM * LIBSTUB_DSA_get0_g(void)
@@ -47028,6 +47091,15 @@ const BIGNUM * LIBSTUB_RSA_get0_dmq1(void)
   const RSA * ___r = (const RSA *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_get0_dmq1(_base, ___r);
+}
+
+const BIGNUM * LIB_RSA_get0_e(struct Library * _base, const RSA * ___d);
+
+const BIGNUM * LIBSTUB_RSA_get0_e(void)
+{
+  const RSA * ___d = (const RSA *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RSA_get0_e(_base, ___d);
 }
 
 const BIGNUM * LIB_RSA_get0_q(struct Library * _base, const RSA * ___d);
@@ -47121,14 +47193,14 @@ int LIBSTUB_X509_LOOKUP_meth_set_new_item(void)
   return LIB_X509_LOOKUP_meth_set_new_item(_base, ___method, ___new_item);
 }
 
-int LIB_X509_LOOKUP_meth_set_shutdown(struct Library * _base, X509_LOOKUP_METHOD * ___method, int (*___shutdown)(X509_LOOKUP *ctx));
+int LIB_X509_LOOKUP_meth_set_shutdown(struct Library * _base, X509_LOOKUP_METHOD * ___method, int (*_____shutdown)(X509_LOOKUP *ctx));
 
 int LIBSTUB_X509_LOOKUP_meth_set_shutdown(void)
 {
   X509_LOOKUP_METHOD * ___method = (X509_LOOKUP_METHOD *)REG_A0;
-  int (*___shutdown)(X509_LOOKUP *ctx) = (int (*)(X509_LOOKUP *ctx))REG_A1;
+  int (*_____shutdown)(X509_LOOKUP *ctx) = (int (*)(X509_LOOKUP *ctx))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_LOOKUP_meth_set_shutdown(_base, ___method, ___shutdown);
+  return LIB_X509_LOOKUP_meth_set_shutdown(_base, ___method, _____shutdown);
 }
 
 int (* LIB_X509_LOOKUP_meth_get_new_item(struct Library * _base, const X509_LOOKUP_METHOD* ___method))(X509_LOOKUP *ctx);
@@ -47373,6 +47445,71 @@ void LIBSTUB_RAND_keep_random_devices_open(void)
   return LIB_RAND_keep_random_devices_open(_base, ___keep);
 }
 
+int LIB_EC_POINT_set_compressed_coordinates(struct Library * _base, const EC_GROUP * ___group, EC_POINT * ___p, const BIGNUM * ___x, int ___y_bit, BN_CTX * ___ctx);
+
+int LIBSTUB_EC_POINT_set_compressed_coordinates(void)
+{
+  const EC_GROUP * ___group = (const EC_GROUP *)REG_A0;
+  EC_POINT * ___p = (EC_POINT *)REG_A1;
+  const BIGNUM * ___x = (const BIGNUM *)REG_A2;
+  int ___y_bit = (int)REG_D0;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_POINT_set_compressed_coordinates(_base, ___group, ___p, ___x, ___y_bit, ___ctx);
+}
+
+int LIB_EC_POINT_set_affine_coordinates(struct Library * _base, const EC_GROUP * ___group, EC_POINT * ___p, const BIGNUM * ___x, const BIGNUM * ___y, BN_CTX * ___ctx);
+
+int LIBSTUB_EC_POINT_set_affine_coordinates(void)
+{
+  const EC_GROUP * ___group = (const EC_GROUP *)REG_A0;
+  EC_POINT * ___p = (EC_POINT *)REG_A1;
+  const BIGNUM * ___x = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___y = (const BIGNUM *)REG_A3;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_POINT_set_affine_coordinates(_base, ___group, ___p, ___x, ___y, ___ctx);
+}
+
+int LIB_EC_POINT_get_affine_coordinates(struct Library * _base, const EC_GROUP * ___group, const EC_POINT * ___p, BIGNUM * ___x, BIGNUM * ___y, BN_CTX * ___ctx);
+
+int LIBSTUB_EC_POINT_get_affine_coordinates(void)
+{
+  const EC_GROUP * ___group = (const EC_GROUP *)REG_A0;
+  const EC_POINT * ___p = (const EC_POINT *)REG_A1;
+  BIGNUM * ___x = (BIGNUM *)REG_A2;
+  BIGNUM * ___y = (BIGNUM *)REG_A3;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_POINT_get_affine_coordinates(_base, ___group, ___p, ___x, ___y, ___ctx);
+}
+
+int LIB_EC_GROUP_set_curve(struct Library * _base, EC_GROUP * ___group, const BIGNUM * ___p, const BIGNUM * ___a, const BIGNUM * ___b, BN_CTX * ___ctx);
+
+int LIBSTUB_EC_GROUP_set_curve(void)
+{
+  EC_GROUP * ___group = (EC_GROUP *)REG_A0;
+  const BIGNUM * ___p = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___a = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___b = (const BIGNUM *)REG_A3;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_GROUP_set_curve(_base, ___group, ___p, ___a, ___b, ___ctx);
+}
+
+int LIB_EC_GROUP_get_curve(struct Library * _base, const EC_GROUP * ___group, BIGNUM * ___p, BIGNUM * ___a, BIGNUM * ___b, BN_CTX * ___ctx);
+
+int LIBSTUB_EC_GROUP_get_curve(void)
+{
+  const EC_GROUP * ___group = (const EC_GROUP *)REG_A0;
+  BIGNUM * ___p = (BIGNUM *)REG_A1;
+  BIGNUM * ___a = (BIGNUM *)REG_A2;
+  BIGNUM * ___b = (BIGNUM *)REG_A3;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_GROUP_get_curve(_base, ___group, ___p, ___a, ___b, ___ctx);
+}
+
 const X509_ALGOR * LIB_OCSP_resp_get0_tbs_sigalg(struct Library * _base, const OCSP_BASICRESP * ___bs);
 
 const X509_ALGOR * LIBSTUB_OCSP_resp_get0_tbs_sigalg(void)
@@ -47419,6 +47556,25 @@ void LIBSTUB_EVP_PKEY_meth_get_digest_custom(void)
   int (*___pdigest_custom)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx) = (int (*)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_digest_custom(_base, ___pmeth, ___pdigest_custom);
+}
+
+const char * LIB_OPENSSL_DIR_read(struct Library * _base, OPENSSL_DIR_CTX ** ___ctx, const char * ___directory);
+
+const char * LIBSTUB_OPENSSL_DIR_read(void)
+{
+  OPENSSL_DIR_CTX ** ___ctx = (OPENSSL_DIR_CTX **)REG_A0;
+  const char * ___directory = (const char *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_DIR_read(_base, ___ctx, ___directory);
+}
+
+int LIB_OPENSSL_DIR_end(struct Library * _base, OPENSSL_DIR_CTX ** ___ctx);
+
+int LIBSTUB_OPENSSL_DIR_end(void)
+{
+  OPENSSL_DIR_CTX ** ___ctx = (OPENSSL_DIR_CTX **)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_DIR_end(_base, ___ctx);
 }
 
 

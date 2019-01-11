@@ -149,4 +149,9 @@
 
 #include <amissl/tags.h>
 
+// internal typedefs
+#ifndef O_DIR_H
+typedef struct OPENSSL_dir_context_st OPENSSL_DIR_CTX;
+#endif
+
 #endif /* AMISSL_AMISSL_H */

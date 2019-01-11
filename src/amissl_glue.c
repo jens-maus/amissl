@@ -4,12 +4,13 @@
 
 /***************************************************************************/
 
-#include "amissl_glue.h"
-
 #include <internal/cryptlib.h>
 #include <internal/o_str.h>
+#include <internal/o_dir.h>
 #include <internal/dso.h>
 #include <internal/err.h>
+
+#include "amissl_glue.h"
 
 /***************************************************************************/
 
@@ -201,7 +202,7 @@ int SAVEDS ASM LIB_ASN1_STRING_set(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_STRING_length(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_STRING * x))
+int SAVEDS ASM LIB_ASN1_STRING_length(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const ASN1_STRING * x))
 {
 	return ASN1_STRING_length(x);
 }
@@ -439,7 +440,7 @@ ASN1_GENERALIZEDTIME * SAVEDS ASM LIB_ASN1_GENERALIZEDTIME_set(REG(a6, UNUSED __
 
 // ---
 
-int SAVEDS ASM LIB_ASN1_GENERALIZEDTIME_set_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_GENERALIZEDTIME * s), REG(a1, char * str))
+int SAVEDS ASM LIB_ASN1_GENERALIZEDTIME_set_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ASN1_GENERALIZEDTIME * s), REG(a1, const char * str))
 {
 	return ASN1_GENERALIZEDTIME_set_string(s, str);
 }
@@ -30821,6 +30822,13 @@ X509_OBJECT * SAVEDS ASM LIB_X509_OBJECT_new(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
+ASN1_TYPE * SAVEDS ASM LIB_PKCS12_get_attr(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const PKCS12_SAFEBAG * bag), REG(d0, int attr_nid))
+{
+	return PKCS12_get_attr(bag, attr_nid);
+}
+
+// ---
+
 void SAVEDS ASM LIB_ECPKPARAMETERS_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, ECPKPARAMETERS * a))
 {
 	ECPKPARAMETERS_free(a);
@@ -31300,6 +31308,20 @@ int SAVEDS ASM LIB_PEM_read_bio_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO 
 int SAVEDS ASM LIB_PEM_bytes_read_bio_secmem(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, unsigned char ** pdata), REG(a1, long * plen), REG(a2, char ** pnm), REG(a3, const char * name), REG(a5, BIO * bp), REG(d0, pem_password_cb * cb), REG(d1, void * u))
 {
 	return PEM_bytes_read_bio_secmem(pdata, plen, pnm, name, bp, cb, u);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EVP_DigestSign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_MD_CTX * ctx), REG(a1, unsigned char * sigret), REG(a2, size_t * siglen), REG(a3, const unsigned char * tbs), REG(d0, size_t tbslen))
+{
+	return EVP_DigestSign(ctx, sigret, siglen, tbs, tbslen);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EVP_DigestVerify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_MD_CTX * ctx), REG(a1, const unsigned char * sigret), REG(d0, size_t siglen), REG(a2, const unsigned char * tbs), REG(d1, size_t tbslen))
+{
+	return EVP_DigestVerify(ctx, sigret, siglen, tbs, tbslen);
 }
 
 // ---
@@ -31790,6 +31812,13 @@ SCRYPT_PARAMS * SAVEDS ASM LIB_d2i_SCRYPT_PARAMS(REG(a6, UNUSED __IFACE_OR_BASE)
 const ASN1_ITEM * SAVEDS ASM LIB_SCRYPT_PARAMS_it(REG(a6, UNUSED __IFACE_OR_BASE))
 {
 	return SCRYPT_PARAMS_it();
+}
+
+// ---
+
+const EVP_PKEY_METHOD * SAVEDS ASM LIB_EVP_PKEY_meth_get0(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, size_t idx))
+{
+	return EVP_PKEY_meth_get0(idx);
 }
 
 // ---
@@ -32763,6 +32792,13 @@ unsigned int SAVEDS ASM LIB_X509_VERIFY_PARAM_get_hostflags(REG(a6, UNUSED __IFA
 
 // ---
 
+const BIGNUM * SAVEDS ASM LIB_DH_get0_p(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh))
+{
+	return DH_get0_p(dh);
+}
+
+// ---
+
 const BIGNUM * SAVEDS ASM LIB_DH_get0_q(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DH * dh))
 {
 	return DH_get0_q(dh);
@@ -32812,6 +32848,13 @@ const BIGNUM * SAVEDS ASM LIB_DSA_get0_q(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
+const BIGNUM * SAVEDS ASM LIB_DSA_get0_p(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d))
+{
+	return DSA_get0_p(d);
+}
+
+// ---
+
 const BIGNUM * SAVEDS ASM LIB_DSA_get0_g(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const DSA * d))
 {
 	return DSA_get0_g(d);
@@ -32843,6 +32886,13 @@ const BIGNUM * SAVEDS ASM LIB_RSA_get0_n(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 const BIGNUM * SAVEDS ASM LIB_RSA_get0_dmq1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r))
 {
 	return RSA_get0_dmq1(r);
+}
+
+// ---
+
+const BIGNUM * SAVEDS ASM LIB_RSA_get0_e(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * d))
+{
+	return RSA_get0_e(d);
 }
 
 // ---
@@ -32917,9 +32967,9 @@ int SAVEDS ASM LIB_X509_LOOKUP_meth_set_new_item(REG(a6, UNUSED __IFACE_OR_BASE)
 
 // ---
 
-int SAVEDS ASM LIB_X509_LOOKUP_meth_set_shutdown(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP_METHOD * method), REG(a1, int (*shutdown)(X509_LOOKUP *ctx)))
+int SAVEDS ASM LIB_X509_LOOKUP_meth_set_shutdown(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_LOOKUP_METHOD * method), REG(a1, int (*__shutdown)(X509_LOOKUP *ctx)))
 {
-	return X509_LOOKUP_meth_set_shutdown(method, shutdown);
+	return X509_LOOKUP_meth_set_shutdown(method, __shutdown);
 }
 
 // ---
@@ -33099,6 +33149,41 @@ void SAVEDS ASM LIB_RAND_keep_random_devices_open(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
+int SAVEDS ASM LIB_EC_POINT_set_compressed_coordinates(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_GROUP * group), REG(a1, EC_POINT * p), REG(a2, const BIGNUM * x), REG(d0, int y_bit), REG(a3, BN_CTX * ctx))
+{
+	return EC_POINT_set_compressed_coordinates(group, p, x, y_bit, ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EC_POINT_set_affine_coordinates(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_GROUP * group), REG(a1, EC_POINT * p), REG(a2, const BIGNUM * x), REG(a3, const BIGNUM * y), REG(a5, BN_CTX * ctx))
+{
+	return EC_POINT_set_affine_coordinates(group, p, x, y, ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EC_POINT_get_affine_coordinates(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_GROUP * group), REG(a1, const EC_POINT * p), REG(a2, BIGNUM * x), REG(a3, BIGNUM * y), REG(a5, BN_CTX * ctx))
+{
+	return EC_POINT_get_affine_coordinates(group, p, x, y, ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EC_GROUP_set_curve(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EC_GROUP * group), REG(a1, const BIGNUM * p), REG(a2, const BIGNUM * a), REG(a3, const BIGNUM * b), REG(a5, BN_CTX * ctx))
+{
+	return EC_GROUP_set_curve(group, p, a, b, ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EC_GROUP_get_curve(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_GROUP * group), REG(a1, BIGNUM * p), REG(a2, BIGNUM * a), REG(a3, BIGNUM * b), REG(a5, BN_CTX * ctx))
+{
+	return EC_GROUP_get_curve(group, p, a, b, ctx);
+}
+
+// ---
+
 const X509_ALGOR * SAVEDS ASM LIB_OCSP_resp_get0_tbs_sigalg(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OCSP_BASICRESP * bs))
 {
 	return OCSP_resp_get0_tbs_sigalg(bs);
@@ -33130,6 +33215,20 @@ void SAVEDS ASM LIB_EVP_PKEY_meth_set_digest_custom(REG(a6, UNUSED __IFACE_OR_BA
 void SAVEDS ASM LIB_EVP_PKEY_meth_get_digest_custom(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**pdigest_custom)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)))
 {
 	EVP_PKEY_meth_get_digest_custom(pmeth, pdigest_custom);
+}
+
+// ---
+
+const char * SAVEDS ASM LIB_OPENSSL_DIR_read(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_DIR_CTX ** ctx), REG(a1, const char * directory))
+{
+	return OPENSSL_DIR_read(ctx, directory);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OPENSSL_DIR_end(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_DIR_CTX ** ctx))
+{
+	return OPENSSL_DIR_end(ctx);
 }
 
 // ---

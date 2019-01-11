@@ -5022,15 +5022,21 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SSL_get_signature_type_nid
 	    FPTR IAmiSSL_IPAddressRange_free
 	    FPTR IAmiSSL_TLS_FEATURE_new
+	    FPTR AmiSSLIFace_PEM_write_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_f_linebuffer
+	    FPTR AmiSSLIFace_PEM_read_UNIMPLEMENTED
 	    FPTR IAmiSSL_IPAddressRange_new
 	    FPTR IAmiSSL_IPAddressRange_it
+	    FPTR AmiSSLIFace_PEM_X509_INFO_read_UNIMPLEMENTED
 	    FPTR IAmiSSL_d2i_IPAddressRange
+	    FPTR AmiSSLIFace_PEM_ASN1_write_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_PEM_ASN1_read_UNIMPLEMENTED
 	    FPTR IAmiSSL_TLS_FEATURE_free
 	    FPTR IAmiSSL_i2d_RSA_OAEP_PARAMS
 	    FPTR AmiSSLIFace_PEM_write_DHxparams_UNIMPLEMENTED
 	    FPTR IAmiSSL_i2d_IPAddressRange
 	    FPTR IAmiSSL_X509_OBJECT_new
+	    FPTR IAmiSSL_PKCS12_get_attr
 	    FPTR IAmiSSL_ECPKPARAMETERS_free
 	    FPTR IAmiSSL_ECPKPARAMETERS_new
 	    FPTR IAmiSSL_ASN1_ITEM_lookup
@@ -5100,6 +5106,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ESS_CERT_ID_V2_new
 	    FPTR IAmiSSL_PEM_read_bio_ex
 	    FPTR IAmiSSL_PEM_bytes_read_bio_secmem
+	    FPTR IAmiSSL_EVP_DigestSign
+	    FPTR IAmiSSL_EVP_DigestVerify
 	    FPTR IAmiSSL_UI_method_get_data_duplicator
 	    FPTR IAmiSSL_UI_method_set_data_duplicator
 	    FPTR IAmiSSL_UI_dup_user_data
@@ -5171,6 +5179,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_i2d_SCRYPT_PARAMS
 	    FPTR IAmiSSL_d2i_SCRYPT_PARAMS
 	    FPTR IAmiSSL_SCRYPT_PARAMS_it
+	    FPTR IAmiSSL_EVP_PKEY_meth_get0
 	    FPTR IAmiSSL_EVP_PKEY_meth_get_count
 	    FPTR IAmiSSL_RAND_DRBG_get0_public
 	    FPTR IAmiSSL_RAND_priv_bytes
@@ -5308,6 +5317,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_asn1_set_set_pub_key
 	    FPTR IAmiSSL_RAND_DRBG_set_defaults
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_hostflags
+	    FPTR IAmiSSL_DH_get0_p
 	    FPTR IAmiSSL_DH_get0_q
 	    FPTR IAmiSSL_DH_get0_g
 	    FPTR IAmiSSL_DH_get0_priv_key
@@ -5315,11 +5325,13 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_DSA_get0_priv_key
 	    FPTR IAmiSSL_DSA_get0_pub_key
 	    FPTR IAmiSSL_DSA_get0_q
+	    FPTR IAmiSSL_DSA_get0_p
 	    FPTR IAmiSSL_DSA_get0_g
 	    FPTR IAmiSSL_RSA_get0_dmp1
 	    FPTR IAmiSSL_RSA_get0_d
 	    FPTR IAmiSSL_RSA_get0_n
 	    FPTR IAmiSSL_RSA_get0_dmq1
+	    FPTR IAmiSSL_RSA_get0_e
 	    FPTR IAmiSSL_RSA_get0_q
 	    FPTR IAmiSSL_RSA_get0_p
 	    FPTR IAmiSSL_RSA_get0_iqmp
@@ -5356,11 +5368,18 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_asn1_set_get_pub_key
 	    FPTR IAmiSSL_EVP_PKEY_set_alias_type
 	    FPTR IAmiSSL_RAND_keep_random_devices_open
+	    FPTR IAmiSSL_EC_POINT_set_compressed_coordinates
+	    FPTR IAmiSSL_EC_POINT_set_affine_coordinates
+	    FPTR IAmiSSL_EC_POINT_get_affine_coordinates
+	    FPTR IAmiSSL_EC_GROUP_set_curve
+	    FPTR IAmiSSL_EC_GROUP_get_curve
 	    FPTR IAmiSSL_OCSP_resp_get0_tbs_sigalg
 	    FPTR IAmiSSL_OCSP_resp_get0_respdata
 	    FPTR IAmiSSL_EVP_MD_CTX_set_pkey_ctx
 	    FPTR IAmiSSL_EVP_PKEY_meth_set_digest_custom
 	    FPTR IAmiSSL_EVP_PKEY_meth_get_digest_custom
+	    FPTR IAmiSSL_OPENSSL_DIR_read
+	    FPTR IAmiSSL_OPENSSL_DIR_end
 	LABEL AmiSSLIFace_SIZE
 
 #endif
