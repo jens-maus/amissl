@@ -47,7 +47,7 @@ sub get_new_symbols {
          $columns[3] =~ /^EXIST:EXPORT_VAR_AS_FUNCTION.*:FUNCTION:.*/ ||
          $columns[3] =~ /^EXIST::FUNCTION:.*/)
       {
-         if ($idl !~ /$columns[0]/ ) {
+         if ($idl !~ /name="$columns[0]"/ ) {
             my $unimplemented = 0;
             if ($columns[3] =~ /(STDIO|KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128)/) {
                $unimplemented = 1;
