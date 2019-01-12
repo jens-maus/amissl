@@ -1211,6 +1211,7 @@ int SAVEDS ASM LIB_SSL_CTX_use_certificate_chain_file(REG(a6, __IFACE_OR_BASE), 
 STACK_OF(X509_NAME) * SAVEDS ASM LIB_SSL_load_client_CA_file(REG(a6, __IFACE_OR_BASE), REG(a0, const char * file));
 int SAVEDS ASM LIB_SSL_add_file_cert_subjects_to_stack(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * stackCAs), REG(a1, const char * file));
 int SAVEDS ASM LIB_SSL_add_dir_cert_subjects_to_stack(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_NAME) * stackCAs), REG(a1, const char * dir));
+const char * SAVEDS ASM LIB_SSL_state_string(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_rstate_string(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_state_string_long(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 const char * SAVEDS ASM LIB_SSL_rstate_string_long(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
@@ -6215,7 +6216,7 @@ int SAVEDS ASM LIB_OPENSSL_DIR_end(REG(a6, __IFACE_OR_BASE), REG(a0, OPENSSL_DIR
     LFUNC_FA_(SSL_add_file_cert_subjects_to_stack) \
     LFUNC_FA_(SSL_add_dir_cert_subjects_to_stack) \
     LFUNC_FA_(UNIMPLEMENTED) /* SSL_load_error_strings */ \
-    LFUNC_FA_(UNIMPLEMENTED) /* SSL_state_string */ \
+    LFUNC_FA_(SSL_state_string) \
     LFUNC_FA_(SSL_rstate_string) \
     LFUNC_FA_(SSL_state_string_long) \
     LFUNC_FA_(SSL_rstate_string_long) \

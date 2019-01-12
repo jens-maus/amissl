@@ -4689,6 +4689,10 @@ typedef ULONG _sfdc_vararg;
       LP2(0x214e, int, SSL_add_dir_cert_subjects_to_stack , STACK_OF(X509_NAME) *, ___stackCAs, a0, const char *, ___dir, a1,\
       , AMISSL_BASE_NAME)
 
+#define SSL_state_string(___s) \
+      LP1(0x215a, const char *, SSL_state_string , const SSL *, ___s, a0,\
+      , AMISSL_BASE_NAME)
+
 #define SSL_rstate_string(___s) \
       LP1(0x2160, const char *, SSL_rstate_string , const SSL *, ___s, a0,\
       , AMISSL_BASE_NAME)

@@ -1222,7 +1222,8 @@ SSL_CTX_use_certificate_chain_file(ctx,file)(a0,a1)
 SSL_load_client_CA_file(file)(a0)
 SSL_add_file_cert_subjects_to_stack(stackCAs,file)(a0,a1)
 SSL_add_dir_cert_subjects_to_stack(stackCAs,dir)(a0,a1)
-##bias 8544
+##bias 8538
+SSL_state_string(s)(a0)
 SSL_rstate_string(s)(a0)
 SSL_state_string_long(s)(a0)
 SSL_rstate_string_long(s)(a0)

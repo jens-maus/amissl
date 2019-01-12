@@ -1461,7 +1461,7 @@ struct AmiSSLIFace
 	int APICALL (*SSL_add_file_cert_subjects_to_stack)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * stackCAs, const char * file);
 	int APICALL (*SSL_add_dir_cert_subjects_to_stack)(struct AmiSSLIFace *Self, STACK_OF(X509_NAME) * stackCAs, const char * dir);
 	APTR SSL_load_error_strings_UNIMPLEMENTED;
-	APTR SSL_state_string_UNIMPLEMENTED;
+	const char * APICALL (*SSL_state_string)(struct AmiSSLIFace *Self, const SSL * s);
 	const char * APICALL (*SSL_rstate_string)(struct AmiSSLIFace *Self, const SSL * s);
 	const char * APICALL (*SSL_state_string_long)(struct AmiSSLIFace *Self, const SSL * s);
 	const char * APICALL (*SSL_rstate_string_long)(struct AmiSSLIFace *Self, const SSL * s);

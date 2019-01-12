@@ -5678,7 +5678,7 @@
     </method>
     <method name="SSL_load_error_strings" result="void" status="unimplemented">
     </method>
-    <method name="SSL_state_string" result="const char *" status="unimplemented">
+    <method name="SSL_state_string" result="const char *">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_rstate_string" result="const char *">

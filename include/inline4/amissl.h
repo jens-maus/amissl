@@ -1216,6 +1216,7 @@
 #define SSL_load_client_CA_file(file) IAmiSSL->SSL_load_client_CA_file((file))
 #define SSL_add_file_cert_subjects_to_stack(stackCAs, file) IAmiSSL->SSL_add_file_cert_subjects_to_stack((stackCAs), (file))
 #define SSL_add_dir_cert_subjects_to_stack(stackCAs, dir) IAmiSSL->SSL_add_dir_cert_subjects_to_stack((stackCAs), (dir))
+#define SSL_state_string(s) IAmiSSL->SSL_state_string((s))
 #define SSL_rstate_string(s) IAmiSSL->SSL_rstate_string((s))
 #define SSL_state_string_long(s) IAmiSSL->SSL_state_string_long((s))
 #define SSL_rstate_string_long(s) IAmiSSL->SSL_rstate_string_long((s))

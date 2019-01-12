@@ -1179,6 +1179,7 @@ LIBSTUB(SSL_CTX_use_certificate_chain_file, int);
 LIBSTUB(SSL_load_client_CA_file, STACK_OF(X509_NAME) *);
 LIBSTUB(SSL_add_file_cert_subjects_to_stack, int);
 LIBSTUB(SSL_add_dir_cert_subjects_to_stack, int);
+LIBSTUB(SSL_state_string, const char *);
 LIBSTUB(SSL_rstate_string, const char *);
 LIBSTUB(SSL_state_string_long, const char *);
 LIBSTUB(SSL_rstate_string_long, const char *);

@@ -11722,6 +11722,15 @@ int LIBSTUB_SSL_add_dir_cert_subjects_to_stack(void)
   return LIB_SSL_add_dir_cert_subjects_to_stack(_base, ___stackCAs, ___dir);
 }
 
+const char * LIB_SSL_state_string(struct Library * _base, const SSL * ___s);
+
+const char * LIBSTUB_SSL_state_string(void)
+{
+  const SSL * ___s = (const SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_state_string(_base, ___s);
+}
+
 const char * LIB_SSL_rstate_string(struct Library * _base, const SSL * ___s);
 
 const char * LIBSTUB_SSL_rstate_string(void)

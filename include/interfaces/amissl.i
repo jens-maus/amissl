@@ -1437,7 +1437,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SSL_add_file_cert_subjects_to_stack
 	    FPTR IAmiSSL_SSL_add_dir_cert_subjects_to_stack
 	    FPTR AmiSSLIFace_SSL_load_error_strings_UNIMPLEMENTED
-	    FPTR AmiSSLIFace_SSL_state_string_UNIMPLEMENTED
+	    FPTR IAmiSSL_SSL_state_string
 	    FPTR IAmiSSL_SSL_rstate_string
 	    FPTR IAmiSSL_SSL_state_string_long
 	    FPTR IAmiSSL_SSL_rstate_string_long

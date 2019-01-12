@@ -1236,7 +1236,8 @@ int SSL_CTX_use_certificate_chain_file(SSL_CTX * ctx, const char * file) (a0,a1)
 STACK_OF(X509_NAME) * SSL_load_client_CA_file(const char * file) (a0)
 int SSL_add_file_cert_subjects_to_stack(STACK_OF(X509_NAME) * stackCAs, const char * file) (a0,a1)
 int SSL_add_dir_cert_subjects_to_stack(STACK_OF(X509_NAME) * stackCAs, const char * dir) (a0,a1)
-==reserve 2
+==reserve 1
+const char * SSL_state_string(const SSL * s) (a0)
 const char * SSL_rstate_string(const SSL * s) (a0)
 const char * SSL_state_string_long(const SSL * s) (a0)
 const char * SSL_rstate_string_long(const SSL * s) (a0)

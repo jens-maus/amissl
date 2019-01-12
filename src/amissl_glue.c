@@ -8219,6 +8219,13 @@ int SAVEDS ASM LIB_SSL_add_dir_cert_subjects_to_stack(REG(a6, UNUSED __IFACE_OR_
 
 // ---
 
+const char * SAVEDS ASM LIB_SSL_state_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL * s))
+{
+	return SSL_state_string(s);
+}
+
+// ---
+
 const char * SAVEDS ASM LIB_SSL_rstate_string(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL * s))
 {
 	return SSL_rstate_string(s);

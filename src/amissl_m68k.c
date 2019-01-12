@@ -17348,6 +17348,20 @@ STATIC CONST struct EmuTrap stub_main_SSL_add_dir_cert_subjects_to_stack = { TRA
 
 // ---
 
+STATIC const char * stub_main_SSL_state_string_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->SSL_state_string(
+		(const SSL *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_SSL_state_string = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SSL_state_string_PPC };
+
+// ---
+
 STATIC const char * stub_main_SSL_rstate_string_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -72057,7 +72071,7 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_SSL_add_file_cert_subjects_to_stack,
 	&stub_main_SSL_add_dir_cert_subjects_to_stack,
 	&stub_main_UNIMPLEMENTED, /* SSL_load_error_strings */
-	&stub_main_UNIMPLEMENTED, /* SSL_state_string */
+	&stub_main_SSL_state_string,
 	&stub_main_SSL_rstate_string,
 	&stub_main_SSL_state_string_long,
 	&stub_main_SSL_rstate_string_long,

@@ -7095,6 +7095,11 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___dir), A1), \
      struct Library *, AMISSL_BASE_NAME, 1421, Amissl)
 
+#define SSL_state_string(___s) \
+      AROS_LC1(const char *, SSL_state_string, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSL_BASE_NAME, 1423, Amissl)
+
 #define SSL_rstate_string(___s) \
       AROS_LC1(const char *, SSL_rstate_string, \
  AROS_LCA(const SSL *, (___s), A0), \
