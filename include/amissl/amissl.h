@@ -1,14 +1,13 @@
-#ifndef AMISSL_AMISSL_H
-
 /* 
  * Make sure that this file is included from proto/amissl.h
  * so that the dependancies don't cause errors
  */
-#ifdef PROTO_AMISSL_H
-#define AMISSL_AMISSL_H
-#else
+#ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
 #endif
+
+#ifndef AMISSL_AMISSL_H
+#define AMISSL_AMISSL_H
 
 #ifdef __SASC
 #define ssize_t int
