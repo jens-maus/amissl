@@ -120,7 +120,7 @@ static STACK_OF(X509) *load_chain(BIO *fp, int nelem)
             else
                 cert = d2i_X509_AUX(0, &p, len);
 
-            if (!TEST_ptr(cert))
+            if (!TEST_ptr(cert)
                     || !TEST_long_eq(p - data, len)) {
                 TEST_info("Certificate parsing error");
                 goto err;
