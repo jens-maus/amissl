@@ -327,7 +327,11 @@ static int indent_printf(int indent, BIO *bio, const char *format, ...)
 
     va_start(args, format);
 
+#if defined(OPENSSL_SYS_AMIGA)
+    ret = BIO_printf(bio, "%*s", indent, "") + BIO_vprintf(bio, format, va_arg(args, long *));
+#else
     ret = BIO_printf(bio, "%*s", indent, "") + BIO_vprintf(bio, format, args);
+#endif
 
     va_end(args);
     return ret;

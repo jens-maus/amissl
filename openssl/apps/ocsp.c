@@ -822,7 +822,11 @@ log_message(int level, const char *fmt, ...)
 # endif
     if (!multi) {
         BIO_printf(bio_err, "%s: ", prog);
+#if defined(OPENSSL_SYS_AMIGA)
+        BIO_vprintf(bio_err, fmt, va_arg(ap, long *));
+#else
         BIO_vprintf(bio_err, fmt, ap);
+#endif
         BIO_printf(bio_err, "\n");
     }
     va_end(ap);
