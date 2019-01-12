@@ -77,7 +77,12 @@ static char **lookup_serial(CA_DB *db, ASN1_INTEGER *ser);
 static BIO *init_responder(const char *port);
 static int do_responder(OCSP_REQUEST **preq, BIO **pcbio, BIO *acbio, int timeout);
 static int send_ocsp_response(BIO *cbio, OCSP_RESPONSE *resp);
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+static void VARARGS68K log_message(int level, const char *fmt, ...);
+#else
 static void log_message(int level, const char *fmt, ...);
+#endif
 static char *prog;
 static int multi = 0;
 
@@ -804,6 +809,31 @@ redo_accept:
     return ret;
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+static void VARARGS68K
+log_message(int level, const char *fmt, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, fmt);
+# ifdef OCSP_DAEMON
+    if (multi) {
+        char buf[1024];
+        if (vsnprintf(buf, sizeof(buf), fmt, ap) > 0) {
+            syslog(level, "%s", buf);
+        }
+        if (level >= LOG_ERR)
+            ERR_print_errors_cb(print_syslog, &level);
+    }
+# endif
+    if (!multi) {
+        BIO_printf(bio_err, "%s: ", prog);
+        BIO_vprintf(bio_err, fmt, VA_ARG(ap, long *));
+        BIO_printf(bio_err, "\n");
+    }
+    VA_END(ap);
+}
+#else
 static void
 log_message(int level, const char *fmt, ...)
 {
@@ -822,15 +852,12 @@ log_message(int level, const char *fmt, ...)
 # endif
     if (!multi) {
         BIO_printf(bio_err, "%s: ", prog);
-#if defined(OPENSSL_SYS_AMIGA)
-        BIO_vprintf(bio_err, fmt, va_arg(ap, long *));
-#else
         BIO_vprintf(bio_err, fmt, ap);
-#endif
         BIO_printf(bio_err, "\n");
     }
     va_end(ap);
 }
+#endif
 
 # ifdef OCSP_DAEMON
 

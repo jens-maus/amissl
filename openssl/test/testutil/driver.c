@@ -151,6 +151,26 @@ void set_test_title(const char *title)
     test_title = title == NULL ? NULL : strdup(title);
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+PRINTF_FORMAT(2, 3) static VARARGS68K void test_verdict(int pass, const char *extra, ...)
+{
+    VA_LIST ap;
+
+    test_flush_stdout();
+    test_flush_stderr();
+
+    test_printf_stdout("%*s%s", level, "", pass ? "ok" : "not ok");
+    if (extra != NULL) {
+        test_printf_stdout(" ");
+        VA_START(ap, extra);
+        test_vprintf_stdout(extra, VA_ARG(ap, long *));
+        VA_END(ap);
+    }
+    test_printf_stdout("\n");
+    test_flush_stdout();
+}
+#else
 PRINTF_FORMAT(2, 3) static void test_verdict(int pass, const char *extra, ...)
 {
     va_list ap;
@@ -168,6 +188,7 @@ PRINTF_FORMAT(2, 3) static void test_verdict(int pass, const char *extra, ...)
     test_printf_stdout("\n");
     test_flush_stdout();
 }
+#endif
 
 int run_tests(const char *test_prog_name)
 {

@@ -268,6 +268,16 @@ int test_BN_abs_eq_word(const char *file, int line, const char *bns,
  * Pretty print a failure message.
  * These should not be called directly, use the TEST_xxx macros below instead.
  */
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+void VARARGS68K test_error(const char *file, int line, const char *desc, ...)
+    PRINTF_FORMAT(3, 4);
+void VARARGS68K test_error_c90(const char *desc, ...) PRINTF_FORMAT(1, 2);
+void VARARGS68K test_info(const char *file, int line, const char *desc, ...)
+    PRINTF_FORMAT(3, 4);
+void VARARGS68K test_info_c90(const char *desc, ...) PRINTF_FORMAT(1, 2);
+void VARARGS68K test_note(const char *desc, ...) PRINTF_FORMAT(1, 2);
+#else
 void test_error(const char *file, int line, const char *desc, ...)
     PRINTF_FORMAT(3, 4);
 void test_error_c90(const char *desc, ...) PRINTF_FORMAT(1, 2);
@@ -275,6 +285,7 @@ void test_info(const char *file, int line, const char *desc, ...)
     PRINTF_FORMAT(3, 4);
 void test_info_c90(const char *desc, ...) PRINTF_FORMAT(1, 2);
 void test_note(const char *desc, ...) PRINTF_FORMAT(1, 2);
+#endif
 void test_openssl_errors(void);
 void test_perror(const char *s);
 

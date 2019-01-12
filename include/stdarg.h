@@ -1,7 +1,7 @@
 #ifndef _STDARG_H
 #define _STDARG_H
 
-#if defined(__amigaos4__)
+#if defined(__amigaos4__) && defined(AMISSL_COMPILE)
 
 #ifndef __GNUC_VA_LIST
 #define __GNUC_VA_LIST

@@ -264,6 +264,7 @@ int setup_tests(void)
     return 1;
 }
 
+#if !defined(OPENSSL_SYS_AMIGA) /* FIXME */
 /*
  * Replace testutil output routines.  We do this to eliminate possible sources
  * of BIO error
@@ -300,3 +301,4 @@ int test_flush_stderr(void)
 {
     return fflush(stderr);
 }
+#endif

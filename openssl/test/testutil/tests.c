@@ -66,6 +66,77 @@ void test_fail_message_prefix(const char *prefix, const char *file,
  * calling test6(3, "oops") will return 0 and produce out along the lines of:
  *      FAIL oops: (int) value 3 is not 6\n
  */
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+static void VARARGS68K test_fail_message(const char *prefix, const char *file, int line,
+                                         const char *type, const char *left,
+                                         const char *right, const char *op,
+                                         const char *fmt, ...)
+            PRINTF_FORMAT(8, 9);
+
+static void test_fail_message_va(const char *prefix, const char *file,
+                                 int line, const char *type,
+                                 const char *left, const char *right,
+                                 const char *op, const char *fmt, long *ap)
+{
+    test_fail_message_prefix(prefix, file, line, type, left, right, op);
+    if (fmt != NULL) {
+        test_vprintf_stderr(fmt, ap);
+        test_printf_stderr("\n");
+    }
+    test_flush_stderr();
+}
+
+static void VARARGS68K test_fail_message(const char *prefix, const char *file,
+                                         int line, const char *type,
+                                         const char *left, const char *right,
+                                         const char *op, const char *fmt, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, fmt);
+    test_fail_message_va(prefix, file, line, type, left, right, op, fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+}
+
+void VARARGS68K test_info_c90(const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va("INFO", NULL, -1, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+}
+
+void VARARGS68K test_info(const char *file, int line, const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va("INFO", file, line, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+}
+
+void VARARGS68K test_error_c90(const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va(NULL, NULL, -1, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+    test_printf_stderr("\n");
+}
+
+void VARARGS68K test_error(const char *file, int line, const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va(NULL, file, line, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+    test_printf_stderr("\n");
+}
+#else
 static void test_fail_message(const char *prefix, const char *file, int line,
                               const char *type, const char *left,
                               const char *right, const char *op,
@@ -134,6 +205,7 @@ void test_error(const char *file, int line, const char *desc, ...)
     va_end(ap);
     test_printf_stderr("\n");
 }
+#endif
 
 void test_perror(const char *s)
 {
@@ -144,6 +216,20 @@ void test_perror(const char *s)
     TEST_error("%s: %s", s, strerror(errno));
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+void VARARGS68K test_note(const char *fmt, ...)
+{
+    if (fmt != NULL) {
+        VA_LIST ap;
+
+        VA_START(ap, fmt);
+        test_vprintf_stderr(fmt, VA_ARG(ap, long *));
+        VA_END(ap);
+        test_printf_stderr("\n");
+    }
+    test_flush_stderr();
+}
+#else
 void test_note(const char *fmt, ...)
 {
     if (fmt != NULL) {
@@ -156,6 +242,7 @@ void test_note(const char *fmt, ...)
     }
     test_flush_stderr();
 }
+#endif
 
 void test_openssl_errors(void)
 {

@@ -19,14 +19,25 @@
 void test_open_streams(void);
 void test_close_streams(void);
 /* The following ALL return the number of characters written */
+#if defined(OPENSSL_SYS_AMIGA)
+int test_vprintf_stdout(const char *fmt, long *ap);
+int test_vprintf_stderr(const char *fmt, long *ap);
+#else
 int test_vprintf_stdout(const char *fmt, va_list ap);
 int test_vprintf_stderr(const char *fmt, va_list ap);
+#endif
 /* These return failure or success */
 int test_flush_stdout(void);
 int test_flush_stderr(void);
 
 /* Commodity functions.  There's no need to override these */
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+int VARARGS68K test_printf_stdout(const char *fmt, ...);
+int VARARGS68K test_printf_stderr(const char *fmt, ...);
+#else
 int test_printf_stdout(const char *fmt, ...);
 int test_printf_stderr(const char *fmt, ...);
+#endif
 
 #endif                          /* HEADER_TU_OUTPUT_H */

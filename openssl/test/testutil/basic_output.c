@@ -37,6 +37,17 @@ void test_close_streams(void)
     BIO_free_all(bio_err);
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+int test_vprintf_stdout(const char *fmt, long *ap)
+{
+    return BIO_vprintf(bio_out, fmt, ap);
+}
+
+int test_vprintf_stderr(const char *fmt, long *ap)
+{
+    return BIO_vprintf(bio_err, fmt, ap);
+}
+#else
 int test_vprintf_stdout(const char *fmt, va_list ap)
 {
     return BIO_vprintf(bio_out, fmt, ap);
@@ -46,6 +57,7 @@ int test_vprintf_stderr(const char *fmt, va_list ap)
 {
     return BIO_vprintf(bio_err, fmt, ap);
 }
+#endif
 
 int test_flush_stdout(void)
 {
