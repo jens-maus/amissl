@@ -17737,7 +17737,7 @@
       <arg name="passlen" type="int" m68kreg="d0"/>
       <arg name="param" type="ASN1_TYPE *" m68kreg="a2"/>
       <arg name="c" type="const EVP_CIPHER *" m68kreg="a3"/>
-      <arg name="md" type="const EVP_MD *" m68kreg="a5"/>
+      <arg name="md" type="const EVP_MD *" m68kreg="d1"/>
       <arg name="en_de" type="int" m68kreg="d1"/>
     </method>
     <method name="HMAC_CTX_free" result="void">
@@ -17854,7 +17854,7 @@
       <arg name="pmacalg" type="const X509_ALGOR **" m68kreg="a1"/>
       <arg name="psalt" type="const ASN1_OCTET_STRING **" m68kreg="a2"/>
       <arg name="piter" type="const ASN1_INTEGER **" m68kreg="a3"/>
-      <arg name="p12" type="const PKCS12 *" m68kreg="a5"/>
+      <arg name="p12" type="const PKCS12 *" m68kreg="d0"/>
     </method>
     <method name="PKCS12_mac_present" result="int">
       <arg name="p12" type="const PKCS12 *" m68kreg="a0"/>
@@ -17940,15 +17940,15 @@
       <arg name="p1" type="BIGNUM *" m68kreg="a1"/>
       <arg name="p2" type="BIGNUM *" m68kreg="a2"/>
       <arg name="q1" type="BIGNUM *" m68kreg="a3"/>
-      <arg name="q2" type="BIGNUM *" m68kreg="a5"/>
-      <arg name="Xp1" type="const BIGNUM *" m68kreg="d0"/>
-      <arg name="Xp2" type="const BIGNUM *" m68kreg="d1"/>
-      <arg name="Xp" type="const BIGNUM *" m68kreg="d2"/>
-      <arg name="Xq1" type="const BIGNUM *" m68kreg="d3"/>
-      <arg name="Xq2" type="const BIGNUM *" m68kreg="d4"/>
-      <arg name="Xq" type="const BIGNUM *" m68kreg="d5"/>
-      <arg name="e" type="const BIGNUM *" m68kreg="d6"/>
-      <arg name="cb" type="BN_GENCB *" m68kreg="d7"/>
+      <arg name="q2" type="BIGNUM *" m68kreg="d0"/>
+      <arg name="Xp1" type="const BIGNUM *" m68kreg="d1"/>
+      <arg name="Xp2" type="const BIGNUM *" m68kreg="d2"/>
+      <arg name="Xp" type="const BIGNUM *" m68kreg="d3"/>
+      <arg name="Xq1" type="const BIGNUM *" m68kreg="d4"/>
+      <arg name="Xq2" type="const BIGNUM *" m68kreg="d5"/>
+      <arg name="Xq" type="const BIGNUM *" m68kreg="d6"/>
+      <arg name="e" type="const BIGNUM *" m68kreg="d7"/>
+      <arg name="cb" type="BN_GENCB *" m68kreg="a4"/>
     </method>
     <method name="RSA_X931_generate_key_ex" result="int">
       <arg name="rsa" type="RSA *" m68kreg="a0"/>
@@ -20433,7 +20433,7 @@
       <arg name="name" type="char **" m68kreg="a1"/>
       <arg name="header" type="char **" m68kreg="a2"/>
       <arg name="data" type="unsigned char **" m68kreg="a3"/>
-      <arg name="len" type="long *" m68kreg="a5"/>
+      <arg name="len" type="long *" m68kreg="d0"/>
     </method>
     <method name="IPAddressRange_new" result="IPAddressRange *">
     </method>
@@ -20455,19 +20455,19 @@
       <arg name="name" type="const char *" m68kreg="a1"/>
       <arg name="fp" type="FILE *" m68kreg="a2"/>
       <arg name="x" type="void *" m68kreg="a3"/>
-      <arg name="enc" type="const EVP_CIPHER *" m68kreg="a5"/>
-      <arg name="kstr" type="unsigned char *" m68kreg="d0"/>
-      <arg name="klen" type="int" m68kreg="d1"/>
-      <arg name="callback" type="pem_password_cb *" m68kreg="d2"/>
-      <arg name="u" type="void *" m68kreg="d3"/>
+      <arg name="enc" type="const EVP_CIPHER *" m68kreg="d0"/>
+      <arg name="kstr" type="unsigned char *" m68kreg="d1"/>
+      <arg name="klen" type="int" m68kreg="d2"/>
+      <arg name="callback" type="pem_password_cb *" m68kreg="d3"/>
+      <arg name="u" type="void *" m68kreg="d4"/>
     </method>
     <method name="PEM_ASN1_read" result="void *" status="unimplemented">
       <arg name="d2i" type="d2i_of_void *" m68kreg="a0"/>
       <arg name="name" type="const char *" m68kreg="a1"/>
       <arg name="fp" type="FILE *" m68kreg="a2"/>
       <arg name="x" type="void **" m68kreg="a3"/>
-      <arg name="cb" type="pem_password_cb *" m68kreg="a5"/>
-      <arg name="u" type="void *" m68kreg="d0"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
+      <arg name="u" type="void *" m68kreg="d1"/>
     </method>
     <method name="TLS_FEATURE_free" result="void">
       <arg name="a" type="TLS_FEATURE *" m68kreg="a0"/>
@@ -20650,14 +20650,14 @@
       <arg name="mdnid" type="int *" m68kreg="a1"/>
       <arg name="pknid" type="int *" m68kreg="a2"/>
       <arg name="secbits" type="int *" m68kreg="a3"/>
-      <arg name="flags" type="uint32_t *" m68kreg="a5"/>
+      <arg name="flags" type="uint32_t *" m68kreg="d0"/>
     </method>
     <method name="X509_get_signature_info" result="int">
       <arg name="x" type="X509 *" m68kreg="a0"/>
       <arg name="mdnid" type="int *" m68kreg="a1"/>
       <arg name="pknid" type="int *" m68kreg="a2"/>
       <arg name="secbits" type="int *" m68kreg="a3"/>
-      <arg name="flags" type="uint32_t *" m68kreg="a5"/>
+      <arg name="flags" type="uint32_t *" m68kreg="d0"/>
     </method>
     <method name="X509_SIG_INFO_set" result="void">
       <arg name="siginf" type="X509_SIG_INFO *" m68kreg="a0"/>
@@ -20714,17 +20714,17 @@
       <arg name="name" type="char **" m68kreg="a1"/>
       <arg name="header" type="char **" m68kreg="a2"/>
       <arg name="data" type="unsigned char **" m68kreg="a3"/>
-      <arg name="len" type="long *" m68kreg="a5"/>
-      <arg name="flags" type="unsigned int" m68kreg="d0"/>
+      <arg name="len" type="long *" m68kreg="d0"/>
+      <arg name="flags" type="unsigned int" m68kreg="d1"/>
     </method>
     <method name="PEM_bytes_read_bio_secmem" result="int">
       <arg name="pdata" type="unsigned char **" m68kreg="a0"/>
       <arg name="plen" type="long *" m68kreg="a1"/>
       <arg name="pnm" type="char **" m68kreg="a2"/>
       <arg name="name" type="const char *" m68kreg="a3"/>
-      <arg name="bp" type="BIO *" m68kreg="a5"/>
-      <arg name="cb" type="pem_password_cb *" m68kreg="d0"/>
-      <arg name="u" type="void *" m68kreg="d1"/>
+      <arg name="bp" type="BIO *" m68kreg="d0"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="d1"/>
+      <arg name="u" type="void *" m68kreg="d2"/>
     </method>
     <method name="EVP_DigestSign" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
@@ -21668,28 +21668,28 @@
       <arg name="p" type="EC_POINT *" m68kreg="a1"/>
       <arg name="x" type="const BIGNUM *" m68kreg="a2"/>
       <arg name="y" type="const BIGNUM *" m68kreg="a3"/>
-      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="d0"/>
     </method>
     <method name="EC_POINT_get_affine_coordinates" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
       <arg name="p" type="const EC_POINT *" m68kreg="a1"/>
       <arg name="x" type="BIGNUM *" m68kreg="a2"/>
       <arg name="y" type="BIGNUM *" m68kreg="a3"/>
-      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="d0"/>
     </method>
     <method name="EC_GROUP_set_curve" result="int">
       <arg name="group" type="EC_GROUP *" m68kreg="a0"/>
       <arg name="p" type="const BIGNUM *" m68kreg="a1"/>
       <arg name="a" type="const BIGNUM *" m68kreg="a2"/>
       <arg name="b" type="const BIGNUM *" m68kreg="a3"/>
-      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="d0"/>
     </method>
     <method name="EC_GROUP_get_curve" result="int">
       <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
       <arg name="p" type="BIGNUM *" m68kreg="a1"/>
       <arg name="a" type="BIGNUM *" m68kreg="a2"/>
       <arg name="b" type="BIGNUM *" m68kreg="a3"/>
-      <arg name="ctx" type="BN_CTX *" m68kreg="a5"/>
+      <arg name="ctx" type="BN_CTX *" m68kreg="d0"/>
     </method>
     <method name="OCSP_resp_get0_tbs_sigalg" result="const X509_ALGOR *">
       <arg name="bs" type="const OCSP_BASICRESP *" m68kreg="a0"/>

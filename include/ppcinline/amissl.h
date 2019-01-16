@@ -14787,7 +14787,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_v2_scrypt_keyivgen(___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de) \
-      LP7(0x64c8, int, PKCS5_v2_scrypt_keyivgen , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d7, int, ___en_de, d1,\
+      LP7(0x64c8, int, PKCS5_v2_scrypt_keyivgen , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d1, int, ___en_de, d1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define HMAC_CTX_free(___ctx) \
@@ -14887,7 +14887,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_get0_mac(___pmac, ___pmacalg, ___psalt, ___piter, ___p12) \
-      LP5NR(0x655e, PKCS12_get0_mac , const ASN1_OCTET_STRING **, ___pmac, a0, const X509_ALGOR **, ___pmacalg, a1, const ASN1_OCTET_STRING **, ___psalt, a2, const ASN1_INTEGER **, ___piter, a3, const PKCS12 *, ___p12, d7,\
+      LP5NR(0x655e, PKCS12_get0_mac , const ASN1_OCTET_STRING **, ___pmac, a0, const X509_ALGOR **, ___pmacalg, a1, const ASN1_OCTET_STRING **, ___psalt, a2, const ASN1_INTEGER **, ___piter, a3, const PKCS12 *, ___p12, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_mac_present(___p12) \
@@ -14983,7 +14983,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define RSA_X931_derive_ex(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
-      LP13(0x65ee, int, RSA_X931_derive_ex , RSA *, ___rsa, a0, BIGNUM *, ___p1, a1, BIGNUM *, ___p2, a2, BIGNUM *, ___q1, a3, BIGNUM *, ___q2, d7, const BIGNUM *, ___Xp1, d0, const BIGNUM *, ___Xp2, d1, const BIGNUM *, ___Xp, d2, const BIGNUM *, ___Xq1, d3, const BIGNUM *, ___Xq2, d4, const BIGNUM *, ___Xq, d5, const BIGNUM *, ___e, d6, BN_GENCB *, ___cb, d7,\
+      LP13(0x65ee, int, RSA_X931_derive_ex , RSA *, ___rsa, a0, BIGNUM *, ___p1, a1, BIGNUM *, ___p2, a2, BIGNUM *, ___q1, a3, BIGNUM *, ___q2, d0, const BIGNUM *, ___Xp1, d1, const BIGNUM *, ___Xp2, d2, const BIGNUM *, ___Xp, d3, const BIGNUM *, ___Xq1, d4, const BIGNUM *, ___Xq2, d5, const BIGNUM *, ___Xq, d6, const BIGNUM *, ___e, d7, BN_GENCB *, ___cb, d7,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define RSA_X931_generate_key_ex(___rsa, ___bits, ___e, ___cb) \
@@ -17827,11 +17827,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_SIG_INFO_get(___siginf, ___mdnid, ___pknid, ___secbits, ___flags) \
-      LP5(0x76ec, int, X509_SIG_INFO_get , const X509_SIG_INFO *, ___siginf, a0, int *, ___mdnid, a1, int *, ___pknid, a2, int *, ___secbits, a3, uint32_t *, ___flags, d7,\
+      LP5(0x76ec, int, X509_SIG_INFO_get , const X509_SIG_INFO *, ___siginf, a0, int *, ___mdnid, a1, int *, ___pknid, a2, int *, ___secbits, a3, uint32_t *, ___flags, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_get_signature_info(___x, ___mdnid, ___pknid, ___secbits, ___flags) \
-      LP5(0x76f2, int, X509_get_signature_info , X509 *, ___x, a0, int *, ___mdnid, a1, int *, ___pknid, a2, int *, ___secbits, a3, uint32_t *, ___flags, d7,\
+      LP5(0x76f2, int, X509_get_signature_info , X509 *, ___x, a0, int *, ___mdnid, a1, int *, ___pknid, a2, int *, ___secbits, a3, uint32_t *, ___flags, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_SIG_INFO_set(___siginf, ___mdnid, ___pknid, ___secbits, ___flags) \
@@ -17887,11 +17887,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PEM_read_bio_ex(___bp, ___name, ___header, ___data, ___len, ___flags) \
-      LP6(0x7746, int, PEM_read_bio_ex , BIO *, ___bp, a0, char **, ___name, a1, char **, ___header, a2, unsigned char **, ___data, a3, long *, ___len, d7, unsigned int, ___flags, d0,\
+      LP6(0x7746, int, PEM_read_bio_ex , BIO *, ___bp, a0, char **, ___name, a1, char **, ___header, a2, unsigned char **, ___data, a3, long *, ___len, d0, unsigned int, ___flags, d1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PEM_bytes_read_bio_secmem(___pdata, ___plen, ___pnm, ___name, ___bp, ___cb, ___u) \
-      LP7(0x774c, int, PEM_bytes_read_bio_secmem , unsigned char **, ___pdata, a0, long *, ___plen, a1, char **, ___pnm, a2, const char *, ___name, a3, BIO *, ___bp, d7, pem_password_cb *, ___cb, d0, void *, ___u, d1,\
+      LP7(0x774c, int, PEM_bytes_read_bio_secmem , unsigned char **, ___pdata, a0, long *, ___plen, a1, char **, ___pnm, a2, const char *, ___name, a3, BIO *, ___bp, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_DigestSign(___ctx, ___sigret, ___siglen, ___tbs, ___tbslen) \
@@ -18948,19 +18948,19 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EC_POINT_set_affine_coordinates(___group, ___p, ___x, ___y, ___ctx) \
-      LP5(0x7d76, int, EC_POINT_set_affine_coordinates , const EC_GROUP *, ___group, a0, EC_POINT *, ___p, a1, const BIGNUM *, ___x, a2, const BIGNUM *, ___y, a3, BN_CTX *, ___ctx, d7,\
+      LP5(0x7d76, int, EC_POINT_set_affine_coordinates , const EC_GROUP *, ___group, a0, EC_POINT *, ___p, a1, const BIGNUM *, ___x, a2, const BIGNUM *, ___y, a3, BN_CTX *, ___ctx, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EC_POINT_get_affine_coordinates(___group, ___p, ___x, ___y, ___ctx) \
-      LP5(0x7d7c, int, EC_POINT_get_affine_coordinates , const EC_GROUP *, ___group, a0, const EC_POINT *, ___p, a1, BIGNUM *, ___x, a2, BIGNUM *, ___y, a3, BN_CTX *, ___ctx, d7,\
+      LP5(0x7d7c, int, EC_POINT_get_affine_coordinates , const EC_GROUP *, ___group, a0, const EC_POINT *, ___p, a1, BIGNUM *, ___x, a2, BIGNUM *, ___y, a3, BN_CTX *, ___ctx, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EC_GROUP_set_curve(___group, ___p, ___a, ___b, ___ctx) \
-      LP5(0x7d82, int, EC_GROUP_set_curve , EC_GROUP *, ___group, a0, const BIGNUM *, ___p, a1, const BIGNUM *, ___a, a2, const BIGNUM *, ___b, a3, BN_CTX *, ___ctx, d7,\
+      LP5(0x7d82, int, EC_GROUP_set_curve , EC_GROUP *, ___group, a0, const BIGNUM *, ___p, a1, const BIGNUM *, ___a, a2, const BIGNUM *, ___b, a3, BN_CTX *, ___ctx, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EC_GROUP_get_curve(___group, ___p, ___a, ___b, ___ctx) \
-      LP5(0x7d88, int, EC_GROUP_get_curve , const EC_GROUP *, ___group, a0, BIGNUM *, ___p, a1, BIGNUM *, ___a, a2, BIGNUM *, ___b, a3, BN_CTX *, ___ctx, d7,\
+      LP5(0x7d88, int, EC_GROUP_get_curve , const EC_GROUP *, ___group, a0, BIGNUM *, ___p, a1, BIGNUM *, ___a, a2, BIGNUM *, ___b, a3, BN_CTX *, ___ctx, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OCSP_resp_get0_tbs_sigalg(___bs) \

@@ -147,26 +147,20 @@ sub params_to_xml {
       elsif ($param =~ /^(\w+[\w\s\(\)]*)\s*(\*+)\s*(\w+)$/ ) {
          # const type *name
          # type *name
-         if ($m68k_areg > 5) {
+         if ($m68k_areg > 3) {
             $reg = "d".$m68k_dreg++;
          } else {
             $reg = "a".$m68k_areg++;
-            if ($m68k_areg == 4) {
-               $m68k_areg++;
-            }
          }
          $xml .= "      <arg name=\"$3\" type=\"$1$2\" m68kreg=\"$reg\"/>\n";
       }
       elsif ($param =~ /^(\w+[\w\s\(\)]*)\s*(\*+)\s*(\w+)\[\]$/ ) {
          # const type *name[]
          # type *name[]
-         if ($m68k_areg > 5) {
+         if ($m68k_areg > 3) {
             $reg = "d".$m68k_dreg++;
          } else {
             $reg = "a".$m68k_areg++;
-            if ($m68k_areg == 4) {
-               $m68k_areg++;
-            }
          }
          $xml .= "      <arg name=\"$3\" type=\"$1$2*\" m68kreg=\"$reg\"/>\n";
       }
@@ -174,13 +168,10 @@ sub params_to_xml {
       elsif ($param =~ /^(\w+[\w\s]*)\s*(\*+)\s*[\s\)]*$/ ) {
          # const type *
          # type *
-         if ($m68k_areg > 5) {
+         if ($m68k_areg > 3) {
             $reg = "d".$m68k_dreg++;
          } else {
             $reg = "a".$m68k_areg++;
-            if ($m68k_areg == 4) {
-               $m68k_areg++;
-            }
          }
          $name = chr($unnamed_arg);
          $xml .= "      <arg name=\"$name\" type=\"$1$2\" m68kreg=\"$reg\"/>\n";
@@ -205,24 +196,18 @@ sub params_to_xml {
       elsif ($param =~ /^(\w+)\s+(\**\s*)?\((\*+)(\w+)\)\s*(\([^;]+\))/ ) {
          # function pointer
 #        print "FUNCARG: '",$1,"' '",$2,"' '",$3,"' '",$4,"' '",$5,"'\n";
-         if ($m68k_areg > 5) {
+         if ($m68k_areg > 3) {
             $reg = "d".$m68k_dreg++;
          } else {
             $reg = "a".$m68k_areg++;
-            if ($m68k_areg == 4) {
-               $m68k_areg++;
-            }
          }
          $xml .= "      <arg name=\"$4\" type=\"$1 $2($3)$5\" m68kreg=\"$reg\"/>\n";
       }
       elsif ($param eq "...") {
-         if ($m68k_areg > 5) {
+         if ($m68k_areg > 3) {
             $reg = "d".$m68k_dreg++;
          } else {
             $reg = "a".$m68k_areg++;
-            if ($m68k_areg == 4) {
-               $m68k_areg++;
-            }
          }
          $xml .= "      <vararg name=\"dummy\" type=\"long\" m68kreg=\"$reg\"/>\n";
       }

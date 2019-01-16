@@ -22678,7 +22678,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___passlen), D0), \
  AROS_LCA(ASN1_TYPE *, (___param), A2), \
  AROS_LCA(const EVP_CIPHER *, (___c), A3), \
- AROS_LCA(const EVP_MD *, (___md), A5), \
+ AROS_LCA(const EVP_MD *, (___md), D1), \
  AROS_LCA(int, (___en_de), D1), \
      struct Library *, AMISSL_BASE_NAME, 4300, Amissl)
 
@@ -22845,7 +22845,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const X509_ALGOR **, (___pmacalg), A1), \
  AROS_LCA(const ASN1_OCTET_STRING **, (___psalt), A2), \
  AROS_LCA(const ASN1_INTEGER **, (___piter), A3), \
- AROS_LCA(const PKCS12 *, (___p12), A5), \
+ AROS_LCA(const PKCS12 *, (___p12), D0), \
      struct Library *, AMISSL_BASE_NAME, 4325, Amissl)
 
 #define PKCS12_mac_present(___p12) \
@@ -22979,15 +22979,15 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(BIGNUM *, (___p1), A1), \
  AROS_LCA(BIGNUM *, (___p2), A2), \
  AROS_LCA(BIGNUM *, (___q1), A3), \
- AROS_LCA(BIGNUM *, (___q2), A5), \
- AROS_LCA(const BIGNUM *, (___Xp1), D0), \
- AROS_LCA(const BIGNUM *, (___Xp2), D1), \
- AROS_LCA(const BIGNUM *, (___Xp), D2), \
- AROS_LCA(const BIGNUM *, (___Xq1), D3), \
- AROS_LCA(const BIGNUM *, (___Xq2), D4), \
- AROS_LCA(const BIGNUM *, (___Xq), D5), \
- AROS_LCA(const BIGNUM *, (___e), D6), \
- AROS_LCA(BN_GENCB *, (___cb), D7), \
+ AROS_LCA(BIGNUM *, (___q2), D0), \
+ AROS_LCA(const BIGNUM *, (___Xp1), D1), \
+ AROS_LCA(const BIGNUM *, (___Xp2), D2), \
+ AROS_LCA(const BIGNUM *, (___Xp), D3), \
+ AROS_LCA(const BIGNUM *, (___Xq1), D4), \
+ AROS_LCA(const BIGNUM *, (___Xq2), D5), \
+ AROS_LCA(const BIGNUM *, (___Xq), D6), \
+ AROS_LCA(const BIGNUM *, (___e), D7), \
+ AROS_LCA(BN_GENCB *, (___cb), A4), \
      struct Library *, AMISSL_BASE_NAME, 4349, Amissl)
 
 #define RSA_X931_generate_key_ex(___rsa, ___bits, ___e, ___cb) \
@@ -27032,7 +27032,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int *, (___mdnid), A1), \
  AROS_LCA(int *, (___pknid), A2), \
  AROS_LCA(int *, (___secbits), A3), \
- AROS_LCA(uint32_t *, (___flags), A5), \
+ AROS_LCA(uint32_t *, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 5074, Amissl)
 
 #define X509_get_signature_info(___x, ___mdnid, ___pknid, ___secbits, ___flags) \
@@ -27041,7 +27041,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int *, (___mdnid), A1), \
  AROS_LCA(int *, (___pknid), A2), \
  AROS_LCA(int *, (___secbits), A3), \
- AROS_LCA(uint32_t *, (___flags), A5), \
+ AROS_LCA(uint32_t *, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 5075, Amissl)
 
 #define X509_SIG_INFO_set(___siginf, ___mdnid, ___pknid, ___secbits, ___flags) \
@@ -27126,8 +27126,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(char **, (___name), A1), \
  AROS_LCA(char **, (___header), A2), \
  AROS_LCA(unsigned char **, (___data), A3), \
- AROS_LCA(long *, (___len), A5), \
- AROS_LCA(unsigned int, (___flags), D0), \
+ AROS_LCA(long *, (___len), D0), \
+ AROS_LCA(unsigned int, (___flags), D1), \
      struct Library *, AMISSL_BASE_NAME, 5089, Amissl)
 
 #define PEM_bytes_read_bio_secmem(___pdata, ___plen, ___pnm, ___name, ___bp, ___cb, ___u) \
@@ -27136,9 +27136,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(long *, (___plen), A1), \
  AROS_LCA(char **, (___pnm), A2), \
  AROS_LCA(const char *, (___name), A3), \
- AROS_LCA(BIO *, (___bp), A5), \
- AROS_LCA(pem_password_cb *, (___cb), D0), \
- AROS_LCA(void *, (___u), D1), \
+ AROS_LCA(BIO *, (___bp), D0), \
+ AROS_LCA(pem_password_cb *, (___cb), D1), \
+ AROS_LCA(void *, (___u), D2), \
      struct Library *, AMISSL_BASE_NAME, 5090, Amissl)
 
 #define EVP_DigestSign(___ctx, ___sigret, ___siglen, ___tbs, ___tbslen) \
@@ -28608,7 +28608,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EC_POINT *, (___p), A1), \
  AROS_LCA(const BIGNUM *, (___x), A2), \
  AROS_LCA(const BIGNUM *, (___y), A3), \
- AROS_LCA(BN_CTX *, (___ctx), A5), \
+ AROS_LCA(BN_CTX *, (___ctx), D0), \
      struct Library *, AMISSL_BASE_NAME, 5353, Amissl)
 
 #define EC_POINT_get_affine_coordinates(___group, ___p, ___x, ___y, ___ctx) \
@@ -28617,7 +28617,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EC_POINT *, (___p), A1), \
  AROS_LCA(BIGNUM *, (___x), A2), \
  AROS_LCA(BIGNUM *, (___y), A3), \
- AROS_LCA(BN_CTX *, (___ctx), A5), \
+ AROS_LCA(BN_CTX *, (___ctx), D0), \
      struct Library *, AMISSL_BASE_NAME, 5354, Amissl)
 
 #define EC_GROUP_set_curve(___group, ___p, ___a, ___b, ___ctx) \
@@ -28626,7 +28626,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const BIGNUM *, (___p), A1), \
  AROS_LCA(const BIGNUM *, (___a), A2), \
  AROS_LCA(const BIGNUM *, (___b), A3), \
- AROS_LCA(BN_CTX *, (___ctx), A5), \
+ AROS_LCA(BN_CTX *, (___ctx), D0), \
      struct Library *, AMISSL_BASE_NAME, 5355, Amissl)
 
 #define EC_GROUP_get_curve(___group, ___p, ___a, ___b, ___ctx) \
@@ -28635,7 +28635,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(BIGNUM *, (___p), A1), \
  AROS_LCA(BIGNUM *, (___a), A2), \
  AROS_LCA(BIGNUM *, (___b), A3), \
- AROS_LCA(BN_CTX *, (___ctx), A5), \
+ AROS_LCA(BN_CTX *, (___ctx), D0), \
      struct Library *, AMISSL_BASE_NAME, 5356, Amissl)
 
 #define OCSP_resp_get0_tbs_sigalg(___bs) \

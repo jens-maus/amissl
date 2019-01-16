@@ -37394,7 +37394,7 @@ int LIBSTUB_PKCS5_v2_scrypt_keyivgen(void)
   int ___passlen = (int)REG_D0;
   ASN1_TYPE * ___param = (ASN1_TYPE *)REG_A2;
   const EVP_CIPHER * ___c = (const EVP_CIPHER *)REG_A3;
-  const EVP_MD * ___md = (const EVP_MD *)REG_A5;
+  const EVP_MD * ___md = (const EVP_MD *)REG_D1;
   int ___en_de = (int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS5_v2_scrypt_keyivgen(_base, ___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de);
@@ -37661,7 +37661,7 @@ void LIBSTUB_PKCS12_get0_mac(void)
   const X509_ALGOR ** ___pmacalg = (const X509_ALGOR **)REG_A1;
   const ASN1_OCTET_STRING ** ___psalt = (const ASN1_OCTET_STRING **)REG_A2;
   const ASN1_INTEGER ** ___piter = (const ASN1_INTEGER **)REG_A3;
-  const PKCS12 * ___p12 = (const PKCS12 *)REG_A5;
+  const PKCS12 * ___p12 = (const PKCS12 *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS12_get0_mac(_base, ___pmac, ___pmacalg, ___psalt, ___piter, ___p12);
 }
@@ -37891,15 +37891,15 @@ int LIBSTUB_RSA_X931_derive_ex(void)
   BIGNUM * ___p1 = (BIGNUM *)REG_A1;
   BIGNUM * ___p2 = (BIGNUM *)REG_A2;
   BIGNUM * ___q1 = (BIGNUM *)REG_A3;
-  BIGNUM * ___q2 = (BIGNUM *)REG_A5;
-  const BIGNUM * ___Xp1 = (const BIGNUM *)REG_D0;
-  const BIGNUM * ___Xp2 = (const BIGNUM *)REG_D1;
-  const BIGNUM * ___Xp = (const BIGNUM *)REG_D2;
-  const BIGNUM * ___Xq1 = (const BIGNUM *)REG_D3;
-  const BIGNUM * ___Xq2 = (const BIGNUM *)REG_D4;
-  const BIGNUM * ___Xq = (const BIGNUM *)REG_D5;
-  const BIGNUM * ___e = (const BIGNUM *)REG_D6;
-  BN_GENCB * ___cb = (BN_GENCB *)REG_D7;
+  BIGNUM * ___q2 = (BIGNUM *)REG_D0;
+  const BIGNUM * ___Xp1 = (const BIGNUM *)REG_D1;
+  const BIGNUM * ___Xp2 = (const BIGNUM *)REG_D2;
+  const BIGNUM * ___Xp = (const BIGNUM *)REG_D3;
+  const BIGNUM * ___Xq1 = (const BIGNUM *)REG_D4;
+  const BIGNUM * ___Xq2 = (const BIGNUM *)REG_D5;
+  const BIGNUM * ___Xq = (const BIGNUM *)REG_D6;
+  const BIGNUM * ___e = (const BIGNUM *)REG_D7;
+  BN_GENCB * ___cb = (BN_GENCB *)REG_A4;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RSA_X931_derive_ex(_base, ___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb);
 }
@@ -44788,7 +44788,7 @@ int LIBSTUB_X509_SIG_INFO_get(void)
   int * ___mdnid = (int *)REG_A1;
   int * ___pknid = (int *)REG_A2;
   int * ___secbits = (int *)REG_A3;
-  uint32_t * ___flags = (uint32_t *)REG_A5;
+  uint32_t * ___flags = (uint32_t *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_SIG_INFO_get(_base, ___siginf, ___mdnid, ___pknid, ___secbits, ___flags);
 }
@@ -44801,7 +44801,7 @@ int LIBSTUB_X509_get_signature_info(void)
   int * ___mdnid = (int *)REG_A1;
   int * ___pknid = (int *)REG_A2;
   int * ___secbits = (int *)REG_A3;
-  uint32_t * ___flags = (uint32_t *)REG_A5;
+  uint32_t * ___flags = (uint32_t *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_get_signature_info(_base, ___x, ___mdnid, ___pknid, ___secbits, ___flags);
 }
@@ -44942,8 +44942,8 @@ int LIBSTUB_PEM_read_bio_ex(void)
   char ** ___name = (char **)REG_A1;
   char ** ___header = (char **)REG_A2;
   unsigned char ** ___data = (unsigned char **)REG_A3;
-  long * ___len = (long *)REG_A5;
-  unsigned int ___flags = (unsigned int)REG_D0;
+  long * ___len = (long *)REG_D0;
+  unsigned int ___flags = (unsigned int)REG_D1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PEM_read_bio_ex(_base, ___bp, ___name, ___header, ___data, ___len, ___flags);
 }
@@ -44956,9 +44956,9 @@ int LIBSTUB_PEM_bytes_read_bio_secmem(void)
   long * ___plen = (long *)REG_A1;
   char ** ___pnm = (char **)REG_A2;
   const char * ___name = (const char *)REG_A3;
-  BIO * ___bp = (BIO *)REG_A5;
-  pem_password_cb * ___cb = (pem_password_cb *)REG_D0;
-  void * ___u = (void *)REG_D1;
+  BIO * ___bp = (BIO *)REG_D0;
+  pem_password_cb * ___cb = (pem_password_cb *)REG_D1;
+  void * ___u = (void *)REG_D2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PEM_bytes_read_bio_secmem(_base, ___pdata, ___plen, ___pnm, ___name, ___bp, ___cb, ___u);
 }
@@ -47475,7 +47475,7 @@ int LIBSTUB_EC_POINT_set_affine_coordinates(void)
   EC_POINT * ___p = (EC_POINT *)REG_A1;
   const BIGNUM * ___x = (const BIGNUM *)REG_A2;
   const BIGNUM * ___y = (const BIGNUM *)REG_A3;
-  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  BN_CTX * ___ctx = (BN_CTX *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_POINT_set_affine_coordinates(_base, ___group, ___p, ___x, ___y, ___ctx);
 }
@@ -47488,7 +47488,7 @@ int LIBSTUB_EC_POINT_get_affine_coordinates(void)
   const EC_POINT * ___p = (const EC_POINT *)REG_A1;
   BIGNUM * ___x = (BIGNUM *)REG_A2;
   BIGNUM * ___y = (BIGNUM *)REG_A3;
-  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  BN_CTX * ___ctx = (BN_CTX *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_POINT_get_affine_coordinates(_base, ___group, ___p, ___x, ___y, ___ctx);
 }
@@ -47501,7 +47501,7 @@ int LIBSTUB_EC_GROUP_set_curve(void)
   const BIGNUM * ___p = (const BIGNUM *)REG_A1;
   const BIGNUM * ___a = (const BIGNUM *)REG_A2;
   const BIGNUM * ___b = (const BIGNUM *)REG_A3;
-  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  BN_CTX * ___ctx = (BN_CTX *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_GROUP_set_curve(_base, ___group, ___p, ___a, ___b, ___ctx);
 }
@@ -47514,7 +47514,7 @@ int LIBSTUB_EC_GROUP_get_curve(void)
   BIGNUM * ___p = (BIGNUM *)REG_A1;
   BIGNUM * ___a = (BIGNUM *)REG_A2;
   BIGNUM * ___b = (BIGNUM *)REG_A3;
-  BN_CTX * ___ctx = (BN_CTX *)REG_A5;
+  BN_CTX * ___ctx = (BN_CTX *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_GROUP_get_curve(_base, ___group, ___p, ___a, ___b, ___ctx);
 }
