@@ -25880,7 +25880,7 @@ int SAVEDS ASM LIB_EVP_PKEY_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_
 
 // ---
 
-int SAVEDS ASM LIB_PKCS5_v2_scrypt_keyivgen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * c), REG(d1, const EVP_MD * md), REG(d1, int en_de))
+int SAVEDS ASM LIB_PKCS5_v2_scrypt_keyivgen(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * c), REG(d1, const EVP_MD * md), REG(d2, int en_de))
 {
 	return PKCS5_v2_scrypt_keyivgen(ctx, pass, passlen, param, c, md, en_de);
 }

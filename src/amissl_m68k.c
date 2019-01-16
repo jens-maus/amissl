@@ -55320,7 +55320,7 @@ STATIC int stub_main_PKCS5_v2_scrypt_keyivgen_PPC(uint32 *regarray)
 		(ASN1_TYPE *)regarray[REG68K_A2/4],
 		(const EVP_CIPHER *)regarray[REG68K_A3/4],
 		(const EVP_MD *)regarray[REG68K_D1/4],
-		(int)regarray[REG68K_D1/4]
+		(int)regarray[REG68K_D2/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_PKCS5_v2_scrypt_keyivgen = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_PKCS5_v2_scrypt_keyivgen_PPC };

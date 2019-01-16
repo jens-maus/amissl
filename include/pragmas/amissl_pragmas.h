@@ -22180,10 +22180,10 @@
  #pragma amicall(AmiSSLBase, 0x64c2, EVP_PKEY_up_ref(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS5_v2_scrypt_keyivgen 64c8 11ba09807
+ #pragma libcall AmiSSLBase PKCS5_v2_scrypt_keyivgen 64c8 21ba09807
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x64c8, PKCS5_v2_scrypt_keyivgen(a0,a1,d0,a2,a3,d1,d1))
+ #pragma amicall(AmiSSLBase, 0x64c8, PKCS5_v2_scrypt_keyivgen(a0,a1,d0,a2,a3,d1,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase HMAC_CTX_free 64ce 801

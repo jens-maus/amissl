@@ -3897,7 +3897,7 @@ EVP_PKEY_meth_get_verify_recover(pmeth,pverify_recover_init,pverify_recover)(a0,
 EVP_PKEY_meth_get_verifyctx(pmeth,pverifyctx_init,pverifyctx)(a0,a1,a2)
 EVP_PKEY_security_bits(pkey)(a0)
 EVP_PKEY_up_ref(pkey)(a0)
-PKCS5_v2_scrypt_keyivgen(ctx,pass,passlen,param,c,md,en_de)(a0,a1,d0,a2,a3,d1,d1)
+PKCS5_v2_scrypt_keyivgen(ctx,pass,passlen,param,c,md,en_de)(a0,a1,d0,a2,a3,d1,d2)
 HMAC_CTX_free(ctx)(a0)
 HMAC_CTX_new()()
 HMAC_CTX_reset(ctx)(a0)

@@ -3735,7 +3735,7 @@ void SAVEDS ASM LIB_EVP_PKEY_meth_get_verify_recover(REG(a6, __IFACE_OR_BASE), R
 void SAVEDS ASM LIB_EVP_PKEY_meth_get_verifyctx(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY_METHOD * pmeth), REG(a1, int (**pverifyctx_init)(EVP_PKEY_CTX *, EVP_MD_CTX *)), REG(a2, int (**pverifyctx)(EVP_PKEY_CTX *, const unsigned char *, int, EVP_MD_CTX *)));
 int SAVEDS ASM LIB_EVP_PKEY_security_bits(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
 int SAVEDS ASM LIB_EVP_PKEY_up_ref(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey));
-int SAVEDS ASM LIB_PKCS5_v2_scrypt_keyivgen(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * c), REG(d1, const EVP_MD * md), REG(d1, int en_de));
+int SAVEDS ASM LIB_PKCS5_v2_scrypt_keyivgen(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * c), REG(d1, const EVP_MD * md), REG(d2, int en_de));
 void SAVEDS ASM LIB_HMAC_CTX_free(REG(a6, __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx));
 HMAC_CTX * SAVEDS ASM LIB_HMAC_CTX_new(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_HMAC_CTX_reset(REG(a6, __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx));

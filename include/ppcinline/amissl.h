@@ -14787,7 +14787,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_v2_scrypt_keyivgen(___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de) \
-      LP7(0x64c8, int, PKCS5_v2_scrypt_keyivgen , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d1, int, ___en_de, d1,\
+      LP7(0x64c8, int, PKCS5_v2_scrypt_keyivgen , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define HMAC_CTX_free(___ctx) \

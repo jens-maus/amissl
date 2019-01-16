@@ -22679,7 +22679,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(ASN1_TYPE *, (___param), A2), \
  AROS_LCA(const EVP_CIPHER *, (___c), A3), \
  AROS_LCA(const EVP_MD *, (___md), D1), \
- AROS_LCA(int, (___en_de), D1), \
+ AROS_LCA(int, (___en_de), D2), \
      struct Library *, AMISSL_BASE_NAME, 4300, Amissl)
 
 #define HMAC_CTX_free(___ctx) \

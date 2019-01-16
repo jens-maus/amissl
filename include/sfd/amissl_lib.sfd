@@ -3913,7 +3913,7 @@ void EVP_PKEY_meth_get_verify_recover(const EVP_PKEY_METHOD * pmeth, int (**pver
 void EVP_PKEY_meth_get_verifyctx(const EVP_PKEY_METHOD * pmeth, int (**pverifyctx_init)(EVP_PKEY_CTX *, EVP_MD_CTX *), int (**pverifyctx)(EVP_PKEY_CTX *, const unsigned char *, int, EVP_MD_CTX *)) (a0,a1,a2)
 int EVP_PKEY_security_bits(const EVP_PKEY * pkey) (a0)
 int EVP_PKEY_up_ref(EVP_PKEY * pkey) (a0)
-int PKCS5_v2_scrypt_keyivgen(EVP_CIPHER_CTX * ctx, const char * pass, int passlen, ASN1_TYPE * param, const EVP_CIPHER * c, const EVP_MD * md, int en_de) (a0,a1,d0,a2,a3,d1,d1)
+int PKCS5_v2_scrypt_keyivgen(EVP_CIPHER_CTX * ctx, const char * pass, int passlen, ASN1_TYPE * param, const EVP_CIPHER * c, const EVP_MD * md, int en_de) (a0,a1,d0,a2,a3,d1,d2)
 void HMAC_CTX_free(HMAC_CTX * ctx) (a0)
 HMAC_CTX * HMAC_CTX_new() ()
 int HMAC_CTX_reset(HMAC_CTX * ctx) (a0)

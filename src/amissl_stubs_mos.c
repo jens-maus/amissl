@@ -37395,7 +37395,7 @@ int LIBSTUB_PKCS5_v2_scrypt_keyivgen(void)
   ASN1_TYPE * ___param = (ASN1_TYPE *)REG_A2;
   const EVP_CIPHER * ___c = (const EVP_CIPHER *)REG_A3;
   const EVP_MD * ___md = (const EVP_MD *)REG_D1;
-  int ___en_de = (int)REG_D1;
+  int ___en_de = (int)REG_D2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS5_v2_scrypt_keyivgen(_base, ___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de);
 }

@@ -17738,7 +17738,7 @@
       <arg name="param" type="ASN1_TYPE *" m68kreg="a2"/>
       <arg name="c" type="const EVP_CIPHER *" m68kreg="a3"/>
       <arg name="md" type="const EVP_MD *" m68kreg="d1"/>
-      <arg name="en_de" type="int" m68kreg="d1"/>
+      <arg name="en_de" type="int" m68kreg="d2"/>
     </method>
     <method name="HMAC_CTX_free" result="void">
       <arg name="ctx" type="HMAC_CTX *" m68kreg="a0"/>
