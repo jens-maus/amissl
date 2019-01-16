@@ -844,6 +844,43 @@ static int wait_for_thread(thread_t thread)
     return WaitForSingleObject(thread, INFINITE) == 0;
 }
 
+# elif defined(OPENSSL_SYS_AMIGA)
+
+#include <proto/dos.h>
+
+struct amiga_thread {
+    struct Process *process;
+    int finished;
+};
+
+typedef struct amiga_thread thread_t;
+
+static void thread_run(void)
+{
+    thread_t *t = (thread_t *)atoi(GetArgStr());
+    run_multi_thread_test();
+    t->finished = TRUE;
+}
+
+static int run_thread(thread_t *t)
+{
+    char args[32];
+    sprintf(args,"%d",(int)t);
+    t->finished = FALSE;
+    t->process = CreateNewProcTags(NP_Entry, thread_run, NP_Arguments, args, NP_StackSize, 32*1024, TAG_END);
+    return t->process != NULL;
+}
+
+static int wait_for_thread(thread_t *t)
+{
+    /* Not pretty, but does the job for this test! */
+    while (!t->finished) {
+        Delay(25);
+    }
+    Delay(10);
+    return 1;
+}
+
 # else
 
 typedef pthread_t thread_t;
@@ -881,7 +918,11 @@ static int test_multi_thread(void)
         run_thread(&t[i]);
     run_multi_thread_test();
     for (i = 0; i < THREADS; i++)
+# if defined(OPENSSL_SYS_AMIGA)
+        wait_for_thread(&t[i]);
+# else
         wait_for_thread(t[i]);
+# endif
 
     if (!TEST_true(multi_thread_rand_bytes_succeeded))
         return 0;
