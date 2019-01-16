@@ -392,7 +392,7 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
     DEPEND[shlibloadtest]=libtestutil.a
   ENDIF
 
-  IF[{- $disabled{shared} -}]
+  IF[{- !$disabled{shared} -}]
     PROGRAMS_NO_INST=cipher_overhead_test
     SOURCE[cipher_overhead_test]=cipher_overhead_test.c
     INCLUDE[cipher_overhead_test]=.. ../include
@@ -435,7 +435,7 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
   # and VMS, where the exported symbols are those listed in util/*.num), these
   # programs are forcibly linked with the static libraries, where all symbols
   # are always available.
-  IF[1]
+  IF[{- $config{target} !~ /amiga/ -}]
     PROGRAMS_NO_INST=asn1_internal_test modes_internal_test x509_internal_test \
                      tls13encryptiontest wpackettest ctype_internal_test \
                      rdrand_sanitytest
