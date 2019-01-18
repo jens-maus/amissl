@@ -209,7 +209,11 @@ static const int aead_lengths_list[] = {
 #define START   0
 #define STOP    1
 
-#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
+#if defined(OPENSSL_SYS_AMIGA) && defined(SIGALRM)
+# undef SIGALRM
+#endif
+
+#ifdef SIGALRM
 
 static void alarmed(int sig)
 {
@@ -3363,7 +3367,7 @@ int speed_main(int argc, char **argv)
 
 static void print_message(const char *s, long num, int length, int tm)
 {
-#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
+#ifdef SIGALRM
     BIO_printf(bio_err,
                mr ? "+DT:%s:%d:%d\n"
                : "Doing %s for %ds on %d size blocks: ", s, tm, length);
@@ -3380,7 +3384,7 @@ static void print_message(const char *s, long num, int length, int tm)
 static void pkey_print_message(const char *str, const char *str2, long num,
                                unsigned int bits, int tm)
 {
-#if defined(SIGALRM) && !defined(OPENSSL_SYS_AMIGA)
+#ifdef SIGALRM
     BIO_printf(bio_err,
                mr ? "+DTP:%d:%s:%s:%d\n"
                : "Doing %u bits %s %s's for %ds: ", bits, str, str2, tm);
