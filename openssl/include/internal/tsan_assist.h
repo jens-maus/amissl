@@ -48,7 +48,7 @@
  */
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L \
-    && !defined(__STDC_NO_ATOMICS__)
+    && !defined(__STDC_NO_ATOMICS__) && !defined(OPENSSL_SYS_AMIGA)
 # include <stdatomic.h>
 
 # if defined(ATOMIC_POINTER_LOCK_FREE) \
@@ -124,6 +124,42 @@
 # if !defined(_ISO_VOLATILE)
 #  define tsan_ld_acq(ptr) (*(ptr))
 #  define tsan_st_rel(ptr, val) (*(ptr) = (val))
+# endif
+
+#elif defined(OPENSSL_SYS_AMIGA)
+
+# define TSAN_QUALIFIER volatile
+# define tsan_load(ptr) (*(ptr))
+# define tsan_store(ptr, val) (*(ptr) = (val))
+
+# if defined(__amigaos4__) || defined(__MORPHOS__)
+#  define tsan_counter(ptr) \
+   ({ typeof (*ptr) res, tmp; \
+      __asm__ __volatile__ ( \
+         "1: lwarx %0,0,%2\n" \
+         "addi %1,%0,1\n" \
+         "stwcx. %1,0,%2\n" \
+         "bne- 1b" \
+         : "=&r" (res), "=&r" (tmp) \
+         : "r" (ptr) \
+         : "cc", "memory"); \
+      res; \
+   })
+#  define tsan_decr(ptr) \
+   ({ typeof (*ptr) res, tmp; \
+      __asm__ __volatile__ ( \
+         "1: lwarx %0,0,%2\n" \
+         "addi %1,%0,-1\n" \
+         "stwcx. %1,0,%2\n" \
+         "bne- 1b" \
+         : "=&r" (res), "=&r" (tmp) \
+         : "r" (ptr) \
+         : "cc", "memory"); \
+      res; \
+   })
+# else
+#  define tsan_counter(ptr) ((*(ptr))++)
+#  define tsan_decr(ptr) ((*(ptr))--)
 # endif
 
 #endif
