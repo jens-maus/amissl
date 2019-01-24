@@ -191,20 +191,22 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  if(LibAPIVersion == AMISSL_V11x)
+  if(LibAPIVersion >= AMISSL_V110c)
   {
     D(DBF_STARTUP, "About to open amissl v11x library");
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
     // known 1.1.X amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
+    // but we must take care to prevent applications requiring newer API functions
+    // from loading older libraries that do not contain those required entries
     if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
-      if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
-        if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL)
-          if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
-            OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+      if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
+        if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL &&
+                                            OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
+          if(LibAPIVersion == AMISSL_V110c) OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
   }
-  else if(LibAPIVersion == AMISSL_V10x)
+  else if(LibAPIVersion == AMISSL_V102f)
   {
     D(DBF_STARTUP, "About to open amissl v10x library");
 

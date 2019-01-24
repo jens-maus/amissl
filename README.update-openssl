@@ -109,8 +109,8 @@ HowTo update the OpenSSL version in "openssl/":
    Modify VERSIONNAME to match the OpenSSL version. Also set AMISSLDATE and
    AMISSLMASTERDATE to the release date of the OpenSSL version you just merged.
 
-8. Modify the "src/amisslmaster_library.c" file and have a look for the following
-   type of sections in OpenAmiSSL():
+8. Modify the "src/amisslmaster_library.c" and "include/libraries/amisslmaster.h"
+   files and have a look for the following type of sections in OpenAmiSSL():
 
    -- cut here --
    if(LibAPIVersion == AMISSL_V11x)
@@ -121,9 +121,15 @@ HowTo update the OpenSSL version in "openssl/":
    }
    -- cut here --
 
-  Make sure you add a new OpenLib() call in the right section (and with the correct
-  logic) so that the newly created "amissl_vXXX.library" can be opneed by the
-  amisslmaster.library.
+   Make sure you add a new OpenLib() call in the right section (and with the correct
+   logic) so that the newly created "amissl_vXXX.library" can be opneed by the
+   amisslmaster.library.
+ 
+   When new functions are added to amissl.xml you must create a new AMISSL_Vnnnx
+   definition in "libraries/amisslmaster.library" and ensure the logic added above
+   allows older applications to load newer backwards compatible libraries, but
+   prevent new applications (requiring newly added OpenSSL API functions) from
+   loading older libraries (otherwise crashes will occur).
 
 9. Review all changes with "git status" and make sure to commit everything
    properly. Also use "git diff HEAD" at the end again to double check your changes.
