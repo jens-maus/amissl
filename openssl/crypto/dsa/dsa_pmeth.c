@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2006-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -31,8 +31,8 @@ typedef struct {
 
 static int pkey_dsa_init(EVP_PKEY_CTX *ctx)
 {
-    DSA_PKEY_CTX *dctx;
-    dctx = OPENSSL_malloc(sizeof(*dctx));
+    DSA_PKEY_CTX *dctx = OPENSSL_malloc(sizeof(*dctx));
+
     if (dctx == NULL)
         return 0;
     dctx->nbits = 1024;
@@ -50,6 +50,7 @@ static int pkey_dsa_init(EVP_PKEY_CTX *ctx)
 static int pkey_dsa_copy(EVP_PKEY_CTX *dst, EVP_PKEY_CTX *src)
 {
     DSA_PKEY_CTX *dctx, *sctx;
+
     if (!pkey_dsa_init(dst))
         return 0;
     sctx = src->data;
@@ -76,13 +77,8 @@ static int pkey_dsa_sign(EVP_PKEY_CTX *ctx, unsigned char *sig,
     DSA_PKEY_CTX *dctx = ctx->data;
     DSA *dsa = ctx->pkey->pkey.dsa;
 
-    if (dctx->md) {
-        if (tbslen != (size_t)EVP_MD_size(dctx->md))
-            return 0;
-    } else {
-        if (tbslen != SHA_DIGEST_LENGTH)
-            return 0;
-    }
+    if (dctx->md != NULL && tbslen != (size_t)EVP_MD_size(dctx->md))
+        return 0;
 
     ret = DSA_sign(0, tbs, tbslen, sig, &sltmp, dsa);
 
@@ -100,13 +96,8 @@ static int pkey_dsa_verify(EVP_PKEY_CTX *ctx,
     DSA_PKEY_CTX *dctx = ctx->data;
     DSA *dsa = ctx->pkey->pkey.dsa;
 
-    if (dctx->md) {
-        if (tbslen != (size_t)EVP_MD_size(dctx->md))
-            return 0;
-    } else {
-        if (tbslen != SHA_DIGEST_LENGTH)
-            return 0;
-    }
+    if (dctx->md != NULL && tbslen != (size_t)EVP_MD_size(dctx->md))
+        return 0;
 
     ret = DSA_verify(0, tbs, tbslen, sig, siglen, dsa);
 
@@ -116,6 +107,7 @@ static int pkey_dsa_verify(EVP_PKEY_CTX *ctx,
 static int pkey_dsa_ctrl(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)
 {
     DSA_PKEY_CTX *dctx = ctx->data;
+
     switch (type) {
     case EVP_PKEY_CTRL_DSA_PARAMGEN_BITS:
         if (p1 < 256)
@@ -187,9 +179,15 @@ static int pkey_dsa_ctrl_str(EVP_PKEY_CTX *ctx,
                                  NULL);
     }
     if (strcmp(type, "dsa_paramgen_md") == 0) {
+        const EVP_MD *md = EVP_get_digestbyname(value);
+
+        if (md == NULL) {
+            DSAerr(DSA_F_PKEY_DSA_CTRL_STR, DSA_R_INVALID_DIGEST_TYPE);
+            return 0;
+        }
         return EVP_PKEY_CTX_ctrl(ctx, EVP_PKEY_DSA, EVP_PKEY_OP_PARAMGEN,
                                  EVP_PKEY_CTRL_DSA_PARAMGEN_MD, 0,
-                                 (void *)EVP_get_digestbyname(value));
+                                 (void *)md);
     }
     return -2;
 }
@@ -200,6 +198,7 @@ static int pkey_dsa_paramgen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
     DSA_PKEY_CTX *dctx = ctx->data;
     BN_GENCB *pcb;
     int ret;
+
     if (ctx->pkey_gencb) {
         pcb = BN_GENCB_new();
         if (pcb == NULL)
@@ -225,6 +224,7 @@ static int pkey_dsa_paramgen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 static int pkey_dsa_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 {
     DSA *dsa = NULL;
+
     if (ctx->pkey == NULL) {
         DSAerr(DSA_F_PKEY_DSA_KEYGEN, DSA_R_NO_PARAMETERS_SET);
         return 0;

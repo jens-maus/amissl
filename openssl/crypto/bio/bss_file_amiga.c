@@ -28,7 +28,11 @@ static const BIO_METHOD methods_filep =
 {
 	BIO_TYPE_FILE,
 	"FILE pointer (Amiga)",
+	/* TODO: Convert to new style write function */
+	bwrite_conv,
 	file_write,
+	/* TODO: Convert to new style read function */
+	bread_conv,
 	file_read,
 	file_puts,
 	file_gets,
@@ -39,9 +43,9 @@ static const BIO_METHOD methods_filep =
 };
 
 #ifdef __amigaos4__
-#define FSeek(file, pos, mode) Seek(file, pos, mode)
+#define SeekToEOF(file) FSeek(file, 0, OFFSET_END)
 
-static LONG Seek(BPTR file, LONG pos, LONG mode)
+static LONG FSeek(BPTR file, LONG pos, LONG mode)
 {
 	int64 ret = GetFilePosition(file);
 
@@ -53,6 +57,7 @@ static LONG Seek(BPTR file, LONG pos, LONG mode)
 	return((LONG)ret);
 }
 #else /* __amigaos4__ */
+#define SeekToEOF(file) Seek(file, 0, OFFSET_END)
 #define FFlush(file) Flush(file)
 
 static BPTR FOpen(STRPTR name, LONG mode, LONG buffer_size)
@@ -107,7 +112,7 @@ static BPTR FOpenFromMode(char *name, char *mode)
 		file = FOpen(name, type, 16384);
 
 		if (file && seek_to_end)
-			Seek(file, 0, OFFSET_END);
+			SeekToEOF(file);
 	}
 
 	return(file);

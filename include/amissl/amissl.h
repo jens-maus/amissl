@@ -1,14 +1,13 @@
-#ifndef AMISSL_AMISSL_H
-
 /* 
  * Make sure that this file is included from proto/amissl.h
  * so that the dependancies don't cause errors
  */
-#ifdef PROTO_AMISSL_H
-#define AMISSL_AMISSL_H
-#else
+#ifndef PROTO_AMISSL_H
 #include <proto/amissl.h>
 #endif
+
+#ifndef AMISSL_AMISSL_H
+#define AMISSL_AMISSL_H
 
 #ifdef __SASC
 #define ssize_t int
@@ -98,6 +97,7 @@
 #include <openssl/pkcs12.h>
 #include <openssl/pkcs7.h>
 #include <openssl/rand.h>
+#include <openssl/rand_drbg.h>
 #ifndef OPENSSL_NO_RC2
 #include <openssl/rc2.h>
 #endif
@@ -128,6 +128,7 @@
 #include <openssl/ssl2.h>
 #include <openssl/ssl3.h>
 #include <openssl/stack.h>
+#include <openssl/store.h>
 #include <openssl/symhacks.h>
 #include <openssl/tls1.h>
 #include <openssl/ts.h>
@@ -146,5 +147,10 @@
 #endif
 
 #include <amissl/tags.h>
+
+// internal typedefs
+#ifndef O_DIR_H
+typedef struct OPENSSL_dir_context_st OPENSSL_DIR_CTX;
+#endif
 
 #endif /* AMISSL_AMISSL_H */

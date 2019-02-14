@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2011-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -41,19 +41,18 @@ NON_EMPTY_TRANSLATION_UNIT
 # include <openssl/err.h>
 # include "ec_lcl.h"
 
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+# if defined(__SIZEOF_INT128__) && __SIZEOF_INT128__==16
   /* even with gcc, the typedef won't work for 32-bit platforms */
 typedef __uint128_t uint128_t;  /* nonstandard; implemented by gcc on 64-bit
                                  * platforms */
 typedef __int128_t int128_t;
 # else
-#  error "Need GCC 3.1 or later to define type uint128_t"
+#  error "Your compiler doesn't appear to support 128-bit integer types"
 # endif
 
 typedef uint8_t u8;
 typedef uint32_t u32;
 typedef uint64_t u64;
-typedef int64_t s64;
 
 /*
  * The underlying field. P256 operates over GF(2^256-2^224+2^192+2^96-1). We
@@ -165,7 +164,7 @@ static int BN_to_felem(felem out, const BIGNUM *bn)
     /* BN_bn2bin eats leading zeroes */
     memset(b_out, 0, sizeof(b_out));
     num_bytes = BN_num_bytes(bn);
-    if (num_bytes > sizeof b_out) {
+    if (num_bytes > sizeof(b_out)) {
         ECerr(EC_F_BN_TO_FELEM, EC_R_BIGNUM_OUT_OF_RANGE);
         return 0;
     }
@@ -184,8 +183,8 @@ static BIGNUM *smallfelem_to_BN(BIGNUM *out, const smallfelem in)
 {
     felem_bytearray b_in, b_out;
     smallfelem_to_bin32(b_in, in);
-    flip_endian(b_out, b_in, sizeof b_out);
-    return BN_bin2bn(b_out, sizeof b_out, out);
+    flip_endian(b_out, b_in, sizeof(b_out));
+    return BN_bin2bn(b_out, sizeof(b_out), out);
 }
 
 /*-
@@ -394,7 +393,7 @@ static void felem_shrink(smallfelem out, const felem in)
 {
     felem tmp;
     u64 a, b, mask;
-    s64 high, low;
+    u64 high, low;
     static const u64 kPrime3Test = 0x7fffffff00000001ul; /* 2^63 - 2^32 + 1 */
 
     /* Carry 2->3 */
@@ -435,29 +434,31 @@ static void felem_shrink(smallfelem out, const felem in)
      * In order to make space in tmp[3] for the carry from 2 -> 3, we
      * conditionally subtract kPrime if tmp[3] is large enough.
      */
-    high = tmp[3] >> 64;
+    high = (u64)(tmp[3] >> 64);
     /* As tmp[3] < 2^65, high is either 1 or 0 */
-    high <<= 63;
-    high >>= 63;
+    high = 0 - high;
     /*-
      * high is:
      *   all ones   if the high word of tmp[3] is 1
-     *   all zeros  if the high word of tmp[3] if 0 */
-    low = tmp[3];
-    mask = low >> 63;
+     *   all zeros  if the high word of tmp[3] if 0
+     */
+    low = (u64)tmp[3];
+    mask = 0 - (low >> 63);
     /*-
      * mask is:
      *   all ones   if the MSB of low is 1
-     *   all zeros  if the MSB of low if 0 */
+     *   all zeros  if the MSB of low if 0
+     */
     low &= bottom63bits;
     low -= kPrime3Test;
     /* if low was greater than kPrime3Test then the MSB is zero */
     low = ~low;
-    low >>= 63;
+    low = 0 - (low >> 63);
     /*-
      * low is:
      *   all ones   if low was > kPrime3Test
-     *   all zeros  if low was <= kPrime3Test */
+     *   all zeros  if low was <= kPrime3Test
+     */
     mask = (mask & low) | high;
     tmp[0] -= mask & kPrime[0];
     tmp[1] -= mask & kPrime[1];
@@ -891,7 +892,7 @@ static void felem_contract(smallfelem out, const felem in)
         equal &= equal << 4;
         equal &= equal << 2;
         equal &= equal << 1;
-        equal = ((s64) equal) >> 63;
+        equal = 0 - (equal >> 63);
 
         all_equal_so_far &= equal;
     }
@@ -958,7 +959,7 @@ static limb smallfelem_is_zero(const smallfelem small)
     is_zero &= is_zero << 4;
     is_zero &= is_zero << 2;
     is_zero &= is_zero << 1;
-    is_zero = ((s64) is_zero) >> 63;
+    is_zero = 0 - (is_zero >> 63);
 
     is_p = (small[0] ^ kPrime[0]) |
         (small[1] ^ kPrime[1]) |
@@ -970,7 +971,7 @@ static limb smallfelem_is_zero(const smallfelem small)
     is_p &= is_p << 4;
     is_p &= is_p << 2;
     is_p &= is_p << 1;
-    is_p = ((s64) is_p) >> 63;
+    is_p = 0 - (is_p >> 63);
 
     is_zero |= is_p;
 
@@ -1765,7 +1766,7 @@ static void batch_mul(felem x_out, felem y_out, felem z_out,
 /* Precomputation for the group generator. */
 struct nistp256_pre_comp_st {
     smallfelem g_pre_comp[2][16][3];
-    int references;
+    CRYPTO_REF_COUNT references;
     CRYPTO_RWLOCK *lock;
 };
 
@@ -1820,7 +1821,12 @@ const EC_METHOD *EC_GFp_nistp256_method(void)
         ec_key_simple_generate_public_key,
         0, /* keycopy */
         0, /* keyfinish */
-        ecdh_simple_compute_key
+        ecdh_simple_compute_key,
+        0, /* field_inverse_mod_ord */
+        0, /* blind_coordinates */
+        0, /* ladder_pre */
+        0, /* ladder_step */
+        0  /* ladder_post */
     };
 
     return &ret;
@@ -1831,7 +1837,7 @@ const EC_METHOD *EC_GFp_nistp256_method(void)
  * FUNCTIONS TO MANAGE PRECOMPUTATION
  */
 
-static NISTP256_PRE_COMP *nistp256_pre_comp_new()
+static NISTP256_PRE_COMP *nistp256_pre_comp_new(void)
 {
     NISTP256_PRE_COMP *ret = OPENSSL_zalloc(sizeof(*ret));
 
@@ -1855,7 +1861,7 @@ NISTP256_PRE_COMP *EC_nistp256_pre_comp_dup(NISTP256_PRE_COMP *p)
 {
     int i;
     if (p != NULL)
-        CRYPTO_atomic_add(&p->references, 1, &i, p->lock);
+        CRYPTO_UP_REF(&p->references, &i, p->lock);
     return p;
 }
 
@@ -1866,7 +1872,7 @@ void EC_nistp256_pre_comp_free(NISTP256_PRE_COMP *pre)
     if (pre == NULL)
         return;
 
-    CRYPTO_atomic_add(&pre->references, -1, &i, pre->lock);
+    CRYPTO_DOWN_REF(&pre->references, &i, pre->lock);
     REF_PRINT_COUNT("EC_nistp256", x);
     if (i > 0)
         return;
@@ -1901,9 +1907,10 @@ int ec_GFp_nistp256_group_set_curve(EC_GROUP *group, const BIGNUM *p,
         if ((ctx = new_ctx = BN_CTX_new()) == NULL)
             return 0;
     BN_CTX_start(ctx);
-    if (((curve_p = BN_CTX_get(ctx)) == NULL) ||
-        ((curve_a = BN_CTX_get(ctx)) == NULL) ||
-        ((curve_b = BN_CTX_get(ctx)) == NULL))
+    curve_p = BN_CTX_get(ctx);
+    curve_a = BN_CTX_get(ctx);
+    curve_b = BN_CTX_get(ctx);
+    if (curve_b == NULL)
         goto err;
     BN_bin2bn(nistp256_curve_params[0], sizeof(felem_bytearray), curve_p);
     BN_bin2bn(nistp256_curve_params[1], sizeof(felem_bytearray), curve_a);
@@ -2011,7 +2018,6 @@ int ec_GFp_nistp256_points_mul(const EC_GROUP *group, EC_POINT *r,
     int ret = 0;
     int j;
     int mixed = 0;
-    BN_CTX *new_ctx = NULL;
     BIGNUM *x, *y, *z, *tmp_scalar;
     felem_bytearray g_secret;
     felem_bytearray *secrets = NULL;
@@ -2029,14 +2035,12 @@ int ec_GFp_nistp256_points_mul(const EC_GROUP *group, EC_POINT *r,
     const EC_POINT *p = NULL;
     const BIGNUM *p_scalar = NULL;
 
-    if (ctx == NULL)
-        if ((ctx = new_ctx = BN_CTX_new()) == NULL)
-            return 0;
     BN_CTX_start(ctx);
-    if (((x = BN_CTX_get(ctx)) == NULL) ||
-        ((y = BN_CTX_get(ctx)) == NULL) ||
-        ((z = BN_CTX_get(ctx)) == NULL) ||
-        ((tmp_scalar = BN_CTX_get(ctx)) == NULL))
+    x = BN_CTX_get(ctx);
+    y = BN_CTX_get(ctx);
+    z = BN_CTX_get(ctx);
+    tmp_scalar = BN_CTX_get(ctx);
+    if (tmp_scalar == NULL)
         goto err;
 
     if (scalar != NULL) {
@@ -2199,7 +2203,6 @@ int ec_GFp_nistp256_points_mul(const EC_GROUP *group, EC_POINT *r,
  err:
     BN_CTX_end(ctx);
     EC_POINT_free(generator);
-    BN_CTX_free(new_ctx);
     OPENSSL_free(secrets);
     OPENSSL_free(pre_comp);
     OPENSSL_free(tmp_smallfelems);
@@ -2223,7 +2226,9 @@ int ec_GFp_nistp256_precompute_mult(EC_GROUP *group, BN_CTX *ctx)
         if ((ctx = new_ctx = BN_CTX_new()) == NULL)
             return 0;
     BN_CTX_start(ctx);
-    if (((x = BN_CTX_get(ctx)) == NULL) || ((y = BN_CTX_get(ctx)) == NULL))
+    x = BN_CTX_get(ctx);
+    y = BN_CTX_get(ctx);
+    if (y == NULL)
         goto err;
     /* get the generator */
     if (group->generator == NULL)
@@ -2233,7 +2238,7 @@ int ec_GFp_nistp256_precompute_mult(EC_GROUP *group, BN_CTX *ctx)
         goto err;
     BN_bin2bn(nistp256_curve_params[3], sizeof(felem_bytearray), x);
     BN_bin2bn(nistp256_curve_params[4], sizeof(felem_bytearray), y);
-    if (!EC_POINT_set_affine_coordinates_GFp(group, generator, x, y, ctx))
+    if (!EC_POINT_set_affine_coordinates(group, generator, x, y, ctx))
         goto err;
     if ((pre = nistp256_pre_comp_new()) == NULL)
         goto err;

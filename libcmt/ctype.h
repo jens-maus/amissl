@@ -93,6 +93,11 @@ extern const unsigned char __ctype_table[];
 
 /****************************************************************************/
 
+extern int tolower(int c);
+extern int toupper(int c);
+
+/****************************************************************************/
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
