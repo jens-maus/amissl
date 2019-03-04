@@ -20886,6 +20886,11 @@
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
       <arg name="ctrl_function" type="OSSL_STORE_ctrl_fn" m68kreg="a1"/>
     </method>
+    <method name="OSSL_STORE_vctrl" result="int">
+      <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
+      <arg name="cmd" type="int" m68kreg="d0"/>
+      <arg name="args" type="va_list" m68kreg="a1"/>
+    </method>
     <method name="OSSL_STORE_ctrl" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
       <arg name="cmd" type="int" m68kreg="d0"/>
@@ -21374,11 +21379,6 @@
       <arg name="type" type="int" m68kreg="d0"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
       <arg name="parent" type="RAND_DRBG *" m68kreg="a0"/>
-    </method>
-    <method name="OSSL_STORE_vctrl" result="int">
-      <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
-      <arg name="cmd" type="int" m68kreg="d0"/>
-      <arg name="args" type="va_list" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_SEARCH_by_alias" result="OSSL_STORE_SEARCH *">
       <arg name="alias" type="const char *" m68kreg="a0"/>
