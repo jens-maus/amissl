@@ -20052,7 +20052,7 @@
     </method>
     <method name="SSL_CTX_set_keylog_callback" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_CTX_keylog_cb_func" m68kreg="d0"/>
+      <arg name="cb" type="SSL_CTX_keylog_cb_func" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_get_keylog_callback" result="SSL_CTX_keylog_cb_func">
       <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
@@ -20100,8 +20100,8 @@
     </method>
     <method name="SSL_CTX_set_client_hello_cb" result="void">
       <arg name="c" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_client_hello_cb_fn" m68kreg="d0"/>
-      <arg name="arg" type="void *" m68kreg="a1"/>
+      <arg name="cb" type="SSL_client_hello_cb_fn" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
     </method>
     <method name="SSL_client_hello_get0_legacy_version" result="unsigned int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -20170,11 +20170,11 @@
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="ext_type" type="unsigned int" m68kreg="d0"/>
       <arg name="context" type="unsigned int" m68kreg="d1"/>
-      <arg name="add_cb" type="SSL_custom_ext_add_cb_ex" m68kreg="d2"/>
-      <arg name="free_cb" type="SSL_custom_ext_free_cb_ex" m68kreg="d3"/>
-      <arg name="add_arg" type="void *" m68kreg="a1"/>
-      <arg name="parse_cb" type="SSL_custom_ext_parse_cb_ex" m68kreg="d4"/>
-      <arg name="parse_arg" type="void *" m68kreg="a2"/>
+      <arg name="add_cb" type="SSL_custom_ext_add_cb_ex" m68kreg="a1"/>
+      <arg name="free_cb" type="SSL_custom_ext_free_cb_ex" m68kreg="a2"/>
+      <arg name="add_arg" type="void *" m68kreg="a3"/>
+      <arg name="parse_cb" type="SSL_custom_ext_parse_cb_ex" m68kreg="d2"/>
+      <arg name="parse_arg" type="void *" m68kreg="d3"/>
     </method>
     <method name="SSL_SESSION_is_resumable" result="int">
       <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
@@ -20222,19 +20222,19 @@
     </method>
     <method name="SSL_set_psk_find_session_callback" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_psk_find_session_cb_func" m68kreg="d0"/>
+      <arg name="cb" type="SSL_psk_find_session_cb_func" m68kreg="a1"/>
     </method>
     <method name="SSL_set_psk_use_session_callback" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_psk_use_session_cb_func" m68kreg="d0"/>
+      <arg name="cb" type="SSL_psk_use_session_cb_func" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_set_psk_use_session_callback" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_psk_use_session_cb_func" m68kreg="d0"/>
+      <arg name="cb" type="SSL_psk_use_session_cb_func" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_set_psk_find_session_callback" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_psk_find_session_cb_func" m68kreg="d0"/>
+      <arg name="cb" type="SSL_psk_find_session_cb_func" m68kreg="a1"/>
     </method>
     <method name="SSL_CIPHER_get_handshake_digest" result="const EVP_MD *">
       <arg name="c" type="const SSL_CIPHER *" m68kreg="a0"/>
@@ -20290,7 +20290,7 @@
     </method>
     <method name="DTLS_set_timer_cb" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="cb" type="DTLS_timer_cb" m68kreg="d0"/>
+      <arg name="cb" type="DTLS_timer_cb" m68kreg="a1"/>
     </method>
     <method name="SSL_CTX_set_tlsext_max_fragment_length" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -20348,9 +20348,9 @@
     </method>
     <method name="SSL_CTX_set_session_ticket_cb" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="gen_cb" type="SSL_CTX_generate_session_ticket_fn" m68kreg="d0"/>
-      <arg name="dec_cb" type="SSL_CTX_decrypt_session_ticket_fn" m68kreg="d1"/>
-      <arg name="arg" type="void *" m68kreg="a1"/>
+      <arg name="gen_cb" type="SSL_CTX_generate_session_ticket_fn" m68kreg="a1"/>
+      <arg name="dec_cb" type="SSL_CTX_decrypt_session_ticket_fn" m68kreg="a2"/>
+      <arg name="arg" type="void *" m68kreg="a3"/>
     </method>
     <method name="SSL_CTX_set_stateless_cookie_generate_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -20384,13 +20384,13 @@
     </method>
     <method name="SSL_CTX_set_allow_early_data_cb" result="void">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_allow_early_data_cb_fn" m68kreg="d0"/>
-      <arg name="arg" type="void *" m68kreg="a1"/>
+      <arg name="cb" type="SSL_allow_early_data_cb_fn" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
     </method>
     <method name="SSL_set_allow_early_data_cb" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="cb" type="SSL_allow_early_data_cb_fn" m68kreg="d0"/>
-      <arg name="arg" type="void *" m68kreg="a1"/>
+      <arg name="cb" type="SSL_allow_early_data_cb_fn" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
     </method>
     <method name="SSL_set_recv_max_early_data" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -20509,7 +20509,7 @@
     </method>
     <method name="BIO_set_callback_ex" result="void">
       <arg name="b" type="BIO *" m68kreg="a0"/>
-      <arg name="callback" type="BIO_callback_fn_ex" m68kreg="d0"/>
+      <arg name="callback" type="BIO_callback_fn_ex" m68kreg="a1"/>
     </method>
     <method name="BIO_get_callback_ex" result="BIO_callback_fn_ex">
       <arg name="b" type="const BIO *" m68kreg="a0"/>
@@ -20776,7 +20776,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_error" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="error_function" type="OSSL_STORE_error_fn" m68kreg="d0"/>
+      <arg name="error_function" type="OSSL_STORE_error_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_INFO_get0_PKEY" result="EVP_PKEY *">
       <arg name="info" type="const OSSL_STORE_INFO *" m68kreg="a0"/>
@@ -20797,7 +20797,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_eof" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="eof_function" type="OSSL_STORE_eof_fn" m68kreg="d0"/>
+      <arg name="eof_function" type="OSSL_STORE_eof_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_LOADER_new" result="OSSL_STORE_LOADER *">
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
@@ -20808,7 +20808,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_close" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="close_function" type="OSSL_STORE_close_fn" m68kreg="d0"/>
+      <arg name="close_function" type="OSSL_STORE_close_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_INFO_new_PARAMS" result="OSSL_STORE_INFO *">
       <arg name="params" type="EVP_PKEY *" m68kreg="a0"/>
@@ -20839,7 +20839,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_load" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="load_function" type="OSSL_STORE_load_fn" m68kreg="d0"/>
+      <arg name="load_function" type="OSSL_STORE_load_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_LOADER_get0_scheme" result="const char *">
       <arg name="loader" type="const OSSL_STORE_LOADER *" m68kreg="a0"/>
@@ -20848,8 +20848,8 @@
       <arg name="uri" type="const char *" m68kreg="a0"/>
       <arg name="ui_method" type="const UI_METHOD *" m68kreg="a1"/>
       <arg name="ui_data" type="void *" m68kreg="a2"/>
-      <arg name="post_process" type="OSSL_STORE_post_process_info_fn" m68kreg="d0"/>
-      <arg name="post_process_data" type="void *" m68kreg="a3"/>
+      <arg name="post_process" type="OSSL_STORE_post_process_info_fn" m68kreg="a3"/>
+      <arg name="post_process_data" type="void *" m68kreg="d0"/>
     </method>
     <method name="OSSL_STORE_close" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
@@ -20880,11 +20880,11 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_open" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="open_function" type="OSSL_STORE_open_fn" m68kreg="d0"/>
+      <arg name="open_function" type="OSSL_STORE_open_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_LOADER_set_ctrl" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="ctrl_function" type="OSSL_STORE_ctrl_fn" m68kreg="d0"/>
+      <arg name="ctrl_function" type="OSSL_STORE_ctrl_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_ctrl" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
@@ -20923,10 +20923,10 @@
     </method>
     <method name="RAND_DRBG_set_callbacks" result="int">
       <arg name="drbg" type="RAND_DRBG *" m68kreg="a0"/>
-      <arg name="get_entropy" type="RAND_DRBG_get_entropy_fn" m68kreg="d0"/>
-      <arg name="cleanup_entropy" type="RAND_DRBG_cleanup_entropy_fn" m68kreg="d1"/>
-      <arg name="get_nonce" type="RAND_DRBG_get_nonce_fn" m68kreg="d2"/>
-      <arg name="cleanup_nonce" type="RAND_DRBG_cleanup_nonce_fn" m68kreg="d3"/>
+      <arg name="get_entropy" type="RAND_DRBG_get_entropy_fn" m68kreg="a1"/>
+      <arg name="cleanup_entropy" type="RAND_DRBG_cleanup_entropy_fn" m68kreg="a2"/>
+      <arg name="get_nonce" type="RAND_DRBG_get_nonce_fn" m68kreg="a3"/>
+      <arg name="cleanup_nonce" type="RAND_DRBG_cleanup_nonce_fn" m68kreg="d0"/>
     </method>
     <method name="RAND_DRBG_new" result="RAND_DRBG *">
       <arg name="type" type="int" m68kreg="d0"/>
@@ -21378,7 +21378,7 @@
     <method name="OSSL_STORE_vctrl" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
       <arg name="cmd" type="int" m68kreg="d0"/>
-      <arg name="args" type="va_list" m68kreg="d1"/>
+      <arg name="args" type="va_list" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_SEARCH_by_alias" result="OSSL_STORE_SEARCH *">
       <arg name="alias" type="const char *" m68kreg="a0"/>
@@ -21390,7 +21390,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_expect" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="expect_function" type="OSSL_STORE_expect_fn" m68kreg="d0"/>
+      <arg name="expect_function" type="OSSL_STORE_expect_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_expect" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
@@ -21437,7 +21437,7 @@
     </method>
     <method name="OSSL_STORE_LOADER_set_find" result="int">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
-      <arg name="find_function" type="OSSL_STORE_find_fn" m68kreg="d0"/>
+      <arg name="find_function" type="OSSL_STORE_find_fn" m68kreg="a1"/>
     </method>
     <method name="OSSL_STORE_SEARCH_free" result="void">
       <arg name="search" type="OSSL_STORE_SEARCH *" m68kreg="a0"/>
@@ -21569,11 +21569,11 @@
     </method>
     <method name="X509_LOOKUP_meth_set_ctrl" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="ctrl_fn" type="X509_LOOKUP_ctrl_fn" m68kreg="d0"/>
+      <arg name="ctrl_fn" type="X509_LOOKUP_ctrl_fn" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_meth_set_get_by_issuer_serial" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="fn" type="X509_LOOKUP_get_by_issuer_serial_fn" m68kreg="d0"/>
+      <arg name="fn" type="X509_LOOKUP_get_by_issuer_serial_fn" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_get_store" result="X509_STORE *">
       <arg name="ctx" type="const X509_LOOKUP *" m68kreg="a0"/>
@@ -21583,7 +21583,7 @@
     </method>
     <method name="X509_LOOKUP_meth_set_get_by_alias" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="fn" type="X509_LOOKUP_get_by_alias_fn" m68kreg="d0"/>
+      <arg name="fn" type="X509_LOOKUP_get_by_alias_fn" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_meth_get_get_by_subject" result="X509_LOOKUP_get_by_subject_fn">
       <arg name="method" type="const X509_LOOKUP_METHOD *" m68kreg="a0"/>
@@ -21593,7 +21593,7 @@
     </method>
     <method name="X509_LOOKUP_meth_set_get_by_subject" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="fn" type="X509_LOOKUP_get_by_subject_fn" m68kreg="d0"/>
+      <arg name="fn" type="X509_LOOKUP_get_by_subject_fn" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_meth_set_free" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
@@ -21611,7 +21611,7 @@
     </method>
     <method name="X509_LOOKUP_meth_set_get_by_fingerprint" result="int">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
-      <arg name="fn" type="X509_LOOKUP_get_by_fingerprint_fn" m68kreg="d0"/>
+      <arg name="fn" type="X509_LOOKUP_get_by_fingerprint_fn" m68kreg="a1"/>
     </method>
     <method name="X509_LOOKUP_meth_free" result="void">
       <arg name="method" type="X509_LOOKUP_METHOD *" m68kreg="a0"/>
