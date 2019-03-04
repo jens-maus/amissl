@@ -5397,7 +5397,7 @@
     <method name="RAND_add" result="void">
       <arg name="buf" type="const void *" m68kreg="a0"/>
       <arg name="num" type="int" m68kreg="d0"/>
-      <arg name="randomness" type="double" m68kreg="d1"/>
+      <arg name="randomness" type="double" m68kreg="d1-d2"/>
     </method>
     <method name="RAND_load_file" result="int">
       <arg name="file" type="const char *" m68kreg="a0"/>
@@ -16820,7 +16820,7 @@
     </method>
     <method name="ASN1_ENUMERATED_set_int64" result="int">
       <arg name="a" type="ASN1_ENUMERATED *" m68kreg="a0"/>
-      <arg name="r" type="int64_t" m68kreg="d0"/>
+      <arg name="r" type="int64_t" m68kreg="d0-d1"/>
     </method>
     <method name="ASN1_INTEGER_get_int64" result="int">
       <arg name="pr" type="int64_t *" m68kreg="a0"/>
@@ -16832,11 +16832,11 @@
     </method>
     <method name="ASN1_INTEGER_set_int64" result="int">
       <arg name="a" type="ASN1_INTEGER *" m68kreg="a0"/>
-      <arg name="r" type="int64_t" m68kreg="d0"/>
+      <arg name="r" type="int64_t" m68kreg="d0-d1"/>
     </method>
     <method name="ASN1_INTEGER_set_uint64" result="int">
       <arg name="a" type="ASN1_INTEGER *" m68kreg="a0"/>
-      <arg name="r" type="uint64_t" m68kreg="d0"/>
+      <arg name="r" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="ASN1_SCTX_free" result="void">
       <arg name="p" type="ASN1_SCTX *" m68kreg="a0"/>
@@ -17189,7 +17189,7 @@
     <method name="OPENSSL_cleanup" result="void">
     </method>
     <method name="OPENSSL_init_crypto" result="int">
-      <arg name="opts" type="uint64_t" m68kreg="d0"/>
+      <arg name="opts" type="uint64_t" m68kreg="d0-d1"/>
       <arg name="settings" type="const OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_INIT_free" result="void">
@@ -17638,7 +17638,7 @@
       <arg name="N" type="unsigned long" m68kreg="d2"/>
       <arg name="r" type="unsigned long" m68kreg="d3"/>
       <arg name="p" type="unsigned long" m68kreg="d4"/>
-      <arg name="maxmem" type="uint64_t" m68kreg="d5"/>
+      <arg name="maxmem" type="uint64_t" m68kreg="d5-d6"/>
       <arg name="key" type="unsigned char *" m68kreg="a2"/>
       <arg name="keylen" type="size_t" m68kreg="a3"/>
     </method>
@@ -18016,7 +18016,7 @@
       <arg name="aiv" type="unsigned char *" m68kreg="a2"/>
       <arg name="N" type="unsigned long" m68kreg="d1"/>
       <arg name="r" type="unsigned long" m68kreg="d2"/>
-      <arg name="p" type="uint64_t" m68kreg="d3"/>
+      <arg name="p" type="uint64_t" m68kreg="d3-d4"/>
     </method>
     <method name="X509_aux_print" result="int" status="unimplemented">
       <arg name="out" type="BIO *" m68kreg="a0"/>
@@ -18248,7 +18248,7 @@
       <arg name="client" type="BIO_ADDR *" m68kreg="a1"/>
     </method>
     <method name="OPENSSL_init_ssl" result="int">
-      <arg name="opts" type="uint64_t" m68kreg="d0"/>
+      <arg name="opts" type="uint64_t" m68kreg="d0-d1"/>
       <arg name="settings" type="const OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
     </method>
     <method name="SSL_add1_host" result="int">
@@ -18606,7 +18606,7 @@
       <arg name="version" type="unsigned char" m68kreg="d0"/>
       <arg name="logid_base64" type="const char *" m68kreg="a0"/>
       <arg name="entry_type" type="ct_log_entry_type_t" m68kreg="d1"/>
-      <arg name="timestamp" type="uint64_t" m68kreg="d2"/>
+      <arg name="timestamp" type="uint64_t" m68kreg="d2-d3"/>
       <arg name="extensions_base64" type="const char *" m68kreg="a1"/>
       <arg name="signature_base64" type="const char *" m68kreg="a2"/>
     </method>
@@ -18649,7 +18649,7 @@
     </method>
     <method name="SCT_set_timestamp" result="void">
       <arg name="sct" type="SCT *" m68kreg="a0"/>
-      <arg name="timestamp" type="uint64_t" m68kreg="d0"/>
+      <arg name="timestamp" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="SCT_get_signature_nid" result="int">
       <arg name="sct" type="const SCT *" m68kreg="a0"/>
@@ -19973,7 +19973,7 @@
     </method>
     <method name="CT_POLICY_EVAL_CTX_set_time" result="void">
       <arg name="ctx" type="CT_POLICY_EVAL_CTX *" m68kreg="a0"/>
-      <arg name="time_in_ms" type="uint64_t" m68kreg="d0"/>
+      <arg name="time_in_ms" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="DH_check_params" result="int">
       <arg name="dh" type="const DH *" m68kreg="a0"/>
@@ -21032,8 +21032,8 @@
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
       <arg name="keytype" type="int" m68kreg="d0"/>
       <arg name="optype" type="int" m68kreg="d1"/>
-      <arg name="cmd" type="int" m68kreg="d2"/>
-      <arg name="value" type="uint64_t" m68kreg="d3"/>
+      <arg name="cmd" type="int" m68kreg="d4"/>
+      <arg name="value" type="uint64_t" m68kreg="d2-d3"/>
     </method>
     <method name="EVP_DigestFinalXOF" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
@@ -21094,8 +21094,8 @@
       <arg name="dh" type="const DH *" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_sk_new_reserve" result="OPENSSL_STACK *">
-      <arg name="c" type="OPENSSL_sk_compfunc" m68kreg="d0"/>
-      <arg name="n" type="int" m68kreg="d1"/>
+      <arg name="c" type="OPENSSL_sk_compfunc" m68kreg="a0"/>
+      <arg name="n" type="int" m68kreg="d0"/>
     </method>
     <method name="EVP_PKEY_asn1_set_check" result="void">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
