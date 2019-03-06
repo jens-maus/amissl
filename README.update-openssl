@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2016 AmiSSL Open Source Team
+ Copyright (C) 2006-2019 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -78,6 +78,16 @@ HowTo update the OpenSSL version in "openssl/":
       existing function definitions.
    -> 'va_list' types won't work, have a look at how "long *" is used instead
       (e.g. for BIO_printf)
+   -> be sure to declare varargs functions directly after their stdargs
+      counterpart, as this is critical for the m68k build
+   -> follow existing m68k register allocation rules, prioritising d0-d7 for
+      non-pointer arguments and a0-a3 for pointers, incrementally using them in
+      the order of the arguments, using a4 only after exhausting the other 12
+      registers, with the exception of...
+   -> make sure 64-bit arguments (e.g. double, long long, uint64_t, int64_t)
+      explictly declare the m68k 32-bit register pair to use (e.g. d0-d1).
+      Additionally, for VBCC compatibility, try to use only even pairs (i.e.
+      either d0-d1, d2-d3, d4-d5 or d6-d7) and reallocate other arguments to help.
 
    NOTE: tools/newXMLhelper.pl can be used to help with this, cross-referencing
    various files and finally generating the required xml output which you may
@@ -90,8 +100,8 @@ HowTo update the OpenSSL version in "openssl/":
    $ cd src
    $ ./mkidl.sh
 
-   Please note that this will only work if you have the latest idltool, etc. installed
-   in your cross compiler environment.
+   Please note that this will only work if you have the latest idltool (53.27 being
+   the current minimum requirement), etc. installed in your cross compiler environment.
 
 6. Check "include/amissl/amissl.h" to directly include all existing header files
    located in "include/openssl/". Due to some header file changes of newer versions
