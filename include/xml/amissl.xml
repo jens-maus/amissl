@@ -16208,7 +16208,7 @@
     </method>
     <method name="OPENSSL_stderr" result="void *" status="unimplemented">
     </method>
-    <method name="OPENSSL_showfatal" result="void">
+    <method name="OPENSSL_showfatal" result="void" status="unimplemented">
       <arg name="fmta" type="const char *" m68kreg="a0"/>
       <vararg name="dummy" type="long" m68kreg="a1"/>
     </method>
