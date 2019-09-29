@@ -169,8 +169,9 @@ OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
 INCLUDE  = -I./include -I$(BUILD_D)/openssl/include -I./include/internal
-APPCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
-CFLAGS   = $(APPCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
+COMCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+APPCFLAGS= $(COMCFLAGS)
+CFLAGS   = $(COMCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
            -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
            -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
            -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
@@ -203,6 +204,7 @@ ifeq ($(OS), os4)
   CPU       = -mcpu=powerpc -mstrict-align
   WARN      += -Wdeclaration-after-statement -Wdisabled-optimization -Wshadow
   APPCFLAGS += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  AINLCFLAGS = $(COMCFLAGS) -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   CFLAGS    += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
   LDFLAGS   += -mcrt=$(CRT)
   BASEREL   = -mbaserel
@@ -451,22 +453,22 @@ $(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 
 $(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_amissl_main.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(BUILD_D)/autoinit_amissl_main.o
+	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
 $(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_amissl_main_newlib.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(BUILD_D)/autoinit_amissl_main_newlib.o
+	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
 $(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(BUILD_D)/libstubs.o
+	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
 $(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
 	@echo "  AR $@"
-	@$(AR) r $@ $(BUILD_D)/debug.o
+	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
 ## AMISSL TESTCASE BINARIES ##
@@ -495,11 +497,11 @@ $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/liba
 
 $(BUILD_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
+	@$(CC) $(APPCFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
 $(BUILD_D)/autoinit_amissl_main_newlib.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE) -mcrt=newlib
+	@$(CC) $(AINLCFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
 $(BUILD_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
