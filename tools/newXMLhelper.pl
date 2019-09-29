@@ -138,6 +138,7 @@ sub params_to_xml {
    my $m68k_dreg = 0;
    my $m68k_areg = 0;
    my $unnamed_arg = ord("a");
+   my $reg;
 
    my @params = split_params($_[0]);
    foreach my $param (@params) {
@@ -181,15 +182,36 @@ sub params_to_xml {
       elsif ($param =~ /^\s*(\w+[\w\s]*)\s+(\w+)[\s\)]*$/ ) {
          # const type name
          # type name
-         $xml .= "      <arg name=\"$2\" type=\"$1\" m68kreg=\"d$m68k_dreg\"/>\n";
-         $m68k_dreg++;
+         if (substr($1,-3,3) eq '_fn' || substr($1,-5,5) eq '_func'||
+             substr($1,-3,3) eq '_cb' || substr($1,-6,6) eq '_cb_ex') {
+            # function pointer typedef
+            if ($m68k_areg > 3) {
+               $reg = "d".$m68k_dreg++;
+            } else {
+               $reg = "a".$m68k_areg++;
+            }
+         } else {
+            $reg = "d".$m68k_dreg++;
+         }
+         $xml .= "      <arg name=\"$2\" type=\"$1\" m68kreg=\"$reg\"/>\n";
       }
       elsif ($param =~ /^(\w+[\w\s]*)\)*$/ ) {
          # const type
          # type
          $name = chr($unnamed_arg);
-         $xml .= "      <arg name=\"$name\" type=\"$1\" m68kreg=\"d$m68k_dreg\"/>\n";
-         $m68k_dreg++;
+         if (substr($1,-3,3) eq '_fn' || substr($1,-5,5) eq '_func'||
+             substr($1,-3,3) eq '_cb' || substr($1,-6,6) eq '_cb_ex' ||
+             $1 eq 'va_list') {
+            # function pointer typedef
+            if ($m68k_areg > 3) {
+               $reg = "d".$m68k_dreg++;
+            } else {
+               $reg = "a".$m68k_areg++;
+            }
+         } else {
+            $reg = "d".$m68k_dreg++;
+         }
+         $xml .= "      <arg name=\"$name\" type=\"$1\" m68kreg=\"$reg\"/>\n";
          $unnamed_arg++;
       }
 #     elsif ($param =~ /^(\w+)\s+(\**\s*)?\((\*+)(\w+)\)\s*(\([\d\D]*\))/ ) {
