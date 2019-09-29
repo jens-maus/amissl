@@ -109,10 +109,14 @@ static char *make_config_name(void)
     len = strlen(t) + 1 + strlen(OPENSSL_CONF) + 1;
     p = app_malloc(len, "config filename buffer");
     strcpy(p, t);
+#ifndef OPENSSL_SYS_AMIGA
 #ifndef OPENSSL_SYS_VMS
     strcat(p, "/");
 #endif
     strcat(p, OPENSSL_CONF);
+#else
+    AddPart(p, OPENSSL_CONF, len);
+#endif
 
     return p;
 }
