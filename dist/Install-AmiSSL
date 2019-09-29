@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.10 (13.02.2017)
+; $VER: Install-AmiSSL 4.0.11 (29.9.2019)
 
 (set #AmiUpdate (= @app-name "AmiUpdate"))
 
@@ -371,6 +371,8 @@
 ;----------------------------------------------------------------------------
 ; /// S:User-Startup additions
 
+(set #startup-command "")
+
 ; If assign missing (OS4 install) or new install
 (if (or (not #updateInstall) (if #amissl-assign 0 1))
 	(set #startup-command (cat "Assign AmiSSL: \"" #storage-dir "\"\n"))
@@ -396,7 +398,7 @@
 	)
 )
 
-(if #startup-command
+(if (<> #startup-command "")
 	(startup @app-name
 		(prompt #str-add-assign)
 		(help @startup-help)
