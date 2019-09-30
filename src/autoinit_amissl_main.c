@@ -60,12 +60,12 @@ static void fatal_error(const char *message)
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
 // the AmigaOS3 build needs these stubs for the varargs functions
-LONG FPrintf(BPTR fh, CONST_STRPTR format, ...)
+LONG (FPrintf)(BPTR fh, CONST_STRPTR format, ...)
 { return VFPrintf(fh, format, &format+1); }
 
-long InitAmiSSL(Tag tag1, ...)
+long (InitAmiSSL)(Tag tag1, ...)
 { return InitAmiSSLA((struct TagItem *)&tag1); }
-long CleanupAmiSSL(Tag tag1, ...)
+long (CleanupAmiSSL)(Tag tag1, ...)
 { return CleanupAmiSSLA((struct TagItem *)&tag1); }
 
 #elif defined(__MORPHOS__)
