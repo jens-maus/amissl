@@ -345,7 +345,7 @@ int (CT_verify_at_least_one_good_sct)(const CT_POLICY_EVAL_CTX * ctx, const STAC
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
 #include <proto/dos.h>
-LONG Printf( CONST_STRPTR format, ... )
+LONG (Printf)( CONST_STRPTR format, ... )
 { return VPrintf(format, (CONST APTR)((ULONG)&format + sizeof(CONST_STRPTR))); }
 
 int (BIO_printf)( BIO *bio, const char *format, ... )
