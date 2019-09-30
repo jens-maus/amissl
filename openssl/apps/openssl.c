@@ -27,6 +27,9 @@
 #ifdef OPENSSL_SYS_VMS
 # include <unixio.h>
 #endif
+#ifdef OPENSSL_SYS_AMIGA
+#include <proto/dos.h>
+#endif /* OPENSSL_SYS_AMIGA */
 #include "apps.h"
 #define INCLUDE_FUNCTION_TABLE
 #include "progs.h"

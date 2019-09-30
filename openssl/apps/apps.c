@@ -2620,6 +2620,7 @@ BIO *bio_open_owner(const char *filename, int format, int private)
     if (!private || filename == NULL || strcmp(filename, "-") == 0)
         return bio_open_default(filename, 'w', format);
 
+#ifndef OPENSSL_SYS_AMIGA
     mode = O_WRONLY;
 #ifdef O_CREAT
     mode |= O_CREAT;
@@ -2656,6 +2657,9 @@ BIO *bio_open_owner(const char *filename, int format, int private)
     if (textmode)
         bflags |= BIO_FP_TEXT;
     b = BIO_new_fp(fp, bflags);
+#else
+    b = BIO_new_file(filename, modestr('w', format));
+#endif
     if (b)
         return b;
 

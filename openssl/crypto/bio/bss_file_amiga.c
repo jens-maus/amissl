@@ -134,11 +134,15 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 {
 	BIO *ret;
 	BPTR file;
+	int fp_flags = BIO_CLOSE;
+
+	if (strchr(mode, 'b') == NULL)
+		fp_flags |= BIO_FP_TEXT;
 
 	if((file = FOpenFromMode((char *)filename, (char *)mode)))
 	{
 		if((ret = BIO_new(BIO_s_file())))
-			BIO_set_fp_amiga(ret, file, BIO_CLOSE);
+			BIO_set_fp_amiga(ret, file, fp_flags);
 	}
 	else
 	{
