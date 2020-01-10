@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2019 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -18,7 +18,8 @@ int create_ssl_ctx_pair(const SSL_METHOD *sm, const SSL_METHOD *cm,
                         char *privkeyfile);
 int create_ssl_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
                        SSL **cssl, BIO *s_to_c_fbio, BIO *c_to_s_fbio);
-int create_bare_ssl_connection(SSL *serverssl, SSL *clientssl, int want);
+int create_bare_ssl_connection(SSL *serverssl, SSL *clientssl, int want,
+                               int read);
 int create_ssl_connection(SSL *serverssl, SSL *clientssl, int want);
 void shutdown_ssl_connection(SSL *serverssl, SSL *clientssl);
 
@@ -28,6 +29,9 @@ void bio_f_tls_dump_filter_free(void);
 
 const BIO_METHOD *bio_s_mempacket_test(void);
 void bio_s_mempacket_test_free(void);
+
+const BIO_METHOD *bio_s_always_retry(void);
+void bio_s_always_retry_free(void);
 
 /* Packet types - value 0 is reserved */
 #define INJECT_PACKET                   1

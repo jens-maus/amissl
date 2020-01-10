@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2018 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2011-2019 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -20,6 +20,13 @@
 
 #if defined(_WIN32)
 # include <windows.h>
+#endif
+
+
+#if defined(OPENSSL_SYS_UNIX)
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 #endif
 
 #include "testutil.h"
@@ -293,7 +300,7 @@ static int error_check(DRBG_SELFTEST_DATA *td)
      * Personalisation string tests
      */
 
-    /* Test detection of too large personlisation string */
+    /* Test detection of too large personalisation string */
     if (!init(drbg, td, &t)
             || RAND_DRBG_instantiate(drbg, td->pers, drbg->max_perslen + 1) > 0)
         goto err;
@@ -420,7 +427,7 @@ static int error_check(DRBG_SELFTEST_DATA *td)
      */
 
     /* Test explicit reseed with too large additional input */
-    if (!init(drbg, td, &t)
+    if (!instantiate(drbg, td, &t)
             || RAND_DRBG_reseed(drbg, td->adin, drbg->max_adinlen + 1, 0) > 0)
         goto err;
 
@@ -431,7 +438,7 @@ static int error_check(DRBG_SELFTEST_DATA *td)
         goto err;
 
     /* Test explicit reseed with too much entropy */
-    if (!init(drbg, td, &t))
+    if (!instantiate(drbg, td, &t))
         goto err;
     t.entropylen = drbg->max_entropylen + 1;
     if (!TEST_int_le(RAND_DRBG_reseed(drbg, td->adin, td->adinlen, 0), 0)
@@ -439,7 +446,7 @@ static int error_check(DRBG_SELFTEST_DATA *td)
         goto err;
 
     /* Test explicit reseed with too little entropy */
-    if (!init(drbg, td, &t))
+    if (!instantiate(drbg, td, &t))
         goto err;
     t.entropylen = drbg->min_entropylen - 1;
     if (!TEST_int_le(RAND_DRBG_reseed(drbg, td->adin, td->adinlen, 0), 0)
@@ -669,6 +676,40 @@ static int test_drbg_reseed(int expect_success,
     return 1;
 }
 
+
+#if defined(OPENSSL_SYS_UNIX)
+/*
+ * Test whether master, public and private DRBG are reseeded after
+ * forking the process.
+ */
+static int test_drbg_reseed_after_fork(RAND_DRBG *master,
+                                       RAND_DRBG *public,
+                                       RAND_DRBG *private)
+{
+    pid_t pid;
+    int status=0;
+
+    pid = fork();
+    if (!TEST_int_ge(pid, 0))
+        return 0;
+
+    if (pid > 0) {
+        /* I'm the parent; wait for the child and check its exit code */
+        return TEST_int_eq(waitpid(pid, &status, 0), pid) && TEST_int_eq(status, 0);
+    }
+
+    /* I'm the child; check whether all three DRBGs reseed. */
+    if (!TEST_true(test_drbg_reseed(1, master, public, private, 1, 1, 1, 0)))
+        status = 1;
+
+    /* Remove hooks  */
+    unhook_drbg(master);
+    unhook_drbg(public);
+    unhook_drbg(private);
+    exit(status);
+}
+#endif
+
 /*
  * Test whether the default rand_method (RAND_OpenSSL()) is
  * setup correctly, in particular whether reseeding  works
@@ -755,6 +796,10 @@ static int test_rand_drbg_reseed(void)
         goto error;
     reset_drbg_hook_ctx();
 
+#if defined(OPENSSL_SYS_UNIX)
+    if (!TEST_true(test_drbg_reseed_after_fork(master, public, private)))
+        goto error;
+#endif
 
     /* fill 'randomness' buffer with some arbitrary data */
     memset(rand_add_buf, 'r', sizeof(rand_add_buf));
@@ -830,6 +875,11 @@ typedef HANDLE thread_t;
 static DWORD WINAPI thread_run(LPVOID arg)
 {
     run_multi_thread_test();
+    /*
+     * Because we're linking with a static library, we must stop each
+     * thread explicitly, or so says OPENSSL_thread_stop(3)
+     */
+    OPENSSL_thread_stop();
     return 0;
 }
 
@@ -889,6 +939,11 @@ typedef pthread_t thread_t;
 static void *thread_run(void *arg)
 {
     run_multi_thread_test();
+    /*
+     * Because we're linking with a static library, we must stop each
+     * thread explicitly, or so says OPENSSL_thread_stop(3)
+     */
+    OPENSSL_thread_stop();
     return NULL;
 }
 

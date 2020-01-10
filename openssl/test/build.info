@@ -12,7 +12,8 @@ IF[{- !$disabled{tests} -}]
   SOURCE[libtestutil.a]=testutil/basic_output.c testutil/output_helpers.c \
           testutil/driver.c testutil/tests.c testutil/cb.c testutil/stanza.c \
           testutil/format_output.c testutil/tap_bio.c \
-          testutil/test_cleanup.c testutil/main.c testutil/init.c
+          testutil/test_cleanup.c testutil/main.c testutil/init.c \
+          testutil/random.c
   INCLUDE[libtestutil.a]=../include
   DEPEND[libtestutil.a]=../libcrypto
 
@@ -41,7 +42,7 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
           packettest asynctest secmemtest srptest memleaktest stack_test \
           dtlsv1listentest ct_test threadstest afalgtest d2i_test \
           ssl_test_ctx_test ssl_test x509aux cipherlist_test asynciotest \
-          bio_callback_test \
+          bio_callback_test bio_memleak_test \
           bioprinttest sslapitest dtlstest sslcorrupttest bio_enc_test \
           pkey_meth_test pkey_meth_kdf_test uitest cipherbytes_test \
           asn1_encode_test asn1_decode_test asn1_string_table_test \
@@ -299,6 +300,10 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
   INCLUDE[bio_callback_test]=../include
   DEPEND[bio_callback_test]=../libcrypto libtestutil.a
 
+  SOURCE[bio_memleak_test]=bio_memleak_test.c
+  INCLUDE[bio_memleak_test]=../include
+  DEPEND[bio_memleak_test]=../libcrypto libtestutil.a
+
   SOURCE[bioprinttest]=bioprinttest.c
   INCLUDE[bioprinttest]=../include
   DEPEND[bioprinttest]=../libcrypto libtestutil.a
@@ -389,7 +394,6 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
     PROGRAMS_NO_INST=shlibloadtest
     SOURCE[shlibloadtest]=shlibloadtest.c
     INCLUDE[shlibloadtest]=../include ../crypto/include
-    DEPEND[shlibloadtest]=libtestutil.a
   ENDIF
 
   IF[{- !$disabled{shared} -}]
@@ -455,7 +459,7 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
       PROGRAMS_NO_INST=sm4_internal_test
     ENDIF
     IF[{- !$disabled{ec} -}]
-      PROGRAMS_NO_INST=curve448_internal_test
+      PROGRAMS_NO_INST=ec_internal_test curve448_internal_test
     ENDIF
 
     SOURCE[poly1305_internal_test]=poly1305_internal_test.c
@@ -501,6 +505,10 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
     SOURCE[sm4_internal_test]=sm4_internal_test.c
     INCLUDE[sm4_internal_test]=.. ../include ../crypto/include
     DEPEND[sm4_internal_test]=../libcrypto.a libtestutil.a
+
+    SOURCE[ec_internal_test]=ec_internal_test.c
+    INCLUDE[ec_internal_test]=../include ../crypto/ec ../crypto/include
+    DEPEND[ec_internal_test]=../libcrypto.a libtestutil.a
 
     SOURCE[curve448_internal_test]=curve448_internal_test.c
     INCLUDE[curve448_internal_test]=.. ../include ../crypto/ec/curve448
@@ -572,11 +580,19 @@ ENDIF
        next if grep { lc("$name.h") =~ m/$_/i } @nogo_headers_re;
        $OUT .= <<"_____";
 
-  PROGRAMS_NO_INST=buildtest_$name
+  PROGRAMS_NO_INST=buildtest_c_$name
+  SOURCE[buildtest_c_$name]=buildtest_$name.c
   GENERATE[buildtest_$name.c]=generate_buildtest.pl $name
-  SOURCE[buildtest_$name]=buildtest_$name.c
-  INCLUDE[buildtest_$name]=../include
-  DEPEND[buildtest_$name]=../libssl ../libcrypto
+  INCLUDE[buildtest_c_$name]=../include
+  DEPEND[buildtest_c_$name]=../libssl ../libcrypto
+_____
+       $OUT .= <<"_____" if $config{CXX} && !$disabled{"buildtest-c++"};
+
+  PROGRAMS_NO_INST=buildtest_cc_$name
+  SOURCE[buildtest_cc_$name]=buildtest_$name.cc
+  GENERATE[buildtest_$name.cc]=generate_buildtest.pl $name
+  INCLUDE[buildtest_cc_$name]=../include
+  DEPEND[buildtest_cc_$name]=../libssl ../libcrypto
 _____
    }
 -}
