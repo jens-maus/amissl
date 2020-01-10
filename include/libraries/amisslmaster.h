@@ -12,9 +12,10 @@
 #define AMISSL_V110e        0x08  /* AmiSSL v4.1 */
 #define AMISSL_V110g        0x09  /* AmiSSL v4.2 */
 #define AMISSL_V111a        0x0a  /* AmiSSL v4.3 */
+#define AMISSL_V111d        0x0b  /* AmiSSL v4.4 */
 
 #define AMISSL_V10x         AMISSL_V102f /* Latest AmiSSL/OpenSSL 1.0.x compatible version */
-#define AMISSL_V11x         AMISSL_V111a /* Latest AmiSSL/OpenSSL 1.1.x compatible version */
+#define AMISSL_V11x         AMISSL_V111d /* Latest AmiSSL/OpenSSL 1.1.x compatible version */
 
 #define AMISSL_CURRENT_VERSION   AMISSL_V11x
 

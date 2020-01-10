@@ -20008,7 +20008,7 @@
       <arg name="e" type="ENGINE *" m68kreg="a1"/>
     </method>
 
-    <!-- AmiSSL v4.x - OpenSSL 1.1.1a -->
+    <!-- AmiSSL v4.3 (fixed/changed for v4.4) - OpenSSL 1.1.1a -->
     <method name="SSL_get_client_ciphers" result="STACK_OF(SSL_CIPHER) *">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
@@ -21717,5 +21717,24 @@
       <arg name="ctx" type="OPENSSL_DIR_CTX **" m68kreg="a0"/>
     </method>
 
+    <!-- AmiSSL v4.4 - OpenSSL 1.1.1d -->
+    <method name="OPENSSL_INIT_set_config_filename" result="int" status="unimplemented">
+      <arg name="settings" type="OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
+      <arg name="config_filename" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_INIT_set_config_file_flags" result="void" status="unimplemented">
+      <arg name="settings" type="OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
+      <arg name="flags" type="unsigned long" m68kreg="d0"/>
+    </method>
+    <method name="EVP_PKEY_get0_engine" result="ENGINE *">
+      <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
+    </method>
+    <method name="X509_get0_authority_serial" result="const ASN1_INTEGER *">
+      <arg name="x" type="X509 *" m68kreg="a0"/>
+    </method>
+    <method name="X509_get0_authority_issuer" result="const GENERAL_NAMES *">
+      <arg name="x" type="X509 *" m68kreg="a0"/>
+    </method>
+    
   </interface>
 </library>
