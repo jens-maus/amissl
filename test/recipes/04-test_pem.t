@@ -76,7 +76,7 @@ my %dsa_expected = (
     "dsa.pem" => 1
 );
 
-plan tests =>  scalar keys(%cert_expected) + scalar keys(%dsa_expected) + 1;
+plan tests =>  scalar keys(%cert_expected) + scalar keys(%dsa_expected) + 2;
 
 foreach my $input (keys %cert_expected) {
     my @common = ($cmd, "x509", "-text", "-noout", "-inform", "PEM", "-in");
@@ -88,7 +88,11 @@ SKIP: {
     skip "DSA support disabled, skipping...", (scalar keys %dsa_expected) unless !disabled("dsa");
     foreach my $input (keys %dsa_expected) {
         my @common = ($cmd, "pkey", "-inform", "PEM", "-passin", "file:" . data_file("wellknown"), "-noout", "-text", "-in");
-        my @data = run(app([@common, data_file($input)], stderr => undef), capture => 1);
+        my @data;
+        {
+            local $ENV{MSYS2_ARG_CONV_EXCL} = "file:";
+            @data = run(app([@common, data_file($input)], stderr => undef), capture => 1);
+        }
         my @match = grep /68:42:02:16:63:54:16:eb:06:5c:ab:06:72:3b:78:/, @data;
         is((scalar @match > 0 ? 1 : 0), $dsa_expected{$input});
     }
@@ -100,3 +104,5 @@ SKIP: {
     my @match = grep /00:a0:3a:21:14:5d:cd:b6:d5:a0:3e:49:23:c1:3a:/, @data;
     ok(scalar @match > 0 ? 1 : 0);
 }
+
+ok(run(test(["pemtest"])), "running pemtest");

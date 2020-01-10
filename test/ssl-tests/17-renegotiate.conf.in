@@ -19,7 +19,8 @@ our @tests = (
     {
         name => "renegotiate-client-no-resume",
         server => {
-            "Options" => "NoResumptionOnRenegotiation"
+            "Options" => "NoResumptionOnRenegotiation",
+            "MaxProtocol" => "TLSv1.2"
         },
         client => {},
         test => {
@@ -31,7 +32,9 @@ our @tests = (
     },
     {
         name => "renegotiate-client-resume",
-        server => {},
+        server => {
+            "MaxProtocol" => "TLSv1.2"
+        },
         client => {},
         test => {
             "Method" => "TLS",
@@ -43,7 +46,8 @@ our @tests = (
     {
         name => "renegotiate-server-no-resume",
         server => {
-            "Options" => "NoResumptionOnRenegotiation"
+            "Options" => "NoResumptionOnRenegotiation",
+            "MaxProtocol" => "TLSv1.2"
         },
         client => {},
         test => {
@@ -55,7 +59,9 @@ our @tests = (
     },
     {
         name => "renegotiate-server-resume",
-        server => {},
+        server => {
+            "MaxProtocol" => "TLSv1.2"
+        },
         client => {},
         test => {
             "Method" => "TLS",
@@ -108,10 +114,10 @@ our @tests_tls1_2 = (
         name => "renegotiate-aead-to-non-aead",
         server => {
             "Options" => "NoResumptionOnRenegotiation",
-            "MaxProtocol" => "TLSv1.2"
         },
         client => {
             "CipherString" => "AES128-GCM-SHA256",
+            "MaxProtocol" => "TLSv1.2",
             extra => {
                 "RenegotiateCiphers" => "AES128-SHA"
             }
@@ -127,10 +133,10 @@ our @tests_tls1_2 = (
         name => "renegotiate-non-aead-to-aead",
         server => {
             "Options" => "NoResumptionOnRenegotiation",
-            "MaxProtocol" => "TLSv1.2"
         },
         client => {
             "CipherString" => "AES128-SHA",
+            "MaxProtocol" => "TLSv1.2",
             extra => {
                 "RenegotiateCiphers" => "AES128-GCM-SHA256"
             }
@@ -146,10 +152,10 @@ our @tests_tls1_2 = (
         name => "renegotiate-non-aead-to-non-aead",
         server => {
             "Options" => "NoResumptionOnRenegotiation",
-            "MaxProtocol" => "TLSv1.2"
         },
         client => {
             "CipherString" => "AES128-SHA",
+            "MaxProtocol" => "TLSv1.2",
             extra => {
                 "RenegotiateCiphers" => "AES256-SHA"
             }
@@ -165,10 +171,10 @@ our @tests_tls1_2 = (
         name => "renegotiate-aead-to-aead",
         server => {
             "Options" => "NoResumptionOnRenegotiation",
-            "MaxProtocol" => "TLSv1.2"
         },
         client => {
             "CipherString" => "AES128-GCM-SHA256",
+            "MaxProtocol" => "TLSv1.2",
             extra => {
                 "RenegotiateCiphers" => "AES256-GCM-SHA384"
             }
@@ -178,6 +184,64 @@ our @tests_tls1_2 = (
             "HandshakeMode" => "RenegotiateClient",
             "ResumptionExpected" => "No",
             "ExpectedResult" => "Success"
+        }
+    },
+    {
+        name => "no-renegotiation-server-by-client",
+        server => {
+            "Options" => "NoRenegotiation",
+            "MaxProtocol" => "TLSv1.2"
+        },
+        client => { },
+        test => {
+            "Method" => "TLS",
+            "HandshakeMode" => "RenegotiateClient",
+            "ResumptionExpected" => "No",
+            "ExpectedResult" => "ClientFail"
+        }
+    },
+    {
+        name => "no-renegotiation-server-by-server",
+        server => {
+            "Options" => "NoRenegotiation",
+            "MaxProtocol" => "TLSv1.2"
+        },
+        client => { },
+        test => {
+            "Method" => "TLS",
+            "HandshakeMode" => "RenegotiateServer",
+            "ResumptionExpected" => "No",
+            "ExpectedResult" => "ServerFail"
+        }
+    },
+    {
+        name => "no-renegotiation-client-by-server",
+        server => {
+            "MaxProtocol" => "TLSv1.2"
+        },
+        client => {
+            "Options" => "NoRenegotiation",
+        },
+        test => {
+            "Method" => "TLS",
+            "HandshakeMode" => "RenegotiateServer",
+            "ResumptionExpected" => "No",
+            "ExpectedResult" => "ServerFail"
+        }
+    },
+    {
+        name => "no-renegotiation-client-by-client",
+        server => {
+            "MaxProtocol" => "TLSv1.2"
+        },
+        client => {
+            "Options" => "NoRenegotiation",
+        },
+        test => {
+            "Method" => "TLS",
+            "HandshakeMode" => "RenegotiateClient",
+            "ResumptionExpected" => "No",
+            "ExpectedResult" => "ClientFail"
         }
     }
 );
