@@ -131,7 +131,7 @@ DEFINE_RUN_ONCE_STATIC(ossl_init_register_atexit)
 #ifdef OPENSSL_INIT_DEBUG
     fprintf(stderr, "OPENSSL_INIT: ossl_init_register_atexit()\n");
 #endif
-#ifndef OPENSSL_SYS_UEFI
+#if !defined(OPENSSL_SYS_UEFI) && !defined(OPENSSL_SYS_AMIGA)
 # ifdef _WIN32
     /* We use _onexit() in preference because it gets called on DLL unload */
     if (_onexit(win32atexit) == NULL)
