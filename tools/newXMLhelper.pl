@@ -9,7 +9,7 @@
 ## for manual insertion do the end of the amissl.xml file
 ##
 
-$cc="gcc:bin/gcc-4.0.4";
+$cc="ppc-amigaos-gcc-4.0.4";
 $cppflags="-mcrt=clib2 -I../include";
 @num_files=("../openssl/util/libssl.num", "../openssl/util/libcrypto.num");
 $idl_file="../include/xml/amissl.xml";

@@ -3213,7 +3213,7 @@
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="EVP_PKEY_size" result="int">
-      <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
+      <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="EVP_PKEY_assign" result="int">
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
@@ -5949,13 +5949,13 @@
       <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_renegotiate_pending" result="int">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_shutdown" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_ssl_method" result="const SSL_METHOD *">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_set_ssl_method" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -10840,10 +10840,10 @@
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_current_compression" result="const COMP_METHOD *">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_current_expansion" result="const COMP_METHOD *">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_COMP_get_name" result="const char *">
       <arg name="comp" type="const COMP_METHOD *" m68kreg="a0"/>
@@ -14691,7 +14691,7 @@
       <arg name="pctx" type="ASN1_PCTX *" m68kreg="a2"/>
     </method>
     <method name="GENERAL_NAME_get0_value" result="void *">
-      <arg name="a" type="GENERAL_NAME *" m68kreg="a0"/>
+      <arg name="a" type="const GENERAL_NAME *" m68kreg="a0"/>
       <arg name="ptype" type="int *" m68kreg="a1"/>
     </method>
     <method name="b2i_PVK_bio" result="EVP_PKEY *">
@@ -15681,7 +15681,7 @@
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
     <method name="GENERAL_NAME_get0_otherName" result="int">
-      <arg name="gen" type="GENERAL_NAME *" m68kreg="a0"/>
+      <arg name="gen" type="const GENERAL_NAME *" m68kreg="a0"/>
       <arg name="poid" type="ASN1_OBJECT **" m68kreg="a1"/>
       <arg name="pvalue" type="ASN1_TYPE **" m68kreg="a2"/>
     </method>
@@ -16729,7 +16729,7 @@
       <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
     </method>
     <method name="SSL_CTX_get_ssl_method" result="const SSL_METHOD *">
-      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
     </method>
     <method name="SSL_CTX_set_alpn_protos" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
@@ -18421,7 +18421,7 @@
       <arg name="x" type="const SSL_SESSION *" m68kreg="a1"/>
     </method>
     <method name="SSL_session_reused" result="int">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_set0_security_ex_data" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -20066,7 +20066,7 @@
       <arg name="updatetype" type="int" m68kreg="d0"/>
     </method>
     <method name="SSL_get_key_update_type" result="int">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_bytes_to_cipher_list" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -20192,10 +20192,10 @@
       <arg name="block_size" type="size_t" m68kreg="d0"/>
     </method>
     <method name="SSL_CTX_get_record_padding_callback_arg" result="void *">
-      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_record_padding_callback_arg" result="void *">
-      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="ssl" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_set_block_padding" result="int">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
@@ -20373,10 +20373,10 @@
       <arg name="num_tickets" type="size_t" m68kreg="d0"/>
     </method>
     <method name="SSL_CTX_get_num_tickets" result="size_t">
-      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_num_tickets" result="size_t">
-      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="SSL_CTX_set_num_tickets" result="int">
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
