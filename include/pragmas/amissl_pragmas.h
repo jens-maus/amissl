@@ -19927,14 +19927,6 @@
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0x5b74, i2d_RSA_PSS_PARAMS(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
-#ifdef __CLIB_PRAGMA_TAGCALL
- #ifdef __CLIB_PRAGMA_LIBCALL
-  #pragma tagcall AmiSSLBase OPENSSL_showfatal 5b7a 9802
- #endif /* __CLIB_PRAGMA_LIBCALL */
- #ifdef __CLIB_PRAGMA_AMICALL
-  #pragma tagcall(AmiSSLBase, 0x5b7a, OPENSSL_showfatal(a0,a1))
- #endif /* __CLIB_PRAGMA_AMICALL */
-#endif /* __CLIB_PRAGMA_TAGCALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase POLICY_MAPPING_it 5b80 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
@@ -25834,10 +25826,10 @@
  #pragma amicall(AmiSSLBase, 0x7338, SSL_write_ex(a0,a1,d0,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_keylog_callback 733e 0802
+ #pragma libcall AmiSSLBase SSL_CTX_set_keylog_callback 733e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x733e, SSL_CTX_set_keylog_callback(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x733e, SSL_CTX_set_keylog_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_CTX_get_keylog_callback 7344 801
@@ -25900,10 +25892,10 @@
  #pragma amicall(AmiSSLBase, 0x737a, SSL_client_hello_get0_random(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_client_hello_cb 7380 90803
+ #pragma libcall AmiSSLBase SSL_CTX_set_client_hello_cb 7380 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7380, SSL_CTX_set_client_hello_cb(a0,d0,a1))
+ #pragma amicall(AmiSSLBase, 0x7380, SSL_CTX_set_client_hello_cb(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_client_hello_get0_legacy_version 7386 801
@@ -26008,10 +26000,10 @@
  #pragma amicall(AmiSSLBase, 0x73e6, SSL_CTX_get0_CA_list(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_add_custom_ext 73ec a493210808
+ #pragma libcall AmiSSLBase SSL_CTX_add_custom_ext 73ec 32ba910808
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x73ec, SSL_CTX_add_custom_ext(a0,d0,d1,d2,d3,a1,d4,a2))
+ #pragma amicall(AmiSSLBase, 0x73ec, SSL_CTX_add_custom_ext(a0,d0,d1,a1,a2,a3,d2,d3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_SESSION_is_resumable 73f2 801
@@ -26080,28 +26072,28 @@
  #pragma amicall(AmiSSLBase, 0x742e, SSL_client_hello_get1_extensions_present(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_psk_find_session_callback 7434 0802
+ #pragma libcall AmiSSLBase SSL_set_psk_find_session_callback 7434 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7434, SSL_set_psk_find_session_callback(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7434, SSL_set_psk_find_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_psk_use_session_callback 743a 0802
+ #pragma libcall AmiSSLBase SSL_set_psk_use_session_callback 743a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x743a, SSL_set_psk_use_session_callback(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x743a, SSL_set_psk_use_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_psk_use_session_callback 7440 0802
+ #pragma libcall AmiSSLBase SSL_CTX_set_psk_use_session_callback 7440 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7440, SSL_CTX_set_psk_use_session_callback(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7440, SSL_CTX_set_psk_use_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_psk_find_session_callback 7446 0802
+ #pragma libcall AmiSSLBase SSL_CTX_set_psk_find_session_callback 7446 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7446, SSL_CTX_set_psk_find_session_callback(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7446, SSL_CTX_set_psk_find_session_callback(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_CIPHER_get_handshake_digest 744c 801
@@ -26188,10 +26180,10 @@
  #pragma amicall(AmiSSLBase, 0x749a, SSL_SESSION_get0_alpn_selected(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DTLS_set_timer_cb 74a0 0802
+ #pragma libcall AmiSSLBase DTLS_set_timer_cb 74a0 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x74a0, DTLS_set_timer_cb(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x74a0, DTLS_set_timer_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_CTX_set_tlsext_max_fragment_length 74a6 0802
@@ -26260,10 +26252,10 @@
  #pragma amicall(AmiSSLBase, 0x74e2, SSL_SESSION_set1_ticket_appdata(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_session_ticket_cb 74e8 910804
+ #pragma libcall AmiSSLBase SSL_CTX_set_session_ticket_cb 74e8 ba9804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x74e8, SSL_CTX_set_session_ticket_cb(a0,d0,d1,a1))
+ #pragma amicall(AmiSSLBase, 0x74e8, SSL_CTX_set_session_ticket_cb(a0,a1,a2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_CTX_set_stateless_cookie_generate_cb 74ee 9802
@@ -26314,16 +26306,16 @@
  #pragma amicall(AmiSSLBase, 0x7518, SSL_CTX_set_num_tickets(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_CTX_set_allow_early_data_cb 751e 90803
+ #pragma libcall AmiSSLBase SSL_CTX_set_allow_early_data_cb 751e a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x751e, SSL_CTX_set_allow_early_data_cb(a0,d0,a1))
+ #pragma amicall(AmiSSLBase, 0x751e, SSL_CTX_set_allow_early_data_cb(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SSL_set_allow_early_data_cb 7524 90803
+ #pragma libcall AmiSSLBase SSL_set_allow_early_data_cb 7524 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7524, SSL_set_allow_early_data_cb(a0,d0,a1))
+ #pragma amicall(AmiSSLBase, 0x7524, SSL_set_allow_early_data_cb(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase SSL_set_recv_max_early_data 752a 0802
@@ -26458,10 +26450,10 @@
  #pragma amicall(AmiSSLBase, 0x75cc, BIO_read_ex(a0,a1,d0,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase BIO_set_callback_ex 75d2 0802
+ #pragma libcall AmiSSLBase BIO_set_callback_ex 75d2 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x75d2, BIO_set_callback_ex(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x75d2, BIO_set_callback_ex(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase BIO_get_callback_ex 75d8 801
@@ -26908,10 +26900,10 @@
  #pragma amicall(AmiSSLBase, 0x778e, OSSL_STORE_register_loader(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_error 7794 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_error 7794 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7794, OSSL_STORE_LOADER_set_error(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7794, OSSL_STORE_LOADER_set_error(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_INFO_get0_PKEY 779a 801
@@ -26950,10 +26942,10 @@
  #pragma amicall(AmiSSLBase, 0x77b8, OSSL_STORE_INFO_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_eof 77be 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_eof 77be 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x77be, OSSL_STORE_LOADER_set_eof(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x77be, OSSL_STORE_LOADER_set_eof(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_LOADER_new 77c4 9802
@@ -26968,10 +26960,10 @@
  #pragma amicall(AmiSSLBase, 0x77ca, OSSL_STORE_INFO_get0_CERT(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_close 77d0 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_close 77d0 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x77d0, OSSL_STORE_LOADER_set_close(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x77d0, OSSL_STORE_LOADER_set_close(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_INFO_new_PARAMS 77d6 801
@@ -27028,10 +27020,10 @@
  #pragma amicall(AmiSSLBase, 0x7806, OSSL_STORE_INFO_get1_NAME(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_load 780c 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_load 780c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x780c, OSSL_STORE_LOADER_set_load(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x780c, OSSL_STORE_LOADER_set_load(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_LOADER_get0_scheme 7812 801
@@ -27040,10 +27032,10 @@
  #pragma amicall(AmiSSLBase, 0x7812, OSSL_STORE_LOADER_get0_scheme(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_open 7818 b0a9805
+ #pragma libcall AmiSSLBase OSSL_STORE_open 7818 0ba9805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7818, OSSL_STORE_open(a0,a1,a2,d0,a3))
+ #pragma amicall(AmiSSLBase, 0x7818, OSSL_STORE_open(a0,a1,a2,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_close 781e 801
@@ -27100,858 +27092,858 @@
  #pragma amicall(AmiSSLBase, 0x784e, OSSL_STORE_eof(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_open 7854 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_open 7854 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7854, OSSL_STORE_LOADER_set_open(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7854, OSSL_STORE_LOADER_set_open(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_ctrl 785a 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_ctrl 785a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x785a, OSSL_STORE_LOADER_set_ctrl(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x785a, OSSL_STORE_LOADER_set_ctrl(a0,a1))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase OSSL_STORE_vctrl 7860 90803
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7860, OSSL_STORE_vctrl(a0,d0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_TAGCALL
  #ifdef __CLIB_PRAGMA_LIBCALL
-  #pragma tagcall AmiSSLBase OSSL_STORE_ctrl 785a 90803
+  #pragma tagcall AmiSSLBase OSSL_STORE_ctrl 7860 90803
  #endif /* __CLIB_PRAGMA_LIBCALL */
  #ifdef __CLIB_PRAGMA_AMICALL
-  #pragma tagcall(AmiSSLBase, 0x785a, OSSL_STORE_ctrl(a0,d0,a1))
+  #pragma tagcall(AmiSSLBase, 0x7860, OSSL_STORE_ctrl(a0,d0,a1))
  #endif /* __CLIB_PRAGMA_AMICALL */
 #endif /* __CLIB_PRAGMA_TAGCALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_INFO_get0_NAME_description 7860 801
+ #pragma libcall AmiSSLBase OSSL_STORE_INFO_get0_NAME_description 7866 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7860, OSSL_STORE_INFO_get0_NAME_description(a0))
+ #pragma amicall(AmiSSLBase, 0x7866, OSSL_STORE_INFO_get0_NAME_description(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_INFO_set0_NAME_description 7866 9802
+ #pragma libcall AmiSSLBase OSSL_STORE_INFO_set0_NAME_description 786c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7866, OSSL_STORE_INFO_set0_NAME_description(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x786c, OSSL_STORE_INFO_set0_NAME_description(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_INFO_get1_NAME_description 786c 801
+ #pragma libcall AmiSSLBase OSSL_STORE_INFO_get1_NAME_description 7872 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x786c, OSSL_STORE_INFO_get1_NAME_description(a0))
+ #pragma amicall(AmiSSLBase, 0x7872, OSSL_STORE_INFO_get1_NAME_description(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_do_all_loaders 7872 9802
+ #pragma libcall AmiSSLBase OSSL_STORE_do_all_loaders 7878 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7872, OSSL_STORE_do_all_loaders(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7878, OSSL_STORE_do_all_loaders(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_get0_engine 7878 801
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_get0_engine 787e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7878, OSSL_STORE_LOADER_get0_engine(a0))
+ #pragma amicall(AmiSSLBase, 0x787e, OSSL_STORE_LOADER_get0_engine(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_instantiate 787e 09803
+ #pragma libcall AmiSSLBase RAND_DRBG_instantiate 7884 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x787e, RAND_DRBG_instantiate(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7884, RAND_DRBG_instantiate(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_uninstantiate 7884 801
+ #pragma libcall AmiSSLBase RAND_DRBG_uninstantiate 788a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7884, RAND_DRBG_uninstantiate(a0))
+ #pragma amicall(AmiSSLBase, 0x788a, RAND_DRBG_uninstantiate(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_set 788a 10803
+ #pragma libcall AmiSSLBase RAND_DRBG_set 7890 10803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x788a, RAND_DRBG_set(a0,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x7890, RAND_DRBG_set(a0,d0,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_set_callbacks 7890 3210805
+ #pragma libcall AmiSSLBase RAND_DRBG_set_callbacks 7896 0ba9805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7890, RAND_DRBG_set_callbacks(a0,d0,d1,d2,d3))
+ #pragma amicall(AmiSSLBase, 0x7896, RAND_DRBG_set_callbacks(a0,a1,a2,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_new 7896 81003
+ #pragma libcall AmiSSLBase RAND_DRBG_new 789c 81003
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7896, RAND_DRBG_new(d0,d1,a0))
+ #pragma amicall(AmiSSLBase, 0x789c, RAND_DRBG_new(d0,d1,a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_set_reseed_interval 789c 0802
+ #pragma libcall AmiSSLBase RAND_DRBG_set_reseed_interval 78a2 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x789c, RAND_DRBG_set_reseed_interval(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x78a2, RAND_DRBG_set_reseed_interval(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_free 78a2 801
+ #pragma libcall AmiSSLBase RAND_DRBG_free 78a8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78a2, RAND_DRBG_free(a0))
+ #pragma amicall(AmiSSLBase, 0x78a8, RAND_DRBG_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_generate 78a8 2a109806
+ #pragma libcall AmiSSLBase RAND_DRBG_generate 78ae 2a109806
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78a8, RAND_DRBG_generate(a0,a1,d0,d1,a2,d2))
+ #pragma amicall(AmiSSLBase, 0x78ae, RAND_DRBG_generate(a0,a1,d0,d1,a2,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_reseed 78ae 109804
+ #pragma libcall AmiSSLBase RAND_DRBG_reseed 78b4 109804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78ae, RAND_DRBG_reseed(a0,a1,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x78b4, RAND_DRBG_reseed(a0,a1,d0,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_set_ex_data 78b4 90803
+ #pragma libcall AmiSSLBase RAND_DRBG_set_ex_data 78ba 90803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78b4, RAND_DRBG_set_ex_data(a0,d0,a1))
+ #pragma amicall(AmiSSLBase, 0x78ba, RAND_DRBG_set_ex_data(a0,d0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_get_ex_data 78ba 0802
+ #pragma libcall AmiSSLBase RAND_DRBG_get_ex_data 78c0 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78ba, RAND_DRBG_get_ex_data(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x78c0, RAND_DRBG_get_ex_data(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha3_224 78c0 00
+ #pragma libcall AmiSSLBase EVP_sha3_224 78c6 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78c0, EVP_sha3_224())
+ #pragma amicall(AmiSSLBase, 0x78c6, EVP_sha3_224())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha3_256 78c6 00
+ #pragma libcall AmiSSLBase EVP_sha3_256 78cc 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78c6, EVP_sha3_256())
+ #pragma amicall(AmiSSLBase, 0x78cc, EVP_sha3_256())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha3_384 78cc 00
+ #pragma libcall AmiSSLBase EVP_sha3_384 78d2 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78cc, EVP_sha3_384())
+ #pragma amicall(AmiSSLBase, 0x78d2, EVP_sha3_384())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha3_512 78d2 00
+ #pragma libcall AmiSSLBase EVP_sha3_512 78d8 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78d2, EVP_sha3_512())
+ #pragma amicall(AmiSSLBase, 0x78d8, EVP_sha3_512())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_shake128 78d8 00
+ #pragma libcall AmiSSLBase EVP_shake128 78de 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78d8, EVP_shake128())
+ #pragma amicall(AmiSSLBase, 0x78de, EVP_shake128())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_shake256 78de 00
+ #pragma libcall AmiSSLBase EVP_shake256 78e4 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78de, EVP_shake256())
+ #pragma amicall(AmiSSLBase, 0x78e4, EVP_shake256())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SCRYPT_PARAMS_new 78e4 00
+ #pragma libcall AmiSSLBase SCRYPT_PARAMS_new 78ea 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78e4, SCRYPT_PARAMS_new())
+ #pragma amicall(AmiSSLBase, 0x78ea, SCRYPT_PARAMS_new())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SCRYPT_PARAMS_free 78ea 801
+ #pragma libcall AmiSSLBase SCRYPT_PARAMS_free 78f0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78ea, SCRYPT_PARAMS_free(a0))
+ #pragma amicall(AmiSSLBase, 0x78f0, SCRYPT_PARAMS_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_SCRYPT_PARAMS 78f0 9802
+ #pragma libcall AmiSSLBase i2d_SCRYPT_PARAMS 78f6 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78f0, i2d_SCRYPT_PARAMS(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x78f6, i2d_SCRYPT_PARAMS(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase d2i_SCRYPT_PARAMS 78f6 09803
+ #pragma libcall AmiSSLBase d2i_SCRYPT_PARAMS 78fc 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78f6, d2i_SCRYPT_PARAMS(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x78fc, d2i_SCRYPT_PARAMS(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase SCRYPT_PARAMS_it 78fc 00
+ #pragma libcall AmiSSLBase SCRYPT_PARAMS_it 7902 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x78fc, SCRYPT_PARAMS_it())
+ #pragma amicall(AmiSSLBase, 0x7902, SCRYPT_PARAMS_it())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_get0 7902 001
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_get0 7908 001
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7902, EVP_PKEY_meth_get0(d0))
+ #pragma amicall(AmiSSLBase, 0x7908, EVP_PKEY_meth_get0(d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_get_count 7908 00
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_get_count 790e 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7908, EVP_PKEY_meth_get_count())
+ #pragma amicall(AmiSSLBase, 0x790e, EVP_PKEY_meth_get_count())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_get0_public 790e 00
+ #pragma libcall AmiSSLBase RAND_DRBG_get0_public 7914 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x790e, RAND_DRBG_get0_public())
+ #pragma amicall(AmiSSLBase, 0x7914, RAND_DRBG_get0_public())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_priv_bytes 7914 0802
+ #pragma libcall AmiSSLBase RAND_priv_bytes 791a 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7914, RAND_priv_bytes(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x791a, RAND_priv_bytes(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase BN_priv_rand 791a 210804
+ #pragma libcall AmiSSLBase BN_priv_rand 7920 210804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x791a, BN_priv_rand(a0,d0,d1,d2))
+ #pragma amicall(AmiSSLBase, 0x7920, BN_priv_rand(a0,d0,d1,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase BN_priv_rand_range 7920 9802
+ #pragma libcall AmiSSLBase BN_priv_rand_range 7926 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7920, BN_priv_rand_range(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7926, BN_priv_rand_range(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ASN1_TIME_normalize 7926 801
+ #pragma libcall AmiSSLBase ASN1_TIME_normalize 792c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7926, ASN1_TIME_normalize(a0))
+ #pragma amicall(AmiSSLBase, 0x792c, ASN1_TIME_normalize(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ASN1_TIME_cmp_time_t 792c 0802
+ #pragma libcall AmiSSLBase ASN1_TIME_cmp_time_t 7932 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x792c, ASN1_TIME_cmp_time_t(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7932, ASN1_TIME_cmp_time_t(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ASN1_TIME_compare 7932 9802
+ #pragma libcall AmiSSLBase ASN1_TIME_compare 7938 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7932, ASN1_TIME_compare(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7938, ASN1_TIME_compare(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_CTX_ctrl_uint64 7938 3210805
+ #pragma libcall AmiSSLBase EVP_PKEY_CTX_ctrl_uint64 793e 2410805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7938, EVP_PKEY_CTX_ctrl_uint64(a0,d0,d1,d2,d3))
+ #pragma amicall(AmiSSLBase, 0x793e, EVP_PKEY_CTX_ctrl_uint64(a0,d0,d1,d4,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_DigestFinalXOF 793e 09803
+ #pragma libcall AmiSSLBase EVP_DigestFinalXOF 7944 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x793e, EVP_DigestFinalXOF(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7944, EVP_DigestFinalXOF(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ERR_clear_last_mark 7944 00
+ #pragma libcall AmiSSLBase ERR_clear_last_mark 794a 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7944, ERR_clear_last_mark())
+ #pragma amicall(AmiSSLBase, 0x794a, ERR_clear_last_mark())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_get0_private 794a 00
+ #pragma libcall AmiSSLBase RAND_DRBG_get0_private 7950 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x794a, RAND_DRBG_get0_private())
+ #pragma amicall(AmiSSLBase, 0x7950, RAND_DRBG_get0_private())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_192_ccm 7950 00
+ #pragma libcall AmiSSLBase EVP_aria_192_ccm 7956 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7950, EVP_aria_192_ccm())
+ #pragma amicall(AmiSSLBase, 0x7956, EVP_aria_192_ccm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_256_gcm 7956 00
+ #pragma libcall AmiSSLBase EVP_aria_256_gcm 795c 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7956, EVP_aria_256_gcm())
+ #pragma amicall(AmiSSLBase, 0x795c, EVP_aria_256_gcm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_256_ccm 795c 00
+ #pragma libcall AmiSSLBase EVP_aria_256_ccm 7962 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x795c, EVP_aria_256_ccm())
+ #pragma amicall(AmiSSLBase, 0x7962, EVP_aria_256_ccm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_128_gcm 7962 00
+ #pragma libcall AmiSSLBase EVP_aria_128_gcm 7968 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7962, EVP_aria_128_gcm())
+ #pragma amicall(AmiSSLBase, 0x7968, EVP_aria_128_gcm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_128_ccm 7968 00
+ #pragma libcall AmiSSLBase EVP_aria_128_ccm 796e 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7968, EVP_aria_128_ccm())
+ #pragma amicall(AmiSSLBase, 0x796e, EVP_aria_128_ccm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_aria_192_gcm 796e 00
+ #pragma libcall AmiSSLBase EVP_aria_192_gcm 7974 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x796e, EVP_aria_192_gcm())
+ #pragma amicall(AmiSSLBase, 0x7974, EVP_aria_192_gcm())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase UI_get_result_length 7974 0802
+ #pragma libcall AmiSSLBase UI_get_result_length 797a 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7974, UI_get_result_length(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x797a, UI_get_result_length(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase UI_set_result_ex 797a 0a9804
+ #pragma libcall AmiSSLBase UI_set_result_ex 7980 0a9804
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x797a, UI_set_result_ex(a0,a1,a2,d0))
+ #pragma amicall(AmiSSLBase, 0x7980, UI_set_result_ex(a0,a1,a2,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase UI_get_result_string_length 7980 801
+ #pragma libcall AmiSSLBase UI_get_result_string_length 7986 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7980, UI_get_result_string_length(a0))
+ #pragma amicall(AmiSSLBase, 0x7986, UI_get_result_string_length(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_check 7986 801
+ #pragma libcall AmiSSLBase EVP_PKEY_check 798c 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7986, EVP_PKEY_check(a0))
+ #pragma amicall(AmiSSLBase, 0x798c, EVP_PKEY_check(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_set_check 798c 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_set_check 7992 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x798c, EVP_PKEY_meth_set_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7992, EVP_PKEY_meth_set_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_get_check 7992 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_get_check 7998 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7992, EVP_PKEY_meth_get_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7998, EVP_PKEY_meth_get_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_remove 7998 801
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_remove 799e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7998, EVP_PKEY_meth_remove(a0))
+ #pragma amicall(AmiSSLBase, 0x799e, EVP_PKEY_meth_remove(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OPENSSL_sk_reserve 799e 0802
+ #pragma libcall AmiSSLBase OPENSSL_sk_reserve 79a4 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x799e, OPENSSL_sk_reserve(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x79a4, OPENSSL_sk_reserve(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DH_new_by_nid 79a4 001
+ #pragma libcall AmiSSLBase DH_new_by_nid 79aa 001
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79a4, DH_new_by_nid(d0))
+ #pragma amicall(AmiSSLBase, 0x79aa, DH_new_by_nid(d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DH_get_nid 79aa 801
+ #pragma libcall AmiSSLBase DH_get_nid 79b0 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79aa, DH_get_nid(a0))
+ #pragma amicall(AmiSSLBase, 0x79b0, DH_get_nid(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OPENSSL_sk_new_reserve 79b0 1002
+ #pragma libcall AmiSSLBase OPENSSL_sk_new_reserve 79b6 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79b0, OPENSSL_sk_new_reserve(d0,d1))
+ #pragma amicall(AmiSSLBase, 0x79b6, OPENSSL_sk_new_reserve(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_check 79b6 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_check 79bc 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79b6, EVP_PKEY_asn1_set_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x79bc, EVP_PKEY_asn1_set_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_siginf 79bc 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_siginf 79c2 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79bc, EVP_PKEY_asn1_set_siginf(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x79c2, EVP_PKEY_asn1_set_siginf(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm4_ctr 79c2 00
+ #pragma libcall AmiSSLBase EVP_sm4_ctr 79c8 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79c2, EVP_sm4_ctr())
+ #pragma amicall(AmiSSLBase, 0x79c8, EVP_sm4_ctr())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm4_cbc 79c8 00
+ #pragma libcall AmiSSLBase EVP_sm4_cbc 79ce 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79c8, EVP_sm4_cbc())
+ #pragma amicall(AmiSSLBase, 0x79ce, EVP_sm4_cbc())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm4_ofb 79ce 00
+ #pragma libcall AmiSSLBase EVP_sm4_ofb 79d4 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79ce, EVP_sm4_ofb())
+ #pragma amicall(AmiSSLBase, 0x79d4, EVP_sm4_ofb())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm4_ecb 79d4 00
+ #pragma libcall AmiSSLBase EVP_sm4_ecb 79da 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79d4, EVP_sm4_ecb())
+ #pragma amicall(AmiSSLBase, 0x79da, EVP_sm4_ecb())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm4_cfb128 79da 00
+ #pragma libcall AmiSSLBase EVP_sm4_cfb128 79e0 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79da, EVP_sm4_cfb128())
+ #pragma amicall(AmiSSLBase, 0x79e0, EVP_sm4_cfb128())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sm3 79e0 00
+ #pragma libcall AmiSSLBase EVP_sm3 79e6 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79e0, EVP_sm3())
+ #pragma amicall(AmiSSLBase, 0x79e6, EVP_sm3())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_get0_multi_prime_factors 79e6 9802
+ #pragma libcall AmiSSLBase RSA_get0_multi_prime_factors 79ec 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79e6, RSA_get0_multi_prime_factors(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x79ec, RSA_get0_multi_prime_factors(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_public_check 79ec 801
+ #pragma libcall AmiSSLBase EVP_PKEY_public_check 79f2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79ec, EVP_PKEY_public_check(a0))
+ #pragma amicall(AmiSSLBase, 0x79f2, EVP_PKEY_public_check(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_param_check 79f2 801
+ #pragma libcall AmiSSLBase EVP_PKEY_param_check 79f8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79f2, EVP_PKEY_param_check(a0))
+ #pragma amicall(AmiSSLBase, 0x79f8, EVP_PKEY_param_check(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_set_public_check 79f8 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_set_public_check 79fe 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79f8, EVP_PKEY_meth_set_public_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x79fe, EVP_PKEY_meth_set_public_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_set_param_check 79fe 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_set_param_check 7a04 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x79fe, EVP_PKEY_meth_set_param_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a04, EVP_PKEY_meth_set_param_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_get_public_check 7a04 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_get_public_check 7a0a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a04, EVP_PKEY_meth_get_public_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a0a, EVP_PKEY_meth_get_public_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_meth_get_param_check 7a0a 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_meth_get_param_check 7a10 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a0a, EVP_PKEY_meth_get_param_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a10, EVP_PKEY_meth_get_param_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_public_check 7a10 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_public_check 7a16 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a10, EVP_PKEY_asn1_set_public_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a16, EVP_PKEY_asn1_set_public_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_param_check 7a16 9802
+ #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_param_check 7a1c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a16, EVP_PKEY_asn1_set_param_check(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a1c, EVP_PKEY_asn1_set_param_check(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DH_check_ex 7a1c 801
+ #pragma libcall AmiSSLBase DH_check_ex 7a22 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a1c, DH_check_ex(a0))
+ #pragma amicall(AmiSSLBase, 0x7a22, DH_check_ex(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DH_check_pub_key_ex 7a22 9802
+ #pragma libcall AmiSSLBase DH_check_pub_key_ex 7a28 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a22, DH_check_pub_key_ex(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a28, DH_check_pub_key_ex(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase DH_check_params_ex 7a28 801
+ #pragma libcall AmiSSLBase DH_check_params_ex 7a2e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a28, DH_check_params_ex(a0))
+ #pragma amicall(AmiSSLBase, 0x7a2e, DH_check_params_ex(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_generate_multi_prime_key 7a2e a910805
+ #pragma libcall AmiSSLBase RSA_generate_multi_prime_key 7a34 a910805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a2e, RSA_generate_multi_prime_key(a0,d0,d1,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x7a34, RSA_generate_multi_prime_key(a0,d0,d1,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_get_multi_prime_extra_count 7a34 801
+ #pragma libcall AmiSSLBase RSA_get_multi_prime_extra_count 7a3a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a34, RSA_get_multi_prime_extra_count(a0))
+ #pragma amicall(AmiSSLBase, 0x7a3a, RSA_get_multi_prime_extra_count(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OCSP_resp_get0_signer 7a3a a9803
+ #pragma libcall AmiSSLBase OCSP_resp_get0_signer 7a40 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a3a, OCSP_resp_get0_signer(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x7a40, OCSP_resp_get0_signer(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_get0_multi_prime_crt_params 7a40 a9803
+ #pragma libcall AmiSSLBase RSA_get0_multi_prime_crt_params 7a46 a9803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a40, RSA_get0_multi_prime_crt_params(a0,a1,a2))
+ #pragma amicall(AmiSSLBase, 0x7a46, RSA_get0_multi_prime_crt_params(a0,a1,a2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_set0_multi_prime_params 7a46 0ba9805
+ #pragma libcall AmiSSLBase RSA_set0_multi_prime_params 7a4c 0ba9805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a46, RSA_set0_multi_prime_params(a0,a1,a2,a3,d0))
+ #pragma amicall(AmiSSLBase, 0x7a4c, RSA_set0_multi_prime_params(a0,a1,a2,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_get_version 7a4c 801
+ #pragma libcall AmiSSLBase RSA_get_version 7a52 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a4c, RSA_get_version(a0))
+ #pragma amicall(AmiSSLBase, 0x7a52, RSA_get_version(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_meth_get_multi_prime_keygen 7a52 801
+ #pragma libcall AmiSSLBase RSA_meth_get_multi_prime_keygen 7a58 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a52, RSA_meth_get_multi_prime_keygen(a0))
+ #pragma amicall(AmiSSLBase, 0x7a58, RSA_meth_get_multi_prime_keygen(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_meth_set_multi_prime_keygen 7a58 9802
+ #pragma libcall AmiSSLBase RSA_meth_set_multi_prime_keygen 7a5e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a58, RSA_meth_set_multi_prime_keygen(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a5e, RSA_meth_set_multi_prime_keygen(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_get0_master 7a5e 00
+ #pragma libcall AmiSSLBase RAND_DRBG_get0_master 7a64 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a5e, RAND_DRBG_get0_master())
+ #pragma amicall(AmiSSLBase, 0x7a64, RAND_DRBG_get0_master())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_set_reseed_time_interval 7a64 0802
+ #pragma libcall AmiSSLBase RAND_DRBG_set_reseed_time_interval 7a6a 0802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a64, RAND_DRBG_set_reseed_time_interval(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7a6a, RAND_DRBG_set_reseed_time_interval(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_get0_addProfessionInfo 7a6a 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_get0_addProfessionInfo 7a70 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a6a, PROFESSION_INFO_get0_addProfessionInfo(a0))
+ #pragma amicall(AmiSSLBase, 0x7a70, PROFESSION_INFO_get0_addProfessionInfo(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_free 7a70 801
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_free 7a76 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a70, ADMISSION_SYNTAX_free(a0))
+ #pragma amicall(AmiSSLBase, 0x7a76, ADMISSION_SYNTAX_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase d2i_ADMISSION_SYNTAX 7a76 09803
+ #pragma libcall AmiSSLBase d2i_ADMISSION_SYNTAX 7a7c 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a76, d2i_ADMISSION_SYNTAX(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7a7c, d2i_ADMISSION_SYNTAX(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityId 7a7c 9802
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityId 7a82 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a7c, NAMING_AUTHORITY_set0_authorityId(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a82, NAMING_AUTHORITY_set0_authorityId(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityURL 7a82 9802
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityURL 7a88 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a82, NAMING_AUTHORITY_set0_authorityURL(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7a88, NAMING_AUTHORITY_set0_authorityURL(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase d2i_PROFESSION_INFO 7a88 09803
+ #pragma libcall AmiSSLBase d2i_PROFESSION_INFO 7a8e 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a88, d2i_PROFESSION_INFO(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7a8e, d2i_PROFESSION_INFO(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_it 7a8e 00
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_it 7a94 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a8e, NAMING_AUTHORITY_it())
+ #pragma amicall(AmiSSLBase, 0x7a94, NAMING_AUTHORITY_it())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_get0_contentsOfAdmissions 7a94 801
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_get0_contentsOfAdmissions 7a9a 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a94, ADMISSION_SYNTAX_get0_contentsOfAdmissions(a0))
+ #pragma amicall(AmiSSLBase, 0x7a9a, ADMISSION_SYNTAX_get0_contentsOfAdmissions(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_set0_professionItems 7a9a 9802
+ #pragma libcall AmiSSLBase PROFESSION_INFO_set0_professionItems 7aa0 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7a9a, PROFESSION_INFO_set0_professionItems(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7aa0, PROFESSION_INFO_set0_professionItems(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_new 7aa0 00
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_new 7aa6 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7aa0, NAMING_AUTHORITY_new())
+ #pragma amicall(AmiSSLBase, 0x7aa6, NAMING_AUTHORITY_new())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityURL 7aa6 801
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityURL 7aac 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7aa6, NAMING_AUTHORITY_get0_authorityURL(a0))
+ #pragma amicall(AmiSSLBase, 0x7aac, NAMING_AUTHORITY_get0_authorityURL(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_get0_admissionAuthority 7aac 801
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_get0_admissionAuthority 7ab2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7aac, ADMISSION_SYNTAX_get0_admissionAuthority(a0))
+ #pragma amicall(AmiSSLBase, 0x7ab2, ADMISSION_SYNTAX_get0_admissionAuthority(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_new 7ab2 00
+ #pragma libcall AmiSSLBase PROFESSION_INFO_new 7ab8 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ab2, PROFESSION_INFO_new())
+ #pragma amicall(AmiSSLBase, 0x7ab8, PROFESSION_INFO_new())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_new 7ab8 00
+ #pragma libcall AmiSSLBase ADMISSIONS_new 7abe 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ab8, ADMISSIONS_new())
+ #pragma amicall(AmiSSLBase, 0x7abe, ADMISSIONS_new())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_set0_admissionAuthority 7abe 9802
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_set0_admissionAuthority 7ac4 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7abe, ADMISSION_SYNTAX_set0_admissionAuthority(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7ac4, ADMISSION_SYNTAX_set0_admissionAuthority(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_get0_professionOIDs 7ac4 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_get0_professionOIDs 7aca 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ac4, PROFESSION_INFO_get0_professionOIDs(a0))
+ #pragma amicall(AmiSSLBase, 0x7aca, PROFESSION_INFO_get0_professionOIDs(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_it 7aca 00
+ #pragma libcall AmiSSLBase PROFESSION_INFO_it 7ad0 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7aca, PROFESSION_INFO_it())
+ #pragma amicall(AmiSSLBase, 0x7ad0, PROFESSION_INFO_it())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_PROFESSION_INFO 7ad0 9802
+ #pragma libcall AmiSSLBase i2d_PROFESSION_INFO 7ad6 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ad0, i2d_PROFESSION_INFO(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7ad6, i2d_PROFESSION_INFO(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_set0_professionInfos 7ad6 9802
+ #pragma libcall AmiSSLBase ADMISSIONS_set0_professionInfos 7adc 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ad6, ADMISSIONS_set0_professionInfos(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7adc, ADMISSIONS_set0_professionInfos(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_get0_namingAuthority 7adc 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_get0_namingAuthority 7ae2 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7adc, PROFESSION_INFO_get0_namingAuthority(a0))
+ #pragma amicall(AmiSSLBase, 0x7ae2, PROFESSION_INFO_get0_namingAuthority(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_free 7ae2 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_free 7ae8 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ae2, PROFESSION_INFO_free(a0))
+ #pragma amicall(AmiSSLBase, 0x7ae8, PROFESSION_INFO_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_set0_addProfessionInfo 7ae8 9802
+ #pragma libcall AmiSSLBase PROFESSION_INFO_set0_addProfessionInfo 7aee 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ae8, PROFESSION_INFO_set0_addProfessionInfo(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7aee, PROFESSION_INFO_set0_addProfessionInfo(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_set0_registrationNumber 7aee 9802
+ #pragma libcall AmiSSLBase PROFESSION_INFO_set0_registrationNumber 7af4 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7aee, PROFESSION_INFO_set0_registrationNumber(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7af4, PROFESSION_INFO_set0_registrationNumber(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_set0_contentsOfAdmissions 7af4 9802
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_set0_contentsOfAdmissions 7afa 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7af4, ADMISSION_SYNTAX_set0_contentsOfAdmissions(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7afa, ADMISSION_SYNTAX_set0_contentsOfAdmissions(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityId 7afa 801
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityId 7b00 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7afa, NAMING_AUTHORITY_get0_authorityId(a0))
+ #pragma amicall(AmiSSLBase, 0x7b00, NAMING_AUTHORITY_get0_authorityId(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_it 7b00 00
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_it 7b06 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b00, ADMISSION_SYNTAX_it())
+ #pragma amicall(AmiSSLBase, 0x7b06, ADMISSION_SYNTAX_it())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_ADMISSION_SYNTAX 7b06 9802
+ #pragma libcall AmiSSLBase i2d_ADMISSION_SYNTAX 7b0c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b06, i2d_ADMISSION_SYNTAX(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b0c, i2d_ADMISSION_SYNTAX(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityText 7b0c 801
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_get0_authorityText 7b12 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b0c, NAMING_AUTHORITY_get0_authorityText(a0))
+ #pragma amicall(AmiSSLBase, 0x7b12, NAMING_AUTHORITY_get0_authorityText(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_set0_namingAuthority 7b12 9802
+ #pragma libcall AmiSSLBase PROFESSION_INFO_set0_namingAuthority 7b18 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b12, PROFESSION_INFO_set0_namingAuthority(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b18, PROFESSION_INFO_set0_namingAuthority(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_NAMING_AUTHORITY 7b18 9802
+ #pragma libcall AmiSSLBase i2d_NAMING_AUTHORITY 7b1e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b18, i2d_NAMING_AUTHORITY(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b1e, i2d_NAMING_AUTHORITY(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_free 7b1e 801
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_free 7b24 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b1e, NAMING_AUTHORITY_free(a0))
+ #pragma amicall(AmiSSLBase, 0x7b24, NAMING_AUTHORITY_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_set0_admissionAuthority 7b24 9802
+ #pragma libcall AmiSSLBase ADMISSIONS_set0_admissionAuthority 7b2a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b24, ADMISSIONS_set0_admissionAuthority(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b2a, ADMISSIONS_set0_admissionAuthority(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_free 7b2a 801
+ #pragma libcall AmiSSLBase ADMISSIONS_free 7b30 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b2a, ADMISSIONS_free(a0))
+ #pragma amicall(AmiSSLBase, 0x7b30, ADMISSIONS_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_get0_registrationNumber 7b30 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_get0_registrationNumber 7b36 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b30, PROFESSION_INFO_get0_registrationNumber(a0))
+ #pragma amicall(AmiSSLBase, 0x7b36, PROFESSION_INFO_get0_registrationNumber(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase d2i_ADMISSIONS 7b36 09803
+ #pragma libcall AmiSSLBase d2i_ADMISSIONS 7b3c 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b36, d2i_ADMISSIONS(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7b3c, d2i_ADMISSIONS(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase i2d_ADMISSIONS 7b3c 9802
+ #pragma libcall AmiSSLBase i2d_ADMISSIONS 7b42 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b3c, i2d_ADMISSIONS(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b42, i2d_ADMISSIONS(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_get0_professionItems 7b42 801
+ #pragma libcall AmiSSLBase PROFESSION_INFO_get0_professionItems 7b48 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b42, PROFESSION_INFO_get0_professionItems(a0))
+ #pragma amicall(AmiSSLBase, 0x7b48, PROFESSION_INFO_get0_professionItems(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_get0_admissionAuthority 7b48 801
+ #pragma libcall AmiSSLBase ADMISSIONS_get0_admissionAuthority 7b4e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b48, ADMISSIONS_get0_admissionAuthority(a0))
+ #pragma amicall(AmiSSLBase, 0x7b4e, ADMISSIONS_get0_admissionAuthority(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PROFESSION_INFO_set0_professionOIDs 7b4e 9802
+ #pragma libcall AmiSSLBase PROFESSION_INFO_set0_professionOIDs 7b54 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b4e, PROFESSION_INFO_set0_professionOIDs(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b54, PROFESSION_INFO_set0_professionOIDs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase d2i_NAMING_AUTHORITY 7b54 09803
+ #pragma libcall AmiSSLBase d2i_NAMING_AUTHORITY 7b5a 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b54, d2i_NAMING_AUTHORITY(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7b5a, d2i_NAMING_AUTHORITY(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_it 7b5a 00
+ #pragma libcall AmiSSLBase ADMISSIONS_it 7b60 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b5a, ADMISSIONS_it())
+ #pragma amicall(AmiSSLBase, 0x7b60, ADMISSIONS_it())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_get0_namingAuthority 7b60 801
+ #pragma libcall AmiSSLBase ADMISSIONS_get0_namingAuthority 7b66 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b60, ADMISSIONS_get0_namingAuthority(a0))
+ #pragma amicall(AmiSSLBase, 0x7b66, ADMISSIONS_get0_namingAuthority(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityText 7b66 9802
+ #pragma libcall AmiSSLBase NAMING_AUTHORITY_set0_authorityText 7b6c 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b66, NAMING_AUTHORITY_set0_authorityText(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b6c, NAMING_AUTHORITY_set0_authorityText(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_set0_namingAuthority 7b6c 9802
+ #pragma libcall AmiSSLBase ADMISSIONS_set0_namingAuthority 7b72 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b6c, ADMISSIONS_set0_namingAuthority(a0,a1))
+ #pragma amicall(AmiSSLBase, 0x7b72, ADMISSIONS_set0_namingAuthority(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSIONS_get0_professionInfos 7b72 801
+ #pragma libcall AmiSSLBase ADMISSIONS_get0_professionInfos 7b78 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b72, ADMISSIONS_get0_professionInfos(a0))
+ #pragma amicall(AmiSSLBase, 0x7b78, ADMISSIONS_get0_professionInfos(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase ADMISSION_SYNTAX_new 7b78 00
+ #pragma libcall AmiSSLBase ADMISSION_SYNTAX_new 7b7e 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b78, ADMISSION_SYNTAX_new())
+ #pragma amicall(AmiSSLBase, 0x7b7e, ADMISSION_SYNTAX_new())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha512_256 7b7e 00
+ #pragma libcall AmiSSLBase EVP_sha512_256 7b84 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b7e, EVP_sha512_256())
+ #pragma amicall(AmiSSLBase, 0x7b84, EVP_sha512_256())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_sha512_224 7b84 00
+ #pragma libcall AmiSSLBase EVP_sha512_224 7b8a 00
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b84, EVP_sha512_224())
+ #pragma amicall(AmiSSLBase, 0x7b8a, EVP_sha512_224())
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OCSP_basic_sign_ctx 7b8a 0ba9805
+ #pragma libcall AmiSSLBase OCSP_basic_sign_ctx 7b90 0ba9805
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b8a, OCSP_basic_sign_ctx(a0,a1,a2,a3,d0))
+ #pragma amicall(AmiSSLBase, 0x7b90, OCSP_basic_sign_ctx(a0,a1,a2,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_bytes 7b90 09803
+ #pragma libcall AmiSSLBase RAND_DRBG_bytes 7b96 09803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b90, RAND_DRBG_bytes(a0,a1,d0))
+ #pragma amicall(AmiSSLBase, 0x7b96, RAND_DRBG_bytes(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_DRBG_secure_new 7b96 81003
+ #pragma libcall AmiSSLBase RAND_DRBG_secure_new 7b9c 81003
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b96, RAND_DRBG_secure_new(d0,d1,a0))
-#endif /* __CLIB_PRAGMA_AMICALL */
-#ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_vctrl 7b9c 10803
-#endif /* __CLIB_PRAGMA_LIBCALL */
-#ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7b9c, OSSL_STORE_vctrl(a0,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x7b9c, RAND_DRBG_secure_new(d0,d1,a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_SEARCH_by_alias 7ba2 801
@@ -27966,10 +27958,10 @@
  #pragma amicall(AmiSSLBase, 0x7ba8, BIO_bind(d0,a0,d1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_expect 7bae 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_expect 7bae 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7bae, OSSL_STORE_LOADER_set_expect(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7bae, OSSL_STORE_LOADER_set_expect(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_expect 7bb4 0802
@@ -28044,10 +28036,10 @@
  #pragma amicall(AmiSSLBase, 0x7bf6, X509_get0_authority_key_id(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_find 7bfc 0802
+ #pragma libcall AmiSSLBase OSSL_STORE_LOADER_set_find 7bfc 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7bfc, OSSL_STORE_LOADER_set_find(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7bfc, OSSL_STORE_LOADER_set_find(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase OSSL_STORE_SEARCH_free 7c02 801
@@ -28272,16 +28264,16 @@
  #pragma amicall(AmiSSLBase, 0x7cda, X509_LOOKUP_meth_get_new_item(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_ctrl 7ce0 0802
+ #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_ctrl 7ce0 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ce0, X509_LOOKUP_meth_set_ctrl(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7ce0, X509_LOOKUP_meth_set_ctrl(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_issuer_serial 7ce6 0802
+ #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_issuer_serial 7ce6 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7ce6, X509_LOOKUP_meth_set_get_by_issuer_serial(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7ce6, X509_LOOKUP_meth_set_get_by_issuer_serial(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_LOOKUP_get_store 7cec 801
@@ -28296,10 +28288,10 @@
  #pragma amicall(AmiSSLBase, 0x7cf2, X509_LOOKUP_meth_get_ctrl(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_alias 7cf8 0802
+ #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_alias 7cf8 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7cf8, X509_LOOKUP_meth_set_get_by_alias(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7cf8, X509_LOOKUP_meth_set_get_by_alias(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_LOOKUP_meth_get_get_by_subject 7cfe 801
@@ -28314,10 +28306,10 @@
  #pragma amicall(AmiSSLBase, 0x7d04, X509_LOOKUP_meth_get_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_subject 7d0a 0802
+ #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_subject 7d0a 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7d0a, X509_LOOKUP_meth_set_get_by_subject(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7d0a, X509_LOOKUP_meth_set_get_by_subject(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_free 7d10 9802
@@ -28344,10 +28336,10 @@
  #pragma amicall(AmiSSLBase, 0x7d22, X509_LOOKUP_get_method_data(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_fingerprint 7d28 0802
+ #pragma libcall AmiSSLBase X509_LOOKUP_meth_set_get_by_fingerprint 7d28 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x7d28, X509_LOOKUP_meth_set_get_by_fingerprint(a0,d0))
+ #pragma amicall(AmiSSLBase, 0x7d28, X509_LOOKUP_meth_set_get_by_fingerprint(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_LOOKUP_meth_free 7d2e 801
@@ -28486,6 +28478,24 @@
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0x7db2, OPENSSL_DIR_end(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase EVP_PKEY_get0_engine 7dc4 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7dc4, EVP_PKEY_get0_engine(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase X509_get0_authority_serial 7dca 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7dca, X509_get0_authority_serial(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase X509_get0_authority_issuer 7dd0 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7dd0, X509_get0_authority_issuer(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 
 #endif /* PRAGMAS_AMISSL_PRAGMAS_H */

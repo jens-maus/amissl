@@ -9,3 +9,4 @@ struct Library * OpenAmiSSL() ()
 void CloseAmiSSL() ()
 struct Library * OpenAmiSSLCipher(LONG Cipher) (d0)
 void CloseAmiSSLCipher(struct Library * CipherBase) (a0)
+==end

@@ -3918,7 +3918,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_RSA_PSS_PARAMS_free
 	    FPTR IAmiSSL_i2d_RSA_PSS_PARAMS
 	    FPTR AmiSSLIFace_OPENSSL_stderr_UNIMPLEMENTED
-	    FPTR IAmiSSL_OPENSSL_showfatal
+	    FPTR AmiSSLIFace_OPENSSL_showfatal_UNIMPLEMENTED
 	    FPTR IAmiSSL_POLICY_MAPPING_it
 	    FPTR IAmiSSL_NAME_CONSTRAINTS_it
 	    FPTR IAmiSSL_ASN1_OCTET_STRING_NDEF_it
@@ -5151,6 +5151,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OSSL_STORE_eof
 	    FPTR IAmiSSL_OSSL_STORE_LOADER_set_open
 	    FPTR IAmiSSL_OSSL_STORE_LOADER_set_ctrl
+	    FPTR IAmiSSL_OSSL_STORE_vctrl
 	    FPTR IAmiSSL_OSSL_STORE_ctrl
 	    FPTR IAmiSSL_OSSL_STORE_INFO_get0_NAME_description
 	    FPTR IAmiSSL_OSSL_STORE_INFO_set0_NAME_description
@@ -5290,7 +5291,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OCSP_basic_sign_ctx
 	    FPTR IAmiSSL_RAND_DRBG_bytes
 	    FPTR IAmiSSL_RAND_DRBG_secure_new
-	    FPTR IAmiSSL_OSSL_STORE_vctrl
 	    FPTR IAmiSSL_OSSL_STORE_SEARCH_by_alias
 	    FPTR IAmiSSL_BIO_bind
 	    FPTR IAmiSSL_OSSL_STORE_LOADER_set_expect
@@ -5380,6 +5380,11 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_meth_get_digest_custom
 	    FPTR IAmiSSL_OPENSSL_DIR_read
 	    FPTR IAmiSSL_OPENSSL_DIR_end
+	    FPTR AmiSSLIFace_OPENSSL_INIT_set_config_filename_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_OPENSSL_INIT_set_config_file_flags_UNIMPLEMENTED
+	    FPTR IAmiSSL_EVP_PKEY_get0_engine
+	    FPTR IAmiSSL_X509_get0_authority_serial
+	    FPTR IAmiSSL_X509_get0_authority_issuer
 	LABEL AmiSSLIFace_SIZE
 
 #endif

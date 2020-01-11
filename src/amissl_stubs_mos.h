@@ -4524,6 +4524,7 @@ LIBSTUB(OSSL_STORE_INFO_new_NAME, OSSL_STORE_INFO *);
 LIBSTUB(OSSL_STORE_eof, int);
 LIBSTUB(OSSL_STORE_LOADER_set_open, int);
 LIBSTUB(OSSL_STORE_LOADER_set_ctrl, int);
+LIBSTUB(OSSL_STORE_vctrl, int);
 LIBSTUB(OSSL_STORE_INFO_get0_NAME_description, const char *);
 LIBSTUB(OSSL_STORE_INFO_set0_NAME_description, int);
 LIBSTUB(OSSL_STORE_INFO_get1_NAME_description, char *);
@@ -4662,7 +4663,6 @@ LIBSTUB(EVP_sha512_224, const EVP_MD *);
 LIBSTUB(OCSP_basic_sign_ctx, int);
 LIBSTUB(RAND_DRBG_bytes, int);
 LIBSTUB(RAND_DRBG_secure_new, RAND_DRBG *);
-LIBSTUB(OSSL_STORE_vctrl, int);
 LIBSTUB(OSSL_STORE_SEARCH_by_alias, OSSL_STORE_SEARCH *);
 LIBSTUB(BIO_bind, int);
 LIBSTUB(OSSL_STORE_LOADER_set_expect, int);
@@ -4752,6 +4752,9 @@ LIBSTUB(EVP_PKEY_meth_set_digest_custom, void);
 LIBSTUB(EVP_PKEY_meth_get_digest_custom, void);
 LIBSTUB(OPENSSL_DIR_read, const char *);
 LIBSTUB(OPENSSL_DIR_end, int);
+LIBSTUB(EVP_PKEY_get0_engine, ENGINE *);
+LIBSTUB(X509_get0_authority_serial, const ASN1_INTEGER *);
+LIBSTUB(X509_get0_authority_issuer, const GENERAL_NAMES *);
 
 #ifdef __cplusplus
 }
