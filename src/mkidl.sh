@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# idltool minimum version check
+idltool_minver=53.28
+[ `idltool | grep -c $idltool_minver` -eq 0 ] && { echo "idltool $idltool_minver required - please upgrade"; exit 1; }
+
 # amissl.library 
 tmp=`mktemp -d`
 idltool -a -g ../include/xml/amissl.xml -o ${tmp}

@@ -100,7 +100,7 @@ HowTo update the OpenSSL version in "openssl/":
    $ cd src
    $ ./mkidl.sh
 
-   Please note that this will only work if you have the latest idltool (53.27 being
+   Please note that this will only work if you have the latest idltool (53.28 being
    the current minimum requirement), etc. installed in your cross compiler environment.
 
 6. Check "include/amissl/amissl.h" to directly include all existing header files
