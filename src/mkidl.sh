@@ -45,6 +45,8 @@ sfdc --mode=macros ../include/sfd/amissl_lib.sfd -o ../include/inline/amissl.h
 sfdc --mode=macros ../include/sfd/amisslmaster_lib.sfd -o ../include/inline/amisslmaster.h
 sfdc --mode=pragmas ../include/sfd/amissl_lib.sfd -o ../include/pragmas/amissl_pragmas.h
 sfdc --mode=pragmas ../include/sfd/amisslmaster_lib.sfd -o ../include/pragmas/amisslmaster_pragmas.h
+sfdc --mode=macros --target m68kvbcc-unknown-amigaos ../include/sfd/amissl_lib.sfd -o ../include/inline/amissl_protos.h
+sfdc --mode=macros --target m68kvbcc-unknown-amigaos ../include/sfd/amisslmaster_lib.sfd -o ../include/inline/amisslmaster_protos.h
 
 # mos/ppc specific header creation
 sfdc --mode=macros --target ppc-morphos ../include/sfd/amissl_lib.sfd -o ../include/ppcinline/amissl.h

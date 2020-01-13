@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.10)! Do not edit! */
+/* Automatically generated header (sfdc 1.11)! Do not edit! */
 #ifndef PRAGMAS_AMISSLMASTER_PRAGMAS_H
 #define PRAGMAS_AMISSLMASTER_PRAGMAS_H
 
@@ -7,7 +7,7 @@
 **
 **   Direct ROM interface (pragma) definitions.
 **
-**   Copyright © 2001 Amiga, Inc.
+**   Copyright (c) 2001 Amiga, Inc.
 **       All Rights Reserved
 */
 
