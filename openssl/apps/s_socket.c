@@ -26,6 +26,10 @@
 typedef unsigned int u_int;
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+#include <proto/exec.h>
+#endif
+
 #ifndef OPENSSL_NO_SOCK
 
 # include "apps.h"
@@ -339,6 +343,16 @@ int do_server(int *accept_sock, const char *host, const char *port,
             }
             do {
                 sock = BIO_accept_ex(asock, ourpeer, 0);
+#if defined(OPENSSL_SYS_AMIGA)
+                if (SetSignal(0L,SIGBREAKF_CTRL_C) & SIGBREAKF_CTRL_C) {
+                    /* This would otherwise get stuck in a busy loop due to libcmt/clib2
+                     * conflicts, so exit gracefully (we could instead not clear
+                     * SIGBREAKF_CTRL_C and use fflush(stdout) to get clib2 to handle
+                     * the signal internally, ultimately triggering an exit() here
+                     */
+                    break;
+                }
+#endif
             } while (sock < 0 && BIO_sock_should_retry(sock));
             if (sock < 0) {
                 ERR_print_errors(bio_err);

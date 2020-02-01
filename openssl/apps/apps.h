@@ -80,7 +80,7 @@ CONF *app_load_config_quiet(const char *filename);
 int app_load_modules(const CONF *config);
 void unbuffer(FILE *fp);
 void wait_for_async(SSL *s);
-# if defined(OPENSSL_SYS_MSDOS)
+# if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
 int has_stdin_waiting(void);
 # endif
 

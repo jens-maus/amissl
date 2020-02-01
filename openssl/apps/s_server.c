@@ -105,11 +105,6 @@ static int async = 0;
 
 static const char *session_id_prefix = NULL;
 
-#ifdef OPENSSL_SYS_AMIGA
-#include <proto/dos.h>
-static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
-#endif
-
 #ifndef OPENSSL_NO_DTLS
 static int enable_timeouts = 0;
 static long socket_mtu;
