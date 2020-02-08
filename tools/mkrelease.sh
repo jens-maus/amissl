@@ -57,6 +57,9 @@ cp -a include/fd/amissl* "release/AmiSSL/Developer/fd/"
 cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
 cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
 
+# create new OpenSSL.doc
+sh tools/openssldoc.sh > release/AmiSSL/Doc/OpenSSL.doc
+
 # copy SDK relevant files
 cp -a include/amissl "release/AmiSSL/Developer/include/"
 cp -a include/openssl "release/AmiSSL/Developer/include/"
