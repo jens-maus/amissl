@@ -2,7 +2,10 @@ Introduction
 ------------
 This archive contains developer files and an example program which should make
 it possible to add AmiSSL support to client and server applications interested
-in providing SSL/TLS functionality to end users.
+in providing SSL/TLS functionality to end users. This SDK release provides
+include files for GCC, vbcc and SAS/C on OS3/m68k and also GCC OS4/PPC
+includes. If you are using SAS/C please see the end of this document for
+important information.
 
 The information is mostly AmiSSL specific. For more information on SSL
 programming, check OpenSSL documentation and examples
@@ -172,6 +175,22 @@ These will return textual representation of requested cipher data. For example,
 SSL_CIPHER_get_encryption() will return "AES(256)" when 256-bit AES cipher is
 used.
 
+Callback functions
+------------------
+Some OpenSSL functions require you to pass your own callback function in as a
+parameter. These functions will be called using default calling conventions
+on OS3 and OS4. On OS3 this means AmiSSL will call your function with the
+function arguments placed on the stack, whilst on OS4 they will be placed in
+registers, as usual. If you have set your compiler to use a different
+convention, be sure to define your callback function correctly. For example:
+
+STDARGS SAVEDS int verify_cb(int preverify_ok, X509_STORE_CTX *ctx)
+{
+	return preverify_ok;
+}
+
+SSL_CTX_set_verify(sslctx,SSL_VERIFY_PEER,verify_cb);
+
 Compiler issues
 ---------------
 Sometimes it is necessary to pass an AmiSSL function as a function pointer
@@ -189,4 +208,12 @@ name than to change many occurrences of f. ex. ASN1_OBJECT_free to f. ex.
 ASN1_OBJECT_free_stub whenever ASN1_OBJECT_free is passed as a function
 pointer.
 
-This SDK release provides include files for GCC on 68k and also OS4 includes.
+For SAS/C you will have to take special care where 64-bit integers are
+concerned - in particular, OPENSSL_init_ssl(), which you mignt not even be
+calling directly, but is ultimately the end result of many of the macros for
+older legacy SSL initialisation functions. Remember that for 64-bit
+parameters, the high 32-bits are placed in D0 and the low 32-bits in D1.
+So, you might want to use a workaround like this:
+
+#define OPENSSL_init_ssl_32(opts, settings) \
+	(putreg(REG_D1,opts), OPENSSL_init_ssl(0, settings))
