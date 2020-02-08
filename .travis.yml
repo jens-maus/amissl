@@ -22,7 +22,7 @@ install:
   - sudo apt-get -qq install libc6:i386
   # Install all adtools related stuff we need
   - curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
-  - if [[ ${BUILD} =~ os3|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
+  - if [[ ${BUILD} =~ os3-68020|os3-68060|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
   - if [[ ${BUILD} =~ os4|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
   #- if [[ ${BUILD} =~ mos|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
   #- if [[ ${BUILD} =~ aros-ppc|release ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-aros.tar.bz2 | sudo tar xj -C / ; fi
@@ -38,8 +38,10 @@ before_script:
 env:
   - BUILD="OS=os4"
   - BUILD="OS=os4 DEBUG="
-  - BUILD="OS=os3"
-  - BUILD="OS=os3 DEBUG="
+  - BUILD="OS=os3-68020"
+  - BUILD="OS=os3-68020 DEBUG="
+  - BUILD="OS=os3-68060"
+  - BUILD="OS=os3-68060 DEBUG="
   #- BUILD="OS=mos"
   #- BUILD="OS=mos DEBUG="
   #- BUILD="OS=aros-ppc"

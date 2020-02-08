@@ -61,7 +61,7 @@ ifndef (OS)
     OS = os4
   else
   ifeq ($(HOST), AmigaOS)
-    OS = os3
+    OS = os3-68020
   else
   ifeq ($(HOST), MorphOS)
     OS = mos
@@ -207,6 +207,7 @@ ifeq ($(OS), os4)
   AINLCFLAGS = $(COMCFLAGS) -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   CFLAGS    += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
   LDFLAGS   += -mcrt=$(CRT)
+  LDLIBS    += -lgcc
   BASEREL   = -mbaserel
   NOBASEREL = -mno-baserel
 
@@ -219,13 +220,13 @@ ifeq ($(OS), os4)
   EXTRALINKLIBS = $(BUILD_D)/libamisslauto_newlib.a
 
 else
-ifeq ($(OS), os3)
+ifeq ($(OS), os3-68020)
 
   ##############################
-  # AmigaOS3
+  # AmigaOS3 (68020/030/040 nofpu)
 
   # the OpenSSL target definition to use
-  OPENSSL_T = amiga-os3
+  OPENSSL_T = amiga-os3-68020
 
   # Compiler/link/strip commands
   ifneq ($(HOST), AmigaOS)
@@ -233,11 +234,38 @@ ifeq ($(OS), os3)
   endif
 
   # Compiler/Linker flags
-  CPU       = -m68020-60
+  CPU       = -m68020-40 -msoft-float
   APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
-  LDLIBS    += -ldebug -lc -lm -lgcc -lamiga
+  LDLIBS    += -ldebug -lc -lm -lamiga
+  BASEREL   = -resident32
+  NOBASEREL = -fno-baserel
+  BRELLIB   = -mrestore-a4
+  GCCVER    = 2
+
+  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o
+
+else
+ifeq ($(OS), os3-68060)
+
+  ##############################
+  # AmigaOS3 (68060)
+
+  # the OpenSSL target definition to use
+  OPENSSL_T = amiga-os3-68060
+
+  # Compiler/link/strip commands
+  ifneq ($(HOST), AmigaOS)
+    CROSS_PREFIX = m68k-amigaos-
+  endif
+
+  # Compiler/Linker flags
+  CPU       = -m68060
+  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
+  CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  LDFLAGS   += -mcrt=clib2
+  LDLIBS    += -ldebug -lc -lm -lamiga
   BASEREL   = -resident32
   NOBASEREL = -fno-baserel
   BRELLIB   = -mrestore-a4
@@ -349,6 +377,7 @@ endif
 endif
 endif
 endif
+endif
 
 ###########################################################################
 # Here starts all stuff that is common for all target platforms and
@@ -372,7 +401,7 @@ LINKLIBS = $(BUILD_D)/libamisslauto.a \
            $(BUILD_D)/libamissldebug.a \
            $(EXTRALINKLIBS)
 
-LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT) -lgcc
+LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
 # main target
 .PHONY: all
@@ -382,11 +411,14 @@ all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $
 .PHONY: release
 release:
 	@echo "  CC $<"
+	make OS=os3-68020 clean
+	make OS=os3-68020 DEBUG=
+	@echo "  CC $<"
+	make OS=os3-68060 clean
+	make OS=os3-68060 DEBUG=
+	@echo "  CC $<"
 	make OS=os4 clean
 	make OS=os4 DEBUG=
-	@echo "  CC $<"
-	make OS=os3 clean
-	make OS=os3 DEBUG=
 	#@echo "  CC $<"
 	#make OS=mos clean
 	#make OS=mos DEBUG=
@@ -438,8 +470,8 @@ $(LIBSSL): $(LIBCRYPTO)
 
 ## LIBCMT BUILD RULES ##
 
-$(LIBCMT): $(BUILD_D)/libcmt
-	@$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) BUILD_D=../$(BUILD_D)/libcmt
+$(LIBCMT): $(BUILD_D)/libcmt libcmt
+	$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) CPU="$(CPU)" BUILD_D=../$(BUILD_D)/libcmt
 
 ## AMISSL BUILD RULES ##
 

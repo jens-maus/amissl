@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.11 (29.9.2019)
+; $VER: Install-AmiSSL 4.0.12 (7.2.2020)
 
 (set #AmiUpdate (= @app-name "AmiUpdate"))
 
@@ -61,6 +61,10 @@
 )
 (set #str-deleting-certs "Deleting old certificates")
 (set #str-amiupdate-copyfile "Copying file via AmiUpdate:\n%s\n\nTo drawer:\n%s")
+(set #str-cpu-68k (cat
+	"AmiSSL comes in several versions for different processors. "
+	"Which version of AmiSSL would you like to install?")
+)
 
 ; ///
 ; /// ***** Deutsch
@@ -113,7 +117,22 @@
 )
 ; finally convert the system number into a string for easier understanding
 (set #detectedSystem
-    (select #detectedSystem "os3" "os4" "mos" "aros-i386" "aros-ppc" "aros-x86_64")
+	(select #detectedSystem "os3" "os4" "mos" "aros-i386" "aros-ppc" "aros-x86_64")
+)
+
+(if (= #detectedSystem "os3")
+	(set #cpu-id
+		(askchoice
+			(prompt #str-cpu-68k)
+			(help @askchoice-help)
+			(choices "68020/68030/68040" "68060")
+			(default
+				(if (OR (= (database "cpu") "68060")
+				        (<> (getversion "68060.library" (resident)) 0))
+				1 0)
+			)
+		)
+	)
 )
 
 ;----------------------------------------------------------------------------
@@ -258,7 +277,13 @@
 
 (complete 10)
 
-(foreach (tackon #libs-src-dir "AmiSSL") "#?.library"
+(if (= #detectedSystem "os3")
+	(set #cpu-dir (if (= #cpu-id 1) "68060" "68020-40"))
+	; else
+	(set #cpu-dir "")
+)
+
+(foreach (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) "#?.library"
 	(if #AmiUpdate
 		(
 			(working (#str-amiupdate-copyfile (tackon (tackon #libs-src-dir "AmiSSL") @each-name) (tackon #libs-dir "AmiSSL")))
@@ -266,7 +291,7 @@
 		)
 		; else
 		(copyfiles
-			(source (tackon (tackon #libs-src-dir "AmiSSL") @each-name))
+			(source (tackon (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) @each-name))
 			(dest (tackon #libs-dir "AmiSSL"))
 		)
 	)

@@ -20,27 +20,31 @@ mkdir -p "release/AmiSSL/Libs"
 versionname=`grep ^VERSIONNAME= Makefile | awk -F= '{ print $2 }'`
 
 #OS="os3 os4 mos aros-i386 aros-ppc aros-x86_64"
-OS="os3 os4"
+OS="os3-68020 os3-68060 os4"
 
 for os in ${OS}; do
+	libdir="";
 	case $os in
-	    os3)         fullsys="AmigaOS3";;
+	    os3-68020)   fullsys="AmigaOS3" libdir="/68020-40";;
+	    os3-68060)   fullsys="AmigaOS3" libdir="/68060";;
 	    os4)         fullsys="AmigaOS4";;
 	    mos)         fullsys="MorphOS";;
 	    aros-i386)   fullsys="AROS-i386";;
 	    aros-ppc)    fullsys="AROS-ppc";;
 	    aros-x86_64) fullsys="AROS-x86_64";;
 	esac
-	mkdir -p "release/AmiSSL/Libs/$fullsys"
-	cp -a build_$os/amisslmaster.library "release/AmiSSL/Libs/$fullsys/"
-	mkdir -p "release/AmiSSL/Libs/$fullsys/AmiSSL"
-	cp -a build_$os/amissl_v$versionname.library "release/AmiSSL/Libs/$fullsys/AmiSSL/"
-	mkdir -p "release/AmiSSL/C/$fullsys"
-	cp -a build_$os/openssl/apps/openssl "release/AmiSSL/C/$fullsys/OpenSSL"
-	mkdir -p "release/AmiSSL/Developer/Examples/$fullsys"
-	cp -a build_$os/https "release/AmiSSL/Developer/Examples/$fullsys/"
-	mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
-	cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
+	mkdir -p "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir"
+	cp -a build_$os/amissl_v$versionname.library "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir"
+	if [ "$os" != "os3-68060" ]; then
+	    mkdir -p "release/AmiSSL/Libs/$fullsys"
+	    cp -a build_$os/amisslmaster.library "release/AmiSSL/Libs/$fullsys/"
+	    mkdir -p "release/AmiSSL/C/$fullsys"
+	    cp -a build_$os/openssl/apps/openssl "release/AmiSSL/C/$fullsys/OpenSSL"
+	    mkdir -p "release/AmiSSL/Developer/Examples/$fullsys"
+	    cp -a build_$os/https "release/AmiSSL/Developer/Examples/$fullsys/"
+	    mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
+	    cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
+	fi
 done
 
 cp -a dist/AmiSSL.info "release/"

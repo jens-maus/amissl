@@ -636,8 +636,15 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
   // can skip all the library init stuff and return the base pointer right away.
   if(base->segList != 0)
   {
+    // make sure that this is really a 68060 machine if optimized for 68060
+    #if _M68060 || __mc68060
+    if((SysBase->AttnFlags & AFF_68060) == 0)
+    {
+      DeleteLibrary(&base->libBase);
+      return(NULL);
+    }
     // make sure that this is really a 68020+ machine if optimized for 020+
-    #if _M68060 || _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040 || __mc68060
+    #elif _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040
     if((SysBase->AttnFlags & AFF_68020) == 0)
     {
       DeleteLibrary(&base->libBase);

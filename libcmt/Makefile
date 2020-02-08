@@ -47,14 +47,13 @@ ifeq ($(OS), os4)
 
   # Compiler/Linker flags
   CRT      = clib2
-  CPU      = -mcpu=powerpc -mstrict-align
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization
   CFLAGS   += -mcrt=$(CRT) -mbaserel -D__USE_INLINE__ -D__C_MACROS__ \
               $(REDEFINE) -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
 
 else
-ifeq ($(OS), os3)
+ifeq ($(OS), $(filter $(OS), os3-68020 os3-68060))
 
   ##############################
   # AmigaOS3
@@ -65,7 +64,6 @@ ifeq ($(OS), os3)
   endif
 
   # Compiler/Linker flags
-  CPU	    = -m68020-60
   CFLAGS  += -mcrt=clib2 -resident32 -I../include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
   LDFLAGS += -mcrt=clib2
   LDLIBS  += -lm
@@ -82,7 +80,6 @@ ifeq ($(OS), mos)
   endif
 
   # Compiler/Linker flags
-  CPU     = -mcpu=powerpc
   CFLAGS  += -noixemul -mbaserel32 -I./include/netinclude
   LDFLAGS += -noixemul
 
@@ -122,6 +119,26 @@ $(BUILD_D):
 $(BUILD_D)/%.o: %.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_D)/int64_muldi3.o: int64math.c
+	@echo "  CC $< -DL_muldi3"
+	@$(CC) $(CFLAGS) -c $< -o $@ -DL_muldi3
+
+$(BUILD_D)/int64_umoddi3.o: int64math.c
+	@echo "  CC $< -DL_umoddi3"
+	@$(CC) $(CFLAGS) -c $< -o $@ -DL_umoddi3
+
+$(BUILD_D)/int64_udivdi3.o: int64math.c
+	@echo "  CC $< -DL_udivdi3"
+	@$(CC) $(CFLAGS) -c $< -o $@ -DL_udivdi3
+
+$(BUILD_D)/int64_lshrdi3.o: int64math.c
+	@echo "  CC $< -DL_lshrdi3"
+	@$(CC) $(CFLAGS) -c $< -o $@ -DL_lshrdi3
+
+$(BUILD_D)/int64_ashldi3.o: int64math.c
+	@echo "  CC $< -DL_ashldi3"
+	@$(CC) $(CFLAGS) -c $< -o $@ -DL_ashldi3
 
 libobjs: $(LIBOBJS)
 
@@ -211,7 +228,13 @@ NWLIBOBJS = $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/closelog.o \
             $(BUILD_D)/syslog.o
 
-LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(BUILD_D)/threadhash.o $(NWLIBOBJS) $(BUILD_D)/localtime.o $(BUILD_D)/libcmt.o
+INT64OBJS = $(BUILD_D)/int64_muldi3.o \
+            $(BUILD_D)/int64_udivdi3.o \
+            $(BUILD_D)/int64_umoddi3.o \
+            $(BUILD_D)/int64_lshrdi3.o \
+            $(BUILD_D)/int64_ashldi3.o
+
+LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(BUILD_D)/threadhash.o $(NWLIBOBJS) $(INT64OBJS) $(BUILD_D)/localtime.o $(BUILD_D)/libcmt.o
 
 $(BUILD_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"
