@@ -2,7 +2,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
-# Copyright (C) 2006-2016 AmiSSL Open Source Team
+# Copyright (C) 2006-2020 AmiSSL Open Source Team
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -244,7 +244,8 @@ ifeq ($(OS), os3-68020)
   BRELLIB   = -mrestore-a4
   GCCVER    = 2
 
-  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o
+  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
+                 $(BUILD_D)/amissl_glue_a4a5.o
 
 else
 ifeq ($(OS), os3-68060)
@@ -271,7 +272,8 @@ ifeq ($(OS), os3-68060)
   BRELLIB   = -mrestore-a4
   GCCVER    = 2
 
-  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o
+  EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
+                 $(BUILD_D)/amissl_glue_a4a5.o
 
 else
 ifeq ($(OS), mos)
@@ -556,6 +558,10 @@ $(BUILD_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) -I./openssl/crypto/include -I./openssl -I./openssl/include -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
+
+$(BUILD_D)/amissl_glue_a4a5.o: $(SRC_D)/amissl_glue_a4a5.S
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 # cleanup target
 .PHONY: clean

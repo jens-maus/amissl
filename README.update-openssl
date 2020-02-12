@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2019 AmiSSL Open Source Team
+ Copyright (C) 2006-2020 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -88,6 +88,10 @@ HowTo update the OpenSSL version in "openssl/":
       explictly declare the m68k 32-bit register pair to use (e.g. d0-d1).
       Additionally, for VBCC compatibility, try to use only even pairs (i.e.
       either d0-d1, d2-d3, d4-d5 or d6-d7) and reallocate other arguments to help.
+   -> a4 and a5 are best avoided because GCC has trouble when these are used. If
+      there is no other choice, then you will need to write the reg->stack
+      stub function in assembler, adding it to amissl_glue_a4a5.s and updating
+      amissl_glue.patch accordingly to remove the C version for OS3 only
 
    NOTE: tools/newXMLhelper.pl can be used to help with this, cross-referencing
    various files and finally generating the required xml output which you may

@@ -1,4 +1,4 @@
-#!/bin/perl
+#!/usr/bin/perl
 
 ##
 ## This script cross-references the API functions defined in the

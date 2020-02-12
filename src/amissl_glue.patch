@@ -1,5 +1,5 @@
---- amissl_glue.c	2019-01-11 19:52:28.000000000 
-+++ amissl_glue.c_patched	2019-01-11 19:53:05.000000000 
+--- amissl_glue.c	2020-02-12 13:23:29.659951064 +0000
++++ amissl_glue.c_patched	2020-02-12 13:25:28.959955093 +0000
 @@ -4,6 +4,12 @@
  
  /***************************************************************************/
@@ -66,6 +66,19 @@
  long SAVEDS ASM LIB_CleanupAmiSSLA(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct TagItem * tagList))
  {
  	return CleanupAmiSSLA(tagList);
+ }
++#endif
+ 
+ // ---
+ 
+@@ -26198,10 +26223,12 @@
+ 
+ // ---
+ 
++#if !defined(__amigaos3__)
+ int SAVEDS ASM LIB_RSA_X931_derive_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, BIGNUM * p1), REG(a2, BIGNUM * p2), REG(a3, BIGNUM * q1), REG(d0, BIGNUM * q2), REG(d1, const BIGNUM * Xp1), REG(d2, const BIGNUM * Xp2), REG(d3, const BIGNUM * Xp), REG(d4, const BIGNUM * Xq1), REG(d5, const BIGNUM * Xq2), REG(d6, const BIGNUM * Xq), REG(d7, const BIGNUM * e), REG(a4, BN_GENCB * cb))
+ {
+ 	return RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb);
  }
 +#endif
  
