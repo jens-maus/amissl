@@ -412,14 +412,17 @@ void OPENSSL_cpuid_setup(void)
 #include <proto/exec.h>
 void OPENSSL_cpuid_setup(void)
 {
-    uint32 family, vec;
+    uint32 family = 0, vec;
 
     GetCPUInfoTags(GCIT_Family, &family, GCIT_VectorUnit, &vec, TAG_DONE);
 
-    OPENSSL_ppccap_P = PPC_FPU;
+    if(family != CPUFAMILY_E500)
+    {
+        OPENSSL_ppccap_P |= PPC_FPU;
 
-    if((family == CPUFAMILY_PA6T) || (family == CPUFAMILY_E5500))
-        OPENSSL_ppccap_P |= PPC_FPU64;
+        if((family == CPUFAMILY_PA6T) || (family == CPUFAMILY_E5500))
+            OPENSSL_ppccap_P |= PPC_FPU64;
+    }
 
     if((vec == VECTORTYPE_ALTIVEC) &&
        ((SysBase->lib_Version == 51 && SysBase->lib_Revision >= 12) || SysBase->lib_Version > 51))
