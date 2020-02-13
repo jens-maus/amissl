@@ -87,6 +87,6 @@ releaserev=`grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }'`
 echo "  MK AmiSSL-$releasever.$releaserev.lha"
 cd release
 rm -f ../AmiSSL-$releasever.$releaserev.lha
-lha -ao5q ../AmiSSL-$releasever.$releaserev.lha *
+lha -ao5q1 ../AmiSSL-$releasever.$releaserev.lha *
 cp ../dist/AmiSSL.readme ../AmiSSL-$releasever.$releaserev.readme
 cd ..
