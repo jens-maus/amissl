@@ -10,11 +10,16 @@
 #include <stdio.h>
 #include <errno.h>
 
+#define  __USE_BASETYPE__
+
 #include <proto/exec.h>
 #include <proto/dos.h>
+#include <proto/utility.h>
 #include <proto/amissl.h>
 #include <proto/amisslmaster.h>
 #include <proto/socket.h>
+#include <clib/alib_protos.h>
+#include <utility/utility.h>
 
 #include <amissl/amissl.h>
 #include <libraries/amisslmaster.h>
@@ -22,20 +27,21 @@
 
 static BOOL Init(void);
 static void Cleanup(void);
+static void GenerateRandomSeed(char *buffer, int size);
 static int ConnectToServer(char *, short, char *, short);
+static int verify_cb(int preverify_ok, X509_STORE_CTX *ctx);
 
 struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
+struct UtilityBase *UtilityBase;
+
+BOOL AmiSSLInitialized;
 
 #if defined(__amigaos4__)
 struct AmiSSLMasterIFace *IAmiSSLMaster;
 struct AmiSSLIFace *IAmiSSL;
 struct SocketIFace *ISocket;
-#endif
-
-#ifndef __amigaos4__
-#define GetInterface(a, b, c, d) 1
-#define DropInterface(x)
-
+struct UtilityIFace *IUtility;
+#else
 static BPTR ErrorOutput(void)
 {
 	return(((struct Process *)FindTask(NULL))->pr_CES);
@@ -50,60 +56,64 @@ static BPTR GetStdErr(void)
 	return(err ? err : Output());
 }
 
-/* The program expects at most four arguments: host in IP format, port
- * number to connect to, proxy in IP format and proxy port number.
- * If last two are specified, host can be in any format proxy will
- * understand (since this is an example for SSL programming, host name
- * resolving code is left out).
+/* Usage: https <host> <port> [proxyhost] [proxyport]
  *
- * Default values are "127.0.0.1", 443. If any proxy parameter is
- * omitted, the program will connect directly to the host.
+ * host:      name of host (default: "localhost")
+ * port:      port to connect to (default: 443)
+ * proxyhost: name of proxy (optional)
+ * proxyport: name of proxy (optional)
+ *
+ * If any proxy parameter is omitted, the program will
+ * connect directly to the host.
  */
 int main(int argc, char *argv[])
 {
 	char buffer[4096]; /* This should be dynamically allocated */
-	const char *request = "GET / HTTP/1.0\r\n\r\n";
 	BOOL is_ok = FALSE;
 	X509 *server_cert;
 	SSL_CTX *ctx;
 	BIO *bio_err;
 	SSL *ssl;
 
-	if (Init())
+	if (Init()) /* Open required OS libraries and initialize AmiSSL */
 	{
 		/* Basic intialization. Next few steps (up to SSL_new()) need
 		 * to be done only once per AmiSSL opener.
 		 */
-		SSLeay_add_ssl_algorithms();
-		SSL_load_error_strings();
+		OPENSSL_init_ssl(OPENSSL_INIT_SSL_DEFAULT | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
+
+		/* Seed the entropy engine */
+		GenerateRandomSeed(buffer, 128);
+		RAND_seed(buffer, 128);
 
 		/* Note: BIO writing routines are prepared for NULL BIO handle */
 		if((bio_err = BIO_new(BIO_s_file())) != NULL)
 			BIO_set_fp_amiga(bio_err, GetStdErr(), BIO_NOCLOSE | BIO_FP_TEXT);
 
 		/* Get a new SSL context */
-		if((ctx = SSL_CTX_new(SSLv23_client_method())) != NULL)
+		if((ctx = SSL_CTX_new(TLS_client_method())) != NULL)
 		{
 			/* Basic certificate handling. OpenSSL documentation has more
 			 * information on this.
 			 */
 			SSL_CTX_set_default_verify_paths(ctx);
 			SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
-			                   NULL);
+			                   verify_cb);
 
 			/* The following needs to be done once per socket */
 			if((ssl = SSL_new(ctx)) != NULL)
 			{
 				int sock;
+				int port, pport;
+				char *host, *proxy;
 
 				/* Connect to the HTTPS server, directly or through a proxy */
-				if (argc > 4)
-					sock = ConnectToServer(argv[1], atol(argv[2]), argv[3],
-					                       atol(argv[4]));
-				else
-					sock = ConnectToServer(argv[1] ? argv[1] : (char *)"127.0.0.1",
-					                       argc > 2 ? atol(argv[2]) : 443,
-					                       NULL, 0);
+				host = (argc > 1) ? argv[1] : (char *)"localhost";
+				port = (argc > 2) ? atol(argv[2]) : 443;
+				proxy = (argc > 3) ? argv[3] : NULL;
+				pport = (argc > 4) ? atol(argv[4]) : 0;
+
+				sock = ConnectToServer(host, port, proxy, pport);
 
 				/* Check if connection was established */
 				if (sock >= 0)
@@ -112,6 +122,9 @@ int main(int argc, char *argv[])
 
 					/* Associate the socket with the ssl structure */
 					SSL_set_fd(ssl, sock);
+
+					/* Set up SNI (Server Name Indication) */
+					SSL_set_tlsext_host_name(ssl, host);
 
 					/* Perform SSL handshake */
 					if((ssl_err = SSL_connect(ssl)) >= 0)
@@ -147,7 +160,8 @@ int main(int argc, char *argv[])
 							/* Send a HTTP request. Again, this is just
 							 * a very basic example.
 							 */
-							if ((ssl_err = SSL_write(ssl, request, strlen(request)))
+							sprintf(buffer,"GET / HTTP/1.0\r\nHost: %s\r\n\r\n",host);
+							if ((ssl_err = SSL_write(ssl, buffer, strlen(buffer)))
 							    > 0)
 							{
 								/* Dump everything to output */
@@ -168,6 +182,9 @@ int main(int argc, char *argv[])
 						}
 						else
 							FPrintf(GetStdErr(), "Couldn't get server certificate!\n");
+
+						/* Send SSL close notification */
+						SSL_shutdown(ssl);
 					}
 					else
 						FPrintf(GetStdErr(), "Couldn't establish SSL connection!\n");
@@ -176,15 +193,13 @@ int main(int argc, char *argv[])
 					if (ssl_err < 0)
 						ERR_print_errors(bio_err);
 
-					/* Send SSL close notification and close the socket */
-					SSL_shutdown(ssl);
+					/* Close the socket */
 					CloseSocket(sock);
 				}
 				else
 					FPrintf(GetStdErr(), "Couldn't connect to host!\n");
 
-        
-			  FPrintf(GetStdErr(), "before SSL_free()\n");
+				FPrintf(GetStdErr(), "before SSL_free()\n");
 				SSL_free(ssl);
 			}
 			else
@@ -196,7 +211,7 @@ int main(int argc, char *argv[])
 		else
 			FPrintf(GetStdErr(), "Couldn't create new context!\n");
 
-	  FPrintf(GetStdErr(), "before Cleanup()\n");
+		FPrintf(GetStdErr(), "before Cleanup()\n");
 		Cleanup();
 	}
 
@@ -207,88 +222,125 @@ int main(int argc, char *argv[])
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
+#if defined(__amigaos4__)
+#define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
+#define DROPINTERFACE(iface)      (DropInterface((struct Interface *)iface), iface = NULL)
+#else
+#define GETINTERFACE(iface, base) TRUE
+#define DROPINTERFACE(iface)
+#endif
+
 /* Open and initialize AmiSSL */
 static BOOL Init(void)
 {
-	BOOL is_ok = FALSE;
+	AmiSSLInitialized = FALSE;
 
-	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
-		FPrintf(GetStdErr(), "Couldn't open bsdsocket.library v4!\n");
-#if defined(__amigaos4__)
-	else if (!(ISocket = (struct SocketIFace *)GetInterface(SocketBase, "main", 1, NULL)))
+	if (!(UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 0)))
+		FPrintf(GetStdErr(), "Couldn't open utility.library!\n");
+	else if (!GETINTERFACE(IUtility, &UtilityBase->ub_LibNode))
 		FPrintf(GetStdErr(), "Couldn't get Socket interface!\n");
-#endif
+	else if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
+		FPrintf(GetStdErr(), "Couldn't open bsdsocket.library v4!\n");
+	else if (!GETINTERFACE(ISocket, SocketBase))
+		FPrintf(GetStdErr(), "Couldn't get Socket interface!\n");
 	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 	                                          AMISSLMASTER_MIN_VERSION)))
 		FPrintf(GetStdErr(), "Couldn't open amisslmaster.library v"
 		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
-#if defined(__amigaos4__)
-	else if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface(AmiSSLMasterBase,
-	                                                                    "main", 1, NULL)))
+	else if (!GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSLMaster interface!\n");
-#endif
 	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
 		FPrintf(GetStdErr(), "AmiSSL version is too old!\n");
 	else if (!(AmiSSLBase = OpenAmiSSL()))
 		FPrintf(GetStdErr(), "Couldn't open AmiSSL!\n");
-#if defined(__amigaos4__)
-	else if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface(AmiSSLBase,
-	                                                        "main", 1, NULL)))
+	else if (!GETINTERFACE(IAmiSSL, AmiSSLBase))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSL interface!\n");
-#endif
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 #if defined(__amigaos4__)
-	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 	                    AmiSSL_ISocket, ISocket,
-	                    TAG_DONE) != 0)
 #else
-	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 	                    AmiSSL_SocketBase, SocketBase,
-	                    TAG_DONE) != 0)
 #endif
+	                    TAG_DONE) != 0)
 		FPrintf(GetStdErr(), "Couldn't initialize AmiSSL!\n");
 	else
-		is_ok = TRUE;
+		AmiSSLInitialized = TRUE;
 
-	if (!is_ok)
+	if (!AmiSSLInitialized)
 		Cleanup(); /* This is safe to call even if something failed above */
 
-	return(is_ok);
+	return(AmiSSLInitialized);
 }
 
 static void Cleanup(void)
 {
+	if (AmiSSLInitialized)
+	{	/* Must always call after successful InitAmiSSL() */
+		CleanupAmiSSL(TAG_DONE);
+	}
+
 	if (AmiSSLBase)
 	{
-    #if defined(__amigaos4__)
-		if (IAmiSSL)
-		{
-			CleanupAmiSSL(TAG_DONE);
-			DropInterface((struct Interface *)IAmiSSL);
-			IAmiSSL = NULL;
-		}
-    #else
-		CleanupAmiSSL(TAG_DONE);
-    #endif
-
+		DROPINTERFACE(IAmiSSL);
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
 
-  #if defined(__amigaos4__)
-	DropInterface((struct Interface *)IAmiSSLMaster);
-	IAmiSSLMaster = NULL;
-  #endif
-
+	DROPINTERFACE(IAmiSSLMaster);
 	CloseLibrary(AmiSSLMasterBase);
 	AmiSSLMasterBase = NULL;
 
-  #if defined(__amigaos4__)
-	DropInterface((struct Interface *)ISocket);
-	ISocket = NULL;
-  #endif
-
+	DROPINTERFACE(ISocket);
 	CloseLibrary(SocketBase);
 	SocketBase = NULL;
+
+	DROPINTERFACE(IUtility);
+	CloseLibrary(&UtilityBase->ub_LibNode);
+	UtilityBase = NULL;
+}
+
+/* Get some suitable random seed data
+ */
+static void GenerateRandomSeed(char *buffer, int size)
+{
+	int i;
+#ifdef __amigaos4__
+	struct RandomState rs;
+
+	rs.rs_Low = clock();
+	rs.rs_High = time(NULL);
+
+	for(i = 0; i < size/4; i++)
+	{
+		((LONG *)buffer)[i] = Random(&rs);
+	}
+#else
+	for(i = 0; i < size/2; i++)
+	{
+		((UWORD *)buffer)[i] = RangeRand(65535);
+	}
+#endif
+}
+
+/* This callback is called everytime OpenSSL verifies a certificate
+ * in the chain during a connection, indicating success or failure.
+ */
+static int verify_cb(int preverify_ok, X509_STORE_CTX *ctx)
+{
+	if (!preverify_ok)
+	{
+		/* Here, you could ask the user whether to ignore the failure,
+		 * displaying information from the certificate, for example.
+		 */
+		FPrintf(GetStdErr(),"Certificate verification failed (%s)\n",
+		        X509_verify_cert_error_string(X509_STORE_CTX_get_error(ctx)));
+	}
+	else
+	{
+		FPrintf(GetStdErr(),"Certificate verification successful (hash %08lx)\n",
+		        X509_issuer_and_serial_hash(X509_STORE_CTX_get_current_cert(ctx)));
+	}
+	return preverify_ok;
 }
 
 /* Connect to the specified server, either directly or through the specified
@@ -297,28 +349,27 @@ static void Cleanup(void)
 static int ConnectToServer(char *host, short port, char *proxy, short pport)
 {
 	struct sockaddr_in addr;
+	struct hostent *hostent;
 	char buffer[1024]; /* This should be dynamically alocated */
 	BOOL is_ok = FALSE;
 	char *s1, *s2;
-	int sock;
+	int sock = -1;
 
-	/* Create a socket and connect to the server */
-	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) >= 0)
+	/* Lookup hostname */
+	if ((hostent = gethostbyname((proxy && pport) ? proxy : host)) != NULL)
 	{
 		memset(&addr, 0, sizeof(addr));
 		addr.sin_family = AF_INET;
+		addr.sin_port = htons((proxy && pport) ? pport : port);
+		addr.sin_len = hostent->h_length;;
+		memcpy(&addr.sin_addr,hostent->h_addr,hostent->h_length);
+	}
+	else
+		FPrintf(GetStdErr(), "Host lookup failed\n");
 
-		if (proxy && pport)
-		{
-			addr.sin_addr.s_addr = inet_addr(proxy); /* This should be checked against INADDR_NONE */
-			addr.sin_port = htons(pport);
-		}
-		else
-		{
-			addr.sin_addr.s_addr = inet_addr(host); /* This should be checked against INADDR_NONE */
-			addr.sin_port = htons(port);
-		}
-
+	/* Create a socket and connect to the server */
+	if (hostent && ((sock = socket(AF_INET, SOCK_STREAM, 0)) >= 0))
+	{
 		if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) >= 0)
 		{
 			/* For proxy connection, use SSL tunneling. First issue a HTTP CONNECT
@@ -381,8 +432,8 @@ static int ConnectToServer(char *host, short port, char *proxy, short pport)
 			else
 				is_ok = TRUE;
 		}
-    else
-      FPrintf(GetStdErr(), "Couldn't connect to server\n");
+		else
+			FPrintf(GetStdErr(), "Couldn't connect to server\n");
 
 		if (!is_ok)
 		{
