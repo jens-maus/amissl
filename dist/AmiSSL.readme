@@ -1,11 +1,11 @@
-Short:        AmiSSL - OpenSSL as an Amiga shared library
+Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
 Version:      4.4
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
-Architecture: ppc-amigaos >= 4.0.5, m68k-amigaos >= 3.0, ppc-morphos >= 1.4.5
+Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
 This is version 4.4 of the AmiSSL library for Amiga based operating systems
