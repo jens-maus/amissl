@@ -14,26 +14,32 @@
 
 #include <proto/exec.h>
 
-static struct SignalSemaphore RunOnceLock;
+#if defined(__amigaos4__)
+#define ALLOCSEMAPHORE(sem, type) sem = (type *)AllocSysObjectTags(ASOT_SEMAPHORE, ASOSEM_Size, sizeof(type), TAG_DONE)
+#define FREESEMAPHORE(sem) if (sem != NULL) FreeSysObject(ASOT_SEMAPHORE, sem)
+#else
+#define ALLOCSEMAPHORE(sem, type) if ((sem = (type *)OPENSSL_malloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
+#define FREESEMAPHORE(sem) if (sem != NULL) OPENSSL_free(sem)
+#endif
 
-int CRYPTO_THREAD_init(void)
+static struct SignalSemaphore *RunOnceLock = NULL;
+
+int CRYPTO_THREAD_setup(void)
 {
-    InitSemaphore(&RunOnceLock);
-    return 1;
+    ALLOCSEMAPHORE(RunOnceLock, struct SignalSemaphore);
+    return (RunOnceLock != NULL) ? 1 : 0;
 }
 
 int CRYPTO_THREAD_cleanup(void)
 {
+    FREESEMAPHORE(RunOnceLock);
     return 1;
 }
 
 CRYPTO_RWLOCK *CRYPTO_THREAD_lock_new(void)
 {
-    CRYPTO_RWLOCK *lock = OPENSSL_malloc(sizeof(struct SignalSemaphore));
-
-    if (lock != NULL)
-        InitSemaphore((struct SignalSemaphore *)lock);
-
+    CRYPTO_RWLOCK *lock;
+    ALLOCSEMAPHORE(lock, struct SignalSemaphore);
     return lock;
 }
 
@@ -57,20 +63,19 @@ int CRYPTO_THREAD_unlock(CRYPTO_RWLOCK *lock)
 
 void CRYPTO_THREAD_lock_free(CRYPTO_RWLOCK *lock)
 {
-    if (lock != NULL)
-       OPENSSL_free(lock);
+    FREESEMAPHORE(lock);
 }
 
 int CRYPTO_THREAD_run_once(CRYPTO_ONCE *once, void (*init)(void))
 {
-    ObtainSemaphore(&RunOnceLock);
+    ObtainSemaphore(RunOnceLock);
 
     if (*once == CRYPTO_ONCE_STATIC_INIT) {
         init();
         *once = 1;
     }
 
-    ReleaseSemaphore(&RunOnceLock);
+    ReleaseSemaphore(RunOnceLock);
 
     return 1;
 }
@@ -101,9 +106,9 @@ static int task_cmp(const void *a_void, const void *b_void)
 int CRYPTO_THREAD_init_local(CRYPTO_THREAD_LOCAL *key, void (*cleanup)(void *))
 {
     THREAD_KEY *keydata;
+    ALLOCSEMAPHORE(keydata, THREAD_KEY);
 
-    if ((keydata = OPENSSL_malloc(sizeof(THREAD_KEY)))) {
-        InitSemaphore(&keydata->lock);
+    if (keydata != NULL) {
         keydata->hash = NULL;
         *key = (CRYPTO_THREAD_LOCAL)keydata;
         return 1;
@@ -195,7 +200,7 @@ int CRYPTO_THREAD_cleanup_local(CRYPTO_THREAD_LOCAL *key)
             OPENSSL_LH_doall(keydata->hash, free_task_value);
             OPENSSL_LH_free(keydata->hash);
         }
-        OPENSSL_free(keydata);
+        FREESEMAPHORE(keydata);
 	*key = 0;
         return 1;
     }

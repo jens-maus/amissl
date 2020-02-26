@@ -211,6 +211,8 @@ int main(int argc, char *argv[])
 		else
 			FPrintf(GetStdErr(), "Couldn't create new context!\n");
 
+		BIO_free(bio_err);
+
 		FPrintf(GetStdErr(), "before Cleanup()\n");
 		Cleanup();
 	}

@@ -87,14 +87,8 @@ __end__restore_r13:                                         \n\
 ");
 #endif
 
-#ifdef __amigaos4__
-  #define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, AVT_ClearWithValue, 0, TAG_DONE)
-#else
-  #define SB_AllocVec(s,t)    AllocVec(s, t)
-#endif
-
 /* in openssl/crypto/threads_amissl.c */
-extern int CRYPTO_THREAD_init(void);
+extern int CRYPTO_THREAD_setup(void);
 extern int CRYPTO_THREAD_cleanup(void);
 
 #if !defined(__amigaos4__)
@@ -129,7 +123,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
   SHOWPOINTER(DBF_STARTUP, &ownBase);
   SHOWPOINTER(DBF_STARTUP, ownBase);
 
-  ret = (AMISSL_STATE *)SB_AllocVec(sizeof(*ret), MEMF_CLEAR);
+  ret = (AMISSL_STATE *)malloc(sizeof(*ret));
   if (ret != NULL)
   {
     unsigned long pid = (unsigned long)FindTask(NULL);
@@ -152,7 +146,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
     D(DBF_STARTUP, "h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)", parentBase->thread_hash, pid, ret);
     if(!h_insert(parentBase->thread_hash, pid, ret))
     {
-      FreeVec(ret);
+      free(ret);
       ret = NULL;
     }
   }
@@ -171,7 +165,7 @@ static void ThreadGroupStateCleanup(UNUSED long Key, AMISSL_STATE *a)
   {
     D(DBF_STARTUP, "Cleaning up state %08lx for %08lx (group %lu)", a, a->pid, a->ThreadGroupID);
     h_delete(parentBase->thread_hash, a->pid);
-    FreeVec(a);
+    free(a);
   }
 }
 
@@ -342,16 +336,20 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED s
     if(state->SocketBase && state->ISocketPtr && *state->ISocketPtr)
     {
       DropInterface((struct Interface *)*state->ISocketPtr);
-      state->ISocketPtr = NULL;
     }
 #endif
+
+    OPENSSL_thread_stop();
 
     ObtainSemaphore(&parentBase->openssl_cs);
     D(DBF_STARTUP, "h_delete(parentBase->thread_hash)");
     h_delete(parentBase->thread_hash, state->pid);
     ReleaseSemaphore(&parentBase->openssl_cs);
 
-    FreeVec(state);
+    if(state->getenv_var)
+      free(state->getenv_var);
+
+    free(state);
   }
 
   return(0);
@@ -487,17 +485,16 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
 
   ReleaseSemaphore(&parentBase->openssl_cs);
 
-  CRYPTO_THREAD_init();
-
+  if (CRYPTO_THREAD_setup()
 #if defined(__amigaos4__)
-  if ((DOSBase = OpenLibrary("dos.library", 50))
+    && (DOSBase = OpenLibrary("dos.library", 50))
     && (IntuitionBase = OpenLibrary("intuition.library", 50))
     && (UtilityBase = OpenLibrary("utility.library", 50))
     && (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
     && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
 #else
-  if ((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
+    && (DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
     && (UtilityBase = OpenLibrary("utility.library", 37)))
 #endif

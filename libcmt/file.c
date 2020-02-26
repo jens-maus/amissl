@@ -270,7 +270,7 @@ setvbuf(FILE *stream,char *buf,int bufmode,size_t size)
 		bufmode = _IONBF; /* A buffer size of 0 bytes defaults to unbuffered operation. */
 	else if (buf == NULL)
 	{
-		if ((new_buffer = malloc(size)))
+		if ((new_buffer = malloc(size)) == NULL)
 		{
 			SetAmiSSLerrno(ENOMEM);
 			goto out;
