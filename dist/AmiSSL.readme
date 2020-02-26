@@ -2,13 +2,13 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.4
+Version:      4.5
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.4 of the AmiSSL library for Amiga based operating systems
+This is version 4.5 of the AmiSSL library for Amiga based operating systems
 and the first public open-source based release of AmiSSL. Version 4.x is a new
 major release which comes with full compatibility to the OpenSSL 1.1.x line
 which includes important security related fixes and comes with new encryption
@@ -23,11 +23,11 @@ AmiSSLv3 will continue to work properly.
 
 Compatibility:
 -------------
-All applications compiled to use AmiSSL 4.0-4.2 will automatically use
-AmiSSL 4.4 once installed. Unfortunately, due to some errors that were made in
+All applications compiled to use AmiSSL 4.0-4.2 or 4.4 will automatically use
+AmiSSL 4.5 once installed. Unfortunately, due to some errors that were made in
 AmiSSL 4.3, applications compiled to specifically use AmiSSL 4.3 will need to
-be recompiled with the AmiSSL 4.4 SDK in order for them to be able to use
-AmiSSL 4.4.
+be recompiled with the AmiSSL 4.4 SDK (or newer) in order for them to be
+able to use AmiSSL 4.5.
 
 IMPORTANT NOTE:
 --------------
@@ -44,6 +44,16 @@ supported in one of the next releases or please consider joining our team.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.5 (??.03.2020):
+------------------------
+- Dropped FPU usage from 68060 target, allowing 68LC060 and 68EC060
+  processors to benefit from the 4.4 changes, without crashing.
+- Fixed a number of memory leaks, particularly where multithreaded
+  applications would leak memory over time (although freed on exit).
+- Fixed installer issue for MorphOS (#43).
+- Modernized and improved the https example source code.
+- Minor improvements/fixes.
 
 Version 4.4 (15.02.2020):
 ------------------------
