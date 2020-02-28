@@ -1,3 +1,13 @@
+#ifndef __USE_BASETYPE__
+#define __USE_BASETYPE__
+#endif
+#ifndef __USE_INLINE__
+#define __USE_INLINE__
+#endif
+#ifndef __NEW_TIMEVAL_DEFINITION_USED__
+#define __NEW_TIMEVAL_DEFINITION_USED__
+#endif
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/time.h>
@@ -9,8 +19,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-
-#define  __USE_BASETYPE__
 
 #include <proto/exec.h>
 #include <proto/dos.h>
