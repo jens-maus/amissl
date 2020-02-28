@@ -1,3 +1,4 @@
+#if defined(__amigaos4__)
 #ifndef __USE_BASETYPE__
 #define __USE_BASETYPE__
 #endif
@@ -7,14 +8,10 @@
 #ifndef __NEW_TIMEVAL_DEFINITION_USED__
 #define __NEW_TIMEVAL_DEFINITION_USED__
 #endif
+#endif /* __amigaos4__ */
 
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/time.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <netdb.h>
-#include <dos/dos.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
