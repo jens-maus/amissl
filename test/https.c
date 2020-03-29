@@ -262,13 +262,15 @@ static BOOL Init(void)
 		FPrintf(GetStdErr(), "Couldn't open AmiSSL!\n");
 	else if (!GETINTERFACE(IAmiSSL, AmiSSLBase))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSL interface!\n");
-	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 #if defined(__amigaos4__)
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
 	                    AmiSSL_ISocket, ISocket,
-#else
-	                    AmiSSL_SocketBase, SocketBase,
-#endif
 	                    TAG_DONE) != 0)
+#else
+	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
+	                    AmiSSL_SocketBase, SocketBase,
+	                    TAG_DONE) != 0)
+#endif
 		FPrintf(GetStdErr(), "Couldn't initialize AmiSSL!\n");
 	else
 		AmiSSLInitialized = TRUE;
