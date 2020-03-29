@@ -45,12 +45,13 @@ Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
-Version 4.5 (??.03.2020):
+Version 4.5 (29.03.2020):
 ------------------------
 - Dropped FPU usage from 68060 target, allowing 68LC060 and 68EC060
   processors to benefit from the 4.4 changes, without crashing.
 - Fixed a number of memory leaks, particularly where multithreaded
   applications would leak memory over time (although freed on exit).
+- All binaries now stripped of debug symbols, improving load time.
 - Fixed installer issue for MorphOS (#43).
 - Modernized and improved the https example source code.
 - Minor improvements/fixes.

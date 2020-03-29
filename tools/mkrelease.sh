@@ -25,23 +25,23 @@ OS="os3-68020 os3-68060 os4"
 for os in ${OS}; do
 	libdir="";
 	case $os in
-	    os3-68020)   fullsys="AmigaOS3" libdir="/68020-40";;
-	    os3-68060)   fullsys="AmigaOS3" libdir="/68060";;
-	    os4)         fullsys="AmigaOS4";;
-	    mos)         fullsys="MorphOS";;
+	    os3-68020)   fullsys="AmigaOS3" strip="m68k-amigaos-strip" libdir="/68020-40";;
+	    os3-68060)   fullsys="AmigaOS3" strip="m68k-amigaos-strip" libdir="/68060";;
+	    os4)         fullsys="AmigaOS4" strip="ppc-amigaos-strip";;
+	    mos)         fullsys="MorphOS"  strip="ppc-morphos-strip";;
 	    aros-i386)   fullsys="AROS-i386";;
 	    aros-ppc)    fullsys="AROS-ppc";;
 	    aros-x86_64) fullsys="AROS-x86_64";;
 	esac
 	mkdir -p "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir"
-	cp -a build_$os/amissl_v$versionname.library "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir"
+	$strip -p -R.comment build_$os/amissl_v$versionname.library -o "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir/amissl_v$versionname.library"
 	if [ "$os" != "os3-68060" ]; then
 	    mkdir -p "release/AmiSSL/Libs/$fullsys"
-	    cp -a build_$os/amisslmaster.library "release/AmiSSL/Libs/$fullsys/"
+	    $strip -p -R.comment build_$os/amisslmaster.library -o "release/AmiSSL/Libs/$fullsys/amisslmaster.library"
 	    mkdir -p "release/AmiSSL/C/$fullsys"
-	    cp -a build_$os/openssl/apps/openssl "release/AmiSSL/C/$fullsys/OpenSSL"
+	    $strip -p -R.comment build_$os/openssl/apps/openssl -o "release/AmiSSL/C/$fullsys/OpenSSL"
 	    mkdir -p "release/AmiSSL/Developer/Examples/$fullsys"
-	    cp -a build_$os/https "release/AmiSSL/Developer/Examples/$fullsys/"
+	    $strip -p -R.comment build_$os/https -o "release/AmiSSL/Developer/Examples/$fullsys/https"
 	    mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
 	    cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
 	fi
