@@ -1,7 +1,7 @@
 #ifdef OPENSSL_SYS_AMIGA
 #include <openssl/e_os2.h>
 
-#include "ui_locl.h"
+#include "ui_local.h"
 
 #include <stdio.h> /* for BUFSIZ */
 #include <string.h>

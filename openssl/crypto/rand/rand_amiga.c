@@ -1,7 +1,7 @@
 #include <openssl/rand.h>
 #include <openssl/sha.h>
-#include "rand_lcl.h"
-#include "internal/rand_int.h"
+#include "rand_local.h"
+#include "crypto/rand.h"
 
 #ifdef OPENSSL_SYS_AMIGA
 

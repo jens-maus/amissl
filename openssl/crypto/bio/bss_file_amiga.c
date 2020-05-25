@@ -10,7 +10,7 @@
 #include <dos/stdio.h>
 #include <string.h>
 
-#include "bio_lcl.h"
+#include "bio_local.h"
 #include <openssl/err.h>
 #include <openssl/buffer.h>
 
