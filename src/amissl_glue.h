@@ -4792,6 +4792,11 @@ int SAVEDS ASM LIB_OPENSSL_DIR_end(REG(a6, __IFACE_OR_BASE), REG(a0, OPENSSL_DIR
 ENGINE * SAVEDS ASM LIB_EVP_PKEY_get0_engine(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
 const ASN1_INTEGER * SAVEDS ASM LIB_X509_get0_authority_serial(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 const GENERAL_NAMES * SAVEDS ASM LIB_X509_get0_authority_issuer(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
+void SAVEDS ASM LIB_EVP_PKEY_meth_set_digestsign(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (*digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)));
+void SAVEDS ASM LIB_EVP_PKEY_meth_set_digestverify(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (*digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)));
+void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestverify(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)));
+void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestsign(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)));
+const RSA_PSS_PARAMS * SAVEDS ASM LIB_RSA_get0_pss_params(REG(a6, __IFACE_OR_BASE), REG(a0, const RSA * r));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR \
@@ -10165,7 +10170,12 @@ const GENERAL_NAMES * SAVEDS ASM LIB_X509_get0_authority_issuer(REG(a6, __IFACE_
     LFUNC_FA_(UNIMPLEMENTED) /* OPENSSL_INIT_set_config_file_flags */ \
     LFUNC_FA_(EVP_PKEY_get0_engine) \
     LFUNC_FA_(X509_get0_authority_serial) \
-    LFUNC_FA_(X509_get0_authority_issuer)
+    LFUNC_FA_(X509_get0_authority_issuer) \
+    LFUNC_FA_(EVP_PKEY_meth_set_digestsign) \
+    LFUNC_FA_(EVP_PKEY_meth_set_digestverify) \
+    LFUNC_FA_(EVP_PKEY_meth_get_digestverify) \
+    LFUNC_FA_(EVP_PKEY_meth_get_digestsign) \
+    LFUNC_FA_(RSA_get0_pss_params)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSL_H */

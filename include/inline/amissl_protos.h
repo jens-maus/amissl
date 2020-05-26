@@ -14253,4 +14253,19 @@ const ASN1_INTEGER * __X509_get0_authority_serial(__reg("a6") struct Library * ,
 const GENERAL_NAMES * __X509_get0_authority_issuer(__reg("a6") struct Library * , __reg("a0") X509 * x ) = "\tjsr\t-32208(a6)";
 #define X509_get0_authority_issuer(x) __X509_get0_authority_issuer(AmiSSLBase, (x))
 
+void __EVP_PKEY_meth_set_digestsign(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_METHOD * pmeth , __reg("a1") int (*digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) ) = "\tjsr\t-32214(a6)";
+#define EVP_PKEY_meth_set_digestsign(pmeth, digestsign) __EVP_PKEY_meth_set_digestsign(AmiSSLBase, (pmeth), (digestsign))
+
+void __EVP_PKEY_meth_set_digestverify(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_METHOD * pmeth , __reg("a1") int (*digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) ) = "\tjsr\t-32220(a6)";
+#define EVP_PKEY_meth_set_digestverify(pmeth, digestverify) __EVP_PKEY_meth_set_digestverify(AmiSSLBase, (pmeth), (digestverify))
+
+void __EVP_PKEY_meth_get_digestverify(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_METHOD * pmeth , __reg("a1") int (**digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) ) = "\tjsr\t-32226(a6)";
+#define EVP_PKEY_meth_get_digestverify(pmeth, digestverify) __EVP_PKEY_meth_get_digestverify(AmiSSLBase, (pmeth), (digestverify))
+
+void __EVP_PKEY_meth_get_digestsign(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_METHOD * pmeth , __reg("a1") int (**digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) ) = "\tjsr\t-32232(a6)";
+#define EVP_PKEY_meth_get_digestsign(pmeth, digestsign) __EVP_PKEY_meth_get_digestsign(AmiSSLBase, (pmeth), (digestsign))
+
+const RSA_PSS_PARAMS * __RSA_get0_pss_params(__reg("a6") struct Library * , __reg("a0") const RSA * r ) = "\tjsr\t-32238(a6)";
+#define RSA_get0_pss_params(r) __RSA_get0_pss_params(AmiSSLBase, (r))
+
 #endif /* !_INLINE_AMISSL_H */

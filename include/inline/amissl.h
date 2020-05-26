@@ -18998,4 +18998,24 @@ typedef ULONG _sfdc_vararg;
       LP1(0x7dd0, const GENERAL_NAMES *, X509_get0_authority_issuer , X509 *, ___x, a0,\
       , AMISSL_BASE_NAME)
 
+#define EVP_PKEY_meth_set_digestsign(___pmeth, ___digestsign) \
+      LP2NRFP(0x7dd6, EVP_PKEY_meth_set_digestsign , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestsign, a1,\
+      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))
+
+#define EVP_PKEY_meth_set_digestverify(___pmeth, ___digestverify) \
+      LP2NRFP(0x7ddc, EVP_PKEY_meth_set_digestverify , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestverify, a1,\
+      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
+
+#define EVP_PKEY_meth_get_digestverify(___pmeth, ___digestverify) \
+      LP2NRFP(0x7de2, EVP_PKEY_meth_get_digestverify , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestverify, a1,\
+      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
+
+#define EVP_PKEY_meth_get_digestsign(___pmeth, ___digestsign) \
+      LP2NRFP(0x7de8, EVP_PKEY_meth_get_digestsign , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestsign, a1,\
+      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))
+
+#define RSA_get0_pss_params(___r) \
+      LP1(0x7dee, const RSA_PSS_PARAMS *, RSA_get0_pss_params , const RSA *, ___r, a0,\
+      , AMISSL_BASE_NAME)
+
 #endif /* !_INLINE_AMISSL_H */

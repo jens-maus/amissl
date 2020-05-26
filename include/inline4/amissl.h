@@ -4797,5 +4797,10 @@
 #define EVP_PKEY_get0_engine(pkey) IAmiSSL->EVP_PKEY_get0_engine((pkey))
 #define X509_get0_authority_serial(x) IAmiSSL->X509_get0_authority_serial((x))
 #define X509_get0_authority_issuer(x) IAmiSSL->X509_get0_authority_issuer((x))
+#define EVP_PKEY_meth_set_digestsign(pmeth, digestsign) IAmiSSL->EVP_PKEY_meth_set_digestsign((pmeth), (digestsign))
+#define EVP_PKEY_meth_set_digestverify(pmeth, digestverify) IAmiSSL->EVP_PKEY_meth_set_digestverify((pmeth), (digestverify))
+#define EVP_PKEY_meth_get_digestverify(pmeth, digestverify) IAmiSSL->EVP_PKEY_meth_get_digestverify((pmeth), (digestverify))
+#define EVP_PKEY_meth_get_digestsign(pmeth, digestsign) IAmiSSL->EVP_PKEY_meth_get_digestsign((pmeth), (digestsign))
+#define RSA_get0_pss_params(r) IAmiSSL->RSA_get0_pss_params((r))
 
 #endif /* INLINE4_AMISSL_H */

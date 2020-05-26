@@ -21735,6 +21735,27 @@
     <method name="X509_get0_authority_issuer" result="const GENERAL_NAMES *">
       <arg name="x" type="X509 *" m68kreg="a0"/>
     </method>
-    
+
+    <!-- AmiSSL v4.6 - OpenSSL 1.1.1g -->
+    <method name="EVP_PKEY_meth_set_digestsign" result="void">
+      <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
+      <arg name="digestsign" type="int (*)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
+    </method>
+    <method name="EVP_PKEY_meth_set_digestverify" result="void">
+      <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
+      <arg name="digestverify" type="int (*)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
+    </method>
+    <method name="EVP_PKEY_meth_get_digestverify" result="void">
+      <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
+      <arg name="digestverify" type="int (**)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
+    </method>
+    <method name="EVP_PKEY_meth_get_digestsign" result="void">
+      <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
+      <arg name="digestsign" type="int (**)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
+    </method>
+    <method name="RSA_get0_pss_params" result="const RSA_PSS_PARAMS *">
+      <arg name="r" type="const RSA *" m68kreg="a0"/>
+    </method>
+
   </interface>
 </library>

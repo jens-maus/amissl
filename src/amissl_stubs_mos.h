@@ -4755,6 +4755,11 @@ LIBSTUB(OPENSSL_DIR_end, int);
 LIBSTUB(EVP_PKEY_get0_engine, ENGINE *);
 LIBSTUB(X509_get0_authority_serial, const ASN1_INTEGER *);
 LIBSTUB(X509_get0_authority_issuer, const GENERAL_NAMES *);
+LIBSTUB(EVP_PKEY_meth_set_digestsign, void);
+LIBSTUB(EVP_PKEY_meth_set_digestverify, void);
+LIBSTUB(EVP_PKEY_meth_get_digestverify, void);
+LIBSTUB(EVP_PKEY_meth_get_digestsign, void);
+LIBSTUB(RSA_get0_pss_params, const RSA_PSS_PARAMS *);
 
 #ifdef __cplusplus
 }

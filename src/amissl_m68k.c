@@ -70689,6 +70689,80 @@ STATIC CONST struct EmuTrap stub_main_X509_get0_authority_issuer = { TRAPINST, T
 
 // ---
 
+STATIC void stub_main_EVP_PKEY_meth_set_digestsign_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->EVP_PKEY_meth_set_digestsign(
+		(EVP_PKEY_METHOD *)regarray[REG68K_A0/4],
+		(int (*)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen))regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EVP_PKEY_meth_set_digestsign = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_meth_set_digestsign_PPC };
+
+// ---
+
+STATIC void stub_main_EVP_PKEY_meth_set_digestverify_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->EVP_PKEY_meth_set_digestverify(
+		(EVP_PKEY_METHOD *)regarray[REG68K_A0/4],
+		(int (*)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen))regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EVP_PKEY_meth_set_digestverify = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_meth_set_digestverify_PPC };
+
+// ---
+
+STATIC void stub_main_EVP_PKEY_meth_get_digestverify_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->EVP_PKEY_meth_get_digestverify(
+		(EVP_PKEY_METHOD *)regarray[REG68K_A0/4],
+		(int (**)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen))regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EVP_PKEY_meth_get_digestverify = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_meth_get_digestverify_PPC };
+
+// ---
+
+STATIC void stub_main_EVP_PKEY_meth_get_digestsign_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->EVP_PKEY_meth_get_digestsign(
+		(EVP_PKEY_METHOD *)regarray[REG68K_A0/4],
+		(int (**)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen))regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EVP_PKEY_meth_get_digestsign = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_meth_get_digestsign_PPC };
+
+// ---
+
+STATIC const RSA_PSS_PARAMS * stub_main_RSA_get0_pss_params_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->RSA_get0_pss_params(
+		(const RSA *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_RSA_get0_pss_params = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_RSA_get0_pss_params_PPC };
+
+// ---
+
 CONST CONST_APTR main_VecTable68K[] =
 {
 	&stub_main_Open,
@@ -76059,6 +76133,11 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_EVP_PKEY_get0_engine,
 	&stub_main_X509_get0_authority_serial,
 	&stub_main_X509_get0_authority_issuer,
+	&stub_main_EVP_PKEY_meth_set_digestsign,
+	&stub_main_EVP_PKEY_meth_set_digestverify,
+	&stub_main_EVP_PKEY_meth_get_digestverify,
+	&stub_main_EVP_PKEY_meth_get_digestsign,
+	&stub_main_RSA_get0_pss_params,
 	(CONST_APTR)-1
 };
 

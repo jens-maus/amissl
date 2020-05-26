@@ -47613,6 +47613,55 @@ const GENERAL_NAMES * LIBSTUB_X509_get0_authority_issuer(void)
   return LIB_X509_get0_authority_issuer(_base, ___x);
 }
 
+void LIB_EVP_PKEY_meth_set_digestsign(struct Library * _base, EVP_PKEY_METHOD * ___pmeth, int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen));
+
+void LIBSTUB_EVP_PKEY_meth_set_digestsign(void)
+{
+  EVP_PKEY_METHOD * ___pmeth = (EVP_PKEY_METHOD *)REG_A0;
+  int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_meth_set_digestsign(_base, ___pmeth, ___digestsign);
+}
+
+void LIB_EVP_PKEY_meth_set_digestverify(struct Library * _base, EVP_PKEY_METHOD * ___pmeth, int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen));
+
+void LIBSTUB_EVP_PKEY_meth_set_digestverify(void)
+{
+  EVP_PKEY_METHOD * ___pmeth = (EVP_PKEY_METHOD *)REG_A0;
+  int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_meth_set_digestverify(_base, ___pmeth, ___digestverify);
+}
+
+void LIB_EVP_PKEY_meth_get_digestverify(struct Library * _base, EVP_PKEY_METHOD * ___pmeth, int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen));
+
+void LIBSTUB_EVP_PKEY_meth_get_digestverify(void)
+{
+  EVP_PKEY_METHOD * ___pmeth = (EVP_PKEY_METHOD *)REG_A0;
+  int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_meth_get_digestverify(_base, ___pmeth, ___digestverify);
+}
+
+void LIB_EVP_PKEY_meth_get_digestsign(struct Library * _base, EVP_PKEY_METHOD * ___pmeth, int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen));
+
+void LIBSTUB_EVP_PKEY_meth_get_digestsign(void)
+{
+  EVP_PKEY_METHOD * ___pmeth = (EVP_PKEY_METHOD *)REG_A0;
+  int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_meth_get_digestsign(_base, ___pmeth, ___digestsign);
+}
+
+const RSA_PSS_PARAMS * LIB_RSA_get0_pss_params(struct Library * _base, const RSA * ___r);
+
+const RSA_PSS_PARAMS * LIBSTUB_RSA_get0_pss_params(void)
+{
+  const RSA * ___r = (const RSA *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RSA_get0_pss_params(_base, ___r);
+}
+
 
 #ifdef __cplusplus
 }

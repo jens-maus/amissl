@@ -5409,6 +5409,11 @@ struct AmiSSLIFace
 	ENGINE * APICALL (*EVP_PKEY_get0_engine)(struct AmiSSLIFace *Self, const EVP_PKEY * pkey);
 	const ASN1_INTEGER * APICALL (*X509_get0_authority_serial)(struct AmiSSLIFace *Self, X509 * x);
 	const GENERAL_NAMES * APICALL (*X509_get0_authority_issuer)(struct AmiSSLIFace *Self, X509 * x);
+	void APICALL (*EVP_PKEY_meth_set_digestsign)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (*digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen));
+	void APICALL (*EVP_PKEY_meth_set_digestverify)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (*digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen));
+	void APICALL (*EVP_PKEY_meth_get_digestverify)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (**digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen));
+	void APICALL (*EVP_PKEY_meth_get_digestsign)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (**digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen));
+	const RSA_PSS_PARAMS * APICALL (*RSA_get0_pss_params)(struct AmiSSLIFace *Self, const RSA * r);
 };
 
 #ifdef __cplusplus

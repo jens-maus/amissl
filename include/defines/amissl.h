@@ -28687,4 +28687,33 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509 *, (___x), A0), \
      struct Library *, AMISSL_BASE_NAME, 5368, Amissl)
 
+#define EVP_PKEY_meth_set_digestsign(___pmeth, ___digestsign) \
+      AROS_LC2(void, EVP_PKEY_meth_set_digestsign, \
+ AROS_LCA(EVP_PKEY_METHOD *, (___pmeth), A0), \
+ AROS_LCA(int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen), (___digestsign), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5369, Amissl)
+
+#define EVP_PKEY_meth_set_digestverify(___pmeth, ___digestverify) \
+      AROS_LC2(void, EVP_PKEY_meth_set_digestverify, \
+ AROS_LCA(EVP_PKEY_METHOD *, (___pmeth), A0), \
+ AROS_LCA(int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen), (___digestverify), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5370, Amissl)
+
+#define EVP_PKEY_meth_get_digestverify(___pmeth, ___digestverify) \
+      AROS_LC2(void, EVP_PKEY_meth_get_digestverify, \
+ AROS_LCA(EVP_PKEY_METHOD *, (___pmeth), A0), \
+ AROS_LCA(int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen), (___digestverify), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5371, Amissl)
+
+#define EVP_PKEY_meth_get_digestsign(___pmeth, ___digestsign) \
+      AROS_LC2(void, EVP_PKEY_meth_get_digestsign, \
+ AROS_LCA(EVP_PKEY_METHOD *, (___pmeth), A0), \
+ AROS_LCA(int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen), (___digestsign), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5372, Amissl)
+
+#define RSA_get0_pss_params(___r) \
+      AROS_LC1(const RSA_PSS_PARAMS *, RSA_get0_pss_params, \
+ AROS_LCA(const RSA *, (___r), A0), \
+     struct Library *, AMISSL_BASE_NAME, 5373, Amissl)
+
 #endif /* !_INLINE_AMISSL_H */

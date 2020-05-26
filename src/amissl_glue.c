@@ -33263,6 +33263,41 @@ const GENERAL_NAMES * SAVEDS ASM LIB_X509_get0_authority_issuer(REG(a6, UNUSED _
 
 // ---
 
+void SAVEDS ASM LIB_EVP_PKEY_meth_set_digestsign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (*digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)))
+{
+	EVP_PKEY_meth_set_digestsign(pmeth, digestsign);
+}
+
+// ---
+
+void SAVEDS ASM LIB_EVP_PKEY_meth_set_digestverify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (*digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)))
+{
+	EVP_PKEY_meth_set_digestverify(pmeth, digestverify);
+}
+
+// ---
+
+void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestverify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)))
+{
+	EVP_PKEY_meth_get_digestverify(pmeth, digestverify);
+}
+
+// ---
+
+void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestsign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)))
+{
+	EVP_PKEY_meth_get_digestsign(pmeth, digestsign);
+}
+
+// ---
+
+const RSA_PSS_PARAMS * SAVEDS ASM LIB_RSA_get0_pss_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const RSA * r))
+{
+	return RSA_get0_pss_params(r);
+}
+
+// ---
+
 
 /***************************************************************************/
 
