@@ -654,16 +654,23 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
   // can skip all the library init stuff and return the base pointer right away.
   if(base->segList != 0)
   {
-    // make sure that this is really a 68060 machine if optimized for 68060
+    // make sure that this is really a 68060 machine or
+    // running on Amithlon if optimized for 68060
     #if _M68060 || __mc68060
-    if((SysBase->AttnFlags & AFF_68060) == 0)
+    if(((SysBase->AttnFlags & AFF_68060) == 0) &&
+       !OpenResource("amithlon.resource"))
     {
       DeleteLibrary(&base->libBase);
       return(NULL);
     }
-    // make sure that this is really a 68020+ machine if optimized for 020+
+    // make sure that this is really a 68020-040 machine and
+    // not Amithlon, if optimized for 68020-040 (should check if not
+    // running on 68060 also, but would fail on MorphOS, for example
+    // as that identifies as 68060, not 68040)
     #elif _M68040 || _M68030 || _M68020 || __mc68020 || __mc68030 || __mc68040
-    if((SysBase->AttnFlags & AFF_68020) == 0)
+    if(((SysBase->AttnFlags & AFF_68020) == 0) ||
+       //((SysBase->AttnFlags & AFF_68060) != 0) ||
+       OpenResource("amithlon.resource"))
     {
       DeleteLibrary(&base->libBase);
       return(NULL);

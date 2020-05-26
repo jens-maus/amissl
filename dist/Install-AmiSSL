@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.13 (19.2.2020)
+; $VER: Install-AmiSSL 4.0.14 (17.4.2020)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -62,7 +62,7 @@
 (set #str-deleting-certs "Deleting old certificates")
 (set #str-amiupdate-copyfile "Copying file via AmiUpdate:\n%s\n\nTo drawer:\n%s")
 (set #str-cpu-68k (cat
-	"AmiSSL comes in several versions for different processors. "
+	"AmiSSL comes in two versions optimised for different processors. "
 	"Which version of AmiSSL would you like to install?")
 )
 
@@ -118,23 +118,6 @@
 ; finally convert the system number into a string for easier understanding
 (set #detectedSystem
 	(select #detectedSystem "os3" "os4" "mos" "aros-i386" "aros-ppc" "aros-x86_64")
-)
-
-(if (= #detectedSystem "os3")
-	(set #cpu-id
-		(askchoice
-			(prompt #str-cpu-68k)
-			(help @askchoice-help)
-			(choices "68020/68030/68040" "68060")
-			(default
-				(if (OR (= (database "cpu") "68060")
-				        (<> (getversion "68060.library" (resident)) 0))
-				1 0)
-			)
-		)
-	)
-	; else
-	(set #cpu-id 0)
 )
 
 ;----------------------------------------------------------------------------
@@ -278,9 +261,33 @@
 )
 
 (complete 10)
+(if (= #detectedSystem "os3")
+
+)
+
 
 (if (= #src-os-dir "AmigaOS3")
-	(set #cpu-dir (if (= #cpu-id 1) "68060" "68020-40"))
+	(
+		(if (= #detectedSystem "mos")
+			(set #cpu-id 0)
+			; else
+			(set #cpu-id
+				(if (OR (= (database "cpu") "68060")
+				    (OR (<> (getversion "68060.library" (resident)) 0)
+				        (<> (getversion "amithlon.resource" (resident)) 0)))
+				1 0)
+			)
+		)
+		(set #cpu-id
+			(askchoice
+				(prompt #str-cpu-68k)
+				(help @askchoice-help)
+				(choices "68020/030/040/080 or MorphOS" "68060 or Amithlon")
+				(default #cpu-id)
+			)
+		)
+		(set #cpu-dir (if (= 1 #cpu-id) "68060" "68020-40" ))
+	)
 	; else
 	(set #cpu-dir "")
 )
