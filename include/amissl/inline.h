@@ -159,8 +159,12 @@ DEFINE_STACK_OF(X509_POLICY_NODE)
 DEFINE_STACK_OF(ASIdOrRange)
 DEFINE_STACK_OF(IPAddressOrRange)
 DEFINE_STACK_OF(IPAddressFamily)
+DEFINE_STACK_OF(ASN1_STRING)
 DEFINE_STACK_OF(ASN1_VALUE)
+DEFINE_STACK_OF(ADMISSIONS)
+DEFINE_STACK_OF(PROFESSION_INFO)
 DEFINE_STACK_OF(ESS_CERT_ID)
+DEFINE_STACK_OF(ESS_CERT_ID_V2)
 DEFINE_STACK_OF_CONST(EVP_MD)
 DEFINE_STACK_OF(X509_LOOKUP)
 DEFINE_STACK_OF(X509_OBJECT)
@@ -198,9 +202,8 @@ DEFINE_SPECIAL_STACK_OF(OPENSSL_PSTRING, OPENSSL_STRING)
 
 # undef DEFINE_LHASH_OF
 # define DEFINE_LHASH_OF(type) \
-    static ossl_inline LHASH_OF(type) * \
-        lh_##type##_new(unsigned long (*hfn)(const type *), \
-                        int (*cfn)(const type *, const type *)) \
+    static ossl_unused ossl_inline LHASH_OF(type) *lh_##type##_new(unsigned long (*hfn)(const type *), \
+                                                                   int (*cfn)(const type *, const type *)) \
     { \
         return (LHASH_OF(type) *) \
             OPENSSL_LH_new((OPENSSL_LH_HASHFUNC)hfn, (OPENSSL_LH_COMPFUNC)cfn); \
