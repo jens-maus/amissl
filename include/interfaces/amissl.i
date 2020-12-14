@@ -5390,6 +5390,10 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_meth_get_digestverify
 	    FPTR IAmiSSL_EVP_PKEY_meth_get_digestsign
 	    FPTR IAmiSSL_RSA_get0_pss_params
+	    FPTR IAmiSSL_X509_ALGOR_copy
+	    FPTR IAmiSSL_X509_REQ_set0_signature
+	    FPTR IAmiSSL_X509_REQ_set1_signature_algo
+	    FPTR IAmiSSL_EC_KEY_decoded_from_explicit_params
 	LABEL AmiSSLIFace_SIZE
 
 #endif

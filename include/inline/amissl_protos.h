@@ -14268,4 +14268,16 @@ void __EVP_PKEY_meth_get_digestsign(__reg("a6") struct Library * , __reg("a0") E
 const RSA_PSS_PARAMS * __RSA_get0_pss_params(__reg("a6") struct Library * , __reg("a0") const RSA * r ) = "\tjsr\t-32238(a6)";
 #define RSA_get0_pss_params(r) __RSA_get0_pss_params(AmiSSLBase, (r))
 
+int __X509_ALGOR_copy(__reg("a6") struct Library * , __reg("a0") X509_ALGOR * dest , __reg("a1") const X509_ALGOR * src ) = "\tjsr\t-32244(a6)";
+#define X509_ALGOR_copy(dest, src) __X509_ALGOR_copy(AmiSSLBase, (dest), (src))
+
+void __X509_REQ_set0_signature(__reg("a6") struct Library * , __reg("a0") X509_REQ * req , __reg("a1") ASN1_BIT_STRING * psig ) = "\tjsr\t-32250(a6)";
+#define X509_REQ_set0_signature(req, psig) __X509_REQ_set0_signature(AmiSSLBase, (req), (psig))
+
+int __X509_REQ_set1_signature_algo(__reg("a6") struct Library * , __reg("a0") X509_REQ * req , __reg("a1") X509_ALGOR * palg ) = "\tjsr\t-32256(a6)";
+#define X509_REQ_set1_signature_algo(req, palg) __X509_REQ_set1_signature_algo(AmiSSLBase, (req), (palg))
+
+int __EC_KEY_decoded_from_explicit_params(__reg("a6") struct Library * , __reg("a0") const EC_KEY * key ) = "\tjsr\t-32262(a6)";
+#define EC_KEY_decoded_from_explicit_params(key) __EC_KEY_decoded_from_explicit_params(AmiSSLBase, (key))
+
 #endif /* !_INLINE_AMISSL_H */

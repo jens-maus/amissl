@@ -28716,4 +28716,27 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const RSA *, (___r), A0), \
      struct Library *, AMISSL_BASE_NAME, 5373, Amissl)
 
+#define X509_ALGOR_copy(___dest, ___src) \
+      AROS_LC2(int, X509_ALGOR_copy, \
+ AROS_LCA(X509_ALGOR *, (___dest), A0), \
+ AROS_LCA(const X509_ALGOR *, (___src), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5374, Amissl)
+
+#define X509_REQ_set0_signature(___req, ___psig) \
+      AROS_LC2(void, X509_REQ_set0_signature, \
+ AROS_LCA(X509_REQ *, (___req), A0), \
+ AROS_LCA(ASN1_BIT_STRING *, (___psig), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5375, Amissl)
+
+#define X509_REQ_set1_signature_algo(___req, ___palg) \
+      AROS_LC2(int, X509_REQ_set1_signature_algo, \
+ AROS_LCA(X509_REQ *, (___req), A0), \
+ AROS_LCA(X509_ALGOR *, (___palg), A1), \
+     struct Library *, AMISSL_BASE_NAME, 5376, Amissl)
+
+#define EC_KEY_decoded_from_explicit_params(___key) \
+      AROS_LC1(int, EC_KEY_decoded_from_explicit_params, \
+ AROS_LCA(const EC_KEY *, (___key), A0), \
+     struct Library *, AMISSL_BASE_NAME, 5377, Amissl)
+
 #endif /* !_INLINE_AMISSL_H */

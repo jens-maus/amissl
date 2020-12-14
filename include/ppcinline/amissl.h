@@ -19018,4 +19018,20 @@ typedef ULONG _sfdc_vararg;
       LP1(0x7dee, const RSA_PSS_PARAMS *, RSA_get0_pss_params , const RSA *, ___r, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
+#define X509_ALGOR_copy(___dest, ___src) \
+      LP2(0x7df4, int, X509_ALGOR_copy , X509_ALGOR *, ___dest, a0, const X509_ALGOR *, ___src, a1,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_REQ_set0_signature(___req, ___psig) \
+      LP2NR(0x7dfa, X509_REQ_set0_signature , X509_REQ *, ___req, a0, ASN1_BIT_STRING *, ___psig, a1,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_REQ_set1_signature_algo(___req, ___palg) \
+      LP2(0x7e00, int, X509_REQ_set1_signature_algo , X509_REQ *, ___req, a0, X509_ALGOR *, ___palg, a1,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EC_KEY_decoded_from_explicit_params(___key) \
+      LP1(0x7e06, int, EC_KEY_decoded_from_explicit_params , const EC_KEY *, ___key, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
 #endif /* !_PPCINLINE_AMISSL_H */

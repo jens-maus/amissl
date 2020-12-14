@@ -5414,6 +5414,10 @@ struct AmiSSLIFace
 	void APICALL (*EVP_PKEY_meth_get_digestverify)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (**digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen));
 	void APICALL (*EVP_PKEY_meth_get_digestsign)(struct AmiSSLIFace *Self, EVP_PKEY_METHOD * pmeth, int (**digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen));
 	const RSA_PSS_PARAMS * APICALL (*RSA_get0_pss_params)(struct AmiSSLIFace *Self, const RSA * r);
+	int APICALL (*X509_ALGOR_copy)(struct AmiSSLIFace *Self, X509_ALGOR * dest, const X509_ALGOR * src);
+	void APICALL (*X509_REQ_set0_signature)(struct AmiSSLIFace *Self, X509_REQ * req, ASN1_BIT_STRING * psig);
+	int APICALL (*X509_REQ_set1_signature_algo)(struct AmiSSLIFace *Self, X509_REQ * req, X509_ALGOR * palg);
+	int APICALL (*EC_KEY_decoded_from_explicit_params)(struct AmiSSLIFace *Self, const EC_KEY * key);
 };
 
 #ifdef __cplusplus

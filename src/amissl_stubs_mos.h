@@ -4760,6 +4760,10 @@ LIBSTUB(EVP_PKEY_meth_set_digestverify, void);
 LIBSTUB(EVP_PKEY_meth_get_digestverify, void);
 LIBSTUB(EVP_PKEY_meth_get_digestsign, void);
 LIBSTUB(RSA_get0_pss_params, const RSA_PSS_PARAMS *);
+LIBSTUB(X509_ALGOR_copy, int);
+LIBSTUB(X509_REQ_set0_signature, void);
+LIBSTUB(X509_REQ_set1_signature_algo, int);
+LIBSTUB(EC_KEY_decoded_from_explicit_params, int);
 
 #ifdef __cplusplus
 }

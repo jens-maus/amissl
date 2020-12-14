@@ -21757,5 +21757,22 @@
       <arg name="r" type="const RSA *" m68kreg="a0"/>
     </method>
 
+    <!-- AmiSSL v4.7 - OpenSSL 1.1.1i -->
+    <method name="X509_ALGOR_copy" result="int">
+      <arg name="dest" type="X509_ALGOR *" m68kreg="a0"/>
+      <arg name="src" type="const X509_ALGOR *" m68kreg="a1"/>
+    </method>
+    <method name="X509_REQ_set0_signature" result="void">
+      <arg name="req" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="psig" type="ASN1_BIT_STRING *" m68kreg="a1"/>
+    </method>
+    <method name="X509_REQ_set1_signature_algo" result="int">
+      <arg name="req" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="palg" type="X509_ALGOR *" m68kreg="a1"/>
+    </method>
+    <method name="EC_KEY_decoded_from_explicit_params" result="int">
+      <arg name="key" type="const EC_KEY *" m68kreg="a0"/>
+    </method>
+
   </interface>
 </library>

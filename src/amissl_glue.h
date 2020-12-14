@@ -4797,6 +4797,10 @@ void SAVEDS ASM LIB_EVP_PKEY_meth_set_digestverify(REG(a6, __IFACE_OR_BASE), REG
 void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestverify(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestverify)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)));
 void SAVEDS ASM LIB_EVP_PKEY_meth_get_digestsign(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_METHOD * pmeth), REG(a1, int (**digestsign)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)));
 const RSA_PSS_PARAMS * SAVEDS ASM LIB_RSA_get0_pss_params(REG(a6, __IFACE_OR_BASE), REG(a0, const RSA * r));
+int SAVEDS ASM LIB_X509_ALGOR_copy(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ALGOR * dest), REG(a1, const X509_ALGOR * src));
+void SAVEDS ASM LIB_X509_REQ_set0_signature(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, ASN1_BIT_STRING * psig));
+int SAVEDS ASM LIB_X509_REQ_set1_signature_algo(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, X509_ALGOR * palg));
+int SAVEDS ASM LIB_EC_KEY_decoded_from_explicit_params(REG(a6, __IFACE_OR_BASE), REG(a0, const EC_KEY * key));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR \
@@ -10175,7 +10179,11 @@ const RSA_PSS_PARAMS * SAVEDS ASM LIB_RSA_get0_pss_params(REG(a6, __IFACE_OR_BAS
     LFUNC_FA_(EVP_PKEY_meth_set_digestverify) \
     LFUNC_FA_(EVP_PKEY_meth_get_digestverify) \
     LFUNC_FA_(EVP_PKEY_meth_get_digestsign) \
-    LFUNC_FA_(RSA_get0_pss_params)
+    LFUNC_FA_(RSA_get0_pss_params) \
+    LFUNC_FA_(X509_ALGOR_copy) \
+    LFUNC_FA_(X509_REQ_set0_signature) \
+    LFUNC_FA_(X509_REQ_set1_signature_algo) \
+    LFUNC_FA_(EC_KEY_decoded_from_explicit_params)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSL_H */

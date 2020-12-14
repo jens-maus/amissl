@@ -4802,5 +4802,9 @@
 #define EVP_PKEY_meth_get_digestverify(pmeth, digestverify) IAmiSSL->EVP_PKEY_meth_get_digestverify((pmeth), (digestverify))
 #define EVP_PKEY_meth_get_digestsign(pmeth, digestsign) IAmiSSL->EVP_PKEY_meth_get_digestsign((pmeth), (digestsign))
 #define RSA_get0_pss_params(r) IAmiSSL->RSA_get0_pss_params((r))
+#define X509_ALGOR_copy(dest, src) IAmiSSL->X509_ALGOR_copy((dest), (src))
+#define X509_REQ_set0_signature(req, psig) IAmiSSL->X509_REQ_set0_signature((req), (psig))
+#define X509_REQ_set1_signature_algo(req, palg) IAmiSSL->X509_REQ_set1_signature_algo((req), (palg))
+#define EC_KEY_decoded_from_explicit_params(key) IAmiSSL->EC_KEY_decoded_from_explicit_params((key))
 
 #endif /* INLINE4_AMISSL_H */

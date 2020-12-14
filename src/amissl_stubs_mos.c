@@ -47662,6 +47662,45 @@ const RSA_PSS_PARAMS * LIBSTUB_RSA_get0_pss_params(void)
   return LIB_RSA_get0_pss_params(_base, ___r);
 }
 
+int LIB_X509_ALGOR_copy(struct Library * _base, X509_ALGOR * ___dest, const X509_ALGOR * ___src);
+
+int LIBSTUB_X509_ALGOR_copy(void)
+{
+  X509_ALGOR * ___dest = (X509_ALGOR *)REG_A0;
+  const X509_ALGOR * ___src = (const X509_ALGOR *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_ALGOR_copy(_base, ___dest, ___src);
+}
+
+void LIB_X509_REQ_set0_signature(struct Library * _base, X509_REQ * ___req, ASN1_BIT_STRING * ___psig);
+
+void LIBSTUB_X509_REQ_set0_signature(void)
+{
+  X509_REQ * ___req = (X509_REQ *)REG_A0;
+  ASN1_BIT_STRING * ___psig = (ASN1_BIT_STRING *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_REQ_set0_signature(_base, ___req, ___psig);
+}
+
+int LIB_X509_REQ_set1_signature_algo(struct Library * _base, X509_REQ * ___req, X509_ALGOR * ___palg);
+
+int LIBSTUB_X509_REQ_set1_signature_algo(void)
+{
+  X509_REQ * ___req = (X509_REQ *)REG_A0;
+  X509_ALGOR * ___palg = (X509_ALGOR *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_REQ_set1_signature_algo(_base, ___req, ___palg);
+}
+
+int LIB_EC_KEY_decoded_from_explicit_params(struct Library * _base, const EC_KEY * ___key);
+
+int LIBSTUB_EC_KEY_decoded_from_explicit_params(void)
+{
+  const EC_KEY * ___key = (const EC_KEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EC_KEY_decoded_from_explicit_params(_base, ___key);
+}
+
 
 #ifdef __cplusplus
 }

@@ -70763,6 +70763,65 @@ STATIC CONST struct EmuTrap stub_main_RSA_get0_pss_params = { TRAPINST, TRAPTYPE
 
 // ---
 
+STATIC int stub_main_X509_ALGOR_copy_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->X509_ALGOR_copy(
+		(X509_ALGOR *)regarray[REG68K_A0/4],
+		(const X509_ALGOR *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_ALGOR_copy = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_ALGOR_copy_PPC };
+
+// ---
+
+STATIC void stub_main_X509_REQ_set0_signature_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	Self->X509_REQ_set0_signature(
+		(X509_REQ *)regarray[REG68K_A0/4],
+		(ASN1_BIT_STRING *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_REQ_set0_signature = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_REQ_set0_signature_PPC };
+
+// ---
+
+STATIC int stub_main_X509_REQ_set1_signature_algo_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->X509_REQ_set1_signature_algo(
+		(X509_REQ *)regarray[REG68K_A0/4],
+		(X509_ALGOR *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_X509_REQ_set1_signature_algo = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_REQ_set1_signature_algo_PPC };
+
+// ---
+
+STATIC int stub_main_EC_KEY_decoded_from_explicit_params_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EC_KEY_decoded_from_explicit_params(
+		(const EC_KEY *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_EC_KEY_decoded_from_explicit_params = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EC_KEY_decoded_from_explicit_params_PPC };
+
+// ---
+
 CONST CONST_APTR main_VecTable68K[] =
 {
 	&stub_main_Open,
@@ -76138,6 +76197,10 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_EVP_PKEY_meth_get_digestverify,
 	&stub_main_EVP_PKEY_meth_get_digestsign,
 	&stub_main_RSA_get0_pss_params,
+	&stub_main_X509_ALGOR_copy,
+	&stub_main_X509_REQ_set0_signature,
+	&stub_main_X509_REQ_set1_signature_algo,
+	&stub_main_EC_KEY_decoded_from_explicit_params,
 	(CONST_APTR)-1
 };
 

@@ -33298,6 +33298,34 @@ const RSA_PSS_PARAMS * SAVEDS ASM LIB_RSA_get0_pss_params(REG(a6, UNUSED __IFACE
 
 // ---
 
+int SAVEDS ASM LIB_X509_ALGOR_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_ALGOR * dest), REG(a1, const X509_ALGOR * src))
+{
+	return X509_ALGOR_copy(dest, src);
+}
+
+// ---
+
+void SAVEDS ASM LIB_X509_REQ_set0_signature(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, ASN1_BIT_STRING * psig))
+{
+	X509_REQ_set0_signature(req, psig);
+}
+
+// ---
+
+int SAVEDS ASM LIB_X509_REQ_set1_signature_algo(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REQ * req), REG(a1, X509_ALGOR * palg))
+{
+	return X509_REQ_set1_signature_algo(req, palg);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EC_KEY_decoded_from_explicit_params(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EC_KEY * key))
+{
+	return EC_KEY_decoded_from_explicit_params(key);
+}
+
+// ---
+
 
 /***************************************************************************/
 
