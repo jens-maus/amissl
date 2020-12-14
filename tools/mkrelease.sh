@@ -35,13 +35,17 @@ for os in ${OS}; do
 	esac
 	mkdir -p "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir"
 	$strip -p -R.comment build_$os/amissl_v$versionname.library -o "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir/amissl_v$versionname.library"
+	chmod 644 "release/AmiSSL/Libs/$fullsys/AmiSSL$libdir/amissl_v$versionname.library"
 	if [ "$os" != "os3-68060" ]; then
 	    mkdir -p "release/AmiSSL/Libs/$fullsys"
 	    $strip -p -R.comment build_$os/amisslmaster.library -o "release/AmiSSL/Libs/$fullsys/amisslmaster.library"
+	    chmod 644 "release/AmiSSL/Libs/$fullsys/amisslmaster.library"
 	    mkdir -p "release/AmiSSL/C/$fullsys"
 	    $strip -p -R.comment build_$os/openssl/apps/openssl -o "release/AmiSSL/C/$fullsys/OpenSSL"
+	    chmod 755 "release/AmiSSL/C/$fullsys/OpenSSL"
 	    mkdir -p "release/AmiSSL/Developer/Examples/$fullsys"
 	    $strip -p -R.comment build_$os/https -o "release/AmiSSL/Developer/Examples/$fullsys/https"
+	    chmod 755 "release/AmiSSL/Developer/Examples/$fullsys/https"
 	    mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
 	    cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
 	fi
