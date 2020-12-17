@@ -2,32 +2,31 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.6
+Version:      4.7
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.6 of the open-source based AmiSSL library for Amiga based
+This is version 4.7 of the open-source based AmiSSL library for Amiga based
 operating systems. Version 4.x is a new major release which comes with full
 compatibility to the OpenSSL 1.1.x line which includes important security
 related fixes, TLSv1.3 and comes with new encryption ciphers which are
 required nowadays to connect to modern SSL-based services (e.g.  HTTPS).
-However, due to fundamental changes in the API between the old AmiSSLv3 and
-new v4 versions and the large changes between the old OpenSSL 0.9.x and the
-new OpenSSL 1.1.x line, applications have to be recompiled with the updated
-AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x API. Besides
-that fundamental change, AmiSSLv4 can be installed on top of a AmiSSLv3
-installation while still ensuring that applications compiled for AmiSSLv3 will
-continue to work properly.
 
 Backwards Compatibility:
 -----------------------
-All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.5 will automatically
-use AmiSSL 4.6 once installed. Unfortunately, due to some errors that were
+All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.6 will automatically
+use AmiSSL 4.7 once installed. Unfortunately, due to some errors that were
 made in AmiSSL 4.3, applications compiled to specifically use AmiSSL 4.3 will
 need to be recompiled with the AmiSSL 4.4 SDK (or newer) in order for them to
-be able to use AmiSSL 4.6.
+be able to use AmiSSL 4.7. Due to fundamental changes in the API between the
+old AmiSSLv3 and new v4 versions and the large changes between the old OpenSSL
+0.9.x and the new OpenSSL 1.1.x line, applications have to be recompiled with
+the updated AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x
+API. Besides that fundamental change, AmiSSLv4 can be installed on top of a
+AmiSSLv3 installation while still ensuring that applications compiled for
+AmiSSLv3 will continue to work properly.
 
 IMPORTANT NOTE:
 --------------
@@ -44,6 +43,15 @@ supported in one of the next releases or please consider joining our team.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.7 (17.12.2020):
+------------------------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.1i (08.12.2020) version, which brings security and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.haxx.se/ca/
+- Fixed OpenSSL command and https developer example not having execute file
+  permission bit set on OS3
 
 Version 4.6 (08.06.2020):
 ------------------------
@@ -94,6 +102,8 @@ Version 4.4 (15.02.2020):
 - OpenSSL s_server command can now be interrupted with Ctrl-C.
 - Install script fixes for MorphOS (#41).
 - Fixed include files for vbcc/m68k compilation (#20).
+- LhA release archive now packed using an older header level for better
+  compatibility with some Amiga unpackers.
 - Minor improvements/fixes.
 
 Version 4.3 (21.02.2019):
