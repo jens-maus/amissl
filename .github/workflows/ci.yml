@@ -13,7 +13,7 @@ jobs:
       matrix:
         #platform: [os4, os3, mos, aros-ppc, aros-i386, aros-x86_64]
         platform: [os4, os3-68020, os3-68060, release]
-        build: [release]
+        build: [release, debug]
 
         exclude:
           - platform: release
@@ -33,7 +33,7 @@ jobs:
       run: |
         curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
         if [[ ${{ matrix.platform }} =~ os3-68020|os3-68060|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
-        if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C / ; fi
+        if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ mos|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-ppc|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-aros.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-i386|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-i386-aros.tar.bz2 | sudo tar xj -C / ; fi
