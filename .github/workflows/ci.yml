@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         #platform: [os4, os3, mos, aros-ppc, aros-i386, aros-x86_64]
-        platform: [os4, os3-68020, os3-68060, release]
+        platform: [os4, os3-68020, os3-68060]
         build: [release, debug]
 
         exclude:
@@ -21,6 +21,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: setup env
+      run: |
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >>$GITHUB_ENV
 
     - name: setup dependencies
       run: |
@@ -39,24 +43,25 @@ jobs:
         #if [[ ${{ matrix.platform }} =~ aros-i386|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-i386-aros.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-x86_64|release|nightly ]]; then curl -L https://dl.bintray.com/jens-maus/adtools/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C / ; fi
 
-    #- name: cleanup old action artifacts
-    #  run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
+    - name: cleanup old action artifacts
+      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
 
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
     #  if: matrix.platform == 'os4'
 
     - name: build ${{ matrix.platform }}-${{ matrix.build }}
-      if: matrix.platform != 'release' && matrix.platform != 'debug'
       timeout-minutes: 480
       run: |
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         if [[ ${{ matrix.build }} =~ release ]]; then make -j1 OS=${{ matrix.platform }} DEBUG= ; fi
         if [[ ${{ matrix.build }} =~ debug ]]; then make -j1 OS=${{ matrix.platform }} ; fi
 
-    - name: build release
-      if: matrix.platform == 'release'
-      timeout-minutes: 480
-      run: |
-        export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
-        make -j1 release
+    - name: upload build as workflow artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: |
+          build_${{ matrix.platform }}/amissl_v*.library*
+          build_${{ matrix.platform }}/amisslmaster.library*
+        name: AmiSSL-${{ matrix.platform }}-${{ env.GITHUB_SHA7 }}-${{ matrix.build }}
+      continue-on-error: true
