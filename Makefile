@@ -485,12 +485,12 @@ $(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
 	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,-Map=$@.map
 
-$(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_amissl_main.o
+$(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_assl.o
 	@echo "  AR $@"
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
-$(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_amissl_main_newlib.o
+$(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_assl_newlib.o
 	@echo "  AR $@"
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
@@ -529,11 +529,11 @@ $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/liba
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
-$(BUILD_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
+$(BUILD_D)/autoinit_assl.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
-$(BUILD_D)/autoinit_amissl_main_newlib.o: $(SRC_D)/autoinit_amissl_main.c
+$(BUILD_D)/autoinit_assl_newlib.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(AINLCFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 

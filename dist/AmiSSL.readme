@@ -44,6 +44,7 @@ Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
+- Fixed corrupted OS3 libamisslauto.a (object name was too long)
 - Tweaked SDK examples and OpenSSL includes to be more compatible with
   vanilla VBCC and SAS/C compiler installations
 - Restored SAS/C support to AmiSSL autoopen link library code
