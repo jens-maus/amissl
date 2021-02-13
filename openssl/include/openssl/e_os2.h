@@ -218,11 +218,14 @@ extern "C" {
 #  define OSSL_SSIZE_MAX MAX_INTN
 # endif
 
+# if defined(OPENSSL_SYS_AMIGA)
+#  define ossl_ssize_t int
+#  define OSSL_SSIZE_MAX INT_MAX
+# endif
+  
 # ifndef ossl_ssize_t
 #  define ossl_ssize_t ssize_t
-#  if defined(OPENSSL_SYS_AMIGA) && (defined(__MORPHOS__) || defined(__SASC))
-#   define OSSL_SSIZE_MAX INT_MAX
-#  elif defined(SSIZE_MAX)
+#  if defined(SSIZE_MAX)
 #   define OSSL_SSIZE_MAX SSIZE_MAX
 #  elif defined(_POSIX_SSIZE_MAX)
 #   define OSSL_SSIZE_MAX _POSIX_SSIZE_MAX
@@ -264,6 +267,8 @@ typedef int int32_t;
 typedef unsigned int uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
+# elif defined(OPENSSL_SYS_AMIGA)
+#  include <amissl/types.h>
 # else
 #  include <stdint.h>
 # endif

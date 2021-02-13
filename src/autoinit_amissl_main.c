@@ -1,10 +1,13 @@
+#if defined(__amigaos4__) && !defined(__USE_INLINE__)
+  #define __USE_INLINE__
+#endif
+
 #include <proto/exec.h>
 #include <proto/dos.h>
 
 #include <exec/types.h>
 #include <dos/dos.h>
 #include <utility/tagitem.h>
-#include <internal/amissl_compiler.h>
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
@@ -13,24 +16,44 @@
 
 #include <errno.h>
 
-/****************************************************************************/
-
-__attribute__((weak)) struct Library *AmiSSLBase = NULL;
-__attribute__((weak)) struct Library *AmiSSLMasterBase = NULL;
-__attribute__((weak)) struct Library *SocketBase = NULL;
-
-#if defined(__amigaos4__)
-__attribute__((weak)) struct AmiSSLIFace * IAmiSSL = NULL;
-__attribute__((weak)) struct AmiSSLMasterIFace * IAmiSSLMaster = NULL;
-__attribute__((weak)) struct SocketIFace * ISocket = NULL;
+#if defined(__GNUC__)
+  #define CONSTRUCTOR(name) void __init_##name(void) __attribute__((constructor)); void __init_##name(void)
+  #define DESTRUCTOR(name) void __exit_##name(void) __attribute__((destructor)); void __exit_##name(void)
+  #define WEAK __attribute__((weak))
+  #define fatal_error(message) show_fatal_error(message)
+#elif defined(__SASC)
+  #define CONSTRUCTOR(name) int __stdargs _STI_250_##name(void)
+  #define DESTRUCTOR(name) void __stdargs _STD_250_##name(void)
+  #define WEAK
+  #define fatal_error(message) return show_fatal_error(message)
+#elif defined(__VBCC__)
+  #define CONSTRUCTOR(name) void _INIT_5_##name(void)
+  #define DESTRUCTOR(name) void _EXIT_5_##name(void)
+  #define WEAK
+  #define fatal_error(message) show_fatal_error(message)
+#else
+  #error Compiler not supported
 #endif
 
-void __init_amissl_main(void) __attribute__((constructor));
-void __exit_amissl_main(void) __attribute__((destructor));
+/****************************************************************************/
+
+WEAK struct Library *AmiSSLBase = NULL;
+WEAK struct Library *AmiSSLMasterBase = NULL;
+WEAK struct Library *SocketBase = NULL;
+
+#if defined(__amigaos4__)
+WEAK struct AmiSSLIFace *IAmiSSL = NULL;
+WEAK struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
+WEAK struct SocketIFace *ISocket = NULL;
+#endif
 
 /****************************************************************************/
 
-static void fatal_error(const char *message)
+#if defined(__SASC)
+static int show_fatal_error(const char *message)
+#else
+static void show_fatal_error(const char *message)
+#endif
 {
   BOOL from_wb = ((struct Process *)FindTask(NULL))->pr_CLI == 0;
   BPTR fh;
@@ -54,7 +77,11 @@ static void fatal_error(const char *message)
       Close(fh);
   }
 
+  #if defined(__SASC)
+  return 1;
+  #else
   exit(RETURN_FAIL);
+  #endif
 }
 
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
@@ -141,14 +168,15 @@ asm (".align 2                        \n\
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
-void __init_amissl_main(void)
+CONSTRUCTOR(amissl)
 {
   #if defined(__amigaos4__)
   if (!ISocket)
   #endif
   {
-    if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
-      fatal_error("Couldn't open bsdsocket.library v4!\n");
+    if (!SocketBase)
+      if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
+        fatal_error("Couldn't open bsdsocket.library v4!\n");
 
     #if defined(__amigaos4__)
     if (!(ISocket = (struct SocketIFace *)GetInterface((struct Library *)SocketBase, "main", 1, NULL)))
@@ -195,18 +223,22 @@ void __init_amissl_main(void)
       fatal_error("Couldn't initialize AmiSSL!\n");
     #endif
   }
+
+  #if defined(__SASC)
+  return 0; /* no error */
+  #endif
 }
 
 /****************************************************************************/
 
-void __exit_amissl_main(void)
+DESTRUCTOR(amissl)
 {
   if (AmiSSLBase)
   {
     #if defined(__amigaos4__)
     if (IAmiSSL)
     {
-      CleanupAmiSSL(TAG_DONE);
+      CleanupAmiSSLA(NULL);
       DropInterface((struct Interface *)IAmiSSL);
 
       IAmiSSL = NULL;
@@ -215,7 +247,7 @@ void __exit_amissl_main(void)
     if (IAmiSSLMaster)
       CloseAmiSSL();
     #else
-    CleanupAmiSSL(TAG_DONE);
+    CleanupAmiSSLA(NULL);
     CloseAmiSSL();
     #endif
 
