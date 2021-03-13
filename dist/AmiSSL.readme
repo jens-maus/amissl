@@ -2,13 +2,13 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.7
+Version:      4.8
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.7 of the open-source based AmiSSL library for Amiga based
+This is version 4.8 of the open-source based AmiSSL library for Amiga based
 operating systems. Version 4.x is a new major release which comes with full
 compatibility to the OpenSSL 1.1.x line which includes important security
 related fixes, TLSv1.3 and comes with new encryption ciphers which are
@@ -16,8 +16,8 @@ required nowadays to connect to modern SSL-based services (e.g.  HTTPS).
 
 Backwards Compatibility:
 -----------------------
-All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.6 will automatically
-use AmiSSL 4.7 once installed. Unfortunately, due to some errors that were
+All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.7 will automatically
+use AmiSSL 4.8 once installed. Unfortunately, due to some errors that were
 made in AmiSSL 4.3, applications compiled to specifically use AmiSSL 4.3 will
 need to be recompiled with the AmiSSL 4.4 SDK (or newer) in order for them to
 be able to use AmiSSL 4.7. Due to fundamental changes in the API between the
@@ -44,13 +44,19 @@ Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
-- Fixed corrupted OS3 libamisslauto.a (object name was too long)
+Version 4.8 (13.03.2021):
+------------------------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.1j (16.02.2021) version, which brings security and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html.
+- Fixed corrupted OS3 libamisslauto.a (object name was too long).
 - Tweaked SDK examples and OpenSSL includes to be more compatible with
-  vanilla VBCC and SAS/C compiler installations
-- Restored SAS/C support to AmiSSL autoopen link library code
-- Added native VBCC support to AmiSSL autoopen link library code
+  vanilla VBCC and SAS/C compiler installations.
+- Restored SAS/C support to AmiSSL autoopen link library code.
+- Added native VBCC support to AmiSSL autoopen link library code.
 - Added lib/autoinit_amissl_main.c to SDK to allow VBCC, SAS/C and GCC
-  users to compile their own link library, if required
+  users to compile their own link library, if required.
 
 Version 4.7 (17.12.2020):
 ------------------------
