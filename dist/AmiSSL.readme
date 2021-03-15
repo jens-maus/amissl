@@ -20,7 +20,7 @@ All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.7 will automatically
 use AmiSSL 4.8 once installed. Unfortunately, due to some errors that were
 made in AmiSSL 4.3, applications compiled to specifically use AmiSSL 4.3 will
 need to be recompiled with the AmiSSL 4.4 SDK (or newer) in order for them to
-be able to use AmiSSL 4.7. Due to fundamental changes in the API between the
+be able to use AmiSSL 4.8. Due to fundamental changes in the API between the
 old AmiSSLv3 and new v4 versions and the large changes between the old OpenSSL
 0.9.x and the new OpenSSL 1.1.x line, applications have to be recompiled with
 the updated AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x
