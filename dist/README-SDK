@@ -33,7 +33,7 @@ in using AmiSSL should be something like the following pseudo-code:
 if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
                                    AMISSLMASTER_MIN_VERSION)))
 {
-	if(InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE or FALSE))
+	if(InitAmiSSLMaster(AMISSL_V11x, TRUE or FALSE))
 	{
 		if((AmiSSLBase = OpenAmiSSL()))
 		{
@@ -71,7 +71,7 @@ in its own structures - if unsure, specify TRUE).
 
 If you need to compile a program specifically for f. ex. OpenSSL 0.9.7g API,
 you need to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V097g. If
-your are, however, always using the latest AmiSSL SDK version you can keep
+you are, however, always using the latest AmiSSL SDK version you can keep
 using AMISSL_CURRENT_VERSION.
 
 InitAmiSSLMaster() returns a boolean value indicating its success. It will only
@@ -112,8 +112,10 @@ The following tags are currently available for InitAmiSSL() call:
   use an internal errno pointer and thus errno changes will not be propagated
   to your program.
 
-Linker libraries that automatically open and set up AmiSSL are also available
-as part of the AmiSSL SDK.
+Linker libraries, that automatically open and set up AmiSSL, are also available
+for GCC (OS3 and OS4) as part of the AmiSSL SDK. You may also compile your
+own linker library from lib/autoinit_amissl_main.c which can be compiled
+with VBCC and SAS/C, in addition to GCC.
 
 Note, that unlike in AmiSSL v1, AmiSSLBase can be shared between different
 subprocesses. Furthermore, this is encouraged since it allows the cache of
@@ -208,8 +210,9 @@ name than to change many occurrences of f. ex. ASN1_OBJECT_free to f. ex.
 ASN1_OBJECT_free_stub whenever ASN1_OBJECT_free is passed as a function
 pointer.
 
-For SAS/C you will have to take special care where 64-bit integers are
-concerned - in particular, OPENSSL_init_ssl(), which you mignt not even be
+For SAS/C you will need to add "MemorySize=h IdentifierLength=80" to your
+SC command line and have to take special care where 64-bit integers are
+concerned. In particular, OPENSSL_init_ssl(), which you mignt not even be
 calling directly, but is ultimately the end result of many of the macros for
 older legacy SSL initialisation functions. Remember that for 64-bit
 parameters, the high 32-bits are placed in D0 and the low 32-bits in D1.

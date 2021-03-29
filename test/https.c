@@ -1,14 +1,11 @@
 #if defined(__amigaos4__)
-#ifndef __USE_BASETYPE__
-#define __USE_BASETYPE__
+# ifndef __USE_INLINE__
+#  define __USE_INLINE__
+# endif
+# if defined(__VBCC__) && !defined(__USE_OLD_TIMEVAL__)
+#  define __USE_OLD_TIMEVAL__
+# endif
 #endif
-#ifndef __USE_INLINE__
-#define __USE_INLINE__
-#endif
-#ifndef __NEW_TIMEVAL_DEFINITION_USED__
-#define __NEW_TIMEVAL_DEFINITION_USED__
-#endif
-#endif /* __amigaos4__ */
 
 #include <sys/socket.h>
 #include <netdb.h>
@@ -19,7 +16,9 @@
 
 #include <proto/exec.h>
 #include <proto/dos.h>
+#define __NOLIBBASE__
 #include <proto/utility.h>
+#undef __NOLIBBASE__
 #include <proto/amissl.h>
 #include <proto/amisslmaster.h>
 #include <proto/socket.h>
@@ -36,8 +35,7 @@ static void GenerateRandomSeed(char *buffer, int size);
 static int ConnectToServer(char *, short, char *, short);
 static int verify_cb(int preverify_ok, X509_STORE_CTX *ctx);
 
-struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase;
-struct UtilityBase *UtilityBase;
+struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase, *UtilityBase;
 
 BOOL AmiSSLInitialized;
 
@@ -242,9 +240,9 @@ static BOOL Init(void)
 {
 	AmiSSLInitialized = FALSE;
 
-	if (!(UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 0)))
+	if (!(UtilityBase = OpenLibrary("utility.library", 0)))
 		FPrintf(GetStdErr(), "Couldn't open utility.library!\n");
-	else if (!GETINTERFACE(IUtility, &UtilityBase->ub_LibNode))
+	else if (!GETINTERFACE(IUtility, UtilityBase))
 		FPrintf(GetStdErr(), "Couldn't get Socket interface!\n");
 	else if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
 		FPrintf(GetStdErr(), "Couldn't open bsdsocket.library v4!\n");
@@ -285,7 +283,7 @@ static void Cleanup(void)
 {
 	if (AmiSSLInitialized)
 	{	/* Must always call after successful InitAmiSSL() */
-		CleanupAmiSSL(TAG_DONE);
+		CleanupAmiSSLA(NULL);
 	}
 
 	if (AmiSSLBase)
@@ -304,7 +302,7 @@ static void Cleanup(void)
 	SocketBase = NULL;
 
 	DROPINTERFACE(IUtility);
-	CloseLibrary(&UtilityBase->ub_LibNode);
+	CloseLibrary(UtilityBase);
 	UtilityBase = NULL;
 }
 

@@ -64,6 +64,7 @@ cp -a test/https.c "release/AmiSSL/Developer/Examples/"
 cp -a include/fd/amissl* "release/AmiSSL/Developer/fd/"
 cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
 cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
+cp -a src/autoinit_amissl_main.c "release/AmiSSL/Developer/lib/"
 
 # create new OpenSSL.doc
 sh tools/openssldoc.sh > release/AmiSSL/Doc/OpenSSL.doc

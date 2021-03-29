@@ -1,0 +1,59 @@
+name: release
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 480
+
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: setup dependencies
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update -y -qq || true
+        sudo apt-get -qq install libc6:i386
+        sudo ln -s /usr/lib/x86_64-linux-gnu/libmpfr.so.6 /usr/lib/x86_64-linux-gnu/libmpfr.so.4
+
+    - name: setup env
+      run : |
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >>$GITHUB_ENV
+
+    - name: install adtools build env
+      run: |
+        curl -L https://dl.bintray.com/jens-maus/adtools/adtools-utils.tar.bz2 | sudo tar xj -C /
+        curl -L https://dl.bintray.com/jens-maus/adtools/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
+        curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
+        #curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
+        #curl -L https://dl.bintray.com/jens-maus/adtools/adtools-ppc-aros.tar.bz2 | sudo tar xj -C /
+        #curl -L https://dl.bintray.com/jens-maus/adtools/adtools-i386-aros.tar.bz2 | sudo tar xj -C /
+        #curl -L https://dl.bintray.com/jens-maus/adtools/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C /
+
+    - name: cleanup old action artifacts
+      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
+
+    #- name: remote debug tmate session
+    #  uses: mxschmitt/action-tmate@v1
+    #  if: matrix.platform == 'os4'
+
+    - name: build AmiSSL release
+      timeout-minutes: 480
+      run: |
+        export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
+        make -j1 release
+
+    - name: upload release archive as workflow artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: |
+          AmiSSL-*.lha
+          AmiSSL-*.readme
+        name: AmiSSL-${{ env.GITHUB_SHA7 }}
+      continue-on-error: true

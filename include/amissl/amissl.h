@@ -9,10 +9,6 @@
 #ifndef AMISSL_AMISSL_H
 #define AMISSL_AMISSL_H
 
-#ifdef __SASC
-#define ssize_t int
-#endif
-
 #include <openssl/opensslconf.h>
 
 #ifndef OPENSSL_NO_AES

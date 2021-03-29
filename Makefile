@@ -149,11 +149,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=4
-VERSIONNAME=111i
-AMISSLREVISION=7
-AMISSLMASTERREVISION=7
-AMISSLDATE=17.12.2020
-AMISSLMASTERDATE=17.12.2020
+VERSIONNAME=111j
+AMISSLREVISION=8
+AMISSLMASTERREVISION=8
+AMISSLDATE=13.03.2021
+AMISSLMASTERDATE=13.03.2021
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -485,12 +485,12 @@ $(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
 	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,-Map=$@.map
 
-$(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_amissl_main.o
+$(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_assl.o
 	@echo "  AR $@"
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
-$(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_amissl_main_newlib.o
+$(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_assl_newlib.o
 	@echo "  AR $@"
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
@@ -529,11 +529,11 @@ $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/liba
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
-$(BUILD_D)/autoinit_amissl_main.o: $(SRC_D)/autoinit_amissl_main.c
+$(BUILD_D)/autoinit_assl.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 
-$(BUILD_D)/autoinit_amissl_main_newlib.o: $(SRC_D)/autoinit_amissl_main.c
+$(BUILD_D)/autoinit_assl_newlib.o: $(SRC_D)/autoinit_amissl_main.c
 	@echo "  CC $<"
 	@$(CC) $(AINLCFLAGS) $(NOBASEREL) -c $< -o $@ -DVERSION=$(VERSION) $(INCLUDE)
 

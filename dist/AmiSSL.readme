@@ -2,13 +2,13 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.7
+Version:      4.8
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.7 of the open-source based AmiSSL library for Amiga based
+This is version 4.8 of the open-source based AmiSSL library for Amiga based
 operating systems. Version 4.x is a new major release which comes with full
 compatibility to the OpenSSL 1.1.x line which includes important security
 related fixes, TLSv1.3 and comes with new encryption ciphers which are
@@ -16,11 +16,11 @@ required nowadays to connect to modern SSL-based services (e.g.  HTTPS).
 
 Backwards Compatibility:
 -----------------------
-All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.6 will automatically
-use AmiSSL 4.7 once installed. Unfortunately, due to some errors that were
+All applications compiled to use AmiSSL 4.0-4.2 or 4.4-4.7 will automatically
+use AmiSSL 4.8 once installed. Unfortunately, due to some errors that were
 made in AmiSSL 4.3, applications compiled to specifically use AmiSSL 4.3 will
 need to be recompiled with the AmiSSL 4.4 SDK (or newer) in order for them to
-be able to use AmiSSL 4.7. Due to fundamental changes in the API between the
+be able to use AmiSSL 4.8. Due to fundamental changes in the API between the
 old AmiSSLv3 and new v4 versions and the large changes between the old OpenSSL
 0.9.x and the new OpenSSL 1.1.x line, applications have to be recompiled with
 the updated AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x
@@ -43,6 +43,20 @@ supported in one of the next releases or please consider joining our team.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.8 (13.03.2021):
+------------------------
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.1j (16.02.2021) version, which brings security and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html.
+- Fixed corrupted OS3 libamisslauto.a (object name was too long).
+- Tweaked SDK examples and OpenSSL includes to be more compatible with
+  vanilla VBCC and SAS/C compiler installations.
+- Restored SAS/C support to AmiSSL autoopen link library code.
+- Added native VBCC support to AmiSSL autoopen link library code.
+- Added lib/autoinit_amissl_main.c to SDK to allow VBCC, SAS/C and GCC
+  users to compile their own link library, if required.
 
 Version 4.7 (17.12.2020):
 ------------------------
@@ -138,7 +152,7 @@ Version 4.1 (13.03.2017):
 - Added some m68k asm replacement code for potentially speeding up BN
   calculation routines.
 - Added AmiUpdate compatibility.
-- included a newlib compiled version of libamisslauto.a.
+- Included a newlib compiled version of libamisslauto.a.
 - Minor improvements/Fixes for install script.
 
 Version 4.0 (07.02.2017):
@@ -238,7 +252,7 @@ Legal information
 -----------------
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2020 AmiSSL Open Source Team.
+AmiSSL v4    Copyright (c) 2014-2021 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
@@ -259,7 +273,7 @@ the toolkit. See below for the actual license texts.
 OpenSSL License
 ---------------
 ====================================================================
-Copyright (c) 1998-2020 The OpenSSL Project.  All rights reserved.
+Copyright (c) 1998-2021 The OpenSSL Project.  All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions

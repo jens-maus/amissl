@@ -5,7 +5,7 @@
 [![HitCount](http://hits.dwyl.io/jens-maus/amissl.svg)](http://hits.dwyl.io/jens-maus/amissl)
 [![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/amissl/latest.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
-[![Build Status](https://travis-ci.org/jens-maus/amissl.svg?branch=master)](https://travis-ci.org/jens-maus/amissl)
+[![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
 [![License](http://img.shields.io/:license-bsd_style-blue.svg?style=flat)](https://www.openssl.org/source/license.html)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8L52PD9A9WS36)
 
@@ -80,7 +80,7 @@ script used accordingly.
 ```
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2020 AmiSSL Open Source Team.
+AmiSSL v4    Copyright (c) 2014-2021 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
