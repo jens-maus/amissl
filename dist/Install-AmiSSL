@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.14 (17.4.2020)
+; $VER: Install-AmiSSL 4.0.15 (29.3.2021)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -50,7 +50,7 @@
 	"so that AmiSSL can find its certificates.")
 )
 (set #str-success (cat
-	"AmiSSL installation finished succesfully. Enjoy!\n\n"
+	"AmiSSL %ld.%ld installation finished succesfully. Enjoy!\n\n"
 	"(Please reboot for modifications to take effect)")
 )
 (set #str-reboot-before-install (cat
@@ -65,10 +65,11 @@
 	"AmiSSL comes in two versions optimised for different processors. "
 	"Which version of AmiSSL would you like to install?")
 )
+(set #str-cleaning-old-libs "Deleting redundant old libraries")
 
 ; ///
 ; /// ***** Deutsch
-(if (= #language "deutsch")
+(if (= @language "deutsch")
 )
 ; ///
 
@@ -217,6 +218,8 @@
 
 (set #old-lib-ver (getversion "LIBS:amisslmaster.library"))
 (set #new-lib-ver (getversion (tackon #libs-src-dir "amisslmaster.library")))
+(set #amissl-ver (/ #new-lib-ver 65536))
+(set #amissl-rev (- #new-lib-ver (* #amissl-ver 65536)))
 
 (if (= #detectedSystem "os4")
 	(
@@ -261,10 +264,6 @@
 )
 
 (complete 10)
-(if (= #detectedSystem "os3")
-
-)
-
 
 (if (= #src-os-dir "AmigaOS3")
 	(
@@ -292,7 +291,7 @@
 	(set #cpu-dir "")
 )
 
-(foreach (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) "#?.library"
+(foreach (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) "amissl_v#?.library"
 	(if (= #AmiUpdate 1)
 		(
 			(working (#str-amiupdate-copyfile (tackon (tackon #libs-src-dir "AmiSSL") @each-name) (tackon #libs-dir "AmiSSL")))
@@ -303,6 +302,18 @@
 			(source (tackon (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) @each-name))
 			(dest (tackon #libs-dir "AmiSSL"))
 		)
+	)
+)
+
+(complete 25)
+
+(working #str-cleaning-old-libs)
+(foreach (tackon #libs-dir "AmiSSL") "amissl_v11#?.library"
+	(if	(AND	; Only delete versions older than ours, and not any special exceptions
+			(< (getversion (tackon (tackon #libs-dir "AmiSSL") @each-name)) #new-lib-ver)
+			(<> @each-name "amissl_v111a.library")
+		)
+		(delete (tackon (tackon #libs-dir "AmiSSL") @each-name))
 	)
 )
 
@@ -444,4 +455,4 @@
 
 (complete 100)
 (set @default-dest #dest-dir)
-(if (= #AmiUpdate 1) (exit (quiet)) (exit #str-success))
+(if (= #AmiUpdate 1) (exit (quiet)) (exit (#str-success #amissl-ver #amissl-rev)))
