@@ -36,7 +36,7 @@
     <method name="Reserved7" result="void" status="unimplemented"/>
     <method name="Reserved8" result="void" status="unimplemented"/>
 
-    <!-- AmiSSL v3.6 - OpenSSL 0.9.7g -->
+    <!-- AmiSSL v3.6/3.7 - OpenSSL 0.9.7g -->
 
     <method name="ASN1_TYPE_new" result="ASN1_TYPE *">
     </method>
@@ -10321,7 +10321,7 @@
     <method name="PROXY_CERT_INFO_EXTENSION_it" result="const ASN1_ITEM *">
     </method>
 
-    <!-- AmiSSL v3.7 - OpenSSL 0.9.7g -->
+    <!-- AmiSSL v3.x - OpenSSL 0.9.7m -->
 
     <method name="FIPS_mode" result="int">
     </method>
@@ -16804,7 +16804,7 @@
       <arg name="rhash" type="unsigned char *" m68kreg="d2"/>
     </method>
 
-    <!-- AmiSSL v4.0 - OpenSSL 1.1.0 -->
+    <!-- AmiSSL v4 pre-release - OpenSSL 1.1.0c -->
 
     <method name="ASN1_add_stable_module" result="void">
     </method>
@@ -19967,7 +19967,7 @@
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
 
-    <!-- AmiSSL v4.x - OpenSSL 1.1.0d -->
+    <!-- AmiSSL v4.0 - OpenSSL 1.1.0d -->
     <method name="CT_POLICY_EVAL_CTX_get_time" result="uint64_t">
       <arg name="ctx" type="const CT_POLICY_EVAL_CTX *" m68kreg="a0"/>
     </method>
@@ -19996,7 +19996,7 @@
       <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
     </method>
 
-    <!-- AmiSSL v4.x - OpenSSL 1.1.0g -->
+    <!-- AmiSSL v4.2 - OpenSSL 1.1.0g -->
     <method name="CRYPTO_secure_clear_free" result="void">
       <arg name="ptr" type="void *" m68kreg="a0"/>
       <arg name="num" type="size_t" m68kreg="d0"/>

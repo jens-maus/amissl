@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.14 (17.4.2020)
+; $VER: Install-AmiSSL 4.0.16 (30.3.2021)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -50,7 +50,7 @@
 	"so that AmiSSL can find its certificates.")
 )
 (set #str-success (cat
-	"AmiSSL installation finished succesfully. Enjoy!\n\n"
+	"AmiSSL %ld.%ld installation finished succesfully. Enjoy!\n\n"
 	"(Please reboot for modifications to take effect)")
 )
 (set #str-reboot-before-install (cat
@@ -65,11 +65,71 @@
 	"AmiSSL comes in two versions optimised for different processors. "
 	"Which version of AmiSSL would you like to install?")
 )
+(set #str-cleaning-old-libs "Deleting redundant old libraries")
 
 ; ///
 ; /// ***** Deutsch
-(if (= #language "deutsch")
+(if (= @language "deutsch")
 )
+
+; ///
+; /// ***** Svenska
+(if (= @language "svenska")
+    (
+        (set #str-acknowledgeOS (cat
+	        "Var god verifiera den automatiska\n"
+            "detekteringen av ditt operativsystem:")
+        )
+        (set #str-amissl-assign (cat
+	        "Installeraren har upptäckt att du redan har en AmiSSL: "
+            "tilldelning som pekar till \"%s\". Vill du installera och "
+            "uppgradera AmiSSL där med dina tidigare installationsval?\n\n"
+            "Notera: Det är starkt rekommenderat att ha alla AmiSSL versioner "
+            "installerade i samma katalog. Installationer i olika kataloger "
+            "kommer mest troligt kräva manuell redigering i User-Startup.")
+        )
+        (set #str-no-help "Ingen hjälp tillgänglig")
+        (set #str-dest-dir (cat
+	        "Var vill du installera AmiSSL? En katalog med namnet "
+	        "AmiSSL KOMMER att skapas där.")
+        )
+        (set #str-certs-older-over-newer (cat
+	        "Det verkar som du redan har en nyare version av AmiSSL "
+            "installerad. Det är rekommenderat att du inte installerar "
+            "certifikaten från denna äldre version och att du behåller "
+            "de nuvarande installerade certifikaten från den nyare versionen.\n\n"
+            "Vill du behålla de nuvarande installerade certifikaten?")
+        )
+        (set #str-certs-keep "Behåll installerade certifikat")
+        (set #str-certs-replace "Ersätt certifikat")
+        (set #str-add-path (cat
+	        "Vill du lägga till AmiSSL: till din sökväg? Detta gör det "
+            "möjligt att exekvera OpenSSL verktyget utan att behöva "
+            "ange full sökväg till det.")
+        )
+        (set #str-add-assign (cat
+	        "AmiSSL: tilldelningen behöver läggas till i User-Startup "
+            "så att AmiSSL kan hitta sina certifikat.")
+        )
+        (set #str-success (cat
+	        "AmiSSL %ld.%ld installeringen avslutades framgångsrikt. Mycket nöje!\n\n"
+	        "(Var god starta om datorn för att ändringarna ska få effekt)")
+        )
+        (set #str-reboot-before-install (cat
+	        "Installeraren har upptäckt att ett program använder AmiSSL."
+            "Var god stäng alla program som använder AmiSSL och kör "
+            "installeraren igen.\n\n"
+            "Om detta meddelande upprepas, starta om och försök igen.")
+        )
+        (set #str-deleting-certs "Raderar gamla certifikat")
+        (set #str-amiupdate-copyfile "Kopierar fil via AmiUpdate:\n%s\n\nTill låda:\n%s")
+        (set #str-cpu-68k (cat
+	        "AmiSSL kommer i två versioner, optimerade för olika processorer. "
+	        "Vilken version av AmiSSL vill du installera?")
+        )
+    )
+)
+
 ; ///
 
 ;----------------------------------------------------------------------------
@@ -119,6 +179,7 @@
 (set #detectedSystem
 	(select #detectedSystem "os3" "os4" "mos" "aros-i386" "aros-ppc" "aros-x86_64")
 )
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Here we go!
@@ -171,6 +232,7 @@
 (if (= #detectedSystem "aros-x86_64")
 	(set #src-os-dir "AROS-x86_64")
 )
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// For an existing install, check if to update or start afresh
@@ -183,6 +245,7 @@
 		)
 	)
 )
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Ask for new installation dir, if required
@@ -208,6 +271,7 @@
 		(set #cmd-dir #dest-dir)
 	)
 )
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Install libraries
@@ -217,10 +281,12 @@
 
 (set #old-lib-ver (getversion "LIBS:amisslmaster.library"))
 (set #new-lib-ver (getversion (tackon #libs-src-dir "amisslmaster.library")))
+(set #amissl-ver (/ #new-lib-ver 65536))
+(set #amissl-rev (- #new-lib-ver (* #amissl-ver 65536)))
 
 (if (= #detectedSystem "os4")
 	(
-		; /// Try to force ramlib to expunge libraries to release exclusive file locks
+		; Try to force ramlib to expunge libraries to release exclusive file locks
 		(foreach (tackon #libs-dir "AmiSSL") "amissl_v#?.library"
 			(
 				(set #resident-lib-ver (getversion @each-name (resident)))
@@ -261,10 +327,6 @@
 )
 
 (complete 10)
-(if (= #detectedSystem "os3")
-
-)
-
 
 (if (= #src-os-dir "AmigaOS3")
 	(
@@ -292,7 +354,7 @@
 	(set #cpu-dir "")
 )
 
-(foreach (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) "#?.library"
+(foreach (tackon (tackon #libs-src-dir "AmiSSL") #cpu-dir) "amissl_v#?.library"
 	(if (= #AmiUpdate 1)
 		(
 			(working (#str-amiupdate-copyfile (tackon (tackon #libs-src-dir "AmiSSL") @each-name) (tackon #libs-dir "AmiSSL")))
@@ -306,7 +368,20 @@
 	)
 )
 
+(complete 25)
+
+(working #str-cleaning-old-libs)
+(foreach (tackon #libs-dir "AmiSSL") "amissl_v11#?.library"
+	(if	(AND	; Only delete versions older than ours, and not any special exceptions
+			(< (getversion (tackon (tackon #libs-dir "AmiSSL") @each-name)) #new-lib-ver)
+			(<> @each-name "amissl_v111a.library")
+		)
+		(delete (tackon (tackon #libs-dir "AmiSSL") @each-name))
+	)
+)
+
 (complete 30)
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Install documentation
@@ -328,6 +403,7 @@
 )
 
 (complete 45)
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Install OpenSSL tool
@@ -345,6 +421,7 @@
 )
 
 (complete 60)
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// Install Certificates
@@ -400,6 +477,7 @@
 (makedir (tackon #storage-dir "Private"))
 
 (complete 90)
+; ///
 
 ;----------------------------------------------------------------------------
 ; /// S:User-Startup additions
@@ -439,9 +517,9 @@
 	)
 )
 
-;----------------------------------------------------------------------------
 ; /// ********************
+;----------------------------------------------------------------------------
 
 (complete 100)
 (set @default-dest #dest-dir)
-(if (= #AmiUpdate 1) (exit (quiet)) (exit #str-success))
+(if (= #AmiUpdate 1) (exit (quiet)) (exit (#str-success #amissl-ver #amissl-rev)))
