@@ -191,7 +191,13 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  if(LibAPIVersion >= AMISSL_V110c)
+  if(LibAPIVersion == AMISSL_V111a_OBS)
+  {
+    // Special case - due to some mistakes made in the ABI / interface update in
+    // this version, meaning future versions are incompatible
+    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4);
+  }
+  else if(LibAPIVersion >= AMISSL_V110c)
   {
     D(DBF_STARTUP, "About to open amissl v11x library");
 
@@ -200,15 +206,16 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
     // but we must take care to prevent applications requiring newer API functions
     // from loading older libraries that do not contain those required entries
-    if(LibAPIVersion == AMISSL_V111a_OBS || (LibAPIVersion <= AMISSL_V111j && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL))
-      if(LibAPIVersion == AMISSL_V111a_OBS || (LibAPIVersion <= AMISSL_V111i && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL))
-        if(LibAPIVersion == AMISSL_V111a_OBS || (LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL))
-          if(LibAPIVersion == AMISSL_V111a_OBS || (LibAPIVersion <= AMISSL_V111d && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL))
-            if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
-              if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
-                if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL &&
-                                                    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
-                  if(LibAPIVersion == AMISSL_V110c) OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+    if(LibAPIVersion <= AMISSL_V111k && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111k.library", 4) == NULL
+                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL
+                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)
+      if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL
+                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL)
+         if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
+            if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
+              if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
+                                               && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
+		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
   }
   else if(LibAPIVersion == AMISSL_V102f)
   {
@@ -221,24 +228,13 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
       if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101i.library", 3) == NULL)
         OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101h.library", 3);
   }
-  else if(LibAPIVersion == AMISSL_V098y)
+  else if(LibAPIVersion >= AMISSL_V097g)
   {
-    // if an application requests 0.9.8y we try to open newer 0.9.8 versions until 0.9.8y
+    // if an application requests 0.9.7g we try to open newer 0.9.7 versions until 0.9.7y
     // as they are API compatible
-    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v098y.library", 3);
-  }
-  else if(LibAPIVersion == AMISSL_V097m)
-  {
-    // if an application requests 0.9.7m we try to open newer 0.9.7 versions until 0.9.7m
-    // as they are API compatible
-    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3);
-  }
-  else if(LibAPIVersion == AMISSL_V097g)
-  {
-    // if an application requests 0.9.7g we try to open newer 0.9.7 versions until 0.9.7m
-    // as they are API compatible
-    if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3) == NULL)
-      OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
+    if(LibAPIVersion <= AMISSL_V098y && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v098y.library", 3) == NULL)
+      if(LibAPIVersion <= AMISSL_V097m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3) == NULL)
+        OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
   }
   else if(LibAPIVersion == AMISSL_V2)
   {
