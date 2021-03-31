@@ -33,7 +33,7 @@ my $X509 = "$openssl x509";
 my $PKCS12 = "$openssl pkcs12";
 
 # default openssl.cnf file has setup as per the following
-my $CATOP = "./demoCA";
+my $CATOP = "AmiSSL:demoCA";
 my $CAKEY = "cakey.pem";
 my $CAREQ = "careq.pem";
 my $CACERT = "cacert.pem";

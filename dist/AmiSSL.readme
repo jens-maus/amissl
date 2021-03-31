@@ -52,6 +52,10 @@ Version 4.9 (02.04.2021):
 - Simplified and improved logic in amisslmaster.library for choosing which
   libraries to open.
 - Installer will now delete redundant AmiSSLv4 libraries where possible.
+- Added Swedish installer translation.
+- Updated icons with more modern GlowIcons.
+- Added default openssl.cnf file and CA.pl helper script to the installation.
+- Added CA.pl documentation to OpenSSL.doc.
 
 Version 4.8 (13.03.2021):
 ------------------------

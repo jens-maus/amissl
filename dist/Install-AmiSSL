@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.16 (30.3.2021)
+; $VER: Install-AmiSSL 4.0.17 (31.3.2021)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -418,6 +418,18 @@
 		(source (tackon "C" (tackon #src-os-dir "OpenSSL")))
 		(dest #cmd-dir)
 	)
+)
+
+(if (NOT (exists (tackon #storage-dir "openssl.cnf")))
+	(copyfiles
+		(source "C/openssl.cnf")
+		(dest #storage-dir)
+	)
+)
+
+(copyfiles
+	(source "C/CA.pl")
+	(dest #storage-dir)
 )
 
 (complete 60)
