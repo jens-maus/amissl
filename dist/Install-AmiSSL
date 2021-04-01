@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.17 (31.3.2021)
+; $VER: Install-AmiSSL 4.0.18 (31.3.2021)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -127,6 +127,7 @@
 	        "AmiSSL kommer i två versioner, optimerade för olika processorer. "
 	        "Vilken version av AmiSSL vill du installera?")
         )
+        (set #str-cleaning-old-libs "Raderar onödiga gamla bibliotek")
     )
 )
 
