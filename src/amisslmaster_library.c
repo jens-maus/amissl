@@ -211,11 +211,11 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
                                      && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)
       if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL
                                        && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL)
-         if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
-            if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
-              if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
-                                               && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
-		OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+        if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
+          if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
+            if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
+                                             && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
+              OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
   }
   else if(LibAPIVersion == AMISSL_V102f)
   {
