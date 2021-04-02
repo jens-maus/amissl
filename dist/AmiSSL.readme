@@ -29,18 +29,6 @@ Besides that fundamental change, AmiSSLv4 can be installed on top of a
 AmiSSLv3 installation while still ensuring that applications compiled for
 AmiSSLv3 will continue to work properly.
 
-IMPORTANT NOTE:
---------------
-This release comes with binaries for the AmigaOS4/PPC and AmigaOS3/m68k
-platform only.  Unfortunately, due to lack of motivated developers we couldn't
-provide native binaries for the MorphOS/PPC or AROS (PPC, i386, x86_64)
-platform in time. If you are, however, interested in seeing AmiSSL v4 being
-ported for these other Amiga-based platforms, please try to find motivated and
-talented developers who could join our team as proper maintainers for these
-alternative platforms. In addition, if you are a MorphOS or AROS developer
-yourself, feel free to send proper pull requests to see your platform
-supported in one of the next releases or please consider joining our team.
-
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
@@ -54,7 +42,7 @@ Version 4.9 (02.04.2021):
 - Installer will now delete redundant AmiSSLv4 libraries where possible.
 - Added Swedish installer translation.
 - Updated icons with more modern GlowIcons.
-- Added default openssl.cnf file and CA.pl helper script to the installation.
+- Added sample openssl.cnf file and CA.pl helper script to the installation.
 - Added CA.pl documentation to OpenSSL.doc.
 
 Version 4.8 (13.03.2021):
@@ -256,10 +244,25 @@ install your own certificates in this directory path.
 The OpenSSL command-line tool
 -----------------------------
 A port of the OpenSSL command-line tool is also included and usually installed
-to AMISSL: during installatiopn. It is a "command line tool for using the
+to AmiSSL: during installation. It is a "command line tool for using the
 various cryptography functions of OpenSSL's crypto library from the shell".
 The documentation for the OpenSSL tool is included in the archive and can also
-be reviewed online: https://www.openssl.org/docs/man1.1.1/apps/openssl.html
+be reviewed online: https://www.openssl.org/docs/man1.1.1/man1/openssl.html.
+A sample openssl.cnf file is also installed to AmiSSL:, if it doesn't already
+exist, along with the CA.pl helper script, both of which aid the certificate
+generation features of the OpenSSL tool.
+
+IMPORTANT NOTE:
+--------------
+This release comes with binaries for the AmigaOS4/PPC and AmigaOS3/m68k
+platform only.  Unfortunately, due to lack of motivated developers we couldn't
+provide native binaries for the MorphOS/PPC or AROS (PPC, i386, x86_64)
+platform in time. If you are, however, interested in seeing AmiSSL v4 being
+ported for these other Amiga-based platforms, please try to find motivated and
+talented developers who could join our team as proper maintainers for these
+alternative platforms. In addition, if you are a MorphOS or AROS developer
+yourself, feel free to send proper pull requests to see your platform
+supported in one of the next releases or please consider joining our team.
 
 Legal information
 -----------------

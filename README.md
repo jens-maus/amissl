@@ -2,7 +2,7 @@
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/amissl/latest/total.svg)](https://github.com/jens-maus/amissl/releases/latest)
-[![HitCount](http://hits.dwyl.io/jens-maus/amissl.svg)](http://hits.dwyl.io/jens-maus/amissl)
+[![HitCount](http://hits.dwyl.com/jens-maus/amissl.svg)](http://hits.dwyl.com/jens-maus/amissl)
 [![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/amissl/latest.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
@@ -32,7 +32,7 @@ sure that the correct `amissl_vXXXX.library` versions are opened.
 
 Other shared libraries are usually stored inside the `AmiSSL:Libs/AmiSSL` directory.
 None of these libraries have to be opened directly by any third party application
-but only by 'amisslmaster.library'. The technical details on this can be found in
+but only by `amisslmaster.library`. The technical details on this can be found in
 the AmiSSL SDK documentation.
 
 ### Root Certificates
@@ -59,7 +59,10 @@ to be used any application software using AmiSSL.
 
 A port of the OpenSSL tool is also included. It is a "command line tool for
 using the various cryptography functions of OpenSSL's crypto library from the
-shell". A detailed documentation for the OpenSSL tool is included in the archive.
+shell". A detailed documentation for the OpenSSL tool is included in the archive
+and can also be reviewed [online](https://www.openssl.org/docs/man1.1.1/man1/openssl.html).
+A sample openssl.cnf file is also included, along with the CA.pl helper script, both
+of which aid the certificate generation features of the OpenSSL tool.
 
 ## Requirements
 
