@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 4.0.18 (31.3.2021)
+; $VER: Install-AmiSSL 4.0.19 (3.4.2021)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -74,62 +74,124 @@
 
 ; ///
 ; /// ***** Svenska
-(if (= @language "svenska")
-    (
-        (set #str-acknowledgeOS (cat
-	        "Var god verifiera den automatiska\n"
-            "detekteringen av ditt operativsystem:")
-        )
-        (set #str-amissl-assign (cat
-	        "Installeraren har upptäckt att du redan har en AmiSSL: "
-            "tilldelning som pekar till \"%s\". Vill du installera och "
-            "uppgradera AmiSSL där med dina tidigare installationsval?\n\n"
-            "Notera: Det är starkt rekommenderat att ha alla AmiSSL versioner "
-            "installerade i samma katalog. Installationer i olika kataloger "
-            "kommer mest troligt kräva manuell redigering i User-Startup.")
-        )
-        (set #str-no-help "Ingen hjälp tillgänglig")
-        (set #str-dest-dir (cat
-	        "Var vill du installera AmiSSL? En katalog med namnet "
-	        "AmiSSL KOMMER att skapas där.")
-        )
-        (set #str-certs-older-over-newer (cat
-	        "Det verkar som du redan har en nyare version av AmiSSL "
-            "installerad. Det är rekommenderat att du inte installerar "
-            "certifikaten från denna äldre version och att du behåller "
-            "de nuvarande installerade certifikaten från den nyare versionen.\n\n"
-            "Vill du behålla de nuvarande installerade certifikaten?")
-        )
-        (set #str-certs-keep "Behåll installerade certifikat")
-        (set #str-certs-replace "Ersätt certifikat")
-        (set #str-add-path (cat
-	        "Vill du lägga till AmiSSL: till din sökväg? Detta gör det "
-            "möjligt att exekvera OpenSSL verktyget utan att behöva "
-            "ange full sökväg till det.")
-        )
-        (set #str-add-assign (cat
-	        "AmiSSL: tilldelningen behöver läggas till i User-Startup "
-            "så att AmiSSL kan hitta sina certifikat.")
-        )
-        (set #str-success (cat
-	        "AmiSSL %ld.%ld installeringen avslutades framgångsrikt. Mycket nöje!\n\n"
-	        "(Var god starta om datorn för att ändringarna ska få effekt)")
-        )
-        (set #str-reboot-before-install (cat
-	        "Installeraren har upptäckt att ett program använder AmiSSL."
-            "Var god stäng alla program som använder AmiSSL och kör "
-            "installeraren igen.\n\n"
-            "Om detta meddelande upprepas, starta om och försök igen.")
-        )
-        (set #str-deleting-certs "Raderar gamla certifikat")
-        (set #str-amiupdate-copyfile "Kopierar fil via AmiUpdate:\n%s\n\nTill låda:\n%s")
-        (set #str-cpu-68k (cat
-	        "AmiSSL kommer i två versioner, optimerade för olika processorer. "
-	        "Vilken version av AmiSSL vill du installera?")
-        )
-        (set #str-cleaning-old-libs "Raderar onödiga gamla bibliotek")
-    )
+(if (= @language "svenska") (
+
+(set #str-acknowledgeOS (cat
+	"Var god verifiera den automatiska\n"
+        "detekteringen av ditt operativsystem:")
 )
+(set #str-amissl-assign (cat
+	"Installeraren har upptäckt att du redan har en AmiSSL: "
+	"tilldelning som pekar till \"%s\". Vill du installera och "
+	"uppgradera AmiSSL där med dina tidigare installationsval?\n\n"
+	"Notera: Det är starkt rekommenderat att ha alla AmiSSL versioner "
+	"installerade i samma katalog. Installationer i olika kataloger "
+	"kommer mest troligt kräva manuell redigering i User-Startup.")
+)
+(set #str-no-help "Ingen hjälp tillgänglig")
+(set #str-dest-dir (cat
+	"Var vill du installera AmiSSL? En katalog med namnet "
+	"AmiSSL KOMMER att skapas där.")
+)
+(set #str-certs-older-over-newer (cat
+	"Det verkar som du redan har en nyare version av AmiSSL "
+	"installerad. Det är rekommenderat att du inte installerar "
+	"certifikaten från denna äldre version och att du behåller "
+	"de nuvarande installerade certifikaten från den nyare versionen.\n\n"
+	"Vill du behålla de nuvarande installerade certifikaten?")
+)
+(set #str-certs-keep "Behåll installerade certifikat")
+(set #str-certs-replace "Ersätt certifikat")
+(set #str-add-path (cat
+	"Vill du lägga till AmiSSL: till din sökväg? Detta gör det "
+	"möjligt att exekvera OpenSSL verktyget utan att behöva "
+	"ange full sökväg till det.")
+)
+(set #str-add-assign (cat
+	"AmiSSL: tilldelningen behöver läggas till i User-Startup "
+	"så att AmiSSL kan hitta sina certifikat.")
+)
+(set #str-success (cat
+	"AmiSSL %ld.%ld installeringen avslutades framgångsrikt. Mycket nöje!\n\n"
+	"(Var god starta om datorn för att ändringarna ska få effekt)")
+)
+(set #str-reboot-before-install (cat
+	"Installeraren har upptäckt att ett program använder AmiSSL."
+	"Var god stäng alla program som använder AmiSSL och kör "
+	"installeraren igen.\n\n"
+	"Om detta meddelande upprepas, starta om och försök igen.")
+)
+(set #str-deleting-certs "Raderar gamla certifikat")
+(set #str-amiupdate-copyfile "Kopierar fil via AmiUpdate:\n%s\n\nTill låda:\n%s")
+(set #str-cpu-68k (cat
+	"AmiSSL kommer i två versioner, optimerade för olika processorer. "
+	"Vilken version av AmiSSL vill du installera?")
+)
+(set #str-cleaning-old-libs "Raderar onödiga gamla bibliotek")
+
+))
+
+; ///
+; /// ***** Italiano
+(if (= @language "italiano") (
+
+(set #str-acknowledgeOS (cat
+	"Per favore conferma il rilevamento automatico\n"
+	"del tuo sistema operativo:")
+)
+(set #str-amissl-assign (cat
+	"L'installer ha rilevato la presenza di un assign AmiSSL: già esistente "
+	"che punta a \"%s\". Si desidera installare ed aggiornare "
+	"AmiSSL li usando le tue precedenti scelte di installazione?\n\n"
+	"Nota: Nel caso sia già presente una vecchia versione, oppure in caso "
+	"di installazioni future è fortemente consigliato l'uso della stessa directory "
+	"per le installazione di AmiSSL. L'installazione di ulteriori versioni su "
+	"directory differenti potrebbe infatti richiedere all'utente un ulteriore "
+	"intervento manuale sulla User-Startup.")
+)
+(set #str-no-help "Nessun aiuto disponibile")
+(set #str-dest-dir (cat
+	"Dove si desidera installare AmiSSL? Una directory chiamata "
+	"AmiSSL verrà creata li.")
+)
+(set #str-certs-older-over-newer (cat
+	"Sembra che tu abbia già installato nel tuo sistema una versione più "
+	"recente di AmiSSL, si consiglia di non installare i certificati da questa "
+	"versione e di conservare invece i certificati attualmente installati "
+	"dalla versione più recente.\n\n"
+	"Si desidera conservare i certificati correntemente installati?")
+)
+(set #str-certs-keep "Mantenimento dei certificati installati")
+(set #str-certs-replace "Sostituzione dei certificati")
+(set #str-add-path (cat
+	"Si desidera aggiungere AmiSSL: al tuo percorso? Questo renderà "
+	"possibile l'esecuzione dello strumento OpenSSL senza la necessità "
+	"di doverne specificare il percorso completo.")
+)
+(set #str-add-assign (cat
+	"Un assign AmiSSL: dovrà essere aggiunto alla User-Startup "
+	"in modo che AmiSSL possa trovare i suoi certificati.")
+)
+(set #str-success (cat
+	"Installazione di AmiSSL %ld.%ld completata con successo!\n\n"
+	"(Riavvia il computer per completare l'installazione)")
+)
+(set #str-reboot-before-install (cat
+	"Il programma di installazione ha rilevato che un'applicazione "
+	"attualmente in esecuzione sta usando AmiSSL. Per favore "
+	"chiudi tutte le applicazioni che stanno usando AmiSSL e "
+	"riavvia nuovamente l'installazione.\n\n"
+	"Se il messaggio persiste, riavvia il computer e riprova.")
+)
+(set #str-deleting-certs "Eliminazione dei vecchi certificati")
+(set #str-amiupdate-copyfile "Copia dei file tramite AmiUpdate:\n%s\n\nNel cassetto:\n%s")
+(set #str-cpu-68k (cat
+	"AmiSSL è disponibile in due versioni ottimizzate per processori diversi. "
+	"Quale versione di AmiSSL si desidera installare?")
+)
+(set #str-cleaning-old-libs "Eliminazione delle vecchie librerie ridondanti")
+
+))
 
 ; ///
 
