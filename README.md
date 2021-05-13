@@ -2,7 +2,6 @@
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/amissl/latest/total.svg)](https://github.com/jens-maus/amissl/releases/latest)
-[![HitCount](http://hits.dwyl.com/jens-maus/amissl.svg)](http://hits.dwyl.com/jens-maus/amissl)
 [![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/amissl/latest.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
