@@ -1,19 +1,77 @@
+# AmiSSL Release build
 name: release
+
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 jobs:
-  check:
+  release_draft:
+    name: Release draft
+    runs-on: ubuntu-20.04
+    outputs:
+      upload_url: ${{ steps.release_drafter.outputs.upload_url }}
+      version: ${{ steps.env.outputs.version }}
+      date: ${{ steps.env.outputs.date }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Environment
+      id: env
+      shell: bash
+        BUILD_DATE=$(date +%Y%m%d)
+        VERSION=$(grep ^VERSION= Makefile | awk -F= '{ print $2 }')
+        AMISSLMASTERREVISION=$(grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }')
+        echo "::set-output name=version::${VERSION}.${AMISSLMASTERREVISION}"
+        echo "::set-output name=date::${BUILD_DATE}"
+
+    - name: Get previous tag
+      id: previoustag
+      uses: WyriHaximus/github-action-get-previous-tag@v1.1
+
+    - name: Generate changelog
+      id: changelog
+      uses: metcalfc/changelog-generator@v1.0.0
+      with:
+        myToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate release notes
+      shell: bash
+      run: |
+        export CHANGELOG="$(tac <<'EOF'
+        ${{ steps.changelog.outputs.changelog }}
+        EOF
+        )"
+        export VERSION=${{ steps.env.outputs.version }}
+        export PREVIOUS_TAG=${{ steps.previoustag.outputs.tag }}
+        envsubst <.github/release-template.md >/tmp/release-template.md
+
+    - name: Create release draft
+      id: release_drafter
+      uses: ncipollo/release-action@v1.8.6
+      with:
+        tag: ${{ steps.env.outputs.version }}
+        name: 'AmiSSL ${{ steps.env.outputs.version }}'
+        bodyFile: /tmp/release-template.md
+        draft: true
+        prerelease: false
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Release build
     runs-on: ubuntu-20.04
     timeout-minutes: 480
+    needs: release_draft
 
     strategy:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - name: setup dependencies
       run: |
@@ -25,6 +83,7 @@ jobs:
     - name: setup env
       run : |
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >>$GITHUB_ENV
+        echo "BUILD_DATE=$(date +'%Y%m%d')" >>$GITHUB_ENV
 
     - name: install adtools build env
       run: |
@@ -37,13 +96,10 @@ jobs:
         #curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C /
 
-    - name: cleanup old action artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
-
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
-    #  if: matrix.platform == 'os4'
 
+    # major build step
     - name: build AmiSSL release
       timeout-minutes: 480
       run: |
@@ -54,7 +110,40 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: |
-          AmiSSL-*.lha
-          AmiSSL-*.readme
-        name: AmiSSL-${{ env.GITHUB_SHA7 }}
+          AmiSSL-${{ needs.release_draft.outputs.version }}.lha
+          AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
+          AmiSSL-${{ needs.release_draft.outputs.version }}.readme
+        name: AmiSSL-${{ needs.release_draft.outputs.version }}-${{ env.GITHUB_SHA7 }}
       continue-on-error: true
+
+    #######################
+    # release uploads
+    - name: Upload release archive
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.lha
+        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.lha
+        asset_content_type: application/x-lha
+
+    - name: Upload release archive [sha256]
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
+        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
+        asset_content_type: text/plain
+
+    - name: Upload release archive [readme]
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.readme
+        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.readme
+        asset_content_type: text/plain
