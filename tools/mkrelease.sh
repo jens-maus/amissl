@@ -95,5 +95,6 @@ echo "  MK AmiSSL-$releasever.$releaserev.lha"
 cd release
 rm -f ../AmiSSL-$releasever.$releaserev.lha
 lha -ao5q21 ../AmiSSL-$releasever.$releaserev.lha *
+(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev.lha >AmiSSL-$releasever.$releaserev.lha.sha256)
 cp ../dist/AmiSSL.readme ../AmiSSL-$releasever.$releaserev.readme
 cd ..
