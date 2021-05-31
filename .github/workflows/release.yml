@@ -1,5 +1,5 @@
 # AmiSSL Release build
-name: release
+name: Release Build
 
 on:
   workflow_dispatch:
@@ -22,6 +22,7 @@ jobs:
     - name: Setup Environment
       id: env
       shell: bash
+      run: |
         BUILD_DATE=$(date +%Y%m%d)
         VERSION=$(grep ^VERSION= Makefile | awk -F= '{ print $2 }')
         AMISSLMASTERREVISION=$(grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }')
