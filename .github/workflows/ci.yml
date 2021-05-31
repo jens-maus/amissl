@@ -2,6 +2,7 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -44,9 +45,6 @@ jobs:
         #if [[ ${{ matrix.platform }} =~ aros-i386|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-x86_64|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C / ; fi
 
-    - name: cleanup old action artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
-
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
     #  if: matrix.platform == 'os4'
@@ -66,3 +64,14 @@ jobs:
           build_${{ matrix.platform }}/amisslmaster.library*
         name: AmiSSL-${{ matrix.platform }}-${{ env.GITHUB_SHA7 }}-${{ matrix.build }}
       continue-on-error: true
+
+  cleanup:
+    name: Cleanup artifacts/packages
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1.2.0
+        with:
+          age: '2 months'
+          skip-tags: true
+          skip-recent: 15
