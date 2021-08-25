@@ -1,5 +1,6 @@
 /build_*
 /release
 /*.lha
+/*.lha.sha256
 /*.readme
 .DS_Store
