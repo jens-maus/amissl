@@ -58,9 +58,9 @@ static struct {
 } GlobalTimer;
 
 #if defined(__amigaos4__)
-static size_t read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort *port)
+static void read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort *port)
 {
-	unsigned char temp_buffer[SHA_DIGEST_LENGTH], data_buffer[SHA_DIGEST_LENGTH];
+	unsigned char temp_buffer[SHA256_DIGEST_LENGTH], data_buffer[SHA256_DIGEST_LENGTH];
 	struct IOStdReq *entropy_request;
 
 	if ((entropy_request = (struct IOStdReq *)CreateIORequest(port, sizeof(*entropy_request))))
@@ -76,8 +76,8 @@ static size_t read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort 
 				if (DoIO((struct IORequest *)entropy_request) == 0)
 				{
 					size_t bytes_read = entropy_request->io_Actual;
+					SHA256(&temp_buffer[0], bytes_read, &data_buffer[0]);
 					if (bytes_read > bytes_needed) bytes_read = bytes_needed;
-					SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
 					rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
 					bytes_needed -= bytes_read;
 				}
@@ -90,7 +90,6 @@ static size_t read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort 
 		}
 		DeleteIORequest((struct IORequest *)entropy_request);
 	}
-        return bytes_needed;
 }
 #endif /* __amigaos4__ */
 
@@ -102,23 +101,28 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 {
 	struct TimeRequest *time_request;
 	struct MsgPort *port = NULL;
-	size_t bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
+	size_t bytes_needed;
+
+	#if defined(__amigaos4__)
+	bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
 
 	if ((bytes_needed > 0) && (port = CreateMsgPort()))
 	{
-#if defined(__amigaos4__)
-		bytes_needed = read_entropy(pool,bytes_needed,port);
-#endif
+		read_entropy(pool,bytes_needed,port);
 	}
+	#endif
 
 	/* The following block will be used on "classic" machines. It does not generate
 	 * a high degree of randomness, but it does the job since rand_pool_acquire_entropy
 	 * is usually called infrequently by OpenSSL to generate a 32 byte seed.
 	 */
-	if ((bytes_needed > 0) && port &&
+	bytes_needed = rand_pool_bytes_needed(pool, 4 /*entropy_factor*/);
+
+	if ((bytes_needed > 0) &&
+	    (port || (port = CreateMsgPort())) &&
 	    (time_request = (struct TimeRequest *)CreateIORequest(port, sizeof(*time_request))))
 	{
-		if (OpenDevice(TIMERNAME, UNIT_VBLANK, &time_request->Request, 0) == 0)
+		if (OpenDevice(TIMERNAME, UNIT_MICROHZ, &time_request->Request, 0) == 0)
 		{
 			#if defined(__amigaos4__)
 			struct TimerIFace *ITimer;
@@ -129,7 +133,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 			if ((TimerBase = time_request->Request.io_Device))
 			#endif
 			{
-				unsigned char temp_buffer[SHA_DIGEST_LENGTH], data_buffer[SHA_DIGEST_LENGTH];
+				unsigned char temp_buffer[SHA256_DIGEST_LENGTH], data_buffer[SHA256_DIGEST_LENGTH];
 				struct EClockVal curr_eclock;
 				ULONG prev_ev_lo = 0;
 				struct TimeVal tv;
@@ -185,10 +189,9 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 					 */
 					if (!aborted)
 					{
-						size_t bytes_read = sizeof(data_buffer) / 4;
-						if (bytes_read > bytes_needed) bytes_read = bytes_needed;
-						SHA1(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-						rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
+						size_t bytes_read = (bytes_needed < sizeof(data_buffer)) ? bytes_needed : sizeof(data_buffer);
+						SHA256(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
+						rand_pool_add(pool, &data_buffer[0], bytes_read, 2 * bytes_read);
 						bytes_needed -= bytes_read;
 					}
 				}
@@ -287,7 +290,7 @@ int rand_pool_init(void)
 	{
 		if ((GlobalTimer.time_request = (struct TimeRequest *)CreateIORequest(port, sizeof(*GlobalTimer.time_request))))
 		{
-			if (OpenDevice(TIMERNAME, UNIT_VBLANK, &GlobalTimer.time_request->Request, 0) == 0)
+			if (OpenDevice(TIMERNAME, UNIT_MICROHZ, &GlobalTimer.time_request->Request, 0) == 0)
 			{
 #if defined(__amigaos4__)
 				if (GlobalTimer.time_request->Request.io_Device)

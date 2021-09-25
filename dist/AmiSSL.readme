@@ -2,13 +2,13 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.10
+Version:      4.11
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.10 of the open-source based AmiSSL library for Amiga based
+This is version 4.11 of the open-source based AmiSSL library for Amiga based
 operating systems. Version 4.x is a new major release which comes with full
 compatibility to the OpenSSL 1.1.x line which includes important security
 related fixes, TLSv1.3 and comes with new encryption ciphers which are
@@ -32,6 +32,15 @@ AmiSSLv3 will continue to work properly.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.11 (xx.10.2021):
+------------------------
+- Legacy entropy generation is now faster on OS3 machines, with the
+  removal of delays caused by using the vblank timer, which typically
+  causes AmiSSL to initialise 2 seconds faster (#57).
+- Fixed legacy entropy generation to correctly use an entropy factor of 4,
+  as originally intended, which was broken since AmiSSL 4.3 (#57).
+- Entropy generation now uses SHA-256 instead of SHA-1.
 
 Version 4.10 (25.08.2021):
 ------------------------
