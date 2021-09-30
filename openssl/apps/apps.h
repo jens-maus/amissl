@@ -83,6 +83,10 @@ void wait_for_async(SSL *s);
 # if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
 int has_stdin_waiting(void);
 # endif
+# if defined(OPENSSL_SYS_AMIGA)
+// Mixing stdio/printf with DOS/BIO_printf is a bad idea, so avoid stdio
+# define printf(...) BIO_printf(bio_out, __VA_ARGS__)
+# endif
 
 void corrupt_signature(const ASN1_STRING *signature);
 int set_cert_times(X509 *x, const char *startdate, const char *enddate,
