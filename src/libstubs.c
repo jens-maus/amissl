@@ -4,14 +4,50 @@
 #include <proto/dos.h>
 #include <proto/amissl.h>
 
-#ifndef __amigaos4__
-static BPTR ErrorOutput(void)
+static BOOL IsSameFile(BPTR a, BPTR b)
 {
-  struct Process *proc = (struct Process *)FindTask(NULL);
+  BOOL same = FALSE;
 
-  return(proc->pr_CES);
+  #if defined(__amigaos4__)
+  if (DOSBase->lib_Version > 53 || (DOSBase->lib_Version == 53 && DOSBase->lib_Revision >= 71))
+  {
+    if (SameFH(a,b) == FH_SAME) same = TRUE;
+  }
+  else
+  #endif
+  {
+    BPTR lock1, lock2;
+    if (lock1 = DupLockFromFH(a))
+    {
+      if (lock2 = DupLockFromFH(b))
+      {
+        if (SameLock(lock1,lock2) == LOCK_SAME)
+          same = TRUE;
+        UnLock(lock2);
+      }
+      UnLock(lock1);
+    }
+  }
+
+  return same;
 }
-#endif /* !__amigaos4 */
+
+static BPTR GetErrorOutput(void)
+{
+  BPTR fh, output = Output();
+
+  #if defined(__amigaos4__)
+  fh = ErrorOutput();
+  #else
+  struct Process *proc = (struct Process *)FindTask(NULL);
+  fh = proc->pr_CES;
+  #endif
+
+  if ((fh != output) && output && (!fh || IsSameFile(fh,output)))
+    fh = output;
+
+  return fh;
+}
 
 /* Only stdin, stdout and stderr are used in OpenSSL test applications
  * and openssl program, so the following function should cover all cases.
@@ -20,10 +56,10 @@ static BPTR GetFileBPTR(const char *func_name, FILE *fp)
 {
   BPTR ret;
 
-  if (fp == stdout || (fp == stderr && !ErrorOutput()))
+  if (fp == stdout)
     ret = Output();
   else if (fp == stderr)
-    ret = ErrorOutput();
+    ret = GetErrorOutput();
   else if (fp == stdin)
     ret = Input();
   else
