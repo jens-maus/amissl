@@ -495,9 +495,9 @@ $(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_assl_newlib.o
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
-$(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o
+$(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o $(BUILD_D)/appsoutput.o
 	@echo "  AR $@"
-	@$(AR) r $@ $<
+	@$(AR) r $@ $(BUILD_D)/libstubs.o $(BUILD_D)/appsoutput.o
 	@$(RANLIB) $@
 
 $(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
@@ -540,6 +540,10 @@ $(BUILD_D)/autoinit_assl_newlib.o: $(SRC_D)/autoinit_amissl_main.c
 $(BUILD_D)/libstubs.o: $(SRC_D)/libstubs.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL $(INCLUDE)
+
+$(BUILD_D)/appsoutput.o: $(SRC_D)/appsoutput.c
+	@echo "  CC $<"
+	@$(CC) $(CFLAGS) $(NOBASEREL) -c $< -o $@ $(INCLUDE)
 
 $(BUILD_D)/debug.o: $(SRC_D)/debug.c
 	@echo "  CC $<"

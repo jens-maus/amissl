@@ -17,9 +17,9 @@ static BOOL IsSameFile(BPTR a, BPTR b)
   #endif
   {
     BPTR lock1, lock2;
-    if (lock1 = DupLockFromFH(a))
+    if ((lock1 = DupLockFromFH(a)))
     {
-      if (lock2 = DupLockFromFH(b))
+      if ((lock2 = DupLockFromFH(b)))
       {
         if (SameLock(lock1,lock2) == LOCK_SAME)
           same = TRUE;
