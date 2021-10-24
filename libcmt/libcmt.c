@@ -59,7 +59,13 @@ void __init_libcmt(void)
   InitSemaphore(&__mem_cs);
 
 #if defined(__amigaos4__)
-  __mem_pool = AllocSysObjectTags(ASOT_MEMPOOL, ASOPOOL_MFlags, MEMF_PRIVATE, ASOPOOL_Puddle, 8192, ASOPOOL_Threshold, 4096, ASOPOOL_Name, "AmiSSL", TAG_DONE);
+  __mem_pool = AllocSysObjectTags(ASOT_MEMPOOL,
+				  ASOPOOL_MFlags, MEMF_SHARED,
+				  ASOPOOL_LockMem, FALSE,
+				  ASOPOOL_Puddle, 8192,
+				  ASOPOOL_Threshold, 4096,
+				  ASOPOOL_Name, "AmiSSL",
+				  TAG_DONE);
 #else
   __mem_pool = CreatePool(MEMF_ANY, 8192, 4096);
 #endif

@@ -41,6 +41,7 @@ Version 4.11 (xx.10.2021):
 - Fixed legacy entropy generation to correctly use an entropy factor of 4,
   as originally intended, which was broken since AmiSSL 4.3 (#57).
 - Entropy generation now uses SHA-256 instead of SHA-1.
+- Tweaked OS4 memory allocations to prevent locking.
 - Fixed issues when redirecting OpenSSL tool output to a file (#58).
 - Added Ctrl-C break detection to the OpenSSL tool.
 

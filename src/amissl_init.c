@@ -23,7 +23,7 @@ extern struct DosLibrary *DOSBase;
 
 #ifdef __amigaos4__
 
-#define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, TAG_DONE)
+#define SB_AllocVec(s,t)    AllocVecTags(s, AVT_Type, MEMF_SHARED, AVT_Lock, FALSE, TAG_DONE)
 #define SB_FreeVec          FreeVec
 
 #else
