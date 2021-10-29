@@ -92,7 +92,7 @@ jobs:
         curl -L ${DOWNLOAD_PATH}/adtools-utils.tar.bz2 | sudo tar xj -C /
         curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
         curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
-        curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
+        curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-ppc-aros.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C /

@@ -53,7 +53,7 @@ jobs:
     - name: build ${{ matrix.platform }}-${{ matrix.build }}
       timeout-minutes: 480
       run: |
-        sudo rm /usr/local/amiga/bin/ppc-amigaos-strip
+        if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then sudo rm /usr/local/amiga/bin/ppc-amigaos-strip ; fi
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         if [[ ${{ matrix.build }} =~ release ]]; then make -j1 OS=${{ matrix.platform }} DEBUG= ; fi
         if [[ ${{ matrix.build }} =~ debug ]]; then make -j1 OS=${{ matrix.platform }} ; fi
