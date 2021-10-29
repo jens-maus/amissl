@@ -40,6 +40,7 @@ jobs:
         curl -L ${DOWNLOAD_PATH}/adtools-utils.tar.bz2 | sudo tar xj -C /
         if [[ ${{ matrix.platform }} =~ os3-68020|os3-68060|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
         if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
+        if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ mos|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-ppc|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-aros.tar.bz2 | sudo tar xj -C / ; fi
         #if [[ ${{ matrix.platform }} =~ aros-i386|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C / ; fi
@@ -52,6 +53,7 @@ jobs:
     - name: build ${{ matrix.platform }}-${{ matrix.build }}
       timeout-minutes: 480
       run: |
+        rm /usr/local/amiga/bin/ppc-amigaos-strip
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         if [[ ${{ matrix.build }} =~ release ]]; then make -j1 OS=${{ matrix.platform }} DEBUG= ; fi
         if [[ ${{ matrix.build }} =~ debug ]]; then make -j1 OS=${{ matrix.platform }} ; fi

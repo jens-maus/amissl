@@ -27,7 +27,7 @@ for os in ${OS}; do
 	case $os in
 	    os3-68020)   fullsys="AmigaOS3" strip="m68k-amigaos-strip" libdir="/68020-40";;
 	    os3-68060)   fullsys="AmigaOS3" strip="m68k-amigaos-strip" libdir="/68060";;
-	    os4)         fullsys="AmigaOS4" strip="ppc-amigaos-strip";;
+	    os4)         fullsys="AmigaOS4" strip="ppc-amigaos-strip --strip-unneeded-rel-relocs";;
 	    mos)         fullsys="MorphOS"  strip="ppc-morphos-strip";;
 	    aros-i386)   fullsys="AROS-i386";;
 	    aros-ppc)    fullsys="AROS-ppc";;

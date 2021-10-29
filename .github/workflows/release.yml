@@ -92,6 +92,7 @@ jobs:
         curl -L ${DOWNLOAD_PATH}/adtools-utils.tar.bz2 | sudo tar xj -C /
         curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
         curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
+        curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-ppc-aros.tar.bz2 | sudo tar xj -C /
         #curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C /
@@ -104,6 +105,7 @@ jobs:
     - name: build AmiSSL release
       timeout-minutes: 480
       run: |
+        rm /usr/local/amiga/bin/ppc-amigaos-strip
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         make -j1 release
 
