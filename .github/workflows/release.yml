@@ -105,7 +105,7 @@ jobs:
     - name: build AmiSSL release
       timeout-minutes: 480
       run: |
-        rm /usr/local/amiga/bin/ppc-amigaos-strip
+        sudo rm /usr/local/amiga/bin/ppc-amigaos-strip
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         make -j1 release
 
