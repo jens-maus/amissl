@@ -35,6 +35,8 @@ Requirements:
 
 Version 4.11 (30.10.2021):
 ------------------------
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 26.10.2021.
 - Legacy entropy generation is now faster on OS3 machines, with the
   removal of delays caused by using the vblank timer, which typically
   causes AmiSSL to initialise 2 seconds faster (#57).
@@ -55,7 +57,7 @@ Version 4.10 (25.08.2021):
   + Fixed various read buffer overruns processing ASN.1 strings
     (CVE-2021-3712).
 - Updated root certificates to latest Mozilla-based bundle provided
-  by https://curl.haxx.se/ca/
+  by https://curl.haxx.se/ca/ dated 05.07.2021.
 - Added Italian installer translation.
 
 Version 4.9 (02.04.2021):
