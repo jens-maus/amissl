@@ -33,7 +33,7 @@ Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
-Version 4.11 (xx.10.2021):
+Version 4.11 (30.10.2021):
 ------------------------
 - Legacy entropy generation is now faster on OS3 machines, with the
   removal of delays caused by using the vblank timer, which typically
@@ -41,9 +41,10 @@ Version 4.11 (xx.10.2021):
 - Fixed legacy entropy generation to correctly use an entropy factor of 4,
   as originally intended, which was broken since AmiSSL 4.3 (#57).
 - Entropy generation now uses SHA-256 instead of SHA-1.
-- Tweaked OS4 memory allocations to prevent locking.
+- Tweaked OS4 memory allocations to not be locked.
 - Fixed issues when redirecting OpenSSL tool output to a file (#58).
 - Added Ctrl-C break detection to the OpenSSL tool.
+- OS4 binaries now stripped further with --strip-unneeded-rel-relocs.
 
 Version 4.10 (25.08.2021):
 ------------------------
