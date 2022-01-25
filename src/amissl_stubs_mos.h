@@ -3751,7 +3751,7 @@ LIBSTUB(RSA_bits, int);
 LIBSTUB(RSA_check_key_ex, int);
 LIBSTUB(RSA_PKCS1_OpenSSL, const RSA_METHOD *);
 LIBSTUB(RSA_security_bits, int);
-LIBSTUB(RSA_X931_derive_ex, int);
+LIBSTUB(OBSOLETE_RSA_X931_derive_ex, int);
 LIBSTUB(RSA_X931_generate_key_ex, int);
 LIBSTUB(TS_CONF_set_signer_digest, int);
 LIBSTUB(TS_RESP_CTX_set_signer_digest, int);
@@ -4764,6 +4764,8 @@ LIBSTUB(X509_ALGOR_copy, int);
 LIBSTUB(X509_REQ_set0_signature, void);
 LIBSTUB(X509_REQ_set1_signature_algo, int);
 LIBSTUB(EC_KEY_decoded_from_explicit_params, int);
+LIBSTUB(RSA_X931_derive_ex_amiga_1, int);
+LIBSTUB(RSA_X931_derive_ex_amiga_2, void *);
 
 #ifdef __cplusplus
 }

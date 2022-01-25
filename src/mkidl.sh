@@ -2,11 +2,12 @@
 
 # idltool minimum version check
 idltool_minver=53.28
-[ `idltool | grep -c $idltool_minver` -eq 0 ] && { echo "idltool $idltool_minver required - please upgrade"; exit 1; }
+[ "`idltool | head -c13 | tail -c5`" \< "$idltool_minver" ] && { echo "idltool $idltool_minver required - please upgrade"; exit 1; }
 
 # amissl.library 
 tmp=`mktemp -d`
 idltool -a -g ../include/xml/amissl.xml -o ${tmp}
+sed -Ei 's/(\s)OBSOLETE_/\1/g' ${tmp}/amissl_glue.c
 patch ${tmp}/amissl_glue.c < amissl_glue.patch
 cp ${tmp}/amissl_glue.c .
 cp ${tmp}/amissl_glue.h .

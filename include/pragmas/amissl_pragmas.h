@@ -22466,10 +22466,10 @@
  #pragma amicall(AmiSSLBase, 0x65e8, RSA_security_bits(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RSA_X931_derive_ex 65ee c76543210ba98013
+ #pragma libcall AmiSSLBase OBSOLETE_RSA_X931_derive_ex 65ee c76543210ba98013
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x65ee, RSA_X931_derive_ex(a0,a1,a2,a3,d0,d1,d2,d3,d4,d5,d6,d7,a4))
+ #pragma amicall(AmiSSLBase, 0x65ee, OBSOLETE_RSA_X931_derive_ex(a0,a1,a2,a3,d0,d1,d2,d3,d4,d5,d6,d7,a4))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase RSA_X931_generate_key_ex 65f4 190804
@@ -28550,6 +28550,18 @@
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLBase, 0x7e06, EC_KEY_decoded_from_explicit_params(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase RSA_X931_derive_ex_amiga_1 7e0c b210a9807
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7e0c, RSA_X931_derive_ex_amiga_1(a0,a1,a2,d0,d1,d2,a3))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLBase RSA_X931_derive_ex_amiga_2 7e12 b210a9807
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLBase, 0x7e12, RSA_X931_derive_ex_amiga_2(a0,a1,a2,d0,d1,d2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 
 #endif /* PRAGMAS_AMISSL_PRAGMAS_H */

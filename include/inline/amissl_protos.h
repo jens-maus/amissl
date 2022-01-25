@@ -11236,8 +11236,8 @@ const RSA_METHOD * __RSA_PKCS1_OpenSSL(__reg("a6") struct Library * ) = "\tjsr\t
 int __RSA_security_bits(__reg("a6") struct Library * , __reg("a0") const RSA * rsa ) = "\tjsr\t-26088(a6)";
 #define RSA_security_bits(rsa) __RSA_security_bits(AmiSSLBase, (rsa))
 
-int __RSA_X931_derive_ex(__reg("a6") struct Library * , __reg("a0") RSA * rsa , __reg("a1") BIGNUM * p1 , __reg("a2") BIGNUM * p2 , __reg("a3") BIGNUM * q1 , __reg("d0") BIGNUM * q2 , __reg("d1") const BIGNUM * Xp1 , __reg("d2") const BIGNUM * Xp2 , __reg("d3") const BIGNUM * Xp , __reg("d4") const BIGNUM * Xq1 , __reg("d5") const BIGNUM * Xq2 , __reg("d6") const BIGNUM * Xq , __reg("d7") const BIGNUM * e , __reg("a4") BN_GENCB * cb ) = "\tjsr\t-26094(a6)";
-#define RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb) __RSA_X931_derive_ex(AmiSSLBase, (rsa), (p1), (p2), (q1), (q2), (Xp1), (Xp2), (Xp), (Xq1), (Xq2), (Xq), (e), (cb))
+int __OBSOLETE_RSA_X931_derive_ex(__reg("a6") struct Library * , __reg("a0") RSA * rsa , __reg("a1") BIGNUM * p1 , __reg("a2") BIGNUM * p2 , __reg("a3") BIGNUM * q1 , __reg("d0") BIGNUM * q2 , __reg("d1") const BIGNUM * Xp1 , __reg("d2") const BIGNUM * Xp2 , __reg("d3") const BIGNUM * Xp , __reg("d4") const BIGNUM * Xq1 , __reg("d5") const BIGNUM * Xq2 , __reg("d6") const BIGNUM * Xq , __reg("d7") const BIGNUM * e , __reg("a4") BN_GENCB * cb ) = "\tjsr\t-26094(a6)";
+#define OBSOLETE_RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb) __OBSOLETE_RSA_X931_derive_ex(AmiSSLBase, (rsa), (p1), (p2), (q1), (q2), (Xp1), (Xp2), (Xp), (Xq1), (Xq2), (Xq), (e), (cb))
 
 int __RSA_X931_generate_key_ex(__reg("a6") struct Library * , __reg("a0") RSA * rsa , __reg("d0") int bits , __reg("a1") const BIGNUM * e , __reg("d1") BN_GENCB * cb ) = "\tjsr\t-26100(a6)";
 #define RSA_X931_generate_key_ex(rsa, bits, e, cb) __RSA_X931_generate_key_ex(AmiSSLBase, (rsa), (bits), (e), (cb))
@@ -14279,5 +14279,11 @@ int __X509_REQ_set1_signature_algo(__reg("a6") struct Library * , __reg("a0") X5
 
 int __EC_KEY_decoded_from_explicit_params(__reg("a6") struct Library * , __reg("a0") const EC_KEY * key ) = "\tjsr\t-32262(a6)";
 #define EC_KEY_decoded_from_explicit_params(key) __EC_KEY_decoded_from_explicit_params(AmiSSLBase, (key))
+
+int __RSA_X931_derive_ex_amiga_1(__reg("a6") struct Library * , __reg("a0") RSA * rsa , __reg("a1") BIGNUM * p1 , __reg("a2") BIGNUM * p2 , __reg("d0") BIGNUM * q1 , __reg("d1") BIGNUM * q2 , __reg("d2") const BIGNUM * Xp1 , __reg("a3") void * moreargs ) = "\tjsr\t-32268(a6)";
+#define RSA_X931_derive_ex_amiga_1(rsa, p1, p2, q1, q2, Xp1, moreargs) __RSA_X931_derive_ex_amiga_1(AmiSSLBase, (rsa), (p1), (p2), (q1), (q2), (Xp1), (moreargs))
+
+void * __RSA_X931_derive_ex_amiga_2(__reg("a6") struct Library * , __reg("a0") const BIGNUM * Xp2 , __reg("a1") const BIGNUM * Xp , __reg("a2") const BIGNUM * Xq1 , __reg("d0") const BIGNUM * Xq2 , __reg("d1") const BIGNUM * Xq , __reg("d2") const BIGNUM * e , __reg("a3") BN_GENCB * cb ) = "\tjsr\t-32274(a6)";
+#define RSA_X931_derive_ex_amiga_2(Xp2, Xp, Xq1, Xq2, Xq, e, cb) __RSA_X931_derive_ex_amiga_2(AmiSSLBase, (Xp2), (Xp), (Xq1), (Xq2), (Xq), (e), (cb))
 
 #endif /* !_INLINE_AMISSL_H */

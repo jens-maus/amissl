@@ -4364,7 +4364,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_RSA_check_key_ex
 	    FPTR IAmiSSL_RSA_PKCS1_OpenSSL
 	    FPTR IAmiSSL_RSA_security_bits
-	    FPTR IAmiSSL_RSA_X931_derive_ex
+	    FPTR IAmiSSL_OBSOLETE_RSA_X931_derive_ex
 	    FPTR IAmiSSL_RSA_X931_generate_key_ex
 	    FPTR IAmiSSL_TS_CONF_set_signer_digest
 	    FPTR IAmiSSL_TS_RESP_CTX_set_signer_digest
@@ -5394,6 +5394,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_REQ_set0_signature
 	    FPTR IAmiSSL_X509_REQ_set1_signature_algo
 	    FPTR IAmiSSL_EC_KEY_decoded_from_explicit_params
+	    FPTR IAmiSSL_RSA_X931_derive_ex_amiga_1
+	    FPTR IAmiSSL_RSA_X931_derive_ex_amiga_2
 	LABEL AmiSSLIFace_SIZE
 
 #endif

@@ -22968,8 +22968,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const RSA *, (___rsa), A0), \
      struct Library *, AMISSL_BASE_NAME, 4348, Amissl)
 
-#define RSA_X931_derive_ex(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
-      AROS_LC13(int, RSA_X931_derive_ex, \
+#define OBSOLETE_RSA_X931_derive_ex(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
+      AROS_LC13(int, OBSOLETE_RSA_X931_derive_ex, \
  AROS_LCA(RSA *, (___rsa), A0), \
  AROS_LCA(BIGNUM *, (___p1), A1), \
  AROS_LCA(BIGNUM *, (___p2), A2), \
@@ -28738,5 +28738,27 @@ typedef ULONG _sfdc_vararg;
       AROS_LC1(int, EC_KEY_decoded_from_explicit_params, \
  AROS_LCA(const EC_KEY *, (___key), A0), \
      struct Library *, AMISSL_BASE_NAME, 5377, Amissl)
+
+#define RSA_X931_derive_ex_amiga_1(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___moreargs) \
+      AROS_LC7(int, RSA_X931_derive_ex_amiga_1, \
+ AROS_LCA(RSA *, (___rsa), A0), \
+ AROS_LCA(BIGNUM *, (___p1), A1), \
+ AROS_LCA(BIGNUM *, (___p2), A2), \
+ AROS_LCA(BIGNUM *, (___q1), D0), \
+ AROS_LCA(BIGNUM *, (___q2), D1), \
+ AROS_LCA(const BIGNUM *, (___Xp1), D2), \
+ AROS_LCA(void *, (___moreargs), A3), \
+     struct Library *, AMISSL_BASE_NAME, 5378, Amissl)
+
+#define RSA_X931_derive_ex_amiga_2(___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
+      AROS_LC7(void *, RSA_X931_derive_ex_amiga_2, \
+ AROS_LCA(const BIGNUM *, (___Xp2), A0), \
+ AROS_LCA(const BIGNUM *, (___Xp), A1), \
+ AROS_LCA(const BIGNUM *, (___Xq1), A2), \
+ AROS_LCA(const BIGNUM *, (___Xq2), D0), \
+ AROS_LCA(const BIGNUM *, (___Xq), D1), \
+ AROS_LCA(const BIGNUM *, (___e), D2), \
+ AROS_LCA(BN_GENCB *, (___cb), A3), \
+     struct Library *, AMISSL_BASE_NAME, 5379, Amissl)
 
 #endif /* !_INLINE_AMISSL_H */

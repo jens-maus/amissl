@@ -38,6 +38,7 @@ Version 4.12 (xx.2.2022):
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1m (14.12.2021) version, which brings security and bug fixes.
+- Fixed RSA_X931_derive_ex() from not being reachable on OS3
 
 Version 4.11 (30.10.2021):
 ------------------------

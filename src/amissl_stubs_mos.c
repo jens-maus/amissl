@@ -37883,9 +37883,9 @@ int LIBSTUB_RSA_security_bits(void)
   return LIB_RSA_security_bits(_base, ___rsa);
 }
 
-int LIB_RSA_X931_derive_ex(struct Library * _base, RSA * ___rsa, BIGNUM * ___p1, BIGNUM * ___p2, BIGNUM * ___q1, BIGNUM * ___q2, const BIGNUM * ___Xp1, const BIGNUM * ___Xp2, const BIGNUM * ___Xp, const BIGNUM * ___Xq1, const BIGNUM * ___Xq2, const BIGNUM * ___Xq, const BIGNUM * ___e, BN_GENCB * ___cb);
+int LIB_OBSOLETE_RSA_X931_derive_ex(struct Library * _base, RSA * ___rsa, BIGNUM * ___p1, BIGNUM * ___p2, BIGNUM * ___q1, BIGNUM * ___q2, const BIGNUM * ___Xp1, const BIGNUM * ___Xp2, const BIGNUM * ___Xp, const BIGNUM * ___Xq1, const BIGNUM * ___Xq2, const BIGNUM * ___Xq, const BIGNUM * ___e, BN_GENCB * ___cb);
 
-int LIBSTUB_RSA_X931_derive_ex(void)
+int LIBSTUB_OBSOLETE_RSA_X931_derive_ex(void)
 {
   RSA * ___rsa = (RSA *)REG_A0;
   BIGNUM * ___p1 = (BIGNUM *)REG_A1;
@@ -37901,7 +37901,7 @@ int LIBSTUB_RSA_X931_derive_ex(void)
   const BIGNUM * ___e = (const BIGNUM *)REG_D7;
   BN_GENCB * ___cb = (BN_GENCB *)REG_A4;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_RSA_X931_derive_ex(_base, ___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb);
+  return LIB_OBSOLETE_RSA_X931_derive_ex(_base, ___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb);
 }
 
 int LIB_RSA_X931_generate_key_ex(struct Library * _base, RSA * ___rsa, int ___bits, const BIGNUM * ___e, BN_GENCB * ___cb);
@@ -47699,6 +47699,36 @@ int LIBSTUB_EC_KEY_decoded_from_explicit_params(void)
   const EC_KEY * ___key = (const EC_KEY *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_decoded_from_explicit_params(_base, ___key);
+}
+
+int LIB_RSA_X931_derive_ex_amiga_1(struct Library * _base, RSA * ___rsa, BIGNUM * ___p1, BIGNUM * ___p2, BIGNUM * ___q1, BIGNUM * ___q2, const BIGNUM * ___Xp1, void * ___moreargs);
+
+int LIBSTUB_RSA_X931_derive_ex_amiga_1(void)
+{
+  RSA * ___rsa = (RSA *)REG_A0;
+  BIGNUM * ___p1 = (BIGNUM *)REG_A1;
+  BIGNUM * ___p2 = (BIGNUM *)REG_A2;
+  BIGNUM * ___q1 = (BIGNUM *)REG_D0;
+  BIGNUM * ___q2 = (BIGNUM *)REG_D1;
+  const BIGNUM * ___Xp1 = (const BIGNUM *)REG_D2;
+  void * ___moreargs = (void *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RSA_X931_derive_ex_amiga_1(_base, ___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___moreargs);
+}
+
+void * LIB_RSA_X931_derive_ex_amiga_2(struct Library * _base, const BIGNUM * ___Xp2, const BIGNUM * ___Xp, const BIGNUM * ___Xq1, const BIGNUM * ___Xq2, const BIGNUM * ___Xq, const BIGNUM * ___e, BN_GENCB * ___cb);
+
+void * LIBSTUB_RSA_X931_derive_ex_amiga_2(void)
+{
+  const BIGNUM * ___Xp2 = (const BIGNUM *)REG_A0;
+  const BIGNUM * ___Xp = (const BIGNUM *)REG_A1;
+  const BIGNUM * ___Xq1 = (const BIGNUM *)REG_A2;
+  const BIGNUM * ___Xq2 = (const BIGNUM *)REG_D0;
+  const BIGNUM * ___Xq = (const BIGNUM *)REG_D1;
+  const BIGNUM * ___e = (const BIGNUM *)REG_D2;
+  BN_GENCB * ___cb = (BN_GENCB *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RSA_X931_derive_ex_amiga_2(_base, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb);
 }
 
 

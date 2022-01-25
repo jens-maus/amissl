@@ -17935,7 +17935,7 @@
     <method name="RSA_security_bits" result="int">
       <arg name="rsa" type="const RSA *" m68kreg="a0"/>
     </method>
-    <method name="RSA_X931_derive_ex" result="int">
+    <method name="OBSOLETE_RSA_X931_derive_ex" result="int">
       <arg name="rsa" type="RSA *" m68kreg="a0"/>
       <arg name="p1" type="BIGNUM *" m68kreg="a1"/>
       <arg name="p2" type="BIGNUM *" m68kreg="a2"/>
@@ -21772,6 +21772,27 @@
     </method>
     <method name="EC_KEY_decoded_from_explicit_params" result="int">
       <arg name="key" type="const EC_KEY *" m68kreg="a0"/>
+    </method>
+
+    <!-- AmiSSL v4.12 - OpenSSL 1.1.1m -->
+    <!-- SPLIT RSA_X931_derive_ex (not enough registers) -->
+    <method name="RSA_X931_derive_ex_amiga_1" result="int">
+      <arg name="rsa" type="RSA *" m68kreg="a0"/>
+      <arg name="p1" type="BIGNUM *" m68kreg="a1"/>
+      <arg name="p2" type="BIGNUM *" m68kreg="a2"/>
+      <arg name="q1" type="BIGNUM *" m68kreg="d0"/>
+      <arg name="q2" type="BIGNUM *" m68kreg="d1"/>
+      <arg name="Xp1" type="const BIGNUM *" m68kreg="d2"/>
+      <arg name="moreargs" type="void *" m68kreg="a3"/>
+    </method>
+    <method name="RSA_X931_derive_ex_amiga_2" result="void *">
+      <arg name="Xp2" type="const BIGNUM *" m68kreg="a0"/>
+      <arg name="Xp" type="const BIGNUM *" m68kreg="a1"/>
+      <arg name="Xq1" type="const BIGNUM *" m68kreg="a2"/>
+      <arg name="Xq2" type="const BIGNUM *" m68kreg="d0"/>
+      <arg name="Xq" type="const BIGNUM *" m68kreg="d1"/>
+      <arg name="e" type="const BIGNUM *" m68kreg="d2"/>
+      <arg name="cb" type="BN_GENCB *" m68kreg="a3"/>
     </method>
 
   </interface>

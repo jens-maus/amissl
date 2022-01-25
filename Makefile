@@ -213,6 +213,7 @@ ifeq ($(OS), os4)
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_library_os4.o \
                  $(BUILD_D)/amissl_glue.o \
+                 $(BUILD_D)/amissl_glue_extra.o \
                  $(BUILD_D)/amissl_m68k.o
 
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_m68k.o
@@ -245,7 +246,7 @@ ifeq ($(OS), os3-68020)
   GCCVER    = 2
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
-                 $(BUILD_D)/amissl_glue_a4a5.o
+                 $(BUILD_D)/amissl_glue_extra.o
 
 else
 ifeq ($(OS), os3-68060)
@@ -273,7 +274,7 @@ ifeq ($(OS), os3-68060)
   GCCVER    = 2
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
-                 $(BUILD_D)/amissl_glue_a4a5.o
+                 $(BUILD_D)/amissl_glue_extra.o
 
 else
 ifeq ($(OS), mos)
@@ -300,7 +301,8 @@ ifeq ($(OS), mos)
   BRELLIB   = #-mrestore-a4
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_stubs_mos.o \
-                 $(BUILD_D)/amissl_glue.o
+                 $(BUILD_D)/amissl_glue.o \
+                 $(BUILD_D)/amissl_glue_extra.o
 
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_stubs_mos.o
 
@@ -562,10 +564,6 @@ $(BUILD_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 $(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
 	@$(CC) $(CFLAGS) -I./openssl/crypto/include -I./openssl -I./openssl/include -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
-
-$(BUILD_D)/amissl_glue_a4a5.o: $(SRC_D)/amissl_glue_a4a5.S
-	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
 
 # cleanup target
 .PHONY: clean

@@ -242,10 +242,25 @@ int RSA_generate_key_ex(RSA *rsa, int bits, BIGNUM *e, BN_GENCB *cb);
 int RSA_generate_multi_prime_key(RSA *rsa, int bits, int primes,
                                  BIGNUM *e, BN_GENCB *cb);
 
+# if defined(OPENSSL_SYS_AMIGA)
+int RSA_X931_derive_ex_amiga_1(RSA *rsa, BIGNUM *p1, BIGNUM *p2,
+                               BIGNUM *q1, BIGNUM *q2,
+                               const BIGNUM *Xp1, void *moreargs);
+void *RSA_X931_derive_ex_amiga_2(const BIGNUM *Xp2, const BIGNUM *Xp,
+                                 const BIGNUM *Xq1, const BIGNUM *Xq2,
+                                 const BIGNUM *Xq, const BIGNUM *e,
+                                 BN_GENCB *cb);
+#  if !defined(AMISSL_COMPILE)
+#   define RSA_X931_derive_ex(rsa,p1,p2,q1,q2,Xp1,Xp2,Xp,Xq1,Xq2,Xq,e,cb) \
+     RSA_X931_derive_ex_amiga_1(rsa,p1,p2,q1,q2,Xp1,                      \
+     RSA_X931_derive_ex_amiga_2(Xp2,Xp,Xq1,Xq2,Xq,e,cb))
+#  else
 int RSA_X931_derive_ex(RSA *rsa, BIGNUM *p1, BIGNUM *p2, BIGNUM *q1,
                        BIGNUM *q2, const BIGNUM *Xp1, const BIGNUM *Xp2,
                        const BIGNUM *Xp, const BIGNUM *Xq1, const BIGNUM *Xq2,
                        const BIGNUM *Xq, const BIGNUM *e, BN_GENCB *cb);
+#  endif
+# endif
 int RSA_X931_generate_key_ex(RSA *rsa, int bits, const BIGNUM *e,
                              BN_GENCB *cb);
 

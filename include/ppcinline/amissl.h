@@ -14977,8 +14977,8 @@ typedef ULONG _sfdc_vararg;
       LP1(0x65e8, int, RSA_security_bits , const RSA *, ___rsa, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define RSA_X931_derive_ex(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
-      LP13(0x65ee, int, RSA_X931_derive_ex , RSA *, ___rsa, a0, BIGNUM *, ___p1, a1, BIGNUM *, ___p2, a2, BIGNUM *, ___q1, a3, BIGNUM *, ___q2, d0, const BIGNUM *, ___Xp1, d1, const BIGNUM *, ___Xp2, d2, const BIGNUM *, ___Xp, d3, const BIGNUM *, ___Xq1, d4, const BIGNUM *, ___Xq2, d5, const BIGNUM *, ___Xq, d6, const BIGNUM *, ___e, d7, BN_GENCB *, ___cb, d7,\
+#define OBSOLETE_RSA_X931_derive_ex(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
+      LP13(0x65ee, int, OBSOLETE_RSA_X931_derive_ex , RSA *, ___rsa, a0, BIGNUM *, ___p1, a1, BIGNUM *, ___p2, a2, BIGNUM *, ___q1, a3, BIGNUM *, ___q2, d0, const BIGNUM *, ___Xp1, d1, const BIGNUM *, ___Xp2, d2, const BIGNUM *, ___Xp, d3, const BIGNUM *, ___Xq1, d4, const BIGNUM *, ___Xq2, d5, const BIGNUM *, ___Xq, d6, const BIGNUM *, ___e, d7, BN_GENCB *, ___cb, d7,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define RSA_X931_generate_key_ex(___rsa, ___bits, ___e, ___cb) \
@@ -19032,6 +19032,14 @@ typedef ULONG _sfdc_vararg;
 
 #define EC_KEY_decoded_from_explicit_params(___key) \
       LP1(0x7e06, int, EC_KEY_decoded_from_explicit_params , const EC_KEY *, ___key, a0,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define RSA_X931_derive_ex_amiga_1(___rsa, ___p1, ___p2, ___q1, ___q2, ___Xp1, ___moreargs) \
+      LP7(0x7e0c, int, RSA_X931_derive_ex_amiga_1 , RSA *, ___rsa, a0, BIGNUM *, ___p1, a1, BIGNUM *, ___p2, a2, BIGNUM *, ___q1, d0, BIGNUM *, ___q2, d1, const BIGNUM *, ___Xp1, d2, void *, ___moreargs, a3,\
+      , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define RSA_X931_derive_ex_amiga_2(___Xp2, ___Xp, ___Xq1, ___Xq2, ___Xq, ___e, ___cb) \
+      LP7(0x7e12, void *, RSA_X931_derive_ex_amiga_2 , const BIGNUM *, ___Xp2, a0, const BIGNUM *, ___Xp, a1, const BIGNUM *, ___Xq1, a2, const BIGNUM *, ___Xq2, d0, const BIGNUM *, ___Xq, d1, const BIGNUM *, ___e, d2, BN_GENCB *, ___cb, a3,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #endif /* !_PPCINLINE_AMISSL_H */

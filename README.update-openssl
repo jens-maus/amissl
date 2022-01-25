@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2021 AmiSSL Open Source Team
+ Copyright (C) 2006-2022 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -73,25 +73,26 @@ HowTo update the OpenSSL version in "openssl/":
    include/xml/amissl.xml
 
    When changing the "include/xml/amissl.xml" file the following rules apply:
-   -> don't remove any function but flag them as "unimplemented"
+   -> don't remove any function, but instead flag them as "unimplemented"
    -> only add new functions to the bottom of the xml file and not between
       existing function definitions.
    -> 'va_list' types won't work, have a look at how "long *" is used instead
       (e.g. for BIO_printf)
    -> be sure to declare varargs functions directly after their stdargs
-      counterpart, as this is critical for the m68k build
+      counterpart, as this is critical for the m68k build.
    -> follow existing m68k register allocation rules, prioritising d0-d7 for
       non-pointer arguments and a0-a3 for pointers, incrementally using them in
-      the order of the arguments, using a4 only after exhausting the other 12
-      registers, with the exception of...
+      the order of the arguments. Do not use any other registers (a4 and a5 are
+      problematic, so never use them).
    -> make sure 64-bit arguments (e.g. double, long long, uint64_t, int64_t)
       explictly declare the m68k 32-bit register pair to use (e.g. d0-d1).
       Additionally, for VBCC compatibility, try to use only even pairs (i.e.
       either d0-d1, d2-d3, d4-d5 or d6-d7) and reallocate other arguments to help.
-   -> a4 and a5 are best avoided because GCC has trouble when these are used. If
-      there is no other choice, then you will need to write the reg->stack
-      stub function in assembler, adding it to amissl_glue_a4a5.s and updating
-      amissl_glue.patch accordingly to remove the C version for OS3 only
+   -> if a function has a large number of arguments, requiring more than 12 m68k
+      registers, you should split this into two functions and use a macro to join
+      them back up. See RSA_X931_derive_ex for an example. Try to split register
+      usage as equally as possible between the two functions, to help compilers
+      generate better code.
 
    NOTE: tools/newXMLhelper.pl can be used to help with this, cross-referencing
    various files and finally generating the required xml output which you may
