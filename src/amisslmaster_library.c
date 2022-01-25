@@ -206,7 +206,8 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
     // but we must take care to prevent applications requiring newer API functions
     // from loading older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V111l && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111l.library", 4) == NULL
+    if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111m.library", 4) == NULL
+                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111l.library", 4) == NULL
                                      && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111k.library", 4) == NULL
                                      && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL
                                      && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)

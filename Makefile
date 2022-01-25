@@ -2,7 +2,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
-# Copyright (C) 2006-2021 AmiSSL Open Source Team
+# Copyright (C) 2006-2022 AmiSSL Open Source Team
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -149,11 +149,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=4
-VERSIONNAME=111l
-AMISSLREVISION=11
-AMISSLMASTERREVISION=11
-AMISSLDATE=30.10.2021
-AMISSLMASTERDATE=30.10.2021
+VERSIONNAME=111m
+AMISSLREVISION=12
+AMISSLMASTERREVISION=12
+AMISSLDATE=25.1.2022
+AMISSLMASTERDATE=25.1.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)

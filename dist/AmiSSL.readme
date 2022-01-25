@@ -2,13 +2,13 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.11
+Version:      4.12
 Replaces:     util/libs/AmiSSL-*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.11 of the open-source based AmiSSL library for Amiga based
+This is version 4.12 of the open-source based AmiSSL library for Amiga based
 operating systems. Version 4.x is a new major release which comes with full
 compatibility to the OpenSSL 1.1.x line which includes important security
 related fixes, TLSv1.3 and comes with new encryption ciphers which are
@@ -32,6 +32,12 @@ AmiSSLv3 will continue to work properly.
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 4.12 (xx.2.2022):
+------------------------
+
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 1.1.1m (14.12.2021) version, which brings security and bug fixes.
 
 Version 4.11 (30.10.2021):
 ------------------------
