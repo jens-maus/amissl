@@ -1,0 +1,211 @@
+*asm:
+--traditional-format %(asm_cpu) %{.s: %{mregnames} %{mno-regnames}} %{.S: %{mregnames} %{mno-regnames}} %{v:-V} %{Qy:} %{!Qn:-Qy} %{n} %{T} %{Ym,*} %{Yd,*} %{Wa,*:%*} %{mrelocatable} %{mrelocatable-lib} %{fpic|fpie|fPIC|fPIE:-K PIC} %{memb|msdata|msdata=eabi: -memb} %{mlittle|mlittle-endian:-mlittle;   mbig|mbig-endian      :-mbig;      mcall-aixdesc |		     mcall-freebsd |		     mcall-netbsd  |		     mcall-openbsd |		     mcall-linux   |		     mcall-gnu             :-mbig;      mcall-i960-old        :-mlittle}
+
+*asm_debug:
+%{gstabs*:--gstabs}%{!gstabs*:%{g*:--gdwarf2}}
+
+*asm_final:
+
+
+*asm_options:
+%a %Y %{c:%W{o*}%{!o*:-o %w%b%O}}%{!c:-o %d%w%u%O}
+
+*invoke_as:
+%{!S:-o %|.s |
+ as %(asm_options) %|.s %A }
+
+*cpp:
+%{posix: -D_POSIX_SOURCE} %(cpp_os_default)
+
+*cpp_options:
+%(cpp_unique_options) %1 %{m*} %{std*&ansi&trigraphs} %{W*&pedantic*} %{w} %{f*} %{g*:%{!g0:%{!fno-working-directory:-fworking-directory}}} %{O*} %{undef} %{save-temps:-fpch-preprocess}
+
+*cpp_debug_options:
+%{d*}
+
+*cpp_unique_options:
+%{C|CC:%{!E:%eGCC does not support -C or -CC without -E}} %{!Q:-quiet} %{nostdinc*} %{C} %{CC} %{v} %{I*&F*} %{P} %I %{MD:-MD %{!o:%b.d}%{o*:%.d%*}} %{MMD:-MMD %{!o:%b.d}%{o*:%.d%*}} %{M} %{MM} %{MF*} %{MG} %{MP} %{MQ*} %{MT*} %{!E:%{!M:%{!MM:%{MD|MMD:%{o*:-MQ %*}}}}} %{remap} %{g3:-dD} %{H} %C %{D*&U*&A*} %{i*} %Z %i %{fmudflap:-D_MUDFLAP -include mf-runtime.h} %{fmudflapth:-D_MUDFLAP -D_MUDFLAPTH -include mf-runtime.h} %{E|M|MM:%W{o*}}
+
+*trad_capable_cpp:
+cc1 -E %{traditional|ftraditional|traditional-cpp:-traditional-cpp}
+
+*cc1:
+%{G*} %{mlittle|mlittle-endian: %(cc1_endian_little);             mbig   |mbig-endian   : %(cc1_endian_big);                mcall-aixdesc |					    mcall-freebsd |					    mcall-netbsd  |					    mcall-openbsd |					    mcall-linux   |					    mcall-gnu             : -mbig %(cc1_endian_big);          mcall-i960-old        : -mlittle %(cc1_endian_little);                          : %(cc1_endian_default)}          %{mno-sdata: -msdata=none } %{meabi: %{!mcall-*: -mcall-sysv }} %{!meabi: %{!mno-eabi:     %{mrelocatable: -meabi }     %{mcall-freebsd: -mno-eabi }     %{mcall-i960-old: -meabi }     %{mcall-linux: -mno-eabi }     %{mcall-gnu: -mno-eabi }     %{mcall-netbsd: -mno-eabi }     %{mcall-openbsd: -mno-eabi }}} %{msdata: -msdata=default} %{mno-sdata: -msdata=none} %{profile: -p}
+
+*cc1_options:
+%{pg:%{fomit-frame-pointer:%e-pg and -fomit-frame-pointer are incompatible}} %1 %{!Q:-quiet} -dumpbase %B %{d*} %{m*} %{a*} %{c|S:%{o*:-auxbase-strip %*}%{!o*:-auxbase %b}}%{!c:%{!S:-auxbase %b}} %{g*} %{O*} %{W*&pedantic*} %{w} %{std*&ansi&trigraphs} %{v:-version} %{pg:-p} %{p} %{f*} %{undef} %{Qn:-fno-ident} %{--help:--help} %{--target-help:--target-help} %{!fsyntax-only:%{S:%W{o*}%{!o*:-o %b.s}}} %{fsyntax-only:-o %j} %{-param*} %{fmudflap|fmudflapth:-fno-builtin -fno-merge-constants}
+
+*cc1plus:
+
+
+*link_gcc_c_sequence:
+%G %L %G
+
+*endfile:
+%{mcrt=clib2|mcrt=clib2-ts: %(endfile_clib2); mcrt=ixemul: %(endfile_ixemul); mcrt=libnix: %(endfile_libnix); mcrt=newlib: %(endfile_newlib); mcrt=default|!mcrt=*: %(endfile_amiga_default); : %eInvalid C runtime library}
+
+*link:
+%{!static:--eh-frame-hdr} --defsym __amigaos4__=1 -q -d %{h*} %{v:-V} %{G*} %{Wl,*:%*} %{YP,*} %{R*} %{Qy:} %{!Qn:-Qy} %{mbaserel: %{msdata|msdata=default|msdata=sysv: %e-mbaserel and -msdata options are incompatible}} %{mcrt=clib2|mcrt=clib2-ts: %(link_clib2); mcrt=ixemul: %(link_ixemul); mcrt=libnix: %(link_libnix); mcrt=newlib: %(link_newlib); mcrt=default|!mcrt=*: %(link_amiga_default); : %eInvalid C runtime library} -L%(base_sdk)local/common/lib%(lib_subdir_type) %{newlib: %e-newlib is obsolete, use -mcrt=newlib instead}
+
+*lib:
+--start-group -lc --end-group
+
+*mfwrap:
+ %{static: %{fmudflap|fmudflapth:  --wrap=malloc --wrap=free --wrap=calloc --wrap=realloc --wrap=mmap --wrap=munmap --wrap=alloca} %{fmudflapth: --wrap=pthread_create --wrap=pthread_join --wrap=pthread_exit}} %{fmudflap|fmudflapth: --wrap=main}
+
+*mflib:
+%{fmudflap|fmudflapth: -export-dynamic}
+
+*libgcc:
+-lgcc
+
+*startfile:
+%{mcrt=clib2|mcrt=clib2-ts: %(startfile_clib2); mcrt=ixemul: %(startfile_ixemul); mcrt=libnix: %(startfile_libnix); mcrt=newlib: %(startfile_newlib); mcrt=default|!mcrt=*: %(startfile_amiga_default); : %eInvalid C runtime library}
+
+*switches_need_spaces:
+
+
+*cross_compile:
+1
+
+*version:
+4.0.4
+
+*multilib:
+. !msoft-float;soft-float msoft-float;
+
+*multilib_defaults:
+mbig mcall-sysv
+
+*multilib_extra:
+
+
+*multilib_matches:
+msoft-float msoft-float;
+
+*multilib_exclusions:
+
+
+*multilib_options:
+msoft-float
+
+*linker:
+collect2
+
+*link_libgcc:
+%D
+
+*md_exec_prefix:
+
+
+*md_startfile_prefix:
+
+
+*md_startfile_prefix_1:
+
+
+*startfile_prefix_spec:
+
+
+*sysroot_suffix_spec:
+
+
+*sysroot_hdrs_suffix_spec:
+
+
+*cpp_default:
+
+
+*asm_cpu:
+%{!mcpu*:   %{mpower: %{!mpower2: -mpwr}}   %{mpower2: -mpwrx}   %{mpowerpc64*: -mppc64}   %{!mpowerpc64*: %{mpowerpc*: -mppc}}   %{mno-power: %{!mpowerpc*: -mcom}}   %{!mno-power: %{!mpower*: %(asm_default)}}} %{mcpu=common: -mcom} %{mcpu=power: -mpwr} %{mcpu=power2: -mpwrx} %{mcpu=power3: -mppc64} %{mcpu=power4: -mpower4} %{mcpu=power5: -mpower4} %{mcpu=powerpc: -mppc} %{mcpu=rios: -mpwr} %{mcpu=rios1: -mpwr} %{mcpu=rios2: -mpwrx} %{mcpu=rsc: -mpwr} %{mcpu=rsc1: -mpwr} %{mcpu=rs64a: -mppc64} %{mcpu=401: -mppc} %{mcpu=403: -m403} %{mcpu=405: -m405} %{mcpu=405fp: -m405} %{mcpu=440: -m440} %{mcpu=440fp: -m440} %{mcpu=505: -mppc} %{mcpu=601: -m601} %{mcpu=602: -mppc} %{mcpu=603: -mppc} %{mcpu=603e: -mppc} %{mcpu=ec603e: -mppc} %{mcpu=604: -mppc} %{mcpu=604e: -mppc} %{mcpu=620: -mppc64} %{mcpu=630: -mppc64} %{mcpu=740: -mppc} %{mcpu=750: -mppc} %{mcpu=G3: -mppc} %{mcpu=7400: -mppc -maltivec} %{mcpu=7450: -mppc -maltivec} %{mcpu=G4: -mppc -maltivec} %{mcpu=801: -mppc} %{mcpu=821: -mppc} %{mcpu=823: -mppc} %{mcpu=860: -mppc} %{mcpu=970: -mpower4 -maltivec} %{mcpu=G5: -mpower4 -maltivec} %{mcpu=8540: -me500} %{maltivec: -maltivec}
+
+*asm_default:
+-mppc
+
+*base_gcc:
+/usr/local/amiga/
+
+*base_sdk:
+/usr/local/amiga/ppc-amigaos/SDK/
+
+*cpp_os_default:
+%{mcrt=clib2|mcrt=clib2-ts: %(cpp_clib2); mcrt=ixemul: %(cpp_ixemul); mcrt=libnix: %(cpp_libnix); mcrt=newlib: %(cpp_newlib); mcrt=default|!mcrt=*: %{mcrt=default|!nostdinc: %(cpp_amiga_default)}; : %eInvalid C runtime library} -isystem %(base_sdk)include/include_h -isystem %(base_sdk)include/netinclude -isystem %(base_sdk)local/common/include %{mbaserel: %{msdata|msdata=default|msdata=sysv: %e-mbaserel and -msdata options are incompatible}} %{newlib: %e-newlib is obsolete, use -mcrt=newlib instead}
+
+*lib_subdir_type:
+%{mbaserel:/baserel; msdata|msdata=default|msdata=sysv:/small-data}%{msoft-float:/soft-float}
+
+*cpp_amiga_default:
+%{mcrt=default|!mcrt=*:%<mcrt=default -mcrt=newlib} %(cpp_newlib)
+
+*link_amiga_default:
+%(link_newlib)
+
+*startfile_amiga_default:
+%(startfile_newlib)
+
+*endfile_amiga_default:
+%(endfile_newlib)
+
+*cpp_clib2:
+-isystem %(base_sdk)clib2/include -isystem %(base_sdk)local/clib2/include
+
+*lib_subdir_clib2:
+%{mcrt=clib2-ts:lib.threadsafe; :lib}%(lib_subdir_type)
+
+*link_clib2:
+-L%(base_sdk)clib2/%(lib_subdir_clib2) -L%(base_gcc)lib/gcc/ppc-amigaos/%(version)/%{mcrt=clib2-ts:clib2-ts; :clib2}/lib%(lib_subdir_type) -L%(base_sdk)local/clib2/%(lib_subdir_clib2)
+
+*startfile_clib2:
+%(base_sdk)clib2/%{mcrt=clib2-ts:lib.threadsafe; :lib}%{!msoft-float:%(lib_subdir_type)}/crtbegin.o %(base_sdk)clib2/%{mcrt=clib2-ts:lib.threadsafe; :lib}%{!msoft-float:%(lib_subdir_type)}/crt0.o
+
+*endfile_clib2:
+%(base_sdk)clib2/%{mcrt=clib2-ts:lib.threadsafe; :lib}%{!msoft-float:%(lib_subdir_type)}/crtend.o
+
+*cpp_ixemul:
+-isystem %(base_sdk)ixemul/include -isystem %(base_sdk)local/ixemul/include
+
+*lib_subdir_ixemul:
+lib%(lib_subdir_type)
+
+*link_ixemul:
+-L%(base_sdk)ixemul/%(lib_subdir_ixemul) -L%(base_gcc)lib/gcc/ppc-amigaos/%(version)/ixemul/%(lib_subdir_ixemul) -L%(base_sdk)local/ixemul/%(lib_subdir_ixemul)
+
+*startfile_ixemul:
+%(base_sdk)ixemul/%(lib_subdir_ixemul)/crtbegin.o
+
+*endfile_ixemul:
+%(base_sdk)ixemul/%(lib_subdir_ixemul)/crtend.o
+
+*cpp_libnix:
+-isystem %(base_sdk)libnix/include -isystem %(base_sdk)local/libnix/include
+
+*lib_subdir_libnix:
+lib%(lib_subdir_type)
+
+*link_libnix:
+-L%(base_sdk)libnix/%(lib_subdir_libnix) -L%(base_gcc)lib/gcc/ppc-amigaos/%(version)/libnix/%(lib_subdir_libnix) -L%(base_sdk)local/libnix/%(lib_subdir_libnix)
+
+*startfile_libnix:
+%(base_sdk)libnix/%(lib_subdir_libnix)/crtbegin.o
+
+*endfile_libnix:
+%(base_sdk)libnix/%(lib_subdir_libnix)/crtend.o
+
+*cpp_newlib:
+-isystem %(base_sdk)newlib/include -isystem %(base_sdk)local/newlib/include
+
+*lib_subdir_newlib:
+lib%(lib_subdir_type)
+
+*link_newlib:
+-L%(base_sdk)newlib/%(lib_subdir_newlib) -L%(base_gcc)lib/gcc/ppc-amigaos/%(version)/newlib/%(lib_subdir_newlib) -L%(base_sdk)local/newlib/%(lib_subdir_newlib)
+
+*startfile_newlib:
+%(base_sdk)newlib/%(lib_subdir_newlib)/crtbegin.o
+
+*endfile_newlib:
+%(base_sdk)newlib/%(lib_subdir_newlib)/crtend.o
+
+*link_command:
+%{!fsyntax-only:%{!c:%{!M:%{!MM:%{!E:%{!S:    %(linker) %l %{pie:} %X %{o*} %{A} %{d} %{e*} %{m} %{N} %{n} %{r}    %{s} %{t} %{u*} %{x} %{z} %{Z} %{!A:%{!nostdlib:%{!nostartfiles:%S}}}    %{static:} %{L*} %(mfwrap) %(link_libgcc) %o %(mflib)    %{fprofile-arcs|fprofile-generate:-lgcov}    %{!nostdlib:%{!nodefaultlibs:%(link_gcc_c_sequence)}}    %{!A:%{!nostdlib:%{!nostartfiles:%E}}} %{T*} }}}}}}
+
