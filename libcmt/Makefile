@@ -64,7 +64,7 @@ ifeq ($(OS), $(filter $(OS), os3-68020 os3-68060))
   endif
 
   # Compiler/Linker flags
-  CFLAGS  += -mcrt=clib2 -resident32 -I../include/netinclude -DNO_INLINE_STDARG -D__CLIB2__ -D__amigaos3__
+  CFLAGS  += -mcrt=clib2 -resident32 -I../include/netinclude -D__CLIB2__ -D__amigaos3__
   LDFLAGS += -mcrt=clib2
   LDLIBS  += -lm
 
@@ -234,7 +234,12 @@ INT64OBJS = $(BUILD_D)/int64_muldi3.o \
             $(BUILD_D)/int64_lshrdi3.o \
             $(BUILD_D)/int64_ashldi3.o
 
-LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(BUILD_D)/threadhash.o $(NWLIBOBJS) $(INT64OBJS) $(BUILD_D)/localtime.o $(BUILD_D)/libcmt.o
+MISCOBJS  = $(BUILD_D)/threadhash.o \
+            $(BUILD_D)/localtime.o \
+            $(BUILD_D)/showreq.o \
+            $(BUILD_D)/libcmt.o
+
+LIBOBJS = $(CLIB2OBJS) $(STDIOOBJS) $(NWLIBOBJS) $(INT64OBJS) $(MISCOBJS)
 
 $(BUILD_D)/libcmt.a: $(LIBOBJS)
 	@echo "  AR $@"

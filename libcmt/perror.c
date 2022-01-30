@@ -1,7 +1,7 @@
-#include <stdio.h>
+#include "libcmt.h"
 
 void perror(const char * s)
 {
   if(s != NULL)
-    fprintf(stderr,"%s\n",s);
+    ShowRequester(SR_ERROR,NULL,s,NULL);
 }

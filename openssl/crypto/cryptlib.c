@@ -409,27 +409,18 @@ void OPENSSL_showfatal(const char *fmta, ...)
 }
 #else
 #include <proto/exec.h>
-#include <proto/intuition.h>
-#include <intuition/intuition.h>
+#include <libcmt.h>
 
 void OPENSSL_showfatal(const char *fmta, ...)
 {
   va_list ap;
-  struct EasyStruct ErrReq;
   char error[512];
 
   va_start(ap, fmta);
   BIO_vsnprintf(error, sizeof(error), fmta, ap);
   va_end(ap);
 
-  ErrReq.es_StructSize   = sizeof(struct EasyStruct);
-  ErrReq.es_Flags        = 0;
-  ErrReq.es_Title        = "AmiSSL/OpenSSL internal error";
-  ErrReq.es_TextFormat   = error;
-  ErrReq.es_GadgetFormat = "Abort";
-
-  // Open an Easy Requester
-  EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
+  ShowRequester(SR_ERROR,NULL,error,"Suspend");
 }
 #endif /* !OPENSSL_SYS_AMIGA */
 
@@ -444,7 +435,11 @@ void OPENSSL_die(const char *message, const char *file, int line)
     OPENSSL_showfatal("%s:%d: OpenSSL internal error: %s\n",
                       file, line, message);
 #if !defined(_WIN32)
+# if defined(OPENSSL_SYS_AMIGA)
+    Wait(0);
+# else
     abort();
+# endif
 #else
     /*
      * Win32 abort() customarily shows a dialog, but we just did that...

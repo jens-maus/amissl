@@ -36,8 +36,4 @@ STDARGS int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
 
-enum SRType {SR_INFO, SR_WARNING, SR_ERROR, SR_QUESTION};
-LONG ShowRequester(enum SRType type, const char *title, const char *body,
-                   const char *gadgets);
-
 #endif /* !INTERNAL_AMISSL_H */
