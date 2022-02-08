@@ -38,6 +38,8 @@ Version 4.12 (xx.2.2022):
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1m (14.12.2021) version, which brings security and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 1.2.2022.
 - Fixed RSA_X931_derive_ex() from not being reachable on OS3.
 - Fixed crash after OpenSSL fatal error message requester shown.
 - Cleaned up and unified error requesters, removing redundant code.
