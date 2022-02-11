@@ -33,7 +33,7 @@ Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
 
-Version 4.12 (xx.2.2022):
+Version 4.12 (11.2.2022):
 ------------------------
 
 - Updated OpenSSL backend to full compatibility to latest
