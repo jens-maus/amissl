@@ -64,6 +64,10 @@ extern "C" {
         return (OPENSSL_sk_freefunc)fr; \
     }
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define SKM_DEFINE_STACK_OF(t1, t2, t3) \
+    STACK_OF(t1);
+# else
 # define SKM_DEFINE_STACK_OF(t1, t2, t3) \
     STACK_OF(t1); \
     typedef int (*sk_##t1##_compfunc)(const t3 * const *a, const t3 *const *b); \
@@ -174,6 +178,7 @@ extern "C" {
     { \
         return (sk_##t1##_compfunc)OPENSSL_sk_set_cmp_func((OPENSSL_STACK *)sk, (OPENSSL_sk_compfunc)compare); \
     }
+# endif
 
 # define DEFINE_STACK_OF(t) SKM_DEFINE_STACK_OF(t, t, t)
 # define DEFINE_STACK_OF_CONST(t) SKM_DEFINE_STACK_OF(t, const t, t)

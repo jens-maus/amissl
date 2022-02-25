@@ -474,7 +474,7 @@ int OPENSSL_INIT_set_config_appname(OPENSSL_INIT_SETTINGS *settings,
 # endif
 void OPENSSL_INIT_free(OPENSSL_INIT_SETTINGS *settings);
 
-# if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG)
+# if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG) && !defined(OPENSSL_SYS_AMIGA)
 #  if defined(_WIN32)
 #   if defined(BASETYPES) || defined(_WINDEF_H)
 /* application has to include <windows.h> in order to use this */

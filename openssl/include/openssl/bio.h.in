@@ -23,7 +23,7 @@ use OpenSSL::stackhash qw(generate_stack_macros);
 
 # include <openssl/e_os2.h>
 
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 #  include <stdio.h>
 # endif
 # include <stdarg.h>
@@ -463,8 +463,13 @@ struct bio_dgram_sctp_prinfo {
 # define BIO_get_fd(b,c)         BIO_ctrl(b,BIO_C_GET_FD,0,(char *)(c))
 
 /* BIO_s_file() */
+# ifndef OPENSSL_SYS_AMIGA
 # define BIO_set_fp(b,fp,c)      BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)(fp))
 # define BIO_get_fp(b,fpp)       BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)(fpp))
+# else
+# define BIO_set_fp_amiga(b,fp,c) BIO_ctrl(b,BIO_C_SET_FILE_PTR,c,(char *)(fp))
+# define BIO_get_fp_amiga(b,fpp)  BIO_ctrl(b,BIO_C_GET_FILE_PTR,0,(char *)(fpp))
+# endif
 
 /* BIO_s_fd() and BIO_s_file() */
 # define BIO_seek(b,ofs) (int)BIO_ctrl(b,BIO_C_FILE_SEEK,ofs,NULL)
@@ -599,8 +604,12 @@ int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
 const BIO_METHOD *BIO_s_file(void);
 BIO *BIO_new_file(const char *filename, const char *mode);
 BIO *BIO_new_from_core_bio(OSSL_LIB_CTX *libctx, OSSL_CORE_BIO *corebio);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 BIO *BIO_new_fp(FILE *stream, int close_flag);
+# endif
+# ifdef OPENSSL_SYS_AMIGA
+#  include <dos/dos.h>
+BIO *BIO_new_fp_amiga(BPTR stream, int close_flag);
 # endif
 BIO *BIO_new_ex(OSSL_LIB_CTX *libctx, const BIO_METHOD *method);
 BIO *BIO_new(const BIO_METHOD *type);
@@ -811,12 +820,22 @@ void BIO_copy_next_retry(BIO *b);
 # endif
 int BIO_printf(BIO *bio, const char *format, ...)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 2, 3)));
+# if !defined(OPENSSL_SYS_AMIGA) || defined(AMISSL_COMPILE)
 int BIO_vprintf(BIO *bio, const char *format, va_list args)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 2, 0)));
+# else
+int BIO_vprintf(BIO *bio, const char *format, long * args)
+ossl_bio__attr__((__format__(ossl_bio__printf__, 2, 0)));
+# endif
 int BIO_snprintf(char *buf, size_t n, const char *format, ...)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 3, 4)));
+# if !defined(OPENSSL_SYS_AMIGA) || defined(AMISSL_COMPILE)
 int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 3, 0)));
+# else
+int BIO_vsnprintf(char *buf, size_t n, const char *format, long * args)
+ossl_bio__attr__((__format__(ossl_bio__printf__, 3, 0)));
+# endif
 # undef ossl_bio__attr__
 # undef ossl_bio__printf__
 

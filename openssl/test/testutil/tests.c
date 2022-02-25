@@ -229,6 +229,28 @@ void VARARGS68K test_note(const char *fmt, ...)
     }
     test_flush_stderr();
 }
+
+
+int VARARGS68K test_skip(const char *file, int line, const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va("SKIP", file, line, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+    return TEST_SKIP_CODE;
+}
+
+int VARARGS68K test_skip_c90(const char *desc, ...)
+{
+    VA_LIST ap;
+
+    VA_START(ap, desc);
+    test_fail_message_va("SKIP", NULL, -1, NULL, NULL, NULL, NULL, desc, VA_ARG(ap, long *));
+    VA_END(ap);
+    test_printf_stderr("\n");
+    return TEST_SKIP_CODE;
+}
 #else
 void test_note(const char *fmt, ...)
 {
@@ -242,7 +264,6 @@ void test_note(const char *fmt, ...)
     }
     test_flush_stderr();
 }
-#endif
 
 
 int test_skip(const char *file, int line, const char *desc, ...)
@@ -265,6 +286,7 @@ int test_skip_c90(const char *desc, ...)
     test_printf_stderr("\n");
     return TEST_SKIP_CODE;
 }
+#endif
 
 
 void test_openssl_errors(void)

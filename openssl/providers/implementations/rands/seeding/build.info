@@ -5,6 +5,9 @@ ENDIF
 IF[{- $config{target} =~ /vms/i -}]
   $COMMON=$COMMON rand_vms.c
 ENDIF
+IF[{- $config{target} =~ /amiga/i -}]
+  $COMMON=$COMMON rand_amiga.c
+ENDIF
 
 SOURCE[../../../libdefault.a]=$COMMON
 

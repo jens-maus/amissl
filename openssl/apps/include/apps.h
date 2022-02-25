@@ -73,8 +73,30 @@ int app_load_modules(const CONF *config);
 CONF *app_load_config_modules(const char *configfile);
 void unbuffer(FILE *fp);
 void wait_for_async(SSL *s);
-# if defined(OPENSSL_SYS_MSDOS)
+# if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
 int has_stdin_waiting(void);
+# endif
+# if defined(OPENSSL_SYS_AMIGA)
+#  include <internal/amissl_compiler.h>
+// Mixing stdio/printf with DOS/BIO_printf is a bad idea, so avoid stdio
+VARARGS68K int assl_fprintf(FILE *fp, const char *fmt, ...);
+VARARGS68K int assl_bioprintf(BIO *bio, const char *fmt, ...);
+int assl_biovprintf(BIO *bio, const char *fmt, long *args);
+int assl_fputs(const char *str, FILE *fp);
+int assl_bioputs(BIO *bio, const char *str);
+int assl_fflush(FILE *fp);
+#  define printf(...) assl_bioprintf(bio_out, __VA_ARGS__)
+#  define puts(str) assl_bioputs(bio_out, str)
+#  define fprintf(fp, ...) assl_fprintf(fp, __VA_ARGS__)
+#  define fputs(str, fp) assl_fputs(str, fp)
+#  define fflush(fp) assl_fflush(fp)
+// Perform Ctrl-C checking after BIO_printf/puts()
+#  undef BIO_printf
+#  define BIO_printf assl_bioprintf
+#  undef BIO_vprintf
+#  define BIO_vprintf(bio, fmt, args) assl_biovprintf(bio, fmt, args)
+#  undef BIO_puts
+#  define BIO_puts(bio, str) assl_bioputs(bio, str)
 # endif
 
 void corrupt_signature(const ASN1_STRING *signature);
@@ -217,7 +239,12 @@ typedef struct ca_db_st {
 # endif
 } CA_DB;
 
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+void VARARGS68K app_bail_out(char *fmt, ...);
+#else
 void app_bail_out(char *fmt, ...);
+#endif
 void *app_malloc(size_t sz, const char *what);
 BIGNUM *load_serial(const char *serialfile, int create, ASN1_INTEGER **retai);
 int save_serial(const char *serialfile, const char *suffix, const BIGNUM *serial,

@@ -13,7 +13,7 @@
 # include "apps.h"
 
 # ifndef HAVE_FORK
-#  if defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_WINDOWS)
+#  if defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_AMIGA)
 #   define HAVE_FORK 0
 #  else
 #   define HAVE_FORK 1
@@ -52,7 +52,12 @@
  * fmt: message with potential extra parameters like with printf()
  * returns nothing
  */
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+void VARARGS68K log_message(const char *prog, int level, const char *fmt, ...);
+#else
 void log_message(const char *prog, int level, const char *fmt, ...);
+#endif
 
 # ifndef OPENSSL_NO_SOCK
 /*-

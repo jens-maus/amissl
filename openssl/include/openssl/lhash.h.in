@@ -165,6 +165,10 @@ void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *lh, BIO *out);
     } \
     LHASH_OF(type)
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define DEFINE_LHASH_OF(type) \
+    LHASH_OF(type)
+# else
 # define DEFINE_LHASH_OF(type) \
     LHASH_OF(type) { union lh_##type##_dummy { void* d1; unsigned long d2; int d3; } dummy; }; \
     static ossl_unused ossl_inline LHASH_OF(type) *lh_##type##_new(unsigned long (*hfn)(const type *), \
@@ -234,6 +238,7 @@ void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *lh, BIO *out);
                              (OPENSSL_LH_DOALL_FUNCARG)doallarg, arg); \
     } \
     LHASH_OF(type)
+# endif
 
 #define IMPLEMENT_LHASH_DOALL_ARG_CONST(type, argtype) \
     int_implement_lhash_doall(type, argtype, const type)

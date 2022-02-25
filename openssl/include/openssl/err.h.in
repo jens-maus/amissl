@@ -439,7 +439,7 @@ const char *ERR_reason_error_string(unsigned long e);
 
 void ERR_print_errors_cb(int (*cb) (const char *str, size_t len, void *u),
                          void *u);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 void ERR_print_errors_fp(FILE *fp);
 # endif
 void ERR_print_errors(BIO *bp);

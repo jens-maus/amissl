@@ -54,14 +54,26 @@ static int print_syslog(const char *str, size_t len, void *levPtr)
 }
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+void VARARGS68K log_message(const char *prog, int level, const char *fmt, ...)
+#else
 void log_message(const char *prog, int level, const char *fmt, ...)
+#endif
 {
+#if defined(OPENSSL_SYS_AMIGA)
+    VA_LIST ap;
+#else
     va_list ap;
+#endif
 
     if (verbosity < level)
         return;
 
+#if defined(OPENSSL_SYS_AMIGA)
+    VA_START(ap, fmt);
+#else
     va_start(ap, fmt);
+#endif
 #ifdef HTTP_DAEMON
     if (multi) {
         char buf[1024];
@@ -74,11 +86,19 @@ void log_message(const char *prog, int level, const char *fmt, ...)
 #endif
     {
         BIO_printf(bio_err, "%s: ", prog);
+#if defined(OPENSSL_SYS_AMIGA)
+        BIO_vprintf(bio_err, fmt, VA_ARG(ap, long *));
+#else
         BIO_vprintf(bio_err, fmt, ap);
+#endif
         BIO_printf(bio_err, "\n");
         (void)BIO_flush(bio_err);
     }
+#if defined(OPENSSL_SYS_AMIGA)
+    VA_END(ap);
+#else
     va_end(ap);
+#endif
 }
 
 #ifdef HTTP_DAEMON

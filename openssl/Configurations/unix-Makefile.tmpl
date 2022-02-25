@@ -1679,7 +1679,7 @@ EOF
       } else {
           if ($config{target} =~ /amiga/) {
 	      $recipe .= <<"EOF";
-$obj$objext: $deps
+$obj: $deps
 	$cmd $cmdflags $incs $defs $cmdcompile -o \$\@ $srcs
 EOF
 	  } else {

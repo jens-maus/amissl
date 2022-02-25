@@ -90,6 +90,40 @@ int load_key_certs_crls_suppress(const char *uri, int format, int maybe_stdin,
 
 int app_init(long mesgwin);
 
+#if defined(OPENSSL_SYS_AMIGA)
+
+#if !defined(__MORPHOS__)
+#include <sys/select.h>
+#endif
+
+#include <internal/amissl.h>
+
+#define XMKSTR(x) #x
+#define MKSTR(x)  XMKSTR(x)
+
+// stack cookie for shell v45+
+static const char USED_VAR openssl_stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
+
+#if defined(__amigaos4__)
+  long __stack_size = MIN_STACKSIZE;        // set the minimum startup stack for clib2
+  long __default_pool_size = 128*1024;   // set the pool & puddle size for the
+  long __default_puddle_size = 32*1024;  // AllocPool() functions to something more reasonable.
+#elif defined(__SASC) || defined(__GNUC__)
+  #if defined(__libnix__) || defined(__SASC)
+  // GCC (libnix) supports the same as SAS/C!
+  long NEAR __stack = MIN_STACKSIZE;
+  long NEAR __buffsize = 8192;
+  long NEAR _MSTEP = 16384;
+  #else
+  long __stack_size = MIN_STACKSIZE;    // set the minimum startup stack for clib2
+  #endif
+#elif defined(__VBCC__) /* starting with VBCC 0.8 release */
+  long __stack = MIN_STACKSIZE;
+#else
+  #error "initial stack/memory specification failed"
+#endif
+#endif
+
 int chopup_args(ARGS *arg, char *buf)
 {
     int quoted;
@@ -607,6 +641,18 @@ EVP_PKEY *load_keyparams(const char *uri, int format, int maybe_stdin,
     return load_keyparams_suppress(uri, format, maybe_stdin, keytype, desc, 0);
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+void VARARGS68K app_bail_out(char *fmt, ...)
+{
+    VA_LIST args;
+
+    VA_START(args, fmt);
+    BIO_vprintf(bio_err, fmt, VA_ARG(args, long *));
+    VA_END(args);
+    ERR_print_errors(bio_err);
+    exit(EXIT_FAILURE);
+}
+#else
 void app_bail_out(char *fmt, ...)
 {
     va_list args;
@@ -617,6 +663,7 @@ void app_bail_out(char *fmt, ...)
     ERR_print_errors(bio_err);
     exit(EXIT_FAILURE);
 }
+#endif
 
 void *app_malloc(size_t sz, const char *what)
 {
@@ -1625,7 +1672,7 @@ CA_DB *load_index(const char *dbfile, DB_ATTR *db_attr)
     if (in == NULL)
         goto err;
 
-#ifndef OPENSSL_NO_POSIX_IO
+#if !defined(OPENSSL_NO_POSIX_IO) && !defined(OPENSSL_SYS_AMIGA)
     BIO_get_fp(in, &dbfp);
     if (fstat(fileno(dbfp), &dbst) == -1) {
         ERR_raise_data(ERR_LIB_SYS, errno,
@@ -2364,6 +2411,15 @@ static X509_CRL *load_crl_crldp(STACK_OF(DIST_POINT) *crldp)
     return NULL;
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+static void stub_DIST_POINT_free(DIST_POINT *a)
+{
+  DIST_POINT_free(a);
+}
+#undef DIST_POINT_free
+#define DIST_POINT_free stub_DIST_POINT_free
+#endif
+
 /*
  * Example of downloading CRLs from CRLDP:
  * not usable for real world as it always downloads and doesn't cache anything.
@@ -2708,7 +2764,7 @@ double app_tminterval(int stop, int usertime)
     return ret;
 }
 
-#elif defined(_SC_CLK_TCK)      /* by means of unistd.h */
+#elif defined(_SC_CLK_TCK) && !defined(OPENSSL_SYS_AMIGA)      /* by means of unistd.h */
 # include <sys/times.h>
 
 double app_tminterval(int stop, int usertime)
@@ -2738,13 +2794,17 @@ double app_tminterval(int stop, int usertime)
 double app_tminterval(int stop, int usertime)
 {
     double ret = 0;
+    #if !defined(OPENSSL_SYS_AMIGA)
     struct rusage rus;
+    #endif
     struct timeval now;
     static struct timeval tmstart;
 
+    #if !defined(OPENSSL_SYS_AMIGA)
     if (usertime)
         getrusage(RUSAGE_SELF, &rus), now = rus.ru_utime;
     else
+    #endif
         gettimeofday(&now, NULL);
 
     if (stop == TM_START)
@@ -2968,6 +3028,7 @@ BIO *bio_open_owner(const char *filename, int format, int private)
     if (!private || filename == NULL || strcmp(filename, "-") == 0)
         return bio_open_default(filename, 'w', format);
 
+#ifndef OPENSSL_SYS_AMIGA
     textmode = FMT_istext(format);
 #ifndef OPENSSL_NO_POSIX_IO
     mode = O_WRONLY;
@@ -3009,6 +3070,9 @@ BIO *bio_open_owner(const char *filename, int format, int private)
     if (textmode)
         bflags |= BIO_FP_TEXT;
     b = BIO_new_fp(fp, bflags);
+#else  /* OPENSSL_SYS_AMIGA */
+    b = BIO_new_file(filename, modestr('w', format));
+#endif /* OPENSSL_SYS_AMIGA */
     if (b != NULL)
         return b;
 
@@ -3100,7 +3164,13 @@ void wait_for_async(SSL *s)
 }
 
 /* if OPENSSL_SYS_WINDOWS is defined then so is OPENSSL_SYS_MSDOS */
-#if defined(OPENSSL_SYS_MSDOS)
+#if defined(OPENSSL_SYS_MSDOS) || defined(OPENSSL_SYS_AMIGA)
+
+#ifdef OPENSSL_SYS_AMIGA
+#include <proto/dos.h>
+static int _kbhit(void) { return(WaitForChar(Input(), 0)); }
+#endif
+
 int has_stdin_waiting(void)
 {
 # if defined(OPENSSL_SYS_WINDOWS)
@@ -3214,6 +3284,18 @@ void make_uppercase(char *string)
 }
 
 /* This function is defined here due to visibility of bio_err */
+#if defined(OPENSSL_SYS_AMIGA)
+int VARARGS68K opt_printf_stderr(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = BIO_vprintf(bio_err, fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+    return ret;
+}
+#else
 int opt_printf_stderr(const char *fmt, ...)
 {
     va_list ap;
@@ -3224,6 +3306,7 @@ int opt_printf_stderr(const char *fmt, ...)
     va_end(ap);
     return ret;
 }
+#endif
 
 OSSL_PARAM *app_params_new_from_opts(STACK_OF(OPENSSL_STRING) *opts,
                                      const OSSL_PARAM *paramdefs)

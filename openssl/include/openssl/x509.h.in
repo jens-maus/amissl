@@ -801,7 +801,7 @@ unsigned long X509_NAME_hash_old(const X509_NAME *x);
 int X509_CRL_cmp(const X509_CRL *a, const X509_CRL *b);
 int X509_CRL_match(const X509_CRL *a, const X509_CRL *b);
 int X509_aux_print(BIO *out, X509 *x, int indent);
-# ifndef OPENSSL_NO_STDIO
+# if !defined(OPENSSL_NO_STDIO) || defined(OPENSSL_SYS_AMIGA)
 int X509_print_ex_fp(FILE *bp, X509 *x, unsigned long nmflag,
                      unsigned long cflag);
 int X509_print_fp(FILE *bp, X509 *x);

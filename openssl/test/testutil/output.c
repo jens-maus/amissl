@@ -9,6 +9,31 @@
 
 #include "output.h"
 
+#if defined(OPENSSL_SYS_AMIGA)
+int VARARGS68K test_printf_stdout(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = test_vprintf_stdout(fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+
+    return ret;
+}
+
+int VARARGS68K test_printf_stderr(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = test_vprintf_stderr(fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+
+    return ret;
+}
+#else
 int test_printf_stdout(const char *fmt, ...)
 {
     va_list ap;
@@ -32,6 +57,7 @@ int test_printf_stderr(const char *fmt, ...)
 
     return ret;
 }
+#endif
 
 int test_printf_tapout(const char *fmt, ...)
 {

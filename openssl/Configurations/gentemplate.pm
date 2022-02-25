@@ -432,7 +432,11 @@ sub dolib {
              lib => $lib, attrs => { %attrs },
              objs => [ @objs, @foreign_objs ]);
         foreach (@objs) {
-            $self->doobj($_, $lib, intent => "lib", attrs => { %attrs });
+            if ($self->{config}->{target} =~ /amiga/ && $lib =~ /lib(apps|testutil)\.a$/) {
+                $self->doobj($_, $lib, intent => "bin", attrs => { %attrs });
+            } else {
+                $self->doobj($_, $lib, intent => "lib", attrs => { %attrs });
+           }
         }
     }
     $cache{$lib} = 1;

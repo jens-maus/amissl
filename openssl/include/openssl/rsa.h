@@ -288,7 +288,6 @@ int RSA_X931_derive_ex(RSA *rsa, BIGNUM *p1, BIGNUM *p2,
                        const BIGNUM *e, BN_GENCB *cb);
 #  endif
 # endif
-
 OSSL_DEPRECATEDIN_3_0 int RSA_X931_generate_key_ex(RSA *rsa, int bits,
                                                    const BIGNUM *e,
                                                    BN_GENCB *cb);

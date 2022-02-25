@@ -93,6 +93,17 @@ int test_flush_stderr(void)
     return BIO_flush(bio_err);
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+int test_vprintf_tapout(const char *fmt, long *ap)
+{
+    return BIO_vprintf(tap_out, fmt, ap);
+}
+
+int test_vprintf_taperr(const char *fmt, long *ap)
+{
+    return BIO_vprintf(tap_err, fmt, ap);
+}
+#else
 int test_vprintf_tapout(const char *fmt, va_list ap)
 {
     return BIO_vprintf(tap_out, fmt, ap);
@@ -102,6 +113,7 @@ int test_vprintf_taperr(const char *fmt, va_list ap)
 {
     return BIO_vprintf(tap_err, fmt, ap);
 }
+#endif
 
 int test_flush_tapout(void)
 {

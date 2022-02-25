@@ -791,7 +791,11 @@ int BIO_lookup_ex(const char *host, const char *service, int lookup_type,
             he = &he_fallback;
             switch(lookup_type) {
             case BIO_LOOKUP_CLIENT:
+#ifdef OPENSSL_SYS_AMIGA
+                he_fallback_address = INADDR_ANY;
+#else
                 he_fallback_address = INADDR_LOOPBACK;
+#endif
                 break;
             case BIO_LOOKUP_SERVER:
                 he_fallback_address = INADDR_ANY;
@@ -819,7 +823,7 @@ int BIO_lookup_ex(const char *host, const char *service, int lookup_type,
                  * anyway [above getaddrinfo/gai_strerror is]. We just let
                  * system administrator figure this out...
                  */
-# if defined(OPENSSL_SYS_VXWORKS)
+# if defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_AMIGA)
                 /* h_errno doesn't exist on VxWorks */
                 ERR_raise_data(ERR_LIB_SYS, 1000,
                                "calling gethostbyname()");
