@@ -1,5 +1,4 @@
----
-name: Windows GitHub CI for 1.1.1
+name: Windows GitHub CI
 
 on: [pull_request, push]
 
@@ -9,13 +8,13 @@ jobs:
     strategy:
       matrix:
         os:
-        - windows-2019
-        - windows-2022
+          - windows-latest
+          - windows-2016
         platform:
-        - arch: win64
-          config: VC-WIN64A
-        - arch: win32
-          config: VC-WIN32 --strict-warnings
+          - arch: win64
+            config: VC-WIN64A enable-fips
+          - arch: win32
+            config: VC-WIN32 --strict-warnings no-fips
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v2
@@ -25,20 +24,19 @@ jobs:
     - uses: ilammy/setup-nasm@v1
       with:
         platform: ${{ matrix.platform.arch }}
-    - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
       run: mkdir _build
     - name: config
       working-directory: _build
       run: |
-        perl ..\Configure no-makedepend ${{ matrix.platform.config }}
+        perl ..\Configure --banner=Configured no-makedepend ${{ matrix.platform.config }}
         perl configdata.pm --dump
     - name: build
       working-directory: _build
       run: nmake /S
     - name: test
       working-directory: _build
-      run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz*
+      run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
     - name: install
       # Run on 64 bit only as 32 bit is slow enough already
       if: $${{ matrix.platform.arch == 'win64' }}
@@ -50,47 +48,45 @@ jobs:
     strategy:
       matrix:
         os:
-        - windows-2019
-        - windows-2022
+          - windows-latest
+          - windows-2016
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v2
     - uses: ilammy/msvc-dev-cmd@v1
-    - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
       run: mkdir _build
     - name: config
       working-directory: _build
       run: |
-        perl ..\Configure no-makedepend no-shared VC-WIN64A-masm
+        perl ..\Configure --banner=Configured no-makedepend no-shared no-fips VC-WIN64A-masm
         perl configdata.pm --dump
     - name: build
       working-directory: _build
       run: nmake /S
     - name: test
       working-directory: _build
-      run: nmake test VERBOSE_FAILURE=yes
+      run: nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4
   minimal:
     strategy:
       matrix:
         os:
-        - windows-2019
-        - windows-2022
+          - windows-latest
+          - windows-2016
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v2
     - uses: ilammy/msvc-dev-cmd@v1
-    - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
       run: mkdir _build
     - name: config
       working-directory: _build
       run: |
-        perl ..\Configure no-makedepend no-deprecated no-asm -DOPENSSL_SMALL_FOOTPRINT VC-WIN64A
+        perl ..\Configure --banner=Configured no-makedepend no-bulk no-deprecated no-fips no-asm -DOPENSSL_SMALL_FOOTPRINT VC-WIN64A
         perl configdata.pm --dump
     - name: build
       working-directory: _build
       run: nmake # verbose, so no /S here
     - name: test
       working-directory: _build
-      run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz*
+      run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
