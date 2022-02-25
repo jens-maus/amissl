@@ -1,6 +1,6 @@
 #include <openssl/rand.h>
 #include <openssl/sha.h>
-#include "rand_local.h"
+#include "crypto/rand_pool.h"
 #include "crypto/rand.h"
 
 #ifdef OPENSSL_SYS_AMIGA
@@ -78,7 +78,7 @@ static void read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort *p
 					size_t bytes_read = entropy_request->io_Actual;
 					SHA256(&temp_buffer[0], bytes_read, &data_buffer[0]);
 					if (bytes_read > bytes_needed) bytes_read = bytes_needed;
-					rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
+					ossl_rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
 					bytes_needed -= bytes_read;
 				}
 				else
@@ -97,14 +97,14 @@ static void read_entropy(RAND_POOL *pool, size_t bytes_needed, struct MsgPort *p
 ** This must be re-entrant as may be called by multiple tasks hence must
 ** always allocate our own port and requests and not use the global timer
 */
-size_t rand_pool_acquire_entropy(RAND_POOL *pool)
+size_t ossl_pool_acquire_entropy(RAND_POOL *pool)
 {
 	struct TimeRequest *time_request;
 	struct MsgPort *port = NULL;
 	size_t bytes_needed;
 
 	#if defined(__amigaos4__)
-	bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
+	bytes_needed = ossl_rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
 
 	if ((bytes_needed > 0) && (port = CreateMsgPort()))
 	{
@@ -116,7 +116,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 	 * a high degree of randomness, but it does the job since rand_pool_acquire_entropy
 	 * is usually called infrequently by OpenSSL to generate a 32 byte seed.
 	 */
-	bytes_needed = rand_pool_bytes_needed(pool, 4 /*entropy_factor*/);
+	bytes_needed = ossl_rand_pool_bytes_needed(pool, 4 /*entropy_factor*/);
 
 	if ((bytes_needed > 0) &&
 	    (port || (port = CreateMsgPort())) &&
@@ -191,7 +191,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 					{
 						size_t bytes_read = (bytes_needed < sizeof(data_buffer)) ? bytes_needed : sizeof(data_buffer);
 						SHA256(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-						rand_pool_add(pool, &data_buffer[0], bytes_read, 2 * bytes_read);
+						ossl_rand_pool_add(pool, &data_buffer[0], bytes_read, 2 * bytes_read);
 						bytes_needed -= bytes_read;
 					}
 				}
@@ -206,7 +206,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 
 	DeleteMsgPort(port);
 
-	return rand_pool_entropy_available(pool);
+	return ossl_rand_pool_entropy_available(pool);
 }
 
 /*
@@ -238,7 +238,7 @@ static uint32_t amiga_get_process_id(void)
 	return ret;
 }
 
-int rand_pool_add_nonce_data(RAND_POOL *pool)
+int ossl_pool_add_nonce_data(RAND_POOL *pool)
 {
 	DECL_TIMER_INTERFACE();
 
@@ -257,13 +257,13 @@ int rand_pool_add_nonce_data(RAND_POOL *pool)
 	data.tid = CRYPTO_THREAD_get_current_id();
 	GetSysTime(TIMEVAL(&data.tv));
 
-	return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
+	return ossl_rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
 }
 
 /*
 ** Frequently called, so must have low overhead
 */
-int rand_pool_add_additional_data(RAND_POOL *pool)
+int ossl_rand_pool_add_additional_data(RAND_POOL *pool)
 {
 	DECL_TIMER_INTERFACE();
 
@@ -280,10 +280,10 @@ int rand_pool_add_additional_data(RAND_POOL *pool)
 	data.tid = CRYPTO_THREAD_get_current_id();
 	ReadEClock(&data.curr_eclock);
 
-	return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
+	return ossl_rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
 }
 
-int rand_pool_init(void)
+int ossl_rand_pool_init(void)
 {
 	struct MsgPort *port;
 	if ((port = CreateMsgPort()))
@@ -315,7 +315,7 @@ int rand_pool_init(void)
 	return 0;
 }
 
-void rand_pool_cleanup(void)
+void ossl_rand_pool_cleanup(void)
 {
         struct MsgPort *port = GlobalTimer.time_request->Request.io_Message.mn_ReplyPort;
 #if defined(__amigaos4__)
@@ -326,7 +326,7 @@ void rand_pool_cleanup(void)
 	DeleteMsgPort(port);
 }
 
-void rand_pool_keep_random_devices_open(int keep)
+void ossl_rand_pool_keep_random_devices_open(int keep)
 {
 }
 
