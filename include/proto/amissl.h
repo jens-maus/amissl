@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (C) 1999-2006 Andrija Antonijevic, Stefan Burstroem
- Copyright (C) 2006-2017 AmiSSL Open Source Team
+ Copyright (C) 2006-2022 AmiSSL Open Source Team
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,7 @@
 /****************************************************************************/
 
 #ifndef __NOLIBBASE__
- extern struct Library * AmiSSLBase;
+extern struct Library * AmiSSLBase, *AmiSSLExtBase;
 #endif /* __NOLIBBASE__ */
 
 /****************************************************************************/
@@ -57,19 +57,24 @@
  #if defined(__GNUC__)
   #ifdef __AROS__
    #include <defines/amissl.h>
+   #include <defines/amisslext.h>
   #else
    #ifndef __PPC__
     #include <inline/amissl.h>
+    #include <inline/amisslext.h>
    #else /* __PPC__ */
     #include <ppcinline/amissl.h>
+    #include <ppcinline/amisslext.h>
    #endif /* __PPC__ */
   #endif /* __AROS__ */
  #elif defined(__VBCC__)
   #ifndef __PPC__
    #include <inline/amissl_protos.h>
+   #include <inline/amisslext_protos.h>
   #endif /* __PPC__ */
  #else /* __GNUC__ */
   #include <pragmas/amissl_pragmas.h>
+  #include <pragmas/amisslext_pragmas.h>
  #endif /* __GNUC__ */
 #endif /* __amigaos4__ */
 
