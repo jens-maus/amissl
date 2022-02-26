@@ -12,7 +12,9 @@
 
 #ifndef OPENSSL_PROV_SSL_H
 # define OPENSSL_PROV_SSL_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # ifdef __cplusplus
 extern "C" {

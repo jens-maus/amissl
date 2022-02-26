@@ -14,7 +14,9 @@
 
 #ifndef OPENSSL_CMP_UTIL_H
 # define OPENSSL_CMP_UTIL_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/opensslconf.h>
 # ifndef OPENSSL_NO_CMP

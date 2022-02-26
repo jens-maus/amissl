@@ -14,7 +14,9 @@
 
 #ifndef OPENSSL_OBJ_MAC_H
 # define OPENSSL_OBJ_MAC_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 #define SN_undef                        "UNDEF"
 #define LN_undef                        "undefined"

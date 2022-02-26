@@ -12,7 +12,9 @@
 
 #ifndef OPENSSL_PEM2_H
 # define OPENSSL_PEM2_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/macros.h>
 # ifndef OPENSSL_NO_DEPRECATED_3_0

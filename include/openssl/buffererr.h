@@ -13,7 +13,9 @@
 
 #ifndef OPENSSL_BUFFERERR_H
 # define OPENSSL_BUFFERERR_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/opensslconf.h>
 # include <openssl/symhacks.h>

@@ -12,7 +12,9 @@
 
 #ifndef  OPENSSL_CONFTYPES_H
 # define OPENSSL_CONFTYPES_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 #ifndef  OPENSSL_CONF_H
 # include <openssl/conf.h>

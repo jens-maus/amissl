@@ -12,7 +12,9 @@
 
 #ifndef OPENSSL_CORE_H
 # define OPENSSL_CORE_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <stddef.h>
 # include <openssl/types.h>
