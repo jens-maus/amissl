@@ -20,7 +20,9 @@
  */
 #ifndef OSSL_CRYPTO_CTYPE_H
 # define OSSL_CRYPTO_CTYPE_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # define CTYPE_MASK_lower       0x1
 # define CTYPE_MASK_upper       0x2

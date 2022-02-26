@@ -11,7 +11,9 @@
 /* This header can move into provider when legacy support is removed */
 #ifndef OSSL_INTERNAL_SM3_H
 # define OSSL_INTERNAL_SM3_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/opensslconf.h>
 

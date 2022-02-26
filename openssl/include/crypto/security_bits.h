@@ -9,7 +9,9 @@
 
 #ifndef OSSL_SECURITY_BITS_H
 # define OSSL_SECURITY_BITS_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 uint16_t ossl_ifc_ffc_compute_security_bits(int n);
 

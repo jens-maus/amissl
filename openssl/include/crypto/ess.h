@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CRYPTO_ESS_H
 # define OSSL_CRYPTO_ESS_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 /*-
  * IssuerSerial ::= SEQUENCE {

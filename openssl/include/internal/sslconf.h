@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_SSLCONF_H
 # define OSSL_INTERNAL_SSLCONF_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 typedef struct ssl_conf_cmd_st SSL_CONF_CMD;
 

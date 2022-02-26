@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_DSO_H
 # define OSSL_INTERNAL_DSO_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/crypto.h>
 # include "internal/dsoerr.h"
@@ -159,6 +161,6 @@ DSO *DSO_dsobyaddr(void *addr, int flags);
  * OS-specific details such as libc.so.versioning or where does it actually
  * reside: in libc itself or libsocket.
  */
-void *DSO_global_lookup(const char *name);
+void *(DSO_global_lookup)(const char *name);
 
 #endif

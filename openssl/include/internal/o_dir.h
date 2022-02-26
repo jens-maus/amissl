@@ -38,7 +38,9 @@
 
 #ifndef OSSL_INTERNAL_O_DIR_H
 # define OSSL_INTERNAL_O_DIR_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 typedef struct OPENSSL_dir_context_st OPENSSL_DIR_CTX;
 

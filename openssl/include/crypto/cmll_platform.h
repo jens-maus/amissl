@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CMLL_PLATFORM_H
 # define OSSL_CMLL_PLATFORM_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # if defined(CMLL_ASM) && (defined(__sparc) || defined(__sparc__))
 

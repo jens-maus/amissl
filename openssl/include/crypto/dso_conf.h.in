@@ -10,7 +10,9 @@
 
 #ifndef OSSL_CRYPTO_DSO_CONF_H
 # define OSSL_CRYPTO_DSO_CONF_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 {-  # The DSO code currently always implements all functions so that no
     # applications will have to worry about that from a compilation point

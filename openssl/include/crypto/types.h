@@ -11,7 +11,9 @@
 
 #ifndef OSSL_CRYPTO_TYPES_H
 # define OSSL_CRYPTO_TYPES_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # ifdef OPENSSL_NO_DEPRECATED_3_0
 typedef struct rsa_st RSA;

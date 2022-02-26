@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_CONF_H
 # define OSSL_INTERNAL_CONF_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/conf.h>
 

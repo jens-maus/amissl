@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_ASN1_H
 # define OSSL_INTERNAL_ASN1_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb);
 

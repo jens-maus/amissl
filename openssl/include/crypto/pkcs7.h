@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CRYPTO_PKCS7_H
 # define OSSL_CRYPTO_PKCS7_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 void ossl_pkcs7_resolve_libctx(PKCS7 *p7);
 

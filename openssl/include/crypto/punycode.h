@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CRYPTO_PUNYCODE_H
 # define OSSL_CRYPTO_PUNYCODE_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 int ossl_punycode_decode (
     const char *pEncoded,

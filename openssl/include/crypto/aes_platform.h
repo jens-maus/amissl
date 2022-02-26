@@ -9,7 +9,9 @@
 
 #ifndef OSSL_AES_PLATFORM_H
 # define OSSL_AES_PLATFORM_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/aes.h>
 

@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_ERR_H
 # define OSSL_INTERNAL_ERR_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 void err_free_strings_int(void);
 

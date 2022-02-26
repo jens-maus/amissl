@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_TLSGROUPS_H
 # define OSSL_INTERNAL_TLSGROUPS_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # define OSSL_TLS_GROUP_ID_sect163k1        0x0001
 # define OSSL_TLS_GROUP_ID_sect163r1        0x0002

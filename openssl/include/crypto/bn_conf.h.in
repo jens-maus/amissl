@@ -10,7 +10,9 @@
 
 #ifndef OSSL_CRYPTO_BN_CONF_H
 # define OSSL_CRYPTO_BN_CONF_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 /*
  * The contents of this file are not used in the UEFI build, as

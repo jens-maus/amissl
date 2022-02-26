@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CRYPTO_ASN1_DSA_H
 # define OSSL_CRYPTO_ASN1_DSA_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 #include "internal/packet.h"
 

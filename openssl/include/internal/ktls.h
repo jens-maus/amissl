@@ -22,7 +22,9 @@
 
 #ifndef HEADER_INTERNAL_KTLS
 # define HEADER_INTERNAL_KTLS
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # ifndef OPENSSL_NO_KTLS
 

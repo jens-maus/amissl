@@ -9,7 +9,9 @@
 
 #ifndef OSSL_CRYPTO_ASN1_H
 # define OSSL_CRYPTO_ASN1_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include <openssl/asn1.h>
 # include <openssl/core_dispatch.h> /* OSSL_FUNC_keymgmt_import() */
