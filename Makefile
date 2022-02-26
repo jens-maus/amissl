@@ -148,12 +148,12 @@ endif
 # ignored warnings are:
 # none - because we want to compile with -Wall all the time
 
-VERSION=4
-VERSIONNAME=111m
-AMISSLREVISION=12
-AMISSLMASTERREVISION=12
-AMISSLDATE=11.2.2022
-AMISSLMASTERDATE=11.2.2022
+VERSION=5
+VERSIONNAME=300
+AMISSLREVISION=0
+AMISSLMASTERREVISION=0
+AMISSLDATE=26.2.2022
+AMISSLMASTERDATE=26.2.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -464,11 +464,11 @@ else
 endif
 
 $(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-makedepend no-shared --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make include/openssl/opensslconf.h)
+	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-makedepend no-shared disable-ssl-trace --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make build_generated)
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
-	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines RANLIB=$(RANLIB) all build_tests
+	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines MODULESDIR=AmiSSL:modules RANLIB=$(RANLIB) all build_tests
 
 $(LIBSSL): $(LIBCRYPTO)
 

@@ -1688,7 +1688,6 @@ $obj: $deps
 	$cmd $incs $defs $cmdflags $cmdcompile -o \$\@ $srcs
 EOF
 	  }
-
           if ($makedep_scheme eq 'makedepend') {
               $recipe .= <<"EOF";
 	\$(MAKEDEPEND) -f- -Y -- $incs $cmdflags -- $srcs 2>/dev/null \\
@@ -1909,8 +1908,8 @@ EOF
       my $linkflags = join("", map { $_." " } @linkdirs);
       my $linklibs = join("", map { $_." " } @linklibs);
       if ($config{target} =~ /amiga/) {
-          $linklibs =~ s/\slib(crypto|ssl)\.a//g;
-          $linklibs =~ s/\s-l(crypto|ssl)//g;
+          $linklibs =~ s/\s*lib(crypto|ssl)\.a//g;
+          $linklibs =~ s/\s*-l(crypto|ssl)//g;
       }
       my $cmd = '$(CC)';
       my $cmdflags = '$(BIN_CFLAGS)';

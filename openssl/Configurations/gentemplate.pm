@@ -436,7 +436,7 @@ sub dolib {
                 $self->doobj($_, $lib, intent => "bin", attrs => { %attrs });
             } else {
                 $self->doobj($_, $lib, intent => "lib", attrs => { %attrs });
-           }
+            }
         }
     }
     $cache{$lib} = 1;

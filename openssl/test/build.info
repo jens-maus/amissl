@@ -36,14 +36,14 @@ IF[{- !$disabled{tests} -}]
           aborttest test_test pkcs12_format_test \
           sanitytest rsa_complex exdatatest bntest \
           ecstresstest gmdifftest pbelutest \
-          destest mdc2test sha_test \
+          mdc2test sha_test \
           exptest pbetest \
           evp_pkey_provided_test evp_test evp_extra_test evp_extra_test2 \
           evp_fetch_prov_test evp_libctx_test ossl_store_test \
           v3nametest v3ext \
           evp_pkey_provided_test evp_test evp_extra_test evp_extra_test2 \
           evp_fetch_prov_test v3nametest v3ext \
-          crltest danetest bad_dtls_test lhash_test sparse_array_test \
+          crltest danetest bad_dtls_test lhash_test \
           conf_include_test params_api_test params_conversion_test \
           constant_time_test verify_extra_test clienthellotest \
           packettest asynctest secmemtest srptest memleaktest stack_test \
@@ -60,7 +60,7 @@ IF[{- !$disabled{tests} -}]
           http_test servername_test ocspapitest fatalerrtest tls13ccstest \
           sysdefaulttest errtest ssl_ctx_test \
           context_internal_test aesgcmtest params_test evp_pkey_dparams_test \
-          keymgmt_internal_test hexstr_test provider_status_test defltfips_test \
+          hexstr_test provider_status_test defltfips_test \
           bio_readbuffer_test user_property_test pkcs7_test upcallstest \
           provfetchtest prov_config_test
 
@@ -490,12 +490,14 @@ IF[{- !$disabled{tests} -}]
     INCLUDE[moduleloadtest]=../include ../apps/include
   ENDIF
 
+ IF[{- $config{target} !~ /amiga/ -}]
   # cipher_overhead_test uses internal symbols, so it must be linked with
   # the static libraries
   PROGRAMS{noinst}=cipher_overhead_test
   SOURCE[cipher_overhead_test]=cipher_overhead_test.c
   INCLUDE[cipher_overhead_test]=.. ../include ../apps/include
   DEPEND[cipher_overhead_test]=../libcrypto.a ../libssl.a libtestutil.a
+ ENDIF
 
   SOURCE[uitest]=uitest.c ../apps/lib/apps_ui.c
   INCLUDE[uitest]=.. ../include ../apps/include
@@ -580,7 +582,8 @@ IF[{- !$disabled{tests} -}]
                      rsa_sp800_56b_test bn_internal_test ecdsatest rsa_test \
                      rc2test rc4test rc5test hmactest ffc_internal_test \
                      asn1_dsa_internal_test dsatest dsa_no_digest_size_test \
-                     dhtest ssl_old_test
+                     dhtest ssl_old_test destest keymgmt_internal_test \
+                     sparse_array_test
 
     IF[{- !$disabled{poly1305} -}]
       PROGRAMS{noinst}=poly1305_internal_test
