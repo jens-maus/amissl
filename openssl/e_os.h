@@ -28,7 +28,6 @@
 # endif
 
 #if defined(OPENSSL_SYS_AMIGA)
-#  define NO_CHMOD
 #  define NO_SYSLOG
 #  undef  DEVRANDOM
 #  ifdef __CLIB2__

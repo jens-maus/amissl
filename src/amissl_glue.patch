@@ -1,18 +1,19 @@
---- amissl_glue.c	2022-01-25 16:03:55.795139091 +0000
-+++ amissl_glue.c_patched	2022-01-25 16:14:08.327721498 +0000
-@@ -4,6 +4,12 @@
+--- amissl_glue.c	2022-02-26 17:14:30.758785970 +0000
++++ amissl_glue.c_patched	2022-02-26 17:15:36.207466807 +0000
+@@ -4,7 +4,13 @@
  
  /***************************************************************************/
  
 +#include <internal/cryptlib.h>
-+#include <internal/o_str.h>
 +#include <internal/o_dir.h>
 +#include <internal/dso.h>
 +#include <internal/err.h>
 +
  #include "amissl_glue.h"
++#include "amisslext_glue.h"
  
  /***************************************************************************/
+ 
 @@ -14,11 +20,24 @@
  #undef SAVEDS
  #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
@@ -71,13 +72,12 @@
  
  // ---
  
-@@ -26200,7 +26225,13 @@
+@@ -26137,7 +26162,13 @@
  
  int SAVEDS ASM LIB_OBSOLETE_RSA_X931_derive_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, BIGNUM * p1), REG(a2, BIGNUM * p2), REG(a3, BIGNUM * q1), REG(d0, BIGNUM * q2), REG(d1, const BIGNUM * Xp1), REG(d2, const BIGNUM * Xp2), REG(d3, const BIGNUM * Xp), REG(d4, const BIGNUM * Xq1), REG(d5, const BIGNUM * Xq2), REG(d6, const BIGNUM * Xq), REG(d7, const BIGNUM * e), REG(a4, BN_GENCB * cb))
  {
--	return RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb);
 +#if defined(__amigaos4__)
-+	return RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb);
+ 	return RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1, Xp2, Xp, Xq1, Xq2, Xq, e, cb);
 +#else
 +	// This old entry point was unreachable with GCC (LP13A4() impossible),
 +	// SAS/C (too many library parameters) and VBCC (will have trashed A4)

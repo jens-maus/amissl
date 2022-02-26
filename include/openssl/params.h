@@ -75,6 +75,67 @@ OSSL_PARAM *OSSL_PARAM_locate(OSSL_PARAM *p, const char *key);
 const OSSL_PARAM *OSSL_PARAM_locate_const(const OSSL_PARAM *p, const char *key);
 
 /* Basic parameter type run-time construction */
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  define DECLARE_OSSL_PARAM_construct_LP0(name) \
+      void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result);
+#  define DECLARE_OSSL_PARAM_construct_LP1(name, type) \
+      void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result, const char *key, type *buf);
+#  define DECLARE_OSSL_PARAM_construct_LP2(name, type) \
+      void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result, const char *key, type *buf, size_t bsize);
+
+DECLARE_OSSL_PARAM_construct_LP1(int, int)
+DECLARE_OSSL_PARAM_construct_LP1(uint, unsigned int)
+DECLARE_OSSL_PARAM_construct_LP1(long, long int)
+DECLARE_OSSL_PARAM_construct_LP1(ulong, unsigned long int)
+DECLARE_OSSL_PARAM_construct_LP1(int32, int32_t)
+DECLARE_OSSL_PARAM_construct_LP1(uint32, uint32_t)
+DECLARE_OSSL_PARAM_construct_LP1(int64, int64_t)
+DECLARE_OSSL_PARAM_construct_LP1(uint64, uint64_t)
+DECLARE_OSSL_PARAM_construct_LP1(size_t, size_t)
+DECLARE_OSSL_PARAM_construct_LP1(time_t, time_t)
+DECLARE_OSSL_PARAM_construct_LP2(BN, unsigned char)
+DECLARE_OSSL_PARAM_construct_LP1(double, double)
+DECLARE_OSSL_PARAM_construct_LP2(utf8_string, char)
+DECLARE_OSSL_PARAM_construct_LP2(utf8_ptr, char *)
+DECLARE_OSSL_PARAM_construct_LP2(octet_string, void)
+DECLARE_OSSL_PARAM_construct_LP2(octet_ptr, void *)
+DECLARE_OSSL_PARAM_construct_LP0(end)
+
+#  define OSSL_PARAM_construct_int(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_int_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_uint(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_long(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_long_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_ulong(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_ulong_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_int32(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_int32_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_uint32(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint32_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_int64(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_int64_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_uint64(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint64_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_size_t(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_size_t_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_time_t(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_time_t_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_BN(key,buf,bsize) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_BN_amiga(&p,key,buf,bsize); p; })
+#  define OSSL_PARAM_construct_double(key,buf) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_double_amiga(&p,key,buf); p; })
+#  define OSSL_PARAM_construct_utf8_string(key,buf,bsize)	\
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_utf8_string_amiga(&p,key,buf,bsize); p; })
+#  define OSSL_PARAM_construct_utf8_ptr(key,buf,bsize) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_utf8_ptr_amiga(&p,key,buf,bsize); p; })
+#  define OSSL_PARAM_construct_octet_string(key,buf,bsize) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_octet_string_amiga(&p,key,buf,bsize); p; })
+#  define OSSL_PARAM_construct_octet_ptr(key,buf,bsize) \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_octet_ptr_amiga(&p,key,buf,bsize); p; })
+#  define OSSL_PARAM_construct_end() \
+     ({ OSSL_PARAM p; OSSL_PARAM_construct_end_amiga(&p); p; })
+# else
 OSSL_PARAM OSSL_PARAM_construct_int(const char *key, int *buf);
 OSSL_PARAM OSSL_PARAM_construct_uint(const char *key, unsigned int *buf);
 OSSL_PARAM OSSL_PARAM_construct_long(const char *key, long int *buf);
@@ -97,6 +158,7 @@ OSSL_PARAM OSSL_PARAM_construct_octet_string(const char *key, void *buf,
 OSSL_PARAM OSSL_PARAM_construct_octet_ptr(const char *key, void **buf,
                                           size_t bsize);
 OSSL_PARAM OSSL_PARAM_construct_end(void);
+# endif
 
 int OSSL_PARAM_allocate_from_text(OSSL_PARAM *to,
                                   const OSSL_PARAM *paramdefs,

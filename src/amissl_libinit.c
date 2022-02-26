@@ -21,6 +21,7 @@
 
 #include "amissl_base.h"
 #include "amissl_glue.h"
+#include "amisslext_glue.h"
 
 #if defined(__MORPHOS__)
 #include "amissl_stubs_mos.h"
@@ -30,6 +31,8 @@
 
 #include <internal/debug.h>
 #include <internal/amissl.h>
+
+extern struct LibraryHeader *CreateExtLibrary(struct LibraryHeader *main);
 
 #if defined(__amigaos4__)
 #define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
@@ -295,6 +298,7 @@ STATIC CONST_APTR main_vectors[] =
   (CONST_APTR)NULL,
   (CONST_APTR)NULL,
   (CONST_APTR)SDI_LIBVECTOR,
+  (CONST_APTR)SDI_LIBVECTOR_EXT,
   (CONST_APTR)-1
 };
 
@@ -1001,6 +1005,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->ThreadGroupID = 0;
 
     #if defined(__amigaos4__)
+    if((child->extBase = CreateExtLibrary(child)) != NULL)
     {
       uint32 offset;
       if((child->baserelData = (base->IElf->CopyDataSegment)(base->elfHandle, &offset)))
@@ -1024,9 +1029,10 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         else
         {
           E(DBF_STARTUP, "AmiSSL: != 0 returned by LIB___UserLibInit()");
-
           (base->IElf->FreeDataSegmentCopy)(base->elfHandle, child->baserelData);
-        }
+          DeleteLibrary(&child->libBase);
+          child = NULL;
+	}
       }
       else
       {
@@ -1034,6 +1040,12 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
         DeleteLibrary(&child->libBase);
         child = NULL;
       }
+    }
+    else
+    {
+      E(DBF_STARTUP, "AmiSSL: NULL returned by CreateExtLibrary()");
+      DeleteLibrary(&child->libBase);
+      child = NULL;
     }
     #elif defined(__amigaos3__)
     child->dataSize = __GetDataSize();
@@ -1060,11 +1072,20 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     dataSeg += 0x7ffe;
     child->dataSeg = dataSeg;
 
-    // Reset the child's counter
-    child->libBase.lib_OpenCnt = 1;
+    if((child->extBase = CreateExtLibrary(child)) != NULL)
+    {
+      // Reset the child's counter
+      child->libBase.lib_OpenCnt = 1;
 
-    D(DBF_STARTUP, "Calling __UserLibInit(%08lx)", child);
-    LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
+      D(DBF_STARTUP, "Calling __UserLibInit(%08lx)", child);
+      LIB___UserLibInit((__BASE_OR_IFACE_TYPE)child, child);
+    }
+    else
+    {
+      E(DBF_STARTUP, "AmiSSL: NULL returned by CreateExtLibrary()");
+      FreeMem((UBYTE *)child-child->libBase.lib_NegSize, child->libBase.lib_NegSize+sizeof(*child)+child->dataSize);
+      child = NULL;
+    }
     #elif defined(__MORPHOS__)
     if(base->dataSize)
     {
@@ -1193,10 +1214,14 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     #ifdef MULTIBASE
     struct LibraryHeader *parent = base->parent;
     BOOL expunge_parent = (parent->libBase.lib_Flags & LIBF_DELEXP) != 0 ? TRUE : FALSE;
-
-    /* release child base */
     #if defined(__amigaos4__)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+    #endif
+
+    DeleteLibrary(&base->extBase->libBase);
+    
+    /* release child base */
+    #if defined(__amigaos4__)
     LIB___UserLibCleanup((__BASE_OR_IFACE_TYPE)extlib->MainIFace, base);
     (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
     base->baserelData = NULL;

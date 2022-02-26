@@ -1,0 +1,33 @@
+--- amisslext_m68k.c	2022-01-24 17:13:49.172538669 +0000
++++ amisslext_m68k.c_patched	2022-01-24 17:15:27.274195733 +0000
+@@ -38,6 +38,7 @@
+ 
+ /***************************************************************************/
+ 
++#if 0
+ STATIC struct Library * stub_ext_Open_PPC(uint32 *regarray)
+ {
+ 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+@@ -75,6 +76,7 @@
+ 	return 0;
+ }
+ STATIC CONST struct EmuTrap stub_ext_Reserved = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_Reserved_PPC };
++#endif
+ 
+ // ---
+ 
+@@ -15765,10 +15767,10 @@
+ 
+ CONST CONST_APTR ext_VecTable68K[] =
+ {
+-	&stub_ext_Open,
+-	&stub_ext_Close,
+-	&stub_ext_Expunge,
+-	&stub_ext_Reserved,
++	NULL,
++	NULL,
++	NULL,
++	NULL,
+ 	&stub_ext_SSL_CTX_set_async_callback,
+ 	&stub_ext_SSL_CTX_set_async_callback_arg,
+ 	&stub_ext_SSL_set_async_callback,

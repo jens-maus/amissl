@@ -190,6 +190,7 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 {
   AMISSL_STATE *state;
   LONG err;
+  struct LibraryHeader **extLibBasePtr;
 
   SHOWPOINTER(DBF_STARTUP, SysBase);
   SHOWPOINTER(DBF_STARTUP, __BASE_OR_IFACE_VAR);
@@ -305,6 +306,9 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
     state->TCPIPStackType = (LONG)GetTagData(AmiSSL_SocketBaseBrand, TCPIP_AmiTCP, tagList);
     state->MLinkLock = (APTR)GetTagData(AmiSSL_MLinkLock, (int)NULL, tagList);
 #endif
+    extLibBasePtr = (struct LibraryHeader **)GetTagData(AmiSSL_ExtLibBasePtr,(ULONG)NULL,tagList);
+    if(extLibBasePtr) *extLibBasePtr = ((struct LibraryHeader *)state->AmiSSLBase)->extBase;
+
     if((errno_ptr = (int *)GetTagData(AmiSSL_ErrNoPtr, (int)NULL, tagList)))
       state->errno_ptr = errno_ptr;
 
@@ -496,7 +500,7 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
 #else
     && (DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-    && (UtilityBase = OpenLibrary("utility.library", 37)))
+    && (UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)))
 #endif
   {
     err = 0;

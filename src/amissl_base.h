@@ -39,6 +39,10 @@ struct LibraryHeader
   struct Library          *sysBase;
   struct SignalSemaphore  libSem;
 
+  #if !defined(__amigaos4__) || !defined(NO_VECTABLE68K)
+  struct LibraryHeader    *extBase;
+  #endif
+
   //////////////////////////////////////
   // local variables which are valid only
   // for this particular libbase

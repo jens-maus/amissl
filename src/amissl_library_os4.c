@@ -98,6 +98,27 @@ LIBPROTOVA(OSSL_STORE_ctrl, int, UNUSED struct AmiSSLIFace *Self, OSSL_STORE_CTX
   return ret;
 }
 
+LIBPROTOVA(ERR_set_error, void, UNUSED struct AmiSSLIFace *Self, int lib, int reason, const char *fmt, ...)
+{
+  VA_LIST args;
+
+  VA_START(args, fmt);
+  ERR_vset_error(lib,reason,fmt,args);
+  VA_END(args);
+}
+
+LIBPROTOVA(EVP_PKEY_Q_keygen, EVP_PKEY *, UNUSED struct AmiSSLIFace *Self, OSSL_LIB_CTX *libctx, const char *propq, const char *type, ...)
+{
+  VA_LIST args;
+  EVP_PKEY *ret;
+    
+  VA_START(args, type);
+  ret = EVP_PKEY_Q_vkeygen(libctx, propq, type, args);
+  VA_END(args);
+
+  return ret;
+}
+
 int __amigaos4_check68k_check(int (*func)())
 {
   return IExec->IsNative(func);

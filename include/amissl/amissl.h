@@ -30,13 +30,17 @@
 #include <openssl/cast.h>
 #endif
 #include <openssl/cmac.h>
+#include <openssl/cmp.h>
 #include <openssl/comp.h>
 #include <openssl/conf.h>
 #include <openssl/conf_api.h>
+#include <openssl/core.h>
+#include <openssl/crmf.h>
 #include <openssl/crypto.h>
 #ifndef OPENSSL_NO_CT
 #include <openssl/ct.h>
 #endif
+#include <openssl/decoder.h>
 #ifndef OPENSSL_NO_DES
 #include <openssl/des.h>
 #endif
@@ -57,6 +61,7 @@
 #ifndef OPENSSL_NO_ECDSA
 #include <openssl/ecdsa.h>
 #endif
+#include <openssl/encoder.h>
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
@@ -65,6 +70,7 @@
 #ifndef OPENSSL_NO_HMAC
 #include <openssl/hmac.h>
 #endif
+#include <openssl/http.h>
 #ifndef OPENSSL_NO_IDEA
 #include <openssl/idea.h>
 #endif
@@ -87,13 +93,14 @@
 #include <openssl/objects.h>
 #include <openssl/ocsp.h>
 #include <openssl/opensslv.h>
-#include <openssl/ossl_typ.h>
 #include <openssl/pem.h>
 #include <openssl/pem2.h>
 #include <openssl/pkcs12.h>
 #include <openssl/pkcs7.h>
+#include <openssl/params.h>
+#include <openssl/param_build.h>
+#include <openssl/provider.h>
 #include <openssl/rand.h>
-#include <openssl/rand_drbg.h>
 #ifndef OPENSSL_NO_RC2
 #include <openssl/rc2.h>
 #endif
@@ -113,6 +120,7 @@
 #ifndef OPENSSL_NO_SEED
 #include <openssl/seed.h>
 #endif
+#include <openssl/self_test.h>
 #ifndef OPENSSL_NO_SHA
 #include <openssl/sha.h>
 #endif
@@ -127,8 +135,10 @@
 #include <openssl/store.h>
 #include <openssl/symhacks.h>
 #include <openssl/tls1.h>
+#include <openssl/trace.h>
 #include <openssl/ts.h>
 #include <openssl/txt_db.h>
+#include <openssl/types.h>
 #include <openssl/ui.h>
 #ifndef OPENSSL_NO_WHIRLPOOL
 #include <openssl/whrlpool.h>

@@ -78,6 +78,41 @@ int OSSL_HTTP_set1_request(OSSL_HTTP_REQ_CTX *rctx, const char *path,
                            const char *expected_content_type, int expect_asn1,
                            size_t max_resp_len, int timeout, int keep_alive);
 BIO *OSSL_HTTP_exchange(OSSL_HTTP_REQ_CTX *rctx, char **redirection_url);
+
+# if defined(OPENSSL_SYS_AMIGA)
+BIO *OSSL_HTTP_get_amiga_1(const char *url, const char *proxy, const char *no_proxy,
+                           BIO *bio, BIO *rbio,
+                           OSSL_HTTP_bio_cb_t bio_update_fn,
+			   void *moreargs);
+void *OSSL_HTTP_get_amiga_2(void *arg, int buf_size, const STACK_OF(CONF_VALUE) *headers,
+                            const char *expected_content_type, int expect_asn1,
+			    size_t max_resp_len, int timeout);
+
+BIO * OSSL_HTTP_transfer_amiga_1(OSSL_HTTP_REQ_CTX ** prctx, const char * server,
+				 const char * port, const char * path, int use_ssl,
+				 const char * proxy, const char * no_proxy,
+				 BIO * bio, BIO * rbio, OSSL_HTTP_bio_cb_t bio_update_fn,
+				 void * moreargs);
+void * OSSL_HTTP_transfer_amiga_2(void * arg, int buf_size,
+				  const struct stack_st_CONF_VALUE * headers,
+				  const char * content_type, BIO * req,
+				  const char * expected_content_type,
+				  int expect_asn1, size_t max_resp_len,
+				  int timeout, int keep_alive);
+# endif
+
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  define OSSL_HTTP_get(url,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,expected_content_type,expect_asn1,max_resp_len,timeout) \
+     OSSL_HTTP_get_amiga_1(url,proxy,no_proxy,bio,rbio,bio_update_fn,  \
+     OSSL_HTTP_get_amiga_2(arg,buf_size,headers,expected_content_type, \
+                           expect_asn1,max_resp_len,timeout))
+#  define OSSL_HTTP_transfer(prctx,server,port,path,use_ssl,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,content_type,req,expected_content_type,expect_asn1,max_resp_len,timeout,keep_alive) \
+     OSSL_HTTP_transfer_amiga_1(prctx,server,port,path,use_ssl,proxy,  \
+                                no_proxy,bio,rbio,bio_update_fn,       \
+     OSSL_HTTP_transfer_amiga_2(arg,buf_size,headers,content_type,req, \
+                                expected_content_type,expect_asn1,     \
+                                max_resp_len,timeout,keep_alive))
+# else
 BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
                    BIO *bio, BIO *rbio,
                    OSSL_HTTP_bio_cb_t bio_update_fn, void *arg,
@@ -94,6 +129,7 @@ BIO *OSSL_HTTP_transfer(OSSL_HTTP_REQ_CTX **prctx,
                         const char *content_type, BIO *req,
                         const char *expected_content_type, int expect_asn1,
                         size_t max_resp_len, int timeout, int keep_alive);
+#endif
 int OSSL_HTTP_close(OSSL_HTTP_REQ_CTX *rctx, int ok);
 
 /* Auxiliary functions */

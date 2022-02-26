@@ -58,7 +58,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_TYPE(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_TYPE, \
- AROS_LCA(ASN1_TYPE *, (___a), A0), \
+ AROS_LCA(const ASN1_TYPE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 20, Amissl)
 
@@ -175,7 +175,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_BIT_STRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_BIT_STRING, \
- AROS_LCA(ASN1_BIT_STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_BIT_STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 43, Amissl)
 
@@ -243,7 +243,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_INTEGER(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_INTEGER, \
- AROS_LCA(ASN1_INTEGER *, (___a), A0), \
+ AROS_LCA(const ASN1_INTEGER *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 58, Amissl)
 
@@ -265,8 +265,8 @@ typedef ULONG _sfdc_vararg;
 
 #define ASN1_INTEGER_cmp(___x, ___y) \
       AROS_LC2(int, ASN1_INTEGER_cmp, \
- AROS_LCA(ASN1_INTEGER *, (___x), A0), \
- AROS_LCA(ASN1_INTEGER *, (___y), A1), \
+ AROS_LCA(const ASN1_INTEGER *, (___x), A0), \
+ AROS_LCA(const ASN1_INTEGER *, (___y), A1), \
      struct Library *, AMISSL_BASE_NAME, 64, Amissl)
 
 #define ASN1_ENUMERATED_new() \
@@ -287,7 +287,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_ENUMERATED(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_ENUMERATED, \
- AROS_LCA(ASN1_ENUMERATED *, (___a), A0), \
+ AROS_LCA(const ASN1_ENUMERATED *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 68, Amissl)
 
@@ -353,7 +353,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_OCTET_STRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_OCTET_STRING, \
- AROS_LCA(ASN1_OCTET_STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_OCTET_STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 80, Amissl)
 
@@ -397,7 +397,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_VISIBLESTRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_VISIBLESTRING, \
- AROS_LCA(ASN1_VISIBLESTRING *, (___a), A0), \
+ AROS_LCA(const ASN1_VISIBLESTRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 88, Amissl)
 
@@ -423,7 +423,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_UNIVERSALSTRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_UNIVERSALSTRING, \
- AROS_LCA(ASN1_UNIVERSALSTRING *, (___a), A0), \
+ AROS_LCA(const ASN1_UNIVERSALSTRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 93, Amissl)
 
@@ -449,7 +449,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_UTF8STRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_UTF8STRING, \
- AROS_LCA(ASN1_UTF8STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_UTF8STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 98, Amissl)
 
@@ -475,7 +475,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_NULL(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_NULL, \
- AROS_LCA(ASN1_NULL *, (___a), A0), \
+ AROS_LCA(const ASN1_NULL *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 103, Amissl)
 
@@ -501,7 +501,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_BMPSTRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_BMPSTRING, \
- AROS_LCA(ASN1_BMPSTRING *, (___a), A0), \
+ AROS_LCA(const ASN1_BMPSTRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 108, Amissl)
 
@@ -541,7 +541,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_PRINTABLE(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_PRINTABLE, \
- AROS_LCA(ASN1_STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 115, Amissl)
 
@@ -567,7 +567,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_DIRECTORYSTRING(___a, ___out) \
       AROS_LC2(int, i2d_DIRECTORYSTRING, \
- AROS_LCA(ASN1_STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 120, Amissl)
 
@@ -593,7 +593,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_DISPLAYTEXT(___a, ___out) \
       AROS_LC2(int, i2d_DISPLAYTEXT, \
- AROS_LCA(ASN1_STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 125, Amissl)
 
@@ -619,7 +619,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_PRINTABLESTRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_PRINTABLESTRING, \
- AROS_LCA(ASN1_PRINTABLESTRING *, (___a), A0), \
+ AROS_LCA(const ASN1_PRINTABLESTRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 130, Amissl)
 
@@ -645,7 +645,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_T61STRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_T61STRING, \
- AROS_LCA(ASN1_T61STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_T61STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 135, Amissl)
 
@@ -671,7 +671,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_IA5STRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_IA5STRING, \
- AROS_LCA(ASN1_IA5STRING *, (___a), A0), \
+ AROS_LCA(const ASN1_IA5STRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 140, Amissl)
 
@@ -697,7 +697,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_GENERALSTRING(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_GENERALSTRING, \
- AROS_LCA(ASN1_GENERALSTRING *, (___a), A0), \
+ AROS_LCA(const ASN1_GENERALSTRING *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 145, Amissl)
 
@@ -723,7 +723,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_UTCTIME(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_UTCTIME, \
- AROS_LCA(ASN1_UTCTIME *, (___a), A0), \
+ AROS_LCA(const ASN1_UTCTIME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 150, Amissl)
 
@@ -749,7 +749,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_GENERALIZEDTIME(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_GENERALIZEDTIME, \
- AROS_LCA(ASN1_GENERALIZEDTIME *, (___a), A0), \
+ AROS_LCA(const ASN1_GENERALIZEDTIME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 155, Amissl)
 
@@ -775,7 +775,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASN1_TIME(___a, ___out) \
       AROS_LC2(int, i2d_ASN1_TIME, \
- AROS_LCA(ASN1_TIME *, (___a), A0), \
+ AROS_LCA(const ASN1_TIME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 160, Amissl)
 
@@ -892,7 +892,7 @@ typedef ULONG _sfdc_vararg;
 
 #define ASN1_INTEGER_to_BN(___ai, ___bn) \
       AROS_LC2(BIGNUM *, ASN1_INTEGER_to_BN, \
- AROS_LCA(ASN1_INTEGER *, (___ai), A0), \
+ AROS_LCA(const ASN1_INTEGER *, (___ai), A0), \
  AROS_LCA(BIGNUM *, (___bn), A1), \
      struct Library *, AMISSL_BASE_NAME, 180, Amissl)
 
@@ -1006,7 +1006,7 @@ typedef ULONG _sfdc_vararg;
       AROS_LC3(int, ASN1_item_i2d_bio, \
  AROS_LCA(const ASN1_ITEM *, (___it), A0), \
  AROS_LCA(BIO *, (___out), A1), \
- AROS_LCA(void *, (___x), A2), \
+ AROS_LCA(const void *, (___x), A2), \
      struct Library *, AMISSL_BASE_NAME, 201, Amissl)
 
 #define ASN1_UTCTIME_print(___fp, ___a) \
@@ -1192,7 +1192,7 @@ typedef ULONG _sfdc_vararg;
 
 #define ASN1_item_i2d(___val, ___out, ___it) \
       AROS_LC3(int, ASN1_item_i2d, \
- AROS_LCA(ASN1_VALUE *, (___val), A0), \
+ AROS_LCA(const ASN1_VALUE *, (___val), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
  AROS_LCA(const ASN1_ITEM *, (___it), A2), \
      struct Library *, AMISSL_BASE_NAME, 241, Amissl)
@@ -1263,7 +1263,7 @@ typedef ULONG _sfdc_vararg;
 
 #define ASN1_item_ex_i2d(___pval, ___out, ___it, ___tag, ___aclass) \
       AROS_LC5(int, ASN1_item_ex_i2d, \
- AROS_LCA(ASN1_VALUE **, (___pval), A0), \
+ AROS_LCA(const ASN1_VALUE **, (___pval), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
  AROS_LCA(const ASN1_ITEM *, (___it), A2), \
  AROS_LCA(int, (___tag), D0), \
@@ -2655,11 +2655,6 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(int, ERR_load_CONF_strings, \
      struct Library *, AMISSL_BASE_NAME, 518, Amissl)
 
-#define CRYPTO_mem_ctrl(___mode) \
-      AROS_LC1(int, CRYPTO_mem_ctrl, \
- AROS_LCA(int, (___mode), D0), \
-     struct Library *, AMISSL_BASE_NAME, 526, Amissl)
-
 #define OPENSSL_issetugid() \
       AROS_LC0(int, OPENSSL_issetugid, \
      struct Library *, AMISSL_BASE_NAME, 530, Amissl)
@@ -2753,10 +2748,6 @@ typedef ULONG _sfdc_vararg;
 #define ERR_load_CRYPTO_strings() \
       AROS_LC0(int, ERR_load_CRYPTO_strings, \
      struct Library *, AMISSL_BASE_NAME, 593, Amissl)
-
-#define ERR_load_DSO_strings() \
-      AROS_LC0(void, ERR_load_DSO_strings, \
-     struct Library *, AMISSL_BASE_NAME, 618, Amissl)
 
 #define EC_GFp_simple_method() \
       AROS_LC0(const EC_METHOD *, EC_GFp_simple_method, \
@@ -3034,8 +3025,8 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(int, ERR_load_EC_strings, \
      struct Library *, AMISSL_BASE_NAME, 657, Amissl)
 
-#define ERR_put_error(___lib, ___func, ___reason, ___file, ___line) \
-      AROS_LC5(void, ERR_put_error, \
+#define OBSOLETE_ERR_put_error(___lib, ___func, ___reason, ___file, ___line) \
+      AROS_LC5(void, OBSOLETE_ERR_put_error, \
  AROS_LCA(int, (___lib), D0), \
  AROS_LCA(int, (___func), D1), \
  AROS_LCA(int, (___reason), D2), \
@@ -3859,13 +3850,13 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___type), D0), \
      struct Library *, AMISSL_BASE_NAME, 829, Amissl)
 
-#define EVP_PKEY_bits(___pkey) \
-      AROS_LC1(int, EVP_PKEY_bits, \
+#define OBSOLETE_EVP_PKEY_bits(___pkey) \
+      AROS_LC1(int, OBSOLETE_EVP_PKEY_bits, \
  AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 830, Amissl)
 
-#define EVP_PKEY_size(___pkey) \
-      AROS_LC1(int, EVP_PKEY_size, \
+#define OBSOLETE_EVP_PKEY_size(___pkey) \
+      AROS_LC1(int, OBSOLETE_EVP_PKEY_size, \
  AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 831, Amissl)
 
@@ -3928,7 +3919,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PublicKey(___a, ___pp) \
       AROS_LC2(int, i2d_PublicKey, \
- AROS_LCA(EVP_PKEY *, (___a), A0), \
+ AROS_LCA(const EVP_PKEY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 842, Amissl)
 
@@ -3949,7 +3940,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PrivateKey(___a, ___pp) \
       AROS_LC2(int, i2d_PrivateKey, \
- AROS_LCA(EVP_PKEY *, (___a), A0), \
+ AROS_LCA(const EVP_PKEY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 845, Amissl)
 
@@ -3976,8 +3967,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_PKEY *, (___b), A1), \
      struct Library *, AMISSL_BASE_NAME, 849, Amissl)
 
-#define EVP_CIPHER_type(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_type, \
+#define OBSOLETE_EVP_CIPHER_type(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_type, \
  AROS_LCA(const EVP_CIPHER *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 850, Amissl)
 
@@ -4455,8 +4446,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(unsigned long, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 982, Amissl)
 
-#define OCSP_parse_url(___url, ___phost, ___pport, ___ppath, ___pssl) \
-      AROS_LC5(int, OCSP_parse_url, \
+#define OBSOLETE_OCSP_parse_url(___url, ___phost, ___pport, ___ppath, ___pssl) \
+      AROS_LC5(int, OBSOLETE_OCSP_parse_url, \
  AROS_LCA(const char *, (___url), A0), \
  AROS_LCA(char **, (___phost), A1), \
  AROS_LCA(char **, (___pport), A2), \
@@ -4828,7 +4819,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_SINGLERESP(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_SINGLERESP, \
- AROS_LCA(OCSP_SINGLERESP *, (___a), A0), \
+ AROS_LCA(const OCSP_SINGLERESP *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1039, Amissl)
 
@@ -4854,7 +4845,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_CERTSTATUS(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_CERTSTATUS, \
- AROS_LCA(OCSP_CERTSTATUS *, (___a), A0), \
+ AROS_LCA(const OCSP_CERTSTATUS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1044, Amissl)
 
@@ -4880,7 +4871,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_REVOKEDINFO(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_REVOKEDINFO, \
- AROS_LCA(OCSP_REVOKEDINFO *, (___a), A0), \
+ AROS_LCA(const OCSP_REVOKEDINFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1049, Amissl)
 
@@ -4906,7 +4897,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_BASICRESP(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_BASICRESP, \
- AROS_LCA(OCSP_BASICRESP *, (___a), A0), \
+ AROS_LCA(const OCSP_BASICRESP *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1054, Amissl)
 
@@ -4932,7 +4923,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_RESPDATA(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_RESPDATA, \
- AROS_LCA(OCSP_RESPDATA *, (___a), A0), \
+ AROS_LCA(const OCSP_RESPDATA *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1059, Amissl)
 
@@ -4958,7 +4949,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_RESPID(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_RESPID, \
- AROS_LCA(OCSP_RESPID *, (___a), A0), \
+ AROS_LCA(const OCSP_RESPID *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1064, Amissl)
 
@@ -4984,7 +4975,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_RESPONSE(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_RESPONSE, \
- AROS_LCA(OCSP_RESPONSE *, (___a), A0), \
+ AROS_LCA(const OCSP_RESPONSE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1069, Amissl)
 
@@ -5010,7 +5001,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_RESPBYTES(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_RESPBYTES, \
- AROS_LCA(OCSP_RESPBYTES *, (___a), A0), \
+ AROS_LCA(const OCSP_RESPBYTES *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1074, Amissl)
 
@@ -5036,7 +5027,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_ONEREQ(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_ONEREQ, \
- AROS_LCA(OCSP_ONEREQ *, (___a), A0), \
+ AROS_LCA(const OCSP_ONEREQ *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1079, Amissl)
 
@@ -5062,7 +5053,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_CERTID(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_CERTID, \
- AROS_LCA(OCSP_CERTID *, (___a), A0), \
+ AROS_LCA(const OCSP_CERTID *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1084, Amissl)
 
@@ -5088,7 +5079,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_REQUEST(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_REQUEST, \
- AROS_LCA(OCSP_REQUEST *, (___a), A0), \
+ AROS_LCA(const OCSP_REQUEST *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1089, Amissl)
 
@@ -5114,7 +5105,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_SIGNATURE(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_SIGNATURE, \
- AROS_LCA(OCSP_SIGNATURE *, (___a), A0), \
+ AROS_LCA(const OCSP_SIGNATURE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1094, Amissl)
 
@@ -5140,7 +5131,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_REQINFO(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_REQINFO, \
- AROS_LCA(OCSP_REQINFO *, (___a), A0), \
+ AROS_LCA(const OCSP_REQINFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1099, Amissl)
 
@@ -5166,7 +5157,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_CRLID(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_CRLID, \
- AROS_LCA(OCSP_CRLID *, (___a), A0), \
+ AROS_LCA(const OCSP_CRLID *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1104, Amissl)
 
@@ -5192,7 +5183,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OCSP_SERVICELOC(___a, ___out) \
       AROS_LC2(int, i2d_OCSP_SERVICELOC, \
- AROS_LCA(OCSP_SERVICELOC *, (___a), A0), \
+ AROS_LCA(const OCSP_SERVICELOC *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1109, Amissl)
 
@@ -5518,7 +5509,7 @@ typedef ULONG _sfdc_vararg;
 #define PEM_write_bio_RSAPublicKey(___bp, ___x) \
       AROS_LC2(int, PEM_write_bio_RSAPublicKey, \
  AROS_LCA(BIO *, (___bp), A0), \
- AROS_LCA(RSA *, (___x), A1), \
+ AROS_LCA(const RSA *, (___x), A1), \
      struct Library *, AMISSL_BASE_NAME, 1156, Amissl)
 
 #define PEM_read_bio_RSA_PUBKEY(___bp, ___x, ___cb, ___u) \
@@ -5532,7 +5523,7 @@ typedef ULONG _sfdc_vararg;
 #define PEM_write_bio_RSA_PUBKEY(___bp, ___x) \
       AROS_LC2(int, PEM_write_bio_RSA_PUBKEY, \
  AROS_LCA(BIO *, (___bp), A0), \
- AROS_LCA(RSA *, (___x), A1), \
+ AROS_LCA(const RSA *, (___x), A1), \
      struct Library *, AMISSL_BASE_NAME, 1158, Amissl)
 
 #define PEM_read_bio_DSAPrivateKey(___bp, ___x, ___cb, ___u) \
@@ -5945,7 +5936,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12(___a, ___out) \
       AROS_LC2(int, i2d_PKCS12, \
- AROS_LCA(PKCS12 *, (___a), A0), \
+ AROS_LCA(const PKCS12 *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1216, Amissl)
 
@@ -5971,7 +5962,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12_MAC_DATA(___a, ___out) \
       AROS_LC2(int, i2d_PKCS12_MAC_DATA, \
- AROS_LCA(PKCS12_MAC_DATA *, (___a), A0), \
+ AROS_LCA(const PKCS12_MAC_DATA *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1221, Amissl)
 
@@ -5997,7 +5988,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12_SAFEBAG(___a, ___out) \
       AROS_LC2(int, i2d_PKCS12_SAFEBAG, \
- AROS_LCA(PKCS12_SAFEBAG *, (___a), A0), \
+ AROS_LCA(const PKCS12_SAFEBAG *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1226, Amissl)
 
@@ -6023,7 +6014,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12_BAGS(___a, ___out) \
       AROS_LC2(int, i2d_PKCS12_BAGS, \
- AROS_LCA(PKCS12_BAGS *, (___a), A0), \
+ AROS_LCA(const PKCS12_BAGS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1231, Amissl)
 
@@ -6068,7 +6059,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12_bio(___bp, ___p12) \
       AROS_LC2(int, i2d_PKCS12_bio, \
- AROS_LCA(BIO *, (___bp), A0), \
+ AROS_LCA(const BIO *, (___bp), A0), \
  AROS_LCA(PKCS12 *, (___p12), A1), \
      struct Library *, AMISSL_BASE_NAME, 1238, Amissl)
 
@@ -6110,7 +6101,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_bio(___bp, ___p7) \
       AROS_LC2(int, i2d_PKCS7_bio, \
- AROS_LCA(BIO *, (___bp), A0), \
+ AROS_LCA(const BIO *, (___bp), A0), \
  AROS_LCA(PKCS7 *, (___p7), A1), \
      struct Library *, AMISSL_BASE_NAME, 1245, Amissl)
 
@@ -6132,7 +6123,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_ISSUER_AND_SERIAL(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_ISSUER_AND_SERIAL, \
- AROS_LCA(PKCS7_ISSUER_AND_SERIAL *, (___a), A0), \
+ AROS_LCA(const PKCS7_ISSUER_AND_SERIAL *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1249, Amissl)
 
@@ -6158,7 +6149,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_SIGNER_INFO(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_SIGNER_INFO, \
- AROS_LCA(PKCS7_SIGNER_INFO *, (___a), A0), \
+ AROS_LCA(const PKCS7_SIGNER_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1254, Amissl)
 
@@ -6184,7 +6175,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_RECIP_INFO(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_RECIP_INFO, \
- AROS_LCA(PKCS7_RECIP_INFO *, (___a), A0), \
+ AROS_LCA(const PKCS7_RECIP_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1259, Amissl)
 
@@ -6210,7 +6201,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_SIGNED(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_SIGNED, \
- AROS_LCA(PKCS7_SIGNED *, (___a), A0), \
+ AROS_LCA(const PKCS7_SIGNED *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1264, Amissl)
 
@@ -6236,7 +6227,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_ENC_CONTENT(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_ENC_CONTENT, \
- AROS_LCA(PKCS7_ENC_CONTENT *, (___a), A0), \
+ AROS_LCA(const PKCS7_ENC_CONTENT *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1269, Amissl)
 
@@ -6262,7 +6253,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_ENVELOPE(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_ENVELOPE, \
- AROS_LCA(PKCS7_ENVELOPE *, (___a), A0), \
+ AROS_LCA(const PKCS7_ENVELOPE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1274, Amissl)
 
@@ -6288,7 +6279,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_SIGN_ENVELOPE(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_SIGN_ENVELOPE, \
- AROS_LCA(PKCS7_SIGN_ENVELOPE *, (___a), A0), \
+ AROS_LCA(const PKCS7_SIGN_ENVELOPE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1279, Amissl)
 
@@ -6314,7 +6305,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_DIGEST(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_DIGEST, \
- AROS_LCA(PKCS7_DIGEST *, (___a), A0), \
+ AROS_LCA(const PKCS7_DIGEST *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1284, Amissl)
 
@@ -6340,7 +6331,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_ENCRYPT(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_ENCRYPT, \
- AROS_LCA(PKCS7_ENCRYPT *, (___a), A0), \
+ AROS_LCA(const PKCS7_ENCRYPT *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1289, Amissl)
 
@@ -6366,7 +6357,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7, \
- AROS_LCA(PKCS7 *, (___a), A0), \
+ AROS_LCA(const PKCS7 *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1294, Amissl)
 
@@ -7160,7 +7151,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_SSL_SESSION(___in, ___pp) \
       AROS_LC2(int, i2d_SSL_SESSION, \
- AROS_LCA(SSL_SESSION *, (___in), A0), \
+ AROS_LCA(const SSL_SESSION *, (___in), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 1437, Amissl)
 
@@ -7208,8 +7199,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(long, (___length), D0), \
      struct Library *, AMISSL_BASE_NAME, 1444, Amissl)
 
-#define SSL_get_peer_certificate(___s) \
-      AROS_LC1(X509 *, SSL_get_peer_certificate, \
+#define OBSOLETE_SSL_get_peer_certificate(___s) \
+      AROS_LC1(X509 *, OBSOLETE_SSL_get_peer_certificate, \
  AROS_LCA(const SSL *, (___s), A0), \
      struct Library *, AMISSL_BASE_NAME, 1445, Amissl)
 
@@ -8386,7 +8377,7 @@ typedef ULONG _sfdc_vararg;
 #define i2d_RSAPublicKey_bio(___bp, ___rsa) \
       AROS_LC2(int, i2d_RSAPublicKey_bio, \
  AROS_LCA(BIO *, (___bp), A0), \
- AROS_LCA(RSA *, (___rsa), A1), \
+ AROS_LCA(const RSA *, (___rsa), A1), \
      struct Library *, AMISSL_BASE_NAME, 1667, Amissl)
 
 #define d2i_RSA_PUBKEY_bio(___bp, ___rsa) \
@@ -8398,7 +8389,7 @@ typedef ULONG _sfdc_vararg;
 #define i2d_RSA_PUBKEY_bio(___bp, ___rsa) \
       AROS_LC2(int, i2d_RSA_PUBKEY_bio, \
  AROS_LCA(BIO *, (___bp), A0), \
- AROS_LCA(RSA *, (___rsa), A1), \
+ AROS_LCA(const RSA *, (___rsa), A1), \
      struct Library *, AMISSL_BASE_NAME, 1669, Amissl)
 
 #define d2i_DSA_PUBKEY_bio(___bp, ___dsa) \
@@ -8599,7 +8590,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_ALGOR(___a, ___out) \
       AROS_LC2(int, i2d_X509_ALGOR, \
- AROS_LCA(X509_ALGOR *, (___a), A0), \
+ AROS_LCA(const X509_ALGOR *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1706, Amissl)
 
@@ -8625,7 +8616,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_VAL(___a, ___out) \
       AROS_LC2(int, i2d_X509_VAL, \
- AROS_LCA(X509_VAL *, (___a), A0), \
+ AROS_LCA(const X509_VAL *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1711, Amissl)
 
@@ -8651,7 +8642,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_PUBKEY(___a, ___out) \
       AROS_LC2(int, i2d_X509_PUBKEY, \
- AROS_LCA(X509_PUBKEY *, (___a), A0), \
+ AROS_LCA(const X509_PUBKEY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1716, Amissl)
 
@@ -8678,7 +8669,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PUBKEY(___a, ___pp) \
       AROS_LC2(int, i2d_PUBKEY, \
- AROS_LCA(EVP_PKEY *, (___a), A0), \
+ AROS_LCA(const EVP_PKEY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 1721, Amissl)
 
@@ -8691,7 +8682,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_RSA_PUBKEY(___a, ___pp) \
       AROS_LC2(int, i2d_RSA_PUBKEY, \
- AROS_LCA(RSA *, (___a), A0), \
+ AROS_LCA(const RSA *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 1723, Amissl)
 
@@ -8704,7 +8695,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_DSA_PUBKEY(___a, ___pp) \
       AROS_LC2(int, i2d_DSA_PUBKEY, \
- AROS_LCA(DSA *, (___a), A0), \
+ AROS_LCA(const DSA *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 1725, Amissl)
 
@@ -8733,7 +8724,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_SIG(___a, ___out) \
       AROS_LC2(int, i2d_X509_SIG, \
- AROS_LCA(X509_SIG *, (___a), A0), \
+ AROS_LCA(const X509_SIG *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1730, Amissl)
 
@@ -8759,7 +8750,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_REQ_INFO(___a, ___out) \
       AROS_LC2(int, i2d_X509_REQ_INFO, \
- AROS_LCA(X509_REQ_INFO *, (___a), A0), \
+ AROS_LCA(const X509_REQ_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1735, Amissl)
 
@@ -8785,7 +8776,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_REQ(___a, ___out) \
       AROS_LC2(int, i2d_X509_REQ, \
- AROS_LCA(X509_REQ *, (___a), A0), \
+ AROS_LCA(const X509_REQ *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1740, Amissl)
 
@@ -8811,7 +8802,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_ATTRIBUTE(___a, ___out) \
       AROS_LC2(int, i2d_X509_ATTRIBUTE, \
- AROS_LCA(X509_ATTRIBUTE *, (___a), A0), \
+ AROS_LCA(const X509_ATTRIBUTE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1745, Amissl)
 
@@ -8844,7 +8835,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_EXTENSION(___a, ___out) \
       AROS_LC2(int, i2d_X509_EXTENSION, \
- AROS_LCA(X509_EXTENSION *, (___a), A0), \
+ AROS_LCA(const X509_EXTENSION *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1751, Amissl)
 
@@ -8870,7 +8861,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_NAME_ENTRY(___a, ___out) \
       AROS_LC2(int, i2d_X509_NAME_ENTRY, \
- AROS_LCA(X509_NAME_ENTRY *, (___a), A0), \
+ AROS_LCA(const X509_NAME_ENTRY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1756, Amissl)
 
@@ -8896,7 +8887,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_NAME(___a, ___out) \
       AROS_LC2(int, i2d_X509_NAME, \
- AROS_LCA(X509_NAME *, (___a), A0), \
+ AROS_LCA(const X509_NAME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1761, Amissl)
 
@@ -8928,7 +8919,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_CINF(___a, ___out) \
       AROS_LC2(int, i2d_X509_CINF, \
- AROS_LCA(X509_CINF *, (___a), A0), \
+ AROS_LCA(const X509_CINF *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1767, Amissl)
 
@@ -8954,7 +8945,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509(___a, ___out) \
       AROS_LC2(int, i2d_X509, \
- AROS_LCA(X509 *, (___a), A0), \
+ AROS_LCA(const X509 *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1772, Amissl)
 
@@ -8980,7 +8971,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_CERT_AUX(___a, ___out) \
       AROS_LC2(int, i2d_X509_CERT_AUX, \
- AROS_LCA(X509_CERT_AUX *, (___a), A0), \
+ AROS_LCA(const X509_CERT_AUX *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1777, Amissl)
 
@@ -9003,7 +8994,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_AUX(___a, ___pp) \
       AROS_LC2(int, i2d_X509_AUX, \
- AROS_LCA(X509 *, (___a), A0), \
+ AROS_LCA(const X509 *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 1782, Amissl)
 
@@ -9085,7 +9076,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_REVOKED(___a, ___out) \
       AROS_LC2(int, i2d_X509_REVOKED, \
- AROS_LCA(X509_REVOKED *, (___a), A0), \
+ AROS_LCA(const X509_REVOKED *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1796, Amissl)
 
@@ -9111,7 +9102,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_CRL_INFO(___a, ___out) \
       AROS_LC2(int, i2d_X509_CRL_INFO, \
- AROS_LCA(X509_CRL_INFO *, (___a), A0), \
+ AROS_LCA(const X509_CRL_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1801, Amissl)
 
@@ -9137,7 +9128,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_CRL(___a, ___out) \
       AROS_LC2(int, i2d_X509_CRL, \
- AROS_LCA(X509_CRL *, (___a), A0), \
+ AROS_LCA(const X509_CRL *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1806, Amissl)
 
@@ -9178,7 +9169,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_NETSCAPE_SPKI(___a, ___out) \
       AROS_LC2(int, i2d_NETSCAPE_SPKI, \
- AROS_LCA(NETSCAPE_SPKI *, (___a), A0), \
+ AROS_LCA(const NETSCAPE_SPKI *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1816, Amissl)
 
@@ -9204,7 +9195,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_NETSCAPE_SPKAC(___a, ___out) \
       AROS_LC2(int, i2d_NETSCAPE_SPKAC, \
- AROS_LCA(NETSCAPE_SPKAC *, (___a), A0), \
+ AROS_LCA(const NETSCAPE_SPKAC *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1821, Amissl)
 
@@ -9230,7 +9221,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_NETSCAPE_CERT_SEQUENCE(___a, ___out) \
       AROS_LC2(int, i2d_NETSCAPE_CERT_SEQUENCE, \
- AROS_LCA(NETSCAPE_CERT_SEQUENCE *, (___a), A0), \
+ AROS_LCA(const NETSCAPE_CERT_SEQUENCE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1826, Amissl)
 
@@ -9596,8 +9587,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const X509_NAME *, (___b), A1), \
      struct Library *, AMISSL_BASE_NAME, 1884, Amissl)
 
-#define X509_NAME_hash(___x) \
-      AROS_LC1(unsigned long, X509_NAME_hash, \
+#define OBSOLETE_X509_NAME_hash(___x) \
+      AROS_LC1(unsigned long, OBSOLETE_X509_NAME_hash, \
  AROS_LCA(X509_NAME *, (___x), A0), \
      struct Library *, AMISSL_BASE_NAME, 1885, Amissl)
 
@@ -10246,7 +10237,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PBEPARAM(___a, ___out) \
       AROS_LC2(int, i2d_PBEPARAM, \
- AROS_LCA(PBEPARAM *, (___a), A0), \
+ AROS_LCA(const PBEPARAM *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1980, Amissl)
 
@@ -10272,7 +10263,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PBE2PARAM(___a, ___out) \
       AROS_LC2(int, i2d_PBE2PARAM, \
- AROS_LCA(PBE2PARAM *, (___a), A0), \
+ AROS_LCA(const PBE2PARAM *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1985, Amissl)
 
@@ -10298,7 +10289,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PBKDF2PARAM(___a, ___out) \
       AROS_LC2(int, i2d_PBKDF2PARAM, \
- AROS_LCA(PBKDF2PARAM *, (___a), A0), \
+ AROS_LCA(const PBKDF2PARAM *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1990, Amissl)
 
@@ -10340,7 +10331,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS8_PRIV_KEY_INFO(___a, ___out) \
       AROS_LC2(int, i2d_PKCS8_PRIV_KEY_INFO, \
- AROS_LCA(PKCS8_PRIV_KEY_INFO *, (___a), A0), \
+ AROS_LCA(const PKCS8_PRIV_KEY_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 1997, Amissl)
 
@@ -10661,7 +10652,7 @@ typedef ULONG _sfdc_vararg;
 
 #define X509_STORE_CTX_get_current_cert(___ctx) \
       AROS_LC1(X509 *, X509_STORE_CTX_get_current_cert, \
- AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 2054, Amissl)
 
 #define X509_STORE_CTX_get0_chain(___ctx) \
@@ -10737,7 +10728,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_BASIC_CONSTRAINTS(___a, ___out) \
       AROS_LC2(int, i2d_BASIC_CONSTRAINTS, \
- AROS_LCA(BASIC_CONSTRAINTS *, (___a), A0), \
+ AROS_LCA(const BASIC_CONSTRAINTS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2067, Amissl)
 
@@ -10763,7 +10754,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_SXNET(___a, ___out) \
       AROS_LC2(int, i2d_SXNET, \
- AROS_LCA(SXNET *, (___a), A0), \
+ AROS_LCA(const SXNET *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2072, Amissl)
 
@@ -10789,7 +10780,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_SXNETID(___a, ___out) \
       AROS_LC2(int, i2d_SXNETID, \
- AROS_LCA(SXNETID *, (___a), A0), \
+ AROS_LCA(const SXNETID *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2077, Amissl)
 
@@ -10857,7 +10848,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_AUTHORITY_KEYID(___a, ___out) \
       AROS_LC2(int, i2d_AUTHORITY_KEYID, \
- AROS_LCA(AUTHORITY_KEYID *, (___a), A0), \
+ AROS_LCA(const AUTHORITY_KEYID *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2088, Amissl)
 
@@ -10883,7 +10874,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKEY_USAGE_PERIOD(___a, ___out) \
       AROS_LC2(int, i2d_PKEY_USAGE_PERIOD, \
- AROS_LCA(PKEY_USAGE_PERIOD *, (___a), A0), \
+ AROS_LCA(const PKEY_USAGE_PERIOD *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2093, Amissl)
 
@@ -10909,7 +10900,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_GENERAL_NAME(___a, ___out) \
       AROS_LC2(int, i2d_GENERAL_NAME, \
- AROS_LCA(GENERAL_NAME *, (___a), A0), \
+ AROS_LCA(const GENERAL_NAME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2098, Amissl)
 
@@ -10948,7 +10939,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_GENERAL_NAMES(___a, ___out) \
       AROS_LC2(int, i2d_GENERAL_NAMES, \
- AROS_LCA(GENERAL_NAMES *, (___a), A0), \
+ AROS_LCA(const GENERAL_NAMES *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2105, Amissl)
 
@@ -10988,7 +10979,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_OTHERNAME(___a, ___out) \
       AROS_LC2(int, i2d_OTHERNAME, \
- AROS_LCA(OTHERNAME *, (___a), A0), \
+ AROS_LCA(const OTHERNAME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2112, Amissl)
 
@@ -11014,7 +11005,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_EDIPARTYNAME(___a, ___out) \
       AROS_LC2(int, i2d_EDIPARTYNAME, \
- AROS_LCA(EDIPARTYNAME *, (___a), A0), \
+ AROS_LCA(const EDIPARTYNAME *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2117, Amissl)
 
@@ -11053,7 +11044,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_EXTENDED_KEY_USAGE(___a, ___out) \
       AROS_LC2(int, i2d_EXTENDED_KEY_USAGE, \
- AROS_LCA(EXTENDED_KEY_USAGE *, (___a), A0), \
+ AROS_LCA(const EXTENDED_KEY_USAGE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2124, Amissl)
 
@@ -11085,7 +11076,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_CERTIFICATEPOLICIES(___a, ___out) \
       AROS_LC2(int, i2d_CERTIFICATEPOLICIES, \
- AROS_LCA(CERTIFICATEPOLICIES *, (___a), A0), \
+ AROS_LCA(const CERTIFICATEPOLICIES *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2130, Amissl)
 
@@ -11111,7 +11102,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_POLICYINFO(___a, ___out) \
       AROS_LC2(int, i2d_POLICYINFO, \
- AROS_LCA(POLICYINFO *, (___a), A0), \
+ AROS_LCA(const POLICYINFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2135, Amissl)
 
@@ -11137,7 +11128,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_POLICYQUALINFO(___a, ___out) \
       AROS_LC2(int, i2d_POLICYQUALINFO, \
- AROS_LCA(POLICYQUALINFO *, (___a), A0), \
+ AROS_LCA(const POLICYQUALINFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2140, Amissl)
 
@@ -11163,7 +11154,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_USERNOTICE(___a, ___out) \
       AROS_LC2(int, i2d_USERNOTICE, \
- AROS_LCA(USERNOTICE *, (___a), A0), \
+ AROS_LCA(const USERNOTICE *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2145, Amissl)
 
@@ -11189,7 +11180,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_NOTICEREF(___a, ___out) \
       AROS_LC2(int, i2d_NOTICEREF, \
- AROS_LCA(NOTICEREF *, (___a), A0), \
+ AROS_LCA(const NOTICEREF *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2150, Amissl)
 
@@ -11215,7 +11206,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_CRL_DIST_POINTS(___a, ___out) \
       AROS_LC2(int, i2d_CRL_DIST_POINTS, \
- AROS_LCA(CRL_DIST_POINTS *, (___a), A0), \
+ AROS_LCA(const CRL_DIST_POINTS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2155, Amissl)
 
@@ -11960,10 +11951,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int *, (___num), D1), \
      struct Library *, AMISSL_BASE_NAME, 2270, Amissl)
 
-#define _shadow_DES_check_key() \
-      AROS_LC0(int *, _shadow_DES_check_key, \
-     struct Library *, AMISSL_BASE_NAME, 2271, Amissl)
-
 #define DES_options() \
       AROS_LC0(const char *, DES_options, \
      struct Library *, AMISSL_BASE_NAME, 2272, Amissl)
@@ -12605,8 +12592,8 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(const char *, MD2_options, \
      struct Library *, AMISSL_BASE_NAME, 2405, Amissl)
 
-#define MD2_Init(___c) \
-      AROS_LC1(int, MD2_Init, \
+#define OBSOLETE_MD2_Init(___c) \
+      AROS_LC1(int, OBSOLETE_MD2_Init, \
  AROS_LCA(MD2_CTX *, (___c), A0), \
      struct Library *, AMISSL_BASE_NAME, 2406, Amissl)
 
@@ -13134,23 +13121,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___pl), D3), \
      struct Library *, AMISSL_BASE_NAME, 2486, Amissl)
 
-#define RSA_padding_add_SSLv23(___to, ___tlen, ___f, ___fl) \
-      AROS_LC4(int, RSA_padding_add_SSLv23, \
- AROS_LCA(unsigned char *, (___to), A0), \
- AROS_LCA(int, (___tlen), D0), \
- AROS_LCA(const unsigned char *, (___f), A1), \
- AROS_LCA(int, (___fl), D1), \
-     struct Library *, AMISSL_BASE_NAME, 2487, Amissl)
-
-#define RSA_padding_check_SSLv23(___to, ___tlen, ___f, ___fl, ___rsa_len) \
-      AROS_LC5(int, RSA_padding_check_SSLv23, \
- AROS_LCA(unsigned char *, (___to), A0), \
- AROS_LCA(int, (___tlen), D0), \
- AROS_LCA(const unsigned char *, (___f), A1), \
- AROS_LCA(int, (___fl), D1), \
- AROS_LCA(int, (___rsa_len), D2), \
-     struct Library *, AMISSL_BASE_NAME, 2488, Amissl)
-
 #define RSA_padding_add_none(___to, ___tlen, ___f, ___fl) \
       AROS_LC4(int, RSA_padding_add_none, \
  AROS_LCA(unsigned char *, (___to), A0), \
@@ -13255,7 +13225,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PROXY_POLICY(___a, ___out) \
       AROS_LC2(int, i2d_PROXY_POLICY, \
- AROS_LCA(PROXY_POLICY *, (___a), A0), \
+ AROS_LCA(const PROXY_POLICY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2514, Amissl)
 
@@ -13281,17 +13251,13 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PROXY_CERT_INFO_EXTENSION(___a, ___out) \
       AROS_LC2(int, i2d_PROXY_CERT_INFO_EXTENSION, \
- AROS_LCA(PROXY_CERT_INFO_EXTENSION *, (___a), A0), \
+ AROS_LCA(const PROXY_CERT_INFO_EXTENSION *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2519, Amissl)
 
 #define PROXY_CERT_INFO_EXTENSION_it() \
       AROS_LC0(const ASN1_ITEM *, PROXY_CERT_INFO_EXTENSION_it, \
      struct Library *, AMISSL_BASE_NAME, 2520, Amissl)
-
-#define FIPS_mode() \
-      AROS_LC0(int, FIPS_mode, \
-     struct Library *, AMISSL_BASE_NAME, 2521, Amissl)
 
 #define BN_mod_exp_mont_consttime(___rr, ___a, ___p, ___m, ___ctx, ___in_mont) \
       AROS_LC6(int, BN_mod_exp_mont_consttime, \
@@ -13735,13 +13701,13 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(void, ENGINE_register_all_ciphers, \
      struct Library *, AMISSL_BASE_NAME, 2591, Amissl)
 
-#define EVP_CIPHER_nid(___cipher) \
-      AROS_LC1(int, EVP_CIPHER_nid, \
+#define OBSOLETE_EVP_CIPHER_nid(___cipher) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_nid, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 2592, Amissl)
 
-#define EVP_MD_type(___md) \
-      AROS_LC1(int, EVP_MD_type, \
+#define OBSOLETE_EVP_MD_type(___md) \
+      AROS_LC1(int, OBSOLETE_EVP_MD_type, \
  AROS_LCA(const EVP_MD *, (___md), A0), \
      struct Library *, AMISSL_BASE_NAME, 2593, Amissl)
 
@@ -13827,8 +13793,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 2607, Amissl)
 
-#define EVP_CIPHER_iv_length(___cipher) \
-      AROS_LC1(int, EVP_CIPHER_iv_length, \
+#define OBSOLETE_EVP_CIPHER_iv_length(___cipher) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_iv_length, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 2608, Amissl)
 
@@ -14239,14 +14205,14 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___maxline), A3), \
      struct Library *, AMISSL_BASE_NAME, 2676, Amissl)
 
-#define OCSP_sendreq_nbio(___presp, ___rctx) \
-      AROS_LC2(int, OCSP_sendreq_nbio, \
+#define OBSOLETE_OCSP_sendreq_nbio(___presp, ___rctx) \
+      AROS_LC2(int, OBSOLETE_OCSP_sendreq_nbio, \
  AROS_LCA(OCSP_RESPONSE **, (___presp), A0), \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A1), \
      struct Library *, AMISSL_BASE_NAME, 2677, Amissl)
 
-#define OCSP_REQ_CTX_free(___rctx) \
-      AROS_LC1(void, OCSP_REQ_CTX_free, \
+#define OBSOLETE_OCSP_REQ_CTX_free(___rctx) \
+      AROS_LC1(void, OBSOLETE_OCSP_REQ_CTX_free, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 2678, Amissl)
 
@@ -14887,7 +14853,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ECPrivateKey(___key, ___out) \
       AROS_LC2(int, i2d_ECPrivateKey, \
- AROS_LCA(EC_KEY *, (___key), A0), \
+ AROS_LCA(const EC_KEY *, (___key), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2880, Amissl)
 
@@ -15009,8 +14975,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EC_KEY *, (___key), A0), \
      struct Library *, AMISSL_BASE_NAME, 2901, Amissl)
 
-#define d2i_EC_PUBKEY(___a, ___pp, ___length) \
-      AROS_LC3(EC_KEY *, d2i_EC_PUBKEY, \
+#define OBSOLETE_d2i_EC_PUBKEY(___a, ___pp, ___length) \
+      AROS_LC3(EC_KEY *, OBSOLETE_d2i_EC_PUBKEY, \
  AROS_LCA(EC_KEY **, (___a), A0), \
  AROS_LCA(const unsigned char **, (___pp), A1), \
  AROS_LCA(long, (___length), A2), \
@@ -15063,7 +15029,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ECParameters(___key, ___out) \
       AROS_LC2(int, i2d_ECParameters, \
- AROS_LCA(EC_KEY *, (___key), A0), \
+ AROS_LCA(const EC_KEY *, (___key), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 2915, Amissl)
 
@@ -15086,7 +15052,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_EC_PUBKEY(___a, ___pp) \
       AROS_LC2(int, i2d_EC_PUBKEY, \
- AROS_LCA(EC_KEY *, (___a), A0), \
+ AROS_LCA(const EC_KEY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 2922, Amissl)
 
@@ -15615,7 +15581,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_CMS_ContentInfo(___a, ___out) \
       AROS_LC2(int, i2d_CMS_ContentInfo, \
- AROS_LCA(CMS_ContentInfo *, (___a), A0), \
+ AROS_LCA(const CMS_ContentInfo *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 3044, Amissl)
 
@@ -16189,7 +16155,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_CMS_ReceiptRequest(___a, ___out) \
       AROS_LC2(int, i2d_CMS_ReceiptRequest, \
- AROS_LCA(CMS_ReceiptRequest *, (___a), A0), \
+ AROS_LCA(const CMS_ReceiptRequest *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 3129, Amissl)
 
@@ -16812,11 +16778,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___u), A3), \
      struct Library *, AMISSL_BASE_NAME, 3240, Amissl)
 
-#define FIPS_mode_set(___r) \
-      AROS_LC1(int, FIPS_mode_set, \
- AROS_LCA(int, (___r), D0), \
-     struct Library *, AMISSL_BASE_NAME, 3279, Amissl)
-
 #define BN_X931_generate_Xpq(___Xp, ___Xq, ___nbits, ___ctx) \
       AROS_LC4(int, BN_X931_generate_Xpq, \
  AROS_LCA(BIGNUM *, (___Xp), A0), \
@@ -17091,7 +17052,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_NDEF(___a, ___out) \
       AROS_LC2(int, i2d_PKCS7_NDEF, \
- AROS_LCA(PKCS7 *, (___a), A0), \
+ AROS_LCA(const PKCS7 *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 3338, Amissl)
 
@@ -17410,8 +17371,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_CIPHER_CTX *, (___a), A0), \
      struct Library *, AMISSL_BASE_NAME, 3402, Amissl)
 
-#define EVP_CIPHER_block_size(___cipher) \
-      AROS_LC1(int, EVP_CIPHER_block_size, \
+#define OBSOLETE_EVP_CIPHER_block_size(___cipher) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_block_size, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 3403, Amissl)
 
@@ -17426,18 +17387,18 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const BIO *, (___b), A0), \
      struct Library *, AMISSL_BASE_NAME, 3405, Amissl)
 
-#define EVP_CIPHER_CTX_nid(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_nid, \
+#define OBSOLETE_EVP_CIPHER_CTX_nid(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_nid, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3406, Amissl)
 
-#define EVP_CIPHER_CTX_key_length(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_key_length, \
+#define OBSOLETE_EVP_CIPHER_CTX_key_length(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_key_length, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3407, Amissl)
 
-#define EVP_MD_size(___md) \
-      AROS_LC1(int, EVP_MD_size, \
+#define OBSOLETE_EVP_MD_size(___md) \
+      AROS_LC1(int, OBSOLETE_EVP_MD_size, \
  AROS_LCA(const EVP_MD *, (___md), A0), \
      struct Library *, AMISSL_BASE_NAME, 3408, Amissl)
 
@@ -17453,8 +17414,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 3410, Amissl)
 
-#define EVP_MD_pkey_type(___md) \
-      AROS_LC1(int, EVP_MD_pkey_type, \
+#define OBSOLETE_EVP_MD_pkey_type(___md) \
+      AROS_LC1(int, OBSOLETE_EVP_MD_pkey_type, \
  AROS_LCA(const EVP_MD *, (___md), A0), \
      struct Library *, AMISSL_BASE_NAME, 3411, Amissl)
 
@@ -17464,8 +17425,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 3412, Amissl)
 
-#define EVP_CIPHER_flags(___cipher) \
-      AROS_LC1(unsigned long, EVP_CIPHER_flags, \
+#define OBSOLETE_EVP_CIPHER_flags(___cipher) \
+      AROS_LC1(unsigned long, OBSOLETE_EVP_CIPHER_flags, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 3413, Amissl)
 
@@ -17474,8 +17435,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const BIO *, (___b), A0), \
      struct Library *, AMISSL_BASE_NAME, 3414, Amissl)
 
-#define EVP_CIPHER_key_length(___cipher) \
-      AROS_LC1(int, EVP_CIPHER_key_length, \
+#define OBSOLETE_EVP_CIPHER_key_length(___cipher) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_key_length, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 3415, Amissl)
 
@@ -17487,8 +17448,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(unsigned int, (___inl), D0), \
      struct Library *, AMISSL_BASE_NAME, 3416, Amissl)
 
-#define EVP_CIPHER_CTX_block_size(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_block_size, \
+#define OBSOLETE_EVP_CIPHER_CTX_block_size(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_block_size, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3417, Amissl)
 
@@ -17502,8 +17463,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3419, Amissl)
 
-#define EVP_MD_block_size(___md) \
-      AROS_LC1(int, EVP_MD_block_size, \
+#define OBSOLETE_EVP_MD_block_size(___md) \
+      AROS_LC1(int, OBSOLETE_EVP_MD_block_size, \
  AROS_LCA(const EVP_MD *, (___md), A0), \
      struct Library *, AMISSL_BASE_NAME, 3420, Amissl)
 
@@ -17517,8 +17478,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const BIO *, (___b), A0), \
      struct Library *, AMISSL_BASE_NAME, 3423, Amissl)
 
-#define EVP_CIPHER_CTX_iv_length(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_iv_length, \
+#define OBSOLETE_EVP_CIPHER_CTX_iv_length(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_iv_length, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3424, Amissl)
 
@@ -17539,7 +17500,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_EXTENSIONS(___a, ___out) \
       AROS_LC2(int, i2d_X509_EXTENSIONS, \
- AROS_LCA(X509_EXTENSIONS *, (___a), A0), \
+ AROS_LCA(const X509_EXTENSIONS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 3427, Amissl)
 
@@ -17590,7 +17551,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_X509_ALGORS(___a, ___out) \
       AROS_LC2(int, i2d_X509_ALGORS, \
- AROS_LCA(X509_ALGORS *, (___a), A0), \
+ AROS_LCA(const X509_ALGORS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 3434, Amissl)
 
@@ -17941,7 +17902,7 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_asn1_set_public(___ameth, ___pub_decode, ___pub_encode, ___pub_cmp, ___pub_print, ___pkey_size, ___pkey_bits) \
       AROS_LC7(void, EVP_PKEY_asn1_set_public, \
  AROS_LCA(EVP_PKEY_ASN1_METHOD *, (___ameth), A0), \
- AROS_LCA(int (*)(EVP_PKEY *pk,X509_PUBKEY *pub), (___pub_decode), A1), \
+ AROS_LCA(int (*)(EVP_PKEY *pk,const X509_PUBKEY *pub), (___pub_decode), A1), \
  AROS_LCA(int (*)(X509_PUBKEY *pub,const EVP_PKEY *pk), (___pub_encode), A2), \
  AROS_LCA(int (*)(const EVP_PKEY *a,const EVP_PKEY *b), (___pub_cmp), A3), \
  AROS_LCA(int (*)(BIO *out,const EVP_PKEY *pkey,int indent,ASN1_PCTX *pctx), (___pub_print), D0), \
@@ -18176,7 +18137,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ISSUING_DIST_POINT(___a, ___pp) \
       AROS_LC2(int, i2d_ISSUING_DIST_POINT, \
- AROS_LCA(ISSUING_DIST_POINT *, (___a), A0), \
+ AROS_LCA(const ISSUING_DIST_POINT *, (___a), A0), \
  AROS_LCA(unsigned char **, (___pp), A1), \
      struct Library *, AMISSL_BASE_NAME, 3536, Amissl)
 
@@ -18252,8 +18213,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 3548, Amissl)
 
-#define EVP_PKEY_base_id(___pkey) \
-      AROS_LC1(int, EVP_PKEY_base_id, \
+#define OBSOLETE_EVP_PKEY_base_id(___pkey) \
+      AROS_LC1(int, OBSOLETE_EVP_PKEY_base_id, \
  AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 3549, Amissl)
 
@@ -19043,7 +19004,7 @@ typedef ULONG _sfdc_vararg;
       AROS_LC4(X509_CRL_METHOD *, X509_CRL_METHOD_new, \
  AROS_LCA(int (*)(X509_CRL *crl), (___crl_init), A0), \
  AROS_LCA(int (*)(X509_CRL *crl), (___crl_free), A1), \
- AROS_LCA(int (*)(X509_CRL *crl,X509_REVOKED **ret,ASN1_INTEGER *ser,X509_NAME *issuer), (___crl_lookup), A2), \
+ AROS_LCA(int (*)(X509_CRL *crl,X509_REVOKED **ret,const ASN1_INTEGER *serial,const X509_NAME *issuer), (___crl_lookup), A2), \
  AROS_LCA(int (*)(X509_CRL *crl,EVP_PKEY *pk), (___crl_verify), A3), \
      struct Library *, AMISSL_BASE_NAME, 3680, Amissl)
 
@@ -19543,8 +19504,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___type), A0), \
      struct Library *, AMISSL_BASE_NAME, 3767, Amissl)
 
-#define EVP_PKEY_id(___pkey) \
-      AROS_LC1(int, EVP_PKEY_id, \
+#define OBSOLETE_EVP_PKEY_id(___pkey) \
+      AROS_LC1(int, OBSOLETE_EVP_PKEY_id, \
  AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 3768, Amissl)
 
@@ -19866,7 +19827,7 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_set_copy(___pmeth, ___copy) \
       AROS_LC2(void, EVP_PKEY_meth_set_copy, \
  AROS_LCA(EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *dst,EVP_PKEY_CTX *src), (___copy), A1), \
+ AROS_LCA(int (*)(EVP_PKEY_CTX *dst,const EVP_PKEY_CTX *src), (___copy), A1), \
      struct Library *, AMISSL_BASE_NAME, 3822, Amissl)
 
 #define ASN1_PCTX_set_cert_flags(___p, ___flags) \
@@ -19926,8 +19887,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___str), A1), \
      struct Library *, AMISSL_BASE_NAME, 3831, Amissl)
 
-#define EVP_MD_flags(___md) \
-      AROS_LC1(unsigned long, EVP_MD_flags, \
+#define OBSOLETE_EVP_MD_flags(___md) \
+      AROS_LC1(unsigned long, OBSOLETE_EVP_MD_flags, \
  AROS_LCA(const EVP_MD *, (___md), A0), \
      struct Library *, AMISSL_BASE_NAME, 3832, Amissl)
 
@@ -19936,15 +19897,15 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(TS_RESP_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3833, Amissl)
 
-#define OCSP_REQ_CTX_add1_header(___rctx, ___name, ___value) \
-      AROS_LC3(int, OCSP_REQ_CTX_add1_header, \
+#define OBSOLETE_OCSP_REQ_CTX_add1_header(___rctx, ___name, ___value) \
+      AROS_LC3(int, OBSOLETE_OCSP_REQ_CTX_add1_header, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(const char *, (___name), A1), \
  AROS_LCA(const char *, (___value), A2), \
      struct Library *, AMISSL_BASE_NAME, 3834, Amissl)
 
-#define OCSP_REQ_CTX_set1_req(___rctx, ___req) \
-      AROS_LC2(int, OCSP_REQ_CTX_set1_req, \
+#define OBSOLETE_OCSP_REQ_CTX_set1_req(___rctx, ___req) \
+      AROS_LC2(int, OBSOLETE_OCSP_REQ_CTX_set1_req, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(OCSP_REQUEST *, (___req), A1), \
      struct Library *, AMISSL_BASE_NAME, 3835, Amissl)
@@ -20114,13 +20075,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___enc), D2), \
  AROS_LCA(block128_f, (___block), D3), \
      struct Library *, AMISSL_BASE_NAME, 3854, Amissl)
-
-#define OPENSSL_memcmp(___p1, ___p2, ___n) \
-      AROS_LC3(int, OPENSSL_memcmp, \
- AROS_LCA(const void *, (___p1), A0), \
- AROS_LCA(const void *, (___p2), A1), \
- AROS_LCA(size_t, (___n), D0), \
-     struct Library *, AMISSL_BASE_NAME, 3855, Amissl)
 
 #define OPENSSL_gmtime(___timer, ___result) \
       AROS_LC2(struct tm *, OPENSSL_gmtime, \
@@ -20773,45 +20727,45 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(block128_f, (___block), D1), \
      struct Library *, AMISSL_BASE_NAME, 3969, Amissl)
 
-#define OCSP_REQ_CTX_get0_mem_bio(___rctx) \
-      AROS_LC1(BIO *, OCSP_REQ_CTX_get0_mem_bio, \
+#define OBSOLETE_OCSP_REQ_CTX_get0_mem_bio(___rctx) \
+      AROS_LC1(BIO *, OBSOLETE_OCSP_REQ_CTX_get0_mem_bio, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3970, Amissl)
 
-#define OCSP_REQ_CTX_http(___rctx, ___op, ___path) \
-      AROS_LC3(int, OCSP_REQ_CTX_http, \
+#define OBSOLETE_OCSP_REQ_CTX_http(___rctx, ___op, ___path) \
+      AROS_LC3(int, OBSOLETE_OCSP_REQ_CTX_http, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(const char *, (___op), A1), \
  AROS_LCA(const char *, (___path), A2), \
      struct Library *, AMISSL_BASE_NAME, 3971, Amissl)
 
-#define OCSP_REQ_CTX_i2d(___rctx, ___it, ___val) \
-      AROS_LC3(int, OCSP_REQ_CTX_i2d, \
+#define OBSOLETE_OCSP_REQ_CTX_i2d(___rctx, ___it, ___val) \
+      AROS_LC3(int, OBSOLETE_OCSP_REQ_CTX_i2d, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(const ASN1_ITEM *, (___it), A1), \
  AROS_LCA(ASN1_VALUE *, (___val), A2), \
      struct Library *, AMISSL_BASE_NAME, 3972, Amissl)
 
-#define OCSP_REQ_CTX_nbio(___rctx) \
-      AROS_LC1(int, OCSP_REQ_CTX_nbio, \
+#define OBSOLETE_OCSP_REQ_CTX_nbio(___rctx) \
+      AROS_LC1(int, OBSOLETE_OCSP_REQ_CTX_nbio, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3973, Amissl)
 
-#define OCSP_REQ_CTX_nbio_d2i(___rctx, ___pval, ___it) \
-      AROS_LC3(int, OCSP_REQ_CTX_nbio_d2i, \
+#define OBSOLETE_OCSP_REQ_CTX_nbio_d2i(___rctx, ___pval, ___it) \
+      AROS_LC3(int, OBSOLETE_OCSP_REQ_CTX_nbio_d2i, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(ASN1_VALUE **, (___pval), A1), \
  AROS_LCA(const ASN1_ITEM *, (___it), A2), \
      struct Library *, AMISSL_BASE_NAME, 3974, Amissl)
 
-#define OCSP_REQ_CTX_new(___io, ___maxline) \
-      AROS_LC2(OCSP_REQ_CTX *, OCSP_REQ_CTX_new, \
+#define OBSOLETE_OCSP_REQ_CTX_new(___io, ___maxline) \
+      AROS_LC2(OCSP_REQ_CTX *, OBSOLETE_OCSP_REQ_CTX_new, \
  AROS_LCA(BIO *, (___io), A0), \
  AROS_LCA(int, (___maxline), D0), \
      struct Library *, AMISSL_BASE_NAME, 3975, Amissl)
 
-#define OCSP_set_max_response_length(___rctx, ___len) \
-      AROS_LC2(void, OCSP_set_max_response_length, \
+#define OBSOLETE_OCSP_set_max_response_length(___rctx, ___len) \
+      AROS_LC2(void, OBSOLETE_OCSP_set_max_response_length, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(unsigned long, (___len), D0), \
      struct Library *, AMISSL_BASE_NAME, 3976, Amissl)
@@ -20903,8 +20857,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(unsigned int, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 3988, Amissl)
 
-#define X509_CRL_http_nbio(___rctx, ___pcrl) \
-      AROS_LC2(int, X509_CRL_http_nbio, \
+#define OBSOLETE_X509_CRL_http_nbio(___rctx, ___pcrl) \
+      AROS_LC2(int, OBSOLETE_X509_CRL_http_nbio, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(X509_CRL **, (___pcrl), A1), \
      struct Library *, AMISSL_BASE_NAME, 3989, Amissl)
@@ -20921,8 +20875,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const X509 *, (___x), A0), \
      struct Library *, AMISSL_BASE_NAME, 3991, Amissl)
 
-#define X509_http_nbio(___rctx, ___pcert) \
-      AROS_LC2(int, X509_http_nbio, \
+#define OBSOLETE_X509_http_nbio(___rctx, ___pcert) \
+      AROS_LC2(int, OBSOLETE_X509_http_nbio, \
  AROS_LCA(OCSP_REQ_CTX *, (___rctx), A0), \
  AROS_LCA(X509 **, (___pcert), A1), \
      struct Library *, AMISSL_BASE_NAME, 3992, Amissl)
@@ -21031,8 +20985,8 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_asn1_set_item(___ameth, ___item_verify, ___item_sign) \
       AROS_LC3(void, EVP_PKEY_asn1_set_item, \
  AROS_LCA(EVP_PKEY_ASN1_METHOD *, (___ameth), A0), \
- AROS_LCA(int (*)(EVP_MD_CTX *,const ASN1_ITEM *,void *,X509_ALGOR *,ASN1_BIT_STRING *,EVP_PKEY *), (___item_verify), A1), \
- AROS_LCA(int (*)(EVP_MD_CTX *,const ASN1_ITEM *,void *,X509_ALGOR *,X509_ALGOR *,ASN1_BIT_STRING *), (___item_sign), A2), \
+ AROS_LCA(int (*)(EVP_MD_CTX *,const ASN1_ITEM *,const void *,const X509_ALGOR *,const ASN1_BIT_STRING *,EVP_PKEY *), (___item_verify), A1), \
+ AROS_LCA(int (*)(EVP_MD_CTX *,const ASN1_ITEM *,const void *,X509_ALGOR *,X509_ALGOR *,ASN1_BIT_STRING *), (___item_sign), A2), \
      struct Library *, AMISSL_BASE_NAME, 4010, Amissl)
 
 #define DTLS_client_method() \
@@ -21804,11 +21758,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___line), D1), \
      struct Library *, AMISSL_BASE_NAME, 4146, Amissl)
 
-#define CRYPTO_set_mem_debug(___flag) \
-      AROS_LC1(int, CRYPTO_set_mem_debug, \
- AROS_LCA(int, (___flag), D0), \
-     struct Library *, AMISSL_BASE_NAME, 4147, Amissl)
-
 #define CRYPTO_strndup(___str, ___s, ___file, ___line) \
       AROS_LC4(char *, CRYPTO_strndup, \
  AROS_LCA(const char *, (___str), A0), \
@@ -22185,8 +22134,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___cipher_data), A1), \
      struct Library *, AMISSL_BASE_NAME, 4215, Amissl)
 
-#define EVP_CIPHER_CTX_encrypting(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_encrypting, \
+#define OBSOLETE_EVP_CIPHER_CTX_encrypting(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_encrypting, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4216, Amissl)
 
@@ -22200,8 +22149,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4218, Amissl)
 
-#define EVP_CIPHER_CTX_num(___ctx) \
-      AROS_LC1(int, EVP_CIPHER_CTX_num, \
+#define OBSOLETE_EVP_CIPHER_CTX_num(___ctx) \
+      AROS_LC1(int, OBSOLETE_EVP_CIPHER_CTX_num, \
  AROS_LCA(const EVP_CIPHER_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4219, Amissl)
 
@@ -22358,8 +22307,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_MD_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4247, Amissl)
 
-#define EVP_MD_CTX_md_data(___ctx) \
-      AROS_LC1(void *, EVP_MD_CTX_md_data, \
+#define OBSOLETE_EVP_MD_CTX_md_data(___ctx) \
+      AROS_LC1(void *, OBSOLETE_EVP_MD_CTX_md_data, \
  AROS_LCA(const EVP_MD_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4248, Amissl)
 
@@ -22367,8 +22316,8 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(EVP_MD_CTX *, EVP_MD_CTX_new, \
      struct Library *, AMISSL_BASE_NAME, 4249, Amissl)
 
-#define EVP_MD_CTX_pkey_ctx(___ctx) \
-      AROS_LC1(EVP_PKEY_CTX *, EVP_MD_CTX_pkey_ctx, \
+#define OBSOLETE_EVP_MD_CTX_pkey_ctx(___ctx) \
+      AROS_LC1(EVP_PKEY_CTX *, OBSOLETE_EVP_MD_CTX_pkey_ctx, \
  AROS_LCA(const EVP_MD_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 4250, Amissl)
 
@@ -22542,23 +22491,23 @@ typedef ULONG _sfdc_vararg;
      struct Library *, AMISSL_BASE_NAME, 4279, Amissl)
 
 #define EVP_PKEY_get0_DH(___pkey) \
-      AROS_LC1(DH *, EVP_PKEY_get0_DH, \
- AROS_LCA(EVP_PKEY *, (___pkey), A0), \
+      AROS_LC1(const DH *, EVP_PKEY_get0_DH, \
+ AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 4280, Amissl)
 
 #define EVP_PKEY_get0_DSA(___pkey) \
-      AROS_LC1(DSA *, EVP_PKEY_get0_DSA, \
- AROS_LCA(EVP_PKEY *, (___pkey), A0), \
+      AROS_LC1(const DSA *, EVP_PKEY_get0_DSA, \
+ AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 4281, Amissl)
 
 #define EVP_PKEY_get0_EC_KEY(___pkey) \
-      AROS_LC1(EC_KEY *, EVP_PKEY_get0_EC_KEY, \
- AROS_LCA(EVP_PKEY *, (___pkey), A0), \
+      AROS_LC1(const EC_KEY *, EVP_PKEY_get0_EC_KEY, \
+ AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 4282, Amissl)
 
 #define EVP_PKEY_get0_RSA(___pkey) \
-      AROS_LC1(RSA *, EVP_PKEY_get0_RSA, \
- AROS_LCA(EVP_PKEY *, (___pkey), A0), \
+      AROS_LC1(const RSA *, EVP_PKEY_get0_RSA, \
+ AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 4283, Amissl)
 
 #define EVP_PKEY_meth_get_cleanup(___pmeth, ___pcleanup) \
@@ -22570,7 +22519,7 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_copy(___pmeth, ___pcopy) \
       AROS_LC2(void, EVP_PKEY_meth_get_copy, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,EVP_PKEY_CTX *), (___pcopy), A1), \
+ AROS_LCA(int (*)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *), (___pcopy), A1), \
      struct Library *, AMISSL_BASE_NAME, 4285, Amissl)
 
 #define EVP_PKEY_meth_get_ctrl(___pmeth, ___pctrl, ___pctrl_str) \
@@ -22656,8 +22605,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int (*)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *), (___pverifyctx), A2), \
      struct Library *, AMISSL_BASE_NAME, 4297, Amissl)
 
-#define EVP_PKEY_security_bits(___pkey) \
-      AROS_LC1(int, EVP_PKEY_security_bits, \
+#define OBSOLETE_EVP_PKEY_security_bits(___pkey) \
+      AROS_LC1(int, OBSOLETE_EVP_PKEY_security_bits, \
  AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
      struct Library *, AMISSL_BASE_NAME, 4298, Amissl)
 
@@ -23054,8 +23003,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_STORE *, (___s), A1), \
      struct Library *, AMISSL_BASE_NAME, 4360, Amissl)
 
-#define TS_VERIFY_CTS_set_certs(___ctx, ___certs) \
-      AROS_LC2(STACK_OF(X509) *, TS_VERIFY_CTS_set_certs, \
+#define OBSOLETE_TS_VERIFY_CTS_set_certs(___ctx, ___certs) \
+      AROS_LC2(STACK_OF(X509) *, OBSOLETE_TS_VERIFY_CTS_set_certs, \
  AROS_LCA(TS_VERIFY_CTX *, (___ctx), A0), \
  AROS_LCA(STACK_OF(X509) *, (___certs), A1), \
      struct Library *, AMISSL_BASE_NAME, 4361, Amissl)
@@ -25735,7 +25684,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASIdentifierChoice(___a, ___out) \
       AROS_LC2(int, i2d_ASIdentifierChoice, \
- AROS_LCA(ASIdentifierChoice *, (___a), A0), \
+ AROS_LCA(const ASIdentifierChoice *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4839, Amissl)
 
@@ -25761,7 +25710,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASIdentifiers(___a, ___out) \
       AROS_LC2(int, i2d_ASIdentifiers, \
- AROS_LCA(ASIdentifiers *, (___a), A0), \
+ AROS_LCA(const ASIdentifiers *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4844, Amissl)
 
@@ -25787,7 +25736,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASIdOrRange(___a, ___out) \
       AROS_LC2(int, i2d_ASIdOrRange, \
- AROS_LCA(ASIdOrRange *, (___a), A0), \
+ AROS_LCA(const ASIdOrRange *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4849, Amissl)
 
@@ -25813,7 +25762,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ASRange(___a, ___out) \
       AROS_LC2(int, i2d_ASRange, \
- AROS_LCA(ASRange *, (___a), A0), \
+ AROS_LCA(const ASRange *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4854, Amissl)
 
@@ -25839,7 +25788,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_IPAddressChoice(___a, ___out) \
       AROS_LC2(int, i2d_IPAddressChoice, \
- AROS_LCA(IPAddressChoice *, (___a), A0), \
+ AROS_LCA(const IPAddressChoice *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4859, Amissl)
 
@@ -25865,7 +25814,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_IPAddressFamily(___a, ___out) \
       AROS_LC2(int, i2d_IPAddressFamily, \
- AROS_LCA(IPAddressFamily *, (___a), A0), \
+ AROS_LCA(const IPAddressFamily *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4864, Amissl)
 
@@ -25891,7 +25840,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_IPAddressOrRange(___a, ___out) \
       AROS_LC2(int, i2d_IPAddressOrRange, \
- AROS_LCA(IPAddressOrRange *, (___a), A0), \
+ AROS_LCA(const IPAddressOrRange *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 4869, Amissl)
 
@@ -25961,15 +25910,15 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(int, BIO_get_new_index, \
      struct Library *, AMISSL_BASE_NAME, 4882, Amissl)
 
-#define EVP_PKEY_set1_tls_encodedpoint(___pkey, ___pt, ___ptlen) \
-      AROS_LC3(int, EVP_PKEY_set1_tls_encodedpoint, \
+#define OBSOLETE_EVP_PKEY_set1_tls_encodedpoint(___pkey, ___pt, ___ptlen) \
+      AROS_LC3(int, OBSOLETE_EVP_PKEY_set1_tls_encodedpoint, \
  AROS_LCA(EVP_PKEY *, (___pkey), A0), \
  AROS_LCA(const unsigned char *, (___pt), A1), \
  AROS_LCA(size_t, (___ptlen), D0), \
      struct Library *, AMISSL_BASE_NAME, 4883, Amissl)
 
-#define EVP_PKEY_get1_tls_encodedpoint(___pkey, ___ppt) \
-      AROS_LC2(size_t, EVP_PKEY_get1_tls_encodedpoint, \
+#define OBSOLETE_EVP_PKEY_get1_tls_encodedpoint(___pkey, ___ppt) \
+      AROS_LC2(size_t, OBSOLETE_EVP_PKEY_get1_tls_encodedpoint, \
  AROS_LCA(EVP_PKEY *, (___pkey), A0), \
  AROS_LCA(unsigned char **, (___ppt), A1), \
      struct Library *, AMISSL_BASE_NAME, 4884, Amissl)
@@ -26742,13 +26691,13 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_RSA_OAEP_PARAMS(___a, ___out) \
       AROS_LC2(int, i2d_RSA_OAEP_PARAMS, \
- AROS_LCA(RSA_OAEP_PARAMS *, (___a), A0), \
+ AROS_LCA(const RSA_OAEP_PARAMS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5017, Amissl)
 
 #define i2d_IPAddressRange(___a, ___out) \
       AROS_LC2(int, i2d_IPAddressRange, \
- AROS_LCA(IPAddressRange *, (___a), A0), \
+ AROS_LCA(const IPAddressRange *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5019, Amissl)
 
@@ -27425,83 +27374,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const OSSL_STORE_LOADER *, (___loader), A0), \
      struct Library *, AMISSL_BASE_NAME, 5141, Amissl)
 
-#define RAND_DRBG_instantiate(___drbg, ___pers, ___perslen) \
-      AROS_LC3(int, RAND_DRBG_instantiate, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(const unsigned char *, (___pers), A1), \
- AROS_LCA(size_t, (___perslen), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5142, Amissl)
-
-#define RAND_DRBG_uninstantiate(___drbg) \
-      AROS_LC1(int, RAND_DRBG_uninstantiate, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
-     struct Library *, AMISSL_BASE_NAME, 5143, Amissl)
-
-#define RAND_DRBG_set(___drbg, ___type, ___flags) \
-      AROS_LC3(int, RAND_DRBG_set, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(int, (___type), D0), \
- AROS_LCA(unsigned int, (___flags), D1), \
-     struct Library *, AMISSL_BASE_NAME, 5144, Amissl)
-
-#define RAND_DRBG_set_callbacks(___drbg, ___get_entropy, ___cleanup_entropy, ___get_nonce, ___cleanup_nonce) \
-      AROS_LC5(int, RAND_DRBG_set_callbacks, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(RAND_DRBG_get_entropy_fn, (___get_entropy), A1), \
- AROS_LCA(RAND_DRBG_cleanup_entropy_fn, (___cleanup_entropy), A2), \
- AROS_LCA(RAND_DRBG_get_nonce_fn, (___get_nonce), A3), \
- AROS_LCA(RAND_DRBG_cleanup_nonce_fn, (___cleanup_nonce), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5145, Amissl)
-
-#define RAND_DRBG_new(___type, ___flags, ___parent) \
-      AROS_LC3(RAND_DRBG *, RAND_DRBG_new, \
- AROS_LCA(int, (___type), D0), \
- AROS_LCA(unsigned int, (___flags), D1), \
- AROS_LCA(RAND_DRBG *, (___parent), A0), \
-     struct Library *, AMISSL_BASE_NAME, 5146, Amissl)
-
-#define RAND_DRBG_set_reseed_interval(___drbg, ___interval) \
-      AROS_LC2(int, RAND_DRBG_set_reseed_interval, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(unsigned int, (___interval), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5147, Amissl)
-
-#define RAND_DRBG_free(___drbg) \
-      AROS_LC1(void, RAND_DRBG_free, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
-     struct Library *, AMISSL_BASE_NAME, 5148, Amissl)
-
-#define RAND_DRBG_generate(___drbg, ___out, ___outlen, ___prediction_resistance, ___adin, ___adinlen) \
-      AROS_LC6(int, RAND_DRBG_generate, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(unsigned char *, (___out), A1), \
- AROS_LCA(size_t, (___outlen), D0), \
- AROS_LCA(int, (___prediction_resistance), D1), \
- AROS_LCA(const unsigned char *, (___adin), A2), \
- AROS_LCA(size_t, (___adinlen), D2), \
-     struct Library *, AMISSL_BASE_NAME, 5149, Amissl)
-
-#define RAND_DRBG_reseed(___drbg, ___adin, ___adinlen, ___prediction_resistance) \
-      AROS_LC4(int, RAND_DRBG_reseed, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(const unsigned char *, (___adin), A1), \
- AROS_LCA(size_t, (___adinlen), D0), \
- AROS_LCA(int, (___prediction_resistance), D1), \
-     struct Library *, AMISSL_BASE_NAME, 5150, Amissl)
-
-#define RAND_DRBG_set_ex_data(___drbg, ___idx, ___arg) \
-      AROS_LC3(int, RAND_DRBG_set_ex_data, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(int, (___idx), D0), \
- AROS_LCA(void *, (___arg), A1), \
-     struct Library *, AMISSL_BASE_NAME, 5151, Amissl)
-
-#define RAND_DRBG_get_ex_data(___drbg, ___idx) \
-      AROS_LC2(void *, RAND_DRBG_get_ex_data, \
- AROS_LCA(const RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(int, (___idx), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5152, Amissl)
-
 #define EVP_sha3_224() \
       AROS_LC0(const EVP_MD *, EVP_sha3_224, \
      struct Library *, AMISSL_BASE_NAME, 5153, Amissl)
@@ -27537,7 +27409,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_SCRYPT_PARAMS(___a, ___out) \
       AROS_LC2(int, i2d_SCRYPT_PARAMS, \
- AROS_LCA(SCRYPT_PARAMS *, (___a), A0), \
+ AROS_LCA(const SCRYPT_PARAMS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5161, Amissl)
 
@@ -27560,10 +27432,6 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_count() \
       AROS_LC0(size_t, EVP_PKEY_meth_get_count, \
      struct Library *, AMISSL_BASE_NAME, 5165, Amissl)
-
-#define RAND_DRBG_get0_public() \
-      AROS_LC0(RAND_DRBG *, RAND_DRBG_get0_public, \
-     struct Library *, AMISSL_BASE_NAME, 5166, Amissl)
 
 #define RAND_priv_bytes(___buf, ___num) \
       AROS_LC2(int, RAND_priv_bytes, \
@@ -27621,10 +27489,6 @@ typedef ULONG _sfdc_vararg;
 #define ERR_clear_last_mark() \
       AROS_LC0(int, ERR_clear_last_mark, \
      struct Library *, AMISSL_BASE_NAME, 5175, Amissl)
-
-#define RAND_DRBG_get0_private() \
-      AROS_LC0(RAND_DRBG *, RAND_DRBG_get0_private, \
-     struct Library *, AMISSL_BASE_NAME, 5176, Amissl)
 
 #define EVP_aria_192_ccm() \
       AROS_LC0(const EVP_CIPHER *, EVP_aria_192_ccm, \
@@ -27870,16 +27734,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int (*)(RSA *rsa,int bits,int primes,BIGNUM *e,BN_GENCB *cb), (___keygen), A1), \
      struct Library *, AMISSL_BASE_NAME, 5221, Amissl)
 
-#define RAND_DRBG_get0_master() \
-      AROS_LC0(RAND_DRBG *, RAND_DRBG_get0_master, \
-     struct Library *, AMISSL_BASE_NAME, 5222, Amissl)
-
-#define RAND_DRBG_set_reseed_time_interval(___drbg, ___interval) \
-      AROS_LC2(int, RAND_DRBG_set_reseed_time_interval, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(time_t, (___interval), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5223, Amissl)
-
 #define PROFESSION_INFO_get0_addProfessionInfo(___pi) \
       AROS_LC1(const ASN1_OCTET_STRING *, PROFESSION_INFO_get0_addProfessionInfo, \
  AROS_LCA(const PROFESSION_INFO *, (___pi), A0), \
@@ -27970,7 +27824,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PROFESSION_INFO(___a, ___out) \
       AROS_LC2(int, i2d_PROFESSION_INFO, \
- AROS_LCA(PROFESSION_INFO *, (___a), A0), \
+ AROS_LCA(const PROFESSION_INFO *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5241, Amissl)
 
@@ -28019,7 +27873,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ADMISSION_SYNTAX(___a, ___out) \
       AROS_LC2(int, i2d_ADMISSION_SYNTAX, \
- AROS_LCA(ADMISSION_SYNTAX *, (___a), A0), \
+ AROS_LCA(const ADMISSION_SYNTAX *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5250, Amissl)
 
@@ -28036,7 +27890,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_NAMING_AUTHORITY(___a, ___out) \
       AROS_LC2(int, i2d_NAMING_AUTHORITY, \
- AROS_LCA(NAMING_AUTHORITY *, (___a), A0), \
+ AROS_LCA(const NAMING_AUTHORITY *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5253, Amissl)
 
@@ -28070,7 +27924,7 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_ADMISSIONS(___a, ___out) \
       AROS_LC2(int, i2d_ADMISSIONS, \
- AROS_LCA(ADMISSIONS *, (___a), A0), \
+ AROS_LCA(const ADMISSIONS *, (___a), A0), \
  AROS_LCA(unsigned char **, (___out), A1), \
      struct Library *, AMISSL_BASE_NAME, 5259, Amissl)
 
@@ -28143,20 +27997,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(STACK_OF(X509) *, (___certs), A3), \
  AROS_LCA(unsigned long, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 5272, Amissl)
-
-#define RAND_DRBG_bytes(___drbg, ___out, ___outlen) \
-      AROS_LC3(int, RAND_DRBG_bytes, \
- AROS_LCA(RAND_DRBG *, (___drbg), A0), \
- AROS_LCA(unsigned char *, (___out), A1), \
- AROS_LCA(size_t, (___outlen), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5273, Amissl)
-
-#define RAND_DRBG_secure_new(___type, ___flags, ___parent) \
-      AROS_LC3(RAND_DRBG *, RAND_DRBG_secure_new, \
- AROS_LCA(int, (___type), D0), \
- AROS_LCA(unsigned int, (___flags), D1), \
- AROS_LCA(RAND_DRBG *, (___parent), A0), \
-     struct Library *, AMISSL_BASE_NAME, 5274, Amissl)
 
 #define OSSL_STORE_SEARCH_by_alias(___alias) \
       AROS_LC1(OSSL_STORE_SEARCH *, OSSL_STORE_SEARCH_by_alias, \
@@ -28259,14 +28099,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const OSSL_STORE_SEARCH *, (___criterion), A0), \
      struct Library *, AMISSL_BASE_NAME, 5292, Amissl)
 
-#define RAND_DRBG_set_reseed_defaults(___master_reseed_interval, ___slave_reseed_interval, ___master_reseed_time_interval, ___slave_reseed_time_interval) \
-      AROS_LC4(int, RAND_DRBG_set_reseed_defaults, \
- AROS_LCA(unsigned int, (___master_reseed_interval), D0), \
- AROS_LCA(unsigned int, (___slave_reseed_interval), D1), \
- AROS_LCA(time_t, (___master_reseed_time_interval), D2), \
- AROS_LCA(time_t, (___slave_reseed_time_interval), D3), \
-     struct Library *, AMISSL_BASE_NAME, 5293, Amissl)
-
 #define EVP_PKEY_new_raw_private_key(___type, ___e, ___priv, ___len) \
       AROS_LC4(EVP_PKEY *, EVP_PKEY_new_raw_private_key, \
  AROS_LCA(int, (___type), D0), \
@@ -28302,12 +28134,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_PKEY_ASN1_METHOD *, (___ameth), A0), \
  AROS_LCA(int (*)(EVP_PKEY *pk,const unsigned char *pub,size_t len), (___set_pub_key), A1), \
      struct Library *, AMISSL_BASE_NAME, 5298, Amissl)
-
-#define RAND_DRBG_set_defaults(___type, ___flags) \
-      AROS_LC2(int, RAND_DRBG_set_defaults, \
- AROS_LCA(int, (___type), D0), \
- AROS_LCA(unsigned int, (___flags), D1), \
-     struct Library *, AMISSL_BASE_NAME, 5299, Amissl)
 
 #define X509_VERIFY_PARAM_get_hostflags(___param) \
       AROS_LC1(unsigned int, X509_VERIFY_PARAM_get_hostflags, \
@@ -28576,12 +28402,6 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_PKEY_ASN1_METHOD *, (___ameth), A0), \
  AROS_LCA(int (*)(const EVP_PKEY *pk,unsigned char *pub,size_t *len), (___get_pub_key), A1), \
      struct Library *, AMISSL_BASE_NAME, 5349, Amissl)
-
-#define EVP_PKEY_set_alias_type(___pkey, ___type) \
-      AROS_LC2(int, EVP_PKEY_set_alias_type, \
- AROS_LCA(EVP_PKEY *, (___pkey), A0), \
- AROS_LCA(int, (___type), D0), \
-     struct Library *, AMISSL_BASE_NAME, 5350, Amissl)
 
 #define RAND_keep_random_devices_open(___keep) \
       AROS_LC1(void, RAND_keep_random_devices_open, \

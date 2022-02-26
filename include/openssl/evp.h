@@ -1500,11 +1500,26 @@ int EVP_PBE_scrypt(const char *pass, size_t passlen,
                    const unsigned char *salt, size_t saltlen,
                    uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem,
                    unsigned char *key, size_t keylen);
+# if defined(OPENSSL_SYS_AMIGA)
+int EVP_PBE_scrypt_ex_amiga_1(const char * pass, size_t passlen,
+			      const unsigned char * salt,
+			      uint64_t N, uint64_t r, uint64_t p,
+			      uint64_t maxmem, void * moreargs);
+void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t keylen,
+				 OSSL_LIB_CTX * ctx, const char * propq);
+# endif
+
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  define EVP_PBE_scrypt_ex(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen,ctx,propq) \
+     EVP_PBE_scrypt_ex_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
+     EVP_PBE_scrypt_ex_amiga_2(saltlen,key,keylen,ctx,propq))
+# else
 int EVP_PBE_scrypt_ex(const char *pass, size_t passlen,
                       const unsigned char *salt, size_t saltlen,
                       uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem,
                       unsigned char *key, size_t keylen,
                       OSSL_LIB_CTX *ctx, const char *propq);
+# endif
 
 int PKCS5_v2_scrypt_keyivgen(EVP_CIPHER_CTX *ctx, const char *pass,
                              int passlen, ASN1_TYPE *param,
@@ -1972,6 +1987,10 @@ int EVP_PKEY_set_octet_string_param(EVP_PKEY *pkey, const char *key_name,
 int EVP_PKEY_get_ec_point_conv_form(const EVP_PKEY *pkey);
 int EVP_PKEY_get_field_type(const EVP_PKEY *pkey);
 
+# if defined(OPENSSL_SYS_AMIGA)
+EVP_PKEY *EVP_PKEY_Q_vkeygen(OSSL_LIB_CTX *libctx, const char *propq,
+                             const char *type, va_list args);
+# endif
 EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
                             const char *type, ...);
 int EVP_PKEY_paramgen_init(EVP_PKEY_CTX *ctx);
