@@ -101,6 +101,7 @@ typedef int socklen_t;
 #if !defined(__MORPHOS__)
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 
 struct hostent * gethostbyname(const char *name);
 struct servent * getservbyname(const char *name, const char *proto);
@@ -122,6 +123,7 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int listen(int sockfd, int backlog);
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int ioctlsocket(int sockfd, long request, char *arg);
+int select(int numsocks, fd_set *readsocks, fd_set *writesocks, fd_set *exceptsocks, struct timeval *timeout);
 void openlog(const char *ident, int option, int facility);
 void syslog(int priority, const char *format, ...);
 void closelog(void);

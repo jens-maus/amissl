@@ -226,7 +226,8 @@ NWLIBOBJS = $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/recvfrom.o \
             $(BUILD_D)/openlog.o \
             $(BUILD_D)/closelog.o \
-            $(BUILD_D)/syslog.o
+            $(BUILD_D)/syslog.o \
+            $(BUILD_D)/select.o
 
 INT64OBJS = $(BUILD_D)/int64_muldi3.o \
             $(BUILD_D)/int64_udivdi3.o \
