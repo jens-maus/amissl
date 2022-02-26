@@ -1159,6 +1159,48 @@ static EVP_PKEY *evp_pkey_keygen(OSSL_LIB_CTX *libctx, const char *name,
     return pkey;
 }
 
+#ifdef OPENSSL_SYS_AMIGA
+EVP_PKEY *EVP_PKEY_Q_vkeygen(OSSL_LIB_CTX *libctx, const char *propq,
+                             const char *type, va_list args)
+{
+    size_t bits;
+    char *name;
+    OSSL_PARAM params[] = { OSSL_PARAM_END, OSSL_PARAM_END };
+    EVP_PKEY *ret = NULL;
+
+    if (strcasecmp(type, "RSA") == 0) {
+        bits = va_arg(args, size_t);
+        params[0] = OSSL_PARAM_construct_size_t(OSSL_PKEY_PARAM_RSA_BITS, &bits);
+    } else if (strcasecmp(type, "EC") == 0) {
+        name = va_arg(args, char *);
+        params[0] = OSSL_PARAM_construct_utf8_string(OSSL_PKEY_PARAM_GROUP_NAME,
+                                                     name, 0);
+    } else if (strcasecmp(type, "ED25519") != 0
+               && strcasecmp(type, "X25519") != 0
+               && strcasecmp(type, "ED448") != 0
+               && strcasecmp(type, "X448") != 0) {
+        ERR_raise(ERR_LIB_EVP, ERR_R_PASSED_INVALID_ARGUMENT);
+        goto end;
+    }
+    ret = evp_pkey_keygen(libctx, type, propq, params);
+
+ end:
+    return ret;
+}
+
+EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
+                            const char *type, ...)
+{
+    va_list args;
+    EVP_PKEY *ret;
+
+    va_start(args, type);
+    ret = EVP_PKEY_Q_keygen(libctx, propq, type, args);
+    va_end(args);
+
+    return ret;
+}
+#else
 EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
                             const char *type, ...)
 {
@@ -1190,3 +1232,4 @@ EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
     va_end(args);
     return ret;
 }
+#endif

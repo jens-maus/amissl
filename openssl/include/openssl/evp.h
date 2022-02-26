@@ -1969,6 +1969,10 @@ int EVP_PKEY_set_octet_string_param(EVP_PKEY *pkey, const char *key_name,
 int EVP_PKEY_get_ec_point_conv_form(const EVP_PKEY *pkey);
 int EVP_PKEY_get_field_type(const EVP_PKEY *pkey);
 
+# if defined(OPENSSL_SYS_AMIGA)
+EVP_PKEY *EVP_PKEY_Q_vkeygen(OSSL_LIB_CTX *libctx, const char *propq,
+                             const char *type, va_list args);
+# endif
 EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
                             const char *type, ...);
 int EVP_PKEY_paramgen_init(EVP_PKEY_CTX *ctx);
