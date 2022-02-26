@@ -312,6 +312,12 @@ void OPENSSL_cpuid_setup(void)
 }
 #else
 #include <proto/exec.h>
+
+uint32_t OPENSSL_rdtsc(void)
+{
+    return 0;
+}
+
 void OPENSSL_cpuid_setup(void)
 {
     uint32 family = 0, vec;
