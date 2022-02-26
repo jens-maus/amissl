@@ -91,14 +91,10 @@ extern "C" {
 
 /* Macros for start and end of ASN1_ITEM definition */
 
-# ifndef OPENSSL_SYS_AMIGA
 # define ASN1_ITEM_start(itname) \
         const ASN1_ITEM * itname##_it(void) \
         { \
                 static const ASN1_ITEM local_it = {
-# else
-#  error "Logic error!"
-# endif /* !OPENSSL_SYS_AMIGA */
 
 # define static_ASN1_ITEM_start(itname) \
         static ASN1_ITEM_start(itname)
