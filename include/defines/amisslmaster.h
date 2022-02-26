@@ -44,4 +44,14 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(struct Library *, (___CipherBase), A0), \
      struct Library *, AMISSLMASTER_BASE_NAME, 9, Amisslmaster)
 
+#define OpenAmiSSLTagList(___tagList) \
+      AROS_LC1(LONG, OpenAmiSSLTagList, \
+ AROS_LCA(struct TagItem *, (___tagList), A0), \
+     struct Library *, AMISSLMASTER_BASE_NAME, 10, Amisslmaster)
+
+#ifndef NO_INLINE_STDARG
+#define OpenAmiSSLTags(___tag, ...) \
+    ({_sfdc_vararg _tags[] = { ___tag, __VA_ARGS__ }; OpenAmiSSLTagList((struct TagItem *) _tags); })
+#endif /* !NO_INLINE_STDARG */
+
 #endif /* !_INLINE_AMISSLMASTER_H */

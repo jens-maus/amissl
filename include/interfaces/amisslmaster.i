@@ -19,6 +19,8 @@ STRUCTURE AmiSSLMasterIFace, InterfaceData_SIZE
 	    FPTR IAmiSSLMaster_CloseAmiSSL
 	    FPTR IAmiSSLMaster_OpenAmiSSLCipher
 	    FPTR IAmiSSLMaster_CloseAmiSSLCipher
+	    FPTR IAmiSSLMaster_OpenAmiSSLTagList
+	    FPTR IAmiSSLMaster_OpenAmiSSLTags
 	LABEL AmiSSLMasterIFace_SIZE
 
 #endif

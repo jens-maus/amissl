@@ -1,11 +1,14 @@
 #include <libraries/amissl.h>
 #include <libraries/amisslmaster.h>
+#include <amissl/tags.h>
 
 #define __NOLIBBASE__
 #define __NOGLOBALIFACE__
 #include <proto/exec.h>
 #include <proto/intuition.h>
+#include <proto/utility.h>
 #include <proto/amisslmaster.h>
+#include <proto/amissl.h>
 
 #include "amisslmaster_lib_protos.h"
 
@@ -32,15 +35,23 @@ struct AmiSSLIFace * IAmiSSL = NULL;
 #if defined(__amigaos4__)
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
+struct Library *UtilityBase = NULL;
+struct UtilityIFace *IUtility = NULL;
 extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
 #else
 struct IntuitionBase *IntuitionBase = NULL;
+#if defined(__amigaos3__)
+struct UtilityBase *UtilityBase = NULL;
+#else
+struct Library *UtilityBase = NULL;
+#endif
 extern struct ExecBase *SysBase;
 #endif
 
 LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
 LONG LibUsesOpenSSLStructs = 0;
+LONG AmiSSLInitialised = FALSE;
 
 struct SignalSemaphore AmiSSLMasterLock;
 
@@ -201,30 +212,44 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   {
     D(DBF_STARTUP, "About to open amissl v11x library");
 
+    // if an application requests AmiSSL/OpenSSL versions 3.x.x (or 1.1.x and doesn't
+    // use public structures) we try to open any known 3.x.x amissl library as OpenSSL
+    // defines binary/api compatibility when only minor or patch numbers are changed
+    // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
+    // take care to prevent applications requiring newer API functions from loading
+    // older libraries that do not contain those required entries
+    if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
+    {
+      OpenLib(&AmiSSLBase,"libs:amissl/amissl_v300.library", 5);
+    }
+
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
-    // known 1.1.X amissl library as OpenSSL defines binary/api compatibility when only
+    // known 1.1.x amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
     // but we must take care to prevent applications requiring newer API functions
     // from loading older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111m.library", 4) == NULL
-                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111l.library", 4) == NULL
-                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111k.library", 4) == NULL
-                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL
-                                     && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)
-      if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL
-                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL)
-        if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
-          if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
-            if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
-                                             && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
-              OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+    if(!AmiSSLBase && LibAPIVersion < AMISSL_V300)
+    {
+      if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111m.library", 4) == NULL
+                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111l.library", 4) == NULL
+                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111k.library", 4) == NULL
+                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL
+                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)
+        if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL
+                                         && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL)
+          if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
+            if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
+              if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
+                                               && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
+                OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+    }
   }
   else if(LibAPIVersion == AMISSL_V102f)
   {
     D(DBF_STARTUP, "About to open amissl v10x library");
 
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
-    // known 1.0.X amissl library as OpenSSL defines binary/api compatibility when only
+    // known 1.0.x amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
     if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v102f.library", 3) == NULL)
       if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101i.library", 3) == NULL)
@@ -316,7 +341,14 @@ LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  CloseLib(AmiSSLBase);
+  if(AmiSSLBase)
+  {
+    if(AmiSSLInitialised)
+    {
+      CleanupAmiSSLA(NULL);
+    }
+    CloseLib(AmiSSLBase);
+  }
 
   CloseLib(amisslinit.BlowFishBase);
   CloseLib(amisslinit.CASTBase);
@@ -417,6 +449,76 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
   return result;
 }
 
+LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
+{
+  #if defined(__amigaos4__)
+  struct AmiSSLMasterIFace *IAmiSSLMaster = __BASE_OR_IFACE_VAR;
+  #else
+  struct Library *AmiSSLMasterBase = __BASE_OR_IFACE_VAR;
+  #endif
+  struct TagItem *apiVersion, *usesOpenSSLStructs;
+  LONG err = 0;
+
+  apiVersion = FindTagItem(AmiSSL_APIVersion,tagList);
+  usesOpenSSLStructs = FindTagItem(AmiSSL_UsesOpenSSLStructs,tagList);
+
+  if(apiVersion && usesOpenSSLStructs &&
+     InitAmiSSLMaster(apiVersion->ti_Data,usesOpenSSLStructs->ti_Data))
+  {
+    if(OpenAmiSSL())
+    {
+      struct Library **libBasePtr;
+
+#ifdef __amigaos4__
+      struct AmiSSLIFace **ifacePtr;
+      struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)AmiSSLBase + AmiSSLBase->lib_PosSize);
+      IAmiSSL = (struct AmiSSLIFace *)ExtLib->MainIFace;
+      ifacePtr = (struct AmiSSLIFace **)GetTagData(AmiSSL_InterfacePtr,(ULONG)NULL,tagList);
+      if(ifacePtr) *ifacePtr = IAmiSSL;
+#endif
+      libBasePtr = (struct Library **)GetTagData(AmiSSL_LibBasePtr,(ULONG)NULL,tagList);
+      if(libBasePtr) *libBasePtr = AmiSSLBase;
+
+      if(GetTagData(AmiSSL_InitAmiSSL,TRUE,tagList))
+      {
+        if(InitAmiSSLA(tagList) == 0)
+	{
+          AmiSSLInitialised = TRUE;
+        }
+        else
+        {
+          CloseAmiSSL();
+          err = 3;
+        }
+      }
+    }
+    else
+    {
+      err = 2;
+    }
+  }
+  else
+  {
+    err = 1;
+  }
+
+  return err;
+}
+
+#ifdef __amigaos4__
+LIBPROTOVA(OpenAmiSSLTags, LONG, REG(a6, __BASE_OR_IFACE), ...)
+{
+  __gnuc_va_list ap;
+  struct TagItem *tags;
+
+  __builtin_va_start(ap, __BASE_OR_IFACE_VAR);
+  tags = va_getlinearva(ap, struct TagItem *);
+  __builtin_va_end(ap);
+
+  return CALL_LFUNC(OpenAmiSSLTagList, tags);
+}
+#endif
+
 LIBPROTO(CloseAmiSSLCipher, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct Library *LibBase))
 {
   ObtainSemaphore(&AmiSSLMasterLock);
@@ -450,6 +552,11 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
   }
 
 #if defined(__amigaos4__)
+  if(IUtility != NULL)
+  {
+    DropInterface((struct Interface *)IUtility);
+    IUtility = NULL;
+  }
   if(IIntuition != NULL)
   {
     DropInterface((struct Interface *)IIntuition);
@@ -457,6 +564,11 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
   }
 #endif
 
+  if(UtilityBase != NULL)
+  {
+    CloseLibrary((struct Library *)UtilityBase);
+    UtilityBase = NULL;
+  }
   if(IntuitionBase != NULL)
   {
     CloseLibrary((struct Library *)IntuitionBase);
@@ -478,10 +590,13 @@ LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
   InitSemaphore(&AmiSSLMasterLock);
 
 #if defined(__amigaos4__)
-  if((IntuitionBase = OpenLibrary("intuition.library", 50)) != NULL
+  if((UtilityBase = OpenLibrary("utility.library", 50)) != NULL
+     && (IntuitionBase = OpenLibrary("intuition.library", 50)) != NULL
+     && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)) != NULL
      && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL)) != NULL)
 #else
-  if((IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL)
+  if((UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)) != NULL
+     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL)
 #endif
   {
     err = 0;

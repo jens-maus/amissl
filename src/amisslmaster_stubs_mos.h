@@ -20,6 +20,7 @@ LIBSTUB(OpenAmiSSL, struct Library *);
 LIBSTUB(CloseAmiSSL, void);
 LIBSTUB(OpenAmiSSLCipher, struct Library *);
 LIBSTUB(CloseAmiSSLCipher, void);
+LIBSTUB(OpenAmiSSLTagList, LONG);
 
 #ifdef __cplusplus
 }

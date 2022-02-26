@@ -9,4 +9,7 @@ struct Library * OpenAmiSSL() ()
 void CloseAmiSSL() ()
 struct Library * OpenAmiSSLCipher(LONG Cipher) (d0)
 void CloseAmiSSLCipher(struct Library * CipherBase) (a0)
+LONG OpenAmiSSLTagList(struct TagItem * tagList) (a0)
+==varargs
+LONG OpenAmiSSLTags(Tag tag, ...) (a0)
 ==end

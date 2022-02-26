@@ -37,6 +37,8 @@ struct AmiSSLMasterIFace
 	void APICALL (*CloseAmiSSL)(struct AmiSSLMasterIFace *Self);
 	struct Library * APICALL (*OpenAmiSSLCipher)(struct AmiSSLMasterIFace *Self, LONG Cipher);
 	void APICALL (*CloseAmiSSLCipher)(struct AmiSSLMasterIFace *Self, struct Library * CipherBase);
+	LONG APICALL (*OpenAmiSSLTagList)(struct AmiSSLMasterIFace *Self, struct TagItem * tagList);
+	LONG APICALL (*OpenAmiSSLTags)(struct AmiSSLMasterIFace *Self, ...);
 };
 
 #ifdef __cplusplus

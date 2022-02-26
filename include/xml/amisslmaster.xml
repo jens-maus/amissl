@@ -21,5 +21,11 @@
 		<method name="CloseAmiSSLCipher" result="void">
 			<arg name="CipherBase" type="struct Library *" m68kreg="a0"/>
 		</method>
+		<method name="OpenAmiSSLTagList" result="LONG">
+			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
+		</method>
+		<method name="OpenAmiSSLTags" result="LONG">
+			<vararg name="tag" type="Tag" m68kreg="a0"/>
+		</method>
 	</interface>
 </library>
