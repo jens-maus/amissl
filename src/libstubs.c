@@ -162,6 +162,7 @@ long (BIO_debug_callback)(BIO *bio, int cmd, const char *argp, int argi, long ar
   return(BIO_debug_callback(bio, cmd, argp, argi, argl, ret));
 }
 
+#ifndef OPENSSL_NO_DEPRECATED_3_0
 DH * (DH_new)(void)
 {
   return(DH_new());
@@ -171,6 +172,7 @@ DSA * (DSA_new)(void)
 {
   return(DSA_new());
 }
+#endif
 
 OCSP_REQUEST * (OCSP_REQUEST_new)(void)
 {
@@ -227,6 +229,7 @@ X509 * (d2i_X509)(X509 **a, const unsigned char **pp, long length)
   return(d2i_X509(a, pp, length));
 }
 
+#if 0
 DH * (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
 {
   return(d2i_DHparams(a, pp, length));
@@ -241,6 +244,7 @@ DSA * (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
 {
   return(d2i_DSAparams(a, pp, length));
 }
+#endif
 
 OCSP_REQUEST * (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, const unsigned char **in, long len)
 {
@@ -257,21 +261,24 @@ SSL_SESSION * (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char **pp, long 
   return(d2i_SSL_SESSION(a, pp, length));
 }
 
+#if 0
 EC_GROUP * (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, long len)
 {
   return(d2i_ECPKParameters(a, in, len));
 }
+#endif
 
-int (i2d_X509_AUX)(X509 *a, unsigned char **pp)
+int (i2d_X509_AUX)(const X509 *a, unsigned char **pp)
 {
   return(i2d_X509_AUX(a, pp));
 }
 
-int (i2d_X509)(X509 *a, unsigned char **pp)
+int (i2d_X509)(const X509 *a, unsigned char **pp)
 {
   return(i2d_X509(a, pp));
 }
 
+#if 0
 int (i2d_DHparams)(const DH *a, unsigned char **pp)
 {
   return(i2d_DHparams(a, pp));
@@ -286,32 +293,36 @@ int (i2d_DSAparams)(const DSA *a, unsigned char **pp)
 {
   return(i2d_DSAparams(a, pp));
 }
+#endif
 
-int (i2d_OCSP_REQUEST)(OCSP_REQUEST *a, unsigned char **out)
+int (i2d_OCSP_REQUEST)(const OCSP_REQUEST *a, unsigned char **out)
 {
   return(i2d_OCSP_REQUEST(a, out));
 }
 
-int (i2d_OCSP_RESPONSE)(OCSP_RESPONSE *a, unsigned char **out)
+int (i2d_OCSP_RESPONSE)(const OCSP_RESPONSE *a, unsigned char **out)
 {
   return(i2d_OCSP_RESPONSE(a, out));
 }
 
-int (i2d_SSL_SESSION)(SSL_SESSION *in, unsigned char **pp)
+int (i2d_SSL_SESSION)(const SSL_SESSION *in, unsigned char **pp)
 {
   return(i2d_SSL_SESSION(in, pp));
 }
 
+#if 0
 int (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
 {
   return(i2d_ECPKParameters(a, out));
 }
+#endif
 
 void (X509_CRL_free)(X509_CRL * a)
 {
   X509_CRL_free(a);
 }
 
+#if 0
 void (AES_encrypt)(const unsigned char * in, unsigned char * out, const AES_KEY * key)
 {
   AES_encrypt(in, out, key);
@@ -321,6 +332,7 @@ void (GENERAL_NAMES_free)(GENERAL_NAMES * a)
 {
   GENERAL_NAMES_free(a);
 }
+#endif
 
 int (EVP_PKEY_sign_init)(EVP_PKEY_CTX *ctx)
 {
@@ -368,6 +380,7 @@ int (EVP_PKEY_derive_init)(EVP_PKEY_CTX *ctx)
   return EVP_PKEY_derive_init(ctx);
 }
 
+#if 0
 int (CT_verify_no_bad_scts)(const CT_POLICY_EVAL_CTX *ctx, const STACK_OF(SCT) *scts, void *arg)
 {
   return CT_verify_no_bad_scts(ctx, scts, arg);
@@ -377,6 +390,7 @@ int (CT_verify_at_least_one_good_sct)(const CT_POLICY_EVAL_CTX * ctx, const STAC
 {
   return CT_verify_at_least_one_good_sct(ctx, scts, arg);
 }
+#endif
 
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
@@ -397,6 +411,26 @@ void (ERR_add_error_data)(int num, ...)
   va_start(args, num);
   ERR_add_error_vdata(num, args);
   va_end(args);
+}
+
+void (ERR_set_error)(int lib, int reason, const char *fmt, ...)
+{
+  va_list args;
+  SHOWREGISTERS();
+  va_start(args, fmt);
+  ERR_vset_error(lib, reason, fmt, args);
+  va_end(args);
+}
+
+EVP_PKEY * (EVP_PKEY_Q_keygen)(OSSL_LIB_CTX *libctx, const char *propq, const char *type, ...)
+{
+  va_list args;
+  EVP_PKEY *ret;
+  SHOWREGISTERS();
+  va_start(args, type);
+  ret = EVP_PKEY_Q_vkeygen(libctx, propq, type, args);
+  va_end(args);
+  return ret;
 }
 
 #elif defined(__MORPHOS__)
@@ -430,6 +464,17 @@ void (ERR_add_error_data)(int num, ...)
   va_end(args);
 }
 
+EVP_PKEY * (EVP_PKEY_Q_keygen)(OSSL_LIB_CTX *libctx, const char *propq, const char *type, ...)
+{
+  va_list args;
+  EVP_PKEY *ret;
+  SHOWREGISTERS();
+  va_start(args, type);
+  ret = EVP_PKEY_Q_keygen(libctx, propq, type, (long *)args);
+  va_end(args);
+  return ret;
+}
+
 #endif
 #endif
 
@@ -442,6 +487,77 @@ void (X509_NAME_free)(X509_NAME *a)
 {
   X509_NAME_free(a);
 }
+
+int (OSSL_CMP_CTX_set1_subjectName)(OSSL_CMP_CTX *ctx, const X509_NAME *name)
+{
+  return OSSL_CMP_CTX_set1_subjectName(ctx, name);
+}
+
+int (OSSL_CMP_CTX_set1_issuer)(OSSL_CMP_CTX *ctx, const X509_NAME *name)
+{
+  return OSSL_CMP_CTX_set1_issuer(ctx, name);
+}
+
+int (OSSL_CMP_CTX_set1_untrusted)(OSSL_CMP_CTX *ctx, STACK_OF(X509) *certs)
+{
+  return OSSL_CMP_CTX_set1_untrusted(ctx, certs);
+}
+
+int (OSSL_CMP_CTX_set1_recipient)(OSSL_CMP_CTX *ctx, const X509_NAME *name)
+{
+  return OSSL_CMP_CTX_set1_recipient(ctx, name);
+}
+
+int (OSSL_CMP_CTX_set1_extraCertsOut)(OSSL_CMP_CTX *ctx, STACK_OF(X509) *extraCertsOut)
+{
+  return OSSL_CMP_CTX_set1_extraCertsOut(ctx, extraCertsOut);
+}
+
+int (OSSL_CMP_CTX_set1_expected_sender)(OSSL_CMP_CTX *ctx, const X509_NAME *name)
+{
+  return OSSL_CMP_CTX_set1_expected_sender(ctx, name);
+}
+
+void (SSL_trace)(int write_p, int version, int content_type, const void *buf,
+		 size_t len, SSL *ssl, void *arg)
+{
+  SSL_trace(write_p, version, content_type, buf, len, ssl, arg);
+}
+
+long (BIO_debug_callback_ex)(BIO *bio, int oper, const char *argp, size_t len,
+			     int argi, long argl, int ret, size_t *processed)
+{
+  return BIO_debug_callback_ex(bio, oper, argp, len, argi, argl, ret, processed);
+}
+
+int (X509_STORE_CTX_print_verify_cb)(int ok, X509_STORE_CTX *ctx)
+{
+  return X509_STORE_CTX_print_verify_cb(ok, ctx);
+}
+
+OSSL_CMP_ITAV * (OSSL_CMP_ITAV_dup)(const OSSL_CMP_ITAV *a)
+{
+  return OSSL_CMP_ITAV_dup(a);
+}
+
+#define FREE_STUB_FUNC(name) void (name##_free)(name *a) { name##_free(a); }
+
+FREE_STUB_FUNC(OSSL_STORE_LOADER)
+FREE_STUB_FUNC(OSSL_ENCODER)
+FREE_STUB_FUNC(OSSL_DECODER)
+FREE_STUB_FUNC(EVP_KDF)
+FREE_STUB_FUNC(EVP_MAC)
+FREE_STUB_FUNC(EVP_CIPHER)
+FREE_STUB_FUNC(EVP_MD)
+FREE_STUB_FUNC(EVP_KEYMGMT)
+FREE_STUB_FUNC(EVP_SIGNATURE)
+FREE_STUB_FUNC(EVP_ASYM_CIPHER)
+FREE_STUB_FUNC(EVP_KEYEXCH)
+FREE_STUB_FUNC(EVP_KEM)
+FREE_STUB_FUNC(EVP_RAND)
+FREE_STUB_FUNC(GENERAL_NAMES)
+FREE_STUB_FUNC(OSSL_CMP_ITAV)
+FREE_STUB_FUNC(OSSL_LIB_CTX)
 
 // declare stub functions for the ASN1 iterator functions so that within openssl we
 // can directly reference e.g. "ASN1_ANY" and have it calling "IAmiSSL->ASN1_ANY_it()" instead.
