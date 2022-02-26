@@ -674,7 +674,7 @@ struct ossl_cmp_msg_st {
     char *propq;
 } /* OSSL_CMP_MSG */;
 OSSL_CMP_MSG *OSSL_CMP_MSG_new(OSSL_LIB_CTX *libctx, const char *propq);
-void OSSL_CMP_MSG_free(OSSL_CMP_MSG *msg);
+void (OSSL_CMP_MSG_free)(OSSL_CMP_MSG *msg);
 
 /*-
  * ProtectedPart ::= SEQUENCE {

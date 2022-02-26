@@ -188,6 +188,11 @@ static double Time_F(int s)
 
     return ret;
 }
+#elif defined(OPENSSL_SYS_AMIGA)
+static double Time_F(int s)
+{
+    return app_tminterval(s, usertime);
+}
 #else
 # error "SIGALRM not defined and the platform is not Windows"
 #endif
@@ -3338,23 +3343,37 @@ int speed_main(int argc, char **argv)
 
 static void print_message(const char *s, long num, int length, int tm)
 {
+#if defined(OPENSSL_SYS_AMIGA)
+    BIO_printf(bio_err,
+               mr ? "+DN:%s:%ld:%d\n"
+               : "Doing %s %ld times on %d size blocks: ", s, num, length);
+    (void)BIO_flush(bio_err);
+#else
     BIO_printf(bio_err,
                mr ? "+DT:%s:%d:%d\n"
                : "Doing %s for %ds on %d size blocks: ", s, tm, length);
     (void)BIO_flush(bio_err);
     run = 1;
     alarm(tm);
+#endif
 }
 
 static void pkey_print_message(const char *str, const char *str2, long num,
                                unsigned int bits, int tm)
 {
+#if defined(OPENSSL_SYS_AMIGA)
+    BIO_printf(bio_err,
+               mr ? "+DNP:%ld:%d:%s:%s\n"
+               : "Doing %ld %u bits %s %s's: ", num, bits, str, str2);
+    (void)BIO_flush(bio_err);
+#else
     BIO_printf(bio_err,
                mr ? "+DTP:%d:%s:%s:%d\n"
                : "Doing %u bits %s %s's for %ds: ", bits, str, str2, tm);
     (void)BIO_flush(bio_err);
     run = 1;
     alarm(tm);
+#endif
 }
 
 static void print_result(int alg, int run_no, int count, double time_used)

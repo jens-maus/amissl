@@ -326,9 +326,15 @@ typedef struct ASN1_VALUE_st ASN1_VALUE;
 # define DECLARE_ASN1_NDEF_FUNCTION(name)                                   \
     DECLARE_ASN1_NDEF_FUNCTION_attr(extern, name)
 
+#ifdef OPENSSL_SYS_AMIGA
+# define DECLARE_ASN1_ALLOC_FUNCTIONS_name_attr(attr, type, name)           \
+    attr type *(name##_new)(void);					    \
+    attr void (name##_free)(type *a);
+#else
 # define DECLARE_ASN1_ALLOC_FUNCTIONS_name_attr(attr, type, name)           \
     attr type *name##_new(void);                                            \
     attr void name##_free(type *a);
+#endif
 # define DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, name)                      \
     DECLARE_ASN1_ALLOC_FUNCTIONS_name_attr(extern, type, name)
 

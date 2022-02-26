@@ -391,11 +391,22 @@ void ERR_set_error(int lib, int reason, const char *fmt, ...);
 void ERR_vset_error(int lib, int reason, const char *fmt, va_list args);
 
 /* Main error raising functions */
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define ERR_raise(lib, reason)                                 \
+    ERR_new(),                                                  \
+    ERR_set_debug(OPENSSL_FILE,OPENSSL_LINE,OPENSSL_FUNC),      \
+    ERR_set_error((lib),(reason),NULL)
+# define ERR_raise_data                                         \
+    ERR_new(),                                                  \
+    ERR_set_debug(OPENSSL_FILE,OPENSSL_LINE,OPENSSL_FUNC),      \
+    ERR_set_error
+# else
 # define ERR_raise(lib, reason) ERR_raise_data((lib),(reason),NULL)
 # define ERR_raise_data                                         \
     (ERR_new(),                                                 \
      ERR_set_debug(OPENSSL_FILE,OPENSSL_LINE,OPENSSL_FUNC),     \
      ERR_set_error)
+# endif
 
 # ifndef OPENSSL_NO_DEPRECATED_3_0
 /* Backward compatibility */

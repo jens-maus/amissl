@@ -214,7 +214,8 @@ ifeq ($(OS), os4)
   EXTRALIBOBJS = $(BUILD_D)/amissl_library_os4.o \
                  $(BUILD_D)/amissl_glue.o \
                  $(BUILD_D)/amissl_glue_extra.o \
-                 $(BUILD_D)/amissl_m68k.o
+                 $(BUILD_D)/amissl_m68k.o \
+                 $(BUILD_D)/amisslext_m68k.o
 
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_m68k.o
 
@@ -388,6 +389,7 @@ endif
 # hosts.
 
 LIBOBJS = $(BUILD_D)/amissl_libinit.o \
+          $(BUILD_D)/amisslext_libinit.o \
           $(BUILD_D)/amissl_library.o \
           $(BUILD_D)/amissl_norestore.o \
           $(BUILD_D)/amissl_init.o \

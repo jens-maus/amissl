@@ -109,7 +109,7 @@ static uint64_t get_timer_bits(void);
 
 #if !(defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_WIN32) \
     || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_VXWORKS) \
-    || defined(OPENSSL_SYS_UEFI)) || defined(OPENSSL_SYS_AMIGA))
+    || defined(OPENSSL_SYS_UEFI) || defined(OPENSSL_SYS_AMIGA))
 
 # if defined(OPENSSL_SYS_VOS)
 
