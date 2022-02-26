@@ -37,7 +37,6 @@
 
 /****************************************************************************/
 
-WEAK struct Library *AmiSSLBase = NULL;
 WEAK struct Library *AmiSSLMasterBase = NULL;
 WEAK struct Library *SocketBase = NULL;
 
@@ -45,7 +44,13 @@ WEAK struct Library *SocketBase = NULL;
 WEAK struct AmiSSLIFace *IAmiSSL = NULL;
 WEAK struct AmiSSLMasterIFace *IAmiSSLMaster = NULL;
 WEAK struct SocketIFace *ISocket = NULL;
+#else
+WEAK struct Library *AmiSSLBase = NULL;
+WEAK struct Library *AmiSSLExtBase = NULL;
 #endif
+
+WEAK LONG AmiSSLAPIVersion = AMISSL_CURRENT_VERSION;
+WEAK LONG UsesOpenSSLStructs = TRUE;
 
 /****************************************************************************/
 
@@ -90,16 +95,18 @@ static void show_fatal_error(const char *message)
 LONG (FPrintf)(BPTR fh, CONST_STRPTR format, ...)
 { return VFPrintf(fh, format, &format+1); }
 
-long (InitAmiSSL)(Tag tag1, ...)
+LONG (InitAmiSSL)(Tag tag1, ...)
 { return InitAmiSSLA((struct TagItem *)&tag1); }
-long (CleanupAmiSSL)(Tag tag1, ...)
+LONG (CleanupAmiSSL)(Tag tag1, ...)
 { return CleanupAmiSSLA((struct TagItem *)&tag1); }
+LONG (OpenAmiSSLTags)(Tag tag1, ...)
+{ return OpenAmiSSLTagList((struct TagItem *)&tag1); }
 
 #elif defined(__MORPHOS__)
 
 #warning "replace pure ASM stubs by ASM+C stubs"
 
-long v_InitAmiSSLA(struct TagItem *tags)
+LONG v_InitAmiSSLA(struct TagItem *tags)
 {
   return InitAmiSSLA(tags);
 }
@@ -130,7 +137,7 @@ asm (".align 2                     \n\
       blr                          \n\
      ");
 
-long v_CleanupAmiSSLA(struct TagItem *tags)
+LONG v_CleanupAmiSSLA(struct TagItem *tags)
 {
   return CleanupAmiSSLA(tags);
 }
@@ -159,6 +166,37 @@ asm (".align 2                        \n\
       mtlr  0                         \n\
       stwu  11,48(1)                  \n\
       blr                             \n\
+     ");
+
+LONG v_OpenAmiSSLTagList(struct TagItem *tags)
+{
+  return OpenAmiSSLTagList(tags);
+}
+
+asm (".align 2                         \n\
+      .globl OpenAmiSSLTags            \n\
+      .type  OpenAmiSSLTags,@function  \n\
+ OpenAmiSSLTags:                       \n\
+      lwz 12,0(1)                      \n\
+      mflr  0                          \n\
+      stwu  1,-48(1)                   \n\
+      stw 12,16(1)                     \n\
+      stw 0,20(1)                      \n\
+      stw 3,24(1)                      \n\
+      stw 4,28(1)                      \n\
+      stw 5,32(1)                      \n\
+      stw 6,36(1)                      \n\
+      stw 7,40(1)                      \n\
+      stw 8,44(1)                      \n\
+      stw 9,48(1)                      \n\
+      stw 10,52(1)                     \n\
+      addi  3,1,24                     \n\
+      bl v_OpenAmiSSLTagList           \n\
+      lwz 0,20(1)                      \n\
+      lwz 11,16(1)                     \n\
+      mtlr  0                          \n\
+      stwu  11,48(1)                   \n\
+      blr                              \n\
      ");
 
 #endif
@@ -196,32 +234,41 @@ CONSTRUCTOR(amissl)
     if (!(IAmiSSLMaster = (struct AmiSSLMasterIFace *)GetInterface((struct Library *)AmiSSLMasterBase, "main", 1, NULL)))
       fatal_error("Couldn't obtain amisslmaster interface\n");
     #endif
-
-    if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-      fatal_error("Couldn't initialize amisslmaster.library!\n");
   }
 
   #if defined(__amigaos4__)
   if (!IAmiSSL)
   #endif
   {
-    if (!(AmiSSLBase = OpenAmiSSL()))
-      fatal_error("Couldn't open AmiSSL!\n");
-
+    LONG err;
     #if defined(__amigaos4__)
-    if (!(IAmiSSL = (struct AmiSSLIFace *)GetInterface((struct Library *)AmiSSLBase, "main", 1, NULL)))
-      fatal_error("Couldn't obtain amissl interface\n");
-
-    if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-                            AmiSSL_ISocket, ISocket,
-                            TAG_DONE))
-      fatal_error("Couldn't initialize AmiSSL!\n");
+    err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
+                         AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
+                         AmiSSL_InterfacePtr, &IAmiSSL,
+                         AmiSSL_ErrNoPtr, &errno,
+                         AmiSSL_ISocket, ISocket,
+                         TAG_DONE);
     #else
-    if(InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-                            AmiSSL_SocketBase, SocketBase,
-                            TAG_DONE))
-      fatal_error("Couldn't initialize AmiSSL!\n");
+    err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
+                         AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
+                         AmiSSL_LibBasePtr, &AmiSSLBase,
+                         AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
+                         AmiSSL_ErrNoPtr, &errno,
+                         AmiSSL_SocketBase, SocketBase,
+                         TAG_DONE);
     #endif
+    switch (err)
+    {
+      case 1:
+        fatal_error("Couldn't initialise amisslmaster.library!\n");
+	break;
+      case 2:
+        fatal_error("Couldn't open AmiSSL!\n");
+	break;
+      case 3:
+        fatal_error("Couldn't initialise AmiSSL!\n");
+	break;
+    }
   }
 
   #if defined(__SASC)
@@ -233,25 +280,19 @@ CONSTRUCTOR(amissl)
 
 DESTRUCTOR(amissl)
 {
+  #if defined(__amigaos4__)
+  if (IAmiSSL)
+  #else
   if (AmiSSLBase)
+  #endif
   {
-    #if defined(__amigaos4__)
-    if (IAmiSSL)
-    {
-      CleanupAmiSSLA(NULL);
-      DropInterface((struct Interface *)IAmiSSL);
-
-      IAmiSSL = NULL;
-    }
-
-    if (IAmiSSLMaster)
-      CloseAmiSSL();
-    #else
-    CleanupAmiSSLA(NULL);
     CloseAmiSSL();
-    #endif
 
+    #if defined(__amigaos4__)
+    IAmiSSL = NULL;
+    #else
     AmiSSLBase = NULL;
+    #endif
   }
 
   if (AmiSSLMasterBase)
