@@ -527,11 +527,13 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[conf_include_test]=../include ../apps/include
   DEPEND[conf_include_test]=../libcrypto libtestutil.a
 
+ IF[{- $config{target} !~ /amiga/ -}]
   IF[{- !$disabled{cmp} -}]
     PROGRAMS{noinst}=cmp_asn_test cmp_ctx_test cmp_status_test cmp_hdr_test \
                      cmp_protect_test cmp_msg_test cmp_vfy_test \
                      cmp_server_test cmp_client_test
   ENDIF
+ ENDIF
 
   SOURCE[cmp_asn_test]=cmp_asn_test.c helpers/cmp_testlib.c
   INCLUDE[cmp_asn_test]=.. ../include ../apps/include
@@ -807,10 +809,12 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[aesgcmtest]=../include ../apps/include ..
   DEPEND[aesgcmtest]=../libcrypto libtestutil.a
 
+ IF[{- $config{target} !~ /amiga/ -}]
   PROGRAMS{noinst}=context_internal_test
   SOURCE[context_internal_test]=context_internal_test.c
   INCLUDE[context_internal_test]=.. ../include ../apps/include
   DEPEND[context_internal_test]=../libcrypto.a libtestutil.a
+ ENDIF
 
   PROGRAMS{noinst}=provider_internal_test
   DEFINE[provider_internal_test]=PROVIDER_INIT_FUNCTION_NAME=p_test_init
