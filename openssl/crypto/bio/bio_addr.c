@@ -914,7 +914,7 @@ int BIO_lookup_ex(const char *host, const char *service, int lookup_type,
                 addrlistp++)
                 ;
 
-            for(addresses = addrlistp - he->h_addr_list;
+            for(addresses = addrlistp - (char **)he->h_addr_list;
                 addrlistp--, addresses-- > 0; ) {
                 if (!addrinfo_wrap(he->h_addrtype, socktype,
                                    *addrlistp, he->h_length,
