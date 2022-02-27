@@ -283,7 +283,7 @@ static void sha256_block_data_order(SHA256_CTX *ctx, const void *in,
         } else {
             SHA_LONG l;
 
-            E(DBF_ALWAYS, "LITTLE ENDIAN BRANCH!!!: is_endian.little = %ld, in=%08lx, (in %% 4) = %ld, sizeof(SHA_LONG) = %ld", is_endian.little, in, ((size_t)in % 4), sizeof(SHA_LONG));
+            E(DBF_ALWAYS, "LITTLE ENDIAN BRANCH!!!: ossl_is_endian.little = %ld, in=%08lx, (in %% 4) = %ld, sizeof(SHA_LONG) = %ld", ossl_is_endian.little, in, ((size_t)in % 4), sizeof(SHA_LONG));
             E(DBF_ALWAYS, "a=%08lx b=%08lx c=%08lx d=%08lx e=%08lx f=%08lx g=%08lx h=%08lx", a, b, c, d, e, f, g, h);
             #if defined(DEBUG)
             for(i=0; i < 16; i++)
