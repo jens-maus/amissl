@@ -10,7 +10,9 @@ printf "\$VER: OpenSSL.doc $releasever.$releaserev ($releasedate)\n\n"
 
 pod2text -w80 openssl/doc/man1/openssl.pod
 
-find openssl/doc/man1 ! -regex "^.*\openssl\.pod$" -type f | sort |
+find openssl/doc/man1 build_os4/openssl/doc/man1 -name "*.pod" \
+    ! -regex "^.*\openssl\.pod$" -type f -printf "%f###%p\n" \
+    | sort | sed 's/.*###//' |
 while IFS= read -r podfile; do
     printf "\n********************************************************************************\n\n"
     pod2text -w80 $podfile
