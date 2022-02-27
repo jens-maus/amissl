@@ -381,7 +381,12 @@ int opt_uintmax(const char *arg, ossl_uintmax_t *result);
 int opt_isdir(const char *name);
 int opt_format(const char *s, unsigned long flags, int *result);
 void print_format_error(int format, unsigned long flags);
+#if defined(OPENSSL_SYS_AMIGA)
+#include <internal/amissl_compiler.h>
+int VARARGS68K opt_printf_stderr(const char *fmt, ...);
+#else
 int opt_printf_stderr(const char *fmt, ...);
+#endif
 int opt_string(const char *name, const char **options);
 int opt_pair(const char *arg, const OPT_PAIR * pairs, int *result);
 

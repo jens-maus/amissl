@@ -146,13 +146,14 @@ BIO *BIO_new_file(const char *filename, const char *mode)
 	}
 	else
 	{
-		SYSerr(SYS_F_FOPEN, __io2errno(IoErr()));
-		ERR_add_error_data(5, "FOpenFromMode('", filename, "','", mode, "')");
+		ERR_raise_data(ERR_LIB_SYS, __io2errno(IoErr()),
+		               "FOpenFromMode('%s','%s')",
+		               filename, mode);
 
 		if (IoErr() == ERROR_OBJECT_NOT_FOUND)
-			BIOerr(BIO_F_BIO_NEW_FILE, BIO_R_NO_SUCH_FILE);
+			ERR_raise(ERR_LIB_BIO, BIO_R_NO_SUCH_FILE);
 		else
-			BIOerr(BIO_F_BIO_NEW_FILE, ERR_R_SYS_LIB);
+			ERR_raise(ERR_LIB_BIO, ERR_R_SYS_LIB);
 
 		ret = NULL;
 	}
@@ -267,9 +268,8 @@ static int file_read(BIO *b, char *out, int outl)
 		 */
 		if (ret == 0 && IoErr() != 0)
 		{
-			SYSerr(SYS_F_FREAD, __io2errno(IoErr()));
-			BIOerr(BIO_F_FILE_READ, ERR_R_SYS_LIB);
-
+			ERR_raise(ERR_LIB_SYS, __io2errno(IoErr()));
+			ERR_raise(ERR_LIB_BIO, ERR_R_SYS_LIB);
 			ret = -1;
 		}
 	}
@@ -324,19 +324,19 @@ static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 			if (num & BIO_FP_APPEND)
 			{
 				if (num & BIO_FP_READ)
-					BUF_strlcpy(p, "a+", sizeof(p));
+					OPENSSL_strlcpy(p, "a+", sizeof(p));
 				else
-					BUF_strlcpy(p, "a", sizeof(p));
+					OPENSSL_strlcpy(p, "a", sizeof(p));
 			}
 			else if ((num & BIO_FP_READ) && (num & BIO_FP_WRITE))
-				BUF_strlcpy(p, "r+", sizeof(p));
+				OPENSSL_strlcpy(p, "r+", sizeof(p));
 			else if (num & BIO_FP_WRITE)
-				BUF_strlcpy(p, "w", sizeof(p));
+				OPENSSL_strlcpy(p, "w", sizeof(p));
 			else if (num & BIO_FP_READ)
-				BUF_strlcpy(p, "r", sizeof(p));
+				OPENSSL_strlcpy(p, "r", sizeof(p));
 			else
 			{
-				BIOerr(BIO_F_FILE_CTRL, BIO_R_BAD_FOPEN_MODE);
+				ERR_raise(ERR_LIB_BIO, BIO_R_BAD_FOPEN_MODE);
 				ret = 0;
 			}
 
@@ -349,9 +349,10 @@ static long file_ctrl(BIO *b, int cmd, long num, void *ptr)
 				}
 				else
 				{
-					SYSerr(SYS_F_FOPEN, __io2errno(IoErr()));
-					ERR_add_error_data(5, "FOpenFromMode('", ptr, "','", p, "')");
-					BIOerr(BIO_F_FILE_CTRL, ERR_R_SYS_LIB);
+					ERR_raise_data(ERR_LIB_SYS, __io2errno(IoErr()),
+					               "FOpenFromMode('%s','%s')",
+					               ptr, p);
+					ERR_raise(ERR_LIB_BIO, ERR_R_SYS_LIB);
 					ret = 0;
 				}
 			}

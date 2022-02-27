@@ -66,6 +66,18 @@ void opt_check_usage(void)
         test_printf_stderr("Warning arguments %d and later unchecked\n", i);
 }
 
+#if defined(OPENSSL_SYS_AMIGA)
+int VARARGS68K opt_printf_stderr(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = test_vprintf_stderr(fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+    return ret;
+}
+#else
 int opt_printf_stderr(const char *fmt, ...)
 {
     va_list ap;
@@ -76,4 +88,5 @@ int opt_printf_stderr(const char *fmt, ...)
     va_end(ap);
     return ret;
 }
+#endif
 

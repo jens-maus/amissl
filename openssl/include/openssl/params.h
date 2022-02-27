@@ -99,39 +99,39 @@ DECLARE_OSSL_PARAM_construct_LP2(octet_ptr, void *)
 DECLARE_OSSL_PARAM_construct_LP0(end)
 
 #  define OSSL_PARAM_construct_int(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_int_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_int_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_uint(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_uint_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_long(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_long_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_long_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_ulong(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_ulong_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_ulong_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_int32(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_int32_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_int32_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_uint32(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint32_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_uint32_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_int64(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_int64_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_int64_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_uint64(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_uint64_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_uint64_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_size_t(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_size_t_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_size_t_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_time_t(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_time_t_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_time_t_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_BN(key,buf,bsize) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_BN_amiga(&p,key,buf,bsize); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_BN_amiga(&__r,key,buf,bsize); __r; })
 #  define OSSL_PARAM_construct_double(key,buf) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_double_amiga(&p,key,buf); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_double_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_utf8_string(key,buf,bsize)	\
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_utf8_string_amiga(&p,key,buf,bsize); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_utf8_string_amiga(&__r,key,buf,bsize); __r; })
 #  define OSSL_PARAM_construct_utf8_ptr(key,buf,bsize) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_utf8_ptr_amiga(&p,key,buf,bsize); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_utf8_ptr_amiga(&__r,key,buf,bsize); __r; })
 #  define OSSL_PARAM_construct_octet_string(key,buf,bsize) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_octet_string_amiga(&p,key,buf,bsize); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_octet_string_amiga(&__r,key,buf,bsize); __r; })
 #  define OSSL_PARAM_construct_octet_ptr(key,buf,bsize) \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_octet_ptr_amiga(&p,key,buf,bsize); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_octet_ptr_amiga(&__r,key,buf,bsize); __r; })
 #  define OSSL_PARAM_construct_end() \
-     ({ OSSL_PARAM p; OSSL_PARAM_construct_end_amiga(&p); p; })
+     ({ OSSL_PARAM __r; OSSL_PARAM_construct_end_amiga(&__r); __r; })
 # else
 OSSL_PARAM OSSL_PARAM_construct_int(const char *key, int *buf);
 OSSL_PARAM OSSL_PARAM_construct_uint(const char *key, unsigned int *buf);

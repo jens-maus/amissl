@@ -33,6 +33,30 @@ int VARARGS68K test_printf_stderr(const char *fmt, ...)
 
     return ret;
 }
+
+int VARARGS68K test_printf_tapout(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = test_vprintf_tapout(fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+
+    return ret;
+}
+
+int VARARGS68K test_printf_taperr(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = test_vprintf_taperr(fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+
+    return ret;
+}
 #else
 int test_printf_stdout(const char *fmt, ...)
 {
@@ -57,7 +81,6 @@ int test_printf_stderr(const char *fmt, ...)
 
     return ret;
 }
-#endif
 
 int test_printf_tapout(const char *fmt, ...)
 {
@@ -82,3 +105,4 @@ int test_printf_taperr(const char *fmt, ...)
 
     return ret;
 }
+#endif
