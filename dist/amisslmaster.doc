@@ -1,0 +1,232 @@
+TABLE OF CONTENTS
+
+amisslmaster.library/--background--
+amisslmaster.library/CloseAmiSSL
+amisslmaster.library/CloseAmiSSLCipher
+amisslmaster.library/InitAmiSSLMaster
+amisslmaster.library/OpenAmiSSL
+amisslmaster.library/OpenAmiSSLCipher
+amisslmaster.library/OpenAmiSSLTagList
+amisslmaster.library/--background--          amisslmaster.library/--background--
+
+   PURPOSE
+	The amisslmaster.library was introduced starting with AmiSSL v2 and
+	manages different versions of AmiSSL and backwards compatibility.
+	Multiple versions of AmiSSL may be installed simultaneously (due to
+	OpenSSL API/ABI changes, applications may require specific versions).
+
+	Since AmiSSL v2, rather than opening AmiSSL libraries directly,
+	developers must use this library to open their required version of
+	AmiSSL and close it again after use. Each opener gets their own
+	unique AmiSSLMasterBase.
+
+	The use of amisslmaster.library makes it possible to have multiple
+	versions of amissl.library with incompatible APIs installed keeping
+	the programs compiled with an older amissl.library working. This is
+	necessary since OpenSSL API changes from time to time. Also, when a
+	new version of AmiSSL is released with amissl.library API that is
+	backwards compatible to some previous version, a program requesting
+	the old version of amissl.library will automatically get the new
+	version and the old version can be deleted (usually by the installer).
+
+amisslmaster.library/CloseAmiSSL                amisslmaster.library/CloseAmiSSL
+
+   NAME
+	CloseAmiSSL -- close the previously opened AmiSSL library (V2)
+
+   SYNOPSIS
+	CloseAmiSSL()
+
+	void CloseAmiSSL(void);
+
+   FUNCTION	
+	After a successful call to OpenAmiSSLTags() or OpenAmiSSL(), once you
+	have finished using AmiSSL, you must call this function to close it and
+	clean up.
+
+   SEE ALSO
+	OpenAmiSSLTags(), OpenAmiSSL()
+
+amisslmaster.library/CloseAmiSSLCipher    amisslmaster.library/CloseAmiSSLCipher
+
+   NAME
+	CloseAmiSSLCipher -- close previously opened AmiSSL cipher library (V2)
+
+   SYNOPSIS
+	CloseAmiSSLCipher( CipherBase );
+
+	void CloseAmiSSLCipher( struct Library * );
+
+   FUNCTION
+	This function is not used for AmiSSL v3 or higher.
+
+	After a successful call to OpenAmiSSLCipher(), once you have finished
+	using the library, you must call this function to close it and clean up.
+
+   INPUTS
+	CipherBase - library pointer returned by OpenAmiSSLCipher()
+
+   SEE ALSO
+	OpenAmiSSLCipher()
+
+amisslmaster.library/InitAmiSSLMaster     amisslmaster.library/InitAmiSSLMaster
+
+   NAME
+	InitAmiSSLMaster -- specify which version of AmiSSL to use (V2)
+
+   SYNOPSIS
+	success = InitAmiSSLMaster( APIVersion, UsesOpenSSLStructs )
+
+	LONG InitAmiSSLMaster( LONG, LONG );
+
+   FUNCTION
+	This function has been deprecated - use OpenAmiSSLTags() instead.
+
+	Initialise AmiSSLMaster by specifying the minimum version of AmiSSL
+	that you wish to use and whether your application accesses or uses
+	public OpenSSL structures.
+
+   INPUTS
+	APIVersion - See OpenAmiSSLTags()/AmiSSL_APIVersion.
+
+	UsesOpenSSLStructs - See OpenAmiSSLTags()/AmiSSL_UsesOpenSSLStructs.
+
+   RESULTS
+	success - boolean; (zero or non-zero), 0 for failure.
+	          Can only fail if the specified APIVersion was newer
+	          than supported by the installed amisslmaster.library.
+
+   SEE ALSO
+	OpenAmiSSLTags()
+
+amisslmaster.library/OpenAmiSSL                  amisslmaster.library/OpenAmiSSL
+
+   NAME
+	OpenAmiSSL -- open the requested AmiSSL library (V2)
+
+   SYNOPSIS
+	AmiSSLBase = OpenAmiSSL()
+
+	struct Library *OpenAmiSSL(void);
+
+   FUNCTION
+	This function has been deprecated - use OpenAmiSSLTags() instead.
+
+	Attempt to open the AmiSSL version specified by a previous successful
+	call to	InitAmiSSLMaster(). The library may choose to automatically
+	choose a newer version, if backwards compatible. If successful, be
+	sure to close it again using CloseAmiSSL(), when you are done.
+
+   RESULTS
+	AmiSSLBase - a library pointer for a successful open, else NULL
+
+   SEE ALSO
+	OpenAmiSSLTags(), InitAmiSSLMaster(), CloseAmiSSL()
+
+amisslmaster.library/OpenAmiSSLCipher      amisslmaster.library/OpenAmiSSLCipher
+
+   NAME
+	OpenAmiSSLCipher -- open an AmiSSL v2 cipher algorithm library (V2)
+
+   SYNOPSIS
+	library = OpenAmiSSLCipher( Cipher );
+
+	struct Library *OpenAmiSSLCipher( LONG );
+
+   FUNCTION
+	This function is not used by AmiSSL v3 or higher.
+
+	Open one of the separate, individual AmiSSL v2 cipher algorithm
+	libraries.
+
+   INPUTS
+	Cipher - The cipher you would like to open (choose a CIPHER_* definition
+	    from <libraries/amissl.h>)
+
+   RESULTS
+	library - a library pointer for a successful open, else NULL
+	
+   SEE ALSO
+	CloseAmiSSLCipher()
+
+amisslmaster.library/OpenAmiSSLTagList    amisslmaster.library/OpenAmiSSLTagList
+
+   NAME
+	OpenAmiSSLTagList -- open the requested AmiSSL library (V5)
+	OpenAmiSSLTags -- varargs stub for OpenAmiSSLTagList() (V5)
+
+   SYNOPSIS
+	error = OpenAmiSSLTagList( tagList )
+
+	LONG OpenAmiSSLTagList( struct TagItem * )
+
+	error = OpenAmiSSLTags( tag, ... )
+
+	LONG OpenAmiSSLTags( Tag, ... );
+
+   FUNCTION
+	Simplified way to open AmiSSL, combining the functionality of
+	InitAmiSSLMaster(), OpenAmiSSL() and InitAmiSSL(). If successful,
+	CloseAmiSSL() must later be called when your application has
+	finished using AmiSSL.
+
+   INPUTS
+        tagList - pointer to an array of tags providing extra parameters.
+
+   TAGS
+	AmiSSL_APIVersion - (LONG) The minimum AmiSSL/OpenSSL version that
+	    you wish to open (see <libraries/amisslmaster.h> for valid
+	    values. The library may choose to automatically open a newer
+	    version, if backwards compatible with your choice. If you need
+	    to compile a program specifically for OpenSSL 1.1.1m API, for
+	    example, you need to use the SDK in which AMISSL_CURRENT_VERSION
+	    is AMISSL_V111m (required). (V5)
+
+	AmiSSL_UsesOpenSSLStructs - (BOOL) Indicate whether your application
+	    directly references or allocates any of the non-opaque structure
+	    definitions in the OpenSSL header files. It is encouraged that
+	    specify FALSE and completely avoid using any structures directly,
+	    as it means your application will not be restricted to an old
+	    AmiSSL version in the future. If you are not sure or need to use
+	    any of these structures, you must specify TRUE. This is not so
+	    much of an issue since OpenSSL 1.1.0 as most public structures
+	    were made opaque, with functions added to access them. Everytime
+	    the OpenSSL team modify public structures, it means that AmiSSL
+	    cannot automatically upgrade the OpenSSL version used by your
+	    application - recompilation will be required with the new SDK.
+	    These structures are not scheduled to be altered in any future
+	    OpenSSL 3.x.x versions, but may do so in the next major version
+	    (required). (V5)
+
+	AmiSSL_LibBasePtr - (struct Library **) Pointer to your AmiSSLBase
+	    variable for AmigaOS 3.x. If successful, this function will set
+	    this to the opened library. DO NOT call CloseLibrary() on this as
+	    CloseAmiSSL() takes care of it. Not needed in AmigaOS 4.x
+	    applications. (V5)
+
+	AmiSSL_LibExtBasePtr - (struct Library **) Pointer to your
+	    AmiSSLExtBase variable for AmigaOS 3.x. Because of the sheer
+	    number of available public functions in OpenSSL, AmiSSL v5 spans
+	    two library bases. If successful, this function will set this to
+	    the opened library, if you have also set AmiSSL_InitAmiSSL to
+	    TRUE. DO NOT call CloseLibrary() on this as CloseAmiSSL() takes
+	    care of it. Not needed in AmigaOS 4.x applications. (V5)
+
+	AmiSSL_InterfacePtr - (struct AmiSSLIFace **) Pointer to your IAmiSSL
+	    variable for AmigaOS 4.x. If successful, this function will set
+	    this to the main interface, saving you from needing to call
+	    GetInterface(). If providing this, DO NOT call DropInterface() on
+	    IAmiSSL as CloseAmiSSL() takes care of it. (V5)
+
+	AmiSSL_InitAmiSSL - Boolean value indicating whether to call
+	    InitAmiSSL(). If set to TRUE, InitAmiSSL() will be called and
+	    CloseAmiSSL() will also call CleanupAmiSSL(). You may also pass
+	    any of the tags listed for InitAmiSSL(). Otherwise, if specifying
+	    FALSE, you will need to call InitAmiSSL() and CleanupAmiSSL()
+	    yourself (defaults to TRUE). (V5)
+	
+   RESULTS
+	error - returns 0 on success or non-zero on failure.
+
+   SEE ALSO
+	InitAmiSSLMaster(), CloseAmiSSL(), amissl.library/InitAmiSSL()

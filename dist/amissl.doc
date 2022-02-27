@@ -1,0 +1,230 @@
+TABLE OF CONTENTS
+
+amissl.library/--background--
+amissl.library/CleanupAmiSSLA
+amissl.library/InitAmiSSLA
+amissl.library/SSL_CIPHER_get_authentication
+amissl.library/SSL_CIPHER_get_encryption
+amissl.library/SSL_CIPHER_get_key_exchange
+amissl.library/SSL_CIPHER_get_mac
+amissl.library/--background--                      amissl.library/--background--
+
+   PURPOSE
+	The amissl.library contains the public OpenSSL API functions. There are
+	too many to list and document here, but you can find documentation on the
+	OpenSSL API at https://www.openssl.org/docs/manmaster/man3. Instead, only
+	the AmiSSL specific functions are documented here.
+
+	Since AmiSSL v2, you must not open this library directly, but instead
+	use amisslmaster.library/OpenAmiSSL() to do so and then call InitAmiSSL()
+	before you can start using OpenSSL functions. This is because multiple
+	versions of AmiSSL can be installed at the same time with the libraries
+	named of the form amissl_v<version>.library.
+
+	Since AmiSSL v2, each opener gets their own unique baserel based
+	AmiSSLBase. This can be shared between different subprocesses.
+	Furthermore, this is encouraged since it allows the cache of server
+	certificates to be used by all subprocesses that share the same
+	AmiSSLBase resulting in	speed increase. Each subprocess MUST call
+	InitAmiSSL() with appropriate arguments before using any other
+	amissl.library calls and CleanupAmiSSL() before it exits.
+
+amissl.library/CleanupAmiSSLA                      amissl.library/CleanupAmiSSLA
+
+   NAME
+	CleanupAmiSSLA -- initialise the AmiSSL library (V1)
+	CleanupAmiSSL  -- varargs stub for CleanupAmiSSLA() (V1)
+
+   SYNOPSIS
+	error = CleanupAmiSSLA( tagList )
+
+	LONG CleanupAmiSSLA( struct TagItem * )
+
+	error = CleanupAmiSSL( tag, ... )
+
+	LONG CleanupAmiSSL( Tag, ... );
+
+   FUNCTION
+	If you used amisslmaster.library/OpenSSLTags() to initialise AmiSSL,
+	you must not use this function, as amisslmaster.library/CloseAmiSSL()
+	will call it for you.
+
+	Otherwise, for each process using AmiSSL, where you made a successful
+	InitAmiSSLA() call, you	must pair it with a call to this function
+	to cleanup and process related resources. Failure to do so can cause
+	AmiSSL to crash. Once this function has been called, you must not use
+	any OpenSSL functions.
+
+   INPUTS
+        tagList - pointer to an array of tags providing optional extra
+            parameters, or NULL.
+
+   TAGS
+
+   RESULTS
+	error - returns 0 on success or non-zero on failure.
+
+   SEE ALSO
+	InitAmiSSLA()
+
+amissl.library/InitAmiSSLA                            amissl.library/InitAmiSSLA
+
+   NAME
+	InitAmiSSLA -- initialise the AmiSSL library (V1)
+	InitAmiSSL  -- varargs stub for InitAmiSSLA() (V1)
+
+   SYNOPSIS
+	error = InitAmiSSLA( tagList )
+
+	LONG InitAmiSSLA( struct TagItem * )
+
+	error = InitAmiSSL( tag, ... )
+
+	LONG InitAmiSSL( Tag, ... );
+
+   FUNCTION
+	Usually, you will be using amisslmaster.library/OpenSSLTags to
+	initialise AmiSSL, so you should not need to use this function
+	in simple applications. If you have decided delay the initialisation,
+	this function must be called to initialise AmiSSL, once	opened,
+	before you can use any of the available OpenSSL functions.
+
+	Furthermore, if you would like to use AmiSSL in your application's
+	subprocesses, it is recommended that you share the AmiSSL instance
+	opened from your main process and have each process simply call
+	InitAmiSSLA() instead of wasting resources and opening AmiSSL for
+	every process.
+
+   INPUTS
+        tagList - pointer to an array of tags providing optional extra
+	    parameters, or NULL.
+
+   TAGS
+	AmiSSL_SocketBase - (struct Library *) Pointer to the socket base. If
+	    the caller doesn't need any networking functionality, or if using
+	    AmiSSL_ISocket / AmiSSL_ISocketPtr for AmigaOS 4.x, this can be
+	    omitted. (defaults to NULL). (V1)
+
+	AmiSSL_ISocket - (struct SocketIFace *) Pointer to the socket library
+	    interface for AmigaOS 4.x. If the caller doesn't need any
+	    networking functionality, this can be omitted, likewise if
+	    AmiSSL_ISocketPtr or AmiSSL_SocketBase has been specified
+	    instead. (V3)
+
+	AmiSSL_ISocketPtr - (struct SocketIFace **) Pointer to your ISocket
+	    variable for AmigaOS 4.x. If the caller doesn't need networking
+	    functionality, this can be omitted, likewise if AmiSSL_ISocket or
+	    AmiSSL_SocketBase has been specified instead. This generally
+	    doesn't need to be used, but may be useful if you need to open
+	    ISocket after initiliasing AmiSSL. (V3)
+
+	AmiSSL_ErrNoPtr - (int *)Pointer to the errno variable to set when
+	    some of the C or socket library functions called by AmiSSL return
+	    an error. You should always specify this tag or errno error
+	    detection in your program will not work reliably. AmiSSL will
+	    always instruct the network library to use a certain errno
+	    pointer (ie. it will specify SBTM_SETVAL(SBTC_ERRNOLONGPTR) in
+	    SocketBaseTags() for bsdsocket.library and similarly for other
+	    networking packages) possibly overriding the errno pointer you
+	    specified to the networking library yourself. If AmiSSL_ErrNoPtr
+	    is specified, AmiSSL will use it for SBTM_SETVAL(SBTC_ERRNOLONGPTR)
+	    or equivalent calls, otherwise it will use an internal errno
+	    pointer and thus errno changes will not be propagated to your
+	    application. (V2)
+
+	AmiSSL_SocketBaseBrand - (LONG) useful only if you are using
+	    MultiTCP linker library by Stefan Burstroem, you can ignore it
+	    otherwise. (defaults to TCPIP_AmiTCP) (V2)
+
+	AmiSSL_MLinkLock - useful only if you are using MultiTCP linker
+	    library by Stefan Burstroem, you can ignore it otherwise. (V2)
+
+	AmiSSL_Version - OBSOLETE - Used for AmiSSL v1 only
+	AmiSSL_Revision - OBSOLETE - Used for AmiSSL v1 only
+	AmiSSL_Version_Override - OBSOLETE - Used for AmiSSL v1 only
+	AmiSSL_TCPStack - OBSOLETE - Used for AmiSSL v2 only
+	AmiSSL_SSLVersionApp - OBSOLETE - Used for AmiSSL v2/v3 only
+
+   RESULTS
+	error - returns 0 on success or non-zero on failure.
+
+   SEE ALSO
+	CleanupAmiSSLA()
+
+amissl.library/SSL_CIPHER_get_authentication   amissl.library/SSL_CIPHER_get_authentication
+   NAME
+	SSL_CIPHER_get_authentication -- get the name of a cipher's
+	                                 authentication algorithm (V3)
+
+   SYNOPSIS
+	name = SSL_CIPHER_get_authentication( cipher )
+
+	const char *SSL_CIPHER_get_authentication( SSL_CIPHER * );
+
+   FUNCTION
+	Return the textual representation of a cipher's authentication algorithm.
+
+   INPUTS
+        cipher - pointer to a SSL cipher.
+
+   RESULTS
+	name - returns the cipher authentication name or "unknown".
+
+amissl.library/SSL_CIPHER_get_encryption   amissl.library/SSL_CIPHER_get_encryption
+
+   NAME
+	SSL_CIPHER_get_encryption -- get the name of a cipher's
+	                             encryption algorithm (V3)
+
+   SYNOPSIS
+	name = SSL_CIPHER_get_encryption( cipher )
+
+	const char *SSL_CIPHER_get_encryption( SSL_CIPHER * );
+
+   FUNCTION
+	Return the textual representation of a cipher's encryption algorithm.
+
+   INPUTS
+        cipher - pointer to a SSL cipher.
+
+   RESULTS
+	name - returns the cipher encryption name or "unknown".
+
+amissl.library/SSL_CIPHER_get_export        amissl.library/SSL_CIPHER_get_export
+
+   NAME
+	SSL_CIPHER_get_key_exchange -- get the name of a cipher's
+	                               key exchange algorithm (V3)
+
+   SYNOPSIS
+	name = SSL_CIPHER_get_key_exchange( cipher )
+
+	const char *SSL_CIPHER_get_key_exchange( SSL_CIPHER * );
+
+   FUNCTION
+	Return the textual representation of a cipher's key exchange algorithm.
+
+   INPUTS
+        cipher - pointer to a SSL cipher.
+
+   RESULTS
+	name - returns the cipher key exchange name or "unknown".
+
+amissl.library/SSL_CIPHER_get_mac              amissl.library/SSL_CIPHER_get_mac
+
+   NAME
+	SSL_CIPHER_get_mac -- get the name of a cipher's mac algorithm (V3)
+
+   SYNOPSIS
+	name = SSL_CIPHER_get_mac( cipher )
+
+	const char *SSL_CIPHER_get_mac( SSL_CIPHER * );
+
+   FUNCTION
+	Return the textual representation of a cipher's mac algorithm.
+
+   INPUTS
+        cipher - pointer to a SSL cipher.
+
+   RESULTS
+	name - returns the cipher mac name or "unknown".
