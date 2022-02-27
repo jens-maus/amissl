@@ -77,7 +77,7 @@ OSSL_PARAM *OSSL_PARAM_locate(OSSL_PARAM *p, const char *key);
 const OSSL_PARAM *OSSL_PARAM_locate_const(const OSSL_PARAM *p, const char *key);
 
 /* Basic parameter type run-time construction */
-# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# if defined(OPENSSL_SYS_AMIGA)
 #  define DECLARE_OSSL_PARAM_construct_LP0(name) \
       void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result);
 #  define DECLARE_OSSL_PARAM_construct_LP1(name, type) \
