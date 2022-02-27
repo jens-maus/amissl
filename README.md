@@ -10,7 +10,7 @@
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic
-library toolkit.
+and SSL/TLS library toolkit.
 
 The library together with its provided software development kit (SDK) tries to be
 100% API/ABI compatible to the OpenSSL version it is based on. In addition, due to its
@@ -82,7 +82,7 @@ script used accordingly.
 ```
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2022 AmiSSL Open Source Team.
+AmiSSL v4/v5 Copyright (c) 2014-2022 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,

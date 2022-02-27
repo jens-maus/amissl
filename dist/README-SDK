@@ -20,8 +20,9 @@ few differences as a result of the limited Amiga shared library model.
 
 AmiSSL API
 ----------
-AmiSSL v3/v4 API is slightly different from v1 API. Nevertheless, the procedure
-in using AmiSSL should be something like the following pseudo-code:
+AmiSSL v5 API is slightly different from previous versions and has been
+simplified. Notes for migration from previous versions are shown further below.
+The procedure to use AmiSSL should be something like the following pseudo-code:
 
 -- cut here --
 #include <proto/amisslmaster.h>
@@ -31,86 +32,61 @@ in using AmiSSL should be something like the following pseudo-code:
 #include <amissl/amissl.h>
 
 if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
-                                   AMISSLMASTER_MIN_VERSION)))
+                                   AMISSLMASTER_MIN_VERSION))
 {
-	if(InitAmiSSLMaster(AMISSL_V11x, TRUE or FALSE))
+#if defined(__amigaos4__)
+	if(IAmiSSLMaster = (struct AmiSSLMasterIFace *)
+	                   GetInterface((struct Library *)AmiSSLMasterBase,
+	                                "main", 1, NULL))
 	{
-		if((AmiSSLBase = OpenAmiSSL()))
+		if(OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+		                  AmiSSL_UsesOpenSSLStructs, TRUE or FALSE,
+		                  AmiSSL_InterfacePtr, &IAmiSSL,
+		                  AmiSSL_ErrNoPtr, &errno,
+		                  AmiSSL_ISocket, ISocket,
+		                  ..., TAG_DONE) == 0)
 		{
-			if(InitAmiSSL(..., TAG_DONE) == 0)
-			{
-				/* Initialization successfully completed, proceed */
-
-				/* ... The rest of the program ... */
-
-				CleanupAmiSSL(TAG_DONE);
-			}
-			else
-				printf("ERROR: Couldn't initialize AmiSSL!");
-
 			CloseAmiSSL();
 		}
-		else
-			printf("ERROR: Couldn't open AmiSSL!");
-	}
-	else
-		printf("ERROR: AmiSSL version is too old!");
+		else printf("ERROR: Couldn't open AmiSSL!");
 
+		DropInterface((struct Interface *)IAmiSSLMaster);
+	}
+	else printf("ERROR: Couldn't obtain AmiSSLMaster interface!");
+#else
+	if(OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+	                  AmiSSL_UsesOpenSSLStructs, TRUE or FALSE,
+	                  AmiSSL_LibBasePtr, &AmiSSLBase,
+	                  AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
+	                  AmiSSL_ErrNoPtr, &errno,
+	                  AmiSSL_SocketBase, SocketBase,
+	                  ..., TAG_DONE) == 0)
+	{
+		CloseAmiSSL();
+	}
+	else printf("ERROR: Couldn't open AmiSSL!");
+#endif
 	CloseLibrary(AmiSSLMasterBase);
 }
-else
-	printf("ERROR: Couldn't open amisslmaster.library!");
+else printf("ERROR: Couldn't open amisslmaster.library!");
 -- cut here --
 
 The first step is to open amisslmaster.library requesting at least
-AMISSLMASTER_MIN_VERSION version. Then, amisslmaster.library/InitAmiSSLMaster()
-have to be called specifying which API version the program was compiled for and
-whether it uses OpenSSL structures in some way (ie. if it accesses some of the
-fields directly and not through AmiSSL API or if it includes OpenSSL structures
-in its own structures - if unsure, specify TRUE).
+AMISSLMASTER_MIN_VERSION version (and, for OS4, call GetInterface() to get the
+"main" interface and later DropInterface() in the cleanup phase).
+
+Then amisslmaster.library/OpenAmiSSLTags() has to be called specifying which
+API version the program was compiled for and whether it uses OpenSSL structures
+in some way (ie. if it accesses some of the fields directly and not through
+AmiSSL API or if it includes OpenSSL structures in its own structures - if
+unsure, specify TRUE). It will return zero on success or a non-zero value on
+failure. See the autodocs for amisslmaster.library/OpenAmiSSLTags() and
+amissl.library/InitAmiSSL() for currently available tags.
 
 If you need to compile a program specifically for f. ex. OpenSSL 0.9.7g API,
 you need to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V097g. If
 you are, however, always using the latest AmiSSL SDK version you can keep
 using AMISSL_CURRENT_VERSION.
-
-InitAmiSSLMaster() returns a boolean value indicating its success. It will only
-fail if a program requests a newer version of amissl.library than the program
-is aware of.
-
-Now the appropriate amissl.library needs to be opened by calling the
-amisslmaster.library/OpenAmiSSL() function. It will either return the library
-base if it was possible to open it or NULL otherwise.
-
-On AmigaOS4, it is of course also required to call GetInterface() to get "main"
-interfaces for the libraries after OpenLibrary()/OpenAmiSSL() calls in the
-initialization phase and then call DropInterface() for them in the cleanup
-phase.
-
-As the final step of initialization, amissl.library/InitAmiSSL() should be
-called. It will return zero on success or a non-zero value on failure.
-
-The following tags are currently available for InitAmiSSL() call:
-
-- AmiSSL_SocketBase/AmiSSL_ISocket: Pointer to socket base and/or interface on
-  OS4. If the caller doesn't need any networking functionality, this can be
-  omitted (defaults to NULL).
-
-- AmiSSL_SocketBaseBrand, AmiSSL_MLinkLock: these two are useful only if you
-  are using MultiTCP linker library by Stefan Burstroem, you can ignore them
-  otherwise. The former defaults to TCPIP_AmiTCP and the latter to NULL.
-
-- AmiSSL_ErrNoPtr: pointer to the errno variable to set when some of the C or
-  socket library functions called by AmiSSL return an error. You should always
-  specify this tag or errno error detection in your program will not work
-  reliably. AmiSSL will always instruct the network library to use a certain
-  errno pointer (ie. it will specify SBTM_SETVAL(SBTC_ERRNOLONGPTR) in
-  SocketBaseTags call for bsdsocket.library and similarly for other networking
-  packages) possibly overriding the errno pointer you specified to the
-  networking library yourself. If AmiSSL_ErrNoPtr is specified, AmiSSL will use
-  it for SBTM_SETVAL(SBTC_ERRNOLONGPTR) or equivalent calls, otherwise it will
-  use an internal errno pointer and thus errno changes will not be propagated
-  to your program.
 
 Linker libraries, that automatically open and set up AmiSSL, are also available
 for GCC (OS3 and OS4) as part of the AmiSSL SDK. You may also compile your
@@ -133,9 +109,40 @@ amissl.library API that is backwards compatible to some previous version, a
 program requesting the old version of amissl.library will automatically get the
 new version and the old version can be deleted.
 
+Migration from AmiSSL v4 to v5
+------------------------------
+AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.0.x, but
+fortunately you will usually not need to make any changes to your OpenSSL code,
+as most things are actually backwards compatible (most functions that have been
+removed or changed will automatically be replaced by macros in the OpenSSL
+header files). The main difference is that due to the shear amount of OpenSSL
+functions available, we had to split them across two library bases on OS3 which
+meant the addition of AmiSSLExtBase. The only time you will really be aware of
+this is the need to start using OpenAmiSSLTags() in place of InitAmiSSLMaster(),
+OpenAmiSSL() and InitAmiSSL(). Unless you specify AmiSSL_InitAmiSSL as FALSE,
+you should not call CleanupAmiSSL(), as CloseAmiSSL() will take care of this
+for you. However, the procedure for subprocesses remains the same - they must
+continue to both call InitAmiSSL() and CleanupAmiSSL() if sharing the AmiSSL
+instance from the parent task where OpenSSLTags() was called. For OS4 only,
+you can even get away with not using OpenSSLTags() and make no changes to
+your code, but we recommend switching to OpenSSLTags().
+
+Migration from AmiSSL v3 to v4
+------------------------------
+AmiSSL v3 is OpenSSL 0.9.x based and there were many fundamental changes in
+AmiSSL v4 due to the switch to OpenSSL 1.1.x. Although there were no changes in
+the AmiSSL API itself, there were lots of important changes in the OpenSSL API.
+Rather than simply recompiling, depending on how heavy your OpenSSL usage is,
+you may well need to make changes to your code. For example, many public
+structures that were defined in the header files have now been made private.
+Rather than allocating them yourself, or putting them on the stack, you will
+need to use the provided new functions to obtain, access and modify these
+structures. We also dropped SSLv2/v3 methods completely, so you will need to
+switch to TLS.
+
 Differences to OpenSSL
 ----------------------
-Unlike AmiSSL v1, AmiSSL v3/v4 uses "#include <openssl/xxx.h>" scheme instead
+Unlike AmiSSL v1, AmiSSL v3/v4/v5 uses "#include <openssl/xxx.h>" scheme instead
 of "#include <amissl/xxx.h>" scheme. This and some other changes should make it
 possible to compile most OpenSSL programs out of the box. There are some
 differences to OpenSSL, though.

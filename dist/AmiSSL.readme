@@ -2,36 +2,44 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@futaura.co.uk>
 Type:         util/libs
-Version:      4.12
-Replaces:     util/libs/AmiSSL-*
+Version:      5.0
+Replaces:     util/libs/AmiSSL-5.*
 Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
 Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
 URL:          https://github.com/jens-maus/amissl
 
-This is version 4.12 of the open-source based AmiSSL library for Amiga based
-operating systems. Version 4.x is a new major release which comes with full
-compatibility to the OpenSSL 1.1.x line which includes important security
-related fixes, TLSv1.3 and comes with new encryption ciphers which are
-required nowadays to connect to modern SSL-based services (e.g.  HTTPS).
+This is version 5.0 of the open-source based AmiSSL library for Amiga based
+operating systems. Version 5.x is a new major release which comes with full
+compatibility to the OpenSSL 3.0 line which includes important security
+related fixes, a built-in HTTP(S) client and comes with new encryption
+ciphers which are required nowadays to connect to modern SSL-based services
+such as HTTPS and SSH.
 
 Backwards Compatibility:
 -----------------------
-All applications compiled to use most previous versions of AmiSSLv4 will
-automatically use this latest version once installed. Unfortunately, due to
-some errors that were made in AmiSSL 4.3, applications compiled to
-specifically use AmiSSL 4.3 will need to be recompiled with the AmiSSL 4.4
-SDK (or newer) in order for them to be able to use this latest version.
-Due to fundamental changes in the API between the old AmiSSLv3 and new v4
-versions and the large changes between the old OpenSSL 0.9.x and the new
-OpenSSL 1.1.x line, applications have to be recompiled with the updated
-AmiSSL SDK to take full advantage of the modernized OpenSSL 1.1.x API.
-Besides that fundamental change, AmiSSLv4 can be installed on top of a
-AmiSSLv3 installation while still ensuring that applications compiled for
-AmiSSLv3 will continue to work properly.
+All applications compiled to use previous versions of AmiSSL v5 will
+automatically use this latest version once installed. Only applications
+compiled for AmiSSL v4 that declared they do not reference public OpenSSL
+structures will automatically start using AmiSSL v5. Otherwise, old
+applications will continue to use AmiSSL v4 and will need to be recompiled
+with the updated SDK in order to start using AmiSSL v5. Besides this
+difference, AmiSSL v5 can be installed on top of any previous AmiSSL
+versions, which ensures that applications compiled for AmiSSL v1/v2/v3/v4
+will continue to work.
 
 Requirements:
 ------------
 - AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ or MorphOS
+
+Version 5.0 (x.x.2022):
+------------------------
+
+- Updated OpenSSL backend to full compatibility to latest
+  OpenSSL 3.0.0 (7.9.2021) version, which brings new features, such as a
+  built-in HTTP(S) client, along with security and bug fixes.
+- Added new streamlined OpenAmiSSLTags/TagList() function to
+  amisslmaster.library which simplifies the opening of AmiSSL.
+- Added autodocs for all the Amiga specific interface functions.
 
 Version 4.12 (11.2.2022):
 ------------------------
@@ -78,7 +86,7 @@ Version 4.9 (02.04.2021):
   OpenSSL 1.1.1k (25.03.2021) version, which brings security and bug fixes.
 - Simplified and improved logic in amisslmaster.library for choosing which
   libraries to open.
-- Installer will now delete redundant AmiSSLv4 libraries where possible.
+- Installer will now delete redundant AmiSSL v4 libraries where possible.
 - Added Swedish installer translation.
 - Updated icons with more modern GlowIcons.
 - Added sample openssl.cnf file and CA.pl helper script to the installation.
@@ -241,17 +249,18 @@ https://github.com/jens-maus/amissl/blob/master/dist/README-SDK).
 
 The previous versions of libraries in AmiSSL directory should be kept when a
 new version of AmiSSL is released since they may still be used. For example,
-IBrowse v2.3 uses AmiSSLv2 libraries through amisslmaster.library.  These
+IBrowse v2.3 uses AmiSSL v2 libraries through amisslmaster.library.  These
 libraries are named "AmiSSL:Libs/AmiSSL/amissl_v2.library",
 "AmiSSL:Libs/AmiSSL/blowfish_v2.library", etc. and are based on OpenSSL
-0.9.6g. The first release of AmiSSLv3 is based on OpenSSL 0.9.7g, latest
+0.9.6g. The first release of AmiSSL v3 is based on OpenSSL 0.9.7g, latest
 available at the time. It includes "AmiSSL:Libs/AmiSSL/amissl_v097g.library"
 (all other libraries like blowfish, cast etc are now included in it and the
 name reflects the OpenSSL version number). Since OpenSSL 0.9.6g and 0.9.7g
 have incompatible API's and public structures, when IBrowse v2.3 tries to open
 AmiSSL through amisslmaster.library v3, amisslmaster.library will honor its
-request and open AmiSSLv2 libraries even though AmiSSLv3 library is available.
-The same applies to AmiSSLv4, the successor of AmiSSLv3.
+request and open AmiSSL v2 libraries even though AmiSSL v3 library is
+available. The same applies to AmiSSL v4, the successor of AmiSSL v3,
+likewise for AmiSSL v5, the successor of AmiSSL v4.
 
 Another example: suppose that a program is compiled for OpenSSL 0.9.7g API.
 When it asks amisslmaster.library to open AmiSSL with that API,
@@ -286,7 +295,7 @@ A port of the OpenSSL command-line tool is also included and usually installed
 to AmiSSL: during installation. It is a "command line tool for using the
 various cryptography functions of OpenSSL's crypto library from the shell".
 The documentation for the OpenSSL tool is included in the archive and can also
-be reviewed online: https://www.openssl.org/docs/man1.1.1/man1/openssl.html.
+be reviewed online: https://www.openssl.org/docs/man3.0/man1/openssl.html.
 A sample openssl.cnf file is also installed to AmiSSL:, if it doesn't already
 exist, along with the CA.pl helper script, both of which aid the certificate
 generation features of the OpenSSL tool.
@@ -307,7 +316,7 @@ Legal information
 -----------------
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4    Copyright (c) 2014-2021 AmiSSL Open Source Team.
+AmiSSL v4/v5 Copyright (c) 2014-2022 AmiSSL Open Source Team.
 All Rights Reserved.
 
 AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
