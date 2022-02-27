@@ -102,7 +102,9 @@ DECLARE_OSSL_PARAM_construct_LP2(utf8_ptr, char *)
 DECLARE_OSSL_PARAM_construct_LP2(octet_string, void)
 DECLARE_OSSL_PARAM_construct_LP2(octet_ptr, void *)
 DECLARE_OSSL_PARAM_construct_LP0(end)
+# endif
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
 #  define OSSL_PARAM_construct_int(key,buf) \
      ({ OSSL_PARAM __r; OSSL_PARAM_construct_int_amiga(&__r,key,buf); __r; })
 #  define OSSL_PARAM_construct_uint(key,buf) \
