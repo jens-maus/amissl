@@ -36,12 +36,11 @@ IF[{- !$disabled{tests} -}]
           aborttest test_test pkcs12_format_test \
           sanitytest rsa_complex exdatatest bntest \
           ecstresstest gmdifftest pbelutest \
-          mdc2test sha_test \
+          mdc2test \
           exptest pbetest \
-          evp_pkey_provided_test evp_test evp_extra_test evp_extra_test2 \
-          evp_fetch_prov_test evp_libctx_test ossl_store_test \
+          evp_test evp_extra_test2 \
+          evp_fetch_prov_test ossl_store_test \
           v3nametest v3ext \
-          evp_pkey_provided_test evp_test evp_extra_test evp_extra_test2 \
           evp_fetch_prov_test v3nametest v3ext \
           crltest danetest bad_dtls_test lhash_test \
           conf_include_test params_api_test params_conversion_test \
@@ -59,8 +58,8 @@ IF[{- !$disabled{tests} -}]
           time_offset_test pemtest ssl_cert_table_internal_test ciphername_test \
           http_test servername_test ocspapitest fatalerrtest tls13ccstest \
           sysdefaulttest errtest ssl_ctx_test \
-          context_internal_test aesgcmtest params_test evp_pkey_dparams_test \
-          hexstr_test provider_status_test defltfips_test \
+          aesgcmtest params_test evp_pkey_dparams_test \
+          provider_status_test defltfips_test \
           bio_readbuffer_test user_property_test pkcs7_test upcallstest \
           provfetchtest prov_config_test
 
@@ -814,13 +813,13 @@ IF[{- !$disabled{tests} -}]
   SOURCE[context_internal_test]=context_internal_test.c
   INCLUDE[context_internal_test]=.. ../include ../apps/include
   DEPEND[context_internal_test]=../libcrypto.a libtestutil.a
- ENDIF
 
   PROGRAMS{noinst}=provider_internal_test
   DEFINE[provider_internal_test]=PROVIDER_INIT_FUNCTION_NAME=p_test_init
   SOURCE[provider_internal_test]=provider_internal_test.c p_test.c
   INCLUDE[provider_internal_test]=../include ../apps/include ..
   DEPEND[provider_internal_test]=../libcrypto.a libtestutil.a
+ ENDIF
   PROGRAMS{noinst}=provider_test
   DEFINE[provider_test]=PROVIDER_INIT_FUNCTION_NAME=p_test_init
   SOURCE[provider_test]=provider_test.c p_test.c
@@ -852,6 +851,7 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[params_test]=.. ../include ../apps/include
   DEPEND[params_test]=../libcrypto.a libtestutil.a
 
+ IF[{- $config{target} !~ /amiga/ -}]
   PROGRAMS{noinst}=hexstr_test
   SOURCE[hexstr_test]=hexstr_test.c
   INCLUDE[hexstr_test]=.. ../include ../apps/include
@@ -873,6 +873,7 @@ IF[{- !$disabled{tests} -}]
   SOURCE[namemap_internal_test]=namemap_internal_test.c
   INCLUDE[namemap_internal_test]=.. ../include ../apps/include
   DEPEND[namemap_internal_test]=../libcrypto.a libtestutil.a
+ ENDIF
 
   PROGRAMS{noinst}=bio_prefix_text
   SOURCE[bio_prefix_text]=bio_prefix_text.c
