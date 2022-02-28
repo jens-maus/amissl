@@ -95,7 +95,9 @@ typedef struct openssl_speed_sec_st {
     int ffdh;
 } openssl_speed_sec_t;
 
+#if !defined(OPENSSL_SYS_AMIGA)
 static volatile int run = 0;
+#endif
 
 static int mr = 0;  /* machine-readeable output format to merge fork results */
 static int usertime = 1;
@@ -189,9 +191,27 @@ static double Time_F(int s)
     return ret;
 }
 #elif defined(OPENSSL_SYS_AMIGA)
+
+# define alarm(s) alarm_amiga(s)
+
+static time_t wait_until;
+
+static void alarm_amiga(int seconds)
+{
+    wait_until = time(NULL) + seconds;
+}
+
+static int run(void)
+{
+    return (time(NULL) < wait_until);
+}
+
 static double Time_F(int s)
 {
-    return app_tminterval(s, usertime);
+    double ret = app_tminterval(s, usertime);
+    if (s == STOP)
+        alarm(0);
+    return ret;
 }
 #else
 # error "SIGALRM not defined and the platform is not Windows"
@@ -460,7 +480,11 @@ static const OPT_PAIR sm2_choices[SM2_NUM] = {
 static double sm2_results[SM2_NUM][2];    /* 2 ops: sign then verify */
 #endif /* OPENSSL_NO_SM2 */
 
+#if defined(OPENSSL_SYS_AMIGA)
+#define COND(unused_cond) (run() && count < 0x7fffffff)
+#else
 #define COND(unused_cond) (run && count < 0x7fffffff)
+#endif
 #define COUNT(d) (count)
 
 typedef struct loopargs_st {
@@ -3343,37 +3367,27 @@ int speed_main(int argc, char **argv)
 
 static void print_message(const char *s, long num, int length, int tm)
 {
-#if defined(OPENSSL_SYS_AMIGA)
-    BIO_printf(bio_err,
-               mr ? "+DN:%s:%ld:%d\n"
-               : "Doing %s %ld times on %d size blocks: ", s, num, length);
-    (void)BIO_flush(bio_err);
-#else
     BIO_printf(bio_err,
                mr ? "+DT:%s:%d:%d\n"
                : "Doing %s for %ds on %d size blocks: ", s, tm, length);
     (void)BIO_flush(bio_err);
+#if !defined(OPENSSL_SYS_AMIGA)
     run = 1;
-    alarm(tm);
 #endif
+    alarm(tm);
 }
 
 static void pkey_print_message(const char *str, const char *str2, long num,
                                unsigned int bits, int tm)
 {
-#if defined(OPENSSL_SYS_AMIGA)
-    BIO_printf(bio_err,
-               mr ? "+DNP:%ld:%d:%s:%s\n"
-               : "Doing %ld %u bits %s %s's: ", num, bits, str, str2);
-    (void)BIO_flush(bio_err);
-#else
     BIO_printf(bio_err,
                mr ? "+DTP:%d:%s:%s:%d\n"
                : "Doing %u bits %s %s's for %ds: ", bits, str, str2, tm);
     (void)BIO_flush(bio_err);
+#if !defined(OPENSSL_SYS_AMIGA)
     run = 1;
-    alarm(tm);
 #endif
+    alarm(tm);
 }
 
 static void print_result(int alg, int run_no, int count, double time_used)
@@ -3628,7 +3642,11 @@ static void multiblock_speed(const EVP_CIPHER *evp_cipher, int lengths_single,
     for (j = 0; j < num; j++) {
         print_message(alg_name, 0, mblengths[j], seconds->sym);
         Time_F(START);
+#if defined(OPENSSL_SYS_AMIGA)
+        for (count = 0; run() && count < 0x7fffffff; count++) {
+#else
         for (count = 0; run && count < 0x7fffffff; count++) {
+#endif
             unsigned char aad[EVP_AEAD_TLS1_AAD_LEN];
             EVP_CTRL_TLS1_1_MULTIBLOCK_PARAM mb_param;
             size_t len = mblengths[j];
