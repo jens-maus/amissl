@@ -21,6 +21,9 @@
 #elif defined(__s390__) || defined(__s390x__)
 # include "s390x_arch.h"
 # define CPU_INFO_STR_LEN 2048
+# elif defined(OPENSSL_SYS_AMIGA) && defined(__PPC__)
+# include "crypto/ppc_arch.h"
+# define CPU_INFO_STR_LEN 128
 #else
 # define CPU_INFO_STR_LEN 128
 #endif
@@ -98,6 +101,9 @@ DEFINE_RUN_ONCE_STATIC(init_info_strings)
         BIO_snprintf(ossl_cpu_info_str + strlen(ossl_cpu_info_str),
                      sizeof(ossl_cpu_info_str) - strlen(ossl_cpu_info_str),
                      " env:%s", env);
+# elif defined(OPENSSL_SYS_AMIGA) && defined(__PPC__)
+    BIO_snprintf(ossl_cpu_info_str, sizeof(ossl_cpu_info_str),
+                 CPUINFO_PREFIX "OPENSSL_ppccap=0x%x", OPENSSL_ppccap_P);
 # endif
 #endif
 
