@@ -1626,7 +1626,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_CMP_print_errors_cb(___log_fn) \
-      LP1NR(0x97e, OSSL_CMP_print_errors_cb , OSSL_CMP_log_cb_t, ___log_fn, d0,\
+      LP1NR(0x97e, OSSL_CMP_print_errors_cb , OSSL_CMP_log_cb_t, ___log_fn, a0,\
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_CRMF_CERTID_get0_issuer(___cid) \
@@ -2066,7 +2066,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_HTTP_get_amiga_1(___url, ___proxy, ___no_proxy, ___bio, ___rbio, ___bio_update_fn, ___moreargs) \
-      LP7(0xc12, BIO *, OSSL_HTTP_get_amiga_1 , const char *, ___url, a0, const char *, ___proxy, a1, const char *, ___no_proxy, a2, BIO *, ___bio, d0, BIO *, ___rbio, d1, OSSL_HTTP_bio_cb_t, ___bio_update_fn, d2, void *, ___moreargs, a3,\
+      LP7(0xc12, BIO *, OSSL_HTTP_get_amiga_1 , const char *, ___url, a0, const char *, ___proxy, a1, const char *, ___no_proxy, a2, BIO *, ___bio, d1, BIO *, ___rbio, d2, OSSL_HTTP_bio_cb_t, ___bio_update_fn, a3, void *, ___moreargs, d0,\
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_HTTP_get_amiga_2(___arg, ___buf_size, ___headers, ___expected_content_type, ___expect_asn1, ___max_resp_len, ___timeout) \
@@ -2074,7 +2074,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_HTTP_transfer_amiga_1(___prctx, ___server, ___port, ___path, ___use_ssl, ___proxy, ___no_proxy, ___bio, ___rbio, ___bio_update_fn, ___moreargs) \
-      LP11(0xc1e, BIO *, OSSL_HTTP_transfer_amiga_1 , OSSL_HTTP_REQ_CTX **, ___prctx, a0, const char *, ___server, a1, const char *, ___port, a2, const char *, ___path, d0, int, ___use_ssl, d1, const char *, ___proxy, d2, const char *, ___no_proxy, d3, BIO *, ___bio, d4, BIO *, ___rbio, d5, OSSL_HTTP_bio_cb_t, ___bio_update_fn, d6, void *, ___moreargs, a3,\
+      LP11(0xc1e, BIO *, OSSL_HTTP_transfer_amiga_1 , OSSL_HTTP_REQ_CTX **, ___prctx, a0, const char *, ___server, a1, const char *, ___port, a2, const char *, ___path, d1, int, ___use_ssl, d2, const char *, ___proxy, d3, const char *, ___no_proxy, d4, BIO *, ___bio, d5, BIO *, ___rbio, d6, OSSL_HTTP_bio_cb_t, ___bio_update_fn, a3, void *, ___moreargs, d0,\
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_HTTP_transfer_amiga_2(___arg, ___buf_size, ___headers, ___content_type, ___req, ___expected_content_type, ___expect_asn1, ___max_resp_len, ___timeout, ___keep_alive) \
@@ -2262,7 +2262,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_CMP_SRV_CTX_init(___srv_ctx, ___custom_ctx, ___process_cert_request, ___process_rr, ___process_genm, ___process_error, ___process_certConf, ___process_pollReq) \
-      LP8(0xd38, int, OSSL_CMP_SRV_CTX_init , OSSL_CMP_SRV_CTX *, ___srv_ctx, a0, void *, ___custom_ctx, a1, OSSL_CMP_SRV_cert_request_cb_t, ___process_cert_request, d0, OSSL_CMP_SRV_rr_cb_t, ___process_rr, d1, OSSL_CMP_SRV_genm_cb_t, ___process_genm, d2, OSSL_CMP_SRV_error_cb_t, ___process_error, d3, OSSL_CMP_SRV_certConf_cb_t, ___process_certConf, d4, OSSL_CMP_SRV_pollReq_cb_t, ___process_pollReq, d5,\
+      LP8(0xd38, int, OSSL_CMP_SRV_CTX_init , OSSL_CMP_SRV_CTX *, ___srv_ctx, a0, void *, ___custom_ctx, a1, OSSL_CMP_SRV_cert_request_cb_t, ___process_cert_request, a2, OSSL_CMP_SRV_rr_cb_t, ___process_rr, a3, OSSL_CMP_SRV_genm_cb_t, ___process_genm, d0, OSSL_CMP_SRV_error_cb_t, ___process_error, d1, OSSL_CMP_SRV_certConf_cb_t, ___process_certConf, d2, OSSL_CMP_SRV_pollReq_cb_t, ___process_pollReq, d3,\
       , AMISSLEXT_BASE_NAME)
 
 #define OSSL_CMP_SRV_CTX_get0_cmp_ctx(___srv_ctx) \

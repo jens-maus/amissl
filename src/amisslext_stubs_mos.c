@@ -4016,7 +4016,7 @@ void LIB_OSSL_CMP_print_errors_cb(struct Library * _base, OSSL_CMP_log_cb_t ___l
 
 void LIBSTUB_OSSL_CMP_print_errors_cb(void)
 {
-  OSSL_CMP_log_cb_t ___log_fn = (OSSL_CMP_log_cb_t)REG_D0;
+  OSSL_CMP_log_cb_t ___log_fn = (OSSL_CMP_log_cb_t)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_print_errors_cb(_base, ___log_fn);
 }
@@ -5203,10 +5203,10 @@ BIO * LIBSTUB_OSSL_HTTP_get_amiga_1(void)
   const char * ___url = (const char *)REG_A0;
   const char * ___proxy = (const char *)REG_A1;
   const char * ___no_proxy = (const char *)REG_A2;
-  BIO * ___bio = (BIO *)REG_D0;
-  BIO * ___rbio = (BIO *)REG_D1;
-  OSSL_HTTP_bio_cb_t ___bio_update_fn = (OSSL_HTTP_bio_cb_t)REG_D2;
-  void * ___moreargs = (void *)REG_A3;
+  BIO * ___bio = (BIO *)REG_D1;
+  BIO * ___rbio = (BIO *)REG_D2;
+  OSSL_HTTP_bio_cb_t ___bio_update_fn = (OSSL_HTTP_bio_cb_t)REG_A3;
+  void * ___moreargs = (void *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_HTTP_get_amiga_1(_base, ___url, ___proxy, ___no_proxy, ___bio, ___rbio, ___bio_update_fn, ___moreargs);
 }
@@ -5233,14 +5233,14 @@ BIO * LIBSTUB_OSSL_HTTP_transfer_amiga_1(void)
   OSSL_HTTP_REQ_CTX ** ___prctx = (OSSL_HTTP_REQ_CTX **)REG_A0;
   const char * ___server = (const char *)REG_A1;
   const char * ___port = (const char *)REG_A2;
-  const char * ___path = (const char *)REG_D0;
-  int ___use_ssl = (int)REG_D1;
-  const char * ___proxy = (const char *)REG_D2;
-  const char * ___no_proxy = (const char *)REG_D3;
-  BIO * ___bio = (BIO *)REG_D4;
-  BIO * ___rbio = (BIO *)REG_D5;
-  OSSL_HTTP_bio_cb_t ___bio_update_fn = (OSSL_HTTP_bio_cb_t)REG_D6;
-  void * ___moreargs = (void *)REG_A3;
+  const char * ___path = (const char *)REG_D1;
+  int ___use_ssl = (int)REG_D2;
+  const char * ___proxy = (const char *)REG_D3;
+  const char * ___no_proxy = (const char *)REG_D4;
+  BIO * ___bio = (BIO *)REG_D5;
+  BIO * ___rbio = (BIO *)REG_D6;
+  OSSL_HTTP_bio_cb_t ___bio_update_fn = (OSSL_HTTP_bio_cb_t)REG_A3;
+  void * ___moreargs = (void *)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_HTTP_transfer_amiga_1(_base, ___prctx, ___server, ___port, ___path, ___use_ssl, ___proxy, ___no_proxy, ___bio, ___rbio, ___bio_update_fn, ___moreargs);
 }
@@ -5712,12 +5712,12 @@ int LIBSTUB_OSSL_CMP_SRV_CTX_init(void)
 {
   OSSL_CMP_SRV_CTX * ___srv_ctx = (OSSL_CMP_SRV_CTX *)REG_A0;
   void * ___custom_ctx = (void *)REG_A1;
-  OSSL_CMP_SRV_cert_request_cb_t ___process_cert_request = (OSSL_CMP_SRV_cert_request_cb_t)REG_D0;
-  OSSL_CMP_SRV_rr_cb_t ___process_rr = (OSSL_CMP_SRV_rr_cb_t)REG_D1;
-  OSSL_CMP_SRV_genm_cb_t ___process_genm = (OSSL_CMP_SRV_genm_cb_t)REG_D2;
-  OSSL_CMP_SRV_error_cb_t ___process_error = (OSSL_CMP_SRV_error_cb_t)REG_D3;
-  OSSL_CMP_SRV_certConf_cb_t ___process_certConf = (OSSL_CMP_SRV_certConf_cb_t)REG_D4;
-  OSSL_CMP_SRV_pollReq_cb_t ___process_pollReq = (OSSL_CMP_SRV_pollReq_cb_t)REG_D5;
+  OSSL_CMP_SRV_cert_request_cb_t ___process_cert_request = (OSSL_CMP_SRV_cert_request_cb_t)REG_A2;
+  OSSL_CMP_SRV_rr_cb_t ___process_rr = (OSSL_CMP_SRV_rr_cb_t)REG_A3;
+  OSSL_CMP_SRV_genm_cb_t ___process_genm = (OSSL_CMP_SRV_genm_cb_t)REG_D0;
+  OSSL_CMP_SRV_error_cb_t ___process_error = (OSSL_CMP_SRV_error_cb_t)REG_D1;
+  OSSL_CMP_SRV_certConf_cb_t ___process_certConf = (OSSL_CMP_SRV_certConf_cb_t)REG_D2;
+  OSSL_CMP_SRV_pollReq_cb_t ___process_pollReq = (OSSL_CMP_SRV_pollReq_cb_t)REG_D3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_SRV_CTX_init(_base, ___srv_ctx, ___custom_ctx, ___process_cert_request, ___process_rr, ___process_genm, ___process_error, ___process_certConf, ___process_pollReq);
 }

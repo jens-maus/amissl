@@ -22615,7 +22615,7 @@
     </method>
     <method name="OSSL_PARAM_set_uint64" result="int">
       <arg name="p" type="OSSL_PARAM *" m68kreg="a0"/>
-      <arg name="val" type="uint64_t" m68kreg="d0"/>
+      <arg name="val" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="OSSL_PARAM_set_size_t" result="int">
       <arg name="p" type="OSSL_PARAM *" m68kreg="a0"/>
@@ -23401,7 +23401,7 @@
       <arg name="msg" type="const char *" m68kreg="a3"/>
     </method>
     <method name="OSSL_CMP_print_errors_cb" result="void">
-      <arg name="log_fn" type="OSSL_CMP_log_cb_t" m68kreg="d0"/>
+      <arg name="log_fn" type="OSSL_CMP_log_cb_t" m68kreg="a0"/>
     </method>
     <method name="OSSL_CRMF_CERTID_get0_issuer" result="const X509_NAME *">
       <arg name="cid" type="const OSSL_CRMF_CERTID *" m68kreg="a0"/>
@@ -23929,10 +23929,10 @@
       <arg name="url" type="const char *" m68kreg="a0"/>
       <arg name="proxy" type="const char *" m68kreg="a1"/>
       <arg name="no_proxy" type="const char *" m68kreg="a2"/>
-      <arg name="bio" type="BIO *" m68kreg="d0"/>
-      <arg name="rbio" type="BIO *" m68kreg="d1"/>
-      <arg name="bio_update_fn" type="OSSL_HTTP_bio_cb_t" m68kreg="d2"/>
-      <arg name="moreargs" type="void *" m68kreg="a3"/>
+      <arg name="bio" type="BIO *" m68kreg="d1"/>
+      <arg name="rbio" type="BIO *" m68kreg="d2"/>
+      <arg name="bio_update_fn" type="OSSL_HTTP_bio_cb_t" m68kreg="a3"/>
+      <arg name="moreargs" type="void *" m68kreg="d0"/>
     </method>
     <method name="OSSL_HTTP_get_amiga_2" result="void *">
       <arg name="arg" type="void *" m68kreg="a0"/>
@@ -23948,14 +23948,14 @@
       <arg name="prctx" type="OSSL_HTTP_REQ_CTX **" m68kreg="a0"/>
       <arg name="server" type="const char *" m68kreg="a1"/>
       <arg name="port" type="const char *" m68kreg="a2"/>
-      <arg name="path" type="const char *" m68kreg="d0"/>
-      <arg name="use_ssl" type="int" m68kreg="d1"/>
-      <arg name="proxy" type="const char *" m68kreg="d2"/>
-      <arg name="no_proxy" type="const char *" m68kreg="d3"/>
-      <arg name="bio" type="BIO *" m68kreg="d4"/>
-      <arg name="rbio" type="BIO *" m68kreg="d5"/>
-      <arg name="bio_update_fn" type="OSSL_HTTP_bio_cb_t" m68kreg="d6"/>
-      <arg name="moreargs" type="void *" m68kreg="a3"/>
+      <arg name="path" type="const char *" m68kreg="d1"/>
+      <arg name="use_ssl" type="int" m68kreg="d2"/>
+      <arg name="proxy" type="const char *" m68kreg="d3"/>
+      <arg name="no_proxy" type="const char *" m68kreg="d4"/>
+      <arg name="bio" type="BIO *" m68kreg="d5"/>
+      <arg name="rbio" type="BIO *" m68kreg="d6"/>
+      <arg name="bio_update_fn" type="OSSL_HTTP_bio_cb_t" m68kreg="a3"/>
+      <arg name="moreargs" type="void *" m68kreg="d0"/>
     </method>
     <method name="OSSL_HTTP_transfer_amiga_2" result="void *">
       <arg name="arg" type="void *" m68kreg="a0"/>
@@ -24145,12 +24145,12 @@
     <method name="OSSL_CMP_SRV_CTX_init" result="int">
       <arg name="srv_ctx" type="OSSL_CMP_SRV_CTX *" m68kreg="a0"/>
       <arg name="custom_ctx" type="void *" m68kreg="a1"/>
-      <arg name="process_cert_request" type="OSSL_CMP_SRV_cert_request_cb_t" m68kreg="d0"/>
-      <arg name="process_rr" type="OSSL_CMP_SRV_rr_cb_t" m68kreg="d1"/>
-      <arg name="process_genm" type="OSSL_CMP_SRV_genm_cb_t" m68kreg="d2"/>
-      <arg name="process_error" type="OSSL_CMP_SRV_error_cb_t" m68kreg="d3"/>
-      <arg name="process_certConf" type="OSSL_CMP_SRV_certConf_cb_t" m68kreg="d4"/>
-      <arg name="process_pollReq" type="OSSL_CMP_SRV_pollReq_cb_t" m68kreg="d5"/>
+      <arg name="process_cert_request" type="OSSL_CMP_SRV_cert_request_cb_t" m68kreg="a2"/>
+      <arg name="process_rr" type="OSSL_CMP_SRV_rr_cb_t" m68kreg="a3"/>
+      <arg name="process_genm" type="OSSL_CMP_SRV_genm_cb_t" m68kreg="d0"/>
+      <arg name="process_error" type="OSSL_CMP_SRV_error_cb_t" m68kreg="d1"/>
+      <arg name="process_certConf" type="OSSL_CMP_SRV_certConf_cb_t" m68kreg="d2"/>
+      <arg name="process_pollReq" type="OSSL_CMP_SRV_pollReq_cb_t" m68kreg="d3"/>
     </method>
     <method name="OSSL_CMP_SRV_CTX_get0_cmp_ctx" result="OSSL_CMP_CTX *">
       <arg name="srv_ctx" type="const OSSL_CMP_SRV_CTX *" m68kreg="a0"/>
@@ -24293,7 +24293,7 @@
     <method name="OSSL_PARAM_BLD_push_uint64" result="int">
       <arg name="bld" type="OSSL_PARAM_BLD *" m68kreg="a0"/>
       <arg name="key" type="const char *" m68kreg="a1"/>
-      <arg name="val" type="uint64_t" m68kreg="d0"/>
+      <arg name="val" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="OSSL_PARAM_BLD_push_size_t" result="int">
       <arg name="bld" type="OSSL_PARAM_BLD *" m68kreg="a0"/>
@@ -25298,19 +25298,19 @@
     </method>
     <method name="EVP_PKEY_CTX_set_scrypt_N" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
-      <arg name="n" type="uint64_t" m68kreg="d0"/>
+      <arg name="n" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="EVP_PKEY_CTX_set_scrypt_r" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
-      <arg name="r" type="uint64_t" m68kreg="d0"/>
+      <arg name="r" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="EVP_PKEY_CTX_set_scrypt_p" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
-      <arg name="p" type="uint64_t" m68kreg="d0"/>
+      <arg name="p" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="EVP_PKEY_CTX_set_scrypt_maxmem_bytes" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
-      <arg name="maxmem_bytes" type="uint64_t" m68kreg="d0"/>
+      <arg name="maxmem_bytes" type="uint64_t" m68kreg="d0-d1"/>
     </method>
     <method name="EVP_PKEY_CTX_set_dh_kdf_type" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
@@ -25707,7 +25707,7 @@
     </method>
     <method name="CRYPTO_atomic_or" result="int">
       <arg name="val" type="uint64_t *" m68kreg="a0"/>
-      <arg name="op" type="uint64_t" m68kreg="d0"/>
+      <arg name="op" type="uint64_t" m68kreg="d0-d1"/>
       <arg name="ret" type="uint64_t *" m68kreg="a1"/>
       <arg name="lock" type="CRYPTO_RWLOCK *" m68kreg="a2"/>
     </method>

@@ -2420,7 +2420,7 @@ typedef ULONG _sfdc_vararg;
 
 #define OSSL_CMP_print_errors_cb(___log_fn) \
       AROS_LC1(void, OSSL_CMP_print_errors_cb, \
- AROS_LCA(OSSL_CMP_log_cb_t, (___log_fn), D0), \
+ AROS_LCA(OSSL_CMP_log_cb_t, (___log_fn), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 405, Amisslext)
 
 #define OSSL_CRMF_CERTID_get0_issuer(___cid) \
@@ -3167,10 +3167,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___url), A0), \
  AROS_LCA(const char *, (___proxy), A1), \
  AROS_LCA(const char *, (___no_proxy), A2), \
- AROS_LCA(BIO *, (___bio), D0), \
- AROS_LCA(BIO *, (___rbio), D1), \
- AROS_LCA(OSSL_HTTP_bio_cb_t, (___bio_update_fn), D2), \
- AROS_LCA(void *, (___moreargs), A3), \
+ AROS_LCA(BIO *, (___bio), D1), \
+ AROS_LCA(BIO *, (___rbio), D2), \
+ AROS_LCA(OSSL_HTTP_bio_cb_t, (___bio_update_fn), A3), \
+ AROS_LCA(void *, (___moreargs), D0), \
      struct Library *, AMISSLEXT_BASE_NAME, 515, Amisslext)
 
 #define OSSL_HTTP_get_amiga_2(___arg, ___buf_size, ___headers, ___expected_content_type, ___expect_asn1, ___max_resp_len, ___timeout) \
@@ -3189,14 +3189,14 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(OSSL_HTTP_REQ_CTX **, (___prctx), A0), \
  AROS_LCA(const char *, (___server), A1), \
  AROS_LCA(const char *, (___port), A2), \
- AROS_LCA(const char *, (___path), D0), \
- AROS_LCA(int, (___use_ssl), D1), \
- AROS_LCA(const char *, (___proxy), D2), \
- AROS_LCA(const char *, (___no_proxy), D3), \
- AROS_LCA(BIO *, (___bio), D4), \
- AROS_LCA(BIO *, (___rbio), D5), \
- AROS_LCA(OSSL_HTTP_bio_cb_t, (___bio_update_fn), D6), \
- AROS_LCA(void *, (___moreargs), A3), \
+ AROS_LCA(const char *, (___path), D1), \
+ AROS_LCA(int, (___use_ssl), D2), \
+ AROS_LCA(const char *, (___proxy), D3), \
+ AROS_LCA(const char *, (___no_proxy), D4), \
+ AROS_LCA(BIO *, (___bio), D5), \
+ AROS_LCA(BIO *, (___rbio), D6), \
+ AROS_LCA(OSSL_HTTP_bio_cb_t, (___bio_update_fn), A3), \
+ AROS_LCA(void *, (___moreargs), D0), \
      struct Library *, AMISSLEXT_BASE_NAME, 517, Amisslext)
 
 #define OSSL_HTTP_transfer_amiga_2(___arg, ___buf_size, ___headers, ___content_type, ___req, ___expected_content_type, ___expect_asn1, ___max_resp_len, ___timeout, ___keep_alive) \
@@ -3480,12 +3480,12 @@ typedef ULONG _sfdc_vararg;
       AROS_LC8(int, OSSL_CMP_SRV_CTX_init, \
  AROS_LCA(OSSL_CMP_SRV_CTX *, (___srv_ctx), A0), \
  AROS_LCA(void *, (___custom_ctx), A1), \
- AROS_LCA(OSSL_CMP_SRV_cert_request_cb_t, (___process_cert_request), D0), \
- AROS_LCA(OSSL_CMP_SRV_rr_cb_t, (___process_rr), D1), \
- AROS_LCA(OSSL_CMP_SRV_genm_cb_t, (___process_genm), D2), \
- AROS_LCA(OSSL_CMP_SRV_error_cb_t, (___process_error), D3), \
- AROS_LCA(OSSL_CMP_SRV_certConf_cb_t, (___process_certConf), D4), \
- AROS_LCA(OSSL_CMP_SRV_pollReq_cb_t, (___process_pollReq), D5), \
+ AROS_LCA(OSSL_CMP_SRV_cert_request_cb_t, (___process_cert_request), A2), \
+ AROS_LCA(OSSL_CMP_SRV_rr_cb_t, (___process_rr), A3), \
+ AROS_LCA(OSSL_CMP_SRV_genm_cb_t, (___process_genm), D0), \
+ AROS_LCA(OSSL_CMP_SRV_error_cb_t, (___process_error), D1), \
+ AROS_LCA(OSSL_CMP_SRV_certConf_cb_t, (___process_certConf), D2), \
+ AROS_LCA(OSSL_CMP_SRV_pollReq_cb_t, (___process_pollReq), D3), \
      struct Library *, AMISSLEXT_BASE_NAME, 564, Amisslext)
 
 #define OSSL_CMP_SRV_CTX_get0_cmp_ctx(___srv_ctx) \

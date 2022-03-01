@@ -35951,7 +35951,7 @@ int SAVEDS ASM LIB_OSSL_CMP_print_to_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-void SAVEDS ASM LIB_OSSL_CMP_print_errors_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(d0, OSSL_CMP_log_cb_t log_fn))
+void SAVEDS ASM LIB_OSSL_CMP_print_errors_cb(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_log_cb_t log_fn))
 {
 	OSSL_CMP_print_errors_cb(log_fn);
 }
@@ -36721,7 +36721,7 @@ BIO * SAVEDS ASM LIB_OSSL_HTTP_exchange(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0,
 
 // ---
 
-BIO * SAVEDS ASM LIB_OSSL_HTTP_get_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * url), REG(a1, const char * proxy), REG(a2, const char * no_proxy), REG(d0, BIO * bio), REG(d1, BIO * rbio), REG(d2, OSSL_HTTP_bio_cb_t bio_update_fn), REG(a3, void * moreargs))
+BIO * SAVEDS ASM LIB_OSSL_HTTP_get_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * url), REG(a1, const char * proxy), REG(a2, const char * no_proxy), REG(d1, BIO * bio), REG(d2, BIO * rbio), REG(a3, OSSL_HTTP_bio_cb_t bio_update_fn), REG(d0, void * moreargs))
 {
 	return OSSL_HTTP_get_amiga_1(url, proxy, no_proxy, bio, rbio, bio_update_fn, moreargs);
 }
@@ -36735,7 +36735,7 @@ void * SAVEDS ASM LIB_OSSL_HTTP_get_amiga_2(REG(a6, UNUSED __IFACE_OR_BASE), REG
 
 // ---
 
-BIO * SAVEDS ASM LIB_OSSL_HTTP_transfer_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_HTTP_REQ_CTX ** prctx), REG(a1, const char * server), REG(a2, const char * port), REG(d0, const char * path), REG(d1, int use_ssl), REG(d2, const char * proxy), REG(d3, const char * no_proxy), REG(d4, BIO * bio), REG(d5, BIO * rbio), REG(d6, OSSL_HTTP_bio_cb_t bio_update_fn), REG(a3, void * moreargs))
+BIO * SAVEDS ASM LIB_OSSL_HTTP_transfer_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_HTTP_REQ_CTX ** prctx), REG(a1, const char * server), REG(a2, const char * port), REG(d1, const char * path), REG(d2, int use_ssl), REG(d3, const char * proxy), REG(d4, const char * no_proxy), REG(d5, BIO * bio), REG(d6, BIO * rbio), REG(a3, OSSL_HTTP_bio_cb_t bio_update_fn), REG(d0, void * moreargs))
 {
 	return OSSL_HTTP_transfer_amiga_1(prctx, server, port, path, use_ssl, proxy, no_proxy, bio, rbio, bio_update_fn, moreargs);
 }
@@ -37064,7 +37064,7 @@ void SAVEDS ASM LIB_OSSL_CMP_SRV_CTX_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-int SAVEDS ASM LIB_OSSL_CMP_SRV_CTX_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_SRV_CTX * srv_ctx), REG(a1, void * custom_ctx), REG(d0, OSSL_CMP_SRV_cert_request_cb_t process_cert_request), REG(d1, OSSL_CMP_SRV_rr_cb_t process_rr), REG(d2, OSSL_CMP_SRV_genm_cb_t process_genm), REG(d3, OSSL_CMP_SRV_error_cb_t process_error), REG(d4, OSSL_CMP_SRV_certConf_cb_t process_certConf), REG(d5, OSSL_CMP_SRV_pollReq_cb_t process_pollReq))
+int SAVEDS ASM LIB_OSSL_CMP_SRV_CTX_init(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_SRV_CTX * srv_ctx), REG(a1, void * custom_ctx), REG(a2, OSSL_CMP_SRV_cert_request_cb_t process_cert_request), REG(a3, OSSL_CMP_SRV_rr_cb_t process_rr), REG(d0, OSSL_CMP_SRV_genm_cb_t process_genm), REG(d1, OSSL_CMP_SRV_error_cb_t process_error), REG(d2, OSSL_CMP_SRV_certConf_cb_t process_certConf), REG(d3, OSSL_CMP_SRV_pollReq_cb_t process_pollReq))
 {
 	return OSSL_CMP_SRV_CTX_init(srv_ctx, custom_ctx, process_cert_request, process_rr, process_genm, process_error, process_certConf, process_pollReq);
 }

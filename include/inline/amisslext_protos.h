@@ -1217,7 +1217,7 @@ void __OSSL_CMP_log_close(__reg("a6") struct Library * ) = "\tjsr\t-2418(a6)";
 int __OSSL_CMP_print_to_bio(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") const char * component , __reg("a2") const char * file , __reg("d0") int line , __reg("d1") OSSL_CMP_severity level , __reg("a3") const char * msg ) = "\tjsr\t-2424(a6)";
 #define OSSL_CMP_print_to_bio(bio, component, file, line, level, msg) __OSSL_CMP_print_to_bio(AmiSSLExtBase, (bio), (component), (file), (line), (level), (msg))
 
-void __OSSL_CMP_print_errors_cb(__reg("a6") struct Library * , __reg("d0") OSSL_CMP_log_cb_t log_fn ) = "\tjsr\t-2430(a6)";
+void __OSSL_CMP_print_errors_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_log_cb_t log_fn ) = "\tjsr\t-2430(a6)";
 #define OSSL_CMP_print_errors_cb(log_fn) __OSSL_CMP_print_errors_cb(AmiSSLExtBase, (log_fn))
 
 const X509_NAME * __OSSL_CRMF_CERTID_get0_issuer(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_CERTID * cid ) = "\tjsr\t-2436(a6)";
@@ -1547,13 +1547,13 @@ int __OSSL_HTTP_set1_request(__reg("a6") struct Library * , __reg("a0") OSSL_HTT
 BIO * __OSSL_HTTP_exchange(__reg("a6") struct Library * , __reg("a0") OSSL_HTTP_REQ_CTX * rctx , __reg("a1") char ** redirection_url ) = "\tjsr\t-3084(a6)";
 #define OSSL_HTTP_exchange(rctx, redirection_url) __OSSL_HTTP_exchange(AmiSSLExtBase, (rctx), (redirection_url))
 
-BIO * __OSSL_HTTP_get_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * url , __reg("a1") const char * proxy , __reg("a2") const char * no_proxy , __reg("d0") BIO * bio , __reg("d1") BIO * rbio , __reg("d2") OSSL_HTTP_bio_cb_t bio_update_fn , __reg("a3") void * moreargs ) = "\tjsr\t-3090(a6)";
+BIO * __OSSL_HTTP_get_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * url , __reg("a1") const char * proxy , __reg("a2") const char * no_proxy , __reg("d1") BIO * bio , __reg("d2") BIO * rbio , __reg("a3") OSSL_HTTP_bio_cb_t bio_update_fn , __reg("d0") void * moreargs ) = "\tjsr\t-3090(a6)";
 #define OSSL_HTTP_get_amiga_1(url, proxy, no_proxy, bio, rbio, bio_update_fn, moreargs) __OSSL_HTTP_get_amiga_1(AmiSSLExtBase, (url), (proxy), (no_proxy), (bio), (rbio), (bio_update_fn), (moreargs))
 
 void * __OSSL_HTTP_get_amiga_2(__reg("a6") struct Library * , __reg("a0") void * arg , __reg("a1") int buf_size , __reg("a2") const struct stack_st_CONF_VALUE * headers , __reg("a3") const char * expected_content_type , __reg("d0") int expect_asn1 , __reg("d1") size_t max_resp_len , __reg("d2") int timeout ) = "\tjsr\t-3096(a6)";
 #define OSSL_HTTP_get_amiga_2(arg, buf_size, headers, expected_content_type, expect_asn1, max_resp_len, timeout) __OSSL_HTTP_get_amiga_2(AmiSSLExtBase, (arg), (buf_size), (headers), (expected_content_type), (expect_asn1), (max_resp_len), (timeout))
 
-BIO * __OSSL_HTTP_transfer_amiga_1(__reg("a6") struct Library * , __reg("a0") OSSL_HTTP_REQ_CTX ** prctx , __reg("a1") const char * server , __reg("a2") const char * port , __reg("d0") const char * path , __reg("d1") int use_ssl , __reg("d2") const char * proxy , __reg("d3") const char * no_proxy , __reg("d4") BIO * bio , __reg("d5") BIO * rbio , __reg("d6") OSSL_HTTP_bio_cb_t bio_update_fn , __reg("a3") void * moreargs ) = "\tjsr\t-3102(a6)";
+BIO * __OSSL_HTTP_transfer_amiga_1(__reg("a6") struct Library * , __reg("a0") OSSL_HTTP_REQ_CTX ** prctx , __reg("a1") const char * server , __reg("a2") const char * port , __reg("d1") const char * path , __reg("d2") int use_ssl , __reg("d3") const char * proxy , __reg("d4") const char * no_proxy , __reg("d5") BIO * bio , __reg("d6") BIO * rbio , __reg("a3") OSSL_HTTP_bio_cb_t bio_update_fn , __reg("d0") void * moreargs ) = "\tjsr\t-3102(a6)";
 #define OSSL_HTTP_transfer_amiga_1(prctx, server, port, path, use_ssl, proxy, no_proxy, bio, rbio, bio_update_fn, moreargs) __OSSL_HTTP_transfer_amiga_1(AmiSSLExtBase, (prctx), (server), (port), (path), (use_ssl), (proxy), (no_proxy), (bio), (rbio), (bio_update_fn), (moreargs))
 
 void * __OSSL_HTTP_transfer_amiga_2(__reg("a6") struct Library * , __reg("a0") void * arg , __reg("d0") int buf_size , __reg("a1") const struct stack_st_CONF_VALUE * headers , __reg("a2") const char * content_type , __reg("a3") BIO * req , __reg("d1") const char * expected_content_type , __reg("d2") int expect_asn1 , __reg("d3") size_t max_resp_len , __reg("d4") int timeout , __reg("d5") int keep_alive ) = "\tjsr\t-3108(a6)";
@@ -1694,7 +1694,7 @@ OSSL_CMP_SRV_CTX * __OSSL_CMP_SRV_CTX_new(__reg("a6") struct Library * , __reg("
 void __OSSL_CMP_SRV_CTX_free(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_SRV_CTX * srv_ctx ) = "\tjsr\t-3378(a6)";
 #define OSSL_CMP_SRV_CTX_free(srv_ctx) __OSSL_CMP_SRV_CTX_free(AmiSSLExtBase, (srv_ctx))
 
-int __OSSL_CMP_SRV_CTX_init(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_SRV_CTX * srv_ctx , __reg("a1") void * custom_ctx , __reg("d0") OSSL_CMP_SRV_cert_request_cb_t process_cert_request , __reg("d1") OSSL_CMP_SRV_rr_cb_t process_rr , __reg("d2") OSSL_CMP_SRV_genm_cb_t process_genm , __reg("d3") OSSL_CMP_SRV_error_cb_t process_error , __reg("d4") OSSL_CMP_SRV_certConf_cb_t process_certConf , __reg("d5") OSSL_CMP_SRV_pollReq_cb_t process_pollReq ) = "\tjsr\t-3384(a6)";
+int __OSSL_CMP_SRV_CTX_init(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_SRV_CTX * srv_ctx , __reg("a1") void * custom_ctx , __reg("a2") OSSL_CMP_SRV_cert_request_cb_t process_cert_request , __reg("a3") OSSL_CMP_SRV_rr_cb_t process_rr , __reg("d0") OSSL_CMP_SRV_genm_cb_t process_genm , __reg("d1") OSSL_CMP_SRV_error_cb_t process_error , __reg("d2") OSSL_CMP_SRV_certConf_cb_t process_certConf , __reg("d3") OSSL_CMP_SRV_pollReq_cb_t process_pollReq ) = "\tjsr\t-3384(a6)";
 #define OSSL_CMP_SRV_CTX_init(srv_ctx, custom_ctx, process_cert_request, process_rr, process_genm, process_error, process_certConf, process_pollReq) __OSSL_CMP_SRV_CTX_init(AmiSSLExtBase, (srv_ctx), (custom_ctx), (process_cert_request), (process_rr), (process_genm), (process_error), (process_certConf), (process_pollReq))
 
 OSSL_CMP_CTX * __OSSL_CMP_SRV_CTX_get0_cmp_ctx(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_SRV_CTX * srv_ctx ) = "\tjsr\t-3390(a6)";

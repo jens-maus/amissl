@@ -2436,10 +2436,10 @@
  #pragma amicall(AmiSSLExtBase, 0x978, OSSL_CMP_print_to_bio(a0,a1,a2,d0,d1,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_print_errors_cb 97e 001
+ #pragma libcall AmiSSLExtBase OSSL_CMP_print_errors_cb 97e 801
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0x97e, OSSL_CMP_print_errors_cb(d0))
+ #pragma amicall(AmiSSLExtBase, 0x97e, OSSL_CMP_print_errors_cb(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CRMF_CERTID_get0_issuer 984 801
@@ -3096,10 +3096,10 @@
  #pragma amicall(AmiSSLExtBase, 0xc0c, OSSL_HTTP_exchange(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_HTTP_get_amiga_1 c12 b210a9807
+ #pragma libcall AmiSSLExtBase OSSL_HTTP_get_amiga_1 c12 0b21a9807
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0xc12, OSSL_HTTP_get_amiga_1(a0,a1,a2,d0,d1,d2,a3))
+ #pragma amicall(AmiSSLExtBase, 0xc12, OSSL_HTTP_get_amiga_1(a0,a1,a2,d1,d2,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_HTTP_get_amiga_2 c18 210ba9807
@@ -3108,10 +3108,10 @@
  #pragma amicall(AmiSSLExtBase, 0xc18, OSSL_HTTP_get_amiga_2(a0,a1,a2,a3,d0,d1,d2))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_HTTP_transfer_amiga_1 c1e b6543210a98011
+ #pragma libcall AmiSSLExtBase OSSL_HTTP_transfer_amiga_1 c1e 0b654321a98011
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0xc1e, OSSL_HTTP_transfer_amiga_1(a0,a1,a2,d0,d1,d2,d3,d4,d5,d6,a3))
+ #pragma amicall(AmiSSLExtBase, 0xc1e, OSSL_HTTP_transfer_amiga_1(a0,a1,a2,d1,d2,d3,d4,d5,d6,a3,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_HTTP_transfer_amiga_2 c24 54321ba908010
@@ -3390,10 +3390,10 @@
  #pragma amicall(AmiSSLExtBase, 0xd32, OSSL_CMP_SRV_CTX_free(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_SRV_CTX_init d38 5432109808
+ #pragma libcall AmiSSLExtBase OSSL_CMP_SRV_CTX_init d38 3210ba9808
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0xd38, OSSL_CMP_SRV_CTX_init(a0,a1,d0,d1,d2,d3,d4,d5))
+ #pragma amicall(AmiSSLExtBase, 0xd38, OSSL_CMP_SRV_CTX_init(a0,a1,a2,a3,d0,d1,d2,d3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CMP_SRV_CTX_get0_cmp_ctx d3e 801
