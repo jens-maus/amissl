@@ -193,17 +193,13 @@ static double Time_F(int s)
 #elif defined(OPENSSL_SYS_AMIGA)
 
 # define alarm(s) alarm_amiga(s)
+# define run (clock() < wait_until)
 
-static time_t wait_until;
+static clock_t wait_until;
 
 static void alarm_amiga(int seconds)
 {
-    wait_until = time(NULL) + seconds;
-}
-
-static int run(void)
-{
-    return (time(NULL) < wait_until);
+    wait_until = clock() + seconds * CLOCKS_PER_SEC;
 }
 
 static double Time_F(int s)
@@ -480,11 +476,7 @@ static const OPT_PAIR sm2_choices[SM2_NUM] = {
 static double sm2_results[SM2_NUM][2];    /* 2 ops: sign then verify */
 #endif /* OPENSSL_NO_SM2 */
 
-#if defined(OPENSSL_SYS_AMIGA)
-#define COND(unused_cond) (run() && count < 0x7fffffff)
-#else
 #define COND(unused_cond) (run && count < 0x7fffffff)
-#endif
 #define COUNT(d) (count)
 
 typedef struct loopargs_st {
@@ -3642,11 +3634,7 @@ static void multiblock_speed(const EVP_CIPHER *evp_cipher, int lengths_single,
     for (j = 0; j < num; j++) {
         print_message(alg_name, 0, mblengths[j], seconds->sym);
         Time_F(START);
-#if defined(OPENSSL_SYS_AMIGA)
-        for (count = 0; run() && count < 0x7fffffff; count++) {
-#else
         for (count = 0; run && count < 0x7fffffff; count++) {
-#endif
             unsigned char aad[EVP_AEAD_TLS1_AAD_LEN];
             EVP_CTRL_TLS1_1_MULTIBLOCK_PARAM mb_param;
             size_t len = mblengths[j];
