@@ -14,8 +14,8 @@
  * PREV(c);     ungetc a character
  * VAL(a)       leads to 1 if a is true and valid
  */
-#define NEXT(c) ((c)=(*ptr=='\000'?EOF:*ptr++),size++,incount++)
-#define PREV(c) do{if((c)!=EOF)ptr--;size--;incount--;}while(0)
+#define NEXT(c) ((c)=(*s=='\000'?EOF:*s++),size++,incount++)
+#define PREV(c) do{if((c)!=EOF)s--;size--;incount--;}while(0)
 #define VAL(a)  ((a)&&size<=width)
 
 static const char __decimalpoint[]=".";
@@ -32,7 +32,6 @@ int vsscanf(const char *s,const char *format,va_list args)
 {
   size_t blocks=0,incount=0;
   int c=0;
-  char *ptr = (char *)s;
 
   while(*format)
   {
