@@ -1770,6 +1770,8 @@ static int ssl_start_async_job(SSL *s, struct ssl_async_args *args,
                  (s->waitctx, ssl_async_wait_ctx_cb, s))
             return -1;
     }
+
+    s->rwstate = SSL_NOTHING;
     switch (ASYNC_start_job(&s->job, s->waitctx, &ret, func, args,
                             sizeof(struct ssl_async_args))) {
     case ASYNC_ERR:
@@ -5973,7 +5975,6 @@ int SSL_set0_tmp_dh_pkey(SSL *s, EVP_PKEY *dhpkey)
     if (!ssl_security(s, SSL_SECOP_TMP_DH,
                       EVP_PKEY_get_security_bits(dhpkey), 0, dhpkey)) {
         ERR_raise(ERR_LIB_SSL, SSL_R_DH_KEY_TOO_SMALL);
-        EVP_PKEY_free(dhpkey);
         return 0;
     }
     EVP_PKEY_free(s->cert->dh_tmp);
@@ -5986,7 +5987,6 @@ int SSL_CTX_set0_tmp_dh_pkey(SSL_CTX *ctx, EVP_PKEY *dhpkey)
     if (!ssl_ctx_security(ctx, SSL_SECOP_TMP_DH,
                           EVP_PKEY_get_security_bits(dhpkey), 0, dhpkey)) {
         ERR_raise(ERR_LIB_SSL, SSL_R_DH_KEY_TOO_SMALL);
-        EVP_PKEY_free(dhpkey);
         return 0;
     }
     EVP_PKEY_free(ctx->cert->dh_tmp);
