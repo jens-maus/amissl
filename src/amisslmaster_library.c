@@ -210,7 +210,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   }
   else if(LibAPIVersion >= AMISSL_V110c)
   {
-    D(DBF_STARTUP, "About to open amissl v11x library");
+    D(DBF_STARTUP, "About to open amissl v11x/v3xx library");
 
     // if an application requests AmiSSL/OpenSSL versions 3.x.x (or 1.1.x and doesn't
     // use public structures) we try to open any known 3.x.x amissl library as OpenSSL
@@ -220,7 +220,8 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // older libraries that do not contain those required entries
     if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
     {
-      OpenLib(&AmiSSLBase,"libs:amissl/amissl_v300.library", 5);
+      if(LibAPIVersion <= AMISSL_V300 && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v301.library", 5) == NULL)
+        OpenLib(&AmiSSLBase,"libs:amissl/amissl_v300.library", 5);
     }
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any

@@ -19,13 +19,14 @@
 #define AMISSL_V111k        0x0f  /* AmiSSL v4.9 */
 #define AMISSL_V111l        0x10  /* AmiSSL v4.10/4.11 */
 #define AMISSL_V111m        0x11  /* AmiSSL v4.12 */
-#define AMISSL_V300         0x12  /* AmiSSL v5.0 */
+#define AMISSL_V300         0x12  /* unreleased version */
+#define AMISSL_V301         0x13  /* AmiSSL v5.0 */
 
 #define AMISSL_V10x         AMISSL_V102f /* Latest minimum AmiSSL/OpenSSL 1.0.x compatible version */
 #define AMISSL_V11x         AMISSL_V110d /* Latest minimum AmiSSL/OpenSSL 1.1.x compatible version */
-#define AMISSL_V3xx         AMISSL_V300  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
+#define AMISSL_V3xx         AMISSL_V301  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
 
-#define AMISSL_CURRENT_VERSION   AMISSL_V300
+#define AMISSL_CURRENT_VERSION   AMISSL_V301
 
 #define AMISSLMASTER_MIN_VERSION 5
 
