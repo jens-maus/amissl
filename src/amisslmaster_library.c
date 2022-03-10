@@ -90,20 +90,30 @@ static void FlushLib(struct Library *LibBase)
   }
 }
 
-static struct Library *OpenLib(struct Library **LibBase,const char *CipherName,LONG CipherVersion)
+static struct Library *OpenLib(struct Library **LibBase,const char *Name)
 {
-  if (LibAPIVersion > AMISSL_V2) // See CloseLib for explanation
-    *LibBase = OpenLibrary(CipherName, CipherVersion);
+  if (LibAPIVersion == AMISSL_V2 && *LibBase) // See CloseLib for explanation
+  {
+    (*LibBase)->lib_OpenCnt++;
+  }
   else
   {
-    if(*LibBase)
+    LONG version;
+    char libname[40] = "LIBS:AmiSSL/";
+    if (LibAPIVersion == AMISSL_V2)
     {
-      (*LibBase)->lib_OpenCnt++;
+      version = 2;
+      strcat(libname,Name);
+      strcat(libname,"_v2.library");
     }
     else
     {
-      *LibBase = OpenLibrary(CipherName,CipherVersion);
+      version = (LibAPIVersion >= AMISSL_V300) ? 5 : ((LibAPIVersion >= AMISSL_V110c) ? 4 : 3);
+      strcat(libname,"amissl_v");
+      strcat(libname,Name);
+      strcat(libname,".library");
     }
+    *LibBase = OpenLibrary(libname,version);
   }
   return *LibBase;
 }
@@ -206,7 +216,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   {
     // Special case - due to some mistakes made in the ABI / interface update in
     // this version, meaning future versions are incompatible
-    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4);
+    OpenLib(&AmiSSLBase,"111a");
   }
   else if(LibAPIVersion >= AMISSL_V110c)
   {
@@ -220,8 +230,8 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // older libraries that do not contain those required entries
     if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
     {
-      if(LibAPIVersion <= AMISSL_V300 && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v301.library", 5) == NULL)
-        OpenLib(&AmiSSLBase,"libs:amissl/amissl_v300.library", 5);
+      if(LibAPIVersion <= AMISSL_V301 && OpenLib(&AmiSSLBase,"301") == NULL)
+        OpenLib(&AmiSSLBase,"300");
     }
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
@@ -231,18 +241,18 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // from loading older libraries that do not contain those required entries
     if(!AmiSSLBase && LibAPIVersion < AMISSL_V300)
     {
-      if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111m.library", 4) == NULL
-                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111l.library", 4) == NULL
-                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111k.library", 4) == NULL
-                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111j.library", 4) == NULL
-                                       && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111i.library", 4) == NULL)
-        if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111g.library", 4) == NULL
-                                         && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111d.library", 4) == NULL)
-          if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v111a.library", 4) == NULL)
-            if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110g.library", 4) == NULL)
-              if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110e.library", 4) == NULL
-                                               && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110d.library", 4) == NULL)
-                OpenLib(&AmiSSLBase,"libs:amissl/amissl_v110c.library", 4);
+      if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"111m") == NULL)
+	if(LibAPIVersion <= AMISSL_V111l && OpenLib(&AmiSSLBase,"111l") == NULL
+                                         && OpenLib(&AmiSSLBase,"111k") == NULL
+                                         && OpenLib(&AmiSSLBase,"111j") == NULL
+                                         && OpenLib(&AmiSSLBase,"111i") == NULL)
+          if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"111g") == NULL
+                                           && OpenLib(&AmiSSLBase,"111d") == NULL)
+            if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"111a") == NULL)
+              if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"110g") == NULL)
+                if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"110e") == NULL
+                                                 && OpenLib(&AmiSSLBase,"110d") == NULL)
+                  OpenLib(&AmiSSLBase,"110c");
     }
   }
   else if(LibAPIVersion == AMISSL_V102f)
@@ -252,50 +262,50 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
     // known 1.0.x amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
-    if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v102f.library", 3) == NULL)
-      if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101i.library", 3) == NULL)
-        OpenLib(&AmiSSLBase,"libs:amissl/amissl_v101h.library", 3);
+    if(OpenLib(&AmiSSLBase,"102f") == NULL)
+      if(OpenLib(&AmiSSLBase,"101i") == NULL)
+        OpenLib(&AmiSSLBase,"101h");
   }
   else if(LibAPIVersion >= AMISSL_V097g)
   {
     // if an application requests 0.9.7g we try to open newer 0.9.7 versions until 0.9.7y
     // as they are API compatible
-    if(LibAPIVersion <= AMISSL_V098y && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v098y.library", 3) == NULL)
-      if(LibAPIVersion <= AMISSL_V097m && OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097m.library", 3) == NULL)
-        OpenLib(&AmiSSLBase,"libs:amissl/amissl_v097g.library", 3);
+    if(LibAPIVersion <= AMISSL_V098y && OpenLib(&AmiSSLBase,"098y") == NULL)
+      if(LibAPIVersion <= AMISSL_V097m && OpenLib(&AmiSSLBase,"097m") == NULL)
+        OpenLib(&AmiSSLBase,"097g");
   }
   else if(LibAPIVersion == AMISSL_V2)
   {
     /* This only happens for m68k code, no need to handle ppc versions here */
-    if(OpenLib(&AmiSSLBase,"libs:amissl/amissl_v2.library",2) != NULL)
+    if(OpenLib(&AmiSSLBase,"amissl") != NULL)
     {
-      amisslinit.BlowFishBase = OpenLib(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
-      amisslinit.CASTBase = OpenLib(&CASTBase,"libs:amissl/cast_v2.library",2);
-      amisslinit.DESBase = OpenLib(&DESBase,"libs:amissl/des_v2.library",2);
-      amisslinit.IDEABase = OpenLib(&IDEABase,"libs:amissl/idea_v2.library",2);
-      amisslinit.MD2Base = OpenLib(&MD2Base,"libs:amissl/md2_v2.library",2);
-      amisslinit.MD4Base = OpenLib(&MD4Base,"libs:amissl/md4_v2.library",2);
-      amisslinit.MD5Base = OpenLib(&MD5Base,"libs:amissl/md5_v2.library",2);
-      amisslinit.RC2Base = OpenLib(&RC2Base,"libs:amissl/rc2_v2.library",2);
-      amisslinit.RC4Base = OpenLib(&RC4Base,"libs:amissl/rc4_v2.library",2);
-      amisslinit.RC5Base = OpenLib(&RC5Base,"libs:amissl/rc5_v2.library",2);
-      amisslinit.RIPEMDBase = OpenLib(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
-      amisslinit.SHABase = OpenLib(&SHABase,"libs:amissl/sha_v2.library",2);
+      amisslinit.BlowFishBase = OpenLib(&BlowFishBase,"blowfish");
+      amisslinit.CASTBase = OpenLib(&CASTBase,"cast");
+      amisslinit.DESBase = OpenLib(&DESBase,"des");
+      amisslinit.IDEABase = OpenLib(&IDEABase,"idea");
+      amisslinit.MD2Base = OpenLib(&MD2Base,"md2");
+      amisslinit.MD4Base = OpenLib(&MD4Base,"md4");
+      amisslinit.MD5Base = OpenLib(&MD5Base,"md5");
+      amisslinit.RC2Base = OpenLib(&RC2Base,"rc2");
+      amisslinit.RC4Base = OpenLib(&RC4Base,"rc4");
+      amisslinit.RC5Base = OpenLib(&RC5Base,"rc5");
+      amisslinit.RIPEMDBase = OpenLib(&RIPEMDBase,"ripemd");
+      amisslinit.SHABase = OpenLib(&SHABase,"sha");
 
       if(SHABase)
       {
-        amisslinit.DSABase = OpenLib(&DSABase,"libs:amissl/dsa_v2.library",2);
-        amisslinit.DHBase = OpenLib(&DHBase,"libs:amissl/dh_v2.library",2);
+        amisslinit.DSABase = OpenLib(&DSABase,"dsa");
+        amisslinit.DHBase = OpenLib(&DHBase,"dh");
       }
 
       if(SHABase && MD5Base)
       {
-        amisslinit.RSABase = OpenLib(&RSABase,"libs:amissl/rsa_v2.library",2);
+        amisslinit.RSABase = OpenLib(&RSABase,"rsa");
       }
 
       if(DESBase)
       {
-        amisslinit.MDC2Base = OpenLib(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
+        amisslinit.MDC2Base = OpenLib(&MDC2Base,"mdc2");
       }
 #ifdef __amigaos4__
       EmulateTags(AmiSSLBase,
@@ -386,13 +396,13 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
     switch(Cipher)
     {
       case CIPHER_BLOWFISH:
-        result = OpenLib(&BlowFishBase,"libs:amissl/blowfish_v2.library",2);
+        result = OpenLib(&BlowFishBase,"blowfish");
         break;
       case CIPHER_CAST:
-        result = OpenLib(&CASTBase,"libs:amissl/cast_v2.library",2);
+        result = OpenLib(&CASTBase,"cast");
         break;
       case CIPHER_DES:
-        result = OpenLib(&DESBase,"libs:amissl/des_v2.library",2);
+        result = OpenLib(&DESBase,"des");
         break;
       case CIPHER_DH:
         if(OpenAmiSSL() != NULL)
@@ -407,31 +417,31 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
         }
         break;
       case CIPHER_IDEA:
-        result = OpenLib(&IDEABase,"libs:amissl/idea_v2.library",2);
+        result = OpenLib(&IDEABase,"idea");
         break;
       case CIPHER_MD2:
-        result = OpenLib(&MD2Base,"libs:amissl/md2_v2.library",2);
+        result = OpenLib(&MD2Base,"md2");
         break;
       case CIPHER_MD4:
-        result = OpenLib(&MD4Base,"libs:amissl/md4_v2.library",2);
+        result = OpenLib(&MD4Base,"md4");
         break;
       case CIPHER_MD5:
-        result = OpenLib(&MD5Base,"libs:amissl/md5_v2.library",2);
+        result = OpenLib(&MD5Base,"md5");
         break;
       case CIPHER_MDC2:
-        result = OpenLib(&MDC2Base,"libs:amissl/mdc2_v2.library",2);
+        result = OpenLib(&MDC2Base,"mdc2");
         break;
       case CIPHER_RC2:
-        result = OpenLib(&RC2Base,"libs:amissl/rc2_v2.library",2);
+        result = OpenLib(&RC2Base,"rc2");
         break;
       case CIPHER_RC4:
-        result = OpenLib(&RC4Base,"libs:amissl/rc4_v2.library",2);
+        result = OpenLib(&RC4Base,"rc4");
         break;
       case CIPHER_RC5:
-        result = OpenLib(&RC5Base,"libs:amissl/rc5_v2.library",2);
+        result = OpenLib(&RC5Base,"rc5");
         break;
       case CIPHER_RIPEMD:
-        result = OpenLib(&RIPEMDBase,"libs:amissl/ripemd_v2.library",2);
+        result = OpenLib(&RIPEMDBase,"ripemd");
         break;
       case CIPHER_RSA:
         if(OpenAmiSSL() != NULL)
@@ -440,7 +450,7 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
         }
         break;
       case CIPHER_SHA:
-        result = OpenLib(&SHABase,"libs:amissl/sha_v2.library",2);
+        result = OpenLib(&SHABase,"sha");
         break;
     }
   }
