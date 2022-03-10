@@ -88,9 +88,6 @@ LONG _start(void)
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 
-// stack cookie for shell v45+
-static const char USED_VAR stack_size[] = "$STACK:" MKSTR(MIN_STACKSIZE) "\n";
-
 /****************************************************************************/
 
 #if defined(__amigaos4__)
