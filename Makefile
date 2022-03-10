@@ -411,7 +411,7 @@ LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/httpget $(BUILD_D)/uitest $(BUILD_D)/vatest
 
 # for making a release we compile ALL target with no debug
 .PHONY: release
@@ -523,6 +523,10 @@ $(BUILD_D)/https: $(TEST_D)/https.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libami
 	@echo "  CC/LD $@"
 	@$(CC) $(APPCFLAGS) -DNO_INLINE_STDARG -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
 
+$(BUILD_D)/httpget: $(TEST_D)/httpget.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
+	@echo "  CC/LD $@"
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+
 $(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
 	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
@@ -589,6 +593,7 @@ dump:
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/amisslmaster.library > $(BUILD_D)/amisslmaster.library.dump
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/amissl_v$(VERSIONNAME).library > $(BUILD_D)/amissl_v$(VERSIONNAME).library.dump
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/https > $(BUILD_D)/https.dump
+	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/httpget > $(BUILD_D)/httpget.dump
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/uitest > $(BUILD_D)/uitest.dump
 	-$(OBJDUMP) --section-headers --all-headers --reloc --disassemble-all $(BUILD_D)/vatest > $(BUILD_D)/vatest.dump
 

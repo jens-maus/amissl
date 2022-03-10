@@ -11,6 +11,11 @@ The information is mostly AmiSSL specific. For more information on SSL
 programming, check OpenSSL documentation and examples
 (http://www.openssl.org/).
 
+The provided example, httpget.c, is an example of how to use the new
+OpenSSL 3.0 built-in HTTP client functions. It shows how to retrieve a
+document from a "http://" or "https://" server, with or without a password
+and how you can also use URL parsing functions from OpenSSL 3.0.
+
 The provided example, https.c, is an example of a very simple client. It shows
 how to retrieve a document from a "https://" server by connecting directly to
 the site, and also by connecting through a proxy server (SSL tunneling).
