@@ -32,113 +32,12 @@
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
-#include <SDI_compiler.h>
-
-#ifdef USE_AUTOINIT
-
-/* Link with -lamisslauto
- */
-
-LONG UsesOpenSSLStructs = FALSE;
-
-static SSL_CTX *Init(void)
-{
-	SSL_CTX *ctx = NULL;
-
-	if (!(ctx = SSL_CTX_new(TLS_client_method())))
-		Printf("Couldn't create SSL context!\n");
-
-	return ctx;
-}
-
-static void Cleanup(SSL_CTX *ctx)
-{
-	SSL_CTX_free(ctx);
-}
-
-#else
+#if !defined(__amigaos4__)
+# include <SDI_compiler.h>
+#endif
 
 static SSL_CTX *Init(void);
 static void Cleanup(SSL_CTX *ctx);
-
-struct Library *AmiSSLMasterBase, *SocketBase;
-
-# if defined(__amigaos4__)
-struct AmiSSLMasterIFace *IAmiSSLMaster;
-struct AmiSSLIFace *IAmiSSL;
-struct SocketIFace *ISocket;
-#  define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
-#  define DROPINTERFACE(iface)      (DropInterface((struct Interface *)iface), iface = NULL)
-# else
-struct Library *AmiSSLBase, *AmiSSLExtBase;
-#  define GETINTERFACE(iface, base) TRUE
-#  define DROPINTERFACE(iface)
-# endif
-
-# define XMKSTR(x) #x
-# define MKSTR(x)  XMKSTR(x)
-
-/* Open and initialize AmiSSL
- */
-static SSL_CTX *Init(void)
-{
-	SSL_CTX *ctx = NULL;
-
-	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
-		Printf("Couldn't open bsdsocket.library v4!\n");
-	else if (!GETINTERFACE(ISocket, SocketBase))
-		Printf("Couldn't get Socket interface!\n");
-	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
-	                                          AMISSLMASTER_MIN_VERSION)))
-		Printf("Couldn't open amisslmaster.library v"
-		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
-	else if (!GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
-		Printf("Couldn't get AmiSSLMaster interface!\n");
-# if defined(__amigaos4__)
-        else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
-                                AmiSSL_UsesOpenSSLStructs, FALSE,
-                                AmiSSL_InterfacePtr, &IAmiSSL,
-                                AmiSSL_ErrNoPtr, &errno,
-                                AmiSSL_ISocket, ISocket,
-                                TAG_DONE) != 0)
-# else
-	else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
-                                AmiSSL_UsesOpenSSLStructs, FALSE,
-                                AmiSSL_LibBasePtr, &AmiSSLBase,
-	                        AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
-                                AmiSSL_ErrNoPtr, &errno,
-                                AmiSSL_SocketBase, SocketBase,
-                                TAG_DONE) != 0)
-# endif
-		Printf("Couldn't open and initialize AmiSSL!\n");
-	else if (!(ctx = SSL_CTX_new(TLS_client_method())))
-		Printf("Couldn't create SSL context!\n");
-
-	return ctx;
-}
-
-/* Close AmiSSL
- */
-static void Cleanup(SSL_CTX *ctx)
-{
-# if defined(__amigaos4__)
-	if (IAmiSSL)
-# else
-	if (AmiSSLBase)
-# endif
-	{
-		SSL_CTX_free(ctx);
-		CloseAmiSSL();
-	}
-
-	DROPINTERFACE(IAmiSSLMaster);
-	CloseLibrary(AmiSSLMasterBase);
-
-	DROPINTERFACE(ISocket);
-	CloseLibrary(SocketBase);
-}
-
-#endif /* !USE_AUTOINIT */
 
 /* Check if URL is valid and extract any username/password
  */
@@ -256,3 +155,106 @@ int main(int argc, char *argv[])
 
 	return(is_ok ? RETURN_OK : RETURN_ERROR);
 }
+
+#if defined(USE_AUTOINIT)
+
+/* Link with -lamisslauto
+ */
+
+LONG UsesOpenSSLStructs = FALSE;
+
+static SSL_CTX *Init(void)
+{
+	SSL_CTX *ctx;
+
+	if (!(ctx = SSL_CTX_new(TLS_client_method())))
+		Printf("Couldn't create SSL context!\n");
+
+	return ctx;
+}
+
+static void Cleanup(SSL_CTX *ctx)
+{
+	SSL_CTX_free(ctx);
+}
+
+#else
+
+struct Library *AmiSSLMasterBase, *SocketBase;
+
+# if defined(__amigaos4__)
+struct AmiSSLMasterIFace *IAmiSSLMaster;
+struct AmiSSLIFace *IAmiSSL;
+struct SocketIFace *ISocket;
+#  define GETINTERFACE(iface, base) (iface = (APTR)GetInterface((struct Library *)(base), "main", 1L, NULL))
+#  define DROPINTERFACE(iface)      (DropInterface((struct Interface *)iface), iface = NULL)
+# else
+struct Library *AmiSSLBase, *AmiSSLExtBase;
+#  define GETINTERFACE(iface, base) TRUE
+#  define DROPINTERFACE(iface)
+# endif
+
+# define XMKSTR(x) #x
+# define MKSTR(x)  XMKSTR(x)
+
+/* Open and initialize AmiSSL
+ */
+static SSL_CTX *Init(void)
+{
+	SSL_CTX *ctx = NULL;
+
+	if (!(SocketBase = OpenLibrary("bsdsocket.library", 4)))
+		Printf("Couldn't open bsdsocket.library v4!\n");
+	else if (!GETINTERFACE(ISocket, SocketBase))
+		Printf("Couldn't get Socket interface!\n");
+	else if (!(AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
+	                                          AMISSLMASTER_MIN_VERSION)))
+		Printf("Couldn't open amisslmaster.library v"
+		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
+	else if (!GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
+		Printf("Couldn't get AmiSSLMaster interface!\n");
+# if defined(__amigaos4__)
+        else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+                                AmiSSL_UsesOpenSSLStructs, FALSE,
+                                AmiSSL_InterfacePtr, &IAmiSSL,
+                                AmiSSL_ErrNoPtr, &errno,
+                                AmiSSL_ISocket, ISocket,
+                                TAG_DONE) != 0)
+# else
+	else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+                                AmiSSL_UsesOpenSSLStructs, FALSE,
+                                AmiSSL_LibBasePtr, &AmiSSLBase,
+	                        AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
+                                AmiSSL_ErrNoPtr, &errno,
+                                AmiSSL_SocketBase, SocketBase,
+                                TAG_DONE) != 0)
+# endif
+		Printf("Couldn't open and initialize AmiSSL!\n");
+	else if (!(ctx = SSL_CTX_new(TLS_client_method())))
+		Printf("Couldn't create SSL context!\n");
+
+	return ctx;
+}
+
+/* Close AmiSSL
+ */
+static void Cleanup(SSL_CTX *ctx)
+{
+# if defined(__amigaos4__)
+	if (IAmiSSL)
+# else
+	if (AmiSSLBase)
+# endif
+	{
+		SSL_CTX_free(ctx);
+		CloseAmiSSL();
+	}
+
+	DROPINTERFACE(IAmiSSLMaster);
+	CloseLibrary(AmiSSLMasterBase);
+
+	DROPINTERFACE(ISocket);
+	CloseLibrary(SocketBase);
+}
+
+#endif /* !USE_AUTOINIT */
