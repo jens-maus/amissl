@@ -4,11 +4,11 @@
  * 68060, crippling performance, so we override the routines required by
  * OpenSSL below and do not link with libgcc.a anymore.
  *
- * 68060 optimised 64-bit multiplication routine from vbcc with permission
- * by Frank Wille.
+ * 68060 optimised 64-bit multiplication from vbcc, used with permission
+ * Copyright (c) 2001-2022 Frank Wille. All Rights Reserved.
  *
  * Remaining code adapted from GNU CC's (2.95.3) libgcc2.c and longlong.h
- * Copyright (C) 1989, 91-98, 1999 Free Software Foundation, Inc.
+ * Copyright (c) 1989, 91-98, 1999 Free Software Foundation, Inc.
  */
 
 #if defined(__GNUC__) && defined(__amigaos3__)
