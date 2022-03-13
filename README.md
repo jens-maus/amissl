@@ -5,7 +5,7 @@
 [![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/amissl/latest.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
-[![License](http://img.shields.io/:license-bsd_style-blue.svg?style=flat)](https://www.openssl.org/source/license.html)
+[![License](http://img.shields.io/:license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic

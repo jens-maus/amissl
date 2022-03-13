@@ -1,4 +1,4 @@
-[![Downloads](https://img.shields.io/github/downloads/jens-maus/amissl/${VERSION}/total.svg)](https://github.com/jens-maus/amissl/releases/${VERSION}) [![License](http://img.shields.io/:license-bsd_style-blue.svg?style=flat)](https://www.openssl.org/source/license.html)
+[![Downloads](https://img.shields.io/github/downloads/jens-maus/amissl/${VERSION}/total.svg)](https://github.com/jens-maus/amissl/releases/${VERSION}) [![License](http://img.shields.io/:license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## About:
 This is version ${VERSION} of the open-source based AmiSSL library for Amiga based operating systems. Version 4.x is a new major release which comes with full compatibility to the OpenSSL 1.1.x line which includes important security related fixes and comes with new encryption ciphers which are required nowadays to connect to modern SSL-based services (e.g.  HTTPS).
