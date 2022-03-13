@@ -1,7 +1,10 @@
-#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-#include <proto/amissl.h>
-#endif
 /*
+ * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+ * Copyright (c) 2014-2022 AmiSSL Open Source Team.
+ * All Rights Reserved.
+ *
+ * This file has been modified for use with AmiSSL for AmigaOS-based systems.
+ *
  * Copyright 2002-2021 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2002, Oracle and/or its affiliates. All rights reserved
  *
@@ -11,10 +14,14 @@
  * https://www.openssl.org/source/license.html
  */
 
+#if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
+# include <proto/amissl.h>
+#endif
+
 #ifndef OPENSSL_EC_H
 # define OPENSSL_EC_H
 # if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
+#  pragma once
 # endif
 
 # include <openssl/macros.h>
