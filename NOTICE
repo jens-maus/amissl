@@ -1,0 +1,13 @@
+AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
+AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic, Stefan Burstroem.
+AmiSSL v4/v5 Copyright (c) 2014-2022 AmiSSL Open Source Team.
+All Rights Reserved.
+
+OpenSSL Cryptography and SSL/TLS Toolkit
+Copyright (c) 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+
+68060 optimised 64-bit multiplication routines
+Copyright (c) 2001-2022 Frank Wille. All Rights Reserved.
+
+OpenSSL BIGNUM 68020-68040 optimised routines
+Copyright (c) 2002 by Howard Chu <hyc@highlandsun.com>

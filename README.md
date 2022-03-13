@@ -6,7 +6,6 @@
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
 [![License](http://img.shields.io/:license-bsd_style-blue.svg?style=flat)](https://www.openssl.org/source/license.html)
-[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8L52PD9A9WS36)
 
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic
@@ -85,21 +84,28 @@ AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
 AmiSSL v4/v5 Copyright (c) 2014-2022 AmiSSL Open Source Team.
 All Rights Reserved.
 
-AmiSSL IS PROVIDED "AS IS" AND ANY WARRANTIES, EXPRESSED OR IMPLIED,
-INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-AmiSSL AUTHORS OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+OpenSSL Cryptography and SSL/TLS Toolkit
+Copyright (c) 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
 
-This product includes cryptographic software written by Eric Young
-(eay@cryptsoft.com). This product includes software written by Tim Hudson
-(tjh@cryptsoft.com). Please refer to the complete license information of
-the OpenSSL project (www.openssl.org) for more information.
+AmiSSL uses a modified version of OpenSSL. Both AmiSSL and OpenSSL
+are licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License in the file LICENSE in the
+source distribution or at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+68060 optimised 64-bit multiplication routines
+Copyright (c) 2001-2022 Frank Wille. All Rights Reserved.
+
+OpenSSL BIGNUM 68020-68040 optimised routines
+Copyright (c) 2002 by Howard Chu <hyc@highlandsun.com>
 ```
 
 ## Authors
@@ -108,8 +114,10 @@ AmiSSL is a collaborative effort with Amiga-specific code being contributed by
 the following people:
 
 - Andrija Antonijevic
-- Gunther Nikl
-- Jens Maus
-- Oliver Roberts
-- Stefan Burstroem
 - Thore Böckelmann
+- Stefan Burstroem
+- Howard Chu
+- Jens Maus
+- Gunther Nikl
+- Oliver Roberts
+- Frank Wille
