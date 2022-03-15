@@ -1737,11 +1737,11 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char, (___sep), D1), \
      struct Library *, AMISSLEXT_BASE_NAME, 287, Amisslext)
 
-#define OPENSSL_buf2hexstr_ex(___str, ___str_n, ___strlen, ___buf, ___buflen, ___sep) \
+#define OPENSSL_buf2hexstr_ex(___str, ___str_n, ___strlength, ___buf, ___buflen, ___sep) \
       AROS_LC6(int, OPENSSL_buf2hexstr_ex, \
  AROS_LCA(char *, (___str), A0), \
  AROS_LCA(size_t, (___str_n), D0), \
- AROS_LCA(size_t *, (___strlen), A1), \
+ AROS_LCA(size_t *, (___strlength), A1), \
  AROS_LCA(const unsigned char *, (___buf), A2), \
  AROS_LCA(size_t, (___buflen), D1), \
  AROS_LCA(const char, (___sep), D2), \

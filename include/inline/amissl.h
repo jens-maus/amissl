@@ -3970,7 +3970,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS12_bio(___bp, ___p12) \
-      LP2(0x1d04, int, i2d_PKCS12_bio , const BIO *, ___bp, a0, PKCS12 *, ___p12, a1,\
+      LP2(0x1d04, int, i2d_PKCS12_bio , BIO *, ___bp, a0, const PKCS12 *, ___p12, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_PKCS12_bio(___bp, ___p12) \
@@ -3998,7 +3998,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS7_bio(___bp, ___p7) \
-      LP2(0x1d2e, int, i2d_PKCS7_bio , const BIO *, ___bp, a0, PKCS7 *, ___p7, a1,\
+      LP2(0x1d2e, int, i2d_PKCS7_bio , BIO *, ___bp, a0, const PKCS7 *, ___p7, a1,\
       , AMISSL_BASE_NAME)
 
 #define PKCS7_ISSUER_AND_SERIAL_new() \

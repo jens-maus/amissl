@@ -6959,7 +6959,7 @@ PKCS12 * SAVEDS ASM LIB_PKCS12_create(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, c
 
 // ---
 
-int SAVEDS ASM LIB_i2d_PKCS12_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO * bp), REG(a1, PKCS12 * p12))
+int SAVEDS ASM LIB_i2d_PKCS12_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const PKCS12 * p12))
 {
 	return i2d_PKCS12_bio(bp, p12);
 }
@@ -7008,7 +7008,7 @@ PKCS7 * SAVEDS ASM LIB_d2i_PKCS7_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BI
 
 // ---
 
-int SAVEDS ASM LIB_i2d_PKCS7_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const BIO * bp), REG(a1, PKCS7 * p7))
+int SAVEDS ASM LIB_i2d_PKCS7_bio(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const PKCS7 * p7))
 {
 	return i2d_PKCS7_bio(bp, p7);
 }
@@ -35132,9 +35132,9 @@ int SAVEDS ASM LIB_OPENSSL_hexstr2buf_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0
 
 // ---
 
-int SAVEDS ASM LIB_OPENSSL_buf2hexstr_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * str), REG(d0, size_t str_n), REG(a1, size_t * strlen), REG(a2, const unsigned char * buf), REG(d1, size_t buflen), REG(d2, const char sep))
+int SAVEDS ASM LIB_OPENSSL_buf2hexstr_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, char * str), REG(d0, size_t str_n), REG(a1, size_t * strlength), REG(a2, const unsigned char * buf), REG(d1, size_t buflen), REG(d2, const char sep))
 {
-	return OPENSSL_buf2hexstr_ex(str, str_n, strlen, buf, buflen, sep);
+	return OPENSSL_buf2hexstr_ex(str, str_n, strlength, buf, buflen, sep);
 }
 
 // ---

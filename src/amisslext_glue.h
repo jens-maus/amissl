@@ -319,7 +319,7 @@ void SAVEDS ASM LIB_ERR_vset_error(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), R
 void SAVEDS ASM LIB_ERR_set_error(REG(a6, __IFACE_OR_BASE), REG(d0, int lib), REG(d1, int reason), REG(a0, const char * fmt), ...);
 int SAVEDS ASM LIB_X509_self_signed(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * cert), REG(d0, int verify_signature));
 int SAVEDS ASM LIB_OPENSSL_hexstr2buf_ex(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char * buf), REG(d0, size_t buf_n), REG(a1, size_t * buflen), REG(a2, const char * str), REG(d1, const char sep));
-int SAVEDS ASM LIB_OPENSSL_buf2hexstr_ex(REG(a6, __IFACE_OR_BASE), REG(a0, char * str), REG(d0, size_t str_n), REG(a1, size_t * strlen), REG(a2, const unsigned char * buf), REG(d1, size_t buflen), REG(d2, const char sep));
+int SAVEDS ASM LIB_OPENSSL_buf2hexstr_ex(REG(a6, __IFACE_OR_BASE), REG(a0, char * str), REG(d0, size_t str_n), REG(a1, size_t * strlength), REG(a2, const unsigned char * buf), REG(d1, size_t buflen), REG(d2, const char sep));
 int SAVEDS ASM LIB_OSSL_PARAM_allocate_from_text(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_PARAM * to), REG(a1, const OSSL_PARAM * paramdefs), REG(a2, const char * key), REG(a3, const char * value), REG(d0, size_t value_n), REG(d1, int * found));
 const OSSL_PARAM * SAVEDS ASM LIB_EVP_MD_gettable_params(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_MD * digest));
 const OSSL_PARAM * SAVEDS ASM LIB_EVP_MD_CTX_settable_params(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_MD_CTX * ctx));

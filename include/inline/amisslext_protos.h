@@ -866,8 +866,8 @@ int __X509_self_signed(__reg("a6") struct Library * , __reg("a0") X509 * cert , 
 int __OPENSSL_hexstr2buf_ex(__reg("a6") struct Library * , __reg("a0") unsigned char * buf , __reg("d0") size_t buf_n , __reg("a1") size_t * buflen , __reg("a2") const char * str , __reg("d1") const char sep ) = "\tjsr\t-1722(a6)";
 #define OPENSSL_hexstr2buf_ex(buf, buf_n, buflen, str, sep) __OPENSSL_hexstr2buf_ex(AmiSSLExtBase, (buf), (buf_n), (buflen), (str), (sep))
 
-int __OPENSSL_buf2hexstr_ex(__reg("a6") struct Library * , __reg("a0") char * str , __reg("d0") size_t str_n , __reg("a1") size_t * strlen , __reg("a2") const unsigned char * buf , __reg("d1") size_t buflen , __reg("d2") const char sep ) = "\tjsr\t-1728(a6)";
-#define OPENSSL_buf2hexstr_ex(str, str_n, strlen, buf, buflen, sep) __OPENSSL_buf2hexstr_ex(AmiSSLExtBase, (str), (str_n), (strlen), (buf), (buflen), (sep))
+int __OPENSSL_buf2hexstr_ex(__reg("a6") struct Library * , __reg("a0") char * str , __reg("d0") size_t str_n , __reg("a1") size_t * strlength , __reg("a2") const unsigned char * buf , __reg("d1") size_t buflen , __reg("d2") const char sep ) = "\tjsr\t-1728(a6)";
+#define OPENSSL_buf2hexstr_ex(str, str_n, strlength, buf, buflen, sep) __OPENSSL_buf2hexstr_ex(AmiSSLExtBase, (str), (str_n), (strlength), (buf), (buflen), (sep))
 
 int __OSSL_PARAM_allocate_from_text(__reg("a6") struct Library * , __reg("a0") OSSL_PARAM * to , __reg("a1") const OSSL_PARAM * paramdefs , __reg("a2") const char * key , __reg("a3") const char * value , __reg("d0") size_t value_n , __reg("d1") int * found ) = "\tjsr\t-1734(a6)";
 #define OSSL_PARAM_allocate_from_text(to, paramdefs, key, value, value_n, found) __OSSL_PARAM_allocate_from_text(AmiSSLExtBase, (to), (paramdefs), (key), (value), (value_n), (found))

@@ -1157,8 +1157,8 @@ typedef ULONG _sfdc_vararg;
       LP5(0x6ba, int, OPENSSL_hexstr2buf_ex , unsigned char *, ___buf, a0, size_t, ___buf_n, d0, size_t *, ___buflen, a1, const char *, ___str, a2, const char, ___sep, d1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define OPENSSL_buf2hexstr_ex(___str, ___str_n, ___strlen, ___buf, ___buflen, ___sep) \
-      LP6(0x6c0, int, OPENSSL_buf2hexstr_ex , char *, ___str, a0, size_t, ___str_n, d0, size_t *, ___strlen, a1, const unsigned char *, ___buf, a2, size_t, ___buflen, d1, const char, ___sep, d2,\
+#define OPENSSL_buf2hexstr_ex(___str, ___str_n, ___strlength, ___buf, ___buflen, ___sep) \
+      LP6(0x6c0, int, OPENSSL_buf2hexstr_ex , char *, ___str, a0, size_t, ___str_n, d0, size_t *, ___strlength, a1, const unsigned char *, ___buf, a2, size_t, ___buflen, d1, const char, ___sep, d2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_PARAM_allocate_from_text(___to, ___paramdefs, ___key, ___value, ___value_n, ___found) \

@@ -34,9 +34,9 @@ Requirements:
 Version 5.0 (x.x.2022):
 ------------------------
 
-- Updated OpenSSL backend to full compatibility to latest
-  OpenSSL 3.0.0 (7.9.2021) version, which brings new features, such as a
-  built-in HTTP(S) client, along with security and bug fixes.
+- Switched to OpenSSL 3.0 and updated backend to full compatibility to
+  latest OpenSSL 3.0.2 (15.3.2022) version, which brings new features,
+  such as a built-in HTTP(S) client, along with security and bug fixes.
 - Added new streamlined OpenAmiSSLTags/TagList() function to
   amisslmaster.library which simplifies the opening of AmiSSL.
 - Added simple httpget example code which shows how applications can use

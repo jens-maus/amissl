@@ -152,11 +152,11 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-VERSIONNAME=301
+VERSIONNAME=302
 AMISSLREVISION=0
 AMISSLMASTERREVISION=0
-AMISSLDATE=8.3.2022
-AMISSLMASTERDATE=8.3.2022
+AMISSLDATE=15.3.2022
+AMISSLMASTERDATE=15.3.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -427,7 +427,7 @@ release:
 	make OS=os3-68060 DEBUG=
 	@echo "  CC $<"
 	make OS=os4 clean
-	make OS=os4 DEBUG=
+	make OS=os4 DEBUG= all build_docs
 	#@echo "  CC $<"
 	#make OS=mos clean
 	#make OS=mos DEBUG=
@@ -473,9 +473,13 @@ $(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
-	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines MODULESDIR=AmiSSL:modules RANLIB=$(RANLIB) all build_tests
+	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile OPENSSLDIR=AmiSSL: ENGINESDIR=AmiSSL:engines MODULESDIR=AmiSSL:modules RANLIB=$(RANLIB) build_sw build_programs
 
 $(LIBSSL): $(LIBCRYPTO)
+
+.PHONY: build_docs
+build_docs:
+	@$(MAKE) -C $(BUILD_D)/openssl -f Makefile build_generated_pods
 
 ## LIBCMT BUILD RULES ##
 

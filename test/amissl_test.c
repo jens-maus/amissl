@@ -50,6 +50,7 @@
 #define XMKSTR(x) #x
 #define MKSTR(x)  XMKSTR(x)
 #define LIBNAME "AmiSSL/amissl_v" MKSTR(VERSIONNAME) ".library"
+#undef AMISSL_CURRENT_VERSION
 #define AMISSL_CURRENT_VERSION   AMISSL_V11x
 
 struct Library *AmiSSLBase = NULL;

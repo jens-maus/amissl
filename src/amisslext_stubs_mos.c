@@ -2863,18 +2863,18 @@ int LIBSTUB_OPENSSL_hexstr2buf_ex(void)
   return LIB_OPENSSL_hexstr2buf_ex(_base, ___buf, ___buf_n, ___buflen, ___str, ___sep);
 }
 
-int LIB_OPENSSL_buf2hexstr_ex(struct Library * _base, char * ___str, size_t ___str_n, size_t * ___strlen, const unsigned char * ___buf, size_t ___buflen, const char ___sep);
+int LIB_OPENSSL_buf2hexstr_ex(struct Library * _base, char * ___str, size_t ___str_n, size_t * ___strlength, const unsigned char * ___buf, size_t ___buflen, const char ___sep);
 
 int LIBSTUB_OPENSSL_buf2hexstr_ex(void)
 {
   char * ___str = (char *)REG_A0;
   size_t ___str_n = (size_t)REG_D0;
-  size_t * ___strlen = (size_t *)REG_A1;
+  size_t * ___strlength = (size_t *)REG_A1;
   const unsigned char * ___buf = (const unsigned char *)REG_A2;
   size_t ___buflen = (size_t)REG_D1;
   const char ___sep = (const char)REG_D2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_OPENSSL_buf2hexstr_ex(_base, ___str, ___str_n, ___strlen, ___buf, ___buflen, ___sep);
+  return LIB_OPENSSL_buf2hexstr_ex(_base, ___str, ___str_n, ___strlength, ___buf, ___buflen, ___sep);
 }
 
 int LIB_OSSL_PARAM_allocate_from_text(struct Library * _base, OSSL_PARAM * ___to, const OSSL_PARAM * ___paramdefs, const char * ___key, const char * ___value, size_t ___value_n, int * ___found);

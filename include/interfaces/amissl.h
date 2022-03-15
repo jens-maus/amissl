@@ -1276,14 +1276,14 @@ struct AmiSSLIFace
 	APICALL void (*PKCS12_PBE_add)(struct AmiSSLIFace *Self);
 	APICALL int (*PKCS12_parse)(struct AmiSSLIFace *Self, PKCS12 * p12, const char * pass, EVP_PKEY ** pkey, X509 ** cert, STACK_OF(X509) ** ca);
 	APICALL PKCS12 * (*PKCS12_create)(struct AmiSSLIFace *Self, const char * pass, const char * name, EVP_PKEY * pkey, X509 * cert, STACK_OF(X509) * ca, int nid_key, int nid_cert, int iter, int mac_iter, int keytype);
-	APICALL int (*i2d_PKCS12_bio)(struct AmiSSLIFace *Self, const BIO * bp, PKCS12 * p12);
+	APICALL int (*i2d_PKCS12_bio)(struct AmiSSLIFace *Self, BIO * bp, const PKCS12 * p12);
 	APICALL PKCS12 * (*d2i_PKCS12_bio)(struct AmiSSLIFace *Self, BIO * bp, PKCS12 ** p12);
 	APICALL int (*PKCS12_newpass)(struct AmiSSLIFace *Self, PKCS12 * p12, const char * oldpass, const char * newpass);
 	APICALL int (*ERR_load_PKCS12_strings)(struct AmiSSLIFace *Self);
 	APICALL int (*PKCS7_ISSUER_AND_SERIAL_digest)(struct AmiSSLIFace *Self, PKCS7_ISSUER_AND_SERIAL * data, const EVP_MD * type, unsigned char * md, unsigned int * len);
 	APICALL PKCS7 * (*PKCS7_dup)(struct AmiSSLIFace *Self, PKCS7 * p7);
 	APICALL PKCS7 * (*d2i_PKCS7_bio)(struct AmiSSLIFace *Self, BIO * bp, PKCS7 ** p7);
-	APICALL int (*i2d_PKCS7_bio)(struct AmiSSLIFace *Self, const BIO * bp, PKCS7 * p7);
+	APICALL int (*i2d_PKCS7_bio)(struct AmiSSLIFace *Self, BIO * bp, const PKCS7 * p7);
 	APICALL PKCS7_ISSUER_AND_SERIAL * (*PKCS7_ISSUER_AND_SERIAL_new)(struct AmiSSLIFace *Self);
 	APICALL void (*PKCS7_ISSUER_AND_SERIAL_free)(struct AmiSSLIFace *Self, PKCS7_ISSUER_AND_SERIAL * a);
 	APICALL PKCS7_ISSUER_AND_SERIAL * (*d2i_PKCS7_ISSUER_AND_SERIAL)(struct AmiSSLIFace *Self, PKCS7_ISSUER_AND_SERIAL ** a, const unsigned char ** in, long len);
@@ -5704,7 +5704,7 @@ struct AmiSSLIFace
 	APICALL void (*ERR_set_error)(struct AmiSSLIFace *Self, int lib, int reason, const char * fmt, ...);
 	APICALL int (*X509_self_signed)(struct AmiSSLIFace *Self, X509 * cert, int verify_signature);
 	APICALL int (*OPENSSL_hexstr2buf_ex)(struct AmiSSLIFace *Self, unsigned char * buf, size_t buf_n, size_t * buflen, const char * str, const char sep);
-	APICALL int (*OPENSSL_buf2hexstr_ex)(struct AmiSSLIFace *Self, char * str, size_t str_n, size_t * strlen, const unsigned char * buf, size_t buflen, const char sep);
+	APICALL int (*OPENSSL_buf2hexstr_ex)(struct AmiSSLIFace *Self, char * str, size_t str_n, size_t * strlength, const unsigned char * buf, size_t buflen, const char sep);
 	APICALL int (*OSSL_PARAM_allocate_from_text)(struct AmiSSLIFace *Self, OSSL_PARAM * to, const OSSL_PARAM * paramdefs, const char * key, const char * value, size_t value_n, int * found);
 	APICALL const OSSL_PARAM * (*EVP_MD_gettable_params)(struct AmiSSLIFace *Self, const EVP_MD * digest);
 	APICALL const OSSL_PARAM * (*EVP_MD_CTX_settable_params)(struct AmiSSLIFace *Self, EVP_MD_CTX * ctx);

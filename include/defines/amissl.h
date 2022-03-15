@@ -6059,8 +6059,8 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS12_bio(___bp, ___p12) \
       AROS_LC2(int, i2d_PKCS12_bio, \
- AROS_LCA(const BIO *, (___bp), A0), \
- AROS_LCA(PKCS12 *, (___p12), A1), \
+ AROS_LCA(BIO *, (___bp), A0), \
+ AROS_LCA(const PKCS12 *, (___p12), A1), \
      struct Library *, AMISSL_BASE_NAME, 1238, Amissl)
 
 #define d2i_PKCS12_bio(___bp, ___p12) \
@@ -6101,8 +6101,8 @@ typedef ULONG _sfdc_vararg;
 
 #define i2d_PKCS7_bio(___bp, ___p7) \
       AROS_LC2(int, i2d_PKCS7_bio, \
- AROS_LCA(const BIO *, (___bp), A0), \
- AROS_LCA(PKCS7 *, (___p7), A1), \
+ AROS_LCA(BIO *, (___bp), A0), \
+ AROS_LCA(const PKCS7 *, (___p7), A1), \
      struct Library *, AMISSL_BASE_NAME, 1245, Amissl)
 
 #define PKCS7_ISSUER_AND_SERIAL_new() \

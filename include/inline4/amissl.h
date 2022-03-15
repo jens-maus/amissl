@@ -5067,7 +5067,7 @@
 #endif
 #define X509_self_signed(cert, verify_signature) IAmiSSL->X509_self_signed((cert), (verify_signature))
 #define OPENSSL_hexstr2buf_ex(buf, buf_n, buflen, str, sep) IAmiSSL->OPENSSL_hexstr2buf_ex((buf), (buf_n), (buflen), (str), (sep))
-#define OPENSSL_buf2hexstr_ex(str, str_n, strlen, buf, buflen, sep) IAmiSSL->OPENSSL_buf2hexstr_ex((str), (str_n), (strlen), (buf), (buflen), (sep))
+#define OPENSSL_buf2hexstr_ex(str, str_n, strlength, buf, buflen, sep) IAmiSSL->OPENSSL_buf2hexstr_ex((str), (str_n), (strlength), (buf), (buflen), (sep))
 #define OSSL_PARAM_allocate_from_text(to, paramdefs, key, value, value_n, found) IAmiSSL->OSSL_PARAM_allocate_from_text((to), (paramdefs), (key), (value), (value_n), (found))
 #define EVP_MD_gettable_params(digest) IAmiSSL->EVP_MD_gettable_params((digest))
 #define EVP_MD_CTX_settable_params(ctx) IAmiSSL->EVP_MD_CTX_settable_params((ctx))

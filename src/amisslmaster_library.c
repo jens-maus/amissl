@@ -254,8 +254,9 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // older libraries that do not contain those required entries
     if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
     {
-      if(LibAPIVersion <= AMISSL_V301 && OpenLib(&AmiSSLBase,"301") == NULL)
-        OpenLib(&AmiSSLBase,"300");
+      if(LibAPIVersion <= AMISSL_V302 && OpenLib(&AmiSSLBase,"302") == NULL
+                                      && OpenLib(&AmiSSLBase,"301") == NULL)
+          OpenLib(&AmiSSLBase,"300");
     }
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any

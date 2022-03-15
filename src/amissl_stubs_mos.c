@@ -9964,12 +9964,12 @@ PKCS12 * LIBSTUB_PKCS12_create(void)
   return LIB_PKCS12_create(_base, ___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___iter, ___mac_iter, ___keytype);
 }
 
-int LIB_i2d_PKCS12_bio(struct Library * _base, const BIO * ___bp, PKCS12 * ___p12);
+int LIB_i2d_PKCS12_bio(struct Library * _base, BIO * ___bp, const PKCS12 * ___p12);
 
 int LIBSTUB_i2d_PKCS12_bio(void)
 {
-  const BIO * ___bp = (const BIO *)REG_A0;
-  PKCS12 * ___p12 = (PKCS12 *)REG_A1;
+  BIO * ___bp = (BIO *)REG_A0;
+  const PKCS12 * ___p12 = (const PKCS12 *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2d_PKCS12_bio(_base, ___bp, ___p12);
 }
@@ -10034,12 +10034,12 @@ PKCS7 * LIBSTUB_d2i_PKCS7_bio(void)
   return LIB_d2i_PKCS7_bio(_base, ___bp, ___p7);
 }
 
-int LIB_i2d_PKCS7_bio(struct Library * _base, const BIO * ___bp, PKCS7 * ___p7);
+int LIB_i2d_PKCS7_bio(struct Library * _base, BIO * ___bp, const PKCS7 * ___p7);
 
 int LIBSTUB_i2d_PKCS7_bio(void)
 {
-  const BIO * ___bp = (const BIO *)REG_A0;
-  PKCS7 * ___p7 = (PKCS7 *)REG_A1;
+  BIO * ___bp = (BIO *)REG_A0;
+  const PKCS7 * ___p7 = (const PKCS7 *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_i2d_PKCS7_bio(_base, ___bp, ___p7);
 }

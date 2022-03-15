@@ -14727,8 +14727,8 @@ STATIC int stub_main_i2d_PKCS12_bio_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->i2d_PKCS12_bio(
-		(const BIO *)regarray[REG68K_A0/4],
-		(PKCS12 *)regarray[REG68K_A1/4]
+		(BIO *)regarray[REG68K_A0/4],
+		(const PKCS12 *)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_i2d_PKCS12_bio = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_i2d_PKCS12_bio_PPC };
@@ -14831,8 +14831,8 @@ STATIC int stub_main_i2d_PKCS7_bio_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->i2d_PKCS7_bio(
-		(const BIO *)regarray[REG68K_A0/4],
-		(PKCS7 *)regarray[REG68K_A1/4]
+		(BIO *)regarray[REG68K_A0/4],
+		(const PKCS7 *)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_i2d_PKCS7_bio = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_i2d_PKCS7_bio_PPC };

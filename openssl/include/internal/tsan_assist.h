@@ -69,6 +69,7 @@
 #  define TSAN_QUALIFIER volatile
 #  define tsan_load(ptr) __atomic_load_n((ptr), __ATOMIC_RELAXED)
 #  define tsan_store(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELAXED)
+
 #  define tsan_counter(ptr) __atomic_fetch_add((ptr), 1, __ATOMIC_RELAXED)
 #  define tsan_decr(ptr) __atomic_fetch_add((ptr), -1, __ATOMIC_RELAXED)
 #  define tsan_ld_acq(ptr) __atomic_load_n((ptr), __ATOMIC_ACQUIRE)
@@ -134,7 +135,7 @@
 
 # if defined(__amigaos4__) || defined(__MORPHOS__)
 #  define tsan_counter(ptr) \
-   ({ typeof (*ptr) res, tmp; \
+   ({ typeof (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx %0,0,%2\n" \
          "addi %1,%0,1\n" \
@@ -146,7 +147,7 @@
       res; \
    })
 #  define tsan_decr(ptr) \
-   ({ typeof (*ptr) res, tmp; \
+   ({ typeof (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx %0,0,%2\n" \
          "addi %1,%0,-1\n" \

@@ -5013,8 +5013,8 @@
       <arg name="keytype" type="int" m68kreg="d5"/>
     </method>
     <method name="i2d_PKCS12_bio" result="int">
-      <arg name="bp" type="const BIO *" m68kreg="a0"/>
-      <arg name="p12" type="PKCS12 *" m68kreg="a1"/>
+      <arg name="bp" type="BIO *" m68kreg="a0"/>
+      <arg name="p12" type="const PKCS12 *" m68kreg="a1"/>
     </method>
     <method name="d2i_PKCS12_bio" result="PKCS12 *">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -5041,8 +5041,8 @@
       <arg name="p7" type="PKCS7 **" m68kreg="a1"/>
     </method>
     <method name="i2d_PKCS7_bio" result="int">
-      <arg name="bp" type="const BIO *" m68kreg="a0"/>
-      <arg name="p7" type="PKCS7 *" m68kreg="a1"/>
+      <arg name="bp" type="BIO *" m68kreg="a0"/>
+      <arg name="p7" type="const PKCS7 *" m68kreg="a1"/>
     </method>
     <method name="PKCS7_ISSUER_AND_SERIAL_new" result="PKCS7_ISSUER_AND_SERIAL *">
     </method>
@@ -22981,7 +22981,7 @@
     <method name="OPENSSL_buf2hexstr_ex" result="int">
       <arg name="str" type="char *" m68kreg="a0"/>
       <arg name="str_n" type="size_t" m68kreg="d0"/>
-      <arg name="strlen" type="size_t *" m68kreg="a1"/>
+      <arg name="strlength" type="size_t *" m68kreg="a1"/>
       <arg name="buf" type="const unsigned char *" m68kreg="a2"/>
       <arg name="buflen" type="size_t" m68kreg="d1"/>
       <arg name="sep" type="const char" m68kreg="d2"/>

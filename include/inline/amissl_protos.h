@@ -2980,7 +2980,7 @@ int __PKCS12_parse(__reg("a6") struct Library * , __reg("a0") PKCS12 * p12 , __r
 PKCS12 * __PKCS12_create(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") const char * name , __reg("a2") EVP_PKEY * pkey , __reg("a3") X509 * cert , __reg("d0") STACK_OF(X509) * ca , __reg("d1") int nid_key , __reg("d2") int nid_cert , __reg("d3") int iter , __reg("d4") int mac_iter , __reg("d5") int keytype ) = "\tjsr\t-7422(a6)";
 #define PKCS12_create(pass, name, pkey, cert, ca, nid_key, nid_cert, iter, mac_iter, keytype) __PKCS12_create(AmiSSLBase, (pass), (name), (pkey), (cert), (ca), (nid_key), (nid_cert), (iter), (mac_iter), (keytype))
 
-int __i2d_PKCS12_bio(__reg("a6") struct Library * , __reg("a0") const BIO * bp , __reg("a1") PKCS12 * p12 ) = "\tjsr\t-7428(a6)";
+int __i2d_PKCS12_bio(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") const PKCS12 * p12 ) = "\tjsr\t-7428(a6)";
 #define i2d_PKCS12_bio(bp, p12) __i2d_PKCS12_bio(AmiSSLBase, (bp), (p12))
 
 PKCS12 * __d2i_PKCS12_bio(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") PKCS12 ** p12 ) = "\tjsr\t-7434(a6)";
@@ -3001,7 +3001,7 @@ PKCS7 * __PKCS7_dup(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 ) = "\
 PKCS7 * __d2i_PKCS7_bio(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") PKCS7 ** p7 ) = "\tjsr\t-7464(a6)";
 #define d2i_PKCS7_bio(bp, p7) __d2i_PKCS7_bio(AmiSSLBase, (bp), (p7))
 
-int __i2d_PKCS7_bio(__reg("a6") struct Library * , __reg("a0") const BIO * bp , __reg("a1") PKCS7 * p7 ) = "\tjsr\t-7470(a6)";
+int __i2d_PKCS7_bio(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") const PKCS7 * p7 ) = "\tjsr\t-7470(a6)";
 #define i2d_PKCS7_bio(bp, p7) __i2d_PKCS7_bio(AmiSSLBase, (bp), (p7))
 
 PKCS7_ISSUER_AND_SERIAL * __PKCS7_ISSUER_AND_SERIAL_new(__reg("a6") struct Library * ) = "\tjsr\t-7476(a6)";
