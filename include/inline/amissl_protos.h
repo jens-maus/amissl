@@ -1969,7 +1969,7 @@ int __OBSOLETE_EVP_PKEY_bits(__reg("a6") struct Library * , __reg("a0") const EV
 int __OBSOLETE_EVP_PKEY_size(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY * pkey ) = "\tjsr\t-4986(a6)";
 #define OBSOLETE_EVP_PKEY_size(pkey) __OBSOLETE_EVP_PKEY_size(AmiSSLBase, (pkey))
 
-int __EVP_PKEY_assign(__reg("a6") struct Library * , __reg("a0") EVP_PKEY * pkey , __reg("d0") int type , __reg("a1") char * key ) = "\tjsr\t-4992(a6)";
+int __EVP_PKEY_assign(__reg("a6") struct Library * , __reg("a0") EVP_PKEY * pkey , __reg("d0") int type , __reg("a1") void * key ) = "\tjsr\t-4992(a6)";
 #define EVP_PKEY_assign(pkey, type, key) __EVP_PKEY_assign(AmiSSLBase, (pkey), (type), (key))
 
 int __EVP_PKEY_set1_RSA(__reg("a6") struct Library * , __reg("a0") EVP_PKEY * pkey , __reg("a1") struct rsa_st * key ) = "\tjsr\t-4998(a6)";

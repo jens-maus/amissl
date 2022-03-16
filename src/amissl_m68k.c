@@ -9548,7 +9548,7 @@ STATIC int stub_main_EVP_PKEY_assign_PPC(uint32 *regarray)
 	return Self->EVP_PKEY_assign(
 		(EVP_PKEY *)regarray[REG68K_A0/4],
 		(int)regarray[REG68K_D0/4],
-		(char *)regarray[REG68K_A1/4]
+		(void *)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_EVP_PKEY_assign = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_EVP_PKEY_assign_PPC };

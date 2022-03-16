@@ -706,7 +706,7 @@ int EVP_PKEY_encrypt(EVP_PKEY_CTX * ctx, unsigned char * out, size_t * outlen, c
 int EVP_PKEY_type(int type) (d0)
 int OBSOLETE_EVP_PKEY_bits(const EVP_PKEY * pkey) (a0)
 int OBSOLETE_EVP_PKEY_size(const EVP_PKEY * pkey) (a0)
-int EVP_PKEY_assign(EVP_PKEY * pkey, int type, char * key) (a0,d0,a1)
+int EVP_PKEY_assign(EVP_PKEY * pkey, int type, void * key) (a0,d0,a1)
 int EVP_PKEY_set1_RSA(EVP_PKEY * pkey, struct rsa_st * key) (a0,a1)
 struct rsa_st * EVP_PKEY_get1_RSA(EVP_PKEY * pkey) (a0)
 int EVP_PKEY_set1_DSA(EVP_PKEY * pkey, struct dsa_st * key) (a0,a1)

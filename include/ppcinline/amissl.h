@@ -2622,7 +2622,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_assign(___pkey, ___type, ___key) \
-      LP3(0x1380, int, EVP_PKEY_assign , EVP_PKEY *, ___pkey, a0, int, ___type, d0, char *, ___key, a1,\
+      LP3(0x1380, int, EVP_PKEY_assign , EVP_PKEY *, ___pkey, a0, int, ___type, d0, void *, ___key, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_set1_RSA(___pkey, ___key) \

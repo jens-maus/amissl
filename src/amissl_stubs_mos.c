@@ -6419,13 +6419,13 @@ int LIBSTUB_OBSOLETE_EVP_PKEY_size(void)
   return LIB_OBSOLETE_EVP_PKEY_size(_base, ___pkey);
 }
 
-int LIB_EVP_PKEY_assign(struct Library * _base, EVP_PKEY * ___pkey, int ___type, char * ___key);
+int LIB_EVP_PKEY_assign(struct Library * _base, EVP_PKEY * ___pkey, int ___type, void * ___key);
 
 int LIBSTUB_EVP_PKEY_assign(void)
 {
   EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A0;
   int ___type = (int)REG_D0;
-  char * ___key = (char *)REG_A1;
+  void * ___key = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_assign(_base, ___pkey, ___type, ___key);
 }

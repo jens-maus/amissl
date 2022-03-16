@@ -4600,7 +4600,7 @@ int SAVEDS ASM LIB_OBSOLETE_EVP_PKEY_size(REG(a6, UNUSED __IFACE_OR_BASE), REG(a
 
 // ---
 
-int SAVEDS ASM LIB_EVP_PKEY_assign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(d0, int type), REG(a1, char * key))
+int SAVEDS ASM LIB_EVP_PKEY_assign(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(d0, int type), REG(a1, void * key))
 {
 	return EVP_PKEY_assign(pkey, type, key);
 }

@@ -3246,7 +3246,7 @@
     <method name="EVP_PKEY_assign" result="int">
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
       <arg name="type" type="int" m68kreg="d0"/>
-      <arg name="key" type="char *" m68kreg="a1"/>
+      <arg name="key" type="void *" m68kreg="a1"/>
     </method>
     <method name="EVP_PKEY_set1_RSA" result="int">
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>

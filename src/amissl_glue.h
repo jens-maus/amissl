@@ -694,7 +694,7 @@ int SAVEDS ASM LIB_EVP_PKEY_encrypt(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_C
 int SAVEDS ASM LIB_EVP_PKEY_type(REG(a6, __IFACE_OR_BASE), REG(d0, int type));
 int SAVEDS ASM LIB_OBSOLETE_EVP_PKEY_bits(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
 int SAVEDS ASM LIB_OBSOLETE_EVP_PKEY_size(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
-int SAVEDS ASM LIB_EVP_PKEY_assign(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(d0, int type), REG(a1, char * key));
+int SAVEDS ASM LIB_EVP_PKEY_assign(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(d0, int type), REG(a1, void * key));
 int SAVEDS ASM LIB_EVP_PKEY_set1_RSA(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(a1, struct rsa_st * key));
 struct rsa_st * SAVEDS ASM LIB_EVP_PKEY_get1_RSA(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey));
 int SAVEDS ASM LIB_EVP_PKEY_set1_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY * pkey), REG(a1, struct dsa_st * key));

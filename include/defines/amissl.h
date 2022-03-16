@@ -3864,7 +3864,7 @@ typedef ULONG _sfdc_vararg;
       AROS_LC3(int, EVP_PKEY_assign, \
  AROS_LCA(EVP_PKEY *, (___pkey), A0), \
  AROS_LCA(int, (___type), D0), \
- AROS_LCA(char *, (___key), A1), \
+ AROS_LCA(void *, (___key), A1), \
      struct Library *, AMISSL_BASE_NAME, 832, Amissl)
 
 #define EVP_PKEY_set1_RSA(___pkey, ___key) \

@@ -870,7 +870,7 @@ struct AmiSSLIFace
 	APICALL int (*EVP_PKEY_type)(struct AmiSSLIFace *Self, int type);
 	APICALL int (*OBSOLETE_EVP_PKEY_bits)(struct AmiSSLIFace *Self, const EVP_PKEY * pkey);
 	APICALL int (*OBSOLETE_EVP_PKEY_size)(struct AmiSSLIFace *Self, const EVP_PKEY * pkey);
-	APICALL int (*EVP_PKEY_assign)(struct AmiSSLIFace *Self, EVP_PKEY * pkey, int type, char * key);
+	APICALL int (*EVP_PKEY_assign)(struct AmiSSLIFace *Self, EVP_PKEY * pkey, int type, void * key);
 	APICALL int (*EVP_PKEY_set1_RSA)(struct AmiSSLIFace *Self, EVP_PKEY * pkey, struct rsa_st * key);
 	APICALL struct rsa_st * (*EVP_PKEY_get1_RSA)(struct AmiSSLIFace *Self, EVP_PKEY * pkey);
 	APICALL int (*EVP_PKEY_set1_DSA)(struct AmiSSLIFace *Self, EVP_PKEY * pkey, struct dsa_st * key);
