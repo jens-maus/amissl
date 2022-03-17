@@ -284,7 +284,7 @@ typedef uint64_t ossl_uintmax_t;
 #   define ossl_inline inline
 #  elif defined(__GNUC__) && __GNUC__>=2
 #   define ossl_inline __inline__
-#  elif defined(_MSC_VER)
+#  elif defined(_MSC_VER) || defined(__SASC)
   /*
    * Visual Studio: inline is available in C++ only, however
    * __inline is available for C, see
