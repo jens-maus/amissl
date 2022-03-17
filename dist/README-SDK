@@ -17,8 +17,9 @@ document from a "http://" or "https://" server, with or without a password
 and how you can also use URL parsing functions from OpenSSL 3.0.
 
 The provided example, https.c, is an example of a very simple client. It shows
-how to retrieve a document from a "https://" server by connecting directly to
-the site, and also by connecting through a proxy server (SSL tunneling).
+how to retrieve a document from a "https://" server, at a lower level, by
+connecting directly to the site, and also by connecting through a proxy server
+(SSL tunneling).
 
 AmiSSL provides essentially the same functionality as OpenSSL, but there are a
 few differences as a result of the limited Amiga shared library model.
@@ -46,9 +47,9 @@ if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 	{
 		if(OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
 		                  AmiSSL_UsesOpenSSLStructs, TRUE or FALSE,
-		                  AmiSSL_InterfacePtr, &IAmiSSL,
-		                  AmiSSL_ErrNoPtr, &errno,
+		                  AmiSSL_GetIAmiSSL, &IAmiSSL,
 		                  AmiSSL_ISocket, ISocket,
+		                  AmiSSL_ErrNoPtr, &errno,
 		                  ..., TAG_DONE) == 0)
 		{
 			CloseAmiSSL();
@@ -61,10 +62,10 @@ if((AmiSSLMasterBase = OpenLibrary("amisslmaster.library",
 #else
 	if(OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
 	                  AmiSSL_UsesOpenSSLStructs, TRUE or FALSE,
-	                  AmiSSL_LibBasePtr, &AmiSSLBase,
-	                  AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
-	                  AmiSSL_ErrNoPtr, &errno,
+	                  AmiSSL_GetAmiSSLBase, &AmiSSLBase,
+	                  AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,
 	                  AmiSSL_SocketBase, SocketBase,
+	                  AmiSSL_ErrNoPtr, &errno,
 	                  ..., TAG_DONE) == 0)
 	{
 		CloseAmiSSL();
@@ -116,21 +117,28 @@ new version and the old version can be deleted.
 
 Migration from AmiSSL v4 to v5
 ------------------------------
-AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.0.x, but
-fortunately you will usually not need to make any changes to your OpenSSL code,
-as most things are actually backwards compatible (most functions that have been
-removed or changed will automatically be replaced by macros in the OpenSSL
-header files). The main difference is that due to the shear amount of OpenSSL
-functions available, we had to split them across two library bases on OS3 which
-meant the addition of AmiSSLExtBase. The only time you will really be aware of
-this is the need to start using OpenAmiSSLTags() in place of InitAmiSSLMaster(),
-OpenAmiSSL() and InitAmiSSL(). Unless you specify AmiSSL_InitAmiSSL as FALSE,
-you should not call CleanupAmiSSL(), as CloseAmiSSL() will take care of this
-for you. However, the procedure for subprocesses remains the same - they must
-continue to both call InitAmiSSL() and CleanupAmiSSL() if sharing the AmiSSL
-instance from the parent task where OpenSSLTags() was called. For OS4 only,
-you can even get away with not using OpenSSLTags() and make no changes to
-your code, but we recommend switching to OpenSSLTags().
+AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.0, but
+fortunately you will not usually need to make any changes to your code, as most
+things are actually backwards compatible (most functions that have been removed
+or changed will be replaced by macros in the OpenSSL header files). However, we
+encourage developers to use the new OpenAmiSSLTags() function, in place of
+InitAmiSSLMaster(), OpenAmiSSL() and InitAmiSSL() (these functions will still
+continue to operate as before). Details of OpenSSL changes are available at
+https://www.openssl.org/docs/manmaster/man7/migration_guide.html.
+
+Due to the shear amount of OpenSSL 3.0 API functions available, we had to split
+them across two library bases on OS3 which meant the addition of AmiSSLExtBase.
+AmiSSLExtBase can be obtained using the AmiSSL_GetAmiSSLExtBase tag in
+OpenAmiSSLTags() (or alternatively, in InitAmiSSL() if you wish to keep using
+the old functions). Applications that do not use OpenSSL heavily, you may well
+not use any of the new OpenSSL 3.0 functions (which may get called indirectly)
+and therefore no changes at all will be required in the code as AmiSSSLExtBase
+is not required. This does not apply to OS4, where there is one single
+interface as before.
+
+The procedure for subprocesses remains unchanged - they must continue to call
+InitAmiSSL() and CleanupAmiSSL() if sharing the AmiSSL instance from the parent
+task where OpenAmiSSLTags() was called.
 
 Migration from AmiSSL v3 to v4
 ------------------------------

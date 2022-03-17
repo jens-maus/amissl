@@ -175,55 +175,47 @@ amisslmaster.library/OpenAmiSSLTagList
 
    TAGS
 	AmiSSL_APIVersion - (LONG) The minimum AmiSSL/OpenSSL version that
-	    you wish to open (see <libraries/amisslmaster.h> for valid
-	    values. The library may choose to automatically open a newer
-	    version, if backwards compatible with your choice. If you need
-	    to compile a program specifically for OpenSSL 1.1.1m API, for
-	    example, you need to use the SDK in which AMISSL_CURRENT_VERSION
-	    is AMISSL_V111m (required). (V5)
+	    you wish to open (see <libraries/amisslmaster.h> for valid values.
+	    The library may choose to automatically open a newer version, if
+	    backwards compatible with your choice. If you need to compile a
+	    program specifically for OpenSSL 1.1.1m API, for example, you need
+	    to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V111m
+	    (required). (V5)
 
 	AmiSSL_UsesOpenSSLStructs - (BOOL) Indicate whether your application
 	    directly references or allocates any of the non-opaque structure
-	    definitions in the OpenSSL header files. It is encouraged that
-	    specify FALSE and completely avoid using any structures directly,
-	    as it means your application will not be restricted to an old
-	    AmiSSL version in the future. If you are not sure or need to use
-	    any of these structures, you must specify TRUE. This is not so
-	    much of an issue since OpenSSL 1.1.0 as most public structures
-	    were made opaque, with functions added to access them. Everytime
-	    the OpenSSL team modify public structures, it means that AmiSSL
-	    cannot automatically upgrade the OpenSSL version used by your
-	    application - recompilation will be required with the new SDK.
+	    definitions in the OpenSSL header files. Where possible, it is
+	    encouraged to set this to FALSE and completely avoid using any
+	    structures directly, as it means your application will not be
+	    restricted to an old AmiSSL version in the future. If you are not
+	    sure or need to use any of these structures, you must specify TRUE.
+	    This is not so much of an issue since OpenSSL 1.1.0 as most public
+	    structures were made opaque, with functions added to access them.
+	    Everytime the OpenSSL team modify public structures, it means that
+	    AmiSSL cannot automatically upgrade the OpenSSL version used by
+	    your application - recompilation will be required with the new SDK.
 	    These structures are not scheduled to be altered in any future
 	    OpenSSL 3.x.x versions, but may do so in the next major version
 	    (required). (V5)
 
-	AmiSSL_LibBasePtr - (struct Library **) Pointer to your AmiSSLBase
+	AmiSSL_InitAmiSSL - (BOOL) Indicate whether to call InitAmiSSL(). If
+	    set to TRUE, InitAmiSSL() will be called and CloseAmiSSL() will
+	    also call CleanupAmiSSL(). You may also pass any of the tags
+	    listed for InitAmiSSL(). Otherwise, if specifying FALSE, you will
+	    need to call InitAmiSSL() and CleanupAmiSSL() yourself
+	    (defaults to TRUE). (V5)
+
+	AmiSSL_GetAmiSSLBase - (struct Library **) Pointer to your AmiSSLBase
 	    variable for AmigaOS 3.x. If successful, this function will set
 	    this to the opened library. DO NOT call CloseLibrary() on this as
 	    CloseAmiSSL() takes care of it. Not needed in AmigaOS 4.x
 	    applications. (V5)
 
-	AmiSSL_LibExtBasePtr - (struct Library **) Pointer to your
-	    AmiSSLExtBase variable for AmigaOS 3.x. Because of the sheer
-	    number of available public functions in OpenSSL, AmiSSL v5 spans
-	    two library bases. If successful, this function will set this to
-	    the opened library, if you have also set AmiSSL_InitAmiSSL to
-	    TRUE. DO NOT call CloseLibrary() on this as CloseAmiSSL() takes
-	    care of it. Not needed in AmigaOS 4.x applications. (V5)
-
-	AmiSSL_InterfacePtr - (struct AmiSSLIFace **) Pointer to your IAmiSSL
+	AmiSSL_GetIAmiSSL - (struct AmiSSLIFace **) Pointer to your IAmiSSL
 	    variable for AmigaOS 4.x. If successful, this function will set
 	    this to the main interface, saving you from needing to call
-	    GetInterface(). If providing this, DO NOT call DropInterface() on
-	    IAmiSSL as CloseAmiSSL() takes care of it. (V5)
-
-	AmiSSL_InitAmiSSL - Boolean value indicating whether to call
-	    InitAmiSSL(). If set to TRUE, InitAmiSSL() will be called and
-	    CloseAmiSSL() will also call CleanupAmiSSL(). You may also pass
-	    any of the tags listed for InitAmiSSL(). Otherwise, if specifying
-	    FALSE, you will need to call InitAmiSSL() and CleanupAmiSSL()
-	    yourself (defaults to TRUE). (V5)
+	    GetInterface(). DO NOT call DropInterface() on this pointer as
+	    CloseAmiSSL() takes care of it. (V5)
 	
    RESULTS
 	error - returns 0 on success or non-zero on failure.

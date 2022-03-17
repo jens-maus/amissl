@@ -239,19 +239,19 @@ static SSL_CTX *Init(void)
 		Printf("Couldn't get AmiSSLMaster interface!\n");
 # if defined(__amigaos4__)
         else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
-                                AmiSSL_UsesOpenSSLStructs, FALSE,
-                                AmiSSL_InterfacePtr, &IAmiSSL,
-                                AmiSSL_ErrNoPtr, &errno,
-                                AmiSSL_ISocket, ISocket,
-                                TAG_DONE) != 0)
+	                        AmiSSL_UsesOpenSSLStructs, FALSE,
+	                        AmiSSL_GetIAmiSSL, &IAmiSSL,
+	                        AmiSSL_ISocket, ISocket,
+	                        AmiSSL_ErrNoPtr, &errno,
+	                        TAG_DONE) != 0)
 # else
 	else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
-                                AmiSSL_UsesOpenSSLStructs, FALSE,
-                                AmiSSL_LibBasePtr, &AmiSSLBase,
-	                        AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
-                                AmiSSL_ErrNoPtr, &errno,
-                                AmiSSL_SocketBase, SocketBase,
-                                TAG_DONE) != 0)
+	                        AmiSSL_UsesOpenSSLStructs, FALSE,
+	                        AmiSSL_GetAmiSSLBase, &AmiSSLBase,
+	                        AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,
+	                        AmiSSL_SocketBase, SocketBase,
+	                        AmiSSL_ErrNoPtr, &errno,
+	                        TAG_DONE) != 0)
 # endif
 		Printf("Couldn't open and initialize AmiSSL!\n");
 	else if (!(ctx = SSL_CTX_new(TLS_client_method())))

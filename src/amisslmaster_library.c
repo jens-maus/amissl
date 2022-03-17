@@ -52,9 +52,6 @@ struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
 
 struct Library * AmiSSLBase = NULL;
-#ifdef __amigaos4__
-struct AmiSSLIFace * IAmiSSL = NULL;
-#endif
 
 #if defined(__amigaos4__)
 struct Library *IntuitionBase = NULL;
@@ -381,6 +378,10 @@ LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE))
   {
     if(AmiSSLInitialised)
     {
+#ifdef __amigaos4__
+      struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)AmiSSLBase + AmiSSLBase->lib_PosSize);
+      struct AmiSSLIFace *IAmiSSL = (struct AmiSSLIFace *)ExtLib->MainIFace;
+#endif
       CleanupAmiSSLA(NULL);
     }
     CloseLib(AmiSSLBase);
@@ -503,18 +504,10 @@ LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagIt
   {
     if(OpenAmiSSL())
     {
-      struct Library **libBasePtr;
-
 #ifdef __amigaos4__
-      struct AmiSSLIFace **ifacePtr;
       struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)AmiSSLBase + AmiSSLBase->lib_PosSize);
-      IAmiSSL = (struct AmiSSLIFace *)ExtLib->MainIFace;
-      ifacePtr = (struct AmiSSLIFace **)GetTagData(AmiSSL_InterfacePtr,(ULONG)NULL,tagList);
-      if(ifacePtr) *ifacePtr = IAmiSSL;
+      struct AmiSSLIFace *IAmiSSL = (struct AmiSSLIFace *)ExtLib->MainIFace;
 #endif
-      libBasePtr = (struct Library **)GetTagData(AmiSSL_LibBasePtr,(ULONG)NULL,tagList);
-      if(libBasePtr) *libBasePtr = AmiSSLBase;
-
       if(GetTagData(AmiSSL_InitAmiSSL,TRUE,tagList))
       {
         if(InitAmiSSLA(tagList) == 0)
@@ -526,6 +519,17 @@ LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagIt
           CloseAmiSSL();
           err = 3;
         }
+      }
+      else
+      {
+        struct Library **libBasePtr;
+#ifdef __amigaos4__
+        struct AmiSSLIFace **ifacePtr;
+        ifacePtr = (struct AmiSSLIFace **)GetTagData(AmiSSL_GetIAmiSSL,(ULONG)NULL,tagList);
+        if(ifacePtr) *ifacePtr = IAmiSSL;
+#endif
+        libBasePtr = (struct Library **)GetTagData(AmiSSL_GetAmiSSLBase,(ULONG)NULL,tagList);
+        if(libBasePtr) *libBasePtr = AmiSSLBase;
       }
     }
     else

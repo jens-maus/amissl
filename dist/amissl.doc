@@ -11,15 +11,16 @@ amissl.library/SSL_CIPHER_get_mac
 
    PURPOSE
 	The amissl.library contains the public OpenSSL API functions. There are
-	too many to list and document here, but you can find documentation on the
-	OpenSSL API at https://www.openssl.org/docs/manmaster/man3. Instead, only
-	the AmiSSL specific functions are documented here.
+	too many to list and document here, but you can find documentation on
+	the OpenSSL API at https://www.openssl.org/docs/manmaster/man3.
+	Instead, only the AmiSSL specific functions are documented here.
 
-	Since AmiSSL v2, you must not open this library directly, but instead
-	use amisslmaster.library/OpenAmiSSL() to do so and then call InitAmiSSL()
-	before you can start using OpenSSL functions. This is because multiple
-	versions of AmiSSL can be installed at the same time with the libraries
-	named of the form amissl_v<version>.library.
+	Since AmiSSL v2, you must not open this library directly. In AmiSSL v5
+	you should use use amisslmaster.library/OpenAmiSSLTags() instead.
+	In AmiSSL v2/v3/v4, use amisslmaster.library/OpenAmiSSL() and then call
+	InitAmiSSL() before you can start using OpenSSL functions. This is
+	because multiple versions of AmiSSL can be installed at the same time
+	with the libraries named of the form amissl_v<version>.library.
 
 	Since AmiSSL v2, each opener gets their own unique baserel based
 	AmiSSLBase. This can be shared between different subprocesses.
@@ -45,11 +46,11 @@ amissl.library/SSL_CIPHER_get_mac
 	LONG CleanupAmiSSL( Tag, ... );
 
    FUNCTION
-	If you used amisslmaster.library/OpenSSLTags() to initialise AmiSSL,
-	you must not use this function, as amisslmaster.library/CloseAmiSSL()
-	will call it for you.
+	If using amisslmaster.library/OpenSSLTags() and the AmiSSL_InitAmiSSL
+	tag to initialise AmiSSL, you must not use this function,
+	as amisslmaster.library/CloseAmiSSL() will call it for you.
 
-	Otherwise, for each process using AmiSSL, where you made a successful
+	However, for each process using AmiSSL, where you made a successful
 	InitAmiSSLA() call, you	must pair it with a call to this function
 	to cleanup and process related resources. Failure to do so can cause
 	AmiSSL to crash. Once this function has been called, you must not use
@@ -83,7 +84,7 @@ amissl.library/SSL_CIPHER_get_mac
 	LONG InitAmiSSL( Tag, ... );
 
    FUNCTION
-	Usually, you will be using amisslmaster.library/OpenSSLTags to
+	Usually, you will be using amisslmaster.library/OpenSSLTags() to
 	initialise AmiSSL, so you should not need to use this function
 	in simple applications. If you have decided delay the initialisation,
 	this function must be called to initialise AmiSSL, once	opened,
@@ -100,6 +101,14 @@ amissl.library/SSL_CIPHER_get_mac
 	    parameters, or NULL.
 
    TAGS
+	AmiSSL_GetAmiSSLBase - (struct Library **) Pointer to your
+	    AmiSSLExtBase variable for AmigaOS 3.x. Because of the sheer
+	    number of available public functions in OpenSSL, AmiSSL v5 spans
+	    two library bases. If successful, this function will set this to
+	    the opened library. DO NOT call CloseLibrary() on this as
+	    CloseAmiSSL() takes care of it. Not needed in AmigaOS 4.x
+	    applications. (V5)
+
 	AmiSSL_SocketBase - (struct Library *) Pointer to the socket base. If
 	    the caller doesn't need any networking functionality, or if using
 	    AmiSSL_ISocket / AmiSSL_ISocketPtr for AmigaOS 4.x, this can be

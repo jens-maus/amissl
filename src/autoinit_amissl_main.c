@@ -268,17 +268,17 @@ CONSTRUCTOR(amissl)
     #if defined(__amigaos4__)
     err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
                          AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
-                         AmiSSL_InterfacePtr, &IAmiSSL,
-                         AmiSSL_ErrNoPtr, &errno,
+                         AmiSSL_GetIAmiSSL, &IAmiSSL,
                          AmiSSL_ISocket, ISocket,
+                         AmiSSL_ErrNoPtr, &errno,
                          TAG_DONE);
     #else
     err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
                          AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
-                         AmiSSL_LibBasePtr, &AmiSSLBase,
-                         AmiSSL_ExtLibBasePtr, &AmiSSLExtBase,
-                         AmiSSL_ErrNoPtr, &errno,
+                         AmiSSL_GetAmiSSLBase, &AmiSSLBase,
+                         AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,
                          AmiSSL_SocketBase, SocketBase,
+                         AmiSSL_ErrNoPtr, &errno,
                          TAG_DONE);
     #endif
     switch (err)
