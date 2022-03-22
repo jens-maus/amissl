@@ -43,6 +43,8 @@ Version 5.0 (x.x.2022):
   the new built-in HTTP client.
 - Added autodocs for all the Amiga specific interface functions.
 - Switched to the Apache License, Version 2.0.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 18.3.2022.
 
 Version 4.12 (11.2.2022):
 ------------------------
