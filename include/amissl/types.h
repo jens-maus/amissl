@@ -1,5 +1,5 @@
 #ifndef AMISSL_TYPES_H
-#define AMISSL_TYPES_H
+# define AMISSL_TYPES_H
 
 /***************************************************************************
 
@@ -25,13 +25,13 @@
 
 ***************************************************************************/
 
-#if defined(__SASC)
+# if defined(__SASC)
 
-#if !defined(_MACHINE_TYPES_H_) // include:amitcp/machine/types.h
+#  if !defined(_MACHINE_TYPES_H_) // include:amitcp/machine/types.h
 typedef signed char int8_t;
 typedef short int16_t;
 typedef int int32_t;
-#endif
+#  endif
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -42,16 +42,22 @@ typedef long int off_t;
 typedef int int64_t;
 typedef unsigned int uint64_t;
 
-#elif defined(__VBCC__)
+# else
 
+#  if defined(__VBCC__)
+/* sys/types.h */
 typedef long int off_t;
+#  endif
 
-#include <stdint.h>
+#  if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+#   include <inttypes.h>
+#   undef OPENSSL_NO_INTTYPES_H
+#  else
+#   include <stdint.h>
+#  endif
 
-#else
+#  undef OPENSSL_NO_STDINT_H
 
-#include <stdint.h>
-
-#endif
+# endif
 
 #endif /* !AMISSL_TYPES_H */
