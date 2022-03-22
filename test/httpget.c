@@ -39,8 +39,6 @@
 # define __USE_INLINE__
 #endif
 
-#include <sys/socket.h>
-#include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -50,7 +48,6 @@
 #include <proto/dos.h>
 #include <proto/amissl.h>
 #include <proto/amisslmaster.h>
-#include <proto/socket.h>
 
 #include <amissl/amissl.h>
 #include <libraries/amisslmaster.h>
