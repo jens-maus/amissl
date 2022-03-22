@@ -53,13 +53,19 @@
 #ifndef OPENSSL_NO_CAST
 #include <openssl/cast.h>
 #endif
+#ifndef OPENSSL_NO_CMAC
 #include <openssl/cmac.h>
+#endif
+#ifndef OPENSSL_NO_CMP
 #include <openssl/cmp.h>
+#endif
 #include <openssl/comp.h>
 #include <openssl/conf.h>
 #include <openssl/conf_api.h>
 #include <openssl/core.h>
+#ifndef OPENSSL_NO_CRMF
 #include <openssl/crmf.h>
+#endif
 #include <openssl/crypto.h>
 #ifndef OPENSSL_NO_CT
 #include <openssl/ct.h>
@@ -79,17 +85,12 @@
 #ifndef OPENSSL_NO_EC
 #include <openssl/ec.h>
 #endif
-#ifndef OPENSSL_NO_ECDH
-#include <openssl/ecdh.h>
-#endif
-#ifndef OPENSSL_NO_ECDSA
-#include <openssl/ecdsa.h>
-#endif
 #include <openssl/encoder.h>
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
 #include <openssl/err.h>
+#include <openssl/ess.h>
 #include <openssl/evp.h>
 #ifndef OPENSSL_NO_HMAC
 #include <openssl/hmac.h>
@@ -160,7 +161,9 @@
 #include <openssl/symhacks.h>
 #include <openssl/tls1.h>
 #include <openssl/trace.h>
+#ifndef OPENSSL_NO_TS
 #include <openssl/ts.h>
+#endif
 #include <openssl/txt_db.h>
 #include <openssl/types.h>
 #include <openssl/ui.h>

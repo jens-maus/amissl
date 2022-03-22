@@ -251,9 +251,15 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // older libraries that do not contain those required entries
     if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
     {
-      if(LibAPIVersion <= AMISSL_V302 && OpenLib(&AmiSSLBase,"302") == NULL
-                                      && OpenLib(&AmiSSLBase,"301") == NULL)
+      if(LibAPIVersion >= AMISSL_V302 || LibAPIVersion < AMISSL_V300)
+      {
+        OpenLib(&AmiSSLBase,"302");
+      }
+      if(!AmiSSLBase && LibAPIVersion <= AMISSL_V301)
+      {
+        if(OpenLib(&AmiSSLBase,"301") == NULL)
           OpenLib(&AmiSSLBase,"300");
+      }
     }
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
@@ -274,7 +280,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
               if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"110g") == NULL)
                 if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"110e") == NULL
                                                  && OpenLib(&AmiSSLBase,"110d") == NULL)
-                  OpenLib(&AmiSSLBase,"110c");
+		  if(LibAPIVersion == AMISSL_V110c) OpenLib(&AmiSSLBase,"110c");
     }
   }
   else if(LibAPIVersion == AMISSL_V102f)
@@ -294,7 +300,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // as they are API compatible
     if(LibAPIVersion <= AMISSL_V098y && OpenLib(&AmiSSLBase,"098y") == NULL)
       if(LibAPIVersion <= AMISSL_V097m && OpenLib(&AmiSSLBase,"097m") == NULL)
-        OpenLib(&AmiSSLBase,"097g");
+        if(LibAPIVersion == AMISSL_V097g) OpenLib(&AmiSSLBase,"097g");
   }
   else if(LibAPIVersion == AMISSL_V2)
   {

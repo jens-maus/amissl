@@ -77,7 +77,14 @@ HowTo update the OpenSSL version in "openssl/":
    include/xml/amissl.xml
 
    When changing the "include/xml/amissl.xml" file the following rules apply:
-   -> don't remove any function, but instead flag them as "unimplemented"
+   -> functions should be renamed, only if the OpenSSL team has simply replaced
+      the old name with a macro mapping to the new name and there are no changes
+      in the parameters, otherwise...
+   -> if functions are removed by the OpenSSL team and mapped to a new function
+      instead, using a macro with differing parameters, simply add the "OBSOLETE_"
+      prefix to the name (the macro will then get used in the stub function for
+      backwards compatibility). If no macro exists...
+   -> don't remove any function, but instead flag them as "unimplemented".
    -> only add new functions to the bottom of the xml file and not between
       existing function definitions.
    -> 'va_list' types won't work, have a look at how "long *" is used instead
@@ -109,7 +116,7 @@ HowTo update the OpenSSL version in "openssl/":
    $ cd src
    $ ./mkidl.sh
 
-   Please note that this will only work if you have the latest idltool (53.28 being
+   Please note that this will only work if you have the latest idltool (53.32 being
    the current minimum requirement), etc. installed in your cross compiler environment.
 
 6. Check "include/amissl/amissl.h" to directly include all existing header files
@@ -135,7 +142,7 @@ HowTo update the OpenSSL version in "openssl/":
    if(LibAPIVersion == AMISSL_V30x)
    {
     [...]
-    OpenLib(&AmiSSLBase,"libs:amissl/amissl_v300.library", 5);
+    OpenLib(&AmiSSLBase,"300");
     [...]
    }
    -- cut here --

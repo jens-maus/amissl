@@ -1,5 +1,5 @@
---- amissl_glue.c	2022-02-26 17:14:30.758785970 +0000
-+++ amissl_glue.c_patched	2022-02-26 17:15:36.207466807 +0000
+--- amissl_glue.c	2022-03-22 13:17:33.055034755 +0000
++++ amissl_glue.c_patched	2022-03-22 13:17:14.927025872 +0000
 @@ -4,7 +4,13 @@
  
  /***************************************************************************/
@@ -72,7 +72,7 @@
  
  // ---
  
-@@ -26137,7 +26162,13 @@
+@@ -26452,7 +26477,13 @@
  
  int SAVEDS ASM LIB_OBSOLETE_RSA_X931_derive_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, BIGNUM * p1), REG(a2, BIGNUM * p2), REG(a3, BIGNUM * q1), REG(d0, BIGNUM * q2), REG(d1, const BIGNUM * Xp1), REG(d2, const BIGNUM * Xp2), REG(d3, const BIGNUM * Xp), REG(d4, const BIGNUM * Xq1), REG(d5, const BIGNUM * Xq2), REG(d6, const BIGNUM * Xq), REG(d7, const BIGNUM * e), REG(a4, BN_GENCB * cb))
  {

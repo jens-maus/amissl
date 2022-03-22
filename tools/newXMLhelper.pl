@@ -41,6 +41,9 @@ $includes="../openssl/include/openssl";
 @includes_ignore=("safestack.h","asn1_mac.h");
 $tmp_dir="newXML";
 
+$re_unimplemented= qr/(STDIO|KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128)/;
+$re_ignore= qr/(STDIO|SSL_TRACE|CRYPTO_MDEBUG|UNIT_TEST)/;
+
 #######################################################################
 
 use constant DONE_NONE => 0x00;
@@ -71,9 +74,9 @@ sub get_new_symbols {
          $columns[3] =~ /^EXIST:EXPORT_VAR_AS_FUNCTION.*:FUNCTION:.*/ ||
          $columns[3] =~ /^EXIST::FUNCTION:.*/)
       {
-         if ($idl !~ /name="$columns[0]"/ ) {
+         if ($idl !~ /name="(OBSOLETE_)*$columns[0](_amiga.*)*"/ && $columns[3] !~ $re_ignore) {
             my $unimplemented = 0;
-            if ($columns[3] =~ /(STDIO|KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128)/) {
+            if ($columns[3] =~ $re_unimplemented) {
                $unimplemented = 1;
             }
             push @symbols, { name => $columns[0], unimplemented => $unimplemented, xml => "", done => DONE_NONE };
@@ -279,7 +282,7 @@ sub parse_header {
       $/ = ";";
 #     if ($file_content =~ /$symbol\([^\)]+;/ ) {
 #     if ($file_content =~ /$symbol(\([\w\s\(\)\*,]+\));/ ) {
-      if ($file_content =~ /$symbol(\([\d\D]+\));/ ) {
+      if ($file_content =~ /\(?$symbol\)?(\([\d\D]+\));/ ) {
          my $xml;
          my $offset = $-[0] - 128;
          if ($offset < 0) {
@@ -287,7 +290,7 @@ sub parse_header {
          }
          my $str = substr($file_content, $offset, $+[0]-$offset);
 #        if ($str =~ /((const\s+)?\w+\s+(\**\s*)?)$symbol\(([^;]+)/ ) {
-         if ($str =~ /((const\s+)?((unsigned|signed|struct)\s+)?[\w\(\)]+\s+(\**\s*)?)$symbol\(([^;]+)/ ) {
+         if ($str =~ /((const\s+)?((unsigned|signed|struct)\s+)?[\w\(\)]+\s+(\**\s*)?)\(?$symbol\)?\(([^;]+)/ ) {
             # function definition with non-function pointer result
             my $return_type = trim($1);
             my $params = trim($6);

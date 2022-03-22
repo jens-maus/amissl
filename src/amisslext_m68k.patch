@@ -1,5 +1,5 @@
---- amisslext_m68k.c	2022-01-24 17:13:49.172538669 +0000
-+++ amisslext_m68k.c_patched	2022-01-24 17:15:27.274195733 +0000
+--- amisslext_m68k.c	2022-03-21 20:31:25.159124470 +0000
++++ amisslext_m68k.c_patched	2022-03-21 20:31:02.203923837 +0000
 @@ -38,6 +38,7 @@
  
  /***************************************************************************/
@@ -16,7 +16,7 @@
  
  // ---
  
-@@ -15765,10 +15767,10 @@
+@@ -14752,10 +14754,10 @@
  
  CONST CONST_APTR ext_VecTable68K[] =
  {
@@ -28,6 +28,6 @@
 +	NULL,
 +	NULL,
 +	NULL,
- 	&stub_ext_SSL_CTX_set_async_callback,
- 	&stub_ext_SSL_CTX_set_async_callback_arg,
- 	&stub_ext_SSL_set_async_callback,
+ 	&stub_ext_OSSL_trace_enabled,
+ 	&stub_ext_OSSL_trace_begin,
+ 	&stub_ext_OSSL_trace_end,
