@@ -81,16 +81,18 @@ HowTo update the OpenSSL version in "openssl/":
       the old name with a macro mapping to the new name and there are no changes
       in the parameters, otherwise...
    -> if functions are removed by the OpenSSL team and mapped to a new function
-      instead, using a macro with differing parameters, simply add the "OBSOLETE_"
-      prefix to the name (the macro will then get used in the stub function for
-      backwards compatibility). If no macro exists...
+      instead, using a macro with differing parameters, simply add the
+      "OBSOLETE_" prefix to the name (the macro will then get used in the stub
+      function for backwards compatibility). If no macro exists...
    -> don't remove any function, but instead flag them as "unimplemented".
    -> only add new functions to the bottom of the xml file and not between
       existing function definitions.
    -> 'va_list' types won't work, have a look at how "long *" is used instead
       (e.g. for BIO_printf)
    -> be sure to declare varargs functions directly after their stdargs
-      counterpart, as this is critical for the m68k build.
+      counterpart, as this is critical for the m68k build. If there is only a
+      varargs function and no stdargs function, you will need to create one
+      (e.g. EVP_PKEY_Q_keygen - we added EVP_PKEY_Q_vkeygen ourselves)
    -> follow existing m68k register allocation rules, prioritising d0-d7 for
       non-pointer arguments and a0-a3 for pointers, incrementally using them in
       the order of the arguments. Do not use any other registers (a4 and a5 are
