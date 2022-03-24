@@ -155,8 +155,8 @@ VERSION=5
 VERSIONNAME=302
 AMISSLREVISION=0
 AMISSLMASTERREVISION=0
-AMISSLDATE=15.3.2022
-AMISSLMASTERDATE=15.3.2022
+AMISSLDATE=23.3.2022
+AMISSLMASTERDATE=23.3.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -206,10 +206,10 @@ ifeq ($(OS), os4)
   CRT       = clib2
   CPU       = -mcpu=powerpc -mstrict-align
   WARN      += -Wdeclaration-after-statement -Wdisabled-optimization
-  APPCFLAGS += -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames -specs=tools/gcc-os4.specs
-  AINLCFLAGS = $(COMCFLAGS) -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
-  CFLAGS    += -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
-  LDFLAGS   += -mcrt=$(CRT) -specs=tools/gcc-os4.specs
+  APPCFLAGS += -std=c99 -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames -specs=tools/gcc-os4.specs
+  AINLCFLAGS = $(COMCFLAGS) -std=c99 -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS    += -std=c99 -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
+  LDFLAGS   += -std=c99 -mcrt=$(CRT) -specs=tools/gcc-os4.specs
   LDLIBS    += -lgcc
   BASEREL   = -mbaserel
   NOBASEREL = -mno-baserel

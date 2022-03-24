@@ -1229,7 +1229,7 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
 #if defined(__amigaos4__)
 void __baserel_get_addr(struct Interface *self);
 
-asm (" \n\
+__asm__ (" \n\
   .text               \n\
   .globl __baserel_get_addr    \n\
 __baserel_get_addr:    \n\

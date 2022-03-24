@@ -94,7 +94,7 @@ cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
 cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
 cp -a src/autoinit_amissl_main.c "release/AmiSSL/Developer/lib/"
 cp -a openssl/apps/openssl.cnf "release/AmiSSL/C/"
-cp -a build_os4/openssl/apps/CA.pl "release/AmiSSL/C/"
+cp -a build_os4/openssl/apps/*.pl "release/AmiSSL/C/"
 
 # create new OpenSSL.doc
 sh tools/openssldoc.sh > release/AmiSSL/Doc/OpenSSL.doc

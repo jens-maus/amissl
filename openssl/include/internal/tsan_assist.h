@@ -135,7 +135,7 @@
 
 # if defined(__amigaos4__) || defined(__MORPHOS__)
 #  define tsan_counter(ptr) \
-   ({ typeof (*(ptr)) res, tmp; \
+   ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx %0,0,%2\n" \
          "addi %1,%0,1\n" \
@@ -147,7 +147,7 @@
       res; \
    })
 #  define tsan_decr(ptr) \
-   ({ typeof (*(ptr)) res, tmp; \
+   ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx %0,0,%2\n" \
          "addi %1,%0,-1\n" \
