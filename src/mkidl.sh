@@ -53,6 +53,7 @@ csplit -s -n1 -f${tmp}/part ../include/xml/amissl.xml /###/ {*}
 cat ${tmp}/part0 ${tmp}/part1 ${tmp}/part3 > ${tmp}/amissl.xml
 idltool -g -m ${tmp}/amissl.xml -o ${tmp}
 cp ${tmp}/amissl_glue.h .
+patch ${tmp}/amissl_m68k.c < amissl_m68k.patch
 cp ${tmp}/amissl_m68k.c .
 cat ${tmp}/part0 ${tmp}/part2 ${tmp}/part3 > ${tmp}/amisslext.xml
 sed -i 's/basename=\"AmiSSLBase\"/basename=\"AmiSSLExtBase\"/' ${tmp}/amisslext.xml

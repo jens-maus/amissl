@@ -2204,6 +2204,8 @@ LIBSTUB(SHA1_Update, int);
 LIBSTUB(SHA1_Final, int);
 LIBSTUB(SHA1, unsigned char *);
 LIBSTUB(SHA1_Transform, void);
+LIBSTUB(UI_read_string_lib, int);
+LIBSTUB(UI_write_string_lib, int);
 LIBSTUB(HMAC_CTX_set_flags, void);
 LIBSTUB(X509_check_ca, int);
 LIBSTUB(PROXY_POLICY_new, PROXY_POLICY *);

@@ -15394,6 +15394,24 @@ void SAVEDS ASM LIB_SHA1_Transform(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SHA_
 
 // ---
 
+int UI_read_string_lib(UI * ui, UI_STRING * uis);
+
+int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
+{
+	return UI_read_string_lib(ui, uis);
+}
+
+// ---
+
+int UI_write_string_lib(UI * ui, UI_STRING * uis);
+
+int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
+{
+	return UI_write_string_lib(ui, uis);
+}
+
+// ---
+
 void SAVEDS ASM LIB_HMAC_CTX_set_flags(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx), REG(d0, unsigned long flags))
 {
 	HMAC_CTX_set_flags(ctx, flags);

@@ -20115,13 +20115,20 @@ STATIC CONST struct EmuTrap stub_main_UI_set_default_method = { TRAPINST, TRAPTY
 
 // ---
 
+const UI_METHOD *UI_get_default_method_68k(void);
+
+STATIC const UI_METHOD * __attribute__((baserel_restore)) LIB_UI_get_default_method_68k(UNUSED struct AmiSSLIFace *Self)
+{
+	return UI_get_default_method_68k();
+}
+
 STATIC const UI_METHOD * stub_main_UI_get_default_method_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
-	return Self->UI_get_default_method();
+	return LIB_UI_get_default_method_68k(Self);
 }
 STATIC CONST struct EmuTrap stub_main_UI_get_default_method = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_get_default_method_PPC };
 
@@ -20156,13 +20163,16 @@ STATIC CONST struct EmuTrap stub_main_UI_set_method = { TRAPINST, TRAPTYPE, (uin
 
 // ---
 
-STATIC UI_METHOD * stub_main_UI_OpenSSL_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+UI_METHOD *UI_OpenSSL_68k(void);
 
-	return Self->UI_OpenSSL();
+STATIC UI_METHOD * stub_main_UI_OpenSSL_PPC(UNUSED uint32 *regarray)
+{
+	/* This would need to be added to the interface and called through
+	 * Self->UI_OpenSSL_68k() mechanism to have baserel stuff work correctly,
+  	 * but since it's returning a pointer to constant (common to all openers)
+  	 * structure, it will work like this, too.
+	 */
+	return UI_OpenSSL_68k();
 }
 STATIC CONST struct EmuTrap stub_main_UI_OpenSSL = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_OpenSSL_PPC };
 
@@ -32728,6 +32738,36 @@ STATIC void stub_main_SHA1_Transform_PPC(uint32 *regarray)
 	);
 }
 STATIC CONST struct EmuTrap stub_main_SHA1_Transform = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_SHA1_Transform_PPC };
+
+// ---
+
+STATIC int stub_main_UI_read_string_lib_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->UI_read_string_lib(
+		(UI *)regarray[REG68K_A0/4],
+		(UI_STRING *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_UI_read_string_lib = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_read_string_lib_PPC };
+
+// ---
+
+STATIC int stub_main_UI_write_string_lib_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->UI_write_string_lib(
+		(UI *)regarray[REG68K_A0/4],
+		(UI_STRING *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_main_UI_write_string_lib = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_UI_write_string_lib_PPC };
 
 // ---
 
@@ -74692,8 +74732,8 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_SHA1_Final,
 	&stub_main_SHA1,
 	&stub_main_SHA1_Transform,
-	&stub_main_UNIMPLEMENTED, /* UI_read_string_lib */
-	&stub_main_UNIMPLEMENTED, /* UI_write_string_lib */
+	&stub_main_UI_read_string_lib,
+	&stub_main_UI_write_string_lib,
 	&stub_main_HMAC_CTX_set_flags,
 	&stub_main_X509_check_ca,
 	&stub_main_PROXY_POLICY_new,

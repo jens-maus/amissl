@@ -1,5 +1,5 @@
---- amissl_glue.c	2022-03-22 13:17:33.055034755 +0000
-+++ amissl_glue.c_patched	2022-03-22 13:17:14.927025872 +0000
+--- amissl_glue.c	2022-03-26 13:15:21.414382815 +0000
++++ amissl_glue.c_patched	2022-03-26 13:15:15.750381865 +0000
 @@ -4,7 +4,13 @@
  
  /***************************************************************************/
@@ -72,7 +72,25 @@
  
  // ---
  
-@@ -26452,7 +26477,13 @@
+@@ -15369,6 +15394,8 @@
+ 
+ // ---
+ 
++int UI_read_string_lib(UI * ui, UI_STRING * uis);
++
+ int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
+ {
+ 	return UI_read_string_lib(ui, uis);
+@@ -15376,6 +15403,8 @@
+ 
+ // ---
+ 
++int UI_write_string_lib(UI * ui, UI_STRING * uis);
++
+ int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
+ {
+ 	return UI_write_string_lib(ui, uis);
+@@ -26466,7 +26495,13 @@
  
  int SAVEDS ASM LIB_OBSOLETE_RSA_X931_derive_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, BIGNUM * p1), REG(a2, BIGNUM * p2), REG(a3, BIGNUM * q1), REG(d0, BIGNUM * q2), REG(d1, const BIGNUM * Xp1), REG(d2, const BIGNUM * Xp2), REG(d3, const BIGNUM * Xp), REG(d4, const BIGNUM * Xq1), REG(d5, const BIGNUM * Xq2), REG(d6, const BIGNUM * Xq), REG(d7, const BIGNUM * e), REG(a4, BN_GENCB * cb))
  {

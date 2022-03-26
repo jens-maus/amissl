@@ -39,6 +39,8 @@ Version 5.0 (x.x.2022):
   such as a built-in HTTP(S) client, along with security and bug fixes.
 - Added new streamlined OpenAmiSSLTags/TagList() function to
   amisslmaster.library which simplifies the opening of AmiSSL.
+- Fixed OpenSSL UI function m68k/ppc crosscalls, reinstating code from
+  AmiSSL v3, that was unfortunately removed in AmiSSL v4.
 - Added simple httpget example code which shows how applications can use
   the new built-in HTTP client.
 - Added autodocs for all the Amiga specific interface functions.

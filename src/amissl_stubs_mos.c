@@ -22128,6 +22128,26 @@ void LIBSTUB_SHA1_Transform(void)
   return LIB_SHA1_Transform(_base, ___c, ___data);
 }
 
+int LIB_UI_read_string_lib(struct Library * _base, UI * ___ui, UI_STRING * ___uis);
+
+int LIBSTUB_UI_read_string_lib(void)
+{
+  UI * ___ui = (UI *)REG_A0;
+  UI_STRING * ___uis = (UI_STRING *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_UI_read_string_lib(_base, ___ui, ___uis);
+}
+
+int LIB_UI_write_string_lib(struct Library * _base, UI * ___ui, UI_STRING * ___uis);
+
+int LIBSTUB_UI_write_string_lib(void)
+{
+  UI * ___ui = (UI *)REG_A0;
+  UI_STRING * ___uis = (UI_STRING *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_UI_write_string_lib(_base, ___ui, ___uis);
+}
+
 void LIB_HMAC_CTX_set_flags(struct Library * _base, HMAC_CTX * ___ctx, unsigned long ___flags);
 
 void LIBSTUB_HMAC_CTX_set_flags(void)

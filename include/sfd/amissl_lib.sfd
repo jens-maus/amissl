@@ -2273,7 +2273,11 @@ int SHA1_Update(SHA_CTX * c, const void * data, unsigned long len) (a0,a1,d0)
 int SHA1_Final(unsigned char * md, SHA_CTX * c) (a0,a1)
 unsigned char * SHA1(const unsigned char * d, unsigned long n, unsigned char * md) (a0,d0,a1)
 void SHA1_Transform(SHA_CTX * c, const unsigned char * data) (a0,a1)
-==reserve 2
+==private
+int UI_read_string_lib(UI * ui, UI_STRING * uis) (a0,a1)
+==private
+int UI_write_string_lib(UI * ui, UI_STRING * uis) (a0,a1)
+==public
 void HMAC_CTX_set_flags(HMAC_CTX * ctx, unsigned long flags) (a0,d0)
 int X509_check_ca(X509 * x) (a0)
 PROXY_POLICY * PROXY_POLICY_new() ()

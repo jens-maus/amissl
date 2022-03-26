@@ -2236,6 +2236,8 @@ int SAVEDS ASM LIB_SHA1_Update(REG(a6, __IFACE_OR_BASE), REG(a0, SHA_CTX * c), R
 int SAVEDS ASM LIB_SHA1_Final(REG(a6, __IFACE_OR_BASE), REG(a0, unsigned char * md), REG(a1, SHA_CTX * c));
 unsigned char * SAVEDS ASM LIB_SHA1(REG(a6, __IFACE_OR_BASE), REG(a0, const unsigned char * d), REG(d0, unsigned long n), REG(a1, unsigned char * md));
 void SAVEDS ASM LIB_SHA1_Transform(REG(a6, __IFACE_OR_BASE), REG(a0, SHA_CTX * c), REG(a1, const unsigned char * data));
+int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
+int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
 void SAVEDS ASM LIB_HMAC_CTX_set_flags(REG(a6, __IFACE_OR_BASE), REG(a0, HMAC_CTX * ctx), REG(d0, unsigned long flags));
 int SAVEDS ASM LIB_X509_check_ca(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 PROXY_POLICY * SAVEDS ASM LIB_PROXY_POLICY_new(REG(a6, __IFACE_OR_BASE));
@@ -7402,8 +7404,8 @@ int SAVEDS ASM LIB_OSSL_trace_set_callback(REG(a6, __IFACE_OR_BASE), REG(d0, int
     LFUNC_FA_(SHA1_Final) \
     LFUNC_FA_(SHA1) \
     LFUNC_FA_(SHA1_Transform) \
-    LFUNC_FA_(UNIMPLEMENTED) /* UI_read_string_lib */ \
-    LFUNC_FA_(UNIMPLEMENTED) /* UI_write_string_lib */ \
+    LFUNC_FA_(UI_read_string_lib) \
+    LFUNC_FA_(UI_write_string_lib) \
     LFUNC_FA_(HMAC_CTX_set_flags) \
     LFUNC_FA_(X509_check_ca) \
     LFUNC_FA_(PROXY_POLICY_new) \

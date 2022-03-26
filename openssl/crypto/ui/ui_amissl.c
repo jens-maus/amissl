@@ -122,7 +122,7 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 }
 
 /* This is modeled per OpenSSL write_string. The design *is* a bit weird... */
-static int UI_write_string_lib(UI *ui, UI_STRING *uis)
+int UI_write_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type;
 
@@ -138,7 +138,7 @@ static int UI_write_string_lib(UI *ui, UI_STRING *uis)
 	return(1);
 }
 
-static int UI_read_string_lib(UI *ui, UI_STRING *uis)
+int UI_read_string_lib(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
 
@@ -234,16 +234,16 @@ static UI_METHOD ui_amissl =
 	NULL, /* construct prompt */
 };
 
-static const UI_METHOD *default_UI_meth = &ui_amissl;
+static const UI_METHOD *default_UI_meth = NULL;
 
 void UI_set_default_method(const UI_METHOD *meth)
 {
-    default_UI_meth = meth;
+	default_UI_meth = meth;
 }
 
 const UI_METHOD *UI_get_default_method(void)
 {
-    return default_UI_meth;
+	return default_UI_meth ? default_UI_meth : &ui_amissl;
 }
 
 UI_METHOD *UI_OpenSSL(void)
@@ -257,11 +257,23 @@ UI_METHOD *UI_OpenSSL(void)
 
 int read_string_cb(UI *ui, UI_STRING *uis)
 {
+	SETUPSTATE();
+#ifdef __amigaos4__
+	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+#else
+	struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif
 	return UI_read_string_lib(ui,uis);
 }
 
 int write_string_cb(UI *ui, UI_STRING *uis)
 {
+	SETUPSTATE();
+#ifdef __amigaos4__
+	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+#else
+	struct Library *AmiSSLBase=state->AmiSSLBase;
+#endif
 	return UI_write_string_lib(ui,uis);
 }
 
@@ -291,7 +303,7 @@ static const struct AmiSSLEmuTrap read_string_emul = {
 	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
 	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
 	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
-	0x4EAE,0xC508,	// JSR         -$3AF8(A6)
+	0x4EAE,0xC53E,	// JSR         -$3AC2(A6)
 	0x2C5F,		// MOVEA.L     (A7)+,A6
 	0x4E75		// RTS
   },
@@ -308,7 +320,7 @@ static const struct AmiSSLEmuTrap write_string_emul = {
 	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
 	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
 	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
-	0x4EAE,0xC502,	// JSR         -$3AFE(A6)
+	0x4EAE,0xC538,	// JSR         -$3AC8(A6)
 	0x2C5F,		// MOVEA.L     (A7)+,A6
 	0x4E75	  // RTS
   },
@@ -332,6 +344,11 @@ static const UI_METHOD ui_amissl_68k =
 	(int (*)(UI *))nop_method_emul, /* close session */
 	NULL, /* construct prompt */
 };
+
+const UI_METHOD *(UI_get_default_method_68k)(void)
+{
+	return default_UI_meth ? default_UI_meth : &ui_amissl_68k;
+}
 
 UI_METHOD *UI_OpenSSL_68k(void)
 {

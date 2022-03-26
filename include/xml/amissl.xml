@@ -10301,11 +10301,11 @@
       <arg name="c" type="SHA_CTX *" m68kreg="a0"/>
       <arg name="data" type="const unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="UI_read_string_lib" result="int" status="unimplemented">
+    <method name="UI_read_string_lib" result="int" status="private">
       <arg name="ui" type="UI *" m68kreg="a0"/>
       <arg name="uis" type="UI_STRING *" m68kreg="a1"/>
     </method>
-    <method name="UI_write_string_lib" result="int" status="unimplemented">
+    <method name="UI_write_string_lib" result="int" status="private">
       <arg name="ui" type="UI *" m68kreg="a0"/>
       <arg name="uis" type="UI_STRING *" m68kreg="a1"/>
     </method>
