@@ -240,7 +240,7 @@ ifeq ($(OS), os3-68020)
 
   # Compiler/Linker flags
   CPU       = -m68020-40 -msoft-float
-  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
+  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
   LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
@@ -268,7 +268,7 @@ ifeq ($(OS), os3-68060)
 
   # Compiler/Linker flags
   CPU       = -m68060 -msoft-float
-  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -DNO_INLINE_VARARGS -D__amigaos3__
+  APPCFLAGS += -mcrt=clib2 -I./include/netinclude -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
   LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
@@ -412,9 +412,12 @@ LINKLIBS = $(BUILD_D)/libamisslauto.a \
 
 LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
+APPS =  $(BUILD_D)/amisslmaster_test $(BUILD_D)/amissl_v$(VERSIONNAME)_test \
+        $(BUILD_D)/https $(BUILD_D)/httpget $(BUILD_D)/uitest $(BUILD_D)/vatest
+
 # main target
 .PHONY: all
-all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amissl_v$(VERSIONNAME)_test $(BUILD_D)/amisslmaster.library $(BUILD_D)/amisslmaster_test $(BUILD_D)/https $(BUILD_D)/httpget $(BUILD_D)/uitest $(BUILD_D)/vatest
+all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amisslmaster.library $(APPS)
 
 # for making a release we compile ALL target with no debug
 .PHONY: release
@@ -526,21 +529,21 @@ $(BUILD_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 	@echo "  CC/LD $@"
 	@$(CC) $(APPCFLAGS) -Wno-format -o $@ -DVERSIONNAME=$(VERSIONNAME) $^
 
-$(BUILD_D)/https: $(TEST_D)/https.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
+$(BUILD_D)/https: $(TEST_D)/https.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -DNO_INLINE_STDARG -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D)
 
-$(BUILD_D)/httpget: $(TEST_D)/httpget.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
+$(BUILD_D)/httpget: $(TEST_D)/httpget.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D)
 
 $(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -DNO_INLINE_VARARGS -o $@ $< -L$(BUILD_D) -lamisslauto -lamisslstubs
 
 $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -fno-strict-aliasing -o $@ $^ -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -DNO_INLINE_VARARGS -fno-strict-aliasing -o $@ $< -L$(BUILD_D) -lamisslauto -lamisslstubs
 
 ## SOURCES COMPILED WITHOUT BASEREL SUPPORT ##
 
