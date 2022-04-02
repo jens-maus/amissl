@@ -492,21 +492,16 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
   return result;
 }
 
-LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *tagList))
+LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(d0, LONG APIVersion), REG(a0, struct TagItem *tagList))
 {
   #if defined(__amigaos4__)
   struct AmiSSLMasterIFace *IAmiSSLMaster = __BASE_OR_IFACE_VAR;
   #else
   struct Library *AmiSSLMasterBase = __BASE_OR_IFACE_VAR;
   #endif
-  struct TagItem *apiVersion, *usesOpenSSLStructs;
   LONG err = 0;
 
-  apiVersion = FindTagItem(AmiSSL_APIVersion,tagList);
-  usesOpenSSLStructs = FindTagItem(AmiSSL_UsesOpenSSLStructs,tagList);
-
-  if(apiVersion && usesOpenSSLStructs &&
-     InitAmiSSLMaster(apiVersion->ti_Data,usesOpenSSLStructs->ti_Data))
+  if(InitAmiSSLMaster(APIVersion,GetTagData(AmiSSL_UsesOpenSSLStructs,TRUE,tagList)))
   {
     if(OpenAmiSSL())
     {
@@ -552,16 +547,16 @@ LIBPROTO(OpenAmiSSLTagList, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagIt
 }
 
 #ifdef __amigaos4__
-LIBPROTOVA(OpenAmiSSLTags, LONG, REG(a6, __BASE_OR_IFACE), ...)
+LIBPROTOVA(OpenAmiSSLTags, LONG, REG(a6, __BASE_OR_IFACE), REG(d0, LONG APIVersion), ...)
 {
   __gnuc_va_list ap;
   struct TagItem *tags;
 
-  __builtin_va_start(ap, __BASE_OR_IFACE_VAR);
+  __builtin_va_start(ap, APIVersion);
   tags = va_getlinearva(ap, struct TagItem *);
   __builtin_va_end(ap);
 
-  return CALL_LFUNC(OpenAmiSSLTagList, tags);
+  return CALL_LFUNC(OpenAmiSSLTagList, APIVersion, tags);
 }
 #endif
 

@@ -87,7 +87,7 @@ amisslmaster.library/OpenAmiSSLTagList
 	public OpenSSL structures.
 
    INPUTS
-	APIVersion - See OpenAmiSSLTags()/AmiSSL_APIVersion.
+	APIVersion - See OpenAmiSSLTags().
 
 	UsesOpenSSLStructs - See OpenAmiSSLTags()/AmiSSL_UsesOpenSSLStructs.
 
@@ -156,13 +156,13 @@ amisslmaster.library/OpenAmiSSLTagList
 	OpenAmiSSLTags -- varargs stub for OpenAmiSSLTagList() (V5)
 
    SYNOPSIS
-	error = OpenAmiSSLTagList( tagList )
+	error = OpenAmiSSLTagList( APIVersion, tagList )
 
-	LONG OpenAmiSSLTagList( struct TagItem * )
+	LONG OpenAmiSSLTagList( LONG, struct TagItem * )
 
-	error = OpenAmiSSLTags( tag, ... )
+	error = OpenAmiSSLTags( APIVersion, tag, ... )
 
-	LONG OpenAmiSSLTags( Tag, ... );
+	LONG OpenAmiSSLTags( LONG, Tag, ... );
 
    FUNCTION
 	Simplified way to open AmiSSL, combining the functionality of
@@ -171,17 +171,16 @@ amisslmaster.library/OpenAmiSSLTagList
 	finished using AmiSSL.
 
    INPUTS
+	APIVersion - The minimum AmiSSL/OpenSSL version that you wish to open
+	    (see <libraries/amisslmaster.h> for valid values). The library may
+	    choose to automatically open a newer version, if backwards
+	    compatible with your choice. If you need to compile a program
+	    specifically for OpenSSL 3.0.0 API, for example, you need to use
+	    the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V300.
+
         tagList - pointer to an array of tags providing extra parameters.
 
    TAGS
-	AmiSSL_APIVersion - (LONG) The minimum AmiSSL/OpenSSL version that
-	    you wish to open (see <libraries/amisslmaster.h> for valid values.
-	    The library may choose to automatically open a newer version, if
-	    backwards compatible with your choice. If you need to compile a
-	    program specifically for OpenSSL 1.1.1m API, for example, you need
-	    to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V111m
-	    (required). (V5)
-
 	AmiSSL_UsesOpenSSLStructs - (BOOL) Indicate whether your application
 	    directly references or allocates any of the non-opaque structure
 	    definitions in the OpenSSL header files. Where possible, it is
@@ -196,7 +195,7 @@ amisslmaster.library/OpenAmiSSLTagList
 	    your application - recompilation will be required with the new SDK.
 	    These structures are not scheduled to be altered in any future
 	    OpenSSL 3.x.x versions, but may do so in the next major version
-	    (required). (V5)
+	    (defaults to TRUE). (V5)
 
 	AmiSSL_InitAmiSSL - (BOOL) Indicate whether to call InitAmiSSL(). If
 	    set to TRUE, InitAmiSSL() will be called and CloseAmiSSL() will

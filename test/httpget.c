@@ -235,14 +235,14 @@ static SSL_CTX *Init(void)
 	else if (!GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
 		Printf("Couldn't get AmiSSLMaster interface!\n");
 # if defined(__amigaos4__)
-        else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+	else if (OpenAmiSSLTags(AMISSL_CURRENT_VERSION,
 	                        AmiSSL_UsesOpenSSLStructs, FALSE,
 	                        AmiSSL_GetIAmiSSL, &IAmiSSL,
 	                        AmiSSL_ISocket, ISocket,
 	                        AmiSSL_ErrNoPtr, &errno,
 	                        TAG_DONE) != 0)
 # else
-	else if (OpenAmiSSLTags(AmiSSL_APIVersion, AMISSL_CURRENT_VERSION,
+	else if (OpenAmiSSLTags(AMISSL_CURRENT_VERSION,
 	                        AmiSSL_UsesOpenSSLStructs, FALSE,
 	                        AmiSSL_GetAmiSSLBase, &AmiSSLBase,
 	                        AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,

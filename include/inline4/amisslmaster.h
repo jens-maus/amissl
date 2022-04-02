@@ -28,11 +28,11 @@
 #define CloseAmiSSL() IAmiSSLMaster->CloseAmiSSL()
 #define OpenAmiSSLCipher(Cipher) IAmiSSLMaster->OpenAmiSSLCipher((Cipher))
 #define CloseAmiSSLCipher(CipherBase) IAmiSSLMaster->CloseAmiSSLCipher((CipherBase))
-#define OpenAmiSSLTagList(tagList) IAmiSSLMaster->OpenAmiSSLTagList((tagList))
+#define OpenAmiSSLTagList(APIVersion, tagList) IAmiSSLMaster->OpenAmiSSLTagList((APIVersion), (tagList))
 #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || (__GNUC__ >= 3)
 #define OpenAmiSSLTags(...) IAmiSSLMaster->OpenAmiSSLTags(__VA_ARGS__)
 #elif (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
-#define OpenAmiSSLTags(...) IAmiSSLMaster->OpenAmiSSLTags(vargs)
+#define OpenAmiSSLTags(vargs...) IAmiSSLMaster->OpenAmiSSLTags(vargs)
 #endif
 
 #endif /* INLINE4_AMISSLMASTER_H */

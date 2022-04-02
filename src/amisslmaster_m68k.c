@@ -152,6 +152,7 @@ STATIC LONG stub_main_OpenAmiSSLTagList_PPC(uint32 *regarray)
 	struct AmiSSLMasterIFace *Self = (struct AmiSSLMasterIFace *)ExtLib->MainIFace;
 
 	return Self->OpenAmiSSLTagList(
+		(LONG)regarray[REG68K_D0/4],
 		(struct TagItem *)regarray[REG68K_A0/4]
 	);
 }

@@ -61,13 +61,14 @@ void LIBSTUB_CloseAmiSSLCipher(void)
   return LIB_CloseAmiSSLCipher(_base, ___CipherBase);
 }
 
-LONG LIB_OpenAmiSSLTagList(struct Library * _base, struct TagItem * ___tagList);
+LONG LIB_OpenAmiSSLTagList(struct Library * _base, LONG ___APIVersion, struct TagItem * ___tagList);
 
 LONG LIBSTUB_OpenAmiSSLTagList(void)
 {
+  LONG ___APIVersion = (LONG)REG_D0;
   struct TagItem * ___tagList = (struct TagItem *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_OpenAmiSSLTagList(_base, ___tagList);
+  return LIB_OpenAmiSSLTagList(_base, ___APIVersion, ___tagList);
 }
 
 

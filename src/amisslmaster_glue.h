@@ -28,8 +28,8 @@ struct Library * SAVEDS ASM LIB_OpenAmiSSL(REG(a6, __IFACE_OR_BASE));
 void SAVEDS ASM LIB_CloseAmiSSL(REG(a6, __IFACE_OR_BASE));
 struct Library * SAVEDS ASM LIB_OpenAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(d0, LONG Cipher));
 void SAVEDS ASM LIB_CloseAmiSSLCipher(REG(a6, __IFACE_OR_BASE), REG(a0, struct Library * CipherBase));
-LONG SAVEDS ASM LIB_OpenAmiSSLTagList(REG(a6, __IFACE_OR_BASE), REG(a0, struct TagItem * tagList));
-LONG SAVEDS ASM LIB_OpenAmiSSLTags(REG(a6, __IFACE_OR_BASE), ...);
+LONG SAVEDS ASM LIB_OpenAmiSSLTagList(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), REG(a0, struct TagItem * tagList));
+LONG SAVEDS ASM LIB_OpenAmiSSLTags(REG(a6, __IFACE_OR_BASE), REG(d0, LONG APIVersion), ...);
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR \

@@ -58,17 +58,17 @@
  #pragma amicall(AmiSSLMasterBase, 0x36, CloseAmiSSLCipher(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLMasterBase OpenAmiSSLTagList 3c 801
+ #pragma libcall AmiSSLMasterBase OpenAmiSSLTagList 3c 8002
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLMasterBase, 0x3c, OpenAmiSSLTagList(a0))
+ #pragma amicall(AmiSSLMasterBase, 0x3c, OpenAmiSSLTagList(d0,a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_TAGCALL
  #ifdef __CLIB_PRAGMA_LIBCALL
-  #pragma tagcall AmiSSLMasterBase OpenAmiSSLTags 3c 801
+  #pragma tagcall AmiSSLMasterBase OpenAmiSSLTags 3c 8002
  #endif /* __CLIB_PRAGMA_LIBCALL */
  #ifdef __CLIB_PRAGMA_AMICALL
-  #pragma tagcall(AmiSSLMasterBase, 0x3c, OpenAmiSSLTags(a0))
+  #pragma tagcall(AmiSSLMasterBase, 0x3c, OpenAmiSSLTags(d0,a0))
  #endif /* __CLIB_PRAGMA_AMICALL */
 #endif /* __CLIB_PRAGMA_TAGCALL */
 

@@ -8,5 +8,5 @@ OpenAmiSSL()()
 CloseAmiSSL()()
 OpenAmiSSLCipher(Cipher)(d0)
 CloseAmiSSLCipher(CipherBase)(a0)
-OpenAmiSSLTagList(tagList)(a0)
+OpenAmiSSLTagList(APIVersion,tagList)(d0,a0)
 ##end

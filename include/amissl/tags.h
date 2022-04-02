@@ -41,11 +41,10 @@
 #define AmiSSL_MLinkLock        (TAG_USER + 0x0a)
 #define AmiSSL_ErrNoPtr         (TAG_USER + 0x0b)
 
-#define AmiSSL_APIVersion         (TAG_USER + 0x0c)
-#define AmiSSL_UsesOpenSSLStructs (TAG_USER + 0x0d)
-#define AmiSSL_GetAmiSSLBase      (TAG_USER + 0x0e)
-#define AmiSSL_GetAmiSSLExtBase   (TAG_USER + 0x0f)
-#define AmiSSL_GetIAmiSSL         (TAG_USER + 0x10) /* Only accessible from ppc code */
-#define AmiSSL_InitAmiSSL         (TAG_USER + 0x11)
+#define AmiSSL_UsesOpenSSLStructs (TAG_USER + 0x0c)
+#define AmiSSL_GetAmiSSLBase      (TAG_USER + 0x0d)
+#define AmiSSL_GetAmiSSLExtBase   (TAG_USER + 0x0e)
+#define AmiSSL_GetIAmiSSL         (TAG_USER + 0x0f) /* Only accessible from ppc code */
+#define AmiSSL_InitAmiSSL         (TAG_USER + 0x10)
 
 #endif /* !AMISSL_TAGS_H */

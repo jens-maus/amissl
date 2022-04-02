@@ -40,13 +40,13 @@ typedef ULONG _sfdc_vararg;
       LP1NR(0x36, CloseAmiSSLCipher , struct Library *, ___CipherBase, a0,\
       , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define OpenAmiSSLTagList(___tagList) \
-      LP1(0x3c, LONG, OpenAmiSSLTagList , struct TagItem *, ___tagList, a0,\
+#define OpenAmiSSLTagList(___APIVersion, ___tagList) \
+      LP2(0x3c, LONG, OpenAmiSSLTagList , LONG, ___APIVersion, d0, struct TagItem *, ___tagList, a0,\
       , AMISSLMASTER_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #ifndef NO_INLINE_STDARG
-#define OpenAmiSSLTags(___tag, ...) \
-    ({_sfdc_vararg _tags[] = { ___tag, __VA_ARGS__ }; OpenAmiSSLTagList((struct TagItem *) _tags); })
+#define OpenAmiSSLTags(___APIVersion, ___tag, ...) \
+    ({_sfdc_vararg _tags[] = { ___tag, __VA_ARGS__ }; OpenAmiSSLTagList((___APIVersion), (struct TagItem *) _tags); })
 #endif /* !NO_INLINE_STDARG */
 
 #endif /* !_PPCINLINE_AMISSLMASTER_H */

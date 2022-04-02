@@ -123,8 +123,8 @@ LONG (InitAmiSSL)(Tag tag1, ...)
 { return InitAmiSSLA((struct TagItem *)&tag1); }
 LONG (CleanupAmiSSL)(Tag tag1, ...)
 { return CleanupAmiSSLA((struct TagItem *)&tag1); }
-LONG (OpenAmiSSLTags)(Tag tag1, ...)
-{ return OpenAmiSSLTagList((struct TagItem *)&tag1); }
+LONG (OpenAmiSSLTags)(LONG APIVersion, Tag tag1, ...)
+{ return OpenAmiSSLTagList(APIVersion, (struct TagItem *)&tag1); }
 
 #elif defined(__MORPHOS__)
 
@@ -192,9 +192,9 @@ asm (".align 2                        \n\
       blr                             \n\
      ");
 
-LONG v_OpenAmiSSLTagList(struct TagItem *tags)
+LONG v_OpenAmiSSLTagList(LONG APIVersion, struct TagItem *tags)
 {
-  return OpenAmiSSLTagList(tags);
+  return OpenAmiSSLTagList(APIVersion, tags);
 }
 
 asm (".align 2                         \n\
@@ -266,14 +266,14 @@ CONSTRUCTOR(amissl)
   {
     LONG err;
     #if defined(__amigaos4__)
-    err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
+    err = OpenAmiSSLTags(AmiSSLAPIVersion,
                          AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
                          AmiSSL_GetIAmiSSL, &IAmiSSL,
                          AmiSSL_ISocket, ISocket,
                          AmiSSL_ErrNoPtr, &errno,
                          TAG_DONE);
     #else
-    err = OpenAmiSSLTags(AmiSSL_APIVersion, AmiSSLAPIVersion,
+    err = OpenAmiSSLTags(AmiSSLAPIVersion,
                          AmiSSL_UsesOpenSSLStructs, UsesOpenSSLStructs,
                          AmiSSL_GetAmiSSLBase, &AmiSSLBase,
                          AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,

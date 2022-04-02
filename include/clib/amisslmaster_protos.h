@@ -36,8 +36,8 @@ struct Library * OpenAmiSSL(void);
 void CloseAmiSSL(void);
 struct Library * OpenAmiSSLCipher(LONG Cipher);
 void CloseAmiSSLCipher(struct Library * CipherBase);
-LONG OpenAmiSSLTagList(struct TagItem * tagList);
-LONG OpenAmiSSLTags(Tag tag, ...);
+LONG OpenAmiSSLTagList(LONG APIVersion, struct TagItem * tagList);
+LONG OpenAmiSSLTags(LONG APIVersion, Tag tag, ...);
 
 #ifdef __cplusplus
 }

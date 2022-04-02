@@ -47,9 +47,11 @@
 			<arg name="CipherBase" type="struct Library *" m68kreg="a0"/>
 		</method>
 		<method name="OpenAmiSSLTagList" result="LONG">
+			<arg name="APIVersion" type="LONG" m68kreg="d0"/>
 			<arg name="tagList" type="struct TagItem *" m68kreg="a0"/>
 		</method>
 		<method name="OpenAmiSSLTags" result="LONG">
+			<arg name="APIVersion" type="LONG" m68kreg="d0"/>
 			<vararg name="tag" type="Tag" m68kreg="a0"/>
 		</method>
 	</interface>
