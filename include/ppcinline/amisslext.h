@@ -3626,196 +3626,200 @@ typedef ULONG _sfdc_vararg;
       LP9(0x152a, int, PKCS5_v2_PBE_keyivgen_ex , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___cipher, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define EVP_PBE_scrypt_ex_amiga_1(___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs) \
-      LP8(0x1530, int, EVP_PBE_scrypt_ex_amiga_1 , const char *, ___pass, a0, size_t, ___passlen, a1, const unsigned char *, ___salt, a2, uint64_t, ___N, d0, uint64_t, ___r, d2, uint64_t, ___p, d4, uint64_t, ___maxmem, d6, void *, ___moreargs, a3,\
+#define EVP_PBE_scrypt_amiga_1(___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs) \
+      LP8(0x1530, int, EVP_PBE_scrypt_amiga_1 , const char *, ___pass, a0, size_t, ___passlen, a1, const unsigned char *, ___salt, a2, uint64_t, ___N, d0, uint64_t, ___r, d2, uint64_t, ___p, d4, uint64_t, ___maxmem, d6, void *, ___moreargs, a3,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EVP_PBE_scrypt_amiga_2(___saltlen, ___key, ___keylen) \
+      LP3(0x1536, void *, EVP_PBE_scrypt_amiga_2 , size_t, ___saltlen, d0, unsigned char *, ___key, a0, size_t, ___keylen, d1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PBE_scrypt_ex_amiga_2(___saltlen, ___key, ___keylen, ___ctx, ___propq) \
-      LP5(0x1536, void *, EVP_PBE_scrypt_ex_amiga_2 , size_t, ___saltlen, d0, unsigned char *, ___key, a0, size_t, ___keylen, d1, OSSL_LIB_CTX *, ___ctx, a1, const char *, ___propq, a2,\
+      LP5(0x153c, void *, EVP_PBE_scrypt_ex_amiga_2 , size_t, ___saltlen, d0, unsigned char *, ___key, a0, size_t, ___keylen, d1, OSSL_LIB_CTX *, ___ctx, a1, const char *, ___propq, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_v2_scrypt_keyivgen_ex(___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de, ___libctx, ___propq) \
-      LP9(0x153c, int, PKCS5_v2_scrypt_keyivgen_ex , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
+      LP9(0x1542, int, PKCS5_v2_scrypt_keyivgen_ex , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___c, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PBE_CipherInit_ex(___pbe_obj, ___pass, ___passlen, ___param, ___ctx, ___en_de, ___libctx, ___propq) \
-      LP8(0x1542, int, EVP_PBE_CipherInit_ex , ASN1_OBJECT *, ___pbe_obj, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, EVP_CIPHER_CTX *, ___ctx, a3, int, ___en_de, d1, OSSL_LIB_CTX *, ___libctx, d2, const char *, ___propq, d3,\
+      LP8(0x1548, int, EVP_PBE_CipherInit_ex , ASN1_OBJECT *, ___pbe_obj, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, EVP_CIPHER_CTX *, ___ctx, a3, int, ___en_de, d1, OSSL_LIB_CTX *, ___libctx, d2, const char *, ___propq, d3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PBE_find_ex(___type, ___pbe_nid, ___pcnid, ___pmnid, ___pkeygen, ___pkeygen_ex) \
-      LP6(0x1548, int, EVP_PBE_find_ex , int, ___type, d0, int, ___pbe_nid, d1, int *, ___pcnid, a0, int *, ___pmnid, a1, EVP_PBE_KEYGEN **, ___pkeygen, a2, EVP_PBE_KEYGEN_EX **, ___pkeygen_ex, a3,\
+      LP6(0x154e, int, EVP_PBE_find_ex , int, ___type, d0, int, ___pbe_nid, d1, int *, ___pcnid, a0, int *, ___pmnid, a1, EVP_PBE_KEYGEN **, ___pkeygen, a2, EVP_PBE_KEYGEN_EX **, ___pkeygen_ex, a3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(___pbe_nid, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___p8inf, ___ctx, ___propq) \
-      LP9(0x154e, PKCS12_SAFEBAG *, PKCS12_SAFEBAG_create_pkcs8_encrypt_ex , int, ___pbe_nid, d0, const char *, ___pass, a0, int, ___passlen, d1, unsigned char *, ___salt, a1, int, ___saltlen, d2, int, ___iter, d3, PKCS8_PRIV_KEY_INFO *, ___p8inf, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d4,\
+      LP9(0x1554, PKCS12_SAFEBAG *, PKCS12_SAFEBAG_create_pkcs8_encrypt_ex , int, ___pbe_nid, d0, const char *, ___pass, a0, int, ___passlen, d1, unsigned char *, ___salt, a1, int, ___saltlen, d2, int, ___iter, d3, PKCS8_PRIV_KEY_INFO *, ___p8inf, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS8_decrypt_ex(___p8, ___pass, ___passlen, ___ctx, ___propq) \
-      LP5(0x1554, PKCS8_PRIV_KEY_INFO *, PKCS8_decrypt_ex , const X509_SIG *, ___p8, a0, const char *, ___pass, a1, int, ___passlen, d0, OSSL_LIB_CTX *, ___ctx, a2, const char *, ___propq, a3,\
+      LP5(0x155a, PKCS8_PRIV_KEY_INFO *, PKCS8_decrypt_ex , const X509_SIG *, ___p8, a0, const char *, ___pass, a1, int, ___passlen, d0, OSSL_LIB_CTX *, ___ctx, a2, const char *, ___propq, a3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_decrypt_skey_ex(___bag, ___pass, ___passlen, ___ctx, ___propq) \
-      LP5(0x155a, PKCS8_PRIV_KEY_INFO *, PKCS12_decrypt_skey_ex , const PKCS12_SAFEBAG *, ___bag, a0, const char *, ___pass, a1, int, ___passlen, d0, OSSL_LIB_CTX *, ___ctx, a2, const char *, ___propq, a3,\
+      LP5(0x1560, PKCS8_PRIV_KEY_INFO *, PKCS12_decrypt_skey_ex , const PKCS12_SAFEBAG *, ___bag, a0, const char *, ___pass, a1, int, ___passlen, d0, OSSL_LIB_CTX *, ___ctx, a2, const char *, ___propq, a3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS8_encrypt_ex(___pbe_nid, ___cipher, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___p8, ___ctx, ___propq) \
-      LP10(0x1560, X509_SIG *, PKCS8_encrypt_ex , int, ___pbe_nid, d0, const EVP_CIPHER *, ___cipher, a0, const char *, ___pass, a1, int, ___passlen, d1, unsigned char *, ___salt, a2, int, ___saltlen, d2, int, ___iter, d3, PKCS8_PRIV_KEY_INFO *, ___p8, a3, OSSL_LIB_CTX *, ___ctx, d4, const char *, ___propq, d5,\
+      LP10(0x1566, X509_SIG *, PKCS8_encrypt_ex , int, ___pbe_nid, d0, const EVP_CIPHER *, ___cipher, a0, const char *, ___pass, a1, int, ___passlen, d1, unsigned char *, ___salt, a2, int, ___saltlen, d2, int, ___iter, d3, PKCS8_PRIV_KEY_INFO *, ___p8, a3, OSSL_LIB_CTX *, ___ctx, d4, const char *, ___propq, d5,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS8_set0_pbe_ex(___pass, ___passlen, ___p8inf, ___pbe, ___ctx, ___propq) \
-      LP6(0x1566, X509_SIG *, PKCS8_set0_pbe_ex , const char *, ___pass, a0, int, ___passlen, d0, PKCS8_PRIV_KEY_INFO *, ___p8inf, a1, X509_ALGOR *, ___pbe, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d1,\
+      LP6(0x156c, X509_SIG *, PKCS8_set0_pbe_ex , const char *, ___pass, a0, int, ___passlen, d0, PKCS8_PRIV_KEY_INFO *, ___p8inf, a1, X509_ALGOR *, ___pbe, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_pack_p7encdata_ex(___pbe_nid, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___bags, ___ctx, ___propq) \
-      LP9(0x156c, PKCS7 *, PKCS12_pack_p7encdata_ex , int, ___pbe_nid, d0, const char *, ___pass, a0, int, ___passlen, d1, unsigned char *, ___salt, a1, int, ___saltlen, d2, int, ___iter, d3, STACK_OF(PKCS12_SAFEBAG) *, ___bags, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d4,\
+      LP9(0x1572, PKCS7 *, PKCS12_pack_p7encdata_ex , int, ___pbe_nid, d0, const char *, ___pass, a0, int, ___passlen, d1, unsigned char *, ___salt, a1, int, ___saltlen, d2, int, ___iter, d3, STACK_OF(PKCS12_SAFEBAG) *, ___bags, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_pbe_crypt_ex(___algor, ___pass, ___passlen, ___in, ___inlen, ___data, ___datalen, ___en_de, ___libctx, ___propq) \
-      LP10(0x1572, unsigned char *, PKCS12_pbe_crypt_ex , const X509_ALGOR *, ___algor, a0, const char *, ___pass, a1, int, ___passlen, d0, const unsigned char *, ___in, a2, int, ___inlen, d1, unsigned char **, ___data, a3, int *, ___datalen, d2, int, ___en_de, d3, OSSL_LIB_CTX *, ___libctx, d4, const char *, ___propq, d5,\
+      LP10(0x1578, unsigned char *, PKCS12_pbe_crypt_ex , const X509_ALGOR *, ___algor, a0, const char *, ___pass, a1, int, ___passlen, d0, const unsigned char *, ___in, a2, int, ___inlen, d1, unsigned char **, ___data, a3, int *, ___datalen, d2, int, ___en_de, d3, OSSL_LIB_CTX *, ___libctx, d4, const char *, ___propq, d5,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_item_decrypt_d2i_ex(___algor, ___it, ___pass, ___passlen, ___oct, ___zbuf, ___libctx, ___propq) \
-      LP8(0x1578, void *, PKCS12_item_decrypt_d2i_ex , const X509_ALGOR *, ___algor, a0, const ASN1_ITEM *, ___it, a1, const char *, ___pass, a2, int, ___passlen, d0, const ASN1_OCTET_STRING *, ___oct, a3, int, ___zbuf, d1, OSSL_LIB_CTX *, ___libctx, d2, const char *, ___propq, d3,\
+      LP8(0x157e, void *, PKCS12_item_decrypt_d2i_ex , const X509_ALGOR *, ___algor, a0, const ASN1_ITEM *, ___it, a1, const char *, ___pass, a2, int, ___passlen, d0, const ASN1_OCTET_STRING *, ___oct, a3, int, ___zbuf, d1, OSSL_LIB_CTX *, ___libctx, d2, const char *, ___propq, d3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_item_i2d_encrypt_ex(___algor, ___it, ___pass, ___passlen, ___obj, ___zbuf, ___ctx, ___propq) \
-      LP8(0x157e, ASN1_OCTET_STRING *, PKCS12_item_i2d_encrypt_ex , X509_ALGOR *, ___algor, a0, const ASN1_ITEM *, ___it, a1, const char *, ___pass, a2, int, ___passlen, d0, void *, ___obj, a3, int, ___zbuf, d1, OSSL_LIB_CTX *, ___ctx, d2, const char *, ___propq, d3,\
+      LP8(0x1584, ASN1_OCTET_STRING *, PKCS12_item_i2d_encrypt_ex , X509_ALGOR *, ___algor, a0, const ASN1_ITEM *, ___it, a1, const char *, ___pass, a2, int, ___passlen, d0, void *, ___obj, a3, int, ___zbuf, d1, OSSL_LIB_CTX *, ___ctx, d2, const char *, ___propq, d3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_init_ex(___mode, ___ctx, ___propq) \
-      LP3(0x1584, PKCS12 *, PKCS12_init_ex , int, ___mode, d0, OSSL_LIB_CTX *, ___ctx, a0, const char *, ___propq, a1,\
+      LP3(0x158a, PKCS12 *, PKCS12_init_ex , int, ___mode, d0, OSSL_LIB_CTX *, ___ctx, a0, const char *, ___propq, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_key_gen_asc_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
-      LP11(0x158a, int, PKCS12_key_gen_asc_ex , const char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
+      LP11(0x1590, int, PKCS12_key_gen_asc_ex , const char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_key_gen_uni_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
-      LP11(0x1590, int, PKCS12_key_gen_uni_ex , unsigned char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
+      LP11(0x1596, int, PKCS12_key_gen_uni_ex , unsigned char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_key_gen_utf8_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
-      LP11(0x1596, int, PKCS12_key_gen_utf8_ex , const char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
+      LP11(0x159c, int, PKCS12_key_gen_utf8_ex , const char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___id, d2, int, ___iter, d3, int, ___n, d4, unsigned char *, ___out, a2, const EVP_MD *, ___md_type, a3, OSSL_LIB_CTX *, ___ctx, d5, const char *, ___propq, d6,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_PBE_keyivgen_ex(___ctx, ___pass, ___passlen, ___param, ___cipher, ___md_type, ___en_de, ___libctx, ___propq) \
-      LP9(0x159c, int, PKCS12_PBE_keyivgen_ex , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___cipher, a3, const EVP_MD *, ___md_type, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
+      LP9(0x15a2, int, PKCS12_PBE_keyivgen_ex , EVP_CIPHER_CTX *, ___ctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___cipher, a3, const EVP_MD *, ___md_type, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_create_ex(___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___iter, ___mac_iter, ___keytype, ___ctx, ___propq) \
-      LP12(0x15a2, PKCS12 *, PKCS12_create_ex , const char *, ___pass, a0, const char *, ___name, a1, EVP_PKEY *, ___pkey, a2, X509 *, ___cert, a3, STACK_OF(X509) *, ___ca, d0, int, ___nid_key, d1, int, ___nid_cert, d2, int, ___iter, d3, int, ___mac_iter, d4, int, ___keytype, d5, OSSL_LIB_CTX *, ___ctx, d6, const char *, ___propq, d7,\
+      LP12(0x15a8, PKCS12 *, PKCS12_create_ex , const char *, ___pass, a0, const char *, ___name, a1, EVP_PKEY *, ___pkey, a2, X509 *, ___cert, a3, STACK_OF(X509) *, ___ca, d0, int, ___nid_key, d1, int, ___nid_cert, d2, int, ___iter, d3, int, ___mac_iter, d4, int, ___keytype, d5, OSSL_LIB_CTX *, ___ctx, d6, const char *, ___propq, d7,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_add_key_ex(___pbags, ___key, ___key_usage, ___iter, ___key_nid, ___pass, ___ctx, ___propq) \
-      LP8(0x15a8, PKCS12_SAFEBAG *, PKCS12_add_key_ex , STACK_OF(PKCS12_SAFEBAG) **, ___pbags, a0, EVP_PKEY *, ___key, a1, int, ___key_usage, d0, int, ___iter, d1, int, ___key_nid, d2, const char *, ___pass, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d3,\
+      LP8(0x15ae, PKCS12_SAFEBAG *, PKCS12_add_key_ex , STACK_OF(PKCS12_SAFEBAG) **, ___pbags, a0, EVP_PKEY *, ___key, a1, int, ___key_usage, d0, int, ___iter, d1, int, ___key_nid, d2, const char *, ___pass, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_add_safe_ex(___psafes, ___bags, ___safe_nid, ___iter, ___pass, ___ctx, ___propq) \
-      LP7(0x15ae, int, PKCS12_add_safe_ex , STACK_OF(PKCS7) **, ___psafes, a0, STACK_OF(PKCS12_SAFEBAG) *, ___bags, a1, int, ___safe_nid, d0, int, ___iter, d1, const char *, ___pass, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d2,\
+      LP7(0x15b4, int, PKCS12_add_safe_ex , STACK_OF(PKCS7) **, ___psafes, a0, STACK_OF(PKCS12_SAFEBAG) *, ___bags, a1, int, ___safe_nid, d0, int, ___iter, d1, const char *, ___pass, a2, OSSL_LIB_CTX *, ___ctx, a3, const char *, ___propq, d2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_add_safes_ex(___safes, ___p7_nid, ___ctx, ___propq) \
-      LP4(0x15b4, PKCS12 *, PKCS12_add_safes_ex , STACK_OF(PKCS7) *, ___safes, a0, int, ___p7_nid, d0, OSSL_LIB_CTX *, ___ctx, a1, const char *, ___propq, a2,\
+      LP4(0x15ba, PKCS12 *, PKCS12_add_safes_ex , STACK_OF(PKCS7) *, ___safes, a0, int, ___p7_nid, d0, OSSL_LIB_CTX *, ___ctx, a1, const char *, ___propq, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_pbe_set0_algor_ex(___algor, ___alg, ___iter, ___salt, ___saltlen, ___libctx) \
-      LP6(0x15ba, int, PKCS5_pbe_set0_algor_ex , X509_ALGOR *, ___algor, a0, int, ___alg, d0, int, ___iter, d1, const unsigned char *, ___salt, a1, int, ___saltlen, d2, OSSL_LIB_CTX *, ___libctx, a2,\
+      LP6(0x15c0, int, PKCS5_pbe_set0_algor_ex , X509_ALGOR *, ___algor, a0, int, ___alg, d0, int, ___iter, d1, const unsigned char *, ___salt, a1, int, ___saltlen, d2, OSSL_LIB_CTX *, ___libctx, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_pbe_set_ex(___alg, ___iter, ___salt, ___saltlen, ___libctx) \
-      LP5(0x15c0, X509_ALGOR *, PKCS5_pbe_set_ex , int, ___alg, d0, int, ___iter, d1, const unsigned char *, ___salt, a0, int, ___saltlen, d2, OSSL_LIB_CTX *, ___libctx, a1,\
+      LP5(0x15c6, X509_ALGOR *, PKCS5_pbe_set_ex , int, ___alg, d0, int, ___iter, d1, const unsigned char *, ___salt, a0, int, ___saltlen, d2, OSSL_LIB_CTX *, ___libctx, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_pbe2_set_iv_ex(___cipher, ___iter, ___salt, ___saltlen, ___aiv, ___prf_nid, ___libctx) \
-      LP7(0x15c6, X509_ALGOR *, PKCS5_pbe2_set_iv_ex , const EVP_CIPHER *, ___cipher, a0, int, ___iter, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, unsigned char *, ___aiv, a2, int, ___prf_nid, d2, OSSL_LIB_CTX *, ___libctx, a3,\
+      LP7(0x15cc, X509_ALGOR *, PKCS5_pbe2_set_iv_ex , const EVP_CIPHER *, ___cipher, a0, int, ___iter, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, unsigned char *, ___aiv, a2, int, ___prf_nid, d2, OSSL_LIB_CTX *, ___libctx, a3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_pbkdf2_set_ex(___iter, ___salt, ___saltlen, ___prf_nid, ___keylen, ___libctx) \
-      LP6(0x15cc, X509_ALGOR *, PKCS5_pbkdf2_set_ex , int, ___iter, d0, unsigned char *, ___salt, a0, int, ___saltlen, d1, int, ___prf_nid, d2, int, ___keylen, d3, OSSL_LIB_CTX *, ___libctx, a1,\
+      LP6(0x15d2, X509_ALGOR *, PKCS5_pbkdf2_set_ex , int, ___iter, d0, unsigned char *, ___salt, a0, int, ___saltlen, d1, int, ___prf_nid, d2, int, ___keylen, d3, OSSL_LIB_CTX *, ___libctx, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_new_from_core_bio(___libctx, ___corebio) \
-      LP2(0x15d2, BIO *, BIO_new_from_core_bio , OSSL_LIB_CTX *, ___libctx, a0, OSSL_CORE_BIO *, ___corebio, a1,\
+      LP2(0x15d8, BIO *, BIO_new_from_core_bio , OSSL_LIB_CTX *, ___libctx, a0, OSSL_CORE_BIO *, ___corebio, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_new_ex(___libctx, ___method) \
-      LP2(0x15d8, BIO *, BIO_new_ex , OSSL_LIB_CTX *, ___libctx, a0, const BIO_METHOD *, ___method, a1,\
+      LP2(0x15de, BIO *, BIO_new_ex , OSSL_LIB_CTX *, ___libctx, a0, const BIO_METHOD *, ___method, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_s_core() \
-      LP0(0x15de, const BIO_METHOD *, BIO_s_core ,\
+      LP0(0x15e4, const BIO_METHOD *, BIO_s_core ,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_get_line(___bio, ___buf, ___size) \
-      LP3(0x15e4, int, BIO_get_line , BIO *, ___bio, a0, char *, ___buf, a1, int, ___size, d0,\
+      LP3(0x15ea, int, BIO_get_line , BIO *, ___bio, a0, char *, ___buf, a1, int, ___size, d0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_LIB_CTX_new_from_dispatch(___handle, ___in) \
-      LP2(0x15ea, OSSL_LIB_CTX *, OSSL_LIB_CTX_new_from_dispatch , const OSSL_CORE_HANDLE *, ___handle, a0, const OSSL_DISPATCH *, ___in, a1,\
+      LP2(0x15f0, OSSL_LIB_CTX *, OSSL_LIB_CTX_new_from_dispatch , const OSSL_CORE_HANDLE *, ___handle, a0, const OSSL_DISPATCH *, ___in, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_LIB_CTX_new_child(___handle, ___in) \
-      LP2(0x15f0, OSSL_LIB_CTX *, OSSL_LIB_CTX_new_child , const OSSL_CORE_HANDLE *, ___handle, a0, const OSSL_DISPATCH *, ___in, a1,\
+      LP2(0x15f6, OSSL_LIB_CTX *, OSSL_LIB_CTX_new_child , const OSSL_CORE_HANDLE *, ___handle, a0, const OSSL_DISPATCH *, ___in, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_PROVIDER_get0_dispatch(___prov) \
-      LP1(0x15f6, const OSSL_DISPATCH *, OSSL_PROVIDER_get0_dispatch , const OSSL_PROVIDER *, ___prov, a0,\
+      LP1(0x15fc, const OSSL_DISPATCH *, OSSL_PROVIDER_get0_dispatch , const OSSL_PROVIDER *, ___prov, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS5_PBE_keyivgen_ex(___cctx, ___pass, ___passlen, ___param, ___cipher, ___md, ___en_de, ___libctx, ___propq) \
-      LP9(0x15fc, int, PKCS5_PBE_keyivgen_ex , EVP_CIPHER_CTX *, ___cctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___cipher, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
+      LP9(0x1602, int, PKCS5_PBE_keyivgen_ex , EVP_CIPHER_CTX *, ___cctx, a0, const char *, ___pass, a1, int, ___passlen, d0, ASN1_TYPE *, ___param, a2, const EVP_CIPHER *, ___cipher, a3, const EVP_MD *, ___md, d1, int, ___en_de, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_MAC_CTX_get_block_size(___ctx) \
-      LP1(0x1602, size_t, EVP_MAC_CTX_get_block_size , EVP_MAC_CTX *, ___ctx, a0,\
+      LP1(0x1608, size_t, EVP_MAC_CTX_get_block_size , EVP_MAC_CTX *, ___ctx, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_debug_callback_ex(___bio, ___oper, ___argp, ___len, ___argi, ___argl, ___ret, ___processed) \
-      LP8(0x1608, long, BIO_debug_callback_ex , BIO *, ___bio, a0, int, ___oper, d0, const char *, ___argp, a1, size_t, ___len, d1, int, ___argi, d2, long, ___argl, d3, int, ___ret, d4, size_t *, ___processed, a2,\
+      LP8(0x160e, long, BIO_debug_callback_ex , BIO *, ___bio, a0, int, ___oper, d0, const char *, ___argp, a1, size_t, ___len, d1, int, ___argi, d2, long, ___argl, d3, int, ___ret, d4, size_t *, ___processed, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define b2i_PVK_bio_ex(___in, ___cb, ___u, ___libctx, ___propq) \
-      LP5(0x160e, EVP_PKEY *, b2i_PVK_bio_ex , BIO *, ___in, a0, pem_password_cb *, ___cb, a1, void *, ___u, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d0,\
+      LP5(0x1614, EVP_PKEY *, b2i_PVK_bio_ex , BIO *, ___in, a0, pem_password_cb *, ___cb, a1, void *, ___u, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define i2b_PVK_bio_ex(___out, ___pk, ___enclevel, ___cb, ___u, ___libctx, ___propq) \
-      LP7(0x1614, int, i2b_PVK_bio_ex , BIO *, ___out, a0, const EVP_PKEY *, ___pk, a1, int, ___enclevel, d0, pem_password_cb *, ___cb, a2, void *, ___u, a3, OSSL_LIB_CTX *, ___libctx, d1, const char *, ___propq, d2,\
+      LP7(0x161a, int, i2b_PVK_bio_ex , BIO *, ___out, a0, const EVP_PKEY *, ___pk, a1, int, ___enclevel, d0, pem_password_cb *, ___cb, a2, void *, ___u, a3, OSSL_LIB_CTX *, ___libctx, d1, const char *, ___propq, d2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define NCONF_get0_libctx(___conf) \
-      LP1(0x161a, OSSL_LIB_CTX *, NCONF_get0_libctx , const CONF *, ___conf, a0,\
+      LP1(0x1620, OSSL_LIB_CTX *, NCONF_get0_libctx , const CONF *, ___conf, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define NCONF_get_section_names(___conf) \
-      LP1(0x1620, STACK_OF(OPENSSL_CSTRING) *, NCONF_get_section_names , const CONF *, ___conf, a0,\
+      LP1(0x1626, STACK_OF(OPENSSL_CSTRING) *, NCONF_get_section_names , const CONF *, ___conf, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_PUBKEY_new_ex(___libctx, ___propq) \
-      LP2(0x1626, X509_PUBKEY *, X509_PUBKEY_new_ex , OSSL_LIB_CTX *, ___libctx, a0, const char *, ___propq, a1,\
+      LP2(0x162c, X509_PUBKEY *, X509_PUBKEY_new_ex , OSSL_LIB_CTX *, ___libctx, a0, const char *, ___propq, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ASN1_item_new_ex(___it, ___libctx, ___propq) \
-      LP3(0x162c, ASN1_VALUE *, ASN1_item_new_ex , const ASN1_ITEM *, ___it, a0, OSSL_LIB_CTX *, ___libctx, a1, const char *, ___propq, a2,\
+      LP3(0x1632, ASN1_VALUE *, ASN1_item_new_ex , const ASN1_ITEM *, ___it, a0, OSSL_LIB_CTX *, ___libctx, a1, const char *, ___propq, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ASN1_item_d2i_bio_ex(___it, ___in, ___pval, ___libctx, ___propq) \
-      LP5(0x1632, void *, ASN1_item_d2i_bio_ex , const ASN1_ITEM *, ___it, a0, BIO *, ___in, a1, void *, ___pval, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d0,\
+      LP5(0x1638, void *, ASN1_item_d2i_bio_ex , const ASN1_ITEM *, ___it, a0, BIO *, ___in, a1, void *, ___pval, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ASN1_item_d2i_ex(___val, ___in, ___len, ___it, ___libctx, ___propq) \
-      LP6(0x1638, ASN1_VALUE *, ASN1_item_d2i_ex , ASN1_VALUE **, ___val, a0, const unsigned char **, ___in, a1, long, ___len, d0, const ASN1_ITEM *, ___it, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d1,\
+      LP6(0x163e, ASN1_VALUE *, ASN1_item_d2i_ex , ASN1_VALUE **, ___val, a0, const unsigned char **, ___in, a1, long, ___len, d0, const ASN1_ITEM *, ___it, a2, OSSL_LIB_CTX *, ___libctx, a3, const char *, ___propq, d1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ASN1_TIME_print_ex(___bp, ___tm, ___flags) \
-      LP3(0x163e, int, ASN1_TIME_print_ex , BIO *, ___bp, a0, const ASN1_TIME *, ___tm, a1, unsigned long, ___flags, d0,\
+      LP3(0x1644, int, ASN1_TIME_print_ex , BIO *, ___bp, a0, const ASN1_TIME *, ___tm, a1, unsigned long, ___flags, d0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_get0_provider(___key) \
-      LP1(0x1644, const OSSL_PROVIDER *, EVP_PKEY_get0_provider , const EVP_PKEY *, ___key, a0,\
+      LP1(0x164a, const OSSL_PROVIDER *, EVP_PKEY_get0_provider , const EVP_PKEY *, ___key, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_CTX_get0_provider(___ctx) \
-      LP1(0x164a, const OSSL_PROVIDER *, EVP_PKEY_CTX_get0_provider , const EVP_PKEY_CTX *, ___ctx, a0,\
+      LP1(0x1650, const OSSL_PROVIDER *, EVP_PKEY_CTX_get0_provider , const EVP_PKEY_CTX *, ___ctx, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #endif /* !_PPCINLINE_AMISSLEXT_H */

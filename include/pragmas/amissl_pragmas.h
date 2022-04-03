@@ -22256,10 +22256,10 @@
  #pragma amicall(AmiSSLBase, 0x643e, EVP_PBE_get(a0,a1,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase EVP_PBE_scrypt 6444 ba54321908010
+ #pragma libcall AmiSSLBase OBSOLETE_EVP_PBE_scrypt 6444 ba54321908010
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6444, EVP_PBE_scrypt(a0,d0,a1,d1,d2,d3,d4,d5,a2,a3))
+ #pragma amicall(AmiSSLBase, 0x6444, OBSOLETE_EVP_PBE_scrypt(a0,d0,a1,d1,d2,d3,d4,d5,a2,a3))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase EVP_PKEY_asn1_set_security_bits 644a 9802
@@ -22772,10 +22772,10 @@
  #pragma amicall(AmiSSLBase, 0x6642, i2d_re_X509_REQ_tbs(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 6648 321a09807
+ #pragma libcall AmiSSLBase PKCS5_pbe2_set_scrypt 6648 642a09807
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x6648, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d1,d2,d3))
+ #pragma amicall(AmiSSLBase, 0x6648, PKCS5_pbe2_set_scrypt(a0,a1,d0,a2,d2,d4,d6))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase X509_CRL_get0_extensions 6654 801

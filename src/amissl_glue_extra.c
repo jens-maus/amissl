@@ -161,10 +161,10 @@ void * OSSL_HTTP_transfer_amiga_2(void * arg, int buf_size,
 
 // ---
 
-int EVP_PBE_scrypt_ex_amiga_1(const char * pass, size_t passlen,
-			      const unsigned char * salt,
-			      uint64_t N, uint64_t r, uint64_t p,
-			      uint64_t maxmem, void * moreargs)
+int EVP_PBE_scrypt_amiga_1(const char * pass, size_t passlen,
+			   const unsigned char * salt,
+			   uint64_t N, uint64_t r, uint64_t p,
+			   uint64_t maxmem, void * moreargs)
 {
   int result, *a = (int *)moreargs;
   if (a != NULL)
@@ -179,6 +179,18 @@ int EVP_PBE_scrypt_ex_amiga_1(const char * pass, size_t passlen,
     result = 0;
   }
   return result;
+}
+
+void * EVP_PBE_scrypt_amiga_2(size_t saltlen, unsigned char * key, size_t keylen)
+{
+  int *moreargs = malloc(3*sizeof(int));
+  if (moreargs != NULL)
+  {
+    moreargs[0] = (int)saltlen;
+    moreargs[1] = (int)key;
+    moreargs[2] = (int)keylen;
+  }
+  return (void *)moreargs;
 }
 
 void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t keylen,

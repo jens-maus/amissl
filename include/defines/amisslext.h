@@ -5745,8 +5745,8 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___propq), D4), \
      struct Library *, AMISSLEXT_BASE_NAME, 903, Amisslext)
 
-#define EVP_PBE_scrypt_ex_amiga_1(___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs) \
-      AROS_LC8(int, EVP_PBE_scrypt_ex_amiga_1, \
+#define EVP_PBE_scrypt_amiga_1(___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs) \
+      AROS_LC8(int, EVP_PBE_scrypt_amiga_1, \
  AROS_LCA(const char *, (___pass), A0), \
  AROS_LCA(size_t, (___passlen), A1), \
  AROS_LCA(const unsigned char *, (___salt), A2), \
@@ -5757,6 +5757,13 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___moreargs), A3), \
      struct Library *, AMISSLEXT_BASE_NAME, 904, Amisslext)
 
+#define EVP_PBE_scrypt_amiga_2(___saltlen, ___key, ___keylen) \
+      AROS_LC3(void *, EVP_PBE_scrypt_amiga_2, \
+ AROS_LCA(size_t, (___saltlen), D0), \
+ AROS_LCA(unsigned char *, (___key), A0), \
+ AROS_LCA(size_t, (___keylen), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 905, Amisslext)
+
 #define EVP_PBE_scrypt_ex_amiga_2(___saltlen, ___key, ___keylen, ___ctx, ___propq) \
       AROS_LC5(void *, EVP_PBE_scrypt_ex_amiga_2, \
  AROS_LCA(size_t, (___saltlen), D0), \
@@ -5764,7 +5771,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(size_t, (___keylen), D1), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 905, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 906, Amisslext)
 
 #define PKCS5_v2_scrypt_keyivgen_ex(___ctx, ___pass, ___passlen, ___param, ___c, ___md, ___en_de, ___libctx, ___propq) \
       AROS_LC9(int, PKCS5_v2_scrypt_keyivgen_ex, \
@@ -5777,7 +5784,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___en_de), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D3), \
  AROS_LCA(const char *, (___propq), D4), \
-     struct Library *, AMISSLEXT_BASE_NAME, 906, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 907, Amisslext)
 
 #define EVP_PBE_CipherInit_ex(___pbe_obj, ___pass, ___passlen, ___param, ___ctx, ___en_de, ___libctx, ___propq) \
       AROS_LC8(int, EVP_PBE_CipherInit_ex, \
@@ -5789,7 +5796,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___en_de), D1), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D2), \
  AROS_LCA(const char *, (___propq), D3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 907, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 908, Amisslext)
 
 #define EVP_PBE_find_ex(___type, ___pbe_nid, ___pcnid, ___pmnid, ___pkeygen, ___pkeygen_ex) \
       AROS_LC6(int, EVP_PBE_find_ex, \
@@ -5799,7 +5806,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int *, (___pmnid), A1), \
  AROS_LCA(EVP_PBE_KEYGEN **, (___pkeygen), A2), \
  AROS_LCA(EVP_PBE_KEYGEN_EX **, (___pkeygen_ex), A3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 908, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 909, Amisslext)
 
 #define PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(___pbe_nid, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___p8inf, ___ctx, ___propq) \
       AROS_LC9(PKCS12_SAFEBAG *, PKCS12_SAFEBAG_create_pkcs8_encrypt_ex, \
@@ -5812,7 +5819,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(PKCS8_PRIV_KEY_INFO *, (___p8inf), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
  AROS_LCA(const char *, (___propq), D4), \
-     struct Library *, AMISSLEXT_BASE_NAME, 909, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 910, Amisslext)
 
 #define PKCS8_decrypt_ex(___p8, ___pass, ___passlen, ___ctx, ___propq) \
       AROS_LC5(PKCS8_PRIV_KEY_INFO *, PKCS8_decrypt_ex, \
@@ -5821,7 +5828,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___passlen), D0), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A2), \
  AROS_LCA(const char *, (___propq), A3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 910, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 911, Amisslext)
 
 #define PKCS12_decrypt_skey_ex(___bag, ___pass, ___passlen, ___ctx, ___propq) \
       AROS_LC5(PKCS8_PRIV_KEY_INFO *, PKCS12_decrypt_skey_ex, \
@@ -5830,7 +5837,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___passlen), D0), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A2), \
  AROS_LCA(const char *, (___propq), A3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 911, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 912, Amisslext)
 
 #define PKCS8_encrypt_ex(___pbe_nid, ___cipher, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___p8, ___ctx, ___propq) \
       AROS_LC10(X509_SIG *, PKCS8_encrypt_ex, \
@@ -5844,7 +5851,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(PKCS8_PRIV_KEY_INFO *, (___p8), A3), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D4), \
  AROS_LCA(const char *, (___propq), D5), \
-     struct Library *, AMISSLEXT_BASE_NAME, 912, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 913, Amisslext)
 
 #define PKCS8_set0_pbe_ex(___pass, ___passlen, ___p8inf, ___pbe, ___ctx, ___propq) \
       AROS_LC6(X509_SIG *, PKCS8_set0_pbe_ex, \
@@ -5854,7 +5861,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_ALGOR *, (___pbe), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
  AROS_LCA(const char *, (___propq), D1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 913, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 914, Amisslext)
 
 #define PKCS12_pack_p7encdata_ex(___pbe_nid, ___pass, ___passlen, ___salt, ___saltlen, ___iter, ___bags, ___ctx, ___propq) \
       AROS_LC9(PKCS7 *, PKCS12_pack_p7encdata_ex, \
@@ -5867,7 +5874,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(STACK_OF(PKCS12_SAFEBAG) *, (___bags), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
  AROS_LCA(const char *, (___propq), D4), \
-     struct Library *, AMISSLEXT_BASE_NAME, 914, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 915, Amisslext)
 
 #define PKCS12_pbe_crypt_ex(___algor, ___pass, ___passlen, ___in, ___inlen, ___data, ___datalen, ___en_de, ___libctx, ___propq) \
       AROS_LC10(unsigned char *, PKCS12_pbe_crypt_ex, \
@@ -5881,7 +5888,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___en_de), D3), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D4), \
  AROS_LCA(const char *, (___propq), D5), \
-     struct Library *, AMISSLEXT_BASE_NAME, 915, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 916, Amisslext)
 
 #define PKCS12_item_decrypt_d2i_ex(___algor, ___it, ___pass, ___passlen, ___oct, ___zbuf, ___libctx, ___propq) \
       AROS_LC8(void *, PKCS12_item_decrypt_d2i_ex, \
@@ -5893,7 +5900,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___zbuf), D1), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D2), \
  AROS_LCA(const char *, (___propq), D3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 916, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 917, Amisslext)
 
 #define PKCS12_item_i2d_encrypt_ex(___algor, ___it, ___pass, ___passlen, ___obj, ___zbuf, ___ctx, ___propq) \
       AROS_LC8(ASN1_OCTET_STRING *, PKCS12_item_i2d_encrypt_ex, \
@@ -5905,14 +5912,14 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___zbuf), D1), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D2), \
  AROS_LCA(const char *, (___propq), D3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 917, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 918, Amisslext)
 
 #define PKCS12_init_ex(___mode, ___ctx, ___propq) \
       AROS_LC3(PKCS12 *, PKCS12_init_ex, \
  AROS_LCA(int, (___mode), D0), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A0), \
  AROS_LCA(const char *, (___propq), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 918, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 919, Amisslext)
 
 #define PKCS12_key_gen_asc_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
       AROS_LC11(int, PKCS12_key_gen_asc_ex, \
@@ -5927,7 +5934,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_MD *, (___md_type), A3), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D5), \
  AROS_LCA(const char *, (___propq), D6), \
-     struct Library *, AMISSLEXT_BASE_NAME, 919, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 920, Amisslext)
 
 #define PKCS12_key_gen_uni_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
       AROS_LC11(int, PKCS12_key_gen_uni_ex, \
@@ -5942,7 +5949,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_MD *, (___md_type), A3), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D5), \
  AROS_LCA(const char *, (___propq), D6), \
-     struct Library *, AMISSLEXT_BASE_NAME, 920, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 921, Amisslext)
 
 #define PKCS12_key_gen_utf8_ex(___pass, ___passlen, ___salt, ___saltlen, ___id, ___iter, ___n, ___out, ___md_type, ___ctx, ___propq) \
       AROS_LC11(int, PKCS12_key_gen_utf8_ex, \
@@ -5957,7 +5964,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_MD *, (___md_type), A3), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D5), \
  AROS_LCA(const char *, (___propq), D6), \
-     struct Library *, AMISSLEXT_BASE_NAME, 921, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 922, Amisslext)
 
 #define PKCS12_PBE_keyivgen_ex(___ctx, ___pass, ___passlen, ___param, ___cipher, ___md_type, ___en_de, ___libctx, ___propq) \
       AROS_LC9(int, PKCS12_PBE_keyivgen_ex, \
@@ -5970,7 +5977,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___en_de), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D3), \
  AROS_LCA(const char *, (___propq), D4), \
-     struct Library *, AMISSLEXT_BASE_NAME, 922, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 923, Amisslext)
 
 #define PKCS12_create_ex(___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___iter, ___mac_iter, ___keytype, ___ctx, ___propq) \
       AROS_LC12(PKCS12 *, PKCS12_create_ex, \
@@ -5986,7 +5993,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___keytype), D5), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), D6), \
  AROS_LCA(const char *, (___propq), D7), \
-     struct Library *, AMISSLEXT_BASE_NAME, 923, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 924, Amisslext)
 
 #define PKCS12_add_key_ex(___pbags, ___key, ___key_usage, ___iter, ___key_nid, ___pass, ___ctx, ___propq) \
       AROS_LC8(PKCS12_SAFEBAG *, PKCS12_add_key_ex, \
@@ -5998,7 +6005,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___pass), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
  AROS_LCA(const char *, (___propq), D3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 924, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 925, Amisslext)
 
 #define PKCS12_add_safe_ex(___psafes, ___bags, ___safe_nid, ___iter, ___pass, ___ctx, ___propq) \
       AROS_LC7(int, PKCS12_add_safe_ex, \
@@ -6009,7 +6016,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___pass), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
  AROS_LCA(const char *, (___propq), D2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 925, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 926, Amisslext)
 
 #define PKCS12_add_safes_ex(___safes, ___p7_nid, ___ctx, ___propq) \
       AROS_LC4(PKCS12 *, PKCS12_add_safes_ex, \
@@ -6017,7 +6024,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___p7_nid), D0), \
  AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 926, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 927, Amisslext)
 
 #define PKCS5_pbe_set0_algor_ex(___algor, ___alg, ___iter, ___salt, ___saltlen, ___libctx) \
       AROS_LC6(int, PKCS5_pbe_set0_algor_ex, \
@@ -6027,7 +6034,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const unsigned char *, (___salt), A1), \
  AROS_LCA(int, (___saltlen), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 927, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 928, Amisslext)
 
 #define PKCS5_pbe_set_ex(___alg, ___iter, ___salt, ___saltlen, ___libctx) \
       AROS_LC5(X509_ALGOR *, PKCS5_pbe_set_ex, \
@@ -6036,7 +6043,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const unsigned char *, (___salt), A0), \
  AROS_LCA(int, (___saltlen), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 928, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 929, Amisslext)
 
 #define PKCS5_pbe2_set_iv_ex(___cipher, ___iter, ___salt, ___saltlen, ___aiv, ___prf_nid, ___libctx) \
       AROS_LC7(X509_ALGOR *, PKCS5_pbe2_set_iv_ex, \
@@ -6047,7 +6054,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(unsigned char *, (___aiv), A2), \
  AROS_LCA(int, (___prf_nid), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
-     struct Library *, AMISSLEXT_BASE_NAME, 929, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 930, Amisslext)
 
 #define PKCS5_pbkdf2_set_ex(___iter, ___salt, ___saltlen, ___prf_nid, ___keylen, ___libctx) \
       AROS_LC6(X509_ALGOR *, PKCS5_pbkdf2_set_ex, \
@@ -6057,47 +6064,47 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___prf_nid), D2), \
  AROS_LCA(int, (___keylen), D3), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 930, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 931, Amisslext)
 
 #define BIO_new_from_core_bio(___libctx, ___corebio) \
       AROS_LC2(BIO *, BIO_new_from_core_bio, \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A0), \
  AROS_LCA(OSSL_CORE_BIO *, (___corebio), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 931, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 932, Amisslext)
 
 #define BIO_new_ex(___libctx, ___method) \
       AROS_LC2(BIO *, BIO_new_ex, \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A0), \
  AROS_LCA(const BIO_METHOD *, (___method), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 932, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 933, Amisslext)
 
 #define BIO_s_core() \
       AROS_LC0(const BIO_METHOD *, BIO_s_core, \
-     struct Library *, AMISSLEXT_BASE_NAME, 933, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 934, Amisslext)
 
 #define BIO_get_line(___bio, ___buf, ___size) \
       AROS_LC3(int, BIO_get_line, \
  AROS_LCA(BIO *, (___bio), A0), \
  AROS_LCA(char *, (___buf), A1), \
  AROS_LCA(int, (___size), D0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 934, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 935, Amisslext)
 
 #define OSSL_LIB_CTX_new_from_dispatch(___handle, ___in) \
       AROS_LC2(OSSL_LIB_CTX *, OSSL_LIB_CTX_new_from_dispatch, \
  AROS_LCA(const OSSL_CORE_HANDLE *, (___handle), A0), \
  AROS_LCA(const OSSL_DISPATCH *, (___in), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 935, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 936, Amisslext)
 
 #define OSSL_LIB_CTX_new_child(___handle, ___in) \
       AROS_LC2(OSSL_LIB_CTX *, OSSL_LIB_CTX_new_child, \
  AROS_LCA(const OSSL_CORE_HANDLE *, (___handle), A0), \
  AROS_LCA(const OSSL_DISPATCH *, (___in), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 936, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 937, Amisslext)
 
 #define OSSL_PROVIDER_get0_dispatch(___prov) \
       AROS_LC1(const OSSL_DISPATCH *, OSSL_PROVIDER_get0_dispatch, \
  AROS_LCA(const OSSL_PROVIDER *, (___prov), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 937, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 938, Amisslext)
 
 #define PKCS5_PBE_keyivgen_ex(___cctx, ___pass, ___passlen, ___param, ___cipher, ___md, ___en_de, ___libctx, ___propq) \
       AROS_LC9(int, PKCS5_PBE_keyivgen_ex, \
@@ -6110,12 +6117,12 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___en_de), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D3), \
  AROS_LCA(const char *, (___propq), D4), \
-     struct Library *, AMISSLEXT_BASE_NAME, 938, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 939, Amisslext)
 
 #define EVP_MAC_CTX_get_block_size(___ctx) \
       AROS_LC1(size_t, EVP_MAC_CTX_get_block_size, \
  AROS_LCA(EVP_MAC_CTX *, (___ctx), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 939, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 940, Amisslext)
 
 #define BIO_debug_callback_ex(___bio, ___oper, ___argp, ___len, ___argi, ___argl, ___ret, ___processed) \
       AROS_LC8(long, BIO_debug_callback_ex, \
@@ -6127,7 +6134,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(long, (___argl), D3), \
  AROS_LCA(int, (___ret), D4), \
  AROS_LCA(size_t *, (___processed), A2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 940, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 941, Amisslext)
 
 #define b2i_PVK_bio_ex(___in, ___cb, ___u, ___libctx, ___propq) \
       AROS_LC5(EVP_PKEY *, b2i_PVK_bio_ex, \
@@ -6136,7 +6143,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___u), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 941, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 942, Amisslext)
 
 #define i2b_PVK_bio_ex(___out, ___pk, ___enclevel, ___cb, ___u, ___libctx, ___propq) \
       AROS_LC7(int, i2b_PVK_bio_ex, \
@@ -6147,30 +6154,30 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___u), A3), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D1), \
  AROS_LCA(const char *, (___propq), D2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 942, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 943, Amisslext)
 
 #define NCONF_get0_libctx(___conf) \
       AROS_LC1(OSSL_LIB_CTX *, NCONF_get0_libctx, \
  AROS_LCA(const CONF *, (___conf), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 943, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 944, Amisslext)
 
 #define NCONF_get_section_names(___conf) \
       AROS_LC1(STACK_OF(OPENSSL_CSTRING) *, NCONF_get_section_names, \
  AROS_LCA(const CONF *, (___conf), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 944, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 945, Amisslext)
 
 #define X509_PUBKEY_new_ex(___libctx, ___propq) \
       AROS_LC2(X509_PUBKEY *, X509_PUBKEY_new_ex, \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A0), \
  AROS_LCA(const char *, (___propq), A1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 945, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 946, Amisslext)
 
 #define ASN1_item_new_ex(___it, ___libctx, ___propq) \
       AROS_LC3(ASN1_VALUE *, ASN1_item_new_ex, \
  AROS_LCA(const ASN1_ITEM *, (___it), A0), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
-     struct Library *, AMISSLEXT_BASE_NAME, 946, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 947, Amisslext)
 
 #define ASN1_item_d2i_bio_ex(___it, ___in, ___pval, ___libctx, ___propq) \
       AROS_LC5(void *, ASN1_item_d2i_bio_ex, \
@@ -6179,7 +6186,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___pval), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 947, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 948, Amisslext)
 
 #define ASN1_item_d2i_ex(___val, ___in, ___len, ___it, ___libctx, ___propq) \
       AROS_LC6(ASN1_VALUE *, ASN1_item_d2i_ex, \
@@ -6189,23 +6196,23 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const ASN1_ITEM *, (___it), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D1), \
-     struct Library *, AMISSLEXT_BASE_NAME, 948, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 949, Amisslext)
 
 #define ASN1_TIME_print_ex(___bp, ___tm, ___flags) \
       AROS_LC3(int, ASN1_TIME_print_ex, \
  AROS_LCA(BIO *, (___bp), A0), \
  AROS_LCA(const ASN1_TIME *, (___tm), A1), \
  AROS_LCA(unsigned long, (___flags), D0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 949, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 950, Amisslext)
 
 #define EVP_PKEY_get0_provider(___key) \
       AROS_LC1(const OSSL_PROVIDER *, EVP_PKEY_get0_provider, \
  AROS_LCA(const EVP_PKEY *, (___key), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 950, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 951, Amisslext)
 
 #define EVP_PKEY_CTX_get0_provider(___ctx) \
       AROS_LC1(const OSSL_PROVIDER *, EVP_PKEY_CTX_get0_provider, \
  AROS_LCA(const EVP_PKEY_CTX *, (___ctx), A0), \
-     struct Library *, AMISSLEXT_BASE_NAME, 951, Amisslext)
+     struct Library *, AMISSLEXT_BASE_NAME, 952, Amisslext)
 
 #endif /* !_INLINE_AMISSLEXT_H */

@@ -940,7 +940,8 @@ const char * SAVEDS ASM LIB_EVP_ASYM_CIPHER_get0_name(REG(a6, __IFACE_OR_BASE), 
 const char * SAVEDS ASM LIB_EVP_KEM_get0_name(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_KEM * wrap));
 const char * SAVEDS ASM LIB_EVP_KEYEXCH_get0_name(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_KEYEXCH * keyexch));
 int SAVEDS ASM LIB_PKCS5_v2_PBE_keyivgen_ex(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * cipher), REG(d1, const EVP_MD * md), REG(d2, int en_de), REG(d3, OSSL_LIB_CTX * libctx), REG(d4, const char * propq));
-int SAVEDS ASM LIB_EVP_PBE_scrypt_ex_amiga_1(REG(a6, __IFACE_OR_BASE), REG(a0, const char * pass), REG(a1, size_t passlen), REG(a2, const unsigned char * salt), REG(d0, uint64_t N), REG(d2, uint64_t r), REG(d4, uint64_t p), REG(d6, uint64_t maxmem), REG(a3, void * moreargs));
+int SAVEDS ASM LIB_EVP_PBE_scrypt_amiga_1(REG(a6, __IFACE_OR_BASE), REG(a0, const char * pass), REG(a1, size_t passlen), REG(a2, const unsigned char * salt), REG(d0, uint64_t N), REG(d2, uint64_t r), REG(d4, uint64_t p), REG(d6, uint64_t maxmem), REG(a3, void * moreargs));
+void * SAVEDS ASM LIB_EVP_PBE_scrypt_amiga_2(REG(a6, __IFACE_OR_BASE), REG(d0, size_t saltlen), REG(a0, unsigned char * key), REG(d1, size_t keylen));
 void * SAVEDS ASM LIB_EVP_PBE_scrypt_ex_amiga_2(REG(a6, __IFACE_OR_BASE), REG(d0, size_t saltlen), REG(a0, unsigned char * key), REG(d1, size_t keylen), REG(a1, OSSL_LIB_CTX * ctx), REG(a2, const char * propq));
 int SAVEDS ASM LIB_PKCS5_v2_scrypt_keyivgen_ex(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, const EVP_CIPHER * c), REG(d1, const EVP_MD * md), REG(d2, int en_de), REG(d3, OSSL_LIB_CTX * libctx), REG(d4, const char * propq));
 int SAVEDS ASM LIB_EVP_PBE_CipherInit_ex(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_OBJECT * pbe_obj), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, ASN1_TYPE * param), REG(a3, EVP_CIPHER_CTX * ctx), REG(d1, int en_de), REG(d2, OSSL_LIB_CTX * libctx), REG(d3, const char * propq));
@@ -1892,7 +1893,8 @@ const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, __IFACE_
     LFUNC_FA_(EVP_KEM_get0_name) \
     LFUNC_FA_(EVP_KEYEXCH_get0_name) \
     LFUNC_FA_(PKCS5_v2_PBE_keyivgen_ex) \
-    LFUNC_FA_(EVP_PBE_scrypt_ex_amiga_1) \
+    LFUNC_FA_(EVP_PBE_scrypt_amiga_1) \
+    LFUNC_FA_(EVP_PBE_scrypt_amiga_2) \
     LFUNC_FA_(EVP_PBE_scrypt_ex_amiga_2) \
     LFUNC_FA_(PKCS5_v2_scrypt_keyivgen_ex) \
     LFUNC_FA_(EVP_PBE_CipherInit_ex) \

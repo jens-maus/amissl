@@ -4293,7 +4293,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_MD_meth_set_result_size
 	    FPTR IAmiSSL_EVP_MD_meth_set_update
 	    FPTR IAmiSSL_EVP_PBE_get
-	    FPTR IAmiSSL_EVP_PBE_scrypt
+	    FPTR IAmiSSL_OBSOLETE_EVP_PBE_scrypt
 	    FPTR IAmiSSL_EVP_PKEY_asn1_set_security_bits
 	    FPTR IAmiSSL_EVP_PKEY_get0_DH
 	    FPTR IAmiSSL_EVP_PKEY_get0_DSA
@@ -6379,7 +6379,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_KEM_get0_name
 	    FPTR IAmiSSL_EVP_KEYEXCH_get0_name
 	    FPTR IAmiSSL_PKCS5_v2_PBE_keyivgen_ex
-	    FPTR IAmiSSL_EVP_PBE_scrypt_ex_amiga_1
+	    FPTR IAmiSSL_EVP_PBE_scrypt_amiga_1
+	    FPTR IAmiSSL_EVP_PBE_scrypt_amiga_2
 	    FPTR IAmiSSL_EVP_PBE_scrypt_ex_amiga_2
 	    FPTR IAmiSSL_PKCS5_v2_scrypt_keyivgen_ex
 	    FPTR IAmiSSL_EVP_PBE_CipherInit_ex

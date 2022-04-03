@@ -1493,24 +1493,28 @@ int PKCS5_v2_PBE_keyivgen_ex(EVP_CIPHER_CTX *ctx, const char *pass, int passlen,
                              OSSL_LIB_CTX *libctx, const char *propq);
 
 #ifndef OPENSSL_NO_SCRYPT
-int EVP_PBE_scrypt(const char *pass, size_t passlen,
-                   const unsigned char *salt, size_t saltlen,
-                   uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem,
-                   unsigned char *key, size_t keylen);
 # if defined(OPENSSL_SYS_AMIGA)
-int EVP_PBE_scrypt_ex_amiga_1(const char * pass, size_t passlen,
-			      const unsigned char * salt,
-			      uint64_t N, uint64_t r, uint64_t p,
-			      uint64_t maxmem, void * moreargs);
+int EVP_PBE_scrypt_amiga_1(const char * pass, size_t passlen,
+                           const unsigned char * salt,
+                           uint64_t N, uint64_t r, uint64_t p,
+                           uint64_t maxmem, void * moreargs);
+void * EVP_PBE_scrypt_amiga_2(size_t saltlen, unsigned char * key, size_t keylen);
 void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t keylen,
 				 OSSL_LIB_CTX * ctx, const char * propq);
 # endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  define EVP_PBE_scrypt(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen) \
+     EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
+     EVP_PBE_scrypt_amiga_2(saltlen,key,keylen))
 #  define EVP_PBE_scrypt_ex(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen,ctx,propq) \
-     EVP_PBE_scrypt_ex_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
+     EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
      EVP_PBE_scrypt_ex_amiga_2(saltlen,key,keylen,ctx,propq))
 # else
+int EVP_PBE_scrypt(const char *pass, size_t passlen,
+                   const unsigned char *salt, size_t saltlen,
+                   uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem,
+                   unsigned char *key, size_t keylen);
 int EVP_PBE_scrypt_ex(const char *pass, size_t passlen,
                       const unsigned char *salt, size_t saltlen,
                       uint64_t N, uint64_t r, uint64_t p, uint64_t maxmem,

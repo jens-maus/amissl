@@ -13858,13 +13858,13 @@ STATIC CONST struct EmuTrap stub_ext_PKCS5_v2_PBE_keyivgen_ex = { TRAPINST, TRAP
 
 // ---
 
-STATIC int stub_ext_EVP_PBE_scrypt_ex_amiga_1_PPC(uint32 *regarray)
+STATIC int stub_ext_EVP_PBE_scrypt_amiga_1_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
-	return Self->EVP_PBE_scrypt_ex_amiga_1(
+	return Self->EVP_PBE_scrypt_amiga_1(
 		(const char *)regarray[REG68K_A0/4],
 		(size_t)regarray[REG68K_A1/4],
 		(const unsigned char *)regarray[REG68K_A2/4],
@@ -13875,7 +13875,23 @@ STATIC int stub_ext_EVP_PBE_scrypt_ex_amiga_1_PPC(uint32 *regarray)
 		(void *)regarray[REG68K_A3/4]
 	);
 }
-STATIC CONST struct EmuTrap stub_ext_EVP_PBE_scrypt_ex_amiga_1 = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_PBE_scrypt_ex_amiga_1_PPC };
+STATIC CONST struct EmuTrap stub_ext_EVP_PBE_scrypt_amiga_1 = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_PBE_scrypt_amiga_1_PPC };
+
+// ---
+
+STATIC void * stub_ext_EVP_PBE_scrypt_amiga_2_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EVP_PBE_scrypt_amiga_2(
+		(size_t)regarray[REG68K_D0/4],
+		(unsigned char *)regarray[REG68K_A0/4],
+		(size_t)regarray[REG68K_D1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_EVP_PBE_scrypt_amiga_2 = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_PBE_scrypt_amiga_2_PPC };
 
 // ---
 
@@ -15657,7 +15673,8 @@ CONST CONST_APTR ext_VecTable68K[] =
 	&stub_ext_EVP_KEM_get0_name,
 	&stub_ext_EVP_KEYEXCH_get0_name,
 	&stub_ext_PKCS5_v2_PBE_keyivgen_ex,
-	&stub_ext_EVP_PBE_scrypt_ex_amiga_1,
+	&stub_ext_EVP_PBE_scrypt_amiga_1,
+	&stub_ext_EVP_PBE_scrypt_amiga_2,
 	&stub_ext_EVP_PBE_scrypt_ex_amiga_2,
 	&stub_ext_PKCS5_v2_scrypt_keyivgen_ex,
 	&stub_ext_EVP_PBE_CipherInit_ex,

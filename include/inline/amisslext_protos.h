@@ -2719,148 +2719,151 @@ const char * __EVP_KEYEXCH_get0_name(__reg("a6") struct Library * , __reg("a0") 
 int __PKCS5_v2_PBE_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * cipher , __reg("d1") const EVP_MD * md , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5418(a6)";
 #define PKCS5_v2_PBE_keyivgen_ex(ctx, pass, passlen, param, cipher, md, en_de, libctx, propq) __PKCS5_v2_PBE_keyivgen_ex(AmiSSLExtBase, (ctx), (pass), (passlen), (param), (cipher), (md), (en_de), (libctx), (propq))
 
-int __EVP_PBE_scrypt_ex_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") size_t passlen , __reg("a2") const unsigned char * salt , __reg("d0/d1") uint64_t N , __reg("d2/d3") uint64_t r , __reg("d4/d5") uint64_t p , __reg("d6/d7") uint64_t maxmem , __reg("a3") void * moreargs ) = "\tjsr\t-5424(a6)";
-#define EVP_PBE_scrypt_ex_amiga_1(pass, passlen, salt, N, r, p, maxmem, moreargs) __EVP_PBE_scrypt_ex_amiga_1(AmiSSLExtBase, (pass), (passlen), (salt), (N), (r), (p), (maxmem), (moreargs))
+int __EVP_PBE_scrypt_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") size_t passlen , __reg("a2") const unsigned char * salt , __reg("d0/d1") uint64_t N , __reg("d2/d3") uint64_t r , __reg("d4/d5") uint64_t p , __reg("d6/d7") uint64_t maxmem , __reg("a3") void * moreargs ) = "\tjsr\t-5424(a6)";
+#define EVP_PBE_scrypt_amiga_1(pass, passlen, salt, N, r, p, maxmem, moreargs) __EVP_PBE_scrypt_amiga_1(AmiSSLExtBase, (pass), (passlen), (salt), (N), (r), (p), (maxmem), (moreargs))
 
-void * __EVP_PBE_scrypt_ex_amiga_2(__reg("a6") struct Library * , __reg("d0") size_t saltlen , __reg("a0") unsigned char * key , __reg("d1") size_t keylen , __reg("a1") OSSL_LIB_CTX * ctx , __reg("a2") const char * propq ) = "\tjsr\t-5430(a6)";
+void * __EVP_PBE_scrypt_amiga_2(__reg("a6") struct Library * , __reg("d0") size_t saltlen , __reg("a0") unsigned char * key , __reg("d1") size_t keylen ) = "\tjsr\t-5430(a6)";
+#define EVP_PBE_scrypt_amiga_2(saltlen, key, keylen) __EVP_PBE_scrypt_amiga_2(AmiSSLExtBase, (saltlen), (key), (keylen))
+
+void * __EVP_PBE_scrypt_ex_amiga_2(__reg("a6") struct Library * , __reg("d0") size_t saltlen , __reg("a0") unsigned char * key , __reg("d1") size_t keylen , __reg("a1") OSSL_LIB_CTX * ctx , __reg("a2") const char * propq ) = "\tjsr\t-5436(a6)";
 #define EVP_PBE_scrypt_ex_amiga_2(saltlen, key, keylen, ctx, propq) __EVP_PBE_scrypt_ex_amiga_2(AmiSSLExtBase, (saltlen), (key), (keylen), (ctx), (propq))
 
-int __PKCS5_v2_scrypt_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * c , __reg("d1") const EVP_MD * md , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5436(a6)";
+int __PKCS5_v2_scrypt_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * c , __reg("d1") const EVP_MD * md , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5442(a6)";
 #define PKCS5_v2_scrypt_keyivgen_ex(ctx, pass, passlen, param, c, md, en_de, libctx, propq) __PKCS5_v2_scrypt_keyivgen_ex(AmiSSLExtBase, (ctx), (pass), (passlen), (param), (c), (md), (en_de), (libctx), (propq))
 
-int __EVP_PBE_CipherInit_ex(__reg("a6") struct Library * , __reg("a0") ASN1_OBJECT * pbe_obj , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") EVP_CIPHER_CTX * ctx , __reg("d1") int en_de , __reg("d2") OSSL_LIB_CTX * libctx , __reg("d3") const char * propq ) = "\tjsr\t-5442(a6)";
+int __EVP_PBE_CipherInit_ex(__reg("a6") struct Library * , __reg("a0") ASN1_OBJECT * pbe_obj , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") EVP_CIPHER_CTX * ctx , __reg("d1") int en_de , __reg("d2") OSSL_LIB_CTX * libctx , __reg("d3") const char * propq ) = "\tjsr\t-5448(a6)";
 #define EVP_PBE_CipherInit_ex(pbe_obj, pass, passlen, param, ctx, en_de, libctx, propq) __EVP_PBE_CipherInit_ex(AmiSSLExtBase, (pbe_obj), (pass), (passlen), (param), (ctx), (en_de), (libctx), (propq))
 
-int __EVP_PBE_find_ex(__reg("a6") struct Library * , __reg("d0") int type , __reg("d1") int pbe_nid , __reg("a0") int * pcnid , __reg("a1") int * pmnid , __reg("a2") EVP_PBE_KEYGEN ** pkeygen , __reg("a3") EVP_PBE_KEYGEN_EX ** pkeygen_ex ) = "\tjsr\t-5448(a6)";
+int __EVP_PBE_find_ex(__reg("a6") struct Library * , __reg("d0") int type , __reg("d1") int pbe_nid , __reg("a0") int * pcnid , __reg("a1") int * pmnid , __reg("a2") EVP_PBE_KEYGEN ** pkeygen , __reg("a3") EVP_PBE_KEYGEN_EX ** pkeygen_ex ) = "\tjsr\t-5454(a6)";
 #define EVP_PBE_find_ex(type, pbe_nid, pcnid, pmnid, pkeygen, pkeygen_ex) __EVP_PBE_find_ex(AmiSSLExtBase, (type), (pbe_nid), (pcnid), (pmnid), (pkeygen), (pkeygen_ex))
 
-PKCS12_SAFEBAG * __PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const char * pass , __reg("d1") int passlen , __reg("a1") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a2") PKCS8_PRIV_KEY_INFO * p8inf , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d4") const char * propq ) = "\tjsr\t-5454(a6)";
+PKCS12_SAFEBAG * __PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const char * pass , __reg("d1") int passlen , __reg("a1") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a2") PKCS8_PRIV_KEY_INFO * p8inf , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d4") const char * propq ) = "\tjsr\t-5460(a6)";
 #define PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(pbe_nid, pass, passlen, salt, saltlen, iter, p8inf, ctx, propq) __PKCS12_SAFEBAG_create_pkcs8_encrypt_ex(AmiSSLExtBase, (pbe_nid), (pass), (passlen), (salt), (saltlen), (iter), (p8inf), (ctx), (propq))
 
-PKCS8_PRIV_KEY_INFO * __PKCS8_decrypt_ex(__reg("a6") struct Library * , __reg("a0") const X509_SIG * p8 , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") OSSL_LIB_CTX * ctx , __reg("a3") const char * propq ) = "\tjsr\t-5460(a6)";
+PKCS8_PRIV_KEY_INFO * __PKCS8_decrypt_ex(__reg("a6") struct Library * , __reg("a0") const X509_SIG * p8 , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") OSSL_LIB_CTX * ctx , __reg("a3") const char * propq ) = "\tjsr\t-5466(a6)";
 #define PKCS8_decrypt_ex(p8, pass, passlen, ctx, propq) __PKCS8_decrypt_ex(AmiSSLExtBase, (p8), (pass), (passlen), (ctx), (propq))
 
-PKCS8_PRIV_KEY_INFO * __PKCS12_decrypt_skey_ex(__reg("a6") struct Library * , __reg("a0") const PKCS12_SAFEBAG * bag , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") OSSL_LIB_CTX * ctx , __reg("a3") const char * propq ) = "\tjsr\t-5466(a6)";
+PKCS8_PRIV_KEY_INFO * __PKCS12_decrypt_skey_ex(__reg("a6") struct Library * , __reg("a0") const PKCS12_SAFEBAG * bag , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") OSSL_LIB_CTX * ctx , __reg("a3") const char * propq ) = "\tjsr\t-5472(a6)";
 #define PKCS12_decrypt_skey_ex(bag, pass, passlen, ctx, propq) __PKCS12_decrypt_skey_ex(AmiSSLExtBase, (bag), (pass), (passlen), (ctx), (propq))
 
-X509_SIG * __PKCS8_encrypt_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const EVP_CIPHER * cipher , __reg("a1") const char * pass , __reg("d1") int passlen , __reg("a2") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a3") PKCS8_PRIV_KEY_INFO * p8 , __reg("d4") OSSL_LIB_CTX * ctx , __reg("d5") const char * propq ) = "\tjsr\t-5472(a6)";
+X509_SIG * __PKCS8_encrypt_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const EVP_CIPHER * cipher , __reg("a1") const char * pass , __reg("d1") int passlen , __reg("a2") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a3") PKCS8_PRIV_KEY_INFO * p8 , __reg("d4") OSSL_LIB_CTX * ctx , __reg("d5") const char * propq ) = "\tjsr\t-5478(a6)";
 #define PKCS8_encrypt_ex(pbe_nid, cipher, pass, passlen, salt, saltlen, iter, p8, ctx, propq) __PKCS8_encrypt_ex(AmiSSLExtBase, (pbe_nid), (cipher), (pass), (passlen), (salt), (saltlen), (iter), (p8), (ctx), (propq))
 
-X509_SIG * __PKCS8_set0_pbe_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") PKCS8_PRIV_KEY_INFO * p8inf , __reg("a2") X509_ALGOR * pbe , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d1") const char * propq ) = "\tjsr\t-5478(a6)";
+X509_SIG * __PKCS8_set0_pbe_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") PKCS8_PRIV_KEY_INFO * p8inf , __reg("a2") X509_ALGOR * pbe , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d1") const char * propq ) = "\tjsr\t-5484(a6)";
 #define PKCS8_set0_pbe_ex(pass, passlen, p8inf, pbe, ctx, propq) __PKCS8_set0_pbe_ex(AmiSSLExtBase, (pass), (passlen), (p8inf), (pbe), (ctx), (propq))
 
-PKCS7 * __PKCS12_pack_p7encdata_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const char * pass , __reg("d1") int passlen , __reg("a1") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a2") STACK_OF(PKCS12_SAFEBAG) * bags , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d4") const char * propq ) = "\tjsr\t-5484(a6)";
+PKCS7 * __PKCS12_pack_p7encdata_ex(__reg("a6") struct Library * , __reg("d0") int pbe_nid , __reg("a0") const char * pass , __reg("d1") int passlen , __reg("a1") unsigned char * salt , __reg("d2") int saltlen , __reg("d3") int iter , __reg("a2") STACK_OF(PKCS12_SAFEBAG) * bags , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d4") const char * propq ) = "\tjsr\t-5490(a6)";
 #define PKCS12_pack_p7encdata_ex(pbe_nid, pass, passlen, salt, saltlen, iter, bags, ctx, propq) __PKCS12_pack_p7encdata_ex(AmiSSLExtBase, (pbe_nid), (pass), (passlen), (salt), (saltlen), (iter), (bags), (ctx), (propq))
 
-unsigned char * __PKCS12_pbe_crypt_ex(__reg("a6") struct Library * , __reg("a0") const X509_ALGOR * algor , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") const unsigned char * in , __reg("d1") int inlen , __reg("a3") unsigned char ** data , __reg("d2") int * datalen , __reg("d3") int en_de , __reg("d4") OSSL_LIB_CTX * libctx , __reg("d5") const char * propq ) = "\tjsr\t-5490(a6)";
+unsigned char * __PKCS12_pbe_crypt_ex(__reg("a6") struct Library * , __reg("a0") const X509_ALGOR * algor , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") const unsigned char * in , __reg("d1") int inlen , __reg("a3") unsigned char ** data , __reg("d2") int * datalen , __reg("d3") int en_de , __reg("d4") OSSL_LIB_CTX * libctx , __reg("d5") const char * propq ) = "\tjsr\t-5496(a6)";
 #define PKCS12_pbe_crypt_ex(algor, pass, passlen, in, inlen, data, datalen, en_de, libctx, propq) __PKCS12_pbe_crypt_ex(AmiSSLExtBase, (algor), (pass), (passlen), (in), (inlen), (data), (datalen), (en_de), (libctx), (propq))
 
-void * __PKCS12_item_decrypt_d2i_ex(__reg("a6") struct Library * , __reg("a0") const X509_ALGOR * algor , __reg("a1") const ASN1_ITEM * it , __reg("a2") const char * pass , __reg("d0") int passlen , __reg("a3") const ASN1_OCTET_STRING * oct , __reg("d1") int zbuf , __reg("d2") OSSL_LIB_CTX * libctx , __reg("d3") const char * propq ) = "\tjsr\t-5496(a6)";
+void * __PKCS12_item_decrypt_d2i_ex(__reg("a6") struct Library * , __reg("a0") const X509_ALGOR * algor , __reg("a1") const ASN1_ITEM * it , __reg("a2") const char * pass , __reg("d0") int passlen , __reg("a3") const ASN1_OCTET_STRING * oct , __reg("d1") int zbuf , __reg("d2") OSSL_LIB_CTX * libctx , __reg("d3") const char * propq ) = "\tjsr\t-5502(a6)";
 #define PKCS12_item_decrypt_d2i_ex(algor, it, pass, passlen, oct, zbuf, libctx, propq) __PKCS12_item_decrypt_d2i_ex(AmiSSLExtBase, (algor), (it), (pass), (passlen), (oct), (zbuf), (libctx), (propq))
 
-ASN1_OCTET_STRING * __PKCS12_item_i2d_encrypt_ex(__reg("a6") struct Library * , __reg("a0") X509_ALGOR * algor , __reg("a1") const ASN1_ITEM * it , __reg("a2") const char * pass , __reg("d0") int passlen , __reg("a3") void * obj , __reg("d1") int zbuf , __reg("d2") OSSL_LIB_CTX * ctx , __reg("d3") const char * propq ) = "\tjsr\t-5502(a6)";
+ASN1_OCTET_STRING * __PKCS12_item_i2d_encrypt_ex(__reg("a6") struct Library * , __reg("a0") X509_ALGOR * algor , __reg("a1") const ASN1_ITEM * it , __reg("a2") const char * pass , __reg("d0") int passlen , __reg("a3") void * obj , __reg("d1") int zbuf , __reg("d2") OSSL_LIB_CTX * ctx , __reg("d3") const char * propq ) = "\tjsr\t-5508(a6)";
 #define PKCS12_item_i2d_encrypt_ex(algor, it, pass, passlen, obj, zbuf, ctx, propq) __PKCS12_item_i2d_encrypt_ex(AmiSSLExtBase, (algor), (it), (pass), (passlen), (obj), (zbuf), (ctx), (propq))
 
-PKCS12 * __PKCS12_init_ex(__reg("a6") struct Library * , __reg("d0") int mode , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") const char * propq ) = "\tjsr\t-5508(a6)";
+PKCS12 * __PKCS12_init_ex(__reg("a6") struct Library * , __reg("d0") int mode , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") const char * propq ) = "\tjsr\t-5514(a6)";
 #define PKCS12_init_ex(mode, ctx, propq) __PKCS12_init_ex(AmiSSLExtBase, (mode), (ctx), (propq))
 
-int __PKCS12_key_gen_asc_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5514(a6)";
+int __PKCS12_key_gen_asc_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5520(a6)";
 #define PKCS12_key_gen_asc_ex(pass, passlen, salt, saltlen, id, iter, n, out, md_type, ctx, propq) __PKCS12_key_gen_asc_ex(AmiSSLExtBase, (pass), (passlen), (salt), (saltlen), (id), (iter), (n), (out), (md_type), (ctx), (propq))
 
-int __PKCS12_key_gen_uni_ex(__reg("a6") struct Library * , __reg("a0") unsigned char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5520(a6)";
+int __PKCS12_key_gen_uni_ex(__reg("a6") struct Library * , __reg("a0") unsigned char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5526(a6)";
 #define PKCS12_key_gen_uni_ex(pass, passlen, salt, saltlen, id, iter, n, out, md_type, ctx, propq) __PKCS12_key_gen_uni_ex(AmiSSLExtBase, (pass), (passlen), (salt), (saltlen), (id), (iter), (n), (out), (md_type), (ctx), (propq))
 
-int __PKCS12_key_gen_utf8_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5526(a6)";
+int __PKCS12_key_gen_utf8_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") int passlen , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int id , __reg("d3") int iter , __reg("d4") int n , __reg("a2") unsigned char * out , __reg("a3") const EVP_MD * md_type , __reg("d5") OSSL_LIB_CTX * ctx , __reg("d6") const char * propq ) = "\tjsr\t-5532(a6)";
 #define PKCS12_key_gen_utf8_ex(pass, passlen, salt, saltlen, id, iter, n, out, md_type, ctx, propq) __PKCS12_key_gen_utf8_ex(AmiSSLExtBase, (pass), (passlen), (salt), (saltlen), (id), (iter), (n), (out), (md_type), (ctx), (propq))
 
-int __PKCS12_PBE_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * cipher , __reg("d1") const EVP_MD * md_type , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5532(a6)";
+int __PKCS12_PBE_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * cipher , __reg("d1") const EVP_MD * md_type , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5538(a6)";
 #define PKCS12_PBE_keyivgen_ex(ctx, pass, passlen, param, cipher, md_type, en_de, libctx, propq) __PKCS12_PBE_keyivgen_ex(AmiSSLExtBase, (ctx), (pass), (passlen), (param), (cipher), (md_type), (en_de), (libctx), (propq))
 
-PKCS12 * __PKCS12_create_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") const char * name , __reg("a2") EVP_PKEY * pkey , __reg("a3") X509 * cert , __reg("d0") STACK_OF(X509) * ca , __reg("d1") int nid_key , __reg("d2") int nid_cert , __reg("d3") int iter , __reg("d4") int mac_iter , __reg("d5") int keytype , __reg("d6") OSSL_LIB_CTX * ctx , __reg("d7") const char * propq ) = "\tjsr\t-5538(a6)";
+PKCS12 * __PKCS12_create_ex(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") const char * name , __reg("a2") EVP_PKEY * pkey , __reg("a3") X509 * cert , __reg("d0") STACK_OF(X509) * ca , __reg("d1") int nid_key , __reg("d2") int nid_cert , __reg("d3") int iter , __reg("d4") int mac_iter , __reg("d5") int keytype , __reg("d6") OSSL_LIB_CTX * ctx , __reg("d7") const char * propq ) = "\tjsr\t-5544(a6)";
 #define PKCS12_create_ex(pass, name, pkey, cert, ca, nid_key, nid_cert, iter, mac_iter, keytype, ctx, propq) __PKCS12_create_ex(AmiSSLExtBase, (pass), (name), (pkey), (cert), (ca), (nid_key), (nid_cert), (iter), (mac_iter), (keytype), (ctx), (propq))
 
-PKCS12_SAFEBAG * __PKCS12_add_key_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS12_SAFEBAG) ** pbags , __reg("a1") EVP_PKEY * key , __reg("d0") int key_usage , __reg("d1") int iter , __reg("d2") int key_nid , __reg("a2") const char * pass , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d3") const char * propq ) = "\tjsr\t-5544(a6)";
+PKCS12_SAFEBAG * __PKCS12_add_key_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS12_SAFEBAG) ** pbags , __reg("a1") EVP_PKEY * key , __reg("d0") int key_usage , __reg("d1") int iter , __reg("d2") int key_nid , __reg("a2") const char * pass , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d3") const char * propq ) = "\tjsr\t-5550(a6)";
 #define PKCS12_add_key_ex(pbags, key, key_usage, iter, key_nid, pass, ctx, propq) __PKCS12_add_key_ex(AmiSSLExtBase, (pbags), (key), (key_usage), (iter), (key_nid), (pass), (ctx), (propq))
 
-int __PKCS12_add_safe_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS7) ** psafes , __reg("a1") STACK_OF(PKCS12_SAFEBAG) * bags , __reg("d0") int safe_nid , __reg("d1") int iter , __reg("a2") const char * pass , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d2") const char * propq ) = "\tjsr\t-5550(a6)";
+int __PKCS12_add_safe_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS7) ** psafes , __reg("a1") STACK_OF(PKCS12_SAFEBAG) * bags , __reg("d0") int safe_nid , __reg("d1") int iter , __reg("a2") const char * pass , __reg("a3") OSSL_LIB_CTX * ctx , __reg("d2") const char * propq ) = "\tjsr\t-5556(a6)";
 #define PKCS12_add_safe_ex(psafes, bags, safe_nid, iter, pass, ctx, propq) __PKCS12_add_safe_ex(AmiSSLExtBase, (psafes), (bags), (safe_nid), (iter), (pass), (ctx), (propq))
 
-PKCS12 * __PKCS12_add_safes_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS7) * safes , __reg("d0") int p7_nid , __reg("a1") OSSL_LIB_CTX * ctx , __reg("a2") const char * propq ) = "\tjsr\t-5556(a6)";
+PKCS12 * __PKCS12_add_safes_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(PKCS7) * safes , __reg("d0") int p7_nid , __reg("a1") OSSL_LIB_CTX * ctx , __reg("a2") const char * propq ) = "\tjsr\t-5562(a6)";
 #define PKCS12_add_safes_ex(safes, p7_nid, ctx, propq) __PKCS12_add_safes_ex(AmiSSLExtBase, (safes), (p7_nid), (ctx), (propq))
 
-int __PKCS5_pbe_set0_algor_ex(__reg("a6") struct Library * , __reg("a0") X509_ALGOR * algor , __reg("d0") int alg , __reg("d1") int iter , __reg("a1") const unsigned char * salt , __reg("d2") int saltlen , __reg("a2") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5562(a6)";
+int __PKCS5_pbe_set0_algor_ex(__reg("a6") struct Library * , __reg("a0") X509_ALGOR * algor , __reg("d0") int alg , __reg("d1") int iter , __reg("a1") const unsigned char * salt , __reg("d2") int saltlen , __reg("a2") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5568(a6)";
 #define PKCS5_pbe_set0_algor_ex(algor, alg, iter, salt, saltlen, libctx) __PKCS5_pbe_set0_algor_ex(AmiSSLExtBase, (algor), (alg), (iter), (salt), (saltlen), (libctx))
 
-X509_ALGOR * __PKCS5_pbe_set_ex(__reg("a6") struct Library * , __reg("d0") int alg , __reg("d1") int iter , __reg("a0") const unsigned char * salt , __reg("d2") int saltlen , __reg("a1") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5568(a6)";
+X509_ALGOR * __PKCS5_pbe_set_ex(__reg("a6") struct Library * , __reg("d0") int alg , __reg("d1") int iter , __reg("a0") const unsigned char * salt , __reg("d2") int saltlen , __reg("a1") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5574(a6)";
 #define PKCS5_pbe_set_ex(alg, iter, salt, saltlen, libctx) __PKCS5_pbe_set_ex(AmiSSLExtBase, (alg), (iter), (salt), (saltlen), (libctx))
 
-X509_ALGOR * __PKCS5_pbe2_set_iv_ex(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER * cipher , __reg("d0") int iter , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("a2") unsigned char * aiv , __reg("d2") int prf_nid , __reg("a3") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5574(a6)";
+X509_ALGOR * __PKCS5_pbe2_set_iv_ex(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER * cipher , __reg("d0") int iter , __reg("a1") unsigned char * salt , __reg("d1") int saltlen , __reg("a2") unsigned char * aiv , __reg("d2") int prf_nid , __reg("a3") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5580(a6)";
 #define PKCS5_pbe2_set_iv_ex(cipher, iter, salt, saltlen, aiv, prf_nid, libctx) __PKCS5_pbe2_set_iv_ex(AmiSSLExtBase, (cipher), (iter), (salt), (saltlen), (aiv), (prf_nid), (libctx))
 
-X509_ALGOR * __PKCS5_pbkdf2_set_ex(__reg("a6") struct Library * , __reg("d0") int iter , __reg("a0") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int prf_nid , __reg("d3") int keylen , __reg("a1") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5580(a6)";
+X509_ALGOR * __PKCS5_pbkdf2_set_ex(__reg("a6") struct Library * , __reg("d0") int iter , __reg("a0") unsigned char * salt , __reg("d1") int saltlen , __reg("d2") int prf_nid , __reg("d3") int keylen , __reg("a1") OSSL_LIB_CTX * libctx ) = "\tjsr\t-5586(a6)";
 #define PKCS5_pbkdf2_set_ex(iter, salt, saltlen, prf_nid, keylen, libctx) __PKCS5_pbkdf2_set_ex(AmiSSLExtBase, (iter), (salt), (saltlen), (prf_nid), (keylen), (libctx))
 
-BIO * __BIO_new_from_core_bio(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") OSSL_CORE_BIO * corebio ) = "\tjsr\t-5586(a6)";
+BIO * __BIO_new_from_core_bio(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") OSSL_CORE_BIO * corebio ) = "\tjsr\t-5592(a6)";
 #define BIO_new_from_core_bio(libctx, corebio) __BIO_new_from_core_bio(AmiSSLExtBase, (libctx), (corebio))
 
-BIO * __BIO_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const BIO_METHOD * method ) = "\tjsr\t-5592(a6)";
+BIO * __BIO_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const BIO_METHOD * method ) = "\tjsr\t-5598(a6)";
 #define BIO_new_ex(libctx, method) __BIO_new_ex(AmiSSLExtBase, (libctx), (method))
 
-const BIO_METHOD * __BIO_s_core(__reg("a6") struct Library * ) = "\tjsr\t-5598(a6)";
+const BIO_METHOD * __BIO_s_core(__reg("a6") struct Library * ) = "\tjsr\t-5604(a6)";
 #define BIO_s_core() __BIO_s_core(AmiSSLExtBase)
 
-int __BIO_get_line(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") char * buf , __reg("d0") int size ) = "\tjsr\t-5604(a6)";
+int __BIO_get_line(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") char * buf , __reg("d0") int size ) = "\tjsr\t-5610(a6)";
 #define BIO_get_line(bio, buf, size) __BIO_get_line(AmiSSLExtBase, (bio), (buf), (size))
 
-OSSL_LIB_CTX * __OSSL_LIB_CTX_new_from_dispatch(__reg("a6") struct Library * , __reg("a0") const OSSL_CORE_HANDLE * handle , __reg("a1") const OSSL_DISPATCH * in ) = "\tjsr\t-5610(a6)";
+OSSL_LIB_CTX * __OSSL_LIB_CTX_new_from_dispatch(__reg("a6") struct Library * , __reg("a0") const OSSL_CORE_HANDLE * handle , __reg("a1") const OSSL_DISPATCH * in ) = "\tjsr\t-5616(a6)";
 #define OSSL_LIB_CTX_new_from_dispatch(handle, in) __OSSL_LIB_CTX_new_from_dispatch(AmiSSLExtBase, (handle), (in))
 
-OSSL_LIB_CTX * __OSSL_LIB_CTX_new_child(__reg("a6") struct Library * , __reg("a0") const OSSL_CORE_HANDLE * handle , __reg("a1") const OSSL_DISPATCH * in ) = "\tjsr\t-5616(a6)";
+OSSL_LIB_CTX * __OSSL_LIB_CTX_new_child(__reg("a6") struct Library * , __reg("a0") const OSSL_CORE_HANDLE * handle , __reg("a1") const OSSL_DISPATCH * in ) = "\tjsr\t-5622(a6)";
 #define OSSL_LIB_CTX_new_child(handle, in) __OSSL_LIB_CTX_new_child(AmiSSLExtBase, (handle), (in))
 
-const OSSL_DISPATCH * __OSSL_PROVIDER_get0_dispatch(__reg("a6") struct Library * , __reg("a0") const OSSL_PROVIDER * prov ) = "\tjsr\t-5622(a6)";
+const OSSL_DISPATCH * __OSSL_PROVIDER_get0_dispatch(__reg("a6") struct Library * , __reg("a0") const OSSL_PROVIDER * prov ) = "\tjsr\t-5628(a6)";
 #define OSSL_PROVIDER_get0_dispatch(prov) __OSSL_PROVIDER_get0_dispatch(AmiSSLExtBase, (prov))
 
-int __PKCS5_PBE_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * cctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * cipher , __reg("d1") const EVP_MD * md , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5628(a6)";
+int __PKCS5_PBE_keyivgen_ex(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * cctx , __reg("a1") const char * pass , __reg("d0") int passlen , __reg("a2") ASN1_TYPE * param , __reg("a3") const EVP_CIPHER * cipher , __reg("d1") const EVP_MD * md , __reg("d2") int en_de , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-5634(a6)";
 #define PKCS5_PBE_keyivgen_ex(cctx, pass, passlen, param, cipher, md, en_de, libctx, propq) __PKCS5_PBE_keyivgen_ex(AmiSSLExtBase, (cctx), (pass), (passlen), (param), (cipher), (md), (en_de), (libctx), (propq))
 
-size_t __EVP_MAC_CTX_get_block_size(__reg("a6") struct Library * , __reg("a0") EVP_MAC_CTX * ctx ) = "\tjsr\t-5634(a6)";
+size_t __EVP_MAC_CTX_get_block_size(__reg("a6") struct Library * , __reg("a0") EVP_MAC_CTX * ctx ) = "\tjsr\t-5640(a6)";
 #define EVP_MAC_CTX_get_block_size(ctx) __EVP_MAC_CTX_get_block_size(AmiSSLExtBase, (ctx))
 
-long __BIO_debug_callback_ex(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("d0") int oper , __reg("a1") const char * argp , __reg("d1") size_t len , __reg("d2") int argi , __reg("d3") long argl , __reg("d4") int ret , __reg("a2") size_t * processed ) = "\tjsr\t-5640(a6)";
+long __BIO_debug_callback_ex(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("d0") int oper , __reg("a1") const char * argp , __reg("d1") size_t len , __reg("d2") int argi , __reg("d3") long argl , __reg("d4") int ret , __reg("a2") size_t * processed ) = "\tjsr\t-5646(a6)";
 #define BIO_debug_callback_ex(bio, oper, argp, len, argi, argl, ret, processed) __BIO_debug_callback_ex(AmiSSLExtBase, (bio), (oper), (argp), (len), (argi), (argl), (ret), (processed))
 
-EVP_PKEY * __b2i_PVK_bio_ex(__reg("a6") struct Library * , __reg("a0") BIO * in , __reg("a1") pem_password_cb * cb , __reg("a2") void * u , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d0") const char * propq ) = "\tjsr\t-5646(a6)";
+EVP_PKEY * __b2i_PVK_bio_ex(__reg("a6") struct Library * , __reg("a0") BIO * in , __reg("a1") pem_password_cb * cb , __reg("a2") void * u , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d0") const char * propq ) = "\tjsr\t-5652(a6)";
 #define b2i_PVK_bio_ex(in, cb, u, libctx, propq) __b2i_PVK_bio_ex(AmiSSLExtBase, (in), (cb), (u), (libctx), (propq))
 
-int __i2b_PVK_bio_ex(__reg("a6") struct Library * , __reg("a0") BIO * out , __reg("a1") const EVP_PKEY * pk , __reg("d0") int enclevel , __reg("a2") pem_password_cb * cb , __reg("a3") void * u , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-5652(a6)";
+int __i2b_PVK_bio_ex(__reg("a6") struct Library * , __reg("a0") BIO * out , __reg("a1") const EVP_PKEY * pk , __reg("d0") int enclevel , __reg("a2") pem_password_cb * cb , __reg("a3") void * u , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-5658(a6)";
 #define i2b_PVK_bio_ex(out, pk, enclevel, cb, u, libctx, propq) __i2b_PVK_bio_ex(AmiSSLExtBase, (out), (pk), (enclevel), (cb), (u), (libctx), (propq))
 
-OSSL_LIB_CTX * __NCONF_get0_libctx(__reg("a6") struct Library * , __reg("a0") const CONF * conf ) = "\tjsr\t-5658(a6)";
+OSSL_LIB_CTX * __NCONF_get0_libctx(__reg("a6") struct Library * , __reg("a0") const CONF * conf ) = "\tjsr\t-5664(a6)";
 #define NCONF_get0_libctx(conf) __NCONF_get0_libctx(AmiSSLExtBase, (conf))
 
-STACK_OF(OPENSSL_CSTRING) * __NCONF_get_section_names(__reg("a6") struct Library * , __reg("a0") const CONF * conf ) = "\tjsr\t-5664(a6)";
+STACK_OF(OPENSSL_CSTRING) * __NCONF_get_section_names(__reg("a6") struct Library * , __reg("a0") const CONF * conf ) = "\tjsr\t-5670(a6)";
 #define NCONF_get_section_names(conf) __NCONF_get_section_names(AmiSSLExtBase, (conf))
 
-X509_PUBKEY * __X509_PUBKEY_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * propq ) = "\tjsr\t-5670(a6)";
+X509_PUBKEY * __X509_PUBKEY_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * propq ) = "\tjsr\t-5676(a6)";
 #define X509_PUBKEY_new_ex(libctx, propq) __X509_PUBKEY_new_ex(AmiSSLExtBase, (libctx), (propq))
 
-ASN1_VALUE * __ASN1_item_new_ex(__reg("a6") struct Library * , __reg("a0") const ASN1_ITEM * it , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-5676(a6)";
+ASN1_VALUE * __ASN1_item_new_ex(__reg("a6") struct Library * , __reg("a0") const ASN1_ITEM * it , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-5682(a6)";
 #define ASN1_item_new_ex(it, libctx, propq) __ASN1_item_new_ex(AmiSSLExtBase, (it), (libctx), (propq))
 
-void * __ASN1_item_d2i_bio_ex(__reg("a6") struct Library * , __reg("a0") const ASN1_ITEM * it , __reg("a1") BIO * in , __reg("a2") void * pval , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d0") const char * propq ) = "\tjsr\t-5682(a6)";
+void * __ASN1_item_d2i_bio_ex(__reg("a6") struct Library * , __reg("a0") const ASN1_ITEM * it , __reg("a1") BIO * in , __reg("a2") void * pval , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d0") const char * propq ) = "\tjsr\t-5688(a6)";
 #define ASN1_item_d2i_bio_ex(it, in, pval, libctx, propq) __ASN1_item_d2i_bio_ex(AmiSSLExtBase, (it), (in), (pval), (libctx), (propq))
 
-ASN1_VALUE * __ASN1_item_d2i_ex(__reg("a6") struct Library * , __reg("a0") ASN1_VALUE ** val , __reg("a1") const unsigned char ** in , __reg("d0") long len , __reg("a2") const ASN1_ITEM * it , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-5688(a6)";
+ASN1_VALUE * __ASN1_item_d2i_ex(__reg("a6") struct Library * , __reg("a0") ASN1_VALUE ** val , __reg("a1") const unsigned char ** in , __reg("d0") long len , __reg("a2") const ASN1_ITEM * it , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-5694(a6)";
 #define ASN1_item_d2i_ex(val, in, len, it, libctx, propq) __ASN1_item_d2i_ex(AmiSSLExtBase, (val), (in), (len), (it), (libctx), (propq))
 
-int __ASN1_TIME_print_ex(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") const ASN1_TIME * tm , __reg("d0") unsigned long flags ) = "\tjsr\t-5694(a6)";
+int __ASN1_TIME_print_ex(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") const ASN1_TIME * tm , __reg("d0") unsigned long flags ) = "\tjsr\t-5700(a6)";
 #define ASN1_TIME_print_ex(bp, tm, flags) __ASN1_TIME_print_ex(AmiSSLExtBase, (bp), (tm), (flags))
 
-const OSSL_PROVIDER * __EVP_PKEY_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY * key ) = "\tjsr\t-5700(a6)";
+const OSSL_PROVIDER * __EVP_PKEY_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY * key ) = "\tjsr\t-5706(a6)";
 #define EVP_PKEY_get0_provider(key) __EVP_PKEY_get0_provider(AmiSSLExtBase, (key))
 
-const OSSL_PROVIDER * __EVP_PKEY_CTX_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY_CTX * ctx ) = "\tjsr\t-5706(a6)";
+const OSSL_PROVIDER * __EVP_PKEY_CTX_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY_CTX * ctx ) = "\tjsr\t-5712(a6)";
 #define EVP_PKEY_CTX_get0_provider(ctx) __EVP_PKEY_CTX_get0_provider(AmiSSLExtBase, (ctx))
 
 #endif /* !_INLINE_AMISSLEXT_H */

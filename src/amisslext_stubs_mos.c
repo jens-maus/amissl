@@ -9330,9 +9330,9 @@ int LIBSTUB_PKCS5_v2_PBE_keyivgen_ex(void)
   return LIB_PKCS5_v2_PBE_keyivgen_ex(_base, ___ctx, ___pass, ___passlen, ___param, ___cipher, ___md, ___en_de, ___libctx, ___propq);
 }
 
-int LIB_EVP_PBE_scrypt_ex_amiga_1(struct Library * _base, const char * ___pass, size_t ___passlen, const unsigned char * ___salt, uint64_t ___N, uint64_t ___r, uint64_t ___p, uint64_t ___maxmem, void * ___moreargs);
+int LIB_EVP_PBE_scrypt_amiga_1(struct Library * _base, const char * ___pass, size_t ___passlen, const unsigned char * ___salt, uint64_t ___N, uint64_t ___r, uint64_t ___p, uint64_t ___maxmem, void * ___moreargs);
 
-int LIBSTUB_EVP_PBE_scrypt_ex_amiga_1(void)
+int LIBSTUB_EVP_PBE_scrypt_amiga_1(void)
 {
   const char * ___pass = (const char *)REG_A0;
   size_t ___passlen = (size_t)REG_A1;
@@ -9343,7 +9343,18 @@ int LIBSTUB_EVP_PBE_scrypt_ex_amiga_1(void)
   uint64_t ___maxmem = (uint64_t)REG_D6;
   void * ___moreargs = (void *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_EVP_PBE_scrypt_ex_amiga_1(_base, ___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs);
+  return LIB_EVP_PBE_scrypt_amiga_1(_base, ___pass, ___passlen, ___salt, ___N, ___r, ___p, ___maxmem, ___moreargs);
+}
+
+void * LIB_EVP_PBE_scrypt_amiga_2(struct Library * _base, size_t ___saltlen, unsigned char * ___key, size_t ___keylen);
+
+void * LIBSTUB_EVP_PBE_scrypt_amiga_2(void)
+{
+  size_t ___saltlen = (size_t)REG_D0;
+  unsigned char * ___key = (unsigned char *)REG_A0;
+  size_t ___keylen = (size_t)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PBE_scrypt_amiga_2(_base, ___saltlen, ___key, ___keylen);
 }
 
 void * LIB_EVP_PBE_scrypt_ex_amiga_2(struct Library * _base, size_t ___saltlen, unsigned char * ___key, size_t ___keylen, OSSL_LIB_CTX * ___ctx, const char * ___propq);

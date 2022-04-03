@@ -103,7 +103,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_cmp(___a, ___b) \
-      LP2(0xcc, int, ASN1_STRING_cmp , ASN1_STRING *, ___a, a0, ASN1_STRING *, ___b, a1,\
+      LP2(0xcc, int, ASN1_STRING_cmp , const ASN1_STRING *, ___a, a0, const ASN1_STRING *, ___b, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_set(___str, ___data, ___len) \
@@ -231,7 +231,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_UTCTIME_set_string(___s, ___str) \
-      LP2(0x1b0, int, ASN1_UTCTIME_set_string , ASN1_UTCTIME *, ___s, a0, char *, ___str, a1,\
+      LP2(0x1b0, int, ASN1_UTCTIME_set_string , ASN1_UTCTIME *, ___s, a0, const char *, ___str, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_UTCTIME_cmp_time_t(___s, ___t) \
@@ -279,7 +279,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_OCTET_STRING_set(___str, ___data, ___len) \
-      LP3(0x1f8, int, ASN1_OCTET_STRING_set , ASN1_OCTET_STRING *, ___str, a0, const void *, ___data, a1, int, ___len, d0,\
+      LP3(0x1f8, int, ASN1_OCTET_STRING_set , ASN1_OCTET_STRING *, ___str, a0, const unsigned char *, ___data, a1, int, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_VISIBLESTRING_new() \
@@ -699,11 +699,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_dup(___i2d, ___d2i, ___x) \
-      LP3(0x492, void *, ASN1_dup , i2d_of_void *, ___i2d, a0, d2i_of_void *, ___d2i, a1, char *, ___x, a2,\
+      LP3(0x492, void *, ASN1_dup , i2d_of_void *, ___i2d, a0, d2i_of_void *, ___d2i, a1, const void *, ___x, a2,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_item_dup(___it, ___x) \
-      LP2(0x498, void *, ASN1_item_dup , const ASN1_ITEM *, ___it, a0, void *, ___x, a1,\
+      LP2(0x498, void *, ASN1_item_dup , const ASN1_ITEM *, ___it, a0, const void *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_to_UTF8(___out, ___in) \
@@ -719,7 +719,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_i2d_bio(___i2d, ___out, ___x) \
-      LP3(0x4b0, int, ASN1_i2d_bio , i2d_of_void *, ___i2d, a0, BIO *, ___out, a1, unsigned char *, ___x, a2,\
+      LP3(0x4b0, int, ASN1_i2d_bio , i2d_of_void *, ___i2d, a0, BIO *, ___out, a1, const void *, ___x, a2,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_item_i2d_bio(___it, ___out, ___x) \
@@ -727,11 +727,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_UTCTIME_print(___fp, ___a) \
-      LP2(0x4bc, int, ASN1_UTCTIME_print , BIO *, ___fp, a0, ASN1_UTCTIME *, ___a, a1,\
+      LP2(0x4bc, int, ASN1_UTCTIME_print , BIO *, ___fp, a0, const ASN1_UTCTIME *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_GENERALIZEDTIME_print(___fp, ___a) \
-      LP2(0x4c2, int, ASN1_GENERALIZEDTIME_print , BIO *, ___fp, a0, ASN1_GENERALIZEDTIME *, ___a, a1,\
+      LP2(0x4c2, int, ASN1_GENERALIZEDTIME_print , BIO *, ___fp, a0, const ASN1_GENERALIZEDTIME *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_TIME_print(___fp, ___a) \
@@ -739,7 +739,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_print(___bp, ___v) \
-      LP2(0x4ce, int, ASN1_STRING_print , BIO *, ___bp, a0, ASN1_STRING *, ___v, a1,\
+      LP2(0x4ce, int, ASN1_STRING_print , BIO *, ___bp, a0, const ASN1_STRING *, ___v, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_print_ex(___out, ___str, ___flags) \
@@ -747,7 +747,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_parse(___bp, ___pp, ___len, ___indent) \
-      LP4(0x4da, int, ASN1_parse , BIO *, ___bp, a0, unsigned char *, ___pp, a1, long, ___len, d0, int, ___indent, d1,\
+      LP4(0x4da, int, ASN1_parse , BIO *, ___bp, a0, const unsigned char *, ___pp, a1, long, ___len, d0, int, ___indent, d1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_parse_dump(___bp, ___pp, ___len, ___indent, ___dump) \
@@ -791,7 +791,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_set_default_mask_asc(___p) \
-      LP1(0x564, int, ASN1_STRING_set_default_mask_asc , char *, ___p, a0,\
+      LP1(0x564, int, ASN1_STRING_set_default_mask_asc , const char *, ___p, a0,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_STRING_get_default_mask() \
@@ -919,7 +919,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_get_ex_data(___bio, ___idx) \
-      LP2(0x696, void *, BIO_get_ex_data , BIO *, ___bio, a0, int, ___idx, d0,\
+      LP2(0x696, void *, BIO_get_ex_data , const BIO *, ___bio, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define OBSOLETE_BIO_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
@@ -1111,11 +1111,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_dump(___b, ___bytes, ___len) \
-      LP3(0x7bc, int, BIO_dump , BIO *, ___b, a0, const char *, ___bytes, a1, int, ___len, d0,\
+      LP3(0x7bc, int, BIO_dump , BIO *, ___b, a0, const void *, ___bytes, a1, int, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define BIO_dump_indent(___b, ___bytes, ___len, ___indent) \
-      LP4(0x7c2, int, BIO_dump_indent , BIO *, ___b, a0, const char *, ___bytes, a1, int, ___len, d0, int, ___indent, d1,\
+      LP4(0x7c2, int, BIO_dump_indent , BIO *, ___b, a0, const void *, ___bytes, a1, int, ___len, d0, int, ___indent, d1,\
       , AMISSL_BASE_NAME)
 
 #define BIO_gethostbyname(___name) \
@@ -1241,11 +1241,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BN_rand_range(___rnd, ___range) \
-      LP2(0x87c, int, BN_rand_range , BIGNUM *, ___rnd, a0, BIGNUM *, ___range, a1,\
+      LP2(0x87c, int, BN_rand_range , BIGNUM *, ___rnd, a0, const BIGNUM *, ___range, a1,\
       , AMISSL_BASE_NAME)
 
 #define BN_pseudo_rand_range(___rnd, ___range) \
-      LP2(0x882, int, BN_pseudo_rand_range , BIGNUM *, ___rnd, a0, BIGNUM *, ___range, a1,\
+      LP2(0x882, int, BN_pseudo_rand_range , BIGNUM *, ___rnd, a0, const BIGNUM *, ___range, a1,\
       , AMISSL_BASE_NAME)
 
 #define BN_num_bits(___a) \
@@ -1541,7 +1541,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BN_BLINDING_new(___A, ___Ai, ___mod) \
-      LP3(0xa4a, BN_BLINDING *, BN_BLINDING_new , BIGNUM *, ___A, a0, BIGNUM *, ___Ai, a1, BIGNUM *, ___mod, a2,\
+      LP3(0xa4a, BN_BLINDING *, BN_BLINDING_new , const BIGNUM *, ___A, a0, const BIGNUM *, ___Ai, a1, BIGNUM *, ___mod, a2,\
       , AMISSL_BASE_NAME)
 
 #define BN_BLINDING_free(___b) \
@@ -2174,7 +2174,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_Digest(___data, ___count, ___md, ___size, ___type, ___impl) \
-      LP6(0x1062, int, EVP_Digest , void *, ___data, a0, unsigned int, ___count, d0, unsigned char *, ___md, a1, unsigned int *, ___size, a2, const EVP_MD *, ___type, a3, ENGINE *, ___impl, d1,\
+      LP6(0x1062, int, EVP_Digest , const void *, ___data, a0, size_t, ___count, d0, unsigned char *, ___md, a1, unsigned int *, ___size, a2, const EVP_MD *, ___type, a3, ENGINE *, ___impl, d1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_MD_CTX_copy(___out, ___in) \
@@ -2194,7 +2194,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_set_pw_prompt(___prompt) \
-      LP1NR(0x1080, EVP_set_pw_prompt , char *, ___prompt, a0,\
+      LP1NR(0x1080, EVP_set_pw_prompt , const char *, ___prompt, a0,\
       , AMISSL_BASE_NAME)
 
 #define EVP_get_pw_prompt() \
@@ -2270,11 +2270,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_VerifyFinal(___ctx, ___sigbuf, ___siglen, ___pkey) \
-      LP4(0x10f2, int, EVP_VerifyFinal , EVP_MD_CTX *, ___ctx, a0, unsigned char *, ___sigbuf, a1, unsigned int, ___siglen, d0, EVP_PKEY *, ___pkey, a2,\
+      LP4(0x10f2, int, EVP_VerifyFinal , EVP_MD_CTX *, ___ctx, a0, const unsigned char *, ___sigbuf, a1, unsigned int, ___siglen, d0, EVP_PKEY *, ___pkey, a2,\
       , AMISSL_BASE_NAME)
 
 #define EVP_OpenInit(___ctx, ___type, ___ek, ___ekl, ___iv, ___priv) \
-      LP6(0x10f8, int, EVP_OpenInit , EVP_CIPHER_CTX *, ___ctx, a0, const EVP_CIPHER *, ___type, a1, unsigned char *, ___ek, a2, int, ___ekl, d0, unsigned char *, ___iv, a3, EVP_PKEY *, ___priv, d1,\
+      LP6(0x10f8, int, EVP_OpenInit , EVP_CIPHER_CTX *, ___ctx, a0, const EVP_CIPHER *, ___type, a1, const unsigned char *, ___ek, a2, int, ___ekl, d0, const unsigned char *, ___iv, a3, EVP_PKEY *, ___priv, d1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_OpenFinal(___ctx, ___out, ___outl) \
@@ -2310,7 +2310,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_DecodeUpdate(___ctx, ___out, ___outl, ___in, ___inl) \
-      LP5(0x112e, int, EVP_DecodeUpdate , EVP_ENCODE_CTX *, ___ctx, a0, unsigned char *, ___out, a1, int *, ___outl, a2, unsigned char *, ___in, a3, int, ___inl, d0,\
+      LP5(0x112e, int, EVP_DecodeUpdate , EVP_ENCODE_CTX *, ___ctx, a0, unsigned char *, ___out, a1, int *, ___outl, a2, const unsigned char *, ___in, a3, int, ___inl, d0,\
       , AMISSL_BASE_NAME)
 
 #define EVP_DecodeFinal(___ctx, ___out, ___outl) \
@@ -2746,11 +2746,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_copy_parameters(___to, ___from) \
-      LP2(0x13d4, int, EVP_PKEY_copy_parameters , EVP_PKEY *, ___to, a0, EVP_PKEY *, ___from, a1,\
+      LP2(0x13d4, int, EVP_PKEY_copy_parameters , EVP_PKEY *, ___to, a0, const EVP_PKEY *, ___from, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_missing_parameters(___pkey) \
-      LP1(0x13da, int, EVP_PKEY_missing_parameters , EVP_PKEY *, ___pkey, a0,\
+      LP1(0x13da, int, EVP_PKEY_missing_parameters , const EVP_PKEY *, ___pkey, a0,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_save_parameters(___pkey, ___mode) \
@@ -2758,7 +2758,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_cmp_parameters(___a, ___b) \
-      LP2(0x13e6, int, EVP_PKEY_cmp_parameters , EVP_PKEY *, ___a, a0, EVP_PKEY *, ___b, a1,\
+      LP2(0x13e6, int, EVP_PKEY_cmp_parameters , const EVP_PKEY *, ___a, a0, const EVP_PKEY *, ___b, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_CIPHER_get_type(___ctx) \
@@ -2786,7 +2786,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PKCS5_PBKDF2_HMAC_SHA1(___pass, ___passlen, ___salt, ___saltlen, ___iter, ___keylen, ___out) \
-      LP7(0x1410, int, PKCS5_PBKDF2_HMAC_SHA1 , const char *, ___pass, a0, int, ___passlen, d0, unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___iter, d2, int, ___keylen, d3, unsigned char *, ___out, a2,\
+      LP7(0x1410, int, PKCS5_PBKDF2_HMAC_SHA1 , const char *, ___pass, a0, int, ___passlen, d0, const unsigned char *, ___salt, a1, int, ___saltlen, d1, int, ___iter, d2, int, ___keylen, d3, unsigned char *, ___out, a2,\
       , AMISSL_BASE_NAME)
 
 #define PKCS5_v2_PBE_keyivgen(___ctx, ___pass, ___passlen, ___param, ___cipher, ___md, ___en_de) \
@@ -2829,8 +2829,8 @@ typedef ULONG _sfdc_vararg;
       LP3(0x1458, int, HMAC_Final , HMAC_CTX *, ___ctx, a0, unsigned char *, ___md, a1, unsigned int *, ___len, a2,\
       , AMISSL_BASE_NAME)
 
-#define HMAC(___evp_md, ___key, ___key_len, ___d, ___n, ___md, ___md_len) \
-      LP7(0x145e, unsigned char *, HMAC , const EVP_MD *, ___evp_md, a0, const void *, ___key, a1, int, ___key_len, d0, const unsigned char *, ___d, a2, int, ___n, d1, unsigned char *, ___md, a3, unsigned int *, ___md_len, d2,\
+#define HMAC(___evp_md, ___key, ___key_len, ___data, ___data_len, ___md, ___md_len) \
+      LP7(0x145e, unsigned char *, HMAC , const EVP_MD *, ___evp_md, a0, const void *, ___key, a1, int, ___key_len, d0, const unsigned char *, ___data, a2, size_t, ___data_len, d1, unsigned char *, ___md, a3, unsigned int *, ___md_len, d2,\
       , AMISSL_BASE_NAME)
 
 #define OPENSSL_LH_new(___h, ___c) \
@@ -3010,7 +3010,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OCSP_request_set1_name(___req, ___nm) \
-      LP2(0x16c2, int, OCSP_request_set1_name , OCSP_REQUEST *, ___req, a0, X509_NAME *, ___nm, a1,\
+      LP2(0x16c2, int, OCSP_request_set1_name , OCSP_REQUEST *, ___req, a0, const X509_NAME *, ___nm, a1,\
       , AMISSL_BASE_NAME)
 
 #define OCSP_request_add1_cert(___req, ___cert) \
@@ -3062,11 +3062,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OCSP_id_issuer_cmp(___a, ___b) \
-      LP2(0x1710, int, OCSP_id_issuer_cmp , OCSP_CERTID *, ___a, a0, OCSP_CERTID *, ___b, a1,\
+      LP2(0x1710, int, OCSP_id_issuer_cmp , const OCSP_CERTID *, ___a, a0, const OCSP_CERTID *, ___b, a1,\
       , AMISSL_BASE_NAME)
 
 #define OCSP_id_cmp(___a, ___b) \
-      LP2(0x1716, int, OCSP_id_cmp , OCSP_CERTID *, ___a, a0, OCSP_CERTID *, ___b, a1,\
+      LP2(0x1716, int, OCSP_id_cmp , const OCSP_CERTID *, ___a, a0, const OCSP_CERTID *, ___b, a1,\
       , AMISSL_BASE_NAME)
 
 #define OCSP_request_onereq_count(___req) \
@@ -3118,7 +3118,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OCSP_url_svcloc_new(___issuer, ___urls) \
-      LP2(0x176a, X509_EXTENSION *, OCSP_url_svcloc_new , X509_NAME *, ___issuer, a0, const char **, ___urls, a1,\
+      LP2(0x176a, X509_EXTENSION *, OCSP_url_svcloc_new , const X509_NAME *, ___issuer, a0, const char **, ___urls, a1,\
       , AMISSL_BASE_NAME)
 
 #define OCSP_REQUEST_get_ext_count(___x) \
@@ -3618,7 +3618,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_ASN1_write_bio(___i2d, ___name, ___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP9(0x1a58, int, PEM_ASN1_write_bio , i2d_of_void *, ___i2d, a0, const char *, ___name, a1, BIO *, ___bp, a2, char *, ___x, a3, const EVP_CIPHER *, ___enc, d0, unsigned char *, ___kstr, d1, int, ___klen, d2, pem_password_cb *, ___cb, d3, void *, ___u, d4,\
+      LP9(0x1a58, int, PEM_ASN1_write_bio , i2d_of_void *, ___i2d, a0, const char *, ___name, a1, BIO *, ___bp, a2, const void *, ___x, a3, const EVP_CIPHER *, ___enc, d0, const unsigned char *, ___kstr, d1, int, ___klen, d2, pem_password_cb *, ___cb, d3, void *, ___u, d4,\
       , AMISSL_BASE_NAME)
 
 #define PEM_X509_INFO_read_bio(___bp, ___sk, ___cb, ___u) \
@@ -3626,7 +3626,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_X509_INFO_write_bio(___bp, ___xi, ___enc, ___kstr, ___klen, ___cd, ___u) \
-      LP7(0x1a64, int, PEM_X509_INFO_write_bio , BIO *, ___bp, a0, X509_INFO *, ___xi, a1, EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cd, d1, void *, ___u, d2,\
+      LP7(0x1a64, int, PEM_X509_INFO_write_bio , BIO *, ___bp, a0, const X509_INFO *, ___xi, a1, EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cd, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_SignInit(___ctx, ___type) \
@@ -3634,7 +3634,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_SignUpdate(___ctx, ___d, ___cnt) \
-      LP3(0x1a82, int, PEM_SignUpdate , EVP_MD_CTX *, ___ctx, a0, unsigned char *, ___d, a1, unsigned int, ___cnt, d0,\
+      LP3(0x1a82, int, PEM_SignUpdate , EVP_MD_CTX *, ___ctx, a0, const unsigned char *, ___d, a1, unsigned int, ___cnt, d0,\
       , AMISSL_BASE_NAME)
 
 #define PEM_SignFinal(___ctx, ___sigret, ___siglen, ___pkey) \
@@ -3650,7 +3650,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_dek_info(___buf, ___type, ___len, ___str) \
-      LP4NR(0x1a9a, PEM_dek_info , char *, ___buf, a0, const char *, ___type, a1, int, ___len, d0, char *, ___str, a2,\
+      LP4NR(0x1a9a, PEM_dek_info , char *, ___buf, a0, const char *, ___type, a1, int, ___len, d0, const char *, ___str, a2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_X509(___bp, ___x, ___cb, ___u) \
@@ -3658,7 +3658,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_X509(___bp, ___x) \
-      LP2(0x1aa6, int, PEM_write_bio_X509 , BIO *, ___bp, a0, X509 *, ___x, a1,\
+      LP2(0x1aa6, int, PEM_write_bio_X509 , BIO *, ___bp, a0, const X509 *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_X509_AUX(___bp, ___x, ___cb, ___u) \
@@ -3666,7 +3666,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_X509_AUX(___bp, ___x) \
-      LP2(0x1ab2, int, PEM_write_bio_X509_AUX , BIO *, ___bp, a0, X509 *, ___x, a1,\
+      LP2(0x1ab2, int, PEM_write_bio_X509_AUX , BIO *, ___bp, a0, const X509 *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_X509_REQ(___bp, ___x, ___cb, ___u) \
@@ -3674,11 +3674,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_X509_REQ(___bp, ___x) \
-      LP2(0x1abe, int, PEM_write_bio_X509_REQ , BIO *, ___bp, a0, X509_REQ *, ___x, a1,\
+      LP2(0x1abe, int, PEM_write_bio_X509_REQ , BIO *, ___bp, a0, const X509_REQ *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_X509_REQ_NEW(___bp, ___x) \
-      LP2(0x1ac4, int, PEM_write_bio_X509_REQ_NEW , BIO *, ___bp, a0, X509_REQ *, ___x, a1,\
+      LP2(0x1ac4, int, PEM_write_bio_X509_REQ_NEW , BIO *, ___bp, a0, const X509_REQ *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_X509_CRL(___bp, ___x, ___cb, ___u) \
@@ -3686,7 +3686,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_X509_CRL(___bp, ___x) \
-      LP2(0x1ad0, int, PEM_write_bio_X509_CRL , BIO *, ___bp, a0, X509_CRL *, ___x, a1,\
+      LP2(0x1ad0, int, PEM_write_bio_X509_CRL , BIO *, ___bp, a0, const X509_CRL *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_PKCS7(___bp, ___x, ___cb, ___u) \
@@ -3694,7 +3694,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PKCS7(___bp, ___x) \
-      LP2(0x1adc, int, PEM_write_bio_PKCS7 , BIO *, ___bp, a0, PKCS7 *, ___x, a1,\
+      LP2(0x1adc, int, PEM_write_bio_PKCS7 , BIO *, ___bp, a0, const PKCS7 *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_NETSCAPE_CERT_SEQUENCE(___bp, ___x, ___cb, ___u) \
@@ -3702,7 +3702,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_NETSCAPE_CERT_SEQUENCE(___bp, ___x) \
-      LP2(0x1ae8, int, PEM_write_bio_NETSCAPE_CERT_SEQUENCE , BIO *, ___bp, a0, NETSCAPE_CERT_SEQUENCE *, ___x, a1,\
+      LP2(0x1ae8, int, PEM_write_bio_NETSCAPE_CERT_SEQUENCE , BIO *, ___bp, a0, const NETSCAPE_CERT_SEQUENCE *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_PKCS8(___bp, ___x, ___cb, ___u) \
@@ -3710,7 +3710,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PKCS8(___bp, ___x) \
-      LP2(0x1af4, int, PEM_write_bio_PKCS8 , BIO *, ___bp, a0, X509_SIG *, ___x, a1,\
+      LP2(0x1af4, int, PEM_write_bio_PKCS8 , BIO *, ___bp, a0, const X509_SIG *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_PKCS8_PRIV_KEY_INFO(___bp, ___x, ___cb, ___u) \
@@ -3718,7 +3718,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PKCS8_PRIV_KEY_INFO(___bp, ___x) \
-      LP2(0x1b00, int, PEM_write_bio_PKCS8_PRIV_KEY_INFO , BIO *, ___bp, a0, PKCS8_PRIV_KEY_INFO *, ___x, a1,\
+      LP2(0x1b00, int, PEM_write_bio_PKCS8_PRIV_KEY_INFO , BIO *, ___bp, a0, const PKCS8_PRIV_KEY_INFO *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_RSAPrivateKey(___bp, ___x, ___cb, ___u) \
@@ -3726,7 +3726,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_RSAPrivateKey(___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP7(0x1b0c, int, PEM_write_bio_RSAPrivateKey , BIO *, ___bp, a0, RSA *, ___x, a1, const EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
+      LP7(0x1b0c, int, PEM_write_bio_RSAPrivateKey , BIO *, ___bp, a0, const RSA *, ___x, a1, const EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_RSAPublicKey(___bp, ___x, ___cb, ___u) \
@@ -3750,7 +3750,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_DSAPrivateKey(___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP7(0x1b30, int, PEM_write_bio_DSAPrivateKey , BIO *, ___bp, a0, DSA *, ___x, a1, const EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
+      LP7(0x1b30, int, PEM_write_bio_DSAPrivateKey , BIO *, ___bp, a0, const DSA *, ___x, a1, const EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_DSA_PUBKEY(___bp, ___x, ___cb, ___u) \
@@ -3758,7 +3758,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_DSA_PUBKEY(___bp, ___x) \
-      LP2(0x1b3c, int, PEM_write_bio_DSA_PUBKEY , BIO *, ___bp, a0, DSA *, ___x, a1,\
+      LP2(0x1b3c, int, PEM_write_bio_DSA_PUBKEY , BIO *, ___bp, a0, const DSA *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_DSAparams(___bp, ___x, ___cb, ___u) \
@@ -3766,7 +3766,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_DSAparams(___bp, ___x) \
-      LP2(0x1b48, int, PEM_write_bio_DSAparams , BIO *, ___bp, a0, DSA *, ___x, a1,\
+      LP2(0x1b48, int, PEM_write_bio_DSAparams , BIO *, ___bp, a0, const DSA *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_DHparams(___bp, ___x, ___cb, ___u) \
@@ -3774,7 +3774,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_DHparams(___bp, ___x) \
-      LP2(0x1b54, int, PEM_write_bio_DHparams , BIO *, ___bp, a0, DH *, ___x, a1,\
+      LP2(0x1b54, int, PEM_write_bio_DHparams , BIO *, ___bp, a0, const DH *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_PrivateKey(___bp, ___x, ___cb, ___u) \
@@ -3782,7 +3782,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PrivateKey(___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP7(0x1b60, int, PEM_write_bio_PrivateKey , BIO *, ___bp, a0, EVP_PKEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
+      LP7(0x1b60, int, PEM_write_bio_PrivateKey , BIO *, ___bp, a0, const EVP_PKEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_PUBKEY(___bp, ___x, ___cb, ___u) \
@@ -3790,7 +3790,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PUBKEY(___bp, ___x) \
-      LP2(0x1b6c, int, PEM_write_bio_PUBKEY , BIO *, ___bp, a0, EVP_PKEY *, ___x, a1,\
+      LP2(0x1b6c, int, PEM_write_bio_PUBKEY , BIO *, ___bp, a0, const EVP_PKEY *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PKCS8PrivateKey_nid(___bp, ___x, ___nid, ___kstr, ___klen, ___cb, ___u) \
@@ -4394,11 +4394,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PKCS7_get_attribute(___si, ___nid) \
-      LP2(0x1efc, ASN1_TYPE *, PKCS7_get_attribute , PKCS7_SIGNER_INFO *, ___si, a0, int, ___nid, d0,\
+      LP2(0x1efc, ASN1_TYPE *, PKCS7_get_attribute , const PKCS7_SIGNER_INFO *, ___si, a0, int, ___nid, d0,\
       , AMISSL_BASE_NAME)
 
 #define PKCS7_get_signed_attribute(___si, ___nid) \
-      LP2(0x1f02, ASN1_TYPE *, PKCS7_get_signed_attribute , PKCS7_SIGNER_INFO *, ___si, a0, int, ___nid, d0,\
+      LP2(0x1f02, ASN1_TYPE *, PKCS7_get_signed_attribute , const PKCS7_SIGNER_INFO *, ___si, a0, int, ___nid, d0,\
       , AMISSL_BASE_NAME)
 
 #define PKCS7_set_signed_attributes(___p7si, ___sk) \
@@ -4718,7 +4718,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_use_PrivateKey_ASN1(___pk, ___ssl, ___d, ___len) \
-      LP4(0x2106, int, SSL_use_PrivateKey_ASN1 , int, ___pk, d0, SSL *, ___ssl, a0, unsigned char *, ___d, a1, long, ___len, d1,\
+      LP4(0x2106, int, SSL_use_PrivateKey_ASN1 , int, ___pk, d0, SSL *, ___ssl, a0, const unsigned char *, ___d, a1, long, ___len, d1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_use_certificate(___ssl, ___x) \
@@ -4726,7 +4726,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_use_certificate_ASN1(___ssl, ___d, ___len) \
-      LP3(0x2112, int, SSL_use_certificate_ASN1 , SSL *, ___ssl, a0, unsigned char *, ___d, a1, int, ___len, d0,\
+      LP3(0x2112, int, SSL_use_certificate_ASN1 , SSL *, ___ssl, a0, const unsigned char *, ___d, a1, int, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_use_RSAPrivateKey_file(___ssl, ___file, ___type) \
@@ -4890,7 +4890,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_use_RSAPrivateKey_ASN1(___ctx, ___d, ___len) \
-      LP3(0x2214, int, SSL_CTX_use_RSAPrivateKey_ASN1 , SSL_CTX *, ___ctx, a0, unsigned char *, ___d, a1, long, ___len, d0,\
+      LP3(0x2214, int, SSL_CTX_use_RSAPrivateKey_ASN1 , SSL_CTX *, ___ctx, a0, const unsigned char *, ___d, a1, long, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_use_PrivateKey(___ctx, ___pkey) \
@@ -4898,7 +4898,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_use_PrivateKey_ASN1(___pk, ___ctx, ___d, ___len) \
-      LP4(0x2220, int, SSL_CTX_use_PrivateKey_ASN1 , int, ___pk, d0, SSL_CTX *, ___ctx, a0, unsigned char *, ___d, a1, long, ___len, d1,\
+      LP4(0x2220, int, SSL_CTX_use_PrivateKey_ASN1 , int, ___pk, d0, SSL_CTX *, ___ctx, a0, const unsigned char *, ___d, a1, long, ___len, d1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_use_certificate(___ctx, ___x) \
@@ -4906,7 +4906,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_use_certificate_ASN1(___ctx, ___len, ___d) \
-      LP3(0x222c, int, SSL_CTX_use_certificate_ASN1 , SSL_CTX *, ___ctx, a0, int, ___len, d0, unsigned char *, ___d, a1,\
+      LP3(0x222c, int, SSL_CTX_use_certificate_ASN1 , SSL_CTX *, ___ctx, a0, int, ___len, d0, const unsigned char *, ___d, a1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_set_default_passwd_cb(___ctx, ___cb) \
@@ -5042,7 +5042,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_set_ssl_method(___s, ___method) \
-      LP2(0x232e, int, SSL_set_ssl_method , SSL *, ___s, a0, SSL_METHOD *, ___method, a1,\
+      LP2(0x232e, int, SSL_set_ssl_method , SSL *, ___s, a0, const SSL_METHOD *, ___method, a1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_alert_type_string_long(___value) \
@@ -5430,7 +5430,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define UI_get_ex_data(___r, ___idx) \
-      LP2(0x25a4, void *, UI_get_ex_data , UI *, ___r, a0, int, ___idx, d0,\
+      LP2(0x25a4, void *, UI_get_ex_data , const UI *, ___r, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define UI_set_default_method(___meth) \
@@ -5634,7 +5634,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_X509_bio(___bp, ___x509) \
-      LP2(0x26e2, int, i2d_X509_bio , BIO *, ___bp, a0, X509 *, ___x509, a1,\
+      LP2(0x26e2, int, i2d_X509_bio , BIO *, ___bp, a0, const X509 *, ___x509, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_X509_CRL_bio(___bp, ___crl) \
@@ -5642,7 +5642,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_X509_CRL_bio(___bp, ___crl) \
-      LP2(0x26ee, int, i2d_X509_CRL_bio , BIO *, ___bp, a0, X509_CRL *, ___crl, a1,\
+      LP2(0x26ee, int, i2d_X509_CRL_bio , BIO *, ___bp, a0, const X509_CRL *, ___crl, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_X509_REQ_bio(___bp, ___req) \
@@ -5650,7 +5650,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_X509_REQ_bio(___bp, ___req) \
-      LP2(0x26fa, int, i2d_X509_REQ_bio , BIO *, ___bp, a0, X509_REQ *, ___req, a1,\
+      LP2(0x26fa, int, i2d_X509_REQ_bio , BIO *, ___bp, a0, const X509_REQ *, ___req, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_RSAPrivateKey_bio(___bp, ___rsa) \
@@ -5658,7 +5658,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_RSAPrivateKey_bio(___bp, ___rsa) \
-      LP2(0x2706, int, i2d_RSAPrivateKey_bio , BIO *, ___bp, a0, RSA *, ___rsa, a1,\
+      LP2(0x2706, int, i2d_RSAPrivateKey_bio , BIO *, ___bp, a0, const RSA *, ___rsa, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_RSAPublicKey_bio(___bp, ___rsa) \
@@ -5682,7 +5682,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_DSA_PUBKEY_bio(___bp, ___dsa) \
-      LP2(0x272a, int, i2d_DSA_PUBKEY_bio , BIO *, ___bp, a0, DSA *, ___dsa, a1,\
+      LP2(0x272a, int, i2d_DSA_PUBKEY_bio , BIO *, ___bp, a0, const DSA *, ___dsa, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_DSAPrivateKey_bio(___bp, ___dsa) \
@@ -5690,7 +5690,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_DSAPrivateKey_bio(___bp, ___dsa) \
-      LP2(0x2736, int, i2d_DSAPrivateKey_bio , BIO *, ___bp, a0, DSA *, ___dsa, a1,\
+      LP2(0x2736, int, i2d_DSAPrivateKey_bio , BIO *, ___bp, a0, const DSA *, ___dsa, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_PKCS8_bio(___bp, ___p8) \
@@ -5698,7 +5698,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS8_bio(___bp, ___p8) \
-      LP2(0x2742, int, i2d_PKCS8_bio , BIO *, ___bp, a0, X509_SIG *, ___p8, a1,\
+      LP2(0x2742, int, i2d_PKCS8_bio , BIO *, ___bp, a0, const X509_SIG *, ___p8, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_PKCS8_PRIV_KEY_INFO_bio(___bp, ___p8inf) \
@@ -5706,15 +5706,15 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS8_PRIV_KEY_INFO_bio(___bp, ___p8inf) \
-      LP2(0x274e, int, i2d_PKCS8_PRIV_KEY_INFO_bio , BIO *, ___bp, a0, PKCS8_PRIV_KEY_INFO *, ___p8inf, a1,\
+      LP2(0x274e, int, i2d_PKCS8_PRIV_KEY_INFO_bio , BIO *, ___bp, a0, const PKCS8_PRIV_KEY_INFO *, ___p8inf, a1,\
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS8PrivateKeyInfo_bio(___bp, ___key) \
-      LP2(0x2754, int, i2d_PKCS8PrivateKeyInfo_bio , BIO *, ___bp, a0, EVP_PKEY *, ___key, a1,\
+      LP2(0x2754, int, i2d_PKCS8PrivateKeyInfo_bio , BIO *, ___bp, a0, const EVP_PKEY *, ___key, a1,\
       , AMISSL_BASE_NAME)
 
 #define i2d_PrivateKey_bio(___bp, ___pkey) \
-      LP2(0x275a, int, i2d_PrivateKey_bio , BIO *, ___bp, a0, EVP_PKEY *, ___pkey, a1,\
+      LP2(0x275a, int, i2d_PrivateKey_bio , BIO *, ___bp, a0, const EVP_PKEY *, ___pkey, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_PrivateKey_bio(___bp, ___a) \
@@ -5722,7 +5722,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_PUBKEY_bio(___bp, ___pkey) \
-      LP2(0x2766, int, i2d_PUBKEY_bio , BIO *, ___bp, a0, EVP_PKEY *, ___pkey, a1,\
+      LP2(0x2766, int, i2d_PUBKEY_bio , BIO *, ___bp, a0, const EVP_PKEY *, ___pkey, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_PUBKEY_bio(___bp, ___a) \
@@ -5766,7 +5766,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_cmp_current_time(___s) \
-      LP1(0x27a8, int, X509_cmp_current_time , ASN1_TIME *, ___s, a0,\
+      LP1(0x27a8, int, X509_cmp_current_time , const ASN1_TIME *, ___s, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_time_adj(___s, ___adj, ___t) \
@@ -5874,7 +5874,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_PUBKEY_get(___key) \
-      LP1(0x284a, EVP_PKEY *, X509_PUBKEY_get , X509_PUBKEY *, ___key, a0,\
+      LP1(0x284a, EVP_PKEY *, X509_PUBKEY_get , const X509_PUBKEY *, ___key, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_get_pubkey_parameters(___pkey, ___chain) \
@@ -6050,7 +6050,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_NAME_set(___xn, ___name) \
-      LP2(0x2952, int, X509_NAME_set , X509_NAME **, ___xn, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2952, int, X509_NAME_set , X509_NAME **, ___xn, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_CINF_new() \
@@ -6122,7 +6122,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_get_ex_data(___r, ___idx) \
-      LP2(0x29be, void *, X509_get_ex_data , X509 *, ___r, a0, int, ___idx, d0,\
+      LP2(0x29be, void *, X509_get_ex_data , const X509 *, ___r, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define i2d_X509_AUX(___a, ___pp) \
@@ -6329,12 +6329,12 @@ typedef ULONG _sfdc_vararg;
       LP5(0x2afc, int, ASN1_item_digest , const ASN1_ITEM *, ___it, a0, const EVP_MD *, ___type, a1, void *, ___data, a2, unsigned char *, ___md, a3, unsigned int *, ___len, d0,\
       , AMISSL_BASE_NAME)
 
-#define ASN1_item_verify(___it, ___algor1, ___signature, ___data, ___pkey) \
-      LP5(0x2b02, int, ASN1_item_verify , const ASN1_ITEM *, ___it, a0, X509_ALGOR *, ___algor1, a1, ASN1_BIT_STRING *, ___signature, a2, void *, ___data, a3, EVP_PKEY *, ___pkey, d0,\
+#define ASN1_item_verify(___it, ___alg, ___signature, ___data, ___pkey) \
+      LP5(0x2b02, int, ASN1_item_verify , const ASN1_ITEM *, ___it, a0, const X509_ALGOR *, ___alg, a1, const ASN1_BIT_STRING *, ___signature, a2, const void *, ___data, a3, EVP_PKEY *, ___pkey, d0,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_item_sign(___it, ___algor1, ___algor2, ___signature, ___data, ___pkey, ___type) \
-      LP7(0x2b08, int, ASN1_item_sign , const ASN1_ITEM *, ___it, a0, X509_ALGOR *, ___algor1, a1, X509_ALGOR *, ___algor2, a2, ASN1_BIT_STRING *, ___signature, a3, void *, ___data, d0, EVP_PKEY *, ___pkey, d1, const EVP_MD *, ___type, d2,\
+      LP7(0x2b08, int, ASN1_item_sign , const ASN1_ITEM *, ___it, a0, X509_ALGOR *, ___algor1, a1, X509_ALGOR *, ___algor2, a2, ASN1_BIT_STRING *, ___signature, a3, const void *, ___data, d0, EVP_PKEY *, ___pkey, d1, const EVP_MD *, ___type, d2,\
       , AMISSL_BASE_NAME)
 
 #define X509_set_version(___x, ___version) \
@@ -6350,7 +6350,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_set_issuer_name(___x, ___name) \
-      LP2(0x2b20, int, X509_set_issuer_name , X509 *, ___x, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2b20, int, X509_set_issuer_name , X509 *, ___x, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_get_issuer_name(___a) \
@@ -6358,7 +6358,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_set_subject_name(___x, ___name) \
-      LP2(0x2b2c, int, X509_set_subject_name , X509 *, ___x, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2b2c, int, X509_set_subject_name , X509 *, ___x, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_get_subject_name(___a) \
@@ -6394,7 +6394,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_set_subject_name(___req, ___name) \
-      LP2(0x2b62, int, X509_REQ_set_subject_name , X509_REQ *, ___req, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2b62, int, X509_REQ_set_subject_name , X509_REQ *, ___req, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_set_pubkey(___x, ___pkey) \
@@ -6422,11 +6422,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_add_extensions_nid(___req, ___exts, ___nid) \
-      LP3(0x2b8c, int, X509_REQ_add_extensions_nid , X509_REQ *, ___req, a0, STACK_OF(X509_EXTENSION) *, ___exts, a1, int, ___nid, d0,\
+      LP3(0x2b8c, int, X509_REQ_add_extensions_nid , X509_REQ *, ___req, a0, const STACK_OF(X509_EXTENSION) *, ___exts, a1, int, ___nid, d0,\
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_add_extensions(___req, ___exts) \
-      LP2(0x2b92, int, X509_REQ_add_extensions , X509_REQ *, ___req, a0, STACK_OF(X509_EXTENSION) *, ___exts, a1,\
+      LP2(0x2b92, int, X509_REQ_add_extensions , X509_REQ *, ___req, a0, const STACK_OF(X509_EXTENSION) *, ___exts, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_get_attr_count(___req) \
@@ -6470,7 +6470,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_CRL_set_issuer_name(___x, ___name) \
-      LP2(0x2bd4, int, X509_CRL_set_issuer_name , X509_CRL *, ___x, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2bd4, int, X509_CRL_set_issuer_name , X509_CRL *, ___x, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_CRL_set1_lastUpdate(___x, ___tm) \
@@ -6886,11 +6886,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_find_by_issuer_and_serial(___sk, ___name, ___serial) \
-      LP3(0x2e4a, X509 *, X509_find_by_issuer_and_serial , STACK_OF(X509) *, ___sk, a0, X509_NAME *, ___name, a1, ASN1_INTEGER *, ___serial, a2,\
+      LP3(0x2e4a, X509 *, X509_find_by_issuer_and_serial , STACK_OF(X509) *, ___sk, a0, const X509_NAME *, ___name, a1, const ASN1_INTEGER *, ___serial, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509_find_by_subject(___sk, ___name) \
-      LP2(0x2e50, X509 *, X509_find_by_subject , STACK_OF(X509) *, ___sk, a0, X509_NAME *, ___name, a1,\
+      LP2(0x2e50, X509 *, X509_find_by_subject , STACK_OF(X509) *, ___sk, a0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define PBEPARAM_new() \
@@ -6954,7 +6954,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PKCS5_pbe_set(___alg, ___iter, ___salt, ___saltlen) \
-      LP4(0x2eb0, X509_ALGOR *, PKCS5_pbe_set , int, ___alg, d0, int, ___iter, d1, unsigned char *, ___salt, a0, int, ___saltlen, d2,\
+      LP4(0x2eb0, X509_ALGOR *, PKCS5_pbe_set , int, ___alg, d0, int, ___iter, d1, const unsigned char *, ___salt, a0, int, ___saltlen, d2,\
       , AMISSL_BASE_NAME)
 
 #define PKCS5_pbe2_set(___cipher, ___iter, ___salt, ___saltlen) \
@@ -6986,7 +6986,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY2PKCS8(___pkey) \
-      LP1(0x2ee0, PKCS8_PRIV_KEY_INFO *, EVP_PKEY2PKCS8 , EVP_PKEY *, ___pkey, a0,\
+      LP1(0x2ee0, PKCS8_PRIV_KEY_INFO *, EVP_PKEY2PKCS8 , const EVP_PKEY *, ___pkey, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_check_trust(___x, ___id, ___flags) \
@@ -7030,11 +7030,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_OBJECT_idx_by_subject(___h, ___type, ___name) \
-      LP3(0x2f2e, int, X509_OBJECT_idx_by_subject , STACK_OF(X509_OBJECT) *, ___h, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1,\
+      LP3(0x2f2e, int, X509_OBJECT_idx_by_subject , STACK_OF(X509_OBJECT) *, ___h, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_OBJECT_retrieve_by_subject(___h, ___type, ___name) \
-      LP3(0x2f34, X509_OBJECT *, X509_OBJECT_retrieve_by_subject , STACK_OF(X509_OBJECT) *, ___h, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1,\
+      LP3(0x2f34, X509_OBJECT *, X509_OBJECT_retrieve_by_subject , STACK_OF(X509_OBJECT) *, ___h, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_OBJECT_retrieve_match(___h, ___x) \
@@ -7110,7 +7110,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_by_subject(___vs, ___type, ___name, ___ret) \
-      LP4(0x2fa6, int, X509_STORE_CTX_get_by_subject , X509_STORE_CTX *, ___vs, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1, X509_OBJECT *, ___ret, a2,\
+      LP4(0x2fa6, int, X509_STORE_CTX_get_by_subject , const X509_STORE_CTX *, ___vs, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1, X509_OBJECT *, ___ret, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509_LOOKUP_ctrl(___ctx, ___cmd, ___argc, ___argl, ___ret) \
@@ -7142,11 +7142,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_LOOKUP_by_subject(___ctx, ___type, ___name, ___ret) \
-      LP4(0x2fd6, int, X509_LOOKUP_by_subject , X509_LOOKUP *, ___ctx, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1, X509_OBJECT *, ___ret, a2,\
+      LP4(0x2fd6, int, X509_LOOKUP_by_subject , X509_LOOKUP *, ___ctx, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1, X509_OBJECT *, ___ret, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509_LOOKUP_by_issuer_serial(___ctx, ___type, ___name, ___serial, ___ret) \
-      LP5(0x2fdc, int, X509_LOOKUP_by_issuer_serial , X509_LOOKUP *, ___ctx, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1, ASN1_INTEGER *, ___serial, a2, X509_OBJECT *, ___ret, a3,\
+      LP5(0x2fdc, int, X509_LOOKUP_by_issuer_serial , X509_LOOKUP *, ___ctx, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1, const ASN1_INTEGER *, ___serial, a2, X509_OBJECT *, ___ret, a3,\
       , AMISSL_BASE_NAME)
 
 #define X509_LOOKUP_by_fingerprint(___ctx, ___type, ___bytes, ___len, ___ret) \
@@ -7178,11 +7178,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_ex_data(___ctx, ___idx) \
-      LP2(0x300c, void *, X509_STORE_CTX_get_ex_data , X509_STORE_CTX *, ___ctx, a0, int, ___idx, d0,\
+      LP2(0x300c, void *, X509_STORE_CTX_get_ex_data , const X509_STORE_CTX *, ___ctx, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_error(___ctx) \
-      LP1(0x3012, int, X509_STORE_CTX_get_error , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x3012, int, X509_STORE_CTX_get_error , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_error(___ctx, ___s) \
@@ -7190,7 +7190,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_error_depth(___ctx) \
-      LP1(0x301e, int, X509_STORE_CTX_get_error_depth , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x301e, int, X509_STORE_CTX_get_error_depth , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_current_cert(___ctx) \
@@ -7198,11 +7198,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_chain(___ctx) \
-      LP1(0x302a, STACK_OF(X509) *, X509_STORE_CTX_get0_chain , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x302a, STACK_OF(X509) *, X509_STORE_CTX_get0_chain , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get1_chain(___ctx) \
-      LP1(0x3030, STACK_OF(X509) *, X509_STORE_CTX_get1_chain , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x3030, STACK_OF(X509) *, X509_STORE_CTX_get1_chain , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_cert(___c, ___x) \
@@ -7222,11 +7222,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_flags(___ctx, ___flags) \
-      LP2NR(0x304e, X509_STORE_CTX_set_flags , X509_STORE_CTX *, ___ctx, a0, long, ___flags, d0,\
+      LP2NR(0x304e, X509_STORE_CTX_set_flags , X509_STORE_CTX *, ___ctx, a0, unsigned long, ___flags, d0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_time(___ctx, ___flags, ___t) \
-      LP3NR(0x3054, X509_STORE_CTX_set_time , X509_STORE_CTX *, ___ctx, a0, long, ___flags, d0, time_t, ___t, d1,\
+      LP3NR(0x3054, X509_STORE_CTX_set_time , X509_STORE_CTX *, ___ctx, a0, unsigned long, ___flags, d0, time_t, ___t, d1,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_verify_cb(___ctx, ___verify_cb) \
@@ -7410,7 +7410,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define v2i_GENERAL_NAMES(___method, ___ctx, ___nval) \
-      LP3(0x3168, GENERAL_NAMES *, v2i_GENERAL_NAMES , X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, STACK_OF(CONF_VALUE) *, ___nval, a2,\
+      LP3(0x3168, GENERAL_NAMES *, v2i_GENERAL_NAMES , const X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, STACK_OF(CONF_VALUE) *, ___nval, a2,\
       , AMISSL_BASE_NAME)
 
 #define OTHERNAME_new() \
@@ -7618,7 +7618,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_DIST_POINT(___a, ___out) \
-      LP2(0x32a0, int, i2d_DIST_POINT , DIST_POINT *, ___a, a0, unsigned char **, ___out, a1,\
+      LP2(0x32a0, int, i2d_DIST_POINT , const DIST_POINT *, ___a, a0, unsigned char **, ___out, a1,\
       , AMISSL_BASE_NAME)
 
 #define DIST_POINT_it() \
@@ -7638,7 +7638,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_DIST_POINT_NAME(___a, ___out) \
-      LP2(0x32be, int, i2d_DIST_POINT_NAME , DIST_POINT_NAME *, ___a, a0, unsigned char **, ___out, a1,\
+      LP2(0x32be, int, i2d_DIST_POINT_NAME , const DIST_POINT_NAME *, ___a, a0, unsigned char **, ___out, a1,\
       , AMISSL_BASE_NAME)
 
 #define DIST_POINT_NAME_it() \
@@ -7658,7 +7658,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_ACCESS_DESCRIPTION(___a, ___out) \
-      LP2(0x32dc, int, i2d_ACCESS_DESCRIPTION , ACCESS_DESCRIPTION *, ___a, a0, unsigned char **, ___out, a1,\
+      LP2(0x32dc, int, i2d_ACCESS_DESCRIPTION , const ACCESS_DESCRIPTION *, ___a, a0, unsigned char **, ___out, a1,\
       , AMISSL_BASE_NAME)
 
 #define ACCESS_DESCRIPTION_it() \
@@ -7678,7 +7678,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_AUTHORITY_INFO_ACCESS(___a, ___out) \
-      LP2(0x32fa, int, i2d_AUTHORITY_INFO_ACCESS , AUTHORITY_INFO_ACCESS *, ___a, a0, unsigned char **, ___out, a1,\
+      LP2(0x32fa, int, i2d_AUTHORITY_INFO_ACCESS , const AUTHORITY_INFO_ACCESS *, ___a, a0, unsigned char **, ___out, a1,\
       , AMISSL_BASE_NAME)
 
 #define AUTHORITY_INFO_ACCESS_it() \
@@ -7686,7 +7686,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define v2i_GENERAL_NAME(___method, ___ctx, ___cnf) \
-      LP3(0x3306, GENERAL_NAME *, v2i_GENERAL_NAME , X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, CONF_VALUE *, ___cnf, a2,\
+      LP3(0x3306, GENERAL_NAME *, v2i_GENERAL_NAME , const X509V3_EXT_METHOD *, ___method, a0, X509V3_CTX *, ___ctx, a1, CONF_VALUE *, ___cnf, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509V3_conf_free(___val) \
@@ -7694,7 +7694,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509V3_EXT_nconf_nid(___conf, ___ctx, ___ext_nid, ___value) \
-      LP4(0x3312, X509_EXTENSION *, X509V3_EXT_nconf_nid , CONF *, ___conf, a0, X509V3_CTX *, ___ctx, a1, int, ___ext_nid, d0, char *, ___value, a2,\
+      LP4(0x3312, X509_EXTENSION *, X509V3_EXT_nconf_nid , CONF *, ___conf, a0, X509V3_CTX *, ___ctx, a1, int, ___ext_nid, d0, const char *, ___value, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509V3_EXT_nconf(___conf, ___ctx, ___name, ___value) \
@@ -7974,23 +7974,23 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define AES_cbc_encrypt(___in, ___out, ___length, ___key, ___ivec, ___enc) \
-      LP6NR(0x34b6, AES_cbc_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, const int, ___enc, d1,\
+      LP6NR(0x34b6, AES_cbc_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, const int, ___enc, d1,\
       , AMISSL_BASE_NAME)
 
 #define AES_cfb128_encrypt(___in, ___out, ___length, ___key, ___ivec, ___num, ___enc) \
-      LP7NR(0x34bc, AES_cfb128_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
+      LP7NR(0x34bc, AES_cfb128_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
       , AMISSL_BASE_NAME)
 
 #define AES_cfb1_encrypt(___in, ___out, ___length, ___key, ___ivec, ___num, ___enc) \
-      LP7NR(0x34c2, AES_cfb1_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
+      LP7NR(0x34c2, AES_cfb1_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
       , AMISSL_BASE_NAME)
 
 #define AES_cfb8_encrypt(___in, ___out, ___length, ___key, ___ivec, ___num, ___enc) \
-      LP7NR(0x34c8, AES_cfb8_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
+      LP7NR(0x34c8, AES_cfb8_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, const int, ___enc, d2,\
       , AMISSL_BASE_NAME)
 
 #define AES_ofb128_encrypt(___in, ___out, ___length, ___key, ___ivec, ___num) \
-      LP6NR(0x34d4, AES_ofb128_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1,\
+      LP6NR(0x34d4, AES_ofb128_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, int *, ___num, d1,\
       , AMISSL_BASE_NAME)
 
 #define BF_set_key(___key, ___len, ___data) \
@@ -8030,27 +8030,27 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CAST_ecb_encrypt(___in, ___out, ___key, ___enc) \
-      LP4NR(0x3516, CAST_ecb_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, CAST_KEY *, ___key, a2, int, ___enc, d0,\
+      LP4NR(0x3516, CAST_ecb_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const CAST_KEY *, ___key, a2, int, ___enc, d0,\
       , AMISSL_BASE_NAME)
 
 #define CAST_encrypt(___data, ___key) \
-      LP2NR(0x351c, CAST_encrypt , CAST_LONG *, ___data, a0, CAST_KEY *, ___key, a1,\
+      LP2NR(0x351c, CAST_encrypt , CAST_LONG *, ___data, a0, const CAST_KEY *, ___key, a1,\
       , AMISSL_BASE_NAME)
 
 #define CAST_decrypt(___data, ___key) \
-      LP2NR(0x3522, CAST_decrypt , CAST_LONG *, ___data, a0, CAST_KEY *, ___key, a1,\
+      LP2NR(0x3522, CAST_decrypt , CAST_LONG *, ___data, a0, const CAST_KEY *, ___key, a1,\
       , AMISSL_BASE_NAME)
 
 #define CAST_cbc_encrypt(___in, ___out, ___length, ___ks, ___iv, ___enc) \
-      LP6NR(0x3528, CAST_cbc_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, CAST_KEY *, ___ks, a2, unsigned char *, ___iv, a3, int, ___enc, d1,\
+      LP6NR(0x3528, CAST_cbc_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, const CAST_KEY *, ___ks, a2, unsigned char *, ___iv, a3, int, ___enc, d1,\
       , AMISSL_BASE_NAME)
 
 #define CAST_cfb64_encrypt(___in, ___out, ___length, ___schedule, ___ivec, ___num, ___enc) \
-      LP7NR(0x352e, CAST_cfb64_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, CAST_KEY *, ___schedule, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, int, ___enc, d2,\
+      LP7NR(0x352e, CAST_cfb64_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, const CAST_KEY *, ___schedule, a2, unsigned char *, ___ivec, a3, int *, ___num, d1, int, ___enc, d2,\
       , AMISSL_BASE_NAME)
 
 #define CAST_ofb64_encrypt(___in, ___out, ___length, ___schedule, ___ivec, ___num) \
-      LP6NR(0x3534, CAST_ofb64_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, CAST_KEY *, ___schedule, a2, unsigned char *, ___ivec, a3, int *, ___num, d1,\
+      LP6NR(0x3534, CAST_ofb64_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, long, ___length, d0, const CAST_KEY *, ___schedule, a2, unsigned char *, ___ivec, a3, int *, ___num, d1,\
       , AMISSL_BASE_NAME)
 
 #define DES_options() \
@@ -8230,7 +8230,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define DH_get_ex_data(___d, ___idx) \
-      LP2(0x3732, void *, DH_get_ex_data , DH *, ___d, a0, int, ___idx, d0,\
+      LP2(0x3732, void *, DH_get_ex_data , const DH *, ___d, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define DH_generate_parameters(___prime_len, ___generator, ___callback, ___cb_arg) \
@@ -8346,7 +8346,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define DSA_get_ex_data(___d, ___idx) \
-      LP2(0x37e0, void *, DSA_get_ex_data , DSA *, ___d, a0, int, ___idx, d0,\
+      LP2(0x37e0, void *, DSA_get_ex_data , const DSA *, ___d, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define d2i_DSAPublicKey(___a, ___pp, ___length) \
@@ -8438,7 +8438,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD2_Update(___c, ___data, ___len) \
-      LP3(0x386a, int, MD2_Update , MD2_CTX *, ___c, a0, const unsigned char *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x386a, int, MD2_Update , MD2_CTX *, ___c, a0, const unsigned char *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define MD2_Final(___md, ___c) \
@@ -8446,7 +8446,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD2(___d, ___n, ___md) \
-      LP3(0x3876, unsigned char *, MD2 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x3876, unsigned char *, MD2 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define MD4_Init(___c) \
@@ -8454,7 +8454,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD4_Update(___c, ___data, ___len) \
-      LP3(0x3882, int, MD4_Update , MD4_CTX *, ___c, a0, const void *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x3882, int, MD4_Update , MD4_CTX *, ___c, a0, const void *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define MD4_Final(___md, ___c) \
@@ -8462,7 +8462,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD4(___d, ___n, ___md) \
-      LP3(0x388e, unsigned char *, MD4 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x388e, unsigned char *, MD4 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define MD4_Transform(___c, ___b) \
@@ -8474,7 +8474,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD5_Update(___c, ___data, ___len) \
-      LP3(0x38a0, int, MD5_Update , MD5_CTX *, ___c, a0, const void *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x38a0, int, MD5_Update , MD5_CTX *, ___c, a0, const void *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define MD5_Final(___md, ___c) \
@@ -8482,7 +8482,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MD5(___d, ___n, ___md) \
-      LP3(0x38ac, unsigned char *, MD5 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x38ac, unsigned char *, MD5 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define MD5_Transform(___c, ___b) \
@@ -8494,7 +8494,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MDC2_Update(___c, ___data, ___len) \
-      LP3(0x38be, int, MDC2_Update , MDC2_CTX *, ___c, a0, const unsigned char *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x38be, int, MDC2_Update , MDC2_CTX *, ___c, a0, const unsigned char *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define MDC2_Final(___md, ___c) \
@@ -8502,7 +8502,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define MDC2(___d, ___n, ___md) \
-      LP3(0x38ca, unsigned char *, MDC2 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x38ca, unsigned char *, MDC2 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define RC2_set_key(___key, ___len, ___data, ___bits) \
@@ -8542,11 +8542,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define RC4(___key, ___len, ___indata, ___outdata) \
-      LP4NR(0x3906, RC4 , RC4_KEY *, ___key, a0, unsigned long, ___len, d0, const unsigned char *, ___indata, a1, unsigned char *, ___outdata, a2,\
+      LP4NR(0x3906, RC4 , RC4_KEY *, ___key, a0, size_t, ___len, d0, const unsigned char *, ___indata, a1, unsigned char *, ___outdata, a2,\
       , AMISSL_BASE_NAME)
 
 #define RC5_32_set_key(___key, ___len, ___data, ___rounds) \
-      LP4NR(0x390c, RC5_32_set_key , RC5_32_KEY *, ___key, a0, int, ___len, d0, const unsigned char *, ___data, a1, int, ___rounds, d1,\
+      LP4(0x390c, int, RC5_32_set_key , RC5_32_KEY *, ___key, a0, int, ___len, d0, const unsigned char *, ___data, a1, int, ___rounds, d1,\
       , AMISSL_BASE_NAME)
 
 #define RC5_32_ecb_encrypt(___in, ___out, ___key, ___enc) \
@@ -8578,7 +8578,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define RIPEMD160_Update(___c, ___data, ___len) \
-      LP3(0x393c, int, RIPEMD160_Update , RIPEMD160_CTX *, ___c, a0, const void *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x393c, int, RIPEMD160_Update , RIPEMD160_CTX *, ___c, a0, const void *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define RIPEMD160_Final(___md, ___c) \
@@ -8586,7 +8586,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define RIPEMD160(___d, ___n, ___md) \
-      LP3(0x3948, unsigned char *, RIPEMD160 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x3948, unsigned char *, RIPEMD160 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define RIPEMD160_Transform(___c, ___b) \
@@ -8694,7 +8694,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define RSA_verify(___type, ___m, ___m_length, ___sigbuf, ___siglen, ___rsa) \
-      LP6(0x3a08, int, RSA_verify , int, ___type, d0, const unsigned char *, ___m, a0, unsigned int, ___m_length, d1, unsigned char *, ___sigbuf, a1, unsigned int, ___siglen, d2, RSA *, ___rsa, a2,\
+      LP6(0x3a08, int, RSA_verify , int, ___type, d0, const unsigned char *, ___m, a0, unsigned int, ___m_length, d1, const unsigned char *, ___sigbuf, a1, unsigned int, ___siglen, d2, RSA *, ___rsa, a2,\
       , AMISSL_BASE_NAME)
 
 #define RSA_sign_ASN1_OCTET_STRING(___type, ___m, ___m_length, ___sigret, ___siglen, ___rsa) \
@@ -8774,7 +8774,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SHA1_Update(___c, ___data, ___len) \
-      LP3(0x3aaa, int, SHA1_Update , SHA_CTX *, ___c, a0, const void *, ___data, a1, unsigned long, ___len, d0,\
+      LP3(0x3aaa, int, SHA1_Update , SHA_CTX *, ___c, a0, const void *, ___data, a1, size_t, ___len, d0,\
       , AMISSL_BASE_NAME)
 
 #define SHA1_Final(___md, ___c) \
@@ -8782,7 +8782,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SHA1(___d, ___n, ___md) \
-      LP3(0x3ab6, unsigned char *, SHA1 , const unsigned char *, ___d, a0, unsigned long, ___n, d0, unsigned char *, ___md, a1,\
+      LP3(0x3ab6, unsigned char *, SHA1 , const unsigned char *, ___d, a0, size_t, ___n, d0, unsigned char *, ___md, a1,\
       , AMISSL_BASE_NAME)
 
 #define SHA1_Transform(___c, ___data) \
@@ -8974,7 +8974,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define DSA_generate_parameters_ex(___dsa, ___bits, ___seed, ___seed_len, ___counter_ret, ___h_ret, ___cb) \
-      LP7(0x3bf4, int, DSA_generate_parameters_ex , DSA *, ___dsa, a0, int, ___bits, d0, unsigned char *, ___seed, a1, int, ___seed_len, d1, int *, ___counter_ret, a2, unsigned long *, ___h_ret, a3, BN_GENCB *, ___cb, d2,\
+      LP7(0x3bf4, int, DSA_generate_parameters_ex , DSA *, ___dsa, a0, int, ___bits, d0, const unsigned char *, ___seed, a1, int, ___seed_len, d1, int *, ___counter_ret, a2, unsigned long *, ___h_ret, a3, BN_GENCB *, ___cb, d2,\
       , AMISSL_BASE_NAME)
 
 #define EC_KEY_new_by_curve_name(___nid) \
@@ -9134,7 +9134,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set1_param(___ctx, ___pm) \
-      LP2(0x3cea, int, X509_STORE_set1_param , X509_STORE *, ___ctx, a0, X509_VERIFY_PARAM *, ___pm, a1,\
+      LP2(0x3cea, int, X509_STORE_set1_param , X509_STORE *, ___ctx, a0, const X509_VERIFY_PARAM *, ___pm, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_generate_nconf(___str, ___nconf) \
@@ -9186,7 +9186,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_EC_PUBKEY(___bp, ___x) \
-      LP2(0x3d38, int, PEM_write_bio_EC_PUBKEY , BIO *, ___bp, a0, EC_KEY *, ___x, a1,\
+      LP2(0x3d38, int, PEM_write_bio_EC_PUBKEY , BIO *, ___bp, a0, const EC_KEY *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define d2i_EC_PUBKEY_bio(___bp, ___eckey) \
@@ -9210,11 +9210,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_EC_PUBKEY_bio(___bp, ___eckey) \
-      LP2(0x3d5c, int, i2d_EC_PUBKEY_bio , BIO *, ___bp, a0, EC_KEY *, ___eckey, a1,\
+      LP2(0x3d5c, int, i2d_EC_PUBKEY_bio , BIO *, ___bp, a0, const EC_KEY *, ___eckey, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_ECPrivateKey(___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP7(0x3d62, int, PEM_write_bio_ECPrivateKey , BIO *, ___bp, a0, EC_KEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
+      LP7(0x3d62, int, PEM_write_bio_ECPrivateKey , BIO *, ___bp, a0, const EC_KEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_ECPKParameters(___bp, ___x) \
@@ -9222,7 +9222,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_ECPrivateKey_bio(___bp, ___eckey) \
-      LP2(0x3d6e, int, i2d_ECPrivateKey_bio , BIO *, ___bp, a0, EC_KEY *, ___eckey, a1,\
+      LP2(0x3d6e, int, i2d_ECPrivateKey_bio , BIO *, ___bp, a0, const EC_KEY *, ___eckey, a1,\
       , AMISSL_BASE_NAME)
 
 #define i2d_ECPKParameters(___a, ___out) \
@@ -9318,7 +9318,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define AES_ige_encrypt(___in, ___out, ___length, ___key, ___ivec, ___enc) \
-      LP6NR(0x3e10, AES_ige_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, const unsigned long, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, const int, ___enc, d1,\
+      LP6NR(0x3e10, AES_ige_encrypt , const unsigned char *, ___in, a0, unsigned char *, ___out, a1, size_t, ___length, d0, const AES_KEY *, ___key, a2, unsigned char *, ___ivec, a3, const int, ___enc, d1,\
       , AMISSL_BASE_NAME)
 
 #define EC_KEY_precompute_mult(___key, ___ctx) \
@@ -9374,11 +9374,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_policy_tree(___ctx) \
-      LP1(0x3e64, X509_POLICY_TREE *, X509_STORE_CTX_get0_policy_tree , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x3e64, X509_POLICY_TREE *, X509_STORE_CTX_get0_policy_tree , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_explicit_policy(___ctx) \
-      LP1(0x3e6a, int, X509_STORE_CTX_get_explicit_policy , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x3e6a, int, X509_STORE_CTX_get_explicit_policy , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_policy_tree_get0_policies(___tree) \
@@ -9430,7 +9430,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OCSP_sendreq_new(___io, ___path, ___req, ___maxline) \
-      LP4(0x3eb8, OSSL_HTTP_REQ_CTX *, OCSP_sendreq_new , BIO *, ___io, a0, const char *, ___path, a1, OCSP_REQUEST *, ___req, a2, int, ___maxline, a3,\
+      LP4(0x3eb8, OSSL_HTTP_REQ_CTX *, OCSP_sendreq_new , BIO *, ___io, a0, const char *, ___path, a1, const OCSP_REQUEST *, ___req, a2, int, ___maxline, a3,\
       , AMISSL_BASE_NAME)
 
 #define OBSOLETE_OCSP_sendreq_nbio(___presp, ___rctx) \
@@ -10438,7 +10438,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_CMS(___out, ___cms) \
-      LP2(0x47b8, int, PEM_write_bio_CMS , BIO *, ___out, a0, CMS_ContentInfo *, ___cms, a1,\
+      LP2(0x47b8, int, PEM_write_bio_CMS , BIO *, ___out, a0, const CMS_ContentInfo *, ___cms, a1,\
       , AMISSL_BASE_NAME)
 
 #define CMS_unsigned_get_attr(___si, ___loc) \
@@ -10594,7 +10594,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CMS_signed_get0_data_by_OBJ(___si, ___oid, ___lastpos, ___type) \
-      LP4(0x48a8, void *, CMS_signed_get0_data_by_OBJ , CMS_SignerInfo *, ___si, a0, const ASN1_OBJECT *, ___oid, a1, int, ___lastpos, d0, int, ___type, d1,\
+      LP4(0x48a8, void *, CMS_signed_get0_data_by_OBJ , const CMS_SignerInfo *, ___si, a0, const ASN1_OBJECT *, ___oid, a1, int, ___lastpos, d0, int, ___type, d1,\
       , AMISSL_BASE_NAME)
 
 #define CMS_get0_SignerInfos(___cms) \
@@ -10858,7 +10858,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CMS_ContentInfo_print_ctx(___out, ___x, ___indent, ___pctx) \
-      LP4NR(0x4a34, CMS_ContentInfo_print_ctx , BIO *, ___out, a0, const CMS_ContentInfo *, ___x, a1, int, ___indent, d0, const ASN1_PCTX *, ___pctx, a2,\
+      LP4(0x4a34, int, CMS_ContentInfo_print_ctx , BIO *, ___out, a0, const CMS_ContentInfo *, ___x, a1, int, ___indent, d0, const ASN1_PCTX *, ___pctx, a2,\
       , AMISSL_BASE_NAME)
 
 #define CMS_add1_crl(___cms, ___crl) \
@@ -11077,8 +11077,8 @@ typedef ULONG _sfdc_vararg;
       LP2(0x4b8a, int, X509_sign_ctx , X509 *, ___x, a0, EVP_MD_CTX *, ___ctx, a1,\
       , AMISSL_BASE_NAME)
 
-#define ASN1_item_sign_ctx(___it, ___algor1, ___algor2, ___signature, ___asn, ___ctx) \
-      LP6(0x4b90, int, ASN1_item_sign_ctx , const ASN1_ITEM *, ___it, a0, X509_ALGOR *, ___algor1, a1, X509_ALGOR *, ___algor2, a2, ASN1_BIT_STRING *, ___signature, a3, void *, ___asn, d0, EVP_MD_CTX *, ___ctx, d1,\
+#define ASN1_item_sign_ctx(___it, ___algor1, ___algor2, ___signature, ___data, ___ctx) \
+      LP6(0x4b90, int, ASN1_item_sign_ctx , const ASN1_ITEM *, ___it, a0, X509_ALGOR *, ___algor1, a1, X509_ALGOR *, ___algor2, a2, ASN1_BIT_STRING *, ___signature, a3, const void *, ___data, d0, EVP_MD_CTX *, ___ctx, d1,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set0_crls(___ctx, ___sk) \
@@ -11126,7 +11126,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, void (*__fpr)(struct ssl_ctx_st *ctx, SSL_SESSION *sess))
 
 #define PEM_write_bio_SSL_SESSION(___bp, ___x) \
-      LP2(0x4be4, int, PEM_write_bio_SSL_SESSION , BIO *, ___bp, a0, SSL_SESSION *, ___x, a1,\
+      LP2(0x4be4, int, PEM_write_bio_SSL_SESSION , BIO *, ___bp, a0, const SSL_SESSION *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define PEM_read_bio_SSL_SESSION(___bp, ___x, ___cb, ___u) \
@@ -11286,7 +11286,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_param(___ctx) \
-      LP1(0x4dee, X509_VERIFY_PARAM *, X509_STORE_CTX_get0_param , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x4dee, X509_VERIFY_PARAM *, X509_STORE_CTX_get0_param , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_depth(___store, ___depth) \
@@ -11322,7 +11322,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_item_ndef_i2d(___val, ___out, ___it) \
-      LP3(0x4e2a, int, ASN1_item_ndef_i2d , ASN1_VALUE *, ___val, a0, unsigned char **, ___out, a1, const ASN1_ITEM *, ___it, a2,\
+      LP3(0x4e2a, int, ASN1_item_ndef_i2d , const ASN1_VALUE *, ___val, a0, unsigned char **, ___out, a1, const ASN1_ITEM *, ___it, a2,\
       , AMISSL_BASE_NAME)
 
 #define ERR_pop_to_mark() \
@@ -11330,7 +11330,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_policy_level_get0_node(___level, ___i) \
-      LP2(0x4e36, X509_POLICY_NODE *, X509_policy_level_get0_node , X509_POLICY_LEVEL *, ___level, a0, int, ___i, d0,\
+      LP2(0x4e36, X509_POLICY_NODE *, X509_policy_level_get0_node , const X509_POLICY_LEVEL *, ___level, a0, int, ___i, d0,\
       , AMISSL_BASE_NAME)
 
 #define i2d_PKCS7_NDEF(___a, ___out) \
@@ -11414,7 +11414,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_dump_indent_cb(___cb, ___u, ___s, ___len, ___indent) \
-      LP5FP(0x4ed2, int, BIO_dump_indent_cb , __fpt, ___cb, a0, void *, ___u, a1, const char *, ___s, a2, int, ___len, d0, int, ___indent, d1,\
+      LP5FP(0x4ed2, int, BIO_dump_indent_cb , __fpt, ___cb, a0, void *, ___u, a1, const void *, ___s, a2, int, ___len, d0, int, ___indent, d1,\
       , AMISSL_BASE_NAME, int (*__fpt)(const void *data,size_t len,void *u))
 
 #define BN_nist_mod_256(___r, ___a, ___p, ___ctx) \
@@ -11486,7 +11486,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_dump_cb(___cb, ___u, ___s, ___len) \
-      LP4FP(0x4f68, int, BIO_dump_cb , __fpt, ___cb, a0, void *, ___u, a1, const char *, ___s, a2, int, ___len, a3,\
+      LP4FP(0x4f68, int, BIO_dump_cb , __fpt, ___cb, a0, void *, ___u, a1, const void *, ___s, a2, int, ___len, a3,\
       , AMISSL_BASE_NAME, int (*__fpt)(const void *data,size_t len,void *u))
 
 #define BN_get_rfc3526_prime_8192(___bn) \
@@ -11650,7 +11650,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509at_get0_data_by_OBJ(___x, ___obj, ___lastpos, ___type) \
-      LP4(0x506a, void *, X509at_get0_data_by_OBJ , STACK_OF(X509_ATTRIBUTE) *, ___x, a0, const ASN1_OBJECT *, ___obj, a1, int, ___lastpos, d0, int, ___type, d1,\
+      LP4(0x506a, void *, X509at_get0_data_by_OBJ , const STACK_OF(X509_ATTRIBUTE) *, ___x, a0, const ASN1_OBJECT *, ___obj, a1, int, ___lastpos, d0, int, ___type, d1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_TYPE_set1(___a, ___type, ___value) \
@@ -11742,7 +11742,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_item_print(___out, ___ifld, ___indent, ___it, ___ctx) \
-      LP5(0x510c, int, ASN1_item_print , BIO *, ___out, a0, ASN1_VALUE *, ___ifld, a1, int, ___indent, d0, const ASN1_ITEM *, ___it, a2, const ASN1_PCTX *, ___ctx, a3,\
+      LP5(0x510c, int, ASN1_item_print , BIO *, ___out, a0, const ASN1_VALUE *, ___ifld, a1, int, ___indent, d0, const ASN1_ITEM *, ___it, a2, const ASN1_PCTX *, ___ctx, a3,\
       , AMISSL_BASE_NAME)
 
 #define TS_TST_INFO_set_nonce(___a, ___nonce) \
@@ -11810,7 +11810,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get1_crls(___st, ___nm) \
-      LP2(0x517e, STACK_OF(X509_CRL) *, X509_STORE_CTX_get1_crls , X509_STORE_CTX *, ___st, a0, X509_NAME *, ___nm, a1,\
+      LP2(0x517e, STACK_OF(X509_CRL) *, X509_STORE_CTX_get1_crls , const X509_STORE_CTX *, ___st, a0, const X509_NAME *, ___nm, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_asn1_new(___id, ___flags, ___pem_str, ___info) \
@@ -11826,7 +11826,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_TS_TST_INFO_bio(___fp, ___a) \
-      LP2(0x5196, int, i2d_TS_TST_INFO_bio , BIO *, ___fp, a0, TS_TST_INFO *, ___a, a1,\
+      LP2(0x5196, int, i2d_TS_TST_INFO_bio , BIO *, ___fp, a0, const TS_TST_INFO *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define TS_TST_INFO_set_ordering(___a, ___ordering) \
@@ -12026,7 +12026,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define DIST_POINT_set_dpname(___dpn, ___iname) \
-      LP2(0x52da, int, DIST_POINT_set_dpname , DIST_POINT_NAME *, ___dpn, a0, X509_NAME *, ___iname, a1,\
+      LP2(0x52da, int, DIST_POINT_set_dpname , DIST_POINT_NAME *, ___dpn, a0, const X509_NAME *, ___iname, a1,\
       , AMISSL_BASE_NAME)
 
 #define i2d_ISSUING_DIST_POINT(___a, ___pp) \
@@ -12034,7 +12034,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_CTX_get_data(___ctx) \
-      LP1(0x52e6, void *, EVP_PKEY_CTX_get_data , EVP_PKEY_CTX *, ___ctx, a0,\
+      LP1(0x52e6, void *, EVP_PKEY_CTX_get_data , const EVP_PKEY_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define TS_STATUS_INFO_print_bio(___bio, ___a) \
@@ -12138,7 +12138,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2b_PVK_bio(___out, ___pk, ___enclevel, ___cb, ___u) \
-      LP5(0x5394, int, i2b_PVK_bio , BIO *, ___out, a0, EVP_PKEY *, ___pk, a1, int, ___enclevel, d0, pem_password_cb *, ___cb, a2, void *, ___u, a3,\
+      LP5(0x5394, int, i2b_PVK_bio , BIO *, ___out, a0, const EVP_PKEY *, ___pk, a1, int, ___enclevel, d0, pem_password_cb *, ___cb, a2, void *, ___u, a3,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_print_private(___out, ___pkey, ___indent, ___pctx) \
@@ -12154,7 +12154,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_UTCTIME_adj(___s, ___t, ___offset_day, ___offset_sec) \
-      LP4(0x53ac, ASN1_UTCTIME *, ASN1_UTCTIME_adj , ASN1_UTCTIME *, ___s, a0, time_t, ___t, d0, int, ___offset_day, d1, int, ___offset_sec, d2,\
+      LP4(0x53ac, ASN1_UTCTIME *, ASN1_UTCTIME_adj , ASN1_UTCTIME *, ___s, a0, time_t, ___t, d0, int, ___offset_day, d1, long, ___offset_sec, d2,\
       , AMISSL_BASE_NAME)
 
 #define TS_TST_INFO_new() \
@@ -12218,7 +12218,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ASN1_TIME_adj(___s, ___t, ___offset_day, ___offset_sec) \
-      LP4(0x540c, ASN1_TIME *, ASN1_TIME_adj , ASN1_TIME *, ___s, a0, time_t, ___t, d0, int, ___offset_day, d1, int, ___offset_sec, d2,\
+      LP4(0x540c, ASN1_TIME *, ASN1_TIME_adj , ASN1_TIME *, ___s, a0, time_t, ___t, d0, int, ___offset_day, d1, long, ___offset_sec, d2,\
       , AMISSL_BASE_NAME)
 
 #define TS_OBJ_print_bio(___bio, ___obj) \
@@ -12254,7 +12254,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *ctx), int (*__fpt2)(EVP_PKEY_CTX *ctx,unsigned char *key,size_t *keylen))
 
 #define i2d_TS_MSG_IMPRINT_bio(___fp, ___a) \
-      LP2(0x5448, int, i2d_TS_MSG_IMPRINT_bio , BIO *, ___fp, a0, TS_MSG_IMPRINT *, ___a, a1,\
+      LP2(0x5448, int, i2d_TS_MSG_IMPRINT_bio , BIO *, ___fp, a0, const TS_MSG_IMPRINT *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define TS_RESP_CTX_set_accuracy(___ctx, ___secs, ___millis, ___micros) \
@@ -12286,7 +12286,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2b_PrivateKey_bio(___out, ___pk) \
-      LP2(0x5478, int, i2b_PrivateKey_bio , BIO *, ___out, a0, EVP_PKEY *, ___pk, a1,\
+      LP2(0x5478, int, i2b_PrivateKey_bio , BIO *, ___out, a0, const EVP_PKEY *, ___pk, a1,\
       , AMISSL_BASE_NAME)
 
 #define i2d_TS_RESP(___a, ___pp) \
@@ -12394,7 +12394,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *ctx), int (*__fpt2)(EVP_PKEY_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
 
 #define i2b_PublicKey_bio(___out, ___pk) \
-      LP2(0x5520, int, i2b_PublicKey_bio , BIO *, ___out, a0, EVP_PKEY *, ___pk, a1,\
+      LP2(0x5520, int, i2b_PublicKey_bio , BIO *, ___out, a0, const EVP_PKEY *, ___pk, a1,\
       , AMISSL_BASE_NAME)
 
 #define TS_CONF_set_certs(___conf, ___section, ___certs, ___ctx) \
@@ -12526,7 +12526,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_PUBKEY_get0_param(___ppkalg, ___pk, ___ppklen, ___pa, ___pub) \
-      LP5(0x55f8, int, X509_PUBKEY_get0_param , ASN1_OBJECT **, ___ppkalg, a0, const unsigned char **, ___pk, a1, int *, ___ppklen, a2, X509_ALGOR **, ___pa, a3, X509_PUBKEY *, ___pub, d0,\
+      LP5(0x55f8, int, X509_PUBKEY_get0_param , ASN1_OBJECT **, ___ppkalg, a0, const unsigned char **, ___pk, a1, int *, ___ppklen, a2, X509_ALGOR **, ___pa, a3, const X509_PUBKEY *, ___pub, d0,\
       , AMISSL_BASE_NAME)
 
 #define TS_MSG_IMPRINT_dup(___a) \
@@ -12534,11 +12534,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PKCS7_print_ctx(___out, ___x, ___indent, ___pctx) \
-      LP4NR(0x5604, PKCS7_print_ctx , BIO *, ___out, a0, const PKCS7 *, ___x, a1, int, ___indent, d0, const ASN1_PCTX *, ___pctx, a2,\
+      LP4(0x5604, int, PKCS7_print_ctx , BIO *, ___out, a0, const PKCS7 *, ___x, a1, int, ___indent, d0, const ASN1_PCTX *, ___pctx, a2,\
       , AMISSL_BASE_NAME)
 
 #define i2d_TS_REQ_bio(___fp, ___a) \
-      LP2(0x560a, int, i2d_TS_REQ_bio , BIO *, ___fp, a0, TS_REQ *, ___a, a1,\
+      LP2(0x560a, int, i2d_TS_REQ_bio , BIO *, ___fp, a0, const TS_REQ *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_asn1_set_param(___ameth, ___param_decode, ___param_encode, ___param_missing, ___param_copy, ___param_cmp, ___param_print) \
@@ -12702,7 +12702,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_Parameters(___bp, ___x) \
-      LP2(0x5706, int, PEM_write_bio_Parameters , BIO *, ___bp, a0, EVP_PKEY *, ___x, a1,\
+      LP2(0x5706, int, PEM_write_bio_Parameters , BIO *, ___bp, a0, const EVP_PKEY *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define TS_TST_INFO_get_accuracy(___a) \
@@ -12710,7 +12710,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_CRL_get0_by_serial(___crl, ___ret, ___serial) \
-      LP3(0x5712, int, X509_CRL_get0_by_serial , X509_CRL *, ___crl, a0, X509_REVOKED **, ___ret, a1, ASN1_INTEGER *, ___serial, a2,\
+      LP3(0x5712, int, X509_CRL_get0_by_serial , X509_CRL *, ___crl, a0, X509_REVOKED **, ___ret, a1, const ASN1_INTEGER *, ___serial, a2,\
       , AMISSL_BASE_NAME)
 
 #define TS_TST_INFO_set_version(___a, ___version) \
@@ -12774,7 +12774,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get1_certs(___st, ___nm) \
-      LP2(0x5784, STACK_OF(X509) *, X509_STORE_CTX_get1_certs , X509_STORE_CTX *, ___st, a0, X509_NAME *, ___nm, a1,\
+      LP2(0x5784, STACK_OF(X509) *, X509_STORE_CTX_get1_certs , X509_STORE_CTX *, ___st, a0, const X509_NAME *, ___nm, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_CTX_get_operation(___ctx) \
@@ -12798,7 +12798,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_get0(___pkey) \
-      LP1(0x57a8, void *, EVP_PKEY_get0 , EVP_PKEY *, ___pkey, a0,\
+      LP1(0x57a8, void *, EVP_PKEY_get0 , const EVP_PKEY *, ___pkey, a0,\
       , AMISSL_BASE_NAME)
 
 #define BIO_asn1_set_suffix(___b, ___suffix, ___suffix_free) \
@@ -12890,7 +12890,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_TS_RESP_bio(___fp, ___a) \
-      LP2(0x5832, int, i2d_TS_RESP_bio , BIO *, ___fp, a0, TS_RESP *, ___a, a1,\
+      LP2(0x5832, int, i2d_TS_RESP_bio , BIO *, ___fp, a0, const TS_RESP *, ___a, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_CTX_get0_peerkey(___ctx) \
@@ -12982,7 +12982,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define TS_CONF_set_clock_precision_digits(___conf, ___section, ___ctx) \
-      LP3(0x58c2, int, TS_CONF_set_clock_precision_digits , CONF *, ___conf, a0, const char *, ___section, a1, TS_RESP_CTX *, ___ctx, a2,\
+      LP3(0x58c2, int, TS_CONF_set_clock_precision_digits , const CONF *, ___conf, a0, const char *, ___section, a1, TS_RESP_CTX *, ___ctx, a2,\
       , AMISSL_BASE_NAME)
 
 #define ESS_ISSUER_SERIAL_dup(___a) \
@@ -13006,7 +13006,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_check_akid(___issuer, ___akid) \
-      LP2(0x58e6, int, X509_check_akid , X509 *, ___issuer, a0, AUTHORITY_KEYID *, ___akid, a1,\
+      LP2(0x58e6, int, X509_check_akid , const X509 *, ___issuer, a0, const AUTHORITY_KEYID *, ___akid, a1,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_PCTX_free(___p) \
@@ -13090,7 +13090,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define TS_ext_print_bio(___bio, ___extensions) \
-      LP2(0x596a, int, TS_ext_print_bio , BIO *, ___bio, a0, STACK_OF(X509_EXTENSION) *, ___extensions, a1,\
+      LP2(0x596a, int, TS_ext_print_bio , BIO *, ___bio, a0, const STACK_OF(X509_EXTENSION) *, ___extensions, a1,\
       , AMISSL_BASE_NAME)
 
 #define TS_ASN1_INTEGER_print_bio(___bio, ___num) \
@@ -13142,7 +13142,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_NAME_hash_old(___x) \
-      LP1(0x59c4, unsigned long, X509_NAME_hash_old , X509_NAME *, ___x, a0,\
+      LP1(0x59c4, unsigned long, X509_NAME_hash_old , const X509_NAME *, ___x, a0,\
       , AMISSL_BASE_NAME)
 
 #define ASN1_TIME_set_string(___s, ___str) \
@@ -13170,15 +13170,15 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_current_crl(___ctx) \
-      LP1(0x59ee, X509_CRL *, X509_STORE_CTX_get0_current_crl , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x59ee, X509_CRL *, X509_STORE_CTX_get0_current_crl , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_parent_ctx(___ctx) \
-      LP1(0x59f4, X509_STORE_CTX *, X509_STORE_CTX_get0_parent_ctx , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x59f4, X509_STORE_CTX *, X509_STORE_CTX_get0_parent_ctx , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_current_issuer(___ctx) \
-      LP1(0x59fa, X509 *, X509_STORE_CTX_get0_current_issuer , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x59fa, X509 *, X509_STORE_CTX_get0_current_issuer , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define EVP_CIPHER_CTX_copy(___out, ___in) \
@@ -13330,7 +13330,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_xts128_encrypt(___ctx, ___iv, ___inp, ___out, ___len, ___enc) \
-      LP6(0x5ae4, int, CRYPTO_xts128_encrypt , XTS128_CONTEXT *, ___ctx, a0, const unsigned char *, ___iv, a1, const unsigned char *, ___inp, a2, unsigned char *, ___out, a3, size_t, ___len, d0, int, ___enc, d1,\
+      LP6(0x5ae4, int, CRYPTO_xts128_encrypt , const XTS128_CONTEXT *, ___ctx, a0, const unsigned char *, ___iv, a1, const unsigned char *, ___inp, a2, unsigned char *, ___out, a3, size_t, ___len, d0, int, ___enc, d1,\
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_nistcts128_decrypt_block(___in, ___out, ___len, ___key, ___ivec, ___block) \
@@ -13426,7 +13426,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define i2d_RSA_PSS_PARAMS(___a, ___out) \
-      LP2(0x5b74, int, i2d_RSA_PSS_PARAMS , RSA_PSS_PARAMS *, ___a, a0, unsigned char **, ___out, a1,\
+      LP2(0x5b74, int, i2d_RSA_PSS_PARAMS , const RSA_PSS_PARAMS *, ___a, a0, unsigned char **, ___out, a1,\
       , AMISSL_BASE_NAME)
 
 #define POLICY_MAPPING_it() \
@@ -13486,7 +13486,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_DHxparams(___bp, ___x) \
-      LP2(0x5be6, int, PEM_write_bio_DHxparams , BIO *, ___bp, a0, DH *, ___x, a1,\
+      LP2(0x5be6, int, PEM_write_bio_DHxparams , BIO *, ___bp, a0, const DH *, ___x, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_ALGOR_cmp(___a, ___b) \
@@ -13502,7 +13502,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define BIO_hex_string(___out, ___indent, ___width, ___data, ___datalen) \
-      LP5(0x5bfe, int, BIO_hex_string , BIO *, ___out, a0, int, ___indent, d0, int, ___width, d1, unsigned char *, ___data, a1, int, ___datalen, d2,\
+      LP5(0x5bfe, int, BIO_hex_string , BIO *, ___out, a0, int, ___indent, d0, int, ___width, d1, const void *, ___data, a1, int, ___datalen, d2,\
       , AMISSL_BASE_NAME)
 
 #define OBSOLETE_BUF_strnlen(___str, ___maxlen) \
@@ -13518,7 +13518,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CMS_RecipientInfo_encrypt(___cms, ___ri) \
-      LP2(0x5c16, int, CMS_RecipientInfo_encrypt , CMS_ContentInfo *, ___cms, a0, CMS_RecipientInfo *, ___ri, a1,\
+      LP2(0x5c16, int, CMS_RecipientInfo_encrypt , const CMS_ContentInfo *, ___cms, a0, CMS_RecipientInfo *, ___ri, a1,\
       , AMISSL_BASE_NAME)
 
 #define CMS_RecipientInfo_get0_pkey_ctx(___ri) \
@@ -13742,7 +13742,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_store(___ctx) \
-      LP1(0x5d9c, X509_STORE *, X509_STORE_CTX_get0_store , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x5d9c, X509_STORE *, X509_STORE_CTX_get0_store , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_VERIFY_PARAM_add1_host(___param, ___name, ___namelen) \
@@ -13758,7 +13758,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_VERIFY_PARAM_get0_peername(___param) \
-      LP1(0x5db4, char *, X509_VERIFY_PARAM_get0_peername , X509_VERIFY_PARAM *, ___param, a0,\
+      LP1(0x5db4, char *, X509_VERIFY_PARAM_get0_peername , const X509_VERIFY_PARAM *, ___param, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_VERIFY_PARAM_get_count() \
@@ -14290,7 +14290,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_secure_allocated(___ptr) \
-      LP1(0x6102, int, CRYPTO_secure_allocated , void *, ___ptr, a0,\
+      LP1(0x6102, int, CRYPTO_secure_allocated , const void *, ___ptr, a0,\
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_secure_free(___ptr, ___file, ___line) \
@@ -14306,7 +14306,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_secure_malloc_init(___sz, ___minsize) \
-      LP2(0x611a, int, CRYPTO_secure_malloc_init , size_t, ___sz, d0, int, ___minsize, d1,\
+      LP2(0x611a, int, CRYPTO_secure_malloc_init , size_t, ___sz, d0, size_t, ___minsize, d1,\
       , AMISSL_BASE_NAME)
 
 #define CRYPTO_secure_malloc_initialized() \
@@ -14614,7 +14614,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_CIPHER_CTX_set_num(___ctx, ___num) \
-      LP2NR(0x62f4, EVP_CIPHER_CTX_set_num , EVP_CIPHER_CTX *, ___ctx, a0, int, ___num, d0,\
+      LP2(0x62f4, int, EVP_CIPHER_CTX_set_num , EVP_CIPHER_CTX *, ___ctx, a0, int, ___num, d0,\
       , AMISSL_BASE_NAME)
 
 #define EVP_CIPHER_impl_ctx_size(___cipher) \
@@ -14837,8 +14837,8 @@ typedef ULONG _sfdc_vararg;
       LP3(0x643e, int, EVP_PBE_get , int *, ___ptype, a0, int *, ___ppbe_nid, a1, size_t, ___num, d0,\
       , AMISSL_BASE_NAME)
 
-#define EVP_PBE_scrypt(___pass, ___passlen, ___salt, ___saltlen, ___N, ___r, ___p, ___maxmem, ___key, ___keylen) \
-      LP10(0x6444, int, EVP_PBE_scrypt , const char *, ___pass, a0, size_t, ___passlen, d0, const unsigned char *, ___salt, a1, size_t, ___saltlen, d1, unsigned long, ___N, d2, unsigned long, ___r, d3, unsigned long, ___p, d4, uint64_t, ___maxmem, d5, unsigned char *, ___key, a2, size_t, ___keylen, a3,\
+#define OBSOLETE_EVP_PBE_scrypt(___pass, ___passlen, ___salt, ___saltlen, ___N, ___r, ___p, ___maxmem, ___key, ___keylen) \
+      LP10(0x6444, int, OBSOLETE_EVP_PBE_scrypt , const const char *, ___pass, a0, size_t, ___passlen, d0, const unsigned char *, ___salt, a1, size_t, ___saltlen, d1, unsigned long, ___N, d2, unsigned long, ___r, d3, unsigned long, ___p, d4, uint64_t, ___maxmem, d5, unsigned char *, ___key, a2, size_t, ___keylen, a3,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_asn1_set_security_bits(___ameth, ___pkey_security_bits) \
@@ -15182,7 +15182,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PKCS5_pbe2_set_scrypt(___cipher, ___salt, ___saltlen, ___aiv, ___N, ___r, ___p) \
-      LP7(0x6648, X509_ALGOR *, PKCS5_pbe2_set_scrypt , const EVP_CIPHER *, ___cipher, a0, const unsigned char *, ___salt, a1, int, ___saltlen, d0, unsigned char *, ___aiv, a2, unsigned long, ___N, d1, unsigned long, ___r, d2, uint64_t, ___p, d3,\
+      LP7(0x6648, X509_ALGOR *, PKCS5_pbe2_set_scrypt , const EVP_CIPHER *, ___cipher, a0, const unsigned char *, ___salt, a1, int, ___saltlen, d0, unsigned char *, ___aiv, a2, uint64_t, ___N, d2, uint64_t, ___r, d4, uint64_t, ___p, d6,\
       , AMISSL_BASE_NAME)
 
 #define X509_CRL_get0_extensions(___crl) \
@@ -15270,11 +15270,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_NAME_get0_der(___nm, ___pder, ___pderlen) \
-      LP3(0x66d2, int, X509_NAME_get0_der , X509_NAME *, ___nm, a0, const unsigned char **, ___pder, a1, size_t *, ___pderlen, a2,\
+      LP3(0x66d2, int, X509_NAME_get0_der , const X509_NAME *, ___nm, a0, const unsigned char **, ___pder, a1, size_t *, ___pderlen, a2,\
       , AMISSL_BASE_NAME)
 
 #define X509_PUBKEY_get0(___key) \
-      LP1(0x66d8, EVP_PKEY *, X509_PUBKEY_get0 , X509_PUBKEY *, ___key, a0,\
+      LP1(0x66d8, EVP_PKEY *, X509_PUBKEY_get0 , const X509_PUBKEY *, ___key, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_REQ_get0_signature(___req, ___psig, ___palg) \
@@ -15318,7 +15318,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_num_untrusted(___ctx) \
-      LP1(0x671a, int, X509_STORE_CTX_get_num_untrusted , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x671a, int, X509_STORE_CTX_get_num_untrusted , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set0_dane(___ctx, ___dane) \
@@ -15454,7 +15454,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_clear_options(___s, ___op) \
-      LP2(0x67e6, unsigned long, SSL_clear_options , SSL *, ___s, a0, unsigned long, ___op, d0,\
+      LP2(0x67e6, uint64_t, SSL_clear_options , SSL *, ___s, a0, uint64_t, ___op, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_config(___s, ___name) \
@@ -15462,7 +15462,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_clear_options(___ctx, ___op) \
-      LP2(0x67f2, unsigned long, SSL_CTX_clear_options , SSL_CTX *, ___ctx, a0, unsigned long, ___op, d0,\
+      LP2(0x67f2, uint64_t, SSL_CTX_clear_options , SSL_CTX *, ___ctx, a0, uint64_t, ___op, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_config(___ctx, ___name) \
@@ -15482,11 +15482,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_get_options(___ctx) \
-      LP1(0x6810, unsigned long, SSL_CTX_get_options , const SSL_CTX *, ___ctx, a0,\
+      LP1(0x6810, uint64_t, SSL_CTX_get_options , const SSL_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_get_security_callback(___ctx) \
-      LP1FR(0x6816, __fpr, SSL_CTX_get_security_callback , SSL_CTX *, ___ctx, a0,\
+      LP1FR(0x6816, __fpr, SSL_CTX_get_security_callback , const SSL_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME, int (*__fpr)(const SSL *, const SSL_CTX *, int, int, int, void *, void *))
 
 #define SSL_CTX_get_security_level(___ctx) \
@@ -15510,7 +15510,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt)(SSL *,int))
 
 #define SSL_CTX_set_options(___ctx, ___op) \
-      LP2(0x683a, unsigned long, SSL_CTX_set_options , SSL_CTX *, ___ctx, a0, unsigned long, ___op, d0,\
+      LP2(0x683a, uint64_t, SSL_CTX_set_options , SSL_CTX *, ___ctx, a0, uint64_t, ___op, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_CTX_set_security_callback(___ctx, ___cb) \
@@ -15562,7 +15562,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define SSL_get_options(___s) \
-      LP1(0x688e, unsigned long, SSL_get_options , const SSL *, ___s, a0,\
+      LP1(0x688e, uint64_t, SSL_get_options , const SSL *, ___s, a0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_get_security_callback(___s) \
@@ -15642,7 +15642,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt)(SSL *,int))
 
 #define SSL_set_options(___s, ___op) \
-      LP2(0x6906, unsigned long, SSL_set_options , SSL *, ___s, a0, unsigned long, ___op, d0,\
+      LP2(0x6906, uint64_t, SSL_set_options , SSL *, ___s, a0, uint64_t, ___op, d0,\
       , AMISSL_BASE_NAME)
 
 #define SSL_set0_rbio(___s, ___rbio) \
@@ -16346,11 +16346,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define DSA_meth_get_paramgen(___dsam) \
-      LP1FR(0x6d26, __fpr, DSA_meth_get_paramgen , DSA_METHOD *, ___dsam, a0,\
+      LP1FR(0x6d26, __fpr, DSA_meth_get_paramgen , const DSA_METHOD *, ___dsam, a0,\
       , AMISSL_BASE_NAME, int (*__fpr)(DSA *, int, const unsigned char *, int, int *, unsigned long *, BN_GENCB *))
 
 #define DSA_meth_get_sign(___dsam) \
-      LP1FR(0x6d2c, __fpr, DSA_meth_get_sign , DSA_METHOD *, ___dsam, a0,\
+      LP1FR(0x6d2c, __fpr, DSA_meth_get_sign , const DSA_METHOD *, ___dsam, a0,\
       , AMISSL_BASE_NAME, DSA_SIG * (*__fpr)(const unsigned char *, int, DSA *))
 
 #define DSA_meth_set_paramgen(___dsam, ___paramgen) \
@@ -16742,7 +16742,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_obj_by_subject(___vs, ___type, ___name) \
-      LP3(0x6f78, X509_OBJECT *, X509_STORE_CTX_get_obj_by_subject , X509_STORE_CTX *, ___vs, a0, X509_LOOKUP_TYPE, ___type, d0, X509_NAME *, ___name, a1,\
+      LP3(0x6f78, X509_OBJECT *, X509_STORE_CTX_get_obj_by_subject , X509_STORE_CTX *, ___vs, a0, X509_LOOKUP_TYPE, ___type, d0, const X509_NAME *, ___name, a1,\
       , AMISSL_BASE_NAME)
 
 #define X509_OBJECT_free(___a) \
@@ -16754,11 +16754,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_untrusted(___ctx) \
-      LP1(0x6f8a, STACK_OF(X509) *, X509_STORE_CTX_get0_untrusted , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x6f8a, STACK_OF(X509) *, X509_STORE_CTX_get0_untrusted , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get0_cert(___ctx) \
-      LP1(0x6f90, X509 *, X509_STORE_CTX_get0_cert , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x6f90, X509 *, X509_STORE_CTX_get0_cert , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_verify(___ctx, ___verify) \
@@ -16766,11 +16766,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_verify(___ctx) \
-      LP1(0x6f9c, X509_STORE_CTX_verify_fn, X509_STORE_CTX_get_verify , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x6f9c, X509_STORE_CTX_verify_fn, X509_STORE_CTX_get_verify , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_verify_cb(___ctx) \
-      LP1(0x6fa2, X509_STORE_CTX_verify_cb, X509_STORE_CTX_get_verify_cb , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x6fa2, X509_STORE_CTX_verify_cb, X509_STORE_CTX_get_verify_cb , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set0_verified_chain(___ctx, ___sk) \
@@ -16798,7 +16798,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define EVP_ENCODE_CTX_copy(___dctx, ___sctx) \
-      LP2(0x6fea, int, EVP_ENCODE_CTX_copy , EVP_ENCODE_CTX *, ___dctx, a0, EVP_ENCODE_CTX *, ___sctx, a1,\
+      LP2(0x6fea, int, EVP_ENCODE_CTX_copy , EVP_ENCODE_CTX *, ___dctx, a0, const EVP_ENCODE_CTX *, ___sctx, a1,\
       , AMISSL_BASE_NAME)
 
 #define EVP_PKEY_get0_hmac(___pkey, ___len) \
@@ -16818,7 +16818,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define PEM_write_bio_PrivateKey_traditional(___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
-      LP7(0x7008, int, PEM_write_bio_PrivateKey_traditional , BIO *, ___bp, a0, EVP_PKEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
+      LP7(0x7008, int, PEM_write_bio_PrivateKey_traditional , BIO *, ___bp, a0, const EVP_PKEY *, ___x, a1, const EVP_CIPHER *, ___enc, a2, const unsigned char *, ___kstr, a3, int, ___klen, d0, pem_password_cb *, ___cb, d1, void *, ___u, d2,\
       , AMISSL_BASE_NAME)
 
 #define SSL_SESSION_get_protocol_version(___s) \
@@ -16858,7 +16858,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_OBJECT_get0_X509_CRL(___a) \
-      LP1(0x7044, X509_CRL *, X509_OBJECT_get0_X509_CRL , X509_OBJECT *, ___a, a0,\
+      LP1(0x7044, X509_CRL *, X509_OBJECT_get0_X509_CRL , const X509_OBJECT *, ___a, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_lock(___ctx) \
@@ -16870,11 +16870,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get0_objects(___v) \
-      LP1(0x7056, STACK_OF(X509_OBJECT) *, X509_STORE_get0_objects , X509_STORE *, ___v, a0,\
+      LP1(0x7056, STACK_OF(X509_OBJECT) *, X509_STORE_get0_objects , const X509_STORE *, ___v, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get0_param(___ctx) \
-      LP1(0x705c, X509_VERIFY_PARAM *, X509_STORE_get0_param , X509_STORE *, ___ctx, a0,\
+      LP1(0x705c, X509_VERIFY_PARAM *, X509_STORE_get0_param , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_verify(___ctx, ___verify) \
@@ -16882,11 +16882,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_verify(___ctx) \
-      LP1(0x7068, X509_STORE_CTX_verify_fn, X509_STORE_get_verify , X509_STORE *, ___ctx, a0,\
+      LP1(0x7068, X509_STORE_CTX_verify_fn, X509_STORE_get_verify , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_verify_cb(___ctx) \
-      LP1(0x706e, X509_STORE_CTX_verify_cb, X509_STORE_get_verify_cb , X509_STORE *, ___ctx, a0,\
+      LP1(0x706e, X509_STORE_CTX_verify_cb, X509_STORE_get_verify_cb , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_get_issuer(___ctx, ___get_issuer) \
@@ -16894,7 +16894,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_get_issuer(___ctx) \
-      LP1(0x707a, X509_STORE_CTX_get_issuer_fn, X509_STORE_get_get_issuer , X509_STORE *, ___ctx, a0,\
+      LP1(0x707a, X509_STORE_CTX_get_issuer_fn, X509_STORE_get_get_issuer , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_check_issued(___ctx, ___check_issued) \
@@ -16902,7 +16902,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_check_issued(___ctx) \
-      LP1(0x7086, X509_STORE_CTX_check_issued_fn, X509_STORE_get_check_issued , X509_STORE *, ___ctx, a0,\
+      LP1(0x7086, X509_STORE_CTX_check_issued_fn, X509_STORE_get_check_issued , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_check_revocation(___ctx, ___check_revocation) \
@@ -16910,7 +16910,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_check_revocation(___ctx) \
-      LP1(0x7092, X509_STORE_CTX_check_revocation_fn, X509_STORE_get_check_revocation , X509_STORE *, ___ctx, a0,\
+      LP1(0x7092, X509_STORE_CTX_check_revocation_fn, X509_STORE_get_check_revocation , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_get_crl(___ctx, ___get_crl) \
@@ -16918,7 +16918,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_get_crl(___ctx) \
-      LP1(0x709e, X509_STORE_CTX_get_crl_fn, X509_STORE_get_get_crl , X509_STORE *, ___ctx, a0,\
+      LP1(0x709e, X509_STORE_CTX_get_crl_fn, X509_STORE_get_get_crl , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_check_crl(___ctx, ___check_crl) \
@@ -16926,7 +16926,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_check_crl(___ctx) \
-      LP1(0x70aa, X509_STORE_CTX_check_crl_fn, X509_STORE_get_check_crl , X509_STORE *, ___ctx, a0,\
+      LP1(0x70aa, X509_STORE_CTX_check_crl_fn, X509_STORE_get_check_crl , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_cert_crl(___ctx, ___cert_crl) \
@@ -16934,7 +16934,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_cert_crl(___ctx) \
-      LP1(0x70b6, X509_STORE_CTX_cert_crl_fn, X509_STORE_get_cert_crl , X509_STORE *, ___ctx, a0,\
+      LP1(0x70b6, X509_STORE_CTX_cert_crl_fn, X509_STORE_get_cert_crl , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_check_policy(___ctx, ___check_policy) \
@@ -16942,7 +16942,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_check_policy(___ctx) \
-      LP1(0x70c2, X509_STORE_CTX_check_policy_fn, X509_STORE_get_check_policy , X509_STORE *, ___ctx, a0,\
+      LP1(0x70c2, X509_STORE_CTX_check_policy_fn, X509_STORE_get_check_policy , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_lookup_certs(___ctx, ___lookup_certs) \
@@ -16950,7 +16950,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_lookup_certs(___ctx) \
-      LP1(0x70ce, X509_STORE_CTX_lookup_certs_fn, X509_STORE_get_lookup_certs , X509_STORE *, ___ctx, a0,\
+      LP1(0x70ce, X509_STORE_CTX_lookup_certs_fn, X509_STORE_get_lookup_certs , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_lookup_crls(___ctx, ___lookup_crls) \
@@ -16958,7 +16958,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_lookup_crls(___ctx) \
-      LP1(0x70da, X509_STORE_CTX_lookup_crls_fn, X509_STORE_get_lookup_crls , X509_STORE *, ___ctx, a0,\
+      LP1(0x70da, X509_STORE_CTX_lookup_crls_fn, X509_STORE_get_lookup_crls , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_cleanup(___ctx, ___cleanup) \
@@ -16966,7 +16966,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_cleanup(___ctx) \
-      LP1(0x70e6, X509_STORE_CTX_cleanup_fn, X509_STORE_get_cleanup , X509_STORE *, ___ctx, a0,\
+      LP1(0x70e6, X509_STORE_CTX_cleanup_fn, X509_STORE_get_cleanup , const X509_STORE *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_set_ex_data(___ctx, ___idx, ___data) \
@@ -16974,47 +16974,47 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_get_ex_data(___ctx, ___idx) \
-      LP2(0x70f2, void *, X509_STORE_get_ex_data , X509_STORE *, ___ctx, a0, int, ___idx, d0,\
+      LP2(0x70f2, void *, X509_STORE_get_ex_data , const X509_STORE *, ___ctx, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_get_issuer(___ctx) \
-      LP1(0x70f8, X509_STORE_CTX_get_issuer_fn, X509_STORE_CTX_get_get_issuer , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x70f8, X509_STORE_CTX_get_issuer_fn, X509_STORE_CTX_get_get_issuer , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_check_issued(___ctx) \
-      LP1(0x70fe, X509_STORE_CTX_check_issued_fn, X509_STORE_CTX_get_check_issued , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x70fe, X509_STORE_CTX_check_issued_fn, X509_STORE_CTX_get_check_issued , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_check_revocation(___ctx) \
-      LP1(0x7104, X509_STORE_CTX_check_revocation_fn, X509_STORE_CTX_get_check_revocation , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x7104, X509_STORE_CTX_check_revocation_fn, X509_STORE_CTX_get_check_revocation , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_get_crl(___ctx) \
-      LP1(0x710a, X509_STORE_CTX_get_crl_fn, X509_STORE_CTX_get_get_crl , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x710a, X509_STORE_CTX_get_crl_fn, X509_STORE_CTX_get_get_crl , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_check_crl(___ctx) \
-      LP1(0x7110, X509_STORE_CTX_check_crl_fn, X509_STORE_CTX_get_check_crl , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x7110, X509_STORE_CTX_check_crl_fn, X509_STORE_CTX_get_check_crl , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_cert_crl(___ctx) \
-      LP1(0x7116, X509_STORE_CTX_cert_crl_fn, X509_STORE_CTX_get_cert_crl , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x7116, X509_STORE_CTX_cert_crl_fn, X509_STORE_CTX_get_cert_crl , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_check_policy(___ctx) \
-      LP1(0x711c, X509_STORE_CTX_check_policy_fn, X509_STORE_CTX_get_check_policy , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x711c, X509_STORE_CTX_check_policy_fn, X509_STORE_CTX_get_check_policy , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_lookup_certs(___ctx) \
-      LP1(0x7122, X509_STORE_CTX_lookup_certs_fn, X509_STORE_CTX_get_lookup_certs , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x7122, X509_STORE_CTX_lookup_certs_fn, X509_STORE_CTX_get_lookup_certs , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_lookup_crls(___ctx) \
-      LP1(0x7128, X509_STORE_CTX_lookup_crls_fn, X509_STORE_CTX_get_lookup_crls , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x7128, X509_STORE_CTX_lookup_crls_fn, X509_STORE_CTX_get_lookup_crls , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_get_cleanup(___ctx) \
-      LP1(0x712e, X509_STORE_CTX_cleanup_fn, X509_STORE_CTX_get_cleanup , X509_STORE_CTX *, ___ctx, a0,\
+      LP1(0x712e, X509_STORE_CTX_cleanup_fn, X509_STORE_CTX_get_cleanup , const X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_STORE_CTX_set_error_depth(___ctx, ___depth) \
@@ -17490,7 +17490,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, size_t (*__fpt)(SSL *ssl,int type,size_t len,void *arg))
 
 #define SSL_set_record_padding_callback(___ssl, ___cb) \
-      LP2NRFP(0x73fe, SSL_set_record_padding_callback , SSL *, ___ssl, a0, __fpt, ___cb, a1,\
+      LP2FP(0x73fe, int, SSL_set_record_padding_callback , SSL *, ___ssl, a0, __fpt, ___cb, a1,\
       , AMISSL_BASE_NAME, size_t (*__fpt)(SSL *ssl,int type,size_t len,void *arg))
 
 #define SSL_CTX_set_block_padding(___ctx, ___block_size) \
@@ -18018,7 +18018,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define ESS_SIGNING_CERT_V2_dup(___a) \
-      LP1(0x773a, ESS_SIGNING_CERT_V2 *, ESS_SIGNING_CERT_V2_dup , ESS_SIGNING_CERT_V2 *, ___a, a0,\
+      LP1(0x773a, ESS_SIGNING_CERT_V2 *, ESS_SIGNING_CERT_V2_dup , const ESS_SIGNING_CERT_V2 *, ___a, a0,\
       , AMISSL_BASE_NAME)
 
 #define ESS_CERT_ID_V2_new() \
@@ -18739,7 +18739,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OSSL_STORE_find(___ctx, ___search) \
-      LP2(0x7bd2, int, OSSL_STORE_find , OSSL_STORE_CTX *, ___ctx, a0, OSSL_STORE_SEARCH *, ___search, a1,\
+      LP2(0x7bd2, int, OSSL_STORE_find , OSSL_STORE_CTX *, ___ctx, a0, const OSSL_STORE_SEARCH *, ___search, a1,\
       , AMISSL_BASE_NAME)
 
 #define OSSL_STORE_SEARCH_get_type(___criterion) \
@@ -18759,7 +18759,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define OSSL_STORE_SEARCH_get0_name(___criterion) \
-      LP1(0x7bf0, X509_NAME *, OSSL_STORE_SEARCH_get0_name , OSSL_STORE_SEARCH *, ___criterion, a0,\
+      LP1(0x7bf0, X509_NAME *, OSSL_STORE_SEARCH_get0_name , const OSSL_STORE_SEARCH *, ___criterion, a0,\
       , AMISSL_BASE_NAME)
 
 #define X509_get0_authority_key_id(___x) \
@@ -19039,7 +19039,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))
 
 #define EVP_PKEY_meth_get_digest_custom(___pmeth, ___pdigest_custom) \
-      LP2NRFP(0x7da6, EVP_PKEY_meth_get_digest_custom , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pdigest_custom, a1,\
+      LP2NRFP(0x7da6, EVP_PKEY_meth_get_digest_custom , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pdigest_custom, a1,\
       , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))
 
 #define OPENSSL_DIR_read(___ctx, ___directory) \
@@ -19071,11 +19071,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
 
 #define EVP_PKEY_meth_get_digestverify(___pmeth, ___digestverify) \
-      LP2NRFP(0x7de2, EVP_PKEY_meth_get_digestverify , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestverify, a1,\
+      LP2NRFP(0x7de2, EVP_PKEY_meth_get_digestverify , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestverify, a1,\
       , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
 
 #define EVP_PKEY_meth_get_digestsign(___pmeth, ___digestsign) \
-      LP2NRFP(0x7de8, EVP_PKEY_meth_get_digestsign , EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestsign, a1,\
+      LP2NRFP(0x7de8, EVP_PKEY_meth_get_digestsign , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestsign, a1,\
       , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))
 
 #define RSA_get0_pss_params(___r) \
