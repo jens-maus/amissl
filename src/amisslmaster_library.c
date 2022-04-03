@@ -233,7 +233,27 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   ObtainSemaphore(&AmiSSLMasterLock);
 
-  if(LibAPIVersion == AMISSL_V111a_OBS)
+  if(LibAPIVersion >= AMISSL_V302)
+  {
+    D(DBF_STARTUP, "About to open amissl v3xx library");
+
+    // if an application requests AmiSSL/OpenSSL versions 3.x.x we try to open any
+    // known 3.x.x amissl library as OpenSSL defines binary/api compatibility when
+    // only minor or patch numbers are changed
+    // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
+    // take care to prevent applications requiring newer API functions from loading
+    // older libraries that do not contain those required entries
+    /*if(LibAPIVersion <= AMISSL_V303 && OpenLib(&AmiSSLBase,"303") == NULL)
+      if(LibAPIVersion == AMISSL_V302)*/ OpenLib(&AmiSSLBase,"302");
+  }
+  else if(LibAPIVersion >= AMISSL_V300)
+  {
+    D(DBF_STARTUP, "About to open amissl v30x library");
+
+    if(OpenLib(&AmiSSLBase,"301") == NULL)
+      OpenLib(&AmiSSLBase,"300");
+  }
+  else if(LibAPIVersion == AMISSL_V111a_OBS)
   {
     // Special case - due to some mistakes made in the ABI / interface update in
     // this version, meaning future versions are incompatible
@@ -241,26 +261,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   }
   else if(LibAPIVersion >= AMISSL_V110c)
   {
-    D(DBF_STARTUP, "About to open amissl v11x/v3xx library");
-
-    // if an application requests AmiSSL/OpenSSL versions 3.x.x (or 1.1.x and doesn't
-    // use public structures) we try to open any known 3.x.x amissl library as OpenSSL
-    // defines binary/api compatibility when only minor or patch numbers are changed
-    // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
-    // take care to prevent applications requiring newer API functions from loading
-    // older libraries that do not contain those required entries
-    if(LibAPIVersion >= AMISSL_V300 || !LibUsesOpenSSLStructs)
-    {
-      if(LibAPIVersion >= AMISSL_V302 || LibAPIVersion < AMISSL_V300)
-      {
-        OpenLib(&AmiSSLBase,"302");
-      }
-      if(!AmiSSLBase && LibAPIVersion <= AMISSL_V301)
-      {
-        if(OpenLib(&AmiSSLBase,"301") == NULL)
-          OpenLib(&AmiSSLBase,"300");
-      }
-    }
+    D(DBF_STARTUP, "About to open amissl v11x library");
 
     // if an application requests AmiSSL/OpenSSL versions 1.1.x we try to open any
     // known 1.1.x amissl library as OpenSSL defines binary/api compatibility when only

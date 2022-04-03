@@ -18,14 +18,11 @@ such as HTTPS and SSH.
 Backwards Compatibility:
 -----------------------
 All applications compiled to use previous versions of AmiSSL v5 will
-automatically use this latest version once installed. Only applications
-compiled for AmiSSL v4 that declared they do not reference public OpenSSL
-structures will automatically start using AmiSSL v5. Otherwise, old
-applications will continue to use AmiSSL v4 and will need to be recompiled
-with the updated SDK in order to start using AmiSSL v5. Besides this
-difference, AmiSSL v5 can be installed on top of any previous AmiSSL
-versions, which ensures that applications compiled for AmiSSL v1/v2/v3/v4
-will continue to work.
+automatically use this latest version once installed. Old applications will
+continue to use AmiSSL v4 or older and will need to be recompiled with the
+updated SDK in order to start using AmiSSL v5. Besides this difference,
+AmiSSL v5 can be installed on top of any previous AmiSSL versions, which
+ensures that applications compiled for AmiSSL v1/v2/v3/v4 continue to work.
 
 Requirements:
 ------------
