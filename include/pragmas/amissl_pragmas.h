@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 #ifndef PRAGMAS_AMISSL_PRAGMAS_H
 #define PRAGMAS_AMISSL_PRAGMAS_H
 

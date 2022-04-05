@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 
 #ifndef _INLINE_AMISSL_H
 #define _INLINE_AMISSL_H
@@ -1852,13 +1852,13 @@ typedef ULONG _sfdc_vararg;
       LP2(0xca2, void *, CRYPTO_get_ex_data , const CRYPTO_EX_DATA *, ___ad, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME)
 
-#define CRYPTO_set_mem_functions(___m, ___r, ___f) \
-      LP3FP3(0xd2c, int, CRYPTO_set_mem_functions , __fpt1, ___m, a0, __fpt2, ___r, a1, __fpt3, ___f, a2,\
-      , AMISSL_BASE_NAME, void * (*__fpt1)(size_t,const char *,int), void * (*__fpt2)(void *,size_t,const char *,int), void (*__fpt3)(void *,const char *,int))
+#define CRYPTO_set_mem_functions(___malloc_fn, ___realloc_fn, ___free_fn) \
+      LP3(0xd2c, int, CRYPTO_set_mem_functions , CRYPTO_malloc_fn, ___malloc_fn, a0, CRYPTO_realloc_fn, ___realloc_fn, a1, CRYPTO_free_fn, ___free_fn, a2,\
+      , AMISSL_BASE_NAME)
 
-#define CRYPTO_get_mem_functions(___m, ___r, ___f) \
-      LP3NRFP3(0xd4a, CRYPTO_get_mem_functions , __fpt1, ___m, a0, __fpt2, ___r, a1, __fpt3, ___f, a2,\
-      , AMISSL_BASE_NAME, void * (*__fpt1)(size_t,const char *,int), void * (*__fpt2)(void *,size_t,const char *,int), void (*__fpt3)(void *,const char *,int))
+#define CRYPTO_get_mem_functions(___malloc_fn, ___realloc_fn, ___free_fn) \
+      LP3NR(0xd4a, CRYPTO_get_mem_functions , CRYPTO_malloc_fn *, ___malloc_fn, a0, CRYPTO_realloc_fn *, ___realloc_fn, a1, CRYPTO_free_fn *, ___free_fn, a2,\
+      , AMISSL_BASE_NAME)
 
 #define CRYPTO_malloc(___num, ___file, ___line) \
       LP3(0xd74, void *, CRYPTO_malloc , size_t, ___num, d0, const char *, ___file, a0, int, ___line, d1,\
@@ -14419,23 +14419,23 @@ typedef ULONG _sfdc_vararg;
 
 #define EC_KEY_METHOD_get_compute_key(___meth, ___pck) \
       LP2NRFP(0x61ce, EC_KEY_METHOD_get_compute_key , const EC_KEY_METHOD *, ___meth, a0, __fpt, ___pck, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *))
+      , AMISSL_BASE_NAME, int (**__fpt)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *))
 
 #define EC_KEY_METHOD_get_init(___meth, ___pinit, ___pfinish, ___pcopy, ___pset_group, ___pset_private, ___pset_public) \
       LP7NRFP6(0x61d4, EC_KEY_METHOD_get_init , const EC_KEY_METHOD *, ___meth, a0, __fpt1, ___pinit, a1, __fpt2, ___pfinish, a2, __fpt3, ___pcopy, a3, __fpt4, ___pset_group, d0, __fpt5, ___pset_private, d1, __fpt6, ___pset_public, d2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EC_KEY *), void (*__fpt2)(EC_KEY *), int (*__fpt3)(EC_KEY *,const EC_KEY *), int (*__fpt4)(EC_KEY *,const EC_GROUP *), int (*__fpt5)(EC_KEY *,const BIGNUM *), int (*__fpt6)(EC_KEY *,const EC_POINT *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EC_KEY *), void (**__fpt2)(EC_KEY *), int (**__fpt3)(EC_KEY *,const EC_KEY *), int (**__fpt4)(EC_KEY *,const EC_GROUP *), int (**__fpt5)(EC_KEY *,const BIGNUM *), int (**__fpt6)(EC_KEY *,const EC_POINT *))
 
 #define EC_KEY_METHOD_get_keygen(___meth, ___pkeygen) \
       LP2NRFP(0x61da, EC_KEY_METHOD_get_keygen , const EC_KEY_METHOD *, ___meth, a0, __fpt, ___pkeygen, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EC_KEY *))
+      , AMISSL_BASE_NAME, int (**__fpt)(EC_KEY *))
 
 #define EC_KEY_METHOD_get_sign(___meth, ___psign, ___psign_setup, ___psign_sig) \
       LP4NRFP3(0x61e0, EC_KEY_METHOD_get_sign , const EC_KEY_METHOD *, ___meth, a0, __fpt1, ___psign, a1, __fpt2, ___psign_setup, a2, __fpt3, ___psign_sig, a3,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), int (*__fpt2)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), ECDSA_SIG * (*__fpt3)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), int (**__fpt2)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), ECDSA_SIG * (**__fpt3)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *))
 
 #define EC_KEY_METHOD_get_verify(___meth, ___pverify, ___pverify_sig) \
       LP3NRFP2(0x61e6, EC_KEY_METHOD_get_verify , const EC_KEY_METHOD *, ___meth, a0, __fpt1, ___pverify, a1, __fpt2, ___pverify_sig, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), int (*__fpt2)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), int (**__fpt2)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *))
 
 #define EC_KEY_METHOD_new(___meth) \
       LP1(0x61ec, EC_KEY_METHOD *, EC_KEY_METHOD_new , const EC_KEY_METHOD *, ___meth, a0,\
@@ -14863,59 +14863,59 @@ typedef ULONG _sfdc_vararg;
 
 #define EVP_PKEY_meth_get_cleanup(___pmeth, ___pcleanup) \
       LP2NRFP(0x6468, EVP_PKEY_meth_get_cleanup , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pcleanup, a1,\
-      , AMISSL_BASE_NAME, void (*__fpt)(EVP_PKEY_CTX *))
+      , AMISSL_BASE_NAME, void (**__fpt)(EVP_PKEY_CTX *))
 
 #define EVP_PKEY_meth_get_copy(___pmeth, ___pcopy) \
       LP2NRFP(0x646e, EVP_PKEY_meth_get_copy , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pcopy, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *))
 
 #define EVP_PKEY_meth_get_ctrl(___pmeth, ___pctrl, ___pctrl_str) \
       LP3NRFP2(0x6474, EVP_PKEY_meth_get_ctrl , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pctrl, a1, __fpt2, ___pctrl_str, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *,int,int,void *), int (*__fpt2)(EVP_PKEY_CTX *,const char *,const char *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *,int,int,void *), int (**__fpt2)(EVP_PKEY_CTX *,const char *,const char *))
 
 #define EVP_PKEY_meth_get_decrypt(___pmeth, ___pdecrypt_init, ___pdecrypt) \
       LP3NRFP2(0x647a, EVP_PKEY_meth_get_decrypt , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pdecrypt_init, a1, __fpt2, ___pdecrypt, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
 
 #define EVP_PKEY_meth_get_derive(___pmeth, ___pderive_init, ___pderive) \
       LP3NRFP2(0x6480, EVP_PKEY_meth_get_derive , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pderive_init, a1, __fpt2, ___pderive, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *))
 
 #define EVP_PKEY_meth_get_encrypt(___pmeth, ___pencrypt_init, ___pencryptfn) \
       LP3NRFP2(0x6486, EVP_PKEY_meth_get_encrypt , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pencrypt_init, a1, __fpt2, ___pencryptfn, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
 
 #define EVP_PKEY_meth_get_init(___pmeth, ___pinit) \
       LP2NRFP(0x648c, EVP_PKEY_meth_get_init , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pinit, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY_CTX *))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY_CTX *))
 
 #define EVP_PKEY_meth_get_keygen(___pmeth, ___pkeygen_init, ___pkeygen) \
       LP3NRFP2(0x6492, EVP_PKEY_meth_get_keygen , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pkeygen_init, a1, __fpt2, ___pkeygen, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,EVP_PKEY *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,EVP_PKEY *))
 
 #define EVP_PKEY_meth_get_paramgen(___pmeth, ___pparamgen_init, ___pparamgen) \
       LP3NRFP2(0x6498, EVP_PKEY_meth_get_paramgen , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pparamgen_init, a1, __fpt2, ___pparamgen, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,EVP_PKEY *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,EVP_PKEY *))
 
 #define EVP_PKEY_meth_get_sign(___pmeth, ___psign_init, ___psign) \
       LP3NRFP2(0x649e, EVP_PKEY_meth_get_sign , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___psign_init, a1, __fpt2, ___psign, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
 
 #define EVP_PKEY_meth_get_signctx(___pmeth, ___psignctx_init, ___psignctx) \
       LP3NRFP2(0x64a4, EVP_PKEY_meth_get_signctx , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___psignctx_init, a1, __fpt2, ___psignctx, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *,EVP_MD_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *,EVP_MD_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *))
 
 #define EVP_PKEY_meth_get_verify(___pmeth, ___pverify_init, ___pverify) \
       LP3NRFP2(0x64aa, EVP_PKEY_meth_get_verify , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pverify_init, a1, __fpt2, ___pverify, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t))
 
 #define EVP_PKEY_meth_get_verify_recover(___pmeth, ___pverify_recover_init, ___pverify_recover) \
       LP3NRFP2(0x64b0, EVP_PKEY_meth_get_verify_recover , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pverify_recover_init, a1, __fpt2, ___pverify_recover, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))
 
 #define EVP_PKEY_meth_get_verifyctx(___pmeth, ___pverifyctx_init, ___pverifyctx) \
       LP3NRFP2(0x64b6, EVP_PKEY_meth_get_verifyctx , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt1, ___pverifyctx_init, a1, __fpt2, ___pverifyctx, a2,\
-      , AMISSL_BASE_NAME, int (*__fpt1)(EVP_PKEY_CTX *,EVP_MD_CTX *), int (*__fpt2)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *))
+      , AMISSL_BASE_NAME, int (**__fpt1)(EVP_PKEY_CTX *,EVP_MD_CTX *), int (**__fpt2)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *))
 
 #define EVP_PKEY_get_security_bits(___pkey) \
       LP1(0x64bc, int, EVP_PKEY_get_security_bits , const EVP_PKEY *, ___pkey, a0,\
@@ -18376,7 +18376,7 @@ typedef ULONG _sfdc_vararg;
 
 #define EVP_PKEY_meth_get_check(___pmeth, ___pcheck) \
       LP2NRFP(0x7998, EVP_PKEY_meth_get_check , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pcheck, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY *pkey))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY *pkey))
 
 #define EVP_PKEY_meth_remove(___pmeth) \
       LP1(0x799e, int, EVP_PKEY_meth_remove , const EVP_PKEY_METHOD *, ___pmeth, a0,\
@@ -18452,11 +18452,11 @@ typedef ULONG _sfdc_vararg;
 
 #define EVP_PKEY_meth_get_public_check(___pmeth, ___pcheck) \
       LP2NRFP(0x7a0a, EVP_PKEY_meth_get_public_check , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pcheck, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY *pkey))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY *pkey))
 
 #define EVP_PKEY_meth_get_param_check(___pmeth, ___pcheck) \
       LP2NRFP(0x7a10, EVP_PKEY_meth_get_param_check , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pcheck, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY *pkey))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY *pkey))
 
 #define EVP_PKEY_asn1_set_public_check(___ameth, ___pkey_pub_check) \
       LP2NRFP(0x7a16, EVP_PKEY_asn1_set_public_check , EVP_PKEY_ASN1_METHOD *, ___ameth, a0, __fpt, ___pkey_pub_check, a1,\
@@ -19040,7 +19040,7 @@ typedef ULONG _sfdc_vararg;
 
 #define EVP_PKEY_meth_get_digest_custom(___pmeth, ___pdigest_custom) \
       LP2NRFP(0x7da6, EVP_PKEY_meth_get_digest_custom , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___pdigest_custom, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))
 
 #define OPENSSL_DIR_read(___ctx, ___directory) \
       LP2(0x7dac, const char *, OPENSSL_DIR_read , OPENSSL_DIR_CTX **, ___ctx, a0, const char *, ___directory, a1,\
@@ -19072,11 +19072,11 @@ typedef ULONG _sfdc_vararg;
 
 #define EVP_PKEY_meth_get_digestverify(___pmeth, ___digestverify) \
       LP2NRFP(0x7de2, EVP_PKEY_meth_get_digestverify , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestverify, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))
 
 #define EVP_PKEY_meth_get_digestsign(___pmeth, ___digestsign) \
       LP2NRFP(0x7de8, EVP_PKEY_meth_get_digestsign , const EVP_PKEY_METHOD *, ___pmeth, a0, __fpt, ___digestsign, a1,\
-      , AMISSL_BASE_NAME, int (*__fpt)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))
+      , AMISSL_BASE_NAME, int (**__fpt)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))
 
 #define RSA_get0_pss_params(___r) \
       LP1(0x7dee, const RSA_PSS_PARAMS *, RSA_get0_pss_params , const RSA *, ___r, a0,\

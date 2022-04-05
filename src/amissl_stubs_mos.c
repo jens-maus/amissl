@@ -1,4 +1,4 @@
-/* Automatically generated gatestubs (sfdc 1.11)! Do not edit! */
+/* Automatically generated gatestubs (sfdc 1.12)! Do not edit! */
 
 #include <exec/types.h>
 #include <dos/dos.h>
@@ -4544,26 +4544,26 @@ void * LIBSTUB_CRYPTO_get_ex_data(void)
   return LIB_CRYPTO_get_ex_data(_base, ___ad, ___idx);
 }
 
-int LIB_CRYPTO_set_mem_functions(struct Library * _base, void * (*___m)(size_t,const char *,int), void * (*___r)(void *,size_t,const char *,int), void (*___f)(void *,const char *,int));
+int LIB_CRYPTO_set_mem_functions(struct Library * _base, CRYPTO_malloc_fn ___malloc_fn, CRYPTO_realloc_fn ___realloc_fn, CRYPTO_free_fn ___free_fn);
 
 int LIBSTUB_CRYPTO_set_mem_functions(void)
 {
-  void * (*___m)(size_t,const char *,int) = (void * (*)(size_t,const char *,int))REG_A0;
-  void * (*___r)(void *,size_t,const char *,int) = (void * (*)(void *,size_t,const char *,int))REG_A1;
-  void (*___f)(void *,const char *,int) = (void (*)(void *,const char *,int))REG_A2;
+  CRYPTO_malloc_fn ___malloc_fn = (CRYPTO_malloc_fn)REG_A0;
+  CRYPTO_realloc_fn ___realloc_fn = (CRYPTO_realloc_fn)REG_A1;
+  CRYPTO_free_fn ___free_fn = (CRYPTO_free_fn)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_CRYPTO_set_mem_functions(_base, ___m, ___r, ___f);
+  return LIB_CRYPTO_set_mem_functions(_base, ___malloc_fn, ___realloc_fn, ___free_fn);
 }
 
-void LIB_CRYPTO_get_mem_functions(struct Library * _base, void * (*___m)(size_t,const char *,int), void * (*___r)(void *,size_t,const char *,int), void (*___f)(void *,const char *,int));
+void LIB_CRYPTO_get_mem_functions(struct Library * _base, CRYPTO_malloc_fn * ___malloc_fn, CRYPTO_realloc_fn * ___realloc_fn, CRYPTO_free_fn * ___free_fn);
 
 void LIBSTUB_CRYPTO_get_mem_functions(void)
 {
-  void * (*___m)(size_t,const char *,int) = (void * (*)(size_t,const char *,int))REG_A0;
-  void * (*___r)(void *,size_t,const char *,int) = (void * (*)(void *,size_t,const char *,int))REG_A1;
-  void (*___f)(void *,const char *,int) = (void (*)(void *,const char *,int))REG_A2;
+  CRYPTO_malloc_fn * ___malloc_fn = (CRYPTO_malloc_fn *)REG_A0;
+  CRYPTO_realloc_fn * ___realloc_fn = (CRYPTO_realloc_fn *)REG_A1;
+  CRYPTO_free_fn * ___free_fn = (CRYPTO_free_fn *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_CRYPTO_get_mem_functions(_base, ___m, ___r, ___f);
+  return LIB_CRYPTO_get_mem_functions(_base, ___malloc_fn, ___realloc_fn, ___free_fn);
 }
 
 void * LIB_CRYPTO_malloc(struct Library * _base, size_t ___num, const char * ___file, int ___line);
@@ -36534,7 +36534,7 @@ void LIB_EC_KEY_METHOD_get_compute_key(struct Library * _base, const EC_KEY_METH
 void LIBSTUB_EC_KEY_METHOD_get_compute_key(void)
 {
   const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
-  int (*___pck)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *) = (int (*)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *))REG_A1;
+  int (*___pck)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *) = (int (**)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_compute_key(_base, ___meth, ___pck);
 }
@@ -36544,12 +36544,12 @@ void LIB_EC_KEY_METHOD_get_init(struct Library * _base, const EC_KEY_METHOD * __
 void LIBSTUB_EC_KEY_METHOD_get_init(void)
 {
   const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
-  int (*___pinit)(EC_KEY *) = (int (*)(EC_KEY *))REG_A1;
-  void (*___pfinish)(EC_KEY *) = (void (*)(EC_KEY *))REG_A2;
-  int (*___pcopy)(EC_KEY *,const EC_KEY *) = (int (*)(EC_KEY *,const EC_KEY *))REG_A3;
-  int (*___pset_group)(EC_KEY *,const EC_GROUP *) = (int (*)(EC_KEY *,const EC_GROUP *))REG_D0;
-  int (*___pset_private)(EC_KEY *,const BIGNUM *) = (int (*)(EC_KEY *,const BIGNUM *))REG_D1;
-  int (*___pset_public)(EC_KEY *,const EC_POINT *) = (int (*)(EC_KEY *,const EC_POINT *))REG_D2;
+  int (*___pinit)(EC_KEY *) = (int (**)(EC_KEY *))REG_A1;
+  void (*___pfinish)(EC_KEY *) = (void (**)(EC_KEY *))REG_A2;
+  int (*___pcopy)(EC_KEY *,const EC_KEY *) = (int (**)(EC_KEY *,const EC_KEY *))REG_A3;
+  int (*___pset_group)(EC_KEY *,const EC_GROUP *) = (int (**)(EC_KEY *,const EC_GROUP *))REG_D0;
+  int (*___pset_private)(EC_KEY *,const BIGNUM *) = (int (**)(EC_KEY *,const BIGNUM *))REG_D1;
+  int (*___pset_public)(EC_KEY *,const EC_POINT *) = (int (**)(EC_KEY *,const EC_POINT *))REG_D2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_init(_base, ___meth, ___pinit, ___pfinish, ___pcopy, ___pset_group, ___pset_private, ___pset_public);
 }
@@ -36559,7 +36559,7 @@ void LIB_EC_KEY_METHOD_get_keygen(struct Library * _base, const EC_KEY_METHOD * 
 void LIBSTUB_EC_KEY_METHOD_get_keygen(void)
 {
   const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
-  int (*___pkeygen)(EC_KEY *) = (int (*)(EC_KEY *))REG_A1;
+  int (*___pkeygen)(EC_KEY *) = (int (**)(EC_KEY *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_keygen(_base, ___meth, ___pkeygen);
 }
@@ -36569,9 +36569,9 @@ void LIB_EC_KEY_METHOD_get_sign(struct Library * _base, const EC_KEY_METHOD * __
 void LIBSTUB_EC_KEY_METHOD_get_sign(void)
 {
   const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
-  int (*___psign)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *) = (int (*)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A1;
-  int (*___psign_setup)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **) = (int (*)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **))REG_A2;
-  ECDSA_SIG * (*___psign_sig)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *) = (ECDSA_SIG * (*)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A3;
+  int (*___psign)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *) = (int (**)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A1;
+  int (*___psign_setup)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **) = (int (**)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **))REG_A2;
+  ECDSA_SIG * (*___psign_sig)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *) = (ECDSA_SIG * (**)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *))REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_sign(_base, ___meth, ___psign, ___psign_setup, ___psign_sig);
 }
@@ -36581,8 +36581,8 @@ void LIB_EC_KEY_METHOD_get_verify(struct Library * _base, const EC_KEY_METHOD * 
 void LIBSTUB_EC_KEY_METHOD_get_verify(void)
 {
   const EC_KEY_METHOD * ___meth = (const EC_KEY_METHOD *)REG_A0;
-  int (*___pverify)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *) = (int (*)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *))REG_A1;
-  int (*___pverify_sig)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *) = (int (*)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *))REG_A2;
+  int (*___pverify)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *) = (int (**)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *))REG_A1;
+  int (*___pverify_sig)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *) = (int (**)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EC_KEY_METHOD_get_verify(_base, ___meth, ___pverify, ___pverify_sig);
 }
@@ -37600,7 +37600,7 @@ void LIB_EVP_PKEY_meth_get_cleanup(struct Library * _base, const EVP_PKEY_METHOD
 void LIBSTUB_EVP_PKEY_meth_get_cleanup(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  void (*___pcleanup)(EVP_PKEY_CTX *) = (void (*)(EVP_PKEY_CTX *))REG_A1;
+  void (*___pcleanup)(EVP_PKEY_CTX *) = (void (**)(EVP_PKEY_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_cleanup(_base, ___pmeth, ___pcleanup);
 }
@@ -37610,7 +37610,7 @@ void LIB_EVP_PKEY_meth_get_copy(struct Library * _base, const EVP_PKEY_METHOD * 
 void LIBSTUB_EVP_PKEY_meth_get_copy(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pcopy)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *))REG_A1;
+  int (*___pcopy)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_copy(_base, ___pmeth, ___pcopy);
 }
@@ -37620,8 +37620,8 @@ void LIB_EVP_PKEY_meth_get_ctrl(struct Library * _base, const EVP_PKEY_METHOD * 
 void LIBSTUB_EVP_PKEY_meth_get_ctrl(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pctrl)(EVP_PKEY_CTX *,int,int,void *) = (int (*)(EVP_PKEY_CTX *,int,int,void *))REG_A1;
-  int (*___pctrl_str)(EVP_PKEY_CTX *,const char *,const char *) = (int (*)(EVP_PKEY_CTX *,const char *,const char *))REG_A2;
+  int (*___pctrl)(EVP_PKEY_CTX *,int,int,void *) = (int (**)(EVP_PKEY_CTX *,int,int,void *))REG_A1;
+  int (*___pctrl_str)(EVP_PKEY_CTX *,const char *,const char *) = (int (**)(EVP_PKEY_CTX *,const char *,const char *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_ctrl(_base, ___pmeth, ___pctrl, ___pctrl_str);
 }
@@ -37631,8 +37631,8 @@ void LIB_EVP_PKEY_meth_get_decrypt(struct Library * _base, const EVP_PKEY_METHOD
 void LIBSTUB_EVP_PKEY_meth_get_decrypt(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pdecrypt_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pdecrypt)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
+  int (*___pdecrypt_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pdecrypt)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_decrypt(_base, ___pmeth, ___pdecrypt_init, ___pdecrypt);
 }
@@ -37642,8 +37642,8 @@ void LIB_EVP_PKEY_meth_get_derive(struct Library * _base, const EVP_PKEY_METHOD 
 void LIBSTUB_EVP_PKEY_meth_get_derive(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pderive_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pderive)(EVP_PKEY_CTX *,unsigned char *,size_t *) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *))REG_A2;
+  int (*___pderive_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pderive)(EVP_PKEY_CTX *,unsigned char *,size_t *) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_derive(_base, ___pmeth, ___pderive_init, ___pderive);
 }
@@ -37653,8 +37653,8 @@ void LIB_EVP_PKEY_meth_get_encrypt(struct Library * _base, const EVP_PKEY_METHOD
 void LIBSTUB_EVP_PKEY_meth_get_encrypt(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pencrypt_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pencryptfn)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
+  int (*___pencrypt_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pencryptfn)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_encrypt(_base, ___pmeth, ___pencrypt_init, ___pencryptfn);
 }
@@ -37664,7 +37664,7 @@ void LIB_EVP_PKEY_meth_get_init(struct Library * _base, const EVP_PKEY_METHOD * 
 void LIBSTUB_EVP_PKEY_meth_get_init(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pinit)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pinit)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_init(_base, ___pmeth, ___pinit);
 }
@@ -37674,8 +37674,8 @@ void LIB_EVP_PKEY_meth_get_keygen(struct Library * _base, const EVP_PKEY_METHOD 
 void LIBSTUB_EVP_PKEY_meth_get_keygen(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pkeygen_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pkeygen)(EVP_PKEY_CTX *,EVP_PKEY *) = (int (*)(EVP_PKEY_CTX *,EVP_PKEY *))REG_A2;
+  int (*___pkeygen_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pkeygen)(EVP_PKEY_CTX *,EVP_PKEY *) = (int (**)(EVP_PKEY_CTX *,EVP_PKEY *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_keygen(_base, ___pmeth, ___pkeygen_init, ___pkeygen);
 }
@@ -37685,8 +37685,8 @@ void LIB_EVP_PKEY_meth_get_paramgen(struct Library * _base, const EVP_PKEY_METHO
 void LIBSTUB_EVP_PKEY_meth_get_paramgen(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pparamgen_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pparamgen)(EVP_PKEY_CTX *,EVP_PKEY *) = (int (*)(EVP_PKEY_CTX *,EVP_PKEY *))REG_A2;
+  int (*___pparamgen_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pparamgen)(EVP_PKEY_CTX *,EVP_PKEY *) = (int (**)(EVP_PKEY_CTX *,EVP_PKEY *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_paramgen(_base, ___pmeth, ___pparamgen_init, ___pparamgen);
 }
@@ -37696,8 +37696,8 @@ void LIB_EVP_PKEY_meth_get_sign(struct Library * _base, const EVP_PKEY_METHOD * 
 void LIBSTUB_EVP_PKEY_meth_get_sign(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___psign_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___psign)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
+  int (*___psign_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___psign)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_sign(_base, ___pmeth, ___psign_init, ___psign);
 }
@@ -37707,8 +37707,8 @@ void LIB_EVP_PKEY_meth_get_signctx(struct Library * _base, const EVP_PKEY_METHOD
 void LIBSTUB_EVP_PKEY_meth_get_signctx(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___psignctx_init)(EVP_PKEY_CTX *,EVP_MD_CTX *) = (int (*)(EVP_PKEY_CTX *,EVP_MD_CTX *))REG_A1;
-  int (*___psignctx)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *))REG_A2;
+  int (*___psignctx_init)(EVP_PKEY_CTX *,EVP_MD_CTX *) = (int (**)(EVP_PKEY_CTX *,EVP_MD_CTX *))REG_A1;
+  int (*___psignctx)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_signctx(_base, ___pmeth, ___psignctx_init, ___psignctx);
 }
@@ -37718,8 +37718,8 @@ void LIB_EVP_PKEY_meth_get_verify(struct Library * _base, const EVP_PKEY_METHOD 
 void LIBSTUB_EVP_PKEY_meth_get_verify(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pverify_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pverify)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t) = (int (*)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t))REG_A2;
+  int (*___pverify_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pverify)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t) = (int (**)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_verify(_base, ___pmeth, ___pverify_init, ___pverify);
 }
@@ -37729,8 +37729,8 @@ void LIB_EVP_PKEY_meth_get_verify_recover(struct Library * _base, const EVP_PKEY
 void LIBSTUB_EVP_PKEY_meth_get_verify_recover(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pverify_recover_init)(EVP_PKEY_CTX *) = (int (*)(EVP_PKEY_CTX *))REG_A1;
-  int (*___pverify_recover)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
+  int (*___pverify_recover_init)(EVP_PKEY_CTX *) = (int (**)(EVP_PKEY_CTX *))REG_A1;
+  int (*___pverify_recover)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t) = (int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_verify_recover(_base, ___pmeth, ___pverify_recover_init, ___pverify_recover);
 }
@@ -37740,8 +37740,8 @@ void LIB_EVP_PKEY_meth_get_verifyctx(struct Library * _base, const EVP_PKEY_METH
 void LIBSTUB_EVP_PKEY_meth_get_verifyctx(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pverifyctx_init)(EVP_PKEY_CTX *,EVP_MD_CTX *) = (int (*)(EVP_PKEY_CTX *,EVP_MD_CTX *))REG_A1;
-  int (*___pverifyctx)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *) = (int (*)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *))REG_A2;
+  int (*___pverifyctx_init)(EVP_PKEY_CTX *,EVP_MD_CTX *) = (int (**)(EVP_PKEY_CTX *,EVP_MD_CTX *))REG_A1;
+  int (*___pverifyctx)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *) = (int (**)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *))REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_verifyctx(_base, ___pmeth, ___pverifyctx_init, ___pverifyctx);
 }
@@ -46137,7 +46137,7 @@ void LIB_EVP_PKEY_meth_get_check(struct Library * _base, const EVP_PKEY_METHOD *
 void LIBSTUB_EVP_PKEY_meth_get_check(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pcheck)(EVP_PKEY *pkey) = (int (*)(EVP_PKEY *pkey))REG_A1;
+  int (*___pcheck)(EVP_PKEY *pkey) = (int (**)(EVP_PKEY *pkey))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_check(_base, ___pmeth, ___pcheck);
 }
@@ -46310,7 +46310,7 @@ void LIB_EVP_PKEY_meth_get_public_check(struct Library * _base, const EVP_PKEY_M
 void LIBSTUB_EVP_PKEY_meth_get_public_check(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pcheck)(EVP_PKEY *pkey) = (int (*)(EVP_PKEY *pkey))REG_A1;
+  int (*___pcheck)(EVP_PKEY *pkey) = (int (**)(EVP_PKEY *pkey))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_public_check(_base, ___pmeth, ___pcheck);
 }
@@ -46320,7 +46320,7 @@ void LIB_EVP_PKEY_meth_get_param_check(struct Library * _base, const EVP_PKEY_ME
 void LIBSTUB_EVP_PKEY_meth_get_param_check(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pcheck)(EVP_PKEY *pkey) = (int (*)(EVP_PKEY *pkey))REG_A1;
+  int (*___pcheck)(EVP_PKEY *pkey) = (int (**)(EVP_PKEY *pkey))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_param_check(_base, ___pmeth, ___pcheck);
 }
@@ -47732,7 +47732,7 @@ void LIB_EVP_PKEY_meth_get_digest_custom(struct Library * _base, const EVP_PKEY_
 void LIBSTUB_EVP_PKEY_meth_get_digest_custom(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___pdigest_custom)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx) = (int (*)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))REG_A1;
+  int (*___pdigest_custom)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx) = (int (**)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_digest_custom(_base, ___pmeth, ___pdigest_custom);
 }
@@ -47808,7 +47808,7 @@ void LIB_EVP_PKEY_meth_get_digestverify(struct Library * _base, const EVP_PKEY_M
 void LIBSTUB_EVP_PKEY_meth_get_digestverify(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  int (*___digestverify)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen) = (int (**)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_digestverify(_base, ___pmeth, ___digestverify);
 }
@@ -47818,7 +47818,7 @@ void LIB_EVP_PKEY_meth_get_digestsign(struct Library * _base, const EVP_PKEY_MET
 void LIBSTUB_EVP_PKEY_meth_get_digestsign(void)
 {
   const EVP_PKEY_METHOD * ___pmeth = (const EVP_PKEY_METHOD *)REG_A0;
-  int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) = (int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
+  int (*___digestsign)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen) = (int (**)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_EVP_PKEY_meth_get_digestsign(_base, ___pmeth, ___digestsign);
 }

@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 
 #ifndef _INLINE_AMISSL_H
 #define _INLINE_AMISSL_H
@@ -1391,11 +1391,11 @@ int __CRYPTO_set_ex_data(__reg("a6") struct Library * , __reg("a0") CRYPTO_EX_DA
 void * __CRYPTO_get_ex_data(__reg("a6") struct Library * , __reg("a0") const CRYPTO_EX_DATA * ad , __reg("d0") int idx ) = "\tjsr\t-3234(a6)";
 #define CRYPTO_get_ex_data(ad, idx) __CRYPTO_get_ex_data(AmiSSLBase, (ad), (idx))
 
-int __CRYPTO_set_mem_functions(__reg("a6") struct Library * , __reg("a0") void * (*m)(size_t,const char *,int) , __reg("a1") void * (*r)(void *,size_t,const char *,int) , __reg("a2") void (*f)(void *,const char *,int) ) = "\tjsr\t-3372(a6)";
-#define CRYPTO_set_mem_functions(m, r, f) __CRYPTO_set_mem_functions(AmiSSLBase, (m), (r), (f))
+int __CRYPTO_set_mem_functions(__reg("a6") struct Library * , __reg("a0") CRYPTO_malloc_fn malloc_fn , __reg("a1") CRYPTO_realloc_fn realloc_fn , __reg("a2") CRYPTO_free_fn free_fn ) = "\tjsr\t-3372(a6)";
+#define CRYPTO_set_mem_functions(malloc_fn, realloc_fn, free_fn) __CRYPTO_set_mem_functions(AmiSSLBase, (malloc_fn), (realloc_fn), (free_fn))
 
-void __CRYPTO_get_mem_functions(__reg("a6") struct Library * , __reg("a0") void * (**m)(size_t,const char *,int) , __reg("a1") void * (**r)(void *,size_t,const char *,int) , __reg("a2") void (**f)(void *,const char *,int) ) = "\tjsr\t-3402(a6)";
-#define CRYPTO_get_mem_functions(m, r, f) __CRYPTO_get_mem_functions(AmiSSLBase, (m), (r), (f))
+void __CRYPTO_get_mem_functions(__reg("a6") struct Library * , __reg("a0") CRYPTO_malloc_fn * malloc_fn , __reg("a1") CRYPTO_realloc_fn * realloc_fn , __reg("a2") CRYPTO_free_fn * free_fn ) = "\tjsr\t-3402(a6)";
+#define CRYPTO_get_mem_functions(malloc_fn, realloc_fn, free_fn) __CRYPTO_get_mem_functions(AmiSSLBase, (malloc_fn), (realloc_fn), (free_fn))
 
 void * __CRYPTO_malloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("a0") const char * file , __reg("d1") int line ) = "\tjsr\t-3444(a6)";
 #define CRYPTO_malloc(num, file, line) __CRYPTO_malloc(AmiSSLBase, (num), (file), (line))

@@ -497,9 +497,9 @@ void CRYPTO_free_ex_data(int class_index, void * obj, CRYPTO_EX_DATA * ad) (d0,a
 int CRYPTO_set_ex_data(CRYPTO_EX_DATA * ad, int idx, void * val) (a0,d0,a1)
 void * CRYPTO_get_ex_data(const CRYPTO_EX_DATA * ad, int idx) (a0,d0)
 ==reserve 22
-int CRYPTO_set_mem_functions(void * (*m)(size_t, const char *, int), void * (*r)(void *, size_t, const char *, int), void (*f)(void *, const char *, int)) (a0,a1,a2)
+int CRYPTO_set_mem_functions(CRYPTO_malloc_fn malloc_fn, CRYPTO_realloc_fn realloc_fn, CRYPTO_free_fn free_fn) (a0,a1,a2)
 ==reserve 4
-void CRYPTO_get_mem_functions(void * (**m)(size_t, const char *, int), void * (**r)(void *, size_t, const char *, int), void (**f)(void *, const char *, int)) (a0,a1,a2)
+void CRYPTO_get_mem_functions(CRYPTO_malloc_fn * malloc_fn, CRYPTO_realloc_fn * realloc_fn, CRYPTO_free_fn * free_fn) (a0,a1,a2)
 ==reserve 6
 void * CRYPTO_malloc(size_t num, const char * file, int line) (d0,a0,d1)
 void CRYPTO_free(void * str, const char * file, int line) (a0,a1,d0)

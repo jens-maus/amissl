@@ -1,5 +1,5 @@
 * "amissl.library"
-* Automatically generated FD (sfdc 1.11)! Do not edit!
+* Automatically generated FD (sfdc 1.12)! Do not edit!
 ##base _AmiSSLBase
 ##bias 30
 ##private
@@ -485,9 +485,9 @@ CRYPTO_free_ex_data(class_index,obj,ad)(d0,a0,a1)
 CRYPTO_set_ex_data(ad,idx,val)(a0,d0,a1)
 CRYPTO_get_ex_data(ad,idx)(a0,d0)
 ##bias 3372
-CRYPTO_set_mem_functions(m,r,f)(a0,a1,a2)
+CRYPTO_set_mem_functions(malloc_fn,realloc_fn,free_fn)(a0,a1,a2)
 ##bias 3402
-CRYPTO_get_mem_functions(m,r,f)(a0,a1,a2)
+CRYPTO_get_mem_functions(malloc_fn,realloc_fn,free_fn)(a0,a1,a2)
 ##bias 3444
 CRYPTO_malloc(num,file,line)(d0,a0,d1)
 CRYPTO_free(str,file,line)(a0,a1,d0)

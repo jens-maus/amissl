@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 
 #ifndef _INLINE_AMISSL_H
 #define _INLINE_AMISSL_H
@@ -2744,18 +2744,18 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___idx), D0), \
      struct Library *, AMISSL_BASE_NAME, 539, Amissl)
 
-#define CRYPTO_set_mem_functions(___m, ___r, ___f) \
+#define CRYPTO_set_mem_functions(___malloc_fn, ___realloc_fn, ___free_fn) \
       AROS_LC3(int, CRYPTO_set_mem_functions, \
- AROS_LCA(void * (*)(size_t,const char *,int), (___m), A0), \
- AROS_LCA(void * (*)(void *,size_t,const char *,int), (___r), A1), \
- AROS_LCA(void (*)(void *,const char *,int), (___f), A2), \
+ AROS_LCA(CRYPTO_malloc_fn, (___malloc_fn), A0), \
+ AROS_LCA(CRYPTO_realloc_fn, (___realloc_fn), A1), \
+ AROS_LCA(CRYPTO_free_fn, (___free_fn), A2), \
      struct Library *, AMISSL_BASE_NAME, 562, Amissl)
 
-#define CRYPTO_get_mem_functions(___m, ___r, ___f) \
+#define CRYPTO_get_mem_functions(___malloc_fn, ___realloc_fn, ___free_fn) \
       AROS_LC3(void, CRYPTO_get_mem_functions, \
- AROS_LCA(void * (*)(size_t,const char *,int), (___m), A0), \
- AROS_LCA(void * (*)(void *,size_t,const char *,int), (___r), A1), \
- AROS_LCA(void (*)(void *,const char *,int), (___f), A2), \
+ AROS_LCA(CRYPTO_malloc_fn *, (___malloc_fn), A0), \
+ AROS_LCA(CRYPTO_realloc_fn *, (___realloc_fn), A1), \
+ AROS_LCA(CRYPTO_free_fn *, (___free_fn), A2), \
      struct Library *, AMISSL_BASE_NAME, 567, Amissl)
 
 #define CRYPTO_malloc(___num, ___file, ___line) \
@@ -22157,39 +22157,39 @@ typedef ULONG _sfdc_vararg;
 #define EC_KEY_METHOD_get_compute_key(___meth, ___pck) \
       AROS_LC2(void, EC_KEY_METHOD_get_compute_key, \
  AROS_LCA(const EC_KEY_METHOD *, (___meth), A0), \
- AROS_LCA(int (*)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *), (___pck), A1), \
+ AROS_LCA(int (**)(unsigned char **,size_t *,const EC_POINT *,const EC_KEY *), (___pck), A1), \
      struct Library *, AMISSL_BASE_NAME, 4173, Amissl)
 
 #define EC_KEY_METHOD_get_init(___meth, ___pinit, ___pfinish, ___pcopy, ___pset_group, ___pset_private, ___pset_public) \
       AROS_LC7(void, EC_KEY_METHOD_get_init, \
  AROS_LCA(const EC_KEY_METHOD *, (___meth), A0), \
- AROS_LCA(int (*)(EC_KEY *), (___pinit), A1), \
- AROS_LCA(void (*)(EC_KEY *), (___pfinish), A2), \
- AROS_LCA(int (*)(EC_KEY *,const EC_KEY *), (___pcopy), A3), \
- AROS_LCA(int (*)(EC_KEY *,const EC_GROUP *), (___pset_group), D0), \
- AROS_LCA(int (*)(EC_KEY *,const BIGNUM *), (___pset_private), D1), \
- AROS_LCA(int (*)(EC_KEY *,const EC_POINT *), (___pset_public), D2), \
+ AROS_LCA(int (**)(EC_KEY *), (___pinit), A1), \
+ AROS_LCA(void (**)(EC_KEY *), (___pfinish), A2), \
+ AROS_LCA(int (**)(EC_KEY *,const EC_KEY *), (___pcopy), A3), \
+ AROS_LCA(int (**)(EC_KEY *,const EC_GROUP *), (___pset_group), D0), \
+ AROS_LCA(int (**)(EC_KEY *,const BIGNUM *), (___pset_private), D1), \
+ AROS_LCA(int (**)(EC_KEY *,const EC_POINT *), (___pset_public), D2), \
      struct Library *, AMISSL_BASE_NAME, 4174, Amissl)
 
 #define EC_KEY_METHOD_get_keygen(___meth, ___pkeygen) \
       AROS_LC2(void, EC_KEY_METHOD_get_keygen, \
  AROS_LCA(const EC_KEY_METHOD *, (___meth), A0), \
- AROS_LCA(int (*)(EC_KEY *), (___pkeygen), A1), \
+ AROS_LCA(int (**)(EC_KEY *), (___pkeygen), A1), \
      struct Library *, AMISSL_BASE_NAME, 4175, Amissl)
 
 #define EC_KEY_METHOD_get_sign(___meth, ___psign, ___psign_setup, ___psign_sig) \
       AROS_LC4(void, EC_KEY_METHOD_get_sign, \
  AROS_LCA(const EC_KEY_METHOD *, (___meth), A0), \
- AROS_LCA(int (*)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), (___psign), A1), \
- AROS_LCA(int (*)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), (___psign_setup), A2), \
- AROS_LCA(ECDSA_SIG * (*)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *), (___psign_sig), A3), \
+ AROS_LCA(int (**)(int,const unsigned char *,int,unsigned char *,unsigned int *,const BIGNUM *,const BIGNUM *,EC_KEY *), (___psign), A1), \
+ AROS_LCA(int (**)(EC_KEY *,BN_CTX *,BIGNUM **,BIGNUM **), (___psign_setup), A2), \
+ AROS_LCA(ECDSA_SIG * (**)(const unsigned char *,int,const BIGNUM *,const BIGNUM *,EC_KEY *), (___psign_sig), A3), \
      struct Library *, AMISSL_BASE_NAME, 4176, Amissl)
 
 #define EC_KEY_METHOD_get_verify(___meth, ___pverify, ___pverify_sig) \
       AROS_LC3(void, EC_KEY_METHOD_get_verify, \
  AROS_LCA(const EC_KEY_METHOD *, (___meth), A0), \
- AROS_LCA(int (*)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), (___pverify), A1), \
- AROS_LCA(int (*)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *), (___pverify_sig), A2), \
+ AROS_LCA(int (**)(int,const unsigned char *,int,const unsigned char *,int,EC_KEY *), (___pverify), A1), \
+ AROS_LCA(int (**)(const unsigned char *,int,const ECDSA_SIG *,EC_KEY *), (___pverify_sig), A2), \
      struct Library *, AMISSL_BASE_NAME, 4177, Amissl)
 
 #define EC_KEY_METHOD_new(___meth) \
@@ -22779,96 +22779,96 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_cleanup(___pmeth, ___pcleanup) \
       AROS_LC2(void, EVP_PKEY_meth_get_cleanup, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(void (*)(EVP_PKEY_CTX *), (___pcleanup), A1), \
+ AROS_LCA(void (**)(EVP_PKEY_CTX *), (___pcleanup), A1), \
      struct Library *, AMISSL_BASE_NAME, 4284, Amissl)
 
 #define EVP_PKEY_meth_get_copy(___pmeth, ___pcopy) \
       AROS_LC2(void, EVP_PKEY_meth_get_copy, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *), (___pcopy), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,const EVP_PKEY_CTX *), (___pcopy), A1), \
      struct Library *, AMISSL_BASE_NAME, 4285, Amissl)
 
 #define EVP_PKEY_meth_get_ctrl(___pmeth, ___pctrl, ___pctrl_str) \
       AROS_LC3(void, EVP_PKEY_meth_get_ctrl, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,int,int,void *), (___pctrl), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,const char *,const char *), (___pctrl_str), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,int,int,void *), (___pctrl), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,const char *,const char *), (___pctrl_str), A2), \
      struct Library *, AMISSL_BASE_NAME, 4286, Amissl)
 
 #define EVP_PKEY_meth_get_decrypt(___pmeth, ___pdecrypt_init, ___pdecrypt) \
       AROS_LC3(void, EVP_PKEY_meth_get_decrypt, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pdecrypt_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pdecrypt), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pdecrypt_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pdecrypt), A2), \
      struct Library *, AMISSL_BASE_NAME, 4287, Amissl)
 
 #define EVP_PKEY_meth_get_derive(___pmeth, ___pderive_init, ___pderive) \
       AROS_LC3(void, EVP_PKEY_meth_get_derive, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pderive_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *), (___pderive), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pderive_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *), (___pderive), A2), \
      struct Library *, AMISSL_BASE_NAME, 4288, Amissl)
 
 #define EVP_PKEY_meth_get_encrypt(___pmeth, ___pencrypt_init, ___pencryptfn) \
       AROS_LC3(void, EVP_PKEY_meth_get_encrypt, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pencrypt_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pencryptfn), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pencrypt_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pencryptfn), A2), \
      struct Library *, AMISSL_BASE_NAME, 4289, Amissl)
 
 #define EVP_PKEY_meth_get_init(___pmeth, ___pinit) \
       AROS_LC2(void, EVP_PKEY_meth_get_init, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pinit), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pinit), A1), \
      struct Library *, AMISSL_BASE_NAME, 4290, Amissl)
 
 #define EVP_PKEY_meth_get_keygen(___pmeth, ___pkeygen_init, ___pkeygen) \
       AROS_LC3(void, EVP_PKEY_meth_get_keygen, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pkeygen_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,EVP_PKEY *), (___pkeygen), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pkeygen_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,EVP_PKEY *), (___pkeygen), A2), \
      struct Library *, AMISSL_BASE_NAME, 4291, Amissl)
 
 #define EVP_PKEY_meth_get_paramgen(___pmeth, ___pparamgen_init, ___pparamgen) \
       AROS_LC3(void, EVP_PKEY_meth_get_paramgen, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pparamgen_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,EVP_PKEY *), (___pparamgen), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pparamgen_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,EVP_PKEY *), (___pparamgen), A2), \
      struct Library *, AMISSL_BASE_NAME, 4292, Amissl)
 
 #define EVP_PKEY_meth_get_sign(___pmeth, ___psign_init, ___psign) \
       AROS_LC3(void, EVP_PKEY_meth_get_sign, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___psign_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___psign), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___psign_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___psign), A2), \
      struct Library *, AMISSL_BASE_NAME, 4293, Amissl)
 
 #define EVP_PKEY_meth_get_signctx(___pmeth, ___psignctx_init, ___psignctx) \
       AROS_LC3(void, EVP_PKEY_meth_get_signctx, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,EVP_MD_CTX *), (___psignctx_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *), (___psignctx), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,EVP_MD_CTX *), (___psignctx_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,EVP_MD_CTX *), (___psignctx), A2), \
      struct Library *, AMISSL_BASE_NAME, 4294, Amissl)
 
 #define EVP_PKEY_meth_get_verify(___pmeth, ___pverify_init, ___pverify) \
       AROS_LC3(void, EVP_PKEY_meth_get_verify, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pverify_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t), (___pverify), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pverify_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,const unsigned char *,size_t,const unsigned char *,size_t), (___pverify), A2), \
      struct Library *, AMISSL_BASE_NAME, 4295, Amissl)
 
 #define EVP_PKEY_meth_get_verify_recover(___pmeth, ___pverify_recover_init, ___pverify_recover) \
       AROS_LC3(void, EVP_PKEY_meth_get_verify_recover, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *), (___pverify_recover_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pverify_recover), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *), (___pverify_recover_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,unsigned char *,size_t *,const unsigned char *,size_t), (___pverify_recover), A2), \
      struct Library *, AMISSL_BASE_NAME, 4296, Amissl)
 
 #define EVP_PKEY_meth_get_verifyctx(___pmeth, ___pverifyctx_init, ___pverifyctx) \
       AROS_LC3(void, EVP_PKEY_meth_get_verifyctx, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,EVP_MD_CTX *), (___pverifyctx_init), A1), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *), (___pverifyctx), A2), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,EVP_MD_CTX *), (___pverifyctx_init), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *,const unsigned char *,int,EVP_MD_CTX *), (___pverifyctx), A2), \
      struct Library *, AMISSL_BASE_NAME, 4297, Amissl)
 
 #define EVP_PKEY_get_security_bits(___pkey) \
@@ -27813,7 +27813,7 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_check(___pmeth, ___pcheck) \
       AROS_LC2(void, EVP_PKEY_meth_get_check, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY *pkey), (___pcheck), A1), \
+ AROS_LCA(int (**)(EVP_PKEY *pkey), (___pcheck), A1), \
      struct Library *, AMISSL_BASE_NAME, 5188, Amissl)
 
 #define EVP_PKEY_meth_remove(___pmeth) \
@@ -27910,13 +27910,13 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_public_check(___pmeth, ___pcheck) \
       AROS_LC2(void, EVP_PKEY_meth_get_public_check, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY *pkey), (___pcheck), A1), \
+ AROS_LCA(int (**)(EVP_PKEY *pkey), (___pcheck), A1), \
      struct Library *, AMISSL_BASE_NAME, 5207, Amissl)
 
 #define EVP_PKEY_meth_get_param_check(___pmeth, ___pcheck) \
       AROS_LC2(void, EVP_PKEY_meth_get_param_check, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY *pkey), (___pcheck), A1), \
+ AROS_LCA(int (**)(EVP_PKEY *pkey), (___pcheck), A1), \
      struct Library *, AMISSL_BASE_NAME, 5208, Amissl)
 
 #define EVP_PKEY_asn1_set_public_check(___ameth, ___pkey_pub_check) \
@@ -28744,7 +28744,7 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_digest_custom(___pmeth, ___pdigest_custom) \
       AROS_LC2(void, EVP_PKEY_meth_get_digest_custom, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx), (___pdigest_custom), A1), \
+ AROS_LCA(int (**)(EVP_PKEY_CTX *ctx,EVP_MD_CTX *mctx), (___pdigest_custom), A1), \
      struct Library *, AMISSL_BASE_NAME, 5361, Amissl)
 
 #define OPENSSL_DIR_read(___ctx, ___directory) \
@@ -28788,13 +28788,13 @@ typedef ULONG _sfdc_vararg;
 #define EVP_PKEY_meth_get_digestverify(___pmeth, ___digestverify) \
       AROS_LC2(void, EVP_PKEY_meth_get_digestverify, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen), (___digestverify), A1), \
+ AROS_LCA(int (**)(EVP_MD_CTX *ctx,const unsigned char *sig,size_t siglen,const unsigned char *tbs,size_t tbslen), (___digestverify), A1), \
      struct Library *, AMISSL_BASE_NAME, 5371, Amissl)
 
 #define EVP_PKEY_meth_get_digestsign(___pmeth, ___digestsign) \
       AROS_LC2(void, EVP_PKEY_meth_get_digestsign, \
  AROS_LCA(const EVP_PKEY_METHOD *, (___pmeth), A0), \
- AROS_LCA(int (*)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen), (___digestsign), A1), \
+ AROS_LCA(int (**)(EVP_MD_CTX *ctx,unsigned char *sig,size_t *siglen,const unsigned char *tbs,size_t tbslen), (___digestsign), A1), \
      struct Library *, AMISSL_BASE_NAME, 5372, Amissl)
 
 #define RSA_get0_pss_params(___r) \

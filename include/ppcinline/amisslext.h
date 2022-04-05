@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 
 #ifndef _PPCINLINE_AMISSLEXT_H
 #define _PPCINLINE_AMISSLEXT_H

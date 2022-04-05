@@ -2243,9 +2243,9 @@
     <method name="CRYPTO_get_dynlock_destroy_callback" result="void (*)(struct CRYPTO_dynlock_value *l, const char *file, int line)" status="unimplemented">
     </method>
     <method name="CRYPTO_set_mem_functions" result="int">
-      <arg name="m" type="void * (*)(size_t, const char *, int)" m68kreg="a0"/>
-      <arg name="r" type="void * (*)(void *, size_t, const char *, int)" m68kreg="a1"/>
-      <arg name="f" type="void (*)(void *, const char *, int)" m68kreg="a2"/>
+      <arg name="malloc_fn" type="CRYPTO_malloc_fn" m68kreg="a0"/>
+      <arg name="realloc_fn" type="CRYPTO_realloc_fn" m68kreg="a1"/>
+      <arg name="free_fn" type="CRYPTO_free_fn" m68kreg="a2"/>
     </method>
     <method name="CRYPTO_set_locked_mem_functions" result="int" status="unimplemented">
       <arg name="m" type="void * (*)(size_t)" m68kreg="a0"/>
@@ -2268,9 +2268,9 @@
       <arg name="go" type="long (*)(void)" m68kreg="d0"/>
     </method>
     <method name="CRYPTO_get_mem_functions" result="void">
-      <arg name="m" type="void * (**)(size_t, const char *, int)" m68kreg="a0"/>
-      <arg name="r" type="void * (**)(void *, size_t, const char *, int)" m68kreg="a1"/>
-      <arg name="f" type="void (**)(void *, const char *, int)" m68kreg="a2"/>
+      <arg name="malloc_fn" type="CRYPTO_malloc_fn *" m68kreg="a0"/>
+      <arg name="realloc_fn" type="CRYPTO_realloc_fn *" m68kreg="a1"/>
+      <arg name="free_fn" type="CRYPTO_free_fn *" m68kreg="a2"/>
     </method>
     <method name="CRYPTO_get_locked_mem_functions" result="void" status="unimplemented">
       <arg name="m" type="void * (**)(size_t)" m68kreg="a0"/>

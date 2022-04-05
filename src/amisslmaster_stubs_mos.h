@@ -1,4 +1,4 @@
-/* Automatically generated header (sfdc 1.11)! Do not edit! */
+/* Automatically generated header (sfdc 1.12)! Do not edit! */
 
 #ifndef _GATEPROTO_AMISSLMASTER_H
 #define _GATEPROTO_AMISSLMASTER_H
