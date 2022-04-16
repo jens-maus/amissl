@@ -152,11 +152,8 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
+REVISION=1
 VERSIONNAME=302
-AMISSLREVISION=0
-AMISSLMASTERREVISION=0
-AMISSLDATE=8.4.2022
-AMISSLMASTERDATE=8.4.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -171,14 +168,11 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachabl
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include -I$(BUILD_D)/openssl/include -I./include/internal
+INCLUDE  = -I./include -I$(BUILD_D) -I$(BUILD_D)/openssl/include -I./include/internal
 COMCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
 APPCFLAGS= $(COMCFLAGS)
 CFLAGS   = $(COMCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
-           -DVERSION=$(VERSION) -DVERSIONNAME=$(VERSIONNAME) \
-           -DAMISSLREVISION=$(AMISSLREVISION) -DAMISSLDATE=$(AMISSLDATE) \
-           -DAMISSLMASTERREVISION=$(AMISSLMASTERREVISION) \
-           -DAMISSLMASTERDATE=$(AMISSLMASTERDATE) -DLIBCPU=$(OS)
+           -DVERSIONNAME=$(VERSIONNAME) -DLIBCPU=$(OS)
 LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
 LIBSSL   = $(BUILD_D)/openssl/libssl.a
 LIBCRYPTO= $(BUILD_D)/openssl/libcrypto.a
@@ -426,7 +420,7 @@ APPS =  $(BUILD_D)/amisslmaster_test $(BUILD_D)/amissl_v$(VERSIONNAME)_test \
 
 # main target
 .PHONY: all
-all: $(BUILD_D) $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amisslmaster.library $(APPS)
+all: $(BUILD_D) $(BUILD_D)/amissl_rev.h $(LIBCMT) $(BUILD_D)/openssl/Makefile $(LINKLIBS) $(LIBCRYPTO) $(LIBSSL) $(BUILD_D)/amissl_v$(VERSIONNAME).library $(BUILD_D)/amisslmaster.library $(APPS)
 
 # for making a release we compile ALL target with no debug
 .PHONY: release
@@ -499,6 +493,9 @@ $(LIBCMT): $(BUILD_D)/libcmt libcmt
 	$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) CPU="$(CPU)" BUILD_D=../$(BUILD_D)/libcmt
 
 ## AMISSL BUILD RULES ##
+
+$(BUILD_D)/amissl_rev.h:
+	@bumprev -q -v $(VERSION) -r $(REVISION) -n OpenSSL -b $(BUILD_D)/amissl -i h
 
 $(BUILD_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
@@ -617,7 +614,7 @@ $(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 # cleanup target
 .PHONY: clean
 clean:
-	-rm -f $(BUILD_D)/*.o $(BUILD_D)/*.a
+	-rm -f $(BUILD_D)/*.o $(BUILD_D)/*.a $(BUILD_D)/*.h
 	-rm -f $(BUILD_D)/amissl_v$(VERSIONNAME).library*
 	-rm -f $(BUILD_D)/amisslmaster.library*
 	-rm -rf $(BUILD_D)/openssl

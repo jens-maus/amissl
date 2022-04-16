@@ -56,6 +56,8 @@
 #include <internal/debug.h>
 #include <internal/amissl.h>
 
+#include <amissl_rev.h>
+
 extern struct LibraryHeader *CreateExtLibrary(struct LibraryHeader *main);
 
 #if defined(__amigaos4__)
@@ -137,8 +139,8 @@ void __dtor_math_exit(void);
 
 #define LIBNAME        "amissl_v" MKSTR(VERSIONNAME) ".library"
 #define LIB_VERSION    VERSION
-#define LIB_REVISION   AMISSLREVISION
-#define LIB_REV_STRING "$VER: " LIBNAME " " MKSTR(VERSION) "." MKSTR(AMISSLREVISION) " (" MKSTR(AMISSLDATE) ") " MKSTR(LIBCPU) " version\r\n"
+#define LIB_REVISION   REVISION
+#define LIB_REV_STRING "$VER: " LIBNAME " " MKSTR(VERSION) "." MKSTR(REVISION) " (" DATE ") " MKSTR(LIBCPU) " version\r\n"
 
 static const char UserLibName[] = LIBNAME;
 static const char UserLibID[]   = LIB_REV_STRING;

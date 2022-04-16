@@ -235,7 +235,8 @@ static void setup_trace(const char *str)
 #endif /* OPENSSL_NO_TRACE */
 
 #if defined(OPENSSL_SYS_AMIGA)
-const char * const ProgramVersion = "\0$VER: " OPENSSL_VERSION_TEXT "\r\n";
+#include "amissl_rev.h"
+const char * const ProgramVersion = VERSTAG;
 #endif /* OPENSSL_SYS_AMIGA */
 
 static char *help_argv[] = { "help", NULL };

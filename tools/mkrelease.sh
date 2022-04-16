@@ -118,7 +118,7 @@ mv release/AmiSSL/Developer/lib/AmigaOS4/libamisslauto.a "release/AmiSSL/Develop
 cp -a build_os4/libamisslauto_newlib.a "release/AmiSSL/Developer/lib/AmigaOS4/newlib/libamisslauto.a"
 
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
-releaserev=`grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }'`
+releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
 
 echo "  MK AmiSSL-$releasever.$releaserev.lha"
 cd release
