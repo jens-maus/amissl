@@ -1,16 +1,31 @@
-Introduction
-------------
-This archive contains developer files and an example program which should make
+AmiSSL v5 Developer Documentation
+---------------------------------
+
+1. Introduction
+2. Examples
+3. AmiSSL API
+4. Link libraries
+5. Migration from AmiSSL v4
+6. Migration from AmiSSL v3
+7. Differences to OpenSSL
+8. Callback functions
+9. Compiler issues
+
+
+1.Introduction
+--------------
+This archive contains developer files and example programs which should make
 it possible to add AmiSSL support to client and server applications interested
 in providing SSL/TLS functionality to end users. This SDK release provides
-include files for GCC, vbcc and SAS/C on OS3/m68k and also GCC OS4/PPC
-includes. If you are using SAS/C please see the end of this document for
-important information.
+include files for GCC and vbcc for OS3/m68k and OS4/PPC. Also, SAS/C is
+supported, but please see the end of this document for important information.
 
 The information is mostly AmiSSL specific. For more information on SSL
 programming, check OpenSSL documentation and examples
-(http://www.openssl.org/).
+(https://www.openssl.org/).
 
+2.Examples
+----------
 The provided example, httpget.c, is an example of how to use the new
 OpenSSL 3.0 built-in HTTP client functions. It shows how to retrieve a
 document from a "http://" or "https://" server, with or without a password
@@ -24,11 +39,11 @@ connecting directly to the site, and also by connecting through a proxy server
 AmiSSL provides essentially the same functionality as OpenSSL, but there are a
 few differences as a result of the limited Amiga shared library model.
 
-AmiSSL API
-----------
+3. AmiSSL API
+-------------
 AmiSSL v5 API is slightly different from previous versions and has been
-simplified. Notes for migration from previous versions are shown further below.
-The procedure to use AmiSSL should be something like the following pseudo-code:
+simplified. The procedure to use AmiSSL should be something like the following
+pseudo-code:
 
 -- cut here --
 #include <proto/amisslmaster.h>
@@ -94,11 +109,6 @@ you need to use the SDK in which AMISSL_CURRENT_VERSION is AMISSL_V097g. If
 you are, however, always using the latest AmiSSL SDK version you can keep
 using AMISSL_CURRENT_VERSION.
 
-Linker libraries, that automatically open and set up AmiSSL, are also available
-for GCC (OS3 and OS4) as part of the AmiSSL SDK. You may also compile your
-own linker library from lib/autoinit_amissl_main.c which can be compiled
-with VBCC and SAS/C, in addition to GCC.
-
 Note, that unlike in AmiSSL v1, AmiSSLBase can be shared between different
 subprocesses. Furthermore, this is encouraged since it allows the cache of
 server certificates to be used by all subprocesses that share the same AmiSSL
@@ -112,11 +122,34 @@ amissl.library with incompatible APIs installed keeping the programs compiled
 with an older amissl.library working. This is necessary since OpenSSL API
 changes from time to time. Also, when a new version of AmiSSL is released with
 amissl.library API that is backwards compatible to some previous version, a
-program requesting the old version of amissl.library will automatically get the
-new version and the old version can be deleted.
+program requesting the old version of amissl.library will automatically get
+the new version and the old version can be deleted.
 
-Migration from AmiSSL v4 to v5
-------------------------------
+4. Link libraries
+-----------------
+The following optional link libraries are supplied, for GCC on OS3/OS4 and
+vbcc on OS4:
+
+- libamisslauto.a (link with -lamisslauto)
+As per the standard libauto, automatically open and set up AmiSSL, without
+having to worry about the initialisation code yourself. You may also compile
+your own link library for a different compiler from lib/autoinit_amissl_main.c
+which can be compiled with VBCC, SAS/C and GCC.
+
+- libamisslstubs.a (link with -lamisslstubs)
+Some OpenSSL functions take a pointer to another OpenSSL function as a
+parameter. This becomes a problem when using standard AmigaOS library inlines,
+usually causing undefined reference errors (e.g. X509_free) when linking. You
+can either create your own stub functions to resolve this, which simply call
+the AmiSSL functions, but for convenience you can instead link with this
+library which contains stubs for all OpenSSL functions. If you wish to create
+this library for a different compiler, the stubs source code can be created
+on OS4 using "idltool -L amissl.xml" or on OS3 from the sfd file using tools
+such as sfdc, sfd or fd2pragma.
+
+
+5. Migration from AmiSSL v4
+---------------------------
 AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.0, but
 fortunately you will not usually need to make any changes to your code, as most
 things are actually backwards compatible (most functions that have been removed
@@ -140,8 +173,8 @@ The procedure for subprocesses remains unchanged - they must continue to call
 InitAmiSSL() and CleanupAmiSSL() if sharing the AmiSSL instance from the parent
 task where OpenAmiSSLTags() was called.
 
-Migration from AmiSSL v3 to v4
-------------------------------
+6. Migration from AmiSSL v3
+---------------------------
 AmiSSL v3 is OpenSSL 0.9.x based and there were many fundamental changes in
 AmiSSL v4 due to the switch to OpenSSL 1.1.x. Although there were no changes in
 the AmiSSL API itself, there were lots of important changes in the OpenSSL API.
@@ -153,8 +186,8 @@ need to use the provided new functions to obtain, access and modify these
 structures. We also dropped SSLv2/v3 methods completely, so you will need to
 switch to TLS.
 
-Differences to OpenSSL
-----------------------
+7. Differences to OpenSSL
+-------------------------
 Unlike AmiSSL v1, AmiSSL v3/v4/v5 uses "#include <openssl/xxx.h>" scheme instead
 of "#include <amissl/xxx.h>" scheme. This and some other changes should make it
 possible to compile most OpenSSL programs out of the box. There are some
@@ -197,8 +230,8 @@ These will return textual representation of requested cipher data. For example,
 SSL_CIPHER_get_encryption() will return "AES(256)" when 256-bit AES cipher is
 used.
 
-Callback functions
-------------------
+8.Callback functions
+--------------------
 Some OpenSSL functions require you to pass your own callback function in as a
 parameter. These functions will be called using default calling conventions
 on OS3 and OS4. On OS3 this means AmiSSL will call your function with the
@@ -213,8 +246,8 @@ STDARGS SAVEDS int verify_cb(int preverify_ok, X509_STORE_CTX *ctx)
 
 SSL_CTX_set_verify(sslctx,SSL_VERIFY_PEER,verify_cb);
 
-Compiler issues
----------------
+9. Compiler issues
+------------------
 Sometimes it is necessary to pass an AmiSSL function as a function pointer
 argument. Since AmiSSL functions are inside the library, it is not possible
 directly. In these cases, it is possible to use a stub function:
