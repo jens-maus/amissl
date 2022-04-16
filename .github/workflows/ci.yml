@@ -37,7 +37,8 @@ jobs:
     - name: install adtools build env
       run: |
         DOWNLOAD_PATH=https://github.com/adtools/adtools/releases/download/20170213
-        curl -L ${DOWNLOAD_PATH}/adtools-utils.tar.bz2 | sudo tar xj -C /
+        DOWNLOAD_PATH_UTILS=https://github.com/adtools/adtools/releases/download/20220416
+        curl -L ${DOWNLOAD_PATH_UTILS}/adtools-utils.tar.bz2 | sudo tar xj -C /
         if [[ ${{ matrix.platform }} =~ os3-68020|os3-68060|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
         if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
         if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C / ; fi

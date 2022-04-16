@@ -74,6 +74,7 @@ for os in ${OS}; do
 	    $strip -p -R.comment build_$os/httpget -o "release/AmiSSL/Developer/Examples/$fullsys/httpget"
 	    chmod 755 "release/AmiSSL/Developer/Examples/$fullsys/httpget"
 	    mkdir -p "release/AmiSSL/Developer/lib/$fullsys"
+	    cp -a build_$os/libamisslstubs.a "release/AmiSSL/Developer/lib/$fullsys/"
 	    cp -a build_$os/libamisslauto.a "release/AmiSSL/Developer/lib/$fullsys/"
 	fi
 done

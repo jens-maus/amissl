@@ -176,6 +176,8 @@ int (X509_NAME_print_ex_fp)(FILE *fp, const X509_NAME *nm, int indent, unsigned 
   return ret;
 }
 
+#ifdef NO_STUBLIB
+
 void (ASN1_OBJECT_free)(ASN1_OBJECT *a)
 {
   ASN1_OBJECT_free(a);
@@ -731,3 +733,5 @@ ASN1_STUB_FUNC(ZINT32)
 ASN1_STUB_FUNC(ZINT64)
 ASN1_STUB_FUNC(ZUINT32)
 ASN1_STUB_FUNC(ZUINT64)
+
+#endif /* NO_STUBLIB */

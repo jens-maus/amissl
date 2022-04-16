@@ -1992,8 +1992,10 @@ int EVP_PKEY_get_field_type(const EVP_PKEY *pkey);
 EVP_PKEY *EVP_PKEY_Q_vkeygen(OSSL_LIB_CTX *libctx, const char *propq,
                              const char *type, va_list args);
 # endif
+# if !defined(AMISSL_STUBLIB)
 EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
                             const char *type, ...);
+# endif
 int EVP_PKEY_paramgen_init(EVP_PKEY_CTX *ctx);
 int EVP_PKEY_paramgen(EVP_PKEY_CTX *ctx, EVP_PKEY **ppkey);
 int EVP_PKEY_keygen_init(EVP_PKEY_CTX *ctx);

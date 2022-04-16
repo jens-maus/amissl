@@ -155,8 +155,8 @@ VERSION=5
 VERSIONNAME=302
 AMISSLREVISION=0
 AMISSLMASTERREVISION=0
-AMISSLDATE=23.3.2022
-AMISSLMASTERDATE=23.3.2022
+AMISSLDATE=8.4.2022
+AMISSLMASTERDATE=8.4.2022
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -224,6 +224,8 @@ ifeq ($(OS), os4)
 
   EXTRALINKLIBS = $(BUILD_D)/libamisslauto_newlib.a
 
+  GENSTUBS = idltool --linklib --output $(BUILD_D) include/xml/amissl.xml
+
 else
 ifeq ($(OS), os3-68020)
 
@@ -252,6 +254,9 @@ ifeq ($(OS), os3-68020)
   EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
                  $(BUILD_D)/amissl_glue_extra.o
 
+  GENSTUBS = sfdc --mode=stubs --output=$(BUILD_D)/amissl_files/main_stubs/%f.c --target=m68k-unknown-amigaos --quiet include/sfd/amissl_lib.sfd
+  GENSTUBSEXT = sfdc --mode=stubs --output=$(BUILD_D)/amissl_files/main_stubs/%f.c --target=m68k-unknown-amigaos --quiet include/sfd/amisslext_lib.sfd
+
 else
 ifeq ($(OS), os3-68060)
 
@@ -279,6 +284,9 @@ ifeq ($(OS), os3-68060)
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_glue.o \
                  $(BUILD_D)/amissl_glue_extra.o
+
+  GENSTUBS = sfdc --mode=stubs --output=$(BUILD_D)/amissl_files/main_stubs/%f.c --target=m68k-unknown-amigaos --quiet include/sfd/amissl_lib.sfd
+  GENSTUBSEXT = sfdc --mode=stubs --output=$(BUILD_D)/amissl_files/main_stubs/%f.c --target=m68k-unknown-amigaos --quiet include/sfd/amisslext_lib.sfd
 
 else
 ifeq ($(OS), mos)
@@ -407,6 +415,7 @@ MASTEROBJS = $(BUILD_D)/amisslmaster_libinit.o \
 
 LINKLIBS = $(BUILD_D)/libamisslauto.a \
            $(BUILD_D)/libamisslstubs.a \
+           $(BUILD_D)/libamisslapps.a \
            $(BUILD_D)/libamissldebug.a \
            $(EXTRALINKLIBS)
 
@@ -509,7 +518,7 @@ $(BUILD_D)/libamisslauto_newlib.a: $(BUILD_D)/autoinit_assl_newlib.o
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
 
-$(BUILD_D)/libamisslstubs.a: $(BUILD_D)/libstubs.o $(BUILD_D)/appsoutput.o
+$(BUILD_D)/libamisslapps.a: $(BUILD_D)/libstubs.o $(BUILD_D)/appsoutput.o
 	@echo "  AR $@"
 	@$(AR) r $@ $(BUILD_D)/libstubs.o $(BUILD_D)/appsoutput.o
 	@$(RANLIB) $@
@@ -518,6 +527,30 @@ $(BUILD_D)/libamissldebug.a: $(BUILD_D)/debug.o
 	@echo "  AR $@"
 	@$(AR) r $@ $<
 	@$(RANLIB) $@
+
+## AMISSL STUB LINKLIB ##
+
+$(BUILD_D)/amissl_files/main_stubs: include/xml/amissl.xml
+	@$(MKDIR) $@
+	@$(GENSTUBS)
+	@$(GENSTUBSEXT)
+	@$(RM) $@/OBSOLETE_*.c
+
+STUBSRCS = $(sort $(wildcard $(BUILD_D)/amissl_files/main_stubs/*.c))
+STUBOBJS = $(patsubst %.c,%.o,$(STUBSRCS))
+
+$(BUILD_D)/amissl_files/main_stubs/%.o: $(BUILD_D)/amissl_files/main_stubs/%.c
+	@echo "  CC $<"
+	@$(CC) $(APPCFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL_STUBLIB -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -DINLINE4_AMISSL_H
+
+.PHONY: stublib
+stublib: $(STUBOBJS)
+	@echo "  AR libamisslstubs.a"
+	@$(AR) r $(BUILD_D)/libamisslstubs.a $(STUBOBJS)
+	@$(RANLIB) $(BUILD_D)/libamisslstubs.a
+
+$(BUILD_D)/libamisslstubs.a: $(BUILD_D)/amissl_files/main_stubs $(STUBOBJS)
+	@$(MAKE) stublib
 
 ## AMISSL TESTCASE BINARIES ##
 
@@ -531,15 +564,15 @@ $(BUILD_D)/amissl_v$(VERSIONNAME)_test: $(TEST_D)/amissl_test.c
 
 $(BUILD_D)/https: $(TEST_D)/https.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D)
+	@$(CC) $(APPCFLAGS) -o $@ $^
 
 $(BUILD_D)/httpget: $(TEST_D)/httpget.c
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -o $@ $^ -L$(BUILD_D)
+	@$(CC) $(APPCFLAGS) -o $@ $^
 
-$(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
+$(BUILD_D)/uitest: $(TEST_D)/uitest.c $(BUILD_D)/libamisslauto.a
 	@echo "  CC/LD $@"
-	@$(CC) $(APPCFLAGS) -DNO_INLINE_VARARGS -o $@ $< -L$(BUILD_D) -lamisslauto -lamisslstubs
+	@$(CC) $(APPCFLAGS) -DNO_INLINE_VARARGS -o $@ $< -L$(BUILD_D) -lamisslauto
 
 $(BUILD_D)/vatest: $(TEST_D)/vatest.c $(BUILD_D)/libamisslauto.a $(BUILD_D)/libamisslstubs.a
 	@echo "  CC/LD $@"
@@ -593,8 +626,6 @@ clean:
 # distclean target
 .PHONY: distclean
 distclean: clean
-	-rm -f openssl/configdata.pm
-	-rm -f openssl/include/openssl/opensslconf.h
 	-rm -rf $(BUILD_D) $(BUILD_D)
 
 # for creating a .dump file

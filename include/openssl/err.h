@@ -394,7 +394,9 @@ DEFINE_LHASH_OF_INTERNAL(ERR_STRING_DATA);
 /* Building blocks */
 void ERR_new(void);
 void ERR_set_debug(const char *file, int line, const char *func);
+# if !defined(AMISSL_STUBLIB)
 void ERR_set_error(int lib, int reason, const char *fmt, ...);
+# endif
 void ERR_vset_error(int lib, int reason, const char *fmt, va_list args);
 
 /* Main error raising functions */
@@ -478,7 +480,9 @@ void ERR_print_errors_fp(FILE *fp);
 # endif
 void ERR_print_errors(BIO *bp);
 
+# if !defined(AMISSL_STUBLIB)
 void ERR_add_error_data(int num, ...);
+# endif
 void ERR_add_error_vdata(int num, va_list args);
 void ERR_add_error_txt(const char *sepr, const char *txt);
 void ERR_add_error_mem_bio(const char *sep, BIO *bio);

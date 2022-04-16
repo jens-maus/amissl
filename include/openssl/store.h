@@ -82,8 +82,10 @@ OSSL_STORE_open_ex(const char *uri, OSSL_LIB_CTX *libctx, const char *propq,
  * Each command takes different arguments.
  */
 # ifndef OPENSSL_NO_DEPRECATED_3_0
+# if !defined(AMISSL_STUBLIB)
 OSSL_DEPRECATEDIN_3_0 int OSSL_STORE_ctrl(OSSL_STORE_CTX *ctx, int cmd,
                                           ... /* args */);
+# endif
 OSSL_DEPRECATEDIN_3_0 int OSSL_STORE_vctrl(OSSL_STORE_CTX *ctx, int cmd,
                                            va_list args);
 # endif

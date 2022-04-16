@@ -855,12 +855,16 @@ void BIO_copy_next_retry(BIO *b);
 #   endif
 #  endif
 # endif
+# if !defined(AMISSL_STUBLIB)
 int BIO_printf(BIO *bio, const char *format, ...)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 2, 3)));
+# endif
 int BIO_vprintf(BIO *bio, const char *format, va_list args)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 2, 0)));
+# if !defined(AMISSL_STUBLIB)
 int BIO_snprintf(char *buf, size_t n, const char *format, ...)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 3, 4)));
+# endif
 int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
 ossl_bio__attr__((__format__(ossl_bio__printf__, 3, 0)));
 # undef ossl_bio__attr__
