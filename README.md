@@ -7,6 +7,8 @@
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
 [![License](http://img.shields.io/:license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
+<a href="https://www.ibrowse-dev.net/"><img src="https://www.ibrowse-dev.net/images/sponsor.png" width="272" height="99" align="right" border="0" /></a>
+
 The AmiSSL project is a collaborative effort to develop a shared library for Amiga-based
 systems (AmigaOS, MorphOS, AROS, etc.) based on the OpenSSL (www.openssl.org) cryptographic
 and SSL/TLS library toolkit.
