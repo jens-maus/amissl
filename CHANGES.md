@@ -1,4 +1,4 @@
-AmiSSL 5.1 (x.x.2022)
+## AmiSSL 5.1 (x.x.2022)
 
 - Switched to OpenSSL 3.0 and updated backend to full compatibility to
   latest OpenSSL 3.0.2 (15.3.2022) version, which brings new features,
@@ -18,7 +18,7 @@ AmiSSL 5.1 (x.x.2022)
 - Added OpenSSL stub link libraries for OS3 (GCC) and OS4 (GCC & VBCC).
 - AmiSSL and OpenSSL switched to the Apache License, Version 2.0.
 
-AmiSSL 4.12 (11.2.2022)
+## AmiSSL 4.12 (11.2.2022)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1m (14.12.2021) version, which brings security and bug fixes.
@@ -29,7 +29,7 @@ AmiSSL 4.12 (11.2.2022)
 - Cleaned up and unified error requesters, removing redundant code.
 - Fixed GCC linker alignment for all OS4 binaries.
 
-AmiSSL 4.11 (30.10.2021)
+## AmiSSL 4.11 (30.10.2021)
 
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 26.10.2021.
@@ -44,7 +44,7 @@ AmiSSL 4.11 (30.10.2021)
 - Added Ctrl-C break detection to the OpenSSL tool.
 - OS4 binaries now stripped further with --strip-unneeded-rel-relocs.
 
-AmiSSL 4.10 (25.8.2021)
+## AmiSSL 4.10 (25.8.2021)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1l (24.08.2021) version, which brings security and bug
@@ -56,7 +56,7 @@ AmiSSL 4.10 (25.8.2021)
   by https://curl.haxx.se/ca/ dated 05.07.2021.
 - Added Italian installer translation.
 
-AmiSSL 4.9 (2.4.2021)
+## AmiSSL 4.9 (2.4.2021)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1k (25.03.2021) version, which brings security and bug fixes.
@@ -68,7 +68,7 @@ AmiSSL 4.9 (2.4.2021)
 - Added sample openssl.cnf file and CA.pl helper script to the installation.
 - Added CA.pl documentation to OpenSSL.doc.
 
-AmiSSL 4.8 (13.3.2021)
+## AmiSSL 4.8 (13.3.2021)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1j (16.02.2021) version, which brings security and bug fixes.
@@ -82,7 +82,7 @@ AmiSSL 4.8 (13.3.2021)
 - Added lib/autoinit_amissl_main.c to SDK to allow VBCC, SAS/C and GCC
   users to compile their own link library, if required.
 
-AmiSSL 4.7 (17.12.2020)
+## AmiSSL 4.7 (17.12.2020)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1i (08.12.2020) version, which brings security and bug fixes.
@@ -91,7 +91,7 @@ AmiSSL 4.7 (17.12.2020)
 - Fixed OpenSSL command and https developer example not having execute file
   permission bit set on OS3
 
-AmiSSL 4.6 (8.6.2020)
+## AmiSSL 4.6 (8.6.2020)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1g (21.04.2020) version, which brings security and bug fixes.
@@ -99,7 +99,7 @@ AmiSSL 4.6 (8.6.2020)
   integer math emulation being broken in Amithlon (68080 and MorphOS should
   continue to use the more optimal 68020-40 target).
 
-AmiSSL 4.5 (29.3.2020)
+## AmiSSL 4.5 (29.3.2020)
 
 - Dropped FPU usage from 68060 target, allowing 68LC060 and 68EC060
   processors to benefit from the 4.4 changes, without crashing.
@@ -110,7 +110,7 @@ AmiSSL 4.5 (29.3.2020)
 - Modernized and improved the https example source code.
 - Minor improvements/fixes.
 
-AmiSSL 4.4 (15.2.2020)
+## AmiSSL 4.4 (15.2.2020)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.1d (10.09.2019) version.
@@ -144,7 +144,7 @@ AmiSSL 4.4 (15.2.2020)
   compatibility with some Amiga unpackers.
 - Minor improvements/fixes.
 
-AmiSSL 4.3 (21.2.2019):
+## AmiSSL 4.3 (21.2.2019):
 
 - Updated OpenSSL backend to latest OpenSSL 1.1.1a (20.11.2018) version
   including newest TLS 1.2 and TLS 1.3 protocol/cipher versions and general
@@ -153,7 +153,7 @@ AmiSSL 4.3 (21.2.2019):
   by https://curl.haxx.se/ca/
 - Minor improvements/fixes.
 
-AmiSSL 4.2 (7.3.2018)
+## AmiSSL 4.2 (7.3.2018)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.0g (02.11.2017) version.
@@ -166,7 +166,7 @@ AmiSSL 4.2 (7.3.2018)
   AmiSSL includes for MorphOS.
 - Minor improvements/fixes.
 
-AmiSSL 4.1 (13.3.2017)
+## AmiSSL 4.1 (13.3.2017)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.0e (16.02.2017) version.
@@ -179,7 +179,7 @@ AmiSSL 4.1 (13.3.2017)
 - Included a newlib compiled version of libamisslauto.a.
 - Minor improvements/Fixes for install script.
 
-AmiSSL 4.0 (7.2.2017)
+## AmiSSL 4.0 (7.2.2017)
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.0d (26 Jan 2017) version.
@@ -192,7 +192,7 @@ AmiSSL 4.0 (7.2.2017)
   platforms using proper baserel support for using the amissl shared library
   in a multi-application environment.
 
-AmiSSL 3.7 (2.4.2006)
+## AmiSSL 3.7 (2.4.2006)
 
 - Fixed a problem in amisslmaster.library where init and cleanup routines
   might not get called a matching number of times.
@@ -204,26 +204,26 @@ AmiSSL 3.7 (2.4.2006)
 - The 68k version now uses modified SAS/C libinit code which calls
   CacheClearE() instead of CacheClearU() to improve performance.
 
-AmiSSL 3.6 (4.3.2006)
+## AmiSSL 3.6 (4.3.2006)
 
 - The close routine for amissl.library was cleaning up all currently hashed
   states, including those belonging to other openers of the library. This
   could lead to a crash when two programs were using AmiSSL (bug #2960).
 
-AmiSSL 3.5 (14.6.2005)
+## AmiSSL 3.5 (14.6.2005)
 
 - First v3 release, port of OpenSSL 0.9.7g.
 
-AmiSSL 2.2 (22.10.2002)
+## AmiSSL 2.2 (22.10.2002)
 
 - First v2 release.
 - Added amisslmaster.library and new API.
 
-AmiSSL 1.1 (31.7.2001)
+## AmiSSL 1.1 (31.7.2001)
 
 - Minor upgrade which fixes a bug in amissl.library.
 - Installation script included.
 
-AmiSSL 1.0 (31.8.1999)
+## AmiSSL 1.0 (31.8.1999)
 
 - Started this madness.
