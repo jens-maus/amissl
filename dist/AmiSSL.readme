@@ -144,3 +144,17 @@ Copyright (c) 2001-2022 Frank Wille. All Rights Reserved.
 
 OpenSSL BIGNUM 68020-68040 optimised routines
 Copyright (c) 2002 by Howard Chu <hyc@highlandsun.com>
+
+Authors
+-------
+AmiSSL is a collaborative effort with Amiga-specific code being
+contributed by the following people:
+
+- Andrija Antonijevic
+- Thore Böckelmann
+- Stefan Burstroem
+- Howard Chu
+- Jens Maus
+- Gunther Nikl
+- Oliver Roberts
+- Frank Wille

@@ -73,12 +73,12 @@ certificates in `AmiSSL:UserCerts` and private keys in `AmiSSL:Private`.
 
 ### The 'OpenSSL' command-line tool
 
-A port of the OpenSSL tool is also included and usually installed to AmiSSL:
-or C: during installation. It is a "command line tool for using the various
+A port of the OpenSSL tool is also included and usually installed to `AmiSSL:`
+or `C:` during installation. It is a "command line tool for using the various
 cryptography functions of OpenSSL's crypto library from the shell". The
 documentation for the OpenSSL tool is included in the archive and can also
 be reviewed [online](https://www.openssl.org/docs/man3.0/man1/openssl.html).
-A sample openssl.cnf file is also installed to AmiSSL:, if it doesn't already
+A sample openssl.cnf file is also installed to `AmiSSL:`, if it doesn't already
 exist, along with the CA.pl helper script, both of which aid the certificate
 generation features of the OpenSSL tool. The tsget.pl script is also included.
 
@@ -87,7 +87,7 @@ generation features of the OpenSSL tool. The tsget.pl script is also included.
 The AmiSSL SDK contains everything a developer needs to use OpenSSL in their
 applications, including C header files, Autodocs, autoopen link library,
 stub link library, examples and library interface description files. The first
-point of call being the README-SDK file which explains what needs to be done.
+point of call being the [README-SDK](dist/README-SDK) file which explains what needs to be done.
 
 ## Backwards Compatibility
 
@@ -106,7 +106,7 @@ compatible with AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ and MorphOS.
 
 ## Installation
 
-Latest release archive can be downloaded from the following URL:
+The latest release archive can be downloaded from the following URL:
 
   https://github.com/jens-maus/amissl/releases
 
