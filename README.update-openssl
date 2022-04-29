@@ -125,17 +125,13 @@ HowTo update the OpenSSL version in "openssl/":
    located in "include/openssl/". Due to some header file changes of newer versions
    amissl.h needs usually some tuning.
 
-7. Modify the top-level 'Makefile' and change the following sections:
+7. Modify the top-level 'Makefile' and change the following section:
 
      VERSION=5
-     VERSIONNAME=300
-     AMISSLREVISION=0
-     AMISSLMASTERREVISION=0
-     AMISSLDATE=27.2.2022
-     AMISSLMASTERDATE=27.2.2022
+     REVISION=1
+     VERSIONNAME=302
 
-   Modify VERSIONNAME to match the OpenSSL version. Also set AMISSLDATE and
-   AMISSLMASTERDATE to the release date of the OpenSSL version you just merged.
+   Modify VERSIONNAME to match the OpenSSL version.
 
 8. Modify the "src/amisslmaster_library.c" and "include/libraries/amisslmaster.h"
    files and have a look for the following type of sections in OpenAmiSSL():
