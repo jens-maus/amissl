@@ -4482,7 +4482,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME)
 
 #define RAND_add(___buf, ___num, ___randomness) \
-      LP3NR(0x1f8c, RAND_add , const void *, ___buf, a0, int, ___num, d0, double, ___randomness, d1,\
+      LP3NR(0x1f8c, RAND_add , const void *, ___buf, a0, int, ___num, d2, double, ___randomness, d0,\
       , AMISSL_BASE_NAME)
 
 #define RAND_load_file(___file, ___max_bytes) \

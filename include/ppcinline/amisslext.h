@@ -1086,7 +1086,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_log_cb(___ctx, ___cb) \
-      LP2(0x654, int, OSSL_CMP_CTX_set_log_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_log_cb_t, ___cb, d0,\
+      LP2(0x654, int, OSSL_CMP_CTX_set_log_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_log_cb_t, ___cb, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_print_errors(___ctx) \
@@ -1114,7 +1114,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_http_cb(___ctx, ___cb) \
-      LP2(0x67e, int, OSSL_CMP_CTX_set_http_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_HTTP_bio_cb_t, ___cb, d0,\
+      LP2(0x67e, int, OSSL_CMP_CTX_set_http_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_HTTP_bio_cb_t, ___cb, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_http_cb_arg(___ctx, ___arg) \
@@ -1126,7 +1126,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_transfer_cb(___ctx, ___cb) \
-      LP2(0x690, int, OSSL_CMP_CTX_set_transfer_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_transfer_cb_t, ___cb, d0,\
+      LP2(0x690, int, OSSL_CMP_CTX_set_transfer_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_transfer_cb_t, ___cb, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_transfer_cb_arg(___ctx, ___arg) \
@@ -1238,7 +1238,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_certConf_cb(___ctx, ___cb) \
-      LP2(0x738, int, OSSL_CMP_CTX_set_certConf_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_certConf_cb_t, ___cb, d0,\
+      LP2(0x738, int, OSSL_CMP_CTX_set_certConf_cb , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_certConf_cb_t, ___cb, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_set_certConf_cb_arg(___ctx, ___arg) \

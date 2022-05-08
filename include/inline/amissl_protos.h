@@ -3364,7 +3364,7 @@ int __RAND_pseudo_bytes(__reg("a6") struct Library * , __reg("a0") unsigned char
 void __RAND_seed(__reg("a6") struct Library * , __reg("a0") const void * buf , __reg("d0") int num ) = "\tjsr\t-8070(a6)";
 #define RAND_seed(buf, num) __RAND_seed(AmiSSLBase, (buf), (num))
 
-void __RAND_add(__reg("a6") struct Library * , __reg("a0") const void * buf , __reg("d2") int num , __reg("d0/d1") double randomness ) = "\texg\td1,d2\n\texg\td0,d1\n\t\tjsr\t-8076(a6)";
+void __RAND_add(__reg("a6") struct Library * , __reg("a0") const void * buf , __reg("d2") int num , __reg("d0/d1") double randomness ) = "\tjsr\t-8076(a6)";
 #define RAND_add(buf, num, randomness) __RAND_add(AmiSSLBase, (buf), (num), (randomness))
 
 int __RAND_load_file(__reg("a6") struct Library * , __reg("a0") const char * file , __reg("d0") long max_bytes ) = "\tjsr\t-8082(a6)";

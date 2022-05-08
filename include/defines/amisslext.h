@@ -1605,7 +1605,7 @@ typedef ULONG _sfdc_vararg;
 #define OSSL_CMP_CTX_set_log_cb(___ctx, ___cb) \
       AROS_LC2(int, OSSL_CMP_CTX_set_log_cb, \
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
- AROS_LCA(OSSL_CMP_log_cb_t, (___cb), D0), \
+ AROS_LCA(OSSL_CMP_log_cb_t, (___cb), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 270, Amisslext)
 
 #define OSSL_CMP_CTX_print_errors(___ctx) \
@@ -1646,7 +1646,7 @@ typedef ULONG _sfdc_vararg;
 #define OSSL_CMP_CTX_set_http_cb(___ctx, ___cb) \
       AROS_LC2(int, OSSL_CMP_CTX_set_http_cb, \
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
- AROS_LCA(OSSL_HTTP_bio_cb_t, (___cb), D0), \
+ AROS_LCA(OSSL_HTTP_bio_cb_t, (___cb), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 277, Amisslext)
 
 #define OSSL_CMP_CTX_set_http_cb_arg(___ctx, ___arg) \
@@ -1663,7 +1663,7 @@ typedef ULONG _sfdc_vararg;
 #define OSSL_CMP_CTX_set_transfer_cb(___ctx, ___cb) \
       AROS_LC2(int, OSSL_CMP_CTX_set_transfer_cb, \
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
- AROS_LCA(OSSL_CMP_transfer_cb_t, (___cb), D0), \
+ AROS_LCA(OSSL_CMP_transfer_cb_t, (___cb), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 280, Amisslext)
 
 #define OSSL_CMP_CTX_set_transfer_cb_arg(___ctx, ___arg) \
@@ -1831,7 +1831,7 @@ typedef ULONG _sfdc_vararg;
 #define OSSL_CMP_CTX_set_certConf_cb(___ctx, ___cb) \
       AROS_LC2(int, OSSL_CMP_CTX_set_certConf_cb, \
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
- AROS_LCA(OSSL_CMP_certConf_cb_t, (___cb), D0), \
+ AROS_LCA(OSSL_CMP_certConf_cb_t, (___cb), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 308, Amisslext)
 
 #define OSSL_CMP_CTX_set_certConf_cb_arg(___ctx, ___arg) \

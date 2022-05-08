@@ -812,7 +812,7 @@ int __OSSL_CMP_CTX_set_option(__reg("a6") struct Library * , __reg("a0") OSSL_CM
 int __OSSL_CMP_CTX_get_option(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx , __reg("d0") int opt ) = "\tjsr\t-1614(a6)";
 #define OSSL_CMP_CTX_get_option(ctx, opt) __OSSL_CMP_CTX_get_option(AmiSSLExtBase, (ctx), (opt))
 
-int __OSSL_CMP_CTX_set_log_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("d0") OSSL_CMP_log_cb_t cb ) = "\tjsr\t-1620(a6)";
+int __OSSL_CMP_CTX_set_log_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_CMP_log_cb_t cb ) = "\tjsr\t-1620(a6)";
 #define OSSL_CMP_CTX_set_log_cb(ctx, cb) __OSSL_CMP_CTX_set_log_cb(AmiSSLExtBase, (ctx), (cb))
 
 void __OSSL_CMP_CTX_print_errors(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx ) = "\tjsr\t-1626(a6)";
@@ -833,7 +833,7 @@ int __OSSL_CMP_CTX_set1_proxy(__reg("a6") struct Library * , __reg("a0") OSSL_CM
 int __OSSL_CMP_CTX_set1_no_proxy(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") const char * names ) = "\tjsr\t-1656(a6)";
 #define OSSL_CMP_CTX_set1_no_proxy(ctx, names) __OSSL_CMP_CTX_set1_no_proxy(AmiSSLExtBase, (ctx), (names))
 
-int __OSSL_CMP_CTX_set_http_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("d0") OSSL_HTTP_bio_cb_t cb ) = "\tjsr\t-1662(a6)";
+int __OSSL_CMP_CTX_set_http_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_HTTP_bio_cb_t cb ) = "\tjsr\t-1662(a6)";
 #define OSSL_CMP_CTX_set_http_cb(ctx, cb) __OSSL_CMP_CTX_set_http_cb(AmiSSLExtBase, (ctx), (cb))
 
 int __OSSL_CMP_CTX_set_http_cb_arg(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") void * arg ) = "\tjsr\t-1668(a6)";
@@ -842,7 +842,7 @@ int __OSSL_CMP_CTX_set_http_cb_arg(__reg("a6") struct Library * , __reg("a0") OS
 void * __OSSL_CMP_CTX_get_http_cb_arg(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx ) = "\tjsr\t-1674(a6)";
 #define OSSL_CMP_CTX_get_http_cb_arg(ctx) __OSSL_CMP_CTX_get_http_cb_arg(AmiSSLExtBase, (ctx))
 
-int __OSSL_CMP_CTX_set_transfer_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("d0") OSSL_CMP_transfer_cb_t cb ) = "\tjsr\t-1680(a6)";
+int __OSSL_CMP_CTX_set_transfer_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_CMP_transfer_cb_t cb ) = "\tjsr\t-1680(a6)";
 #define OSSL_CMP_CTX_set_transfer_cb(ctx, cb) __OSSL_CMP_CTX_set_transfer_cb(AmiSSLExtBase, (ctx), (cb))
 
 int __OSSL_CMP_CTX_set_transfer_cb_arg(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") void * arg ) = "\tjsr\t-1686(a6)";
@@ -926,7 +926,7 @@ int __OSSL_CMP_CTX_set1_p10CSR(__reg("a6") struct Library * , __reg("a0") OSSL_C
 int __OSSL_CMP_CTX_push0_genm_ITAV(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_CMP_ITAV * itav ) = "\tjsr\t-1842(a6)";
 #define OSSL_CMP_CTX_push0_genm_ITAV(ctx, itav) __OSSL_CMP_CTX_push0_genm_ITAV(AmiSSLExtBase, (ctx), (itav))
 
-int __OSSL_CMP_CTX_set_certConf_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("d0") OSSL_CMP_certConf_cb_t cb ) = "\tjsr\t-1848(a6)";
+int __OSSL_CMP_CTX_set_certConf_cb(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_CMP_certConf_cb_t cb ) = "\tjsr\t-1848(a6)";
 #define OSSL_CMP_CTX_set_certConf_cb(ctx, cb) __OSSL_CMP_CTX_set_certConf_cb(AmiSSLExtBase, (ctx), (cb))
 
 int __OSSL_CMP_CTX_set_certConf_cb_arg(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") void * arg ) = "\tjsr\t-1854(a6)";

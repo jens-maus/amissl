@@ -11215,8 +11215,8 @@ void LIB_RAND_add(struct Library * _base, const void * ___buf, int ___num, doubl
 void LIBSTUB_RAND_add(void)
 {
   const void * ___buf = (const void *)REG_A0;
-  int ___num = (int)REG_D0;
-  double ___randomness = (double)REG_D1;
+  int ___num = (int)REG_D2;
+  double ___randomness = (double)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_RAND_add(_base, ___buf, ___num, ___randomness);
 }

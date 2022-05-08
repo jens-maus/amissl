@@ -1626,10 +1626,10 @@
  #pragma amicall(AmiSSLExtBase, 0x64e, OSSL_CMP_CTX_get_option(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_log_cb 654 0802
+ #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_log_cb 654 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0x654, OSSL_CMP_CTX_set_log_cb(a0,d0))
+ #pragma amicall(AmiSSLExtBase, 0x654, OSSL_CMP_CTX_set_log_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_print_errors 65a 801
@@ -1668,10 +1668,10 @@
  #pragma amicall(AmiSSLExtBase, 0x678, OSSL_CMP_CTX_set1_no_proxy(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_http_cb 67e 0802
+ #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_http_cb 67e 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0x67e, OSSL_CMP_CTX_set_http_cb(a0,d0))
+ #pragma amicall(AmiSSLExtBase, 0x67e, OSSL_CMP_CTX_set_http_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_http_cb_arg 684 9802
@@ -1686,10 +1686,10 @@
  #pragma amicall(AmiSSLExtBase, 0x68a, OSSL_CMP_CTX_get_http_cb_arg(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_transfer_cb 690 0802
+ #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_transfer_cb 690 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0x690, OSSL_CMP_CTX_set_transfer_cb(a0,d0))
+ #pragma amicall(AmiSSLExtBase, 0x690, OSSL_CMP_CTX_set_transfer_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_transfer_cb_arg 696 9802
@@ -1854,10 +1854,10 @@
  #pragma amicall(AmiSSLExtBase, 0x732, OSSL_CMP_CTX_push0_genm_ITAV(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_certConf_cb 738 0802
+ #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_certConf_cb 738 9802
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLExtBase, 0x738, OSSL_CMP_CTX_set_certConf_cb(a0,d0))
+ #pragma amicall(AmiSSLExtBase, 0x738, OSSL_CMP_CTX_set_certConf_cb(a0,a1))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLExtBase OSSL_CMP_CTX_set_certConf_cb_arg 73e 9802

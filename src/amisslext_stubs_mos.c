@@ -2661,7 +2661,7 @@ int LIB_OSSL_CMP_CTX_set_log_cb(struct Library * _base, OSSL_CMP_CTX * ___ctx, O
 int LIBSTUB_OSSL_CMP_CTX_set_log_cb(void)
 {
   OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
-  OSSL_CMP_log_cb_t ___cb = (OSSL_CMP_log_cb_t)REG_D0;
+  OSSL_CMP_log_cb_t ___cb = (OSSL_CMP_log_cb_t)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_CTX_set_log_cb(_base, ___ctx, ___cb);
 }
@@ -2730,7 +2730,7 @@ int LIB_OSSL_CMP_CTX_set_http_cb(struct Library * _base, OSSL_CMP_CTX * ___ctx, 
 int LIBSTUB_OSSL_CMP_CTX_set_http_cb(void)
 {
   OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
-  OSSL_HTTP_bio_cb_t ___cb = (OSSL_HTTP_bio_cb_t)REG_D0;
+  OSSL_HTTP_bio_cb_t ___cb = (OSSL_HTTP_bio_cb_t)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_CTX_set_http_cb(_base, ___ctx, ___cb);
 }
@@ -2759,7 +2759,7 @@ int LIB_OSSL_CMP_CTX_set_transfer_cb(struct Library * _base, OSSL_CMP_CTX * ___c
 int LIBSTUB_OSSL_CMP_CTX_set_transfer_cb(void)
 {
   OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
-  OSSL_CMP_transfer_cb_t ___cb = (OSSL_CMP_transfer_cb_t)REG_D0;
+  OSSL_CMP_transfer_cb_t ___cb = (OSSL_CMP_transfer_cb_t)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_CTX_set_transfer_cb(_base, ___ctx, ___cb);
 }
@@ -3039,7 +3039,7 @@ int LIB_OSSL_CMP_CTX_set_certConf_cb(struct Library * _base, OSSL_CMP_CTX * ___c
 int LIBSTUB_OSSL_CMP_CTX_set_certConf_cb(void)
 {
   OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
-  OSSL_CMP_certConf_cb_t ___cb = (OSSL_CMP_certConf_cb_t)REG_D0;
+  OSSL_CMP_certConf_cb_t ___cb = (OSSL_CMP_certConf_cb_t)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_CTX_set_certConf_cb(_base, ___ctx, ___cb);
 }

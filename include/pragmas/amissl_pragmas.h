@@ -6722,10 +6722,10 @@
  #pragma amicall(AmiSSLBase, 0x1f86, RAND_seed(a0,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
- #pragma libcall AmiSSLBase RAND_add 1f8c 10803
+ #pragma libcall AmiSSLBase RAND_add 1f8c 02803
 #endif /* __CLIB_PRAGMA_LIBCALL */
 #ifdef __CLIB_PRAGMA_AMICALL
- #pragma amicall(AmiSSLBase, 0x1f8c, RAND_add(a0,d0,d1))
+ #pragma amicall(AmiSSLBase, 0x1f8c, RAND_add(a0,d2,d0))
 #endif /* __CLIB_PRAGMA_AMICALL */
 #ifdef __CLIB_PRAGMA_LIBCALL
  #pragma libcall AmiSSLBase RAND_load_file 1f92 0802

@@ -5424,8 +5424,8 @@
     </method>
     <method name="RAND_add" result="void">
       <arg name="buf" type="const void *" m68kreg="a0"/>
-      <arg name="num" type="int" m68kreg="d0"/>
-      <arg name="randomness" type="double" m68kreg="d1-d2"/>
+      <arg name="num" type="int" m68kreg="d2"/>
+      <arg name="randomness" type="double" m68kreg="d0-d1"/>
     </method>
     <method name="RAND_load_file" result="int">
       <arg name="file" type="const char *" m68kreg="a0"/>
@@ -22637,7 +22637,7 @@
     </method>
     <method name="OSSL_PARAM_set_double" result="int">
       <arg name="p" type="OSSL_PARAM *" m68kreg="a0"/>
-      <arg name="val" type="double" m68kreg="d0"/>
+      <arg name="val" type="double" m68kreg="d0-d1"/>
     </method>
     <method name="OSSL_PARAM_get_BN" result="int">
       <arg name="p" type="const OSSL_PARAM *" m68kreg="a0"/>
@@ -23215,7 +23215,7 @@
     </method>
     <method name="OSSL_CMP_CTX_set_log_cb" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="OSSL_CMP_log_cb_t" m68kreg="d0"/>
+      <arg name="cb" type="OSSL_CMP_log_cb_t" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_CTX_print_errors" result="void">
       <arg name="ctx" type="const OSSL_CMP_CTX *" m68kreg="a0"/>
@@ -23242,7 +23242,7 @@
     </method>
     <method name="OSSL_CMP_CTX_set_http_cb" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="OSSL_HTTP_bio_cb_t" m68kreg="d0"/>
+      <arg name="cb" type="OSSL_HTTP_bio_cb_t" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_CTX_set_http_cb_arg" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
@@ -23253,7 +23253,7 @@
     </method>
     <method name="OSSL_CMP_CTX_set_transfer_cb" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="OSSL_CMP_transfer_cb_t" m68kreg="d0"/>
+      <arg name="cb" type="OSSL_CMP_transfer_cb_t" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_CTX_set_transfer_cb_arg" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
@@ -23365,7 +23365,7 @@
     </method>
     <method name="OSSL_CMP_CTX_set_certConf_cb" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
-      <arg name="cb" type="OSSL_CMP_certConf_cb_t" m68kreg="d0"/>
+      <arg name="cb" type="OSSL_CMP_certConf_cb_t" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_CTX_set_certConf_cb_arg" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
@@ -24331,7 +24331,7 @@
     <method name="OSSL_PARAM_BLD_push_double" result="int">
       <arg name="bld" type="OSSL_PARAM_BLD *" m68kreg="a0"/>
       <arg name="key" type="const char *" m68kreg="a1"/>
-      <arg name="val" type="double" m68kreg="d0"/>
+      <arg name="val" type="double" m68kreg="d0-d1"/>
     </method>
     <method name="OSSL_PARAM_BLD_push_BN" result="int">
       <arg name="bld" type="OSSL_PARAM_BLD *" m68kreg="a0"/>

@@ -6794,8 +6794,8 @@ typedef ULONG _sfdc_vararg;
 #define RAND_add(___buf, ___num, ___randomness) \
       AROS_LC3(void, RAND_add, \
  AROS_LCA(const void *, (___buf), A0), \
- AROS_LCA(int, (___num), D0), \
- AROS_LCA(double, (___randomness), D1), \
+ AROS_LCA(int, (___num), D2), \
+ AROS_LCA(double, (___randomness), D0), \
      struct Library *, AMISSL_BASE_NAME, 1346, Amissl)
 
 #define RAND_load_file(___file, ___max_bytes) \
