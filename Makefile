@@ -164,19 +164,20 @@ VPATH     = $(BUILD_D)
 GCCVER    = 4
 
 # Common compiler/linker flags
-WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachable-code
-OPTFLAGS = -O3 -fomit-frame-pointer
-DEBUG    = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
-DEBUGSYM = -g -gstabs
-INCLUDE  = -I./include -I$(BUILD_D) -I$(BUILD_D)/openssl/include -I./include/internal
-COMCFLAGS= $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
-APPCFLAGS= $(COMCFLAGS)
-CFLAGS   = $(COMCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
-           -DVERSIONNAME=$(VERSIONNAME) -DLIBCPU=$(OS)
-LDFLAGS  = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
-LIBSSL   = $(BUILD_D)/openssl/libssl.a
-LIBCRYPTO= $(BUILD_D)/openssl/libcrypto.a
-LIBCMT   = $(BUILD_D)/libcmt/libcmt.a
+WARN       = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachable-code
+OPTFLAGS   = -O3 -fomit-frame-pointer
+DEBUG      = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
+DEBUGSYM   = -g -gstabs
+INCLUDE    = -I./include -I$(BUILD_D) -I$(BUILD_D)/openssl/include -I./include/internal
+COMCFLAGS  = $(CPU) $(WARN) $(OPTFLAGS) $(DEBUG) $(INCLUDE)
+APPCFLAGS  = $(COMCFLAGS)
+STUBCFLAGS = $(COMCFLAGS) -DAMISSL_STUBLIB
+CFLAGS     = $(COMCFLAGS) $(BASEREL) -DAMISSL -DAMISSL_COMPILE -DBASEREL \
+           -DVERSIONNAME=$(VERSIONNAME) -DLIBCPU=$(OS) -Wno-deprecated-declarations
+LDFLAGS    = $(CPU) $(BASEREL) $(DEBUGSYM) -nostdlib
+LIBSSL     = $(BUILD_D)/openssl/libssl.a
+LIBCRYPTO  = $(BUILD_D)/openssl/libcrypto.a
+LIBCMT     = $(BUILD_D)/libcmt/libcmt.a
 
 # different options per target OS
 ifeq ($(OS), os4)
@@ -203,6 +204,8 @@ ifeq ($(OS), os4)
   APPCFLAGS += -std=c99 -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames -specs=tools/gcc-os4.specs
   AINLCFLAGS = $(COMCFLAGS) -std=c99 -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
   CFLAGS    += -std=c99 -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
+  STUBCFLAGS+= -std=c99 -mcrt=$(CRT) -DINLINE4_AMISSL_H -Wno-deprecated-declarations
+  STUBINC    = -include $(BUILD_D)/precompiled.h
   LDFLAGS   += -std=c99 -mcrt=$(CRT) -specs=tools/gcc-os4.specs
   LDLIBS    += -lgcc
   BASEREL   = -mbaserel
@@ -217,6 +220,8 @@ ifeq ($(OS), os4)
   EXTRAMASTEROBJS = $(BUILD_D)/amisslmaster_m68k.o
 
   EXTRALINKLIBS = $(BUILD_D)/libamisslauto_newlib.a
+
+  PRECOMPILED_H = $(BUILD_D)/precompiled.h.gch
 
   GENSTUBS = idltool --linklib --output $(BUILD_D) include/xml/amissl.xml
 
@@ -238,6 +243,7 @@ ifeq ($(OS), os3-68020)
   CPU       = -m68020-40 -msoft-float
   APPCFLAGS += -mcrt=clib2 -I./include/netinclude -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  STUBCFLAGS+= -mcrt=clib2 -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
   LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
   BASEREL   = -resident32
@@ -269,6 +275,7 @@ ifeq ($(OS), os3-68060)
   CPU       = -m68060 -msoft-float
   APPCFLAGS += -mcrt=clib2 -I./include/netinclude -D__amigaos3__
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
+  STUBCFLAGS+= -mcrt=clib2 -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
   LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
   BASEREL   = -resident32
@@ -536,9 +543,13 @@ $(BUILD_D)/amissl_files/main_stubs: include/xml/amissl.xml
 STUBSRCS = $(sort $(wildcard $(BUILD_D)/amissl_files/main_stubs/*.c))
 STUBOBJS = $(patsubst %.c,%.o,$(STUBSRCS))
 
-$(BUILD_D)/amissl_files/main_stubs/%.o: $(BUILD_D)/amissl_files/main_stubs/%.c
+ $(PRECOMPILED_H): include/proto/amissl.h
 	@echo "  CC $<"
-	@$(CC) $(APPCFLAGS) $(NOBASEREL) -c $< -o $@ -DAMISSL_STUBLIB -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -DINLINE4_AMISSL_H
+	$(CC) $(STUBCFLAGS) -c $< -o $@
+
+$(BUILD_D)/amissl_files/main_stubs/%.o: $(BUILD_D)/amissl_files/main_stubs/%.c $(PRECOMPILED_H)
+	@echo "  CC $<"
+	@$(CC) $(STUBCFLAGS) $(STUBINC) -c $< -o $@
 
 .PHONY: stublib
 stublib: $(STUBOBJS)
@@ -609,7 +620,7 @@ $(BUILD_D)/amissl_library.o: $(SRC_D)/amissl_library.c
 
 $(BUILD_D)/amissl_glue.o: $(SRC_D)/amissl_glue.c
 	@echo "  CC $<"
-	@$(CC) $(CFLAGS) -I./openssl/crypto/include -I./openssl -I./openssl/include -Wno-deprecated-declarations $(BRELLIB) -c $< -o $@
+	@$(CC) $(CFLAGS) -I./openssl/crypto/include -I./openssl -I./openssl/include $(BRELLIB) -c $< -o $@
 
 # cleanup target
 .PHONY: clean
