@@ -32,11 +32,11 @@ struct AmiSSLMasterIFace
 	APICALL uint32 (*Release)(struct AmiSSLMasterIFace *Self);
 	APTR Expunge_UNIMPLEMENTED;
 	APTR Clone_UNIMPLEMENTED;
-	APICALL LONG (*InitAmiSSLMaster)(struct AmiSSLMasterIFace *Self, LONG APIVersion, LONG UsesOpenSSLStructs);
-	APICALL struct Library * (*OpenAmiSSL)(struct AmiSSLMasterIFace *Self);
+	DEPRECATED APICALL LONG (*InitAmiSSLMaster)(struct AmiSSLMasterIFace *Self, LONG APIVersion, LONG UsesOpenSSLStructs);
+	DEPRECATED APICALL struct Library * (*OpenAmiSSL)(struct AmiSSLMasterIFace *Self);
 	APICALL void (*CloseAmiSSL)(struct AmiSSLMasterIFace *Self);
-	APICALL struct Library * (*OpenAmiSSLCipher)(struct AmiSSLMasterIFace *Self, LONG Cipher);
-	APICALL void (*CloseAmiSSLCipher)(struct AmiSSLMasterIFace *Self, struct Library * CipherBase);
+	DEPRECATED APICALL struct Library * (*OpenAmiSSLCipher)(struct AmiSSLMasterIFace *Self, LONG Cipher);
+	DEPRECATED APICALL void (*CloseAmiSSLCipher)(struct AmiSSLMasterIFace *Self, struct Library * CipherBase);
 	APICALL LONG (*OpenAmiSSLTagList)(struct AmiSSLMasterIFace *Self, LONG APIVersion, struct TagItem * tagList);
 	APICALL LONG (*OpenAmiSSLTags)(struct AmiSSLMasterIFace *Self, LONG APIVersion, ...);
 };

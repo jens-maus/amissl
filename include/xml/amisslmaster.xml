@@ -32,18 +32,18 @@
 		<method name="Release" result="uint32"/>
 		<method name="Expunge" result="void" status="unimplemented"/>
 		<method name="Clone" result="struct Interface *" status="unimplemented"/>
-		<method name="InitAmiSSLMaster" result="LONG">
+		<method name="InitAmiSSLMaster" result="LONG" lifecycle="deprecated">
 			<arg name="APIVersion" type="LONG" m68kreg="d0"/>
 			<arg name="UsesOpenSSLStructs" type="LONG" m68kreg="d1"/>
 		</method>
-		<method name="OpenAmiSSL" result="struct Library *">
+		<method name="OpenAmiSSL" result="struct Library *" lifecycle="deprecated">
 		</method>
 		<method name="CloseAmiSSL" result="void">
 		</method>
-		<method name="OpenAmiSSLCipher" result="struct Library *">
+		<method name="OpenAmiSSLCipher" result="struct Library *" lifecycle="deprecated">
 			<arg name="Cipher" type="LONG" m68kreg="d0"/>
 		</method>
-		<method name="CloseAmiSSLCipher" result="void">
+		<method name="CloseAmiSSLCipher" result="void" lifecycle="deprecated">
 			<arg name="CipherBase" type="struct Library *" m68kreg="a0"/>
 		</method>
 		<method name="OpenAmiSSLTagList" result="LONG">
