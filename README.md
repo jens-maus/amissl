@@ -1,4 +1,4 @@
-# AmiSSL library – OpenSSL for Amiga systems
+# ![AmiSSL library – OpenSSL for Amiga systems](https://www.ibrowse-dev.net/images/amissl.png)
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/amissl/latest/total.svg)](https://github.com/jens-maus/amissl/releases/latest)
