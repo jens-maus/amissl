@@ -103,7 +103,7 @@ BOOL GetURL(char *url, char *userinfo, SSL_CTX *sslctx)
 	BIO *bio, *bio_err;
 
 	/* Add our own HTTP headers */
-	X509V3_add_value("User-Agent", "AmiSSL/5.0", &headers);
+	X509V3_add_value("User-Agent", "AmiSSL/5.1", &headers);
 	X509V3_add_value("Referer", "GetURL()", &headers);
 	if (userinfo)
 	{
