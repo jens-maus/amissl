@@ -37,7 +37,7 @@ IF[{- !$disabled{tests} -}]
           sanitytest rsa_complex exdatatest bntest \
           ecstresstest gmdifftest pbelutest \
           mdc2test \
-          exptest pbetest \
+          exptest pbetest localetest evp_pkey_ctx_new_from_name\
           evp_test evp_extra_test2 \
           evp_fetch_prov_test ossl_store_test \
           v3nametest v3ext \
@@ -133,6 +133,14 @@ IF[{- !$disabled{tests} -}]
   SOURCE[exptest]=exptest.c
   INCLUDE[exptest]=../include ../apps/include
   DEPEND[exptest]=../libcrypto libtestutil.a
+
+  SOURCE[localetest]=localetest.c
+  INCLUDE[localetest]=../include ../apps/include
+  DEPEND[localetest]=../libcrypto libtestutil.a
+
+  SOURCE[evp_pkey_ctx_new_from_name]=evp_pkey_ctx_new_from_name.c
+  INCLUDE[evp_pkey_ctx_new_from_name]=../include ../apps/include
+  DEPEND[evp_pkey_ctx_new_from_name]=../libcrypto
 
   SOURCE[pbetest]=pbetest.c
   INCLUDE[pbetest]=../include ../apps/include
