@@ -1,10 +1,11 @@
 ## AmiSSL 5.1 (x.x.2022)
 
-- Switched to OpenSSL 3.0 and updated backend to full compatibility to
-  latest OpenSSL 3.0.2 (15.3.2022) version, which brings new features,
+- Switched to OpenSSL 3.0 and updated backend to full compatibility with
+  the latest OpenSSL 3.0.2 (15.3.2022) version, which brings new features,
   such as a built-in HTTP(S) client, along with security and bug fixes.
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 26.4.2022.
+- Split AmiSSL release archive into smaller OS specific and SDK archives.
 - OpenSSL tool now has a proper $VER string, with the version number
   matching the AmiSSL release version number.
 - Fixed OpenSSL UI function m68k/ppc crosscalls, reinstating code from
@@ -12,11 +13,12 @@
 - Added new streamlined OpenAmiSSLTags/TagList() function to
   amisslmaster.library which simplifies the opening of AmiSSL.
 - Added simple httpget example code which shows how applications can use
-  the new built-in HTTP client.
+  the new built-in HTTP(S) client.
 - Added full autodocs for all the Amiga specific interface functions.
 - Improved and structured the developer README-SDK file.
 - Added OpenSSL stub link libraries for OS3 (GCC) and OS4 (GCC & VBCC).
 - AmiSSL and OpenSSL switched to the Apache License, Version 2.0.
+- We have a new domain name amissl.org.
 
 ## AmiSSL 4.12 (11.2.2022)
 

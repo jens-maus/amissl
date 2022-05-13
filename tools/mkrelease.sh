@@ -42,6 +42,8 @@ mkdir -p "release/AmiSSL/Developer/xml"
 mkdir -p "release/AmiSSL/Doc"
 mkdir -p "release/AmiSSL/Libs"
 
+releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
+releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
 versionname=`grep ^VERSIONNAME= Makefile | awk -F= '{ print $2 }'`
 
 #OS="os3 os4 mos aros-i386 aros-ppc aros-x86_64"
@@ -83,26 +85,30 @@ cp -a dist/AmiSSL.info "release/"
 cp -a dist/AutoInstall "release/"
 cp -a dist/Install-AmiSSL* "release/AmiSSL/"
 cp -a dist/*.doc.info "release/AmiSSL/Doc/"
-cp -a dist/AmiSSL.readme "release/AmiSSL/Doc/AmiSSL.doc"
-sed -E 's/^#+\s//g' CHANGES.md > "release/AmiSSL/Doc/ChangeLog"
+sed -E  "s/\{version\}/$releasever.$releaserev/" dist/AmiSSL.readme > release/AmiSSL/Doc/AmiSSL.doc
+sed -Ei 's/\{repsuffix\}//' release/AmiSSL/Doc/AmiSSL.doc
+sed -Ei 's/\{requires\}/AmigaOS 4.0\/PPC, AmigaOS 3.0+\/68020+/' release/AmiSSL/Doc/AmiSSL.doc
+sed -Ei 's/\{arch\}/ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0.0/' release/AmiSSL/Doc/AmiSSL.doc
+sed -E  's/^#+\s//g' CHANGES.md > "release/AmiSSL/Doc/ChangeLog"
 cp -a dist/ChangeLog.info "release/AmiSSL/Doc/"
 cp -a dist/Doc.info "release/AmiSSL/"
 cp -a dist/Developer.info "release/AmiSSL/"
 cp -a certs/*.? "release/AmiSSL/Certs/"
-cp -a dist/README-SDK "release/AmiSSL/Developer/"
-cp -a dist/*.doc "release/AmiSSL/Developer/Autodocs/"
-cp -a test/http*.c "release/AmiSSL/Developer/Examples/"
-cp -a include/fd/amissl* "release/AmiSSL/Developer/fd/"
-cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
-cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
-cp -a src/autoinit_amissl_main.c "release/AmiSSL/Developer/lib/"
 cp -a openssl/apps/openssl.cnf "release/AmiSSL/C/"
 cp -a build_os4/openssl/apps/*.pl "release/AmiSSL/C/"
 
 # create new OpenSSL.doc
+echo "  MK OpenSSL.doc"
 sh tools/openssldoc.sh > release/AmiSSL/Doc/OpenSSL.doc
 
 # copy SDK relevant files
+cp -a dist/README-SDK "release/AmiSSL/Developer/"
+cp -a dist/*.doc "release/AmiSSL/Developer/Autodocs/"
+cp -a test/http*.c "release/AmiSSL/Developer/Examples/"
+cp -a src/autoinit_amissl_main.c "release/AmiSSL/Developer/lib/"
+cp -a include/fd/amissl* "release/AmiSSL/Developer/fd/"
+cp -a include/sfd/amissl* "release/AmiSSL/Developer/sfd/"
+cp -a include/xml/amissl* "release/AmiSSL/Developer/xml/"
 cp -a include/amissl "release/AmiSSL/Developer/include/"
 cp -a include/openssl "release/AmiSSL/Developer/include/"
 for incdir in clib defines inline inline4 interfaces libraries ppcinline pragmas proto; do
@@ -119,13 +125,40 @@ mkdir -p "release/AmiSSL/Developer/lib/AmigaOS4/newlib"
 mv release/AmiSSL/Developer/lib/AmigaOS4/libamisslauto.a "release/AmiSSL/Developer/lib/AmigaOS4/clib2/"
 cp -a build_os4/libamisslauto_newlib.a "release/AmiSSL/Developer/lib/AmigaOS4/newlib/libamisslauto.a"
 
-releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
-releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
-
-echo "  MK AmiSSL-$releasever.$releaserev.lha"
 cd release
-rm -f ../AmiSSL-$releasever.$releaserev.lha
-lha -ao5q21 ../AmiSSL-$releasever.$releaserev.lha *
-(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev.lha >AmiSSL-$releasever.$releaserev.lha.sha256)
-cp ../dist/AmiSSL.readme ../AmiSSL-$releasever.$releaserev.readme
+
+#echo "  MK AmiSSL-$releasever.$releaserev.lha"
+#rm -f ../AmiSSL-$releasever.$releaserev.lha
+#lha a -o5q21 ../AmiSSL-$releasever.$releaserev.lha *
+#(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev.lha >AmiSSL-$releasever.$releaserev.lha.sha256)
+#cp -a AmiSSL/Doc/AmiSSL.doc ../AmiSSL-$releasever.$releaserev.readme
+
+echo "  MK AmiSSL-$releasever.$releaserev-OS3.lha"
+rm -f ../AmiSSL-$releasever.$releaserev-OS3.lha
+lha a -o5q21 -x=*Developer* -x=*AmigaOS4* ../AmiSSL-$releasever.$releaserev-OS3.lha AmiSSL AmiSSL.info
+(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev-OS3.lha >AmiSSL-$releasever.$releaserev-OS3.lha.sha256)
+sed -E  "s/\{version\}/$releasever.$releaserev/" ../dist/AmiSSL.readme > ../AmiSSL-$releasever.$releaserev-OS3.readme
+sed -Ei 's/\{repsuffix\}/-OS3/' ../AmiSSL-$releasever.$releaserev-OS3.readme
+sed -Ei 's/\{requires\}/AmigaOS 3.0+\/68020+/' ../AmiSSL-$releasever.$releaserev-OS3.readme
+sed -Ei 's/\{arch\}/m68k-amigaos >= 3.0.0/' ../AmiSSL-$releasever.$releaserev-OS3.readme
+
+echo "  MK AmiSSL-$releasever.$releaserev-OS4.lha"
+rm -f ../AmiSSL-$releasever.$releaserev-OS4.lha
+lha a -o5q21 -x=*Developer* -x=*AmigaOS3* ../AmiSSL-$releasever.$releaserev-OS4.lha *
+(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev-OS4.lha >AmiSSL-$releasever.$releaserev-OS4.lha.sha256)
+sed -E  "s/\{version\}/$releasever.$releaserev/" ../dist/AmiSSL.readme > ../AmiSSL-$releasever.$releaserev-OS4.readme
+sed -Ei 's/\{repsuffix\}/-OS4/' ../AmiSSL-$releasever.$releaserev-OS4.readme
+sed -Ei 's/\{requires\}/AmigaOS 4.0\/PPC/' ../AmiSSL-$releasever.$releaserev-OS4.readme
+sed -Ei 's/\{arch\}/ppc-amigaos >= 4.0.5/' ../AmiSSL-$releasever.$releaserev-OS4.readme
+
+echo "  MK AmiSSL-$releasever.$releaserev-SDK.lha"
+rm -f ../AmiSSL-$releasever.$releaserev-SDK.lha
+lha a -o5q21 ../AmiSSL-$releasever.$releaserev-SDK.lha AmiSSL/Developer* AmiSSL/Doc/AmiSSL.doc* AmiSSL.info
+(cd ../ ; sha256sum AmiSSL-$releasever.$releaserev-SDK.lha >AmiSSL-$releasever.$releaserev-SDK.lha.sha256)
+sed -E  "s/\{version\}/$releasever.$releaserev/" ../dist/AmiSSL.readme > ../AmiSSL-$releasever.$releaserev-SDK.readme
+sed -Ei 's/^(Short:.*)/\1 SDK/' ../AmiSSL-$releasever.$releaserev-SDK.readme
+sed -Ei 's/\{repsuffix\}/-SDK/' ../AmiSSL-$releasever.$releaserev-SDK.readme
+sed -Ei '/^Requires:.*/d' ../AmiSSL-$releasever.$releaserev-SDK.readme
+sed -Ei 's/\{arch\}/ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0.0/' ../AmiSSL-$releasever.$releaserev-SDK.readme
+
 cd ..

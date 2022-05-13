@@ -2,11 +2,11 @@ Short:        OpenSSL as an Amiga shared library
 Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@amissl.org>
 Type:         util/libs
-Version:      5.1
-Replaces:     util/libs/AmiSSL-5.*
-Requires:     AmigaOS 4.0/PPC, AmigaOS 3.0+/68020+
-Architecture: ppc-amigaos >= 4.0.5; m68k-amigaos >= 3.0
-URL:          https://github.com/jens-maus/amissl
+Version:      {version}
+Replaces:     util/libs/AmiSSL-5.*{repsuffix}.lha
+Requires:     {requires}
+Architecture: {arch}
+URL:          https://www.amissl.org/github
 
 The AmiSSL project is a collaborative effort to develop a port of OpenSSL
 in a shared library for Amiga-based systems (AmigaOS, MorphOS, AROS, etc).
