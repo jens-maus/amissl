@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -47,6 +47,7 @@
 #  define EC_R_DECODE_ERROR                                142
 #  define EC_R_DISCRIMINANT_IS_ZERO                        118
 #  define EC_R_EC_GROUP_NEW_BY_NAME_FAILURE                119
+#  define EC_R_EXPLICIT_PARAMS_NOT_SUPPORTED               127
 #  define EC_R_FAILED_MAKING_PUBLIC_KEY                    166
 #  define EC_R_FIELD_TOO_LARGE                             143
 #  define EC_R_GF2M_NOT_SUPPORTED                          147

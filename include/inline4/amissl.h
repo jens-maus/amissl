@@ -5857,5 +5857,7 @@
 #define ASN1_TIME_print_ex(bp, tm, flags) IAmiSSL->ASN1_TIME_print_ex((bp), (tm), (flags))
 #define EVP_PKEY_get0_provider(key) IAmiSSL->EVP_PKEY_get0_provider((key))
 #define EVP_PKEY_CTX_get0_provider(ctx) IAmiSSL->EVP_PKEY_CTX_get0_provider((ctx))
+#define OPENSSL_strcasecmp(s1, s2) IAmiSSL->OPENSSL_strcasecmp((s1), (s2))
+#define OPENSSL_strncasecmp(s1, s2, n) IAmiSSL->OPENSSL_strncasecmp((s1), (s2), (n))
 
 #endif /* INLINE4_AMISSL_H */

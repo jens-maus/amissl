@@ -40641,6 +40641,20 @@ const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, UNUSED _
 
 // ---
 
+int SAVEDS ASM LIB_OPENSSL_strcasecmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2))
+{
+	return OPENSSL_strcasecmp(s1, s2);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2), REG(d0, size_t n))
+{
+	return OPENSSL_strncasecmp(s1, s2, n);
+}
+
+// ---
+
 
 /***************************************************************************/
 

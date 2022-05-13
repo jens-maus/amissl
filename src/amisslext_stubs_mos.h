@@ -965,6 +965,8 @@ LIBSTUB(ASN1_item_d2i_ex, ASN1_VALUE *);
 LIBSTUB(ASN1_TIME_print_ex, int);
 LIBSTUB(EVP_PKEY_get0_provider, const OSSL_PROVIDER *);
 LIBSTUB(EVP_PKEY_CTX_get0_provider, const OSSL_PROVIDER *);
+LIBSTUB(OPENSSL_strcasecmp, int);
+LIBSTUB(OPENSSL_strncasecmp, int);
 
 #ifdef __cplusplus
 }

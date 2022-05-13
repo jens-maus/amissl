@@ -14768,6 +14768,37 @@ STATIC CONST struct EmuTrap stub_ext_EVP_PKEY_CTX_get0_provider = { TRAPINST, TR
 
 // ---
 
+STATIC int stub_ext_OPENSSL_strcasecmp_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->OPENSSL_strcasecmp(
+		(const char *)regarray[REG68K_A0/4],
+		(const char *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_OPENSSL_strcasecmp = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OPENSSL_strcasecmp_PPC };
+
+// ---
+
+STATIC int stub_ext_OPENSSL_strncasecmp_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->OPENSSL_strncasecmp(
+		(const char *)regarray[REG68K_A0/4],
+		(const char *)regarray[REG68K_A1/4],
+		(size_t)regarray[REG68K_D0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_OPENSSL_strncasecmp = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OPENSSL_strncasecmp_PPC };
+
+// ---
+
 CONST CONST_APTR ext_VecTable68K[] =
 {
 	NULL,
@@ -15722,6 +15753,8 @@ CONST CONST_APTR ext_VecTable68K[] =
 	&stub_ext_ASN1_TIME_print_ex,
 	&stub_ext_EVP_PKEY_get0_provider,
 	&stub_ext_EVP_PKEY_CTX_get0_provider,
+	&stub_ext_OPENSSL_strcasecmp,
+	&stub_ext_OPENSSL_strncasecmp,
 	(CONST_APTR)-1
 };
 

@@ -958,4 +958,6 @@ ASN1_VALUE * ASN1_item_d2i_ex(ASN1_VALUE ** val, const unsigned char ** in, long
 int ASN1_TIME_print_ex(BIO * bp, const ASN1_TIME * tm, unsigned long flags) (a0,a1,d0)
 const OSSL_PROVIDER * EVP_PKEY_get0_provider(const EVP_PKEY * key) (a0)
 const OSSL_PROVIDER * EVP_PKEY_CTX_get0_provider(const EVP_PKEY_CTX * ctx) (a0)
+int OPENSSL_strcasecmp(const char * s1, const char * s2) (a0,a1)
+int OPENSSL_strncasecmp(const char * s1, const char * s2, size_t n) (a0,a1,d0)
 ==end

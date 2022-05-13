@@ -1,7 +1,7 @@
 ## AmiSSL 5.1 (x.x.2022)
 
 - Switched to OpenSSL 3.0 and updated backend to full compatibility with
-  the latest OpenSSL 3.0.2 (15.3.2022) version, which brings new features,
+  the latest OpenSSL 3.0.3 (3.5.2022) version, which brings new features,
   such as a built-in HTTP(S) client, along with security and bug fixes.
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 26.4.2022.

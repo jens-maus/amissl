@@ -6215,4 +6215,17 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_PKEY_CTX *, (___ctx), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 952, Amisslext)
 
+#define OPENSSL_strcasecmp(___s1, ___s2) \
+      AROS_LC2(int, OPENSSL_strcasecmp, \
+ AROS_LCA(const char *, (___s1), A0), \
+ AROS_LCA(const char *, (___s2), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 953, Amisslext)
+
+#define OPENSSL_strncasecmp(___s1, ___s2, ___n) \
+      AROS_LC3(int, OPENSSL_strncasecmp, \
+ AROS_LCA(const char *, (___s1), A0), \
+ AROS_LCA(const char *, (___s2), A1), \
+ AROS_LCA(size_t, (___n), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 954, Amisslext)
+
 #endif /* !_INLINE_AMISSLEXT_H */

@@ -153,7 +153,7 @@ endif
 
 VERSION=5
 REVISION=1
-VERSIONNAME=302
+VERSIONNAME=303
 
 # Common Directories
 PREFIX    = $(CDTHIS)
@@ -543,7 +543,7 @@ $(BUILD_D)/amissl_files/main_stubs: include/xml/amissl.xml
 STUBSRCS = $(sort $(wildcard $(BUILD_D)/amissl_files/main_stubs/*.c))
 STUBOBJS = $(patsubst %.c,%.o,$(STUBSRCS))
 
- $(PRECOMPILED_H): include/proto/amissl.h
+$(PRECOMPILED_H): include/proto/amissl.h include/xml/amissl.xml
 	@echo "  CC $<"
 	$(CC) $(STUBCFLAGS) -c $< -o $@
 

@@ -9996,6 +9996,27 @@ const OSSL_PROVIDER * LIBSTUB_EVP_PKEY_CTX_get0_provider(void)
   return LIB_EVP_PKEY_CTX_get0_provider(_base, ___ctx);
 }
 
+int LIB_OPENSSL_strcasecmp(struct Library * _base, const char * ___s1, const char * ___s2);
+
+int LIBSTUB_OPENSSL_strcasecmp(void)
+{
+  const char * ___s1 = (const char *)REG_A0;
+  const char * ___s2 = (const char *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_strcasecmp(_base, ___s1, ___s2);
+}
+
+int LIB_OPENSSL_strncasecmp(struct Library * _base, const char * ___s1, const char * ___s2, size_t ___n);
+
+int LIBSTUB_OPENSSL_strncasecmp(void)
+{
+  const char * ___s1 = (const char *)REG_A0;
+  const char * ___s2 = (const char *)REG_A1;
+  size_t ___n = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_strncasecmp(_base, ___s1, ___s2, ___n);
+}
+
 
 #ifdef __cplusplus
 }

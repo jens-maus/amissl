@@ -989,6 +989,8 @@ ASN1_VALUE * SAVEDS ASM LIB_ASN1_item_d2i_ex(REG(a6, __IFACE_OR_BASE), REG(a0, A
 int SAVEDS ASM LIB_ASN1_TIME_print_ex(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const ASN1_TIME * tm), REG(d0, unsigned long flags));
 const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_get0_provider(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * key));
 const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY_CTX * ctx));
+int SAVEDS ASM LIB_OPENSSL_strcasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2));
+int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2), REG(d0, size_t n));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR_EXT \
@@ -1941,7 +1943,9 @@ const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, __IFACE_
     LFUNC_FA_(ASN1_item_d2i_ex) \
     LFUNC_FA_(ASN1_TIME_print_ex) \
     LFUNC_FA_(EVP_PKEY_get0_provider) \
-    LFUNC_FA_(EVP_PKEY_CTX_get0_provider)
+    LFUNC_FA_(EVP_PKEY_CTX_get0_provider) \
+    LFUNC_FA_(OPENSSL_strcasecmp) \
+    LFUNC_FA_(OPENSSL_strncasecmp)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSLEXT_H */

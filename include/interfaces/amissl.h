@@ -6452,6 +6452,8 @@ struct AmiSSLIFace
 	APICALL int (*ASN1_TIME_print_ex)(struct AmiSSLIFace *Self, BIO * bp, const ASN1_TIME * tm, unsigned long flags);
 	APICALL const OSSL_PROVIDER * (*EVP_PKEY_get0_provider)(struct AmiSSLIFace *Self, const EVP_PKEY * key);
 	APICALL const OSSL_PROVIDER * (*EVP_PKEY_CTX_get0_provider)(struct AmiSSLIFace *Self, const EVP_PKEY_CTX * ctx);
+	APICALL int (*OPENSSL_strcasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2);
+	APICALL int (*OPENSSL_strncasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2, size_t n);
 };
 
 #ifdef __cplusplus

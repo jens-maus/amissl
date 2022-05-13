@@ -26465,6 +26465,18 @@
       <arg name="ctx" type="const EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
 
+    <!-- AmiSSL v5.1 - OpenSSL 3.0.3 -->
+
+    <method name="OPENSSL_strcasecmp" result="int">
+      <arg name="s1" type="const char *" m68kreg="a0"/>
+      <arg name="s2" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_strncasecmp" result="int">
+      <arg name="s1" type="const char *" m68kreg="a0"/>
+      <arg name="s2" type="const char *" m68kreg="a1"/>
+      <arg name="n" type="size_t" m68kreg="d0"/>
+    </method>
+
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->
   </interface>
 </library>

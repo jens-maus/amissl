@@ -2866,4 +2866,10 @@ const OSSL_PROVIDER * __EVP_PKEY_get0_provider(__reg("a6") struct Library * , __
 const OSSL_PROVIDER * __EVP_PKEY_CTX_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY_CTX * ctx ) = "\tjsr\t-5712(a6)";
 #define EVP_PKEY_CTX_get0_provider(ctx) __EVP_PKEY_CTX_get0_provider(AmiSSLExtBase, (ctx))
 
+int __OPENSSL_strcasecmp(__reg("a6") struct Library * , __reg("a0") const char * s1 , __reg("a1") const char * s2 ) = "\tjsr\t-5718(a6)";
+#define OPENSSL_strcasecmp(s1, s2) __OPENSSL_strcasecmp(AmiSSLExtBase, (s1), (s2))
+
+int __OPENSSL_strncasecmp(__reg("a6") struct Library * , __reg("a0") const char * s1 , __reg("a1") const char * s2 , __reg("d0") size_t n ) = "\tjsr\t-5724(a6)";
+#define OPENSSL_strncasecmp(s1, s2, n) __OPENSSL_strncasecmp(AmiSSLExtBase, (s1), (s2), (n))
+
 #endif /* !_INLINE_AMISSLEXT_H */

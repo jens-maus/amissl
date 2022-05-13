@@ -3822,4 +3822,12 @@ typedef ULONG _sfdc_vararg;
       LP1(0x1650, const OSSL_PROVIDER *, EVP_PKEY_CTX_get0_provider , const EVP_PKEY_CTX *, ___ctx, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
+#define OPENSSL_strcasecmp(___s1, ___s2) \
+      LP2(0x1656, int, OPENSSL_strcasecmp , const char *, ___s1, a0, const char *, ___s2, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define OPENSSL_strncasecmp(___s1, ___s2, ___n) \
+      LP3(0x165c, int, OPENSSL_strncasecmp , const char *, ___s1, a0, const char *, ___s2, a1, size_t, ___n, d0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
 #endif /* !_PPCINLINE_AMISSLEXT_H */
