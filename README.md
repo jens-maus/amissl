@@ -6,6 +6,7 @@
 [![Issues](https://img.shields.io/github/issues/jens-maus/amissl.svg)](https://github.com/jens-maus/amissl/issues)
 [![Build](https://github.com/jens-maus/amissl/workflows/CI/badge.svg)](https://github.com/jens-maus/amissl/actions)
 [![License](http://img.shields.io/:license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=KSG49RVGY8AG2)
 
 <a href="https://www.ibrowse-dev.net/"><img src="https://www.ibrowse-dev.net/images/sponsor.png" width="272" height="99" align="right" border="0" /></a>
 
