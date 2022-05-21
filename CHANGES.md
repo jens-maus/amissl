@@ -1,4 +1,4 @@
-## AmiSSL 5.1 (x.x.2022)
+## AmiSSL 5.1 (21.5.2022)
 
 - Switched to OpenSSL 3.0 and updated backend to full compatibility with
   the latest OpenSSL 3.0.3 (3.5.2022) version, which brings new features,
@@ -18,7 +18,8 @@
 - Improved and structured the developer README-SDK file.
 - Added OpenSSL stub link libraries for OS3 (GCC) and OS4 (GCC & VBCC).
 - AmiSSL and OpenSSL switched to the Apache License, Version 2.0.
-- We have a new domain name amissl.org.
+- We have a new homepage at https://amissl.org which provides links to all
+  AmiSSL resources, old and new.
 
 ## AmiSSL 4.12 (11.2.2022)
 
