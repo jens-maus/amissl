@@ -6,7 +6,7 @@ Version:      {version}
 Replaces:     util/libs/AmiSSL-5.*{repsuffix}.lha
 Requires:     {requires}
 Architecture: {arch}
-URL:          https://www.amissl.org/github
+URL:          https://www.amissl.org/download/
 
 The AmiSSL project is a collaborative effort to develop a port of OpenSSL
 in a shared library for Amiga-based systems (AmigaOS, MorphOS, AROS, etc).
@@ -145,10 +145,16 @@ Copyright (c) 2001-2022 Frank Wille. All Rights Reserved.
 OpenSSL BIGNUM 68020-68040 optimised routines
 Copyright (c) 2002 by Howard Chu <hyc@highlandsun.com>
 
+Contact us
+----------
+Bugs, any other issues or queries should be reported to the AmiSSL team via
+https://github.com/jens-maus/amissl/issues. You may also follow us on
+Twitter @amigassl, where we post updates and release announcements.
+
 Authors
 -------
-AmiSSL is a collaborative effort with Amiga-specific code being
-contributed by the following people:
+AmiSSL is a collaborative effort with Amiga-specific code being contributed
+by the following people:
 
 - Andrija Antonijevic
 - Thore Böckelmann

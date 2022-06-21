@@ -1,3 +1,9 @@
+## AmiSSL 5.2 (21.6.2022)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.0.4 (21.6.2022) version, which brings security, memory leak
+  and other bug fixes.
+
 ## AmiSSL 5.1 (21.5.2022)
 
 - Switched to OpenSSL 3.0 and updated backend to full compatibility with

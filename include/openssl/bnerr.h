@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -48,6 +48,7 @@
 # define BN_R_NOT_A_SQUARE                                111
 # define BN_R_NOT_INITIALIZED                             107
 # define BN_R_NO_INVERSE                                  108
+# define BN_R_NO_PRIME_CANDIDATE                          121
 # define BN_R_NO_SOLUTION                                 116
 # define BN_R_NO_SUITABLE_DIGEST                          120
 # define BN_R_PRIVATE_KEY_TOO_LARGE                       117
