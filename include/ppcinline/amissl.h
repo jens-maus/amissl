@@ -14838,7 +14838,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OBSOLETE_EVP_PBE_scrypt(___pass, ___passlen, ___salt, ___saltlen, ___N, ___r, ___p, ___maxmem, ___key, ___keylen) \
-      LP10(0x6444, int, OBSOLETE_EVP_PBE_scrypt , const const char *, ___pass, a0, size_t, ___passlen, d0, const unsigned char *, ___salt, a1, size_t, ___saltlen, d1, unsigned long, ___N, d2, unsigned long, ___r, d3, unsigned long, ___p, d4, uint64_t, ___maxmem, d5, unsigned char *, ___key, a2, size_t, ___keylen, a3,\
+      LP10(0x6444, int, OBSOLETE_EVP_PBE_scrypt , const char *, ___pass, a0, size_t, ___passlen, d0, const unsigned char *, ___salt, a1, size_t, ___saltlen, d1, unsigned long, ___N, d2, unsigned long, ___r, d3, unsigned long, ___p, d4, uint64_t, ___maxmem, d5, unsigned char *, ___key, a2, size_t, ___keylen, a3,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_asn1_set_security_bits(___ameth, ___pkey_security_bits) \

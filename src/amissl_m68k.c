@@ -55537,7 +55537,7 @@ STATIC int stub_main_OBSOLETE_EVP_PBE_scrypt_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->OBSOLETE_EVP_PBE_scrypt(
-		(const const char *)regarray[REG68K_A0/4],
+		(const char *)regarray[REG68K_A0/4],
 		(size_t)regarray[REG68K_D0/4],
 		(const unsigned char *)regarray[REG68K_A1/4],
 		(size_t)regarray[REG68K_D1/4],

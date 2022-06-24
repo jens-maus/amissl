@@ -37531,11 +37531,11 @@ int LIBSTUB_EVP_PBE_get(void)
   return LIB_EVP_PBE_get(_base, ___ptype, ___ppbe_nid, ___num);
 }
 
-int LIB_OBSOLETE_EVP_PBE_scrypt(struct Library * _base, const const char * ___pass, size_t ___passlen, const unsigned char * ___salt, size_t ___saltlen, unsigned long ___N, unsigned long ___r, unsigned long ___p, uint64_t ___maxmem, unsigned char * ___key, size_t ___keylen);
+int LIB_OBSOLETE_EVP_PBE_scrypt(struct Library * _base, const char * ___pass, size_t ___passlen, const unsigned char * ___salt, size_t ___saltlen, unsigned long ___N, unsigned long ___r, unsigned long ___p, uint64_t ___maxmem, unsigned char * ___key, size_t ___keylen);
 
 int LIBSTUB_OBSOLETE_EVP_PBE_scrypt(void)
 {
-  const const char * ___pass = (const const char *)REG_A0;
+  const char * ___pass = (const char *)REG_A0;
   size_t ___passlen = (size_t)REG_D0;
   const unsigned char * ___salt = (const unsigned char *)REG_A1;
   size_t ___saltlen = (size_t)REG_D1;

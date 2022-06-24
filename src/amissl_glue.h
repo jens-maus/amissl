@@ -3750,7 +3750,7 @@ int SAVEDS ASM LIB_EVP_MD_meth_set_input_blocksize(REG(a6, __IFACE_OR_BASE), REG
 int SAVEDS ASM LIB_EVP_MD_meth_set_result_size(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_MD * md), REG(d0, int resultsize));
 int SAVEDS ASM LIB_EVP_MD_meth_set_update(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_MD * md), REG(a1, int (*update)(EVP_MD_CTX *, const void *, size_t)));
 int SAVEDS ASM LIB_EVP_PBE_get(REG(a6, __IFACE_OR_BASE), REG(a0, int * ptype), REG(a1, int * ppbe_nid), REG(d0, size_t num));
-int SAVEDS ASM LIB_OBSOLETE_EVP_PBE_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen));
+int SAVEDS ASM LIB_OBSOLETE_EVP_PBE_scrypt(REG(a6, __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen));
 void SAVEDS ASM LIB_EVP_PKEY_asn1_set_security_bits(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_ASN1_METHOD * ameth), REG(a1, int (*pkey_security_bits)(const EVP_PKEY *)));
 const DH * SAVEDS ASM LIB_EVP_PKEY_get0_DH(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
 const DSA * SAVEDS ASM LIB_EVP_PKEY_get0_DSA(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));

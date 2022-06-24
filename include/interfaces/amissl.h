@@ -4317,7 +4317,7 @@ struct AmiSSLIFace
 	DEPRECATED APICALL int (*EVP_MD_meth_set_result_size)(struct AmiSSLIFace *Self, EVP_MD * md, int resultsize);
 	DEPRECATED APICALL int (*EVP_MD_meth_set_update)(struct AmiSSLIFace *Self, EVP_MD * md, int (*update)(EVP_MD_CTX *, const void *, size_t));
 	APICALL int (*EVP_PBE_get)(struct AmiSSLIFace *Self, int * ptype, int * ppbe_nid, size_t num);
-	APICALL int (*OBSOLETE_EVP_PBE_scrypt)(struct AmiSSLIFace *Self, const const char * pass, size_t passlen, const unsigned char * salt, size_t saltlen, unsigned long N, unsigned long r, unsigned long p, uint64_t maxmem, unsigned char * key, size_t keylen);
+	APICALL int (*OBSOLETE_EVP_PBE_scrypt)(struct AmiSSLIFace *Self, const char * pass, size_t passlen, const unsigned char * salt, size_t saltlen, unsigned long N, unsigned long r, unsigned long p, uint64_t maxmem, unsigned char * key, size_t keylen);
 	APICALL void (*EVP_PKEY_asn1_set_security_bits)(struct AmiSSLIFace *Self, EVP_PKEY_ASN1_METHOD * ameth, int (*pkey_security_bits)(const EVP_PKEY *));
 	DEPRECATED APICALL const DH * (*EVP_PKEY_get0_DH)(struct AmiSSLIFace *Self, const EVP_PKEY * pkey);
 	DEPRECATED APICALL const DSA * (*EVP_PKEY_get0_DSA)(struct AmiSSLIFace *Self, const EVP_PKEY * pkey);

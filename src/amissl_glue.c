@@ -25996,7 +25996,7 @@ int SAVEDS ASM LIB_EVP_PBE_get(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, int * pt
 
 // ---
 
-int SAVEDS ASM LIB_OBSOLETE_EVP_PBE_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen))
+int SAVEDS ASM LIB_OBSOLETE_EVP_PBE_scrypt(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(d0, size_t passlen), REG(a1, const unsigned char * salt), REG(d1, size_t saltlen), REG(d2, unsigned long N), REG(d3, unsigned long r), REG(d4, unsigned long p), REG(d5, uint64_t maxmem), REG(a2, unsigned char * key), REG(a3, size_t keylen))
 {
 	return EVP_PBE_scrypt(pass, passlen, salt, saltlen, N, r, p, maxmem, key, keylen);
 }

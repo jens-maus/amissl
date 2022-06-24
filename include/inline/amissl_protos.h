@@ -11131,7 +11131,7 @@ int __EVP_MD_meth_set_update(__reg("a6") struct Library * , __reg("a0") EVP_MD *
 int __EVP_PBE_get(__reg("a6") struct Library * , __reg("a0") int * ptype , __reg("a1") int * ppbe_nid , __reg("d0") size_t num ) = "\tjsr\t-25662(a6)";
 #define EVP_PBE_get(ptype, ppbe_nid, num) __EVP_PBE_get(AmiSSLBase, (ptype), (ppbe_nid), (num))
 
-int __OBSOLETE_EVP_PBE_scrypt(__reg("a6") struct Library * , __reg("a0") const const char * pass , __reg("d0") size_t passlen , __reg("a1") const unsigned char * salt , __reg("d1") size_t saltlen , __reg("d2") unsigned long N , __reg("d3") unsigned long r , __reg("d6") unsigned long p , __reg("d4/d5") uint64_t maxmem , __reg("a2") unsigned char * key , __reg("a3") size_t keylen ) = "\texg\td5,d6\n\texg\td4,d5\n\t\tjsr\t-25668(a6)";
+int __OBSOLETE_EVP_PBE_scrypt(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("d0") size_t passlen , __reg("a1") const unsigned char * salt , __reg("d1") size_t saltlen , __reg("d2") unsigned long N , __reg("d3") unsigned long r , __reg("d6") unsigned long p , __reg("d4/d5") uint64_t maxmem , __reg("a2") unsigned char * key , __reg("a3") size_t keylen ) = "\texg\td5,d6\n\texg\td4,d5\n\t\tjsr\t-25668(a6)";
 #define OBSOLETE_EVP_PBE_scrypt(pass, passlen, salt, saltlen, N, r, p, maxmem, key, keylen) __OBSOLETE_EVP_PBE_scrypt(AmiSSLBase, (pass), (passlen), (salt), (saltlen), (N), (r), (p), (maxmem), (key), (keylen))
 
 void __EVP_PKEY_asn1_set_security_bits(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_ASN1_METHOD * ameth , __reg("a1") int (*pkey_security_bits)(const EVP_PKEY *) ) = "\tjsr\t-25674(a6)";

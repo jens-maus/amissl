@@ -1,3 +1,6 @@
+- Fixed "const const" typo in interface definition of the old unused
+  EVP_PBE_scrypt() public API entry point.
+
 ## AmiSSL 5.2 (21.6.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest

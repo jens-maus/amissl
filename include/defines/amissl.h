@@ -22738,7 +22738,7 @@ typedef ULONG _sfdc_vararg;
 
 #define OBSOLETE_EVP_PBE_scrypt(___pass, ___passlen, ___salt, ___saltlen, ___N, ___r, ___p, ___maxmem, ___key, ___keylen) \
       AROS_LC10(int, OBSOLETE_EVP_PBE_scrypt, \
- AROS_LCA(const const char *, (___pass), A0), \
+ AROS_LCA(const char *, (___pass), A0), \
  AROS_LCA(size_t, (___passlen), D0), \
  AROS_LCA(const unsigned char *, (___salt), A1), \
  AROS_LCA(size_t, (___saltlen), D1), \

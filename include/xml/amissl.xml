@@ -17659,7 +17659,7 @@
       <arg name="num" type="size_t" m68kreg="d0"/>
     </method>
     <method name="OBSOLETE_EVP_PBE_scrypt" result="int">
-      <arg name="pass" type="const const char *" m68kreg="a0"/>
+      <arg name="pass" type="const char *" m68kreg="a0"/>
       <arg name="passlen" type="size_t" m68kreg="d0"/>
       <arg name="salt" type="const unsigned char *" m68kreg="a1"/>
       <arg name="saltlen" type="size_t" m68kreg="d1"/>
