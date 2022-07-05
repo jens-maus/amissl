@@ -1,4 +1,10 @@
-- Fixed "const const" typo in interface definition of the old unused
+## AmiSSL 5.3 (5.7.2022)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.0.5 (5.7.2022) version, which brings security, memory leak
+  and other bug fixes.
+
+- Fixed "const const" typo in SDK interface definition of the old unused
   EVP_PBE_scrypt() public API entry point.
 
 ## AmiSSL 5.2 (21.6.2022)

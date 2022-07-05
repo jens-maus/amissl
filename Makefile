@@ -152,8 +152,8 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-REVISION=2
-VERSIONNAME=304
+REVISION=3
+VERSIONNAME=305
 
 # Common Directories
 PREFIX    = $(CDTHIS)
