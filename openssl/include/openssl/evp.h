@@ -1504,12 +1504,21 @@ void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t key
 # endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
-#  define EVP_PBE_scrypt(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen) \
+#  if defined(__amigaos4__) && !defined(__USE_INLINE__)
+#   define EVP_PBE_scrypt(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen) \
+     IAmiSSL->EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
+     IAmiSSL->EVP_PBE_scrypt_amiga_2(saltlen,key,keylen))
+#   define EVP_PBE_scrypt_ex(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen,ctx,propq) \
+     IAmiSSL->EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
+     IAmiSSL->EVP_PBE_scrypt_ex_amiga_2(saltlen,key,keylen,ctx,propq))
+#  else
+#   define EVP_PBE_scrypt(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen) \
      EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
      EVP_PBE_scrypt_amiga_2(saltlen,key,keylen))
-#  define EVP_PBE_scrypt_ex(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen,ctx,propq) \
+#   define EVP_PBE_scrypt_ex(pass,passlen,salt,saltlen,N,r,p,maxmem,key,keylen,ctx,propq) \
      EVP_PBE_scrypt_amiga_1(pass,passlen,salt,N,r,p,maxmem, \
      EVP_PBE_scrypt_ex_amiga_2(saltlen,key,keylen,ctx,propq))
+#  endif
 # else
 int EVP_PBE_scrypt(const char *pass, size_t passlen,
                    const unsigned char *salt, size_t saltlen,

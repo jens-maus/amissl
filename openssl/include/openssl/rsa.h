@@ -277,9 +277,15 @@ void *RSA_X931_derive_ex_amiga_2(const BIGNUM *Xp2, const BIGNUM *Xp,
 # endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  if defined(__amigaos4__) && !defined(__USE_INLINE__)
+#   define RSA_X931_derive_ex(rsa,p1,p2,q1,q2,Xp1,Xp2,Xp,Xq1,Xq2,Xq,e,cb) \
+     IAmiSSL->RSA_X931_derive_ex_amiga_1(rsa,p1,p2,q1,q2,Xp1,             \
+     IAmiSSL->RSA_X931_derive_ex_amiga_2(Xp2,Xp,Xq1,Xq2,Xq,e,cb))
+#  else
 #   define RSA_X931_derive_ex(rsa,p1,p2,q1,q2,Xp1,Xp2,Xp,Xq1,Xq2,Xq,e,cb) \
      RSA_X931_derive_ex_amiga_1(rsa,p1,p2,q1,q2,Xp1,                      \
      RSA_X931_derive_ex_amiga_2(Xp2,Xp,Xq1,Xq2,Xq,e,cb))
+#  endif
 # else
 OSSL_DEPRECATEDIN_3_0
 int RSA_X931_derive_ex(RSA *rsa, BIGNUM *p1, BIGNUM *p2,

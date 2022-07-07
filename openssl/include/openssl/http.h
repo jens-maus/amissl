@@ -99,16 +99,29 @@ void * OSSL_HTTP_transfer_amiga_2(void * arg, int buf_size,
 # endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
-#  define OSSL_HTTP_get(url,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,expected_content_type,expect_asn1,max_resp_len,timeout) \
+#  if defined(__amigaos4__) && !defined(__USE_INLINE__)
+#   define OSSL_HTTP_get(url,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,expected_content_type,expect_asn1,max_resp_len,timeout) \
+     IAmiSSL->OSSL_HTTP_get_amiga_1(url,proxy,no_proxy,bio,rbio,bio_update_fn,  \
+     IAmiSSL->OSSL_HTTP_get_amiga_2(arg,buf_size,headers,expected_content_type, \
+                                    expect_asn1,max_resp_len,timeout))
+#   define OSSL_HTTP_transfer(prctx,server,port,path,use_ssl,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,content_type,req,expected_content_type,expect_asn1,max_resp_len,timeout,keep_alive) \
+     IAmiSSL->OSSL_HTTP_transfer_amiga_1(prctx,server,port,path,use_ssl,proxy,  \
+                                         no_proxy,bio,rbio,bio_update_fn,       \
+     IAmiSSL->OSSL_HTTP_transfer_amiga_2(arg,buf_size,headers,content_type,req, \
+                                         expected_content_type,expect_asn1,     \
+                                         max_resp_len,timeout,keep_alive))
+#  else
+#   define OSSL_HTTP_get(url,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,expected_content_type,expect_asn1,max_resp_len,timeout) \
      OSSL_HTTP_get_amiga_1(url,proxy,no_proxy,bio,rbio,bio_update_fn,  \
      OSSL_HTTP_get_amiga_2(arg,buf_size,headers,expected_content_type, \
                            expect_asn1,max_resp_len,timeout))
-#  define OSSL_HTTP_transfer(prctx,server,port,path,use_ssl,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,content_type,req,expected_content_type,expect_asn1,max_resp_len,timeout,keep_alive) \
+#   define OSSL_HTTP_transfer(prctx,server,port,path,use_ssl,proxy,no_proxy,bio,rbio,bio_update_fn,arg,buf_size,headers,content_type,req,expected_content_type,expect_asn1,max_resp_len,timeout,keep_alive) \
      OSSL_HTTP_transfer_amiga_1(prctx,server,port,path,use_ssl,proxy,  \
                                 no_proxy,bio,rbio,bio_update_fn,       \
      OSSL_HTTP_transfer_amiga_2(arg,buf_size,headers,content_type,req, \
                                 expected_content_type,expect_asn1,     \
                                 max_resp_len,timeout,keep_alive))
+#  endif
 # else
 BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
                    BIO *bio, BIO *rbio,

@@ -1,3 +1,6 @@
+- Reworked macros for split API functions to better handle when
+  __USE_INLINE__ is not defined
+
 ## AmiSSL 5.3 (5.7.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest
