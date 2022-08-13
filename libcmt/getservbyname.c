@@ -41,6 +41,7 @@ struct servent *(getservbyname)(const UBYTE *name, const UBYTE *proto)
 				ReleaseSemaphore(&state->MLinkLock->Semaphore);
 				return res;
 				break;}
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 				return amitcp_GetServByName(name, proto);

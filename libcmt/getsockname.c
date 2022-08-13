@@ -34,6 +34,7 @@ LONG (getsockname)(LONG sockfd, struct sockaddr *addr, LONG *addrlen)
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

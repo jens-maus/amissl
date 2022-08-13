@@ -34,6 +34,7 @@ LONG (select)(LONG numsocks, fd_set *readsocks, fd_set *writesocks, fd_set *exce
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

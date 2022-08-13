@@ -5,11 +5,12 @@
 
 //#include "asm.h"
 
-#define TCPIP_AmiTCP  0x01
-#define TCPIP_IN225   0x02
-#define TCPIP_Miami   0x03
-#define TCPIP_Termite 0x04
-#define TCPIP_MLink   0x05
+#define TCPIP_AmiTCP   0x01
+#define TCPIP_IN225    0x02
+#define TCPIP_Miami    0x03
+#define TCPIP_Termite  0x04
+#define TCPIP_MLink    0x05
+#define TCPIP_Roadshow 0x06
 
 #ifndef NO_MTCP_PROTOS
 

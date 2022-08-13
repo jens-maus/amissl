@@ -42,6 +42,7 @@ LONG (socket)(LONG domain, LONG type, LONG protocol)
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 				return amitcp_Socket(domain, type, protocol);
@@ -113,6 +114,7 @@ void initialize_socket_errno(AMISSL_STATE *state)
 		{
 			switch(state->TCPIPStackType)
 			{
+				case TCPIP_Roadshow:
 				case TCPIP_Miami:
 				case TCPIP_AmiTCP:
 					amitcp_SocketBaseTagList(tags);

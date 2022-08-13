@@ -36,6 +36,7 @@ LONG (sendto)(LONG sockfd, const UBYTE *buf, LONG len, LONG flags,
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

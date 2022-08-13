@@ -35,6 +35,7 @@ LONG (listen)(LONG sockfd, LONG backlog)
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

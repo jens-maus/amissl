@@ -41,6 +41,7 @@ LONG (connect)(LONG sockfd, const struct sockaddr *addr, LONG addrlen)
 				ReleaseSemaphore(&state->MLinkLock->Semaphore);
 				return res;
 				break;}
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 				return amitcp_Connect(sockfd, addr, addrlen);

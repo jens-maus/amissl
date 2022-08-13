@@ -1,3 +1,4 @@
+- Handle setting of Roadshow TCP/IP stack type on OS3.
 - Removed unnecessary multiple openings of dos.library, some of which
   were mistakenly never closed.
 - Reworked macros for split API functions to better handle when

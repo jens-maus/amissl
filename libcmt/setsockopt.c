@@ -34,6 +34,7 @@ LONG (setsockopt)(LONG sockfd, LONG level, LONG optname, const void *optval, LON
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

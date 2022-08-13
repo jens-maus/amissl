@@ -30,6 +30,7 @@ int ioctlsocket(int sockfd, long request, char *arg)
 	{
 		switch(state->TCPIPStackType)
 		{
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 			case TCPIP_MLink:

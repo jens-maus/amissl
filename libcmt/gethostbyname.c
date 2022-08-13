@@ -41,6 +41,7 @@ struct hostent *(gethostbyname)(const UBYTE *name)
 				ReleaseSemaphore(&state->MLinkLock->Semaphore);
 				return res;
 				break;}
+			case TCPIP_Roadshow:
 			case TCPIP_Miami:
 			case TCPIP_AmiTCP:
 				return amitcp_GetHostByName(name);
