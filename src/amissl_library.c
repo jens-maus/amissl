@@ -450,11 +450,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
     DropInterface((struct Interface *)IIntuition);
     IIntuition = NULL;
   }
-  if(IDOS != NULL)
-  {
-    DropInterface((struct Interface *)IDOS);
-    IDOS = NULL;
-  }
 #endif
 
   if(UtilityBase != NULL)
@@ -466,11 +461,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
   {
     CloseLibrary((struct Library *)IntuitionBase);
     IntuitionBase = NULL;
-  }
-  if(DOSBase != NULL)
-  {
-    CloseLibrary((struct Library *)DOSBase);
-    DOSBase = NULL;
   }
 
   // make sure to free all resources of libcmt
@@ -524,14 +514,11 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
 
   if (CRYPTO_THREAD_setup()
 #if defined(__amigaos4__)
-    && (DOSBase = OpenLibrary("dos.library", 50))
     && (IntuitionBase = OpenLibrary("intuition.library", 50))
     && (UtilityBase = OpenLibrary("utility.library", 50))
-    && (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL))
     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
     && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
 #else
-    && (DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
     && (UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)))
 #endif

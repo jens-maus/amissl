@@ -1,12 +1,13 @@
+- Removed unnecessary multiple openings of dos.library, some of which
+  were mistakenly never closed.
 - Reworked macros for split API functions to better handle when
-  __USE_INLINE__ is not defined
+  __USE_INLINE__ is not defined.
 
 ## AmiSSL 5.3 (5.7.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest
   OpenSSL 3.0.5 (5.7.2022) version, which brings security, memory leak
   and other bug fixes.
-
 - Fixed "const const" typo in SDK interface definition of the old unused
   EVP_PBE_scrypt() public API entry point.
 

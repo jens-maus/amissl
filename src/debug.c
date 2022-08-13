@@ -110,10 +110,9 @@ void SetupDebug(const char *libName, int version, int revision)
   _DBPRINTF("Initializing runtime debugging:\n");
 
 #if defined(__amigaos4__)
-  if((DOSBase = OpenLibrary("dos.library", 50)) != NULL &&
-     (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL)) != NULL)
+  if(IDOS)
 #else
-  if((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) != NULL)
+  if(DOSBase)
 #endif
   {
     if(GetVar("amissl.debug", var, sizeof(var), 0) > 0)
@@ -233,11 +232,6 @@ void SetupDebug(const char *libName, int version, int revision)
           break;
       }
     }
-
-    #if defined(__amigaos4__)
-    DropInterface((struct Interface *)IDOS);
-    #endif
-    CloseLibrary((struct Library *)DOSBase);
   }
 
   _DBPRINTF("set debug classes/flags (env:amissl.debug): %08lx/%08lx\n", debug_classes, debug_flags);

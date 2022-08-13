@@ -60,7 +60,9 @@ struct LibraryHeader
   #endif /* MULTIBASE */
 
   BPTR                    segList;
+  #if defined(__MORPHOS__)
   struct Library          *sysBase;
+  #endif
   struct SignalSemaphore  libSem;
 
   #if !defined(__amigaos4__) || !defined(NO_VECTABLE68K)

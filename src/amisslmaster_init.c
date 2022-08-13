@@ -37,7 +37,7 @@ extern struct DOSIFace * AMISSL_COMMON_DATA IDOS;
 #define GETINTERFACE(iface, base)    TRUE
 #define DROPINTERFACE(iface)
 
-extern struct DosLibrary *DOSBase;
+extern struct DosLibrary * AMISSL_COMMON_DATA DOSBase;
 
 #endif
 

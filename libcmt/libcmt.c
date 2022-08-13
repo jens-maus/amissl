@@ -105,16 +105,12 @@ void __init_libcmt(void)
   SHOWPOINTER(DBF_STARTUP, &__gmt_offset);
 
 #if defined(__amigaos4__)
-  if((DOSBase = OpenLibrary("dos.library", 50)) &&
-     (LocaleBase = OpenLibrary("locale.library", 50)) &&
-     (IDOS = (struct DOSIFace *)GetInterface(DOSBase,"main",1,NULL)) &&
+  if((LocaleBase = OpenLibrary("locale.library", 50)) &&
      (ILocale = (struct LocaleIFace *)GetInterface(LocaleBase,"main",1,NULL)))
 #elif defined(__amigaos3__)
-  if(((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) &&
-      (LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38))))
+  if((LocaleBase = (struct LocaleBase *)OpenLibrary("locale.library", 38)))
 #elif defined(__MORPHOS__)
-  if(((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)) &&
-      (LocaleBase = (struct Library *)OpenLibrary("locale.library", 38))))
+  if((LocaleBase = (struct Library *)OpenLibrary("locale.library", 38)))
 #endif
   {
     struct Locale *locale;
@@ -153,13 +149,9 @@ void __free_libcmt(void)
 #if defined(__amigaos4__)
   DropInterface((struct Interface *)ILocale);
   ILocale = NULL;
-  DropInterface((struct Interface *)IDOS);
-  IDOS = NULL;
 #endif
   CloseLibrary((struct Library *)LocaleBase);
   LocaleBase = NULL;
-  CloseLibrary((struct Library *)DOSBase);
-  DOSBase = NULL;
 
   SHOWPOINTER(DBF_STARTUP, &__mem_pool);
   // free memory related stuff

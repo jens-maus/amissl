@@ -111,8 +111,8 @@ struct Library * AMISSL_COMMON_DATA NewlibBase = NULL;
 struct NewlibIFace * AMISSL_COMMON_DATA INewlib = NULL;
 #endif
 #else
-struct ExecBase *SysBase = NULL;
-struct DosLibrary *DOSBase = NULL;
+struct ExecBase * AMISSL_COMMON_DATA SysBase = NULL;
+struct DosLibrary * AMISSL_COMMON_DATA DOSBase = NULL;
 #endif
 
 #define LIBNAME        "amisslmaster.library"
@@ -618,9 +618,6 @@ INLINE ULONG __GetBSSSize(void)
 #if defined(__amigaos4__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
 {
-  struct ExecBase *sb = (struct ExecBase *)pIExec->Data.LibBase;
-  IExec = pIExec;
-  SysBase = (APTR)sb;
 #elif defined(__MORPHOS__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecBase *sb)
 {
@@ -633,12 +630,9 @@ AROS_UFH3(struct LibraryHeader *, LibInit,
 )
 {
   AROS_USERFUNC_INIT
-  SysBase = (APTR)sb;
 #else
 struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(a0, BPTR librarySegment), REG(a6, struct ExecBase *sb))
 {
-
-  SysBase = (APTR)sb;
 #endif
 
   // cleanup the library header structure beginning with the
@@ -652,13 +646,22 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
   base->libBase.lib_IdString     = (char *)(UserLibID+6);
 
   // set some important member variables
+#if defined(__MORPHOS__)
   base->sysBase = &sb->LibNode;
+#endif
   base->segList = librarySegment;
 
   // if LibInit() is called with librarySegment == 0 then we
   // can skip all the library init stuff and return the base pointer right away.
   if(base->segList != 0)
   {
+    #if defined(__amigaos4__)
+    IExec = pIExec;
+    SysBase = pIExec->Data.LibBase;
+    #elif !defined(__MORPHOS__)
+    SysBase = (APTR)sb;
+    #endif
+
     // make sure that this is really a 68060 machine if optimized for 68060
     #if _M68060 || __mc68060
     if((SysBase->AttnFlags & AFF_68060) == 0)
@@ -675,9 +678,16 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     }
     #endif
 
-    #if defined(__amigaos4__) && defined(__NEWLIB__)
-    if((NewlibBase = OpenLibrary("newlib.library", 3)) &&
-       GETINTERFACE(INewlib, NewlibBase))
+    #if defined(__amigaos4__)
+    if((DOSBase = OpenLibrary("dos.library", 52))
+       && GETINTERFACE(IDOS, DOSBase)
+       #if defined(__NEWLIB__)
+       && (NewlibBase = OpenLibrary("newlib.library", 3))
+       && GETINTERFACE(INewlib, NewlibBase)
+       #endif
+      )
+    #else
+    if((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)))
     #endif
     {
       BOOL success;
@@ -697,13 +707,10 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       base->dataSeg  = __GetDataSeg();
       base->dataSize = __GetDataSize();
       #elif defined(__amigaos4__)
-      if((DOSBase = OpenLibrary("dos.library", 52)))
-        IDOS = (struct DOSIFace *)GetInterface(DOSBase, "main", 1, NULL);
-
       if((base->ElfBase = OpenLibrary("elf.library",52)))
         base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
 
-      if(IDOS != NULL && base->IElf != NULL)
+      if(base->IElf != NULL)
       {
         GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
         if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
@@ -747,15 +754,22 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       }
       else
         callLibFunction(freeBase, base);
+    }
 
-      #if defined(__amigaos4__) && defined(__NEWLIB__)
-      if(NewlibBase)
-      {
-        DROPINTERFACE(INewlib);
-        CloseLibrary(NewlibBase);
-        NewlibBase = NULL;
-      }
-      #endif
+    #if defined(__amigaos4__) && defined(__NEWLIB__)
+    if(NewlibBase)
+    {
+      DROPINTERFACE(INewlib);
+      CloseLibrary(NewlibBase);
+      NewlibBase = NULL;
+    }
+    #endif
+
+    if(DOSBase)
+    {
+      DROPINTERFACE(IDOS);
+      CloseLibrary((struct Library *)DOSBase);
+      DOSBase = NULL;
     }
 
     E(DBF_STARTUP, "failure");
@@ -780,6 +794,20 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 {
   BPTR rc;
 
+#if defined(MULTIBASE)
+  #if defined(__amigaos4__)
+  struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+
+  LIB___UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
+
+  (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+  DROPINTERFACE(base->IElf);
+  CloseLibrary((struct Library *)base->ElfBase);
+  #else
+  LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
+  #endif
+#endif
+
   SHOWPOINTER(DBF_STARTUP, SysBase);
   SHOWPOINTER(DBF_STARTUP, base);
 
@@ -794,9 +822,14 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
   {
     DROPINTERFACE(INewlib);
     CloseLibrary(NewlibBase);
-    NewlibBase = NULL;
   }
   #endif
+
+  if(DOSBase)
+  {
+    DROPINTERFACE(IDOS);
+    CloseLibrary((struct Library *)DOSBase);
+  }
 
   // make sure the system deletes the library as well.
   rc = base->segList;
@@ -849,17 +882,7 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
   }
   else
   {
-    #if defined(__amigaos4__) && defined(MULTIBASE)
-    struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
-
     D(DBF_STARTUP, "AmiSSLMaster: expunge");
-    LIB___UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
-
-    (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
-    DROPINTERFACE(base->IElf);
-    CloseLibrary((struct Library *)base->ElfBase);
-    #endif
-
     rc = LibDelete(base);
   }
 
@@ -1186,17 +1209,6 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
       if(parent->libBase.lib_OpenCnt == 0)
       {
         D(DBF_STARTUP, "AmiSSLMaster: delayed expunge");
-
-        #if defined(__amigaos4__)
-        extlib = (struct ExtendedLibrary *)((ULONG)parent + parent->libBase.lib_PosSize);
-        LIB___UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
-        (parent->IElf->CloseElfTags)(parent->elfHandle, CET_ReClose, TRUE, TAG_DONE);
-        DROPINTERFACE(parent->IElf);
-        CloseLibrary((struct Library *)parent->ElfBase);
-        #else
-        LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
-        #endif
-
         rc = LibDelete(parent);
       }
       else
