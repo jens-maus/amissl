@@ -1,7 +1,9 @@
+- File locks on the OS4 libraries are released during initialisation and
+  no longer held until reboot or expunged from memory (#46).
 - Handle setting of Roadshow TCP/IP stack type on OS3.
 - Removed unnecessary multiple openings of dos.library, some of which
   were mistakenly never closed.
-- Reworked macros for split API functions to better handle when
+- Reworked SDK macros for split API functions to better handle when
   __USE_INLINE__ is not defined.
 
 ## AmiSSL 5.3 (5.7.2022)

@@ -615,6 +615,55 @@ INLINE ULONG __GetBSSSize(void)
 }
 #endif // __amigaos3__
 
+#if defined(MULTIBASE)
+STATIC struct LibraryHeader *InitMultiBase(struct LibraryHeader *base)
+{
+  #if defined(__amigaos4__)
+  struct Library *ElfBase;
+  struct ElfIFace *IElf;
+
+  if((ElfBase = OpenLibrary("elf.library",52)))
+  {
+    if((IElf = (struct ElfIFace *)GetInterface(ElfBase,"main",1,NULL)))
+    {
+      Elf32_Handle elf = NULL;
+      GetSegListInfoTags(base->segList, GSLI_ElfHandle, &elf, TAG_DONE);
+      if(elf && (elf = OpenElfTags(OET_ElfHandle, elf, TAG_DONE)))
+      { /* Check for .data and preload with relocs ready for CopyDataSegment() */
+        D(DBF_STARTUP, "OpenElfTags success!");
+        if(GetSectionHeaderTags(elf, GST_SectionName, ".data", TAG_DONE))
+	{ /* Success - close input file handle only, as no longer required */
+          CloseElfTags(elf, CET_FreeUnneeded, FALSE, TAG_DONE);
+          base->IElf = IElf;
+          base->elfHandle = elf;
+          return base;
+        }
+	else
+        { /* Fail - close the handle fully */
+          CloseElfTags(elf, CET_ReClose, TRUE, TAG_DONE);
+          D(DBF_STARTUP, ".data section not found!");
+        }
+      }
+      else
+        D(DBF_STARTUP, "OpenElfTags NO success!");
+      DropInterface((struct Interface *)IElf);
+    }
+    CloseLibrary(ElfBase);
+  }
+
+  return NULL;
+  #elif defined(__amigaos3__)
+  base->dataSeg  = __GetDataSeg();
+  base->dataSize = __GetDataSize();
+  return base;
+  #elif defined(__MORPHOS__)
+  base->dataSeg = (char *)r13 - R13_OFFSET;
+  base->dataSize = __dbsize();
+  return base;
+  #endif
+}
+#endif /* MULTIBASE */
+
 #if defined(__amigaos4__)
 struct LibraryHeader * LibInit(struct LibraryHeader *base, BPTR librarySegment, struct ExecIFace *pIExec)
 {
@@ -702,58 +751,36 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       InitSemaphore(&base->libSem);
 
       #if defined(MULTIBASE)
-      #if defined(__amigaos3__)
-      base->parent   = base;
-      base->dataSeg  = __GetDataSeg();
-      base->dataSize = __GetDataSize();
-      #elif defined(__amigaos4__)
-      if((base->ElfBase = OpenLibrary("elf.library",52)))
-        base->IElf = (struct ElfIFace *)GetInterface(base->ElfBase,"main",1,NULL);
-
-      if(base->IElf != NULL)
+      if((base->parent = InitMultiBase(base)))
+      #endif /* MULTIBASE */
       {
-        GetSegListInfoTags(base->segList, GSLI_ElfHandle, &base->elfHandle, TAG_DONE);
-        if(base->elfHandle && (base->elfHandle = (base->IElf->OpenElfTags)(OET_ElfHandle, base->elfHandle, TAG_DONE)))
+        // If we are not running on AmigaOS4 (no stackswap required) we go and
+        // do an explicit StackSwap() in case the user wants to make sure we
+        // have enough stack for his user functions
+        #if defined(DEBUG)
+        SHOWPOINTER(DBF_STARTUP, SysBase);
+        SHOWPOINTER(DBF_STARTUP, DOSBase);
+        #endif
+        success = callLibFunction(initBase, base);
+        #if defined(DEBUG)
+        SHOWPOINTER(DBF_STARTUP, SysBase);
+        SHOWPOINTER(DBF_STARTUP, DOSBase);
+        #endif
+
+        // check if everything worked out fine
+        if(success != FALSE)
         {
-          base->parent = base;
-          D(DBF_STARTUP, "OpenElfTags success!");
+          // everything was successfully so lets
+          // set the initialized value and contiue
+          // with the class open phase
+          D(DBF_STARTUP, "success: %08lx", base);
+
+          // return the library base as success
+          return base;
         }
         else
-          D(DBF_STARTUP, "OpenElfTags NO success!");
+          callLibFunction(freeBase, base);
       }
-      #elif defined(__MORPHOS__)
-      base->dataSeg = (char *)r13 - R13_OFFSET;
-      base->dataSize = __dbsize();
-      base->parent = base;
-      #endif
-      #endif /* MULTIBASE */
-
-      // If we are not running on AmigaOS4 (no stackswap required) we go and
-      // do an explicit StackSwap() in case the user wants to make sure we
-      // have enough stack for his user functions
-      #if defined(DEBUG)
-      SHOWPOINTER(DBF_STARTUP, SysBase);
-      SHOWPOINTER(DBF_STARTUP, DOSBase);
-      #endif
-      success = callLibFunction(initBase, base);
-      #if defined(DEBUG)
-      SHOWPOINTER(DBF_STARTUP, SysBase);
-      SHOWPOINTER(DBF_STARTUP, DOSBase);
-      #endif
-
-      // check if everything worked out fine
-      if(success != FALSE)
-      {
-        // everything was successfully so lets
-        // set the initialized value and contiue
-        // with the class open phase
-        D(DBF_STARTUP, "success: %08lx", base);
-
-        // return the library base as success
-        return base;
-      }
-      else
-        callLibFunction(freeBase, base);
     }
 
     #if defined(__amigaos4__) && defined(__NEWLIB__)
@@ -797,12 +824,14 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 #if defined(MULTIBASE)
   #if defined(__amigaos4__)
   struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+  struct Library *elfbase;
 
   LIB___UserLibExpunge((struct AmiSSLMasterIFace *)extlib->MainIFace);
 
   (base->IElf->CloseElfTags)(base->elfHandle, CET_ReClose, TRUE, TAG_DONE);
+  elfbase = base->IElf->Data.LibBase;
   DROPINTERFACE(base->IElf);
-  CloseLibrary((struct Library *)base->ElfBase);
+  CloseLibrary(elfbase);
   #else
   LIB___UserLibExpunge((__BASE_OR_IFACE_TYPE)base);
   #endif

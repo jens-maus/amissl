@@ -52,7 +52,6 @@ struct LibraryHeader
   ULONG                   dataSize;
   struct LibraryHeader    *parent;
   #if defined(__amigaos4__)
-  struct Library          *ElfBase;
   struct ElfIFace         *IElf;
   Elf32_Handle            elfHandle;
   uint8                   *baserelData;

@@ -152,7 +152,7 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-REVISION=3
+REVISION=4
 VERSIONNAME=305
 
 # Common Directories
