@@ -1,3 +1,5 @@
+- Added a proper Amiga-specific ossl_sleep() function, replacing the
+  default fallback busy wait function.
 - Consolidated all routines that individually open timer.device to
   instead use a single unified thread-safe solution.
 - File locks on the OS4 libraries are released during initialisation and

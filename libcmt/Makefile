@@ -201,6 +201,7 @@ STDIOOBJS = $(BUILD_D)/malloc.o \
             $(BUILD_D)/math.o \
             $(BUILD_D)/timer.o \
             $(BUILD_D)/gettimeofday.o \
+            $(BUILD_D)/usleep.o \
             $(BUILD_D)/vsnprintf.o \
             $(BUILD_D)/tolower.o \
             $(BUILD_D)/toupper.o
