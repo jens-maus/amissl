@@ -1,27 +1,36 @@
+/***************************************************************************
+
+ AmiSSL - OpenSSL wrapper for AmigaOS-based systems
+ Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+ Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ All Rights Reserved.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License in the file LICENSE in the
+ source distribution or at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ AmiSSL Official Support Site: https://github.com/jens-maus/amissl
+
+***************************************************************************/
+
 #include <proto/timer.h>
 #include <proto/exec.h>
+#include <timeval.h>
 
 #include <sys/time.h>
 
+#include "libcmt.h"
+
 #define UNIX_TIME_OFFSET 252460800
-
-#if !defined(__amigaos4__) || !defined(__NEW_TIMEVAL_DEFINITION_USED__)
-#include <exec/io.h>
-struct TimeVal
-{
-  ULONG Seconds;
-  ULONG Microseconds;
-};
-
-struct TimeRequest
-{
-  struct IORequest Request;
-  struct TimeVal   Time;
-};
-#define TIMEVAL(x)  (APTR)(x)
-#else
-#define TIMEVAL(x)  (x)
-#endif
 
 extern LONG __gmt_offset;
 
@@ -31,87 +40,44 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
   ULONG seconds;
   ULONG microseconds;
   struct TimeVal tv;
-  struct MsgPort *port = NULL;
-  struct TimeRequest *tr = NULL;
 
-  #if defined(__amigaos4__)
-  if((port = AllocSysObjectTags(ASOT_PORT, TAG_DONE)) != NULL)
+  GETSTATE();
+
+  if(OpenTimer(state))
   {
-    if((tr = AllocSysObjectTags(ASOT_IOREQUEST,
-      ASOIOR_Size, sizeof(*tr),
-      ASOIOR_ReplyPort, port,
-      TAG_DONE)) != NULL)
-    {
-  #else
-  if((port = CreateMsgPort()) != NULL)
-  {
-     if((tr = (struct TimeRequest *)CreateIORequest(port, sizeof(*tr))) != NULL)
-     {
-  #endif
-      if(OpenDevice(TIMERNAME, UNIT_MICROHZ, (struct IORequest *)tr, 0) == 0)
-      {
-        #if defined(__amigaos4__)
-        struct TimerIFace *ITimer = NULL;
-        #endif
-        struct Device *TimerBase;
+    GETTIMERSTATE(state);
 
-        if((TimerBase = tr->Request.io_Device) != NULL)
-	{
-	#if defined(__amigaos4__)
-          if((ITimer = (struct TimerIFace *)GetInterface((struct Library *)TimerBase, "main", 1, NULL)) != NULL)
-	  {
-	#endif
-            GetSysTime(TIMEVAL(&tv));
+    GetSysTime(TIMEVAL(&tv));
 
-            seconds = tv.Seconds;
-            microseconds = tv.Microseconds;
+    seconds = tv.Seconds;
+    microseconds = tv.Microseconds;
       
-            /* Convert the number of seconds so that they match the Unix epoch, which
-               starts (January 1st, 1970) eight years before the AmigaOS epoch. */
-            seconds += UNIX_TIME_OFFSET;
+    /* Convert the number of seconds so that they match the Unix epoch, which
+       starts (January 1st, 1970) eight years before the AmigaOS epoch. */
+    seconds += UNIX_TIME_OFFSET;
 
-            /* If possible, adjust for the local time zone. We do this because the
-               AmigaOS system time is returned in local time and we want to return
-               it in UTC. */
-            seconds += 60 * __gmt_offset;
+    /* If possible, adjust for the local time zone. We do this because the
+       AmigaOS system time is returned in local time and we want to return
+       it in UTC. */
+    seconds += 60 * __gmt_offset;
 
-            if(tp != NULL)
-            {
-              tp->tv_sec  = (long)seconds;
-              tp->tv_usec = (long)microseconds;
-            }
-
-            if(tzp != NULL)
-            {
-              tzp->tz_minuteswest = __gmt_offset;
-
-              /* The -1 means "we do not know if the time given is in
-                 daylight savings time". */
-              tzp->tz_dsttime = -1;
-            }
-
-            result = 0;
-          }
-
-        #if defined(__amigaos4__)
-          DropInterface((struct Interface *)ITimer);
-	}
-	#endif
-        
-	CloseDevice((struct IORequest *)tr);
-      }
-    #if defined(__amigaos4__)
-      FreeSysObject(ASOT_IOREQUEST, tr);
+    if(tp != NULL)
+    {
+      tp->tv_sec  = (long)seconds;
+      tp->tv_usec = (long)microseconds;
     }
 
-    FreeSysObject(ASOT_PORT, port);
-    #else
-      DeleteIORequest((struct IORequest *)tr);
+    if(tzp != NULL)
+    {
+      tzp->tz_minuteswest = __gmt_offset;
+
+      /* The -1 means "we do not know if the time given is in
+         daylight savings time". */
+      tzp->tz_dsttime = -1;
     }
 
-    DeleteMsgPort(port);
-    #endif
+    result = 0;
   }
 
-  return(result);
+  return result;
 }

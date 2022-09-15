@@ -164,7 +164,11 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 #ifdef __amigaos4__
     ret->ISocket = NULL;
     ret->ISocketPtr = NULL;
+    ret->ITimer = NULL;
+    ret->EntropyRequest = NULL;
 #endif
+    ret->TimeRequest = NULL;
+    ret->TimerPort = NULL;
     ret->ThreadGroupID = ownBase->ThreadGroupID;
 
     D(DBF_STARTUP, "h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)", parentBase->thread_hash, pid, ret);
@@ -369,14 +373,16 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED s
 
   if((state = GetAmiSSLState()))
   {
+    OPENSSL_thread_stop();
+
+    CleanupTimers(state);
+
 #ifdef __amigaos4__
     if(state->SocketBase && state->ISocketPtr && *state->ISocketPtr)
     {
       DropInterface((struct Interface *)*state->ISocketPtr);
     }
 #endif
-
-    OPENSSL_thread_stop();
 
     ObtainSemaphore(&parentBase->openssl_cs);
     D(DBF_STARTUP, "h_delete(parentBase->thread_hash)");

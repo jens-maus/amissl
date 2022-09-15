@@ -50,7 +50,11 @@ typedef struct {
 #ifdef __amigaos4__
 	struct SocketIFace *ISocket;
 	struct SocketIFace **ISocketPtr;
+	struct TimerIFace *ITimer;
+	struct IOStdReq *EntropyRequest;
 #endif
+	struct TimeRequest *TimeRequest;
+	struct MsgPort *TimerPort;
 	ULONG ThreadGroupID; // All states for a specific library base have the same ID
 } AMISSL_STATE;
 

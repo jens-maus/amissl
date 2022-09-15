@@ -1,5 +1,7 @@
+- Consolidated all routines that individually open timer.device to
+  instead use a single unified thread-safe solution.
 - File locks on the OS4 libraries are released during initialisation and
-  no longer held until reboot or expunged from memory (#46).
+  no longer held until reboot or expunged from memory (#49).
 - Handle setting of Roadshow TCP/IP stack type on OS3.
 - Removed unnecessary multiple openings of dos.library, some of which
   were mistakenly never closed.

@@ -103,6 +103,12 @@ struct SocketIFace *GetSocketIFace(int modifies_errno);
 #define GETISOCKET_NOERRNO() struct SocketIFace *ISocket = GetSocketIFace(0)
 #define GETSTATE() AMISSL_STATE *state = GetAmiSSLState()
 #define GETSOCKET() struct Library *SocketBase = GetAmiSSLState()->SocketBase
+#ifdef __amigaos4__
+#define GETTIMERSTATE(state) struct TimerIFace *ITimer = state->ITimer
+#else
+#define GETTIMERSTATE(state) struct Device *TimerBase = state->TimeRequest->Request.io_Device
+#endif
+#define GETTIMER() GETTIMERSTATE(GetAmiSSLState())
 
 #define DO_NOTHING     ((void)0)
 
@@ -156,5 +162,9 @@ void closelog(void);
 enum SRType {SR_INFO, SR_WARNING, SR_ERROR, SR_QUESTION};
 LONG ShowRequester(enum SRType type, const char *title, const char *body,
                    const char *gadgets);
+
+struct TimeRequest *OpenTimer(AMISSL_STATE *state);
+struct IOStdReq *OpenEntropy(AMISSL_STATE *state);
+void CleanupTimers(AMISSL_STATE *state);
 
 #endif /* !LIBCMT_H */
