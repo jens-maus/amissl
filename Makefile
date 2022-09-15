@@ -506,11 +506,11 @@ $(BUILD_D)/amissl_rev.h:
 
 $(BUILD_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,--cref,-Map=$@.map
 
 $(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,--cref,-Map=$@.map
 
 $(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_assl.o
 	@echo "  AR $@"
