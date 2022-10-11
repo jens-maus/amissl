@@ -1,4 +1,4 @@
-# Copyright 2021 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2021-2022 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -12,8 +12,14 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   apply-label:
+    permissions:
+      actions: read
+      pull-requests: write
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.event == 'pull_request' }}
     steps:
