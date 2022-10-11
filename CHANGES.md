@@ -1,3 +1,5 @@
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 11.10.2022.
 - Added a proper Amiga-specific ossl_sleep() function, replacing the
   default fallback busy wait function.
 - Consolidated all routines that individually open timer.device to
