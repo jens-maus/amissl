@@ -44,7 +44,9 @@ mkdir -p "release/AmiSSL/Libs"
 
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
 releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
-versionname=`grep ^VERSIONNAME= Makefile | awk -F= '{ print $2 }'`
+versionname=`grep ^MAJOR= openssl/VERSION.dat | awk -F= '{ print $2 }'`
+versionname="${versionname}`grep ^MINOR= openssl/VERSION.dat | awk -F= '{ print $2 }'`"
+versionname="${versionname}`grep ^PATCH= openssl/VERSION.dat | awk -F= '{ print $2 }'`"
 
 #OS="os3 os4 mos aros-i386 aros-ppc aros-x86_64"
 OS="os3-68020 os3-68060 os4"
