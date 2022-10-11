@@ -310,7 +310,7 @@ struct servent *getservbyname(const char *name, const char *proto);
 /* end vxworks */
 
 /* system-specific variants defining ossl_sleep() */
-#if defined(OPENSSL_SYS_UNIX) || defined(OPENSSL_SYS_AMIGA)
+#if defined(OPENSSL_SYS_UNIX) || defined(__DJGPP__) || defined(OPENSSL_SYS_AMIGA)
 # include <unistd.h>
 static ossl_inline void ossl_sleep(unsigned long millis)
 {
