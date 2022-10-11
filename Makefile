@@ -151,9 +151,11 @@ endif
 # ignored warnings are:
 # none - because we want to compile with -Wall all the time
 
+include openssl/VERSION.dat
+
 VERSION=5
 REVISION=4
-VERSIONNAME=305
+VERSIONNAME=$(MAJOR)$(MINOR)$(PATCH)
 
 # Common Directories
 PREFIX    = $(CDTHIS)
