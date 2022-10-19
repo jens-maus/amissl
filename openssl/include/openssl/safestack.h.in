@@ -34,6 +34,13 @@ extern "C" {
 # define STACK_OF(type) struct stack_st_##type
 
 /* Helper macro for internal use */
+# ifdef AMISSL_NO_STATIC_FUNCTIONS
+# define SKM_DEFINE_STACK_OF_INTERNAL(t1, t2, t3) \
+    STACK_OF(t1); \
+    typedef int (*sk_##t1##_compfunc)(const t3 * const *a, const t3 *const *b); \
+    typedef void (*sk_##t1##_freefunc)(t3 *a); \
+    typedef t3 * (*sk_##t1##_copyfunc)(const t3 *a);
+# else
 # define SKM_DEFINE_STACK_OF_INTERNAL(t1, t2, t3) \
     STACK_OF(t1); \
     typedef int (*sk_##t1##_compfunc)(const t3 * const *a, const t3 *const *b); \
@@ -63,6 +70,7 @@ extern "C" {
     { \
         return (OPENSSL_sk_freefunc)fr; \
     }
+# endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
 # define SKM_DEFINE_STACK_OF(t1, t2, t3) \

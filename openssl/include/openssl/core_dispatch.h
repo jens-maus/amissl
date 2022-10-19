@@ -44,6 +44,10 @@ extern "C" {
  * Note: This is considered a "reserved" internal macro. Applications should
  * not use this or assume its existence.
  */
+#ifdef AMISSL_NO_STATIC_FUNCTIONS
+#define OSSL_CORE_MAKE_FUNC(type,name,args)                             \
+    typedef type (OSSL_FUNC_##name##_fn)args;
+#else
 #define OSSL_CORE_MAKE_FUNC(type,name,args)                             \
     typedef type (OSSL_FUNC_##name##_fn)args;                           \
     static ossl_unused ossl_inline \
@@ -51,6 +55,7 @@ extern "C" {
     {                                                                   \
         return (OSSL_FUNC_##name##_fn *)opf->function;                  \
     }
+#endif
 
 /*
  * Core function identities, for the two OSSL_DISPATCH tables being passed

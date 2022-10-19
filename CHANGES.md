@@ -1,3 +1,6 @@
+- The AMISSL_NO_STATIC_FUNCTIONS preprocessor symbol has been added to
+  the SDK, mainly for use with VBCC (see SDK documentation).
+
 ## AmiSSL 5.4 (11.10.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest

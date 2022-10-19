@@ -22,7 +22,7 @@
 
 ***************************************************************************/
 
-#if !defined(AMISSL_INLINE_H) && !defined(AMISSL_COMPILE)
+#if !defined(AMISSL_INLINE_H) && !defined(AMISSL_COMPILE) && !defined(AMISSL_NO_STATIC_FUNCTIONS)
 # define AMISSL_INLINE_H
 
 /*

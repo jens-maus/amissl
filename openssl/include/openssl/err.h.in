@@ -240,6 +240,8 @@ struct err_state_st {
 
 # define ERR_SYSTEM_ERROR(errcode)      (((errcode) & ERR_SYSTEM_FLAG) != 0)
 
+# ifndef AMISSL_NO_STATIC_FUNCTIONS
+
 static ossl_unused ossl_inline int ERR_GET_LIB(unsigned long errcode)
 {
     if (ERR_SYSTEM_ERROR(errcode))
@@ -270,6 +272,8 @@ static ossl_unused ossl_inline int ERR_COMMON_ERROR(unsigned long errcode)
 {
     return (ERR_GET_RFLAGS(errcode) & ERR_RFLAG_COMMON) != 0;
 }
+
+# endif
 
 /*
  * ERR_PACK is a helper macro to properly pack OpenSSL error codes and may

@@ -140,6 +140,14 @@ void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *lh, BIO *out);
 # define LHASH_OF(type) struct lhash_st_##type
 
 /* Helper macro for internal use */
+# ifdef AMISSL_NO_STATIC_FUNCTIONS
+# define DEFINE_LHASH_OF_INTERNAL(type) \
+    LHASH_OF(type) { union lh_##type##_dummy { void* d1; unsigned long d2; int d3; } dummy; }; \
+    typedef int (*lh_##type##_compfunc)(const type *a, const type *b); \
+    typedef unsigned long (*lh_##type##_hashfunc)(const type *a); \
+    typedef void (*lh_##type##_doallfunc)(type *a); \
+    LHASH_OF(type)
+# else
 # define DEFINE_LHASH_OF_INTERNAL(type) \
     LHASH_OF(type) { union lh_##type##_dummy { void* d1; unsigned long d2; int d3; } dummy; }; \
     typedef int (*lh_##type##_compfunc)(const type *a, const type *b); \
@@ -174,6 +182,7 @@ void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *lh, BIO *out);
         return (OPENSSL_LH_DOALL_FUNC)dfn; \
     } \
     LHASH_OF(type)
+# endif
 
 # if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
 # define DEFINE_LHASH_OF(type) \

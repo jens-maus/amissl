@@ -10,7 +10,9 @@ AmiSSL v5 Developer Documentation
  7. Migration from AmiSSL v3
  8. Differences to OpenSSL
  9. Callback functions
-10. Compiler issues
+10. Stub functions
+11. VBCC issues
+12. SAS/C issues
 
 
 1. Introduction
@@ -253,8 +255,8 @@ STDARGS SAVEDS int verify_cb(int preverify_ok, X509_STORE_CTX *ctx)
 SSL_CTX_set_verify(sslctx,SSL_VERIFY_PEER,verify_cb);
 
 
-10. Compiler issues
--------------------
+10. Stub functions
+------------------
 Sometimes it is necessary to pass an AmiSSL function as a function pointer
 argument. Since AmiSSL functions are inside the library, it is not possible
 directly. See the section about the libamisslstubs.a link library which aims to
@@ -272,13 +274,32 @@ name than to change many occurrences of f. ex. ASN1_OBJECT_free to f. ex.
 ASN1_OBJECT_free_stub whenever ASN1_OBJECT_free is passed as a function
 pointer.
 
-For SAS/C you will need to add "MemorySize=h IdentifierLength=80" to your
-SC command line and have to take special care where 64-bit integers are
-concerned. In particular, OPENSSL_init_ssl(), which you mignt not even be
-calling directly, but is ultimately the end result of many of the macros for
-older legacy SSL initialisation functions. Remember that for 64-bit
-parameters, the high 32-bits are placed in D0 and the low 32-bits in D1.
-So, you might want to use a workaround like this:
+11. VBCC issues
+---------------
+The OpenSSL header files rely on using and declaring static inline helper
+functions. This means that lots of functions will be declared in every
+module that you include the OpenSSL headers and probably most of them you
+will not use or need. Most compilers remove these unused functions by
+default and sometimes even with the optimiser completely disabled.
+Unfortunately, VBCC is different and will only remove these functions if
+you use -O3 when compiling. -O1 and -O2 will leave all the unused functions
+in your code. If for some reason you do not wish to use -O3, you could try
+-O=17375 or -O=17407. These are the equivalent of -O1 and -O2 respectively,
+but with the required optimiser bit added to enable removal of the unused
+functions. Alternatively, you may compile with -DAMISSL_NO_STATIC_FUNCTIONS,
+which will stop all the affected functions from being declared in the first
+place, but obviously you can only use this if your code is not using any of
+these functions otherwise you will get errors when compiling.
+
+12. SAS/C issues
+----------------
+You will need to add "MemorySize=h IdentifierLength=80" to your SC command
+line and have to take special care where 64-bit integers are concerned. In
+particular, OPENSSL_init_ssl(), which you mignt not even be calling directly,
+but is ultimately the end result of many of the macros for older legacy SSL
+initialisation functions. Remember that for 64-bit parameters, the high
+32-bits are placed in D0 and the low 32-bits in D1. So, you might want to
+use a workaround like this:
 
 #define OPENSSL_init_ssl_32(opts, settings) \
 	(putreg(REG_D1,opts), OPENSSL_init_ssl(0, settings))
