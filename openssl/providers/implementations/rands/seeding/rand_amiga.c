@@ -37,57 +37,45 @@
 
 #include "libcmt.h"
 
-/* Maximum number of attempts to get a delay of 1 microsecond that is not equal to 0 */
-#define MAX_ATTEMPTS 1000
-
-#if defined(__amigaos4__)
-static void read_entropy(RAND_POOL *pool, size_t bytes_needed, AMISSL_STATE *state)
-{
-    unsigned char temp_buffer[SHA256_DIGEST_LENGTH], data_buffer[SHA256_DIGEST_LENGTH];
-    struct IOStdReq *entropy_request;
-
-    if ((entropy_request = OpenEntropy(state)))
-    {
-        while (bytes_needed > 0)
-        {
-            entropy_request->io_Command = TR_READENTROPY;
-            entropy_request->io_Data = &temp_buffer[0];
-            entropy_request->io_Length = sizeof(temp_buffer);
-
-            if (DoIO((struct IORequest *)entropy_request) == 0)
-            {
-                size_t bytes_read = entropy_request->io_Actual;
-                SHA256(&temp_buffer[0], bytes_read, &data_buffer[0]);
-                if (bytes_read > bytes_needed) bytes_read = bytes_needed;
-                ossl_rand_pool_add(pool, &data_buffer[0], bytes_read, 8 * bytes_read);
-                bytes_needed -= bytes_read;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-}
-#endif /* __amigaos4__ */
-
 /*
 ** This must be re-entrant as may be called by multiple tasks hence must
 ** always allocate our own port and requests
 */
+
 size_t ossl_pool_acquire_entropy(RAND_POOL *pool)
 {
     struct TimeRequest *time_request;
-    size_t bytes_needed;
+    size_t bytes_needed, bytes_read;
+    unsigned char *buffer;
 
     GETSTATE();
 
     #if defined(__amigaos4__)
+    struct IOStdReq *entropy_request;
+
     bytes_needed = ossl_rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
 
-    if (bytes_needed > 0)
+    if (bytes_needed > 0 && (entropy_request = OpenEntropy(state)))
     {
-        read_entropy(pool,bytes_needed,state);
+        do
+        {
+	    buffer = ossl_rand_pool_add_begin(pool, bytes_needed);
+            entropy_request->io_Command = TR_READENTROPY;
+            entropy_request->io_Data = buffer;
+            entropy_request->io_Length = bytes_needed;
+
+            if (buffer && DoIO((struct IORequest *)entropy_request) == 0)
+            {
+	        bytes_read = entropy_request->io_Actual;
+	        if (bytes_read > bytes_needed) bytes_read = bytes_needed;
+                ossl_rand_pool_add_end(pool, bytes_read, 8 * bytes_read);
+                bytes_needed -= bytes_read;
+            }
+            else
+            {
+	        break; /* abort */
+            }
+        } while (bytes_needed > 0);
     }
     #endif
 
@@ -97,71 +85,37 @@ size_t ossl_pool_acquire_entropy(RAND_POOL *pool)
      */
     bytes_needed = ossl_rand_pool_bytes_needed(pool, 4 /*entropy_factor*/);
 
-    if (bytes_needed > 0 && (time_request = OpenTimer(state)))
+    if (bytes_needed > 0 && (buffer = ossl_rand_pool_add_begin(pool, bytes_needed)) && (time_request = OpenTimer(state)))
     {
-        unsigned char temp_buffer[SHA256_DIGEST_LENGTH], data_buffer[SHA256_DIGEST_LENGTH];
         struct EClockVal curr_eclock;
-        ULONG prev_ev_lo = 0;
-        struct TimeVal tv;
-        int i, attempt;
-        BOOL aborted;
 
         GETTIMERSTATE(state);
 
-        ReadEClock(&curr_eclock);
-        aborted = FALSE;
+        bytes_read = 0;
 
-        while(!aborted && bytes_needed > 0)
+        do
         {
-            for(i = 0;
-                !aborted && i < (int)sizeof(temp_buffer) - (int)sizeof(ULONG);
-                i++)
-            {
-                attempt = 0;
-
-                /* Ask for a one microsecond delay and measure the time
-                 * the delay actually took.
-                 */
-                do
-                {
-                    time_request->Request.io_Command = TR_ADDREQUEST;
-                    time_request->Time.Seconds = 0;
-                    time_request->Time.Microseconds = 1;
-
-                    if (DoIO((struct IORequest *)time_request) == 0)
-                    {
-                        prev_ev_lo = curr_eclock.ev_lo;
-                        ReadEClock(&curr_eclock);
-
-                        attempt++;
-		    }
-                    else
-                        aborted = TRUE;
-                } while(!aborted && prev_ev_lo == 0 && attempt < MAX_ATTEMPTS);
-
-                if (attempt >= MAX_ATTEMPTS)
-                    aborted = TRUE;
-
-                /* Since we are going for randomness, ev_hi is irrelevant */
-                temp_buffer[i] = (unsigned char)(curr_eclock.ev_lo - prev_ev_lo);
-            }
-
-            GetSysTime(TIMEVAL(&tv));
-
-            if (sizeof(temp_buffer) > sizeof(ULONG))
-                *(ULONG *)&temp_buffer[sizeof(temp_buffer) - sizeof(ULONG)] = tv.Microseconds;
-
-            /* Shuffle the bits around and specify that about
-             * one fourth of it adds to the entropy.
+            /* Ask for a one microsecond delay and measure the time
+             * the delay actually took.
              */
-            if (!aborted)
+            time_request->Request.io_Command = TR_ADDREQUEST;
+            time_request->Time.Seconds = 0;
+            time_request->Time.Microseconds = 1;
+
+            if (DoIO((struct IORequest *)time_request) != 0)
             {
-                size_t bytes_read = (bytes_needed < sizeof(data_buffer)) ? bytes_needed : sizeof(data_buffer);
-                SHA256(&temp_buffer[0], sizeof(temp_buffer), &data_buffer[0]);
-                ossl_rand_pool_add(pool, &data_buffer[0], bytes_read, 2 * bytes_read);
-                bytes_needed -= bytes_read;
+	        break; /* abort */
             }
-        }
+
+            ReadEClock(&curr_eclock);
+
+            /* Since we are going for randomness, ev_hi is irrelevant */
+            *buffer++ = (unsigned char)(curr_eclock.ev_lo & 0xff);
+
+        } while (++bytes_read < bytes_needed);
+
+        /* Only add a quarter of the bits to the entropy */
+        ossl_rand_pool_add_end(pool, bytes_read, 2 * bytes_read);
     }
 
     return ossl_rand_pool_entropy_available(pool);

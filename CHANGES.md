@@ -1,3 +1,4 @@
+- Improved and simplified random number seeding routines.
 - The AMISSL_NO_STATIC_FUNCTIONS preprocessor symbol has been added to
   the SDK, mainly for use with VBCC (see SDK documentation).
 
