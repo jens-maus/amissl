@@ -1,20 +1,20 @@
 ## AmiSSL 5.5 (1.11.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest
-  OpenSSL 3.0.7 (11.1.2022) version, which includes:
-  # Added RIPEMD160 to the default provider.
-  # Fixed regressions introduced in 3.0.6 version.
-  # Fixed two buffer overflows in punycode decoding functions.
+  OpenSSL 3.0.7 (1.11.2022) version, which includes:
+  + Added RIPEMD160 to the default provider.
+  + Fixed regressions introduced in 3.0.6 version.
+  + Fixed two buffer overflows in punycode decoding functions.
     ([CVE-2022-3786]) and ([CVE-2022-3602])
 - Improved and simplified random number seeding routines.
 - The AMISSL_NO_STATIC_FUNCTIONS preprocessor symbol has been added to
-  the SDK, mainly for use with VBCC (see SDK documentation).
+  the SDK, mainly for use with VBCC (see SDK documentation - #66).
 
 ## AmiSSL 5.4 (11.10.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest
   OpenSSL 3.0.6 (11.10.2022) version, which brings fixes including:
-  # Fix for custom ciphers to prevent accidental use of NULL encryption
+  + Fix for custom ciphers to prevent accidental use of NULL encryption
     ([CVE-2022-3358])
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 11.10.2022.
@@ -35,7 +35,7 @@
 - Updated OpenSSL backend to full compatibility with the latest
   OpenSSL 3.0.5 (5.7.2022) version, which brings security, memory leak
   and other bug fixes, including:
-  # Fixed heap memory corruption with RSA private key operation
+  + Fixed heap memory corruption with RSA private key operation
     ([CVE-2022-2274])
 - Fixed "const const" typo in SDK interface definition of the old unused
   EVP_PBE_scrypt() public API entry point.
