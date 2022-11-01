@@ -151,10 +151,10 @@ endif
 # ignored warnings are:
 # none - because we want to compile with -Wall all the time
 
-include openssl/VERSION.dat
-
 VERSION=5
-REVISION=4
+REVISION=5
+
+include openssl/VERSION.dat
 VERSIONNAME=$(MAJOR)$(MINOR)$(PATCH)
 
 # Common Directories
