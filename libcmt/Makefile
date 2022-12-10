@@ -48,8 +48,8 @@ ifeq ($(OS), os4)
   # Compiler/Linker flags
   CRT      = clib2
   WARN     += -Wdeclaration-after-statement -Wdisabled-optimization
-  CFLAGS   += -mcrt=$(CRT) -mbaserel -D__USE_INLINE__ -D__C_MACROS__ \
-              $(REDEFINE) -Wa,-mregnames
+  CFLAGS   += -mcrt=$(CRT) -mbaserel -mno-sdata -D__USE_INLINE__ \
+              -D__C_MACROS__ $(REDEFINE) -Wa,-mregnames
   LDFLAGS  += -mcrt=$(CRT)
 
 else

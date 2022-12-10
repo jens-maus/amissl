@@ -210,7 +210,7 @@ ifeq ($(OS), os4)
   STUBINC    = -include $(BUILD_D)/precompiled.h
   LDFLAGS   += -std=c99 -mcrt=$(CRT) -specs=tools/gcc-os4.specs
   LDLIBS    += -lgcc
-  BASEREL   = -mbaserel
+  BASEREL   = -mbaserel -mno-sdata
   NOBASEREL = -mno-baserel
 
   EXTRALIBOBJS = $(BUILD_D)/amissl_library_os4.o \
