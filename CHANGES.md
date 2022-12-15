@@ -1,3 +1,8 @@
+- Fixed TLS 1.3 cipher lookup failure regression on OS4 (#68).
+- The improvement from v5.4 that released file locks on the OS4
+  libraries is now only activated with elf.library 53.35 or higher.
+- Minor build changes.
+
 ## AmiSSL 5.5 (1.11.2022)
 
 - Updated OpenSSL backend to full compatibility with the latest

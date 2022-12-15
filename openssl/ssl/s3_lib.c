@@ -4087,7 +4087,11 @@ const SSL_CIPHER *ssl3_get_cipher_by_std_name(const char *stdname)
 {
     SSL_CIPHER *tbl;
 #if defined(OPENSSL_SYS_AMIGA) && defined(__amigaos4__)
-    static /* baserel compiler bug workaround - stop array going into .rodata */
+    /* baserel compiler bug workaround - GCC normally puts this array in
+       .rodata, which is a bug when using -mbaserel as the .rodata relocs
+       will point to the original .data, not the copy. We therefore make
+       make the array static to force it into .data instead */
+    static
 #endif
     SSL_CIPHER *alltabs[] = {tls13_ciphers, ssl3_ciphers, ssl3_scsvs};
     size_t i, j, tblsize[] = {TLS13_NUM_CIPHERS, SSL3_NUM_CIPHERS,

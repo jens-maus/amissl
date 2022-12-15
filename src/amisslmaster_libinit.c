@@ -628,21 +628,12 @@ STATIC struct LibraryHeader *InitMultiBase(struct LibraryHeader *base)
     {
       Elf32_Handle elf = NULL;
       GetSegListInfoTags(base->segList, GSLI_ElfHandle, &elf, TAG_DONE);
-      if(elf && (elf = OpenElfTags(OET_ElfHandle, elf, TAG_DONE)))
-      { /* Check for .data and preload with relocs ready for CopyDataSegment() */
+      if(elf && (elf = OpenElfTags(OET_ElfHandle, elf, OET_NoDOS, LIB_IS_AT_LEAST(ElfBase, 53, 35), TAG_DONE)))
+      {
         D(DBF_STARTUP, "OpenElfTags success!");
-        if(GetSectionHeaderTags(elf, GST_SectionName, ".data", TAG_DONE))
-	{ /* Success - close input file handle only, as no longer required */
-          CloseElfTags(elf, CET_FreeUnneeded, FALSE, TAG_DONE);
-          base->IElf = IElf;
-          base->elfHandle = elf;
-          return base;
-        }
-	else
-        { /* Fail - close the handle fully */
-          CloseElfTags(elf, CET_ReClose, TRUE, TAG_DONE);
-          D(DBF_STARTUP, ".data section not found!");
-        }
+        base->IElf = IElf;
+        base->elfHandle = elf;
+        return base;
       }
       else
         D(DBF_STARTUP, "OpenElfTags NO success!");

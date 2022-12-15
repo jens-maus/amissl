@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 5.0.2 (30.8.2022)
+; $VER: Install-AmiSSL 5.0.3 (12.12.2022)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -350,9 +350,8 @@
 (set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
 
 ; Try to force ramlib on OS4 to expunge libraries to release
-; exclusive library file locks (not required since 5.4)
-(if (AND (= #detectedSystem "os4")
-         (< #resident-lib-ver (+ (* 65536 5) 4)))
+; exclusive library file locks
+(if (= #detectedSystem "os4")
 	(
 		(foreach (tackon #libs-dir "AmiSSL") "amissl_v#?.library"
 			(
