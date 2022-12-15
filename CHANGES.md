@@ -1,3 +1,5 @@
+## AmiSSL 5.6 (15.12.2022)
+
 - Fixed TLS 1.3 cipher lookup failure regression on OS4 (#68).
 - The improvement from v5.4 that released file locks on the OS4
   libraries is now only activated with elf.library 53.35 or higher.
