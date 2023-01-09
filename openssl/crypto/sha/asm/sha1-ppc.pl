@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2006-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -290,9 +296,6 @@ Ldone:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,3,0
-	.long	0
 ___
 
 # This is private block function, which uses tailored calling
@@ -342,11 +345,10 @@ $code.=<<___;
 	addi	$inp,$inp,`16*4`
 	bdnz	Lsha1_block_private
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	.sha1_block_data_order,.-.sha1_block_data_order
 ___
 $code.=<<___;
+.rodata
 .asciz	"SHA1 block transform for PPC, CRYPTOGAMS by <appro\@fy.chalmers.se>"
 ___
 

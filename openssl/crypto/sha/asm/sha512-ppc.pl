@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2006-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -246,7 +252,8 @@ ___
 }
 
 $code.=<<___;
-	bl	LPICmeup
+	lis	$Tbl,LK`$SZ*64`\@ha
+	la      $Tbl,LK`$SZ*64`\@l($Tbl)
 LPICedup:
 	andi.	r0,$inp,3
 	bne	Lunaligned
@@ -352,9 +359,6 @@ Ldone:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,3,0
-	.long	0
 ___
 
 if ($SZ==4 || $SIZE_T==8) {
@@ -442,8 +446,6 @@ $code.=<<___;
 	$ST	$H,`7*$SZ`($ctx)
 	bne	Lsha2_block_private
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	$func,.-$func
 ___
 } else {
@@ -715,28 +717,15 @@ $code.=<<___;
 	$UCMP	$inp,$num
 	bne	Lsha2_block_private
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	$func,.-$func
 ___
 }
 
-# Ugly hack here, because PPC assembler syntax seem to vary too
-# much from platforms to platform...
-$code.=<<___;
-.align	6
-LPICmeup:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	$Tbl	; vvvvvv "distance" between . and 1st data entry
-	addi	$Tbl,$Tbl,`64-8`
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`64-9*4`
-___
 $code.=<<___ if ($SZ==8);
+.rodata
+.type	LK512, \@object
+.align	6
+LK512:
 	.quad	0x428a2f98d728ae22,0x7137449123ef65cd
 	.quad	0xb5c0fbcfec4d3b2f,0xe9b5dba58189dbbc
 	.quad	0x3956c25bf348b538,0x59f111f1b605d019
@@ -779,6 +768,10 @@ $code.=<<___ if ($SZ==8);
 	.quad	0x5fcb6fab3ad6faec,0x6c44198c4a475817
 ___
 $code.=<<___ if ($SZ==4);
+.rodata
+.type	LK256, \@object
+.align	6
+LK256:
 	.long	0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5
 	.long	0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5
 	.long	0xd807aa98,0x12835b01,0x243185be,0x550c7dc3

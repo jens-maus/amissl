@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2007-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -118,29 +124,11 @@ $mask1b=$Tbl3;
 
 $code.=<<___;
 .machine	"any"
-.text
+.rodata
 
 .align	7
+.type	LAES_Te, \@object
 LAES_Te:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	$Tbl0	;    vvvvv "distance" between . and 1st data entry
-	addi	$Tbl0,$Tbl0,`128-8`
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`64-9*4`
-LAES_Td:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	$Tbl0	;    vvvvvvvv "distance" between . and 1st data entry
-	addi	$Tbl0,$Tbl0,`128-64-8+2048+256`
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`128-64-9*4`
 ___
 &_data_word(
 	0xc66363a5, 0xf87c7c84, 0xee777799, 0xf67b7b8d,
@@ -240,6 +228,9 @@ $code.=<<___;
 .byte	0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf
 .byte	0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68
 .byte	0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
+
+.type	LAES_Td, \@object
+LAES_Td:
 ___
 &_data_word(
 	0x51f4a750, 0x7e416553, 0x1a17a4c3, 0x3a275e96,
@@ -341,6 +332,7 @@ $code.=<<___;
 .byte	0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
 
 
+.text
 .globl	.AES_encrypt
 .align	7
 .AES_encrypt:
@@ -400,7 +392,6 @@ $code.=<<___ if ($LITTLE_ENDIAN);
 	rlwimi	$s3,$t3,24,16,23
 ___
 $code.=<<___;
-	bl	LAES_Te
 	bl	Lppc_AES_encrypt_compact
 	$POP	$out,`$FRAME-$SIZE_T*19`($sp)
 ___
@@ -469,7 +460,6 @@ Lenc_xpage:
 	insrwi	$s2,$acc10,8,16
 	insrwi	$s3,$acc14,8,16
 
-	bl	LAES_Te
 	bl	Lppc_AES_encrypt_compact
 	$POP	$out,`$FRAME-$SIZE_T*19`($sp)
 
@@ -525,12 +515,13 @@ Lenc_done:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,3,0
-	.long	0
 
+___
+$code.=<<___ if (0);
 .align	5
 Lppc_AES_encrypt:
+	lis	$Tbl0,LAES_Te\@ha
+	la	$Tbl0,LAES_Te\@l($Tbl0)
 	lwz	$acc00,240($key)
 	addi	$Tbl1,$Tbl0,3
 	lwz	$t0,0($key)
@@ -670,11 +661,13 @@ Lenc_loop:
 	xor	$s2,$s2,$t2
 	xor	$s3,$s3,$t3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
+___
+$code.=<<___;
 .align	4
 Lppc_AES_encrypt_compact:
+	lis	$Tbl0,LAES_Te\@ha
+	la	$Tbl0,LAES_Te\@l($Tbl0)
 	lwz	$acc00,240($key)
 	addi	$Tbl1,$Tbl0,2048
 	lwz	$t0,0($key)
@@ -815,8 +808,6 @@ Lenc_compact_done:
 	xor	$s2,$s2,$t2
 	xor	$s3,$s3,$t3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	.AES_encrypt,.-.AES_encrypt
 
 .globl	.AES_decrypt
@@ -878,7 +869,6 @@ $code.=<<___ if ($LITTLE_ENDIAN);
 	rlwimi	$s3,$t3,24,16,23
 ___
 $code.=<<___;
-	bl	LAES_Td
 	bl	Lppc_AES_decrypt_compact
 	$POP	$out,`$FRAME-$SIZE_T*19`($sp)
 ___
@@ -947,7 +937,6 @@ Ldec_xpage:
 	insrwi	$s2,$acc10,8,16
 	insrwi	$s3,$acc14,8,16
 
-	bl	LAES_Td
 	bl	Lppc_AES_decrypt_compact
 	$POP	$out,`$FRAME-$SIZE_T*19`($sp)
 
@@ -1003,12 +992,13 @@ Ldec_done:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,3,0
-	.long	0
 
+___
+$code.=<<___ if (0);
 .align	5
 Lppc_AES_decrypt:
+	lis	$Tbl0,LAES_Td\@ha
+	la	$Tbl0,LAES_Td\@l($Tbl0)
 	lwz	$acc00,240($key)
 	addi	$Tbl1,$Tbl0,3
 	lwz	$t0,0($key)
@@ -1148,11 +1138,13 @@ Ldec_loop:
 	xor	$s2,$s2,$t2
 	xor	$s3,$s3,$t3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
+___
+$code.=<<___;
 .align	4
 Lppc_AES_decrypt_compact:
+	lis	$Tbl0,LAES_Td\@ha
+	la	$Tbl0,LAES_Td\@l($Tbl0)
 	lwz	$acc00,240($key)
 	addi	$Tbl1,$Tbl0,2048
 	lwz	$t0,0($key)
@@ -1450,11 +1442,12 @@ Ldec_compact_done:
 	xor	$s2,$s2,$t2
 	xor	$s3,$s3,$t3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	.AES_decrypt,.-.AES_decrypt
 
+.rodata
 .asciz	"AES for PPC, CRYPTOGAMS by <appro\@openssl.org>"
+
+.text
 .align	7
 ___
 

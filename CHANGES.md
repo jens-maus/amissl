@@ -1,3 +1,6 @@
+- Prevent OS4 load time emulation corrupting the data in the PPC ASM
+  optimised routines by moving data from .text section to .rodata. (#38)
+- Removed redundant code in PPC ASM optimised routines.
 - Removed unused PPC POWER8 specific ASM optimised routines.
 
 ## AmiSSL 5.6 (15.12.2022)

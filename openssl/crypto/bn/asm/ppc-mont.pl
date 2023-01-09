@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2006-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -347,9 +353,6 @@ Lcopy:				; conditional copy
 	$POP	r31,`-1*$SIZE_T`($tj)
 	mr	$sp,$tj
 	blr
-	.long	0
-	.byte	0,12,4,0,0x80,12,6,0
-	.long	0
 .size	.bn_mul_mont_int,.-.bn_mul_mont_int
 ___
 }
@@ -947,9 +950,6 @@ $code.=<<___;
 	$POP	r31,-$SIZE_T*1($bp)
 	mr	$sp,$bp
 	blr
-	.long	0
-	.byte	0,12,4,0x20,0x80,18,6,0
-	.long	0
 .size	.bn_mul4x_mont_int,.-.bn_mul4x_mont_int
 ___
 }
@@ -1979,13 +1979,11 @@ $code.=<<___;
 	$POP	r31,-$SIZE_T*1($ap)
 	mr	$sp,$ap
 	blr
-	.long	0
-	.byte	0,12,4,0x20,0x80,18,6,0
-	.long	0
 .size	__bn_sqr8x_mont,.-__bn_sqr8x_mont
 ___
 }
 $code.=<<___;
+.rodata
 .asciz  "Montgomery Multiplication for PPC, CRYPTOGAMS by <appro\@openssl.org>"
 ___
 

@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2013-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -70,8 +76,9 @@ open STDOUT,"| $^X $xlate $flavour \"$output\""
 $code.=<<___;
 .machine	"any"
 
-.text
+.rodata
 
+.type	_vpaes_consts, \@object
 .align	7	# totally strategic alignment
 _vpaes_consts:
 Lk_mc_forward:	# mc_forward
@@ -158,17 +165,9 @@ Lk_opt:		# output transform
 Lk_deskew:	# deskew tables: inverts the sbox's "skew"
 	.long	0x00e3a447, 0x40a3e407, 0x1af9be5d, 0x5ab9fe1d	?rev
 	.long	0x0069ea83, 0xdcb5365f, 0x771e9df4, 0xabc24128	?rev
-.align	5
 Lconsts:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	r12	#vvvvv "distance between . and _vpaes_consts
-	addi	r12,r12,-0x308
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .asciz  "Vector Permutation AES for AltiVec, Mike Hamburg (Stanford University)"
+.text
 .align	6
 ___
 
@@ -189,9 +188,8 @@ $code.=<<___;
 ##
 .align	4
 _vpaes_encrypt_preheat:
-	mflr	r8
-	bl	Lconsts
-	mtlr	r8
+	lis	r12, _vpaes_consts\@ha
+	la	r12, _vpaes_consts\@l(r12)
 	li	r11, 0xc0		# Lk_inv
 	li	r10, 0xd0
 	li	r9,  0xe0		# Lk_ipt
@@ -216,8 +214,6 @@ _vpaes_encrypt_preheat:
 	lvx	$sb2u, r12, r11
 	lvx	$sb2t, r12, r10
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  _aes_encrypt_core
@@ -304,8 +300,6 @@ Lenc_entry:
 	vxor	v0, v0, v4		# vpxor		%xmm4,	%xmm0,	%xmm0	# 0 = A
 	vperm	v0, v0, v7, v1		# vpshufb	%xmm1,	%xmm0,	%xmm0
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 .globl	.vpaes_encrypt
 .align	5
@@ -399,16 +393,12 @@ Lenc_done:
 	lvx	v31,r11,$sp
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
-	.long	0
 .size	.vpaes_encrypt,.-.vpaes_encrypt
 
 .align	4
 _vpaes_decrypt_preheat:
-	mflr	r8
-	bl	Lconsts
-	mtlr	r8
+	lis	r12, _vpaes_consts\@ha
+	la	r12, _vpaes_consts\@l(r12)
 	li	r11, 0xc0		# Lk_inv
 	li	r10, 0xd0
 	li	r9,  0x160		# Ldipt
@@ -441,8 +431,6 @@ _vpaes_decrypt_preheat:
 	lvx	$sbeu, r12, r11
 	lvx	$sbet, r12, r10
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  Decryption core
@@ -536,8 +524,6 @@ Ldec_entry:
 	vxor	v0, v1, v4		# vpxor		%xmm4,	%xmm1,	%xmm0	# 0 = A
 	vperm	v0, v0, v7, v2		# vpshufb	%xmm2,	%xmm0,	%xmm0
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 .globl	.vpaes_decrypt
 .align	5
@@ -631,9 +617,6 @@ Ldec_done:
 	lvx	v31,r11,$sp
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
-	.long	0
 .size	.vpaes_decrypt,.-.vpaes_decrypt
 
 .globl	.vpaes_cbc_encrypt
@@ -858,9 +841,6 @@ Lcbc_abort:
 	mtlr	r0
 	addi	$sp,$sp,`$FRAME+$SIZE_T*2`
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,2,6,0
-	.long	0
 .size	.vpaes_cbc_encrypt,.-.vpaes_cbc_encrypt
 ___
 }
@@ -877,9 +857,8 @@ $code.=<<___;
 ########################################################
 .align	4
 _vpaes_key_preheat:
-	mflr	r8
-	bl	Lconsts
-	mtlr	r8
+	lis	r12, _vpaes_consts\@ha
+	la	r12, _vpaes_consts\@l(r12)
 	li	r11, 0xc0		# Lk_inv
 	li	r10, 0xd0
 	li	r9,  0xe0		# L_ipt
@@ -920,8 +899,6 @@ _vpaes_key_preheat:
 	lvx	v25, 0, r12		# Lk_mc_forward[0]
 	lvx	v26, r12, r8		# Lks63
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 .align	4
 _vpaes_schedule_core:
@@ -1166,8 +1143,6 @@ Lschedule_mangle_done:
 	vxor	v7, v7, v7		# vpxor		%xmm7,	%xmm7,	%xmm7
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  .aes_schedule_192_smear
@@ -1194,8 +1169,6 @@ _vpaes_schedule_192_smear:
 	?vsldoi	v6, v6, v9, 8
 	?vsldoi	v6, v9, v6, 8		# clobber low side with zeros
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  .aes_schedule_round
@@ -1260,8 +1233,6 @@ _vpaes_schedule_low_round:
 	vxor	v0, v1, v7		# vpxor		%xmm7,	%xmm1,	%xmm0
 	vxor	v7, v1, v7		# vmovdqa	%xmm0,	%xmm7
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  .aes_schedule_transform
@@ -1282,8 +1253,6 @@ _vpaes_schedule_transform:
 	vperm	v2, $ipthi, $ipthi, v2	# vpshufb	%xmm0,	%xmm1,	%xmm0
 	vxor	v0, v0, v2		# vpxor		%xmm2,	%xmm0,	%xmm0
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 ##
 ##  .aes_schedule_mangle
@@ -1385,8 +1354,6 @@ Lschedule_mangle_dec:
 	vmr	$outhead, v1
 	stvx	v2, 0, $out
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 
 .globl	.vpaes_set_encrypt_key
 .align	5
@@ -1461,9 +1428,6 @@ Lschedule_mangle_dec:
 	lvx	v31,r11,$sp
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
-	.long	0
 .size	.vpaes_set_encrypt_key,.-.vpaes_set_encrypt_key
 
 .globl	.vpaes_set_decrypt_key
@@ -1544,9 +1508,6 @@ Lschedule_mangle_dec:
 	lvx	v31,r11,$sp
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
-	.long	0
 .size	.vpaes_set_decrypt_key,.-.vpaes_set_decrypt_key
 ___
 }

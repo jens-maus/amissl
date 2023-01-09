@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -145,8 +151,6 @@ $code.=<<___;
 Lno_key:
 	xor	r3,r3,r3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
 .size	.poly1305_init_int,.-.poly1305_init_int
 
 .globl	.poly1305_blocks
@@ -248,8 +252,6 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 Labort:
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,5,4,0
 .size	.poly1305_blocks,.-.poly1305_blocks
 ___
 {
@@ -360,8 +362,6 @@ $code.=<<___;
 	stbu	$h1,1($mac)
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
 .size	.poly1305_emit,.-.poly1305_emit
 ___
 }							} else {
@@ -420,8 +420,6 @@ $code.=<<___;
 Lno_key:
 	xor	r3,r3,r3
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
 .size	.poly1305_init_int,.-.poly1305_init_int
 
 .globl	.poly1305_blocks
@@ -632,8 +630,6 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 Labort:
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,4,0
 .size	.poly1305_blocks,.-.poly1305_blocks
 ___
 {
@@ -731,8 +727,6 @@ Lemit_base2_32:
 	stbu	$h3,1($mac)
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
 .size	.poly1305_emit,.-.poly1305_emit
 ___
 }							}
@@ -828,8 +822,6 @@ $code.=<<___;
 	stw	r0,24($ctx)		# clear is_base2_26
 
 	b	Lpoly1305_blocks
-	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
 .size	.poly1305_blocks_vsx,.-.poly1305_blocks_vsx
 
 .align	5
@@ -866,8 +858,6 @@ __poly1305_mul:
 	addze	$h2,$h2
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	__poly1305_mul,.-__poly1305_mul
 
 .align	5
@@ -902,8 +892,6 @@ __poly1305_splat:
 	stw	$d0,0x80($t1)
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	__poly1305_splat,.-__poly1305_splat
 
 .align	5
@@ -945,7 +933,8 @@ __poly1305_blocks_vsx:
 	$PUSH	r31,`$VSXFRAME-$SIZE_T*1`($sp)
 	$PUSH	r0,`$VSXFRAME+$LRSAVE`($sp)
 
-	bl	LPICmeup
+	lis	$const,Lconsts\@ha
+	la	$const,Lconsts\@l($const)
 
 	li	$x10,0x10
 	li	$x20,0x20
@@ -1048,8 +1037,6 @@ $code.=<<___;
 	stw	$t0,24($ctx)		# clear is_base2_26
 
 	b	Lpoly1305_blocks
-	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
 .size	.poly1305_blocks_vsx,.-.poly1305_blocks_vsx
 
 .align	5
@@ -1136,8 +1123,6 @@ __poly1305_mul:
 	vaddudm		$H4,$H4,$ACC3		# h3 -> h4
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 .size	__poly1305_mul,.-__poly1305_mul
 
 .align	5
@@ -1179,7 +1164,8 @@ __poly1305_blocks_vsx:
 	$PUSH	r31,`$VSXFRAME-$SIZE_T*1`($sp)
 	$PUSH	r0,`$VSXFRAME+$LRSAVE`($sp)
 
-	bl	LPICmeup
+	lis	$const,Lconsts\@ha
+	la	$const,Lconsts\@l($const)
 
 	li	$x10,0x10
 	li	$x20,0x20
@@ -1926,23 +1912,12 @@ Ldone_vsx:
 	$POP	r31,`$VSXFRAME-$SIZE_T*1`($sp)
 	addi	$sp,$sp,$VSXFRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,5,4,0
-	.long	0
 .size	__poly1305_blocks_vsx,.-__poly1305_blocks_vsx
 
+.rodata
+.type	Lconsts,\@object
 .align	6
-LPICmeup:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	$const      # vvvvvv "distance" between . and 1st data entry
-	addi	$const,$const,`64-8`
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`64-9*4`
-
+Lconsts:
 .quad	0x0000000003ffffff,0x0000000003ffffff	# mask26
 .quad	0x000000000000001a,0x000000000000001a	# _26
 .quad	0x0000000000000028,0x0000000000000028	# _40

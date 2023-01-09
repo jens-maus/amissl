@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -89,7 +95,8 @@ $code.=<<___;
 	mflr	$padbit
 	$PUSH	$padbit,`$LOCALS+$LRSAVE`($sp)
 
-	bl	LPICmeup
+	lis	$len,Lconsts\@ha
+	la	$len,Lconsts\@l($len)
 
 	xor	r0,r0,r0
 	mtlr	$padbit				# restore lr
@@ -227,8 +234,6 @@ Lno_key:
 	xor	r3,r3,r3
 	addi	$sp,$sp,$LOCALS
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,0,2,0
 .size	.poly1305_init_fpu,.-.poly1305_init_fpu
 
 .globl	.poly1305_blocks_fpu
@@ -542,8 +547,6 @@ Lentry:
 	addi	$sp,$sp,$FRAME
 Labort:
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,0,4,0
 .size	.poly1305_blocks_fpu,.-.poly1305_blocks_fpu
 ___
 {
@@ -697,26 +700,15 @@ $code.=<<___;
 	$POP	r31,`$FRAME-$SIZE_T*1`($sp)
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,4,3,0
 .size	.poly1305_emit_fpu,.-.poly1305_emit_fpu
 ___
 }
-# Ugly hack here, because PPC assembler syntax seem to vary too
-# much from platforms to platform...
-$code.=<<___;
-.align	6
-LPICmeup:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	$len	# vvvvvv "distance" between . and 1st data entry
-	addi	$len,$len,`64-8`	# borrow $len
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`64-9*4`
 
+$code.=<<___;
+.rodata
+.type	Lconsts, \@object
+.align	6
+Lconsts:
 .quad	0x4330000000000000		# 2^(52+0)
 .quad	0x4530000000000000		# 2^(52+32)
 .quad	0x4730000000000000		# 2^(52+64)
@@ -735,6 +727,7 @@ LPICmeup:
 
 .quad	0x0000000000000001		# fpscr: truncate, no exceptions
 .asciz	"Poly1305 for PPC FPU, CRYPTOGAMS by <appro\@openssl.org>"
+.text
 .align	4
 ___
 

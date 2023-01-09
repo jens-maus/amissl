@@ -1,4 +1,10 @@
 #! /usr/bin/env perl
+# Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# All Rights Reserved.
+#
+# This file has been modified for use with AmiSSL for AmigaOS-based systems.
+#
 # Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -215,9 +221,6 @@ __ChaCha20_ctr32_int:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,4,1,0x80,18,5,0
-	.long	0
 .size	.ChaCha20_ctr32_int,.-.ChaCha20_ctr32_int
 
 .align	5
@@ -406,8 +409,6 @@ Loop_tail:					# byte-by-byte loop
 	stw	$sp,`$LOCALS+60`($sp)
 
 	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
 ___
 
 {{{
@@ -500,7 +501,8 @@ $code.=<<___;
 	$PUSH	r0, `$FRAME+$LRSAVE`($sp)
 	mtspr	256,r12				# preserve 29 AltiVec registers
 
-	bl	Lconsts				# returns pointer Lsigma in r12
+	lis	r12,Lsigma\@ha
+	la	r12,Lsigma\@l(r12)
 	li	@x[0],16
 	li	@x[1],32
 	li	@x[2],48
@@ -905,9 +907,6 @@ Ldone_vmx:
 	mtlr	r0
 	addi	$sp,$sp,$FRAME
 	blr
-	.long	0
-	.byte	0,12,0x04,1,0x80,18,5,0
-	.long	0
 .size	.ChaCha20_ctr32_vmx,.-.ChaCha20_ctr32_vmx
 ___
 }}}
@@ -1011,7 +1010,8 @@ $code.=<<___;
 	$PUSH	r0, `$FRAME+$LRSAVE`($sp)
 	mtspr	256,r12				# preserve 29 AltiVec registers
 
-	bl	Lconsts				# returns pointer Lsigma in r12
+	lis	r12,Lsigma\@ha
+	la	r12,Lsigma\@l(r12)
 	lvx_4w	@K[0],0,r12			# load sigma
 	addi	r12,r12,0x50
 	li	$x10,16
@@ -1286,24 +1286,13 @@ Loop_tail_vsx:
 	stvx_4w	$K[0],$x30,r11
 
 	b	Ldone_vsx
-	.long	0
-	.byte	0,12,0x04,1,0x80,0,5,0
-	.long	0
 .size	.ChaCha20_ctr32_vsx,.-.ChaCha20_ctr32_vsx
 ___
 }}}
 $code.=<<___;
+.rodata
+.type	Lsigma,\@object
 .align	5
-Lconsts:
-	mflr	r0
-	bcl	20,31,\$+4
-	mflr	r12	#vvvvv "distance between . and Lsigma
-	addi	r12,r12,`64-8`
-	mtlr	r0
-	blr
-	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
-	.space	`64-9*4`
 Lsigma:
 	.long   0x61707865,0x3320646e,0x79622d32,0x6b206574
 	.long	1,0,0,0
@@ -1324,6 +1313,7 @@ $code.=<<___;
 	.long	0x6b206574,0x6b206574,0x6b206574,0x6b206574
 	.long	0,1,2,3
 .asciz  "ChaCha20 for PowerPC/AltiVec, CRYPTOGAMS by <appro\@openssl.org>"
+.text
 .align	2
 ___
 
