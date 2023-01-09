@@ -1,3 +1,5 @@
+- Removed unused PPC POWER8 specific ASM optimised routines.
+
 ## AmiSSL 5.6 (15.12.2022)
 
 - Fixed TLS 1.3 cipher lookup failure regression on OS4 (#68).

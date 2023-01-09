@@ -1,4 +1,10 @@
 /*
+ * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
+ * Copyright (c) 2014-2023 AmiSSL Open Source Team.
+ * All Rights Reserved.
+ *
+ * This file has been modified for use with AmiSSL for AmigaOS-based systems.
+ *
  * Copyright 2014-2021 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -19,10 +25,18 @@ extern unsigned int OPENSSL_ppccap_P;
  */
 # define PPC_FPU64       (1<<0)
 # define PPC_ALTIVEC     (1<<1)
+# if defined(OPENSSL_SYS_AMIGA)
+# define PPC_CRYPTO207   0
+# define PPC_FPU         (1<<3)
+# define PPC_MADD300     0
+# define PPC_MFTB        0
+# define PPC_MFSPR268    0
+# else
 # define PPC_CRYPTO207   (1<<2)
 # define PPC_FPU         (1<<3)
 # define PPC_MADD300     (1<<4)
 # define PPC_MFTB        (1<<5)
 # define PPC_MFSPR268    (1<<6)
+# endif
 
 #endif
