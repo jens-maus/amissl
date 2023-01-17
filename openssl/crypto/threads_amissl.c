@@ -33,7 +33,7 @@
 #define ALLOCSEMAPHORE(sem, type) sem = (type *)AllocSysObjectTags(ASOT_SEMAPHORE, ASOSEM_Size, sizeof(type), TAG_DONE)
 #define FREESEMAPHORE(sem) if (sem != NULL) FreeSysObject(ASOT_SEMAPHORE, sem)
 #else
-#define ALLOCSEMAPHORE(sem, type) if ((sem = (type *)OPENSSL_malloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
+#define ALLOCSEMAPHORE(sem, type) if ((sem = (type *)OPENSSL_zalloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
 #define FREESEMAPHORE(sem) if (sem != NULL) OPENSSL_free(sem)
 #endif
 

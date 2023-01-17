@@ -1,5 +1,6 @@
+- Correctly clear thread locks before using InitSemaphore() on OS3 (#70).
 - Prevent OS4 load time emulation corrupting the data in the PPC ASM
-  optimised routines by moving data from .text section to .rodata. (#38)
+  optimised routines by moving data from .text section to .rodata (#38).
 - Removed redundant code in PPC ASM optimised routines.
 - Removed unused PPC POWER8 specific ASM optimised routines.
 
