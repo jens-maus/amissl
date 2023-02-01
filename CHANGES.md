@@ -1,3 +1,5 @@
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 10.1.2023.
 - Correctly clear thread locks before using InitSemaphore() on OS3 (#70).
 - Prevent OS4 load time emulation corrupting the data in the PPC ASM
   optimised routines by moving data from .text section to .rodata (#38).
