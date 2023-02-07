@@ -108,9 +108,12 @@ compatible with AmigaOS 4.0+/PPC, AmigaOS 3.0+/68020+ and MorphOS.
 
 ## Installation
 
-The latest release archive can be downloaded from the following URL:
+AmiUpdate may be used by AmigaOS 4.x users to automatically download and install
+any new AmiSSL version. Otherwise, the latest release archive can be downloaded
+from any of the following URLs:
 
   https://github.com/jens-maus/amissl/releases
+  http://aminet.net/search?query=amissl-5
 
 Once downloaded it should be unarchived to a temporary directory and the "Install"
 script used accordingly.
