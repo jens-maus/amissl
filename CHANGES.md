@@ -49,7 +49,7 @@
 - Updated OpenSSL backend to full compatibility with the latest
   OpenSSL 3.0.6 (11.10.2022) version, which brings fixes including:
   + Fix for custom ciphers to prevent accidental use of NULL encryption
-    ([CVE-2022-3358])
+    (CVE-2022-3358)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 11.10.2022.
 - Added a proper Amiga-specific ossl_sleep() function, replacing the
@@ -70,7 +70,7 @@
   OpenSSL 3.0.5 (5.7.2022) version, which brings security, memory leak
   and other bug fixes, including:
   + Fixed heap memory corruption with RSA private key operation
-    ([CVE-2022-2274])
+    (CVE-2022-2274)
 - Fixed "const const" typo in SDK interface definition of the old unused
   EVP_PBE_scrypt() public API entry point.
 

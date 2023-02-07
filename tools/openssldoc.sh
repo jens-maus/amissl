@@ -4,7 +4,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2022 AmiSSL Open Source Team.
+# Copyright (c) 2006-2023 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@
 
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
 releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
-releasedate=`date +%-d.%m.%Y`
+releasedate=`date +%-d.%-m.%Y`
 
 printf "\$VER: OpenSSL.doc $releasever.$releaserev ($releasedate)\n\n"
 
