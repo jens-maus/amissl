@@ -967,6 +967,7 @@ LIBSTUB(EVP_PKEY_get0_provider, const OSSL_PROVIDER *);
 LIBSTUB(EVP_PKEY_CTX_get0_provider, const OSSL_PROVIDER *);
 LIBSTUB(OPENSSL_strcasecmp, int);
 LIBSTUB(OPENSSL_strncasecmp, int);
+LIBSTUB(OSSL_CMP_CTX_reset_geninfo_ITAVs, int);
 
 #ifdef __cplusplus
 }

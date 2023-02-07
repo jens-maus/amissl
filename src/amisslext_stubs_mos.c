@@ -10017,6 +10017,15 @@ int LIBSTUB_OPENSSL_strncasecmp(void)
   return LIB_OPENSSL_strncasecmp(_base, ___s1, ___s2, ___n);
 }
 
+int LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(struct Library * _base, OSSL_CMP_CTX * ___ctx);
+
+int LIBSTUB_OSSL_CMP_CTX_reset_geninfo_ITAVs(void)
+{
+  OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(_base, ___ctx);
+}
+
 
 #ifdef __cplusplus
 }

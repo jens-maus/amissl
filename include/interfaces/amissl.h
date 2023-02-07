@@ -6454,6 +6454,7 @@ struct AmiSSLIFace
 	APICALL const OSSL_PROVIDER * (*EVP_PKEY_CTX_get0_provider)(struct AmiSSLIFace *Self, const EVP_PKEY_CTX * ctx);
 	APICALL int (*OPENSSL_strcasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2);
 	APICALL int (*OPENSSL_strncasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2, size_t n);
+	APICALL int (*OSSL_CMP_CTX_reset_geninfo_ITAVs)(struct AmiSSLIFace *Self, OSSL_CMP_CTX * ctx);
 };
 
 #ifdef __cplusplus

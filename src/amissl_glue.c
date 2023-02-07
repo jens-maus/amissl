@@ -40655,6 +40655,13 @@ int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
+int SAVEDS ASM LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx))
+{
+	return OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx);
+}
+
+// ---
+
 
 /***************************************************************************/
 

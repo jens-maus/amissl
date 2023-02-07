@@ -2872,4 +2872,7 @@ int __OPENSSL_strcasecmp(__reg("a6") struct Library * , __reg("a0") const char *
 int __OPENSSL_strncasecmp(__reg("a6") struct Library * , __reg("a0") const char * s1 , __reg("a1") const char * s2 , __reg("d0") size_t n ) = "\tjsr\t-5724(a6)";
 #define OPENSSL_strncasecmp(s1, s2, n) __OPENSSL_strncasecmp(AmiSSLExtBase, (s1), (s2), (n))
 
+int __OSSL_CMP_CTX_reset_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx ) = "\tjsr\t-5730(a6)";
+#define OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx) __OSSL_CMP_CTX_reset_geninfo_ITAVs(AmiSSLExtBase, (ctx))
+
 #endif /* !_INLINE_AMISSLEXT_H */

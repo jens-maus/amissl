@@ -953,4 +953,5 @@ EVP_PKEY_get0_provider(key)(a0)
 EVP_PKEY_CTX_get0_provider(ctx)(a0)
 OPENSSL_strcasecmp(s1,s2)(a0,a1)
 OPENSSL_strncasecmp(s1,s2,n)(a0,a1,d0)
+OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx)(a0)
 ##end

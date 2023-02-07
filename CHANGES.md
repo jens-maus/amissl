@@ -1,3 +1,22 @@
+## AmiSSL 5.7 (7.2.2023)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.0.8 (7.2.2023) version, which includes one high, seven
+  moderate and one low severity fixes for newly identified
+  vulnerbilities:
+  + Fixed NULL dereference during PKCS7 data verification.
+    (CVE-2023-0401)
+  + Fixed X.400 address type confusion in X.509 GeneralName.
+    (CVE-2023-0286)
+  + Fixed NULL dereference validating DSA public key. (CVE-2023-0217)
+  + Fixed Invalid pointer dereference in d2i_PKCS7 functions.
+    (CVE-2023-0216)
+  + Fixed Use-after-free following BIO_new_NDEF. (CVE-2023-0215)
+  + Fixed Double free after calling PEM_read_bio_ex. (CVE-2022-4450)
+  + Fixed Timing Oracle in RSA Decryption. (CVE-2022-4304)
+  + Fixed X.509 Name Constraints Read Buffer Overflow. (CVE-2022-4203)
+  + Fixed X.509 Policy Constraints Double Locking security issue.
+    (CVE-2022-3996)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 10.1.2023.
 - Correctly clear thread locks before using InitSemaphore() on OS3 (#70).
@@ -20,7 +39,7 @@
   + Added RIPEMD160 to the default provider.
   + Fixed regressions introduced in 3.0.6 version.
   + Fixed two buffer overflows in punycode decoding functions.
-    ([CVE-2022-3786]) and ([CVE-2022-3602])
+    (CVE-2022-3786) and (CVE-2022-3602)
 - Improved and simplified random number seeding routines.
 - The AMISSL_NO_STATIC_FUNCTIONS preprocessor symbol has been added to
   the SDK, mainly for use with VBCC (see SDK documentation - #66).

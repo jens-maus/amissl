@@ -3830,4 +3830,8 @@ typedef ULONG _sfdc_vararg;
       LP3(0x165c, int, OPENSSL_strncasecmp , const char *, ___s1, a0, const char *, ___s2, a1, size_t, ___n, d0,\
       , AMISSLEXT_BASE_NAME)
 
+#define OSSL_CMP_CTX_reset_geninfo_ITAVs(___ctx) \
+      LP1(0x1662, int, OSSL_CMP_CTX_reset_geninfo_ITAVs , OSSL_CMP_CTX *, ___ctx, a0,\
+      , AMISSLEXT_BASE_NAME)
+
 #endif /* !_INLINE_AMISSLEXT_H */

@@ -14799,6 +14799,20 @@ STATIC CONST struct EmuTrap stub_ext_OPENSSL_strncasecmp = { TRAPINST, TRAPTYPE,
 
 // ---
 
+STATIC int stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->OSSL_CMP_CTX_reset_geninfo_ITAVs(
+		(OSSL_CMP_CTX *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs_PPC };
+
+// ---
+
 CONST CONST_APTR ext_VecTable68K[] =
 {
 	NULL,
@@ -15755,6 +15769,7 @@ CONST CONST_APTR ext_VecTable68K[] =
 	&stub_ext_EVP_PKEY_CTX_get0_provider,
 	&stub_ext_OPENSSL_strcasecmp,
 	&stub_ext_OPENSSL_strncasecmp,
+	&stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs,
 	(CONST_APTR)-1
 };
 

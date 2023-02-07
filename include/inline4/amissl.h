@@ -5859,5 +5859,6 @@
 #define EVP_PKEY_CTX_get0_provider(ctx) IAmiSSL->EVP_PKEY_CTX_get0_provider((ctx))
 #define OPENSSL_strcasecmp(s1, s2) IAmiSSL->OPENSSL_strcasecmp((s1), (s2))
 #define OPENSSL_strncasecmp(s1, s2, n) IAmiSSL->OPENSSL_strncasecmp((s1), (s2), (n))
+#define OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx) IAmiSSL->OSSL_CMP_CTX_reset_geninfo_ITAVs((ctx))
 
 #endif /* INLINE4_AMISSL_H */

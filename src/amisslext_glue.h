@@ -991,6 +991,7 @@ const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_get0_provider(REG(a6, __IFACE_OR_B
 const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY_CTX * ctx));
 int SAVEDS ASM LIB_OPENSSL_strcasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2));
 int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2), REG(d0, size_t n));
+int SAVEDS ASM LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR_EXT \
@@ -1945,7 +1946,8 @@ int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const c
     LFUNC_FA_(EVP_PKEY_get0_provider) \
     LFUNC_FA_(EVP_PKEY_CTX_get0_provider) \
     LFUNC_FA_(OPENSSL_strcasecmp) \
-    LFUNC_FA_(OPENSSL_strncasecmp)
+    LFUNC_FA_(OPENSSL_strncasecmp) \
+    LFUNC_FA_(OSSL_CMP_CTX_reset_geninfo_ITAVs)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSLEXT_H */

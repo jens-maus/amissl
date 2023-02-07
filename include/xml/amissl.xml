@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26475,6 +26475,12 @@
       <arg name="s1" type="const char *" m68kreg="a0"/>
       <arg name="s2" type="const char *" m68kreg="a1"/>
       <arg name="n" type="size_t" m68kreg="d0"/>
+    </method>
+
+    <!-- AmiSSL v5.7 - OpenSSL 3.0.8 -->
+
+    <method name="OSSL_CMP_CTX_reset_geninfo_ITAVs" result="int">
+      <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
     </method>
 
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->

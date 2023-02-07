@@ -6228,4 +6228,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(size_t, (___n), D0), \
      struct Library *, AMISSLEXT_BASE_NAME, 954, Amisslext)
 
+#define OSSL_CMP_CTX_reset_geninfo_ITAVs(___ctx) \
+      AROS_LC1(int, OSSL_CMP_CTX_reset_geninfo_ITAVs, \
+ AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 955, Amisslext)
+
 #endif /* !_INLINE_AMISSLEXT_H */
