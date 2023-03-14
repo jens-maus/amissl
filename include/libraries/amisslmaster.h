@@ -25,41 +25,47 @@
 
 ***************************************************************************/
 
-#define AMISSL_V2           0x01  /* OBSOLETE NAME */
-#define AMISSL_V096g        0x01  /* AmiSSL v2 */
-#define AMISSL_V097g        0x02  /* AmiSSL v3.6/3.7 */
-#define AMISSL_V097m        0x03  /* unreleased version */
-#define AMISSL_V098y        0x04  /* unreleased version */
-#define AMISSL_V102f        0x05  /* unreleased version */
-#define AMISSL_V110c        0x06  /* unreleased version */
-#define AMISSL_V110d        0x07  /* AmiSSL v4.0 */
-#define AMISSL_V110e        0x08  /* AmiSSL v4.1 */
-#define AMISSL_V110g        0x09  /* AmiSSL v4.2 */
-#define AMISSL_V111a_OBS    0x0a  /* AmiSSL v4.3 (obsolete incompatible API) */
-#define AMISSL_V111d        0x0b  /* AmiSSL v4.4/4.5 */
-#define AMISSL_V111g        0x0c  /* AmiSSL v4.6 */
-#define AMISSL_V111i        0x0d  /* AmiSSL v4.7 */
-#define AMISSL_V111j        0x0e  /* AmiSSL v4.8 */
-#define AMISSL_V111k        0x0f  /* AmiSSL v4.9 */
-#define AMISSL_V111l        0x10  /* AmiSSL v4.10/4.11 */
-#define AMISSL_V111m        0x11  /* AmiSSL v4.12 */
-#define AMISSL_V300         0x12  /* unreleased version */
-#define AMISSL_V301         0x13  /* unreleased version */
-#define AMISSL_V302         0x14  /* unreleased version */
-#define AMISSL_V303         0x15  /* AmiSSL v5.1 */
-#define AMISSL_V304         0x16  /* AmiSSL v5.2 */
-#define AMISSL_V305         0x17  /* AmiSSL v5.3 */
-#define AMISSL_V306         0x18  /* AmiSSL v5.4 */
-#define AMISSL_V307         0x19  /* AmiSSL v5.5/5.6 */
-#define AMISSL_V308         0x1a  /* AmiSSL v5.7 */
-#define AMISSL_V310         0x1b  /* AmiSSL v5.8 */
+enum AmiSSLVersion
+{
+  AMISSL_V2 = 1,    /* OBSOLETE NAME */
+  AMISSL_V096g = 1, /* AmiSSL v2 */
+  AMISSL_V097g,     /* AmiSSL v3.6/3.7 */
+  AMISSL_V097m,     /* unreleased version */
+  AMISSL_V098y,     /* unreleased version */
+  AMISSL_V102f,     /* unreleased version */
+  AMISSL_V110c,     /* unreleased version */
+  AMISSL_V110d,     /* AmiSSL v4.0 */
+  AMISSL_V110e,     /* AmiSSL v4.1 */
+  AMISSL_V110g,     /* AmiSSL v4.2 */
+  AMISSL_V111a_OBS, /* AmiSSL v4.3 (obsolete incompatible API) */
+  AMISSL_V111d,     /* AmiSSL v4.4/4.5 */
+  AMISSL_V111g,     /* AmiSSL v4.6 */
+  AMISSL_V111i,     /* AmiSSL v4.7 */
+  AMISSL_V111j,     /* AmiSSL v4.8 */
+  AMISSL_V111k,     /* AmiSSL v4.9 */
+  AMISSL_V111l,     /* AmiSSL v4.10/4.11 */
+  AMISSL_V111m,     /* AmiSSL v4.12 */
+  AMISSL_V300,      /* unreleased version */
+  AMISSL_V301,      /* unreleased version */
+  AMISSL_V302,      /* unreleased version */
+  AMISSL_V303,      /* AmiSSL v5.1 */
+  AMISSL_V304,      /* AmiSSL v5.2 */
+  AMISSL_V305,      /* AmiSSL v5.3 */
+  AMISSL_V306,      /* AmiSSL v5.4 */
+  AMISSL_V307,      /* AmiSSL v5.5/5.6 */
+  AMISSL_V308,      /* AmiSSL v5.7 */
+  AMISSL_V310,      /* AmiSSL v5.8 */
 
-#define AMISSL_V10x         AMISSL_V102f /* Latest minimum AmiSSL/OpenSSL 1.0.x compatible version */
-#define AMISSL_V11x         AMISSL_V110d /* Latest minimum AmiSSL/OpenSSL 1.1.x compatible version */
-#define AMISSL_V3xx         AMISSL_V303  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
+  /* ADD NEW VERSIONS ABOVE THIS LINE */
+  AMISSL_VMAX
+};
 
-#define AMISSL_CURRENT_VERSION   AMISSL_V310
+#define AMISSL_CURRENT_VERSION (AMISSL_VMAX - 1)
 
 #define AMISSLMASTER_MIN_VERSION 5
+
+#define AMISSL_V10x AMISSL_V102f /* Latest minimum AmiSSL/OpenSSL 1.0.x compatible version */
+#define AMISSL_V11x AMISSL_V110d /* Latest minimum AmiSSL/OpenSSL 1.1.x compatible version */
+#define AMISSL_V3xx AMISSL_V303  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
 
 #endif /* !LIBRARIES_AMISSLMASTER_H */
