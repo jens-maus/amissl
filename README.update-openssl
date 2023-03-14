@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -129,9 +129,6 @@ HowTo update the OpenSSL version in "openssl/":
 
      VERSION=5
      REVISION=1
-     VERSIONNAME=302
-
-   Modify VERSIONNAME to match the OpenSSL version.
 
 8. Modify the "src/amisslmaster_library.c" and "include/libraries/amisslmaster.h"
    files and have a look for the following type of sections in OpenAmiSSL():
