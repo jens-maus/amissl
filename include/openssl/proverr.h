@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -44,6 +44,7 @@
 # define PROV_R_CIPHER_OPERATION_FAILED                   102
 # define PROV_R_DERIVATION_FUNCTION_INIT_FAILED           205
 # define PROV_R_DIGEST_NOT_ALLOWED                        174
+# define PROV_R_EMS_NOT_ENABLED                           233
 # define PROV_R_ENTROPY_SOURCE_STRENGTH_TOO_WEAK          186
 # define PROV_R_ERROR_INSTANTIATING_DRBG                  188
 # define PROV_R_ERROR_RETRIEVING_ENTROPY                  189

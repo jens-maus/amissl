@@ -14813,6 +14813,94 @@ STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs = { TRAPIN
 
 // ---
 
+STATIC int stub_ext_EVP_RAND_CTX_up_ref_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EVP_RAND_CTX_up_ref(
+		(EVP_RAND_CTX *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_EVP_RAND_CTX_up_ref = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_RAND_CTX_up_ref_PPC };
+
+// ---
+
+STATIC int stub_ext_RAND_set0_public_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->RAND_set0_public(
+		(OSSL_LIB_CTX *)regarray[REG68K_A0/4],
+		(EVP_RAND_CTX *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_RAND_set0_public = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_RAND_set0_public_PPC };
+
+// ---
+
+STATIC int stub_ext_RAND_set0_private_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->RAND_set0_private(
+		(OSSL_LIB_CTX *)regarray[REG68K_A0/4],
+		(EVP_RAND_CTX *)regarray[REG68K_A1/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_RAND_set0_private = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_RAND_set0_private_PPC };
+
+// ---
+
+STATIC EVP_MD_CTX * stub_ext_EVP_MD_CTX_dup_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EVP_MD_CTX_dup(
+		(const EVP_MD_CTX *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_EVP_MD_CTX_dup = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_MD_CTX_dup_PPC };
+
+// ---
+
+STATIC EVP_CIPHER_CTX * stub_ext_EVP_CIPHER_CTX_dup_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->EVP_CIPHER_CTX_dup(
+		(const EVP_CIPHER_CTX *)regarray[REG68K_A0/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_EVP_CIPHER_CTX_dup = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_EVP_CIPHER_CTX_dup_PPC };
+
+// ---
+
+STATIC int stub_ext_BN_are_coprime_PPC(uint32 *regarray)
+{
+	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
+	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
+	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
+
+	return Self->BN_are_coprime(
+		(BIGNUM *)regarray[REG68K_A0/4],
+		(const BIGNUM *)regarray[REG68K_A1/4],
+		(BN_CTX *)regarray[REG68K_A2/4]
+	);
+}
+STATIC CONST struct EmuTrap stub_ext_BN_are_coprime = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_BN_are_coprime_PPC };
+
+// ---
+
 CONST CONST_APTR ext_VecTable68K[] =
 {
 	NULL,
@@ -15770,6 +15858,12 @@ CONST CONST_APTR ext_VecTable68K[] =
 	&stub_ext_OPENSSL_strcasecmp,
 	&stub_ext_OPENSSL_strncasecmp,
 	&stub_ext_OSSL_CMP_CTX_reset_geninfo_ITAVs,
+	&stub_ext_EVP_RAND_CTX_up_ref,
+	&stub_ext_RAND_set0_public,
+	&stub_ext_RAND_set0_private,
+	&stub_ext_EVP_MD_CTX_dup,
+	&stub_ext_EVP_CIPHER_CTX_dup,
+	&stub_ext_BN_are_coprime,
 	(CONST_APTR)-1
 };
 

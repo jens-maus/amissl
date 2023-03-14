@@ -192,10 +192,7 @@ OSSL_DEPRECATEDIN_3_1 void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *
     LHASH_OF(type)
 # endif
 
-# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
-# define DEFINE_LHASH_OF(type) \
-    LHASH_OF(type)
-# else
+
 # ifndef OPENSSL_NO_DEPRECATED_3_1
 #  define DEFINE_LHASH_OF_DEPRECATED(type) \
     static ossl_unused ossl_inline void \
@@ -287,18 +284,23 @@ OSSL_DEPRECATEDIN_3_1 void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *
     } \
     LHASH_OF(type)
 
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+# define DEFINE_LHASH_OF(type) \
+    LHASH_OF(type)
+# else
 # define DEFINE_LHASH_OF(type) \
     DEFINE_LHASH_OF_EX(type); \
     DEFINE_LHASH_OF_DEPRECATED(type) \
     LHASH_OF(type)
 
-#define IMPLEMENT_LHASH_DOALL_ARG_CONST(type, argtype) \
+# define IMPLEMENT_LHASH_DOALL_ARG_CONST(type, argtype) \
     int_implement_lhash_doall(type, argtype, const type)
 
-#define IMPLEMENT_LHASH_DOALL_ARG(type, argtype) \
+# define IMPLEMENT_LHASH_DOALL_ARG(type, argtype) \
     int_implement_lhash_doall(type, argtype, type)
+# endif
 
-#define int_implement_lhash_doall(type, argtype, cbargtype) \
+# define int_implement_lhash_doall(type, argtype, cbargtype) \
     static ossl_unused ossl_inline void \
         lh_##type##_doall_##argtype(LHASH_OF(type) *lh, \
                                    void (*fn)(cbargtype *, argtype *), \
@@ -308,7 +310,6 @@ OSSL_DEPRECATEDIN_3_1 void OPENSSL_LH_node_usage_stats_bio(const OPENSSL_LHASH *
                              (OPENSSL_LH_DOALL_FUNCARG)fn, (void *)arg); \
     } \
     LHASH_OF(type)
-#endif
 
 {-
     generate_lhash_macros("OPENSSL_STRING")

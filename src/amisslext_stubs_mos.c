@@ -10026,6 +10026,64 @@ int LIBSTUB_OSSL_CMP_CTX_reset_geninfo_ITAVs(void)
   return LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(_base, ___ctx);
 }
 
+int LIB_EVP_RAND_CTX_up_ref(struct Library * _base, EVP_RAND_CTX * ___ctx);
+
+int LIBSTUB_EVP_RAND_CTX_up_ref(void)
+{
+  EVP_RAND_CTX * ___ctx = (EVP_RAND_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_RAND_CTX_up_ref(_base, ___ctx);
+}
+
+int LIB_RAND_set0_public(struct Library * _base, OSSL_LIB_CTX * ___ctx, EVP_RAND_CTX * ___rand);
+
+int LIBSTUB_RAND_set0_public(void)
+{
+  OSSL_LIB_CTX * ___ctx = (OSSL_LIB_CTX *)REG_A0;
+  EVP_RAND_CTX * ___rand = (EVP_RAND_CTX *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RAND_set0_public(_base, ___ctx, ___rand);
+}
+
+int LIB_RAND_set0_private(struct Library * _base, OSSL_LIB_CTX * ___ctx, EVP_RAND_CTX * ___rand);
+
+int LIBSTUB_RAND_set0_private(void)
+{
+  OSSL_LIB_CTX * ___ctx = (OSSL_LIB_CTX *)REG_A0;
+  EVP_RAND_CTX * ___rand = (EVP_RAND_CTX *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RAND_set0_private(_base, ___ctx, ___rand);
+}
+
+EVP_MD_CTX * LIB_EVP_MD_CTX_dup(struct Library * _base, const EVP_MD_CTX * ___in);
+
+EVP_MD_CTX * LIBSTUB_EVP_MD_CTX_dup(void)
+{
+  const EVP_MD_CTX * ___in = (const EVP_MD_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_MD_CTX_dup(_base, ___in);
+}
+
+EVP_CIPHER_CTX * LIB_EVP_CIPHER_CTX_dup(struct Library * _base, const EVP_CIPHER_CTX * ___in);
+
+EVP_CIPHER_CTX * LIBSTUB_EVP_CIPHER_CTX_dup(void)
+{
+  const EVP_CIPHER_CTX * ___in = (const EVP_CIPHER_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CIPHER_CTX_dup(_base, ___in);
+}
+
+int LIB_BN_are_coprime(struct Library * _base, BIGNUM * ___a, const BIGNUM * ___b, BN_CTX * ___ctx);
+
+int LIBSTUB_BN_are_coprime(void)
+{
+  BIGNUM * ___a = (BIGNUM *)REG_A0;
+  const BIGNUM * ___b = (const BIGNUM *)REG_A1;
+  BN_CTX * ___ctx = (BN_CTX *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_BN_are_coprime(_base, ___a, ___b, ___ctx);
+}
+
 
 #ifdef __cplusplus
 }

@@ -51,13 +51,14 @@
 #define AMISSL_V305         0x17  /* AmiSSL v5.3 */
 #define AMISSL_V306         0x18  /* AmiSSL v5.4 */
 #define AMISSL_V307         0x19  /* AmiSSL v5.5/5.6 */
-#define AMISSL_V308         0x20  /* AmiSSL v5.7 */
+#define AMISSL_V308         0x1a  /* AmiSSL v5.7 */
+#define AMISSL_V310         0x1b  /* AmiSSL v5.8 */
 
 #define AMISSL_V10x         AMISSL_V102f /* Latest minimum AmiSSL/OpenSSL 1.0.x compatible version */
 #define AMISSL_V11x         AMISSL_V110d /* Latest minimum AmiSSL/OpenSSL 1.1.x compatible version */
 #define AMISSL_V3xx         AMISSL_V303  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
 
-#define AMISSL_CURRENT_VERSION   AMISSL_V308
+#define AMISSL_CURRENT_VERSION   AMISSL_V310
 
 #define AMISSLMASTER_MIN_VERSION 5
 

@@ -40662,6 +40662,48 @@ int SAVEDS ASM LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BA
 
 // ---
 
+int SAVEDS ASM LIB_EVP_RAND_CTX_up_ref(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_RAND_CTX * ctx))
+{
+	return EVP_RAND_CTX_up_ref(ctx);
+}
+
+// ---
+
+int SAVEDS ASM LIB_RAND_set0_public(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(a1, EVP_RAND_CTX * rand))
+{
+	return RAND_set0_public(ctx, rand);
+}
+
+// ---
+
+int SAVEDS ASM LIB_RAND_set0_private(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(a1, EVP_RAND_CTX * rand))
+{
+	return RAND_set0_private(ctx, rand);
+}
+
+// ---
+
+EVP_MD_CTX * SAVEDS ASM LIB_EVP_MD_CTX_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_MD_CTX * in))
+{
+	return EVP_MD_CTX_dup(in);
+}
+
+// ---
+
+EVP_CIPHER_CTX * SAVEDS ASM LIB_EVP_CIPHER_CTX_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const EVP_CIPHER_CTX * in))
+{
+	return EVP_CIPHER_CTX_dup(in);
+}
+
+// ---
+
+int SAVEDS ASM LIB_BN_are_coprime(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNUM * a), REG(a1, const BIGNUM * b), REG(a2, BN_CTX * ctx))
+{
+	return BN_are_coprime(a, b, ctx);
+}
+
+// ---
+
 
 /***************************************************************************/
 

@@ -152,7 +152,7 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-REVISION=7
+REVISION=8
 
 include openssl/VERSION.dat
 VERSIONNAME=$(MAJOR)$(MINOR)$(PATCH)

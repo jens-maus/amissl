@@ -6233,4 +6233,38 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 955, Amisslext)
 
+#define EVP_RAND_CTX_up_ref(___ctx) \
+      AROS_LC1(int, EVP_RAND_CTX_up_ref, \
+ AROS_LCA(EVP_RAND_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 956, Amisslext)
+
+#define RAND_set0_public(___ctx, ___rand) \
+      AROS_LC2(int, RAND_set0_public, \
+ AROS_LCA(OSSL_LIB_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_RAND_CTX *, (___rand), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 957, Amisslext)
+
+#define RAND_set0_private(___ctx, ___rand) \
+      AROS_LC2(int, RAND_set0_private, \
+ AROS_LCA(OSSL_LIB_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_RAND_CTX *, (___rand), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 958, Amisslext)
+
+#define EVP_MD_CTX_dup(___in) \
+      AROS_LC1(EVP_MD_CTX *, EVP_MD_CTX_dup, \
+ AROS_LCA(const EVP_MD_CTX *, (___in), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 959, Amisslext)
+
+#define EVP_CIPHER_CTX_dup(___in) \
+      AROS_LC1(EVP_CIPHER_CTX *, EVP_CIPHER_CTX_dup, \
+ AROS_LCA(const EVP_CIPHER_CTX *, (___in), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 960, Amisslext)
+
+#define BN_are_coprime(___a, ___b, ___ctx) \
+      AROS_LC3(int, BN_are_coprime, \
+ AROS_LCA(BIGNUM *, (___a), A0), \
+ AROS_LCA(const BIGNUM *, (___b), A1), \
+ AROS_LCA(BN_CTX *, (___ctx), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 961, Amisslext)
+
 #endif /* !_INLINE_AMISSLEXT_H */

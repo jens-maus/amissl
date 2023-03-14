@@ -6455,6 +6455,12 @@ struct AmiSSLIFace
 	APICALL int (*OPENSSL_strcasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2);
 	APICALL int (*OPENSSL_strncasecmp)(struct AmiSSLIFace *Self, const char * s1, const char * s2, size_t n);
 	APICALL int (*OSSL_CMP_CTX_reset_geninfo_ITAVs)(struct AmiSSLIFace *Self, OSSL_CMP_CTX * ctx);
+	APICALL int (*EVP_RAND_CTX_up_ref)(struct AmiSSLIFace *Self, EVP_RAND_CTX * ctx);
+	APICALL int (*RAND_set0_public)(struct AmiSSLIFace *Self, OSSL_LIB_CTX * ctx, EVP_RAND_CTX * rand);
+	APICALL int (*RAND_set0_private)(struct AmiSSLIFace *Self, OSSL_LIB_CTX * ctx, EVP_RAND_CTX * rand);
+	APICALL EVP_MD_CTX * (*EVP_MD_CTX_dup)(struct AmiSSLIFace *Self, const EVP_MD_CTX * in);
+	APICALL EVP_CIPHER_CTX * (*EVP_CIPHER_CTX_dup)(struct AmiSSLIFace *Self, const EVP_CIPHER_CTX * in);
+	APICALL int (*BN_are_coprime)(struct AmiSSLIFace *Self, BIGNUM * a, const BIGNUM * b, BN_CTX * ctx);
 };
 
 #ifdef __cplusplus

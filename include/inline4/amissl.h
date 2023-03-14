@@ -5860,5 +5860,11 @@
 #define OPENSSL_strcasecmp(s1, s2) IAmiSSL->OPENSSL_strcasecmp((s1), (s2))
 #define OPENSSL_strncasecmp(s1, s2, n) IAmiSSL->OPENSSL_strncasecmp((s1), (s2), (n))
 #define OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx) IAmiSSL->OSSL_CMP_CTX_reset_geninfo_ITAVs((ctx))
+#define EVP_RAND_CTX_up_ref(ctx) IAmiSSL->EVP_RAND_CTX_up_ref((ctx))
+#define RAND_set0_public(ctx, rand) IAmiSSL->RAND_set0_public((ctx), (rand))
+#define RAND_set0_private(ctx, rand) IAmiSSL->RAND_set0_private((ctx), (rand))
+#define EVP_MD_CTX_dup(in) IAmiSSL->EVP_MD_CTX_dup((in))
+#define EVP_CIPHER_CTX_dup(in) IAmiSSL->EVP_CIPHER_CTX_dup((in))
+#define BN_are_coprime(a, b, ctx) IAmiSSL->BN_are_coprime((a), (b), (ctx))
 
 #endif /* INLINE4_AMISSL_H */

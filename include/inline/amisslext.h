@@ -3834,4 +3834,28 @@ typedef ULONG _sfdc_vararg;
       LP1(0x1662, int, OSSL_CMP_CTX_reset_geninfo_ITAVs , OSSL_CMP_CTX *, ___ctx, a0,\
       , AMISSLEXT_BASE_NAME)
 
+#define EVP_RAND_CTX_up_ref(___ctx) \
+      LP1(0x1668, int, EVP_RAND_CTX_up_ref , EVP_RAND_CTX *, ___ctx, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define RAND_set0_public(___ctx, ___rand) \
+      LP2(0x166e, int, RAND_set0_public , OSSL_LIB_CTX *, ___ctx, a0, EVP_RAND_CTX *, ___rand, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define RAND_set0_private(___ctx, ___rand) \
+      LP2(0x1674, int, RAND_set0_private , OSSL_LIB_CTX *, ___ctx, a0, EVP_RAND_CTX *, ___rand, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_MD_CTX_dup(___in) \
+      LP1(0x167a, EVP_MD_CTX *, EVP_MD_CTX_dup , const EVP_MD_CTX *, ___in, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CIPHER_CTX_dup(___in) \
+      LP1(0x1680, EVP_CIPHER_CTX *, EVP_CIPHER_CTX_dup , const EVP_CIPHER_CTX *, ___in, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define BN_are_coprime(___a, ___b, ___ctx) \
+      LP3(0x1686, int, BN_are_coprime , BIGNUM *, ___a, a0, const BIGNUM *, ___b, a1, BN_CTX *, ___ctx, a2,\
+      , AMISSLEXT_BASE_NAME)
+
 #endif /* !_INLINE_AMISSLEXT_H */

@@ -992,6 +992,12 @@ const OSSL_PROVIDER * SAVEDS ASM LIB_EVP_PKEY_CTX_get0_provider(REG(a6, __IFACE_
 int SAVEDS ASM LIB_OPENSSL_strcasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2));
 int SAVEDS ASM LIB_OPENSSL_strncasecmp(REG(a6, __IFACE_OR_BASE), REG(a0, const char * s1), REG(a1, const char * s2), REG(d0, size_t n));
 int SAVEDS ASM LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx));
+int SAVEDS ASM LIB_EVP_RAND_CTX_up_ref(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_RAND_CTX * ctx));
+int SAVEDS ASM LIB_RAND_set0_public(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(a1, EVP_RAND_CTX * rand));
+int SAVEDS ASM LIB_RAND_set0_private(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(a1, EVP_RAND_CTX * rand));
+EVP_MD_CTX * SAVEDS ASM LIB_EVP_MD_CTX_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_MD_CTX * in));
+EVP_CIPHER_CTX * SAVEDS ASM LIB_EVP_CIPHER_CTX_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_CIPHER_CTX * in));
+int SAVEDS ASM LIB_BN_are_coprime(REG(a6, __IFACE_OR_BASE), REG(a0, BIGNUM * a), REG(a1, const BIGNUM * b), REG(a2, BN_CTX * ctx));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR_EXT \
@@ -1947,7 +1953,13 @@ int SAVEDS ASM LIB_OSSL_CMP_CTX_reset_geninfo_ITAVs(REG(a6, __IFACE_OR_BASE), RE
     LFUNC_FA_(EVP_PKEY_CTX_get0_provider) \
     LFUNC_FA_(OPENSSL_strcasecmp) \
     LFUNC_FA_(OPENSSL_strncasecmp) \
-    LFUNC_FA_(OSSL_CMP_CTX_reset_geninfo_ITAVs)
+    LFUNC_FA_(OSSL_CMP_CTX_reset_geninfo_ITAVs) \
+    LFUNC_FA_(EVP_RAND_CTX_up_ref) \
+    LFUNC_FA_(RAND_set0_public) \
+    LFUNC_FA_(RAND_set0_private) \
+    LFUNC_FA_(EVP_MD_CTX_dup) \
+    LFUNC_FA_(EVP_CIPHER_CTX_dup) \
+    LFUNC_FA_(BN_are_coprime)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSLEXT_H */

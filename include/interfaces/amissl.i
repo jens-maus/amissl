@@ -6431,6 +6431,12 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OPENSSL_strcasecmp
 	    FPTR IAmiSSL_OPENSSL_strncasecmp
 	    FPTR IAmiSSL_OSSL_CMP_CTX_reset_geninfo_ITAVs
+	    FPTR IAmiSSL_EVP_RAND_CTX_up_ref
+	    FPTR IAmiSSL_RAND_set0_public
+	    FPTR IAmiSSL_RAND_set0_private
+	    FPTR IAmiSSL_EVP_MD_CTX_dup
+	    FPTR IAmiSSL_EVP_CIPHER_CTX_dup
+	    FPTR IAmiSSL_BN_are_coprime
 	LABEL AmiSSLIFace_SIZE
 
 #endif

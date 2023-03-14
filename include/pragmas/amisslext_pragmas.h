@@ -5749,5 +5749,41 @@
 #ifdef __CLIB_PRAGMA_AMICALL
  #pragma amicall(AmiSSLExtBase, 0x1662, OSSL_CMP_CTX_reset_geninfo_ITAVs(a0))
 #endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase EVP_RAND_CTX_up_ref 1668 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x1668, EVP_RAND_CTX_up_ref(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase RAND_set0_public 166e 9802
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x166e, RAND_set0_public(a0,a1))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase RAND_set0_private 1674 9802
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x1674, RAND_set0_private(a0,a1))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase EVP_MD_CTX_dup 167a 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x167a, EVP_MD_CTX_dup(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase EVP_CIPHER_CTX_dup 1680 801
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x1680, EVP_CIPHER_CTX_dup(a0))
+#endif /* __CLIB_PRAGMA_AMICALL */
+#ifdef __CLIB_PRAGMA_LIBCALL
+ #pragma libcall AmiSSLExtBase BN_are_coprime 1686 a9803
+#endif /* __CLIB_PRAGMA_LIBCALL */
+#ifdef __CLIB_PRAGMA_AMICALL
+ #pragma amicall(AmiSSLExtBase, 0x1686, BN_are_coprime(a0,a1,a2))
+#endif /* __CLIB_PRAGMA_AMICALL */
 
 #endif /* PRAGMAS_AMISSLEXT_PRAGMAS_H */

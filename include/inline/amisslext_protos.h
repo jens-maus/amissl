@@ -2875,4 +2875,22 @@ int __OPENSSL_strncasecmp(__reg("a6") struct Library * , __reg("a0") const char 
 int __OSSL_CMP_CTX_reset_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx ) = "\tjsr\t-5730(a6)";
 #define OSSL_CMP_CTX_reset_geninfo_ITAVs(ctx) __OSSL_CMP_CTX_reset_geninfo_ITAVs(AmiSSLExtBase, (ctx))
 
+int __EVP_RAND_CTX_up_ref(__reg("a6") struct Library * , __reg("a0") EVP_RAND_CTX * ctx ) = "\tjsr\t-5736(a6)";
+#define EVP_RAND_CTX_up_ref(ctx) __EVP_RAND_CTX_up_ref(AmiSSLExtBase, (ctx))
+
+int __RAND_set0_public(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") EVP_RAND_CTX * rand ) = "\tjsr\t-5742(a6)";
+#define RAND_set0_public(ctx, rand) __RAND_set0_public(AmiSSLExtBase, (ctx), (rand))
+
+int __RAND_set0_private(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") EVP_RAND_CTX * rand ) = "\tjsr\t-5748(a6)";
+#define RAND_set0_private(ctx, rand) __RAND_set0_private(AmiSSLExtBase, (ctx), (rand))
+
+EVP_MD_CTX * __EVP_MD_CTX_dup(__reg("a6") struct Library * , __reg("a0") const EVP_MD_CTX * in ) = "\tjsr\t-5754(a6)";
+#define EVP_MD_CTX_dup(in) __EVP_MD_CTX_dup(AmiSSLExtBase, (in))
+
+EVP_CIPHER_CTX * __EVP_CIPHER_CTX_dup(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER_CTX * in ) = "\tjsr\t-5760(a6)";
+#define EVP_CIPHER_CTX_dup(in) __EVP_CIPHER_CTX_dup(AmiSSLExtBase, (in))
+
+int __BN_are_coprime(__reg("a6") struct Library * , __reg("a0") BIGNUM * a , __reg("a1") const BIGNUM * b , __reg("a2") BN_CTX * ctx ) = "\tjsr\t-5766(a6)";
+#define BN_are_coprime(a, b, ctx) __BN_are_coprime(AmiSSLExtBase, (a), (b), (ctx))
+
 #endif /* !_INLINE_AMISSLEXT_H */

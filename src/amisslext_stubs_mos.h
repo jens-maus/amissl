@@ -968,6 +968,12 @@ LIBSTUB(EVP_PKEY_CTX_get0_provider, const OSSL_PROVIDER *);
 LIBSTUB(OPENSSL_strcasecmp, int);
 LIBSTUB(OPENSSL_strncasecmp, int);
 LIBSTUB(OSSL_CMP_CTX_reset_geninfo_ITAVs, int);
+LIBSTUB(EVP_RAND_CTX_up_ref, int);
+LIBSTUB(RAND_set0_public, int);
+LIBSTUB(RAND_set0_private, int);
+LIBSTUB(EVP_MD_CTX_dup, EVP_MD_CTX *);
+LIBSTUB(EVP_CIPHER_CTX_dup, EVP_CIPHER_CTX *);
+LIBSTUB(BN_are_coprime, int);
 
 #ifdef __cplusplus
 }

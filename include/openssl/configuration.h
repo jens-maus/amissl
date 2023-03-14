@@ -42,7 +42,7 @@ extern "C" {
 # ifndef OPENSSL_SYS_AMIGA
 #  define OPENSSL_SYS_AMIGA 1
 # endif
-# define OPENSSL_CONFIGURED_API 30000
+# define OPENSSL_CONFIGURED_API 30100
 # ifndef OPENSSL_RAND_SEED_OS
 #  define OPENSSL_RAND_SEED_OS
 # endif
