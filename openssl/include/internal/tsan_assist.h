@@ -128,33 +128,20 @@
 # define tsan_store(ptr, val) (*(ptr) = (val))
 
 # if defined(__amigaos4__) || defined(__MORPHOS__)
-#  define tsan_counter(ptr) \
+#  define tsan_add(ptr, n)	    \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx %0,0,%2\n" \
-         "addi %1,%0,1\n" \
+         "addi %1,%0,%3\n" \
          "stwcx. %1,0,%2\n" \
          "bne- 1b" \
          : "=&r" (res), "=&r" (tmp) \
-         : "r" (ptr) \
-         : "cc", "memory"); \
-      res; \
-   })
-#  define tsan_decr(ptr) \
-   ({ __typeof__ (*(ptr)) res, tmp; \
-      __asm__ __volatile__ ( \
-         "1: lwarx %0,0,%2\n" \
-         "addi %1,%0,-1\n" \
-         "stwcx. %1,0,%2\n" \
-         "bne- 1b" \
-         : "=&r" (res), "=&r" (tmp) \
-         : "r" (ptr) \
+         : "r" (ptr), "r" (n)	    \
          : "cc", "memory"); \
       res; \
    })
 # else
-#  define tsan_counter(ptr) ((*(ptr))++)
-#  define tsan_decr(ptr) ((*(ptr))--)
+#  define tsan_add(ptr, n) ((*(ptr)) += (n))
 # endif
 
 #endif
