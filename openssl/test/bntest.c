@@ -38,6 +38,7 @@ typedef struct mpitest_st {
 
 static const int NUM0 = 100;           /* number of tests */
 static const int NUM1 = 50;            /* additional tests for some functions */
+static const int NUM_PRIME_TESTS = 20;
 static BN_CTX *ctx;
 
 /*
@@ -168,6 +169,11 @@ static int test_swap(void)
             || !equalBN("swap", b, c))
         goto err;
 
+    /* regular swap: same pointer */
+    BN_swap(a, a);
+    if (!equalBN("swap with same pointer", a, d))
+        goto err;
+
     /* conditional swap: true */
     cond = 1;
     BN_consttime_swap(cond, a, b, top);
@@ -175,11 +181,21 @@ static int test_swap(void)
             || !equalBN("cswap true", b, d))
         goto err;
 
+    /* conditional swap: true, same pointer */
+    BN_consttime_swap(cond, a, a, top);
+    if (!equalBN("cswap true", a, c))
+        goto err;
+
     /* conditional swap: false */
     cond = 0;
     BN_consttime_swap(cond, a, b, top);
     if (!equalBN("cswap false", a, c)
             || !equalBN("cswap false", b, d))
+        goto err;
+
+    /* conditional swap: false, same pointer */
+    BN_consttime_swap(cond, a, a, top);
+    if (!equalBN("cswap false", a, c))
         goto err;
 
     /* same tests but checking flag swap */
@@ -2573,6 +2589,25 @@ static int test_ctx_consttime_flag(void)
     return st;
 }
 
+static int test_coprime(void)
+{
+    BIGNUM *a = NULL, *b = NULL;
+    int ret = 0;
+
+    ret = TEST_ptr(a = BN_new())
+          && TEST_ptr(b = BN_new())
+          && TEST_true(BN_set_word(a, 66))
+          && TEST_true(BN_set_word(b, 99))
+          && TEST_int_eq(BN_are_coprime(a, b, ctx), 0)
+          && TEST_int_eq(BN_are_coprime(b, a, ctx), 0)
+          && TEST_true(BN_set_word(a, 67))
+          && TEST_int_eq(BN_are_coprime(a, b, ctx), 1)
+          && TEST_int_eq(BN_are_coprime(b, a, ctx), 1);
+    BN_free(a);
+    BN_free(b);
+    return ret;
+}
+
 static int test_gcd_prime(void)
 {
     BIGNUM *a = NULL, *b = NULL, *gcd = NULL;
@@ -2585,11 +2620,12 @@ static int test_gcd_prime(void)
 
     if (!TEST_true(BN_generate_prime_ex(a, 1024, 0, NULL, NULL, NULL)))
             goto err;
-    for (i = 0; i < NUM0; i++) {
+    for (i = 0; i < NUM_PRIME_TESTS; i++) {
         if (!TEST_true(BN_generate_prime_ex(b, 1024, 0,
                                             NULL, NULL, NULL))
                 || !TEST_true(BN_gcd(gcd, a, b, ctx))
-                || !TEST_true(BN_is_one(gcd)))
+                || !TEST_true(BN_is_one(gcd))
+                || !TEST_true(BN_are_coprime(a, b, ctx)))
             goto err;
     }
 
@@ -3066,6 +3102,7 @@ int setup_tests(void)
         ADD_ALL_TESTS(test_is_prime, (int)OSSL_NELEM(primes));
         ADD_ALL_TESTS(test_not_prime, (int)OSSL_NELEM(not_primes));
         ADD_TEST(test_gcd_prime);
+        ADD_TEST(test_coprime);
         ADD_ALL_TESTS(test_mod_exp, (int)OSSL_NELEM(ModExpTests));
         ADD_ALL_TESTS(test_mod_exp_consttime, (int)OSSL_NELEM(ModExpTests));
         ADD_TEST(test_mod_exp2_mont);

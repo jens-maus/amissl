@@ -432,7 +432,7 @@ int NAME_CONSTRAINTS_check_CN(X509 *x, NAME_CONSTRAINTS *nc)
         ne = X509_NAME_get_entry(nm, i);
         cn = X509_NAME_ENTRY_get_data(ne);
 
-        /* Only process attributes that look like host names */
+        /* Only process attributes that look like hostnames */
         if ((r = cn2dnsid(cn, &idval, &idlen)) != X509_V_OK)
             return r;
         if (idlen == 0)
@@ -640,7 +640,7 @@ static int nc_email_eai(ASN1_TYPE *emltype, ASN1_IA5STRING *base)
     const char *emlptr;
     const char *emlat;
     char ulabel[256];
-    size_t size = sizeof(ulabel) - 1;
+    size_t size = sizeof(ulabel);
     int ret = X509_V_OK;
     size_t emlhostlen;
 
@@ -667,18 +667,16 @@ static int nc_email_eai(ASN1_TYPE *emltype, ASN1_IA5STRING *base)
         goto end;
     }
 
-    memset(ulabel, 0, sizeof(ulabel));
     /* Special case: initial '.' is RHS match */
     if (*baseptr == '.') {
         ulabel[0] = '.';
-        size -= 1;
-        if (ossl_a2ulabel(baseptr, ulabel + 1, &size) <= 0) {
+        if (ossl_a2ulabel(baseptr, ulabel + 1, size - 1) <= 0) {
             ret = X509_V_ERR_UNSPECIFIED;
             goto end;
         }
 
         if ((size_t)eml->length > strlen(ulabel)) {
-            emlptr += eml->length - (strlen(ulabel));
+            emlptr += eml->length - strlen(ulabel);
             /* X509_V_OK */
             if (ia5ncasecmp(ulabel, emlptr, strlen(ulabel)) == 0)
                 goto end;
@@ -687,7 +685,7 @@ static int nc_email_eai(ASN1_TYPE *emltype, ASN1_IA5STRING *base)
         goto end;
     }
 
-    if (ossl_a2ulabel(baseptr, ulabel, &size) <= 0) {
+    if (ossl_a2ulabel(baseptr, ulabel, size) <= 0) {
         ret = X509_V_ERR_UNSPECIFIED;
         goto end;
     }

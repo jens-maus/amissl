@@ -1,5 +1,5 @@
 #! /usr/bin/env perl
-# Copyright 2018-2021 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2018-2022 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -292,7 +292,7 @@ EOF
     { regexp   => qr/(.*)\bLHASH_OF<<<\((.*?)\)>>>(.*)/,
       massager => sub { return ("$1struct lhash_st_$2$3"); }
     },
-    { regexp   => qr/DEFINE_LHASH_OF(?:_INTERNAL)?<<<\((.*)\)>>>/,
+    { regexp   => qr/DEFINE_LHASH_OF(?:_INTERNAL|_EX)?<<<\((.*)\)>>>/,
       massager => sub {
           return (<<"EOF");
 static ossl_inline LHASH_OF($1) * lh_$1_new(unsigned long (*hfn)(const $1 *),

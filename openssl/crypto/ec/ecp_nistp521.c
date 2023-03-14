@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2011-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -782,7 +782,6 @@ static void felem_inv(felem out, const felem in)
     felem_reduce(ftmp3, tmp);   /* 2^7 - 2^3 */
     felem_square(tmp, ftmp3);
     felem_reduce(ftmp3, tmp);   /* 2^8 - 2^4 */
-    felem_assign(ftmp4, ftmp3);
     felem_mul(tmp, ftmp3, ftmp);
     felem_reduce(ftmp4, tmp);   /* 2^8 - 2^1 */
     felem_square(tmp, ftmp4);

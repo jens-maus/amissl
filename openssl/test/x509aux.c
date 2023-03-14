@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 #include <openssl/pem.h>
 #include <openssl/conf.h>
 #include <openssl/err.h>
-#include "internal/nelem.h"
 #include "testutil.h"
 
 static int test_certs(int num)

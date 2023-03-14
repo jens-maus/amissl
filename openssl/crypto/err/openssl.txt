@@ -1,4 +1,4 @@
-# Copyright 1999-2022 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 1999-2023 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -439,10 +439,23 @@ CRYPTO_R_ILLEGAL_HEX_DIGIT:102:illegal hex digit
 CRYPTO_R_INSUFFICIENT_DATA_SPACE:106:insufficient data space
 CRYPTO_R_INSUFFICIENT_PARAM_SIZE:107:insufficient param size
 CRYPTO_R_INSUFFICIENT_SECURE_DATA_SPACE:108:insufficient secure data space
+CRYPTO_R_INTEGER_OVERFLOW:127:integer overflow
 CRYPTO_R_INVALID_NEGATIVE_VALUE:122:invalid negative value
 CRYPTO_R_INVALID_NULL_ARGUMENT:109:invalid null argument
 CRYPTO_R_INVALID_OSSL_PARAM_TYPE:110:invalid ossl param type
+CRYPTO_R_NO_PARAMS_TO_MERGE:131:no params to merge
+CRYPTO_R_NO_SPACE_FOR_TERMINATING_NULL:128:no space for terminating null
 CRYPTO_R_ODD_NUMBER_OF_DIGITS:103:odd number of digits
+CRYPTO_R_PARAM_CANNOT_BE_REPRESENTED_EXACTLY:123:\
+	param cannot be represented exactly
+CRYPTO_R_PARAM_NOT_INTEGER_TYPE:124:param not integer type
+CRYPTO_R_PARAM_OF_INCOMPATIBLE_TYPE:129:param of incompatible type
+CRYPTO_R_PARAM_UNSIGNED_INTEGER_NEGATIVE_VALUE_UNSUPPORTED:125:\
+	param unsigned integer negative value unsupported
+CRYPTO_R_PARAM_UNSUPPORTED_FLOATING_POINT_FORMAT:130:\
+	param unsupported floating point format
+CRYPTO_R_PARAM_VALUE_TOO_LARGE_FOR_DESTINATION:126:\
+	param value too large for destination
 CRYPTO_R_PROVIDER_ALREADY_EXISTS:104:provider already exists
 CRYPTO_R_PROVIDER_SECTION_ERROR:105:provider section error
 CRYPTO_R_RANDOM_SECTION_ERROR:119:random section error
@@ -514,6 +527,7 @@ DSA_R_PARAMETER_ENCODING_ERROR:105:parameter encoding error
 DSA_R_P_NOT_PRIME:115:p not prime
 DSA_R_Q_NOT_PRIME:113:q not prime
 DSA_R_SEED_LEN_SMALL:110:seed_len is less than the length of q
+DSA_R_TOO_MANY_RETRIES:116:too many retries
 DSO_R_CTRL_FAILED:100:control command failed
 DSO_R_DSO_ALREADY_LOADED:110:dso already loaded
 DSO_R_EMPTY_FILE_STRUCTURE:113:empty file structure
@@ -597,6 +611,7 @@ EC_R_POINT_IS_NOT_ON_CURVE:107:point is not on curve
 EC_R_RANDOM_NUMBER_GENERATION_FAILED:158:random number generation failed
 EC_R_SHARED_INFO_ERROR:150:shared info error
 EC_R_SLOT_FULL:108:slot full
+EC_R_TOO_MANY_RETRIES:176:too many retries
 EC_R_UNDEFINED_GENERATOR:113:undefined generator
 EC_R_UNDEFINED_ORDER:128:undefined order
 EC_R_UNKNOWN_COFACTOR:164:unknown cofactor
@@ -972,6 +987,7 @@ PROV_R_BN_ERROR:160:bn error
 PROV_R_CIPHER_OPERATION_FAILED:102:cipher operation failed
 PROV_R_DERIVATION_FUNCTION_INIT_FAILED:205:derivation function init failed
 PROV_R_DIGEST_NOT_ALLOWED:174:digest not allowed
+PROV_R_EMS_NOT_ENABLED:233:ems not enabled
 PROV_R_ENTROPY_SOURCE_STRENGTH_TOO_WEAK:186:entropy source strength too weak
 PROV_R_ERROR_INSTANTIATING_DRBG:188:error instantiating drbg
 PROV_R_ERROR_RETRIEVING_ENTROPY:189:error retrieving entropy

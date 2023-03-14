@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2002, Oracle and/or its affiliates. All rights reserved
  * Copyright 2005 Nokia. All rights reserved.
  *
@@ -42,7 +42,6 @@ typedef unsigned int u_int;
 #include <openssl/err.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
-#include <openssl/ssl.h>
 #include <openssl/rand.h>
 #include <openssl/ocsp.h>
 #ifndef OPENSSL_NO_DH
@@ -229,6 +228,7 @@ static int psk_find_session_cb(SSL *ssl, const unsigned char *identity,
             || !SSL_SESSION_set_cipher(tmpsess, cipher)
             || !SSL_SESSION_set_protocol_version(tmpsess, SSL_version(ssl))) {
         OPENSSL_free(key);
+        SSL_SESSION_free(tmpsess);
         return 0;
     }
     OPENSSL_free(key);
@@ -2995,8 +2995,9 @@ static void print_connection_info(SSL *con)
 #endif
     if (SSL_session_reused(con))
         BIO_printf(bio_s_out, "Reused session-id\n");
-    BIO_printf(bio_s_out, "Secure Renegotiation IS%s supported\n",
-               SSL_get_secure_renegotiation_support(con) ? "" : " NOT");
+
+    ssl_print_secure_renegotiation_notes(bio_s_out, con);
+
     if ((SSL_get_options(con) & SSL_OP_NO_RENEGOTIATION))
         BIO_printf(bio_s_out, "Renegotiation is DISABLED\n");
 
@@ -3230,10 +3231,7 @@ static int www_body(int s, int stype, int prot, unsigned char *context)
             }
             BIO_puts(io, "\n");
 
-            BIO_printf(io,
-                       "Secure Renegotiation IS%s supported\n",
-                       SSL_get_secure_renegotiation_support(con) ?
-                       "" : " NOT");
+            ssl_print_secure_renegotiation_notes(io, con);
 
             /*
              * The following is evil and should not really be done

@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -141,6 +141,20 @@ void EVP_MD_CTX_free(EVP_MD_CTX *ctx)
     OPENSSL_free(ctx);
 }
 
+int evp_md_ctx_free_algctx(EVP_MD_CTX *ctx)
+{
+    if (ctx->algctx != NULL) {
+        if (!ossl_assert(ctx->digest != NULL)) {
+            ERR_raise(ERR_LIB_EVP, EVP_R_INITIALIZATION_ERROR);
+            return 0;
+        }
+        if (ctx->digest->freectx != NULL)
+            ctx->digest->freectx(ctx->algctx);
+        ctx->algctx = NULL;
+    }
+    return 1;
+}
+
 static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
                                 const OSSL_PARAM params[], ENGINE *impl)
 {
@@ -169,16 +183,6 @@ static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
 
     EVP_MD_CTX_clear_flags(ctx, EVP_MD_CTX_FLAG_CLEANED);
 
-    if (ctx->algctx != NULL) {
-        if (!ossl_assert(ctx->digest != NULL)) {
-            ERR_raise(ERR_LIB_EVP, EVP_R_INITIALIZATION_ERROR);
-            return 0;
-        }
-        if (ctx->digest->freectx != NULL)
-            ctx->digest->freectx(ctx->algctx);
-        ctx->algctx = NULL;
-    }
-
     if (type != NULL) {
         ctx->reqdigest = type;
     } else {
@@ -197,21 +201,20 @@ static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
      * previous handle, re-querying for an ENGINE, and having a
      * reinitialisation, when it may all be unnecessary.
      */
-    if (ctx->engine && ctx->digest &&
-        (type == NULL || (type->type == ctx->digest->type)))
+    if (ctx->engine != NULL
+            && ctx->digest != NULL
+            && type->type == ctx->digest->type)
         goto skip_to_init;
 
-    if (type != NULL) {
-        /*
-         * Ensure an ENGINE left lying around from last time is cleared (the
-         * previous check attempted to avoid this if the same ENGINE and
-         * EVP_MD could be used).
-         */
-        ENGINE_finish(ctx->engine);
-        ctx->engine = NULL;
-    }
+    /*
+     * Ensure an ENGINE left lying around from last time is cleared (the
+     * previous check attempted to avoid this if the same ENGINE and
+     * EVP_MD could be used).
+     */
+    ENGINE_finish(ctx->engine);
+    ctx->engine = NULL;
 
-    if (type != NULL && impl == NULL)
+    if (impl == NULL)
         tmpimpl = ENGINE_get_digest_engine(type->type);
 #endif
 
@@ -219,15 +222,21 @@ static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
      * If there are engines involved or EVP_MD_CTX_FLAG_NO_INIT is set then we
      * should use legacy handling for now.
      */
-    if (ctx->engine != NULL
-            || impl != NULL
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
+    if (impl != NULL
+#if !defined(OPENSSL_NO_ENGINE)
+            || ctx->engine != NULL
+# if !defined(FIPS_MODULE)
             || tmpimpl != NULL
+# endif
 #endif
             || (ctx->flags & EVP_MD_CTX_FLAG_NO_INIT) != 0
             || (type != NULL && type->origin == EVP_ORIG_METH)
             || (type == NULL && ctx->digest != NULL
                              && ctx->digest->origin == EVP_ORIG_METH)) {
+        /* If we were using provided hash before, cleanup algctx */
+        if (!evp_md_ctx_free_algctx(ctx))
+            return 0;
+
         if (ctx->digest == ctx->fetched_digest)
             ctx->digest = NULL;
         EVP_MD_free(ctx->fetched_digest);
@@ -238,6 +247,15 @@ static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
     cleanup_old_md_data(ctx, 1);
 
     /* Start of non-legacy code below */
+    if (ctx->digest == type) {
+        if (!ossl_assert(type->prov != NULL)) {
+            ERR_raise(ERR_LIB_EVP, EVP_R_INITIALIZATION_ERROR);
+            return 0;
+        }
+    } else {
+        if (!evp_md_ctx_free_algctx(ctx))
+            return 0;
+    }
 
     if (type->prov == NULL) {
 #ifdef FIPS_MODULE
@@ -260,11 +278,6 @@ static int evp_md_init_internal(EVP_MD_CTX *ctx, const EVP_MD *type,
 #endif
     }
 
-    if (ctx->algctx != NULL && ctx->digest != NULL && ctx->digest != type) {
-        if (ctx->digest->freectx != NULL)
-            ctx->digest->freectx(ctx->algctx);
-        ctx->algctx = NULL;
-    }
     if (type->prov != NULL && ctx->fetched_digest != type) {
         if (!EVP_MD_up_ref((EVP_MD *)type)) {
             ERR_raise(ERR_LIB_EVP, EVP_R_INITIALIZATION_ERROR);
@@ -447,7 +460,7 @@ int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *isize)
 
     if (isize != NULL) {
         if (size <= UINT_MAX) {
-            *isize = (int)size;
+            *isize = (unsigned int)size;
         } else {
             ERR_raise(ERR_LIB_EVP, EVP_R_FINAL_ERROR);
             ret = 0;
@@ -512,6 +525,17 @@ legacy:
     }
 
     return ret;
+}
+
+EVP_MD_CTX *EVP_MD_CTX_dup(const EVP_MD_CTX *in)
+{
+    EVP_MD_CTX *out = EVP_MD_CTX_new();
+
+    if (out != NULL && !EVP_MD_CTX_copy_ex(out, in)) {
+        EVP_MD_CTX_free(out);
+        out = NULL;
+    }
+    return out;
 }
 
 int EVP_MD_CTX_copy(EVP_MD_CTX *out, const EVP_MD_CTX *in)

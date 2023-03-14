@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2007-2022 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright Nokia 2007-2019
  * Copyright Siemens AG 2015-2019
  *
@@ -434,7 +434,7 @@ static int execute_msg_check_test(CMP_VFY_TEST_FIXTURE *fixture)
                                                fixture->additional_arg)))
         return 0;
 
-    if (fixture->expected == 0) /* error expected aready during above check */
+    if (fixture->expected == 0) /* error expected already during above check */
         return 1;
     return
         TEST_int_eq(0,

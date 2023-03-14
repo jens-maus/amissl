@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2006-2023 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -346,7 +346,7 @@ static int ecdh_cms_encrypt(CMS_RecipientInfo *ri)
 
     penclen = CMS_SharedInfo_encode(&penc, wrap_alg, ukm, keylen);
 
-    if (penclen == 0)
+    if (penclen <= 0)
         goto err;
 
     if (EVP_PKEY_CTX_set0_ecdh_kdf_ukm(pctx, penc, penclen) <= 0)
@@ -387,27 +387,4 @@ int ossl_cms_ecdh_envelope(CMS_RecipientInfo *ri, int decrypt)
 
     ERR_raise(ERR_LIB_CMS, CMS_R_NOT_SUPPORTED_FOR_THIS_KEY_TYPE);
     return 0;
-}
-
-/* ECDSA and DSA implementation is the same */
-int ossl_cms_ecdsa_dsa_sign(CMS_SignerInfo *si, int verify)
-{
-    assert(verify == 0 || verify == 1);
-
-    if (verify == 0) {
-        int snid, hnid;
-        X509_ALGOR *alg1, *alg2;
-        EVP_PKEY *pkey = si->pkey;
-
-        CMS_SignerInfo_get0_algs(si, NULL, NULL, &alg1, &alg2);
-        if (alg1 == NULL || alg1->algorithm == NULL)
-            return -1;
-        hnid = OBJ_obj2nid(alg1->algorithm);
-        if (hnid == NID_undef)
-            return -1;
-        if (!OBJ_find_sigid_by_algs(&snid, hnid, EVP_PKEY_get_id(pkey)))
-            return -1;
-        X509_ALGOR_set0(alg2, OBJ_nid2obj(snid), V_ASN1_UNDEF, 0);
-    }
-    return 1;
 }

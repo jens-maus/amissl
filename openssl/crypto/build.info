@@ -51,6 +51,10 @@ IF[{- !$disabled{asm} && $config{processor} ne '386' -}]
 
   $CPUIDASM_c64xplus=c64xpluscpuid.s
 
+  $CPUIDASM_riscv64=riscvcap.c riscv64cpuid.s
+  $CPUIDASM_riscv32=riscvcap.c riscv32cpuid.s
+
+  $CPUIDASM_loongarch64=loongarchcap.c loongarch64cpuid.s
   # Now that we have defined all the arch specific variables, use the
   # appropriate one, and define the appropriate macros
   IF[$CPUIDASM_{- $target{asm_arch} -}]
@@ -74,8 +78,8 @@ DEFINE[../providers/libfips.a]=$CPUIDDEF
 # already gets everything that the static libcrypto.a has, and doesn't need it
 # added again.
 IF[{- !$disabled{module} && !$disabled{shared} -}]
-  SOURCE[../providers/liblegacy.a]=$CPUID_COMMON
-  DEFINE[../providers/liblegacy.a]=$CPUIDDEF
+  SOURCE[../providers/legacy]=$CPUID_COMMON
+  DEFINE[../providers/legacy]=$CPUIDDEF
 ENDIF
 
 # Implementations are now spread across several libraries, so the CPUID define
@@ -97,9 +101,7 @@ $UTIL_COMMON=\
         context.c sparse_array.c asn1_dsa.c packet.c param_build.c \
         param_build_set.c der_writer.c threads_lib.c params_dup.c
 
-IF[{- !$disabled{shared} -}]
-  SOURCE[../libssl]=sparse_array.c
-ENDIF
+SHARED_SOURCE[../libssl]=sparse_array.c
 
 SOURCE[../libcrypto]=$UTIL_COMMON \
         mem.c mem_sec.c \
@@ -134,7 +136,10 @@ GENERATE[armv4cpuid.S]=armv4cpuid.pl
 INCLUDE[armv4cpuid.o]=.
 GENERATE[s390xcpuid.S]=s390xcpuid.pl
 INCLUDE[s390xcpuid.o]=.
+GENERATE[riscv64cpuid.s]=riscv64cpuid.pl
+GENERATE[riscv32cpuid.s]=riscv32cpuid.pl
 
+GENERATE[loongarch64cpuid.s]=loongarch64cpuid.pl
 IF[{- $config{target} =~ /^(?:Cygwin|mingw|VC-|BC-)/ -}]
   SHARED_SOURCE[../libcrypto]=dllmain.c
 ENDIF

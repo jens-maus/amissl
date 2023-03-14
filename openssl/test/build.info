@@ -62,7 +62,8 @@ IF[{- !$disabled{tests} -}]
           aesgcmtest params_test evp_pkey_dparams_test \
           provider_status_test defltfips_test \
           bio_readbuffer_test user_property_test pkcs7_test upcallstest \
-          provfetchtest prov_config_test rand_test fips_version_test
+          provfetchtest prov_config_test rand_test fips_version_test \
+          nodefltctxtest
 
   IF[{- !$disabled{'deprecated-3.0'} -}]
     PROGRAMS{noinst}=enginetest
@@ -214,6 +215,10 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[provider_status_test]=../include ../apps/include
   DEPEND[provider_status_test]=../libcrypto.a libtestutil.a
 
+  SOURCE[nodefltctxtest]=nodefltctxtest.c
+  INCLUDE[nodefltctxtest]=../include ../apps/include
+  DEPEND[nodefltctxtest]=../libcrypto.a libtestutil.a
+
   IF[{- !$disabled{'deprecated-3.0'} -}]
     PROGRAMS{noinst}=igetest bftest casttest
 
@@ -293,7 +298,7 @@ IF[{- !$disabled{tests} -}]
   SOURCE[punycode_test]=punycode_test.c
   INCLUDE[punycode_test]=../include ../apps/include
   DEPEND[punycode_test]=../libcrypto.a libtestutil.a
-
+ 
   SOURCE[stack_test]=stack_test.c
   INCLUDE[stack_test]=../include ../apps/include
   DEPEND[stack_test]=../libcrypto libtestutil.a
@@ -597,7 +602,7 @@ IF[{- !$disabled{tests} -}]
   IF[{- $config{target} !~ /amiga/ -}]
     PROGRAMS{noinst}=asn1_internal_test modes_internal_test x509_internal_test \
                      tls13encryptiontest wpackettest ctype_internal_test \
-                     rdrand_sanitytest property_test ideatest rsa_mp_test \
+                     rdcpu_sanitytest property_test ideatest rsa_mp_test \
                      rsa_sp800_56b_test bn_internal_test ecdsatest rsa_test \
                      rc2test rc4test rc5test hmactest ffc_internal_test \
                      asn1_dsa_internal_test dsatest dsa_no_digest_size_test \
@@ -751,9 +756,9 @@ IF[{- !$disabled{tests} -}]
     INCLUDE[rc4test]=../include ../apps/include
     DEPEND[rc4test]=../libcrypto.a libtestutil.a
 
-    SOURCE[rdrand_sanitytest]=rdrand_sanitytest.c
-    INCLUDE[rdrand_sanitytest]=../include ../apps/include
-    DEPEND[rdrand_sanitytest]=../libcrypto.a libtestutil.a
+    SOURCE[rdcpu_sanitytest]=rdcpu_sanitytest.c
+    INCLUDE[rdcpu_sanitytest]=../include ../apps/include ../crypto
+    DEPEND[rdcpu_sanitytest]=../libcrypto.a libtestutil.a
 
     SOURCE[rsa_sp800_56b_test]=rsa_sp800_56b_test.c
     INCLUDE[rsa_sp800_56b_test]=.. ../include ../crypto/rsa ../apps/include
@@ -894,6 +899,14 @@ IF[{- !$disabled{tests} -}]
   SOURCE[endecode_test]=endecode_test.c helpers/predefined_dhparams.c
   INCLUDE[endecode_test]=.. ../include ../apps/include
   DEPEND[endecode_test]=../libcrypto.a libtestutil.a
+  IF[{- !$disabled{module} && !$disabled{legacy} -}]
+    DEFINE[endecode_test]=STATIC_LEGACY
+    SOURCE[endecode_test]=../providers/legacyprov.c
+    INCLUDE[endecode_test]=../providers/common/include \
+                           ../providers/implementations/include
+    DEPEND[endecode_test]=../providers/liblegacy.a \
+                          ../providers/libcommon.a
+  ENDIF
 
   IF[{- !$disabled{'deprecated-3.0'} -}]
     PROGRAMS{noinst}=endecoder_legacy_test
@@ -924,6 +937,17 @@ ENDIF
   SOURCE[ssl_ctx_test]=ssl_ctx_test.c
   INCLUDE[ssl_ctx_test]=../include ../apps/include
   DEPEND[ssl_ctx_test]=../libcrypto ../libssl libtestutil.a
+
+  SOURCE[build_wincrypt_test]=build_wincrypt_test.c
+  INCLUDE[build_wincrypt_test]=../include
+  DEPEND[build_wincrypt_test]=../libssl ../libcrypto
+
+  IF[{- !$disabled{shared} -}]
+    PROGRAMS{noinst}=timing_load_creds
+    SOURCE[timing_load_creds]=timing_load_creds.c
+    INCLUDE[timing_load_creds]=../include
+    DEPEND[timing_load_creds]=../libcrypto.a
+  ENDIF
 
 {-
    use File::Spec::Functions;

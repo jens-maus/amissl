@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2022 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2019, Oracle and/or its affiliates.  All rights reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -78,7 +78,7 @@ static int test_param_type_extra(OSSL_PARAM *param, const unsigned char *cmp,
     const int signd = param->data_type == OSSL_PARAM_INTEGER;
 
     /*
-     * Set the unmodified sentinal directly because there is no param array
+     * Set the unmodified sentinel directly because there is no param array
      * for these tests.
      */
     param->return_size = OSSL_PARAM_UNMODIFIED;
@@ -424,14 +424,15 @@ static int test_param_bignum(int n)
     int ret = 0;
 
     param.data = bnbuf;
-    param.data_size = len;
+    param.data_size = sizeof(bnbuf);
 
-    le_copy(buf, raw_values[n].value, len);
     if (!TEST_ptr(b = BN_lebin2bn(raw_values[n].value, (int)len, NULL)))
         goto err;
 
-    if (!TEST_true(OSSL_PARAM_set_BN(&param, b))
-        || !TEST_mem_eq(bnbuf, param.return_size, buf, param.return_size))
+    if (!TEST_true(OSSL_PARAM_set_BN(&param, b)))
+        goto err;
+    le_copy(buf, bnbuf, sizeof(bnbuf));
+    if (!TEST_mem_eq(raw_values[n].value, len, buf, len))
         goto err;
     param.data_size = param.return_size;
     if (!TEST_true(OSSL_PARAM_get_BN(&param, &c))

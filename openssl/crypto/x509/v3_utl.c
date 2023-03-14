@@ -9,7 +9,7 @@
 
 /* X509 v3 extension utilities */
 
-#include "e_os.h"
+#include "internal/e_os.h"
 #include "internal/cryptlib.h"
 #include <stdio.h>
 #include <string.h>
@@ -47,7 +47,7 @@ static int x509v3_add_len_value(const char *name, const char *value,
     if (name != NULL && (tname = OPENSSL_strdup(name)) == NULL)
         goto err;
     if (value != NULL) {
-        /* We don't allow embeded NUL characters */
+        /* We don't allow embedded NUL characters */
         if (memchr(value, 0, vallen) != NULL)
             goto err;
         tvalue = OPENSSL_strndup(value, vallen);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2001-2023 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright Siemens AG 2018-2020
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -8,7 +8,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include "e_os.h"
+#include "internal/e_os.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "crypto/ctype.h"
@@ -20,6 +20,7 @@
 #include <openssl/cmperr.h>
 #include <openssl/buffer.h>
 #include <openssl/http.h>
+#include <openssl/trace.h>
 #include "internal/sockets.h"
 #include "internal/cryptlib.h" /* for ossl_assert() */
 
@@ -51,7 +52,7 @@ struct ossl_http_req_ctx_st {
     void *upd_arg;              /* Optional arg for update callback function */
     int use_ssl;                /* Use HTTPS */
     char *proxy;                /* Optional proxy name or URI */
-    char *server;               /* Optional server host name */
+    char *server;               /* Optional server hostname */
     char *port;                 /* Optional server port */
     BIO *mem;                   /* Mem BIO holding request header or response */
     BIO *req;                   /* BIO holding the request provided by caller */
@@ -513,6 +514,7 @@ static int may_still_retry(time_t max_time, int *ptimeout)
 int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
 {
     int i, found_expected_ct = 0, found_keep_alive = 0;
+    int found_text_ct = 0;
     long n;
     size_t resp_len;
     const unsigned char *p;
@@ -564,18 +566,24 @@ int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
         }
         rctx->state = OHS_WRITE_INIT;
 
-        /* fall thru */
+        /* fall through */
     case OHS_WRITE_INIT:
         rctx->len_to_send = BIO_get_mem_data(rctx->mem, &rctx->pos);
         rctx->state = OHS_WRITE_HDR;
+        if (OSSL_TRACE_ENABLED(HTTP))
+            OSSL_TRACE(HTTP, "Sending request header:\n");
 
-        /* fall thru */
+        /* fall through */
     case OHS_WRITE_HDR:
         /* Copy some chunk of data from rctx->mem to rctx->wbio */
     case OHS_WRITE_REQ:
         /* Copy some chunk of data from rctx->req to rctx->wbio */
 
         if (rctx->len_to_send > 0) {
+            if (OSSL_TRACE_ENABLED(HTTP)
+                && rctx->state == OHS_WRITE_HDR && rctx->len_to_send <= INT_MAX)
+                OSSL_TRACE2(HTTP, "%.*s", (int)rctx->len_to_send, rctx->pos);
+
             i = BIO_write(rctx->wbio, rctx->pos, rctx->len_to_send);
             if (i <= 0) {
                 if (BIO_should_retry(rctx->wbio))
@@ -605,7 +613,7 @@ int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
         }
         rctx->state = OHS_FLUSH;
 
-        /* fall thru */
+        /* fall through */
     case OHS_FLUSH:
 
         i = BIO_flush(rctx->wbio);
@@ -659,6 +667,13 @@ int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
             return 0;
         }
 
+        /* dump all response header lines */
+        if (OSSL_TRACE_ENABLED(HTTP)) {
+            if (rctx->state == OHS_FIRSTLINE)
+                OSSL_TRACE(HTTP, "Received response header:\n");
+            OSSL_TRACE1(HTTP, "%s", buf);
+        }
+
         /* First line */
         if (rctx->state == OHS_FIRSTLINE) {
             switch (parse_http_line1(buf, &found_keep_alive)) {
@@ -697,15 +712,20 @@ int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
                 rctx->redirection_url = value;
                 return 0;
             }
-            if (rctx->state == OHS_HEADERS && rctx->expected_ct != NULL
-                    && OPENSSL_strcasecmp(key, "Content-Type") == 0) {
-                if (OPENSSL_strcasecmp(rctx->expected_ct, value) != 0) {
-                    ERR_raise_data(ERR_LIB_HTTP, HTTP_R_UNEXPECTED_CONTENT_TYPE,
-                                   "expected=%s, actual=%s",
-                                   rctx->expected_ct, value);
-                    return 0;
+            if (OPENSSL_strcasecmp(key, "Content-Type") == 0) {
+                if (rctx->state == OHS_HEADERS
+                    && rctx->expected_ct != NULL) {
+                    if (OPENSSL_strcasecmp(rctx->expected_ct, value) != 0) {
+                        ERR_raise_data(ERR_LIB_HTTP,
+                                       HTTP_R_UNEXPECTED_CONTENT_TYPE,
+                                       "expected=%s, actual=%s",
+                                       rctx->expected_ct, value);
+                        return 0;
+                    }
+                    found_expected_ct = 1;
                 }
-                found_expected_ct = 1;
+                if (OPENSSL_strncasecmp(value, "text/", 5) == 0)
+                    found_text_ct = 1;
             }
 
             /* https://tools.ietf.org/html/rfc7230#section-6.3 Persistence */
@@ -745,8 +765,12 @@ int OSSL_HTTP_REQ_CTX_nbio(OSSL_HTTP_REQ_CTX *rctx)
             rctx->keep_alive = 0;
         }
 
-        if (rctx->state == OHS_ERROR)
+        if (rctx->state == OHS_ERROR) {
+            if (OSSL_TRACE_ENABLED(HTTP)
+                    && found_text_ct && BIO_get_mem_data(rctx->mem, &p) > 0)
+                OSSL_TRACE1(HTTP, "%s", p);
             return 0;
+        }
 
         if (rctx->expected_ct != NULL && !found_expected_ct) {
             ERR_raise_data(ERR_LIB_HTTP, HTTP_R_MISSING_CONTENT_TYPE,
@@ -1122,7 +1146,7 @@ BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
     char *port;
     char *path;
     int use_ssl;
-    OSSL_HTTP_REQ_CTX *rctx;
+    OSSL_HTTP_REQ_CTX *rctx = NULL;
     BIO *resp = NULL;
     time_t max_time = timeout > 0 ? time(NULL) + timeout : 0;
 
@@ -1148,10 +1172,12 @@ BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
                                         NULL /* req */,
                                         expected_ct, expect_asn1, max_resp_len,
                                         -1 /* use same max time (timeout) */,
-                                        0 /* no keep_alive */))
+                                        0 /* no keep_alive */)) {
                 OSSL_HTTP_REQ_CTX_free(rctx);
-            else
+                rctx = NULL;
+           } else {
                 resp = OSSL_HTTP_exchange(rctx, &redirection_url);
+           }
         }
         OPENSSL_free(path);
         if (resp == NULL && redirection_url != NULL) {
@@ -1166,6 +1192,7 @@ BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
                         OPENSSL_free(host);
                         OPENSSL_free(port);
                         (void)OSSL_HTTP_close(rctx, 1);
+                        rctx = NULL;
                         BIO_free(resp);
                         OPENSSL_free(current_url);
                         return NULL;
@@ -1175,6 +1202,7 @@ BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
                 OPENSSL_free(host);
                 OPENSSL_free(port);
                 (void)OSSL_HTTP_close(rctx, 1);
+                rctx = NULL;
                 continue;
             }
             /* if redirection not allowed, ignore it */
@@ -1184,6 +1212,7 @@ BIO *OSSL_HTTP_get(const char *url, const char *proxy, const char *no_proxy,
         OPENSSL_free(port);
         if (!OSSL_HTTP_close(rctx, resp != NULL)) {
             BIO_free(resp);
+            rctx = NULL;
             resp = NULL;
         }
         break;

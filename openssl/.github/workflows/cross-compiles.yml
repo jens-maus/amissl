@@ -1,4 +1,4 @@
-# Copyright 2021-2022 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2021-2023 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -30,8 +30,24 @@ jobs:
         #          to never run the tests, otherwise its value is passed to
         #          the "make test" command to allow selective disabling of
         #          tests.
+        #   qemucpu: optional; string that describes CPU properties.
+        #            The string will be used to set the QEMU_CPU variable.
+        #   opensslcapsname: optional; string that describes the postfix of the
+        #                    OpenSSL environment variable that defines CPU
+        #                    capabilities. E.g. "foo" will result in an
+        #                    environment variable with the name OPENSSL_foo.
+        #   opensslcaps: optional; if opensslcapsname (see above) is set, then
+        #                this string will be used as content for the OpenSSL
+        #                capabilities variable.
+        #   ppa:   Launchpad PPA repository to download packages from.
         platform: [
           {
+            arch: i386-pc-msdosdjgpp,
+            libs: libc-djgpp-dev libwatt-djgpp-dev djgpp-utils,
+            target: no-threads 386 DJGPP,
+            tests: none,
+            ppa: jwt27/djgpp-toolchain
+          }, {
             arch: aarch64-linux-gnu,
             libs: libc6-dev-arm64-cross,
             target: linux-aarch64
@@ -80,7 +96,10 @@ jobs:
           }, {
             arch: powerpc64le-linux-gnu,
             libs: libc6-dev-ppc64el-cross,
-            target: linux-ppc64le
+            # The default compiler for this platform on Ubuntu 20.04 seems
+            # buggy and causes test failures. Dropping the optimisation level
+            # resolves it.
+            target: -O2 linux-ppc64le
           }, {
             arch: riscv64-linux-gnu,
             libs: libc6-dev-riscv64-cross,
@@ -131,6 +150,10 @@ jobs:
         ]
     runs-on: ubuntu-latest
     steps:
+    - name: install package repository
+      if: matrix.platform.ppa != ''
+      run: |
+        sudo add-apt-repository ppa:${{ matrix.platform.ppa }}
     - name: install packages
       run: |
         sudo apt-get update
@@ -161,14 +184,24 @@ jobs:
       if: github.event_name == 'push' && matrix.platform.tests != 'none'
       run: sudo apt-get -yq --force-yes install qemu-user
 
+    - name: Set QEMU environment
+      if: github.event_name == 'push' && matrix.platform.qemucpu != ''
+      run: echo "QEMU_CPU=${{ matrix.platform.qemucpu }}" >> $GITHUB_ENV
+
+    - name: Set OpenSSL caps environment
+      if: github.event_name == 'push' && matrix.platform.opensslcapsname != ''
+      run: echo "OPENSSL_${{ matrix.platform.opensslcapsname }}=\
+                 ${{ matrix.platform.opensslcaps }}" >> $GITHUB_ENV
+
     - name: make all tests
       if: github.event_name == 'push' && matrix.platform.tests == ''
       run: |
         make test HARNESS_JOBS=${HARNESS_JOBS:-4} \
+                  TESTS="-test_afalg" \
                   QEMU_LD_PREFIX=/usr/${{ matrix.platform.arch }}
     - name: make some tests
       if: github.event_name == 'push' && matrix.platform.tests != 'none' && matrix.platform.tests != ''
       run: |
         make test HARNESS_JOBS=${HARNESS_JOBS:-4} \
-                  TESTS="${{ matrix.platform.tests }}" \
+                  TESTS="${{ matrix.platform.tests }} -test_afalg" \
                   QEMU_LD_PREFIX=/usr/${{ matrix.platform.arch }}

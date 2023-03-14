@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -45,6 +45,7 @@ static int test_trace_categories(void)
         CASE(DECODER);
         CASE(ENCODER);
         CASE(REF_COUNT);
+        CASE(HTTP);
 #undef CASE
         default:
             is_cat_name_eq = TEST_ptr_null(cat_name);
@@ -66,10 +67,10 @@ static int test_trace_categories(void)
 #ifndef OPENSSL_NO_TRACE
 static void put_trace_output(void)
 {
-    OSSL_TRACE_BEGIN(REF_COUNT) {
+    OSSL_TRACE_BEGIN(HTTP) {
         BIO_printf(trc_out, "Hello World\n");
         BIO_printf(trc_out, "Good Bye Universe\n");
-    } OSSL_TRACE_END(REF_COUNT);
+    } OSSL_TRACE_END(HTTP);
 }
 
 static int test_trace_channel(void)
@@ -85,22 +86,22 @@ static int test_trace_channel(void)
     if (!TEST_ptr(bio))
         goto end;
 
-    if (!TEST_int_eq(OSSL_trace_set_channel(OSSL_TRACE_CATEGORY_REF_COUNT, bio), 1))
+    if (!TEST_int_eq(OSSL_trace_set_channel(OSSL_TRACE_CATEGORY_HTTP, bio), 1))
         goto end;
 
-    if (!TEST_true(OSSL_trace_enabled(OSSL_TRACE_CATEGORY_REF_COUNT)))
+    if (!TEST_true(OSSL_trace_enabled(OSSL_TRACE_CATEGORY_HTTP)))
         goto end;
 
-    if (!TEST_int_eq(OSSL_trace_set_prefix(OSSL_TRACE_CATEGORY_REF_COUNT, "xyz-"), 1))
+    if (!TEST_int_eq(OSSL_trace_set_prefix(OSSL_TRACE_CATEGORY_HTTP, "xyz-"), 1))
         goto end;
-    if (!TEST_int_eq(OSSL_trace_set_suffix(OSSL_TRACE_CATEGORY_REF_COUNT, "-abc"), 1))
+    if (!TEST_int_eq(OSSL_trace_set_suffix(OSSL_TRACE_CATEGORY_HTTP, "-abc"), 1))
         goto end;
 
     put_trace_output();
     len = BIO_get_mem_data(bio, &p_buf);
     if (!TEST_strn2_eq(p_buf, len, expected, expected_len))
         goto end;
-    if (!TEST_int_eq(OSSL_trace_set_channel(OSSL_TRACE_CATEGORY_REF_COUNT, NULL), 1))
+    if (!TEST_int_eq(OSSL_trace_set_channel(OSSL_TRACE_CATEGORY_HTTP, NULL), 1))
         goto end;
     bio = NULL;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2020 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -18,7 +18,6 @@
 #include <openssl/params.h>
 #include <openssl/types.h>
 #include <openssl/core_names.h>
-#include "internal/nelem.h"
 #include "testutil.h"
 
 #if defined(OPENSSL_NO_DES) && !defined(OPENSSL_NO_MDC2)

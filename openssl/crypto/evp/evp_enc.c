@@ -68,7 +68,14 @@ int EVP_CIPHER_CTX_reset(EVP_CIPHER_CTX *ctx)
 
 EVP_CIPHER_CTX *EVP_CIPHER_CTX_new(void)
 {
-    return OPENSSL_zalloc(sizeof(EVP_CIPHER_CTX));
+    EVP_CIPHER_CTX *ctx;
+
+    ctx = OPENSSL_zalloc(sizeof(EVP_CIPHER_CTX));
+    if (ctx == NULL)
+        return NULL;
+
+    ctx->iv_len = -1;
+    return ctx;
 }
 
 void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx)
@@ -89,8 +96,6 @@ static int evp_cipher_init_internal(EVP_CIPHER_CTX *ctx,
 #if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
     ENGINE *tmpimpl = NULL;
 #endif
-
-    ctx->iv_len = -1;
 
     /*
      * enc == 1 means we are encrypting.
@@ -994,7 +999,7 @@ int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *c, int keylen)
     if (c->cipher->prov != NULL) {
         int ok;
         OSSL_PARAM params[2] = { OSSL_PARAM_END, OSSL_PARAM_END };
-        size_t len = keylen;
+        size_t len;
 
         if (EVP_CIPHER_CTX_get_key_length(c) == keylen)
             return 1;
@@ -1007,9 +1012,13 @@ int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *c, int keylen)
         }
 
         params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_KEYLEN, &len);
+        if (!OSSL_PARAM_set_int(params, keylen))
+            return 0;
         ok = evp_do_ciph_ctx_setparams(c->cipher, c->algctx, params);
-
-        return ok > 0 ? 1 : 0;
+        if (ok <= 0)
+            return 0;
+        c->key_len = keylen;
+        return 1;
     }
 
     /* Code below to be removed when legacy support is dropped. */
@@ -1070,6 +1079,7 @@ int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr)
     switch (type) {
     case EVP_CTRL_SET_KEY_LENGTH:
         params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_KEYLEN, &sz);
+        ctx->key_len = -1;
         break;
     case EVP_CTRL_RAND_KEY:      /* Used by DES */
         set_params = 0;
@@ -1265,11 +1275,27 @@ int EVP_CIPHER_get_params(EVP_CIPHER *cipher, OSSL_PARAM params[])
 
 int EVP_CIPHER_CTX_set_params(EVP_CIPHER_CTX *ctx, const OSSL_PARAM params[])
 {
+    int r = 0;
+    const OSSL_PARAM *p;
+
     if (ctx->cipher != NULL && ctx->cipher->set_ctx_params != NULL) {
-        ctx->iv_len = -1;
-        return ctx->cipher->set_ctx_params(ctx->algctx, params);
+        r = ctx->cipher->set_ctx_params(ctx->algctx, params);
+        if (r > 0) {
+            p = OSSL_PARAM_locate_const(params, OSSL_CIPHER_PARAM_KEYLEN);
+            if (p != NULL && !OSSL_PARAM_get_int(p, &ctx->key_len)) {
+                r = 0;
+                ctx->key_len = -1;
+            }
+        }
+        if (r > 0) {
+            p = OSSL_PARAM_locate_const(params, OSSL_CIPHER_PARAM_IVLEN);
+            if (p != NULL && !OSSL_PARAM_get_int(p, &ctx->iv_len)) {
+                r = 0;
+                ctx->iv_len = -1;
+            }
+        }
     }
-    return 0;
+    return r;
 }
 
 int EVP_CIPHER_CTX_get_params(EVP_CIPHER_CTX *ctx, OSSL_PARAM params[])
@@ -1363,6 +1389,17 @@ int EVP_CIPHER_CTX_rand_key(EVP_CIPHER_CTX *ctx, unsigned char *key)
         return 1;
     }
 #endif /* FIPS_MODULE */
+}
+
+EVP_CIPHER_CTX *EVP_CIPHER_CTX_dup(const EVP_CIPHER_CTX *in)
+{
+    EVP_CIPHER_CTX *out = EVP_CIPHER_CTX_new();
+
+    if (out != NULL && !EVP_CIPHER_CTX_copy(out, in)) {
+        EVP_CIPHER_CTX_free(out);
+        out = NULL;
+    }
+    return out;
 }
 
 int EVP_CIPHER_CTX_copy(EVP_CIPHER_CTX *out, const EVP_CIPHER_CTX *in)

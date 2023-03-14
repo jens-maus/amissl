@@ -265,7 +265,6 @@ It will treat as success the case where the OID already exists (even if the
 short name I<sn> or long name I<ln> provided as arguments differ from those
 associated with the existing OID, in which case the new names are not
 associated).
-This function is not thread safe.
 
 The core_obj_add_sigid() function registers a new composite signature algorithm
 (I<sign_name>) consisting of an underlying signature algorithm (I<pkey_name>)
@@ -280,7 +279,6 @@ signature algorithm already exists (even if registered against a different
 underlying signature or digest algorithm). For I<digest_name>, NULL or an
 empty string is permissible for signature algorithms that do not need a digest
 to operate correctly. The function returns 1 on success or 0 on failure.
-This function is not thread safe.
 
 CRYPTO_malloc(), CRYPTO_zalloc(), CRYPTO_free(), CRYPTO_clear_free(),
 CRYPTO_realloc(), CRYPTO_clear_realloc(), CRYPTO_secure_malloc(),
@@ -609,6 +607,11 @@ or maximum. A -1 indicates that the group should not be used in that protocol.
 
 =back
 
+=head1 NOTES
+
+The core_obj_create() and core_obj_add_sigid() functions were not thread safe
+in OpenSSL 3.0.
+
 =head1 EXAMPLES
 
 This is an example of a simple provider made available as a
@@ -779,7 +782,7 @@ This relies on a few things existing in F<openssl/core_dispatch.h>:
 
  #define OSSL_FUNC_BAR_FREECTX     2
  typedef void (OSSL_FUNC_bar_freectx_fn)(void *ctx);
- static ossl_inline OSSL_FUNC_bar_newctx(const OSSL_DISPATCH *opf)
+ static ossl_inline OSSL_FUNC_bar_freectx(const OSSL_DISPATCH *opf)
  { return (OSSL_FUNC_bar_freectx_fn *)opf->function; }
 
  #define OSSL_FUNC_BAR_INIT        3
@@ -809,7 +812,7 @@ introduced in OpenSSL 3.0.
 
 =head1 COPYRIGHT
 
-Copyright 2019-2022 The OpenSSL Project Authors. All Rights Reserved.
+Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.
 
 Licensed under the Apache License 2.0 (the "License").  You may not use
 this file except in compliance with the License.  You can obtain a copy

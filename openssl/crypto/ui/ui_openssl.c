@@ -8,7 +8,7 @@
  */
 
 #if !defined(OPENSSL_SYS_AMIGA)
-#include "e_os.h"
+#include "internal/e_os.h"
 #include <openssl/e_os2.h>
 #include <openssl/err.h>
 #include <openssl/ui.h>

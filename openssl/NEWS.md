@@ -7,6 +7,7 @@ release. For more details please read the CHANGES file.
 OpenSSL Releases
 ----------------
 
+ - [OpenSSL 3.1](#openssl-31)
  - [OpenSSL 3.0](#openssl-30)
  - [OpenSSL 1.1.1](#openssl-111)
  - [OpenSSL 1.1.0](#openssl-110)
@@ -14,6 +15,17 @@ OpenSSL Releases
  - [OpenSSL 1.0.1](#openssl-101)
  - [OpenSSL 1.0.0](#openssl-100)
  - [OpenSSL 0.9.x](#openssl-09x)
+
+OpenSSL 3.1
+-----------
+
+### Major changes between OpenSSL 3.0 and OpenSSL 3.1.0 [14 Mar 2023]
+
+  * SSL 3, TLS 1.0, TLS 1.1, and DTLS 1.0 only work at security level 0.
+  * Performance enhancements and new platform support including new
+    assembler code algorithm implementations.
+  * Deprecated LHASH statistics functions.
+  * FIPS 140-3 compliance changes.
 
 OpenSSL 3.0
 -----------
@@ -83,7 +95,7 @@ OpenSSL 3.0
   * Enhanced 'openssl list' with many new options.
   * Added migration guide to man7.
   * Implemented support for fully "pluggable" TLSv1.3 groups.
-  * Added suport for Kernel TLS (KTLS).
+  * Added support for Kernel TLS (KTLS).
   * Changed the license to the Apache License v2.0.
   * Moved all variations of the EVP ciphers CAST5, BF, IDEA, SEED, RC2,
     RC4, RC5, and DES to the legacy provider.
@@ -126,7 +138,7 @@ OpenSSL 3.0
   * Deprecated ERR_put_error(), ERR_get_error_line(), ERR_get_error_line_data(),
     ERR_peek_error_line_data(), ERR_peek_last_error_line_data() and
     ERR_func_error_string().
-  * Added OSSL_PROVIDER_available(), to check provider availibility.
+  * Added OSSL_PROVIDER_available(), to check provider availability.
   * Added 'openssl mac' that uses the EVP_MAC API.
   * Added 'openssl kdf' that uses the EVP_KDF API.
   * Add OPENSSL_info() and 'openssl info' to get built-in data.
@@ -1440,7 +1452,7 @@ OpenSSL 0.9.x
 [CVE-2022-4203]: https://www.openssl.org/news/vulnerabilities.html#CVE-2022-4203
 [CVE-2022-3996]: https://www.openssl.org/news/vulnerabilities.html#CVE-2022-3996
 [CVE-2022-2274]: https://www.openssl.org/news/vulnerabilities.html#CVE-2022-2274
-[CVE-2022-2097]: https://www.openssl.org/news/vulnerabilities.html#CVE-2022-2274
+[CVE-2022-2097]: https://www.openssl.org/news/vulnerabilities.html#CVE-2022-2097
 [CVE-2020-1971]: https://www.openssl.org/news/vulnerabilities.html#CVE-2020-1971
 [CVE-2020-1967]: https://www.openssl.org/news/vulnerabilities.html#CVE-2020-1967
 [CVE-2019-1563]: https://www.openssl.org/news/vulnerabilities.html#CVE-2019-1563

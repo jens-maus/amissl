@@ -29,6 +29,7 @@
 #include "internal/bio.h"
 #include "internal/core.h"
 #include "provider_local.h"
+#include "crypto/context.h"
 #ifndef FIPS_MODULE
 # include <openssl/self_test.h>
 #endif
@@ -72,7 +73,7 @@
  * The locks available are:
  *
  * The provider flag_lock: Used to control updates to the various provider
- * "flags" (flag_initialized, flag_activated, flag_fallback) and associated
+ * "flags" (flag_initialized and flag_activated) and associated
  * "counts" (activatecnt).
  *
  * The provider refcnt_lock: Only ever used to control updates to the provider
@@ -142,7 +143,6 @@ struct ossl_provider_st {
     /* Flag bits */
     unsigned int flag_initialized:1;
     unsigned int flag_activated:1;
-    unsigned int flag_fallback:1; /* Can be used as fallback */
 
     /* Getting and setting the flags require synchronization */
     CRYPTO_RWLOCK *flag_lock;
@@ -283,7 +283,7 @@ void ossl_provider_info_clear(OSSL_PROVIDER_INFO *info)
     sk_INFOPAIR_pop_free(info->parameters, infopair_free);
 }
 
-static void provider_store_free(void *vstore)
+void ossl_provider_store_free(void *vstore)
 {
     struct provider_store_st *store = vstore;
     size_t i;
@@ -305,7 +305,7 @@ static void provider_store_free(void *vstore)
     OPENSSL_free(store);
 }
 
-static void *provider_store_new(OSSL_LIB_CTX *ctx)
+void *ossl_provider_store_new(OSSL_LIB_CTX *ctx)
 {
     struct provider_store_st *store = OPENSSL_zalloc(sizeof(*store));
 
@@ -316,7 +316,7 @@ static void *provider_store_new(OSSL_LIB_CTX *ctx)
         || (store->child_cbs = sk_OSSL_PROVIDER_CHILD_CB_new_null()) == NULL
 #endif
         || (store->lock = CRYPTO_THREAD_lock_new()) == NULL) {
-        provider_store_free(store);
+        ossl_provider_store_free(store);
         return NULL;
     }
     store->libctx = ctx;
@@ -325,19 +325,11 @@ static void *provider_store_new(OSSL_LIB_CTX *ctx)
     return store;
 }
 
-static const OSSL_LIB_CTX_METHOD provider_store_method = {
-    /* Needs to be freed before the child provider data is freed */
-    OSSL_LIB_CTX_METHOD_PRIORITY_1,
-    provider_store_new,
-    provider_store_free,
-};
-
 static struct provider_store_st *get_provider_store(OSSL_LIB_CTX *libctx)
 {
     struct provider_store_st *store = NULL;
 
-    store = ossl_lib_ctx_get_data(libctx, OSSL_LIB_CTX_PROVIDER_STORE_INDEX,
-                                  &provider_store_method);
+    store = ossl_lib_ctx_get_data(libctx, OSSL_LIB_CTX_PROVIDER_STORE_INDEX);
     if (store == NULL)
         ERR_raise(ERR_LIB_CRYPTO, ERR_R_INTERNAL_ERROR);
     return store;
@@ -1484,16 +1476,6 @@ int OSSL_PROVIDER_available(OSSL_LIB_CTX *libctx, const char *name)
         ossl_provider_free(prov);
     }
     return available;
-}
-
-/* Setters of Provider Object data */
-int ossl_provider_set_fallback(OSSL_PROVIDER *prov)
-{
-    if (prov == NULL)
-        return 0;
-
-    prov->flag_fallback = 1;
-    return 1;
 }
 
 /* Getters of Provider Object data */

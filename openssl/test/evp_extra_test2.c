@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2015-2023 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -387,6 +387,7 @@ static int test_dh_paramgen(void)
     EVP_PKEY_free(pkey);
     return ret;
 }
+
 #endif
 
 #ifndef OPENSSL_NO_EC
@@ -974,6 +975,47 @@ err:
     OSSL_PARAM_free(to_params);
     return ret;
 }
+
+/*
+ * Test that OSSL_PKEY_PARAM_FFC_DIGEST_PROPS is set properly when using fromdata
+ * This test:
+ *   checks for failure when the property query is bad (tstid == 0)
+ *   checks for success when the property query is valid (tstid == 1)
+ */
+static int test_dsa_fromdata_digest_prop(int tstid)
+{
+    EVP_PKEY_CTX *ctx = NULL, *gctx = NULL;
+    EVP_PKEY *pkey = NULL,  *pkey2 = NULL;
+    OSSL_PARAM params[4], *p = params;
+    int ret = 0;
+    int expected = (tstid == 0 ? 0 : 1);
+    unsigned int pbits = 512; /* minimum allowed for speed */
+
+    *p++ = OSSL_PARAM_construct_uint(OSSL_PKEY_PARAM_FFC_PBITS, &pbits);
+    *p++ = OSSL_PARAM_construct_utf8_string(OSSL_PKEY_PARAM_FFC_DIGEST, "SHA512", 0);
+    /* Setting a bad prop query here should fail during paramgen - when it tries to do a fetch */
+    *p++ = OSSL_PARAM_construct_utf8_string(OSSL_PKEY_PARAM_FFC_DIGEST_PROPS,
+                                            tstid == 0 ? "provider=unknown" : "provider=default", 0);
+    *p++ = OSSL_PARAM_construct_end();
+
+    if (!TEST_ptr(ctx = EVP_PKEY_CTX_new_from_name(mainctx, "DSA", NULL))
+        || !TEST_int_eq(EVP_PKEY_fromdata_init(ctx), 1)
+        || !TEST_int_eq(EVP_PKEY_fromdata(ctx, &pkey, EVP_PKEY_KEY_PARAMETERS, params), 1))
+        goto err;
+
+    if (!TEST_ptr(gctx = EVP_PKEY_CTX_new_from_pkey(mainctx, pkey, NULL))
+        || !TEST_int_eq(EVP_PKEY_paramgen_init(gctx), 1)
+        || !TEST_int_eq(EVP_PKEY_paramgen(gctx, &pkey2), expected))
+        goto err;
+
+    ret = 1;
+err:
+    EVP_PKEY_free(pkey2);
+    EVP_PKEY_free(pkey);
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_CTX_free(gctx);
+    return ret;
+}
 #endif /* OPENSSL_NO_DSA */
 
 static int test_pkey_todata_null(void)
@@ -1088,6 +1130,21 @@ static int test_rsa_pss_sign(void)
     return ret;
 }
 
+static int test_evp_md_ctx_dup(void)
+{
+    EVP_MD_CTX *mdctx;
+    EVP_MD_CTX *copyctx = NULL;
+    int ret;
+
+    /* test copying freshly initialized context */
+    ret = TEST_ptr(mdctx = EVP_MD_CTX_new())
+          && TEST_ptr(copyctx = EVP_MD_CTX_dup(mdctx));
+
+    EVP_MD_CTX_free(mdctx);
+    EVP_MD_CTX_free(copyctx);
+    return ret;
+}
+
 static int test_evp_md_ctx_copy(void)
 {
     EVP_MD_CTX *mdctx = NULL;
@@ -1155,6 +1212,7 @@ int setup_tests(void)
 #ifndef OPENSSL_NO_DSA
     ADD_TEST(test_dsa_todata);
     ADD_TEST(test_dsa_tofrom_data_select);
+    ADD_ALL_TESTS(test_dsa_fromdata_digest_prop, 2);
 #endif
 #ifndef OPENSSL_NO_DH
     ADD_TEST(test_dh_tofrom_data_select);
@@ -1170,6 +1228,7 @@ int setup_tests(void)
 #endif
     ADD_ALL_TESTS(test_PEM_read_bio_negative, OSSL_NELEM(keydata));
     ADD_TEST(test_rsa_pss_sign);
+    ADD_TEST(test_evp_md_ctx_dup);
     ADD_TEST(test_evp_md_ctx_copy);
     ADD_ALL_TESTS(test_provider_unload_effective, 2);
 #if !defined OPENSSL_NO_DES && !defined OPENSSL_NO_MD5

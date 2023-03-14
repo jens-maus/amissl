@@ -218,7 +218,7 @@ static void dgram_adjust_rcv_timeout(BIO *b)
                        &(data->socket_timeout), &sz) < 0) {
             perror("getsockopt");
         } else
-            OPENSSL_assert(sz <= sizeof(data->socket_timeout));
+            OPENSSL_assert((size_t)sz <= sizeof(data->socket_timeout));
 #  endif
 
         /* Get current time */
@@ -393,7 +393,9 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
     long ret = 1;
     int *ip;
     bio_dgram_data *data = NULL;
+# ifndef __DJGPP__
     int sockopt_val = 0;
+# endif
     int d_errno;
 # if defined(OPENSSL_SYS_LINUX) && (defined(IP_MTU_DISCOVER) || defined(IP_MTU))
     socklen_t sockopt_len;      /* assume that system supporting IP_MTU is
@@ -623,7 +625,7 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
                 perror("getsockopt");
                 ret = -1;
             } else {
-                OPENSSL_assert(sz <= sizeof(struct timeval));
+                OPENSSL_assert((size_t)sz <= sizeof(struct timeval));
                 ret = (int)sz;
             }
 #  endif
@@ -674,7 +676,7 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
                 perror("getsockopt");
                 ret = -1;
             } else {
-                OPENSSL_assert(sz <= sizeof(struct timeval));
+                OPENSSL_assert((size_t)sz <= sizeof(struct timeval));
                 ret = (int)sz;
             }
 #  endif
@@ -705,24 +707,24 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
         break;
 # endif
     case BIO_CTRL_DGRAM_SET_DONT_FRAG:
-        sockopt_val = num ? 1 : 0;
-
         switch (data->peer.sa.sa_family) {
         case AF_INET:
 # if defined(IP_DONTFRAG)
+            sockopt_val = num ? 1 : 0;
             if ((ret = setsockopt(b->num, IPPROTO_IP, IP_DONTFRAG,
                                   &sockopt_val, sizeof(sockopt_val))) < 0) {
                 perror("setsockopt");
                 ret = -1;
             }
 # elif defined(OPENSSL_SYS_LINUX) && defined(IP_MTU_DISCOVER) && defined (IP_PMTUDISC_PROBE)
-            if ((sockopt_val = num ? IP_PMTUDISC_PROBE : IP_PMTUDISC_DONT),
-                (ret = setsockopt(b->num, IPPROTO_IP, IP_MTU_DISCOVER,
+            sockopt_val = num ? IP_PMTUDISC_PROBE : IP_PMTUDISC_DONT;
+            if ((ret = setsockopt(b->num, IPPROTO_IP, IP_MTU_DISCOVER,
                                   &sockopt_val, sizeof(sockopt_val))) < 0) {
                 perror("setsockopt");
                 ret = -1;
             }
 # elif defined(OPENSSL_SYS_WINDOWS) && defined(IP_DONTFRAGMENT)
+            sockopt_val = num ? 1 : 0;
             if ((ret = setsockopt(b->num, IPPROTO_IP, IP_DONTFRAGMENT,
                                   (const char *)&sockopt_val,
                                   sizeof(sockopt_val))) < 0) {
@@ -736,6 +738,7 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
 # if OPENSSL_USE_IPV6
         case AF_INET6:
 #  if defined(IPV6_DONTFRAG)
+            sockopt_val = num ? 1 : 0;
             if ((ret = setsockopt(b->num, IPPROTO_IPV6, IPV6_DONTFRAG,
                                   (const void *)&sockopt_val,
                                   sizeof(sockopt_val))) < 0) {
@@ -743,8 +746,8 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
                 ret = -1;
             }
 #  elif defined(OPENSSL_SYS_LINUX) && defined(IPV6_MTUDISCOVER)
-            if ((sockopt_val = num ? IP_PMTUDISC_PROBE : IP_PMTUDISC_DONT),
-                (ret = setsockopt(b->num, IPPROTO_IPV6, IPV6_MTU_DISCOVER,
+            sockopt_val = num ? IP_PMTUDISC_PROBE : IP_PMTUDISC_DONT;
+            if ((ret = setsockopt(b->num, IPPROTO_IPV6, IPV6_MTU_DISCOVER,
                                   &sockopt_val, sizeof(sockopt_val))) < 0) {
                 perror("setsockopt");
                 ret = -1;

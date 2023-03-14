@@ -1,4 +1,4 @@
-$COMMON=rand_unix.c rand_win.c rand_tsc.c rand_cpu_x86.c
+$COMMON=rand_unix.c rand_win.c rand_tsc.c
 IF[{- $config{target} =~ /vxworks/i -}]
   $COMMON=$COMMON rand_vxworks.c
 ENDIF
@@ -7,6 +7,11 @@ IF[{- $config{target} =~ /vms/i -}]
 ENDIF
 IF[{- $config{target} =~ /amiga/i -}]
   $COMMON=$COMMON rand_amiga.c
+ENDIF
+IF[{- !$disabled{asm} && $config{target} =~ '.*aarch64' -}]
+  $COMMON=$COMMON rand_cpu_arm64.c
+ELSE
+  $COMMON=$COMMON rand_cpu_x86.c
 ENDIF
 
 SOURCE[../../../libdefault.a]=$COMMON
