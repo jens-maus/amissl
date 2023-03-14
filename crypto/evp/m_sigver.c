@@ -51,15 +51,8 @@ static int do_sigver_init(EVP_MD_CTX *ctx, EVP_PKEY_CTX **pctx,
     void *provkey = NULL;
     int ret, iter, reinit = 1;
 
-    if (ctx->algctx != NULL) {
-        if (!ossl_assert(ctx->digest != NULL)) {
-            ERR_raise(ERR_LIB_EVP, EVP_R_INITIALIZATION_ERROR);
-            return 0;
-        }
-        if (ctx->digest->freectx != NULL)
-            ctx->digest->freectx(ctx->algctx);
-        ctx->algctx = NULL;
-    }
+    if (!evp_md_ctx_free_algctx(ctx))
+        return 0;
 
     if (ctx->pctx == NULL) {
         reinit = 0;
@@ -239,7 +232,7 @@ static int do_sigver_init(EVP_MD_CTX *ctx, EVP_PKEY_CTX **pctx,
              * This might be requested by a later call to EVP_MD_CTX_get0_md().
              * In that case the "explicit fetch" rules apply for that
              * function (as per man pages), i.e. the ref count is not updated
-             * so the EVP_MD should not be used beyound the lifetime of the
+             * so the EVP_MD should not be used beyond the lifetime of the
              * EVP_MD_CTX.
              */
             ctx->fetched_digest = EVP_MD_fetch(locpctx->libctx, mdname, props);

@@ -20,6 +20,12 @@ EVP_MD_stdin.c         Compute a digest with data read from stdin
 EVP_MD_xof.c           Compute a digest using the SHAKE256 XOF
 EVP_f_md.c             Compute a digest using BIO and EVP_f_md
 
+encrypt:
+rsa_encrypt.c          Encrypt and decrypt data using an RSA keypair.
+
+encode:
+rsa_encode.c           Encode and decode PEM-encoded RSA keys
+
 kdf:
 hkdf.c                 Demonstration of HMAC based key derivation
 pbkdf2.c               Demonstration of PBKDF2 password based key derivation
@@ -48,3 +54,6 @@ signature:
 EVP_Signature_demo.c   Compute and verify a signature from multiple buffers
 rsa_pss_direct.c       Compute and verify an RSA-PSS signature from a hash
 rsa_pss_hash.c         Compute and verify an RSA-PSS signature over a buffer
+
+sslecho:
+main.c                 Simple SSL echo client/server.

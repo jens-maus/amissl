@@ -44,6 +44,8 @@ my @files = qw(
                 evpciph_aes_stitched.txt
                 evpciph_des3_common.txt
                 evpkdf_hkdf.txt
+                evpkdf_kbkdf_counter.txt
+                evpkdf_kbkdf_kmac.txt
                 evpkdf_pbkdf1.txt
                 evpkdf_pbkdf2.txt
                 evpkdf_ss.txt
@@ -82,7 +84,7 @@ push @files, qw(
 my @defltfiles = qw(
                      evpciph_aes_ocb.txt
                      evpciph_aes_siv.txt
-                     evpciph_aria.txt 
+                     evpciph_aria.txt
                      evpciph_bf.txt
                      evpciph_camellia.txt
                      evpciph_camellia_cts.txt

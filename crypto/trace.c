@@ -137,8 +137,9 @@ static const struct trace_category_st
     TRACE_CATEGORY_(STORE),
     TRACE_CATEGORY_(DECODER),
     TRACE_CATEGORY_(ENCODER),
-    TRACE_CATEGORY_(REF_COUNT)
-};
+    TRACE_CATEGORY_(REF_COUNT),
+    TRACE_CATEGORY_(HTTP),
+}; /* KEEP THIS LIST IN SYNC with #define OSSL_TRACE_CATEGORY_... in trace.h */
 
 const char *OSSL_trace_get_category_name(int num)
 {

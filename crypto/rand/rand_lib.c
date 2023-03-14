@@ -18,6 +18,7 @@
 #include "crypto/rand.h"
 #include "crypto/cryptlib.h"
 #include "rand_local.h"
+#include "crypto/context.h"
 
 #ifndef FIPS_MODULE
 # include <stdio.h>
@@ -28,7 +29,7 @@
 # include <openssl/engine.h>
 # include "crypto/rand_pool.h"
 # include "prov/seeding.h"
-# include "e_os.h"
+# include "internal/e_os.h"
 
 # ifndef OPENSSL_NO_ENGINE
 /* non-NULL if default_RAND_meth is ENGINE-provided */
@@ -435,7 +436,7 @@ typedef struct rand_global_st {
  * Initialize the OSSL_LIB_CTX global DRBGs on first use.
  * Returns the allocated global data on success or NULL on failure.
  */
-static void *rand_ossl_ctx_new(OSSL_LIB_CTX *libctx)
+void *ossl_rand_ctx_new(OSSL_LIB_CTX *libctx)
 {
     RAND_GLOBAL *dgbl = OPENSSL_zalloc(sizeof(*dgbl));
 
@@ -492,16 +493,9 @@ void ossl_rand_ctx_free(void *vdgbl)
     OPENSSL_free(dgbl);
 }
 
-static const OSSL_LIB_CTX_METHOD rand_drbg_ossl_ctx_method = {
-    OSSL_LIB_CTX_METHOD_PRIORITY_2,
-    rand_ossl_ctx_new,
-    ossl_rand_ctx_free,
-};
-
 static RAND_GLOBAL *rand_get_global(OSSL_LIB_CTX *libctx)
 {
-    return ossl_lib_ctx_get_data(libctx, OSSL_LIB_CTX_DRBG_INDEX,
-                                 &rand_drbg_ossl_ctx_method);
+    return ossl_lib_ctx_get_data(libctx, OSSL_LIB_CTX_DRBG_INDEX);
 }
 
 static void rand_delete_thread_state(void *arg)
@@ -725,6 +719,34 @@ EVP_RAND_CTX *RAND_get0_private(OSSL_LIB_CTX *ctx)
         CRYPTO_THREAD_set_local(&dgbl->private, rand);
     }
     return rand;
+}
+
+int RAND_set0_public(OSSL_LIB_CTX *ctx, EVP_RAND_CTX *rand)
+{
+    RAND_GLOBAL *dgbl = rand_get_global(ctx);
+    EVP_RAND_CTX *old;
+    int r;
+
+    if (dgbl == NULL)
+        return 0;
+    old = CRYPTO_THREAD_get_local(&dgbl->public);
+    if ((r = CRYPTO_THREAD_set_local(&dgbl->public, rand)) > 0)
+        EVP_RAND_CTX_free(old);
+    return r;
+}
+
+int RAND_set0_private(OSSL_LIB_CTX *ctx, EVP_RAND_CTX *rand)
+{
+    RAND_GLOBAL *dgbl = rand_get_global(ctx);
+    EVP_RAND_CTX *old;
+    int r;
+
+    if (dgbl == NULL)
+        return 0;
+    old = CRYPTO_THREAD_get_local(&dgbl->private);
+    if ((r = CRYPTO_THREAD_set_local(&dgbl->private, rand)) > 0)
+        EVP_RAND_CTX_free(old);
+    return r;
 }
 
 #ifndef FIPS_MODULE

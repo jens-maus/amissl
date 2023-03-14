@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2017-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -13,7 +13,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "internal/nelem.h"
 
 /* The size of memory buffers to display on failure */
 #define MEM_BUFFER_SIZE     (2000)

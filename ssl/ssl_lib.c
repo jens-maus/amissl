@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "ssl_local.h"
-#include "e_os.h"
+#include "internal/e_os.h"
 #include <openssl/objects.h>
 #include <openssl/x509v3.h>
 #include <openssl/rand.h>
@@ -22,6 +22,7 @@
 #include <openssl/ct.h>
 #include <openssl/trace.h>
 #include "internal/cryptlib.h"
+#include "internal/nelem.h"
 #include "internal/refcount.h"
 #include "internal/ktls.h"
 
@@ -1046,7 +1047,7 @@ int SSL_dane_enable(SSL *s, const char *basedomain)
 
     /*
      * Default SNI name.  This rejects empty names, while set1_host below
-     * accepts them and disables host name checks.  To avoid side-effects with
+     * accepts them and disables hostname checks.  To avoid side-effects with
      * invalid input, set the SNI name first.
      */
     if (s->ext.hostname == NULL) {

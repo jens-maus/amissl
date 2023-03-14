@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2017-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -35,7 +35,8 @@ static int do_test_cert_table(int nid, uint32_t amask, size_t idx,
         TEST_note("Expected %s, got %s\n", OBJ_nid2sn(nid),
                   OBJ_nid2sn(clu->nid));
     if (clu->amask != amask)
-        TEST_note("Expected auth mask 0x%x, got 0x%x\n", amask, clu->amask);
+        TEST_note("Expected auth mask 0x%x, got 0x%x\n",
+                  (unsigned int)amask, (unsigned int)clu->amask);
     return 0;
 }
 
