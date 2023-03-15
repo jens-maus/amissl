@@ -325,7 +325,7 @@
 # endif
 
 # ifndef OSSL_CRYPTO_ALLOC
-#  if defined(__GNUC__)
+#  if defined(__GNUC__) && __GNUC__ > 2
 #   define OSSL_CRYPTO_ALLOC __attribute__((malloc))
 #  elif defined(_MSC_VER)
 #   define OSSL_CRYPTO_ALLOC __declspec(restrict)
