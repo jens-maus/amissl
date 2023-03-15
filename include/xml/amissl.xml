@@ -3628,7 +3628,7 @@
     <method name="OPENSSL_LH_num_items" result="unsigned long">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
     </method>
-    <method name="OPENSSL_LH_stats_bio" result="void">
+    <method name="OPENSSL_LH_stats_bio" result="void" lifecycle="deprecated">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg name="out" type="BIO *" m68kreg="a1"/>
     </method>
@@ -3636,7 +3636,7 @@
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg name="out" type="BIO *" m68kreg="a1"/>
     </method>
-    <method name="OPENSSL_LH_node_usage_stats_bio" result="void">
+    <method name="OPENSSL_LH_node_usage_stats_bio" result="void" lifecycle="deprecated">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg name="out" type="BIO *" m68kreg="a1"/>
     </method>
@@ -11389,15 +11389,15 @@
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="x509" type="X509 *" m68kreg="a1"/>
     </method>
-    <method name="OPENSSL_LH_node_stats" result="void" status="unimplemented">
+    <method name="OPENSSL_LH_node_stats" result="void" status="unimplemented" lifecycle="deprecated">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg name="fp" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="OPENSSL_LH_node_usage_stats" result="void" status="unimplemented">
+    <method name="OPENSSL_LH_node_usage_stats" result="void" status="unimplemented" lifecycle="deprecated">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg name="fp" type="FILE *" m68kreg="a1"/>
     </method>
-    <method name="OPENSSL_LH_stats" result="void" status="unimplemented">
+    <method name="OPENSSL_LH_stats" result="void"  status="unimplemented" lifecycle="deprecated">
       <arg name="lh" type="const OPENSSL_LHASH *" m68kreg="a0"/>
       <arg namea="fp" type="FILE *" m68kreg="a1"/>
     </method>

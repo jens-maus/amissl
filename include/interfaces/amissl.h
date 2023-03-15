@@ -972,9 +972,9 @@ struct AmiSSLIFace
 	APICALL void (*OPENSSL_LH_doall_arg)(struct AmiSSLIFace *Self, OPENSSL_LHASH * lh, OPENSSL_LH_DOALL_FUNCARG func, void * arg);
 	APICALL unsigned long (*OPENSSL_LH_strhash)(struct AmiSSLIFace *Self, const char * c);
 	APICALL unsigned long (*OPENSSL_LH_num_items)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh);
-	APICALL void (*OPENSSL_LH_stats_bio)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh, BIO * out);
+	DEPRECATED APICALL void (*OPENSSL_LH_stats_bio)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh, BIO * out);
 	APICALL void (*OPENSSL_LH_node_stats_bio)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh, BIO * out);
-	APICALL void (*OPENSSL_LH_node_usage_stats_bio)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh, BIO * out);
+	DEPRECATED APICALL void (*OPENSSL_LH_node_usage_stats_bio)(struct AmiSSLIFace *Self, const OPENSSL_LHASH * lh, BIO * out);
 	APICALL int (*OBJ_NAME_init)(struct AmiSSLIFace *Self);
 	APICALL int (*OBJ_NAME_new_index)(struct AmiSSLIFace *Self, unsigned long (*hash_func)(const char *), int (*cmp_func)(const char *, const char *), void (*free_func)(const char *, int, const char *));
 	APICALL const char * (*OBJ_NAME_get)(struct AmiSSLIFace *Self, const char * name, int type);
