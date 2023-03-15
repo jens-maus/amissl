@@ -172,29 +172,6 @@ int ossl_pool_add_nonce_data(RAND_POOL *pool)
     return ossl_rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
 }
 
-/*
-** Frequently called, so must have low overhead
-*/
-int ossl_rand_pool_add_additional_data(RAND_POOL *pool)
-{
-    GETTIMER();
-
-    struct {
-        CRYPTO_THREAD_ID tid;
-        struct EClockVal curr_eclock;
-    } data = { 0 };
-
-    /*
-     * Add some noise from the thread id and a high resolution timer.
-     * The thread id adds a little randomness if the drbg is accessed
-     * concurrently (which is the case for the <master> drbg).
-     */
-    data.tid = CRYPTO_THREAD_get_current_id();
-    ReadEClock(&data.curr_eclock);
-
-    return ossl_rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
-}
-
 int ossl_rand_pool_init(void)
 {
     GETSTATE();
