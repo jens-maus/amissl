@@ -121,9 +121,9 @@ environment that any opener receives an own baserel based library base.
 4. Examples
 -----------
 The provided example, httpget.c, is an example of how to use the new
-OpenSSL 3.0 built-in HTTP client functions. It shows how to retrieve a
+OpenSSL 3.x built-in HTTP client functions. It shows how to retrieve a
 document from a "http://" or "https://" server, with or without a password
-and how you can also use the URL parsing functions from OpenSSL 3.0.
+and how you can also use the URL parsing functions from OpenSSL 3.x.
 
 Another example, https.c, is a very simple client. It shows how to retrieve a
 document from a "https://" server, at a lower level, by connecting directly
@@ -155,7 +155,7 @@ such as sfdc, sfd or fd2pragma.
 
 6. Migration from AmiSSL v4
 ---------------------------
-AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.0, but
+AmiSSL v4 is OpenSSL 1.1.x based, whilst AmiSSL v5 uses OpenSSL 3.x, but
 fortunately you will not usually need to make any changes to your code, as most
 things are actually backwards compatible (most functions that have been removed
 or changed will be replaced by macros in the OpenSSL header files). However, we
@@ -165,7 +165,7 @@ continue to operate as before). Details of OpenSSL changes are available at
 https://www.openssl.org/docs/manmaster/man7/migration_guide.html and with
 GCC you will receive warnings if you use any deprecated functions.
 
-Due to the shear amount of OpenSSL 3.0 API functions available, we had to split
+Due to the shear amount of OpenSSL 3.x API functions available, we had to split
 them across two library bases on OS3 which meant the addition of AmiSSLExtBase.
 AmiSSLExtBase can be obtained using the AmiSSL_GetAmiSSLExtBase tag in
 OpenAmiSSLTags() (or alternatively, in InitAmiSSL() if you wish to keep using

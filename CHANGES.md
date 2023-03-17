@@ -1,3 +1,18 @@
+## AmiSSL 5.8 (x.3.2023)
+
+- Switched to OpenSSL 3.1, with full compatibility with the latest
+  OpenSSL 3.1.0 (14.3.2023) version, which includes:
+  + SSL 3, TLS 1.0, TLS 1.1, and DTLS 1.0 only work at security level 0.
+  + Performance enhancements and new platform support including new
+    assembler code algorithm implementations.
+  + Deprecated LHASH statistics functions.
+  + FIPS 140-3 compliance changes.
+- Replaced many common Exec semaphore protected OpenSSL operations with
+  atomic inline assembly code on both OS3 and OS4, decreasing overhead
+  and increasing performance.
+- Fixed bug in the 5.7 SDK (applications built with it should be
+  recompiled using the 5.8 SDK).
+
 ## AmiSSL 5.7 (7.2.2023)
 
 - Updated OpenSSL backend to full compatibility with the latest
