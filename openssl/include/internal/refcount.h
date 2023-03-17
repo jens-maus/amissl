@@ -148,6 +148,71 @@ static __inline int CRYPTO_DOWN_REF(volatile int *val, int *ret,
 }
 #   endif
 
+#  elif defined(OPENSSL_SYS_AMIGA)
+
+#   if defined(__amigaos4__) || defined (MORPHOS)
+
+#    define HAVE_ATOMICS 1
+
+typedef int CRYPTO_REF_COUNT;
+
+#    define ATOMIC_ADD_FETCH(val, amount)	\
+     ({ int res; \
+        __asm__ __volatile__ ( \
+          "1: lwarx %0,0,%1\n" \
+          "   addi %0,%0,%2\n" \
+          "   stwcx. %0,0,%1\n" \
+          "   bne- 1b" \
+          : "=&b" (res) \
+          : "r" (val), "i" (amount) \
+          : "cc", "memory"); \
+        res; \
+     })
+
+static __inline__ int CRYPTO_UP_REF(int *val, int *ret, ossl_unused void *lock)
+{
+    *ret = ATOMIC_ADD_FETCH(val, 1);
+    return 1;
+}
+
+static __inline__ int CRYPTO_DOWN_REF(int *val, int *ret,
+                                      ossl_unused void *lock)
+{
+    *ret = ATOMIC_ADD_FETCH(val, -1);
+    return 1;
+}
+#   elif __mc68020 || __mc68030 || __mc68040 || __mc68060
+
+#    define HAVE_ATOMICS 1
+
+typedef int CRYPTO_REF_COUNT;
+
+#    define ATOMIC_OP_FETCH(val, op) \
+     ({ int res, tmp; \
+        __asm__ __volatile__ ( \
+          "   movel %0,%2\n" \
+          "1: movel %2,%1\n" \
+          " " #op "ql #1,%1\n" \
+          "   casl  %2,%1,%0\n" \
+          "   jne   1b" \
+          : "+m" (*val), "=&d" (res), "=&d" (tmp)); \
+        res; \
+     })
+
+static __inline__ int CRYPTO_UP_REF(int *val, int *ret, ossl_unused void *lock)
+{
+    *ret = ATOMIC_OP_FETCH(val, add);
+    return 1;
+}
+
+static __inline__ int CRYPTO_DOWN_REF(int *val, int *ret,
+                                      ossl_unused void *lock)
+{
+    *ret = ATOMIC_OP_FETCH(val, sub);
+    return 1;
+}
+
+#   endif
 #  endif
 # endif  /* !OPENSSL_DEV_NO_ATOMICS */
 

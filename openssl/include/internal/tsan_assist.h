@@ -48,7 +48,7 @@
  */
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L \
-    && !defined(__STDC_NO_ATOMICS__) && !defined(OPENSSL_SYS_AMIGA)
+    && !defined(__STDC_NO_ATOMICS__)
 # include <stdatomic.h>
 
 # if defined(ATOMIC_POINTER_LOCK_FREE) \
@@ -126,22 +126,64 @@
 # define TSAN_QUALIFIER volatile
 # define tsan_load(ptr) (*(ptr))
 # define tsan_store(ptr, val) (*(ptr) = (val))
+# define tsan_ld_acq(ptr) tsan_load(ptr)
+# define tsan_st_rel(ptr, val) tsan_store(ptr, val)
 
 # if defined(__amigaos4__) || defined(__MORPHOS__)
-#  define tsan_add(ptr, n)	    \
+#  define tsan_add(ptr, n) \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
-         "1: lwarx %0,0,%2\n" \
-         "addi %1,%0,%3\n" \
-         "stwcx. %1,0,%2\n" \
-         "bne- 1b" \
-         : "=&r" (res), "=&r" (tmp) \
-         : "r" (ptr), "r" (n)	    \
+         "1: lwarx  %0,0,%2\n" \
+         "   add    %1,%0,%3\n" \
+         "   stwcx. %1,0,%2\n" \
+         "   bne- 1b" \
+         : "=&b" (res), "=&r" (tmp) \
+         : "r" (ptr), "r" (n) \
          : "cc", "memory"); \
       res; \
    })
+#  define tsan_addi(ptr, n) \
+   ({ __typeof__ (*(ptr)) res, tmp; \
+      __asm__ __volatile__ ( \
+         "1: lwarx  %0,0,%2\n" \
+         "   addi   %1,%0,%3\n" \
+         "   stwcx. %1,0,%2\n" \
+         "   bne-   1b" \
+         : "=&b" (res), "=&r" (tmp) \
+         : "r" (ptr), "i" (n) \
+         : "cc", "memory"); \
+      res; \
+   })
+#  define tsan_counter(ptr) tsan_addi((ptr), 1)
+#  define tsan_decr(ptr) tsan_addi((ptr), -1)
+# elif __mc68020 || __mc68030 || __mc68040 || __mc68060
+#  define tsan_add(ptr, n) \
+   ({ __typeof__ (*(ptr)) res, tmp; \
+      __asm__ __volatile__ ( \
+        "   movel %0,%1\n" \
+        "1: movel %1,%2\n" \
+        "   addl  %3,%2\n" \
+        "   casl  %1,%2,%0\n" \
+        "   jne   1b" \
+        : "+m" (*ptr), "=&d" (res), "=&d" (tmp) \
+        : "d" (n)); \
+      res; \
+   })
+#  define tsan_op(ptr, op)		    \
+   ({ __typeof__ (*(ptr)) res, tmp; \
+      __asm__ __volatile__ ( \
+        "   movel %0,%1\n" \
+        "1: movel %1,%2\n" \
+        " " #op "ql #1,%2\n" \
+        "   casl  %1,%2,%0\n" \
+        "   jne   1b" \
+        : "+m" (*ptr), "=&d" (res), "=&d" (tmp)); \
+      res; \
+   })
+#  define tsan_counter(ptr) tsan_op((ptr), add)
+#  define tsan_decr(ptr) tsan_op((ptr), sub)
 # else
-#  define tsan_add(ptr, n) ((*(ptr)) += (n))
+#  define tsan_add(ptr, n) (*(ptr) += (n))
 # endif
 
 #endif
@@ -166,6 +208,9 @@
 
 #endif
 
-#define tsan_counter(ptr) tsan_add((ptr), 1)
-#define tsan_decr(ptr) tsan_add((ptr), -1)
-
+#ifndef tsan_counter
+# define tsan_counter(ptr) tsan_add((ptr), 1)
+#endif
+#ifndef tsan_decr
+# define tsan_decr(ptr) tsan_add((ptr), -1)
+#endif
