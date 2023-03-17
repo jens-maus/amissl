@@ -212,6 +212,12 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
   SHOWVALUE(DBF_STARTUP, LibAPIVersion);
   SHOWVALUE(DBF_STARTUP, LibUsesOpenSSLStructs);
 
+  // fix up wrong value for AMISSL_V308 in AmiSSL 5.7
+  #if AMISSL_CURRENT_VERSION < 0x20
+  if(APIVersion == 0x20)
+    APIVersion = AMISSL_V308;
+  #endif
+
   LibAPIVersion = APIVersion;
   LibUsesOpenSSLStructs = UsesOpenSSLStructs;
 
@@ -219,8 +225,8 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
   SHOWVALUE(DBF_STARTUP, LibAPIVersion);
   SHOWVALUE(DBF_STARTUP, LibUsesOpenSSLStructs);
 
-  RETURN(LibAPIVersion <= AMISSL_CURRENT_VERSION);
-  return(LibAPIVersion <= AMISSL_CURRENT_VERSION);
+  RETURN(APIVersion <= AMISSL_CURRENT_VERSION);
+  return(APIVersion <= AMISSL_CURRENT_VERSION);
 }
 
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
