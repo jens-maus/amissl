@@ -1,4 +1,4 @@
-## AmiSSL 5.8 (x.3.2023)
+## AmiSSL 5.8 (23.3.2023)
 
 - Switched to OpenSSL 3.1, with full compatibility with the latest
   OpenSSL 3.1.0 (14.3.2023) version, which includes:
