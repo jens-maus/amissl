@@ -53,6 +53,8 @@
 #include <libraries/amisslmaster.h>
 #include <libraries/amissl.h>
 
+const char stack_size[] = "$STACK:8192";
+
 static BOOL Init(void);
 static void Cleanup(void);
 static void GenerateRandomSeed(char *buffer, int size);

@@ -57,6 +57,8 @@
 # include <SDI_compiler.h>
 #endif
 
+const char stack_size[] = "$STACK:8192";
+
 static SSL_CTX *Init(void);
 static void Cleanup(SSL_CTX *ctx);
 
