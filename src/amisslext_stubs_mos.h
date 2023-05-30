@@ -974,6 +974,7 @@ LIBSTUB(RAND_set0_private, int);
 LIBSTUB(EVP_MD_CTX_dup, EVP_MD_CTX *);
 LIBSTUB(EVP_CIPHER_CTX_dup, EVP_CIPHER_CTX *);
 LIBSTUB(BN_are_coprime, int);
+LIBSTUB(OSSL_CMP_MSG_update_recipNonce, int);
 
 #ifdef __cplusplus
 }

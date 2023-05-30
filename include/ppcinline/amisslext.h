@@ -3858,4 +3858,8 @@ typedef ULONG _sfdc_vararg;
       LP3(0x1686, int, BN_are_coprime , BIGNUM *, ___a, a0, const BIGNUM *, ___b, a1, BN_CTX *, ___ctx, a2,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
+#define OSSL_CMP_MSG_update_recipNonce(___ctx, ___msg) \
+      LP2(0x168c, int, OSSL_CMP_MSG_update_recipNonce , OSSL_CMP_CTX *, ___ctx, a0, OSSL_CMP_MSG *, ___msg, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
 #endif /* !_PPCINLINE_AMISSLEXT_H */

@@ -2893,4 +2893,7 @@ EVP_CIPHER_CTX * __EVP_CIPHER_CTX_dup(__reg("a6") struct Library * , __reg("a0")
 int __BN_are_coprime(__reg("a6") struct Library * , __reg("a0") BIGNUM * a , __reg("a1") const BIGNUM * b , __reg("a2") BN_CTX * ctx ) = "\tjsr\t-5766(a6)";
 #define BN_are_coprime(a, b, ctx) __BN_are_coprime(AmiSSLExtBase, (a), (b), (ctx))
 
+int __OSSL_CMP_MSG_update_recipNonce(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") OSSL_CMP_MSG * msg ) = "\tjsr\t-5772(a6)";
+#define OSSL_CMP_MSG_update_recipNonce(ctx, msg) __OSSL_CMP_MSG_update_recipNonce(AmiSSLExtBase, (ctx), (msg))
+
 #endif /* !_INLINE_AMISSLEXT_H */

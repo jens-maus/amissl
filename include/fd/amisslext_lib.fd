@@ -960,4 +960,5 @@ RAND_set0_private(ctx,rand)(a0,a1)
 EVP_MD_CTX_dup(in)(a0)
 EVP_CIPHER_CTX_dup(in)(a0)
 BN_are_coprime(a,b,ctx)(a0,a1,a2)
+OSSL_CMP_MSG_update_recipNonce(ctx,msg)(a0,a1)
 ##end

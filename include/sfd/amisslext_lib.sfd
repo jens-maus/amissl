@@ -967,4 +967,5 @@ int RAND_set0_private(OSSL_LIB_CTX * ctx, EVP_RAND_CTX * rand) (a0,a1)
 EVP_MD_CTX * EVP_MD_CTX_dup(const EVP_MD_CTX * in) (a0)
 EVP_CIPHER_CTX * EVP_CIPHER_CTX_dup(const EVP_CIPHER_CTX * in) (a0)
 int BN_are_coprime(BIGNUM * a, const BIGNUM * b, BN_CTX * ctx) (a0,a1,a2)
+int OSSL_CMP_MSG_update_recipNonce(OSSL_CMP_CTX * ctx, OSSL_CMP_MSG * msg) (a0,a1)
 ==end

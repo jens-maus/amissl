@@ -40704,6 +40704,13 @@ int SAVEDS ASM LIB_BN_are_coprime(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIGNU
 
 // ---
 
+int SAVEDS ASM LIB_OSSL_CMP_MSG_update_recipNonce(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx), REG(a1, OSSL_CMP_MSG * msg))
+{
+	return OSSL_CMP_MSG_update_recipNonce(ctx, msg);
+}
+
+// ---
+
 
 /***************************************************************************/
 

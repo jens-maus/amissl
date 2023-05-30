@@ -6437,6 +6437,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_MD_CTX_dup
 	    FPTR IAmiSSL_EVP_CIPHER_CTX_dup
 	    FPTR IAmiSSL_BN_are_coprime
+	    FPTR IAmiSSL_OSSL_CMP_MSG_update_recipNonce
 	LABEL AmiSSLIFace_SIZE
 
 #endif

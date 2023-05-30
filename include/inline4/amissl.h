@@ -5866,5 +5866,6 @@
 #define EVP_MD_CTX_dup(in) IAmiSSL->EVP_MD_CTX_dup((in))
 #define EVP_CIPHER_CTX_dup(in) IAmiSSL->EVP_CIPHER_CTX_dup((in))
 #define BN_are_coprime(a, b, ctx) IAmiSSL->BN_are_coprime((a), (b), (ctx))
+#define OSSL_CMP_MSG_update_recipNonce(ctx, msg) IAmiSSL->OSSL_CMP_MSG_update_recipNonce((ctx), (msg))
 
 #endif /* INLINE4_AMISSL_H */

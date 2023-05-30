@@ -26508,6 +26508,13 @@
       <arg name="ctx" type="BN_CTX *" m68kreg="a2"/>
     </method>
 
+    <!-- AmiSSL v5.9 - OpenSSL 3.1.1 -->
+
+    <method name="OSSL_CMP_MSG_update_recipNonce" result="int">
+      <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
+      <arg name="msg" type="OSSL_CMP_MSG *" m68kreg="a1"/>
+    </method>
+
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->
   </interface>
 </library>

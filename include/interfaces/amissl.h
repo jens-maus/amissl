@@ -6461,6 +6461,7 @@ struct AmiSSLIFace
 	APICALL EVP_MD_CTX * (*EVP_MD_CTX_dup)(struct AmiSSLIFace *Self, const EVP_MD_CTX * in);
 	APICALL EVP_CIPHER_CTX * (*EVP_CIPHER_CTX_dup)(struct AmiSSLIFace *Self, const EVP_CIPHER_CTX * in);
 	APICALL int (*BN_are_coprime)(struct AmiSSLIFace *Self, BIGNUM * a, const BIGNUM * b, BN_CTX * ctx);
+	APICALL int (*OSSL_CMP_MSG_update_recipNonce)(struct AmiSSLIFace *Self, OSSL_CMP_CTX * ctx, OSSL_CMP_MSG * msg);
 };
 
 #ifdef __cplusplus

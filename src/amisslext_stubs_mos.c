@@ -10084,6 +10084,16 @@ int LIBSTUB_BN_are_coprime(void)
   return LIB_BN_are_coprime(_base, ___a, ___b, ___ctx);
 }
 
+int LIB_OSSL_CMP_MSG_update_recipNonce(struct Library * _base, OSSL_CMP_CTX * ___ctx, OSSL_CMP_MSG * ___msg);
+
+int LIBSTUB_OSSL_CMP_MSG_update_recipNonce(void)
+{
+  OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
+  OSSL_CMP_MSG * ___msg = (OSSL_CMP_MSG *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_MSG_update_recipNonce(_base, ___ctx, ___msg);
+}
+
 
 #ifdef __cplusplus
 }

@@ -6267,4 +6267,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(BN_CTX *, (___ctx), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 961, Amisslext)
 
+#define OSSL_CMP_MSG_update_recipNonce(___ctx, ___msg) \
+      AROS_LC2(int, OSSL_CMP_MSG_update_recipNonce, \
+ AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
+ AROS_LCA(OSSL_CMP_MSG *, (___msg), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 962, Amisslext)
+
 #endif /* !_INLINE_AMISSLEXT_H */

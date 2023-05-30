@@ -1,3 +1,21 @@
+## AmiSSL 5.9 (30.5.2023)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.1.1 (30.5.2023) version, which includes one moderate and
+  three low severity fixes for newly identified vulnerabilities:
+  + Mitigate for very slow OBJ_obj2txt() performance with gigantic
+    OBJECT IDENTIFIER sub-identities. 
+    (CVE-2023-2650)
+  + Fixed documentation of X509_VERIFY_PARAM_add0_policy().
+    (CVE-2023-0466)
+  + Fixed handling of invalid certificate policies in leaf certificates.
+    (CVE-2023-0465)
+  + Limited the number of nodes created in a policy tree.
+    (CVE-2023-0464)
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 30.5.2023.
+- Added 8K minimum stack cookie to example programs.
+
 ## AmiSSL 5.8 (23.3.2023)
 
 - Switched to OpenSSL 3.1, with full compatibility with the latest
@@ -18,7 +36,7 @@
 - Updated OpenSSL backend to full compatibility with the latest
   OpenSSL 3.0.8 (7.2.2023) version, which includes one high, seven
   moderate and one low severity fixes for newly identified
-  vulnerbilities:
+  vulnerabilities:
   + Fixed NULL dereference during PKCS7 data verification.
     (CVE-2023-0401)
   + Fixed X.400 address type confusion in X.509 GeneralName.
