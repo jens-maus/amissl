@@ -1,3 +1,15 @@
+## AmiSSL 5.10 (1.8.2023)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.1.2 (1.8.2023) version, which includes improvements and
+  fixes for three low severity identified vulnerabilities:
+  + Fix excessive time spent checking DH q parameter value.
+    (CVE-2023-3817)
+  + Fix DH_check() excessive time with over sized modulus.
+    (CVE-2023-3446)
+  + Do not ignore empty associated data entries with AES-SIV.
+    (CVE-2023-2975)
+
 ## AmiSSL 5.9 (30.5.2023)
 
 - Updated OpenSSL backend to full compatibility with the latest
