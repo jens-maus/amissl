@@ -1,3 +1,11 @@
+## AmiSSL 5.11 (19.9.2023)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.1.3 (19.9.2023) version which provides various minor fixes,
+  including removal of memory leaks.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 22.8.2023.
+
 ## AmiSSL 5.10 (1.8.2023)
 
 - Updated OpenSSL backend to full compatibility with the latest
