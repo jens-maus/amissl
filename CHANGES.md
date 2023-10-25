@@ -1,3 +1,10 @@
+## AmiSSL 5.12 (25.10.2023)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.1.4 (24.10.2023) version which provides various bug and
+  security fixes, including one moderate severity vulnerability:
+  + Fix incorrect cipher key & IV length processing. (CVE-2023-5363)
+
 ## AmiSSL 5.11 (19.9.2023)
 
 - Updated OpenSSL backend to full compatibility with the latest

@@ -249,7 +249,8 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V313 && OpenLib(&AmiSSLBase,"313") == NULL
+    if(LibAPIVersion <= AMISSL_V314 && OpenLib(&AmiSSLBase,"314") == NULL
+                                    && OpenLib(&AmiSSLBase,"313") == NULL
                                     && OpenLib(&AmiSSLBase,"312") == NULL
                                     && OpenLib(&AmiSSLBase,"311") == NULL)
       if(LibAPIVersion <= AMISSL_V310 && OpenLib(&AmiSSLBase,"310") == NULL)
