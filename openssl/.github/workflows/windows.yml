@@ -28,6 +28,8 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
+    - name: checkout fuzz/corpora submodule
+      run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ matrix.platform.arch }}
@@ -45,6 +47,18 @@ jobs:
     - name: build
       working-directory: _build
       run: nmake /S
+    - name: download coreinfo
+      uses: suisei-cn/actions-download-file@v1.4.0
+      with:
+        url: "https://download.sysinternals.com/files/Coreinfo.zip"
+        target: _build/coreinfo/
+    - name: get cpu info
+      working-directory: _build
+      continue-on-error: true
+      run: |
+        7z.exe x coreinfo/Coreinfo.zip
+        ./Coreinfo64.exe -accepteula -f
+        ./apps/openssl.exe version -c
     - name: test
       working-directory: _build
       run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
@@ -64,6 +78,8 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
+    - name: checkout fuzz/corpora submodule
+      run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
@@ -76,6 +92,18 @@ jobs:
     - name: build
       working-directory: _build
       run: nmake /S
+    - name: download coreinfo
+      uses: suisei-cn/actions-download-file@v1.4.0
+      with:
+        url: "https://download.sysinternals.com/files/Coreinfo.zip"
+        target: _build/coreinfo/
+    - name: get cpu info
+      working-directory: _build
+      continue-on-error: true
+      run: |
+        7z.exe x coreinfo/Coreinfo.zip
+        ./Coreinfo64.exe -accepteula -f
+        ./apps/openssl.exe version -c
     - name: test
       working-directory: _build
       run: nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4
@@ -88,6 +116,8 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
+    - name: checkout fuzz/corpora submodule
+      run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
@@ -95,11 +125,61 @@ jobs:
     - name: config
       working-directory: _build
       run: |
-        perl ..\Configure --banner=Configured no-makedepend no-bulk no-deprecated no-fips no-asm -DOPENSSL_SMALL_FOOTPRINT
+        perl ..\Configure --banner=Configured no-makedepend no-bulk no-deprecated no-fips no-asm no-threads -DOPENSSL_SMALL_FOOTPRINT
         perl configdata.pm --dump
     - name: build
       working-directory: _build
       run: nmake # verbose, so no /S here
+    - name: download coreinfo
+      uses: suisei-cn/actions-download-file@v1.4.0
+      with:
+        url: "https://download.sysinternals.com/files/Coreinfo.zip"
+        target: _build/coreinfo/
+    - name: get cpu info
+      working-directory: _build
+      continue-on-error: true
+      run: |
+        7z.exe x coreinfo/Coreinfo.zip
+        ./Coreinfo64.exe -accepteula -f
+        ./apps/openssl.exe version -c
     - name: test
       working-directory: _build
       run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
+  cygwin:
+    # Run a job for each of the specified target architectures:
+    strategy:
+      matrix:
+        os:
+          - windows-2019
+# really worth while running, too? cygwin should mask this
+#          - windows-2022
+        platform:
+          - arch: win64
+            config: -DCMAKE_C_COMPILER=gcc --strict-warnings no-fips
+# are we really learning sth new from win32? So let's save some CO2 for now disabling this
+#          - arch: win32
+#            config: -DCMAKE_C_COMPILER=gcc --strict-warnings no-fips
+    runs-on: ${{matrix.os}}
+    env:
+      CYGWIN_NOWINPATH: 1
+      SHELLOPTS: igncr
+# Don't overwhelm github CI VMs:
+      MAKE_PARAMS: -j 4
+    steps:
+# Checkout before cygwin can mess with PATH...
+    - uses: actions/checkout@v4
+    - uses: cygwin/cygwin-install-action@master
+      with:
+         packages: perl git make gcc-core
+    - name: Check repo
+      run: cygcheck -V
+    - name: Full cygcheck status
+      run: cygcheck -s -v -r -h
+# Activate this if checkout action fails:
+#    - name: Clone repo
+#      run: bash -c "pwd && git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/${{ github.repository }}.git"
+    - name: Full build
+      run: bash -c "gcc --version && ./config ${{ matrix.platform.config }} && make $MAKE_PARAMS"
+# Disable testing for now. TBD: Need local cygwin installation to debug .
+#    - name: Run openssl tests
+#      run: bash -c "cd openssl && make V=1 test"

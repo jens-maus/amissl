@@ -148,7 +148,7 @@ err:
     OPENSSL_free(name);
     OPENSSL_free(header);
     OPENSSL_free(data);
-    sk_X509_pop_free(chain, X509_free);
+    OSSL_STACK_OF_X509_free(chain);
     return NULL;
 }
 
@@ -349,7 +349,7 @@ static int test_tlsafile(SSL_CTX *ctx, const char *base_name,
         }
 
         ok = verify_chain(ssl, chain);
-        sk_X509_pop_free(chain, X509_free);
+        OSSL_STACK_OF_X509_free(chain);
         err = SSL_get_verify_result(ssl);
         /*
          * Peek under the hood, normally TLSA match data is hidden when
