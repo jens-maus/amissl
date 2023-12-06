@@ -60,6 +60,26 @@ void OSSL_sleep(uint64_t millis)
     Sleep(limited_millis);
 }
 
+#elif defined(OPENSSL_SYS_AMIGA)
+
+#include <timeval.h>
+#include <libcmt.h>
+
+void OSSL_sleep(uint64_t millis)
+{
+    struct TimeRequest *tr;
+
+    GETSTATE();
+
+    if((tr = OpenTimer(state)))
+    {
+        tr->Request.io_Command = TR_ADDREQUEST;
+        tr->Time.Seconds = (ULONG)(millis / 1000);
+        tr->Time.Microseconds = (ULONG)((millis % 1000) * 1000);
+        DoIO(&tr->Request);
+    }
+}
+
 #else
 /* Fallback to a busy wait */
 # include "internal/time.h"
