@@ -27,85 +27,127 @@
 
 #if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG) && defined(OPENSSL_SYS_AMIGA)
 
-#include <proto/exec.h>
+# include <proto/exec.h>
 
-#if defined(__amigaos4__)
-#define ALLOCSEMAPHORE(sem, type) sem = (type *)AllocSysObjectTags(ASOT_SEMAPHORE, ASOSEM_Size, sizeof(type), TAG_DONE)
-#define FREESEMAPHORE(sem) if (sem != NULL) FreeSysObject(ASOT_SEMAPHORE, sem)
-#else
-#define ALLOCSEMAPHORE(sem, type) if ((sem = (type *)OPENSSL_zalloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
-#define FREESEMAPHORE(sem) if (sem != NULL) OPENSSL_free(sem)
-#endif
+# if defined(__amigaos4__)
+
+#  define ALLOC_LOCK(mutex, noop) mutex = AllocSysObject(ASOT_MUTEX, NULL)
+#  define FREE_LOCK(mutex) if (mutex != NULL) FreeSysObject(ASOT_MUTEX, mutex)
+#  define OBTAIN_LOCK(mutex) MutexObtain(mutex)
+#  define OBTAIN_SHARED_LOCK(mutex) OBTAIN_LOCK(mutex)
+#  define RELEASE_LOCK(mutex) MutexRelease(mutex)
+
+static APTR RunOnceLock = NULL;
+
+# else
+
+#  define ALLOC_LOCK(sem, type) if ((sem = OPENSSL_zalloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
+#  define FREE_LOCK(sem) if (sem != NULL) OPENSSL_free(sem)
+#  define OBTAIN_LOCK(sem) ObtainSemaphore((struct SignalSemaphore *)sem)
+#  define OBTAIN_SHARED_LOCK(sem) ObtainSemaphoreShared((struct SignalSemaphore *)sem)
+#  define RELEASE_LOCK(sem) ReleaseSemaphore((struct SignalSemaphore *)sem)
 
 static struct SignalSemaphore *RunOnceLock = NULL;
 
+# endif
+
 int CRYPTO_THREAD_setup(void)
 {
-    ALLOCSEMAPHORE(RunOnceLock, struct SignalSemaphore);
+    ALLOC_LOCK(RunOnceLock, struct SignalSemaphore);
     return (RunOnceLock != NULL) ? 1 : 0;
 }
 
 int CRYPTO_THREAD_cleanup(void)
 {
-    FREESEMAPHORE(RunOnceLock);
+    FREE_LOCK(RunOnceLock);
     return 1;
 }
 
 CRYPTO_RWLOCK *CRYPTO_THREAD_lock_new(void)
 {
     CRYPTO_RWLOCK *lock;
-    ALLOCSEMAPHORE(lock, struct SignalSemaphore);
+    ALLOC_LOCK(lock, struct SignalSemaphore);
     return lock;
 }
 
 __owur int CRYPTO_THREAD_read_lock(CRYPTO_RWLOCK *lock)
 {
-    ObtainSemaphoreShared((struct SignalSemaphore *)lock);
+    OBTAIN_SHARED_LOCK(lock);
     return 1;
 }
 
 __owur int CRYPTO_THREAD_write_lock(CRYPTO_RWLOCK *lock)
 {
-    ObtainSemaphore((struct SignalSemaphore *)lock);
+    OBTAIN_LOCK(lock);
     return 1;
 }
 
 int CRYPTO_THREAD_unlock(CRYPTO_RWLOCK *lock)
 {
-    ReleaseSemaphore((struct SignalSemaphore *)lock);
+    RELEASE_LOCK(lock);
     return 1;
 }
 
 void CRYPTO_THREAD_lock_free(CRYPTO_RWLOCK *lock)
 {
-    FREESEMAPHORE(lock);
+    FREE_LOCK(lock);
 }
 
 int CRYPTO_THREAD_run_once(CRYPTO_ONCE *once, void (*init)(void))
 {
-    ObtainSemaphore(RunOnceLock);
+    OBTAIN_LOCK(RunOnceLock);
 
     if (*once == CRYPTO_ONCE_STATIC_INIT) {
         init();
         *once = 1;
     }
 
-    ReleaseSemaphore(RunOnceLock);
+    RELEASE_LOCK(RunOnceLock);
 
     return 1;
 }
-
-typedef struct thread_key_st
-{
-	struct SignalSemaphore lock;
-	OPENSSL_LHASH *hash;
-} THREAD_KEY;
 
 typedef struct thread_task_value_st
 {
 	struct Task *task;
 	void *data;
 } THREAD_TASK_VALUE;
+
+# if defined(__amigaos4__)
+
+#  define ALLOC_THREAD_KEY(key) \
+  if ((key = OPENSSL_malloc(sizeof(THREAD_KEY)))) { \
+    if ((ALLOC_LOCK(key->lock, 0)) == NULL) {	    \
+      OPENSSL_free(key); \
+      key = NULL; \
+    } \
+  }
+#  define FREE_THREAD_KEY(key) if (key != NULL) { FREE_LOCK(key->lock); OPENSSL_free(key); } 
+#  define LOCK_THREAD_KEY(key) OBTAIN_LOCK(key->lock)
+#  define LOCK_SHARED_THREAD_KEY(key) OBTAIN_LOCK(key->lock)
+#  define UNLOCK_THREAD_KEY(key) RELEASE_LOCK(key->lock)
+
+typedef struct thread_key_st
+{
+    APTR lock;
+    OPENSSL_LHASH *hash;
+} THREAD_KEY;
+
+# else
+
+#  define ALLOC_THREAD_KEY(key) ALLOC_LOCK(key, THREAD_KEY)
+#  define FREE_THREAD_KEY(key) FREE_LOCK(&(key->lock))
+#  define LOCK_THREAD_KEY(key) OBTAIN_LOCK(&(key->lock))
+#  define LOCK_SHARED_THREAD_KEY(key) OBTAIN_SHARED_LOCK(&(key->lock))
+#  define UNLOCK_THREAD_KEY(key) RELEASE_LOCK(&(key->lock))
+
+typedef struct thread_key_st
+{
+    struct SignalSemaphore lock;
+    OPENSSL_LHASH *hash;
+} THREAD_KEY;
+
+# endif
 
 static unsigned long task_hash(const void *a_void)
 {
@@ -121,7 +163,7 @@ static int task_cmp(const void *a_void, const void *b_void)
 int CRYPTO_THREAD_init_local(CRYPTO_THREAD_LOCAL *key, void (*cleanup)(void *))
 {
     THREAD_KEY *keydata;
-    ALLOCSEMAPHORE(keydata, THREAD_KEY);
+    ALLOC_THREAD_KEY(keydata);
 
     if (keydata != NULL) {
         keydata->hash = NULL;
@@ -138,14 +180,15 @@ void *CRYPTO_THREAD_get_local(CRYPTO_THREAD_LOCAL *key)
     THREAD_TASK_VALUE tmp, *value = NULL;
 
     if (keydata != NULL) {
-        ObtainSemaphoreShared(&keydata->lock);
+        
+        LOCK_SHARED_THREAD_KEY(keydata);
 
         if (keydata->hash != NULL) {
             tmp.task = FindTask(NULL);
             value = OPENSSL_LH_retrieve(keydata->hash, &tmp);
         }
 
-        ReleaseSemaphore(&keydata->lock);
+        UNLOCK_THREAD_KEY(keydata);
     }
 
     return value ? value->data : NULL;
@@ -159,7 +202,7 @@ int CRYPTO_THREAD_set_local(CRYPTO_THREAD_LOCAL *key, void *val)
     if (keydata != NULL) {
         tmp.task = FindTask(NULL);
 
-        ObtainSemaphore(&keydata->lock);
+        LOCK_THREAD_KEY(keydata);
 
         if (val == NULL) {
             /* DELETE */
@@ -195,7 +238,7 @@ int CRYPTO_THREAD_set_local(CRYPTO_THREAD_LOCAL *key, void *val)
             }
         }
 
-        ReleaseSemaphore(&keydata->lock);
+        UNLOCK_THREAD_KEY(keydata);
     }
 
     return value ? 1 : 0;
@@ -215,7 +258,7 @@ int CRYPTO_THREAD_cleanup_local(CRYPTO_THREAD_LOCAL *key)
             OPENSSL_LH_doall(keydata->hash, free_task_value);
             OPENSSL_LH_free(keydata->hash);
         }
-        FREESEMAPHORE(keydata);
+	FREE_THREAD_KEY(keydata);
 	*key = 0;
         return 1;
     }
