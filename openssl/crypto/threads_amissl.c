@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,13 +58,13 @@ CRYPTO_RWLOCK *CRYPTO_THREAD_lock_new(void)
     return lock;
 }
 
-int CRYPTO_THREAD_read_lock(CRYPTO_RWLOCK *lock)
+__owur int CRYPTO_THREAD_read_lock(CRYPTO_RWLOCK *lock)
 {
     ObtainSemaphoreShared((struct SignalSemaphore *)lock);
     return 1;
 }
 
-int CRYPTO_THREAD_write_lock(CRYPTO_RWLOCK *lock)
+__owur int CRYPTO_THREAD_write_lock(CRYPTO_RWLOCK *lock)
 {
     ObtainSemaphore((struct SignalSemaphore *)lock);
     return 1;
@@ -261,6 +261,18 @@ int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
 }
 
 int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
+	return 0;
+
+    *ret  = *val;
+
+    CRYPTO_THREAD_unlock(lock);
+
+    return 1;
+}
+
+int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
 {
     if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
 	return 0;

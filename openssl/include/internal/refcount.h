@@ -188,7 +188,9 @@ static __inline int CRYPTO_GET_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
 
 #    define HAVE_ATOMICS 1
 
-typedef int CRYPTO_REF_COUNT;
+typedef struct {
+    volatile int val;
+} CRYPTO_REF_COUNT;
 
 #    define ATOMIC_ADD_FETCH(val, amount)	\
      ({ int res; \
@@ -203,23 +205,31 @@ typedef int CRYPTO_REF_COUNT;
         res; \
      })
 
-static __inline__ int CRYPTO_UP_REF(int *val, int *ret, ossl_unused void *lock)
+static ossl_unused ossl_inline int CRYPTO_UP_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
 {
-    *ret = ATOMIC_ADD_FETCH(val, 1);
+    *ret = ATOMIC_ADD_FETCH(&refcnt->val, 1);
     return 1;
 }
 
-static __inline__ int CRYPTO_DOWN_REF(int *val, int *ret,
-                                      ossl_unused void *lock)
+static ossl_unused ossl_inline int CRYPTO_DOWN_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
 {
-    *ret = ATOMIC_ADD_FETCH(val, -1);
+    *ret = ATOMIC_ADD_FETCH(&refcnt->val, -1);
     return 1;
 }
+
+static ossl_unused ossl_inline int CRYPTO_GET_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
+{
+    *ret = refcnt->val;
+    return 1;
+}
+
 #   elif __mc68020 || __mc68030 || __mc68040 || __mc68060
 
 #    define HAVE_ATOMICS 1
 
-typedef int CRYPTO_REF_COUNT;
+typedef struct {
+    volatile int val;
+} CRYPTO_REF_COUNT;
 
 #    define ATOMIC_OP_FETCH(val, op) \
      ({ int res, tmp; \
@@ -233,16 +243,21 @@ typedef int CRYPTO_REF_COUNT;
         res; \
      })
 
-static __inline__ int CRYPTO_UP_REF(int *val, int *ret, ossl_unused void *lock)
+static ossl_unused ossl_inline int CRYPTO_UP_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
 {
-    *ret = ATOMIC_OP_FETCH(val, add);
+    *ret = ATOMIC_OP_FETCH(&refcnt->val, add);
     return 1;
 }
 
-static __inline__ int CRYPTO_DOWN_REF(int *val, int *ret,
-                                      ossl_unused void *lock)
+static ossl_unused ossl_inline int CRYPTO_DOWN_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
 {
-    *ret = ATOMIC_OP_FETCH(val, sub);
+    *ret = ATOMIC_OP_FETCH(&refcnt->val, sub);
+    return 1;
+}
+
+static ossl_unused ossl_inline int CRYPTO_GET_REF(CRYPTO_REF_COUNT *refcnt, int *ret)
+{
+    *ret = refcnt->val;
     return 1;
 }
 

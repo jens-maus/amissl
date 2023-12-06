@@ -446,7 +446,7 @@ static OSSL_PROVIDER *provider_new(const char *name,
         OPENSSL_free(prov);
         return NULL;
     }
-#ifndef HAVE_ATOMICS
+#if !defined(HAVE_ATOMICS) || defined(OPENSSL_SYS_AMIGA)
     if ((prov->activatecnt_lock = CRYPTO_THREAD_lock_new()) == NULL) {
         ossl_provider_free(prov);
         ERR_raise(ERR_LIB_CRYPTO, ERR_R_CRYPTO_LIB);
@@ -742,7 +742,7 @@ void ossl_provider_free(OSSL_PROVIDER *prov)
             sk_INFOPAIR_pop_free(prov->parameters, infopair_free);
             CRYPTO_THREAD_lock_free(prov->opbits_lock);
             CRYPTO_THREAD_lock_free(prov->flag_lock);
-#ifndef HAVE_ATOMICS
+#if !defined(HAVE_ATOMICS) || defined(OPENSSL_SYS_AMIGA)
             CRYPTO_THREAD_lock_free(prov->activatecnt_lock);
 #endif
             CRYPTO_FREE_REF(&prov->refcnt);
