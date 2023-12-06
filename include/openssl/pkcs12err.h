@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -33,6 +33,7 @@
 /*
  * PKCS12 reason codes.
  */
+# define PKCS12_R_CALLBACK_FAILED                         115
 # define PKCS12_R_CANT_PACK_STRUCTURE                     100
 # define PKCS12_R_CONTENT_TYPE_NOT_DATA                   121
 # define PKCS12_R_DECODE_ERROR                            101

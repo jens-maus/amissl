@@ -297,11 +297,33 @@ PKCS12 *PKCS12_create_ex(const char *pass, const char *name, EVP_PKEY *pkey,
                          X509 *cert, STACK_OF(X509) *ca, int nid_key, int nid_cert,
                          int iter, int mac_iter, int keytype,
                          OSSL_LIB_CTX *ctx, const char *propq);
+
+# if defined(OPENSSL_SYS_AMIGA)
+PKCS12 *PKCS12_create_ex2_amiga_1(const char *pass, const char *name, EVP_PKEY *pkey,
+                                  X509 *cert, STACK_OF(X509) *ca, int nid_key, int nid_cert,
+                                  void *moreargs);
+void *PKCS12_create_ex2_amiga_2(int iter, int mac_iter, int keytype,
+                                OSSL_LIB_CTX *ctx, const char *propq,
+                                PKCS12_create_cb *cb, void *cbarg);
+# endif
+
+# if defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE)
+#  if defined(__amigaos4__) && !defined(__USE_INLINE__)
+#   define PKCS12_create_ex2(pass,name,pkey,cert,ca,nid_key,nid_cert,iter,mac_iter,keytype,ctx,propq,cb,cbarg) \
+     IAmiSSL->PKCS12_create_ex2_amiga_1(pass,name,pkey,cert,ca,nid_key,nid_cert, \
+     IAmiSSL->PKCS12_create_ex2_amiga_2(iter,mac_iter,keytype,ctx,propq,cb,cbarg))
+#  else
+#   define PKCS12_create_ex2(pass,name,pkey,cert,ca,nid_key,nid_cert,iter,mac_iter,keytype,ctx,propq,cb,cbarg) \
+     PKCS12_create_ex2_amiga_1(pass,name,pkey,cert,ca,nid_key,nid_cert,	\
+     PKCS12_create_ex2_amiga_2(iter,mac_iter,keytype,ctx,propq,cb,cbarg))
+#  endif
+# else
 PKCS12 *PKCS12_create_ex2(const char *pass, const char *name, EVP_PKEY *pkey,
                           X509 *cert, STACK_OF(X509) *ca, int nid_key, int nid_cert,
                           int iter, int mac_iter, int keytype,
                           OSSL_LIB_CTX *ctx, const char *propq,
                           PKCS12_create_cb *cb, void *cbarg);
+# endif
 
 PKCS12_SAFEBAG *PKCS12_add_cert(STACK_OF(PKCS12_SAFEBAG) **pbags, X509 *cert);
 PKCS12_SAFEBAG *PKCS12_add_key(STACK_OF(PKCS12_SAFEBAG) **pbags,

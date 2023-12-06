@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -170,7 +170,7 @@ SKM_DEFINE_STACK_OF_INTERNAL(X509_ALGOR, X509_ALGOR, X509_ALGOR)
 
 
 
-# define ASN1_STRING_FLAG_BITS_LEFT 0x08/* Set if 0x07 has bits left value */
+# define ASN1_STRING_FLAG_BITS_LEFT 0x08 /* Set if 0x07 has bits left value */
 /*
  * This indicates that the ASN1_STRING is not a real value but just a place
  * holder for the location where indefinite length constructed data should be
@@ -326,19 +326,19 @@ typedef struct ASN1_VALUE_st ASN1_VALUE;
     DECLARE_ASN1_ENCODE_FUNCTIONS_name_attr(extern, type, name)
 
 # define DECLARE_ASN1_ENCODE_FUNCTIONS_only_attr(attr, type, name)          \
-    attr type *d2i_##name(type **a, const unsigned char **in, long len);    \
-    attr int i2d_##name(const type *a, unsigned char **out);
+    attr type *(d2i_##name)(type **a, const unsigned char **in, long len); \
+    attr int (i2d_##name)(const type *a, unsigned char **out);
 # define DECLARE_ASN1_ENCODE_FUNCTIONS_only(type, name)                     \
     DECLARE_ASN1_ENCODE_FUNCTIONS_only_attr(extern, type, name)
 
 # define DECLARE_ASN1_NDEF_FUNCTION_attr(attr, name)                        \
-    attr int i2d_##name##_NDEF(const name *a, unsigned char **out);
+    attr int (i2d_##name##_NDEF)(const name *a, unsigned char **out);
 # define DECLARE_ASN1_NDEF_FUNCTION(name)                                   \
     DECLARE_ASN1_NDEF_FUNCTION_attr(extern, name)
 
 # define DECLARE_ASN1_ALLOC_FUNCTIONS_name_attr(attr, type, name)           \
-    attr type *name##_new(void);                                            \
-    attr void name##_free(type *a);
+    attr type *(name##_new)(void);					\
+    attr void (name##_free)(type *a);
 # define DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, name)                      \
     DECLARE_ASN1_ALLOC_FUNCTIONS_name_attr(extern, type, name)
 
@@ -348,7 +348,7 @@ typedef struct ASN1_VALUE_st ASN1_VALUE;
     DECLARE_ASN1_DUP_FUNCTION_attr(extern, type)
 
 # define DECLARE_ASN1_DUP_FUNCTION_name_attr(attr, type, name)              \
-    attr type *name##_dup(const type *a);
+    attr type *(name##_dup)(const type *a);
 # define DECLARE_ASN1_DUP_FUNCTION_name(type, name)                         \
     DECLARE_ASN1_DUP_FUNCTION_name_attr(extern, type, name)
 
@@ -358,7 +358,7 @@ typedef struct ASN1_VALUE_st ASN1_VALUE;
     DECLARE_ASN1_PRINT_FUNCTION_attr(extern, stname)
 
 # define DECLARE_ASN1_PRINT_FUNCTION_fname_attr(attr, stname, fname)        \
-    attr int fname##_print_ctx(BIO *out, const stname *x, int indent,       \
+    attr int (fname##_print_ctx)(BIO *out, const stname *x, int indent,	\
                                const ASN1_PCTX *pctx);
 # define DECLARE_ASN1_PRINT_FUNCTION_fname(stname, fname)                   \
     DECLARE_ASN1_PRINT_FUNCTION_fname_attr(extern, stname, fname)
@@ -438,7 +438,7 @@ typedef const ASN1_ITEM *ASN1_ITEM_EXP (void);
 # define ASN1_ITEM_rptr(ref) (ref##_it())
 
 # define DECLARE_ASN1_ITEM_attr(attr, name)                                 \
-    attr const ASN1_ITEM * name##_it(void);
+    attr const ASN1_ITEM * (name##_it)(void);
 # define DECLARE_ASN1_ITEM(name)                                            \
     DECLARE_ASN1_ITEM_attr(extern, name)
 
@@ -1011,6 +1011,8 @@ int ASN1_TYPE_get_int_octetstring(const ASN1_TYPE *a, long *num,
                                   unsigned char *data, int max_len);
 
 void *ASN1_item_unpack(const ASN1_STRING *oct, const ASN1_ITEM *it);
+void *ASN1_item_unpack_ex(const ASN1_STRING *oct, const ASN1_ITEM *it,
+                          OSSL_LIB_CTX *libctx, const char *propq);
 
 ASN1_STRING *ASN1_item_pack(void *obj, const ASN1_ITEM *it,
                             ASN1_OCTET_STRING **oct);

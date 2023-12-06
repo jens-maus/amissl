@@ -6523,16 +6523,16 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(PKCS7_SIGNER_INFO *, (___p7i), A1), \
      struct Library *, AMISSL_BASE_NAME, 1302, Amissl)
 
-#define PKCS7_add_certificate(___p7, ___x509) \
+#define PKCS7_add_certificate(___p7, ___cert) \
       AROS_LC2(int, PKCS7_add_certificate, \
  AROS_LCA(PKCS7 *, (___p7), A0), \
- AROS_LCA(X509 *, (___x509), A1), \
+ AROS_LCA(X509 *, (___cert), A1), \
      struct Library *, AMISSL_BASE_NAME, 1303, Amissl)
 
-#define PKCS7_add_crl(___p7, ___x509) \
+#define PKCS7_add_crl(___p7, ___crl) \
       AROS_LC2(int, PKCS7_add_crl, \
  AROS_LCA(PKCS7 *, (___p7), A0), \
- AROS_LCA(X509_CRL *, (___x509), A1), \
+ AROS_LCA(X509_CRL *, (___crl), A1), \
      struct Library *, AMISSL_BASE_NAME, 1304, Amissl)
 
 #define PKCS7_content_new(___p7, ___nid) \
@@ -6550,12 +6550,12 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(PKCS7_SIGNER_INFO *, (___si), D0), \
      struct Library *, AMISSL_BASE_NAME, 1306, Amissl)
 
-#define PKCS7_signatureVerify(___bio, ___p7, ___si, ___x509) \
+#define PKCS7_signatureVerify(___bio, ___p7, ___si, ___signer) \
       AROS_LC4(int, PKCS7_signatureVerify, \
  AROS_LCA(BIO *, (___bio), A0), \
  AROS_LCA(PKCS7 *, (___p7), A1), \
  AROS_LCA(PKCS7_SIGNER_INFO *, (___si), A2), \
- AROS_LCA(X509 *, (___x509), A3), \
+ AROS_LCA(X509 *, (___signer), A3), \
      struct Library *, AMISSL_BASE_NAME, 1307, Amissl)
 
 #define PKCS7_dataInit(___p7, ___bio) \
@@ -9705,9 +9705,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(ASN1_TIME *, (___tm), A1), \
      struct Library *, AMISSL_BASE_NAME, 1875, Amissl)
 
-#define X509_check_private_key(___x509, ___pkey) \
+#define X509_check_private_key(___cert, ___pkey) \
       AROS_LC2(int, X509_check_private_key, \
- AROS_LCA(const X509 *, (___x509), A0), \
+ AROS_LCA(const X509 *, (___cert), A0), \
  AROS_LCA(const EVP_PKEY *, (___pkey), A1), \
      struct Library *, AMISSL_BASE_NAME, 1876, Amissl)
 
@@ -10601,26 +10601,26 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(X509_STORE *, X509_STORE_new, \
      struct Library *, AMISSL_BASE_NAME, 2017, Amissl)
 
-#define X509_STORE_free(___v) \
+#define X509_STORE_free(___xs) \
       AROS_LC1(void, X509_STORE_free, \
- AROS_LCA(X509_STORE *, (___v), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 2018, Amissl)
 
-#define X509_STORE_set_flags(___ctx, ___flags) \
+#define X509_STORE_set_flags(___xs, ___flags) \
       AROS_LC2(int, X509_STORE_set_flags, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(unsigned long, (___flags), D0), \
      struct Library *, AMISSL_BASE_NAME, 2019, Amissl)
 
-#define X509_STORE_set_purpose(___ctx, ___purpose) \
+#define X509_STORE_set_purpose(___xs, ___purpose) \
       AROS_LC2(int, X509_STORE_set_purpose, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(int, (___purpose), D0), \
      struct Library *, AMISSL_BASE_NAME, 2020, Amissl)
 
-#define X509_STORE_set_trust(___ctx, ___trust) \
+#define X509_STORE_set_trust(___xs, ___trust) \
       AROS_LC2(int, X509_STORE_set_trust, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(int, (___trust), D0), \
      struct Library *, AMISSL_BASE_NAME, 2021, Amissl)
 
@@ -10640,12 +10640,12 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 2024, Amissl)
 
-#define X509_STORE_CTX_init(___ctx, ___store, ___x509, ___chain) \
+#define X509_STORE_CTX_init(___ctx, ___trust_store, ___target, ___untrusted) \
       AROS_LC4(int, X509_STORE_CTX_init, \
  AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
- AROS_LCA(X509_STORE *, (___store), A1), \
- AROS_LCA(X509 *, (___x509), A2), \
- AROS_LCA(STACK_OF(X509) *, (___chain), A3), \
+ AROS_LCA(X509_STORE *, (___trust_store), A1), \
+ AROS_LCA(X509 *, (___target), A2), \
+ AROS_LCA(STACK_OF(X509) *, (___untrusted), A3), \
      struct Library *, AMISSL_BASE_NAME, 2025, Amissl)
 
 #define X509_STORE_CTX_set0_trusted_stack(___ctx, ___sk) \
@@ -10659,9 +10659,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 2027, Amissl)
 
-#define X509_STORE_add_lookup(___v, ___m) \
+#define X509_STORE_add_lookup(___xs, ___m) \
       AROS_LC2(X509_LOOKUP *, X509_STORE_add_lookup, \
- AROS_LCA(X509_STORE *, (___v), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_LOOKUP_METHOD *, (___m), A1), \
      struct Library *, AMISSL_BASE_NAME, 2028, Amissl)
 
@@ -10673,15 +10673,15 @@ typedef ULONG _sfdc_vararg;
       AROS_LC0(X509_LOOKUP_METHOD *, X509_LOOKUP_file, \
      struct Library *, AMISSL_BASE_NAME, 2030, Amissl)
 
-#define X509_STORE_add_cert(___ctx, ___x) \
+#define X509_STORE_add_cert(___xs, ___x) \
       AROS_LC2(int, X509_STORE_add_cert, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509 *, (___x), A1), \
      struct Library *, AMISSL_BASE_NAME, 2031, Amissl)
 
-#define X509_STORE_add_crl(___ctx, ___x) \
+#define X509_STORE_add_crl(___xs, ___x) \
       AROS_LC2(int, X509_STORE_add_crl, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_CRL *, (___x), A1), \
      struct Library *, AMISSL_BASE_NAME, 2032, Amissl)
 
@@ -10778,16 +10778,16 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_LOOKUP *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 2045, Amissl)
 
-#define X509_STORE_load_locations(___ctx, ___file, ___dir) \
+#define X509_STORE_load_locations(___xs, ___file, ___dir) \
       AROS_LC3(int, X509_STORE_load_locations, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___file), A1), \
  AROS_LCA(const char *, (___dir), A2), \
      struct Library *, AMISSL_BASE_NAME, 2046, Amissl)
 
-#define X509_STORE_set_default_paths(___ctx) \
+#define X509_STORE_set_default_paths(___xs) \
       AROS_LC1(int, X509_STORE_set_default_paths, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 2047, Amissl)
 
 #define OBSOLETE_X509_STORE_CTX_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
@@ -13943,9 +13943,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_VERIFY_PARAM *, (___param), A0), \
      struct Library *, AMISSL_BASE_NAME, 2598, Amissl)
 
-#define X509_STORE_set1_param(___ctx, ___pm) \
+#define X509_STORE_set1_param(___xs, ___pm) \
       AROS_LC2(int, X509_STORE_set1_param, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const X509_VERIFY_PARAM *, (___pm), A1), \
      struct Library *, AMISSL_BASE_NAME, 2599, Amissl)
 
@@ -14003,9 +14003,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSL_BASE_NAME, 2608, Amissl)
 
-#define X509_REQ_check_private_key(___x509, ___pkey) \
+#define X509_REQ_check_private_key(___req, ___pkey) \
       AROS_LC2(int, X509_REQ_check_private_key, \
- AROS_LCA(X509_REQ *, (___x509), A0), \
+ AROS_LCA(const X509_REQ *, (___req), A0), \
  AROS_LCA(EVP_PKEY *, (___pkey), A1), \
      struct Library *, AMISSL_BASE_NAME, 2609, Amissl)
 
@@ -19561,9 +19561,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(EVP_PKEY_CTX *, (___ctx), A0), \
      struct Library *, AMISSL_BASE_NAME, 3732, Amissl)
 
-#define X509_STORE_CTX_get1_certs(___st, ___nm) \
+#define X509_STORE_CTX_get1_certs(___xs, ___nm) \
       AROS_LC2(STACK_OF(X509) *, X509_STORE_CTX_get1_certs, \
- AROS_LCA(X509_STORE_CTX *, (___st), A0), \
+ AROS_LCA(X509_STORE_CTX *, (___xs), A0), \
  AROS_LCA(const X509_NAME *, (___nm), A1), \
      struct Library *, AMISSL_BASE_NAME, 3734, Amissl)
 
@@ -20170,9 +20170,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(OCSP_REQUEST *, (___req), A1), \
      struct Library *, AMISSL_BASE_NAME, 3835, Amissl)
 
-#define X509_STORE_set_verify_cb(___ctx, ___verify_cb) \
+#define X509_STORE_set_verify_cb(___xs, ___verify_cb) \
       AROS_LC2(void, X509_STORE_set_verify_cb, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_verify_cb, (___verify_cb), A1), \
      struct Library *, AMISSL_BASE_NAME, 3836, Amissl)
 
@@ -24700,9 +24700,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___len), D2), \
      struct Library *, AMISSL_BASE_NAME, 4612, Amissl)
 
-#define X509_STORE_up_ref(___v) \
+#define X509_STORE_up_ref(___xs) \
       AROS_LC1(int, X509_STORE_up_ref, \
- AROS_LCA(X509_STORE *, (___v), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4613, Amissl)
 
 #define SSL_enable_ct(___s, ___validation_mode) \
@@ -24844,10 +24844,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int (*)(BIO *), (___destroy), A1), \
      struct Library *, AMISSL_BASE_NAME, 4638, Amissl)
 
-#define BIO_meth_set_gets(___biom, ___func) \
+#define BIO_meth_set_gets(___biom, ___ossl_gets) \
       AROS_LC2(int, BIO_meth_set_gets, \
  AROS_LCA(BIO_METHOD *, (___biom), A0), \
- AROS_LCA(int (*)(BIO *,char *,int), (___func), A1), \
+ AROS_LCA(int (*)(BIO *,char *,int), (___ossl_gets), A1), \
      struct Library *, AMISSL_BASE_NAME, 4639, Amissl)
 
 #define BIO_meth_get_callback_ctrl(___biom) \
@@ -25095,7 +25095,7 @@ typedef ULONG _sfdc_vararg;
 
 #define X509_REQ_get0_pubkey(___req) \
       AROS_LC1(EVP_PKEY *, X509_REQ_get0_pubkey, \
- AROS_LCA(X509_REQ *, (___req), A0), \
+ AROS_LCA(const X509_REQ *, (___req), A0), \
      struct Library *, AMISSL_BASE_NAME, 4683, Amissl)
 
 #define RSA_set0_key(___r, ___n, ___e, ___d) \
@@ -25689,162 +25689,162 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const X509_OBJECT *, (___a), A0), \
      struct Library *, AMISSL_BASE_NAME, 4790, Amissl)
 
-#define X509_STORE_lock(___ctx) \
+#define X509_STORE_lock(___xs) \
       AROS_LC1(int, X509_STORE_lock, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4791, Amissl)
 
-#define X509_STORE_unlock(___ctx) \
+#define X509_STORE_unlock(___xs) \
       AROS_LC1(int, X509_STORE_unlock, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4792, Amissl)
 
-#define X509_STORE_get0_objects(___v) \
+#define X509_STORE_get0_objects(___xs) \
       AROS_LC1(STACK_OF(X509_OBJECT) *, X509_STORE_get0_objects, \
- AROS_LCA(const X509_STORE *, (___v), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4793, Amissl)
 
-#define X509_STORE_get0_param(___ctx) \
+#define X509_STORE_get0_param(___xs) \
       AROS_LC1(X509_VERIFY_PARAM *, X509_STORE_get0_param, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4794, Amissl)
 
-#define X509_STORE_set_verify(___ctx, ___verify) \
+#define X509_STORE_set_verify(___xs, ___verify) \
       AROS_LC2(void, X509_STORE_set_verify, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_verify_fn, (___verify), A1), \
      struct Library *, AMISSL_BASE_NAME, 4795, Amissl)
 
-#define X509_STORE_get_verify(___ctx) \
+#define X509_STORE_get_verify(___xs) \
       AROS_LC1(X509_STORE_CTX_verify_fn, X509_STORE_get_verify, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4796, Amissl)
 
-#define X509_STORE_get_verify_cb(___ctx) \
+#define X509_STORE_get_verify_cb(___xs) \
       AROS_LC1(X509_STORE_CTX_verify_cb, X509_STORE_get_verify_cb, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4797, Amissl)
 
-#define X509_STORE_set_get_issuer(___ctx, ___get_issuer) \
+#define X509_STORE_set_get_issuer(___xs, ___get_issuer) \
       AROS_LC2(void, X509_STORE_set_get_issuer, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_get_issuer_fn, (___get_issuer), A1), \
      struct Library *, AMISSL_BASE_NAME, 4798, Amissl)
 
-#define X509_STORE_get_get_issuer(___ctx) \
+#define X509_STORE_get_get_issuer(___xs) \
       AROS_LC1(X509_STORE_CTX_get_issuer_fn, X509_STORE_get_get_issuer, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4799, Amissl)
 
-#define X509_STORE_set_check_issued(___ctx, ___check_issued) \
+#define X509_STORE_set_check_issued(___xs, ___check_issued) \
       AROS_LC2(void, X509_STORE_set_check_issued, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_check_issued_fn, (___check_issued), A1), \
      struct Library *, AMISSL_BASE_NAME, 4800, Amissl)
 
-#define X509_STORE_get_check_issued(___ctx) \
+#define X509_STORE_get_check_issued(___xs) \
       AROS_LC1(X509_STORE_CTX_check_issued_fn, X509_STORE_get_check_issued, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4801, Amissl)
 
-#define X509_STORE_set_check_revocation(___ctx, ___check_revocation) \
+#define X509_STORE_set_check_revocation(___xs, ___check_revocation) \
       AROS_LC2(void, X509_STORE_set_check_revocation, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_check_revocation_fn, (___check_revocation), A1), \
      struct Library *, AMISSL_BASE_NAME, 4802, Amissl)
 
-#define X509_STORE_get_check_revocation(___ctx) \
+#define X509_STORE_get_check_revocation(___xs) \
       AROS_LC1(X509_STORE_CTX_check_revocation_fn, X509_STORE_get_check_revocation, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4803, Amissl)
 
-#define X509_STORE_set_get_crl(___ctx, ___get_crl) \
+#define X509_STORE_set_get_crl(___xs, ___get_crl) \
       AROS_LC2(void, X509_STORE_set_get_crl, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_get_crl_fn, (___get_crl), A1), \
      struct Library *, AMISSL_BASE_NAME, 4804, Amissl)
 
-#define X509_STORE_get_get_crl(___ctx) \
+#define X509_STORE_get_get_crl(___xs) \
       AROS_LC1(X509_STORE_CTX_get_crl_fn, X509_STORE_get_get_crl, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4805, Amissl)
 
-#define X509_STORE_set_check_crl(___ctx, ___check_crl) \
+#define X509_STORE_set_check_crl(___xs, ___check_crl) \
       AROS_LC2(void, X509_STORE_set_check_crl, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_check_crl_fn, (___check_crl), A1), \
      struct Library *, AMISSL_BASE_NAME, 4806, Amissl)
 
-#define X509_STORE_get_check_crl(___ctx) \
+#define X509_STORE_get_check_crl(___xs) \
       AROS_LC1(X509_STORE_CTX_check_crl_fn, X509_STORE_get_check_crl, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4807, Amissl)
 
-#define X509_STORE_set_cert_crl(___ctx, ___cert_crl) \
+#define X509_STORE_set_cert_crl(___xs, ___cert_crl) \
       AROS_LC2(void, X509_STORE_set_cert_crl, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_cert_crl_fn, (___cert_crl), A1), \
      struct Library *, AMISSL_BASE_NAME, 4808, Amissl)
 
-#define X509_STORE_get_cert_crl(___ctx) \
+#define X509_STORE_get_cert_crl(___xs) \
       AROS_LC1(X509_STORE_CTX_cert_crl_fn, X509_STORE_get_cert_crl, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4809, Amissl)
 
-#define X509_STORE_set_check_policy(___ctx, ___check_policy) \
+#define X509_STORE_set_check_policy(___xs, ___check_policy) \
       AROS_LC2(void, X509_STORE_set_check_policy, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_check_policy_fn, (___check_policy), A1), \
      struct Library *, AMISSL_BASE_NAME, 4810, Amissl)
 
-#define X509_STORE_get_check_policy(___ctx) \
+#define X509_STORE_get_check_policy(___xs) \
       AROS_LC1(X509_STORE_CTX_check_policy_fn, X509_STORE_get_check_policy, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4811, Amissl)
 
-#define X509_STORE_set_lookup_certs(___ctx, ___lookup_certs) \
+#define X509_STORE_set_lookup_certs(___xs, ___lookup_certs) \
       AROS_LC2(void, X509_STORE_set_lookup_certs, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_lookup_certs_fn, (___lookup_certs), A1), \
      struct Library *, AMISSL_BASE_NAME, 4812, Amissl)
 
-#define X509_STORE_get_lookup_certs(___ctx) \
+#define X509_STORE_get_lookup_certs(___xs) \
       AROS_LC1(X509_STORE_CTX_lookup_certs_fn, X509_STORE_get_lookup_certs, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4813, Amissl)
 
-#define X509_STORE_set_lookup_crls(___ctx, ___lookup_crls) \
+#define X509_STORE_set_lookup_crls(___xs, ___lookup_crls) \
       AROS_LC2(void, X509_STORE_set_lookup_crls, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_lookup_crls_fn, (___lookup_crls), A1), \
      struct Library *, AMISSL_BASE_NAME, 4814, Amissl)
 
-#define X509_STORE_get_lookup_crls(___ctx) \
+#define X509_STORE_get_lookup_crls(___xs) \
       AROS_LC1(X509_STORE_CTX_lookup_crls_fn, X509_STORE_get_lookup_crls, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4815, Amissl)
 
-#define X509_STORE_set_cleanup(___ctx, ___cleanup) \
+#define X509_STORE_set_cleanup(___xs, ___cleanup) \
       AROS_LC2(void, X509_STORE_set_cleanup, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(X509_STORE_CTX_cleanup_fn, (___cleanup), A1), \
      struct Library *, AMISSL_BASE_NAME, 4816, Amissl)
 
-#define X509_STORE_get_cleanup(___ctx) \
+#define X509_STORE_get_cleanup(___xs) \
       AROS_LC1(X509_STORE_CTX_cleanup_fn, X509_STORE_get_cleanup, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
      struct Library *, AMISSL_BASE_NAME, 4817, Amissl)
 
-#define X509_STORE_set_ex_data(___ctx, ___idx, ___data) \
+#define X509_STORE_set_ex_data(___xs, ___idx, ___data) \
       AROS_LC3(int, X509_STORE_set_ex_data, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(int, (___idx), D0), \
  AROS_LCA(void *, (___data), A1), \
      struct Library *, AMISSL_BASE_NAME, 4818, Amissl)
 
-#define X509_STORE_get_ex_data(___ctx, ___idx) \
+#define X509_STORE_get_ex_data(___xs, ___idx) \
       AROS_LC2(void *, X509_STORE_get_ex_data, \
- AROS_LCA(const X509_STORE *, (___ctx), A0), \
+ AROS_LCA(const X509_STORE *, (___xs), A0), \
  AROS_LCA(int, (___idx), D0), \
      struct Library *, AMISSL_BASE_NAME, 4819, Amissl)
 

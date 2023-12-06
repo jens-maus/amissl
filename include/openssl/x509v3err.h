@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -35,6 +35,8 @@
  */
 # define X509V3_R_BAD_IP_ADDRESS                          118
 # define X509V3_R_BAD_OBJECT                              119
+# define X509V3_R_BAD_OPTION                              170
+# define X509V3_R_BAD_VALUE                               171
 # define X509V3_R_BN_DEC2BN_ERROR                         100
 # define X509V3_R_BN_TO_ASN1_INTEGER_ERROR                101
 # define X509V3_R_DIRNAME_ERROR                           149
@@ -98,6 +100,7 @@
 # define X509V3_R_UNKNOWN_EXTENSION                       129
 # define X509V3_R_UNKNOWN_EXTENSION_NAME                  130
 # define X509V3_R_UNKNOWN_OPTION                          120
+# define X509V3_R_UNKNOWN_VALUE                           172
 # define X509V3_R_UNSUPPORTED_OPTION                      117
 # define X509V3_R_UNSUPPORTED_TYPE                        167
 # define X509V3_R_USER_TOO_LONG                           132

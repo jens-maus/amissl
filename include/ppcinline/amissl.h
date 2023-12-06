@@ -4317,12 +4317,12 @@ typedef ULONG _sfdc_vararg;
       LP2(0x1e84, int, PKCS7_add_signer , PKCS7 *, ___p7, a0, PKCS7_SIGNER_INFO *, ___p7i, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define PKCS7_add_certificate(___p7, ___x509) \
-      LP2(0x1e8a, int, PKCS7_add_certificate , PKCS7 *, ___p7, a0, X509 *, ___x509, a1,\
+#define PKCS7_add_certificate(___p7, ___cert) \
+      LP2(0x1e8a, int, PKCS7_add_certificate , PKCS7 *, ___p7, a0, X509 *, ___cert, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define PKCS7_add_crl(___p7, ___x509) \
-      LP2(0x1e90, int, PKCS7_add_crl , PKCS7 *, ___p7, a0, X509_CRL *, ___x509, a1,\
+#define PKCS7_add_crl(___p7, ___crl) \
+      LP2(0x1e90, int, PKCS7_add_crl , PKCS7 *, ___p7, a0, X509_CRL *, ___crl, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS7_content_new(___p7, ___nid) \
@@ -4333,8 +4333,8 @@ typedef ULONG _sfdc_vararg;
       LP5(0x1e9c, int, PKCS7_dataVerify , X509_STORE *, ___cert_store, a0, X509_STORE_CTX *, ___ctx, a1, BIO *, ___bio, a2, PKCS7 *, ___p7, a3, PKCS7_SIGNER_INFO *, ___si, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define PKCS7_signatureVerify(___bio, ___p7, ___si, ___x509) \
-      LP4(0x1ea2, int, PKCS7_signatureVerify , BIO *, ___bio, a0, PKCS7 *, ___p7, a1, PKCS7_SIGNER_INFO *, ___si, a2, X509 *, ___x509, a3,\
+#define PKCS7_signatureVerify(___bio, ___p7, ___si, ___signer) \
+      LP4(0x1ea2, int, PKCS7_signatureVerify , BIO *, ___bio, a0, PKCS7 *, ___p7, a1, PKCS7_SIGNER_INFO *, ___si, a2, X509 *, ___signer, a3,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS7_dataInit(___p7, ___bio) \
@@ -6493,8 +6493,8 @@ typedef ULONG _sfdc_vararg;
       LP2(0x2bf2, int, X509_REVOKED_set_revocationDate , X509_REVOKED *, ___r, a0, ASN1_TIME *, ___tm, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_check_private_key(___x509, ___pkey) \
-      LP2(0x2bf8, int, X509_check_private_key , const X509 *, ___x509, a0, const EVP_PKEY *, ___pkey, a1,\
+#define X509_check_private_key(___cert, ___pkey) \
+      LP2(0x2bf8, int, X509_check_private_key , const X509 *, ___cert, a0, const EVP_PKEY *, ___pkey, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_issuer_and_serial_cmp(___a, ___b) \
@@ -7049,20 +7049,20 @@ typedef ULONG _sfdc_vararg;
       LP0(0x2f46, X509_STORE *, X509_STORE_new ,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_free(___v) \
-      LP1NR(0x2f4c, X509_STORE_free , X509_STORE *, ___v, a0,\
+#define X509_STORE_free(___xs) \
+      LP1NR(0x2f4c, X509_STORE_free , X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_flags(___ctx, ___flags) \
-      LP2(0x2f52, int, X509_STORE_set_flags , X509_STORE *, ___ctx, a0, unsigned long, ___flags, d0,\
+#define X509_STORE_set_flags(___xs, ___flags) \
+      LP2(0x2f52, int, X509_STORE_set_flags , X509_STORE *, ___xs, a0, unsigned long, ___flags, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_purpose(___ctx, ___purpose) \
-      LP2(0x2f58, int, X509_STORE_set_purpose , X509_STORE *, ___ctx, a0, int, ___purpose, d0,\
+#define X509_STORE_set_purpose(___xs, ___purpose) \
+      LP2(0x2f58, int, X509_STORE_set_purpose , X509_STORE *, ___xs, a0, int, ___purpose, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_trust(___ctx, ___trust) \
-      LP2(0x2f5e, int, X509_STORE_set_trust , X509_STORE *, ___ctx, a0, int, ___trust, d0,\
+#define X509_STORE_set_trust(___xs, ___trust) \
+      LP2(0x2f5e, int, X509_STORE_set_trust , X509_STORE *, ___xs, a0, int, ___trust, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_CTX_new() \
@@ -7077,8 +7077,8 @@ typedef ULONG _sfdc_vararg;
       LP1NR(0x2f70, X509_STORE_CTX_free , X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_CTX_init(___ctx, ___store, ___x509, ___chain) \
-      LP4(0x2f76, int, X509_STORE_CTX_init , X509_STORE_CTX *, ___ctx, a0, X509_STORE *, ___store, a1, X509 *, ___x509, a2, STACK_OF(X509) *, ___chain, a3,\
+#define X509_STORE_CTX_init(___ctx, ___trust_store, ___target, ___untrusted) \
+      LP4(0x2f76, int, X509_STORE_CTX_init , X509_STORE_CTX *, ___ctx, a0, X509_STORE *, ___trust_store, a1, X509 *, ___target, a2, STACK_OF(X509) *, ___untrusted, a3,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_CTX_set0_trusted_stack(___ctx, ___sk) \
@@ -7089,8 +7089,8 @@ typedef ULONG _sfdc_vararg;
       LP1NR(0x2f82, X509_STORE_CTX_cleanup , X509_STORE_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_add_lookup(___v, ___m) \
-      LP2(0x2f88, X509_LOOKUP *, X509_STORE_add_lookup , X509_STORE *, ___v, a0, X509_LOOKUP_METHOD *, ___m, a1,\
+#define X509_STORE_add_lookup(___xs, ___m) \
+      LP2(0x2f88, X509_LOOKUP *, X509_STORE_add_lookup , X509_STORE *, ___xs, a0, X509_LOOKUP_METHOD *, ___m, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_LOOKUP_hash_dir() \
@@ -7101,12 +7101,12 @@ typedef ULONG _sfdc_vararg;
       LP0(0x2f94, X509_LOOKUP_METHOD *, X509_LOOKUP_file ,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_add_cert(___ctx, ___x) \
-      LP2(0x2f9a, int, X509_STORE_add_cert , X509_STORE *, ___ctx, a0, X509 *, ___x, a1,\
+#define X509_STORE_add_cert(___xs, ___x) \
+      LP2(0x2f9a, int, X509_STORE_add_cert , X509_STORE *, ___xs, a0, X509 *, ___x, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_add_crl(___ctx, ___x) \
-      LP2(0x2fa0, int, X509_STORE_add_crl , X509_STORE *, ___ctx, a0, X509_CRL *, ___x, a1,\
+#define X509_STORE_add_crl(___xs, ___x) \
+      LP2(0x2fa0, int, X509_STORE_add_crl , X509_STORE *, ___xs, a0, X509_CRL *, ___x, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_CTX_get_by_subject(___vs, ___type, ___name, ___ret) \
@@ -7161,12 +7161,12 @@ typedef ULONG _sfdc_vararg;
       LP1(0x2fee, int, X509_LOOKUP_shutdown , X509_LOOKUP *, ___ctx, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_load_locations(___ctx, ___file, ___dir) \
-      LP3(0x2ff4, int, X509_STORE_load_locations , X509_STORE *, ___ctx, a0, const char *, ___file, a1, const char *, ___dir, a2,\
+#define X509_STORE_load_locations(___xs, ___file, ___dir) \
+      LP3(0x2ff4, int, X509_STORE_load_locations , X509_STORE *, ___xs, a0, const char *, ___file, a1, const char *, ___dir, a2,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_default_paths(___ctx) \
-      LP1(0x2ffa, int, X509_STORE_set_default_paths , X509_STORE *, ___ctx, a0,\
+#define X509_STORE_set_default_paths(___xs) \
+      LP1(0x2ffa, int, X509_STORE_set_default_paths , X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OBSOLETE_X509_STORE_CTX_get_ex_new_index(___argl, ___argp, ___new_func, ___dup_func, ___free_func) \
@@ -9133,8 +9133,8 @@ typedef ULONG _sfdc_vararg;
       LP1NR(0x3ce4, X509_VERIFY_PARAM_free , X509_VERIFY_PARAM *, ___param, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set1_param(___ctx, ___pm) \
-      LP2(0x3cea, int, X509_STORE_set1_param , X509_STORE *, ___ctx, a0, const X509_VERIFY_PARAM *, ___pm, a1,\
+#define X509_STORE_set1_param(___xs, ___pm) \
+      LP2(0x3cea, int, X509_STORE_set1_param , X509_STORE *, ___xs, a0, const X509_VERIFY_PARAM *, ___pm, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define ASN1_generate_nconf(___str, ___nconf) \
@@ -9173,8 +9173,8 @@ typedef ULONG _sfdc_vararg;
       LP1(0x3d20, int, EVP_CIPHER_get_iv_length , const EVP_CIPHER *, ___cipher, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_REQ_check_private_key(___x509, ___pkey) \
-      LP2(0x3d26, int, X509_REQ_check_private_key , X509_REQ *, ___x509, a0, EVP_PKEY *, ___pkey, a1,\
+#define X509_REQ_check_private_key(___req, ___pkey) \
+      LP2(0x3d26, int, X509_REQ_check_private_key , const X509_REQ *, ___req, a0, EVP_PKEY *, ___pkey, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PEM_read_bio_EC_PUBKEY(___bp, ___x, ___cb, ___u) \
@@ -12773,8 +12773,8 @@ typedef ULONG _sfdc_vararg;
       LP1NR(0x5778, EVP_PKEY_CTX_free , EVP_PKEY_CTX *, ___ctx, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_CTX_get1_certs(___st, ___nm) \
-      LP2(0x5784, STACK_OF(X509) *, X509_STORE_CTX_get1_certs , X509_STORE_CTX *, ___st, a0, const X509_NAME *, ___nm, a1,\
+#define X509_STORE_CTX_get1_certs(___xs, ___nm) \
+      LP2(0x5784, STACK_OF(X509) *, X509_STORE_CTX_get1_certs , X509_STORE_CTX *, ___xs, a0, const X509_NAME *, ___nm, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define EVP_PKEY_CTX_get_operation(___ctx) \
@@ -13165,8 +13165,8 @@ typedef ULONG _sfdc_vararg;
       LP2(0x59e2, int, OBSOLETE_OCSP_REQ_CTX_set1_req , OSSL_HTTP_REQ_CTX *, ___rctx, a0, OCSP_REQUEST *, ___req, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_verify_cb(___ctx, ___verify_cb) \
-      LP2NR(0x59e8, X509_STORE_set_verify_cb , X509_STORE *, ___ctx, a0, X509_STORE_CTX_verify_cb, ___verify_cb, a1,\
+#define X509_STORE_set_verify_cb(___xs, ___verify_cb) \
+      LP2NR(0x59e8, X509_STORE_set_verify_cb , X509_STORE *, ___xs, a0, X509_STORE_CTX_verify_cb, ___verify_cb, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_CTX_get0_current_crl(___ctx) \
@@ -16169,8 +16169,8 @@ typedef ULONG _sfdc_vararg;
       LP5(0x6c18, int, PKCS8_pkey_add1_attr_by_NID , PKCS8_PRIV_KEY_INFO *, ___p8, a0, int, ___nid, d0, int, ___type, d1, const unsigned char *, ___bytes, a1, int, ___len, d2,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_up_ref(___v) \
-      LP1(0x6c1e, int, X509_STORE_up_ref , X509_STORE *, ___v, a0,\
+#define X509_STORE_up_ref(___xs) \
+      LP1(0x6c1e, int, X509_STORE_up_ref , X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define SSL_enable_ct(___s, ___validation_mode) \
@@ -16273,8 +16273,8 @@ typedef ULONG _sfdc_vararg;
       LP2FP(0x6cb4, int, BIO_meth_set_destroy , BIO_METHOD *, ___biom, a0, __fpt, ___destroy, a1,\
       , AMISSL_BASE_NAME, int (*__fpt)(BIO *), 0, 0, 0, 0, 0, 0)
 
-#define BIO_meth_set_gets(___biom, ___func) \
-      LP2FP(0x6cba, int, BIO_meth_set_gets , BIO_METHOD *, ___biom, a0, __fpt, ___func, a1,\
+#define BIO_meth_set_gets(___biom, ___ossl_gets) \
+      LP2FP(0x6cba, int, BIO_meth_set_gets , BIO_METHOD *, ___biom, a0, __fpt, ___ossl_gets, a1,\
       , AMISSL_BASE_NAME, int (*__fpt)(BIO *,char *,int), 0, 0, 0, 0, 0, 0)
 
 #define BIO_meth_get_callback_ctrl(___biom) \
@@ -16450,7 +16450,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_REQ_get0_pubkey(___req) \
-      LP1(0x6dc2, EVP_PKEY *, X509_REQ_get0_pubkey , X509_REQ *, ___req, a0,\
+      LP1(0x6dc2, EVP_PKEY *, X509_REQ_get0_pubkey , const X509_REQ *, ___req, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define RSA_set0_key(___r, ___n, ___e, ___d) \
@@ -16861,120 +16861,120 @@ typedef ULONG _sfdc_vararg;
       LP1(0x7044, X509_CRL *, X509_OBJECT_get0_X509_CRL , const X509_OBJECT *, ___a, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_lock(___ctx) \
-      LP1(0x704a, int, X509_STORE_lock , X509_STORE *, ___ctx, a0,\
+#define X509_STORE_lock(___xs) \
+      LP1(0x704a, int, X509_STORE_lock , X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_unlock(___ctx) \
-      LP1(0x7050, int, X509_STORE_unlock , X509_STORE *, ___ctx, a0,\
+#define X509_STORE_unlock(___xs) \
+      LP1(0x7050, int, X509_STORE_unlock , X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get0_objects(___v) \
-      LP1(0x7056, STACK_OF(X509_OBJECT) *, X509_STORE_get0_objects , const X509_STORE *, ___v, a0,\
+#define X509_STORE_get0_objects(___xs) \
+      LP1(0x7056, STACK_OF(X509_OBJECT) *, X509_STORE_get0_objects , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get0_param(___ctx) \
-      LP1(0x705c, X509_VERIFY_PARAM *, X509_STORE_get0_param , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get0_param(___xs) \
+      LP1(0x705c, X509_VERIFY_PARAM *, X509_STORE_get0_param , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_verify(___ctx, ___verify) \
-      LP2NR(0x7062, X509_STORE_set_verify , X509_STORE *, ___ctx, a0, X509_STORE_CTX_verify_fn, ___verify, a1,\
+#define X509_STORE_set_verify(___xs, ___verify) \
+      LP2NR(0x7062, X509_STORE_set_verify , X509_STORE *, ___xs, a0, X509_STORE_CTX_verify_fn, ___verify, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_verify(___ctx) \
-      LP1(0x7068, X509_STORE_CTX_verify_fn, X509_STORE_get_verify , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_verify(___xs) \
+      LP1(0x7068, X509_STORE_CTX_verify_fn, X509_STORE_get_verify , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_verify_cb(___ctx) \
-      LP1(0x706e, X509_STORE_CTX_verify_cb, X509_STORE_get_verify_cb , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_verify_cb(___xs) \
+      LP1(0x706e, X509_STORE_CTX_verify_cb, X509_STORE_get_verify_cb , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_get_issuer(___ctx, ___get_issuer) \
-      LP2NR(0x7074, X509_STORE_set_get_issuer , X509_STORE *, ___ctx, a0, X509_STORE_CTX_get_issuer_fn, ___get_issuer, a1,\
+#define X509_STORE_set_get_issuer(___xs, ___get_issuer) \
+      LP2NR(0x7074, X509_STORE_set_get_issuer , X509_STORE *, ___xs, a0, X509_STORE_CTX_get_issuer_fn, ___get_issuer, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_get_issuer(___ctx) \
-      LP1(0x707a, X509_STORE_CTX_get_issuer_fn, X509_STORE_get_get_issuer , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_get_issuer(___xs) \
+      LP1(0x707a, X509_STORE_CTX_get_issuer_fn, X509_STORE_get_get_issuer , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_check_issued(___ctx, ___check_issued) \
-      LP2NR(0x7080, X509_STORE_set_check_issued , X509_STORE *, ___ctx, a0, X509_STORE_CTX_check_issued_fn, ___check_issued, a1,\
+#define X509_STORE_set_check_issued(___xs, ___check_issued) \
+      LP2NR(0x7080, X509_STORE_set_check_issued , X509_STORE *, ___xs, a0, X509_STORE_CTX_check_issued_fn, ___check_issued, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_check_issued(___ctx) \
-      LP1(0x7086, X509_STORE_CTX_check_issued_fn, X509_STORE_get_check_issued , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_check_issued(___xs) \
+      LP1(0x7086, X509_STORE_CTX_check_issued_fn, X509_STORE_get_check_issued , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_check_revocation(___ctx, ___check_revocation) \
-      LP2NR(0x708c, X509_STORE_set_check_revocation , X509_STORE *, ___ctx, a0, X509_STORE_CTX_check_revocation_fn, ___check_revocation, a1,\
+#define X509_STORE_set_check_revocation(___xs, ___check_revocation) \
+      LP2NR(0x708c, X509_STORE_set_check_revocation , X509_STORE *, ___xs, a0, X509_STORE_CTX_check_revocation_fn, ___check_revocation, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_check_revocation(___ctx) \
-      LP1(0x7092, X509_STORE_CTX_check_revocation_fn, X509_STORE_get_check_revocation , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_check_revocation(___xs) \
+      LP1(0x7092, X509_STORE_CTX_check_revocation_fn, X509_STORE_get_check_revocation , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_get_crl(___ctx, ___get_crl) \
-      LP2NR(0x7098, X509_STORE_set_get_crl , X509_STORE *, ___ctx, a0, X509_STORE_CTX_get_crl_fn, ___get_crl, a1,\
+#define X509_STORE_set_get_crl(___xs, ___get_crl) \
+      LP2NR(0x7098, X509_STORE_set_get_crl , X509_STORE *, ___xs, a0, X509_STORE_CTX_get_crl_fn, ___get_crl, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_get_crl(___ctx) \
-      LP1(0x709e, X509_STORE_CTX_get_crl_fn, X509_STORE_get_get_crl , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_get_crl(___xs) \
+      LP1(0x709e, X509_STORE_CTX_get_crl_fn, X509_STORE_get_get_crl , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_check_crl(___ctx, ___check_crl) \
-      LP2NR(0x70a4, X509_STORE_set_check_crl , X509_STORE *, ___ctx, a0, X509_STORE_CTX_check_crl_fn, ___check_crl, a1,\
+#define X509_STORE_set_check_crl(___xs, ___check_crl) \
+      LP2NR(0x70a4, X509_STORE_set_check_crl , X509_STORE *, ___xs, a0, X509_STORE_CTX_check_crl_fn, ___check_crl, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_check_crl(___ctx) \
-      LP1(0x70aa, X509_STORE_CTX_check_crl_fn, X509_STORE_get_check_crl , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_check_crl(___xs) \
+      LP1(0x70aa, X509_STORE_CTX_check_crl_fn, X509_STORE_get_check_crl , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_cert_crl(___ctx, ___cert_crl) \
-      LP2NR(0x70b0, X509_STORE_set_cert_crl , X509_STORE *, ___ctx, a0, X509_STORE_CTX_cert_crl_fn, ___cert_crl, a1,\
+#define X509_STORE_set_cert_crl(___xs, ___cert_crl) \
+      LP2NR(0x70b0, X509_STORE_set_cert_crl , X509_STORE *, ___xs, a0, X509_STORE_CTX_cert_crl_fn, ___cert_crl, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_cert_crl(___ctx) \
-      LP1(0x70b6, X509_STORE_CTX_cert_crl_fn, X509_STORE_get_cert_crl , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_cert_crl(___xs) \
+      LP1(0x70b6, X509_STORE_CTX_cert_crl_fn, X509_STORE_get_cert_crl , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_check_policy(___ctx, ___check_policy) \
-      LP2NR(0x70bc, X509_STORE_set_check_policy , X509_STORE *, ___ctx, a0, X509_STORE_CTX_check_policy_fn, ___check_policy, a1,\
+#define X509_STORE_set_check_policy(___xs, ___check_policy) \
+      LP2NR(0x70bc, X509_STORE_set_check_policy , X509_STORE *, ___xs, a0, X509_STORE_CTX_check_policy_fn, ___check_policy, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_check_policy(___ctx) \
-      LP1(0x70c2, X509_STORE_CTX_check_policy_fn, X509_STORE_get_check_policy , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_check_policy(___xs) \
+      LP1(0x70c2, X509_STORE_CTX_check_policy_fn, X509_STORE_get_check_policy , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_lookup_certs(___ctx, ___lookup_certs) \
-      LP2NR(0x70c8, X509_STORE_set_lookup_certs , X509_STORE *, ___ctx, a0, X509_STORE_CTX_lookup_certs_fn, ___lookup_certs, a1,\
+#define X509_STORE_set_lookup_certs(___xs, ___lookup_certs) \
+      LP2NR(0x70c8, X509_STORE_set_lookup_certs , X509_STORE *, ___xs, a0, X509_STORE_CTX_lookup_certs_fn, ___lookup_certs, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_lookup_certs(___ctx) \
-      LP1(0x70ce, X509_STORE_CTX_lookup_certs_fn, X509_STORE_get_lookup_certs , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_lookup_certs(___xs) \
+      LP1(0x70ce, X509_STORE_CTX_lookup_certs_fn, X509_STORE_get_lookup_certs , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_lookup_crls(___ctx, ___lookup_crls) \
-      LP2NR(0x70d4, X509_STORE_set_lookup_crls , X509_STORE *, ___ctx, a0, X509_STORE_CTX_lookup_crls_fn, ___lookup_crls, a1,\
+#define X509_STORE_set_lookup_crls(___xs, ___lookup_crls) \
+      LP2NR(0x70d4, X509_STORE_set_lookup_crls , X509_STORE *, ___xs, a0, X509_STORE_CTX_lookup_crls_fn, ___lookup_crls, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_lookup_crls(___ctx) \
-      LP1(0x70da, X509_STORE_CTX_lookup_crls_fn, X509_STORE_get_lookup_crls , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_lookup_crls(___xs) \
+      LP1(0x70da, X509_STORE_CTX_lookup_crls_fn, X509_STORE_get_lookup_crls , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_cleanup(___ctx, ___cleanup) \
-      LP2NR(0x70e0, X509_STORE_set_cleanup , X509_STORE *, ___ctx, a0, X509_STORE_CTX_cleanup_fn, ___cleanup, a1,\
+#define X509_STORE_set_cleanup(___xs, ___cleanup) \
+      LP2NR(0x70e0, X509_STORE_set_cleanup , X509_STORE *, ___xs, a0, X509_STORE_CTX_cleanup_fn, ___cleanup, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_cleanup(___ctx) \
-      LP1(0x70e6, X509_STORE_CTX_cleanup_fn, X509_STORE_get_cleanup , const X509_STORE *, ___ctx, a0,\
+#define X509_STORE_get_cleanup(___xs) \
+      LP1(0x70e6, X509_STORE_CTX_cleanup_fn, X509_STORE_get_cleanup , const X509_STORE *, ___xs, a0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_set_ex_data(___ctx, ___idx, ___data) \
-      LP3(0x70ec, int, X509_STORE_set_ex_data , X509_STORE *, ___ctx, a0, int, ___idx, d0, void *, ___data, a1,\
+#define X509_STORE_set_ex_data(___xs, ___idx, ___data) \
+      LP3(0x70ec, int, X509_STORE_set_ex_data , X509_STORE *, ___xs, a0, int, ___idx, d0, void *, ___data, a1,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
-#define X509_STORE_get_ex_data(___ctx, ___idx) \
-      LP2(0x70f2, void *, X509_STORE_get_ex_data , const X509_STORE *, ___ctx, a0, int, ___idx, d0,\
+#define X509_STORE_get_ex_data(___xs, ___idx) \
+      LP2(0x70f2, void *, X509_STORE_get_ex_data , const X509_STORE *, ___xs, a0, int, ___idx, d0,\
       , AMISSL_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_CTX_get_get_issuer(___ctx) \

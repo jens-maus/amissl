@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -210,6 +210,46 @@ void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t key
 
 // ---
 
+PKCS12 *PKCS12_create_ex2_amiga_1(const char *pass, const char *name, EVP_PKEY *pkey,
+                                  X509 *cert, STACK_OF(X509) *ca, int nid_key, int nid_cert,
+                                  void *moreargs)
+{
+  PKCS12 *result;
+  int *a = (int *)moreargs;
+  if (a != NULL)
+  {
+    result = PKCS12_create_ex2(pass, name, pkey, cert, ca, nid_key, nid_cert,
+			       (int)a[0], (int)a[1], (int)a[2], (OSSL_LIB_CTX *)a[3],
+			       (const char *)a[4], (PKCS12_create_cb *)a[5], (void *)a[6] );
+    free(a);
+  }
+  else
+  {
+    result = NULL;
+  }
+  return result;
+}
+
+void *PKCS12_create_ex2_amiga_2(int iter, int mac_iter, int keytype,
+                                OSSL_LIB_CTX *ctx, const char *propq,
+                                PKCS12_create_cb *cb, void *cbarg)
+{
+  int *moreargs = malloc(7*sizeof(int));
+  if (moreargs != NULL)
+  {
+    moreargs[0] = (int)iter;
+    moreargs[1] = (int)mac_iter;
+    moreargs[2] = (int)keytype;
+    moreargs[3] = (int)ctx;
+    moreargs[4] = (int)propq;
+    moreargs[5] = (int)cb;
+    moreargs[6] = (int)cbarg;
+  }
+  return (void *)moreargs;
+}
+
+// ---
+
 #define IMPLEMENT_OSSL_PARAM_construct_LP0(name) \
   void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result) \
   { *result = OSSL_PARAM_construct_##name(); }
@@ -239,3 +279,45 @@ IMPLEMENT_OSSL_PARAM_construct_LP2(utf8_ptr, char *)
 IMPLEMENT_OSSL_PARAM_construct_LP2(octet_string, void)
 IMPLEMENT_OSSL_PARAM_construct_LP2(octet_ptr, void *)
 IMPLEMENT_OSSL_PARAM_construct_LP0(end)
+
+// ---
+
+OSSL_HPKE_CTX *OSSL_HPKE_CTX_new_amiga(int mode, OSSL_HPKE_SUITE *suite, int role,
+                                       OSSL_LIB_CTX *libctx, const char *propq)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_CTX_new(mode, __suite, role, libctx, propq);
+}
+
+int OSSL_HPKE_keygen_amiga(OSSL_HPKE_SUITE *suite,
+                           unsigned char *pub, size_t *publen, EVP_PKEY **priv,
+                           const unsigned char *ikm, size_t ikmlen,
+                           OSSL_LIB_CTX *libctx, const char *propq)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_keygen(__suite, pub, publen, priv, ikm, ikmlen, libctx, propq);
+}
+
+int OSSL_HPKE_suite_check_amiga(OSSL_HPKE_SUITE *suite)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_suite_check(__suite);
+}
+
+size_t OSSL_HPKE_get_ciphertext_size_amiga(OSSL_HPKE_SUITE *suite, size_t clearlen)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_get_ciphertext_size(__suite, clearlen);
+}
+
+size_t OSSL_HPKE_get_public_encap_size_amiga(OSSL_HPKE_SUITE *suite)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_get_public_encap_size(__suite);
+}
+
+size_t OSSL_HPKE_get_recommended_ikmelen_amiga(OSSL_HPKE_SUITE *suite)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_HPKE_get_recommended_ikmelen(__suite);
+}

@@ -10778,24 +10778,24 @@ int LIBSTUB_PKCS7_add_signer(void)
   return LIB_PKCS7_add_signer(_base, ___p7, ___p7i);
 }
 
-int LIB_PKCS7_add_certificate(struct Library * _base, PKCS7 * ___p7, X509 * ___x509);
+int LIB_PKCS7_add_certificate(struct Library * _base, PKCS7 * ___p7, X509 * ___cert);
 
 int LIBSTUB_PKCS7_add_certificate(void)
 {
   PKCS7 * ___p7 = (PKCS7 *)REG_A0;
-  X509 * ___x509 = (X509 *)REG_A1;
+  X509 * ___cert = (X509 *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_PKCS7_add_certificate(_base, ___p7, ___x509);
+  return LIB_PKCS7_add_certificate(_base, ___p7, ___cert);
 }
 
-int LIB_PKCS7_add_crl(struct Library * _base, PKCS7 * ___p7, X509_CRL * ___x509);
+int LIB_PKCS7_add_crl(struct Library * _base, PKCS7 * ___p7, X509_CRL * ___crl);
 
 int LIBSTUB_PKCS7_add_crl(void)
 {
   PKCS7 * ___p7 = (PKCS7 *)REG_A0;
-  X509_CRL * ___x509 = (X509_CRL *)REG_A1;
+  X509_CRL * ___crl = (X509_CRL *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_PKCS7_add_crl(_base, ___p7, ___x509);
+  return LIB_PKCS7_add_crl(_base, ___p7, ___crl);
 }
 
 int LIB_PKCS7_content_new(struct Library * _base, PKCS7 * ___p7, int ___nid);
@@ -10821,16 +10821,16 @@ int LIBSTUB_PKCS7_dataVerify(void)
   return LIB_PKCS7_dataVerify(_base, ___cert_store, ___ctx, ___bio, ___p7, ___si);
 }
 
-int LIB_PKCS7_signatureVerify(struct Library * _base, BIO * ___bio, PKCS7 * ___p7, PKCS7_SIGNER_INFO * ___si, X509 * ___x509);
+int LIB_PKCS7_signatureVerify(struct Library * _base, BIO * ___bio, PKCS7 * ___p7, PKCS7_SIGNER_INFO * ___si, X509 * ___signer);
 
 int LIBSTUB_PKCS7_signatureVerify(void)
 {
   BIO * ___bio = (BIO *)REG_A0;
   PKCS7 * ___p7 = (PKCS7 *)REG_A1;
   PKCS7_SIGNER_INFO * ___si = (PKCS7_SIGNER_INFO *)REG_A2;
-  X509 * ___x509 = (X509 *)REG_A3;
+  X509 * ___signer = (X509 *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_PKCS7_signatureVerify(_base, ___bio, ___p7, ___si, ___x509);
+  return LIB_PKCS7_signatureVerify(_base, ___bio, ___p7, ___si, ___signer);
 }
 
 BIO * LIB_PKCS7_dataInit(struct Library * _base, PKCS7 * ___p7, BIO * ___bio);
@@ -16136,14 +16136,14 @@ int LIBSTUB_X509_REVOKED_set_revocationDate(void)
   return LIB_X509_REVOKED_set_revocationDate(_base, ___r, ___tm);
 }
 
-int LIB_X509_check_private_key(struct Library * _base, const X509 * ___x509, const EVP_PKEY * ___pkey);
+int LIB_X509_check_private_key(struct Library * _base, const X509 * ___cert, const EVP_PKEY * ___pkey);
 
 int LIBSTUB_X509_check_private_key(void)
 {
-  const X509 * ___x509 = (const X509 *)REG_A0;
+  const X509 * ___cert = (const X509 *)REG_A0;
   const EVP_PKEY * ___pkey = (const EVP_PKEY *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_check_private_key(_base, ___x509, ___pkey);
+  return LIB_X509_check_private_key(_base, ___cert, ___pkey);
 }
 
 int LIB_X509_issuer_and_serial_cmp(struct Library * _base, const X509 * ___a, const X509 * ___b);
@@ -17588,43 +17588,43 @@ X509_STORE * LIBSTUB_X509_STORE_new(void)
   return LIB_X509_STORE_new(_base);
 }
 
-void LIB_X509_STORE_free(struct Library * _base, X509_STORE * ___v);
+void LIB_X509_STORE_free(struct Library * _base, X509_STORE * ___xs);
 
 void LIBSTUB_X509_STORE_free(void)
 {
-  X509_STORE * ___v = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_free(_base, ___v);
+  return LIB_X509_STORE_free(_base, ___xs);
 }
 
-int LIB_X509_STORE_set_flags(struct Library * _base, X509_STORE * ___ctx, unsigned long ___flags);
+int LIB_X509_STORE_set_flags(struct Library * _base, X509_STORE * ___xs, unsigned long ___flags);
 
 int LIBSTUB_X509_STORE_set_flags(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   unsigned long ___flags = (unsigned long)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_flags(_base, ___ctx, ___flags);
+  return LIB_X509_STORE_set_flags(_base, ___xs, ___flags);
 }
 
-int LIB_X509_STORE_set_purpose(struct Library * _base, X509_STORE * ___ctx, int ___purpose);
+int LIB_X509_STORE_set_purpose(struct Library * _base, X509_STORE * ___xs, int ___purpose);
 
 int LIBSTUB_X509_STORE_set_purpose(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   int ___purpose = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_purpose(_base, ___ctx, ___purpose);
+  return LIB_X509_STORE_set_purpose(_base, ___xs, ___purpose);
 }
 
-int LIB_X509_STORE_set_trust(struct Library * _base, X509_STORE * ___ctx, int ___trust);
+int LIB_X509_STORE_set_trust(struct Library * _base, X509_STORE * ___xs, int ___trust);
 
 int LIBSTUB_X509_STORE_set_trust(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   int ___trust = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_trust(_base, ___ctx, ___trust);
+  return LIB_X509_STORE_set_trust(_base, ___xs, ___trust);
 }
 
 X509_STORE_CTX * LIB_X509_STORE_CTX_new(struct Library * _base);
@@ -17655,16 +17655,16 @@ void LIBSTUB_X509_STORE_CTX_free(void)
   return LIB_X509_STORE_CTX_free(_base, ___ctx);
 }
 
-int LIB_X509_STORE_CTX_init(struct Library * _base, X509_STORE_CTX * ___ctx, X509_STORE * ___store, X509 * ___x509, STACK_OF(X509) * ___chain);
+int LIB_X509_STORE_CTX_init(struct Library * _base, X509_STORE_CTX * ___ctx, X509_STORE * ___trust_store, X509 * ___target, STACK_OF(X509) * ___untrusted);
 
 int LIBSTUB_X509_STORE_CTX_init(void)
 {
   X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
-  X509_STORE * ___store = (X509_STORE *)REG_A1;
-  X509 * ___x509 = (X509 *)REG_A2;
-  STACK_OF(X509) * ___chain = (STACK_OF(X509) *)REG_A3;
+  X509_STORE * ___trust_store = (X509_STORE *)REG_A1;
+  X509 * ___target = (X509 *)REG_A2;
+  STACK_OF(X509) * ___untrusted = (STACK_OF(X509) *)REG_A3;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_CTX_init(_base, ___ctx, ___store, ___x509, ___chain);
+  return LIB_X509_STORE_CTX_init(_base, ___ctx, ___trust_store, ___target, ___untrusted);
 }
 
 void LIB_X509_STORE_CTX_set0_trusted_stack(struct Library * _base, X509_STORE_CTX * ___ctx, STACK_OF(X509) * ___sk);
@@ -17686,14 +17686,14 @@ void LIBSTUB_X509_STORE_CTX_cleanup(void)
   return LIB_X509_STORE_CTX_cleanup(_base, ___ctx);
 }
 
-X509_LOOKUP * LIB_X509_STORE_add_lookup(struct Library * _base, X509_STORE * ___v, X509_LOOKUP_METHOD * ___m);
+X509_LOOKUP * LIB_X509_STORE_add_lookup(struct Library * _base, X509_STORE * ___xs, X509_LOOKUP_METHOD * ___m);
 
 X509_LOOKUP * LIBSTUB_X509_STORE_add_lookup(void)
 {
-  X509_STORE * ___v = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_LOOKUP_METHOD * ___m = (X509_LOOKUP_METHOD *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_add_lookup(_base, ___v, ___m);
+  return LIB_X509_STORE_add_lookup(_base, ___xs, ___m);
 }
 
 X509_LOOKUP_METHOD * LIB_X509_LOOKUP_hash_dir(struct Library * _base);
@@ -17712,24 +17712,24 @@ X509_LOOKUP_METHOD * LIBSTUB_X509_LOOKUP_file(void)
   return LIB_X509_LOOKUP_file(_base);
 }
 
-int LIB_X509_STORE_add_cert(struct Library * _base, X509_STORE * ___ctx, X509 * ___x);
+int LIB_X509_STORE_add_cert(struct Library * _base, X509_STORE * ___xs, X509 * ___x);
 
 int LIBSTUB_X509_STORE_add_cert(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509 * ___x = (X509 *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_add_cert(_base, ___ctx, ___x);
+  return LIB_X509_STORE_add_cert(_base, ___xs, ___x);
 }
 
-int LIB_X509_STORE_add_crl(struct Library * _base, X509_STORE * ___ctx, X509_CRL * ___x);
+int LIB_X509_STORE_add_crl(struct Library * _base, X509_STORE * ___xs, X509_CRL * ___x);
 
 int LIBSTUB_X509_STORE_add_crl(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_CRL * ___x = (X509_CRL *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_add_crl(_base, ___ctx, ___x);
+  return LIB_X509_STORE_add_crl(_base, ___xs, ___x);
 }
 
 int LIB_X509_STORE_CTX_get_by_subject(struct Library * _base, const X509_STORE_CTX * ___vs, X509_LOOKUP_TYPE ___type, const X509_NAME * ___name, X509_OBJECT * ___ret);
@@ -17877,24 +17877,24 @@ int LIBSTUB_X509_LOOKUP_shutdown(void)
   return LIB_X509_LOOKUP_shutdown(_base, ___ctx);
 }
 
-int LIB_X509_STORE_load_locations(struct Library * _base, X509_STORE * ___ctx, const char * ___file, const char * ___dir);
+int LIB_X509_STORE_load_locations(struct Library * _base, X509_STORE * ___xs, const char * ___file, const char * ___dir);
 
 int LIBSTUB_X509_STORE_load_locations(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   const char * ___file = (const char *)REG_A1;
   const char * ___dir = (const char *)REG_A2;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_load_locations(_base, ___ctx, ___file, ___dir);
+  return LIB_X509_STORE_load_locations(_base, ___xs, ___file, ___dir);
 }
 
-int LIB_X509_STORE_set_default_paths(struct Library * _base, X509_STORE * ___ctx);
+int LIB_X509_STORE_set_default_paths(struct Library * _base, X509_STORE * ___xs);
 
 int LIBSTUB_X509_STORE_set_default_paths(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_default_paths(_base, ___ctx);
+  return LIB_X509_STORE_set_default_paths(_base, ___xs);
 }
 
 int LIB_OBSOLETE_X509_STORE_CTX_get_ex_new_index(struct Library * _base, long ___argl, void * ___argp, CRYPTO_EX_new * ___new_func, CRYPTO_EX_dup * ___dup_func, CRYPTO_EX_free * ___free_func);
@@ -23034,14 +23034,14 @@ void LIBSTUB_X509_VERIFY_PARAM_free(void)
   return LIB_X509_VERIFY_PARAM_free(_base, ___param);
 }
 
-int LIB_X509_STORE_set1_param(struct Library * _base, X509_STORE * ___ctx, const X509_VERIFY_PARAM * ___pm);
+int LIB_X509_STORE_set1_param(struct Library * _base, X509_STORE * ___xs, const X509_VERIFY_PARAM * ___pm);
 
 int LIBSTUB_X509_STORE_set1_param(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   const X509_VERIFY_PARAM * ___pm = (const X509_VERIFY_PARAM *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set1_param(_base, ___ctx, ___pm);
+  return LIB_X509_STORE_set1_param(_base, ___xs, ___pm);
 }
 
 ASN1_TYPE * LIB_ASN1_generate_nconf(struct Library * _base, const char * ___str, CONF * ___nconf);
@@ -23134,14 +23134,14 @@ int LIBSTUB_EVP_CIPHER_get_iv_length(void)
   return LIB_EVP_CIPHER_get_iv_length(_base, ___cipher);
 }
 
-int LIB_X509_REQ_check_private_key(struct Library * _base, X509_REQ * ___x509, EVP_PKEY * ___pkey);
+int LIB_X509_REQ_check_private_key(struct Library * _base, const X509_REQ * ___req, EVP_PKEY * ___pkey);
 
 int LIBSTUB_X509_REQ_check_private_key(void)
 {
-  X509_REQ * ___x509 = (X509_REQ *)REG_A0;
+  const X509_REQ * ___req = (const X509_REQ *)REG_A0;
   EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_REQ_check_private_key(_base, ___x509, ___pkey);
+  return LIB_X509_REQ_check_private_key(_base, ___req, ___pkey);
 }
 
 EC_KEY * LIB_PEM_read_bio_EC_PUBKEY(struct Library * _base, BIO * ___bp, EC_KEY ** ___x, pem_password_cb * ___cb, void * ___u);
@@ -32292,14 +32292,14 @@ void LIBSTUB_EVP_PKEY_CTX_free(void)
   return LIB_EVP_PKEY_CTX_free(_base, ___ctx);
 }
 
-STACK_OF(X509) * LIB_X509_STORE_CTX_get1_certs(struct Library * _base, X509_STORE_CTX * ___st, const X509_NAME * ___nm);
+STACK_OF(X509) * LIB_X509_STORE_CTX_get1_certs(struct Library * _base, X509_STORE_CTX * ___xs, const X509_NAME * ___nm);
 
 STACK_OF(X509) * LIBSTUB_X509_STORE_CTX_get1_certs(void)
 {
-  X509_STORE_CTX * ___st = (X509_STORE_CTX *)REG_A0;
+  X509_STORE_CTX * ___xs = (X509_STORE_CTX *)REG_A0;
   const X509_NAME * ___nm = (const X509_NAME *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_CTX_get1_certs(_base, ___st, ___nm);
+  return LIB_X509_STORE_CTX_get1_certs(_base, ___xs, ___nm);
 }
 
 int LIB_EVP_PKEY_CTX_get_operation(struct Library * _base, EVP_PKEY_CTX * ___ctx);
@@ -33293,14 +33293,14 @@ int LIBSTUB_OBSOLETE_OCSP_REQ_CTX_set1_req(void)
   return LIB_OBSOLETE_OCSP_REQ_CTX_set1_req(_base, ___rctx, ___req);
 }
 
-void LIB_X509_STORE_set_verify_cb(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_verify_cb ___verify_cb);
+void LIB_X509_STORE_set_verify_cb(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_verify_cb ___verify_cb);
 
 void LIBSTUB_X509_STORE_set_verify_cb(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_verify_cb ___verify_cb = (X509_STORE_CTX_verify_cb)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_verify_cb(_base, ___ctx, ___verify_cb);
+  return LIB_X509_STORE_set_verify_cb(_base, ___xs, ___verify_cb);
 }
 
 X509_CRL * LIB_X509_STORE_CTX_get0_current_crl(struct Library * _base, const X509_STORE_CTX * ___ctx);
@@ -40827,13 +40827,13 @@ int LIBSTUB_PKCS8_pkey_add1_attr_by_NID(void)
   return LIB_PKCS8_pkey_add1_attr_by_NID(_base, ___p8, ___nid, ___type, ___bytes, ___len);
 }
 
-int LIB_X509_STORE_up_ref(struct Library * _base, X509_STORE * ___v);
+int LIB_X509_STORE_up_ref(struct Library * _base, X509_STORE * ___xs);
 
 int LIBSTUB_X509_STORE_up_ref(void)
 {
-  X509_STORE * ___v = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_up_ref(_base, ___v);
+  return LIB_X509_STORE_up_ref(_base, ___xs);
 }
 
 int LIB_SSL_enable_ct(struct Library * _base, SSL * ___s, int ___validation_mode);
@@ -41075,14 +41075,14 @@ int LIBSTUB_BIO_meth_set_destroy(void)
   return LIB_BIO_meth_set_destroy(_base, ___biom, ___destroy);
 }
 
-int LIB_BIO_meth_set_gets(struct Library * _base, BIO_METHOD * ___biom, int (*___func)(BIO *,char *,int));
+int LIB_BIO_meth_set_gets(struct Library * _base, BIO_METHOD * ___biom, int (*___ossl_gets)(BIO *,char *,int));
 
 int LIBSTUB_BIO_meth_set_gets(void)
 {
   BIO_METHOD * ___biom = (BIO_METHOD *)REG_A0;
-  int (*___func)(BIO *,char *,int) = (int (*)(BIO *,char *,int))REG_A1;
+  int (*___ossl_gets)(BIO *,char *,int) = (int (*)(BIO *,char *,int))REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_BIO_meth_set_gets(_base, ___biom, ___func);
+  return LIB_BIO_meth_set_gets(_base, ___biom, ___ossl_gets);
 }
 
 long (* LIB_BIO_meth_get_callback_ctrl(struct Library * _base, const BIO_METHOD * ___biom))(BIO *, int, BIO_info_cb *);
@@ -41500,11 +41500,11 @@ int LIBSTUB_X509_VERIFY_PARAM_get_auth_level(void)
   return LIB_X509_VERIFY_PARAM_get_auth_level(_base, ___param);
 }
 
-EVP_PKEY * LIB_X509_REQ_get0_pubkey(struct Library * _base, X509_REQ * ___req);
+EVP_PKEY * LIB_X509_REQ_get0_pubkey(struct Library * _base, const X509_REQ * ___req);
 
 EVP_PKEY * LIBSTUB_X509_REQ_get0_pubkey(void)
 {
-  X509_REQ * ___req = (X509_REQ *)REG_A0;
+  const X509_REQ * ___req = (const X509_REQ *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_X509_REQ_get0_pubkey(_base, ___req);
 }
@@ -42508,279 +42508,279 @@ X509_CRL * LIBSTUB_X509_OBJECT_get0_X509_CRL(void)
   return LIB_X509_OBJECT_get0_X509_CRL(_base, ___a);
 }
 
-int LIB_X509_STORE_lock(struct Library * _base, X509_STORE * ___ctx);
+int LIB_X509_STORE_lock(struct Library * _base, X509_STORE * ___xs);
 
 int LIBSTUB_X509_STORE_lock(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_lock(_base, ___ctx);
+  return LIB_X509_STORE_lock(_base, ___xs);
 }
 
-int LIB_X509_STORE_unlock(struct Library * _base, X509_STORE * ___ctx);
+int LIB_X509_STORE_unlock(struct Library * _base, X509_STORE * ___xs);
 
 int LIBSTUB_X509_STORE_unlock(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_unlock(_base, ___ctx);
+  return LIB_X509_STORE_unlock(_base, ___xs);
 }
 
-STACK_OF(X509_OBJECT) * LIB_X509_STORE_get0_objects(struct Library * _base, const X509_STORE * ___v);
+STACK_OF(X509_OBJECT) * LIB_X509_STORE_get0_objects(struct Library * _base, const X509_STORE * ___xs);
 
 STACK_OF(X509_OBJECT) * LIBSTUB_X509_STORE_get0_objects(void)
 {
-  const X509_STORE * ___v = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get0_objects(_base, ___v);
+  return LIB_X509_STORE_get0_objects(_base, ___xs);
 }
 
-X509_VERIFY_PARAM * LIB_X509_STORE_get0_param(struct Library * _base, const X509_STORE * ___ctx);
+X509_VERIFY_PARAM * LIB_X509_STORE_get0_param(struct Library * _base, const X509_STORE * ___xs);
 
 X509_VERIFY_PARAM * LIBSTUB_X509_STORE_get0_param(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get0_param(_base, ___ctx);
+  return LIB_X509_STORE_get0_param(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_verify(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_verify_fn ___verify);
+void LIB_X509_STORE_set_verify(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_verify_fn ___verify);
 
 void LIBSTUB_X509_STORE_set_verify(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_verify_fn ___verify = (X509_STORE_CTX_verify_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_verify(_base, ___ctx, ___verify);
+  return LIB_X509_STORE_set_verify(_base, ___xs, ___verify);
 }
 
-X509_STORE_CTX_verify_fn LIB_X509_STORE_get_verify(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_verify_fn LIB_X509_STORE_get_verify(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_verify_fn LIBSTUB_X509_STORE_get_verify(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_verify(_base, ___ctx);
+  return LIB_X509_STORE_get_verify(_base, ___xs);
 }
 
-X509_STORE_CTX_verify_cb LIB_X509_STORE_get_verify_cb(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_verify_cb LIB_X509_STORE_get_verify_cb(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_verify_cb LIBSTUB_X509_STORE_get_verify_cb(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_verify_cb(_base, ___ctx);
+  return LIB_X509_STORE_get_verify_cb(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_get_issuer(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_get_issuer_fn ___get_issuer);
+void LIB_X509_STORE_set_get_issuer(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_get_issuer_fn ___get_issuer);
 
 void LIBSTUB_X509_STORE_set_get_issuer(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_get_issuer_fn ___get_issuer = (X509_STORE_CTX_get_issuer_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_get_issuer(_base, ___ctx, ___get_issuer);
+  return LIB_X509_STORE_set_get_issuer(_base, ___xs, ___get_issuer);
 }
 
-X509_STORE_CTX_get_issuer_fn LIB_X509_STORE_get_get_issuer(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_get_issuer_fn LIB_X509_STORE_get_get_issuer(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_get_issuer_fn LIBSTUB_X509_STORE_get_get_issuer(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_get_issuer(_base, ___ctx);
+  return LIB_X509_STORE_get_get_issuer(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_check_issued(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_issued_fn ___check_issued);
+void LIB_X509_STORE_set_check_issued(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_check_issued_fn ___check_issued);
 
 void LIBSTUB_X509_STORE_set_check_issued(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_check_issued_fn ___check_issued = (X509_STORE_CTX_check_issued_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_check_issued(_base, ___ctx, ___check_issued);
+  return LIB_X509_STORE_set_check_issued(_base, ___xs, ___check_issued);
 }
 
-X509_STORE_CTX_check_issued_fn LIB_X509_STORE_get_check_issued(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_check_issued_fn LIB_X509_STORE_get_check_issued(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_check_issued_fn LIBSTUB_X509_STORE_get_check_issued(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_check_issued(_base, ___ctx);
+  return LIB_X509_STORE_get_check_issued(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_check_revocation(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_revocation_fn ___check_revocation);
+void LIB_X509_STORE_set_check_revocation(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_check_revocation_fn ___check_revocation);
 
 void LIBSTUB_X509_STORE_set_check_revocation(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_check_revocation_fn ___check_revocation = (X509_STORE_CTX_check_revocation_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_check_revocation(_base, ___ctx, ___check_revocation);
+  return LIB_X509_STORE_set_check_revocation(_base, ___xs, ___check_revocation);
 }
 
-X509_STORE_CTX_check_revocation_fn LIB_X509_STORE_get_check_revocation(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_check_revocation_fn LIB_X509_STORE_get_check_revocation(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_check_revocation_fn LIBSTUB_X509_STORE_get_check_revocation(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_check_revocation(_base, ___ctx);
+  return LIB_X509_STORE_get_check_revocation(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_get_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_get_crl_fn ___get_crl);
+void LIB_X509_STORE_set_get_crl(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_get_crl_fn ___get_crl);
 
 void LIBSTUB_X509_STORE_set_get_crl(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_get_crl_fn ___get_crl = (X509_STORE_CTX_get_crl_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_get_crl(_base, ___ctx, ___get_crl);
+  return LIB_X509_STORE_set_get_crl(_base, ___xs, ___get_crl);
 }
 
-X509_STORE_CTX_get_crl_fn LIB_X509_STORE_get_get_crl(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_get_crl_fn LIB_X509_STORE_get_get_crl(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_get_crl_fn LIBSTUB_X509_STORE_get_get_crl(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_get_crl(_base, ___ctx);
+  return LIB_X509_STORE_get_get_crl(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_check_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_crl_fn ___check_crl);
+void LIB_X509_STORE_set_check_crl(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_check_crl_fn ___check_crl);
 
 void LIBSTUB_X509_STORE_set_check_crl(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_check_crl_fn ___check_crl = (X509_STORE_CTX_check_crl_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_check_crl(_base, ___ctx, ___check_crl);
+  return LIB_X509_STORE_set_check_crl(_base, ___xs, ___check_crl);
 }
 
-X509_STORE_CTX_check_crl_fn LIB_X509_STORE_get_check_crl(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_check_crl_fn LIB_X509_STORE_get_check_crl(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_check_crl_fn LIBSTUB_X509_STORE_get_check_crl(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_check_crl(_base, ___ctx);
+  return LIB_X509_STORE_get_check_crl(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_cert_crl(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_cert_crl_fn ___cert_crl);
+void LIB_X509_STORE_set_cert_crl(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_cert_crl_fn ___cert_crl);
 
 void LIBSTUB_X509_STORE_set_cert_crl(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_cert_crl_fn ___cert_crl = (X509_STORE_CTX_cert_crl_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_cert_crl(_base, ___ctx, ___cert_crl);
+  return LIB_X509_STORE_set_cert_crl(_base, ___xs, ___cert_crl);
 }
 
-X509_STORE_CTX_cert_crl_fn LIB_X509_STORE_get_cert_crl(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_cert_crl_fn LIB_X509_STORE_get_cert_crl(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_cert_crl_fn LIBSTUB_X509_STORE_get_cert_crl(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_cert_crl(_base, ___ctx);
+  return LIB_X509_STORE_get_cert_crl(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_check_policy(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_check_policy_fn ___check_policy);
+void LIB_X509_STORE_set_check_policy(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_check_policy_fn ___check_policy);
 
 void LIBSTUB_X509_STORE_set_check_policy(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_check_policy_fn ___check_policy = (X509_STORE_CTX_check_policy_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_check_policy(_base, ___ctx, ___check_policy);
+  return LIB_X509_STORE_set_check_policy(_base, ___xs, ___check_policy);
 }
 
-X509_STORE_CTX_check_policy_fn LIB_X509_STORE_get_check_policy(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_check_policy_fn LIB_X509_STORE_get_check_policy(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_check_policy_fn LIBSTUB_X509_STORE_get_check_policy(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_check_policy(_base, ___ctx);
+  return LIB_X509_STORE_get_check_policy(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_lookup_certs(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_lookup_certs_fn ___lookup_certs);
+void LIB_X509_STORE_set_lookup_certs(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_lookup_certs_fn ___lookup_certs);
 
 void LIBSTUB_X509_STORE_set_lookup_certs(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_lookup_certs_fn ___lookup_certs = (X509_STORE_CTX_lookup_certs_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_lookup_certs(_base, ___ctx, ___lookup_certs);
+  return LIB_X509_STORE_set_lookup_certs(_base, ___xs, ___lookup_certs);
 }
 
-X509_STORE_CTX_lookup_certs_fn LIB_X509_STORE_get_lookup_certs(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_lookup_certs_fn LIB_X509_STORE_get_lookup_certs(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_lookup_certs_fn LIBSTUB_X509_STORE_get_lookup_certs(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_lookup_certs(_base, ___ctx);
+  return LIB_X509_STORE_get_lookup_certs(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_lookup_crls(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_lookup_crls_fn ___lookup_crls);
+void LIB_X509_STORE_set_lookup_crls(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_lookup_crls_fn ___lookup_crls);
 
 void LIBSTUB_X509_STORE_set_lookup_crls(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_lookup_crls_fn ___lookup_crls = (X509_STORE_CTX_lookup_crls_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_lookup_crls(_base, ___ctx, ___lookup_crls);
+  return LIB_X509_STORE_set_lookup_crls(_base, ___xs, ___lookup_crls);
 }
 
-X509_STORE_CTX_lookup_crls_fn LIB_X509_STORE_get_lookup_crls(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_lookup_crls_fn LIB_X509_STORE_get_lookup_crls(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_lookup_crls_fn LIBSTUB_X509_STORE_get_lookup_crls(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_lookup_crls(_base, ___ctx);
+  return LIB_X509_STORE_get_lookup_crls(_base, ___xs);
 }
 
-void LIB_X509_STORE_set_cleanup(struct Library * _base, X509_STORE * ___ctx, X509_STORE_CTX_cleanup_fn ___cleanup);
+void LIB_X509_STORE_set_cleanup(struct Library * _base, X509_STORE * ___xs, X509_STORE_CTX_cleanup_fn ___cleanup);
 
 void LIBSTUB_X509_STORE_set_cleanup(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   X509_STORE_CTX_cleanup_fn ___cleanup = (X509_STORE_CTX_cleanup_fn)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_cleanup(_base, ___ctx, ___cleanup);
+  return LIB_X509_STORE_set_cleanup(_base, ___xs, ___cleanup);
 }
 
-X509_STORE_CTX_cleanup_fn LIB_X509_STORE_get_cleanup(struct Library * _base, const X509_STORE * ___ctx);
+X509_STORE_CTX_cleanup_fn LIB_X509_STORE_get_cleanup(struct Library * _base, const X509_STORE * ___xs);
 
 X509_STORE_CTX_cleanup_fn LIBSTUB_X509_STORE_get_cleanup(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_cleanup(_base, ___ctx);
+  return LIB_X509_STORE_get_cleanup(_base, ___xs);
 }
 
-int LIB_X509_STORE_set_ex_data(struct Library * _base, X509_STORE * ___ctx, int ___idx, void * ___data);
+int LIB_X509_STORE_set_ex_data(struct Library * _base, X509_STORE * ___xs, int ___idx, void * ___data);
 
 int LIBSTUB_X509_STORE_set_ex_data(void)
 {
-  X509_STORE * ___ctx = (X509_STORE *)REG_A0;
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
   int ___idx = (int)REG_D0;
   void * ___data = (void *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_set_ex_data(_base, ___ctx, ___idx, ___data);
+  return LIB_X509_STORE_set_ex_data(_base, ___xs, ___idx, ___data);
 }
 
-void * LIB_X509_STORE_get_ex_data(struct Library * _base, const X509_STORE * ___ctx, int ___idx);
+void * LIB_X509_STORE_get_ex_data(struct Library * _base, const X509_STORE * ___xs, int ___idx);
 
 void * LIBSTUB_X509_STORE_get_ex_data(void)
 {
-  const X509_STORE * ___ctx = (const X509_STORE *)REG_A0;
+  const X509_STORE * ___xs = (const X509_STORE *)REG_A0;
   int ___idx = (int)REG_D0;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_STORE_get_ex_data(_base, ___ctx, ___idx);
+  return LIB_X509_STORE_get_ex_data(_base, ___xs, ___idx);
 }
 
 X509_STORE_CTX_get_issuer_fn LIB_X509_STORE_CTX_get_get_issuer(struct Library * _base, const X509_STORE_CTX * ___ctx);

@@ -34228,7 +34228,7 @@ STATIC int stub_main_X509_REQ_check_private_key_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->X509_REQ_check_private_key(
-		(X509_REQ *)regarray[REG68K_A0/4],
+		(const X509_REQ *)regarray[REG68K_A0/4],
 		(EVP_PKEY *)regarray[REG68K_A1/4]
 	);
 }
@@ -61500,7 +61500,7 @@ STATIC EVP_PKEY * stub_main_X509_REQ_get0_pubkey_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->X509_REQ_get0_pubkey(
-		(X509_REQ *)regarray[REG68K_A0/4]
+		(const X509_REQ *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_main_X509_REQ_get0_pubkey = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_REQ_get0_pubkey_PPC };

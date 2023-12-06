@@ -2081,21 +2081,21 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(int, (___flags), D0), \
      struct Library *, AMISSLEXT_BASE_NAME, 349, Amisslext)
 
-#define X509_STORE_load_file(___ctx, ___file) \
+#define X509_STORE_load_file(___xs, ___file) \
       AROS_LC2(int, X509_STORE_load_file, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___file), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 350, Amisslext)
 
-#define X509_STORE_load_path(___ctx, ___path) \
+#define X509_STORE_load_path(___xs, ___path) \
       AROS_LC2(int, X509_STORE_load_path, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___path), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 351, Amisslext)
 
-#define X509_STORE_load_store(___ctx, ___store) \
+#define X509_STORE_load_store(___xs, ___store) \
       AROS_LC2(int, X509_STORE_load_store, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___store), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 352, Amisslext)
 
@@ -2735,9 +2735,9 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 441, Amisslext)
 
-#define X509_STORE_get1_all_certs(___st) \
+#define X509_STORE_get1_all_certs(___xs) \
       AROS_LC1(STACK_OF(X509) *, X509_STORE_get1_all_certs, \
- AROS_LCA(X509_STORE *, (___st), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 442, Amisslext)
 
 #define OSSL_CMP_validate_msg(___ctx, ___msg) \
@@ -4046,34 +4046,34 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___propq), D1), \
      struct Library *, AMISSLEXT_BASE_NAME, 639, Amisslext)
 
-#define X509_STORE_load_file_ex(___ctx, ___file, ___libctx, ___propq) \
+#define X509_STORE_load_file_ex(___xs, ___file, ___libctx, ___propq) \
       AROS_LC4(int, X509_STORE_load_file_ex, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___file), A1), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
  AROS_LCA(const char *, (___propq), A3), \
      struct Library *, AMISSLEXT_BASE_NAME, 640, Amisslext)
 
-#define X509_STORE_load_store_ex(___ctx, ___store, ___libctx, ___propq) \
+#define X509_STORE_load_store_ex(___xs, ___store, ___libctx, ___propq) \
       AROS_LC4(int, X509_STORE_load_store_ex, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___store), A1), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
  AROS_LCA(const char *, (___propq), A3), \
      struct Library *, AMISSLEXT_BASE_NAME, 641, Amisslext)
 
-#define X509_STORE_load_locations_ex(___ctx, ___file, ___dir, ___libctx, ___propq) \
+#define X509_STORE_load_locations_ex(___xs, ___file, ___dir, ___libctx, ___propq) \
       AROS_LC5(int, X509_STORE_load_locations_ex, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(const char *, (___file), A1), \
  AROS_LCA(const char *, (___dir), A2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D0), \
      struct Library *, AMISSLEXT_BASE_NAME, 642, Amisslext)
 
-#define X509_STORE_set_default_paths_ex(___ctx, ___libctx, ___propq) \
+#define X509_STORE_set_default_paths_ex(___xs, ___libctx, ___propq) \
       AROS_LC3(int, X509_STORE_set_default_paths_ex, \
- AROS_LCA(X509_STORE *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___xs), A0), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 643, Amisslext)
@@ -4409,70 +4409,70 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(CMS_ContentInfo **, (___ci), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 693, Amisslext)
 
-#define CMS_sign_ex(___signcert, ___pkey, ___certs, ___data, ___flags, ___ctx, ___propq) \
+#define CMS_sign_ex(___signcert, ___pkey, ___certs, ___data, ___flags, ___libctx, ___propq) \
       AROS_LC7(CMS_ContentInfo *, CMS_sign_ex, \
  AROS_LCA(X509 *, (___signcert), A0), \
  AROS_LCA(EVP_PKEY *, (___pkey), A1), \
  AROS_LCA(STACK_OF(X509) *, (___certs), A2), \
  AROS_LCA(BIO *, (___data), A3), \
  AROS_LCA(unsigned int, (___flags), D0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), D1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), D1), \
  AROS_LCA(const char *, (___propq), D2), \
      struct Library *, AMISSLEXT_BASE_NAME, 694, Amisslext)
 
-#define CMS_data_create_ex(___in, ___flags, ___ctx, ___propq) \
+#define CMS_data_create_ex(___in, ___flags, ___libctx, ___propq) \
       AROS_LC4(CMS_ContentInfo *, CMS_data_create_ex, \
  AROS_LCA(BIO *, (___in), A0), \
  AROS_LCA(unsigned int, (___flags), D0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 695, Amisslext)
 
-#define CMS_digest_create_ex(___in, ___md, ___flags, ___ctx, ___propq) \
+#define CMS_digest_create_ex(___in, ___md, ___flags, ___libctx, ___propq) \
       AROS_LC5(CMS_ContentInfo *, CMS_digest_create_ex, \
  AROS_LCA(BIO *, (___in), A0), \
  AROS_LCA(const EVP_MD *, (___md), A1), \
  AROS_LCA(unsigned int, (___flags), D0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A2), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
  AROS_LCA(const char *, (___propq), A3), \
      struct Library *, AMISSLEXT_BASE_NAME, 696, Amisslext)
 
-#define CMS_EncryptedData_encrypt_ex(___in, ___cipher, ___key, ___keylen, ___flags, ___ctx, ___propq) \
+#define CMS_EncryptedData_encrypt_ex(___in, ___cipher, ___key, ___keylen, ___flags, ___libctx, ___propq) \
       AROS_LC7(CMS_ContentInfo *, CMS_EncryptedData_encrypt_ex, \
  AROS_LCA(BIO *, (___in), A0), \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A1), \
  AROS_LCA(const unsigned char *, (___key), A2), \
  AROS_LCA(size_t, (___keylen), D0), \
  AROS_LCA(unsigned int, (___flags), D1), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D2), \
      struct Library *, AMISSLEXT_BASE_NAME, 697, Amisslext)
 
-#define CMS_encrypt_ex(___certs, ___in, ___cipher, ___flags, ___ctx, ___propq) \
+#define CMS_encrypt_ex(___certs, ___in, ___cipher, ___flags, ___libctx, ___propq) \
       AROS_LC6(CMS_ContentInfo *, CMS_encrypt_ex, \
  AROS_LCA(STACK_OF(X509) *, (___certs), A0), \
  AROS_LCA(BIO *, (___in), A1), \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A2), \
  AROS_LCA(unsigned int, (___flags), D0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
  AROS_LCA(const char *, (___propq), D1), \
      struct Library *, AMISSLEXT_BASE_NAME, 698, Amisslext)
 
-#define CMS_EnvelopedData_create_ex(___cipher, ___ctx, ___propq) \
+#define CMS_EnvelopedData_create_ex(___cipher, ___libctx, ___propq) \
       AROS_LC3(CMS_ContentInfo *, CMS_EnvelopedData_create_ex, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 699, Amisslext)
 
-#define CMS_ReceiptRequest_create0_ex(___id, ___idlen, ___allorfirst, ___receiptList, ___receiptsTo, ___ctx) \
+#define CMS_ReceiptRequest_create0_ex(___id, ___idlen, ___allorfirst, ___receiptList, ___receiptsTo, ___libctx) \
       AROS_LC6(CMS_ReceiptRequest *, CMS_ReceiptRequest_create0_ex, \
  AROS_LCA(unsigned char *, (___id), A0), \
  AROS_LCA(int, (___idlen), D0), \
  AROS_LCA(int, (___allorfirst), D1), \
  AROS_LCA(STACK_OF(GENERAL_NAMES) *, (___receiptList), A1), \
  AROS_LCA(STACK_OF(GENERAL_NAMES) *, (___receiptsTo), A2), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A3), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A3), \
      struct Library *, AMISSLEXT_BASE_NAME, 700, Amisslext)
 
 #define EVP_SignFinal_ex(___ctx, ___md, ___s, ___pkey, ___libctx, ___propq) \
@@ -4923,10 +4923,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 768, Amisslext)
 
-#define CMS_AuthEnvelopedData_create_ex(___cipher, ___ctx, ___propq) \
+#define CMS_AuthEnvelopedData_create_ex(___cipher, ___libctx, ___propq) \
       AROS_LC3(CMS_ContentInfo *, CMS_AuthEnvelopedData_create_ex, \
  AROS_LCA(const EVP_CIPHER *, (___cipher), A0), \
- AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
  AROS_LCA(const char *, (___propq), A2), \
      struct Library *, AMISSLEXT_BASE_NAME, 769, Amisslext)
 
@@ -6272,5 +6272,1028 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
  AROS_LCA(OSSL_CMP_MSG *, (___msg), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 962, Amisslext)
+
+#define SSL_client_hello_get_extension_order(___s, ___exts, ___num_exts) \
+      AROS_LC3(int, SSL_client_hello_get_extension_order, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(uint16_t *, (___exts), A1), \
+ AROS_LCA(size_t *, (___num_exts), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 963, Amisslext)
+
+#define OSSL_QUIC_client_method() \
+      AROS_LC0(const SSL_METHOD *, OSSL_QUIC_client_method, \
+     struct Library *, AMISSLEXT_BASE_NAME, 964, Amisslext)
+
+#define OSSL_QUIC_client_thread_method() \
+      AROS_LC0(const SSL_METHOD *, OSSL_QUIC_client_thread_method, \
+     struct Library *, AMISSLEXT_BASE_NAME, 965, Amisslext)
+
+#define SSL_CTX_set1_cert_comp_preference(___ctx, ___algs, ___len) \
+      AROS_LC3(int, SSL_CTX_set1_cert_comp_preference, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(int *, (___algs), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 966, Amisslext)
+
+#define SSL_set1_cert_comp_preference(___ssl, ___algs, ___len) \
+      AROS_LC3(int, SSL_set1_cert_comp_preference, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(int *, (___algs), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 967, Amisslext)
+
+#define SSL_CTX_compress_certs(___ctx, ___alg) \
+      AROS_LC2(int, SSL_CTX_compress_certs, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(int, (___alg), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 968, Amisslext)
+
+#define SSL_compress_certs(___ssl, ___alg) \
+      AROS_LC2(int, SSL_compress_certs, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(int, (___alg), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 969, Amisslext)
+
+#define SSL_CTX_set1_compressed_cert(___ctx, ___algorithm, ___comp_data, ___comp_length, ___orig_length) \
+      AROS_LC5(int, SSL_CTX_set1_compressed_cert, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(int, (___algorithm), D0), \
+ AROS_LCA(unsigned char *, (___comp_data), A1), \
+ AROS_LCA(size_t, (___comp_length), D1), \
+ AROS_LCA(size_t, (___orig_length), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 970, Amisslext)
+
+#define SSL_set1_compressed_cert(___ssl, ___algorithm, ___comp_data, ___comp_length, ___orig_length) \
+      AROS_LC5(int, SSL_set1_compressed_cert, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(int, (___algorithm), D0), \
+ AROS_LCA(unsigned char *, (___comp_data), A1), \
+ AROS_LCA(size_t, (___comp_length), D1), \
+ AROS_LCA(size_t, (___orig_length), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 971, Amisslext)
+
+#define SSL_CTX_get1_compressed_cert(___ctx, ___alg, ___data, ___orig_len) \
+      AROS_LC4(size_t, SSL_CTX_get1_compressed_cert, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(int, (___alg), D0), \
+ AROS_LCA(unsigned char **, (___data), A1), \
+ AROS_LCA(size_t *, (___orig_len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 972, Amisslext)
+
+#define SSL_get1_compressed_cert(___ssl, ___alg, ___data, ___orig_len) \
+      AROS_LC4(size_t, SSL_get1_compressed_cert, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(int, (___alg), D0), \
+ AROS_LCA(unsigned char **, (___data), A1), \
+ AROS_LCA(size_t *, (___orig_len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 973, Amisslext)
+
+#define SSL_get_rpoll_descriptor(___s, ___desc) \
+      AROS_LC2(int, SSL_get_rpoll_descriptor, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(BIO_POLL_DESCRIPTOR *, (___desc), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 974, Amisslext)
+
+#define SSL_get_wpoll_descriptor(___s, ___desc) \
+      AROS_LC2(int, SSL_get_wpoll_descriptor, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(BIO_POLL_DESCRIPTOR *, (___desc), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 975, Amisslext)
+
+#define SSL_set_blocking_mode(___s, ___blocking) \
+      AROS_LC2(int, SSL_set_blocking_mode, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(int, (___blocking), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 976, Amisslext)
+
+#define SSL_get_blocking_mode(___s) \
+      AROS_LC1(int, SSL_get_blocking_mode, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 977, Amisslext)
+
+#define SSL_set1_initial_peer_addr(___s, ___peer_addr) \
+      AROS_LC2(int, SSL_set1_initial_peer_addr, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(const BIO_ADDR *, (___peer_addr), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 978, Amisslext)
+
+#define SSL_net_read_desired(___s) \
+      AROS_LC1(int, SSL_net_read_desired, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 979, Amisslext)
+
+#define SSL_net_write_desired(___s) \
+      AROS_LC1(int, SSL_net_write_desired, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 980, Amisslext)
+
+#define SSL_shutdown_ex(___ssl, ___flags, ___args, ___args_len) \
+      AROS_LC4(int, SSL_shutdown_ex, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(uint64_t, (___flags), D0), \
+ AROS_LCA(const SSL_SHUTDOWN_EX_ARGS *, (___args), A1), \
+ AROS_LCA(size_t, (___args_len), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 981, Amisslext)
+
+#define SSL_stream_conclude(___ssl, ___flags) \
+      AROS_LC2(int, SSL_stream_conclude, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(uint64_t, (___flags), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 982, Amisslext)
+
+#define SSL_inject_net_dgram(___s, ___buf, ___buf_len, ___peer, ___local) \
+      AROS_LC5(int, SSL_inject_net_dgram, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(const unsigned char *, (___buf), A1), \
+ AROS_LCA(size_t, (___buf_len), D0), \
+ AROS_LCA(const BIO_ADDR *, (___peer), A2), \
+ AROS_LCA(const BIO_ADDR *, (___local), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 983, Amisslext)
+
+#define SSL_get0_peer_rpk(___s) \
+      AROS_LC1(EVP_PKEY *, SSL_get0_peer_rpk, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 984, Amisslext)
+
+#define SSL_SESSION_get0_peer_rpk(___s) \
+      AROS_LC1(EVP_PKEY *, SSL_SESSION_get0_peer_rpk, \
+ AROS_LCA(SSL_SESSION *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 985, Amisslext)
+
+#define SSL_set1_client_cert_type(___s, ___val, ___len) \
+      AROS_LC3(int, SSL_set1_client_cert_type, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(const unsigned char *, (___val), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 986, Amisslext)
+
+#define SSL_get0_client_cert_type(___s, ___t, ___len) \
+      AROS_LC3(int, SSL_get0_client_cert_type, \
+ AROS_LCA(const SSL *, (___s), A0), \
+ AROS_LCA(unsigned char **, (___t), A1), \
+ AROS_LCA(size_t *, (___len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 987, Amisslext)
+
+#define SSL_set1_server_cert_type(___s, ___val, ___len) \
+      AROS_LC3(int, SSL_set1_server_cert_type, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(const unsigned char *, (___val), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 988, Amisslext)
+
+#define SSL_get0_server_cert_type(___s, ___t, ___len) \
+      AROS_LC3(int, SSL_get0_server_cert_type, \
+ AROS_LCA(const SSL *, (___s), A0), \
+ AROS_LCA(unsigned char **, (___t), A1), \
+ AROS_LCA(size_t *, (___len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 989, Amisslext)
+
+#define SSL_CTX_set1_client_cert_type(___ctx, ___val, ___len) \
+      AROS_LC3(int, SSL_CTX_set1_client_cert_type, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(const unsigned char *, (___val), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 990, Amisslext)
+
+#define SSL_CTX_get0_client_cert_type(___ctx, ___t, ___len) \
+      AROS_LC3(int, SSL_CTX_get0_client_cert_type, \
+ AROS_LCA(const SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned char **, (___t), A1), \
+ AROS_LCA(size_t *, (___len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 991, Amisslext)
+
+#define SSL_CTX_set1_server_cert_type(___ctx, ___val, ___len) \
+      AROS_LC3(int, SSL_CTX_set1_server_cert_type, \
+ AROS_LCA(SSL_CTX *, (___ctx), A0), \
+ AROS_LCA(const unsigned char *, (___val), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 992, Amisslext)
+
+#define SSL_CTX_get0_server_cert_type(___s, ___t, ___len) \
+      AROS_LC3(int, SSL_CTX_get0_server_cert_type, \
+ AROS_LCA(const SSL_CTX *, (___s), A0), \
+ AROS_LCA(unsigned char **, (___t), A1), \
+ AROS_LCA(size_t *, (___len), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 993, Amisslext)
+
+#define SSL_get_negotiated_client_cert_type(___s) \
+      AROS_LC1(int, SSL_get_negotiated_client_cert_type, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 994, Amisslext)
+
+#define SSL_get_negotiated_server_cert_type(___s) \
+      AROS_LC1(int, SSL_get_negotiated_server_cert_type, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 995, Amisslext)
+
+#define SSL_add_expected_rpk(___s, ___rpk) \
+      AROS_LC2(int, SSL_add_expected_rpk, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(EVP_PKEY *, (___rpk), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 996, Amisslext)
+
+#define d2i_SSL_SESSION_ex(___a, ___pp, ___length, ___libctx, ___propq) \
+      AROS_LC5(SSL_SESSION *, d2i_SSL_SESSION_ex, \
+ AROS_LCA(SSL_SESSION **, (___a), A0), \
+ AROS_LCA(const unsigned char **, (___pp), A1), \
+ AROS_LCA(long, (___length), D0), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
+ AROS_LCA(const char *, (___propq), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 997, Amisslext)
+
+#define SSL_is_tls(___s) \
+      AROS_LC1(int, SSL_is_tls, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 998, Amisslext)
+
+#define SSL_is_quic(___s) \
+      AROS_LC1(int, SSL_is_quic, \
+ AROS_LCA(const SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 999, Amisslext)
+
+#define SSL_get_handshake_rtt(___s, ___rtt) \
+      AROS_LC2(int, SSL_get_handshake_rtt, \
+ AROS_LCA(const SSL *, (___s), A0), \
+ AROS_LCA(uint64_t *, (___rtt), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1000, Amisslext)
+
+#define SSL_new_stream(___s, ___flags) \
+      AROS_LC2(SSL *, SSL_new_stream, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(uint64_t, (___flags), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1001, Amisslext)
+
+#define SSL_get0_connection(___s) \
+      AROS_LC1(SSL *, SSL_get0_connection, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1002, Amisslext)
+
+#define SSL_is_connection(___s) \
+      AROS_LC1(int, SSL_is_connection, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1003, Amisslext)
+
+#define SSL_get_stream_type(___s) \
+      AROS_LC1(int, SSL_get_stream_type, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1004, Amisslext)
+
+#define SSL_get_stream_id(___s) \
+      AROS_LC1(uint64_t, SSL_get_stream_id, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1005, Amisslext)
+
+#define SSL_set_default_stream_mode(___s, ___mode) \
+      AROS_LC2(int, SSL_set_default_stream_mode, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(uint32_t, (___mode), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1006, Amisslext)
+
+#define SSL_accept_stream(___s, ___flags) \
+      AROS_LC2(SSL *, SSL_accept_stream, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(uint64_t, (___flags), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1007, Amisslext)
+
+#define SSL_get_accept_stream_queue_len(___s) \
+      AROS_LC1(size_t, SSL_get_accept_stream_queue_len, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1008, Amisslext)
+
+#define SSL_stream_reset(___ssl, ___args, ___args_len) \
+      AROS_LC3(int, SSL_stream_reset, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(const SSL_STREAM_RESET_ARGS *, (___args), A1), \
+ AROS_LCA(size_t, (___args_len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1009, Amisslext)
+
+#define SSL_get_stream_read_state(___ssl) \
+      AROS_LC1(int, SSL_get_stream_read_state, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1010, Amisslext)
+
+#define SSL_get_stream_write_state(___ssl) \
+      AROS_LC1(int, SSL_get_stream_write_state, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1011, Amisslext)
+
+#define SSL_get_stream_read_error_code(___ssl, ___app_error_code) \
+      AROS_LC2(int, SSL_get_stream_read_error_code, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(uint64_t *, (___app_error_code), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1012, Amisslext)
+
+#define SSL_get_stream_write_error_code(___ssl, ___app_error_code) \
+      AROS_LC2(int, SSL_get_stream_write_error_code, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(uint64_t *, (___app_error_code), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1013, Amisslext)
+
+#define SSL_get_conn_close_info(___ssl, ___info, ___info_len) \
+      AROS_LC3(int, SSL_get_conn_close_info, \
+ AROS_LCA(SSL *, (___ssl), A0), \
+ AROS_LCA(SSL_CONN_CLOSE_INFO *, (___info), A1), \
+ AROS_LCA(size_t, (___info_len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1014, Amisslext)
+
+#define SSL_set_incoming_stream_policy(___s, ___policy, ___aec) \
+      AROS_LC3(int, SSL_set_incoming_stream_policy, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(int, (___policy), D2), \
+ AROS_LCA(uint64_t, (___aec), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1015, Amisslext)
+
+#define SSL_handle_events(___s) \
+      AROS_LC1(int, SSL_handle_events, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1016, Amisslext)
+
+#define SSL_get_event_timeout(___s, ___tv, ___is_infinite) \
+      AROS_LC3(int, SSL_get_event_timeout, \
+ AROS_LCA(SSL *, (___s), A0), \
+ AROS_LCA(struct timeval *, (___tv), A1), \
+ AROS_LCA(int *, (___is_infinite), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1017, Amisslext)
+
+#define SSL_get0_group_name(___s) \
+      AROS_LC1(const char *, SSL_get0_group_name, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1018, Amisslext)
+
+#define SSL_is_stream_local(___s) \
+      AROS_LC1(int, SSL_is_stream_local, \
+ AROS_LCA(SSL *, (___s), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1019, Amisslext)
+
+#define BIO_f_zlib() \
+      AROS_LC0(const BIO_METHOD *, BIO_f_zlib, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1020, Amisslext)
+
+#define X509_PUBKEY_set0_public_key(___pub, ___penc, ___penclen) \
+      AROS_LC3(void, X509_PUBKEY_set0_public_key, \
+ AROS_LCA(X509_PUBKEY *, (___pub), A0), \
+ AROS_LCA(unsigned char *, (___penc), A1), \
+ AROS_LCA(int, (___penclen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1021, Amisslext)
+
+#define OSSL_STACK_OF_X509_free(___certs) \
+      AROS_LC1(void, OSSL_STACK_OF_X509_free, \
+ AROS_LCA(struct stack_st_X509 *, (___certs), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1022, Amisslext)
+
+#define OSSL_trace_string(___out, ___text, ___full, ___data, ___size) \
+      AROS_LC5(int, OSSL_trace_string, \
+ AROS_LCA(BIO *, (___out), A0), \
+ AROS_LCA(int, (___text), D0), \
+ AROS_LCA(int, (___full), D1), \
+ AROS_LCA(const unsigned char *, (___data), A1), \
+ AROS_LCA(size_t, (___size), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1023, Amisslext)
+
+#define BN_signed_bin2bn(___s, ___len, ___ret) \
+      AROS_LC3(BIGNUM *, BN_signed_bin2bn, \
+ AROS_LCA(const unsigned char *, (___s), A0), \
+ AROS_LCA(int, (___len), D0), \
+ AROS_LCA(BIGNUM *, (___ret), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1024, Amisslext)
+
+#define BN_signed_bn2bin(___a, ___to, ___tolen) \
+      AROS_LC3(int, BN_signed_bn2bin, \
+ AROS_LCA(const BIGNUM *, (___a), A0), \
+ AROS_LCA(unsigned char *, (___to), A1), \
+ AROS_LCA(int, (___tolen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1025, Amisslext)
+
+#define BN_signed_lebin2bn(___s, ___len, ___ret) \
+      AROS_LC3(BIGNUM *, BN_signed_lebin2bn, \
+ AROS_LCA(const unsigned char *, (___s), A0), \
+ AROS_LCA(int, (___len), D0), \
+ AROS_LCA(BIGNUM *, (___ret), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1026, Amisslext)
+
+#define BN_signed_bn2lebin(___a, ___to, ___tolen) \
+      AROS_LC3(int, BN_signed_bn2lebin, \
+ AROS_LCA(const BIGNUM *, (___a), A0), \
+ AROS_LCA(unsigned char *, (___to), A1), \
+ AROS_LCA(int, (___tolen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1027, Amisslext)
+
+#define BN_signed_native2bn(___s, ___len, ___ret) \
+      AROS_LC3(BIGNUM *, BN_signed_native2bn, \
+ AROS_LCA(const unsigned char *, (___s), A0), \
+ AROS_LCA(int, (___len), D0), \
+ AROS_LCA(BIGNUM *, (___ret), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1028, Amisslext)
+
+#define BN_signed_bn2native(___a, ___to, ___tolen) \
+      AROS_LC3(int, BN_signed_bn2native, \
+ AROS_LCA(const BIGNUM *, (___a), A0), \
+ AROS_LCA(unsigned char *, (___to), A1), \
+ AROS_LCA(int, (___tolen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1029, Amisslext)
+
+#define ASYNC_set_mem_functions(___alloc_fn, ___free_fn) \
+      AROS_LC2(int, ASYNC_set_mem_functions, \
+ AROS_LCA(ASYNC_stack_alloc_fn, (___alloc_fn), A0), \
+ AROS_LCA(ASYNC_stack_free_fn, (___free_fn), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1030, Amisslext)
+
+#define ASYNC_get_mem_functions(___alloc_fn, ___free_fn) \
+      AROS_LC2(void, ASYNC_get_mem_functions, \
+ AROS_LCA(ASYNC_stack_alloc_fn *, (___alloc_fn), A0), \
+ AROS_LCA(ASYNC_stack_free_fn *, (___free_fn), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1031, Amisslext)
+
+#define BIO_ADDR_dup(___ap) \
+      AROS_LC1(BIO_ADDR *, BIO_ADDR_dup, \
+ AROS_LCA(const BIO_ADDR *, (___ap), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1032, Amisslext)
+
+#define OSSL_CMP_ITAV_new_caCerts(___caCerts) \
+      AROS_LC1(OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_caCerts, \
+ AROS_LCA(const struct stack_st_X509 *, (___caCerts), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1033, Amisslext)
+
+#define OSSL_CMP_ITAV_get0_caCerts(___itav, ___out) \
+      AROS_LC2(int, OSSL_CMP_ITAV_get0_caCerts, \
+ AROS_LCA(const OSSL_CMP_ITAV *, (___itav), A0), \
+ AROS_LCA(struct stack_st_X509 **, (___out), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1034, Amisslext)
+
+#define OSSL_CMP_get1_caCerts(___ctx, ___out) \
+      AROS_LC2(int, OSSL_CMP_get1_caCerts, \
+ AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
+ AROS_LCA(struct stack_st_X509 **, (___out), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1035, Amisslext)
+
+#define OSSL_CMP_ITAV_new_rootCaCert(___rootCaCert) \
+      AROS_LC1(OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_rootCaCert, \
+ AROS_LCA(const X509 *, (___rootCaCert), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1036, Amisslext)
+
+#define OSSL_CMP_ITAV_get0_rootCaCert(___itav, ___out) \
+      AROS_LC2(int, OSSL_CMP_ITAV_get0_rootCaCert, \
+ AROS_LCA(const OSSL_CMP_ITAV *, (___itav), A0), \
+ AROS_LCA(X509 **, (___out), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1037, Amisslext)
+
+#define OSSL_CMP_ITAV_new_rootCaKeyUpdate(___newWithNew, ___newWithOld, ___oldWithNew) \
+      AROS_LC3(OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_rootCaKeyUpdate, \
+ AROS_LCA(const X509 *, (___newWithNew), A0), \
+ AROS_LCA(const X509 *, (___newWithOld), A1), \
+ AROS_LCA(const X509 *, (___oldWithNew), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1038, Amisslext)
+
+#define OSSL_CMP_ITAV_get0_rootCaKeyUpdate(___itav, ___newWithNew, ___newWithOld, ___oldWithNew) \
+      AROS_LC4(int, OSSL_CMP_ITAV_get0_rootCaKeyUpdate, \
+ AROS_LCA(const OSSL_CMP_ITAV *, (___itav), A0), \
+ AROS_LCA(X509 **, (___newWithNew), A1), \
+ AROS_LCA(X509 **, (___newWithOld), A2), \
+ AROS_LCA(X509 **, (___oldWithNew), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1039, Amisslext)
+
+#define OSSL_CMP_get1_rootCaKeyUpdate(___ctx, ___oldWithOld, ___newWithNew, ___newWithOld, ___oldWithNew) \
+      AROS_LC5(int, OSSL_CMP_get1_rootCaKeyUpdate, \
+ AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
+ AROS_LCA(const X509 *, (___oldWithOld), A1), \
+ AROS_LCA(X509 **, (___newWithNew), A2), \
+ AROS_LCA(X509 **, (___newWithOld), A3), \
+ AROS_LCA(X509 **, (___oldWithNew), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1040, Amisslext)
+
+#define OSSL_CMP_CTX_get0_libctx(___ctx) \
+      AROS_LC1(OSSL_LIB_CTX *, OSSL_CMP_CTX_get0_libctx, \
+ AROS_LCA(const OSSL_CMP_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1041, Amisslext)
+
+#define OSSL_CMP_CTX_get0_propq(___ctx) \
+      AROS_LC1(const char *, OSSL_CMP_CTX_get0_propq, \
+ AROS_LCA(const OSSL_CMP_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1042, Amisslext)
+
+#define OSSL_CMP_CTX_get0_validatedSrvCert(___ctx) \
+      AROS_LC1(X509 *, OSSL_CMP_CTX_get0_validatedSrvCert, \
+ AROS_LCA(const OSSL_CMP_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1043, Amisslext)
+
+#define OSSL_CMP_CTX_set1_serialNumber(___ctx, ___sn) \
+      AROS_LC2(int, OSSL_CMP_CTX_set1_serialNumber, \
+ AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
+ AROS_LCA(const ASN1_INTEGER *, (___sn), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1044, Amisslext)
+
+#define OSSL_CRMF_CERTTEMPLATE_get0_publicKey(___tmpl) \
+      AROS_LC1(X509_PUBKEY *, OSSL_CRMF_CERTTEMPLATE_get0_publicKey, \
+ AROS_LCA(const OSSL_CRMF_CERTTEMPLATE *, (___tmpl), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1045, Amisslext)
+
+#define CMS_final_digest(___cms, ___md, ___mdlen, ___dcont, ___flags) \
+      AROS_LC5(int, CMS_final_digest, \
+ AROS_LCA(CMS_ContentInfo *, (___cms), A0), \
+ AROS_LCA(const unsigned char *, (___md), A1), \
+ AROS_LCA(unsigned int, (___mdlen), D0), \
+ AROS_LCA(BIO *, (___dcont), A2), \
+ AROS_LCA(unsigned int, (___flags), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1046, Amisslext)
+
+#define CMS_EnvelopedData_it() \
+      AROS_LC0(const ASN1_ITEM *, CMS_EnvelopedData_it, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1047, Amisslext)
+
+#define CMS_EnvelopedData_decrypt(___env, ___detached_data, ___pkey, ___cert, ___secret, ___flags, ___libctx, ___propq) \
+      AROS_LC8(BIO *, CMS_EnvelopedData_decrypt, \
+ AROS_LCA(CMS_EnvelopedData *, (___env), A0), \
+ AROS_LCA(BIO *, (___detached_data), A1), \
+ AROS_LCA(EVP_PKEY *, (___pkey), A2), \
+ AROS_LCA(X509 *, (___cert), A3), \
+ AROS_LCA(ASN1_OCTET_STRING *, (___secret), D0), \
+ AROS_LCA(unsigned int, (___flags), D1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), D2), \
+ AROS_LCA(const char *, (___propq), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1048, Amisslext)
+
+#define CMS_SignedData_free(___a) \
+      AROS_LC1(void, CMS_SignedData_free, \
+ AROS_LCA(CMS_SignedData *, (___a), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1049, Amisslext)
+
+#define CMS_SignedData_new() \
+      AROS_LC0(CMS_SignedData *, CMS_SignedData_new, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1050, Amisslext)
+
+#define CMS_SignedData_verify(___sd, ___detached_data, ___scerts, ___store, ___extra, ___crls, ___flags, ___libctx, ___propq) \
+      AROS_LC9(BIO *, CMS_SignedData_verify, \
+ AROS_LCA(CMS_SignedData *, (___sd), A0), \
+ AROS_LCA(BIO *, (___detached_data), A1), \
+ AROS_LCA(struct stack_st_X509 *, (___scerts), A2), \
+ AROS_LCA(X509_STORE *, (___store), A3), \
+ AROS_LCA(struct stack_st_X509 *, (___extra), D0), \
+ AROS_LCA(struct stack_st_X509_CRL *, (___crls), D1), \
+ AROS_LCA(unsigned int, (___flags), D2), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), D3), \
+ AROS_LCA(const char *, (___propq), D4), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1051, Amisslext)
+
+#define BIO_s_dgram_mem() \
+      AROS_LC0(const BIO_METHOD *, BIO_s_dgram_mem, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1052, Amisslext)
+
+#define BIO_recvmmsg(___b, ___msg, ___stride, ___num_msg, ___flags, ___msgs_processed) \
+      AROS_LC6(int, BIO_recvmmsg, \
+ AROS_LCA(BIO *, (___b), A0), \
+ AROS_LCA(BIO_MSG *, (___msg), A1), \
+ AROS_LCA(size_t, (___stride), D0), \
+ AROS_LCA(size_t, (___num_msg), D1), \
+ AROS_LCA(uint64_t, (___flags), D2), \
+ AROS_LCA(size_t *, (___msgs_processed), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1053, Amisslext)
+
+#define BIO_sendmmsg(___b, ___msg, ___stride, ___num_msg, ___flags, ___msgs_processed) \
+      AROS_LC6(int, BIO_sendmmsg, \
+ AROS_LCA(BIO *, (___b), A0), \
+ AROS_LCA(BIO_MSG *, (___msg), A1), \
+ AROS_LCA(size_t, (___stride), D0), \
+ AROS_LCA(size_t, (___num_msg), D1), \
+ AROS_LCA(uint64_t, (___flags), D2), \
+ AROS_LCA(size_t *, (___msgs_processed), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1054, Amisslext)
+
+#define BIO_meth_set_sendmmsg(___biom, ___f) \
+      AROS_LC2(int, BIO_meth_set_sendmmsg, \
+ AROS_LCA(BIO_METHOD *, (___biom), A0), \
+ AROS_LCA(int (*)(BIO *,BIO_MSG *,size_t,size_t,uint64_t,size_t *), (___f), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1055, Amisslext)
+
+#define BIO_meth_get_sendmmsg(___biom) \
+      AROS_LC1(int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *), BIO_meth_get_sendmmsg, \
+ AROS_LCA(const BIO_METHOD *, (___biom), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1056, Amisslext)
+
+#define BIO_meth_set_recvmmsg(___biom, ___f) \
+      AROS_LC2(int, BIO_meth_set_recvmmsg, \
+ AROS_LCA(BIO_METHOD *, (___biom), A0), \
+ AROS_LCA(int (*)(BIO *,BIO_MSG *,size_t,size_t,uint64_t,size_t *), (___f), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1057, Amisslext)
+
+#define BIO_meth_get_recvmmsg(___biom) \
+      AROS_LC1(int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *), BIO_meth_get_recvmmsg, \
+ AROS_LCA(const BIO_METHOD *, (___biom), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1058, Amisslext)
+
+#define BIO_err_is_non_fatal(___errcode) \
+      AROS_LC1(int, BIO_err_is_non_fatal, \
+ AROS_LCA(unsigned int, (___errcode), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1059, Amisslext)
+
+#define BIO_s_dgram_pair() \
+      AROS_LC0(const BIO_METHOD *, BIO_s_dgram_pair, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1060, Amisslext)
+
+#define BIO_new_bio_dgram_pair(___bio1, ___writebuf1, ___bio2, ___writebuf2) \
+      AROS_LC4(int, BIO_new_bio_dgram_pair, \
+ AROS_LCA(BIO **, (___bio1), A0), \
+ AROS_LCA(size_t, (___writebuf1), D0), \
+ AROS_LCA(BIO **, (___bio2), A1), \
+ AROS_LCA(size_t, (___writebuf2), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1061, Amisslext)
+
+#define EVP_PKEY_auth_encapsulate_init(___ctx, ___authpriv, ___params) \
+      AROS_LC3(int, EVP_PKEY_auth_encapsulate_init, \
+ AROS_LCA(EVP_PKEY_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_PKEY *, (___authpriv), A1), \
+ AROS_LCA(const OSSL_PARAM *, (___params), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1062, Amisslext)
+
+#define EVP_PKEY_auth_decapsulate_init(___ctx, ___authpub, ___params) \
+      AROS_LC3(int, EVP_PKEY_auth_decapsulate_init, \
+ AROS_LCA(EVP_PKEY_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_PKEY *, (___authpub), A1), \
+ AROS_LCA(const OSSL_PARAM *, (___params), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1063, Amisslext)
+
+#define PKCS12_SAFEBAG_set0_attrs(___bag, ___attrs) \
+      AROS_LC2(void, PKCS12_SAFEBAG_set0_attrs, \
+ AROS_LCA(PKCS12_SAFEBAG *, (___bag), A0), \
+ AROS_LCA(struct stack_st_X509_ATTRIBUTE *, (___attrs), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1064, Amisslext)
+
+#define PKCS12_create_ex2_amiga_1(___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___moreargs) \
+      AROS_LC8(PKCS12 *, PKCS12_create_ex2_amiga_1, \
+ AROS_LCA(const char *, (___pass), A0), \
+ AROS_LCA(const char *, (___name), A1), \
+ AROS_LCA(EVP_PKEY *, (___pkey), A2), \
+ AROS_LCA(X509 *, (___cert), A3), \
+ AROS_LCA(struct stack_st_X509 *, (___ca), D0), \
+ AROS_LCA(int, (___nid_key), D1), \
+ AROS_LCA(int, (___nid_cert), D2), \
+ AROS_LCA(void *, (___moreargs), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1065, Amisslext)
+
+#define PKCS12_create_ex2_amiga_2(___iter, ___mac_iter, ___keytype, ___ctx, ___propq, ___cb, ___cbarg) \
+      AROS_LC7(void *, PKCS12_create_ex2_amiga_2, \
+ AROS_LCA(int, (___iter), D0), \
+ AROS_LCA(int, (___mac_iter), D1), \
+ AROS_LCA(int, (___keytype), D2), \
+ AROS_LCA(OSSL_LIB_CTX *, (___ctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+ AROS_LCA(PKCS12_create_cb *, (___cb), A3), \
+ AROS_LCA(void *, (___cbarg), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1066, Amisslext)
+
+#define OSSL_sleep(___millis) \
+      AROS_LC1(void, OSSL_sleep, \
+ AROS_LCA(uint64_t, (___millis), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1067, Amisslext)
+
+#define OSSL_get_thread_support_flags() \
+      AROS_LC0(uint32_t, OSSL_get_thread_support_flags, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1068, Amisslext)
+
+#define OSSL_set_max_threads(___ctx, ___max_threads) \
+      AROS_LC2(int, OSSL_set_max_threads, \
+ AROS_LCA(OSSL_LIB_CTX *, (___ctx), A0), \
+ AROS_LCA(uint64_t, (___max_threads), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1069, Amisslext)
+
+#define OSSL_get_max_threads(___ctx) \
+      AROS_LC1(uint64_t, OSSL_get_max_threads, \
+ AROS_LCA(OSSL_LIB_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1070, Amisslext)
+
+#define COMP_brotli() \
+      AROS_LC0(COMP_METHOD *, COMP_brotli, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1071, Amisslext)
+
+#define COMP_brotli_oneshot() \
+      AROS_LC0(COMP_METHOD *, COMP_brotli_oneshot, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1072, Amisslext)
+
+#define BIO_f_brotli() \
+      AROS_LC0(const BIO_METHOD *, BIO_f_brotli, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1073, Amisslext)
+
+#define COMP_zstd() \
+      AROS_LC0(COMP_METHOD *, COMP_zstd, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1074, Amisslext)
+
+#define COMP_zstd_oneshot() \
+      AROS_LC0(COMP_METHOD *, COMP_zstd_oneshot, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1075, Amisslext)
+
+#define BIO_f_zstd() \
+      AROS_LC0(const BIO_METHOD *, BIO_f_zstd, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1076, Amisslext)
+
+#define d2i_PUBKEY_ex_bio(___bp, ___a, ___libctx, ___propq) \
+      AROS_LC4(EVP_PKEY *, d2i_PUBKEY_ex_bio, \
+ AROS_LCA(BIO *, (___bp), A0), \
+ AROS_LCA(EVP_PKEY **, (___a), A1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
+ AROS_LCA(const char *, (___propq), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1077, Amisslext)
+
+#define COMP_zlib_oneshot() \
+      AROS_LC0(COMP_METHOD *, COMP_zlib_oneshot, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1078, Amisslext)
+
+#define OSSL_HPKE_keygen_amiga(___suite, ___pub, ___publen, ___priv, ___ikm, ___ikmlen, ___libctx, ___propq) \
+      AROS_LC8(int, OSSL_HPKE_keygen_amiga, \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+ AROS_LCA(unsigned char *, (___pub), A1), \
+ AROS_LCA(size_t *, (___publen), A2), \
+ AROS_LCA(EVP_PKEY **, (___priv), A3), \
+ AROS_LCA(const unsigned char *, (___ikm), D0), \
+ AROS_LCA(size_t, (___ikmlen), D1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), D2), \
+ AROS_LCA(const char *, (___propq), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1079, Amisslext)
+
+#define OSSL_HPKE_suite_check_amiga(___suite) \
+      AROS_LC1(int, OSSL_HPKE_suite_check_amiga, \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1080, Amisslext)
+
+#define OSSL_HPKE_get_grease_value(___suite_in, ___suite, ___enc, ___enclen, ___ct, ___ctlen, ___libctx, ___propq) \
+      AROS_LC8(int, OSSL_HPKE_get_grease_value, \
+ AROS_LCA(const OSSL_HPKE_SUITE *, (___suite_in), A0), \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A1), \
+ AROS_LCA(unsigned char *, (___enc), A2), \
+ AROS_LCA(size_t *, (___enclen), A3), \
+ AROS_LCA(unsigned char *, (___ct), D0), \
+ AROS_LCA(size_t, (___ctlen), D1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), D2), \
+ AROS_LCA(const char *, (___propq), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1081, Amisslext)
+
+#define OSSL_HPKE_str2suite(___str, ___suite) \
+      AROS_LC2(int, OSSL_HPKE_str2suite, \
+ AROS_LCA(const char *, (___str), A0), \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1082, Amisslext)
+
+#define OSSL_HPKE_CTX_free(___ctx) \
+      AROS_LC1(void, OSSL_HPKE_CTX_free, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1083, Amisslext)
+
+#define OSSL_HPKE_CTX_new_amiga(___mode, ___suite, ___role, ___libctx, ___propq) \
+      AROS_LC5(OSSL_HPKE_CTX *, OSSL_HPKE_CTX_new_amiga, \
+ AROS_LCA(int, (___mode), D0), \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+ AROS_LCA(int, (___role), D1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1084, Amisslext)
+
+#define OSSL_HPKE_CTX_set1_authpriv(___ctx, ___priv) \
+      AROS_LC2(int, OSSL_HPKE_CTX_set1_authpriv, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_PKEY *, (___priv), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1085, Amisslext)
+
+#define OSSL_HPKE_CTX_set1_authpub(___ctx, ___pub, ___publen) \
+      AROS_LC3(int, OSSL_HPKE_CTX_set1_authpub, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(const unsigned char *, (___pub), A1), \
+ AROS_LCA(size_t, (___publen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1086, Amisslext)
+
+#define OSSL_HPKE_CTX_set1_psk(___ctx, ___pskid, ___psk, ___psklen) \
+      AROS_LC4(int, OSSL_HPKE_CTX_set1_psk, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(const char *, (___pskid), A1), \
+ AROS_LCA(const unsigned char *, (___psk), A2), \
+ AROS_LCA(size_t, (___psklen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1087, Amisslext)
+
+#define OSSL_HPKE_CTX_set1_ikme(___ctx, ___ikme, ___ikmelen) \
+      AROS_LC3(int, OSSL_HPKE_CTX_set1_ikme, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(const unsigned char *, (___ikme), A1), \
+ AROS_LCA(size_t, (___ikmelen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1088, Amisslext)
+
+#define OSSL_HPKE_get_ciphertext_size_amiga(___suite, ___clearlen) \
+      AROS_LC2(size_t, OSSL_HPKE_get_ciphertext_size_amiga, \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+ AROS_LCA(size_t, (___clearlen), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1089, Amisslext)
+
+#define OSSL_HPKE_get_public_encap_size_amiga(___suite) \
+      AROS_LC1(size_t, OSSL_HPKE_get_public_encap_size_amiga, \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1090, Amisslext)
+
+#define OSSL_HPKE_export(___ctx, ___secret, ___secretlen, ___label, ___labellen) \
+      AROS_LC5(int, OSSL_HPKE_export, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned char *, (___secret), A1), \
+ AROS_LCA(size_t, (___secretlen), D0), \
+ AROS_LCA(const unsigned char *, (___label), A2), \
+ AROS_LCA(size_t, (___labellen), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1091, Amisslext)
+
+#define OSSL_HPKE_encap(___ctx, ___enc, ___enclen, ___pub, ___publen, ___info, ___infolen) \
+      AROS_LC7(int, OSSL_HPKE_encap, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned char *, (___enc), A1), \
+ AROS_LCA(size_t *, (___enclen), A2), \
+ AROS_LCA(const unsigned char *, (___pub), A3), \
+ AROS_LCA(size_t, (___publen), D0), \
+ AROS_LCA(const unsigned char *, (___info), D1), \
+ AROS_LCA(size_t, (___infolen), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1092, Amisslext)
+
+#define OSSL_HPKE_decap(___ctx, ___enc, ___enclen, ___recippriv, ___info, ___infolen) \
+      AROS_LC6(int, OSSL_HPKE_decap, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(const unsigned char *, (___enc), A1), \
+ AROS_LCA(size_t, (___enclen), D0), \
+ AROS_LCA(EVP_PKEY *, (___recippriv), A2), \
+ AROS_LCA(const unsigned char *, (___info), A3), \
+ AROS_LCA(size_t, (___infolen), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1093, Amisslext)
+
+#define OSSL_HPKE_seal(___ctx, ___ct, ___ctlen, ___aad, ___aadlen, ___pt, ___ptlen) \
+      AROS_LC7(int, OSSL_HPKE_seal, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned char *, (___ct), A1), \
+ AROS_LCA(size_t *, (___ctlen), A2), \
+ AROS_LCA(const unsigned char *, (___aad), A3), \
+ AROS_LCA(size_t, (___aadlen), D0), \
+ AROS_LCA(const unsigned char *, (___pt), D1), \
+ AROS_LCA(size_t, (___ptlen), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1094, Amisslext)
+
+#define OSSL_HPKE_open(___ctx, ___pt, ___ptlen, ___aad, ___aadlen, ___ct, ___ctlen) \
+      AROS_LC7(int, OSSL_HPKE_open, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned char *, (___pt), A1), \
+ AROS_LCA(size_t *, (___ptlen), A2), \
+ AROS_LCA(const unsigned char *, (___aad), A3), \
+ AROS_LCA(size_t, (___aadlen), D0), \
+ AROS_LCA(const unsigned char *, (___ct), D1), \
+ AROS_LCA(size_t, (___ctlen), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1095, Amisslext)
+
+#define OSSL_HPKE_CTX_get_seq(___ctx, ___seq) \
+      AROS_LC2(int, OSSL_HPKE_CTX_get_seq, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(uint64_t *, (___seq), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1096, Amisslext)
+
+#define OSSL_HPKE_CTX_set_seq(___ctx, ___seq) \
+      AROS_LC2(int, OSSL_HPKE_CTX_set_seq, \
+ AROS_LCA(OSSL_HPKE_CTX *, (___ctx), A0), \
+ AROS_LCA(uint64_t, (___seq), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1097, Amisslext)
+
+#define OSSL_HPKE_get_recommended_ikmelen_amiga(___suite) \
+      AROS_LC1(size_t, OSSL_HPKE_get_recommended_ikmelen_amiga, \
+ AROS_LCA(OSSL_HPKE_SUITE *, (___suite), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1098, Amisslext)
+
+#define OSSL_PROVIDER_get0_default_search_path(___libctx) \
+      AROS_LC1(const char *, OSSL_PROVIDER_get0_default_search_path, \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1099, Amisslext)
+
+#define BIO_get_rpoll_descriptor(___b, ___desc) \
+      AROS_LC2(int, BIO_get_rpoll_descriptor, \
+ AROS_LCA(BIO *, (___b), A0), \
+ AROS_LCA(BIO_POLL_DESCRIPTOR *, (___desc), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1100, Amisslext)
+
+#define BIO_get_wpoll_descriptor(___b, ___desc) \
+      AROS_LC2(int, BIO_get_wpoll_descriptor, \
+ AROS_LCA(BIO *, (___b), A0), \
+ AROS_LCA(BIO_POLL_DESCRIPTOR *, (___desc), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1101, Amisslext)
+
+#define ASN1_item_unpack_ex(___oct, ___it, ___libctx, ___propq) \
+      AROS_LC4(void *, ASN1_item_unpack_ex, \
+ AROS_LCA(const ASN1_STRING *, (___oct), A0), \
+ AROS_LCA(const ASN1_ITEM *, (___it), A1), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A2), \
+ AROS_LCA(const char *, (___propq), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1102, Amisslext)
+
+#define PKCS12_SAFEBAG_get1_cert_ex(___bag, ___libctx, ___propq) \
+      AROS_LC3(X509 *, PKCS12_SAFEBAG_get1_cert_ex, \
+ AROS_LCA(const PKCS12_SAFEBAG *, (___bag), A0), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1103, Amisslext)
+
+#define PKCS12_SAFEBAG_get1_crl_ex(___bag, ___libctx, ___propq) \
+      AROS_LC3(X509_CRL *, PKCS12_SAFEBAG_get1_crl_ex, \
+ AROS_LCA(const PKCS12_SAFEBAG *, (___bag), A0), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1104, Amisslext)
+
+#define EC_GROUP_to_params(___group, ___libctx, ___propq, ___bnctx) \
+      AROS_LC4(OSSL_PARAM *, EC_GROUP_to_params, \
+ AROS_LCA(const EC_GROUP *, (___group), A0), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+ AROS_LCA(BN_CTX *, (___bnctx), A3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1105, Amisslext)
+
+#define X509_STORE_CTX_init_rpk(___ctx, ___trust_store, ___rpk) \
+      AROS_LC3(int, X509_STORE_CTX_init_rpk, \
+ AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(X509_STORE *, (___trust_store), A1), \
+ AROS_LCA(EVP_PKEY*, (___rpk), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1106, Amisslext)
+
+#define X509_STORE_CTX_get0_rpk(___ctx) \
+      AROS_LC1(EVP_PKEY *, X509_STORE_CTX_get0_rpk, \
+ AROS_LCA(const X509_STORE_CTX *, (___ctx), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1107, Amisslext)
+
+#define X509_STORE_CTX_set0_rpk(___ctx, ___target) \
+      AROS_LC2(void, X509_STORE_CTX_set0_rpk, \
+ AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_PKEY *, (___target), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1108, Amisslext)
+
+#define CRYPTO_atomic_load_int(___val, ___ret, ___lock) \
+      AROS_LC3(int, CRYPTO_atomic_load_int, \
+ AROS_LCA(int *, (___val), A0), \
+ AROS_LCA(int *, (___ret), A1), \
+ AROS_LCA(CRYPTO_RWLOCK *, (___lock), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1109, Amisslext)
+
+#define OSSL_ERR_STATE_new() \
+      AROS_LC0(ERR_STATE *, OSSL_ERR_STATE_new, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1110, Amisslext)
+
+#define OSSL_ERR_STATE_save(___es) \
+      AROS_LC1(void, OSSL_ERR_STATE_save, \
+ AROS_LCA(ERR_STATE *, (___es), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1111, Amisslext)
+
+#define OSSL_ERR_STATE_restore(___es) \
+      AROS_LC1(void, OSSL_ERR_STATE_restore, \
+ AROS_LCA(const ERR_STATE *, (___es), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1112, Amisslext)
+
+#define OSSL_ERR_STATE_free(___es) \
+      AROS_LC1(void, OSSL_ERR_STATE_free, \
+ AROS_LCA(ERR_STATE *, (___es), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1113, Amisslext)
+
+#define ERR_count_to_mark() \
+      AROS_LC0(int, ERR_count_to_mark, \
+     struct Library *, AMISSLEXT_BASE_NAME, 1114, Amisslext)
+
+#define OSSL_PROVIDER_load_ex(___a, ___name, ___params) \
+      AROS_LC3(OSSL_PROVIDER *, OSSL_PROVIDER_load_ex, \
+ AROS_LCA(OSSL_LIB_CTX *, (___a), A0), \
+ AROS_LCA(const char *, (___name), A1), \
+ AROS_LCA(OSSL_PARAM *, (___params), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1115, Amisslext)
+
+#define OSSL_PROVIDER_try_load_ex(___a, ___name, ___params, ___retain_fallbacks) \
+      AROS_LC4(OSSL_PROVIDER *, OSSL_PROVIDER_try_load_ex, \
+ AROS_LCA(OSSL_LIB_CTX *, (___a), A0), \
+ AROS_LCA(const char *, (___name), A1), \
+ AROS_LCA(OSSL_PARAM *, (___params), A2), \
+ AROS_LCA(int, (___retain_fallbacks), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1116, Amisslext)
+
+#define OSSL_ERR_STATE_save_to_mark(___es) \
+      AROS_LC1(void, OSSL_ERR_STATE_save_to_mark, \
+ AROS_LCA(ERR_STATE *, (___es), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1117, Amisslext)
+
+#define X509_STORE_CTX_set_get_crl(___ctx, ___get_crl) \
+      AROS_LC2(void, X509_STORE_CTX_set_get_crl, \
+ AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(X509_STORE_CTX_get_crl_fn, (___get_crl), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1118, Amisslext)
+
+#define X509_STORE_CTX_set_current_reasons(___ctx, ___current_reasons) \
+      AROS_LC2(void, X509_STORE_CTX_set_current_reasons, \
+ AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(unsigned int, (___current_reasons), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1119, Amisslext)
+
+#define OSSL_STORE_delete(___uri, ___libctx, ___propq, ___ui_method, ___ui_data, ___params) \
+      AROS_LC6(int, OSSL_STORE_delete, \
+ AROS_LCA(const char *, (___uri), A0), \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A1), \
+ AROS_LCA(const char *, (___propq), A2), \
+ AROS_LCA(const UI_METHOD *, (___ui_method), A3), \
+ AROS_LCA(void *, (___ui_data), D0), \
+ AROS_LCA(const OSSL_PARAM *, (___params), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1120, Amisslext)
+
+#define BIO_ADDR_copy(___dst, ___src) \
+      AROS_LC2(int, BIO_ADDR_copy, \
+ AROS_LCA(BIO_ADDR *, (___dst), A0), \
+ AROS_LCA(const BIO_ADDR *, (___src), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1121, Amisslext)
 
 #endif /* !_INLINE_AMISSLEXT_H */

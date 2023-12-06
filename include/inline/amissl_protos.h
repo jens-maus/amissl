@@ -3241,11 +3241,11 @@ int __PKCS7_SIGNER_INFO_set(__reg("a6") struct Library * , __reg("a0") PKCS7_SIG
 int __PKCS7_add_signer(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") PKCS7_SIGNER_INFO * p7i ) = "\tjsr\t-7812(a6)";
 #define PKCS7_add_signer(p7, p7i) __PKCS7_add_signer(AmiSSLBase, (p7), (p7i))
 
-int __PKCS7_add_certificate(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") X509 * x509 ) = "\tjsr\t-7818(a6)";
-#define PKCS7_add_certificate(p7, x509) __PKCS7_add_certificate(AmiSSLBase, (p7), (x509))
+int __PKCS7_add_certificate(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") X509 * cert ) = "\tjsr\t-7818(a6)";
+#define PKCS7_add_certificate(p7, cert) __PKCS7_add_certificate(AmiSSLBase, (p7), (cert))
 
-int __PKCS7_add_crl(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") X509_CRL * x509 ) = "\tjsr\t-7824(a6)";
-#define PKCS7_add_crl(p7, x509) __PKCS7_add_crl(AmiSSLBase, (p7), (x509))
+int __PKCS7_add_crl(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") X509_CRL * crl ) = "\tjsr\t-7824(a6)";
+#define PKCS7_add_crl(p7, crl) __PKCS7_add_crl(AmiSSLBase, (p7), (crl))
 
 int __PKCS7_content_new(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("d0") int nid ) = "\tjsr\t-7830(a6)";
 #define PKCS7_content_new(p7, nid) __PKCS7_content_new(AmiSSLBase, (p7), (nid))
@@ -3253,8 +3253,8 @@ int __PKCS7_content_new(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , 
 int __PKCS7_dataVerify(__reg("a6") struct Library * , __reg("a0") X509_STORE * cert_store , __reg("a1") X509_STORE_CTX * ctx , __reg("a2") BIO * bio , __reg("a3") PKCS7 * p7 , __reg("d0") PKCS7_SIGNER_INFO * si ) = "\tjsr\t-7836(a6)";
 #define PKCS7_dataVerify(cert_store, ctx, bio, p7, si) __PKCS7_dataVerify(AmiSSLBase, (cert_store), (ctx), (bio), (p7), (si))
 
-int __PKCS7_signatureVerify(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") PKCS7 * p7 , __reg("a2") PKCS7_SIGNER_INFO * si , __reg("a3") X509 * x509 ) = "\tjsr\t-7842(a6)";
-#define PKCS7_signatureVerify(bio, p7, si, x509) __PKCS7_signatureVerify(AmiSSLBase, (bio), (p7), (si), (x509))
+int __PKCS7_signatureVerify(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") PKCS7 * p7 , __reg("a2") PKCS7_SIGNER_INFO * si , __reg("a3") X509 * signer ) = "\tjsr\t-7842(a6)";
+#define PKCS7_signatureVerify(bio, p7, si, signer) __PKCS7_signatureVerify(AmiSSLBase, (bio), (p7), (si), (signer))
 
 BIO * __PKCS7_dataInit(__reg("a6") struct Library * , __reg("a0") PKCS7 * p7 , __reg("a1") BIO * bio ) = "\tjsr\t-7848(a6)";
 #define PKCS7_dataInit(p7, bio) __PKCS7_dataInit(AmiSSLBase, (p7), (bio))
@@ -4873,8 +4873,8 @@ int __X509_REVOKED_set_serialNumber(__reg("a6") struct Library * , __reg("a0") X
 int __X509_REVOKED_set_revocationDate(__reg("a6") struct Library * , __reg("a0") X509_REVOKED * r , __reg("a1") ASN1_TIME * tm ) = "\tjsr\t-11250(a6)";
 #define X509_REVOKED_set_revocationDate(r, tm) __X509_REVOKED_set_revocationDate(AmiSSLBase, (r), (tm))
 
-int __X509_check_private_key(__reg("a6") struct Library * , __reg("a0") const X509 * x509 , __reg("a1") const EVP_PKEY * pkey ) = "\tjsr\t-11256(a6)";
-#define X509_check_private_key(x509, pkey) __X509_check_private_key(AmiSSLBase, (x509), (pkey))
+int __X509_check_private_key(__reg("a6") struct Library * , __reg("a0") const X509 * cert , __reg("a1") const EVP_PKEY * pkey ) = "\tjsr\t-11256(a6)";
+#define X509_check_private_key(cert, pkey) __X509_check_private_key(AmiSSLBase, (cert), (pkey))
 
 int __X509_issuer_and_serial_cmp(__reg("a6") struct Library * , __reg("a0") const X509 * a , __reg("a1") const X509 * b ) = "\tjsr\t-11262(a6)";
 #define X509_issuer_and_serial_cmp(a, b) __X509_issuer_and_serial_cmp(AmiSSLBase, (a), (b))
@@ -5290,17 +5290,17 @@ int __X509_OBJECT_up_ref_count(__reg("a6") struct Library * , __reg("a0") X509_O
 X509_STORE * __X509_STORE_new(__reg("a6") struct Library * ) = "\tjsr\t-12102(a6)";
 #define X509_STORE_new() __X509_STORE_new(AmiSSLBase)
 
-void __X509_STORE_free(__reg("a6") struct Library * , __reg("a0") X509_STORE * v ) = "\tjsr\t-12108(a6)";
-#define X509_STORE_free(v) __X509_STORE_free(AmiSSLBase, (v))
+void __X509_STORE_free(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-12108(a6)";
+#define X509_STORE_free(xs) __X509_STORE_free(AmiSSLBase, (xs))
 
-int __X509_STORE_set_flags(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("d0") unsigned long flags ) = "\tjsr\t-12114(a6)";
-#define X509_STORE_set_flags(ctx, flags) __X509_STORE_set_flags(AmiSSLBase, (ctx), (flags))
+int __X509_STORE_set_flags(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("d0") unsigned long flags ) = "\tjsr\t-12114(a6)";
+#define X509_STORE_set_flags(xs, flags) __X509_STORE_set_flags(AmiSSLBase, (xs), (flags))
 
-int __X509_STORE_set_purpose(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("d0") int purpose ) = "\tjsr\t-12120(a6)";
-#define X509_STORE_set_purpose(ctx, purpose) __X509_STORE_set_purpose(AmiSSLBase, (ctx), (purpose))
+int __X509_STORE_set_purpose(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("d0") int purpose ) = "\tjsr\t-12120(a6)";
+#define X509_STORE_set_purpose(xs, purpose) __X509_STORE_set_purpose(AmiSSLBase, (xs), (purpose))
 
-int __X509_STORE_set_trust(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("d0") int trust ) = "\tjsr\t-12126(a6)";
-#define X509_STORE_set_trust(ctx, trust) __X509_STORE_set_trust(AmiSSLBase, (ctx), (trust))
+int __X509_STORE_set_trust(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("d0") int trust ) = "\tjsr\t-12126(a6)";
+#define X509_STORE_set_trust(xs, trust) __X509_STORE_set_trust(AmiSSLBase, (xs), (trust))
 
 X509_STORE_CTX * __X509_STORE_CTX_new(__reg("a6") struct Library * ) = "\tjsr\t-12132(a6)";
 #define X509_STORE_CTX_new() __X509_STORE_CTX_new(AmiSSLBase)
@@ -5311,8 +5311,8 @@ int __X509_STORE_CTX_get1_issuer(__reg("a6") struct Library * , __reg("a0") X509
 void __X509_STORE_CTX_free(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx ) = "\tjsr\t-12144(a6)";
 #define X509_STORE_CTX_free(ctx) __X509_STORE_CTX_free(AmiSSLBase, (ctx))
 
-int __X509_STORE_CTX_init(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx , __reg("a1") X509_STORE * store , __reg("a2") X509 * x509 , __reg("a3") STACK_OF(X509) * chain ) = "\tjsr\t-12150(a6)";
-#define X509_STORE_CTX_init(ctx, store, x509, chain) __X509_STORE_CTX_init(AmiSSLBase, (ctx), (store), (x509), (chain))
+int __X509_STORE_CTX_init(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx , __reg("a1") X509_STORE * trust_store , __reg("a2") X509 * target , __reg("a3") STACK_OF(X509) * untrusted ) = "\tjsr\t-12150(a6)";
+#define X509_STORE_CTX_init(ctx, trust_store, target, untrusted) __X509_STORE_CTX_init(AmiSSLBase, (ctx), (trust_store), (target), (untrusted))
 
 void __X509_STORE_CTX_set0_trusted_stack(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx , __reg("a1") STACK_OF(X509) * sk ) = "\tjsr\t-12156(a6)";
 #define X509_STORE_CTX_set0_trusted_stack(ctx, sk) __X509_STORE_CTX_set0_trusted_stack(AmiSSLBase, (ctx), (sk))
@@ -5320,8 +5320,8 @@ void __X509_STORE_CTX_set0_trusted_stack(__reg("a6") struct Library * , __reg("a
 void __X509_STORE_CTX_cleanup(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx ) = "\tjsr\t-12162(a6)";
 #define X509_STORE_CTX_cleanup(ctx) __X509_STORE_CTX_cleanup(AmiSSLBase, (ctx))
 
-X509_LOOKUP * __X509_STORE_add_lookup(__reg("a6") struct Library * , __reg("a0") X509_STORE * v , __reg("a1") X509_LOOKUP_METHOD * m ) = "\tjsr\t-12168(a6)";
-#define X509_STORE_add_lookup(v, m) __X509_STORE_add_lookup(AmiSSLBase, (v), (m))
+X509_LOOKUP * __X509_STORE_add_lookup(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_LOOKUP_METHOD * m ) = "\tjsr\t-12168(a6)";
+#define X509_STORE_add_lookup(xs, m) __X509_STORE_add_lookup(AmiSSLBase, (xs), (m))
 
 X509_LOOKUP_METHOD * __X509_LOOKUP_hash_dir(__reg("a6") struct Library * ) = "\tjsr\t-12174(a6)";
 #define X509_LOOKUP_hash_dir() __X509_LOOKUP_hash_dir(AmiSSLBase)
@@ -5329,11 +5329,11 @@ X509_LOOKUP_METHOD * __X509_LOOKUP_hash_dir(__reg("a6") struct Library * ) = "\t
 X509_LOOKUP_METHOD * __X509_LOOKUP_file(__reg("a6") struct Library * ) = "\tjsr\t-12180(a6)";
 #define X509_LOOKUP_file() __X509_LOOKUP_file(AmiSSLBase)
 
-int __X509_STORE_add_cert(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509 * x ) = "\tjsr\t-12186(a6)";
-#define X509_STORE_add_cert(ctx, x) __X509_STORE_add_cert(AmiSSLBase, (ctx), (x))
+int __X509_STORE_add_cert(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509 * x ) = "\tjsr\t-12186(a6)";
+#define X509_STORE_add_cert(xs, x) __X509_STORE_add_cert(AmiSSLBase, (xs), (x))
 
-int __X509_STORE_add_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_CRL * x ) = "\tjsr\t-12192(a6)";
-#define X509_STORE_add_crl(ctx, x) __X509_STORE_add_crl(AmiSSLBase, (ctx), (x))
+int __X509_STORE_add_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_CRL * x ) = "\tjsr\t-12192(a6)";
+#define X509_STORE_add_crl(xs, x) __X509_STORE_add_crl(AmiSSLBase, (xs), (x))
 
 int __X509_STORE_CTX_get_by_subject(__reg("a6") struct Library * , __reg("a0") const X509_STORE_CTX * vs , __reg("d0") X509_LOOKUP_TYPE type , __reg("a1") const X509_NAME * name , __reg("a2") X509_OBJECT * ret ) = "\tjsr\t-12198(a6)";
 #define X509_STORE_CTX_get_by_subject(vs, type, name, ret) __X509_STORE_CTX_get_by_subject(AmiSSLBase, (vs), (type), (name), (ret))
@@ -5374,11 +5374,11 @@ int __X509_LOOKUP_by_alias(__reg("a6") struct Library * , __reg("a0") X509_LOOKU
 int __X509_LOOKUP_shutdown(__reg("a6") struct Library * , __reg("a0") X509_LOOKUP * ctx ) = "\tjsr\t-12270(a6)";
 #define X509_LOOKUP_shutdown(ctx) __X509_LOOKUP_shutdown(AmiSSLBase, (ctx))
 
-int __X509_STORE_load_locations(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") const char * file , __reg("a2") const char * dir ) = "\tjsr\t-12276(a6)";
-#define X509_STORE_load_locations(ctx, file, dir) __X509_STORE_load_locations(AmiSSLBase, (ctx), (file), (dir))
+int __X509_STORE_load_locations(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") const char * file , __reg("a2") const char * dir ) = "\tjsr\t-12276(a6)";
+#define X509_STORE_load_locations(xs, file, dir) __X509_STORE_load_locations(AmiSSLBase, (xs), (file), (dir))
 
-int __X509_STORE_set_default_paths(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx ) = "\tjsr\t-12282(a6)";
-#define X509_STORE_set_default_paths(ctx) __X509_STORE_set_default_paths(AmiSSLBase, (ctx))
+int __X509_STORE_set_default_paths(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-12282(a6)";
+#define X509_STORE_set_default_paths(xs) __X509_STORE_set_default_paths(AmiSSLBase, (xs))
 
 int __OBSOLETE_X509_STORE_CTX_get_ex_new_index(__reg("a6") struct Library * , __reg("d0") long argl , __reg("a0") void * argp , __reg("a1") CRYPTO_EX_new * new_func , __reg("a2") CRYPTO_EX_dup * dup_func , __reg("a3") CRYPTO_EX_free * free_func ) = "\tjsr\t-12288(a6)";
 #define OBSOLETE_X509_STORE_CTX_get_ex_new_index(argl, argp, new_func, dup_func, free_func) __OBSOLETE_X509_STORE_CTX_get_ex_new_index(AmiSSLBase, (argl), (argp), (new_func), (dup_func), (free_func))
@@ -6853,8 +6853,8 @@ int __RSA_generate_key_ex(__reg("a6") struct Library * , __reg("a0") RSA * rsa ,
 void __X509_VERIFY_PARAM_free(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param ) = "\tjsr\t-15588(a6)";
 #define X509_VERIFY_PARAM_free(param) __X509_VERIFY_PARAM_free(AmiSSLBase, (param))
 
-int __X509_STORE_set1_param(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") const X509_VERIFY_PARAM * pm ) = "\tjsr\t-15594(a6)";
-#define X509_STORE_set1_param(ctx, pm) __X509_STORE_set1_param(AmiSSLBase, (ctx), (pm))
+int __X509_STORE_set1_param(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") const X509_VERIFY_PARAM * pm ) = "\tjsr\t-15594(a6)";
+#define X509_STORE_set1_param(xs, pm) __X509_STORE_set1_param(AmiSSLBase, (xs), (pm))
 
 ASN1_TYPE * __ASN1_generate_nconf(__reg("a6") struct Library * , __reg("a0") const char * str , __reg("a1") CONF * nconf ) = "\tjsr\t-15600(a6)";
 #define ASN1_generate_nconf(str, nconf) __ASN1_generate_nconf(AmiSSLBase, (str), (nconf))
@@ -6883,8 +6883,8 @@ void __EVP_CIPHER_CTX_set_flags(__reg("a6") struct Library * , __reg("a0") EVP_C
 int __EVP_CIPHER_get_iv_length(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER * cipher ) = "\tjsr\t-15648(a6)";
 #define EVP_CIPHER_get_iv_length(cipher) __EVP_CIPHER_get_iv_length(AmiSSLBase, (cipher))
 
-int __X509_REQ_check_private_key(__reg("a6") struct Library * , __reg("a0") X509_REQ * x509 , __reg("a1") EVP_PKEY * pkey ) = "\tjsr\t-15654(a6)";
-#define X509_REQ_check_private_key(x509, pkey) __X509_REQ_check_private_key(AmiSSLBase, (x509), (pkey))
+int __X509_REQ_check_private_key(__reg("a6") struct Library * , __reg("a0") const X509_REQ * req , __reg("a1") EVP_PKEY * pkey ) = "\tjsr\t-15654(a6)";
+#define X509_REQ_check_private_key(req, pkey) __X509_REQ_check_private_key(AmiSSLBase, (req), (pkey))
 
 EC_KEY * __PEM_read_bio_EC_PUBKEY(__reg("a6") struct Library * , __reg("a0") BIO * bp , __reg("a1") EC_KEY ** x , __reg("a2") pem_password_cb * cb , __reg("a3") void * u ) = "\tjsr\t-15660(a6)";
 #define PEM_read_bio_EC_PUBKEY(bp, x, cb, u) __PEM_read_bio_EC_PUBKEY(AmiSSLBase, (bp), (x), (cb), (u))
@@ -9583,8 +9583,8 @@ void __EVP_CIPHER_do_all_sorted(__reg("a6") struct Library * , __reg("a0") void 
 void __EVP_PKEY_CTX_free(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_CTX * ctx ) = "\tjsr\t-22392(a6)";
 #define EVP_PKEY_CTX_free(ctx) __EVP_PKEY_CTX_free(AmiSSLBase, (ctx))
 
-STACK_OF(X509) * __X509_STORE_CTX_get1_certs(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * st , __reg("a1") const X509_NAME * nm ) = "\tjsr\t-22404(a6)";
-#define X509_STORE_CTX_get1_certs(st, nm) __X509_STORE_CTX_get1_certs(AmiSSLBase, (st), (nm))
+STACK_OF(X509) * __X509_STORE_CTX_get1_certs(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * xs , __reg("a1") const X509_NAME * nm ) = "\tjsr\t-22404(a6)";
+#define X509_STORE_CTX_get1_certs(xs, nm) __X509_STORE_CTX_get1_certs(AmiSSLBase, (xs), (nm))
 
 int __EVP_PKEY_CTX_get_operation(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_CTX * ctx ) = "\tjsr\t-22410(a6)";
 #define EVP_PKEY_CTX_get_operation(ctx) __EVP_PKEY_CTX_get_operation(AmiSSLBase, (ctx))
@@ -9877,8 +9877,8 @@ int __OSSL_HTTP_REQ_CTX_add1_header(__reg("a6") struct Library * , __reg("a0") O
 int __OBSOLETE_OCSP_REQ_CTX_set1_req(__reg("a6") struct Library * , __reg("a0") OSSL_HTTP_REQ_CTX * rctx , __reg("a1") OCSP_REQUEST * req ) = "\tjsr\t-23010(a6)";
 #define OBSOLETE_OCSP_REQ_CTX_set1_req(rctx, req) __OBSOLETE_OCSP_REQ_CTX_set1_req(AmiSSLBase, (rctx), (req))
 
-void __X509_STORE_set_verify_cb(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_verify_cb verify_cb ) = "\tjsr\t-23016(a6)";
-#define X509_STORE_set_verify_cb(ctx, verify_cb) __X509_STORE_set_verify_cb(AmiSSLBase, (ctx), (verify_cb))
+void __X509_STORE_set_verify_cb(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_verify_cb verify_cb ) = "\tjsr\t-23016(a6)";
+#define X509_STORE_set_verify_cb(xs, verify_cb) __X509_STORE_set_verify_cb(AmiSSLBase, (xs), (verify_cb))
 
 X509_CRL * __X509_STORE_CTX_get0_current_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE_CTX * ctx ) = "\tjsr\t-23022(a6)";
 #define X509_STORE_CTX_get0_current_crl(ctx) __X509_STORE_CTX_get0_current_crl(AmiSSLBase, (ctx))
@@ -12130,8 +12130,8 @@ const STACK_OF(X509_ATTRIBUTE) * __PKCS8_pkey_get0_attrs(__reg("a6") struct Libr
 int __PKCS8_pkey_add1_attr_by_NID(__reg("a6") struct Library * , __reg("a0") PKCS8_PRIV_KEY_INFO * p8 , __reg("d0") int nid , __reg("d1") int type , __reg("a1") const unsigned char * bytes , __reg("d2") int len ) = "\tjsr\t-27672(a6)";
 #define PKCS8_pkey_add1_attr_by_NID(p8, nid, type, bytes, len) __PKCS8_pkey_add1_attr_by_NID(AmiSSLBase, (p8), (nid), (type), (bytes), (len))
 
-int __X509_STORE_up_ref(__reg("a6") struct Library * , __reg("a0") X509_STORE * v ) = "\tjsr\t-27678(a6)";
-#define X509_STORE_up_ref(v) __X509_STORE_up_ref(AmiSSLBase, (v))
+int __X509_STORE_up_ref(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-27678(a6)";
+#define X509_STORE_up_ref(xs) __X509_STORE_up_ref(AmiSSLBase, (xs))
 
 int __SSL_enable_ct(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") int validation_mode ) = "\tjsr\t-27684(a6)";
 #define SSL_enable_ct(s, validation_mode) __SSL_enable_ct(AmiSSLBase, (s), (validation_mode))
@@ -12208,8 +12208,8 @@ int __BIO_meth_set_write(__reg("a6") struct Library * , __reg("a0") BIO_METHOD *
 int __BIO_meth_set_destroy(__reg("a6") struct Library * , __reg("a0") BIO_METHOD * biom , __reg("a1") int (*destroy)(BIO *) ) = "\tjsr\t-27828(a6)";
 #define BIO_meth_set_destroy(biom, destroy) __BIO_meth_set_destroy(AmiSSLBase, (biom), (destroy))
 
-int __BIO_meth_set_gets(__reg("a6") struct Library * , __reg("a0") BIO_METHOD * biom , __reg("a1") int (*func)(BIO *,char *,int) ) = "\tjsr\t-27834(a6)";
-#define BIO_meth_set_gets(biom, func) __BIO_meth_set_gets(AmiSSLBase, (biom), (func))
+int __BIO_meth_set_gets(__reg("a6") struct Library * , __reg("a0") BIO_METHOD * biom , __reg("a1") int (*ossl_gets)(BIO *,char *,int) ) = "\tjsr\t-27834(a6)";
+#define BIO_meth_set_gets(biom, ossl_gets) __BIO_meth_set_gets(AmiSSLBase, (biom), (ossl_gets))
 
 long  (* __BIO_meth_get_callback_ctrl(__reg("a6") struct Library * , __reg("a0") const BIO_METHOD * biom ) )(BIO *, int, BIO_info_cb *) =  "\tjsr\t-27840(a6)";
 #define BIO_meth_get_callback_ctrl(biom) __BIO_meth_get_callback_ctrl(AmiSSLBase, (biom))
@@ -12340,7 +12340,7 @@ void __X509_VERIFY_PARAM_set_auth_level(__reg("a6") struct Library * , __reg("a0
 int __X509_VERIFY_PARAM_get_auth_level(__reg("a6") struct Library * , __reg("a0") const X509_VERIFY_PARAM * param ) = "\tjsr\t-28092(a6)";
 #define X509_VERIFY_PARAM_get_auth_level(param) __X509_VERIFY_PARAM_get_auth_level(AmiSSLBase, (param))
 
-EVP_PKEY * __X509_REQ_get0_pubkey(__reg("a6") struct Library * , __reg("a0") X509_REQ * req ) = "\tjsr\t-28098(a6)";
+EVP_PKEY * __X509_REQ_get0_pubkey(__reg("a6") struct Library * , __reg("a0") const X509_REQ * req ) = "\tjsr\t-28098(a6)";
 #define X509_REQ_get0_pubkey(req) __X509_REQ_get0_pubkey(AmiSSLBase, (req))
 
 int __RSA_set0_key(__reg("a6") struct Library * , __reg("a0") RSA * r , __reg("a1") BIGNUM * n , __reg("a2") BIGNUM * e , __reg("a3") BIGNUM * d ) = "\tjsr\t-28104(a6)";
@@ -12649,92 +12649,92 @@ X509_LOOKUP_TYPE __X509_OBJECT_get_type(__reg("a6") struct Library * , __reg("a0
 X509_CRL * __X509_OBJECT_get0_X509_CRL(__reg("a6") struct Library * , __reg("a0") const X509_OBJECT * a ) = "\tjsr\t-28740(a6)";
 #define X509_OBJECT_get0_X509_CRL(a) __X509_OBJECT_get0_X509_CRL(AmiSSLBase, (a))
 
-int __X509_STORE_lock(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx ) = "\tjsr\t-28746(a6)";
-#define X509_STORE_lock(ctx) __X509_STORE_lock(AmiSSLBase, (ctx))
+int __X509_STORE_lock(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-28746(a6)";
+#define X509_STORE_lock(xs) __X509_STORE_lock(AmiSSLBase, (xs))
 
-int __X509_STORE_unlock(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx ) = "\tjsr\t-28752(a6)";
-#define X509_STORE_unlock(ctx) __X509_STORE_unlock(AmiSSLBase, (ctx))
+int __X509_STORE_unlock(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-28752(a6)";
+#define X509_STORE_unlock(xs) __X509_STORE_unlock(AmiSSLBase, (xs))
 
-STACK_OF(X509_OBJECT) * __X509_STORE_get0_objects(__reg("a6") struct Library * , __reg("a0") const X509_STORE * v ) = "\tjsr\t-28758(a6)";
-#define X509_STORE_get0_objects(v) __X509_STORE_get0_objects(AmiSSLBase, (v))
+STACK_OF(X509_OBJECT) * __X509_STORE_get0_objects(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28758(a6)";
+#define X509_STORE_get0_objects(xs) __X509_STORE_get0_objects(AmiSSLBase, (xs))
 
-X509_VERIFY_PARAM * __X509_STORE_get0_param(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28764(a6)";
-#define X509_STORE_get0_param(ctx) __X509_STORE_get0_param(AmiSSLBase, (ctx))
+X509_VERIFY_PARAM * __X509_STORE_get0_param(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28764(a6)";
+#define X509_STORE_get0_param(xs) __X509_STORE_get0_param(AmiSSLBase, (xs))
 
-void __X509_STORE_set_verify(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_verify_fn verify ) = "\tjsr\t-28770(a6)";
-#define X509_STORE_set_verify(ctx, verify) __X509_STORE_set_verify(AmiSSLBase, (ctx), (verify))
+void __X509_STORE_set_verify(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_verify_fn verify ) = "\tjsr\t-28770(a6)";
+#define X509_STORE_set_verify(xs, verify) __X509_STORE_set_verify(AmiSSLBase, (xs), (verify))
 
-X509_STORE_CTX_verify_fn __X509_STORE_get_verify(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28776(a6)";
-#define X509_STORE_get_verify(ctx) __X509_STORE_get_verify(AmiSSLBase, (ctx))
+X509_STORE_CTX_verify_fn __X509_STORE_get_verify(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28776(a6)";
+#define X509_STORE_get_verify(xs) __X509_STORE_get_verify(AmiSSLBase, (xs))
 
-X509_STORE_CTX_verify_cb __X509_STORE_get_verify_cb(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28782(a6)";
-#define X509_STORE_get_verify_cb(ctx) __X509_STORE_get_verify_cb(AmiSSLBase, (ctx))
+X509_STORE_CTX_verify_cb __X509_STORE_get_verify_cb(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28782(a6)";
+#define X509_STORE_get_verify_cb(xs) __X509_STORE_get_verify_cb(AmiSSLBase, (xs))
 
-void __X509_STORE_set_get_issuer(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_get_issuer_fn get_issuer ) = "\tjsr\t-28788(a6)";
-#define X509_STORE_set_get_issuer(ctx, get_issuer) __X509_STORE_set_get_issuer(AmiSSLBase, (ctx), (get_issuer))
+void __X509_STORE_set_get_issuer(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_get_issuer_fn get_issuer ) = "\tjsr\t-28788(a6)";
+#define X509_STORE_set_get_issuer(xs, get_issuer) __X509_STORE_set_get_issuer(AmiSSLBase, (xs), (get_issuer))
 
-X509_STORE_CTX_get_issuer_fn __X509_STORE_get_get_issuer(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28794(a6)";
-#define X509_STORE_get_get_issuer(ctx) __X509_STORE_get_get_issuer(AmiSSLBase, (ctx))
+X509_STORE_CTX_get_issuer_fn __X509_STORE_get_get_issuer(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28794(a6)";
+#define X509_STORE_get_get_issuer(xs) __X509_STORE_get_get_issuer(AmiSSLBase, (xs))
 
-void __X509_STORE_set_check_issued(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_check_issued_fn check_issued ) = "\tjsr\t-28800(a6)";
-#define X509_STORE_set_check_issued(ctx, check_issued) __X509_STORE_set_check_issued(AmiSSLBase, (ctx), (check_issued))
+void __X509_STORE_set_check_issued(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_check_issued_fn check_issued ) = "\tjsr\t-28800(a6)";
+#define X509_STORE_set_check_issued(xs, check_issued) __X509_STORE_set_check_issued(AmiSSLBase, (xs), (check_issued))
 
-X509_STORE_CTX_check_issued_fn __X509_STORE_get_check_issued(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28806(a6)";
-#define X509_STORE_get_check_issued(ctx) __X509_STORE_get_check_issued(AmiSSLBase, (ctx))
+X509_STORE_CTX_check_issued_fn __X509_STORE_get_check_issued(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28806(a6)";
+#define X509_STORE_get_check_issued(xs) __X509_STORE_get_check_issued(AmiSSLBase, (xs))
 
-void __X509_STORE_set_check_revocation(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_check_revocation_fn check_revocation ) = "\tjsr\t-28812(a6)";
-#define X509_STORE_set_check_revocation(ctx, check_revocation) __X509_STORE_set_check_revocation(AmiSSLBase, (ctx), (check_revocation))
+void __X509_STORE_set_check_revocation(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_check_revocation_fn check_revocation ) = "\tjsr\t-28812(a6)";
+#define X509_STORE_set_check_revocation(xs, check_revocation) __X509_STORE_set_check_revocation(AmiSSLBase, (xs), (check_revocation))
 
-X509_STORE_CTX_check_revocation_fn __X509_STORE_get_check_revocation(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28818(a6)";
-#define X509_STORE_get_check_revocation(ctx) __X509_STORE_get_check_revocation(AmiSSLBase, (ctx))
+X509_STORE_CTX_check_revocation_fn __X509_STORE_get_check_revocation(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28818(a6)";
+#define X509_STORE_get_check_revocation(xs) __X509_STORE_get_check_revocation(AmiSSLBase, (xs))
 
-void __X509_STORE_set_get_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_get_crl_fn get_crl ) = "\tjsr\t-28824(a6)";
-#define X509_STORE_set_get_crl(ctx, get_crl) __X509_STORE_set_get_crl(AmiSSLBase, (ctx), (get_crl))
+void __X509_STORE_set_get_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_get_crl_fn get_crl ) = "\tjsr\t-28824(a6)";
+#define X509_STORE_set_get_crl(xs, get_crl) __X509_STORE_set_get_crl(AmiSSLBase, (xs), (get_crl))
 
-X509_STORE_CTX_get_crl_fn __X509_STORE_get_get_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28830(a6)";
-#define X509_STORE_get_get_crl(ctx) __X509_STORE_get_get_crl(AmiSSLBase, (ctx))
+X509_STORE_CTX_get_crl_fn __X509_STORE_get_get_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28830(a6)";
+#define X509_STORE_get_get_crl(xs) __X509_STORE_get_get_crl(AmiSSLBase, (xs))
 
-void __X509_STORE_set_check_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_check_crl_fn check_crl ) = "\tjsr\t-28836(a6)";
-#define X509_STORE_set_check_crl(ctx, check_crl) __X509_STORE_set_check_crl(AmiSSLBase, (ctx), (check_crl))
+void __X509_STORE_set_check_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_check_crl_fn check_crl ) = "\tjsr\t-28836(a6)";
+#define X509_STORE_set_check_crl(xs, check_crl) __X509_STORE_set_check_crl(AmiSSLBase, (xs), (check_crl))
 
-X509_STORE_CTX_check_crl_fn __X509_STORE_get_check_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28842(a6)";
-#define X509_STORE_get_check_crl(ctx) __X509_STORE_get_check_crl(AmiSSLBase, (ctx))
+X509_STORE_CTX_check_crl_fn __X509_STORE_get_check_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28842(a6)";
+#define X509_STORE_get_check_crl(xs) __X509_STORE_get_check_crl(AmiSSLBase, (xs))
 
-void __X509_STORE_set_cert_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_cert_crl_fn cert_crl ) = "\tjsr\t-28848(a6)";
-#define X509_STORE_set_cert_crl(ctx, cert_crl) __X509_STORE_set_cert_crl(AmiSSLBase, (ctx), (cert_crl))
+void __X509_STORE_set_cert_crl(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_cert_crl_fn cert_crl ) = "\tjsr\t-28848(a6)";
+#define X509_STORE_set_cert_crl(xs, cert_crl) __X509_STORE_set_cert_crl(AmiSSLBase, (xs), (cert_crl))
 
-X509_STORE_CTX_cert_crl_fn __X509_STORE_get_cert_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28854(a6)";
-#define X509_STORE_get_cert_crl(ctx) __X509_STORE_get_cert_crl(AmiSSLBase, (ctx))
+X509_STORE_CTX_cert_crl_fn __X509_STORE_get_cert_crl(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28854(a6)";
+#define X509_STORE_get_cert_crl(xs) __X509_STORE_get_cert_crl(AmiSSLBase, (xs))
 
-void __X509_STORE_set_check_policy(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_check_policy_fn check_policy ) = "\tjsr\t-28860(a6)";
-#define X509_STORE_set_check_policy(ctx, check_policy) __X509_STORE_set_check_policy(AmiSSLBase, (ctx), (check_policy))
+void __X509_STORE_set_check_policy(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_check_policy_fn check_policy ) = "\tjsr\t-28860(a6)";
+#define X509_STORE_set_check_policy(xs, check_policy) __X509_STORE_set_check_policy(AmiSSLBase, (xs), (check_policy))
 
-X509_STORE_CTX_check_policy_fn __X509_STORE_get_check_policy(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28866(a6)";
-#define X509_STORE_get_check_policy(ctx) __X509_STORE_get_check_policy(AmiSSLBase, (ctx))
+X509_STORE_CTX_check_policy_fn __X509_STORE_get_check_policy(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28866(a6)";
+#define X509_STORE_get_check_policy(xs) __X509_STORE_get_check_policy(AmiSSLBase, (xs))
 
-void __X509_STORE_set_lookup_certs(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_lookup_certs_fn lookup_certs ) = "\tjsr\t-28872(a6)";
-#define X509_STORE_set_lookup_certs(ctx, lookup_certs) __X509_STORE_set_lookup_certs(AmiSSLBase, (ctx), (lookup_certs))
+void __X509_STORE_set_lookup_certs(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_lookup_certs_fn lookup_certs ) = "\tjsr\t-28872(a6)";
+#define X509_STORE_set_lookup_certs(xs, lookup_certs) __X509_STORE_set_lookup_certs(AmiSSLBase, (xs), (lookup_certs))
 
-X509_STORE_CTX_lookup_certs_fn __X509_STORE_get_lookup_certs(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28878(a6)";
-#define X509_STORE_get_lookup_certs(ctx) __X509_STORE_get_lookup_certs(AmiSSLBase, (ctx))
+X509_STORE_CTX_lookup_certs_fn __X509_STORE_get_lookup_certs(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28878(a6)";
+#define X509_STORE_get_lookup_certs(xs) __X509_STORE_get_lookup_certs(AmiSSLBase, (xs))
 
-void __X509_STORE_set_lookup_crls(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_lookup_crls_fn lookup_crls ) = "\tjsr\t-28884(a6)";
-#define X509_STORE_set_lookup_crls(ctx, lookup_crls) __X509_STORE_set_lookup_crls(AmiSSLBase, (ctx), (lookup_crls))
+void __X509_STORE_set_lookup_crls(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_lookup_crls_fn lookup_crls ) = "\tjsr\t-28884(a6)";
+#define X509_STORE_set_lookup_crls(xs, lookup_crls) __X509_STORE_set_lookup_crls(AmiSSLBase, (xs), (lookup_crls))
 
-X509_STORE_CTX_lookup_crls_fn __X509_STORE_get_lookup_crls(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28890(a6)";
-#define X509_STORE_get_lookup_crls(ctx) __X509_STORE_get_lookup_crls(AmiSSLBase, (ctx))
+X509_STORE_CTX_lookup_crls_fn __X509_STORE_get_lookup_crls(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28890(a6)";
+#define X509_STORE_get_lookup_crls(xs) __X509_STORE_get_lookup_crls(AmiSSLBase, (xs))
 
-void __X509_STORE_set_cleanup(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("a1") X509_STORE_CTX_cleanup_fn cleanup ) = "\tjsr\t-28896(a6)";
-#define X509_STORE_set_cleanup(ctx, cleanup) __X509_STORE_set_cleanup(AmiSSLBase, (ctx), (cleanup))
+void __X509_STORE_set_cleanup(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") X509_STORE_CTX_cleanup_fn cleanup ) = "\tjsr\t-28896(a6)";
+#define X509_STORE_set_cleanup(xs, cleanup) __X509_STORE_set_cleanup(AmiSSLBase, (xs), (cleanup))
 
-X509_STORE_CTX_cleanup_fn __X509_STORE_get_cleanup(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx ) = "\tjsr\t-28902(a6)";
-#define X509_STORE_get_cleanup(ctx) __X509_STORE_get_cleanup(AmiSSLBase, (ctx))
+X509_STORE_CTX_cleanup_fn __X509_STORE_get_cleanup(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs ) = "\tjsr\t-28902(a6)";
+#define X509_STORE_get_cleanup(xs) __X509_STORE_get_cleanup(AmiSSLBase, (xs))
 
-int __X509_STORE_set_ex_data(__reg("a6") struct Library * , __reg("a0") X509_STORE * ctx , __reg("d0") int idx , __reg("a1") void * data ) = "\tjsr\t-28908(a6)";
-#define X509_STORE_set_ex_data(ctx, idx, data) __X509_STORE_set_ex_data(AmiSSLBase, (ctx), (idx), (data))
+int __X509_STORE_set_ex_data(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("d0") int idx , __reg("a1") void * data ) = "\tjsr\t-28908(a6)";
+#define X509_STORE_set_ex_data(xs, idx, data) __X509_STORE_set_ex_data(AmiSSLBase, (xs), (idx), (data))
 
-void * __X509_STORE_get_ex_data(__reg("a6") struct Library * , __reg("a0") const X509_STORE * ctx , __reg("d0") int idx ) = "\tjsr\t-28914(a6)";
-#define X509_STORE_get_ex_data(ctx, idx) __X509_STORE_get_ex_data(AmiSSLBase, (ctx), (idx))
+void * __X509_STORE_get_ex_data(__reg("a6") struct Library * , __reg("a0") const X509_STORE * xs , __reg("d0") int idx ) = "\tjsr\t-28914(a6)";
+#define X509_STORE_get_ex_data(xs, idx) __X509_STORE_get_ex_data(AmiSSLBase, (xs), (idx))
 
 X509_STORE_CTX_get_issuer_fn __X509_STORE_CTX_get_get_issuer(__reg("a6") struct Library * , __reg("a0") const X509_STORE_CTX * ctx ) = "\tjsr\t-28920(a6)";
 #define X509_STORE_CTX_get_get_issuer(ctx) __X509_STORE_CTX_get_get_issuer(AmiSSLBase, (ctx))
