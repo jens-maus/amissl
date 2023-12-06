@@ -588,6 +588,7 @@ int ASN1_TIME_compare(const ASN1_TIME *a, const ASN1_TIME *b)
     return 0;
 }
 
+#if !defined(OPENSSL_SYS_AMIGA)
 /*
  * tweak for Windows
  */
@@ -662,3 +663,4 @@ time_t ossl_asn1_string_to_time_t(const char *asn1_string)
 
     return timestamp_utc;
 }
+#endif
