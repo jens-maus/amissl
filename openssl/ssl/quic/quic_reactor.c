@@ -9,6 +9,7 @@
 #include "internal/quic_reactor.h"
 #include "internal/common.h"
 #include "internal/thread_arch.h"
+#include <openssl/err.h>
 
 /*
  * Core I/O Reactor Framework

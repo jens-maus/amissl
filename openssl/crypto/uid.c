@@ -10,7 +10,7 @@
 #include <openssl/crypto.h>
 #include <openssl/opensslconf.h>
 
-#if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_UEFI) || defined(__wasi__) || defined(OPENSSL_SYS_AMIGA
+#if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_UEFI) || defined(__wasi__) || defined(OPENSSL_SYS_AMIGA)
 
 int OPENSSL_issetugid(void)
 {
