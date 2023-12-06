@@ -4854,10 +4854,17 @@ __owur int SSL_get_handshake_rtt(const SSL *s, uint64_t *rtt)
 
     if (sc == NULL)
         return -1;
+#ifdef __amigaos4__
+    if (sc->ts_msg_write <= 0 || sc->ts_msg_read <= 0)
+        return 0; /* data not (yet) available */
+    if (sc->ts_msg_read < sc->ts_msg_write)
+        return -1;
+#else
     if (sc->ts_msg_write.t <= 0 || sc->ts_msg_read.t <= 0)
         return 0; /* data not (yet) available */
     if (sc->ts_msg_read.t < sc->ts_msg_write.t)
         return -1;
+#endif
 
     *rtt = ossl_time2us(ossl_time_subtract(sc->ts_msg_read, sc->ts_msg_write));
     return 1;

@@ -31,6 +31,18 @@ OSSL_TIME ossl_time_now(void)
     now.ul -= 116444736000000000UI64;
 # endif
     r.t = ((uint64_t)now.ul) * (OSSL_TIME_SECOND / 10000000);
+#elif defined(__amigaos4__)
+    struct timeval t;
+
+    if (gettimeofday(&t, NULL) < 0) {
+        ERR_raise_data(ERR_LIB_SYS, get_last_sys_error(),
+                       "calling gettimeofday()");
+        return ossl_time_zero();
+    }
+    if (t.tv_sec <= 0)
+        r = t.tv_usec <= 0 ? 0 : t.tv_usec * OSSL_TIME_US;
+    else
+        r = ((uint64_t)t.tv_sec * 1000000 + t.tv_usec) * OSSL_TIME_US;
 #else   /* defined(_WIN32) */
     struct timeval t;
 
