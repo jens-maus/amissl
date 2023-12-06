@@ -33,7 +33,7 @@ amissl.library/SSL_CIPHER_get_mac
 amissl.library/CleanupAmiSSLA                      amissl.library/CleanupAmiSSLA
 
    NAME
-	CleanupAmiSSLA -- initialise the AmiSSL library (V1)
+	CleanupAmiSSLA -- cleanup the AmiSSL library (V1)
 	CleanupAmiSSL  -- varargs stub for CleanupAmiSSLA() (V1)
 
    SYNOPSIS
