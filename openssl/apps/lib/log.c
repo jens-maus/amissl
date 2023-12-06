@@ -41,7 +41,11 @@ static int print_syslog(const char *str, size_t len, void *levPtr)
 }
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+static void log_with_prefix(const char *prog, const char *fmt, long *ap)
+#else
 static void log_with_prefix(const char *prog, const char *fmt, va_list ap)
+#endif
 {
     char prefix[80];
     BIO *bio, *pre = BIO_new(BIO_f_prefix());
@@ -68,11 +72,19 @@ static void log_with_prefix(const char *prog, const char *fmt, va_list ap)
 # define OSSL_NO_C99
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+void VARARGS68K trace_log_message(int category,
+                       const char *prog, int level, const char *fmt, ...)
+{
+    VA_LIST ap;
+    VA_START(ap, fmt);
+#else
 void trace_log_message(int category,
                        const char *prog, int level, const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
+#endif
 
 #ifdef OSSL_NO_C99
     if (verbosity >= level)
@@ -84,7 +96,11 @@ void trace_log_message(int category,
         va_list ap_copy;
 
         va_copy(ap_copy, ap);
+#if defined(OPENSSL_SYS_AMIGA)
+        (void)BIO_vprintf(out, fmt, VA_ARG(ap_copy, long *));
+#else
         (void)BIO_vprintf(out, fmt, ap_copy);
+#endif
         va_end(ap_copy);
 #else
         (void)BIO_vprintf(out, fmt, ap);
@@ -103,6 +119,11 @@ void trace_log_message(int category,
             ERR_print_errors_cb(print_syslog, &level);
     } else
 #endif
+#if defined(OPENSSL_SYS_AMIGA)
+    log_with_prefix(prog, fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+#else
     log_with_prefix(prog, fmt, ap);
     va_end(ap);
+#endif
 }

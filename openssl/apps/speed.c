@@ -4432,7 +4432,9 @@ static void pkey_print_message(const char *str, const char *str2, unsigned int b
                mr ? "+DTP:%d:%s:%s:%d\n"
                : "Doing %u bits %s %s ops for %ds: ", bits, str, str2, tm);
     (void)BIO_flush(bio_err);
+#if !defined(OPENSSL_SYS_AMIGA)
     run = 1;
+#endif
     alarm(tm);
 }
 

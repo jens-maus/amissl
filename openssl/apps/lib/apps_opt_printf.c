@@ -12,6 +12,18 @@
 #include "apps_ui.h"
 
 /* This function is defined here due to visibility of bio_err */
+#if defined(OPENSSL_SYS_AMIGA)
+int VARARGS68K opt_printf_stderr(const char *fmt, ...)
+{
+    VA_LIST ap;
+    int ret;
+
+    VA_START(ap, fmt);
+    ret = BIO_vprintf(bio_err, fmt, VA_ARG(ap, long *));
+    VA_END(ap);
+    return ret;
+}
+#else
 int opt_printf_stderr(const char *fmt, ...)
 {
     va_list ap;
@@ -22,4 +34,4 @@ int opt_printf_stderr(const char *fmt, ...)
     va_end(ap);
     return ret;
 }
-
+#endif

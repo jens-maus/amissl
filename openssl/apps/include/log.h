@@ -44,7 +44,12 @@ int log_get_verbosity(void);
  * ...: potential extra parameters like with printf()
  * returns nothing
  */
+#if defined(OPENSSL_SYS_AMIGA)
+void VARARGS68K trace_log_message(int category,
+                       const char *prog, int level, const char *fmt, ...);
+#else
 void trace_log_message(int category,
                        const char *prog, int level, const char *fmt, ...);
+#endif
 
 #endif /* OSSL_APPS_LOG_H */

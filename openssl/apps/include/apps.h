@@ -246,12 +246,12 @@ typedef struct ca_db_st {
 
 extern int do_updatedb(CA_DB *db, time_t *now);
 
-#if defined(OPENSSL_SYS_AMIGA)
-#include <internal/amissl_compiler.h>
+# if defined(OPENSSL_SYS_AMIGA)
+# include <internal/amissl_compiler.h>
 void VARARGS68K app_bail_out(char *fmt, ...);
-#else
+# else
 void app_bail_out(char *fmt, ...);
-#endif
+# endif
 void *app_malloc(size_t sz, const char *what);
 
 /* load_serial, save_serial, and rotate_serial are also used for CRL numbers */
