@@ -217,6 +217,7 @@ NWLIBOBJS = $(BUILD_D)/setsockopt.o \
             $(BUILD_D)/closesocket.o \
             $(BUILD_D)/getsockopt.o \
             $(BUILD_D)/getsockname.o \
+            $(BUILD_D)/getpeername.o \
             $(BUILD_D)/inet_ntoa.o \
             $(BUILD_D)/socket.o \
             $(BUILD_D)/connect.o \

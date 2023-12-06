@@ -139,6 +139,7 @@ char *inet_ntoa(struct in_addr in);
 int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
 int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+int getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int shutdown(int sockfd, int how);
 int closesocket(int s);
 ssize_t send(int sockfd, const void *buf, size_t len, int flags);
