@@ -67,16 +67,16 @@ void AES_xts_decrypt(const unsigned char *inp, unsigned char *out, size_t len,
 #   ifdef VPAES_ASM
 #    define VPAES_CAPABLE (OPENSSL_ppccap_P & PPC_ALTIVEC)
 #   endif
-#   define HWAES_CAPABLE  (OPENSSL_ppccap_P & PPC_CRYPTO207)
-#   define HWAES_set_encrypt_key aes_p8_set_encrypt_key
-#   define HWAES_set_decrypt_key aes_p8_set_decrypt_key
-#   define HWAES_encrypt aes_p8_encrypt
-#   define HWAES_decrypt aes_p8_decrypt
-#   define HWAES_cbc_encrypt aes_p8_cbc_encrypt
-#   define HWAES_ctr32_encrypt_blocks aes_p8_ctr32_encrypt_blocks
-#   define HWAES_xts_encrypt aes_p8_xts_encrypt
-#   define HWAES_xts_decrypt aes_p8_xts_decrypt
-#   if !defined(OPENSSL_SYS_AIX) && !defined(OPENSSL_SYS_MACOSX)
+#   if !defined(OPENSSL_SYS_AIX) && !defined(OPENSSL_SYS_MACOSX) && !defined(OPENSSL_SYS_AMIGA)
+#    define HWAES_CAPABLE  (OPENSSL_ppccap_P & PPC_CRYPTO207)
+#    define HWAES_set_encrypt_key aes_p8_set_encrypt_key
+#    define HWAES_set_decrypt_key aes_p8_set_decrypt_key
+#    define HWAES_encrypt aes_p8_encrypt
+#    define HWAES_decrypt aes_p8_decrypt
+#    define HWAES_cbc_encrypt aes_p8_cbc_encrypt
+#    define HWAES_ctr32_encrypt_blocks aes_p8_ctr32_encrypt_blocks
+#    define HWAES_xts_encrypt aes_p8_xts_encrypt
+#    define HWAES_xts_decrypt aes_p8_xts_decrypt
 #    define PPC_AES_GCM_CAPABLE (OPENSSL_ppccap_P & PPC_MADD300)
 #    define AES_GCM_ENC_BYTES 128
 #    define AES_GCM_DEC_BYTES 128
@@ -89,7 +89,7 @@ size_t ppc_aes_gcm_decrypt(const unsigned char *in, unsigned char *out,
 #    define AES_GCM_ASM_PPC(gctx) ((gctx)->ctr==aes_p8_ctr32_encrypt_blocks && \
                                    (gctx)->gcm.funcs.ghash==gcm_ghash_p8)
 void gcm_ghash_p8(u64 Xi[2],const u128 Htable[16],const u8 *inp, size_t len);
-#   endif /* OPENSSL_SYS_AIX || OPENSSL_SYS_MACOSX */
+#   endif /* OPENSSL_SYS_AIX || OPENSSL_SYS_MACOSX || OPENSSL_SYS_AMIGA */
 #  endif /* PPC */
 
 #  if (defined(__arm__) || defined(__arm) || defined(__aarch64__) || defined(_M_ARM64)) 
