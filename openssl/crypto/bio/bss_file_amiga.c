@@ -52,10 +52,8 @@ static const BIO_METHOD methods_filep =
 {
 	BIO_TYPE_FILE,
 	"FILE pointer (Amiga)",
-	/* TODO: Convert to new style write function */
 	bwrite_conv,
 	file_write,
-	/* TODO: Convert to new style read function */
 	bread_conv,
 	file_read,
 	file_puts,
