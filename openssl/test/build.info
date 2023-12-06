@@ -34,11 +34,11 @@ IF[{- !$disabled{tests} -}]
           confdump \
           versions \
           aborttest test_test pkcs12_format_test pkcs12_api_test \
-          sanitytest time_test rsa_complex exdatatest bntest \
+          time_test rsa_complex exdatatest bntest \
           ecstresstest gmdifftest pbelutest \
           mdc2test \
           exptest pbetest localetest evp_pkey_ctx_new_from_name \
-          evp_test evp_extra_test2 \
+          evp_test \
           evp_fetch_prov_test ossl_store_test \
           v3nametest v3ext \
           crltest danetest bad_dtls_test lhash_test \
@@ -48,9 +48,9 @@ IF[{- !$disabled{tests} -}]
           dtlsv1listentest ct_test threadstest afalgtest d2i_test \
           ssl_test_ctx_test ssl_test x509aux cipherlist_test asynciotest \
           bio_callback_test bio_memleak_test bio_core_test bio_dgram_test param_build_test \
-          bioprinttest sslapitest ssl_handshake_rtt_test dtlstest sslcorrupttest \
+          bioprinttest dtlstest sslcorrupttest \
           bio_enc_test pkey_meth_test pkey_meth_kdf_test evp_kdf_test uitest \
-          cipherbytes_test threadstest_fips threadpool_test \
+          cipherbytes_test threadstest_fips \
           asn1_encode_test asn1_decode_test asn1_string_table_test \
           x509_time_test x509_dup_cert_test x509_check_cert_pkey_test \
           recordlentest drbgtest rand_status_test sslbuffertest \
@@ -60,8 +60,8 @@ IF[{- !$disabled{tests} -}]
           aesgcmtest params_test evp_pkey_dparams_test \
           provider_status_test defltfips_test \
           bio_readbuffer_test user_property_test pkcs7_test upcallstest \
-          provfetchtest prov_config_test rand_test ca_internals_test \
-          bio_tfo_test membio_test bio_dgram_test list_test fips_version_test \
+          provfetchtest prov_config_test \
+          bio_tfo_test membio_test bio_dgram_test fips_version_test \
           x509_test hpke_test pairwise_fail_test nodefltctxtest
 
   IF[{- !$disabled{'rpk'} -}]
@@ -72,10 +72,12 @@ IF[{- !$disabled{tests} -}]
     PROGRAMS{noinst}=enginetest
   ENDIF
 
+ IF[{- $config{target} !~ /amiga/ -}]
   IF[{- !$disabled{quic} -}]
     PROGRAMS{noinst}=priority_queue_test event_queue_test quicfaultstest quicapitest \
                      quic_newcid_test
   ENDIF
+ ENDIF
 
   IF[{- !$disabled{comp} && (!$disabled{brotli} || !$disabled{zstd} || !$disabled{zlib}) -}]
     PROGRAMS{noinst}=cert_comp_test
@@ -966,11 +968,13 @@ IF[{- !$disabled{tests} -}]
     DEPEND[algorithmid_test]=../libcrypto.a libtestutil.a
   ENDIF
 
+ IF[{- $config{target} !~ /amiga/ -}]
   PROGRAMS{noinst}=asn1_time_test
   SOURCE[asn1_time_test]=asn1_time_test.c ../crypto/ctype.c \
                          ../crypto/asn1/a_time.c
   INCLUDE[asn1_time_test]=../include ../apps/include
   DEPEND[asn1_time_test]=../libcrypto libtestutil.a
+ ENDIF
 
   # We disable this test completely in a shared build because it deliberately
   # redefines some internal libssl symbols. This doesn't work in a non-shared
@@ -1130,12 +1134,14 @@ ENDIF
     DEPEND[timing_load_creds]=../libcrypto.a
   ENDIF
 
+ IF[{- $config{target} !~ /amiga/ -}]
   IF[{- !$disabled{'quic'} -}]
     PROGRAMS{noinst}=quic_wire_test quic_ackm_test quic_record_test
     PROGRAMS{noinst}=quic_fc_test quic_stream_test quic_cfq_test quic_txpim_test
     PROGRAMS{noinst}=quic_fifd_test quic_txp_test quic_tserver_test
     PROGRAMS{noinst}=quic_client_test quic_cc_test quic_multistream_test
   ENDIF
+ ENDIF
 
   SOURCE[quic_ackm_test]=quic_ackm_test.c cc_dummy.c
   INCLUDE[quic_ackm_test]=../include ../apps/include

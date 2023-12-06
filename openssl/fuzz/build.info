@@ -132,9 +132,11 @@ IF[{- !$disabled{tests} -}]
     PROGRAMS{noinst}=x509-test
   ENDIF
 
+ IF[{- $config{target} !~ /amiga/ -}]
   IF[{- !$disabled{"quic"} -}]
     PROGRAMS{noinst}=quic-client-test
   ENDIF
+ ENDIF
 
   SOURCE[asn1-test]=asn1.c test-corpus.c fuzz_rand.c
   INCLUDE[asn1-test]=../include
