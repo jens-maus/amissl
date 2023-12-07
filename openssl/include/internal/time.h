@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_TIME_H
 # define OSSL_INTERNAL_TIME_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <openssl/e_os2.h>     /* uint64_t */
 # include "internal/e_os.h"     /* for struct timeval */
@@ -300,7 +302,7 @@ OSSL_TIME ossl_time_from_timeval(struct timeval tv)
 {
     OSSL_TIME t;
 
-#ifndef __DJGPP__ /* tv_sec is unsigned on djgpp. */
+#if !defined(__DJGPP__) && !defined(OPENSSL_SYS_AMIGA) /* tv_sec is unsigned on djgpp. */
     if (tv.tv_sec < 0)
         return ossl_time_zero();
 #endif
