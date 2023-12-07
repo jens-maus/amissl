@@ -223,7 +223,11 @@ int set_nameopt(const char *arg)
 unsigned long get_nameopt(void)
 {
     return
+#if defined(OPENSSL_SYS_AMIGA)
+        nmflag_set ? nmflag : XN_FLAG_ONELINE;
+#else
         nmflag_set ? nmflag : XN_FLAG_SEP_CPLUS_SPC | ASN1_STRFLGS_UTF8_CONVERT;
+#endif
 }
 
 void dump_cert_text(BIO *out, X509 *x)
