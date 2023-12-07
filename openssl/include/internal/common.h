@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_COMMON_H
 # define OSSL_INTERNAL_COMMON_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <stdlib.h>
 # include <string.h>
@@ -18,7 +20,7 @@
 # include "internal/e_os.h" /* ossl_inline in many files */
 # include "internal/nelem.h"
 
-# if defined(__GNUC__) || defined(__clang__)
+# if (defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))) || defined(__clang__)
 #  define likely(x)     __builtin_expect(!!(x), 1)
 #  define unlikely(x)   __builtin_expect(!!(x), 0)
 # else
