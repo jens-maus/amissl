@@ -65,7 +65,9 @@
 
 #ifndef OSSL_CRYPTO_MD32_COMMON_H
 # define OSSL_CRYPTO_MD32_COMMON_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <openssl/crypto.h>
 

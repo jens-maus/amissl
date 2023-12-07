@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_LIST_H
 # define OSSL_INTERNAL_LIST_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <string.h>
 # include <assert.h>

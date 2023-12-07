@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_HPKE_UTIL_H
 # define OSSL_INTERNAL_HPKE_UTIL_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 /* Constants from RFC 9180 Section 7.1 and 7.3 */
 # define OSSL_HPKE_MAX_SECRET 64

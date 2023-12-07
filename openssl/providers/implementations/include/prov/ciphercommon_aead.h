@@ -9,7 +9,9 @@
 
 #ifndef OSSL_PROV_CIPHERCOMMON_AEAD_H
 # define OSSL_PROV_CIPHERCOMMON_AEAD_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # define UNINITIALISED_SIZET ((size_t)-1)
 
