@@ -108,16 +108,14 @@ ENDIF
 
 IF[{- !$disabled{tests} -}]
   PROGRAMS{noinst}=asn1-test asn1parse-test bignum-test bndiv-test client-test conf-test crl-test server-test smime-test
- IF[{- $config{target} !~ /amiga/ -}]
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   PROGRAMS{noinst}=punycode-test
  ENDIF
   PROGRAMS{noinst}=pem-test decoder-test
   PROGRAMS{noinst}=v3name-test
 
-  IF[{- !$disabled{"cmp"} -}]
-   IF[{- $config{target} !~ /amiga/ -}]
+  IF[{- !$disabled{"cmp"} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=cmp-test
-   ENDIF
   ENDIF
 
   IF[{- !$disabled{"cms"} -}]
@@ -132,11 +130,9 @@ IF[{- !$disabled{tests} -}]
     PROGRAMS{noinst}=x509-test
   ENDIF
 
- IF[{- $config{target} !~ /amiga/ -}]
-  IF[{- !$disabled{"quic"} -}]
+  IF[{- !$disabled{"quic"} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=quic-client-test
   ENDIF
- ENDIF
 
   SOURCE[asn1-test]=asn1.c test-corpus.c fuzz_rand.c
   INCLUDE[asn1-test]=../include

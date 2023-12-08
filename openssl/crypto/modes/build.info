@@ -35,7 +35,7 @@ IF[{- !$disabled{asm} -}]
   $MODESASM_ppc32=ghashp8-ppc.s
   $MODESDEF_ppc32=
   $MODESASM_ppc64=$MODESASM_ppc32
-  IF[{- $target{sys_id} ne "AIX" && $target{sys_id} ne "MACOSX" && $config{target} !~ /amiga/i -}]
+  IF[{- $target{sys_id} ne "AIX" && $target{sys_id} ne "MACOSX" && $target{sys_id} ne "AMIGA" -}]
     $MODESASM_ppc64=$MODESASM_ppc32 aes-gcm-ppc.s
   ENDIF
   $MODESDEF_ppc64=$MODESDEF_ppc32

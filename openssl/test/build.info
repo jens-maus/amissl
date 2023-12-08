@@ -72,12 +72,10 @@ IF[{- !$disabled{tests} -}]
     PROGRAMS{noinst}=enginetest
   ENDIF
 
- IF[{- $config{target} !~ /amiga/ -}]
-  IF[{- !$disabled{quic} -}]
+  IF[{- !$disabled{quic} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=priority_queue_test event_queue_test quicfaultstest quicapitest \
                      quic_newcid_test
   ENDIF
- ENDIF
 
   IF[{- !$disabled{comp} && (!$disabled{brotli} || !$disabled{zstd} || !$disabled{zlib}) -}]
     PROGRAMS{noinst}=cert_comp_test
@@ -632,7 +630,7 @@ IF[{- !$disabled{tests} -}]
     INCLUDE[moduleloadtest]=../include ../apps/include
   ENDIF
 
- IF[{- $config{target} !~ /amiga/ -}]
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   # cipher_overhead_test uses internal symbols, so it must be linked with
   # the static libraries
   PROGRAMS{noinst}=cipher_overhead_test
@@ -669,13 +667,11 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[conf_include_test]=../include ../apps/include
   DEPEND[conf_include_test]=../libcrypto libtestutil.a
 
- IF[{- $config{target} !~ /amiga/ -}]
-  IF[{- !$disabled{cmp} -}]
+  IF[{- !$disabled{cmp} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=cmp_asn_test cmp_ctx_test cmp_status_test cmp_hdr_test \
                      cmp_protect_test cmp_msg_test cmp_vfy_test \
                      cmp_server_test cmp_client_test
   ENDIF
- ENDIF
 
   SOURCE[cmp_asn_test]=cmp_asn_test.c helpers/cmp_testlib.c
   INCLUDE[cmp_asn_test]=.. ../include ../apps/include
@@ -726,7 +722,7 @@ IF[{- !$disabled{tests} -}]
   # and VMS, where the exported symbols are those listed in util/*.num), these
   # programs are forcibly linked with the static libraries, where all symbols
   # are always available.
-  IF[{- $config{target} !~ /amiga/ -}]
+  IF[{- $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=asn1_internal_test modes_internal_test x509_internal_test \
                      tls13encryptiontest wpackettest ctype_internal_test \
                      rdcpu_sanitytest property_test ideatest rsa_mp_test \
@@ -968,7 +964,7 @@ IF[{- !$disabled{tests} -}]
     DEPEND[algorithmid_test]=../libcrypto.a libtestutil.a
   ENDIF
 
- IF[{- $config{target} !~ /amiga/ -}]
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   PROGRAMS{noinst}=asn1_time_test
   SOURCE[asn1_time_test]=asn1_time_test.c ../crypto/ctype.c \
                          ../crypto/asn1/a_time.c
@@ -1004,7 +1000,7 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[aesgcmtest]=../include ../apps/include ..
   DEPEND[aesgcmtest]=../libcrypto libtestutil.a
 
- IF[{- $config{target} !~ /amiga/ -}]
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   PROGRAMS{noinst}=context_internal_test
   SOURCE[context_internal_test]=context_internal_test.c
   INCLUDE[context_internal_test]=.. ../include ../apps/include
@@ -1064,7 +1060,7 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[params_test]=.. ../include ../apps/include
   DEPEND[params_test]=../libcrypto.a libtestutil.a
 
- IF[{- $config{target} !~ /amiga/ -}]
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   PROGRAMS{noinst}=hexstr_test
   SOURCE[hexstr_test]=hexstr_test.c
   INCLUDE[hexstr_test]=.. ../include ../apps/include
@@ -1134,14 +1130,12 @@ ENDIF
     DEPEND[timing_load_creds]=../libcrypto.a
   ENDIF
 
- IF[{- $config{target} !~ /amiga/ -}]
-  IF[{- !$disabled{'quic'} -}]
+  IF[{- !$disabled{'quic'} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=quic_wire_test quic_ackm_test quic_record_test
     PROGRAMS{noinst}=quic_fc_test quic_stream_test quic_cfq_test quic_txpim_test
     PROGRAMS{noinst}=quic_fifd_test quic_txp_test quic_tserver_test
     PROGRAMS{noinst}=quic_client_test quic_cc_test quic_multistream_test
   ENDIF
- ENDIF
 
   SOURCE[quic_ackm_test]=quic_ackm_test.c cc_dummy.c
   INCLUDE[quic_ackm_test]=../include ../apps/include
