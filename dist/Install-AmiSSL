@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 5.0.3 (12.12.2022)
+; $VER: Install-AmiSSL 5.13 (7.12.2023)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -349,33 +349,37 @@
 
 (set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
 
-; Try to force ramlib on OS4 to expunge libraries to release
-; exclusive library file locks
+; Try to force ramlib on OS4 to expunge libraries to release exclusive
+; library file locks, which is necessary until AmiSSL 5.6 + elf.library 53.35
 (if (= #detectedSystem "os4")
 	(
+		(set #elflib-ver (getversion "elf.library" (resident)))
+		(set #elflib-min (+ (* 65536 53) 35))
+		(set #amissl-min (+ (* 65536 5) 6))
 		(foreach (tackon #libs-dir "AmiSSL") "amissl_v#?.library"
 			(
 				(set #resident-lib-ver (getversion @each-name (resident)))
-				(if (> #resident-lib-ver 0)
+				(if (AND (> #resident-lib-ver 0) (OR (< #resident-lib-ver #amissl-min) (< #elflib-ver #elflib-min)))
 					(
 						(set #lib-name ((tackon (tackon #libs-dir "AmiSSL") @each-name)))
 						(rename #lib-name (cat #lib-name "-expunge"))
 						(rename (cat #lib-name "-expunge") #lib-name)
 					)
 				)
+
 			)
 		)
 		(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
-		(if (> #resident-lib-ver 0)
+		(if (AND (> #resident-lib-ver 0) (OR (< #resident-lib-ver #amissl-min) (< #elflib-ver #elflib-min)))
 			(
 				(set #lib-name (tackon #libs-dir "amisslmaster.library"))
 				(rename #lib-name (cat #lib-name "-expunge"))
 				(rename (cat #lib-name "-expunge") #lib-name)
+				(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
+				(if (> #resident-lib-ver 0)
+					(abort #str-reboot-before-install)
+				)
 			)
-		)
-		(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
-		(if (> #resident-lib-ver 0)
-			(abort #str-reboot-before-install)
 		)
 	)
 )
