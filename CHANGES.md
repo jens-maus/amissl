@@ -1,3 +1,34 @@
+## AmiSSL 5.13 (?.12.2023)
+
+- Switched to OpenSSL 3.2, with full compatibility with the latest
+  OpenSSL 3.2.0 (23.11.2023) version, which includes the following
+  new features:
+  + Support for client side QUIC (RFC 9000)
+  + Support for Ed25519ctx, Ed25519ph and Ed448ph in addition to
+    existing support for Ed25519 and Ed448 (RFC 8032)
+  + Support for deterministic ECDSA signatures (RFC 6979)
+  + Support for AES-GCM-SIV, a nonce-misuse-resistant AEAD (RFC 8452)
+  + Support for the Argon2 KDF (RFC 9106)
+  + Support for Hybrid Public Key Encryption (HPKE) (RFC 9180)
+  + Support for SM4-XTS
+  + Support for Brainpool curves in TLS 1.3
+  + Support for TLS Raw Public Keys (RFC 7250)
+  + Support for using the IANA standard names in TLS ciphersuite
+    configuration
+  + Multiple new features and improvements to CMP protocol support
+- Use Exec mutexes instead of semaphores on AmigaOS 4.x, decreasing
+  system overhead.
+- Use ASOPOOL_Protected instead of our own semaphore protection
+  on AmigaOS 4.x.
+- Improved error handling should failures occur early in library
+  initialisation.
+- The installer now properly handles any certificates that may have
+  been disabled by the user and will update them, but leave them
+  disabled.
+- The installer on AmigaOS 4.x can now install the libraries whilst
+  AmiSSL is still in use, provided elf.library 53.35+ is installed
+  and no instances prior to AmiSSL 5.6 are still in memory.
+
 ## AmiSSL 5.12 (25.10.2023)
 
 - Updated OpenSSL backend to full compatibility with the latest
@@ -53,8 +84,8 @@
   + Deprecated LHASH statistics functions.
   + FIPS 140-3 compliance changes.
 - Replaced many common Exec semaphore protected OpenSSL operations with
-  atomic inline assembly code on both OS3 and OS4, decreasing overhead
-  and increasing performance.
+  atomic inline assembly code on both AmigaOS 3.x and 4,x, decreasing
+  overhead and increasing performance.
 - Fixed bug in the 5.7 SDK (applications built with it should be
   recompiled using the 5.8 SDK).
 
@@ -79,16 +110,18 @@
     (CVE-2022-3996)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 10.1.2023.
-- Correctly clear thread locks before using InitSemaphore() on OS3 (#70).
-- Prevent OS4 load time emulation corrupting the data in the PPC ASM
-  optimised routines by moving data from .text section to .rodata (#38).
+- Correctly clear thread locks before using InitSemaphore() on
+  AmigaOS 3.x (#70).
+- Prevent AmigaOS 4.x load time emulation corrupting the data in the
+  PPC ASM optimised routines by moving data from .text section to
+  .rodata (#38).
 - Removed redundant code in PPC ASM optimised routines.
 - Removed unused PPC POWER8 specific ASM optimised routines.
 
 ## AmiSSL 5.6 (15.12.2022)
 
-- Fixed TLS 1.3 cipher lookup failure regression on OS4 (#68).
-- The improvement from v5.4 that released file locks on the OS4
+- Fixed TLS 1.3 cipher lookup failure regression on AmigaOS 4.x (#68).
+- The improvement from v5.4 that released file locks on the AmigaOS 4.x
   libraries is now only activated with elf.library 53.35 or higher.
 - Minor build changes.
 
@@ -116,9 +149,10 @@
   default fallback busy wait function.
 - Consolidated all routines that individually open timer.device to
   instead use a single unified thread-safe solution.
-- File locks on the OS4 libraries are released during initialisation and
-  no longer held until reboot or expunged from memory (#49).
-- Handle setting of Roadshow TCP/IP stack type on OS3.
+- File locks on the AmigaOS 4.x libraries are released during
+  initialisation and no longer held until reboot or expunged from
+  memory (#49).
+- Handle setting of Roadshow TCP/IP stack type on AmigaOS 3.x.
 - Removed unnecessary multiple openings of dos.library, some of which
   were mistakenly never closed.
 - Reworked SDK macros for split API functions to better handle when
@@ -158,7 +192,8 @@
   the new built-in HTTP(S) client.
 - Added full autodocs for all the Amiga specific interface functions.
 - Improved and structured the developer README-SDK file.
-- Added OpenSSL stub link libraries for OS3 (GCC) and OS4 (GCC & VBCC).
+- Added OpenSSL stub link libraries for AmigaOS 3.x (GCC) and
+  AmigaOS 4.x (GCC & VBCC).
 - AmiSSL and OpenSSL switched to the Apache License, Version 2.0.
 - We have a new homepage at https://amissl.org which provides links to all
   AmiSSL resources, old and new.
@@ -169,25 +204,25 @@
   OpenSSL 1.1.1m (14.12.2021) version, which brings security and bug fixes.
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 1.2.2022.
-- Fixed RSA_X931_derive_ex() from not being reachable on OS3.
+- Fixed RSA_X931_derive_ex() from not being reachable on AmigaOS 3.x.
 - Fixed crash after OpenSSL fatal error message requester shown.
 - Cleaned up and unified error requesters, removing redundant code.
-- Fixed GCC linker alignment for all OS4 binaries.
+- Fixed GCC linker alignment for all AmigaOS 4.x binaries.
 
 ## AmiSSL 4.11 (30.10.2021)
 
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 26.10.2021.
-- Legacy entropy generation is now faster on OS3 machines, with the
+- Legacy entropy generation is now faster on AmigaOS 3.x machines, with the
   removal of delays caused by using the vblank timer, which typically
   causes AmiSSL to initialise 2 seconds faster (#57).
 - Fixed legacy entropy generation to correctly use an entropy factor of 4,
   as originally intended, which was broken since AmiSSL 4.3 (#57).
 - Entropy generation now uses SHA-256 instead of SHA-1.
-- Tweaked OS4 memory allocations to not be locked.
+- Tweaked AmigaOS 4.x memory allocations to not be locked.
 - Fixed issues when redirecting OpenSSL tool output to a file (#58).
 - Added Ctrl-C break detection to the OpenSSL tool.
-- OS4 binaries now stripped further with --strip-unneeded-rel-relocs.
+- AmigaOS 4.x binaries now stripped further with --strip-unneeded-rel-relocs.
 
 ## AmiSSL 4.10 (25.8.2021)
 
@@ -219,7 +254,7 @@
   OpenSSL 1.1.1j (16.02.2021) version, which brings security and bug fixes.
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html.
-- Fixed corrupted OS3 libamisslauto.a (object name was too long).
+- Fixed corrupted AmigaOS 3.x libamisslauto.a (object name was too long).
 - Tweaked SDK examples and OpenSSL includes to be more compatible with
   vanilla VBCC and SAS/C compiler installations.
 - Restored SAS/C support to AmiSSL autoopen link library code.
@@ -234,7 +269,7 @@
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.haxx.se/ca/
 - Fixed OpenSSL command and https developer example not having execute file
-  permission bit set on OS3
+  permission bit set on AmigaOS 3.x
 
 ## AmiSSL 4.6 (8.6.2020)
 
@@ -273,13 +308,14 @@
 - Improved BN performance for 68060 (disabled m68k asm replacement as it's
   slower due to the above).
 - Improved elliptic curve performance for all m68k processors.
-- Fixed the OS3 target from crashing on systems with a 68020/030, but
-  without an FPU (#37).
+- Fixed the AmigaOS 3.x target from crashing on systems with a 68020/030,
+  but without an FPU (#37).
 - Disabled Poly1305 FPU algorithm on Tabor A1222 (#38).
-- Fixed TLS 1.3 cipher lookup failures on OS4, caused by compiler bug (#35).
+- Fixed TLS 1.3 cipher lookup failures on AmigaOS 4.x, caused by a compiler
+  bug (#35).
 - OpenSSL.doc not updated for the last 14 years, but now automatically
   updated for each new release.
-- Fixed crashing OpenSSL command on OS3 (#28).
+- Fixed crashing OpenSSL command on AmigaOS 3.x (#28).
 - Fixed OpenSSL command not making path to openssl.cnf correctly (#34).
 - Fixed OpenSSL command -out parameter (#33).
 - OpenSSL s_server command can now be interrupted with Ctrl-C.
@@ -304,7 +340,7 @@
   OpenSSL 1.1.0g (02.11.2017) version.
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.haxx.se/ca/
-- Fixed https.c example cleanup code for non-OS4 targets (#18)
+- Fixed https.c example cleanup code for non-AmigaOS 4.x targets (#18)
 - Reinstated AmigaOS multithreading support and semaphore protection, using
   the new thread API introduced in OpenSSL 1.1.0 (#17)
 - Include `ppcinline/macros.h` which contains all `LPXX()` macros to use the
@@ -315,9 +351,9 @@
 
 - Updated OpenSSL backend to full compatibility to latest
   OpenSSL 1.1.0e (16.02.2017) version.
-- MorphOS can now be selected as an install target with the OS3/m68k version
-  being installed. For a native PPC version we would require some work to be
-  done by some talented MorphOS developers.
+- MorphOS can now be selected as an install target with the AmigaOS 3.x/m68k
+  version being installed. For a native PPC version we would require some
+  work to be done by some talented MorphOS developers.
 - Added some m68k asm replacement code for potentially speeding up BN
   calculation routines.
 - Added AmiUpdate compatibility.
