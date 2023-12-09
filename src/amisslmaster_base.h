@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,7 +60,7 @@ struct LibraryHeader
 
   BPTR                    segList;
   struct Library          *sysBase;
-  struct SignalSemaphore  libSem;
+  LOCK_DECLARE(           libLock);
 };
 
 #endif /* BASE_H */

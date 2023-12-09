@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,8 +43,10 @@ struct Library *LocaleBase = NULL;
 
 // global variables throughout libcmt
 struct MinList __filelist; /* list of open files (fflush() needs also access) */
-struct SignalSemaphore __filelist_cs;
+LOCK_DECLARE(__filelist_cs);
+#if !defined(__amigaos4__)
 struct SignalSemaphore __mem_cs;
+#endif
 void *__mem_pool = NULL;
 ULONG __clock_base = 0;
 LONG __gmt_offset = 0;
@@ -72,15 +74,12 @@ static int timezone_get_offset(void)
 #define timezone_get_offset() 0
 #endif
 
-void __init_libcmt(void)
+int __init_libcmt(void)
 {
   ENTER();
 
   // initialize memory stuff
-  SHOWPOINTER(DBF_STARTUP, &__mem_cs);
   SHOWPOINTER(DBF_STARTUP, &__mem_pool);
-
-  InitSemaphore(&__mem_cs);
 
 #if defined(__amigaos4__)
   __mem_pool = AllocSysObjectTags(ASOT_MEMPOOL,
@@ -89,8 +88,12 @@ void __init_libcmt(void)
 				  ASOPOOL_Puddle, 8192,
 				  ASOPOOL_Threshold, 4096,
 				  ASOPOOL_Name, "AmiSSL",
+				  ASOPOOL_Protected, TRUE,
 				  TAG_DONE);
 #else
+  SHOWPOINTER(DBF_STARTUP, &__mem_cs);
+  InitSemaphore(&__mem_cs);
+
   __mem_pool = CreatePool(MEMF_ANY, 8192, 4096);
 #endif
 
@@ -98,7 +101,11 @@ void __init_libcmt(void)
   SHOWPOINTER(DBF_STARTUP, &__filelist);
   SHOWPOINTER(DBF_STARTUP, &__filelist_cs);
   NewList((struct List *)&__filelist);
-  InitSemaphore(&__filelist_cs);
+  if(__mem_pool == NULL || !LOCK_INIT(__filelist_cs))
+  {
+    __free_libcmt();
+    return 0;
+  }
 
   // initialize clock/locale stuff
   SHOWPOINTER(DBF_STARTUP, &__clock_base);
@@ -136,6 +143,8 @@ void __init_libcmt(void)
     E(DBF_STARTUP, "ERROR on OpenLibrary()");
 
   LEAVE();
+
+  return 1;
 }
 
 void __free_libcmt(void)
@@ -152,6 +161,8 @@ void __free_libcmt(void)
 #endif
   CloseLibrary((struct Library *)LocaleBase);
   LocaleBase = NULL;
+
+  LOCK_FREE(__filelist_cs);
 
   SHOWPOINTER(DBF_STARTUP, &__mem_pool);
   // free memory related stuff

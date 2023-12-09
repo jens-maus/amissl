@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,10 +62,10 @@ STDARGS AMISSL_STATE *GetAmiSSLState(void)
   SHOWPOINTER(DBF_BASEREL, SysBase);
   SHOWPOINTER(DBF_BASEREL, &parentBase->openssl_cs);
 
-  ObtainSemaphore(&parentBase->openssl_cs);
+  LOCK_OBTAIN(parentBase->openssl_cs);
   D(DBF_BASEREL, "h_find(parentBase->thread_hash=%08lx)", parentBase->thread_hash);
   ret = (AMISSL_STATE *)h_find(parentBase->thread_hash, (long)FindTask(NULL));
-  ReleaseSemaphore(&parentBase->openssl_cs);
+  LOCK_RELEASE(parentBase->openssl_cs);
 
   RETURN(ret);
   return ret;

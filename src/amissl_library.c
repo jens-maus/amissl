@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -142,7 +142,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
 
   ENTER();
 
-  ObtainSemaphore(&parentBase->openssl_cs);
+  LOCK_OBTAIN(parentBase->openssl_cs);
 
   SHOWPOINTER(DBF_STARTUP, &ownBase);
   SHOWPOINTER(DBF_STARTUP, ownBase);
@@ -179,7 +179,7 @@ static AMISSL_STATE *CreateAmiSSLState(void)
     }
   }
 
-  ReleaseSemaphore(&parentBase->openssl_cs);
+  LOCK_RELEASE(parentBase->openssl_cs);
 
   SHOWPOINTER(DBF_STARTUP, ret);
   SHOWPOINTER(DBF_STARTUP, SysBase);
@@ -384,10 +384,10 @@ LIBPROTO(CleanupAmiSSLA, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, UNUSED s
     }
 #endif
 
-    ObtainSemaphore(&parentBase->openssl_cs);
+    LOCK_OBTAIN(parentBase->openssl_cs);
     D(DBF_STARTUP, "h_delete(parentBase->thread_hash)");
     h_delete(parentBase->thread_hash, state->pid);
-    ReleaseSemaphore(&parentBase->openssl_cs);
+    LOCK_RELEASE(parentBase->openssl_cs);
 
     if(state->getenv_var)
       free(state->getenv_var);
@@ -437,10 +437,10 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
   if(libBase->parent->thread_hash)
   {
     D(DBF_STARTUP, "Performing unfreed states cleanup for %08lx (group %lu)", FindTask(NULL), libBase->ThreadGroupID);
-    ObtainSemaphore(&libBase->parent->openssl_cs);
+    LOCK_OBTAIN(libBase->parent->openssl_cs);
     D(DBF_STARTUP, "h_doall(thread_hash)");
     h_doall(libBase->parent->thread_hash, (void (*)(long, void *))ThreadGroupStateCleanup);
-    ReleaseSemaphore(&libBase->parent->openssl_cs);
+    LOCK_RELEASE(libBase->parent->openssl_cs);
   }
   else
     W(DBF_STARTUP, "No thread_hash");
@@ -496,10 +496,11 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
   // lets set the parent of libBase as our parentBase
   parentBase = libBase->parent;
   SHOWPOINTER(DBF_STARTUP, &parentBase);
-  SHOWPOINTER(DBF_STARTUP, parentBase),
+  SHOWPOINTER(DBF_STARTUP, parentBase);
 
   // we have to initialize the libcmt stuff
-  __init_libcmt();
+  if (!__init_libcmt())
+    return err;
 
   D(DBF_STARTUP, "Global parentBase variables:");
   D(DBF_STARTUP, "---------------------------");
@@ -510,13 +511,13 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
   SHOWVALUE(DBF_STARTUP, parentBase->LastThreadGroupID);
   D(DBF_STARTUP, "---------------------------");
 
-  ObtainSemaphore(&parentBase->openssl_cs);
+  LOCK_OBTAIN(parentBase->openssl_cs);
 
   ownBase->ThreadGroupID = ++(parentBase->LastThreadGroupID);
   SHOWPOINTER(DBF_STARTUP, &ownBase->ThreadGroupID);
   SHOWVALUE(DBF_STARTUP, ownBase->ThreadGroupID);
 
-  ReleaseSemaphore(&parentBase->openssl_cs);
+  LOCK_RELEASE(parentBase->openssl_cs);
 
   if (CRYPTO_THREAD_setup()
 #if defined(__amigaos4__)

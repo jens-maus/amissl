@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,7 +62,7 @@ struct LibraryHeader
   #if defined(__MORPHOS__)
   struct Library          *sysBase;
   #endif
-  struct SignalSemaphore  libSem;
+  LOCK_DECLARE(           libLock);
 
   #if !defined(__amigaos4__) || !defined(NO_VECTABLE68K)
   struct LibraryHeader    *extBase;
@@ -78,7 +78,7 @@ struct LibraryHeader
   // for the parent libbase and which
   // are thus global throughout all libbases
   // created by AmiSSL.
-  struct SignalSemaphore openssl_cs;
+  LOCK_DECLARE(openssl_cs);
   struct HashTable *thread_hash;
   ULONG LastThreadGroupID;
 };

@@ -8,7 +8,7 @@
 #include <internal/amissl.h>
 
 extern struct MinList __filelist;
-extern struct SignalSemaphore __filelist_cs;
+extern LOCK_DECLARE(__filelist_cs);
 
 int __fflush(FILE *stream) /* fflush exactly one file */
 {
@@ -47,7 +47,7 @@ int fflush(FILE *stream) /* fflush one or all files */
 	if(TOFILE(stream)!=NULL)
 		return __fflush(stream);
 	retval=0;
-	ObtainSemaphore(&__filelist_cs);
+	LOCK_OBTAIN(__filelist_cs);
 	node=__filelist.mlh_Head;
 	while((nextnode=node->mln_Succ)!=NULL)
 	{
@@ -55,6 +55,6 @@ int fflush(FILE *stream) /* fflush one or all files */
 			retval=EOF;
 		node=nextnode;
 	}
-	ReleaseSemaphore(&__filelist_cs);
+	LOCK_RELEASE(__filelist_cs);
 	return retval;
 }

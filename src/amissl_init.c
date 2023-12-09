@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,7 +78,11 @@ ULONG freeBase(UNUSED struct LibraryHeader *lib)
 
   SHOWPOINTER(DBF_STARTUP, &lib->thread_hash);
   SHOWPOINTER(DBF_STARTUP, lib->thread_hash);
-  h_free(lib->thread_hash);
+
+  if(lib->thread_hash)
+    h_free(lib->thread_hash);
+
+  LOCK_FREE(lib->openssl_cs);
 
   RETURN(TRUE);
   return TRUE;
@@ -88,6 +92,8 @@ ULONG freeBase(UNUSED struct LibraryHeader *lib)
 
 ULONG initBase(UNUSED struct LibraryHeader *lib)
 {
+  ULONG success;
+
   ENTER();
 
   SHOWPOINTER(DBF_STARTUP, SysBase);
@@ -97,7 +103,6 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
 
   // initialize the global variables of the parent libbase
   SHOWPOINTER(DBF_STARTUP, &lib->openssl_cs);
-  InitSemaphore(&lib->openssl_cs);
 
   lib->thread_hash = h_new(7, h_allocfunc, h_freefunc);
   SHOWPOINTER(DBF_STARTUP, &lib->thread_hash);
@@ -107,10 +112,12 @@ ULONG initBase(UNUSED struct LibraryHeader *lib)
   SHOWPOINTER(DBF_STARTUP, &lib->LastThreadGroupID);
   SHOWVALUE(DBF_STARTUP, lib->LastThreadGroupID);
 
+  success = (lib->thread_hash != NULL) && LOCK_INIT(lib->openssl_cs);
+
   D(DBF_STARTUP, "-------------------------------");
 
-  RETURN(TRUE);
-  return TRUE;
+  RETURN(success);
+  return success;
 }
 
 /***********************************************************************/

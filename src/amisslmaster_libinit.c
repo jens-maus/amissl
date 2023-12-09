@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,9 @@
 #include <proto/dos.h>
 #endif
 
+#include <internal/debug.h>
+#include <internal/amissl.h>
+
 #include "amisslmaster_lib_protos.h"
 #include "amisslmaster_base.h"
 #include "amisslmaster_glue.h"
@@ -39,9 +42,6 @@
 #if defined(__MORPHOS__)
 #include "amisslmaster_stubs_mos.h"
 #endif
-
-#include <internal/debug.h>
-#include <internal/amissl.h>
 
 #include "amissl_rev.h"
 
@@ -739,11 +739,11 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
       D(DBF_STARTUP, "LibInit()");
       #endif
 
-      InitSemaphore(&base->libSem);
-
+      if(LOCK_INIT(base->libLock)
       #if defined(MULTIBASE)
-      if((base->parent = InitMultiBase(base)))
+	 && (base->parent = InitMultiBase(base))
       #endif /* MULTIBASE */
+	 )
       {
         // If we are not running on AmigaOS4 (no stackswap required) we go and
         // do an explicit StackSwap() in case the user wants to make sure we
@@ -773,6 +773,8 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
           callLibFunction(freeBase, base);
       }
     }
+
+    LOCK_FREE(base->libLock);
 
     #if defined(__amigaos4__) && defined(__NEWLIB__)
     if(NewlibBase)
@@ -830,6 +832,8 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
 
   SHOWPOINTER(DBF_STARTUP, SysBase);
   SHOWPOINTER(DBF_STARTUP, base);
+
+  LOCK_FREE(base->libLock);
 
   // remove the library base from exec's lib list in advance
   Remove((struct Node *)base);
@@ -968,7 +972,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   base->libBase.lib_Flags &= ~LIBF_DELEXP;
 
   // protect
-  ObtainSemaphore(&base->libSem);
+  LOCK_OBTAIN(base->libLock);
 
   #if defined(MULTIBASE)
   #if defined(__amigaos4__)
@@ -993,12 +997,6 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
 
   if(child != NULL)
   {
-    #if defined(__amigaos3__)
-    unsigned char *dataSeg;
-    ULONG *relocs;
-    ULONG numRelocs;
-    #endif
-
     #if defined(__amigaos3__) // CreateLibrary/LibInit has already done this
     // lets clone the child library header
     child->libBase.lib_Node.ln_Type = NT_LIBRARY;
@@ -1010,8 +1008,22 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
     child->libBase.lib_IdString     = base->libBase.lib_IdString;
     #endif
 
-    InitSemaphore(&child->libSem);
     child->parent   = base;
+
+    if (!LOCK_INIT(child->libLock))
+    {
+        DeleteLibrary(&child->libBase);
+        child = NULL;
+    }
+  }
+
+  if(child != NULL)
+  {
+    #if defined(__amigaos3__)
+    unsigned char *dataSeg;
+    ULONG *relocs;
+    ULONG numRelocs;
+    #endif
 
     #if defined(__amigaos4__)
     {
@@ -1145,7 +1157,7 @@ struct LibraryHeader * LIBFUNC LibOpen(REG(d0, UNUSED ULONG version), REG(a6, st
   #endif // MULTIBASE
 
   // unprotect
-  ReleaseSemaphore(&base->libSem);
+  LOCK_RELEASE(base->libLock);
 
   #if defined(DEBUG)
   SHOWPOINTER(DBF_STARTUP, SysBase);
@@ -1187,13 +1199,13 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
   #endif
 
   // free all our private data and stuff.
-  ObtainSemaphore(&base->libSem);
+  LOCK_OBTAIN(base->libLock);
 
   // make sure we have enough stack here
   callLibFunction(closeBase, base);
 
   // unprotect
-  ReleaseSemaphore(&base->libSem);
+  LOCK_RELEASE(base->libLock);
 
   // decrease the open counter
   base->libBase.lib_OpenCnt--;
@@ -1205,10 +1217,16 @@ BPTR LIBFUNC LibClose(REG(a6, struct LibraryHeader *base))
     #ifdef MULTIBASE
     struct LibraryHeader *parent = base->parent;
     BOOL exp_parent = (parent->libBase.lib_Flags & LIBF_DELEXP) != 0 ? 1 : 0;
-
-    /* release child base */
     #if defined(__amigaos4__)
     struct ExtendedLibrary *extlib = (struct ExtendedLibrary *)((ULONG)base + base->libBase.lib_PosSize);
+    #endif
+    #endif
+
+    LOCK_FREE(base->libLock);
+
+    #ifdef MULTIBASE
+    /* release child base */
+    #if defined(__amigaos4__)
     LIB___UserLibCleanup((struct AmiSSLMasterIFace *)extlib->MainIFace);
     (parent->IElf->FreeDataSegmentCopy)(parent->elfHandle, base->baserelData);
     base->baserelData = NULL;

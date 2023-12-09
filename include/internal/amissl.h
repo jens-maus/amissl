@@ -45,8 +45,10 @@ typedef struct {
 	APTR stack;
 	struct tm localtime_var;
 	struct Library *SocketBase;
+#if !defined(__amigaos4__) && !defined(__MORPHOS__)
 	LONG TCPIPStackType;
 	struct MLinkLock *MLinkLock; // This is really ancient, but ib still supports it so...
+#endif
 #ifdef __amigaos4__
 	struct SocketIFace *ISocket;
 	struct SocketIFace **ISocketPtr;
@@ -63,5 +65,19 @@ STDARGS void SetAmiSSLerrno(int);
 STDARGS int GetAmiSSLerrno(void);
 
 #define SETUPSTATE() AMISSL_STATE *state = GetAmiSSLState()
+
+#if defined(__amigaos4__)
+# define LOCK_INIT(mutex) ((mutex = AllocSysObject(ASOT_MUTEX, NULL)) != NULL)
+# define LOCK_FREE(mutex) FreeSysObject(ASOT_MUTEX, mutex)
+# define LOCK_OBTAIN(mutex) MutexObtain(mutex)
+# define LOCK_RELEASE(mutex) MutexRelease(mutex)
+# define LOCK_DECLARE(mutex) APTR mutex
+#else
+# define LOCK_INIT(sem) (InitSemaphore(&(sem)), TRUE)
+# define LOCK_FREE(sem) while(0)
+# define LOCK_OBTAIN(sem) ObtainSemaphore(&(sem))
+# define LOCK_RELEASE(sem) ReleaseSemaphore(&(sem))
+# define LOCK_DECLARE(sem) struct SignalSemaphore sem
+#endif
 
 #endif /* !INTERNAL_AMISSL_H */

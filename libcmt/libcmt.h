@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@
 
 extern int __io2errno(int);
 extern void initialize_socket_errno(AMISSL_STATE *state);
-extern void __init_libcmt(void);
+extern int __init_libcmt(void);
 extern void __free_libcmt(void);
 
 /****************************************************************************/

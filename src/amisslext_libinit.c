@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,8 @@
 #include <exec/resident.h>
 #include <proto/exec.h>
 
+#include <internal/amissl.h>
+
 //
 
 #include "amissl_lib_protos.h"
@@ -41,8 +43,6 @@
 #endif
 
 //
-
-#include <internal/amissl.h>
 
 #if defined(__amigaos3__)
 #if defined(__GNUC__) && __GNUC__ < 3

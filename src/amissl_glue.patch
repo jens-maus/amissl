@@ -1,5 +1,5 @@
---- amissl_glue.c	2022-03-26 13:15:21.414382815 +0000
-+++ amissl_glue.c_patched	2022-03-26 13:15:15.750381865 +0000
+--- amissl_glue.c	2023-12-08 21:21:37.771112599 +0000
++++ amissl_glue.c_patched	2023-12-08 21:22:36.683115409 +0000
 @@ -4,7 +4,13 @@
  
  /***************************************************************************/
@@ -14,7 +14,7 @@
  
  /***************************************************************************/
  
-@@ -14,11 +20,24 @@
+@@ -14,11 +20,25 @@
  #undef SAVEDS
  #define SAVEDS __attribute__((baserel_restore)) __attribute__ ((noinline))
  #elif defined(__amigaos3__)
@@ -22,6 +22,7 @@
 +//#error insert the correct offset to let the __restore_a4 function restore the correct base relative data segment below and remove this warning
  // restore the base relative data segment from the library base address in register a6
  // this function will be called from all non-static functions in this module if it is built with -mrestore-a4
++#include <internal/amissl.h>
 +#include "amissl_base.h"
  static const USED_VAR unsigned short __restore_a4[] = { 0x286e, OFFSET(LibraryHeader, dataSeg), 0x4e75 }; // "move.l a6@(dataSeg:w),a4;rts"
 -#endif // __amigaos3__
@@ -41,7 +42,7 @@
  #endif // BASEREL
  
  /***************************************************************************/
-@@ -30,24 +49,30 @@
+@@ -30,24 +50,30 @@
  
  // ---
  
@@ -72,7 +73,7 @@
  
  // ---
  
-@@ -15369,6 +15394,8 @@
+@@ -15369,6 +15395,8 @@
  
  // ---
  
@@ -81,7 +82,7 @@
  int SAVEDS ASM LIB_UI_read_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
  {
  	return UI_read_string_lib(ui, uis);
-@@ -15376,6 +15403,8 @@
+@@ -15376,6 +15404,8 @@
  
  // ---
  
@@ -90,7 +91,7 @@
  int SAVEDS ASM LIB_UI_write_string_lib(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
  {
  	return UI_write_string_lib(ui, uis);
-@@ -26466,7 +26495,13 @@
+@@ -26466,7 +26496,13 @@
  
  int SAVEDS ASM LIB_OBSOLETE_RSA_X931_derive_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, RSA * rsa), REG(a1, BIGNUM * p1), REG(a2, BIGNUM * p2), REG(a3, BIGNUM * q1), REG(d0, BIGNUM * q2), REG(d1, const BIGNUM * Xp1), REG(d2, const BIGNUM * Xp2), REG(d3, const BIGNUM * Xp), REG(d4, const BIGNUM * Xq1), REG(d5, const BIGNUM * Xq2), REG(d6, const BIGNUM * Xq), REG(d7, const BIGNUM * e), REG(a4, BN_GENCB * cb))
  {

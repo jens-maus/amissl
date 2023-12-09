@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,13 +43,19 @@ malloc(
   SHOWPOINTER(DBF_STARTUP, &__mem_cs);
   SHOWPOINTER(DBF_STARTUP, &__mem_pool);
   #endif
- 
+
+  #if !defined(__amigaos4__)
   ObtainSemaphore(&__mem_cs);
+  #endif
+
   n += sizeof(*p);
   p = AllocPooled(__mem_pool, n);
   if (p)
     *p++ = n;
+
+  #if !defined(__amigaos4__)
   ReleaseSemaphore(&__mem_cs);
+  #endif
 
   #if 0
   RETURN(p);

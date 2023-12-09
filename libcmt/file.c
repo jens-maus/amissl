@@ -10,7 +10,8 @@
 #include "libcmt.h"
 
 extern struct MinList __filelist; /* list of open files (fflush() needs also access) */
-extern struct SignalSemaphore __filelist_cs;
+
+extern LOCK_DECLARE(__filelist_cs);
 
 FILE *freopen(const char *filename,const char *mode,FILE *stream)
 {
@@ -119,9 +120,9 @@ FILE *fopen(const char *name, const char *mode)
 			node->FILE._flag |= _IOALLOCBUF;
 			if(freopen(name,mode,(FILE *)&node->FILE)!=NULL)
 			{
-				ObtainSemaphore(&__filelist_cs);
+				LOCK_OBTAIN(__filelist_cs);
 				AddHead((struct List *)&__filelist,(struct Node *)&node->node);
-				ReleaseSemaphore(&__filelist_cs);
+				LOCK_RELEASE(__filelist_cs);
 				return (FILE *)&node->FILE;
 			}
 			free(node->FILE._base);
@@ -146,9 +147,9 @@ int fclose(FILE *file)
 
 	node = (struct filenode *)(((BYTE *)file)-offsetof(struct filenode,FILE));
 
-	ObtainSemaphore(&__filelist_cs);
+	LOCK_OBTAIN(__filelist_cs);
 	Remove((struct Node *)node);
-	ReleaseSemaphore(&__filelist_cs);
+	LOCK_RELEASE(__filelist_cs);
 
 	Close(TOFILE(file)->_file);
 

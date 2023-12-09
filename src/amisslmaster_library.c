@@ -40,6 +40,7 @@
 
 #include <internal/SDI_lib.h>
 #include <internal/debug.h>
+#include <internal/amissl.h>
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>
@@ -74,7 +75,7 @@ LONG LibAPIVersion = AMISSL_CURRENT_VERSION;
 LONG LibUsesOpenSSLStructs = 0;
 LONG AmiSSLInitialised = FALSE;
 
-struct SignalSemaphore AmiSSLMasterLock;
+LOCK_DECLARE(AmiSSLMasterLock);
 
 struct AmiSSLInitStruct amisslinit; /* Keep them here so we know which ciphers we were able to open this time */
 
@@ -231,7 +232,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, SysBase);
 
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
-  ObtainSemaphore(&AmiSSLMasterLock);
+  LOCK_OBTAIN(AmiSSLMasterLock);
 
   if(LibAPIVersion >= AMISSL_V302)
   {
@@ -382,7 +383,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     E(DBF_STARTUP, "ERROR: couldn't open amissl library: %08lx", AmiSSLBase);
   #endif
 
-  ReleaseSemaphore(&AmiSSLMasterLock);
+  LOCK_RELEASE(AmiSSLMasterLock);
 
   RETURN(AmiSSLBase);
   return AmiSSLBase;
@@ -390,7 +391,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 
 LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE))
 {
-  ObtainSemaphore(&AmiSSLMasterLock);
+  LOCK_OBTAIN(AmiSSLMasterLock);
 
   if(AmiSSLBase)
   {
@@ -420,7 +421,7 @@ LIBPROTO(CloseAmiSSL, void, REG(a6, UNUSED __BASE_OR_IFACE))
   CloseLib(amisslinit.SHABase);
   CloseLib(amisslinit.RSABase);
 
-  ReleaseSemaphore(&AmiSSLMasterLock);
+  LOCK_RELEASE(AmiSSLMasterLock);
 }
 
 LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG Cipher))
@@ -432,7 +433,7 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
   struct Library *AmiSSLMasterBase = __BASE_OR_IFACE_VAR;
   #endif
 
-  ObtainSemaphore(&AmiSSLMasterLock);
+  LOCK_OBTAIN(AmiSSLMasterLock);
 
   // only open sub libraries for our old-style AmiSSL v2 versions.
   if(LibAPIVersion == AMISSL_V2)
@@ -499,7 +500,7 @@ LIBPROTO(OpenAmiSSLCipher, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE), RE
     }
   }
 
-  ReleaseSemaphore(&AmiSSLMasterLock);
+  LOCK_RELEASE(AmiSSLMasterLock);
 
   return result;
 }
@@ -574,9 +575,9 @@ LIBPROTOVA(OpenAmiSSLTags, LONG, REG(a6, __BASE_OR_IFACE), REG(d0, LONG APIVersi
 
 LIBPROTO(CloseAmiSSLCipher, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct Library *LibBase))
 {
-  ObtainSemaphore(&AmiSSLMasterLock);
+  LOCK_OBTAIN(AmiSSLMasterLock);
   CloseLib(LibBase);
-  ReleaseSemaphore(&AmiSSLMasterLock);
+  LOCK_RELEASE(AmiSSLMasterLock);
 }
 
 LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
@@ -627,6 +628,8 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE))
     CloseLibrary((struct Library *)IntuitionBase);
     IntuitionBase = NULL;
   }
+
+  LOCK_FREE(AmiSSLMasterLock);
 }
 
 LIBPROTO(__UserLibExpunge, void, REG(a6, UNUSED __BASE_OR_IFACE))
@@ -640,17 +643,17 @@ LIBPROTO(__UserLibInit, int, REG(a6, UNUSED __BASE_OR_IFACE))
 
   ENTER();
 
-  InitSemaphore(&AmiSSLMasterLock);
-
+  if(LOCK_INIT(AmiSSLMasterLock)
 #if defined(__amigaos4__)
-  if((UtilityBase = OpenLibrary("utility.library", 50)) != NULL
+     && (UtilityBase = OpenLibrary("utility.library", 50)) != NULL
      && (IntuitionBase = OpenLibrary("intuition.library", 50)) != NULL
      && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)) != NULL
-     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL)) != NULL)
+     && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase, "main", 1, NULL)) != NULL
 #else
-  if((UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)) != NULL
-     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL)
+     && (UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)) != NULL
+     && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)) != NULL
 #endif
+     )
   {
     err = 0;
   }
