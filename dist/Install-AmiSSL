@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 5.13 (7.12.2023)
+; $VER: Install-AmiSSL 5.13 (9.12.2023)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -347,8 +347,6 @@
 (set #amissl-ver (/ #new-lib-ver 65536))
 (set #amissl-rev (- #new-lib-ver (* #amissl-ver 65536)))
 
-(set #resident-lib-ver (getversion "amisslmaster.library" (resident)))
-
 ; Try to force ramlib on OS4 to expunge libraries to release exclusive
 ; library file locks, which is necessary until AmiSSL 5.6 + elf.library 53.35
 (if (= #detectedSystem "os4")
@@ -546,10 +544,26 @@
 (complete 75)
 
 (if (= #copy-certs 1)
-	(copyfiles
-		(source "Certs")
-		(dest #certs-dir)
-		(all)
+	(if (exists (tackon #certs-dir "disabled"))
+		(foreach "Certs" "#?"
+			(if (exists (tackon (tackon #certs-dir "disabled") @each-name))
+				(copyfiles
+					(source (tackon "Certs" @each-name))
+					(dest (tackon #certs-dir "disabled"))
+				)
+				;else
+				(copyfiles
+					(source (tackon "Certs" @each-name))
+					(dest #certs-dir)
+				)
+			)
+		)
+		;else
+		(copyfiles
+			(source "Certs")
+			(dest #certs-dir)
+			(all)
+		)
 	)
 )
 
