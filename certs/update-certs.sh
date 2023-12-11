@@ -4,7 +4,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2022 AmiSSL Open Source Team.
+# Copyright (c) 2006-2023 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ cd ${TMPDIR}
 wget -O ca-bundle.crt https://curl.se/ca/cacert.pem
 awk 'BEGIN {c=0} v{v=v"\n"$0} /----BEGIN/{v=$0;c++}/----END/&&v { print v > "cert." c ".pem"; v=x}' ca-bundle.crt
 rm ca-bundle.crt
-c_rehash .
+openssl rehash -compat .
 rm -f ${CURDIR}/*.[[:alnum:]]
 find . -type l -exec cp {} ${CURDIR}/ \;
 rm -rf ${TMPDIR}
