@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@
 // since the Amiga's timeval structure was renamed to
 // "struct TimeVal" in OS4 (to prevent clashes with the POSIX one)
 // we require to define that slightly compatible structure on our
-// own in case we compile YAM for something else than OS4 or in case
+// own in case we compile AmiSSL for something else than OS4 or in case
 // an older SDK is used.
 #if !defined(__amigaos4__) || !defined(__NEW_TIMEVAL_DEFINITION_USED__)
 #include <exec/io.h>

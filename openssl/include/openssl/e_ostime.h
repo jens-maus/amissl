@@ -23,6 +23,10 @@
 
 # if defined(OPENSSL_SYS_WINDOWS)
 #  include <winsock2.h>
+# elif defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE) && \
+     ((defined(__amigaos4__) && defined(__USE_OLD_TIMEVAL__)) || \
+     (!defined(__amigaos4__) && !defined(__USE_NEW_TIMEVAL__)))
+#  include <devices/timer.h>
 # else
 #  include <sys/time.h>
 # endif

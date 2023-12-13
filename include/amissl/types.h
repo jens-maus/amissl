@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2023 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,7 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef long int off_t;
+typedef unsigned long uintptr_t;
 
 /* Cannot use 64-bit functions - used only to allow headers to be parsed */
 typedef int int64_t;
