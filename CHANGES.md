@@ -16,6 +16,8 @@
   + Support for using the IANA standard names in TLS ciphersuite
     configuration
   + Multiple new features and improvements to CMP protocol support
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 12.12.2023.
 - Use Exec mutexes instead of semaphores on AmigaOS 4.x, decreasing
   system overhead.
 - Use ASOPOOL_Protected instead of our own semaphore protection
