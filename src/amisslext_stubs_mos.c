@@ -10693,11 +10693,11 @@ void LIBSTUB_X509_PUBKEY_set0_public_key(void)
   return LIB_X509_PUBKEY_set0_public_key(_base, ___pub, ___penc, ___penclen);
 }
 
-void LIB_OSSL_STACK_OF_X509_free(struct Library * _base, struct stack_st_X509 * ___certs);
+void LIB_OSSL_STACK_OF_X509_free(struct Library * _base, STACK_OF(X509) * ___certs);
 
 void LIBSTUB_OSSL_STACK_OF_X509_free(void)
 {
-  struct stack_st_X509 * ___certs = (struct stack_st_X509 *)REG_A0;
+  STACK_OF(X509) * ___certs = (STACK_OF(X509) *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_STACK_OF_X509_free(_base, ___certs);
 }
@@ -10810,31 +10810,31 @@ BIO_ADDR * LIBSTUB_BIO_ADDR_dup(void)
   return LIB_BIO_ADDR_dup(_base, ___ap);
 }
 
-OSSL_CMP_ITAV * LIB_OSSL_CMP_ITAV_new_caCerts(struct Library * _base, const struct stack_st_X509 * ___caCerts);
+OSSL_CMP_ITAV * LIB_OSSL_CMP_ITAV_new_caCerts(struct Library * _base, const STACK_OF(X509) * ___caCerts);
 
 OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_ITAV_new_caCerts(void)
 {
-  const struct stack_st_X509 * ___caCerts = (const struct stack_st_X509 *)REG_A0;
+  const STACK_OF(X509) * ___caCerts = (const STACK_OF(X509) *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_ITAV_new_caCerts(_base, ___caCerts);
 }
 
-int LIB_OSSL_CMP_ITAV_get0_caCerts(struct Library * _base, const OSSL_CMP_ITAV * ___itav, struct stack_st_X509 ** ___out);
+int LIB_OSSL_CMP_ITAV_get0_caCerts(struct Library * _base, const OSSL_CMP_ITAV * ___itav, STACK_OF(X509) ** ___out);
 
 int LIBSTUB_OSSL_CMP_ITAV_get0_caCerts(void)
 {
   const OSSL_CMP_ITAV * ___itav = (const OSSL_CMP_ITAV *)REG_A0;
-  struct stack_st_X509 ** ___out = (struct stack_st_X509 **)REG_A1;
+  STACK_OF(X509) ** ___out = (STACK_OF(X509) **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_ITAV_get0_caCerts(_base, ___itav, ___out);
 }
 
-int LIB_OSSL_CMP_get1_caCerts(struct Library * _base, OSSL_CMP_CTX * ___ctx, struct stack_st_X509 ** ___out);
+int LIB_OSSL_CMP_get1_caCerts(struct Library * _base, OSSL_CMP_CTX * ___ctx, STACK_OF(X509) ** ___out);
 
 int LIBSTUB_OSSL_CMP_get1_caCerts(void)
 {
   OSSL_CMP_CTX * ___ctx = (OSSL_CMP_CTX *)REG_A0;
-  struct stack_st_X509 ** ___out = (struct stack_st_X509 **)REG_A1;
+  STACK_OF(X509) ** ___out = (STACK_OF(X509) **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_get1_caCerts(_base, ___ctx, ___out);
 }
@@ -10994,16 +10994,16 @@ CMS_SignedData * LIBSTUB_CMS_SignedData_new(void)
   return LIB_CMS_SignedData_new(_base);
 }
 
-BIO * LIB_CMS_SignedData_verify(struct Library * _base, CMS_SignedData * ___sd, BIO * ___detached_data, struct stack_st_X509 * ___scerts, X509_STORE * ___store, struct stack_st_X509 * ___extra, struct stack_st_X509_CRL * ___crls, unsigned int ___flags, OSSL_LIB_CTX * ___libctx, const char * ___propq);
+BIO * LIB_CMS_SignedData_verify(struct Library * _base, CMS_SignedData * ___sd, BIO * ___detached_data, STACK_OF(X509) * ___scerts, X509_STORE * ___store, STACK_OF(X509) * ___extra, STACK_OF(X509_CRL) * ___crls, unsigned int ___flags, OSSL_LIB_CTX * ___libctx, const char * ___propq);
 
 BIO * LIBSTUB_CMS_SignedData_verify(void)
 {
   CMS_SignedData * ___sd = (CMS_SignedData *)REG_A0;
   BIO * ___detached_data = (BIO *)REG_A1;
-  struct stack_st_X509 * ___scerts = (struct stack_st_X509 *)REG_A2;
+  STACK_OF(X509) * ___scerts = (STACK_OF(X509) *)REG_A2;
   X509_STORE * ___store = (X509_STORE *)REG_A3;
-  struct stack_st_X509 * ___extra = (struct stack_st_X509 *)REG_D0;
-  struct stack_st_X509_CRL * ___crls = (struct stack_st_X509_CRL *)REG_D1;
+  STACK_OF(X509) * ___extra = (STACK_OF(X509) *)REG_D0;
+  STACK_OF(X509_CRL) * ___crls = (STACK_OF(X509_CRL) *)REG_D1;
   unsigned int ___flags = (unsigned int)REG_D2;
   OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_D3;
   const char * ___propq = (const char *)REG_D4;
@@ -11136,17 +11136,17 @@ int LIBSTUB_EVP_PKEY_auth_decapsulate_init(void)
   return LIB_EVP_PKEY_auth_decapsulate_init(_base, ___ctx, ___authpub, ___params);
 }
 
-void LIB_PKCS12_SAFEBAG_set0_attrs(struct Library * _base, PKCS12_SAFEBAG * ___bag, struct stack_st_X509_ATTRIBUTE * ___attrs);
+void LIB_PKCS12_SAFEBAG_set0_attrs(struct Library * _base, PKCS12_SAFEBAG * ___bag, STACK_OF(X509_ATTRIBUTE) * ___attrs);
 
 void LIBSTUB_PKCS12_SAFEBAG_set0_attrs(void)
 {
   PKCS12_SAFEBAG * ___bag = (PKCS12_SAFEBAG *)REG_A0;
-  struct stack_st_X509_ATTRIBUTE * ___attrs = (struct stack_st_X509_ATTRIBUTE *)REG_A1;
+  STACK_OF(X509_ATTRIBUTE) * ___attrs = (STACK_OF(X509_ATTRIBUTE) *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_PKCS12_SAFEBAG_set0_attrs(_base, ___bag, ___attrs);
 }
 
-PKCS12 * LIB_PKCS12_create_ex2_amiga_1(struct Library * _base, const char * ___pass, const char * ___name, EVP_PKEY * ___pkey, X509 * ___cert, struct stack_st_X509 * ___ca, int ___nid_key, int ___nid_cert, void * ___moreargs);
+PKCS12 * LIB_PKCS12_create_ex2_amiga_1(struct Library * _base, const char * ___pass, const char * ___name, EVP_PKEY * ___pkey, X509 * ___cert, STACK_OF(X509) * ___ca, int ___nid_key, int ___nid_cert, void * ___moreargs);
 
 PKCS12 * LIBSTUB_PKCS12_create_ex2_amiga_1(void)
 {
@@ -11154,7 +11154,7 @@ PKCS12 * LIBSTUB_PKCS12_create_ex2_amiga_1(void)
   const char * ___name = (const char *)REG_A1;
   EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A2;
   X509 * ___cert = (X509 *)REG_A3;
-  struct stack_st_X509 * ___ca = (struct stack_st_X509 *)REG_D0;
+  STACK_OF(X509) * ___ca = (STACK_OF(X509) *)REG_D0;
   int ___nid_key = (int)REG_D1;
   int ___nid_cert = (int)REG_D2;
   void * ___moreargs = (void *)REG_D3;

@@ -15814,7 +15814,7 @@ STATIC void stub_ext_OSSL_STACK_OF_X509_free_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	Self->OSSL_STACK_OF_X509_free(
-		(struct stack_st_X509 *)regarray[REG68K_A0/4]
+		(STACK_OF(X509) *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_STACK_OF_X509_free = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_STACK_OF_X509_free_PPC };
@@ -15986,7 +15986,7 @@ STATIC OSSL_CMP_ITAV * stub_ext_OSSL_CMP_ITAV_new_caCerts_PPC(uint32 *regarray)
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->OSSL_CMP_ITAV_new_caCerts(
-		(const struct stack_st_X509 *)regarray[REG68K_A0/4]
+		(const STACK_OF(X509) *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_ITAV_new_caCerts = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_ITAV_new_caCerts_PPC };
@@ -16001,7 +16001,7 @@ STATIC int stub_ext_OSSL_CMP_ITAV_get0_caCerts_PPC(uint32 *regarray)
 
 	return Self->OSSL_CMP_ITAV_get0_caCerts(
 		(const OSSL_CMP_ITAV *)regarray[REG68K_A0/4],
-		(struct stack_st_X509 **)regarray[REG68K_A1/4]
+		(STACK_OF(X509) **)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_ITAV_get0_caCerts = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_ITAV_get0_caCerts_PPC };
@@ -16016,7 +16016,7 @@ STATIC int stub_ext_OSSL_CMP_get1_caCerts_PPC(uint32 *regarray)
 
 	return Self->OSSL_CMP_get1_caCerts(
 		(OSSL_CMP_CTX *)regarray[REG68K_A0/4],
-		(struct stack_st_X509 **)regarray[REG68K_A1/4]
+		(STACK_OF(X509) **)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_get1_caCerts = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_get1_caCerts_PPC };
@@ -16260,10 +16260,10 @@ STATIC BIO * stub_ext_CMS_SignedData_verify_PPC(uint32 *regarray)
 	return Self->CMS_SignedData_verify(
 		(CMS_SignedData *)regarray[REG68K_A0/4],
 		(BIO *)regarray[REG68K_A1/4],
-		(struct stack_st_X509 *)regarray[REG68K_A2/4],
+		(STACK_OF(X509) *)regarray[REG68K_A2/4],
 		(X509_STORE *)regarray[REG68K_A3/4],
-		(struct stack_st_X509 *)regarray[REG68K_D0/4],
-		(struct stack_st_X509_CRL *)regarray[REG68K_D1/4],
+		(STACK_OF(X509) *)regarray[REG68K_D0/4],
+		(STACK_OF(X509_CRL) *)regarray[REG68K_D1/4],
 		(unsigned int)regarray[REG68K_D2/4],
 		(OSSL_LIB_CTX *)regarray[REG68K_D3/4],
 		(const char *)regarray[REG68K_D4/4]
@@ -16464,7 +16464,7 @@ STATIC void stub_ext_PKCS12_SAFEBAG_set0_attrs_PPC(uint32 *regarray)
 
 	Self->PKCS12_SAFEBAG_set0_attrs(
 		(PKCS12_SAFEBAG *)regarray[REG68K_A0/4],
-		(struct stack_st_X509_ATTRIBUTE *)regarray[REG68K_A1/4]
+		(STACK_OF(X509_ATTRIBUTE) *)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_PKCS12_SAFEBAG_set0_attrs = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_PKCS12_SAFEBAG_set0_attrs_PPC };
@@ -16482,7 +16482,7 @@ STATIC PKCS12 * stub_ext_PKCS12_create_ex2_amiga_1_PPC(uint32 *regarray)
 		(const char *)regarray[REG68K_A1/4],
 		(EVP_PKEY *)regarray[REG68K_A2/4],
 		(X509 *)regarray[REG68K_A3/4],
-		(struct stack_st_X509 *)regarray[REG68K_D0/4],
+		(STACK_OF(X509) *)regarray[REG68K_D0/4],
 		(int)regarray[REG68K_D1/4],
 		(int)regarray[REG68K_D2/4],
 		(void *)regarray[REG68K_D3/4]

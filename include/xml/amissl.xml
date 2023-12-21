@@ -26763,7 +26763,7 @@
       <arg name="penclen" type="int" m68kreg="d0"/>
     </method>
     <method name="OSSL_STACK_OF_X509_free" result="void">
-      <arg name="certs" type="struct stack_st_X509 *" m68kreg="a0"/>
+      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a0"/>
     </method>
     <method name="OSSL_trace_string" result="int">
       <arg name="out" type="BIO *" m68kreg="a0"/>
@@ -26814,15 +26814,15 @@
       <arg name="ap" type="const BIO_ADDR *" m68kreg="a0"/>
     </method>
     <method name="OSSL_CMP_ITAV_new_caCerts" result="OSSL_CMP_ITAV *">
-      <arg name="caCerts" type="const struct stack_st_X509 *" m68kreg="a0"/>
+      <arg name="caCerts" type="const STACK_OF(X509) *" m68kreg="a0"/>
     </method>
     <method name="OSSL_CMP_ITAV_get0_caCerts" result="int">
       <arg name="itav" type="const OSSL_CMP_ITAV *" m68kreg="a0"/>
-      <arg name="out" type="struct stack_st_X509 **" m68kreg="a1"/>
+      <arg name="out" type="STACK_OF(X509) **" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_get1_caCerts" result="int">
       <arg name="ctx" type="OSSL_CMP_CTX *" m68kreg="a0"/>
-      <arg name="out" type="struct stack_st_X509 **" m68kreg="a1"/>
+      <arg name="out" type="STACK_OF(X509) **" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_ITAV_new_rootCaCert" result="OSSL_CMP_ITAV *">
       <arg name="rootCaCert" type="const X509 *" m68kreg="a0"/>
@@ -26892,10 +26892,10 @@
     <method name="CMS_SignedData_verify" result="BIO *">
       <arg name="sd" type="CMS_SignedData *" m68kreg="a0"/>
       <arg name="detached_data" type="BIO *" m68kreg="a1"/>
-      <arg name="scerts" type="struct stack_st_X509 *" m68kreg="a2"/>
+      <arg name="scerts" type="STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="store" type="X509_STORE *" m68kreg="a3"/>
-      <arg name="extra" type="struct stack_st_X509 *" m68kreg="d0"/>
-      <arg name="crls" type="struct stack_st_X509_CRL *" m68kreg="d1"/>
+      <arg name="extra" type="STACK_OF(X509) *" m68kreg="d0"/>
+      <arg name="crls" type="STACK_OF(X509_CRL) *" m68kreg="d1"/>
       <arg name="flags" type="unsigned int" m68kreg="d2"/>
       <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="d3"/>
       <arg name="propq" type="const char *" m68kreg="d4"/>
@@ -26955,7 +26955,7 @@
     </method>
     <method name="PKCS12_SAFEBAG_set0_attrs" result="void">
       <arg name="bag" type="PKCS12_SAFEBAG *" m68kreg="a0"/>
-      <arg name="attrs" type="struct stack_st_X509_ATTRIBUTE *" m68kreg="a1"/>
+      <arg name="attrs" type="STACK_OF(X509_ATTRIBUTE) *" m68kreg="a1"/>
     </method>
     <!-- SPLIT PKCS12_create_ex2() (not enough registers) -->
     <method name="PKCS12_create_ex2_amiga_1" result="PKCS12 *">
@@ -26963,7 +26963,7 @@
       <arg name="name" type="const char *" m68kreg="a1"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a2"/>
       <arg name="cert" type="X509 *" m68kreg="a3"/>
-      <arg name="ca" type="struct stack_st_X509 *" m68kreg="d0"/>
+      <arg name="ca" type="STACK_OF(X509) *" m68kreg="d0"/>
       <arg name="nid_key" type="int" m68kreg="d1"/>
       <arg name="nid_cert" type="int" m68kreg="d2"/>
       <arg name="moreargs" type="void *" m68kreg="d3"/>

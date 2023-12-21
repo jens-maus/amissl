@@ -6638,7 +6638,7 @@ typedef ULONG _sfdc_vararg;
 
 #define OSSL_STACK_OF_X509_free(___certs) \
       AROS_LC1(void, OSSL_STACK_OF_X509_free, \
- AROS_LCA(struct stack_st_X509 *, (___certs), A0), \
+ AROS_LCA(STACK_OF(X509) *, (___certs), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1022, Amisslext)
 
 #define OSSL_trace_string(___out, ___text, ___full, ___data, ___size) \
@@ -6711,19 +6711,19 @@ typedef ULONG _sfdc_vararg;
 
 #define OSSL_CMP_ITAV_new_caCerts(___caCerts) \
       AROS_LC1(OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_caCerts, \
- AROS_LCA(const struct stack_st_X509 *, (___caCerts), A0), \
+ AROS_LCA(const STACK_OF(X509) *, (___caCerts), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1033, Amisslext)
 
 #define OSSL_CMP_ITAV_get0_caCerts(___itav, ___out) \
       AROS_LC2(int, OSSL_CMP_ITAV_get0_caCerts, \
  AROS_LCA(const OSSL_CMP_ITAV *, (___itav), A0), \
- AROS_LCA(struct stack_st_X509 **, (___out), A1), \
+ AROS_LCA(STACK_OF(X509) **, (___out), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 1034, Amisslext)
 
 #define OSSL_CMP_get1_caCerts(___ctx, ___out) \
       AROS_LC2(int, OSSL_CMP_get1_caCerts, \
  AROS_LCA(OSSL_CMP_CTX *, (___ctx), A0), \
- AROS_LCA(struct stack_st_X509 **, (___out), A1), \
+ AROS_LCA(STACK_OF(X509) **, (___out), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 1035, Amisslext)
 
 #define OSSL_CMP_ITAV_new_rootCaCert(___rootCaCert) \
@@ -6825,10 +6825,10 @@ typedef ULONG _sfdc_vararg;
       AROS_LC9(BIO *, CMS_SignedData_verify, \
  AROS_LCA(CMS_SignedData *, (___sd), A0), \
  AROS_LCA(BIO *, (___detached_data), A1), \
- AROS_LCA(struct stack_st_X509 *, (___scerts), A2), \
+ AROS_LCA(STACK_OF(X509) *, (___scerts), A2), \
  AROS_LCA(X509_STORE *, (___store), A3), \
- AROS_LCA(struct stack_st_X509 *, (___extra), D0), \
- AROS_LCA(struct stack_st_X509_CRL *, (___crls), D1), \
+ AROS_LCA(STACK_OF(X509) *, (___extra), D0), \
+ AROS_LCA(STACK_OF(X509_CRL) *, (___crls), D1), \
  AROS_LCA(unsigned int, (___flags), D2), \
  AROS_LCA(OSSL_LIB_CTX *, (___libctx), D3), \
  AROS_LCA(const char *, (___propq), D4), \
@@ -6914,7 +6914,7 @@ typedef ULONG _sfdc_vararg;
 #define PKCS12_SAFEBAG_set0_attrs(___bag, ___attrs) \
       AROS_LC2(void, PKCS12_SAFEBAG_set0_attrs, \
  AROS_LCA(PKCS12_SAFEBAG *, (___bag), A0), \
- AROS_LCA(struct stack_st_X509_ATTRIBUTE *, (___attrs), A1), \
+ AROS_LCA(STACK_OF(X509_ATTRIBUTE) *, (___attrs), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 1064, Amisslext)
 
 #define PKCS12_create_ex2_amiga_1(___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___moreargs) \
@@ -6923,7 +6923,7 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const char *, (___name), A1), \
  AROS_LCA(EVP_PKEY *, (___pkey), A2), \
  AROS_LCA(X509 *, (___cert), A3), \
- AROS_LCA(struct stack_st_X509 *, (___ca), D0), \
+ AROS_LCA(STACK_OF(X509) *, (___ca), D0), \
  AROS_LCA(int, (___nid_key), D1), \
  AROS_LCA(int, (___nid_cert), D2), \
  AROS_LCA(void *, (___moreargs), D3), \

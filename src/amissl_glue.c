@@ -41125,7 +41125,7 @@ void SAVEDS ASM LIB_X509_PUBKEY_set0_public_key(REG(a6, UNUSED __IFACE_OR_BASE),
 
 // ---
 
-void SAVEDS ASM LIB_OSSL_STACK_OF_X509_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct stack_st_X509 * certs))
+void SAVEDS ASM LIB_OSSL_STACK_OF_X509_free(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(X509) * certs))
 {
 	OSSL_STACK_OF_X509_free(certs);
 }
@@ -41202,21 +41202,21 @@ BIO_ADDR * SAVEDS ASM LIB_BIO_ADDR_dup(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, 
 
 // ---
 
-OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const struct stack_st_X509 * caCerts))
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const STACK_OF(X509) * caCerts))
 {
 	return OSSL_CMP_ITAV_new_caCerts(caCerts);
 }
 
 // ---
 
-int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, struct stack_st_X509 ** out))
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, STACK_OF(X509) ** out))
 {
 	return OSSL_CMP_ITAV_get0_caCerts(itav, out);
 }
 
 // ---
 
-int SAVEDS ASM LIB_OSSL_CMP_get1_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx), REG(a1, struct stack_st_X509 ** out))
+int SAVEDS ASM LIB_OSSL_CMP_get1_caCerts(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx), REG(a1, STACK_OF(X509) ** out))
 {
 	return OSSL_CMP_get1_caCerts(ctx, out);
 }
@@ -41328,7 +41328,7 @@ CMS_SignedData * SAVEDS ASM LIB_CMS_SignedData_new(REG(a6, UNUSED __IFACE_OR_BAS
 
 // ---
 
-BIO * SAVEDS ASM LIB_CMS_SignedData_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CMS_SignedData * sd), REG(a1, BIO * detached_data), REG(a2, struct stack_st_X509 * scerts), REG(a3, X509_STORE * store), REG(d0, struct stack_st_X509 * extra), REG(d1, struct stack_st_X509_CRL * crls), REG(d2, unsigned int flags), REG(d3, OSSL_LIB_CTX * libctx), REG(d4, const char * propq))
+BIO * SAVEDS ASM LIB_CMS_SignedData_verify(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, CMS_SignedData * sd), REG(a1, BIO * detached_data), REG(a2, STACK_OF(X509) * scerts), REG(a3, X509_STORE * store), REG(d0, STACK_OF(X509) * extra), REG(d1, STACK_OF(X509_CRL) * crls), REG(d2, unsigned int flags), REG(d3, OSSL_LIB_CTX * libctx), REG(d4, const char * propq))
 {
 	return CMS_SignedData_verify(sd, detached_data, scerts, store, extra, crls, flags, libctx, propq);
 }
@@ -41419,14 +41419,14 @@ int SAVEDS ASM LIB_EVP_PKEY_auth_decapsulate_init(REG(a6, UNUSED __IFACE_OR_BASE
 
 // ---
 
-void SAVEDS ASM LIB_PKCS12_SAFEBAG_set0_attrs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag), REG(a1, struct stack_st_X509_ATTRIBUTE * attrs))
+void SAVEDS ASM LIB_PKCS12_SAFEBAG_set0_attrs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, PKCS12_SAFEBAG * bag), REG(a1, STACK_OF(X509_ATTRIBUTE) * attrs))
 {
 	PKCS12_SAFEBAG_set0_attrs(bag, attrs);
 }
 
 // ---
 
-PKCS12 * SAVEDS ASM LIB_PKCS12_create_ex2_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(a1, const char * name), REG(a2, EVP_PKEY * pkey), REG(a3, X509 * cert), REG(d0, struct stack_st_X509 * ca), REG(d1, int nid_key), REG(d2, int nid_cert), REG(d3, void * moreargs))
+PKCS12 * SAVEDS ASM LIB_PKCS12_create_ex2_amiga_1(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const char * pass), REG(a1, const char * name), REG(a2, EVP_PKEY * pkey), REG(a3, X509 * cert), REG(d0, STACK_OF(X509) * ca), REG(d1, int nid_key), REG(d2, int nid_cert), REG(d3, void * moreargs))
 {
 	return PKCS12_create_ex2_amiga_1(pass, name, pkey, cert, ca, nid_key, nid_cert, moreargs);
 }

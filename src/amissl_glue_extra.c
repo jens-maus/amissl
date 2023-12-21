@@ -123,7 +123,7 @@ BIO * OSSL_HTTP_transfer_amiga_1(OSSL_HTTP_REQ_CTX ** prctx, const char * server
     result = OSSL_HTTP_transfer(prctx, server, port, path, use_ssl, proxy, no_proxy,
 				bio, rbio, bio_update_fn,
 				(void *)a[0], (int)a[1],
-				(const struct stack_st_CONF_VALUE *)a[2],
+				(const STACK_OF(CONF_VALUE) *)a[2],
 				(const char *)a[3], (BIO *)a[4], (const char *)a[5],
 				(int)a[6], (size_t)a[7], (int)a[8], (int)a[9]);
     free(a);
@@ -136,7 +136,7 @@ BIO * OSSL_HTTP_transfer_amiga_1(OSSL_HTTP_REQ_CTX ** prctx, const char * server
 }
 
 void * OSSL_HTTP_transfer_amiga_2(void * arg, int buf_size,
-				  const struct stack_st_CONF_VALUE * headers,
+				  const STACK_OF(CONF_VALUE) * headers,
 				  const char * content_type, BIO * req,
 				  const char * expected_content_type,
 				  int expect_asn1, size_t max_resp_len,

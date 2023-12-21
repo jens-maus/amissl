@@ -6521,7 +6521,7 @@ struct AmiSSLIFace
 	APICALL int (*SSL_is_stream_local)(struct AmiSSLIFace *Self, SSL * s);
 	APICALL const BIO_METHOD * (*BIO_f_zlib)(struct AmiSSLIFace *Self);
 	APICALL void (*X509_PUBKEY_set0_public_key)(struct AmiSSLIFace *Self, X509_PUBKEY * pub, unsigned char * penc, int penclen);
-	APICALL void (*OSSL_STACK_OF_X509_free)(struct AmiSSLIFace *Self, struct stack_st_X509 * certs);
+	APICALL void (*OSSL_STACK_OF_X509_free)(struct AmiSSLIFace *Self, STACK_OF(X509) * certs);
 	APICALL int (*OSSL_trace_string)(struct AmiSSLIFace *Self, BIO * out, int text, int full, const unsigned char * data, size_t size);
 	APICALL BIGNUM * (*BN_signed_bin2bn)(struct AmiSSLIFace *Self, const unsigned char * s, int len, BIGNUM * ret);
 	APICALL int (*BN_signed_bn2bin)(struct AmiSSLIFace *Self, const BIGNUM * a, unsigned char * to, int tolen);
@@ -6532,9 +6532,9 @@ struct AmiSSLIFace
 	APICALL int (*ASYNC_set_mem_functions)(struct AmiSSLIFace *Self, ASYNC_stack_alloc_fn alloc_fn, ASYNC_stack_free_fn free_fn);
 	APICALL void (*ASYNC_get_mem_functions)(struct AmiSSLIFace *Self, ASYNC_stack_alloc_fn * alloc_fn, ASYNC_stack_free_fn * free_fn);
 	APICALL BIO_ADDR * (*BIO_ADDR_dup)(struct AmiSSLIFace *Self, const BIO_ADDR * ap);
-	APICALL OSSL_CMP_ITAV * (*OSSL_CMP_ITAV_new_caCerts)(struct AmiSSLIFace *Self, const struct stack_st_X509 * caCerts);
-	APICALL int (*OSSL_CMP_ITAV_get0_caCerts)(struct AmiSSLIFace *Self, const OSSL_CMP_ITAV * itav, struct stack_st_X509 ** out);
-	APICALL int (*OSSL_CMP_get1_caCerts)(struct AmiSSLIFace *Self, OSSL_CMP_CTX * ctx, struct stack_st_X509 ** out);
+	APICALL OSSL_CMP_ITAV * (*OSSL_CMP_ITAV_new_caCerts)(struct AmiSSLIFace *Self, const STACK_OF(X509) * caCerts);
+	APICALL int (*OSSL_CMP_ITAV_get0_caCerts)(struct AmiSSLIFace *Self, const OSSL_CMP_ITAV * itav, STACK_OF(X509) ** out);
+	APICALL int (*OSSL_CMP_get1_caCerts)(struct AmiSSLIFace *Self, OSSL_CMP_CTX * ctx, STACK_OF(X509) ** out);
 	APICALL OSSL_CMP_ITAV * (*OSSL_CMP_ITAV_new_rootCaCert)(struct AmiSSLIFace *Self, const X509 * rootCaCert);
 	APICALL int (*OSSL_CMP_ITAV_get0_rootCaCert)(struct AmiSSLIFace *Self, const OSSL_CMP_ITAV * itav, X509 ** out);
 	APICALL OSSL_CMP_ITAV * (*OSSL_CMP_ITAV_new_rootCaKeyUpdate)(struct AmiSSLIFace *Self, const X509 * newWithNew, const X509 * newWithOld, const X509 * oldWithNew);
@@ -6550,7 +6550,7 @@ struct AmiSSLIFace
 	APICALL BIO * (*CMS_EnvelopedData_decrypt)(struct AmiSSLIFace *Self, CMS_EnvelopedData * env, BIO * detached_data, EVP_PKEY * pkey, X509 * cert, ASN1_OCTET_STRING * secret, unsigned int flags, OSSL_LIB_CTX * libctx, const char * propq);
 	APICALL void (*CMS_SignedData_free)(struct AmiSSLIFace *Self, CMS_SignedData * a);
 	APICALL CMS_SignedData * (*CMS_SignedData_new)(struct AmiSSLIFace *Self);
-	APICALL BIO * (*CMS_SignedData_verify)(struct AmiSSLIFace *Self, CMS_SignedData * sd, BIO * detached_data, struct stack_st_X509 * scerts, X509_STORE * store, struct stack_st_X509 * extra, struct stack_st_X509_CRL * crls, unsigned int flags, OSSL_LIB_CTX * libctx, const char * propq);
+	APICALL BIO * (*CMS_SignedData_verify)(struct AmiSSLIFace *Self, CMS_SignedData * sd, BIO * detached_data, STACK_OF(X509) * scerts, X509_STORE * store, STACK_OF(X509) * extra, STACK_OF(X509_CRL) * crls, unsigned int flags, OSSL_LIB_CTX * libctx, const char * propq);
 	APICALL const BIO_METHOD * (*BIO_s_dgram_mem)(struct AmiSSLIFace *Self);
 	APICALL int (*BIO_recvmmsg)(struct AmiSSLIFace *Self, BIO * b, BIO_MSG * msg, size_t stride, size_t num_msg, uint64_t flags, size_t * msgs_processed);
 	APICALL int (*BIO_sendmmsg)(struct AmiSSLIFace *Self, BIO * b, BIO_MSG * msg, size_t stride, size_t num_msg, uint64_t flags, size_t * msgs_processed);
@@ -6563,8 +6563,8 @@ struct AmiSSLIFace
 	APICALL int (*BIO_new_bio_dgram_pair)(struct AmiSSLIFace *Self, BIO ** bio1, size_t writebuf1, BIO ** bio2, size_t writebuf2);
 	APICALL int (*EVP_PKEY_auth_encapsulate_init)(struct AmiSSLIFace *Self, EVP_PKEY_CTX * ctx, EVP_PKEY * authpriv, const OSSL_PARAM * params);
 	APICALL int (*EVP_PKEY_auth_decapsulate_init)(struct AmiSSLIFace *Self, EVP_PKEY_CTX * ctx, EVP_PKEY * authpub, const OSSL_PARAM * params);
-	APICALL void (*PKCS12_SAFEBAG_set0_attrs)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag, struct stack_st_X509_ATTRIBUTE * attrs);
-	APICALL PKCS12 * (*PKCS12_create_ex2_amiga_1)(struct AmiSSLIFace *Self, const char * pass, const char * name, EVP_PKEY * pkey, X509 * cert, struct stack_st_X509 * ca, int nid_key, int nid_cert, void * moreargs);
+	APICALL void (*PKCS12_SAFEBAG_set0_attrs)(struct AmiSSLIFace *Self, PKCS12_SAFEBAG * bag, STACK_OF(X509_ATTRIBUTE) * attrs);
+	APICALL PKCS12 * (*PKCS12_create_ex2_amiga_1)(struct AmiSSLIFace *Self, const char * pass, const char * name, EVP_PKEY * pkey, X509 * cert, STACK_OF(X509) * ca, int nid_key, int nid_cert, void * moreargs);
 	APICALL void * (*PKCS12_create_ex2_amiga_2)(struct AmiSSLIFace *Self, int iter, int mac_iter, int keytype, OSSL_LIB_CTX * ctx, const char * propq, PKCS12_create_cb * cb, void * cbarg);
 	APICALL void (*OSSL_sleep)(struct AmiSSLIFace *Self, uint64_t millis);
 	APICALL uint32_t (*OSSL_get_thread_support_flags)(struct AmiSSLIFace *Self);

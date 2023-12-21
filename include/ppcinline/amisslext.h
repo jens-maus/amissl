@@ -4099,7 +4099,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_STACK_OF_X509_free(___certs) \
-      LP1NR(0x17f4, OSSL_STACK_OF_X509_free , struct stack_st_X509 *, ___certs, a0,\
+      LP1NR(0x17f4, OSSL_STACK_OF_X509_free , STACK_OF(X509) *, ___certs, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_trace_string(___out, ___text, ___full, ___data, ___size) \
@@ -4143,15 +4143,15 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_ITAV_new_caCerts(___caCerts) \
-      LP1(0x1836, OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_caCerts , const struct stack_st_X509 *, ___caCerts, a0,\
+      LP1(0x1836, OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new_caCerts , const STACK_OF(X509) *, ___caCerts, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_ITAV_get0_caCerts(___itav, ___out) \
-      LP2(0x183c, int, OSSL_CMP_ITAV_get0_caCerts , const OSSL_CMP_ITAV *, ___itav, a0, struct stack_st_X509 **, ___out, a1,\
+      LP2(0x183c, int, OSSL_CMP_ITAV_get0_caCerts , const OSSL_CMP_ITAV *, ___itav, a0, STACK_OF(X509) **, ___out, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_get1_caCerts(___ctx, ___out) \
-      LP2(0x1842, int, OSSL_CMP_get1_caCerts , OSSL_CMP_CTX *, ___ctx, a0, struct stack_st_X509 **, ___out, a1,\
+      LP2(0x1842, int, OSSL_CMP_get1_caCerts , OSSL_CMP_CTX *, ___ctx, a0, STACK_OF(X509) **, ___out, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_ITAV_new_rootCaCert(___rootCaCert) \
@@ -4215,7 +4215,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define CMS_SignedData_verify(___sd, ___detached_data, ___scerts, ___store, ___extra, ___crls, ___flags, ___libctx, ___propq) \
-      LP9(0x18a2, BIO *, CMS_SignedData_verify , CMS_SignedData *, ___sd, a0, BIO *, ___detached_data, a1, struct stack_st_X509 *, ___scerts, a2, X509_STORE *, ___store, a3, struct stack_st_X509 *, ___extra, d0, struct stack_st_X509_CRL *, ___crls, d1, unsigned int, ___flags, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
+      LP9(0x18a2, BIO *, CMS_SignedData_verify , CMS_SignedData *, ___sd, a0, BIO *, ___detached_data, a1, STACK_OF(X509) *, ___scerts, a2, X509_STORE *, ___store, a3, STACK_OF(X509) *, ___extra, d0, STACK_OF(X509_CRL) *, ___crls, d1, unsigned int, ___flags, d2, OSSL_LIB_CTX *, ___libctx, d3, const char *, ___propq, d4,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define BIO_s_dgram_mem() \
@@ -4267,11 +4267,11 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_SAFEBAG_set0_attrs(___bag, ___attrs) \
-      LP2NR(0x18f0, PKCS12_SAFEBAG_set0_attrs , PKCS12_SAFEBAG *, ___bag, a0, struct stack_st_X509_ATTRIBUTE *, ___attrs, a1,\
+      LP2NR(0x18f0, PKCS12_SAFEBAG_set0_attrs , PKCS12_SAFEBAG *, ___bag, a0, STACK_OF(X509_ATTRIBUTE) *, ___attrs, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_create_ex2_amiga_1(___pass, ___name, ___pkey, ___cert, ___ca, ___nid_key, ___nid_cert, ___moreargs) \
-      LP8(0x18f6, PKCS12 *, PKCS12_create_ex2_amiga_1 , const char *, ___pass, a0, const char *, ___name, a1, EVP_PKEY *, ___pkey, a2, X509 *, ___cert, a3, struct stack_st_X509 *, ___ca, d0, int, ___nid_key, d1, int, ___nid_cert, d2, void *, ___moreargs, d3,\
+      LP8(0x18f6, PKCS12 *, PKCS12_create_ex2_amiga_1 , const char *, ___pass, a0, const char *, ___name, a1, EVP_PKEY *, ___pkey, a2, X509 *, ___cert, a3, STACK_OF(X509) *, ___ca, d0, int, ___nid_key, d1, int, ___nid_cert, d2, void *, ___moreargs, d3,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define PKCS12_create_ex2_amiga_2(___iter, ___mac_iter, ___keytype, ___ctx, ___propq, ___cb, ___cbarg) \

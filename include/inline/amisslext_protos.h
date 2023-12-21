@@ -3073,7 +3073,7 @@ const BIO_METHOD * __BIO_f_zlib(__reg("a6") struct Library * ) = "\tjsr\t-6120(a
 void __X509_PUBKEY_set0_public_key(__reg("a6") struct Library * , __reg("a0") X509_PUBKEY * pub , __reg("a1") unsigned char * penc , __reg("d0") int penclen ) = "\tjsr\t-6126(a6)";
 #define X509_PUBKEY_set0_public_key(pub, penc, penclen) __X509_PUBKEY_set0_public_key(AmiSSLExtBase, (pub), (penc), (penclen))
 
-void __OSSL_STACK_OF_X509_free(__reg("a6") struct Library * , __reg("a0") struct stack_st_X509 * certs ) = "\tjsr\t-6132(a6)";
+void __OSSL_STACK_OF_X509_free(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * certs ) = "\tjsr\t-6132(a6)";
 #define OSSL_STACK_OF_X509_free(certs) __OSSL_STACK_OF_X509_free(AmiSSLExtBase, (certs))
 
 int __OSSL_trace_string(__reg("a6") struct Library * , __reg("a0") BIO * out , __reg("d0") int text , __reg("d1") int full , __reg("a1") const unsigned char * data , __reg("d2") size_t size ) = "\tjsr\t-6138(a6)";
@@ -3106,13 +3106,13 @@ void __ASYNC_get_mem_functions(__reg("a6") struct Library * , __reg("a0") ASYNC_
 BIO_ADDR * __BIO_ADDR_dup(__reg("a6") struct Library * , __reg("a0") const BIO_ADDR * ap ) = "\tjsr\t-6192(a6)";
 #define BIO_ADDR_dup(ap) __BIO_ADDR_dup(AmiSSLExtBase, (ap))
 
-OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new_caCerts(__reg("a6") struct Library * , __reg("a0") const struct stack_st_X509 * caCerts ) = "\tjsr\t-6198(a6)";
+OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new_caCerts(__reg("a6") struct Library * , __reg("a0") const STACK_OF(X509) * caCerts ) = "\tjsr\t-6198(a6)";
 #define OSSL_CMP_ITAV_new_caCerts(caCerts) __OSSL_CMP_ITAV_new_caCerts(AmiSSLExtBase, (caCerts))
 
-int __OSSL_CMP_ITAV_get0_caCerts(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_ITAV * itav , __reg("a1") struct stack_st_X509 ** out ) = "\tjsr\t-6204(a6)";
+int __OSSL_CMP_ITAV_get0_caCerts(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_ITAV * itav , __reg("a1") STACK_OF(X509) ** out ) = "\tjsr\t-6204(a6)";
 #define OSSL_CMP_ITAV_get0_caCerts(itav, out) __OSSL_CMP_ITAV_get0_caCerts(AmiSSLExtBase, (itav), (out))
 
-int __OSSL_CMP_get1_caCerts(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") struct stack_st_X509 ** out ) = "\tjsr\t-6210(a6)";
+int __OSSL_CMP_get1_caCerts(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_CTX * ctx , __reg("a1") STACK_OF(X509) ** out ) = "\tjsr\t-6210(a6)";
 #define OSSL_CMP_get1_caCerts(ctx, out) __OSSL_CMP_get1_caCerts(AmiSSLExtBase, (ctx), (out))
 
 OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new_rootCaCert(__reg("a6") struct Library * , __reg("a0") const X509 * rootCaCert ) = "\tjsr\t-6216(a6)";
@@ -3160,7 +3160,7 @@ void __CMS_SignedData_free(__reg("a6") struct Library * , __reg("a0") CMS_Signed
 CMS_SignedData * __CMS_SignedData_new(__reg("a6") struct Library * ) = "\tjsr\t-6300(a6)";
 #define CMS_SignedData_new() __CMS_SignedData_new(AmiSSLExtBase)
 
-BIO * __CMS_SignedData_verify(__reg("a6") struct Library * , __reg("a0") CMS_SignedData * sd , __reg("a1") BIO * detached_data , __reg("a2") struct stack_st_X509 * scerts , __reg("a3") X509_STORE * store , __reg("d0") struct stack_st_X509 * extra , __reg("d1") struct stack_st_X509_CRL * crls , __reg("d2") unsigned int flags , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-6306(a6)";
+BIO * __CMS_SignedData_verify(__reg("a6") struct Library * , __reg("a0") CMS_SignedData * sd , __reg("a1") BIO * detached_data , __reg("a2") STACK_OF(X509) * scerts , __reg("a3") X509_STORE * store , __reg("d0") STACK_OF(X509) * extra , __reg("d1") STACK_OF(X509_CRL) * crls , __reg("d2") unsigned int flags , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-6306(a6)";
 #define CMS_SignedData_verify(sd, detached_data, scerts, store, extra, crls, flags, libctx, propq) __CMS_SignedData_verify(AmiSSLExtBase, (sd), (detached_data), (scerts), (store), (extra), (crls), (flags), (libctx), (propq))
 
 const BIO_METHOD * __BIO_s_dgram_mem(__reg("a6") struct Library * ) = "\tjsr\t-6312(a6)";
@@ -3199,10 +3199,10 @@ int __EVP_PKEY_auth_encapsulate_init(__reg("a6") struct Library * , __reg("a0") 
 int __EVP_PKEY_auth_decapsulate_init(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_CTX * ctx , __reg("a1") EVP_PKEY * authpub , __reg("a2") const OSSL_PARAM * params ) = "\tjsr\t-6378(a6)";
 #define EVP_PKEY_auth_decapsulate_init(ctx, authpub, params) __EVP_PKEY_auth_decapsulate_init(AmiSSLExtBase, (ctx), (authpub), (params))
 
-void __PKCS12_SAFEBAG_set0_attrs(__reg("a6") struct Library * , __reg("a0") PKCS12_SAFEBAG * bag , __reg("a1") struct stack_st_X509_ATTRIBUTE * attrs ) = "\tjsr\t-6384(a6)";
+void __PKCS12_SAFEBAG_set0_attrs(__reg("a6") struct Library * , __reg("a0") PKCS12_SAFEBAG * bag , __reg("a1") STACK_OF(X509_ATTRIBUTE) * attrs ) = "\tjsr\t-6384(a6)";
 #define PKCS12_SAFEBAG_set0_attrs(bag, attrs) __PKCS12_SAFEBAG_set0_attrs(AmiSSLExtBase, (bag), (attrs))
 
-PKCS12 * __PKCS12_create_ex2_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") const char * name , __reg("a2") EVP_PKEY * pkey , __reg("a3") X509 * cert , __reg("d0") struct stack_st_X509 * ca , __reg("d1") int nid_key , __reg("d2") int nid_cert , __reg("d3") void * moreargs ) = "\tjsr\t-6390(a6)";
+PKCS12 * __PKCS12_create_ex2_amiga_1(__reg("a6") struct Library * , __reg("a0") const char * pass , __reg("a1") const char * name , __reg("a2") EVP_PKEY * pkey , __reg("a3") X509 * cert , __reg("d0") STACK_OF(X509) * ca , __reg("d1") int nid_key , __reg("d2") int nid_cert , __reg("d3") void * moreargs ) = "\tjsr\t-6390(a6)";
 #define PKCS12_create_ex2_amiga_1(pass, name, pkey, cert, ca, nid_key, nid_cert, moreargs) __PKCS12_create_ex2_amiga_1(AmiSSLExtBase, (pass), (name), (pkey), (cert), (ca), (nid_key), (nid_cert), (moreargs))
 
 void * __PKCS12_create_ex2_amiga_2(__reg("a6") struct Library * , __reg("d0") int iter , __reg("d1") int mac_iter , __reg("d2") int keytype , __reg("a1") OSSL_LIB_CTX * ctx , __reg("a2") const char * propq , __reg("a3") PKCS12_create_cb * cb , __reg("d3") void * cbarg ) = "\tjsr\t-6396(a6)";
