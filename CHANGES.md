@@ -1,4 +1,4 @@
-## AmiSSL 5.13 (?.12.2023)
+## AmiSSL 5.13 (22.12.2023)
 
 - Switched to OpenSSL 3.2, with full compatibility with the latest
   OpenSSL 3.2.0 (23.11.2023) version, which includes the following
@@ -20,8 +20,8 @@
   by https://curl.se/docs/caextract.html dated 12.12.2023.
 - Use Exec mutexes instead of semaphores on AmigaOS 4.x, decreasing
   system overhead.
-- Use ASOPOOL_Protected instead of our own semaphore protection
-  on AmigaOS 4.x.
+- Use ASOPOOL_Protected instead of our own semaphore protected
+  memory pool on AmigaOS 4.x.
 - Improved error handling should failures occur early in library
   initialisation.
 - The installer now properly handles any certificates that may have
