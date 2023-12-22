@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 5.13 (9.12.2023)
+; $VER: Install-AmiSSL 5.13 (22.12.2023)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -494,8 +494,10 @@
 )
 
 (copyfiles
-	(source "C/CA.pl")
+	(source "C")
+	(pattern "#?.pl")
 	(dest #storage-dir)
+	(files)
 )
 
 (complete 60)
