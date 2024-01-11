@@ -910,6 +910,7 @@ Ldone_vmx:
 .size	.ChaCha20_ctr32_vmx,.-.ChaCha20_ctr32_vmx
 ___
 }}}
+if (0) # Not currently needed for AmigaOS
 {{{
 my ($xa0,$xa1,$xa2,$xa3, $xb0,$xb1,$xb2,$xb3,
     $xc0,$xc1,$xc2,$xc3, $xd0,$xd1,$xd2,$xd3) = map("v$_",(0..15));

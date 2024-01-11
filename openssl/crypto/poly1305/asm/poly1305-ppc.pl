@@ -730,6 +730,7 @@ Lemit_base2_32:
 .size	.poly1305_emit,.-.poly1305_emit
 ___
 }							}
+if (0) # Not currently needed for AmigaOS
 {{{
 ########################################################################
 # PowerISA 2.07/VSX section                                            #
