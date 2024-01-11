@@ -29,7 +29,7 @@
   disabled.
 - The installer on AmigaOS 4.x can now install the libraries whilst
   AmiSSL is still in use, provided elf.library 53.35+ is installed
-  and no instances prior to AmiSSL 5.6 are still in memory.
+  and no instances prior to AmiSSL 5.6 are still in memory (#49).
 
 ## AmiSSL 5.12 (25.10.2023)
 
