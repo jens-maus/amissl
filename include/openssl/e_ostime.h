@@ -35,6 +35,15 @@
 
 # if defined(OPENSSL_SYS_WINDOWS)
 #  include <winsock2.h>
+#  if !defined(_WINSOCKAPI_)
+    /*
+     * winsock2.h defines _WINSOCK2API_ and both winsock2.h and winsock.h define
+     * _WINSOCKAPI_. Both of these provide struct timeval. Don't include
+     * winsock2.h if either header has been included to avoid breakage with
+     * applications that prefer to use <winsock.h> over <winsock2.h>.
+     */
+#   include <winsock2.h>
+#  endif
 # elif defined(OPENSSL_SYS_AMIGA) && !defined(AMISSL_COMPILE) && \
      ((defined(__amigaos4__) && defined(__USE_OLD_TIMEVAL__)) || \
      (!defined(__amigaos4__) && !defined(__USE_NEW_TIMEVAL__)))

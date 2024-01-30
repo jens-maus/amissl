@@ -1,3 +1,17 @@
+## AmiSSL 5.14 (30.1.2024)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.2.1 (30.1.2024) version which includes fixes for these
+  low severity vulnerabilities:
+  + Fixed PKCS12 decoding crashes.
+    (CVE-2024-0727)
+  + Fixed excessive time spent checking invalid RSA public keys.
+    (CVE-2023-6237)
+  + Fixed excessive time spent in DH check / generation with large Q
+    parameter value.
+    (CVE-2023-5678)
+- Removed redundant POWER8 VSX Poly1305 and ChaCha20 code.
+
 ## AmiSSL 5.13 (22.12.2023)
 
 - Switched to OpenSSL 3.2, with full compatibility with the latest
