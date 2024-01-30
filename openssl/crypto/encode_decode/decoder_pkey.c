@@ -724,6 +724,7 @@ int ossl_decoder_cache_flush(OSSL_LIB_CTX *libctx)
     if (cache == NULL)
         return 0;
 
+
     if (!CRYPTO_THREAD_write_lock(cache->lock)) {
         ERR_raise(ERR_LIB_OSSL_DECODER, ERR_R_OSSL_DECODER_LIB);
         return 0;
