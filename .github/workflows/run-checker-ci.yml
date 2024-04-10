@@ -1,4 +1,4 @@
-# Copyright 2021-2023 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2021-2024 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -10,6 +10,9 @@ name: Run-checker CI
 on: [pull_request, push]
 permissions:
   contents: read
+
+env:
+  OSSL_RUN_CI_TESTS: 1
 
 jobs:
   run-checker:
@@ -54,5 +57,7 @@ jobs:
       run: |
         cat /proc/cpuinfo
         if [ -x apps/openssl ] ; then ./util/opensslwrap.sh version -c ; fi
+    - name: Check platform symbol usage
+      run: ./util/checkplatformsyms.pl ./util/platform_symbols/unix-symbols.txt ./libcrypto.so ./libssl.so
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}

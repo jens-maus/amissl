@@ -1,4 +1,4 @@
-# Copyright 2021-2023 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2021-2024 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -27,6 +27,7 @@ jobs:
           no-asan,
           no-asm,
           no-async,
+          no-atexit,
           no-autoalginit,
           no-autoerrinit,
           no-autoload-config,
@@ -268,6 +269,10 @@ jobs:
       uses: actions/checkout@v4
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
+    - name: Adjust ASLR for sanitizer
+      run: |
+        sudo cat /proc/sys/vm/mmap_rnd_bits
+        sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
       run: ./config --banner=Configured --debug enable-asan enable-ubsan enable-comp enable-brotli -DPEDANTIC && perl configdata.pm --dump
     - name: make
@@ -290,6 +295,10 @@ jobs:
       uses: actions/checkout@v4
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
+    - name: Adjust ASLR for sanitizer
+      run: |
+        sudo cat /proc/sys/vm/mmap_rnd_bits
+        sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
       run: ./config --banner=Configured --debug enable-asan enable-ubsan enable-comp enable-zstd -DPEDANTIC && perl configdata.pm --dump
     - name: make
@@ -304,7 +313,7 @@ jobs:
   enable_tfo:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-13, macos-14 ]
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4

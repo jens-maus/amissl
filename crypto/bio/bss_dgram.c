@@ -66,6 +66,10 @@
    #undef NO_RECVMSG
    #define NO_RECVMSG
 # endif
+# if defined(__ANDROID_API__) && __ANDROID_API__ < 21
+#  undef NO_RECVMMSG
+#  define NO_RECVMMSG
+# endif
 # if !defined(M_METHOD)
 #  if defined(OPENSSL_SYS_WINDOWS) && defined(BIO_HAVE_WSAMSG) && !defined(NO_WSARECVMSG)
 #   define M_METHOD  M_METHOD_WSARECVMSG
@@ -103,7 +107,7 @@
     || M_METHOD == M_METHOD_WSARECVMSG
 #  if defined(__APPLE__)
     /*
-     * CMSG_SPACE is not a constant expresson on OSX even though POSIX
+     * CMSG_SPACE is not a constant expression on OSX even though POSIX
      * says it's supposed to be. This should be adequate.
      */
 #   define BIO_CMSG_ALLOC_LEN   64
@@ -1174,7 +1178,7 @@ static int pack_local(BIO *b, MSGHDR_TYPE *mh, const BIO_ADDR *local) {
         cmsg->cmsg_type  = IP_PKTINFO;
 
         info = (struct in_pktinfo *)BIO_CMSG_DATA(cmsg);
-#   if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_CYGWIN)
+#   if !defined(OPENSSL_SYS_WINDOWS) && !defined(OPENSSL_SYS_CYGWIN) && !defined(__FreeBSD__)
         info->ipi_spec_dst      = local->s_in.sin_addr;
 #   endif
         info->ipi_addr.s_addr   = 0;

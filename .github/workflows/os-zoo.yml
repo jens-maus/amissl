@@ -1,4 +1,4 @@
-# Copyright 2021-2023 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2021-2024 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -105,7 +105,7 @@ jobs:
       fail-fast: false
       matrix:
         branch: [openssl-3.0, openssl-3.1, master]
-        os: [macos-11, macos-12, macos-13]
+        os: [macos-11, macos-12, macos-13, macos-14]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
@@ -141,7 +141,6 @@ jobs:
       run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: ilammy/setup-nasm@v1
-    - uses: shogo82148/actions-setup-perl@v1
     - name: prepare the build directory
       run: mkdir _build
     - name: config
@@ -154,7 +153,7 @@ jobs:
       working-directory: _build
       run: nmake /S
     - name: download coreinfo
-      uses: suisei-cn/actions-download-file@v1.4.0
+      uses: suisei-cn/actions-download-file@v1.6.0
       with:
         url: "https://download.sysinternals.com/files/Coreinfo.zip"
         target: _build/coreinfo/

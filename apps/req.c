@@ -573,7 +573,7 @@ int req_main(int argc, char **argv)
         X509V3_CTX ctx;
 
         X509V3_set_ctx_test(&ctx);
-        X509V3_set_nconf(&ctx, addext_conf);
+        X509V3_set_nconf(&ctx, req_conf);
         if (!X509V3_EXT_add_nconf(addext_conf, &ctx, "default", NULL)) {
             BIO_printf(bio_err, "Error checking extensions defined using -addext\n");
             goto end;
@@ -918,9 +918,10 @@ int req_main(int argc, char **argv)
 
         if (i < 0)
             goto end;
-        if (i == 0)
+        if (i == 0) {
             BIO_printf(bio_err, "Certificate request self-signature verify failure\n");
-        else /* i > 0 */
+	    goto end;
+        } else /* i > 0 */
             BIO_printf(bio_out, "Certificate request self-signature verify OK\n");
     }
 
