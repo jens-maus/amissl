@@ -1,6 +1,6 @@
 #! /usr/bin/env perl
 # -*- mode: perl; -*-
-# Copyright 2016-2023 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2016-2024 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -385,6 +385,12 @@ if (defined env($local_config_envname)) {
     }
 }
 
+# Fail if no configuration is apparent
+if (!%table) {
+    print "Failed to find any os/compiler configurations. Please make sure the Configurations directory is included.\n";
+    &usage;
+}
+
 # Save away perl command information
 $config{perl_cmd} = $^X;
 $config{perl_version} = $Config{version};
@@ -414,6 +420,7 @@ my @disablables = (
     "asan",
     "asm",
     "async",
+    "atexit",
     "autoalginit",
     "autoerrinit",
     "autoload-config",
@@ -484,6 +491,7 @@ my @disablables = (
     "posix-io",
     "psk",
     "quic",
+    "unstable-qlog",
     "rc2",
     "rc4",
     "rc5",
@@ -590,7 +598,7 @@ our %disabled = ( # "what"         => "comment"
 my @disable_cascades = (
     # "what"            => [ "cascade", ... ]
     "bulk"              => [ "shared", "dso",
-                             "aria", "async", "autoload-config",
+                             "aria", "async", "atexit", "autoload-config",
                              "blake2", "bf", "camellia", "cast", "chacha",
                              "cmac", "cms", "cmp", "comp", "ct",
                              "des", "dgram", "dh", "dsa",
@@ -625,6 +633,7 @@ my @disable_cascades = (
     sub { 0 == scalar grep { !$disabled{$_} } @tls }
                         => [ "tls" ],
     "tls1_3"            => [ "quic" ],
+    "quic"              => [ "unstable-qlog" ],
 
     "crypto-mdebug"     => [ "crypto-mdebug-backtrace" ],
 
@@ -1544,6 +1553,10 @@ foreach (grep /^-fsanitize=/, @{$config{CFLAGS} || []}) {
 # code knows about it.  Any other flag is taken care of by the configs.
 unless($disabled{threads}) {
     push @{$config{openssl_feature_defines}}, "OPENSSL_THREADS";
+}
+
+if ($disabled{"unstable-qlog"}) {
+    $disabled{"qlog"} = 1;
 }
 
 my $no_shared_warn=0;
@@ -2473,10 +2486,11 @@ EOF
                     && $f =~ m/^(.*?)\|(.*)$/) {
                     $i = $1;
                     $m = $2;
-                    $i = cleanfile($sourced, $i, $blddir, 1);
-                    $i2 = cleanfile($buildd, $i, $blddir);
+                    # We must be very careful to modify $i last
                     $d = cleanfile($sourced, "$i/$m", $blddir, 1);
                     $d2 = cleanfile($buildd, "$i/$m", $blddir);
+                    $i2 = cleandir($buildd, $i, $blddir);
+                    $i = cleandir($sourced, $i, $blddir, 1);
                 } else {
                     $d = cleanfile($sourced, $f, $blddir, 1);
                     $d2 = cleanfile($buildd, $f, $blddir);
