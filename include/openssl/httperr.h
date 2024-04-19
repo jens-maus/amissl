@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -56,6 +56,7 @@
 # define HTTP_R_REDIRECTION_NOT_ENABLED                   116
 # define HTTP_R_RESPONSE_LINE_TOO_LONG                    113
 # define HTTP_R_RESPONSE_PARSE_ERROR                      104
+# define HTTP_R_RESPONSE_TOO_MANY_HDRLINES                130
 # define HTTP_R_RETRY_TIMEOUT                             129
 # define HTTP_R_SERVER_CANCELED_CONNECTION                127
 # define HTTP_R_SOCK_NOT_SUPPORTED                        122

@@ -6597,6 +6597,24 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_STORE_CTX_set_current_reasons
 	    FPTR IAmiSSL_OSSL_STORE_delete
 	    FPTR IAmiSSL_BIO_ADDR_copy
+	    FPTR IAmiSSL_SSL_write_ex2
+	    FPTR IAmiSSL_SSL_get_value_uint
+	    FPTR IAmiSSL_SSL_set_value_uint
+	    FPTR IAmiSSL_SSL_poll
+	    FPTR IAmiSSL_SSL_SESSION_get_time_ex
+	    FPTR IAmiSSL_SSL_SESSION_set_time_ex
+	    FPTR IAmiSSL_OSSL_CMP_CTX_get0_geninfo_ITAVs
+	    FPTR IAmiSSL_OSSL_CMP_HDR_get0_geninfo_ITAVs
+	    FPTR IAmiSSL_OSSL_CMP_ITAV_new0_certProfile
+	    FPTR IAmiSSL_OSSL_CMP_ITAV_get0_certProfile
+	    FPTR IAmiSSL_OSSL_CMP_MSG_get0_certreq_publickey
+	    FPTR IAmiSSL_OSSL_CMP_SRV_CTX_init_trans
+	    FPTR IAmiSSL_EVP_DigestSqueeze
+	    FPTR IAmiSSL_ERR_pop
+	    FPTR IAmiSSL_X509_STORE_get1_objects
+	    FPTR IAmiSSL_OPENSSL_LH_set_thunks
+	    FPTR IAmiSSL_OPENSSL_LH_doall_arg_thunk
+	    FPTR IAmiSSL_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines
 	LABEL AmiSSLIFace_SIZE
 
 #endif

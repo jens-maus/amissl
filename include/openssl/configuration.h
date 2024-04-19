@@ -42,7 +42,7 @@ extern "C" {
 # ifndef OPENSSL_SYS_AMIGA
 #  define OPENSSL_SYS_AMIGA 1
 # endif
-# define OPENSSL_CONFIGURED_API 30200
+# define OPENSSL_CONFIGURED_API 30300
 # ifndef OPENSSL_RAND_SEED_OS
 #  define OPENSSL_RAND_SEED_OS
 # endif
@@ -57,6 +57,9 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_ASAN
 #  define OPENSSL_NO_ASAN
+# endif
+# ifndef OPENSSL_NO_ATEXIT
+#  define OPENSSL_NO_ATEXIT
 # endif
 # ifndef OPENSSL_NO_BROTLI
 #  define OPENSSL_NO_BROTLI
@@ -103,6 +106,9 @@ extern "C" {
 # ifndef OPENSSL_NO_MSAN
 #  define OPENSSL_NO_MSAN
 # endif
+# ifndef OPENSSL_NO_QLOG
+#  define OPENSSL_NO_QLOG
+# endif
 # ifndef OPENSSL_NO_SCTP
 #  define OPENSSL_NO_SCTP
 # endif
@@ -129,6 +135,9 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_UNIT_TEST
 #  define OPENSSL_NO_UNIT_TEST
+# endif
+# ifndef OPENSSL_NO_UNSTABLE_QLOG
+#  define OPENSSL_NO_UNSTABLE_QLOG
 # endif
 # ifndef OPENSSL_NO_UPLINK
 #  define OPENSSL_NO_UPLINK

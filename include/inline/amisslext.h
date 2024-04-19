@@ -4498,4 +4498,76 @@ typedef ULONG _sfdc_vararg;
       LP2(0x1a46, int, BIO_ADDR_copy , BIO_ADDR *, ___dst, a0, const BIO_ADDR *, ___src, a1,\
       , AMISSLEXT_BASE_NAME)
 
+#define SSL_write_ex2(___s, ___buf, ___num, ___flags, ___written) \
+      LP5(0x1a4c, int, SSL_write_ex2 , SSL *, ___s, a0, const void *, ___buf, a1, size_t, ___num, d2, uint64_t, ___flags, d0, size_t *, ___written, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_get_value_uint(___s, ___class_, ___id, ___v) \
+      LP4(0x1a52, int, SSL_get_value_uint , SSL *, ___s, a0, uint32_t, ___class_, d0, uint32_t, ___id, d1, uint64_t *, ___v, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_set_value_uint(___s, ___class_, ___id, ___v) \
+      LP4(0x1a58, int, SSL_set_value_uint , SSL *, ___s, a0, uint32_t, ___class_, d0, uint32_t, ___id, d1, uint64_t, ___v, d2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_poll(___items, ___num_items, ___stride, ___timeout, ___flags, ___result_count) \
+      LP6(0x1a5e, int, SSL_poll , SSL_POLL_ITEM *, ___items, a0, size_t, ___num_items, d0, size_t, ___stride, d1, const struct timeval *, ___timeout, a1, uint64_t, ___flags, d2, size_t *, ___result_count, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_SESSION_get_time_ex(___s) \
+      LP1(0x1a64, time_t, SSL_SESSION_get_time_ex , const SSL_SESSION *, ___s, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_SESSION_set_time_ex(___s, ___t) \
+      LP2(0x1a6a, time_t, SSL_SESSION_set_time_ex , SSL_SESSION *, ___s, a0, time_t, ___t, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_CTX_get0_geninfo_ITAVs(___ctx) \
+      LP1(0x1a70, struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_CTX_get0_geninfo_ITAVs , const OSSL_CMP_CTX *, ___ctx, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_HDR_get0_geninfo_ITAVs(___hdr) \
+      LP1(0x1a76, struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_HDR_get0_geninfo_ITAVs , const OSSL_CMP_PKIHEADER *, ___hdr, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_ITAV_new0_certProfile(___certProfile) \
+      LP1(0x1a7c, OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new0_certProfile , struct stack_st_ASN1_UTF8STRING *, ___certProfile, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_ITAV_get0_certProfile(___itav, ___out) \
+      LP2(0x1a82, int, OSSL_CMP_ITAV_get0_certProfile , const OSSL_CMP_ITAV *, ___itav, a0, struct stack_st_ASN1_UTF8STRING **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_MSG_get0_certreq_publickey(___msg) \
+      LP1(0x1a88, X509_PUBKEY *, OSSL_CMP_MSG_get0_certreq_publickey , const OSSL_CMP_MSG *, ___msg, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CMP_SRV_CTX_init_trans(___srv_ctx, ___delay, ___clean) \
+      LP3(0x1a8e, int, OSSL_CMP_SRV_CTX_init_trans , OSSL_CMP_SRV_CTX *, ___srv_ctx, a0, OSSL_CMP_SRV_delayed_delivery_cb_t, ___delay, a1, OSSL_CMP_SRV_clean_transaction_cb_t, ___clean, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_DigestSqueeze(___ctx, ___out, ___outlen) \
+      LP3(0x1a94, int, EVP_DigestSqueeze , EVP_MD_CTX *, ___ctx, a0, unsigned char *, ___out, a1, size_t, ___outlen, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define ERR_pop() \
+      LP0(0x1a9a, int, ERR_pop ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define X509_STORE_get1_objects(___xs) \
+      LP1(0x1aa0, struct stack_st_X509_OBJECT *, X509_STORE_get1_objects , X509_STORE *, ___xs, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OPENSSL_LH_set_thunks(___lh, ___hw, ___cw, ___daw, ___daaw) \
+      LP5(0x1aa6, OPENSSL_LHASH *, OPENSSL_LH_set_thunks , OPENSSL_LHASH *, ___lh, a0, OPENSSL_LH_HASHFUNCTHUNK, ___hw, a1, OPENSSL_LH_COMPFUNCTHUNK, ___cw, a2, OPENSSL_LH_DOALL_FUNC_THUNK, ___daw, a3, OPENSSL_LH_DOALL_FUNCARG_THUNK, ___daaw, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OPENSSL_LH_doall_arg_thunk(___lh, ___daaw, ___fn, ___arg) \
+      LP4NR(0x1aac, OPENSSL_LH_doall_arg_thunk , OPENSSL_LHASH *, ___lh, a0, OPENSSL_LH_DOALL_FUNCARG_THUNK, ___daaw, d0, OPENSSL_LH_DOALL_FUNCARG, ___fn, d1, void *, ___arg, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(___rctx, ___count) \
+      LP2NR(0x1ab2, OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines , OSSL_HTTP_REQ_CTX *, ___rctx, a0, size_t, ___count, d0,\
+      , AMISSLEXT_BASE_NAME)
+
 #endif /* !_INLINE_AMISSLEXT_H */

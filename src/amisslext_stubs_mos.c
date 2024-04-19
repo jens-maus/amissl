@@ -11753,6 +11753,196 @@ int LIBSTUB_BIO_ADDR_copy(void)
   return LIB_BIO_ADDR_copy(_base, ___dst, ___src);
 }
 
+int LIB_SSL_write_ex2(struct Library * _base, SSL * ___s, const void * ___buf, size_t ___num, uint64_t ___flags, size_t * ___written);
+
+int LIBSTUB_SSL_write_ex2(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  const void * ___buf = (const void *)REG_A1;
+  size_t ___num = (size_t)REG_D2;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  size_t * ___written = (size_t *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_write_ex2(_base, ___s, ___buf, ___num, ___flags, ___written);
+}
+
+int LIB_SSL_get_value_uint(struct Library * _base, SSL * ___s, uint32_t ___class_, uint32_t ___id, uint64_t * ___v);
+
+int LIBSTUB_SSL_get_value_uint(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  uint32_t ___class_ = (uint32_t)REG_D0;
+  uint32_t ___id = (uint32_t)REG_D1;
+  uint64_t * ___v = (uint64_t *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_get_value_uint(_base, ___s, ___class_, ___id, ___v);
+}
+
+int LIB_SSL_set_value_uint(struct Library * _base, SSL * ___s, uint32_t ___class_, uint32_t ___id, uint64_t ___v);
+
+int LIBSTUB_SSL_set_value_uint(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  uint32_t ___class_ = (uint32_t)REG_D0;
+  uint32_t ___id = (uint32_t)REG_D1;
+  uint64_t ___v = (uint64_t)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_set_value_uint(_base, ___s, ___class_, ___id, ___v);
+}
+
+int LIB_SSL_poll(struct Library * _base, SSL_POLL_ITEM * ___items, size_t ___num_items, size_t ___stride, const struct timeval * ___timeout, uint64_t ___flags, size_t * ___result_count);
+
+int LIBSTUB_SSL_poll(void)
+{
+  SSL_POLL_ITEM * ___items = (SSL_POLL_ITEM *)REG_A0;
+  size_t ___num_items = (size_t)REG_D0;
+  size_t ___stride = (size_t)REG_D1;
+  const struct timeval * ___timeout = (const struct timeval *)REG_A1;
+  uint64_t ___flags = (uint64_t)REG_D2;
+  size_t * ___result_count = (size_t *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_poll(_base, ___items, ___num_items, ___stride, ___timeout, ___flags, ___result_count);
+}
+
+time_t LIB_SSL_SESSION_get_time_ex(struct Library * _base, const SSL_SESSION * ___s);
+
+time_t LIBSTUB_SSL_SESSION_get_time_ex(void)
+{
+  const SSL_SESSION * ___s = (const SSL_SESSION *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_SESSION_get_time_ex(_base, ___s);
+}
+
+time_t LIB_SSL_SESSION_set_time_ex(struct Library * _base, SSL_SESSION * ___s, time_t ___t);
+
+time_t LIBSTUB_SSL_SESSION_set_time_ex(void)
+{
+  SSL_SESSION * ___s = (SSL_SESSION *)REG_A0;
+  time_t ___t = (time_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_SESSION_set_time_ex(_base, ___s, ___t);
+}
+
+struct stack_st_OSSL_CMP_ITAV * LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_CTX * ___ctx);
+
+struct stack_st_OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_CTX_get0_geninfo_ITAVs(void)
+{
+  const OSSL_CMP_CTX * ___ctx = (const OSSL_CMP_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(_base, ___ctx);
+}
+
+struct stack_st_OSSL_CMP_ITAV * LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_PKIHEADER * ___hdr);
+
+struct stack_st_OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_HDR_get0_geninfo_ITAVs(void)
+{
+  const OSSL_CMP_PKIHEADER * ___hdr = (const OSSL_CMP_PKIHEADER *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(_base, ___hdr);
+}
+
+OSSL_CMP_ITAV * LIB_OSSL_CMP_ITAV_new0_certProfile(struct Library * _base, struct stack_st_ASN1_UTF8STRING * ___certProfile);
+
+OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_ITAV_new0_certProfile(void)
+{
+  struct stack_st_ASN1_UTF8STRING * ___certProfile = (struct stack_st_ASN1_UTF8STRING *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_ITAV_new0_certProfile(_base, ___certProfile);
+}
+
+int LIB_OSSL_CMP_ITAV_get0_certProfile(struct Library * _base, const OSSL_CMP_ITAV * ___itav, struct stack_st_ASN1_UTF8STRING ** ___out);
+
+int LIBSTUB_OSSL_CMP_ITAV_get0_certProfile(void)
+{
+  const OSSL_CMP_ITAV * ___itav = (const OSSL_CMP_ITAV *)REG_A0;
+  struct stack_st_ASN1_UTF8STRING ** ___out = (struct stack_st_ASN1_UTF8STRING **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_ITAV_get0_certProfile(_base, ___itav, ___out);
+}
+
+X509_PUBKEY * LIB_OSSL_CMP_MSG_get0_certreq_publickey(struct Library * _base, const OSSL_CMP_MSG * ___msg);
+
+X509_PUBKEY * LIBSTUB_OSSL_CMP_MSG_get0_certreq_publickey(void)
+{
+  const OSSL_CMP_MSG * ___msg = (const OSSL_CMP_MSG *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_MSG_get0_certreq_publickey(_base, ___msg);
+}
+
+int LIB_OSSL_CMP_SRV_CTX_init_trans(struct Library * _base, OSSL_CMP_SRV_CTX * ___srv_ctx, OSSL_CMP_SRV_delayed_delivery_cb_t ___delay, OSSL_CMP_SRV_clean_transaction_cb_t ___clean);
+
+int LIBSTUB_OSSL_CMP_SRV_CTX_init_trans(void)
+{
+  OSSL_CMP_SRV_CTX * ___srv_ctx = (OSSL_CMP_SRV_CTX *)REG_A0;
+  OSSL_CMP_SRV_delayed_delivery_cb_t ___delay = (OSSL_CMP_SRV_delayed_delivery_cb_t)REG_A1;
+  OSSL_CMP_SRV_clean_transaction_cb_t ___clean = (OSSL_CMP_SRV_clean_transaction_cb_t)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CMP_SRV_CTX_init_trans(_base, ___srv_ctx, ___delay, ___clean);
+}
+
+int LIB_EVP_DigestSqueeze(struct Library * _base, EVP_MD_CTX * ___ctx, unsigned char * ___out, size_t ___outlen);
+
+int LIBSTUB_EVP_DigestSqueeze(void)
+{
+  EVP_MD_CTX * ___ctx = (EVP_MD_CTX *)REG_A0;
+  unsigned char * ___out = (unsigned char *)REG_A1;
+  size_t ___outlen = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_DigestSqueeze(_base, ___ctx, ___out, ___outlen);
+}
+
+int LIB_ERR_pop(struct Library * _base);
+
+int LIBSTUB_ERR_pop(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_ERR_pop(_base);
+}
+
+struct stack_st_X509_OBJECT * LIB_X509_STORE_get1_objects(struct Library * _base, X509_STORE * ___xs);
+
+struct stack_st_X509_OBJECT * LIBSTUB_X509_STORE_get1_objects(void)
+{
+  X509_STORE * ___xs = (X509_STORE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_get1_objects(_base, ___xs);
+}
+
+OPENSSL_LHASH * LIB_OPENSSL_LH_set_thunks(struct Library * _base, OPENSSL_LHASH * ___lh, OPENSSL_LH_HASHFUNCTHUNK ___hw, OPENSSL_LH_COMPFUNCTHUNK ___cw, OPENSSL_LH_DOALL_FUNC_THUNK ___daw, OPENSSL_LH_DOALL_FUNCARG_THUNK ___daaw);
+
+OPENSSL_LHASH * LIBSTUB_OPENSSL_LH_set_thunks(void)
+{
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
+  OPENSSL_LH_HASHFUNCTHUNK ___hw = (OPENSSL_LH_HASHFUNCTHUNK)REG_A1;
+  OPENSSL_LH_COMPFUNCTHUNK ___cw = (OPENSSL_LH_COMPFUNCTHUNK)REG_A2;
+  OPENSSL_LH_DOALL_FUNC_THUNK ___daw = (OPENSSL_LH_DOALL_FUNC_THUNK)REG_A3;
+  OPENSSL_LH_DOALL_FUNCARG_THUNK ___daaw = (OPENSSL_LH_DOALL_FUNCARG_THUNK)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_LH_set_thunks(_base, ___lh, ___hw, ___cw, ___daw, ___daaw);
+}
+
+void LIB_OPENSSL_LH_doall_arg_thunk(struct Library * _base, OPENSSL_LHASH * ___lh, OPENSSL_LH_DOALL_FUNCARG_THUNK ___daaw, OPENSSL_LH_DOALL_FUNCARG ___fn, void * ___arg);
+
+void LIBSTUB_OPENSSL_LH_doall_arg_thunk(void)
+{
+  OPENSSL_LHASH * ___lh = (OPENSSL_LHASH *)REG_A0;
+  OPENSSL_LH_DOALL_FUNCARG_THUNK ___daaw = (OPENSSL_LH_DOALL_FUNCARG_THUNK)REG_D0;
+  OPENSSL_LH_DOALL_FUNCARG ___fn = (OPENSSL_LH_DOALL_FUNCARG)REG_D1;
+  void * ___arg = (void *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_LH_doall_arg_thunk(_base, ___lh, ___daaw, ___fn, ___arg);
+}
+
+void LIB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(struct Library * _base, OSSL_HTTP_REQ_CTX * ___rctx, size_t ___count);
+
+void LIBSTUB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(void)
+{
+  OSSL_HTTP_REQ_CTX * ___rctx = (OSSL_HTTP_REQ_CTX *)REG_A0;
+  size_t ___count = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(_base, ___rctx, ___count);
+}
+
 
 #ifdef __cplusplus
 }

@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2023 AmiSSL Open Source Team.
+ Copyright (c) 2006-2024 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27224,6 +27224,91 @@
       <arg name="src" type="const BIO_ADDR *" m68kreg="a1"/>
     </method>
 
+    <!-- AmiSSL v5.13 - OpenSSL 3.2.0 -->
+
+    <method name="SSL_write_ex2" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="buf" type="const void *" m68kreg="a1"/>
+      <arg name="num" type="size_t" m68kreg="d2"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+      <arg name="written" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_get_value_uint" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="class_" type="uint32_t" m68kreg="d0"/>
+      <arg name="id" type="uint32_t" m68kreg="d1"/>
+      <arg name="v" type="uint64_t *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set_value_uint" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="class_" type="uint32_t" m68kreg="d0"/>
+      <arg name="id" type="uint32_t" m68kreg="d1"/>
+      <arg name="v" type="uint64_t" m68kreg="d2-d3"/>
+    </method>
+    <method name="SSL_poll" result="int">
+      <arg name="items" type="SSL_POLL_ITEM *" m68kreg="a0"/>
+      <arg name="num_items" type="size_t" m68kreg="d0"/>
+      <arg name="stride" type="size_t" m68kreg="d1"/>
+      <arg name="timeout" type="const struct timeval *" m68kreg="a1"/>
+      <arg name="flags" type="uint64_t" m68kreg="d2-d3"/>
+      <arg name="result_count" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_SESSION_get_time_ex" result="time_t">
+      <arg name="s" type="const SSL_SESSION *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_SESSION_set_time_ex" result="time_t">
+      <arg name="s" type="SSL_SESSION *" m68kreg="a0"/>
+      <arg name="t" type="time_t" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_CMP_CTX_get0_geninfo_ITAVs" result="struct stack_st_OSSL_CMP_ITAV *">
+      <arg name="ctx" type="const OSSL_CMP_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CMP_HDR_get0_geninfo_ITAVs" result="struct stack_st_OSSL_CMP_ITAV *">
+      <arg name="hdr" type="const OSSL_CMP_PKIHEADER *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CMP_ITAV_new0_certProfile" result="OSSL_CMP_ITAV *">
+      <arg name="certProfile" type="struct stack_st_ASN1_UTF8STRING *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CMP_ITAV_get0_certProfile" result="int">
+      <arg name="itav" type="const OSSL_CMP_ITAV *" m68kreg="a0"/>
+      <arg name="out" type="struct stack_st_ASN1_UTF8STRING **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_CMP_MSG_get0_certreq_publickey" result="X509_PUBKEY *">
+      <arg name="msg" type="const OSSL_CMP_MSG *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CMP_SRV_CTX_init_trans" result="int">
+      <arg name="srv_ctx" type="OSSL_CMP_SRV_CTX *" m68kreg="a0"/>
+      <arg name="delay" type="OSSL_CMP_SRV_delayed_delivery_cb_t" m68kreg="a1"/>
+      <arg name="clean" type="OSSL_CMP_SRV_clean_transaction_cb_t" m68kreg="a2"/>
+    </method>
+    <method name="EVP_DigestSqueeze" result="int">
+      <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char *" m68kreg="a1"/>
+      <arg name="outlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="ERR_pop" result="int">
+    </method>
+    <method name="X509_STORE_get1_objects" result="struct stack_st_X509_OBJECT *">
+      <arg name="xs" type="X509_STORE *" m68kreg="a0"/>
+    </method>
+    <method name="OPENSSL_LH_set_thunks" result="OPENSSL_LHASH *">
+      <arg name="lh" type="OPENSSL_LHASH *" m68kreg="a0"/>
+      <arg name="hw" type="OPENSSL_LH_HASHFUNCTHUNK" m68kreg="a1"/>
+      <arg name="cw" type="OPENSSL_LH_COMPFUNCTHUNK" m68kreg="a2"/>
+      <arg name="daw" type="OPENSSL_LH_DOALL_FUNC_THUNK" m68kreg="a3"/>
+      <arg name="daaw" type="OPENSSL_LH_DOALL_FUNCARG_THUNK" m68kreg="d0"/>
+    </method>
+    <method name="OPENSSL_LH_doall_arg_thunk" result="void">
+      <arg name="lh" type="OPENSSL_LHASH *" m68kreg="a0"/>
+      <arg name="daaw" type="OPENSSL_LH_DOALL_FUNCARG_THUNK" m68kreg="d0"/>
+      <arg name="fn" type="OPENSSL_LH_DOALL_FUNCARG" m68kreg="d1"/>
+      <arg name="arg" type="void *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines" result="void">
+      <arg name="rctx" type="OSSL_HTTP_REQ_CTX *" m68kreg="a0"/>
+      <arg name="count" type="size_t" m68kreg="d0"/>
+    </method>
+    
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->
   </interface>
 </library>

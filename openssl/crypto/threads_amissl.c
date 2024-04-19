@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2023 AmiSSL Open Source Team.
+ Copyright (c) 2006-2024 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,8 @@
 
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
+#include "internal/rcu.h"
+#include "rcu_internal.h"
 
 #if defined(OPENSSL_THREADS) && !defined(CRYPTO_TDEBUG) && defined(OPENSSL_SYS_AMIGA)
 
@@ -50,6 +52,83 @@ static APTR RunOnceLock = NULL;
 static struct SignalSemaphore *RunOnceLock = NULL;
 
 # endif
+
+struct rcu_lock_st {
+    struct rcu_cb_item *cb_items;
+};
+
+CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
+{
+    struct rcu_lock_st *lock;
+
+    lock = OPENSSL_zalloc(sizeof(*lock));
+    return lock;
+}
+
+void ossl_rcu_lock_free(CRYPTO_RCU_LOCK *lock)
+{
+    OPENSSL_free(lock);
+}
+
+void ossl_rcu_read_lock(CRYPTO_RCU_LOCK *lock)
+{
+    return;
+}
+
+void ossl_rcu_write_lock(CRYPTO_RCU_LOCK *lock)
+{
+    return;
+}
+
+void ossl_rcu_write_unlock(CRYPTO_RCU_LOCK *lock)
+{
+    return;
+}
+
+void ossl_rcu_read_unlock(CRYPTO_RCU_LOCK *lock)
+{
+    return;
+}
+
+void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
+{
+    struct rcu_cb_item *items = lock->cb_items;
+    struct rcu_cb_item *tmp;
+
+    lock->cb_items = NULL;
+
+    while (items != NULL) {
+        tmp = items->next;
+        items->fn(items->data);
+        OPENSSL_free(items);
+        items = tmp;
+    }
+}
+
+int ossl_rcu_call(CRYPTO_RCU_LOCK *lock, rcu_cb_fn cb, void *data)
+{
+    struct rcu_cb_item *new = OPENSSL_zalloc(sizeof(*new));
+
+    if (new == NULL)
+        return 0;
+
+    new->fn = cb;
+    new->data = data;
+    new->next = lock->cb_items;
+    lock->cb_items = new;
+    return 1;
+}
+
+void *ossl_rcu_uptr_deref(void **p)
+{
+    return (void *)*p;
+}
+
+void ossl_rcu_assign_uptr(void **p, void **v)
+{
+    *(void **)p = *(void **)v;
+}
+
 
 int CRYPTO_THREAD_setup(void)
 {

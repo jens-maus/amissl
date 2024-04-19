@@ -41825,6 +41825,132 @@ int SAVEDS ASM LIB_BIO_ADDR_copy(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, BIO_AD
 
 // ---
 
+int SAVEDS ASM LIB_SSL_write_ex2(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const void * buf), REG(d2, size_t num), REG(d0, uint64_t flags), REG(a2, size_t * written))
+{
+	return SSL_write_ex2(s, buf, num, flags, written);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_get_value_uint(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, uint32_t class_), REG(d1, uint32_t id), REG(a1, uint64_t * v))
+{
+	return SSL_get_value_uint(s, class_, id, v);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_set_value_uint(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, uint32_t class_), REG(d1, uint32_t id), REG(d2, uint64_t v))
+{
+	return SSL_set_value_uint(s, class_, id, v);
+}
+
+// ---
+
+int SAVEDS ASM LIB_SSL_poll(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_POLL_ITEM * items), REG(d0, size_t num_items), REG(d1, size_t stride), REG(a1, const struct timeval * timeout), REG(d2, uint64_t flags), REG(a2, size_t * result_count))
+{
+	return SSL_poll(items, num_items, stride, timeout, flags, result_count);
+}
+
+// ---
+
+time_t SAVEDS ASM LIB_SSL_SESSION_get_time_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const SSL_SESSION * s))
+{
+	return SSL_SESSION_get_time_ex(s);
+}
+
+// ---
+
+time_t SAVEDS ASM LIB_SSL_SESSION_set_time_ex(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, SSL_SESSION * s), REG(d0, time_t t))
+{
+	return SSL_SESSION_set_time_ex(s, t);
+}
+
+// ---
+
+struct stack_st_OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_CTX * ctx))
+{
+	return OSSL_CMP_CTX_get0_geninfo_ITAVs(ctx);
+}
+
+// ---
+
+struct stack_st_OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_PKIHEADER * hdr))
+{
+	return OSSL_CMP_HDR_get0_geninfo_ITAVs(hdr);
+}
+
+// ---
+
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct stack_st_ASN1_UTF8STRING * certProfile))
+{
+	return OSSL_CMP_ITAV_new0_certProfile(certProfile);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, struct stack_st_ASN1_UTF8STRING ** out))
+{
+	return OSSL_CMP_ITAV_get0_certProfile(itav, out);
+}
+
+// ---
+
+X509_PUBKEY * SAVEDS ASM LIB_OSSL_CMP_MSG_get0_certreq_publickey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_MSG * msg))
+{
+	return OSSL_CMP_MSG_get0_certreq_publickey(msg);
+}
+
+// ---
+
+int SAVEDS ASM LIB_OSSL_CMP_SRV_CTX_init_trans(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_CMP_SRV_CTX * srv_ctx), REG(a1, OSSL_CMP_SRV_delayed_delivery_cb_t delay), REG(a2, OSSL_CMP_SRV_clean_transaction_cb_t clean))
+{
+	return OSSL_CMP_SRV_CTX_init_trans(srv_ctx, delay, clean);
+}
+
+// ---
+
+int SAVEDS ASM LIB_EVP_DigestSqueeze(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, EVP_MD_CTX * ctx), REG(a1, unsigned char * out), REG(d0, size_t outlen))
+{
+	return EVP_DigestSqueeze(ctx, out, outlen);
+}
+
+// ---
+
+int SAVEDS ASM LIB_ERR_pop(REG(a6, UNUSED __IFACE_OR_BASE))
+{
+	return ERR_pop();
+}
+
+// ---
+
+struct stack_st_X509_OBJECT * SAVEDS ASM LIB_X509_STORE_get1_objects(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * xs))
+{
+	return X509_STORE_get1_objects(xs);
+}
+
+// ---
+
+OPENSSL_LHASH * SAVEDS ASM LIB_OPENSSL_LH_set_thunks(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, OPENSSL_LH_HASHFUNCTHUNK hw), REG(a2, OPENSSL_LH_COMPFUNCTHUNK cw), REG(a3, OPENSSL_LH_DOALL_FUNC_THUNK daw), REG(d0, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw))
+{
+	return OPENSSL_LH_set_thunks(lh, hw, cw, daw, daaw);
+}
+
+// ---
+
+void SAVEDS ASM LIB_OPENSSL_LH_doall_arg_thunk(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(d0, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw), REG(d1, OPENSSL_LH_DOALL_FUNCARG fn), REG(a1, void * arg))
+{
+	OPENSSL_LH_doall_arg_thunk(lh, daaw, fn, arg);
+}
+
+// ---
+
+void SAVEDS ASM LIB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, OSSL_HTTP_REQ_CTX * rctx), REG(d0, size_t count))
+{
+	OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(rctx, count);
+}
+
+// ---
+
 
 /***************************************************************************/
 

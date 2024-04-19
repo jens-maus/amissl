@@ -3373,4 +3373,58 @@ int __OSSL_STORE_delete(__reg("a6") struct Library * , __reg("a0") const char * 
 int __BIO_ADDR_copy(__reg("a6") struct Library * , __reg("a0") BIO_ADDR * dst , __reg("a1") const BIO_ADDR * src ) = "\tjsr\t-6726(a6)";
 #define BIO_ADDR_copy(dst, src) __BIO_ADDR_copy(AmiSSLExtBase, (dst), (src))
 
+int __SSL_write_ex2(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const void * buf , __reg("d2") size_t num , __reg("d0/d1") uint64_t flags , __reg("a2") size_t * written ) = "\tjsr\t-6732(a6)";
+#define SSL_write_ex2(s, buf, num, flags, written) __SSL_write_ex2(AmiSSLExtBase, (s), (buf), (num), (flags), (written))
+
+int __SSL_get_value_uint(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") uint32_t class_ , __reg("d1") uint32_t id , __reg("a1") uint64_t * v ) = "\tjsr\t-6738(a6)";
+#define SSL_get_value_uint(s, class_, id, v) __SSL_get_value_uint(AmiSSLExtBase, (s), (class_), (id), (v))
+
+int __SSL_set_value_uint(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") uint32_t class_ , __reg("d1") uint32_t id , __reg("d2/d3") uint64_t v ) = "\tjsr\t-6744(a6)";
+#define SSL_set_value_uint(s, class_, id, v) __SSL_set_value_uint(AmiSSLExtBase, (s), (class_), (id), (v))
+
+int __SSL_poll(__reg("a6") struct Library * , __reg("a0") SSL_POLL_ITEM * items , __reg("d0") size_t num_items , __reg("d1") size_t stride , __reg("a1") const struct timeval * timeout , __reg("d2/d3") uint64_t flags , __reg("a2") size_t * result_count ) = "\tjsr\t-6750(a6)";
+#define SSL_poll(items, num_items, stride, timeout, flags, result_count) __SSL_poll(AmiSSLExtBase, (items), (num_items), (stride), (timeout), (flags), (result_count))
+
+time_t __SSL_SESSION_get_time_ex(__reg("a6") struct Library * , __reg("a0") const SSL_SESSION * s ) = "\tjsr\t-6756(a6)";
+#define SSL_SESSION_get_time_ex(s) __SSL_SESSION_get_time_ex(AmiSSLExtBase, (s))
+
+time_t __SSL_SESSION_set_time_ex(__reg("a6") struct Library * , __reg("a0") SSL_SESSION * s , __reg("d0") time_t t ) = "\tjsr\t-6762(a6)";
+#define SSL_SESSION_set_time_ex(s, t) __SSL_SESSION_set_time_ex(AmiSSLExtBase, (s), (t))
+
+struct stack_st_OSSL_CMP_ITAV * __OSSL_CMP_CTX_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx ) = "\tjsr\t-6768(a6)";
+#define OSSL_CMP_CTX_get0_geninfo_ITAVs(ctx) __OSSL_CMP_CTX_get0_geninfo_ITAVs(AmiSSLExtBase, (ctx))
+
+struct stack_st_OSSL_CMP_ITAV * __OSSL_CMP_HDR_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_PKIHEADER * hdr ) = "\tjsr\t-6774(a6)";
+#define OSSL_CMP_HDR_get0_geninfo_ITAVs(hdr) __OSSL_CMP_HDR_get0_geninfo_ITAVs(AmiSSLExtBase, (hdr))
+
+OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new0_certProfile(__reg("a6") struct Library * , __reg("a0") struct stack_st_ASN1_UTF8STRING * certProfile ) = "\tjsr\t-6780(a6)";
+#define OSSL_CMP_ITAV_new0_certProfile(certProfile) __OSSL_CMP_ITAV_new0_certProfile(AmiSSLExtBase, (certProfile))
+
+int __OSSL_CMP_ITAV_get0_certProfile(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_ITAV * itav , __reg("a1") struct stack_st_ASN1_UTF8STRING ** out ) = "\tjsr\t-6786(a6)";
+#define OSSL_CMP_ITAV_get0_certProfile(itav, out) __OSSL_CMP_ITAV_get0_certProfile(AmiSSLExtBase, (itav), (out))
+
+X509_PUBKEY * __OSSL_CMP_MSG_get0_certreq_publickey(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_MSG * msg ) = "\tjsr\t-6792(a6)";
+#define OSSL_CMP_MSG_get0_certreq_publickey(msg) __OSSL_CMP_MSG_get0_certreq_publickey(AmiSSLExtBase, (msg))
+
+int __OSSL_CMP_SRV_CTX_init_trans(__reg("a6") struct Library * , __reg("a0") OSSL_CMP_SRV_CTX * srv_ctx , __reg("a1") OSSL_CMP_SRV_delayed_delivery_cb_t delay , __reg("a2") OSSL_CMP_SRV_clean_transaction_cb_t clean ) = "\tjsr\t-6798(a6)";
+#define OSSL_CMP_SRV_CTX_init_trans(srv_ctx, delay, clean) __OSSL_CMP_SRV_CTX_init_trans(AmiSSLExtBase, (srv_ctx), (delay), (clean))
+
+int __EVP_DigestSqueeze(__reg("a6") struct Library * , __reg("a0") EVP_MD_CTX * ctx , __reg("a1") unsigned char * out , __reg("d0") size_t outlen ) = "\tjsr\t-6804(a6)";
+#define EVP_DigestSqueeze(ctx, out, outlen) __EVP_DigestSqueeze(AmiSSLExtBase, (ctx), (out), (outlen))
+
+int __ERR_pop(__reg("a6") struct Library * ) = "\tjsr\t-6810(a6)";
+#define ERR_pop() __ERR_pop(AmiSSLExtBase)
+
+struct stack_st_X509_OBJECT * __X509_STORE_get1_objects(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-6816(a6)";
+#define X509_STORE_get1_objects(xs) __X509_STORE_get1_objects(AmiSSLExtBase, (xs))
+
+OPENSSL_LHASH * __OPENSSL_LH_set_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_LHASH * lh , __reg("a1") OPENSSL_LH_HASHFUNCTHUNK hw , __reg("a2") OPENSSL_LH_COMPFUNCTHUNK cw , __reg("a3") OPENSSL_LH_DOALL_FUNC_THUNK daw , __reg("d0") OPENSSL_LH_DOALL_FUNCARG_THUNK daaw ) = "\tjsr\t-6822(a6)";
+#define OPENSSL_LH_set_thunks(lh, hw, cw, daw, daaw) __OPENSSL_LH_set_thunks(AmiSSLExtBase, (lh), (hw), (cw), (daw), (daaw))
+
+void __OPENSSL_LH_doall_arg_thunk(__reg("a6") struct Library * , __reg("a0") OPENSSL_LHASH * lh , __reg("d0") OPENSSL_LH_DOALL_FUNCARG_THUNK daaw , __reg("d1") OPENSSL_LH_DOALL_FUNCARG fn , __reg("a1") void * arg ) = "\tjsr\t-6828(a6)";
+#define OPENSSL_LH_doall_arg_thunk(lh, daaw, fn, arg) __OPENSSL_LH_doall_arg_thunk(AmiSSLExtBase, (lh), (daaw), (fn), (arg))
+
+void __OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(__reg("a6") struct Library * , __reg("a0") OSSL_HTTP_REQ_CTX * rctx , __reg("d0") size_t count ) = "\tjsr\t-6834(a6)";
+#define OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(rctx, count) __OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(AmiSSLExtBase, (rctx), (count))
+
 #endif /* !_INLINE_AMISSLEXT_H */

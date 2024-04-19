@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -59,6 +59,7 @@
 # define ASN1_R_EXPLICIT_TAG_NOT_CONSTRUCTED              120
 # define ASN1_R_FIELD_MISSING                             121
 # define ASN1_R_FIRST_NUM_TOO_LARGE                       122
+# define ASN1_R_GENERALIZEDTIME_IS_TOO_SHORT              232
 # define ASN1_R_HEADER_TOO_LONG                           123
 # define ASN1_R_ILLEGAL_BITSTRING_FORMAT                  175
 # define ASN1_R_ILLEGAL_BOOLEAN                           176
@@ -145,6 +146,7 @@
 # define ASN1_R_UNSUPPORTED_CIPHER                        228
 # define ASN1_R_UNSUPPORTED_PUBLIC_KEY_TYPE               167
 # define ASN1_R_UNSUPPORTED_TYPE                          196
+# define ASN1_R_UTCTIME_IS_TOO_SHORT                      233
 # define ASN1_R_WRONG_INTEGER_TYPE                        225
 # define ASN1_R_WRONG_PUBLIC_KEY_TYPE                     200
 # define ASN1_R_WRONG_TAG                                 168

@@ -6621,6 +6621,24 @@ struct AmiSSLIFace
 	APICALL void (*X509_STORE_CTX_set_current_reasons)(struct AmiSSLIFace *Self, X509_STORE_CTX * ctx, unsigned int current_reasons);
 	APICALL int (*OSSL_STORE_delete)(struct AmiSSLIFace *Self, const char * uri, OSSL_LIB_CTX * libctx, const char * propq, const UI_METHOD * ui_method, void * ui_data, const OSSL_PARAM * params);
 	APICALL int (*BIO_ADDR_copy)(struct AmiSSLIFace *Self, BIO_ADDR * dst, const BIO_ADDR * src);
+	APICALL int (*SSL_write_ex2)(struct AmiSSLIFace *Self, SSL * s, const void * buf, size_t num, uint64_t flags, size_t * written);
+	APICALL int (*SSL_get_value_uint)(struct AmiSSLIFace *Self, SSL * s, uint32_t class_, uint32_t id, uint64_t * v);
+	APICALL int (*SSL_set_value_uint)(struct AmiSSLIFace *Self, SSL * s, uint32_t class_, uint32_t id, uint64_t v);
+	APICALL int (*SSL_poll)(struct AmiSSLIFace *Self, SSL_POLL_ITEM * items, size_t num_items, size_t stride, const struct timeval * timeout, uint64_t flags, size_t * result_count);
+	APICALL time_t (*SSL_SESSION_get_time_ex)(struct AmiSSLIFace *Self, const SSL_SESSION * s);
+	APICALL time_t (*SSL_SESSION_set_time_ex)(struct AmiSSLIFace *Self, SSL_SESSION * s, time_t t);
+	APICALL struct stack_st_OSSL_CMP_ITAV * (*OSSL_CMP_CTX_get0_geninfo_ITAVs)(struct AmiSSLIFace *Self, const OSSL_CMP_CTX * ctx);
+	APICALL struct stack_st_OSSL_CMP_ITAV * (*OSSL_CMP_HDR_get0_geninfo_ITAVs)(struct AmiSSLIFace *Self, const OSSL_CMP_PKIHEADER * hdr);
+	APICALL OSSL_CMP_ITAV * (*OSSL_CMP_ITAV_new0_certProfile)(struct AmiSSLIFace *Self, struct stack_st_ASN1_UTF8STRING * certProfile);
+	APICALL int (*OSSL_CMP_ITAV_get0_certProfile)(struct AmiSSLIFace *Self, const OSSL_CMP_ITAV * itav, struct stack_st_ASN1_UTF8STRING ** out);
+	APICALL X509_PUBKEY * (*OSSL_CMP_MSG_get0_certreq_publickey)(struct AmiSSLIFace *Self, const OSSL_CMP_MSG * msg);
+	APICALL int (*OSSL_CMP_SRV_CTX_init_trans)(struct AmiSSLIFace *Self, OSSL_CMP_SRV_CTX * srv_ctx, OSSL_CMP_SRV_delayed_delivery_cb_t delay, OSSL_CMP_SRV_clean_transaction_cb_t clean);
+	APICALL int (*EVP_DigestSqueeze)(struct AmiSSLIFace *Self, EVP_MD_CTX * ctx, unsigned char * out, size_t outlen);
+	APICALL int (*ERR_pop)(struct AmiSSLIFace *Self);
+	APICALL struct stack_st_X509_OBJECT * (*X509_STORE_get1_objects)(struct AmiSSLIFace *Self, X509_STORE * xs);
+	APICALL OPENSSL_LHASH * (*OPENSSL_LH_set_thunks)(struct AmiSSLIFace *Self, OPENSSL_LHASH * lh, OPENSSL_LH_HASHFUNCTHUNK hw, OPENSSL_LH_COMPFUNCTHUNK cw, OPENSSL_LH_DOALL_FUNC_THUNK daw, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw);
+	APICALL void (*OPENSSL_LH_doall_arg_thunk)(struct AmiSSLIFace *Self, OPENSSL_LHASH * lh, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw, OPENSSL_LH_DOALL_FUNCARG fn, void * arg);
+	APICALL void (*OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines)(struct AmiSSLIFace *Self, OSSL_HTTP_REQ_CTX * rctx, size_t count);
 };
 
 #ifdef __cplusplus

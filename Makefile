@@ -152,7 +152,7 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-REVISION=14
+REVISION=15
 
 include openssl/VERSION.dat
 VERSIONNAME=$(MAJOR)$(MINOR)$(PATCH)
@@ -484,7 +484,7 @@ else
 endif
 
 $(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) enable-mdc2 enable-md2 enable-rc5 no-makedepend no-shared disable-ssl-trace no-thread-pool --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make build_generated)
+	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make build_generated)
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile
