@@ -54,6 +54,7 @@ static struct SignalSemaphore *RunOnceLock = NULL;
 # endif
 
 struct rcu_lock_st {
+    CRYPTO_RWLOCK *lock;
     struct rcu_cb_item *cb_items;
 };
 
@@ -61,40 +62,52 @@ CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
 {
     struct rcu_lock_st *lock;
 
-    lock = OPENSSL_zalloc(sizeof(*lock));
-    return lock;
+    if((lock = OPENSSL_zalloc(sizeof(*lock))))
+    {
+        if((lock->lock = CRYPTO_THREAD_lock_new()))
+	{
+	    return lock;
+	}
+	OPENSSL_free(lock);
+    }
+
+    return NULL;
 }
 
 void ossl_rcu_lock_free(CRYPTO_RCU_LOCK *lock)
 {
+    CRYPTO_THREAD_lock_free(lock->lock);
     OPENSSL_free(lock);
 }
 
 void ossl_rcu_read_lock(CRYPTO_RCU_LOCK *lock)
 {
-    return;
+    CRYPTO_THREAD_read_lock(lock->lock);
 }
 
 void ossl_rcu_write_lock(CRYPTO_RCU_LOCK *lock)
 {
-    return;
+    CRYPTO_THREAD_write_lock(lock->lock);
 }
 
 void ossl_rcu_write_unlock(CRYPTO_RCU_LOCK *lock)
 {
-    return;
+    CRYPTO_THREAD_unlock(lock->lock);
 }
 
 void ossl_rcu_read_unlock(CRYPTO_RCU_LOCK *lock)
 {
-    return;
+    CRYPTO_THREAD_unlock(lock->lock);
 }
 
 void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
 {
-    struct rcu_cb_item *items = lock->cb_items;
+    struct rcu_cb_item *items;
     struct rcu_cb_item *tmp;
 
+    CRYPTO_THREAD_write_lock(lock->lock);
+
+    items = lock->cb_items;
     lock->cb_items = NULL;
 
     while (items != NULL) {
@@ -103,6 +116,8 @@ void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
         OPENSSL_free(items);
         items = tmp;
     }
+
+    CRYPTO_THREAD_unlock(lock->lock);
 }
 
 int ossl_rcu_call(CRYPTO_RCU_LOCK *lock, rcu_cb_fn cb, void *data)
@@ -112,10 +127,15 @@ int ossl_rcu_call(CRYPTO_RCU_LOCK *lock, rcu_cb_fn cb, void *data)
     if (new == NULL)
         return 0;
 
+    CRYPTO_THREAD_write_lock(lock->lock);
+
     new->fn = cb;
     new->data = data;
     new->next = lock->cb_items;
     lock->cb_items = new;
+
+    CRYPTO_THREAD_unlock(lock->lock);
+
     return 1;
 }
 
@@ -357,8 +377,10 @@ int CRYPTO_THREAD_compare_id(CRYPTO_THREAD_ID a, CRYPTO_THREAD_ID b)
 
 int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
 {
-    if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
+    if (lock == NULL)
 	return 0;
+
+    CRYPTO_THREAD_write_lock(lock);
 
     *val += amount;
     *ret  = *val;
@@ -371,8 +393,10 @@ int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
 int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
                      CRYPTO_RWLOCK *lock)
 {
-    if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
+    if (lock == NULL)
 	return 0;
+
+    CRYPTO_THREAD_write_lock(lock);
 
     *val |= op;
     *ret  = *val;
@@ -384,8 +408,10 @@ int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
 
 int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
 {
-    if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
+    if (lock == NULL)
 	return 0;
+
+    CRYPTO_THREAD_read_lock(lock);
 
     *ret  = *val;
 
@@ -396,8 +422,10 @@ int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
 
 int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
 {
-    if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
+    if (lock == NULL)
 	return 0;
+
+    CRYPTO_THREAD_read_lock(lock);
 
     *ret  = *val;
 
