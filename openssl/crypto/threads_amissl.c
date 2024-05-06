@@ -129,7 +129,6 @@ void ossl_rcu_assign_uptr(void **p, void **v)
     *(void **)p = *(void **)v;
 }
 
-
 int CRYPTO_THREAD_setup(void)
 {
     ALLOC_LOCK(RunOnceLock, struct SignalSemaphore);
@@ -186,11 +185,11 @@ int CRYPTO_THREAD_run_once(CRYPTO_ONCE *once, void (*init)(void))
     return 1;
 }
 
-typedef struct thread_task_value_st
+typedef struct thread_entry_st
 {
 	struct Task *task;
 	void *data;
-} THREAD_TASK_VALUE;
+} THREAD_ENTRY;
 
 # if defined(__amigaos4__)
 
@@ -209,7 +208,7 @@ typedef struct thread_task_value_st
 typedef struct thread_key_st
 {
     APTR lock;
-    OPENSSL_LHASH *hash;
+    LHASH_OF(THREAD_ENTRY) *hashtable;
 } THREAD_KEY;
 
 # else
@@ -223,20 +222,21 @@ typedef struct thread_key_st
 typedef struct thread_key_st
 {
     struct SignalSemaphore lock;
-    OPENSSL_LHASH *hash;
+    LHASH_OF(THREAD_ENTRY) *hashtable;
 } THREAD_KEY;
 
 # endif
 
-static unsigned long task_hash(const void *a_void)
+DEFINE_LHASH_OF_EX(THREAD_ENTRY);
+
+static unsigned long task_hash(const THREAD_ENTRY *e)
 {
-    return(((unsigned long)((THREAD_TASK_VALUE *)a_void)->task)*13);
+    return ((unsigned long)e->task) * 13;
 }
 
-static int task_cmp(const void *a_void, const void *b_void)
+static int task_cmp(const THREAD_ENTRY *a, const THREAD_ENTRY *b)
 {
-    return((int)((long)((THREAD_TASK_VALUE *)a_void)->task -
-                 (long)((THREAD_TASK_VALUE *)b_void)->task));
+    return ((int)(a->task - b->task));
 }
 
 int CRYPTO_THREAD_init_local(CRYPTO_THREAD_LOCAL *key, void (*cleanup)(void *))
@@ -245,7 +245,7 @@ int CRYPTO_THREAD_init_local(CRYPTO_THREAD_LOCAL *key, void (*cleanup)(void *))
     ALLOC_THREAD_KEY(keydata);
 
     if (keydata != NULL) {
-        keydata->hash = NULL;
+        keydata->hashtable = NULL;
         *key = (CRYPTO_THREAD_LOCAL)keydata;
         return 1;
     }
@@ -256,27 +256,27 @@ int CRYPTO_THREAD_init_local(CRYPTO_THREAD_LOCAL *key, void (*cleanup)(void *))
 void *CRYPTO_THREAD_get_local(CRYPTO_THREAD_LOCAL *key)
 {
     THREAD_KEY *keydata = (THREAD_KEY *)*key;
-    THREAD_TASK_VALUE tmp, *value = NULL;
+    THREAD_ENTRY tmp, *entry = NULL;
 
     if (keydata != NULL) {
         
         LOCK_SHARED_THREAD_KEY(keydata);
 
-        if (keydata->hash != NULL) {
+        if (keydata->hashtable != NULL) {
             tmp.task = FindTask(NULL);
-            value = OPENSSL_LH_retrieve(keydata->hash, &tmp);
+            entry = lh_THREAD_ENTRY_retrieve(keydata->hashtable, &tmp);
         }
 
         UNLOCK_THREAD_KEY(keydata);
     }
 
-    return value ? value->data : NULL;
+    return entry ? entry->data : NULL;
 }
 
 int CRYPTO_THREAD_set_local(CRYPTO_THREAD_LOCAL *key, void *val)
 {
     THREAD_KEY *keydata = (THREAD_KEY *)*key;
-    THREAD_TASK_VALUE tmp, *value = NULL;
+    THREAD_ENTRY tmp, *entry = NULL;
 
     if (keydata != NULL) {
         tmp.task = FindTask(NULL);
@@ -285,34 +285,34 @@ int CRYPTO_THREAD_set_local(CRYPTO_THREAD_LOCAL *key, void *val)
 
         if (val == NULL) {
             /* DELETE */
-            if (keydata->hash != NULL)
-                value = OPENSSL_LH_retrieve(keydata->hash, &tmp);
+            if (keydata->hashtable != NULL)
+                entry = lh_THREAD_ENTRY_retrieve(keydata->hashtable, &tmp);
 
-            if (value != NULL) {
-                OPENSSL_LH_delete(keydata->hash, value);
-                OPENSSL_free(value);
+            if (entry != NULL) {
+                lh_THREAD_ENTRY_delete(keydata->hashtable, entry);
+                OPENSSL_free(entry);
                 /* make sure we don't leak memory */
-                if (OPENSSL_LH_num_items(keydata->hash) == 0) {
-                    OPENSSL_LH_free(keydata->hash);
-                    keydata->hash = NULL;
+                if (lh_THREAD_ENTRY_num_items(keydata->hashtable) == 0) {
+                    lh_THREAD_ENTRY_free(keydata->hashtable);
+                    keydata->hashtable = NULL;
                 }
             }
         }
         else {
             /* SET */
-            if (keydata->hash == NULL)
-                keydata->hash = OPENSSL_LH_new(task_hash, task_cmp);
+            if (keydata->hashtable == NULL)
+                keydata->hashtable = lh_THREAD_ENTRY_new(task_hash, task_cmp);
             else
-                value = OPENSSL_LH_retrieve(keydata->hash, &tmp);
+                entry = lh_THREAD_ENTRY_retrieve(keydata->hashtable, &tmp);
 
-            if (keydata->hash != NULL) {
-                if (value == NULL)
-                    value = OPENSSL_malloc(sizeof(THREAD_TASK_VALUE));
+            if (keydata->hashtable != NULL) {
+                if (entry == NULL)
+                    entry = OPENSSL_malloc(sizeof(THREAD_ENTRY));
 
-                if (value != NULL) {
-                    value->task = tmp.task;
-                    value->data = val;
-                    OPENSSL_LH_insert(keydata->hash, value);
+                if (entry != NULL) {
+                    entry->task = tmp.task;
+                    entry->data = val;
+                    lh_THREAD_ENTRY_insert(keydata->hashtable, entry);
                 }
             }
         }
@@ -320,12 +320,12 @@ int CRYPTO_THREAD_set_local(CRYPTO_THREAD_LOCAL *key, void *val)
         UNLOCK_THREAD_KEY(keydata);
     }
 
-    return value ? 1 : 0;
+    return entry ? 1 : 0;
 }
 
-static void free_task_value(void *value)
+static void free_task_entry(THREAD_ENTRY *entry)
 {
-    OPENSSL_free(value);
+    OPENSSL_free(entry);
 }
 
 int CRYPTO_THREAD_cleanup_local(CRYPTO_THREAD_LOCAL *key)
@@ -333,12 +333,12 @@ int CRYPTO_THREAD_cleanup_local(CRYPTO_THREAD_LOCAL *key)
     THREAD_KEY *keydata;
 
     if ((keydata = (THREAD_KEY *)*key)) {
-	if (keydata->hash) {
-            OPENSSL_LH_doall(keydata->hash, free_task_value);
-            OPENSSL_LH_free(keydata->hash);
+        if (keydata->hashtable) {
+            lh_THREAD_ENTRY_doall(keydata->hashtable, free_task_entry);
+            lh_THREAD_ENTRY_free(keydata->hashtable);
         }
-	FREE_THREAD_KEY(keydata);
-	*key = 0;
+        FREE_THREAD_KEY(keydata);
+        *key = 0;
         return 1;
     }
 
