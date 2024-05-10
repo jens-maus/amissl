@@ -17453,7 +17453,7 @@ STATIC CONST struct EmuTrap stub_ext_SSL_SESSION_set_time_ex = { TRAPINST, TRAPT
 
 // ---
 
-STATIC struct stack_st_OSSL_CMP_ITAV * stub_ext_OSSL_CMP_CTX_get0_geninfo_ITAVs_PPC(uint32 *regarray)
+STATIC STACK_OF(OSSL_CMP_ITAV) * stub_ext_OSSL_CMP_CTX_get0_geninfo_ITAVs_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -17467,7 +17467,7 @@ STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_CTX_get0_geninfo_ITAVs = { TRAPINS
 
 // ---
 
-STATIC struct stack_st_OSSL_CMP_ITAV * stub_ext_OSSL_CMP_HDR_get0_geninfo_ITAVs_PPC(uint32 *regarray)
+STATIC STACK_OF(OSSL_CMP_ITAV) * stub_ext_OSSL_CMP_HDR_get0_geninfo_ITAVs_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
@@ -17488,7 +17488,7 @@ STATIC OSSL_CMP_ITAV * stub_ext_OSSL_CMP_ITAV_new0_certProfile_PPC(uint32 *regar
 	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
 
 	return Self->OSSL_CMP_ITAV_new0_certProfile(
-		(struct stack_st_ASN1_UTF8STRING *)regarray[REG68K_A0/4]
+		(STACK_OF(ASN1_UTF8STRING) *)regarray[REG68K_A0/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_ITAV_new0_certProfile = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_ITAV_new0_certProfile_PPC };
@@ -17503,7 +17503,7 @@ STATIC int stub_ext_OSSL_CMP_ITAV_get0_certProfile_PPC(uint32 *regarray)
 
 	return Self->OSSL_CMP_ITAV_get0_certProfile(
 		(const OSSL_CMP_ITAV *)regarray[REG68K_A0/4],
-		(struct stack_st_ASN1_UTF8STRING **)regarray[REG68K_A1/4]
+		(STACK_OF(ASN1_UTF8STRING) **)regarray[REG68K_A1/4]
 	);
 }
 STATIC CONST struct EmuTrap stub_ext_OSSL_CMP_ITAV_get0_certProfile = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_ext_OSSL_CMP_ITAV_get0_certProfile_PPC };
@@ -17568,7 +17568,7 @@ STATIC CONST struct EmuTrap stub_ext_ERR_pop = { TRAPINST, TRAPTYPE, (uint32 (*)
 
 // ---
 
-STATIC struct stack_st_X509_OBJECT * stub_ext_X509_STORE_get1_objects_PPC(uint32 *regarray)
+STATIC STACK_OF(X509_OBJECT) * stub_ext_X509_STORE_get1_objects_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
 	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);

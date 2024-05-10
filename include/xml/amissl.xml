@@ -27224,7 +27224,7 @@
       <arg name="src" type="const BIO_ADDR *" m68kreg="a1"/>
     </method>
 
-    <!-- AmiSSL v5.13 - OpenSSL 3.2.0 -->
+    <!-- AmiSSL v5.14 - OpenSSL 3.3.0 -->
 
     <method name="SSL_write_ex2" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -27260,18 +27260,18 @@
       <arg name="s" type="SSL_SESSION *" m68kreg="a0"/>
       <arg name="t" type="time_t" m68kreg="d0"/>
     </method>
-    <method name="OSSL_CMP_CTX_get0_geninfo_ITAVs" result="struct stack_st_OSSL_CMP_ITAV *">
+    <method name="OSSL_CMP_CTX_get0_geninfo_ITAVs" result="STACK_OF(OSSL_CMP_ITAV) *">
       <arg name="ctx" type="const OSSL_CMP_CTX *" m68kreg="a0"/>
     </method>
-    <method name="OSSL_CMP_HDR_get0_geninfo_ITAVs" result="struct stack_st_OSSL_CMP_ITAV *">
+    <method name="OSSL_CMP_HDR_get0_geninfo_ITAVs" result="STACK_OF(OSSL_CMP_ITAV) *">
       <arg name="hdr" type="const OSSL_CMP_PKIHEADER *" m68kreg="a0"/>
     </method>
     <method name="OSSL_CMP_ITAV_new0_certProfile" result="OSSL_CMP_ITAV *">
-      <arg name="certProfile" type="struct stack_st_ASN1_UTF8STRING *" m68kreg="a0"/>
+      <arg name="certProfile" type="STACK_OF(ASN1_UTF8STRING) *" m68kreg="a0"/>
     </method>
     <method name="OSSL_CMP_ITAV_get0_certProfile" result="int">
       <arg name="itav" type="const OSSL_CMP_ITAV *" m68kreg="a0"/>
-      <arg name="out" type="struct stack_st_ASN1_UTF8STRING **" m68kreg="a1"/>
+      <arg name="out" type="STACK_OF(ASN1_UTF8STRING) **" m68kreg="a1"/>
     </method>
     <method name="OSSL_CMP_MSG_get0_certreq_publickey" result="X509_PUBKEY *">
       <arg name="msg" type="const OSSL_CMP_MSG *" m68kreg="a0"/>
@@ -27288,7 +27288,7 @@
     </method>
     <method name="ERR_pop" result="int">
     </method>
-    <method name="X509_STORE_get1_objects" result="struct stack_st_X509_OBJECT *">
+    <method name="X509_STORE_get1_objects" result="STACK_OF(X509_OBJECT) *">
       <arg name="xs" type="X509_STORE *" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_LH_set_thunks" result="OPENSSL_LHASH *">

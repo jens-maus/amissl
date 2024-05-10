@@ -3391,16 +3391,16 @@ time_t __SSL_SESSION_get_time_ex(__reg("a6") struct Library * , __reg("a0") cons
 time_t __SSL_SESSION_set_time_ex(__reg("a6") struct Library * , __reg("a0") SSL_SESSION * s , __reg("d0") time_t t ) = "\tjsr\t-6762(a6)";
 #define SSL_SESSION_set_time_ex(s, t) __SSL_SESSION_set_time_ex(AmiSSLExtBase, (s), (t))
 
-struct stack_st_OSSL_CMP_ITAV * __OSSL_CMP_CTX_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx ) = "\tjsr\t-6768(a6)";
+STACK_OF(OSSL_CMP_ITAV) * __OSSL_CMP_CTX_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_CTX * ctx ) = "\tjsr\t-6768(a6)";
 #define OSSL_CMP_CTX_get0_geninfo_ITAVs(ctx) __OSSL_CMP_CTX_get0_geninfo_ITAVs(AmiSSLExtBase, (ctx))
 
-struct stack_st_OSSL_CMP_ITAV * __OSSL_CMP_HDR_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_PKIHEADER * hdr ) = "\tjsr\t-6774(a6)";
+STACK_OF(OSSL_CMP_ITAV) * __OSSL_CMP_HDR_get0_geninfo_ITAVs(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_PKIHEADER * hdr ) = "\tjsr\t-6774(a6)";
 #define OSSL_CMP_HDR_get0_geninfo_ITAVs(hdr) __OSSL_CMP_HDR_get0_geninfo_ITAVs(AmiSSLExtBase, (hdr))
 
-OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new0_certProfile(__reg("a6") struct Library * , __reg("a0") struct stack_st_ASN1_UTF8STRING * certProfile ) = "\tjsr\t-6780(a6)";
+OSSL_CMP_ITAV * __OSSL_CMP_ITAV_new0_certProfile(__reg("a6") struct Library * , __reg("a0") STACK_OF(ASN1_UTF8STRING) * certProfile ) = "\tjsr\t-6780(a6)";
 #define OSSL_CMP_ITAV_new0_certProfile(certProfile) __OSSL_CMP_ITAV_new0_certProfile(AmiSSLExtBase, (certProfile))
 
-int __OSSL_CMP_ITAV_get0_certProfile(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_ITAV * itav , __reg("a1") struct stack_st_ASN1_UTF8STRING ** out ) = "\tjsr\t-6786(a6)";
+int __OSSL_CMP_ITAV_get0_certProfile(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_ITAV * itav , __reg("a1") STACK_OF(ASN1_UTF8STRING) ** out ) = "\tjsr\t-6786(a6)";
 #define OSSL_CMP_ITAV_get0_certProfile(itav, out) __OSSL_CMP_ITAV_get0_certProfile(AmiSSLExtBase, (itav), (out))
 
 X509_PUBKEY * __OSSL_CMP_MSG_get0_certreq_publickey(__reg("a6") struct Library * , __reg("a0") const OSSL_CMP_MSG * msg ) = "\tjsr\t-6792(a6)";
@@ -3415,7 +3415,7 @@ int __EVP_DigestSqueeze(__reg("a6") struct Library * , __reg("a0") EVP_MD_CTX * 
 int __ERR_pop(__reg("a6") struct Library * ) = "\tjsr\t-6810(a6)";
 #define ERR_pop() __ERR_pop(AmiSSLExtBase)
 
-struct stack_st_X509_OBJECT * __X509_STORE_get1_objects(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-6816(a6)";
+STACK_OF(X509_OBJECT) * __X509_STORE_get1_objects(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs ) = "\tjsr\t-6816(a6)";
 #define X509_STORE_get1_objects(xs) __X509_STORE_get1_objects(AmiSSLExtBase, (xs))
 
 OPENSSL_LHASH * __OPENSSL_LH_set_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_LHASH * lh , __reg("a1") OPENSSL_LH_HASHFUNCTHUNK hw , __reg("a2") OPENSSL_LH_COMPFUNCTHUNK cw , __reg("a3") OPENSSL_LH_DOALL_FUNC_THUNK daw , __reg("d0") OPENSSL_LH_DOALL_FUNCARG_THUNK daaw ) = "\tjsr\t-6822(a6)";

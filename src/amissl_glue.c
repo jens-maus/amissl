@@ -41867,28 +41867,28 @@ time_t SAVEDS ASM LIB_SSL_SESSION_set_time_ex(REG(a6, UNUSED __IFACE_OR_BASE), R
 
 // ---
 
-struct stack_st_OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_CTX * ctx))
+STACK_OF(OSSL_CMP_ITAV) * SAVEDS ASM LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_CTX * ctx))
 {
 	return OSSL_CMP_CTX_get0_geninfo_ITAVs(ctx);
 }
 
 // ---
 
-struct stack_st_OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_PKIHEADER * hdr))
+STACK_OF(OSSL_CMP_ITAV) * SAVEDS ASM LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_PKIHEADER * hdr))
 {
 	return OSSL_CMP_HDR_get0_geninfo_ITAVs(hdr);
 }
 
 // ---
 
-OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, struct stack_st_ASN1_UTF8STRING * certProfile))
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, STACK_OF(ASN1_UTF8STRING) * certProfile))
 {
 	return OSSL_CMP_ITAV_new0_certProfile(certProfile);
 }
 
 // ---
 
-int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, struct stack_st_ASN1_UTF8STRING ** out))
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_certProfile(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, STACK_OF(ASN1_UTF8STRING) ** out))
 {
 	return OSSL_CMP_ITAV_get0_certProfile(itav, out);
 }
@@ -41923,7 +41923,7 @@ int SAVEDS ASM LIB_ERR_pop(REG(a6, UNUSED __IFACE_OR_BASE))
 
 // ---
 
-struct stack_st_X509_OBJECT * SAVEDS ASM LIB_X509_STORE_get1_objects(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * xs))
+STACK_OF(X509_OBJECT) * SAVEDS ASM LIB_X509_STORE_get1_objects(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_STORE * xs))
 {
 	return X509_STORE_get1_objects(xs);
 }

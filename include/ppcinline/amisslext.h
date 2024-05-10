@@ -4523,19 +4523,19 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_CTX_get0_geninfo_ITAVs(___ctx) \
-      LP1(0x1a70, struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_CTX_get0_geninfo_ITAVs , const OSSL_CMP_CTX *, ___ctx, a0,\
+      LP1(0x1a70, STACK_OF(OSSL_CMP_ITAV) *, OSSL_CMP_CTX_get0_geninfo_ITAVs , const OSSL_CMP_CTX *, ___ctx, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_HDR_get0_geninfo_ITAVs(___hdr) \
-      LP1(0x1a76, struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_HDR_get0_geninfo_ITAVs , const OSSL_CMP_PKIHEADER *, ___hdr, a0,\
+      LP1(0x1a76, STACK_OF(OSSL_CMP_ITAV) *, OSSL_CMP_HDR_get0_geninfo_ITAVs , const OSSL_CMP_PKIHEADER *, ___hdr, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_ITAV_new0_certProfile(___certProfile) \
-      LP1(0x1a7c, OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new0_certProfile , struct stack_st_ASN1_UTF8STRING *, ___certProfile, a0,\
+      LP1(0x1a7c, OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new0_certProfile , STACK_OF(ASN1_UTF8STRING) *, ___certProfile, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_ITAV_get0_certProfile(___itav, ___out) \
-      LP2(0x1a82, int, OSSL_CMP_ITAV_get0_certProfile , const OSSL_CMP_ITAV *, ___itav, a0, struct stack_st_ASN1_UTF8STRING **, ___out, a1,\
+      LP2(0x1a82, int, OSSL_CMP_ITAV_get0_certProfile , const OSSL_CMP_ITAV *, ___itav, a0, STACK_OF(ASN1_UTF8STRING) **, ___out, a1,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OSSL_CMP_MSG_get0_certreq_publickey(___msg) \
@@ -4555,7 +4555,7 @@ typedef ULONG _sfdc_vararg;
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define X509_STORE_get1_objects(___xs) \
-      LP1(0x1aa0, struct stack_st_X509_OBJECT *, X509_STORE_get1_objects , X509_STORE *, ___xs, a0,\
+      LP1(0x1aa0, STACK_OF(X509_OBJECT) *, X509_STORE_get1_objects , X509_STORE *, ___xs, a0,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
 #define OPENSSL_LH_set_thunks(___lh, ___hw, ___cw, ___daw, ___daaw) \

@@ -7343,24 +7343,24 @@ typedef ULONG _sfdc_vararg;
      struct Library *, AMISSLEXT_BASE_NAME, 1127, Amisslext)
 
 #define OSSL_CMP_CTX_get0_geninfo_ITAVs(___ctx) \
-      AROS_LC1(struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_CTX_get0_geninfo_ITAVs, \
+      AROS_LC1(STACK_OF(OSSL_CMP_ITAV) *, OSSL_CMP_CTX_get0_geninfo_ITAVs, \
  AROS_LCA(const OSSL_CMP_CTX *, (___ctx), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1128, Amisslext)
 
 #define OSSL_CMP_HDR_get0_geninfo_ITAVs(___hdr) \
-      AROS_LC1(struct stack_st_OSSL_CMP_ITAV *, OSSL_CMP_HDR_get0_geninfo_ITAVs, \
+      AROS_LC1(STACK_OF(OSSL_CMP_ITAV) *, OSSL_CMP_HDR_get0_geninfo_ITAVs, \
  AROS_LCA(const OSSL_CMP_PKIHEADER *, (___hdr), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1129, Amisslext)
 
 #define OSSL_CMP_ITAV_new0_certProfile(___certProfile) \
       AROS_LC1(OSSL_CMP_ITAV *, OSSL_CMP_ITAV_new0_certProfile, \
- AROS_LCA(struct stack_st_ASN1_UTF8STRING *, (___certProfile), A0), \
+ AROS_LCA(STACK_OF(ASN1_UTF8STRING) *, (___certProfile), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1130, Amisslext)
 
 #define OSSL_CMP_ITAV_get0_certProfile(___itav, ___out) \
       AROS_LC2(int, OSSL_CMP_ITAV_get0_certProfile, \
  AROS_LCA(const OSSL_CMP_ITAV *, (___itav), A0), \
- AROS_LCA(struct stack_st_ASN1_UTF8STRING **, (___out), A1), \
+ AROS_LCA(STACK_OF(ASN1_UTF8STRING) **, (___out), A1), \
      struct Library *, AMISSLEXT_BASE_NAME, 1131, Amisslext)
 
 #define OSSL_CMP_MSG_get0_certreq_publickey(___msg) \
@@ -7387,7 +7387,7 @@ typedef ULONG _sfdc_vararg;
      struct Library *, AMISSLEXT_BASE_NAME, 1135, Amisslext)
 
 #define X509_STORE_get1_objects(___xs) \
-      AROS_LC1(struct stack_st_X509_OBJECT *, X509_STORE_get1_objects, \
+      AROS_LC1(STACK_OF(X509_OBJECT) *, X509_STORE_get1_objects, \
  AROS_LCA(X509_STORE *, (___xs), A0), \
      struct Library *, AMISSLEXT_BASE_NAME, 1136, Amisslext)
 

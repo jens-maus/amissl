@@ -11823,39 +11823,39 @@ time_t LIBSTUB_SSL_SESSION_set_time_ex(void)
   return LIB_SSL_SESSION_set_time_ex(_base, ___s, ___t);
 }
 
-struct stack_st_OSSL_CMP_ITAV * LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_CTX * ___ctx);
+STACK_OF(OSSL_CMP_ITAV) * LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_CTX * ___ctx);
 
-struct stack_st_OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_CTX_get0_geninfo_ITAVs(void)
+STACK_OF(OSSL_CMP_ITAV) * LIBSTUB_OSSL_CMP_CTX_get0_geninfo_ITAVs(void)
 {
   const OSSL_CMP_CTX * ___ctx = (const OSSL_CMP_CTX *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_CTX_get0_geninfo_ITAVs(_base, ___ctx);
 }
 
-struct stack_st_OSSL_CMP_ITAV * LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_PKIHEADER * ___hdr);
+STACK_OF(OSSL_CMP_ITAV) * LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(struct Library * _base, const OSSL_CMP_PKIHEADER * ___hdr);
 
-struct stack_st_OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_HDR_get0_geninfo_ITAVs(void)
+STACK_OF(OSSL_CMP_ITAV) * LIBSTUB_OSSL_CMP_HDR_get0_geninfo_ITAVs(void)
 {
   const OSSL_CMP_PKIHEADER * ___hdr = (const OSSL_CMP_PKIHEADER *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_HDR_get0_geninfo_ITAVs(_base, ___hdr);
 }
 
-OSSL_CMP_ITAV * LIB_OSSL_CMP_ITAV_new0_certProfile(struct Library * _base, struct stack_st_ASN1_UTF8STRING * ___certProfile);
+OSSL_CMP_ITAV * LIB_OSSL_CMP_ITAV_new0_certProfile(struct Library * _base, STACK_OF(ASN1_UTF8STRING) * ___certProfile);
 
 OSSL_CMP_ITAV * LIBSTUB_OSSL_CMP_ITAV_new0_certProfile(void)
 {
-  struct stack_st_ASN1_UTF8STRING * ___certProfile = (struct stack_st_ASN1_UTF8STRING *)REG_A0;
+  STACK_OF(ASN1_UTF8STRING) * ___certProfile = (STACK_OF(ASN1_UTF8STRING) *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_ITAV_new0_certProfile(_base, ___certProfile);
 }
 
-int LIB_OSSL_CMP_ITAV_get0_certProfile(struct Library * _base, const OSSL_CMP_ITAV * ___itav, struct stack_st_ASN1_UTF8STRING ** ___out);
+int LIB_OSSL_CMP_ITAV_get0_certProfile(struct Library * _base, const OSSL_CMP_ITAV * ___itav, STACK_OF(ASN1_UTF8STRING) ** ___out);
 
 int LIBSTUB_OSSL_CMP_ITAV_get0_certProfile(void)
 {
   const OSSL_CMP_ITAV * ___itav = (const OSSL_CMP_ITAV *)REG_A0;
-  struct stack_st_ASN1_UTF8STRING ** ___out = (struct stack_st_ASN1_UTF8STRING **)REG_A1;
+  STACK_OF(ASN1_UTF8STRING) ** ___out = (STACK_OF(ASN1_UTF8STRING) **)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
   return LIB_OSSL_CMP_ITAV_get0_certProfile(_base, ___itav, ___out);
 }
@@ -11899,9 +11899,9 @@ int LIBSTUB_ERR_pop(void)
   return LIB_ERR_pop(_base);
 }
 
-struct stack_st_X509_OBJECT * LIB_X509_STORE_get1_objects(struct Library * _base, X509_STORE * ___xs);
+STACK_OF(X509_OBJECT) * LIB_X509_STORE_get1_objects(struct Library * _base, X509_STORE * ___xs);
 
-struct stack_st_X509_OBJECT * LIBSTUB_X509_STORE_get1_objects(void)
+STACK_OF(X509_OBJECT) * LIBSTUB_X509_STORE_get1_objects(void)
 {
   X509_STORE * ___xs = (X509_STORE *)REG_A0;
   struct Library * _base = (struct Library *)REG_A6;
