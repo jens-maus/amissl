@@ -4,7 +4,7 @@
  * via Makefile.in
  *
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2023 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2024 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
