@@ -158,7 +158,6 @@ CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
     new->prior_signal = ossl_crypto_condvar_new();
     new->alloc_lock = ossl_crypto_mutex_new();
     new->prior_lock = ossl_crypto_mutex_new();
-    new->write_lock = ossl_crypto_mutex_new();
     new->qp_group = allocate_new_qp_group(new, num_writers + 1);
     if (new->qp_group == NULL
         || new->alloc_signal == NULL
@@ -190,7 +189,7 @@ void ossl_rcu_lock_free(CRYPTO_RCU_LOCK *lock)
     OPENSSL_free(lock);
 }
 
-static inline struct rcu_qp *get_hold_current_qp(CRYPTO_RCU_LOCK *lock)
+static ossl_inline struct rcu_qp *get_hold_current_qp(CRYPTO_RCU_LOCK *lock)
 {
     uint32_t qp_idx;
 
