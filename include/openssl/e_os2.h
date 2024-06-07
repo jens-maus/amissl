@@ -5,7 +5,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -253,6 +253,7 @@ typedef INT32 int32_t;
 typedef UINT32 uint32_t;
 typedef INT64 int64_t;
 typedef UINT64 uint64_t;
+typedef UINTN uintptr_t;
 # elif defined(OPENSSL_SYS_AMIGA)
 #  include <amissl/types.h>
 # elif (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || \

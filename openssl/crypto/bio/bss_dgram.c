@@ -560,7 +560,11 @@ static long dgram_ctrl(BIO *b, int cmd, long num, void *ptr)
     socklen_t addr_len;
     BIO_ADDR addr;
 # endif
+# if defined(OPENSSL_SYS_AMIGA)
+    struct sockaddr ss;
+# else
     struct sockaddr_storage ss;
+# endif
     socklen_t ss_len = sizeof(ss);
 
     data = (bio_dgram_data *)b->ptr;

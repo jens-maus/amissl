@@ -1,3 +1,14 @@
+## AmiSSL 5.16 (7.6.2024)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.3.1 (4.6.2024) version which includes these low severity
+  bug fixes and mitigations:
+  + Fixed potential use after free after SSL_free_buffers() is called.
+    (CVE-2024-4741)
+  + Fixed an issue where checking excessively long DSA keys or
+    parameters may be very slow.
+    (CVE-2024-4603)
+
 ## AmiSSL 5.15 (10.5.2024)
 
 - Switched to OpenSSL 3.3, with full compatibility with the latest
