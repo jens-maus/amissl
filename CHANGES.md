@@ -1,3 +1,6 @@
+- Refactored the OpenSSL locking and mutex routines to remove the
+  unnecessary duplication of code.
+
 ## AmiSSL 5.16 (7.6.2024)
 
 - Updated OpenSSL backend to full compatibility with the latest

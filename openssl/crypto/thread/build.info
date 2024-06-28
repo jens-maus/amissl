@@ -2,6 +2,7 @@ LIBS=../../libcrypto
 
 $THREADS_ARCH=\
       arch.c  \
+      arch/thread_amissl.c \
       arch/thread_win.c arch/thread_posix.c arch/thread_none.c
 
 IF[{- !$disabled{'thread-pool'} -}]

@@ -9,7 +9,9 @@
 
 #ifndef OPENSSL_RCU_H
 # define OPENSSL_RCU_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 typedef void (*rcu_cb_fn)(void *data);
 

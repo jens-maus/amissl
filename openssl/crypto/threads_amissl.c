@@ -24,6 +24,7 @@
 
 #include <openssl/crypto.h>
 #include <openssl/lhash.h>
+#include "internal/thread_arch.h"
 #include "internal/rcu.h"
 #include "rcu_internal.h"
 
@@ -32,29 +33,15 @@
 # include <proto/exec.h>
 
 # if defined(__amigaos4__)
-
-#  define ALLOC_LOCK(mutex, noop) mutex = AllocSysObject(ASOT_MUTEX, NULL)
-#  define FREE_LOCK(mutex) if (mutex != NULL) FreeSysObject(ASOT_MUTEX, mutex)
-#  define OBTAIN_LOCK(mutex) MutexObtain(mutex)
-#  define OBTAIN_SHARED_LOCK(mutex) OBTAIN_LOCK(mutex)
-#  define RELEASE_LOCK(mutex) MutexRelease(mutex)
-
-static APTR RunOnceLock = NULL;
-
+#  define OBTAIN_SHARED_LOCK(mutex) ossl_crypto_mutex_lock(mutex)
 # else
-
-#  define ALLOC_LOCK(sem, type) if ((sem = OPENSSL_zalloc(sizeof(type))) != NULL) InitSemaphore((struct SignalSemaphore *)sem)
-#  define FREE_LOCK(sem) if (sem != NULL) OPENSSL_free(sem)
-#  define OBTAIN_LOCK(sem) ObtainSemaphore((struct SignalSemaphore *)sem)
 #  define OBTAIN_SHARED_LOCK(sem) ObtainSemaphoreShared((struct SignalSemaphore *)sem)
-#  define RELEASE_LOCK(sem) ReleaseSemaphore((struct SignalSemaphore *)sem)
-
-static struct SignalSemaphore *RunOnceLock = NULL;
-
 # endif
 
+static CRYPTO_MUTEX *RunOnceLock = NULL;
+
 struct rcu_lock_st {
-    CRYPTO_RWLOCK *lock;
+    CRYPTO_MUTEX *mutex;
     struct rcu_cb_item *cb_items;
 };
 
@@ -64,7 +51,7 @@ CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
 
     if((lock = OPENSSL_zalloc(sizeof(*lock))))
     {
-        if((lock->lock = CRYPTO_THREAD_lock_new()))
+        if((lock->mutex = ossl_crypto_mutex_new()))
 	{
 	    return lock;
 	}
@@ -76,28 +63,28 @@ CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
 
 void ossl_rcu_lock_free(CRYPTO_RCU_LOCK *lock)
 {
-    CRYPTO_THREAD_lock_free(lock->lock);
+    ossl_crypto_mutex_free(&lock->mutex);
     OPENSSL_free(lock);
 }
 
 void ossl_rcu_read_lock(CRYPTO_RCU_LOCK *lock)
 {
-    CRYPTO_THREAD_read_lock(lock->lock);
+    OBTAIN_SHARED_LOCK(lock->mutex);
 }
 
 void ossl_rcu_write_lock(CRYPTO_RCU_LOCK *lock)
 {
-    CRYPTO_THREAD_write_lock(lock->lock);
+    ossl_crypto_mutex_lock(lock->mutex);
 }
 
 void ossl_rcu_write_unlock(CRYPTO_RCU_LOCK *lock)
 {
-    CRYPTO_THREAD_unlock(lock->lock);
+    ossl_crypto_mutex_unlock(lock->mutex);
 }
 
 void ossl_rcu_read_unlock(CRYPTO_RCU_LOCK *lock)
 {
-    CRYPTO_THREAD_unlock(lock->lock);
+    ossl_crypto_mutex_unlock(lock->mutex);
 }
 
 void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
@@ -105,7 +92,7 @@ void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
     struct rcu_cb_item *items;
     struct rcu_cb_item *tmp;
 
-    CRYPTO_THREAD_write_lock(lock->lock);
+    ossl_crypto_mutex_lock(lock->mutex);
 
     items = lock->cb_items;
     lock->cb_items = NULL;
@@ -117,7 +104,7 @@ void ossl_synchronize_rcu(CRYPTO_RCU_LOCK *lock)
         items = tmp;
     }
 
-    CRYPTO_THREAD_unlock(lock->lock);
+    ossl_crypto_mutex_unlock(lock->mutex);
 }
 
 int ossl_rcu_call(CRYPTO_RCU_LOCK *lock, rcu_cb_fn cb, void *data)
@@ -127,14 +114,14 @@ int ossl_rcu_call(CRYPTO_RCU_LOCK *lock, rcu_cb_fn cb, void *data)
     if (new == NULL)
         return 0;
 
-    CRYPTO_THREAD_write_lock(lock->lock);
+    ossl_crypto_mutex_lock(lock->mutex);
 
     new->fn = cb;
     new->data = data;
     new->next = lock->cb_items;
     lock->cb_items = new;
 
-    CRYPTO_THREAD_unlock(lock->lock);
+    ossl_crypto_mutex_unlock(lock->mutex);
 
     return 1;
 }
@@ -151,21 +138,19 @@ void ossl_rcu_assign_uptr(void **p, void **v)
 
 int CRYPTO_THREAD_setup(void)
 {
-    ALLOC_LOCK(RunOnceLock, struct SignalSemaphore);
+    RunOnceLock = ossl_crypto_mutex_new();
     return (RunOnceLock != NULL) ? 1 : 0;
 }
 
 int CRYPTO_THREAD_cleanup(void)
 {
-    FREE_LOCK(RunOnceLock);
+    ossl_crypto_mutex_free(&RunOnceLock);
     return 1;
 }
 
 CRYPTO_RWLOCK *CRYPTO_THREAD_lock_new(void)
 {
-    CRYPTO_RWLOCK *lock;
-    ALLOC_LOCK(lock, struct SignalSemaphore);
-    return lock;
+    return (CRYPTO_RWLOCK *)ossl_crypto_mutex_new();
 }
 
 __owur int CRYPTO_THREAD_read_lock(CRYPTO_RWLOCK *lock)
@@ -176,31 +161,32 @@ __owur int CRYPTO_THREAD_read_lock(CRYPTO_RWLOCK *lock)
 
 __owur int CRYPTO_THREAD_write_lock(CRYPTO_RWLOCK *lock)
 {
-    OBTAIN_LOCK(lock);
+    ossl_crypto_mutex_lock(lock);
     return 1;
 }
 
 int CRYPTO_THREAD_unlock(CRYPTO_RWLOCK *lock)
 {
-    RELEASE_LOCK(lock);
+    ossl_crypto_mutex_unlock(lock);
     return 1;
 }
 
 void CRYPTO_THREAD_lock_free(CRYPTO_RWLOCK *lock)
 {
-    FREE_LOCK(lock);
+    CRYPTO_MUTEX *mutex = (CRYPTO_MUTEX *)lock;
+    ossl_crypto_mutex_free(&mutex);
 }
 
 int CRYPTO_THREAD_run_once(CRYPTO_ONCE *once, void (*init)(void))
 {
-    OBTAIN_LOCK(RunOnceLock);
+    ossl_crypto_mutex_lock(RunOnceLock);
 
     if (*once == CRYPTO_ONCE_STATIC_INIT) {
         init();
         *once = 1;
     }
 
-    RELEASE_LOCK(RunOnceLock);
+    ossl_crypto_mutex_unlock(RunOnceLock);
 
     return 1;
 }
@@ -211,40 +197,27 @@ typedef struct thread_entry_st
 	void *data;
 } THREAD_ENTRY;
 
-# if defined(__amigaos4__)
+typedef struct thread_key_st
+{
+    CRYPTO_MUTEX *mutex;
+    LHASH_OF(THREAD_ENTRY) *hashtable;
+} THREAD_KEY;
 
-#  define ALLOC_THREAD_KEY(key) \
+# define ALLOC_THREAD_KEY(key)			    \
   if ((key = OPENSSL_malloc(sizeof(THREAD_KEY)))) { \
-    if ((ALLOC_LOCK(key->lock, 0)) == NULL) {	    \
+    if ((key->mutex = ossl_crypto_mutex_new()) == NULL) {	\
       OPENSSL_free(key); \
       key = NULL; \
     } \
   }
-#  define FREE_THREAD_KEY(key) if (key != NULL) { FREE_LOCK(key->lock); OPENSSL_free(key); } 
-#  define LOCK_THREAD_KEY(key) OBTAIN_LOCK(key->lock)
-#  define LOCK_SHARED_THREAD_KEY(key) OBTAIN_LOCK(key->lock)
-#  define UNLOCK_THREAD_KEY(key) RELEASE_LOCK(key->lock)
+# define FREE_THREAD_KEY(key) if (key != NULL) { ossl_crypto_mutex_free(&key->mutex); OPENSSL_free(key); }
+# define LOCK_THREAD_KEY(key) ossl_crypto_mutex_lock(key->mutex)
+# define UNLOCK_THREAD_KEY(key) ossl_crypto_mutex_unlock(key->mutex)
 
-typedef struct thread_key_st
-{
-    APTR lock;
-    LHASH_OF(THREAD_ENTRY) *hashtable;
-} THREAD_KEY;
-
+# if defined(__amigaos4__)
+#  define LOCK_SHARED_THREAD_KEY(key) LOCK_THREAD_KEY(key)
 # else
-
-#  define ALLOC_THREAD_KEY(key) ALLOC_LOCK(key, THREAD_KEY)
-#  define FREE_THREAD_KEY(key) FREE_LOCK(&(key->lock))
-#  define LOCK_THREAD_KEY(key) OBTAIN_LOCK(&(key->lock))
-#  define LOCK_SHARED_THREAD_KEY(key) OBTAIN_SHARED_LOCK(&(key->lock))
-#  define UNLOCK_THREAD_KEY(key) RELEASE_LOCK(&(key->lock))
-
-typedef struct thread_key_st
-{
-    struct SignalSemaphore lock;
-    LHASH_OF(THREAD_ENTRY) *hashtable;
-} THREAD_KEY;
-
+#  define LOCK_SHARED_THREAD_KEY(key) OBTAIN_SHARED_LOCK(key->mutex)
 # endif
 
 DEFINE_LHASH_OF_EX(THREAD_ENTRY);
@@ -380,12 +353,12 @@ int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
     if (lock == NULL)
 	return 0;
 
-    CRYPTO_THREAD_write_lock(lock);
+    ossl_crypto_mutex_lock(lock);
 
     *val += amount;
     *ret  = *val;
 
-    CRYPTO_THREAD_unlock(lock);
+    ossl_crypto_mutex_unlock(lock);
 
     return 1;
 }
@@ -396,12 +369,12 @@ int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
     if (lock == NULL)
 	return 0;
 
-    CRYPTO_THREAD_write_lock(lock);
+    ossl_crypto_mutex_lock(lock);
 
     *val |= op;
     *ret  = *val;
 
-    CRYPTO_THREAD_unlock(lock);
+    ossl_crypto_mutex_unlock(lock);
 
     return 1;
 }
@@ -411,11 +384,11 @@ int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
     if (lock == NULL)
 	return 0;
 
-    CRYPTO_THREAD_read_lock(lock);
+    ossl_crypto_mutex_lock(lock);
 
     *ret  = *val;
 
-    CRYPTO_THREAD_unlock(lock);
+    ossl_crypto_mutex_unlock(lock);
 
     return 1;
 }
@@ -425,11 +398,11 @@ int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
     if (lock == NULL)
 	return 0;
 
-    CRYPTO_THREAD_read_lock(lock);
+    ossl_crypto_mutex_lock(lock);
 
     *ret  = *val;
 
-    CRYPTO_THREAD_unlock(lock);
+    ossl_crypto_mutex_unlock(lock);
 
     return 1;
 }
