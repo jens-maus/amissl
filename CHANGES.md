@@ -1,3 +1,5 @@
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 2.7.2024.
 - Refactored the OpenSSL locking and mutex routines to remove the
   unnecessary duplication of code.
 
