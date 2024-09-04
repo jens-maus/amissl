@@ -1,3 +1,12 @@
+## AmiSSL 5.17 (4.9.2024)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.3.2 (3.9.2024) version which includes these moderate and
+  low severity bug fixes and mitigations:
+  + Fixed possible denial of service in X.509 name checks.
+    (CVE-2024-6119)
+  + Fixed possible buffer overread in SSL_select_next_proto().
+    (CVE-2024-5535)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 2.7.2024.
 - Refactored the OpenSSL locking and mutex routines to remove the

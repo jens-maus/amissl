@@ -45,17 +45,16 @@ struct rcu_lock_st {
     struct rcu_cb_item *cb_items;
 };
 
-CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers)
+CRYPTO_RCU_LOCK *ossl_rcu_lock_new(int num_writers, OSSL_LIB_CTX *ctx)
 {
-    struct rcu_lock_st *lock;
-
-    if((lock = OPENSSL_zalloc(sizeof(*lock))))
+    struct rcu_lock_st *new;
+    if((new = OPENSSL_zalloc(sizeof(*new))))
     {
-        if((lock->mutex = ossl_crypto_mutex_new()))
-	{
-	    return lock;
-	}
-	OPENSSL_free(lock);
+        if((new->mutex = ossl_crypto_mutex_new()))
+        {
+	    return new;
+        }
+        OPENSSL_free(new);
     }
 
     return NULL;
