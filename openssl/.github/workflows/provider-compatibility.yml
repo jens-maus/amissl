@@ -31,7 +31,7 @@ jobs:
           # Formally released versions should be added here.
           #     `dir' it the directory inside the tarball.
           #     `tgz' is the name of the tarball.
-          #     `utl' is the download URL.
+          #     `url' is the download URL.
           {
             dir: openssl-3.0.0,
             tgz: openssl-3.0.0.tar.gz,
@@ -93,7 +93,7 @@ jobs:
                                                  -providers
         working-directory: ${{ matrix.release.dir }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.release.tgz }}
           path: ${{ matrix.release.tgz }}
@@ -116,6 +116,18 @@ jobs:
             name: openssl-3.1,
             dir: branch-3.1,
             tgz: branch-3.1.tar.gz,
+          }, {
+            name: openssl-3.2,
+            dir: branch-3.2,
+            tgz: branch-3.2.tar.gz,
+          }, {
+            name: openssl-3.3,
+            dir: branch-3.3,
+            tgz: branch-3.3.tar.gz,
+          }, {
+            name: openssl-3.4,
+            dir: branch-3.4,
+            tgz: branch-3.4.tar.gz,
           }, {
             name: master,
             dir: branch-master,
@@ -169,7 +181,7 @@ jobs:
         run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
         working-directory: ${{ matrix.branch.dir }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.branch.tgz }}
           path: ${{ matrix.branch.tgz }}
@@ -187,9 +199,11 @@ jobs:
         # Note that releases are not used as a test environment for
         # later providers.  Problems in these situations ought to be
         # caught by cross branch testing before the release.
-        tree_a: [ branch-master, branch-3.1, branch-3.0,
+        tree_a: [ branch-master, branch-3.4, branch-3.3,
+                  branch-3.2, branch-3.1, branch-3.0,
                   openssl-3.0.0, openssl-3.0.8, openssl-3.0.9, openssl-3.1.2 ]
-        tree_b: [ branch-master, branch-3.1, branch-3.0  ]
+        tree_b: [ branch-master, branch-3.4, branch-3.3,
+                  branch-3.2, branch-3.1, branch-3.0  ]
     steps:
       - name: early exit checks
         id: early_exit
@@ -201,7 +215,7 @@ jobs:
           fi
         continue-on-error: true
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.8
         if: steps.early_exit.outcome == 'success'
         with:
           name: ${{ matrix.tree_a }}.tar.gz
@@ -209,7 +223,7 @@ jobs:
         if: steps.early_exit.outcome == 'success'
         run: tar xzf "${{ matrix.tree_a }}.tar.gz"
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.8
         if: steps.early_exit.outcome == 'success'
         with:
           name: ${{ matrix.tree_b }}.tar.gz

@@ -25,6 +25,12 @@ jobs:
       matrix:
         branches: [
           {
+            branch: openssl-3.3,
+            extra_config: no-afalgeng enable-fips enable-tfo
+          }, {
+            branch: openssl-3.2,
+            extra_config: no-afalgeng enable-fips enable-tfo
+          }, {
             branch: openssl-3.1,
             extra_config: no-afalgeng enable-fips
           }, {
@@ -66,7 +72,7 @@ jobs:
         cat /proc/cpuinfo
         ./util/opensslwrap.sh version -c
     - name: make test
-      run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} TESTS='-test_external_krb5'
+      run: make test TESTS='-test_external_krb5'
     - name: generate coverage info
       run: lcov -d . -c
              --exclude "${PWD}/test/*"
@@ -76,7 +82,7 @@ jobs:
              --exclude "/usr/include/*"
               -o ./lcov.info
     - name: Coveralls upload
-      uses: coverallsapp/github-action@v2.3.0
+      uses: coverallsapp/github-action@v2.3.2
       with:
         github-token: ${{ secrets.github_token }}
         git-branch: ${{ matrix.branches.branch }}
