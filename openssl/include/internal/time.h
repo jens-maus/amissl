@@ -66,7 +66,7 @@ OSSL_TIME ossl_ticks2time(uint64_t ticks)
     OSSL_TIME r;
 
     r = ticks;
-    return ticks;
+    return r;
 }
 
 /* Convert a time to a tick count */
