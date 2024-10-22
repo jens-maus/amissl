@@ -36,9 +36,9 @@ FILE *freopen(const char *filename,const char *mode,FILE *stream)
 		}
 		stream->file=0l;
 	}
+#endif
 	if(error)
 		return NULL;
-#endif
 
 	if(filename!=NULL)
 	{

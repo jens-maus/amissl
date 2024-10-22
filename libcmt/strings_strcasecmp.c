@@ -81,7 +81,5 @@ strcasecmp(const char * _s1, const char * _s2)
 		result = (int)c1 - (int)c2;
 	}
 
- out:
-
 	return(result);
 }

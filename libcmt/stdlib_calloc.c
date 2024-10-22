@@ -42,7 +42,11 @@
 /****************************************************************************/
 
 STATIC void *
+#ifdef __MEM_DEBUG
 __calloc(size_t num_elements,size_t element_size,const char * file,int line)
+#else
+__calloc(size_t num_elements,size_t element_size)
+#endif
 {
 	void * result = NULL;
 	size_t total_size;
@@ -69,7 +73,11 @@ calloc(size_t num_elements,size_t element_size)
 {
 	void * result;
 
+#ifdef __MEM_DEBUG
 	result = __calloc(num_elements,element_size,NULL,0);
+#else
+	result = __calloc(num_elements,element_size);
+#endif
 
 	return(result);
 }
