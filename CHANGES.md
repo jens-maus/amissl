@@ -1,3 +1,11 @@
+## AmiSSL 5.18 (23.10.2024)
+
+- Switched to OpenSSL 3.4, with full compatibility with the latest
+  OpenSSL 3.4.0 (22.10.2024) version, which includes new features,
+  improvements and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 24.9.2024.
+
 ## AmiSSL 5.17 (4.9.2024)
 
 - Updated OpenSSL backend to full compatibility with the latest

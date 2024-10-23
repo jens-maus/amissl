@@ -1176,6 +1176,192 @@ STACK_OF(X509_OBJECT) * SAVEDS ASM LIB_X509_STORE_get1_objects(REG(a6, __IFACE_O
 OPENSSL_LHASH * SAVEDS ASM LIB_OPENSSL_LH_set_thunks(REG(a6, __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(a1, OPENSSL_LH_HASHFUNCTHUNK hw), REG(a2, OPENSSL_LH_COMPFUNCTHUNK cw), REG(a3, OPENSSL_LH_DOALL_FUNC_THUNK daw), REG(d0, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw));
 void SAVEDS ASM LIB_OPENSSL_LH_doall_arg_thunk(REG(a6, __IFACE_OR_BASE), REG(a0, OPENSSL_LHASH * lh), REG(d0, OPENSSL_LH_DOALL_FUNCARG_THUNK daaw), REG(d1, OPENSSL_LH_DOALL_FUNCARG fn), REG(a1, void * arg));
 void SAVEDS ASM LIB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_HTTP_REQ_CTX * rctx), REG(d0, size_t count));
+void SAVEDS ASM LIB_SSL_CTX_flush_sessions_ex(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, time_t tm));
+int SAVEDS ASM LIB_SSL_CTX_set_block_padding_ex(REG(a6, __IFACE_OR_BASE), REG(a0, SSL_CTX * ctx), REG(d0, size_t app_block_size), REG(d1, size_t hs_block_size));
+int SAVEDS ASM LIB_SSL_set_block_padding_ex(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * ssl), REG(d0, size_t app_block_size), REG(d1, size_t hs_block_size));
+char * SAVEDS ASM LIB_SSL_get1_builtin_sigalgs(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * libctx));
+DIST_POINT_NAME * SAVEDS ASM LIB_DIST_POINT_NAME_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const DIST_POINT_NAME * a));
+int SAVEDS ASM LIB_GENERAL_NAME_set1_X509_NAME(REG(a6, __IFACE_OR_BASE), REG(a0, GENERAL_NAME ** tgt), REG(a1, const X509_NAME * src));
+OSSL_CMP_CRLSTATUS * SAVEDS ASM LIB_OSSL_CMP_CRLSTATUS_create(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_CRL * crl), REG(a1, const X509 * cert), REG(d0, int only_DN));
+void SAVEDS ASM LIB_OSSL_CMP_CRLSTATUS_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_CRLSTATUS * crlstatus));
+int SAVEDS ASM LIB_OSSL_CMP_CRLSTATUS_get0(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_CRLSTATUS * crlstatus), REG(a1, DIST_POINT_NAME ** dpn), REG(a2, GENERAL_NAMES ** issuer), REG(a3, ASN1_TIME ** thisUpdate));
+OSSL_CMP_CRLSTATUS * SAVEDS ASM LIB_OSSL_CMP_CRLSTATUS_new1(REG(a6, __IFACE_OR_BASE), REG(a0, const DIST_POINT_NAME * dpn), REG(a1, const GENERAL_NAMES * issuer), REG(a2, const ASN1_TIME * thisUpdate));
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_crlStatusList(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, STACK_OF(OSSL_CMP_CRLSTATUS) ** out));
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get0_crls(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * it), REG(a1, STACK_OF(X509_CRL) ** out));
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new0_crlStatusList(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(OSSL_CMP_CRLSTATUS) * crlStatusList));
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new_crls(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_CRL * crls));
+int SAVEDS ASM LIB_OSSL_CMP_get1_crlUpdate(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx), REG(a1, const X509 * crlcert), REG(a2, const X509_CRL * last_crl), REG(a3, X509_CRL ** crl));
+OSSL_CMP_ITAV * SAVEDS ASM LIB_OSSL_CMP_ITAV_new0_certReqTemplate(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CRMF_CERTTEMPLATE * certTemplate), REG(a1, OSSL_CMP_ATAVS * keySpec));
+int SAVEDS ASM LIB_OSSL_CMP_ITAV_get1_certReqTemplate(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ITAV * itav), REG(a1, OSSL_CRMF_CERTTEMPLATE ** certTemplate), REG(a2, OSSL_CMP_ATAVS ** keySpec));
+OSSL_CMP_ATAV * SAVEDS ASM LIB_OSSL_CMP_ATAV_create(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_OBJECT * type), REG(a1, ASN1_TYPE * value));
+void SAVEDS ASM LIB_OSSL_CMP_ATAV_set0(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_ATAV * itav), REG(a1, ASN1_OBJECT * type), REG(a2, ASN1_TYPE * value));
+ASN1_OBJECT * SAVEDS ASM LIB_OSSL_CMP_ATAV_get0_type(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ATAV * itav));
+ASN1_TYPE * SAVEDS ASM LIB_OSSL_CMP_ATAV_get0_value(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ATAV * itav));
+OSSL_CMP_ATAV * SAVEDS ASM LIB_OSSL_CMP_ATAV_new_algId(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ALGOR * alg));
+X509_ALGOR * SAVEDS ASM LIB_OSSL_CMP_ATAV_get0_algId(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ATAV * atav));
+OSSL_CMP_ATAV * SAVEDS ASM LIB_OSSL_CMP_ATAV_new_rsaKeyLen(REG(a6, __IFACE_OR_BASE), REG(d0, int len));
+int SAVEDS ASM LIB_OSSL_CMP_ATAV_get_rsaKeyLen(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ATAV * atav));
+int SAVEDS ASM LIB_OSSL_CMP_ATAV_push1(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_ATAVS ** sk_p), REG(a1, const OSSL_CMP_ATAV * atav));
+int SAVEDS ASM LIB_OSSL_CMP_get1_certReqTemplate(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_CTX * ctx), REG(a1, OSSL_CRMF_CERTTEMPLATE ** certTemplate), REG(a2, OSSL_CMP_ATAVS ** keySpec));
+OSSL_CMP_ATAVS * SAVEDS ASM LIB_d2i_OSSL_CMP_ATAVS(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_ATAVS ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_CMP_ATAVS(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CMP_ATAVS * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_CMP_ATAVS_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CMP_ATAVS * a));
+OSSL_CMP_ATAVS * SAVEDS ASM LIB_OSSL_CMP_ATAVS_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_CMP_ATAVS_it(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_CRMF_ATTRIBUTETYPEANDVALUE * v));
+OSSL_CRMF_ATTRIBUTETYPEANDVALUE * SAVEDS ASM LIB_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CRMF_ATTRIBUTETYPEANDVALUE * a));
+OSSL_CRMF_CERTTEMPLATE * SAVEDS ASM LIB_OSSL_CRMF_CERTTEMPLATE_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_CRMF_CERTTEMPLATE * a));
+int SAVEDS ASM LIB_CRYPTO_atomic_store(REG(a6, __IFACE_OR_BASE), REG(a0, uint64_t * dst), REG(d0, uint64_t val), REG(a1, CRYPTO_RWLOCK * lock));
+void * SAVEDS ASM LIB_CRYPTO_aligned_alloc(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t align), REG(a0, void ** freeptr), REG(a1, const char * file), REG(d2, int line));
+STACK_OF(X509_EXTENSION) * SAVEDS ASM LIB_X509v3_add_extensions(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_EXTENSION) ** target), REG(a1, const STACK_OF(X509_EXTENSION) * exts));
+int SAVEDS ASM LIB_PKCS12_set_pbmac1_pbkdf2(REG(a6, __IFACE_OR_BASE), REG(a0, PKCS12 * p12), REG(a1, const char * pass), REG(d0, int passlen), REG(a2, unsigned char * salt), REG(d1, int saltlen), REG(d2, int iter), REG(a3, const EVP_MD * md_type), REG(d3, const char * prf_md_name));
+PBKDF2PARAM * SAVEDS ASM LIB_PBMAC1_get1_pbkdf2_param(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ALGOR * macalg));
+PBMAC1PARAM * SAVEDS ASM LIB_d2i_PBMAC1PARAM(REG(a6, __IFACE_OR_BASE), REG(a0, PBMAC1PARAM ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_PBMAC1PARAM(REG(a6, __IFACE_OR_BASE), REG(a0, const PBMAC1PARAM * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_PBMAC1PARAM_free(REG(a6, __IFACE_OR_BASE), REG(a0, PBMAC1PARAM * a));
+PBMAC1PARAM * SAVEDS ASM LIB_PBMAC1PARAM_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_PBMAC1PARAM_it(REG(a6, __IFACE_OR_BASE));
+int SAVEDS ASM LIB_OSSL_LIB_CTX_get_conf_diagnostics(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx));
+void SAVEDS ASM LIB_OSSL_LIB_CTX_set_conf_diagnostics(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(d0, int value));
+void * SAVEDS ASM LIB_OSSL_LIB_CTX_get_data(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * ctx), REG(d0, int index));
+int SAVEDS ASM LIB_OSSL_GENERAL_NAMES_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * out), REG(a1, GENERAL_NAMES * gens), REG(d0, int indent));
+int SAVEDS ASM LIB_TS_VERIFY_CTX_set0_data(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, BIO * b));
+int SAVEDS ASM LIB_TS_VERIFY_CTX_set0_imprint(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, unsigned char * hexstr), REG(d0, long len));
+int SAVEDS ASM LIB_TS_VERIFY_CTX_set0_store(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, X509_STORE * s));
+int SAVEDS ASM LIB_TS_VERIFY_CTX_set0_certs(REG(a6, __IFACE_OR_BASE), REG(a0, TS_VERIFY_CTX * ctx), REG(a1, STACK_OF(X509) * certs));
+int SAVEDS ASM LIB_CRYPTO_atomic_add64(REG(a6, __IFACE_OR_BASE), REG(a0, uint64_t * val), REG(d0, uint64_t op), REG(a1, uint64_t * ret), REG(a2, CRYPTO_RWLOCK * lock));
+int SAVEDS ASM LIB_CRYPTO_atomic_and(REG(a6, __IFACE_OR_BASE), REG(a0, uint64_t * val), REG(d0, uint64_t op), REG(a1, uint64_t * ret), REG(a2, CRYPTO_RWLOCK * lock));
+OSSL_ATTRIBUTES_SYNTAX * SAVEDS ASM LIB_d2i_OSSL_ATTRIBUTES_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ATTRIBUTES_SYNTAX ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_ATTRIBUTES_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_ATTRIBUTES_SYNTAX * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_ATTRIBUTES_SYNTAX_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ATTRIBUTES_SYNTAX * a));
+OSSL_ATTRIBUTES_SYNTAX * SAVEDS ASM LIB_OSSL_ATTRIBUTES_SYNTAX_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_ATTRIBUTES_SYNTAX_it(REG(a6, __IFACE_OR_BASE));
+OSSL_USER_NOTICE_SYNTAX * SAVEDS ASM LIB_d2i_OSSL_USER_NOTICE_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_USER_NOTICE_SYNTAX ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_USER_NOTICE_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_USER_NOTICE_SYNTAX * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_USER_NOTICE_SYNTAX_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_USER_NOTICE_SYNTAX * a));
+OSSL_USER_NOTICE_SYNTAX * SAVEDS ASM LIB_OSSL_USER_NOTICE_SYNTAX_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_USER_NOTICE_SYNTAX_it(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_OSSL_INDICATOR_set_callback(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * libctx), REG(a1, OSSL_INDICATOR_CALLBACK * cb));
+void SAVEDS ASM LIB_OSSL_INDICATOR_get_callback(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * libctx), REG(a1, OSSL_INDICATOR_CALLBACK ** cb));
+int SAVEDS ASM LIB_OPENSSL_strtoul(REG(a6, __IFACE_OR_BASE), REG(a0, const char * str), REG(a1, char ** endptr), REG(d0, int base), REG(a2, unsigned long * num));
+OSSL_BASIC_ATTR_CONSTRAINTS * SAVEDS ASM LIB_d2i_OSSL_BASIC_ATTR_CONSTRAINTS(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_BASIC_ATTR_CONSTRAINTS ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_BASIC_ATTR_CONSTRAINTS(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_BASIC_ATTR_CONSTRAINTS * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_BASIC_ATTR_CONSTRAINTS_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_BASIC_ATTR_CONSTRAINTS * a));
+OSSL_BASIC_ATTR_CONSTRAINTS * SAVEDS ASM LIB_OSSL_BASIC_ATTR_CONSTRAINTS_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_BASIC_ATTR_CONSTRAINTS_it(REG(a6, __IFACE_OR_BASE));
+const OSSL_PARAM * SAVEDS ASM LIB_EVP_KEYMGMT_gen_gettable_params(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_KEYMGMT * keymgmt));
+int SAVEDS ASM LIB_EVP_PKEY_CTX_set_signature(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * pctx), REG(a1, const unsigned char * sig), REG(d0, size_t siglen));
+int SAVEDS ASM LIB_EVP_PKEY_sign_init_ex2(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SIGNATURE * algo), REG(a2, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_PKEY_sign_message_init(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SIGNATURE * algo), REG(a2, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_PKEY_sign_message_update(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, const unsigned char * in), REG(d0, size_t inlen));
+int SAVEDS ASM LIB_EVP_PKEY_sign_message_final(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, unsigned char * sig), REG(a2, size_t * siglen));
+int SAVEDS ASM LIB_EVP_PKEY_verify_init_ex2(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SIGNATURE * algo), REG(a2, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_PKEY_verify_message_init(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SIGNATURE * algo), REG(a2, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_PKEY_verify_message_update(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, const unsigned char * in), REG(d0, size_t inlen));
+int SAVEDS ASM LIB_EVP_PKEY_verify_message_final(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx));
+int SAVEDS ASM LIB_EVP_PKEY_verify_recover_init_ex2(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SIGNATURE * algo), REG(a2, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_MD_xof(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_MD * md));
+int SAVEDS ASM LIB_EVP_MD_CTX_get_size_ex(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_MD_CTX * ctx));
+int SAVEDS ASM LIB_EVP_CIPHER_CTX_set_algor_params(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, const X509_ALGOR * alg));
+int SAVEDS ASM LIB_EVP_CIPHER_CTX_get_algor_params(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, X509_ALGOR * alg));
+int SAVEDS ASM LIB_EVP_CIPHER_CTX_get_algor(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_CIPHER_CTX * ctx), REG(a1, X509_ALGOR ** alg));
+int SAVEDS ASM LIB_EVP_PKEY_CTX_set_algor_params(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, const X509_ALGOR * alg));
+int SAVEDS ASM LIB_EVP_PKEY_CTX_get_algor_params(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, X509_ALGOR * alg));
+int SAVEDS ASM LIB_EVP_PKEY_CTX_get_algor(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, X509_ALGOR ** alg));
+X509_ACERT * SAVEDS ASM LIB_d2i_X509_ACERT(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_X509_ACERT(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_X509_ACERT_free(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * a));
+X509_ACERT * SAVEDS ASM LIB_X509_ACERT_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_X509_ACERT_it(REG(a6, __IFACE_OR_BASE));
+X509_ACERT * SAVEDS ASM LIB_X509_ACERT_dup(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * a));
+const ASN1_ITEM * SAVEDS ASM LIB_X509_ACERT_INFO_it(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_X509_ACERT_INFO_free(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT_INFO * a));
+X509_ACERT_INFO * SAVEDS ASM LIB_X509_ACERT_INFO_new(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_OSSL_OBJECT_DIGEST_INFO_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_OBJECT_DIGEST_INFO * a));
+OSSL_OBJECT_DIGEST_INFO * SAVEDS ASM LIB_OSSL_OBJECT_DIGEST_INFO_new(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ISSUER_SERIAL * a));
+OSSL_ISSUER_SERIAL * SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_new(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_X509_ACERT_ISSUER_V2FORM_free(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT_ISSUER_V2FORM * a));
+X509_ACERT_ISSUER_V2FORM * SAVEDS ASM LIB_X509_ACERT_ISSUER_V2FORM_new(REG(a6, __IFACE_OR_BASE));
+X509_ACERT * SAVEDS ASM LIB_PEM_read_bio_X509_ACERT(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * out), REG(a1, X509_ACERT ** x), REG(a2, pem_password_cb * cb), REG(a3, void * u));
+int SAVEDS ASM LIB_PEM_write_bio_X509_ACERT(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * out), REG(a1, const X509_ACERT * x));
+X509_ACERT * SAVEDS ASM LIB_d2i_X509_ACERT_bio(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, X509_ACERT ** acert));
+int SAVEDS ASM LIB_i2d_X509_ACERT_bio(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const X509_ACERT * acert));
+const GENERAL_NAMES * SAVEDS ASM LIB_X509_ACERT_get0_holder_entityName(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const OSSL_ISSUER_SERIAL * SAVEDS ASM LIB_X509_ACERT_get0_holder_baseCertId(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const OSSL_OBJECT_DIGEST_INFO * SAVEDS ASM LIB_X509_ACERT_get0_holder_digest(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const X509_NAME * SAVEDS ASM LIB_X509_ACERT_get0_issuerName(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+long SAVEDS ASM LIB_X509_ACERT_get_version(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+void SAVEDS ASM LIB_X509_ACERT_get0_signature(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x), REG(a1, const ASN1_BIT_STRING ** psig), REG(a2, const X509_ALGOR ** palg));
+int SAVEDS ASM LIB_X509_ACERT_get_signature_nid(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const X509_ALGOR * SAVEDS ASM LIB_X509_ACERT_get0_info_sigalg(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const ASN1_INTEGER * SAVEDS ASM LIB_X509_ACERT_get0_serialNumber(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const ASN1_TIME * SAVEDS ASM LIB_X509_ACERT_get0_notBefore(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const ASN1_TIME * SAVEDS ASM LIB_X509_ACERT_get0_notAfter(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const ASN1_BIT_STRING * SAVEDS ASM LIB_X509_ACERT_get0_issuerUID(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+int SAVEDS ASM LIB_X509_ACERT_set_version(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(d0, long version));
+void SAVEDS ASM LIB_X509_ACERT_set0_holder_entityName(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, GENERAL_NAMES * name));
+void SAVEDS ASM LIB_X509_ACERT_set0_holder_baseCertId(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, OSSL_ISSUER_SERIAL * isss));
+void SAVEDS ASM LIB_X509_ACERT_set0_holder_digest(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, OSSL_OBJECT_DIGEST_INFO * dinfo));
+int SAVEDS ASM LIB_X509_ACERT_set1_issuerName(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const X509_NAME * name));
+int SAVEDS ASM LIB_X509_ACERT_set1_serialNumber(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const ASN1_INTEGER * serial));
+int SAVEDS ASM LIB_X509_ACERT_set1_notBefore(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const ASN1_GENERALIZEDTIME * time));
+int SAVEDS ASM LIB_X509_ACERT_set1_notAfter(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const ASN1_GENERALIZEDTIME * time));
+void SAVEDS ASM LIB_OSSL_OBJECT_DIGEST_INFO_get0_digest(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_OBJECT_DIGEST_INFO * o), REG(a1, int * digestedObjectType), REG(a2, const X509_ALGOR ** digestAlgorithm), REG(a3, const ASN1_BIT_STRING ** digest));
+int SAVEDS ASM LIB_OSSL_OBJECT_DIGEST_INFO_set1_digest(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_OBJECT_DIGEST_INFO * o), REG(d0, int digestedObjectType), REG(a1, X509_ALGOR * digestAlgorithm), REG(a2, ASN1_BIT_STRING * digest));
+const X509_NAME * SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_get0_issuer(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_ISSUER_SERIAL * isss));
+const ASN1_INTEGER * SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_get0_serial(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_ISSUER_SERIAL * isss));
+const ASN1_BIT_STRING * SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_get0_issuerUID(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_ISSUER_SERIAL * isss));
+int SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_set1_issuer(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ISSUER_SERIAL * isss), REG(a1, const X509_NAME * issuer));
+int SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_set1_serial(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ISSUER_SERIAL * isss), REG(a1, const ASN1_INTEGER * serial));
+int SAVEDS ASM LIB_OSSL_ISSUER_SERIAL_set1_issuerUID(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_ISSUER_SERIAL * isss), REG(a1, const ASN1_BIT_STRING * uid));
+int SAVEDS ASM LIB_X509_ACERT_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, X509_ACERT * x));
+int SAVEDS ASM LIB_X509_ACERT_print_ex(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, X509_ACERT * x), REG(d0, unsigned long nmflags), REG(d1, unsigned long cflag));
+int SAVEDS ASM LIB_X509_ACERT_get_attr_count(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+int SAVEDS ASM LIB_X509_ACERT_get_attr_by_NID(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x), REG(d0, int nid), REG(d1, int lastpos));
+int SAVEDS ASM LIB_X509_ACERT_get_attr_by_OBJ(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x), REG(a1, const ASN1_OBJECT * obj), REG(d0, int lastpos));
+X509_ATTRIBUTE * SAVEDS ASM LIB_X509_ACERT_get_attr(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x), REG(d0, int loc));
+X509_ATTRIBUTE * SAVEDS ASM LIB_X509_ACERT_delete_attr(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(d0, int loc));
+int SAVEDS ASM LIB_X509_ACERT_add1_attr(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, X509_ATTRIBUTE * attr));
+int SAVEDS ASM LIB_X509_ACERT_add1_attr_by_OBJ(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const ASN1_OBJECT * obj), REG(d0, int type), REG(a2, const void * bytes), REG(d1, int len));
+int SAVEDS ASM LIB_X509_ACERT_add1_attr_by_NID(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(d0, int nid), REG(d1, int type), REG(a1, const void * bytes), REG(d2, int len));
+int SAVEDS ASM LIB_X509_ACERT_add1_attr_by_txt(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, const char * attrname), REG(d0, int type), REG(a2, const unsigned char * bytes), REG(d1, int len));
+int SAVEDS ASM LIB_X509_ACERT_sign(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, EVP_PKEY * pkey), REG(a2, const EVP_MD * md));
+int SAVEDS ASM LIB_X509_ACERT_sign_ctx(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(a1, EVP_MD_CTX * ctx));
+int SAVEDS ASM LIB_X509_ACERT_verify(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * a), REG(a1, EVP_PKEY * r));
+void * SAVEDS ASM LIB_X509_ACERT_get_ext_d2i(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x), REG(d0, int nid), REG(a1, int * crit), REG(a2, int * idx));
+int SAVEDS ASM LIB_X509_ACERT_add1_ext_i2d(REG(a6, __IFACE_OR_BASE), REG(a0, X509_ACERT * x), REG(d0, int nid), REG(a1, void * value), REG(d1, int crit), REG(d2, unsigned long flags));
+const struct stack_st_X509_EXTENSION * SAVEDS ASM LIB_X509_ACERT_get0_extensions(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_ACERT * x));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_VALUE_it(REG(a6, __IFACE_OR_BASE));
+void SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_VALUE_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_IETF_ATTR_SYNTAX_VALUE * a));
+OSSL_IETF_ATTR_SYNTAX_VALUE * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_VALUE_new(REG(a6, __IFACE_OR_BASE));
+OSSL_IETF_ATTR_SYNTAX * SAVEDS ASM LIB_d2i_OSSL_IETF_ATTR_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_IETF_ATTR_SYNTAX ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_IETF_ATTR_SYNTAX(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_IETF_ATTR_SYNTAX * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_IETF_ATTR_SYNTAX * a));
+OSSL_IETF_ATTR_SYNTAX * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_it(REG(a6, __IFACE_OR_BASE));
+const GENERAL_NAMES * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_get0_policyAuthority(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_IETF_ATTR_SYNTAX * a));
+void SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_set0_policyAuthority(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_IETF_ATTR_SYNTAX * a), REG(a1, GENERAL_NAMES * names));
+int SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_get_value_num(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_IETF_ATTR_SYNTAX * a));
+void * SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_get0_value(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_IETF_ATTR_SYNTAX * a), REG(d0, int ind), REG(a1, int * type));
+int SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_add1_value(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_IETF_ATTR_SYNTAX * a), REG(d0, int type), REG(a1, void * data));
+int SAVEDS ASM LIB_OSSL_IETF_ATTR_SYNTAX_print(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, OSSL_IETF_ATTR_SYNTAX * a), REG(d0, int indent));
+int SAVEDS ASM LIB_X509_ACERT_add_attr_nconf(REG(a6, __IFACE_OR_BASE), REG(a0, CONF * conf), REG(a1, const char * section), REG(a2, X509_ACERT * acert));
+OSSL_TARGET * SAVEDS ASM LIB_d2i_OSSL_TARGET(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGET ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_TARGET(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_TARGET * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_TARGET_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGET * a));
+OSSL_TARGET * SAVEDS ASM LIB_OSSL_TARGET_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_TARGET_it(REG(a6, __IFACE_OR_BASE));
+OSSL_TARGETS * SAVEDS ASM LIB_d2i_OSSL_TARGETS(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGETS ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_TARGETS(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_TARGETS * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_TARGETS_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGETS * a));
+OSSL_TARGETS * SAVEDS ASM LIB_OSSL_TARGETS_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_TARGETS_it(REG(a6, __IFACE_OR_BASE));
+OSSL_TARGETING_INFORMATION * SAVEDS ASM LIB_d2i_OSSL_TARGETING_INFORMATION(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGETING_INFORMATION ** a), REG(a1, const unsigned char ** in), REG(d0, long len));
+int SAVEDS ASM LIB_i2d_OSSL_TARGETING_INFORMATION(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_TARGETING_INFORMATION * a), REG(a1, unsigned char ** out));
+void SAVEDS ASM LIB_OSSL_TARGETING_INFORMATION_free(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_TARGETING_INFORMATION * a));
+OSSL_TARGETING_INFORMATION * SAVEDS ASM LIB_OSSL_TARGETING_INFORMATION_new(REG(a6, __IFACE_OR_BASE));
+const ASN1_ITEM * SAVEDS ASM LIB_OSSL_TARGETING_INFORMATION_it(REG(a6, __IFACE_OR_BASE));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR_EXT \
@@ -2315,7 +2501,193 @@ void SAVEDS ASM LIB_OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines(REG(a6, __IFACE
     LFUNC_FA_(X509_STORE_get1_objects) \
     LFUNC_FA_(OPENSSL_LH_set_thunks) \
     LFUNC_FA_(OPENSSL_LH_doall_arg_thunk) \
-    LFUNC_FA_(OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines)
+    LFUNC_FA_(OSSL_HTTP_REQ_CTX_set_max_response_hdr_lines) \
+    LFUNC_FA_(SSL_CTX_flush_sessions_ex) \
+    LFUNC_FA_(SSL_CTX_set_block_padding_ex) \
+    LFUNC_FA_(SSL_set_block_padding_ex) \
+    LFUNC_FA_(SSL_get1_builtin_sigalgs) \
+    LFUNC_FA_(DIST_POINT_NAME_dup) \
+    LFUNC_FA_(GENERAL_NAME_set1_X509_NAME) \
+    LFUNC_FA_(OSSL_CMP_CRLSTATUS_create) \
+    LFUNC_FA_(OSSL_CMP_CRLSTATUS_free) \
+    LFUNC_FA_(OSSL_CMP_CRLSTATUS_get0) \
+    LFUNC_FA_(OSSL_CMP_CRLSTATUS_new1) \
+    LFUNC_FA_(OSSL_CMP_ITAV_get0_crlStatusList) \
+    LFUNC_FA_(OSSL_CMP_ITAV_get0_crls) \
+    LFUNC_FA_(OSSL_CMP_ITAV_new0_crlStatusList) \
+    LFUNC_FA_(OSSL_CMP_ITAV_new_crls) \
+    LFUNC_FA_(OSSL_CMP_get1_crlUpdate) \
+    LFUNC_FA_(OSSL_CMP_ITAV_new0_certReqTemplate) \
+    LFUNC_FA_(OSSL_CMP_ITAV_get1_certReqTemplate) \
+    LFUNC_FA_(OSSL_CMP_ATAV_create) \
+    LFUNC_FA_(OSSL_CMP_ATAV_set0) \
+    LFUNC_FA_(OSSL_CMP_ATAV_get0_type) \
+    LFUNC_FA_(OSSL_CMP_ATAV_get0_value) \
+    LFUNC_FA_(OSSL_CMP_ATAV_new_algId) \
+    LFUNC_FA_(OSSL_CMP_ATAV_get0_algId) \
+    LFUNC_FA_(OSSL_CMP_ATAV_new_rsaKeyLen) \
+    LFUNC_FA_(OSSL_CMP_ATAV_get_rsaKeyLen) \
+    LFUNC_FA_(OSSL_CMP_ATAV_push1) \
+    LFUNC_FA_(OSSL_CMP_get1_certReqTemplate) \
+    LFUNC_FA_(d2i_OSSL_CMP_ATAVS) \
+    LFUNC_FA_(i2d_OSSL_CMP_ATAVS) \
+    LFUNC_FA_(OSSL_CMP_ATAVS_free) \
+    LFUNC_FA_(OSSL_CMP_ATAVS_new) \
+    LFUNC_FA_(OSSL_CMP_ATAVS_it) \
+    LFUNC_FA_(OSSL_CRMF_ATTRIBUTETYPEANDVALUE_free) \
+    LFUNC_FA_(OSSL_CRMF_ATTRIBUTETYPEANDVALUE_dup) \
+    LFUNC_FA_(OSSL_CRMF_CERTTEMPLATE_dup) \
+    LFUNC_FA_(CRYPTO_atomic_store) \
+    LFUNC_FA_(CRYPTO_aligned_alloc) \
+    LFUNC_FA_(X509v3_add_extensions) \
+    LFUNC_FA_(PKCS12_set_pbmac1_pbkdf2) \
+    LFUNC_FA_(PBMAC1_get1_pbkdf2_param) \
+    LFUNC_FA_(d2i_PBMAC1PARAM) \
+    LFUNC_FA_(i2d_PBMAC1PARAM) \
+    LFUNC_FA_(PBMAC1PARAM_free) \
+    LFUNC_FA_(PBMAC1PARAM_new) \
+    LFUNC_FA_(PBMAC1PARAM_it) \
+    LFUNC_FA_(OSSL_LIB_CTX_get_conf_diagnostics) \
+    LFUNC_FA_(OSSL_LIB_CTX_set_conf_diagnostics) \
+    LFUNC_FA_(OSSL_LIB_CTX_get_data) \
+    LFUNC_FA_(OSSL_GENERAL_NAMES_print) \
+    LFUNC_FA_(TS_VERIFY_CTX_set0_data) \
+    LFUNC_FA_(TS_VERIFY_CTX_set0_imprint) \
+    LFUNC_FA_(TS_VERIFY_CTX_set0_store) \
+    LFUNC_FA_(TS_VERIFY_CTX_set0_certs) \
+    LFUNC_FA_(CRYPTO_atomic_add64) \
+    LFUNC_FA_(CRYPTO_atomic_and) \
+    LFUNC_FA_(d2i_OSSL_ATTRIBUTES_SYNTAX) \
+    LFUNC_FA_(i2d_OSSL_ATTRIBUTES_SYNTAX) \
+    LFUNC_FA_(OSSL_ATTRIBUTES_SYNTAX_free) \
+    LFUNC_FA_(OSSL_ATTRIBUTES_SYNTAX_new) \
+    LFUNC_FA_(OSSL_ATTRIBUTES_SYNTAX_it) \
+    LFUNC_FA_(d2i_OSSL_USER_NOTICE_SYNTAX) \
+    LFUNC_FA_(i2d_OSSL_USER_NOTICE_SYNTAX) \
+    LFUNC_FA_(OSSL_USER_NOTICE_SYNTAX_free) \
+    LFUNC_FA_(OSSL_USER_NOTICE_SYNTAX_new) \
+    LFUNC_FA_(OSSL_USER_NOTICE_SYNTAX_it) \
+    LFUNC_FA_(OSSL_INDICATOR_set_callback) \
+    LFUNC_FA_(OSSL_INDICATOR_get_callback) \
+    LFUNC_FA_(OPENSSL_strtoul) \
+    LFUNC_FA_(d2i_OSSL_BASIC_ATTR_CONSTRAINTS) \
+    LFUNC_FA_(i2d_OSSL_BASIC_ATTR_CONSTRAINTS) \
+    LFUNC_FA_(OSSL_BASIC_ATTR_CONSTRAINTS_free) \
+    LFUNC_FA_(OSSL_BASIC_ATTR_CONSTRAINTS_new) \
+    LFUNC_FA_(OSSL_BASIC_ATTR_CONSTRAINTS_it) \
+    LFUNC_FA_(EVP_KEYMGMT_gen_gettable_params) \
+    LFUNC_FA_(EVP_PKEY_CTX_set_signature) \
+    LFUNC_FA_(EVP_PKEY_sign_init_ex2) \
+    LFUNC_FA_(EVP_PKEY_sign_message_init) \
+    LFUNC_FA_(EVP_PKEY_sign_message_update) \
+    LFUNC_FA_(EVP_PKEY_sign_message_final) \
+    LFUNC_FA_(EVP_PKEY_verify_init_ex2) \
+    LFUNC_FA_(EVP_PKEY_verify_message_init) \
+    LFUNC_FA_(EVP_PKEY_verify_message_update) \
+    LFUNC_FA_(EVP_PKEY_verify_message_final) \
+    LFUNC_FA_(EVP_PKEY_verify_recover_init_ex2) \
+    LFUNC_FA_(EVP_MD_xof) \
+    LFUNC_FA_(EVP_MD_CTX_get_size_ex) \
+    LFUNC_FA_(EVP_CIPHER_CTX_set_algor_params) \
+    LFUNC_FA_(EVP_CIPHER_CTX_get_algor_params) \
+    LFUNC_FA_(EVP_CIPHER_CTX_get_algor) \
+    LFUNC_FA_(EVP_PKEY_CTX_set_algor_params) \
+    LFUNC_FA_(EVP_PKEY_CTX_get_algor_params) \
+    LFUNC_FA_(EVP_PKEY_CTX_get_algor) \
+    LFUNC_FA_(d2i_X509_ACERT) \
+    LFUNC_FA_(i2d_X509_ACERT) \
+    LFUNC_FA_(X509_ACERT_free) \
+    LFUNC_FA_(X509_ACERT_new) \
+    LFUNC_FA_(X509_ACERT_it) \
+    LFUNC_FA_(X509_ACERT_dup) \
+    LFUNC_FA_(X509_ACERT_INFO_it) \
+    LFUNC_FA_(X509_ACERT_INFO_free) \
+    LFUNC_FA_(X509_ACERT_INFO_new) \
+    LFUNC_FA_(OSSL_OBJECT_DIGEST_INFO_free) \
+    LFUNC_FA_(OSSL_OBJECT_DIGEST_INFO_new) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_free) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_new) \
+    LFUNC_FA_(X509_ACERT_ISSUER_V2FORM_free) \
+    LFUNC_FA_(X509_ACERT_ISSUER_V2FORM_new) \
+    LFUNC_FA_(PEM_read_bio_X509_ACERT) \
+    LFUNC_FA_(PEM_write_bio_X509_ACERT) \
+    LFUNC_FA_(d2i_X509_ACERT_bio) \
+    LFUNC_FA_(i2d_X509_ACERT_bio) \
+    LFUNC_FA_(X509_ACERT_get0_holder_entityName) \
+    LFUNC_FA_(X509_ACERT_get0_holder_baseCertId) \
+    LFUNC_FA_(X509_ACERT_get0_holder_digest) \
+    LFUNC_FA_(X509_ACERT_get0_issuerName) \
+    LFUNC_FA_(X509_ACERT_get_version) \
+    LFUNC_FA_(X509_ACERT_get0_signature) \
+    LFUNC_FA_(X509_ACERT_get_signature_nid) \
+    LFUNC_FA_(X509_ACERT_get0_info_sigalg) \
+    LFUNC_FA_(X509_ACERT_get0_serialNumber) \
+    LFUNC_FA_(X509_ACERT_get0_notBefore) \
+    LFUNC_FA_(X509_ACERT_get0_notAfter) \
+    LFUNC_FA_(X509_ACERT_get0_issuerUID) \
+    LFUNC_FA_(X509_ACERT_set_version) \
+    LFUNC_FA_(X509_ACERT_set0_holder_entityName) \
+    LFUNC_FA_(X509_ACERT_set0_holder_baseCertId) \
+    LFUNC_FA_(X509_ACERT_set0_holder_digest) \
+    LFUNC_FA_(X509_ACERT_set1_issuerName) \
+    LFUNC_FA_(X509_ACERT_set1_serialNumber) \
+    LFUNC_FA_(X509_ACERT_set1_notBefore) \
+    LFUNC_FA_(X509_ACERT_set1_notAfter) \
+    LFUNC_FA_(OSSL_OBJECT_DIGEST_INFO_get0_digest) \
+    LFUNC_FA_(OSSL_OBJECT_DIGEST_INFO_set1_digest) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_get0_issuer) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_get0_serial) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_get0_issuerUID) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_set1_issuer) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_set1_serial) \
+    LFUNC_FA_(OSSL_ISSUER_SERIAL_set1_issuerUID) \
+    LFUNC_FA_(X509_ACERT_print) \
+    LFUNC_FA_(X509_ACERT_print_ex) \
+    LFUNC_FA_(X509_ACERT_get_attr_count) \
+    LFUNC_FA_(X509_ACERT_get_attr_by_NID) \
+    LFUNC_FA_(X509_ACERT_get_attr_by_OBJ) \
+    LFUNC_FA_(X509_ACERT_get_attr) \
+    LFUNC_FA_(X509_ACERT_delete_attr) \
+    LFUNC_FA_(X509_ACERT_add1_attr) \
+    LFUNC_FA_(X509_ACERT_add1_attr_by_OBJ) \
+    LFUNC_FA_(X509_ACERT_add1_attr_by_NID) \
+    LFUNC_FA_(X509_ACERT_add1_attr_by_txt) \
+    LFUNC_FA_(X509_ACERT_sign) \
+    LFUNC_FA_(X509_ACERT_sign_ctx) \
+    LFUNC_FA_(X509_ACERT_verify) \
+    LFUNC_FA_(X509_ACERT_get_ext_d2i) \
+    LFUNC_FA_(X509_ACERT_add1_ext_i2d) \
+    LFUNC_FA_(X509_ACERT_get0_extensions) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_VALUE_it) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_VALUE_free) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_VALUE_new) \
+    LFUNC_FA_(d2i_OSSL_IETF_ATTR_SYNTAX) \
+    LFUNC_FA_(i2d_OSSL_IETF_ATTR_SYNTAX) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_free) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_new) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_it) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_get0_policyAuthority) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_set0_policyAuthority) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_get_value_num) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_get0_value) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_add1_value) \
+    LFUNC_FA_(OSSL_IETF_ATTR_SYNTAX_print) \
+    LFUNC_FA_(X509_ACERT_add_attr_nconf) \
+    LFUNC_FA_(d2i_OSSL_TARGET) \
+    LFUNC_FA_(i2d_OSSL_TARGET) \
+    LFUNC_FA_(OSSL_TARGET_free) \
+    LFUNC_FA_(OSSL_TARGET_new) \
+    LFUNC_FA_(OSSL_TARGET_it) \
+    LFUNC_FA_(d2i_OSSL_TARGETS) \
+    LFUNC_FA_(i2d_OSSL_TARGETS) \
+    LFUNC_FA_(OSSL_TARGETS_free) \
+    LFUNC_FA_(OSSL_TARGETS_new) \
+    LFUNC_FA_(OSSL_TARGETS_it) \
+    LFUNC_FA_(d2i_OSSL_TARGETING_INFORMATION) \
+    LFUNC_FA_(i2d_OSSL_TARGETING_INFORMATION) \
+    LFUNC_FA_(OSSL_TARGETING_INFORMATION_free) \
+    LFUNC_FA_(OSSL_TARGETING_INFORMATION_new) \
+    LFUNC_FA_(OSSL_TARGETING_INFORMATION_it)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSLEXT_H */

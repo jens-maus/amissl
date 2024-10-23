@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -75,6 +75,7 @@
 # define X509_R_UNKNOWN_SIGID_ALGS                        144
 # define X509_R_UNKNOWN_TRUST_ID                          120
 # define X509_R_UNSUPPORTED_ALGORITHM                     111
+# define X509_R_UNSUPPORTED_VERSION                       145
 # define X509_R_WRONG_LOOKUP_TYPE                         112
 # define X509_R_WRONG_TYPE                                122
 

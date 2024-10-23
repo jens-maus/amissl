@@ -100,6 +100,7 @@
 #ifndef OPENSSL_NO_IDEA
 #include <openssl/idea.h>
 #endif
+#include <openssl/indicator.h>
 #include <openssl/kdf.h>
 #include <openssl/lhash.h>
 #ifndef OPENSSL_NO_MD2
@@ -174,6 +175,7 @@
 #include <openssl/whrlpool.h>
 #endif
 #include <openssl/x509.h>
+#include <openssl/x509_acert.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>
 

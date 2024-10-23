@@ -12,6 +12,7 @@
 #include <openssl/asn1t.h>
 #include "../testutil.h"
 
+#if !defined(OPENSSL_SYS_AMIGA)
 /*
  * tweak for Windows
  */
@@ -88,3 +89,4 @@ time_t test_asn1_string_to_time_t(const char *asn1_string)
 
     return timestamp_utc;
 }
+#endif

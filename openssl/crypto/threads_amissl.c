@@ -362,6 +362,38 @@ int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
     return 1;
 }
 
+int CRYPTO_atomic_add64(uint64_t *val, uint64_t op, uint64_t *ret,
+                        CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL)
+	return 0;
+
+    ossl_crypto_mutex_lock(lock);
+
+    *val += op;
+    *ret  = *val;
+
+    ossl_crypto_mutex_unlock(lock);
+
+    return 1;
+}
+
+int CRYPTO_atomic_and(uint64_t *val, uint64_t op, uint64_t *ret,
+                      CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL)
+	return 0;
+
+    ossl_crypto_mutex_lock(lock);
+
+    *val &= op;
+    *ret  = *val;
+
+    ossl_crypto_mutex_unlock(lock);
+
+    return 1;
+}
+
 int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
                      CRYPTO_RWLOCK *lock)
 {
@@ -386,6 +418,20 @@ int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
     ossl_crypto_mutex_lock(lock);
 
     *ret  = *val;
+
+    ossl_crypto_mutex_unlock(lock);
+
+    return 1;
+}
+
+int CRYPTO_atomic_store(uint64_t *dst, uint64_t val, CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL)
+	return 0;
+
+    ossl_crypto_mutex_lock(lock);
+
+    *dst  = val;
 
     ossl_crypto_mutex_unlock(lock);
 

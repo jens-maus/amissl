@@ -10,7 +10,7 @@
 
 IF[{- !$disabled{"fuzz-afl"} || !$disabled{"fuzz-libfuzzer"} -}]
   PROGRAMS{noinst}=asn1 asn1parse bignum bndiv client conf crl server smime
-  PROGRAMS{noinst}=punycode pem decoder hashtable acert
+  PROGRAMS{noinst}=punycode pem decoder acert
   PROGRAMS{noinst}=v3name
   PROGRAMS{noinst}=provider
 
@@ -146,9 +146,9 @@ ENDIF
 IF[{- !$disabled{tests} -}]
   PROGRAMS{noinst}=asn1-test asn1parse-test bignum-test bndiv-test client-test conf-test crl-test server-test smime-test
  IF[{- $target{sys_id} ne "AMIGA" -}]
-  PROGRAMS{noinst}=punycode-test
+  PROGRAMS{noinst}=punycode-test hash-table-test
  ENDIF
-  PROGRAMS{noinst}=pem-test decoder-test hashtable-test acert-test
+  PROGRAMS{noinst}=pem-test decoder-test acert-test
   PROGRAMS{noinst}=v3name-test
   PROGRAMS{noinst}=provider-test
 

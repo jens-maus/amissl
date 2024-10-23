@@ -41,7 +41,7 @@ IF[{- !$disabled{tests} -}]
           evp_test \
           evp_fetch_prov_test ossl_store_test \
           v3nametest v3ext evp_byname_test \
-          crltest danetest bad_dtls_test lhash_test \
+          crltest danetest bad_dtls_test \
           conf_include_test params_api_test params_conversion_test \
           constant_time_test safe_math_test verify_extra_test clienthellotest \
           packettest asynctest secmemtest srptest memleaktest stack_test \

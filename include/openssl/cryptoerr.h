@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -59,6 +59,7 @@
 # define CRYPTO_R_SECURE_MALLOC_FAILURE                   111
 # define CRYPTO_R_STRING_TOO_LONG                         112
 # define CRYPTO_R_TOO_MANY_BYTES                          113
+# define CRYPTO_R_TOO_MANY_NAMES                          132
 # define CRYPTO_R_TOO_MANY_RECORDS                        114
 # define CRYPTO_R_TOO_SMALL_BUFFER                        116
 # define CRYPTO_R_UNKNOWN_NAME_IN_RANDOM_SECTION          120

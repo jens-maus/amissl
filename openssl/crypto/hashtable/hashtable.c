@@ -78,7 +78,7 @@
  * cache line it is advantageous, when supported to fetch the entire
  * structure for faster lookups
  */
-#if defined(__GNUC__) || defined(__CLANG__)
+#if (defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))) || defined(__CLANG__)
 # define PREFETCH_NEIGHBORHOOD(x) __builtin_prefetch(x.entries)
 # define PREFETCH(x) __builtin_prefetch(x)
 #else
