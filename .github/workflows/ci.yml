@@ -60,7 +60,7 @@ jobs:
         if [[ ${{ matrix.build }} =~ debug ]]; then make -j1 OS=${{ matrix.platform }} ; fi
 
     - name: upload build as workflow artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: |
           build_${{ matrix.platform }}/amissl_v*.library*
