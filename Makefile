@@ -2,7 +2,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2024 AmiSSL Open Source Team.
+# Copyright (c) 2006-2025 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -152,7 +152,7 @@ endif
 # none - because we want to compile with -Wall all the time
 
 VERSION=5
-REVISION=18
+REVISION=19
 
 include openssl/VERSION.dat
 VERSIONNAME=$(MAJOR)$(MINOR)$(PATCH)

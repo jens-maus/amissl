@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2024 AmiSSL Open Source Team.
+ Copyright (c) 2006-2025 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -244,7 +244,8 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V340 && OpenLib(&AmiSSLBase,"340") == NULL)
+    if(LibAPIVersion <= AMISSL_V341 && OpenLib(&AmiSSLBase,"341") == NULL
+                                    && OpenLib(&AmiSSLBase,"340") == NULL)
       if(LibAPIVersion <= AMISSL_V332 && OpenLib(&AmiSSLBase,"332") == NULL
                                       && OpenLib(&AmiSSLBase,"331") == NULL
                                       && OpenLib(&AmiSSLBase,"330") == NULL)
