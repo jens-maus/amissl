@@ -1,3 +1,16 @@
+## AmiSSL 5.19 (11.2.2025)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.4.1 (11.2.2025) version which includes these high and
+  low severity bug fixes and mitigations:
+  + Fixed RFC7250 handshakes with unauthenticated servers don't abort
+    as expected.
+    (CVE-2024-12797)
+  + Fixed timing side-channel in ECDSA signature computation.
+    (CVE-2024-13176)
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 31.12.2024.
+
 ## AmiSSL 5.18 (23.10.2024)
 
 - Switched to OpenSSL 3.4, with full compatibility with the latest
