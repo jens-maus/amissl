@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_TO_HEX_H
 # define OSSL_INTERNAL_TO_HEX_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 static ossl_inline size_t to_hex(char *buf, uint8_t n, const char hexdig[17])
 {

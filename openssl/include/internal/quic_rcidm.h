@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_QUIC_RCIDM_H
 # define OSSL_INTERNAL_QUIC_RCIDM_H
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 # pragma once
+# endif
 
 # include "internal/e_os.h"
 # include "internal/time.h"
