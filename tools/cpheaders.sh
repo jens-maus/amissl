@@ -4,7 +4,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2024 AmiSSL Open Source Team.
+# Copyright (c) 2006-2025 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ for header in ${BUILD_D}/openssl/include/openssl/*.h openssl/include/openssl/*.h
   file=$(basename ${header})
   if echo "${file}" | grep -qv "__"; then
     cp -a ${header} include/openssl/
-    sed -i '0,/^ \* Copyright/s// * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.\n * Copyright (c) 2014-2024 AmiSSL Open Source Team.\n * All Rights Reserved.\n *\n * This file has been modified for use with AmiSSL for AmigaOS-based systems.\n *\n&/' include/openssl/${file}
+    sed -i '0,/^ \* Copyright/s// * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.\n * Copyright (c) 2014-2025 AmiSSL Open Source Team.\n * All Rights Reserved.\n *\n * This file has been modified for use with AmiSSL for AmigaOS-based systems.\n *\n&/' include/openssl/${file}
     sed -i '0,/^ \*\//s//&\n\n#if !defined(PROTO_AMISSL_H) \&\& !defined(AMISSL_COMPILE)\n# include <proto\/amissl.h>\n#endif/' include/openssl/${file}
     sed -i '0,/pragma once/s//if defined(__GNUC__) \&\& (__GNUC__ > 3 || (__GNUC__ == 3 \&\& __GNUC_MINOR__ > 3))\n#  &\n# endif/' include/openssl/${file}
     echo "copied+patched ${header} to include/openssl"
