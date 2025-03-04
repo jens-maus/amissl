@@ -83,13 +83,16 @@ jobs:
       continue-on-error: true
 
   cleanup:
+    permissions:
+      contents: write  # c-hive/gha-remove-artifacts
+      actions: write  # c-hive/gha-remove-artifacts
     name: Cleanup artifacts/packages
     needs: skip_check
     if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Remove old artifacts
-        uses: c-hive/gha-remove-artifacts@v1.2.0
+        uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '2 months'
           skip-tags: true
