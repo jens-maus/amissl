@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Remove old artifacts
-        uses: c-hive/gha-remove-artifacts@v1.2.0
+        uses: c-hive/gha-remove-artifacts@v1.4.0
         with:
           age: '2 months'
           skip-tags: true
