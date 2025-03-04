@@ -7,7 +7,7 @@ on:
 jobs:
   release_draft:
     name: Release draft
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     outputs:
       upload_url: ${{ steps.release_drafter.outputs.upload_url }}
       version: ${{ steps.env.outputs.version }}
@@ -64,7 +64,7 @@ jobs:
 
   build:
     name: Release build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 480
     needs: release_draft
 

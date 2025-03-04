@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 480
 
     strategy:
@@ -70,7 +70,7 @@ jobs:
 
   cleanup:
     name: Cleanup artifacts/packages
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Remove old artifacts
         uses: c-hive/gha-remove-artifacts@v1.2.0
