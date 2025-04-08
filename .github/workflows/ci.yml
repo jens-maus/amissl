@@ -69,7 +69,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: config
-      run: CPPFLAGS='-ansi -D_XOPEN_SOURCE=1 -D_POSIX_C_SOURCE=200809L' ./config --banner=Configured no-asm no-secure-memory no-makedepend enable-buildtest-c++ enable-fips --strict-warnings && perl configdata.pm --dump
+      run: CPPFLAGS='-ansi -D_XOPEN_SOURCE=1 -D_POSIX_C_SOURCE=200809L' ./config --banner=Configured enable-sslkeylog no-asm no-secure-memory no-makedepend enable-buildtest-c++ enable-fips --strict-warnings && perl configdata.pm --dump
     - name: make
       run: make -s -j4
 
@@ -86,7 +86,7 @@ jobs:
       run: echo "FIPS_VENDOR=CI" >> VERSION.dat
     - name: config
       # enable-quic is on by default, but we leave it here to check we're testing the explicit enable somewhere
-      run: CC=gcc ./config --banner=Configured enable-demos enable-h3demo enable-fips enable-quic --strict-warnings && perl configdata.pm --dump
+      run: CC=gcc ./config --banner=Configured enable-demos enable-h3demo enable-sslkeylog enable-fips enable-quic --strict-warnings && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -99,6 +99,7 @@ jobs:
       run: |
         util/wrap.pl -fips apps/openssl list -providers | grep 'name: CI FIPS Provider for OpenSSL$'
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@basic-gcc"
@@ -121,13 +122,14 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@basic-clang"
         path: artifacts.tar.gz
 
   linux-arm64:
-    runs-on: linux-arm64
+    runs-on: ${{ github.repository == 'openssl/openssl' && 'linux-arm64' || 'ubuntu-24.04-arm' }}
     steps:
     - uses: actions/checkout@v4
     - name: config
@@ -143,6 +145,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@linux-arm64"
@@ -184,6 +187,7 @@ jobs:
           ./util/opensslwrap.sh version -c
           .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@BSD-x86_64"
@@ -206,6 +210,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@minimal"
@@ -228,6 +233,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@no-deprecated"
@@ -250,6 +256,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@no-shared-ubuntu"
@@ -276,6 +283,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@no-shared-${{ matrix.os }}"
@@ -302,6 +310,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test OPENSSL_TEST_RAND_ORDER=0 TESTS="-test_fuzz* -test_ssl_* -test_sslapi -test_evp -test_cmp_http -test_verify -test_cms -test_store -test_enc -[01][0-9]"
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@non-caching"
@@ -328,6 +337,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test OPENSSL_TEST_RAND_ORDER=0
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@address_ub_sanitizer"
@@ -354,6 +364,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test OPENSSL_TEST_RAND_ORDER=0 TESTS="test_fuzz*"
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@fuzz_tests"
@@ -372,7 +383,7 @@ jobs:
         sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
       # --debug -O1 is to produce a debug build that runs in a reasonable amount of time
-      run: CC=clang ./config --banner=Configured --debug no-shared -O1 -fsanitize=memory -DOSSL_SANITIZE_MEMORY -fno-optimize-sibling-calls enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-fips && perl configdata.pm --dump
+      run: CC=clang ./config --banner=Configured --debug no-shared -O1 -fsanitize=memory -DOSSL_SANITIZE_MEMORY -fno-optimize-sibling-calls enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-fips no-slh-dsa && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -382,6 +393,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test OPENSSL_TEST_RAND_ORDER=0
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@memory_sanitizer"
@@ -398,7 +410,7 @@ jobs:
         sudo cat /proc/sys/vm/mmap_rnd_bits
         sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
-      run: CC=clang ./config --banner=Configured no-fips --strict-warnings -fsanitize=thread && perl configdata.pm --dump
+      run: CC=clang ./config --banner=Configured no-shared no-fips --strict-warnings -g -fsanitize=thread && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -406,8 +418,9 @@ jobs:
         cat /proc/cpuinfo
         ./util/opensslwrap.sh version -c
     - name: make test
-      run: .github/workflows/make-test V=1 TESTS="test_threads test_internal_provider test_provfetch test_provider test_pbe test_evp_kdf test_pkcs12 test_store test_evp test_quic*"
+      run: .github/workflows/make-test V=1 TESTS="test_lhash test_threads test_internal_provider test_provfetch test_provider test_pbe test_evp_kdf test_pkcs12 test_store test_evp test_quic*"
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@threads_sanitizer"
@@ -432,6 +445,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@enable_non-default_options"
@@ -462,6 +476,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@full_featured"
@@ -484,6 +499,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@no-legacy"
@@ -506,6 +522,7 @@ jobs:
     - name: make test
       run: .github/workflows/make-test
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@legacy"
@@ -548,6 +565,7 @@ jobs:
       run: ../source/.github/workflows/make-test
       working-directory: ./build
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@out-of-readonly-source-and-install-ubuntu"
@@ -592,6 +610,7 @@ jobs:
       run: ../source/.github/workflows/make-test
       working-directory: ./build
     - name: save artifacts
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: "ci@out-of-readonly-source-and-install-${{ matrix.os }}"
@@ -600,7 +619,7 @@ jobs:
       run: make install
       working-directory: ./build
 
-  external-tests:
+  external-tests-misc:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -620,25 +639,50 @@ jobs:
       run: ./config --banner=Configured --strict-warnings --debug no-afalgeng enable-rc5 enable-md2 enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-external-tests no-fips && perl configdata.pm --dump
     - name: make
       run: make -s -j4
+    - uses: dtolnay/rust-toolchain@stable
     - name: get cpu info
       run: |
         cat /proc/cpuinfo
         ./util/opensslwrap.sh version -c
-    - name: test external gost-engine
-      run: make test TESTS="test_external_gost_engine"
+#    - name: test external gost-engine
+#      run: make test TESTS="test_external_gost_engine"
     - name: test external krb5
       run: make test TESTS="test_external_krb5"
-    - name: test external_tlsfuzzer
+    - name: test external tlsfuzzer
       run: make test TESTS="test_external_tlsfuzzer"
-    - name: test external oqs-provider
-      run: make test TESTS="test_external_oqsprovider"
+    - name: test external Cloudflare quiche
+      run: make test TESTS="test_external_cf_quiche" VERBOSE=1
     - name: test ability to produce debuginfo files
       run: |
         make debuginfo
         gdb < <(echo -e "file ./libcrypto.so.3\nquit") > ./results
         grep -q "Reading symbols from.*libcrypto\.so\.3\.debug" results
 
-  external-test-pyca:
+  external-tests-providers:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: package installs
+      run: |
+        sudo apt-get update
+        sudo apt-get -yq install meson pkg-config gnutls-bin libnss3-tools libnss3-dev libsofthsm2 opensc expect
+    - name: config
+      run: ./config --banner=Configured --strict-warnings --debug enable-external-tests && perl configdata.pm --dump
+    - name: make
+      run: make -s -j4
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        ./util/opensslwrap.sh version -c
+    - name: test external oqs-provider
+      run: make test TESTS="test_external_oqsprovider"
+    # Disabled temporarily: https://github.com/latchset/pkcs11-provider/pull/525#discussion_r1982805969
+    # - name: test external pkcs11-provider
+    #   run: make test TESTS="test_external_pkcs11_provider" VERBOSE=1
+
+  external-tests-pyca:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -667,21 +711,3 @@ jobs:
         ./util/opensslwrap.sh version -c
     - name: test external pyca
       run: make test TESTS="test_external_pyca" VERBOSE=1
-
-  external-test-cf-quiche:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Configure OpenSSL
-      run: ./config --banner=Configured --strict-warnings enable-external-tests && perl configdata.pm --dump
-    - name: make
-      run: make -s -j4
-    - uses: dtolnay/rust-toolchain@stable
-    - name: get cpu info
-      run: |
-        cat /proc/cpuinfo
-        ./util/opensslwrap.sh version -c
-    - name: test external Cloudflare quiche
-      run: make test TESTS="test_external_cf_quiche" VERBOSE=1

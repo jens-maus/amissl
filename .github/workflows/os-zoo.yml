@@ -9,7 +9,8 @@ name: OS Zoo CI
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '50 02 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,20 +22,20 @@ jobs:
       matrix:
         tag: [edge, latest]
         cc: [gcc, clang]
-        branch: [openssl-3.0, openssl-3.1, master]
     runs-on: ubuntu-latest
     container:
       image: docker.io/library/alpine:${{ matrix.tag }}
     env:
-      # https://www.openwall.com/lists/musl/2022/02/16/14
-      EXTRA_CFLAGS: ${{ matrix.cc == 'clang' && '-Wno-sign-compare' || '' }}
+      # See https://www.openwall.com/lists/musl/2022/02/16/14
+      # for the reason why -Wno-sign-compare is needed with clang
+      # -Wno-stringop-overflow is needed to silence a bogus
+      # warning on new fortify-headers with gcc
+      EXTRA_CFLAGS: ${{ matrix.cc == 'clang' && '-Wno-sign-compare' || matrix.tag == 'edge' && '-Wno-stringop-overflow' || '' }}
       CC: ${{ matrix.cc }}
     steps:
     - name: install packages
       run: apk --no-cache add build-base perl linux-headers ${{ matrix.cc }}
     - uses: actions/checkout@v4
-      with:
-        ref: ${{ matrix.branch }}
     - name: config
       run: |
         ./config --banner=Configured no-shared -Wall -Werror enable-fips --strict-warnings \
@@ -54,7 +55,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [openssl-3.0, openssl-3.1, master]
         zoo:
           - image: docker.io/library/debian:10
             install: apt-get update && apt-get install -y gcc make perl
@@ -83,8 +83,6 @@ jobs:
     container: ${{ matrix.zoo.image }}
     steps:
     - uses: actions/checkout@v4
-      with:
-        ref: ${{ matrix.branch }}
     - name: install packages
       run: ${{ matrix.zoo.install }}
     - name: config
@@ -104,13 +102,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [openssl-3.0, openssl-3.1, master]
         os: [macos-13, macos-14, macos-15]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
-      with:
-        ref: ${{ matrix.branch }}
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - name: config
@@ -130,13 +125,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [openssl-3.0, openssl-3.1, master]
         os: [windows-2019, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
-      with:
-        ref: ${{ matrix.branch }}
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
@@ -179,6 +171,40 @@ jobs:
       run: make -j4
     - name: get cpu info
       run: ./util/opensslwrap.sh version -c
+    - name: make test
+      run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
+
+  linux-ppc64le:
+    runs-on: linux-ppc64le
+    steps:
+    - uses: actions/checkout@v4
+    - name: config
+      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+    - name: config dump
+      run: ./configdata.pm --dump
+    - name: make
+      run: make -j4
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        ./util/opensslwrap.sh version -c
+    - name: make test
+      run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
+
+  linux-s390x:
+    runs-on: linux-s390x
+    steps:
+    - uses: actions/checkout@v4
+    - name: config
+      run: ./config enable-fips enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+    - name: config dump
+      run: ./configdata.pm --dump
+    - name: make
+      run: make -j4
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        ./util/opensslwrap.sh version -c
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
