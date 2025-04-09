@@ -3,6 +3,8 @@
 - Switched to OpenSSL 3.5, with full compatibility with the latest
   OpenSSL 3.5.0 (8.4.2025) version, which includes new features,
   improvements and bug fixes.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 25.2.2025.
 
 ## AmiSSL 5.19 (11.2.2025)
 
