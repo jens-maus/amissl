@@ -167,7 +167,11 @@ int ossl_rio_notifier_init(RIO_NOTIFIER *nfy)
 
     /* Bind the socket to a random loopback port. */
     sa.sin_family       = AF_INET;
+#ifdef OPENSSL_SYS_AMIGA
+    sa.sin_addr.s_addr  = htonl(INADDR_ANY);
+#else
     sa.sin_addr.s_addr  = htonl(INADDR_LOOPBACK);
+#endif
     rc = bind(lfd, (const struct sockaddr *)&sa, sizeof(sa));
     if (rc < 0) {
         ERR_raise_data(ERR_LIB_SYS, get_last_sys_error(),

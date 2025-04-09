@@ -21,7 +21,7 @@ it being a shared library, it can be used by several Amiga applications at
 the same time, without wasting resources.
 
 AmiSSL v5 is a new major release which has been updated with full
-compatibility with OpenSSL 3.4. This includes important security related
+compatibility with OpenSSL 3.5. This includes important security related
 fixes, a built-in HTTP(S) client and comes with the latest encryption
 ciphers which are required nowadays to connect to modern SSL-based services
 such as HTTPS and SSH.
@@ -76,7 +76,7 @@ A port of the OpenSSL tool is also included and usually installed to AmiSSL:
 or C: during installation. It is a "command line tool for using the various
 cryptography functions of OpenSSL's crypto library from the shell". The
 documentation for the OpenSSL tool is included in the archive and can also
-be reviewed online: https://www.openssl.org/docs/man3.4/man1/openssl.html.
+be reviewed online: https://www.openssl.org/docs/man3.5/man1/openssl.html.
 A sample openssl.cnf file is also installed to AmiSSL:, if it doesn't already
 exist, along with the CA.pl helper script, both of which aid the certificate
 generation features of the OpenSSL tool. The tsget.pl script is also included.

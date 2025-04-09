@@ -244,25 +244,26 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V341 && OpenLib(&AmiSSLBase,"341") == NULL
-                                    && OpenLib(&AmiSSLBase,"340") == NULL)
-      if(LibAPIVersion <= AMISSL_V332 && OpenLib(&AmiSSLBase,"332") == NULL
-                                      && OpenLib(&AmiSSLBase,"331") == NULL
-                                      && OpenLib(&AmiSSLBase,"330") == NULL)
-        if(LibAPIVersion <= AMISSL_V321 && OpenLib(&AmiSSLBase,"321") == NULL
-                                        && OpenLib(&AmiSSLBase,"320") == NULL)
-          if(LibAPIVersion <= AMISSL_V314 && OpenLib(&AmiSSLBase,"314") == NULL
-                                          && OpenLib(&AmiSSLBase,"313") == NULL
-                                          && OpenLib(&AmiSSLBase,"312") == NULL
-                                          && OpenLib(&AmiSSLBase,"311") == NULL)
-            if(LibAPIVersion <= AMISSL_V310 && OpenLib(&AmiSSLBase,"310") == NULL)
-              if(LibAPIVersion <= AMISSL_V308 && OpenLib(&AmiSSLBase,"308") == NULL)
-                if(LibAPIVersion <= AMISSL_V307 && OpenLib(&AmiSSLBase,"307") == NULL
-                                                && OpenLib(&AmiSSLBase,"306") == NULL
-                                                && OpenLib(&AmiSSLBase,"305") == NULL
-                                                && OpenLib(&AmiSSLBase,"304") == NULL
-                                                && OpenLib(&AmiSSLBase,"303") == NULL)
-                  if(LibAPIVersion == AMISSL_V302) OpenLib(&AmiSSLBase,"302");
+    if(LibAPIVersion <= AMISSL_V350 && OpenLib(&AmiSSLBase,"350") == NULL)
+      if(LibAPIVersion <= AMISSL_V341 && OpenLib(&AmiSSLBase,"341") == NULL
+                                      && OpenLib(&AmiSSLBase,"340") == NULL)
+        if(LibAPIVersion <= AMISSL_V332 && OpenLib(&AmiSSLBase,"332") == NULL
+                                        && OpenLib(&AmiSSLBase,"331") == NULL
+                                        && OpenLib(&AmiSSLBase,"330") == NULL)
+          if(LibAPIVersion <= AMISSL_V321 && OpenLib(&AmiSSLBase,"321") == NULL
+                                          && OpenLib(&AmiSSLBase,"320") == NULL)
+            if(LibAPIVersion <= AMISSL_V314 && OpenLib(&AmiSSLBase,"314") == NULL
+                                            && OpenLib(&AmiSSLBase,"313") == NULL
+                                            && OpenLib(&AmiSSLBase,"312") == NULL
+                                            && OpenLib(&AmiSSLBase,"311") == NULL)
+              if(LibAPIVersion <= AMISSL_V310 && OpenLib(&AmiSSLBase,"310") == NULL)
+                if(LibAPIVersion <= AMISSL_V308 && OpenLib(&AmiSSLBase,"308") == NULL)
+                  if(LibAPIVersion <= AMISSL_V307 && OpenLib(&AmiSSLBase,"307") == NULL
+                                                  && OpenLib(&AmiSSLBase,"306") == NULL
+                                                  && OpenLib(&AmiSSLBase,"305") == NULL
+                                                  && OpenLib(&AmiSSLBase,"304") == NULL
+                                                  && OpenLib(&AmiSSLBase,"303") == NULL)
+                    if(LibAPIVersion == AMISSL_V302) OpenLib(&AmiSSLBase,"302");
   }
   else if(LibAPIVersion >= AMISSL_V300)
   {

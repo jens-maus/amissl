@@ -1,3 +1,9 @@
+## AmiSSL 5.20 (x.4.2025)
+
+- Switched to OpenSSL 3.5, with full compatibility with the latest
+  OpenSSL 3.5.0 (8.4.2025) version, which includes new features,
+  improvements and bug fixes.
+
 ## AmiSSL 5.19 (11.2.2025)
 
 - Updated OpenSSL backend to full compatibility with the latest

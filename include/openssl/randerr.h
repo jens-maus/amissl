@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -63,6 +63,7 @@
 # define RAND_R_PERSONALISATION_STRING_TOO_LONG           116
 # define RAND_R_PREDICTION_RESISTANCE_NOT_SUPPORTED       133
 # define RAND_R_PRNG_NOT_SEEDED                           100
+# define RAND_R_RANDOM_POOL_IS_EMPTY                      142
 # define RAND_R_RANDOM_POOL_OVERFLOW                      125
 # define RAND_R_RANDOM_POOL_UNDERFLOW                     134
 # define RAND_R_REQUEST_TOO_LARGE_FOR_DRBG                117

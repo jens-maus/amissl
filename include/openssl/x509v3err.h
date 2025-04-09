@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -93,6 +93,7 @@
 # define X509V3_R_POLICY_PATH_LENGTH                      156
 # define X509V3_R_POLICY_PATH_LENGTH_ALREADY_DEFINED      157
 # define X509V3_R_POLICY_WHEN_PROXY_LANGUAGE_REQUIRES_NO_POLICY 159
+# define X509V3_R_PURPOSE_NOT_UNIQUE                      173
 # define X509V3_R_SECTION_NOT_FOUND                       150
 # define X509V3_R_UNABLE_TO_GET_ISSUER_DETAILS            122
 # define X509V3_R_UNABLE_TO_GET_ISSUER_KEYID              123

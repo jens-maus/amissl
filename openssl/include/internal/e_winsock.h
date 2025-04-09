@@ -9,7 +9,9 @@
 
 #ifndef OSSL_E_WINSOCK_H
 # define OSSL_E_WINSOCK_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # ifdef WINDOWS
 #  if !defined(_WIN32_WCE) && !defined(_WIN32_WINNT)

@@ -296,7 +296,7 @@ IF[{- !$disabled{tests} -}]
     DEPEND[casttest]=../libcrypto libtestutil.a
   ENDIF
 
-  IF[{- !$disabled{'ml-dsa'} -}]
+  IF[{- !$disabled{'ml-dsa'} && $target{sys_id} ne "AMIGA" -}]
     PROGRAMS{noinst}=ml_dsa_test
     SOURCE[ml_dsa_test]=ml_dsa_test.c
     INCLUDE[ml_dsa_test]=../include ../apps/include

@@ -9,7 +9,9 @@
 
 #ifndef OSSL_SM4_PLATFORM_H
 # define OSSL_SM4_PLATFORM_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # if defined(OPENSSL_CPUID_OBJ)
 #  if defined(__aarch64__) ||  defined (_M_ARM64)

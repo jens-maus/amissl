@@ -9,7 +9,9 @@
 
 #ifndef PROV_ML_DSA_CODECS_H
 # define PROV_ML_DSA_CODECS_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # ifndef OPENSSL_NO_ML_DSA
 #  include <openssl/e_os2.h>

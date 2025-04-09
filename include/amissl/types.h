@@ -54,6 +54,7 @@ typedef long int off_t;
 #   include <inttypes.h>
 #   undef OPENSSL_NO_INTTYPES_H
 #  else
+#   include <stddef.h>
 #   include <stdint.h>
 #  endif
 

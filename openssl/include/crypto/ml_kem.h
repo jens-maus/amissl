@@ -9,7 +9,9 @@
 
 #ifndef OPENSSL_HEADER_ML_KEM_H
 # define OPENSSL_HEADER_ML_KEM_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <openssl/e_os2.h>
 # include <openssl/bio.h>

@@ -58,4 +58,31 @@ void ossl_crypto_mutex_free(CRYPTO_MUTEX **mutex)
     FREE_LOCK(*mutex);
     *mutex = NULL;
 }
+
+CRYPTO_CONDVAR *ossl_crypto_condvar_new(void)
+{
+    return NULL;
+}
+
+void ossl_crypto_condvar_wait(CRYPTO_CONDVAR *cv, CRYPTO_MUTEX *mutex)
+{
+}
+
+void ossl_crypto_condvar_wait_timeout(CRYPTO_CONDVAR *cv, CRYPTO_MUTEX *mutex,
+                                      OSSL_TIME deadline)
+{
+}
+
+void ossl_crypto_condvar_broadcast(CRYPTO_CONDVAR *cv)
+{
+}
+
+void ossl_crypto_condvar_signal(CRYPTO_CONDVAR *cv)
+{
+}
+
+void ossl_crypto_condvar_free(CRYPTO_CONDVAR **cv)
+{
+}
+
 #endif

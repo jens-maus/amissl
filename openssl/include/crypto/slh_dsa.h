@@ -12,7 +12,9 @@
 #ifndef OSSL_CRYPTO_SLH_DSA_H
 # define OSSL_CRYPTO_SLH_DSA_H
 
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 # include <openssl/e_os2.h>
 # include <openssl/types.h>
 # include "crypto/types.h"

@@ -1263,7 +1263,7 @@ EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
     EVP_PKEY *ret;
 
     va_start(args, type);
-    ret = EVP_PKEY_Q_keygen(libctx, propq, type, args);
+    ret = EVP_PKEY_Q_vkeygen(libctx, propq, type, args);
     va_end(args);
 
     return ret;

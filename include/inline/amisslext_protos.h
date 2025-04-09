@@ -3985,4 +3985,631 @@ OSSL_TARGETING_INFORMATION * __OSSL_TARGETING_INFORMATION_new(__reg("a6") struct
 const ASN1_ITEM * __OSSL_TARGETING_INFORMATION_it(__reg("a6") struct Library * ) = "\tjsr\t-7950(a6)";
 #define OSSL_TARGETING_INFORMATION_it() __OSSL_TARGETING_INFORMATION_it(AmiSSLExtBase)
 
+int __SSL_set_quic_tls_cbs(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const OSSL_DISPATCH * qtdis , __reg("a2") void * arg ) = "\tjsr\t-7956(a6)";
+#define SSL_set_quic_tls_cbs(s, qtdis, arg) __SSL_set_quic_tls_cbs(AmiSSLExtBase, (s), (qtdis), (arg))
+
+int __SSL_set_quic_tls_transport_params(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const unsigned char * params , __reg("d0") size_t params_len ) = "\tjsr\t-7962(a6)";
+#define SSL_set_quic_tls_transport_params(s, params, params_len) __SSL_set_quic_tls_transport_params(AmiSSLExtBase, (s), (params), (params_len))
+
+int __SSL_set_quic_tls_early_data_enabled(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") int enabled ) = "\tjsr\t-7968(a6)";
+#define SSL_set_quic_tls_early_data_enabled(s, enabled) __SSL_set_quic_tls_early_data_enabled(AmiSSLExtBase, (s), (enabled))
+
+const SSL_METHOD * __OSSL_QUIC_server_method(__reg("a6") struct Library * ) = "\tjsr\t-7974(a6)";
+#define OSSL_QUIC_server_method() __OSSL_QUIC_server_method(AmiSSLExtBase)
+
+int __SSL_is_listener(__reg("a6") struct Library * , __reg("a0") SSL * ssl ) = "\tjsr\t-7980(a6)";
+#define SSL_is_listener(ssl) __SSL_is_listener(AmiSSLExtBase, (ssl))
+
+SSL * __SSL_get0_listener(__reg("a6") struct Library * , __reg("a0") SSL * s ) = "\tjsr\t-7986(a6)";
+#define SSL_get0_listener(s) __SSL_get0_listener(AmiSSLExtBase, (s))
+
+SSL * __SSL_new_listener(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("d0/d1") uint64_t flags ) = "\tjsr\t-7992(a6)";
+#define SSL_new_listener(ctx, flags) __SSL_new_listener(AmiSSLExtBase, (ctx), (flags))
+
+SSL * __SSL_accept_connection(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("d0/d1") uint64_t flags ) = "\tjsr\t-7998(a6)";
+#define SSL_accept_connection(ssl, flags) __SSL_accept_connection(AmiSSLExtBase, (ssl), (flags))
+
+size_t __SSL_get_accept_connection_queue_len(__reg("a6") struct Library * , __reg("a0") SSL * ssl ) = "\tjsr\t-8004(a6)";
+#define SSL_get_accept_connection_queue_len(ssl) __SSL_get_accept_connection_queue_len(AmiSSLExtBase, (ssl))
+
+int __SSL_listen(__reg("a6") struct Library * , __reg("a0") SSL * ssl ) = "\tjsr\t-8010(a6)";
+#define SSL_listen(ssl) __SSL_listen(AmiSSLExtBase, (ssl))
+
+SSL * __SSL_new_from_listener(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("d0/d1") uint64_t flags ) = "\tjsr\t-8016(a6)";
+#define SSL_new_from_listener(ssl, flags) __SSL_new_from_listener(AmiSSLExtBase, (ssl), (flags))
+
+SSL * __SSL_new_listener_from(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("d0/d1") uint64_t flags ) = "\tjsr\t-8022(a6)";
+#define SSL_new_listener_from(ssl, flags) __SSL_new_listener_from(AmiSSLExtBase, (ssl), (flags))
+
+int __SSL_is_domain(__reg("a6") struct Library * , __reg("a0") SSL * s ) = "\tjsr\t-8028(a6)";
+#define SSL_is_domain(s) __SSL_is_domain(AmiSSLExtBase, (s))
+
+SSL * __SSL_get0_domain(__reg("a6") struct Library * , __reg("a0") SSL * s ) = "\tjsr\t-8034(a6)";
+#define SSL_get0_domain(s) __SSL_get0_domain(AmiSSLExtBase, (s))
+
+SSL * __SSL_new_domain(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("d0/d1") uint64_t flags ) = "\tjsr\t-8040(a6)";
+#define SSL_new_domain(ctx, flags) __SSL_new_domain(AmiSSLExtBase, (ctx), (flags))
+
+int __SSL_CTX_set_domain_flags(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("d0/d1") uint64_t domain_flags ) = "\tjsr\t-8046(a6)";
+#define SSL_CTX_set_domain_flags(ctx, domain_flags) __SSL_CTX_set_domain_flags(AmiSSLExtBase, (ctx), (domain_flags))
+
+int __SSL_CTX_get_domain_flags(__reg("a6") struct Library * , __reg("a0") const SSL_CTX * ctx , __reg("a1") uint64_t * domain_flags ) = "\tjsr\t-8052(a6)";
+#define SSL_CTX_get_domain_flags(ctx, domain_flags) __SSL_CTX_get_domain_flags(AmiSSLExtBase, (ctx), (domain_flags))
+
+int __SSL_get_domain_flags(__reg("a6") struct Library * , __reg("a0") const SSL * ssl , __reg("a1") uint64_t * domain_flags ) = "\tjsr\t-8058(a6)";
+#define SSL_get_domain_flags(ssl, domain_flags) __SSL_get_domain_flags(AmiSSLExtBase, (ssl), (domain_flags))
+
+void __SSL_CTX_set_new_pending_conn_cb(__reg("a6") struct Library * , __reg("a0") SSL_CTX * c , __reg("a1") SSL_new_pending_conn_cb_fn cb , __reg("a2") void * arg ) = "\tjsr\t-8064(a6)";
+#define SSL_CTX_set_new_pending_conn_cb(c, cb, arg) __SSL_CTX_set_new_pending_conn_cb(AmiSSLExtBase, (c), (cb), (arg))
+
+int __X509_VERIFY_PARAM_get_purpose(__reg("a6") struct Library * , __reg("a0") const X509_VERIFY_PARAM * param ) = "\tjsr\t-8070(a6)";
+#define X509_VERIFY_PARAM_get_purpose(param) __X509_VERIFY_PARAM_get_purpose(AmiSSLExtBase, (param))
+
+OSSL_CRMF_ENCRYPTEDKEY * __d2i_OSSL_CRMF_ENCRYPTEDKEY(__reg("a6") struct Library * , __reg("a0") OSSL_CRMF_ENCRYPTEDKEY ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8076(a6)";
+#define d2i_OSSL_CRMF_ENCRYPTEDKEY(a, in, len) __d2i_OSSL_CRMF_ENCRYPTEDKEY(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_CRMF_ENCRYPTEDKEY(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_ENCRYPTEDKEY * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8082(a6)";
+#define i2d_OSSL_CRMF_ENCRYPTEDKEY(a, out) __i2d_OSSL_CRMF_ENCRYPTEDKEY(AmiSSLExtBase, (a), (out))
+
+void __OSSL_CRMF_ENCRYPTEDKEY_free(__reg("a6") struct Library * , __reg("a0") OSSL_CRMF_ENCRYPTEDKEY * a ) = "\tjsr\t-8088(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_free(a) __OSSL_CRMF_ENCRYPTEDKEY_free(AmiSSLExtBase, (a))
+
+OSSL_CRMF_ENCRYPTEDKEY * __OSSL_CRMF_ENCRYPTEDKEY_new(__reg("a6") struct Library * ) = "\tjsr\t-8094(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_new() __OSSL_CRMF_ENCRYPTEDKEY_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_CRMF_ENCRYPTEDKEY_it(__reg("a6") struct Library * ) = "\tjsr\t-8100(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_it() __OSSL_CRMF_ENCRYPTEDKEY_it(AmiSSLExtBase)
+
+X509 * __OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_ENCRYPTEDKEY * ecert , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq , __reg("a3") EVP_PKEY * pkey , __reg("d0") unsigned int flags ) = "\tjsr\t-8106(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(ecert, libctx, propq, pkey, flags) __OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(AmiSSLExtBase, (ecert), (libctx), (propq), (pkey), (flags))
+
+unsigned char * __OSSL_CRMF_ENCRYPTEDVALUE_decrypt(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_ENCRYPTEDVALUE * enc , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq , __reg("a3") EVP_PKEY * pkey , __reg("d0") int * outlen ) = "\tjsr\t-8112(a6)";
+#define OSSL_CRMF_ENCRYPTEDVALUE_decrypt(enc, libctx, propq, pkey, outlen) __OSSL_CRMF_ENCRYPTEDVALUE_decrypt(AmiSSLExtBase, (enc), (libctx), (propq), (pkey), (outlen))
+
+EVP_PKEY * __OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_ENCRYPTEDKEY * encryptedKey , __reg("a1") X509_STORE * ts , __reg("a2") STACK_OF(X509) * extra , __reg("a3") EVP_PKEY * pkey , __reg("d0") X509 * cert , __reg("d1") ASN1_OCTET_STRING * secret , __reg("d2") OSSL_LIB_CTX * libctx , __reg("d3") const char * propq ) = "\tjsr\t-8118(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(encryptedKey, ts, extra, pkey, cert, secret, libctx, propq) __OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(AmiSSLExtBase, (encryptedKey), (ts), (extra), (pkey), (cert), (secret), (libctx), (propq))
+
+int __OSSL_CRMF_MSG_centralkeygen_requested(__reg("a6") struct Library * , __reg("a0") const OSSL_CRMF_MSG * crm , __reg("a1") const X509_REQ * p10cr ) = "\tjsr\t-8124(a6)";
+#define OSSL_CRMF_MSG_centralkeygen_requested(crm, p10cr) __OSSL_CRMF_MSG_centralkeygen_requested(AmiSSLExtBase, (crm), (p10cr))
+
+CMS_EnvelopedData * __CMS_EnvelopedData_dup(__reg("a6") struct Library * , __reg("a0") const CMS_EnvelopedData * a ) = "\tjsr\t-8130(a6)";
+#define CMS_EnvelopedData_dup(a) __CMS_EnvelopedData_dup(AmiSSLExtBase, (a))
+
+OSSL_CRMF_ENCRYPTEDKEY * __OSSL_CRMF_ENCRYPTEDKEY_init_envdata(__reg("a6") struct Library * , __reg("a0") CMS_EnvelopedData * envdata ) = "\tjsr\t-8136(a6)";
+#define OSSL_CRMF_ENCRYPTEDKEY_init_envdata(envdata) __OSSL_CRMF_ENCRYPTEDKEY_init_envdata(AmiSSLExtBase, (envdata))
+
+char * __EVP_get1_default_properties(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx ) = "\tjsr\t-8142(a6)";
+#define EVP_get1_default_properties(libctx) __EVP_get1_default_properties(AmiSSLExtBase, (libctx))
+
+int __RAND_set1_random_provider(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") OSSL_PROVIDER * p ) = "\tjsr\t-8148(a6)";
+#define RAND_set1_random_provider(ctx, p) __RAND_set1_random_provider(AmiSSLExtBase, (ctx), (p))
+
+int __X509_PURPOSE_get_unused_id(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx ) = "\tjsr\t-8154(a6)";
+#define X509_PURPOSE_get_unused_id(libctx) __X509_PURPOSE_get_unused_id(AmiSSLExtBase, (libctx))
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * __d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(__reg("a6") struct Library * , __reg("a0") OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8160(a6)";
+#define d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(a, in, len) __d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(__reg("a6") struct Library * , __reg("a0") const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8166(a6)";
+#define i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(a, out) __i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(AmiSSLExtBase, (a), (out))
+
+void __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(__reg("a6") struct Library * , __reg("a0") OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * a ) = "\tjsr\t-8172(a6)";
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(a) __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(AmiSSLExtBase, (a))
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new(__reg("a6") struct Library * ) = "\tjsr\t-8178(a6)";
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new() __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it(__reg("a6") struct Library * ) = "\tjsr\t-8184(a6)";
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it() __OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it(AmiSSLExtBase)
+
+OSSL_ROLE_SPEC_CERT_ID * __d2i_OSSL_ROLE_SPEC_CERT_ID(__reg("a6") struct Library * , __reg("a0") OSSL_ROLE_SPEC_CERT_ID ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8190(a6)";
+#define d2i_OSSL_ROLE_SPEC_CERT_ID(a, in, len) __d2i_OSSL_ROLE_SPEC_CERT_ID(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ROLE_SPEC_CERT_ID(__reg("a6") struct Library * , __reg("a0") const OSSL_ROLE_SPEC_CERT_ID * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8196(a6)";
+#define i2d_OSSL_ROLE_SPEC_CERT_ID(a, out) __i2d_OSSL_ROLE_SPEC_CERT_ID(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ROLE_SPEC_CERT_ID_free(__reg("a6") struct Library * , __reg("a0") OSSL_ROLE_SPEC_CERT_ID * a ) = "\tjsr\t-8202(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_free(a) __OSSL_ROLE_SPEC_CERT_ID_free(AmiSSLExtBase, (a))
+
+OSSL_ROLE_SPEC_CERT_ID * __OSSL_ROLE_SPEC_CERT_ID_new(__reg("a6") struct Library * ) = "\tjsr\t-8208(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_new() __OSSL_ROLE_SPEC_CERT_ID_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ROLE_SPEC_CERT_ID_it(__reg("a6") struct Library * ) = "\tjsr\t-8214(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_it() __OSSL_ROLE_SPEC_CERT_ID_it(AmiSSLExtBase)
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * __d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(__reg("a6") struct Library * , __reg("a0") OSSL_ROLE_SPEC_CERT_ID_SYNTAX ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8220(a6)";
+#define d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(a, in, len) __d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(__reg("a6") struct Library * , __reg("a0") const OSSL_ROLE_SPEC_CERT_ID_SYNTAX * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8226(a6)";
+#define i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(a, out) __i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(__reg("a6") struct Library * , __reg("a0") OSSL_ROLE_SPEC_CERT_ID_SYNTAX * a ) = "\tjsr\t-8232(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(a) __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(AmiSSLExtBase, (a))
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new(__reg("a6") struct Library * ) = "\tjsr\t-8238(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new() __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it(__reg("a6") struct Library * ) = "\tjsr\t-8244(a6)";
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it() __OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it(AmiSSLExtBase)
+
+OSSL_ATTRIBUTE_DESCRIPTOR * __d2i_OSSL_ATTRIBUTE_DESCRIPTOR(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_DESCRIPTOR ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8250(a6)";
+#define d2i_OSSL_ATTRIBUTE_DESCRIPTOR(a, in, len) __d2i_OSSL_ATTRIBUTE_DESCRIPTOR(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATTRIBUTE_DESCRIPTOR(__reg("a6") struct Library * , __reg("a0") const OSSL_ATTRIBUTE_DESCRIPTOR * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8256(a6)";
+#define i2d_OSSL_ATTRIBUTE_DESCRIPTOR(a, out) __i2d_OSSL_ATTRIBUTE_DESCRIPTOR(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATTRIBUTE_DESCRIPTOR_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_DESCRIPTOR * a ) = "\tjsr\t-8262(a6)";
+#define OSSL_ATTRIBUTE_DESCRIPTOR_free(a) __OSSL_ATTRIBUTE_DESCRIPTOR_free(AmiSSLExtBase, (a))
+
+OSSL_ATTRIBUTE_DESCRIPTOR * __OSSL_ATTRIBUTE_DESCRIPTOR_new(__reg("a6") struct Library * ) = "\tjsr\t-8268(a6)";
+#define OSSL_ATTRIBUTE_DESCRIPTOR_new() __OSSL_ATTRIBUTE_DESCRIPTOR_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATTRIBUTE_DESCRIPTOR_it(__reg("a6") struct Library * ) = "\tjsr\t-8274(a6)";
+#define OSSL_ATTRIBUTE_DESCRIPTOR_it() __OSSL_ATTRIBUTE_DESCRIPTOR_it(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_HASH_it(__reg("a6") struct Library * ) = "\tjsr\t-8280(a6)";
+#define OSSL_HASH_it() __OSSL_HASH_it(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_INFO_SYNTAX_it(__reg("a6") struct Library * ) = "\tjsr\t-8286(a6)";
+#define OSSL_INFO_SYNTAX_it() __OSSL_INFO_SYNTAX_it(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_INFO_SYNTAX_POINTER_it(__reg("a6") struct Library * ) = "\tjsr\t-8292(a6)";
+#define OSSL_INFO_SYNTAX_POINTER_it() __OSSL_INFO_SYNTAX_POINTER_it(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_PRIVILEGE_POLICY_ID_it(__reg("a6") struct Library * ) = "\tjsr\t-8298(a6)";
+#define OSSL_PRIVILEGE_POLICY_ID_it() __OSSL_PRIVILEGE_POLICY_ID_it(AmiSSLExtBase)
+
+OSSL_HASH * __d2i_OSSL_HASH(__reg("a6") struct Library * , __reg("a0") OSSL_HASH ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8304(a6)";
+#define d2i_OSSL_HASH(a, in, len) __d2i_OSSL_HASH(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_HASH(__reg("a6") struct Library * , __reg("a0") const OSSL_HASH * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8310(a6)";
+#define i2d_OSSL_HASH(a, out) __i2d_OSSL_HASH(AmiSSLExtBase, (a), (out))
+
+void __OSSL_HASH_free(__reg("a6") struct Library * , __reg("a0") OSSL_HASH * a ) = "\tjsr\t-8316(a6)";
+#define OSSL_HASH_free(a) __OSSL_HASH_free(AmiSSLExtBase, (a))
+
+OSSL_HASH * __OSSL_HASH_new(__reg("a6") struct Library * ) = "\tjsr\t-8322(a6)";
+#define OSSL_HASH_new() __OSSL_HASH_new(AmiSSLExtBase)
+
+OSSL_INFO_SYNTAX * __d2i_OSSL_INFO_SYNTAX(__reg("a6") struct Library * , __reg("a0") OSSL_INFO_SYNTAX ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8328(a6)";
+#define d2i_OSSL_INFO_SYNTAX(a, in, len) __d2i_OSSL_INFO_SYNTAX(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_INFO_SYNTAX(__reg("a6") struct Library * , __reg("a0") const OSSL_INFO_SYNTAX * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8334(a6)";
+#define i2d_OSSL_INFO_SYNTAX(a, out) __i2d_OSSL_INFO_SYNTAX(AmiSSLExtBase, (a), (out))
+
+void __OSSL_INFO_SYNTAX_free(__reg("a6") struct Library * , __reg("a0") OSSL_INFO_SYNTAX * a ) = "\tjsr\t-8340(a6)";
+#define OSSL_INFO_SYNTAX_free(a) __OSSL_INFO_SYNTAX_free(AmiSSLExtBase, (a))
+
+OSSL_INFO_SYNTAX * __OSSL_INFO_SYNTAX_new(__reg("a6") struct Library * ) = "\tjsr\t-8346(a6)";
+#define OSSL_INFO_SYNTAX_new() __OSSL_INFO_SYNTAX_new(AmiSSLExtBase)
+
+OSSL_INFO_SYNTAX_POINTER * __d2i_OSSL_INFO_SYNTAX_POINTER(__reg("a6") struct Library * , __reg("a0") OSSL_INFO_SYNTAX_POINTER ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8352(a6)";
+#define d2i_OSSL_INFO_SYNTAX_POINTER(a, in, len) __d2i_OSSL_INFO_SYNTAX_POINTER(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_INFO_SYNTAX_POINTER(__reg("a6") struct Library * , __reg("a0") const OSSL_INFO_SYNTAX_POINTER * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8358(a6)";
+#define i2d_OSSL_INFO_SYNTAX_POINTER(a, out) __i2d_OSSL_INFO_SYNTAX_POINTER(AmiSSLExtBase, (a), (out))
+
+void __OSSL_INFO_SYNTAX_POINTER_free(__reg("a6") struct Library * , __reg("a0") OSSL_INFO_SYNTAX_POINTER * a ) = "\tjsr\t-8364(a6)";
+#define OSSL_INFO_SYNTAX_POINTER_free(a) __OSSL_INFO_SYNTAX_POINTER_free(AmiSSLExtBase, (a))
+
+OSSL_INFO_SYNTAX_POINTER * __OSSL_INFO_SYNTAX_POINTER_new(__reg("a6") struct Library * ) = "\tjsr\t-8370(a6)";
+#define OSSL_INFO_SYNTAX_POINTER_new() __OSSL_INFO_SYNTAX_POINTER_new(AmiSSLExtBase)
+
+OSSL_PRIVILEGE_POLICY_ID * __d2i_OSSL_PRIVILEGE_POLICY_ID(__reg("a6") struct Library * , __reg("a0") OSSL_PRIVILEGE_POLICY_ID ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8376(a6)";
+#define d2i_OSSL_PRIVILEGE_POLICY_ID(a, in, len) __d2i_OSSL_PRIVILEGE_POLICY_ID(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_PRIVILEGE_POLICY_ID(__reg("a6") struct Library * , __reg("a0") const OSSL_PRIVILEGE_POLICY_ID * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8382(a6)";
+#define i2d_OSSL_PRIVILEGE_POLICY_ID(a, out) __i2d_OSSL_PRIVILEGE_POLICY_ID(AmiSSLExtBase, (a), (out))
+
+void __OSSL_PRIVILEGE_POLICY_ID_free(__reg("a6") struct Library * , __reg("a0") OSSL_PRIVILEGE_POLICY_ID * a ) = "\tjsr\t-8388(a6)";
+#define OSSL_PRIVILEGE_POLICY_ID_free(a) __OSSL_PRIVILEGE_POLICY_ID_free(AmiSSLExtBase, (a))
+
+OSSL_PRIVILEGE_POLICY_ID * __OSSL_PRIVILEGE_POLICY_ID_new(__reg("a6") struct Library * ) = "\tjsr\t-8394(a6)";
+#define OSSL_PRIVILEGE_POLICY_ID_new() __OSSL_PRIVILEGE_POLICY_ID_new(AmiSSLExtBase)
+
+int __OSSL_PARAM_print_to_bio(__reg("a6") struct Library * , __reg("a0") const OSSL_PARAM * params , __reg("a1") BIO * bio , __reg("d0") int print_values ) = "\tjsr\t-8400(a6)";
+#define OSSL_PARAM_print_to_bio(params, bio, print_values) __OSSL_PARAM_print_to_bio(AmiSSLExtBase, (params), (bio), (print_values))
+
+OSSL_DAY_TIME * __d2i_OSSL_DAY_TIME(__reg("a6") struct Library * , __reg("a0") OSSL_DAY_TIME ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8406(a6)";
+#define d2i_OSSL_DAY_TIME(a, in, len) __d2i_OSSL_DAY_TIME(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_DAY_TIME(__reg("a6") struct Library * , __reg("a0") const OSSL_DAY_TIME * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8412(a6)";
+#define i2d_OSSL_DAY_TIME(a, out) __i2d_OSSL_DAY_TIME(AmiSSLExtBase, (a), (out))
+
+void __OSSL_DAY_TIME_free(__reg("a6") struct Library * , __reg("a0") OSSL_DAY_TIME * a ) = "\tjsr\t-8418(a6)";
+#define OSSL_DAY_TIME_free(a) __OSSL_DAY_TIME_free(AmiSSLExtBase, (a))
+
+OSSL_DAY_TIME * __OSSL_DAY_TIME_new(__reg("a6") struct Library * ) = "\tjsr\t-8424(a6)";
+#define OSSL_DAY_TIME_new() __OSSL_DAY_TIME_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_DAY_TIME_it(__reg("a6") struct Library * ) = "\tjsr\t-8430(a6)";
+#define OSSL_DAY_TIME_it() __OSSL_DAY_TIME_it(AmiSSLExtBase)
+
+OSSL_DAY_TIME_BAND * __d2i_OSSL_DAY_TIME_BAND(__reg("a6") struct Library * , __reg("a0") OSSL_DAY_TIME_BAND ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8436(a6)";
+#define d2i_OSSL_DAY_TIME_BAND(a, in, len) __d2i_OSSL_DAY_TIME_BAND(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_DAY_TIME_BAND(__reg("a6") struct Library * , __reg("a0") const OSSL_DAY_TIME_BAND * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8442(a6)";
+#define i2d_OSSL_DAY_TIME_BAND(a, out) __i2d_OSSL_DAY_TIME_BAND(AmiSSLExtBase, (a), (out))
+
+void __OSSL_DAY_TIME_BAND_free(__reg("a6") struct Library * , __reg("a0") OSSL_DAY_TIME_BAND * a ) = "\tjsr\t-8448(a6)";
+#define OSSL_DAY_TIME_BAND_free(a) __OSSL_DAY_TIME_BAND_free(AmiSSLExtBase, (a))
+
+OSSL_DAY_TIME_BAND * __OSSL_DAY_TIME_BAND_new(__reg("a6") struct Library * ) = "\tjsr\t-8454(a6)";
+#define OSSL_DAY_TIME_BAND_new() __OSSL_DAY_TIME_BAND_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_DAY_TIME_BAND_it(__reg("a6") struct Library * ) = "\tjsr\t-8460(a6)";
+#define OSSL_DAY_TIME_BAND_it() __OSSL_DAY_TIME_BAND_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_DAY * __d2i_OSSL_TIME_SPEC_DAY(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_DAY ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8466(a6)";
+#define d2i_OSSL_TIME_SPEC_DAY(a, in, len) __d2i_OSSL_TIME_SPEC_DAY(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_DAY(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_DAY * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8472(a6)";
+#define i2d_OSSL_TIME_SPEC_DAY(a, out) __i2d_OSSL_TIME_SPEC_DAY(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_DAY_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_DAY * a ) = "\tjsr\t-8478(a6)";
+#define OSSL_TIME_SPEC_DAY_free(a) __OSSL_TIME_SPEC_DAY_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_DAY * __OSSL_TIME_SPEC_DAY_new(__reg("a6") struct Library * ) = "\tjsr\t-8484(a6)";
+#define OSSL_TIME_SPEC_DAY_new() __OSSL_TIME_SPEC_DAY_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_DAY_it(__reg("a6") struct Library * ) = "\tjsr\t-8490(a6)";
+#define OSSL_TIME_SPEC_DAY_it() __OSSL_TIME_SPEC_DAY_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_WEEKS * __d2i_OSSL_TIME_SPEC_WEEKS(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_WEEKS ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8496(a6)";
+#define d2i_OSSL_TIME_SPEC_WEEKS(a, in, len) __d2i_OSSL_TIME_SPEC_WEEKS(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_WEEKS(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_WEEKS * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8502(a6)";
+#define i2d_OSSL_TIME_SPEC_WEEKS(a, out) __i2d_OSSL_TIME_SPEC_WEEKS(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_WEEKS_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_WEEKS * a ) = "\tjsr\t-8508(a6)";
+#define OSSL_TIME_SPEC_WEEKS_free(a) __OSSL_TIME_SPEC_WEEKS_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_WEEKS * __OSSL_TIME_SPEC_WEEKS_new(__reg("a6") struct Library * ) = "\tjsr\t-8514(a6)";
+#define OSSL_TIME_SPEC_WEEKS_new() __OSSL_TIME_SPEC_WEEKS_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_WEEKS_it(__reg("a6") struct Library * ) = "\tjsr\t-8520(a6)";
+#define OSSL_TIME_SPEC_WEEKS_it() __OSSL_TIME_SPEC_WEEKS_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_MONTH * __d2i_OSSL_TIME_SPEC_MONTH(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_MONTH ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8526(a6)";
+#define d2i_OSSL_TIME_SPEC_MONTH(a, in, len) __d2i_OSSL_TIME_SPEC_MONTH(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_MONTH(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_MONTH * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8532(a6)";
+#define i2d_OSSL_TIME_SPEC_MONTH(a, out) __i2d_OSSL_TIME_SPEC_MONTH(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_MONTH_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_MONTH * a ) = "\tjsr\t-8538(a6)";
+#define OSSL_TIME_SPEC_MONTH_free(a) __OSSL_TIME_SPEC_MONTH_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_MONTH * __OSSL_TIME_SPEC_MONTH_new(__reg("a6") struct Library * ) = "\tjsr\t-8544(a6)";
+#define OSSL_TIME_SPEC_MONTH_new() __OSSL_TIME_SPEC_MONTH_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_MONTH_it(__reg("a6") struct Library * ) = "\tjsr\t-8550(a6)";
+#define OSSL_TIME_SPEC_MONTH_it() __OSSL_TIME_SPEC_MONTH_it(AmiSSLExtBase)
+
+OSSL_NAMED_DAY * __d2i_OSSL_NAMED_DAY(__reg("a6") struct Library * , __reg("a0") OSSL_NAMED_DAY ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8556(a6)";
+#define d2i_OSSL_NAMED_DAY(a, in, len) __d2i_OSSL_NAMED_DAY(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_NAMED_DAY(__reg("a6") struct Library * , __reg("a0") const OSSL_NAMED_DAY * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8562(a6)";
+#define i2d_OSSL_NAMED_DAY(a, out) __i2d_OSSL_NAMED_DAY(AmiSSLExtBase, (a), (out))
+
+void __OSSL_NAMED_DAY_free(__reg("a6") struct Library * , __reg("a0") OSSL_NAMED_DAY * a ) = "\tjsr\t-8568(a6)";
+#define OSSL_NAMED_DAY_free(a) __OSSL_NAMED_DAY_free(AmiSSLExtBase, (a))
+
+OSSL_NAMED_DAY * __OSSL_NAMED_DAY_new(__reg("a6") struct Library * ) = "\tjsr\t-8574(a6)";
+#define OSSL_NAMED_DAY_new() __OSSL_NAMED_DAY_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_NAMED_DAY_it(__reg("a6") struct Library * ) = "\tjsr\t-8580(a6)";
+#define OSSL_NAMED_DAY_it() __OSSL_NAMED_DAY_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_X_DAY_OF * __d2i_OSSL_TIME_SPEC_X_DAY_OF(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_X_DAY_OF ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8586(a6)";
+#define d2i_OSSL_TIME_SPEC_X_DAY_OF(a, in, len) __d2i_OSSL_TIME_SPEC_X_DAY_OF(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_X_DAY_OF(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_X_DAY_OF * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8592(a6)";
+#define i2d_OSSL_TIME_SPEC_X_DAY_OF(a, out) __i2d_OSSL_TIME_SPEC_X_DAY_OF(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_X_DAY_OF_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_X_DAY_OF * a ) = "\tjsr\t-8598(a6)";
+#define OSSL_TIME_SPEC_X_DAY_OF_free(a) __OSSL_TIME_SPEC_X_DAY_OF_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_X_DAY_OF * __OSSL_TIME_SPEC_X_DAY_OF_new(__reg("a6") struct Library * ) = "\tjsr\t-8604(a6)";
+#define OSSL_TIME_SPEC_X_DAY_OF_new() __OSSL_TIME_SPEC_X_DAY_OF_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_X_DAY_OF_it(__reg("a6") struct Library * ) = "\tjsr\t-8610(a6)";
+#define OSSL_TIME_SPEC_X_DAY_OF_it() __OSSL_TIME_SPEC_X_DAY_OF_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_ABSOLUTE * __d2i_OSSL_TIME_SPEC_ABSOLUTE(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_ABSOLUTE ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8616(a6)";
+#define d2i_OSSL_TIME_SPEC_ABSOLUTE(a, in, len) __d2i_OSSL_TIME_SPEC_ABSOLUTE(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_ABSOLUTE(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_ABSOLUTE * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8622(a6)";
+#define i2d_OSSL_TIME_SPEC_ABSOLUTE(a, out) __i2d_OSSL_TIME_SPEC_ABSOLUTE(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_ABSOLUTE_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_ABSOLUTE * a ) = "\tjsr\t-8628(a6)";
+#define OSSL_TIME_SPEC_ABSOLUTE_free(a) __OSSL_TIME_SPEC_ABSOLUTE_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_ABSOLUTE * __OSSL_TIME_SPEC_ABSOLUTE_new(__reg("a6") struct Library * ) = "\tjsr\t-8634(a6)";
+#define OSSL_TIME_SPEC_ABSOLUTE_new() __OSSL_TIME_SPEC_ABSOLUTE_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_ABSOLUTE_it(__reg("a6") struct Library * ) = "\tjsr\t-8640(a6)";
+#define OSSL_TIME_SPEC_ABSOLUTE_it() __OSSL_TIME_SPEC_ABSOLUTE_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC_TIME * __d2i_OSSL_TIME_SPEC_TIME(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_TIME ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8646(a6)";
+#define d2i_OSSL_TIME_SPEC_TIME(a, in, len) __d2i_OSSL_TIME_SPEC_TIME(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC_TIME(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC_TIME * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8652(a6)";
+#define i2d_OSSL_TIME_SPEC_TIME(a, out) __i2d_OSSL_TIME_SPEC_TIME(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_TIME_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC_TIME * a ) = "\tjsr\t-8658(a6)";
+#define OSSL_TIME_SPEC_TIME_free(a) __OSSL_TIME_SPEC_TIME_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC_TIME * __OSSL_TIME_SPEC_TIME_new(__reg("a6") struct Library * ) = "\tjsr\t-8664(a6)";
+#define OSSL_TIME_SPEC_TIME_new() __OSSL_TIME_SPEC_TIME_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_TIME_it(__reg("a6") struct Library * ) = "\tjsr\t-8670(a6)";
+#define OSSL_TIME_SPEC_TIME_it() __OSSL_TIME_SPEC_TIME_it(AmiSSLExtBase)
+
+OSSL_TIME_SPEC * __d2i_OSSL_TIME_SPEC(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8676(a6)";
+#define d2i_OSSL_TIME_SPEC(a, in, len) __d2i_OSSL_TIME_SPEC(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_SPEC(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_SPEC * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8682(a6)";
+#define i2d_OSSL_TIME_SPEC(a, out) __i2d_OSSL_TIME_SPEC(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_SPEC_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_SPEC * a ) = "\tjsr\t-8688(a6)";
+#define OSSL_TIME_SPEC_free(a) __OSSL_TIME_SPEC_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_SPEC * __OSSL_TIME_SPEC_new(__reg("a6") struct Library * ) = "\tjsr\t-8694(a6)";
+#define OSSL_TIME_SPEC_new() __OSSL_TIME_SPEC_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_SPEC_it(__reg("a6") struct Library * ) = "\tjsr\t-8700(a6)";
+#define OSSL_TIME_SPEC_it() __OSSL_TIME_SPEC_it(AmiSSLExtBase)
+
+OSSL_TIME_PERIOD * __d2i_OSSL_TIME_PERIOD(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_PERIOD ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8706(a6)";
+#define d2i_OSSL_TIME_PERIOD(a, in, len) __d2i_OSSL_TIME_PERIOD(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_TIME_PERIOD(__reg("a6") struct Library * , __reg("a0") const OSSL_TIME_PERIOD * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8712(a6)";
+#define i2d_OSSL_TIME_PERIOD(a, out) __i2d_OSSL_TIME_PERIOD(AmiSSLExtBase, (a), (out))
+
+void __OSSL_TIME_PERIOD_free(__reg("a6") struct Library * , __reg("a0") OSSL_TIME_PERIOD * a ) = "\tjsr\t-8718(a6)";
+#define OSSL_TIME_PERIOD_free(a) __OSSL_TIME_PERIOD_free(AmiSSLExtBase, (a))
+
+OSSL_TIME_PERIOD * __OSSL_TIME_PERIOD_new(__reg("a6") struct Library * ) = "\tjsr\t-8724(a6)";
+#define OSSL_TIME_PERIOD_new() __OSSL_TIME_PERIOD_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_TIME_PERIOD_it(__reg("a6") struct Library * ) = "\tjsr\t-8730(a6)";
+#define OSSL_TIME_PERIOD_it() __OSSL_TIME_PERIOD_it(AmiSSLExtBase)
+
+int __EVP_CIPHER_can_pipeline(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER * cipher , __reg("d0") int enc ) = "\tjsr\t-8736(a6)";
+#define EVP_CIPHER_can_pipeline(cipher, enc) __EVP_CIPHER_can_pipeline(AmiSSLExtBase, (cipher), (enc))
+
+int __EVP_CipherPipelineEncryptInit(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const EVP_CIPHER * cipher , __reg("a2") const unsigned char * key , __reg("d0") size_t keylen , __reg("d1") size_t numpipes , __reg("a3") const unsigned char ** iv , __reg("d2") size_t ivlen ) = "\tjsr\t-8742(a6)";
+#define EVP_CipherPipelineEncryptInit(ctx, cipher, key, keylen, numpipes, iv, ivlen) __EVP_CipherPipelineEncryptInit(AmiSSLExtBase, (ctx), (cipher), (key), (keylen), (numpipes), (iv), (ivlen))
+
+int __EVP_CipherPipelineDecryptInit(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const EVP_CIPHER * cipher , __reg("a2") const unsigned char * key , __reg("d0") size_t keylen , __reg("d1") size_t numpipes , __reg("a3") const unsigned char ** iv , __reg("d2") size_t ivlen ) = "\tjsr\t-8748(a6)";
+#define EVP_CipherPipelineDecryptInit(ctx, cipher, key, keylen, numpipes, iv, ivlen) __EVP_CipherPipelineDecryptInit(AmiSSLExtBase, (ctx), (cipher), (key), (keylen), (numpipes), (iv), (ivlen))
+
+int __EVP_CipherPipelineUpdate(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") unsigned char ** out , __reg("a2") size_t * outl , __reg("a3") const size_t * outsize , __reg("d0") const unsigned char ** in , __reg("d1") const size_t * inl ) = "\tjsr\t-8754(a6)";
+#define EVP_CipherPipelineUpdate(ctx, out, outl, outsize, in, inl) __EVP_CipherPipelineUpdate(AmiSSLExtBase, (ctx), (out), (outl), (outsize), (in), (inl))
+
+int __EVP_CipherPipelineFinal(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") unsigned char ** outm , __reg("a2") size_t * outl , __reg("a3") const size_t * outsize ) = "\tjsr\t-8760(a6)";
+#define EVP_CipherPipelineFinal(ctx, outm, outl, outsize) __EVP_CipherPipelineFinal(AmiSSLExtBase, (ctx), (outm), (outl), (outsize))
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * __d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_TYPE_MAPPING ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8766(a6)";
+#define d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(a, in, len) __d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(__reg("a6") struct Library * , __reg("a0") const OSSL_ATTRIBUTE_TYPE_MAPPING * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8772(a6)";
+#define i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(a, out) __i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATTRIBUTE_TYPE_MAPPING_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_TYPE_MAPPING * a ) = "\tjsr\t-8778(a6)";
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_free(a) __OSSL_ATTRIBUTE_TYPE_MAPPING_free(AmiSSLExtBase, (a))
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * __OSSL_ATTRIBUTE_TYPE_MAPPING_new(__reg("a6") struct Library * ) = "\tjsr\t-8784(a6)";
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_new() __OSSL_ATTRIBUTE_TYPE_MAPPING_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATTRIBUTE_TYPE_MAPPING_it(__reg("a6") struct Library * ) = "\tjsr\t-8790(a6)";
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_it() __OSSL_ATTRIBUTE_TYPE_MAPPING_it(AmiSSLExtBase)
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * __d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_VALUE_MAPPING ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8796(a6)";
+#define d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(a, in, len) __d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(__reg("a6") struct Library * , __reg("a0") const OSSL_ATTRIBUTE_VALUE_MAPPING * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8802(a6)";
+#define i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(a, out) __i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATTRIBUTE_VALUE_MAPPING_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_VALUE_MAPPING * a ) = "\tjsr\t-8808(a6)";
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_free(a) __OSSL_ATTRIBUTE_VALUE_MAPPING_free(AmiSSLExtBase, (a))
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * __OSSL_ATTRIBUTE_VALUE_MAPPING_new(__reg("a6") struct Library * ) = "\tjsr\t-8814(a6)";
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_new() __OSSL_ATTRIBUTE_VALUE_MAPPING_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATTRIBUTE_VALUE_MAPPING_it(__reg("a6") struct Library * ) = "\tjsr\t-8820(a6)";
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_it() __OSSL_ATTRIBUTE_VALUE_MAPPING_it(AmiSSLExtBase)
+
+OSSL_ATTRIBUTE_MAPPING * __d2i_OSSL_ATTRIBUTE_MAPPING(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_MAPPING ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8826(a6)";
+#define d2i_OSSL_ATTRIBUTE_MAPPING(a, in, len) __d2i_OSSL_ATTRIBUTE_MAPPING(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATTRIBUTE_MAPPING(__reg("a6") struct Library * , __reg("a0") const OSSL_ATTRIBUTE_MAPPING * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8832(a6)";
+#define i2d_OSSL_ATTRIBUTE_MAPPING(a, out) __i2d_OSSL_ATTRIBUTE_MAPPING(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATTRIBUTE_MAPPING_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_MAPPING * a ) = "\tjsr\t-8838(a6)";
+#define OSSL_ATTRIBUTE_MAPPING_free(a) __OSSL_ATTRIBUTE_MAPPING_free(AmiSSLExtBase, (a))
+
+OSSL_ATTRIBUTE_MAPPING * __OSSL_ATTRIBUTE_MAPPING_new(__reg("a6") struct Library * ) = "\tjsr\t-8844(a6)";
+#define OSSL_ATTRIBUTE_MAPPING_new() __OSSL_ATTRIBUTE_MAPPING_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATTRIBUTE_MAPPING_it(__reg("a6") struct Library * ) = "\tjsr\t-8850(a6)";
+#define OSSL_ATTRIBUTE_MAPPING_it() __OSSL_ATTRIBUTE_MAPPING_it(AmiSSLExtBase)
+
+OSSL_ATTRIBUTE_MAPPINGS * __d2i_OSSL_ATTRIBUTE_MAPPINGS(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_MAPPINGS ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8856(a6)";
+#define d2i_OSSL_ATTRIBUTE_MAPPINGS(a, in, len) __d2i_OSSL_ATTRIBUTE_MAPPINGS(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATTRIBUTE_MAPPINGS(__reg("a6") struct Library * , __reg("a0") const OSSL_ATTRIBUTE_MAPPINGS * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8862(a6)";
+#define i2d_OSSL_ATTRIBUTE_MAPPINGS(a, out) __i2d_OSSL_ATTRIBUTE_MAPPINGS(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATTRIBUTE_MAPPINGS_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATTRIBUTE_MAPPINGS * a ) = "\tjsr\t-8868(a6)";
+#define OSSL_ATTRIBUTE_MAPPINGS_free(a) __OSSL_ATTRIBUTE_MAPPINGS_free(AmiSSLExtBase, (a))
+
+OSSL_ATTRIBUTE_MAPPINGS * __OSSL_ATTRIBUTE_MAPPINGS_new(__reg("a6") struct Library * ) = "\tjsr\t-8874(a6)";
+#define OSSL_ATTRIBUTE_MAPPINGS_new() __OSSL_ATTRIBUTE_MAPPINGS_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATTRIBUTE_MAPPINGS_it(__reg("a6") struct Library * ) = "\tjsr\t-8880(a6)";
+#define OSSL_ATTRIBUTE_MAPPINGS_it() __OSSL_ATTRIBUTE_MAPPINGS_it(AmiSSLExtBase)
+
+OSSL_ATAV * __d2i_OSSL_ATAV(__reg("a6") struct Library * , __reg("a0") OSSL_ATAV ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8886(a6)";
+#define d2i_OSSL_ATAV(a, in, len) __d2i_OSSL_ATAV(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ATAV(__reg("a6") struct Library * , __reg("a0") const OSSL_ATAV * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8892(a6)";
+#define i2d_OSSL_ATAV(a, out) __i2d_OSSL_ATAV(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ATAV_free(__reg("a6") struct Library * , __reg("a0") OSSL_ATAV * a ) = "\tjsr\t-8898(a6)";
+#define OSSL_ATAV_free(a) __OSSL_ATAV_free(AmiSSLExtBase, (a))
+
+OSSL_ATAV * __OSSL_ATAV_new(__reg("a6") struct Library * ) = "\tjsr\t-8904(a6)";
+#define OSSL_ATAV_new() __OSSL_ATAV_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ATAV_it(__reg("a6") struct Library * ) = "\tjsr\t-8910(a6)";
+#define OSSL_ATAV_it() __OSSL_ATAV_it(AmiSSLExtBase)
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * __d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_CHOICE ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8916(a6)";
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(a, in, len) __d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(__reg("a6") struct Library * , __reg("a0") const OSSL_ALLOWED_ATTRIBUTES_CHOICE * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8922(a6)";
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(a, out) __i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_CHOICE * a ) = "\tjsr\t-8928(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(a) __OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(AmiSSLExtBase, (a))
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * __OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(__reg("a6") struct Library * ) = "\tjsr\t-8934(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_new() __OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ALLOWED_ATTRIBUTES_CHOICE_it(__reg("a6") struct Library * ) = "\tjsr\t-8940(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_it() __OSSL_ALLOWED_ATTRIBUTES_CHOICE_it(AmiSSLExtBase)
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * __d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_ITEM ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8946(a6)";
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(a, in, len) __d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(__reg("a6") struct Library * , __reg("a0") const OSSL_ALLOWED_ATTRIBUTES_ITEM * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8952(a6)";
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(a, out) __i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ALLOWED_ATTRIBUTES_ITEM_free(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_ITEM * a ) = "\tjsr\t-8958(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_free(a) __OSSL_ALLOWED_ATTRIBUTES_ITEM_free(AmiSSLExtBase, (a))
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * __OSSL_ALLOWED_ATTRIBUTES_ITEM_new(__reg("a6") struct Library * ) = "\tjsr\t-8964(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_new() __OSSL_ALLOWED_ATTRIBUTES_ITEM_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ALLOWED_ATTRIBUTES_ITEM_it(__reg("a6") struct Library * ) = "\tjsr\t-8970(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_it() __OSSL_ALLOWED_ATTRIBUTES_ITEM_it(AmiSSLExtBase)
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * __d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_SYNTAX ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-8976(a6)";
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(a, in, len) __d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(__reg("a6") struct Library * , __reg("a0") const OSSL_ALLOWED_ATTRIBUTES_SYNTAX * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-8982(a6)";
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(a, out) __i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(AmiSSLExtBase, (a), (out))
+
+void __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(__reg("a6") struct Library * , __reg("a0") OSSL_ALLOWED_ATTRIBUTES_SYNTAX * a ) = "\tjsr\t-8988(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(a) __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(AmiSSLExtBase, (a))
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new(__reg("a6") struct Library * ) = "\tjsr\t-8994(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new() __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it(__reg("a6") struct Library * ) = "\tjsr\t-9000(a6)";
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it() __OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it(AmiSSLExtBase)
+
+int __EVP_CipherInit_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_CIPHER_CTX * ctx , __reg("a1") const EVP_CIPHER * cipher , __reg("a2") EVP_SKEY * skey , __reg("a3") const unsigned char * iv , __reg("d0") size_t iv_len , __reg("d1") int enc , __reg("d2") const OSSL_PARAM * params ) = "\tjsr\t-9006(a6)";
+#define EVP_CipherInit_SKEY(ctx, cipher, skey, iv, iv_len, enc, params) __EVP_CipherInit_SKEY(AmiSSLExtBase, (ctx), (cipher), (skey), (iv), (iv_len), (enc), (params))
+
+EVP_SKEY * __EVP_SKEY_import(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * skeymgmtname , __reg("a2") const char * propquery , __reg("d0") int selection , __reg("a3") const OSSL_PARAM * params ) = "\tjsr\t-9012(a6)";
+#define EVP_SKEY_import(libctx, skeymgmtname, propquery, selection, params) __EVP_SKEY_import(AmiSSLExtBase, (libctx), (skeymgmtname), (propquery), (selection), (params))
+
+EVP_SKEY * __EVP_SKEY_generate(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * skeymgmtname , __reg("a2") const char * propquery , __reg("a3") const OSSL_PARAM * params ) = "\tjsr\t-9018(a6)";
+#define EVP_SKEY_generate(libctx, skeymgmtname, propquery, params) __EVP_SKEY_generate(AmiSSLExtBase, (libctx), (skeymgmtname), (propquery), (params))
+
+EVP_SKEY * __EVP_SKEY_import_raw_key(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * skeymgmtname , __reg("a2") unsigned char * key , __reg("d0") size_t keylen , __reg("a3") const char * propquery ) = "\tjsr\t-9024(a6)";
+#define EVP_SKEY_import_raw_key(libctx, skeymgmtname, key, keylen, propquery) __EVP_SKEY_import_raw_key(AmiSSLExtBase, (libctx), (skeymgmtname), (key), (keylen), (propquery))
+
+int __EVP_SKEY_get0_raw_key(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const unsigned char ** key , __reg("a2") size_t * len ) = "\tjsr\t-9030(a6)";
+#define EVP_SKEY_get0_raw_key(skey, key, len) __EVP_SKEY_get0_raw_key(AmiSSLExtBase, (skey), (key), (len))
+
+int __EVP_SKEY_export(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("d0") int selection , __reg("a1") OSSL_CALLBACK * export_cb , __reg("a2") void * export_cbarg ) = "\tjsr\t-9036(a6)";
+#define EVP_SKEY_export(skey, selection, export_cb, export_cbarg) __EVP_SKEY_export(AmiSSLExtBase, (skey), (selection), (export_cb), (export_cbarg))
+
+int __EVP_SKEY_up_ref(__reg("a6") struct Library * , __reg("a0") EVP_SKEY * skey ) = "\tjsr\t-9042(a6)";
+#define EVP_SKEY_up_ref(skey) __EVP_SKEY_up_ref(AmiSSLExtBase, (skey))
+
+void __EVP_SKEY_free(__reg("a6") struct Library * , __reg("a0") EVP_SKEY * skey ) = "\tjsr\t-9048(a6)";
+#define EVP_SKEY_free(skey) __EVP_SKEY_free(AmiSSLExtBase, (skey))
+
+EVP_SKEYMGMT * __EVP_SKEYMGMT_fetch(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * ctx , __reg("a1") const char * algorithm , __reg("a2") const char * properties ) = "\tjsr\t-9054(a6)";
+#define EVP_SKEYMGMT_fetch(ctx, algorithm, properties) __EVP_SKEYMGMT_fetch(AmiSSLExtBase, (ctx), (algorithm), (properties))
+
+int __EVP_SKEYMGMT_up_ref(__reg("a6") struct Library * , __reg("a0") EVP_SKEYMGMT * keymgmt ) = "\tjsr\t-9060(a6)";
+#define EVP_SKEYMGMT_up_ref(keymgmt) __EVP_SKEYMGMT_up_ref(AmiSSLExtBase, (keymgmt))
+
+void __EVP_SKEYMGMT_free(__reg("a6") struct Library * , __reg("a0") EVP_SKEYMGMT * keymgmt ) = "\tjsr\t-9066(a6)";
+#define EVP_SKEYMGMT_free(keymgmt) __EVP_SKEYMGMT_free(AmiSSLExtBase, (keymgmt))
+
+const OSSL_PROVIDER * __EVP_SKEYMGMT_get0_provider(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * keymgmt ) = "\tjsr\t-9072(a6)";
+#define EVP_SKEYMGMT_get0_provider(keymgmt) __EVP_SKEYMGMT_get0_provider(AmiSSLExtBase, (keymgmt))
+
+const char * __EVP_SKEYMGMT_get0_name(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * keymgmt ) = "\tjsr\t-9078(a6)";
+#define EVP_SKEYMGMT_get0_name(keymgmt) __EVP_SKEYMGMT_get0_name(AmiSSLExtBase, (keymgmt))
+
+const char * __EVP_SKEYMGMT_get0_description(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * keymgmt ) = "\tjsr\t-9084(a6)";
+#define EVP_SKEYMGMT_get0_description(keymgmt) __EVP_SKEYMGMT_get0_description(AmiSSLExtBase, (keymgmt))
+
+int __EVP_SKEYMGMT_is_a(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * keymgmt , __reg("a1") const char * name ) = "\tjsr\t-9090(a6)";
+#define EVP_SKEYMGMT_is_a(keymgmt, name) __EVP_SKEYMGMT_is_a(AmiSSLExtBase, (keymgmt), (name))
+
+void __EVP_SKEYMGMT_do_all_provided(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") void (*fn)(EVP_SKEYMGMT *keymgmt,void *arg) , __reg("a2") void * arg ) = "\tjsr\t-9096(a6)";
+#define EVP_SKEYMGMT_do_all_provided(libctx, fn, arg) __EVP_SKEYMGMT_do_all_provided(AmiSSLExtBase, (libctx), (fn), (arg))
+
+int __EVP_SKEYMGMT_names_do_all(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * keymgmt , __reg("a1") void (*fn)(const char *name,void *data) , __reg("a2") void * data ) = "\tjsr\t-9102(a6)";
+#define EVP_SKEYMGMT_names_do_all(keymgmt, fn, data) __EVP_SKEYMGMT_names_do_all(AmiSSLExtBase, (keymgmt), (fn), (data))
+
+int __EVP_MAC_init_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_MAC_CTX * ctx , __reg("a1") EVP_SKEY * skey , __reg("a2") const OSSL_PARAM * params ) = "\tjsr\t-9108(a6)";
+#define EVP_MAC_init_SKEY(ctx, skey, params) __EVP_MAC_init_SKEY(AmiSSLExtBase, (ctx), (skey), (params))
+
+const char * __EVP_SKEY_get0_key_id(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey ) = "\tjsr\t-9114(a6)";
+#define EVP_SKEY_get0_key_id(skey) __EVP_SKEY_get0_key_id(AmiSSLExtBase, (skey))
+
+const char * __EVP_SKEY_get0_skeymgmt_name(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey ) = "\tjsr\t-9120(a6)";
+#define EVP_SKEY_get0_skeymgmt_name(skey) __EVP_SKEY_get0_skeymgmt_name(AmiSSLExtBase, (skey))
+
+const char * __EVP_SKEY_get0_provider_name(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey ) = "\tjsr\t-9126(a6)";
+#define EVP_SKEY_get0_provider_name(skey) __EVP_SKEY_get0_provider_name(AmiSSLExtBase, (skey))
+
+const OSSL_PARAM * __EVP_SKEYMGMT_get0_gen_settable_params(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * skeymgmt ) = "\tjsr\t-9132(a6)";
+#define EVP_SKEYMGMT_get0_gen_settable_params(skeymgmt) __EVP_SKEYMGMT_get0_gen_settable_params(AmiSSLExtBase, (skeymgmt))
+
+const OSSL_PARAM * __EVP_SKEYMGMT_get0_imp_settable_params(__reg("a6") struct Library * , __reg("a0") const EVP_SKEYMGMT * skeymgmt ) = "\tjsr\t-9138(a6)";
+#define EVP_SKEYMGMT_get0_imp_settable_params(skeymgmt) __EVP_SKEYMGMT_get0_imp_settable_params(AmiSSLExtBase, (skeymgmt))
+
+int __EVP_SKEY_is_a(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const char * name ) = "\tjsr\t-9144(a6)";
+#define EVP_SKEY_is_a(skey, name) __EVP_SKEY_is_a(AmiSSLExtBase, (skey), (name))
+
+EVP_SKEY * __EVP_SKEY_to_provider(__reg("a6") struct Library * , __reg("a0") EVP_SKEY * skey , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") OSSL_PROVIDER * prov , __reg("a3") const char * propquery ) = "\tjsr\t-9150(a6)";
+#define EVP_SKEY_to_provider(skey, libctx, prov, propquery) __EVP_SKEY_to_provider(AmiSSLExtBase, (skey), (libctx), (prov), (propquery))
+
+int __OSSL_PROVIDER_add_conf_parameter(__reg("a6") struct Library * , __reg("a0") OSSL_PROVIDER * prov , __reg("a1") const char * name , __reg("a2") const char * value ) = "\tjsr\t-9156(a6)";
+#define OSSL_PROVIDER_add_conf_parameter(prov, name, value) __OSSL_PROVIDER_add_conf_parameter(AmiSSLExtBase, (prov), (name), (value))
+
+int __OSSL_PROVIDER_get_conf_parameters(__reg("a6") struct Library * , __reg("a0") const OSSL_PROVIDER * prov , __reg("a1") OSSL_PARAM * params ) = "\tjsr\t-9162(a6)";
+#define OSSL_PROVIDER_get_conf_parameters(prov, params) __OSSL_PROVIDER_get_conf_parameters(AmiSSLExtBase, (prov), (params))
+
+int __OSSL_PROVIDER_conf_get_bool(__reg("a6") struct Library * , __reg("a0") const OSSL_PROVIDER * prov , __reg("a1") const char * name , __reg("d0") int defval ) = "\tjsr\t-9168(a6)";
+#define OSSL_PROVIDER_conf_get_bool(prov, name, defval) __OSSL_PROVIDER_conf_get_bool(AmiSSLExtBase, (prov), (name), (defval))
+
+OSSL_AA_DIST_POINT * __d2i_OSSL_AA_DIST_POINT(__reg("a6") struct Library * , __reg("a0") OSSL_AA_DIST_POINT ** a , __reg("a1") const unsigned char ** in , __reg("d0") long len ) = "\tjsr\t-9174(a6)";
+#define d2i_OSSL_AA_DIST_POINT(a, in, len) __d2i_OSSL_AA_DIST_POINT(AmiSSLExtBase, (a), (in), (len))
+
+int __i2d_OSSL_AA_DIST_POINT(__reg("a6") struct Library * , __reg("a0") const OSSL_AA_DIST_POINT * a , __reg("a1") unsigned char ** out ) = "\tjsr\t-9180(a6)";
+#define i2d_OSSL_AA_DIST_POINT(a, out) __i2d_OSSL_AA_DIST_POINT(AmiSSLExtBase, (a), (out))
+
+void __OSSL_AA_DIST_POINT_free(__reg("a6") struct Library * , __reg("a0") OSSL_AA_DIST_POINT * a ) = "\tjsr\t-9186(a6)";
+#define OSSL_AA_DIST_POINT_free(a) __OSSL_AA_DIST_POINT_free(AmiSSLExtBase, (a))
+
+OSSL_AA_DIST_POINT * __OSSL_AA_DIST_POINT_new(__reg("a6") struct Library * ) = "\tjsr\t-9192(a6)";
+#define OSSL_AA_DIST_POINT_new() __OSSL_AA_DIST_POINT_new(AmiSSLExtBase)
+
+const ASN1_ITEM * __OSSL_AA_DIST_POINT_it(__reg("a6") struct Library * ) = "\tjsr\t-9198(a6)";
+#define OSSL_AA_DIST_POINT_it() __OSSL_AA_DIST_POINT_it(AmiSSLExtBase)
+
+int __PEM_ASN1_write_bio_ctx(__reg("a6") struct Library * , __reg("a0") OSSL_i2d_of_void_ctx * i2d , __reg("a1") void * vctx , __reg("a2") const char * name , __reg("a3") BIO * bp , __reg("d0") const void * x , __reg("d1") const EVP_CIPHER * enc , __reg("d2") const unsigned char * kstr , __reg("d3") int klen , __reg("d4") pem_password_cb * cb , __reg("d5") void * u ) = "\tjsr\t-9204(a6)";
+#define PEM_ASN1_write_bio_ctx(i2d, vctx, name, bp, x, enc, kstr, klen, cb, u) __PEM_ASN1_write_bio_ctx(AmiSSLExtBase, (i2d), (vctx), (name), (bp), (x), (enc), (kstr), (klen), (cb), (u))
+
 #endif /* !_INLINE_AMISSLEXT_H */

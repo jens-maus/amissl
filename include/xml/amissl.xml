@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2024 AmiSSL Open Source Team.
+ Copyright (c) 2006-2025 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18988,13 +18988,13 @@
       <arg name="type" type="int" m68kreg="d0"/>
       <arg name="name" type="const char *" m68kreg="a0"/>
     </method>
-    <method name="BIO_meth_get_puts" result="int (*)(BIO *, const char *)">
+    <method name="BIO_meth_get_puts" result="int (*)(BIO *, const char *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="BIO_meth_get_ctrl" result="long (*)(BIO *, int, long, void *)">
+    <method name="BIO_meth_get_ctrl" result="long (*)(BIO *, int, long, void *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="BIO_meth_get_gets" result="int (*)(BIO *, char *, int)">
+    <method name="BIO_meth_get_gets" result="int (*)(BIO *, char *, int)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_get_data" result="void *">
@@ -19030,14 +19030,14 @@
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="create" type="int (*)(BIO *)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_write" result="int (*)(BIO *, const char *, int)">
+    <method name="BIO_meth_get_write" result="int (*)(BIO *, const char *, int)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_meth_set_callback_ctrl" result="int">
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="callback_ctrl" type="long (*)(BIO *, int, BIO_info_cb *)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_create" result="int (*)(BIO *)">
+    <method name="BIO_meth_get_create" result="int (*)(BIO *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_set_next" result="void">
@@ -19060,13 +19060,13 @@
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="ossl_gets" type="int (*)(BIO *, char *, int)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_callback_ctrl" result="long (*)(BIO *, int, BIO_info_cb *)">
+    <method name="BIO_meth_get_callback_ctrl" result="long (*)(BIO *, int, BIO_info_cb *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="BIO_meth_get_destroy" result="int (*)(BIO *)">
+    <method name="BIO_meth_get_destroy" result="int (*)(BIO *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="BIO_meth_get_read" result="int (*)(BIO *, char *, int)">
+    <method name="BIO_meth_get_read" result="int (*)(BIO *, char *, int)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_set_retry_reason" result="void">
@@ -20549,7 +20549,7 @@
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="bread" type="int (*)(BIO *, char *, size_t, size_t *)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_read_ex" result="int (*)(BIO *, char *, size_t, size_t *)">
+    <method name="BIO_meth_get_read_ex" result="int (*)(BIO *, char *, size_t, size_t *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_write_ex" result="int">
@@ -20558,7 +20558,7 @@
       <arg name="dlen" type="size_t" m68kreg="d0"/>
       <arg name="written" type="size_t *" m68kreg="a2"/>
     </method>
-    <method name="BIO_meth_get_write_ex" result="int (*)(BIO *, const char *, size_t, size_t *)">
+    <method name="BIO_meth_get_write_ex" result="int (*)(BIO *, const char *, size_t, size_t *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_meth_set_write_ex" result="int">
@@ -26922,14 +26922,14 @@
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="f" type="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_sendmmsg" result="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)">
+    <method name="BIO_meth_get_sendmmsg" result="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_meth_set_recvmmsg" result="int">
       <arg name="biom" type="BIO_METHOD *" m68kreg="a0"/>
       <arg name="f" type="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)" m68kreg="a1"/>
     </method>
-    <method name="BIO_meth_get_recvmmsg" result="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)">
+    <method name="BIO_meth_get_recvmmsg" result="int (*)(BIO *, BIO_MSG *, size_t, size_t, uint64_t, size_t *)" lifecycle="deprecated">
       <arg name="biom" type="const BIO_METHOD *" m68kreg="a0"/>
     </method>
     <method name="BIO_err_is_non_fatal" result="int">
@@ -28024,6 +28024,768 @@
     <method name="OSSL_TARGETING_INFORMATION_new" result="OSSL_TARGETING_INFORMATION *">
     </method>
     <method name="OSSL_TARGETING_INFORMATION_it" result="const ASN1_ITEM *">
+    </method>
+
+    <!-- AmiSSL v5.20 - OpenSSL 3.5.0 -->
+    
+    <method name="SSL_set_quic_tls_cbs" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="qtdis" type="const OSSL_DISPATCH *" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_set_quic_tls_transport_params" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="params" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="params_len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_set_quic_tls_early_data_enabled" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="enabled" type="int" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_QUIC_server_method" result="const SSL_METHOD *">
+    </method>
+    <method name="SSL_is_listener" result="int">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get0_listener" result="SSL *">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_new_listener" result="SSL *">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_accept_connection" result="SSL *">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_get_accept_connection_queue_len" result="size_t">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_listen" result="int">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_new_from_listener" result="SSL *">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_new_listener_from" result="SSL *">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_is_domain" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get0_domain" result="SSL *">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_new_domain" result="SSL *">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_CTX_set_domain_flags" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="domain_flags" type="uint64_t" m68kreg="d0-d1"/>
+    </method>
+    <method name="SSL_CTX_get_domain_flags" result="int">
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+      <arg name="domain_flags" type="uint64_t *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_get_domain_flags" result="int">
+      <arg name="ssl" type="const SSL *" m68kreg="a0"/>
+      <arg name="domain_flags" type="uint64_t *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_set_new_pending_conn_cb" result="void">
+      <arg name="c" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="cb" type="SSL_new_pending_conn_cb_fn" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_get_purpose" result="int">
+      <arg name="param" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+    </method>
+    <method name="d2i_OSSL_CRMF_ENCRYPTEDKEY" result="OSSL_CRMF_ENCRYPTEDKEY *">
+      <arg name="a" type="OSSL_CRMF_ENCRYPTEDKEY **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_CRMF_ENCRYPTEDKEY" result="int">
+      <arg name="a" type="const OSSL_CRMF_ENCRYPTEDKEY *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_free" result="void">
+      <arg name="a" type="OSSL_CRMF_ENCRYPTEDKEY *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_new" result="OSSL_CRMF_ENCRYPTEDKEY *">
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_get1_encCert" result="X509 *">
+      <arg name="ecert" type="const OSSL_CRMF_ENCRYPTEDKEY *" m68kreg="a0"/>
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a1"/>
+      <arg name="propq" type="const char *" m68kreg="a2"/>
+      <arg name="pkey" type="EVP_PKEY *" m68kreg="a3"/>
+      <arg name="flags" type="unsigned int" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDVALUE_decrypt" result="unsigned char *">
+      <arg name="enc" type="const OSSL_CRMF_ENCRYPTEDVALUE *" m68kreg="a0"/>
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a1"/>
+      <arg name="propq" type="const char *" m68kreg="a2"/>
+      <arg name="pkey" type="EVP_PKEY *" m68kreg="a3"/>
+      <arg name="outlen" type="int *" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_get1_pkey" result="EVP_PKEY *">
+      <arg name="encryptedKey" type="const OSSL_CRMF_ENCRYPTEDKEY *" m68kreg="a0"/>
+      <arg name="ts" type="X509_STORE *" m68kreg="a1"/>
+      <arg name="extra" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="pkey" type="EVP_PKEY *" m68kreg="a3"/>
+      <arg name="cert" type="X509 *" m68kreg="d0"/>
+      <arg name="secret" type="ASN1_OCTET_STRING *" m68kreg="d1"/>
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="d2"/>
+      <arg name="propq" type="const char *" m68kreg="d3"/>
+    </method>
+    <method name="OSSL_CRMF_MSG_centralkeygen_requested" result="int">
+      <arg name="crm" type="const OSSL_CRMF_MSG *" m68kreg="a0"/>
+      <arg name="p10cr" type="const X509_REQ *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_EnvelopedData_dup" result="CMS_EnvelopedData *">
+      <arg name="a" type="const CMS_EnvelopedData *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_CRMF_ENCRYPTEDKEY_init_envdata" result="OSSL_CRMF_ENCRYPTEDKEY *">
+      <arg name="envdata" type="CMS_EnvelopedData *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_get1_default_properties" result="char *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="RAND_set1_random_provider" result="int">
+      <arg name="ctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="p" type="OSSL_PROVIDER *" m68kreg="a1"/>
+    </method>
+    <method name="X509_PURPOSE_get_unused_id" result="int">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX" result="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *">
+      <arg name="a" type="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX" result="int">
+      <arg name="a" type="const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free" result="void">
+      <arg name="a" type="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new" result="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *">
+    </method>
+    <method name="OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ROLE_SPEC_CERT_ID" result="OSSL_ROLE_SPEC_CERT_ID *">
+      <arg name="a" type="OSSL_ROLE_SPEC_CERT_ID **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ROLE_SPEC_CERT_ID" result="int">
+      <arg name="a" type="const OSSL_ROLE_SPEC_CERT_ID *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_free" result="void">
+      <arg name="a" type="OSSL_ROLE_SPEC_CERT_ID *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_new" result="OSSL_ROLE_SPEC_CERT_ID *">
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX" result="OSSL_ROLE_SPEC_CERT_ID_SYNTAX *">
+      <arg name="a" type="OSSL_ROLE_SPEC_CERT_ID_SYNTAX **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX" result="int">
+      <arg name="a" type="const OSSL_ROLE_SPEC_CERT_ID_SYNTAX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free" result="void">
+      <arg name="a" type="OSSL_ROLE_SPEC_CERT_ID_SYNTAX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new" result="OSSL_ROLE_SPEC_CERT_ID_SYNTAX *">
+    </method>
+    <method name="OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ATTRIBUTE_DESCRIPTOR" result="OSSL_ATTRIBUTE_DESCRIPTOR *">
+      <arg name="a" type="OSSL_ATTRIBUTE_DESCRIPTOR **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATTRIBUTE_DESCRIPTOR" result="int">
+      <arg name="a" type="const OSSL_ATTRIBUTE_DESCRIPTOR *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_DESCRIPTOR_free" result="void">
+      <arg name="a" type="OSSL_ATTRIBUTE_DESCRIPTOR *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_DESCRIPTOR_new" result="OSSL_ATTRIBUTE_DESCRIPTOR *">
+    </method>
+    <method name="OSSL_ATTRIBUTE_DESCRIPTOR_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="OSSL_HASH_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="OSSL_INFO_SYNTAX_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="OSSL_INFO_SYNTAX_POINTER_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="OSSL_PRIVILEGE_POLICY_ID_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_HASH" result="OSSL_HASH *">
+      <arg name="a" type="OSSL_HASH **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_HASH" result="int">
+      <arg name="a" type="const OSSL_HASH *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_HASH_free" result="void">
+      <arg name="a" type="OSSL_HASH *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_HASH_new" result="OSSL_HASH *">
+    </method>
+    <method name="d2i_OSSL_INFO_SYNTAX" result="OSSL_INFO_SYNTAX *">
+      <arg name="a" type="OSSL_INFO_SYNTAX **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_INFO_SYNTAX" result="int">
+      <arg name="a" type="const OSSL_INFO_SYNTAX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_INFO_SYNTAX_free" result="void">
+      <arg name="a" type="OSSL_INFO_SYNTAX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_INFO_SYNTAX_new" result="OSSL_INFO_SYNTAX *">
+    </method>
+    <method name="d2i_OSSL_INFO_SYNTAX_POINTER" result="OSSL_INFO_SYNTAX_POINTER *">
+      <arg name="a" type="OSSL_INFO_SYNTAX_POINTER **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_INFO_SYNTAX_POINTER" result="int">
+      <arg name="a" type="const OSSL_INFO_SYNTAX_POINTER *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_INFO_SYNTAX_POINTER_free" result="void">
+      <arg name="a" type="OSSL_INFO_SYNTAX_POINTER *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_INFO_SYNTAX_POINTER_new" result="OSSL_INFO_SYNTAX_POINTER *">
+    </method>
+    <method name="d2i_OSSL_PRIVILEGE_POLICY_ID" result="OSSL_PRIVILEGE_POLICY_ID *">
+      <arg name="a" type="OSSL_PRIVILEGE_POLICY_ID **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_PRIVILEGE_POLICY_ID" result="int">
+      <arg name="a" type="const OSSL_PRIVILEGE_POLICY_ID *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_PRIVILEGE_POLICY_ID_free" result="void">
+      <arg name="a" type="OSSL_PRIVILEGE_POLICY_ID *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_PRIVILEGE_POLICY_ID_new" result="OSSL_PRIVILEGE_POLICY_ID *">
+    </method>
+    <method name="OSSL_PARAM_print_to_bio" result="int">
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="a0"/>
+      <arg name="bio" type="BIO *" m68kreg="a1"/>
+      <arg name="print_values" type="int" m68kreg="d0"/>
+    </method>
+    <method name="d2i_OSSL_DAY_TIME" result="OSSL_DAY_TIME *">
+      <arg name="a" type="OSSL_DAY_TIME **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_DAY_TIME" result="int">
+      <arg name="a" type="const OSSL_DAY_TIME *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_DAY_TIME_free" result="void">
+      <arg name="a" type="OSSL_DAY_TIME *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_DAY_TIME_new" result="OSSL_DAY_TIME *">
+    </method>
+    <method name="OSSL_DAY_TIME_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_DAY_TIME_BAND" result="OSSL_DAY_TIME_BAND *">
+      <arg name="a" type="OSSL_DAY_TIME_BAND **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_DAY_TIME_BAND" result="int">
+      <arg name="a" type="const OSSL_DAY_TIME_BAND *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_DAY_TIME_BAND_free" result="void">
+      <arg name="a" type="OSSL_DAY_TIME_BAND *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_DAY_TIME_BAND_new" result="OSSL_DAY_TIME_BAND *">
+    </method>
+    <method name="OSSL_DAY_TIME_BAND_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_DAY" result="OSSL_TIME_SPEC_DAY *">
+      <arg name="a" type="OSSL_TIME_SPEC_DAY **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_DAY" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_DAY *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_DAY_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_DAY *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_DAY_new" result="OSSL_TIME_SPEC_DAY *">
+    </method>
+    <method name="OSSL_TIME_SPEC_DAY_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_WEEKS" result="OSSL_TIME_SPEC_WEEKS *">
+      <arg name="a" type="OSSL_TIME_SPEC_WEEKS **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_WEEKS" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_WEEKS *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_WEEKS_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_WEEKS *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_WEEKS_new" result="OSSL_TIME_SPEC_WEEKS *">
+    </method>
+    <method name="OSSL_TIME_SPEC_WEEKS_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_MONTH" result="OSSL_TIME_SPEC_MONTH *">
+      <arg name="a" type="OSSL_TIME_SPEC_MONTH **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_MONTH" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_MONTH *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_MONTH_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_MONTH *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_MONTH_new" result="OSSL_TIME_SPEC_MONTH *">
+    </method>
+    <method name="OSSL_TIME_SPEC_MONTH_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_NAMED_DAY" result="OSSL_NAMED_DAY *">
+      <arg name="a" type="OSSL_NAMED_DAY **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_NAMED_DAY" result="int">
+      <arg name="a" type="const OSSL_NAMED_DAY *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_NAMED_DAY_free" result="void">
+      <arg name="a" type="OSSL_NAMED_DAY *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_NAMED_DAY_new" result="OSSL_NAMED_DAY *">
+    </method>
+    <method name="OSSL_NAMED_DAY_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_X_DAY_OF" result="OSSL_TIME_SPEC_X_DAY_OF *">
+      <arg name="a" type="OSSL_TIME_SPEC_X_DAY_OF **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_X_DAY_OF" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_X_DAY_OF *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_X_DAY_OF_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_X_DAY_OF *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_X_DAY_OF_new" result="OSSL_TIME_SPEC_X_DAY_OF *">
+    </method>
+    <method name="OSSL_TIME_SPEC_X_DAY_OF_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_ABSOLUTE" result="OSSL_TIME_SPEC_ABSOLUTE *">
+      <arg name="a" type="OSSL_TIME_SPEC_ABSOLUTE **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_ABSOLUTE" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_ABSOLUTE *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_ABSOLUTE_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_ABSOLUTE *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_ABSOLUTE_new" result="OSSL_TIME_SPEC_ABSOLUTE *">
+    </method>
+    <method name="OSSL_TIME_SPEC_ABSOLUTE_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC_TIME" result="OSSL_TIME_SPEC_TIME *">
+      <arg name="a" type="OSSL_TIME_SPEC_TIME **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC_TIME" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC_TIME *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_TIME_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC_TIME *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_TIME_new" result="OSSL_TIME_SPEC_TIME *">
+    </method>
+    <method name="OSSL_TIME_SPEC_TIME_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_SPEC" result="OSSL_TIME_SPEC *">
+      <arg name="a" type="OSSL_TIME_SPEC **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_SPEC" result="int">
+      <arg name="a" type="const OSSL_TIME_SPEC *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_free" result="void">
+      <arg name="a" type="OSSL_TIME_SPEC *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_SPEC_new" result="OSSL_TIME_SPEC *">
+    </method>
+    <method name="OSSL_TIME_SPEC_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_TIME_PERIOD" result="OSSL_TIME_PERIOD *">
+      <arg name="a" type="OSSL_TIME_PERIOD **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_TIME_PERIOD" result="int">
+      <arg name="a" type="const OSSL_TIME_PERIOD *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_TIME_PERIOD_free" result="void">
+      <arg name="a" type="OSSL_TIME_PERIOD *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_TIME_PERIOD_new" result="OSSL_TIME_PERIOD *">
+    </method>
+    <method name="OSSL_TIME_PERIOD_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="EVP_CIPHER_can_pipeline" result="int">
+      <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
+      <arg name="enc" type="int" m68kreg="d0"/>
+    </method>
+    <method name="EVP_CipherPipelineEncryptInit" result="int">
+      <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
+      <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a1"/>
+      <arg name="key" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="keylen" type="size_t" m68kreg="d0"/>
+      <arg name="numpipes" type="size_t" m68kreg="d1"/>
+      <arg name="iv" type="const unsigned char **" m68kreg="a3"/>
+      <arg name="ivlen" type="size_t" m68kreg="d2"/>
+    </method>
+    <method name="EVP_CipherPipelineDecryptInit" result="int">
+      <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
+      <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a1"/>
+      <arg name="key" type="const unsigned char *" m68kreg="a2"/>
+      <arg name="keylen" type="size_t" m68kreg="d0"/>
+      <arg name="numpipes" type="size_t" m68kreg="d1"/>
+      <arg name="iv" type="const unsigned char **" m68kreg="a3"/>
+      <arg name="ivlen" type="size_t" m68kreg="d2"/>
+    </method>
+    <method name="EVP_CipherPipelineUpdate" result="int">
+      <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+      <arg name="outl" type="size_t *" m68kreg="a2"/>
+      <arg name="outsize" type="const size_t *" m68kreg="a3"/>
+      <arg name="in" type="const unsigned char **" m68kreg="d0"/>
+      <arg name="inl" type="const size_t *" m68kreg="d1"/>
+    </method>
+    <method name="EVP_CipherPipelineFinal" result="int">
+      <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
+      <arg name="outm" type="unsigned char **" m68kreg="a1"/>
+      <arg name="outl" type="size_t *" m68kreg="a2"/>
+      <arg name="outsize" type="const size_t *" m68kreg="a3"/>
+    </method>
+    <method name="d2i_OSSL_ATTRIBUTE_TYPE_MAPPING" result="OSSL_ATTRIBUTE_TYPE_MAPPING *">
+      <arg name="a" type="OSSL_ATTRIBUTE_TYPE_MAPPING **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATTRIBUTE_TYPE_MAPPING" result="int">
+      <arg name="a" type="const OSSL_ATTRIBUTE_TYPE_MAPPING *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_TYPE_MAPPING_free" result="void">
+      <arg name="a" type="OSSL_ATTRIBUTE_TYPE_MAPPING *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_TYPE_MAPPING_new" result="OSSL_ATTRIBUTE_TYPE_MAPPING *">
+    </method>
+    <method name="OSSL_ATTRIBUTE_TYPE_MAPPING_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ATTRIBUTE_VALUE_MAPPING" result="OSSL_ATTRIBUTE_VALUE_MAPPING *">
+      <arg name="a" type="OSSL_ATTRIBUTE_VALUE_MAPPING **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATTRIBUTE_VALUE_MAPPING" result="int">
+      <arg name="a" type="const OSSL_ATTRIBUTE_VALUE_MAPPING *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_VALUE_MAPPING_free" result="void">
+      <arg name="a" type="OSSL_ATTRIBUTE_VALUE_MAPPING *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_VALUE_MAPPING_new" result="OSSL_ATTRIBUTE_VALUE_MAPPING *">
+    </method>
+    <method name="OSSL_ATTRIBUTE_VALUE_MAPPING_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ATTRIBUTE_MAPPING" result="OSSL_ATTRIBUTE_MAPPING *">
+      <arg name="a" type="OSSL_ATTRIBUTE_MAPPING **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATTRIBUTE_MAPPING" result="int">
+      <arg name="a" type="const OSSL_ATTRIBUTE_MAPPING *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPING_free" result="void">
+      <arg name="a" type="OSSL_ATTRIBUTE_MAPPING *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPING_new" result="OSSL_ATTRIBUTE_MAPPING *">
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPING_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ATTRIBUTE_MAPPINGS" result="OSSL_ATTRIBUTE_MAPPINGS *">
+      <arg name="a" type="OSSL_ATTRIBUTE_MAPPINGS **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATTRIBUTE_MAPPINGS" result="int">
+      <arg name="a" type="const OSSL_ATTRIBUTE_MAPPINGS *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPINGS_free" result="void">
+      <arg name="a" type="OSSL_ATTRIBUTE_MAPPINGS *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPINGS_new" result="OSSL_ATTRIBUTE_MAPPINGS *">
+    </method>
+    <method name="OSSL_ATTRIBUTE_MAPPINGS_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ATAV" result="OSSL_ATAV *">
+      <arg name="a" type="OSSL_ATAV **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ATAV" result="int">
+      <arg name="a" type="const OSSL_ATAV *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ATAV_free" result="void">
+      <arg name="a" type="OSSL_ATAV *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ATAV_new" result="OSSL_ATAV *">
+    </method>
+    <method name="OSSL_ATAV_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE" result="OSSL_ALLOWED_ATTRIBUTES_CHOICE *">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_CHOICE **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE" result="int">
+      <arg name="a" type="const OSSL_ALLOWED_ATTRIBUTES_CHOICE *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_CHOICE_free" result="void">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_CHOICE *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_CHOICE_new" result="OSSL_ALLOWED_ATTRIBUTES_CHOICE *">
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_CHOICE_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM" result="OSSL_ALLOWED_ATTRIBUTES_ITEM *">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_ITEM **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM" result="int">
+      <arg name="a" type="const OSSL_ALLOWED_ATTRIBUTES_ITEM *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_ITEM_free" result="void">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_ITEM *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_ITEM_new" result="OSSL_ALLOWED_ATTRIBUTES_ITEM *">
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_ITEM_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX" result="OSSL_ALLOWED_ATTRIBUTES_SYNTAX *">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_SYNTAX **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX" result="int">
+      <arg name="a" type="const OSSL_ALLOWED_ATTRIBUTES_SYNTAX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free" result="void">
+      <arg name="a" type="OSSL_ALLOWED_ATTRIBUTES_SYNTAX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new" result="OSSL_ALLOWED_ATTRIBUTES_SYNTAX *">
+    </method>
+    <method name="OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="EVP_CipherInit_SKEY" result="int">
+      <arg name="ctx" type="EVP_CIPHER_CTX *" m68kreg="a0"/>
+      <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a1"/>
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a2"/>
+      <arg name="iv" type="const unsigned char *" m68kreg="a3"/>
+      <arg name="iv_len" type="size_t" m68kreg="d0"/>
+      <arg name="enc" type="int" m68kreg="d1"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="d2"/>
+    </method>
+    <method name="EVP_SKEY_import" result="EVP_SKEY *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="skeymgmtname" type="const char *" m68kreg="a1"/>
+      <arg name="propquery" type="const char *" m68kreg="a2"/>
+      <arg name="selection" type="int" m68kreg="d0"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="a3"/>
+    </method>
+    <method name="EVP_SKEY_generate" result="EVP_SKEY *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="skeymgmtname" type="const char *" m68kreg="a1"/>
+      <arg name="propquery" type="const char *" m68kreg="a2"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="a3"/>
+    </method>
+    <method name="EVP_SKEY_import_raw_key" result="EVP_SKEY *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="skeymgmtname" type="const char *" m68kreg="a1"/>
+      <arg name="key" type="unsigned char *" m68kreg="a2"/>
+      <arg name="keylen" type="size_t" m68kreg="d0"/>
+      <arg name="propquery" type="const char *" m68kreg="a3"/>
+    </method>
+    <method name="EVP_SKEY_get0_raw_key" result="int">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+      <arg name="key" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SKEY_export" result="int">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+      <arg name="selection" type="int" m68kreg="d0"/>
+      <arg name="export_cb" type="OSSL_CALLBACK *" m68kreg="a1"/>
+      <arg name="export_cbarg" type="void *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SKEY_up_ref" result="int">
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEY_free" result="void">
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_fetch" result="EVP_SKEYMGMT *">
+      <arg name="ctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="algorithm" type="const char *" m68kreg="a1"/>
+      <arg name="properties" type="const char *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SKEYMGMT_up_ref" result="int">
+      <arg name="keymgmt" type="EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_free" result="void">
+      <arg name="keymgmt" type="EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_get0_provider" result="const OSSL_PROVIDER *">
+      <arg name="keymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_get0_name" result="const char *">
+      <arg name="keymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_get0_description" result="const char *">
+      <arg name="keymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_is_a" result="int">
+      <arg name="keymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="EVP_SKEYMGMT_do_all_provided" result="void">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="fn" type="void (*)(EVP_SKEYMGMT *keymgmt, void *arg)" m68kreg="a1"/>
+      <arg name="arg" type="void *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SKEYMGMT_names_do_all" result="int">
+      <arg name="keymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+      <arg name="fn" type="void (*)(const char *name, void *data)" m68kreg="a1"/>
+      <arg name="data" type="void *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_MAC_init_SKEY" result="int">
+      <arg name="ctx" type="EVP_MAC_CTX *" m68kreg="a0"/>
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a1"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SKEY_get0_key_id" result="const char *">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEY_get0_skeymgmt_name" result="const char *">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEY_get0_provider_name" result="const char *">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_get0_gen_settable_params" result="const OSSL_PARAM *">
+      <arg name="skeymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEYMGMT_get0_imp_settable_params" result="const OSSL_PARAM *">
+      <arg name="skeymgmt" type="const EVP_SKEYMGMT *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_SKEY_is_a" result="int">
+      <arg name="skey" type="const EVP_SKEY *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="EVP_SKEY_to_provider" result="EVP_SKEY *">
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a0"/>
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a1"/>
+      <arg name="prov" type="OSSL_PROVIDER *" m68kreg="a2"/>
+      <arg name="propquery" type="const char *" m68kreg="a3"/>
+    </method>
+    <method name="OSSL_PROVIDER_add_conf_parameter" result="int">
+      <arg name="prov" type="OSSL_PROVIDER *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="value" type="const char *" m68kreg="a2"/>
+    </method>
+    <method name="OSSL_PROVIDER_get_conf_parameters" result="int">
+      <arg name="prov" type="const OSSL_PROVIDER *" m68kreg="a0"/>
+      <arg name="params" type="OSSL_PARAM *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_PROVIDER_conf_get_bool" result="int">
+      <arg name="prov" type="const OSSL_PROVIDER *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="defval" type="int" m68kreg="d0"/>
+    </method>
+    <method name="d2i_OSSL_AA_DIST_POINT" result="OSSL_AA_DIST_POINT *">
+      <arg name="a" type="OSSL_AA_DIST_POINT **" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="len" type="long" m68kreg="d0"/>
+    </method>
+    <method name="i2d_OSSL_AA_DIST_POINT" result="int">
+      <arg name="a" type="const OSSL_AA_DIST_POINT *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_AA_DIST_POINT_free" result="void">
+      <arg name="a" type="OSSL_AA_DIST_POINT *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_AA_DIST_POINT_new" result="OSSL_AA_DIST_POINT *">
+    </method>
+    <method name="OSSL_AA_DIST_POINT_it" result="const ASN1_ITEM *">
+    </method>
+    <method name="PEM_ASN1_write_bio_ctx" result="int">
+      <arg name="i2d" type="OSSL_i2d_of_void_ctx *" m68kreg="a0"/>
+      <arg name="vctx" type="void *" m68kreg="a1"/>
+      <arg name="name" type="const char *" m68kreg="a2"/>
+      <arg name="bp" type="BIO *" m68kreg="a3"/>
+      <arg name="x" type="const void *" m68kreg="d0"/>
+      <arg name="enc" type="const EVP_CIPHER *" m68kreg="d1"/>
+      <arg name="kstr" type="const unsigned char *" m68kreg="d2"/>
+      <arg name="klen" type="int" m68kreg="d3"/>
+      <arg name="cb" type="pem_password_cb *" m68kreg="d4"/>
+      <arg name="u" type="void *" m68kreg="d5"/>
     </method>
 
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->

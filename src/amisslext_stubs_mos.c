@@ -13773,6 +13773,2019 @@ const ASN1_ITEM * LIBSTUB_OSSL_TARGETING_INFORMATION_it(void)
   return LIB_OSSL_TARGETING_INFORMATION_it(_base);
 }
 
+int LIB_SSL_set_quic_tls_cbs(struct Library * _base, SSL * ___s, const OSSL_DISPATCH * ___qtdis, void * ___arg);
+
+int LIBSTUB_SSL_set_quic_tls_cbs(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  const OSSL_DISPATCH * ___qtdis = (const OSSL_DISPATCH *)REG_A1;
+  void * ___arg = (void *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_set_quic_tls_cbs(_base, ___s, ___qtdis, ___arg);
+}
+
+int LIB_SSL_set_quic_tls_transport_params(struct Library * _base, SSL * ___s, const unsigned char * ___params, size_t ___params_len);
+
+int LIBSTUB_SSL_set_quic_tls_transport_params(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  const unsigned char * ___params = (const unsigned char *)REG_A1;
+  size_t ___params_len = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_set_quic_tls_transport_params(_base, ___s, ___params, ___params_len);
+}
+
+int LIB_SSL_set_quic_tls_early_data_enabled(struct Library * _base, SSL * ___s, int ___enabled);
+
+int LIBSTUB_SSL_set_quic_tls_early_data_enabled(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  int ___enabled = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_set_quic_tls_early_data_enabled(_base, ___s, ___enabled);
+}
+
+const SSL_METHOD * LIB_OSSL_QUIC_server_method(struct Library * _base);
+
+const SSL_METHOD * LIBSTUB_OSSL_QUIC_server_method(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_QUIC_server_method(_base);
+}
+
+int LIB_SSL_is_listener(struct Library * _base, SSL * ___ssl);
+
+int LIBSTUB_SSL_is_listener(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_is_listener(_base, ___ssl);
+}
+
+SSL * LIB_SSL_get0_listener(struct Library * _base, SSL * ___s);
+
+SSL * LIBSTUB_SSL_get0_listener(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_get0_listener(_base, ___s);
+}
+
+SSL * LIB_SSL_new_listener(struct Library * _base, SSL_CTX * ___ctx, uint64_t ___flags);
+
+SSL * LIBSTUB_SSL_new_listener(void)
+{
+  SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_new_listener(_base, ___ctx, ___flags);
+}
+
+SSL * LIB_SSL_accept_connection(struct Library * _base, SSL * ___ssl, uint64_t ___flags);
+
+SSL * LIBSTUB_SSL_accept_connection(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_accept_connection(_base, ___ssl, ___flags);
+}
+
+size_t LIB_SSL_get_accept_connection_queue_len(struct Library * _base, SSL * ___ssl);
+
+size_t LIBSTUB_SSL_get_accept_connection_queue_len(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_get_accept_connection_queue_len(_base, ___ssl);
+}
+
+int LIB_SSL_listen(struct Library * _base, SSL * ___ssl);
+
+int LIBSTUB_SSL_listen(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_listen(_base, ___ssl);
+}
+
+SSL * LIB_SSL_new_from_listener(struct Library * _base, SSL * ___ssl, uint64_t ___flags);
+
+SSL * LIBSTUB_SSL_new_from_listener(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_new_from_listener(_base, ___ssl, ___flags);
+}
+
+SSL * LIB_SSL_new_listener_from(struct Library * _base, SSL * ___ssl, uint64_t ___flags);
+
+SSL * LIBSTUB_SSL_new_listener_from(void)
+{
+  SSL * ___ssl = (SSL *)REG_A0;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_new_listener_from(_base, ___ssl, ___flags);
+}
+
+int LIB_SSL_is_domain(struct Library * _base, SSL * ___s);
+
+int LIBSTUB_SSL_is_domain(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_is_domain(_base, ___s);
+}
+
+SSL * LIB_SSL_get0_domain(struct Library * _base, SSL * ___s);
+
+SSL * LIBSTUB_SSL_get0_domain(void)
+{
+  SSL * ___s = (SSL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_get0_domain(_base, ___s);
+}
+
+SSL * LIB_SSL_new_domain(struct Library * _base, SSL_CTX * ___ctx, uint64_t ___flags);
+
+SSL * LIBSTUB_SSL_new_domain(void)
+{
+  SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
+  uint64_t ___flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_new_domain(_base, ___ctx, ___flags);
+}
+
+int LIB_SSL_CTX_set_domain_flags(struct Library * _base, SSL_CTX * ___ctx, uint64_t ___domain_flags);
+
+int LIBSTUB_SSL_CTX_set_domain_flags(void)
+{
+  SSL_CTX * ___ctx = (SSL_CTX *)REG_A0;
+  uint64_t ___domain_flags = (uint64_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_CTX_set_domain_flags(_base, ___ctx, ___domain_flags);
+}
+
+int LIB_SSL_CTX_get_domain_flags(struct Library * _base, const SSL_CTX * ___ctx, uint64_t * ___domain_flags);
+
+int LIBSTUB_SSL_CTX_get_domain_flags(void)
+{
+  const SSL_CTX * ___ctx = (const SSL_CTX *)REG_A0;
+  uint64_t * ___domain_flags = (uint64_t *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_CTX_get_domain_flags(_base, ___ctx, ___domain_flags);
+}
+
+int LIB_SSL_get_domain_flags(struct Library * _base, const SSL * ___ssl, uint64_t * ___domain_flags);
+
+int LIBSTUB_SSL_get_domain_flags(void)
+{
+  const SSL * ___ssl = (const SSL *)REG_A0;
+  uint64_t * ___domain_flags = (uint64_t *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_get_domain_flags(_base, ___ssl, ___domain_flags);
+}
+
+void LIB_SSL_CTX_set_new_pending_conn_cb(struct Library * _base, SSL_CTX * ___c, SSL_new_pending_conn_cb_fn ___cb, void * ___arg);
+
+void LIBSTUB_SSL_CTX_set_new_pending_conn_cb(void)
+{
+  SSL_CTX * ___c = (SSL_CTX *)REG_A0;
+  SSL_new_pending_conn_cb_fn ___cb = (SSL_new_pending_conn_cb_fn)REG_A1;
+  void * ___arg = (void *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_SSL_CTX_set_new_pending_conn_cb(_base, ___c, ___cb, ___arg);
+}
+
+int LIB_X509_VERIFY_PARAM_get_purpose(struct Library * _base, const X509_VERIFY_PARAM * ___param);
+
+int LIBSTUB_X509_VERIFY_PARAM_get_purpose(void)
+{
+  const X509_VERIFY_PARAM * ___param = (const X509_VERIFY_PARAM *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_VERIFY_PARAM_get_purpose(_base, ___param);
+}
+
+OSSL_CRMF_ENCRYPTEDKEY * LIB_d2i_OSSL_CRMF_ENCRYPTEDKEY(struct Library * _base, OSSL_CRMF_ENCRYPTEDKEY ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_CRMF_ENCRYPTEDKEY * LIBSTUB_d2i_OSSL_CRMF_ENCRYPTEDKEY(void)
+{
+  OSSL_CRMF_ENCRYPTEDKEY ** ___a = (OSSL_CRMF_ENCRYPTEDKEY **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_CRMF_ENCRYPTEDKEY(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_CRMF_ENCRYPTEDKEY(struct Library * _base, const OSSL_CRMF_ENCRYPTEDKEY * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_CRMF_ENCRYPTEDKEY(void)
+{
+  const OSSL_CRMF_ENCRYPTEDKEY * ___a = (const OSSL_CRMF_ENCRYPTEDKEY *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_CRMF_ENCRYPTEDKEY(_base, ___a, ___out);
+}
+
+void LIB_OSSL_CRMF_ENCRYPTEDKEY_free(struct Library * _base, OSSL_CRMF_ENCRYPTEDKEY * ___a);
+
+void LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_free(void)
+{
+  OSSL_CRMF_ENCRYPTEDKEY * ___a = (OSSL_CRMF_ENCRYPTEDKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_free(_base, ___a);
+}
+
+OSSL_CRMF_ENCRYPTEDKEY * LIB_OSSL_CRMF_ENCRYPTEDKEY_new(struct Library * _base);
+
+OSSL_CRMF_ENCRYPTEDKEY * LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_CRMF_ENCRYPTEDKEY_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_it(_base);
+}
+
+X509 * LIB_OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(struct Library * _base, const OSSL_CRMF_ENCRYPTEDKEY * ___ecert, OSSL_LIB_CTX * ___libctx, const char * ___propq, EVP_PKEY * ___pkey, unsigned int ___flags);
+
+X509 * LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(void)
+{
+  const OSSL_CRMF_ENCRYPTEDKEY * ___ecert = (const OSSL_CRMF_ENCRYPTEDKEY *)REG_A0;
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A1;
+  const char * ___propq = (const char *)REG_A2;
+  EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A3;
+  unsigned int ___flags = (unsigned int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(_base, ___ecert, ___libctx, ___propq, ___pkey, ___flags);
+}
+
+unsigned char * LIB_OSSL_CRMF_ENCRYPTEDVALUE_decrypt(struct Library * _base, const OSSL_CRMF_ENCRYPTEDVALUE * ___enc, OSSL_LIB_CTX * ___libctx, const char * ___propq, EVP_PKEY * ___pkey, int * ___outlen);
+
+unsigned char * LIBSTUB_OSSL_CRMF_ENCRYPTEDVALUE_decrypt(void)
+{
+  const OSSL_CRMF_ENCRYPTEDVALUE * ___enc = (const OSSL_CRMF_ENCRYPTEDVALUE *)REG_A0;
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A1;
+  const char * ___propq = (const char *)REG_A2;
+  EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A3;
+  int * ___outlen = (int *)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDVALUE_decrypt(_base, ___enc, ___libctx, ___propq, ___pkey, ___outlen);
+}
+
+EVP_PKEY * LIB_OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(struct Library * _base, const OSSL_CRMF_ENCRYPTEDKEY * ___encryptedKey, X509_STORE * ___ts, STACK_OF(X509) * ___extra, EVP_PKEY * ___pkey, X509 * ___cert, ASN1_OCTET_STRING * ___secret, OSSL_LIB_CTX * ___libctx, const char * ___propq);
+
+EVP_PKEY * LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(void)
+{
+  const OSSL_CRMF_ENCRYPTEDKEY * ___encryptedKey = (const OSSL_CRMF_ENCRYPTEDKEY *)REG_A0;
+  X509_STORE * ___ts = (X509_STORE *)REG_A1;
+  STACK_OF(X509) * ___extra = (STACK_OF(X509) *)REG_A2;
+  EVP_PKEY * ___pkey = (EVP_PKEY *)REG_A3;
+  X509 * ___cert = (X509 *)REG_D0;
+  ASN1_OCTET_STRING * ___secret = (ASN1_OCTET_STRING *)REG_D1;
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_D2;
+  const char * ___propq = (const char *)REG_D3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(_base, ___encryptedKey, ___ts, ___extra, ___pkey, ___cert, ___secret, ___libctx, ___propq);
+}
+
+int LIB_OSSL_CRMF_MSG_centralkeygen_requested(struct Library * _base, const OSSL_CRMF_MSG * ___crm, const X509_REQ * ___p10cr);
+
+int LIBSTUB_OSSL_CRMF_MSG_centralkeygen_requested(void)
+{
+  const OSSL_CRMF_MSG * ___crm = (const OSSL_CRMF_MSG *)REG_A0;
+  const X509_REQ * ___p10cr = (const X509_REQ *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_MSG_centralkeygen_requested(_base, ___crm, ___p10cr);
+}
+
+CMS_EnvelopedData * LIB_CMS_EnvelopedData_dup(struct Library * _base, const CMS_EnvelopedData * ___a);
+
+CMS_EnvelopedData * LIBSTUB_CMS_EnvelopedData_dup(void)
+{
+  const CMS_EnvelopedData * ___a = (const CMS_EnvelopedData *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_EnvelopedData_dup(_base, ___a);
+}
+
+OSSL_CRMF_ENCRYPTEDKEY * LIB_OSSL_CRMF_ENCRYPTEDKEY_init_envdata(struct Library * _base, CMS_EnvelopedData * ___envdata);
+
+OSSL_CRMF_ENCRYPTEDKEY * LIBSTUB_OSSL_CRMF_ENCRYPTEDKEY_init_envdata(void)
+{
+  CMS_EnvelopedData * ___envdata = (CMS_EnvelopedData *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_CRMF_ENCRYPTEDKEY_init_envdata(_base, ___envdata);
+}
+
+char * LIB_EVP_get1_default_properties(struct Library * _base, OSSL_LIB_CTX * ___libctx);
+
+char * LIBSTUB_EVP_get1_default_properties(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_get1_default_properties(_base, ___libctx);
+}
+
+int LIB_RAND_set1_random_provider(struct Library * _base, OSSL_LIB_CTX * ___ctx, OSSL_PROVIDER * ___p);
+
+int LIBSTUB_RAND_set1_random_provider(void)
+{
+  OSSL_LIB_CTX * ___ctx = (OSSL_LIB_CTX *)REG_A0;
+  OSSL_PROVIDER * ___p = (OSSL_PROVIDER *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_RAND_set1_random_provider(_base, ___ctx, ___p);
+}
+
+int LIB_X509_PURPOSE_get_unused_id(struct Library * _base, OSSL_LIB_CTX * ___libctx);
+
+int LIBSTUB_X509_PURPOSE_get_unused_id(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_PURPOSE_get_unused_id(_base, ___libctx);
+}
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * LIB_d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(struct Library * _base, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * LIBSTUB_d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(void)
+{
+  OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX ** ___a = (OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(struct Library * _base, const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(void)
+{
+  const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * ___a = (const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(_base, ___a, ___out);
+}
+
+void LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(struct Library * _base, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * ___a);
+
+void LIBSTUB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(void)
+{
+  OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * ___a = (OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(_base, ___a);
+}
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new(struct Library * _base);
+
+OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX * LIBSTUB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it(_base);
+}
+
+OSSL_ROLE_SPEC_CERT_ID * LIB_d2i_OSSL_ROLE_SPEC_CERT_ID(struct Library * _base, OSSL_ROLE_SPEC_CERT_ID ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ROLE_SPEC_CERT_ID * LIBSTUB_d2i_OSSL_ROLE_SPEC_CERT_ID(void)
+{
+  OSSL_ROLE_SPEC_CERT_ID ** ___a = (OSSL_ROLE_SPEC_CERT_ID **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ROLE_SPEC_CERT_ID(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ROLE_SPEC_CERT_ID(struct Library * _base, const OSSL_ROLE_SPEC_CERT_ID * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ROLE_SPEC_CERT_ID(void)
+{
+  const OSSL_ROLE_SPEC_CERT_ID * ___a = (const OSSL_ROLE_SPEC_CERT_ID *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ROLE_SPEC_CERT_ID(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ROLE_SPEC_CERT_ID_free(struct Library * _base, OSSL_ROLE_SPEC_CERT_ID * ___a);
+
+void LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_free(void)
+{
+  OSSL_ROLE_SPEC_CERT_ID * ___a = (OSSL_ROLE_SPEC_CERT_ID *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_free(_base, ___a);
+}
+
+OSSL_ROLE_SPEC_CERT_ID * LIB_OSSL_ROLE_SPEC_CERT_ID_new(struct Library * _base);
+
+OSSL_ROLE_SPEC_CERT_ID * LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ROLE_SPEC_CERT_ID_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_it(_base);
+}
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * LIB_d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(struct Library * _base, OSSL_ROLE_SPEC_CERT_ID_SYNTAX ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * LIBSTUB_d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(void)
+{
+  OSSL_ROLE_SPEC_CERT_ID_SYNTAX ** ___a = (OSSL_ROLE_SPEC_CERT_ID_SYNTAX **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(struct Library * _base, const OSSL_ROLE_SPEC_CERT_ID_SYNTAX * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(void)
+{
+  const OSSL_ROLE_SPEC_CERT_ID_SYNTAX * ___a = (const OSSL_ROLE_SPEC_CERT_ID_SYNTAX *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(struct Library * _base, OSSL_ROLE_SPEC_CERT_ID_SYNTAX * ___a);
+
+void LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(void)
+{
+  OSSL_ROLE_SPEC_CERT_ID_SYNTAX * ___a = (OSSL_ROLE_SPEC_CERT_ID_SYNTAX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(_base, ___a);
+}
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new(struct Library * _base);
+
+OSSL_ROLE_SPEC_CERT_ID_SYNTAX * LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it(_base);
+}
+
+OSSL_ATTRIBUTE_DESCRIPTOR * LIB_d2i_OSSL_ATTRIBUTE_DESCRIPTOR(struct Library * _base, OSSL_ATTRIBUTE_DESCRIPTOR ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATTRIBUTE_DESCRIPTOR * LIBSTUB_d2i_OSSL_ATTRIBUTE_DESCRIPTOR(void)
+{
+  OSSL_ATTRIBUTE_DESCRIPTOR ** ___a = (OSSL_ATTRIBUTE_DESCRIPTOR **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATTRIBUTE_DESCRIPTOR(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATTRIBUTE_DESCRIPTOR(struct Library * _base, const OSSL_ATTRIBUTE_DESCRIPTOR * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATTRIBUTE_DESCRIPTOR(void)
+{
+  const OSSL_ATTRIBUTE_DESCRIPTOR * ___a = (const OSSL_ATTRIBUTE_DESCRIPTOR *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATTRIBUTE_DESCRIPTOR(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATTRIBUTE_DESCRIPTOR_free(struct Library * _base, OSSL_ATTRIBUTE_DESCRIPTOR * ___a);
+
+void LIBSTUB_OSSL_ATTRIBUTE_DESCRIPTOR_free(void)
+{
+  OSSL_ATTRIBUTE_DESCRIPTOR * ___a = (OSSL_ATTRIBUTE_DESCRIPTOR *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_DESCRIPTOR_free(_base, ___a);
+}
+
+OSSL_ATTRIBUTE_DESCRIPTOR * LIB_OSSL_ATTRIBUTE_DESCRIPTOR_new(struct Library * _base);
+
+OSSL_ATTRIBUTE_DESCRIPTOR * LIBSTUB_OSSL_ATTRIBUTE_DESCRIPTOR_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_DESCRIPTOR_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATTRIBUTE_DESCRIPTOR_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATTRIBUTE_DESCRIPTOR_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_DESCRIPTOR_it(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_HASH_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_HASH_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_HASH_it(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_INFO_SYNTAX_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_INFO_SYNTAX_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_it(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_INFO_SYNTAX_POINTER_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_INFO_SYNTAX_POINTER_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_POINTER_it(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_PRIVILEGE_POLICY_ID_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_PRIVILEGE_POLICY_ID_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PRIVILEGE_POLICY_ID_it(_base);
+}
+
+OSSL_HASH * LIB_d2i_OSSL_HASH(struct Library * _base, OSSL_HASH ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_HASH * LIBSTUB_d2i_OSSL_HASH(void)
+{
+  OSSL_HASH ** ___a = (OSSL_HASH **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_HASH(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_HASH(struct Library * _base, const OSSL_HASH * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_HASH(void)
+{
+  const OSSL_HASH * ___a = (const OSSL_HASH *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_HASH(_base, ___a, ___out);
+}
+
+void LIB_OSSL_HASH_free(struct Library * _base, OSSL_HASH * ___a);
+
+void LIBSTUB_OSSL_HASH_free(void)
+{
+  OSSL_HASH * ___a = (OSSL_HASH *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_HASH_free(_base, ___a);
+}
+
+OSSL_HASH * LIB_OSSL_HASH_new(struct Library * _base);
+
+OSSL_HASH * LIBSTUB_OSSL_HASH_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_HASH_new(_base);
+}
+
+OSSL_INFO_SYNTAX * LIB_d2i_OSSL_INFO_SYNTAX(struct Library * _base, OSSL_INFO_SYNTAX ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_INFO_SYNTAX * LIBSTUB_d2i_OSSL_INFO_SYNTAX(void)
+{
+  OSSL_INFO_SYNTAX ** ___a = (OSSL_INFO_SYNTAX **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_INFO_SYNTAX(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_INFO_SYNTAX(struct Library * _base, const OSSL_INFO_SYNTAX * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_INFO_SYNTAX(void)
+{
+  const OSSL_INFO_SYNTAX * ___a = (const OSSL_INFO_SYNTAX *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_INFO_SYNTAX(_base, ___a, ___out);
+}
+
+void LIB_OSSL_INFO_SYNTAX_free(struct Library * _base, OSSL_INFO_SYNTAX * ___a);
+
+void LIBSTUB_OSSL_INFO_SYNTAX_free(void)
+{
+  OSSL_INFO_SYNTAX * ___a = (OSSL_INFO_SYNTAX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_free(_base, ___a);
+}
+
+OSSL_INFO_SYNTAX * LIB_OSSL_INFO_SYNTAX_new(struct Library * _base);
+
+OSSL_INFO_SYNTAX * LIBSTUB_OSSL_INFO_SYNTAX_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_new(_base);
+}
+
+OSSL_INFO_SYNTAX_POINTER * LIB_d2i_OSSL_INFO_SYNTAX_POINTER(struct Library * _base, OSSL_INFO_SYNTAX_POINTER ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_INFO_SYNTAX_POINTER * LIBSTUB_d2i_OSSL_INFO_SYNTAX_POINTER(void)
+{
+  OSSL_INFO_SYNTAX_POINTER ** ___a = (OSSL_INFO_SYNTAX_POINTER **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_INFO_SYNTAX_POINTER(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_INFO_SYNTAX_POINTER(struct Library * _base, const OSSL_INFO_SYNTAX_POINTER * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_INFO_SYNTAX_POINTER(void)
+{
+  const OSSL_INFO_SYNTAX_POINTER * ___a = (const OSSL_INFO_SYNTAX_POINTER *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_INFO_SYNTAX_POINTER(_base, ___a, ___out);
+}
+
+void LIB_OSSL_INFO_SYNTAX_POINTER_free(struct Library * _base, OSSL_INFO_SYNTAX_POINTER * ___a);
+
+void LIBSTUB_OSSL_INFO_SYNTAX_POINTER_free(void)
+{
+  OSSL_INFO_SYNTAX_POINTER * ___a = (OSSL_INFO_SYNTAX_POINTER *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_POINTER_free(_base, ___a);
+}
+
+OSSL_INFO_SYNTAX_POINTER * LIB_OSSL_INFO_SYNTAX_POINTER_new(struct Library * _base);
+
+OSSL_INFO_SYNTAX_POINTER * LIBSTUB_OSSL_INFO_SYNTAX_POINTER_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_INFO_SYNTAX_POINTER_new(_base);
+}
+
+OSSL_PRIVILEGE_POLICY_ID * LIB_d2i_OSSL_PRIVILEGE_POLICY_ID(struct Library * _base, OSSL_PRIVILEGE_POLICY_ID ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_PRIVILEGE_POLICY_ID * LIBSTUB_d2i_OSSL_PRIVILEGE_POLICY_ID(void)
+{
+  OSSL_PRIVILEGE_POLICY_ID ** ___a = (OSSL_PRIVILEGE_POLICY_ID **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_PRIVILEGE_POLICY_ID(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_PRIVILEGE_POLICY_ID(struct Library * _base, const OSSL_PRIVILEGE_POLICY_ID * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_PRIVILEGE_POLICY_ID(void)
+{
+  const OSSL_PRIVILEGE_POLICY_ID * ___a = (const OSSL_PRIVILEGE_POLICY_ID *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_PRIVILEGE_POLICY_ID(_base, ___a, ___out);
+}
+
+void LIB_OSSL_PRIVILEGE_POLICY_ID_free(struct Library * _base, OSSL_PRIVILEGE_POLICY_ID * ___a);
+
+void LIBSTUB_OSSL_PRIVILEGE_POLICY_ID_free(void)
+{
+  OSSL_PRIVILEGE_POLICY_ID * ___a = (OSSL_PRIVILEGE_POLICY_ID *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PRIVILEGE_POLICY_ID_free(_base, ___a);
+}
+
+OSSL_PRIVILEGE_POLICY_ID * LIB_OSSL_PRIVILEGE_POLICY_ID_new(struct Library * _base);
+
+OSSL_PRIVILEGE_POLICY_ID * LIBSTUB_OSSL_PRIVILEGE_POLICY_ID_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PRIVILEGE_POLICY_ID_new(_base);
+}
+
+int LIB_OSSL_PARAM_print_to_bio(struct Library * _base, const OSSL_PARAM * ___params, BIO * ___bio, int ___print_values);
+
+int LIBSTUB_OSSL_PARAM_print_to_bio(void)
+{
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_A0;
+  BIO * ___bio = (BIO *)REG_A1;
+  int ___print_values = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PARAM_print_to_bio(_base, ___params, ___bio, ___print_values);
+}
+
+OSSL_DAY_TIME * LIB_d2i_OSSL_DAY_TIME(struct Library * _base, OSSL_DAY_TIME ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_DAY_TIME * LIBSTUB_d2i_OSSL_DAY_TIME(void)
+{
+  OSSL_DAY_TIME ** ___a = (OSSL_DAY_TIME **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_DAY_TIME(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_DAY_TIME(struct Library * _base, const OSSL_DAY_TIME * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_DAY_TIME(void)
+{
+  const OSSL_DAY_TIME * ___a = (const OSSL_DAY_TIME *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_DAY_TIME(_base, ___a, ___out);
+}
+
+void LIB_OSSL_DAY_TIME_free(struct Library * _base, OSSL_DAY_TIME * ___a);
+
+void LIBSTUB_OSSL_DAY_TIME_free(void)
+{
+  OSSL_DAY_TIME * ___a = (OSSL_DAY_TIME *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_free(_base, ___a);
+}
+
+OSSL_DAY_TIME * LIB_OSSL_DAY_TIME_new(struct Library * _base);
+
+OSSL_DAY_TIME * LIBSTUB_OSSL_DAY_TIME_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_DAY_TIME_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_DAY_TIME_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_it(_base);
+}
+
+OSSL_DAY_TIME_BAND * LIB_d2i_OSSL_DAY_TIME_BAND(struct Library * _base, OSSL_DAY_TIME_BAND ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_DAY_TIME_BAND * LIBSTUB_d2i_OSSL_DAY_TIME_BAND(void)
+{
+  OSSL_DAY_TIME_BAND ** ___a = (OSSL_DAY_TIME_BAND **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_DAY_TIME_BAND(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_DAY_TIME_BAND(struct Library * _base, const OSSL_DAY_TIME_BAND * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_DAY_TIME_BAND(void)
+{
+  const OSSL_DAY_TIME_BAND * ___a = (const OSSL_DAY_TIME_BAND *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_DAY_TIME_BAND(_base, ___a, ___out);
+}
+
+void LIB_OSSL_DAY_TIME_BAND_free(struct Library * _base, OSSL_DAY_TIME_BAND * ___a);
+
+void LIBSTUB_OSSL_DAY_TIME_BAND_free(void)
+{
+  OSSL_DAY_TIME_BAND * ___a = (OSSL_DAY_TIME_BAND *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_BAND_free(_base, ___a);
+}
+
+OSSL_DAY_TIME_BAND * LIB_OSSL_DAY_TIME_BAND_new(struct Library * _base);
+
+OSSL_DAY_TIME_BAND * LIBSTUB_OSSL_DAY_TIME_BAND_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_BAND_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_DAY_TIME_BAND_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_DAY_TIME_BAND_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_DAY_TIME_BAND_it(_base);
+}
+
+OSSL_TIME_SPEC_DAY * LIB_d2i_OSSL_TIME_SPEC_DAY(struct Library * _base, OSSL_TIME_SPEC_DAY ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_DAY * LIBSTUB_d2i_OSSL_TIME_SPEC_DAY(void)
+{
+  OSSL_TIME_SPEC_DAY ** ___a = (OSSL_TIME_SPEC_DAY **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_DAY(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_DAY(struct Library * _base, const OSSL_TIME_SPEC_DAY * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_DAY(void)
+{
+  const OSSL_TIME_SPEC_DAY * ___a = (const OSSL_TIME_SPEC_DAY *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_DAY(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_DAY_free(struct Library * _base, OSSL_TIME_SPEC_DAY * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_DAY_free(void)
+{
+  OSSL_TIME_SPEC_DAY * ___a = (OSSL_TIME_SPEC_DAY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_DAY_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_DAY * LIB_OSSL_TIME_SPEC_DAY_new(struct Library * _base);
+
+OSSL_TIME_SPEC_DAY * LIBSTUB_OSSL_TIME_SPEC_DAY_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_DAY_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_DAY_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_DAY_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_DAY_it(_base);
+}
+
+OSSL_TIME_SPEC_WEEKS * LIB_d2i_OSSL_TIME_SPEC_WEEKS(struct Library * _base, OSSL_TIME_SPEC_WEEKS ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_WEEKS * LIBSTUB_d2i_OSSL_TIME_SPEC_WEEKS(void)
+{
+  OSSL_TIME_SPEC_WEEKS ** ___a = (OSSL_TIME_SPEC_WEEKS **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_WEEKS(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_WEEKS(struct Library * _base, const OSSL_TIME_SPEC_WEEKS * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_WEEKS(void)
+{
+  const OSSL_TIME_SPEC_WEEKS * ___a = (const OSSL_TIME_SPEC_WEEKS *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_WEEKS(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_WEEKS_free(struct Library * _base, OSSL_TIME_SPEC_WEEKS * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_WEEKS_free(void)
+{
+  OSSL_TIME_SPEC_WEEKS * ___a = (OSSL_TIME_SPEC_WEEKS *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_WEEKS_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_WEEKS * LIB_OSSL_TIME_SPEC_WEEKS_new(struct Library * _base);
+
+OSSL_TIME_SPEC_WEEKS * LIBSTUB_OSSL_TIME_SPEC_WEEKS_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_WEEKS_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_WEEKS_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_WEEKS_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_WEEKS_it(_base);
+}
+
+OSSL_TIME_SPEC_MONTH * LIB_d2i_OSSL_TIME_SPEC_MONTH(struct Library * _base, OSSL_TIME_SPEC_MONTH ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_MONTH * LIBSTUB_d2i_OSSL_TIME_SPEC_MONTH(void)
+{
+  OSSL_TIME_SPEC_MONTH ** ___a = (OSSL_TIME_SPEC_MONTH **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_MONTH(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_MONTH(struct Library * _base, const OSSL_TIME_SPEC_MONTH * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_MONTH(void)
+{
+  const OSSL_TIME_SPEC_MONTH * ___a = (const OSSL_TIME_SPEC_MONTH *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_MONTH(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_MONTH_free(struct Library * _base, OSSL_TIME_SPEC_MONTH * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_MONTH_free(void)
+{
+  OSSL_TIME_SPEC_MONTH * ___a = (OSSL_TIME_SPEC_MONTH *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_MONTH_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_MONTH * LIB_OSSL_TIME_SPEC_MONTH_new(struct Library * _base);
+
+OSSL_TIME_SPEC_MONTH * LIBSTUB_OSSL_TIME_SPEC_MONTH_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_MONTH_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_MONTH_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_MONTH_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_MONTH_it(_base);
+}
+
+OSSL_NAMED_DAY * LIB_d2i_OSSL_NAMED_DAY(struct Library * _base, OSSL_NAMED_DAY ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_NAMED_DAY * LIBSTUB_d2i_OSSL_NAMED_DAY(void)
+{
+  OSSL_NAMED_DAY ** ___a = (OSSL_NAMED_DAY **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_NAMED_DAY(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_NAMED_DAY(struct Library * _base, const OSSL_NAMED_DAY * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_NAMED_DAY(void)
+{
+  const OSSL_NAMED_DAY * ___a = (const OSSL_NAMED_DAY *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_NAMED_DAY(_base, ___a, ___out);
+}
+
+void LIB_OSSL_NAMED_DAY_free(struct Library * _base, OSSL_NAMED_DAY * ___a);
+
+void LIBSTUB_OSSL_NAMED_DAY_free(void)
+{
+  OSSL_NAMED_DAY * ___a = (OSSL_NAMED_DAY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_NAMED_DAY_free(_base, ___a);
+}
+
+OSSL_NAMED_DAY * LIB_OSSL_NAMED_DAY_new(struct Library * _base);
+
+OSSL_NAMED_DAY * LIBSTUB_OSSL_NAMED_DAY_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_NAMED_DAY_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_NAMED_DAY_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_NAMED_DAY_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_NAMED_DAY_it(_base);
+}
+
+OSSL_TIME_SPEC_X_DAY_OF * LIB_d2i_OSSL_TIME_SPEC_X_DAY_OF(struct Library * _base, OSSL_TIME_SPEC_X_DAY_OF ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_X_DAY_OF * LIBSTUB_d2i_OSSL_TIME_SPEC_X_DAY_OF(void)
+{
+  OSSL_TIME_SPEC_X_DAY_OF ** ___a = (OSSL_TIME_SPEC_X_DAY_OF **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_X_DAY_OF(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_X_DAY_OF(struct Library * _base, const OSSL_TIME_SPEC_X_DAY_OF * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_X_DAY_OF(void)
+{
+  const OSSL_TIME_SPEC_X_DAY_OF * ___a = (const OSSL_TIME_SPEC_X_DAY_OF *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_X_DAY_OF(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_X_DAY_OF_free(struct Library * _base, OSSL_TIME_SPEC_X_DAY_OF * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_X_DAY_OF_free(void)
+{
+  OSSL_TIME_SPEC_X_DAY_OF * ___a = (OSSL_TIME_SPEC_X_DAY_OF *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_X_DAY_OF_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_X_DAY_OF * LIB_OSSL_TIME_SPEC_X_DAY_OF_new(struct Library * _base);
+
+OSSL_TIME_SPEC_X_DAY_OF * LIBSTUB_OSSL_TIME_SPEC_X_DAY_OF_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_X_DAY_OF_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_X_DAY_OF_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_X_DAY_OF_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_X_DAY_OF_it(_base);
+}
+
+OSSL_TIME_SPEC_ABSOLUTE * LIB_d2i_OSSL_TIME_SPEC_ABSOLUTE(struct Library * _base, OSSL_TIME_SPEC_ABSOLUTE ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_ABSOLUTE * LIBSTUB_d2i_OSSL_TIME_SPEC_ABSOLUTE(void)
+{
+  OSSL_TIME_SPEC_ABSOLUTE ** ___a = (OSSL_TIME_SPEC_ABSOLUTE **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_ABSOLUTE(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_ABSOLUTE(struct Library * _base, const OSSL_TIME_SPEC_ABSOLUTE * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_ABSOLUTE(void)
+{
+  const OSSL_TIME_SPEC_ABSOLUTE * ___a = (const OSSL_TIME_SPEC_ABSOLUTE *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_ABSOLUTE(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_ABSOLUTE_free(struct Library * _base, OSSL_TIME_SPEC_ABSOLUTE * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_ABSOLUTE_free(void)
+{
+  OSSL_TIME_SPEC_ABSOLUTE * ___a = (OSSL_TIME_SPEC_ABSOLUTE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_ABSOLUTE_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_ABSOLUTE * LIB_OSSL_TIME_SPEC_ABSOLUTE_new(struct Library * _base);
+
+OSSL_TIME_SPEC_ABSOLUTE * LIBSTUB_OSSL_TIME_SPEC_ABSOLUTE_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_ABSOLUTE_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_ABSOLUTE_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_ABSOLUTE_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_ABSOLUTE_it(_base);
+}
+
+OSSL_TIME_SPEC_TIME * LIB_d2i_OSSL_TIME_SPEC_TIME(struct Library * _base, OSSL_TIME_SPEC_TIME ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC_TIME * LIBSTUB_d2i_OSSL_TIME_SPEC_TIME(void)
+{
+  OSSL_TIME_SPEC_TIME ** ___a = (OSSL_TIME_SPEC_TIME **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC_TIME(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC_TIME(struct Library * _base, const OSSL_TIME_SPEC_TIME * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC_TIME(void)
+{
+  const OSSL_TIME_SPEC_TIME * ___a = (const OSSL_TIME_SPEC_TIME *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC_TIME(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_TIME_free(struct Library * _base, OSSL_TIME_SPEC_TIME * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_TIME_free(void)
+{
+  OSSL_TIME_SPEC_TIME * ___a = (OSSL_TIME_SPEC_TIME *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_TIME_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC_TIME * LIB_OSSL_TIME_SPEC_TIME_new(struct Library * _base);
+
+OSSL_TIME_SPEC_TIME * LIBSTUB_OSSL_TIME_SPEC_TIME_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_TIME_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_TIME_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_TIME_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_TIME_it(_base);
+}
+
+OSSL_TIME_SPEC * LIB_d2i_OSSL_TIME_SPEC(struct Library * _base, OSSL_TIME_SPEC ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_SPEC * LIBSTUB_d2i_OSSL_TIME_SPEC(void)
+{
+  OSSL_TIME_SPEC ** ___a = (OSSL_TIME_SPEC **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_SPEC(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_SPEC(struct Library * _base, const OSSL_TIME_SPEC * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_SPEC(void)
+{
+  const OSSL_TIME_SPEC * ___a = (const OSSL_TIME_SPEC *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_SPEC(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_SPEC_free(struct Library * _base, OSSL_TIME_SPEC * ___a);
+
+void LIBSTUB_OSSL_TIME_SPEC_free(void)
+{
+  OSSL_TIME_SPEC * ___a = (OSSL_TIME_SPEC *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_free(_base, ___a);
+}
+
+OSSL_TIME_SPEC * LIB_OSSL_TIME_SPEC_new(struct Library * _base);
+
+OSSL_TIME_SPEC * LIBSTUB_OSSL_TIME_SPEC_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_SPEC_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_SPEC_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_SPEC_it(_base);
+}
+
+OSSL_TIME_PERIOD * LIB_d2i_OSSL_TIME_PERIOD(struct Library * _base, OSSL_TIME_PERIOD ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_TIME_PERIOD * LIBSTUB_d2i_OSSL_TIME_PERIOD(void)
+{
+  OSSL_TIME_PERIOD ** ___a = (OSSL_TIME_PERIOD **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_TIME_PERIOD(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_TIME_PERIOD(struct Library * _base, const OSSL_TIME_PERIOD * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_TIME_PERIOD(void)
+{
+  const OSSL_TIME_PERIOD * ___a = (const OSSL_TIME_PERIOD *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_TIME_PERIOD(_base, ___a, ___out);
+}
+
+void LIB_OSSL_TIME_PERIOD_free(struct Library * _base, OSSL_TIME_PERIOD * ___a);
+
+void LIBSTUB_OSSL_TIME_PERIOD_free(void)
+{
+  OSSL_TIME_PERIOD * ___a = (OSSL_TIME_PERIOD *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_PERIOD_free(_base, ___a);
+}
+
+OSSL_TIME_PERIOD * LIB_OSSL_TIME_PERIOD_new(struct Library * _base);
+
+OSSL_TIME_PERIOD * LIBSTUB_OSSL_TIME_PERIOD_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_PERIOD_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_TIME_PERIOD_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_TIME_PERIOD_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_TIME_PERIOD_it(_base);
+}
+
+int LIB_EVP_CIPHER_can_pipeline(struct Library * _base, const EVP_CIPHER * ___cipher, int ___enc);
+
+int LIBSTUB_EVP_CIPHER_can_pipeline(void)
+{
+  const EVP_CIPHER * ___cipher = (const EVP_CIPHER *)REG_A0;
+  int ___enc = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CIPHER_can_pipeline(_base, ___cipher, ___enc);
+}
+
+int LIB_EVP_CipherPipelineEncryptInit(struct Library * _base, EVP_CIPHER_CTX * ___ctx, const EVP_CIPHER * ___cipher, const unsigned char * ___key, size_t ___keylen, size_t ___numpipes, const unsigned char ** ___iv, size_t ___ivlen);
+
+int LIBSTUB_EVP_CipherPipelineEncryptInit(void)
+{
+  EVP_CIPHER_CTX * ___ctx = (EVP_CIPHER_CTX *)REG_A0;
+  const EVP_CIPHER * ___cipher = (const EVP_CIPHER *)REG_A1;
+  const unsigned char * ___key = (const unsigned char *)REG_A2;
+  size_t ___keylen = (size_t)REG_D0;
+  size_t ___numpipes = (size_t)REG_D1;
+  const unsigned char ** ___iv = (const unsigned char **)REG_A3;
+  size_t ___ivlen = (size_t)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CipherPipelineEncryptInit(_base, ___ctx, ___cipher, ___key, ___keylen, ___numpipes, ___iv, ___ivlen);
+}
+
+int LIB_EVP_CipherPipelineDecryptInit(struct Library * _base, EVP_CIPHER_CTX * ___ctx, const EVP_CIPHER * ___cipher, const unsigned char * ___key, size_t ___keylen, size_t ___numpipes, const unsigned char ** ___iv, size_t ___ivlen);
+
+int LIBSTUB_EVP_CipherPipelineDecryptInit(void)
+{
+  EVP_CIPHER_CTX * ___ctx = (EVP_CIPHER_CTX *)REG_A0;
+  const EVP_CIPHER * ___cipher = (const EVP_CIPHER *)REG_A1;
+  const unsigned char * ___key = (const unsigned char *)REG_A2;
+  size_t ___keylen = (size_t)REG_D0;
+  size_t ___numpipes = (size_t)REG_D1;
+  const unsigned char ** ___iv = (const unsigned char **)REG_A3;
+  size_t ___ivlen = (size_t)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CipherPipelineDecryptInit(_base, ___ctx, ___cipher, ___key, ___keylen, ___numpipes, ___iv, ___ivlen);
+}
+
+int LIB_EVP_CipherPipelineUpdate(struct Library * _base, EVP_CIPHER_CTX * ___ctx, unsigned char ** ___out, size_t * ___outl, const size_t * ___outsize, const unsigned char ** ___in, const size_t * ___inl);
+
+int LIBSTUB_EVP_CipherPipelineUpdate(void)
+{
+  EVP_CIPHER_CTX * ___ctx = (EVP_CIPHER_CTX *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  size_t * ___outl = (size_t *)REG_A2;
+  const size_t * ___outsize = (const size_t *)REG_A3;
+  const unsigned char ** ___in = (const unsigned char **)REG_D0;
+  const size_t * ___inl = (const size_t *)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CipherPipelineUpdate(_base, ___ctx, ___out, ___outl, ___outsize, ___in, ___inl);
+}
+
+int LIB_EVP_CipherPipelineFinal(struct Library * _base, EVP_CIPHER_CTX * ___ctx, unsigned char ** ___outm, size_t * ___outl, const size_t * ___outsize);
+
+int LIBSTUB_EVP_CipherPipelineFinal(void)
+{
+  EVP_CIPHER_CTX * ___ctx = (EVP_CIPHER_CTX *)REG_A0;
+  unsigned char ** ___outm = (unsigned char **)REG_A1;
+  size_t * ___outl = (size_t *)REG_A2;
+  const size_t * ___outsize = (const size_t *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CipherPipelineFinal(_base, ___ctx, ___outm, ___outl, ___outsize);
+}
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * LIB_d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(struct Library * _base, OSSL_ATTRIBUTE_TYPE_MAPPING ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * LIBSTUB_d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(void)
+{
+  OSSL_ATTRIBUTE_TYPE_MAPPING ** ___a = (OSSL_ATTRIBUTE_TYPE_MAPPING **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(struct Library * _base, const OSSL_ATTRIBUTE_TYPE_MAPPING * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(void)
+{
+  const OSSL_ATTRIBUTE_TYPE_MAPPING * ___a = (const OSSL_ATTRIBUTE_TYPE_MAPPING *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_free(struct Library * _base, OSSL_ATTRIBUTE_TYPE_MAPPING * ___a);
+
+void LIBSTUB_OSSL_ATTRIBUTE_TYPE_MAPPING_free(void)
+{
+  OSSL_ATTRIBUTE_TYPE_MAPPING * ___a = (OSSL_ATTRIBUTE_TYPE_MAPPING *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_free(_base, ___a);
+}
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_new(struct Library * _base);
+
+OSSL_ATTRIBUTE_TYPE_MAPPING * LIBSTUB_OSSL_ATTRIBUTE_TYPE_MAPPING_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATTRIBUTE_TYPE_MAPPING_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_TYPE_MAPPING_it(_base);
+}
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * LIB_d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(struct Library * _base, OSSL_ATTRIBUTE_VALUE_MAPPING ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * LIBSTUB_d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(void)
+{
+  OSSL_ATTRIBUTE_VALUE_MAPPING ** ___a = (OSSL_ATTRIBUTE_VALUE_MAPPING **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(struct Library * _base, const OSSL_ATTRIBUTE_VALUE_MAPPING * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(void)
+{
+  const OSSL_ATTRIBUTE_VALUE_MAPPING * ___a = (const OSSL_ATTRIBUTE_VALUE_MAPPING *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_free(struct Library * _base, OSSL_ATTRIBUTE_VALUE_MAPPING * ___a);
+
+void LIBSTUB_OSSL_ATTRIBUTE_VALUE_MAPPING_free(void)
+{
+  OSSL_ATTRIBUTE_VALUE_MAPPING * ___a = (OSSL_ATTRIBUTE_VALUE_MAPPING *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_free(_base, ___a);
+}
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_new(struct Library * _base);
+
+OSSL_ATTRIBUTE_VALUE_MAPPING * LIBSTUB_OSSL_ATTRIBUTE_VALUE_MAPPING_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATTRIBUTE_VALUE_MAPPING_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_VALUE_MAPPING_it(_base);
+}
+
+OSSL_ATTRIBUTE_MAPPING * LIB_d2i_OSSL_ATTRIBUTE_MAPPING(struct Library * _base, OSSL_ATTRIBUTE_MAPPING ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATTRIBUTE_MAPPING * LIBSTUB_d2i_OSSL_ATTRIBUTE_MAPPING(void)
+{
+  OSSL_ATTRIBUTE_MAPPING ** ___a = (OSSL_ATTRIBUTE_MAPPING **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATTRIBUTE_MAPPING(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATTRIBUTE_MAPPING(struct Library * _base, const OSSL_ATTRIBUTE_MAPPING * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATTRIBUTE_MAPPING(void)
+{
+  const OSSL_ATTRIBUTE_MAPPING * ___a = (const OSSL_ATTRIBUTE_MAPPING *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATTRIBUTE_MAPPING(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATTRIBUTE_MAPPING_free(struct Library * _base, OSSL_ATTRIBUTE_MAPPING * ___a);
+
+void LIBSTUB_OSSL_ATTRIBUTE_MAPPING_free(void)
+{
+  OSSL_ATTRIBUTE_MAPPING * ___a = (OSSL_ATTRIBUTE_MAPPING *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPING_free(_base, ___a);
+}
+
+OSSL_ATTRIBUTE_MAPPING * LIB_OSSL_ATTRIBUTE_MAPPING_new(struct Library * _base);
+
+OSSL_ATTRIBUTE_MAPPING * LIBSTUB_OSSL_ATTRIBUTE_MAPPING_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPING_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATTRIBUTE_MAPPING_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATTRIBUTE_MAPPING_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPING_it(_base);
+}
+
+OSSL_ATTRIBUTE_MAPPINGS * LIB_d2i_OSSL_ATTRIBUTE_MAPPINGS(struct Library * _base, OSSL_ATTRIBUTE_MAPPINGS ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATTRIBUTE_MAPPINGS * LIBSTUB_d2i_OSSL_ATTRIBUTE_MAPPINGS(void)
+{
+  OSSL_ATTRIBUTE_MAPPINGS ** ___a = (OSSL_ATTRIBUTE_MAPPINGS **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATTRIBUTE_MAPPINGS(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATTRIBUTE_MAPPINGS(struct Library * _base, const OSSL_ATTRIBUTE_MAPPINGS * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATTRIBUTE_MAPPINGS(void)
+{
+  const OSSL_ATTRIBUTE_MAPPINGS * ___a = (const OSSL_ATTRIBUTE_MAPPINGS *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATTRIBUTE_MAPPINGS(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATTRIBUTE_MAPPINGS_free(struct Library * _base, OSSL_ATTRIBUTE_MAPPINGS * ___a);
+
+void LIBSTUB_OSSL_ATTRIBUTE_MAPPINGS_free(void)
+{
+  OSSL_ATTRIBUTE_MAPPINGS * ___a = (OSSL_ATTRIBUTE_MAPPINGS *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPINGS_free(_base, ___a);
+}
+
+OSSL_ATTRIBUTE_MAPPINGS * LIB_OSSL_ATTRIBUTE_MAPPINGS_new(struct Library * _base);
+
+OSSL_ATTRIBUTE_MAPPINGS * LIBSTUB_OSSL_ATTRIBUTE_MAPPINGS_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPINGS_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATTRIBUTE_MAPPINGS_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATTRIBUTE_MAPPINGS_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATTRIBUTE_MAPPINGS_it(_base);
+}
+
+OSSL_ATAV * LIB_d2i_OSSL_ATAV(struct Library * _base, OSSL_ATAV ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ATAV * LIBSTUB_d2i_OSSL_ATAV(void)
+{
+  OSSL_ATAV ** ___a = (OSSL_ATAV **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ATAV(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ATAV(struct Library * _base, const OSSL_ATAV * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ATAV(void)
+{
+  const OSSL_ATAV * ___a = (const OSSL_ATAV *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ATAV(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ATAV_free(struct Library * _base, OSSL_ATAV * ___a);
+
+void LIBSTUB_OSSL_ATAV_free(void)
+{
+  OSSL_ATAV * ___a = (OSSL_ATAV *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATAV_free(_base, ___a);
+}
+
+OSSL_ATAV * LIB_OSSL_ATAV_new(struct Library * _base);
+
+OSSL_ATAV * LIBSTUB_OSSL_ATAV_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATAV_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ATAV_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ATAV_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ATAV_it(_base);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_CHOICE ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * LIBSTUB_d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_CHOICE ** ___a = (OSSL_ALLOWED_ATTRIBUTES_CHOICE **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(struct Library * _base, const OSSL_ALLOWED_ATTRIBUTES_CHOICE * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(void)
+{
+  const OSSL_ALLOWED_ATTRIBUTES_CHOICE * ___a = (const OSSL_ALLOWED_ATTRIBUTES_CHOICE *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_CHOICE * ___a);
+
+void LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_CHOICE * ___a = (OSSL_ALLOWED_ATTRIBUTES_CHOICE *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(_base, ___a);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(struct Library * _base);
+
+OSSL_ALLOWED_ATTRIBUTES_CHOICE * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_CHOICE_it(_base);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_ITEM ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * LIBSTUB_d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_ITEM ** ___a = (OSSL_ALLOWED_ATTRIBUTES_ITEM **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(struct Library * _base, const OSSL_ALLOWED_ATTRIBUTES_ITEM * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(void)
+{
+  const OSSL_ALLOWED_ATTRIBUTES_ITEM * ___a = (const OSSL_ALLOWED_ATTRIBUTES_ITEM *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_free(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_ITEM * ___a);
+
+void LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_ITEM_free(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_ITEM * ___a = (OSSL_ALLOWED_ATTRIBUTES_ITEM *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_free(_base, ___a);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_new(struct Library * _base);
+
+OSSL_ALLOWED_ATTRIBUTES_ITEM * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_ITEM_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_ITEM_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_ITEM_it(_base);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_SYNTAX ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * LIBSTUB_d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_SYNTAX ** ___a = (OSSL_ALLOWED_ATTRIBUTES_SYNTAX **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(struct Library * _base, const OSSL_ALLOWED_ATTRIBUTES_SYNTAX * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(void)
+{
+  const OSSL_ALLOWED_ATTRIBUTES_SYNTAX * ___a = (const OSSL_ALLOWED_ATTRIBUTES_SYNTAX *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(_base, ___a, ___out);
+}
+
+void LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(struct Library * _base, OSSL_ALLOWED_ATTRIBUTES_SYNTAX * ___a);
+
+void LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(void)
+{
+  OSSL_ALLOWED_ATTRIBUTES_SYNTAX * ___a = (OSSL_ALLOWED_ATTRIBUTES_SYNTAX *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(_base, ___a);
+}
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new(struct Library * _base);
+
+OSSL_ALLOWED_ATTRIBUTES_SYNTAX * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it(_base);
+}
+
+int LIB_EVP_CipherInit_SKEY(struct Library * _base, EVP_CIPHER_CTX * ___ctx, const EVP_CIPHER * ___cipher, EVP_SKEY * ___skey, const unsigned char * ___iv, size_t ___iv_len, int ___enc, const OSSL_PARAM * ___params);
+
+int LIBSTUB_EVP_CipherInit_SKEY(void)
+{
+  EVP_CIPHER_CTX * ___ctx = (EVP_CIPHER_CTX *)REG_A0;
+  const EVP_CIPHER * ___cipher = (const EVP_CIPHER *)REG_A1;
+  EVP_SKEY * ___skey = (EVP_SKEY *)REG_A2;
+  const unsigned char * ___iv = (const unsigned char *)REG_A3;
+  size_t ___iv_len = (size_t)REG_D0;
+  int ___enc = (int)REG_D1;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_CipherInit_SKEY(_base, ___ctx, ___cipher, ___skey, ___iv, ___iv_len, ___enc, ___params);
+}
+
+EVP_SKEY * LIB_EVP_SKEY_import(struct Library * _base, OSSL_LIB_CTX * ___libctx, const char * ___skeymgmtname, const char * ___propquery, int ___selection, const OSSL_PARAM * ___params);
+
+EVP_SKEY * LIBSTUB_EVP_SKEY_import(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  const char * ___skeymgmtname = (const char *)REG_A1;
+  const char * ___propquery = (const char *)REG_A2;
+  int ___selection = (int)REG_D0;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_import(_base, ___libctx, ___skeymgmtname, ___propquery, ___selection, ___params);
+}
+
+EVP_SKEY * LIB_EVP_SKEY_generate(struct Library * _base, OSSL_LIB_CTX * ___libctx, const char * ___skeymgmtname, const char * ___propquery, const OSSL_PARAM * ___params);
+
+EVP_SKEY * LIBSTUB_EVP_SKEY_generate(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  const char * ___skeymgmtname = (const char *)REG_A1;
+  const char * ___propquery = (const char *)REG_A2;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_generate(_base, ___libctx, ___skeymgmtname, ___propquery, ___params);
+}
+
+EVP_SKEY * LIB_EVP_SKEY_import_raw_key(struct Library * _base, OSSL_LIB_CTX * ___libctx, const char * ___skeymgmtname, unsigned char * ___key, size_t ___keylen, const char * ___propquery);
+
+EVP_SKEY * LIBSTUB_EVP_SKEY_import_raw_key(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  const char * ___skeymgmtname = (const char *)REG_A1;
+  unsigned char * ___key = (unsigned char *)REG_A2;
+  size_t ___keylen = (size_t)REG_D0;
+  const char * ___propquery = (const char *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_import_raw_key(_base, ___libctx, ___skeymgmtname, ___key, ___keylen, ___propquery);
+}
+
+int LIB_EVP_SKEY_get0_raw_key(struct Library * _base, const EVP_SKEY * ___skey, const unsigned char ** ___key, size_t * ___len);
+
+int LIBSTUB_EVP_SKEY_get0_raw_key(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  const unsigned char ** ___key = (const unsigned char **)REG_A1;
+  size_t * ___len = (size_t *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_get0_raw_key(_base, ___skey, ___key, ___len);
+}
+
+int LIB_EVP_SKEY_export(struct Library * _base, const EVP_SKEY * ___skey, int ___selection, OSSL_CALLBACK * ___export_cb, void * ___export_cbarg);
+
+int LIBSTUB_EVP_SKEY_export(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  int ___selection = (int)REG_D0;
+  OSSL_CALLBACK * ___export_cb = (OSSL_CALLBACK *)REG_A1;
+  void * ___export_cbarg = (void *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_export(_base, ___skey, ___selection, ___export_cb, ___export_cbarg);
+}
+
+int LIB_EVP_SKEY_up_ref(struct Library * _base, EVP_SKEY * ___skey);
+
+int LIBSTUB_EVP_SKEY_up_ref(void)
+{
+  EVP_SKEY * ___skey = (EVP_SKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_up_ref(_base, ___skey);
+}
+
+void LIB_EVP_SKEY_free(struct Library * _base, EVP_SKEY * ___skey);
+
+void LIBSTUB_EVP_SKEY_free(void)
+{
+  EVP_SKEY * ___skey = (EVP_SKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_free(_base, ___skey);
+}
+
+EVP_SKEYMGMT * LIB_EVP_SKEYMGMT_fetch(struct Library * _base, OSSL_LIB_CTX * ___ctx, const char * ___algorithm, const char * ___properties);
+
+EVP_SKEYMGMT * LIBSTUB_EVP_SKEYMGMT_fetch(void)
+{
+  OSSL_LIB_CTX * ___ctx = (OSSL_LIB_CTX *)REG_A0;
+  const char * ___algorithm = (const char *)REG_A1;
+  const char * ___properties = (const char *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_fetch(_base, ___ctx, ___algorithm, ___properties);
+}
+
+int LIB_EVP_SKEYMGMT_up_ref(struct Library * _base, EVP_SKEYMGMT * ___keymgmt);
+
+int LIBSTUB_EVP_SKEYMGMT_up_ref(void)
+{
+  EVP_SKEYMGMT * ___keymgmt = (EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_up_ref(_base, ___keymgmt);
+}
+
+void LIB_EVP_SKEYMGMT_free(struct Library * _base, EVP_SKEYMGMT * ___keymgmt);
+
+void LIBSTUB_EVP_SKEYMGMT_free(void)
+{
+  EVP_SKEYMGMT * ___keymgmt = (EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_free(_base, ___keymgmt);
+}
+
+const OSSL_PROVIDER * LIB_EVP_SKEYMGMT_get0_provider(struct Library * _base, const EVP_SKEYMGMT * ___keymgmt);
+
+const OSSL_PROVIDER * LIBSTUB_EVP_SKEYMGMT_get0_provider(void)
+{
+  const EVP_SKEYMGMT * ___keymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_get0_provider(_base, ___keymgmt);
+}
+
+const char * LIB_EVP_SKEYMGMT_get0_name(struct Library * _base, const EVP_SKEYMGMT * ___keymgmt);
+
+const char * LIBSTUB_EVP_SKEYMGMT_get0_name(void)
+{
+  const EVP_SKEYMGMT * ___keymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_get0_name(_base, ___keymgmt);
+}
+
+const char * LIB_EVP_SKEYMGMT_get0_description(struct Library * _base, const EVP_SKEYMGMT * ___keymgmt);
+
+const char * LIBSTUB_EVP_SKEYMGMT_get0_description(void)
+{
+  const EVP_SKEYMGMT * ___keymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_get0_description(_base, ___keymgmt);
+}
+
+int LIB_EVP_SKEYMGMT_is_a(struct Library * _base, const EVP_SKEYMGMT * ___keymgmt, const char * ___name);
+
+int LIBSTUB_EVP_SKEYMGMT_is_a(void)
+{
+  const EVP_SKEYMGMT * ___keymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  const char * ___name = (const char *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_is_a(_base, ___keymgmt, ___name);
+}
+
+void LIB_EVP_SKEYMGMT_do_all_provided(struct Library * _base, OSSL_LIB_CTX * ___libctx, void (*___fn)(EVP_SKEYMGMT *keymgmt,void *arg), void * ___arg);
+
+void LIBSTUB_EVP_SKEYMGMT_do_all_provided(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  void (*___fn)(EVP_SKEYMGMT *keymgmt,void *arg) = (void (*)(EVP_SKEYMGMT *keymgmt,void *arg))REG_A1;
+  void * ___arg = (void *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_do_all_provided(_base, ___libctx, ___fn, ___arg);
+}
+
+int LIB_EVP_SKEYMGMT_names_do_all(struct Library * _base, const EVP_SKEYMGMT * ___keymgmt, void (*___fn)(const char *name,void *data), void * ___data);
+
+int LIBSTUB_EVP_SKEYMGMT_names_do_all(void)
+{
+  const EVP_SKEYMGMT * ___keymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  void (*___fn)(const char *name,void *data) = (void (*)(const char *name,void *data))REG_A1;
+  void * ___data = (void *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_names_do_all(_base, ___keymgmt, ___fn, ___data);
+}
+
+int LIB_EVP_MAC_init_SKEY(struct Library * _base, EVP_MAC_CTX * ___ctx, EVP_SKEY * ___skey, const OSSL_PARAM * ___params);
+
+int LIBSTUB_EVP_MAC_init_SKEY(void)
+{
+  EVP_MAC_CTX * ___ctx = (EVP_MAC_CTX *)REG_A0;
+  EVP_SKEY * ___skey = (EVP_SKEY *)REG_A1;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_MAC_init_SKEY(_base, ___ctx, ___skey, ___params);
+}
+
+const char * LIB_EVP_SKEY_get0_key_id(struct Library * _base, const EVP_SKEY * ___skey);
+
+const char * LIBSTUB_EVP_SKEY_get0_key_id(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_get0_key_id(_base, ___skey);
+}
+
+const char * LIB_EVP_SKEY_get0_skeymgmt_name(struct Library * _base, const EVP_SKEY * ___skey);
+
+const char * LIBSTUB_EVP_SKEY_get0_skeymgmt_name(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_get0_skeymgmt_name(_base, ___skey);
+}
+
+const char * LIB_EVP_SKEY_get0_provider_name(struct Library * _base, const EVP_SKEY * ___skey);
+
+const char * LIBSTUB_EVP_SKEY_get0_provider_name(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_get0_provider_name(_base, ___skey);
+}
+
+const OSSL_PARAM * LIB_EVP_SKEYMGMT_get0_gen_settable_params(struct Library * _base, const EVP_SKEYMGMT * ___skeymgmt);
+
+const OSSL_PARAM * LIBSTUB_EVP_SKEYMGMT_get0_gen_settable_params(void)
+{
+  const EVP_SKEYMGMT * ___skeymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_get0_gen_settable_params(_base, ___skeymgmt);
+}
+
+const OSSL_PARAM * LIB_EVP_SKEYMGMT_get0_imp_settable_params(struct Library * _base, const EVP_SKEYMGMT * ___skeymgmt);
+
+const OSSL_PARAM * LIBSTUB_EVP_SKEYMGMT_get0_imp_settable_params(void)
+{
+  const EVP_SKEYMGMT * ___skeymgmt = (const EVP_SKEYMGMT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEYMGMT_get0_imp_settable_params(_base, ___skeymgmt);
+}
+
+int LIB_EVP_SKEY_is_a(struct Library * _base, const EVP_SKEY * ___skey, const char * ___name);
+
+int LIBSTUB_EVP_SKEY_is_a(void)
+{
+  const EVP_SKEY * ___skey = (const EVP_SKEY *)REG_A0;
+  const char * ___name = (const char *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_is_a(_base, ___skey, ___name);
+}
+
+EVP_SKEY * LIB_EVP_SKEY_to_provider(struct Library * _base, EVP_SKEY * ___skey, OSSL_LIB_CTX * ___libctx, OSSL_PROVIDER * ___prov, const char * ___propquery);
+
+EVP_SKEY * LIBSTUB_EVP_SKEY_to_provider(void)
+{
+  EVP_SKEY * ___skey = (EVP_SKEY *)REG_A0;
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A1;
+  OSSL_PROVIDER * ___prov = (OSSL_PROVIDER *)REG_A2;
+  const char * ___propquery = (const char *)REG_A3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_to_provider(_base, ___skey, ___libctx, ___prov, ___propquery);
+}
+
+int LIB_OSSL_PROVIDER_add_conf_parameter(struct Library * _base, OSSL_PROVIDER * ___prov, const char * ___name, const char * ___value);
+
+int LIBSTUB_OSSL_PROVIDER_add_conf_parameter(void)
+{
+  OSSL_PROVIDER * ___prov = (OSSL_PROVIDER *)REG_A0;
+  const char * ___name = (const char *)REG_A1;
+  const char * ___value = (const char *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PROVIDER_add_conf_parameter(_base, ___prov, ___name, ___value);
+}
+
+int LIB_OSSL_PROVIDER_get_conf_parameters(struct Library * _base, const OSSL_PROVIDER * ___prov, OSSL_PARAM * ___params);
+
+int LIBSTUB_OSSL_PROVIDER_get_conf_parameters(void)
+{
+  const OSSL_PROVIDER * ___prov = (const OSSL_PROVIDER *)REG_A0;
+  OSSL_PARAM * ___params = (OSSL_PARAM *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PROVIDER_get_conf_parameters(_base, ___prov, ___params);
+}
+
+int LIB_OSSL_PROVIDER_conf_get_bool(struct Library * _base, const OSSL_PROVIDER * ___prov, const char * ___name, int ___defval);
+
+int LIBSTUB_OSSL_PROVIDER_conf_get_bool(void)
+{
+  const OSSL_PROVIDER * ___prov = (const OSSL_PROVIDER *)REG_A0;
+  const char * ___name = (const char *)REG_A1;
+  int ___defval = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PROVIDER_conf_get_bool(_base, ___prov, ___name, ___defval);
+}
+
+OSSL_AA_DIST_POINT * LIB_d2i_OSSL_AA_DIST_POINT(struct Library * _base, OSSL_AA_DIST_POINT ** ___a, const unsigned char ** ___in, long ___len);
+
+OSSL_AA_DIST_POINT * LIBSTUB_d2i_OSSL_AA_DIST_POINT(void)
+{
+  OSSL_AA_DIST_POINT ** ___a = (OSSL_AA_DIST_POINT **)REG_A0;
+  const unsigned char ** ___in = (const unsigned char **)REG_A1;
+  long ___len = (long)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_d2i_OSSL_AA_DIST_POINT(_base, ___a, ___in, ___len);
+}
+
+int LIB_i2d_OSSL_AA_DIST_POINT(struct Library * _base, const OSSL_AA_DIST_POINT * ___a, unsigned char ** ___out);
+
+int LIBSTUB_i2d_OSSL_AA_DIST_POINT(void)
+{
+  const OSSL_AA_DIST_POINT * ___a = (const OSSL_AA_DIST_POINT *)REG_A0;
+  unsigned char ** ___out = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_OSSL_AA_DIST_POINT(_base, ___a, ___out);
+}
+
+void LIB_OSSL_AA_DIST_POINT_free(struct Library * _base, OSSL_AA_DIST_POINT * ___a);
+
+void LIBSTUB_OSSL_AA_DIST_POINT_free(void)
+{
+  OSSL_AA_DIST_POINT * ___a = (OSSL_AA_DIST_POINT *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AA_DIST_POINT_free(_base, ___a);
+}
+
+OSSL_AA_DIST_POINT * LIB_OSSL_AA_DIST_POINT_new(struct Library * _base);
+
+OSSL_AA_DIST_POINT * LIBSTUB_OSSL_AA_DIST_POINT_new(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AA_DIST_POINT_new(_base);
+}
+
+const ASN1_ITEM * LIB_OSSL_AA_DIST_POINT_it(struct Library * _base);
+
+const ASN1_ITEM * LIBSTUB_OSSL_AA_DIST_POINT_it(void)
+{
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_AA_DIST_POINT_it(_base);
+}
+
+int LIB_PEM_ASN1_write_bio_ctx(struct Library * _base, OSSL_i2d_of_void_ctx * ___i2d, void * ___vctx, const char * ___name, BIO * ___bp, const void * ___x, const EVP_CIPHER * ___enc, const unsigned char * ___kstr, int ___klen, pem_password_cb * ___cb, void * ___u);
+
+int LIBSTUB_PEM_ASN1_write_bio_ctx(void)
+{
+  OSSL_i2d_of_void_ctx * ___i2d = (OSSL_i2d_of_void_ctx *)REG_A0;
+  void * ___vctx = (void *)REG_A1;
+  const char * ___name = (const char *)REG_A2;
+  BIO * ___bp = (BIO *)REG_A3;
+  const void * ___x = (const void *)REG_D0;
+  const EVP_CIPHER * ___enc = (const EVP_CIPHER *)REG_D1;
+  const unsigned char * ___kstr = (const unsigned char *)REG_D2;
+  int ___klen = (int)REG_D3;
+  pem_password_cb * ___cb = (pem_password_cb *)REG_D4;
+  void * ___u = (void *)REG_D5;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_PEM_ASN1_write_bio_ctx(_base, ___i2d, ___vctx, ___name, ___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u);
+}
+
 
 #ifdef __cplusplus
 }

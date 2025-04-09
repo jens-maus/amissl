@@ -9,7 +9,9 @@
 
 #ifndef OSSL_MLX_KEM_H
 # define OSSL_MLX_KEM_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 #include <openssl/evp.h>
 #include <openssl/ml_kem.h>

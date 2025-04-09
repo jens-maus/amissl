@@ -5314,4 +5314,840 @@ typedef ULONG _sfdc_vararg;
       LP0(0x1f0e, const ASN1_ITEM *, OSSL_TARGETING_INFORMATION_it ,\
       , AMISSLEXT_BASE_NAME)
 
+#define SSL_set_quic_tls_cbs(___s, ___qtdis, ___arg) \
+      LP3(0x1f14, int, SSL_set_quic_tls_cbs , SSL *, ___s, a0, const OSSL_DISPATCH *, ___qtdis, a1, void *, ___arg, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_set_quic_tls_transport_params(___s, ___params, ___params_len) \
+      LP3(0x1f1a, int, SSL_set_quic_tls_transport_params , SSL *, ___s, a0, const unsigned char *, ___params, a1, size_t, ___params_len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_set_quic_tls_early_data_enabled(___s, ___enabled) \
+      LP2(0x1f20, int, SSL_set_quic_tls_early_data_enabled , SSL *, ___s, a0, int, ___enabled, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_QUIC_server_method() \
+      LP0(0x1f26, const SSL_METHOD *, OSSL_QUIC_server_method ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_is_listener(___ssl) \
+      LP1(0x1f2c, int, SSL_is_listener , SSL *, ___ssl, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_get0_listener(___s) \
+      LP1(0x1f32, SSL *, SSL_get0_listener , SSL *, ___s, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_new_listener(___ctx, ___flags) \
+      LP2(0x1f38, SSL *, SSL_new_listener , SSL_CTX *, ___ctx, a0, uint64_t, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_accept_connection(___ssl, ___flags) \
+      LP2(0x1f3e, SSL *, SSL_accept_connection , SSL *, ___ssl, a0, uint64_t, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_get_accept_connection_queue_len(___ssl) \
+      LP1(0x1f44, size_t, SSL_get_accept_connection_queue_len , SSL *, ___ssl, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_listen(___ssl) \
+      LP1(0x1f4a, int, SSL_listen , SSL *, ___ssl, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_new_from_listener(___ssl, ___flags) \
+      LP2(0x1f50, SSL *, SSL_new_from_listener , SSL *, ___ssl, a0, uint64_t, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_new_listener_from(___ssl, ___flags) \
+      LP2(0x1f56, SSL *, SSL_new_listener_from , SSL *, ___ssl, a0, uint64_t, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_is_domain(___s) \
+      LP1(0x1f5c, int, SSL_is_domain , SSL *, ___s, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_get0_domain(___s) \
+      LP1(0x1f62, SSL *, SSL_get0_domain , SSL *, ___s, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_new_domain(___ctx, ___flags) \
+      LP2(0x1f68, SSL *, SSL_new_domain , SSL_CTX *, ___ctx, a0, uint64_t, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_CTX_set_domain_flags(___ctx, ___domain_flags) \
+      LP2(0x1f6e, int, SSL_CTX_set_domain_flags , SSL_CTX *, ___ctx, a0, uint64_t, ___domain_flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_CTX_get_domain_flags(___ctx, ___domain_flags) \
+      LP2(0x1f74, int, SSL_CTX_get_domain_flags , const SSL_CTX *, ___ctx, a0, uint64_t *, ___domain_flags, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_get_domain_flags(___ssl, ___domain_flags) \
+      LP2(0x1f7a, int, SSL_get_domain_flags , const SSL *, ___ssl, a0, uint64_t *, ___domain_flags, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define SSL_CTX_set_new_pending_conn_cb(___c, ___cb, ___arg) \
+      LP3NR(0x1f80, SSL_CTX_set_new_pending_conn_cb , SSL_CTX *, ___c, a0, SSL_new_pending_conn_cb_fn, ___cb, a1, void *, ___arg, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define X509_VERIFY_PARAM_get_purpose(___param) \
+      LP1(0x1f86, int, X509_VERIFY_PARAM_get_purpose , const X509_VERIFY_PARAM *, ___param, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_CRMF_ENCRYPTEDKEY(___a, ___in, ___len) \
+      LP3(0x1f8c, OSSL_CRMF_ENCRYPTEDKEY *, d2i_OSSL_CRMF_ENCRYPTEDKEY , OSSL_CRMF_ENCRYPTEDKEY **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_CRMF_ENCRYPTEDKEY(___a, ___out) \
+      LP2(0x1f92, int, i2d_OSSL_CRMF_ENCRYPTEDKEY , const OSSL_CRMF_ENCRYPTEDKEY *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_free(___a) \
+      LP1NR(0x1f98, OSSL_CRMF_ENCRYPTEDKEY_free , OSSL_CRMF_ENCRYPTEDKEY *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_new() \
+      LP0(0x1f9e, OSSL_CRMF_ENCRYPTEDKEY *, OSSL_CRMF_ENCRYPTEDKEY_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_it() \
+      LP0(0x1fa4, const ASN1_ITEM *, OSSL_CRMF_ENCRYPTEDKEY_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_get1_encCert(___ecert, ___libctx, ___propq, ___pkey, ___flags) \
+      LP5(0x1faa, X509 *, OSSL_CRMF_ENCRYPTEDKEY_get1_encCert , const OSSL_CRMF_ENCRYPTEDKEY *, ___ecert, a0, OSSL_LIB_CTX *, ___libctx, a1, const char *, ___propq, a2, EVP_PKEY *, ___pkey, a3, unsigned int, ___flags, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDVALUE_decrypt(___enc, ___libctx, ___propq, ___pkey, ___outlen) \
+      LP5(0x1fb0, unsigned char *, OSSL_CRMF_ENCRYPTEDVALUE_decrypt , const OSSL_CRMF_ENCRYPTEDVALUE *, ___enc, a0, OSSL_LIB_CTX *, ___libctx, a1, const char *, ___propq, a2, EVP_PKEY *, ___pkey, a3, int *, ___outlen, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(___encryptedKey, ___ts, ___extra, ___pkey, ___cert, ___secret, ___libctx, ___propq) \
+      LP8(0x1fb6, EVP_PKEY *, OSSL_CRMF_ENCRYPTEDKEY_get1_pkey , const OSSL_CRMF_ENCRYPTEDKEY *, ___encryptedKey, a0, X509_STORE *, ___ts, a1, STACK_OF(X509) *, ___extra, a2, EVP_PKEY *, ___pkey, a3, X509 *, ___cert, d0, ASN1_OCTET_STRING *, ___secret, d1, OSSL_LIB_CTX *, ___libctx, d2, const char *, ___propq, d3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_MSG_centralkeygen_requested(___crm, ___p10cr) \
+      LP2(0x1fbc, int, OSSL_CRMF_MSG_centralkeygen_requested , const OSSL_CRMF_MSG *, ___crm, a0, const X509_REQ *, ___p10cr, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define CMS_EnvelopedData_dup(___a) \
+      LP1(0x1fc2, CMS_EnvelopedData *, CMS_EnvelopedData_dup , const CMS_EnvelopedData *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_CRMF_ENCRYPTEDKEY_init_envdata(___envdata) \
+      LP1(0x1fc8, OSSL_CRMF_ENCRYPTEDKEY *, OSSL_CRMF_ENCRYPTEDKEY_init_envdata , CMS_EnvelopedData *, ___envdata, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_get1_default_properties(___libctx) \
+      LP1(0x1fce, char *, EVP_get1_default_properties , OSSL_LIB_CTX *, ___libctx, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define RAND_set1_random_provider(___ctx, ___p) \
+      LP2(0x1fd4, int, RAND_set1_random_provider , OSSL_LIB_CTX *, ___ctx, a0, OSSL_PROVIDER *, ___p, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define X509_PURPOSE_get_unused_id(___libctx) \
+      LP1(0x1fda, int, X509_PURPOSE_get_unused_id , OSSL_LIB_CTX *, ___libctx, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(___a, ___in, ___len) \
+      LP3(0x1fe0, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *, d2i_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX , OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX(___a, ___out) \
+      LP2(0x1fe6, int, i2d_OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX , const OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free(___a) \
+      LP1NR(0x1fec, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_free , OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new() \
+      LP0(0x1ff2, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX *, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it() \
+      LP0(0x1ff8, const ASN1_ITEM *, OSSL_AUTHORITY_ATTRIBUTE_ID_SYNTAX_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ROLE_SPEC_CERT_ID(___a, ___in, ___len) \
+      LP3(0x1ffe, OSSL_ROLE_SPEC_CERT_ID *, d2i_OSSL_ROLE_SPEC_CERT_ID , OSSL_ROLE_SPEC_CERT_ID **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ROLE_SPEC_CERT_ID(___a, ___out) \
+      LP2(0x2004, int, i2d_OSSL_ROLE_SPEC_CERT_ID , const OSSL_ROLE_SPEC_CERT_ID *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_free(___a) \
+      LP1NR(0x200a, OSSL_ROLE_SPEC_CERT_ID_free , OSSL_ROLE_SPEC_CERT_ID *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_new() \
+      LP0(0x2010, OSSL_ROLE_SPEC_CERT_ID *, OSSL_ROLE_SPEC_CERT_ID_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_it() \
+      LP0(0x2016, const ASN1_ITEM *, OSSL_ROLE_SPEC_CERT_ID_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(___a, ___in, ___len) \
+      LP3(0x201c, OSSL_ROLE_SPEC_CERT_ID_SYNTAX *, d2i_OSSL_ROLE_SPEC_CERT_ID_SYNTAX , OSSL_ROLE_SPEC_CERT_ID_SYNTAX **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX(___a, ___out) \
+      LP2(0x2022, int, i2d_OSSL_ROLE_SPEC_CERT_ID_SYNTAX , const OSSL_ROLE_SPEC_CERT_ID_SYNTAX *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free(___a) \
+      LP1NR(0x2028, OSSL_ROLE_SPEC_CERT_ID_SYNTAX_free , OSSL_ROLE_SPEC_CERT_ID_SYNTAX *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new() \
+      LP0(0x202e, OSSL_ROLE_SPEC_CERT_ID_SYNTAX *, OSSL_ROLE_SPEC_CERT_ID_SYNTAX_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it() \
+      LP0(0x2034, const ASN1_ITEM *, OSSL_ROLE_SPEC_CERT_ID_SYNTAX_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATTRIBUTE_DESCRIPTOR(___a, ___in, ___len) \
+      LP3(0x203a, OSSL_ATTRIBUTE_DESCRIPTOR *, d2i_OSSL_ATTRIBUTE_DESCRIPTOR , OSSL_ATTRIBUTE_DESCRIPTOR **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATTRIBUTE_DESCRIPTOR(___a, ___out) \
+      LP2(0x2040, int, i2d_OSSL_ATTRIBUTE_DESCRIPTOR , const OSSL_ATTRIBUTE_DESCRIPTOR *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_DESCRIPTOR_free(___a) \
+      LP1NR(0x2046, OSSL_ATTRIBUTE_DESCRIPTOR_free , OSSL_ATTRIBUTE_DESCRIPTOR *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_DESCRIPTOR_new() \
+      LP0(0x204c, OSSL_ATTRIBUTE_DESCRIPTOR *, OSSL_ATTRIBUTE_DESCRIPTOR_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_DESCRIPTOR_it() \
+      LP0(0x2052, const ASN1_ITEM *, OSSL_ATTRIBUTE_DESCRIPTOR_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_HASH_it() \
+      LP0(0x2058, const ASN1_ITEM *, OSSL_HASH_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_it() \
+      LP0(0x205e, const ASN1_ITEM *, OSSL_INFO_SYNTAX_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_POINTER_it() \
+      LP0(0x2064, const ASN1_ITEM *, OSSL_INFO_SYNTAX_POINTER_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PRIVILEGE_POLICY_ID_it() \
+      LP0(0x206a, const ASN1_ITEM *, OSSL_PRIVILEGE_POLICY_ID_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_HASH(___a, ___in, ___len) \
+      LP3(0x2070, OSSL_HASH *, d2i_OSSL_HASH , OSSL_HASH **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_HASH(___a, ___out) \
+      LP2(0x2076, int, i2d_OSSL_HASH , const OSSL_HASH *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_HASH_free(___a) \
+      LP1NR(0x207c, OSSL_HASH_free , OSSL_HASH *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_HASH_new() \
+      LP0(0x2082, OSSL_HASH *, OSSL_HASH_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_INFO_SYNTAX(___a, ___in, ___len) \
+      LP3(0x2088, OSSL_INFO_SYNTAX *, d2i_OSSL_INFO_SYNTAX , OSSL_INFO_SYNTAX **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_INFO_SYNTAX(___a, ___out) \
+      LP2(0x208e, int, i2d_OSSL_INFO_SYNTAX , const OSSL_INFO_SYNTAX *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_free(___a) \
+      LP1NR(0x2094, OSSL_INFO_SYNTAX_free , OSSL_INFO_SYNTAX *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_new() \
+      LP0(0x209a, OSSL_INFO_SYNTAX *, OSSL_INFO_SYNTAX_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_INFO_SYNTAX_POINTER(___a, ___in, ___len) \
+      LP3(0x20a0, OSSL_INFO_SYNTAX_POINTER *, d2i_OSSL_INFO_SYNTAX_POINTER , OSSL_INFO_SYNTAX_POINTER **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_INFO_SYNTAX_POINTER(___a, ___out) \
+      LP2(0x20a6, int, i2d_OSSL_INFO_SYNTAX_POINTER , const OSSL_INFO_SYNTAX_POINTER *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_POINTER_free(___a) \
+      LP1NR(0x20ac, OSSL_INFO_SYNTAX_POINTER_free , OSSL_INFO_SYNTAX_POINTER *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_INFO_SYNTAX_POINTER_new() \
+      LP0(0x20b2, OSSL_INFO_SYNTAX_POINTER *, OSSL_INFO_SYNTAX_POINTER_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_PRIVILEGE_POLICY_ID(___a, ___in, ___len) \
+      LP3(0x20b8, OSSL_PRIVILEGE_POLICY_ID *, d2i_OSSL_PRIVILEGE_POLICY_ID , OSSL_PRIVILEGE_POLICY_ID **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_PRIVILEGE_POLICY_ID(___a, ___out) \
+      LP2(0x20be, int, i2d_OSSL_PRIVILEGE_POLICY_ID , const OSSL_PRIVILEGE_POLICY_ID *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PRIVILEGE_POLICY_ID_free(___a) \
+      LP1NR(0x20c4, OSSL_PRIVILEGE_POLICY_ID_free , OSSL_PRIVILEGE_POLICY_ID *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PRIVILEGE_POLICY_ID_new() \
+      LP0(0x20ca, OSSL_PRIVILEGE_POLICY_ID *, OSSL_PRIVILEGE_POLICY_ID_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PARAM_print_to_bio(___params, ___bio, ___print_values) \
+      LP3(0x20d0, int, OSSL_PARAM_print_to_bio , const OSSL_PARAM *, ___params, a0, BIO *, ___bio, a1, int, ___print_values, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_DAY_TIME(___a, ___in, ___len) \
+      LP3(0x20d6, OSSL_DAY_TIME *, d2i_OSSL_DAY_TIME , OSSL_DAY_TIME **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_DAY_TIME(___a, ___out) \
+      LP2(0x20dc, int, i2d_OSSL_DAY_TIME , const OSSL_DAY_TIME *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_free(___a) \
+      LP1NR(0x20e2, OSSL_DAY_TIME_free , OSSL_DAY_TIME *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_new() \
+      LP0(0x20e8, OSSL_DAY_TIME *, OSSL_DAY_TIME_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_it() \
+      LP0(0x20ee, const ASN1_ITEM *, OSSL_DAY_TIME_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_DAY_TIME_BAND(___a, ___in, ___len) \
+      LP3(0x20f4, OSSL_DAY_TIME_BAND *, d2i_OSSL_DAY_TIME_BAND , OSSL_DAY_TIME_BAND **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_DAY_TIME_BAND(___a, ___out) \
+      LP2(0x20fa, int, i2d_OSSL_DAY_TIME_BAND , const OSSL_DAY_TIME_BAND *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_BAND_free(___a) \
+      LP1NR(0x2100, OSSL_DAY_TIME_BAND_free , OSSL_DAY_TIME_BAND *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_BAND_new() \
+      LP0(0x2106, OSSL_DAY_TIME_BAND *, OSSL_DAY_TIME_BAND_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_DAY_TIME_BAND_it() \
+      LP0(0x210c, const ASN1_ITEM *, OSSL_DAY_TIME_BAND_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_DAY(___a, ___in, ___len) \
+      LP3(0x2112, OSSL_TIME_SPEC_DAY *, d2i_OSSL_TIME_SPEC_DAY , OSSL_TIME_SPEC_DAY **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_DAY(___a, ___out) \
+      LP2(0x2118, int, i2d_OSSL_TIME_SPEC_DAY , const OSSL_TIME_SPEC_DAY *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_DAY_free(___a) \
+      LP1NR(0x211e, OSSL_TIME_SPEC_DAY_free , OSSL_TIME_SPEC_DAY *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_DAY_new() \
+      LP0(0x2124, OSSL_TIME_SPEC_DAY *, OSSL_TIME_SPEC_DAY_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_DAY_it() \
+      LP0(0x212a, const ASN1_ITEM *, OSSL_TIME_SPEC_DAY_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_WEEKS(___a, ___in, ___len) \
+      LP3(0x2130, OSSL_TIME_SPEC_WEEKS *, d2i_OSSL_TIME_SPEC_WEEKS , OSSL_TIME_SPEC_WEEKS **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_WEEKS(___a, ___out) \
+      LP2(0x2136, int, i2d_OSSL_TIME_SPEC_WEEKS , const OSSL_TIME_SPEC_WEEKS *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_WEEKS_free(___a) \
+      LP1NR(0x213c, OSSL_TIME_SPEC_WEEKS_free , OSSL_TIME_SPEC_WEEKS *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_WEEKS_new() \
+      LP0(0x2142, OSSL_TIME_SPEC_WEEKS *, OSSL_TIME_SPEC_WEEKS_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_WEEKS_it() \
+      LP0(0x2148, const ASN1_ITEM *, OSSL_TIME_SPEC_WEEKS_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_MONTH(___a, ___in, ___len) \
+      LP3(0x214e, OSSL_TIME_SPEC_MONTH *, d2i_OSSL_TIME_SPEC_MONTH , OSSL_TIME_SPEC_MONTH **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_MONTH(___a, ___out) \
+      LP2(0x2154, int, i2d_OSSL_TIME_SPEC_MONTH , const OSSL_TIME_SPEC_MONTH *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_MONTH_free(___a) \
+      LP1NR(0x215a, OSSL_TIME_SPEC_MONTH_free , OSSL_TIME_SPEC_MONTH *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_MONTH_new() \
+      LP0(0x2160, OSSL_TIME_SPEC_MONTH *, OSSL_TIME_SPEC_MONTH_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_MONTH_it() \
+      LP0(0x2166, const ASN1_ITEM *, OSSL_TIME_SPEC_MONTH_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_NAMED_DAY(___a, ___in, ___len) \
+      LP3(0x216c, OSSL_NAMED_DAY *, d2i_OSSL_NAMED_DAY , OSSL_NAMED_DAY **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_NAMED_DAY(___a, ___out) \
+      LP2(0x2172, int, i2d_OSSL_NAMED_DAY , const OSSL_NAMED_DAY *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_NAMED_DAY_free(___a) \
+      LP1NR(0x2178, OSSL_NAMED_DAY_free , OSSL_NAMED_DAY *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_NAMED_DAY_new() \
+      LP0(0x217e, OSSL_NAMED_DAY *, OSSL_NAMED_DAY_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_NAMED_DAY_it() \
+      LP0(0x2184, const ASN1_ITEM *, OSSL_NAMED_DAY_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_X_DAY_OF(___a, ___in, ___len) \
+      LP3(0x218a, OSSL_TIME_SPEC_X_DAY_OF *, d2i_OSSL_TIME_SPEC_X_DAY_OF , OSSL_TIME_SPEC_X_DAY_OF **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_X_DAY_OF(___a, ___out) \
+      LP2(0x2190, int, i2d_OSSL_TIME_SPEC_X_DAY_OF , const OSSL_TIME_SPEC_X_DAY_OF *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_X_DAY_OF_free(___a) \
+      LP1NR(0x2196, OSSL_TIME_SPEC_X_DAY_OF_free , OSSL_TIME_SPEC_X_DAY_OF *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_X_DAY_OF_new() \
+      LP0(0x219c, OSSL_TIME_SPEC_X_DAY_OF *, OSSL_TIME_SPEC_X_DAY_OF_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_X_DAY_OF_it() \
+      LP0(0x21a2, const ASN1_ITEM *, OSSL_TIME_SPEC_X_DAY_OF_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_ABSOLUTE(___a, ___in, ___len) \
+      LP3(0x21a8, OSSL_TIME_SPEC_ABSOLUTE *, d2i_OSSL_TIME_SPEC_ABSOLUTE , OSSL_TIME_SPEC_ABSOLUTE **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_ABSOLUTE(___a, ___out) \
+      LP2(0x21ae, int, i2d_OSSL_TIME_SPEC_ABSOLUTE , const OSSL_TIME_SPEC_ABSOLUTE *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_ABSOLUTE_free(___a) \
+      LP1NR(0x21b4, OSSL_TIME_SPEC_ABSOLUTE_free , OSSL_TIME_SPEC_ABSOLUTE *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_ABSOLUTE_new() \
+      LP0(0x21ba, OSSL_TIME_SPEC_ABSOLUTE *, OSSL_TIME_SPEC_ABSOLUTE_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_ABSOLUTE_it() \
+      LP0(0x21c0, const ASN1_ITEM *, OSSL_TIME_SPEC_ABSOLUTE_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC_TIME(___a, ___in, ___len) \
+      LP3(0x21c6, OSSL_TIME_SPEC_TIME *, d2i_OSSL_TIME_SPEC_TIME , OSSL_TIME_SPEC_TIME **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC_TIME(___a, ___out) \
+      LP2(0x21cc, int, i2d_OSSL_TIME_SPEC_TIME , const OSSL_TIME_SPEC_TIME *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_TIME_free(___a) \
+      LP1NR(0x21d2, OSSL_TIME_SPEC_TIME_free , OSSL_TIME_SPEC_TIME *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_TIME_new() \
+      LP0(0x21d8, OSSL_TIME_SPEC_TIME *, OSSL_TIME_SPEC_TIME_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_TIME_it() \
+      LP0(0x21de, const ASN1_ITEM *, OSSL_TIME_SPEC_TIME_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_SPEC(___a, ___in, ___len) \
+      LP3(0x21e4, OSSL_TIME_SPEC *, d2i_OSSL_TIME_SPEC , OSSL_TIME_SPEC **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_SPEC(___a, ___out) \
+      LP2(0x21ea, int, i2d_OSSL_TIME_SPEC , const OSSL_TIME_SPEC *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_free(___a) \
+      LP1NR(0x21f0, OSSL_TIME_SPEC_free , OSSL_TIME_SPEC *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_new() \
+      LP0(0x21f6, OSSL_TIME_SPEC *, OSSL_TIME_SPEC_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_SPEC_it() \
+      LP0(0x21fc, const ASN1_ITEM *, OSSL_TIME_SPEC_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_TIME_PERIOD(___a, ___in, ___len) \
+      LP3(0x2202, OSSL_TIME_PERIOD *, d2i_OSSL_TIME_PERIOD , OSSL_TIME_PERIOD **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_TIME_PERIOD(___a, ___out) \
+      LP2(0x2208, int, i2d_OSSL_TIME_PERIOD , const OSSL_TIME_PERIOD *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_PERIOD_free(___a) \
+      LP1NR(0x220e, OSSL_TIME_PERIOD_free , OSSL_TIME_PERIOD *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_PERIOD_new() \
+      LP0(0x2214, OSSL_TIME_PERIOD *, OSSL_TIME_PERIOD_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_TIME_PERIOD_it() \
+      LP0(0x221a, const ASN1_ITEM *, OSSL_TIME_PERIOD_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CIPHER_can_pipeline(___cipher, ___enc) \
+      LP2(0x2220, int, EVP_CIPHER_can_pipeline , const EVP_CIPHER *, ___cipher, a0, int, ___enc, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CipherPipelineEncryptInit(___ctx, ___cipher, ___key, ___keylen, ___numpipes, ___iv, ___ivlen) \
+      LP7(0x2226, int, EVP_CipherPipelineEncryptInit , EVP_CIPHER_CTX *, ___ctx, a0, const EVP_CIPHER *, ___cipher, a1, const unsigned char *, ___key, a2, size_t, ___keylen, d0, size_t, ___numpipes, d1, const unsigned char **, ___iv, a3, size_t, ___ivlen, d2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CipherPipelineDecryptInit(___ctx, ___cipher, ___key, ___keylen, ___numpipes, ___iv, ___ivlen) \
+      LP7(0x222c, int, EVP_CipherPipelineDecryptInit , EVP_CIPHER_CTX *, ___ctx, a0, const EVP_CIPHER *, ___cipher, a1, const unsigned char *, ___key, a2, size_t, ___keylen, d0, size_t, ___numpipes, d1, const unsigned char **, ___iv, a3, size_t, ___ivlen, d2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CipherPipelineUpdate(___ctx, ___out, ___outl, ___outsize, ___in, ___inl) \
+      LP6(0x2232, int, EVP_CipherPipelineUpdate , EVP_CIPHER_CTX *, ___ctx, a0, unsigned char **, ___out, a1, size_t *, ___outl, a2, const size_t *, ___outsize, a3, const unsigned char **, ___in, d0, const size_t *, ___inl, d1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CipherPipelineFinal(___ctx, ___outm, ___outl, ___outsize) \
+      LP4(0x2238, int, EVP_CipherPipelineFinal , EVP_CIPHER_CTX *, ___ctx, a0, unsigned char **, ___outm, a1, size_t *, ___outl, a2, const size_t *, ___outsize, a3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATTRIBUTE_TYPE_MAPPING(___a, ___in, ___len) \
+      LP3(0x223e, OSSL_ATTRIBUTE_TYPE_MAPPING *, d2i_OSSL_ATTRIBUTE_TYPE_MAPPING , OSSL_ATTRIBUTE_TYPE_MAPPING **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATTRIBUTE_TYPE_MAPPING(___a, ___out) \
+      LP2(0x2244, int, i2d_OSSL_ATTRIBUTE_TYPE_MAPPING , const OSSL_ATTRIBUTE_TYPE_MAPPING *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_free(___a) \
+      LP1NR(0x224a, OSSL_ATTRIBUTE_TYPE_MAPPING_free , OSSL_ATTRIBUTE_TYPE_MAPPING *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_new() \
+      LP0(0x2250, OSSL_ATTRIBUTE_TYPE_MAPPING *, OSSL_ATTRIBUTE_TYPE_MAPPING_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_TYPE_MAPPING_it() \
+      LP0(0x2256, const ASN1_ITEM *, OSSL_ATTRIBUTE_TYPE_MAPPING_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATTRIBUTE_VALUE_MAPPING(___a, ___in, ___len) \
+      LP3(0x225c, OSSL_ATTRIBUTE_VALUE_MAPPING *, d2i_OSSL_ATTRIBUTE_VALUE_MAPPING , OSSL_ATTRIBUTE_VALUE_MAPPING **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATTRIBUTE_VALUE_MAPPING(___a, ___out) \
+      LP2(0x2262, int, i2d_OSSL_ATTRIBUTE_VALUE_MAPPING , const OSSL_ATTRIBUTE_VALUE_MAPPING *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_free(___a) \
+      LP1NR(0x2268, OSSL_ATTRIBUTE_VALUE_MAPPING_free , OSSL_ATTRIBUTE_VALUE_MAPPING *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_new() \
+      LP0(0x226e, OSSL_ATTRIBUTE_VALUE_MAPPING *, OSSL_ATTRIBUTE_VALUE_MAPPING_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_VALUE_MAPPING_it() \
+      LP0(0x2274, const ASN1_ITEM *, OSSL_ATTRIBUTE_VALUE_MAPPING_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATTRIBUTE_MAPPING(___a, ___in, ___len) \
+      LP3(0x227a, OSSL_ATTRIBUTE_MAPPING *, d2i_OSSL_ATTRIBUTE_MAPPING , OSSL_ATTRIBUTE_MAPPING **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATTRIBUTE_MAPPING(___a, ___out) \
+      LP2(0x2280, int, i2d_OSSL_ATTRIBUTE_MAPPING , const OSSL_ATTRIBUTE_MAPPING *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPING_free(___a) \
+      LP1NR(0x2286, OSSL_ATTRIBUTE_MAPPING_free , OSSL_ATTRIBUTE_MAPPING *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPING_new() \
+      LP0(0x228c, OSSL_ATTRIBUTE_MAPPING *, OSSL_ATTRIBUTE_MAPPING_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPING_it() \
+      LP0(0x2292, const ASN1_ITEM *, OSSL_ATTRIBUTE_MAPPING_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATTRIBUTE_MAPPINGS(___a, ___in, ___len) \
+      LP3(0x2298, OSSL_ATTRIBUTE_MAPPINGS *, d2i_OSSL_ATTRIBUTE_MAPPINGS , OSSL_ATTRIBUTE_MAPPINGS **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATTRIBUTE_MAPPINGS(___a, ___out) \
+      LP2(0x229e, int, i2d_OSSL_ATTRIBUTE_MAPPINGS , const OSSL_ATTRIBUTE_MAPPINGS *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPINGS_free(___a) \
+      LP1NR(0x22a4, OSSL_ATTRIBUTE_MAPPINGS_free , OSSL_ATTRIBUTE_MAPPINGS *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPINGS_new() \
+      LP0(0x22aa, OSSL_ATTRIBUTE_MAPPINGS *, OSSL_ATTRIBUTE_MAPPINGS_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATTRIBUTE_MAPPINGS_it() \
+      LP0(0x22b0, const ASN1_ITEM *, OSSL_ATTRIBUTE_MAPPINGS_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ATAV(___a, ___in, ___len) \
+      LP3(0x22b6, OSSL_ATAV *, d2i_OSSL_ATAV , OSSL_ATAV **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ATAV(___a, ___out) \
+      LP2(0x22bc, int, i2d_OSSL_ATAV , const OSSL_ATAV *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATAV_free(___a) \
+      LP1NR(0x22c2, OSSL_ATAV_free , OSSL_ATAV *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATAV_new() \
+      LP0(0x22c8, OSSL_ATAV *, OSSL_ATAV_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ATAV_it() \
+      LP0(0x22ce, const ASN1_ITEM *, OSSL_ATAV_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE(___a, ___in, ___len) \
+      LP3(0x22d4, OSSL_ALLOWED_ATTRIBUTES_CHOICE *, d2i_OSSL_ALLOWED_ATTRIBUTES_CHOICE , OSSL_ALLOWED_ATTRIBUTES_CHOICE **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE(___a, ___out) \
+      LP2(0x22da, int, i2d_OSSL_ALLOWED_ATTRIBUTES_CHOICE , const OSSL_ALLOWED_ATTRIBUTES_CHOICE *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(___a) \
+      LP1NR(0x22e0, OSSL_ALLOWED_ATTRIBUTES_CHOICE_free , OSSL_ALLOWED_ATTRIBUTES_CHOICE *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_new() \
+      LP0(0x22e6, OSSL_ALLOWED_ATTRIBUTES_CHOICE *, OSSL_ALLOWED_ATTRIBUTES_CHOICE_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_CHOICE_it() \
+      LP0(0x22ec, const ASN1_ITEM *, OSSL_ALLOWED_ATTRIBUTES_CHOICE_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM(___a, ___in, ___len) \
+      LP3(0x22f2, OSSL_ALLOWED_ATTRIBUTES_ITEM *, d2i_OSSL_ALLOWED_ATTRIBUTES_ITEM , OSSL_ALLOWED_ATTRIBUTES_ITEM **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM(___a, ___out) \
+      LP2(0x22f8, int, i2d_OSSL_ALLOWED_ATTRIBUTES_ITEM , const OSSL_ALLOWED_ATTRIBUTES_ITEM *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_free(___a) \
+      LP1NR(0x22fe, OSSL_ALLOWED_ATTRIBUTES_ITEM_free , OSSL_ALLOWED_ATTRIBUTES_ITEM *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_new() \
+      LP0(0x2304, OSSL_ALLOWED_ATTRIBUTES_ITEM *, OSSL_ALLOWED_ATTRIBUTES_ITEM_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_ITEM_it() \
+      LP0(0x230a, const ASN1_ITEM *, OSSL_ALLOWED_ATTRIBUTES_ITEM_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(___a, ___in, ___len) \
+      LP3(0x2310, OSSL_ALLOWED_ATTRIBUTES_SYNTAX *, d2i_OSSL_ALLOWED_ATTRIBUTES_SYNTAX , OSSL_ALLOWED_ATTRIBUTES_SYNTAX **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX(___a, ___out) \
+      LP2(0x2316, int, i2d_OSSL_ALLOWED_ATTRIBUTES_SYNTAX , const OSSL_ALLOWED_ATTRIBUTES_SYNTAX *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free(___a) \
+      LP1NR(0x231c, OSSL_ALLOWED_ATTRIBUTES_SYNTAX_free , OSSL_ALLOWED_ATTRIBUTES_SYNTAX *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new() \
+      LP0(0x2322, OSSL_ALLOWED_ATTRIBUTES_SYNTAX *, OSSL_ALLOWED_ATTRIBUTES_SYNTAX_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it() \
+      LP0(0x2328, const ASN1_ITEM *, OSSL_ALLOWED_ATTRIBUTES_SYNTAX_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_CipherInit_SKEY(___ctx, ___cipher, ___skey, ___iv, ___iv_len, ___enc, ___params) \
+      LP7(0x232e, int, EVP_CipherInit_SKEY , EVP_CIPHER_CTX *, ___ctx, a0, const EVP_CIPHER *, ___cipher, a1, EVP_SKEY *, ___skey, a2, const unsigned char *, ___iv, a3, size_t, ___iv_len, d0, int, ___enc, d1, const OSSL_PARAM *, ___params, d2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_import(___libctx, ___skeymgmtname, ___propquery, ___selection, ___params) \
+      LP5(0x2334, EVP_SKEY *, EVP_SKEY_import , OSSL_LIB_CTX *, ___libctx, a0, const char *, ___skeymgmtname, a1, const char *, ___propquery, a2, int, ___selection, d0, const OSSL_PARAM *, ___params, a3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_generate(___libctx, ___skeymgmtname, ___propquery, ___params) \
+      LP4(0x233a, EVP_SKEY *, EVP_SKEY_generate , OSSL_LIB_CTX *, ___libctx, a0, const char *, ___skeymgmtname, a1, const char *, ___propquery, a2, const OSSL_PARAM *, ___params, a3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_import_raw_key(___libctx, ___skeymgmtname, ___key, ___keylen, ___propquery) \
+      LP5(0x2340, EVP_SKEY *, EVP_SKEY_import_raw_key , OSSL_LIB_CTX *, ___libctx, a0, const char *, ___skeymgmtname, a1, unsigned char *, ___key, a2, size_t, ___keylen, d0, const char *, ___propquery, a3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_get0_raw_key(___skey, ___key, ___len) \
+      LP3(0x2346, int, EVP_SKEY_get0_raw_key , const EVP_SKEY *, ___skey, a0, const unsigned char **, ___key, a1, size_t *, ___len, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_export(___skey, ___selection, ___export_cb, ___export_cbarg) \
+      LP4(0x234c, int, EVP_SKEY_export , const EVP_SKEY *, ___skey, a0, int, ___selection, d0, OSSL_CALLBACK *, ___export_cb, a1, void *, ___export_cbarg, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_up_ref(___skey) \
+      LP1(0x2352, int, EVP_SKEY_up_ref , EVP_SKEY *, ___skey, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_free(___skey) \
+      LP1NR(0x2358, EVP_SKEY_free , EVP_SKEY *, ___skey, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_fetch(___ctx, ___algorithm, ___properties) \
+      LP3(0x235e, EVP_SKEYMGMT *, EVP_SKEYMGMT_fetch , OSSL_LIB_CTX *, ___ctx, a0, const char *, ___algorithm, a1, const char *, ___properties, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_up_ref(___keymgmt) \
+      LP1(0x2364, int, EVP_SKEYMGMT_up_ref , EVP_SKEYMGMT *, ___keymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_free(___keymgmt) \
+      LP1NR(0x236a, EVP_SKEYMGMT_free , EVP_SKEYMGMT *, ___keymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_get0_provider(___keymgmt) \
+      LP1(0x2370, const OSSL_PROVIDER *, EVP_SKEYMGMT_get0_provider , const EVP_SKEYMGMT *, ___keymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_get0_name(___keymgmt) \
+      LP1(0x2376, const char *, EVP_SKEYMGMT_get0_name , const EVP_SKEYMGMT *, ___keymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_get0_description(___keymgmt) \
+      LP1(0x237c, const char *, EVP_SKEYMGMT_get0_description , const EVP_SKEYMGMT *, ___keymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_is_a(___keymgmt, ___name) \
+      LP2(0x2382, int, EVP_SKEYMGMT_is_a , const EVP_SKEYMGMT *, ___keymgmt, a0, const char *, ___name, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_do_all_provided(___libctx, ___fn, ___arg) \
+      LP3NRFP(0x2388, EVP_SKEYMGMT_do_all_provided , OSSL_LIB_CTX *, ___libctx, a0, __fpt, ___fn, a1, void *, ___arg, a2,\
+      , AMISSLEXT_BASE_NAME, void (*__fpt)(EVP_SKEYMGMT *keymgmt,void *arg))
+
+#define EVP_SKEYMGMT_names_do_all(___keymgmt, ___fn, ___data) \
+      LP3FP(0x238e, int, EVP_SKEYMGMT_names_do_all , const EVP_SKEYMGMT *, ___keymgmt, a0, __fpt, ___fn, a1, void *, ___data, a2,\
+      , AMISSLEXT_BASE_NAME, void (*__fpt)(const char *name,void *data))
+
+#define EVP_MAC_init_SKEY(___ctx, ___skey, ___params) \
+      LP3(0x2394, int, EVP_MAC_init_SKEY , EVP_MAC_CTX *, ___ctx, a0, EVP_SKEY *, ___skey, a1, const OSSL_PARAM *, ___params, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_get0_key_id(___skey) \
+      LP1(0x239a, const char *, EVP_SKEY_get0_key_id , const EVP_SKEY *, ___skey, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_get0_skeymgmt_name(___skey) \
+      LP1(0x23a0, const char *, EVP_SKEY_get0_skeymgmt_name , const EVP_SKEY *, ___skey, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_get0_provider_name(___skey) \
+      LP1(0x23a6, const char *, EVP_SKEY_get0_provider_name , const EVP_SKEY *, ___skey, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_get0_gen_settable_params(___skeymgmt) \
+      LP1(0x23ac, const OSSL_PARAM *, EVP_SKEYMGMT_get0_gen_settable_params , const EVP_SKEYMGMT *, ___skeymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEYMGMT_get0_imp_settable_params(___skeymgmt) \
+      LP1(0x23b2, const OSSL_PARAM *, EVP_SKEYMGMT_get0_imp_settable_params , const EVP_SKEYMGMT *, ___skeymgmt, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_is_a(___skey, ___name) \
+      LP2(0x23b8, int, EVP_SKEY_is_a , const EVP_SKEY *, ___skey, a0, const char *, ___name, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define EVP_SKEY_to_provider(___skey, ___libctx, ___prov, ___propquery) \
+      LP4(0x23be, EVP_SKEY *, EVP_SKEY_to_provider , EVP_SKEY *, ___skey, a0, OSSL_LIB_CTX *, ___libctx, a1, OSSL_PROVIDER *, ___prov, a2, const char *, ___propquery, a3,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PROVIDER_add_conf_parameter(___prov, ___name, ___value) \
+      LP3(0x23c4, int, OSSL_PROVIDER_add_conf_parameter , OSSL_PROVIDER *, ___prov, a0, const char *, ___name, a1, const char *, ___value, a2,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PROVIDER_get_conf_parameters(___prov, ___params) \
+      LP2(0x23ca, int, OSSL_PROVIDER_get_conf_parameters , const OSSL_PROVIDER *, ___prov, a0, OSSL_PARAM *, ___params, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_PROVIDER_conf_get_bool(___prov, ___name, ___defval) \
+      LP3(0x23d0, int, OSSL_PROVIDER_conf_get_bool , const OSSL_PROVIDER *, ___prov, a0, const char *, ___name, a1, int, ___defval, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define d2i_OSSL_AA_DIST_POINT(___a, ___in, ___len) \
+      LP3(0x23d6, OSSL_AA_DIST_POINT *, d2i_OSSL_AA_DIST_POINT , OSSL_AA_DIST_POINT **, ___a, a0, const unsigned char **, ___in, a1, long, ___len, d0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define i2d_OSSL_AA_DIST_POINT(___a, ___out) \
+      LP2(0x23dc, int, i2d_OSSL_AA_DIST_POINT , const OSSL_AA_DIST_POINT *, ___a, a0, unsigned char **, ___out, a1,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AA_DIST_POINT_free(___a) \
+      LP1NR(0x23e2, OSSL_AA_DIST_POINT_free , OSSL_AA_DIST_POINT *, ___a, a0,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AA_DIST_POINT_new() \
+      LP0(0x23e8, OSSL_AA_DIST_POINT *, OSSL_AA_DIST_POINT_new ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define OSSL_AA_DIST_POINT_it() \
+      LP0(0x23ee, const ASN1_ITEM *, OSSL_AA_DIST_POINT_it ,\
+      , AMISSLEXT_BASE_NAME)
+
+#define PEM_ASN1_write_bio_ctx(___i2d, ___vctx, ___name, ___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u) \
+      LP10(0x23f4, int, PEM_ASN1_write_bio_ctx , OSSL_i2d_of_void_ctx *, ___i2d, a0, void *, ___vctx, a1, const char *, ___name, a2, BIO *, ___bp, a3, const void *, ___x, d0, const EVP_CIPHER *, ___enc, d1, const unsigned char *, ___kstr, d2, int, ___klen, d3, pem_password_cb *, ___cb, d4, void *, ___u, d5,\
+      , AMISSLEXT_BASE_NAME)
+
 #endif /* !_INLINE_AMISSLEXT_H */
