@@ -9,7 +9,9 @@
 
 #ifndef OPENSSL_BYTEORDER_H
 # define OPENSSL_BYTEORDER_H
-# pragma once
+# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#  pragma once
+# endif
 
 # include <openssl/e_os2.h>
 # include <string.h>
@@ -88,6 +90,14 @@
 #  define OSSL_LE16TOH(x) OSSwapLittleToHostInt16(x)
 #  define OSSL_LE32TOH(x) OSSwapLittleToHostInt32(x)
 #  define OSSL_LE64TOH(x) OSSwapLittleToHostInt64(x)
+
+# elif defined(OPENSSL_SYS_AMIGA)
+#  define OSSL_HTOBE16(x) (x)
+#  define OSSL_HTOBE32(x) (x)
+#  define OSSL_HTOBE64(x) (x)
+#  define OSSL_BE16TOH(x) (x)
+#  define OSSL_BE32TOH(x) (x)
+#  define OSSL_BE64TOH(x) (x)
 
 # endif
 
