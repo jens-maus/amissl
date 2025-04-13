@@ -1,8 +1,12 @@
-## AmiSSL 5.20 (x.4.2025)
+## AmiSSL 5.20 (13.4.2025)
 
 - Switched to OpenSSL 3.5, with full compatibility with the latest
-  OpenSSL 3.5.0 (8.4.2025) version, which includes new features,
-  improvements and bug fixes.
+  OpenSSL 3.5.0 (8.4.2025) version, which provides new features and
+  improvements, including:
+  + PQC algorithms (ML-KEM, ML-DSA and SLH-DSA)
+  + Central key generation in CMP
+  + Opaque symmetric key objects (EVP_SKEY)
+  + Server side QUIC (RFC 9000)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 25.2.2025.
 

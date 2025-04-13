@@ -7,11 +7,9 @@
  * https://www.openssl.org/source/license.html
  */
 
-#ifndef OPENSSL_BYTEORDER_H
+#if !defined(OPENSSL_BYTEORDER_H) && !defined(AMISSL_NO_STATIC_FUNCTIONS)
 # define OPENSSL_BYTEORDER_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+# pragma once
 
 # include <openssl/e_os2.h>
 # include <string.h>
@@ -98,6 +96,9 @@
 #  define OSSL_BE16TOH(x) (x)
 #  define OSSL_BE32TOH(x) (x)
 #  define OSSL_BE64TOH(x) (x)
+#  if defined(__SASC)
+#   define OSSL_NO_64BIT
+#  endif
 
 # endif
 
@@ -165,6 +166,7 @@ OPENSSL_store_u32_be(unsigned char *out, uint32_t val)
 # endif
 }
 
+#ifndef OSSL_NO_64BIT
 static ossl_inline ossl_unused unsigned char *
 OPENSSL_store_u64_le(unsigned char *out, uint64_t val)
 {
@@ -206,6 +208,7 @@ OPENSSL_store_u64_be(unsigned char *out, uint64_t val)
     return out;
 # endif
 }
+#endif
 
 static ossl_inline ossl_unused const unsigned char *
 OPENSSL_load_u16_le(uint16_t *val, const unsigned char *in)
@@ -222,7 +225,7 @@ OPENSSL_load_u16_le(uint16_t *val, const unsigned char *in)
 
     *val = b0 | (b1 << 8);
     return in;
-#endif
+# endif
 }
 
 static ossl_inline ossl_unused const unsigned char *
@@ -240,7 +243,7 @@ OPENSSL_load_u16_be(uint16_t *val, const unsigned char *in)
 
     *val = b0 | (b1 << 8);
     return in;
-#endif
+# endif
 }
 
 static ossl_inline ossl_unused const unsigned char *
@@ -260,7 +263,7 @@ OPENSSL_load_u32_le(uint32_t *val, const unsigned char *in)
 
     *val = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
     return in;
-#endif
+# endif
 }
 
 static ossl_inline ossl_unused const unsigned char *
@@ -280,9 +283,10 @@ OPENSSL_load_u32_be(uint32_t *val, const unsigned char *in)
 
     *val = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
     return in;
-#endif
+# endif
 }
 
+#ifndef OSSL_NO_64BIT
 static ossl_inline ossl_unused const unsigned char *
 OPENSSL_load_u64_le(uint64_t *val, const unsigned char *in)
 {
@@ -305,7 +309,7 @@ OPENSSL_load_u64_le(uint64_t *val, const unsigned char *in)
     *val = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
         | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
     return in;
-#endif
+# endif
 }
 
 static ossl_inline ossl_unused const unsigned char *
@@ -330,9 +334,11 @@ OPENSSL_load_u64_be(uint64_t *val, const unsigned char *in)
     *val = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
         | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
     return in;
-#endif
+# endif
 }
+#endif
 
+# undef OSSL_NO_64BIT
 # undef OSSL_HTOBE16
 # undef OSSL_HTOBE32
 # undef OSSL_HTOBE64
