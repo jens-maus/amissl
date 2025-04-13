@@ -4,36 +4,94 @@ name: Release Build
 on:
   workflow_dispatch:
 
+env:
+  ADTOOLS_DL_PATH: https://github.com/adtools/adtools/releases/download/20170213
+  ADTOOLS_UTILS_DL: https://github.com/adtools/adtools/releases/download/20220416/adtools-utils.tar.bz2
+
 jobs:
-  release_draft:
-    name: Release draft
-    runs-on: ubuntu-24.04
+
+  ## Setup
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
     outputs:
-      upload_url: ${{ steps.release_drafter.outputs.upload_url }}
-      version: ${{ steps.env.outputs.version }}
-      date: ${{ steps.env.outputs.date }}
+      osslversion: ${{ steps.setup.outputs.osslversion }}
+      version: ${{ steps.setup.outputs.version }}
+      date: ${{ steps.setup.outputs.date }}
+      GITHUB_SHA7: ${{ steps.setup.outputs.GITHUB_SHA7 }}
 
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    - name: Setup Environment
-      id: env
+    - name: Get versions
+      id: setup
       shell: bash
       run: |
         BUILD_DATE=$(date +%Y%m%d)
         VERSION=$(grep ^VERSION= Makefile | awk -F= '{ print $2 }')
-        AMISSLMASTERREVISION=$(grep ^AMISSLMASTERREVISION= Makefile | awk -F= '{ print $2 }')
-        echo "::set-output name=version::${VERSION}.${AMISSLMASTERREVISION}"
-        echo "::set-output name=date::${BUILD_DATE}"
+        REVISION=$(grep ^REVISION= Makefile | awk -F= '{ print $2 }')
+        OSSLMAJOR=$(grep ^MAJOR= openssl/VERSION.dat | awk -F= '{ print $2 }')
+        OSSLMINOR=$(grep ^MINOR= openssl/VERSION.dat | awk -F= '{ print $2 }')
+        OSSLPATCH=$(grep ^PATCH= openssl/VERSION.dat | awk -F= '{ print $2 }')
+        echo "osslversion=${OSSLMAJOR}.${OSSLMINOR}" >> $GITHUB_OUTPUT
+        echo "version=${VERSION}.${REVISION}" >> $GITHUB_OUTPUT
+        echo "date=${BUILD_DATE}" >> $GITHUB_OUTPUT
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_OUTPUT
+
+  ## Create draft release
+  release_draft:
+    name: Create Draft Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 480
+    needs: [ setup, build ]
+    strategy:
+      fail-fast: false
+
+    steps:
+    - name: Setup dependencies
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update -y -qq || true
+        sudo apt-get -qq install libc6:i386
+        sudo ln -s /usr/lib/x86_64-linux-gnu/libmpfr.so.6 /usr/lib/x86_64-linux-gnu/libmpfr.so.4
+
+    - name: Install adtools build env
+      run: |
+        curl -L ${{ env.ADTOOLS_UTILS_DL }} | sudo tar xj -C /
+        curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
+        curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C /
+        #curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
+        #curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-ppc-aros.tar.bz2 | sudo tar xj -C /
+        #curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-i386-aros.tar.bz2 | sudo tar xj -C /
+        #curl -L ${{ env.ADTOOLS_DL_PATH }}/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C /
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download all builds
+      uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+
+    - name: Build AmiSSL release archives
+      run: |
+        sudo apt-get -qq install git-restore-mtime
+        #git config --local diff.renameLimit 30000
+        git restore-mtime -q certs dist include src test
+        git restore-mtime -qm openssl/apps
+        export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
+        (cd build_os4/openssl; ../../openssl/Configure amiga-os4; make -j1 build_generated_pods)
+        ./tools/mkrelease.sh
 
     - name: Get previous tag
       id: previoustag
       uses: WyriHaximus/github-action-get-previous-tag@v1.4
 
     - name: Generate changelog
+      if: false
       id: changelog
       uses: metcalfc/changelog-generator@v4.6.2
       with:
@@ -46,108 +104,87 @@ jobs:
         ${{ steps.changelog.outputs.changelog }}
         EOF
         )"
-        export VERSION=${{ steps.env.outputs.version }}
+        export CHANGELOG="$(awk '
+          BEGIN { lines=0 }
+          {
+            if (/^\s*-|\+/) {
+              if (lines++ > 0) printf "\n";
+              printf $0
+            } else if (lines > 0) {
+              if (/^$/) exit
+              $1=$1
+              printf " %s", $0
+            }
+          }
+          END { printf "\n" }
+        ' < CHANGES.md )";
+        export VERSION=${{ needs.setup.outputs.version }}
         export PREVIOUS_TAG=${{ steps.previoustag.outputs.tag }}
+        export OSSLVERSION=${{ needs.setup.outputs.osslversion }}
+        export SHA256SUM="$(cat AmiSSL-${{ needs.setup.outputs.version }}-*.lha.sha256)"
         envsubst <.github/release-template.md >/tmp/release-template.md
 
     - name: Create release draft
-      id: release_drafter
       uses: ncipollo/release-action@v1.16.0
       with:
-        tag: ${{ steps.env.outputs.version }}
-        name: 'AmiSSL ${{ steps.env.outputs.version }}'
+        tag: ${{ needs.setup.outputs.version }}
+        name: 'AmiSSL ${{ needs.setup.outputs.version }}'
         bodyFile: /tmp/release-template.md
         draft: true
         prerelease: false
         allowUpdates: true
+        artifacts: AmiSSL-${{ needs.setup.outputs.version }}-*.lha
+        artifactContentType: application/x-lha
         token: ${{ secrets.GITHUB_TOKEN }}
 
-  build:
-    name: Release build
-    runs-on: ubuntu-24.04
-    timeout-minutes: 480
-    needs: release_draft
+    - name: Upload release files as a workflow artifact
+      uses: actions/upload-artifact@v4
+      with:
+        path: AmiSSL-${{ needs.setup.outputs.version }}-*
+        name: release-${{ needs.setup.outputs.version }}-${{ needs.setup.outputs.GITHUB_SHA7 }}
 
+  ## Build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 480
     strategy:
       fail-fast: false
+      matrix:
+        #platform: [ os4, os3-68020, os3-68060, mos, aros-ppc, aros-i386, aros-x86_64 ]
+        platform: [ os4, os3-68020, os3-68060 ]
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - name: setup dependencies
+    - name: Setup dependencies
       run: |
         sudo dpkg --add-architecture i386
         sudo apt-get update -y -qq || true
         sudo apt-get -qq install libc6:i386
         sudo ln -s /usr/lib/x86_64-linux-gnu/libmpfr.so.6 /usr/lib/x86_64-linux-gnu/libmpfr.so.4
 
-    - name: setup env
-      run : |
-        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >>$GITHUB_ENV
-        echo "BUILD_DATE=$(date +'%Y%m%d')" >>$GITHUB_ENV
-
-    - name: install adtools build env
+    - name: Install adtools build env
       run: |
-        DOWNLOAD_PATH=https://github.com/adtools/adtools/releases/download/20170213
-        DOWNLOAD_PATH_UTILS=https://github.com/adtools/adtools/releases/download/20220416
-        curl -L ${DOWNLOAD_PATH_UTILS}/adtools-utils.tar.bz2 | sudo tar xj -C /
-        curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C /
-        curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C /
-        curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos.tar.bz2 | sudo tar xj -C /
-        #curl -L ${DOWNLOAD_PATH}/adtools-ppc-morphos.tar.bz2 | sudo tar xj -C /
-        #curl -L ${DOWNLOAD_PATH}/adtools-ppc-aros.tar.bz2 | sudo tar xj -C /
-        #curl -L ${DOWNLOAD_PATH}/adtools-i386-aros.tar.bz2 | sudo tar xj -C /
-        #curl -L ${DOWNLOAD_PATH}/adtools-x86_64-aros.tar.bz2 | sudo tar xj -C /
+        curl -L ${{ env.ADTOOLS_UTILS_DL }} | sudo tar xj -C /
+        if [[ ${{ matrix.platform }} =~ os3-68020|os3-68060 ]]; then COMPILER=adtools-m68k-amigaos.tar.bz2 ; fi
+        if [[ ${{ matrix.platform }} =~ os4 ]]; then COMPILER=adtools-ppc-amigaos-legacy.tar.bz2 ; fi
+        if [[ ${{ matrix.platform }} =~ mos ]]; then COMPILER=adtools-ppc-morphos.tar.bz2 ; fi
+        if [[ ${{ matrix.platform }} =~ aros-ppc ]]; then COMPILER=adtools-ppc-aros.tar.bz2 ; fi
+        if [[ ${{ matrix.platform }} =~ aros-i386 ]]; then COMPILER=adtools-i386-aros.tar.bz2 ; fi
+        if [[ ${{ matrix.platform }} =~ aros-x86_64 ]]; then COMPILER=adtools-x86_64-aros.tar.bz2 ; fi
+        curl -L ${{ env.ADTOOLS_DL_PATH }}/${COMPILER} | sudo tar xj -C /
 
-    #- name: remote debug tmate session
-    #  uses: mxschmitt/action-tmate@v1
-
-    # major build step
-    - name: build AmiSSL release
+    - name: Compile ${{ matrix.platform }} release
       timeout-minutes: 480
       run: |
-        sudo rm /usr/local/amiga/bin/ppc-amigaos-strip
         export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
-        make -j1 release
+        make -j1 OS=${{ matrix.platform }} DEBUG=
 
-    - name: upload release archive as workflow artifact
+    - name: Upload ${{ matrix.platform }} build files as a workflow artifact
       uses: actions/upload-artifact@v4
       with:
-        path: |
-          AmiSSL-${{ needs.release_draft.outputs.version }}.lha
-          AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
-          AmiSSL-${{ needs.release_draft.outputs.version }}.readme
-        name: AmiSSL-${{ needs.release_draft.outputs.version }}-${{ env.GITHUB_SHA7 }}
-      continue-on-error: true
-
-    #######################
-    # release uploads
-    - name: Upload release archive
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.release_draft.outputs.upload_url }}
-        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.lha
-        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.lha
-        asset_content_type: application/x-lha
-
-    - name: Upload release archive [sha256]
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.release_draft.outputs.upload_url }}
-        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
-        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.lha.sha256
-        asset_content_type: text/plain
-
-    - name: Upload release archive [readme]
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.release_draft.outputs.upload_url }}
-        asset_path: AmiSSL-${{ needs.release_draft.outputs.version }}.readme
-        asset_name: AmiSSL-${{ needs.release_draft.outputs.version }}.readme
-        asset_content_type: text/plain
+        path: build_${{ matrix.platform }}*
+        name: build-${{ needs.setup.outputs.version }}-${{ needs.setup.outputs.GITHUB_SHA7 }}-${{ matrix.platform }}
