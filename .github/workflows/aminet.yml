@@ -1,0 +1,30 @@
+# Upload latest AmiSSL release to Aminet
+name: Aminet Upload
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    name: Upload latest release to Aminet
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download latest release files
+      uses: dawidd6/action-download-artifact@v9
+      with:
+        workflow: release.yml
+        name: release-*
+        name_is_regexp: true
+
+    - name: Check version and upload
+      run: |
+        DIR=$(ls | grep release-)
+        VERSION=$(echo $DIR | grep -oP "\-\K\d+\.\d+")
+        AMINET_VERSION=$(curl https://aminet.net/util/libs/AmiSSL-v5-SDK.readme | grep -oP "Version:\s+\K\d+\.\d+")
+        if $(dpkg --compare-versions $AMINET_VERSION "lt" $VERSION); then
+          cd $DIR
+          sudo apt install rename
+          rename 's/(.*)-(\d+\.\d+)-(.*)(\.*)/$1-v5-$3/' *.*
+          curl -T "{$(echo *.lha *.readme | tr ' ' ',')}" -u anonymous:oliver@amissl.org ftp://main.aminet.net/new/
+        fi
