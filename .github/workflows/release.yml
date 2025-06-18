@@ -133,6 +133,7 @@ jobs:
         draft: true
         prerelease: false
         allowUpdates: true
+        updateOnlyUnreleased: true
         artifacts: AmiSSL-${{ needs.setup.outputs.version }}-*.lha
         artifactContentType: application/x-lha
         token: ${{ secrets.GITHUB_TOKEN }}
