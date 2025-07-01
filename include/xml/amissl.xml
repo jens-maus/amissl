@@ -18281,7 +18281,7 @@
     </method>
     <method name="SSL_add1_host" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="hostname" type="const char *" m68kreg="a1"/>
+      <arg name="host" type="const char *" m68kreg="a1"/>
     </method>
     <method name="SSL_add_ssl_module" result="void">
     </method>
@@ -18457,7 +18457,7 @@
     </method>
     <method name="SSL_set1_host" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
-      <arg name="hostname" type="const char *" m68kreg="a1"/>
+      <arg name="host" type="const char *" m68kreg="a1"/>
     </method>
     <method name="SSL_set_default_passwd_cb" result="void">
       <arg name="s" type="SSL *" m68kreg="a0"/>

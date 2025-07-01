@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -116,6 +116,12 @@
 # define EVP_R_PKEY_APPLICATION_ASN1_METHOD_ALREADY_REGISTERED 179
 # define EVP_R_PRIVATE_KEY_DECODE_ERROR                   145
 # define EVP_R_PRIVATE_KEY_ENCODE_ERROR                   146
+# define EVP_R_PROVIDER_ASYM_CIPHER_FAILURE               232
+# define EVP_R_PROVIDER_ASYM_CIPHER_NOT_SUPPORTED         235
+# define EVP_R_PROVIDER_KEYMGMT_FAILURE                   233
+# define EVP_R_PROVIDER_KEYMGMT_NOT_SUPPORTED             236
+# define EVP_R_PROVIDER_SIGNATURE_FAILURE                 234
+# define EVP_R_PROVIDER_SIGNATURE_NOT_SUPPORTED           237
 # define EVP_R_PUBLIC_KEY_NOT_RSA                         106
 # define EVP_R_SETTING_XOF_FAILED                         227
 # define EVP_R_SET_DEFAULT_PROPERTY_FAILURE               209

@@ -1,4 +1,13 @@
-- Protect library interface calls from modification on AmigaOS 4.x
+## AmiSSL 5.21 (1.7.2025)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.5.1 (1.7.2025) version which includes this low severity
+  bug fix:
+  + Fix x509 application adds trusted use instead of rejected use.
+    (CVE-2025-4575)
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 20.5.2025.
+- Protect library interface calls from modification on AmigaOS 4.x.
 
 ## AmiSSL 5.20 (13.4.2025)
 
