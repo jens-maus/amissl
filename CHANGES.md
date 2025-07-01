@@ -1,3 +1,5 @@
+- Protect library interface calls from modification on AmigaOS 4.x
+
 ## AmiSSL 5.20 (13.4.2025)
 
 - Switched to OpenSSL 3.5, with full compatibility with the latest

@@ -329,6 +329,7 @@ STATIC CONST struct TagItem mainTags[] =
 {
   { MIT_Name,         (Tag)"main" },
   { MIT_VectorTable,  (Tag)main_vectors },
+  { MIT_Flags,        IFLF_PROTECTED },
   { MIT_Version,      1 },
   { TAG_DONE,         0 }
 };
