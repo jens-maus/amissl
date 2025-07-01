@@ -125,14 +125,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, windows-2022]
+        os: [windows-2022, windows-2025]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - uses: ilammy/msvc-dev-cmd@v1
-    - uses: ilammy/setup-nasm@v1
+    - name: install nasm
+      run: |
+        choco install nasm
+        "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
     - name: prepare the build directory
       run: mkdir _build
     - name: config
