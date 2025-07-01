@@ -125,7 +125,7 @@ jobs:
         envsubst <.github/release-template.md >/tmp/release-template.md
 
     - name: Create release draft
-      uses: ncipollo/release-action@v1.16.0
+      uses: ncipollo/release-action@v1.18.0
       with:
         tag: ${{ needs.setup.outputs.version }}
         name: 'AmiSSL ${{ needs.setup.outputs.version }}'
