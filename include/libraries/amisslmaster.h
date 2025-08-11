@@ -68,6 +68,7 @@ enum AmiSSLVersion
   AMISSL_V341,      /* AmiSSL v5.19 */
   AMISSL_V350,      /* AmiSSL v5.20 */
   AMISSL_V351,      /* AmiSSL v5.21 */
+  AMISSL_V352,      /* AmiSSL v5.22 */
 
   /* ADD NEW VERSIONS ABOVE THIS LINE */
   AMISSL_VMAX

@@ -205,7 +205,7 @@ IF[{- !$disabled{tests} -}]
     DEFINE[evp_test]=NO_LEGACY_MODULE
   ENDIF
 
-  SOURCE[evp_extra_test]=evp_extra_test.c fake_rsaprov.c fake_pipelineprov.c
+  SOURCE[evp_extra_test]=evp_extra_test.c fake_pipelineprov.c
   INCLUDE[evp_extra_test]=../include ../apps/include \
                           ../providers/common/include \
                           ../providers/implementations/include
@@ -1165,10 +1165,12 @@ IF[{- !$disabled{tests} -}]
   INCLUDE[provider_fallback_test]=../include ../apps/include
   DEPEND[provider_fallback_test]=../libcrypto libtestutil.a
 
+ IF[{- $target{sys_id} ne "AMIGA" -}]
   PROGRAMS{noinst}=provider_pkey_test
   SOURCE[provider_pkey_test]=provider_pkey_test.c fake_rsaprov.c
   INCLUDE[provider_pkey_test]=../include ../apps/include
   DEPEND[provider_pkey_test]=../libcrypto libtestutil.a
+ ENDIF
 
   PROGRAMS{noinst}=evp_skey_test
   SOURCE[evp_skey_test]=evp_skey_test.c fake_cipherprov.c
