@@ -87,7 +87,7 @@ static void ossl_sleep_millis(uint64_t millis)
 #include <timeval.h>
 #include <libcmt.h>
 
-void OSSL_sleep(uint64_t millis)
+static void ossl_sleep_millis(uint64_t millis)
 {
     struct TimeRequest *tr;
 
