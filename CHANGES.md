@@ -1,3 +1,13 @@
+## AmiSSL 5.24 (30.9.2025)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.5.4 (30.9.2025) version which includes moderate
+  severity bug fixes:
+  + Fix Out-of-bounds read & write in RFC 3211 KEK Unwrap.
+    (CVE-2025-9230)
+  + Fix Out-of-bounds read in HTTP client no_proxy handling.
+    (CVE-2025-9232)
+
 ## AmiSSL 5.23 (17.9.2025)
 
 - Updated OpenSSL backend to full compatibility with the latest
