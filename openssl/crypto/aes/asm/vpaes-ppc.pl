@@ -1,11 +1,11 @@
 #! /usr/bin/env perl
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# Copyright (c) 2014-2025 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # This file has been modified for use with AmiSSL for AmigaOS-based systems.
 #
-# Copyright 2013-2020 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2013-2025 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy

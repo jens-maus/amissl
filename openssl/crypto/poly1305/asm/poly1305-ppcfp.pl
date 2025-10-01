@@ -1,11 +1,11 @@
 #! /usr/bin/env perl
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2014-2023 AmiSSL Open Source Team.
+# Copyright (c) 2014-2025 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # This file has been modified for use with AmiSSL for AmigaOS-based systems.
 #
-# Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2016-2025 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -14,10 +14,10 @@
 
 #
 # ====================================================================
-# Written by Andy Polyakov <appro@openssl.org> for the OpenSSL
+# Written by Andy Polyakov, @dot-asm, initially for use in the OpenSSL
 # project. The module is, however, dual licensed under OpenSSL and
 # CRYPTOGAMS licenses depending on where you obtain it. For further
-# details see http://www.openssl.org/~appro/cryptogams/.
+# details see https://github.com/dot-asm/cryptogams/.
 # ====================================================================
 #
 # This module implements Poly1305 hash for PowerPC FPU.
@@ -726,7 +726,7 @@ Lconsts:
 .quad	0x4230000000000000		# 2^(52+16+64-96)
 
 .quad	0x0000000000000001		# fpscr: truncate, no exceptions
-.asciz	"Poly1305 for PPC FPU, CRYPTOGAMS by <appro\@openssl.org>"
+.asciz	"Poly1305 for PPC FPU, CRYPTOGAMS by <https://github.com/dot-asm>"
 .text
 .align	4
 ___

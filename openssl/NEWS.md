@@ -7,6 +7,7 @@ release. For more details please read the CHANGES file.
 OpenSSL Releases
 ----------------
 
+ - [OpenSSL 3.6](#openssl-36)
  - [OpenSSL 3.5](#openssl-35)
  - [OpenSSL 3.4](#openssl-34)
  - [OpenSSL 3.3](#openssl-33)
@@ -19,6 +20,36 @@ OpenSSL Releases
  - [OpenSSL 1.0.1](#openssl-101)
  - [OpenSSL 1.0.0](#openssl-100)
  - [OpenSSL 0.9.x](#openssl-09x)
+
+OpenSSL 3.6
+-----------
+
+### Major changes between OpenSSL 3.5 and OpenSSL 3.6.0 [1 Oct 2025]
+
+This release incorporates the following potentially significant or incompatible
+changes:
+
+  * Added NIST security categories for PKEY objects.
+
+  * Added support for `EVP_SKEY` opaque symmetric key objects to the key
+    derivation and key exchange provider methods. Added `EVP_KDF_CTX_set_SKEY()`,
+    `EVP_KDF_derive_SKEY()`, and `EVP_PKEY_derive_SKEY()` functions.
+
+  * Added LMS signature verification support as per [SP 800-208].
+    This support is present in both the FIPS and default providers.
+
+  * An ANSI-C toolchain is no longer sufficient for building OpenSSL.
+    The code should be built using compilers supporting C-99 features.
+
+  * Support for the VxWorks platforms has been removed.
+
+  * Added an `openssl configutl` utility for processing the OpenSSL
+    configuration file and dumping the equal configuration file.
+
+  * Added support for FIPS 186-5 deterministic ECDSA signature
+    generation to the FIPS provider.
+
+  * Deprecated `EVP_PKEY_ASN1_METHOD`-related functions.
 
 OpenSSL 3.5
 -----------
@@ -2119,7 +2150,7 @@ OpenSSL 0.9.x
 [CVE-2006-2940]: https://www.openssl.org/news/vulnerabilities.html#CVE-2006-2940
 [CVE-2006-2937]: https://www.openssl.org/news/vulnerabilities.html#CVE-2006-2937
 [CVE-2005-2969]: https://www.openssl.org/news/vulnerabilities.html#CVE-2005-2969
-[OpenSSL Guide]: https://www.openssl.org/docs/manmaster/man7/ossl-guide-introduction.html
+[OpenSSL Guide]: https://docs.openssl.org/master/man7/ossl-guide-introduction
 [CHANGES.md]: ./CHANGES.md
 [README-QUIC.md]: ./README-QUIC.md
 [issue tracker]: https://github.com/openssl/openssl/issues

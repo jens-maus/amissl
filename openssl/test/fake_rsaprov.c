@@ -357,7 +357,7 @@ static int fake_rsa_sig_sign(void *ctx, unsigned char *sig,
     *siglen = 256;
     /* record that the real sign operation was called */
     if (sig != NULL) {
-        if (!TEST_int_ge(sigsize, *siglen))
+        if (!TEST_size_t_ge(sigsize, *siglen))
             return 0;
         *sigctx = 2;
         /* produce a fake signature */
@@ -470,7 +470,7 @@ static int fake_rsa_dgstsgnvfy_final(void *ctx, unsigned char *sig,
         *siglen = 256;
         /* record that the real sign operation was called */
         if (sig != NULL) {
-            if (!TEST_int_ge(sigsize, *siglen))
+            if (!TEST_size_t_ge(sigsize, *siglen))
                 return 0;
             /* produce a fake signature */
             memset(sig, 'a', *siglen);
@@ -638,7 +638,7 @@ static int fake_rsa_st_load(void *loaderctx,
         if (key_deleted == 1) {
             *storectx = 1;
             break;
-	}
+        }
 
         /* Construct a new key using our keymgmt functions */
         if (!TEST_ptr(key = fake_rsa_keymgmt_new(NULL)))
