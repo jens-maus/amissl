@@ -200,15 +200,16 @@ ifeq ($(OS), os4)
   CC = $(CROSS_PREFIX)gcc-4.0.4
 
   # Compiler/Linker flags
-  CRT       = clib2
-  CPU       = -mcpu=powerpc -mstrict-align
+  CRT        = clib2
+  CPU        = -mcpu=powerpc -mstrict-align
   WARN      += -Wdeclaration-after-statement -Wdisabled-optimization
-  APPCFLAGS += -std=c99 -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames -specs=tools/gcc-os4.specs
-  AINLCFLAGS = $(COMCFLAGS) -std=c99 -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
-  CFLAGS    += -std=c99 -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
-  STUBCFLAGS+= -std=c99 -mcrt=$(CRT) -DINLINE4_AMISSL_H -Wno-deprecated-declarations
+  STANDARD   = -std=gnu99
+  APPCFLAGS += $(STANDARD) -mcrt=$(CRT) -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames -specs=tools/gcc-os4.specs
+  AINLCFLAGS = $(COMCFLAGS) $(STANDARD) -mcrt=newlib -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -Wa,-mregnames
+  CFLAGS    += $(STANDARD) -mcrt=$(CRT) -DMULTIBASE -D__USE_INLINE__ -D__NEW_TIMEVAL_DEFINITION_USED__ -D__C_MACROS__ -Wa,-mregnames
+  STUBCFLAGS+= $(STANDARD) -mcrt=$(CRT) -DINLINE4_AMISSL_H -Wno-deprecated-declarations
   STUBINC    = -include $(BUILD_D)/precompiled.h
-  LDFLAGS   += -std=c99 -mcrt=$(CRT) -specs=tools/gcc-os4.specs
+  LDFLAGS   += $(STANDARD) -mcrt=$(CRT) -specs=tools/gcc-os4.specs
   LDLIBS    += -lgcc
   BASEREL   = -mbaserel -mno-sdata
   NOBASEREL = -mno-baserel
@@ -499,7 +500,7 @@ build_docs:
 ## LIBCMT BUILD RULES ##
 
 $(LIBCMT): $(BUILD_D)/libcmt libcmt
-	$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) CPU="$(CPU)" BUILD_D=../$(BUILD_D)/libcmt
+	$(MAKE) -C libcmt CC=$(CC) AR=$(AR) RANLIB=$(RANLIB) OS=$(OS) CPU="$(CPU) $(STANDARD)" BUILD_D=../$(BUILD_D)/libcmt
 
 ## AMISSL BUILD RULES ##
 
