@@ -43,6 +43,9 @@ jobs:
           else
           MATRIX=$(cat << EOF
           [{
+              "branch": "openssl-3.6",
+              "extra_config": "no-afalgeng enable-fips enable-tfo"
+            },{
               "branch": "openssl-3.5",
               "extra_config": "no-afalgeng enable-fips enable-tfo"
             },{
@@ -62,7 +65,7 @@ jobs:
               "extra_config": "no-afalgeng enable-fips"
             }, {
               "branch": "master",
-              "extra_config": "no-afalgeng enable-fips enable-tfo enable-lms"
+              "extra_config": "no-afalgeng enable-fips enable-tfo enable-lms enable-crypto-mdebug enable-allocfail-tests"
           }]
           EOF
           )
@@ -93,7 +96,7 @@ jobs:
         sudo apt-get -yq install lcov
         sudo apt-get -yq install bison gettext keyutils ldap-utils libldap2-dev libkeyutils-dev python3 python3-paste python3-pyrad slapd tcsh python3-virtualenv virtualenv python3-kdcproxy
     - name: install Test2::V0 for gost_engine testing
-      uses: perl-actions/install-with-cpanm@10d60f00b4073f484fc29d45bfbe2f776397ab3d # v1.7
+      uses: perl-actions/install-with-cpanm@10d60f00b4073f484fc29d45bfbe2f776397ab3d #v1.7
       with:
         install: Test2::V0
     - name: setup hostname workaround
@@ -116,6 +119,7 @@ jobs:
              --exclude "${PWD}/fuzz/*"
              --exclude "/usr/include/*"
              --ignore-errors mismatch
+             --branch-coverage
               -o ./lcov.info
     - name: Coveralls upload
       uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b #v2.3.6

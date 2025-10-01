@@ -38,7 +38,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: config
       run: |
-        ./config --banner=Configured no-shared -Wall -Werror enable-fips --strict-warnings \
+        ./config --strict-warnings --banner=Configured no-shared enable-fips \
                  ${EXTRA_CFLAGS}
     - name: config dump
       run: ./configdata.pm --dump
@@ -111,7 +111,7 @@ jobs:
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - name: config
-      run: ./config --banner=Configured -Wall -Werror --strict-warnings enable-fips
+      run: ./config --strict-warnings --banner=Configured enable-fips
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -127,8 +127,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, windows-2025]
-    runs-on: ${{ matrix.os }}
+        platform:
+          - os: windows-2022
+            vcvars: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat
+          - os: windows-2025
+            vcvars: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat
+    runs-on: ${{ matrix.platform.os }}
     steps:
     - uses: actions/checkout@v4
     - name: checkout fuzz/corpora submodule
@@ -137,23 +141,25 @@ jobs:
       run: |
         choco install nasm
         "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
-    - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 #v1.13.0
     - name: prepare the build directory
       run: mkdir _build
     - name: config
       working-directory: _build
-      run: perl ..\Configure --banner=Configured no-makedepend enable-fips
-    - name: config dump
-      working-directory: _build
-      run: ./configdata.pm --dump
+      shell: cmd
+      run: |
+        call "${{ matrix.platform.vcvars }}"
+        perl ..\Configure --banner=Configured --strict-warnings no-makedepend enable-fips
+        perl configdata.pm --dump
     - name: build
       working-directory: _build
-      run: nmake /S
+      shell: cmd
+      run: |
+        call "${{ matrix.platform.vcvars }}"
+        nmake /S
     - name: download coreinfo
-      uses: suisei-cn/actions-download-file@818d6b7dc8fe73f2f924b6241f2b1134ca1377d9 #v1.6.0
-      with:
-        url: "https://download.sysinternals.com/files/Coreinfo.zip"
-        target: _build/coreinfo/
+      run: |
+        mkdir _build\coreinfo
+        Invoke-WebRequest -Uri "https://download.sysinternals.com/files/Coreinfo.zip" -outfile "_build\coreinfo\Coreinfo.zip"
     - name: get cpu info
       working-directory: _build
       run: |
@@ -162,14 +168,18 @@ jobs:
         apps/openssl.exe version -c
     - name: test
       working-directory: _build
-      run: nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4
+      shell: cmd
+      run: |
+        call "${{ matrix.platform.vcvars }}"
+        nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4
 
   linux-arm64:
     runs-on: linux-arm64
+    if: github.repository == 'openssl/openssl'
     steps:
     - uses: actions/checkout@v4
     - name: config
-      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -181,10 +191,11 @@ jobs:
 
   linux-ppc64le:
     runs-on: linux-ppc64le
+    if: github.repository == 'openssl/openssl'
     steps:
     - uses: actions/checkout@v4
     - name: config
-      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -198,10 +209,11 @@ jobs:
 
   linux-s390x:
     runs-on: linux-s390x
+    if: github.repository == 'openssl/openssl'
     steps:
     - uses: actions/checkout@v4
     - name: config
-      run: ./config enable-fips enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -213,19 +225,37 @@ jobs:
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
+  linux-riscv64:
+    runs-on: linux-riscv64
+    if: github.repository == 'openssl/openssl'
+    steps:
+    - uses: actions/checkout@v4
+    - name: config
+      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+    - name: config dump
+      run: ./configdata.pm --dump
+    - name: make
+      run: make -j8
+    - name: get cpu info
+      run: ./util/opensslwrap.sh version -c
+    - name: make test
+      env:
+        OPENSSL_riscvcap: ZBA_ZBB_ZBC_ZBS_ZKT
+      run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
+
   freebsd-x86_64:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: config
-      uses: cross-platform-actions/action@v0.26.0
+      uses: cross-platform-actions/action@fe0167d8082ac584754ef3ffb567fded22642c7d #v0.27.0
       with:
         operating_system: freebsd
         version: "13.4"
         shutdown_vm: false
         run: |
           sudo pkg install -y gcc perl5
-          ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+          ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
     - name: config dump
       uses: cross-platform-actions/action@fe0167d8082ac584754ef3ffb567fded22642c7d #v0.27.0
       with:
