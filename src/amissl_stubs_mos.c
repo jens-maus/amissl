@@ -39047,14 +39047,14 @@ int LIBSTUB_OPENSSL_init_ssl(void)
   return LIB_OPENSSL_init_ssl(_base, ___opts, ___settings);
 }
 
-int LIB_SSL_add1_host(struct Library * _base, SSL * ___s, const char * ___hostname);
+int LIB_SSL_add1_host(struct Library * _base, SSL * ___s, const char * ___host);
 
 int LIBSTUB_SSL_add1_host(void)
 {
   SSL * ___s = (SSL *)REG_A0;
-  const char * ___hostname = (const char *)REG_A1;
+  const char * ___host = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_add1_host(_base, ___s, ___hostname);
+  return LIB_SSL_add1_host(_base, ___s, ___host);
 }
 
 void LIB_SSL_add_ssl_module(struct Library * _base);
@@ -39496,14 +39496,14 @@ void LIBSTUB_SSL_set0_security_ex_data(void)
   return LIB_SSL_set0_security_ex_data(_base, ___s, ___ex);
 }
 
-int LIB_SSL_set1_host(struct Library * _base, SSL * ___s, const char * ___hostname);
+int LIB_SSL_set1_host(struct Library * _base, SSL * ___s, const char * ___host);
 
 int LIBSTUB_SSL_set1_host(void)
 {
   SSL * ___s = (SSL *)REG_A0;
-  const char * ___hostname = (const char *)REG_A1;
+  const char * ___host = (const char *)REG_A1;
   struct Library * _base = (struct Library *)REG_A6;
-  return LIB_SSL_set1_host(_base, ___s, ___hostname);
+  return LIB_SSL_set1_host(_base, ___s, ___host);
 }
 
 void LIB_SSL_set_default_passwd_cb(struct Library * _base, SSL * ___s, pem_password_cb * ___cb);

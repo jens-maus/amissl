@@ -3900,7 +3900,7 @@ uint32_t SAVEDS ASM LIB_X509_get_extension_flags(REG(a6, __IFACE_OR_BASE), REG(a
 uint32_t SAVEDS ASM LIB_X509_get_key_usage(REG(a6, __IFACE_OR_BASE), REG(a0, X509 * x));
 int SAVEDS ASM LIB_DTLSv1_listen(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, BIO_ADDR * client));
 int SAVEDS ASM LIB_OPENSSL_init_ssl(REG(a6, __IFACE_OR_BASE), REG(d0, uint64_t opts), REG(a0, const OPENSSL_INIT_SETTINGS * settings));
-int SAVEDS ASM LIB_SSL_add1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * hostname));
+int SAVEDS ASM LIB_SSL_add1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * host));
 void SAVEDS ASM LIB_SSL_add_ssl_module(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_SSL_CIPHER_get_cipher_nid(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
 int SAVEDS ASM LIB_SSL_CIPHER_get_digest_nid(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL_CIPHER * c));
@@ -3946,7 +3946,7 @@ int SAVEDS ASM LIB_SSL_SESSION_has_ticket(REG(a6, __IFACE_OR_BASE), REG(a0, cons
 int SAVEDS ASM LIB_SSL_SESSION_print_keylog(REG(a6, __IFACE_OR_BASE), REG(a0, BIO * bp), REG(a1, const SSL_SESSION * x));
 int SAVEDS ASM LIB_SSL_session_reused(REG(a6, __IFACE_OR_BASE), REG(a0, const SSL * s));
 void SAVEDS ASM LIB_SSL_set0_security_ex_data(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, void * ex));
-int SAVEDS ASM LIB_SSL_set1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * hostname));
+int SAVEDS ASM LIB_SSL_set1_host(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, const char * host));
 void SAVEDS ASM LIB_SSL_set_default_passwd_cb(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, pem_password_cb * cb));
 void SAVEDS ASM LIB_SSL_set_default_passwd_cb_userdata(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(a1, void * u));
 void SAVEDS ASM LIB_SSL_set_hostflags(REG(a6, __IFACE_OR_BASE), REG(a0, SSL * s), REG(d0, unsigned int flags));

@@ -1571,6 +1571,29 @@ void SAVEDS ASM LIB_OSSL_AA_DIST_POINT_free(REG(a6, __IFACE_OR_BASE), REG(a0, OS
 OSSL_AA_DIST_POINT * SAVEDS ASM LIB_OSSL_AA_DIST_POINT_new(REG(a6, __IFACE_OR_BASE));
 const ASN1_ITEM * SAVEDS ASM LIB_OSSL_AA_DIST_POINT_it(REG(a6, __IFACE_OR_BASE));
 int SAVEDS ASM LIB_PEM_ASN1_write_bio_ctx(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_i2d_of_void_ctx * i2d), REG(a1, void * vctx), REG(a2, const char * name), REG(a3, BIO * bp), REG(d0, const void * x), REG(d1, const EVP_CIPHER * enc), REG(d2, const unsigned char * kstr), REG(d3, int klen), REG(d4, pem_password_cb * cb), REG(d5, void * u));
+int SAVEDS ASM LIB_EVP_PKEY_get_security_category(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * pkey));
+void SAVEDS ASM LIB_X509_STORE_CTX_set_ocsp_resp(REG(a6, __IFACE_OR_BASE), REG(a0, X509_STORE_CTX * ctx), REG(a1, STACK_OF(OCSP_RESPONSE) * sk));
+OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_set_thunks(REG(a6, __IFACE_OR_BASE), REG(a0, OPENSSL_STACK * st), REG(d0, OPENSSL_sk_freefunc_thunk f_thunk));
+int SAVEDS ASM LIB_i2d_PKCS8PrivateKey(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_PKEY * a), REG(a1, unsigned char ** pp));
+int SAVEDS ASM LIB_OSSL_PARAM_set_octet_string_or_ptr(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_PARAM * p), REG(a1, const void * val), REG(d0, size_t len));
+const OSSL_PARAM * SAVEDS ASM LIB_OSSL_STORE_LOADER_settable_ctx_params(REG(a6, __IFACE_OR_BASE), REG(a0, const OSSL_STORE_LOADER * loader));
+const X509_ALGOR * SAVEDS ASM LIB_X509_CRL_get0_tbs_sigalg(REG(a6, __IFACE_OR_BASE), REG(a0, const X509_CRL * crl));
+int SAVEDS ASM LIB_CMS_RecipientInfo_kemri_cert_cmp(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_RecipientInfo * ri), REG(a1, X509 * cert));
+int SAVEDS ASM LIB_CMS_RecipientInfo_kemri_set0_pkey(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_RecipientInfo * ri), REG(a1, EVP_PKEY * pk));
+EVP_CIPHER_CTX * SAVEDS ASM LIB_CMS_RecipientInfo_kemri_get0_ctx(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_RecipientInfo * ri));
+X509_ALGOR * SAVEDS ASM LIB_CMS_RecipientInfo_kemri_get0_kdf_alg(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_RecipientInfo * ri));
+int SAVEDS ASM LIB_CMS_RecipientInfo_kemri_set_ukm(REG(a6, __IFACE_OR_BASE), REG(a0, CMS_RecipientInfo * ri), REG(a1, const unsigned char * ukm), REG(d0, int ukmLength));
+EVP_SKEY * SAVEDS ASM LIB_EVP_PKEY_derive_SKEY(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_PKEY_CTX * ctx), REG(a1, EVP_SKEYMGMT * mgmt), REG(a2, const char * key_type), REG(a3, const char * propquery), REG(d0, size_t keylen), REG(d1, const OSSL_PARAM * params));
+int SAVEDS ASM LIB_EVP_KDF_CTX_set_SKEY(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_KDF_CTX * ctx), REG(a1, EVP_SKEY * key), REG(a2, const char * paramname));
+EVP_SKEY * SAVEDS ASM LIB_EVP_KDF_derive_SKEY(REG(a6, __IFACE_OR_BASE), REG(a0, EVP_KDF_CTX * ctx), REG(a1, EVP_SKEYMGMT * mgmt), REG(a2, const char * key_type), REG(a3, const char * propquery), REG(d0, size_t keylen), REG(d1, const OSSL_PARAM * params));
+EVP_SKEY * SAVEDS ASM LIB_EVP_SKEY_import_SKEYMGMT(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL_LIB_CTX * libctx), REG(a1, EVP_SKEYMGMT * skeymgmt), REG(d0, int selection), REG(a2, const OSSL_PARAM * params));
+void * SAVEDS ASM LIB_CRYPTO_malloc_array(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t size), REG(a0, const char * file), REG(d2, int line));
+void * SAVEDS ASM LIB_CRYPTO_calloc(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t size), REG(a0, const char * file), REG(d2, int line));
+void * SAVEDS ASM LIB_CRYPTO_aligned_alloc_array(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t size), REG(d2, size_t align), REG(a0, void ** freeptr), REG(a1, const char * file), REG(d3, int line));
+void * SAVEDS ASM LIB_CRYPTO_realloc_array(REG(a6, __IFACE_OR_BASE), REG(a0, void * addr), REG(d0, size_t num), REG(d1, size_t size), REG(a1, const char * file), REG(d2, int line));
+void * SAVEDS ASM LIB_CRYPTO_clear_realloc_array(REG(a6, __IFACE_OR_BASE), REG(a0, void * addr), REG(d0, size_t old_num), REG(d1, size_t num), REG(d2, size_t size), REG(a1, const char * file), REG(d3, int line));
+void * SAVEDS ASM LIB_CRYPTO_secure_malloc_array(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t size), REG(a0, const char * file), REG(d2, int line));
+void * SAVEDS ASM LIB_CRYPTO_secure_calloc(REG(a6, __IFACE_OR_BASE), REG(d0, size_t num), REG(d1, size_t size), REG(a0, const char * file), REG(d2, int line));
 
 #if defined(SDI_LIB_H)
   #define SDI_LIBVECTOR_EXT \
@@ -3105,7 +3128,30 @@ int SAVEDS ASM LIB_PEM_ASN1_write_bio_ctx(REG(a6, __IFACE_OR_BASE), REG(a0, OSSL
     LFUNC_FA_(OSSL_AA_DIST_POINT_free) \
     LFUNC_FA_(OSSL_AA_DIST_POINT_new) \
     LFUNC_FA_(OSSL_AA_DIST_POINT_it) \
-    LFUNC_FA_(PEM_ASN1_write_bio_ctx)
+    LFUNC_FA_(PEM_ASN1_write_bio_ctx) \
+    LFUNC_FA_(EVP_PKEY_get_security_category) \
+    LFUNC_FA_(X509_STORE_CTX_set_ocsp_resp) \
+    LFUNC_FA_(OPENSSL_sk_set_thunks) \
+    LFUNC_FA_(i2d_PKCS8PrivateKey) \
+    LFUNC_FA_(OSSL_PARAM_set_octet_string_or_ptr) \
+    LFUNC_FA_(OSSL_STORE_LOADER_settable_ctx_params) \
+    LFUNC_FA_(X509_CRL_get0_tbs_sigalg) \
+    LFUNC_FA_(CMS_RecipientInfo_kemri_cert_cmp) \
+    LFUNC_FA_(CMS_RecipientInfo_kemri_set0_pkey) \
+    LFUNC_FA_(CMS_RecipientInfo_kemri_get0_ctx) \
+    LFUNC_FA_(CMS_RecipientInfo_kemri_get0_kdf_alg) \
+    LFUNC_FA_(CMS_RecipientInfo_kemri_set_ukm) \
+    LFUNC_FA_(EVP_PKEY_derive_SKEY) \
+    LFUNC_FA_(EVP_KDF_CTX_set_SKEY) \
+    LFUNC_FA_(EVP_KDF_derive_SKEY) \
+    LFUNC_FA_(EVP_SKEY_import_SKEYMGMT) \
+    LFUNC_FA_(CRYPTO_malloc_array) \
+    LFUNC_FA_(CRYPTO_calloc) \
+    LFUNC_FA_(CRYPTO_aligned_alloc_array) \
+    LFUNC_FA_(CRYPTO_realloc_array) \
+    LFUNC_FA_(CRYPTO_clear_realloc_array) \
+    LFUNC_FA_(CRYPTO_secure_malloc_array) \
+    LFUNC_FA_(CRYPTO_secure_calloc)
 #endif /* SDI_LIB_H */
 
 #endif /* GLUE_AMISSLEXT_H */

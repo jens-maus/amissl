@@ -9677,4 +9677,169 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___u), D5), \
      struct Library *, AMISSLEXT_BASE_NAME, 1534, Amisslext)
 
+#define EVP_PKEY_get_security_category(___pkey) \
+      AROS_LC1(int, EVP_PKEY_get_security_category, \
+ AROS_LCA(const EVP_PKEY *, (___pkey), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1535, Amisslext)
+
+#define X509_STORE_CTX_set_ocsp_resp(___ctx, ___sk) \
+      AROS_LC2(void, X509_STORE_CTX_set_ocsp_resp, \
+ AROS_LCA(X509_STORE_CTX *, (___ctx), A0), \
+ AROS_LCA(STACK_OF(OCSP_RESPONSE) *, (___sk), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1536, Amisslext)
+
+#define OPENSSL_sk_set_thunks(___st, ___f_thunk) \
+      AROS_LC2(OPENSSL_STACK *, OPENSSL_sk_set_thunks, \
+ AROS_LCA(OPENSSL_STACK *, (___st), A0), \
+ AROS_LCA(OPENSSL_sk_freefunc_thunk, (___f_thunk), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1537, Amisslext)
+
+#define i2d_PKCS8PrivateKey(___a, ___pp) \
+      AROS_LC2(int, i2d_PKCS8PrivateKey, \
+ AROS_LCA(const EVP_PKEY *, (___a), A0), \
+ AROS_LCA(unsigned char **, (___pp), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1538, Amisslext)
+
+#define OSSL_PARAM_set_octet_string_or_ptr(___p, ___val, ___len) \
+      AROS_LC3(int, OSSL_PARAM_set_octet_string_or_ptr, \
+ AROS_LCA(OSSL_PARAM *, (___p), A0), \
+ AROS_LCA(const void *, (___val), A1), \
+ AROS_LCA(size_t, (___len), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1539, Amisslext)
+
+#define OSSL_STORE_LOADER_settable_ctx_params(___loader) \
+      AROS_LC1(const OSSL_PARAM *, OSSL_STORE_LOADER_settable_ctx_params, \
+ AROS_LCA(const OSSL_STORE_LOADER *, (___loader), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1540, Amisslext)
+
+#define X509_CRL_get0_tbs_sigalg(___crl) \
+      AROS_LC1(const X509_ALGOR *, X509_CRL_get0_tbs_sigalg, \
+ AROS_LCA(const X509_CRL *, (___crl), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1541, Amisslext)
+
+#define CMS_RecipientInfo_kemri_cert_cmp(___ri, ___cert) \
+      AROS_LC2(int, CMS_RecipientInfo_kemri_cert_cmp, \
+ AROS_LCA(CMS_RecipientInfo *, (___ri), A0), \
+ AROS_LCA(X509 *, (___cert), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1542, Amisslext)
+
+#define CMS_RecipientInfo_kemri_set0_pkey(___ri, ___pk) \
+      AROS_LC2(int, CMS_RecipientInfo_kemri_set0_pkey, \
+ AROS_LCA(CMS_RecipientInfo *, (___ri), A0), \
+ AROS_LCA(EVP_PKEY *, (___pk), A1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1543, Amisslext)
+
+#define CMS_RecipientInfo_kemri_get0_ctx(___ri) \
+      AROS_LC1(EVP_CIPHER_CTX *, CMS_RecipientInfo_kemri_get0_ctx, \
+ AROS_LCA(CMS_RecipientInfo *, (___ri), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1544, Amisslext)
+
+#define CMS_RecipientInfo_kemri_get0_kdf_alg(___ri) \
+      AROS_LC1(X509_ALGOR *, CMS_RecipientInfo_kemri_get0_kdf_alg, \
+ AROS_LCA(CMS_RecipientInfo *, (___ri), A0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1545, Amisslext)
+
+#define CMS_RecipientInfo_kemri_set_ukm(___ri, ___ukm, ___ukmLength) \
+      AROS_LC3(int, CMS_RecipientInfo_kemri_set_ukm, \
+ AROS_LCA(CMS_RecipientInfo *, (___ri), A0), \
+ AROS_LCA(const unsigned char *, (___ukm), A1), \
+ AROS_LCA(int, (___ukmLength), D0), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1546, Amisslext)
+
+#define EVP_PKEY_derive_SKEY(___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params) \
+      AROS_LC6(EVP_SKEY *, EVP_PKEY_derive_SKEY, \
+ AROS_LCA(EVP_PKEY_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_SKEYMGMT *, (___mgmt), A1), \
+ AROS_LCA(const char *, (___key_type), A2), \
+ AROS_LCA(const char *, (___propquery), A3), \
+ AROS_LCA(size_t, (___keylen), D0), \
+ AROS_LCA(const OSSL_PARAM *, (___params), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1547, Amisslext)
+
+#define EVP_KDF_CTX_set_SKEY(___ctx, ___key, ___paramname) \
+      AROS_LC3(int, EVP_KDF_CTX_set_SKEY, \
+ AROS_LCA(EVP_KDF_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_SKEY *, (___key), A1), \
+ AROS_LCA(const char *, (___paramname), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1548, Amisslext)
+
+#define EVP_KDF_derive_SKEY(___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params) \
+      AROS_LC6(EVP_SKEY *, EVP_KDF_derive_SKEY, \
+ AROS_LCA(EVP_KDF_CTX *, (___ctx), A0), \
+ AROS_LCA(EVP_SKEYMGMT *, (___mgmt), A1), \
+ AROS_LCA(const char *, (___key_type), A2), \
+ AROS_LCA(const char *, (___propquery), A3), \
+ AROS_LCA(size_t, (___keylen), D0), \
+ AROS_LCA(const OSSL_PARAM *, (___params), D1), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1549, Amisslext)
+
+#define EVP_SKEY_import_SKEYMGMT(___libctx, ___skeymgmt, ___selection, ___params) \
+      AROS_LC4(EVP_SKEY *, EVP_SKEY_import_SKEYMGMT, \
+ AROS_LCA(OSSL_LIB_CTX *, (___libctx), A0), \
+ AROS_LCA(EVP_SKEYMGMT *, (___skeymgmt), A1), \
+ AROS_LCA(int, (___selection), D0), \
+ AROS_LCA(const OSSL_PARAM *, (___params), A2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1550, Amisslext)
+
+#define CRYPTO_malloc_array(___num, ___size, ___file, ___line) \
+      AROS_LC4(void *, CRYPTO_malloc_array, \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(const char *, (___file), A0), \
+ AROS_LCA(int, (___line), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1551, Amisslext)
+
+#define CRYPTO_calloc(___num, ___size, ___file, ___line) \
+      AROS_LC4(void *, CRYPTO_calloc, \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(const char *, (___file), A0), \
+ AROS_LCA(int, (___line), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1552, Amisslext)
+
+#define CRYPTO_aligned_alloc_array(___num, ___size, ___align, ___freeptr, ___file, ___line) \
+      AROS_LC6(void *, CRYPTO_aligned_alloc_array, \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(size_t, (___align), D2), \
+ AROS_LCA(void **, (___freeptr), A0), \
+ AROS_LCA(const char *, (___file), A1), \
+ AROS_LCA(int, (___line), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1553, Amisslext)
+
+#define CRYPTO_realloc_array(___addr, ___num, ___size, ___file, ___line) \
+      AROS_LC5(void *, CRYPTO_realloc_array, \
+ AROS_LCA(void *, (___addr), A0), \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(const char *, (___file), A1), \
+ AROS_LCA(int, (___line), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1554, Amisslext)
+
+#define CRYPTO_clear_realloc_array(___addr, ___old_num, ___num, ___size, ___file, ___line) \
+      AROS_LC6(void *, CRYPTO_clear_realloc_array, \
+ AROS_LCA(void *, (___addr), A0), \
+ AROS_LCA(size_t, (___old_num), D0), \
+ AROS_LCA(size_t, (___num), D1), \
+ AROS_LCA(size_t, (___size), D2), \
+ AROS_LCA(const char *, (___file), A1), \
+ AROS_LCA(int, (___line), D3), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1555, Amisslext)
+
+#define CRYPTO_secure_malloc_array(___num, ___size, ___file, ___line) \
+      AROS_LC4(void *, CRYPTO_secure_malloc_array, \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(const char *, (___file), A0), \
+ AROS_LCA(int, (___line), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1556, Amisslext)
+
+#define CRYPTO_secure_calloc(___num, ___size, ___file, ___line) \
+      AROS_LC4(void *, CRYPTO_secure_calloc, \
+ AROS_LCA(size_t, (___num), D0), \
+ AROS_LCA(size_t, (___size), D1), \
+ AROS_LCA(const char *, (___file), A0), \
+ AROS_LCA(int, (___line), D2), \
+     struct Library *, AMISSLEXT_BASE_NAME, 1557, Amisslext)
+
 #endif /* !_INLINE_AMISSLEXT_H */

@@ -4612,4 +4612,73 @@ const ASN1_ITEM * __OSSL_AA_DIST_POINT_it(__reg("a6") struct Library * ) = "\tjs
 int __PEM_ASN1_write_bio_ctx(__reg("a6") struct Library * , __reg("a0") OSSL_i2d_of_void_ctx * i2d , __reg("a1") void * vctx , __reg("a2") const char * name , __reg("a3") BIO * bp , __reg("d0") const void * x , __reg("d1") const EVP_CIPHER * enc , __reg("d2") const unsigned char * kstr , __reg("d3") int klen , __reg("d4") pem_password_cb * cb , __reg("d5") void * u ) = "\tjsr\t-9204(a6)";
 #define PEM_ASN1_write_bio_ctx(i2d, vctx, name, bp, x, enc, kstr, klen, cb, u) __PEM_ASN1_write_bio_ctx(AmiSSLExtBase, (i2d), (vctx), (name), (bp), (x), (enc), (kstr), (klen), (cb), (u))
 
+int __EVP_PKEY_get_security_category(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY * pkey ) = "\tjsr\t-9210(a6)";
+#define EVP_PKEY_get_security_category(pkey) __EVP_PKEY_get_security_category(AmiSSLExtBase, (pkey))
+
+void __X509_STORE_CTX_set_ocsp_resp(__reg("a6") struct Library * , __reg("a0") X509_STORE_CTX * ctx , __reg("a1") STACK_OF(OCSP_RESPONSE) * sk ) = "\tjsr\t-9216(a6)";
+#define X509_STORE_CTX_set_ocsp_resp(ctx, sk) __X509_STORE_CTX_set_ocsp_resp(AmiSSLExtBase, (ctx), (sk))
+
+OPENSSL_STACK * __OPENSSL_sk_set_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_STACK * st , __reg("d0") OPENSSL_sk_freefunc_thunk f_thunk ) = "\tjsr\t-9222(a6)";
+#define OPENSSL_sk_set_thunks(st, f_thunk) __OPENSSL_sk_set_thunks(AmiSSLExtBase, (st), (f_thunk))
+
+int __i2d_PKCS8PrivateKey(__reg("a6") struct Library * , __reg("a0") const EVP_PKEY * a , __reg("a1") unsigned char ** pp ) = "\tjsr\t-9228(a6)";
+#define i2d_PKCS8PrivateKey(a, pp) __i2d_PKCS8PrivateKey(AmiSSLExtBase, (a), (pp))
+
+int __OSSL_PARAM_set_octet_string_or_ptr(__reg("a6") struct Library * , __reg("a0") OSSL_PARAM * p , __reg("a1") const void * val , __reg("d0") size_t len ) = "\tjsr\t-9234(a6)";
+#define OSSL_PARAM_set_octet_string_or_ptr(p, val, len) __OSSL_PARAM_set_octet_string_or_ptr(AmiSSLExtBase, (p), (val), (len))
+
+const OSSL_PARAM * __OSSL_STORE_LOADER_settable_ctx_params(__reg("a6") struct Library * , __reg("a0") const OSSL_STORE_LOADER * loader ) = "\tjsr\t-9240(a6)";
+#define OSSL_STORE_LOADER_settable_ctx_params(loader) __OSSL_STORE_LOADER_settable_ctx_params(AmiSSLExtBase, (loader))
+
+const X509_ALGOR * __X509_CRL_get0_tbs_sigalg(__reg("a6") struct Library * , __reg("a0") const X509_CRL * crl ) = "\tjsr\t-9246(a6)";
+#define X509_CRL_get0_tbs_sigalg(crl) __X509_CRL_get0_tbs_sigalg(AmiSSLExtBase, (crl))
+
+int __CMS_RecipientInfo_kemri_cert_cmp(__reg("a6") struct Library * , __reg("a0") CMS_RecipientInfo * ri , __reg("a1") X509 * cert ) = "\tjsr\t-9252(a6)";
+#define CMS_RecipientInfo_kemri_cert_cmp(ri, cert) __CMS_RecipientInfo_kemri_cert_cmp(AmiSSLExtBase, (ri), (cert))
+
+int __CMS_RecipientInfo_kemri_set0_pkey(__reg("a6") struct Library * , __reg("a0") CMS_RecipientInfo * ri , __reg("a1") EVP_PKEY * pk ) = "\tjsr\t-9258(a6)";
+#define CMS_RecipientInfo_kemri_set0_pkey(ri, pk) __CMS_RecipientInfo_kemri_set0_pkey(AmiSSLExtBase, (ri), (pk))
+
+EVP_CIPHER_CTX * __CMS_RecipientInfo_kemri_get0_ctx(__reg("a6") struct Library * , __reg("a0") CMS_RecipientInfo * ri ) = "\tjsr\t-9264(a6)";
+#define CMS_RecipientInfo_kemri_get0_ctx(ri) __CMS_RecipientInfo_kemri_get0_ctx(AmiSSLExtBase, (ri))
+
+X509_ALGOR * __CMS_RecipientInfo_kemri_get0_kdf_alg(__reg("a6") struct Library * , __reg("a0") CMS_RecipientInfo * ri ) = "\tjsr\t-9270(a6)";
+#define CMS_RecipientInfo_kemri_get0_kdf_alg(ri) __CMS_RecipientInfo_kemri_get0_kdf_alg(AmiSSLExtBase, (ri))
+
+int __CMS_RecipientInfo_kemri_set_ukm(__reg("a6") struct Library * , __reg("a0") CMS_RecipientInfo * ri , __reg("a1") const unsigned char * ukm , __reg("d0") int ukmLength ) = "\tjsr\t-9276(a6)";
+#define CMS_RecipientInfo_kemri_set_ukm(ri, ukm, ukmLength) __CMS_RecipientInfo_kemri_set_ukm(AmiSSLExtBase, (ri), (ukm), (ukmLength))
+
+EVP_SKEY * __EVP_PKEY_derive_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_PKEY_CTX * ctx , __reg("a1") EVP_SKEYMGMT * mgmt , __reg("a2") const char * key_type , __reg("a3") const char * propquery , __reg("d0") size_t keylen , __reg("d1") const OSSL_PARAM * params ) = "\tjsr\t-9282(a6)";
+#define EVP_PKEY_derive_SKEY(ctx, mgmt, key_type, propquery, keylen, params) __EVP_PKEY_derive_SKEY(AmiSSLExtBase, (ctx), (mgmt), (key_type), (propquery), (keylen), (params))
+
+int __EVP_KDF_CTX_set_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_KDF_CTX * ctx , __reg("a1") EVP_SKEY * key , __reg("a2") const char * paramname ) = "\tjsr\t-9288(a6)";
+#define EVP_KDF_CTX_set_SKEY(ctx, key, paramname) __EVP_KDF_CTX_set_SKEY(AmiSSLExtBase, (ctx), (key), (paramname))
+
+EVP_SKEY * __EVP_KDF_derive_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_KDF_CTX * ctx , __reg("a1") EVP_SKEYMGMT * mgmt , __reg("a2") const char * key_type , __reg("a3") const char * propquery , __reg("d0") size_t keylen , __reg("d1") const OSSL_PARAM * params ) = "\tjsr\t-9294(a6)";
+#define EVP_KDF_derive_SKEY(ctx, mgmt, key_type, propquery, keylen, params) __EVP_KDF_derive_SKEY(AmiSSLExtBase, (ctx), (mgmt), (key_type), (propquery), (keylen), (params))
+
+EVP_SKEY * __EVP_SKEY_import_SKEYMGMT(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") EVP_SKEYMGMT * skeymgmt , __reg("d0") int selection , __reg("a2") const OSSL_PARAM * params ) = "\tjsr\t-9300(a6)";
+#define EVP_SKEY_import_SKEYMGMT(libctx, skeymgmt, selection, params) __EVP_SKEY_import_SKEYMGMT(AmiSSLExtBase, (libctx), (skeymgmt), (selection), (params))
+
+void * __CRYPTO_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9306(a6)";
+#define CRYPTO_malloc_array(num, size, file, line) __CRYPTO_malloc_array(AmiSSLExtBase, (num), (size), (file), (line))
+
+void * __CRYPTO_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9312(a6)";
+#define CRYPTO_calloc(num, size, file, line) __CRYPTO_calloc(AmiSSLExtBase, (num), (size), (file), (line))
+
+void * __CRYPTO_aligned_alloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("d2") size_t align , __reg("a0") void ** freeptr , __reg("a1") const char * file , __reg("d3") int line ) = "\tjsr\t-9318(a6)";
+#define CRYPTO_aligned_alloc_array(num, size, align, freeptr, file, line) __CRYPTO_aligned_alloc_array(AmiSSLExtBase, (num), (size), (align), (freeptr), (file), (line))
+
+void * __CRYPTO_realloc_array(__reg("a6") struct Library * , __reg("a0") void * addr , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a1") const char * file , __reg("d2") int line ) = "\tjsr\t-9324(a6)";
+#define CRYPTO_realloc_array(addr, num, size, file, line) __CRYPTO_realloc_array(AmiSSLExtBase, (addr), (num), (size), (file), (line))
+
+void * __CRYPTO_clear_realloc_array(__reg("a6") struct Library * , __reg("a0") void * addr , __reg("d0") size_t old_num , __reg("d1") size_t num , __reg("d2") size_t size , __reg("a1") const char * file , __reg("d3") int line ) = "\tjsr\t-9330(a6)";
+#define CRYPTO_clear_realloc_array(addr, old_num, num, size, file, line) __CRYPTO_clear_realloc_array(AmiSSLExtBase, (addr), (old_num), (num), (size), (file), (line))
+
+void * __CRYPTO_secure_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9336(a6)";
+#define CRYPTO_secure_malloc_array(num, size, file, line) __CRYPTO_secure_malloc_array(AmiSSLExtBase, (num), (size), (file), (line))
+
+void * __CRYPTO_secure_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9342(a6)";
+#define CRYPTO_secure_calloc(num, size, file, line) __CRYPTO_secure_calloc(AmiSSLExtBase, (num), (size), (file), (line))
+
 #endif /* !_INLINE_AMISSLEXT_H */

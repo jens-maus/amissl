@@ -6150,4 +6150,96 @@ typedef ULONG _sfdc_vararg;
       LP10(0x23f4, int, PEM_ASN1_write_bio_ctx , OSSL_i2d_of_void_ctx *, ___i2d, a0, void *, ___vctx, a1, const char *, ___name, a2, BIO *, ___bp, a3, const void *, ___x, d0, const EVP_CIPHER *, ___enc, d1, const unsigned char *, ___kstr, d2, int, ___klen, d3, pem_password_cb *, ___cb, d4, void *, ___u, d5,\
       , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
 
+#define EVP_PKEY_get_security_category(___pkey) \
+      LP1(0x23fa, int, EVP_PKEY_get_security_category , const EVP_PKEY *, ___pkey, a0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_STORE_CTX_set_ocsp_resp(___ctx, ___sk) \
+      LP2NR(0x2400, X509_STORE_CTX_set_ocsp_resp , X509_STORE_CTX *, ___ctx, a0, STACK_OF(OCSP_RESPONSE) *, ___sk, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define OPENSSL_sk_set_thunks(___st, ___f_thunk) \
+      LP2(0x2406, OPENSSL_STACK *, OPENSSL_sk_set_thunks , OPENSSL_STACK *, ___st, a0, OPENSSL_sk_freefunc_thunk, ___f_thunk, d0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define i2d_PKCS8PrivateKey(___a, ___pp) \
+      LP2(0x240c, int, i2d_PKCS8PrivateKey , const EVP_PKEY *, ___a, a0, unsigned char **, ___pp, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define OSSL_PARAM_set_octet_string_or_ptr(___p, ___val, ___len) \
+      LP3(0x2412, int, OSSL_PARAM_set_octet_string_or_ptr , OSSL_PARAM *, ___p, a0, const void *, ___val, a1, size_t, ___len, d0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define OSSL_STORE_LOADER_settable_ctx_params(___loader) \
+      LP1(0x2418, const OSSL_PARAM *, OSSL_STORE_LOADER_settable_ctx_params , const OSSL_STORE_LOADER *, ___loader, a0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define X509_CRL_get0_tbs_sigalg(___crl) \
+      LP1(0x241e, const X509_ALGOR *, X509_CRL_get0_tbs_sigalg , const X509_CRL *, ___crl, a0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CMS_RecipientInfo_kemri_cert_cmp(___ri, ___cert) \
+      LP2(0x2424, int, CMS_RecipientInfo_kemri_cert_cmp , CMS_RecipientInfo *, ___ri, a0, X509 *, ___cert, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CMS_RecipientInfo_kemri_set0_pkey(___ri, ___pk) \
+      LP2(0x242a, int, CMS_RecipientInfo_kemri_set0_pkey , CMS_RecipientInfo *, ___ri, a0, EVP_PKEY *, ___pk, a1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CMS_RecipientInfo_kemri_get0_ctx(___ri) \
+      LP1(0x2430, EVP_CIPHER_CTX *, CMS_RecipientInfo_kemri_get0_ctx , CMS_RecipientInfo *, ___ri, a0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CMS_RecipientInfo_kemri_get0_kdf_alg(___ri) \
+      LP1(0x2436, X509_ALGOR *, CMS_RecipientInfo_kemri_get0_kdf_alg , CMS_RecipientInfo *, ___ri, a0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CMS_RecipientInfo_kemri_set_ukm(___ri, ___ukm, ___ukmLength) \
+      LP3(0x243c, int, CMS_RecipientInfo_kemri_set_ukm , CMS_RecipientInfo *, ___ri, a0, const unsigned char *, ___ukm, a1, int, ___ukmLength, d0,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EVP_PKEY_derive_SKEY(___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params) \
+      LP6(0x2442, EVP_SKEY *, EVP_PKEY_derive_SKEY , EVP_PKEY_CTX *, ___ctx, a0, EVP_SKEYMGMT *, ___mgmt, a1, const char *, ___key_type, a2, const char *, ___propquery, a3, size_t, ___keylen, d0, const OSSL_PARAM *, ___params, d1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EVP_KDF_CTX_set_SKEY(___ctx, ___key, ___paramname) \
+      LP3(0x2448, int, EVP_KDF_CTX_set_SKEY , EVP_KDF_CTX *, ___ctx, a0, EVP_SKEY *, ___key, a1, const char *, ___paramname, a2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EVP_KDF_derive_SKEY(___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params) \
+      LP6(0x244e, EVP_SKEY *, EVP_KDF_derive_SKEY , EVP_KDF_CTX *, ___ctx, a0, EVP_SKEYMGMT *, ___mgmt, a1, const char *, ___key_type, a2, const char *, ___propquery, a3, size_t, ___keylen, d0, const OSSL_PARAM *, ___params, d1,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define EVP_SKEY_import_SKEYMGMT(___libctx, ___skeymgmt, ___selection, ___params) \
+      LP4(0x2454, EVP_SKEY *, EVP_SKEY_import_SKEYMGMT , OSSL_LIB_CTX *, ___libctx, a0, EVP_SKEYMGMT *, ___skeymgmt, a1, int, ___selection, d0, const OSSL_PARAM *, ___params, a2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_malloc_array(___num, ___size, ___file, ___line) \
+      LP4(0x245a, void *, CRYPTO_malloc_array , size_t, ___num, d0, size_t, ___size, d1, const char *, ___file, a0, int, ___line, d2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_calloc(___num, ___size, ___file, ___line) \
+      LP4(0x2460, void *, CRYPTO_calloc , size_t, ___num, d0, size_t, ___size, d1, const char *, ___file, a0, int, ___line, d2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_aligned_alloc_array(___num, ___size, ___align, ___freeptr, ___file, ___line) \
+      LP6(0x2466, void *, CRYPTO_aligned_alloc_array , size_t, ___num, d0, size_t, ___size, d1, size_t, ___align, d2, void **, ___freeptr, a0, const char *, ___file, a1, int, ___line, d3,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_realloc_array(___addr, ___num, ___size, ___file, ___line) \
+      LP5(0x246c, void *, CRYPTO_realloc_array , void *, ___addr, a0, size_t, ___num, d0, size_t, ___size, d1, const char *, ___file, a1, int, ___line, d2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_clear_realloc_array(___addr, ___old_num, ___num, ___size, ___file, ___line) \
+      LP6(0x2472, void *, CRYPTO_clear_realloc_array , void *, ___addr, a0, size_t, ___old_num, d0, size_t, ___num, d1, size_t, ___size, d2, const char *, ___file, a1, int, ___line, d3,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_secure_malloc_array(___num, ___size, ___file, ___line) \
+      LP4(0x2478, void *, CRYPTO_secure_malloc_array , size_t, ___num, d0, size_t, ___size, d1, const char *, ___file, a0, int, ___line, d2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
+#define CRYPTO_secure_calloc(___num, ___size, ___file, ___line) \
+      LP4(0x247e, void *, CRYPTO_secure_calloc , size_t, ___num, d0, size_t, ___size, d1, const char *, ___file, a0, int, ___line, d2,\
+      , AMISSLEXT_BASE_NAME, 0, 0, 0, 0, 0, 0)
+
 #endif /* !_PPCINLINE_AMISSLEXT_H */

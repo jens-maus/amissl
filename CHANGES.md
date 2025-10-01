@@ -1,3 +1,18 @@
+## AmiSSL 5.25 (x.10.2025)
+
+- Switched to OpenSSL 3.6, with full compatibility with the latest
+  OpenSSL 3.6.0 (1.10.2025) version, which provides new features and
+  improvements, including:
+  + Added NIST security categories for PKEY objects.
+  + Added support for EVP_SKEY opaque symmetric key objects to the key
+    derivation and key exchange provider methods.
+  + Added EVP_KDF_CTX_set_SKEY(), EVP_KDF_derive_SKEY(), and
+    EVP_PKEY_derive_SKEY() functions.
+  + Added LMS signature verification support as per [SP 800-208].
+  + Added an openssl configutl utility for processing the OpenSSL
+    configuration file and dumping the equal configuration file.
+  + Deprecated EVP_PKEY_ASN1_METHOD-related functions.
+
 ## AmiSSL 5.24 (30.9.2025)
 
 - Updated OpenSSL backend to full compatibility with the latest

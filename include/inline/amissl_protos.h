@@ -11581,8 +11581,8 @@ int __DTLSv1_listen(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("
 int __OPENSSL_init_ssl(__reg("a6") struct Library * , __reg("d0/d1") uint64_t opts , __reg("a0") const OPENSSL_INIT_SETTINGS * settings ) = "\tjsr\t-26568(a6)";
 #define OPENSSL_init_ssl(opts, settings) __OPENSSL_init_ssl(AmiSSLBase, (opts), (settings))
 
-int __SSL_add1_host(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * hostname ) = "\tjsr\t-26574(a6)";
-#define SSL_add1_host(s, hostname) __SSL_add1_host(AmiSSLBase, (s), (hostname))
+int __SSL_add1_host(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * host ) = "\tjsr\t-26574(a6)";
+#define SSL_add1_host(s, host) __SSL_add1_host(AmiSSLBase, (s), (host))
 
 void __SSL_add_ssl_module(__reg("a6") struct Library * ) = "\tjsr\t-26580(a6)";
 #define SSL_add_ssl_module() __SSL_add_ssl_module(AmiSSLBase)
@@ -11719,8 +11719,8 @@ int __SSL_session_reused(__reg("a6") struct Library * , __reg("a0") const SSL * 
 void __SSL_set0_security_ex_data(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") void * ex ) = "\tjsr\t-26850(a6)";
 #define SSL_set0_security_ex_data(s, ex) __SSL_set0_security_ex_data(AmiSSLBase, (s), (ex))
 
-int __SSL_set1_host(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * hostname ) = "\tjsr\t-26856(a6)";
-#define SSL_set1_host(s, hostname) __SSL_set1_host(AmiSSLBase, (s), (hostname))
+int __SSL_set1_host(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * host ) = "\tjsr\t-26856(a6)";
+#define SSL_set1_host(s, host) __SSL_set1_host(AmiSSLBase, (s), (host))
 
 void __SSL_set_default_passwd_cb(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") pem_password_cb * cb ) = "\tjsr\t-26862(a6)";
 #define SSL_set_default_passwd_cb(s, cb) __SSL_set_default_passwd_cb(AmiSSLBase, (s), (cb))

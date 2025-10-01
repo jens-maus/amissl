@@ -36,6 +36,7 @@
 #    define NO_SYS_UN_H
 #  endif
 #  include <internal/debug.h>
+#  include <internal/amissl.h>
 #endif
 
 # define get_last_sys_error()    errno

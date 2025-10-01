@@ -7010,6 +7010,29 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OSSL_AA_DIST_POINT_new
 	    FPTR IAmiSSL_OSSL_AA_DIST_POINT_it
 	    FPTR IAmiSSL_PEM_ASN1_write_bio_ctx
+	    FPTR IAmiSSL_EVP_PKEY_get_security_category
+	    FPTR IAmiSSL_X509_STORE_CTX_set_ocsp_resp
+	    FPTR IAmiSSL_OPENSSL_sk_set_thunks
+	    FPTR IAmiSSL_i2d_PKCS8PrivateKey
+	    FPTR IAmiSSL_OSSL_PARAM_set_octet_string_or_ptr
+	    FPTR IAmiSSL_OSSL_STORE_LOADER_settable_ctx_params
+	    FPTR IAmiSSL_X509_CRL_get0_tbs_sigalg
+	    FPTR IAmiSSL_CMS_RecipientInfo_kemri_cert_cmp
+	    FPTR IAmiSSL_CMS_RecipientInfo_kemri_set0_pkey
+	    FPTR IAmiSSL_CMS_RecipientInfo_kemri_get0_ctx
+	    FPTR IAmiSSL_CMS_RecipientInfo_kemri_get0_kdf_alg
+	    FPTR IAmiSSL_CMS_RecipientInfo_kemri_set_ukm
+	    FPTR IAmiSSL_EVP_PKEY_derive_SKEY
+	    FPTR IAmiSSL_EVP_KDF_CTX_set_SKEY
+	    FPTR IAmiSSL_EVP_KDF_derive_SKEY
+	    FPTR IAmiSSL_EVP_SKEY_import_SKEYMGMT
+	    FPTR IAmiSSL_CRYPTO_malloc_array
+	    FPTR IAmiSSL_CRYPTO_calloc
+	    FPTR IAmiSSL_CRYPTO_aligned_alloc_array
+	    FPTR IAmiSSL_CRYPTO_realloc_array
+	    FPTR IAmiSSL_CRYPTO_clear_realloc_array
+	    FPTR IAmiSSL_CRYPTO_secure_malloc_array
+	    FPTR IAmiSSL_CRYPTO_secure_calloc
 	LABEL AmiSSLIFace_SIZE
 
 #endif

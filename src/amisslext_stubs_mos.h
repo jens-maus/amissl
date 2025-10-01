@@ -1547,6 +1547,29 @@ LIBSTUB(OSSL_AA_DIST_POINT_free, void);
 LIBSTUB(OSSL_AA_DIST_POINT_new, OSSL_AA_DIST_POINT *);
 LIBSTUB(OSSL_AA_DIST_POINT_it, const ASN1_ITEM *);
 LIBSTUB(PEM_ASN1_write_bio_ctx, int);
+LIBSTUB(EVP_PKEY_get_security_category, int);
+LIBSTUB(X509_STORE_CTX_set_ocsp_resp, void);
+LIBSTUB(OPENSSL_sk_set_thunks, OPENSSL_STACK *);
+LIBSTUB(i2d_PKCS8PrivateKey, int);
+LIBSTUB(OSSL_PARAM_set_octet_string_or_ptr, int);
+LIBSTUB(OSSL_STORE_LOADER_settable_ctx_params, const OSSL_PARAM *);
+LIBSTUB(X509_CRL_get0_tbs_sigalg, const X509_ALGOR *);
+LIBSTUB(CMS_RecipientInfo_kemri_cert_cmp, int);
+LIBSTUB(CMS_RecipientInfo_kemri_set0_pkey, int);
+LIBSTUB(CMS_RecipientInfo_kemri_get0_ctx, EVP_CIPHER_CTX *);
+LIBSTUB(CMS_RecipientInfo_kemri_get0_kdf_alg, X509_ALGOR *);
+LIBSTUB(CMS_RecipientInfo_kemri_set_ukm, int);
+LIBSTUB(EVP_PKEY_derive_SKEY, EVP_SKEY *);
+LIBSTUB(EVP_KDF_CTX_set_SKEY, int);
+LIBSTUB(EVP_KDF_derive_SKEY, EVP_SKEY *);
+LIBSTUB(EVP_SKEY_import_SKEYMGMT, EVP_SKEY *);
+LIBSTUB(CRYPTO_malloc_array, void *);
+LIBSTUB(CRYPTO_calloc, void *);
+LIBSTUB(CRYPTO_aligned_alloc_array, void *);
+LIBSTUB(CRYPTO_realloc_array, void *);
+LIBSTUB(CRYPTO_clear_realloc_array, void *);
+LIBSTUB(CRYPTO_secure_malloc_array, void *);
+LIBSTUB(CRYPTO_secure_calloc, void *);
 
 #ifdef __cplusplus
 }

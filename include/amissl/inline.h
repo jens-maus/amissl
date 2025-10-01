@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2025 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,11 @@
     typedef int (*sk_##t1##_compfunc)(const t3 * const *a, const t3 *const *b); \
     typedef void (*sk_##t1##_freefunc)(t3 *a); \
     typedef t3 * (*sk_##t1##_copyfunc)(const t3 *a); \
+    static ossl_inline void sk_##t1##_freefunc_thunk(OPENSSL_sk_freefunc freefunc_arg, void *ptr) \
+    { \
+        sk_##t1##_freefunc freefunc = (sk_##t1##_freefunc) freefunc_arg;\
+        freefunc((t3 *)ptr);\
+    } \
     static ossl_unused ossl_inline int sk_##t1##_num(const STACK_OF(t1) *sk) \
     { \
         return OPENSSL_sk_num((const OPENSSL_STACK *)sk); \
@@ -51,7 +56,11 @@
     } \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new(sk_##t1##_compfunc compare) \
     { \
-        return (STACK_OF(t1) *)OPENSSL_sk_new((OPENSSL_sk_compfunc)compare); \
+        OPENSSL_STACK *ret = OPENSSL_sk_new((OPENSSL_sk_compfunc)compare); \
+        OPENSSL_sk_freefunc_thunk f_thunk; \
+        \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk; \
+        return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk); \
     } \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_null(void) \
     { \
@@ -59,7 +68,11 @@
     } \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_reserve(sk_##t1##_compfunc compare, int n) \
     { \
-        return (STACK_OF(t1) *)OPENSSL_sk_new_reserve((OPENSSL_sk_compfunc)compare, n); \
+        OPENSSL_STACK *ret = OPENSSL_sk_new_reserve((OPENSSL_sk_compfunc)compare, n); \
+        OPENSSL_sk_freefunc_thunk f_thunk; \
+        \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk; \
+        return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk); \
     } \
     static ossl_unused ossl_inline int sk_##t1##_reserve(STACK_OF(t1) *sk, int n) \
     { \
@@ -100,6 +113,11 @@
     } \
     static ossl_unused ossl_inline void sk_##t1##_pop_free(STACK_OF(t1) *sk, sk_##t1##_freefunc freefunc) \
     { \
+        OPENSSL_sk_freefunc_thunk f_thunk; \
+        \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk; \
+        sk = (STACK_OF(t1) *)OPENSSL_sk_set_thunks((OPENSSL_STACK *)sk, f_thunk); \
+        \
         OPENSSL_sk_pop_free((OPENSSL_STACK *)sk, (OPENSSL_sk_freefunc)freefunc); \
     } \
     static ossl_unused ossl_inline int sk_##t1##_insert(STACK_OF(t1) *sk, t2 *ptr, int idx) \
@@ -148,6 +166,7 @@
     }
 
 DEFINE_SPECIAL_STACK_OF(OPENSSL_PSTRING, OPENSSL_STRING)
+DEFINE_STACK_OF(OCSP_RESPONSE)
 
 # undef DEFINE_LHASH_OF
 # define DEFINE_LHASH_OF(type) \

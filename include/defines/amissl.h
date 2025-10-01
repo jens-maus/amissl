@@ -23652,10 +23652,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(const OPENSSL_INIT_SETTINGS *, (___settings), A0), \
      struct Library *, AMISSL_BASE_NAME, 4428, Amissl)
 
-#define SSL_add1_host(___s, ___hostname) \
+#define SSL_add1_host(___s, ___host) \
       AROS_LC2(int, SSL_add1_host, \
  AROS_LCA(SSL *, (___s), A0), \
- AROS_LCA(const char *, (___hostname), A1), \
+ AROS_LCA(const char *, (___host), A1), \
      struct Library *, AMISSL_BASE_NAME, 4429, Amissl)
 
 #define SSL_add_ssl_module() \
@@ -23917,10 +23917,10 @@ typedef ULONG _sfdc_vararg;
  AROS_LCA(void *, (___ex), A1), \
      struct Library *, AMISSL_BASE_NAME, 4475, Amissl)
 
-#define SSL_set1_host(___s, ___hostname) \
+#define SSL_set1_host(___s, ___host) \
       AROS_LC2(int, SSL_set1_host, \
  AROS_LCA(SSL *, (___s), A0), \
- AROS_LCA(const char *, (___hostname), A1), \
+ AROS_LCA(const char *, (___host), A1), \
      struct Library *, AMISSL_BASE_NAME, 4476, Amissl)
 
 #define SSL_set_default_passwd_cb(___s, ___cb) \

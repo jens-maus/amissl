@@ -15786,6 +15786,263 @@ int LIBSTUB_PEM_ASN1_write_bio_ctx(void)
   return LIB_PEM_ASN1_write_bio_ctx(_base, ___i2d, ___vctx, ___name, ___bp, ___x, ___enc, ___kstr, ___klen, ___cb, ___u);
 }
 
+int LIB_EVP_PKEY_get_security_category(struct Library * _base, const EVP_PKEY * ___pkey);
+
+int LIBSTUB_EVP_PKEY_get_security_category(void)
+{
+  const EVP_PKEY * ___pkey = (const EVP_PKEY *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_get_security_category(_base, ___pkey);
+}
+
+void LIB_X509_STORE_CTX_set_ocsp_resp(struct Library * _base, X509_STORE_CTX * ___ctx, STACK_OF(OCSP_RESPONSE) * ___sk);
+
+void LIBSTUB_X509_STORE_CTX_set_ocsp_resp(void)
+{
+  X509_STORE_CTX * ___ctx = (X509_STORE_CTX *)REG_A0;
+  STACK_OF(OCSP_RESPONSE) * ___sk = (STACK_OF(OCSP_RESPONSE) *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_STORE_CTX_set_ocsp_resp(_base, ___ctx, ___sk);
+}
+
+OPENSSL_STACK * LIB_OPENSSL_sk_set_thunks(struct Library * _base, OPENSSL_STACK * ___st, OPENSSL_sk_freefunc_thunk ___f_thunk);
+
+OPENSSL_STACK * LIBSTUB_OPENSSL_sk_set_thunks(void)
+{
+  OPENSSL_STACK * ___st = (OPENSSL_STACK *)REG_A0;
+  OPENSSL_sk_freefunc_thunk ___f_thunk = (OPENSSL_sk_freefunc_thunk)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OPENSSL_sk_set_thunks(_base, ___st, ___f_thunk);
+}
+
+int LIB_i2d_PKCS8PrivateKey(struct Library * _base, const EVP_PKEY * ___a, unsigned char ** ___pp);
+
+int LIBSTUB_i2d_PKCS8PrivateKey(void)
+{
+  const EVP_PKEY * ___a = (const EVP_PKEY *)REG_A0;
+  unsigned char ** ___pp = (unsigned char **)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_i2d_PKCS8PrivateKey(_base, ___a, ___pp);
+}
+
+int LIB_OSSL_PARAM_set_octet_string_or_ptr(struct Library * _base, OSSL_PARAM * ___p, const void * ___val, size_t ___len);
+
+int LIBSTUB_OSSL_PARAM_set_octet_string_or_ptr(void)
+{
+  OSSL_PARAM * ___p = (OSSL_PARAM *)REG_A0;
+  const void * ___val = (const void *)REG_A1;
+  size_t ___len = (size_t)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_PARAM_set_octet_string_or_ptr(_base, ___p, ___val, ___len);
+}
+
+const OSSL_PARAM * LIB_OSSL_STORE_LOADER_settable_ctx_params(struct Library * _base, const OSSL_STORE_LOADER * ___loader);
+
+const OSSL_PARAM * LIBSTUB_OSSL_STORE_LOADER_settable_ctx_params(void)
+{
+  const OSSL_STORE_LOADER * ___loader = (const OSSL_STORE_LOADER *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_OSSL_STORE_LOADER_settable_ctx_params(_base, ___loader);
+}
+
+const X509_ALGOR * LIB_X509_CRL_get0_tbs_sigalg(struct Library * _base, const X509_CRL * ___crl);
+
+const X509_ALGOR * LIBSTUB_X509_CRL_get0_tbs_sigalg(void)
+{
+  const X509_CRL * ___crl = (const X509_CRL *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_X509_CRL_get0_tbs_sigalg(_base, ___crl);
+}
+
+int LIB_CMS_RecipientInfo_kemri_cert_cmp(struct Library * _base, CMS_RecipientInfo * ___ri, X509 * ___cert);
+
+int LIBSTUB_CMS_RecipientInfo_kemri_cert_cmp(void)
+{
+  CMS_RecipientInfo * ___ri = (CMS_RecipientInfo *)REG_A0;
+  X509 * ___cert = (X509 *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_RecipientInfo_kemri_cert_cmp(_base, ___ri, ___cert);
+}
+
+int LIB_CMS_RecipientInfo_kemri_set0_pkey(struct Library * _base, CMS_RecipientInfo * ___ri, EVP_PKEY * ___pk);
+
+int LIBSTUB_CMS_RecipientInfo_kemri_set0_pkey(void)
+{
+  CMS_RecipientInfo * ___ri = (CMS_RecipientInfo *)REG_A0;
+  EVP_PKEY * ___pk = (EVP_PKEY *)REG_A1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_RecipientInfo_kemri_set0_pkey(_base, ___ri, ___pk);
+}
+
+EVP_CIPHER_CTX * LIB_CMS_RecipientInfo_kemri_get0_ctx(struct Library * _base, CMS_RecipientInfo * ___ri);
+
+EVP_CIPHER_CTX * LIBSTUB_CMS_RecipientInfo_kemri_get0_ctx(void)
+{
+  CMS_RecipientInfo * ___ri = (CMS_RecipientInfo *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_RecipientInfo_kemri_get0_ctx(_base, ___ri);
+}
+
+X509_ALGOR * LIB_CMS_RecipientInfo_kemri_get0_kdf_alg(struct Library * _base, CMS_RecipientInfo * ___ri);
+
+X509_ALGOR * LIBSTUB_CMS_RecipientInfo_kemri_get0_kdf_alg(void)
+{
+  CMS_RecipientInfo * ___ri = (CMS_RecipientInfo *)REG_A0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_RecipientInfo_kemri_get0_kdf_alg(_base, ___ri);
+}
+
+int LIB_CMS_RecipientInfo_kemri_set_ukm(struct Library * _base, CMS_RecipientInfo * ___ri, const unsigned char * ___ukm, int ___ukmLength);
+
+int LIBSTUB_CMS_RecipientInfo_kemri_set_ukm(void)
+{
+  CMS_RecipientInfo * ___ri = (CMS_RecipientInfo *)REG_A0;
+  const unsigned char * ___ukm = (const unsigned char *)REG_A1;
+  int ___ukmLength = (int)REG_D0;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CMS_RecipientInfo_kemri_set_ukm(_base, ___ri, ___ukm, ___ukmLength);
+}
+
+EVP_SKEY * LIB_EVP_PKEY_derive_SKEY(struct Library * _base, EVP_PKEY_CTX * ___ctx, EVP_SKEYMGMT * ___mgmt, const char * ___key_type, const char * ___propquery, size_t ___keylen, const OSSL_PARAM * ___params);
+
+EVP_SKEY * LIBSTUB_EVP_PKEY_derive_SKEY(void)
+{
+  EVP_PKEY_CTX * ___ctx = (EVP_PKEY_CTX *)REG_A0;
+  EVP_SKEYMGMT * ___mgmt = (EVP_SKEYMGMT *)REG_A1;
+  const char * ___key_type = (const char *)REG_A2;
+  const char * ___propquery = (const char *)REG_A3;
+  size_t ___keylen = (size_t)REG_D0;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_PKEY_derive_SKEY(_base, ___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params);
+}
+
+int LIB_EVP_KDF_CTX_set_SKEY(struct Library * _base, EVP_KDF_CTX * ___ctx, EVP_SKEY * ___key, const char * ___paramname);
+
+int LIBSTUB_EVP_KDF_CTX_set_SKEY(void)
+{
+  EVP_KDF_CTX * ___ctx = (EVP_KDF_CTX *)REG_A0;
+  EVP_SKEY * ___key = (EVP_SKEY *)REG_A1;
+  const char * ___paramname = (const char *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_KDF_CTX_set_SKEY(_base, ___ctx, ___key, ___paramname);
+}
+
+EVP_SKEY * LIB_EVP_KDF_derive_SKEY(struct Library * _base, EVP_KDF_CTX * ___ctx, EVP_SKEYMGMT * ___mgmt, const char * ___key_type, const char * ___propquery, size_t ___keylen, const OSSL_PARAM * ___params);
+
+EVP_SKEY * LIBSTUB_EVP_KDF_derive_SKEY(void)
+{
+  EVP_KDF_CTX * ___ctx = (EVP_KDF_CTX *)REG_A0;
+  EVP_SKEYMGMT * ___mgmt = (EVP_SKEYMGMT *)REG_A1;
+  const char * ___key_type = (const char *)REG_A2;
+  const char * ___propquery = (const char *)REG_A3;
+  size_t ___keylen = (size_t)REG_D0;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_D1;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_KDF_derive_SKEY(_base, ___ctx, ___mgmt, ___key_type, ___propquery, ___keylen, ___params);
+}
+
+EVP_SKEY * LIB_EVP_SKEY_import_SKEYMGMT(struct Library * _base, OSSL_LIB_CTX * ___libctx, EVP_SKEYMGMT * ___skeymgmt, int ___selection, const OSSL_PARAM * ___params);
+
+EVP_SKEY * LIBSTUB_EVP_SKEY_import_SKEYMGMT(void)
+{
+  OSSL_LIB_CTX * ___libctx = (OSSL_LIB_CTX *)REG_A0;
+  EVP_SKEYMGMT * ___skeymgmt = (EVP_SKEYMGMT *)REG_A1;
+  int ___selection = (int)REG_D0;
+  const OSSL_PARAM * ___params = (const OSSL_PARAM *)REG_A2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_EVP_SKEY_import_SKEYMGMT(_base, ___libctx, ___skeymgmt, ___selection, ___params);
+}
+
+void * LIB_CRYPTO_malloc_array(struct Library * _base, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_malloc_array(void)
+{
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  const char * ___file = (const char *)REG_A0;
+  int ___line = (int)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_malloc_array(_base, ___num, ___size, ___file, ___line);
+}
+
+void * LIB_CRYPTO_calloc(struct Library * _base, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_calloc(void)
+{
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  const char * ___file = (const char *)REG_A0;
+  int ___line = (int)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_calloc(_base, ___num, ___size, ___file, ___line);
+}
+
+void * LIB_CRYPTO_aligned_alloc_array(struct Library * _base, size_t ___num, size_t ___size, size_t ___align, void ** ___freeptr, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_aligned_alloc_array(void)
+{
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  size_t ___align = (size_t)REG_D2;
+  void ** ___freeptr = (void **)REG_A0;
+  const char * ___file = (const char *)REG_A1;
+  int ___line = (int)REG_D3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_aligned_alloc_array(_base, ___num, ___size, ___align, ___freeptr, ___file, ___line);
+}
+
+void * LIB_CRYPTO_realloc_array(struct Library * _base, void * ___addr, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_realloc_array(void)
+{
+  void * ___addr = (void *)REG_A0;
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  const char * ___file = (const char *)REG_A1;
+  int ___line = (int)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_realloc_array(_base, ___addr, ___num, ___size, ___file, ___line);
+}
+
+void * LIB_CRYPTO_clear_realloc_array(struct Library * _base, void * ___addr, size_t ___old_num, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_clear_realloc_array(void)
+{
+  void * ___addr = (void *)REG_A0;
+  size_t ___old_num = (size_t)REG_D0;
+  size_t ___num = (size_t)REG_D1;
+  size_t ___size = (size_t)REG_D2;
+  const char * ___file = (const char *)REG_A1;
+  int ___line = (int)REG_D3;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_clear_realloc_array(_base, ___addr, ___old_num, ___num, ___size, ___file, ___line);
+}
+
+void * LIB_CRYPTO_secure_malloc_array(struct Library * _base, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_secure_malloc_array(void)
+{
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  const char * ___file = (const char *)REG_A0;
+  int ___line = (int)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_secure_malloc_array(_base, ___num, ___size, ___file, ___line);
+}
+
+void * LIB_CRYPTO_secure_calloc(struct Library * _base, size_t ___num, size_t ___size, const char * ___file, int ___line);
+
+void * LIBSTUB_CRYPTO_secure_calloc(void)
+{
+  size_t ___num = (size_t)REG_D0;
+  size_t ___size = (size_t)REG_D1;
+  const char * ___file = (const char *)REG_A0;
+  int ___line = (int)REG_D2;
+  struct Library * _base = (struct Library *)REG_A6;
+  return LIB_CRYPTO_secure_calloc(_base, ___num, ___size, ___file, ___line);
+}
+
 
 #ifdef __cplusplus
 }

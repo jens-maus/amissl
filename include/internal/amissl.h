@@ -80,4 +80,8 @@ STDARGS int GetAmiSSLerrno(void);
 # define LOCK_DECLARE(sem) struct SignalSemaphore sem
 #endif
 
+#if !defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L)
+typedef BOOL _Bool;
+#endif
+
 #endif /* !INTERNAL_AMISSL_H */

@@ -15437,8 +15437,8 @@ typedef ULONG _sfdc_vararg;
       LP2(0x67c8, int, OPENSSL_init_ssl , uint64_t, ___opts, d0, const OPENSSL_INIT_SETTINGS *, ___settings, a0,\
       , AMISSL_BASE_NAME)
 
-#define SSL_add1_host(___s, ___hostname) \
-      LP2(0x67ce, int, SSL_add1_host , SSL *, ___s, a0, const char *, ___hostname, a1,\
+#define SSL_add1_host(___s, ___host) \
+      LP2(0x67ce, int, SSL_add1_host , SSL *, ___s, a0, const char *, ___host, a1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_add_ssl_module() \
@@ -15621,8 +15621,8 @@ typedef ULONG _sfdc_vararg;
       LP2NR(0x68e2, SSL_set0_security_ex_data , SSL *, ___s, a0, void *, ___ex, a1,\
       , AMISSL_BASE_NAME)
 
-#define SSL_set1_host(___s, ___hostname) \
-      LP2(0x68e8, int, SSL_set1_host , SSL *, ___s, a0, const char *, ___hostname, a1,\
+#define SSL_set1_host(___s, ___host) \
+      LP2(0x68e8, int, SSL_set1_host , SSL *, ___s, a0, const char *, ___host, a1,\
       , AMISSL_BASE_NAME)
 
 #define SSL_set_default_passwd_cb(___s, ___cb) \

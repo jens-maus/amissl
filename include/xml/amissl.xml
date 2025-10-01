@@ -6203,7 +6203,7 @@
     </method>
     <method name="OPENSSL_sk_pop_free" result="void">
       <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
-      <arg name="func" type="void (*)(void *)" m68kreg="a1"/>
+      <arg name="func" type="OPENSSL_sk_freefunc" m68kreg="a1"/>
     </method>
     <method name="OPENSSL_sk_insert" result="int">
       <arg name="sk" type="OPENSSL_STACK *" m68kreg="a0"/>
@@ -14230,7 +14230,7 @@
       <arg name="a" type="const TS_TST_INFO *" m68kreg="a0"/>
       <arg name="pp" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_find" result="const EVP_PKEY_ASN1_METHOD *">
+    <method name="EVP_PKEY_asn1_find" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
       <arg name="pe" type="ENGINE **" m68kreg="a0"/>
       <arg name="type" type="int" m68kreg="a1"/>
     </method>
@@ -14260,7 +14260,7 @@
     <method name="TS_RESP_dup" result="TS_RESP *">
       <arg name="a" type="const TS_RESP *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_add0" result="int">
+    <method name="EVP_PKEY_asn1_add0" result="int" lifecycle="deprecated">
       <arg name="ameth" type="const EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
     </method>
     <method name="PKCS7_add0_attrib_signing_time" result="int">
@@ -14331,7 +14331,7 @@
       <arg name="st" type="const X509_STORE_CTX *" m68kreg="a0"/>
       <arg name="nm" type="const X509_NAME *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_new" result="EVP_PKEY_ASN1_METHOD *">
+    <method name="EVP_PKEY_asn1_new" result="EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="flags" type="int" m68kreg="d1"/>
       <arg name="pem_str" type="const char *" m68kreg="a0"/>
@@ -14413,7 +14413,7 @@
       <arg name="fp" type="BIO *" m68kreg="a0"/>
       <arg name="a" type="TS_MSG_IMPRINT **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_public" result="void">
+    <method name="EVP_PKEY_asn1_set_public" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pub_decode" type="int (*)(EVP_PKEY *pk, const X509_PUBKEY *pub)" m68kreg="a1"/>
       <arg name="pub_encode" type="int (*)(X509_PUBKEY *pub, const EVP_PKEY *pk)" m68kreg="a2"/>
@@ -14443,11 +14443,11 @@
     <method name="TS_REQ_ext_free" result="void">
       <arg name="a" type="TS_REQ *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_free" result="void">
+    <method name="EVP_PKEY_asn1_set_free" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_free" type="void (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *">
+    <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *" status="unimplemented">
@@ -14601,7 +14601,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_add_alias" result="int">
+    <method name="EVP_PKEY_asn1_add_alias" result="int" lifecycle="deprecated">
       <arg name="to" type="int" m68kreg="d0"/>
       <arg name="from" type="int" m68kreg="d1"/>
     </method>
@@ -14756,7 +14756,7 @@
       <arg name="pa" type="const X509_ALGOR **" m68kreg="a3"/>
       <arg name="p8" type="const PKCS8_PRIV_KEY_INFO *" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_get0" result="const EVP_PKEY_ASN1_METHOD *">
+    <method name="EVP_PKEY_asn1_get0" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
     <method name="OBJ_add_sigid" result="int">
@@ -14902,7 +14902,7 @@
       <arg name="ign" type="unsigned char *" m68kreg="a3"/>
       <arg name="indent" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_get_count" result="int">
+    <method name="EVP_PKEY_asn1_get_count" result="int" lifecycle="deprecated">
     </method>
     <method name="ASN1_PCTX_set_nm_flags" result="void">
       <arg name="p" type="ASN1_PCTX *" m68kreg="a0"/>
@@ -14946,7 +14946,7 @@
       <arg name="a" type="const X509_CRL *" m68kreg="a0"/>
       <arg name="b" type="const X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_private" result="void">
+    <method name="EVP_PKEY_asn1_set_private" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="priv_decode" type="int (*)(EVP_PKEY *pk, const PKCS8_PRIV_KEY_INFO *p8inf)" m68kreg="a1"/>
       <arg name="priv_encode" type="int (*)(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)" m68kreg="a2"/>
@@ -14996,7 +14996,7 @@
       <arg name="certs" type="const char *" m68kreg="a2"/>
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a3"/>
     </method>
-    <method name="EVP_PKEY_asn1_get0_info" result="int">
+    <method name="EVP_PKEY_asn1_get0_info" result="int" lifecycle="deprecated">
       <arg name="ppkey_id" type="int *" m68kreg="a0"/>
       <arg name="ppkey_base_id" type="int *" m68kreg="a1"/>
       <arg name="ppkey_flags" type="int *" m68kreg="a2"/>
@@ -15162,7 +15162,7 @@
       <arg name="fp" type="BIO *" m68kreg="a0"/>
       <arg name="a" type="const TS_REQ *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_param" result="void">
+    <method name="EVP_PKEY_asn1_set_param" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="param_decode" type="int (*)(EVP_PKEY *pkey, const unsigned char **pder, int derlen)" m68kreg="a1"/>
       <arg name="param_encode" type="int (*)(const EVP_PKEY *pkey, unsigned char **pder)" m68kreg="a2"/>
@@ -15254,7 +15254,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *">
+    <method name="EVP_PKEY_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
       <arg name="pe" type="ENGINE **" m68kreg="a0"/>
       <arg name="str" type="const char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
@@ -15398,7 +15398,7 @@
       <arg name="signctx_init" type="int (*)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
       <arg name="signctx" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, EVP_MD_CTX *mctx)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_copy" result="void">
+    <method name="EVP_PKEY_asn1_copy" result="void" lifecycle="deprecated">
       <arg name="dst" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="src" type="const EVP_PKEY_ASN1_METHOD *" m68kreg="a1"/>
     </method>
@@ -15680,7 +15680,7 @@
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="cleanup" type="void (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_free" result="void">
+    <method name="EVP_PKEY_asn1_free" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
     </method>
     <method name="ESS_SIGNING_CERT_free" result="void">
@@ -15798,7 +15798,7 @@
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_ctrl" result="void">
+    <method name="EVP_PKEY_asn1_set_ctrl" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_ctrl" type="int (*)(EVP_PKEY *pkey, int op, long arg1, void *arg2)" m68kreg="a1"/>
     </method>
@@ -16661,7 +16661,7 @@
       <arg name="nid" type="int" m68kreg="d0"/>
       <arg name="ext_data" type="void *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_item" result="void">
+    <method name="EVP_PKEY_asn1_set_item" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="item_verify" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, const void *, const X509_ALGOR *, const ASN1_BIT_STRING *, EVP_PKEY *)" m68kreg="a1"/>
       <arg name="item_sign" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, const void *, X509_ALGOR *, X509_ALGOR *, ASN1_BIT_STRING *)" m68kreg="a2"/>
@@ -17670,7 +17670,7 @@
       <arg name="key" type="unsigned char *" m68kreg="a2"/>
       <arg name="keylen" type="size_t" m68kreg="a3"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_security_bits" result="void">
+    <method name="EVP_PKEY_asn1_set_security_bits" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_security_bits" type="int (*)(const EVP_PKEY *)" m68kreg="a1"/>
     </method>
@@ -21128,11 +21128,11 @@
       <arg name="c" type="OPENSSL_sk_compfunc" m68kreg="a0"/>
       <arg name="n" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_check" result="void">
+    <method name="EVP_PKEY_asn1_set_check" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_siginf" result="void">
+    <method name="EVP_PKEY_asn1_set_siginf" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="siginf_set" type="int (*)(X509_SIG_INFO *siginf, const X509_ALGOR *alg, const ASN1_STRING *sig)" m68kreg="a1"/>
     </method>
@@ -21174,11 +21174,11 @@
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcheck" type="int (**)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_public_check" result="void">
+    <method name="EVP_PKEY_asn1_set_public_check" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_pub_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_param_check" result="void">
+    <method name="EVP_PKEY_asn1_set_param_check" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_param_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
@@ -21500,11 +21500,11 @@
       <arg name="len" type="size_t" m68kreg="d0"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_set_priv_key" result="void">
+    <method name="EVP_PKEY_asn1_set_set_priv_key" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="set_priv_key" type="int (*)(EVP_PKEY *pk, const unsigned char *priv, size_t len)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_set_pub_key" result="void">
+    <method name="EVP_PKEY_asn1_set_set_pub_key" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="set_pub_key" type="int (*)(EVP_PKEY *pk, const unsigned char *pub, size_t len)" m68kreg="a1"/>
     </method>
@@ -21672,11 +21672,11 @@
       <arg name="priv" type="unsigned char *" m68kreg="a1"/>
       <arg name="len" type="size_t *" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_get_priv_key" result="void">
+    <method name="EVP_PKEY_asn1_set_get_priv_key" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="get_priv_key" type="int (*)(const EVP_PKEY *pk, unsigned char *priv, size_t *len)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_get_pub_key" result="void">
+    <method name="EVP_PKEY_asn1_set_get_pub_key" result="void" lifecycle="deprecated">
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="get_pub_key" type="int (*)(const EVP_PKEY *pk, unsigned char *pub, size_t *len)" m68kreg="a1"/>
     </method>
@@ -28786,6 +28786,128 @@
       <arg name="klen" type="int" m68kreg="d3"/>
       <arg name="cb" type="pem_password_cb *" m68kreg="d4"/>
       <arg name="u" type="void *" m68kreg="d5"/>
+    </method>
+
+    <!-- AmiSSL v5.25 - OpenSSL 3.6.0 -->
+
+    <method name="EVP_PKEY_get_security_category" result="int">
+      <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
+    </method>
+    <method name="X509_STORE_CTX_set_ocsp_resp" result="void">
+      <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
+      <arg name="sk" type="STACK_OF(OCSP_RESPONSE) *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_sk_set_thunks" result="OPENSSL_STACK *">
+      <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
+      <arg name="f_thunk" type="OPENSSL_sk_freefunc_thunk" m68kreg="d0"/>
+    </method>
+    <method name="i2d_PKCS8PrivateKey" result="int">
+      <arg name="a" type="const EVP_PKEY *" m68kreg="a0"/>
+      <arg name="pp" type="unsigned char **" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_PARAM_set_octet_string_or_ptr" result="int">
+      <arg name="p" type="OSSL_PARAM *" m68kreg="a0"/>
+      <arg name="val" type="const void *" m68kreg="a1"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_STORE_LOADER_settable_ctx_params" result="const OSSL_PARAM *">
+      <arg name="loader" type="const OSSL_STORE_LOADER *" m68kreg="a0"/>
+    </method>
+    <method name="X509_CRL_get0_tbs_sigalg" result="const X509_ALGOR *">
+      <arg name="crl" type="const X509_CRL *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kemri_cert_cmp" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="cert" type="X509 *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_RecipientInfo_kemri_set0_pkey" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="pk" type="EVP_PKEY *" m68kreg="a1"/>
+    </method>
+    <method name="CMS_RecipientInfo_kemri_get0_ctx" result="EVP_CIPHER_CTX *">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kemri_get0_kdf_alg" result="X509_ALGOR *">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_RecipientInfo_kemri_set_ukm" result="int">
+      <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
+      <arg name="ukm" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="ukmLength" type="int" m68kreg="d0"/>
+    </method>
+    <method name="EVP_PKEY_derive_SKEY" result="EVP_SKEY *">
+      <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
+      <arg name="mgmt" type="EVP_SKEYMGMT *" m68kreg="a1"/>
+      <arg name="key_type" type="const char *" m68kreg="a2"/>
+      <arg name="propquery" type="const char *" m68kreg="a3"/>
+      <arg name="keylen" type="size_t" m68kreg="d0"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="d1"/>
+    </method>
+    <method name="EVP_KDF_CTX_set_SKEY" result="int">
+      <arg name="ctx" type="EVP_KDF_CTX *" m68kreg="a0"/>
+      <arg name="key" type="EVP_SKEY *" m68kreg="a1"/>
+      <arg name="paramname" type="const char *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_KDF_derive_SKEY" result="EVP_SKEY *">
+      <arg name="ctx" type="EVP_KDF_CTX *" m68kreg="a0"/>
+      <arg name="mgmt" type="EVP_SKEYMGMT *" m68kreg="a1"/>
+      <arg name="key_type" type="const char *" m68kreg="a2"/>
+      <arg name="propquery" type="const char *" m68kreg="a3"/>
+      <arg name="keylen" type="size_t" m68kreg="d0"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="d1"/>
+    </method>
+    <method name="EVP_SKEY_import_SKEYMGMT" result="EVP_SKEY *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="skeymgmt" type="EVP_SKEYMGMT *" m68kreg="a1"/>
+      <arg name="selection" type="int" m68kreg="d0"/>
+      <arg name="params" type="const OSSL_PARAM *" m68kreg="a2"/>
+    </method>
+    <method name="CRYPTO_malloc_array" result="void *">
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="file" type="const char *" m68kreg="a0"/>
+      <arg name="line" type="int" m68kreg="d2"/>
+    </method>
+    <method name="CRYPTO_calloc" result="void *">
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="file" type="const char *" m68kreg="a0"/>
+      <arg name="line" type="int" m68kreg="d2"/>
+    </method>
+    <method name="CRYPTO_aligned_alloc_array" result="void *">
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="align" type="size_t" m68kreg="d2"/>
+      <arg name="freeptr" type="void **" m68kreg="a0"/>
+      <arg name="file" type="const char *" m68kreg="a1"/>
+      <arg name="line" type="int" m68kreg="d3"/>
+    </method>
+    <method name="CRYPTO_realloc_array" result="void *">
+      <arg name="addr" type="void *" m68kreg="a0"/>
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="file" type="const char *" m68kreg="a1"/>
+      <arg name="line" type="int" m68kreg="d2"/>
+    </method>
+    <method name="CRYPTO_clear_realloc_array" result="void *">
+      <arg name="addr" type="void *" m68kreg="a0"/>
+      <arg name="old_num" type="size_t" m68kreg="d0"/>
+      <arg name="num" type="size_t" m68kreg="d1"/>
+      <arg name="size" type="size_t" m68kreg="d2"/>
+      <arg name="file" type="const char *" m68kreg="a1"/>
+      <arg name="line" type="int" m68kreg="d3"/>
+    </method>
+    <method name="CRYPTO_secure_malloc_array" result="void *">
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="file" type="const char *" m68kreg="a0"/>
+      <arg name="line" type="int" m68kreg="d2"/>
+    </method>
+    <method name="CRYPTO_secure_calloc" result="void *">
+      <arg name="num" type="size_t" m68kreg="d0"/>
+      <arg name="size" type="size_t" m68kreg="d1"/>
+      <arg name="file" type="const char *" m68kreg="a0"/>
+      <arg name="line" type="int" m68kreg="d2"/>
     </method>
 
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->
