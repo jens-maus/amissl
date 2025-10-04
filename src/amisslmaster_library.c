@@ -48,6 +48,8 @@
 #include <inline/macros.h>
 #endif
 
+#include "../libcmt/libcmt.h"
+
 struct Library *BlowFishBase, *CASTBase, *DESBase, *DHBase, *DSABase, *IDEABase;
 struct Library *MD2Base, *MD4Base, *MD5Base, *MDC2Base, *RC2Base, *RC4Base;
 struct Library *RC5Base, *RIPEMDBase, *SHABase, *RSABase;
@@ -112,32 +114,68 @@ static void FlushLib(struct Library *LibBase)
   }
 }
 
-static struct Library *OpenLib(struct Library **LibBase,const char *Name)
+#define AMISSL_LIBNAME_V2 "LIBS:AmiSSL/%s_v2.library"
+#define AMISSL_LIBNAME_V3 "LIBS:AmiSSL/amissl_v%s.library"
+#define AMISSL_LIBNAME_V5 "LIBS:AmiSSL/amissl_v%ld.library"
+
+/* Used to open AmiSSL V2 libraries only */
+
+static struct Library *OpenLib(struct Library **LibBase, const char *Name)
 {
-  if (LibAPIVersion == AMISSL_V2 && *LibBase) // See CloseLib for explanation
+  if(*LibBase) // See CloseLib for explanation
   {
     (*LibBase)->lib_OpenCnt++;
   }
   else
   {
-    LONG version;
-    char libname[40] = "LIBS:AmiSSL/";
-    if (LibAPIVersion == AMISSL_V2)
+    char libname[40];
+    SNPrintf(libname, sizeof(libname), AMISSL_LIBNAME_V2, Name);
+    *LibBase = OpenLibrary(libname, 2);
+  }
+  return *LibBase;
+}
+
+/* Used to open AmiSSL V3/V4/V5 libraries */
+
+struct Library *OpenAmiSSLBase(int MaxAPI, ...)
+{
+  struct Library *lib = NULL;
+
+  if(LibAPIVersion <= MaxAPI)
+  {
+    va_list va;
+    int version;
+    LONG libversion;
+    const char *libfmt;
+
+    if(LibAPIVersion >= AMISSL_V300)
     {
-      version = 2;
-      strcat(libname,Name);
-      strcat(libname,"_v2.library");
+      libfmt = AMISSL_LIBNAME_V5;
+      libversion = 5;
     }
     else
     {
-      version = (LibAPIVersion >= AMISSL_V300) ? 5 : ((LibAPIVersion >= AMISSL_V110c) ? 4 : 3);
-      strcat(libname,"amissl_v");
-      strcat(libname,Name);
-      strcat(libname,".library");
+      libfmt = AMISSL_LIBNAME_V3;
+      libversion = (LibAPIVersion < AMISSL_V110c) ? 3 : 4;
     }
-    *LibBase = OpenLibrary(libname,version);
+
+    va_start(va, MaxAPI);
+
+    for(version = va_arg(va, int); version; version = va_arg(va, int))
+    {
+      char libname[40];
+      SNPrintf(libname, sizeof(libname), libfmt, version);
+      if((lib = OpenLibrary(libname, libversion)))
+      {
+	AmiSSLBase = lib;
+        break;
+      }
+    }
+
+    va_end(va);
   }
-  return *LibBase;
+
+  return lib;
 }
 
 #define CheckLibBase(base) if(LibBase==base) base=NULL
@@ -224,6 +262,20 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
   return(APIVersion <= AMISSL_CURRENT_VERSION);
 }
 
+/* Macros to simply the logic for checking and opening available AmiSSL
+** library versions, where a single macro call is used to attempt to
+** open available libraries where the API is fully compatible (and the
+** library interface is identical)
+*/
+
+#define OPENASSL1(maxversion, ...) \
+  if (!OpenAmiSSLBase(AMISSL_V ## maxversion, __VA_ARGS__, NULL))
+#define OPENASSL3VA(maxversion, ...) \
+  if (!OpenAmiSSLBase(AMISSL_V ## maxversion, maxversion, __VA_ARGS__, NULL))
+#define OPENASSL3SI(maxversion) \
+  if (!OpenAmiSSLBase(AMISSL_V ## maxversion, maxversion, NULL))
+#define END_OPENASSL {}
+
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
 {
   ENTER();
@@ -244,44 +296,29 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    if(LibAPIVersion <= AMISSL_V360 && OpenLib(&AmiSSLBase,"360") == NULL)
-      if(LibAPIVersion <= AMISSL_V354 && OpenLib(&AmiSSLBase,"354") == NULL
-                                      && OpenLib(&AmiSSLBase,"353") == NULL
-                                      && OpenLib(&AmiSSLBase,"352") == NULL
-                                      && OpenLib(&AmiSSLBase,"351") == NULL
-                                      && OpenLib(&AmiSSLBase,"350") == NULL)
-        if(LibAPIVersion <= AMISSL_V341 && OpenLib(&AmiSSLBase,"341") == NULL
-                                        && OpenLib(&AmiSSLBase,"340") == NULL)
-          if(LibAPIVersion <= AMISSL_V332 && OpenLib(&AmiSSLBase,"332") == NULL
-                                          && OpenLib(&AmiSSLBase,"331") == NULL
-                                          && OpenLib(&AmiSSLBase,"330") == NULL)
-            if(LibAPIVersion <= AMISSL_V321 && OpenLib(&AmiSSLBase,"321") == NULL
-                                            && OpenLib(&AmiSSLBase,"320") == NULL)
-              if(LibAPIVersion <= AMISSL_V314 && OpenLib(&AmiSSLBase,"314") == NULL
-                                              && OpenLib(&AmiSSLBase,"313") == NULL
-                                              && OpenLib(&AmiSSLBase,"312") == NULL
-                                              && OpenLib(&AmiSSLBase,"311") == NULL)
-                if(LibAPIVersion <= AMISSL_V310 && OpenLib(&AmiSSLBase,"310") == NULL)
-                  if(LibAPIVersion <= AMISSL_V308 && OpenLib(&AmiSSLBase,"308") == NULL)
-                    if(LibAPIVersion <= AMISSL_V307 && OpenLib(&AmiSSLBase,"307") == NULL
-                                                    && OpenLib(&AmiSSLBase,"306") == NULL
-                                                    && OpenLib(&AmiSSLBase,"305") == NULL
-                                                    && OpenLib(&AmiSSLBase,"304") == NULL
-                                                    && OpenLib(&AmiSSLBase,"303") == NULL)
-                      if(LibAPIVersion == AMISSL_V302) OpenLib(&AmiSSLBase,"302");
+    OPENASSL3SI( 360 )
+    OPENASSL3VA( 354, 353, 352, 351, 350 )
+    OPENASSL3VA( 341, 340 )
+    OPENASSL3VA( 332, 331, 330 )
+    OPENASSL3VA( 321, 320 )
+    OPENASSL3VA( 314, 313, 312, 311 )
+    OPENASSL3SI( 310 )
+    OPENASSL3SI( 308 )
+    OPENASSL3VA( 307, 306, 305, 304, 303 )
+    OPENASSL3SI( 302 ) END_OPENASSL
   }
   else if(LibAPIVersion >= AMISSL_V300)
   {
     D(DBF_STARTUP, "About to open amissl v30x library");
 
-    if(OpenLib(&AmiSSLBase,"301") == NULL)
-      OpenLib(&AmiSSLBase,"300");
+    // unreleased dev versions, which had an incompatible library interface
+    OPENASSL3VA( 301, 300 ) END_OPENASSL
   }
   else if(LibAPIVersion == AMISSL_V111a_OBS)
   {
     // Special case - due to some mistakes made in the ABI / interface update in
-    // this version, meaning future versions are incompatible
-    OpenLib(&AmiSSLBase,"111a");
+    // this version, meaning newer versions are incompatible
+    OPENASSL1( 111a_OBS, "111a" ) END_OPENASSL
   }
   else if(LibAPIVersion >= AMISSL_V110c)
   {
@@ -292,21 +329,13 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
     // but we must take care to prevent applications requiring newer API functions
     // from loading older libraries that do not contain those required entries
-    if(!AmiSSLBase && LibAPIVersion < AMISSL_V300)
-    {
-      if(LibAPIVersion <= AMISSL_V111m && OpenLib(&AmiSSLBase,"111m") == NULL)
-	if(LibAPIVersion <= AMISSL_V111l && OpenLib(&AmiSSLBase,"111l") == NULL
-                                         && OpenLib(&AmiSSLBase,"111k") == NULL
-                                         && OpenLib(&AmiSSLBase,"111j") == NULL
-                                         && OpenLib(&AmiSSLBase,"111i") == NULL)
-          if(LibAPIVersion <= AMISSL_V111g && OpenLib(&AmiSSLBase,"111g") == NULL
-                                           && OpenLib(&AmiSSLBase,"111d") == NULL)
-            if(LibAPIVersion <= AMISSL_V111a_OBS && OpenLib(&AmiSSLBase,"111a") == NULL)
-              if(LibAPIVersion <= AMISSL_V110g && OpenLib(&AmiSSLBase,"110g") == NULL)
-                if(LibAPIVersion <= AMISSL_V110e && OpenLib(&AmiSSLBase,"110e") == NULL
-                                                 && OpenLib(&AmiSSLBase,"110d") == NULL)
-		  if(LibAPIVersion == AMISSL_V110c) OpenLib(&AmiSSLBase,"110c");
-    }
+    OPENASSL1( 111m, "111m" )
+    OPENASSL1( 111l, "111l", "111k", "111j", "111i" )
+    OPENASSL1( 111g, "111g", "111d" )
+    OPENASSL1( 111a_OBS, "111a" )
+    OPENASSL1( 110g, "110g" )
+    OPENASSL1( 110e, "110e", "110d" )
+    OPENASSL1( 110c, "110c" ) END_OPENASSL
   }
   else if(LibAPIVersion == AMISSL_V102f)
   {
@@ -315,17 +344,15 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // if an application requests AmiSSL/OpenSSL versions 1.0.x we try to open any
     // known 1.0.x amissl library as OpenSSL defines binary/api compatibility when only
     // minor numbers are changed (https://www.openssl.org/support/faq.html#MISC8)
-    if(OpenLib(&AmiSSLBase,"102f") == NULL)
-      if(OpenLib(&AmiSSLBase,"101i") == NULL)
-        OpenLib(&AmiSSLBase,"101h");
+    OPENASSL1( 102f, "102f", "101i", "101h" ) END_OPENASSL
   }
   else if(LibAPIVersion >= AMISSL_V097g)
   {
     // if an application requests 0.9.7g we try to open newer 0.9.7 versions until 0.9.7y
     // as they are API compatible
-    if(LibAPIVersion <= AMISSL_V098y && OpenLib(&AmiSSLBase,"098y") == NULL)
-      if(LibAPIVersion <= AMISSL_V097m && OpenLib(&AmiSSLBase,"097m") == NULL)
-        if(LibAPIVersion == AMISSL_V097g) OpenLib(&AmiSSLBase,"097g");
+    OPENASSL1( 098y, "098y" )
+    OPENASSL1( 097m, "097m" )
+    OPENASSL1( 097g, "097g" ) END_OPENASSL
   }
   else if(LibAPIVersion == AMISSL_V2)
   {

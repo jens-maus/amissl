@@ -12,6 +12,9 @@
   + Added an openssl configutl utility for processing the OpenSSL
     configuration file and dumping the equal configuration file.
   + Deprecated EVP_PKEY_ASN1_METHOD-related functions.
+- Optimised amisslmaster.library for size as it contains no speed
+  critical code, whilst making the logic for opening the libraries
+  easier to follow and maintain.
 
 ## AmiSSL 5.24 (30.9.2025)
 
@@ -498,7 +501,7 @@
   provided by https://curl.haxx.se/ca/
 - Removed whole IsCipherAvailable() API and reenabled IDEA, MDC2 and RC5
   ciphers as the protecting patents have expired during 2012 and 2015.
-- Enabled all PPC ASM optimizations in OpenSSL.
+- Enabled all PPC ASM optimisations in OpenSSL.
 - Switched build system to exclusively use GCC-based cross compilers for all
   platforms using proper baserel support for using the amissl shared library
   in a multi-application environment.

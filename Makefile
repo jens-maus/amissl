@@ -167,7 +167,7 @@ GCCVER    = 4
 
 # Common compiler/linker flags
 WARN       = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare #-Wunreachable-code
-OPTFLAGS   = -O3 -fomit-frame-pointer
+OPTFLAGS   = -Os -fomit-frame-pointer
 DEBUG      = -DDEBUG -fno-omit-frame-pointer $(DEBUGSYM)
 DEBUGSYM   = -g -gstabs
 INCLUDE    = -I./include -I$(BUILD_D) -I$(BUILD_D)/openssl/include -I./include/internal

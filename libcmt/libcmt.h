@@ -168,4 +168,9 @@ struct TimeRequest *OpenTimer(AMISSL_STATE *state);
 struct IOStdReq *OpenEntropy(AMISSL_STATE *state);
 void CleanupTimers(AMISSL_STATE *state);
 
+#ifndef __amigaos4__
+int VSNPrintf(char *buffer, long buffer_len, const char *format, APTR args);
+VARARGS68K int SNPrintf(char *buffer, int buffer_len, const char *format, ...);
+#endif
+
 #endif /* !LIBCMT_H */
