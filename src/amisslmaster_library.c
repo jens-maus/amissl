@@ -137,7 +137,7 @@ static struct Library *OpenLib(struct Library **LibBase, const char *Name)
 
 /* Used to open AmiSSL V3/V4/V5 libraries */
 
-struct Library *OpenAmiSSLBase(int MaxAPI, ...)
+static struct Library *OpenAmiSSLBase(int MaxAPI, ...)
 {
   struct Library *lib = NULL;
 
