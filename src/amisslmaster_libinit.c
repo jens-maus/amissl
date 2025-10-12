@@ -911,8 +911,6 @@ BPTR LIBFUNC LibExpunge(REG(a6, struct LibraryHeader *base))
     rc = LibDelete(base);
   }
 
-  SHOWPOINTER(DBF_STARTUP, SysBase);
-
   return rc;
 #ifdef __AROS__
   AROS_LIBFUNC_EXIT
