@@ -1,4 +1,4 @@
-## AmiSSL 5.25 (x.10.2025)
+## AmiSSL 5.25 (12.10.2025)
 
 - Switched to OpenSSL 3.6, with full compatibility with the latest
   OpenSSL 3.6.0 (1.10.2025) version, which provides new features and
