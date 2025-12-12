@@ -72,7 +72,7 @@ jobs:
         fetch-depth: 0
 
     - name: Download all builds
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         merge-multiple: true
 
