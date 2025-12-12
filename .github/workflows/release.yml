@@ -140,7 +140,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload release files as a workflow artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         path: AmiSSL-${{ needs.setup.outputs.version }}-*
         name: release-${{ needs.setup.outputs.version }}-${{ needs.setup.outputs.GITHUB_SHA7 }}
@@ -186,7 +186,7 @@ jobs:
         make -j1 OS=${{ matrix.platform }} DEBUG=
 
     - name: Upload ${{ matrix.platform }} build files as a workflow artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         path: build_${{ matrix.platform }}*
         name: build-${{ needs.setup.outputs.version }}-${{ needs.setup.outputs.GITHUB_SHA7 }}-${{ matrix.platform }}
