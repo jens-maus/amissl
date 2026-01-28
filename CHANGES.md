@@ -1,3 +1,40 @@
+## AmiSSL 5.26 (28.1.2026)
+
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.6.1 (27.1.2026) security patch release. The most severe
+  CVE fixed in this release is high:
+  + Fixed Improper validation of PBMAC1 parameters in PKCS#12 MAC
+    verification. (CVE-2025-11187)
+  + Fixed Stack buffer overflow in CMS AuthEnvelopedData parsing.
+    (CVE-2025-15467)
+  + Fixed NULL dereference in SSL_CIPHER_find() function on unknown
+    cipher ID. (CVE-2025-15468)
+  + Fixed openssl dgst one-shot codepath silently truncates inputs
+    >16 MiB. (CVE-2025-15469)
+  + Fixed TLS 1.3 CompressedCertificate excessive memory allocation.
+    (CVE-2025-66199)
+  + Fixed Heap out-of-bounds write in BIO_f_linebuffer on short writes.
+    (CVE-2025-68160)
+  + Fixed Unauthenticated/unencrypted trailing bytes with low-level OCB
+    function calls. (CVE-2025-69418)
+  + Fixed Out of bounds write in PKCS12_get_friendlyname() UTF-8
+    conversion. (CVE-2025-69419)
+  + Fixed Missing ASN1_TYPE validation in TS_RESP_verify_response()
+    function. (CVE-2025-69420)
+  + Fixed NULL Pointer Dereference in PKCS12_item_decrypt_d2i_ex()
+    function. (CVE-2025-69421)
+  + Fixed Missing ASN1_TYPE validation in PKCS#12 parsing.
+    (CVE-2026-22795)
+  + Fixed ASN1_TYPE Type Confusion in the PKCS7_digest_from_attributes()
+    function. (CVE-2026-22796)
+  + Fixed a regression in X509_V_FLAG_CRL_CHECK_ALL flag handling by
+    restoring its pre-3.6.0 behaviour.
+  + Fixed a regression in handling stapled OCSP responses causing
+    handshake failures for OpenSSL 3.6.0 servers with various client
+    implementations.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 2.12.2026.
+
 ## AmiSSL 5.25 (12.10.2025)
 
 - Switched to OpenSSL 3.6, with full compatibility with the latest
