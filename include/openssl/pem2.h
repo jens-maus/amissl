@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,18 +14,18 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_PEM2_H
-# define OPENSSL_PEM2_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_PEM2_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/macros.h>
-# ifndef OPENSSL_NO_DEPRECATED_3_0
-#  define HEADER_PEM2_H
-# endif
-# include <openssl/pemerr.h>
+#include <openssl/macros.h>
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+#define HEADER_PEM2_H
+#endif
+#include <openssl/pemerr.h>
 #endif

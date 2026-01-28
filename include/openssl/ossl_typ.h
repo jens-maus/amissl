@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,7 +14,7 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 /*
@@ -23,4 +23,4 @@
  * This header file only exists for compatibility reasons with older
  * applications which #include <openssl/ossl_typ.h>.
  */
-# include <openssl/types.h>
+#include <openssl/types.h>

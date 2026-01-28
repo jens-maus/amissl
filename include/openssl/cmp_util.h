@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -16,53 +16,53 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_CMP_UTIL_H
-# define OPENSSL_CMP_UTIL_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_CMP_UTIL_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/opensslconf.h>
-# ifndef OPENSSL_NO_CMP
+#include <openssl/opensslconf.h>
+#ifndef OPENSSL_NO_CMP
 
-#  include <openssl/macros.h>
-#  include <openssl/trace.h>
+#include <openssl/macros.h>
+#include <openssl/trace.h>
 
-#  ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-#  endif
+#endif
 
-int  OSSL_CMP_log_open(void);
+int OSSL_CMP_log_open(void);
 void OSSL_CMP_log_close(void);
-#  define OSSL_CMP_LOG_PREFIX "CMP "
+#define OSSL_CMP_LOG_PREFIX "CMP "
 
 /*
  * generalized logging/error callback mirroring the severity levels of syslog.h
  */
 typedef int OSSL_CMP_severity;
-#  define OSSL_CMP_LOG_EMERG   0
-#  define OSSL_CMP_LOG_ALERT   1
-#  define OSSL_CMP_LOG_CRIT    2
-#  define OSSL_CMP_LOG_ERR     3
-#  define OSSL_CMP_LOG_WARNING 4
-#  define OSSL_CMP_LOG_NOTICE  5
-#  define OSSL_CMP_LOG_INFO    6
-#  define OSSL_CMP_LOG_DEBUG   7
-#  define OSSL_CMP_LOG_TRACE   8
-#  define OSSL_CMP_LOG_MAX     OSSL_CMP_LOG_TRACE
+#define OSSL_CMP_LOG_EMERG 0
+#define OSSL_CMP_LOG_ALERT 1
+#define OSSL_CMP_LOG_CRIT 2
+#define OSSL_CMP_LOG_ERR 3
+#define OSSL_CMP_LOG_WARNING 4
+#define OSSL_CMP_LOG_NOTICE 5
+#define OSSL_CMP_LOG_INFO 6
+#define OSSL_CMP_LOG_DEBUG 7
+#define OSSL_CMP_LOG_TRACE 8
+#define OSSL_CMP_LOG_MAX OSSL_CMP_LOG_TRACE
 typedef int (*OSSL_CMP_log_cb_t)(const char *func, const char *file, int line,
-                                 OSSL_CMP_severity level, const char *msg);
+    OSSL_CMP_severity level, const char *msg);
 
 int OSSL_CMP_print_to_bio(BIO *bio, const char *component, const char *file,
-                          int line, OSSL_CMP_severity level, const char *msg);
+    int line, OSSL_CMP_severity level, const char *msg);
 /* use of the logging callback for outputting error queue */
 void OSSL_CMP_print_errors_cb(OSSL_CMP_log_cb_t log_fn);
 
-#  ifdef  __cplusplus
+#ifdef __cplusplus
 }
-#  endif
-# endif /* !defined(OPENSSL_NO_CMP) */
+#endif
+#endif /* !defined(OPENSSL_NO_CMP) */
 #endif /* !defined(OPENSSL_CMP_UTIL_H) */

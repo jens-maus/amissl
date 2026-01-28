@@ -296,7 +296,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    OPENASSL3SI( 360 )
+    OPENASSL3VA( 361, 360 )
     OPENASSL3VA( 354, 353, 352, 351, 350 )
     OPENASSL3VA( 341, 340 )
     OPENASSL3VA( 332, 331, 330 )

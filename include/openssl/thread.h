@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -15,27 +15,27 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_THREAD_H
-# define OPENSSL_THREAD_H
+#define OPENSSL_THREAD_H
 
-# define OSSL_THREAD_SUPPORT_FLAG_THREAD_POOL (1U<<0)
-# define OSSL_THREAD_SUPPORT_FLAG_DEFAULT_SPAWN (1U<<1)
+#define OSSL_THREAD_SUPPORT_FLAG_THREAD_POOL (1U << 0)
+#define OSSL_THREAD_SUPPORT_FLAG_DEFAULT_SPAWN (1U << 1)
 
-# include <openssl/types.h>
+#include <openssl/types.h>
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
 uint32_t OSSL_get_thread_support_flags(void);
 int OSSL_set_max_threads(OSSL_LIB_CTX *ctx, uint64_t max_threads);
 uint64_t OSSL_get_max_threads(OSSL_LIB_CTX *ctx);
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif /* OPENSSL_THREAD_H */

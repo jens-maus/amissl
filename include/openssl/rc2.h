@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,67 +14,67 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_RC2_H
-# define OPENSSL_RC2_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_RC2_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/macros.h>
-# ifndef OPENSSL_NO_DEPRECATED_3_0
-#  define HEADER_RC2_H
-# endif
+#include <openssl/macros.h>
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+#define HEADER_RC2_H
+#endif
 
-# include <openssl/opensslconf.h>
+#include <openssl/opensslconf.h>
 
-# ifndef OPENSSL_NO_RC2
-#  ifdef  __cplusplus
+#ifndef OPENSSL_NO_RC2
+#ifdef __cplusplus
 extern "C" {
-#  endif
+#endif
 
-#  define RC2_BLOCK       8
-#  define RC2_KEY_LENGTH  16
+#define RC2_BLOCK 8
+#define RC2_KEY_LENGTH 16
 
-#  ifndef OPENSSL_NO_DEPRECATED_3_0
+#ifndef OPENSSL_NO_DEPRECATED_3_0
 typedef unsigned int RC2_INT;
 
-#   define RC2_ENCRYPT     1
-#   define RC2_DECRYPT     0
+#define RC2_ENCRYPT 1
+#define RC2_DECRYPT 0
 
 typedef struct rc2_key_st {
     RC2_INT data[64];
 } RC2_KEY;
-#  endif
-#  ifndef OPENSSL_NO_DEPRECATED_3_0
+#endif
+#ifndef OPENSSL_NO_DEPRECATED_3_0
 OSSL_DEPRECATEDIN_3_0 void RC2_set_key(RC2_KEY *key, int len,
-                                       const unsigned char *data, int bits);
+    const unsigned char *data, int bits);
 OSSL_DEPRECATEDIN_3_0 void RC2_ecb_encrypt(const unsigned char *in,
-                                           unsigned char *out, RC2_KEY *key,
-                                           int enc);
+    unsigned char *out, RC2_KEY *key,
+    int enc);
 OSSL_DEPRECATEDIN_3_0 void RC2_encrypt(unsigned long *data, RC2_KEY *key);
 OSSL_DEPRECATEDIN_3_0 void RC2_decrypt(unsigned long *data, RC2_KEY *key);
 OSSL_DEPRECATEDIN_3_0 void RC2_cbc_encrypt(const unsigned char *in,
-                                           unsigned char *out, long length,
-                                           RC2_KEY *ks, unsigned char *iv,
-                                           int enc);
+    unsigned char *out, long length,
+    RC2_KEY *ks, unsigned char *iv,
+    int enc);
 OSSL_DEPRECATEDIN_3_0 void RC2_cfb64_encrypt(const unsigned char *in,
-                                             unsigned char *out, long length,
-                                             RC2_KEY *schedule,
-                                             unsigned char *ivec,
-                                             int *num, int enc);
+    unsigned char *out, long length,
+    RC2_KEY *schedule,
+    unsigned char *ivec,
+    int *num, int enc);
 OSSL_DEPRECATEDIN_3_0 void RC2_ofb64_encrypt(const unsigned char *in,
-                                             unsigned char *out, long length,
-                                             RC2_KEY *schedule,
-                                             unsigned char *ivec,
-                                             int *num);
-#  endif
+    unsigned char *out, long length,
+    RC2_KEY *schedule,
+    unsigned char *ivec,
+    int *num);
+#endif
 
-#  ifdef  __cplusplus
+#ifdef __cplusplus
 }
-#  endif
-# endif
+#endif
+#endif
 
 #endif

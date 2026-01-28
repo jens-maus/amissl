@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,36 +14,36 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_IDEA_H
-# define OPENSSL_IDEA_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_IDEA_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/macros.h>
-# ifndef OPENSSL_NO_DEPRECATED_3_0
-#  define HEADER_IDEA_H
-# endif
+#include <openssl/macros.h>
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+#define HEADER_IDEA_H
+#endif
 
-# include <openssl/opensslconf.h>
+#include <openssl/opensslconf.h>
 
-# ifndef OPENSSL_NO_IDEA
-#  ifdef  __cplusplus
+#ifndef OPENSSL_NO_IDEA
+#ifdef __cplusplus
 extern "C" {
-#  endif
+#endif
 
-#  define IDEA_BLOCK      8
-#  define IDEA_KEY_LENGTH 16
+#define IDEA_BLOCK 8
+#define IDEA_KEY_LENGTH 16
 
-#  ifndef OPENSSL_NO_DEPRECATED_3_0
+#ifndef OPENSSL_NO_DEPRECATED_3_0
 
 typedef unsigned int IDEA_INT;
 
-#   define IDEA_ENCRYPT    1
-#   define IDEA_DECRYPT    0
+#define IDEA_ENCRYPT 1
+#define IDEA_DECRYPT 0
 
 typedef struct idea_key_st {
     IDEA_INT data[9][6];
@@ -52,43 +52,43 @@ typedef struct idea_key_st {
 #ifndef OPENSSL_NO_DEPRECATED_3_0
 OSSL_DEPRECATEDIN_3_0 const char *IDEA_options(void);
 OSSL_DEPRECATEDIN_3_0 void IDEA_ecb_encrypt(const unsigned char *in,
-                                            unsigned char *out,
-                                            IDEA_KEY_SCHEDULE *ks);
+    unsigned char *out,
+    IDEA_KEY_SCHEDULE *ks);
 OSSL_DEPRECATEDIN_3_0 void IDEA_set_encrypt_key(const unsigned char *key,
-                                                IDEA_KEY_SCHEDULE *ks);
+    IDEA_KEY_SCHEDULE *ks);
 OSSL_DEPRECATEDIN_3_0 void IDEA_set_decrypt_key(IDEA_KEY_SCHEDULE *ek,
-                                                IDEA_KEY_SCHEDULE *dk);
+    IDEA_KEY_SCHEDULE *dk);
 OSSL_DEPRECATEDIN_3_0 void IDEA_cbc_encrypt(const unsigned char *in,
-                                            unsigned char *out, long length,
-                                            IDEA_KEY_SCHEDULE *ks,
-                                            unsigned char *iv, int enc);
+    unsigned char *out, long length,
+    IDEA_KEY_SCHEDULE *ks,
+    unsigned char *iv, int enc);
 OSSL_DEPRECATEDIN_3_0 void IDEA_cfb64_encrypt(const unsigned char *in,
-                                              unsigned char *out, long length,
-                                              IDEA_KEY_SCHEDULE *ks,
-                                              unsigned char *iv, int *num,
-                                              int enc);
+    unsigned char *out, long length,
+    IDEA_KEY_SCHEDULE *ks,
+    unsigned char *iv, int *num,
+    int enc);
 OSSL_DEPRECATEDIN_3_0 void IDEA_ofb64_encrypt(const unsigned char *in,
-                                              unsigned char *out, long length,
-                                              IDEA_KEY_SCHEDULE *ks,
-                                              unsigned char *iv, int *num);
+    unsigned char *out, long length,
+    IDEA_KEY_SCHEDULE *ks,
+    unsigned char *iv, int *num);
 OSSL_DEPRECATEDIN_3_0 void IDEA_encrypt(unsigned long *in,
-                                        IDEA_KEY_SCHEDULE *ks);
+    IDEA_KEY_SCHEDULE *ks);
 #endif
 
-#  ifndef OPENSSL_NO_DEPRECATED_1_1_0
-#   define idea_options          IDEA_options
-#   define idea_ecb_encrypt      IDEA_ecb_encrypt
-#   define idea_set_encrypt_key  IDEA_set_encrypt_key
-#   define idea_set_decrypt_key  IDEA_set_decrypt_key
-#   define idea_cbc_encrypt      IDEA_cbc_encrypt
-#   define idea_cfb64_encrypt    IDEA_cfb64_encrypt
-#   define idea_ofb64_encrypt    IDEA_ofb64_encrypt
-#   define idea_encrypt          IDEA_encrypt
-#  endif
+#ifndef OPENSSL_NO_DEPRECATED_1_1_0
+#define idea_options IDEA_options
+#define idea_ecb_encrypt IDEA_ecb_encrypt
+#define idea_set_encrypt_key IDEA_set_encrypt_key
+#define idea_set_decrypt_key IDEA_set_decrypt_key
+#define idea_cbc_encrypt IDEA_cbc_encrypt
+#define idea_cfb64_encrypt IDEA_cfb64_encrypt
+#define idea_ofb64_encrypt IDEA_ofb64_encrypt
+#define idea_encrypt IDEA_encrypt
+#endif
 
-#  ifdef  __cplusplus
+#ifdef __cplusplus
 }
-#  endif
-# endif
+#endif
+#endif
 
 #endif

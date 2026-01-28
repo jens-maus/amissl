@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,18 +14,18 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_FIPS_NAMES_H
-# define OPENSSL_FIPS_NAMES_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_FIPS_NAMES_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
 /*
  * Parameter names that the FIPS Provider defines
@@ -35,28 +35,28 @@ extern "C" {
 /* The following 4 Parameters are used for FIPS Self Testing */
 
 /* The calculated MAC of the module file */
-# define OSSL_PROV_FIPS_PARAM_MODULE_MAC      "module-mac"
+#define OSSL_PROV_FIPS_PARAM_MODULE_MAC "module-mac"
 /* The Version number for the fips install process */
-# define OSSL_PROV_FIPS_PARAM_INSTALL_VERSION "install-version"
+#define OSSL_PROV_FIPS_PARAM_INSTALL_VERSION "install-version"
 /* The calculated MAC of the install status indicator */
-# define OSSL_PROV_FIPS_PARAM_INSTALL_MAC     "install-mac"
+#define OSSL_PROV_FIPS_PARAM_INSTALL_MAC "install-mac"
 /* The install status indicator */
-# define OSSL_PROV_FIPS_PARAM_INSTALL_STATUS  "install-status"
+#define OSSL_PROV_FIPS_PARAM_INSTALL_STATUS "install-status"
 
 /*
  * A boolean that determines if the FIPS conditional test errors result in
  * the module entering an error state.
  * Type: OSSL_PARAM_UTF8_STRING
  */
-# define OSSL_PROV_FIPS_PARAM_CONDITIONAL_ERRORS "conditional-errors"
+#define OSSL_PROV_FIPS_PARAM_CONDITIONAL_ERRORS "conditional-errors"
 
 /* The following are provided for backwards compatibility */
-# define OSSL_PROV_FIPS_PARAM_SECURITY_CHECKS OSSL_PROV_PARAM_SECURITY_CHECKS
-# define OSSL_PROV_FIPS_PARAM_TLS1_PRF_EMS_CHECK OSSL_PROV_PARAM_TLS1_PRF_EMS_CHECK
-# define OSSL_PROV_FIPS_PARAM_DRBG_TRUNC_DIGEST OSSL_PROV_PARAM_DRBG_TRUNC_DIGEST
+#define OSSL_PROV_FIPS_PARAM_SECURITY_CHECKS OSSL_PROV_PARAM_SECURITY_CHECKS
+#define OSSL_PROV_FIPS_PARAM_TLS1_PRF_EMS_CHECK OSSL_PROV_PARAM_TLS1_PRF_EMS_CHECK
+#define OSSL_PROV_FIPS_PARAM_DRBG_TRUNC_DIGEST OSSL_PROV_PARAM_DRBG_TRUNC_DIGEST
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif /* OPENSSL_FIPS_NAMES_H */

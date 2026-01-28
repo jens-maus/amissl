@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,41 +14,41 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_MD5_H
-# define OPENSSL_MD5_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_MD5_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/macros.h>
-# ifndef OPENSSL_NO_DEPRECATED_3_0
-#  define HEADER_MD5_H
-# endif
+#include <openssl/macros.h>
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+#define HEADER_MD5_H
+#endif
 
-# include <openssl/opensslconf.h>
+#include <openssl/opensslconf.h>
 
-# ifndef OPENSSL_NO_MD5
-#  include <openssl/e_os2.h>
-#  include <stddef.h>
-#  ifdef  __cplusplus
+#ifndef OPENSSL_NO_MD5
+#include <openssl/e_os2.h>
+#include <stddef.h>
+#ifdef __cplusplus
 extern "C" {
-#  endif
+#endif
 
-#  define MD5_DIGEST_LENGTH 16
+#define MD5_DIGEST_LENGTH 16
 
-#  if !defined(OPENSSL_NO_DEPRECATED_3_0)
+#if !defined(OPENSSL_NO_DEPRECATED_3_0)
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * ! MD5_LONG has to be at least 32 bits wide.                     !
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
-#   define MD5_LONG unsigned int
+#define MD5_LONG unsigned int
 
-#   define MD5_CBLOCK      64
-#   define MD5_LBLOCK      (MD5_CBLOCK/4)
+#define MD5_CBLOCK 64
+#define MD5_LBLOCK (MD5_CBLOCK / 4)
 
 typedef struct MD5state_st {
     MD5_LONG A, B, C, D;
@@ -56,19 +56,19 @@ typedef struct MD5state_st {
     MD5_LONG data[MD5_LBLOCK];
     unsigned int num;
 } MD5_CTX;
-#  endif
-#  ifndef OPENSSL_NO_DEPRECATED_3_0
+#endif
+#ifndef OPENSSL_NO_DEPRECATED_3_0
 OSSL_DEPRECATEDIN_3_0 int MD5_Init(MD5_CTX *c);
 OSSL_DEPRECATEDIN_3_0 int MD5_Update(MD5_CTX *c, const void *data, size_t len);
 OSSL_DEPRECATEDIN_3_0 int MD5_Final(unsigned char *md, MD5_CTX *c);
 OSSL_DEPRECATEDIN_3_0 unsigned char *MD5(const unsigned char *d, size_t n,
-                                         unsigned char *md);
+    unsigned char *md);
 OSSL_DEPRECATEDIN_3_0 void MD5_Transform(MD5_CTX *c, const unsigned char *b);
-#  endif
+#endif
 
-#  ifdef  __cplusplus
+#ifdef __cplusplus
 }
-#  endif
-# endif
+#endif
+#endif
 
 #endif

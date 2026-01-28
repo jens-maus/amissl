@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,38 +14,38 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_EBCDIC_H
-# define OPENSSL_EBCDIC_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_EBCDIC_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/macros.h>
-# ifndef OPENSSL_NO_DEPRECATED_3_0
-#  define HEADER_EBCDIC_H
-# endif
+#include <openssl/macros.h>
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+#define HEADER_EBCDIC_H
+#endif
 
-# include <stdlib.h>
+#include <stdlib.h>
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Avoid name clashes with other applications */
-# define os_toascii   _openssl_os_toascii
-# define os_toebcdic  _openssl_os_toebcdic
-# define ebcdic2ascii _openssl_ebcdic2ascii
-# define ascii2ebcdic _openssl_ascii2ebcdic
+#define os_toascii _openssl_os_toascii
+#define os_toebcdic _openssl_os_toebcdic
+#define ebcdic2ascii _openssl_ebcdic2ascii
+#define ascii2ebcdic _openssl_ascii2ebcdic
 
 extern const unsigned char os_toascii[256];
 extern const unsigned char os_toebcdic[256];
 void *ebcdic2ascii(void *dest, const void *srce, size_t count);
 void *ascii2ebcdic(void *dest, const void *srce, size_t count);
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 }
 #endif
 #endif

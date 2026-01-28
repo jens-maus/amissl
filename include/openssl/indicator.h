@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- * Copyright (c) 2014-2025 AmiSSL Open Source Team.
+ * Copyright (c) 2014-2026 AmiSSL Open Source Team.
  * All Rights Reserved.
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
@@ -14,30 +14,30 @@
  */
 
 #if !defined(PROTO_AMISSL_H) && !defined(AMISSL_COMPILE)
-# include <proto/amissl.h>
+#include <proto/amissl.h>
 #endif
 
 #ifndef OPENSSL_INDICATOR_H
-# define OPENSSL_INDICATOR_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OPENSSL_INDICATOR_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
 #include <openssl/params.h>
 
-typedef int (OSSL_INDICATOR_CALLBACK)(const char *type, const char *desc,
-                                      const OSSL_PARAM params[]);
+typedef int(OSSL_INDICATOR_CALLBACK)(const char *type, const char *desc,
+    const OSSL_PARAM params[]);
 
 void OSSL_INDICATOR_set_callback(OSSL_LIB_CTX *libctx,
-                                 OSSL_INDICATOR_CALLBACK *cb);
+    OSSL_INDICATOR_CALLBACK *cb);
 void OSSL_INDICATOR_get_callback(OSSL_LIB_CTX *libctx,
-                                 OSSL_INDICATOR_CALLBACK **cb);
+    OSSL_INDICATOR_CALLBACK **cb);
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 #endif /* OPENSSL_INDICATOR_H */
