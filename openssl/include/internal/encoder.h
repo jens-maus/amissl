@@ -8,22 +8,22 @@
  */
 
 #ifndef OSSL_INTERNAL_ENCODER_H
-# define OSSL_INTERNAL_ENCODER_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_INTERNAL_ENCODER_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/bio.h>
-# include <openssl/buffer.h>
-# include <openssl/types.h>
-# include "internal/ffc.h"
+#include <openssl/bio.h>
+#include <openssl/buffer.h>
+#include <openssl/types.h>
+#include "internal/ffc.h"
 
 int ossl_bio_print_labeled_bignum(BIO *out, const char *label,
-                                  const BIGNUM *bn);
+    const BIGNUM *bn);
 int ossl_bio_print_labeled_buf(BIO *out, const char *label,
-                               const unsigned char *buf, size_t buflen);
-# if !defined(OPENSSL_NO_DH) || !defined(OPENSSL_NO_DSA)
+    const unsigned char *buf, size_t buflen);
+#if !defined(OPENSSL_NO_DH) || !defined(OPENSSL_NO_DSA)
 int ossl_bio_print_ffc_params(BIO *out, const FFC_PARAMS *ffc);
-# endif
+#endif
 
 #endif

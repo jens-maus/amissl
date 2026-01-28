@@ -9,21 +9,21 @@
  */
 
 #ifndef OSSL_CRYPTO_OBJECTSERR_H
-# define OSSL_CRYPTO_OBJECTSERR_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_OBJECTSERR_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/opensslconf.h>
-# include <openssl/symhacks.h>
+#include <openssl/opensslconf.h>
+#include <openssl/symhacks.h>
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
 int ossl_err_load_OBJ_strings(void);
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 #endif

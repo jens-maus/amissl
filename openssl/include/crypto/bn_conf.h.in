@@ -1,4 +1,6 @@
+/* clang-format off */
 {- join("\n",map { "/* $_ */" } @autowarntext) -}
+/* clang-format on */
 /*
  * Copyright 2016-2021 The OpenSSL Project Authors. All Rights Reserved.
  *
@@ -9,10 +11,10 @@
  */
 
 #ifndef OSSL_CRYPTO_BN_CONF_H
-# define OSSL_CRYPTO_BN_CONF_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_BN_CONF_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
 /*
  * The contents of this file are not used in the UEFI build, as
@@ -23,8 +25,14 @@
 /* Should we define BN_DIV2W here? */
 
 /* Only one for the following should be defined */
+/* clang-format off */
 {- $config{b64l} ? "#define" : "#undef" -} SIXTY_FOUR_BIT_LONG
+    /* clang-format on */
+    /* clang-format off */
 {- $config{b64}  ? "#define" : "#undef" -} SIXTY_FOUR_BIT
+    /* clang-format on */
+    /* clang-format off */
 {- $config{b32}  ? "#define" : "#undef" -} THIRTY_TWO_BIT
+/* clang-format on */
 
 #endif

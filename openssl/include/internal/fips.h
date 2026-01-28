@@ -8,16 +8,16 @@
  */
 
 #ifndef OSSL_INTERNAL_FIPS_H
-# define OSSL_INTERNAL_FIPS_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_INTERNAL_FIPS_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# ifdef FIPS_MODULE
+#ifdef FIPS_MODULE
 
 /* Return 1 if the FIPS self tests are running and 0 otherwise */
 int ossl_fips_self_testing(void);
 
-# endif /* FIPS_MODULE */
+#endif /* FIPS_MODULE */
 
 #endif

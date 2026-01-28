@@ -9,23 +9,23 @@
  */
 
 #ifndef OSSL_CRYPTO_SM4_H
-# define OSSL_CRYPTO_SM4_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_SM4_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/opensslconf.h>
-# include <openssl/e_os2.h>
+#include <openssl/opensslconf.h>
+#include <openssl/e_os2.h>
 
-# ifdef OPENSSL_NO_SM4
-#  error SM4 is disabled.
-# endif
+#ifdef OPENSSL_NO_SM4
+#error SM4 is disabled.
+#endif
 
-# define SM4_ENCRYPT     1
-# define SM4_DECRYPT     0
+#define SM4_ENCRYPT 1
+#define SM4_DECRYPT 0
 
-# define SM4_BLOCK_SIZE    16
-# define SM4_KEY_SCHEDULE  32
+#define SM4_BLOCK_SIZE 16
+#define SM4_KEY_SCHEDULE 32
 
 typedef struct SM4_KEY_st {
     uint32_t rk[SM4_KEY_SCHEDULE];

@@ -8,10 +8,10 @@
  */
 
 #ifndef OSSL_INTERNAL_UNICODE_H
-# define OSSL_INTERNAL_UNICODE_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_INTERNAL_UNICODE_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
 typedef enum {
     SURROGATE_MIN = 0xd800UL,

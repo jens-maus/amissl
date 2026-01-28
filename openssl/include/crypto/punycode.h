@@ -8,19 +8,18 @@
  */
 
 #ifndef OSSL_CRYPTO_PUNYCODE_H
-# define OSSL_CRYPTO_PUNYCODE_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_PUNYCODE_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <stddef.h>     /* for size_t */
+#include <stddef.h> /* for size_t */
 
-int ossl_punycode_decode (
+int ossl_punycode_decode(
     const char *pEncoded,
     const size_t enc_len,
     unsigned int *pDecoded,
-    unsigned int *pout_length
-);
+    unsigned int *pout_length);
 
 int ossl_a2ulabel(const char *in, char *out, size_t outlen);
 

@@ -8,10 +8,10 @@
  */
 
 #ifndef OSSL_INTERNAL_NELEM_H
-# define OSSL_INTERNAL_NELEM_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_INTERNAL_NELEM_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
+#define OSSL_NELEM(x) (sizeof(x) / sizeof((x)[0]))
 #endif

@@ -8,10 +8,10 @@
  */
 
 #ifndef OSSL_MLX_KEM_H
-# define OSSL_MLX_KEM_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_MLX_KEM_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
 #include <openssl/evp.h>
 #include <openssl/ml_kem.h>
@@ -21,11 +21,11 @@
 typedef struct ecdh_vinfo_st {
     const char *algorithm_name;
     const char *group_name;
-    size_t      pubkey_bytes;
-    size_t      prvkey_bytes;
-    size_t      shsec_bytes;
-    int         ml_kem_slot;
-    int         ml_kem_variant;
+    size_t pubkey_bytes;
+    size_t prvkey_bytes;
+    size_t shsec_bytes;
+    int ml_kem_slot;
+    int ml_kem_variant;
 } ECDH_VINFO;
 
 typedef struct mlx_key_st {

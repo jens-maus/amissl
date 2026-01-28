@@ -10,28 +10,28 @@
 
 /* This header can move into provider when legacy support is removed */
 #ifndef OSSL_INTERNAL_SM3_H
-# define OSSL_INTERNAL_SM3_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_INTERNAL_SM3_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/opensslconf.h>
+#include <openssl/opensslconf.h>
 
-# ifdef OPENSSL_NO_SM3
-#  error SM3 is disabled.
-# endif
+#ifdef OPENSSL_NO_SM3
+#error SM3 is disabled.
+#endif
 
-# define SM3_DIGEST_LENGTH 32
-# define SM3_WORD unsigned int
+#define SM3_DIGEST_LENGTH 32
+#define SM3_WORD unsigned int
 
-# define SM3_CBLOCK      64
-# define SM3_LBLOCK      (SM3_CBLOCK/4)
+#define SM3_CBLOCK 64
+#define SM3_LBLOCK (SM3_CBLOCK / 4)
 
 typedef struct SM3state_st {
-   SM3_WORD A, B, C, D, E, F, G, H;
-   SM3_WORD Nl, Nh;
-   SM3_WORD data[SM3_LBLOCK];
-   unsigned int num;
+    SM3_WORD A, B, C, D, E, F, G, H;
+    SM3_WORD Nl, Nh;
+    SM3_WORD data[SM3_LBLOCK];
+    unsigned int num;
 } SM3_CTX;
 
 int ossl_sm3_init(SM3_CTX *c);

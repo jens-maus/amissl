@@ -9,24 +9,24 @@
  */
 
 #ifndef OSSL_CRYPTO_COMPERR_H
-# define OSSL_CRYPTO_COMPERR_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_COMPERR_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/opensslconf.h>
-# include <openssl/symhacks.h>
+#include <openssl/opensslconf.h>
+#include <openssl/symhacks.h>
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
-# ifndef OPENSSL_NO_COMP
+#ifndef OPENSSL_NO_COMP
 
 int ossl_err_load_COMP_strings(void);
-# endif
+#endif
 
-# ifdef  __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 #endif

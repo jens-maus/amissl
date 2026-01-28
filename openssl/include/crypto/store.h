@@ -8,14 +8,14 @@
  */
 
 #ifndef OSSL_CRYPTO_STORE_H
-# define OSSL_CRYPTO_STORE_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_STORE_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/bio.h>
-# include <openssl/store.h>
-# include <openssl/ui.h>
+#include <openssl/bio.h>
+#include <openssl/store.h>
+#include <openssl/ui.h>
 
 void ossl_store_cleanup_int(void);
 int ossl_store_loader_get_number(const OSSL_STORE_LOADER *loader);

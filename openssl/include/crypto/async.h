@@ -8,12 +8,12 @@
  */
 
 #ifndef OSSL_CRYPTO_ASYNC_H
-# define OSSL_CRYPTO_ASYNC_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_ASYNC_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/async.h>
+#include <openssl/async.h>
 
 int async_init(void);
 void async_deinit(void);

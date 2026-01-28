@@ -8,10 +8,10 @@
  */
 
 #ifndef OSSL_CRYPTO_ERR_H
-# define OSSL_CRYPTO_ERR_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_ERR_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
 int ossl_err_load_ERR_strings(void);
 int ossl_err_load_crypto_strings(void);

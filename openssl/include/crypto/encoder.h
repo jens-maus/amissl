@@ -8,12 +8,12 @@
  */
 
 #ifndef OSSL_CRYPTO_ENCODER_H
-# define OSSL_CRYPTO_ENCODER_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_CRYPTO_ENCODER_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/types.h>
+#include <openssl/types.h>
 
 int ossl_encoder_get_number(const OSSL_ENCODER *encoder);
 int ossl_encoder_store_cache_flush(OSSL_LIB_CTX *libctx);

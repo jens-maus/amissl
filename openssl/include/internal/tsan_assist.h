@@ -48,40 +48,39 @@
  */
 
 #ifndef OSSL_INTERNAL_TSAN_ASSIST_H
-# define OSSL_INTERNAL_TSAN_ASSIST_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_INTERNAL_TSAN_ASSIST_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L \
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L \
     && !defined(__STDC_NO_ATOMICS__)
-#  include <stdatomic.h>
+#include <stdatomic.h>
 
-#  if defined(ATOMIC_POINTER_LOCK_FREE) \
-          && ATOMIC_POINTER_LOCK_FREE >= 2
-#   define TSAN_QUALIFIER _Atomic
-#   define tsan_load(ptr) atomic_load_explicit((ptr), memory_order_relaxed)
-#   define tsan_store(ptr, val) atomic_store_explicit((ptr), (val), memory_order_relaxed)
-#   define tsan_add(ptr, n) atomic_fetch_add_explicit((ptr), (n), memory_order_relaxed)
-#   define tsan_ld_acq(ptr) atomic_load_explicit((ptr), memory_order_acquire)
-#   define tsan_st_rel(ptr, val) atomic_store_explicit((ptr), (val), memory_order_release)
-#  endif
+#if defined(ATOMIC_POINTER_LOCK_FREE) \
+    && ATOMIC_POINTER_LOCK_FREE >= 2
+#define TSAN_QUALIFIER _Atomic
+#define tsan_load(ptr) atomic_load_explicit((ptr), memory_order_relaxed)
+#define tsan_store(ptr, val) atomic_store_explicit((ptr), (val), memory_order_relaxed)
+#define tsan_add(ptr, n) atomic_fetch_add_explicit((ptr), (n), memory_order_relaxed)
+#define tsan_ld_acq(ptr) atomic_load_explicit((ptr), memory_order_acquire)
+#define tsan_st_rel(ptr, val) atomic_store_explicit((ptr), (val), memory_order_release)
+#endif
 
-# elif defined(__GNUC__) && defined(__ATOMIC_RELAXED)
+#elif defined(__GNUC__) && defined(__ATOMIC_RELAXED)
 
-#  if defined(__GCC_ATOMIC_POINTER_LOCK_FREE) \
-          && __GCC_ATOMIC_POINTER_LOCK_FREE >= 2
-#   define TSAN_QUALIFIER volatile
-#   define tsan_load(ptr) __atomic_load_n((ptr), __ATOMIC_RELAXED)
-#   define tsan_store(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELAXED)
-#   define tsan_add(ptr, n) __atomic_fetch_add((ptr), (n), __ATOMIC_RELAXED)
-#   define tsan_ld_acq(ptr) __atomic_load_n((ptr), __ATOMIC_ACQUIRE)
-#   define tsan_st_rel(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELEASE)
-#  endif
+#if defined(__GCC_ATOMIC_POINTER_LOCK_FREE) \
+    && __GCC_ATOMIC_POINTER_LOCK_FREE >= 2
+#define TSAN_QUALIFIER volatile
+#define tsan_load(ptr) __atomic_load_n((ptr), __ATOMIC_RELAXED)
+#define tsan_store(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELAXED)
+#define tsan_add(ptr, n) __atomic_fetch_add((ptr), (n), __ATOMIC_RELAXED)
+#define tsan_ld_acq(ptr) __atomic_load_n((ptr), __ATOMIC_ACQUIRE)
+#define tsan_st_rel(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELEASE)
+#endif
 
-# elif defined(_MSC_VER) && _MSC_VER>=1200 \
-      && (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || \
-          defined(_M_ARM64) || (defined(_M_ARM) && _M_ARM >= 7 && !defined(_WIN32_WCE)))
+#elif defined(_MSC_VER) && _MSC_VER >= 1200 \
+    && (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(_M_ARM64) || (defined(_M_ARM) && _M_ARM >= 7 && !defined(_WIN32_WCE)))
 /*
  * There is subtle dependency on /volatile:<iso|ms> command-line option.
  * "ms" implies same semantic as memory_order_acquire for loads and
@@ -93,52 +92,50 @@
  * with additional instructions and penalties, it kind of makes sense to
  * default to "iso"...
  */
-#  define TSAN_QUALIFIER volatile
-#  if defined(_M_ARM) || defined(_M_ARM64)
-#   define _InterlockedExchangeAdd _InterlockedExchangeAdd_nf
-#   pragma intrinsic(_InterlockedExchangeAdd_nf)
-#   pragma intrinsic(__iso_volatile_load32, __iso_volatile_store32)
-#   ifdef _WIN64
-#    define _InterlockedExchangeAdd64 _InterlockedExchangeAdd64_nf
-#    pragma intrinsic(_InterlockedExchangeAdd64_nf)
-#    pragma intrinsic(__iso_volatile_load64, __iso_volatile_store64)
-#    define tsan_load(ptr) (sizeof(*(ptr)) == 8 ? __iso_volatile_load64((void *)(ptr)) \
-                                               : __iso_volatile_load32((void *)(ptr)))
-#    define tsan_store(ptr, val) (sizeof(*(ptr)) == 8 ? __iso_volatile_store64(((void *)(ptr)), (val)) \
-                                                     : __iso_volatile_store32((void *)(ptr), (val)))
-#   else
-#    define tsan_load(ptr) __iso_volatile_load32(ptr)
-#    define tsan_store(ptr, val) __iso_volatile_store32((ptr), (val))
-#   endif
-#  else
-#   define tsan_load(ptr) (*(ptr))
-#   define tsan_store(ptr, val) (*(ptr) = (val))
-#  endif
-#  pragma intrinsic(_InterlockedExchangeAdd)
-#  ifdef _WIN64
-#   pragma intrinsic(_InterlockedExchangeAdd64)
-#   define tsan_add(ptr, n) (sizeof(*(ptr)) == 8 ? _InterlockedExchangeAdd64((void *)(ptr), (n)) \
-                                                : _InterlockedExchangeAdd((void *)(ptr), (n)))
-#  else
-#   define tsan_add(ptr, n) _InterlockedExchangeAdd((ptr), (n))
-#  endif
-#  if !defined(_ISO_VOLATILE)
-#   define tsan_ld_acq(ptr) (*(ptr))
-#   define tsan_st_rel(ptr, val) (*(ptr) = (val))
-#  endif
+#define TSAN_QUALIFIER volatile
+#if defined(_M_ARM) || defined(_M_ARM64)
+#define _InterlockedExchangeAdd _InterlockedExchangeAdd_nf
+#pragma intrinsic(_InterlockedExchangeAdd_nf)
+#pragma intrinsic(__iso_volatile_load32, __iso_volatile_store32)
+#ifdef _WIN64
+#define _InterlockedExchangeAdd64 _InterlockedExchangeAdd64_nf
+#pragma intrinsic(_InterlockedExchangeAdd64_nf)
+#pragma intrinsic(__iso_volatile_load64, __iso_volatile_store64)
+#define tsan_load(ptr) (sizeof(*(ptr)) == 8 ? __iso_volatile_load64((void *)(ptr)) \
+                                            : __iso_volatile_load32((void *)(ptr)))
+#define tsan_store(ptr, val) (sizeof(*(ptr)) == 8 ? __iso_volatile_store64(((void *)(ptr)), (val)) \
+                                                  : __iso_volatile_store32((void *)(ptr), (val)))
+#else
+#define tsan_load(ptr) __iso_volatile_load32(ptr)
+#define tsan_store(ptr, val) __iso_volatile_store32((ptr), (val))
+#endif
+#else
+#define tsan_load(ptr) (*(ptr))
+#define tsan_store(ptr, val) (*(ptr) = (val))
+#endif
+#pragma intrinsic(_InterlockedExchangeAdd)
+#ifdef _WIN64
+#pragma intrinsic(_InterlockedExchangeAdd64)
+#define tsan_add(ptr, n) (sizeof(*(ptr)) == 8 ? _InterlockedExchangeAdd64((void *)(ptr), (n)) \
+                                              : _InterlockedExchangeAdd((void *)(ptr), (n)))
+#else
+#define tsan_add(ptr, n) _InterlockedExchangeAdd((ptr), (n))
+#endif
+#if !defined(_ISO_VOLATILE)
+#define tsan_ld_acq(ptr) (*(ptr))
+#define tsan_st_rel(ptr, val) (*(ptr) = (val))
+#endif
 
+#elif defined(OPENSSL_SYS_AMIGA)
 
+#define TSAN_QUALIFIER volatile
+#define tsan_load(ptr) (*(ptr))
+#define tsan_store(ptr, val) (*(ptr) = (val))
+#define tsan_ld_acq(ptr) tsan_load(ptr)
+#define tsan_st_rel(ptr, val) tsan_store(ptr, val)
 
-# elif defined(OPENSSL_SYS_AMIGA)
-
-#  define TSAN_QUALIFIER volatile
-#  define tsan_load(ptr) (*(ptr))
-#  define tsan_store(ptr, val) (*(ptr) = (val))
-#  define tsan_ld_acq(ptr) tsan_load(ptr)
-#  define tsan_st_rel(ptr, val) tsan_store(ptr, val)
-
-#  if defined(__amigaos4__) || defined(__MORPHOS__)
-#   define tsan_add(ptr, n) \
+#if defined(__amigaos4__) || defined(__MORPHOS__)
+#define tsan_add(ptr, n) \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx  %0,0,%2\n" \
@@ -150,7 +147,7 @@
          : "cc", "memory"); \
       res; \
    })
-#   define tsan_addi(ptr, n) \
+#define tsan_addi(ptr, n) \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
          "1: lwarx  %0,0,%2\n" \
@@ -162,10 +159,10 @@
          : "cc", "memory"); \
       res; \
    })
-#   define tsan_counter(ptr) tsan_addi((ptr), 1)
-#   define tsan_decr(ptr) tsan_addi((ptr), -1)
-#  elif __mc68020 || __mc68030 || __mc68040 || __mc68060
-#   define tsan_add(ptr, n) \
+#define tsan_counter(ptr) tsan_addi((ptr), 1)
+#define tsan_decr(ptr) tsan_addi((ptr), -1)
+#elif __mc68020 || __mc68030 || __mc68040 || __mc68060
+#define tsan_add(ptr, n) \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
         "   movel %0,%1\n" \
@@ -177,7 +174,7 @@
         : "d" (n)); \
       res; \
    })
-#   define tsan_op(ptr, op)		    \
+#define tsan_op(ptr, op)		    \
    ({ __typeof__ (*(ptr)) res, tmp; \
       __asm__ __volatile__ ( \
         "   movel %0,%1\n" \
@@ -188,39 +185,39 @@
         : "+m" (*ptr), "=&d" (res), "=&d" (tmp)); \
       res; \
    })
-#   define tsan_counter(ptr) tsan_op((ptr), add)
-#   define tsan_decr(ptr) tsan_op((ptr), sub)
-#  else
-#   define tsan_add(ptr, n) (*(ptr) += (n))
-#  endif
+#define tsan_counter(ptr) tsan_op((ptr), add)
+#define tsan_decr(ptr) tsan_op((ptr), sub)
+#else
+#define tsan_add(ptr, n) (*(ptr) += (n))
+#endif
 
-# endif
+#endif
 
-# ifndef TSAN_QUALIFIER
+#ifndef TSAN_QUALIFIER
 
-#  ifdef OPENSSL_THREADS
-#   define TSAN_QUALIFIER volatile
-#   define TSAN_REQUIRES_LOCKING
-#  else  /* OPENSSL_THREADS */
-#   define TSAN_QUALIFIER
-#  endif /* OPENSSL_THREADS */
+#ifdef OPENSSL_THREADS
+#define TSAN_QUALIFIER volatile
+#define TSAN_REQUIRES_LOCKING
+#else /* OPENSSL_THREADS */
+#define TSAN_QUALIFIER
+#endif /* OPENSSL_THREADS */
 
-#  define tsan_load(ptr) (*(ptr))
-#  define tsan_store(ptr, val) (*(ptr) = (val))
-#  define tsan_add(ptr, n) (*(ptr) += (n))
+#define tsan_load(ptr) (*(ptr))
+#define tsan_store(ptr, val) (*(ptr) = (val))
+#define tsan_add(ptr, n) (*(ptr) += (n))
 /*
  * Lack of tsan_ld_acq and tsan_ld_rel means that compiler support is not
  * sophisticated enough to support them. Code that relies on them should be
  * protected with #ifdef tsan_ld_acq with locked fallback.
  */
 
-# endif
+#endif
 
-# ifndef tsan_counter
-#  define tsan_counter(ptr) tsan_add((ptr), 1)
-# endif
-# ifndef tsan_decr
-#  define tsan_decr(ptr) tsan_add((ptr), -1)
-# endif
+#ifndef tsan_counter
+#define tsan_counter(ptr) tsan_add((ptr), 1)
+#endif
+#ifndef tsan_decr
+#define tsan_decr(ptr) tsan_add((ptr), -1)
+#endif
 
 #endif

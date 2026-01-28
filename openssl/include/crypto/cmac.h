@@ -8,17 +8,17 @@
  */
 
 #ifndef OSSL_CRYPTO_CMAC_H
-# define OSSL_CRYPTO_CMAC_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_CRYPTO_CMAC_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/types.h>
-# include <openssl/cmac.h>
-# include <openssl/params.h>
+#include <openssl/types.h>
+#include <openssl/cmac.h>
+#include <openssl/params.h>
 
 int ossl_cmac_init(CMAC_CTX *ctx, const void *key, size_t keylen,
-                   const EVP_CIPHER *cipher, ENGINE *impl,
-                   const OSSL_PARAM param[]);
+    const EVP_CIPHER *cipher, ENGINE *impl,
+    const OSSL_PARAM param[]);
 
-#endif  /* OSSL_CRYPTO_CMAC_H */
+#endif /* OSSL_CRYPTO_CMAC_H */

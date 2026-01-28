@@ -14,6 +14,11 @@ jobs:
   Fuzzing:
     runs-on: ubuntu-latest
     steps:
+    - name: Clear unnecessary files
+      run: |
+        df
+        sudo rm -rf /usr/share/dotnet /usr/share/swift /usr/local/.ghcup /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/android /usr/local/lib/node_modules
+        df
     - name: Build Fuzzers
       uses: google/oss-fuzz/infra/cifuzz/actions/build_fuzzers@master
       with:
@@ -26,7 +31,7 @@ jobs:
         fuzz-seconds: 600
         dry-run: false
     - name: Upload Crash
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: failure()
       with:
         name: artifacts

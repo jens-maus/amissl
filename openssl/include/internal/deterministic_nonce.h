@@ -8,19 +8,19 @@
  */
 
 #ifndef OSSL_INTERNAL_DETERMINISTIC_NONCE_H
-# define OSSL_INTERNAL_DETERMINISTIC_NONCE_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#  pragma once
-# endif
+#define OSSL_INTERNAL_DETERMINISTIC_NONCE_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <openssl/bn.h>
+#include <openssl/bn.h>
 
 int ossl_gen_deterministic_nonce_rfc6979(BIGNUM *out, const BIGNUM *q,
-                                         const BIGNUM *priv,
-                                         const unsigned char *message,
-                                         size_t message_len,
-                                         const char *digestname,
-                                         OSSL_LIB_CTX *libctx,
-                                         const char *propq);
+    const BIGNUM *priv,
+    const unsigned char *message,
+    size_t message_len,
+    const char *digestname,
+    OSSL_LIB_CTX *libctx,
+    const char *propq);
 
 #endif /*OSSL_INTERNAL_DETERMINISTIC_NONCE_H */

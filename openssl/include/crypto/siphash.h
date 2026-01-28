@@ -8,17 +8,17 @@
  */
 
 #ifndef OSSL_CRYPTO_SIPHASH_H
-# define OSSL_CRYPTO_SIPHASH_H
-# if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
-# pragma once
-# endif
+#define OSSL_CRYPTO_SIPHASH_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#pragma once
+#endif
 
-# include <stddef.h>
+#include <stddef.h>
 
-# define SIPHASH_BLOCK_SIZE        8
-# define SIPHASH_KEY_SIZE         16
-# define SIPHASH_MIN_DIGEST_SIZE   8
-# define SIPHASH_MAX_DIGEST_SIZE  16
+#define SIPHASH_BLOCK_SIZE 8
+#define SIPHASH_KEY_SIZE 16
+#define SIPHASH_MIN_DIGEST_SIZE 8
+#define SIPHASH_MAX_DIGEST_SIZE 16
 
 typedef struct siphash_st SIPHASH;
 
@@ -26,7 +26,7 @@ size_t SipHash_ctx_size(void);
 size_t SipHash_hash_size(SIPHASH *ctx);
 int SipHash_set_hash_size(SIPHASH *ctx, size_t hash_size);
 int SipHash_Init(SIPHASH *ctx, const unsigned char *k,
-                 int crounds, int drounds);
+    int crounds, int drounds);
 void SipHash_Update(SIPHASH *ctx, const unsigned char *in, size_t inlen);
 int SipHash_Final(SIPHASH *ctx, unsigned char *out, size_t outlen);
 
@@ -46,7 +46,7 @@ struct siphash_st {
 };
 
 /* default: SipHash-2-4 */
-# define SIPHASH_C_ROUNDS 2
-# define SIPHASH_D_ROUNDS 4
+#define SIPHASH_C_ROUNDS 2
+#define SIPHASH_D_ROUNDS 4
 
 #endif
