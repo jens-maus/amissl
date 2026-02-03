@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Download latest release files
-      uses: dawidd6/action-download-artifact@v13
+      uses: dawidd6/action-download-artifact@v14
       with:
         workflow: release.yml
         name: release-*
