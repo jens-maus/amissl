@@ -1,3 +1,7 @@
+## AmiSSL 5.27 (x.x.2026)
+
+- Fixed high stack usage in the ML-KEM code as used in PQC support
+
 ## AmiSSL 5.26 (28.1.2026)
 
 - Updated OpenSSL backend to full compatibility with the latest

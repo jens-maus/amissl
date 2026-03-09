@@ -2270,6 +2270,29 @@ int ossl_ml_kem_encap_seed(uint8_t *ctext, size_t clen,
      */
     CONSTTIME_SECRET(entropy, elen);
 
+#if defined(OPENSSL_SYS_AMIGA)
+    {
+        scalar *tmp;
+        size_t tlen;
+
+#define case_encap_seed(bits)                               \
+        case EVP_PKEY_ML_KEM_##bits:                        \
+            tlen = sizeof(*tmp) * 2 * ML_KEM_##bits##_RANK; \
+            break
+
+        switch (vinfo->evp_type) {
+            case_encap_seed(512);
+            case_encap_seed(768);
+            case_encap_seed(1024);
+            default: tlen = 0;
+        }
+
+        if ((tlen > 0) && (tmp = OPENSSL_secure_malloc(tlen))) {
+            ret = encap(ctext, shared_secret, entropy, tmp, mdctx, key);
+            OPENSSL_secure_clear_free((void *)tmp, tlen);
+        }
+    }
+#else
     /*-
      * This avoids the need to handle allocation failures for two (max 2KB
      * each) vectors, that are never retained on return from this function.
@@ -2289,6 +2312,7 @@ int ossl_ml_kem_encap_seed(uint8_t *ctext, size_t clen,
         case_encap_seed(1024);
     }
 #undef case_encap_seed
+#endif
 
     /* Declassify secret inputs and derived outputs before returning control */
     CONSTTIME_DECLASSIFY(entropy, elen);
@@ -2349,6 +2373,32 @@ int ossl_ml_kem_decap(uint8_t *shared_secret, size_t slen,
     CONSTTIME_SECRET(key->s, classify_bytes);
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+    {
+        uint8_t *cbuf;
+        scalar *tmp;
+        size_t ctlen, tlen;
+
+#define case_decap(bits)                                    \
+        case EVP_PKEY_ML_KEM_##bits:                        \
+            ctlen = sizeof(*cbuf) * CTEXT_BYTES(bits);      \
+            tlen = sizeof(*tmp) * 2 * ML_KEM_##bits##_RANK; \
+            break
+
+        switch (vinfo->evp_type) {
+            case_decap(512);
+            case_decap(768);
+            case_decap(1024);
+            default: tlen = 0;
+        }
+
+	if ((tlen > 0) && (tmp = OPENSSL_secure_malloc(tlen + ctlen))) {
+            cbuf = ((uint8_t *)tmp) + tlen;
+            ret = decap(shared_secret, ctext, cbuf, tmp, mdctx, key);
+            OPENSSL_secure_clear_free((void *)tmp, tlen);
+        }
+    }
+#else
     /*-
      * This avoids the need to handle allocation failures for two (max 2KB
      * each) vectors and an encoded ciphertext (max 1568 bytes), that are never
@@ -2369,6 +2419,7 @@ int ossl_ml_kem_decap(uint8_t *shared_secret, size_t slen,
         case_decap(768);
         case_decap(1024);
     }
+#endif
 
     /* Declassify secret inputs and derived outputs before returning control */
     CONSTTIME_DECLASSIFY(key->s, classify_bytes);
