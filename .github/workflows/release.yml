@@ -94,7 +94,7 @@ jobs:
     - name: Generate changelog
       if: false
       id: changelog
-      uses: metcalfc/changelog-generator@v4.6.2
+      uses: metcalfc/changelog-generator@v4.7.0
       with:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
