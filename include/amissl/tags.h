@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,5 +46,8 @@
 #define AmiSSL_GetAmiSSLExtBase   (TAG_USER + 0x0e)
 #define AmiSSL_GetIAmiSSL         (TAG_USER + 0x0f) /* Only accessible from ppc code */
 #define AmiSSL_InitAmiSSL         (TAG_USER + 0x10)
+
+#define AmiSSL_TimerPort          (TAG_USER + 0x11)
+#define AmiSSL_TimerSignal        (TAG_USER + 0x12)
 
 #endif /* !AMISSL_TAGS_H */

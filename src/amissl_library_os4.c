@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
   AMISSL_STATE *p = GetAmiSSLState();
 
   /* The ISocketPtr might be pointing to uninitialized ISocket in __UserLibInit */
-  if (!p->socket_errno_initialized)
+  if (!(p->flags & AMISSL_STATE_SOCKET_ERRNO_INITIALIZED))
     initialize_socket_errno(p);
 
   return(p->ISocketPtr ? *p->ISocketPtr : NULL);

@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@
 #ifdef CreateMsgPort
 #undef CreateMsgPort
 #endif
-#define CreateMsgPort() AllocSysObject(ASOT_PORT,NULL)
+#define CreateMsgPort() AllocSysObjectTags(ASOT_PORT,ASOPORT_Signal,state->TimerSignal,TAG_DONE)
 #ifdef DeleteMsgPort
 #undef DeleteMsgPort
 #endif
@@ -136,7 +136,7 @@ void CleanupTimers(AMISSL_STATE *state)
     CloseDevice((struct IORequest *)state->TimeRequest);
     DeleteIORequest((struct IORequest *)state->TimeRequest);
   }
-  if(state->TimerPort)
+  if(state->TimerPort && !(state->flags & AMISSL_STATE_TIMER_PORT_USER_SUPPLIED))
   {
     DeleteMsgPort(state->TimerPort);
   }

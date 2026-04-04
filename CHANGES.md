@@ -1,6 +1,8 @@
-## AmiSSL 5.27 (x.x.2026)
+## AmiSSL 5.27 (x.4.2026)
 
-- Fixed high stack usage in the ML-KEM code as used in PQC support
+- Fixed high stack usage in the ML-KEM code as used in PQC support.
+- Added AmiSSL_TimerSignal and AmiSSL_TimerPort tags for InitAmiSSL(),
+  allowing applications to have optional control over signal usage.
 
 ## AmiSSL 5.26 (28.1.2026)
 

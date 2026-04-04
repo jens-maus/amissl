@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2023 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -157,18 +157,18 @@ static AMISSL_STATE *CreateAmiSSLState(void)
     ret->pid = pid;
     ret->errno = 0;
     ret->errno_ptr = &ret->errno;
-    ret->socket_errno_initialized = 0;
+    ret->flags = 0;
     ret->getenv_var = 0;
-    ret->stack = 0;
     ret->SocketBase = NULL;
 #ifdef __amigaos4__
     ret->ISocket = NULL;
     ret->ISocketPtr = NULL;
     ret->ITimer = NULL;
     ret->EntropyRequest = NULL;
+    ret->TimerSignal = -1;
 #endif
-    ret->TimeRequest = NULL;
     ret->TimerPort = NULL;
+    ret->TimeRequest = NULL;
     ret->ThreadGroupID = ownBase->ThreadGroupID;
 
     D(DBF_STARTUP, "h_insert(thread_hash=%08lx, pid=%08lx, ret=%08lx)", parentBase->thread_hash, pid, ret);
@@ -294,8 +294,14 @@ LIBPROTO(InitAmiSSLA, LONG, REG(a6, __BASE_OR_IFACE), REG(a0, struct TagItem *ta
 #endif
 
     state->SocketBase = (APTR)GetTagData(AmiSSL_SocketBase, (int)NULL, tagList);
+    if((state->TimerPort = (APTR)GetTagData(AmiSSL_TimerPort, (int)NULL, tagList)) != NULL)
+    {
+      state->flags |= AMISSL_STATE_TIMER_PORT_USER_SUPPLIED;
+    }
 
 #ifdef __amigaos4__
+    state->TimerSignal = GetTagData(AmiSSL_TimerSignal, -1, tagList);
+
     state->ISocket = (struct SocketIFace *)GetTagData(AmiSSL_ISocket, (int)NULL, tagList);
     state->ISocketPtr = (struct SocketIFace **)GetTagData(AmiSSL_ISocketPtr, (ULONG)NULL, tagList);
     state->IAmiSSL = __BASE_OR_IFACE_VAR;

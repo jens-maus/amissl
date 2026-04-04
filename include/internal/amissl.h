@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,32 +32,36 @@
 // default stack size for applications
 #define MIN_STACKSIZE 65536
 
+#define AMISSL_STATE_SOCKET_ERRNO_INITIALIZED 0x01
+#define AMISSL_STATE_TIMER_PORT_USER_SUPPLIED 0x02
+
 typedef struct {
 	struct Library *AmiSSLBase;
-#ifdef __amigaos4__
-	struct AmiSSLIFace *IAmiSSL;
-#endif
+
 	unsigned long pid;
+	unsigned long flags;
 	int errno;
 	int *errno_ptr;		// If the app supplied an errno ptr
-	int socket_errno_initialized;
 	char *getenv_var;
-	APTR stack;
 	struct tm localtime_var;
 	struct Library *SocketBase;
-#if !defined(__amigaos4__) && !defined(__MORPHOS__)
-	LONG TCPIPStackType;
-	struct MLinkLock *MLinkLock; // This is really ancient, but ib still supports it so...
-#endif
-#ifdef __amigaos4__
+	struct MsgPort *TimerPort;
+	struct TimeRequest *TimeRequest;
+	ULONG ThreadGroupID; // All states for a specific library base have the same ID
+
+#if defined(__amigaos4__)
+	struct AmiSSLIFace *IAmiSSL;
 	struct SocketIFace *ISocket;
 	struct SocketIFace **ISocketPtr;
 	struct TimerIFace *ITimer;
 	struct IOStdReq *EntropyRequest;
+	LONG TimerSignal;
 #endif
-	struct TimeRequest *TimeRequest;
-	struct MsgPort *TimerPort;
-	ULONG ThreadGroupID; // All states for a specific library base have the same ID
+
+#if !defined(__amigaos4__) && !defined(__MORPHOS__)
+	LONG TCPIPStackType;
+	struct MLinkLock *MLinkLock; // This is really ancient, but ib still supports it so...
+#endif
 } AMISSL_STATE;
 
 STDARGS AMISSL_STATE *GetAmiSSLState(void);

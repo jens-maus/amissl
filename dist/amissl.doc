@@ -141,9 +141,24 @@ amissl.library/SSL_CIPHER_get_mac
 	    pointer and thus errno changes will not be propagated to your
 	    application. (V2)
 
+        AmiSSL_TimerPort - (struct MsgPort *) Provide an optional dedicated
+	    message port to be used for all timer related functions, instead of
+	    the port that AmiSSL usually allocates itself. It must belong to
+	    the calling process and remain valid until after CleanupAmiSSL()
+	    has been executed, after which the application is responsible for
+	    freeing the port. (V5.27)
+
+        AmiSSL_TimerSignal - (LONG) The signal bit to be used by the message
+	    port which AmiSSL allocates for all timer related functions. It
+	    must remain valid until CleanupAmiSSL() has been executed, after
+	    which the application is responsible for freeing the signal, when
+	    necessary. This tag is only implemented for AmigaOS 4.x, and will
+	    be ignored if AmiSSL_TimerPort has also been specified.
+	    (defaults to -1, allocate a new signal). (V5.27)
+
 	AmiSSL_SocketBaseBrand - (LONG) useful only if you are using
 	    MultiTCP linker library by Stefan Burstroem, you can ignore it
-	    otherwise. (defaults to TCPIP_AmiTCP) (V2)
+	    otherwise. (defaults to TCPIP_AmiTCP). (V2)
 
 	AmiSSL_MLinkLock - useful only if you are using MultiTCP linker
 	    library by Stefan Burstroem, you can ignore it otherwise. (V2)
