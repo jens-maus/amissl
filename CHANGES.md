@@ -1,5 +1,7 @@
 ## AmiSSL 5.27 (x.4.2026)
 
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 19.3.2026.
 - Fixed high stack usage in the ML-KEM code as used in PQC support.
 - Added AmiSSL_TimerSignal and AmiSSL_TimerPort tags for InitAmiSSL(),
   allowing applications to have optional control over signal usage.
