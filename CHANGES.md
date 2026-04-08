@@ -1,5 +1,23 @@
-## AmiSSL 5.27 (x.4.2026)
+## AmiSSL 5.27 (8.4.2026)
 
+- Updated OpenSSL backend to full compatibility with the latest
+  OpenSSL 3.6.2 (7.4.2026) security patch release. The most severe
+  CVE fixed in this release is moderate:
+  + Fixed incorrect failure handling in RSA KEM RSASVE encapsulation.
+    (CVE-2026-31790)
+  + Fixed loss of key agreement group tuple structure when the
+    DEFAULT keyword is used in the server-side configuration of the
+    key-agreement group list. (CVE-2026-2673)
+  + Fixed potential use-after-free in DANE client code.
+    (CVE-2026-28387)
+  + Fixed NULL pointer dereference when processing a delta CRL.
+    (CVE-2026-28388)
+  + Fixed possible NULL dereference when processing CMS
+    KeyAgreeRecipientInfo. (CVE-2026-28389)
+  + Fixed possible NULL dereference when processing CMS
+    KeyTransportRecipientInfo. (CVE-2026-28390)
+  + Fixed heap buffer overflow in hexadecimal conversion.
+    (CVE-2026-31789)
 - Updated root certificates to latest Mozilla-based bundle provided
   by https://curl.se/docs/caextract.html dated 19.3.2026.
 - Fixed high stack usage in the ML-KEM code as used in PQC support.

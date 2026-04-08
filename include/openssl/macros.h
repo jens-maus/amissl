@@ -5,7 +5,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 2019-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -181,6 +181,7 @@
  */
 
 #undef OPENSSL_NO_DEPRECATED_3_6
+#undef OPENSSL_NO_DEPRECATED_3_5
 #undef OPENSSL_NO_DEPRECATED_3_4
 #undef OPENSSL_NO_DEPRECATED_3_1
 #undef OPENSSL_NO_DEPRECATED_3_0
