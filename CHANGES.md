@@ -59,7 +59,7 @@
     handshake failures for OpenSSL 3.6.0 servers with various client
     implementations.
 - Updated root certificates to latest Mozilla-based bundle provided
-  by https://curl.se/docs/caextract.html dated 2.12.2026.
+  by https://curl.se/docs/caextract.html dated 2.12.2025.
 
 ## AmiSSL 5.25 (12.10.2025)
 
