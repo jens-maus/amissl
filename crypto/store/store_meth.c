@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2020-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -302,7 +302,7 @@ inner_loader_fetch(struct loader_data_st *methdata,
     }
 
     /* If we haven't received a name id yet, try to get one for the name */
-    id = scheme != NULL ? ossl_namemap_name2num(namemap, scheme) : 0;
+    id = ossl_namemap_name2num(namemap, scheme);
 
     /*
      * If we haven't found the name yet, chances are that the algorithm to

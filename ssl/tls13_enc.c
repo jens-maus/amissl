@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -39,7 +39,7 @@ int tls13_hkdf_expand_ex(OSSL_LIB_CTX *libctx, const char *propq,
 {
     EVP_KDF *kdf = EVP_KDF_fetch(libctx, OSSL_KDF_NAME_TLS1_3_KDF, propq);
     EVP_KDF_CTX *kctx;
-    OSSL_PARAM params[7], *p = params;
+    OSSL_PARAM params[8], *p = params;
     int mode = EVP_PKEY_HKDEF_MODE_EXPAND_ONLY;
     const char *mdname = EVP_MD_get0_name(md);
     int ret;
@@ -84,6 +84,10 @@ int tls13_hkdf_expand_ex(OSSL_LIB_CTX *libctx, const char *propq,
         *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_DATA,
             (unsigned char *)data,
             datalen);
+    if (propq != NULL)
+        *p++ = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_PROPERTIES,
+            (char *)propq, 0);
+
     *p++ = OSSL_PARAM_construct_end();
 
     ret = EVP_KDF_derive(kctx, out, outlen, params) <= 0;
@@ -525,10 +529,25 @@ int tls13_change_cipher_state(SSL_CONNECTION *s, int which)
             labellen = sizeof(client_early_traffic) - 1;
             log_label = CLIENT_EARLY_LABEL;
 
-            handlen = BIO_get_mem_data(s->s3.handshake_buffer, &hdata);
-            if (handlen <= 0) {
-                SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_R_BAD_HANDSHAKE_LENGTH);
-                goto err;
+#ifndef OPENSSL_NO_ECH
+            /* if ECH worked then use the innerch and not the h/s buffer here */
+            if (((which & SSL3_CC_SERVER) && s->ext.ech.success == 1)
+                || ((which & SSL3_CC_CLIENT) && s->ext.ech.attempted == 1)) {
+                if (s->ext.ech.innerch == NULL) {
+                    SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
+                    goto err;
+                }
+                handlen = (long)s->ext.ech.innerch_len;
+                hdata = s->ext.ech.innerch;
+            } else
+#endif
+            {
+                handlen = BIO_get_mem_data(s->s3.handshake_buffer, &hdata);
+                if (handlen <= 0) {
+                    SSLfatal(s, SSL_AD_INTERNAL_ERROR,
+                        SSL_R_BAD_HANDSHAKE_LENGTH);
+                    goto err;
+                }
             }
 
             if (s->early_data_state == SSL_EARLY_DATA_CONNECTING

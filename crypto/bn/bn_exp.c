@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -754,6 +754,7 @@ int bn_mod_exp_mont_fixed_top(BIGNUM *rr, const BIGNUM *a, const BIGNUM *p,
         for (i = 1; i < top; i++)
             tmp.d[i] = (~m->d[i]) & BN_MASK2;
         tmp.top = top;
+        tmp.flags |= BN_FLG_FIXED_TOP;
     } else
 #endif
         if (!bn_to_mont_fixed_top(&tmp, BN_value_one(), mont, ctx))

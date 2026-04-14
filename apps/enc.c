@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -49,7 +49,6 @@ typedef enum OPTION_choice {
     OPT_IN,
     OPT_OUT,
     OPT_PASS,
-    OPT_ENGINE,
     OPT_D,
     OPT_P,
     OPT_V,
@@ -76,7 +75,9 @@ typedef enum OPTION_choice {
     OPT_R_ENUM,
     OPT_PROV_ENUM,
     OPT_SKEYOPT,
-    OPT_SKEYMGMT
+    OPT_SKEYMGMT,
+    OPT_SKEYURI,
+    OPT_PASSIN
 } OPTION_CHOICE;
 
 const OPTIONS enc_options[] = {
@@ -90,18 +91,12 @@ const OPTIONS enc_options[] = {
     { "d", OPT_D, '-', "Decrypt" },
     { "p", OPT_P, '-', "Print the iv/key" },
     { "P", OPT_UPPER_P, '-', "Print the iv/key and exit" },
-#ifndef OPENSSL_NO_ENGINE
-    { "engine", OPT_ENGINE, 's', "Use engine, possibly a hardware device" },
-#endif
 
     OPT_SECTION("Input"),
     { "in", OPT_IN, '<', "Input file" },
-    { "k", OPT_K, 's', "Passphrase" },
-    { "kfile", OPT_KFILE, '<', "Read passphrase from file" },
 
     OPT_SECTION("Output"),
     { "out", OPT_OUT, '>', "Output file" },
-    { "pass", OPT_PASS, 's', "Passphrase source" },
     { "v", OPT_V, '-', "Verbose output" },
     { "a", OPT_A, '-', "Base64 encode/decode, depending on encryption flag" },
     { "base64", OPT_A, '-', "Same as option -a" },
@@ -119,6 +114,9 @@ const OPTIONS enc_options[] = {
     { "S", OPT_UPPER_S, 's', "Salt, in hex" },
     { "iv", OPT_IV, 's', "IV in hex" },
     { "md", OPT_MD, 's', "Use specified digest to create a key from the passphrase" },
+    { "k", OPT_K, 's', "Passphrase (Deprecated" },
+    { "kfile", OPT_KFILE, '<', "Read passphrase from file (Deprecated)" },
+    { "pass", OPT_PASS, 's', "Passphrase source" },
     { "iter", OPT_ITER, 'p',
         "Specify the iteration count and force the use of PBKDF2" },
     { OPT_MORE_STR, 0, 0, "Default: " STR(PBKDF2_ITER_DEFAULT) },
@@ -134,6 +132,8 @@ const OPTIONS enc_options[] = {
 #endif
     { "skeyopt", OPT_SKEYOPT, 's', "Key options as opt:value for opaque symmetric key handling" },
     { "skeymgmt", OPT_SKEYMGMT, 's', "Symmetric key management name for opaque symmetric key handling" },
+    { "skeyuri", OPT_SKEYURI, 's', "Symmetric key object URI" },
+    { "storepass", OPT_PASSIN, 's', "Store pass phrase source when skeyuri is used (optional)" },
     { "", OPT_CIPHER, '-', "Any supported cipher" },
 
     OPT_R_OPTIONS,
@@ -141,11 +141,37 @@ const OPTIONS enc_options[] = {
     { NULL }
 };
 
+static EVP_SKEY *skey_from_params(const EVP_CIPHER *cipher, const char *skeymgmt,
+    STACK_OF(OPENSSL_STRING) *opts)
+{
+    EVP_SKEY *skey = NULL;
+    EVP_SKEYMGMT *mgmt = NULL;
+    OSSL_PARAM *params = NULL;
+
+    mgmt = EVP_SKEYMGMT_fetch(app_get0_libctx(),
+        skeymgmt != NULL ? skeymgmt : EVP_CIPHER_name(cipher),
+        app_get0_propq());
+    if (mgmt == NULL)
+        return NULL;
+
+    params = app_params_new_from_opts(opts, EVP_SKEYMGMT_get0_imp_settable_params(mgmt));
+    if (params == NULL) {
+        EVP_SKEYMGMT_free(mgmt);
+        return NULL;
+    }
+
+    skey = EVP_SKEY_import(app_get0_libctx(), EVP_SKEYMGMT_get0_name(mgmt),
+        app_get0_propq(), OSSL_SKEYMGMT_SELECT_ALL, params);
+    OSSL_PARAM_free(params);
+    EVP_SKEYMGMT_free(mgmt);
+
+    return skey;
+}
+
 int enc_main(int argc, char **argv)
 {
     static char buf[128];
     static const char magic[] = "Salted__";
-    ENGINE *e = NULL;
     BIO *in = NULL, *out = NULL, *b64 = NULL, *benc = NULL, *rbio = NULL, *wbio = NULL;
     EVP_CIPHER_CTX *ctx = NULL;
     EVP_CIPHER *cipher = NULL;
@@ -154,6 +180,7 @@ int enc_main(int argc, char **argv)
     char *hkey = NULL, *hiv = NULL, *hsalt = NULL, *p;
     char *infile = NULL, *outfile = NULL, *prog;
     char *str = NULL, *passarg = NULL, *pass = NULL, *strbuf = NULL;
+    char *storepassarg = NULL;
     const char *ciphername = NULL;
     char mbuf[sizeof(magic) - 1];
     OPTION_CHOICE o;
@@ -181,8 +208,8 @@ int enc_main(int argc, char **argv)
     BIO *bzstd = NULL;
     STACK_OF(OPENSSL_STRING) *skeyopts = NULL;
     const char *skeymgmt = NULL;
+    const char *skeyuri = NULL;
     EVP_SKEY *skey = NULL;
-    EVP_SKEYMGMT *mgmt = NULL;
 
     /* first check the command name */
     if (strcmp(argv[0], "base64") == 0)
@@ -216,12 +243,12 @@ int enc_main(int argc, char **argv)
             ret = 0;
             goto end;
         case OPT_LIST:
-            BIO_printf(bio_out, "Supported ciphers:\n");
+            BIO_puts(bio_out, "Supported ciphers:\n");
             dec.bio = bio_out;
             dec.n = 0;
             OBJ_NAME_do_all_sorted(OBJ_NAME_TYPE_CIPHER_METH,
                 show_ciphers, &dec);
-            BIO_printf(bio_out, "\n");
+            BIO_puts(bio_out, "\n");
             ret = 0;
             goto end;
         case OPT_E:
@@ -236,8 +263,8 @@ int enc_main(int argc, char **argv)
         case OPT_PASS:
             passarg = opt_arg();
             break;
-        case OPT_ENGINE:
-            e = setup_engine(opt_arg(), 0);
+        case OPT_PASSIN:
+            storepassarg = opt_arg();
             break;
         case OPT_D:
             enc = 0;
@@ -285,6 +312,8 @@ int enc_main(int argc, char **argv)
                 goto opthelp;
             if (k)
                 n *= 1024;
+            if (n > INT_MAX)
+                goto opthelp;
             bsize = (int)n;
             break;
         case OPT_K:
@@ -352,6 +381,9 @@ int enc_main(int argc, char **argv)
         case OPT_SKEYMGMT:
             skeymgmt = opt_arg();
             break;
+        case OPT_SKEYURI:
+            skeyuri = opt_arg();
+            break;
         case OPT_R_CASES:
             if (!opt_rand(o))
                 goto end;
@@ -392,7 +424,7 @@ int enc_main(int argc, char **argv)
     if (base64 && bsize < 80)
         bsize = 80;
     if (verbose)
-        BIO_printf(bio_err, "bufsize=%d\n", bsize);
+        BIO_printf(bio_out, "bufsize=%d\n", bsize);
 
 #ifndef OPENSSL_NO_ZLIB
     if (do_zlib)
@@ -415,7 +447,7 @@ int enc_main(int argc, char **argv)
 
     if (infile == NULL) {
         if (!streamable && printkey != 2) { /* if just print key and exit, it's ok */
-            BIO_printf(bio_err, "Unstreamable cipher mode\n");
+            BIO_puts(bio_err, "Unstreamable cipher mode\n");
             goto end;
         }
         in = dup_bio_in(informat);
@@ -427,13 +459,14 @@ int enc_main(int argc, char **argv)
 
     if (str == NULL && passarg != NULL) {
         if (!app_passwd(passarg, NULL, &pass, NULL)) {
-            BIO_printf(bio_err, "Error getting password\n");
+            BIO_puts(bio_err, "Error getting password\n");
             goto end;
         }
         str = pass;
     }
 
-    if ((str == NULL) && (cipher != NULL) && (hkey == NULL) && (skeyopts == NULL)) {
+    if ((str == NULL) && (cipher != NULL) && (hkey == NULL)
+        && (skeyopts == NULL) && (skeyuri == NULL)) {
         if (1) {
 #ifndef OPENSSL_NO_UI_CONSOLE
             for (;;) {
@@ -453,13 +486,13 @@ int enc_main(int argc, char **argv)
                     break;
                 }
                 if (i < 0) {
-                    BIO_printf(bio_err, "bad password read\n");
+                    BIO_puts(bio_err, "bad password read\n");
                     goto end;
                 }
             }
         } else {
 #endif
-            BIO_printf(bio_err, "password required\n");
+            BIO_puts(bio_err, "password required\n");
             goto end;
         }
     }
@@ -550,13 +583,13 @@ int enc_main(int argc, char **argv)
                 sptr = NULL;
             } else {
                 if (hsalt != NULL && !set_hex(hsalt, salt, saltlen)) {
-                    BIO_printf(bio_err, "invalid hex salt value\n");
+                    BIO_puts(bio_err, "invalid hex salt value\n");
                     goto end;
                 }
                 if (enc) { /* encryption */
                     if (hsalt == NULL) {
                         if (RAND_bytes(salt, saltlen) <= 0) {
-                            BIO_printf(bio_err, "RAND_bytes failed\n");
+                            BIO_puts(bio_err, "RAND_bytes failed\n");
                             goto end;
                         }
                         /*
@@ -571,25 +604,25 @@ int enc_main(int argc, char **argv)
                                        (char *)salt,
                                        saltlen)
                                     != saltlen)) {
-                            BIO_printf(bio_err, "error writing output file\n");
+                            BIO_puts(bio_err, "error writing output file\n");
                             goto end;
                         }
                     }
                 } else { /* decryption */
                     if (hsalt == NULL) {
                         if (BIO_read(rbio, mbuf, sizeof(mbuf)) != sizeof(mbuf)) {
-                            BIO_printf(bio_err, "error reading input file\n");
+                            BIO_puts(bio_err, "error reading input file\n");
                             goto end;
                         }
                         if (memcmp(mbuf, magic, sizeof(mbuf)) == 0) { /* file IS salted */
                             if (BIO_read(rbio, salt,
                                     saltlen)
                                 != saltlen) {
-                                BIO_printf(bio_err, "error reading input file\n");
+                                BIO_puts(bio_err, "error reading input file\n");
                                 goto end;
                             }
                         } else { /* file is NOT salted, NO salt available */
-                            BIO_printf(bio_err, "bad magic number\n");
+                            BIO_puts(bio_err, "bad magic number\n");
                             goto end;
                         }
                     }
@@ -610,7 +643,7 @@ int enc_main(int argc, char **argv)
 
                 if (!PKCS5_PBKDF2_HMAC(str, (int)str_len, sptr, islen,
                         iter, dgst, iklen + ivlen, tmpkeyiv)) {
-                    BIO_printf(bio_err, "PKCS5_PBKDF2_HMAC failed\n");
+                    BIO_puts(bio_err, "PKCS5_PBKDF2_HMAC failed\n");
                     goto end;
                 }
                 /* split and move data back to global buffer */
@@ -618,13 +651,13 @@ int enc_main(int argc, char **argv)
                 memcpy(iv, tmpkeyiv + iklen, ivlen);
                 rawkey_set = 1;
             } else {
-                BIO_printf(bio_err, "*** WARNING : "
-                                    "deprecated key derivation used.\n"
-                                    "Using -iter or -pbkdf2 would be better.\n");
+                BIO_puts(bio_err, "*** WARNING : "
+                                  "deprecated key derivation used.\n"
+                                  "Using -iter or -pbkdf2 would be better.\n");
                 if (!EVP_BytesToKey(cipher, dgst, sptr,
                         (unsigned char *)str, (int)str_len,
                         1, key, iv)) {
-                    BIO_printf(bio_err, "EVP_BytesToKey failed\n");
+                    BIO_puts(bio_err, "EVP_BytesToKey failed\n");
                     goto end;
                 }
                 rawkey_set = 1;
@@ -642,9 +675,9 @@ int enc_main(int argc, char **argv)
             int siz = EVP_CIPHER_get_iv_length(cipher);
 
             if (siz == 0) {
-                BIO_printf(bio_err, "warning: iv not used by this cipher\n");
+                BIO_puts(bio_err, "warning: iv not used by this cipher\n");
             } else if (!set_hex(hiv, iv, siz)) {
-                BIO_printf(bio_err, "invalid hex iv value\n");
+                BIO_puts(bio_err, "invalid hex iv value\n");
                 goto end;
             }
         }
@@ -655,12 +688,12 @@ int enc_main(int argc, char **argv)
              * No IV was explicitly set and no IV was generated.
              * Hence the IV is undefined, making correct decryption impossible.
              */
-            BIO_printf(bio_err, "iv undefined\n");
+            BIO_puts(bio_err, "iv undefined\n");
             goto end;
         }
         if (hkey != NULL) {
             if (!set_hex(hkey, key, EVP_CIPHER_get_key_length(cipher))) {
-                BIO_printf(bio_err, "invalid hex key value\n");
+                BIO_puts(bio_err, "invalid hex key value\n");
                 goto end;
             }
             /* wiping secret data as we no longer need it */
@@ -672,8 +705,8 @@ int enc_main(int argc, char **argv)
          * At this moment we know whether we trying to use raw bytes as the key
          * or an opaque symmetric key. We do not allow both options simultaneously.
          */
-        if (rawkey_set > 0 && skeyopts != NULL) {
-            BIO_printf(bio_err, "Either a raw key or the 'skeyopt' args must be used.\n");
+        if (rawkey_set > 0 && (skeyopts != NULL || skeyuri != NULL)) {
+            BIO_puts(bio_err, "Either a raw key or the skeyopt/skeyuri args must be used.\n");
             goto end;
         }
 
@@ -691,35 +724,34 @@ int enc_main(int argc, char **argv)
             EVP_CIPHER_CTX_set_flags(ctx, EVP_CIPHER_CTX_FLAG_WRAP_ALLOW);
 
         if (rawkey_set) {
-            if (!EVP_CipherInit_ex(ctx, cipher, e, key,
+            if (!EVP_CipherInit_ex(ctx, cipher, NULL, key,
                     (hiv == NULL && wrap == 1 ? NULL : iv), enc)) {
                 BIO_printf(bio_err, "Error setting cipher %s\n",
                     EVP_CIPHER_get0_name(cipher));
-                ERR_print_errors(bio_err);
                 goto end;
             }
         } else {
-            OSSL_PARAM *params = NULL;
+            if (skeyuri != NULL) {
+                char *storepass = NULL;
 
-            mgmt = EVP_SKEYMGMT_fetch(app_get0_libctx(),
-                skeymgmt != NULL ? skeymgmt : EVP_CIPHER_name(cipher),
-                app_get0_propq());
-            if (mgmt == NULL)
-                goto end;
+                if (!app_passwd(storepassarg, NULL, &storepass, NULL)) {
+                    BIO_puts(bio_err,
+                        "Error getting store password from 'storepass' argument\n");
+                }
 
-            params = app_params_new_from_opts(skeyopts,
-                EVP_SKEYMGMT_get0_imp_settable_params(mgmt));
-            if (params == NULL)
-                goto end;
-
-            skey = EVP_SKEY_import(app_get0_libctx(), EVP_SKEYMGMT_get0_name(mgmt),
-                app_get0_propq(), OSSL_SKEYMGMT_SELECT_ALL, params);
-            OSSL_PARAM_free(params);
-            if (skey == NULL) {
-                BIO_printf(bio_err, "Error creating opaque key object for skeymgmt %s\n",
-                    skeymgmt ? skeymgmt : EVP_CIPHER_name(cipher));
-                ERR_print_errors(bio_err);
-                goto end;
+                skey = load_skey(skeyuri, FORMAT_UNDEF, 0, storepass, 0);
+                OPENSSL_free(storepass);
+                if (skey == NULL) {
+                    BIO_printf(bio_err, "Error loading opaque key object from URI %s\n", skeyuri);
+                    goto end;
+                }
+            } else {
+                skey = skey_from_params(cipher, skeymgmt, skeyopts);
+                if (skey == NULL) {
+                    BIO_printf(bio_err, "Error creating opaque key object for skeymgmt %s\n",
+                        skeymgmt ? skeymgmt : EVP_CIPHER_name(cipher));
+                    goto end;
+                }
             }
 
             if (!EVP_CipherInit_SKEY(ctx, cipher, skey,
@@ -727,7 +759,6 @@ int enc_main(int argc, char **argv)
                     EVP_CIPHER_get_iv_length(cipher), enc, NULL)) {
                 BIO_printf(bio_err, "Error setting an opaque key for cipher %s\n",
                     EVP_CIPHER_get0_name(cipher));
-                ERR_print_errors(bio_err);
                 goto end;
             }
         }
@@ -775,11 +806,11 @@ int enc_main(int argc, char **argv)
         if (inl <= 0)
             break;
         if (!streamable && !BIO_eof(rbio)) { /* do not output data */
-            BIO_printf(bio_err, "Unstreamable cipher mode\n");
+            BIO_puts(bio_err, "Unstreamable cipher mode\n");
             goto end;
         }
         if (BIO_write(wbio, (char *)buff, inl) != inl) {
-            BIO_printf(bio_err, "error writing output file\n");
+            BIO_puts(bio_err, "error writing output file\n");
             goto end;
         }
         if (!streamable)
@@ -787,21 +818,21 @@ int enc_main(int argc, char **argv)
     }
     if (!BIO_flush(wbio)) {
         if (enc)
-            BIO_printf(bio_err, "bad encrypt\n");
+            BIO_puts(bio_err, "bad encrypt\n");
         else
-            BIO_printf(bio_err, "bad decrypt\n");
+            BIO_puts(bio_err, "bad decrypt\n");
         goto end;
     }
 
     ret = 0;
     if (verbose) {
-        BIO_printf(bio_err, "bytes read   : %8ju\n", BIO_number_read(in));
-        BIO_printf(bio_err, "bytes written: %8ju\n", BIO_number_written(out));
+        BIO_printf(bio_err, "bytes read   : %8ju\n"
+                            "bytes written: %8ju\n",
+            BIO_number_read(in), BIO_number_written(out));
     }
 end:
     ERR_print_errors(bio_err);
     sk_OPENSSL_STRING_free(skeyopts);
-    EVP_SKEYMGMT_free(mgmt);
     EVP_SKEY_free(skey);
     OPENSSL_free(strbuf);
     OPENSSL_free(buff);
@@ -816,7 +847,6 @@ end:
 #endif
     BIO_free(bbrot);
     BIO_free(bzstd);
-    release_engine(e);
     OPENSSL_free(pass);
     return ret;
 }
@@ -824,25 +854,29 @@ end:
 static void show_ciphers(const OBJ_NAME *name, void *arg)
 {
     struct doall_enc_ciphers *dec = (struct doall_enc_ciphers *)arg;
-    const EVP_CIPHER *cipher;
+    EVP_CIPHER *cipher;
 
     if (!islower((unsigned char)*name->name))
         return;
 
     /* Filter out ciphers that we cannot use */
-    cipher = EVP_get_cipherbyname(name->name);
+    cipher = EVP_CIPHER_fetch(app_get0_libctx(), name->name, app_get0_propq());
     if (cipher == NULL
         || (EVP_CIPHER_get_flags(cipher) & EVP_CIPH_FLAG_AEAD_CIPHER) != 0
         || (EVP_CIPHER_get_flags(cipher) & EVP_CIPH_FLAG_ENC_THEN_MAC) != 0
-        || EVP_CIPHER_get_mode(cipher) == EVP_CIPH_XTS_MODE)
+        || EVP_CIPHER_get_mode(cipher) == EVP_CIPH_XTS_MODE) {
+        EVP_CIPHER_free(cipher);
         return;
+    }
 
     BIO_printf(dec->bio, "-%-25s", name->name);
     if (++dec->n == 3) {
-        BIO_printf(dec->bio, "\n");
+        BIO_puts(dec->bio, "\n");
         dec->n = 0;
     } else
-        BIO_printf(dec->bio, " ");
+        BIO_puts(dec->bio, " ");
+
+    EVP_CIPHER_free(cipher);
 }
 
 static int set_hex(const char *in, unsigned char *out, int size)
@@ -853,17 +887,17 @@ static int set_hex(const char *in, unsigned char *out, int size)
     i = size * 2;
     n = (int)strlen(in);
     if (n > i) {
-        BIO_printf(bio_err, "hex string is too long, ignoring excess\n");
+        BIO_puts(bio_err, "hex string is too long, ignoring excess\n");
         n = i; /* ignore exceeding part */
     } else if (n < i) {
-        BIO_printf(bio_err, "hex string is too short, padding with zero bytes to length\n");
+        BIO_puts(bio_err, "hex string is too short, padding with zero bytes to length\n");
     }
 
     memset(out, 0, size);
     for (i = 0; i < n; i++) {
         j = (unsigned char)*in++;
         if (!isxdigit(j)) {
-            BIO_printf(bio_err, "non-hex digit\n");
+            BIO_puts(bio_err, "non-hex digit\n");
             return 0;
         }
         j = (unsigned char)OPENSSL_hexchar2int(j);

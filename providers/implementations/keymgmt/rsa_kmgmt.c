@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -29,7 +29,9 @@
 #include "internal/param_build_set.h"
 
 static OSSL_FUNC_keymgmt_new_fn rsa_newdata;
+static OSSL_FUNC_keymgmt_new_ex_fn rsa_newdata_ex;
 static OSSL_FUNC_keymgmt_new_fn rsapss_newdata;
+static OSSL_FUNC_keymgmt_new_ex_fn rsapss_newdata_ex;
 static OSSL_FUNC_keymgmt_gen_init_fn rsa_gen_init;
 static OSSL_FUNC_keymgmt_gen_init_fn rsapss_gen_init;
 static OSSL_FUNC_keymgmt_gen_set_params_fn rsa_gen_set_params;
@@ -75,36 +77,91 @@ static int pss_params_fromdata(RSA_PSS_PARAMS_30 *pss_params, int *defaults_set,
     return 1;
 }
 
-static void *rsa_newdata(void *provctx)
+/*
+ * If the application actually created a legacy RSA object and assigned it to
+ * the EVP_PKEY, then we get hold of that object here. We return 0 if we hit
+ * a fatal error or 1 otherwise. We may return 1 but with *rsa set to NULL.
+ */
+static int get_legacy_rsa_object(OSSL_LIB_CTX *libctx, RSA **rsa, const OSSL_PARAM params[])
+{
+#ifndef FIPS_MODULE
+    const OSSL_PARAM *p;
+
+    if (params == NULL)
+        return 1;
+    p = OSSL_PARAM_locate_const(params, "legacy-object");
+    if (p == NULL)
+        return 1;
+    /*
+     * This only works because we are in the default provider. We are not
+     * normally allowed to pass complex objects across the provider boundary
+     * like this.
+     */
+    if (OSSL_PARAM_get_octet_ptr(p, (const void **)rsa, NULL) && *rsa != NULL) {
+        if (ossl_lib_ctx_get_concrete(ossl_rsa_get0_libctx(*rsa)) != ossl_lib_ctx_get_concrete(libctx)) {
+            *rsa = NULL;
+            return 1;
+        }
+        if (!RSA_up_ref(*rsa))
+            return 0;
+    }
+#endif
+
+    return 1;
+}
+
+static void *rsa_newdata_ex(void *provctx, const OSSL_PARAM params[])
 {
     OSSL_LIB_CTX *libctx = PROV_LIBCTX_OF(provctx);
-    RSA *rsa;
+    RSA *rsa = NULL;
 
     if (!ossl_prov_is_running())
         return NULL;
 
-    rsa = ossl_rsa_new_with_ctx(libctx);
-    if (rsa != NULL) {
-        RSA_clear_flags(rsa, RSA_FLAG_TYPE_MASK);
-        RSA_set_flags(rsa, RSA_FLAG_TYPE_RSA);
+    if (!get_legacy_rsa_object(libctx, &rsa, params))
+        return NULL;
+
+    if (rsa == NULL) {
+        rsa = ossl_rsa_new_with_ctx(libctx);
+        if (rsa != NULL) {
+            RSA_clear_flags(rsa, RSA_FLAG_TYPE_MASK);
+            RSA_set_flags(rsa, RSA_FLAG_TYPE_RSA);
+        }
     }
+
+    return rsa;
+}
+
+static void *rsa_newdata(void *provctx)
+{
+    return rsa_newdata_ex(provctx, NULL);
+}
+
+static void *rsapss_newdata_ex(void *provctx, const OSSL_PARAM params[])
+{
+    OSSL_LIB_CTX *libctx = PROV_LIBCTX_OF(provctx);
+    RSA *rsa = NULL;
+
+    if (!ossl_prov_is_running())
+        return NULL;
+
+    if (!get_legacy_rsa_object(libctx, &rsa, params))
+        return NULL;
+
+    if (rsa == NULL) {
+        rsa = ossl_rsa_new_with_ctx(libctx);
+        if (rsa != NULL) {
+            RSA_clear_flags(rsa, RSA_FLAG_TYPE_MASK);
+            RSA_set_flags(rsa, RSA_FLAG_TYPE_RSASSAPSS);
+        }
+    }
+
     return rsa;
 }
 
 static void *rsapss_newdata(void *provctx)
 {
-    OSSL_LIB_CTX *libctx = PROV_LIBCTX_OF(provctx);
-    RSA *rsa;
-
-    if (!ossl_prov_is_running())
-        return NULL;
-
-    rsa = ossl_rsa_new_with_ctx(libctx);
-    if (rsa != NULL) {
-        RSA_clear_flags(rsa, RSA_FLAG_TYPE_MASK);
-        RSA_set_flags(rsa, RSA_FLAG_TYPE_RSASSAPSS);
-    }
-    return rsa;
+    return rsapss_newdata_ex(provctx, NULL);
 }
 
 static void rsa_freedata(void *keydata)
@@ -229,7 +286,7 @@ static int rsa_export(void *keydata, int selection,
     }
 
     ok = param_callback(params, cbarg);
-    OSSL_PARAM_free(params);
+    OSSL_PARAM_clear_free(params);
 err:
     OSSL_PARAM_BLD_free(tmpl);
     return ok;
@@ -433,6 +490,7 @@ struct rsa_gen_ctx {
     /* ACVP test parameters */
     OSSL_PARAM *acvp_test_params;
 #endif
+    uint32_t a, b;
 };
 
 static int rsa_gencb(int p, int n, BN_GENCB *cb)
@@ -520,6 +578,25 @@ static int rsa_gen_set_params(void *genctx, const OSSL_PARAM params[])
     if ((p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_RSA_E)) != NULL
         && !OSSL_PARAM_get_BN(p, &gctx->pub_exp))
         return 0;
+    if ((p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_RSA_A)) != NULL) {
+        if (!OSSL_PARAM_get_uint32(p, &gctx->a))
+            return 0;
+        /* a is an optional value that should be one of (0, 1, 3, 5, 7) */
+        if (gctx->a != 0 && (gctx->a > 7 || (gctx->a & 1) == 0)) {
+            ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_DATA);
+            return 0;
+        }
+    }
+    if ((p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_RSA_B)) != NULL) {
+        if (!OSSL_PARAM_get_uint32(p, &gctx->b))
+            return 0;
+        /* b is an optional value that should be one of (0, 1, 3, 5, 7) */
+        if (gctx->b != 0 && (gctx->b > 7 || (gctx->b & 1) == 0)) {
+            ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_DATA);
+            return 0;
+        }
+    }
+
     /* Only attempt to get PSS parameters when generating an RSA-PSS key */
     if (gctx->rsa_type == RSA_FLAG_TYPE_RSASSAPSS
         && !pss_params_fromdata(&gctx->pss_params, &gctx->pss_defaults_set, params,
@@ -536,8 +613,9 @@ static int rsa_gen_set_params(void *genctx, const OSSL_PARAM params[])
 #define rsa_gen_basic                                        \
     OSSL_PARAM_size_t(OSSL_PKEY_PARAM_RSA_BITS, NULL),       \
         OSSL_PARAM_size_t(OSSL_PKEY_PARAM_RSA_PRIMES, NULL), \
-        OSSL_PARAM_BN(OSSL_PKEY_PARAM_RSA_E, NULL, 0)
-
+        OSSL_PARAM_BN(OSSL_PKEY_PARAM_RSA_E, NULL, 0),       \
+        OSSL_PARAM_uint32(OSSL_PKEY_PARAM_RSA_A, NULL),      \
+        OSSL_PARAM_uint32(OSSL_PKEY_PARAM_RSA_B, NULL)
 /*
  * The following must be kept in sync with ossl_rsa_pss_params_30_fromdata()
  * in crypto/rsa/rsa_backend.c
@@ -552,7 +630,7 @@ static int rsa_gen_set_params(void *genctx, const OSSL_PARAM params[])
 static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
     ossl_unused void *provctx)
 {
-    static OSSL_PARAM settable[] = {
+    static const OSSL_PARAM settable[] = {
         rsa_gen_basic,
         OSSL_PARAM_END
     };
@@ -563,7 +641,7 @@ static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
 static const OSSL_PARAM *rsapss_gen_settable_params(ossl_unused void *genctx,
     ossl_unused void *provctx)
 {
-    static OSSL_PARAM settable[] = {
+    static const OSSL_PARAM settable[] = {
         rsa_gen_basic,
         rsa_gen_pss,
         OSSL_PARAM_END
@@ -614,9 +692,10 @@ static void *rsa_gen(void *genctx, OSSL_CALLBACK *osslcb, void *cbarg)
     }
 #endif
 
-    if (!RSA_generate_multi_prime_key(rsa_tmp,
+    if (!ossl_rsa_generate_multi_prime_key(rsa_tmp,
             (int)gctx->nbits, (int)gctx->primes,
-            gctx->pub_exp, gencb))
+            gctx->pub_exp, gencb,
+            gctx->a, gctx->b))
         goto err;
 
     if (!ossl_rsa_pss_params_30_copy(ossl_rsa_get0_pss_params_30(rsa_tmp),
@@ -694,6 +773,7 @@ static const char *rsa_query_operation_name(int operation_id)
 
 const OSSL_DISPATCH ossl_rsa_keymgmt_functions[] = {
     { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))rsa_newdata },
+    { OSSL_FUNC_KEYMGMT_NEW_EX, (void (*)(void))rsa_newdata_ex },
     { OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))rsa_gen_init },
     { OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS,
         (void (*)(void))rsa_gen_set_params },
@@ -718,6 +798,7 @@ const OSSL_DISPATCH ossl_rsa_keymgmt_functions[] = {
 
 const OSSL_DISPATCH ossl_rsapss_keymgmt_functions[] = {
     { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))rsapss_newdata },
+    { OSSL_FUNC_KEYMGMT_NEW_EX, (void (*)(void))rsapss_newdata_ex },
     { OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))rsapss_gen_init },
     { OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS, (void (*)(void))rsa_gen_set_params },
     { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS,

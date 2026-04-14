@@ -68,7 +68,7 @@ jobs:
               "extra_config": "no-afalgeng enable-fips"
             }, {
               "branch": "master",
-              "extra_config": "no-afalgeng enable-fips enable-tfo enable-lms enable-crypto-mdebug enable-allocfail-tests"
+              "extra_config": "enable-fips enable-tfo enable-lms enable-crypto-mdebug enable-allocfail-tests"
           }]
           EOF
           )
@@ -76,6 +76,7 @@ jobs:
           echo "branches<<EOF"$'\n'"$MATRIX"$'\n'EOF >> "$GITHUB_OUTPUT"
 
   coverage:
+    if: github.repository == 'openssl/openssl'
     needs: define-matrix
     permissions:
       checks: write     # for coverallsapp/github-action to create new checks
@@ -90,6 +91,7 @@ jobs:
       with:
         submodules: recursive
         ref: ${{ matrix.branches.branch }}
+        persist-credentials: false
     - name: cache commit id
       run: |
         echo "githubid=`/usr/bin/git log -1 --format='%H'`" >>$GITHUB_ENV
@@ -105,7 +107,7 @@ jobs:
     - name: setup hostname workaround
       run: sudo hostname localhost
     - name: config
-      run: CC=gcc ./config --debug --coverage ${{ matrix.branches.extra_config }} no-asm enable-rc5 enable-md2 enable-ssl3 enable-nextprotoneg enable-ssl3-method enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-buildtest-c++ enable-ssl-trace enable-trace
+      run: CC=gcc ./config --debug --coverage ${{ matrix.branches.extra_config }} no-asm enable-rc5 enable-md2 enable-nextprotoneg enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-buildtest-c++ enable-ssl-trace enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make

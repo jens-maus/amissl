@@ -18,7 +18,7 @@ jobs:
       - name: install unifdef
         run: |
             sudo apt-get update
-            sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install unifdef
+            sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install unifdef
       - name: create build dirs
         run: |
           mkdir ./build-pristine
@@ -31,6 +31,7 @@ jobs:
           repository: ${{ github.event.pull_request.base.repo.full_name }}
           ref: ${{ github.event.pull_request.base.ref }}
           path: source-pristine
+          persist-credentials: false
       - name: config pristine
         run: ../source-pristine/config enable-fips
         working-directory: ./build-pristine
@@ -46,6 +47,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           path: source
+          persist-credentials: false
       - name: config
         run: ../source/config enable-fips
         working-directory: ./build
@@ -77,7 +79,7 @@ jobs:
   compute-abidiff:
     runs-on: ubuntu-latest
     env:
-      BUILD_OPTS: -g --strict-warnings enable-ktls enable-fips enable-egd enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-sctp enable-ssl3 enable-ssl3-method enable-trace enable-zlib enable-zstd
+      BUILD_OPTS: -g --strict-warnings enable-ktls enable-fips enable-egd enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-sctp enable-trace enable-zlib enable-zstd
     steps:
       - name: create build dirs
         run: |
@@ -93,6 +95,7 @@ jobs:
           repository: ${{ github.event.pull_request.base.repo.full_name }}
           ref: ${{ github.event.pull_request.base.ref }}
           path: source-pristine
+          persist-credentials: false
       - name: config pristine
         run: ../source-pristine/config --banner=Configured $BUILD_OPTS && perl configdata.pm --dump
         working-directory: ./build-pristine
@@ -102,6 +105,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           path: source
+          persist-credentials: false
       - name: config
         run: ../source/config --banner=Configured $BUILD_OPTS && perl configdata.pm --dump
         working-directory: ./build
@@ -113,7 +117,7 @@ jobs:
       - name: save PR number
         run: echo ${{ github.event.number }} > ./artifact/pr_num
       - name: save artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: abidiff
           path: artifact/

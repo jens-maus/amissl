@@ -28,9 +28,9 @@
 #include "rsa_local.h"
 
 /*
- * The intention with the "backend" source file is to offer backend support
- * for legacy backends (EVP_PKEY_ASN1_METHOD and EVP_PKEY_METHOD) and provider
- * implementations alike.
+ * The intention with the "backend" source file is to offer backend functions
+ * for legacy backends (EVP_PKEY_ASN1_METHOD) and provider implementations
+ * alike.
  */
 
 DEFINE_STACK_OF(BIGNUM)
@@ -451,7 +451,7 @@ err:
 int ossl_rsa_is_foreign(const RSA *rsa)
 {
 #ifndef FIPS_MODULE
-    if (rsa->engine != NULL || RSA_get_method(rsa) != RSA_PKCS1_OpenSSL())
+    if (RSA_get_method(rsa) != RSA_PKCS1_OpenSSL())
         return 1;
 #endif
     return 0;

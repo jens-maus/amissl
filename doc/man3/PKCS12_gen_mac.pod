@@ -37,6 +37,8 @@ The default key generation mechanism used is PKCS12KDF.
 
 PKCS12_verify_mac() verifies the PKCS#12 object's HMAC using the supplied
 password.
+If the PKCS12 macdata contains PBMAC1 an error will occur if the related PBKDF2
+parameters are missing, or if the associated key length is not in the range 1 to 64.
 
 PKCS12_setup_mac() sets the MAC part of the PKCS#12 structure with the supplied
 parameters.
@@ -107,7 +109,7 @@ The I<PKCS12_set_pbmac1_pbkdf2> function was added in OpenSSL 3.4.
 
 =head1 COPYRIGHT
 
-Copyright 2021-2025 The OpenSSL Project Authors. All Rights Reserved.
+Copyright 2021-2026 The OpenSSL Project Authors. All Rights Reserved.
 
 Licensed under the Apache License 2.0 (the "License").  You may not use
 this file except in compliance with the License.  You can obtain a copy

@@ -7,21 +7,18 @@
  * https://www.openssl.org/source/license.html
  */
 
-/* We need to use some engine deprecated APIs */
-#define OPENSSL_SUPPRESS_DEPRECATED
-
 #include "internal/cryptlib.h"
 #include "internal/rcu.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <openssl/crypto.h>
+#include <openssl/conf.h>
 #include "internal/conf.h"
 #include <openssl/conf_api.h>
 #include "internal/dso.h"
 #include "internal/thread_once.h"
 #include <openssl/x509.h>
 #include <openssl/trace.h>
-#include <openssl/engine.h>
 #include "conf_local.h"
 
 DEFINE_STACK_OF(CONF_MODULE)
@@ -29,39 +26,6 @@ DEFINE_STACK_OF(CONF_IMODULE)
 
 #define DSO_mod_init_name "OPENSSL_init"
 #define DSO_mod_finish_name "OPENSSL_finish"
-
-/*
- * This structure contains a data about supported modules. entries in this
- * table correspond to either dynamic or static modules.
- */
-
-struct conf_module_st {
-    /* DSO of this module or NULL if static */
-    DSO *dso;
-    /* Name of the module */
-    char *name;
-    /* Init function */
-    conf_init_func *init;
-    /* Finish function */
-    conf_finish_func *finish;
-    /* Number of successfully initialized modules */
-    int links;
-    void *usr_data;
-};
-
-/*
- * This structure contains information about modules that have been
- * successfully initialized. There may be more than one entry for a given
- * module.
- */
-
-struct conf_imodule_st {
-    CONF_MODULE *pmod;
-    char *name;
-    char *value;
-    unsigned long flags;
-    void *usr_data;
-};
 
 static CRYPTO_ONCE init_module_list_lock = CRYPTO_ONCE_STATIC_INIT;
 static CRYPTO_RCU_LOCK *module_list_lock = NULL;
@@ -249,10 +213,6 @@ int CONF_modules_load_file(const char *filename,
 DEFINE_RUN_ONCE_STATIC(do_load_builtin_modules)
 {
     OPENSSL_load_builtin_modules();
-#ifndef OPENSSL_NO_ENGINE
-    /* Need to load ENGINEs */
-    ENGINE_load_builtin_engines();
-#endif
     return 1;
 }
 
@@ -445,6 +405,7 @@ static int module_init(CONF_MODULE *pmod, const char *name, const char *value,
     imod->name = OPENSSL_strdup(name);
     imod->value = OPENSSL_strdup(value);
     imod->usr_data = NULL;
+    imod->libctx = NULL;
 
     if (!imod->name || !imod->value)
         goto memerr;

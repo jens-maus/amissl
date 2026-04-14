@@ -33,7 +33,6 @@
 #include <openssl/param_build.h>
 #include <openssl/x509v3.h>
 #include <openssl/dh.h>
-#include <openssl/engine.h>
 
 #include "helpers/ssltestlib.h"
 #include "testutil.h"
@@ -137,7 +136,7 @@ static const char *ocsp_signer_cert = "subinterCA.pem";
     && defined(OPENSSL_NO_BROTLI) && defined(OPENSSL_NO_ZSTD)     \
     && !defined(OPENSSL_NO_ECX) && !defined(OPENSSL_NO_DH)        \
     && !defined(OPENSSL_NO_ML_DSA) && !defined(OPENSSL_NO_ML_KEM) \
-    && !defined(OPENSSL_NO_TLS1_3)
+    && !defined(OPENSSL_NO_TLS1_3) && !defined(OPENSSL_NO_SM2)
 #define DO_SSL_TRACE_TEST
 #endif
 
@@ -786,7 +785,7 @@ static int test_client_hello_cb(void)
     /* Avoid problems where the default seclevel has been changed */
     SSL_CTX_set_security_level(cctx, 2);
     if (!TEST_true(SSL_CTX_set_cipher_list(cctx,
-            "AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384"))
+            "aes256-gcm-sha384:ecdhe-ecdsa-aes256-gcm-sha384"))
         || !TEST_true(create_ssl_objects(sctx, cctx, &serverssl,
             &clientssl, NULL, NULL))
         || !TEST_false(create_ssl_connection(serverssl, clientssl,
@@ -890,7 +889,7 @@ static int test_ccs_change_cipher(void)
         || !TEST_true(SSL_CTX_set_options(sctx, SSL_OP_NO_TICKET))
         || !TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
             NULL, NULL))
-        || !TEST_true(SSL_set_cipher_list(clientssl, "AES128-GCM-SHA256"))
+        || !TEST_true(SSL_set_cipher_list(clientssl, "aes128-gcm-sha256"))
         || !TEST_true(create_ssl_connection(serverssl, clientssl,
             SSL_ERROR_NONE))
         || !TEST_ptr(sesspre = SSL_get0_session(serverssl))
@@ -905,7 +904,7 @@ static int test_ccs_change_cipher(void)
     if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
             NULL, NULL))
         || !TEST_true(SSL_set_session(clientssl, sess))
-        || !TEST_true(SSL_set_cipher_list(clientssl, "AES256-GCM-SHA384:AES128-GCM-SHA256"))
+        || !TEST_true(SSL_set_cipher_list(clientssl, "aes256-gcm-sha384:aes128-gcm-sha256"))
         || !TEST_true(create_ssl_connection(serverssl, clientssl,
             SSL_ERROR_NONE))
         || !TEST_true(SSL_session_reused(clientssl))
@@ -924,11 +923,11 @@ static int test_ccs_change_cipher(void)
      */
     if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
             NULL, NULL))
-        || !TEST_true(SSL_set_cipher_list(clientssl, "AES128-GCM-SHA256"))
+        || !TEST_true(SSL_set_cipher_list(clientssl, "aes128-gcm-sha256"))
         || !TEST_true(create_ssl_connection(serverssl, clientssl,
             SSL_ERROR_NONE))
         || !TEST_ptr(sesspre = SSL_get0_session(serverssl))
-        || !TEST_true(SSL_set_cipher_list(clientssl, "AES256-GCM-SHA384"))
+        || !TEST_true(SSL_set_cipher_list(clientssl, "aes256-gcm-sha384"))
         || !TEST_true(SSL_renegotiate(clientssl))
         || !TEST_true(SSL_renegotiate_pending(clientssl)))
         goto end;
@@ -1610,12 +1609,7 @@ static int test_large_app_data(int tst)
 #endif
 
     case 4:
-#ifndef OPENSSL_NO_SSL3
-        prot = SSL3_VERSION;
-        break;
-#else
         return TEST_skip("SSL 3 not supported");
-#endif
 
     case 5:
 #ifndef OPENSSL_NO_DTLS1_2
@@ -4404,18 +4398,18 @@ static int test_early_data_replay(int idx)
 }
 
 static const char *ciphersuites[] = {
-    "TLS_AES_128_CCM_8_SHA256",
-    "TLS_AES_128_GCM_SHA256",
-    "TLS_AES_256_GCM_SHA384",
-    "TLS_AES_128_CCM_SHA256",
+    "tls_aes_128_ccm_8_sha256",
+    "tls_aes_128_gcm_sha256",
+    "tls_aes_256_gcm_sha384",
+    "tls_aes_128_ccm_sha256",
 #if !defined(OPENSSL_NO_CHACHA) && !defined(OPENSSL_NO_POLY1305)
-    "TLS_CHACHA20_POLY1305_SHA256",
+    "tls_chacha20_poly1305_sha256",
 #else
     NULL,
 #endif
 #if !defined(OPENSSL_NO_INTEGRITY_ONLY_CIPHERS)
-    "TLS_SHA256_SHA256",
-    "TLS_SHA384_SHA384"
+    "tls_sha256_sha256",
+    "tls_sha384_sha384"
 #endif
 };
 
@@ -5217,12 +5211,12 @@ static int test_set_ciphersuite(int idx)
             TLS_client_method(), TLS1_VERSION, 0,
             &sctx, &cctx, cert, privkey))
         || !TEST_true(SSL_CTX_set_ciphersuites(sctx,
-            "TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_SHA256")))
+            "tls_aes_128_gcm_sha256:tls_aes_128_ccm_sha256")))
         goto end;
 
     if (idx >= 4 && idx <= 7) {
         /* SSL_CTX explicit cipher list */
-        if (!TEST_true(SSL_CTX_set_cipher_list(cctx, "AES256-GCM-SHA384")))
+        if (!TEST_true(SSL_CTX_set_cipher_list(cctx, "aes256-gcm-sha384")))
             goto end;
     }
 
@@ -5256,7 +5250,7 @@ static int test_set_ciphersuite(int idx)
     } else if (idx == 3 || idx == 7 || idx == 9) {
         /* Non default ciphersuite */
         if (!TEST_true(SSL_set_ciphersuites(clientssl,
-                "TLS_AES_128_CCM_SHA256")))
+                "tls_aes_128_ccm_sha256")))
             goto end;
     }
 
@@ -5287,9 +5281,9 @@ static int test_ciphersuite_change(void)
             TLS_client_method(), TLS1_VERSION, 0,
             &sctx, &cctx, cert, privkey))
         || !TEST_true(SSL_CTX_set_ciphersuites(sctx,
-            "TLS_AES_128_GCM_SHA256:"
+            "tls_aes_128_gcm_sha256:"
             "TLS_AES_256_GCM_SHA384:"
-            "TLS_AES_128_CCM_SHA256"))
+            "tls_aes_128_ccm_sha256"))
         || !TEST_true(SSL_CTX_set_ciphersuites(cctx,
             "TLS_AES_128_GCM_SHA256")))
         goto end;
@@ -5428,22 +5422,24 @@ end:
  * Test 16 = Test X25519MLKEM768
  * Test 17 = Test SecP256r1MLKEM768
  * Test 18 = Test SecP384r1MLKEM1024
- * Test 19 = Test all ML-KEM with TLSv1.2 client and server
- * Test 20 = Test all FFDHE with TLSv1.2 client and server
- * Test 21 = Test all ECDHE with TLSv1.2 client and server
+ * Test 19 = Test curveSM2 with TLSv1.3 client and server
+ * Test 20 = Test curveSM2MLKEM768 with TLSv1.3 client and server
+ * Test 21 = Test all ML-KEM with TLSv1.2 client and server
+ * Test 22 = Test all FFDHE with TLSv1.2 client and server
+ * Test 23 = Test all ECDHE with TLSv1.2 client and server
  */
 #ifndef OPENSSL_NO_EC
 static int ecdhe_kexch_groups[] = { NID_X9_62_prime256v1, NID_secp384r1,
     NID_secp521r1,
 #ifndef OPENSSL_NO_ECX
     NID_X25519, NID_X448
-#endif
+#endif /* OPENSSL_NO_ECX */
 };
-#endif
+#endif /* OPENSSL_NO_EC */
 #ifndef OPENSSL_NO_DH
 static int ffdhe_kexch_groups[] = { NID_ffdhe2048, NID_ffdhe3072, NID_ffdhe4096,
     NID_ffdhe6144, NID_ffdhe8192 };
-#endif
+#endif /* OPENSSL_NO_DH */
 static int test_key_exchange(int idx)
 {
     SSL_CTX *sctx = NULL, *cctx = NULL;
@@ -5456,13 +5452,14 @@ static int test_key_exchange(int idx)
     char *kexch_name0 = NULL;
     const char *kexch_names = NULL;
     int shared_group0;
+    const char *client_group_name = NULL;
 
     switch (idx) {
 #ifndef OPENSSL_NO_EC
 #ifndef OPENSSL_NO_TLS1_2
-    case 21:
+    case 23:
         max_version = TLS1_2_VERSION;
-#endif
+#endif /* OPENSSL_NO_TLS1_2 */
         /* Fall through */
     case 0:
         kexch_groups = ecdhe_kexch_groups;
@@ -5494,14 +5491,13 @@ static int test_key_exchange(int idx)
         kexch_alg = NID_X448;
         kexch_name0 = "x448";
         break;
-#endif
-#endif
+#endif /* OPENSSL_NO_ECX */
+#endif /* OPENSSL_NO_EC */
 #ifndef OPENSSL_NO_DH
 #ifndef OPENSSL_NO_TLS1_2
-    case 20:
+    case 22:
         max_version = TLS1_2_VERSION;
-        kexch_name0 = "ffdhe2048";
-#endif
+#endif /* OPENSSL_NO_TLS1_2 */
         /* Fall through */
     case 6:
         kexch_groups = ffdhe_kexch_groups;
@@ -5528,22 +5524,26 @@ static int test_key_exchange(int idx)
         kexch_alg = NID_ffdhe8192;
         kexch_name0 = "ffdhe8192";
         break;
-#endif
+#endif /* OPENSSL_NO_DH */
 #ifndef OPENSSL_NO_ML_KEM
 #if !defined(OPENSSL_NO_TLS1_2)
-    case 19:
+    case 21:
         max_version = TLS1_2_VERSION;
+        kexch_groups = NULL;
 #if !defined(OPENSSL_NO_EC)
         /* Set at least one EC group so the handshake completes */
         kexch_names = "MLKEM512:MLKEM768:MLKEM1024:secp256r1";
+        kexch_name0 = "secp256r1";
+        break;
 #elif !defined(OPENSSL_NO_DH)
-        kexch_names = "MLKEM512:MLKEM768:MLKEM1024";
+        kexch_names = "MLKEM512:MLKEM768:MLKEM1024:ffdhe2048";
+        kexch_name0 = "ffdhe2048";
+        break;
 #else
         /* With neither EC nor DH TLS 1.2 can't happen */
         return 1;
 #endif
-#endif
-        /* Fall through */
+#endif /* OPENSSL_NO_TLS1_2 */
     case 12:
         kexch_groups = NULL;
         if (kexch_names == NULL)
@@ -5572,7 +5572,7 @@ static int test_key_exchange(int idx)
         kexch_name0 = "X25519MLKEM768";
         kexch_names = kexch_name0;
         break;
-#endif
+#endif /* OPENSSL_NO_ECX */
     case 17:
         kexch_groups = NULL;
         kexch_name0 = "SecP256r1MLKEM768";
@@ -5583,15 +5583,37 @@ static int test_key_exchange(int idx)
         kexch_name0 = "SecP384r1MLKEM1024";
         kexch_names = kexch_name0;
         break;
-#endif
-#endif
+#endif /* OPENSSL_NO_EC */
+#endif /* OPENSSL_NO_ML_KEM */
+
+#ifndef OPENSSL_NO_EC
+#ifndef OPENSSL_NO_SM2
+    case 19:
+        if (is_fips)
+            return TEST_skip("curveSM2 is not supported by the fips provider.");
+        kexch_groups = NULL;
+        kexch_name0 = "curveSM2";
+        kexch_names = kexch_name0;
+        break;
+#ifndef OPENSSL_NO_ML_KEM
+    case 20:
+        if (is_fips)
+            return TEST_skip("curveSM2MLKEM768 is not supported by the fips provider.");
+        kexch_groups = NULL;
+        kexch_name0 = "curveSM2MLKEM768";
+        kexch_names = kexch_name0;
+        break;
+#endif /* OPENSSL_NO_ML_KEM */
+#endif /* OPENSSL_NO_SM2 */
+#endif /* OPENSSL_NO_EC */
+
     default:
         /* We're skipping this test */
         return 1;
     }
 
     if (is_fips && fips_provider_version_lt(libctx, 3, 5, 0)
-        && idx >= 12 && idx <= 19)
+        && ((idx >= 12 && idx <= 18) || idx == 21))
         return TEST_skip("ML-KEM not supported in this version of fips provider");
 
     if (!TEST_true(create_ssl_ctx_pair(libctx, TLS_server_method(),
@@ -5640,42 +5662,28 @@ static int test_key_exchange(int idx)
     if (!TEST_true(create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE)))
         goto end;
 
-    /*
-     * If the handshake succeeds the negotiated kexch alg should be the first
-     * one in configured, except in the case of "all" FFDHE and "all" ML-KEM
-     * groups (idx == 19, 20), which are TLSv1.3 only so we expect no shared
-     * group to exist.
-     */
     shared_group0 = SSL_get_shared_group(serverssl, 0);
-    switch (idx) {
-    case 19:
-#if !defined(OPENSSL_NO_EC)
-        /* MLKEM + TLS 1.2 and no DH => "secp526r1" */
-        if (!TEST_int_eq(shared_group0, NID_X9_62_prime256v1))
-            goto end;
-        break;
-#endif
-        /* Fall through */
-    case 20:
-        if (!TEST_int_eq(shared_group0, 0))
-            goto end;
-        break;
-    default:
-        if (kexch_groups != NULL
-            && !TEST_int_eq(shared_group0, kexch_groups[0]))
-            goto end;
-        if (!TEST_str_eq(SSL_group_to_name(serverssl, shared_group0),
-                kexch_name0))
-            goto end;
-        if (!TEST_str_eq(SSL_get0_group_name(serverssl), kexch_name0)
-            || !TEST_str_eq(SSL_get0_group_name(clientssl), kexch_name0))
-            goto end;
-        if (!TEST_int_eq(SSL_get_negotiated_group(serverssl), shared_group0))
-            goto end;
-        if (!TEST_int_eq(SSL_get_negotiated_group(clientssl), shared_group0))
-            goto end;
-        break;
-    }
+    if (kexch_groups != NULL
+        && !TEST_int_eq(shared_group0, kexch_groups[0]))
+        goto end;
+    if (!TEST_str_eq(SSL_group_to_name(serverssl, shared_group0),
+            kexch_name0))
+        goto end;
+    /*
+     * With TLS <= 1.2, the client will not infer an FFDHE group name from
+     * the server's DH parameters, so we allow NULL client names in that
+     * case.
+     */
+    client_group_name = SSL_get0_group_name(clientssl);
+    if (!TEST_str_eq(SSL_get0_group_name(serverssl), kexch_name0)
+        || ((max_version >= TLS1_3_VERSION || client_group_name != NULL)
+            && !TEST_str_eq(client_group_name, kexch_name0)))
+        goto end;
+    if (!TEST_int_eq(SSL_get_negotiated_group(serverssl), shared_group0))
+        goto end;
+    if (client_group_name != NULL
+        && !TEST_int_eq(SSL_get_negotiated_group(clientssl), shared_group0))
+        goto end;
 
     testresult = 1;
 end:
@@ -5780,11 +5788,7 @@ static int test_negotiated_group(int idx)
         kexch_alg = ecdhe_kexch_groups[idx];
     else
         kexch_alg = ffdhe_kexch_groups[idx];
-    /* We expect nothing for the unimplemented TLS 1.2 FFDHE named groups */
-    if (!istls13 && !isecdhe)
-        expectednid = NID_undef;
-    else
-        expectednid = kexch_alg;
+    expectednid = kexch_alg;
 
     if (is_fips && (kexch_alg == NID_X25519 || kexch_alg == NID_X448))
         return TEST_skip("X25519 and X448 might not be available in fips provider.");
@@ -5821,9 +5825,13 @@ static int test_negotiated_group(int idx)
     if (!TEST_true(create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE)))
         goto end;
 
-    /* Initial handshake; always the configured one */
-    if (!TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)
-        || !TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid))
+    /*
+     * Initial handshake; always the configured one.  With TLS <= 1.2 and FFDHE
+     * the client does not infer a negotiated group id.
+     */
+    if (!TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid)
+        || ((istls13 || isecdhe)
+            && !TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)))
         goto end;
 
     if (!TEST_ptr((origsess = SSL_get1_session(clientssl))))
@@ -5848,8 +5856,9 @@ static int test_negotiated_group(int idx)
         goto end;
 
     /* Still had better agree, since nothing changed... */
-    if (!TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)
-        || !TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid))
+    if (!TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid)
+        || ((istls13 || isecdhe)
+            && !TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)))
         goto end;
 
     SSL_shutdown(clientssl);
@@ -5876,11 +5885,7 @@ static int test_negotiated_group(int idx)
         if (!TEST_int_ne(expectednid, kexch_alg))
             goto end;
     } else {
-        /* TLS 1.2 only supports named groups for ECDHE. */
-        if (isecdhe)
-            expectednid = kexch_alg;
-        else
-            expectednid = 0;
+        expectednid = kexch_alg;
     }
     if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
             NULL, NULL))
@@ -5894,8 +5899,9 @@ static int test_negotiated_group(int idx)
         goto end;
 
     /* Check that we get what we expected */
-    if (!TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)
-        || !TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid))
+    if (!TEST_uint_eq(SSL_get_negotiated_group(serverssl), expectednid)
+        || ((istls13 || isecdhe)
+            && !TEST_uint_eq(SSL_get_negotiated_group(clientssl), expectednid)))
         goto end;
 
     testresult = 1;
@@ -7083,7 +7089,9 @@ static int test_export_key_mat(int tst)
     OPENSSL_assert(tst >= 0 && (size_t)tst < OSSL_NELEM(protocols));
     SSL_CTX_set_max_proto_version(cctx, protocols[tst]);
     SSL_CTX_set_min_proto_version(cctx, protocols[tst]);
-    if ((protocols[tst] < TLS1_2_VERSION) && (!SSL_CTX_set_cipher_list(cctx, "DEFAULT:@SECLEVEL=0") || !SSL_CTX_set_cipher_list(sctx, "DEFAULT:@SECLEVEL=0")))
+    if ((protocols[tst] < TLS1_2_VERSION)
+        && (!SSL_CTX_set_cipher_list(cctx, "default:@seclevel=0")
+            || !SSL_CTX_set_cipher_list(sctx, "DEFAULT:@SECLEVEL=0")))
         goto end;
 
     if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL,
@@ -8730,9 +8738,9 @@ static int test_ssl_pending(int tst)
          * Default sigalgs are SHA1 based in <DTLS1.2 which is in security
          * level 0
          */
-        if (!TEST_true(SSL_CTX_set_cipher_list(sctx, "DEFAULT:@SECLEVEL=0"))
+        if (!TEST_true(SSL_CTX_set_cipher_list(sctx, "DEFAULT:@seclevel=0"))
             || !TEST_true(SSL_CTX_set_cipher_list(cctx,
-                "DEFAULT:@SECLEVEL=0")))
+                "default:@SECLEVEL=0")))
             goto end;
 #endif
 #else
@@ -9005,8 +9013,8 @@ static int tick_key_cb(SSL *s, unsigned char key_name[16],
     unsigned char iv[EVP_MAX_IV_LENGTH], EVP_CIPHER_CTX *ctx,
     HMAC_CTX *hctx, int enc)
 {
-    const unsigned char tick_aes_key[16] = "0123456789abcdef";
-    const unsigned char tick_hmac_key[16] = "0123456789abcdef";
+    const unsigned char tick_aes_key[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    const unsigned char tick_hmac_key[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     EVP_CIPHER *aes128cbc;
     EVP_MD *sha256;
     int ret;
@@ -9047,8 +9055,8 @@ static int tick_key_evp_cb(SSL *s, unsigned char key_name[16],
     unsigned char iv[EVP_MAX_IV_LENGTH],
     EVP_CIPHER_CTX *ctx, EVP_MAC_CTX *hctx, int enc)
 {
-    const unsigned char tick_aes_key[16] = "0123456789abcdef";
-    unsigned char tick_hmac_key[16] = "0123456789abcdef";
+    const unsigned char tick_aes_key[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    unsigned char tick_hmac_key[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     OSSL_PARAM params[2];
     EVP_CIPHER *aes128cbc;
     int ret;
@@ -9548,6 +9556,79 @@ end:
     return testresult;
 }
 
+/*
+ * Test that SSL BIO reports EOF correctly
+ * Test 0: EOF after peer close_notify has been received
+ * Test 1: EOF after the underlying BIO reports EOF
+ */
+static int test_ssl_bio_eof(int tst)
+{
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0;
+    BIO *clientbio = BIO_new(BIO_f_ssl());
+    char buf[1];
+    size_t nbytes = 0;
+
+    if (!TEST_ptr(clientbio))
+        goto end;
+
+    if (!TEST_true(create_ssl_ctx_pair(libctx, TLS_server_method(),
+            TLS_client_method(),
+            0, 0,
+            &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL,
+            NULL)))
+        goto end;
+
+    if (!TEST_true(create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE)))
+        goto end;
+
+    if (!TEST_int_eq(BIO_set_ssl(clientbio, clientssl, BIO_NOCLOSE), 1))
+        goto end;
+
+    /* Check we don't receive EOF in normal flow */
+    if (!TEST_true(SSL_write_ex(serverssl, "1", 1, &nbytes)))
+        goto end;
+    if (!TEST_true(BIO_read_ex(clientbio, buf, 1, &nbytes))
+        || !TEST_false(BIO_eof(clientbio)))
+        goto end;
+    /* Absence of data doesn't cause the EOF state */
+    if (!TEST_false(BIO_read_ex(clientbio, buf, 1, &nbytes))
+        || !TEST_false(BIO_eof(clientbio)))
+        goto end;
+
+    /* In test 0 send close_notify from the server */
+    if (tst == 0)
+        SSL_shutdown(serverssl);
+
+    /* In test 1 force the underlying BIO_s_mem to report EOF at end of data */
+    if (tst == 1) {
+        BIO *rbio = SSL_get_rbio(clientssl);
+        if (!TEST_ptr(rbio)
+            || !TEST_int_eq(BIO_method_type(rbio), BIO_TYPE_MEM))
+            goto end;
+        if (!TEST_true(BIO_set_mem_eof_return(rbio, 0)))
+            goto end;
+    }
+
+    /* Now client should observe EOF on the SSL BIO */
+    if (!TEST_int_eq(BIO_read_ex(clientbio, buf, 1, &nbytes), 0)
+        || !TEST_true(BIO_eof(clientbio)))
+        goto end;
+
+    testresult = 1;
+end:
+    BIO_free_all(clientbio);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+    return testresult;
+}
+
 #if !defined(OPENSSL_NO_TLS1_2) || !defined(OSSL_NO_USABLE_TLS1_3)
 static int cert_cb_cnt;
 
@@ -9618,6 +9699,16 @@ static int cert_cb(SSL *s, void *arg)
         int rv;
 
         chain = sk_X509_new_null();
+#ifndef OPENSSL_NO_ML_DSA
+        if (SSL_version(s) >= TLS1_3_VERSION) {
+            if (!TEST_ptr(chain)
+                || !TEST_true(load_chain("root-ml-dsa-44-cert.pem", NULL, NULL, chain))
+                || !TEST_true(load_chain("server-ml-dsa-44-cert.pem", NULL, &x509, NULL))
+                || !TEST_true(load_chain("server-ml-dsa-44-key.pem", &pkey, NULL, NULL)))
+                goto out;
+            goto check;
+        }
+#endif
         if (!TEST_ptr(chain)
             || !TEST_true(load_chain("ca-cert.pem", NULL, NULL, chain))
             || !TEST_true(load_chain("root-cert.pem", NULL, NULL, chain))
@@ -9626,6 +9717,10 @@ static int cert_cb(SSL *s, void *arg)
             || !TEST_true(load_chain("p256-ee-rsa-ca-key.pem", &pkey,
                 NULL, NULL)))
             goto out;
+
+#ifndef OPENSSL_NO_ML_DSA
+    check:
+#endif
         rv = SSL_check_chain(s, x509, pkey, chain);
         /*
          * If the cert doesn't show as valid here (e.g., because we don't
@@ -9668,7 +9763,7 @@ static int test_cert_cb_int(int prot, int tst)
     int testresult = 0, ret;
 
 #ifdef OPENSSL_NO_EC
-    /* We use an EC cert in these tests, so we skip in a no-ec build */
+    /* We use an EC cert in these tests with TLS 1.2 or absent ML-DSA */
     if (tst >= 3)
         return 1;
 #endif
@@ -9699,21 +9794,34 @@ static int test_cert_cb_int(int prot, int tst)
             NULL, NULL)))
         goto end;
 
-    if (tst == 4) {
+    if (tst == 3) {
+        if (!TEST_true(SSL_set1_sigalgs_list(clientssl,
+                "rsa_pss_rsae_sha256:rsa_pkcs1_sha256:"
+                "?ecdsa_secp256r1_sha256:?mldsa44"))
+            || !TEST_true(SSL_set1_sigalgs_list(serverssl,
+                "rsa_pss_rsae_sha256:rsa_pkcs1_sha256:"
+                "?ecdsa_secp256r1_sha256:?mldsa44")))
+            goto end;
+    } else if (tst == 4) {
         /*
          * We cause SSL_check_chain() to fail by specifying sig_algs that
-         * the chain doesn't meet (the root uses an RSA cert)
+         * the chain doesn't meet (root either RSA or ML-DSA).
          */
         if (!TEST_true(SSL_set1_sigalgs_list(clientssl,
-                "ecdsa_secp256r1_sha256")))
+                "ecdsa_secp256r1_sha256"))
+            || !TEST_true(SSL_set1_sigalgs_list(serverssl,
+                "?ecdsa_secp256r1_sha256:?mldsa44")))
             goto end;
     } else if (tst == 5) {
         /*
          * We cause SSL_check_chain() to fail by specifying sig_algs that
-         * the ee cert doesn't meet (the ee uses an ECDSA cert)
+         * the ee cert doesn't meet (the ee uses an ECDSA or ML-DSA cert)
          */
         if (!TEST_true(SSL_set1_sigalgs_list(clientssl,
-                "rsa_pss_rsae_sha256:rsa_pkcs1_sha256")))
+                "rsa_pss_rsae_sha256:rsa_pkcs1_sha256"))
+            || !TEST_true(SSL_set1_sigalgs_list(serverssl,
+                "rsa_pss_rsae_sha256:rsa_pkcs1_sha256:"
+                "?ecdsa_secp256r1_sha256:?mldsa44")))
             goto end;
     }
 
@@ -10007,8 +10115,8 @@ static int test_multiblock_write(int test_index)
      * i.e: write_len >= 4 * frag_size
      * 9 * is chosen so that multiple multiblocks are used + some leftover.
      */
-    unsigned char msg[MULTIBLOCK_FRAGSIZE * 9];
-    unsigned char buf[sizeof(msg)], *p = buf;
+    unsigned char msg[MULTIBLOCK_FRAGSIZE * 9] = { 0 };
+    unsigned char buf[sizeof(msg)] = { 0 }, *p = buf;
     size_t readbytes, written, len;
     EVP_CIPHER *ciph = NULL;
 
@@ -10596,7 +10704,9 @@ static int test_sigalgs_available(int idx)
     OSSL_LIB_CTX *clientctx = libctx, *serverctx = libctx;
     OSSL_PROVIDER *filterprov = NULL;
     int sig, hash, numshared, numshared_expected, hash_expected, sig_expected;
-    const char *sigalg_name, *signame_expected;
+    unsigned char rsig, rhash;
+    unsigned int sigalg, csigalg_expected;
+    const char *sigalg_name, *signame_expected, *csigname_expected;
 
     if (!TEST_ptr(tmpctx))
         goto end;
@@ -10716,20 +10826,30 @@ static int test_sigalgs_available(int idx)
 
     /* For tests 0 and 3 we expect 2 shared sigalgs, otherwise exactly 1 */
     numshared = SSL_get_shared_sigalgs(serverssl, 0, &sig, &hash,
-        NULL, NULL, NULL);
+        NULL, &rsig, &rhash);
     numshared_expected = 1;
     hash_expected = NID_sha256;
     sig_expected = NID_rsassaPss;
     signame_expected = "rsa_pss_rsae_sha256";
+    csigname_expected = "rsa_pss_rsae_sha256";
+    csigalg_expected = 0x0804;
     switch (idx) {
     case 0:
-        hash_expected = NID_sha384;
         signame_expected = "rsa_pss_rsae_sha384";
+        hash_expected = NID_sha384;
+        numshared_expected = 2;
         /* FALLTHROUGH */
+    case 2:
+        csigname_expected = "rsa_pss_rsae_sha384";
+        csigalg_expected = 0x0805;
+        break;
     case 3:
         numshared_expected = 2;
         break;
     case 4:
+        csigname_expected = "ecdsa_secp256r1_sha256";
+        csigalg_expected = 0x0403;
+        /* FALLTHROUGH */
     case 5:
         sig_expected = EVP_PKEY_EC;
         signame_expected = "ecdsa_secp256r1_sha256";
@@ -10740,7 +10860,13 @@ static int test_sigalgs_available(int idx)
         || !TEST_int_eq(sig, sig_expected)
         || !TEST_true(SSL_get0_peer_signature_name(clientssl, &sigalg_name))
         || !TEST_ptr(sigalg_name)
-        || !TEST_str_eq(sigalg_name, signame_expected))
+        || !TEST_str_eq(sigalg_name, signame_expected)
+        || !TEST_int_gt(SSL_get0_shared_sigalg(serverssl, 0, &sigalg, &sigalg_name), 0)
+        || !TEST_int_eq(sigalg, (((int)rhash) << 8) | rsig)
+        || !TEST_str_eq(sigalg_name, signame_expected)
+        || !TEST_int_gt(SSL_get0_sigalg(serverssl, 0, &sigalg, &sigalg_name), 0)
+        || !TEST_int_eq(sigalg, csigalg_expected)
+        || !TEST_str_eq(sigalg_name, csigname_expected))
         goto end;
 
     testresult = filter_provider_check_clean_finish();
@@ -10838,13 +10964,14 @@ static int create_cert_key(int idx, char *certfilename, char *privkeyfilename)
         || !TEST_true(X509_gmtime_adj(X509_getm_notBefore(x509), 0))
         || !TEST_true(X509_gmtime_adj(X509_getm_notAfter(x509), 31536000L))
         || !TEST_true(X509_set_pubkey(x509, pkey))
-        || !TEST_ptr(name = X509_get_subject_name(x509))
+        || !TEST_ptr(name = X509_NAME_new())
         || !TEST_true(X509_NAME_add_entry_by_txt(name, "C", MBSTRING_ASC,
             (unsigned char *)"CH", -1, -1, 0))
         || !TEST_true(X509_NAME_add_entry_by_txt(name, "O", MBSTRING_ASC,
             (unsigned char *)"test.org", -1, -1, 0))
         || !TEST_true(X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
             (unsigned char *)"localhost", -1, -1, 0))
+        || !TEST_true(X509_set_subject_name(x509, name))
         || !TEST_true(X509_set_issuer_name(x509, name))
         || !TEST_true(X509_sign(x509, pkey, EVP_sha1()))
         || !TEST_ptr(keybio = BIO_new_file(privkeyfilename, "wb"))
@@ -10855,6 +10982,7 @@ static int create_cert_key(int idx, char *certfilename, char *privkeyfilename)
 
     EVP_PKEY_free(pkey);
     X509_free(x509);
+    X509_NAME_free(name);
     EVP_PKEY_CTX_free(evpctx);
     BIO_free(keybio);
     BIO_free(certbio);
@@ -11006,7 +11134,8 @@ static int test_ssl_dup(void)
     client2ssl = SSL_dup(clientssl);
     rbio = SSL_get_rbio(clientssl);
     if (!TEST_ptr(rbio)
-        || !TEST_true(BIO_up_ref(rbio)))
+        || !TEST_true(BIO_up_ref(rbio))
+        || !TEST_ptr(client2ssl))
         goto end;
     SSL_set0_rbio(client2ssl, rbio);
     rbio = NULL;
@@ -11249,6 +11378,11 @@ static int test_set_tmp_dh(int idx)
         return 1;
 #endif
 
+    OSSL_PROVIDER *tlsprov = OSSL_PROVIDER_load(libctx, "tls-provider");
+
+    if (!TEST_ptr(tlsprov))
+        goto end;
+
     if (idx >= 5 && idx <= 8) {
         dhpkey = get_tmp_dh_params();
         if (!TEST_ptr(dhpkey))
@@ -11312,7 +11446,9 @@ static int test_set_tmp_dh(int idx)
 
     if (!TEST_true(SSL_set_min_proto_version(serverssl, TLS1_2_VERSION))
         || !TEST_true(SSL_set_max_proto_version(serverssl, TLS1_2_VERSION))
-        || !TEST_true(SSL_set_cipher_list(serverssl, "DHE-RSA-AES128-SHA")))
+        || !TEST_true(SSL_set_cipher_list(serverssl, "DHE-RSA-AES128-SHA"))
+        /* This is required so the server does not use RFC7919 groups */
+        || !TEST_true(SSL_set1_groups_list(clientssl, "xorgroup")))
         goto end;
 
     /*
@@ -11335,6 +11471,7 @@ end:
     SSL_CTX_free(sctx);
     SSL_CTX_free(cctx);
     EVP_PKEY_free(dhpkey);
+    OSSL_PROVIDER_unload(tlsprov);
 
     return testresult;
 }
@@ -11344,6 +11481,7 @@ end:
  */
 static int test_dh_auto(int idx)
 {
+    OSSL_PROVIDER *tlsprov = OSSL_PROVIDER_load(libctx, "tls-provider");
     SSL_CTX *cctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
     SSL_CTX *sctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
     SSL *clientssl = NULL, *serverssl = NULL;
@@ -11351,7 +11489,10 @@ static int test_dh_auto(int idx)
     EVP_PKEY *tmpkey = NULL;
     char *thiscert = NULL, *thiskey = NULL;
     size_t expdhsize = 0;
-    const char *ciphersuite = "DHE-RSA-AES128-SHA";
+    const char *ciphersuite = "dhe-rsa-aes128-sha";
+
+    if (!TEST_ptr(tlsprov))
+        goto end;
 
     if (!TEST_ptr(sctx) || !TEST_ptr(cctx))
         goto end;
@@ -11397,11 +11538,11 @@ static int test_dh_auto(int idx)
             testresult = 1;
             goto end;
         }
-        ciphersuite = "ADH-AES128-SHA256:@SECLEVEL=0";
+        ciphersuite = "adh-aes128-sha256:@seclevel=0";
         expdhsize = 1024;
         break;
     case 6:
-        ciphersuite = "ADH-AES256-SHA256:@SECLEVEL=0";
+        ciphersuite = "adh-aes256-sha256:@seclevel=0";
         expdhsize = 3072;
         break;
     default:
@@ -11424,7 +11565,9 @@ static int test_dh_auto(int idx)
         || !TEST_true(SSL_set_min_proto_version(serverssl, TLS1_2_VERSION))
         || !TEST_true(SSL_set_max_proto_version(serverssl, TLS1_2_VERSION))
         || !TEST_true(SSL_set_cipher_list(serverssl, ciphersuite))
-        || !TEST_true(SSL_set_cipher_list(clientssl, ciphersuite)))
+        || !TEST_true(SSL_set_cipher_list(clientssl, ciphersuite))
+        /* This is required so the server does not use RFC7919 groups */
+        || !TEST_true(SSL_set1_groups_list(clientssl, "xorgroup")))
         goto end;
 
     /*
@@ -11452,9 +11595,231 @@ end:
     SSL_CTX_free(sctx);
     SSL_CTX_free(cctx);
     EVP_PKEY_free(tmpkey);
+    OSSL_PROVIDER_unload(tlsprov);
 
     return testresult;
 }
+
+/*
+ * Test the server will reject FFDHE ciphersuites if no supported FFDHE group is
+ * advertised by the client.
+ */
+static int test_no_shared_ffdhe_group(int idx)
+{
+    SSL_CTX *cctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
+    SSL_CTX *sctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0, ret, expected = 1;
+    char *clientgroup = NULL, *servergroup = NULL, *ciphersuite = NULL;
+    int want_error = SSL_ERROR_NONE;
+
+    if (!TEST_ptr(sctx) || !TEST_ptr(cctx))
+        goto end;
+
+    switch (idx) {
+    case 0:
+        clientgroup = "ffdhe2048";
+        servergroup = "ffdhe3072";
+        ciphersuite = "dhe-rsa-aes128-sha256:aes128-sha256";
+        break;
+    case 1:
+        clientgroup = "ffdhe3072";
+        servergroup = "ffdhe4096";
+        ciphersuite = "dhe-rsa-aes128-sha256:aes128-sha256";
+        break;
+    case 2:
+        clientgroup = "ffdhe4096";
+        servergroup = "ffdhe6144";
+        ciphersuite = "dhe-rsa-aes128-sha256:aes128-sha256";
+        break;
+    case 3:
+        clientgroup = "ffdhe6144";
+        servergroup = "ffdhe8192";
+        ciphersuite = "dhe-rsa-aes128-sha256:aes128-sha256";
+        break;
+    case 4:
+        clientgroup = "ffdhe8192";
+        servergroup = "ffdhe2048";
+        ciphersuite = "dhe-rsa-aes128-sha256:aes128-sha256";
+        break;
+    case 5:
+        clientgroup = "ffdhe2048";
+        servergroup = "ffdhe3072";
+        ciphersuite = "dhe-rsa-aes128-sha256";
+        expected = 0;
+        want_error = SSL_ERROR_SSL;
+        break;
+    case 6:
+        clientgroup = "ffdhe3072";
+        servergroup = "ffdhe4096";
+        ciphersuite = "dhe-rsa-aes128-sha256";
+        expected = 0;
+        want_error = SSL_ERROR_SSL;
+        break;
+    case 7:
+        clientgroup = "ffdhe4096";
+        servergroup = "ffdhe6144";
+        ciphersuite = "dhe-rsa-aes128-sha256";
+        expected = 0;
+        want_error = SSL_ERROR_SSL;
+        break;
+    case 8:
+        clientgroup = "ffdhe6144";
+        servergroup = "ffdhe8192";
+        ciphersuite = "dhe-rsa-aes128-sha256";
+        expected = 0;
+        want_error = SSL_ERROR_SSL;
+        break;
+    case 9:
+        clientgroup = "ffdhe8192";
+        servergroup = "ffdhe2048";
+        ciphersuite = "dhe-rsa-aes128-sha256";
+        expected = 0;
+        want_error = SSL_ERROR_SSL;
+        break;
+    default:
+        TEST_error("Invalid text index");
+        goto end;
+    }
+
+    if (!TEST_true(create_ssl_ctx_pair(libctx, NULL,
+            NULL,
+            0,
+            0,
+            &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+            NULL, NULL)))
+        goto end;
+
+    if (!TEST_true(SSL_set_dh_auto(serverssl, 1))
+        || !TEST_true(SSL_set_min_proto_version(serverssl, TLS1_2_VERSION))
+        || !TEST_true(SSL_set_max_proto_version(serverssl, TLS1_2_VERSION))
+        || !TEST_true(SSL_set_cipher_list(serverssl, ciphersuite))
+        || !TEST_true(SSL_set_cipher_list(clientssl, ciphersuite))
+        || !TEST_true(SSL_set1_groups_list(serverssl, servergroup))
+        || !TEST_true(SSL_set1_groups_list(clientssl, clientgroup)))
+        goto end;
+
+    ret = create_ssl_connection(serverssl, clientssl, want_error);
+    if (!TEST_int_eq(expected, ret))
+        goto end;
+
+    if (expected <= 0) {
+        testresult = 1;
+        goto end;
+    }
+
+    /*
+     * Note that the server should not select the DHE ciphersuite if there are
+     * no shared FFDHE groups, so if it was selected, that is an error.
+     */
+    if (TEST_int_eq(TLS1_CK_DHE_RSA_WITH_AES_128_SHA256,
+            SSL_CIPHER_get_id(SSL_get_current_cipher(clientssl))))
+        goto end;
+
+    testresult = 1;
+
+end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+
+    return testresult;
+}
+
+/*
+ * Test the server will use the supported FFDHE group advertised by the client.
+ */
+static int test_shared_ffdhe_group(int idx)
+{
+    SSL_CTX *cctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
+    SSL_CTX *sctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0;
+    EVP_PKEY *tmpkey = NULL;
+    char *servergroups = "ffdhe2048:ffdhe3072:ffdhe4096:ffdhe6144:ffdhe8192";
+    char *clientgroup = NULL;
+    const char *ciphersuite = "DHE-RSA-AES128-SHA256";
+    char gname[10];
+    size_t gname_len;
+
+    if (!TEST_ptr(sctx) || !TEST_ptr(cctx))
+        goto end;
+
+    switch (idx) {
+    case 0:
+        clientgroup = "ffdhe2048";
+        break;
+    case 1:
+        clientgroup = "ffdhe3072";
+        break;
+    case 2:
+        clientgroup = "ffdhe4096";
+        break;
+    case 3:
+        clientgroup = "ffdhe6144";
+        break;
+    case 4:
+        clientgroup = "ffdhe8192";
+        break;
+    default:
+        TEST_error("Invalid text index");
+        goto end;
+    }
+
+    if (!TEST_true(create_ssl_ctx_pair(libctx, NULL,
+            NULL,
+            0,
+            0,
+            &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+            NULL, NULL)))
+        goto end;
+
+    if (!TEST_true(SSL_set_dh_auto(serverssl, 1))
+        || !TEST_true(SSL_set_min_proto_version(serverssl, TLS1_2_VERSION))
+        || !TEST_true(SSL_set_max_proto_version(serverssl, TLS1_2_VERSION))
+        || !TEST_true(SSL_set_cipher_list(serverssl, ciphersuite))
+        || !TEST_true(SSL_set_cipher_list(clientssl, ciphersuite))
+        || !TEST_true(SSL_set1_groups_list(serverssl, servergroups))
+        || !TEST_true(SSL_set1_groups_list(clientssl, clientgroup)))
+        goto end;
+
+    /*
+     * Send the server's first flight. At this point the server has created the
+     * temporary DH key but hasn't finished using it yet. Once used it is
+     * removed, so we cannot test it.
+     */
+    if (!TEST_int_le(SSL_connect(clientssl), 0)
+        || !TEST_int_le(SSL_accept(serverssl), 0))
+        goto end;
+
+    if (!TEST_int_gt(SSL_get_tmp_key(serverssl, &tmpkey), 0))
+        goto end;
+    if (!TEST_true(EVP_PKEY_get_group_name(tmpkey, gname, sizeof(gname), &gname_len))
+        || !TEST_str_eq(gname, clientgroup))
+        goto end;
+
+    if (!TEST_true(create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE)))
+        goto end;
+
+    testresult = 1;
+
+end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+    EVP_PKEY_free(tmpkey);
+
+    return testresult;
+}
+
 #endif /* OPENSSL_NO_DH */
 #endif /* OPENSSL_NO_TLS1_2 */
 
@@ -11637,6 +12002,57 @@ static int test_set_alpn(void)
     if (!TEST_true(SSL_set_alpn_protos(ssl, bad3, sizeof(bad3))))
         goto end;
     if (!TEST_true(SSL_set_alpn_protos(ssl, bad4, sizeof(bad4))))
+        goto end;
+
+    testresult = 1;
+
+end:
+    SSL_free(ssl);
+    SSL_CTX_free(ctx);
+    return testresult;
+}
+
+static int test_get_alpn(void)
+{
+    SSL_CTX *ctx = NULL;
+    SSL *ssl = NULL;
+    int testresult = 0;
+    unsigned char good[] = { 0x04, 'g', 'o', 'o', 'd' };
+    const unsigned char *expect;
+    unsigned int expect_len;
+
+    /* Create an initial SSL_CTX with no certificate configured */
+    ctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
+    if (!TEST_ptr(ctx))
+        goto end;
+
+    SSL_CTX_get0_alpn_protos(NULL, &expect, &expect_len);
+    if (!TEST_ptr_null(expect))
+        goto end;
+    if (!TEST_int_eq(expect_len, 0))
+        goto end;
+    if (!TEST_false(SSL_CTX_set_alpn_protos(ctx, good, sizeof(good))))
+        goto end;
+
+    SSL_CTX_get0_alpn_protos(ctx, &expect, &expect_len);
+    if (!TEST_mem_eq(expect, expect_len, good, sizeof(good)))
+        goto end;
+
+    ssl = SSL_new(ctx);
+    if (!TEST_ptr(ssl))
+        goto end;
+
+    SSL_get0_alpn_protos(NULL, &expect, &expect_len);
+    if (!TEST_ptr_null(expect))
+        goto end;
+    if (!TEST_int_eq(expect_len, 0))
+        goto end;
+
+    if (!TEST_false(SSL_set_alpn_protos(ssl, good, sizeof(good))))
+        goto end;
+
+    SSL_get0_alpn_protos(ssl, &expect, &expect_len);
+    if (!TEST_mem_eq(expect, expect_len, good, sizeof(good)))
         goto end;
 
     testresult = 1;
@@ -12138,212 +12554,11 @@ end:
 }
 #endif /* OSSL_NO_USABLE_TLS1_3 */
 
-#if !defined(OPENSSL_NO_TLS1_2) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
-/*
- * Test TLSv1.2 with a pipeline capable cipher. TLSv1.3 and DTLS do not
- * support this yet. The only pipeline capable cipher that we have is in the
- * dasync engine (providers don't support this yet), so we have to use
- * deprecated APIs for this test.
- *
- * Test 0: Client has pipelining enabled, server does not
- * Test 1: Server has pipelining enabled, client does not
- * Test 2: Client has pipelining enabled, server does not: not enough data to
- *         fill all the pipelines
- * Test 3: Client has pipelining enabled, server does not: not enough data to
- *         fill all the pipelines by more than a full pipeline's worth
- * Test 4: Client has pipelining enabled, server does not: more data than all
- *         the available pipelines can take
- * Test 5: Client has pipelining enabled, server does not: Maximum size pipeline
- * Test 6: Repeat of test 0, but the engine is loaded late (after the SSL_CTX
- *         is created)
- */
-static int test_pipelining(int idx)
-{
-    SSL_CTX *cctx = NULL, *sctx = NULL;
-    SSL *clientssl = NULL, *serverssl = NULL, *peera, *peerb;
-    int testresult = 0, numreads, numpipes = 5;
-    /* A 55 byte message */
-    unsigned char *msg = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123";
-    size_t written, readbytes, offset, msglen, fragsize = 10;
-    int expectedreads;
-    unsigned char *buf = NULL;
-    ENGINE *e = NULL;
-
-    if (idx != 6) {
-        e = load_dasync();
-        if (e == NULL)
-            return 0;
-    }
-
-    if (!TEST_true(create_ssl_ctx_pair(libctx, TLS_server_method(),
-            TLS_client_method(), 0,
-            TLS1_2_VERSION, &sctx, &cctx, cert,
-            privkey)))
-        goto end;
-
-    if (idx == 6) {
-        e = load_dasync();
-        if (e == NULL)
-            goto end;
-        /* Now act like test 0 */
-        idx = 0;
-    }
-
-    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl,
-            &clientssl, NULL, NULL)))
-        goto end;
-
-    if (!TEST_true(SSL_set_cipher_list(clientssl, "AES128-SHA")))
-        goto end;
-
-    /* peera is always configured for pipelining, while peerb is not. */
-    if (idx == 1) {
-        peera = serverssl;
-        peerb = clientssl;
-
-    } else {
-        peera = clientssl;
-        peerb = serverssl;
-    }
-
-    if (idx == 5) {
-        numpipes = 2;
-        /* Maximum allowed fragment size */
-        fragsize = SSL3_RT_MAX_PLAIN_LENGTH;
-        msglen = fragsize * numpipes;
-        msg = OPENSSL_malloc(msglen);
-        if (!TEST_ptr(msg))
-            goto end;
-        if (!TEST_int_gt(RAND_bytes_ex(libctx, msg, msglen, 0), 0))
-            goto end;
-    } else if (idx == 4) {
-        msglen = 55;
-    } else {
-        msglen = 50;
-    }
-    if (idx == 2)
-        msglen -= 2; /* Send 2 less bytes */
-    else if (idx == 3)
-        msglen -= 12; /* Send 12 less bytes */
-
-    buf = OPENSSL_malloc(msglen);
-    if (!TEST_ptr(buf))
-        goto end;
-
-    if (idx == 5) {
-        /*
-         * Test that setting a split send fragment longer than the maximum
-         * allowed fails
-         */
-        if (!TEST_false(SSL_set_split_send_fragment(peera, (long)(fragsize + 1))))
-            goto end;
-    }
-
-    /*
-     * In the normal case. We have 5 pipelines with 10 bytes per pipeline
-     * (50 bytes in total). This is a ridiculously small number of bytes -
-     * but sufficient for our purposes
-     */
-    if (!TEST_true(SSL_set_max_pipelines(peera, numpipes))
-        || !TEST_true(SSL_set_split_send_fragment(peera, (long)fragsize)))
-        goto end;
-
-    if (!TEST_true(create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE)))
-        goto end;
-
-    /* Write some data from peera to peerb */
-    if (!TEST_true(SSL_write_ex(peera, msg, msglen, &written))
-        || !TEST_size_t_eq(written, msglen))
-        goto end;
-
-    /*
-     * If the pipelining code worked, then we expect all |numpipes| pipelines to
-     * have been used - except in test 3 where only |numpipes - 1| pipelines
-     * will be used. This will result in |numpipes| records (|numpipes - 1| for
-     * test 3) having been sent to peerb. Since peerb is not using read_ahead we
-     * expect this to be read in |numpipes| or |numpipes - 1| separate
-     * SSL_read_ex calls. In the case of test 4, there is then one additional
-     * read for left over data that couldn't fit in the previous pipelines
-     */
-    for (offset = 0, numreads = 0;
-        offset < msglen;
-        offset += readbytes, numreads++) {
-        if (!TEST_true(SSL_read_ex(peerb, buf + offset,
-                msglen - offset, &readbytes)))
-            goto end;
-    }
-
-    expectedreads = idx == 4 ? numpipes + 1
-                             : (idx == 3 ? numpipes - 1 : numpipes);
-    if (!TEST_mem_eq(msg, msglen, buf, offset)
-        || !TEST_int_eq(numreads, expectedreads))
-        goto end;
-
-    /*
-     * Write some data from peerb to peera. We do this in up to |numpipes + 1|
-     * chunks to exercise the read pipelining code on peera.
-     */
-    for (offset = 0; offset < msglen; offset += fragsize) {
-        size_t sendlen = msglen - offset;
-
-        if (sendlen > fragsize)
-            sendlen = fragsize;
-        if (!TEST_true(SSL_write_ex(peerb, msg + offset, sendlen, &written))
-            || !TEST_size_t_eq(written, sendlen))
-            goto end;
-    }
-
-    /*
-     * The data was written in |numpipes|, |numpipes - 1| or |numpipes + 1|
-     * separate chunks (depending on which test we are running). If the
-     * pipelining is working then we expect peera to read up to numpipes chunks
-     * and process them in parallel, giving back the complete result in a single
-     * call to SSL_read_ex
-     */
-    if (!TEST_true(SSL_read_ex(peera, buf, msglen, &readbytes))
-        || !TEST_size_t_le(readbytes, msglen))
-        goto end;
-
-    if (idx == 4) {
-        size_t readbytes2;
-
-        if (!TEST_true(SSL_read_ex(peera, buf + readbytes,
-                msglen - readbytes, &readbytes2)))
-            goto end;
-        readbytes += readbytes2;
-        if (!TEST_size_t_le(readbytes, msglen))
-            goto end;
-    }
-
-    if (!TEST_mem_eq(msg, msglen, buf, readbytes))
-        goto end;
-
-    testresult = 1;
-end:
-    SSL_free(serverssl);
-    SSL_free(clientssl);
-    SSL_CTX_free(sctx);
-    SSL_CTX_free(cctx);
-    if (e != NULL) {
-        ENGINE_unregister_ciphers(e);
-        ENGINE_finish(e);
-        ENGINE_free(e);
-    }
-    OPENSSL_free(buf);
-    if (fragsize == SSL3_RT_MAX_PLAIN_LENGTH)
-        OPENSSL_free(msg);
-    return testresult;
-}
-#endif /* !defined(OPENSSL_NO_TLS1_2) && !defined(OPENSSL_NO_DYNAMIC_ENGINE) */
-
 static int check_version_string(SSL *s, int version)
 {
     const char *verstr = NULL;
 
     switch (version) {
-    case SSL3_VERSION:
-        verstr = "SSLv3";
-        break;
     case TLS1_VERSION:
         verstr = "TLSv1";
         break;
@@ -12381,11 +12596,6 @@ static int test_version(int idx)
     const SSL_METHOD *clientmeth = TLS_client_method();
 
     switch (idx) {
-#if !defined(OPENSSL_NO_SSL3)
-    case 0:
-        version = SSL3_VERSION;
-        break;
-#endif
 #if !defined(OPENSSL_NO_TLS1)
     case 1:
         version = TLS1_VERSION;
@@ -12422,8 +12632,7 @@ static int test_version(int idx)
     }
 
     if (is_fips
-        && (version == SSL3_VERSION
-            || version == TLS1_VERSION
+        && (version == TLS1_VERSION
             || version == DTLS1_VERSION)) {
         TEST_skip("Protocol version not supported with FIPS");
         return 1;
@@ -12440,9 +12649,9 @@ static int test_version(int idx)
             version, &sctx, &cctx, cert, privkey)))
         goto end;
 
-    if (!TEST_true(SSL_CTX_set_cipher_list(sctx, "DEFAULT:@SECLEVEL=0"))
+    if (!TEST_true(SSL_CTX_set_cipher_list(sctx, "default:@SECLEVEL=0"))
         || !TEST_true(SSL_CTX_set_cipher_list(cctx,
-            "DEFAULT:@SECLEVEL=0")))
+            "DEFAULT:@seclevel=0")))
         goto end;
 
     if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl,
@@ -12482,6 +12691,34 @@ end:
     SSL_free(clientssl);
     SSL_CTX_free(sctx);
     SSL_CTX_free(cctx);
+    return testresult;
+}
+
+/*
+ * Test that SSL_CTX_is_server returns the expected results.
+ */
+static int test_ssl_ctx_is_server(void)
+{
+    int testresult = 0;
+    SSL_CTX *cctx = NULL, *sctx = NULL, *gctx = NULL;
+
+    cctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
+    sctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
+    gctx = SSL_CTX_new_ex(libctx, NULL, TLS_method());
+
+    if (!TEST_ptr(cctx) || !TEST_ptr(sctx) || !TEST_ptr(gctx))
+        goto end;
+
+    if (!TEST_false(SSL_CTX_is_server(cctx))
+        || !TEST_true(SSL_CTX_is_server(sctx))
+        || !TEST_true(SSL_CTX_is_server(gctx)))
+        goto end;
+
+    testresult = 1;
+end:
+    SSL_CTX_free(cctx);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(gctx);
     return testresult;
 }
 
@@ -13995,6 +14232,66 @@ err:
 }
 #endif
 
+static int test_ssl_conf_flags(void)
+{
+    SSL_CONF_CTX *cctx = NULL;
+    int ret = 0;
+
+    if (!TEST_ptr(cctx = SSL_CONF_CTX_new()))
+        goto err;
+
+    /* Initial flags should be 0 */
+    if (!TEST_uint_eq(SSL_CONF_CTX_set_flags(cctx, 0), 0))
+        goto err;
+
+    /* Setting CMDLINE should succeed */
+    if (!TEST_uint_eq(SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_CMDLINE),
+            SSL_CONF_FLAG_CMDLINE))
+        goto err;
+
+    /*
+     * Setting FILE when CMDLINE is set should fail to set the flag but return
+     * success (return the original flags value).
+     * If we also try to set a non-conflicting flag at the same time it should
+     * succeed.
+     */
+    if (!TEST_uint_eq(SSL_CONF_CTX_set_flags(cctx,
+                          SSL_CONF_FLAG_FILE
+                              | SSL_CONF_FLAG_SHOW_ERRORS),
+            SSL_CONF_FLAG_CMDLINE | SSL_CONF_FLAG_SHOW_ERRORS))
+        goto err;
+
+    SSL_CONF_CTX_free(cctx);
+    cctx = NULL;
+
+    /* Retry in reverse */
+    if (!TEST_ptr(cctx = SSL_CONF_CTX_new()))
+        goto err;
+
+    /* Setting FILE should succeed */
+    if (!TEST_uint_eq(SSL_CONF_CTX_set_flags(cctx, SSL_CONF_FLAG_FILE),
+            SSL_CONF_FLAG_FILE))
+        goto err;
+
+    /*
+     * Setting CMDLINE when FILE is set should fail to set the flag but return
+     * success (return the original flags value)
+     * If we also try to set a non-conflicting flag at the same time it should
+     * succeed.
+     */
+    if (!TEST_uint_eq(SSL_CONF_CTX_set_flags(cctx,
+                          SSL_CONF_FLAG_CMDLINE
+                              | SSL_CONF_FLAG_SHOW_ERRORS),
+            SSL_CONF_FLAG_FILE | SSL_CONF_FLAG_SHOW_ERRORS))
+        goto err;
+
+    ret = 1;
+
+err:
+    SSL_CONF_CTX_free(cctx);
+    return ret;
+}
+
 /*
  * Test that SSL_CTX_set1_groups() when called with a list where the first
  * entry is unsupported, will send a key_share that uses the next usable entry.
@@ -14328,14 +14625,14 @@ int setup_tests(void)
 #endif /* OSSL_NO_USABLE_TLS1_3 */
 #ifndef OPENSSL_NO_TLS1_2
     /* Test with both TLSv1.3 and 1.2 versions */
-    ADD_ALL_TESTS(test_key_exchange, 21);
+    ADD_ALL_TESTS(test_key_exchange, 23);
 #if !defined(OPENSSL_NO_EC) && !defined(OPENSSL_NO_DH)
     ADD_ALL_TESTS(test_negotiated_group,
         4 * (OSSL_NELEM(ecdhe_kexch_groups) + OSSL_NELEM(ffdhe_kexch_groups)));
 #endif
 #else
     /* Test with only TLSv1.3 versions */
-    ADD_ALL_TESTS(test_key_exchange, 18);
+    ADD_ALL_TESTS(test_key_exchange, 20);
 #endif
     ADD_ALL_TESTS(test_custom_exts, 6);
     ADD_TEST(test_stateless);
@@ -14368,6 +14665,7 @@ int setup_tests(void)
     ADD_ALL_TESTS(test_ticket_callbacks, 20);
     ADD_ALL_TESTS(test_shutdown, 7);
     ADD_TEST(test_async_shutdown);
+    ADD_ALL_TESTS(test_ssl_bio_eof, 2);
     ADD_ALL_TESTS(test_incorrect_shutdown, 2);
     ADD_ALL_TESTS(test_cert_cb, 6);
     ADD_ALL_TESTS(test_client_cert_cb, 2);
@@ -14394,6 +14692,8 @@ int setup_tests(void)
 #ifndef OPENSSL_NO_DH
     ADD_ALL_TESTS(test_set_tmp_dh, 11);
     ADD_ALL_TESTS(test_dh_auto, 7);
+    ADD_ALL_TESTS(test_no_shared_ffdhe_group, 10);
+    ADD_ALL_TESTS(test_shared_ffdhe_group, 5);
 #endif
 #endif
 #ifndef OSSL_NO_USABLE_TLS1_3
@@ -14402,6 +14702,7 @@ int setup_tests(void)
 #endif
     ADD_TEST(test_inherit_verify_param);
     ADD_TEST(test_set_alpn);
+    ADD_TEST(test_get_alpn);
 #if !defined(OPENSSL_NO_EC) && !defined(OPENSSL_NO_TLS1_2)
     ADD_TEST(test_legacy_ec_point_formats);
 #endif
@@ -14419,10 +14720,8 @@ int setup_tests(void)
 #if !defined(OPENSSL_NO_TLS1_2) && !defined(OSSL_NO_USABLE_TLS1_3)
     ADD_ALL_TESTS(test_serverinfo_custom, 4);
 #endif
-#if !defined(OPENSSL_NO_TLS1_2) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
-    ADD_ALL_TESTS(test_pipelining, 7);
-#endif
     ADD_ALL_TESTS(test_version, 6);
+    ADD_TEST(test_ssl_ctx_is_server);
     ADD_TEST(test_rstate_string);
     ADD_ALL_TESTS(test_handshake_retry, 16);
     ADD_TEST(test_data_retry);
@@ -14442,6 +14741,7 @@ int setup_tests(void)
         ADD_TEST(test_ssl_trace);
 #endif
     ADD_ALL_TESTS(test_ssl_set_groups_unsupported_keyshare, 2);
+    ADD_TEST(test_ssl_conf_flags);
     ADD_ALL_TESTS(test_http_verbs, 3);
     return 1;
 

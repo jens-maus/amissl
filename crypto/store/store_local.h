@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -11,7 +11,6 @@
 #include "internal/thread_once.h"
 #include "internal/refcount.h"
 #include <openssl/dsa.h>
-#include <openssl/engine.h>
 #include <openssl/evp.h>
 #include <openssl/lhash.h>
 #include <openssl/x509.h>
@@ -38,6 +37,7 @@ struct ossl_store_info_st {
         EVP_PKEY *pkey; /* when type == OSSL_STORE_INFO_PKEY */
         X509 *x509; /* when type == OSSL_STORE_INFO_CERT */
         X509_CRL *crl; /* when type == OSSL_STORE_INFO_CRL */
+        EVP_SKEY *skey; /* when type == OSSL_STORE_INFO_SKEY */
     } _;
 };
 DEFINE_STACK_OF(OSSL_STORE_INFO)
@@ -54,7 +54,7 @@ struct ossl_store_search_st {
      * Used by OSSL_STORE_SEARCH_BY_NAME and
      * OSSL_STORE_SEARCH_BY_ISSUER_SERIAL
      */
-    X509_NAME *name;
+    const X509_NAME *name;
 
     /* Used by OSSL_STORE_SEARCH_BY_ISSUER_SERIAL */
     const ASN1_INTEGER *serial;
@@ -83,7 +83,6 @@ struct ossl_store_loader_st {
 #ifndef OPENSSL_NO_DEPRECATED_3_0
     /* Legacy stuff */
     const char *scheme;
-    ENGINE *engine;
     OSSL_STORE_open_fn open;
     OSSL_STORE_attach_fn attach;
     OSSL_STORE_ctrl_fn ctrl;

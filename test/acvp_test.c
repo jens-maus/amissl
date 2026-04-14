@@ -1323,6 +1323,16 @@ static int rsa_keygen_test(int id)
     OSSL_PARAM *params = NULL;
     const struct rsa_keygen_st *tst = &rsa_keygen_data[id];
 
+    /*
+     * RSA key generation parameters "a" and "b" were added in OpenSSL 4.0,
+     * So skip the test if the FIPS provider is older.
+     */
+    if ((tst->a > 0 || tst->b > 0)
+        && fips_provider_version_lt(libctx, 4, 0, 0)) {
+        TEST_note("ACVP rsa_keygen_test %d test skipped", id);
+        return 1;
+    }
+
     if (!TEST_ptr(bld = OSSL_PARAM_BLD_new())
         || !TEST_ptr(xp1_bn = BN_bin2bn(tst->xp1, (int)tst->xp1_len, NULL))
         || !TEST_ptr(xp2_bn = BN_bin2bn(tst->xp2, (int)tst->xp2_len, NULL))
@@ -1342,6 +1352,10 @@ static int rsa_keygen_test(int id)
             xq2_bn))
         || !TEST_true(OSSL_PARAM_BLD_push_BN(bld, OSSL_PKEY_PARAM_RSA_TEST_XQ,
             xq_bn))
+        || !TEST_true(OSSL_PARAM_BLD_push_uint32(bld, OSSL_PKEY_PARAM_RSA_A,
+            tst->a))
+        || !TEST_true(OSSL_PARAM_BLD_push_uint32(bld, OSSL_PKEY_PARAM_RSA_B,
+            tst->b))
         || !TEST_ptr(params = OSSL_PARAM_BLD_to_param(bld)))
         goto err;
 
@@ -1370,14 +1384,14 @@ static int rsa_keygen_test(int id)
             &d, &d_len)))
         goto err;
 
-    if (!TEST_mem_eq(tst->p1, tst->p1_len, p1, p1_len)
-        || !TEST_mem_eq(tst->p2, tst->p2_len, p2, p2_len)
+    if ((tst->p1 != NULL && !TEST_mem_eq(tst->p1, tst->p1_len, p1, p1_len))
+        || (tst->p2 != NULL && !TEST_mem_eq(tst->p2, tst->p2_len, p2, p2_len))
+        || (tst->q1 != NULL && !TEST_mem_eq(tst->q1, tst->q1_len, q1, q1_len))
+        || (tst->q2 != NULL && !TEST_mem_eq(tst->q2, tst->q2_len, q2, q2_len))
         || !TEST_mem_eq(tst->p, tst->p_len, p, p_len)
-        || !TEST_mem_eq(tst->q1, tst->q1_len, q1, q1_len)
-        || !TEST_mem_eq(tst->q2, tst->q2_len, q2, q2_len)
         || !TEST_mem_eq(tst->q, tst->q_len, q, q_len)
         || !TEST_mem_eq(tst->n, tst->n_len, n, n_len)
-        || !TEST_mem_eq(tst->d, tst->d_len, d, d_len))
+        || (tst->d != NULL && !TEST_mem_eq(tst->d, tst->d_len, d, d_len)))
         goto err;
 
     test_output_memory("p1", p1, p1_len);

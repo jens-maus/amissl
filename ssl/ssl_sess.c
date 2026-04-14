@@ -14,7 +14,6 @@
 #endif
 #include <stdio.h>
 #include <openssl/rand.h>
-#include <openssl/engine.h>
 #include "internal/refcount.h"
 #include "internal/cryptlib.h"
 #include "internal/ssl_unwrap.h"
@@ -62,7 +61,7 @@ void ssl_session_calculate_timeout(SSL_SESSION *ss)
 SSL_SESSION *SSL_get_session(const SSL *ssl)
 /* aka SSL_get0_session; gets 0 objects, just returns a copy of the pointer */
 {
-    const SSL_CONNECTION *sc = SSL_CONNECTION_FROM_SSL(ssl);
+    const SSL_CONNECTION *sc = SSL_CONNECTION_FROM_CONST_SSL(ssl);
 
     if (sc == NULL)
         return NULL;
@@ -352,7 +351,6 @@ int ssl_generate_session_id(SSL_CONNECTION *s, SSL_SESSION *ss)
     SSL *ssl = SSL_CONNECTION_GET_SSL(s);
 
     switch (s->version) {
-    case SSL3_VERSION:
     case TLS1_VERSION:
     case TLS1_1_VERSION:
     case TLS1_2_VERSION:

@@ -245,7 +245,7 @@ static int cert_acceptable(const OSSL_CMP_CTX *ctx,
     int self_issued = X509_check_issued(cert, cert) == X509_V_OK;
     char *str;
     X509_VERIFY_PARAM *vpm = ts != NULL ? X509_STORE_get0_param(ts) : NULL;
-    int time_cmp;
+    int err;
 
     ossl_cmp_log3(INFO, ctx, " considering %s%s %s with..",
         self_issued ? "self-issued " : "", desc1, desc2);
@@ -265,13 +265,28 @@ static int cert_acceptable(const OSSL_CMP_CTX *ctx,
         return 0;
     }
 
-    time_cmp = X509_cmp_timeframe(vpm, X509_get0_notBefore(cert),
-        X509_get0_notAfter(cert));
-    if (time_cmp != 0) {
-        int err = time_cmp > 0 ? X509_V_ERR_CERT_HAS_EXPIRED
-                               : X509_V_ERR_CERT_NOT_YET_VALID;
+    if (!X509_check_certificate_times(vpm, cert, &err)) {
+        const char *message;
 
-        ossl_cmp_warn(ctx, time_cmp > 0 ? "cert has expired" : "cert is not yet valid");
+        switch (err) {
+        case X509_V_ERR_CERT_NOT_YET_VALID:
+            message = "cert is not yet valid";
+            break;
+        case X509_V_ERR_CERT_HAS_EXPIRED:
+            message = "cert has expired";
+            break;
+        case X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD:
+            message = "cert has an invalid not before field";
+            break;
+        case X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD:
+            message = "cert has an invalid not after field";
+            break;
+        default:
+            message = "cert is invalid for an unspecfied reason";
+            break;
+        }
+
+        ossl_cmp_warn(ctx, message);
         if (ctx->log_cb != NULL /* logging not temporarily disabled */
             && verify_cb_cert(ts, cert, err) <= 0)
             return 0;
@@ -312,21 +327,31 @@ static int check_cert_path(const OSSL_CMP_CTX *ctx, X509_STORE *store,
 /*
  * Exceptional handling for 3GPP TS 33.310 [3G/LTE Network Domain Security
  * (NDS); Authentication Framework (AF)], only to use for IP messages
- * and if the ctx option is explicitly set: use self-issued certificates
- * from extraCerts as trust anchor to validate sender cert -
- * provided it also can validate the newly enrolled certificate
+ * and if the ctx option is explicitly set: use self-issued certificates from
+ * extraCerts as trust anchors when validating the CMP message protection cert
+ * in this and any subsequent responses from the server in the same transaction,
+ * but only if these extraCerts can also be used as trust anchors for validating
+ * the newly enrolled certificate received in the IP message.
  */
 static int check_cert_path_3gpp(const OSSL_CMP_CTX *ctx,
     const OSSL_CMP_MSG *msg, X509 *scrt)
 {
     int valid = 0;
     X509_STORE *store;
+    STACK_OF(X509) *extraCerts;
 
     if (!ctx->permitTAInExtraCertsForIR)
         return 0;
 
+    /*
+     * Initially, use extraCerts from the IP message.
+     * For subsequent msgs (pollRep or PKIConf) in the same transaction,
+     * use extraCertsIn remembered from earlier message (typically, the IP message).
+     * The extraCertsIn field will be cleared by OSSL_CMP_CTX_reinit().
+     */
+    extraCerts = ctx->extraCertsIn == NULL ? msg->extraCerts : ctx->extraCertsIn;
     if ((store = X509_STORE_new()) == NULL
-        || !ossl_cmp_X509_STORE_add1_certs(store, msg->extraCerts,
+        || !ossl_cmp_X509_STORE_add1_certs(store, extraCerts,
             1 /* self-issued only */))
         goto err;
 
@@ -542,10 +567,11 @@ end:
  * (in this order) and is path is validated against ctx->trusted.
  * On success cache the found cert using ossl_cmp_ctx_set1_validatedSrvCert().
  *
- * If ctx->permitTAInExtraCertsForIR is true and when validating a CMP IP msg,
- * the trust anchor for validating the IP msg may be taken from msg->extraCerts
- * if a self-issued certificate is found there that can be used to
- * validate the enrolled certificate returned in the IP.
+ * If ctx->permitTAInExtraCertsForIR is true, when validating a CMP IP message,
+ * trust anchors for validating the IP message (and any subsequent responses
+ * by the server in the same transaction) may be taken from msg->extraCerts
+ * if self-issued certificates are found there that can also be used
+ * to validate the newly enrolled certificate returned in the IP msg.
  * This is according to the need given in 3GPP TS 33.310.
  *
  * Returns 1 on success, 0 on error or validation failed.
@@ -709,6 +735,11 @@ int ossl_cmp_msg_check_update(OSSL_CMP_CTX *ctx, const OSSL_CMP_MSG *msg,
     if (expected_sender != NULL) {
         const X509_NAME *actual_sender;
         char *str;
+
+        if (hdr->sender == NULL) {
+            ERR_raise(ERR_LIB_CMP, CMP_R_MISSING_SENDER_IDENTIFICATION);
+            return 0;
+        }
 
         if (hdr->sender->type != GEN_DIRNAME) {
             ERR_raise(ERR_LIB_CMP, CMP_R_SENDER_GENERALNAME_TYPE_NOT_SUPPORTED);

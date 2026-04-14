@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2020-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -18,7 +18,6 @@
 #include <openssl/params.h>
 #include <openssl/err.h>
 #ifndef FIPS_MODULE
-#include <openssl/engine.h>
 #include <openssl/x509.h>
 #endif
 #include "crypto/bn.h"
@@ -27,6 +26,8 @@
 #include "internal/e_os.h"
 #include "internal/nelem.h"
 #include "internal/param_build_set.h"
+
+#include <crypto/asn1.h>
 
 /* Mapping between a flag and a name */
 static const OSSL_ITEM encoding_nameid_map[] = {
@@ -352,9 +353,9 @@ err:
 }
 
 /*
- * The intention with the "backend" source file is to offer backend support
- * for legacy backends (EVP_PKEY_ASN1_METHOD and EVP_PKEY_METHOD) and provider
- * implementations alike.
+ * The intention with the "backend" source file is to offer backend functions
+ * for legacy backends (EVP_PKEY_ASN1_METHOD) and provider implementations
+ * alike.
  */
 int ossl_ec_set_ecdh_cofactor_mode(EC_KEY *ec, int mode)
 {
@@ -484,6 +485,15 @@ int ossl_ec_key_fromdata(EC_KEY *ec, const OSSL_PARAM params[], int include_priv
         && !EC_KEY_set_public_key(ec, pub_point))
         goto err;
 
+    /* Fallback computation of public key if not provided */
+    if (priv_key != NULL && pub_point == NULL) {
+        if ((pub_point = EC_POINT_new(ecg)) == NULL
+            || !EC_KEY_set_public_key(ec, pub_point))
+            goto err;
+        if (!ossl_ec_key_simple_generate_public_key(ec))
+            goto err;
+    }
+
     ok = 1;
 
 err:
@@ -585,7 +595,7 @@ int ossl_ec_key_otherparams_fromdata(EC_KEY *ec, const OSSL_PARAM params[])
 int ossl_ec_key_is_foreign(const EC_KEY *ec)
 {
 #ifndef FIPS_MODULE
-    if (ec->engine != NULL || EC_KEY_get_method(ec) != EC_KEY_OpenSSL())
+    if (EC_KEY_get_method(ec) != EC_KEY_OpenSSL())
         return 1;
 #endif
     return 0;
@@ -600,9 +610,7 @@ EC_KEY *ossl_ec_key_dup(const EC_KEY *src, int selection)
         return NULL;
     }
 
-    if ((ret = ossl_ec_key_new_method_int(src->libctx, src->propq,
-             src->engine))
-        == NULL)
+    if ((ret = ossl_ec_key_new_method_int(src->libctx, src->propq)) == NULL)
         return NULL;
 
     /* copy the parameters */

@@ -26,6 +26,8 @@
 #include "internal/nelem.h"
 #include "internal/refcount.h"
 
+#include <crypto/asn1.h>
+
 /* error codes */
 
 /* xorprovider error codes */
@@ -214,7 +216,7 @@ struct tls_group_st {
 static struct tls_group_st xor_group = {
     0, /* group_id, set by randomize_tls_alg_id() */
     128, /* secbits */
-    TLS1_3_VERSION, /* mintls */
+    TLS1_2_VERSION, /* mintls */
     0, /* maxtls */
     -1, /* mindtls */
     -1, /* maxdtls */
@@ -3225,6 +3227,11 @@ int tls_provider_init(const OSSL_CORE_HANDLE *handle,
         default:
             break;
         }
+    }
+
+    if (c_obj_create == NULL || c_obj_add_sigid == NULL) {
+        ERR_raise(ERR_LIB_USER, XORPROV_R_OBJ_CREATE_ERR);
+        goto err;
     }
 
     /*

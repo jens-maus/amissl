@@ -24,10 +24,11 @@ permissions:
   contents: read
 
 env:
-  opts: enable-rc5 enable-md2 enable-ssl3 enable-weak-ssl-ciphers enable-zlib
+  opts: enable-rc5 enable-md2 enable-weak-ssl-ciphers enable-zlib
 
 jobs:
   fips-releases:
+    if: github.repository == 'openssl/openssl'
     strategy:
       matrix:
         release: [
@@ -103,6 +104,7 @@ jobs:
           retention-days: 7
 
   development-branches:
+    if: github.repository == 'openssl/openssl'
     strategy:
       matrix:
         branch: [
@@ -141,7 +143,7 @@ jobs:
             name: master,
             dir: branch-master,
             tgz: branch-master.tar.gz,
-            extra_config: "enable-lms",
+            extra_config: "enable-lms enable-tls-deprecated-ec",
           },
         ]
 
@@ -152,6 +154,7 @@ jobs:
           path: ${{ matrix.branch.dir }}
           repository: openssl/openssl
           ref: ${{ matrix.branch.name }}
+          persist-credentials: false
       - name: localegen
         run: sudo locale-gen tr_TR.UTF-8
 
@@ -198,6 +201,7 @@ jobs:
           retention-days: 7
 
   cross-testing:
+    if: github.repository == 'openssl/openssl'
     needs: [fips-releases, development-branches]
     runs-on: ubuntu-latest
     strategy:

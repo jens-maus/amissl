@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2022-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -930,9 +930,10 @@ int qtest_fault_prepend_frame(QTEST_FAULT *fault, const unsigned char *frame,
     old_len = fault->pplainio.buf_len;
 
     /* Extend the size of the packet by the size of the new frame */
-    if (!TEST_true(qtest_fault_resize_plain_packet(fault,
-            old_len + frame_len)))
+    if (!qtest_fault_resize_plain_packet(fault, old_len + frame_len)) {
+        TEST_info("Cannot extend packet (%zu + %zu)", old_len, frame_len);
         return 0;
+    }
 
     memmove(buf + frame_len, buf, old_len);
     memcpy(buf, frame, frame_len);

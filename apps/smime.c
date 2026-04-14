@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1999-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -54,7 +54,6 @@ typedef enum OPTION_choice {
     OPT_INDEF,
     OPT_NOINDEF,
     OPT_CRLFEOL,
-    OPT_ENGINE,
     OPT_PASSIN,
     OPT_TO,
     OPT_FROM,
@@ -95,10 +94,7 @@ const OPTIONS smime_options[] = {
         "Output format SMIME (default), PEM or DER" },
     { "inkey", OPT_INKEY, 's',
         "Input private key (if not signer or recipient)" },
-    { "keyform", OPT_KEYFORM, 'f', "Input private key format (ENGINE, other values ignored)" },
-#ifndef OPENSSL_NO_ENGINE
-    { "engine", OPT_ENGINE, 's', "Use engine, possibly a hardware device" },
-#endif
+    { "keyform", OPT_KEYFORM, 'f', "Input private key format (DER/PEM)" },
     { "stream", OPT_STREAM, '-', "Enable CMS streaming" },
     { "indef", OPT_INDEF, '-', "Same as -stream" },
     { "noindef", OPT_NOINDEF, '-', "Disable CMS streaming" },
@@ -215,7 +211,6 @@ int smime_main(int argc, char **argv)
     int flags = PKCS7_DETACHED, operation = 0, ret = 0, indef = 0;
     int informat = FORMAT_SMIME, outformat = FORMAT_SMIME, keyform = FORMAT_UNDEF;
     int vpmtouched = 0, rv = 0;
-    ENGINE *e = NULL;
     const char *mime_eol = "\n";
     OSSL_LIB_CTX *libctx = app_get0_libctx();
 
@@ -326,9 +321,6 @@ int smime_main(int argc, char **argv)
             conf = app_load_config_modules(opt_arg());
             if (conf == NULL)
                 goto end;
-            break;
-        case OPT_ENGINE:
-            e = setup_engine(opt_arg(), 0);
             break;
         case OPT_PASSIN:
             passinarg = opt_arg();
@@ -471,26 +463,26 @@ int smime_main(int argc, char **argv)
                 goto end;
         }
         if (sksigners == NULL) {
-            BIO_printf(bio_err, "No signer certificate specified\n");
+            BIO_puts(bio_err, "No signer certificate specified\n");
             goto opthelp;
         }
         signerfile = NULL;
         keyfile = NULL;
     } else if (operation == SMIME_DECRYPT) {
         if (recipfile == NULL && keyfile == NULL) {
-            BIO_printf(bio_err,
+            BIO_puts(bio_err,
                 "No recipient certificate or key specified\n");
             goto opthelp;
         }
     } else if (operation == SMIME_ENCRYPT) {
         if (argc == 0) {
-            BIO_printf(bio_err, "No recipient(s) certificate(s) specified\n");
+            BIO_puts(bio_err, "No recipient(s) certificate(s) specified\n");
             goto opthelp;
         }
     }
 
     if (!app_passwd(passinarg, NULL, &passin, NULL)) {
-        BIO_printf(bio_err, "Error getting password\n");
+        BIO_puts(bio_err, "Error getting password\n");
         goto end;
     }
 
@@ -554,7 +546,7 @@ int smime_main(int argc, char **argv)
     }
 
     if (keyfile != NULL) {
-        key = load_key(keyfile, keyform, 0, passin, e, "signing key");
+        key = load_key(keyfile, keyform, 0, passin, "signing key");
         if (key == NULL)
             goto end;
     }
@@ -568,7 +560,7 @@ int smime_main(int argc, char **argv)
 
         p7 = PKCS7_new_ex(libctx, app_get0_propq());
         if (p7 == NULL) {
-            BIO_printf(bio_err, "Error allocating PKCS7 object\n");
+            BIO_puts(bio_err, "Error allocating PKCS7 object\n");
             goto end;
         }
         if (informat == FORMAT_SMIME) {
@@ -578,12 +570,12 @@ int smime_main(int argc, char **argv)
         } else if (informat == FORMAT_ASN1) {
             p7_in = d2i_PKCS7_bio(in, &p7);
         } else {
-            BIO_printf(bio_err, "Bad input format for PKCS#7 file\n");
+            BIO_puts(bio_err, "Bad input format for PKCS#7 file\n");
             goto end;
         }
 
         if (p7_in == NULL) {
-            BIO_printf(bio_err, "Error reading S/MIME message\n");
+            BIO_puts(bio_err, "Error reading S/MIME message\n");
             goto end;
         }
         if (contfile != NULL) {
@@ -647,7 +639,7 @@ int smime_main(int argc, char **argv)
             signer = load_cert(signerfile, FORMAT_UNDEF, "signer certificate");
             if (signer == NULL)
                 goto end;
-            key = load_key(keyfile, keyform, 0, passin, e, "signing key");
+            key = load_key(keyfile, keyform, 0, passin, "signing key");
             if (key == NULL)
                 goto end;
 
@@ -666,22 +658,22 @@ int smime_main(int argc, char **argv)
     }
 
     if (p7 == NULL) {
-        BIO_printf(bio_err, "Error creating PKCS#7 structure\n");
+        BIO_puts(bio_err, "Error creating PKCS#7 structure\n");
         goto end;
     }
 
     ret = 4;
     if (operation == SMIME_DECRYPT) {
         if (!PKCS7_decrypt(p7, key, recip, out, flags)) {
-            BIO_printf(bio_err, "Error decrypting PKCS#7 structure\n");
+            BIO_puts(bio_err, "Error decrypting PKCS#7 structure\n");
             goto end;
         }
     } else if (operation == SMIME_VERIFY) {
         STACK_OF(X509) *signers;
         if (PKCS7_verify(p7, other, store, indata, out, flags))
-            BIO_printf(bio_err, "Verification successful\n");
+            BIO_puts(bio_err, "Verification successful\n");
         else {
-            BIO_printf(bio_err, "Verification failure\n");
+            BIO_puts(bio_err, "Verification failure\n");
             goto end;
         }
         signers = PKCS7_get0_signers(p7, other, flags);
@@ -710,11 +702,11 @@ int smime_main(int argc, char **argv)
         } else if (outformat == FORMAT_ASN1) {
             rv = i2d_PKCS7_bio_stream(out, p7, in, flags);
         } else {
-            BIO_printf(bio_err, "Bad output format for PKCS#7 file\n");
+            BIO_puts(bio_err, "Bad output format for PKCS#7 file\n");
             goto end;
         }
         if (rv == 0) {
-            BIO_printf(bio_err, "Error writing output\n");
+            BIO_puts(bio_err, "Error writing output\n");
             ret = 3;
             goto end;
         }
@@ -736,7 +728,6 @@ end:
     EVP_MD_free(sign_md);
     EVP_CIPHER_free(cipher);
     PKCS7_free(p7);
-    release_engine(e);
     BIO_free(in);
     BIO_free(indata);
     BIO_free_all(out);
