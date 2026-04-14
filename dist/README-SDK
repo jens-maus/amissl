@@ -293,13 +293,13 @@ these functions otherwise you will get errors when compiling.
 
 12. SAS/C issues
 ----------------
-You will need to add "MemorySize=h IdentifierLength=80" to your SC command
-line and have to take special care where 64-bit integers are concerned. In
-particular, OPENSSL_init_ssl(), which you mignt not even be calling directly,
-but is ultimately the end result of many of the macros for older legacy SSL
-initialisation functions. Remember that for 64-bit parameters, the high
-32-bits are placed in D0 and the low 32-bits in D1. So, you might want to
-use a workaround like this:
+You will need to add "PreprocessorBuffer=32768 IdentifierLength=80" to your
+SC command line and have to take special care where 64-bit integers are
+concerned. In particular, OPENSSL_init_ssl(), which you mignt not even be
+calling directly, but is ultimately the end result of many of the macros for
+older legacy SSL initialisation functions. Remember that for 64-bit
+parameters, the high 32-bits are placed in D0 and the low 32-bits in D1. So,
+you might want to use a workaround similar to this:
 
 #define OPENSSL_init_ssl_32(opts, settings) \
 	(putreg(REG_D1,opts), OPENSSL_init_ssl(0, settings))
