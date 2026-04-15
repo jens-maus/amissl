@@ -1,7 +1,7 @@
 /*
  * {- join("\n * ", @autowarntext) -}
  *
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2002, Oracle and/or its affiliates. All rights reserved
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -97,6 +97,7 @@ int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
 int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock);
 int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock);
 int CRYPTO_atomic_store(uint64_t *dst, uint64_t val, CRYPTO_RWLOCK *lock);
+int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock);
 
 /* No longer needed, so this is a no-op */
 #define OPENSSL_malloc_init() \
@@ -487,13 +488,6 @@ int CRYPTO_memcmp(const void *in_a, const void *in_b, size_t len);
 #define OPENSSL_INIT_LOAD_CONFIG 0x00000040L
 #define OPENSSL_INIT_NO_LOAD_CONFIG 0x00000080L
 #define OPENSSL_INIT_ASYNC 0x00000100L
-#define OPENSSL_INIT_ENGINE_RDRAND 0x00000200L
-#define OPENSSL_INIT_ENGINE_DYNAMIC 0x00000400L
-#define OPENSSL_INIT_ENGINE_OPENSSL 0x00000800L
-#define OPENSSL_INIT_ENGINE_CRYPTODEV 0x00001000L
-#define OPENSSL_INIT_ENGINE_CAPI 0x00002000L
-#define OPENSSL_INIT_ENGINE_PADLOCK 0x00004000L
-#define OPENSSL_INIT_ENGINE_AFALG 0x00008000L
 /* FREE:                                     0x00010000L */
 #define OPENSSL_INIT_ATFORK 0x00020000L
 /* OPENSSL_INIT_BASE_ONLY                    0x00040000L */
@@ -507,15 +501,22 @@ int CRYPTO_memcmp(const void *in_a, const void *in_b, size_t len);
 /* FREE: 0x80000000L */
 /* Max OPENSSL_INIT flag value is 0x80000000 */
 
-/* openssl and dasync not counted as builtin */
-#define OPENSSL_INIT_ENGINE_ALL_BUILTIN                       \
-    (OPENSSL_INIT_ENGINE_RDRAND | OPENSSL_INIT_ENGINE_DYNAMIC \
-        | OPENSSL_INIT_ENGINE_CRYPTODEV | OPENSSL_INIT_ENGINE_CAPI | OPENSSL_INIT_ENGINE_PADLOCK)
+/* ENGINEs are no longer available */
+#define OPENSSL_INIT_ENGINE_ALL_BUILTIN 0
+
+#ifdef OPENSSL_ENGINE_STUBS
+#define OPENSSL_INIT_ENGINE_RDRAND 0
+#define OPENSSL_INIT_ENGINE_DYNAMIC 0
+#define OPENSSL_INIT_ENGINE_OPENSSL 0
+#define OPENSSL_INIT_ENGINE_CRYPTODEV 0
+#define OPENSSL_INIT_ENGINE_CAPI 0
+#define OPENSSL_INIT_ENGINE_PADLOCK 0
+#define OPENSSL_INIT_ENGINE_AFALG 0
+#endif
 
 /* Library initialisation functions */
 void OPENSSL_cleanup(void);
 int OPENSSL_init_crypto(uint64_t opts, const OPENSSL_INIT_SETTINGS *settings);
-int OPENSSL_atexit(void (*handler)(void));
 void OPENSSL_thread_stop(void);
 void OPENSSL_thread_stop_ex(OSSL_LIB_CTX *ctx);
 

@@ -15,9 +15,6 @@
 #include "openssl/obj_mac.h"
 #include "openssl/evp.h"
 #include "openssl/err.h"
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
-#include <openssl/engine.h>
-#endif
 
 #ifdef OPENSSL_HMAC_S390X
 
@@ -70,32 +67,7 @@ static void s390x_call_kmac(HMAC_CTX *ctx, const unsigned char *in, size_t len)
     ctx->plat.s390x.ikp = 1;
 }
 
-static int s390x_check_engine_used(const EVP_MD *md, ENGINE *impl)
-{
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
-    const EVP_MD *d;
-
-    if (impl != NULL) {
-        if (!ENGINE_init(impl))
-            return 0;
-    } else {
-        impl = ENGINE_get_digest_engine(EVP_MD_get_type(md));
-    }
-
-    if (impl == NULL)
-        return 0;
-
-    d = ENGINE_get_digest(impl, EVP_MD_get_type(md));
-    ENGINE_finish(impl);
-
-    if (d != NULL)
-        return 1;
-#endif
-
-    return 0;
-}
-
-int s390x_HMAC_init(HMAC_CTX *ctx, const void *key, int key_len, ENGINE *impl)
+int s390x_HMAC_init(HMAC_CTX *ctx, const void *key, int key_len)
 {
     unsigned char *key_param;
     unsigned int key_param_len;
@@ -103,11 +75,6 @@ int s390x_HMAC_init(HMAC_CTX *ctx, const void *key, int key_len, ENGINE *impl)
     ctx->plat.s390x.fc = s390x_fc_from_md(ctx->md);
     if (ctx->plat.s390x.fc == 0)
         return -1; /* Not supported by kmac instruction */
-
-    if (s390x_check_engine_used(ctx->md, impl)) {
-        ctx->plat.s390x.fc = 0;
-        return -1; /* An engine handles the digest, disable acceleration */
-    }
 
     ctx->plat.s390x.blk_size = EVP_MD_get_block_size(ctx->md);
     if (ctx->plat.s390x.blk_size < 0)
@@ -168,7 +135,7 @@ int s390x_HMAC_init(HMAC_CTX *ctx, const void *key, int key_len, ENGINE *impl)
             return 0;
 
         if (key_len > ctx->plat.s390x.blk_size) {
-            if (!EVP_DigestInit_ex(ctx->md_ctx, ctx->md, impl)
+            if (!EVP_DigestInit_ex(ctx->md_ctx, ctx->md, NULL)
                 || !EVP_DigestUpdate(ctx->md_ctx, key, key_len)
                 || !EVP_DigestFinal_ex(ctx->md_ctx, key_param,
                     &key_param_len))

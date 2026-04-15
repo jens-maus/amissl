@@ -18,13 +18,14 @@ permissions:
 
 jobs:
   run-checker:
+    if: github.repository == 'openssl/openssl'
     strategy:
       fail-fast: false
       matrix:
         opt: [
           386,
-          no-afalgeng,
           no-apps,
+          no-argon2,
           no-aria,
           no-asan,
           no-asm,
@@ -39,18 +40,15 @@ jobs:
           no-bulk,
           no-cached-fetch,
           no-camellia,
-          no-capieng,
           no-cast,
           no-chacha,
           no-cmac,
           no-comp,
           enable-crypto-mdebug,
-          enable-crypto-mdebug-backtrace,
           no-ct,
           enable-demos,
           no-deprecated,
           no-des,
-#          enable-devcryptoeng,  # Cannot work on Linux
           no-docs,
           no-dsa,
           no-dtls1,
@@ -61,7 +59,6 @@ jobs:
           no-ecdsa,
           enable-ec_nistp_64_gcc_128,
           enable-egd,
-          no-engine,
 #          enable-external-tests,  # Requires extra setup
           enable-fips,
           enable-fips enable-acvp-tests,
@@ -71,11 +68,12 @@ jobs:
 #          enable-fuzz-libfuzzer,  # Requires extra setup
           no-gost,
           enable-h3demo,
-          enable-heartbeats,
           enable-hqinterop,
+          no-hmac-drbg-kdf,
           no-hw,
-          no-hw-padlock,
           no-idea,
+          no-kbkdf,
+          no-krb5kdf,
           enable-lms,
           no-makedepend,
           enable-md2,
@@ -85,11 +83,11 @@ jobs:
           no-multiblock,
           no-nextprotoneg,
           no-ocb,
-          no-padlockeng,
           no-pic,
           no-poly1305,
           no-posix-io,
           no-psk,
+          no-pvkkdf,
           no-rc2,
           enable-rc5,
           no-rdrand,
@@ -105,14 +103,16 @@ jobs:
           no-sm2-precomp,
           no-sm3,
           no-sm4,
+          no-snmpkdf,
           no-sock,
+          no-srtpkdf,
           no-sse2,
+          no-sshkdf,
+          no-sskdf,
           no-ssl,
           no-ssl-trace,
-          enable-ssl3,
-          enable-ssl3-method,
           enable-sslkeylog,
-          no-static-engine no-shared,
+          no-shared,
           no-tests,
           enable-tfo,
           no-tls1,
@@ -127,6 +127,8 @@ jobs:
           no-uplink,
           no-weak-ssl-ciphers,
           no-whirlpool,
+          no-x942kdf,
+          no-x963kdf,
           enable-zlib-dynamic,
           -DOPENSSL_PEDANTIC_ZEROIZATION,
           -DOPENSSL_PEDANTIC_ZEROIZATION enable-fips,
@@ -155,6 +157,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   run-checker-sctp:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -196,12 +199,13 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   enable_brotli_dynamic:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: install brotli
       run: |
         sudo apt-get update
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install brotli libbrotli1 libbrotli-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install brotli libbrotli1 libbrotli-dev
     - name: checkout openssl
       uses: actions/checkout@v6
       with:
@@ -220,12 +224,13 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   enable_zstd_dynamic:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: install zstd
       run: |
         sudo apt-get update
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install zstd libzstd1 libzstd-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install zstd libzstd1 libzstd-dev
     - name: checkout openssl
       uses: actions/checkout@v6
       with:
@@ -244,13 +249,14 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   enable_brotli_and_zstd_dynamic:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: install brotli and zstd
       run: |
         sudo apt-get update
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install brotli libbrotli1 libbrotli-dev
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install zstd libzstd1 libzstd-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install brotli libbrotli1 libbrotli-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install zstd libzstd1 libzstd-dev
     - name: checkout openssl
       uses: actions/checkout@v6
       with:
@@ -269,6 +275,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   malloc_failure_testing:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: checkout openssl
@@ -290,15 +297,16 @@ jobs:
     - name: make test
       continue-on-error: true
       run: |
-        make TESTS=test_handshake-memfail test
+        make TESTS="test_memfail" test
 
   enable_brotli_and_asan_ubsan:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: install brotli
       run: |
         sudo apt-get update
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install brotli libbrotli1 libbrotli-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install brotli libbrotli1 libbrotli-dev
     - name: checkout openssl
       uses: actions/checkout@v6
       with:
@@ -321,12 +329,13 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} OPENSSL_TEST_RAND_ORDER=0
 
   enable_zstd_and_asan_ubsan:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - name: install zstd
       run: |
         sudo apt-get update
-        sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install zstd libzstd1 libzstd-dev
+        sudo apt-get -yq --no-install-suggests --no-install-recommends --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install zstd libzstd1 libzstd-dev
     - name: checkout openssl
       uses: actions/checkout@v6
       with:
@@ -349,9 +358,10 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} OPENSSL_TEST_RAND_ORDER=0
 
   enable_tfo:
+    if: github.repository == 'openssl/openssl'
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-13, macos-14 ]
+        os: [ubuntu-latest, macos-15, macos-15-intel]
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v6
@@ -369,6 +379,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   enable_buildtest:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -388,6 +399,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
   memory_sanitizer_slh_dsa:
+    if: github.repository == 'openssl/openssl'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -410,3 +422,26 @@ jobs:
         ./util/opensslwrap.sh version -c
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} OPENSSL_TEST_RAND_ORDER=0
+
+  bn_debug:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: config
+      run: ./config --debug --strict-warnings -DBN_DEBUG --banner=Configured -DOPENSSL_NO_SECURE_MEMORY && perl configdata.pm --dump
+    - name: make
+      run: make -j4 # verbose, so no -s here
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        ./util/opensslwrap.sh version -c
+    - name: make test
+      run: .github/workflows/make-test
+    - name: save artifacts
+      if: success() || failure()
+      uses: actions/upload-artifact@v5
+      with:
+        name: "ci@bn_debug"
+        path: artifacts.tar.gz

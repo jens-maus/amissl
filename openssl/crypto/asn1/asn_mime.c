@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2008-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -157,7 +157,6 @@ static ASN1_VALUE *b64_read_asn1(BIO *bio, const ASN1_ITEM *it, ASN1_VALUE **x,
 
 static int asn1_write_micalg(BIO *out, STACK_OF(X509_ALGOR) *mdalgs)
 {
-    const EVP_MD *md;
     int i, have_unknown = 0, write_comma, ret = 0, md_nid;
     have_unknown = 0;
     write_comma = 0;
@@ -179,21 +178,6 @@ static int asn1_write_micalg(BIO *out, STACK_OF(X509_ALGOR) *mdalgs)
             continue;
         }
 
-        md = EVP_get_digestbynid(md_nid);
-        if (md && md->md_ctrl) {
-            int rv;
-            char *micstr;
-            rv = md->md_ctrl(NULL, EVP_MD_CTRL_MICALG, 0, &micstr);
-            if (rv > 0) {
-                rv = BIO_puts(out, micstr);
-                OPENSSL_free(micstr);
-                if (rv < 0)
-                    goto err;
-                continue;
-            }
-            if (rv != -2)
-                goto err;
-        }
         switch (md_nid) {
         case NID_sha1:
             if (BIO_puts(out, "sha1") < 0)
@@ -334,7 +318,7 @@ int SMIME_write_ASN1_ex(BIO *bio, ASN1_VALUE *val, BIO *data, int flags,
     } else if (ctype_nid == NID_pkcs7_signed) {
         if (econt_nid == NID_id_smime_ct_receipt)
             msg_type = "signed-receipt";
-        else if (sk_X509_ALGOR_num(mdalgs) >= 0)
+        else if (mdalgs != NULL && sk_X509_ALGOR_num(mdalgs) > 0)
             msg_type = "signed-data";
         else
             msg_type = "certs-only";
@@ -567,7 +551,7 @@ int SMIME_crlf_copy(BIO *in, BIO *out, int flags)
     out = BIO_push(bf, out);
     if (flags & SMIME_BINARY) {
         while ((len = BIO_read(in, linebuf, MAX_SMLEN)) > 0) {
-            if (BIO_write(out, linebuf, len) != len && out != NULL)
+            if (BIO_write(out, linebuf, len) != len)
                 goto err;
         }
     } else {
@@ -587,7 +571,7 @@ int SMIME_crlf_copy(BIO *in, BIO *out, int flags)
                             goto err;
                     eolcnt = 0;
                 }
-                if (BIO_write(out, linebuf, len) != len && out != NULL)
+                if (BIO_write(out, linebuf, len) != len)
                     goto err;
                 if (eol && BIO_puts(out, "\r\n") < 0)
                     goto err;
@@ -634,7 +618,7 @@ int SMIME_text(BIO *in, BIO *out)
     }
     sk_MIME_HEADER_pop_free(headers, mime_hdr_free);
     while ((len = BIO_read(in, iobuf, sizeof(iobuf))) > 0)
-        if (BIO_write(out, iobuf, len) != len && out != NULL)
+        if (out != NULL && BIO_write(out, iobuf, len) != len)
             return 0;
     return len >= 0;
 }
@@ -670,6 +654,12 @@ static int multi_split(BIO *bio, int flags, const char *bound, STACK_OF(BIO) **r
             first = 1;
             part++;
         } else if (state == 2) {
+            if (bpart == NULL) {
+                bpart = BIO_new(BIO_s_mem());
+                if (bpart == NULL)
+                    return 0;
+                BIO_set_mem_eof_return(bpart, 0);
+            }
             if (!sk_BIO_push(parts, bpart)) {
                 BIO_free(bpart);
                 return 0;
@@ -878,7 +868,7 @@ static char *strip_start(char *name)
 static char *strip_end(char *name)
 {
     char *p, c;
-    if (!name)
+    if (!name || *name == '\0')
         return NULL;
     /* Look for first non whitespace or quote */
     for (p = name + strlen(name) - 1; p >= name; p--) {
@@ -1048,6 +1038,11 @@ static int strip_eol(char *linebuf, int *plen, int flags)
     int len = *plen;
     char *p, c;
     int is_eol = 0;
+
+    if (len <= 0) {
+        *plen = 0;
+        return 0;
+    }
 
 #ifndef OPENSSL_NO_CMS
     if ((flags & CMS_BINARY) != 0) {

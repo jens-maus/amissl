@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2006-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -487,7 +487,7 @@ static int ts_RESP_check_request(TS_RESP_CTX *ctx)
         return 0;
     }
     digest = msg_imprint->hashed_msg;
-    if (digest->length != md_size) {
+    if (ASN1_STRING_length(digest) != md_size) {
         TS_RESP_CTX_set_status_info(ctx, TS_STATUS_REJECTION,
             "Bad message digest.");
         TS_RESP_CTX_add_failure_info(ctx, TS_INFO_BAD_DATA_FORMAT);
@@ -633,9 +633,13 @@ static int ossl_ess_add1_signing_cert(PKCS7_SIGNER_INFO *si,
     const ESS_SIGNING_CERT *sc)
 {
     ASN1_STRING *seq = NULL;
-    int len = i2d_ESS_SIGNING_CERT(sc, NULL);
-    unsigned char *p, *pp = OPENSSL_malloc(len);
+    int len;
+    unsigned char *p, *pp;
 
+    len = i2d_ESS_SIGNING_CERT(sc, NULL);
+    if (len <= 0)
+        return 0;
+    pp = OPENSSL_malloc(len);
     if (pp == NULL)
         return 0;
 
@@ -660,9 +664,13 @@ static int ossl_ess_add1_signing_cert_v2(PKCS7_SIGNER_INFO *si,
     const ESS_SIGNING_CERT_V2 *sc)
 {
     ASN1_STRING *seq = NULL;
-    int len = i2d_ESS_SIGNING_CERT_V2(sc, NULL);
-    unsigned char *p, *pp = OPENSSL_malloc(len);
+    int len;
+    unsigned char *p, *pp;
 
+    len = i2d_ESS_SIGNING_CERT_V2(sc, NULL);
+    if (len <= 0)
+        return 0;
+    pp = OPENSSL_malloc(len);
     if (pp == NULL)
         return 0;
 

@@ -7,6 +7,7 @@ release. For more details please read the CHANGES file.
 OpenSSL Releases
 ----------------
 
+ - [OpenSSL 4.0](#openssl-40)
  - [OpenSSL 3.6](#openssl-36)
  - [OpenSSL 3.5](#openssl-35)
  - [OpenSSL 3.4](#openssl-34)
@@ -21,13 +22,113 @@ OpenSSL Releases
  - [OpenSSL 1.0.0](#openssl-100)
  - [OpenSSL 0.9.x](#openssl-09x)
 
+OpenSSL 4.0
+-----------
+
+### Major changes between OpenSSL 3.6 and OpenSSL 4.0.0 [14 Apr 2026]
+
+OpenSSL 4.0.0 is a feature release adding significant new functionality
+to OpenSSL.
+
+This release incorporates the following potentially significant or incompatible
+changes:
+
+  * Removed extra leading '00:' when printing key data such as an RSA modulus
+    in hexadecimal format where the first (most significant) byte is >= 0x80.
+
+  * Standardized the width of hexadecimal dumps to 24 bytes for signatures
+    (to stay within the 80 characters limit) and 16 bytes for everything else.
+
+  * Lower bounds checks are now enforced when using `PKCS5_PBKDF2_HMAC` API
+    with FIPS provider.
+
+  * Added AKID verification checks when `X509_V_FLAG_X509_STRICT` is set.
+
+  * Augmented CRL verification process with several additional checks.
+
+  * `libcrypto` no longer cleans up globally allocated data via `atexit()`.
+
+  * `BIO_snprintf()` now uses `snprintf()` provided by libc instead of internal
+    implementation.
+
+  * `OPENSSL_cleanup()` now runs in a global destructor, or not at all
+    by default.
+
+  * `ASN1_STRING` has been made opaque.
+
+  * Signatures of numerous API functions, including those that are related
+    to X509 processing, are changed to include `const` qualifiers for argument
+    and return types, where suitable.
+
+  * Deprecated `X509_cmp_time()`, `X509_cmp_current_time()`,
+    and `X509_cmp_timeframe()` in favor of `X509_check_certificate_times()`.
+
+  * Removed support for the SSLv2 Client Hello.
+
+  * Removed support for SSLv3.  SSLv3 has been deprecated since 2015,
+    and OpenSSL had it disabled by default since version 1.1.0 (2016).
+
+  * Removed support for engines.  The `no-engine` build option
+    and the `OPENSSL_NO_ENGINE` macro are always present.
+
+  * Support of deprecated elliptic curves in TLS according to [RFC 8422] was
+    disabled at compile-time by default. To enable it, use the
+    `enable-tls-deprecated-ec` configuration option.
+
+  * Support of explicit EC curves was disabled at compile-time by default.
+    To enable it, use the `enable-ec_explicit_curves` configuration option.
+
+  * Removed `c_rehash` script tool.  Use `openssl rehash` instead.
+
+  * Removed the deprecated `msie-hack` option from the `openssl ca` command.
+
+  * Removed `BIO_f_reliable()` implementation without replacement.
+    It was broken since 3.0 release without any complaints.
+
+  * Removed deprecated support for custom `EVP_CIPHER`, `EVP_MD`, `EVP_PKEY`,
+    and `EVP_PKEY_ASN1` methods.
+
+  * Removed deprecated fixed SSL/TLS version method functions.
+
+  * Removed deprecated functions `ERR_get_state()`, `ERR_remove_state()`
+    and `ERR_remove_thread_state()`. The `ERR_STATE` object is now always
+    opaque.
+
+  * Dropped `darwin-i386{,-cc}` and `darwin-ppc{,64}{,-cc}` targets
+    from Configurations.
+
+This release adds the following new features:
+
+  * Support for Encrypted Client Hello (ECH, [RFC 9849]).
+    See `doc/designs/ech-api.md` for details.
+
+  * Support for [RFC 8998], signature algorithm `sm2sig_sm3`, key exchange
+    group `curveSM2`, and [tls-hybrid-sm2-mlkem] post-quantum group
+    `curveSM2MLKEM768`.
+
+  * cSHAKE function support as per [SP 800-185].
+
+  * "ML-DSA-MU" digest algorithm support.
+
+  * Support for SNMP KDF and SRTP KDF.
+
+  * FIPS self tests can now be deferred and run as needed when installing
+    the FIPS module with the `-defer_tests` option of the `openssl fipsinstall`
+    command.
+
+  * Support for using either static or dynamic VC runtime linkage
+    on Windows.
+
+  * Support for negotiated FFDHE key exchange in TLS 1.2 in accordance
+    with [RFC 7919].
+
 OpenSSL 3.6
 -----------
 
 ### Major changes between OpenSSL 3.6.1 and OpenSSL 3.6.2 [7 Apr 2026]
 
 OpenSSL 3.6.2 is a security patch release. The most severe CVE fixed in this
-release is Medium.
+release is Moderate.
 
 This release incorporates the following bug fixes and mitigations:
 
@@ -2265,6 +2366,11 @@ OpenSSL 0.9.x
 [ESV]: https://csrc.nist.gov/Projects/cryptographic-module-validation-program/entropy-validations
 [OpenSSL Guide]: https://docs.openssl.org/master/man7/ossl-guide-introduction
 [README-QUIC.md]: ./README-QUIC.md
+[RFC 7919]: https://datatracker.ietf.org/doc/html/rfc7919
+[RFC 8422]: https://datatracker.ietf.org/doc/html/rfc8422
+[RFC 8998]: https://datatracker.ietf.org/doc/html/rfc8998#name-iana-considerations
+[RFC 9849]: https://datatracker.ietf.org/doc/html/rfc9849
+[SP 800-185]: https://csrc.nist.gov/pubs/sp/800/185/final
 [SP 800-208]: https://csrc.nist.gov/pubs/sp/800/208/final
 [issue tracker]: https://github.com/openssl/openssl/issues
 [jitterentropy-library]: https://github.com/smuellerDD/jitterentropy-library

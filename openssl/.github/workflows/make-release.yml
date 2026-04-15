@@ -12,6 +12,8 @@ on:
     tags:
       - "openssl-*"
 
+permissions: {}
+
 jobs:
   release:
     runs-on: "releaser"
@@ -25,6 +27,7 @@ jobs:
         repository: "openssl/openssl"
         token: ${{ secrets.GHE_TOKEN }}
         path: ${{ github.ref_name }}
+        persist-credentials: false
     - name: "Prepare assets"
       env:
         SIGNING_KEY_UID: ${{ vars.signing_key_uid }}

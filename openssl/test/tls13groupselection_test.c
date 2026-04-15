@@ -57,6 +57,17 @@ struct tls13groupselection_test_st {
     const enum SERVER_RESPONSE expected_server_response;
 };
 
+/*
+ * Tests that probe robust handling of group removal depend on detailed
+ * knowledge of the default group list.  A stable list is needed that does not
+ * depend on future changes in the actual built-in default.
+ */
+#define TEST_DEFLT                       \
+    "?*X25519MLKEM768 / "                \
+    "?*X25519 : ?secp256r1 / "           \
+    "?X448 : ?secp384r1 : ?secp521r1 / " \
+    "?ffdhe2048:?ffdhe3072"
+
 static const struct tls13groupselection_test_st tls13groupselection_tests[] = {
 
     /*
@@ -186,11 +197,17 @@ static const struct tls13groupselection_test_st tls13groupselection_tests[] = {
      * (I) Check handling of the "DEFAULT" 'pseudo group name'
      */
     { "*X25519:DEFAULT:-prime256v1:-X448", /* test 18 */
-        "DEFAULT:-X25519:-?X25519MLKEM768",
+        "DEFAULT:-X25519"
+        ":-?X25519MLKEM768"
+        ":-?SecP256r1MLKEM768"
+        ":-?curveSM2MLKEM768",
         CLIENT_PREFERENCE,
         "secp384r1", HRR },
     { "*X25519:DEFAULT:-prime256v1:-X448", /* test 19 */
-        "DEFAULT:-X25519:-?X25519MLKEM768",
+        "DEFAULT:-X25519"
+        ":-?X25519MLKEM768"
+        ":-?SecP256r1MLKEM768"
+        ":-?curveSM2MLKEM768",
         SERVER_PREFERENCE,
         "secp384r1", HRR },
     /*
@@ -329,7 +346,58 @@ static const struct tls13groupselection_test_st tls13groupselection_tests[] = {
         "DEFAULT:ffdhe4096", /* test 46 */
         SERVER_PREFERENCE,
         "x25519", HRR },
+    /*
+     * The server's second tuple becomes empty after removal
+     * of "secp256r1", the subsequent removal of X448 is
+     * then from the third tuple.
+     */
+    { "*ffdhe2048:secp384r1", /* test 47 */
+        "*X25519:" TEST_DEFLT ":-secp256r1:-X448",
+        SERVER_PREFERENCE,
+        "secp384r1", HRR },
+    /*
+     * The server's last tuple becomes empty after removals,
+     * and then continues to fill.
+     */
+    { "*ffdhe2048:ffdhe4096", /* test 48 */
+        "*X25519:" TEST_DEFLT ":-ffdhe2048:-ffdhe3072:ffdhe4096",
+        SERVER_PREFERENCE,
+        "ffdhe4096", HRR },
 #endif
+
+    /* Sole unknown keyshare inherited by first remaining tuple group */
+    { "?*BOGUS:X25519 / *secp256r1", /* test 49 */
+        "X25519 / secp256r1",
+        SERVER_PREFERENCE,
+        "x25519", SH },
+    { "X25519:?*BOGUS / *secp256r1", /* test 50 */
+        "X25519 / secp256r1",
+        SERVER_PREFERENCE,
+        "x25519", SH },
+    { "?*BOGUS:X25519:*X448 / *secp256r1", /* test 51 */
+        "X25519:X448 / secp256r1",
+        SERVER_PREFERENCE,
+        "x448", SH },
+    { "X25519:?*BOGUS:*X448 / *secp256r1", /* test 52 */
+        "X25519:X448 / secp256r1",
+        SERVER_PREFERENCE,
+        "x448", SH },
+
+    /* Sole removed keyshares inherited by first remaining tuple group */
+    { "X25519:*X448:secp384r1 / *secp256r1:-X448", /* test 53 */
+        "secp384r1:X448:X25519 / secp256r1",
+        SERVER_PREFERENCE,
+        "x25519", SH },
+    { "X25519:*X448:*secp384r1 / *secp256r1:-X448", /* test 54 */
+        "X25519:secp384r1 / secp256r1",
+        SERVER_PREFERENCE,
+        "secp384r1", SH },
+
+    /* DEFAULT retains tuple structure and inheritance */
+    { "secp256r1:DEFAULT:-?X25519MLKEM768", /* test 55 */
+        "x25519:secp256r1",
+        CLIENT_PREFERENCE,
+        "secp256r1", SH },
 };
 
 static void server_response_check_cb(int write_p, int version,
@@ -339,7 +407,7 @@ static void server_response_check_cb(int write_p, int version,
     /* Cast arg to SERVER_RESPONSE */
     enum SERVER_RESPONSE *server_response = (enum SERVER_RESPONSE *)arg;
     /* Prepare check for HRR */
-    const uint8_t *incoming_random = (uint8_t *)buf + 6;
+    const uint8_t *incoming_random = (const uint8_t *)buf + 6;
     const uint8_t magic_HRR_random[32] = {
         0xCF, 0x21, 0xAD, 0x74, 0xE5, 0x9A, 0x61, 0x11,
         0xBE, 0x1D, 0x8C, 0x02, 0x1E, 0x65, 0xB8, 0x91,
@@ -353,7 +421,7 @@ static void server_response_check_cb(int write_p, int version,
         version == TLS1_3_VERSION && /* for TLSv1.3 ... */
         ((uint8_t *)buf)[0] == SSL3_MT_SERVER_HELLO) { /* with message type "ServerHello" */
         /* Check what it is: SH or HRR (compare the 'random' data field with HRR magic number) */
-        if (memcmp((void *)incoming_random, (void *)magic_HRR_random, 32) == 0)
+        if (memcmp(incoming_random, magic_HRR_random, 32) == 0)
             *server_response *= HRR;
         else
             *server_response *= SH;

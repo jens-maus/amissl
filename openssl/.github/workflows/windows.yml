@@ -73,7 +73,6 @@ jobs:
       run: |
         echo ${Env:OSSL_VERSION}
         reg.exe add HKLM\SOFTWARE\OpenSSL-${Env:OSSL_VERSION}-openssl /v OPENSSLDIR /t REG_EXPAND_SZ /d TESTOPENSSLDIR /reg:32
-        reg.exe add HKLM\SOFTWARE\OpenSSL-${Env:OSSL_VERSION}-openssl /v ENGINESDIR /t REG_EXPAND_SZ /d TESTOPENSSLDIR /reg:32
         reg.exe add HKLM\SOFTWARE\OpenSSL-${Env:OSSL_VERSION}-openssl /v MODULESDIR /t REG_EXPAND_SZ /d TESTOPENSSLDIR /reg:32
         reg.exe query HKLM\SOFTWARE\OpenSSL-${Env:OSSL_VERSION}-openssl /v OPENSSLDIR /reg:32
     - name: get cpu info
@@ -120,7 +119,7 @@ jobs:
       shell: cmd
       run: |
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        perl ..\Configure --banner=Configured --strict-warnings enable-demos no-makedepend no-shared no-fips enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers enable-trace enable-crypto-mdebug -DOSSL_WINCTX=openssl VC-WIN64A-masm
+        perl ..\Configure --banner=Configured --strict-warnings enable-demos no-makedepend no-shared no-fips enable-md2 enable-rc5 enable-weak-ssl-ciphers enable-trace enable-crypto-mdebug -DOSSL_WINCTX=openssl VC-WIN64A-masm
         perl configdata.pm --dump
     - name: build
       working-directory: _build

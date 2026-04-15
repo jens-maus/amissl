@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -17,7 +17,6 @@
 #include "internal/cryptlib.h"
 #include <openssl/asn1t.h>
 #include <openssl/x509.h>
-#include <openssl/engine.h>
 #include "crypto/asn1.h"
 #include "crypto/evp.h"
 #include "crypto/x509.h"
@@ -65,8 +64,7 @@ ASN1_SEQUENCE(X509_PUBKEY_INTERNAL) = {
     ASN1_SIMPLE(X509_PUBKEY, public_key, ASN1_BIT_STRING)
 } static_ASN1_SEQUENCE_END_name(X509_PUBKEY, X509_PUBKEY_INTERNAL)
 
-X509_PUBKEY
-*ossl_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp, long len, OSSL_LIB_CTX *libctx, const char *propq)
+X509_PUBKEY *ossl_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp, long len, OSSL_LIB_CTX *libctx, const char *propq)
 {
     X509_PUBKEY *xpub = OPENSSL_zalloc(sizeof(*xpub));
 
@@ -409,18 +407,8 @@ static int x509_pubkey_decode(EVP_PKEY **ppkey, const X509_PUBKEY *key)
     int nid;
 
     nid = OBJ_obj2nid(key->algor->algorithm);
-    if (!key->flag_force_legacy) {
-#ifndef OPENSSL_NO_ENGINE
-        ENGINE *e = NULL;
-
-        e = ENGINE_get_pkey_meth_engine(nid);
-        if (e == NULL)
-            return 0;
-        ENGINE_finish(e);
-#else
+    if (!key->flag_force_legacy)
         return 0;
-#endif
-    }
 
     pkey = EVP_PKEY_new();
     if (pkey == NULL) {
@@ -1040,7 +1028,7 @@ int X509_PUBKEY_get0_param(ASN1_OBJECT **ppkalg,
     return 1;
 }
 
-ASN1_BIT_STRING *X509_get0_pubkey_bitstr(const X509 *x)
+const ASN1_BIT_STRING *X509_get0_pubkey_bitstr(const X509 *x)
 {
     if (x == NULL)
         return NULL;

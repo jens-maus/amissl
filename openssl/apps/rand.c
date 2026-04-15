@@ -1,5 +1,5 @@
 /*
- * Copyright 1998-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1998-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -21,7 +21,6 @@
 typedef enum OPTION_choice {
     OPT_COMMON,
     OPT_OUT,
-    OPT_ENGINE,
     OPT_BASE64,
     OPT_HEX,
     OPT_R_ENUM,
@@ -33,9 +32,6 @@ const OPTIONS rand_options[] = {
 
     OPT_SECTION("General"),
     { "help", OPT_HELP, '-', "Display this summary" },
-#ifndef OPENSSL_NO_ENGINE
-    { "engine", OPT_ENGINE, 's', "Use engine, possibly a hardware device" },
-#endif
 
     OPT_SECTION("Output"),
     { "out", OPT_OUT, '>', "Output file" },
@@ -52,7 +48,6 @@ const OPTIONS rand_options[] = {
 
 int rand_main(int argc, char **argv)
 {
-    ENGINE *e = NULL;
     BIO *out = NULL;
     char *outfile = NULL, *prog;
     OPTION_CHOICE o;
@@ -76,9 +71,6 @@ int rand_main(int argc, char **argv)
             goto end;
         case OPT_OUT:
             outfile = opt_arg();
-            break;
-        case OPT_ENGINE:
-            e = setup_engine(opt_arg(), 0);
             break;
         case OPT_R_CASES:
             if (!opt_rand(o))
@@ -173,7 +165,7 @@ int rand_main(int argc, char **argv)
             }
             scaled_num = num << shift;
             if (scaled_num > (UINT64_MAX >> 3)) {
-                BIO_printf(bio_err, "Request exceeds max allowed output\n");
+                BIO_puts(bio_err, "Request exceeds max allowed output\n");
                 goto opthelp;
             }
         } else {
@@ -227,7 +219,6 @@ end:
     if (ret != 0)
         ERR_print_errors(bio_err);
     OPENSSL_free(buf);
-    release_engine(e);
     BIO_free_all(out);
     return ret;
 }

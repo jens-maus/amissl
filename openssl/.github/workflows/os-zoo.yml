@@ -17,6 +17,7 @@ permissions:
 
 jobs:
   alpine:
+    if: github.repository == 'openssl/openssl'
     strategy:
       fail-fast: false
       matrix:
@@ -54,6 +55,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   linux:
+    if: github.repository == 'openssl/openssl'
     strategy:
       fail-fast: false
       matrix:
@@ -105,10 +107,11 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   macos:
+    if: github.repository == 'openssl/openssl'
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, macos-14, macos-15]
+        os: [macos-14, macos-15, macos-15-intel]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v6
@@ -117,7 +120,7 @@ jobs:
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - name: config
-      run: ./config --strict-warnings --banner=Configured enable-fips
+      run: ./config --strict-warnings --banner=Configured enable-fips enable-demos enable-h3demo
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -130,6 +133,7 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   windows:
+    if: github.repository == 'openssl/openssl'
     strategy:
       fail-fast: false
       matrix:
@@ -182,14 +186,13 @@ jobs:
         nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4 LHASH_WORKERS=16
 
   linux-arm64:
-    runs-on: linux-arm64
-    if: github.repository == 'openssl/openssl'
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
     - name: config
-      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -199,6 +202,47 @@ jobs:
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
+  linux-x86:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: run container
+      run: |
+        CONTAINER_ID=$(podman run -d -v $(pwd):/mnt -w /mnt --platform=linux/i386 docker.io/i386/debian:13 sleep infinity)
+        echo "CONTAINER_ID=$CONTAINER_ID" >> "$GITHUB_ENV"
+    - name: install dependencies
+      run:
+        podman exec -t $CONTAINER_ID sh -c "apt-get update && apt-get install -y gcc perl make"
+    - name: config
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          "./config --strict-warnings linux-x86 enable-demos enable-fips enable-lms enable-md2 enable-rc5 enable-trace"
+    - name: config dump
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          "./configdata.pm --dump"
+    - name: make
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+        "make -j"
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        podman exec -t $CONTAINER_ID sh -c \
+          "./util/opensslwrap.sh version -c"
+    - name: make test
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          ".github/workflows/make-test"
+    - name: save artifacts
+      if: success() || failure()
+      uses: actions/upload-artifact@v5
+      with:
+        name: "ci@linux-x86"
+        path: artifacts.tar.gz
+
   linux-ppc64le:
     runs-on: linux-ppc64le
     if: github.repository == 'openssl/openssl'
@@ -207,7 +251,7 @@ jobs:
       with:
         persist-credentials: false
     - name: config
-      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -227,7 +271,7 @@ jobs:
       with:
         persist-credentials: false
     - name: config
-      run: ./config --strict-warnings enable-fips enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-fips enable-md2 enable-rc5 enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -247,7 +291,7 @@ jobs:
       with:
         persist-credentials: false
     - name: config
-      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -261,6 +305,7 @@ jobs:
 
   freebsd-x86_64:
     runs-on: ubuntu-latest
+    if: github.repository == 'openssl/openssl'
     steps:
     - uses: actions/checkout@v6
       with:
@@ -273,7 +318,7 @@ jobs:
         shutdown_vm: false
         run: |
           sudo pkg install -y gcc perl5
-          ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+          ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
       with:

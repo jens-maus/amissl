@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -8,7 +8,7 @@
  */
 
 /*
- * We need to use some engine deprecated APIs
+ * We need to use some EVP_PKEY_asn1 deprecated APIs
  */
 #include "internal/deprecated.h"
 
@@ -25,7 +25,7 @@
 #include <openssl/pkcs12.h>
 #include "crypto/asn1.h"
 #include <openssl/des.h>
-#include <openssl/engine.h>
+#include "crypto/evp.h"
 
 #define MIN_LENGTH 4
 
@@ -146,7 +146,7 @@ static int check_pem(const char *nm, const char *name)
              * NB: ENGINE implementations won't contain a deprecated old
              * private key decode function so don't look for them.
              */
-            ameth = EVP_PKEY_asn1_find_str(NULL, nm, slen);
+            ameth = evp_pkey_asn1_find_str(nm, slen);
             if (ameth && ameth->old_priv_decode)
                 return 1;
         }
@@ -158,17 +158,13 @@ static int check_pem(const char *nm, const char *name)
         const EVP_PKEY_ASN1_METHOD *ameth;
         slen = ossl_pem_check_suffix(nm, "PARAMETERS");
         if (slen > 0) {
-            ENGINE *e;
-            ameth = EVP_PKEY_asn1_find_str(&e, nm, slen);
+            ameth = evp_pkey_asn1_find_str(nm, slen);
             if (ameth) {
                 int r;
                 if (ameth->param_decode)
                     r = 1;
                 else
                     r = 0;
-#ifndef OPENSSL_NO_ENGINE
-                ENGINE_finish(e);
-#endif
                 return r;
             }
         }

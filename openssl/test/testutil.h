@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2014-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -12,6 +12,7 @@
 
 #include <stdarg.h>
 #include "internal/common.h" /* for HAS_PREFIX */
+#include "internal/err.h" /* for ERR_NUM_ERRORS */
 
 #include <openssl/provider.h>
 #include <openssl/err.h>
@@ -355,9 +356,9 @@ DECLARE_COMPARISON(char *, str, ne)
  * Same as above, but for strncmp.
  */
 int test_strn_eq(const char *file, int line, const char *, const char *,
-    const char *a, size_t an, const char *b, size_t bn);
+    const char *a, const char *b, size_t n);
 int test_strn_ne(const char *file, int line, const char *, const char *,
-    const char *a, size_t an, const char *b, size_t bn);
+    const char *a, const char *b, size_t n);
 
 /*
  * Equality test for memory blocks where NULL is a legitimate value.
@@ -378,6 +379,23 @@ int test_mem_ne(const char *, int, const char *, const char *,
  */
 int test_true(const char *file, int line, const char *s, int b);
 int test_false(const char *file, int line, const char *s, int b);
+
+/*
+ * Checks whether a specific error reason is present in the error stack.
+ * This function iterates over the current thread's error queue extracting all
+ * pending errors. If any of them match the specified reason code (as returned
+ * by ERR_GET_REASON()), the function returns 1 to indicate that the
+ * corresponding error was found.
+ */
+int test_err_r(const char *file, int line, int lib, int reason);
+
+/*
+ * Checks whether a specific string is present in the error data stack.
+ * This function iterates over the current thread's error queue extracting all
+ * pending errors. If any of them match the specified string the function
+ * returns 1 to indicate that the corresponding error was found.
+ */
+int test_err_s(const char *file, int line, const char *data);
 
 /*
  * Comparisons between BIGNUMs.
@@ -525,16 +543,17 @@ void test_perror(const char *s);
 
 #define TEST_str_eq(a, b) test_str_eq(__FILE__, __LINE__, #a, #b, a, b)
 #define TEST_str_ne(a, b) test_str_ne(__FILE__, __LINE__, #a, #b, a, b)
-#define TEST_strn_eq(a, b, n) test_strn_eq(__FILE__, __LINE__, #a, #b, a, n, b, n)
-#define TEST_strn_ne(a, b, n) test_strn_ne(__FILE__, __LINE__, #a, #b, a, n, b, n)
-#define TEST_strn2_eq(a, m, b, n) test_strn_eq(__FILE__, __LINE__, #a, #b, a, m, b, n)
-#define TEST_strn2_ne(a, m, b, n) test_strn_ne(__FILE__, __LINE__, #a, #b, a, m, b, n)
+#define TEST_strn_eq(a, b, n) test_strn_eq(__FILE__, __LINE__, #a, #b, a, b, n)
+#define TEST_strn_ne(a, b, n) test_strn_ne(__FILE__, __LINE__, #a, #b, a, b, n)
 
 #define TEST_mem_eq(a, m, b, n) test_mem_eq(__FILE__, __LINE__, #a, #b, a, m, b, n)
 #define TEST_mem_ne(a, m, b, n) test_mem_ne(__FILE__, __LINE__, #a, #b, a, m, b, n)
 
 #define TEST_true(a) test_true(__FILE__, __LINE__, #a, (a) != 0)
 #define TEST_false(a) test_false(__FILE__, __LINE__, #a, (a) != 0)
+
+#define TEST_err_r(a, b) test_err_r(__FILE__, __LINE__, a, b)
+#define TEST_err_s(a) test_err_s(__FILE__, __LINE__, a)
 
 #define TEST_BN_eq(a, b) test_BN_eq(__FILE__, __LINE__, #a, #b, a, b)
 #define TEST_BN_ne(a, b) test_BN_ne(__FILE__, __LINE__, #a, #b, a, b)
@@ -662,7 +681,20 @@ X509 *load_cert_pem(const char *file, OSSL_LIB_CTX *libctx);
 X509 *load_cert_der(const unsigned char *bytes, int len);
 STACK_OF(X509) *load_certs_pem(const char *file);
 X509_REQ *load_csr_der(const char *file, OSSL_LIB_CTX *libctx);
-time_t test_asn1_string_to_time_t(const char *asn1_string);
-
+int test_asn1_string_to_time_t(const char *asn1_string, time_t *out_time_t);
 int compare_with_reference_file(BIO *membio, const char *reffile);
+/*
+ * Create an X509 from an array of strings.
+ */
+X509 *X509_from_strings(const char **pem);
+/*
+ * Create a CRL from an array of strings.
+ */
+X509_CRL *CRL_from_strings(const char **pem);
+/*
+ * Glue an array of strings together.  Return a BIO and put the string
+ * into |*out| so we can free it.
+ */
+BIO *glue2bio(const char **pem, char **out);
+
 #endif /* OSSL_TESTUTIL_H */

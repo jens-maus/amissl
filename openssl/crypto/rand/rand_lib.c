@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-/* We need to use some engine deprecated APIs */
+/* We need to use some RAND deprecated APIs */
 #define OPENSSL_SUPPRESS_DEPRECATED
 
 #include <openssl/err.h>
@@ -23,6 +23,7 @@
 #include "rand_local.h"
 #include "crypto/context.h"
 #include "internal/provider.h"
+#include "internal/common.h"
 
 /* clang-format off */
 #ifndef OPENSSL_DEFAULT_SEED_SRC
@@ -90,7 +91,6 @@ static RAND_GLOBAL *rand_get_global(OSSL_LIB_CTX *libctx)
 #include <limits.h>
 #include <openssl/conf.h>
 #include <openssl/trace.h>
-#include <openssl/engine.h>
 #include "crypto/rand_pool.h"
 #include "prov/seeding.h"
 #include "internal/e_os.h"
@@ -114,11 +114,6 @@ static int set_random_provider_name(RAND_GLOBAL *dgbl, const char *name)
     return dgbl->random_provider_name != NULL;
 }
 
-#ifndef OPENSSL_NO_ENGINE
-/* non-NULL if default_RAND_meth is ENGINE-provided */
-static ENGINE *funct_ref;
-static CRYPTO_RWLOCK *rand_engine_lock;
-#endif /* !OPENSSL_NO_ENGINE */
 #ifndef OPENSSL_NO_DEPRECATED_3_0
 static CRYPTO_RWLOCK *rand_meth_lock;
 static const RAND_METHOD *default_RAND_meth;
@@ -129,12 +124,6 @@ static int rand_inited = 0;
 
 DEFINE_RUN_ONCE_STATIC(do_rand_init)
 {
-#ifndef OPENSSL_NO_ENGINE
-    rand_engine_lock = CRYPTO_THREAD_lock_new();
-    if (rand_engine_lock == NULL)
-        return 0;
-#endif /* !OPENSSL_NO_ENGINE */
-
 #ifndef OPENSSL_NO_DEPRECATED_3_0
     rand_meth_lock = CRYPTO_THREAD_lock_new();
     if (rand_meth_lock == NULL)
@@ -152,10 +141,6 @@ err:
     CRYPTO_THREAD_lock_free(rand_meth_lock);
     rand_meth_lock = NULL;
 #endif /* !OPENSSL_NO_DEPRECATED_3_0 */
-#ifndef OPENSSL_NO_ENGINE
-    CRYPTO_THREAD_lock_free(rand_engine_lock);
-    rand_engine_lock = NULL;
-#endif /* !OPENSSL_NO_ENGINE */
     return 0;
 }
 
@@ -172,10 +157,6 @@ void ossl_rand_cleanup_int(void)
     RAND_set_rand_method(NULL);
 #endif /* !OPENSSL_NO_DEPRECATED_3_0 */
     ossl_rand_pool_cleanup();
-#ifndef OPENSSL_NO_ENGINE
-    CRYPTO_THREAD_lock_free(rand_engine_lock);
-    rand_engine_lock = NULL;
-#endif /* !OPENSSL_NO_ENGINE */
 #ifndef OPENSSL_NO_DEPRECATED_3_0
     CRYPTO_THREAD_lock_free(rand_meth_lock);
     rand_meth_lock = NULL;
@@ -245,17 +226,15 @@ int RAND_poll(void)
 
 #ifndef OPENSSL_NO_DEPRECATED_3_0
 static int rand_set_rand_method_internal(const RAND_METHOD *meth,
-    ossl_unused ENGINE *e)
+    ENGINE *e)
 {
+    if (!ossl_assert(e == NULL))
+        return 0;
     if (!RUN_ONCE(&rand_init, do_rand_init))
         return 0;
 
     if (!CRYPTO_THREAD_write_lock(rand_meth_lock))
         return 0;
-#ifndef OPENSSL_NO_ENGINE
-    ENGINE_finish(funct_ref);
-    funct_ref = e;
-#endif
     default_RAND_meth = meth;
     CRYPTO_THREAD_unlock(rand_meth_lock);
     return 1;
@@ -285,56 +264,12 @@ const RAND_METHOD *RAND_get_rand_method(void)
 
     if (!CRYPTO_THREAD_write_lock(rand_meth_lock))
         return NULL;
-    if (default_RAND_meth == NULL) {
-#ifndef OPENSSL_NO_ENGINE
-        ENGINE *e;
-
-        /* If we have an engine that can do RAND, use it. */
-        if ((e = ENGINE_get_default_RAND()) != NULL
-            && (tmp_meth = ENGINE_get_RAND(e)) != NULL) {
-            funct_ref = e;
-            default_RAND_meth = tmp_meth;
-        } else {
-            ENGINE_finish(e);
-            default_RAND_meth = &ossl_rand_meth;
-        }
-#else
+    if (default_RAND_meth == NULL)
         default_RAND_meth = &ossl_rand_meth;
-#endif
-    }
     tmp_meth = default_RAND_meth;
     CRYPTO_THREAD_unlock(rand_meth_lock);
     return tmp_meth;
 }
-
-#if !defined(OPENSSL_NO_ENGINE)
-int RAND_set_rand_engine(ENGINE *engine)
-{
-    const RAND_METHOD *tmp_meth = NULL;
-
-    if (!RUN_ONCE(&rand_init, do_rand_init))
-        return 0;
-
-    if (engine != NULL) {
-        if (!ENGINE_init(engine))
-            return 0;
-        tmp_meth = ENGINE_get_RAND(engine);
-        if (tmp_meth == NULL) {
-            ENGINE_finish(engine);
-            return 0;
-        }
-    }
-    if (!CRYPTO_THREAD_write_lock(rand_engine_lock)) {
-        ENGINE_finish(engine);
-        return 0;
-    }
-
-    /* This function releases any prior ENGINE so call it first */
-    rand_set_rand_method_internal(tmp_meth, engine);
-    CRYPTO_THREAD_unlock(rand_engine_lock);
-    return 1;
-}
-#endif
 #endif /* OPENSSL_NO_DEPRECATED_3_0 */
 
 void RAND_seed(const void *buf, int num)
@@ -592,22 +527,30 @@ static EVP_RAND_CTX *rand_new_seed(OSSL_LIB_CTX *libctx)
     const char *propq;
     char *name;
     EVP_RAND_CTX *ctx = NULL;
+    int fallback = 0;
 #ifdef OPENSSL_NO_FIPS_JITTER
     RAND_GLOBAL *dgbl = rand_get_global(libctx);
 
     if (dgbl == NULL)
         return NULL;
     propq = dgbl->seed_propq;
-    name = dgbl->seed_name != NULL ? dgbl->seed_name
-                                   : OPENSSL_MSTR(OPENSSL_DEFAULT_SEED_SRC);
+    if (dgbl->seed_name != NULL) {
+        name = dgbl->seed_name;
+    } else {
+        fallback = 1;
+        name = OPENSSL_MSTR(OPENSSL_DEFAULT_SEED_SRC);
+    }
 #else /* !OPENSSL_NO_FIPS_JITTER */
     name = "JITTER";
     propq = "";
 #endif /* OPENSSL_NO_FIPS_JITTER */
 
+    ERR_set_mark();
     rand = EVP_RAND_fetch(libctx, name, propq);
+    ERR_pop_to_mark();
     if (rand == NULL) {
-        ERR_raise(ERR_LIB_RAND, RAND_R_UNABLE_TO_FETCH_DRBG);
+        if (!fallback)
+            ERR_raise(ERR_LIB_RAND, RAND_R_UNABLE_TO_FETCH_DRBG);
         goto err;
     }
     ctx = EVP_RAND_CTX_new(rand, NULL);
@@ -760,6 +703,11 @@ static EVP_RAND_CTX *rand_get0_primary(OSSL_LIB_CTX *ctx, RAND_GLOBAL *dgbl)
     if (seed == NULL) {
         ERR_set_mark();
         seed = newseed = rand_new_seed(ctx);
+        if (ERR_count_to_mark() > 0) {
+            EVP_RAND_CTX_free(newseed);
+            ERR_clear_last_mark();
+            return NULL;
+        }
         ERR_pop_to_mark();
     }
 #endif /* !FIPS_MODULE || !OPENSSL_NO_FIPS_JITTER */

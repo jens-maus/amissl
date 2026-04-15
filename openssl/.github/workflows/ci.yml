@@ -35,6 +35,7 @@ jobs:
     - uses: actions/checkout@v6
       with:
         fetch-depth: 0
+        persist-credentials: false
     - name: config
       run: ./config --strict-warnings --banner=Configured enable-fips && perl configdata.pm --dump
     - name: make build_generated
@@ -92,7 +93,7 @@ jobs:
       run: echo "FIPS_VENDOR=CI" >> VERSION.dat
     - name: config
       # enable-quic is on by default, but we leave it here to check we're testing the explicit enable somewhere
-      run: CC=gcc ./config --strict-warnings --banner=Configured enable-demos enable-h3demo enable-sslkeylog enable-fips enable-quic enable-lms && perl configdata.pm --dump
+      run: CC=gcc ./config --strict-warnings --banner=Configured enable-demos enable-h3demo enable-ec_explicit_curves enable-sslkeylog enable-fips enable-quic enable-lms && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -137,13 +138,13 @@ jobs:
         path: artifacts.tar.gz
 
   linux-arm64:
-    runs-on: ${{ github.repository == 'openssl/openssl' && 'linux-arm64' || 'ubuntu-24.04-arm' }}
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
     - name: config
-      run: ./config --strict-warnings enable-demos enable-fips enable-lms enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+      run: ./config --strict-warnings enable-demos enable-fips enable-lms enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       run: ./configdata.pm --dump
     - name: make
@@ -161,6 +162,72 @@ jobs:
         name: "ci@linux-arm64"
         path: artifacts.tar.gz
 
+  gcc-min-version:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/gcc:9
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: config
+      run: ./config --strict-warnings --banner=Configured enable-fips && perl configdata.pm --dump
+    - name: make
+      run: make -s -j4
+    - name: print gcc version
+      run: |
+        gcc --version
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        ./util/opensslwrap.sh version -c
+    - name: make test
+      run: .github/workflows/make-test
+
+  linux-x86:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: run container
+      run: |
+        CONTAINER_ID=$(podman run -d -v $(pwd):/mnt -w /mnt --platform=linux/i386 docker.io/i386/debian:13 sleep infinity)
+        echo "CONTAINER_ID=$CONTAINER_ID" >> "$GITHUB_ENV"
+    - name: install dependencies
+      run:
+        podman exec -t $CONTAINER_ID sh -c "apt-get update && apt-get install -y gcc perl make"
+    - name: config
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          "./config --strict-warnings linux-x86 enable-demos enable-fips enable-lms enable-md2 enable-rc5 enable-trace"
+    - name: config dump
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          "./configdata.pm --dump"
+    - name: make
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+        "make -j"
+    - name: get cpu info
+      run: |
+        cat /proc/cpuinfo
+        podman exec -t $CONTAINER_ID sh -c \
+          "./util/opensslwrap.sh version -c"
+    - name: make test
+      run: |
+        podman exec -t $CONTAINER_ID sh -c \
+          ".github/workflows/make-test"
+    - name: save artifacts
+      if: success() || failure()
+      uses: actions/upload-artifact@v5
+      with:
+        name: "ci@linux-x86"
+        path: artifacts.tar.gz
+
   freebsd-x86_64:
     runs-on: ubuntu-latest
     steps:
@@ -175,7 +242,7 @@ jobs:
         shutdown_vm: false
         run: |
           sudo pkg install -y gcc perl5
-          ./config --strict-warnings enable-fips enable-lms enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-ssl3 enable-ssl3-method enable-trace
+          ./config --strict-warnings enable-fips enable-lms enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
       uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
       with:
@@ -347,7 +414,7 @@ jobs:
         sudo cat /proc/sys/vm/mmap_rnd_bits
         sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
-      run: ./config --strict-warnings --banner=Configured --debug enable-demos enable-h3demo enable-asan enable-ubsan enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-fips enable-lms && perl configdata.pm --dump
+      run: ./config --strict-warnings --banner=Configured --debug enable-demos enable-h3demo enable-asan enable-ec_explicit_curves enable-ubsan enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-fips enable-lms && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -376,7 +443,7 @@ jobs:
         sudo cat /proc/sys/vm/mmap_rnd_bits
         sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
-      run: ./config --strict-warnings --banner=Configured --debug -DPEDANTIC -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION enable-asan enable-ubsan enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method enable-nextprotoneg && perl configdata.pm --dump
+      run: ./config --strict-warnings --banner=Configured --debug -DPEDANTIC -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION enable-asan enable-ec_explicit_curves enable-ubsan enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-weak-ssl-ciphers enable-nextprotoneg && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -407,7 +474,7 @@ jobs:
         sudo sysctl -w vm.mmap_rnd_bits=28
     - name: config
       # --debug -O1 is to produce a debug build that runs in a reasonable amount of time
-      run: CC=clang ./config --strict-warnings --banner=Configured --debug no-shared -O1 -fsanitize=memory -DOSSL_SANITIZE_MEMORY -fno-optimize-sibling-calls enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-fips enable-lms no-slh-dsa && perl configdata.pm --dump
+      run: CC=clang ./config --strict-warnings --banner=Configured --debug no-shared -O1 -fsanitize=memory -DOSSL_SANITIZE_MEMORY -fno-optimize-sibling-calls enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 enable-ec_explicit_curves enable-fips enable-lms no-slh-dsa && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -496,7 +563,7 @@ jobs:
     - name: install extra config support
       run: sudo apt-get -y install libsctp-dev abigail-tools libzstd-dev zstd
     - name: config
-      run: ./config --strict-warnings --banner=Configured enable-demos enable-h3demo enable-ktls enable-fips enable-lms enable-egd enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-sctp enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers enable-trace enable-zlib enable-zstd && perl configdata.pm --dump
+      run: ./config --strict-warnings --banner=Configured enable-demos enable-h3demo enable-ec_explicit_curves enable-ktls enable-fips enable-lms enable-egd enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-sctp enable-weak-ssl-ciphers enable-trace enable-zlib enable-zstd && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -546,7 +613,7 @@ jobs:
     - name: checkout fuzz/corpora submodule
       run: git submodule update --init --depth 1 fuzz/corpora
     - name: config
-      run: ./config --strict-warnings --banner=Configured --debug no-afalgeng enable-demos enable-h3demo no-shared enable-crypto-mdebug enable-rc5 enable-md2 enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 no-fips && perl configdata.pm --dump
+      run: ./config --strict-warnings --banner=Configured --debug enable-demos enable-h3demo no-shared enable-crypto-mdebug enable-rc5 enable-md2 enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-ec_explicit_curves no-fips && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - name: get cpu info
@@ -669,7 +736,7 @@ jobs:
     - name: setup hostname workaround
       run: sudo hostname localhost
     - name: config
-      run: ./config --strict-warnings --banner=Configured --debug no-afalgeng enable-rc5 enable-md2 enable-ssl3 enable-ssl3-method enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-external-tests no-fips && perl configdata.pm --dump
+      run: ./config --strict-warnings --banner=Configured --debug enable-rc5 enable-md2 enable-weak-ssl-ciphers enable-zlib enable-ec_nistp_64_gcc_128 enable-external-tests no-fips && perl configdata.pm --dump
     - name: make
       run: make -s -j4
     - uses: dtolnay/rust-toolchain@0f44b27771c32bda9f458f75a1e241b09791b331
@@ -692,8 +759,8 @@ jobs:
     - name: test ability to produce debuginfo files
       run: |
         make debuginfo
-        gdb < <(echo -e "file ./libcrypto.so.3\nquit") > ./results
-        grep -q "Reading symbols from.*libcrypto\.so\.3\.debug" results
+        gdb < <(echo -e "file ./libcrypto.so.4\nquit") > ./results
+        grep -q "Reading symbols from.*libcrypto\.so\.4\.debug" results
 
   external-tests-oqs-provider:
     runs-on: ubuntu-latest
@@ -776,3 +843,50 @@ jobs:
         ./util/opensslwrap.sh version -c
     - name: test external pyca
       run: make test TESTS="test_external_pyca" VERBOSE=1
+
+  external-test-bssl:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: Configure OpenSSL
+      run: ./config enable-external-tests
+    - name: Build OpenSSL
+      run: make -s -j4
+    - name: Clone BoringSSL 0.20260211.0
+      run: git clone --depth 1 --branch 0.20260211.0  https://boringssl.googlesource.com/boringssl
+    - name: Configure and Build BoringSSL
+      run: |
+        cd boringssl
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=../../boringssl/.local ..
+        make -s -j4
+        make install
+        cd ../..
+    - name: Test ECH with BoringSSL
+      run: make test TESTS='test_external_ech_bssl' V=1
+
+  external-test-nss:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: Configure OpenSSL
+      run: ./config enable-external-tests
+    - name: Build OpenSSL
+      run: make -s -j4
+    - name: Clone and Build NSS
+      run: |
+        mkdir nss
+        cd nss
+        git clone --depth 1 --branch NSS_3_112_3_RTM https://github.com/nss-dev/nss.git
+        hg clone https://hg.mozilla.org/projects/nspr -r NSPR_4_36_BRANCH
+        cd nss
+        USE_64=1 make nss_build_all
+        USE_64=1 make install
+        cd ../..
+    - name: Test ECH with NSS
+      run: make test TESTS='test_external_ech_nss' V=1

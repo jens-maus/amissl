@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2023-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -523,7 +523,7 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     args.is_tserver_ch = is_tserver;
 
     /*
-     * Creating a a new channel is made a bit tricky here as there is a
+     * Creating a new channel is made a bit tricky here as there is a
      * bit of a circular dependency.  Initializing a channel requires that
      * the ch->tls and optionally the qlog_title be configured prior to
      * initialization, but we need the channel at least partially configured
@@ -537,22 +537,31 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     if (ch == NULL)
         return NULL;
 
-    /*
-     * Fixup the channel tls connection here before we init the channel
-     */
-    ch->tls = (tls != NULL) ? tls : port_new_handshake_layer(port, ch);
-
-    if (ch->tls == NULL) {
-        OPENSSL_free(ch);
-        return NULL;
+    if (tls != NULL) {
+        ch->tls = tls;
+    } else {
+        if (ossl_quic_port_test_and_set_peeloff(port, PEELOFF_ACCEPT)) {
+            /*
+             * We're using the normal SSL_accept_connection_path
+             */
+            ch->tls = port_new_handshake_layer(port, ch);
+            if (ch->tls == NULL) {
+                ossl_quic_channel_free(ch);
+                return NULL;
+            }
+        } else {
+            /*
+             * We're deferring user ssl creation until SSL_listen_ex is called
+             */
+            ch->tls = NULL;
+        }
     }
-
 #ifndef OPENSSL_NO_QLOG
     /*
      * If we're using qlog, make sure the tls get further configured properly
      */
     ch->use_qlog = 1;
-    if (ch->tls->ctx->qlog_title != NULL) {
+    if (ch->tls != NULL && ch->tls->ctx->qlog_title != NULL) {
         if ((ch->qlog_title = OPENSSL_strdup(ch->tls->ctx->qlog_title)) == NULL) {
             OPENSSL_free(ch);
             return NULL;
@@ -652,6 +661,27 @@ void ossl_quic_port_set_allow_incoming(QUIC_PORT *port, int allow_incoming)
     port->allow_incoming = allow_incoming;
 }
 
+int ossl_quic_port_test_and_set_peeloff(QUIC_PORT *port, int using_peeloff)
+{
+
+    /*
+     * Peeloff state must be one of PEELOFF_LISTEN or PEELOFF_ACCEPT
+     */
+    if (using_peeloff != PEELOFF_LISTEN && using_peeloff != PEELOFF_ACCEPT)
+        return 0;
+
+    /*
+     * We can only set the peeloff state if its not already been set
+     * or if we're setting it to the already set value
+     * i.e. this is a trapdoor, once we set using_peeloff to LISTEN or ACCEPT
+     * Then the only thing we can set that port too in the future is the same value.
+     */
+    if (port->peeloff_mode != using_peeloff && port->peeloff_mode != PEELOFF_UNSET)
+        return 0;
+    port->peeloff_mode = using_peeloff;
+    return 1;
+}
+
 /*
  * QUIC Port: Ticker-Mutator
  * =========================
@@ -732,7 +762,7 @@ static void port_rx_pre(QUIC_PORT *port)
  * to *new_ch.
  */
 static void port_bind_channel(QUIC_PORT *port, const BIO_ADDR *peer,
-    const QUIC_CONN_ID *scid, const QUIC_CONN_ID *dcid,
+    const QUIC_CONN_ID *dcid,
     const QUIC_CONN_ID *odcid, OSSL_QRX *qrx,
     QUIC_CHANNEL **new_ch)
 {
@@ -745,6 +775,9 @@ static void port_bind_channel(QUIC_PORT *port, const BIO_ADDR *peer,
     if (port->tserver_ch != NULL) {
         ch = port->tserver_ch;
         port->tserver_ch = NULL;
+        if (peer != NULL && BIO_ADDR_family(peer) != AF_UNSPEC)
+            ossl_quic_channel_set_peer_addr(ch, peer);
+
         ossl_quic_channel_bind_qrx(ch, qrx);
         ossl_qrx_set_msg_callback(ch->qrx, ch->msg_callback,
             ch->msg_callback_ssl);
@@ -779,7 +812,7 @@ static void port_bind_channel(QUIC_PORT *port, const BIO_ADDR *peer,
          * See RFC 9000 s. 8.1
          */
         ossl_quic_tx_packetiser_set_validated(ch->txp);
-        if (!ossl_quic_bind_channel(ch, peer, scid, dcid, odcid)) {
+        if (!ossl_quic_bind_channel(ch, peer, dcid, odcid)) {
             ossl_quic_channel_free(ch);
             return;
         }
@@ -788,7 +821,7 @@ static void port_bind_channel(QUIC_PORT *port, const BIO_ADDR *peer,
          * No odcid means we didn't do server validation, so we need to
          * generate a cid via ossl_quic_channel_on_new_conn
          */
-        if (!ossl_quic_channel_on_new_conn(ch, peer, scid, dcid)) {
+        if (!ossl_quic_channel_on_new_conn(ch, peer, dcid)) {
             ossl_quic_channel_free(ch);
             return;
         }
@@ -832,7 +865,7 @@ static int port_try_handle_stateless_reset(QUIC_PORT *port, const QUIC_URXE *e)
 
     for (i = 0;; ++i) {
         if (!ossl_quic_srtm_lookup(port->srtm,
-                (QUIC_STATELESS_RESET_TOKEN *)(data + e->data_len
+                (const QUIC_STATELESS_RESET_TOKEN *)(data + e->data_len
                     - sizeof(QUIC_STATELESS_RESET_TOKEN)),
                 i, &opaque, NULL))
             break;
@@ -905,7 +938,7 @@ static int marshal_validation_token(QUIC_VALIDATION_TOKEN *token,
     }
 
     if (!WPACKET_init(&wpkt, buf_mem)
-        || !WPACKET_memset(&wpkt, token->is_retry, 1)
+        || !WPACKET_put_bytes_u8(&wpkt, token->is_retry)
         || !WPACKET_memcpy(&wpkt, &token->timestamp,
             sizeof(token->timestamp))
         || (token->is_retry
@@ -1335,8 +1368,7 @@ static void port_send_version_negotiation(QUIC_PORT *port, BIO_ADDR *peer,
  *   configurable in the future.
  */
 static int port_validate_token(QUIC_PKT_HDR *hdr, QUIC_PORT *port,
-    BIO_ADDR *peer, QUIC_CONN_ID *odcid,
-    QUIC_CONN_ID *scid, uint8_t *gen_new_token)
+    BIO_ADDR *peer, QUIC_CONN_ID *odcid, uint8_t *gen_new_token)
 {
     int ret = 0;
     QUIC_VALIDATION_TOKEN token = { 0 };
@@ -1396,11 +1428,9 @@ static int port_validate_token(QUIC_PKT_HDR *hdr, QUIC_PORT *port,
                 != 0)
             goto err;
         *odcid = token.odcid;
-        *scid = token.rscid;
     } else {
         if (!ossl_quic_lcidm_get_unused_cid(port->lcidm, odcid))
             goto err;
-        *scid = hdr->src_conn_id;
     }
 
     /*
@@ -1489,7 +1519,7 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
     PACKET pkt;
     QUIC_PKT_HDR hdr;
     QUIC_CHANNEL *ch = NULL, *new_ch = NULL;
-    QUIC_CONN_ID odcid, scid;
+    QUIC_CONN_ID odcid;
     uint8_t gen_new_token = 0;
     OSSL_QRX *qrx = NULL;
     OSSL_QRX *qrx_src = NULL;
@@ -1639,8 +1669,7 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
      */
     if (hdr.token != NULL
         && port_validate_token(&hdr, port, &e->peer,
-               &odcid, &scid,
-               &gen_new_token)
+               &odcid, &gen_new_token)
             == 0) {
         /*
          * RFC 9000 s 8.1.3
@@ -1673,7 +1702,7 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
         qrx = NULL;
     }
 
-    port_bind_channel(port, &e->peer, &scid, &hdr.dst_conn_id,
+    port_bind_channel(port, &e->peer, &hdr.dst_conn_id,
         &odcid, qrx, &new_ch);
 
     /*

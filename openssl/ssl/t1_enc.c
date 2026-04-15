@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright 2005 Nokia. All rights reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -35,7 +35,7 @@ static int tls1_PRF(SSL_CONNECTION *s,
     const EVP_MD *md = ssl_prf_md(s);
     EVP_KDF *kdf;
     EVP_KDF_CTX *kctx = NULL;
-    OSSL_PARAM params[8], *p = params;
+    OSSL_PARAM params[9], *p = params;
     const char *mdname;
 
     if (md == NULL) {
@@ -71,6 +71,13 @@ static int tls1_PRF(SSL_CONNECTION *s,
         (void *)seed4, (size_t)seed4_len);
     *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SEED,
         (void *)seed5, (size_t)seed5_len);
+    /*
+     * If we have a property query string, the kdf needs to know about it in the event
+     * the specific kdf in use allocated a digest as part of its implementation
+     */
+    if (SSL_CONNECTION_GET_CTX(s)->propq != NULL)
+        *p++ = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_PROPERTIES,
+            (char *)SSL_CONNECTION_GET_CTX(s)->propq, 0);
     *p = OSSL_PARAM_construct_end();
     if (EVP_KDF_derive(kctx, out, olen, params)) {
         EVP_KDF_CTX_free(kctx);
@@ -462,7 +469,7 @@ int tls1_export_keying_material(SSL_CONNECTION *s, unsigned char *out,
     if (val == NULL)
         goto ret;
     currentvalpos = 0;
-    memcpy(val + currentvalpos, (unsigned char *)label, llen);
+    memcpy(val + currentvalpos, label, llen);
     currentvalpos += llen;
     memcpy(val + currentvalpos, s->s3.client_random, SSL3_RANDOM_SIZE);
     currentvalpos += SSL3_RANDOM_SIZE;
@@ -593,6 +600,10 @@ int tls1_alert_code(int code)
         return SSL_AD_HANDSHAKE_FAILURE;
     case TLS13_AD_MISSING_EXTENSION:
         return SSL_AD_HANDSHAKE_FAILURE;
+#ifndef OPENSSL_NO_ECH
+    case SSL_AD_ECH_REQUIRED:
+        return TLS1_AD_ECH_REQUIRED;
+#endif
     default:
         return -1;
     }

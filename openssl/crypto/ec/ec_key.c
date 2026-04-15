@@ -19,9 +19,6 @@
 #include "ec_local.h"
 #include "internal/refcount.h"
 #include <openssl/err.h>
-#ifndef FIPS_MODULE
-#include <openssl/engine.h>
-#endif
 #include <openssl/self_test.h>
 #include "prov/providercommon.h"
 #include "prov/ecx.h"
@@ -33,13 +30,13 @@ static int ecdsa_keygen_pairwise_test(EC_KEY *eckey, OSSL_CALLBACK *cb,
 #ifndef FIPS_MODULE
 EC_KEY *EC_KEY_new(void)
 {
-    return ossl_ec_key_new_method_int(NULL, NULL, NULL);
+    return ossl_ec_key_new_method_int(NULL, NULL);
 }
 #endif
 
 EC_KEY *EC_KEY_new_ex(OSSL_LIB_CTX *ctx, const char *propq)
 {
-    return ossl_ec_key_new_method_int(ctx, propq, NULL);
+    return ossl_ec_key_new_method_int(ctx, propq);
 }
 
 EC_KEY *EC_KEY_new_by_curve_name_ex(OSSL_LIB_CTX *ctx, const char *propq,
@@ -84,10 +81,6 @@ void EC_KEY_free(EC_KEY *r)
     if (r->meth != NULL && r->meth->finish != NULL)
         r->meth->finish(r);
 
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
-    ENGINE_finish(r->engine);
-#endif
-
     if (r->group && r->group->meth->keyfinish)
         r->group->meth->keyfinish(r);
 
@@ -114,11 +107,6 @@ EC_KEY *EC_KEY_copy(EC_KEY *dest, const EC_KEY *src)
             dest->meth->finish(dest);
         if (dest->group && dest->group->meth->keyfinish)
             dest->group->meth->keyfinish(dest);
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
-        if (ENGINE_finish(dest->engine) == 0)
-            return 0;
-        dest->engine = NULL;
-#endif
     }
     dest->libctx = src->libctx;
     /* copy the parameters */
@@ -168,11 +156,6 @@ EC_KEY *EC_KEY_copy(EC_KEY *dest, const EC_KEY *src)
 #endif
 
     if (src->meth != dest->meth) {
-#if !defined(OPENSSL_NO_ENGINE) && !defined(FIPS_MODULE)
-        if (src->engine != NULL && ENGINE_init(src->engine) == 0)
-            return NULL;
-        dest->engine = src->engine;
-#endif
         dest->meth = src->meth;
     }
 
@@ -199,11 +182,6 @@ int EC_KEY_up_ref(EC_KEY *r)
     REF_PRINT_COUNT("EC_KEY", i, r);
     REF_ASSERT_ISNT(i < 2);
     return ((i > 1) ? 1 : 0);
-}
-
-ENGINE *EC_KEY_get0_engine(const EC_KEY *eckey)
-{
-    return eckey->engine;
 }
 
 int EC_KEY_generate_key(EC_KEY *eckey)

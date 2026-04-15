@@ -13,22 +13,22 @@ SSL_get1_curves, SSL_get_shared_curve, SSL_CTX_get0_implemented_groups
 
  #include <openssl/ssl.h>
 
- int SSL_CTX_set1_groups(SSL_CTX *ctx, int *glist, int glistlen);
- int SSL_CTX_set1_groups_list(SSL_CTX *ctx, char *list);
+ int SSL_CTX_set1_groups(SSL_CTX *ctx, const int *glist, int glistlen);
+ int SSL_CTX_set1_groups_list(SSL_CTX *ctx, const char *list);
 
- int SSL_set1_groups(SSL *ssl, int *glist, int glistlen);
- int SSL_set1_groups_list(SSL *ssl, char *list);
+ int SSL_set1_groups(SSL *ssl, const int *glist, int glistlen);
+ int SSL_set1_groups_list(SSL *ssl, const char *list);
 
  int SSL_get1_groups(SSL *ssl, int *groups);
  int SSL_get0_iana_groups(SSL *ssl, uint16_t **out);
  int SSL_get_shared_group(SSL *s, int n);
  int SSL_get_negotiated_group(SSL *s);
 
- int SSL_CTX_set1_curves(SSL_CTX *ctx, int *clist, int clistlen);
- int SSL_CTX_set1_curves_list(SSL_CTX *ctx, char *list);
+ int SSL_CTX_set1_curves(SSL_CTX *ctx, const int *clist, int clistlen);
+ int SSL_CTX_set1_curves_list(SSL_CTX *ctx, const char *list);
 
- int SSL_set1_curves(SSL *ssl, int *clist, int clistlen);
- int SSL_set1_curves_list(SSL *ssl, char *list);
+ int SSL_set1_curves(SSL *ssl, const int *clist, int clistlen);
+ int SSL_set1_curves_list(SSL *ssl, const char *list);
 
  int SSL_get1_curves(SSL *ssl, int *curves);
  int SSL_get_shared_curve(SSL *s, int n);
@@ -113,9 +113,13 @@ levels, and can specify which predicted key shares should be sent by a client.
 Group tuples are used by OpenSSL TLS servers to decide whether to request a
 stronger keyshare than those predicted by sending a Hello Retry Request
 (B<HRR>) even if some of the predicted groups are supported.
-OpenSSL clients ignore tuple boundaries, and pay attenion only to the overall
-order of I<list> elements and which groups are selected as predicted keyshares
-as described below.
+OpenSSL clients largely ignore tuple boundaries, and pay attenion only to the
+overall order of I<list> elements and which groups are selected as predicted
+keyshares as described below.
+Tuple boundaries do however affect the behaviour of keyshare predictions
+that C<float> from an unsupported or deleted tuple element to the first
+remaining element of the same tuple, when no other elements of that tuple
+are marked as predicted keyshares.
 
 The specified list elements can optionally be ignored if not implemented
 (listing unknown groups otherwise results in error).
@@ -379,7 +383,7 @@ SSL_set1_groups_list() was added in OpenSSL 3.3.
 
 Support for B<ML-KEM> was added in OpenSSL 3.5.
 
-OpenSSL 3.5 also introduces support for three I<hybrid> ECDH PQ key exchange
+OpenSSL 3.5 also introduced support for three I<hybrid> ECDH PQ key exchange
 TLS groups: B<X25519MLKEM768>, B<SecP256r1MLKEM768> and
 B<SecP384r1MLKEM1024>.
 They offer CPU performance comparable to the associated ECDH group, though at
@@ -389,6 +393,10 @@ largely as a result of the high CPU cost of ECDH for the underlying B<P-384>
 group.
 Also its key exchange messages at close to 1700 bytes are larger than the
 roughly 1200 bytes for the first two groups.
+
+OpenSSL 4.0 introduced the B<curveSM2> (also known as C<ECDHE over SM2>) key
+exchange group as specified in RFC8998, and B<curveSM2MLKEM768>, which is a
+hybrid of the B<curveSM2> group with B<ML-KEM-768>.
 
 As of OpenSSL 3.5 key exchange group names are case-insensitive.
 

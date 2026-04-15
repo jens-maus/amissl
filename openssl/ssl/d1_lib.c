@@ -84,13 +84,6 @@ int dtls1_new(SSL *ssl)
     d1->buffered_messages = pqueue_new();
     d1->sent_messages = pqueue_new();
 
-    if (s->server) {
-        d1->cookie_len = sizeof(s->d1->cookie);
-    }
-
-    d1->link_mtu = 0;
-    d1->mtu = 0;
-
     if (d1->buffered_messages == NULL || d1->sent_messages == NULL) {
         pqueue_free(d1->buffered_messages);
         pqueue_free(d1->sent_messages);
@@ -197,10 +190,6 @@ int dtls1_clear(SSL *ssl)
 
         /* Restore the timer callback from previous state */
         s->d1->timer_cb = timer_cb;
-
-        if (s->server) {
-            s->d1->cookie_len = sizeof(s->d1->cookie);
-        }
 
         if (SSL_get_options(ssl) & SSL_OP_NO_QUERY_MTU) {
             s->d1->mtu = mtu;
@@ -742,10 +731,17 @@ int DTLSv1_listen(SSL *ssl, BIO_ADDR *client)
                 &wbuf[DTLS1_RT_HEADER_LENGTH + DTLS1_HM_HEADER_LENGTH - 3],
                 3);
 
-            if (s->msg_callback)
-                s->msg_callback(1, version, SSL3_RT_HEADER, wbuf,
-                    DTLS1_RT_HEADER_LENGTH, ssl,
-                    s->msg_callback_arg);
+            if (s->msg_callback) {
+                /* Report the outgoing DTLS record header */
+                s->msg_callback(1, (int)version, SSL3_RT_HEADER,
+                    wbuf, DTLS1_RT_HEADER_LENGTH,
+                    ssl, s->msg_callback_arg);
+                /* Report the HelloVerifyRequest handshake message */
+                s->msg_callback(1, (int)version, SSL3_RT_HANDSHAKE,
+                    wbuf + DTLS1_RT_HEADER_LENGTH,
+                    wreclen - DTLS1_RT_HEADER_LENGTH,
+                    ssl, s->msg_callback_arg);
+            }
 
             if ((tmpclient = BIO_ADDR_new()) == NULL) {
                 ERR_raise(ERR_LIB_SSL, ERR_R_BIO_LIB);

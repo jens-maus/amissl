@@ -1,13 +1,11 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
  * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
  */
-
-#define OSSL_FORCE_ERR_STATE
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -86,7 +84,7 @@ static const ERR_STRING_DATA ERR_str_libraries[] = {
  * Should make sure that all ERR_R_ reasons defined in include/openssl/err.h.in
  * are listed.  For maintainability, please keep all reasons in the same order.
  */
-static ERR_STRING_DATA ERR_str_reasons[] = {
+static const ERR_STRING_DATA ERR_str_reasons[] = {
     { ERR_R_SYS_LIB, "system lib" },
     { ERR_R_BN_LIB, "BN lib" },
     { ERR_R_RSA_LIB, "RSA lib" },
@@ -650,18 +648,6 @@ static void err_delete_thread_state(void *unused)
     OSSL_ERR_STATE_free(state);
 }
 
-#ifndef OPENSSL_NO_DEPRECATED_1_1_0
-void ERR_remove_thread_state(void *dummy)
-{
-}
-#endif
-
-#ifndef OPENSSL_NO_DEPRECATED_1_0_0
-void ERR_remove_state(unsigned long pid)
-{
-}
-#endif
-
 ERR_STATE *ossl_err_get_state_int(void)
 {
     ERR_STATE *state;
@@ -703,13 +689,6 @@ ERR_STATE *ossl_err_get_state_int(void)
     set_sys_error(saveerrno);
     return state;
 }
-
-#ifndef OPENSSL_NO_DEPRECATED_3_0
-ERR_STATE *ERR_get_state(void)
-{
-    return ossl_err_get_state_int();
-}
-#endif
 
 /*
  * err_shelve_state returns the current thread local error state
