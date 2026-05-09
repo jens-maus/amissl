@@ -927,13 +927,13 @@ static int check_id_error(X509_STORE_CTX *ctx, int errcode)
 static int check_hosts(X509 *x, X509_VERIFY_PARAM *vpm)
 {
     const uint8_t *name;
-    int n = sk_X509_BUFFER_num(vpm->hosts);
+    int i, n = sk_X509_BUFFER_num(vpm->hosts);
 
     if (vpm->peername != NULL) {
         OPENSSL_free(vpm->peername);
         vpm->peername = NULL;
     }
-    for (int i = 0; i < n; ++i) {
+    for (i = 0; i < n; ++i) {
         size_t len = sk_X509_BUFFER_value(vpm->hosts, i)->len;
         name = sk_X509_BUFFER_value(vpm->hosts, i)->data;
         if (X509_check_host(x, (const char *)name, len, vpm->hostflags, &vpm->peername) > 0)
@@ -947,14 +947,15 @@ static int check_email(X509 *x, X509_VERIFY_PARAM *vpm)
     const uint8_t *name;
     int nasc = sk_X509_BUFFER_num(vpm->rfc822s);
     int nutf = sk_X509_BUFFER_num(vpm->smtputf8s);
+    int i;
 
-    for (int i = 0; i < nasc; ++i) {
+    for (i = 0; i < nasc; ++i) {
         size_t len = sk_X509_BUFFER_value(vpm->rfc822s, i)->len;
         name = sk_X509_BUFFER_value(vpm->rfc822s, i)->data;
         if (ossl_x509_check_rfc822(x, (const char *)name, len, vpm->hostflags))
             return 1;
     }
-    for (int i = 0; i < nutf; ++i) {
+    for (i = 0; i < nutf; ++i) {
         size_t len = sk_X509_BUFFER_value(vpm->smtputf8s, i)->len;
         name = sk_X509_BUFFER_value(vpm->smtputf8s, i)->data;
         if (ossl_x509_check_smtputf8(x, (const char *)name, len, vpm->hostflags))
@@ -966,9 +967,9 @@ static int check_email(X509 *x, X509_VERIFY_PARAM *vpm)
 static int check_ips(X509 *x, X509_VERIFY_PARAM *vpm)
 {
     const uint8_t *name;
-    int n = sk_X509_BUFFER_num(vpm->ips);
+    int i, n = sk_X509_BUFFER_num(vpm->ips);
 
-    for (int i = 0; i < n; ++i) {
+    for (i = 0; i < n; ++i) {
         size_t len = sk_X509_BUFFER_value(vpm->ips, i)->len;
         name = sk_X509_BUFFER_value(vpm->ips, i)->data;
         if (X509_check_ip(x, name, len, vpm->hostflags) > 0)

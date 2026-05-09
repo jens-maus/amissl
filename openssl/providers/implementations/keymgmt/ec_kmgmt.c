@@ -286,12 +286,15 @@ static void *ec_newdata_ex(void *provctx, const OSSL_PARAM params[])
 {
     EC_KEY *eckey = NULL;
     OSSL_LIB_CTX *libctx = PROV_LIBCTX_OF(provctx);
+#ifndef FIPS_MODULE
+    const OSSL_PARAM *p;
+#endif
 
     if (!ossl_prov_is_running())
         return NULL;
 
 #ifndef FIPS_MODULE
-    const OSSL_PARAM *p = NULL;
+    p = NULL;
 
     if (params != NULL)
         p = OSSL_PARAM_locate_const(params, "legacy-object");

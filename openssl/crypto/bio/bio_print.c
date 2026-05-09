@@ -97,8 +97,8 @@ int BIO_vprintf(BIO *bio, const char *format, va_list args)
 #endif
     int ret = -1;
 
-    va_copy(cp_args, args);
 #if defined(_MSC_VER) && _MSC_VER < 1900
+    va_copy(cp_args, args);
     ret = msvc_bio_vprintf(bio, format, cp_args);
 #else
     char buf[512];
@@ -109,6 +109,7 @@ int BIO_vprintf(BIO *bio, const char *format, va_list args)
      * call to vsnprintf() here uses args we got in function argument.
      * The second call is going to use cp_args we made earlier.
      */
+    va_copy(cp_args, args);
     sz = vsnprintf(buf, sizeof(buf), format, args);
     if (sz >= 0) {
         if ((size_t)sz > sizeof(buf)) {

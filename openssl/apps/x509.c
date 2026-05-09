@@ -409,6 +409,7 @@ int x509_main(int argc, char **argv)
 #ifndef OPENSSL_NO_MD5
     int subject_hash_old = 0, issuer_hash_old = 0;
 #endif
+    int confquiet;
 
     ctx = X509_STORE_new();
     if (ctx == NULL)
@@ -828,7 +829,7 @@ int x509_main(int argc, char **argv)
      * `-extensions` was specified.  Otherwise, the requested extensions
      * section must be present.
      */
-    int confquiet = extsect == NULL && extfile == NULL;
+    confquiet = extsect == NULL && extfile == NULL;
     if (newout)
         extconf = load_ext_conf(extfile, extsect, confquiet);
 

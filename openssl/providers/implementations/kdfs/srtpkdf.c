@@ -155,7 +155,7 @@ static int is_power_of_two(uint32_t x, uint32_t *n)
         return 0;
     }
     /* Count the number of trailing bits in the passed value */
-#ifdef __GNUC__
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
     *n = __builtin_ctz(x);
 #else
     {

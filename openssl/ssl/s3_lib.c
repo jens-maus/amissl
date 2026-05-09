@@ -4736,10 +4736,10 @@ const SSL_CIPHER *ssl3_get_cipher_by_id(uint32_t id)
 
 const SSL_CIPHER *ssl3_get_tls13_cipher_by_std_name(const char *stdname)
 {
-    SSL_CIPHER *end = &tls13_ciphers[TLS13_NUM_CIPHERS];
+    SSL_CIPHER *c, *end = &tls13_ciphers[TLS13_NUM_CIPHERS];
 
     /* this is not efficient, necessary to optimize this? */
-    for (SSL_CIPHER *c = tls13_ciphers; c < end; ++c) {
+    for (c = tls13_ciphers; c < end; ++c) {
         if (c->stdname == NULL)
             continue;
         if (OPENSSL_strcasecmp(stdname, c->stdname) == 0)

@@ -462,6 +462,10 @@ int ossl_x509v3_cache_extensions(const X509 *const_x)
     NAME_CONSTRAINTS *tmp_nc;
     STACK_OF(DIST_POINT) *tmp_crldp = NULL;
     X509_SIG_INFO tmp_siginf;
+#ifndef OPENSSL_NO_RFC3779
+    STACK_OF(IPAddressFamily) *tmp_rfc3779_addr;
+    struct ASIdentifiers_st *tmp_rfc3779_asid;
+#endif
 
 #ifdef tsan_ld_acq
     /* Fast lock-free check, see end of the function for details. */
@@ -649,12 +653,11 @@ int ossl_x509v3_cache_extensions(const X509 *const_x)
         tmp_ex_flags |= EXFLAG_INVALID;
 
 #ifndef OPENSSL_NO_RFC3779
-    STACK_OF(IPAddressFamily) *tmp_rfc3779_addr
+    tmp_rfc3779_addr
         = X509_get_ext_d2i(const_x, NID_sbgp_ipAddrBlock, &i, NULL);
     if (tmp_rfc3779_addr == NULL && i != -1)
         tmp_ex_flags |= EXFLAG_INVALID;
-
-    struct ASIdentifiers_st *tmp_rfc3779_asid
+    tmp_rfc3779_asid
         = X509_get_ext_d2i(const_x, NID_sbgp_autonomousSysNum, &i, NULL);
     if (tmp_rfc3779_asid == NULL && i != -1)
         tmp_ex_flags |= EXFLAG_INVALID;

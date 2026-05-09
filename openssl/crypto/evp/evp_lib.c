@@ -372,6 +372,9 @@ int EVP_CIPHER_impl_ctx_size(const EVP_CIPHER *e)
 int EVP_Cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
     const unsigned char *in, unsigned int inl)
 {
+    int ret;
+    size_t outl, blocksize;
+
     if (ctx == NULL || ctx->cipher == NULL || ctx->cipher->prov == NULL)
         return 0;
 
@@ -382,9 +385,9 @@ int EVP_Cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
      * Otherwise, we call the cupdate function if in != NULL, or cfinal
      * if in == NULL.  Regardless of which, we return what we got.
      */
-    int ret = -1;
-    size_t outl = 0;
-    size_t blocksize = EVP_CIPHER_CTX_get_block_size(ctx);
+    ret = -1;
+    outl = 0;
+    blocksize = EVP_CIPHER_CTX_get_block_size(ctx);
 
     if (blocksize == 0)
         return 0;

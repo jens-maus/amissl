@@ -1999,7 +1999,7 @@ static int tls1_check_cert_param(SSL_CONNECTION *s, X509 *x, int check_ee_md)
 int tls1_check_ffdhe_tmp_key(SSL_CONNECTION *s, unsigned long cid)
 {
     const uint16_t *peer_groups;
-    size_t num_peer_groups;
+    size_t num_peer_groups, i;
 
     /* If we have a shared FFDHE group, we can certainly use it. */
     if (tls1_shared_group(s, 0, TLS1_GROUPS_FFDHE_GROUPS) != 0)
@@ -2014,7 +2014,7 @@ int tls1_check_ffdhe_tmp_key(SSL_CONNECTION *s, unsigned long cid)
      *     server, then the server MUST NOT select an FFDHE cipher suite.
      */
     tls1_get_peer_groups(s, &peer_groups, &num_peer_groups);
-    for (size_t i = 0; i < num_peer_groups; i++) {
+    for (i = 0; i < num_peer_groups; i++) {
         if (is_ffdhe_group(peer_groups[i]))
             return 0;
     }
@@ -2512,8 +2512,9 @@ static const SIGALG_LOOKUP *tls1_find_sigalg(const SSL_CTX *ctx,
     uint16_t sigalg)
 {
     const SIGALG_LOOKUP *lu = ctx->sigalg_lookup_cache;
+    size_t i;
 
-    for (size_t i = 0; i < ctx->sigalg_lookup_cache_len; lu++, i++)
+    for (i = 0; i < ctx->sigalg_lookup_cache_len; lu++, i++)
         if (lu->sigalg == sigalg)
             return lu;
     return NULL;

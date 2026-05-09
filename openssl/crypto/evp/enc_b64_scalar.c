@@ -164,8 +164,8 @@ size_t evp_encodeblock_int(EVP_ENCODE_CTX *ctx, unsigned char *t,
 
         return ret;
     } else if (ctx_length % 3 != 0) {
-        i = 0;
         int wrap_cnt_nm3 = 0;
+        i = 0;
         while (i + 2 < dlen) {
             if (ctx != NULL) {
                 if ((wrap_cnt_nm3 < EVP_ENCODE_B64_LENGTH

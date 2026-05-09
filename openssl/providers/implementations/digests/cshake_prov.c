@@ -109,6 +109,7 @@ static int cshake_set_func_encode_string(const char *in,
         { "ParallelHash", parallelhash_encoded_string, sizeof(parallelhash_encoded_string) },
         { NULL, NULL, 0 }
     };
+    int i;
 
     *out = NULL;
     *outlen = 0;
@@ -119,7 +120,7 @@ static int cshake_set_func_encode_string(const char *in,
      */
     if (in == NULL || in[0] == 0)
         return 1;
-    for (int i = 1; functionNameMap[i].name != NULL; ++i) {
+    for (i = 1; functionNameMap[i].name != NULL; ++i) {
         if (functionNameMap[i].name[0] == in[0]) {
             if (OPENSSL_strcasecmp(functionNameMap[i].name, in) == 0) {
                 *out = functionNameMap[i].encoding;

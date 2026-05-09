@@ -1172,12 +1172,13 @@ static int alg_print(const X509_ALGOR *alg)
     const ASN1_OBJECT *aoid;
     const void *aparam;
     PBEPARAM *pbe = NULL;
+    const char *ln;
 
     X509_ALGOR_get0(&aoid, &aparamtype, &aparam, alg);
 
     pbenid = OBJ_obj2nid(aoid);
 
-    const char *ln = OBJ_nid2ln(pbenid);
+    ln = OBJ_nid2ln(pbenid);
     BIO_puts(bio_err, (ln != NULL) ? ln : "(null)");
 
     /*
