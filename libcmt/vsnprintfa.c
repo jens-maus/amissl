@@ -27,6 +27,7 @@
 ** AmigaOS 4.x, where utility.library already has these functions
 */
 
+#undef AMISSL_COMPILE
 #include "libcmt.h"
 
 struct StrInfo

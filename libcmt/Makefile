@@ -28,7 +28,7 @@ WARN     = -W -Wall -Wwrite-strings -Wpointer-arith -Wsign-compare -fno-strict-a
 OPTFLAGS = -O3 -fomit-frame-pointer
 DEBUG    = -DDEBUG -fno-omit-frame-pointer #-O0
 DEBUGSYM = -g -gstabs
-CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I. -I../include -D__NO_NET_API
+CFLAGS   = $(CPU) $(OPTFLAGS) $(DEBUG) $(DEBUGSYM) $(WARN) -I. -I../include -D__NO_NET_API -DAMISSL_COMPILE
 
 CC      = $(CROSS_PREFIX)gcc
 STRIP   = $(CROSS_PREFIX)strip
