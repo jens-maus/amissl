@@ -74,6 +74,7 @@ enum AmiSSLVersion
   AMISSL_V360,      /* AmiSSL v5.25 */
   AMISSL_V361,      /* AmiSSL v5.26 */
   AMISSL_V362,      /* AmiSSL v5.27 */
+  AMISSL_V40x,      /* AmiSSL v6.1 */
 
   /* ADD NEW VERSIONS ABOVE THIS LINE */
   AMISSL_VMAX
@@ -86,5 +87,6 @@ enum AmiSSLVersion
 #define AMISSL_V10x AMISSL_V102f /* Latest minimum AmiSSL/OpenSSL 1.0.x compatible version */
 #define AMISSL_V11x AMISSL_V110d /* Latest minimum AmiSSL/OpenSSL 1.1.x compatible version */
 #define AMISSL_V3xx AMISSL_V303  /* Latest minimum AmiSSL/OpenSSL 3.x.x compatible version */
+#define AMISSL_V4xx AMISSL_V40x  /* Latest minimum AmiSSL/OpenSSL 4.x.x compatible version */
 
 #endif /* !LIBRARIES_AMISSLMASTER_H */

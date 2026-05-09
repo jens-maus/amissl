@@ -339,7 +339,7 @@ static void VARARGS68K indent_printf(int indent, BIO *bio, const char *format, .
 {
     VA_LIST args;
 
-    BIO_printf(bio, "%*s", indent, "") 
+    BIO_printf(bio, "%*s", indent, "");
     VA_START(args, format);
     BIO_vprintf(bio, format, VA_ARG(args, long *));
     VA_END(args);

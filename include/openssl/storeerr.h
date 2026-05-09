@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -44,6 +44,7 @@
 #define OSSL_STORE_R_NOT_A_NAME 103
 #define OSSL_STORE_R_NOT_A_PRIVATE_KEY 102
 #define OSSL_STORE_R_NOT_A_PUBLIC_KEY 122
+#define OSSL_STORE_R_NOT_A_SYMMETRIC_KEY 124
 #define OSSL_STORE_R_NOT_PARAMETERS 104
 #define OSSL_STORE_R_NO_LOADERS_FOUND 123
 #define OSSL_STORE_R_PASSPHRASE_CALLBACK_ERROR 114

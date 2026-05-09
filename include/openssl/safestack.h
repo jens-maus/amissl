@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1999-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1999-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -52,39 +52,47 @@ extern "C" {
     typedef void (*sk_##t1##_freefunc)(t3 *a); \
     typedef t3 * (*sk_##t1##_copyfunc)(const t3 *a);
 #else
-#define SKM_DEFINE_STACK_OF_INTERNAL(t1, t2, t3)			\
-    STACK_OF(t1);                                                                                               \
-    typedef int (*sk_##t1##_compfunc)(const t3 *const *a, const t3 *const *b);                                  \
-    typedef void (*sk_##t1##_freefunc)(t3 * a);                                                                 \
-    typedef t3 *(*sk_##t1##_copyfunc)(const t3 *a);                                                             \
-    static ossl_inline void sk_##t1##_freefunc_thunk(OPENSSL_sk_freefunc freefunc_arg, void *ptr)               \
-    {                                                                                                           \
-        sk_##t1##_freefunc freefunc = (sk_##t1##_freefunc)freefunc_arg;                                         \
-        freefunc((t3 *)ptr);                                                                                    \
-    }                                                                                                           \
-    static ossl_unused ossl_inline t2 *ossl_check_##t1##_type(t2 *ptr)                                          \
-    {                                                                                                           \
-        return ptr;                                                                                             \
-    }                                                                                                           \
-    static ossl_unused ossl_inline const OPENSSL_STACK *ossl_check_const_##t1##_sk_type(const STACK_OF(t1) *sk) \
-    {                                                                                                           \
-        return (const OPENSSL_STACK *)sk;                                                                       \
-    }                                                                                                           \
-    static ossl_unused ossl_inline OPENSSL_STACK *ossl_check_##t1##_sk_type(STACK_OF(t1) *sk)                   \
-    {                                                                                                           \
-        return (OPENSSL_STACK *)sk;                                                                             \
-    }                                                                                                           \
-    static ossl_unused ossl_inline OPENSSL_sk_compfunc ossl_check_##t1##_compfunc_type(sk_##t1##_compfunc cmp)  \
-    {                                                                                                           \
-        return (OPENSSL_sk_compfunc)cmp;                                                                        \
-    }                                                                                                           \
-    static ossl_unused ossl_inline OPENSSL_sk_copyfunc ossl_check_##t1##_copyfunc_type(sk_##t1##_copyfunc cpy)  \
-    {                                                                                                           \
-        return (OPENSSL_sk_copyfunc)cpy;                                                                        \
-    }                                                                                                           \
-    static ossl_unused ossl_inline OPENSSL_sk_freefunc ossl_check_##t1##_freefunc_type(sk_##t1##_freefunc fr)   \
-    {                                                                                                           \
-        return (OPENSSL_sk_freefunc)fr;                                                                         \
+#define SKM_DEFINE_STACK_OF_INTERNAL(t1, t2, t3)                                                                         \
+    STACK_OF(t1);                                                                                                        \
+    typedef int (*sk_##t1##_compfunc)(const t3 *const *a, const t3 *const *b);                                           \
+    typedef void (*sk_##t1##_freefunc)(t3 * a);                                                                          \
+    typedef t3 *(*sk_##t1##_copyfunc)(const t3 *a);                                                                      \
+    static ossl_inline void sk_##t1##_freefunc_thunk(OPENSSL_sk_freefunc freefunc_arg, void *ptr)                        \
+    {                                                                                                                    \
+        sk_##t1##_freefunc freefunc = (sk_##t1##_freefunc)freefunc_arg;                                                  \
+        freefunc((t3 *)ptr);                                                                                             \
+    }                                                                                                                    \
+    static ossl_inline int sk_##t1##_cmpfunc_thunk(int (*cmp)(const void *, const void *), const void *a, const void *b) \
+    {                                                                                                                    \
+        int (*realcmp)(const t3 *const *a, const t3 *const *b) = (int (*)(const t3 *const *a, const t3 *const *b))(cmp); \
+        const t3 *const *at = (const t3 *const *)a;                                                                      \
+        const t3 *const *bt = (const t3 *const *)b;                                                                      \
+                                                                                                                         \
+        return realcmp(at, bt);                                                                                          \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline t2 *ossl_check_##t1##_type(t2 *ptr)                                                   \
+    {                                                                                                                    \
+        return ptr;                                                                                                      \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline const OPENSSL_STACK *ossl_check_const_##t1##_sk_type(const STACK_OF(t1) *sk)          \
+    {                                                                                                                    \
+        return (const OPENSSL_STACK *)sk;                                                                                \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline OPENSSL_STACK *ossl_check_##t1##_sk_type(STACK_OF(t1) *sk)                            \
+    {                                                                                                                    \
+        return (OPENSSL_STACK *)sk;                                                                                      \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline OPENSSL_sk_compfunc ossl_check_##t1##_compfunc_type(sk_##t1##_compfunc cmp)           \
+    {                                                                                                                    \
+        return (OPENSSL_sk_compfunc)cmp;                                                                                 \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline OPENSSL_sk_copyfunc ossl_check_##t1##_copyfunc_type(sk_##t1##_copyfunc cpy)           \
+    {                                                                                                                    \
+        return (OPENSSL_sk_copyfunc)cpy;                                                                                 \
+    }                                                                                                                    \
+    static ossl_unused ossl_inline OPENSSL_sk_freefunc ossl_check_##t1##_freefunc_type(sk_##t1##_freefunc fr)            \
+    {                                                                                                                    \
+        return (OPENSSL_sk_freefunc)fr;                                                                                  \
     }
 #endif
 
@@ -102,6 +110,14 @@ extern "C" {
         sk_##t1##_freefunc freefunc = (sk_##t1##_freefunc)freefunc_arg;                                                    \
         freefunc((t3 *)ptr);                                                                                               \
     }                                                                                                                      \
+    static ossl_inline int sk_##t1##_cmpfunc_thunk(int (*cmp)(const void *, const void *), const void *a, const void *b)   \
+    {                                                                                                                      \
+        int (*realcmp)(const t3 *const *a, const t3 *const *b) = (int (*)(const t3 *const *a, const t3 *const *b))(cmp);   \
+        const t3 *const *at = (const t3 *const *)a;                                                                        \
+        const t3 *const *bt = (const t3 *const *)b;                                                                        \
+                                                                                                                           \
+        return realcmp(at, bt);                                                                                            \
+    }                                                                                                                      \
     static ossl_unused ossl_inline int sk_##t1##_num(const STACK_OF(t1) *sk)                                               \
     {                                                                                                                      \
         return OPENSSL_sk_num((const OPENSSL_STACK *)sk);                                                                  \
@@ -116,11 +132,17 @@ extern "C" {
         OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
                                                                                                                            \
         f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
+        OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
         return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_null(void)                                                  \
     {                                                                                                                      \
-        return (STACK_OF(t1) *)OPENSSL_sk_new_null();                                                                      \
+        OPENSSL_STACK *ret = OPENSSL_sk_new_null();                                                                        \
+        OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
+                                                                                                                           \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
+                                                                                                                           \
+        return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_reserve(sk_##t1##_compfunc compare, int n)                  \
     {                                                                                                                      \
@@ -128,6 +150,7 @@ extern "C" {
         OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
                                                                                                                            \
         f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
+        OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
         return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline int sk_##t1##_reserve(STACK_OF(t1) *sk, int n)                                          \
@@ -184,17 +207,18 @@ extern "C" {
     {                                                                                                                      \
         return (t2 *)OPENSSL_sk_set((OPENSSL_STACK *)sk, idx, (const void *)ptr);                                          \
     }                                                                                                                      \
-    static ossl_unused ossl_inline int sk_##t1##_find(STACK_OF(t1) *sk, t2 *ptr)                                           \
+    static ossl_unused ossl_inline int sk_##t1##_find(const STACK_OF(t1) *sk, t2 *ptr)                                     \
     {                                                                                                                      \
-        return OPENSSL_sk_find((OPENSSL_STACK *)sk, (const void *)ptr);                                                    \
+        return OPENSSL_sk_find((const OPENSSL_STACK *)sk, (const void *)ptr);                                              \
     }                                                                                                                      \
-    static ossl_unused ossl_inline int sk_##t1##_find_ex(STACK_OF(t1) *sk, t2 *ptr)                                        \
+    static ossl_unused ossl_inline int sk_##t1##_find_ex(const STACK_OF(t1) *sk, t2 *ptr)                                  \
     {                                                                                                                      \
-        return OPENSSL_sk_find_ex((OPENSSL_STACK *)sk, (const void *)ptr);                                                 \
+        return OPENSSL_sk_find_ex((const OPENSSL_STACK *)sk, (const void *)ptr);                                           \
     }                                                                                                                      \
-    static ossl_unused ossl_inline int sk_##t1##_find_all(STACK_OF(t1) *sk, t2 *ptr, int *pnum)                            \
+    static ossl_unused ossl_inline int sk_##t1##_find_all(const STACK_OF(t1) *sk, t2 *ptr,                                 \
+        int *pnum)                                                                                                         \
     {                                                                                                                      \
-        return OPENSSL_sk_find_all((OPENSSL_STACK *)sk, (const void *)ptr, pnum);                                          \
+        return OPENSSL_sk_find_all((const OPENSSL_STACK *)sk, (const void *)ptr, pnum);                                    \
     }                                                                                                                      \
     static ossl_unused ossl_inline void sk_##t1##_sort(STACK_OF(t1) *sk)                                                   \
     {                                                                                                                      \
@@ -256,9 +280,9 @@ typedef const char *OPENSSL_CSTRING;
 SKM_DEFINE_STACK_OF_INTERNAL(OPENSSL_STRING, char, char)
 #define sk_OPENSSL_STRING_num(sk) OPENSSL_sk_num(ossl_check_const_OPENSSL_STRING_sk_type(sk))
 #define sk_OPENSSL_STRING_value(sk, idx) ((char *)OPENSSL_sk_value(ossl_check_const_OPENSSL_STRING_sk_type(sk), (idx)))
-#define sk_OPENSSL_STRING_new(cmp) ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_new(ossl_check_OPENSSL_STRING_compfunc_type(cmp)))
-#define sk_OPENSSL_STRING_new_null() ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_new_null())
-#define sk_OPENSSL_STRING_new_reserve(cmp, n) ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_new_reserve(ossl_check_OPENSSL_STRING_compfunc_type(cmp), (n)))
+#define sk_OPENSSL_STRING_new(cmp) ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OPENSSL_STRING_compfunc_type(cmp)), sk_OPENSSL_STRING_cmpfunc_thunk))
+#define sk_OPENSSL_STRING_new_null() ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OPENSSL_STRING_freefunc_thunk))
+#define sk_OPENSSL_STRING_new_reserve(cmp, n) ((STACK_OF(OPENSSL_STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OPENSSL_STRING_compfunc_type(cmp), (n)), sk_OPENSSL_STRING_cmpfunc_thunk))
 #define sk_OPENSSL_STRING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OPENSSL_STRING_sk_type(sk), (n))
 #define sk_OPENSSL_STRING_free(sk) OPENSSL_sk_free(ossl_check_OPENSSL_STRING_sk_type(sk))
 #define sk_OPENSSL_STRING_zero(sk) OPENSSL_sk_zero(ossl_check_OPENSSL_STRING_sk_type(sk))
@@ -282,9 +306,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(OPENSSL_STRING, char, char)
 SKM_DEFINE_STACK_OF_INTERNAL(OPENSSL_CSTRING, const char, char)
 #define sk_OPENSSL_CSTRING_num(sk) OPENSSL_sk_num(ossl_check_const_OPENSSL_CSTRING_sk_type(sk))
 #define sk_OPENSSL_CSTRING_value(sk, idx) ((const char *)OPENSSL_sk_value(ossl_check_const_OPENSSL_CSTRING_sk_type(sk), (idx)))
-#define sk_OPENSSL_CSTRING_new(cmp) ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_new(ossl_check_OPENSSL_CSTRING_compfunc_type(cmp)))
-#define sk_OPENSSL_CSTRING_new_null() ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_new_null())
-#define sk_OPENSSL_CSTRING_new_reserve(cmp, n) ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_new_reserve(ossl_check_OPENSSL_CSTRING_compfunc_type(cmp), (n)))
+#define sk_OPENSSL_CSTRING_new(cmp) ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OPENSSL_CSTRING_compfunc_type(cmp)), sk_OPENSSL_CSTRING_cmpfunc_thunk))
+#define sk_OPENSSL_CSTRING_new_null() ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OPENSSL_CSTRING_freefunc_thunk))
+#define sk_OPENSSL_CSTRING_new_reserve(cmp, n) ((STACK_OF(OPENSSL_CSTRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OPENSSL_CSTRING_compfunc_type(cmp), (n)), sk_OPENSSL_CSTRING_cmpfunc_thunk))
 #define sk_OPENSSL_CSTRING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OPENSSL_CSTRING_sk_type(sk), (n))
 #define sk_OPENSSL_CSTRING_free(sk) OPENSSL_sk_free(ossl_check_OPENSSL_CSTRING_sk_type(sk))
 #define sk_OPENSSL_CSTRING_zero(sk) OPENSSL_sk_zero(ossl_check_OPENSSL_CSTRING_sk_type(sk))
@@ -318,9 +342,9 @@ typedef void *OPENSSL_BLOCK;
 SKM_DEFINE_STACK_OF_INTERNAL(OPENSSL_BLOCK, void, void)
 #define sk_OPENSSL_BLOCK_num(sk) OPENSSL_sk_num(ossl_check_const_OPENSSL_BLOCK_sk_type(sk))
 #define sk_OPENSSL_BLOCK_value(sk, idx) ((void *)OPENSSL_sk_value(ossl_check_const_OPENSSL_BLOCK_sk_type(sk), (idx)))
-#define sk_OPENSSL_BLOCK_new(cmp) ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_new(ossl_check_OPENSSL_BLOCK_compfunc_type(cmp)))
-#define sk_OPENSSL_BLOCK_new_null() ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_new_null())
-#define sk_OPENSSL_BLOCK_new_reserve(cmp, n) ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_new_reserve(ossl_check_OPENSSL_BLOCK_compfunc_type(cmp), (n)))
+#define sk_OPENSSL_BLOCK_new(cmp) ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OPENSSL_BLOCK_compfunc_type(cmp)), sk_OPENSSL_BLOCK_cmpfunc_thunk))
+#define sk_OPENSSL_BLOCK_new_null() ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OPENSSL_BLOCK_freefunc_thunk))
+#define sk_OPENSSL_BLOCK_new_reserve(cmp, n) ((STACK_OF(OPENSSL_BLOCK) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OPENSSL_BLOCK_compfunc_type(cmp), (n)), sk_OPENSSL_BLOCK_cmpfunc_thunk))
 #define sk_OPENSSL_BLOCK_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OPENSSL_BLOCK_sk_type(sk), (n))
 #define sk_OPENSSL_BLOCK_free(sk) OPENSSL_sk_free(ossl_check_OPENSSL_BLOCK_sk_type(sk))
 #define sk_OPENSSL_BLOCK_zero(sk) OPENSSL_sk_zero(ossl_check_OPENSSL_BLOCK_sk_type(sk))

@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -86,9 +86,9 @@ typedef enum {
 SKM_DEFINE_STACK_OF_INTERNAL(X509_LOOKUP, X509_LOOKUP, X509_LOOKUP)
 #define sk_X509_LOOKUP_num(sk) OPENSSL_sk_num(ossl_check_const_X509_LOOKUP_sk_type(sk))
 #define sk_X509_LOOKUP_value(sk, idx) ((X509_LOOKUP *)OPENSSL_sk_value(ossl_check_const_X509_LOOKUP_sk_type(sk), (idx)))
-#define sk_X509_LOOKUP_new(cmp) ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_new(ossl_check_X509_LOOKUP_compfunc_type(cmp)))
-#define sk_X509_LOOKUP_new_null() ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_new_null())
-#define sk_X509_LOOKUP_new_reserve(cmp, n) ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_new_reserve(ossl_check_X509_LOOKUP_compfunc_type(cmp), (n)))
+#define sk_X509_LOOKUP_new(cmp) ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_LOOKUP_compfunc_type(cmp)), sk_X509_LOOKUP_cmpfunc_thunk))
+#define sk_X509_LOOKUP_new_null() ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_LOOKUP_freefunc_thunk))
+#define sk_X509_LOOKUP_new_reserve(cmp, n) ((STACK_OF(X509_LOOKUP) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_LOOKUP_compfunc_type(cmp), (n)), sk_X509_LOOKUP_cmpfunc_thunk))
 #define sk_X509_LOOKUP_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_LOOKUP_sk_type(sk), (n))
 #define sk_X509_LOOKUP_free(sk) OPENSSL_sk_free(ossl_check_X509_LOOKUP_sk_type(sk))
 #define sk_X509_LOOKUP_zero(sk) OPENSSL_sk_zero(ossl_check_X509_LOOKUP_sk_type(sk))
@@ -112,9 +112,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(X509_LOOKUP, X509_LOOKUP, X509_LOOKUP)
 SKM_DEFINE_STACK_OF_INTERNAL(X509_OBJECT, X509_OBJECT, X509_OBJECT)
 #define sk_X509_OBJECT_num(sk) OPENSSL_sk_num(ossl_check_const_X509_OBJECT_sk_type(sk))
 #define sk_X509_OBJECT_value(sk, idx) ((X509_OBJECT *)OPENSSL_sk_value(ossl_check_const_X509_OBJECT_sk_type(sk), (idx)))
-#define sk_X509_OBJECT_new(cmp) ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_new(ossl_check_X509_OBJECT_compfunc_type(cmp)))
-#define sk_X509_OBJECT_new_null() ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_new_null())
-#define sk_X509_OBJECT_new_reserve(cmp, n) ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_new_reserve(ossl_check_X509_OBJECT_compfunc_type(cmp), (n)))
+#define sk_X509_OBJECT_new(cmp) ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_OBJECT_compfunc_type(cmp)), sk_X509_OBJECT_cmpfunc_thunk))
+#define sk_X509_OBJECT_new_null() ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_OBJECT_freefunc_thunk))
+#define sk_X509_OBJECT_new_reserve(cmp, n) ((STACK_OF(X509_OBJECT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_OBJECT_compfunc_type(cmp), (n)), sk_X509_OBJECT_cmpfunc_thunk))
 #define sk_X509_OBJECT_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_OBJECT_sk_type(sk), (n))
 #define sk_X509_OBJECT_free(sk) OPENSSL_sk_free(ossl_check_X509_OBJECT_sk_type(sk))
 #define sk_X509_OBJECT_zero(sk) OPENSSL_sk_zero(ossl_check_X509_OBJECT_sk_type(sk))
@@ -138,9 +138,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(X509_OBJECT, X509_OBJECT, X509_OBJECT)
 SKM_DEFINE_STACK_OF_INTERNAL(X509_VERIFY_PARAM, X509_VERIFY_PARAM, X509_VERIFY_PARAM)
 #define sk_X509_VERIFY_PARAM_num(sk) OPENSSL_sk_num(ossl_check_const_X509_VERIFY_PARAM_sk_type(sk))
 #define sk_X509_VERIFY_PARAM_value(sk, idx) ((X509_VERIFY_PARAM *)OPENSSL_sk_value(ossl_check_const_X509_VERIFY_PARAM_sk_type(sk), (idx)))
-#define sk_X509_VERIFY_PARAM_new(cmp) ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_new(ossl_check_X509_VERIFY_PARAM_compfunc_type(cmp)))
-#define sk_X509_VERIFY_PARAM_new_null() ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_new_null())
-#define sk_X509_VERIFY_PARAM_new_reserve(cmp, n) ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_new_reserve(ossl_check_X509_VERIFY_PARAM_compfunc_type(cmp), (n)))
+#define sk_X509_VERIFY_PARAM_new(cmp) ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_VERIFY_PARAM_compfunc_type(cmp)), sk_X509_VERIFY_PARAM_cmpfunc_thunk))
+#define sk_X509_VERIFY_PARAM_new_null() ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_VERIFY_PARAM_freefunc_thunk))
+#define sk_X509_VERIFY_PARAM_new_reserve(cmp, n) ((STACK_OF(X509_VERIFY_PARAM) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_VERIFY_PARAM_compfunc_type(cmp), (n)), sk_X509_VERIFY_PARAM_cmpfunc_thunk))
 #define sk_X509_VERIFY_PARAM_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_VERIFY_PARAM_sk_type(sk), (n))
 #define sk_X509_VERIFY_PARAM_free(sk) OPENSSL_sk_free(ossl_check_X509_VERIFY_PARAM_sk_type(sk))
 #define sk_X509_VERIFY_PARAM_zero(sk) OPENSSL_sk_zero(ossl_check_X509_VERIFY_PARAM_sk_type(sk))
@@ -168,7 +168,7 @@ SKM_DEFINE_STACK_OF_INTERNAL(X509_VERIFY_PARAM, X509_VERIFY_PARAM, X509_VERIFY_P
 typedef struct x509_trust_st {
     int trust;
     int flags;
-    int (*check_trust)(struct x509_trust_st *, X509 *, int);
+    int (*check_trust)(struct x509_trust_st *, const X509 *, int);
     char *name;
     int arg1;
     void *arg2;
@@ -177,9 +177,9 @@ typedef struct x509_trust_st {
 SKM_DEFINE_STACK_OF_INTERNAL(X509_TRUST, X509_TRUST, X509_TRUST)
 #define sk_X509_TRUST_num(sk) OPENSSL_sk_num(ossl_check_const_X509_TRUST_sk_type(sk))
 #define sk_X509_TRUST_value(sk, idx) ((X509_TRUST *)OPENSSL_sk_value(ossl_check_const_X509_TRUST_sk_type(sk), (idx)))
-#define sk_X509_TRUST_new(cmp) ((STACK_OF(X509_TRUST) *)OPENSSL_sk_new(ossl_check_X509_TRUST_compfunc_type(cmp)))
-#define sk_X509_TRUST_new_null() ((STACK_OF(X509_TRUST) *)OPENSSL_sk_new_null())
-#define sk_X509_TRUST_new_reserve(cmp, n) ((STACK_OF(X509_TRUST) *)OPENSSL_sk_new_reserve(ossl_check_X509_TRUST_compfunc_type(cmp), (n)))
+#define sk_X509_TRUST_new(cmp) ((STACK_OF(X509_TRUST) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_TRUST_compfunc_type(cmp)), sk_X509_TRUST_cmpfunc_thunk))
+#define sk_X509_TRUST_new_null() ((STACK_OF(X509_TRUST) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_TRUST_freefunc_thunk))
+#define sk_X509_TRUST_new_reserve(cmp, n) ((STACK_OF(X509_TRUST) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_TRUST_compfunc_type(cmp), (n)), sk_X509_TRUST_cmpfunc_thunk))
 #define sk_X509_TRUST_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_TRUST_sk_type(sk), (n))
 #define sk_X509_TRUST_free(sk) OPENSSL_sk_free(ossl_check_X509_TRUST_sk_type(sk))
 #define sk_X509_TRUST_zero(sk) OPENSSL_sk_zero(ossl_check_X509_TRUST_sk_type(sk))
@@ -236,7 +236,7 @@ int X509_TRUST_set(int *t, int trust);
 int X509_TRUST_get_count(void);
 X509_TRUST *X509_TRUST_get0(int idx);
 int X509_TRUST_get_by_id(int id);
-int X509_TRUST_add(int id, int flags, int (*ck)(X509_TRUST *, X509 *, int),
+int X509_TRUST_add(int id, int flags, int (*ck)(X509_TRUST *, const X509 *, int),
     const char *name, int arg1, void *arg2);
 void X509_TRUST_cleanup(void);
 int X509_TRUST_get_flags(const X509_TRUST *xp);
@@ -248,16 +248,16 @@ int X509_add1_trust_object(X509 *x, const ASN1_OBJECT *obj);
 int X509_add1_reject_object(X509 *x, const ASN1_OBJECT *obj);
 void X509_trust_clear(X509 *x);
 void X509_reject_clear(X509 *x);
-STACK_OF(ASN1_OBJECT) *X509_get0_trust_objects(X509 *x);
-STACK_OF(ASN1_OBJECT) *X509_get0_reject_objects(X509 *x);
+const STACK_OF(ASN1_OBJECT) *X509_get0_trust_objects(const X509 *x);
+const STACK_OF(ASN1_OBJECT) *X509_get0_reject_objects(const X509 *x);
 
-int (*X509_TRUST_set_default(int (*trust)(int, X509 *, int)))(int, X509 *,
+int (*X509_TRUST_set_default(int (*trust)(int, const X509 *, int)))(int, const X509 *,
     int);
-int X509_check_trust(X509 *x, int id, int flags);
+int X509_check_trust(const X509 *x, int id, int flags);
 
 int X509_verify_cert(X509_STORE_CTX *ctx);
 int X509_STORE_CTX_verify(X509_STORE_CTX *ctx);
-STACK_OF(X509) *X509_build_chain(X509 *target, STACK_OF(X509) *certs,
+STACK_OF(X509) *X509_build_chain(const X509 *target, STACK_OF(X509) *certs,
     X509_STORE *store, int with_self_signed,
     OSSL_LIB_CTX *libctx, const char *propq);
 
@@ -267,9 +267,9 @@ typedef int (*X509_STORE_CTX_verify_cb)(int, X509_STORE_CTX *);
 int X509_STORE_CTX_print_verify_cb(int ok, X509_STORE_CTX *ctx);
 typedef int (*X509_STORE_CTX_verify_fn)(X509_STORE_CTX *);
 typedef int (*X509_STORE_CTX_get_issuer_fn)(X509 **issuer,
-    X509_STORE_CTX *ctx, X509 *x);
+    X509_STORE_CTX *ctx, const X509 *x);
 typedef int (*X509_STORE_CTX_check_issued_fn)(X509_STORE_CTX *ctx,
-    X509 *x, X509 *issuer);
+    const X509 *x, const X509 *issuer);
 typedef int (*X509_STORE_CTX_check_revocation_fn)(X509_STORE_CTX *ctx);
 typedef int (*X509_STORE_CTX_get_crl_fn)(X509_STORE_CTX *ctx,
     X509_CRL **crl, X509 *x);
@@ -278,7 +278,7 @@ typedef int (*X509_STORE_CTX_cert_crl_fn)(X509_STORE_CTX *ctx,
     X509_CRL *crl, X509 *x);
 typedef int (*X509_STORE_CTX_check_policy_fn)(X509_STORE_CTX *ctx);
 typedef STACK_OF(X509)
-    *(*X509_STORE_CTX_lookup_certs_fn)(X509_STORE_CTX *ctx,
+    *(*X509_STORE_CTX_lookup_certs_fn)(const X509_STORE_CTX *ctx,
         const X509_NAME *nm);
 typedef STACK_OF(X509_CRL)
     *(*X509_STORE_CTX_lookup_crls_fn)(const X509_STORE_CTX *ctx,
@@ -442,6 +442,10 @@ void X509_STORE_CTX_set_depth(X509_STORE_CTX *ctx, int depth);
 #define X509_V_ERR_OCSP_NO_RESPONSE 100
 #define X509_V_ERR_CRL_VERIFY_FAILED 101
 
+/* additional AKID errors */
+#define X509_V_ERR_EMPTY_AUTHORITY_KEY_IDENTIFIER 102
+#define X509_V_ERR_AKID_ISSUER_SERIAL_NOT_PAIRED 103
+
 /* Certificate verify flags */
 #ifndef OPENSSL_NO_DEPRECATED_1_1_0
 #define X509_V_FLAG_CB_ISSUER_CHECK 0x0 /* Deprecated */
@@ -530,10 +534,13 @@ void X509_STORE_free(X509_STORE *xs);
 int X509_STORE_lock(X509_STORE *xs);
 int X509_STORE_unlock(X509_STORE *xs);
 int X509_STORE_up_ref(X509_STORE *xs);
+#ifndef OPENSSL_NO_DEPRECATED_4_0
+OSSL_DEPRECATEDIN_4_0_FOR("Use X509_STORE_get1_objects")
 STACK_OF(X509_OBJECT) *X509_STORE_get0_objects(const X509_STORE *xs);
+#endif
 STACK_OF(X509_OBJECT) *X509_STORE_get1_objects(X509_STORE *xs);
 STACK_OF(X509) *X509_STORE_get1_all_certs(X509_STORE *xs);
-STACK_OF(X509) *X509_STORE_CTX_get1_certs(X509_STORE_CTX *xs,
+STACK_OF(X509) *X509_STORE_CTX_get1_certs(const X509_STORE_CTX *xs,
     const X509_NAME *nm);
 STACK_OF(X509_CRL) *X509_STORE_CTX_get1_crls(const X509_STORE_CTX *st,
     const X509_NAME *nm);
@@ -596,11 +603,11 @@ void *X509_STORE_get_ex_data(const X509_STORE *xs, int idx);
 X509_STORE_CTX *X509_STORE_CTX_new_ex(OSSL_LIB_CTX *libctx, const char *propq);
 X509_STORE_CTX *X509_STORE_CTX_new(void);
 
-int X509_STORE_CTX_get1_issuer(X509 **issuer, X509_STORE_CTX *ctx, X509 *x);
+int X509_STORE_CTX_get1_issuer(X509 **issuer, X509_STORE_CTX *ctx, const X509 *x);
 
 void X509_STORE_CTX_free(X509_STORE_CTX *ctx);
 int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *trust_store,
-    X509 *target, STACK_OF(X509) *untrusted);
+    const X509 *target, STACK_OF(X509) *untrusted);
 int X509_STORE_CTX_init_rpk(X509_STORE_CTX *ctx, X509_STORE *trust_store,
     EVP_PKEY *rpk);
 void X509_STORE_CTX_set0_trusted_stack(X509_STORE_CTX *ctx, STACK_OF(X509) *sk);
@@ -721,7 +728,7 @@ int X509_LOOKUP_meth_set_get_by_alias(X509_LOOKUP_METHOD *method,
 X509_LOOKUP_get_by_alias_fn X509_LOOKUP_meth_get_get_by_alias(
     const X509_LOOKUP_METHOD *method);
 
-int X509_STORE_add_cert(X509_STORE *xs, X509 *x);
+int X509_STORE_add_cert(X509_STORE *xs, const X509 *x);
 int X509_STORE_add_crl(X509_STORE *xs, X509_CRL *x);
 
 int X509_STORE_CTX_get_by_subject(const X509_STORE_CTX *vs,
@@ -864,6 +871,8 @@ int X509_VERIFY_PARAM_set1_host(X509_VERIFY_PARAM *param,
     const char *name, size_t namelen);
 int X509_VERIFY_PARAM_add1_host(X509_VERIFY_PARAM *param,
     const char *name, size_t namelen);
+void X509_VERIFY_PARAM_set1_host_input_validation(X509_VERIFY_PARAM *param,
+    int (*validate_host)(const char *name, size_t len));
 void X509_VERIFY_PARAM_set_hostflags(X509_VERIFY_PARAM *param,
     unsigned int flags);
 unsigned int X509_VERIFY_PARAM_get_hostflags(const X509_VERIFY_PARAM *param);
@@ -872,10 +881,28 @@ void X509_VERIFY_PARAM_move_peername(X509_VERIFY_PARAM *, X509_VERIFY_PARAM *);
 char *X509_VERIFY_PARAM_get0_email(X509_VERIFY_PARAM *param);
 int X509_VERIFY_PARAM_set1_email(X509_VERIFY_PARAM *param,
     const char *email, size_t emaillen);
+int X509_VERIFY_PARAM_set1_rfc822(X509_VERIFY_PARAM *param,
+    const char *email, size_t emaillen);
+int X509_VERIFY_PARAM_add1_rfc822(X509_VERIFY_PARAM *param,
+    const char *email, size_t len);
+void X509_VERIFY_PARAM_set1_rfc822_input_validation(X509_VERIFY_PARAM *param,
+    int (*validate_rfc822)(const char *name, size_t len));
+int X509_VERIFY_PARAM_set1_smtputf8(X509_VERIFY_PARAM *param,
+    const char *email, size_t emaillen);
+int X509_VERIFY_PARAM_add1_smtputf8(X509_VERIFY_PARAM *param,
+    const char *email, size_t len);
+void X509_VERIFY_PARAM_set1_smtputf8_input_validation(X509_VERIFY_PARAM *param,
+    int (*validate_smtputf8)(const char *name, size_t len));
 char *X509_VERIFY_PARAM_get1_ip_asc(X509_VERIFY_PARAM *param);
 int X509_VERIFY_PARAM_set1_ip(X509_VERIFY_PARAM *param,
-    const unsigned char *ip, size_t iplen);
+    const uint8_t *ip, size_t iplen);
+void X509_VERIFY_PARAM_set1_ip_input_validation(X509_VERIFY_PARAM *param,
+    int (*validate_ip)(const uint8_t *name, size_t len));
 int X509_VERIFY_PARAM_set1_ip_asc(X509_VERIFY_PARAM *param,
+    const char *ipasc);
+int X509_VERIFY_PARAM_add1_ip(X509_VERIFY_PARAM *param,
+    const uint8_t *ip, size_t len);
+int X509_VERIFY_PARAM_add1_ip_asc(X509_VERIFY_PARAM *param,
     const char *ipasc);
 
 int X509_VERIFY_PARAM_get_depth(const X509_VERIFY_PARAM *param);

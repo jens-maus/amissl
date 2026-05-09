@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 2008-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2008-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -61,9 +61,9 @@ typedef struct CMS_OtherKeyAttribute_st CMS_OtherKeyAttribute;
 SKM_DEFINE_STACK_OF_INTERNAL(CMS_SignerInfo, CMS_SignerInfo, CMS_SignerInfo)
 #define sk_CMS_SignerInfo_num(sk) OPENSSL_sk_num(ossl_check_const_CMS_SignerInfo_sk_type(sk))
 #define sk_CMS_SignerInfo_value(sk, idx) ((CMS_SignerInfo *)OPENSSL_sk_value(ossl_check_const_CMS_SignerInfo_sk_type(sk), (idx)))
-#define sk_CMS_SignerInfo_new(cmp) ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_new(ossl_check_CMS_SignerInfo_compfunc_type(cmp)))
-#define sk_CMS_SignerInfo_new_null() ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_new_null())
-#define sk_CMS_SignerInfo_new_reserve(cmp, n) ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_new_reserve(ossl_check_CMS_SignerInfo_compfunc_type(cmp), (n)))
+#define sk_CMS_SignerInfo_new(cmp) ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_CMS_SignerInfo_compfunc_type(cmp)), sk_CMS_SignerInfo_cmpfunc_thunk))
+#define sk_CMS_SignerInfo_new_null() ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_CMS_SignerInfo_freefunc_thunk))
+#define sk_CMS_SignerInfo_new_reserve(cmp, n) ((STACK_OF(CMS_SignerInfo) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_CMS_SignerInfo_compfunc_type(cmp), (n)), sk_CMS_SignerInfo_cmpfunc_thunk))
 #define sk_CMS_SignerInfo_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_CMS_SignerInfo_sk_type(sk), (n))
 #define sk_CMS_SignerInfo_free(sk) OPENSSL_sk_free(ossl_check_CMS_SignerInfo_sk_type(sk))
 #define sk_CMS_SignerInfo_zero(sk) OPENSSL_sk_zero(ossl_check_CMS_SignerInfo_sk_type(sk))
@@ -87,9 +87,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(CMS_SignerInfo, CMS_SignerInfo, CMS_SignerInfo)
 SKM_DEFINE_STACK_OF_INTERNAL(CMS_RecipientEncryptedKey, CMS_RecipientEncryptedKey, CMS_RecipientEncryptedKey)
 #define sk_CMS_RecipientEncryptedKey_num(sk) OPENSSL_sk_num(ossl_check_const_CMS_RecipientEncryptedKey_sk_type(sk))
 #define sk_CMS_RecipientEncryptedKey_value(sk, idx) ((CMS_RecipientEncryptedKey *)OPENSSL_sk_value(ossl_check_const_CMS_RecipientEncryptedKey_sk_type(sk), (idx)))
-#define sk_CMS_RecipientEncryptedKey_new(cmp) ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_new(ossl_check_CMS_RecipientEncryptedKey_compfunc_type(cmp)))
-#define sk_CMS_RecipientEncryptedKey_new_null() ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_new_null())
-#define sk_CMS_RecipientEncryptedKey_new_reserve(cmp, n) ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_new_reserve(ossl_check_CMS_RecipientEncryptedKey_compfunc_type(cmp), (n)))
+#define sk_CMS_RecipientEncryptedKey_new(cmp) ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_CMS_RecipientEncryptedKey_compfunc_type(cmp)), sk_CMS_RecipientEncryptedKey_cmpfunc_thunk))
+#define sk_CMS_RecipientEncryptedKey_new_null() ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_CMS_RecipientEncryptedKey_freefunc_thunk))
+#define sk_CMS_RecipientEncryptedKey_new_reserve(cmp, n) ((STACK_OF(CMS_RecipientEncryptedKey) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_CMS_RecipientEncryptedKey_compfunc_type(cmp), (n)), sk_CMS_RecipientEncryptedKey_cmpfunc_thunk))
 #define sk_CMS_RecipientEncryptedKey_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_CMS_RecipientEncryptedKey_sk_type(sk), (n))
 #define sk_CMS_RecipientEncryptedKey_free(sk) OPENSSL_sk_free(ossl_check_CMS_RecipientEncryptedKey_sk_type(sk))
 #define sk_CMS_RecipientEncryptedKey_zero(sk) OPENSSL_sk_zero(ossl_check_CMS_RecipientEncryptedKey_sk_type(sk))
@@ -113,9 +113,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(CMS_RecipientEncryptedKey, CMS_RecipientEncryptedKe
 SKM_DEFINE_STACK_OF_INTERNAL(CMS_RecipientInfo, CMS_RecipientInfo, CMS_RecipientInfo)
 #define sk_CMS_RecipientInfo_num(sk) OPENSSL_sk_num(ossl_check_const_CMS_RecipientInfo_sk_type(sk))
 #define sk_CMS_RecipientInfo_value(sk, idx) ((CMS_RecipientInfo *)OPENSSL_sk_value(ossl_check_const_CMS_RecipientInfo_sk_type(sk), (idx)))
-#define sk_CMS_RecipientInfo_new(cmp) ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_new(ossl_check_CMS_RecipientInfo_compfunc_type(cmp)))
-#define sk_CMS_RecipientInfo_new_null() ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_new_null())
-#define sk_CMS_RecipientInfo_new_reserve(cmp, n) ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_new_reserve(ossl_check_CMS_RecipientInfo_compfunc_type(cmp), (n)))
+#define sk_CMS_RecipientInfo_new(cmp) ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_CMS_RecipientInfo_compfunc_type(cmp)), sk_CMS_RecipientInfo_cmpfunc_thunk))
+#define sk_CMS_RecipientInfo_new_null() ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_CMS_RecipientInfo_freefunc_thunk))
+#define sk_CMS_RecipientInfo_new_reserve(cmp, n) ((STACK_OF(CMS_RecipientInfo) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_CMS_RecipientInfo_compfunc_type(cmp), (n)), sk_CMS_RecipientInfo_cmpfunc_thunk))
 #define sk_CMS_RecipientInfo_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_CMS_RecipientInfo_sk_type(sk), (n))
 #define sk_CMS_RecipientInfo_free(sk) OPENSSL_sk_free(ossl_check_CMS_RecipientInfo_sk_type(sk))
 #define sk_CMS_RecipientInfo_zero(sk) OPENSSL_sk_zero(ossl_check_CMS_RecipientInfo_sk_type(sk))
@@ -139,9 +139,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(CMS_RecipientInfo, CMS_RecipientInfo, CMS_Recipient
 SKM_DEFINE_STACK_OF_INTERNAL(CMS_RevocationInfoChoice, CMS_RevocationInfoChoice, CMS_RevocationInfoChoice)
 #define sk_CMS_RevocationInfoChoice_num(sk) OPENSSL_sk_num(ossl_check_const_CMS_RevocationInfoChoice_sk_type(sk))
 #define sk_CMS_RevocationInfoChoice_value(sk, idx) ((CMS_RevocationInfoChoice *)OPENSSL_sk_value(ossl_check_const_CMS_RevocationInfoChoice_sk_type(sk), (idx)))
-#define sk_CMS_RevocationInfoChoice_new(cmp) ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_new(ossl_check_CMS_RevocationInfoChoice_compfunc_type(cmp)))
-#define sk_CMS_RevocationInfoChoice_new_null() ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_new_null())
-#define sk_CMS_RevocationInfoChoice_new_reserve(cmp, n) ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_new_reserve(ossl_check_CMS_RevocationInfoChoice_compfunc_type(cmp), (n)))
+#define sk_CMS_RevocationInfoChoice_new(cmp) ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_CMS_RevocationInfoChoice_compfunc_type(cmp)), sk_CMS_RevocationInfoChoice_cmpfunc_thunk))
+#define sk_CMS_RevocationInfoChoice_new_null() ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_CMS_RevocationInfoChoice_freefunc_thunk))
+#define sk_CMS_RevocationInfoChoice_new_reserve(cmp, n) ((STACK_OF(CMS_RevocationInfoChoice) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_CMS_RevocationInfoChoice_compfunc_type(cmp), (n)), sk_CMS_RevocationInfoChoice_cmpfunc_thunk))
 #define sk_CMS_RevocationInfoChoice_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_CMS_RevocationInfoChoice_sk_type(sk), (n))
 #define sk_CMS_RevocationInfoChoice_free(sk) OPENSSL_sk_free(ossl_check_CMS_RevocationInfoChoice_sk_type(sk))
 #define sk_CMS_RevocationInfoChoice_zero(sk) OPENSSL_sk_zero(ossl_check_CMS_RevocationInfoChoice_sk_type(sk))
@@ -219,6 +219,7 @@ const ASN1_OBJECT *CMS_get0_type(const CMS_ContentInfo *cms);
 
 BIO *CMS_dataInit(CMS_ContentInfo *cms, BIO *icont);
 int CMS_dataFinal(CMS_ContentInfo *cms, BIO *bio);
+int CMS_dataFinal_ex(CMS_ContentInfo *cms, BIO *bio, BIO *data);
 
 ASN1_OCTET_STRING **CMS_get0_content(CMS_ContentInfo *cms);
 int CMS_is_detached(CMS_ContentInfo *cms);
@@ -246,16 +247,13 @@ int CMS_final_digest(CMS_ContentInfo *cms,
     unsigned int flags);
 
 CMS_ContentInfo *CMS_sign(X509 *signcert, EVP_PKEY *pkey,
-    STACK_OF(X509) *certs, BIO *data,
-    unsigned int flags);
+    const STACK_OF(X509) *certs, BIO *data, unsigned int flags);
 CMS_ContentInfo *CMS_sign_ex(X509 *signcert, EVP_PKEY *pkey,
-    STACK_OF(X509) *certs, BIO *data,
-    unsigned int flags, OSSL_LIB_CTX *libctx,
-    const char *propq);
+    const STACK_OF(X509) *certs, BIO *data,
+    unsigned int flags, OSSL_LIB_CTX *libctx, const char *propq);
 
-CMS_ContentInfo *CMS_sign_receipt(CMS_SignerInfo *si,
-    X509 *signcert, EVP_PKEY *pkey,
-    STACK_OF(X509) *certs, unsigned int flags);
+CMS_ContentInfo *CMS_sign_receipt(CMS_SignerInfo *si, X509 *signcert,
+    EVP_PKEY *pkey, const STACK_OF(X509) *certs, unsigned int flags);
 
 int CMS_data(CMS_ContentInfo *cms, BIO *out, unsigned int flags);
 CMS_ContentInfo *CMS_data_create(BIO *in, unsigned int flags);
@@ -285,18 +283,17 @@ CMS_ContentInfo *CMS_EncryptedData_encrypt_ex(BIO *in, const EVP_CIPHER *cipher,
 int CMS_EncryptedData_set1_key(CMS_ContentInfo *cms, const EVP_CIPHER *ciph,
     const unsigned char *key, size_t keylen);
 
-int CMS_verify(CMS_ContentInfo *cms, STACK_OF(X509) *certs,
+int CMS_verify(CMS_ContentInfo *cms, const STACK_OF(X509) *certs,
     X509_STORE *store, BIO *dcont, BIO *out, unsigned int flags);
 
 int CMS_verify_receipt(CMS_ContentInfo *rcms, CMS_ContentInfo *ocms,
-    STACK_OF(X509) *certs,
-    X509_STORE *store, unsigned int flags);
+    const STACK_OF(X509) *certs, X509_STORE *store, unsigned int flags);
 
 STACK_OF(X509) *CMS_get0_signers(CMS_ContentInfo *cms);
 
-CMS_ContentInfo *CMS_encrypt(STACK_OF(X509) *certs, BIO *in,
+CMS_ContentInfo *CMS_encrypt(const STACK_OF(X509) *certs, BIO *in,
     const EVP_CIPHER *cipher, unsigned int flags);
-CMS_ContentInfo *CMS_encrypt_ex(STACK_OF(X509) *certs, BIO *in,
+CMS_ContentInfo *CMS_encrypt_ex(const STACK_OF(X509) *certs, BIO *in,
     const EVP_CIPHER *cipher, unsigned int flags,
     OSSL_LIB_CTX *libctx, const char *propq);
 
@@ -406,7 +403,7 @@ int CMS_SignerInfo_get0_signer_id(CMS_SignerInfo *si,
     ASN1_OCTET_STRING **keyid,
     X509_NAME **issuer, ASN1_INTEGER **sno);
 int CMS_SignerInfo_cert_cmp(CMS_SignerInfo *si, X509 *cert);
-int CMS_set1_signers_certs(CMS_ContentInfo *cms, STACK_OF(X509) *certs,
+int CMS_set1_signers_certs(CMS_ContentInfo *cms, const STACK_OF(X509) *certs,
     unsigned int flags);
 void CMS_SignerInfo_get0_algs(CMS_SignerInfo *si, EVP_PKEY **pk,
     X509 **signer, X509_ALGOR **pdig,
@@ -415,9 +412,10 @@ ASN1_OCTET_STRING *CMS_SignerInfo_get0_signature(CMS_SignerInfo *si);
 int CMS_SignerInfo_sign(CMS_SignerInfo *si);
 int CMS_SignerInfo_verify(CMS_SignerInfo *si);
 int CMS_SignerInfo_verify_content(CMS_SignerInfo *si, BIO *chain);
+int CMS_SignerInfo_verify_ex(CMS_SignerInfo *si, BIO *chain, BIO *data);
 BIO *CMS_SignedData_verify(CMS_SignedData *sd, BIO *detached_data,
-    STACK_OF(X509) *scerts, X509_STORE *store,
-    STACK_OF(X509) *extra, STACK_OF(X509_CRL) *crls,
+    const STACK_OF(X509) *scerts, X509_STORE *store,
+    const STACK_OF(X509) *extra, const STACK_OF(X509_CRL) *crls,
     unsigned int flags,
     OSSL_LIB_CTX *libctx, const char *propq);
 
@@ -443,7 +441,7 @@ int CMS_signed_add1_attr_by_NID(CMS_SignerInfo *si,
 int CMS_signed_add1_attr_by_txt(CMS_SignerInfo *si,
     const char *attrname, int type,
     const void *bytes, int len);
-void *CMS_signed_get0_data_by_OBJ(const CMS_SignerInfo *si,
+const void *CMS_signed_get0_data_by_OBJ(const CMS_SignerInfo *si,
     const ASN1_OBJECT *oid,
     int lastpos, int type);
 
@@ -464,7 +462,7 @@ int CMS_unsigned_add1_attr_by_NID(CMS_SignerInfo *si,
 int CMS_unsigned_add1_attr_by_txt(CMS_SignerInfo *si,
     const char *attrname, int type,
     const void *bytes, int len);
-void *CMS_unsigned_get0_data_by_OBJ(CMS_SignerInfo *si, ASN1_OBJECT *oid,
+const void *CMS_unsigned_get0_data_by_OBJ(CMS_SignerInfo *si, ASN1_OBJECT *oid,
     int lastpos, int type);
 
 int CMS_get1_ReceiptRequest(CMS_SignerInfo *si, CMS_ReceiptRequest **prr);

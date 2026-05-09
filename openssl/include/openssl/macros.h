@@ -68,10 +68,12 @@
 #define OSSL_DEPRECATED_FOR(since, message) __attribute__((deprecated))
 #define OSSL_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
 #endif
+#ifdef OSSL_DEPRECATED
 #define OSSL_BEGIN_ALLOW_DEPRECATED \
     _Pragma("GCC diagnostic push")  \
         _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
 #define OSSL_END_ALLOW_DEPRECATED _Pragma("GCC diagnostic pop")
+#endif
 #elif defined(__SUNPRO_C)
 #if (__SUNPRO_C >= 0x5130)
 #define OSSL_DEPRECATED(since) __attribute__((deprecated))
@@ -380,7 +382,9 @@
 #endif
 
 #ifndef OSSL_CRYPTO_ALLOC
-#if defined(__GNUC__) && __GNUC__ > 2
+#if defined(OPENSSL_SYS_AMIGA)
+#define OSSL_CRYPTO_ALLOC
+#elif defined(__GNUC__) && __GNUC__ > 2
 #define OSSL_CRYPTO_ALLOC __attribute__((__malloc__))
 #elif defined(_MSC_VER)
 #define OSSL_CRYPTO_ALLOC __declspec(restrict)

@@ -321,3 +321,11 @@ size_t OSSL_HPKE_get_recommended_ikmelen_amiga(OSSL_HPKE_SUITE *suite)
   OSSL_HPKE_SUITE __suite = *suite;
   return OSSL_HPKE_get_recommended_ikmelen(__suite);
 }
+
+int OSSL_ECHSTORE_new_config_amiga(OSSL_ECHSTORE *es,
+    uint16_t echversion, uint8_t max_name_length,
+    const char *public_name, OSSL_HPKE_SUITE *suite)
+{
+  OSSL_HPKE_SUITE __suite = *suite;
+  return OSSL_ECHSTORE_new_config(es, echversion, max_name_length, public_name, __suite);
+}

@@ -117,6 +117,7 @@ static void FlushLib(struct Library *LibBase)
 #define AMISSL_LIBNAME_V2 "LIBS:AmiSSL/%s_v2.library"
 #define AMISSL_LIBNAME_V3 "LIBS:AmiSSL/amissl_v%s.library"
 #define AMISSL_LIBNAME_V5 "LIBS:AmiSSL/amissl_v%ld.library"
+#define AMISSL_LIBNAME_V6 "LIBS:AmiSSL/amissl_v%ldx.library"
 
 /* Used to open AmiSSL V2 libraries only */
 
@@ -148,7 +149,12 @@ static struct Library *OpenAmiSSLBase(int MaxAPI, ...)
     LONG libversion;
     const char *libfmt;
 
-    if(LibAPIVersion >= AMISSL_V300)
+    if(LibAPIVersion >= AMISSL_V40x)
+    {
+      libfmt = AMISSL_LIBNAME_V6;
+      libversion = 6;
+    }
+    else if(LibAPIVersion >= AMISSL_V300)
     {
       libfmt = AMISSL_LIBNAME_V5;
       libversion = 5;
@@ -274,6 +280,10 @@ LIBPROTO(InitAmiSSLMaster, LONG, REG(a6, UNUSED __BASE_OR_IFACE), REG(d0, LONG A
   if (!OpenAmiSSLBase(AMISSL_V ## maxversion, maxversion, __VA_ARGS__, NULL))
 #define OPENASSL3SI(maxversion) \
   if (!OpenAmiSSLBase(AMISSL_V ## maxversion, maxversion, NULL))
+#define OPENASSL4VA(maxversion, ...) \
+  if (!OpenAmiSSLBase(AMISSL_V ## maxversion ## x, maxversion, __VA_ARGS__, NULL))
+#define OPENASSL4SI(maxversion) \
+  if (!OpenAmiSSLBase(AMISSL_V ## maxversion ## x, maxversion, NULL))
 #define END_OPENASSL {}
 
 LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
@@ -286,7 +296,19 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   LOCK_OBTAIN(AmiSSLMasterLock);
 
-  if(LibAPIVersion >= AMISSL_V302)
+  if(LibAPIVersion >= AMISSL_V40x)
+  {
+    D(DBF_STARTUP, "About to open amissl v4xx library");
+
+    // if an application requests AmiSSL/OpenSSL versions 4.x.x we try to open any
+    // known 4.x.x amissl library as OpenSSL defines binary/api compatibility when
+    // only minor or patch numbers are changed
+    // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
+    // take care to prevent applications requiring newer API functions from loading
+    // older libraries that do not contain those required entries
+    OPENASSL4SI( 40 ) END_OPENASSL
+  }
+  else if(LibAPIVersion >= AMISSL_V302)
   {
     D(DBF_STARTUP, "About to open amissl v3xx library");
 

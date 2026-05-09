@@ -104,7 +104,7 @@ extern "C" {
 #endif
 
 /* Ignore stubs unused arguments */
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(OPENSSL_SYS_AMIGA)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-value"
 #elif defined(__clang__)
@@ -1201,7 +1201,7 @@ ENGINE_FUNC(int, SSL_CTX_set_client_cert_engine, (SSL_CTX *ctx, ENGINE *e), 0)
 #undef ENGINE_FUNC_NOARGS
 #undef ENGINE_VOID_FUNC_NOARGS
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(OPENSSL_SYS_AMIGA)
 #pragma GCC diagnostic pop
 #elif defined(__clang__)
 #pragma clang diagnostic pop

@@ -50,7 +50,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_STRING_length
 	    FPTR IAmiSSL_ASN1_STRING_length_set
 	    FPTR IAmiSSL_ASN1_STRING_type
-	    FPTR IAmiSSL_ASN1_STRING_data
+	    FPTR AmiSSLIFace_ASN1_STRING_data_UNIMPLEMENTED
 	    FPTR IAmiSSL_ASN1_BIT_STRING_new
 	    FPTR IAmiSSL_ASN1_BIT_STRING_free
 	    FPTR IAmiSSL_d2i_ASN1_BIT_STRING
@@ -698,7 +698,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OBSOLETE_ERR_load_crypto_strings
 	    FPTR AmiSSLIFace_err_free_strings_int_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_remove_state_UNIMPLEMENTED
-	    FPTR IAmiSSL_ERR_get_state
+	    FPTR AmiSSLIFace_ERR_get_state_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_get_string_table_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_get_err_state_table_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ERR_release_err_state_table_UNIMPLEMENTED
@@ -758,7 +758,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_BIO_f_md
 	    FPTR IAmiSSL_BIO_f_base64
 	    FPTR IAmiSSL_BIO_f_cipher
-	    FPTR IAmiSSL_BIO_f_reliable
+	    FPTR AmiSSLIFace_BIO_f_reliable_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_set_cipher
 	    FPTR IAmiSSL_EVP_md_null
 	    FPTR IAmiSSL_EVP_md2
@@ -1506,9 +1506,9 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_SSLv23_method_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_SSLv23_server_method_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_SSLv23_client_method_UNIMPLEMENTED
-	    FPTR IAmiSSL_TLSv1_method
-	    FPTR IAmiSSL_TLSv1_server_method
-	    FPTR IAmiSSL_TLSv1_client_method
+	    FPTR AmiSSLIFace_TLSv1_method_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_TLSv1_server_method_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_TLSv1_client_method_UNIMPLEMENTED
 	    FPTR IAmiSSL_SSL_get_ciphers
 	    FPTR IAmiSSL_SSL_do_handshake
 	    FPTR IAmiSSL_SSL_renegotiate
@@ -2594,21 +2594,21 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EC_KEY_get0_public_key
 	    FPTR IAmiSSL_ECDH_compute_key
 	    FPTR IAmiSSL_EC_KEY_get0_private_key
-	    FPTR IAmiSSL_ENGINE_get_first
-	    FPTR IAmiSSL_ENGINE_get_id
-	    FPTR IAmiSSL_ENGINE_get_name
-	    FPTR IAmiSSL_ENGINE_get_next
-	    FPTR IAmiSSL_ENGINE_free
-	    FPTR IAmiSSL_ENGINE_new
-	    FPTR IAmiSSL_ENGINE_set_id
-	    FPTR IAmiSSL_ENGINE_set_name
-	    FPTR IAmiSSL_ENGINE_add
-	    FPTR IAmiSSL_ENGINE_remove
-	    FPTR IAmiSSL_ENGINE_load_builtin_engines
-	    FPTR IAmiSSL_ENGINE_register_all_ciphers
+	    FPTR AmiSSLIFace_ENGINE_get_first_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_id_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_name_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_next_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_free_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_new_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_id_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_name_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_add_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_remove_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_load_builtin_engines_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_ciphers_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_CIPHER_get_nid
 	    FPTR IAmiSSL_EVP_MD_get_type
-	    FPTR IAmiSSL_ENGINE_register_all_digests
+	    FPTR AmiSSLIFace_ENGINE_register_all_digests_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_test_flags
 	    FPTR IAmiSSL_SSL_COMP_get_compression_methods
 	    FPTR IAmiSSL_RSA_generate_key_ex
@@ -2656,21 +2656,21 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_SSL_get_current_compression
 	    FPTR IAmiSSL_SSL_get_current_expansion
 	    FPTR IAmiSSL_SSL_COMP_get_name
-	    FPTR IAmiSSL_ENGINE_by_id
-	    FPTR IAmiSSL_SSL_CTX_set_client_cert_engine
+	    FPTR AmiSSLIFace_ENGINE_by_id_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_SSL_CTX_set_client_cert_engine_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DTLSv1_client_method_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DTLSv1_method_UNIMPLEMENTED
 	    FPTR IAmiSSL_SHA256
 	    FPTR IAmiSSL_SHA512
 	    FPTR IAmiSSL_AES_ige_encrypt
 	    FPTR IAmiSSL_EC_KEY_precompute_mult
-	    FPTR IAmiSSL_ENGINE_load_private_key
-	    FPTR IAmiSSL_ENGINE_load_public_key
-	    FPTR IAmiSSL_ENGINE_ctrl_cmd
-	    FPTR IAmiSSL_ENGINE_set_default
-	    FPTR IAmiSSL_ENGINE_ctrl
-	    FPTR IAmiSSL_ENGINE_register_all_complete
-	    FPTR IAmiSSL_ENGINE_ctrl_cmd_string
+	    FPTR AmiSSLIFace_ENGINE_load_private_key_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_load_public_key_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_ctrl_cmd_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_complete_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_ctrl_cmd_string_UNIMPLEMENTED
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_add0_policy
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_purpose
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_flags
@@ -2682,14 +2682,14 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_policy_tree_get0_user_policies
 	    FPTR IAmiSSL_BIO_get_callback_arg
 	    FPTR IAmiSSL_EVP_PKEY_add1_attr_by_NID
-	    FPTR IAmiSSL_ENGINE_get_RSA
-	    FPTR IAmiSSL_ENGINE_get_DSA
-	    FPTR IAmiSSL_ENGINE_get_DH
-	    FPTR IAmiSSL_ENGINE_get_RAND
-	    FPTR IAmiSSL_ENGINE_get_ciphers
-	    FPTR IAmiSSL_ENGINE_get_digests
-	    FPTR IAmiSSL_ENGINE_init
-	    FPTR IAmiSSL_ENGINE_finish
+	    FPTR AmiSSLIFace_ENGINE_get_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_ciphers_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_digests_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_finish_UNIMPLEMENTED
 	    FPTR IAmiSSL_OCSP_sendreq_new
 	    FPTR IAmiSSL_OBSOLETE_OCSP_sendreq_nbio
 	    FPTR IAmiSSL_OSSL_HTTP_REQ_CTX_free
@@ -2807,86 +2807,86 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_ASN1_STRING_print_ex_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_i2d_PUBKEY_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_d2i_PUBKEY_fp_UNIMPLEMENTED
-	    FPTR IAmiSSL_ERR_load_ENGINE_strings
-	    FPTR IAmiSSL_ENGINE_set_DSA
-	    FPTR IAmiSSL_ENGINE_get_finish_function
-	    FPTR IAmiSSL_ENGINE_get_default_RSA
-	    FPTR IAmiSSL_ENGINE_set_DH
-	    FPTR IAmiSSL_ENGINE_get_init_function
-	    FPTR IAmiSSL_ENGINE_set_init_function
-	    FPTR IAmiSSL_ENGINE_set_default_DSA
-	    FPTR IAmiSSL_ENGINE_get_last
-	    FPTR IAmiSSL_ENGINE_get_prev
-	    FPTR IAmiSSL_ENGINE_get_default_DH
-	    FPTR IAmiSSL_ENGINE_set_finish_function
-	    FPTR IAmiSSL_ENGINE_set_RSA
-	    FPTR IAmiSSL_ENGINE_set_default_RAND
-	    FPTR IAmiSSL_ENGINE_get_default_DSA
-	    FPTR IAmiSSL_ENGINE_set_default_RSA
-	    FPTR IAmiSSL_ENGINE_get_default_RAND
-	    FPTR IAmiSSL_ENGINE_set_RAND
-	    FPTR IAmiSSL_ENGINE_set_default_DH
-	    FPTR IAmiSSL_ENGINE_get_ctrl_function
-	    FPTR IAmiSSL_ENGINE_set_ctrl_function
-	    FPTR IAmiSSL_ENGINE_unregister_ciphers
-	    FPTR IAmiSSL_ENGINE_unregister_RSA
-	    FPTR IAmiSSL_ENGINE_register_all_RAND
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_dynamic
-	    FPTR IAmiSSL_ENGINE_get_digest_engine
-	    FPTR IAmiSSL_ENGINE_register_DH
-	    FPTR IAmiSSL_ENGINE_register_RAND
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_cryptodev
-	    FPTR IAmiSSL_ENGINE_register_ciphers
+	    FPTR AmiSSLIFace_ERR_load_ENGINE_strings_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_finish_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_default_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_init_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_init_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_last_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_prev_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_default_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_finish_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_default_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_default_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_ctrl_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_ctrl_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_ciphers_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_dynamic_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_digest_engine_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_RAND_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_cryptodev_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_ciphers_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_ubsec_UNIMPLEMENTED
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_openssl
-	    FPTR IAmiSSL_ENGINE_get_cmd_defns
-	    FPTR IAmiSSL_ENGINE_set_load_privkey_function
-	    FPTR IAmiSSL_ENGINE_set_default_digests
-	    FPTR IAmiSSL_ENGINE_register_RSA
-	    FPTR IAmiSSL_ENGINE_unregister_DSA
-	    FPTR IAmiSSL_ENGINE_set_ciphers
-	    FPTR IAmiSSL_RAND_set_rand_engine
-	    FPTR IAmiSSL_ENGINE_get_digest
-	    FPTR IAmiSSL_ENGINE_get_cipher
-	    FPTR IAmiSSL_ENGINE_cmd_is_executable
-	    FPTR IAmiSSL_ENGINE_register_DSA
-	    FPTR IAmiSSL_ENGINE_set_load_pubkey_function
-	    FPTR IAmiSSL_ENGINE_get_load_pubkey_function
-	    FPTR IAmiSSL_ENGINE_register_all_RSA
-	    FPTR IAmiSSL_ENGINE_unregister_digests
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_get_ex_new_index
-	    FPTR IAmiSSL_ENGINE_get_ex_data
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_openssl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_cmd_defns_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_load_privkey_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_digests_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_ciphers_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_RAND_set_rand_engine_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_digest_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_cipher_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_cmd_is_executable_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_load_pubkey_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_load_pubkey_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_RSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_digests_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_get_ex_new_index_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_ex_data_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ASN1_item_d2i_fp_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_set_cmd_defns
-	    FPTR IAmiSSL_ENGINE_register_digests
-	    FPTR IAmiSSL_ENGINE_register_all_DH
-	    FPTR IAmiSSL_ENGINE_get_flags
-	    FPTR IAmiSSL_ENGINE_unregister_DH
-	    FPTR IAmiSSL_ENGINE_register_all_DSA
-	    FPTR IAmiSSL_ENGINE_set_digests
-	    FPTR IAmiSSL_ENGINE_register_complete
-	    FPTR IAmiSSL_ENGINE_set_ex_data
-	    FPTR IAmiSSL_ENGINE_set_destroy_function
-	    FPTR IAmiSSL_ENGINE_get_cipher_engine
+	    FPTR AmiSSLIFace_ENGINE_set_cmd_defns_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_digests_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_DH_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_DSA_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_digests_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_complete_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_ex_data_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_destroy_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_cipher_engine_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_X509_print_ex_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_cswift_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_set_default_ciphers
-	    FPTR IAmiSSL_ENGINE_unregister_RAND
+	    FPTR AmiSSLIFace_ENGINE_set_default_ciphers_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_RAND_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_nuron_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_set_table_flags
+	    FPTR AmiSSLIFace_ENGINE_set_table_flags_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_chil_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_get_destroy_function
+	    FPTR AmiSSLIFace_ENGINE_get_destroy_function_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ASN1_item_i2d_fp_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_atalla_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_get_table_flags
-	    FPTR IAmiSSL_ENGINE_set_flags
-	    FPTR IAmiSSL_ENGINE_get_load_privkey_function
-	    FPTR IAmiSSL_ENGINE_set_default_string
-	    FPTR IAmiSSL_ENGINE_add_conf_module
+	    FPTR AmiSSLIFace_ENGINE_get_table_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_load_privkey_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_string_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_add_conf_module_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_aep_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_sureware_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_4758cca_UNIMPLEMENTED
-	    FPTR IAmiSSL_ENGINE_up_ref
+	    FPTR AmiSSLIFace_ENGINE_up_ref_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_set_STORE_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_register_ECDSA_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_BN_BLINDING_get_thread_id_UNIMPLEMENTED
@@ -2907,7 +2907,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_get1_EC_KEY
 	    FPTR AmiSSLIFace_ENGINE_get_default_ECDH_UNIMPLEMENTED
 	    FPTR IAmiSSL_EC_KEY_get_conv_form
-	    FPTR IAmiSSL_ENGINE_get_static_state
+	    FPTR AmiSSLIFace_ENGINE_get_static_state_UNIMPLEMENTED
 	    FPTR IAmiSSL_ECDSA_SIG_new
 	    FPTR IAmiSSL_EC_POINT_bn2point
 	    FPTR AmiSSLIFace_EC_KEY_get_key_method_data_UNIMPLEMENTED
@@ -2939,7 +2939,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_i2d_EC_PUBKEY
 	    FPTR AmiSSLIFace_ECDSA_get_default_method_UNIMPLEMENTED
 	    FPTR IAmiSSL_EC_GFp_nist_method
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_padlock
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_padlock_UNIMPLEMENTED
 	    FPTR IAmiSSL_EC_GROUP_set_curve_name
 	    FPTR IAmiSSL_BN_GF2m_mod_sqr_arr
 	    FPTR IAmiSSL_BIO_s_datagram
@@ -3154,41 +3154,41 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_CMS_ReceiptRequest_create0
 	    FPTR IAmiSSL_CMS_add1_signer
 	    FPTR IAmiSSL_CMS_RecipientInfo_set0_pkey
-	    FPTR IAmiSSL_ENGINE_set_load_ssl_client_cert_function
-	    FPTR IAmiSSL_ENGINE_get_ssl_client_cert_function
-	    FPTR IAmiSSL_ENGINE_load_ssl_client_cert
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_capi
-	    FPTR IAmiSSL_ENGINE_register_pkey_meths
-	    FPTR IAmiSSL_ENGINE_get_pkey_asn1_meth_engine
+	    FPTR AmiSSLIFace_ENGINE_set_load_ssl_client_cert_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_ssl_client_cert_function_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_load_ssl_client_cert_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_capi_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_pkey_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_asn1_meth_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_WHIRLPOOL_Init
 	    FPTR IAmiSSL_WHIRLPOOL
-	    FPTR IAmiSSL_ENGINE_get_pkey_asn1_meth
-	    FPTR IAmiSSL_ENGINE_get_pkey_meth
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_asn1_meth_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_meth_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_new_CMS
-	    FPTR IAmiSSL_ENGINE_set_default_pkey_asn1_meths
+	    FPTR AmiSSLIFace_ENGINE_set_default_pkey_asn1_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_WHIRLPOOL_BitUpdate
 	    FPTR IAmiSSL_i2d_CMS_bio_stream
 	    FPTR IAmiSSL_CMS_stream
-	    FPTR IAmiSSL_ENGINE_pkey_asn1_find_str
-	    FPTR IAmiSSL_ENGINE_get_pkey_meths
-	    FPTR IAmiSSL_ENGINE_register_pkey_asn1_meths
-	    FPTR IAmiSSL_ENGINE_set_default_pkey_meths
+	    FPTR AmiSSLIFace_ENGINE_pkey_asn1_find_str_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_pkey_asn1_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_pkey_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_HMAC_CTX_copy
-	    FPTR IAmiSSL_ENGINE_get_pkey_asn1_meths
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_asn1_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_whirlpool
-	    FPTR IAmiSSL_ENGINE_register_all_pkey_meths
+	    FPTR AmiSSLIFace_ENGINE_register_all_pkey_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_WHIRLPOOL_Final
-	    FPTR IAmiSSL_ENGINE_get_pkey_asn1_meth_str
-	    FPTR IAmiSSL_ENGINE_register_all_pkey_asn1_meths
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_asn1_meth_str_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_pkey_asn1_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_CMS_ContentInfo_print_ctx
 	    FPTR IAmiSSL_CMS_add1_crl
-	    FPTR IAmiSSL_ENGINE_set_pkey_asn1_meths
-	    FPTR IAmiSSL_ENGINE_get_pkey_meth_engine
+	    FPTR AmiSSLIFace_ENGINE_set_pkey_asn1_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_pkey_meth_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_WHIRLPOOL_Update
 	    FPTR IAmiSSL_PEM_write_bio_CMS_stream
-	    FPTR IAmiSSL_ENGINE_unregister_pkey_meths
-	    FPTR IAmiSSL_ENGINE_unregister_pkey_asn1_meths
-	    FPTR IAmiSSL_ENGINE_set_pkey_meths
+	    FPTR AmiSSLIFace_ENGINE_unregister_pkey_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_pkey_asn1_meths_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_pkey_meths_UNIMPLEMENTED
 	    FPTR IAmiSSL_DSAparams_dup
 	    FPTR IAmiSSL_DHparams_dup
 	    FPTR IAmiSSL_X509_issuer_name_hash_old
@@ -3228,7 +3228,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_aes_192_ccm
 	    FPTR IAmiSSL_EVP_rc4_hmac_md5
 	    FPTR IAmiSSL_EVP_aes_128_cbc_hmac_sha1
-	    FPTR IAmiSSL_OBSOLETE_ENGINE_load_rdrand
+	    FPTR AmiSSLIFace_OBSOLETE_ENGINE_load_rdrand_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_ENGINE_load_rsax_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_aes_256_cbc_hmac_sha1
 	    FPTR IAmiSSL_CMS_add0_recipient_password
@@ -3467,7 +3467,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_print_public
 	    FPTR IAmiSSL_EVP_PKEY_CTX_new
 	    FPTR IAmiSSL_i2d_TS_TST_INFO
-	    FPTR IAmiSSL_EVP_PKEY_asn1_find
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_find_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_DSO_METHOD_beos_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_CONF_load_cert
 	    FPTR IAmiSSL_TS_REQ_get_ext
@@ -3475,12 +3475,12 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_item_print
 	    FPTR IAmiSSL_TS_TST_INFO_set_nonce
 	    FPTR IAmiSSL_TS_RESP_dup
-	    FPTR IAmiSSL_EVP_PKEY_asn1_add0
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_add0_UNIMPLEMENTED
 	    FPTR IAmiSSL_PKCS7_add0_attrib_signing_time
 	    FPTR AmiSSLIFace_i2d_TS_TST_INFO_fp_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_asn1_get_prefix
 	    FPTR IAmiSSL_TS_TST_INFO_set_time
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_decrypt
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_decrypt_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_set_type_str
 	    FPTR IAmiSSL_EVP_PKEY_CTX_get_keygen_info
 	    FPTR IAmiSSL_TS_REQ_set_policy_id
@@ -3492,7 +3492,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_REQ_dup
 	    FPTR IAmiSSL_GENERAL_NAME_dup
 	    FPTR IAmiSSL_X509_STORE_CTX_get1_crls
-	    FPTR IAmiSSL_EVP_PKEY_asn1_new
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_new_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_new_NDEF
 	    FPTR IAmiSSL_TS_MSG_IMPRINT_set_algo
 	    FPTR IAmiSSL_i2d_TS_TST_INFO_bio
@@ -3510,14 +3510,14 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_CONF_load_key
 	    FPTR IAmiSSL_i2d_ASN1_SEQUENCE_ANY
 	    FPTR IAmiSSL_d2i_TS_MSG_IMPRINT_bio
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_public
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_public_UNIMPLEMENTED
 	    FPTR IAmiSSL_b2i_PublicKey_bio
 	    FPTR IAmiSSL_BIO_asn1_set_prefix
 	    FPTR IAmiSSL_EVP_PKEY_new_mac_key
 	    FPTR AmiSSLIFace_CRYPTO_THREADID_cmp_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_REQ_ext_free
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_free
-	    FPTR IAmiSSL_EVP_PKEY_get0_asn1
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_free_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_get0_asn1_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_d2i_NETSCAPE_X509_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_verify_recover_init
 	    FPTR IAmiSSL_EVP_PKEY_CTX_set_data
@@ -3555,7 +3555,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_STATUS_INFO_print_bio
 	    FPTR IAmiSSL_EVP_PKEY_derive_init
 	    FPTR IAmiSSL_d2i_TS_TST_INFO
-	    FPTR IAmiSSL_EVP_PKEY_asn1_add_alias
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_add_alias_UNIMPLEMENTED
 	    FPTR IAmiSSL_d2i_TS_RESP_bio
 	    FPTR IAmiSSL_OTHERNAME_cmp
 	    FPTR IAmiSSL_GENERAL_NAME_set0_value
@@ -3569,14 +3569,14 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_CTX_ctrl
 	    FPTR IAmiSSL_TS_CONF_set_digests
 	    FPTR IAmiSSL_d2i_TS_MSG_IMPRINT
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_ctrl
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_ctrl_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_REQ_get_ext_by_NID
 	    FPTR IAmiSSL_PKCS5_pbe_set0_algor
 	    FPTR AmiSSLIFace_BN_BLINDING_thread_id_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_ACCURACY_new
 	    FPTR IAmiSSL_X509_CRL_METHOD_free
 	    FPTR IAmiSSL_ASN1_PCTX_get_nm_flags
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_sign
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_sign_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_CRYPTO_THREADID_current_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_decrypt_init
 	    FPTR AmiSSLIFace_NETSCAPE_X509_free_UNIMPLEMENTED
@@ -3587,28 +3587,28 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_UTCTIME_adj
 	    FPTR IAmiSSL_TS_TST_INFO_new
 	    FPTR IAmiSSL_EVP_MD_do_all_sorted
-	    FPTR IAmiSSL_TS_CONF_set_default_engine
+	    FPTR AmiSSLIFace_TS_CONF_set_default_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_ACCURACY_set_seconds
 	    FPTR IAmiSSL_TS_TST_INFO_get_time
 	    FPTR IAmiSSL_PKCS8_pkey_get0
-	    FPTR IAmiSSL_EVP_PKEY_asn1_get0
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_get0_UNIMPLEMENTED
 	    FPTR IAmiSSL_OBJ_add_sigid
 	    FPTR IAmiSSL_PKCS7_SIGNER_INFO_sign
 	    FPTR IAmiSSL_EVP_PKEY_paramgen_init
 	    FPTR IAmiSSL_EVP_PKEY_sign
 	    FPTR IAmiSSL_OBJ_sigid_free
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_init
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_init_UNIMPLEMENTED
 	    FPTR IAmiSSL_d2i_ESS_ISSUER_SERIAL
 	    FPTR IAmiSSL_ISSUING_DIST_POINT_new
 	    FPTR IAmiSSL_ASN1_TIME_adj
 	    FPTR IAmiSSL_TS_OBJ_print_bio
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_verify_recover
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_verify_recover_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_RESP_get_status_info
 	    FPTR IAmiSSL_EVP_PKEY_CTX_set_cb
 	    FPTR IAmiSSL_PKCS7_to_TS_TST_INFO
 	    FPTR IAmiSSL_ASN1_PCTX_get_oid_flags
 	    FPTR IAmiSSL_TS_TST_INFO_add_ext
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_derive
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_derive_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_i2d_TS_RESP_fp_UNIMPLEMENTED
 	    FPTR IAmiSSL_i2d_TS_MSG_IMPRINT_bio
 	    FPTR IAmiSSL_TS_RESP_CTX_set_accuracy
@@ -3626,7 +3626,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_RESP_verify_token
 	    FPTR IAmiSSL_OBJ_bsearch_ex_
 	    FPTR IAmiSSL_ASN1_bn_print
-	    FPTR IAmiSSL_EVP_PKEY_asn1_get_count
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_get_count_UNIMPLEMENTED
 	    FPTR IAmiSSL_ASN1_PCTX_set_nm_flags
 	    FPTR IAmiSSL_EVP_DigestVerifyInit
 	    FPTR IAmiSSL_TS_TST_INFO_get_policy_id
@@ -3636,7 +3636,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_STRING_copy
 	    FPTR AmiSSLIFace_d2i_TS_TST_INFO_fp_UNIMPLEMENTED
 	    FPTR IAmiSSL_X509_CRL_match
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_private
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_private_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_TST_INFO_get_ext_d2i
 	    FPTR IAmiSSL_TS_RESP_CTX_add_policy
 	    FPTR IAmiSSL_d2i_TS_RESP
@@ -3645,10 +3645,10 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ERR_load_TS_strings
 	    FPTR IAmiSSL_TS_TST_INFO_get_version
 	    FPTR IAmiSSL_EVP_PKEY_CTX_dup
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_verify
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_verify_UNIMPLEMENTED
 	    FPTR IAmiSSL_i2b_PublicKey_bio
 	    FPTR IAmiSSL_TS_CONF_set_certs
-	    FPTR IAmiSSL_EVP_PKEY_asn1_get0_info
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_get0_info_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_VERIFY_CTX_free
 	    FPTR IAmiSSL_TS_REQ_get_ext_by_critical
 	    FPTR IAmiSSL_TS_RESP_CTX_set_serial_cb
@@ -3660,7 +3660,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_REQ_add_ext
 	    FPTR IAmiSSL_EVP_PKEY_CTX_set_app_data
 	    FPTR IAmiSSL_OBJ_bsearch_
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_verifyctx
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_verifyctx_UNIMPLEMENTED
 	    FPTR IAmiSSL_i2d_PKCS7_bio_stream
 	    FPTR AmiSSLIFace_CRYPTO_THREADID_set_numeric_UNIMPLEMENTED
 	    FPTR IAmiSSL_PKCS7_sign_add_signer
@@ -3686,8 +3686,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_MSG_IMPRINT_dup
 	    FPTR IAmiSSL_PKCS7_print_ctx
 	    FPTR IAmiSSL_i2d_TS_REQ_bio
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_param
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_encrypt
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_param_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_encrypt_UNIMPLEMENTED
 	    FPTR IAmiSSL_ASN1_PCTX_set_flags
 	    FPTR IAmiSSL_i2d_ESS_CERT_ID
 	    FPTR IAmiSSL_TS_VERIFY_CTX_new
@@ -3705,7 +3705,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_CONF_set_ess_cert_id_chain
 	    FPTR IAmiSSL_EVP_PKEY_CTX_get0_pkey
 	    FPTR IAmiSSL_d2i_TS_REQ
-	    FPTR IAmiSSL_EVP_PKEY_asn1_find_str
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_find_str_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_f_asn1
 	    FPTR IAmiSSL_ESS_SIGNING_CERT_new
 	    FPTR IAmiSSL_EVP_PBE_find
@@ -3742,8 +3742,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_TST_INFO_get_ext_count
 	    FPTR IAmiSSL_TS_RESP_CTX_get_request
 	    FPTR AmiSSLIFace_i2d_NETSCAPE_X509_UNIMPLEMENTED
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_signctx
-	    FPTR IAmiSSL_EVP_PKEY_asn1_copy
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_signctx_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_copy_UNIMPLEMENTED
 	    FPTR IAmiSSL_ASN1_TYPE_cmp
 	    FPTR IAmiSSL_EVP_CIPHER_do_all_sorted
 	    FPTR IAmiSSL_EVP_PKEY_CTX_free
@@ -3760,9 +3760,9 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_MD_do_all
 	    FPTR IAmiSSL_TS_TST_INFO_set_accuracy
 	    FPTR IAmiSSL_PKCS7_add_attrib_content_type
-	    FPTR IAmiSSL_EVP_PKEY_meth_add0
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_add0_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_TST_INFO_set_tsa
-	    FPTR IAmiSSL_EVP_PKEY_meth_new
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_new_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_CONF_set_accuracy
 	    FPTR IAmiSSL_ASN1_PCTX_set_oid_flags
 	    FPTR IAmiSSL_ESS_SIGNING_CERT_dup
@@ -3773,7 +3773,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_TS_MSG_IMPRINT_set_msg
 	    FPTR IAmiSSL_BIO_asn1_get_suffix
 	    FPTR IAmiSSL_TS_REQ_free
-	    FPTR IAmiSSL_EVP_PKEY_meth_free
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_free_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_REQ_get_exts
 	    FPTR IAmiSSL_TS_RESP_CTX_set_clock_precision_digits
 	    FPTR IAmiSSL_TS_RESP_CTX_add_failure_info
@@ -3781,11 +3781,11 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_CTX_get0_peerkey
 	    FPTR IAmiSSL_TS_REQ_new
 	    FPTR IAmiSSL_TS_MSG_IMPRINT_new
-	    FPTR IAmiSSL_EVP_PKEY_meth_find
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_find_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_get_id
 	    FPTR IAmiSSL_TS_TST_INFO_set_serial
 	    FPTR IAmiSSL_a2i_GENERAL_NAME
-	    FPTR IAmiSSL_TS_CONF_set_crypto_device
+	    FPTR AmiSSLIFace_TS_CONF_set_crypto_device_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_verify_init
 	    FPTR IAmiSSL_TS_CONF_set_policies
 	    FPTR IAmiSSL_ASN1_PCTX_new
@@ -3812,8 +3812,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_PEM_write_bio_ASN1_stream
 	    FPTR IAmiSSL_i2d_ASN1_bio_stream
 	    FPTR IAmiSSL_TS_X509_ALGOR_print_bio
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_cleanup
-	    FPTR IAmiSSL_EVP_PKEY_asn1_free
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_free_UNIMPLEMENTED
 	    FPTR IAmiSSL_ESS_SIGNING_CERT_free
 	    FPTR IAmiSSL_TS_TST_INFO_set_msg_imprint
 	    FPTR IAmiSSL_GENERAL_NAME_cmp
@@ -3823,10 +3823,10 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_GENERAL_NAME_get0_otherName
 	    FPTR IAmiSSL_d2i_ESS_CERT_ID
 	    FPTR IAmiSSL_OBJ_find_sigid_algs
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_keygen
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_keygen_UNIMPLEMENTED
 	    FPTR IAmiSSL_PKCS5_PBKDF2_HMAC
 	    FPTR IAmiSSL_EVP_PKEY_paramgen
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_paramgen
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_paramgen_UNIMPLEMENTED
 	    FPTR IAmiSSL_BIO_new_PKCS7
 	    FPTR IAmiSSL_EVP_PKEY_verify_recover
 	    FPTR IAmiSSL_TS_ext_print_bio
@@ -3836,10 +3836,10 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_set_type
 	    FPTR IAmiSSL_TS_ACCURACY_set_micros
 	    FPTR IAmiSSL_TS_REQ_to_TS_VERIFY_CTX
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_copy
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_copy_UNIMPLEMENTED
 	    FPTR IAmiSSL_ASN1_PCTX_set_cert_flags
 	    FPTR IAmiSSL_TS_TST_INFO_get_ext
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_ctrl
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_ctrl_UNIMPLEMENTED
 	    FPTR IAmiSSL_TS_TST_INFO_get_ext_by_critical
 	    FPTR IAmiSSL_EVP_PKEY_CTX_new_id
 	    FPTR IAmiSSL_TS_REQ_get_ext_by_OBJ
@@ -3873,8 +3873,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OPENSSL_gmtime
 	    FPTR IAmiSSL_OPENSSL_gmtime_adj
 	    FPTR IAmiSSL_OPENSSL_gmtime_diff
-	    FPTR IAmiSSL_EVP_PKEY_meth_get0_info
-	    FPTR IAmiSSL_EVP_PKEY_meth_copy
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get0_info_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_copy_UNIMPLEMENTED
 	    FPTR IAmiSSL_RSA_padding_add_PKCS1_PSS_mgf1
 	    FPTR IAmiSSL_RSA_verify_PKCS1_PSS_mgf1
 	    FPTR IAmiSSL_X509_ALGOR_set_md
@@ -4025,7 +4025,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_check_ip
 	    FPTR IAmiSSL_X509_check_ip_asc
 	    FPTR AmiSSLIFace_X509V3_EXT_free_UNIMPLEMENTED
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_item
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_item_UNIMPLEMENTED
 	    FPTR IAmiSSL_DTLS_client_method
 	    FPTR IAmiSSL_DTLS_method
 	    FPTR IAmiSSL_DTLS_server_method
@@ -4165,7 +4165,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR AmiSSLIFace_CRYPTO_set_mem_debug_UNIMPLEMENTED
 	    FPTR IAmiSSL_CRYPTO_strndup
 	    FPTR IAmiSSL_CRYPTO_zalloc
-	    FPTR IAmiSSL_OPENSSL_atexit
+	    FPTR AmiSSLIFace_OPENSSL_atexit_UNIMPLEMENTED
 	    FPTR IAmiSSL_OPENSSL_cleanup
 	    FPTR IAmiSSL_OPENSSL_init_crypto
 	    FPTR IAmiSSL_OPENSSL_INIT_free
@@ -4210,13 +4210,13 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EC_KEY_set_method
 	    FPTR IAmiSSL_EC_POINT_point2buf
 	    FPTR IAmiSSL_ECDSA_SIG_get0
-	    FPTR IAmiSSL_ENGINE_get_default_EC
-	    FPTR IAmiSSL_ENGINE_get_EC
-	    FPTR IAmiSSL_ENGINE_register_all_EC
-	    FPTR IAmiSSL_ENGINE_register_EC
-	    FPTR IAmiSSL_ENGINE_set_default_EC
-	    FPTR IAmiSSL_ENGINE_set_EC
-	    FPTR IAmiSSL_ENGINE_unregister_EC
+	    FPTR AmiSSLIFace_ENGINE_get_default_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_get_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_all_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_register_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_default_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_set_EC_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_ENGINE_unregister_EC_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_aes_128_ocb
 	    FPTR IAmiSSL_EVP_aes_128_wrap_pad
 	    FPTR IAmiSSL_EVP_aes_192_ocb
@@ -4239,24 +4239,24 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_CIPHER_CTX_reset
 	    FPTR IAmiSSL_EVP_CIPHER_CTX_set_num
 	    FPTR IAmiSSL_EVP_CIPHER_impl_ctx_size
-	    FPTR IAmiSSL_EVP_CIPHER_meth_dup
-	    FPTR IAmiSSL_EVP_CIPHER_meth_free
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_cleanup
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_ctrl
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_do_cipher
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_get_asn1_params
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_init
-	    FPTR IAmiSSL_EVP_CIPHER_meth_get_set_asn1_params
-	    FPTR IAmiSSL_EVP_CIPHER_meth_new
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_cleanup
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_ctrl
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_do_cipher
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_flags
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_get_asn1_params
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_impl_ctx_size
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_init
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_iv_length
-	    FPTR IAmiSSL_EVP_CIPHER_meth_set_set_asn1_params
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_dup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_free_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_do_cipher_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_get_asn1_params_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_get_set_asn1_params_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_new_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_do_cipher_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_get_asn1_params_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_impl_ctx_size_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_iv_length_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_CIPHER_meth_set_set_asn1_params_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_ENCODE_CTX_free
 	    FPTR IAmiSSL_EVP_ENCODE_CTX_new
 	    FPTR IAmiSSL_EVP_ENCODE_CTX_num
@@ -4267,52 +4267,52 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_MD_CTX_new
 	    FPTR IAmiSSL_EVP_MD_CTX_get_pkey_ctx
 	    FPTR IAmiSSL_EVP_MD_CTX_reset
-	    FPTR IAmiSSL_EVP_MD_CTX_set_update_fn
-	    FPTR IAmiSSL_EVP_MD_CTX_update_fn
-	    FPTR IAmiSSL_EVP_MD_meth_dup
-	    FPTR IAmiSSL_EVP_MD_meth_free
-	    FPTR IAmiSSL_EVP_MD_meth_get_app_datasize
-	    FPTR IAmiSSL_EVP_MD_meth_get_cleanup
-	    FPTR IAmiSSL_EVP_MD_meth_get_copy
-	    FPTR IAmiSSL_EVP_MD_meth_get_ctrl
-	    FPTR IAmiSSL_EVP_MD_meth_get_final
-	    FPTR IAmiSSL_EVP_MD_meth_get_flags
-	    FPTR IAmiSSL_EVP_MD_meth_get_init
-	    FPTR IAmiSSL_EVP_MD_meth_get_input_blocksize
-	    FPTR IAmiSSL_EVP_MD_meth_get_result_size
-	    FPTR IAmiSSL_EVP_MD_meth_get_update
-	    FPTR IAmiSSL_EVP_MD_meth_new
-	    FPTR IAmiSSL_EVP_MD_meth_set_app_datasize
-	    FPTR IAmiSSL_EVP_MD_meth_set_cleanup
-	    FPTR IAmiSSL_EVP_MD_meth_set_copy
-	    FPTR IAmiSSL_EVP_MD_meth_set_ctrl
-	    FPTR IAmiSSL_EVP_MD_meth_set_final
-	    FPTR IAmiSSL_EVP_MD_meth_set_flags
-	    FPTR IAmiSSL_EVP_MD_meth_set_init
-	    FPTR IAmiSSL_EVP_MD_meth_set_input_blocksize
-	    FPTR IAmiSSL_EVP_MD_meth_set_result_size
-	    FPTR IAmiSSL_EVP_MD_meth_set_update
+	    FPTR AmiSSLIFace_EVP_MD_CTX_set_update_fn_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_CTX_update_fn_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_dup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_free_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_app_datasize_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_copy_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_final_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_input_blocksize_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_result_size_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_get_update_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_new_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_app_datasize_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_copy_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_final_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_flags_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_input_blocksize_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_result_size_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_MD_meth_set_update_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PBE_get
 	    FPTR IAmiSSL_OBSOLETE_EVP_PBE_scrypt
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_security_bits
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_security_bits_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_get0_DH
 	    FPTR IAmiSSL_EVP_PKEY_get0_DSA
 	    FPTR IAmiSSL_EVP_PKEY_get0_EC_KEY
 	    FPTR IAmiSSL_EVP_PKEY_get0_RSA
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_cleanup
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_copy
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_ctrl
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_decrypt
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_derive
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_encrypt
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_init
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_keygen
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_paramgen
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_sign
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_signctx
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_verify
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_verify_recover
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_verifyctx
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_cleanup_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_copy_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_ctrl_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_decrypt_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_derive_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_encrypt_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_init_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_keygen_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_paramgen_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_sign_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_signctx_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_verify_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_verify_recover_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_verifyctx_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_PKEY_get_security_bits
 	    FPTR IAmiSSL_EVP_PKEY_up_ref
 	    FPTR IAmiSSL_PKCS5_v2_scrypt_keyivgen
@@ -4695,7 +4695,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_DSA_meth_new
 	    FPTR IAmiSSL_DSA_meth_set_flags
 	    FPTR IAmiSSL_DSA_meth_get_sign_setup
-	    FPTR IAmiSSL_DSA_get0_engine
+	    FPTR AmiSSLIFace_DSA_get0_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_auth_level
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_auth_level
 	    FPTR IAmiSSL_X509_REQ_get0_pubkey
@@ -4719,7 +4719,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_RSA_meth_set_pub_dec
 	    FPTR IAmiSSL_RSA_meth_get_finish
 	    FPTR IAmiSSL_RSA_get0_key
-	    FPTR IAmiSSL_RSA_get0_engine
+	    FPTR AmiSSLIFace_RSA_get0_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_RSA_meth_set_priv_enc
 	    FPTR IAmiSSL_RSA_meth_set_verify
 	    FPTR IAmiSSL_RSA_get0_factors
@@ -4743,7 +4743,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_DH_set0_pqg
 	    FPTR IAmiSSL_DH_clear_flags
 	    FPTR IAmiSSL_DH_get0_key
-	    FPTR IAmiSSL_DH_get0_engine
+	    FPTR AmiSSLIFace_DH_get0_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_DH_set0_key
 	    FPTR IAmiSSL_DH_set_length
 	    FPTR IAmiSSL_DH_test_flags
@@ -4921,7 +4921,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_set_inh_flags
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_inh_flags
 	    FPTR IAmiSSL_CRYPTO_secure_clear_free
-	    FPTR IAmiSSL_EVP_PKEY_set1_engine
+	    FPTR AmiSSLIFace_EVP_PKEY_set1_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_SSL_get_client_ciphers
 	    FPTR IAmiSSL_SSL_CIPHER_standard_name
 	    FPTR IAmiSSL_SSL_get0_verified_chain
@@ -5078,7 +5078,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_aria_128_ctr
 	    FPTR IAmiSSL_EVP_aria_192_ctr
 	    FPTR IAmiSSL_UI_null
-	    FPTR IAmiSSL_EC_KEY_get0_engine
+	    FPTR AmiSSLIFace_EC_KEY_get0_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_INT32_it
 	    FPTR IAmiSSL_UINT64_it
 	    FPTR IAmiSSL_ZINT32_it
@@ -5157,7 +5157,7 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OSSL_STORE_INFO_set0_NAME_description
 	    FPTR IAmiSSL_OSSL_STORE_INFO_get1_NAME_description
 	    FPTR IAmiSSL_OSSL_STORE_do_all_loaders
-	    FPTR IAmiSSL_OSSL_STORE_LOADER_get0_engine
+	    FPTR AmiSSLIFace_OSSL_STORE_LOADER_get0_engine_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_RAND_DRBG_instantiate_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_RAND_DRBG_uninstantiate_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_RAND_DRBG_set_UNIMPLEMENTED
@@ -5180,8 +5180,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_i2d_SCRYPT_PARAMS
 	    FPTR IAmiSSL_d2i_SCRYPT_PARAMS
 	    FPTR IAmiSSL_SCRYPT_PARAMS_it
-	    FPTR IAmiSSL_EVP_PKEY_meth_get0
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_count
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get0_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_count_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_RAND_DRBG_get0_public_UNIMPLEMENTED
 	    FPTR IAmiSSL_RAND_priv_bytes
 	    FPTR IAmiSSL_BN_priv_rand
@@ -5203,15 +5203,15 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_UI_set_result_ex
 	    FPTR IAmiSSL_UI_get_result_string_length
 	    FPTR IAmiSSL_EVP_PKEY_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_remove
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_remove_UNIMPLEMENTED
 	    FPTR IAmiSSL_OPENSSL_sk_reserve
 	    FPTR IAmiSSL_DH_new_by_nid
 	    FPTR IAmiSSL_DH_get_nid
 	    FPTR IAmiSSL_OPENSSL_sk_new_reserve
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_check
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_siginf
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_siginf_UNIMPLEMENTED
 	    FPTR IAmiSSL_EVP_sm4_ctr
 	    FPTR IAmiSSL_EVP_sm4_cbc
 	    FPTR IAmiSSL_EVP_sm4_ofb
@@ -5221,12 +5221,12 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_RSA_get0_multi_prime_factors
 	    FPTR IAmiSSL_EVP_PKEY_public_check
 	    FPTR IAmiSSL_EVP_PKEY_param_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_public_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_param_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_public_check
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_param_check
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_public_check
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_param_check
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_public_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_param_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_public_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_param_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_public_check_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_param_check_UNIMPLEMENTED
 	    FPTR IAmiSSL_DH_check_ex
 	    FPTR IAmiSSL_DH_check_pub_key_ex
 	    FPTR IAmiSSL_DH_check_params_ex
@@ -5313,8 +5313,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_EVP_PKEY_new_raw_private_key
 	    FPTR IAmiSSL_EVP_PKEY_new_raw_public_key
 	    FPTR IAmiSSL_EVP_PKEY_new_CMAC_key
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_set_priv_key
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_set_pub_key
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_set_priv_key_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_set_pub_key_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_RAND_DRBG_set_defaults_UNIMPLEMENTED
 	    FPTR IAmiSSL_X509_VERIFY_PARAM_get_hostflags
 	    FPTR IAmiSSL_DH_get0_p
@@ -5364,8 +5364,8 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_X509_OBJECT_set1_X509_CRL
 	    FPTR IAmiSSL_EVP_PKEY_get_raw_public_key
 	    FPTR IAmiSSL_EVP_PKEY_get_raw_private_key
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_get_priv_key
-	    FPTR IAmiSSL_EVP_PKEY_asn1_set_get_pub_key
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_get_priv_key_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_asn1_set_get_pub_key_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_EVP_PKEY_set_alias_type_UNIMPLEMENTED
 	    FPTR IAmiSSL_RAND_keep_random_devices_open
 	    FPTR IAmiSSL_EC_POINT_set_compressed_coordinates
@@ -5376,19 +5376,19 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_OCSP_resp_get0_tbs_sigalg
 	    FPTR IAmiSSL_OCSP_resp_get0_respdata
 	    FPTR IAmiSSL_EVP_MD_CTX_set_pkey_ctx
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_digest_custom
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_digest_custom
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_digest_custom_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_digest_custom_UNIMPLEMENTED
 	    FPTR IAmiSSL_OPENSSL_DIR_read
 	    FPTR IAmiSSL_OPENSSL_DIR_end
 	    FPTR AmiSSLIFace_OPENSSL_INIT_set_config_filename_UNIMPLEMENTED
 	    FPTR AmiSSLIFace_OPENSSL_INIT_set_config_file_flags_UNIMPLEMENTED
-	    FPTR IAmiSSL_EVP_PKEY_get0_engine
+	    FPTR AmiSSLIFace_EVP_PKEY_get0_engine_UNIMPLEMENTED
 	    FPTR IAmiSSL_X509_get0_authority_serial
 	    FPTR IAmiSSL_X509_get0_authority_issuer
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_digestsign
-	    FPTR IAmiSSL_EVP_PKEY_meth_set_digestverify
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_digestverify
-	    FPTR IAmiSSL_EVP_PKEY_meth_get_digestsign
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_digestsign_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_set_digestverify_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_digestverify_UNIMPLEMENTED
+	    FPTR AmiSSLIFace_EVP_PKEY_meth_get_digestsign_UNIMPLEMENTED
 	    FPTR IAmiSSL_RSA_get0_pss_params
 	    FPTR IAmiSSL_X509_ALGOR_copy
 	    FPTR IAmiSSL_X509_REQ_set0_signature
@@ -7033,6 +7033,79 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_CRYPTO_clear_realloc_array
 	    FPTR IAmiSSL_CRYPTO_secure_malloc_array
 	    FPTR IAmiSSL_CRYPTO_secure_calloc
+	    FPTR IAmiSSL_SSL_CTX_get0_alpn_protos
+	    FPTR IAmiSSL_SSL_get0_alpn_protos
+	    FPTR IAmiSSL_SSL_set1_dnsname
+	    FPTR IAmiSSL_SSL_add1_dnsname
+	    FPTR IAmiSSL_SSL_set1_ipaddr
+	    FPTR IAmiSSL_SSL_add1_ipaddr
+	    FPTR IAmiSSL_SSL_get_peer_addr
+	    FPTR IAmiSSL_SSL_CTX_is_quic
+	    FPTR IAmiSSL_SSL_CTX_is_server
+	    FPTR IAmiSSL_OSSL_QUIC_method
+	    FPTR IAmiSSL_SSL_listen_ex
+	    FPTR IAmiSSL_OSSL_ECHSTORE_new
+	    FPTR IAmiSSL_OSSL_ECHSTORE_free
+	    FPTR IAmiSSL_OSSL_ECHSTORE_new_config_amiga
+	    FPTR IAmiSSL_OSSL_ECHSTORE_write_pem
+	    FPTR IAmiSSL_OSSL_ECHSTORE_read_echconfiglist
+	    FPTR IAmiSSL_OSSL_ECHSTORE_get1_info
+	    FPTR IAmiSSL_OSSL_ECHSTORE_downselect
+	    FPTR IAmiSSL_OSSL_ECHSTORE_set1_key_and_read_pem
+	    FPTR IAmiSSL_OSSL_ECHSTORE_read_pem
+	    FPTR IAmiSSL_OSSL_ECHSTORE_num_keys
+	    FPTR IAmiSSL_OSSL_ECHSTORE_flush_keys
+	    FPTR IAmiSSL_SSL_CTX_set1_echstore
+	    FPTR IAmiSSL_SSL_set1_echstore
+	    FPTR IAmiSSL_SSL_CTX_get1_echstore
+	    FPTR IAmiSSL_SSL_get1_echstore
+	    FPTR IAmiSSL_SSL_ech_get1_status
+	    FPTR IAmiSSL_SSL_ech_set_grease_type
+	    FPTR IAmiSSL_SSL_ech_set_callback
+	    FPTR IAmiSSL_SSL_CTX_ech_set_callback
+	    FPTR IAmiSSL_OSSL_ECHSTORE_num_entries
+	    FPTR IAmiSSL_SSL_ech_set1_server_names
+	    FPTR IAmiSSL_SSL_ech_set1_outer_server_name
+	    FPTR IAmiSSL_SSL_ech_set1_outer_alpn_protos
+	    FPTR IAmiSSL_SSL_ech_set1_grease_suite
+	    FPTR IAmiSSL_SSL_ech_get1_retry_config
+	    FPTR IAmiSSL_SSL_CTX_ech_set1_outer_alpn_protos
+	    FPTR IAmiSSL_SSL_set1_ech_config_list
+	    FPTR IAmiSSL_SSL_get0_sigalg
+	    FPTR IAmiSSL_SSL_get0_shared_sigalg
+	    FPTR IAmiSSL_EC_GROUP_security_bits
+	    FPTR IAmiSSL_ASN1_BIT_STRING_get_length
+	    FPTR IAmiSSL_BIO_set_send_flags
+	    FPTR IAmiSSL_BIO_eof
+	    FPTR AmiSSLIFace_CRYPTO_atomic_store_int_UNIMPLEMENTED
+	    FPTR IAmiSSL_X509_check_certificate_times
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_host_input_validation
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_rfc822
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_add1_rfc822
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_rfc822_input_validation
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_smtputf8
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_add1_smtputf8
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_smtputf8_input_validation
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_add1_ip
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_add1_ip_asc
+	    FPTR IAmiSSL_X509_VERIFY_PARAM_set1_ip_input_validation
+	    FPTR IAmiSSL_OSSL_STORE_INFO_new_SKEY
+	    FPTR IAmiSSL_OSSL_STORE_INFO_get0_SKEY
+	    FPTR IAmiSSL_OSSL_STORE_INFO_get1_SKEY
+	    FPTR IAmiSSL_OPENSSL_posix_to_tm
+	    FPTR IAmiSSL_OPENSSL_tm_to_posix
+	    FPTR IAmiSSL_OPENSSL_timegm
+	    FPTR IAmiSSL_OSSL_PARAM_clear_free
+	    FPTR IAmiSSL_CMS_dataFinal_ex
+	    FPTR IAmiSSL_CMS_SignerInfo_verify_ex
+	    FPTR IAmiSSL_EVP_SIGNATURE_has_message_update
+	    FPTR IAmiSSL_EVP_MD_CTX_serialize
+	    FPTR IAmiSSL_EVP_MD_CTX_deserialize
+	    FPTR IAmiSSL_OSSL_ENCODER_CTX_ctrl_string
+	    FPTR IAmiSSL_OPENSSL_sk_set_cmp_thunks
+	    FPTR IAmiSSL_ASN1_BIT_STRING_set1
+	    FPTR IAmiSSL_OSSL_ESS_check_signing_certs_ex
+	    FPTR IAmiSSL_X509v3_delete_extension
 	LABEL AmiSSLIFace_SIZE
 
 #endif

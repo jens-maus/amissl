@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1999-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1999-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -86,9 +86,9 @@ typedef struct PKCS12_SAFEBAG_st PKCS12_SAFEBAG;
 SKM_DEFINE_STACK_OF_INTERNAL(PKCS12_SAFEBAG, PKCS12_SAFEBAG, PKCS12_SAFEBAG)
 #define sk_PKCS12_SAFEBAG_num(sk) OPENSSL_sk_num(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk))
 #define sk_PKCS12_SAFEBAG_value(sk, idx) ((PKCS12_SAFEBAG *)OPENSSL_sk_value(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk), (idx)))
-#define sk_PKCS12_SAFEBAG_new(cmp) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_new(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp)))
-#define sk_PKCS12_SAFEBAG_new_null() ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_new_null())
-#define sk_PKCS12_SAFEBAG_new_reserve(cmp, n) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_new_reserve(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp), (n)))
+#define sk_PKCS12_SAFEBAG_new(cmp) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp)), sk_PKCS12_SAFEBAG_cmpfunc_thunk))
+#define sk_PKCS12_SAFEBAG_new_null() ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_PKCS12_SAFEBAG_freefunc_thunk))
+#define sk_PKCS12_SAFEBAG_new_reserve(cmp, n) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp), (n)), sk_PKCS12_SAFEBAG_cmpfunc_thunk))
 #define sk_PKCS12_SAFEBAG_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_PKCS12_SAFEBAG_sk_type(sk), (n))
 #define sk_PKCS12_SAFEBAG_free(sk) OPENSSL_sk_free(ossl_check_PKCS12_SAFEBAG_sk_type(sk))
 #define sk_PKCS12_SAFEBAG_zero(sk) OPENSSL_sk_zero(ossl_check_PKCS12_SAFEBAG_sk_type(sk))
@@ -136,11 +136,11 @@ typedef struct pkcs12_bag_st PKCS12_BAGS;
 
 #endif
 #ifndef OPENSSL_NO_DEPRECATED_1_1_0
-OSSL_DEPRECATEDIN_1_1_0 ASN1_TYPE *PKCS12_get_attr(const PKCS12_SAFEBAG *bag,
+OSSL_DEPRECATEDIN_1_1_0 const ASN1_TYPE *PKCS12_get_attr(const PKCS12_SAFEBAG *bag,
     int attr_nid);
 #endif
 
-ASN1_TYPE *PKCS8_get_attr(PKCS8_PRIV_KEY_INFO *p8, int attr_nid);
+const ASN1_TYPE *PKCS8_get_attr(PKCS8_PRIV_KEY_INFO *p8, int attr_nid);
 int PKCS12_mac_present(const PKCS12 *p12);
 void PKCS12_get0_mac(const ASN1_OCTET_STRING **pmac,
     const X509_ALGOR **pmacalg,
@@ -226,7 +226,7 @@ STACK_OF(PKCS12_SAFEBAG) *PKCS12_unpack_p7encdata(PKCS7 *p7, const char *pass,
 int PKCS12_pack_authsafes(PKCS12 *p12, STACK_OF(PKCS7) *safes);
 STACK_OF(PKCS7) *PKCS12_unpack_authsafes(const PKCS12 *p12);
 
-int PKCS12_add_localkeyid(PKCS12_SAFEBAG *bag, unsigned char *name,
+int PKCS12_add_localkeyid(PKCS12_SAFEBAG *bag, const unsigned char *name,
     int namelen);
 int PKCS12_add_friendlyname_asc(PKCS12_SAFEBAG *bag, const char *name,
     int namelen);
@@ -241,7 +241,7 @@ int PKCS12_add1_attr_by_NID(PKCS12_SAFEBAG *bag, int nid, int type,
 int PKCS12_add1_attr_by_txt(PKCS12_SAFEBAG *bag, const char *attrname, int type,
     const unsigned char *bytes, int len);
 int PKCS8_add_keyusage(PKCS8_PRIV_KEY_INFO *p8, int usage);
-ASN1_TYPE *PKCS12_get_attr_gen(const STACK_OF(X509_ATTRIBUTE) *attrs,
+const ASN1_TYPE *PKCS12_get_attr_gen(const STACK_OF(X509_ATTRIBUTE) *attrs,
     int attr_nid);
 char *PKCS12_get_friendlyname(PKCS12_SAFEBAG *bag);
 const STACK_OF(X509_ATTRIBUTE) *

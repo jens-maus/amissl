@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2025 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,7 +141,7 @@
     <method name="ASN1_STRING_type" result="int">
       <arg name="x" type="const ASN1_STRING *" m68kreg="a0"/>
     </method>
-    <method name="ASN1_STRING_data" result="unsigned char *" lifecycle="deprecated">
+    <method name="ASN1_STRING_data" result="unsigned char *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="x" type="ASN1_STRING *" m68kreg="a0"/>
     </method>
     <method name="ASN1_BIT_STRING_new" result="ASN1_BIT_STRING *">
@@ -2300,7 +2300,7 @@
     <method name="CRYPTO_free_locked" result="void" status="unimplemented">
       <arg name="a" type="void *" m68kreg="a0"/>
     </method>
-    <method name="CRYPTO_malloc" result="void *">
+    <method name="CRYPTO_malloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
@@ -2760,7 +2760,7 @@
     <method name="ERR_remove_state" result="void" status="unimplemented">
       <arg name="pid" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="ERR_get_state" result="ERR_STATE *" lifecycle="deprecated">
+    <method name="ERR_get_state" result="ERR_STATE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="ERR_get_string_table" result="LHASH_OF(ERR_STRING_DATA) *" status="unimplemented">
     </method>
@@ -3045,7 +3045,7 @@
     </method>
     <method name="BIO_f_cipher" result="const BIO_METHOD *">
     </method>
-    <method name="BIO_f_reliable" result="const BIO_METHOD *">
+    <method name="BIO_f_reliable" result="const BIO_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="BIO_set_cipher" result="int">
       <arg name="b" type="BIO *" m68kreg="a0"/>
@@ -3787,7 +3787,7 @@
       <arg name="signer" type="X509 *" m68kreg="a1"/>
       <arg name="key" type="EVP_PKEY *" m68kreg="a2"/>
       <arg name="dgst" type="const EVP_MD *" m68kreg="a3"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="d0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="d0"/>
       <arg name="flags" type="unsigned long" m68kreg="d1"/>
     </method>
     <method name="OCSP_response_status" result="int">
@@ -3832,7 +3832,7 @@
     </method>
     <method name="OCSP_request_verify" result="int">
       <arg name="req" type="OCSP_REQUEST *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
@@ -3893,7 +3893,7 @@
       <arg name="signer" type="X509 *" m68kreg="a1"/>
       <arg name="key" type="EVP_PKEY *" m68kreg="a2"/>
       <arg name="dgst" type="const EVP_MD *" m68kreg="a3"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="d0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="d0"/>
       <arg name="flags" type="unsigned long" m68kreg="d1"/>
     </method>
     <method name="ASN1_STRING_encode" result="ASN1_STRING *" status="unimplemented">
@@ -3935,7 +3935,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="OCSP_REQUEST_get_ext" result="X509_EXTENSION *">
+    <method name="OCSP_REQUEST_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="OCSP_REQUEST *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -3958,7 +3958,7 @@
     </method>
     <method name="OCSP_REQUEST_add_ext" result="int">
       <arg name="x" type="OCSP_REQUEST *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="OCSP_ONEREQ_get_ext_count" result="int">
@@ -3979,7 +3979,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="OCSP_ONEREQ_get_ext" result="X509_EXTENSION *">
+    <method name="OCSP_ONEREQ_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="OCSP_ONEREQ *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -4002,7 +4002,7 @@
     </method>
     <method name="OCSP_ONEREQ_add_ext" result="int">
       <arg name="x" type="OCSP_ONEREQ *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="OCSP_BASICRESP_get_ext_count" result="int">
@@ -4023,7 +4023,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="OCSP_BASICRESP_get_ext" result="X509_EXTENSION *">
+    <method name="OCSP_BASICRESP_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="OCSP_BASICRESP *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -4046,7 +4046,7 @@
     </method>
     <method name="OCSP_BASICRESP_add_ext" result="int">
       <arg name="x" type="OCSP_BASICRESP *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="OCSP_SINGLERESP_get_ext_count" result="int">
@@ -4067,7 +4067,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="OCSP_SINGLERESP_get_ext" result="X509_EXTENSION *">
+    <method name="OCSP_SINGLERESP_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="OCSP_SINGLERESP *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -4090,7 +4090,7 @@
     </method>
     <method name="OCSP_SINGLERESP_add_ext" result="int">
       <arg name="x" type="OCSP_SINGLERESP *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="OCSP_SINGLERESP_new" result="OCSP_SINGLERESP *">
@@ -4354,7 +4354,7 @@
     </method>
     <method name="OCSP_basic_verify" result="int">
       <arg name="bs" type="OCSP_BASICRESP *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="st" type="X509_STORE *" m68kreg="a2"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
@@ -4796,7 +4796,7 @@
     </method>
     <method name="PKCS12_add_localkeyid" result="int">
       <arg name="bag" type="PKCS12_SAFEBAG *" m68kreg="a0"/>
-      <arg name="name" type="unsigned char *" m68kreg="a1"/>
+      <arg name="name" type="const unsigned char *" m68kreg="a1"/>
       <arg name="namelen" type="int" m68kreg="d0"/>
     </method>
     <method name="PKCS12_add_friendlyname_asc" result="int">
@@ -4818,7 +4818,7 @@
       <arg name="p8" type="PKCS8_PRIV_KEY_INFO *" m68kreg="a0"/>
       <arg name="usage" type="int" m68kreg="d0"/>
     </method>
-    <method name="PKCS12_get_attr_gen" result="ASN1_TYPE *">
+    <method name="PKCS12_get_attr_gen" result="const ASN1_TYPE *">
       <arg name="attrs" type="const STACK_OF(X509_ATTRIBUTE) *" m68kreg="a0"/>
       <arg name="attr_nid" type="int" m68kreg="d0"/>
     </method>
@@ -5255,7 +5255,7 @@
       <arg name="bio" type="BIO *" m68kreg="a0"/>
       <arg name="p7" type="PKCS7 *" m68kreg="a1"/>
       <arg name="si" type="PKCS7_SIGNER_INFO *" m68kreg="a2"/>
-      <arg name="signer" type="X509 *" m68kreg="a3"/>
+      <arg name="signer" type="const X509 *" m68kreg="a3"/>
     </method>
     <method name="PKCS7_dataInit" result="BIO *">
       <arg name="p7" type="PKCS7 *" m68kreg="a0"/>
@@ -5304,7 +5304,7 @@
       <arg name="p7" type="PKCS7 *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
-    <method name="PKCS7_digest_from_attributes" result="ASN1_OCTET_STRING *">
+    <method name="PKCS7_digest_from_attributes" result="const ASN1_OCTET_STRING *">
       <arg name="sk" type="STACK_OF(X509_ATTRIBUTE) *" m68kreg="a0"/>
     </method>
     <method name="PKCS7_add_signed_attribute" result="int">
@@ -5319,11 +5319,11 @@
       <arg name="atrtype" type="int" m68kreg="d1"/>
       <arg name="value" type="void *" m68kreg="a1"/>
     </method>
-    <method name="PKCS7_get_attribute" result="ASN1_TYPE *">
+    <method name="PKCS7_get_attribute" result="const ASN1_TYPE *">
       <arg name="si" type="const PKCS7_SIGNER_INFO *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="PKCS7_get_signed_attribute" result="ASN1_TYPE *">
+    <method name="PKCS7_get_signed_attribute" result="const ASN1_TYPE *">
       <arg name="si" type="const PKCS7_SIGNER_INFO *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
@@ -5338,13 +5338,13 @@
     <method name="PKCS7_sign" result="PKCS7 *">
       <arg name="signcert" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="data" type="BIO *" m68kreg="a3"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
     <method name="PKCS7_verify" result="int">
       <arg name="p7" type="PKCS7 *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="indata" type="BIO *" m68kreg="a3"/>
       <arg name="out" type="BIO *" m68kreg="d0"/>
@@ -5352,11 +5352,11 @@
     </method>
     <method name="PKCS7_get0_signers" result="STACK_OF(X509) *">
       <arg name="p7" type="PKCS7 *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
     <method name="PKCS7_encrypt" result="PKCS7 *">
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="in" type="BIO *" m68kreg="a1"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
       <arg name="flags" type="int" m68kreg="d0"/>
@@ -5961,11 +5961,11 @@
     </method>
     <method name="SSLv23_client_method" result="const SSL_METHOD *" status="unimplemented">
     </method>
-    <method name="TLSv1_method" result="const SSL_METHOD *" lifecycle="deprecated">
+    <method name="TLSv1_method" result="const SSL_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="TLSv1_server_method" result="const SSL_METHOD *" lifecycle="deprecated">
+    <method name="TLSv1_server_method" result="const SSL_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="TLSv1_client_method" result="const SSL_METHOD *" lifecycle="deprecated">
+    <method name="TLSv1_client_method" result="const SSL_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="SSL_get_ciphers" result="STACK_OF(SSL_CIPHER) *">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
@@ -6219,7 +6219,7 @@
       <arg name="p" type="const void *" m68kreg="a1"/>
     </method>
     <method name="OPENSSL_sk_find" result="int">
-      <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
+      <arg name="st" type="const OPENSSL_STACK *" m68kreg="a0"/>
       <arg name="data" type="const void *" m68kreg="a1"/>
     </method>
     <method name="OPENSSL_sk_push" result="int">
@@ -6529,7 +6529,7 @@
       <arg name="n" type="long" m68kreg="d0"/>
     </method>
     <method name="X509_verify" result="int">
-      <arg name="a" type="X509 *" m68kreg="a0"/>
+      <arg name="a" type="const X509 *" m68kreg="a0"/>
       <arg name="r" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
     <method name="X509_REQ_verify" result="int">
@@ -6560,7 +6560,7 @@
     </method>
     <method name="NETSCAPE_SPKI_print" result="int">
       <arg name="out" type="BIO *" m68kreg="a0"/>
-      <arg name="spki" type="NETSCAPE_SPKI *" m68kreg="a1"/>
+      <arg name="spki" type="const NETSCAPE_SPKI *" m68kreg="a1"/>
     </method>
     <method name="X509_signature_print" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -6743,7 +6743,7 @@
     </method>
     <method name="X509_cmp_time" result="int">
       <arg name="s" type="const ASN1_TIME *" m68kreg="a0"/>
-      <arg name="t" type="time_t *" m68kreg="a1"/>
+      <arg name="t" type="const time_t *" m68kreg="a1"/>
     </method>
     <method name="X509_cmp_current_time" result="int">
       <arg name="s" type="const ASN1_TIME *" m68kreg="a0"/>
@@ -6751,7 +6751,7 @@
     <method name="X509_time_adj" result="ASN1_TIME *">
       <arg name="s" type="ASN1_TIME *" m68kreg="a0"/>
       <arg name="adj" type="long" m68kreg="d0"/>
-      <arg name="t" type="time_t *" m68kreg="a1"/>
+      <arg name="t" type="const time_t *" m68kreg="a1"/>
     </method>
     <method name="X509_gmtime_adj" result="ASN1_TIME *">
       <arg name="s" type="ASN1_TIME *" m68kreg="a0"/>
@@ -6770,12 +6770,12 @@
     <method name="X509_get_default_private_dir" result="const char *">
     </method>
     <method name="X509_to_X509_REQ" result="X509_REQ *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
       <arg name="md" type="const EVP_MD *" m68kreg="a2"/>
     </method>
     <method name="X509_REQ_to_X509" result="X509 *">
-      <arg name="r" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="r" type="const X509_REQ *" m68kreg="a0"/>
       <arg name="days" type="int" m68kreg="d0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
@@ -6836,7 +6836,7 @@
     </method>
     <method name="X509_get_pubkey_parameters" result="int">
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
-      <arg name="chain" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="chain" type="const STACK_OF(X509) *" m68kreg="a1"/>
     </method>
     <method name="i2d_PUBKEY" result="int">
       <arg name="a" type="const EVP_PKEY *" m68kreg="a0"/>
@@ -7069,12 +7069,12 @@
       <arg name="id" type="const unsigned char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
     </method>
-    <method name="X509_alias_get0" result="unsigned char *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_alias_get0" result="const unsigned char *">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="len" type="int *" m68kreg="a1"/>
     </method>
-    <method name="X509_TRUST_set_default" result="int (*)(int, X509 *, int)">
-      <arg name="trust" type="int (*)(int, X509 *, int)" m68kreg="a0"/>
+    <method name="X509_TRUST_set_default" result="int (*)(int, const X509 *, int)">
+      <arg name="trust" type="int (*)(int, const X509 *, int)" m68kreg="a0"/>
     </method>
     <method name="X509_TRUST_set" result="int">
       <arg name="t" type="int *" m68kreg="a0"/>
@@ -7279,14 +7279,14 @@
       <arg name="x" type="X509 *" m68kreg="a0"/>
       <arg name="name" type="const X509_NAME *" m68kreg="a1"/>
     </method>
-    <method name="X509_get_issuer_name" result="X509_NAME *">
+    <method name="X509_get_issuer_name" result="const X509_NAME *">
       <arg name="a" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_set_subject_name" result="int">
       <arg name="x" type="X509 *" m68kreg="a0"/>
       <arg name="name" type="const X509_NAME *" m68kreg="a1"/>
     </method>
-    <method name="X509_get_subject_name" result="X509_NAME *">
+    <method name="X509_get_subject_name" result="const X509_NAME *">
       <arg name="a" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_set1_notBefore" result="int">
@@ -7301,10 +7301,10 @@
       <arg name="x" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="X509_get_pubkey" result="EVP_PKEY *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_get_pubkey" result="EVP_PKEY *" lifecycle="deprecated">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
-    <method name="X509_get0_pubkey_bitstr" result="ASN1_BIT_STRING *">
+    <method name="X509_get0_pubkey_bitstr" result="const ASN1_BIT_STRING *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_certificate_type" result="int" lifecycle="deprecated">
@@ -7323,7 +7323,7 @@
       <arg name="x" type="X509_REQ *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="X509_REQ_get_pubkey" result="EVP_PKEY *">
+    <method name="X509_REQ_get_pubkey" result="EVP_PKEY *" lifecycle="deprecated">
       <arg name="req" type="X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_extension_nid" result="int">
@@ -7335,7 +7335,7 @@
       <arg name="nids" type="int *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_get_extensions" result="STACK_OF(X509_EXTENSION) *">
-      <arg name="req" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="req" type="const X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_add_extensions_nid" result="int">
       <arg name="req" type="X509_REQ *" m68kreg="a0"/>
@@ -7428,21 +7428,21 @@
       <arg name="b" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_issuer_and_serial_hash" result="unsigned long">
-      <arg name="a" type="X509 *" m68kreg="a0"/>
+      <arg name="a" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_issuer_name_cmp" result="int">
       <arg name="a" type="const X509 *" m68kreg="a0"/>
       <arg name="b" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_issuer_name_hash" result="unsigned long">
-      <arg name="a" type="X509 *" m68kreg="a0"/>
+      <arg name="a" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_subject_name_cmp" result="int">
       <arg name="a" type="const X509 *" m68kreg="a0"/>
       <arg name="b" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_subject_name_hash" result="unsigned long">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_cmp" result="int">
       <arg name="a" type="const X509 *" m68kreg="a0"/>
@@ -7472,17 +7472,17 @@
     </method>
     <method name="X509_print_ex" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
       <arg name="cflag" type="unsigned long" m68kreg="d1"/>
     </method>
     <method name="X509_print" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_ocspid_print" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_CERT_AUX_print" result="int" status="unimplemented">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
@@ -7491,17 +7491,17 @@
     </method>
     <method name="X509_CRL_print" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509_CRL *" m68kreg="a1"/>
+      <arg name="x" type="const X509_CRL *" m68kreg="a1"/>
     </method>
     <method name="X509_REQ_print_ex" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509_REQ *" m68kreg="a1"/>
+      <arg name="x" type="const X509_REQ *" m68kreg="a1"/>
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
       <arg name="cflag" type="unsigned long" m68kreg="d1"/>
     </method>
     <method name="X509_REQ_print" result="int">
       <arg name="bp" type="BIO *" m68kreg="a0"/>
-      <arg name="req" type="X509_REQ *" m68kreg="a1"/>
+      <arg name="req" type="const X509_REQ *" m68kreg="a1"/>
     </method>
     <method name="X509_NAME_entry_count" result="int">
       <arg name="name" type="const X509_NAME *" m68kreg="a0"/>
@@ -7528,7 +7528,7 @@
       <arg name="obj" type="const ASN1_OBJECT *" m68kreg="a1"/>
       <arg name="lastpos" type="int" m68kreg="d0"/>
     </method>
-    <method name="X509_NAME_get_entry" result="X509_NAME_ENTRY *">
+    <method name="X509_NAME_get_entry" result="const X509_NAME_ENTRY *">
       <arg name="name" type="const X509_NAME *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -7600,10 +7600,10 @@
       <arg name="bytes" type="const unsigned char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_NAME_ENTRY_get_object" result="ASN1_OBJECT *">
+    <method name="X509_NAME_ENTRY_get_object" result="const ASN1_OBJECT *">
       <arg name="ne" type="const X509_NAME_ENTRY *" m68kreg="a0"/>
     </method>
-    <method name="X509_NAME_ENTRY_get_data" result="ASN1_STRING *">
+    <method name="X509_NAME_ENTRY_get_data" result="const ASN1_STRING *">
       <arg name="ne" type="const X509_NAME_ENTRY *" m68kreg="a0"/>
     </method>
     <method name="X509v3_get_ext_count" result="int">
@@ -7624,7 +7624,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509v3_get_ext" result="X509_EXTENSION *">
+    <method name="X509v3_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="const STACK_OF(X509_EXTENSION) *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -7634,7 +7634,7 @@
     </method>
     <method name="X509v3_add_ext" result="STACK_OF(X509_EXTENSION) *">
       <arg name="x" type="STACK_OF(X509_EXTENSION) **" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_get_ext_count" result="int">
@@ -7655,7 +7655,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_get_ext" result="X509_EXTENSION *">
+    <method name="X509_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -7665,7 +7665,7 @@
     </method>
     <method name="X509_add_ext" result="int">
       <arg name="x" type="X509 *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_get_ext_d2i" result="void *">
@@ -7699,7 +7699,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_CRL_get_ext" result="X509_EXTENSION *">
+    <method name="X509_CRL_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="const X509_CRL *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -7709,7 +7709,7 @@
     </method>
     <method name="X509_CRL_add_ext" result="int">
       <arg name="x" type="X509_CRL *" m68kreg="a0"/>
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_CRL_get_ext_d2i" result="void *">
@@ -7743,7 +7743,7 @@
       <arg name="crit" type="int" m68kreg="d0"/>
       <arg name="lastpos" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_REVOKED_get_ext" result="X509_EXTENSION *">
+    <method name="X509_REVOKED_get_ext" result="const X509_EXTENSION *">
       <arg name="x" type="const X509_REVOKED *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -7791,13 +7791,13 @@
     </method>
     <method name="X509_EXTENSION_set_data" result="int">
       <arg name="ex" type="X509_EXTENSION *" m68kreg="a0"/>
-      <arg name="data" type="ASN1_OCTET_STRING *" m68kreg="a1"/>
+      <arg name="data" type="const ASN1_OCTET_STRING *" m68kreg="a1"/>
     </method>
-    <method name="X509_EXTENSION_get_object" result="ASN1_OBJECT *">
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a0"/>
+    <method name="X509_EXTENSION_get_object" result="const ASN1_OBJECT *">
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a0"/>
     </method>
-    <method name="X509_EXTENSION_get_data" result="ASN1_OCTET_STRING *">
-      <arg name="ne" type="X509_EXTENSION *" m68kreg="a0"/>
+    <method name="X509_EXTENSION_get_data" result="const ASN1_OCTET_STRING *">
+      <arg name="ne" type="const X509_EXTENSION *" m68kreg="a0"/>
     </method>
     <method name="X509_EXTENSION_get_critical" result="int">
       <arg name="ex" type="const X509_EXTENSION *" m68kreg="a0"/>
@@ -7879,8 +7879,8 @@
       <arg name="data" type="const void *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_ATTRIBUTE_get0_data" result="void *">
-      <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a0"/>
+    <method name="X509_ATTRIBUTE_get0_data" result="const void *">
+      <arg name="attr" type="const X509_ATTRIBUTE *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
       <arg name="atrtype" type="int" m68kreg="d1"/>
       <arg name="data" type="void *" m68kreg="a1"/>
@@ -7888,23 +7888,23 @@
     <method name="X509_ATTRIBUTE_count" result="int">
       <arg name="attr" type="const X509_ATTRIBUTE *" m68kreg="a0"/>
     </method>
-    <method name="X509_ATTRIBUTE_get0_object" result="ASN1_OBJECT *">
-      <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a0"/>
+    <method name="X509_ATTRIBUTE_get0_object" result="const ASN1_OBJECT *">
+      <arg name="attr" type="const X509_ATTRIBUTE *" m68kreg="a0"/>
     </method>
-    <method name="X509_ATTRIBUTE_get0_type" result="ASN1_TYPE *">
-      <arg name="attr" type="X509_ATTRIBUTE *" m68kreg="a0"/>
+    <method name="X509_ATTRIBUTE_get0_type" result="const ASN1_TYPE *">
+      <arg name="attr" type="const X509_ATTRIBUTE *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_verify_cert" result="int">
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
     </method>
     <method name="X509_find_by_issuer_and_serial" result="X509 *">
-      <arg name="sk" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="sk" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="name" type="const X509_NAME *" m68kreg="a1"/>
       <arg name="serial" type="const ASN1_INTEGER *" m68kreg="a2"/>
     </method>
     <method name="X509_find_by_subject" result="X509 *">
-      <arg name="sk" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="sk" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="name" type="const X509_NAME *" m68kreg="a1"/>
     </method>
     <method name="PBEPARAM_new" result="PBEPARAM *">
@@ -7998,7 +7998,7 @@
       <arg name="broken" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_check_trust" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="flags" type="int" m68kreg="d1"/>
     </method>
@@ -8013,7 +8013,7 @@
     <method name="X509_TRUST_add" result="int">
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="flags" type="int" m68kreg="d1"/>
-      <arg name="ck" type="int (*)(X509_TRUST *, X509 *, int)" m68kreg="a0"/>
+      <arg name="ck" type="int (*)(X509_TRUST *, const X509 *, int)" m68kreg="a0"/>
       <arg name="name" type="const char *" m68kreg="a1"/>
       <arg name="arg1" type="int" m68kreg="d2"/>
       <arg name="arg2" type="void *" m68kreg="a2"/>
@@ -8070,7 +8070,7 @@
     <method name="X509_STORE_CTX_get1_issuer" result="int">
       <arg name="issuer" type="X509 **" m68kreg="a0"/>
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a1"/>
-      <arg name="x" type="X509 *" m68kreg="a2"/>
+      <arg name="x" type="const X509 *" m68kreg="a2"/>
     </method>
     <method name="X509_STORE_CTX_free" result="void">
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
@@ -8078,7 +8078,7 @@
     <method name="X509_STORE_CTX_init" result="int">
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
       <arg name="trust_store" type="X509_STORE *" m68kreg="a1"/>
-      <arg name="target" type="X509 *" m68kreg="a2"/>
+      <arg name="target" type="const X509 *" m68kreg="a2"/>
       <arg name="untrusted" type="STACK_OF(X509) *" m68kreg="a3"/>
     </method>
     <method name="X509_STORE_CTX_set0_trusted_stack" result="void">
@@ -8098,7 +8098,7 @@
     </method>
     <method name="X509_STORE_add_cert" result="int">
       <arg name="xs" type="X509_STORE *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_STORE_add_crl" result="int">
       <arg name="xs" type="X509_STORE *" m68kreg="a0"/>
@@ -8796,7 +8796,7 @@
     <method name="X509V3_EXT_cleanup" result="void">
     </method>
     <method name="X509V3_EXT_get" result="const X509V3_EXT_METHOD *">
-      <arg name="ext" type="X509_EXTENSION *" m68kreg="a0"/>
+      <arg name="ext" type="const X509_EXTENSION *" m68kreg="a0"/>
     </method>
     <method name="X509V3_EXT_get_nid" result="const X509V3_EXT_METHOD *">
       <arg name="nid" type="int" m68kreg="d0"/>
@@ -8807,7 +8807,7 @@
       <arg name="line" type="const char *" m68kreg="a0"/>
     </method>
     <method name="X509V3_EXT_d2i" result="void *">
-      <arg name="ext" type="X509_EXTENSION *" m68kreg="a0"/>
+      <arg name="ext" type="const X509_EXTENSION *" m68kreg="a0"/>
     </method>
     <method name="X509V3_get_d2i" result="void *">
       <arg name="x" type="const STACK_OF(X509_EXTENSION) *" m68kreg="a0"/>
@@ -8843,7 +8843,7 @@
     </method>
     <method name="X509V3_EXT_print" result="int">
       <arg name="out" type="BIO *" m68kreg="a0"/>
-      <arg name="ext" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ext" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="flag" type="unsigned long" m68kreg="d0"/>
       <arg name="indent" type="int" m68kreg="d1"/>
     </method>
@@ -8855,20 +8855,20 @@
       <arg name="indent" type="int" m68kreg="d1"/>
     </method>
     <method name="X509_check_purpose" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="ca" type="int" m68kreg="d1"/>
     </method>
     <method name="X509_supported_extension" result="int">
-      <arg name="ex" type="X509_EXTENSION *" m68kreg="a0"/>
+      <arg name="ex" type="const X509_EXTENSION *" m68kreg="a0"/>
     </method>
     <method name="X509_PURPOSE_set" result="int">
       <arg name="p" type="int *" m68kreg="a0"/>
       <arg name="purpose" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_check_issued" result="int">
-      <arg name="issuer" type="X509 *" m68kreg="a0"/>
-      <arg name="subject" type="X509 *" m68kreg="a1"/>
+      <arg name="issuer" type="const X509 *" m68kreg="a0"/>
+      <arg name="subject" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="X509_PURPOSE_get_count" result="int">
     </method>
@@ -8905,10 +8905,10 @@
       <arg name="a" type="const X509_PURPOSE *" m68kreg="a0"/>
     </method>
     <method name="X509_get1_email" result="STACK_OF(OPENSSL_STRING) *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_get1_email" result="STACK_OF(OPENSSL_STRING) *">
-      <arg name="x" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="x" type="const X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_email_free" result="void">
       <arg name="sk" type="STACK_OF(OPENSSL_STRING) *" m68kreg="a0"/>
@@ -8919,12 +8919,12 @@
     </method>
     <method name="AES_set_encrypt_key" result="int" lifecycle="deprecated">
       <arg name="userKey" type="const unsigned char *" m68kreg="a0"/>
-      <arg name="bits" type="const int" m68kreg="d0"/>
+      <arg name="bits" type="int" m68kreg="d0"/>
       <arg name="key" type="AES_KEY *" m68kreg="a1"/>
     </method>
     <method name="AES_set_decrypt_key" result="int" lifecycle="deprecated">
       <arg name="userKey" type="const unsigned char *" m68kreg="a0"/>
-      <arg name="bits" type="const int" m68kreg="d0"/>
+      <arg name="bits" type="int" m68kreg="d0"/>
       <arg name="key" type="AES_KEY *" m68kreg="a1"/>
     </method>
     <method name="AES_encrypt" result="void" lifecycle="deprecated">
@@ -8941,7 +8941,7 @@
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
       <arg name="out" type="unsigned char *" m68kreg="a1"/>
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
-      <arg name="enc" type="const int" m68kreg="d0"/>
+      <arg name="enc" type="int" m68kreg="d0"/>
     </method>
     <method name="AES_cbc_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -8949,7 +8949,7 @@
       <arg name="length" type="size_t" m68kreg="d0"/>
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
-      <arg name="enc" type="const int" m68kreg="d1"/>
+      <arg name="enc" type="int" m68kreg="d1"/>
     </method>
     <method name="AES_cfb128_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -8958,7 +8958,7 @@
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="AES_cfb1_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -8967,7 +8967,7 @@
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="AES_cfb8_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -8976,7 +8976,7 @@
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="AES_cfbr_encrypt_block" result="void" status="unimplemented">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -8984,7 +8984,7 @@
       <arg name="nbits" type="const int" m68kreg="d0"/>
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
-      <arg name="enc" type="const int" m68kreg="d1"/>
+      <arg name="enc" type="int" m68kreg="d1"/>
     </method>
     <method name="AES_ofb128_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -10314,7 +10314,7 @@
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
     <method name="X509_check_ca" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="PROXY_POLICY_new" result="PROXY_POLICY *">
     </method>
@@ -10639,39 +10639,39 @@
     <method name="EC_KEY_get0_private_key" result="const BIGNUM *" lifecycle="deprecated">
       <arg name="eckey" type="const EC_KEY *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_first" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_first" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_id" result="const char *" lifecycle="deprecated">
+    <method name="ENGINE_get_id" result="const char *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_name" result="const char *" lifecycle="deprecated">
+    <method name="ENGINE_get_name" result="const char *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_next" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_next" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_free" result="int" lifecycle="deprecated">
+    <method name="ENGINE_free" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_new" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_new" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_id" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_id" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="id" type="const char *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_name" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_name" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="name" type="const char *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_add" result="int" lifecycle="deprecated">
+    <method name="ENGINE_add" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_remove" result="int" lifecycle="deprecated">
+    <method name="ENGINE_remove" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_load_builtin_engines" result="void" lifecycle="deprecated">
+    <method name="ENGINE_load_builtin_engines" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_register_all_ciphers" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_ciphers" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="EVP_CIPHER_get_nid" result="int">
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
@@ -10679,7 +10679,7 @@
     <method name="EVP_MD_get_type" result="int">
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_digests" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_digests" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="BIO_test_flags" result="int">
       <arg name="b" type="const BIO *" m68kreg="a0"/>
@@ -10836,11 +10836,11 @@
       <arg name="ctx" type="BN_CTX *" m68kreg="a3"/>
     </method>
     <method name="X509_get1_ocsp" result="STACK_OF(OPENSSL_STRING) *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="SSL_get_servername" result="const char *">
       <arg name="s" type="const SSL *" m68kreg="a0"/>
-      <arg name="type" type="const int" m68kreg="d0"/>
+      <arg name="type" type="int" m68kreg="d0"/>
     </method>
     <method name="SSL_set_SSL_CTX" result="SSL_CTX *">
       <arg name="ssl" type="SSL *" m68kreg="a0"/>
@@ -10876,10 +10876,10 @@
     <method name="SSL_COMP_get_name" result="const char *">
       <arg name="comp" type="const COMP_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_by_id" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_by_id" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="id" type="const char *" m68kreg="a0"/>
     </method>
-    <method name="SSL_CTX_set_client_cert_engine" result="int">
+    <method name="SSL_CTX_set_client_cert_engine" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
       <arg name="e" type="ENGINE *" m68kreg="a1"/>
     </method>
@@ -10903,25 +10903,25 @@
       <arg name="length" type="size_t" m68kreg="d0"/>
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
-      <arg name="enc" type="const int" m68kreg="d1"/>
+      <arg name="enc" type="int" m68kreg="d1"/>
     </method>
     <method name="EC_KEY_precompute_mult" result="int" lifecycle="deprecated">
       <arg name="key" type="EC_KEY *" m68kreg="a0"/>
       <arg name="ctx" type="BN_CTX *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_load_private_key" result="EVP_PKEY *" lifecycle="deprecated">
+    <method name="ENGINE_load_private_key" result="EVP_PKEY *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="key_id" type="const char *" m68kreg="a1"/>
       <arg name="ui_method" type="UI_METHOD *" m68kreg="a2"/>
       <arg name="callback_data" type="void *" m68kreg="a3"/>
     </method>
-    <method name="ENGINE_load_public_key" result="EVP_PKEY *" lifecycle="deprecated">
+    <method name="ENGINE_load_public_key" result="EVP_PKEY *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="key_id" type="const char *" m68kreg="a1"/>
       <arg name="ui_method" type="UI_METHOD *" m68kreg="a2"/>
       <arg name="callback_data" type="void *" m68kreg="a3"/>
     </method>
-    <method name="ENGINE_ctrl_cmd" result="int" lifecycle="deprecated">
+    <method name="ENGINE_ctrl_cmd" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="cmd_name" type="const char *" m68kreg="a1"/>
       <arg name="i" type="long" m68kreg="a2"/>
@@ -10929,20 +10929,20 @@
       <arg name="f" type="void (*)(void)" m68kreg="d0"/>
       <arg name="cmd_optional" type="int" m68kreg="d1"/>
     </method>
-    <method name="ENGINE_set_default" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_ctrl" result="int" lifecycle="deprecated">
+    <method name="ENGINE_ctrl" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="cmd" type="int" m68kreg="d0"/>
       <arg name="i" type="long" m68kreg="d1"/>
       <arg name="p" type="void *" m68kreg="a1"/>
       <arg name="f" type="void (*)(void)" m68kreg="a2"/>
     </method>
-    <method name="ENGINE_register_all_complete" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_all_complete" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_ctrl_cmd_string" result="int" lifecycle="deprecated">
+    <method name="ENGINE_ctrl_cmd_string" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="cmd_name" type="const char *" m68kreg="a1"/>
       <arg name="arg" type="const char *" m68kreg="a2"/>
@@ -10989,28 +10989,28 @@
       <arg name="bytes" type="const unsigned char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d2"/>
     </method>
-    <method name="ENGINE_get_RSA" result="const RSA_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_RSA" result="const RSA_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_DSA" result="const DSA_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_DSA" result="const DSA_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_DH" result="const DH_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_DH" result="const DH_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_RAND" result="const RAND_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_RAND" result="const RAND_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_ciphers" result="ENGINE_CIPHERS_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_ciphers" result="ENGINE_CIPHERS_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_digests" result="ENGINE_DIGESTS_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_digests" result="ENGINE_DIGESTS_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_init" result="int" lifecycle="deprecated">
+    <method name="ENGINE_init" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_finish" result="int" lifecycle="deprecated">
+    <method name="ENGINE_finish" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="OCSP_sendreq_new" result="OSSL_HTTP_REQ_CTX *">
@@ -11335,11 +11335,11 @@
     </method>
     <method name="X509_REQ_print_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
-      <arg name="req" type="X509_REQ *" m68kreg="a1"/>
+      <arg name="req" type="const X509_REQ *" m68kreg="a1"/>
     </method>
     <method name="X509_print_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
     </method>
     <method name="d2i_DSAPrivateKey_fp" result="DSA *" status="unimplemented">
       <arg name="fp" type="FILE *" m68kreg="a0"/>
@@ -11496,157 +11496,157 @@
       <arg name="fp" type="FILE *" m68kreg="a0"/>
       <arg name="a" type="EVP_PKEY **" m68kreg="a1"/>
     </method>
-    <method name="ERR_load_ENGINE_strings" result="int" lifecycle="deprecated">
+    <method name="ERR_load_ENGINE_strings" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_DSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_DSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="dsa_meth" type="const DSA_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_finish_function" result="ENGINE_GEN_INT_FUNC_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_finish_function" result="ENGINE_GEN_INT_FUNC_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_default_RSA" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_default_RSA" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_DH" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_DH" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="dh_meth" type="const DH_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_init_function" result="ENGINE_GEN_INT_FUNC_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_init_function" result="ENGINE_GEN_INT_FUNC_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_init_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_init_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="init_f" type="ENGINE_GEN_INT_FUNC_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_default_DSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_DSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_last" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_last" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_prev" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_prev" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_default_DH" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_default_DH" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_finish_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_finish_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="finish_f" type="ENGINE_GEN_INT_FUNC_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_RSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_RSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="rsa_meth" type="const RSA_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_default_RAND" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_RAND" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_default_DSA" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_default_DSA" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_default_RSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_RSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_default_RAND" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_default_RAND" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_RAND" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_RAND" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="rand_meth" type="const RAND_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_default_DH" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_DH" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_ctrl_function" result="ENGINE_CTRL_FUNC_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_ctrl_function" result="ENGINE_CTRL_FUNC_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_ctrl_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_ctrl_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="ctrl_f" type="ENGINE_CTRL_FUNC_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_unregister_ciphers" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_ciphers" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_unregister_RSA" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_RSA" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_RAND" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_RAND" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="OBSOLETE_ENGINE_load_dynamic" result="void">
+    <method name="OBSOLETE_ENGINE_load_dynamic" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_digest_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_digest_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_register_DH" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_DH" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_RAND" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_RAND" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="OBSOLETE_ENGINE_load_cryptodev" result="void">
+    <method name="OBSOLETE_ENGINE_load_cryptodev" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_register_ciphers" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_ciphers" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_load_ubsec" result="void" status="unimplemented">
+    <method name="ENGINE_load_ubsec" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="OBSOLETE_ENGINE_load_openssl" result="void">
+    <method name="OBSOLETE_ENGINE_load_openssl" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_cmd_defns" result="const ENGINE_CMD_DEFN *" lifecycle="deprecated">
+    <method name="ENGINE_get_cmd_defns" result="const ENGINE_CMD_DEFN *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_load_privkey_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_load_privkey_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="loadpriv_f" type="ENGINE_LOAD_KEY_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_default_digests" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_digests" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_RSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_RSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_unregister_DSA" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_DSA" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_ciphers" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_ciphers" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="f" type="ENGINE_CIPHERS_PTR" m68kreg="a1"/>
     </method>
-    <method name="RAND_set_rand_engine" result="int" lifecycle="deprecated">
+    <method name="RAND_set_rand_engine" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="engine" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_digest" result="const EVP_MD *" lifecycle="deprecated">
+    <method name="ENGINE_get_digest" result="const EVP_MD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_get_cipher" result="const EVP_CIPHER *" lifecycle="deprecated">
+    <method name="ENGINE_get_cipher" result="const EVP_CIPHER *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_cmd_is_executable" result="int" lifecycle="deprecated">
+    <method name="ENGINE_cmd_is_executable" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="cmd" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_register_DSA" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_DSA" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_load_pubkey_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_load_pubkey_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="loadpub_f" type="ENGINE_LOAD_KEY_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_load_pubkey_function" result="ENGINE_LOAD_KEY_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_load_pubkey_function" result="ENGINE_LOAD_KEY_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_RSA" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_RSA" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_unregister_digests" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_digests" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="OBSOLETE_ENGINE_get_ex_new_index" result="int">
+    <method name="OBSOLETE_ENGINE_get_ex_new_index" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="argl" type="long" m68kreg="d0"/>
       <arg name="argp" type="void *" m68kreg="a0"/>
       <arg name="new_func" type="CRYPTO_EX_new *" m68kreg="a1"/>
       <arg name="dep_func" type="CRYPTO_EX_dup *" m68kreg="a2"/>
       <arg name="free_func" type="CRYPTO_EX_free *" m68kreg="a3"/>
     </method>
-    <method name="ENGINE_get_ex_data" result="void *" lifecycle="deprecated">
-      <arg name="e" type="const ENGINE *" m68kreg="a0"/>
+    <method name="ENGINE_get_ex_data" result="void *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
+      <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
     <method name="ASN1_item_d2i_fp" result="void *" status="unimplemented">
@@ -11654,64 +11654,64 @@
       <arg name="in" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
     </method>
-    <method name="ENGINE_set_cmd_defns" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_cmd_defns" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="defns" type="const ENGINE_CMD_DEFN *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_register_digests" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_digests" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_DH" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_DH" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_flags" result="int" lifecycle="deprecated">
+    <method name="ENGINE_get_flags" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_unregister_DH" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_DH" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_DSA" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_DSA" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_digests" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_digests" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="f" type="ENGINE_DIGESTS_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_register_complete" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_complete" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_ex_data" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_ex_data" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="idx" type="int" m68kreg="d0"/>
       <arg name="arg" type="void *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_destroy_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_destroy_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="destroy_f" type="ENGINE_GEN_INT_FUNC_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_cipher_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_cipher_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_print_ex_fp" result="int" status="unimplemented">
       <arg name="bp" type="FILE *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
       <arg name="cflag" type="unsigned long" m68kreg="d1"/>
     </method>
     <method name="ENGINE_load_cswift" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_set_default_ciphers" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_ciphers" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_unregister_RAND" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_RAND" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="ENGINE_load_nuron" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_set_table_flags" result="void" lifecycle="deprecated">
+    <method name="ENGINE_set_table_flags" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="ENGINE_load_chil" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_get_destroy_function" result="ENGINE_GEN_INT_FUNC_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_destroy_function" result="ENGINE_GEN_INT_FUNC_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
     <method name="ASN1_item_i2d_fp" result="int" status="unimplemented">
@@ -11719,30 +11719,30 @@
       <arg name="out" type="FILE *" m68kreg="a1"/>
       <arg name="x" type="void *" m68kreg="a2"/>
     </method>
-    <method name="ENGINE_load_atalla" result="void" status="unimplemented">
+    <method name="ENGINE_load_atalla" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_table_flags" result="unsigned int" lifecycle="deprecated">
+    <method name="ENGINE_get_table_flags" result="unsigned int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_set_flags" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_flags" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_get_load_privkey_function" result="ENGINE_LOAD_KEY_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_load_privkey_function" result="ENGINE_LOAD_KEY_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_default_string" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_string" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="def_list" type="const char *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_add_conf_module" result="void" lifecycle="deprecated">
+    <method name="ENGINE_add_conf_module" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_load_aep" result="void" status="unimplemented">
+    <method name="ENGINE_load_aep" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="ENGINE_load_sureware" result="void" status="unimplemented">
     </method>
     <method name="ENGINE_load_4758cca" result="void" status="unimplemented">
     </method>
-    <method name="ENGINE_up_ref" result="int" lifecycle="deprecated">
+    <method name="ENGINE_up_ref" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="ENGINE_set_STORE" result="int" status="unimplemented">
@@ -11826,7 +11826,7 @@
     <method name="EC_KEY_get_conv_form" result="point_conversion_form_t" lifecycle="deprecated">
       <arg name="key" type="const EC_KEY *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_static_state" result="void *">
+    <method name="ENGINE_get_static_state" result="void *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="ECDSA_SIG_new" result="ECDSA_SIG *">
     </method>
@@ -11965,7 +11965,7 @@
     </method>
     <method name="EC_GFp_nist_method" result="const EC_METHOD *" lifecycle="deprecated">
     </method>
-    <method name="OBSOLETE_ENGINE_load_padlock" result="void">
+    <method name="OBSOLETE_ENGINE_load_padlock" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="EC_GROUP_set_curve_name" result="void">
       <arg name="group" type="EC_GROUP *" m68kreg="a0"/>
@@ -12266,7 +12266,7 @@
       <arg name="length" type="size_t" m68kreg="d0"/>
       <arg name="key" type="const CAMELLIA_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
-      <arg name="enc" type="const int" m68kreg="d1"/>
+      <arg name="enc" type="int" m68kreg="d1"/>
     </method>
     <method name="Camellia_cfb128_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -12275,7 +12275,7 @@
       <arg name="key" type="const CAMELLIA_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="Camellia_cfb1_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -12284,7 +12284,7 @@
       <arg name="key" type="const CAMELLIA_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="Camellia_cfb8_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -12293,7 +12293,7 @@
       <arg name="key" type="const CAMELLIA_KEY *" m68kreg="a2"/>
       <arg name="ivec" type="unsigned char *" m68kreg="a3"/>
       <arg name="num" type="int *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="Camellia_ctr128_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -12313,7 +12313,7 @@
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
       <arg name="out" type="unsigned char *" m68kreg="a1"/>
       <arg name="key" type="const CAMELLIA_KEY *" m68kreg="a2"/>
-      <arg name="enc" type="const int" m68kreg="d0"/>
+      <arg name="enc" type="int" m68kreg="d0"/>
     </method>
     <method name="Camellia_encrypt" result="void" lifecycle="deprecated">
       <arg name="in" type="const unsigned char *" m68kreg="a0"/>
@@ -12376,7 +12376,7 @@
       <arg name="key" type="const AES_KEY *" m68kreg="a2"/>
       <arg name="key2" type="const AES_KEY *" m68kreg="a3"/>
       <arg name="ivec" type="const unsigned char *" m68kreg="d1"/>
-      <arg name="enc" type="const int" m68kreg="d2"/>
+      <arg name="enc" type="int" m68kreg="d2"/>
     </method>
     <method name="SEED_decrypt" result="void" lifecycle="deprecated">
       <arg name="s" type="const unsigned char *" m68kreg="a0"/>
@@ -12468,7 +12468,7 @@
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
       <arg name="signcert" type="X509 *" m68kreg="a1"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a2"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a3"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a3"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="i2d_CMS_ContentInfo" result="int">
@@ -12490,7 +12490,7 @@
     </method>
     <method name="CMS_verify" result="int">
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="dcont" type="BIO *" m68kreg="a3"/>
       <arg name="out" type="BIO *" m68kreg="d0"/>
@@ -12523,7 +12523,7 @@
       <arg name="detached" type="int" m68kreg="d0"/>
     </method>
     <method name="CMS_encrypt" result="CMS_ContentInfo *">
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="in" type="BIO *" m68kreg="a1"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
@@ -12545,7 +12545,7 @@
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
       <arg name="chain" type="BIO *" m68kreg="a1"/>
     </method>
-    <method name="CMS_unsigned_get0_data_by_OBJ" result="void *">
+    <method name="CMS_unsigned_get0_data_by_OBJ" result="const void *">
       <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
       <arg name="oid" type="ASN1_OBJECT *" m68kreg="a1"/>
       <arg name="lastpos" type="int" m68kreg="d0"/>
@@ -12679,7 +12679,7 @@
     <method name="CMS_sign" result="CMS_ContentInfo *">
       <arg name="signcert" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="data" type="BIO *" m68kreg="a3"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
@@ -12731,7 +12731,7 @@
       <arg name="plist" type="STACK_OF(GENERAL_NAMES) **" m68kreg="a3"/>
       <arg name="prto" type="STACK_OF(GENERAL_NAMES) **" m68kreg="d0"/>
     </method>
-    <method name="CMS_signed_get0_data_by_OBJ" result="void *">
+    <method name="CMS_signed_get0_data_by_OBJ" result="const void *">
       <arg name="si" type="const CMS_SignerInfo *" m68kreg="a0"/>
       <arg name="oid" type="const ASN1_OBJECT *" m68kreg="a1"/>
       <arg name="lastpos" type="int" m68kreg="d0"/>
@@ -12759,7 +12759,7 @@
     </method>
     <method name="CMS_set1_signers_certs" result="int">
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="CMS_signed_get_attr" result="X509_ATTRIBUTE *">
@@ -12785,7 +12785,7 @@
     <method name="CMS_verify_receipt" result="int">
       <arg name="rcms" type="CMS_ContentInfo *" m68kreg="a0"/>
       <arg name="ocms" type="CMS_ContentInfo *" m68kreg="a1"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="store" type="X509_STORE *" m68kreg="a3"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
@@ -12935,14 +12935,14 @@
       <arg name="ri" type="CMS_RecipientInfo *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_load_ssl_client_cert_function" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_load_ssl_client_cert_function" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="loadssl_f" type="ENGINE_SSL_CLIENT_CERT_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_ssl_client_cert_function" result="ENGINE_SSL_CLIENT_CERT_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_ssl_client_cert_function" result="ENGINE_SSL_CLIENT_CERT_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_load_ssl_client_cert" result="int" lifecycle="deprecated">
+    <method name="ENGINE_load_ssl_client_cert" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="s" type="SSL *" m68kreg="a1"/>
       <arg name="ca_dn" type="STACK_OF(X509_NAME) *" m68kreg="a2"/>
@@ -12952,12 +12952,12 @@
       <arg name="ui_method" type="UI_METHOD *" m68kreg="d2"/>
       <arg name="callback_data" type="void *" m68kreg="d3"/>
     </method>
-    <method name="OBSOLETE_ENGINE_load_capi" result="void">
+    <method name="OBSOLETE_ENGINE_load_capi" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_register_pkey_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_pkey_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_get_pkey_asn1_meth_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_asn1_meth_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
     <method name="WHIRLPOOL_Init" result="int" lifecycle="deprecated">
@@ -12968,11 +12968,11 @@
       <arg name="bytes" type="size_t" m68kreg="d0"/>
       <arg name="md" type="unsigned char *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_pkey_asn1_meth" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_asn1_meth" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_get_pkey_meth" result="const EVP_PKEY_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_meth" result="const EVP_PKEY_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
@@ -12980,7 +12980,7 @@
       <arg name="out" type="BIO *" m68kreg="a0"/>
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_default_pkey_asn1_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_pkey_asn1_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="WHIRLPOOL_BitUpdate" result="void" lifecycle="deprecated">
@@ -12998,41 +12998,41 @@
       <arg name="boundary" type="unsigned char ***" m68kreg="a0"/>
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_pkey_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_pkey_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pe" type="ENGINE **" m68kreg="a0"/>
       <arg name="str" type="const char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_get_pkey_meths" result="ENGINE_PKEY_METHS_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_meths" result="ENGINE_PKEY_METHS_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_pkey_asn1_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_pkey_asn1_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_default_pkey_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_pkey_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="HMAC_CTX_copy" result="int" lifecycle="deprecated">
       <arg name="dctx" type="HMAC_CTX *" m68kreg="a0"/>
       <arg name="sctx" type="HMAC_CTX *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_pkey_asn1_meths" result="ENGINE_PKEY_ASN1_METHS_PTR" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_asn1_meths" result="ENGINE_PKEY_ASN1_METHS_PTR" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
     <method name="EVP_whirlpool" result="const EVP_MD *">
     </method>
-    <method name="ENGINE_register_all_pkey_meths" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_pkey_meths" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="WHIRLPOOL_Final" result="int" lifecycle="deprecated">
       <arg name="md" type="unsigned char *" m68kreg="a0"/>
       <arg name="c" type="WHIRLPOOL_CTX *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_pkey_asn1_meth_str" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_asn1_meth_str" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="str" type="const char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_register_all_pkey_asn1_meths" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_pkey_asn1_meths" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="CMS_ContentInfo_print_ctx" result="int">
       <arg name="out" type="BIO *" m68kreg="a0"/>
@@ -13044,11 +13044,11 @@
       <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
       <arg name="crl" type="X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_set_pkey_asn1_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_pkey_asn1_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="f" type="ENGINE_PKEY_ASN1_METHS_PTR" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_get_pkey_meth_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_pkey_meth_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="nid" type="int" m68kreg="d0"/>
     </method>
     <method name="WHIRLPOOL_Update" result="int" lifecycle="deprecated">
@@ -13062,13 +13062,13 @@
       <arg name="in" type="BIO *" m68kreg="a2"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
-    <method name="ENGINE_unregister_pkey_meths" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_pkey_meths" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_unregister_pkey_asn1_meths" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_pkey_asn1_meths" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_pkey_meths" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_pkey_meths" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="f" type="ENGINE_PKEY_METHS_PTR" m68kreg="a1"/>
     </method>
@@ -13079,10 +13079,10 @@
       <arg name="d" type="const DH *" m68kreg="a0"/>
     </method>
     <method name="X509_issuer_name_hash_old" result="unsigned long">
-      <arg name="a" type="X509 *" m68kreg="a0"/>
+      <arg name="a" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_subject_name_hash_old" result="unsigned long">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="SRP_VBASE_get_by_user" result="SRP_user_pwd *" lifecycle="deprecated">
       <arg name="vb" type="SRP_VBASE *" m68kreg="a0"/>
@@ -13217,7 +13217,7 @@
     </method>
     <method name="EVP_aes_128_cbc_hmac_sha1" result="const EVP_CIPHER *">
     </method>
-    <method name="OBSOLETE_ENGINE_load_rdrand" result="void">
+    <method name="OBSOLETE_ENGINE_load_rdrand" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->>
     </method>
     <method name="ENGINE_load_rsax" result="void" status="unimplemented">
     </method>
@@ -13422,7 +13422,7 @@
     </method>
     <method name="X509V3_EXT_print_fp" result="int" status="unimplemented">
       <arg name="out" type="FILE *" m68kreg="a0"/>
-      <arg name="ext" type="X509_EXTENSION *" m68kreg="a1"/>
+      <arg name="ext" type="const X509_EXTENSION *" m68kreg="a1"/>
       <arg name="flag" type="int" m68kreg="d0"/>
       <arg name="indent" type="int" m68kreg="d0"/>
     </method>
@@ -13585,8 +13585,8 @@
     </method>
     <method name="BN_get0_nist_prime_192" result="const BIGNUM *">
     </method>
-    <method name="X509_keyid_get0" result="unsigned char *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_keyid_get0" result="const unsigned char *">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="len" type="int *" m68kreg="a1"/>
     </method>
     <method name="pitem_new" result="pitem *" status="unimplemented">
@@ -13735,7 +13735,7 @@
       <arg name="ctx" type="BN_CTX *" m68kreg="a1"/>
     </method>
     <method name="OPENSSL_sk_find_ex" result="int">
-      <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
+      <arg name="st" type="const OPENSSL_STACK *" m68kreg="a0"/>
       <arg name="data" type="const void *" m68kreg="a1"/>
     </method>
     <method name="POLICY_CONSTRAINTS_new" result="POLICY_CONSTRAINTS *">
@@ -14128,7 +14128,7 @@
       <arg name="ptype" type="int" m68kreg="d0"/>
       <arg name="pval" type="void *" m68kreg="a2"/>
     </method>
-    <method name="X509at_get0_data_by_OBJ" result="void *">
+    <method name="X509at_get0_data_by_OBJ" result="const void *">
       <arg name="x" type="const STACK_OF(X509_ATTRIBUTE) *" m68kreg="a0"/>
       <arg name="obj" type="const ASN1_OBJECT *" m68kreg="a1"/>
       <arg name="lastpos" type="int" m68kreg="d0"/>
@@ -14230,7 +14230,7 @@
       <arg name="a" type="const TS_TST_INFO *" m68kreg="a0"/>
       <arg name="pp" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_find" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_find" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pe" type="ENGINE **" m68kreg="a0"/>
       <arg name="type" type="int" m68kreg="a1"/>
     </method>
@@ -14239,7 +14239,7 @@
     <method name="TS_CONF_load_cert" result="X509 *">
       <arg name="file" type="const char *" m68kreg="a0"/>
     </method>
-    <method name="TS_REQ_get_ext" result="X509_EXTENSION *">
+    <method name="TS_REQ_get_ext" result="const X509_EXTENSION *">
       <arg name="a" type="TS_REQ *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
@@ -14260,7 +14260,7 @@
     <method name="TS_RESP_dup" result="TS_RESP *">
       <arg name="a" type="const TS_RESP *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_add0" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_add0" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="const EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
     </method>
     <method name="PKCS7_add0_attrib_signing_time" result="int">
@@ -14280,7 +14280,7 @@
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
       <arg name="gtime" type="const ASN1_GENERALIZEDTIME *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_decrypt" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_decrypt" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="decrypt_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="decrypt" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *out, size_t *outlen, const unsigned char *in, size_t inlen)" m68kreg="a2"/>
@@ -14331,7 +14331,7 @@
       <arg name="st" type="const X509_STORE_CTX *" m68kreg="a0"/>
       <arg name="nm" type="const X509_NAME *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_new" result="EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_new" result="EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="flags" type="int" m68kreg="d1"/>
       <arg name="pem_str" type="const char *" m68kreg="a0"/>
@@ -14413,7 +14413,7 @@
       <arg name="fp" type="BIO *" m68kreg="a0"/>
       <arg name="a" type="TS_MSG_IMPRINT **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_public" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_public" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pub_decode" type="int (*)(EVP_PKEY *pk, const X509_PUBKEY *pub)" m68kreg="a1"/>
       <arg name="pub_encode" type="int (*)(X509_PUBKEY *pub, const EVP_PKEY *pk)" m68kreg="a2"/>
@@ -14443,11 +14443,11 @@
     <method name="TS_REQ_ext_free" result="void">
       <arg name="a" type="TS_REQ *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_free" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_free" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_free" type="void (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_get0_asn1" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="d2i_NETSCAPE_X509" result="NETSCAPE_X509 *" status="unimplemented">
@@ -14601,7 +14601,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_add_alias" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_add_alias" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="to" type="int" m68kreg="d0"/>
       <arg name="from" type="int" m68kreg="d1"/>
     </method>
@@ -14663,7 +14663,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_ctrl" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_ctrl" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="ctrl" type="int (*)(EVP_PKEY_CTX *ctx, int type, int p1, void *p2)" m68kreg="a1"/>
       <arg name="ctrl_str" type="int (*)(EVP_PKEY_CTX *ctx, const char *type, const char *value)" m68kreg="a2"/>
@@ -14691,7 +14691,7 @@
     <method name="ASN1_PCTX_get_nm_flags" result="unsigned long">
       <arg name="p" type="const ASN1_PCTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_sign" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_sign" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="sign_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="sign" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a2"/>
@@ -14739,7 +14739,7 @@
       <arg name="fn" type="void (*)(const EVP_MD *ciph, const char *from, const char *to, void *x)" m68kreg="a0"/>
       <arg name="arg" type="void *" m68kreg="a1"/>
     </method>
-    <method name="TS_CONF_set_default_engine" result="int">
+    <method name="TS_CONF_set_default_engine" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="name" type="const char *" m68kreg="a0"/>
     </method>
     <method name="TS_ACCURACY_set_seconds" result="int">
@@ -14756,7 +14756,7 @@
       <arg name="pa" type="const X509_ALGOR **" m68kreg="a3"/>
       <arg name="p8" type="const PKCS8_PRIV_KEY_INFO *" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_get0" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_get0" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="idx" type="int" m68kreg="d0"/>
     </method>
     <method name="OBJ_add_sigid" result="int">
@@ -14779,7 +14779,7 @@
     </method>
     <method name="OBJ_sigid_free" result="void">
     </method>
-    <method name="EVP_PKEY_meth_set_init" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_init" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
     </method>
@@ -14800,7 +14800,7 @@
       <arg name="bio" type="BIO *" m68kreg="a0"/>
       <arg name="obj" type="const ASN1_OBJECT *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_verify_recover" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_verify_recover" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="verify_recover_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="verify_recover" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a2"/>
@@ -14823,7 +14823,7 @@
       <arg name="ex" type="X509_EXTENSION *" m68kreg="a1"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_derive" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_derive" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="derive_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="derive" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *key, size_t *keylen)" m68kreg="a2"/>
@@ -14902,7 +14902,7 @@
       <arg name="ign" type="unsigned char *" m68kreg="a3"/>
       <arg name="indent" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_get_count" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_get_count" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="ASN1_PCTX_set_nm_flags" result="void">
       <arg name="p" type="ASN1_PCTX *" m68kreg="a0"/>
@@ -14946,7 +14946,7 @@
       <arg name="a" type="const X509_CRL *" m68kreg="a0"/>
       <arg name="b" type="const X509_CRL *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_private" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_private" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="priv_decode" type="int (*)(EVP_PKEY *pk, const PKCS8_PRIV_KEY_INFO *p8inf)" m68kreg="a1"/>
       <arg name="priv_encode" type="int (*)(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pk)" m68kreg="a2"/>
@@ -14981,7 +14981,7 @@
     <method name="EVP_PKEY_CTX_dup" result="EVP_PKEY_CTX *">
       <arg name="ctx" type="const EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_verify" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_verify" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="verify_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="verify" type="int (*)(EVP_PKEY_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a2"/>
@@ -14996,7 +14996,7 @@
       <arg name="certs" type="const char *" m68kreg="a2"/>
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a3"/>
     </method>
-    <method name="EVP_PKEY_asn1_get0_info" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_get0_info" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ppkey_id" type="int *" m68kreg="a0"/>
       <arg name="ppkey_base_id" type="int *" m68kreg="a1"/>
       <arg name="ppkey_flags" type="int *" m68kreg="a2"/>
@@ -15050,7 +15050,7 @@
       <arg name="size" type="int" m68kreg="d1"/>
       <arg name="cmp" type="int (*)(const void *, const void *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_set_verifyctx" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_verifyctx" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="verifyctx_init" type="int (*)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
       <arg name="verifyctx" type="int (*)(EVP_PKEY_CTX *ctx, const unsigned char *sig,int siglen, EVP_MD_CTX *mctx)" m68kreg="a2"/>
@@ -15162,7 +15162,7 @@
       <arg name="fp" type="BIO *" m68kreg="a0"/>
       <arg name="a" type="const TS_REQ *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_param" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_param" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="param_decode" type="int (*)(EVP_PKEY *pkey, const unsigned char **pder, int derlen)" m68kreg="a1"/>
       <arg name="param_encode" type="int (*)(const EVP_PKEY *pkey, unsigned char **pder)" m68kreg="a2"/>
@@ -15171,7 +15171,7 @@
       <arg name="param_cmp" type="int (*)(const EVP_PKEY *a, const EVP_PKEY *b)" m68kreg="d1"/>
       <arg name="param_print" type="int (*)(BIO *out, const EVP_PKEY *pkey, int indent, ASN1_PCTX *pctx)" m68kreg="d2"/>
     </method>
-    <method name="EVP_PKEY_meth_set_encrypt" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_encrypt" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="encrypt_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="encryptfn" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *out, size_t *outlen, const unsigned char *in, size_t inlen)" m68kreg="a2"/>
@@ -15254,7 +15254,7 @@
       <arg name="pp" type="const unsigned char **" m68kreg="a1"/>
       <arg name="length" type="long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_find_str" result="const EVP_PKEY_ASN1_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pe" type="ENGINE **" m68kreg="a0"/>
       <arg name="str" type="const char *" m68kreg="a1"/>
       <arg name="len" type="int" m68kreg="d0"/>
@@ -15273,7 +15273,7 @@
     <method name="X509_CRL_get0_by_cert" result="int">
       <arg name="crl" type="X509_CRL *" m68kreg="a0"/>
       <arg name="ret" type="X509_REVOKED **" m68kreg="a1"/>
-      <arg name="x" type="X509 *" m68kreg="a2"/>
+      <arg name="x" type="const X509 *" m68kreg="a2"/>
     </method>
     <method name="EVP_PKEY_derive" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
@@ -15358,7 +15358,7 @@
     </method>
     <method name="TS_RESP_verify_signature" result="int">
       <arg name="token" type="PKCS7 *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="signer_out" type="X509 **" m68kreg="a3"/>
     </method>
@@ -15393,12 +15393,12 @@
       <arg name="a" type="const NETSCAPE_X509 *" m68kreg="a0"/>
       <arg name="out" type="unsigned char **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_signctx" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_signctx" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="signctx_init" type="int (*)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
       <arg name="signctx" type="int (*)(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen, EVP_MD_CTX *mctx)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_copy" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_copy" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="dst" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="src" type="const EVP_PKEY_ASN1_METHOD *" m68kreg="a1"/>
     </method>
@@ -15418,7 +15418,7 @@
       <arg name="a" type="TS_MSG_IMPRINT **" m68kreg="a1"/>
     </method>
     <method name="X509_STORE_CTX_get1_certs" result="STACK_OF(X509) *">
-      <arg name="xs" type="X509_STORE_CTX *" m68kreg="a0"/>
+      <arg name="xs" type="const X509_STORE_CTX *" m68kreg="a0"/>
       <arg name="nm" type="const X509_NAME *" m68kreg="a1"/>
     </method>
     <method name="EVP_PKEY_CTX_get_operation" result="int">
@@ -15469,14 +15469,14 @@
       <arg name="si" type="PKCS7_SIGNER_INFO *" m68kreg="a0"/>
       <arg name="coid" type="ASN1_OBJECT *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_add0" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_add0" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
     </method>
     <method name="TS_TST_INFO_set_tsa" result="int">
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
       <arg name="tsa" type="GENERAL_NAME *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_new" result="EVP_PKEY_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_new" result="EVP_PKEY_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="id" type="int" m68kreg="d0"/>
       <arg name="flags" type="int" m68kreg="d1"/>
     </method>
@@ -15500,7 +15500,7 @@
       <arg name="s" type="ASN1_TIME *" m68kreg="a0"/>
       <arg name="offset_day" type="int" m68kreg="d0"/>
       <arg name="offset_sec" type="long" m68kreg="d1"/>
-      <arg name="t" type="time_t *" m68kreg="a1"/>
+      <arg name="t" type="const time_t *" m68kreg="a1"/>
     </method>
     <method name="TS_RESP_CTX_add_flags" result="void">
       <arg name="ctx" type="TS_RESP_CTX *" m68kreg="a0"/>
@@ -15524,7 +15524,7 @@
     <method name="TS_REQ_free" result="void">
       <arg name="a" type="TS_REQ *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_free" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_free" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
     </method>
     <method name="TS_REQ_get_exts" result="STACK_OF(X509_EXTENSION) *">
@@ -15549,7 +15549,7 @@
     </method>
     <method name="TS_MSG_IMPRINT_new" result="TS_MSG_IMPRINT *">
     </method>
-    <method name="EVP_PKEY_meth_find" result="const EVP_PKEY_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_find" result="const EVP_PKEY_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="type" type="int" m68kreg="a0"/>
     </method>
     <method name="EVP_PKEY_get_id" result="int">
@@ -15567,7 +15567,7 @@
       <arg name="value" type="const char *" m68kreg="a3"/>
       <arg name="is_nc" type="int" m68kreg="d1"/>
     </method>
-    <method name="TS_CONF_set_crypto_device" result="int">
+    <method name="TS_CONF_set_crypto_device" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="conf" type="CONF *" m68kreg="a0"/>
       <arg name="section" type="const char *" m68kreg="a1"/>
       <arg name="device" type="const char *" m68kreg="a2"/>
@@ -15642,7 +15642,7 @@
       <arg name="p" type="const ASN1_PCTX *" m68kreg="a0"/>
     </method>
     <method name="NAME_CONSTRAINTS_check" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="nc" type="NAME_CONSTRAINTS *" m68kreg="a1"/>
     </method>
     <method name="ASN1_BIT_STRING_check" result="int">
@@ -15676,11 +15676,11 @@
       <arg name="bio" type="BIO *" m68kreg="a0"/>
       <arg name="alg" type="const X509_ALGOR *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_cleanup" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_cleanup" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="cleanup" type="void (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_free" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_free" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
     </method>
     <method name="ESS_SIGNING_CERT_free" result="void">
@@ -15723,7 +15723,7 @@
       <arg name="pdig_nid" type="int *" m68kreg="a0"/>
       <arg name="ppkey_nid" type="int *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_keygen" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_keygen" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="keygen_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="keygen" type="int (*)(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)" m68kreg="a2"/>
@@ -15742,7 +15742,7 @@
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
       <arg name="ppkey" type="EVP_PKEY **" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_paramgen" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_paramgen" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="paramgen_init" type="int (*)(EVP_PKEY_CTX *ctx)" m68kreg="a1"/>
       <arg name="paramgen" type="int (*)(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)" m68kreg="a2"/>
@@ -15786,7 +15786,7 @@
       <arg name="req" type="TS_REQ *" m68kreg="a0"/>
       <arg name="ctx" type="TS_VERIFY_CTX *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_copy" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_copy" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="copy" type="int (*)(EVP_PKEY_CTX *dst, const EVP_PKEY_CTX *src)" m68kreg="a1"/>
     </method>
@@ -15794,11 +15794,11 @@
       <arg name="p" type="ASN1_PCTX *" m68kreg="a0"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="TS_TST_INFO_get_ext" result="X509_EXTENSION *">
+    <method name="TS_TST_INFO_get_ext" result="const X509_EXTENSION *">
       <arg name="a" type="TS_TST_INFO *" m68kreg="a0"/>
       <arg name="loc" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_ctrl" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_ctrl" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_ctrl" type="int (*)(EVP_PKEY *pkey, int op, long arg1, void *arg2)" m68kreg="a1"/>
     </method>
@@ -15992,12 +15992,12 @@
       <arg name="from" type="const struct tm *" m68kreg="a2"/>
       <arg name="to" type="const struct tm *" m68kreg="a3"/>
     </method>
-    <method name="EVP_PKEY_meth_get0_info" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get0_info" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ppkey_id" type="int *" m68kreg="a0"/>
       <arg name="pflags" type="int *" m68kreg="a1"/>
       <arg name="meth" type="const EVP_PKEY_METHOD *" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_copy" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_copy" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="dst" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="src" type="const EVP_PKEY_METHOD *" m68kreg="a1"/>
     </method>
@@ -16017,7 +16017,7 @@
       <arg name="EM" type="const unsigned char *" m68kreg="d0"/>
       <arg name="sLen" type="int" m68kreg="d1"/>
     </method>
-    <method name="X509_ALGOR_set_md" result="void">
+    <method name="X509_ALGOR_set_md" result="int">
       <arg name="alg" type="X509_ALGOR *" m68kreg="a0"/>
       <arg name="md" type="const EVP_MD *" m68kreg="a1"/>
     </method>
@@ -16553,7 +16553,7 @@
     </method>
     <method name="X509_chain_check_suiteb" result="int">
       <arg name="perror_depth" type="int *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
       <arg name="chain" type="STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
@@ -16622,7 +16622,7 @@
     </method>
     <method name="X509_VERIFY_PARAM_set1_ip" result="int">
       <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
-      <arg name="ip" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="ip" type="const uint8_t *" m68kreg="a1"/>
       <arg name="iplen" type="size_t" m68kreg="d0"/>
     </method>
     <method name="X509_VERIFY_PARAM_set1_ip_asc" result="int">
@@ -16634,26 +16634,26 @@
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
     </method>
     <method name="X509_check_email" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="chk" type="const char *" m68kreg="a1"/>
       <arg name="chklen" type="size_t" m68kreg="d0"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
     </method>
     <method name="X509_check_host" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="chk" type="const char *" m68kreg="a1"/>
       <arg name="chklen" type="size_t" m68kreg="d0"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
       <arg name="peername" type="char **" m68kreg="a2"/>
     </method>
     <method name="X509_check_ip" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="chk" type="const unsigned char *" m68kreg="a1"/>
       <arg name="chklen" type="size_t" m68kreg="d0"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
     </method>
     <method name="X509_check_ip_asc" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="ipasc" type="const char *" m68kreg="a1"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
     </method>
@@ -16661,7 +16661,7 @@
       <arg name="nid" type="int" m68kreg="d0"/>
       <arg name="ext_data" type="void *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_item" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_item" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="item_verify" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, const void *, const X509_ALGOR *, const ASN1_BIT_STRING *, EVP_PKEY *)" m68kreg="a1"/>
       <arg name="item_sign" type="int (*)(EVP_MD_CTX *, const ASN1_ITEM *, const void *, X509_ALGOR *, X509_ALGOR *, ASN1_BIT_STRING *)" m68kreg="a2"/>
@@ -17177,7 +17177,7 @@
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d0"/>
     </method>
-    <method name="CRYPTO_secure_malloc" result="void *">
+    <method name="CRYPTO_secure_malloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
@@ -17192,7 +17192,7 @@
     </method>
     <method name="CRYPTO_secure_used" result="size_t">
     </method>
-    <method name="CRYPTO_secure_zalloc" result="void *">
+    <method name="CRYPTO_secure_zalloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
@@ -17206,12 +17206,12 @@
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d1"/>
     </method>
-    <method name="CRYPTO_zalloc" result="void *">
+    <method name="CRYPTO_zalloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d1"/>
     </method>
-    <method name="OPENSSL_atexit" result="int">
+    <method name="OPENSSL_atexit" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="handler" type="void (*)(void)" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_cleanup" result="void">
@@ -17394,24 +17394,24 @@
       <arg name="pr" type="const BIGNUM **" m68kreg="a1"/>
       <arg name="ps" type="const BIGNUM **" m68kreg="a2"/>
     </method>
-    <method name="ENGINE_get_default_EC" result="ENGINE *" lifecycle="deprecated">
+    <method name="ENGINE_get_default_EC" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_get_EC" result="const EC_KEY_METHOD *" lifecycle="deprecated">
+    <method name="ENGINE_get_EC" result="const EC_KEY_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="const ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_register_all_EC" result="void" lifecycle="deprecated">
+    <method name="ENGINE_register_all_EC" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
-    <method name="ENGINE_register_EC" result="int" lifecycle="deprecated">
+    <method name="ENGINE_register_EC" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_default_EC" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_default_EC" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
-    <method name="ENGINE_set_EC" result="int" lifecycle="deprecated">
+    <method name="ENGINE_set_EC" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
       <arg name="ecdsa_meth" type="const EC_KEY_METHOD *" m68kreg="a1"/>
     </method>
-    <method name="ENGINE_unregister_EC" result="void" lifecycle="deprecated">
+    <method name="ENGINE_unregister_EC" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="e" type="ENGINE *" m68kreg="a0"/>
     </method>
     <method name="EVP_aes_128_ocb" result="const EVP_CIPHER *">
@@ -17471,68 +17471,68 @@
     <method name="EVP_CIPHER_impl_ctx_size" result="int" lifecycle="deprecated">
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_dup" result="EVP_CIPHER *" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_dup" result="EVP_CIPHER *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_free" result="void" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_free" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_cleanup" result="int (*)(EVP_CIPHER_CTX *)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_cleanup" result="int (*)(EVP_CIPHER_CTX *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_ctrl" result="int (*)(EVP_CIPHER_CTX *, int, int, void *)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_ctrl" result="int (*)(EVP_CIPHER_CTX *, int, int, void *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_do_cipher" result="int (*)(EVP_CIPHER_CTX *, unsigned char *, const unsigned char *, size_t)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_do_cipher" result="int (*)(EVP_CIPHER_CTX *, unsigned char *, const unsigned char *, size_t)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_get_asn1_params" result="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_get_asn1_params" result="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_init" result="int (*)(EVP_CIPHER_CTX *, const unsigned char *, const unsigned char *, int)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_init" result="int (*)(EVP_CIPHER_CTX *, const unsigned char *, const unsigned char *, int)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_get_set_asn1_params" result="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_get_set_asn1_params" result="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a0"/>
     </method>
-    <method name="EVP_CIPHER_meth_new" result="EVP_CIPHER *" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_new" result="EVP_CIPHER *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher_type" type="int" m68kreg="d0"/>
       <arg name="block_size" type="int" m68kreg="d1"/>
       <arg name="key_len" type="int" m68kreg="d2"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_cleanup" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_cleanup" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="cleanup" type="int (*)(EVP_CIPHER_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_ctrl" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_ctrl" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="ctrl" type="int (*)(EVP_CIPHER_CTX *, int, int, void *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_do_cipher" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_do_cipher" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="do_cipher" type="int (*)(EVP_CIPHER_CTX *, unsigned char *, const unsigned char *, size_t)" m68kreg="a1"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_flags" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_flags" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_get_asn1_params" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_get_asn1_params" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="get_asn1_parameters" type="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_impl_ctx_size" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_impl_ctx_size" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="ctx_size" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_init" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_init" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="init" type="int (*)(EVP_CIPHER_CTX *, const unsigned char *, const unsigned char *, int)" m68kreg="a1"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_iv_length" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_iv_length" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="iv_len" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_CIPHER_meth_set_set_asn1_params" result="int" lifecycle="deprecated">
+    <method name="EVP_CIPHER_meth_set_set_asn1_params" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="cipher" type="EVP_CIPHER *" m68kreg="a0"/>
       <arg name="set_asn1_parameters" type="int (*)(EVP_CIPHER_CTX *, ASN1_TYPE *)" m68kreg="a1"/>
     </method>
@@ -17566,90 +17566,90 @@
     <method name="EVP_MD_CTX_reset" result="int">
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_CTX_set_update_fn" result="void" lifecycle="deprecated">
+    <method name="EVP_MD_CTX_set_update_fn" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
       <arg name="update" type="int (*)(EVP_MD_CTX *, const void *, size_t)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_CTX_update_fn" result="int (*)(EVP_MD_CTX *, const void *, size_t)" lifecycle="deprecated">
+    <method name="EVP_MD_CTX_update_fn" result="int (*)(EVP_MD_CTX *, const void *, size_t)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_dup" result="EVP_MD *" lifecycle="deprecated">
+    <method name="EVP_MD_meth_dup" result="EVP_MD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_free" result="void" lifecycle="deprecated">
+    <method name="EVP_MD_meth_free" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_app_datasize" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_app_datasize" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_cleanup" result="int (*)(EVP_MD_CTX *)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_cleanup" result="int (*)(EVP_MD_CTX *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_copy" result="int (*)(EVP_MD_CTX *, const EVP_MD_CTX *)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_copy" result="int (*)(EVP_MD_CTX *, const EVP_MD_CTX *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_ctrl" result="int (*)(EVP_MD_CTX *, int, int, void *)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_ctrl" result="int (*)(EVP_MD_CTX *, int, int, void *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_final" result="int (*)(EVP_MD_CTX *, unsigned char *)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_final" result="int (*)(EVP_MD_CTX *, unsigned char *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_flags" result="unsigned long" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_flags" result="unsigned long" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_init" result="int (*)(EVP_MD_CTX *)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_init" result="int (*)(EVP_MD_CTX *)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_input_blocksize" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_input_blocksize" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_result_size" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_result_size" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_get_update" result="int (*)(EVP_MD_CTX *, const void *, size_t)" lifecycle="deprecated">
+    <method name="EVP_MD_meth_get_update" result="int (*)(EVP_MD_CTX *, const void *, size_t)" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="const EVP_MD *" m68kreg="a0"/>
     </method>
-    <method name="EVP_MD_meth_new" result="EVP_MD *" lifecycle="deprecated">
+    <method name="EVP_MD_meth_new" result="EVP_MD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md_type" type="int" m68kreg="d0"/>
       <arg name="pkey_type" type="int" m68kreg="d1"/>
     </method>
-    <method name="EVP_MD_meth_set_app_datasize" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_app_datasize" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="datasize" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_MD_meth_set_cleanup" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_cleanup" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="cleanup" type="int (*)(EVP_MD_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_meth_set_copy" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_copy" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="copy" type="int (*)(EVP_MD_CTX *, const EVP_MD_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_meth_set_ctrl" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_ctrl" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="ctrl" type="int (*)(EVP_MD_CTX *, int, int, void *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_meth_set_final" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_final" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="final" type="int (*)(EVP_MD_CTX *, unsigned char *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_meth_set_flags" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_flags" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="EVP_MD_meth_set_init" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_init" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="init" type="int (*)(EVP_MD_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_MD_meth_set_input_blocksize" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_input_blocksize" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="blocksize" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_MD_meth_set_result_size" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_result_size" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="resultsize" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_MD_meth_set_update" result="int" lifecycle="deprecated">
+    <method name="EVP_MD_meth_set_update" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
       <arg name="update" type="int (*)(EVP_MD_CTX *, const void *, size_t)" m68kreg="a1"/>
     </method>
@@ -17670,7 +17670,7 @@
       <arg name="key" type="unsigned char *" m68kreg="a2"/>
       <arg name="keylen" type="size_t" m68kreg="a3"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_security_bits" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_security_bits" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_security_bits" type="int (*)(const EVP_PKEY *)" m68kreg="a1"/>
     </method>
@@ -17686,69 +17686,69 @@
     <method name="EVP_PKEY_get0_RSA" result="const RSA *" lifecycle="deprecated">
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_get_cleanup" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_cleanup" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcleanup" type="void (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_copy" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_copy" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcopy" type="int (**)(EVP_PKEY_CTX *, const EVP_PKEY_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_ctrl" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_ctrl" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pctrl" type="int (**)(EVP_PKEY_CTX *, int, int, void *)" m68kreg="a1"/>
       <arg name="pctrl_str" type="int (**)(EVP_PKEY_CTX *, const char *, const char *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_decrypt" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_decrypt" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pdecrypt_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pdecrypt" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_derive" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_derive" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pderive_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pderive" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_encrypt" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_encrypt" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pencrypt_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pencryptfn" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_init" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_init" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pinit" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_keygen" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_keygen" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pkeygen_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pkeygen" type="int (**)(EVP_PKEY_CTX *, EVP_PKEY *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_paramgen" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_paramgen" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pparamgen_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pparamgen" type="int (**)(EVP_PKEY_CTX *, EVP_PKEY *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_sign" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_sign" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="psign_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="psign" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_signctx" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_signctx" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="psignctx_init" type="int (**)(EVP_PKEY_CTX *, EVP_MD_CTX *)" m68kreg="a1"/>
       <arg name="psignctx" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, EVP_MD_CTX *)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_verify" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_verify" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pverify_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pverify" type="int (**)(EVP_PKEY_CTX *, const unsigned char *, size_t, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_verify_recover" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_verify_recover" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pverify_recover_init" type="int (**)(EVP_PKEY_CTX *)" m68kreg="a1"/>
       <arg name="pverify_recover" type="int (**)(EVP_PKEY_CTX *, unsigned char *, size_t *, const unsigned char *, size_t)" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_meth_get_verifyctx" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_verifyctx" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pverifyctx_init" type="int (**)(EVP_PKEY_CTX *, EVP_MD_CTX *)" m68kreg="a1"/>
       <arg name="pverifyctx" type="int (**)(EVP_PKEY_CTX *, const unsigned char *, int, EVP_MD_CTX *)" m68kreg="a2"/>
@@ -17939,7 +17939,7 @@
     <method name="PKCS12_SAFEBAG_get_nid" result="int">
       <arg name="bag" type="const PKCS12_SAFEBAG *" m68kreg="a0"/>
     </method>
-    <method name="PKCS8_get_attr" result="ASN1_TYPE *">
+    <method name="PKCS8_get_attr" result="const ASN1_TYPE *">
       <arg name="p8" type="PKCS8_PRIV_KEY_INFO *" m68kreg="a0"/>
       <arg name="attr_nid" type="int" m68kreg="d0"/>
     </method>
@@ -18048,7 +18048,7 @@
     </method>
     <method name="X509_aux_print" result="int" status="unimplemented">
       <arg name="out" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509 *" m68kreg="a1"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
       <arg name="indent" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_CRL_get0_extensions" result="const STACK_OF(X509_EXTENSION) *">
@@ -18059,7 +18059,7 @@
       <arg name="psig" type="const ASN1_BIT_STRING **" m68kreg="a1"/>
       <arg name="palg" type="const X509_ALGOR **" m68kreg="a2"/>
     </method>
-    <method name="X509_CRL_get_issuer" result="X509_NAME *">
+    <method name="X509_CRL_get_issuer" result="const X509_NAME *">
       <arg name="crl" type="const X509_CRL *" m68kreg="a0"/>
     </method>
     <method name="X509_CRL_get_lastUpdate" result="ASN1_TIME *" lifecycle="deprecated">
@@ -18069,7 +18069,7 @@
       <arg name="crl" type="X509_CRL *" m68kreg="a0"/>
     </method>
     <method name="X509_CRL_get_REVOKED" result="STACK_OF(X509_REVOKED) *">
-      <arg name="crl" type="X509_CRL *" m68kreg="a0"/>
+      <arg name="crl" type="const X509_CRL *" m68kreg="a0"/>
     </method>
     <method name="X509_CRL_get_signature_nid" result="int">
       <arg name="crl" type="const X509_CRL *" m68kreg="a0"/>
@@ -18086,14 +18086,14 @@
     <method name="X509_get0_pubkey" result="EVP_PKEY *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
-    <method name="X509_get0_reject_objects" result="STACK_OF(ASN1_OBJECT) *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_get0_reject_objects" result="const STACK_OF(ASN1_OBJECT) *">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get0_tbs_sigalg" result="const X509_ALGOR *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
-    <method name="X509_get0_trust_objects" result="STACK_OF(ASN1_OBJECT) *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_get0_trust_objects" result="const STACK_OF(ASN1_OBJECT) *">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get0_uids" result="void">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
@@ -18101,10 +18101,10 @@
       <arg name="psuid" type="const ASN1_BIT_STRING **" m68kreg="a2"/>
     </method>
     <method name="X509_getm_notAfter" result="ASN1_TIME *">
-      <arg name="x" type="const X509 *" m68kreg="a0"/>
+      <arg name="x" type="X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_getm_notBefore" result="ASN1_TIME *">
-      <arg name="x" type="const X509 *" m68kreg="a0"/>
+      <arg name="x" type="X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get_signature_type" result="int">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
@@ -18112,7 +18112,7 @@
     <method name="X509_get_version" result="long">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
-    <method name="X509_get_X509_PUBKEY" result="X509_PUBKEY *">
+    <method name="X509_get_X509_PUBKEY" result="const X509_PUBKEY *">
       <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_NAME_ENTRY_set" result="int">
@@ -18134,14 +18134,14 @@
     <method name="X509_REQ_get_signature_nid" result="int">
       <arg name="req" type="const X509_REQ *" m68kreg="a0"/>
     </method>
-    <method name="X509_REQ_get_subject_name" result="X509_NAME *">
+    <method name="X509_REQ_get_subject_name" result="const X509_NAME *">
       <arg name="req" type="const X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_get_version" result="long">
       <arg name="req" type="const X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_REQ_get_X509_PUBKEY" result="X509_PUBKEY *">
-      <arg name="req" type="X509_REQ *" m68kreg="a0"/>
+      <arg name="req" type="const X509_REQ *" m68kreg="a0"/>
     </method>
     <method name="X509_REVOKED_get0_extensions" result="const STACK_OF(X509_EXTENSION) *">
       <arg name="r" type="const X509_REVOKED *" m68kreg="a0"/>
@@ -18180,19 +18180,19 @@
     </method>
     <method name="X509v3_addr_add_inherit" result="int">
       <arg name="addr" type="IPAddrBlocks *" m68kreg="a0"/>
-      <arg name="afi" type="const unsigned" m68kreg="d0"/>
+      <arg name="afi" type="unsigned" m68kreg="d0"/>
       <arg name="safi" type="const unsigned *" m68kreg="a1"/>
     </method>
     <method name="X509v3_addr_add_prefix" result="int">
       <arg name="addr" type="IPAddrBlocks *" m68kreg="a0"/>
-      <arg name="afi" type="const unsigned" m68kreg="d0"/>
+      <arg name="afi" type="unsigned" m68kreg="d0"/>
       <arg name="safi" type="const unsigned *" m68kreg="a1"/>
       <arg name="a" type="unsigned char *" m68kreg="a2"/>
       <arg name="prefixlen" type="const int" m68kreg="d1"/>
     </method>
     <method name="X509v3_addr_add_range" result="int">
       <arg name="addr" type="IPAddrBlocks *" m68kreg="a0"/>
-      <arg name="afi" type="const unsigned" m68kreg="d0"/>
+      <arg name="afi" type="unsigned" m68kreg="d0"/>
       <arg name="safi" type="const unsigned *" m68kreg="a1"/>
       <arg name="min" type="unsigned char *" m68kreg="a2"/>
       <arg name="max" type="unsigned char *" m68kreg="a3"/>
@@ -18208,7 +18208,7 @@
       <arg name="afi" type="const unsigned" m68kreg="d0"/>
       <arg name="min" type="unsigned char *" m68kreg="a1"/>
       <arg name="max" type="unsigned char *" m68kreg="a2"/>
-      <arg name="length" type="const int" m68kreg="d1"/>
+      <arg name="length" type="int" m68kreg="d1"/>
     </method>
     <method name="X509v3_addr_inherits" result="int">
       <arg name="addr" type="IPAddrBlocks *" m68kreg="a0"/>
@@ -18224,7 +18224,7 @@
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
     </method>
     <method name="X509v3_addr_validate_resource_set" result="int">
-      <arg name="chain" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="chain" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="ext" type="IPAddrBlocks *" m68kreg="a1"/>
       <arg name="allow_inheritance" type="int" m68kreg="d0"/>
     </method>
@@ -18255,21 +18255,21 @@
       <arg name="ctx" type="X509_STORE_CTX *" m68kreg="a0"/>
     </method>
     <method name="X509v3_asid_validate_resource_set" result="int">
-      <arg name="chain" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="chain" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="ext" type="ASIdentifiers *" m68kreg="a1"/>
       <arg name="allow_inheritance" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_get0_subject_key_id" result="const ASN1_OCTET_STRING *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get_extended_key_usage" result="uint32_t">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get_extension_flags" result="uint32_t">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get_key_usage" result="uint32_t">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="DTLSv1_listen" result="int">
       <arg name="s" type="SSL *" m68kreg="a0"/>
@@ -19207,7 +19207,7 @@
     <method name="DSA_meth_get_sign_setup" result="int (*)(DSA *, BN_CTX *, BIGNUM **, BIGNUM **)" lifecycle="deprecated">
       <arg name="dsam" type="const DSA_METHOD *" m68kreg="a0"/>
     </method>
-    <method name="DSA_get0_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="DSA_get0_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="d" type="DSA *" m68kreg="a0"/>
     </method>
     <method name="X509_VERIFY_PARAM_set_auth_level" result="void">
@@ -19296,7 +19296,7 @@
       <arg name="e" type="const BIGNUM **" m68kreg="a2"/>
       <arg name="d" type="const BIGNUM **" m68kreg="a3"/>
     </method>
-    <method name="RSA_get0_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="RSA_get0_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="r" type="const RSA *" m68kreg="a0"/>
     </method>
     <method name="RSA_meth_set_priv_enc" result="int" lifecycle="deprecated">
@@ -19392,7 +19392,7 @@
       <arg name="pub_key" type="const BIGNUM **" m68kreg="a1"/>
       <arg name="priv_key" type="const BIGNUM **" m68kreg="a2"/>
     </method>
-    <method name="DH_get0_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="DH_get0_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="d" type="DH *" m68kreg="a0"/>
     </method>
     <method name="DH_set0_key" result="int" lifecycle="deprecated">
@@ -19617,7 +19617,7 @@
       <arg name="s" type="const SSL *" m68kreg="a0"/>
     </method>
     <method name="X509_get_pathlen" result="long">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_OBJECT_get_type" result="X509_LOOKUP_TYPE">
       <arg name="a" type="const X509_OBJECT *" m68kreg="a0"/>
@@ -19765,7 +19765,7 @@
       <arg name="x" type="X509 *" m68kreg="a1"/>
     </method>
     <method name="NAME_CONSTRAINTS_check_CN" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="nc" type="NAME_CONSTRAINTS *" m68kreg="a1"/>
     </method>
     <method name="X509_set_proxy_flag" result="void">
@@ -19776,7 +19776,7 @@
       <arg name="l" type="long" m68kreg="d0"/>
     </method>
     <method name="X509_get_proxy_pathlen" result="long">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="ASIdentifierChoice_new" result="ASIdentifierChoice *">
     </method>
@@ -20033,7 +20033,7 @@
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d1"/>
     </method>
-    <method name="EVP_PKEY_set1_engine" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_set1_engine" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a0"/>
       <arg name="e" type="ENGINE *" m68kreg="a1"/>
     </method>
@@ -20517,7 +20517,7 @@
     </method>
     <method name="X509_OBJECT_new" result="X509_OBJECT *">
     </method>
-    <method name="PKCS12_get_attr" result="ASN1_TYPE *" lifecycle="deprecated">
+    <method name="PKCS12_get_attr" result="const ASN1_TYPE *" lifecycle="deprecated">
       <arg name="bag" type="const PKCS12_SAFEBAG *" m68kreg="a0"/>
       <arg name="attr_nid" type="int" m68kreg="d0"/>
     </method>
@@ -20643,7 +20643,7 @@
     </method>
     <method name="UI_null" result="const UI_METHOD *">
     </method>
-    <method name="EC_KEY_get0_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="EC_KEY_get0_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="eckey" type="const EC_KEY *" m68kreg="a0"/>
     </method>
     <method name="INT32_it" result="const ASN1_ITEM *">
@@ -20673,7 +20673,7 @@
     </method>
     <method name="X509_CRL_print_ex" result="int">
       <arg name="out" type="BIO *" m68kreg="a0"/>
-      <arg name="x" type="X509_CRL *" m68kreg="a1"/>
+      <arg name="x" type="const X509_CRL *" m68kreg="a1"/>
       <arg name="nmflag" type="unsigned long" m68kreg="d0"/>
     </method>
     <method name="X509_SIG_INFO_get" result="int">
@@ -20684,7 +20684,7 @@
       <arg name="flags" type="uint32_t *" m68kreg="d0"/>
     </method>
     <method name="X509_get_signature_info" result="int">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
       <arg name="mdnid" type="int *" m68kreg="a1"/>
       <arg name="pknid" type="int *" m68kreg="a2"/>
       <arg name="secbits" type="int *" m68kreg="a3"/>
@@ -20941,7 +20941,7 @@
       <arg name="do_function" type="void (*)(const OSSL_STORE_LOADER *loader, void *do_arg)" m68kreg="a0"/>
       <arg name="do_arg" type="void *" m68kreg="a1"/>
     </method>
-    <method name="OSSL_STORE_LOADER_get0_engine" result="const ENGINE *" lifecycle="deprecated">
+    <method name="OSSL_STORE_LOADER_get0_engine" result="const ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="loader" type="const OSSL_STORE_LOADER *" m68kreg="a0"/>
     </method>
     <method name="RAND_DRBG_instantiate" result="int" status="unimplemented">
@@ -20957,7 +20957,7 @@
       <arg name="type" type="int" m68kreg="d0"/>
       <arg name="flags" type="unsigned int" m68kreg="d1"/>
     </method>
-    <method name="RAND_DRBG_set_callbacks" result="int" status="unimplemented"> <!-- Removed in OpenSSL 3.0 -->
+    <method name="RAND_DRBG_set_callbacks" result="int" status="unimplemented"> <!-- 3.0.0 REMOVED -->
       <arg name="drbg" type="RAND_DRBG *" m68kreg="a0"/>
       <arg name="get_entropy" type="RAND_DRBG_get_entropy_fn" m68kreg="a1"/>
       <arg name="cleanup_entropy" type="RAND_DRBG_cleanup_entropy_fn" m68kreg="a2"/>
@@ -21027,10 +21027,10 @@
     </method>
     <method name="SCRYPT_PARAMS_it" result="const ASN1_ITEM *">
     </method>
-    <method name="EVP_PKEY_meth_get0" result="const EVP_PKEY_METHOD *" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get0" result="const EVP_PKEY_METHOD *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="idx" type="size_t" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_meth_get_count" result="size_t" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_count" result="size_t" status="unimplemented"> <!-- 4.0.0 REMOVED -->
     </method>
     <method name="RAND_DRBG_get0_public" result="RAND_DRBG *" status="unimplemented">
     </method>
@@ -21103,15 +21103,15 @@
     <method name="EVP_PKEY_check" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="check" type="int (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcheck" type="int (**)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_remove" result="int" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_remove" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_sk_reserve" result="int">
@@ -21128,11 +21128,11 @@
       <arg name="c" type="OPENSSL_sk_compfunc" m68kreg="a0"/>
       <arg name="n" type="int" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_siginf" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_siginf" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="siginf_set" type="int (*)(X509_SIG_INFO *siginf, const X509_ALGOR *alg, const ASN1_STRING *sig)" m68kreg="a1"/>
     </method>
@@ -21158,27 +21158,27 @@
     <method name="EVP_PKEY_param_check" result="int">
       <arg name="ctx" type="EVP_PKEY_CTX *" m68kreg="a0"/>
     </method>
-    <method name="EVP_PKEY_meth_set_public_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_public_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="check" type="int (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_param_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_param_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="check" type="int (*)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_public_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_public_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcheck" type="int (**)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_param_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_param_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pcheck" type="int (**)(EVP_PKEY *pkey)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_public_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_public_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_pub_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_param_check" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_param_check" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="pkey_param_check" type="int (*)(const EVP_PKEY *pk)" m68kreg="a1"/>
     </method>
@@ -21205,7 +21205,7 @@
     <method name="OCSP_resp_get0_signer" result="int">
       <arg name="bs" type="OCSP_BASICRESP *" m68kreg="a0"/>
       <arg name="signer" type="X509 **" m68kreg="a1"/>
-      <arg name="extra_certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="extra_certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
     </method>
     <method name="RSA_get0_multi_prime_crt_params" result="int" lifecycle="deprecated">
       <arg name="r" type="const RSA *" m68kreg="a0"/>
@@ -21398,7 +21398,7 @@
       <arg name="brsp" type="OCSP_BASICRESP *" m68kreg="a0"/>
       <arg name="signer" type="X509 *" m68kreg="a1"/>
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a2"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a3"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a3"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
     <method name="RAND_DRBG_bytes" result="int" status="unimplemented">
@@ -21436,7 +21436,7 @@
       <arg name="criterion" type="const OSSL_STORE_SEARCH *" m68kreg="a0"/>
     </method>
     <method name="OSSL_STORE_SEARCH_by_name" result="OSSL_STORE_SEARCH *">
-      <arg name="name" type="X509_NAME *" m68kreg="a0"/>
+      <arg name="name" type="const X509_NAME *" m68kreg="a0"/>
     </method>
     <method name="OSSL_STORE_supports_search" result="int">
       <arg name="ctx" type="OSSL_STORE_CTX *" m68kreg="a0"/>
@@ -21457,14 +21457,14 @@
       <arg name="criterion" type="const OSSL_STORE_SEARCH *" m68kreg="a0"/>
     </method>
     <method name="OSSL_STORE_SEARCH_by_issuer_serial" result="OSSL_STORE_SEARCH *">
-      <arg name="name" type="X509_NAME *" m68kreg="a0"/>
+      <arg name="name" type="const X509_NAME *" m68kreg="a0"/>
       <arg name="serial" type="const ASN1_INTEGER *" m68kreg="a1"/>
     </method>
-    <method name="OSSL_STORE_SEARCH_get0_name" result="X509_NAME *">
+    <method name="OSSL_STORE_SEARCH_get0_name" result="const X509_NAME *">
       <arg name="criterion" type="const OSSL_STORE_SEARCH *" m68kreg="a0"/>
     </method>
     <method name="X509_get0_authority_key_id" result="const ASN1_OCTET_STRING *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="OSSL_STORE_LOADER_set_find" result="int" lifecycle="deprecated">
       <arg name="loader" type="OSSL_STORE_LOADER *" m68kreg="a0"/>
@@ -21500,11 +21500,11 @@
       <arg name="len" type="size_t" m68kreg="d0"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_set_priv_key" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_set_priv_key" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="set_priv_key" type="int (*)(EVP_PKEY *pk, const unsigned char *priv, size_t len)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_set_pub_key" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_set_pub_key" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="set_pub_key" type="int (*)(EVP_PKEY *pk, const unsigned char *pub, size_t len)" m68kreg="a1"/>
     </method>
@@ -21672,11 +21672,11 @@
       <arg name="priv" type="unsigned char *" m68kreg="a1"/>
       <arg name="len" type="size_t *" m68kreg="a2"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_get_priv_key" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_get_priv_key" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="get_priv_key" type="int (*)(const EVP_PKEY *pk, unsigned char *priv, size_t *len)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_asn1_set_get_pub_key" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_asn1_set_get_pub_key" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="ameth" type="EVP_PKEY_ASN1_METHOD *" m68kreg="a0"/>
       <arg name="get_pub_key" type="int (*)(const EVP_PKEY *pk, unsigned char *pub, size_t *len)" m68kreg="a1"/>
     </method>
@@ -21732,11 +21732,11 @@
       <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
       <arg name="pctx" type="EVP_PKEY_CTX *" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_digest_custom" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_digest_custom" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="digest_custom" type="int (*)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_digest_custom" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_digest_custom" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="pdigest_custom" type="int (**)(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx)" m68kreg="a1"/>
     </method>
@@ -21758,31 +21758,31 @@
       <arg name="settings" type="OPENSSL_INIT_SETTINGS *" m68kreg="a0"/>
       <arg name="flags" type="unsigned long" m68kreg="d0"/>
     </method>
-    <method name="EVP_PKEY_get0_engine" result="ENGINE *" lifecycle="deprecated">
+    <method name="EVP_PKEY_get0_engine" result="ENGINE *" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pkey" type="const EVP_PKEY *" m68kreg="a0"/>
     </method>
     <method name="X509_get0_authority_serial" result="const ASN1_INTEGER *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="X509_get0_authority_issuer" result="const GENERAL_NAMES *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
 
     <!-- AmiSSL v4.6 - OpenSSL 1.1.1g -->
 
-    <method name="EVP_PKEY_meth_set_digestsign" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_digestsign" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="digestsign" type="int (*)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_set_digestverify" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_set_digestverify" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="digestverify" type="int (*)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_digestverify" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_digestverify" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="digestverify" type="int (**)(EVP_MD_CTX *ctx, const unsigned char *sig, size_t siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
     </method>
-    <method name="EVP_PKEY_meth_get_digestsign" result="void" lifecycle="deprecated">
+    <method name="EVP_PKEY_meth_get_digestsign" result="void" status="unimplemented"> <!-- 4.0.0 REMOVED -->
       <arg name="pmeth" type="const EVP_PKEY_METHOD *" m68kreg="a0"/>
       <arg name="digestsign" type="int (**)(EVP_MD_CTX *ctx, unsigned char *sig, size_t *siglen, const unsigned char *tbs, size_t tbslen)" m68kreg="a1"/>
     </method>
@@ -22689,8 +22689,8 @@
       <arg name="x" type="X509 *" m68kreg="a0"/>
       <arg name="d_id" type="ASN1_OCTET_STRING *" m68kreg="a1"/>
     </method>
-    <method name="X509_get0_distinguishing_id" result="ASN1_OCTET_STRING *">
-      <arg name="x" type="X509 *" m68kreg="a0"/>
+    <method name="X509_get0_distinguishing_id" result="const ASN1_OCTET_STRING *">
+      <arg name="x" type="const X509 *" m68kreg="a0"/>
     </method>
     <method name="EVP_MD_up_ref" result="int">
       <arg name="md" type="EVP_MD *" m68kreg="a0"/>
@@ -22958,7 +22958,7 @@
       <vararg name="dummy" type="long" m68kreg="a1"/>
     </method>
     <method name="X509_self_signed" result="int">
-      <arg name="cert" type="X509 *" m68kreg="a0"/>
+      <arg name="cert" type="const X509 *" m68kreg="a0"/>
       <arg name="verify_signature" type="int" m68kreg="d0"/>
     </method>
     <method name="OPENSSL_hexstr2buf_ex" result="int">
@@ -23524,12 +23524,12 @@
     </method>
     <method name="X509_add_cert" result="int">
       <arg name="sk" type="STACK_OF(X509) *" m68kreg="a0"/>
-      <arg name="cert" type="X509 *" m68kreg="a1"/>
+      <arg name="cert" type="const X509 *" m68kreg="a1"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_add_certs" result="int">
       <arg name="sk" type="STACK_OF(X509) *" m68kreg="a0"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="flags" type="int" m68kreg="d0"/>
     </method>
     <method name="X509_STORE_load_file" result="int">
@@ -24945,7 +24945,7 @@
       <arg name="propq" type="const char *" m68kreg="a2"/>
     </method>
     <method name="X509_build_chain" result="STACK_OF(X509) *">
-      <arg name="target" type="X509 *" m68kreg="a0"/>
+      <arg name="target" type="const X509 *" m68kreg="a0"/>
       <arg name="certs" type="STACK_OF(X509) *" m68kreg="a1"/>
       <arg name="store" type="X509_STORE *" m68kreg="a2"/>
       <arg name="with_self_signed" type="int" m68kreg="d0"/>
@@ -25178,7 +25178,7 @@
     <method name="CMS_sign_ex" result="CMS_ContentInfo *">
       <arg name="signcert" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="data" type="BIO *" m68kreg="a3"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
       <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="d1"/>
@@ -25207,7 +25207,7 @@
       <arg name="propq" type="const char *" m68kreg="d2"/>
     </method>
     <method name="CMS_encrypt_ex" result="CMS_ContentInfo *">
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="in" type="BIO *" m68kreg="a1"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
       <arg name="flags" type="unsigned int" m68kreg="d0"/>
@@ -25268,14 +25268,14 @@
     <method name="PKCS7_sign_ex" result="PKCS7 *">
       <arg name="signcert" type="X509 *" m68kreg="a0"/>
       <arg name="pkey" type="EVP_PKEY *" m68kreg="a1"/>
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="data" type="BIO *" m68kreg="a3"/>
       <arg name="flags" type="int" m68kreg="d0"/>
       <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="d1"/>
       <arg name="propq" type="const char *" m68kreg="d2"/>
     </method>
     <method name="PKCS7_encrypt_ex" result="PKCS7 *">
-      <arg name="certs" type="STACK_OF(X509) *" m68kreg="a0"/>
+      <arg name="certs" type="const STACK_OF(X509) *" m68kreg="a0"/>
       <arg name="in" type="BIO *" m68kreg="a1"/>
       <arg name="cipher" type="const EVP_CIPHER *" m68kreg="a2"/>
       <arg name="flags" type="int" m68kreg="d0"/>
@@ -26025,7 +26025,7 @@
       <arg name="kdf" type="const EVP_KDF *" m68kreg="a0"/>
     </method>
     <method name="OPENSSL_sk_find_all" result="int">
-      <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
+      <arg name="st" type="const OPENSSL_STACK *" m68kreg="a0"/>
       <arg name="data" type="const void *" m68kreg="a1"/>
       <arg name="pnum" type="int *" m68kreg="a2"/>
     </method>
@@ -26892,10 +26892,10 @@
     <method name="CMS_SignedData_verify" result="BIO *">
       <arg name="sd" type="CMS_SignedData *" m68kreg="a0"/>
       <arg name="detached_data" type="BIO *" m68kreg="a1"/>
-      <arg name="scerts" type="STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="scerts" type="const STACK_OF(X509) *" m68kreg="a2"/>
       <arg name="store" type="X509_STORE *" m68kreg="a3"/>
-      <arg name="extra" type="STACK_OF(X509) *" m68kreg="d0"/>
-      <arg name="crls" type="STACK_OF(X509_CRL) *" m68kreg="d1"/>
+      <arg name="extra" type="const STACK_OF(X509) *" m68kreg="d0"/>
+      <arg name="crls" type="const STACK_OF(X509_CRL) *" m68kreg="d1"/>
       <arg name="flags" type="unsigned int" m68kreg="d2"/>
       <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="d3"/>
       <arg name="propq" type="const char *" m68kreg="d4"/>
@@ -27449,7 +27449,7 @@
       <arg name="val" type="uint64_t" m68kreg="d0-d1"/>
       <arg name="lock" type="CRYPTO_RWLOCK *" m68kreg="a1"/>
     </method>
-    <method name="CRYPTO_aligned_alloc" result="void *">
+    <method name="CRYPTO_aligned_alloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="align" type="size_t" m68kreg="d1"/>
       <arg name="freeptr" type="void **" m68kreg="a0"/>
@@ -28862,19 +28862,19 @@
       <arg name="selection" type="int" m68kreg="d0"/>
       <arg name="params" type="const OSSL_PARAM *" m68kreg="a2"/>
     </method>
-    <method name="CRYPTO_malloc_array" result="void *">
+    <method name="CRYPTO_malloc_array" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="size" type="size_t" m68kreg="d1"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d2"/>
     </method>
-    <method name="CRYPTO_calloc" result="void *">
+    <method name="CRYPTO_calloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="size" type="size_t" m68kreg="d1"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d2"/>
     </method>
-    <method name="CRYPTO_aligned_alloc_array" result="void *">
+    <method name="CRYPTO_aligned_alloc_array" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="size" type="size_t" m68kreg="d1"/>
       <arg name="align" type="size_t" m68kreg="d2"/>
@@ -28897,17 +28897,343 @@
       <arg name="file" type="const char *" m68kreg="a1"/>
       <arg name="line" type="int" m68kreg="d3"/>
     </method>
-    <method name="CRYPTO_secure_malloc_array" result="void *">
+    <method name="CRYPTO_secure_malloc_array" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="size" type="size_t" m68kreg="d1"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d2"/>
     </method>
-    <method name="CRYPTO_secure_calloc" result="void *">
+    <method name="CRYPTO_secure_calloc" result="OSSL_CRYPTO_ALLOC void *">
       <arg name="num" type="size_t" m68kreg="d0"/>
       <arg name="size" type="size_t" m68kreg="d1"/>
       <arg name="file" type="const char *" m68kreg="a0"/>
       <arg name="line" type="int" m68kreg="d2"/>
+    </method>
+
+    <!-- AmiSSL v6.1 - OpenSSL 4.0.0 -->
+
+    <method name="SSL_CTX_get0_alpn_protos" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="protos" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="protos_len" type="unsigned int *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_get0_alpn_protos" result="void">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="protos" type="const unsigned char **" m68kreg="a1"/>
+      <arg name="protos_len" type="unsigned int *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_set1_dnsname" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="dnsname" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_add1_dnsname" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="dnsname" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set1_ipaddr" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="ipaddr" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_add1_ipaddr" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="ipaddr" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_get_peer_addr" result="int">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="peer_addr" type="BIO_ADDR *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_is_quic" result="int">
+      <arg name="c" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_CTX_is_server" result="int">
+      <arg name="c" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_QUIC_method" result="const SSL_METHOD *">
+    </method>
+    <method name="SSL_listen_ex" result="int">
+      <arg name="listener" type="SSL *" m68kreg="a0"/>
+      <arg name="new_conn" type="SSL *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_new" result="OSSL_ECHSTORE *">
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a0"/>
+      <arg name="propq" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_free" result="void">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_ECHSTORE_new_config_amiga" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="echversion" type="uint16_t" m68kreg="d0"/>
+      <arg name="max_name_length" type="uint8_t" m68kreg="d1"/>
+      <arg name="public_name" type="const char *" m68kreg="a1"/>
+      <arg name="suite" type="OSSL_HPKE_SUITE *" m68kreg="a2"/>
+    </method>
+    <method name="OSSL_ECHSTORE_write_pem" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="index" type="int" m68kreg="d0"/>
+      <arg name="out" type="BIO *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_read_echconfiglist" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="in" type="BIO *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_get1_info" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="index" type="int" m68kreg="d0"/>
+      <arg name="loaded_secs" type="time_t *" m68kreg="a1"/>
+      <arg name="public_name" type="char **" m68kreg="a2"/>
+      <arg name="echconfig" type="char **" m68kreg="a3"/>
+      <arg name="has_private" type="int *" m68kreg="d1"/>
+      <arg name="for_retry" type="int *" m68kreg="d2"/>
+    </method>
+    <method name="OSSL_ECHSTORE_downselect" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="index" type="int" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_ECHSTORE_set1_key_and_read_pem" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="priv" type="EVP_PKEY *" m68kreg="a1"/>
+      <arg name="in" type="BIO *" m68kreg="a2"/>
+      <arg name="for_retry" type="int" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_ECHSTORE_read_pem" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="in" type="BIO *" m68kreg="a1"/>
+      <arg name="for_retry" type="int" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_ECHSTORE_num_keys" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="numkeys" type="int *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_flush_keys" result="int">
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="age" type="time_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_CTX_set1_echstore" result="int">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_set1_echstore" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="es" type="OSSL_ECHSTORE *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_get1_echstore" result="OSSL_ECHSTORE *">
+      <arg name="ctx" type="const SSL_CTX *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_get1_echstore" result="OSSL_ECHSTORE *">
+      <arg name="s" type="const SSL *" m68kreg="a0"/>
+    </method>
+    <method name="SSL_ech_get1_status" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="inner_sni" type="char **" m68kreg="a1"/>
+      <arg name="outer_sni" type="char **" m68kreg="a2"/>
+    </method>
+    <method name="SSL_ech_set_grease_type" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="type" type="uint16_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_ech_set_callback" result="void">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="f" type="SSL_ech_cb_func" m68kreg="a1"/>
+    </method>
+    <method name="SSL_CTX_ech_set_callback" result="void">
+      <arg name="ctx" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="f" type="SSL_ech_cb_func" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_ECHSTORE_num_entries" result="int">
+      <arg name="es" type="const OSSL_ECHSTORE *" m68kreg="a0"/>
+      <arg name="numentries" type="int *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_ech_set1_server_names" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="inner_name" type="const char *" m68kreg="a1"/>
+      <arg name="outer_name" type="const char *" m68kreg="a2"/>
+      <arg name="no_outer" type="int" m68kreg="d0"/>
+    </method>
+    <method name="SSL_ech_set1_outer_server_name" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="outer_name" type="const char *" m68kreg="a1"/>
+      <arg name="no_outer" type="int" m68kreg="d0"/>
+    </method>
+    <method name="SSL_ech_set1_outer_alpn_protos" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="protos" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="protos_len" type="const size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_ech_set1_grease_suite" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="suite" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="SSL_ech_get1_retry_config" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="ec" type="unsigned char **" m68kreg="a1"/>
+      <arg name="eclen" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="SSL_CTX_ech_set1_outer_alpn_protos" result="int">
+      <arg name="s" type="SSL_CTX *" m68kreg="a0"/>
+      <arg name="protos" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="protos_len" type="const size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_set1_ech_config_list" result="int">
+      <arg name="ssl" type="SSL *" m68kreg="a0"/>
+      <arg name="ecl" type="const uint8_t *" m68kreg="a1"/>
+      <arg name="ecl_len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="SSL_get0_sigalg" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="idx" type="int" m68kreg="d0"/>
+      <arg name="codepoint" type="unsigned int *" m68kreg="a1"/>
+      <arg name="name" type="const char **" m68kreg="a2"/>
+    </method>
+    <method name="SSL_get0_shared_sigalg" result="int">
+      <arg name="s" type="SSL *" m68kreg="a0"/>
+      <arg name="idx" type="int" m68kreg="d0"/>
+      <arg name="codepoint" type="unsigned int *" m68kreg="a1"/>
+      <arg name="name" type="const char **" m68kreg="a2"/>
+    </method>
+    <method name="EC_GROUP_security_bits" result="int">
+      <arg name="group" type="const EC_GROUP *" m68kreg="a0"/>
+    </method>
+    <method name="ASN1_BIT_STRING_get_length" result="int">
+      <arg name="abs" type="const ASN1_BIT_STRING *" m68kreg="a0"/>
+      <arg name="length" type="size_t *" m68kreg="a1"/>
+      <arg name="unused_bits" type="int *" m68kreg="a2"/>
+    </method>
+    <method name="BIO_set_send_flags" result="long">
+      <arg name="b" type="BIO *" m68kreg="a0"/>
+      <arg name="flags" type="int" m68kreg="d0"/>
+    </method>
+    <method name="BIO_eof" result="int">
+      <arg name="b" type="BIO *" m68kreg="a0"/>
+    </method>
+    <method name="CRYPTO_atomic_store_int" result="int" status="unimplemented"> <!-- 4.0.0 REMOVED -->
+      <arg name="dst" type="int *" m68kreg="a0"/>
+      <arg name="val" type="int" m68kreg="d0"/>
+      <arg name="lock" type="CRYPTO_RWLOCK *" m68kreg="a1"/>
+    </method>
+    <method name="X509_check_certificate_times" result="int">
+      <arg name="vpm" type="const X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="x" type="const X509 *" m68kreg="a1"/>
+      <arg name="error" type="int *" m68kreg="a2"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_host_input_validation" result="void">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="validate_host" type="int (*)(const char *name, size_t len)" m68kreg="a1"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_rfc822" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="email" type="const char *" m68kreg="a1"/>
+      <arg name="emaillen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_add1_rfc822" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="email" type="const char *" m68kreg="a1"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_rfc822_input_validation" result="void">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="validate_rfc822" type="int (*)(const char *name, size_t len)" m68kreg="a1"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_smtputf8" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="email" type="const char *" m68kreg="a1"/>
+      <arg name="emaillen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_add1_smtputf8" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="email" type="const char *" m68kreg="a1"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_smtputf8_input_validation" result="void">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="validate_smtputf8" type="int (*)(const char *name, size_t len)" m68kreg="a1"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_add1_ip" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="ip" type="const uint8_t *" m68kreg="a1"/>
+      <arg name="len" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_add1_ip_asc" result="int">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="ipasc" type="const char *" m68kreg="a1"/>
+    </method>
+    <method name="X509_VERIFY_PARAM_set1_ip_input_validation" result="void">
+      <arg name="param" type="X509_VERIFY_PARAM *" m68kreg="a0"/>
+      <arg name="validate_ip" type="int (*)(const uint8_t *name, size_t len)" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_STORE_INFO_new_SKEY" result="OSSL_STORE_INFO *">
+      <arg name="skey" type="EVP_SKEY *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_STORE_INFO_get0_SKEY" result="EVP_SKEY *">
+      <arg name="info" type="const OSSL_STORE_INFO *" m68kreg="a0"/>
+    </method>
+    <method name="OSSL_STORE_INFO_get1_SKEY" result="EVP_SKEY *">
+      <arg name="info" type="const OSSL_STORE_INFO *" m68kreg="a0"/>
+    </method>
+    <method name="OPENSSL_posix_to_tm" result="int">
+      <arg name="time" type="int64_t" m68kreg="d0-d1"/>
+      <arg name="out_tm" type="struct tm *" m68kreg="a0"/>
+    </method>
+    <method name="OPENSSL_tm_to_posix" result="int">
+      <arg name="tm" type="const struct tm *" m68kreg="a0"/>
+      <arg name="out" type="int64_t *" m68kreg="a1"/>
+    </method>
+    <method name="OPENSSL_timegm" result="int">
+      <arg name="tm" type="const struct tm *" m68kreg="a0"/>
+      <arg name="out" type="time_t *" m68kreg="a1"/>
+    </method>
+    <method name="OSSL_PARAM_clear_free" result="void">
+      <arg name="p" type="OSSL_PARAM *" m68kreg="a0"/>
+    </method>
+    <method name="CMS_dataFinal_ex" result="int">
+      <arg name="cms" type="CMS_ContentInfo *" m68kreg="a0"/>
+      <arg name="bio" type="BIO *" m68kreg="a1"/>
+      <arg name="data" type="BIO *" m68kreg="a2"/>
+    </method>
+    <method name="CMS_SignerInfo_verify_ex" result="int">
+      <arg name="si" type="CMS_SignerInfo *" m68kreg="a0"/>
+      <arg name="chain" type="BIO *" m68kreg="a1"/>
+      <arg name="data" type="BIO *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_SIGNATURE_has_message_update" result="int">
+      <arg name="sig" type="const EVP_SIGNATURE *" m68kreg="a0"/>
+    </method>
+    <method name="EVP_MD_CTX_serialize" result="int">
+      <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
+      <arg name="out" type="unsigned char *" m68kreg="a1"/>
+      <arg name="outlen" type="size_t *" m68kreg="a2"/>
+    </method>
+    <method name="EVP_MD_CTX_deserialize" result="int">
+      <arg name="ctx" type="EVP_MD_CTX *" m68kreg="a0"/>
+      <arg name="in" type="const unsigned char *" m68kreg="a1"/>
+      <arg name="inlen" type="size_t" m68kreg="d0"/>
+    </method>
+    <method name="OSSL_ENCODER_CTX_ctrl_string" result="int">
+      <arg name="ctx" type="OSSL_ENCODER_CTX *" m68kreg="a0"/>
+      <arg name="name" type="const char *" m68kreg="a1"/>
+      <arg name="val" type="const char *" m68kreg="a2"/>
+    </method>
+    <method name="OPENSSL_sk_set_cmp_thunks" result="OPENSSL_STACK *">
+      <arg name="st" type="OPENSSL_STACK *" m68kreg="a0"/>
+      <arg name="c_thunk" type="int (*)(int (*)(const void *, const void *), const void *, const void *)" m68kreg="a1"/>
+    </method>
+    <method name="ASN1_BIT_STRING_set1" result="int">
+      <arg name="abs" type="ASN1_BIT_STRING *" m68kreg="a0"/>
+      <arg name="data" type="const uint8_t *" m68kreg="a1"/>
+      <arg name="length" type="size_t" m68kreg="d0"/>
+      <arg name="unused_bits" type="int" m68kreg="d1"/>
+    </method>
+    <method name="OSSL_ESS_check_signing_certs_ex" result="int">
+      <arg name="ss" type="const ESS_SIGNING_CERT *" m68kreg="a0"/>
+      <arg name="ssv2" type="const ESS_SIGNING_CERT_V2 *" m68kreg="a1"/>
+      <arg name="chain" type="const STACK_OF(X509) *" m68kreg="a2"/>
+      <arg name="libctx" type="OSSL_LIB_CTX *" m68kreg="a3"/>
+      <arg name="propq" type="const char *" m68kreg="d0"/>
+      <arg name="require_signing_cert" type="int" m68kreg="d1"/>
+    </method>
+    <method name="X509v3_delete_extension" result="X509_EXTENSION *">
+      <arg name="x" type="STACK_OF(X509_EXTENSION) **" m68kreg="a0"/>
+      <arg name="loc" type="int" m68kreg="d0"/>
     </method>
 
     <!-- ### END ### DO NOT (RE)MOVE THIS LINE -->

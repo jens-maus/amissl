@@ -408,7 +408,7 @@ int __OSSL_PARAM_set_octet_ptr(__reg("a6") struct Library * , __reg("a0") OSSL_P
 void __X509_set0_distinguishing_id(__reg("a6") struct Library * , __reg("a0") X509 * x , __reg("a1") ASN1_OCTET_STRING * d_id ) = "\tjsr\t-816(a6)";
 #define X509_set0_distinguishing_id(x, d_id) __X509_set0_distinguishing_id(AmiSSLExtBase, (x), (d_id))
 
-ASN1_OCTET_STRING * __X509_get0_distinguishing_id(__reg("a6") struct Library * , __reg("a0") X509 * x ) = "\tjsr\t-822(a6)";
+const ASN1_OCTET_STRING * __X509_get0_distinguishing_id(__reg("a6") struct Library * , __reg("a0") const X509 * x ) = "\tjsr\t-822(a6)";
 #define X509_get0_distinguishing_id(x) __X509_get0_distinguishing_id(AmiSSLExtBase, (x))
 
 int __EVP_MD_up_ref(__reg("a6") struct Library * , __reg("a0") EVP_MD * md ) = "\tjsr\t-828(a6)";
@@ -614,7 +614,7 @@ void __ERR_set_error(__reg("a6") struct Library * , __reg("d0") int lib , __reg(
 #define ERR_set_error(lib, reason, fmt, ...) __ERR_set_error(AmiSSLExtBase, (lib), (reason), (fmt), __VA_ARGS__)
 #endif
 
-int __X509_self_signed(__reg("a6") struct Library * , __reg("a0") X509 * cert , __reg("d0") int verify_signature ) = "\tjsr\t-1224(a6)";
+int __X509_self_signed(__reg("a6") struct Library * , __reg("a0") const X509 * cert , __reg("d0") int verify_signature ) = "\tjsr\t-1224(a6)";
 #define X509_self_signed(cert, verify_signature) __X509_self_signed(AmiSSLExtBase, (cert), (verify_signature))
 
 int __OPENSSL_hexstr2buf_ex(__reg("a6") struct Library * , __reg("a0") unsigned char * buf , __reg("d0") size_t buf_n , __reg("a1") size_t * buflen , __reg("a2") const char * str , __reg("d1") const char sep ) = "\tjsr\t-1230(a6)";
@@ -1046,10 +1046,10 @@ ASN1_OCTET_STRING * __OSSL_CMP_HDR_get0_recipNonce(__reg("a6") struct Library * 
 X509_LOOKUP_METHOD * __X509_LOOKUP_store(__reg("a6") struct Library * ) = "\tjsr\t-2082(a6)";
 #define X509_LOOKUP_store() __X509_LOOKUP_store(AmiSSLExtBase)
 
-int __X509_add_cert(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * sk , __reg("a1") X509 * cert , __reg("d0") int flags ) = "\tjsr\t-2088(a6)";
+int __X509_add_cert(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * sk , __reg("a1") const X509 * cert , __reg("d0") int flags ) = "\tjsr\t-2088(a6)";
 #define X509_add_cert(sk, cert, flags) __X509_add_cert(AmiSSLExtBase, (sk), (cert), (flags))
 
-int __X509_add_certs(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * sk , __reg("a1") STACK_OF(X509) * certs , __reg("d0") int flags ) = "\tjsr\t-2094(a6)";
+int __X509_add_certs(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * sk , __reg("a1") const STACK_OF(X509) * certs , __reg("d0") int flags ) = "\tjsr\t-2094(a6)";
 #define X509_add_certs(sk, certs, flags) __X509_add_certs(AmiSSLExtBase, (sk), (certs), (flags))
 
 int __X509_STORE_load_file(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") const char * file ) = "\tjsr\t-2100(a6)";
@@ -1939,7 +1939,7 @@ int __X509_STORE_load_locations_ex(__reg("a6") struct Library * , __reg("a0") X5
 int __X509_STORE_set_default_paths_ex(__reg("a6") struct Library * , __reg("a0") X509_STORE * xs , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-3858(a6)";
 #define X509_STORE_set_default_paths_ex(xs, libctx, propq) __X509_STORE_set_default_paths_ex(AmiSSLExtBase, (xs), (libctx), (propq))
 
-STACK_OF(X509) * __X509_build_chain(__reg("a6") struct Library * , __reg("a0") X509 * target , __reg("a1") STACK_OF(X509) * certs , __reg("a2") X509_STORE * store , __reg("d0") int with_self_signed , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-3864(a6)";
+STACK_OF(X509) * __X509_build_chain(__reg("a6") struct Library * , __reg("a0") const X509 * target , __reg("a1") STACK_OF(X509) * certs , __reg("a2") X509_STORE * store , __reg("d0") int with_self_signed , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-3864(a6)";
 #define X509_build_chain(target, certs, store, with_self_signed, libctx, propq) __X509_build_chain(AmiSSLExtBase, (target), (certs), (store), (with_self_signed), (libctx), (propq))
 
 int __X509V3_set_issuer_pkey(__reg("a6") struct Library * , __reg("a0") X509V3_CTX * ctx , __reg("a1") EVP_PKEY * pkey ) = "\tjsr\t-3870(a6)";
@@ -2089,7 +2089,7 @@ CMS_ContentInfo * __CMS_ContentInfo_new_ex(__reg("a6") struct Library * , __reg(
 CMS_ContentInfo * __SMIME_read_CMS_ex(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("d0") int flags , __reg("a1") BIO ** bcont , __reg("a2") CMS_ContentInfo ** ci ) = "\tjsr\t-4158(a6)";
 #define SMIME_read_CMS_ex(bio, flags, bcont, ci) __SMIME_read_CMS_ex(AmiSSLExtBase, (bio), (flags), (bcont), (ci))
 
-CMS_ContentInfo * __CMS_sign_ex(__reg("a6") struct Library * , __reg("a0") X509 * signcert , __reg("a1") EVP_PKEY * pkey , __reg("a2") STACK_OF(X509) * certs , __reg("a3") BIO * data , __reg("d0") unsigned int flags , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-4164(a6)";
+CMS_ContentInfo * __CMS_sign_ex(__reg("a6") struct Library * , __reg("a0") X509 * signcert , __reg("a1") EVP_PKEY * pkey , __reg("a2") const STACK_OF(X509) * certs , __reg("a3") BIO * data , __reg("d0") unsigned int flags , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-4164(a6)";
 #define CMS_sign_ex(signcert, pkey, certs, data, flags, libctx, propq) __CMS_sign_ex(AmiSSLExtBase, (signcert), (pkey), (certs), (data), (flags), (libctx), (propq))
 
 CMS_ContentInfo * __CMS_data_create_ex(__reg("a6") struct Library * , __reg("a0") BIO * in , __reg("d0") unsigned int flags , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-4170(a6)";
@@ -2101,7 +2101,7 @@ CMS_ContentInfo * __CMS_digest_create_ex(__reg("a6") struct Library * , __reg("a
 CMS_ContentInfo * __CMS_EncryptedData_encrypt_ex(__reg("a6") struct Library * , __reg("a0") BIO * in , __reg("a1") const EVP_CIPHER * cipher , __reg("a2") const unsigned char * key , __reg("d0") size_t keylen , __reg("d1") unsigned int flags , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-4182(a6)";
 #define CMS_EncryptedData_encrypt_ex(in, cipher, key, keylen, flags, libctx, propq) __CMS_EncryptedData_encrypt_ex(AmiSSLExtBase, (in), (cipher), (key), (keylen), (flags), (libctx), (propq))
 
-CMS_ContentInfo * __CMS_encrypt_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * certs , __reg("a1") BIO * in , __reg("a2") const EVP_CIPHER * cipher , __reg("d0") unsigned int flags , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-4188(a6)";
+CMS_ContentInfo * __CMS_encrypt_ex(__reg("a6") struct Library * , __reg("a0") const STACK_OF(X509) * certs , __reg("a1") BIO * in , __reg("a2") const EVP_CIPHER * cipher , __reg("d0") unsigned int flags , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-4188(a6)";
 #define CMS_encrypt_ex(certs, in, cipher, flags, libctx, propq) __CMS_encrypt_ex(AmiSSLExtBase, (certs), (in), (cipher), (flags), (libctx), (propq))
 
 CMS_ContentInfo * __CMS_EnvelopedData_create_ex(__reg("a6") struct Library * , __reg("a0") const EVP_CIPHER * cipher , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-4194(a6)";
@@ -2125,10 +2125,10 @@ int __EVP_DigestVerifyInit_ex(__reg("a6") struct Library * , __reg("a0") EVP_MD_
 PKCS7 * __PKCS7_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * propq ) = "\tjsr\t-4230(a6)";
 #define PKCS7_new_ex(libctx, propq) __PKCS7_new_ex(AmiSSLExtBase, (libctx), (propq))
 
-PKCS7 * __PKCS7_sign_ex(__reg("a6") struct Library * , __reg("a0") X509 * signcert , __reg("a1") EVP_PKEY * pkey , __reg("a2") STACK_OF(X509) * certs , __reg("a3") BIO * data , __reg("d0") int flags , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-4236(a6)";
+PKCS7 * __PKCS7_sign_ex(__reg("a6") struct Library * , __reg("a0") X509 * signcert , __reg("a1") EVP_PKEY * pkey , __reg("a2") const STACK_OF(X509) * certs , __reg("a3") BIO * data , __reg("d0") int flags , __reg("d1") OSSL_LIB_CTX * libctx , __reg("d2") const char * propq ) = "\tjsr\t-4236(a6)";
 #define PKCS7_sign_ex(signcert, pkey, certs, data, flags, libctx, propq) __PKCS7_sign_ex(AmiSSLExtBase, (signcert), (pkey), (certs), (data), (flags), (libctx), (propq))
 
-PKCS7 * __PKCS7_encrypt_ex(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509) * certs , __reg("a1") BIO * in , __reg("a2") const EVP_CIPHER * cipher , __reg("d0") int flags , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-4242(a6)";
+PKCS7 * __PKCS7_encrypt_ex(__reg("a6") struct Library * , __reg("a0") const STACK_OF(X509) * certs , __reg("a1") BIO * in , __reg("a2") const EVP_CIPHER * cipher , __reg("d0") int flags , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d1") const char * propq ) = "\tjsr\t-4242(a6)";
 #define PKCS7_encrypt_ex(certs, in, cipher, flags, libctx, propq) __PKCS7_encrypt_ex(AmiSSLExtBase, (certs), (in), (cipher), (flags), (libctx), (propq))
 
 PKCS7 * __SMIME_read_PKCS7_ex(__reg("a6") struct Library * , __reg("a0") BIO * bio , __reg("a1") BIO ** bcont , __reg("a2") PKCS7 ** p7 ) = "\tjsr\t-4248(a6)";
@@ -2668,7 +2668,7 @@ const char * __EVP_KEYEXCH_get0_description(__reg("a6") struct Library * , __reg
 const char * __EVP_KDF_get0_description(__reg("a6") struct Library * , __reg("a0") const EVP_KDF * kdf ) = "\tjsr\t-5316(a6)";
 #define EVP_KDF_get0_description(kdf) __EVP_KDF_get0_description(AmiSSLExtBase, (kdf))
 
-int __OPENSSL_sk_find_all(__reg("a6") struct Library * , __reg("a0") OPENSSL_STACK * st , __reg("a1") const void * data , __reg("a2") int * pnum ) = "\tjsr\t-5322(a6)";
+int __OPENSSL_sk_find_all(__reg("a6") struct Library * , __reg("a0") const OPENSSL_STACK * st , __reg("a1") const void * data , __reg("a2") int * pnum ) = "\tjsr\t-5322(a6)";
 #define OPENSSL_sk_find_all(st, data, pnum) __OPENSSL_sk_find_all(AmiSSLExtBase, (st), (data), (pnum))
 
 X509_CRL * __X509_CRL_new_ex(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * propq ) = "\tjsr\t-5328(a6)";
@@ -3160,7 +3160,7 @@ void __CMS_SignedData_free(__reg("a6") struct Library * , __reg("a0") CMS_Signed
 CMS_SignedData * __CMS_SignedData_new(__reg("a6") struct Library * ) = "\tjsr\t-6300(a6)";
 #define CMS_SignedData_new() __CMS_SignedData_new(AmiSSLExtBase)
 
-BIO * __CMS_SignedData_verify(__reg("a6") struct Library * , __reg("a0") CMS_SignedData * sd , __reg("a1") BIO * detached_data , __reg("a2") STACK_OF(X509) * scerts , __reg("a3") X509_STORE * store , __reg("d0") STACK_OF(X509) * extra , __reg("d1") STACK_OF(X509_CRL) * crls , __reg("d2") unsigned int flags , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-6306(a6)";
+BIO * __CMS_SignedData_verify(__reg("a6") struct Library * , __reg("a0") CMS_SignedData * sd , __reg("a1") BIO * detached_data , __reg("a2") const STACK_OF(X509) * scerts , __reg("a3") X509_STORE * store , __reg("d0") const STACK_OF(X509) * extra , __reg("d1") const STACK_OF(X509_CRL) * crls , __reg("d2") unsigned int flags , __reg("d3") OSSL_LIB_CTX * libctx , __reg("d4") const char * propq ) = "\tjsr\t-6306(a6)";
 #define CMS_SignedData_verify(sd, detached_data, scerts, store, extra, crls, flags, libctx, propq) __CMS_SignedData_verify(AmiSSLExtBase, (sd), (detached_data), (scerts), (store), (extra), (crls), (flags), (libctx), (propq))
 
 const BIO_METHOD * __BIO_s_dgram_mem(__reg("a6") struct Library * ) = "\tjsr\t-6312(a6)";
@@ -3535,7 +3535,7 @@ OSSL_CRMF_CERTTEMPLATE * __OSSL_CRMF_CERTTEMPLATE_dup(__reg("a6") struct Library
 int __CRYPTO_atomic_store(__reg("a6") struct Library * , __reg("a0") uint64_t * dst , __reg("d0/d1") uint64_t val , __reg("a1") CRYPTO_RWLOCK * lock ) = "\tjsr\t-7050(a6)";
 #define CRYPTO_atomic_store(dst, val, lock) __CRYPTO_atomic_store(AmiSSLExtBase, (dst), (val), (lock))
 
-void * __CRYPTO_aligned_alloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t align , __reg("a0") void ** freeptr , __reg("a1") const char * file , __reg("d2") int line ) = "\tjsr\t-7056(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_aligned_alloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t align , __reg("a0") void ** freeptr , __reg("a1") const char * file , __reg("d2") int line ) = "\tjsr\t-7056(a6)";
 #define CRYPTO_aligned_alloc(num, align, freeptr, file, line) __CRYPTO_aligned_alloc(AmiSSLExtBase, (num), (align), (freeptr), (file), (line))
 
 STACK_OF(X509_EXTENSION) * __X509v3_add_extensions(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509_EXTENSION) ** target , __reg("a1") const STACK_OF(X509_EXTENSION) * exts ) = "\tjsr\t-7062(a6)";
@@ -4660,13 +4660,13 @@ EVP_SKEY * __EVP_KDF_derive_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_
 EVP_SKEY * __EVP_SKEY_import_SKEYMGMT(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") EVP_SKEYMGMT * skeymgmt , __reg("d0") int selection , __reg("a2") const OSSL_PARAM * params ) = "\tjsr\t-9300(a6)";
 #define EVP_SKEY_import_SKEYMGMT(libctx, skeymgmt, selection, params) __EVP_SKEY_import_SKEYMGMT(AmiSSLExtBase, (libctx), (skeymgmt), (selection), (params))
 
-void * __CRYPTO_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9306(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9306(a6)";
 #define CRYPTO_malloc_array(num, size, file, line) __CRYPTO_malloc_array(AmiSSLExtBase, (num), (size), (file), (line))
 
-void * __CRYPTO_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9312(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9312(a6)";
 #define CRYPTO_calloc(num, size, file, line) __CRYPTO_calloc(AmiSSLExtBase, (num), (size), (file), (line))
 
-void * __CRYPTO_aligned_alloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("d2") size_t align , __reg("a0") void ** freeptr , __reg("a1") const char * file , __reg("d3") int line ) = "\tjsr\t-9318(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_aligned_alloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("d2") size_t align , __reg("a0") void ** freeptr , __reg("a1") const char * file , __reg("d3") int line ) = "\tjsr\t-9318(a6)";
 #define CRYPTO_aligned_alloc_array(num, size, align, freeptr, file, line) __CRYPTO_aligned_alloc_array(AmiSSLExtBase, (num), (size), (align), (freeptr), (file), (line))
 
 void * __CRYPTO_realloc_array(__reg("a6") struct Library * , __reg("a0") void * addr , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a1") const char * file , __reg("d2") int line ) = "\tjsr\t-9324(a6)";
@@ -4675,10 +4675,226 @@ void * __CRYPTO_realloc_array(__reg("a6") struct Library * , __reg("a0") void * 
 void * __CRYPTO_clear_realloc_array(__reg("a6") struct Library * , __reg("a0") void * addr , __reg("d0") size_t old_num , __reg("d1") size_t num , __reg("d2") size_t size , __reg("a1") const char * file , __reg("d3") int line ) = "\tjsr\t-9330(a6)";
 #define CRYPTO_clear_realloc_array(addr, old_num, num, size, file, line) __CRYPTO_clear_realloc_array(AmiSSLExtBase, (addr), (old_num), (num), (size), (file), (line))
 
-void * __CRYPTO_secure_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9336(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_secure_malloc_array(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9336(a6)";
 #define CRYPTO_secure_malloc_array(num, size, file, line) __CRYPTO_secure_malloc_array(AmiSSLExtBase, (num), (size), (file), (line))
 
-void * __CRYPTO_secure_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9342(a6)";
+OSSL_CRYPTO_ALLOC void * __CRYPTO_secure_calloc(__reg("a6") struct Library * , __reg("d0") size_t num , __reg("d1") size_t size , __reg("a0") const char * file , __reg("d2") int line ) = "\tjsr\t-9342(a6)";
 #define CRYPTO_secure_calloc(num, size, file, line) __CRYPTO_secure_calloc(AmiSSLExtBase, (num), (size), (file), (line))
+
+void __SSL_CTX_get0_alpn_protos(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("a1") const unsigned char ** protos , __reg("a2") unsigned int * protos_len ) = "\tjsr\t-9348(a6)";
+#define SSL_CTX_get0_alpn_protos(ctx, protos, protos_len) __SSL_CTX_get0_alpn_protos(AmiSSLExtBase, (ctx), (protos), (protos_len))
+
+void __SSL_get0_alpn_protos(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("a1") const unsigned char ** protos , __reg("a2") unsigned int * protos_len ) = "\tjsr\t-9354(a6)";
+#define SSL_get0_alpn_protos(ssl, protos, protos_len) __SSL_get0_alpn_protos(AmiSSLExtBase, (ssl), (protos), (protos_len))
+
+int __SSL_set1_dnsname(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * dnsname ) = "\tjsr\t-9360(a6)";
+#define SSL_set1_dnsname(s, dnsname) __SSL_set1_dnsname(AmiSSLExtBase, (s), (dnsname))
+
+int __SSL_add1_dnsname(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * dnsname ) = "\tjsr\t-9366(a6)";
+#define SSL_add1_dnsname(s, dnsname) __SSL_add1_dnsname(AmiSSLExtBase, (s), (dnsname))
+
+int __SSL_set1_ipaddr(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * ipaddr ) = "\tjsr\t-9372(a6)";
+#define SSL_set1_ipaddr(s, ipaddr) __SSL_set1_ipaddr(AmiSSLExtBase, (s), (ipaddr))
+
+int __SSL_add1_ipaddr(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * ipaddr ) = "\tjsr\t-9378(a6)";
+#define SSL_add1_ipaddr(s, ipaddr) __SSL_add1_ipaddr(AmiSSLExtBase, (s), (ipaddr))
+
+int __SSL_get_peer_addr(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("a1") BIO_ADDR * peer_addr ) = "\tjsr\t-9384(a6)";
+#define SSL_get_peer_addr(ssl, peer_addr) __SSL_get_peer_addr(AmiSSLExtBase, (ssl), (peer_addr))
+
+int __SSL_CTX_is_quic(__reg("a6") struct Library * , __reg("a0") const SSL_CTX * c ) = "\tjsr\t-9390(a6)";
+#define SSL_CTX_is_quic(c) __SSL_CTX_is_quic(AmiSSLExtBase, (c))
+
+int __SSL_CTX_is_server(__reg("a6") struct Library * , __reg("a0") const SSL_CTX * c ) = "\tjsr\t-9396(a6)";
+#define SSL_CTX_is_server(c) __SSL_CTX_is_server(AmiSSLExtBase, (c))
+
+const SSL_METHOD * __OSSL_QUIC_method(__reg("a6") struct Library * ) = "\tjsr\t-9402(a6)";
+#define OSSL_QUIC_method() __OSSL_QUIC_method(AmiSSLExtBase)
+
+int __SSL_listen_ex(__reg("a6") struct Library * , __reg("a0") SSL * listener , __reg("a1") SSL * new_conn ) = "\tjsr\t-9408(a6)";
+#define SSL_listen_ex(listener, new_conn) __SSL_listen_ex(AmiSSLExtBase, (listener), (new_conn))
+
+OSSL_ECHSTORE * __OSSL_ECHSTORE_new(__reg("a6") struct Library * , __reg("a0") OSSL_LIB_CTX * libctx , __reg("a1") const char * propq ) = "\tjsr\t-9414(a6)";
+#define OSSL_ECHSTORE_new(libctx, propq) __OSSL_ECHSTORE_new(AmiSSLExtBase, (libctx), (propq))
+
+void __OSSL_ECHSTORE_free(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es ) = "\tjsr\t-9420(a6)";
+#define OSSL_ECHSTORE_free(es) __OSSL_ECHSTORE_free(AmiSSLExtBase, (es))
+
+int __OSSL_ECHSTORE_new_config_amiga(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("d0") uint16_t echversion , __reg("d1") uint8_t max_name_length , __reg("a1") const char * public_name , __reg("a2") OSSL_HPKE_SUITE * suite ) = "\tjsr\t-9426(a6)";
+#define OSSL_ECHSTORE_new_config_amiga(es, echversion, max_name_length, public_name, suite) __OSSL_ECHSTORE_new_config_amiga(AmiSSLExtBase, (es), (echversion), (max_name_length), (public_name), (suite))
+
+int __OSSL_ECHSTORE_write_pem(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("d0") int index , __reg("a1") BIO * out ) = "\tjsr\t-9432(a6)";
+#define OSSL_ECHSTORE_write_pem(es, index, out) __OSSL_ECHSTORE_write_pem(AmiSSLExtBase, (es), (index), (out))
+
+int __OSSL_ECHSTORE_read_echconfiglist(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("a1") BIO * in ) = "\tjsr\t-9438(a6)";
+#define OSSL_ECHSTORE_read_echconfiglist(es, in) __OSSL_ECHSTORE_read_echconfiglist(AmiSSLExtBase, (es), (in))
+
+int __OSSL_ECHSTORE_get1_info(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("d0") int index , __reg("a1") time_t * loaded_secs , __reg("a2") char ** public_name , __reg("a3") char ** echconfig , __reg("d1") int * has_private , __reg("d2") int * for_retry ) = "\tjsr\t-9444(a6)";
+#define OSSL_ECHSTORE_get1_info(es, index, loaded_secs, public_name, echconfig, has_private, for_retry) __OSSL_ECHSTORE_get1_info(AmiSSLExtBase, (es), (index), (loaded_secs), (public_name), (echconfig), (has_private), (for_retry))
+
+int __OSSL_ECHSTORE_downselect(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("d0") int index ) = "\tjsr\t-9450(a6)";
+#define OSSL_ECHSTORE_downselect(es, index) __OSSL_ECHSTORE_downselect(AmiSSLExtBase, (es), (index))
+
+int __OSSL_ECHSTORE_set1_key_and_read_pem(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("a1") EVP_PKEY * priv , __reg("a2") BIO * in , __reg("d0") int for_retry ) = "\tjsr\t-9456(a6)";
+#define OSSL_ECHSTORE_set1_key_and_read_pem(es, priv, in, for_retry) __OSSL_ECHSTORE_set1_key_and_read_pem(AmiSSLExtBase, (es), (priv), (in), (for_retry))
+
+int __OSSL_ECHSTORE_read_pem(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("a1") BIO * in , __reg("d0") int for_retry ) = "\tjsr\t-9462(a6)";
+#define OSSL_ECHSTORE_read_pem(es, in, for_retry) __OSSL_ECHSTORE_read_pem(AmiSSLExtBase, (es), (in), (for_retry))
+
+int __OSSL_ECHSTORE_num_keys(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("a1") int * numkeys ) = "\tjsr\t-9468(a6)";
+#define OSSL_ECHSTORE_num_keys(es, numkeys) __OSSL_ECHSTORE_num_keys(AmiSSLExtBase, (es), (numkeys))
+
+int __OSSL_ECHSTORE_flush_keys(__reg("a6") struct Library * , __reg("a0") OSSL_ECHSTORE * es , __reg("d0") time_t age ) = "\tjsr\t-9474(a6)";
+#define OSSL_ECHSTORE_flush_keys(es, age) __OSSL_ECHSTORE_flush_keys(AmiSSLExtBase, (es), (age))
+
+int __SSL_CTX_set1_echstore(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("a1") OSSL_ECHSTORE * es ) = "\tjsr\t-9480(a6)";
+#define SSL_CTX_set1_echstore(ctx, es) __SSL_CTX_set1_echstore(AmiSSLExtBase, (ctx), (es))
+
+int __SSL_set1_echstore(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") OSSL_ECHSTORE * es ) = "\tjsr\t-9486(a6)";
+#define SSL_set1_echstore(s, es) __SSL_set1_echstore(AmiSSLExtBase, (s), (es))
+
+OSSL_ECHSTORE * __SSL_CTX_get1_echstore(__reg("a6") struct Library * , __reg("a0") const SSL_CTX * ctx ) = "\tjsr\t-9492(a6)";
+#define SSL_CTX_get1_echstore(ctx) __SSL_CTX_get1_echstore(AmiSSLExtBase, (ctx))
+
+OSSL_ECHSTORE * __SSL_get1_echstore(__reg("a6") struct Library * , __reg("a0") const SSL * s ) = "\tjsr\t-9498(a6)";
+#define SSL_get1_echstore(s) __SSL_get1_echstore(AmiSSLExtBase, (s))
+
+int __SSL_ech_get1_status(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") char ** inner_sni , __reg("a2") char ** outer_sni ) = "\tjsr\t-9504(a6)";
+#define SSL_ech_get1_status(s, inner_sni, outer_sni) __SSL_ech_get1_status(AmiSSLExtBase, (s), (inner_sni), (outer_sni))
+
+int __SSL_ech_set_grease_type(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") uint16_t type ) = "\tjsr\t-9510(a6)";
+#define SSL_ech_set_grease_type(s, type) __SSL_ech_set_grease_type(AmiSSLExtBase, (s), (type))
+
+void __SSL_ech_set_callback(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") SSL_ech_cb_func f ) = "\tjsr\t-9516(a6)";
+#define SSL_ech_set_callback(s, f) __SSL_ech_set_callback(AmiSSLExtBase, (s), (f))
+
+void __SSL_CTX_ech_set_callback(__reg("a6") struct Library * , __reg("a0") SSL_CTX * ctx , __reg("a1") SSL_ech_cb_func f ) = "\tjsr\t-9522(a6)";
+#define SSL_CTX_ech_set_callback(ctx, f) __SSL_CTX_ech_set_callback(AmiSSLExtBase, (ctx), (f))
+
+int __OSSL_ECHSTORE_num_entries(__reg("a6") struct Library * , __reg("a0") const OSSL_ECHSTORE * es , __reg("a1") int * numentries ) = "\tjsr\t-9528(a6)";
+#define OSSL_ECHSTORE_num_entries(es, numentries) __OSSL_ECHSTORE_num_entries(AmiSSLExtBase, (es), (numentries))
+
+int __SSL_ech_set1_server_names(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * inner_name , __reg("a2") const char * outer_name , __reg("d0") int no_outer ) = "\tjsr\t-9534(a6)";
+#define SSL_ech_set1_server_names(s, inner_name, outer_name, no_outer) __SSL_ech_set1_server_names(AmiSSLExtBase, (s), (inner_name), (outer_name), (no_outer))
+
+int __SSL_ech_set1_outer_server_name(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * outer_name , __reg("d0") int no_outer ) = "\tjsr\t-9540(a6)";
+#define SSL_ech_set1_outer_server_name(s, outer_name, no_outer) __SSL_ech_set1_outer_server_name(AmiSSLExtBase, (s), (outer_name), (no_outer))
+
+int __SSL_ech_set1_outer_alpn_protos(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const unsigned char * protos , __reg("d0") const size_t protos_len ) = "\tjsr\t-9546(a6)";
+#define SSL_ech_set1_outer_alpn_protos(s, protos, protos_len) __SSL_ech_set1_outer_alpn_protos(AmiSSLExtBase, (s), (protos), (protos_len))
+
+int __SSL_ech_set1_grease_suite(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") const char * suite ) = "\tjsr\t-9552(a6)";
+#define SSL_ech_set1_grease_suite(s, suite) __SSL_ech_set1_grease_suite(AmiSSLExtBase, (s), (suite))
+
+int __SSL_ech_get1_retry_config(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("a1") unsigned char ** ec , __reg("a2") size_t * eclen ) = "\tjsr\t-9558(a6)";
+#define SSL_ech_get1_retry_config(s, ec, eclen) __SSL_ech_get1_retry_config(AmiSSLExtBase, (s), (ec), (eclen))
+
+int __SSL_CTX_ech_set1_outer_alpn_protos(__reg("a6") struct Library * , __reg("a0") SSL_CTX * s , __reg("a1") const unsigned char * protos , __reg("d0") const size_t protos_len ) = "\tjsr\t-9564(a6)";
+#define SSL_CTX_ech_set1_outer_alpn_protos(s, protos, protos_len) __SSL_CTX_ech_set1_outer_alpn_protos(AmiSSLExtBase, (s), (protos), (protos_len))
+
+int __SSL_set1_ech_config_list(__reg("a6") struct Library * , __reg("a0") SSL * ssl , __reg("a1") const uint8_t * ecl , __reg("d0") size_t ecl_len ) = "\tjsr\t-9570(a6)";
+#define SSL_set1_ech_config_list(ssl, ecl, ecl_len) __SSL_set1_ech_config_list(AmiSSLExtBase, (ssl), (ecl), (ecl_len))
+
+int __SSL_get0_sigalg(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") int idx , __reg("a1") unsigned int * codepoint , __reg("a2") const char ** name ) = "\tjsr\t-9576(a6)";
+#define SSL_get0_sigalg(s, idx, codepoint, name) __SSL_get0_sigalg(AmiSSLExtBase, (s), (idx), (codepoint), (name))
+
+int __SSL_get0_shared_sigalg(__reg("a6") struct Library * , __reg("a0") SSL * s , __reg("d0") int idx , __reg("a1") unsigned int * codepoint , __reg("a2") const char ** name ) = "\tjsr\t-9582(a6)";
+#define SSL_get0_shared_sigalg(s, idx, codepoint, name) __SSL_get0_shared_sigalg(AmiSSLExtBase, (s), (idx), (codepoint), (name))
+
+int __EC_GROUP_security_bits(__reg("a6") struct Library * , __reg("a0") const EC_GROUP * group ) = "\tjsr\t-9588(a6)";
+#define EC_GROUP_security_bits(group) __EC_GROUP_security_bits(AmiSSLExtBase, (group))
+
+int __ASN1_BIT_STRING_get_length(__reg("a6") struct Library * , __reg("a0") const ASN1_BIT_STRING * abs , __reg("a1") size_t * length , __reg("a2") int * unused_bits ) = "\tjsr\t-9594(a6)";
+#define ASN1_BIT_STRING_get_length(abs, length, unused_bits) __ASN1_BIT_STRING_get_length(AmiSSLExtBase, (abs), (length), (unused_bits))
+
+long __BIO_set_send_flags(__reg("a6") struct Library * , __reg("a0") BIO * b , __reg("d0") int flags ) = "\tjsr\t-9600(a6)";
+#define BIO_set_send_flags(b, flags) __BIO_set_send_flags(AmiSSLExtBase, (b), (flags))
+
+int __BIO_eof(__reg("a6") struct Library * , __reg("a0") BIO * b ) = "\tjsr\t-9606(a6)";
+#define BIO_eof(b) __BIO_eof(AmiSSLExtBase, (b))
+
+int __X509_check_certificate_times(__reg("a6") struct Library * , __reg("a0") const X509_VERIFY_PARAM * vpm , __reg("a1") const X509 * x , __reg("a2") int * error ) = "\tjsr\t-9618(a6)";
+#define X509_check_certificate_times(vpm, x, error) __X509_check_certificate_times(AmiSSLExtBase, (vpm), (x), (error))
+
+void __X509_VERIFY_PARAM_set1_host_input_validation(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") int (*validate_host)(const char *name,size_t len) ) = "\tjsr\t-9624(a6)";
+#define X509_VERIFY_PARAM_set1_host_input_validation(param, validate_host) __X509_VERIFY_PARAM_set1_host_input_validation(AmiSSLExtBase, (param), (validate_host))
+
+int __X509_VERIFY_PARAM_set1_rfc822(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const char * email , __reg("d0") size_t emaillen ) = "\tjsr\t-9630(a6)";
+#define X509_VERIFY_PARAM_set1_rfc822(param, email, emaillen) __X509_VERIFY_PARAM_set1_rfc822(AmiSSLExtBase, (param), (email), (emaillen))
+
+int __X509_VERIFY_PARAM_add1_rfc822(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const char * email , __reg("d0") size_t len ) = "\tjsr\t-9636(a6)";
+#define X509_VERIFY_PARAM_add1_rfc822(param, email, len) __X509_VERIFY_PARAM_add1_rfc822(AmiSSLExtBase, (param), (email), (len))
+
+void __X509_VERIFY_PARAM_set1_rfc822_input_validation(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") int (*validate_rfc822)(const char *name,size_t len) ) = "\tjsr\t-9642(a6)";
+#define X509_VERIFY_PARAM_set1_rfc822_input_validation(param, validate_rfc822) __X509_VERIFY_PARAM_set1_rfc822_input_validation(AmiSSLExtBase, (param), (validate_rfc822))
+
+int __X509_VERIFY_PARAM_set1_smtputf8(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const char * email , __reg("d0") size_t emaillen ) = "\tjsr\t-9648(a6)";
+#define X509_VERIFY_PARAM_set1_smtputf8(param, email, emaillen) __X509_VERIFY_PARAM_set1_smtputf8(AmiSSLExtBase, (param), (email), (emaillen))
+
+int __X509_VERIFY_PARAM_add1_smtputf8(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const char * email , __reg("d0") size_t len ) = "\tjsr\t-9654(a6)";
+#define X509_VERIFY_PARAM_add1_smtputf8(param, email, len) __X509_VERIFY_PARAM_add1_smtputf8(AmiSSLExtBase, (param), (email), (len))
+
+void __X509_VERIFY_PARAM_set1_smtputf8_input_validation(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") int (*validate_smtputf8)(const char *name,size_t len) ) = "\tjsr\t-9660(a6)";
+#define X509_VERIFY_PARAM_set1_smtputf8_input_validation(param, validate_smtputf8) __X509_VERIFY_PARAM_set1_smtputf8_input_validation(AmiSSLExtBase, (param), (validate_smtputf8))
+
+int __X509_VERIFY_PARAM_add1_ip(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const uint8_t * ip , __reg("d0") size_t len ) = "\tjsr\t-9666(a6)";
+#define X509_VERIFY_PARAM_add1_ip(param, ip, len) __X509_VERIFY_PARAM_add1_ip(AmiSSLExtBase, (param), (ip), (len))
+
+int __X509_VERIFY_PARAM_add1_ip_asc(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") const char * ipasc ) = "\tjsr\t-9672(a6)";
+#define X509_VERIFY_PARAM_add1_ip_asc(param, ipasc) __X509_VERIFY_PARAM_add1_ip_asc(AmiSSLExtBase, (param), (ipasc))
+
+void __X509_VERIFY_PARAM_set1_ip_input_validation(__reg("a6") struct Library * , __reg("a0") X509_VERIFY_PARAM * param , __reg("a1") int (*validate_ip)(const uint8_t *name,size_t len) ) = "\tjsr\t-9678(a6)";
+#define X509_VERIFY_PARAM_set1_ip_input_validation(param, validate_ip) __X509_VERIFY_PARAM_set1_ip_input_validation(AmiSSLExtBase, (param), (validate_ip))
+
+OSSL_STORE_INFO * __OSSL_STORE_INFO_new_SKEY(__reg("a6") struct Library * , __reg("a0") EVP_SKEY * skey ) = "\tjsr\t-9684(a6)";
+#define OSSL_STORE_INFO_new_SKEY(skey) __OSSL_STORE_INFO_new_SKEY(AmiSSLExtBase, (skey))
+
+EVP_SKEY * __OSSL_STORE_INFO_get0_SKEY(__reg("a6") struct Library * , __reg("a0") const OSSL_STORE_INFO * info ) = "\tjsr\t-9690(a6)";
+#define OSSL_STORE_INFO_get0_SKEY(info) __OSSL_STORE_INFO_get0_SKEY(AmiSSLExtBase, (info))
+
+EVP_SKEY * __OSSL_STORE_INFO_get1_SKEY(__reg("a6") struct Library * , __reg("a0") const OSSL_STORE_INFO * info ) = "\tjsr\t-9696(a6)";
+#define OSSL_STORE_INFO_get1_SKEY(info) __OSSL_STORE_INFO_get1_SKEY(AmiSSLExtBase, (info))
+
+int __OPENSSL_posix_to_tm(__reg("a6") struct Library * , __reg("d0/d1") int64_t time , __reg("a0") struct tm * out_tm ) = "\tjsr\t-9702(a6)";
+#define OPENSSL_posix_to_tm(time, out_tm) __OPENSSL_posix_to_tm(AmiSSLExtBase, (time), (out_tm))
+
+int __OPENSSL_tm_to_posix(__reg("a6") struct Library * , __reg("a0") const struct tm * tm , __reg("a1") int64_t * out ) = "\tjsr\t-9708(a6)";
+#define OPENSSL_tm_to_posix(tm, out) __OPENSSL_tm_to_posix(AmiSSLExtBase, (tm), (out))
+
+int __OPENSSL_timegm(__reg("a6") struct Library * , __reg("a0") const struct tm * tm , __reg("a1") time_t * out ) = "\tjsr\t-9714(a6)";
+#define OPENSSL_timegm(tm, out) __OPENSSL_timegm(AmiSSLExtBase, (tm), (out))
+
+void __OSSL_PARAM_clear_free(__reg("a6") struct Library * , __reg("a0") OSSL_PARAM * p ) = "\tjsr\t-9720(a6)";
+#define OSSL_PARAM_clear_free(p) __OSSL_PARAM_clear_free(AmiSSLExtBase, (p))
+
+int __CMS_dataFinal_ex(__reg("a6") struct Library * , __reg("a0") CMS_ContentInfo * cms , __reg("a1") BIO * bio , __reg("a2") BIO * data ) = "\tjsr\t-9726(a6)";
+#define CMS_dataFinal_ex(cms, bio, data) __CMS_dataFinal_ex(AmiSSLExtBase, (cms), (bio), (data))
+
+int __CMS_SignerInfo_verify_ex(__reg("a6") struct Library * , __reg("a0") CMS_SignerInfo * si , __reg("a1") BIO * chain , __reg("a2") BIO * data ) = "\tjsr\t-9732(a6)";
+#define CMS_SignerInfo_verify_ex(si, chain, data) __CMS_SignerInfo_verify_ex(AmiSSLExtBase, (si), (chain), (data))
+
+int __EVP_SIGNATURE_has_message_update(__reg("a6") struct Library * , __reg("a0") const EVP_SIGNATURE * sig ) = "\tjsr\t-9738(a6)";
+#define EVP_SIGNATURE_has_message_update(sig) __EVP_SIGNATURE_has_message_update(AmiSSLExtBase, (sig))
+
+int __EVP_MD_CTX_serialize(__reg("a6") struct Library * , __reg("a0") EVP_MD_CTX * ctx , __reg("a1") unsigned char * out , __reg("a2") size_t * outlen ) = "\tjsr\t-9744(a6)";
+#define EVP_MD_CTX_serialize(ctx, out, outlen) __EVP_MD_CTX_serialize(AmiSSLExtBase, (ctx), (out), (outlen))
+
+int __EVP_MD_CTX_deserialize(__reg("a6") struct Library * , __reg("a0") EVP_MD_CTX * ctx , __reg("a1") const unsigned char * in , __reg("d0") size_t inlen ) = "\tjsr\t-9750(a6)";
+#define EVP_MD_CTX_deserialize(ctx, in, inlen) __EVP_MD_CTX_deserialize(AmiSSLExtBase, (ctx), (in), (inlen))
+
+int __OSSL_ENCODER_CTX_ctrl_string(__reg("a6") struct Library * , __reg("a0") OSSL_ENCODER_CTX * ctx , __reg("a1") const char * name , __reg("a2") const char * val ) = "\tjsr\t-9756(a6)";
+#define OSSL_ENCODER_CTX_ctrl_string(ctx, name, val) __OSSL_ENCODER_CTX_ctrl_string(AmiSSLExtBase, (ctx), (name), (val))
+
+OPENSSL_STACK * __OPENSSL_sk_set_cmp_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_STACK * st , __reg("a1") int (*c_thunk)(int  (*,const void *,const void *) ) )(const void *,const void *) =  "\tjsr\t-9762(a6)";
+#define OPENSSL_sk_set_cmp_thunks(st, c_thunk) __OPENSSL_sk_set_cmp_thunks(AmiSSLExtBase, (st), (c_thunk))
+
+int __ASN1_BIT_STRING_set1(__reg("a6") struct Library * , __reg("a0") ASN1_BIT_STRING * abs , __reg("a1") const uint8_t * data , __reg("d0") size_t length , __reg("d1") int unused_bits ) = "\tjsr\t-9768(a6)";
+#define ASN1_BIT_STRING_set1(abs, data, length, unused_bits) __ASN1_BIT_STRING_set1(AmiSSLExtBase, (abs), (data), (length), (unused_bits))
+
+int __OSSL_ESS_check_signing_certs_ex(__reg("a6") struct Library * , __reg("a0") const ESS_SIGNING_CERT * ss , __reg("a1") const ESS_SIGNING_CERT_V2 * ssv2 , __reg("a2") const STACK_OF(X509) * chain , __reg("a3") OSSL_LIB_CTX * libctx , __reg("d0") const char * propq , __reg("d1") int require_signing_cert ) = "\tjsr\t-9774(a6)";
+#define OSSL_ESS_check_signing_certs_ex(ss, ssv2, chain, libctx, propq, require_signing_cert) __OSSL_ESS_check_signing_certs_ex(AmiSSLExtBase, (ss), (ssv2), (chain), (libctx), (propq), (require_signing_cert))
+
+X509_EXTENSION * __X509v3_delete_extension(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509_EXTENSION) ** x , __reg("d0") int loc ) = "\tjsr\t-9780(a6)";
+#define X509v3_delete_extension(x, loc) __X509v3_delete_extension(AmiSSLExtBase, (x), (loc))
 
 #endif /* !_INLINE_AMISSLEXT_H */

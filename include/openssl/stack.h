@@ -5,7 +5,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -48,6 +48,7 @@ OPENSSL_STACK *OPENSSL_sk_new(OPENSSL_sk_compfunc cmp);
 OPENSSL_STACK *OPENSSL_sk_new_null(void);
 OPENSSL_STACK *OPENSSL_sk_new_reserve(OPENSSL_sk_compfunc c, int n);
 OPENSSL_STACK *OPENSSL_sk_set_thunks(OPENSSL_STACK *st, OPENSSL_sk_freefunc_thunk f_thunk);
+OPENSSL_STACK *OPENSSL_sk_set_cmp_thunks(OPENSSL_STACK *st, int (*c_thunk)(int (*)(const void *, const void *), const void *, const void *));
 int OPENSSL_sk_reserve(OPENSSL_STACK *st, int n);
 void OPENSSL_sk_free(OPENSSL_STACK *);
 void OPENSSL_sk_pop_free(OPENSSL_STACK *st, OPENSSL_sk_freefunc func);
@@ -57,9 +58,9 @@ OPENSSL_STACK *OPENSSL_sk_deep_copy(const OPENSSL_STACK *,
 int OPENSSL_sk_insert(OPENSSL_STACK *sk, const void *data, int where);
 void *OPENSSL_sk_delete(OPENSSL_STACK *st, int loc);
 void *OPENSSL_sk_delete_ptr(OPENSSL_STACK *st, const void *p);
-int OPENSSL_sk_find(OPENSSL_STACK *st, const void *data);
-int OPENSSL_sk_find_ex(OPENSSL_STACK *st, const void *data);
-int OPENSSL_sk_find_all(OPENSSL_STACK *st, const void *data, int *pnum);
+int OPENSSL_sk_find(const OPENSSL_STACK *st, const void *data);
+int OPENSSL_sk_find_ex(const OPENSSL_STACK *st, const void *data);
+int OPENSSL_sk_find_all(const OPENSSL_STACK *st, const void *data, int *pnum);
 int OPENSSL_sk_push(OPENSSL_STACK *st, const void *data);
 int OPENSSL_sk_unshift(OPENSSL_STACK *st, const void *data);
 void *OPENSSL_sk_shift(OPENSSL_STACK *st);

@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -31,8 +31,10 @@
 /*
  * OSSL_ENCODER reason codes.
  */
+#define OSSL_ENCODER_R_BAD_PARAMETER_VALUE 103
 #define OSSL_ENCODER_R_ENCODER_NOT_FOUND 101
 #define OSSL_ENCODER_R_INCORRECT_PROPERTY_QUERY 100
 #define OSSL_ENCODER_R_MISSING_GET_PARAMS 102
+#define OSSL_ENCODER_R_UNKNOWN_PARAMETER_NAME 104
 
 #endif

@@ -4,7 +4,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2022 AmiSSL Open Source Team.
+# Copyright (c) 2006-2026 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,8 +45,7 @@ mkdir -p "release/AmiSSL/Libs"
 releasever=`grep ^VERSION= Makefile | awk -F= '{ print $2 }'`
 releaserev=`grep ^REVISION= Makefile | awk -F= '{ print $2 }'`
 versionname=`grep ^MAJOR= openssl/VERSION.dat | awk -F= '{ print $2 }'`
-versionname="${versionname}`grep ^MINOR= openssl/VERSION.dat | awk -F= '{ print $2 }'`"
-versionname="${versionname}`grep ^PATCH= openssl/VERSION.dat | awk -F= '{ print $2 }'`"
+versionname="${versionname}`grep ^MINOR= openssl/VERSION.dat | awk -F= '{ print $2 }'`x"
 
 #OS="os3 os4 mos aros-i386 aros-ppc aros-x86_64"
 OS="os3-68020 os3-68060 os4"

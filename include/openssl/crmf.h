@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 2007-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2007-2026 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright Nokia 2007-2019
  * Copyright Siemens AG 2015-2019
  *
@@ -69,9 +69,9 @@ DECLARE_ASN1_DUP_FUNCTION(OSSL_CRMF_MSG)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_CRMF_MSG, OSSL_CRMF_MSG, OSSL_CRMF_MSG)
 #define sk_OSSL_CRMF_MSG_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_CRMF_MSG_sk_type(sk))
 #define sk_OSSL_CRMF_MSG_value(sk, idx) ((OSSL_CRMF_MSG *)OPENSSL_sk_value(ossl_check_const_OSSL_CRMF_MSG_sk_type(sk), (idx)))
-#define sk_OSSL_CRMF_MSG_new(cmp) ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_new(ossl_check_OSSL_CRMF_MSG_compfunc_type(cmp)))
-#define sk_OSSL_CRMF_MSG_new_null() ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_new_null())
-#define sk_OSSL_CRMF_MSG_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_MSG_compfunc_type(cmp), (n)))
+#define sk_OSSL_CRMF_MSG_new(cmp) ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_CRMF_MSG_compfunc_type(cmp)), sk_OSSL_CRMF_MSG_cmpfunc_thunk))
+#define sk_OSSL_CRMF_MSG_new_null() ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_CRMF_MSG_freefunc_thunk))
+#define sk_OSSL_CRMF_MSG_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_MSG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_MSG_compfunc_type(cmp), (n)), sk_OSSL_CRMF_MSG_cmpfunc_thunk))
 #define sk_OSSL_CRMF_MSG_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_CRMF_MSG_sk_type(sk), (n))
 #define sk_OSSL_CRMF_MSG_free(sk) OPENSSL_sk_free(ossl_check_OSSL_CRMF_MSG_sk_type(sk))
 #define sk_OSSL_CRMF_MSG_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_CRMF_MSG_sk_type(sk))
@@ -101,9 +101,9 @@ DECLARE_ASN1_DUP_FUNCTION(OSSL_CRMF_ATTRIBUTETYPEANDVALUE)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_CRMF_ATTRIBUTETYPEANDVALUE, OSSL_CRMF_ATTRIBUTETYPEANDVALUE, OSSL_CRMF_ATTRIBUTETYPEANDVALUE)
 #define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_sk_type(sk))
 #define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_value(sk, idx) ((OSSL_CRMF_ATTRIBUTETYPEANDVALUE *)OPENSSL_sk_value(ossl_check_const_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_sk_type(sk), (idx)))
-#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new(cmp) ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_new(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_compfunc_type(cmp)))
-#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new_null() ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_new_null())
-#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_compfunc_type(cmp), (n)))
+#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new(cmp) ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_compfunc_type(cmp)), sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_cmpfunc_thunk))
+#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new_null() ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_freefunc_thunk))
+#define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_ATTRIBUTETYPEANDVALUE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_compfunc_type(cmp), (n)), sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_cmpfunc_thunk))
 #define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_sk_type(sk), (n))
 #define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_free(sk) OPENSSL_sk_free(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_sk_type(sk))
 #define sk_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_CRMF_ATTRIBUTETYPEANDVALUE_sk_type(sk))
@@ -138,9 +138,9 @@ DECLARE_ASN1_DUP_FUNCTION(OSSL_CRMF_CERTID)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_CRMF_CERTID, OSSL_CRMF_CERTID, OSSL_CRMF_CERTID)
 #define sk_OSSL_CRMF_CERTID_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_CRMF_CERTID_sk_type(sk))
 #define sk_OSSL_CRMF_CERTID_value(sk, idx) ((OSSL_CRMF_CERTID *)OPENSSL_sk_value(ossl_check_const_OSSL_CRMF_CERTID_sk_type(sk), (idx)))
-#define sk_OSSL_CRMF_CERTID_new(cmp) ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_new(ossl_check_OSSL_CRMF_CERTID_compfunc_type(cmp)))
-#define sk_OSSL_CRMF_CERTID_new_null() ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_new_null())
-#define sk_OSSL_CRMF_CERTID_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_CERTID_compfunc_type(cmp), (n)))
+#define sk_OSSL_CRMF_CERTID_new(cmp) ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_CRMF_CERTID_compfunc_type(cmp)), sk_OSSL_CRMF_CERTID_cmpfunc_thunk))
+#define sk_OSSL_CRMF_CERTID_new_null() ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_CRMF_CERTID_freefunc_thunk))
+#define sk_OSSL_CRMF_CERTID_new_reserve(cmp, n) ((STACK_OF(OSSL_CRMF_CERTID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_CRMF_CERTID_compfunc_type(cmp), (n)), sk_OSSL_CRMF_CERTID_cmpfunc_thunk))
 #define sk_OSSL_CRMF_CERTID_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_CRMF_CERTID_sk_type(sk), (n))
 #define sk_OSSL_CRMF_CERTID_free(sk) OPENSSL_sk_free(ossl_check_OSSL_CRMF_CERTID_sk_type(sk))
 #define sk_OSSL_CRMF_CERTID_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_CRMF_CERTID_sk_type(sk))
@@ -277,7 +277,7 @@ EVP_PKEY *OSSL_CRMF_ENCRYPTEDKEY_get1_pkey(const OSSL_CRMF_ENCRYPTEDKEY *encrypt
     X509_STORE *ts, STACK_OF(X509) *extra, EVP_PKEY *pkey,
     X509 *cert, ASN1_OCTET_STRING *secret,
     OSSL_LIB_CTX *libctx, const char *propq);
-int OSSL_CRMF_MSG_centralkeygen_requested(const OSSL_CRMF_MSG *crm, const X509_REQ *p10cr);
+int OSSL_CRMF_MSG_centralkeygen_requested(const OSSL_CRMF_MSG *crm, const X509_REQ *p10);
 #ifndef OPENSSL_NO_CMS
 OSSL_CRMF_ENCRYPTEDKEY *OSSL_CRMF_ENCRYPTEDKEY_init_envdata(CMS_EnvelopedData *envdata);
 #endif

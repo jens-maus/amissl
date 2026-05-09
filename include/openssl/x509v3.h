@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1999-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1999-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -126,9 +126,9 @@ typedef struct v3_ext_method X509V3_EXT_METHOD;
 SKM_DEFINE_STACK_OF_INTERNAL(X509V3_EXT_METHOD, X509V3_EXT_METHOD, X509V3_EXT_METHOD)
 #define sk_X509V3_EXT_METHOD_num(sk) OPENSSL_sk_num(ossl_check_const_X509V3_EXT_METHOD_sk_type(sk))
 #define sk_X509V3_EXT_METHOD_value(sk, idx) ((X509V3_EXT_METHOD *)OPENSSL_sk_value(ossl_check_const_X509V3_EXT_METHOD_sk_type(sk), (idx)))
-#define sk_X509V3_EXT_METHOD_new(cmp) ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_new(ossl_check_X509V3_EXT_METHOD_compfunc_type(cmp)))
-#define sk_X509V3_EXT_METHOD_new_null() ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_new_null())
-#define sk_X509V3_EXT_METHOD_new_reserve(cmp, n) ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_new_reserve(ossl_check_X509V3_EXT_METHOD_compfunc_type(cmp), (n)))
+#define sk_X509V3_EXT_METHOD_new(cmp) ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509V3_EXT_METHOD_compfunc_type(cmp)), sk_X509V3_EXT_METHOD_cmpfunc_thunk))
+#define sk_X509V3_EXT_METHOD_new_null() ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509V3_EXT_METHOD_freefunc_thunk))
+#define sk_X509V3_EXT_METHOD_new_reserve(cmp, n) ((STACK_OF(X509V3_EXT_METHOD) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509V3_EXT_METHOD_compfunc_type(cmp), (n)), sk_X509V3_EXT_METHOD_cmpfunc_thunk))
 #define sk_X509V3_EXT_METHOD_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509V3_EXT_METHOD_sk_type(sk), (n))
 #define sk_X509V3_EXT_METHOD_free(sk) OPENSSL_sk_free(ossl_check_X509V3_EXT_METHOD_sk_type(sk))
 #define sk_X509V3_EXT_METHOD_zero(sk) OPENSSL_sk_zero(ossl_check_X509V3_EXT_METHOD_sk_type(sk))
@@ -227,9 +227,9 @@ int GENERAL_NAME_set1_X509_NAME(GENERAL_NAME **tgt, const X509_NAME *src);
 SKM_DEFINE_STACK_OF_INTERNAL(ACCESS_DESCRIPTION, ACCESS_DESCRIPTION, ACCESS_DESCRIPTION)
 #define sk_ACCESS_DESCRIPTION_num(sk) OPENSSL_sk_num(ossl_check_const_ACCESS_DESCRIPTION_sk_type(sk))
 #define sk_ACCESS_DESCRIPTION_value(sk, idx) ((ACCESS_DESCRIPTION *)OPENSSL_sk_value(ossl_check_const_ACCESS_DESCRIPTION_sk_type(sk), (idx)))
-#define sk_ACCESS_DESCRIPTION_new(cmp) ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_new(ossl_check_ACCESS_DESCRIPTION_compfunc_type(cmp)))
-#define sk_ACCESS_DESCRIPTION_new_null() ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_new_null())
-#define sk_ACCESS_DESCRIPTION_new_reserve(cmp, n) ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_new_reserve(ossl_check_ACCESS_DESCRIPTION_compfunc_type(cmp), (n)))
+#define sk_ACCESS_DESCRIPTION_new(cmp) ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ACCESS_DESCRIPTION_compfunc_type(cmp)), sk_ACCESS_DESCRIPTION_cmpfunc_thunk))
+#define sk_ACCESS_DESCRIPTION_new_null() ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ACCESS_DESCRIPTION_freefunc_thunk))
+#define sk_ACCESS_DESCRIPTION_new_reserve(cmp, n) ((STACK_OF(ACCESS_DESCRIPTION) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ACCESS_DESCRIPTION_compfunc_type(cmp), (n)), sk_ACCESS_DESCRIPTION_cmpfunc_thunk))
 #define sk_ACCESS_DESCRIPTION_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ACCESS_DESCRIPTION_sk_type(sk), (n))
 #define sk_ACCESS_DESCRIPTION_free(sk) OPENSSL_sk_free(ossl_check_ACCESS_DESCRIPTION_sk_type(sk))
 #define sk_ACCESS_DESCRIPTION_zero(sk) OPENSSL_sk_zero(ossl_check_ACCESS_DESCRIPTION_sk_type(sk))
@@ -253,9 +253,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(ACCESS_DESCRIPTION, ACCESS_DESCRIPTION, ACCESS_DESC
 SKM_DEFINE_STACK_OF_INTERNAL(GENERAL_NAME, GENERAL_NAME, GENERAL_NAME)
 #define sk_GENERAL_NAME_num(sk) OPENSSL_sk_num(ossl_check_const_GENERAL_NAME_sk_type(sk))
 #define sk_GENERAL_NAME_value(sk, idx) ((GENERAL_NAME *)OPENSSL_sk_value(ossl_check_const_GENERAL_NAME_sk_type(sk), (idx)))
-#define sk_GENERAL_NAME_new(cmp) ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_new(ossl_check_GENERAL_NAME_compfunc_type(cmp)))
-#define sk_GENERAL_NAME_new_null() ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_new_null())
-#define sk_GENERAL_NAME_new_reserve(cmp, n) ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_new_reserve(ossl_check_GENERAL_NAME_compfunc_type(cmp), (n)))
+#define sk_GENERAL_NAME_new(cmp) ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_GENERAL_NAME_compfunc_type(cmp)), sk_GENERAL_NAME_cmpfunc_thunk))
+#define sk_GENERAL_NAME_new_null() ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_GENERAL_NAME_freefunc_thunk))
+#define sk_GENERAL_NAME_new_reserve(cmp, n) ((STACK_OF(GENERAL_NAME) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_GENERAL_NAME_compfunc_type(cmp), (n)), sk_GENERAL_NAME_cmpfunc_thunk))
 #define sk_GENERAL_NAME_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_GENERAL_NAME_sk_type(sk), (n))
 #define sk_GENERAL_NAME_free(sk) OPENSSL_sk_free(ossl_check_GENERAL_NAME_sk_type(sk))
 #define sk_GENERAL_NAME_zero(sk) OPENSSL_sk_zero(ossl_check_GENERAL_NAME_sk_type(sk))
@@ -288,9 +288,9 @@ typedef STACK_OF(GENERAL_NAME) GENERAL_NAMES;
 SKM_DEFINE_STACK_OF_INTERNAL(GENERAL_NAMES, GENERAL_NAMES, GENERAL_NAMES)
 #define sk_GENERAL_NAMES_num(sk) OPENSSL_sk_num(ossl_check_const_GENERAL_NAMES_sk_type(sk))
 #define sk_GENERAL_NAMES_value(sk, idx) ((GENERAL_NAMES *)OPENSSL_sk_value(ossl_check_const_GENERAL_NAMES_sk_type(sk), (idx)))
-#define sk_GENERAL_NAMES_new(cmp) ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_new(ossl_check_GENERAL_NAMES_compfunc_type(cmp)))
-#define sk_GENERAL_NAMES_new_null() ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_new_null())
-#define sk_GENERAL_NAMES_new_reserve(cmp, n) ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_new_reserve(ossl_check_GENERAL_NAMES_compfunc_type(cmp), (n)))
+#define sk_GENERAL_NAMES_new(cmp) ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_GENERAL_NAMES_compfunc_type(cmp)), sk_GENERAL_NAMES_cmpfunc_thunk))
+#define sk_GENERAL_NAMES_new_null() ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_GENERAL_NAMES_freefunc_thunk))
+#define sk_GENERAL_NAMES_new_reserve(cmp, n) ((STACK_OF(GENERAL_NAMES) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_GENERAL_NAMES_compfunc_type(cmp), (n)), sk_GENERAL_NAMES_cmpfunc_thunk))
 #define sk_GENERAL_NAMES_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_GENERAL_NAMES_sk_type(sk), (n))
 #define sk_GENERAL_NAMES_free(sk) OPENSSL_sk_free(ossl_check_GENERAL_NAMES_sk_type(sk))
 #define sk_GENERAL_NAMES_zero(sk) OPENSSL_sk_zero(ossl_check_GENERAL_NAMES_sk_type(sk))
@@ -350,9 +350,9 @@ struct DIST_POINT_st {
 SKM_DEFINE_STACK_OF_INTERNAL(DIST_POINT, DIST_POINT, DIST_POINT)
 #define sk_DIST_POINT_num(sk) OPENSSL_sk_num(ossl_check_const_DIST_POINT_sk_type(sk))
 #define sk_DIST_POINT_value(sk, idx) ((DIST_POINT *)OPENSSL_sk_value(ossl_check_const_DIST_POINT_sk_type(sk), (idx)))
-#define sk_DIST_POINT_new(cmp) ((STACK_OF(DIST_POINT) *)OPENSSL_sk_new(ossl_check_DIST_POINT_compfunc_type(cmp)))
-#define sk_DIST_POINT_new_null() ((STACK_OF(DIST_POINT) *)OPENSSL_sk_new_null())
-#define sk_DIST_POINT_new_reserve(cmp, n) ((STACK_OF(DIST_POINT) *)OPENSSL_sk_new_reserve(ossl_check_DIST_POINT_compfunc_type(cmp), (n)))
+#define sk_DIST_POINT_new(cmp) ((STACK_OF(DIST_POINT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_DIST_POINT_compfunc_type(cmp)), sk_DIST_POINT_cmpfunc_thunk))
+#define sk_DIST_POINT_new_null() ((STACK_OF(DIST_POINT) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_DIST_POINT_freefunc_thunk))
+#define sk_DIST_POINT_new_reserve(cmp, n) ((STACK_OF(DIST_POINT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_DIST_POINT_compfunc_type(cmp), (n)), sk_DIST_POINT_cmpfunc_thunk))
 #define sk_DIST_POINT_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_DIST_POINT_sk_type(sk), (n))
 #define sk_DIST_POINT_free(sk) OPENSSL_sk_free(ossl_check_DIST_POINT_sk_type(sk))
 #define sk_DIST_POINT_zero(sk) OPENSSL_sk_zero(ossl_check_DIST_POINT_sk_type(sk))
@@ -395,9 +395,9 @@ typedef struct SXNET_ID_st {
 SKM_DEFINE_STACK_OF_INTERNAL(SXNETID, SXNETID, SXNETID)
 #define sk_SXNETID_num(sk) OPENSSL_sk_num(ossl_check_const_SXNETID_sk_type(sk))
 #define sk_SXNETID_value(sk, idx) ((SXNETID *)OPENSSL_sk_value(ossl_check_const_SXNETID_sk_type(sk), (idx)))
-#define sk_SXNETID_new(cmp) ((STACK_OF(SXNETID) *)OPENSSL_sk_new(ossl_check_SXNETID_compfunc_type(cmp)))
-#define sk_SXNETID_new_null() ((STACK_OF(SXNETID) *)OPENSSL_sk_new_null())
-#define sk_SXNETID_new_reserve(cmp, n) ((STACK_OF(SXNETID) *)OPENSSL_sk_new_reserve(ossl_check_SXNETID_compfunc_type(cmp), (n)))
+#define sk_SXNETID_new(cmp) ((STACK_OF(SXNETID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_SXNETID_compfunc_type(cmp)), sk_SXNETID_cmpfunc_thunk))
+#define sk_SXNETID_new_null() ((STACK_OF(SXNETID) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_SXNETID_freefunc_thunk))
+#define sk_SXNETID_new_reserve(cmp, n) ((STACK_OF(SXNETID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_SXNETID_compfunc_type(cmp), (n)), sk_SXNETID_cmpfunc_thunk))
 #define sk_SXNETID_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_SXNETID_sk_type(sk), (n))
 #define sk_SXNETID_free(sk) OPENSSL_sk_free(ossl_check_SXNETID_sk_type(sk))
 #define sk_SXNETID_zero(sk) OPENSSL_sk_zero(ossl_check_SXNETID_sk_type(sk))
@@ -456,9 +456,9 @@ typedef struct POLICYQUALINFO_st {
 SKM_DEFINE_STACK_OF_INTERNAL(POLICYQUALINFO, POLICYQUALINFO, POLICYQUALINFO)
 #define sk_POLICYQUALINFO_num(sk) OPENSSL_sk_num(ossl_check_const_POLICYQUALINFO_sk_type(sk))
 #define sk_POLICYQUALINFO_value(sk, idx) ((POLICYQUALINFO *)OPENSSL_sk_value(ossl_check_const_POLICYQUALINFO_sk_type(sk), (idx)))
-#define sk_POLICYQUALINFO_new(cmp) ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_new(ossl_check_POLICYQUALINFO_compfunc_type(cmp)))
-#define sk_POLICYQUALINFO_new_null() ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_new_null())
-#define sk_POLICYQUALINFO_new_reserve(cmp, n) ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_new_reserve(ossl_check_POLICYQUALINFO_compfunc_type(cmp), (n)))
+#define sk_POLICYQUALINFO_new(cmp) ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_POLICYQUALINFO_compfunc_type(cmp)), sk_POLICYQUALINFO_cmpfunc_thunk))
+#define sk_POLICYQUALINFO_new_null() ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_POLICYQUALINFO_freefunc_thunk))
+#define sk_POLICYQUALINFO_new_reserve(cmp, n) ((STACK_OF(POLICYQUALINFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_POLICYQUALINFO_compfunc_type(cmp), (n)), sk_POLICYQUALINFO_cmpfunc_thunk))
 #define sk_POLICYQUALINFO_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_POLICYQUALINFO_sk_type(sk), (n))
 #define sk_POLICYQUALINFO_free(sk) OPENSSL_sk_free(ossl_check_POLICYQUALINFO_sk_type(sk))
 #define sk_POLICYQUALINFO_zero(sk) OPENSSL_sk_zero(ossl_check_POLICYQUALINFO_sk_type(sk))
@@ -491,9 +491,9 @@ typedef struct POLICYINFO_st {
 SKM_DEFINE_STACK_OF_INTERNAL(POLICYINFO, POLICYINFO, POLICYINFO)
 #define sk_POLICYINFO_num(sk) OPENSSL_sk_num(ossl_check_const_POLICYINFO_sk_type(sk))
 #define sk_POLICYINFO_value(sk, idx) ((POLICYINFO *)OPENSSL_sk_value(ossl_check_const_POLICYINFO_sk_type(sk), (idx)))
-#define sk_POLICYINFO_new(cmp) ((STACK_OF(POLICYINFO) *)OPENSSL_sk_new(ossl_check_POLICYINFO_compfunc_type(cmp)))
-#define sk_POLICYINFO_new_null() ((STACK_OF(POLICYINFO) *)OPENSSL_sk_new_null())
-#define sk_POLICYINFO_new_reserve(cmp, n) ((STACK_OF(POLICYINFO) *)OPENSSL_sk_new_reserve(ossl_check_POLICYINFO_compfunc_type(cmp), (n)))
+#define sk_POLICYINFO_new(cmp) ((STACK_OF(POLICYINFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_POLICYINFO_compfunc_type(cmp)), sk_POLICYINFO_cmpfunc_thunk))
+#define sk_POLICYINFO_new_null() ((STACK_OF(POLICYINFO) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_POLICYINFO_freefunc_thunk))
+#define sk_POLICYINFO_new_reserve(cmp, n) ((STACK_OF(POLICYINFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_POLICYINFO_compfunc_type(cmp), (n)), sk_POLICYINFO_cmpfunc_thunk))
 #define sk_POLICYINFO_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_POLICYINFO_sk_type(sk), (n))
 #define sk_POLICYINFO_free(sk) OPENSSL_sk_free(ossl_check_POLICYINFO_sk_type(sk))
 #define sk_POLICYINFO_zero(sk) OPENSSL_sk_zero(ossl_check_POLICYINFO_sk_type(sk))
@@ -528,9 +528,9 @@ typedef struct POLICY_MAPPING_st {
 SKM_DEFINE_STACK_OF_INTERNAL(POLICY_MAPPING, POLICY_MAPPING, POLICY_MAPPING)
 #define sk_POLICY_MAPPING_num(sk) OPENSSL_sk_num(ossl_check_const_POLICY_MAPPING_sk_type(sk))
 #define sk_POLICY_MAPPING_value(sk, idx) ((POLICY_MAPPING *)OPENSSL_sk_value(ossl_check_const_POLICY_MAPPING_sk_type(sk), (idx)))
-#define sk_POLICY_MAPPING_new(cmp) ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_new(ossl_check_POLICY_MAPPING_compfunc_type(cmp)))
-#define sk_POLICY_MAPPING_new_null() ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_new_null())
-#define sk_POLICY_MAPPING_new_reserve(cmp, n) ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_new_reserve(ossl_check_POLICY_MAPPING_compfunc_type(cmp), (n)))
+#define sk_POLICY_MAPPING_new(cmp) ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_POLICY_MAPPING_compfunc_type(cmp)), sk_POLICY_MAPPING_cmpfunc_thunk))
+#define sk_POLICY_MAPPING_new_null() ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_POLICY_MAPPING_freefunc_thunk))
+#define sk_POLICY_MAPPING_new_reserve(cmp, n) ((STACK_OF(POLICY_MAPPING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_POLICY_MAPPING_compfunc_type(cmp), (n)), sk_POLICY_MAPPING_cmpfunc_thunk))
 #define sk_POLICY_MAPPING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_POLICY_MAPPING_sk_type(sk), (n))
 #define sk_POLICY_MAPPING_free(sk) OPENSSL_sk_free(ossl_check_POLICY_MAPPING_sk_type(sk))
 #define sk_POLICY_MAPPING_zero(sk) OPENSSL_sk_zero(ossl_check_POLICY_MAPPING_sk_type(sk))
@@ -566,9 +566,9 @@ typedef struct GENERAL_SUBTREE_st {
 SKM_DEFINE_STACK_OF_INTERNAL(GENERAL_SUBTREE, GENERAL_SUBTREE, GENERAL_SUBTREE)
 #define sk_GENERAL_SUBTREE_num(sk) OPENSSL_sk_num(ossl_check_const_GENERAL_SUBTREE_sk_type(sk))
 #define sk_GENERAL_SUBTREE_value(sk, idx) ((GENERAL_SUBTREE *)OPENSSL_sk_value(ossl_check_const_GENERAL_SUBTREE_sk_type(sk), (idx)))
-#define sk_GENERAL_SUBTREE_new(cmp) ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_new(ossl_check_GENERAL_SUBTREE_compfunc_type(cmp)))
-#define sk_GENERAL_SUBTREE_new_null() ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_new_null())
-#define sk_GENERAL_SUBTREE_new_reserve(cmp, n) ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_new_reserve(ossl_check_GENERAL_SUBTREE_compfunc_type(cmp), (n)))
+#define sk_GENERAL_SUBTREE_new(cmp) ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_GENERAL_SUBTREE_compfunc_type(cmp)), sk_GENERAL_SUBTREE_cmpfunc_thunk))
+#define sk_GENERAL_SUBTREE_new_null() ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_GENERAL_SUBTREE_freefunc_thunk))
+#define sk_GENERAL_SUBTREE_new_reserve(cmp, n) ((STACK_OF(GENERAL_SUBTREE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_GENERAL_SUBTREE_compfunc_type(cmp), (n)), sk_GENERAL_SUBTREE_cmpfunc_thunk))
 #define sk_GENERAL_SUBTREE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_GENERAL_SUBTREE_sk_type(sk), (n))
 #define sk_GENERAL_SUBTREE_free(sk) OPENSSL_sk_free(ossl_check_GENERAL_SUBTREE_sk_type(sk))
 #define sk_GENERAL_SUBTREE_zero(sk) OPENSSL_sk_zero(ossl_check_GENERAL_SUBTREE_sk_type(sk))
@@ -695,11 +695,17 @@ struct ISSUING_DIST_POINT_st {
 #define EXFLAG_FRESHEST 0x1000
 #define EXFLAG_SS 0x2000 /* cert is apparently self-signed */
 
+#define EXFLAG_NO_FINGERPRINT 0x100000
+
+/*
+ * The following flags are no longer used. On X509_V_FLAG_X509_STRICT they were
+ * previously enforced as checks on critical extensions but this behavior has
+ * been removed.
+ */
 #define EXFLAG_BCONS_CRITICAL 0x10000
 #define EXFLAG_AKID_CRITICAL 0x20000
 #define EXFLAG_SKID_CRITICAL 0x40000
 #define EXFLAG_SAN_CRITICAL 0x80000
-#define EXFLAG_NO_FINGERPRINT 0x100000
 
 /* https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3 */
 #define KU_DIGITAL_SIGNATURE X509v3_KU_DIGITAL_SIGNATURE
@@ -748,9 +754,9 @@ typedef struct x509_purpose_st {
 SKM_DEFINE_STACK_OF_INTERNAL(X509_PURPOSE, X509_PURPOSE, X509_PURPOSE)
 #define sk_X509_PURPOSE_num(sk) OPENSSL_sk_num(ossl_check_const_X509_PURPOSE_sk_type(sk))
 #define sk_X509_PURPOSE_value(sk, idx) ((X509_PURPOSE *)OPENSSL_sk_value(ossl_check_const_X509_PURPOSE_sk_type(sk), (idx)))
-#define sk_X509_PURPOSE_new(cmp) ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_new(ossl_check_X509_PURPOSE_compfunc_type(cmp)))
-#define sk_X509_PURPOSE_new_null() ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_new_null())
-#define sk_X509_PURPOSE_new_reserve(cmp, n) ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_new_reserve(ossl_check_X509_PURPOSE_compfunc_type(cmp), (n)))
+#define sk_X509_PURPOSE_new(cmp) ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_PURPOSE_compfunc_type(cmp)), sk_X509_PURPOSE_cmpfunc_thunk))
+#define sk_X509_PURPOSE_new_null() ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_PURPOSE_freefunc_thunk))
+#define sk_X509_PURPOSE_new_reserve(cmp, n) ((STACK_OF(X509_PURPOSE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_PURPOSE_compfunc_type(cmp), (n)), sk_X509_PURPOSE_cmpfunc_thunk))
 #define sk_X509_PURPOSE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_PURPOSE_sk_type(sk), (n))
 #define sk_X509_PURPOSE_free(sk) OPENSSL_sk_free(ossl_check_X509_PURPOSE_sk_type(sk))
 #define sk_X509_PURPOSE_zero(sk) OPENSSL_sk_zero(ossl_check_X509_PURPOSE_sk_type(sk))
@@ -897,8 +903,8 @@ DECLARE_ASN1_FUNCTIONS(ISSUING_DIST_POINT)
 
 int DIST_POINT_set_dpname(DIST_POINT_NAME *dpn, const X509_NAME *iname);
 
-int NAME_CONSTRAINTS_check(X509 *x, NAME_CONSTRAINTS *nc);
-int NAME_CONSTRAINTS_check_CN(X509 *x, NAME_CONSTRAINTS *nc);
+int NAME_CONSTRAINTS_check(const X509 *x, NAME_CONSTRAINTS *nc);
+int NAME_CONSTRAINTS_check_CN(const X509 *x, NAME_CONSTRAINTS *nc);
 
 DECLARE_ASN1_FUNCTIONS(ACCESS_DESCRIPTION)
 DECLARE_ASN1_FUNCTIONS(AUTHORITY_INFO_ACCESS)
@@ -991,11 +997,11 @@ int X509V3_EXT_add_list(X509V3_EXT_METHOD *extlist);
 int X509V3_EXT_add_alias(int nid_to, int nid_from);
 void X509V3_EXT_cleanup(void);
 
-const X509V3_EXT_METHOD *X509V3_EXT_get(X509_EXTENSION *ext);
+const X509V3_EXT_METHOD *X509V3_EXT_get(const X509_EXTENSION *ext);
 const X509V3_EXT_METHOD *X509V3_EXT_get_nid(int nid);
 int X509V3_add_standard_extensions(void);
 STACK_OF(CONF_VALUE) *X509V3_parse_list(const char *line);
-void *X509V3_EXT_d2i(X509_EXTENSION *ext);
+void *X509V3_EXT_d2i(const X509_EXTENSION *ext);
 void *X509V3_get_d2i(const STACK_OF(X509_EXTENSION) *x, int nid, int *crit,
     int *idx);
 
@@ -1011,31 +1017,31 @@ int X509V3_add1_i2d(STACK_OF(X509_EXTENSION) **x, int nid, void *value,
 
 void X509V3_EXT_val_prn(BIO *out, STACK_OF(CONF_VALUE) *val, int indent,
     int ml);
-int X509V3_EXT_print(BIO *out, X509_EXTENSION *ext, unsigned long flag,
+int X509V3_EXT_print(BIO *out, const X509_EXTENSION *ext, unsigned long flag,
     int indent);
 #ifndef OPENSSL_NO_STDIO
-int X509V3_EXT_print_fp(FILE *out, X509_EXTENSION *ext, int flag, int indent);
+int X509V3_EXT_print_fp(FILE *out, const X509_EXTENSION *ext, int flag, int indent);
 #endif
 int X509V3_extensions_print(BIO *out, const char *title,
     const STACK_OF(X509_EXTENSION) *exts,
     unsigned long flag, int indent);
 
-int X509_check_ca(X509 *x);
-int X509_check_purpose(X509 *x, int id, int ca);
-int X509_supported_extension(X509_EXTENSION *ex);
-int X509_check_issued(X509 *issuer, X509 *subject);
+int X509_check_ca(const X509 *x);
+int X509_check_purpose(const X509 *x, int id, int ca);
+int X509_supported_extension(const X509_EXTENSION *ex);
+int X509_check_issued(const X509 *issuer, const X509 *subject);
 int X509_check_akid(const X509 *issuer, const AUTHORITY_KEYID *akid);
 void X509_set_proxy_flag(X509 *x);
 void X509_set_proxy_pathlen(X509 *x, long l);
-long X509_get_proxy_pathlen(X509 *x);
+long X509_get_proxy_pathlen(const X509 *x);
 
-uint32_t X509_get_extension_flags(X509 *x);
-uint32_t X509_get_key_usage(X509 *x);
-uint32_t X509_get_extended_key_usage(X509 *x);
-const ASN1_OCTET_STRING *X509_get0_subject_key_id(X509 *x);
-const ASN1_OCTET_STRING *X509_get0_authority_key_id(X509 *x);
-const GENERAL_NAMES *X509_get0_authority_issuer(X509 *x);
-const ASN1_INTEGER *X509_get0_authority_serial(X509 *x);
+uint32_t X509_get_extension_flags(const X509 *x);
+uint32_t X509_get_key_usage(const X509 *x);
+uint32_t X509_get_extended_key_usage(const X509 *x);
+const ASN1_OCTET_STRING *X509_get0_subject_key_id(const X509 *x);
+const ASN1_OCTET_STRING *X509_get0_authority_key_id(const X509 *x);
+const GENERAL_NAMES *X509_get0_authority_issuer(const X509 *x);
+const ASN1_INTEGER *X509_get0_authority_serial(const X509 *x);
 
 int X509_PURPOSE_get_count(void);
 int X509_PURPOSE_get_unused_id(OSSL_LIB_CTX *libctx);
@@ -1053,10 +1059,10 @@ char *X509_PURPOSE_get0_sname(const X509_PURPOSE *xp);
 int X509_PURPOSE_get_trust(const X509_PURPOSE *xp);
 int X509_PURPOSE_set(int *p, int purpose);
 
-STACK_OF(OPENSSL_STRING) *X509_get1_email(X509 *x);
-STACK_OF(OPENSSL_STRING) *X509_REQ_get1_email(X509_REQ *x);
+STACK_OF(OPENSSL_STRING) *X509_get1_email(const X509 *x);
+STACK_OF(OPENSSL_STRING) *X509_REQ_get1_email(const X509_REQ *x);
 void X509_email_free(STACK_OF(OPENSSL_STRING) *sk);
-STACK_OF(OPENSSL_STRING) *X509_get1_ocsp(X509 *x);
+STACK_OF(OPENSSL_STRING) *X509_get1_ocsp(const X509 *x);
 
 /* Flags for X509_check_* functions */
 
@@ -1081,13 +1087,13 @@ STACK_OF(OPENSSL_STRING) *X509_get1_ocsp(X509 *x);
  */
 #define _X509_CHECK_FLAG_DOT_SUBDOMAINS 0x8000
 
-int X509_check_host(X509 *x, const char *chk, size_t chklen,
+int X509_check_host(const X509 *x, const char *chk, size_t chklen,
     unsigned int flags, char **peername);
-int X509_check_email(X509 *x, const char *chk, size_t chklen,
+int X509_check_email(const X509 *x, const char *chk, size_t chklen,
     unsigned int flags);
-int X509_check_ip(X509 *x, const unsigned char *chk, size_t chklen,
+int X509_check_ip(const X509 *x, const unsigned char *chk, size_t chklen,
     unsigned int flags);
-int X509_check_ip_asc(X509 *x, const char *ipasc, unsigned int flags);
+int X509_check_ip_asc(const X509 *x, const char *ipasc, unsigned int flags);
 
 ASN1_OCTET_STRING *a2i_IPADDRESS(const char *ipasc);
 ASN1_OCTET_STRING *a2i_IPADDRESS_NC(const char *ipasc);
@@ -1099,9 +1105,9 @@ void X509_POLICY_NODE_print(BIO *out, X509_POLICY_NODE *node, int indent);
 SKM_DEFINE_STACK_OF_INTERNAL(X509_POLICY_NODE, X509_POLICY_NODE, X509_POLICY_NODE)
 #define sk_X509_POLICY_NODE_num(sk) OPENSSL_sk_num(ossl_check_const_X509_POLICY_NODE_sk_type(sk))
 #define sk_X509_POLICY_NODE_value(sk, idx) ((X509_POLICY_NODE *)OPENSSL_sk_value(ossl_check_const_X509_POLICY_NODE_sk_type(sk), (idx)))
-#define sk_X509_POLICY_NODE_new(cmp) ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_new(ossl_check_X509_POLICY_NODE_compfunc_type(cmp)))
-#define sk_X509_POLICY_NODE_new_null() ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_new_null())
-#define sk_X509_POLICY_NODE_new_reserve(cmp, n) ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_new_reserve(ossl_check_X509_POLICY_NODE_compfunc_type(cmp), (n)))
+#define sk_X509_POLICY_NODE_new(cmp) ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_POLICY_NODE_compfunc_type(cmp)), sk_X509_POLICY_NODE_cmpfunc_thunk))
+#define sk_X509_POLICY_NODE_new_null() ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_POLICY_NODE_freefunc_thunk))
+#define sk_X509_POLICY_NODE_new_reserve(cmp, n) ((STACK_OF(X509_POLICY_NODE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_POLICY_NODE_compfunc_type(cmp), (n)), sk_X509_POLICY_NODE_cmpfunc_thunk))
 #define sk_X509_POLICY_NODE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_POLICY_NODE_sk_type(sk), (n))
 #define sk_X509_POLICY_NODE_free(sk) OPENSSL_sk_free(ossl_check_X509_POLICY_NODE_sk_type(sk))
 #define sk_X509_POLICY_NODE_zero(sk) OPENSSL_sk_zero(ossl_check_X509_POLICY_NODE_sk_type(sk))
@@ -1145,9 +1151,9 @@ typedef struct ASIdOrRange_st {
 SKM_DEFINE_STACK_OF_INTERNAL(ASIdOrRange, ASIdOrRange, ASIdOrRange)
 #define sk_ASIdOrRange_num(sk) OPENSSL_sk_num(ossl_check_const_ASIdOrRange_sk_type(sk))
 #define sk_ASIdOrRange_value(sk, idx) ((ASIdOrRange *)OPENSSL_sk_value(ossl_check_const_ASIdOrRange_sk_type(sk), (idx)))
-#define sk_ASIdOrRange_new(cmp) ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_new(ossl_check_ASIdOrRange_compfunc_type(cmp)))
-#define sk_ASIdOrRange_new_null() ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_new_null())
-#define sk_ASIdOrRange_new_reserve(cmp, n) ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_new_reserve(ossl_check_ASIdOrRange_compfunc_type(cmp), (n)))
+#define sk_ASIdOrRange_new(cmp) ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASIdOrRange_compfunc_type(cmp)), sk_ASIdOrRange_cmpfunc_thunk))
+#define sk_ASIdOrRange_new_null() ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASIdOrRange_freefunc_thunk))
+#define sk_ASIdOrRange_new_reserve(cmp, n) ((STACK_OF(ASIdOrRange) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASIdOrRange_compfunc_type(cmp), (n)), sk_ASIdOrRange_cmpfunc_thunk))
 #define sk_ASIdOrRange_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASIdOrRange_sk_type(sk), (n))
 #define sk_ASIdOrRange_free(sk) OPENSSL_sk_free(ossl_check_ASIdOrRange_sk_type(sk))
 #define sk_ASIdOrRange_zero(sk) OPENSSL_sk_zero(ossl_check_ASIdOrRange_sk_type(sk))
@@ -1212,9 +1218,9 @@ typedef struct IPAddressOrRange_st {
 SKM_DEFINE_STACK_OF_INTERNAL(IPAddressOrRange, IPAddressOrRange, IPAddressOrRange)
 #define sk_IPAddressOrRange_num(sk) OPENSSL_sk_num(ossl_check_const_IPAddressOrRange_sk_type(sk))
 #define sk_IPAddressOrRange_value(sk, idx) ((IPAddressOrRange *)OPENSSL_sk_value(ossl_check_const_IPAddressOrRange_sk_type(sk), (idx)))
-#define sk_IPAddressOrRange_new(cmp) ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_new(ossl_check_IPAddressOrRange_compfunc_type(cmp)))
-#define sk_IPAddressOrRange_new_null() ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_new_null())
-#define sk_IPAddressOrRange_new_reserve(cmp, n) ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_new_reserve(ossl_check_IPAddressOrRange_compfunc_type(cmp), (n)))
+#define sk_IPAddressOrRange_new(cmp) ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_IPAddressOrRange_compfunc_type(cmp)), sk_IPAddressOrRange_cmpfunc_thunk))
+#define sk_IPAddressOrRange_new_null() ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_IPAddressOrRange_freefunc_thunk))
+#define sk_IPAddressOrRange_new_reserve(cmp, n) ((STACK_OF(IPAddressOrRange) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_IPAddressOrRange_compfunc_type(cmp), (n)), sk_IPAddressOrRange_cmpfunc_thunk))
 #define sk_IPAddressOrRange_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_IPAddressOrRange_sk_type(sk), (n))
 #define sk_IPAddressOrRange_free(sk) OPENSSL_sk_free(ossl_check_IPAddressOrRange_sk_type(sk))
 #define sk_IPAddressOrRange_zero(sk) OPENSSL_sk_zero(ossl_check_IPAddressOrRange_sk_type(sk))
@@ -1260,9 +1266,9 @@ typedef struct IPAddressFamily_st {
 SKM_DEFINE_STACK_OF_INTERNAL(IPAddressFamily, IPAddressFamily, IPAddressFamily)
 #define sk_IPAddressFamily_num(sk) OPENSSL_sk_num(ossl_check_const_IPAddressFamily_sk_type(sk))
 #define sk_IPAddressFamily_value(sk, idx) ((IPAddressFamily *)OPENSSL_sk_value(ossl_check_const_IPAddressFamily_sk_type(sk), (idx)))
-#define sk_IPAddressFamily_new(cmp) ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_new(ossl_check_IPAddressFamily_compfunc_type(cmp)))
-#define sk_IPAddressFamily_new_null() ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_new_null())
-#define sk_IPAddressFamily_new_reserve(cmp, n) ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_new_reserve(ossl_check_IPAddressFamily_compfunc_type(cmp), (n)))
+#define sk_IPAddressFamily_new(cmp) ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_IPAddressFamily_compfunc_type(cmp)), sk_IPAddressFamily_cmpfunc_thunk))
+#define sk_IPAddressFamily_new_null() ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_IPAddressFamily_freefunc_thunk))
+#define sk_IPAddressFamily_new_reserve(cmp, n) ((STACK_OF(IPAddressFamily) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_IPAddressFamily_compfunc_type(cmp), (n)), sk_IPAddressFamily_cmpfunc_thunk))
 #define sk_IPAddressFamily_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_IPAddressFamily_sk_type(sk), (n))
 #define sk_IPAddressFamily_free(sk) OPENSSL_sk_free(ossl_check_IPAddressFamily_sk_type(sk))
 #define sk_IPAddressFamily_zero(sk) OPENSSL_sk_zero(ossl_check_IPAddressFamily_sk_type(sk))
@@ -1317,17 +1323,17 @@ int X509v3_asid_add_inherit(ASIdentifiers *asid, int which);
 int X509v3_asid_add_id_or_range(ASIdentifiers *asid, int which,
     ASN1_INTEGER *min, ASN1_INTEGER *max);
 int X509v3_addr_add_inherit(IPAddrBlocks *addr,
-    const unsigned afi, const unsigned *safi);
+    unsigned afi, const unsigned *safi);
 int X509v3_addr_add_prefix(IPAddrBlocks *addr,
-    const unsigned afi, const unsigned *safi,
+    unsigned afi, const unsigned *safi,
     unsigned char *a, const int prefixlen);
 int X509v3_addr_add_range(IPAddrBlocks *addr,
-    const unsigned afi, const unsigned *safi,
+    unsigned afi, const unsigned *safi,
     unsigned char *min, unsigned char *max);
 unsigned X509v3_addr_get_afi(const IPAddressFamily *f);
-int X509v3_addr_get_range(IPAddressOrRange *aor, const unsigned afi,
+int X509v3_addr_get_range(IPAddressOrRange *aor, unsigned afi,
     unsigned char *min, unsigned char *max,
-    const int length);
+    int length);
 
 /*
  * Canonical forms.
@@ -1350,10 +1356,10 @@ int X509v3_addr_subset(IPAddrBlocks *a, IPAddrBlocks *b);
  */
 int X509v3_asid_validate_path(X509_STORE_CTX *);
 int X509v3_addr_validate_path(X509_STORE_CTX *);
-int X509v3_asid_validate_resource_set(STACK_OF(X509) *chain,
+int X509v3_asid_validate_resource_set(const STACK_OF(X509) *chain,
     ASIdentifiers *ext,
     int allow_inheritance);
-int X509v3_addr_validate_resource_set(STACK_OF(X509) *chain,
+int X509v3_addr_validate_resource_set(const STACK_OF(X509) *chain,
     IPAddrBlocks *ext, int allow_inheritance);
 
 #endif /* OPENSSL_NO_RFC3779 */
@@ -1362,9 +1368,9 @@ int X509v3_addr_validate_resource_set(STACK_OF(X509) *chain,
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_STRING, ASN1_STRING, ASN1_STRING)
 #define sk_ASN1_STRING_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_STRING_sk_type(sk))
 #define sk_ASN1_STRING_value(sk, idx) ((ASN1_STRING *)OPENSSL_sk_value(ossl_check_const_ASN1_STRING_sk_type(sk), (idx)))
-#define sk_ASN1_STRING_new(cmp) ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_new(ossl_check_ASN1_STRING_compfunc_type(cmp)))
-#define sk_ASN1_STRING_new_null() ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_new_null())
-#define sk_ASN1_STRING_new_reserve(cmp, n) ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_STRING_compfunc_type(cmp), (n)))
+#define sk_ASN1_STRING_new(cmp) ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_STRING_compfunc_type(cmp)), sk_ASN1_STRING_cmpfunc_thunk))
+#define sk_ASN1_STRING_new_null() ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_STRING_freefunc_thunk))
+#define sk_ASN1_STRING_new_reserve(cmp, n) ((STACK_OF(ASN1_STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_STRING_compfunc_type(cmp), (n)), sk_ASN1_STRING_cmpfunc_thunk))
 #define sk_ASN1_STRING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_STRING_sk_type(sk), (n))
 #define sk_ASN1_STRING_free(sk) OPENSSL_sk_free(ossl_check_ASN1_STRING_sk_type(sk))
 #define sk_ASN1_STRING_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_STRING_sk_type(sk))
@@ -1403,9 +1409,9 @@ DECLARE_ASN1_FUNCTIONS(ADMISSION_SYNTAX)
 SKM_DEFINE_STACK_OF_INTERNAL(PROFESSION_INFO, PROFESSION_INFO, PROFESSION_INFO)
 #define sk_PROFESSION_INFO_num(sk) OPENSSL_sk_num(ossl_check_const_PROFESSION_INFO_sk_type(sk))
 #define sk_PROFESSION_INFO_value(sk, idx) ((PROFESSION_INFO *)OPENSSL_sk_value(ossl_check_const_PROFESSION_INFO_sk_type(sk), (idx)))
-#define sk_PROFESSION_INFO_new(cmp) ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_new(ossl_check_PROFESSION_INFO_compfunc_type(cmp)))
-#define sk_PROFESSION_INFO_new_null() ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_new_null())
-#define sk_PROFESSION_INFO_new_reserve(cmp, n) ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_new_reserve(ossl_check_PROFESSION_INFO_compfunc_type(cmp), (n)))
+#define sk_PROFESSION_INFO_new(cmp) ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_PROFESSION_INFO_compfunc_type(cmp)), sk_PROFESSION_INFO_cmpfunc_thunk))
+#define sk_PROFESSION_INFO_new_null() ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_PROFESSION_INFO_freefunc_thunk))
+#define sk_PROFESSION_INFO_new_reserve(cmp, n) ((STACK_OF(PROFESSION_INFO) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_PROFESSION_INFO_compfunc_type(cmp), (n)), sk_PROFESSION_INFO_cmpfunc_thunk))
 #define sk_PROFESSION_INFO_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_PROFESSION_INFO_sk_type(sk), (n))
 #define sk_PROFESSION_INFO_free(sk) OPENSSL_sk_free(ossl_check_PROFESSION_INFO_sk_type(sk))
 #define sk_PROFESSION_INFO_zero(sk) OPENSSL_sk_zero(ossl_check_PROFESSION_INFO_sk_type(sk))
@@ -1429,9 +1435,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(PROFESSION_INFO, PROFESSION_INFO, PROFESSION_INFO)
 SKM_DEFINE_STACK_OF_INTERNAL(ADMISSIONS, ADMISSIONS, ADMISSIONS)
 #define sk_ADMISSIONS_num(sk) OPENSSL_sk_num(ossl_check_const_ADMISSIONS_sk_type(sk))
 #define sk_ADMISSIONS_value(sk, idx) ((ADMISSIONS *)OPENSSL_sk_value(ossl_check_const_ADMISSIONS_sk_type(sk), (idx)))
-#define sk_ADMISSIONS_new(cmp) ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_new(ossl_check_ADMISSIONS_compfunc_type(cmp)))
-#define sk_ADMISSIONS_new_null() ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_new_null())
-#define sk_ADMISSIONS_new_reserve(cmp, n) ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_new_reserve(ossl_check_ADMISSIONS_compfunc_type(cmp), (n)))
+#define sk_ADMISSIONS_new(cmp) ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ADMISSIONS_compfunc_type(cmp)), sk_ADMISSIONS_cmpfunc_thunk))
+#define sk_ADMISSIONS_new_null() ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ADMISSIONS_freefunc_thunk))
+#define sk_ADMISSIONS_new_reserve(cmp, n) ((STACK_OF(ADMISSIONS) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ADMISSIONS_compfunc_type(cmp), (n)), sk_ADMISSIONS_cmpfunc_thunk))
 #define sk_ADMISSIONS_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ADMISSIONS_sk_type(sk), (n))
 #define sk_ADMISSIONS_free(sk) OPENSSL_sk_free(ossl_check_ADMISSIONS_sk_type(sk))
 #define sk_ADMISSIONS_zero(sk) OPENSSL_sk_zero(ossl_check_ADMISSIONS_sk_type(sk))
@@ -1516,9 +1522,9 @@ DECLARE_ASN1_FUNCTIONS(OSSL_USER_NOTICE_SYNTAX)
 SKM_DEFINE_STACK_OF_INTERNAL(USERNOTICE, USERNOTICE, USERNOTICE)
 #define sk_USERNOTICE_num(sk) OPENSSL_sk_num(ossl_check_const_USERNOTICE_sk_type(sk))
 #define sk_USERNOTICE_value(sk, idx) ((USERNOTICE *)OPENSSL_sk_value(ossl_check_const_USERNOTICE_sk_type(sk), (idx)))
-#define sk_USERNOTICE_new(cmp) ((STACK_OF(USERNOTICE) *)OPENSSL_sk_new(ossl_check_USERNOTICE_compfunc_type(cmp)))
-#define sk_USERNOTICE_new_null() ((STACK_OF(USERNOTICE) *)OPENSSL_sk_new_null())
-#define sk_USERNOTICE_new_reserve(cmp, n) ((STACK_OF(USERNOTICE) *)OPENSSL_sk_new_reserve(ossl_check_USERNOTICE_compfunc_type(cmp), (n)))
+#define sk_USERNOTICE_new(cmp) ((STACK_OF(USERNOTICE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_USERNOTICE_compfunc_type(cmp)), sk_USERNOTICE_cmpfunc_thunk))
+#define sk_USERNOTICE_new_null() ((STACK_OF(USERNOTICE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_USERNOTICE_freefunc_thunk))
+#define sk_USERNOTICE_new_reserve(cmp, n) ((STACK_OF(USERNOTICE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_USERNOTICE_compfunc_type(cmp), (n)), sk_USERNOTICE_cmpfunc_thunk))
 #define sk_USERNOTICE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_USERNOTICE_sk_type(sk), (n))
 #define sk_USERNOTICE_free(sk) OPENSSL_sk_free(ossl_check_USERNOTICE_sk_type(sk))
 #define sk_USERNOTICE_zero(sk) OPENSSL_sk_zero(ossl_check_USERNOTICE_sk_type(sk))
@@ -1555,9 +1561,9 @@ DECLARE_ASN1_FUNCTIONS(OSSL_ROLE_SPEC_CERT_ID)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_ROLE_SPEC_CERT_ID, OSSL_ROLE_SPEC_CERT_ID, OSSL_ROLE_SPEC_CERT_ID)
 #define sk_OSSL_ROLE_SPEC_CERT_ID_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_ROLE_SPEC_CERT_ID_sk_type(sk))
 #define sk_OSSL_ROLE_SPEC_CERT_ID_value(sk, idx) ((OSSL_ROLE_SPEC_CERT_ID *)OPENSSL_sk_value(ossl_check_const_OSSL_ROLE_SPEC_CERT_ID_sk_type(sk), (idx)))
-#define sk_OSSL_ROLE_SPEC_CERT_ID_new(cmp) ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_new(ossl_check_OSSL_ROLE_SPEC_CERT_ID_compfunc_type(cmp)))
-#define sk_OSSL_ROLE_SPEC_CERT_ID_new_null() ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_new_null())
-#define sk_OSSL_ROLE_SPEC_CERT_ID_new_reserve(cmp, n) ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_ROLE_SPEC_CERT_ID_compfunc_type(cmp), (n)))
+#define sk_OSSL_ROLE_SPEC_CERT_ID_new(cmp) ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_ROLE_SPEC_CERT_ID_compfunc_type(cmp)), sk_OSSL_ROLE_SPEC_CERT_ID_cmpfunc_thunk))
+#define sk_OSSL_ROLE_SPEC_CERT_ID_new_null() ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_ROLE_SPEC_CERT_ID_freefunc_thunk))
+#define sk_OSSL_ROLE_SPEC_CERT_ID_new_reserve(cmp, n) ((STACK_OF(OSSL_ROLE_SPEC_CERT_ID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_ROLE_SPEC_CERT_ID_compfunc_type(cmp), (n)), sk_OSSL_ROLE_SPEC_CERT_ID_cmpfunc_thunk))
 #define sk_OSSL_ROLE_SPEC_CERT_ID_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_ROLE_SPEC_CERT_ID_sk_type(sk), (n))
 #define sk_OSSL_ROLE_SPEC_CERT_ID_free(sk) OPENSSL_sk_free(ossl_check_OSSL_ROLE_SPEC_CERT_ID_sk_type(sk))
 #define sk_OSSL_ROLE_SPEC_CERT_ID_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_ROLE_SPEC_CERT_ID_sk_type(sk))
@@ -1805,9 +1811,9 @@ DECLARE_ASN1_FUNCTIONS(OSSL_TIME_PERIOD)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_TIME_PERIOD, OSSL_TIME_PERIOD, OSSL_TIME_PERIOD)
 #define sk_OSSL_TIME_PERIOD_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_TIME_PERIOD_sk_type(sk))
 #define sk_OSSL_TIME_PERIOD_value(sk, idx) ((OSSL_TIME_PERIOD *)OPENSSL_sk_value(ossl_check_const_OSSL_TIME_PERIOD_sk_type(sk), (idx)))
-#define sk_OSSL_TIME_PERIOD_new(cmp) ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_new(ossl_check_OSSL_TIME_PERIOD_compfunc_type(cmp)))
-#define sk_OSSL_TIME_PERIOD_new_null() ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_new_null())
-#define sk_OSSL_TIME_PERIOD_new_reserve(cmp, n) ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_TIME_PERIOD_compfunc_type(cmp), (n)))
+#define sk_OSSL_TIME_PERIOD_new(cmp) ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_TIME_PERIOD_compfunc_type(cmp)), sk_OSSL_TIME_PERIOD_cmpfunc_thunk))
+#define sk_OSSL_TIME_PERIOD_new_null() ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_TIME_PERIOD_freefunc_thunk))
+#define sk_OSSL_TIME_PERIOD_new_reserve(cmp, n) ((STACK_OF(OSSL_TIME_PERIOD) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_TIME_PERIOD_compfunc_type(cmp), (n)), sk_OSSL_TIME_PERIOD_cmpfunc_thunk))
 #define sk_OSSL_TIME_PERIOD_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_TIME_PERIOD_sk_type(sk), (n))
 #define sk_OSSL_TIME_PERIOD_free(sk) OPENSSL_sk_free(ossl_check_OSSL_TIME_PERIOD_sk_type(sk))
 #define sk_OSSL_TIME_PERIOD_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_TIME_PERIOD_sk_type(sk))
@@ -1835,9 +1841,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(OSSL_TIME_PERIOD, OSSL_TIME_PERIOD, OSSL_TIME_PERIO
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_DAY_TIME_BAND, OSSL_DAY_TIME_BAND, OSSL_DAY_TIME_BAND)
 #define sk_OSSL_DAY_TIME_BAND_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_DAY_TIME_BAND_sk_type(sk))
 #define sk_OSSL_DAY_TIME_BAND_value(sk, idx) ((OSSL_DAY_TIME_BAND *)OPENSSL_sk_value(ossl_check_const_OSSL_DAY_TIME_BAND_sk_type(sk), (idx)))
-#define sk_OSSL_DAY_TIME_BAND_new(cmp) ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_new(ossl_check_OSSL_DAY_TIME_BAND_compfunc_type(cmp)))
-#define sk_OSSL_DAY_TIME_BAND_new_null() ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_new_null())
-#define sk_OSSL_DAY_TIME_BAND_new_reserve(cmp, n) ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_DAY_TIME_BAND_compfunc_type(cmp), (n)))
+#define sk_OSSL_DAY_TIME_BAND_new(cmp) ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_DAY_TIME_BAND_compfunc_type(cmp)), sk_OSSL_DAY_TIME_BAND_cmpfunc_thunk))
+#define sk_OSSL_DAY_TIME_BAND_new_null() ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_DAY_TIME_BAND_freefunc_thunk))
+#define sk_OSSL_DAY_TIME_BAND_new_reserve(cmp, n) ((STACK_OF(OSSL_DAY_TIME_BAND) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_DAY_TIME_BAND_compfunc_type(cmp), (n)), sk_OSSL_DAY_TIME_BAND_cmpfunc_thunk))
 #define sk_OSSL_DAY_TIME_BAND_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_DAY_TIME_BAND_sk_type(sk), (n))
 #define sk_OSSL_DAY_TIME_BAND_free(sk) OPENSSL_sk_free(ossl_check_OSSL_DAY_TIME_BAND_sk_type(sk))
 #define sk_OSSL_DAY_TIME_BAND_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_DAY_TIME_BAND_sk_type(sk))
@@ -1899,9 +1905,9 @@ DECLARE_ASN1_FUNCTIONS(OSSL_ATTRIBUTE_MAPPINGS)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_ATTRIBUTE_MAPPING, OSSL_ATTRIBUTE_MAPPING, OSSL_ATTRIBUTE_MAPPING)
 #define sk_OSSL_ATTRIBUTE_MAPPING_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_ATTRIBUTE_MAPPING_sk_type(sk))
 #define sk_OSSL_ATTRIBUTE_MAPPING_value(sk, idx) ((OSSL_ATTRIBUTE_MAPPING *)OPENSSL_sk_value(ossl_check_const_OSSL_ATTRIBUTE_MAPPING_sk_type(sk), (idx)))
-#define sk_OSSL_ATTRIBUTE_MAPPING_new(cmp) ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_new(ossl_check_OSSL_ATTRIBUTE_MAPPING_compfunc_type(cmp)))
-#define sk_OSSL_ATTRIBUTE_MAPPING_new_null() ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_new_null())
-#define sk_OSSL_ATTRIBUTE_MAPPING_new_reserve(cmp, n) ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_ATTRIBUTE_MAPPING_compfunc_type(cmp), (n)))
+#define sk_OSSL_ATTRIBUTE_MAPPING_new(cmp) ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_ATTRIBUTE_MAPPING_compfunc_type(cmp)), sk_OSSL_ATTRIBUTE_MAPPING_cmpfunc_thunk))
+#define sk_OSSL_ATTRIBUTE_MAPPING_new_null() ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_ATTRIBUTE_MAPPING_freefunc_thunk))
+#define sk_OSSL_ATTRIBUTE_MAPPING_new_reserve(cmp, n) ((STACK_OF(OSSL_ATTRIBUTE_MAPPING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_ATTRIBUTE_MAPPING_compfunc_type(cmp), (n)), sk_OSSL_ATTRIBUTE_MAPPING_cmpfunc_thunk))
 #define sk_OSSL_ATTRIBUTE_MAPPING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_ATTRIBUTE_MAPPING_sk_type(sk), (n))
 #define sk_OSSL_ATTRIBUTE_MAPPING_free(sk) OPENSSL_sk_free(ossl_check_OSSL_ATTRIBUTE_MAPPING_sk_type(sk))
 #define sk_OSSL_ATTRIBUTE_MAPPING_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_ATTRIBUTE_MAPPING_sk_type(sk))
@@ -1951,9 +1957,9 @@ DECLARE_ASN1_FUNCTIONS(OSSL_ALLOWED_ATTRIBUTES_SYNTAX)
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_ALLOWED_ATTRIBUTES_CHOICE, OSSL_ALLOWED_ATTRIBUTES_CHOICE, OSSL_ALLOWED_ATTRIBUTES_CHOICE)
 #define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_ALLOWED_ATTRIBUTES_CHOICE_sk_type(sk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_value(sk, idx) ((OSSL_ALLOWED_ATTRIBUTES_CHOICE *)OPENSSL_sk_value(ossl_check_const_OSSL_ALLOWED_ATTRIBUTES_CHOICE_sk_type(sk), (idx)))
-#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(cmp) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_new(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_compfunc_type(cmp)))
-#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new_null() ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_new_null())
-#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new_reserve(cmp, n) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_compfunc_type(cmp), (n)))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new(cmp) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_compfunc_type(cmp)), sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_cmpfunc_thunk))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new_null() ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_freefunc_thunk))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_new_reserve(cmp, n) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_CHOICE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_compfunc_type(cmp), (n)), sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_cmpfunc_thunk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_sk_type(sk), (n))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_free(sk) OPENSSL_sk_free(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_sk_type(sk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_CHOICE_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_ALLOWED_ATTRIBUTES_CHOICE_sk_type(sk))
@@ -1981,9 +1987,9 @@ SKM_DEFINE_STACK_OF_INTERNAL(OSSL_ALLOWED_ATTRIBUTES_CHOICE, OSSL_ALLOWED_ATTRIB
 SKM_DEFINE_STACK_OF_INTERNAL(OSSL_ALLOWED_ATTRIBUTES_ITEM, OSSL_ALLOWED_ATTRIBUTES_ITEM, OSSL_ALLOWED_ATTRIBUTES_ITEM)
 #define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_num(sk) OPENSSL_sk_num(ossl_check_const_OSSL_ALLOWED_ATTRIBUTES_ITEM_sk_type(sk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_value(sk, idx) ((OSSL_ALLOWED_ATTRIBUTES_ITEM *)OPENSSL_sk_value(ossl_check_const_OSSL_ALLOWED_ATTRIBUTES_ITEM_sk_type(sk), (idx)))
-#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new(cmp) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_new(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_compfunc_type(cmp)))
-#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new_null() ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_new_null())
-#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new_reserve(cmp, n) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_new_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_compfunc_type(cmp), (n)))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new(cmp) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_compfunc_type(cmp)), sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_cmpfunc_thunk))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new_null() ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_freefunc_thunk))
+#define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_new_reserve(cmp, n) ((STACK_OF(OSSL_ALLOWED_ATTRIBUTES_ITEM) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_compfunc_type(cmp), (n)), sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_cmpfunc_thunk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_sk_type(sk), (n))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_free(sk) OPENSSL_sk_free(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_sk_type(sk))
 #define sk_OSSL_ALLOWED_ATTRIBUTES_ITEM_zero(sk) OPENSSL_sk_zero(ossl_check_OSSL_ALLOWED_ATTRIBUTES_ITEM_sk_type(sk))

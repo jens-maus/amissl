@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,6 +86,7 @@
 #ifndef OPENSSL_NO_EC
 #include <openssl/ec.h>
 #endif
+#include <openssl/ech.h>
 #include <openssl/encoder.h>
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
@@ -128,6 +129,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/params.h>
 #include <openssl/param_build.h>
+#include <openssl/posix_time.h>
 #include <openssl/provider.h>
 #include <openssl/quic.h>
 #include <openssl/rand.h>

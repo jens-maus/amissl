@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2024 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -47,6 +47,7 @@
 #define X509_R_INVALID_ATTRIBUTES 138
 #define X509_R_INVALID_DIRECTORY 113
 #define X509_R_INVALID_DISTPOINT 143
+#define X509_R_INVALID_EXTENSION 146
 #define X509_R_INVALID_FIELD_NAME 119
 #define X509_R_INVALID_TRUST 123
 #define X509_R_ISSUER_MISMATCH 129

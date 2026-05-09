@@ -9,7 +9,9 @@
  * https://www.openssl.org/source/license.html
  */
 
+#include "internal/o_dir.h" /* for OPENSSL_DIR_read */
 #include "internal/e_os.h"
+#include "apps.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -47,7 +49,6 @@
 #endif
 /* for timing in some TRACE statements */
 #include <time.h>
-#include "internal/o_dir.h" /* for OPENSSL_DIR_read */
 #endif
 
 #ifndef OPENSSL_NO_SOCK
@@ -491,10 +492,16 @@ static int ssl_ech_servername_cb(SSL *s, int *ad, void *arg)
     time_t now = time(0); /* For a bit of basic logging */
     int sockfd = 0, res = 0, echrv = 0;
     size_t srv = 0;
+#if defined(OPENSSL_SYS_AMIGA)
+    struct sockaddr_in ss;
+    char *clientip = "unknown";
+#else
     struct sockaddr_storage ss;
     socklen_t salen = sizeof(ss);
     struct sockaddr *sa;
-    char clientip[INET6_ADDRSTRLEN], lstr[ECH_TIME_STR_LEN];
+    char clientip[INET6_ADDRSTRLEN]
+#endif
+    char lstr[ECH_TIME_STR_LEN];
     const char *servername = NULL;
     char *inner_sni = NULL, *outer_sni = NULL;
     struct tm local;
@@ -523,6 +530,12 @@ static int ssl_ech_servername_cb(SSL *s, int *ad, void *arg)
             strcpy(lstr, "sometime");
     }
 #endif
+#if defined(OPENSSL_SYS_AMIGA)
+    res = BIO_get_fd(SSL_get_wbio(s), NULL);
+    if (res != -1) {
+        get_sock_info_address(res, &clientip, NULL);
+    }
+#else
     memset(clientip, 0, INET6_ADDRSTRLEN);
     strncpy(clientip, "unknown", INET6_ADDRSTRLEN);
     memset(&ss, 0, salen);
@@ -538,6 +551,7 @@ static int ssl_ech_servername_cb(SSL *s, int *ad, void *arg)
             res = getnameinfo(sa, salen, clientip, INET6_ADDRSTRLEN,
                 0, 0, NI_NUMERICHOST);
     }
+#endif
     /* Name that matches "main" ctx */
     servername = SSL_get_servername(s, TLSEXT_NAMETYPE_host_name);
     echrv = SSL_ech_get1_status(s, &inner_sni, &outer_sni);
@@ -588,6 +602,9 @@ static int ssl_ech_servername_cb(SSL *s, int *ad, void *arg)
             break;
         }
     }
+#if defined(OPENSSL_SYS_AMIGA)
+    OPENSSL_free(clientip);
+#endif
     OPENSSL_free(inner_sni);
     OPENSSL_free(outer_sni);
     if (servername != NULL && p->biodebug != NULL) {
@@ -3225,9 +3242,10 @@ static long int count_reads_callback(BIO *bio, int cmd, const char *argp, size_t
 
 static int rpk_enable(SSL *con)
 {
+    int i;
     if (!SSL_dane_enable(con, NULL))
         return 0;
-    for (int i = 0; i < sk_OPENSSL_STRING_num(rpk_files); ++i) {
+    for (i = 0; i < sk_OPENSSL_STRING_num(rpk_files); ++i) {
         const char *file = sk_OPENSSL_STRING_value(rpk_files, i);
 
         if (!load_rpk_file(con, file))

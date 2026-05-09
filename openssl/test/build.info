@@ -67,13 +67,13 @@ IF[{- !$disabled{tests} -}]
           provider_status_test defltfips_test \
           bio_readbuffer_test user_property_test pkcs7_test upcallstest \
           provfetchtest prov_config_test libctx_config_test \
-          ca_internals_test bio_tfo_test membio_test bio_dgram_test \
+          bio_tfo_test membio_test bio_dgram_test \
           fips_version_test x509_test hpke_test pairwise_fail_test \
           nodefltctxtest evp_xof_test x509_load_cert_file_test bio_meth_test \
           x509_acert_test x509_req_test strtoultest bio_pw_callback_test \
           engine_stubs_test base64_simdutf_test bio_eof_test ech_test
 
-  IF[{- !$disabled{'ech'} -}]
+  IF[{- !$disabled{'ech'} -} && $target{sys_id} ne "AMIGA" -}]]
     PROGRAMS{noinst}=ech_corrupt_test
   ENDIF
 

@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 2019-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -48,9 +48,9 @@ typedef struct ESS_signing_cert ESS_SIGNING_CERT;
 SKM_DEFINE_STACK_OF_INTERNAL(ESS_CERT_ID, ESS_CERT_ID, ESS_CERT_ID)
 #define sk_ESS_CERT_ID_num(sk) OPENSSL_sk_num(ossl_check_const_ESS_CERT_ID_sk_type(sk))
 #define sk_ESS_CERT_ID_value(sk, idx) ((ESS_CERT_ID *)OPENSSL_sk_value(ossl_check_const_ESS_CERT_ID_sk_type(sk), (idx)))
-#define sk_ESS_CERT_ID_new(cmp) ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_new(ossl_check_ESS_CERT_ID_compfunc_type(cmp)))
-#define sk_ESS_CERT_ID_new_null() ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_new_null())
-#define sk_ESS_CERT_ID_new_reserve(cmp, n) ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_new_reserve(ossl_check_ESS_CERT_ID_compfunc_type(cmp), (n)))
+#define sk_ESS_CERT_ID_new(cmp) ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ESS_CERT_ID_compfunc_type(cmp)), sk_ESS_CERT_ID_cmpfunc_thunk))
+#define sk_ESS_CERT_ID_new_null() ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ESS_CERT_ID_freefunc_thunk))
+#define sk_ESS_CERT_ID_new_reserve(cmp, n) ((STACK_OF(ESS_CERT_ID) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ESS_CERT_ID_compfunc_type(cmp), (n)), sk_ESS_CERT_ID_cmpfunc_thunk))
 #define sk_ESS_CERT_ID_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ESS_CERT_ID_sk_type(sk), (n))
 #define sk_ESS_CERT_ID_free(sk) OPENSSL_sk_free(ossl_check_ESS_CERT_ID_sk_type(sk))
 #define sk_ESS_CERT_ID_zero(sk) OPENSSL_sk_zero(ossl_check_ESS_CERT_ID_sk_type(sk))
@@ -81,9 +81,9 @@ typedef struct ESS_cert_id_v2_st ESS_CERT_ID_V2;
 SKM_DEFINE_STACK_OF_INTERNAL(ESS_CERT_ID_V2, ESS_CERT_ID_V2, ESS_CERT_ID_V2)
 #define sk_ESS_CERT_ID_V2_num(sk) OPENSSL_sk_num(ossl_check_const_ESS_CERT_ID_V2_sk_type(sk))
 #define sk_ESS_CERT_ID_V2_value(sk, idx) ((ESS_CERT_ID_V2 *)OPENSSL_sk_value(ossl_check_const_ESS_CERT_ID_V2_sk_type(sk), (idx)))
-#define sk_ESS_CERT_ID_V2_new(cmp) ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_new(ossl_check_ESS_CERT_ID_V2_compfunc_type(cmp)))
-#define sk_ESS_CERT_ID_V2_new_null() ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_new_null())
-#define sk_ESS_CERT_ID_V2_new_reserve(cmp, n) ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_new_reserve(ossl_check_ESS_CERT_ID_V2_compfunc_type(cmp), (n)))
+#define sk_ESS_CERT_ID_V2_new(cmp) ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ESS_CERT_ID_V2_compfunc_type(cmp)), sk_ESS_CERT_ID_V2_cmpfunc_thunk))
+#define sk_ESS_CERT_ID_V2_new_null() ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ESS_CERT_ID_V2_freefunc_thunk))
+#define sk_ESS_CERT_ID_V2_new_reserve(cmp, n) ((STACK_OF(ESS_CERT_ID_V2) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ESS_CERT_ID_V2_compfunc_type(cmp), (n)), sk_ESS_CERT_ID_V2_cmpfunc_thunk))
 #define sk_ESS_CERT_ID_V2_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ESS_CERT_ID_V2_sk_type(sk), (n))
 #define sk_ESS_CERT_ID_V2_free(sk) OPENSSL_sk_free(ossl_check_ESS_CERT_ID_V2_sk_type(sk))
 #define sk_ESS_CERT_ID_V2_zero(sk) OPENSSL_sk_zero(ossl_check_ESS_CERT_ID_V2_sk_type(sk))
@@ -136,7 +136,12 @@ int OSSL_ESS_check_signing_certs(const ESS_SIGNING_CERT *ss,
     const ESS_SIGNING_CERT_V2 *ssv2,
     const STACK_OF(X509) *chain,
     int require_signing_cert);
-
+int OSSL_ESS_check_signing_certs_ex(const ESS_SIGNING_CERT *ss,
+    const ESS_SIGNING_CERT_V2 *ssv2,
+    const STACK_OF(X509) *chain,
+    OSSL_LIB_CTX *libctx,
+    const char *propq,
+    int require_signing_cert);
 #ifdef __cplusplus
 }
 #endif

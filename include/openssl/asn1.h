@@ -8,7 +8,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -147,9 +147,9 @@ extern "C" {
 SKM_DEFINE_STACK_OF_INTERNAL(X509_ALGOR, X509_ALGOR, X509_ALGOR)
 #define sk_X509_ALGOR_num(sk) OPENSSL_sk_num(ossl_check_const_X509_ALGOR_sk_type(sk))
 #define sk_X509_ALGOR_value(sk, idx) ((X509_ALGOR *)OPENSSL_sk_value(ossl_check_const_X509_ALGOR_sk_type(sk), (idx)))
-#define sk_X509_ALGOR_new(cmp) ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_new(ossl_check_X509_ALGOR_compfunc_type(cmp)))
-#define sk_X509_ALGOR_new_null() ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_new_null())
-#define sk_X509_ALGOR_new_reserve(cmp, n) ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_new_reserve(ossl_check_X509_ALGOR_compfunc_type(cmp), (n)))
+#define sk_X509_ALGOR_new(cmp) ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_X509_ALGOR_compfunc_type(cmp)), sk_X509_ALGOR_cmpfunc_thunk))
+#define sk_X509_ALGOR_new_null() ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_X509_ALGOR_freefunc_thunk))
+#define sk_X509_ALGOR_new_reserve(cmp, n) ((STACK_OF(X509_ALGOR) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_X509_ALGOR_compfunc_type(cmp), (n)), sk_X509_ALGOR_cmpfunc_thunk))
 #define sk_X509_ALGOR_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_X509_ALGOR_sk_type(sk), (n))
 #define sk_X509_ALGOR_free(sk) OPENSSL_sk_free(ossl_check_X509_ALGOR_sk_type(sk))
 #define sk_X509_ALGOR_zero(sk) OPENSSL_sk_zero(ossl_check_X509_ALGOR_sk_type(sk))
@@ -173,42 +173,8 @@ SKM_DEFINE_STACK_OF_INTERNAL(X509_ALGOR, X509_ALGOR, X509_ALGOR)
 
 /* clang-format on */
 
-#define ASN1_STRING_FLAG_BITS_LEFT 0x08 /* Set if 0x07 has bits left value */
-/*
- * This indicates that the ASN1_STRING is not a real value but just a place
- * holder for the location where indefinite length constructed data should be
- * inserted in the memory buffer
- */
-#define ASN1_STRING_FLAG_NDEF 0x010
-
-/*
- * This flag is used by the CMS code to indicate that a string is not
- * complete and is a place holder for content when it had all been accessed.
- * The flag will be reset when content has been written to it.
- */
-
-#define ASN1_STRING_FLAG_CONT 0x020
-/*
- * This flag is used by ASN1 code to indicate an ASN1_STRING is an MSTRING
- * type.
- */
-#define ASN1_STRING_FLAG_MSTRING 0x040
-/* String is embedded and only content should be freed */
-#define ASN1_STRING_FLAG_EMBED 0x080
-/* String should be parsed in RFC 5280's time format */
-#define ASN1_STRING_FLAG_X509_TIME 0x100
 /* This is the base type that holds just about everything :-) */
-struct asn1_string_st {
-    int length;
-    int type;
-    unsigned char *data;
-    /*
-     * The value of the following field depends on the type being held.  It
-     * is mostly being used for BIT_STRING so if the input data has a
-     * non-zero 'unused bits' value, it will be handled correctly
-     */
-    long flags;
-};
+struct asn1_string_st;
 
 /*
  * ASN1_ENCODING structure: this is used to save the received encoding of an
@@ -250,9 +216,9 @@ struct asn1_string_table_st {
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_STRING_TABLE, ASN1_STRING_TABLE, ASN1_STRING_TABLE)
 #define sk_ASN1_STRING_TABLE_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_STRING_TABLE_sk_type(sk))
 #define sk_ASN1_STRING_TABLE_value(sk, idx) ((ASN1_STRING_TABLE *)OPENSSL_sk_value(ossl_check_const_ASN1_STRING_TABLE_sk_type(sk), (idx)))
-#define sk_ASN1_STRING_TABLE_new(cmp) ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_new(ossl_check_ASN1_STRING_TABLE_compfunc_type(cmp)))
-#define sk_ASN1_STRING_TABLE_new_null() ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_new_null())
-#define sk_ASN1_STRING_TABLE_new_reserve(cmp, n) ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_STRING_TABLE_compfunc_type(cmp), (n)))
+#define sk_ASN1_STRING_TABLE_new(cmp) ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_STRING_TABLE_compfunc_type(cmp)), sk_ASN1_STRING_TABLE_cmpfunc_thunk))
+#define sk_ASN1_STRING_TABLE_new_null() ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_STRING_TABLE_freefunc_thunk))
+#define sk_ASN1_STRING_TABLE_new_reserve(cmp, n) ((STACK_OF(ASN1_STRING_TABLE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_STRING_TABLE_compfunc_type(cmp), (n)), sk_ASN1_STRING_TABLE_cmpfunc_thunk))
 #define sk_ASN1_STRING_TABLE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_STRING_TABLE_sk_type(sk), (n))
 #define sk_ASN1_STRING_TABLE_free(sk) OPENSSL_sk_free(ossl_check_ASN1_STRING_TABLE_sk_type(sk))
 #define sk_ASN1_STRING_TABLE_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_STRING_TABLE_sk_type(sk))
@@ -568,9 +534,9 @@ struct asn1_type_st {
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_TYPE, ASN1_TYPE, ASN1_TYPE)
 #define sk_ASN1_TYPE_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_TYPE_sk_type(sk))
 #define sk_ASN1_TYPE_value(sk, idx) ((ASN1_TYPE *)OPENSSL_sk_value(ossl_check_const_ASN1_TYPE_sk_type(sk), (idx)))
-#define sk_ASN1_TYPE_new(cmp) ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_new(ossl_check_ASN1_TYPE_compfunc_type(cmp)))
-#define sk_ASN1_TYPE_new_null() ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_new_null())
-#define sk_ASN1_TYPE_new_reserve(cmp, n) ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_TYPE_compfunc_type(cmp), (n)))
+#define sk_ASN1_TYPE_new(cmp) ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_TYPE_compfunc_type(cmp)), sk_ASN1_TYPE_cmpfunc_thunk))
+#define sk_ASN1_TYPE_new_null() ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_TYPE_freefunc_thunk))
+#define sk_ASN1_TYPE_new_reserve(cmp, n) ((STACK_OF(ASN1_TYPE) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_TYPE_compfunc_type(cmp), (n)), sk_ASN1_TYPE_cmpfunc_thunk))
 #define sk_ASN1_TYPE_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_TYPE_sk_type(sk), (n))
 #define sk_ASN1_TYPE_free(sk) OPENSSL_sk_free(ossl_check_ASN1_TYPE_sk_type(sk))
 #define sk_ASN1_TYPE_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_TYPE_sk_type(sk))
@@ -633,9 +599,9 @@ void *ASN1_TYPE_unpack_sequence(const ASN1_ITEM *it, const ASN1_TYPE *t);
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_OBJECT, ASN1_OBJECT, ASN1_OBJECT)
 #define sk_ASN1_OBJECT_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_OBJECT_sk_type(sk))
 #define sk_ASN1_OBJECT_value(sk, idx) ((ASN1_OBJECT *)OPENSSL_sk_value(ossl_check_const_ASN1_OBJECT_sk_type(sk), (idx)))
-#define sk_ASN1_OBJECT_new(cmp) ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_new(ossl_check_ASN1_OBJECT_compfunc_type(cmp)))
-#define sk_ASN1_OBJECT_new_null() ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_new_null())
-#define sk_ASN1_OBJECT_new_reserve(cmp, n) ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_OBJECT_compfunc_type(cmp), (n)))
+#define sk_ASN1_OBJECT_new(cmp) ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_OBJECT_compfunc_type(cmp)), sk_ASN1_OBJECT_cmpfunc_thunk))
+#define sk_ASN1_OBJECT_new_null() ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_OBJECT_freefunc_thunk))
+#define sk_ASN1_OBJECT_new_reserve(cmp, n) ((STACK_OF(ASN1_OBJECT) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_OBJECT_compfunc_type(cmp), (n)), sk_ASN1_OBJECT_cmpfunc_thunk))
 #define sk_ASN1_OBJECT_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_OBJECT_sk_type(sk), (n))
 #define sk_ASN1_OBJECT_free(sk) OPENSSL_sk_free(ossl_check_ASN1_OBJECT_sk_type(sk))
 #define sk_ASN1_OBJECT_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_OBJECT_sk_type(sk))
@@ -659,7 +625,11 @@ SKM_DEFINE_STACK_OF_INTERNAL(ASN1_OBJECT, ASN1_OBJECT, ASN1_OBJECT)
 
 /* clang-format on */
 
-DECLARE_ASN1_FUNCTIONS(ASN1_OBJECT)
+#ifndef OPENSSL_NO_DEPRECATED_4_0
+OSSL_DEPRECATEDIN_4_0 ASN1_OBJECT *ASN1_OBJECT_new(void);
+#endif /* OPENSSL_NO_DEPRECATED_4_0 */
+void ASN1_OBJECT_free(ASN1_OBJECT *a);
+DECLARE_ASN1_ENCODE_FUNCTIONS_name_attr(extern, ASN1_OBJECT, ASN1_OBJECT)
 
 ASN1_STRING *ASN1_STRING_new(void);
 void ASN1_STRING_free(ASN1_STRING *a);
@@ -679,9 +649,6 @@ int ASN1_STRING_length(const ASN1_STRING *x);
 OSSL_DEPRECATEDIN_3_0 void ASN1_STRING_length_set(ASN1_STRING *x, int n);
 #endif
 int ASN1_STRING_type(const ASN1_STRING *x);
-#ifndef OPENSSL_NO_DEPRECATED_1_1_0
-OSSL_DEPRECATEDIN_1_1_0 unsigned char *ASN1_STRING_data(ASN1_STRING *x);
-#endif
 const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *x);
 
 DECLARE_ASN1_FUNCTIONS(ASN1_BIT_STRING)
@@ -696,14 +663,18 @@ int ASN1_BIT_STRING_name_print(BIO *out, ASN1_BIT_STRING *bs,
 int ASN1_BIT_STRING_num_asc(const char *name, BIT_STRING_BITNAME *tbl);
 int ASN1_BIT_STRING_set_asc(ASN1_BIT_STRING *bs, const char *name, int value,
     BIT_STRING_BITNAME *tbl);
+int ASN1_BIT_STRING_get_length(const ASN1_BIT_STRING *abs, size_t *length,
+    int *unused_bits);
+int ASN1_BIT_STRING_set1(ASN1_BIT_STRING *abs, const uint8_t *data,
+    size_t length, int unused_bits);
 
 /* clang-format off */
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_INTEGER, ASN1_INTEGER, ASN1_INTEGER)
 #define sk_ASN1_INTEGER_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_INTEGER_sk_type(sk))
 #define sk_ASN1_INTEGER_value(sk, idx) ((ASN1_INTEGER *)OPENSSL_sk_value(ossl_check_const_ASN1_INTEGER_sk_type(sk), (idx)))
-#define sk_ASN1_INTEGER_new(cmp) ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_new(ossl_check_ASN1_INTEGER_compfunc_type(cmp)))
-#define sk_ASN1_INTEGER_new_null() ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_new_null())
-#define sk_ASN1_INTEGER_new_reserve(cmp, n) ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_INTEGER_compfunc_type(cmp), (n)))
+#define sk_ASN1_INTEGER_new(cmp) ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_INTEGER_compfunc_type(cmp)), sk_ASN1_INTEGER_cmpfunc_thunk))
+#define sk_ASN1_INTEGER_new_null() ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_INTEGER_freefunc_thunk))
+#define sk_ASN1_INTEGER_new_reserve(cmp, n) ((STACK_OF(ASN1_INTEGER) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_INTEGER_compfunc_type(cmp), (n)), sk_ASN1_INTEGER_cmpfunc_thunk))
 #define sk_ASN1_INTEGER_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_INTEGER_sk_type(sk), (n))
 #define sk_ASN1_INTEGER_free(sk) OPENSSL_sk_free(ossl_check_ASN1_INTEGER_sk_type(sk))
 #define sk_ASN1_INTEGER_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_INTEGER_sk_type(sk))
@@ -764,9 +735,9 @@ int ASN1_OCTET_STRING_set(ASN1_OCTET_STRING *str, const unsigned char *data,
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_UTF8STRING, ASN1_UTF8STRING, ASN1_UTF8STRING)
 #define sk_ASN1_UTF8STRING_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_UTF8STRING_sk_type(sk))
 #define sk_ASN1_UTF8STRING_value(sk, idx) ((ASN1_UTF8STRING *)OPENSSL_sk_value(ossl_check_const_ASN1_UTF8STRING_sk_type(sk), (idx)))
-#define sk_ASN1_UTF8STRING_new(cmp) ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_new(ossl_check_ASN1_UTF8STRING_compfunc_type(cmp)))
-#define sk_ASN1_UTF8STRING_new_null() ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_new_null())
-#define sk_ASN1_UTF8STRING_new_reserve(cmp, n) ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_UTF8STRING_compfunc_type(cmp), (n)))
+#define sk_ASN1_UTF8STRING_new(cmp) ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_UTF8STRING_compfunc_type(cmp)), sk_ASN1_UTF8STRING_cmpfunc_thunk))
+#define sk_ASN1_UTF8STRING_new_null() ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_UTF8STRING_freefunc_thunk))
+#define sk_ASN1_UTF8STRING_new_reserve(cmp, n) ((STACK_OF(ASN1_UTF8STRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_UTF8STRING_compfunc_type(cmp), (n)), sk_ASN1_UTF8STRING_cmpfunc_thunk))
 #define sk_ASN1_UTF8STRING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_UTF8STRING_sk_type(sk), (n))
 #define sk_ASN1_UTF8STRING_free(sk) OPENSSL_sk_free(ossl_check_ASN1_UTF8STRING_sk_type(sk))
 #define sk_ASN1_UTF8STRING_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_UTF8STRING_sk_type(sk))
@@ -803,9 +774,9 @@ int UTF8_putc(unsigned char *str, int len, unsigned long value);
 SKM_DEFINE_STACK_OF_INTERNAL(ASN1_GENERALSTRING, ASN1_GENERALSTRING, ASN1_GENERALSTRING)
 #define sk_ASN1_GENERALSTRING_num(sk) OPENSSL_sk_num(ossl_check_const_ASN1_GENERALSTRING_sk_type(sk))
 #define sk_ASN1_GENERALSTRING_value(sk, idx) ((ASN1_GENERALSTRING *)OPENSSL_sk_value(ossl_check_const_ASN1_GENERALSTRING_sk_type(sk), (idx)))
-#define sk_ASN1_GENERALSTRING_new(cmp) ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_new(ossl_check_ASN1_GENERALSTRING_compfunc_type(cmp)))
-#define sk_ASN1_GENERALSTRING_new_null() ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_new_null())
-#define sk_ASN1_GENERALSTRING_new_reserve(cmp, n) ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_new_reserve(ossl_check_ASN1_GENERALSTRING_compfunc_type(cmp), (n)))
+#define sk_ASN1_GENERALSTRING_new(cmp) ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_ASN1_GENERALSTRING_compfunc_type(cmp)), sk_ASN1_GENERALSTRING_cmpfunc_thunk))
+#define sk_ASN1_GENERALSTRING_new_null() ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_ASN1_GENERALSTRING_freefunc_thunk))
+#define sk_ASN1_GENERALSTRING_new_reserve(cmp, n) ((STACK_OF(ASN1_GENERALSTRING) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_ASN1_GENERALSTRING_compfunc_type(cmp), (n)), sk_ASN1_GENERALSTRING_cmpfunc_thunk))
 #define sk_ASN1_GENERALSTRING_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_ASN1_GENERALSTRING_sk_type(sk), (n))
 #define sk_ASN1_GENERALSTRING_free(sk) OPENSSL_sk_free(ossl_check_ASN1_GENERALSTRING_sk_type(sk))
 #define sk_ASN1_GENERALSTRING_zero(sk) OPENSSL_sk_zero(ossl_check_ASN1_GENERALSTRING_sk_type(sk))
