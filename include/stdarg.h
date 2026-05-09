@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,10 @@ typedef struct va_list_t
     ((v).is_68k ? \
 	((l*)(v.args.m68k += sizeof(l)))[-1] : \
 	(__builtin_va_arg(v.args.ppc,l)))
+#define va_copy(d,s) \
+    (s).is_68k ? \
+        ((void)((d) = (s))) : \
+        (__builtin_va_copy(d.args.ppc, s.args.ppc), d.is_68k = 0)
 
 #include <sys/amigaos-va.h>
 
