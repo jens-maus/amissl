@@ -412,6 +412,9 @@ typedef _locale_t locale_t;
  * this.
  */
 void ossl_cleanup_destructor(void);
+#elif defined(OPENSSL_SYS_AMIGA)
+/* AmiSSL needs OPENSSL_cleanup() to work in LibClose() */
+#define DO_NOT_SKIP_OPENSSL_CLEANUP
 #else
 #if defined(__has_attribute)
 #if __has_attribute(destructor)
