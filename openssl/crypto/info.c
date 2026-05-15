@@ -84,10 +84,12 @@ DEFINE_RUN_ONCE_STATIC(init_info_strings)
 
     BIO_snprintf(ossl_cpu_info_str, sizeof(ossl_cpu_info_str),
         CPUINFO_PREFIX "OPENSSL_ppccap=0x%x", OPENSSL_ppccap_P);
+#if !defined(OPENSSSL_SYS_AMIGA)
     if ((env = getenv("OPENSSL_ppccap")) != NULL)
         BIO_snprintf(ossl_cpu_info_str + strlen(ossl_cpu_info_str),
             sizeof(ossl_cpu_info_str) - strlen(ossl_cpu_info_str),
             " env:%s", env);
+#endif
 #elif defined(__sparcv9) || defined(__sparcv9__)
     const char *env;
 
