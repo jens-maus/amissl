@@ -453,6 +453,20 @@ int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
     return 1;
 }
 
+int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL)
+	return 0;
+
+    ossl_crypto_mutex_lock(lock);
+
+    *dst  = val;
+
+    ossl_crypto_mutex_unlock(lock);
+
+    return 1;
+}
+
 int openssl_init_fork_handlers(void)
 {
     return 0;
