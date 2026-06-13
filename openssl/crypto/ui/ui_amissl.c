@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -122,7 +122,7 @@ static LONG GetStringReq(const char *title, const char *body, char *buffer,
 }
 
 /* This is modeled per OpenSSL write_string. The design *is* a bit weird... */
-int UI_write_string_lib(UI *ui, UI_STRING *uis)
+int UI_write_string(UI *ui, UI_STRING *uis)
 {
 	int type;
 
@@ -138,7 +138,7 @@ int UI_write_string_lib(UI *ui, UI_STRING *uis)
 	return(1);
 }
 
-int UI_read_string_lib(UI *ui, UI_STRING *uis)
+int UI_read_string(UI *ui, UI_STRING *uis)
 {
 	int type, ret;
 
@@ -220,8 +220,8 @@ static int nop_method(void)
 	return(1);
 }
 
-int read_string_cb(UI *ui, UI_STRING *uis);
-int write_string_cb(UI *ui, UI_STRING *uis);
+static int read_string_cb(UI *ui, UI_STRING *uis);
+static int write_string_cb(UI *ui, UI_STRING *uis);
 
 static UI_METHOD ui_amissl =
 {
@@ -253,43 +253,64 @@ UI_METHOD *UI_OpenSSL(void)
 
 /* Put this here to avoid possible conflicts with code above */
 
-#include <proto/amissl.h>
+#include <internal/amissl.h>
 
-int read_string_cb(UI *ui, UI_STRING *uis)
+#if defined(__amigaos4__)
+struct AmiSSLIFace;
+#define __IFACE_OR_BASE struct AmiSSLIFace *Self
+#else
+#define __IFACE_OR_BASE struct Library *Self
+#endif
+
+LIBPROTO(UI_read_string, int, REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
+LIBPROTO(UI_write_string, int, REG(a6, __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis));
+
+static int read_string_cb(UI *ui, UI_STRING *uis)
 {
 	SETUPSTATE();
 #ifdef __amigaos4__
-	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+	return LIB_UI_read_string(state->IAmiSSL, ui, uis);
 #else
-	struct Library *AmiSSLBase=state->AmiSSLBase;
+	return LIB_UI_read_string(state->AmiSSLBase, ui, uis);
 #endif
-	return UI_read_string_lib(ui,uis);
 }
 
-int write_string_cb(UI *ui, UI_STRING *uis)
+static int write_string_cb(UI *ui, UI_STRING *uis)
 {
 	SETUPSTATE();
 #ifdef __amigaos4__
-	struct AmiSSLIFace *IAmiSSL=state->IAmiSSL;
+	return LIB_UI_write_string(state->IAmiSSL, ui, uis);
 #else
-	struct Library *AmiSSLBase=state->AmiSSLBase;
+	return LIB_UI_write_string(state->AmiSSLBase, ui, uis);
 #endif
-	return UI_write_string_lib(ui,uis);
 }
 
 #ifdef __amigaos4__
 #include <exec/emulation.h>
 #include <exec/types.h>
 
-AMISSL_STATE *stub_GetAmiSSLState(void)
+static int stub_read_string(uint32 *regarray)
 {
-	return GetAmiSSLState();
+	SETUPSTATE();
+	return LIB_UI_read_string(state->IAmiSSL,
+		(UI *)regarray[REG68K_A0/4],
+		(UI_STRING *)regarray[REG68K_A1/4]
+	);
+}
+
+static int stub_write_string(uint32 *regarray)
+{
+	SETUPSTATE();
+	return LIB_UI_write_string(state->IAmiSSL,
+		(UI *)regarray[REG68K_A0/4],
+		(UI_STRING *)regarray[REG68K_A1/4]
+	);
 }
 
 #pragma pack(2)
 
 struct AmiSSLEmuTrap {
-	UWORD  Entry[13];
+	UWORD  Entry[4];
 	ULONG  Instruction;                 /* TRAPINST, see below  */
 	UWORD  Type;                        /* TRAPTYPE, see below  */
 	ULONG  (*Function)(ULONG *Reg68K);  /* PPC function address, */
@@ -297,36 +318,22 @@ struct AmiSSLEmuTrap {
 
 static const struct AmiSSLEmuTrap read_string_emul = {
   {
-	0x6118,		// BSR	       stub
-	0x2F0E,		// MOVE.L      A6,-(A7)
-	0x2C40,		// MOVEA.L     D0,A6
-	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
-	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
-	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
-	0x4EAE,0xC53E,	// JSR         -$3AC2(A6)
-	0x2C5F,		// MOVEA.L     (A7)+,A6
-	0x4E75		// RTS
+	0x206F,0x0004,	// MOVEA.L     0004(A7),A0
+	0x226F,0x0008	// MOVEA.L     0008(A7),A1
   },
 	TRAPINST,
 	TRAPTYPE,
-	(ULONG (*)(ULONG *))stub_GetAmiSSLState
+	(ULONG (*)(ULONG *))stub_read_string
 };
 
 static const struct AmiSSLEmuTrap write_string_emul = {
   {
-	0x6118,		// BSR	       stub
-	0x2F0E,		// MOVE.L      A6,-(A7)
-	0x2C40,		// MOVEA.L     D0,A6
-	0x2C6E,0x0000,	// MOVEA.L     0000(A6),A6
-	0x206F,0x0008,	// MOVEA.L     0008(A7),A0
-	0x226F,0x000C,	// MOVEA.L     000C(A7),A1
-	0x4EAE,0xC538,	// JSR         -$3AC8(A6)
-	0x2C5F,		// MOVEA.L     (A7)+,A6
-	0x4E75	  // RTS
+	0x206F,0x0004,	// MOVEA.L     0004(A7),A0
+	0x226F,0x0008	// MOVEA.L     0008(A7),A1
   },
 	TRAPINST,
 	TRAPTYPE,
-	(ULONG (*)(ULONG *))stub_GetAmiSSLState
+	(ULONG (*)(ULONG *))stub_write_string
 };
 
 static const UWORD nop_method_emul[2] = {
