@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2023 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,47 +27,28 @@
 
 // ---
 
-int RSA_X931_derive_ex_amiga_1(RSA *rsa, BIGNUM *p1, BIGNUM *p2,
-                               BIGNUM *q1, BIGNUM *q2,
-                               const BIGNUM *Xp1, void *moreargs)
+/*
+** Supporting 68K<->PPC crosscalls for openssl/crypto/ui/ui_amissl.c
+*/
+
+int UI_read_string(UI * ui, UI_STRING * uis);
+int UI_write_string(UI * ui, UI_STRING * uis);
+
+LIBPROTO(UI_read_string, int, REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
 {
-  int result, *a = (int *)moreargs;
-  if ((a != NULL))
-  {
-    result = RSA_X931_derive_ex(rsa, p1, p2, q1, q2, Xp1,
-				(const BIGNUM *)a[0], (const BIGNUM *)a[1],
-				(const BIGNUM *)a[2], (const BIGNUM *)a[3],
-				(const BIGNUM *)a[4], (const BIGNUM *)a[5],
-				(BN_GENCB *)a[6]);
-    free(a);
-  }
-  else
-  {
-    result = 0;
-  }
-  return result;
+  return UI_read_string(ui, uis);
 }
 
-void *RSA_X931_derive_ex_amiga_2(const BIGNUM *Xp2, const BIGNUM *Xp,
-                                 const BIGNUM *Xq1, const BIGNUM *Xq2,
-                                 const BIGNUM *Xq, const BIGNUM *e,
-                                 BN_GENCB *cb)
+LIBPROTO(UI_write_string, int, REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, UI * ui), REG(a1, UI_STRING * uis))
 {
-  int *moreargs = malloc(7*sizeof(int));
-  if (moreargs != NULL)
-  {
-    moreargs[0] = (int)Xp2;
-    moreargs[1] = (int)Xp;
-    moreargs[2] = (int)Xq1;
-    moreargs[3] = (int)Xq2;
-    moreargs[4] = (int)Xq;
-    moreargs[5] = (int)e;
-    moreargs[6] = (int)cb;
-  }
-  return (void *)moreargs;
+  return UI_write_string(ui, uis);
 }
 
 // ---
+
+/*
+** OpenSSL API functions that use too many parameters need to be split
+*/
 
 BIO *OSSL_HTTP_get_amiga_1(const char *url, const char *proxy, const char *no_proxy,
                            BIO *bio, BIO *rbio,
@@ -107,8 +88,6 @@ void *OSSL_HTTP_get_amiga_2(void *arg, int buf_size, const STACK_OF(CONF_VALUE) 
   }
   return (void *)moreargs;
 }
-
-// ---
 
 BIO * OSSL_HTTP_transfer_amiga_1(OSSL_HTTP_REQ_CTX ** prctx, const char * server,
 				 const char * port, const char * path, int use_ssl,
@@ -159,8 +138,6 @@ void * OSSL_HTTP_transfer_amiga_2(void * arg, int buf_size,
   return (void *)moreargs;
 }
 
-// ---
-
 int EVP_PBE_scrypt_amiga_1(const char * pass, size_t passlen,
 			   const unsigned char * salt,
 			   uint64_t N, uint64_t r, uint64_t p,
@@ -208,8 +185,6 @@ void * EVP_PBE_scrypt_ex_amiga_2(size_t saltlen, unsigned char * key, size_t key
   return (void *)moreargs;
 }
 
-// ---
-
 PKCS12 *PKCS12_create_ex2_amiga_1(const char *pass, const char *name, EVP_PKEY *pkey,
                                   X509 *cert, STACK_OF(X509) *ca, int nid_key, int nid_cert,
                                   void *moreargs)
@@ -250,6 +225,10 @@ void *PKCS12_create_ex2_amiga_2(int iter, int mac_iter, int keytype,
 
 // ---
 
+/*
+** Stubs for OpenSSL API functions that return a structure
+*/
+
 #define IMPLEMENT_OSSL_PARAM_construct_LP0(name) \
   void OSSL_PARAM_construct_##name##_amiga(OSSL_PARAM *result) \
   { *result = OSSL_PARAM_construct_##name(); }
@@ -281,6 +260,10 @@ IMPLEMENT_OSSL_PARAM_construct_LP2(octet_ptr, void *)
 IMPLEMENT_OSSL_PARAM_construct_LP0(end)
 
 // ---
+
+/*
+** Stubs for OpenSSL API functions that take a structure as a parameter
+*/
 
 OSSL_HPKE_CTX *OSSL_HPKE_CTX_new_amiga(int mode, OSSL_HPKE_SUITE *suite, int role,
                                        OSSL_LIB_CTX *libctx, const char *propq)

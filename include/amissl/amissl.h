@@ -33,8 +33,13 @@
 #ifndef AMISSL_AMISSL_H
 #define AMISSL_AMISSL_H
 
-#include <openssl/opensslconf.h>
+#include <amissl/tags.h>
 
+// These must come first
+#include <openssl/opensslconf.h>
+#include <openssl/pem.h>
+
+// Alphabetical order
 #ifndef OPENSSL_NO_AES
 #include <openssl/aes.h>
 #endif
@@ -59,6 +64,9 @@
 #endif
 #ifndef OPENSSL_NO_CMP
 #include <openssl/cmp.h>
+#endif
+#ifndef OPENSSL_NO_CMS
+#include <openssl/cms.h>
 #endif
 #include <openssl/comp.h>
 #include <openssl/conf.h>
@@ -123,12 +131,11 @@
 #include <openssl/objects.h>
 #include <openssl/ocsp.h>
 #include <openssl/opensslv.h>
-#include <openssl/pem.h>
+#include <openssl/params.h>
+#include <openssl/param_build.h>
 #include <openssl/pem2.h>
 #include <openssl/pkcs12.h>
 #include <openssl/pkcs7.h>
-#include <openssl/params.h>
-#include <openssl/param_build.h>
 #include <openssl/posix_time.h>
 #include <openssl/provider.h>
 #include <openssl/quic.h>
@@ -182,13 +189,6 @@
 #include <openssl/x509_acert.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>
-
-// order dependent header files
-#ifndef OPENSSL_NO_CMS
-#include <openssl/cms.h>
-#endif
-
-#include <amissl/tags.h>
 
 // internal typedefs
 #ifndef OSSL_INTERNAL_O_DIR_H

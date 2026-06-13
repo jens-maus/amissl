@@ -28,6 +28,6 @@
 +	NULL,
 +	NULL,
 +	NULL,
- 	&stub_ext_OSSL_trace_enabled,
- 	&stub_ext_OSSL_trace_begin,
- 	&stub_ext_OSSL_trace_end,
+ 	&stub_ext_UNIMPLEMENTED, /* PLACEHOLDER */
+ 	(CONST_APTR)-1
+ };

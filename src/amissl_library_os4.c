@@ -57,6 +57,10 @@ struct SocketIFace *GetSocketIFace(UNUSED int modifies_errno)
   return(p->ISocketPtr ? *p->ISocketPtr : NULL);
 }
 
+/*
+** Varargs library interface stubs
+*/
+
 LIBPROTOVA(BIO_printf, int, UNUSED struct AmiSSLIFace *Self, BIO * bio, const char * format, ...)
 {
   VA_LIST args;
@@ -81,26 +85,6 @@ LIBPROTOVA(BIO_snprintf, int, UNUSED struct AmiSSLIFace *Self, char * buf, size_
   return ret;
 }
 
-LIBPROTOVA(OPENSSL_showfatal, void, UNUSED struct AmiSSLIFace *Self, const char * fmta, ...)
-{
-  VA_LIST args;
-  struct EasyStruct ErrReq;
-  char error[512];
-
-  VA_START(args, fmta);
-  BIO_vsnprintf(error,sizeof(error),fmta,args);
-  VA_END(args);
-
-  ErrReq.es_StructSize   = sizeof(struct EasyStruct);
-  ErrReq.es_Flags        = 0;
-  ErrReq.es_Title        = "AmiSSL/OpenSSL internal error";
-  ErrReq.es_TextFormat   = error;
-  ErrReq.es_GadgetFormat = "Abort";
-
-  // Open an Easy Requester
-  IIntuition->EasyRequestArgs(NULL, &ErrReq, NULL, NULL);
-}
-
 LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, ...)
 {
   VA_LIST args;
@@ -108,18 +92,6 @@ LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, .
   VA_START(args, num);
   ERR_add_error_vdata(num,args);
   VA_END(args);
-}
-
-LIBPROTOVA(OSSL_STORE_ctrl, int, UNUSED struct AmiSSLIFace *Self, OSSL_STORE_CTX *ctx, int cmd, ...)
-{
-  VA_LIST args;
-  int ret;
-
-  VA_START(args, cmd);
-  ret = OSSL_STORE_vctrl(ctx,cmd,args);
-  VA_END(args);
-
-  return ret;
 }
 
 LIBPROTOVA(ERR_set_error, void, UNUSED struct AmiSSLIFace *Self, int lib, int reason, const char *fmt, ...)
@@ -142,6 +114,10 @@ LIBPROTOVA(EVP_PKEY_Q_keygen, EVP_PKEY *, UNUSED struct AmiSSLIFace *Self, OSSL_
 
   return ret;
 }
+
+/*
+** GCC 4 -check68kfuncptr, required to ensure that function callbacks work in 68K applications
+*/
 
 int __amigaos4_check68k_check(int (*func)())
 {

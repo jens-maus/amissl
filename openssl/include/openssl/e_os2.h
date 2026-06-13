@@ -240,6 +240,11 @@ typedef int ossl_ssize_t;
 #endif
 #endif
 
+#if defined(OPENSSL_SYS_AMIGA)
+typedef int ossl_ssize_t;
+#define OSSL_SSIZE_MAX INT_MAX
+#endif
+
 #ifndef OSSL_SSIZE_MAX
 #include <sys/types.h>
 typedef ssize_t ossl_ssize_t;

@@ -245,7 +245,6 @@ void OPENSSL_showfatal(const char *fmta, ...)
 #endif
 }
 #else
-#include <proto/exec.h>
 #include <libcmt.h>
 
 void OPENSSL_showfatal(const char *fmta, ...)

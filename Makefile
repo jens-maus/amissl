@@ -485,7 +485,7 @@ else
 endif
 
 $(BUILD_D)/openssl/Makefile: $(BUILD_D)/openssl
-	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make build_generated)
+	@(cd $(BUILD_D)/openssl; perl ../../openssl/Configure $(OPENSSL_T) --api=$(MAJOR).0 --cross-compile-prefix=$(CROSS_PREFIX) $(OPENSSL_MODE); make build_generated)
 	@sh tools/cpheaders.sh $(BUILD_D)
 
 $(LIBCRYPTO): $(BUILD_D)/openssl/Makefile

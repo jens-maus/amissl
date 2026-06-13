@@ -68,6 +68,9 @@ extern "C" {
 # ifndef OPENSSL_NO_BROTLI_DYNAMIC
 #  define OPENSSL_NO_BROTLI_DYNAMIC
 # endif
+# ifndef OPENSSL_NO_COMP
+#  define OPENSSL_NO_COMP
+# endif
 # ifndef OPENSSL_NO_CRYPTO_MDEBUG
 #  define OPENSSL_NO_CRYPTO_MDEBUG
 # endif
@@ -76,6 +79,12 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_DEMOS
 #  define OPENSSL_NO_DEMOS
+# endif
+# ifndef OPENSSL_NO_DEPRECATED
+#  define OPENSSL_NO_DEPRECATED
+# endif
+# ifndef OPENSSL_NO_DSO
+#  define OPENSSL_NO_DSO
 # endif
 # ifndef OPENSSL_NO_DYNAMIC_ENGINE
 #  define OPENSSL_NO_DYNAMIC_ENGINE
@@ -125,6 +134,9 @@ extern "C" {
 # ifndef OPENSSL_NO_LMS
 #  define OPENSSL_NO_LMS
 # endif
+# ifndef OPENSSL_NO_MD2
+#  define OPENSSL_NO_MD2
+# endif
 # ifndef OPENSSL_NO_MSAN
 #  define OPENSSL_NO_MSAN
 # endif
@@ -134,8 +146,14 @@ extern "C" {
 # ifndef OPENSSL_NO_QLOG
 #  define OPENSSL_NO_QLOG
 # endif
+# ifndef OPENSSL_NO_RC5
+#  define OPENSSL_NO_RC5
+# endif
 # ifndef OPENSSL_NO_SCTP
 #  define OPENSSL_NO_SCTP
+# endif
+# ifndef OPENSSL_NO_SRP
+#  define OPENSSL_NO_SRP
 # endif
 # ifndef OPENSSL_NO_SSL_TRACE
 #  define OPENSSL_NO_SSL_TRACE
