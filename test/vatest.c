@@ -66,7 +66,7 @@ int main(int argc UNUSED, char **argv UNUSED)
 		BIO_vprintf(out, "Test %s of %d in %f\n", (void *)arglist);
 
 		BIO_printf(out,"Error test: \n");
-		SYSerr(43,42);
+		ERR_raise_data(ERR_LIB_SYS, 42, NULL);
 		ERR_add_error_data(4,"address=","1234"," offset=","5678");
 		ERR_print_errors(out);
 		BIO_free(out);

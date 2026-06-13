@@ -1581,7 +1581,9 @@ static EVP_PKEY_CTX *set_keygen_ctx(const char *gstr,
             (void)BIO_reset(pbio);
             x = PEM_read_bio_X509(pbio, NULL, NULL, NULL);
             if (x != NULL) {
-                param = X509_get_pubkey(x);
+                param = X509_get0_pubkey(x);
+                if (!EVP_PKEY_up_ref(param))
+                  param = NULL;
                 X509_free(x);
             }
         }

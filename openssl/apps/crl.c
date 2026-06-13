@@ -262,14 +262,13 @@ int crl_main(int argc, char **argv)
             BIO_puts(bio_err, "Error getting CRL issuer certificate\n");
             goto end;
         }
-        pkey = X509_get_pubkey(X509_OBJECT_get0_X509(xobj));
+        pkey = X509_get0_pubkey(X509_OBJECT_get0_X509(xobj));
         X509_OBJECT_free(xobj);
         if (pkey == NULL) {
             BIO_puts(bio_err, "Error getting CRL issuer public key\n");
             goto end;
         }
         i = X509_CRL_verify(x, pkey);
-        EVP_PKEY_free(pkey);
         if (i < 0)
             goto end;
         if (i == 0) {

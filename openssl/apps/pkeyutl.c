@@ -648,7 +648,9 @@ static EVP_PKEY *get_pkey(const char *kdfalg,
     case KEY_CERT:
         x = load_cert(keyfile, keyform, "Certificate");
         if (x) {
-            pkey = X509_get_pubkey(x);
+            pkey = X509_get0_pubkey(x);
+            if (!EVP_PKEY_up_ref(pkey))
+              pkey = NULL;
             X509_free(x);
         }
         break;
