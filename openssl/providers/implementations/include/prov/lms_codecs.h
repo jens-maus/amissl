@@ -9,7 +9,9 @@
 
 #ifndef PROV_LMS_CODECS_H
 #define PROV_LMS_CODECS_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
+#endif
 
 #ifndef OPENSSL_NO_LMS
 #include <openssl/e_os2.h>
