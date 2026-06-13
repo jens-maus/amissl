@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -104,72 +104,58 @@ static BPTR GetFileBPTR(const char *func_name, FILE *fp)
   return(ret);
 }
 
+long (BIO_set_fp)(BIO *b, FILE *fp, int closeflag)
+{
+  fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+
+  return BIO_set_fp_amiga(b, GetFileBPTR("BIO_set_fp", fp),
+                          (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
+}
+
+BIO *(BIO_new_fp)(FILE *stream, int closeflag)
+{
+  fflush(stream); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
+
+  return BIO_new_fp_amiga(GetFileBPTR("BN_new_fp", stream),
+                          (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
+}
+
 void (ERR_print_errors_fp)(FILE *fp)
 {
-  BIO *temp;
+  BIO *bio;
 
-  if((temp = BIO_new(BIO_s_file())))
+  if((bio = BIO_new_fp_amiga(GetFileBPTR("ERR_print_errors_fp", fp), BIO_NOCLOSE)))
   {
     fflush(fp);
-
-    if (BIO_set_fp_amiga(temp, GetFileBPTR("ERR_print_errors_fp", fp), BIO_NOCLOSE))
-      ERR_print_errors(temp);
-
-    BIO_free(temp);
+    ERR_print_errors(bio);
+    BIO_free(bio);
   }
 }
 
 int (BN_print_fp)(FILE *fp, const BIGNUM *a)
 {
-  BIO *temp;
+  BIO *bio;
   int ret = 0;
 
-  if((temp = BIO_new(BIO_s_file())))
+  if((bio = BIO_new_fp_amiga(GetFileBPTR("BN_print_fp", fp), BIO_NOCLOSE)))
   {
     fflush(fp);
-
-    if (BIO_set_fp_amiga(temp, GetFileBPTR("BN_print_fp", fp), BIO_NOCLOSE))
-      ret = BN_print(temp, a);
-
-    BIO_free(temp);
+    ret = BN_print(bio, a);
+    BIO_free(bio);
   }
-
-  return(ret);
-}
-
-long (BIO_set_fp)(BIO *b, FILE *fp, int closeflag)
-{
-  fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
-
-  return(BIO_set_fp_amiga(b, GetFileBPTR("BIO_set_fp", fp),
-                          (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE)); // We cannot allow someone else to close the file
-}
-
-BIO *(BIO_new_fp)(FILE *stream, int closeflag)
-{
-  BIO *ret;
-
-  fflush(stream); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
-
-  if((ret = BIO_new(BIO_s_file())) != NULL)
-    BIO_set_fp_amiga(ret, GetFileBPTR("BIO_new_fp", stream),
-                     (closeflag & ~BIO_CLOSE) | BIO_NOCLOSE); // We cannot allow someone else to close the file
 
   return(ret);
 }
 
 int (X509_NAME_print_ex_fp)(FILE *fp, const X509_NAME *nm, int indent, unsigned long flags)
 {
-  int ret=0;
+  int ret = 0;
   BIO *out;
 
-  if((out = BIO_new(BIO_s_file())) != NULL)
+  if((out = BIO_new_fp_amiga(GetFileBPTR("X509_NAME_print_ex_fp", fp), BIO_NOCLOSE)))
   {
     fflush(fp); // Flush the file if there are pending writes. After this point we cannot repair anything out of sync
-
-    if(BIO_set_fp_amiga(out, GetFileBPTR("X509_NAME_print_ex_fp", fp), BIO_NOCLOSE))
-      ret = X509_NAME_print_ex(out, nm, indent, flags);
-
+    ret = X509_NAME_print_ex(out, nm, indent, flags);
     BIO_free(out);
   }
 
@@ -255,23 +241,6 @@ X509 * (d2i_X509)(X509 **a, const unsigned char **pp, long length)
   return(d2i_X509(a, pp, length));
 }
 
-#if 0
-DH * (d2i_DHparams)(DH **a, const unsigned char **pp, long length)
-{
-  return(d2i_DHparams(a, pp, length));
-}
-
-DH * (d2i_DHxparams)(DH **a, const unsigned char **pp, long length)
-{
-  return(d2i_DHxparams(a, pp, length));
-}
-
-DSA * (d2i_DSAparams)(DSA **a, const unsigned char **pp, long length)
-{
-  return(d2i_DSAparams(a, pp, length));
-}
-#endif
-
 OCSP_REQUEST * (d2i_OCSP_REQUEST)(OCSP_REQUEST **a, const unsigned char **in, long len)
 {
   return(d2i_OCSP_REQUEST(a, in, len));
@@ -287,13 +256,6 @@ SSL_SESSION * (d2i_SSL_SESSION)(SSL_SESSION **a, const unsigned char **pp, long 
   return(d2i_SSL_SESSION(a, pp, length));
 }
 
-#if 0
-EC_GROUP * (d2i_ECPKParameters)(EC_GROUP **a, const unsigned char **in, long len)
-{
-  return(d2i_ECPKParameters(a, in, len));
-}
-#endif
-
 int (i2d_X509_AUX)(const X509 *a, unsigned char **pp)
 {
   return(i2d_X509_AUX(a, pp));
@@ -303,23 +265,6 @@ int (i2d_X509)(const X509 *a, unsigned char **pp)
 {
   return(i2d_X509(a, pp));
 }
-
-#if 0
-int (i2d_DHparams)(const DH *a, unsigned char **pp)
-{
-  return(i2d_DHparams(a, pp));
-}
-
-int (i2d_DHxparams)(const DH *dh, unsigned char **pp)
-{
-  return(i2d_DHxparams(dh, pp));
-}
-
-int (i2d_DSAparams)(const DSA *a, unsigned char **pp)
-{
-  return(i2d_DSAparams(a, pp));
-}
-#endif
 
 int (i2d_OCSP_REQUEST)(const OCSP_REQUEST *a, unsigned char **out)
 {
@@ -336,29 +281,10 @@ int (i2d_SSL_SESSION)(const SSL_SESSION *in, unsigned char **pp)
   return(i2d_SSL_SESSION(in, pp));
 }
 
-#if 0
-int (i2d_ECPKParameters)(const EC_GROUP *a, unsigned char **out)
-{
-  return(i2d_ECPKParameters(a, out));
-}
-#endif
-
 void (X509_CRL_free)(X509_CRL * a)
 {
   X509_CRL_free(a);
 }
-
-#if 0
-void (AES_encrypt)(const unsigned char * in, unsigned char * out, const AES_KEY * key)
-{
-  AES_encrypt(in, out, key);
-}
-
-void (GENERAL_NAMES_free)(GENERAL_NAMES * a)
-{
-  GENERAL_NAMES_free(a);
-}
-#endif
 
 int (EVP_PKEY_sign_init)(EVP_PKEY_CTX *ctx)
 {
@@ -405,18 +331,6 @@ int (EVP_PKEY_derive_init)(EVP_PKEY_CTX *ctx)
 {
   return EVP_PKEY_derive_init(ctx);
 }
-
-#if 0
-int (CT_verify_no_bad_scts)(const CT_POLICY_EVAL_CTX *ctx, const STACK_OF(SCT) *scts, void *arg)
-{
-  return CT_verify_no_bad_scts(ctx, scts, arg);
-}
-
-int (CT_verify_at_least_one_good_sct)(const CT_POLICY_EVAL_CTX * ctx, const STACK_OF(SCT) * scts, void * arg)
-{
-  return CT_verify_at_least_one_good_sct(ctx, scts, arg);
-}
-#endif
 
 #if !defined(__AROS__) && (defined(__VBCC__) || defined(NO_INLINE_STDARG))
 #if defined(_M68000) || defined(__M68000) || defined(__mc68000)
