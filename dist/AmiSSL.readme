@@ -3,28 +3,26 @@ Author:       AmiSSL Open Source Team
 Uploader:     Oliver Roberts <oliver@amissl.org>
 Type:         util/libs
 Version:      {version}
-Replaces:     util/libs/AmiSSL-5.*{repsuffix}.lha
 Requires:     {requires}
 Architecture: {arch}
 URL:          https://www.amissl.org/download/
 
 The AmiSSL project is a collaborative effort to develop a port of OpenSSL
 in a shared library for Amiga-based systems (AmigaOS, MorphOS, AROS, etc).
-OpenSSL (www.openssl.org) is "an open source project that provides a
-robust, commercial-grade, and full-featured toolkit for the Transport
-Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also
-a general-purpose cryptography library."
+OpenSSL (www.openssl.org) is "a robust, commercial-grade, full-featured
+Open Source Toolkit for the Transport Layer Security (TLS, formerly SSL),
+Datagram TLS (DTLS), and QUIC protocols. The protocol implementations are
+based on a full-strength general purpose cryptographic library."
 
 The library together with its provided software development kit (SDK) tries
 to be 100% API/ABI compatible to the OpenSSL version it is based on. Due to
 it being a shared library, it can be used by several Amiga applications at
 the same time, without wasting resources.
 
-AmiSSL v5 is a new major release which has been updated with full
-compatibility with OpenSSL 3.6. This includes important security related
-fixes, a built-in HTTP(S) client and comes with the latest encryption
-ciphers which are required nowadays to connect to modern SSL-based services
-such as HTTPS and SSH.
+AmiSSL v6 is a new major release using OpenSSL 4.x. This includes important
+security related fixes, the latest new encryption ciphers and security
+features which are required to connect to modern TLS-based services such as
+HTTPS and SSH. It also has basic built-in HTTP(S) client.
 
 General
 -------
@@ -90,12 +88,12 @@ point of call being the README-SDK file which explains what needs to be done.
 
 Backwards Compatibility
 -----------------------
-All applications compiled to use previous versions of AmiSSL v5 will
-automatically use the latest version once installed. Old applications will
-continue to use AmiSSL v4 or older and will need to be recompiled with the
-updated SDK in order to start using AmiSSL v5. Besides this difference,
-AmiSSL v5 can be installed on top of any previous AmiSSL versions, which
-ensures that applications compiled for AmiSSL v1/v2/v3/v4 continue to work.
+All applications compiled to use previous versions of AmiSSL v6 automatically
+use any updates installed. Old applications will continue to use AmiSSL v5 or
+older and will need to be recompiled with the AmiSSL v6 SDK in order to start
+using it. Besides this difference, AmiSSL v6 can be installed on top of any
+previous AmiSSL versions, which ensures that applications compiled to use
+AmiSSL v1/v2/v3/v4/v5 continue to work.
 
 Requirements
 ------------

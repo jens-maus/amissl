@@ -1,3 +1,23 @@
+## AmiSSL 6.1 (x.6.2026)
+
+- Switched to OpenSSL 4.0 and updated backend to full compatibility with
+  the latest OpenSSL 4.0.1 (9.6.2026) version, which brings new features,
+  such as ECH, along with security and bug fixes.
+- Reset the AmiSSL API, with only the OpenSSL 4.0 API now supported. All
+  functions deprecated or removed in OpenSSL 4.0 and earlier have been
+  completely removed from the AmiSSL API.
+- Libraries no longer have a different name for every OpenSSL release, as
+  patch versions contain no API changes. All OpenSSL 4.0 builds will use
+  amissl_v40x.library, OpenSSL 4.1 will use amissl_v41x.library, and so on.
+- Removed all placeholders from the AmiSSL API for stdio OpenSSL API
+  functions, as stdio can never be available in AmiSSL.
+- Support for RC5, MD2 and SRP has been removed.
+- Updated root certificates to latest Mozilla-based bundle provided
+  by https://curl.se/docs/caextract.html dated 14.5.2026.
+- Removed root certificate support for AmiSSL v3 and earlier. We used to
+  supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having
+  been used by OpenSSL since AmiSSL v4.
+
 ## AmiSSL 5.27 (8.4.2026)
 
 - Updated OpenSSL backend to full compatibility with the latest

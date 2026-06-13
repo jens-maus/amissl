@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 5.13 (22.12.2023)
+; $VER: Install-AmiSSL 6.1 (15.4.2026)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -439,7 +439,7 @@
 (complete 25)
 
 (working #str-cleaning-old-libs)
-(foreach (tackon #libs-dir "AmiSSL") "amissl_v3??.library"
+(foreach (tackon #libs-dir "AmiSSL") "amissl_v4??.library"
 	(if	; Only delete versions older than ours, and not any special exceptions
 		(< (getversion (tackon (tackon #libs-dir "AmiSSL") @each-name)) #new-lib-ver)
 		(delete (tackon (tackon #libs-dir "AmiSSL") @each-name))

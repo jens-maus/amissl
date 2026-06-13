@@ -101,6 +101,11 @@ HowTo update the OpenSSL version in "openssl/":
       explictly declare the m68k 32-bit register pair to use (e.g. d0-d1).
       Additionally, for VBCC compatibility, try to use only even pairs (i.e.
       either d0-d1, d2-d3, d4-d5 or d6-d7) and reallocate other arguments to help.
+   -> function arguments that take a structure (not a pointer to one) are not
+      possible in library calls, so append "_amiga" to the function name and
+      change the argument to a pointer. Then add the "_amiga" function to
+      amissl_glue_extra.c to call the real OpenSSL function, and add macros to
+      the OpenSSL headers to call our "_amiga" function instead
    -> if a function has a large number of arguments, requiring more than 12 m68k
       registers, you should split this into two functions and use a macro to join
       them back up. See RSA_X931_derive_ex for an example. Try to split register
