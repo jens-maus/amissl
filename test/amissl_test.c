@@ -210,7 +210,7 @@ int main(void)
           printf("successfully opened AmiSSL library %d.%d (%s): %08lx\n", AmiSSLBase->lib_Version, AmiSSLBase->lib_Revision, (char *)AmiSSLBase->lib_IdString, AmiSSLBase);
 
           // initialize AmiSSL/OpenSSL related stuff
-          OPENSSL_init_ssl(0,NULL);
+          OPENSSL_init_ssl(OPENSSL_INIT_SSL_DEFAULT | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
           printf("OPENSSL_init_ssl() done.\n");
 
           // seed the random number generator with some valuable entropy

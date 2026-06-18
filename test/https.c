@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,9 +61,7 @@ static void GenerateRandomSeed(char *buffer, int size);
 static int ConnectToServer(char *, short, char *, short);
 static int verify_cb(int preverify_ok, X509_STORE_CTX *ctx);
 
-struct Library *AmiSSLMasterBase, *AmiSSLBase, *SocketBase, *UtilityBase;
-
-BOOL AmiSSLInitialized;
+struct Library *AmiSSLMasterBase, *SocketBase, *UtilityBase;
 
 #if defined(__amigaos4__)
 struct AmiSSLMasterIFace *IAmiSSLMaster;
@@ -71,6 +69,8 @@ struct AmiSSLIFace *IAmiSSL;
 struct SocketIFace *ISocket;
 struct UtilityIFace *IUtility;
 #else
+struct Library *AmiSSLBase, *AmiSSLExtBase;
+
 static BPTR ErrorOutput(void)
 {
 	return(((struct Process *)FindTask(NULL))->pr_CES);
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 						Printf("SSL connection using %s\n", SSL_get_cipher(ssl));
 
 						/* Certificate checking. This example is *very* basic */
-						if((server_cert = SSL_get_peer_certificate(ssl)))
+						if((server_cert = SSL_get0_peer_certificate(ssl)))
 						{
 							char *str;
 
@@ -183,8 +183,6 @@ int main(int argc, char *argv[])
 							}
 							else
 								FPrintf(GetStdErr(), "Warning: couldn't read issuer name in certificate!\n");
-
-							X509_free(server_cert);
 
 							/* Send a HTTP request. Again, this is just
 							 * a very basic example.
@@ -264,7 +262,7 @@ int main(int argc, char *argv[])
 /* Open and initialize AmiSSL */
 static BOOL Init(void)
 {
-	AmiSSLInitialized = FALSE;
+	BOOL AmiSSLInitialized = FALSE;
 
 	if (!(UtilityBase = OpenLibrary("utility.library", 0)))
 		FPrintf(GetStdErr(), "Couldn't open utility.library!\n");
@@ -280,22 +278,23 @@ static BOOL Init(void)
 		                     MKSTR(AMISSLMASTER_MIN_VERSION) "!\n");
 	else if (!GETINTERFACE(IAmiSSLMaster, AmiSSLMasterBase))
 		FPrintf(GetStdErr(), "Couldn't get AmiSSLMaster interface!\n");
-	else if (!InitAmiSSLMaster(AMISSL_CURRENT_VERSION, TRUE))
-		FPrintf(GetStdErr(), "AmiSSL version is too old!\n");
-	else if (!(AmiSSLBase = OpenAmiSSL()))
-		FPrintf(GetStdErr(), "Couldn't open AmiSSL!\n");
-	else if (!GETINTERFACE(IAmiSSL, AmiSSLBase))
-		FPrintf(GetStdErr(), "Couldn't get AmiSSL interface!\n");
-#if defined(__amigaos4__)
-	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-	                    AmiSSL_ISocket, ISocket,
-	                    TAG_DONE) != 0)
-#else
-	else if (InitAmiSSL(AmiSSL_ErrNoPtr, &errno,
-	                    AmiSSL_SocketBase, SocketBase,
-	                    TAG_DONE) != 0)
-#endif
-		FPrintf(GetStdErr(), "Couldn't initialize AmiSSL!\n");
+# if defined(__amigaos4__)
+	else if (OpenAmiSSLTags(AMISSL_CURRENT_VERSION,
+	                        AmiSSL_UsesOpenSSLStructs, FALSE,
+	                        AmiSSL_GetIAmiSSL, &IAmiSSL,
+	                        AmiSSL_ISocket, ISocket,
+	                        AmiSSL_ErrNoPtr, &errno,
+	                        TAG_DONE) != 0)
+# else
+	else if (OpenAmiSSLTags(AMISSL_CURRENT_VERSION,
+	                        AmiSSL_UsesOpenSSLStructs, FALSE,
+	                        AmiSSL_GetAmiSSLBase, &AmiSSLBase,
+	                        AmiSSL_GetAmiSSLExtBase, &AmiSSLExtBase,
+	                        AmiSSL_SocketBase, SocketBase,
+	                        AmiSSL_ErrNoPtr, &errno,
+	                        TAG_DONE) != 0)
+# endif
+		FPrintf(GetStdErr(), "Couldn't open and initialize AmiSSL!\n");
 	else
 		AmiSSLInitialized = TRUE;
 
@@ -307,17 +306,19 @@ static BOOL Init(void)
 
 static void Cleanup(void)
 {
-	if (AmiSSLInitialized)
-	{	/* Must always call after successful InitAmiSSL() */
-		CleanupAmiSSLA(NULL);
+# if defined(__amigaos4__)
+	if (IAmiSSL)
+	{
+		CloseAmiSSL();
+		IAmiSSL = NULL;
 	}
-
+# else
 	if (AmiSSLBase)
 	{
-		DROPINTERFACE(IAmiSSL);
 		CloseAmiSSL();
 		AmiSSLBase = NULL;
 	}
+# endif
 
 	DROPINTERFACE(IAmiSSLMaster);
 	CloseLibrary(AmiSSLMasterBase);
