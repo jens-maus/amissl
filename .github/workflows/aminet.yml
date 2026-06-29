@@ -21,10 +21,10 @@ jobs:
       run: |
         DIR=$(ls | grep release-)
         VERSION=$(echo $DIR | grep -oP "\-\K\d+\.\d+")
-        AMINET_VERSION=$(curl https://aminet.net/util/libs/AmiSSL-v5-SDK.readme | grep -oP "Version:\s+\K\d+\.\d+")
-        if $(dpkg --compare-versions $AMINET_VERSION "lt" $VERSION); then
+        AMINET_VERSION=$(curl https://aminet.net/util/libs/AmiSSL-v6-SDK.readme | grep -oP "Version:\s+\K\d+\.\d+")
+        if $(dpkg --compare-versions "$AMINET_VERSION" "lt" "$VERSION"); then
           cd $DIR
           sudo apt install rename
-          rename 's/(.*)-(\d+\.\d+)-(.*)(\.*)/$1-v5-$3/' *.*
+          rename 's/(.*)-(\d+\.\d+)-(.*)(\.*)/$1-v6-$3/' *.*
           curl -T "{$(echo *.lha *.readme | tr ' ' ',')}" -u anonymous:oliver@amissl.org ftp://main.aminet.net/new/
         fi
