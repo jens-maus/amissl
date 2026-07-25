@@ -76,14 +76,20 @@ jobs:
       with:
         merge-multiple: true
 
+    - name: Restore dist timestamps
+      uses: chetan/git-restore-mtime-action@v2
+      with:
+        args: -q certs dist include src test
+
+    - name: Restore apps timestampes
+      uses: chetan/git-restore-mtime-action@v2
+      with:
+        args: -qm openssl/apps
+
     - name: Build AmiSSL release archives
       run: |
         #git config --local diff.renameLimit 30000
-        #sudo apt-get -qq install git-restore-mtime
-        git clone https://github.com/MestreLion/git-tools.git
-        export PATH=${{github.workspace}}/git-tools:/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
-        git restore-mtime -q certs dist include src test
-        git restore-mtime -qm openssl/apps
+        export PATH=/usr/local/amiga/bin:/opt/m68k-amigaos/bin:/opt/ppc-amigaos/bin:/opt/ppc-morphos/bin:${PATH}
         (cd build_os4/openssl; ../../openssl/Configure amiga-os4; make -j1 build_generated_pods)
         ./tools/mkrelease.sh
 
