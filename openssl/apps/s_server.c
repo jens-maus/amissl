@@ -4030,6 +4030,7 @@ static int www_body(int s, int stype, int prot, unsigned char *context)
 
     if (rpk_files != NULL && !rpk_enable(con)) {
         BIO_puts(bio_err, "Error enabling client RPK verification\n");
+        SSL_free(con);
         goto err;
     }
 
@@ -4553,6 +4554,7 @@ static int rev_body(int s, int stype, int prot, unsigned char *context)
     if (rpk_files != NULL && !rpk_enable(con)) {
         BIO_puts(bio_err, "Error enabling client RPK verification\n");
         ERR_print_errors(bio_err);
+        SSL_free(con);
         goto err;
     }
 

@@ -28,12 +28,6 @@ jobs:
             branch: '3.4',
             cppflags: 'CPPFLAGS=-ansi'
           }, {
-            branch: '3.3',
-            cppflags: 'CPPFLAGS=-ansi',
-          }, {
-            branch: '3.2',
-            cppflags: 'CPPFLAGS=-ansi'
-          }, {
             branch: '3.0',
             cppflags: 'CPPFLAGS=-ansi'
           }
@@ -55,7 +49,7 @@ jobs:
            git config user.name "OpenSSL Machine"
            git config user.email "openssl-machine@openssl.org"
            echo Cherry-picking $REFSTART..$REFEND
-           git cherry-pick $REFSTART..$REFEND
+           git cherry-pick $REFSTART..$REFEND || { git diff | head -n1000; exit 1; }
     - name: config
       if: ${{ contains(join(github.event.pull_request.labels.*.name,','),matrix.release.branch) }}
       run: ${{ matrix.release.cppflags }} ./config --strict-warnings --banner=Configured no-asm enable-fips --strict-warnings -D_DEFAULT_SOURCE && perl configdata.pm --dump
