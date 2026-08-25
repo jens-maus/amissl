@@ -116,10 +116,6 @@ static int ml_kem_pairwise_test(const ML_KEM_KEY *key, int key_flags)
 
     memset(out, 0, sizeof(out));
 
-    /*
-     * The pairwise test is skipped unless either RANDOM or FIXED entropy PCTs
-     * are enabled.
-     */
     if (key_flags & ML_KEM_KEY_RANDOM_PCT) {
         operation_result = ossl_ml_kem_encap_rand(ctext, v->ctext_bytes,
             secret, sizeof(secret), key);
@@ -154,7 +150,10 @@ err:
             v->algorithm_name);
     }
 #endif
-    OPENSSL_free(ctext);
+    OPENSSL_cleanse((void *)entropy, sizeof(entropy));
+    OPENSSL_cleanse((void *)secret, sizeof(secret));
+    OPENSSL_cleanse((void *)out, sizeof(out));
+    OPENSSL_clear_free(ctext, v->ctext_bytes);
     return ret;
 }
 
@@ -336,7 +335,7 @@ err:
     OSSL_PARAM_BLD_free(tmpl);
     OPENSSL_secure_clear_free(seedenc, seedlen);
     OPENSSL_secure_clear_free(prvenc, prvlen);
-    OPENSSL_free(pubenc);
+    OPENSSL_clear_free(pubenc, v->pubkey_bytes);
     return ret;
 }
 
@@ -485,9 +484,6 @@ static int ml_kem_import(void *vkey, int selection, const OSSL_PARAM params[])
     res = ml_kem_key_fromdata(key, params, include_private);
     if (res > 0 && include_private
         && !ml_kem_pairwise_test(key, key->prov_flags)) {
-#ifdef FIPS_MODULE
-        ossl_set_error_state(OSSL_SELF_TEST_TYPE_PCT_IMPORT);
-#endif
         ossl_ml_kem_key_reset(key);
         res = 0;
     }
@@ -536,12 +532,14 @@ static void *ml_kem_load(const void *reference, size_t reference_sz)
                 goto err;
         }
         OPENSSL_secure_clear_free(encoded_dk, key->vinfo->prvkey_bytes);
+        OPENSSL_cleanse((void *)seed, sizeof(seed));
         return key;
     }
 
 err:
     if (key != NULL && key->vinfo != NULL)
         OPENSSL_secure_clear_free(encoded_dk, key->vinfo->prvkey_bytes);
+    OPENSSL_cleanse((void *)seed, sizeof(seed));
     ossl_ml_kem_key_free(key);
     return NULL;
 }
@@ -710,6 +708,7 @@ static int ml_kem_gen_set_params(void *vgctx, const OSSL_PARAM params[])
 
         /* Possibly, but less likely wrong data type */
         ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_SEED_LENGTH);
+        OPENSSL_cleanse((void *)gctx->seedbuf, sizeof(gctx->seedbuf));
         gctx->seed = NULL;
         return 0;
     }
@@ -766,8 +765,10 @@ static void *ml_kem_gen(void *vgctx, OSSL_CALLBACK *osslcb, void *cbarg)
     if ((gctx->selection & OSSL_KEYMGMT_SELECT_KEYPAIR) == 0)
         return key;
 
-    if (seed != NULL && !ossl_ml_kem_set_seed(seed, ML_KEM_SEED_BYTES, key))
+    if (seed != NULL && !ossl_ml_kem_set_seed(seed, ML_KEM_SEED_BYTES, key)) {
+        ossl_ml_kem_key_free(key);
         return NULL;
+    }
     genok = ossl_ml_kem_genkey(nopub, 0, key);
 
     /* Erase the single-use seed */
@@ -778,7 +779,6 @@ static void *ml_kem_gen(void *vgctx, OSSL_CALLBACK *osslcb, void *cbarg)
     if (genok) {
 #ifdef FIPS_MODULE
         if (!ml_kem_pairwise_test(key, ML_KEM_KEY_FIXED_PCT)) {
-            ossl_set_error_state(OSSL_SELF_TEST_TYPE_PCT);
             ossl_ml_kem_key_free(key);
             return NULL;
         }

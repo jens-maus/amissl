@@ -576,6 +576,7 @@ static STRINT_PAIR ssl_versions[] = {
     { "TLS 1.2", TLS1_2_VERSION },
     { "TLS 1.3", TLS1_3_VERSION },
     { "DTLS 1.0", DTLS1_VERSION },
+    { "DTLS 1.2", DTLS1_2_VERSION },
     { "DTLS 1.0 (bad)", DTLS1_BAD_VER },
     { NULL }
 };
@@ -653,7 +654,10 @@ void msg_cb(int write_p, int version, int content_type, const void *buf,
     const char *str_version, *str_content_type = "", *str_details1 = "", *str_details2 = "";
     const unsigned char *bp = buf;
 
-    if (version == TLS1_VERSION || version == TLS1_1_VERSION || version == TLS1_2_VERSION || version == TLS1_3_VERSION || version == DTLS1_VERSION || version == DTLS1_BAD_VER) {
+    if (version == TLS1_VERSION || version == TLS1_1_VERSION
+        || version == TLS1_2_VERSION || version == TLS1_3_VERSION
+        || version == DTLS1_VERSION || version == DTLS1_2_VERSION
+        || version == DTLS1_BAD_VER) {
         str_version = lookup(version, ssl_versions, "???");
         switch (content_type) {
         case SSL3_RT_CHANGE_CIPHER_SPEC:
@@ -1462,10 +1466,7 @@ static STRINT_PAIR callback_types[] = {
     { "Signature Algorithm mask", SSL_SECOP_SIGALG_MASK },
     { "Certificate chain EE key", SSL_SECOP_EE_KEY },
     { "Certificate chain CA key", SSL_SECOP_CA_KEY },
-    { "Peer Chain EE key", SSL_SECOP_PEER_EE_KEY },
-    { "Peer Chain CA key", SSL_SECOP_PEER_CA_KEY },
     { "Certificate chain CA digest", SSL_SECOP_CA_MD },
-    { "Peer chain CA digest", SSL_SECOP_PEER_CA_MD },
     { "SSL compression", SSL_SECOP_COMPRESSION },
     { "Session ticket", SSL_SECOP_TICKET },
     { NULL }
@@ -1499,7 +1500,6 @@ static int security_callback_debug(const SSL *s, const SSL_CTX *ctx,
         show_nm = 0;
         break;
     case SSL_SECOP_CA_MD:
-    case SSL_SECOP_PEER_CA_MD:
         cert_md = 1;
         break;
     case SSL_SECOP_SIGALG_SUPPORTED:

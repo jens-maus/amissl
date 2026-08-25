@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -222,7 +222,7 @@ static int x509_pubkey_ex_d2i_ex(ASN1_VALUE **pval,
                      * bytes.
                      */
                     ERR_clear_last_mark();
-                    ERR_raise(ERR_LIB_ASN1, EVP_R_DECODE_ERROR);
+                    ERR_raise(ERR_LIB_ASN1, ASN1_R_DECODE_ERROR);
                     goto end;
                 }
             }

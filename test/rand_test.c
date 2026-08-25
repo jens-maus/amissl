@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2021-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the >License>).  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -97,6 +97,50 @@ static int test_rand_uniform(void)
                 || !TEST_uint_lt(x, j))
                 return 0;
         }
+
+    res = 1;
+err:
+    OSSL_LIB_CTX_free(ctx);
+    return res;
+}
+
+/*
+ * Check that creating the primary DRBG creates the seed source and
+ * stores it in the library context: later users must keep getting the
+ * same instance and no replacement may be created.
+ */
+static int test_rand_primary_seed_stored(void)
+{
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND_CTX *seed;
+    unsigned char buf[16];
+    int ok, res = 0;
+
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_ptr_null(ossl_rand_get0_seed_noncreating(ctx)))
+        goto err;
+
+    /* The default seed source may be unavailable in some configurations */
+    ERR_set_mark();
+    ok = RAND_bytes_ex(ctx, buf, sizeof(buf), 0) > 0;
+    ERR_pop_to_mark();
+    if (!ok) {
+        TEST_info("skipped: cannot instantiate the primary DRBG");
+        res = 1;
+        goto err;
+    }
+
+    seed = ossl_rand_get0_seed_noncreating(ctx);
+    if (seed == NULL) {
+        /* The seed source silently fell back to operating system entropy */
+        TEST_info("skipped: no seed source was created");
+        res = 1;
+        goto err;
+    }
+
+    if (!TEST_int_gt(RAND_bytes_ex(ctx, buf, sizeof(buf), 0), 0)
+        || !TEST_ptr_eq(ossl_rand_get0_seed_noncreating(ctx), seed))
+        goto err;
 
     res = 1;
 err:
@@ -291,6 +335,7 @@ int setup_tests(void)
 
     ADD_TEST(test_rand);
     ADD_TEST(test_rand_uniform);
+    ADD_TEST(test_rand_primary_seed_stored);
 
     if (OSSL_PROVIDER_available(NULL, "fips")
         && fips_provider_version_ge(NULL, 3, 4, 0))

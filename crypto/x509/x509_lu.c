@@ -741,7 +741,12 @@ static X509_OBJECT *x509_object_dup(const X509_OBJECT *obj)
 
     ret->type = obj->type;
     ret->data = obj->data;
-    X509_OBJECT_up_ref_count(ret);
+
+    if (!X509_OBJECT_up_ref_count(ret)) {
+        OPENSSL_free(ret);
+        return NULL;
+    }
+
     return ret;
 }
 
@@ -764,6 +769,7 @@ static int obj_ht_foreach_object(HT_VALUE *v, void *arg)
     return 1;
 
 err:
+    X509_OBJECT_free(dup);
     sk_X509_OBJECT_pop_free(*sk, X509_OBJECT_free);
     *sk = NULL;
 
