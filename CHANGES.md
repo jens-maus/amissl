@@ -1,7 +1,7 @@
 ## AmiSSL 6.1 (x.6.2026)
 
 - Switched to OpenSSL 4.0 and updated backend to full compatibility with
-  the latest OpenSSL 4.0.1 (9.6.2026) version, which brings new features,
+  the latest OpenSSL 4.0.2 (25.8.2026) version, which brings new features,
   such as ECH, along with security and bug fixes.
 - Reset the AmiSSL API, with only the OpenSSL 4.0 API now supported. All
   functions deprecated or removed in OpenSSL 4.0 and earlier have been
