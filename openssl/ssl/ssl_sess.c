@@ -750,6 +750,14 @@ int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *c)
     SSL_SESSION *s;
 
     /*
+     * evicted_head is a singly-linked list (via the next pointer, which
+     * SSL_SESSION_list_remove zeroes out) of sessions evicted from the cache
+     * that need their remove_session_cb called and their reference dropped
+     * once the lock is released.
+     */
+    SSL_SESSION *evicted_head = NULL;
+
+    /*
      * add just 1 reference count for the SSL_CTX's session cache even though
      * it has two ways of access: each session is in a doubly linked list and
      * an lhash
@@ -797,14 +805,6 @@ int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *c)
         c->time = ossl_time_now();
         ssl_session_calculate_timeout(c);
     }
-
-    /*
-     * evicted_head is a singly-linked list (via the next pointer, which
-     * SSL_SESSION_list_remove zeroes out) of sessions evicted from the cache
-     * that need their remove_session_cb called and their reference dropped
-     * once the lock is released.
-     */
-    SSL_SESSION *evicted_head = NULL;
 
     if (s == NULL) {
         /*
