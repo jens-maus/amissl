@@ -1224,7 +1224,7 @@ IF[{- !$disabled{tests} -}]
     SOURCE[p_ossltest]=p_ossltest.c ../providers/prov_running.c
     INCLUDE[p_test]=../include
     INCLUDE[p_ossltest]=../include ../crypto ../providers/common/include ../providers/implementations/include ../providers/implementations
-    DEPEND[p_ossltest]=../providers/libcommon.a ../libcrypto
+    DEPEND[p_ossltest]=../providers/libdefault.a ../libcrypto
     IF[{- defined $target{shared_defflag} -}]
       SOURCE[p_test]=p_test.ld
       SOURCE[p_ossltest]=p_test.ld
@@ -1284,6 +1284,11 @@ IF[{- !$disabled{tests} -}]
   SOURCE[trace_api_test]=trace_api_test.c
   INCLUDE[trace_api_test]=.. ../include ../apps/include
   DEPEND[trace_api_test]=../libcrypto libtestutil.a
+
+  PROGRAMS{noinst}=endecode_api_test
+  SOURCE[endecode_api_test]=endecode_api_test.c $INITSRC
+  INCLUDE[endecode_api_test]=../include ../apps/include
+  DEPEND[endecode_api_test]=../libcrypto libtestutil.a
 
   PROGRAMS{noinst}=endecode_test
   SOURCE[endecode_test]=endecode_test.c helpers/predefined_dhparams.c

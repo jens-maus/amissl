@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -42,6 +42,20 @@ int ossl_digest_default_get_params(OSSL_PARAM params[], size_t blksz,
         return 0;
     }
     return 1;
+}
+
+const OSSL_PARAM *ossl_digest_default_gettable_ctx_params(ossl_unused void *ctx,
+    ossl_unused void *provctx)
+{
+    return digest_default_get_ctx_params_list;
+}
+
+int ossl_digest_default_get_ctx_params(ossl_unused void *ctx,
+    OSSL_PARAM params[])
+{
+    struct digest_default_get_ctx_params_st p;
+
+    return digest_default_get_ctx_params_decoder(params, &p);
 }
 
 const OSSL_PARAM *ossl_digest_default_gettable_params(void *provctx)
