@@ -1,4 +1,4 @@
-## AmiSSL 6.1 (x.6.2026)
+## AmiSSL 6.1 (x.10.2026)
 
 - Switched to OpenSSL 4.0 and updated backend to full compatibility with
   the latest OpenSSL 4.0.2 (25.8.2026) version, which brings new features,
@@ -17,6 +17,7 @@
 - Removed root certificate support for AmiSSL v3 and earlier. We used to
   supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having
   been used by OpenSSL since AmiSSL v4.
+- Enabled the rehash command in the OpenSSL tool.
 
 ## AmiSSL 5.27 (8.4.2026)
 

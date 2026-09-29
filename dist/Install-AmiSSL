@@ -1,4 +1,4 @@
-; $VER: Install-AmiSSL 6.1 (15.4.2026)
+; $VER: Install-AmiSSL 6.2 (29.9.2026)
 
 (set #AmiUpdate (if (= @app-name "AmiUpdate") 1 0))
 
@@ -534,16 +534,22 @@
 	)
 )
 
+(set #rehash-certs 0)
+
 (if (= #delete-old-certs 1)
 	(
 		(working #str-deleting-certs)
 		(foreach #certs-dir "#?"
-			(delete (tackon #certs-dir @each-name))
+			(if (patmatch "[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].[0-9]" @each-name)
+				(delete (tackon #certs-dir @each-name))
+				; else
+				(set #rehash-certs (+ #rehash-certs 1))
+			)
 		)
 	)
 )
 
-(complete 75)
+(complete 70)
 
 (if (= #copy-certs 1)
 	(if (exists (tackon #certs-dir "disabled"))
@@ -567,6 +573,12 @@
 			(all)
 		)
 	)
+)
+
+(complete 80)
+
+(if (> #rehash-certs 0)
+	(run (tackon #cmd-dir "OpenSSL") " rehash >NIL:")
 )
 
 (makedir (tackon #storage-dir "UserCerts"))

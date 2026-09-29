@@ -12,7 +12,7 @@
 #include "apps.h"
 #include "progs.h"
 
-#if defined(OPENSSL_SYS_UNIX) || defined(__APPLE__) || (defined(__VMS) && defined(__DECC) && __CRTL_VER >= 80300000)
+#if defined(OPENSSL_SYS_UNIX) || defined(__APPLE__) || (defined(__VMS) && defined(__DECC) && __CRTL_VER >= 80300000) || defined(OPENSSL_SYS_AMIGA)
 #include <unistd.h>
 #include <stdio.h>
 #include <limits.h>
@@ -32,7 +32,9 @@
 #pragma names as_is, shortened
 #endif
 
+#if !defined(OPENSSL_SYS_AMIGA)
 #include "internal/o_dir.h"
+#endif
 
 #ifdef __VMS
 #pragma names restore
@@ -332,6 +334,9 @@ static int ends_with_dirsep(const char *path)
         return 1;
 #elif defined _WIN32
     if (*path == '\\')
+        return 1;
+#elif defined OPENSSL_SYS_AMIGA
+    if (*path == ':')
         return 1;
 #endif
     return *path == '/';
