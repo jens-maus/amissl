@@ -7,7 +7,6 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include <string.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
@@ -19,7 +18,6 @@
 #include "prov/provider_ctx.h"
 #include "prov/implementations.h"
 #include "crypto/lms_sig.h"
-#include "internal/cryptlib.h"
 #include "internal/fips.h"
 #include "providers/implementations/signature/lms_signature.inc"
 

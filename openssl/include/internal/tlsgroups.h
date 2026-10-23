@@ -13,6 +13,10 @@
 #pragma once
 #endif
 
+#include <stdint.h>
+
+#include <openssl/e_os2.h> /* For 'ossl_inline' */
+
 #define OSSL_TLS_GROUP_ID_sect163k1 0x0001
 #define OSSL_TLS_GROUP_ID_sect163r1 0x0002
 #define OSSL_TLS_GROUP_ID_sect163r2 0x0003

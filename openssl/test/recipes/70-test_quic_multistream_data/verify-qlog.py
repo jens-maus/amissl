@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2024 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2024-2026 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -8,7 +8,7 @@
 # https://www.openssl.org/source/license.html
 import sys, os, os.path, glob, json, re
 
-re_version = re.compile(r'''^OpenSSL/[0-9]+\.[0-9]\.[0-9](-[^ ]+)? ([^)]+)''')
+re_version = re.compile(r'''^OpenSSL/[0-9]+\.[0-9]+\.[0-9]+(-[^ ]+)? ([^)]+)''')
 
 class Unexpected(Exception):
     def __init__(self, filename, msg):

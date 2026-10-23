@@ -39,9 +39,10 @@ permissions:
   contents: read
 
 jobs:
-  # Only a dispatch carries inputs, so this is skipped on the nightly cron.
   validate-dispatch-inputs:
-    if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
+    if: |
+      github.repository == 'openssl/openssl' &&
+      (inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != '')
     uses: ./.github/workflows/validate-dispatch-inputs.yml
     with:
       pr: ${{ inputs.pr }}
@@ -50,8 +51,8 @@ jobs:
 
   run-checker:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -65,7 +66,6 @@ jobs:
           no-asan,
           no-asm,
           no-async,
-          no-atexit,
           no-autoalginit,
           no-autoerrinit,
           no-autoload-config,
@@ -88,10 +88,9 @@ jobs:
           no-dsa,
           no-dtls1,
           no-dtls1_2,
+          no-dtls1_3,
           no-dtls1_2-method,
           no-dtls1-method,
-          no-ecdh,
-          no-ecdsa,
           enable-ec_nistp_64_gcc_128,
           enable-egd,
 #          enable-external-tests,  # Requires extra setup
@@ -107,6 +106,7 @@ jobs:
           no-hmac-drbg-kdf,
           no-hw,
           no-idea,
+          no-ikev2kdf,
           no-kbkdf,
           no-krb5kdf,
           enable-lms,
@@ -194,8 +194,8 @@ jobs:
 
   run-checker-sctp:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -241,8 +241,8 @@ jobs:
 
   enable_brotli_dynamic:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -271,8 +271,8 @@ jobs:
 
   enable_zstd_dynamic:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -301,8 +301,8 @@ jobs:
 
   enable_brotli_and_zstd_dynamic:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -332,8 +332,8 @@ jobs:
 
   malloc_failure_testing:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -362,8 +362,8 @@ jobs:
 
   enable_brotli_and_asan_ubsan:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -396,8 +396,8 @@ jobs:
 
   enable_zstd_and_asan_ubsan:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -430,8 +430,8 @@ jobs:
 
   enable_tfo:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -456,8 +456,8 @@ jobs:
 
   enable_buildtest:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -481,8 +481,8 @@ jobs:
 
   memory_sanitizer_slh_dsa:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -511,7 +511,7 @@ jobs:
 
   bn_debug:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest

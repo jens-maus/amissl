@@ -39,9 +39,10 @@ permissions:
   contents: read
 
 jobs:
-    # Only a dispatch carries inputs, so this is skipped on the nightly cron.
     validate-dispatch-inputs:
-      if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
+      if: |
+        github.repository == 'openssl/openssl' &&
+        (inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != '')
       uses: ./.github/workflows/validate-dispatch-inputs.yml
       with:
         pr: ${{ inputs.pr }}
@@ -50,9 +51,11 @@ jobs:
 
     check-valgrind-suppressions:
       needs: [validate-dispatch-inputs]
-      if: >-
+      if: |
         !cancelled() &&
-        (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
+        (needs.validate-dispatch-inputs.result == 'success' ||
+         (needs.validate-dispatch-inputs.result == 'skipped' &&
+          inputs.pr == '' && inputs.head_sha == '' && inputs.check_run_id == ''))
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v6

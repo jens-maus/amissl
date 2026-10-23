@@ -40,7 +40,9 @@ permissions:
 jobs:
   # Only a dispatch carries inputs, so this is skipped on the nightly cron.
   validate-dispatch-inputs:
-    if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
+    if: |
+      github.repository == 'openssl/openssl' &&
+      (inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != '')
     uses: ./.github/workflows/validate-dispatch-inputs.yml
     with:
       pr: ${{ inputs.pr }}
@@ -49,8 +51,8 @@ jobs:
 
   alpine:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -92,8 +94,8 @@ jobs:
 
   linux:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -156,8 +158,8 @@ jobs:
 
   macos:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -187,8 +189,8 @@ jobs:
 
   windows:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -209,8 +211,21 @@ jobs:
       run: git submodule update --init --depth 1 fuzz/corpora
     - name: install nasm
       run: |
-        choco install nasm
+        $installer = "nasm-3.01-installer-x64.exe"
+        Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/$installer" -OutFile $installer
+        $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).$installer
+        $actual = (Get-FileHash $installer -Algorithm SHA256).Hash
+        if ($actual -ne $expected) { throw "SHA256 mismatch for $installer (expected $expected, got $actual)" }
+        Start-Process -FilePath ".\$installer" -ArgumentList '/S' -Wait
         "C:\Program Files\NASM" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+    - name: install jom
+      run: |
+        mkdir C:\jom
+        Invoke-WebRequest -Uri "https://openssl-library.org/ci-deps/jom-1.1.7.exe" -OutFile C:\jom\jom.exe
+        $expected = (Get-Content "$env:GITHUB_WORKSPACE\.github\ci-deps.json" -Raw | ConvertFrom-Json).'jom-1.1.7.exe'
+        $actual = (Get-FileHash C:\jom\jom.exe -Algorithm SHA256).Hash
+        if ($actual -ne $expected) { throw "SHA256 mismatch for jom.exe (expected $expected, got $actual)" }
+        "C:\jom" | Out-File -FilePath "$env:GITHUB_PATH" -Append
     - name: prepare the build directory
       run: mkdir _build
     - name: config
@@ -225,7 +240,7 @@ jobs:
       shell: cmd
       run: |
         call "${{ matrix.platform.vcvars }}"
-        nmake /S
+        jom /j4 /S
     - name: download coreinfo
       run: |
         mkdir _build\coreinfo
@@ -241,11 +256,14 @@ jobs:
       shell: cmd
       run: |
         call "${{ matrix.platform.vcvars }}"
-        nmake test VERBOSE_FAILURE=yes HARNESS_JOBS=4 LHASH_WORKERS=16
+        jom test VERBOSE_FAILURE=yes HARNESS_JOBS=4 LHASH_WORKERS=16
 
+  # GitHub-hosted, so pull-request code may build here: coverage bought, not risked. The
+  # repository clause is new -- a cron in a fork expresses nobody's intent.
   linux-arm64:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-24.04-arm
@@ -267,7 +285,8 @@ jobs:
 
   linux-x86:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -312,13 +331,14 @@ jobs:
         path: artifacts.tar.gz
 
   linux-ppc64le:
+    runs-on: linux-ppc64le
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.pr == '')) &&
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
+      ( github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && inputs.pr == '') ) &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
-    runs-on: linux-ppc64le
     steps:
     - uses: actions/checkout@v6
       with:
@@ -338,13 +358,14 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   linux-s390x:
+    runs-on: linux-s390x
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.pr == '')) &&
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
+      ( github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && inputs.pr == '') ) &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
-    runs-on: linux-s390x
     steps:
     - uses: actions/checkout@v6
       with:
@@ -364,13 +385,14 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   linux-riscv64:
+    runs-on: linux-riscv64
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.pr == '')) &&
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
+      ( github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && inputs.pr == '') ) &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
-    runs-on: linux-riscv64
     steps:
     - uses: actions/checkout@v6
       with:
@@ -390,45 +412,94 @@ jobs:
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4} LHASH_WORKERS=${LHASH_WORKERS:-16}
 
   freebsd-x86_64:
+    runs-on: ubuntu-latest
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
         ref: ${{ github.event.inputs.head_sha || github.sha }}
     - name: config
-      uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
       with:
         operating_system: freebsd
-        version: "13.4"
+        version: "14.4"
         shutdown_vm: false
         run: |
           sudo pkg install -y gcc perl5
           ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
     - name: config dump
-      uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
       with:
         operating_system: freebsd
-        version: "13.4"
+        version: "14.4"
         shutdown_vm: false
         run: ./configdata.pm --dump
     - name: make
-      uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
       with:
         operating_system: freebsd
-        version: "13.4"
+        version: "14.4"
         shutdown_vm: false
         run: make -j4
     - name: make test
-      uses: cross-platform-actions/action@46e8d7fb25520a8d6c64fd2b7a1192611da98eda #v0.30.0
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
       with:
         operating_system: freebsd
-        version: "13.4"
+        version: "14.4"
+        run: |
+          ./util/opensslwrap.sh version -c
+          .github/workflows/make-test
+
+  openbsd-x86_64:
+    runs-on: ubuntu-latest
+    needs: [validate-dispatch-inputs]
+    if: |
+      github.repository == 'openssl/openssl' &&
+      !cancelled() &&
+      (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+        ref: ${{ github.event.inputs.head_sha || github.sha }}
+    - name: config
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
+      with:
+        operating_system: openbsd
+        architecture: x86-64
+        version: '7.9'
+        shutdown_vm: false
+        run: |
+          ./config --strict-warnings enable-fips enable-ec_nistp_64_gcc_128 enable-md2 enable-rc5 enable-trace
+    - name: config dump
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
+      with:
+        operating_system: openbsd
+        architecture: x86-64
+        version: '7.9'
+        shutdown_vm: false
+        run: |
+          ./configdata.pm --dump
+    - name: make
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
+      with:
+        operating_system: openbsd
+        architecture: x86-64
+        version: '7.9'
+        shutdown_vm: false
+        run: |
+          make -j4
+    - name: make test
+      uses: cross-platform-actions/action@faa0c6197e94aacf1c5956460152c8380d3560a5 #v1.5.0
+      with:
+        operating_system: openbsd
+        architecture: x86-64
+        version: '7.9'
         run: |
           ./util/opensslwrap.sh version -c
           .github/workflows/make-test

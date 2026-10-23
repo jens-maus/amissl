@@ -7,11 +7,13 @@
  * https://www.openssl.org/source/license.html
  */
 
+#include <stdint.h>
 #include <string.h>
 
 #include <openssl/pem.h>
 #include <openssl/cms.h>
 #include <openssl/bio.h>
+#include <openssl/err.h>
 #include <openssl/x509.h>
 #include "../crypto/cms/cms_local.h" /* for d.signedData and d.envelopedData */
 
@@ -19,6 +21,8 @@
 
 static X509 *cert = NULL;
 static EVP_PKEY *privkey = NULL;
+static X509 *ed448_cert = NULL;
+static EVP_PKEY *ed448_privkey = NULL;
 static char *derin = NULL;
 static char *too_long_iv_cms_in = NULL;
 static char *pwri_kek_oob_der_in = NULL;
@@ -277,6 +281,45 @@ static int test_encrypt_decrypt_aes_256_gcm(void)
     return test_encrypt_decrypt(EVP_aes_256_gcm());
 }
 
+static int smimecap_has_nid(STACK_OF(X509_ALGOR) *smcap, int nid)
+{
+    int i;
+
+    for (i = 0; i < sk_X509_ALGOR_num(smcap); i++) {
+        X509_ALGOR *alg = sk_X509_ALGOR_value(smcap, i);
+        if (OBJ_obj2nid(alg->algorithm) == nid)
+            return 1;
+    }
+    return 0;
+}
+
+static int test_CMS_add_standard_smimecap_ex(void)
+{
+    STACK_OF(X509_ALGOR) *smcap = NULL;
+    int ret = 0;
+
+    if (!TEST_true(CMS_add_standard_smimecap_ex(&smcap, NULL, NULL))
+        || !TEST_int_eq(ERR_peek_error(), 0))
+        goto end;
+
+    /* AES ciphers must be present with the default provider */
+    if (!TEST_true(smimecap_has_nid(smcap, NID_aes_256_cbc))
+        || !TEST_true(smimecap_has_nid(smcap, NID_aes_192_cbc))
+        || !TEST_true(smimecap_has_nid(smcap, NID_aes_128_cbc)))
+        goto end;
+
+    /* RC2, DES, and GOST must NOT be present with just the default provider */
+    if (!TEST_false(smimecap_has_nid(smcap, NID_rc2_cbc))
+        || !TEST_false(smimecap_has_nid(smcap, NID_des_cbc))
+        || !TEST_false(smimecap_has_nid(smcap, NID_id_Gost28147_89)))
+        goto end;
+
+    ret = 1;
+end:
+    sk_X509_ALGOR_pop_free(smcap, X509_ALGOR_free);
+    return ret;
+}
+
 static int test_CMS_add1_cert(void)
 {
     CMS_ContentInfo *cms = NULL;
@@ -288,6 +331,545 @@ static int test_CMS_add1_cert(void)
 
     CMS_ContentInfo_free(cms);
     return ret;
+}
+
+static int test_CMS_SignerInfo_verify_sigalg_oid(void)
+{
+    static const char msg[] = "Hello World!\r\n";
+    BIO *msgbio = NULL;
+    CMS_ContentInfo *cms = NULL;
+    CMS_SignerInfo *si;
+    X509_ALGOR *dalg = NULL;
+    int ret = 0;
+
+    if (!TEST_ptr(msgbio = BIO_new_mem_buf(msg, sizeof(msg) - 1))
+        || !TEST_ptr(cms = CMS_sign(NULL, NULL, NULL, NULL, CMS_PARTIAL))
+        || !TEST_ptr(si = CMS_add1_signer(cms, cert, privkey, EVP_sha256(), 0))
+        || !TEST_true(CMS_final(cms, msgbio, NULL, 0)))
+        goto end;
+
+    if (!TEST_int_gt(CMS_SignerInfo_verify(si), 0))
+        goto end;
+
+    /* A signature algorithm OID as digestAlgorithm must not verify */
+    CMS_SignerInfo_get0_algs(si, NULL, NULL, &dalg, NULL);
+    if (!TEST_true(X509_ALGOR_set0(dalg,
+            OBJ_nid2obj(NID_sha256WithRSAEncryption),
+            V_ASN1_UNDEF, NULL))
+        || !TEST_int_le(CMS_SignerInfo_verify(si), 0))
+        goto end;
+
+    ret = 1;
+end:
+    ERR_clear_error();
+    CMS_ContentInfo_free(cms);
+    BIO_free(msgbio);
+    return ret;
+}
+
+/*
+ * Regression test for GH #32612: when CMS_verify() bails out early because a
+ * signer certificate cannot be found, every SignerInfo must report
+ * CMS_VERIFY_RESULT == 0.  A two-signer message with no embedded certificates,
+ * verified against an empty store, used to leave the trailing signer(s) at 1
+ * ("so far, fine") because the cleanup loop only reset the first 'scount'
+ * (== signers whose cert was found == 0 here) entries.
+ */
+static int test_CMS_verify_result_no_signer_cert(void)
+{
+    CMS_ContentInfo *cms = NULL, *cms2 = NULL;
+    BIO *in = NULL, *out = NULL, *der = NULL;
+    X509_STORE *store = NULL;
+    STACK_OF(CMS_SignerInfo) *sinfos;
+    const unsigned char *p;
+    unsigned char *derbuf = NULL;
+    long derlen;
+    int i, ret = 0;
+
+    if (!TEST_ptr(in = BIO_new_mem_buf("Hello World\n", -1))
+        || !TEST_ptr(out = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(der = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(store = X509_STORE_new()))
+        goto end;
+
+    /* two signers, neither certificate embedded */
+    if (!TEST_ptr(cms = CMS_sign(NULL, NULL, NULL, in,
+                      CMS_BINARY | CMS_PARTIAL | CMS_NOCERTS))
+        || !TEST_ptr(CMS_add1_signer(cms, cert, privkey, NULL, CMS_NOCERTS))
+        || !TEST_ptr(CMS_add1_signer(cms, cert, privkey, NULL, CMS_NOCERTS))
+        || !TEST_true(CMS_final(cms, in, NULL, CMS_BINARY)))
+        goto end;
+
+    /* round-trip through DER so no in-memory signer cert pointers linger */
+    if (!TEST_true(i2d_CMS_bio(der, cms)))
+        goto end;
+    derlen = BIO_get_mem_data(der, &derbuf);
+    p = derbuf;
+    if (!TEST_ptr(cms2 = d2i_CMS_ContentInfo(NULL, &p, derlen)))
+        goto end;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms2, NULL, store, NULL, out,
+                         CMS_BINARY | CMS_VERIFY_PARTIAL),
+            0)
+        || !TEST_int_eq(ERR_GET_REASON(ERR_peek_last_error()),
+            CMS_R_SIGNER_CERTIFICATE_NOT_FOUND))
+        goto end;
+
+    sinfos = CMS_get0_SignerInfos(cms2);
+    if (!TEST_int_eq(sk_CMS_SignerInfo_num(sinfos), 2))
+        goto end;
+    for (i = 0; i < sk_CMS_SignerInfo_num(sinfos); i++) {
+        CMS_SignerInfo *si = sk_CMS_SignerInfo_value(sinfos, i);
+
+        if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si,
+                             CMS_VERIFY_RESULT),
+                0)
+            || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si,
+                                CMS_VERIFY_CERT),
+                0))
+            goto end;
+    }
+
+    ret = 1;
+end:
+    ERR_clear_error();
+    CMS_ContentInfo_free(cms);
+    CMS_ContentInfo_free(cms2);
+    X509_STORE_free(store);
+    BIO_free(in);
+    BIO_free(out);
+    BIO_free(der);
+    return ret;
+}
+
+/* self-signed throwaway cert for the second signer in the test below */
+static X509 *make_self_signed_cert(EVP_PKEY *pkey, const char *cn)
+{
+    X509 *newcert = NULL, *ret = NULL;
+    X509_NAME *name = NULL;
+    ASN1_INTEGER *serial = NULL;
+
+    if (!TEST_ptr(newcert = X509_new())
+        || !TEST_true(X509_set_version(newcert, X509_VERSION_3)))
+        goto err;
+
+    if (!TEST_ptr(serial = ASN1_INTEGER_new())
+        || !TEST_true(ASN1_INTEGER_set(serial, 1))
+        || !TEST_true(X509_set_serialNumber(newcert, serial)))
+        goto err;
+
+    if (!TEST_ptr(X509_gmtime_adj(X509_getm_notBefore(newcert), 0))
+        || !TEST_ptr(X509_gmtime_adj(X509_getm_notAfter(newcert),
+            60L * 60L * 24L * 365L)))
+        goto err;
+
+    if (!TEST_true(X509_set_pubkey(newcert, pkey)))
+        goto err;
+
+    if (!TEST_ptr(name = X509_NAME_new())
+        || !TEST_true(X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
+            (const unsigned char *)cn, -1, -1, 0))
+        || !TEST_true(X509_set_subject_name(newcert, name))
+        || !TEST_true(X509_set_issuer_name(newcert, name)))
+        goto err;
+
+    if (!TEST_int_gt(X509_sign(newcert, pkey, EVP_sha256()), 0))
+        goto err;
+
+    ret = newcert;
+    newcert = NULL;
+err:
+    X509_free(newcert);
+    X509_NAME_free(name);
+    ASN1_INTEGER_free(serial);
+    return ret;
+}
+
+/*
+ * Companion to test_CMS_verify_result_no_signer_cert() above, covering the
+ * mixed case (scount == 1): a two-signer message where only *one* signer's
+ * certificate is available at verification time.  Both SignerInfos must
+ * report verify_result == 0.  Also checks that supplying both certs makes
+ * CMS_verify() succeed.
+ */
+static int test_CMS_verify_result_partial_signer_cert(void)
+{
+    CMS_ContentInfo *cms = NULL, *cms2 = NULL;
+    BIO *in = NULL, *out = NULL, *der = NULL;
+    X509_STORE *store = NULL;
+    EVP_PKEY *pkey2 = NULL;
+    X509 *local_cert2 = NULL;
+    STACK_OF(X509) *both_certs = NULL;
+    STACK_OF(CMS_SignerInfo) *sinfos;
+    const unsigned char *p;
+    unsigned char *derbuf = NULL;
+    long derlen;
+    int i, found_verified = 0, found_unverified = 0, ret = 0;
+
+    if (!TEST_ptr(in = BIO_new_mem_buf("Hello World\n", -1))
+        || !TEST_ptr(out = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(der = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(store = X509_STORE_new())
+        || !TEST_ptr(both_certs = sk_X509_new_null()))
+        goto end;
+
+    if (!TEST_ptr(pkey2 = EVP_PKEY_Q_keygen(NULL, NULL, "RSA", (size_t)2048))
+        || !TEST_ptr(local_cert2 = make_self_signed_cert(pkey2, "second-signer")))
+        goto end;
+
+    /* two signers with two *different* certs, neither embedded */
+    if (!TEST_ptr(cms = CMS_sign(NULL, NULL, NULL, in,
+                      CMS_BINARY | CMS_PARTIAL | CMS_NOCERTS))
+        || !TEST_ptr(CMS_add1_signer(cms, cert, privkey, NULL, CMS_NOCERTS))
+        || !TEST_ptr(CMS_add1_signer(cms, local_cert2, pkey2, NULL, CMS_NOCERTS))
+        || !TEST_true(CMS_final(cms, in, NULL, CMS_BINARY)))
+        goto end;
+
+    /* round-trip through DER so no in-memory signer cert pointers linger */
+    if (!TEST_true(i2d_CMS_bio(der, cms)))
+        goto end;
+    derlen = BIO_get_mem_data(der, &derbuf);
+    p = derbuf;
+    if (!TEST_ptr(cms2 = d2i_CMS_ContentInfo(NULL, &p, derlen)))
+        goto end;
+
+    /* only 'cert' (the 1st signer's) is supplied -> scount == 1, not 0 or 2 */
+    if (!TEST_int_ge(sk_X509_push(both_certs, cert), 1))
+        goto end;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms2, both_certs, store, NULL, out,
+                         CMS_BINARY | CMS_VERIFY_PARTIAL),
+            0)
+        || !TEST_int_eq(ERR_GET_REASON(ERR_peek_last_error()),
+            CMS_R_SIGNER_CERTIFICATE_NOT_FOUND))
+        goto end;
+
+    sinfos = CMS_get0_SignerInfos(cms2);
+    if (!TEST_int_eq(sk_CMS_SignerInfo_num(sinfos), 2))
+        goto end;
+    /*
+     * Neither signer must report success: CMS_verify() overall failed with
+     * CMS_R_SIGNER_CERTIFICATE_NOT_FOUND before any content/attr verification
+     * ran, so both entries must still be at verify_result == 0, regardless
+     * of whether that particular signer's own cert was found.
+     */
+    for (i = 0; i < sk_CMS_SignerInfo_num(sinfos); i++) {
+        CMS_SignerInfo *si = sk_CMS_SignerInfo_value(sinfos, i);
+
+        if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si,
+                             CMS_VERIFY_RESULT),
+                0))
+            goto end;
+    }
+
+    /* now supply both certs: verification of both signers must succeed */
+    if (!TEST_int_ge(sk_X509_push(both_certs, local_cert2), 1))
+        goto end;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms2, both_certs, store, NULL, out,
+                         CMS_BINARY | CMS_VERIFY_PARTIAL
+                             | CMS_NO_SIGNER_CERT_VERIFY),
+            1))
+        goto end;
+
+    for (i = 0; i < sk_CMS_SignerInfo_num(sinfos); i++) {
+        CMS_SignerInfo *si = sk_CMS_SignerInfo_value(sinfos, i);
+        int r = CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_RESULT);
+
+        if (r)
+            found_verified++;
+        else
+            found_unverified++;
+    }
+    if (!TEST_int_eq(found_verified, 2) || !TEST_int_eq(found_unverified, 0))
+        goto end;
+
+    ret = 1;
+end:
+    CMS_ContentInfo_free(cms);
+    CMS_ContentInfo_free(cms2);
+    X509_STORE_free(store);
+    /* both_certs does not own cert/local_cert2 (no _UP_REF push), just free the stack */
+    sk_X509_free(both_certs);
+    X509_free(local_cert2);
+    EVP_PKEY_free(pkey2);
+    BIO_free(in);
+    BIO_free(out);
+    BIO_free(der);
+    return ret;
+}
+
+/*
+ * A CMS_ContentInfo that verified successfully once (all four per-SignerInfo
+ * fields left at 1) must not keep reporting that state if it is verified
+ * again and that second call fails via the early check_content() path at the
+ * top of CMS_verify() -- reached when the content turns out to be missing
+ * and dcont is NULL.
+ */
+static int test_CMS_verify_reused_after_check_content_failure(void)
+{
+    CMS_ContentInfo *cms = NULL;
+    BIO *in = NULL, *out = NULL;
+    X509_STORE *store = NULL;
+    EVP_PKEY *pkey2 = NULL;
+    X509 *local_cert2 = NULL;
+    CMS_SignerInfo *si;
+    STACK_OF(CMS_SignerInfo) *sinfos;
+    ASN1_OCTET_STRING *saved_econtent = NULL;
+    int ret = 0;
+
+    /*
+     * Self-signed cert added directly to the store: chain building succeeds
+     * trivially, so the first CMS_verify() below genuinely sets
+     * cert_verified (unlike the other two tests above, which use
+     * CMS_NO_SIGNER_CERT_VERIFY and never actually exercise that field).
+     */
+    if (!TEST_ptr(in = BIO_new_mem_buf("Hello World\n", -1))
+        || !TEST_ptr(out = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(store = X509_STORE_new())
+        || !TEST_ptr(pkey2 = EVP_PKEY_Q_keygen(NULL, NULL, "RSA", (size_t)2048))
+        || !TEST_ptr(local_cert2 = make_self_signed_cert(pkey2, "reused-cms-signer"))
+        || !TEST_true(X509_STORE_add_cert(store, local_cert2)))
+        goto end;
+
+    /* one signer, cert embedded, content embedded (not detached) */
+    if (!TEST_ptr(cms = CMS_sign(local_cert2, pkey2, NULL, in, CMS_BINARY)))
+        goto end;
+
+    /*
+     * First verification succeeds on this exact in-memory CMS_ContentInfo
+     * (no DER round-trip): 'cert' is directly in the trust store, so
+     * verify_result, cert_verified, attr_verified and content_verified all
+     * land on 1 for the single signer.
+     */
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms, NULL, store, NULL, out, CMS_BINARY), 1))
+        goto end;
+
+    sinfos = CMS_get0_SignerInfos(cms);
+    if (!TEST_int_eq(sk_CMS_SignerInfo_num(sinfos), 1))
+        goto end;
+    si = sk_CMS_SignerInfo_value(sinfos, 0);
+    if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_RESULT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_ATTR), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_CONTENT), 1))
+        goto end;
+
+    /*
+     * Corrupt the embedded content in place on the same, still-"verified"
+     * object so the next call takes the check_content() early-return path
+     * (dcont == NULL and no eContent) instead of the main body / err label.
+     */
+    saved_econtent = cms->d.signedData->encapContentInfo->eContent;
+    cms->d.signedData->encapContentInfo->eContent = NULL;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms, NULL, store, NULL, out, CMS_BINARY), 0))
+        goto end;
+
+    if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_CERT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_ATTR), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si, CMS_VERIFY_CONTENT), 0))
+        goto end;
+
+    ret = 1;
+end:
+    /* put the real content back so CMS_ContentInfo_free() doesn't leak it */
+    if (cms != NULL && saved_econtent != NULL)
+        cms->d.signedData->encapContentInfo->eContent = saved_econtent;
+    CMS_ContentInfo_free(cms);
+    X509_STORE_free(store);
+    X509_free(local_cert2);
+    EVP_PKEY_free(pkey2);
+    BIO_free(in);
+    BIO_free(out);
+    return ret;
+}
+
+/*
+ * With two independently trusted signers and CMS_VERIFY_PARTIAL, one
+ * signer's signature failure must not affect the *other* signer's per-field
+ * results -- including once that other signer also fails and the overall
+ * call fails too.  Without CMS_VERIFY_PARTIAL, verification must stop at
+ * the first failure.
+ */
+static int test_CMS_verify_result_partial_independence(void)
+{
+    CMS_ContentInfo *cms = NULL;
+    BIO *in = NULL, *out = NULL;
+    X509_STORE *store = NULL;
+    EVP_PKEY *pkey1 = NULL, *pkey2 = NULL;
+    X509 *cert1 = NULL, *local_cert2 = NULL;
+    STACK_OF(CMS_SignerInfo) *sinfos;
+    STACK_OF(X509) *signers = NULL;
+    CMS_SignerInfo *si1, *si2;
+    ASN1_OCTET_STRING *sig;
+    int ret = 0;
+
+    /*
+     * Two independent, self-signed certs added directly to the trust store:
+     * chain building for each is trivial (issuer == self, already trusted),
+     * so both genuinely get cert_verified == 1, unlike the global 'cert'
+     * (issued by a separate test CA whose issuer isn't in this store).
+     */
+    if (!TEST_ptr(in = BIO_new_mem_buf("Hello World\n", -1))
+        || !TEST_ptr(out = BIO_new(BIO_s_mem()))
+        || !TEST_ptr(store = X509_STORE_new())
+        || !TEST_ptr(pkey1 = EVP_PKEY_Q_keygen(NULL, NULL, "RSA", (size_t)2048))
+        || !TEST_ptr(cert1 = make_self_signed_cert(pkey1, "first-independent-signer"))
+        || !TEST_ptr(pkey2 = EVP_PKEY_Q_keygen(NULL, NULL, "RSA", (size_t)2048))
+        || !TEST_ptr(local_cert2 = make_self_signed_cert(pkey2, "second-independent-signer"))
+        || !TEST_true(X509_STORE_add_cert(store, cert1))
+        || !TEST_true(X509_STORE_add_cert(store, local_cert2)))
+        goto end;
+
+    /* two signers, both certs embedded, both directly trusted */
+    if (!TEST_ptr(cms = CMS_sign(NULL, NULL, NULL, in, CMS_BINARY | CMS_PARTIAL))
+        || !TEST_ptr(CMS_add1_signer(cms, cert1, pkey1, NULL, 0))
+        || !TEST_ptr(CMS_add1_signer(cms, local_cert2, pkey2, NULL, 0))
+        || !TEST_true(CMS_final(cms, in, NULL, CMS_BINARY)))
+        goto end;
+
+    sinfos = CMS_get0_SignerInfos(cms);
+    if (!TEST_int_eq(sk_CMS_SignerInfo_num(sinfos), 2))
+        goto end;
+    si1 = sk_CMS_SignerInfo_value(sinfos, 0);
+    si2 = sk_CMS_SignerInfo_value(sinfos, 1);
+
+    /* break signer 1's signature over the signed attributes */
+    if (!TEST_ptr(sig = CMS_SignerInfo_get0_signature(si1))
+        || !TEST_size_t_gt(ASN1_STRING_get_length(sig), 0))
+        goto end;
+    ((uint8_t *)ASN1_STRING_get0_data(sig))[0] ^= 0xff;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms, NULL, store, NULL, out, CMS_BINARY), 0))
+        goto end;
+
+    /*
+     * Without CMS_VERIFY_PARTIAL, verification stops at signer 1's failure:
+     * signer 2's signed attributes are not checked and the content is not
+     * read.
+     */
+    if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_ATTR), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_ATTR), 0)
+        || !TEST_size_t_eq(BIO_ctrl_pending(out), 0))
+        goto end;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms, NULL, store, NULL, out,
+                         CMS_BINARY | CMS_VERIFY_PARTIAL),
+            1))
+        goto end;
+
+    /*
+     * Signer 1 failed and signer 2 succeeded (partial verify), but signer
+     * 1's certificate genuinely re-verified during this call and must
+     * still report so.
+     */
+    if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_ATTR), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_RESULT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_ATTR), 1)
+        || !TEST_size_t_gt(BIO_ctrl_pending(out), 0))
+        goto end;
+
+    /* Only the signer whose signature verified may be reported */
+    if (!TEST_ptr(signers = CMS_get0_signers(cms))
+        || !TEST_int_eq(sk_X509_num(signers), 1)
+        || !TEST_int_eq(X509_cmp(sk_X509_value(signers, 0), local_cert2), 0))
+        goto end;
+
+    /* now also break signer 2's signature: the overall call must now fail */
+    if (!TEST_ptr(sig = CMS_SignerInfo_get0_signature(si2))
+        || !TEST_size_t_gt(ASN1_STRING_get_length(sig), 0))
+        goto end;
+    ((uint8_t *)ASN1_STRING_get0_data(sig))[0] ^= 0xff;
+
+    ERR_clear_error();
+    if (!TEST_int_eq(CMS_verify(cms, NULL, store, NULL, out,
+                         CMS_BINARY | CMS_VERIFY_PARTIAL),
+            0))
+        goto end;
+
+    /*
+     * Both signers now fail overall (verify_result == 0), but both
+     * certificates were genuinely re-verified during this same call: that
+     * per-signer fact must not be erased just because the all-vs-partial
+     * policy made the whole call fail.
+     */
+    if (!TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si1, CMS_VERIFY_ATTR), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_RESULT), 0)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_CERT), 1)
+        || !TEST_int_eq(CMS_SignerInfo_get_verification_result(si2, CMS_VERIFY_ATTR), 0))
+        goto end;
+
+    ret = 1;
+end:
+    sk_X509_free(signers);
+    CMS_ContentInfo_free(cms);
+    X509_STORE_free(store);
+    X509_free(cert1);
+    EVP_PKEY_free(pkey1);
+    X509_free(local_cert2);
+    EVP_PKEY_free(pkey2);
+    BIO_free(in);
+    BIO_free(out);
+    return ret;
+}
+
+static int test_CMS_add1_signer_ed448(const EVP_MD *md, unsigned int flags,
+    int expect_success)
+{
+    CMS_ContentInfo *cms = NULL;
+    CMS_SignerInfo *si = NULL;
+    int ret = 0;
+
+    if (!TEST_ptr(cms = CMS_ContentInfo_new()))
+        goto end;
+
+    si = CMS_add1_signer(cms, ed448_cert, ed448_privkey, md, flags);
+    if (expect_success) {
+        if (!TEST_ptr(si))
+            goto end;
+    } else if (!TEST_ptr_null(si)) {
+        goto end;
+    }
+
+    ret = 1;
+end:
+    if (!expect_success && ret)
+        ERR_clear_error();
+    CMS_ContentInfo_free(cms);
+    return ret;
+}
+
+static int test_CMS_add1_signer_ed448_signed_attrs(void)
+{
+    return test_CMS_add1_signer_ed448(NULL, 0, 0);
+}
+
+static int test_CMS_add1_signer_ed448_signed_attrs_md(void)
+{
+    return test_CMS_add1_signer_ed448(EVP_shake256(), 0, 0);
+}
+
+static int test_CMS_add1_signer_ed448_noattr(void)
+{
+    return test_CMS_add1_signer_ed448(NULL, CMS_NOATTR, 1);
 }
 
 static int test_d2i_CMS_bio_NULL(void)
@@ -775,7 +1357,6 @@ end:
 }
 
 #if !defined(OPENSSL_NO_EC) && !defined(OPENSSL_NO_X963KDF)
-
 /*
  * Regression test for CVE-2026-63072: an 8-byte out-of-bounds heap write
  * reachable through CMS_decrypt() when a KeyAgreeRecipientInfo names an
@@ -867,12 +1448,12 @@ end:
 }
 #endif
 
-OPT_TEST_DECLARE_USAGE("certfile privkeyfile derfile tooLongIVpem pwriKekOobDer pwriKekNoIv ecrecip\n")
+OPT_TEST_DECLARE_USAGE("certfile privkeyfile derfile tooLongIVpem pwriKekOobDer pwriKekNoIv ecrecip [ed448certfile ed448privkeyfile]\n")
 
 int setup_tests(void)
 {
     char *certin = NULL, *privkeyin = NULL;
-    BIO *certbio = NULL, *privkeybio = NULL;
+    char *ed448_certin = NULL, *ed448_privkeyin = NULL;
 
     if (!test_skip_common_options()) {
         TEST_error("Error parsing test options\n");
@@ -888,28 +1469,28 @@ int setup_tests(void)
         || !TEST_ptr(ec_recip_in = test_get_argument(6)))
         return 0;
 
-    certbio = BIO_new_file(certin, "r");
-    if (!TEST_ptr(certbio))
-        return 0;
-    if (!TEST_true(PEM_read_bio_X509(certbio, &cert, NULL, NULL))) {
-        BIO_free(certbio);
+    if (!TEST_ptr(cert = load_cert_pem(certin, NULL))
+        || !TEST_ptr(privkey = load_pkey_pem(privkeyin, NULL))) {
+        X509_free(cert);
+        cert = NULL;
+        EVP_PKEY_free(privkey);
+        privkey = NULL;
         return 0;
     }
-    BIO_free(certbio);
 
-    privkeybio = BIO_new_file(privkeyin, "r");
-    if (!TEST_ptr(privkeybio)) {
-        X509_free(cert);
-        cert = NULL;
-        return 0;
+    if (test_get_argument_count() >= 9) {
+        ed448_certin = test_get_argument(7);
+        ed448_privkeyin = test_get_argument(8);
+
+        if (!TEST_ptr(ed448_cert = load_cert_pem(ed448_certin, NULL))
+            || !TEST_ptr(ed448_privkey = load_pkey_pem(ed448_privkeyin, NULL))) {
+            X509_free(ed448_cert);
+            ed448_cert = NULL;
+            EVP_PKEY_free(ed448_privkey);
+            ed448_privkey = NULL;
+            return 0;
+        }
     }
-    if (!TEST_true(PEM_read_bio_PrivateKey(privkeybio, &privkey, NULL, NULL))) {
-        BIO_free(privkeybio);
-        X509_free(cert);
-        cert = NULL;
-        return 0;
-    }
-    BIO_free(privkeybio);
 
     ADD_TEST(test_encrypt_decrypt_aes_cbc);
     ADD_TEST(test_encrypt_decrypt_aes_128_gcm);
@@ -918,7 +1499,13 @@ int setup_tests(void)
     ADD_TEST(test_non_aead_on_auth_envelope_enc);
     ADD_TEST(test_non_aead_on_auth_envelope_dec);
     ADD_TEST(test_short_mac_on_auth_envelope_data);
+    ADD_TEST(test_CMS_add_standard_smimecap_ex);
     ADD_TEST(test_CMS_add1_cert);
+    ADD_TEST(test_CMS_SignerInfo_verify_sigalg_oid);
+    ADD_TEST(test_CMS_verify_result_no_signer_cert);
+    ADD_TEST(test_CMS_verify_result_partial_signer_cert);
+    ADD_TEST(test_CMS_verify_reused_after_check_content_failure);
+    ADD_TEST(test_CMS_verify_result_partial_independence);
     ADD_TEST(test_d2i_CMS_bio_NULL);
     ADD_TEST(test_CMS_set1_key_mem_leak);
     ADD_TEST(test_encrypted_data);
@@ -927,6 +1514,11 @@ int setup_tests(void)
     ADD_TEST(test_cms_aesgcm_iv_too_long);
     ADD_TEST(test_pwri_kek_unwrap_short_encrypted_key);
     ADD_TEST(test_pwri_kek_unwrap_no_iv_key);
+    if (ed448_cert != NULL && ed448_privkey != NULL) {
+        ADD_TEST(test_CMS_add1_signer_ed448_signed_attrs);
+        ADD_TEST(test_CMS_add1_signer_ed448_signed_attrs_md);
+        ADD_TEST(test_CMS_add1_signer_ed448_noattr);
+    }
 
 #if !defined(OPENSSL_NO_EC) && !defined(OPENSSL_NO_X963KDF)
     ADD_TEST(test_kari_wrap_pad_unwrap_overflow);
@@ -938,4 +1530,6 @@ void cleanup_tests(void)
 {
     X509_free(cert);
     EVP_PKEY_free(privkey);
+    X509_free(ed448_cert);
+    EVP_PKEY_free(ed448_privkey);
 }

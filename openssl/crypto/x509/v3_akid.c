@@ -179,7 +179,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
         /*
          * The subject key identifier of the issuer cert is acceptable unless
          * the issuer cert is same as subject cert, but the subject will not
-         * not be self-signed (i.e. will be signed with a different key).
+         * be self-signed (i.e. will be signed with a different key).
          */
         i = X509_get_ext_by_NID(issuer_cert, NID_subject_key_identifier, -1);
         if (i >= 0 && (ext = X509_get_ext(issuer_cert, i)) != NULL
@@ -189,7 +189,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                 goto err;
 
             /* Ignore empty keyids in the issuer cert */
-            if (ASN1_STRING_length(ikeyid) == 0) {
+            if (ASN1_STRING_get_length(ikeyid) == 0) {
                 ASN1_OCTET_STRING_free(ikeyid);
                 ikeyid = NULL;
             }

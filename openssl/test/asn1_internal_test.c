@@ -186,9 +186,9 @@ static int test_unicode_range(void)
                                      "\xff\xff\xff\xff";
     int ok = 1;
 
-    if (!test_unicode(univ_ok, sizeof univ_ok - 1, V_ASN1_UTF8STRING))
+    if (!test_unicode(univ_ok, sizeof(univ_ok) - 1, V_ASN1_UTF8STRING))
         ok = 0;
-    if (!test_unicode(univ_bad, sizeof univ_bad - 1, -1))
+    if (!test_unicode(univ_bad, sizeof(univ_bad) - 1, -1))
         ok = 0;
     return ok;
 }
@@ -196,9 +196,9 @@ static int test_unicode_range(void)
 static int test_invalid_utf8(void)
 {
     const unsigned char inv_utf8[] = "\xF4\x90\x80\x80";
-    unsigned long val;
+    uint32_t val;
 
-    if (!TEST_int_lt(UTF8_getc(inv_utf8, sizeof(inv_utf8), &val), 0))
+    if (!TEST_int_lt(ossl_utf8_getc_internal(inv_utf8, sizeof(inv_utf8), &val), 0))
         return 0;
     return 1;
 }
@@ -266,12 +266,16 @@ static int test_asn1_time_conversion(char *time_string, const char *file,
                     V_ASN1_GENERALIZEDTIME)))
             goto err;
     }
-    if (!TEST_true((strcmp(time_string,
-                        (const char *)ASN1_STRING_get0_data(result))
-            == 0))) {
-        TEST_info("Expected time: %s, Got time: %s\n", time_string,
-            ASN1_STRING_get0_data(result));
-        goto err;
+    {
+        size_t rlen = ASN1_STRING_get_length(result);
+        const char *rdata = (const char *)ASN1_STRING_get0_data(result);
+
+        if (!TEST_size_t_eq(strlen(time_string), rlen)
+            || !TEST_int_eq(memcmp(time_string, rdata, rlen), 0)) {
+            TEST_info("Expected time: %s, Got time: %.*s\n", time_string,
+                (int)rlen, rdata);
+            goto err;
+        }
     }
 
     ret = 1;
@@ -477,7 +481,7 @@ static int posix_time_test(void)
 
     /*
      * Frequently platform conversions can not deal with one second before the
-     * the Unix epoch, due to inheriting terrible API design and knocking this
+     * Unix epoch, due to inheriting terrible API design and knocking this
      * time value out as an error return.
      *
      * We should do better.
@@ -588,6 +592,98 @@ static int test_ossl_uni2utf8(void)
     return ok;
 }
 
+static int test_empty_uni_conversions(void)
+{
+    char *out = NULL;
+    int ok = 0;
+
+    /*
+     * A decoded empty BMPString is a NULL data pointer with a zero length,
+     * which is how an empty PKCS12 friendlyName reaches these functions by
+     * way of ASN1_STRING_get0_data().
+     */
+    if (!TEST_ptr(out = OPENSSL_uni2asc(NULL, 0))
+        || !TEST_str_eq(out, ""))
+        goto err;
+    OPENSSL_free(out);
+    out = NULL;
+
+    if (!TEST_ptr(out = OPENSSL_uni2utf8(NULL, 0))
+        || !TEST_str_eq(out, ""))
+        goto err;
+
+    ok = 1;
+err:
+    OPENSSL_free(out);
+    return ok;
+}
+
+static int test_asn1_string_to_utf8(void)
+{
+    static const unsigned char bmp[] = { 0x00, 'A', 0x00, 'B' };
+    ASN1_STRING in;
+    unsigned char *out = NULL;
+    int len, ok = 0;
+
+    in.flags = 0;
+
+    /* UTF8String in: same-format path of ASN1_mbstring_copy() */
+    in.type = V_ASN1_UTF8STRING;
+    in.data = (unsigned char *)"ABC";
+    in.length = 3;
+    len = ASN1_STRING_to_UTF8(&out, &in);
+    if (!TEST_int_eq(len, 3)
+        || !TEST_ptr(out)
+        || !TEST_mem_eq(out, len, "ABC", 3)
+        || !TEST_true(out[len] == '\0'))
+        goto err;
+    OPENSSL_free(out);
+    out = NULL;
+
+    /* BMPString in: converting path */
+    in.type = V_ASN1_BMPSTRING;
+    in.data = (unsigned char *)bmp;
+    in.length = (int)sizeof(bmp);
+    len = ASN1_STRING_to_UTF8(&out, &in);
+    if (!TEST_int_eq(len, 2)
+        || !TEST_ptr(out)
+        || !TEST_mem_eq(out, len, "AB", 2)
+        || !TEST_true(out[len] == '\0'))
+        goto err;
+    OPENSSL_free(out);
+    out = NULL;
+
+    /* Empty input still yields a NUL terminated buffer */
+    in.type = V_ASN1_UTF8STRING;
+    in.data = (unsigned char *)"";
+    in.length = 0;
+    len = ASN1_STRING_to_UTF8(&out, &in);
+    if (!TEST_int_eq(len, 0)
+        || !TEST_ptr(out)
+        || !TEST_true(out[0] == '\0'))
+        goto err;
+    OPENSSL_free(out);
+    out = NULL;
+
+    /*
+     * The decoder represents an empty string as a NULL data pointer with a
+     * zero length, not as a pointer to zero bytes, so cover that separately.
+     */
+    in.type = V_ASN1_UTF8STRING;
+    in.data = NULL;
+    in.length = 0;
+    len = ASN1_STRING_to_UTF8(&out, &in);
+    if (!TEST_int_eq(len, 0)
+        || !TEST_ptr(out)
+        || !TEST_true(out[0] == '\0'))
+        goto err;
+
+    ok = 1;
+err:
+    OPENSSL_free(out);
+    return ok;
+}
+
 static int asn1_dup_test_op_dup_post_count;
 static int asn1_dup_test_op_free_post_count;
 static int asn1_dup_test_cb(int operation, ASN1_VALUE **in, const ASN1_ITEM *it,
@@ -634,6 +730,33 @@ end:
     return ret;
 }
 
+#ifndef OPENSSL_NO_ECX
+static int test_asn1_item_dup_mfail(void)
+{
+    EVP_PKEY *key = NULL;
+    X509_REQ *src = NULL, *dup = NULL;
+    int ret = -1;
+
+    if (!TEST_ptr(key = EVP_PKEY_Q_keygen(NULL, NULL, "ED25519"))
+        || !TEST_ptr(src = X509_REQ_new_ex(NULL, ""))
+        || !TEST_true(X509_REQ_set_version(src, X509_REQ_VERSION_1))
+        || !TEST_true(X509_REQ_set_pubkey(src, key))
+        || !TEST_int_gt(X509_REQ_sign(src, key, NULL), 0))
+        goto end;
+
+    MFAIL_start();
+    dup = X509_REQ_dup(src);
+    MFAIL_end();
+
+    ret = dup != NULL;
+end:
+    EVP_PKEY_free(key);
+    X509_REQ_free(src);
+    X509_REQ_free(dup);
+    return ret;
+}
+#endif
+
 int setup_tests(void)
 {
     ADD_TEST(test_tbl_standard);
@@ -647,6 +770,11 @@ int setup_tests(void)
     ADD_TEST(test_asn1_time_tm_conversions);
     ADD_TEST(test_mbstring_ncopy);
     ADD_TEST(test_ossl_uni2utf8);
+    ADD_TEST(test_empty_uni_conversions);
+    ADD_TEST(test_asn1_string_to_utf8);
     ADD_TEST(test_asn1_item_dup_failure_frees);
+#ifndef OPENSSL_NO_ECX
+    ADD_MFAIL_NO_CHECK_TEST(test_asn1_item_dup_mfail);
+#endif
     return 1;
 }

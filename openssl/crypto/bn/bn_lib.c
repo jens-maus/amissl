@@ -28,13 +28,9 @@
  * 8 - 256 == 8192
  */
 static int bn_limit_bits = 0;
-static int bn_limit_num = 8; /* (1<<bn_limit_bits) */
 static int bn_limit_bits_low = 0;
-static int bn_limit_num_low = 8; /* (1<<bn_limit_bits_low) */
 static int bn_limit_bits_high = 0;
-static int bn_limit_num_high = 8; /* (1<<bn_limit_bits_high) */
 static int bn_limit_bits_mont = 0;
-static int bn_limit_num_mont = 8; /* (1<<bn_limit_bits_mont) */
 
 void BN_set_params(int mult, int high, int low, int mont)
 {
@@ -42,25 +38,21 @@ void BN_set_params(int mult, int high, int low, int mont)
         if (mult > (int)(sizeof(int) * 8) - 1)
             mult = sizeof(int) * 8 - 1;
         bn_limit_bits = mult;
-        bn_limit_num = 1 << mult;
     }
     if (high >= 0) {
         if (high > (int)(sizeof(int) * 8) - 1)
             high = sizeof(int) * 8 - 1;
         bn_limit_bits_high = high;
-        bn_limit_num_high = 1 << high;
     }
     if (low >= 0) {
         if (low > (int)(sizeof(int) * 8) - 1)
             low = sizeof(int) * 8 - 1;
         bn_limit_bits_low = low;
-        bn_limit_num_low = 1 << low;
     }
     if (mont >= 0) {
         if (mont > (int)(sizeof(int) * 8) - 1)
             mont = sizeof(int) * 8 - 1;
         bn_limit_bits_mont = mont;
-        bn_limit_num_mont = 1 << mont;
     }
 }
 
@@ -89,15 +81,7 @@ const BIGNUM *BN_value_one(void)
     return &const_one;
 }
 
-/*
- * Old Visual Studio ARM compiler miscompiles BN_num_bits_word()
- * https://mta.openssl.org/pipermail/openssl-users/2018-August/008465.html
- */
-#if defined(_MSC_VER) && defined(_ARM_) && defined(_WIN32_WCE) \
-    && _MSC_VER >= 1400 && _MSC_VER < 1501
-#define MS_BROKEN_BN_num_bits_word
-#pragma optimize("", off)
-#endif
+#ifndef __e2k__
 int BN_num_bits_word(BN_ULONG l)
 {
     BN_ULONG x, mask;
@@ -142,9 +126,20 @@ int BN_num_bits_word(BN_ULONG l)
 
     return bits;
 }
-#ifdef MS_BROKEN_BN_num_bits_word
-#pragma optimize("", on)
+#else /* __e2k__ */
+#include <x86gprintrin.h>
+int BN_num_bits_word(BN_ULONG l)
+{
+    /* clz(0) is well-defined on e2k, hence no if (l == 0) return 0;
+     * is required here.
+     */
+#if BN_BITS2 > 32
+    return 64 - __builtin_clzll(l);
+#else
+    return 32 - __builtin_clz(l);
 #endif
+}
+#endif /* __e2k__ */
 
 /*
  * This function still leaks `a->dmax`: it's caller's responsibility to
@@ -322,7 +317,7 @@ BIGNUM *BN_dup(const BIGNUM *a)
     t = BN_get_flags(a, BN_FLG_SECURE) ? BN_secure_new() : BN_new();
     if (t == NULL)
         return NULL;
-    if (!BN_copy(t, a)) {
+    if (BN_copy(t, a) == NULL) {
         BN_free(t);
         return NULL;
     }
@@ -976,12 +971,15 @@ void BN_consttime_swap(BN_ULONG condition, BIGNUM *a, BIGNUM *b, int nwords)
     b->neg ^= t;
 
     /*-
-     * BN_FLG_STATIC_DATA: indicates that data may not be written to. Intention
-     * is actually to treat it as it's read-only data, and some (if not most)
-     * of it does reside in read-only segment. In other words observation of
-     * BN_FLG_STATIC_DATA in BN_consttime_swap should be treated as fatal
-     * condition. It would either cause SEGV or effectively cause data
-     * corruption.
+     * BN_FLG_STATIC_DATA: indicates that d points to a buffer that this
+     * BIGNUM does not own, so it must never be reallocated or freed through
+     * the BIGNUM. The flag by itself does not forbid writing to the words,
+     * but much of the data marked this way is compiled-in and does reside in
+     * a read-only segment. Since BN_consttime_swap writes to d, observing
+     * BN_FLG_STATIC_DATA here should be treated as a fatal condition: it
+     * would either cause SEGV or effectively cause data corruption. The flag
+     * is therefore never swapped, as it describes the storage of each d
+     * buffer, which is not exchanged.
      *
      * BN_FLG_MALLOCED: refers to BN structure itself, and hence must be
      * preserved.

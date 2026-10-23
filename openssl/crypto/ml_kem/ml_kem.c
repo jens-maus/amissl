@@ -15,10 +15,6 @@
 #include "internal/constant_time.h"
 #include "internal/sha3.h"
 
-#if defined(OPENSSL_CONSTANT_TIME_VALIDATION)
-#include <valgrind/memcheck.h>
-#endif
-
 #if ML_KEM_SEED_BYTES != ML_KEM_SHARED_SECRET_BYTES + ML_KEM_RANDOM_BYTES
 #error "ML-KEM keygen seed length != shared secret + random bytes length"
 #endif
@@ -45,29 +41,6 @@
 
 #ifdef SHA3_BLOCKSIZE
 #define SHAKE128_BLOCKSIZE SHA3_BLOCKSIZE(128)
-#endif
-
-/*
- * Return whether a value that can only be 0 or 1 is non-zero, in constant time
- * in practice!  The return value is a mask that is all ones if true, and all
- * zeros otherwise (twos-complement arithmetic assumed for unsigned values).
- *
- * Although this is used in constant-time selects, we omit a value barrier
- * here.  Value barriers impede auto-vectorization (likely because it forces
- * the value to transit through a general-purpose register). On AArch64, this
- * is a difference of 2x.
- *
- * We usually add value barriers to selects because Clang turns consecutive
- * selects with the same condition into a branch instead of CMOV/CSEL. This
- * condition does not occur in Kyber, so omitting it seems to be safe so far,
- * but see |cbd_2|, |cbd_3|, where reduction needs to be specialised to the
- * sign of the input, rather than adding |q| in advance, and using the generic
- * |reduce_once|.  (David Benjamin, Chromium)
- */
-#if 0
-#define constish_time_non_zero(b) (~constant_time_is_zero(b));
-#else
-#define constish_time_non_zero(b) (0u - (b))
 #endif
 
 /*
@@ -146,30 +119,6 @@ static void scalar_encode(uint8_t *out, const scalar *s, int bits);
 #define U_VECTOR_BYTES(b) ((DEGREE / 8) * ML_KEM_##b##_DU * ML_KEM_##b##_RANK)
 #define V_SCALAR_BYTES(b) ((DEGREE / 8) * ML_KEM_##b##_DV)
 #define CTEXT_BYTES(b) (U_VECTOR_BYTES(b) + V_SCALAR_BYTES(b))
-
-#if defined(OPENSSL_CONSTANT_TIME_VALIDATION)
-
-/*
- * CONSTTIME_SECRET takes a pointer and a number of bytes and marks that region
- * of memory as secret. Secret data is tracked as it flows to registers and
- * other parts of a memory. If secret data is used as a condition for a branch,
- * or as a memory index, it will trigger warnings in valgrind.
- */
-#define CONSTTIME_SECRET(ptr, len) VALGRIND_MAKE_MEM_UNDEFINED(ptr, len)
-
-/*
- * CONSTTIME_DECLASSIFY takes a pointer and a number of bytes and marks that
- * region of memory as public. Public data is not subject to constant-time
- * rules.
- */
-#define CONSTTIME_DECLASSIFY(ptr, len) VALGRIND_MAKE_MEM_DEFINED(ptr, len)
-
-#else
-
-#define CONSTTIME_SECRET(ptr, len)
-#define CONSTTIME_DECLASSIFY(ptr, len)
-
-#endif
 
 /*
  * Indices of slots in the vinfo tables below
@@ -456,17 +405,69 @@ static __owur int sample_scalar(scalar *out, EVP_MD_CTX *mdctx)
     return 1;
 }
 
+static CRYPTO_ONCE ml_kem_ntt_once = CRYPTO_ONCE_STATIC_INIT;
+
+#if defined(_ARCH_PPC64)
+#include "arch/ppc_arch.h"
+#endif
+
+#if defined(MLKEM_NTT_PPC_ASM) && defined(_ARCH_PPC64)
+/*
+ * PPC64LE Platform supports.
+ */
+typedef void (*ml_kem_scalar_ntt_fn)(scalar *p);
+typedef void (*ml_kem_scalar_inverse_ntt_fn)(scalar *p);
+
+static void scalar_ntt_generic(scalar *p);
+static void scalar_inverse_ntt_generic(scalar *p);
+
+static ml_kem_scalar_ntt_fn scalar_ntt = scalar_ntt_generic;
+static ml_kem_scalar_inverse_ntt_fn scalar_inverse_ntt = scalar_inverse_ntt_generic;
+
+void mlkem_ntt_ppc(uint16_t *c);
+void mlkem_inverse_ntt_ppc(uint16_t *c);
+
+static void scalar_ntt_ppc(scalar *s)
+{
+    mlkem_ntt_ppc(s->c);
+}
+
+static void scalar_inverse_ntt_ppc(scalar *s)
+{
+    mlkem_inverse_ntt_ppc(s->c);
+}
+#else
+#define scalar_ntt_generic scalar_ntt
+#define scalar_inverse_ntt_generic scalar_inverse_ntt
+#endif
+
+/*
+ * Initialize NTT function pointers to PPC64le implementations if available.
+ * Scalar implementations are used by default.
+ */
+static void ml_kem_ntt_init(void)
+{
+#if defined(MLKEM_NTT_PPC_ASM) && defined(_ARCH_PPC64)
+#if defined(__LITTLE_ENDIAN__) || (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+    if (OPENSSL_ppccap_P & PPC_CRYPTO207) {
+        scalar_ntt = scalar_ntt_ppc;
+        scalar_inverse_ntt = scalar_inverse_ntt_ppc;
+    }
+#endif
+#endif
+}
+
 /*-
  * reduce_once reduces 0 <= x < 2*kPrime, mod kPrime.
  *
  * Subtract |q| if the input is larger, without exposing a side-channel,
- * avoiding the "clangover" attack.  See |constish_time_non_zero| for a
+ * avoiding the "clangover" attack.  See |constish_time_true| for a
  * discussion on why the value barrier is by default omitted.
  */
 static __owur uint16_t reduce_once(uint16_t x)
 {
     const uint16_t subtracted = x - kPrime;
-    uint16_t mask = constish_time_non_zero(subtracted >> 15);
+    uint16_t mask = constish_time_true(subtracted >> 15);
 
     return (mask & x) | (~mask & subtracted);
 }
@@ -506,7 +507,7 @@ static void scalar_mult_const(scalar *s, uint16_t a)
  * elements in GF(3329^2), with the coefficients of the elements being
  * consecutive entries in |s->c|.
  */
-static void scalar_ntt(scalar *s)
+static void scalar_ntt_generic(scalar *s)
 {
     const uint16_t *roots = kNTTRoots;
     uint16_t *end = s->c + DEGREE;
@@ -538,7 +539,7 @@ static void scalar_ntt(scalar *s)
  * iFFT to account for the fact that 3329 does not have a 512th root of unity,
  * using the precomputed 128 roots of unity stored in InverseNTTRoots.
  */
-static void scalar_inverse_ntt(scalar *s)
+static void scalar_inverse_ntt_generic(scalar *s)
 {
     const uint16_t *roots = kInverseNTTRoots;
     uint16_t *end = s->c + DEGREE;
@@ -766,11 +767,11 @@ scalar_decode_decompress_add(scalar *out, const uint8_t in[DEGREE / 8])
 
     /*
      * Add |half_q_plus_1| if the bit is set, without exposing a side-channel,
-     * avoiding the "clangover" attack.  See |constish_time_non_zero| for a
+     * avoiding the "clangover" attack.  See |constish_time_true| for a
      * discussion on why the value barrier is by default omitted.
      */
 #define decode_decompress_add_bit                        \
-    mask = constish_time_non_zero(bit0(b));              \
+    mask = constish_time_true(bit0(b));                  \
     *curr = reduce_once(*curr + (mask & half_q_plus_1)); \
     curr++;                                              \
     b >>= 1
@@ -1029,20 +1030,20 @@ static __owur int cbd_2(scalar *out, uint8_t in[ML_KEM_RANDOM_BYTES + 1],
         b = *r++;
 
         /*
-         * Add |kPrime| if |value| underflowed.  See |constish_time_non_zero|
-         * for a discussion on why the value barrier is by default omitted.
-         * While this could have been written reduce_once(value + kPrime), this
-         * is one extra addition and small range of |value| tempts some
-         * versions of Clang to emit a branch.
+         * Add |kPrime| if |value| underflowed.  See |constish_time_true| for
+         * a discussion on why the value barrier is by default omitted.  While
+         * this could have been written reduce_once(value + kPrime), this is
+         * one extra addition and small range of |value| tempts some versions
+         * of Clang to emit a branch.
          */
         value = bit0(b) + bitn(1, b);
         value -= bitn(2, b) + bitn(3, b);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
 
         value = bitn(4, b) + bitn(5, b);
         value -= bitn(6, b) + bitn(7, b);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
     } while (curr < end);
 
@@ -1075,7 +1076,7 @@ static __owur int cbd_3(scalar *out, uint8_t in[ML_KEM_RANDOM_BYTES + 1],
         b3 = *r++;
 
         /*
-         * Add |kPrime| if |value| underflowed.  See |constish_time_non_zero|
+         * Add |kPrime| if |value| underflowed.  See |constish_time_true|
          * for a discussion on why the value barrier is by default omitted.
          * While this could have been written reduce_once(value + kPrime), this
          * is one extra addition and small range of |value| tempts some
@@ -1083,22 +1084,22 @@ static __owur int cbd_3(scalar *out, uint8_t in[ML_KEM_RANDOM_BYTES + 1],
          */
         value = bit0(b1) + bitn(1, b1) + bitn(2, b1);
         value -= bitn(3, b1) + bitn(4, b1) + bitn(5, b1);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
 
         value = bitn(6, b1) + bitn(7, b1) + bit0(b2);
         value -= bitn(1, b2) + bitn(2, b2) + bitn(3, b2);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
 
         value = bitn(4, b2) + bitn(5, b2) + bitn(6, b2);
         value -= bitn(7, b2) + bit0(b3) + bitn(1, b3);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
 
         value = bitn(2, b3) + bitn(3, b3) + bitn(4, b3);
         value -= bitn(5, b3) + bitn(6, b3) + bitn(7, b3);
-        mask = constish_time_non_zero(value >> 15);
+        mask = constish_time_true(value >> 15);
         *curr++ = value + (kPrime & mask);
     } while (curr < end);
 
@@ -1171,7 +1172,7 @@ end:
  * |A| (our key->m, with the public key holding an expanded (16-bit per scalar
  * coefficient) key->t vector).
  *
- * Caller passes storage in |tmp| for for two temporary vectors.
+ * Caller passes storage in |tmp| for two temporary vectors.
  */
 static __owur int encrypt_cpa(uint8_t out[ML_KEM_SHARED_SECRET_BYTES],
     const uint8_t message[DEGREE / 8],
@@ -1529,42 +1530,38 @@ static int decap(uint8_t secret[ML_KEM_SHARED_SECRET_BYTES],
     const ML_KEM_VINFO *vinfo = key->vinfo;
     int i;
     uint8_t mask;
+    int ret = 0;
 
     /*
-     * If our KDF is unavailable, fail early! Otherwise, keep going ignoring
-     * any further errors, returning success, and whatever we got for a shared
-     * secret.  The decrypt_cpa() function is just arithmetic on secret data,
-     * so should not be subject to failure that makes its output predictable.
-     *
-     * We guard against "should never happen" catastrophic failure of the
-     * "pure" function |hash_g| by overwriting the shared secret with the
-     * content of the failure key and returning early, if nevertheless hash_g
-     * fails.  This is not constant-time, but a failure of |hash_g| already
-     * implies loss of side-channel resistance.
-     *
-     * The same action is taken, if also |encrypt_cpa| should catastrophically
-     * fail, due to failure of the |PRF| underlying the CBD functions.
+     * The functions called below (kdf, hash_kr, encrypt_cpa) only fail on
+     * catastrophic failure of an underlying SHA3/SHAKE primitive, for example
+     * a memory allocation failure in EVP_DigestInit_ex(). None of these
+     * failures are dependent on the ciphertext content, so reporting them as a
+     * hard error does not create a chosen-ciphertext oracle and does not affect
+     * the constant-time properties of the implicit rejection path below.
      */
     if (!kdf(failure_key, key->z, ctext, vinfo->ctext_bytes, mdctx, key)) {
         ERR_raise_data(ERR_LIB_CRYPTO, ERR_R_INTERNAL_ERROR,
             "internal error while performing %s decapsulation",
             vinfo->algorithm_name);
-        OPENSSL_cleanse(buf, DECAP_BUFFER_SZ);
-        return 0;
+        goto end;
     }
     decrypt_cpa(m, ctext, tmp, key);
     if (!hash_kr(Kr, m, mdctx, key)
         || !encrypt_cpa(tmp_ctext, m, r, tmp, mdctx, key)) {
-        memcpy(secret, failure_key, ML_KEM_SHARED_SECRET_BYTES);
+        ERR_raise_data(ERR_LIB_CRYPTO, ERR_R_INTERNAL_ERROR,
+            "internal error while performing %s decapsulation",
+            vinfo->algorithm_name);
         goto end;
     }
     mask = constant_time_eq_int_8(0,
         CRYPTO_memcmp(ctext, tmp_ctext, vinfo->ctext_bytes));
     for (i = 0; i < ML_KEM_SHARED_SECRET_BYTES; i++)
         secret[i] = constant_time_select_8(mask, Kr[i], failure_key[i]);
+    ret = 1;
 end:
     OPENSSL_cleanse(buf, DECAP_BUFFER_SZ);
-    return 1;
+    return ret;
 }
 
 /*
@@ -1654,6 +1651,8 @@ void ossl_ml_kem_key_reset(ML_KEM_KEY *key)
 /* Retrieve the parameters of one of the ML-KEM variants */
 const ML_KEM_VINFO *ossl_ml_kem_get_vinfo(int evp_type)
 {
+    (void)CRYPTO_THREAD_run_once(&ml_kem_ntt_once, ml_kem_ntt_init);
+
     switch (evp_type) {
     case EVP_PKEY_ML_KEM_512:
         return &vinfo_map[ML_KEM_512_VINFO];
@@ -1663,6 +1662,27 @@ const ML_KEM_VINFO *ossl_ml_kem_get_vinfo(int evp_type)
         return &vinfo_map[ML_KEM_1024_VINFO];
     }
     return NULL;
+}
+
+/*
+ * @brief Fetch digest algorithms based on a propq.
+ * For the import case ossl_ml_kem_key_new() gets passed a NULL propq,
+ * so the propq is optionally deferred to the import using OSSL_PARAM.
+ */
+int ossl_ml_kem_key_fetch_digest(ML_KEM_KEY *key, const char *propq)
+{
+    if (key->shake128_md != NULL) {
+        EVP_MD_free(key->shake128_md);
+        EVP_MD_free(key->shake256_md);
+        EVP_MD_free(key->sha3_256_md);
+        EVP_MD_free(key->sha3_512_md);
+    }
+    key->shake128_md = EVP_MD_fetch(key->libctx, "SHAKE128", propq);
+    key->shake256_md = EVP_MD_fetch(key->libctx, "SHAKE256", propq);
+    key->sha3_256_md = EVP_MD_fetch(key->libctx, "SHA3-256", propq);
+    key->sha3_512_md = EVP_MD_fetch(key->libctx, "SHA3-512", propq);
+    return (key->shake128_md != NULL && key->shake256_md != NULL
+        && key->sha3_256_md != NULL && key->sha3_512_md != NULL);
 }
 
 ML_KEM_KEY *ossl_ml_kem_key_new(OSSL_LIB_CTX *libctx, const char *properties,
@@ -1683,17 +1703,10 @@ ML_KEM_KEY *ossl_ml_kem_key_new(OSSL_LIB_CTX *libctx, const char *properties,
     key->vinfo = vinfo;
     key->libctx = libctx;
     key->prov_flags = ML_KEM_KEY_PROV_FLAGS_DEFAULT;
-    key->shake128_md = EVP_MD_fetch(libctx, "SHAKE128", properties);
-    key->shake256_md = EVP_MD_fetch(libctx, "SHAKE256", properties);
-    key->sha3_256_md = EVP_MD_fetch(libctx, "SHA3-256", properties);
-    key->sha3_512_md = EVP_MD_fetch(libctx, "SHA3-512", properties);
     key->d = key->z = key->rho = key->pkhash = key->encoded_dk = key->seedbuf = NULL;
     key->s = key->m = key->t = NULL;
-
-    if (key->shake128_md != NULL
-        && key->shake256_md != NULL
-        && key->sha3_256_md != NULL
-        && key->sha3_512_md != NULL)
+    key->shake128_md = key->shake256_md = key->sha3_256_md = key->sha3_512_md = NULL;
+    if (ossl_ml_kem_key_fetch_digest(key, properties))
         return key;
 
     ossl_ml_kem_key_free(key);
@@ -2084,7 +2097,7 @@ int ossl_ml_kem_decap(uint8_t *shared_secret, size_t slen,
     EVP_MD_CTX *mdctx;
     int ret = 0;
 #if defined(OPENSSL_CONSTANT_TIME_VALIDATION)
-    int classify_bytes = 2 * sizeof(scalar) + ML_KEM_RANDOM_BYTES;
+    int classify_bytes;
 #endif
 
     /* Need a private key here */
@@ -2105,6 +2118,9 @@ int ossl_ml_kem_decap(uint8_t *shared_secret, size_t slen,
      * Data derived from |s| and |z| defaults secret, and to avoid side-channel
      * leaks should not influence control flow.
      */
+#if defined(OPENSSL_CONSTANT_TIME_VALIDATION)
+    classify_bytes = vinfo->rank * sizeof(scalar) + ML_KEM_RANDOM_BYTES;
+#endif
     CONSTTIME_SECRET(key->s, classify_bytes);
 
 #if defined(OPENSSL_SYS_AMIGA)

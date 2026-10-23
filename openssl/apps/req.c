@@ -454,7 +454,7 @@ int req_main(int argc, char **argv)
             not_after = opt_arg();
             break;
         case OPT_DAYS:
-            days = atoi(opt_arg());
+            days = opt_int_arg();
             if (days <= UNSET_DAYS) {
                 BIO_printf(bio_err, "%s: -days parameter arg must be >= -1\n",
                     prog);
@@ -1254,25 +1254,21 @@ static int prompt_info(X509_REQ *req,
 
                 if (!join(buf, sizeof(buf), type, "_value", "Name"))
                     goto err;
-                ;
                 value = app_conf_try_string(req_conf, attr_sect, buf);
 
                 if (!join(buf, sizeof(buf), type, "_min", "Name"))
                     goto err;
-                ;
                 if (!app_conf_try_number(req_conf, attr_sect, buf, &n_min))
                     n_min = -1;
 
                 if (!join(buf, sizeof(buf), type, "_max", "Name"))
                     goto err;
-                ;
                 if (!app_conf_try_number(req_conf, attr_sect, buf, &n_max))
                     n_max = -1;
                 if (!add_attribute_object(req,
                         v->value, def, value, nid, n_min,
                         n_max, chtype))
                     goto err;
-                ;
             }
         }
     } else {
@@ -1561,10 +1557,12 @@ static EVP_PKEY_CTX *set_keygen_ctx(const char *gstr,
     /* Treat the second part of gstr, if there is one */
     if (gstr != NULL) {
         /* If the second part starts with a digit, we assume it's a size */
-        if (!expect_paramfile && gstr[0] >= '0' && gstr[0] <= '9')
-            keylen = atol(gstr);
-        else
+        if (!expect_paramfile && gstr[0] >= '0' && gstr[0] <= '9') {
+            if (!opt_long(gstr, &keylen))
+                return NULL;
+        } else {
             paramfile = gstr;
+        }
     }
 
     if (paramfile != NULL) {

@@ -113,6 +113,27 @@ static void copy_flags(BIO *bio)
 #define MSG_FRAG_LEN_MID 10
 #define MSG_FRAG_LEN_LO 11
 
+/* Returns true if the unified header fixed bits are set (rfc9147 section 4) */
+#define DTLS13_UNI_HDR_FIX_BITS_IS_SET(byte) \
+    (((byte) & DTLS13_UNI_HDR_FIX_BITS_MASK) == DTLS13_UNI_HDR_FIX_BITS)
+
+/* Returns true if the unified header connection id bit is set (rfc9147 section 4) */
+#define DTLS13_UNI_HDR_CID_BIT_IS_SET(byte) \
+    (((byte) & DTLS13_UNI_HDR_CID_BIT) == DTLS13_UNI_HDR_CID_BIT)
+
+/* Returns true if the unified header sequence number bit is set (rfc9147 section 4) */
+#define DTLS13_UNI_HDR_SEQ_BIT_IS_SET(byte) \
+    (((byte) & DTLS13_UNI_HDR_SEQ_BIT) == DTLS13_UNI_HDR_SEQ_BIT)
+
+/* Returns true if the unified header length bit is set (rfc9147 section 4) */
+#define DTLS13_UNI_HDR_LEN_BIT_IS_SET(byte) \
+    (((byte) & DTLS13_UNI_HDR_LEN_BIT) == DTLS13_UNI_HDR_LEN_BIT)
+
+#define DTLS13_UNI_HDR_RECORD_SEQ_HI 1
+#define DTLS13_UNI_HDR_RECORD_SEQ_LO 2
+#define DTLS13_UNI_HDR_RECORD_LEN_HI 3
+#define DTLS13_UNI_HDR_RECORD_LEN_LO 4
+
 static void dump_data(const char *data, int len)
 {
     int rem, i, content, reclen, msglen, fragoff, fraglen, epoch;
@@ -124,28 +145,51 @@ static void dump_data(const char *data, int len)
     rec = (unsigned char *)data;
 
     while (rem > 0) {
+        int rechdrlen;
+
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+            rechdrlen = DTLS13_UNI_HDR_FIXED_LENGTH;
+        else
+            rechdrlen = DTLS1_RT_HEADER_LENGTH;
+
         if (rem != len)
             printf("*\n");
         printf("*---- START OF RECORD ----\n");
-        if (rem < DTLS1_RT_HEADER_LENGTH) {
+        if (rem < rechdrlen) {
             printf("*---- RECORD TRUNCATED ----\n");
             break;
         }
-        content = rec[RECORD_CONTENT_TYPE];
-        printf("** Record Content-type: %d\n", content);
-        printf("** Record Version: %02x%02x\n",
-            rec[RECORD_VERSION_HI], rec[RECORD_VERSION_LO]);
-        epoch = (rec[RECORD_EPOCH_HI] << 8) | rec[RECORD_EPOCH_LO];
-        printf("** Record Epoch: %d\n", epoch);
-        printf("** Record Sequence: ");
-        for (i = RECORD_SEQUENCE_START; i <= RECORD_SEQUENCE_END; i++)
-            printf("%02x", rec[i]);
-        reclen = (rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO];
-        printf("\n** Record Length: %d\n", reclen);
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec)) {
+            content = SSL3_RT_APPLICATION_DATA;
+            printf("** Encrypted DTLS 1.3 Record Content\n");
+            epoch = *rec & DTLS13_UNI_HDR_EPOCH_BITS_MASK;
 
+            if (epoch == 0)
+                epoch = 4;
+
+            printf("** Record Epoch: %d\n", epoch);
+            printf("** Record Sequence: ");
+            for (i = DTLS13_UNI_HDR_RECORD_SEQ_HI; i <= DTLS13_UNI_HDR_RECORD_SEQ_LO; i++)
+                printf("%02x", rec[i]);
+            reclen = (rec[DTLS13_UNI_HDR_RECORD_LEN_HI] << 8)
+                | rec[DTLS13_UNI_HDR_RECORD_LEN_LO];
+            printf("\n** Record Length: %d\n", reclen);
+        } else {
+            content = rec[RECORD_CONTENT_TYPE];
+            printf("** Record Content-type: %d\n", content);
+            printf("** Record Version: %02x%02x\n",
+                rec[RECORD_VERSION_HI], rec[RECORD_VERSION_LO]);
+            epoch = (rec[RECORD_EPOCH_HI] << 8) | rec[RECORD_EPOCH_LO];
+            printf("** Record Epoch: %d\n", epoch);
+            printf("** Record Sequence: ");
+            for (i = RECORD_SEQUENCE_START; i <= RECORD_SEQUENCE_END; i++)
+                printf("%02x", rec[i]);
+            reclen = (rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO];
+            printf("\n** Record Length: %d\n", reclen);
+        }
         /* Now look at message */
-        rec += DTLS1_RT_HEADER_LENGTH;
-        rem -= DTLS1_RT_HEADER_LENGTH;
+        rec += rechdrlen;
+        rem -= rechdrlen;
         if (content == SSL3_RT_HANDSHAKE) {
             printf("**---- START OF HANDSHAKE MESSAGE FRAGMENT ----\n");
             if (epoch > 0) {
@@ -330,13 +374,6 @@ static int mempacket_test_free(BIO *bio)
     return 1;
 }
 
-/* Record Header values */
-#define EPOCH_HI 3
-#define EPOCH_LO 4
-#define RECORD_SEQUENCE 10
-#define RECORD_LEN_HI 11
-#define RECORD_LEN_LO 12
-
 #define STANDARD_PACKET 0
 
 static int mempacket_test_read(BIO *bio, char *out, int outl)
@@ -344,8 +381,7 @@ static int mempacket_test_read(BIO *bio, char *out, int outl)
     MEMPACKET_TEST_CTX *ctx = BIO_get_data(bio);
     MEMPACKET *thispkt;
     unsigned char *rec;
-    int rem;
-    unsigned int seq, offset, len, epoch;
+    unsigned int seq, offset, len, epoch, rem;
 
     BIO_clear_retry_flags(bio);
     if ((thispkt = sk_MEMPACKET_value(ctx->pkts, 0)) == NULL
@@ -369,27 +405,48 @@ static int mempacket_test_read(BIO *bio, char *out, int outl)
          * with any packets that have been injected
          */
         for (rem = thispkt->len, rec = thispkt->data; rem > 0; rem -= len) {
-            if (rem < DTLS1_RT_HEADER_LENGTH)
+            unsigned int rechdrlen;
+
+            if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+                rechdrlen = DTLS13_UNI_HDR_FIXED_LENGTH;
+            else
+                rechdrlen = DTLS1_RT_HEADER_LENGTH;
+
+            if (rem < rechdrlen)
                 return -1;
-            epoch = (rec[EPOCH_HI] << 8) | rec[EPOCH_LO];
+
+            if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+                /* We don't expect epochs higher than 3 */
+                epoch = *rec & DTLS13_UNI_HDR_EPOCH_BITS_MASK;
+            else
+                epoch = (rec[RECORD_EPOCH_HI] << 8) | rec[RECORD_EPOCH_LO];
+
             if (epoch != ctx->epoch) {
                 ctx->epoch = epoch;
                 ctx->currrec = 0;
             }
             seq = ctx->currrec;
             offset = 0;
-            do {
-                rec[RECORD_SEQUENCE - offset] = seq & 0xFF;
-                seq >>= 8;
-                offset++;
-            } while (seq > 0);
+            if (!DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec)) {
+                do {
+                    rec[RECORD_SEQUENCE_END - offset] = seq & 0xFF;
+                    seq >>= 8;
+                    offset++;
+                } while (seq > 0);
+            }
 
-            len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO])
-                + DTLS1_RT_HEADER_LENGTH;
-            if (rem < (int)len)
+            if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+                len = (rec[DTLS13_UNI_HDR_RECORD_LEN_HI] << 8)
+                    | rec[DTLS13_UNI_HDR_RECORD_LEN_LO];
+            else
+                len = (rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO];
+
+            len += rechdrlen;
+
+            if (rem < len)
                 return -1;
             if (ctx->droprec == (int)ctx->currrec && ctx->dropepoch == epoch) {
-                if (rem > (int)len)
+                if (rem > len)
                     memmove(rec, rec + len, rem - len);
                 outl -= len;
                 ctx->droprec = -1;
@@ -433,11 +490,28 @@ int mempacket_swap_epoch(BIO *bio)
         return 0;
 
     for (rem = thispkt->len, rec = thispkt->data; rem > 0; rem -= len, rec += len) {
-        if (rem < DTLS1_RT_HEADER_LENGTH)
+        int rechdrlen;
+
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+            rechdrlen = DTLS13_UNI_HDR_FIXED_LENGTH;
+        else
+            rechdrlen = DTLS1_RT_HEADER_LENGTH;
+
+        if (rem < rechdrlen)
             return 0;
-        epoch = (rec[EPOCH_HI] << 8) | rec[EPOCH_LO];
-        len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO])
-            + DTLS1_RT_HEADER_LENGTH;
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec)) {
+            epoch = *rec & DTLS13_UNI_HDR_EPOCH_BITS_MASK;
+
+            if (epoch == 0)
+                epoch = 4;
+
+            len = ((rec[DTLS13_UNI_HDR_RECORD_LEN_HI] << 8)
+                | rec[DTLS13_UNI_HDR_RECORD_LEN_LO]);
+            len += rechdrlen;
+        } else {
+            epoch = (rec[RECORD_EPOCH_HI] << 8) | rec[RECORD_EPOCH_LO];
+            len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO]) + rechdrlen;
+        }
         if (rem < len)
             return 0;
 
@@ -491,6 +565,107 @@ int mempacket_swap_epoch(BIO *bio)
     return 0;
 }
 
+/*
+ * Look for records from different epochs in the last datagram and swap them
+ * around
+ */
+int mempacket_swap_epoch_dtls13(BIO *bio)
+{
+    MEMPACKET_TEST_CTX *ctx = BIO_get_data(bio);
+    MEMPACKET *thispkt;
+    int rem, len, prevlen = 0;
+    unsigned char *rec, *prevrec = NULL, *tmp;
+    unsigned int epoch;
+    int numpkts = sk_MEMPACKET_num(ctx->pkts);
+
+    if (numpkts <= 0)
+        return 0;
+
+    /*
+     * We need to look at the packet that contains the last Epoch 0 and the
+     * first Epoch 1 record. This is in Packet 5.
+     */
+    thispkt = sk_MEMPACKET_value(ctx->pkts, 5);
+    if (thispkt == NULL)
+        return 0;
+
+    for (rem = thispkt->len, rec = thispkt->data;
+        rem > 0; rem -= len, rec += len) {
+        int rechdrlen;
+
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec))
+            rechdrlen = DTLS13_UNI_HDR_FIXED_LENGTH;
+        else
+            rechdrlen = DTLS1_RT_HEADER_LENGTH;
+
+        if (rem < rechdrlen)
+            return 0;
+        if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*rec)) {
+            epoch = *rec & DTLS13_UNI_HDR_EPOCH_BITS_MASK;
+
+            if (epoch == 0)
+                epoch = 4;
+
+            len = ((rec[DTLS13_UNI_HDR_RECORD_LEN_HI] << 8)
+                | rec[DTLS13_UNI_HDR_RECORD_LEN_LO]);
+            len += rechdrlen;
+        } else {
+            epoch = (rec[RECORD_EPOCH_HI] << 8) | rec[RECORD_EPOCH_LO];
+            len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO]) + rechdrlen;
+        }
+        if (rem < len)
+            return 0;
+
+        /* Assumes the epoch change does not happen on the first record */
+        if (epoch != ctx->epoch) {
+            if (prevrec == NULL)
+                return 0;
+
+            /*
+             * We found 2 records with different epochs. Take a copy of the
+             * earlier record
+             */
+            tmp = OPENSSL_malloc(prevlen);
+            if (tmp == NULL)
+                return 0;
+
+            memcpy(tmp, prevrec, prevlen);
+            /*
+             * Move everything from this record onwards, including any trailing
+             * records, and overwrite the earlier record
+             */
+            memmove(prevrec, rec, rem);
+            thispkt->len -= prevlen;
+
+            /*
+             * Create a new packet for the earlier record that we took out and
+             * add it to the end of the packet list.
+             */
+            thispkt = OPENSSL_malloc(sizeof(*thispkt));
+            if (thispkt == NULL) {
+                OPENSSL_free(tmp);
+                return 0;
+            }
+            thispkt->type = INJECT_PACKET;
+            thispkt->data = tmp;
+            thispkt->len = prevlen;
+            thispkt->num = numpkts;
+            if (sk_MEMPACKET_insert(ctx->pkts, thispkt, numpkts) <= 0) {
+                OPENSSL_free(tmp);
+                OPENSSL_free(thispkt);
+                return 0;
+            }
+            /* We added a packet so increment lastpkt */
+            ctx->lastpkt++;
+            return 1;
+        }
+        prevrec = rec;
+        prevlen = len;
+    }
+
+    return 0;
+}
+
 /* Move packet from position s to position d in the list (d < s) */
 int mempacket_move_packet(BIO *bio, int d, int s)
 {
@@ -524,6 +699,170 @@ int mempacket_move_packet(BIO *bio, int d, int s)
         thispkt = sk_MEMPACKET_value(ctx->pkts, i);
         thispkt->num++;
     }
+    return 1;
+}
+
+/*
+ * Find the first DTLS record with content type rectype.
+ * If hs_msg_type >= 0, only match epoch-0 handshake records whose
+ * first handshake byte equals hs_msg_type.
+ */
+int mempacket_find_record(BIO *bio, int rectype, int hs_msg_type,
+    int *pktidx, int *recidx)
+{
+    MEMPACKET_TEST_CTX *ctx = BIO_get_data(bio);
+    int numpkts = sk_MEMPACKET_num(ctx->pkts);
+    int i, j, rem, len, payload_len;
+    unsigned char *rec;
+
+    for (i = 0; i < numpkts; i++) {
+        MEMPACKET *thispkt = sk_MEMPACKET_value(ctx->pkts, i);
+
+        if (thispkt == NULL)
+            continue;
+        for (j = 0, rem = thispkt->len, rec = thispkt->data;
+            rem >= DTLS1_RT_HEADER_LENGTH;
+            j++, rem -= len, rec += len) {
+            payload_len = (rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO];
+            len = payload_len + DTLS1_RT_HEADER_LENGTH;
+            if (rem < len)
+                return 0;
+            if (rec[RECORD_CONTENT_TYPE] != (unsigned char)rectype)
+                continue;
+            if (hs_msg_type >= 0
+                && ((rec[RECORD_EPOCH_HI] | rec[RECORD_EPOCH_LO]) != 0
+                    || payload_len < 1
+                    || rec[DTLS1_RT_HEADER_LENGTH]
+                        != (unsigned char)hs_msg_type))
+                continue;
+            *pktidx = i;
+            *recidx = j;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * Split packet pktidx before record recidx and insert the tail at pktidx + 1.
+ * Splitting at either boundary (before record 0 or after the last record)
+ * is treated as a successful no-op.
+ */
+int mempacket_split_packet_at(BIO *bio, int pktidx, int recidx)
+{
+    MEMPACKET_TEST_CTX *ctx = BIO_get_data(bio);
+    MEMPACKET *srcpkt, *newpkt;
+    int numpkts = sk_MEMPACKET_num(ctx->pkts);
+    int rem, len, i, split_off = 0;
+    unsigned char *rec;
+
+    if (pktidx < 0 || pktidx >= numpkts || recidx < 0)
+        return 0;
+
+    srcpkt = sk_MEMPACKET_value(ctx->pkts, pktidx);
+    if (srcpkt == NULL)
+        return 0;
+
+    for (i = 0, rem = srcpkt->len, rec = srcpkt->data;
+        rem >= DTLS1_RT_HEADER_LENGTH && i < recidx;
+        i++, rem -= len, rec += len) {
+        len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO])
+            + DTLS1_RT_HEADER_LENGTH;
+        if (rem < len)
+            return 0;
+        split_off += len;
+    }
+
+    if (i != recidx)
+        return 0;
+
+    if (split_off == 0 || split_off == srcpkt->len)
+        return 1;
+
+    newpkt = OPENSSL_malloc(sizeof(*newpkt));
+    if (newpkt == NULL)
+        return 0;
+
+    newpkt->len = srcpkt->len - split_off;
+    newpkt->data = OPENSSL_malloc(newpkt->len);
+    if (newpkt->data == NULL) {
+        OPENSSL_free(newpkt);
+        return 0;
+    }
+
+    memcpy(newpkt->data, srcpkt->data + split_off, newpkt->len);
+    newpkt->type = srcpkt->type;
+    if (pktidx + 1 < numpkts
+        && sk_MEMPACKET_value(ctx->pkts, pktidx + 1) != NULL)
+        newpkt->num = sk_MEMPACKET_value(ctx->pkts, pktidx + 1)->num;
+    else
+        newpkt->num = srcpkt->num + 1;
+
+    if (sk_MEMPACKET_insert(ctx->pkts, newpkt, pktidx + 1) <= 0) {
+        OPENSSL_free(newpkt->data);
+        OPENSSL_free(newpkt);
+        return 0;
+    }
+
+    srcpkt->len = split_off;
+
+    numpkts = sk_MEMPACKET_num(ctx->pkts);
+    for (i = pktidx + 2; i < numpkts; i++)
+        sk_MEMPACKET_value(ctx->pkts, i)->num++;
+
+    return 1;
+}
+
+/*
+ * Append arbitrary data to a given record. The record must be the last record
+ * in the packet
+ */
+int mempacket_append_to_record(BIO *bio, int pktidx, int recidx,
+    unsigned char *data, size_t datalen)
+{
+    MEMPACKET_TEST_CTX *ctx = BIO_get_data(bio);
+    MEMPACKET *srcpkt;
+    size_t rem, len;
+    int i;
+    unsigned char *rec, *tmp;
+
+    if (ctx == NULL)
+        return 0;
+    srcpkt = sk_MEMPACKET_value(ctx->pkts, pktidx);
+    if (srcpkt == NULL)
+        return 0;
+
+    tmp = OPENSSL_realloc(srcpkt->data, srcpkt->len + datalen);
+    if (tmp == NULL)
+        return 0;
+    srcpkt->data = tmp;
+
+    /* Parse the records in the packet looking for the target record index */
+    for (i = 0, rem = srcpkt->len, rec = srcpkt->data;
+        rem >= DTLS1_RT_HEADER_LENGTH && i < recidx;
+        i++, rem -= len, rec += len) {
+        len = ((rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO])
+            + DTLS1_RT_HEADER_LENGTH;
+        if (rem < len)
+            return 0;
+    }
+
+    if (i != recidx || rem < DTLS1_RT_HEADER_LENGTH)
+        return 0;
+
+    len = (rec[RECORD_LEN_HI] << 8) | rec[RECORD_LEN_LO];
+    /* We can only append to the last record */
+    if (rem != len + DTLS1_RT_HEADER_LENGTH)
+        return 0;
+
+    /* Check we can fit the extra data in the record */
+    if (0xffff - len < datalen)
+        return 0;
+    len += datalen;
+    rec[RECORD_LEN_HI] = (len >> 8) & 0xff;
+    rec[RECORD_LEN_LO] = len & 0xff;
+    memcpy(srcpkt->data + srcpkt->len, data, datalen);
+    srcpkt->len += (int)datalen;
     return 1;
 }
 
@@ -568,8 +907,24 @@ int mempacket_test_inject(BIO *bio, const char *in, int inl, int pktnum,
     MEMPACKET *thispkt = NULL, *looppkt, *nextpkt, *allpkts[3];
     int i, duprec;
     const unsigned char *inu = (const unsigned char *)in;
-    size_t len = ((inu[RECORD_LEN_HI] << 8) | inu[RECORD_LEN_LO])
-        + DTLS1_RT_HEADER_LENGTH;
+    size_t len;
+
+    if (DTLS13_UNI_HDR_FIX_BITS_IS_SET(*in)
+        /* The following code does not handle connection ids */
+        && ossl_assert(!DTLS13_UNI_HDR_CID_BIT_IS_SET(*in))) {
+        if (DTLS13_UNI_HDR_LEN_BIT_IS_SET(*in)) {
+            len = 3; /* 2 bytes for len field and 1 byte for record type */
+            len += DTLS13_UNI_HDR_SEQ_BIT_IS_SET(*in) ? 2 : 1;
+            len += ((inu[DTLS13_UNI_HDR_RECORD_LEN_HI] << 8)
+                | inu[DTLS13_UNI_HDR_RECORD_LEN_LO]);
+        } else {
+            /* We assert that inl is the correct record length */
+            len = inl;
+        }
+    } else {
+        len = ((inu[RECORD_LEN_HI] << 8) | inu[RECORD_LEN_LO]);
+        len += DTLS1_RT_HEADER_LENGTH;
+    }
 
     if (ctx == NULL)
         return -1;
@@ -719,6 +1074,9 @@ static long mempacket_test_ctrl(BIO *bio, int cmd, long num, void *ptr)
         break;
     case MEMPACKET_CTRL_SET_DUPLICATE_REC:
         ctx->duprec = (int)num;
+        break;
+    case BIO_CTRL_DGRAM_QUERY_MTU:
+        ret = 1500;
         break;
     case BIO_CTRL_RESET:
     case BIO_CTRL_DUP:

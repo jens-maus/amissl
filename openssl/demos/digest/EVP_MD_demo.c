@@ -78,6 +78,7 @@ static int demonstrate_digest(void)
     const char *option_properties = NULL;
     EVP_MD *message_digest = NULL;
     EVP_MD_CTX *digest_context = NULL;
+    int sz = 0;
     unsigned int digest_length;
     unsigned char *digest_value = NULL;
     unsigned int j;
@@ -100,11 +101,12 @@ static int demonstrate_digest(void)
         goto cleanup;
     }
     /* Determine the length of the fetched digest type */
-    digest_length = EVP_MD_get_size(message_digest);
-    if (digest_length <= 0) {
+    sz = EVP_MD_get_size(message_digest);
+    if (sz <= 0) {
         fprintf(stderr, "EVP_MD_get_size returned invalid size.\n");
         goto cleanup;
     }
+    digest_length = (unsigned int)sz;
 
     digest_value = OPENSSL_malloc(digest_length);
     if (digest_value == NULL) {
@@ -147,8 +149,8 @@ static int demonstrate_digest(void)
     fprintf(stdout, "\n");
     /* Check digest_value against the known answer */
     if ((size_t)digest_length != sizeof(known_answer)) {
-        fprintf(stdout, "Digest length(%d) not equal to known answer length(%lu).\n",
-            digest_length, (unsigned long)sizeof(known_answer));
+        fprintf(stdout, "Digest length(%u) not equal to known answer length(%zu).\n",
+            digest_length, sizeof(known_answer));
     } else if (memcmp(digest_value, known_answer, digest_length) != 0) {
         for (j = 0; j < sizeof(known_answer); j++) {
             fprintf(stdout, "%02x", known_answer[j]);

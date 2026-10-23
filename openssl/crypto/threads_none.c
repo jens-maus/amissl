@@ -287,6 +287,34 @@ int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock)
     return 1;
 }
 
+int CRYPTO_atomic_load_ptr(void **ptr, void **ret, CRYPTO_RWLOCK *lock)
+{
+    *ret = *ptr;
+    return 1;
+}
+
+int CRYPTO_atomic_store_ptr(void **dst, void **val, CRYPTO_RWLOCK *lock)
+{
+    *dst = *val;
+    return 1;
+}
+
+int CRYPTO_atomic_cmp_exch_ptr(void **ptr, void **expect, void *desire, CRYPTO_RWLOCK *lock, int *lock_failed)
+{
+    int lock_sink;
+
+    if (lock_failed == NULL)
+        lock_failed = &lock_sink;
+
+    *lock_failed = 0;
+    if (*ptr == *expect) {
+        *ptr = desire;
+        return 1;
+    }
+    *expect = *ptr;
+    return 0;
+}
+
 int openssl_init_fork_handlers(void)
 {
     return 0;

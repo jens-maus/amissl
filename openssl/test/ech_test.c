@@ -1060,7 +1060,7 @@ static int ech_test_file_read(int run)
     fullname = OPENSSL_malloc(fnlen);
     if (fullname == NULL)
         goto end;
-    BIO_snprintf(fullname, fnlen, "%s/%s", certsdir, ft->fname);
+    snprintf(fullname, fnlen, "%s/%s", certsdir, ft->fname);
     if (verbose)
         TEST_info("testing read of %s", fullname);
     in = BIO_new_file(fullname, "r");
@@ -1320,7 +1320,7 @@ static int test_ech_roundtrip_helper(int idx, int combo)
     aeadind = idx % aeadsz;
     /* initialise early data stuff, just in case */
     memset(ed, 'A', sizeof(ed));
-    BIO_snprintf(suitestr, 100, "%s,%s,%s", kem_str_list[kemind],
+    snprintf(suitestr, 100, "%s,%s,%s", kem_str_list[kemind],
         kdf_str_list[kdfind], aead_str_list[aeadind]);
     if (verbose)
         TEST_info("Doing: iter: %d, suite: %s", idx, suitestr);
@@ -1924,7 +1924,7 @@ static int ech_grease_test(int idx)
     if (!TEST_int_ne((int)retryconfiglen, 0))
         goto end;
     if (verbose)
-        TEST_info("ech_grease_test: retryconfglen: %d\n", (int)retryconfiglen);
+        TEST_info("ech_grease_test: retryconfglen: %zu\n", retryconfiglen);
     /* we kow the sizes to expect as the configs are hard-coded above */
     if (idx == 2 && !TEST_size_t_eq(retryconfiglen, 141))
         goto end;
@@ -2341,6 +2341,75 @@ end:
     return res;
 }
 
+static int ech_admit_cb(int preverify_ok, X509_STORE_CTX *ctx)
+{
+    return 1;
+}
+
+/*
+ * Regression: on the server, SSL_ech_get1_status() must not derive its
+ * SUCCESS/BAD_NAME result from verify_result.  On the server verify_result is
+ * the client certificate's verdict, which is unrelated to ECH.  Here the server
+ * requests a client certificate, trusts no CA, and admits the failing chain
+ * through its verify callback (as a fingerprint- or ACL-based deployment does),
+ * so a successful handshake is left with a non-OK verify_result.  ECH still
+ * succeeded, so the server status must be SSL_ECH_STATUS_SUCCESS, not
+ * SSL_ECH_STATUS_BAD_NAME.
+ */
+static int ech_unauth_client_status_test(void)
+{
+    int res = 0, serverstatus;
+    OSSL_ECHSTORE *es = NULL;
+    OSSL_HPKE_SUITE hpke_suite = OSSL_HPKE_SUITE_DEFAULT;
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    char *sinner = NULL, *souter = NULL;
+
+    if (!TEST_ptr(es = OSSL_ECHSTORE_new(libctx, propq))
+        || !TEST_true(OSSL_ECHSTORE_new_config(es, OSSL_ECH_CURRENT_VERSION, 0,
+            "example.com", hpke_suite))
+        || !TEST_true(create_ssl_ctx_pair(libctx, TLS_server_method(),
+            TLS_client_method(), TLS1_3_VERSION, TLS1_3_VERSION,
+            &sctx, &cctx, cert, privkey)))
+        goto end;
+    /*
+     * The server requests a client certificate but trusts no CA, admitting
+     * whatever the client sends via the callback -- so a successful handshake
+     * leaves verify_result non-OK.
+     */
+    SSL_CTX_set_verify(sctx, SSL_VERIFY_PEER, ech_admit_cb);
+    if (!TEST_true(SSL_CTX_use_certificate_file(cctx, cert, SSL_FILETYPE_PEM))
+        || !TEST_true(SSL_CTX_use_PrivateKey_file(cctx, privkey,
+            SSL_FILETYPE_PEM))
+        || !TEST_true(SSL_CTX_set1_echstore(cctx, es))
+        || !TEST_true(SSL_CTX_set1_echstore(sctx, es))
+        || !TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+            NULL, NULL))
+        || !TEST_true(SSL_set_tlsext_host_name(clientssl, "server.example"))
+        || !TEST_true(create_ssl_connection(serverssl, clientssl,
+            SSL_ERROR_NONE)))
+        goto end;
+    /* The scenario is only meaningful if the client was admitted non-OK. */
+    if (!TEST_int_ne((int)SSL_get_verify_result(serverssl), X509_V_OK))
+        goto end;
+    serverstatus = SSL_ech_get1_status(serverssl, &sinner, &souter);
+    if (verbose)
+        TEST_info("server status %d (verify_result %ld)", serverstatus,
+            SSL_get_verify_result(serverssl));
+    if (!TEST_int_eq(serverstatus, SSL_ECH_STATUS_SUCCESS))
+        goto end;
+    res = 1;
+end:
+    OPENSSL_free(sinner);
+    OPENSSL_free(souter);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+    OSSL_ECHSTORE_free(es);
+    return res;
+}
+
 #endif
 
 int setup_tests(void)
@@ -2391,6 +2460,7 @@ int setup_tests(void)
     ADD_ALL_TESTS(ech_grease_test, 4);
     ADD_ALL_TESTS(test_ech_no_inner, suite_combos);
     ADD_ALL_TESTS(test_ech_keylog_random, 4);
+    ADD_TEST(ech_unauth_client_status_test);
     return 1;
 err:
     return 0;

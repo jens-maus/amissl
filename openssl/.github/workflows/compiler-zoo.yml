@@ -37,7 +37,9 @@ permissions:
   contents: read
 
 jobs:
-  # Only a dispatch carries inputs, so this is skipped on the nightly cron.
+  # Only a dispatch carries inputs, so this is skipped on a push. No repository clause:
+  # the build jobs below keep running in forks on push, and the validator must not claim
+  # a boundary they do not have.
   validate-dispatch-inputs:
     if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
     uses: ./.github/workflows/validate-dispatch-inputs.yml
@@ -48,7 +50,7 @@ jobs:
 
   gcc:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -83,9 +85,69 @@ jobs:
     - name: make test
       run: make test HARNESS_JOBS=${HARNESS_JOBS:-4}
 
+  vs2013:
+    needs: [validate-dispatch-inputs]
+    if: |
+      !cancelled() &&
+      (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            target: VC-WIN64A-MSVC2013
+            config: no-makedepend no-shared enable-fips -DOSSL_WINCTX=openssl
+          - arch: x86
+            target: VC-WIN32-MSVC2013
+            config: no-makedepend enable-fips -DOSSL_WINCTX=openssl
+    runs-on: windows-2022
+    env:
+      IMAGE: ghcr.io/openssl/openssl-vs2013:latest
+      VCVARS: C:\vc12\vcvars_${{ matrix.arch }}.cmd
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+        ref: ${{ github.event.inputs.head_sha || github.sha }}
+    - name: checkout fuzz/corpora submodule
+      run: git submodule update --init --depth 1 fuzz/corpora
+    - name: pull the VS2013 toolchain image
+      shell: cmd
+      run: docker pull %IMAGE%
+    - name: config
+      run: |
+        $chain = @(
+          # 'call', not a bare invocation: cmd does not necessarily return from a
+          # batch file run without it, which would skip the rest of the chain.
+          "call $env:VCVARS"
+          'mkdir _build'
+          'cd _build'
+          "perl ..\Configure ${{ matrix.target }} --banner=Configured ${{ matrix.config }}"
+          'perl configdata.pm --dump'
+        ) -join ' && '
+        docker run --rm --isolation=process -v "${env:GITHUB_WORKSPACE}:C:\src" `
+          -w C:\src ${env:IMAGE} cmd /S /C $chain
+    - name: make
+      run: |
+        $chain = @(
+          "call $env:VCVARS"
+          'jom /j4 /S'
+          'apps\openssl.exe version -c'
+        ) -join ' && '
+        docker run --rm --isolation=process -v "${env:GITHUB_WORKSPACE}:C:\src" `
+          -w C:\src\_build ${env:IMAGE} cmd /S /C $chain
+    - name: make test
+      run: |
+        $chain = @(
+          "call $env:VCVARS"
+          'jom test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4'
+        ) -join ' && '
+        docker run --rm --isolation=process -v "${env:GITHUB_WORKSPACE}:C:\src" `
+          -w C:\src\_build ${env:IMAGE} cmd /S /C $chain
+
   clang:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:

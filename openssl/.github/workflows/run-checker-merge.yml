@@ -33,11 +33,14 @@ run-name: >-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.inputs.pr || github.run_id }}
   cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
-  # Only a dispatch carries inputs, so this is skipped on the nightly cron.
+  # Only a dispatch carries inputs, so this is skipped on a push. No repository clause:
+  # the build jobs below keep running in forks on push, and the validator must not claim
+  # a boundary they do not have.
   validate-dispatch-inputs:
     if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
     uses: ./.github/workflows/validate-dispatch-inputs.yml
@@ -48,7 +51,7 @@ jobs:
 
   run-checker:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     strategy:
@@ -101,7 +104,7 @@ jobs:
 
   jitter:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -111,6 +114,7 @@ jobs:
       with:
         persist-credentials: false
         ref: ${{ github.event.inputs.head_sha || github.sha }}
+    # Third-party, pinned to a release tag: not repointed at the pull request's choice.
     - name: checkout jitter
       uses: actions/checkout@v6
       with:
@@ -135,7 +139,7 @@ jobs:
 
   threads_sanitizer_atomic_fallback:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     runs-on: ubuntu-latest
@@ -159,4 +163,4 @@ jobs:
         cat /proc/cpuinfo
         ./util/opensslwrap.sh version -c
     - name: make test
-      run: make test V=1 TESTS="test_lhash test_threads test_internal_provider test_provfetch test_provider test_pbe test_evp_kdf test_pkcs12 test_store test_evp test_quic*"
+      run: make test V=1 TESTS="test_lhash test_threads test_internal_provider test_provfetch test_provider test_pbe test_evp_kdf test_pkcs12 test_store test_evp test_quic* test_dtls_listener_races"

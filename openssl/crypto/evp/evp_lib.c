@@ -312,6 +312,7 @@ int evp_cipher_cache_constants(EVP_CIPHER *cipher)
     size_t blksz = 0;
     size_t keylen = 0;
     unsigned int mode = 0;
+    int no_store = cipher->flags & EVP_CIPH_FLAG_NO_STORE;
     OSSL_PARAM params[11];
 
     params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_BLOCK_SIZE, &blksz);
@@ -334,7 +335,7 @@ int evp_cipher_cache_constants(EVP_CIPHER *cipher)
         cipher->block_size = (int)blksz;
         cipher->iv_len = (int)ivlen;
         cipher->key_len = (int)keylen;
-        cipher->flags = mode;
+        cipher->flags = mode | no_store;
         if (aead)
             cipher->flags |= EVP_CIPH_FLAG_AEAD_CIPHER;
         if (custom_iv)
@@ -595,6 +596,7 @@ unsigned char *EVP_CIPHER_CTX_buf_noconst(EVP_CIPHER_CTX *ctx)
     return ctx->buf;
 }
 
+#ifndef OPENSSL_NO_DEPRECATED_4_1
 int EVP_CIPHER_CTX_get_num(const EVP_CIPHER_CTX *ctx)
 {
     int ok;
@@ -620,6 +622,7 @@ int EVP_CIPHER_CTX_set_num(EVP_CIPHER_CTX *ctx, int num)
         ctx->num = (int)n;
     return ok != 0;
 }
+#endif /* OPENSSL_NO_DEPRECATED_4_1 */
 
 int EVP_CIPHER_get_key_length(const EVP_CIPHER *cipher)
 {
@@ -1040,12 +1043,17 @@ EVP_PKEY *EVP_PKEY_Q_keygen(OSSL_LIB_CTX *libctx, const char *propq,
         params[0] = OSSL_PARAM_construct_size_t(OSSL_PKEY_PARAM_RSA_BITS, &bits);
     } else if (OPENSSL_strcasecmp(type, "EC") == 0) {
         name = va_arg(args, char *);
+        if (name == NULL) {
+            ERR_raise(ERR_LIB_EVP, ERR_R_PASSED_NULL_PARAMETER);
+            goto end;
+        }
         params[0] = OSSL_PARAM_construct_utf8_string(OSSL_PKEY_PARAM_GROUP_NAME,
             name, 0);
     }
 
     ret = evp_pkey_keygen(libctx, type, propq, params);
 
+end:
 #ifndef OPENSSL_SYS_AMIGA
     va_end(args);
 #endif

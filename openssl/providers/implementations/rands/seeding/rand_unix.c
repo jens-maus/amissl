@@ -354,7 +354,7 @@ static ssize_t syscall_random(void *buf, size_t buflen)
      * internally. So we need to check errno for ENOSYS
      */
 #if !defined(__DragonFly__) && !defined(__NetBSD__) && !defined(__FreeBSD__)
-#if defined(__GNUC__) && __GNUC__ >= 2 && defined(__ELF__) && !defined(__hpux)
+#if defined(__GNUC__) && defined(__ELF__) && !defined(__hpux)
     extern int getentropy(void *buffer, size_t length) __attribute__((weak));
 
     if (getentropy != NULL) {
@@ -451,9 +451,19 @@ static int wait_random_seeded(void)
              * this alternative but essentially identical source moot.
              */
             if (uname(&un) == 0) {
-                kernel[0] = atoi(un.release);
+                int val;
+                char *end;
+
+                kernel[0] = (ossl_strtoint(un.release, &end, 10, &val)
+                                && (*end == '.' || *end == '\0'))
+                    ? val
+                    : 0;
                 p = strchr(un.release, '.');
-                kernel[1] = p == NULL ? 0 : atoi(p + 1);
+                kernel[1] = (p != NULL
+                                && ossl_strtoint(p + 1, &end, 10, &val)
+                                && (*end == '.' || *end == '\0'))
+                    ? val
+                    : 0;
                 if (kernel[0] > kernel_version[0]
                     || (kernel[0] == kernel_version[0]
                         && kernel[1] >= kernel_version[1])) {

@@ -7,7 +7,16 @@
  * https://www.openssl.org/source/license.html
  */
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include <openssl/evp.h>
+#include <openssl/async.h>
+#include <openssl/core.h>
+#include <openssl/core_dispatch.h>
+#include <openssl/err.h>
+#include <openssl/provider.h>
 #include <openssl/rand.h>
 #include <openssl/bio.h>
 #include <openssl/core_names.h>
@@ -16,6 +25,7 @@
 #include "testutil.h"
 
 static char *configfile;
+static char *strictconfigfile;
 
 static int test_rand(void)
 {
@@ -360,6 +370,652 @@ err:
     return res;
 }
 
+/*
+ * Create a parentless DRBG in a provider: instantiating it requests
+ * seeding material through the core's get_user_entropy and
+ * get_user_nonce callbacks, the same path the FIPS provider uses.
+ */
+static EVP_RAND_CTX *provider_side_drbg(OSSL_LIB_CTX *ctx)
+{
+    EVP_RAND *rand;
+    EVP_RAND_CTX *rctx;
+
+    if (!TEST_ptr(rand = EVP_RAND_fetch(ctx, "CTR-DRBG", NULL)))
+        return NULL;
+    rctx = EVP_RAND_CTX_new(rand, NULL);
+    EVP_RAND_free(rand);
+    return rctx;
+}
+
+static int provider_side_drbg_instantiate(EVP_RAND_CTX *rctx)
+{
+    OSSL_PARAM params[2];
+
+    params[0] = OSSL_PARAM_construct_utf8_string(OSSL_DRBG_PARAM_CIPHER,
+        (char *)"AES-256-CTR", 0);
+    params[1] = OSSL_PARAM_construct_end();
+    return EVP_RAND_instantiate(rctx, 0, 0, NULL, 0, params);
+}
+
+/*
+ * Regression test for #25941: with strict seeding the configured seed
+ * source must be instantiated on demand and used when a provider
+ * requests seeding material before anything else created it, instead of
+ * being silently replaced by the operating system entropy sources.
+ */
+static int test_rand_seed_source_strict(void)
+{
+#ifndef OPENSSL_NO_FIPS_JITTER
+    TEST_info("skipped: enable-fips-jitter forces the JITTER seed source");
+    return 1;
+#else
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND_CTX *drbg = NULL, *seed;
+    unsigned char entropy[64], buf[16];
+    OSSL_PARAM params[3];
+    int generate = 1, res = 0;
+    size_t i;
+
+    for (i = 0; i < sizeof(entropy); i++)
+        entropy[i] = 0xff & (i + 1);
+
+    /* The config configures TEST-RAND as the seed source and seed_strict */
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_true(OSSL_LIB_CTX_load_config(ctx, strictconfigfile)))
+        goto err;
+
+    /*
+     * The first seeding request must fail: the configured TEST-RAND has
+     * no entropy to hand out yet and falling back to the operating
+     * system sources would defeat the configuration.
+     */
+    if (!TEST_ptr(drbg = provider_side_drbg(ctx)))
+        goto err;
+    ERR_set_mark();
+    if (!TEST_false(provider_side_drbg_instantiate(drbg))) {
+        ERR_clear_last_mark();
+        goto err;
+    }
+    ERR_pop_to_mark();
+    EVP_RAND_CTX_free(drbg);
+    drbg = NULL;
+
+    /* The request must have instantiated the configured seed source */
+    if (!TEST_ptr(seed = ossl_rand_get0_seed_noncreating(ctx))
+        || !TEST_str_eq(EVP_RAND_get0_name(EVP_RAND_CTX_get0_rand(seed)),
+            "TEST-RAND"))
+        goto err;
+
+    /* Provision the seed source and check that it feeds the DRBG */
+    params[0] = OSSL_PARAM_construct_octet_string(OSSL_RAND_PARAM_TEST_ENTROPY,
+        entropy, sizeof(entropy));
+    params[1] = OSSL_PARAM_construct_int(OSSL_RAND_PARAM_GENERATE, &generate);
+    params[2] = OSSL_PARAM_construct_end();
+    if (!TEST_true(EVP_RAND_CTX_set_params(seed, params))
+        || !TEST_ptr(drbg = provider_side_drbg(ctx))
+        || !TEST_true(provider_side_drbg_instantiate(drbg))
+        || !TEST_true(EVP_RAND_generate(drbg, buf, sizeof(buf), 0, 0,
+            NULL, 0)))
+        goto err;
+
+    res = 1;
+err:
+    EVP_RAND_CTX_free(drbg);
+    OSSL_LIB_CTX_free(ctx);
+    return res;
+#endif /* OPENSSL_NO_FIPS_JITTER */
+}
+
+/*
+ * Verify that a provider requesting seeding material keeps the fallback
+ * behaviour without strict seeding: the request falls back to the
+ * operating system sources without instantiating the seed source, even
+ * when one was configured, so a later RAND_set_seed_source_type() call
+ * still succeeds.  In enable-fips-jitter builds seeding is always
+ * strict and the request instantiates the seed source instead.
+ */
+static int test_rand_seed_source_nonstrict(void)
+{
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND_CTX *drbg = NULL;
+    int ok, res = 0;
+
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new()))
+        goto err;
+
+    if (ossl_rand_seed_source_strict(ctx)) {
+        /* enable-fips-jitter build: the JITTER seed source is hard-wired */
+        if (!TEST_ptr(drbg = provider_side_drbg(ctx)))
+            goto err;
+        ERR_set_mark();
+        ok = provider_side_drbg_instantiate(drbg);
+        ERR_pop_to_mark();
+        /* The seed source may be unusable in this configuration */
+        if (ok
+            && (!TEST_ptr(ossl_rand_get0_seed_noncreating(ctx))
+                || !TEST_false(RAND_set_seed_source_type(ctx, "TEST-RAND",
+                    NULL))))
+            goto err;
+    } else {
+#ifdef OPENSSL_RAND_SEED_NONE
+        TEST_info("skipped: no operating system entropy sources");
+#else
+        /* Strict seeding is implied when the JITTER source is selected */
+        if (!TEST_true(RAND_set_seed_source_type(ctx, "JITTER", NULL))
+            || !TEST_true(ossl_rand_seed_source_strict(ctx))
+            || !TEST_true(RAND_set_seed_source_type(ctx, NULL, NULL))
+            || !TEST_false(ossl_rand_seed_source_strict(ctx)))
+            goto err;
+
+        if (!TEST_ptr(drbg = provider_side_drbg(ctx))
+            || !TEST_true(provider_side_drbg_instantiate(drbg))
+            || !TEST_ptr_null(ossl_rand_get0_seed_noncreating(ctx))
+            || !TEST_true(RAND_set_seed_source_type(ctx, "TEST-RAND", NULL)))
+            goto err;
+        EVP_RAND_CTX_free(drbg);
+        drbg = NULL;
+
+        /* A configured but non-strict seed source still falls back */
+        if (!TEST_ptr(drbg = provider_side_drbg(ctx))
+            || !TEST_true(provider_side_drbg_instantiate(drbg))
+            || !TEST_ptr_null(ossl_rand_get0_seed_noncreating(ctx)))
+            goto err;
+#endif /* OPENSSL_RAND_SEED_NONE */
+    }
+
+    res = 1;
+err:
+    EVP_RAND_CTX_free(drbg);
+    OSSL_LIB_CTX_free(ctx);
+    return res;
+}
+
+#ifdef OPENSSL_NO_FIPS_JITTER
+typedef struct {
+    const OSSL_CORE_HANDLE *handle;
+    OSSL_LIB_CTX *libctx;
+    OSSL_FUNC_get_user_entropy_fn *entropy;
+    OSSL_FUNC_cleanup_user_entropy_fn *clear_entropy;
+    int pause_instances;
+    int recurse_instance;
+    int direct_recurse;
+    int started;
+    int completed;
+    int seed_calls;
+    int recursive_error;
+} ASYNC_SEED_PROBE;
+
+typedef struct {
+    ASYNC_SEED_PROBE *probe;
+    int instance;
+    int ready;
+} ASYNC_SEED;
+
+static ASYNC_SEED_PROBE *async_seed_probe;
+
+static size_t async_seed_request_entropy(ASYNC_SEED_PROBE *probe)
+{
+    unsigned char sentinel, *out = &sentinel;
+    size_t len;
+
+    len = probe->entropy(probe->handle, &out, 128, 16, 32);
+    if (len > 0 && out != NULL && out != &sentinel)
+        probe->clear_entropy(probe->handle, out, len);
+    return len;
+}
+
+static void *async_seed_newctx(void *vprobe, void *parent,
+    const OSSL_DISPATCH *dispatch)
+{
+    ASYNC_SEED *seed = OPENSSL_zalloc(sizeof(*seed));
+
+    if (seed != NULL)
+        seed->probe = vprobe;
+    return seed;
+}
+
+static void async_seed_freectx(void *vseed)
+{
+    OPENSSL_free(vseed);
+}
+
+static int async_seed_instantiate(void *vseed, unsigned int strength,
+    int prediction_resistance, const unsigned char *personalisation,
+    size_t personalisation_len, const OSSL_PARAM params[])
+{
+    ASYNC_SEED *seed = vseed;
+    ASYNC_SEED_PROBE *probe = seed->probe;
+    size_t len;
+
+    seed->instance = ++probe->started;
+    if (seed->instance <= probe->pause_instances) {
+        if (!ASYNC_pause_job())
+            return 0;
+    }
+
+    if (seed->instance == probe->recurse_instance) {
+        ERR_clear_error();
+        if (probe->direct_recurse) {
+            probe->recursive_error = ossl_rand_get0_seed(probe->libctx) == NULL
+                && ERR_GET_LIB(ERR_peek_error()) == ERR_LIB_RAND;
+        } else {
+            len = async_seed_request_entropy(probe);
+            probe->recursive_error = len == 0
+                && ERR_GET_LIB(ERR_peek_error()) == ERR_LIB_RAND;
+        }
+        return 0;
+    }
+
+    seed->ready = 1;
+    probe->completed++;
+    return 1;
+}
+
+static int async_seed_uninstantiate(void *vseed)
+{
+    ((ASYNC_SEED *)vseed)->ready = 0;
+    return 1;
+}
+
+static int async_seed_generate(void *vseed, unsigned char *out, size_t len,
+    unsigned int strength, int prediction_resistance,
+    const unsigned char *additional_input, size_t additional_input_len)
+{
+    if (!((ASYNC_SEED *)vseed)->ready)
+        return 0;
+    memset(out, 0x5a, len);
+    return 1;
+}
+
+static int async_seed_get_ctx_params(void *vseed, OSSL_PARAM params[])
+{
+    ASYNC_SEED *seed = vseed;
+    OSSL_PARAM *p;
+    int state;
+
+    p = OSSL_PARAM_locate(params, OSSL_RAND_PARAM_STRENGTH);
+    if (p != NULL && !OSSL_PARAM_set_uint(p, 256))
+        return 0;
+    p = OSSL_PARAM_locate(params, OSSL_RAND_PARAM_STATE);
+    state = seed->ready ? EVP_RAND_STATE_READY : EVP_RAND_STATE_UNINITIALISED;
+    if (p != NULL && !OSSL_PARAM_set_int(p, state))
+        return 0;
+    p = OSSL_PARAM_locate(params, OSSL_RAND_PARAM_MAX_REQUEST);
+    if (p != NULL && !OSSL_PARAM_set_size_t(p, 65536))
+        return 0;
+    p = OSSL_PARAM_locate(params, OSSL_DRBG_PARAM_RESEED_COUNTER);
+    if (p != NULL && !OSSL_PARAM_set_uint(p, 1))
+        return 0;
+    return 1;
+}
+
+static size_t async_seed_get_seed(void *vseed, unsigned char **out,
+    int entropy, size_t min_len, size_t max_len,
+    int prediction_resistance, const unsigned char *additional_input,
+    size_t additional_input_len)
+{
+    ASYNC_SEED *seed = vseed;
+    size_t len = (entropy + 7) / 8;
+
+    if (len < min_len)
+        len = min_len;
+    if (!seed->ready || len > max_len
+        || (*out = OPENSSL_malloc(len)) == NULL)
+        return 0;
+    seed->probe->seed_calls++;
+    memset(*out, 0x5a, len);
+    return len;
+}
+
+static void async_seed_clear_seed(void *vseed, unsigned char *out, size_t len)
+{
+    OPENSSL_clear_free(out, len);
+}
+
+static const OSSL_DISPATCH async_seed_rand_functions[] = {
+    { OSSL_FUNC_RAND_NEWCTX, (void (*)(void))async_seed_newctx },
+    { OSSL_FUNC_RAND_FREECTX, (void (*)(void))async_seed_freectx },
+    { OSSL_FUNC_RAND_INSTANTIATE, (void (*)(void))async_seed_instantiate },
+    { OSSL_FUNC_RAND_UNINSTANTIATE,
+        (void (*)(void))async_seed_uninstantiate },
+    { OSSL_FUNC_RAND_GENERATE, (void (*)(void))async_seed_generate },
+    { OSSL_FUNC_RAND_GET_CTX_PARAMS,
+        (void (*)(void))async_seed_get_ctx_params },
+    { OSSL_FUNC_RAND_GET_SEED, (void (*)(void))async_seed_get_seed },
+    { OSSL_FUNC_RAND_CLEAR_SEED, (void (*)(void))async_seed_clear_seed },
+    OSSL_DISPATCH_END
+};
+
+static const OSSL_ALGORITHM async_seed_algorithms[] = {
+    { "ASYNC-SEED:JITTER", "provider=async-seed-probe",
+        async_seed_rand_functions, "ASYNC seed source test" },
+    { NULL, NULL, NULL, NULL }
+};
+
+static const OSSL_ALGORITHM *async_seed_query(void *vprobe, int operation,
+    int *no_cache)
+{
+    *no_cache = 0;
+    return operation == OSSL_OP_RAND ? async_seed_algorithms : NULL;
+}
+
+static const OSSL_DISPATCH async_seed_provider_functions[] = {
+    { OSSL_FUNC_PROVIDER_QUERY_OPERATION, (void (*)(void))async_seed_query },
+    OSSL_DISPATCH_END
+};
+
+static int async_seed_provider_init(const OSSL_CORE_HANDLE *handle,
+    const OSSL_DISPATCH *in, const OSSL_DISPATCH **out, void **vprobe)
+{
+    ASYNC_SEED_PROBE *probe = async_seed_probe;
+
+    probe->handle = handle;
+    for (; in->function_id != 0; in++) {
+        switch (in->function_id) {
+        case OSSL_FUNC_GET_USER_ENTROPY:
+            probe->entropy = OSSL_FUNC_get_user_entropy(in);
+            break;
+        case OSSL_FUNC_CLEANUP_USER_ENTROPY:
+            probe->clear_entropy = OSSL_FUNC_cleanup_user_entropy(in);
+            break;
+        }
+    }
+    *vprobe = probe;
+    *out = async_seed_provider_functions;
+    return probe->entropy != NULL && probe->clear_entropy != NULL;
+}
+
+static int async_seed_rand_job(void *vctx)
+{
+    OSSL_LIB_CTX *ctx = *(OSSL_LIB_CTX **)vctx;
+
+    return RAND_get0_primary(ctx) != NULL;
+}
+
+/*
+ * A paused ASYNC job must not make an independent job, or code running
+ * outside ASYNC on the same thread, look like recursive seed construction.
+ * If two jobs pause, each construction marker must survive until its own job
+ * resumes; a real recursive request by either job must still be rejected.
+ */
+static int test_rand_seed_source_async(int idx)
+{
+    ASYNC_SEED_PROBE probe = { 0 };
+    OSSL_LIB_CTX *ctx = NULL;
+    OSSL_PROVIDER *custom = NULL, *def = NULL;
+    ASYNC_JOB *a = NULL, *b = NULL;
+    ASYNC_WAIT_CTX *wa = NULL, *wb = NULL;
+    unsigned char out;
+    int ra = -1, rb = -1, sa = ASYNC_ERR, sb = ASYNC_ERR;
+    int async_started = 0, res = 0;
+
+    probe.pause_instances = idx == 2 ? 2 : 1;
+    probe.recurse_instance = idx == 2 ? 1 : 0;
+    async_seed_probe = &probe;
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_true(OSSL_PROVIDER_add_builtin(ctx, "async-seed-probe",
+            async_seed_provider_init))
+        || !TEST_ptr(custom = OSSL_PROVIDER_load(ctx, "async-seed-probe"))
+        || !TEST_ptr(def = OSSL_PROVIDER_load(ctx, "default"))
+        || !TEST_true(RAND_set_seed_source_type(ctx,
+            idx == 1 ? "ASYNC-SEED" : "JITTER",
+            "provider=async-seed-probe")))
+        goto err;
+    if (!ASYNC_is_capable()) {
+        TEST_info("skipped: ASYNC jobs are unavailable");
+        res = 1;
+        goto err;
+    }
+    if (!TEST_true(ASYNC_init_thread(2, 2)))
+        goto err;
+    async_started = 1;
+    if (!TEST_ptr(wa = ASYNC_WAIT_CTX_new())
+        || !TEST_ptr(wb = ASYNC_WAIT_CTX_new()))
+        goto err;
+
+    ERR_clear_error();
+    sa = ASYNC_start_job(&a, wa, &ra, async_seed_rand_job, &ctx, sizeof(ctx));
+    if (!TEST_int_eq(sa, ASYNC_PAUSE)
+        || !TEST_int_eq(probe.started, 1)
+        || !TEST_int_eq(probe.completed, 0))
+        goto err;
+
+    if (idx == 3) {
+        if (!TEST_true(RAND_bytes_ex(ctx, &out, sizeof(out), 0))
+            || !TEST_int_eq(probe.started, 2)
+            || !TEST_int_eq(probe.completed, 1)
+            || !TEST_int_gt(probe.seed_calls, 0))
+            goto err;
+    } else {
+        sb = ASYNC_start_job(&b, wb, &rb, async_seed_rand_job, &ctx,
+            sizeof(ctx));
+        if (!TEST_int_eq(sb, idx == 2 ? ASYNC_PAUSE : ASYNC_FINISH)
+            || !TEST_int_eq(probe.started, 2))
+            goto err;
+        if (idx != 2
+            && (!TEST_int_eq(rb, 1)
+                || !TEST_int_eq(probe.completed, 1)
+                || !TEST_int_gt(probe.seed_calls, 0)))
+            goto err;
+    }
+
+    sa = ASYNC_start_job(&a, wa, &ra, async_seed_rand_job, &ctx, sizeof(ctx));
+    if (!TEST_int_eq(sa, ASYNC_FINISH))
+        goto err;
+    if (idx == 2) {
+        if (!TEST_int_eq(ra, 0)
+            || !TEST_true(probe.recursive_error)
+            || !TEST_int_eq(probe.started, 2)
+            || !TEST_int_eq(probe.completed, 0))
+            goto err;
+        ERR_clear_error();
+        sb = ASYNC_start_job(&b, wb, &rb, async_seed_rand_job, &ctx,
+            sizeof(ctx));
+        if (!TEST_int_eq(sb, ASYNC_FINISH)
+            || !TEST_int_eq(rb, 1)
+            || !TEST_int_eq(probe.started, 2)
+            || !TEST_int_eq(probe.completed, 1)
+            || !TEST_int_gt(probe.seed_calls, 0))
+            goto err;
+    } else if (!TEST_int_eq(ra, 1)
+        || !TEST_int_eq(probe.started, 2)
+        || !TEST_int_eq(probe.completed, 2)) {
+        goto err;
+    }
+
+    res = 1;
+err:
+    if (a != NULL)
+        ASYNC_start_job(&a, wa, &ra, async_seed_rand_job, &ctx, sizeof(ctx));
+    if (b != NULL)
+        ASYNC_start_job(&b, wb, &rb, async_seed_rand_job, &ctx, sizeof(ctx));
+    ASYNC_WAIT_CTX_free(wa);
+    ASYNC_WAIT_CTX_free(wb);
+    if (async_started)
+        ASYNC_cleanup_thread();
+    OSSL_PROVIDER_unload(def);
+    OSSL_PROVIDER_unload(custom);
+    OSSL_LIB_CTX_free(ctx);
+    async_seed_probe = NULL;
+    return res;
+}
+
+static int test_rand_seed_source_recursive_error(void)
+{
+    ASYNC_SEED_PROBE probe = { 0 };
+    OSSL_LIB_CTX *ctx = NULL;
+    OSSL_PROVIDER *custom = NULL, *def = NULL;
+    unsigned char out;
+    int res = 0;
+
+    probe.recurse_instance = 1;
+    probe.direct_recurse = 1;
+    async_seed_probe = &probe;
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new()))
+        goto err;
+    probe.libctx = ctx;
+    if (!TEST_true(OSSL_PROVIDER_add_builtin(ctx, "async-seed-probe",
+            async_seed_provider_init))
+        || !TEST_ptr(custom = OSSL_PROVIDER_load(ctx, "async-seed-probe"))
+        || !TEST_ptr(def = OSSL_PROVIDER_load(ctx, "default"))
+        || !TEST_true(RAND_set_seed_source_type(ctx, "ASYNC-SEED",
+            "provider=async-seed-probe")))
+        goto err;
+
+    ERR_clear_error();
+    if (!TEST_false(RAND_bytes_ex(ctx, &out, sizeof(out), 0))
+        || !TEST_true(probe.recursive_error)
+        || !TEST_int_eq(probe.started, 1)
+        || !TEST_int_eq(probe.completed, 0)
+        || !TEST_ulong_ne(ERR_peek_error(), 0))
+        goto err;
+
+    res = 1;
+err:
+    OSSL_PROVIDER_unload(def);
+    OSSL_PROVIDER_unload(custom);
+    OSSL_LIB_CTX_free(ctx);
+    async_seed_probe = NULL;
+    return res;
+}
+#endif /* OPENSSL_NO_FIPS_JITTER */
+
+/* Warm up the DRBG cipher fetch caches outside the mfail injection window */
+static int rand_drbg_fetch_warmup(EVP_RAND *drbg_alg)
+{
+    EVP_RAND_CTX *warm;
+    OSSL_PARAM params[3];
+    int ret;
+
+    params[0] = OSSL_PARAM_construct_utf8_string(OSSL_DRBG_PARAM_CIPHER,
+        (char *)"AES-256-CTR", 0);
+    params[1] = OSSL_PARAM_construct_utf8_string(OSSL_PROV_PARAM_CORE_PROV_NAME,
+        (char *)"default", 0);
+    params[2] = OSSL_PARAM_construct_end();
+
+    if (!TEST_ptr(warm = EVP_RAND_CTX_new(drbg_alg, NULL)))
+        return 0;
+    ret = TEST_true(EVP_RAND_CTX_set_params(warm, params));
+    EVP_RAND_CTX_free(warm);
+    return ret;
+}
+
+/*
+ * Memory-failure coverage for the whole random generation stack on a fresh
+ * library context: the seed source and DRBG chain creation and seeding.
+ */
+static int test_rand_bytes_mfail(int idx)
+{
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND *drbg = NULL, *seed = NULL;
+    unsigned char buf[16];
+    int rc = -1;
+
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_ptr(drbg = EVP_RAND_fetch(ctx, "CTR-DRBG", NULL))
+        || !rand_drbg_fetch_warmup(drbg))
+        goto end;
+    /* The default seed source may be unavailable in some configurations */
+    ERR_set_mark();
+    seed = EVP_RAND_fetch(ctx, OPENSSL_SEED_SRC_NAME, NULL);
+    ERR_pop_to_mark();
+
+    MFAIL_start();
+    rc = (idx == 0 ? RAND_bytes_ex(ctx, buf, sizeof(buf), 0)
+                   : RAND_priv_bytes_ex(ctx, buf, sizeof(buf), 0))
+        > 0;
+    MFAIL_end();
+
+end:
+    EVP_RAND_free(seed);
+    EVP_RAND_free(drbg);
+    OSSL_LIB_CTX_free(ctx);
+    return rc;
+}
+
+/* Memory-failure coverage for the seed source entropy acquisition. */
+static int test_rand_seed_src_mfail(void)
+{
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND *rand = NULL;
+    EVP_RAND_CTX *seed = NULL;
+    unsigned char buf[64];
+    int rc = -1;
+
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_ptr(rand = EVP_RAND_fetch(ctx, OPENSSL_SEED_SRC_NAME, NULL)))
+        goto end;
+
+    MFAIL_start();
+    rc = (seed = EVP_RAND_CTX_new(rand, NULL)) != NULL
+        && EVP_RAND_instantiate(seed, 0, 0, NULL, 0, NULL)
+        && EVP_RAND_generate(seed, buf, sizeof(buf), 0, 0, NULL, 0);
+    MFAIL_end();
+
+end:
+    EVP_RAND_CTX_free(seed);
+    EVP_RAND_free(rand);
+    OSSL_LIB_CTX_free(ctx);
+    return rc;
+}
+
+/* Memory-failure coverage for the DRBG operations with a TEST-RAND parent */
+static int test_rand_drbg_mfail(void)
+{
+    OSSL_LIB_CTX *ctx = NULL;
+    EVP_RAND *parent_alg = NULL, *drbg_alg = NULL;
+    EVP_RAND_CTX *parent = NULL, *drbg = NULL;
+    unsigned int strength = 256, generate = 1;
+    unsigned char entropy[128];
+    unsigned char buf[32];
+    OSSL_PARAM parent_params[4], drbg_params[3];
+    size_t i;
+    int rc = -1;
+
+    for (i = 0; i < sizeof(entropy); i++)
+        entropy[i] = 0xff & i;
+    parent_params[0] = OSSL_PARAM_construct_uint(OSSL_RAND_PARAM_STRENGTH,
+        &strength);
+    parent_params[1] = OSSL_PARAM_construct_uint(OSSL_RAND_PARAM_GENERATE,
+        &generate);
+    parent_params[2] = OSSL_PARAM_construct_octet_string(
+        OSSL_RAND_PARAM_TEST_ENTROPY, entropy, sizeof(entropy));
+    parent_params[3] = OSSL_PARAM_construct_end();
+
+    drbg_params[0] = OSSL_PARAM_construct_utf8_string(OSSL_DRBG_PARAM_CIPHER,
+        (char *)"AES-256-CTR", 0);
+    drbg_params[1] = OSSL_PARAM_construct_utf8_string(
+        OSSL_PROV_PARAM_CORE_PROV_NAME, (char *)"default", 0);
+    drbg_params[2] = OSSL_PARAM_construct_end();
+
+    if (!TEST_ptr(ctx = OSSL_LIB_CTX_new())
+        || !TEST_ptr(parent_alg = EVP_RAND_fetch(ctx, "TEST-RAND", NULL))
+        || !TEST_ptr(drbg_alg = EVP_RAND_fetch(ctx, "CTR-DRBG", NULL))
+        || !rand_drbg_fetch_warmup(drbg_alg)
+        || !TEST_ptr(parent = EVP_RAND_CTX_new(parent_alg, NULL))
+        || !TEST_true(EVP_RAND_instantiate(parent, 0, 0, NULL, 0,
+            parent_params)))
+        goto end;
+
+    MFAIL_start();
+    rc = (drbg = EVP_RAND_CTX_new(drbg_alg, parent)) != NULL
+        && EVP_RAND_instantiate(drbg, 0, 0, (unsigned char *)"abc", 3,
+            drbg_params)
+        && EVP_RAND_generate(drbg, buf, sizeof(buf), 0, 0, NULL, 0)
+        && EVP_RAND_reseed(drbg, 0, NULL, 0, (unsigned char *)"xyz", 3)
+        && EVP_RAND_generate(drbg, buf, sizeof(buf), 0, 0,
+            (unsigned char *)"adin", 4);
+    MFAIL_end();
+
+end:
+    EVP_RAND_CTX_free(drbg);
+    EVP_RAND_CTX_free(parent);
+    EVP_RAND_free(parent_alg);
+    EVP_RAND_free(drbg_alg);
+    OSSL_LIB_CTX_free(ctx);
+    return rc;
+}
+
 int setup_tests(void)
 {
     if (!test_skip_common_options()) {
@@ -368,6 +1024,7 @@ int setup_tests(void)
     }
 
     if (!TEST_ptr(configfile = test_get_argument(0))
+        || !TEST_ptr(strictconfigfile = test_get_argument(1))
         || !TEST_true(RAND_set_DRBG_type(NULL, "TEST-RAND", "fips=no",
             NULL, NULL))
         || (fips_provider_version_ge(NULL, 3, 0, 8)
@@ -390,5 +1047,16 @@ int setup_tests(void)
     if (!OSSL_PROVIDER_available(NULL, "fips")
         || fips_provider_version_ge(NULL, 3, 5, 1))
         ADD_TEST(test_rand_get0_primary);
+
+    ADD_TEST(test_rand_seed_source_strict);
+    ADD_TEST(test_rand_seed_source_nonstrict);
+#ifdef OPENSSL_NO_FIPS_JITTER
+    ADD_ALL_TESTS(test_rand_seed_source_async, 4);
+    ADD_TEST(test_rand_seed_source_recursive_error);
+#endif
+
+    ADD_MFAIL_ALL_TESTS(test_rand_bytes_mfail, 2);
+    ADD_MFAIL_TEST(test_rand_seed_src_mfail);
+    ADD_MFAIL_TEST(test_rand_drbg_mfail);
     return 1;
 }

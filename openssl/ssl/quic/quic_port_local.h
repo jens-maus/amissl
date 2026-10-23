@@ -121,6 +121,20 @@ struct quic_port_st {
 
     /* AES-256 GCM context for token encryption */
     EVP_CIPHER_CTX *token_ctx;
+
+    /* Transport parameter values for the port. */
+    uint64_t max_idle_timeout;
+    uint64_t max_udp_payload_size;
+    uint64_t init_max_data;
+    uint64_t init_max_stream_data_bidi_local;
+    uint64_t init_max_stream_data_bidi_remote;
+    uint64_t init_max_stream_data_uni;
+    uint64_t init_max_streams_bidi;
+    uint64_t init_max_streams_uni;
+    uint64_t max_ack_delay;
+    uint64_t active_conn_id_limit;
+    unsigned char ack_delay_exponent;
+    unsigned char disable_active_migration;
     uint64_t max_pending_channels;
 };
 

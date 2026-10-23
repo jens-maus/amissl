@@ -60,6 +60,11 @@ is described in each command documentation.
 A binary format, encoded or parsed according to Distinguished Encoding Rules
 (DER) of the ASN.1 data language.
 
+When a command reads a single DER object, it may stop after successfully
+decoding that object. Any trailing data in the input is not necessarily
+examined or rejected. Therefore, a successful command does not by itself
+confirm that the entire input consists of one valid DER object.
+
 =item B<P12>
 
 A DER-encoded file containing a PKCS#12 object.

@@ -115,11 +115,11 @@ sub add_maximal_padding_filter
         }
 
         my $record = TLSProxy::Record->new(
+            $last_message->server,
             $proxy->flight,
             TLSProxy::Record::RT_APPLICATION_DATA,
             TLSProxy::Record::VERS_TLS_1_2,
             length($data),
-            0,
             length($data),
             $plaintext_len,
             $data,

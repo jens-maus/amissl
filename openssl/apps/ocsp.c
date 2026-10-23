@@ -74,7 +74,7 @@ static int do_responder(OCSP_REQUEST **preq, BIO **pcbio, BIO *acbio,
 static int send_ocsp_response(BIO *cbio, const OCSP_RESPONSE *resp);
 static char *prog;
 
-#ifdef HTTP_DAEMON
+#ifndef OPENSSL_NO_POSIX_IO
 static int index_changed(CA_DB *);
 #endif
 
@@ -152,9 +152,9 @@ const OPTIONS ocsp_options[] = {
     { "help", OPT_HELP, '-', "Display this summary" },
     { "ignore_err", OPT_IGNORE_ERR, '-',
         "Ignore error on OCSP request or response and continue running" },
-    { "CAfile", OPT_CAFILE, '<', "Trusted certificates file" },
-    { "CApath", OPT_CAPATH, '<', "Trusted certificates directory" },
-    { "CAstore", OPT_CASTORE, ':', "Trusted certificates store URI" },
+    { "CAfile", OPT_CAFILE, '<', "File in PEM format with trusted CA certs" },
+    { "CApath", OPT_CAPATH, '/', "Dir with trusted CA cert files in PEM format" },
+    { "CAstore", OPT_CASTORE, ':', "URI of store with trusted CA certs" },
     { "no-CAfile", OPT_NOCAFILE, '-',
         "Do not load the default certificates file" },
     { "no-CApath", OPT_NOCAPATH, '-',
@@ -319,7 +319,7 @@ int ocsp_main(int argc, char **argv)
             break;
         case OPT_TIMEOUT:
 #ifndef OPENSSL_NO_SOCK
-            req_timeout = atoi(opt_arg());
+            req_timeout = opt_int_arg();
 #endif
             break;
         case OPT_URL:
@@ -519,7 +519,7 @@ int ocsp_main(int argc, char **argv)
             accept_count = opt_int_arg();
             break;
         case OPT_NDAYS:
-            ndays = atoi(opt_arg());
+            ndays = opt_int_arg();
             break;
         case OPT_RSIGNER:
             rsignfile = opt_arg();
@@ -571,7 +571,7 @@ int ocsp_main(int argc, char **argv)
             break;
         case OPT_MULTI:
 #ifdef HTTP_DAEMON
-            n_responders = atoi(opt_arg());
+            n_responders = opt_int_arg();
 #endif
             break;
         case OPT_PROV_CASES:
@@ -684,7 +684,7 @@ int ocsp_main(int argc, char **argv)
 redo_accept:
 
     if (acbio != NULL) {
-#ifdef HTTP_DAEMON
+#ifndef OPENSSL_NO_POSIX_IO
         if (index_changed(rdb)) {
             CA_DB *newrdb = load_index(ridx_filename, NULL);
 
@@ -930,7 +930,7 @@ end:
     return ret;
 }
 
-#ifdef HTTP_DAEMON
+#ifndef OPENSSL_NO_POSIX_IO
 
 static int index_changed(CA_DB *rdb)
 {
@@ -941,7 +941,11 @@ static int index_changed(CA_DB *rdb)
             || rdb->dbst.st_ctime != sb.st_ctime
             || rdb->dbst.st_ino != sb.st_ino
             || rdb->dbst.st_dev != sb.st_dev) {
+#ifdef HTTP_DAEMON
             syslog(LOG_INFO, "index file changed, reloading");
+#else
+            BIO_printf(bio_err, "%s: index file changed, reloading\n", prog);
+#endif
             return 1;
         }
     }

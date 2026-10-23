@@ -143,6 +143,7 @@ void evp_pkey_set_cb_translate(BN_GENCB *cb, EVP_PKEY_CTX *ctx);
 struct evp_mac_st {
     OSSL_PROVIDER *prov;
     int name_id;
+    int no_store;
     char *type_name;
     const char *description;
 
@@ -166,6 +167,7 @@ struct evp_mac_st {
 struct evp_kdf_st {
     OSSL_PROVIDER *prov;
     int name_id;
+    int no_store;
     char *type_name;
     const char *description;
     CRYPTO_REF_COUNT refcnt;

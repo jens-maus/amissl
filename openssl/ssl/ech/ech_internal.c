@@ -1,7 +1,7 @@
 /*
  * Copyright 2024-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
- * Licensed under the OpenSSL license (the "License").  You may not use
+ * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
  * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
@@ -39,9 +39,9 @@ void ossl_ech_pbuf(const char *msg, const unsigned char *buf, const size_t blen)
             BIO_printf(trc_out, "msg is NULL\n");
         } else if (buf == NULL || blen == 0) {
             BIO_printf(trc_out, "%s: buf is %p\n", msg, (void *)buf);
-            BIO_printf(trc_out, "%s: blen is %lu\n", msg, (unsigned long)blen);
+            BIO_printf(trc_out, "%s: blen is %zu\n", msg, blen);
         } else {
-            BIO_printf(trc_out, "%s (%lu)\n", msg, (unsigned long)blen);
+            BIO_printf(trc_out, "%s (%zu)\n", msg, blen);
             BIO_dump_indent(trc_out, buf, (int)blen, 4);
         }
     }
