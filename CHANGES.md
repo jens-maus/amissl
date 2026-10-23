@@ -12,6 +12,7 @@ appropriate release branch.
 OpenSSL Releases
 ----------------
 
+ - [OpenSSL 4.1](#openssl-41)
  - [OpenSSL 4.0](#openssl-40)
  - [OpenSSL 3.6](#openssl-36)
  - [OpenSSL 3.5](#openssl-35)
@@ -26,6 +27,591 @@ OpenSSL Releases
  - [OpenSSL 1.0.1](#openssl-101)
  - [OpenSSL 1.0.0](#openssl-100)
  - [OpenSSL 0.9.x](#openssl-09x)
+
+OpenSSL 4.1
+-----------
+
+### Changes between 4.0 and 4.1.0 [23 Oct 2026]
+
+ * Changed the OpenSSL FIPS provider so that every algorithm advertised with
+   `fips=yes` explicitly exposes the `fips-indicator` as a gettable context
+   parameter and returns 1 for an approved operation. The absence of an
+   indicator is no longer interpreted as approval. Algorithms advertised
+   with `fips=no`, including X448MLKEM1024, remain unapproved and return 0 when
+   they expose the indicator.
+
+   *Shane Lontis and Paul Dale*
+
+ * Changed TLS 1.3 clients to offer a PSK, and to attempt 0-RTT early data,
+   only when it can actually be used. A resumption ticket or external PSK is
+   offered only if some offered ciphersuite shares its handshake digest, and
+   0-RTT is attempted only if the first offered PSK's exact ciphersuite and,
+   where recorded, its ALPN protocol are offered and, for a ticket, it has not
+   aged out. When 0-RTT is not viable the client keeps the PSK for a 1-RTT
+   handshake. In particular a client-detected ALPN inconsistency now suppresses
+   0-RTT rather than failing with `SSL_R_INCONSISTENT_EARLY_DATA_ALPN`.
+
+   Fixed TLS 1.3 clients to reject a `psk_use_session` callback PSK whose master
+   key is empty, with `SSL_R_BAD_PSK`, instead of failing later in binder
+   computation.
+
+   *Viktor Dukhovni*
+
+ * Added support for DTLS 1.3 ([RFC 9147]).
+   Refer to the `ossl-guide-dtlsv13(7)` manual page for details.
+
+   *Frederik Wedel-Heinen and Ryan Hooper*
+
+ * Added support for [RFC 8701] GREASE (Generate Random Extensions And Sustain
+   Extensibility).  When `SSL_OP_GREASE` is set, the TLS client injects
+   reserved GREASE values into cipher suites, supported versions, supported
+   groups, signature algorithms, key share, and extensions in the `ClientHello`
+   to prevent ecosystem ossification.
+   Added `-grease` option to `openssl s_client` to enable this.
+   <!-- https://github.com/openssl/openssl/pull/30303 -->
+
+   *William McCormack*
+
+ * Added support for Ed25519 and Ed448 certificates in DTLS 1.2.  Previously,
+   these certificate types were only supported in TLS 1.2 and TLS 1.3.
+   <!-- https://github.com/openssl/openssl/pull/30007 -->
+
+   *Adriano Sela Aviles*
+
+ * Added DTLS support to the SSL listener API.  `SSL_new_listener()` can now
+   create a DTLS listener that demultiplexes incoming datagrams into per-peer
+   connections accepted with `SSL_accept_connection()`.  The listener performs
+   address validation (`HelloVerifyRequest` for DTLS 1.0/1.2,
+   `HelloRetryRequest` cookie for DTLS 1.3) by default;  pass
+   `SSL_LISTENER_FLAG_NO_VALIDATE` to disable it.  Refer
+   to the `SSL_new_listener(3)` manual page for details.
+
+   *Ryan Hooper*
+
+ * Added configurable values for DTLS listeners, accessed
+   via `SSL_get_value_uint()`/`SSL_set_value_uint()`:
+   `SSL_VALUE_DTLS_LISTENER_MAX_PENDING_CONNS`,
+   `SSL_VALUE_DTLS_LISTENER_PENDING_TIMEOUT`,
+   and `SSL_VALUE_DTLS_LISTENER_MAX_DGRAM_SIZE`. Refer
+   to the `SSL_get_value_uint(3)` manual page for details.
+
+   *Ryan Hooper*
+
+ * Implemented an ability to configure additional QUIC transport parameters
+   via the `SSL_get_value_uint()`/`SSL_set_value_uint()` functions:
+   `max_udp_payload_size`, `initial_max_data`,
+   `initial_max_stream_data_bidi_local`, `initial_max_stream_data_uni`,
+   `ack_delay_exponent`, and `max_ack_delay`.
+   <!-- https://github.com/openssl/openssl/pull/29664 -->
+
+   *Nikolas Gauder*
+
+ * Simplified EC key point format handling.
+
+   The point conversion form (compressed, uncompressed, or hybrid)
+   is now a single value on the `EC_GROUP` and round-trips
+   unchanged through import and export of `EC_KEY` objects.
+
+   Freshly generated keys have their public point encoded
+   in uncompressed form.  A `point-format` supplied at key generation
+   time via `OSSL_PKEY_PARAM_EC_POINT_CONVERSION_FORMAT`
+   is validated (an invalid value is rejected) but otherwise ignored
+   on the generated key.  EC parameter generation continues
+   to honour the requested form on the group's generator;  imported
+   keys keep their form.
+
+   The `ec_point_formats` extension no longer affects TLS 1.2
+   X.509 certificate selection or acceptance.  OpenSSL now
+   accepts an EC certificate in any point form it can decode,
+   and sends any EC certificate it has regardless of point form.
+   TLS 1.3 disregards the extension entirely.
+
+   The [RFC 4492][RFC 4492 Section 5.1.2]/[8422 section 5.1.2][RFC 8422 Section 5.1.2]
+   requirement that the peer's point-format list contain "uncompressed" is now
+   enforced on both sides (previously client-only), and only when an ECC TLS 1.2
+   ciphersuite is negotiated—a missing "uncompressed" is ignored under TLS 1.3
+   or with a non-ECC cipher.
+   <!-- https://github.com/openssl/openssl/pull/30940 -->
+
+   *Viktor Dukhovni*
+
+ * Added a new verification error, `X509_V_ERR_DUPLICATE_EXTENSION`,
+   with a descriptive message for certificates containing duplicate X.509
+   extensions, which are explicitly prohibited by [RFC 5280].
+   <!-- https://github.com/openssl/openssl/pull/30233 -->
+
+   *Daniel Kubec*
+
+ * Implemented extended support of metadata for symmetric key objects
+   (`EVP_SKEY`).
+   <!-- https://github.com/openssl/openssl/pull/32644 -->
+
+   *Dmitry Belyavskiy*
+
+ * Added `CMS_VERIFY_PARTIAL` flag to `CMS_verify()`, `-verify_partial`
+   option to `openssl cms -verify` operation,
+   and `CMS_SignerInfo_get_verification_result()`
+   and `CMS_SignerInfo_get0_signer_cert()` functions.
+
+   If the `CMS_VERIFY_PARTIAL` flag is set, the `CMS_verify()` call
+   is successful if at least one of the individual signatures can be verified
+   (as opposed to all of them), which may be useful to gracefully handle various
+   situations, like missing CAs, expired certificates, or unsupported
+   algorithms;  applications can call `CMS_get0_signers()` to check if the set
+   of valid signatures satisfies its policy, or use
+   `CMS_SignerInfo_get_verification_result()`
+   and `CMS_SignerInfo_get0_signer_cert()` functions to access the detailed
+   verification results.
+   <!-- https://github.com/openssl/openssl/pull/27604 -->
+
+   *Jan Lübbe*
+
+ * Added `OSSL_CMP_OPT_NONMATCHED_ERROR_NONCES` option for `OSSL_CMP_CTX`
+   and a corresponding `-nonmatched_error_nonces` option for the `openssl cmp`
+   command.
+
+   This work was sponsored by Siemens AG.
+   <!-- https://github.com/openssl/openssl/pull/29043 -->
+
+   *David von Oheimb*
+
+ * Changed the output of the `-disabled` option for the `openssl list` command
+   to display disabled features, protocols, and algorithms, in relevant
+   sections.
+   <!-- https://github.com/openssl/openssl/pull/30212 -->
+
+   *Paul Louvel*
+
+ * Added `-n` option for the `openssl rand` command to suppress the trailing
+   newline in hexadecimal output mode.
+   <!-- https://github.com/openssl/openssl/pull/31795 -->
+
+   *Evy Garden*
+
+ * Added `-testmode` option for the `openssl s_time` command.
+   <!-- https://github.com/openssl/openssl/pull/31192 -->
+
+   *Jakub Zelenka*
+
+ * Added ability to utilise memory-mapped I/O when reading raw input
+   from a file for one-shot sign/verify operations (such as Ed25519,
+   Ed448, and ML-DSA) to `openssl pkeyutl` command on platforms
+   that support it (Unix-like).  The `openssl dgst` command uses the same
+   approach for one-shot sign/verify when the input is from a file, removing
+   the previous 16 MB limit for file-based input.  This improves performance
+   and supports large files without doubling memory use.  Other platforms
+   and `stdin` input continue to use the existing buffer-based implementation.
+   <!-- https://github.com/openssl/openssl/pull/30429 -->
+
+   *John Claus, Viktor Dukhovni, and David von Oheimb*
+
+ * Added a `seed_strict` option to the `random` configuration section,
+   which makes the configured random seed source strictly enforced when
+   a provider (such as the FIPS provider) requests entropy or a nonce.
+
+   When a provider requests seeding material before the primary DRBG
+   has been created, the request falls back to the operating system entropy
+   sources, because the seed source only comes into existence as a side
+   effect of creating the primary DRBG.  Whether a configured seed source
+   is used therefore depends on operation order.  With `seed_strict` enabled,
+   the seed source is instead instantiated on demand and an error is reported
+   if it cannot be used.  The option is off by default with two exceptions:
+   the `JITTER` seed source seeds strictly unless the option disables it,
+   and `enable-fips-jitter` builds always seed strictly.  Additionally,
+   the property query used to fetch the default seed source can now be set
+   at build time with `-DOPENSSL_DEFAULT_SEED_PROPQ`.
+   <!-- https://github.com/openssl/openssl/pull/31939 -->
+
+   *Jakub Zelenka*
+
+ * Added IKEV2 KDF (`EVP_KDF-IKEV2KDF`) to `EVP_KDF`.
+   <!-- https://github.com/openssl/openssl/pull/30121 -->
+
+   *Helen Zhang*
+
+ * Added `CRYPTO_atomic_load_ptr`, `CRYPTO_atomic_store_ptr`,
+   and `CRYPTO_atomic_cmp_exch_ptr` functions to `libcrypto`, that implement
+   the respective atomic operations with a locking-based fallback on platforms
+   that do not support them.
+   <!-- https://github.com/openssl/openssl/pull/30670 -->
+
+   *Neil Horman*
+
+ * Added `EVP_EC_affine2oct()` function, that converts the affine coordinates
+   of an EC point to an octet string conforming
+   to [Section 2.3.4 of SECG SEC 1][SECG SEC 1 Section 2.3.4] ("Elliptic Curve
+   Cryptography") standard.
+   <!-- https://github.com/openssl/openssl/pull/30597 -->
+
+   *Igor Ustinov*
+
+ * Added `EVP_KDF_CTX_get0_kdf()` and `EVP_KDF_CTX_get1_kdf()` functions
+   as a replacement for the now deprecated `EVP_KDF_CTX_kdf()`.
+   <!-- https://github.com/openssl/openssl/pull/28954 -->
+
+   *Leon Timmermans*
+
+ * Added `ASN1_STRING_new_not_owned()` function to `libcrypto`.  It provides
+   the ability to construct an `ASN1_STRING` with data for which ownership
+   is not taken by the created `ASN1_STRING` object.
+   <!-- https://github.com/openssl/openssl/pull/30964 -->
+
+   *Bob Beck*
+
+ * Added `ASN1_STRING_set1_data()`, `ASN1_STRING_set1_string()`,
+   and `ASN1_STRING_get_length()` API functions, and deprecated
+   `ASN1_STRING_set()` and `ASN1_STRING_length()`.
+
+   The new setter functions do not append a terminating NUL byte to the newly
+   allocated strings, contrary to historic `ASN1_STRING_set()`'s behaviour,
+   so `ASN1_STRING_get0_data()` may return data not followed
+   by an out-of-`ASN1_STRING_get_length()` bounds NUL byte (whose presence
+   has never been guaranteed there by API contract) in more cases
+   than it used to before.  A future release will switch to the usage
+   of the new APIs internally.
+
+   When OpenSSL is built with `AddressSanitizer` or `MemorySanitizer` support,
+   or is run under Valgrind having been built where the Valgrind headers
+   are installed, the added NUL byte is marked inaccessible, so treating
+   the result of `ASN1_STRING_get0_data()` as a C string (`strlen()`, `%s`,
+   `strdup()` and the like) is reported as an error.  All such uses
+   must be changed to honour `ASN1_STRING_get_length()`. The Valgrind
+   check may be disabled by building with `-DOPENSSL_NO_VALGRIND_CHECK`.
+   <!-- https://github.com/openssl/openssl/pull/31194 -->
+   <!-- https://github.com/openssl/openssl/pull/32829 -->
+   <!-- https://github.com/openssl/openssl/pull/32837 -->
+
+   *Bob Beck*
+
+ * Added `CMS_add_standard_smimecap_ex()` API function, which populates
+   an `SMIMECapabilities` list using `EVP_CIPHER_fetch()` and `EVP_MD_fetch()`
+   so that only algorithms available in the active providers are advertised.
+   `PKCS7_sign_add_signer()` was updated in the same way, so that legacy
+   ciphers, such as RC2 and DES, are no longer included in `SMIMECapabilities`
+   by default when only the default provider is loaded.
+   <!-- https://github.com/openssl/openssl/pull/31990 -->
+
+   *Todd Short*
+
+ * Added `CTLOG_STORE_add0_log()` function to add individual CT logs
+   to a `CTLOG_STORE`.
+   <!-- https://github.com/openssl/openssl/pull/30427 -->
+
+   *Tim Perry*
+
+ * Added `FIPS_mode()` macro as a convenience alias
+   to `EVP_default_properties_is_fips_enabled(NULL)`, which is a shorthand
+   to check whether the `fips=yes` property is currently enabled in the default
+   library context.
+   <!-- https://github.com/openssl/openssl/pull/30339 -->
+
+   *Dimitri John Ledkov*
+
+ * Refactored remaining cipher `OSSL_PARAM` name parsing so that automatically
+   generated parsers are used instead of `OSSL_PARAM_locate()` calls.
+   This should ensure that the list of acceptable parameters better matches
+   those which are actually processed.  It should also provide a small
+   performance improvement, because repeated iteration over passed parameter
+   arrays is avoided.
+   <!-- https://github.com/openssl/openssl/pull/32536 -->
+
+   *Dr Paul Dale*
+
+ * Improved interoperability with TPM 1.2 Endorsement Key certificates
+   per [TCG Credential Profiles specification Version 1.2, Section 3.2.7]:
+   `SubjectPublicKeyInfo` blobs whose `AlgorithmIdentifier` uses
+   `id-RSAES-OAEP` (`NID_rsaesOaep`, 1.2.840.113549.1.1.7) with a plain
+   `RSAPublicKey` body are now decoded as RSA keys.  The OAEP
+   `AlgorithmIdentifier` parameters are not interpreted.
+   <!-- https://github.com/openssl/openssl/pull/30961 -->
+
+   *Craig Lorentzen*
+
+ * Do not issue TLS 1.3 session tickets if the server has explicitly disabled
+   them via `SSL_OP_NO_TICKET` and also turned off the session cache with
+   `SSL_SESS_CACHE_OFF`. Both conditions together indicate a clear intent to
+   suppress resumption, so sending `NewSessionTicket` messages would be wasteful
+   and misleading. TLS 1.3 client that does not send the `psk_key_exchange_modes`
+   extension, or that sends it together with [RFC 9149] parameters such as
+   `new_session_count = 0` or `resumption_count = 0`, is effectively signaling
+   no interest in session tickets and session resumption.
+   <!-- https://github.com/openssl/openssl/pull/30639 -->
+
+   *Daniel Kubec*
+
+ * Improved DTLS handshake robustness under UDP reordering by buffering
+   and replaying early `ChangeCipherSpec` (CCS) records at the expected state.
+   <!-- https://github.com/openssl/openssl/pull/30225 -->
+
+   *Tong Li*
+
+ * Updated X.509 certificate verification to no longer consult the subject
+   distinguished name (DN) by default.  Previously, when a certificate contained
+   no subject alternative name of the type being checked, the subject
+   `commonName` (for host name checks) or `emailAddress` (for email checks)
+   was matched instead.  The subject DN is now checked only when
+   the `X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT` flag is set.  Correspondingly,
+   during chain verification, DNS name constraints are applied to the subject
+   `commonName` of the leaf certificate only when that flag is set, rather than
+   whenever the leaf had no DNS subject alternative name.
+   <!-- https://github.com/openssl/openssl/pull/31982 -->
+
+   *Bob Beck*
+
+ * Added various optimizations for the Elbrus2000 architecture
+   in the cryptographic and BN code.
+   <!-- https://github.com/openssl/openssl/pull/31269 -->
+
+   *Gleb Popov*
+
+ * Declared support for AArch64 Guarded Control Stack (GCS) in assembly code.
+
+   When building with compilers that support GCS (Clang 18+, GCC 15+),
+   assembly modules are marked as compatible when branch protection
+   is enabled (e.g. `-mbranch-protection=standard`).  No functional changes
+   to the assembly implementations are required, but compliance ensures
+   correct operation with shadow stack enforcement.
+   <!-- https://github.com/openssl/openssl/pull/31162 -->
+
+   *Guillaume Gardet and Gowtham Suresh Kumar*
+
+ * Added optimized ML-DSA and ML-KEM NTT operations on `ppc64le`.
+   <!-- https://github.com/openssl/openssl/pull/29611 -->
+   <!-- https://github.com/openssl/openssl/pull/30709 -->
+
+   *Danny Tsen*
+
+ * Added AVX2-optimized ML-DSA NTT operations on `x86_64`.
+   <!-- https://github.com/openssl/openssl/pull/30160 -->
+
+   *Marcel Cornu and Tomasz Kantecki*
+
+ * Added AVX-512-optimized SHAKE x4 operations for ML-DSA on `x86_64`.
+   <!-- https://github.com/openssl/openssl/pull/31090 -->
+
+   *Marcel Cornu and Tomasz Kantecki*
+
+ * Added AVX-512 and VAES optimizations for AES-CBC decryption.  Decryption
+   performance for large inputs (1024 bytes or more) improved by 3.5x to 3.8x.
+   <!-- https://github.com/openssl/openssl/pull/30902 -->
+
+   *Madan Mohan Manokar*
+
+ * Added `VC-WIN32-MSVC2013` and `VC-WIN64A-MSVC2013` build targets to provide
+   internal functions for bridging the gaps in C99 standard support
+   that are present in MSVC 2013.
+   <!-- https://github.com/openssl/openssl/pull/31640 -->
+   <!-- https://github.com/openssl/openssl/pull/31988 -->
+
+   *Bob Beck*
+
+ * Added support for the (BSD-specific) `mdoc` format for the manual pages
+   output, which can be selected via `--manpage-format=mdoc` configuration
+   option.  It requires presence of `pod2mdoc` utility in order for it to work.
+   <!-- https://github.com/openssl/openssl/pull/28450 -->
+
+   *Enji Cooper*
+
+ * Added unit tests setup activated via `enable-unit-tests` option.  This works
+   only on platforms with ld `--wrap` support (Linux, BSD).
+   <!-- https://github.com/openssl/openssl/pull/30788 -->
+
+   *Jakub Zelenka*
+
+ * Added test framework for testing function memory allocation failures.
+   <!-- https://github.com/openssl/openssl/pull/30871 -->
+
+   *Jakub Zelenka*
+
+ * Updated header files to reflect modern development practices: all include
+   files now have header guards and they are self-contained (they include all
+   dependencies they need to be included on their own).
+   <!-- https://github.com/openssl/openssl/pull/31001 -->
+
+   *Bob Beck*
+
+ * Fixed a bug where a TLS 1.3 session ticket could retain a stale ALPN
+   protocol from an earlier connection after a resumption negotiated
+   a different protocol (or none), on both the server and the client,
+   which could otherwise affect a later 0-RTT decision.
+   <!-- https://github.com/openssl/openssl/pull/32401 -->
+
+   *Daniel Kubec and Viktor Dukhovni*
+
+ * Fixed `SSL_listen_ex()` to correctly adopt a QUIC connection and to preserve
+   queued connections on allocation failure. Invalid arguments, including
+   non-QUIC SSL objects, and internal failures now return `-1`, reserving `0`
+   for "no connection available".
+   <!-- https://github.com/openssl/openssl/pull/32491 -->
+
+   *Mounir IDRASSI*
+
+ * Fixed QUIC child objects to inherit the effective flags of their explicit
+   event domain.  `SSL_get0_domain()` now reports that domain for connections
+   and streams in the hierarchy.
+   <!-- https://github.com/openssl/openssl/pull/32491 -->
+
+   *Mounir IDRASSI*
+
+ * Fixed TLS 1.3 clients to encrypt 0-RTT early data with the first offered
+   PSK identity ([RFC 9846 Section 4.3.10]) when a 0-RTT-capable resumption
+   ticket has aged out and an external PSK is offered in its place. The early
+   data was being encrypted with the retired ticket's secret, rather than
+   the external PSK's, causing the server to reject it with a bad record MAC.
+   <!-- https://github.com/openssl/openssl/pull/32202 -->
+
+   *Viktor Dukhovni*
+
+ * Fixed TLS 1.3 servers to reject early data when a resumed PSK's
+   ticket age is outside tolerance, per [RFC 9846], instead of accepting
+   0-RTT data from a ticket that has aged out.
+   <!-- https://github.com/openssl/openssl/pull/32202 -->
+
+   *Daniel Kubec*
+
+ * Fixed TLS 1.3 external PSK connections being wrongly rejected when
+   the client sets a non-empty session ID context.
+   <!-- https://github.com/openssl/openssl/pull/31964 -->
+
+   *Viktor Dukhovni*
+
+ * Fixed a TLS 1.3 server with no session ID context to accept external PSK
+   connections and to stop issuing unusable session tickets.
+   <!-- https://github.com/openssl/openssl/pull/31964 -->
+
+   *Viktor Dukhovni*
+
+ * Fixed TLS 1.3 servers to reject early data when the selected ciphersuite
+   differs from the ciphersuite associated with the selected PSK. Same-hash
+   PSK resumption can still continue without accepting 0-RTT data.
+   <!-- https://github.com/openssl/openssl/pull/32032 -->
+
+   *Mounir IDRASSI*
+
+ * Fixed X.509v3 extension configuration parsing to reject repeated fields
+   in the `basicConstraints`, `basicAttConstraints`, and `policyConstraints`
+   X.509v3 extension configurations, instead of silently using the last value.
+   <!-- https://github.com/openssl/openssl/pull/32181 -->
+
+   *Adam Tabak*
+
+ * Fixed X.509 verification of certificate chains that use DSA signatures
+   with SHA-384 or SHA-512 by registering `dsa_with_SHA384` and
+   `dsa_with_SHA512` in the signature-algorithm cross-reference table.
+   <!-- https://github.com/openssl/openssl/pull/30655 -->
+
+   *John Claus*
+
+ * Fixed `CMS_SignerInfo_verify()` to no longer accept signature algorithm
+   identifiers as valid `digestAlgorithms`, in violation of [RFC 5652].
+   <!-- https://github.com/openssl/openssl/pull/32702 -->
+
+   *Jakub Zelenka*
+
+ * Fixed reading of binary data (for example, certificates in DER format)
+   by `openssl` command from `stdin` on Windows.
+   <!-- https://github.com/openssl/openssl/pull/30559 -->
+
+   *Milan Brož*
+
+ * Fixed CRL scope checking for certificates without a CRL distribution
+   points extension.  A CRL having an issuing distribution point extension
+   including a name that matches the certificate issuer name or any
+   `issuerAltName` of the certificate is now accepted, as required
+   by the default distribution point rule at the end
+   of [RFC 5280 Section 6.3.3], instead of being rejected
+   with `X509_V_ERR_DIFFERENT_CRL_SCOPE`.
+
+   *Paul Grubbs*
+
+ * TLS clients no longer send the TLS padding extension ([RFC 7685]).  It was
+   only ever sent when `SSL_OP_TLSEXT_PADDING` was set, to work around
+   a `ClientHello` length bug in F5 middleboxes;  the fix shipped long ago
+   and the affected hardware is long out of support, so nothing should still
+   be running the problematic version.
+   `SSL_OP_TLSEXT_PADDING` is now a no-op retained for compatibility,
+   and is no longer included in `SSL_OP_ALL`.
+   <!-- https://github.com/openssl/openssl/pull/32389 -->
+
+   *Bob Beck*
+
+ * Changed `tsget` utility to use `Net::Curl::Easy` (from the `Net-Curl` CPAN
+   distribution) instead of the abandoned `WWW::Curl::Easy`.  Users who rely
+   on `tsget` should install `Net::Curl::Easy` before upgrading.
+   <!-- https://github.com/openssl/openssl/pull/31445 -->
+
+   *Shreenidhi Shedi*
+
+ * Deprecated the `enable-unit-test` configure option and the
+   `SSL_test_functions()` function.  Both will be removed in OpenSSL 5.0.
+   <!-- https://github.com/openssl/openssl/pull/30788 -->
+
+   *Jakub Zelenka*
+
+ * Deprecated `BIO_snprintf()` and `BIO_vsnprintf()`.  `snprintf()`, being part
+   of C99 standard, that is the baseline for OpenSSL since version 3.6,
+   is now considered universally available;  moreover, the fact that `BIO_*()`
+   functions return -1 on truncation, rather than the would-have-been length,
+   makes their usage error-prone.  Use `snprintf()` and `vsnprintf()` directly.
+   <!-- https://github.com/openssl/openssl/pull/31640 -->
+
+   *Bob Beck*
+
+ * Deprecated undocumented public functions `UTF8_putc()` and `UTF8_getc()`.
+   No public replacement is planned.
+   <!-- https://github.com/openssl/openssl/pull/30967 -->
+
+   *Bob Beck*
+
+ * Deprecated `EVP_CIPHER_CTX_get_num()` and `EVP_CIPHER_CTX_set_num()`
+   functions.  Refer to `ossl-migration-guide(7)` for more info.
+   <!-- https://github.com/openssl/openssl/pull/30335 -->
+
+   *Shane Lontis*
+
+ * Deprecated `ASN1_BIT_STRING_name_print()`, `ASN1_BIT_STRING_num_asc()`,
+   and `ASN1_BIT_STRING_set_asc()` functions. Refer to the manual
+   pages for more information.
+   <!-- https://github.com/openssl/openssl/pull/30853 -->
+
+   *Bob Beck*
+
+ * Deprecated `ASN1_BIT_STRING_set()` function in favour
+   of `ASN1_BIT_STRING_set1()`.
+   <!-- https://github.com/openssl/openssl/pull/30692 -->
+
+   *Norbert Pócs*
+
+ * Deprecated `CMS_stream()` and `PKCS7_stream()` API functions.  These
+   are internal plumbing that was unintentionally exposed as the public API,
+   and they no longer return a streaming boundary.  Use `BIO_new_CMS()`
+   or `BIO_new_PKCS7()` to stream CMS and PKCS#7 content.
+   <!-- https://github.com/openssl/openssl/pull/32242 -->
+
+   *Bob Beck*
+
+ * Deprecated `X509_check_host()`, `X509_check_email()`, `X509_check_ip()`,
+   and `X509_check_ip_asc()` functions.  Applications should migrate to setting
+   a reference identifier to check using `X509_VERIFY_PARAM_set1_host()`,
+   `X509_VERIFY_PARAM_set1_email()`, or `X509_VERIFY_PARAM_set1_ip_asc()`,
+   and using `X509_verify_cert()`.
+   <!-- https://github.com/openssl/openssl/pull/30403 -->
+
+   *Bob Beck*
+
+ * Dropped Windows-on-Itanium (`VC-WIN64I`) and Windows CE (`VC-CE`) targets
+   from Configurations.
+   <!-- https://github.com/openssl/openssl/pull/31601 -->
+   <!-- https://github.com/openssl/openssl/pull/31913 -->
+
+   *Bob Beck*
+
+ * Dropped `no-ecdsa` and `no-ecdh` options from `Configure`, as these options
+   did not really disable the implementations.  Use `no-ec` to disable
+   the elliptic curve support.
+   <!-- https://github.com/openssl/openssl/pull/30446 -->
+
+   *Tomáš Mráz*
 
 OpenSSL 4.0
 -----------
@@ -95,7 +681,7 @@ OpenSSL 4.0
 
    Severity: Low
 
-   Issue summary: The OpenSSL QUIC server, when configured to not preform
+   Issue summary: The OpenSSL QUIC server, when configured to not perform
    address validation, can be forced to count incoming packets multiple times
    in its unvalidated credit computation, leading to a violation
    of the [RFC 9000] unvalidated connection amplification limit of 3 times
@@ -133,7 +719,8 @@ OpenSSL 4.0
 
    *Alexandr Nedvědický*
 
- * Fixed a timing side-channel in scalar multiplication for mon-NIST EC curves.
+ * Fixed a timing side-channel leak in generic elliptic curve scalar
+   multiplication.
 
    Severity: Low
 
@@ -226,7 +813,7 @@ OpenSSL 4.0
    flow control for streams to make the QUIC stack receive ~100 MiB of memory
    instead of 768 KiB (default flow control window size).
 
-   Reportedby: Moltenbit, Bhabani Sankar Das, Saiyowa Security Team, mzfr.
+   Reported by: Moltenbit, Bhabani Sankar Das, Saiyowa Security Team, mzfr.
 
    ([CVE-2026-75804])
 
@@ -311,7 +898,7 @@ OpenSSL 4.0
    *Alexandr Nedvědický*
 
  * Fixed a bug where `EVP_DecryptFinal()` incorrectly reported a stale success
-   on AES-SIV authentication failure after a preciously successful message
+   on AES-SIV authentication failure after a previously successful message
    decryption.
    <!-- https://github.com/openssl/openssl/pull/31610 -->
 
@@ -1396,6 +1983,14 @@ OpenSSL 4.0
    <!-- https://github.com/openssl/openssl/pull/29721 -->
 
    *Bob Beck*
+
+ * Added a `-ta_in_ip_extracert` option for the `openssl cmp` command, that sets
+   `OSSL_CMP_OPT_PERMIT_TA_IN_EXTRACERTS_FOR_IR` option for the `OSSL_CMP_CTX`
+   object.
+
+   This work was sponsored by Siemens AG.
+
+   *David von Oheimb*
 
  * `X509_ALGOR_set_md()` function now returns a value indicating success
     or failure.
@@ -4482,7 +5077,7 @@ breaking changes, and mappings for the large list of deprecated functions.
 
  * Fixed a bug in the function `OCSP_basic_verify` that verifies the signer
    certificate on an OCSP response. The bug caused the function in the case
-   where the (non-default) flag OCSP_NOCHECKS is used to return a postivie
+   where the (non-default) flag OCSP_NOCHECKS is used to return a positive
    response (meaning a successful verification) even in the case where the
    response signing certificate fails to verify.
 
@@ -20280,7 +20875,7 @@ s-cbc           3624.96k     5258.21k     5530.91k     5624.30k     5628.26k
    The new configuration file reading functions are:
 
            NCONF_new, NCONF_free, NCONF_load, NCONF_load_fp, NCONF_load_bio,
-           NCONF_get_section, NCONF_get_string, NCONF_get_numbre
+           NCONF_get_section, NCONF_get_string, NCONF_get_number
 
            NCONF_default, NCONF_WIN32
 
@@ -23925,17 +24520,30 @@ ndif
 [ESV]: https://csrc.nist.gov/Projects/cryptographic-module-validation-program/entropy-validations
 [RFC 2578 (STD 58), section 3.5]: https://datatracker.ietf.org/doc/html/rfc2578#section-3.5
 [RFC 3211]: https://datatracker.ietf.org/doc/html/rfc3211
+[RFC 4492 Section 5.1.2]: https://datatracker.ietf.org/doc/html/rfc4492#section-5.1.2
+[RFC 5280]: https://datatracker.ietf.org/doc/html/rfc5280
+[RFC 5280 Section 6.3.3]: https://datatracker.ietf.org/doc/html/rfc5280#section-6.3.3
 [RFC 5297]: https://datatracker.ietf.org/doc/html/rfc5297
+[RFC 5652]: https://datatracker.ietf.org/doc/html/rfc5652
 [RFC 7250]: https://datatracker.ietf.org/doc/html/rfc7250
+[RFC 7685]: https://datatracker.ietf.org/doc/html/rfc7685
 [RFC 7919]: https://datatracker.ietf.org/doc/html/rfc7919
 [RFC 8422]: https://datatracker.ietf.org/doc/html/rfc8422
+[RFC 8422 Section 5.1.2]: https://datatracker.ietf.org/doc/html/rfc8422#section-5.1.2
 [RFC 8446]: https://datatracker.ietf.org/doc/html/rfc8446
 [RFC 8446 Section 4.6.1]: https://datatracker.ietf.org/doc/html/rfc8446#section-4.6.1
 [RFC 8452]: https://datatracker.ietf.org/doc/html/rfc8452
+[RFC 8701]: https://datatracker.ietf.org/doc/html/rfc8701
 [RFC 8998]: https://datatracker.ietf.org/doc/html/rfc8998#name-iana-considerations
 [RFC 9000]: https://datatracker.ietf.org/doc/html/rfc9000
+[RFC 9147]: https://datatracker.ietf.org/doc/html/rfc9147
+[RFC 9149]: https://datatracker.ietf.org/doc/html/rfc9149
+[RFC 9846]: https://datatracker.ietf.org/doc/html/rfc9846
+[RFC 9846 Section 4.3.10]: https://datatracker.ietf.org/doc/html/rfc9846#section-4.3.10
 [RFC 9849]: https://datatracker.ietf.org/doc/html/rfc9849
+[SECG SEC 1 Section 2.3.4]: https://www.secg.org/sec1-v2.pdf#subsubsection.2.3.4
 [SP 800-132]: https://csrc.nist.gov/pubs/sp/800/132/final
 [SP 800-185]: https://csrc.nist.gov/pubs/sp/800/185/final
 [SP 800-208]: https://csrc.nist.gov/pubs/sp/800/208/final
+[TCG Credential Profiles specification Version 1.2, Section 3.2.7]: https://trustedcomputinggroup.org/wp-content/uploads/Credential_Profiles_V1.2_Level2_Revision8.pdf#page=35
 [tls-hybrid-sm2-mlkem]: https://datatracker.ietf.org/doc/html/draft-yang-tls-hybrid-sm2-mlkem-03#name-iana-considerations

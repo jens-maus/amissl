@@ -82,6 +82,7 @@ typedef unsigned int u_int;
 #endif
 #include "internal/sockets.h"
 #include "internal/statem.h"
+#include "ssl/ssl_local.h"
 
 #ifndef OPENSSL_NO_ECH
 /* needed for X509_check_host in some CI builds "no-http" */
@@ -133,8 +134,10 @@ static int keymatexportlen = 20;
 
 static int async = 0;
 
-static int use_sendfile = 0;
-static int use_zc_sendfile = 0;
+#ifndef OPENSSL_NO_KTLS
+static int use_sendfile;
+static int use_zc_sendfile;
+#endif
 
 static const char *session_id_prefix = NULL;
 
@@ -168,16 +171,17 @@ static unsigned int psk_server_cb(SSL *ssl, const char *identity,
 {
     long key_len = 0;
     unsigned char *key;
+    const int version1_3 = SSL_is_dtls(ssl) ? DTLS1_3_VERSION : TLS1_3_VERSION;
 
     if (s_debug)
         BIO_puts(bio_s_out, "psk_server_cb\n");
 
-    if (!SSL_is_dtls(ssl) && SSL_version(ssl) >= TLS1_3_VERSION) {
+    if (PROTOCOL_VERSION_CMP(SSL_is_dtls(ssl), SSL_version(ssl), version1_3) >= 0) {
         /*
          * This callback is designed for use in (D)TLSv1.2 (or below). It is
          * possible to use a single callback for all protocol versions - but it
-         * is preferred to use a dedicated callback for TLSv1.3. For TLSv1.3 we
-         * have psk_find_session_cb.
+         * is preferred to use a dedicated callback for (D)TLSv1.3. For
+         * (D)TLSv1.3 we have psk_find_session_cb.
          */
         return 0;
     }
@@ -187,8 +191,8 @@ static unsigned int psk_server_cb(SSL *ssl, const char *identity,
         goto out_err;
     }
     if (s_debug)
-        BIO_printf(bio_s_out, "identity_len=%d identity=%s\n",
-            (int)strlen(identity), identity);
+        BIO_printf(bio_s_out, "identity_len=%zu identity=%s\n",
+            strlen(identity), identity);
 
     /* here we could lookup the given identity e.g. from a database */
     if (strcmp(identity, psk_identity) != 0) {
@@ -209,7 +213,7 @@ static unsigned int psk_server_cb(SSL *ssl, const char *identity,
     }
     if (key_len > (int)max_psk_len) {
         BIO_printf(bio_err,
-            "psk buffer of callback is too small (%d) for key (%ld)\n",
+            "psk buffer of callback is too small (%u) for key (%ld)\n",
             max_psk_len, key_len);
         OPENSSL_free(key);
         return 0;
@@ -462,7 +466,7 @@ typedef struct tlsextctx_st {
 static unsigned int ech_print_cb(SSL *s, const char *str)
 {
     if (str != NULL)
-        BIO_printf(bio_s_out, "ECH Server callback printing: \n%s\n", str);
+        BIO_printf(bio_s_out, "ECH Server callback printing:\n%s\n", str);
     return 1;
 }
 
@@ -617,7 +621,8 @@ static int ssl_ech_servername_cb(SSL *s, int *ad, void *arg)
         return SSL_TLSEXT_ERR_NOACK;
     if (echrv == SSL_ECH_STATUS_SUCCESS && servername != NULL) {
         if (ctx2 != NULL) {
-            int check_host = X509_check_host(p->scert, servername, 0, 0, NULL);
+            int check_host = check_cert_might_be_valid(p->biodebug,
+                p->biodebug, p->scert, servername, NULL, NULL);
 
             if (check_host == 1) {
                 if (p->biodebug != NULL)
@@ -848,10 +853,8 @@ static int bring_ocsp_resp_in_correct_order(SSL *s, tlsextstatusctx *srctx,
         sk_OCSP_RESPONSE_pop_free(*sk_resp, OCSP_RESPONSE_free);
 
     SSL_get0_chain_certs(s, &server_chain);
-    /*
-     * TODO(DTLS-1.3): in future DTLS should also be considered
-     */
-    if (server_chain != NULL && srctx->status_all && !SSL_is_dtls(s) && SSL_version(s) >= TLS1_3_VERSION) {
+
+    if (server_chain != NULL && srctx->status_all && ((!SSL_is_dtls(s) && SSL_version(s) >= TLS1_3_VERSION) || (SSL_is_dtls(s) && SSL_version(s) <= DTLS1_3_VERSION))) {
         /* certificate chain is available */
         num = sk_X509_num(server_chain) + 1;
     }
@@ -1006,10 +1009,7 @@ static int get_ocsp_resp_from_responder(SSL *s, tlsextstatusctx *srctx,
 
     SSL_get0_chain_certs(s, &server_chain);
 
-    /*
-     * TODO(DTLS-1.3): in future DTLS should also be considered
-     */
-    if (server_chain != NULL && srctx->status_all && !SSL_is_dtls(s) && SSL_version(s) >= TLS1_3_VERSION) {
+    if (server_chain != NULL && srctx->status_all && ((!SSL_is_dtls(s) && SSL_version(s) >= TLS1_3_VERSION) || (SSL_is_dtls(s) && SSL_version(s) <= DTLS1_3_VERSION))) {
         /* certificate chain is available */
         num = sk_X509_num(server_chain) + 1;
     } else {
@@ -1265,6 +1265,7 @@ typedef enum OPTION_choice {
     OPT_DTLS,
     OPT_DTLS1,
     OPT_DTLS1_2,
+    OPT_DTLS1_3,
     OPT_SCTP,
     OPT_TIMEOUT,
     OPT_MTU,
@@ -1339,9 +1340,9 @@ const OPTIONS s_server_options[] = {
 
     OPT_SECTION("Identity"),
     { "context", OPT_CONTEXT, 's', "Set session ID context" },
-    { "CAfile", OPT_CAFILE, '<', "PEM format file of CA's" },
-    { "CApath", OPT_CAPATH, '/', "PEM format directory of CA's" },
-    { "CAstore", OPT_CASTORE, ':', "URI to store of CA's" },
+    { "CAfile", OPT_CAFILE, '<', "File in PEM format with trusted CA certs" },
+    { "CApath", OPT_CAPATH, '/', "Dir with trusted CA cert files in PEM format" },
+    { "CAstore", OPT_CASTORE, ':', "URI of store with trusted CA certs" },
     { "no-CAfile", OPT_NOCAFILE, '-',
         "Do not load the default certificates file" },
     { "no-CApath", OPT_NOCAPATH, '-',
@@ -1349,9 +1350,9 @@ const OPTIONS s_server_options[] = {
     { "no-CAstore", OPT_NOCASTORE, '-',
         "Do not load certificates from the default certificates store URI" },
     { "nocert", OPT_NOCERT, '-', "Don't use any certificates (Anon-DH)" },
-    { "verify", OPT_VERIFY, 'n', "Turn on peer certificate verification" },
-    { "Verify", OPT_UPPER_V_VERIFY, 'n',
-        "Turn on peer certificate verification, must have a cert" },
+    { "verify", OPT_VERIFY, 'p', "Turn on peer certificate verification, set depth" },
+    { "Verify", OPT_UPPER_V_VERIFY, 'p',
+        "Turn on peer certificate verification, must have a cert, set depth" },
     { "nameopt", OPT_NAMEOPT, 's', "Certificate subject/issuer name printing options" },
     { "cert", OPT_CERT, '<', "Server certificate file to use; default " TEST_CERT },
     { "cert2", OPT_CERT2, '<',
@@ -1408,17 +1409,21 @@ const OPTIONS s_server_options[] = {
     { "crl_download", OPT_CRL_DOWNLOAD, '-',
         "Download CRLs from distribution points in certificate CDP entries" },
     { "chainCAfile", OPT_CHAINCAFILE, '<',
-        "CA file for certificate chain (PEM format)" },
+        "File in PEM format with trusted CA certs to build own cert chain" },
     { "chainCApath", OPT_CHAINCAPATH, '/',
-        "use dir as certificate store path to build CA certificate chain" },
+        "Dir with trusted CA cert files in PEM format to build own cert chain" },
     { "chainCAstore", OPT_CHAINCASTORE, ':',
-        "use URI as certificate store to build CA certificate chain" },
+        "URI of trusted CA cert store to build own cert chain" },
+    { OPT_MORE_STR, 0, 0,
+        "NOTE: these override -CApath, -CAfile, and -CAstore for server chain building" },
     { "verifyCAfile", OPT_VERIFYCAFILE, '<',
-        "CA file for certificate verification (PEM format)" },
+        "File in PEM format with trusted CA certs for client cert verification" },
     { "verifyCApath", OPT_VERIFYCAPATH, '/',
-        "use dir as certificate store path to verify CA certificate" },
+        "Dir with trusted CA cert files in PEM format for client cert verification" },
     { "verifyCAstore", OPT_VERIFYCASTORE, ':',
-        "use URI as certificate store to verify CA certificate" },
+        "URI of trusted CA cert store for client cert verification" },
+    { OPT_MORE_STR, 0, 0,
+        "NOTE: these override -CApath, -CAfile, and -CAstore for client cert verification" },
     { "expected-rpks", OPT_EXPECTED_RPK, '<',
         "PEM file with expected client public key(s)" },
     { "no_cache", OPT_NO_CACHE, '-', "Disable session cache" },
@@ -1442,7 +1447,7 @@ const OPTIONS s_server_options[] = {
         "Provide certificate status response(s) if requested, for the whole chain" },
     { "status_verbose", OPT_STATUS_VERBOSE, '-',
         "Print more output in certificate status callback" },
-    { "status_timeout", OPT_STATUS_TIMEOUT, 'n',
+    { "status_timeout", OPT_STATUS_TIMEOUT, 'N',
         "Status request responder timeout" },
     { "status_url", OPT_STATUS_URL, 's', "Status request fallback URL" },
     { "proxy", OPT_PROXY, 's',
@@ -1499,13 +1504,13 @@ const OPTIONS s_server_options[] = {
 #endif
 
     OPT_SECTION("Protocol and version"),
-    { "max_early_data", OPT_MAX_EARLY, 'n',
+    { "max_early_data", OPT_MAX_EARLY, 'N',
         "The maximum number of bytes of early data as advertised in tickets" },
-    { "recv_max_early_data", OPT_RECV_MAX_EARLY, 'n',
+    { "recv_max_early_data", OPT_RECV_MAX_EARLY, 'N',
         "The maximum number of bytes of early data (hard limit)" },
     { "early_data", OPT_EARLY_DATA, '-', "Attempt to read early data" },
     { "num_tickets", OPT_S_NUM_TICKETS, 'n',
-        "The number of TLSv1.3 session tickets that a server will automatically issue" },
+        "The number of (D)TLSv1.3 session tickets that a server will automatically issue" },
     { "anti_replay", OPT_ANTI_REPLAY, '-', "Switch on anti-replay protection (default)" },
     { "no_anti_replay", OPT_NO_ANTI_REPLAY, '-', "Switch off anti-replay protection" },
     { "http_server_binmode", OPT_HTTP_SERVER_BINMODE, '-', "opening files in binary mode when acting as http server (-WWW and -HTTP)" },
@@ -1534,6 +1539,9 @@ const OPTIONS s_server_options[] = {
 #endif
 #ifndef OPENSSL_NO_DTLS1_2
     { "dtls1_2", OPT_DTLS1_2, '-', "Just talk DTLSv1.2" },
+#endif
+#ifndef OPENSSL_NO_DTLS1_3
+    { "dtls1_3", OPT_DTLS1_3, '-', "Just talk DTLSv1.3" },
 #endif
 #ifndef OPENSSL_NO_SCTP
     { "sctp", OPT_SCTP, '-', "Use SCTP" },
@@ -1586,7 +1594,6 @@ static int ech_load_dir(SSL_CTX *lctx, const char *thedir,
     OPENSSL_DIR_CTX *d = NULL;
     const char *thisfile = NULL;
     OSSL_ECHSTORE *es = NULL;
-    BIO *in = NULL;
     int loaded = 0;
     int ret = 0;
 
@@ -1614,21 +1621,24 @@ static int ech_load_dir(SSL_CTX *lctx, const char *thedir,
     }
     while ((thisfile = OPENSSL_DIR_read(&d, thedir))) {
         char filepath[PATH_MAX];
+        BIO *in = NULL;
         int r;
 
 #ifdef OPENSSL_SYS_VMS
-        r = BIO_snprintf(filepath, sizeof(filepath), "%s%s", thedir, thisfile);
+        r = snprintf(filepath, sizeof(filepath), "%s%s", thedir, thisfile);
 #else
-        r = BIO_snprintf(filepath, sizeof(filepath), "%s/%s", thedir, thisfile);
+        r = snprintf(filepath, sizeof(filepath), "%s/%s", thedir, thisfile);
 #endif
+        if (r < 0 || (size_t)r >= sizeof(filepath))
+            continue;
         if (app_isdir(filepath) > 0) {
             if (s_debug)
                 BIO_printf(bio_err, "Skipping directory: %s\n", filepath);
             continue;
         }
-        if (r < 0
-            || (in = BIO_new_file(filepath, "r")) == NULL
+        if ((in = BIO_new_file(filepath, "r")) == NULL
             || OSSL_ECHSTORE_read_pem(es, in, for_retry) != 1) {
+            BIO_free_all(in);
             BIO_printf(bio_err, "Failed reading from: %s\n", filepath);
             continue;
         }
@@ -1656,9 +1666,10 @@ end:
 }
 #endif
 
-#define IS_PROT_FLAG(o)                                  \
-    (o == OPT_TLS1 || o == OPT_TLS1_1 || o == OPT_TLS1_2 \
-        || o == OPT_TLS1_3 || o == OPT_DTLS || o == OPT_DTLS1 || o == OPT_DTLS1_2)
+#define IS_PROT_FLAG(o)                                                           \
+    (o == OPT_TLS1 || o == OPT_TLS1_1 || o == OPT_TLS1_2                          \
+        || o == OPT_TLS1_3 || o == OPT_DTLS || o == OPT_DTLS1 || o == OPT_DTLS1_2 \
+        || o == OPT_DTLS1_3)
 
 int s_server_main(int argc, char *argv[])
 {
@@ -1718,6 +1729,9 @@ int s_server_main(int argc, char *argv[])
 #ifndef OPENSSL_NO_SRTP
     char *srtp_profiles = NULL;
 #endif
+#if !(defined(OPENSSL_NO_NEXTPROTONEG) && defined(OPENSSL_NO_PSK))
+    int version1_3;
+#endif
     int min_version = 0, max_version = 0, prot_opt = 0, no_prot_opt = 0;
     int s_server_verify = SSL_VERIFY_NONE;
     int s_server_session_id_context = 1; /* anything will do */
@@ -1767,8 +1781,10 @@ int s_server_main(int argc, char *argv[])
     s_quiet = 0;
     s_brief = 0;
     async = 0;
+#ifndef OPENSSL_NO_KTLS
     use_sendfile = 0;
     use_zc_sendfile = 0;
+#endif
 
     port = OPENSSL_strdup(PORT);
     cctx = SSL_CONF_CTX_new();
@@ -1880,17 +1896,17 @@ int s_server_main(int argc, char *argv[])
             break;
 #endif
         case OPT_NACCEPT:
-            naccept = atol(opt_arg());
+            naccept = opt_int_arg();
             break;
         case OPT_VERIFY:
             s_server_verify = SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE;
-            verify_args.depth = atoi(opt_arg());
+            verify_args.depth = opt_int_arg();
             if (!s_quiet)
                 BIO_printf(bio_err, "verify depth is %d\n", verify_args.depth);
             break;
         case OPT_UPPER_V_VERIFY:
             s_server_verify = SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT | SSL_VERIFY_CLIENT_ONCE;
-            verify_args.depth = atoi(opt_arg());
+            verify_args.depth = opt_int_arg();
             if (!s_quiet)
                 BIO_printf(bio_err,
                     "verify depth is %d, must return a certificate\n",
@@ -2074,7 +2090,7 @@ int s_server_main(int argc, char *argv[])
         case OPT_STATUS_TIMEOUT:
 #ifndef OPENSSL_NO_OCSP
             s_tlsextstatus = 1;
-            tlscstatp.timeout = atoi(opt_arg());
+            tlscstatp.timeout = opt_int_arg();
 #endif
             break;
         case OPT_PROXY:
@@ -2232,6 +2248,14 @@ int s_server_main(int argc, char *argv[])
             socket_type = SOCK_DGRAM;
 #endif
             break;
+        case OPT_DTLS1_3:
+#ifndef OPENSSL_NO_DTLS
+            meth = DTLS_server_method();
+            min_version = DTLS1_3_VERSION;
+            max_version = DTLS1_3_VERSION;
+            socket_type = SOCK_DGRAM;
+#endif
+            break;
         case OPT_SCTP:
 #ifndef OPENSSL_NO_SCTP
             protocol = IPPROTO_SCTP;
@@ -2249,7 +2273,8 @@ int s_server_main(int argc, char *argv[])
             break;
         case OPT_MTU:
 #ifndef OPENSSL_NO_DTLS
-            socket_mtu = atol(opt_arg());
+            if (!opt_long(opt_arg(), &socket_mtu))
+                goto opthelp;
 #endif
             break;
         case OPT_LISTEN:
@@ -2300,35 +2325,35 @@ int s_server_main(int argc, char *argv[])
             keymatexportlabel = opt_arg();
             break;
         case OPT_KEYMATEXPORTLEN:
-            keymatexportlen = atoi(opt_arg());
+            keymatexportlen = opt_int_arg();
             break;
         case OPT_ASYNC:
             async = 1;
             break;
         case OPT_MAX_SEND_FRAG:
-            max_send_fragment = atoi(opt_arg());
+            max_send_fragment = opt_int_arg();
             break;
         case OPT_SPLIT_SEND_FRAG:
-            split_send_fragment = atoi(opt_arg());
+            split_send_fragment = opt_int_arg();
             break;
         case OPT_MAX_PIPELINES:
-            max_pipelines = atoi(opt_arg());
+            max_pipelines = opt_int_arg();
             break;
         case OPT_READ_BUF:
-            read_buf_len = atoi(opt_arg());
+            read_buf_len = opt_int_arg();
             break;
         case OPT_KEYLOG_FILE:
             keylog_file = opt_arg();
             break;
         case OPT_MAX_EARLY:
-            max_early_data = atoi(opt_arg());
+            max_early_data = opt_int_arg();
             if (max_early_data < 0) {
                 BIO_puts(bio_err, "Invalid value for max_early_data\n");
                 goto end;
             }
             break;
         case OPT_RECV_MAX_EARLY:
-            recv_max_early_data = atoi(opt_arg());
+            recv_max_early_data = opt_int_arg();
             if (recv_max_early_data < 0) {
                 BIO_puts(bio_err, "Invalid value for recv_max_early_data\n");
                 goto end;
@@ -2402,6 +2427,10 @@ int s_server_main(int argc, char *argv[])
         }
     }
 
+#if !(defined(OPENSSL_NO_NEXTPROTONEG) && defined(OPENSSL_NO_PSK))
+    version1_3 = (socket_type == SOCK_DGRAM) ? DTLS1_3_VERSION : TLS1_3_VERSION;
+#endif
+
     /* No extra arguments. */
     if (!opt_check_rest_arg(NULL))
         goto opthelp;
@@ -2410,7 +2439,7 @@ int s_server_main(int argc, char *argv[])
         goto end;
 
 #ifndef OPENSSL_NO_NEXTPROTONEG
-    if (min_version == TLS1_3_VERSION && next_proto_neg_in != NULL) {
+    if (min_version == version1_3 && next_proto_neg_in != NULL) {
         BIO_puts(bio_err, "Cannot supply -nextprotoneg with TLSv1.3\n");
         goto opthelp;
     }
@@ -2980,7 +3009,7 @@ int s_server_main(int argc, char *argv[])
     }
 
     if (psk_identity_hint != NULL) {
-        if (min_version == TLS1_3_VERSION) {
+        if (min_version == version1_3) {
             BIO_puts(bio_s_out, "PSK warning: there is NO identity hint in TLSv1.3\n");
         } else {
             if (!SSL_CTX_use_psk_identity_hint(ctx, psk_identity_hint)) {
@@ -3037,6 +3066,10 @@ int s_server_main(int argc, char *argv[])
             ERR_print_errors(bio_err);
             goto end;
         }
+        SSL_CTX_set_cookie_generate_cb(ctx2, generate_cookie_callback);
+        SSL_CTX_set_cookie_verify_cb(ctx2, verify_cookie_callback);
+        SSL_CTX_set_stateless_cookie_generate_cb(ctx2, generate_stateless_cookie_callback);
+        SSL_CTX_set_stateless_cookie_verify_cb(ctx2, verify_stateless_cookie_callback);
         tlsextcbp.biodebug = bio_s_out;
 #ifndef OPENSSL_NO_ECH
         SSL_CTX_set_tlsext_servername_callback(ctx2, ssl_ech_servername_cb);
@@ -3130,6 +3163,9 @@ int s_server_main(int argc, char *argv[])
     ret = 0;
 end:
     SSL_CTX_free(ctx);
+#ifndef OPENSSL_NO_SRP
+    cleanup_srp(&srp_callback_parm);
+#endif
     SSL_SESSION_free(psksess);
     set_keylog_file(NULL, NULL);
     X509_free(s_cert);

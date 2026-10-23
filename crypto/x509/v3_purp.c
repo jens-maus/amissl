@@ -15,6 +15,9 @@
 #include "crypto/x509.h"
 #include "internal/tsan_assist.h"
 #include "x509_local.h"
+#include "crypto/objects/obj_dat.h"
+#include "crypto/siphash.h"
+#include <openssl/rand.h>
 
 static int check_ssl_ca(const X509 *x);
 static int check_purpose_ssl_client(const X509_PURPOSE *xp, const X509 *x,
@@ -38,6 +41,7 @@ static int no_check_purpose(const X509_PURPOSE *xp, const X509 *x,
     int non_leaf);
 static int check_purpose_ocsp_helper(const X509_PURPOSE *xp, const X509 *x,
     int non_leaf);
+static int check_name_constraints(const NAME_CONSTRAINTS *nc);
 
 static int xp_cmp(const X509_PURPOSE *const *a, const X509_PURPOSE *const *b);
 static void xptable_free(X509_PURPOSE *p);
@@ -405,6 +409,143 @@ static int check_sig_alg_match(const EVP_PKEY *issuer_key, const X509 *subject)
     return X509_V_ERR_SIGNATURE_ALGORITHM_MISMATCH;
 }
 
+/*
+ * Per-scan SipHash keying for the duplicate-extension fall-back table.
+ *
+ * Standard extensions have an assigned NID and are deduplicated with the O(1)
+ * bitset in scan_ext_flags(). Only unknown or dynamically registered OIDs,
+ * whose bytes are fully attacker-controlled on an untrusted certificate, reach
+ * the hash table. An unkeyed hash would let an attacker precompute colliding
+ * OIDs and drive the table into O(n^2) chain walks (hash flooding). Hash the
+ * OID with SipHash under a random key drawn once per scan, mirroring the
+ * defense in ssl/quic/quic_lcidm.c.
+ */
+typedef struct {
+    const ASN1_OBJECT *obj;
+    const uint64_t *key; /* 128-bit SipHash key owned by scan_ext_flags */
+} oid_hte;
+
+static unsigned long oid_hash(const void *p)
+{
+    const oid_hte *e = (const oid_hte *)p;
+    SIPHASH sip = { 0 };
+    unsigned char digest[SIPHASH_MIN_DIGEST_SIZE];
+    unsigned long v = 0;
+
+    if (!SipHash_set_hash_size(&sip, SIPHASH_MIN_DIGEST_SIZE))
+        return 0;
+    if (!SipHash_Init(&sip, (const unsigned char *)e->key, 0, 0))
+        return 0;
+    SipHash_Update(&sip, (const unsigned char *)e->obj->data, e->obj->length);
+
+    if (!SipHash_Final(&sip, digest, sizeof(digest)))
+        return 0;
+    memcpy(&v, digest, sizeof(v) < sizeof(digest) ? sizeof(v) : sizeof(digest));
+    return v;
+}
+
+static int oid_cmp(const void *a, const void *b)
+{
+    return OBJ_cmp(((const oid_hte *)a)->obj, ((const oid_hte *)b)->obj);
+}
+
+/*
+ * Scan all extensions of a certificate to collect extension-related flags.
+ * Detects duplicate extensions (RFC 5280 section 4.2), the presence of a
+ * freshest CRL extension and unsupported critical extensions.
+ *
+ * In the future, if needed, this scanning function could return the index
+ * of the offending extension on error, allowing the caller to identify which
+ * extension caused the problem and report it via ERR_raise_data().
+ */
+static void scan_ext_flags(const X509 *x509, uint32_t *flags)
+{
+    OPENSSL_LHASH *h = NULL;
+    oid_hte *arr = NULL;
+    size_t num_entries = 0;
+    uint64_t k[2]; /* random SipHash key for the fall-back table */
+    uint8_t ex_bitset[(NUM_NID + 7) / 8];
+    int count = X509_get_ext_count(x509);
+
+    memset(ex_bitset, 0, sizeof(ex_bitset));
+    /* A certificate MUST NOT include more than one instance of an extension. */
+    for (int i = 0; i < count; i++) {
+        const X509_EXTENSION *ex = X509_get_ext(x509, i);
+        const ASN1_OBJECT *a = X509_EXTENSION_get_object(ex);
+        int nid = OBJ_obj2nid(a);
+
+        /*
+         * Known NIDs within the build-time bitset limit are checked for
+         * duplicates in constant time. Unknown OIDs and dynamically registered
+         * NIDs that exceed the limit fall back to duplicate detection via a
+         * hash table.
+         */
+        if (nid > NID_undef && nid < NUM_NID) {
+            unsigned int ex_bit = nid;
+
+            if ((ex_bitset[ex_bit >> 3] & (1u << (ex_bit & 7))) != 0) {
+                *flags |= EXFLAG_DUPLICATE;
+                break;
+            }
+            ex_bitset[ex_bit >> 3] |= (1u << (ex_bit & 7));
+        } else {
+            /*
+             * Extensions with unknown NID (NID_undef) and dynamically
+             * registered NIDs are handled here by hashing the OID (data/length).
+             * A zero-length OID should not reach this point, but we check for
+             * it anyway and assign the EXFLAG_INVALID flag if it does.
+             */
+            if (a->length < 1) {
+                *flags |= EXFLAG_INVALID;
+                break;
+            }
+            /*
+             * Create the table and draw a fresh random SipHash key the first
+             * time an attacker-controlled OID is seen, so unkeyed hashing
+             * cannot be used to force O(n^2) collisions (hash flooding).
+             *
+             * The key and the entry wrappers remain valid for the duration of
+             * the scan; the table never outlives this function.
+             *
+             * If the table cannot be set up or an insert fails, fail closed
+             * with EXFLAG_INVALID, as ossl_x509v3_cache_extensions() does for
+             * any other extension it cannot process. Leaving the loop
+             * silently would skip not only the duplicate check but also the
+             * unsupported-critical check for this and every later extension.
+             */
+            if (h == NULL) {
+                if (RAND_bytes_ex(x509->libctx, (unsigned char *)k, sizeof(k), 0) <= 0
+                    || (arr = OPENSSL_malloc_array(count, sizeof(*arr))) == NULL
+                    || (h = OPENSSL_LH_new(oid_hash, oid_cmp)) == NULL) {
+                    *flags |= EXFLAG_INVALID;
+                    break;
+                }
+            }
+            arr[num_entries].obj = a;
+            arr[num_entries].key = k;
+            if (OPENSSL_LH_insert(h, &arr[num_entries]) != NULL) {
+                *flags |= EXFLAG_DUPLICATE;
+                break;
+            }
+            if (OPENSSL_LH_error(h) != 0) {
+                *flags |= EXFLAG_INVALID;
+                break;
+            }
+            num_entries++;
+        }
+        if (nid == NID_freshest_crl)
+            *flags |= EXFLAG_FRESHEST;
+        if (!X509_EXTENSION_get_critical(ex))
+            continue;
+        if (!X509_supported_extension(ex)) {
+            *flags |= EXFLAG_CRITICAL;
+            break;
+        }
+    }
+    OPENSSL_LH_free(h);
+    OPENSSL_free(arr);
+}
+
 #define V1_ROOT (EXFLAG_V1 | EXFLAG_SS)
 #define ku_reject(x, usage) \
     (((x)->ex_flags & EXFLAG_KUSAGE) != 0 && ((x)->ex_kusage & (usage)) == 0)
@@ -642,6 +783,8 @@ int ossl_x509v3_cache_extensions(const X509 *const_x)
     tmp_nc = X509_get_ext_d2i(const_x, NID_name_constraints, &i, NULL);
     if (tmp_nc == NULL && i != -1)
         tmp_ex_flags |= EXFLAG_INVALID;
+    if (!check_name_constraints(tmp_nc))
+        tmp_ex_flags |= EXFLAG_INVALID;
 
     /* Handle CRL distribution point entries */
     res = setup_crldp(const_x, &tmp_crldp);
@@ -658,19 +801,7 @@ int ossl_x509v3_cache_extensions(const X509 *const_x)
         tmp_ex_flags |= EXFLAG_INVALID;
 #endif
 
-    for (i = 0; i < X509_get_ext_count(const_x); i++) {
-        const X509_EXTENSION *ex = X509_get_ext(const_x, i);
-        int nid = OBJ_obj2nid(X509_EXTENSION_get_object(ex));
-
-        if (nid == NID_freshest_crl)
-            tmp_ex_flags |= EXFLAG_FRESHEST;
-        if (!X509_EXTENSION_get_critical(ex))
-            continue;
-        if (!X509_supported_extension(ex)) {
-            tmp_ex_flags |= EXFLAG_CRITICAL;
-            break;
-        }
-    }
+    scan_ext_flags(const_x, &tmp_ex_flags);
 
     /* Set x->siginf, ignoring errors due to unsupported algos */
     (void)ossl_x509_init_sig_info(const_x, &tmp_siginf);
@@ -1052,6 +1183,45 @@ static int no_check_purpose(const X509_PURPOSE *xp, const X509 *x,
     int non_leaf)
 {
     return 1;
+}
+
+static int check_name_constraints(const NAME_CONSTRAINTS *nc)
+{
+    GENERAL_SUBTREE *sub;
+    int ret = 1;
+
+    if (nc == NULL)
+        goto done;
+
+    for (int i = 0; nc->permittedSubtrees != NULL
+        && i < sk_GENERAL_SUBTREE_num(nc->permittedSubtrees);
+        i++) {
+        sub = sk_GENERAL_SUBTREE_value(nc->permittedSubtrees, i);
+        if (sub->base->type == GEN_OTHERNAME
+            && OBJ_obj2nid(sub->base->d.otherName->type_id)
+                == NID_id_on_SmtpUTF8Mailbox) {
+            /* RFC 9598 prohibits GEN_OTHERNAME email constraints */
+            ERR_raise(ERR_LIB_X509V3, X509_V_ERR_UNSUPPORTED_CONSTRAINT_TYPE);
+            ret = 0;
+            goto done;
+        }
+    }
+    for (int i = 0; nc->excludedSubtrees != NULL
+        && i < sk_GENERAL_SUBTREE_num(nc->excludedSubtrees);
+        i++) {
+        sub = sk_GENERAL_SUBTREE_value(nc->excludedSubtrees, i);
+        if (sub->base->type == GEN_OTHERNAME
+            && OBJ_obj2nid(sub->base->d.otherName->type_id)
+                == NID_id_on_SmtpUTF8Mailbox) {
+            /* RFC 9598 prohibits GEN_OTHERNAME email constraints */
+            ERR_raise(ERR_LIB_X509V3, X509_V_ERR_UNSUPPORTED_CONSTRAINT_TYPE);
+            ret = 0;
+            goto done;
+        }
+    }
+
+done:
+    return ret;
 }
 
 /*-

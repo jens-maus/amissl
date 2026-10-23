@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2022-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -167,6 +167,8 @@ static int test_cfq(void)
     testresult = 1;
 err:
     ossl_quic_cfq_free(cfq);
+    if (testresult && (!TEST_ptr(g_free) || !TEST_size_t_ne(g_free_len, 0)))
+        testresult = 0;
     return testresult;
 }
 

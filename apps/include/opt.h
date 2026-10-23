@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2018-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -39,9 +39,9 @@
         { "purpose", OPT_V_PURPOSE, 's',                                                   \
             "certificate chain purpose" },                                                 \
         { "verify_name", OPT_V_VERIFY_NAME, 's', "verification policy name" },             \
-        { "verify_depth", OPT_V_VERIFY_DEPTH, 'n',                                         \
+        { "verify_depth", OPT_V_VERIFY_DEPTH, 'N',                                         \
             "chain depth limit" },                                                         \
-        { "auth_level", OPT_V_VERIFY_AUTH_LEVEL, 'n',                                      \
+        { "auth_level", OPT_V_VERIFY_AUTH_LEVEL, 'N',                                      \
             "chain authentication security level" },                                       \
         { "attime", OPT_V_ATTIME, 'M', "verification epoch time" },                        \
         { "verify_hostname", OPT_V_VERIFY_HOSTNAME, 's',                                   \
@@ -220,12 +220,12 @@
             "Groups to advertise (colon-separated list)" },                                                     \
         { "named_curve", OPT_S_NAMEDCURVE, 's',                                                                 \
             "Elliptic curve used for ECDHE (server-side only)" },                                               \
-        { "cipher", OPT_S_CIPHER, 's', "Specify TLSv1.2 and below cipher list to be used" },                    \
-        { "ciphersuites", OPT_S_CIPHERSUITES, 's', "Specify TLSv1.3 ciphersuites to be used" },                 \
+        { "cipher", OPT_S_CIPHER, 's', "Specify (D)TLSv1.2 and below cipher list to be used" },                 \
+        { "ciphersuites", OPT_S_CIPHERSUITES, 's', "Specify (D)TLSv1.3 ciphersuites to be used" },              \
         { "min_protocol", OPT_S_MINPROTO, 's', "Specify the minimum protocol version to be used" },             \
         { "max_protocol", OPT_S_MAXPROTO, 's', "Specify the maximum protocol version to be used" },             \
         { "record_padding", OPT_S_RECORD_PADDING, 's',                                                          \
-            "Block size to pad TLS 1.3 records to." },                                                          \
+            "Block size to pad (D)TLS 1.3 records to." },                                                       \
         { "debug_broken_protocol", OPT_S_DEBUGBROKE, '-',                                                       \
             "Perform all sorts of protocol violations for testing purposes" },                                  \
         { "no_middlebox", OPT_S_NO_MIDDLEBOX, '-',                                                              \
@@ -341,8 +341,9 @@ typedef struct options_st {
      * value type:
      *
      *   '-' no value (also the value zero)
-     *   'n' number (type 'int')
-     *   'p' positive number (type 'int')
+     *   'n' any number (type 'int')
+     *   'p' positive number (type 'int', value > 0)
+     *   'N' is a non-negative number (type 'int', value >= 0)
      *   'u' unsigned number (type 'unsigned long')
      *   'l' number (type 'unsigned long')
      *   'M' number (type 'intmax_t')
@@ -356,7 +357,7 @@ typedef struct options_st {
      *   'A' any ASN1, der/pem/b64 format  [OPT_FMT_ASN1]
      *   'c' pem/der/smime format          [OPT_FMT_PDS]
      *
-     * The 'l', 'n' and 'u' value types include the values zero,
+     * The 'l', 'n', 'N' and 'u' value types include the values zero,
      * the 'p' value type does not.
      */
     int valtype;

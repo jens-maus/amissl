@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2015-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -15,6 +15,7 @@
 #include "app_libctx.h"
 #include "internal/nelem.h"
 #include "internal/numbers.h"
+#include <stdio.h>
 #include <string.h>
 #if !defined(OPENSSL_SYS_MSDOS)
 #include <unistd.h>
@@ -36,7 +37,6 @@ const char OPT_PARAM_STR[] = "-P";
 
 /* Our state */
 static char **argv;
-static int argc;
 static int opt_index;
 static char *arg;
 static char *flag;
@@ -148,7 +148,7 @@ char *opt_appname(const char *argv0)
     size_t len = strlen(prog);
 
     if (argv0 != NULL)
-        BIO_snprintf(prog + len, sizeof(prog) - len - 1, " %s", argv0);
+        snprintf(prog + len, sizeof(prog) - len - 1, " %s", argv0);
     return prog;
 }
 
@@ -161,7 +161,6 @@ char *opt_getprog(void)
 char *opt_init(int ac, char **av, const OPTIONS *o)
 {
     /* Store state. */
-    argc = ac;
     argv = av;
     opt_begin();
     opts = o;
@@ -688,7 +687,7 @@ int opt_ulong(const char *value, unsigned long *result)
     l = strtoul(value, &endptr, 0);
     if (*endptr
         || endptr == value
-        || ((l == ULONG_MAX) && errno == ERANGE)
+        || (l == ULONG_MAX && errno == ERANGE)
         || (l == 0 && errno != 0)) {
         opt_number_error(value);
         errno = oerrno;
@@ -765,12 +764,12 @@ int opt_verify(int opt, X509_VERIFY_PARAM *vpm)
         X509_VERIFY_PARAM_set1(vpm, vtmp);
         break;
     case OPT_V_VERIFY_DEPTH:
-        i = atoi(opt_arg());
+        i = opt_int_arg();
         if (i >= 0)
             X509_VERIFY_PARAM_set_depth(vpm, i);
         break;
     case OPT_V_VERIFY_AUTH_LEVEL:
-        i = atoi(opt_arg());
+        i = opt_int_arg();
         if (i >= 0)
             X509_VERIFY_PARAM_set_auth_level(vpm, i);
         break;
@@ -1236,9 +1235,7 @@ int opt_isdir(const char *name)
     if (len_0 > MAX_PATH)
         return -1;
 
-#if !defined(_WIN32_WCE) || _WIN32_WCE >= 101
     if (!MultiByteToWideChar(CP_ACP, 0, name, (int)len_0, tempname, MAX_PATH))
-#endif
         for (i = 0; i < len_0; i++)
             tempname[i] = (WCHAR)name[i];
 

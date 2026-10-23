@@ -7,6 +7,7 @@ release. For more details please read the CHANGES file.
 OpenSSL Releases
 ----------------
 
+ - [OpenSSL 4.1](#openssl-41)
  - [OpenSSL 4.0](#openssl-40)
  - [OpenSSL 3.6](#openssl-36)
  - [OpenSSL 3.5](#openssl-35)
@@ -21,6 +22,79 @@ OpenSSL Releases
  - [OpenSSL 1.0.1](#openssl-101)
  - [OpenSSL 1.0.0](#openssl-100)
  - [OpenSSL 0.9.x](#openssl-09x)
+
+OpenSSL 4.1
+-----------
+
+### Major changes between OpenSSL 4.0 and OpenSSL 4.1.0 [23 Oct 2026]
+
+OpenSSL 4.1.0 is a feature release adding significant new functionality
+to OpenSSL.
+
+This release incorporates the following potentially significant or incompatible
+changes:
+
+  * Added `VC-WIN32-MSVC2013` and `VC-WIN64A-MSVC2013` build targets to provide
+    internal functions for bridging the gaps in C99 standard support
+    that are present in MSVC 2013.
+
+  * Added optimized ML-DSA and ML-KEM NTT operations on `ppc64le`;
+    optimized ML-DSA operations on `x86_64`;
+    AVX-512-optimized SHAKE x4 operations for ML-DSA on `x86_64`;
+    AVX-512 and VAES optimizations for AES-CBC decryption on `x86_64`.
+
+  * Changed `tsget` utility to use `Net::Curl::Easy` (from the `Net-Curl` CPAN
+    distribution) instead of the abandoned `WWW::Curl::Easy`.  Users who rely
+    on `tsget` should install `Net::Curl::Easy` before upgrading.
+
+  * Dropped Windows-on-Itanium (`VC-WIN64I`) and Windows CE (`VC-CE`) targets
+    from Configurations.
+
+  * Dropped `no-ecdsa` and `no-ecdh` options from `Configure`, as these options
+    did not really disable the implementations.  Use `no-ec` to disable
+    the elliptic curve support.
+
+This release adds the following new features:
+
+  * Support for DTLS 1.3 ([RFC 9147]).
+    Refer to the `ossl-guide-dtlsv13(7)` manual page for details.
+
+  * Support for [RFC 8701] GREASE (Generate Random Extensions And Sustain
+    Extensibility).
+
+  * DTLS support in the SSL listener API.
+
+  * Support for IKEV2 KDF.
+
+  * Initial support for the Elbrus2000 (`e2k`) architecture.
+
+Known issues in 4.1.0
+
+  * <https://github.com/openssl/openssl/issues/32878>
+    When a DTLS 1.3 KeyUpdate is received, all other outstanding
+    post-handshake records are dropped from the retransmission buffer.
+    This means post-handshake records still awaiting an ACK (such as a
+    NewSessionTicket) will no longer be retransmitted if the original
+    transmission is lost. A fix is in progress and planned for a future
+    release.
+
+  * <https://github.com/openssl/openssl/issues/33277>
+    A permanent receive failure on a DTLS listener can be reported as
+    `SSL_ERROR_WANT_READ` on an accepted connection. Polling and subsequent
+    accept calls may also fail to report the error, causing applications
+    to continue waiting after a permanent failure.
+
+  * <https://github.com/openssl/openssl/issues/33278>
+    A retryable write failure on a nonblocking connection accepted from a
+    DTLS listener can be reported as `SSL_ERROR_SYSCALL` instead of
+    `SSL_ERROR_WANT_WRITE`. Applications treating this result as fatal may
+    close a connection that is still usable.
+
+  * <https://github.com/openssl/openssl/issues/33242>
+    DTLS 1.3 servers may abort handshakes with an `unexpected_message` alert
+    when a client acknowledges part or all of the server's first flight
+    before sending its response. This can occur after packet loss or while
+    the client is preparing its authentication response.
 
 OpenSSL 4.0
 -----------
@@ -47,7 +121,8 @@ This release incorporates the following bug fixes and mitigations:
   * Fixed potential CPU DoS via O(n^2) fragment reassembly in QUIC.
     ([CVE-2026-42772])
 
-  * Fixed a timing side-channel in scalar multiplication for mon-NIST EC curves.
+  * Fixed a timing side-channel leak in generic elliptic curve scalar
+    multiplication.
     ([CVE-2026-54872])
 
   * Fixed QUIC `STREAM` fragment metadata DoS.
@@ -81,6 +156,16 @@ This release incorporates the following bug fixes and mitigations:
   * Fixed a regression in base64 encoding BIO filter introduced in OpenSSL 4.0,
     where incomplete writes down the BIO chain may result in the loss of encoded
     base64 data.
+
+This release incorporates the following potentially significant or incompatible
+changes:
+
+ * Changed the OpenSSL FIPS provider so that every algorithm advertised
+   with `fips=yes` property explicitly exposes a `fips-indicator` gettable
+   context parameter, that returns 1 for an approved operation.  The absence
+   of an indicator is no longer interpreted as approval.  Algorithms advertised
+   with `fips=no` property, including X448MLKEM1024, remain unapproved
+   and return 0 when they expose the indicator.
 
 ### Major changes between OpenSSL 4.0.1 and OpenSSL 4.0.2 [25 Aug 2026]
 
@@ -2589,7 +2674,9 @@ OpenSSL 0.9.x
 [README-QUIC.md]: ./README-QUIC.md
 [RFC 7919]: https://datatracker.ietf.org/doc/html/rfc7919
 [RFC 8422]: https://datatracker.ietf.org/doc/html/rfc8422
+[RFC 8701]: https://datatracker.ietf.org/doc/html/rfc8701
 [RFC 8998]: https://datatracker.ietf.org/doc/html/rfc8998#name-iana-considerations
+[RFC 9147]: https://datatracker.ietf.org/doc/html/rfc9147
 [RFC 9849]: https://datatracker.ietf.org/doc/html/rfc9849
 [SP 800-185]: https://csrc.nist.gov/pubs/sp/800/185/final
 [SP 800-208]: https://csrc.nist.gov/pubs/sp/800/208/final

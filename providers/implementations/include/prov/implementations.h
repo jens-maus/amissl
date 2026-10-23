@@ -7,6 +7,9 @@
  * https://www.openssl.org/source/license.html
  */
 
+#if !defined(OSSL_PROVIDERS_IMPLEMENTATIONS_INCLUDE_PROV_IMPLEMENTATIONS_H)
+#define OSSL_PROVIDERS_IMPLEMENTATIONS_INCLUDE_PROV_IMPLEMENTATIONS_H
+
 #include <openssl/core.h>
 #include <openssl/types.h>
 
@@ -294,6 +297,7 @@ extern const OSSL_DISPATCH ossl_kdf_hkdf_functions[];
 extern const OSSL_DISPATCH ossl_kdf_hkdf_sha256_functions[];
 extern const OSSL_DISPATCH ossl_kdf_hkdf_sha384_functions[];
 extern const OSSL_DISPATCH ossl_kdf_hkdf_sha512_functions[];
+extern const OSSL_DISPATCH ossl_kdf_ikev2kdf_functions[];
 extern const OSSL_DISPATCH ossl_kdf_tls1_3_kdf_functions[];
 extern const OSSL_DISPATCH ossl_kdf_snmpkdf_functions[];
 extern const OSSL_DISPATCH ossl_kdf_srtpkdf_functions[];
@@ -883,3 +887,5 @@ extern const OSSL_DISPATCH ossl_SubjectPublicKeyInfo_der_to_ml_dsa_87_decoder_fu
 
 extern const OSSL_DISPATCH ossl_generic_skeymgmt_functions[];
 extern const OSSL_DISPATCH ossl_aes_skeymgmt_functions[];
+
+#endif /* !defined(OSSL_PROVIDERS_IMPLEMENTATIONS_INCLUDE_PROV_IMPLEMENTATIONS_H) */

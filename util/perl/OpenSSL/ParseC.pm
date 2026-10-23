@@ -62,7 +62,7 @@ my @opensslcpphandlers = (
     ##################################################################
     # OpenSSL CPP specials
     #
-    # These are used to convert certain pre-precessor expressions into
+    # These are used to convert certain pre-processor expressions into
     # others that @cpphandlers have a better chance to understand.
 
     # This changes any OPENSSL_NO_DEPRECATED_x_y[_z] check to a check of
@@ -73,6 +73,22 @@ my @opensslcpphandlers = (
       massager => sub {
           return (<<"EOF");
 #if$1 OPENSSL_NO_DEPRECATEDIN_$2
+EOF
+      }
+    },
+    # Do the same for modern CPP definition tests.
+    { regexp   => qr/#if (\!defined).*OPENSSL_NO_DEPRECATED_(\d+_\d+(?:_\d+)?).*$/,
+      massager => sub {
+          return (<<"EOF");
+#ifndef OPENSSL_NO_DEPRECATEDIN_$2
+EOF
+      }
+    },
+    # Do the same for modern CPP definition tests.
+    { regexp   => qr/#if (defined).*OPENSSL_NO_DEPRECATED_(\d+_\d+(?:_\d+)?).*$/,
+      massager => sub {
+          return (<<"EOF");
+#ifdef OPENSSL_NO_DEPRECATEDIN_$2
 EOF
       }
     }

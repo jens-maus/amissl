@@ -19,11 +19,11 @@
 #endif
 #include "internal/cryptlib.h"
 #ifdef _WIN32
-#include <windows.h>
+#include "internal/e_os.h"
 #else
 #include <unistd.h>
 #endif
-#include "arm_arch.h"
+#include "arch/arm_arch.h"
 #ifdef __aarch64__
 #include <stdint.h>
 #endif
@@ -69,7 +69,7 @@ uint32_t OPENSSL_rdtsc(void)
 
 /* First determine if getauxval() is available (OSSL_IMPLEMENT_GETAUXVAL) */
 
-#if defined(__GNUC__) && __GNUC__ >= 2
+#if defined(__GNUC__)
 void OPENSSL_cpuid_setup(void) __attribute__((constructor));
 #endif
 
@@ -429,7 +429,8 @@ void OPENSSL_cpuid_setup(void)
             || MIDR_IS_CPU_MODEL(OPENSSL_arm_midr, ARM_CPU_IMP_ARM, ARM_CPU_PART_N3)
             || MIDR_IS_CPU_MODEL(OPENSSL_arm_midr, ARM_CPU_IMP_ARM, ARM_CPU_PART_V3_AE)
             || MIDR_IS_CPU_MODEL(OPENSSL_arm_midr, ARM_CPU_IMP_ARM, ARM_CPU_PART_V3)
-            || MIDR_IMPLEMENTER(OPENSSL_arm_midr) == ARM_CPU_IMP_AMPERE))
+            || MIDR_IMPLEMENTER(OPENSSL_arm_midr) == ARM_CPU_IMP_AMPERE
+            || MIDR_IS_CPU_MODEL(OPENSSL_arm_midr, ARM_CPU_IMP_NVIDIA, NVIDIA_CPU_PART_OLYMPUS)))
         OPENSSL_armcap_P |= ARMV8_UNROLL8_EOR3;
 
     if ((OPENSSL_armcap_P & ARMV8_SHA3)

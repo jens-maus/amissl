@@ -155,8 +155,6 @@ struct script_op {
 #define OPK_S_EXPECT_FIN 9
 #define OPK_C_CONCLUDE 10
 #define OPK_S_CONCLUDE 11
-#define OPK_C_DETACH 12
-#define OPK_C_ATTACH 13
 #define OPK_C_NEW_STREAM 14
 #define OPK_S_NEW_STREAM 15
 #define OPK_C_ACCEPT_STREAM_WAIT 16
@@ -243,10 +241,6 @@ struct script_op {
     { OPK_C_CONCLUDE, NULL, 0, NULL, #stream_name }
 #define OP_S_CONCLUDE(stream_name) \
     { OPK_S_CONCLUDE, NULL, 0, NULL, #stream_name }
-#define OP_C_DETACH(stream_name) \
-    { OPK_C_DETACH, NULL, 0, NULL, #stream_name }
-#define OP_C_ATTACH(stream_name) \
-    { OPK_C_ATTACH, NULL, 0, NULL, #stream_name }
 #define OP_C_NEW_STREAM_BIDI(stream_name, expect_id) \
     { OPK_C_NEW_STREAM, NULL, 0, NULL, #stream_name, (expect_id) }
 #define OP_C_NEW_STREAM_BIDI_EX(stream_name, expect_id, flags) \
@@ -362,108 +356,11 @@ static OSSL_TIME get_time(void *arg)
     return t;
 }
 
-static int skip_time_ms(struct helper *h, struct helper_local *hl)
-{
-    if (!TEST_true(CRYPTO_THREAD_write_lock(h->time_lock)))
-        return 0;
-
-    h->time_slip = ossl_time_add(h->time_slip, ossl_ms2time(hl->check_op->arg2));
-
-    CRYPTO_THREAD_unlock(h->time_lock);
-    return 1;
-}
-
 static QUIC_TSERVER *s_lock(struct helper *h, struct helper_local *hl);
 static void s_unlock(struct helper *h, struct helper_local *hl);
 
 #define ACQUIRE_S() s_lock(h, hl)
 #define ACQUIRE_S_NOHL() s_lock(h, NULL)
-
-static int check_rejected(struct helper *h, struct helper_local *hl)
-{
-    uint64_t stream_id = hl->check_op->arg2;
-
-    if (!ossl_quic_tserver_stream_has_peer_stop_sending(ACQUIRE_S(), stream_id, NULL)
-        || !ossl_quic_tserver_stream_has_peer_reset_stream(ACQUIRE_S(), stream_id, NULL)) {
-        h->check_spin_again = 1;
-        return 0;
-    }
-
-    return 1;
-}
-
-static int check_stream_reset(struct helper *h, struct helper_local *hl)
-{
-    uint64_t stream_id = hl->check_op->arg2, aec = 0;
-
-    if (!ossl_quic_tserver_stream_has_peer_reset_stream(ACQUIRE_S(), stream_id, &aec)) {
-        h->check_spin_again = 1;
-        return 0;
-    }
-
-    return TEST_uint64_t_eq(aec, 42);
-}
-
-static int check_stream_stopped(struct helper *h, struct helper_local *hl)
-{
-    uint64_t stream_id = hl->check_op->arg2;
-
-    if (!ossl_quic_tserver_stream_has_peer_stop_sending(ACQUIRE_S(), stream_id, NULL)) {
-        h->check_spin_again = 1;
-        return 0;
-    }
-
-    return 1;
-}
-
-static int override_key_update(struct helper *h, struct helper_local *hl)
-{
-    QUIC_CHANNEL *ch = ossl_quic_conn_get_channel(h->c_conn);
-
-    ossl_quic_channel_set_txku_threshold_override(ch, hl->check_op->arg2);
-    return 1;
-}
-
-static int trigger_key_update(struct helper *h, struct helper_local *hl)
-{
-    if (!TEST_true(SSL_key_update(h->c_conn, SSL_KEY_UPDATE_REQUESTED)))
-        return 0;
-
-    return 1;
-}
-
-static int check_key_update_ge(struct helper *h, struct helper_local *hl)
-{
-    QUIC_CHANNEL *ch = ossl_quic_conn_get_channel(h->c_conn);
-    int64_t txke = (int64_t)ossl_quic_channel_get_tx_key_epoch(ch);
-    int64_t rxke = (int64_t)ossl_quic_channel_get_rx_key_epoch(ch);
-    int64_t diff = txke - rxke;
-
-    /*
-     * TXKE must always be equal to or ahead of RXKE.
-     * It can be ahead of RXKE by at most 1.
-     */
-    if (!TEST_int64_t_ge(diff, 0) || !TEST_int64_t_le(diff, 1))
-        return 0;
-
-    /* Caller specifies a minimum number of RXKEs which must have happened. */
-    if (!TEST_uint64_t_ge((uint64_t)rxke, hl->check_op->arg2))
-        return 0;
-
-    return 1;
-}
-
-static int check_key_update_lt(struct helper *h, struct helper_local *hl)
-{
-    QUIC_CHANNEL *ch = ossl_quic_conn_get_channel(h->c_conn);
-    uint64_t txke = ossl_quic_channel_get_tx_key_epoch(ch);
-
-    /* Caller specifies a maximum number of TXKEs which must have happened. */
-    if (!TEST_uint64_t_lt(txke, hl->check_op->arg2))
-        return 0;
-
-    return 1;
-}
 
 static unsigned long stream_info_hash(const STREAM_INFO *info)
 {
@@ -805,7 +702,7 @@ static int helper_init(struct helper *h, const char *script_name,
         goto err;
 
     /* Set title for qlog purposes. */
-    BIO_snprintf(title, sizeof(title), "quic_multistream_test: %s", script_name);
+    snprintf(title, sizeof(title), "quic_multistream_test: %s", script_name);
     if (!TEST_true(ossl_quic_set_diag_title(h->c_ctx, title)))
         goto err;
 
@@ -1449,36 +1346,6 @@ static int run_script_worker(struct helper *h, const struct script_op *script,
                 S_SPIN_AGAIN();
         } break;
 
-        case OPK_C_DETACH: {
-            SSL *c_stream;
-
-            if (!TEST_ptr_null(c_tgt))
-                goto out; /* don't overwrite existing stream with same name */
-
-            if (!TEST_ptr(op->stream_name))
-                goto out;
-
-            if (!TEST_ptr(c_stream = ossl_quic_detach_stream(h->c_conn)))
-                goto out;
-
-            if (!TEST_true(helper_local_set_c_stream(hl, op->stream_name, c_stream)))
-                goto out;
-        } break;
-
-        case OPK_C_ATTACH: {
-            if (!TEST_ptr(c_tgt))
-                goto out;
-
-            if (!TEST_ptr(op->stream_name))
-                goto out;
-
-            if (!TEST_true(ossl_quic_attach_stream(h->c_conn, c_tgt)))
-                goto out;
-
-            if (!TEST_true(helper_local_set_c_stream(hl, op->stream_name, NULL)))
-                goto out;
-        } break;
-
         case OPK_C_NEW_STREAM: {
             SSL *c_stream;
             uint64_t flags = op->arg1;
@@ -1497,7 +1364,7 @@ static int run_script_worker(struct helper *h, const struct script_op *script,
                 goto out;
 
             if (allow_fail && c_stream == NULL) {
-                if (!TEST_size_t_eq(ERR_GET_REASON(ERR_get_error()),
+                if (!TEST_size_t_eq(ERR_GET_REASON(ERR_peek_last_error()),
                         SSL_R_STREAM_COUNT_LIMITED))
                     goto out;
 
@@ -2078,694 +1945,131 @@ static CRYPTO_THREAD_RETVAL run_script_child_thread(void *arg)
 
 /* 1. Simple single-stream test */
 static const struct script_op script_1[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_C_CONCLUDE(DEFAULT),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-    OP_S_EXPECT_FIN(a),
-    OP_S_WRITE(a, "orange", 6),
-    OP_S_CONCLUDE(a),
-    OP_C_READ_EXPECT(DEFAULT, "orange", 6),
-    OP_C_EXPECT_FIN(DEFAULT),
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 2. Multi-stream test */
 static const struct script_op script_2[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_INCOMING_STREAM_POLICY(SSL_INCOMING_STREAM_POLICY_ACCEPT),
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-    OP_S_WRITE(a, "orange", 6),
-    OP_C_READ_EXPECT(DEFAULT, "orange", 6),
-
-    OP_C_NEW_STREAM_BIDI(b, C_BIDI_ID(1)),
-    OP_C_WRITE(b, "flamingo", 8),
-    OP_C_CONCLUDE(b),
-    OP_S_BIND_STREAM_ID(b, C_BIDI_ID(1)),
-    OP_S_READ_EXPECT(b, "flamingo", 8),
-    OP_S_EXPECT_FIN(b),
-    OP_S_WRITE(b, "gargoyle", 8),
-    OP_S_CONCLUDE(b),
-    OP_C_READ_EXPECT(b, "gargoyle", 8),
-    OP_C_EXPECT_FIN(b),
-
-    OP_C_NEW_STREAM_UNI(c, C_UNI_ID(0)),
-    OP_C_WRITE(c, "elephant", 8),
-    OP_C_CONCLUDE(c),
-    OP_S_BIND_STREAM_ID(c, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(c, "elephant", 8),
-    OP_S_EXPECT_FIN(c),
-    OP_S_WRITE_FAIL(c),
-
-    OP_C_ACCEPT_STREAM_NONE(),
-
-    OP_S_NEW_STREAM_BIDI(d, S_BIDI_ID(0)),
-    OP_S_WRITE(d, "frog", 4),
-    OP_S_CONCLUDE(d),
-
-    OP_C_ACCEPT_STREAM_WAIT(d),
-    OP_C_ACCEPT_STREAM_NONE(),
-    OP_C_READ_EXPECT(d, "frog", 4),
-    OP_C_EXPECT_FIN(d),
-
-    OP_S_NEW_STREAM_BIDI(e, S_BIDI_ID(1)),
-    OP_S_WRITE(e, "mixture", 7),
-    OP_S_CONCLUDE(e),
-
-    OP_C_ACCEPT_STREAM_WAIT(e),
-    OP_C_READ_EXPECT(e, "mixture", 7),
-    OP_C_EXPECT_FIN(e),
-    OP_C_WRITE(e, "ramble", 6),
-    OP_S_READ_EXPECT(e, "ramble", 6),
-    OP_C_CONCLUDE(e),
-    OP_S_EXPECT_FIN(e),
-
-    OP_S_NEW_STREAM_UNI(f, S_UNI_ID(0)),
-    OP_S_WRITE(f, "yonder", 6),
-    OP_S_CONCLUDE(f),
-
-    OP_C_ACCEPT_STREAM_WAIT(f),
-    OP_C_ACCEPT_STREAM_NONE(),
-    OP_C_READ_EXPECT(f, "yonder", 6),
-    OP_C_EXPECT_FIN(f),
-    OP_C_WRITE_FAIL(f),
-
-    OP_C_SET_INCOMING_STREAM_POLICY(SSL_INCOMING_STREAM_POLICY_REJECT),
-    OP_S_NEW_STREAM_BIDI(g, S_BIDI_ID(2)),
-    OP_S_WRITE(g, "unseen", 6),
-    OP_S_CONCLUDE(g),
-
-    OP_C_ACCEPT_STREAM_NONE(),
-
-    OP_C_SET_INCOMING_STREAM_POLICY(SSL_INCOMING_STREAM_POLICY_AUTO),
-    OP_S_NEW_STREAM_BIDI(h, S_BIDI_ID(3)),
-    OP_S_WRITE(h, "UNSEEN", 6),
-    OP_S_CONCLUDE(h),
-
-    OP_C_ACCEPT_STREAM_NONE(),
-
-    /*
-     * Streams g, h should have been rejected, so server should have got
-     * STOP_SENDING/RESET_STREAM.
-     */
-    OP_CHECK(check_rejected, S_BIDI_ID(2)),
-    OP_CHECK(check_rejected, S_BIDI_ID(3)),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 3. Default stream detach/reattach test */
 static const struct script_op script_3[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_C_DETACH(a), /* DEFAULT becomes stream 'a' */
-    OP_C_WRITE_FAIL(DEFAULT),
-
-    OP_C_WRITE(a, "by", 2),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "appleby", 7),
-
-    OP_S_WRITE(a, "hello", 5),
-    OP_C_READ_EXPECT(a, "hello", 5),
-
-    OP_C_WRITE_FAIL(DEFAULT),
-    OP_C_ATTACH(a),
-    OP_C_WRITE(DEFAULT, "is here", 7),
-    OP_S_READ_EXPECT(a, "is here", 7),
-
-    OP_C_DETACH(a),
-    OP_C_CONCLUDE(a),
-    OP_S_EXPECT_FIN(a),
+    /*
+     * SSL_attach_stream()/SSL_detach_stream() no longer exists,
+     * there is no reason to keep their private implementation
+     * with test
+     */
 
     OP_END
 };
 
 /* 4. Default stream mode test */
 static const struct script_op script_4[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-    OP_C_WRITE_FAIL(DEFAULT),
-
-    OP_S_NEW_STREAM_BIDI(a, S_BIDI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_READ_FAIL(DEFAULT),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_C_ATTACH(a),
-    OP_C_WRITE(DEFAULT, "orange", 6),
-    OP_S_READ_EXPECT(a, "orange", 6),
+    /*
+     * SSL_attach_stream()/SSL_detach_stream() no longer exists,
+     * there is no reason to keep their private implementation
+     * with test
+     */
 
     OP_END
 };
 
 /* 5. Test stream reset functionality */
 static const struct script_op script_5[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_NEW_STREAM_BIDI(b, C_BIDI_ID(1)),
-
-    OP_C_WRITE(a, "apple", 5),
-    OP_C_STREAM_RESET(a, 42),
-
-    OP_C_WRITE(b, "strawberry", 10),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_BIND_STREAM_ID(b, C_BIDI_ID(1)),
-    OP_S_READ_EXPECT(b, "strawberry", 10),
-    /* Reset disrupts read of already sent data */
-    OP_S_READ_FAIL(a, 0),
-    OP_CHECK(check_stream_reset, C_BIDI_ID(0)),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 6. Test STOP_SENDING functionality */
 static const struct script_op script_6[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-    OP_S_NEW_STREAM_BIDI(a, S_BIDI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_FREE_STREAM(a),
-    OP_C_ACCEPT_STREAM_NONE(),
-
-    OP_CHECK(check_stream_stopped, S_BIDI_ID(0)),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 7. Unidirectional default stream mode test (client sends first) */
 static const struct script_op script_7[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_AUTO_UNI),
-    OP_C_WRITE(DEFAULT, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-    OP_S_WRITE_FAIL(a),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 8. Unidirectional default stream mode test (server sends first) */
 static const struct script_op script_8[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_AUTO_UNI),
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-    OP_C_READ_EXPECT(DEFAULT, "apple", 5),
-    OP_C_WRITE_FAIL(DEFAULT),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 9. Unidirectional default stream mode test (server sends first on bidi) */
 static const struct script_op script_9[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_AUTO_UNI),
-    OP_S_NEW_STREAM_BIDI(a, S_BIDI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-    OP_C_READ_EXPECT(DEFAULT, "apple", 5),
-    OP_C_WRITE(DEFAULT, "orange", 6),
-    OP_S_READ_EXPECT(a, "orange", 6),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 10. Shutdown */
 static const struct script_op script_10[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_C_SHUTDOWN_WAIT(NULL, 0),
-    OP_C_EXPECT_CONN_CLOSE_INFO(0, 1, 0),
-    OP_S_EXPECT_CONN_CLOSE_INFO(0, 1, 1),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 11. Many threads accepted on the same client connection */
-static const struct script_op script_11_child[] = {
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "foo", 3),
-    OP_SLEEP(10),
-    OP_C_EXPECT_FIN(a),
-
-    OP_END
-};
-
 static const struct script_op script_11[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_NEW_THREAD(5, script_11_child),
-
-    OP_S_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_S_WRITE(a, "foo", 3),
-    OP_S_CONCLUDE(a),
-
-    OP_S_NEW_STREAM_BIDI(b, ANY_ID),
-    OP_S_WRITE(b, "foo", 3),
-    OP_S_CONCLUDE(b),
-
-    OP_S_NEW_STREAM_BIDI(c, ANY_ID),
-    OP_S_WRITE(c, "foo", 3),
-    OP_S_CONCLUDE(c),
-
-    OP_S_NEW_STREAM_BIDI(d, ANY_ID),
-    OP_S_WRITE(d, "foo", 3),
-    OP_S_CONCLUDE(d),
-
-    OP_S_NEW_STREAM_BIDI(e, ANY_ID),
-    OP_S_WRITE(e, "foo", 3),
-    OP_S_CONCLUDE(e),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 12. Many threads initiated on the same client connection */
-static const struct script_op script_12_child[] = {
-    OP_C_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_C_WRITE(a, "foo", 3),
-    OP_C_CONCLUDE(a),
-    OP_C_FREE_STREAM(a),
-
-    OP_END
-};
-
 static const struct script_op script_12[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_NEW_THREAD(5, script_12_child),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "foo", 3),
-    OP_S_EXPECT_FIN(a),
-    OP_S_BIND_STREAM_ID(b, C_BIDI_ID(1)),
-    OP_S_READ_EXPECT(b, "foo", 3),
-    OP_S_EXPECT_FIN(b),
-    OP_S_BIND_STREAM_ID(c, C_BIDI_ID(2)),
-    OP_S_READ_EXPECT(c, "foo", 3),
-    OP_S_EXPECT_FIN(c),
-    OP_S_BIND_STREAM_ID(d, C_BIDI_ID(3)),
-    OP_S_READ_EXPECT(d, "foo", 3),
-    OP_S_EXPECT_FIN(d),
-    OP_S_BIND_STREAM_ID(e, C_BIDI_ID(4)),
-    OP_S_READ_EXPECT(e, "foo", 3),
-    OP_S_EXPECT_FIN(e),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 13. Many threads accepted on the same client connection (stress test) */
-static const struct script_op script_13_child[] = {
-    OP_BEGIN_REPEAT(10),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "foo", 3),
-    OP_C_EXPECT_FIN(a),
-    OP_C_FREE_STREAM(a),
-
-    OP_END_REPEAT(),
-
-    OP_END
-};
-
 static const struct script_op script_13[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_NEW_THREAD(5, script_13_child),
-
-    OP_BEGIN_REPEAT(50),
-
-    OP_S_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_S_WRITE(a, "foo", 3),
-    OP_S_CONCLUDE(a),
-    OP_S_UNBIND_STREAM_ID(a),
-
-    OP_END_REPEAT(),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 14. Many threads initiating on the same client connection (stress test) */
-static const struct script_op script_14_child[] = {
-    OP_BEGIN_REPEAT(10),
-
-    OP_C_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_C_WRITE(a, "foo", 3),
-    OP_C_CONCLUDE(a),
-    OP_C_FREE_STREAM(a),
-
-    OP_END_REPEAT(),
-
-    OP_END
-};
-
 static const struct script_op script_14[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_NEW_THREAD(5, script_14_child),
-
-    OP_BEGIN_REPEAT(50),
-
-    OP_S_ACCEPT_STREAM_WAIT(a),
-    OP_S_READ_EXPECT(a, "foo", 3),
-    OP_S_EXPECT_FIN(a),
-    OP_S_UNBIND_STREAM_ID(a),
-
-    OP_END_REPEAT(),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 15. Client sending large number of streams, MAX_STREAMS test */
 static const struct script_op script_15[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    /*
-     * This will cause a protocol violation to be raised by the server if we are
-     * not handling the stream limit correctly on the TX side.
-     */
-    OP_BEGIN_REPEAT(200),
-
-    OP_C_NEW_STREAM_BIDI_EX(a, ANY_ID, SSL_STREAM_FLAG_ADVANCE),
-    OP_C_WRITE(a, "foo", 3),
-    OP_C_CONCLUDE(a),
-    OP_C_FREE_STREAM(a),
-
-    OP_END_REPEAT(),
-
-    /* Prove the connection is still good. */
-    OP_S_NEW_STREAM_BIDI(a, S_BIDI_ID(0)),
-    OP_S_WRITE(a, "bar", 3),
-    OP_S_CONCLUDE(a),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "bar", 3),
-    OP_C_EXPECT_FIN(a),
-
-    /*
-     * Drain the queue of incoming streams. We should be able to get all 200
-     * even though only 100 can be initiated at a time.
-     */
-    OP_BEGIN_REPEAT(200),
-
-    OP_S_ACCEPT_STREAM_WAIT(b),
-    OP_S_READ_EXPECT(b, "foo", 3),
-    OP_S_EXPECT_FIN(b),
-    OP_S_UNBIND_STREAM_ID(b),
-
-    OP_END_REPEAT(),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 16. Server sending large number of streams, MAX_STREAMS test */
 static const struct script_op script_16[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    /*
-     * This will cause a protocol violation to be raised by the client if we are
-     * not handling the stream limit correctly on the TX side.
-     */
-    OP_BEGIN_REPEAT(200),
-
-    OP_S_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_S_WRITE(a, "foo", 3),
-    OP_S_CONCLUDE(a),
-    OP_S_UNBIND_STREAM_ID(a),
-
-    OP_END_REPEAT(),
-
-    /* Prove that the connection is still good. */
-    OP_C_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_C_WRITE(a, "bar", 3),
-    OP_C_CONCLUDE(a),
-
-    OP_S_ACCEPT_STREAM_WAIT(b),
-    OP_S_READ_EXPECT(b, "bar", 3),
-    OP_S_EXPECT_FIN(b),
-
-    /* Drain the queue of incoming streams. */
-    OP_BEGIN_REPEAT(200),
-
-    OP_C_ACCEPT_STREAM_WAIT(b),
-    OP_C_READ_EXPECT(b, "foo", 3),
-    OP_C_EXPECT_FIN(b),
-    OP_C_FREE_STREAM(b),
-
-    OP_END_REPEAT(),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 17. Key update test - unlimited */
 static const struct script_op script_17[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_CHECK(override_key_update, 1),
-
-    OP_BEGIN_REPEAT(200),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    /*
-     * TXKU frequency is bounded by RTT because a previous TXKU needs to be
-     * acknowledged by the peer first before another one can be begin. By
-     * waiting this long, we eliminate any such concern and ensure as many key
-     * updates as possible can occur for the purposes of this test.
-     */
-    OP_CHECK(skip_time_ms, 100),
-
-    OP_END_REPEAT(),
-
-    /* At least 5 RXKUs detected */
-    OP_CHECK(check_key_update_ge, 5),
-
-    /*
-     * Prove the connection is still healthy by sending something in both
-     * directions.
-     */
-    OP_C_WRITE(DEFAULT, "xyzzy", 5),
-    OP_S_READ_EXPECT(a, "xyzzy", 5),
-
-    OP_S_WRITE(a, "plugh", 5),
-    OP_C_READ_EXPECT(DEFAULT, "plugh", 5),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 18. Key update test - RTT-bounded */
 static const struct script_op script_18[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_CHECK(override_key_update, 1),
-
-    OP_BEGIN_REPEAT(200),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_READ_EXPECT(a, "apple", 5),
-    OP_CHECK(skip_time_ms, 8),
-
-    OP_END_REPEAT(),
-
-    /*
-     * This time we simulate far less time passing between writes, so there are
-     * fewer opportunities to initiate TXKUs. Note that we ask for a TXKU every
-     * 1 packet above, which is absurd; thus this ensures we only actually
-     * generate TXKUs when we are allowed to.
-     */
-    OP_CHECK(check_key_update_lt, 240),
-
-    /*
-     * Prove the connection is still healthy by sending something in both
-     * directions.
-     */
-    OP_C_WRITE(DEFAULT, "xyzzy", 5),
-    OP_S_READ_EXPECT(a, "xyzzy", 5),
-
-    OP_S_WRITE(a, "plugh", 5),
-    OP_C_READ_EXPECT(DEFAULT, "plugh", 5),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 19. Key update test - artificially triggered */
 static const struct script_op script_19[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_C_WRITE(DEFAULT, "orange", 6),
-    OP_S_READ_EXPECT(a, "orange", 6),
-
-    OP_S_WRITE(a, "strawberry", 10),
-    OP_C_READ_EXPECT(DEFAULT, "strawberry", 10),
-
-    OP_CHECK(check_key_update_lt, 1),
-    OP_CHECK(trigger_key_update, 0),
-
-    OP_C_WRITE(DEFAULT, "orange", 6),
-    OP_S_READ_EXPECT(a, "orange", 6),
-    OP_S_WRITE(a, "ok", 2),
-
-    OP_C_READ_EXPECT(DEFAULT, "ok", 2),
-    OP_CHECK(check_key_update_ge, 1),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 20. Multiple threads accept stream with socket forcibly closed (error test) */
-static int script_20_trigger(struct helper *h, volatile uint64_t *counter)
-{
-#if defined(OPENSSL_THREADS)
-    ossl_crypto_mutex_lock(h->misc_m);
-    ++*counter;
-    ossl_crypto_condvar_broadcast(h->misc_cv);
-    ossl_crypto_mutex_unlock(h->misc_m);
-#endif
-    return 1;
-}
-
-static int script_20_wait(struct helper *h, volatile uint64_t *counter, uint64_t threshold)
-{
-#if defined(OPENSSL_THREADS)
-    int stop = 0;
-
-    ossl_crypto_mutex_lock(h->misc_m);
-    while (!stop) {
-        stop = (*counter >= threshold);
-        if (stop)
-            break;
-
-        ossl_crypto_condvar_wait(h->misc_cv, h->misc_m);
-    }
-
-    ossl_crypto_mutex_unlock(h->misc_m);
-#endif
-    return 1;
-}
-
-static int script_20_trigger1(struct helper *h, struct helper_local *hl)
-{
-    return script_20_trigger(h, &h->scratch0);
-}
-
-static int script_20_wait1(struct helper *h, struct helper_local *hl)
-{
-    return script_20_wait(h, &h->scratch0, hl->check_op->arg2);
-}
-
-static int script_20_trigger2(struct helper *h, struct helper_local *hl)
-{
-    return script_20_trigger(h, &h->scratch1);
-}
-
-static int script_20_wait2(struct helper *h, struct helper_local *hl)
-{
-    return script_20_wait(h, &h->scratch1, hl->check_op->arg2);
-}
-
-static const struct script_op script_20_child[] = {
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "foo", 3),
-
-    OP_CHECK(script_20_trigger1, 0),
-    OP_CHECK(script_20_wait2, 1),
-
-    OP_C_READ_FAIL_WAIT(a),
-    OP_C_EXPECT_SSL_ERR(a, SSL_ERROR_SYSCALL),
-
-    OP_EXPECT_ERR_LIB(ERR_LIB_SSL),
-    OP_EXPECT_ERR_REASON(SSL_R_PROTOCOL_IS_SHUTDOWN),
-
-    OP_POP_ERR(),
-    OP_EXPECT_ERR_LIB(ERR_LIB_SSL),
-    OP_EXPECT_ERR_REASON(SSL_R_QUIC_NETWORK_ERROR),
-
-    OP_C_FREE_STREAM(a),
-
-    OP_END
-};
-
 static const struct script_op script_20[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_NEW_THREAD(5, script_20_child),
-
-    OP_BEGIN_REPEAT(5),
-
-    OP_S_NEW_STREAM_BIDI(a, ANY_ID),
-    OP_S_WRITE(a, "foo", 3),
-    OP_S_UNBIND_STREAM_ID(a),
-
-    OP_END_REPEAT(),
-
-    OP_CHECK(script_20_wait1, 5),
-
-    OP_C_CLOSE_SOCKET(),
-    OP_CHECK(script_20_trigger2, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -2892,212 +2196,43 @@ err:
 }
 
 static const struct script_op script_21[] = {
-    OP_S_SET_INJECT_PLAIN(script_21_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(QUIC_PKT_TYPE_1RTT, OSSL_QUIC_VLINT_MAX),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 22. Fault injection - non-zero packet header reserved bits */
-static int script_22_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
-    unsigned char *buf, size_t len)
-{
-    if (h->inject_word0 == 0)
-        return 1;
-
-    hdr->reserved = 1;
-    return 1;
-}
-
 static const struct script_op script_22[] = {
-    OP_S_SET_INJECT_PLAIN(script_22_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, 0),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_PROTOCOL_VIOLATION, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 23. Fault injection - empty NEW_TOKEN */
-static int script_23_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
-    unsigned char *buf, size_t len)
-{
-    int ok = 0;
-    WPACKET wpkt;
-    unsigned char frame_buf[16];
-    size_t written;
-
-    if (h->inject_word0 == 0 || hdr->type != QUIC_PKT_TYPE_1RTT)
-        return 1;
-
-    if (!TEST_true(WPACKET_init_static_len(&wpkt, frame_buf,
-            sizeof(frame_buf), 0)))
-        return 0;
-
-    if (!TEST_true(WPACKET_quic_write_vlint(&wpkt, OSSL_QUIC_FRAME_TYPE_NEW_TOKEN))
-        || !TEST_true(WPACKET_quic_write_vlint(&wpkt, 0)))
-        goto err;
-
-    if (!TEST_true(WPACKET_get_total_written(&wpkt, &written)))
-        goto err;
-
-    if (!qtest_fault_prepend_frame(h->qtf, frame_buf, written))
-        goto err;
-
-    ok = 1;
-err:
-    if (ok)
-        WPACKET_finish(&wpkt);
-    else
-        WPACKET_cleanup(&wpkt);
-    return ok;
-}
-
 static const struct script_op script_23[] = {
-    OP_S_SET_INJECT_PLAIN(script_23_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, 0),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 24. Fault injection - excess value of MAX_STREAMS_BIDI */
-static int script_24_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
-    unsigned char *buf, size_t len)
-{
-    int ok = 0;
-    WPACKET wpkt;
-    unsigned char frame_buf[16];
-    size_t written;
-
-    if (h->inject_word0 == 0 || hdr->type != QUIC_PKT_TYPE_1RTT)
-        return 1;
-
-    if (!TEST_true(WPACKET_init_static_len(&wpkt, frame_buf,
-            sizeof(frame_buf), 0)))
-        return 0;
-
-    if (!TEST_true(WPACKET_quic_write_vlint(&wpkt, h->inject_word1))
-        || !TEST_true(WPACKET_quic_write_vlint(&wpkt, (((uint64_t)1) << 60) + 1)))
-        goto err;
-
-    if (!TEST_true(WPACKET_get_total_written(&wpkt, &written)))
-        goto err;
-
-    if (!qtest_fault_prepend_frame(h->qtf, frame_buf, written))
-        goto err;
-
-    ok = 1;
-err:
-    if (ok)
-        WPACKET_finish(&wpkt);
-    else
-        WPACKET_cleanup(&wpkt);
-    return ok;
-}
-
 static const struct script_op script_24[] = {
-    OP_S_SET_INJECT_PLAIN(script_24_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, OSSL_QUIC_FRAME_TYPE_MAX_STREAMS_BIDI),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 25. Fault injection - excess value of MAX_STREAMS_UNI */
 static const struct script_op script_25[] = {
-    OP_S_SET_INJECT_PLAIN(script_24_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, OSSL_QUIC_FRAME_TYPE_MAX_STREAMS_UNI),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 26. Fault injection - excess value of STREAMS_BLOCKED_BIDI */
 static const struct script_op script_26[] = {
-    OP_S_SET_INJECT_PLAIN(script_24_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, OSSL_QUIC_FRAME_TYPE_STREAMS_BLOCKED_BIDI),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_LIMIT_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 27. Fault injection - excess value of STREAMS_BLOCKED_UNI */
 static const struct script_op script_27[] = {
-    OP_S_SET_INJECT_PLAIN(script_24_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, OSSL_QUIC_FRAME_TYPE_STREAMS_BLOCKED_UNI),
-
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_LIMIT_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -3141,101 +2276,34 @@ err:
 }
 
 static const struct script_op script_28[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "orange", 6),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "orange", 6),
-
-    OP_C_NEW_STREAM_UNI(b, C_UNI_ID(0)),
-    OP_C_WRITE(b, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(b, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(b, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_UNI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_RESET_STREAM),
-    OP_S_WRITE(a, "fruit", 5),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 29. Fault injection - received RESET_STREAM for nonexistent send-only stream */
 static const struct script_op script_29[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "orange", 6),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "orange", 6),
-
-    OP_C_NEW_STREAM_UNI(b, C_UNI_ID(0)),
-    OP_C_WRITE(b, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(b, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(b, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_UNI_ID(1) + 1, OSSL_QUIC_FRAME_TYPE_RESET_STREAM),
-    OP_S_WRITE(a, "fruit", 5),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 30. Fault injection - received STOP_SENDING for receive-only stream */
 static const struct script_op script_30[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(S_UNI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_STOP_SENDING),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 31. Fault injection - received STOP_SENDING for nonexistent receive-only stream */
 static const struct script_op script_31[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_UNI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_STOP_SENDING),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 32. Fault injection - STREAM frame for nonexistent stream */
+static const struct script_op script_32[] = {
+    /* test moved to test/radix/quic_tests.c */
+    OP_END
+};
+
 static int script_32_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
     unsigned char *buf, size_t len)
 {
@@ -3301,152 +2369,39 @@ err:
     return ok;
 }
 
-static const struct script_op script_32[] = {
-    OP_S_SET_INJECT_PLAIN(script_32_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_UNI_ID(0) + 1, 1),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
-    OP_END
-};
-
 /* 33. Fault injection - STREAM frame with illegal offset */
 static const struct script_op script_33[] = {
-    OP_S_SET_INJECT_PLAIN(script_32_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_BIDI_ID(0) + 1, 2),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 34. Fault injection - STREAM frame which exceeds FC */
 static const struct script_op script_34[] = {
-    OP_S_SET_INJECT_PLAIN(script_32_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_BIDI_ID(0) + 1, 3),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FLOW_CONTROL_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 35. Fault injection - MAX_STREAM_DATA for receive-only stream */
 static const struct script_op script_35[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(S_UNI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_MAX_STREAM_DATA),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 36. Fault injection - MAX_STREAM_DATA for nonexistent stream */
 static const struct script_op script_36[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_S_NEW_STREAM_UNI(a, S_UNI_ID(0)),
-    OP_S_WRITE(a, "apple", 5),
-
-    OP_C_ACCEPT_STREAM_WAIT(a),
-    OP_C_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_BIDI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_MAX_STREAM_DATA),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 37. Fault injection - STREAM_DATA_BLOCKED for send-only stream */
 static const struct script_op script_37[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_UNI(a, C_UNI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_S_NEW_STREAM_UNI(b, S_UNI_ID(0)),
-    OP_SET_INJECT_WORD(C_UNI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_STREAM_DATA_BLOCKED),
-    OP_S_WRITE(b, "orange", 5),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 38. Fault injection - STREAM_DATA_BLOCKED for non-existent stream */
 static const struct script_op script_38[] = {
-    OP_S_SET_INJECT_PLAIN(script_28_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_UNI(a, C_UNI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_UNI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(C_BIDI_ID(0) + 1, OSSL_QUIC_FRAME_TYPE_STREAM_DATA_BLOCKED),
-
-    OP_S_NEW_STREAM_UNI(b, S_UNI_ID(0)),
-    OP_S_WRITE(b, "orange", 5),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_STREAM_STATE_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -3539,61 +2494,13 @@ err:
 }
 
 static const struct script_op script_39[] = {
-    OP_S_SET_INJECT_PLAIN(script_39_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(0, 1),
-    OP_S_WRITE(a, "orange", 5),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 40. Shutdown flush test */
-static const unsigned char script_40_data[1024] = "strawberry";
-
 static const struct script_op script_40[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_C_INHIBIT_TICK(1),
-    OP_C_SET_WRITE_BUF_SIZE(a, 1024 * 100 * 3),
-
-    OP_BEGIN_REPEAT(100),
-
-    OP_C_WRITE(a, script_40_data, sizeof(script_40_data)),
-
-    OP_END_REPEAT(),
-
-    OP_C_CONCLUDE(a),
-    OP_C_SHUTDOWN_WAIT(NULL, 0), /* disengages tick inhibition */
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_BEGIN_REPEAT(100),
-
-    OP_S_READ_EXPECT(a, script_40_data, sizeof(script_40_data)),
-
-    OP_END_REPEAT(),
-
-    OP_S_EXPECT_FIN(a),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(0, 1, 0),
-    OP_S_EXPECT_CONN_CLOSE_INFO(0, 1, 1),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -3636,260 +2543,32 @@ err:
     return ok;
 }
 
-static void script_41_trace(int write_p, int version, int content_type,
-    const void *buf, size_t len, SSL *ssl, void *arg)
-{
-    uint64_t frame_type, frame_data;
-    int was_minimal;
-    struct helper *h = arg;
-    PACKET pkt;
-
-    if (version != OSSL_QUIC1_VERSION
-        || content_type != SSL3_RT_QUIC_FRAME_FULL
-        || len < 1)
-        return;
-
-    if (!TEST_true(PACKET_buf_init(&pkt, buf, len))) {
-        ++h->scratch1;
-        return;
-    }
-
-    if (!TEST_true(ossl_quic_wire_peek_frame_header(&pkt, &frame_type,
-            &was_minimal))) {
-        ++h->scratch1;
-        return;
-    }
-
-    if (frame_type != OSSL_QUIC_FRAME_TYPE_PATH_RESPONSE)
-        return;
-
-    if (!TEST_true(ossl_quic_wire_decode_frame_path_response(&pkt, &frame_data))
-        || !TEST_uint64_t_eq(frame_data, path_challenge)) {
-        ++h->scratch1;
-        return;
-    }
-
-    ++h->scratch0;
-}
-
-static int script_41_setup(struct helper *h, struct helper_local *hl)
-{
-    ossl_quic_tserver_set_msg_callback(ACQUIRE_S(), script_41_trace, h);
-    return 1;
-}
-
-static int script_41_check(struct helper *h, struct helper_local *hl)
-{
-    /* At least one valid challenge/response echo? */
-    if (!TEST_uint64_t_gt(h->scratch0, 0))
-        return 0;
-
-    /* No failed tests? */
-    if (!TEST_uint64_t_eq(h->scratch1, 0))
-        return 0;
-
-    return 1;
-}
-
 static const struct script_op script_41[] = {
-    OP_S_SET_INJECT_PLAIN(script_41_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_CHECK(script_41_setup, 0),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, OSSL_QUIC_FRAME_TYPE_PATH_CHALLENGE),
-
-    OP_S_WRITE(a, "orange", 6),
-    OP_C_READ_EXPECT(DEFAULT, "orange", 6),
-
-    OP_C_WRITE(DEFAULT, "strawberry", 10),
-    OP_S_READ_EXPECT(a, "strawberry", 10),
-
-    OP_CHECK(script_41_check, 0),
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 42. Fault injection - CRYPTO frame with illegal offset */
-static int script_42_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
-    unsigned char *buf, size_t len)
-{
-    int ok = 0;
-    unsigned char frame_buf[64];
-    size_t written;
-    WPACKET wpkt;
-
-    if (h->inject_word0 == 0)
-        return 1;
-
-    --h->inject_word0;
-
-    if (!TEST_true(WPACKET_init_static_len(&wpkt, frame_buf,
-            sizeof(frame_buf), 0)))
-        return 0;
-
-    if (!TEST_true(WPACKET_quic_write_vlint(&wpkt, OSSL_QUIC_FRAME_TYPE_CRYPTO))
-        || !TEST_true(WPACKET_quic_write_vlint(&wpkt, h->inject_word1))
-        || !TEST_true(WPACKET_quic_write_vlint(&wpkt, 1))
-        || !TEST_true(WPACKET_put_bytes_u8(&wpkt, 0x42)))
-        goto err;
-
-    if (!TEST_true(WPACKET_get_total_written(&wpkt, &written)))
-        goto err;
-
-    if (!qtest_fault_prepend_frame(h->qtf, frame_buf, written))
-        goto err;
-
-    ok = 1;
-err:
-    if (ok)
-        WPACKET_finish(&wpkt);
-    else
-        WPACKET_cleanup(&wpkt);
-    return ok;
-}
-
 static const struct script_op script_42[] = {
-    OP_S_SET_INJECT_PLAIN(script_42_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, (((uint64_t)1) << 62) - 1),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 43. Fault injection - CRYPTO frame exceeding FC */
 static const struct script_op script_43[] = {
-    OP_S_SET_INJECT_PLAIN(script_42_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
-
-    OP_C_NEW_STREAM_BIDI(a, C_BIDI_ID(0)),
-    OP_C_WRITE(a, "apple", 5),
-
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, 0x100000 /* 1 MiB */),
-    OP_S_WRITE(a, "orange", 6),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_CRYPTO_BUFFER_EXCEEDED, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 44. Fault injection - PADDING */
-static int script_44_inject_plain(struct helper *h, QUIC_PKT_HDR *hdr,
-    unsigned char *buf, size_t len)
-{
-    int ok = 0;
-    WPACKET wpkt;
-    unsigned char frame_buf[16];
-    size_t written;
-
-    if (h->inject_word0 == 0 || hdr->type != QUIC_PKT_TYPE_1RTT)
-        return 1;
-
-    if (!TEST_true(WPACKET_init_static_len(&wpkt, frame_buf,
-            sizeof(frame_buf), 0)))
-        return 0;
-
-    if (!TEST_true(ossl_quic_wire_encode_padding(&wpkt, 1)))
-        goto err;
-
-    if (!TEST_true(WPACKET_get_total_written(&wpkt, &written)))
-        goto err;
-
-    if (!qtest_fault_prepend_frame(h->qtf, frame_buf, written))
-        goto err;
-
-    ok = 1;
-err:
-    if (ok)
-        WPACKET_finish(&wpkt);
-    else
-        WPACKET_cleanup(&wpkt);
-    return ok;
-}
-
 static const struct script_op script_44[] = {
-    OP_S_SET_INJECT_PLAIN(script_44_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, 0),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-    OP_C_READ_EXPECT(DEFAULT, "Strawberry", 10),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 45. PING must generate ACK */
-static int force_ping(struct helper *h, struct helper_local *hl)
-{
-    QUIC_CHANNEL *ch = ossl_quic_tserver_get_channel(ACQUIRE_S());
-
-    h->scratch0 = ossl_quic_channel_get_diag_num_rx_ack(ch);
-
-    if (!TEST_true(ossl_quic_tserver_ping(ACQUIRE_S())))
-        return 0;
-
-    return 1;
-}
-
-static int wait_incoming_acks_increased(struct helper *h, struct helper_local *hl)
-{
-    QUIC_CHANNEL *ch = ossl_quic_tserver_get_channel(ACQUIRE_S());
-    uint16_t count;
-
-    count = ossl_quic_channel_get_diag_num_rx_ack(ch);
-
-    if (count == h->scratch0) {
-        h->check_spin_again = 1;
-        return 0;
-    }
-
-    return 1;
-}
-
 static const struct script_op script_45[] = {
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_BEGIN_REPEAT(2),
-
-    OP_CHECK(force_ping, 0),
-    OP_CHECK(wait_incoming_acks_increased, 0),
-
-    OP_END_REPEAT(),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-    OP_C_READ_EXPECT(DEFAULT, "Strawberry", 10),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -3988,81 +2667,25 @@ err:
 }
 
 static const struct script_op script_46[] = {
-    OP_S_SET_INJECT_PLAIN(script_46_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(1, 0),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 47. Fault injection - ACK - malformed subsequent range */
 static const struct script_op script_47[] = {
-    OP_S_SET_INJECT_PLAIN(script_46_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(2, 0),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 48. Fault injection - ACK - malformed subsequent range */
 static const struct script_op script_48[] = {
-    OP_S_SET_INJECT_PLAIN(script_46_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(3, 0),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_FRAME_ENCODING_ERROR, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
 /* 49. Fault injection - ACK - fictional PN */
 static const struct script_op script_49[] = {
-    OP_S_SET_INJECT_PLAIN(script_46_inject_plain),
-    OP_C_SET_ALPN("ossltest"),
-    OP_C_CONNECT_WAIT(),
-
-    OP_C_WRITE(DEFAULT, "apple", 5),
-    OP_S_BIND_STREAM_ID(a, C_BIDI_ID(0)),
-    OP_S_READ_EXPECT(a, "apple", 5),
-
-    OP_SET_INJECT_WORD(4, 0),
-
-    OP_S_WRITE(a, "Strawberry", 10),
-    /*
-     * The injected ACK acknowledges a packet number we have not sent, which the
-     * peer is expected to treat as a PROTOCOL_VIOLATION, so the connection is
-     * closed rather than the stream data being delivered.
-     */
-    OP_C_EXPECT_CONN_CLOSE_INFO(OSSL_QUIC_ERR_PROTOCOL_VIOLATION, 0, 0),
-
+    /* test moved to test/radix/quic_tests.c */
     OP_END
 };
 
@@ -4809,7 +3432,7 @@ static int script_68_inject_handshake(struct helper *h, unsigned char *msg,
     return 1;
 }
 
-/* Send a CerticateRequest message post-handshake */
+/* Send a CertificateRequest message post-handshake */
 static const struct script_op script_68[] = {
     OP_S_SET_INJECT_HANDSHAKE(script_68_inject_handshake),
     OP_C_SET_ALPN("ossltest"),
@@ -5355,25 +3978,24 @@ static const struct script_op script_80[] = {
     OP_END
 };
 
-/* 81. Idle timeout configuration */
-static int modify_idle_timeout(struct helper *h, struct helper_local *hl)
+static int modify_static_tp(struct helper *h, struct helper_local *hl, int ssl_value)
 {
     uint64_t v = 0;
 
     /* Test bad value is rejected. */
     if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
-            (1ULL << 62))))
+            ssl_value,
+            OSSL_QUIC_VLINT_MAX + 1)))
         return 0;
 
     /* Set value. */
     if (!TEST_true(SSL_set_feature_request_uint(h->c_conn,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
+            ssl_value,
             hl->check_op->arg2)))
         return 0;
 
     if (!TEST_true(SSL_get_feature_request_uint(h->c_conn,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
+            ssl_value,
             &v)))
         return 0;
 
@@ -5383,12 +4005,12 @@ static int modify_idle_timeout(struct helper *h, struct helper_local *hl)
     return 1;
 }
 
-static int check_idle_timeout(struct helper *h, struct helper_local *hl)
+static int check_static_tp(struct helper *h, struct helper_local *hl, int ssl_value)
 {
     uint64_t v = 0;
 
     if (!TEST_true(SSL_get_value_uint(h->c_conn, (uint32_t)hl->check_op->arg1,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
+            ssl_value,
             &v)))
         return 0;
 
@@ -5398,6 +4020,42 @@ static int check_idle_timeout(struct helper *h, struct helper_local *hl)
     return 1;
 }
 
+static int cannot_change_static_tp(struct helper *h, struct helper_local *hl, int ssl_value)
+{
+    uint64_t v = 0;
+
+    if (!TEST_true(SSL_get_feature_request_uint(h->c_conn,
+            ssl_value,
+            &v)))
+        return 0;
+
+    if (!TEST_uint64_t_eq(v, hl->check_op->arg1))
+        return 0;
+
+    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
+            ssl_value,
+            hl->check_op->arg2)))
+        return 0;
+
+    return 1;
+}
+
+static int modify_idle_timeout(struct helper *h, struct helper_local *hl)
+{
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_IDLE_TIMEOUT);
+}
+
+static int check_idle_timeout(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_IDLE_TIMEOUT);
+}
+
+static int cannot_change_idle_timeout(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_IDLE_TIMEOUT);
+}
+
+/* 81. Idle timeout configuration */
 static const struct script_op script_81[] = {
     OP_C_SET_ALPN("ossltest"),
     OP_CHECK(modify_idle_timeout, 25000),
@@ -5425,33 +4083,13 @@ static const struct script_op script_82[] = {
 };
 
 /* 83. No late changes to idle timeout */
-static int cannot_change_idle_timeout(struct helper *h, struct helper_local *hl)
-{
-    uint64_t v = 0;
-
-    if (!TEST_true(SSL_get_feature_request_uint(h->c_conn,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
-            &v)))
-        return 0;
-
-    if (!TEST_uint64_t_eq(v, 30000))
-        return 0;
-
-    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
-            SSL_VALUE_QUIC_IDLE_TIMEOUT,
-            5000)))
-        return 0;
-
-    return 1;
-}
-
 static const struct script_op script_83[] = {
     OP_C_SET_ALPN("ossltest"),
     OP_C_CONNECT_WAIT(),
 
     OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
 
-    OP_CHECK(cannot_change_idle_timeout, 0),
+    OP_CHECK2(cannot_change_idle_timeout, 30000, 5000),
     OP_CHECK2(check_idle_timeout, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 30000),
     OP_CHECK2(check_idle_timeout, SSL_VALUE_CLASS_FEATURE_NEGOTIATED, 30000),
 
@@ -6001,6 +4639,375 @@ static const struct script_op script_87[] = {
     OP_END
 };
 
+static int modify_udp_payload_size_max(struct helper *h, struct helper_local *hl)
+{
+    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
+            SSL_VALUE_QUIC_UDP_PAYLOAD_SIZE_MAX,
+            QUIC_MIN_INITIAL_DGRAM_LEN - 1)))
+        return 0;
+
+    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
+            SSL_VALUE_QUIC_UDP_PAYLOAD_SIZE_MAX,
+            QUIC_DEFAULT_MAX_UDP_PAYLOAD_SIZE + 1)))
+        return 0;
+
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_UDP_PAYLOAD_SIZE_MAX);
+}
+
+static int check_udp_payload_size_max(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_UDP_PAYLOAD_SIZE_MAX);
+}
+
+static int cannot_change_udp_payload_size_max(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_UDP_PAYLOAD_SIZE_MAX);
+}
+
+/* 89. Max udp payload size configuration */
+static const struct script_op script_89[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_udp_payload_size_max, QUIC_DEFAULT_MAX_UDP_PAYLOAD_SIZE),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_udp_payload_size_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_MIN_INITIAL_DGRAM_LEN),
+    OP_CHECK2(check_udp_payload_size_max,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_DEFAULT_MAX_UDP_PAYLOAD_SIZE),
+
+    OP_END
+};
+
+/* 90. Negotiated default max udp payload size if not configured */
+static const struct script_op script_90[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_udp_payload_size_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_MIN_INITIAL_DGRAM_LEN),
+    OP_CHECK2(check_udp_payload_size_max,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_MIN_INITIAL_DGRAM_LEN),
+
+    OP_END
+};
+
+/* 91. No late changes to max udp payload size */
+static const struct script_op script_91[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_udp_payload_size_max, QUIC_MIN_INITIAL_DGRAM_LEN,
+        QUIC_DEFAULT_MAX_UDP_PAYLOAD_SIZE),
+    OP_CHECK2(check_udp_payload_size_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_MIN_INITIAL_DGRAM_LEN),
+
+    OP_END
+};
+
+static int modify_window_con(struct helper *h, struct helper_local *hl)
+{
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWCON);
+}
+
+static int check_window_con(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWCON);
+}
+
+static int cannot_change_window_con(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWCON);
+}
+
+/* 92. Connection window configuration */
+static const struct script_op script_92[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_window_con, 800000),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_con, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 768 * 1024),
+    OP_CHECK2(check_window_con, SSL_VALUE_CLASS_FEATURE_REQUEST, 800000),
+
+    OP_END
+};
+
+/* 93. Negotiated default connection window if not configured */
+static const struct script_op script_93[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_con, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 768 * 1024),
+    OP_CHECK2(check_window_con, SSL_VALUE_CLASS_FEATURE_REQUEST, 768 * 1024),
+
+    OP_END
+};
+
+/* 94. No late changes to connection window */
+static const struct script_op script_94[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_window_con, 768 * 1024, 800000),
+    OP_CHECK2(check_window_con, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 768 * 1024),
+
+    OP_END
+};
+
+static int modify_window_bidi_stream(struct helper *h, struct helper_local *hl)
+{
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWBSTR);
+}
+
+static int check_window_bidi_stream(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWBSTR);
+}
+
+static int cannot_change_window_bidi_stream(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWBSTR);
+}
+
+/* 95. Bidi stream window configuration */
+static const struct script_op script_95[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_window_bidi_stream, 600000),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_bidi_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+    OP_CHECK2(check_window_bidi_stream, SSL_VALUE_CLASS_FEATURE_REQUEST, 600000),
+
+    OP_END
+};
+
+/* 96. Negotiated default bidi stream window if not configured */
+static const struct script_op script_96[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_bidi_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+    OP_CHECK2(check_window_bidi_stream, SSL_VALUE_CLASS_FEATURE_REQUEST, 512 * 1024),
+
+    OP_END
+};
+
+/* 97. No late changes to bidi stream window */
+static const struct script_op script_97[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_window_bidi_stream, 512 * 1024, 600000),
+    OP_CHECK2(check_window_bidi_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+
+    OP_END
+};
+
+static int modify_window_uni_stream(struct helper *h, struct helper_local *hl)
+{
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWUSTR);
+}
+
+static int check_window_uni_stream(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWUSTR);
+}
+
+static int cannot_change_window_uni_stream(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_WINDOWUSTR);
+}
+
+/* 98. Uni stream window configuration */
+static const struct script_op script_98[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_window_uni_stream, 600000),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_uni_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+    OP_CHECK2(check_window_uni_stream, SSL_VALUE_CLASS_FEATURE_REQUEST, 600000),
+
+    OP_END
+};
+
+/* 99. Negotiated default uni stream window if not configured */
+static const struct script_op script_99[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_window_uni_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+    OP_CHECK2(check_window_uni_stream, SSL_VALUE_CLASS_FEATURE_REQUEST, 512 * 1024),
+
+    OP_END
+};
+
+/* 100. No late changes to uni stream window */
+static const struct script_op script_100[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_window_uni_stream, 512 * 1024, 600000),
+    OP_CHECK2(check_window_uni_stream, SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, 512 * 1024),
+
+    OP_END
+};
+
+static int
+modify_ack_delay_exponent(struct helper *h, struct helper_local *hl)
+{
+    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
+            SSL_VALUE_QUIC_ACK_DELAY_EXPONENT,
+            QUIC_MAX_ACK_DELAY_EXP + 1)))
+        return 0;
+
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_EXPONENT);
+}
+
+static int check_ack_delay_exponent(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_EXPONENT);
+}
+
+static int cannot_change_ack_delay_exponent(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_EXPONENT);
+}
+
+/* 101. Ack delay exponent configuration */
+static const struct script_op script_101[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_ack_delay_exponent, QUIC_DEFAULT_ACK_DELAY_EXP + 1),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_ack_delay_exponent,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_ACK_DELAY_EXP),
+    OP_CHECK2(check_ack_delay_exponent,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_DEFAULT_ACK_DELAY_EXP + 1),
+
+    OP_END
+};
+
+/* 102. Negotiated default ack delay exponent if not configured */
+static const struct script_op script_102[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_ack_delay_exponent,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_ACK_DELAY_EXP),
+    OP_CHECK2(check_ack_delay_exponent,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_DEFAULT_ACK_DELAY_EXP),
+
+    OP_END
+};
+
+/* 103. No late changes to ack delay exponent */
+static const struct script_op script_103[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_ack_delay_exponent, QUIC_DEFAULT_ACK_DELAY_EXP,
+        QUIC_DEFAULT_ACK_DELAY_EXP + 1),
+    OP_CHECK2(check_ack_delay_exponent,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_ACK_DELAY_EXP),
+
+    OP_END
+};
+
+static int modify_ack_delay_max(struct helper *h, struct helper_local *hl)
+{
+    if (!TEST_false(SSL_set_feature_request_uint(h->c_conn,
+            SSL_VALUE_QUIC_ACK_DELAY_MAX,
+            QUIC_MAX_MAX_ACK_DELAY + 1)))
+        return 0;
+
+    return modify_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_MAX);
+}
+
+static int check_ack_delay_max(struct helper *h, struct helper_local *hl)
+{
+    return check_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_MAX);
+}
+
+static int cannot_change_ack_delay_max(struct helper *h, struct helper_local *hl)
+{
+    return cannot_change_static_tp(h, hl, SSL_VALUE_QUIC_ACK_DELAY_MAX);
+}
+
+/* 104. Max ack delay configuration */
+static const struct script_op script_104[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_CHECK(modify_ack_delay_max, QUIC_DEFAULT_MAX_ACK_DELAY / 2),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_ack_delay_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_MAX_ACK_DELAY),
+    OP_CHECK2(check_ack_delay_max,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_DEFAULT_MAX_ACK_DELAY / 2),
+
+    OP_END
+};
+
+/* 105. Negotiated default max ack delay if not configured */
+static const struct script_op script_105[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(check_ack_delay_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_MAX_ACK_DELAY),
+    OP_CHECK2(check_ack_delay_max,
+        SSL_VALUE_CLASS_FEATURE_REQUEST, QUIC_DEFAULT_MAX_ACK_DELAY),
+
+    OP_END
+};
+
+/* 106. No late changes to max ack delay */
+static const struct script_op script_106[] = {
+    OP_C_SET_ALPN("ossltest"),
+    OP_C_CONNECT_WAIT(),
+
+    OP_C_SET_DEFAULT_STREAM_MODE(SSL_DEFAULT_STREAM_MODE_NONE),
+
+    OP_CHECK2(cannot_change_ack_delay_max, QUIC_DEFAULT_MAX_ACK_DELAY,
+        QUIC_DEFAULT_MAX_ACK_DELAY / 2),
+    OP_CHECK2(check_ack_delay_max,
+        SSL_VALUE_CLASS_FEATURE_PEER_REQUEST, QUIC_DEFAULT_MAX_ACK_DELAY),
+
+    OP_END
+};
+
 static const struct script_op *const scripts[] = {
     script_1,
     script_2,
@@ -6090,6 +5097,24 @@ static const struct script_op *const scripts[] = {
     script_86,
     script_87,
     script_88,
+    script_89,
+    script_90,
+    script_91,
+    script_92,
+    script_93,
+    script_94,
+    script_95,
+    script_96,
+    script_97,
+    script_98,
+    script_99,
+    script_100,
+    script_101,
+    script_102,
+    script_103,
+    script_104,
+    script_105,
+    script_106,
 };
 
 static int test_script(int idx)
@@ -6115,7 +5140,7 @@ static int test_script(int idx)
     }
 #endif
 
-    BIO_snprintf(script_name, sizeof(script_name), "script %d", script_idx + 1);
+    snprintf(script_name, sizeof(script_name), "script %d", script_idx + 1);
 
     TEST_info("Running script %d (order=%d, blocking=%d)", script_idx + 1,
         free_order, blocking);
@@ -6201,7 +5226,7 @@ static ossl_unused int test_dyn_frame_types(int idx)
             s[i].arg2 = forbidden_frame_types[idx].expected_err;
         }
 
-    BIO_snprintf(script_name, sizeof(script_name),
+    snprintf(script_name, sizeof(script_name),
         "dyn script %d", idx);
 
     return run_script(dyn_frame_types_script, script_name, 0, 0);

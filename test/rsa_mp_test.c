@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2017-2026 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright 2017 BaishanCloud. All rights reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -313,9 +313,38 @@ err:
     return ret;
 }
 
+static int test_rsa_mp_gen_mfail(void)
+{
+    int ret = 0;
+    RSA *rsa = NULL;
+    BIGNUM *ebn = NULL;
+
+    /* Setting up is not under injection, only the generation itself is. */
+    if (!TEST_ptr(rsa = RSA_new()))
+        goto err;
+    if (!TEST_ptr(ebn = BN_new()))
+        goto err;
+    if (!TEST_true(BN_set_word(ebn, RSA_F4)))
+        goto err;
+
+    MFAIL_start();
+    ret = RSA_generate_multi_prime_key(rsa, 1024, NUM_EXTRA_PRIMES + 2, ebn, NULL);
+    MFAIL_end();
+
+    /* If the generation was successful, the key must be usable. */
+    if (ret > 0)
+        ret = TEST_true(RSA_check_key_ex(rsa, NULL)) ? 1 : -1;
+
+err:
+    BN_free(ebn);
+    RSA_free(rsa);
+    return ret;
+}
+
 int setup_tests(void)
 {
     ADD_TEST(test_rsa_mp_gen_bad_input);
     ADD_ALL_TESTS(test_rsa_mp, 2);
+    ADD_MFAIL_SAMPLED_TEST(test_rsa_mp_gen_mfail, 64);
     return 1;
 }

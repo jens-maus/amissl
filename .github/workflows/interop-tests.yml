@@ -36,7 +36,9 @@ permissions: {}
 jobs:
   # Only a dispatch carries inputs, so this is skipped on the nightly cron.
   validate-dispatch-inputs:
-    if: inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != ''
+    if: |
+      github.repository == 'openssl/openssl' &&
+      (inputs.pr != '' || inputs.head_sha != '' || inputs.check_run_id != '')
     uses: ./.github/workflows/validate-dispatch-inputs.yml
     with:
       pr: ${{ inputs.pr }}
@@ -45,10 +47,12 @@ jobs:
 
   test:
     needs: [validate-dispatch-inputs]
-    if: >-
-      (github.repository == 'openssl/openssl') &&
+    if: |
+      github.repository == 'openssl/openssl' &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     container:
       image: docker.io/fedora:43
@@ -81,6 +85,7 @@ jobs:
         run: |
           mkdir -p /build/SPECS && cd /build && echo -e "%_topdir /build\n%_lto_cflags %{nil}" >~/.rpmmacros && rpmdev-setuptree
           cd /build && cp ${GITHUB_WORKSPACE}/interop/openssl/openssl.spec SPECS/ && \
+          sed -i '/PRE_RELEASE_TAG/s/-/~/g' ${GITHUB_WORKSPACE}/VERSION.dat && \
           cd SPECS/ && source ${GITHUB_WORKSPACE}/VERSION.dat && \
           sed -i "s/SOVERSION/$SHLIB_VERSION/" openssl.spec && \
           sed -i "s/^Version: .*\$/Version: $MAJOR.$MINOR.$PATCH/" openssl.spec
@@ -93,14 +98,14 @@ jobs:
       - name: Run interop tests
         run: |
           cd interop
-          tmt run -av plans -n interop tests -f "tag: interop-openssl & tag: interop-$COMPONENT" provision -h local --feeling-safe execute -h tmt --interactive
+          tmt --feeling-safe run -av plans -n interop tests -f "tag: interop-openssl & tag: interop-$COMPONENT" provision -h local execute -h tmt --interactive
           openssl version
           echo "Finished - important to prevent unwanted output truncating"
   openssh_interop:
     needs: [validate-dispatch-inputs]
-    if: >-
+    if: |
+      github.repository == 'openssl/openssl' &&
       inputs.pr == '' &&
-      (github.repository == 'openssl/openssl') &&
       !cancelled() &&
       (needs.validate-dispatch-inputs.result == 'success' || needs.validate-dispatch-inputs.result == 'skipped')
     name: "openssh interop ${{ matrix.branch.openssl }}"
@@ -109,10 +114,11 @@ jobs:
       matrix:
         branch: [
           { openssl: 'master', openssh: 'openssl-master', openssl_config: 'no-docs'},
+          { openssl: 'openssl-4.1', openssh: 'openssl-4.1', openssl_config: 'no-docs'},
+          { openssl: 'openssl-4.0', openssh: 'openssl-4.0', openssl_config: 'no-docs'},
           { openssl: 'openssl-3.6', openssh: 'openssl-3.6', openssl_config: 'no-docs'},
           { openssl: 'openssl-3.5', openssh: 'openssl-3.5', openssl_config: 'no-docs'},
-          { openssl: 'openssl-3.4', openssh: 'openssl-3.4', openssl_config: 'no-docs'},
-          { openssl: 'openssl-3.0', openssh: 'openssl-3.0', openssl_config: ''}
+          { openssl: 'openssl-3.4', openssh: 'openssl-3.4', openssl_config: 'no-docs'}
         ]
     runs-on: ubuntu-latest
     env:
@@ -120,28 +126,24 @@ jobs:
       TEST_SSH_UNSAFE_PERMISSIONS: 1
       TEST_SSH_HOSTBASED_AUTH: yes
     steps:
-    - uses: actions/checkout@v6
-      with:
-        persist-credentials: false
-        ref: ${{ matrix.branch.openssl }}
-        fetch-depth: 1
-    - name: config
-      run: ./config --banner=Configured -fPIC --prefix=/opt/openssl ${{ matrix.openssl_config }} shared -Wl,-rpath,/opt/openssl/lib64 && perl configdata.pm --dump
-    - name: make
-      run: |
-        make -s -j4
-        make -s -j4 install_sw
-    - name: install dependencies of openssh
+    - name: install dependencies
       run: |
         sudo apt-get update
         sudo apt-get -yq install autoconf zlib1g-dev
-    - name: run openssh
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+        repository: openssh/openssh-portable
+        fetch-depth: 1
+    - name: setup ci
+      run: sh ./.github/setup_ci.sh ${{ matrix.branch.openssh }} ubuntu-latest
+    - name: autoreconf
+      run: autoreconf
+    - name: configure
+      run: sh ./.github/configure.sh ${{ matrix.branch.openssh }}
+    - name: make
       run: |
-        git clone --branch master --depth 1 https://github.com/openssh/openssh-portable.git
-        cd openssh-portable
-        sh ./.github/setup_ci.sh ${{ matrix.branch.openssh }} ubuntu-latest
-        autoreconf
-        sh ./.github/configure.sh ${{ matrix.branch.openssh }}
         make clean
         make -s -j4
-        sh ./.github/run_test.sh
+    - name: run tests
+      run: sh ./.github/run_test.sh

@@ -31,6 +31,11 @@ int main(int argc, char *argv[])
     int setup_res;
     int gi_ret;
 
+    if (mfail_install(0) < 0) {
+        test_printf_stderr("MFAIL installation failed - aborting\n");
+        return ret;
+    }
+
     gi_ret = global_init();
 
     test_open_streams();

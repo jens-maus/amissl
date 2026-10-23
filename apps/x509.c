@@ -197,7 +197,7 @@ const OPTIONS x509_options[] = {
         "[CC]YYMMDDHHMMSSZ value for notBefore certificate field" },
     { "not_after", OPT_NOT_AFTER, 's',
         "[CC]YYMMDDHHMMSSZ value for notAfter certificate field, overrides -days" },
-    { "days", OPT_DAYS, 'n',
+    { "days", OPT_DAYS, 'p',
         "Number of days until newly generated certificate expires - default 30" },
     { "preserve_dates", OPT_PRESERVE_DATES, '-',
         "Preserve existing validity dates" },
@@ -492,7 +492,7 @@ int x509_main(int argc, char **argv)
             not_after = opt_arg();
             break;
         case OPT_DAYS:
-            days = atoi(opt_arg());
+            days = opt_int_arg();
             if (days <= UNSET_DAYS) {
                 BIO_printf(bio_err, "%s: -days parameter arg must be >= -1\n",
                     prog);
@@ -837,13 +837,21 @@ int x509_main(int argc, char **argv)
 
         if (extsect == NULL) {
             extsect = app_conf_try_string(extconf, "default", "extensions");
+            /*
+             * If neither -extfile nor -extensions is provided, and the default
+             * config file's default section doesn't contain the "extensions"
+             * config option, extsect is left as NULL, which is then used
+             * as an indicator to avoid trying to load extensions.
+             */
             if (extfile != NULL && extsect == NULL)
                 extsect = "default";
         }
-        X509V3_set_ctx_test(&ctx2);
-        if (!do_EXT_add_nconf(extconf, extconf, &ctx2, NULL,
-                "Error checking extension section %s\n", extsect))
-            goto err;
+        if (extsect != NULL) {
+            X509V3_set_ctx_test(&ctx2);
+            if (!do_EXT_add_nconf(extconf, extconf, &ctx2, NULL,
+                    "Error checking extension section %s\n", extsect))
+                goto err;
+        }
     } else if (newout && !confquiet) {
         goto err;
     }
@@ -1009,7 +1017,7 @@ cert_loop:
         if (!X509V3_set_issuer_pkey(&ext_ctx, privkey))
             goto err;
     }
-    if (extconf != NULL && !x509toreq) {
+    if (extconf != NULL && !x509toreq && extsect != NULL) {
         if (!do_EXT_add_nconf(extconf, extconf, &ext_ctx, x,
                 "Error adding extensions from section %s\n", extsect))
             goto err;
@@ -1034,7 +1042,7 @@ cert_loop:
         }
         if ((rq = x509_to_req(x, ext_copy, ext_names)) == NULL)
             goto err;
-        if (extconf != NULL) {
+        if (extconf != NULL && extsect != NULL) {
             if (!do_EXT_REQ_add_nconf(extconf, extconf, &ext_ctx, rq,
                     "Error adding request extensions from section %s\n", extsect))
                 goto err;
@@ -1233,7 +1241,8 @@ cert_loop:
             goto end;
     }
 
-    if (!check_cert_attributes(out, x, checkhost, checkemail, checkip, 1))
+    if (!check_cert_might_be_valid(out, bio_err, x, checkhost, checkemail,
+            checkip))
         goto err;
 
     if (noout || nocert) {

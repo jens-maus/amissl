@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2024 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -11,6 +11,7 @@
 #include <openssl/opensslconf.h>
 
 #include <string.h>
+#include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/ssl.h>
 #include <openssl/tls1.h>
@@ -35,6 +36,8 @@ static int test_func(void)
             TEST_info("min/max version setting incorrect");
             goto err;
         }
+        if (!TEST_long_eq(ERR_peek_error(), 0))
+            goto err;
     }
     ret = 1;
 err:

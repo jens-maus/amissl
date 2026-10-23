@@ -136,7 +136,7 @@ EC_KEY *EC_KEY_copy(EC_KEY *dest, const EC_KEY *src)
                 if (dest->priv_key == NULL)
                     return NULL;
             }
-            if (!BN_copy(dest->priv_key, src->priv_key))
+            if (BN_copy(dest->priv_key, src->priv_key) == NULL)
                 return NULL;
             if (src->group->meth->keycopy
                 && src->group->meth->keycopy(dest, src) == 0)
@@ -146,7 +146,6 @@ EC_KEY *EC_KEY_copy(EC_KEY *dest, const EC_KEY *src)
 
     /* copy the rest */
     dest->enc_flag = src->enc_flag;
-    dest->conv_form = src->conv_form;
     dest->version = src->version;
     dest->flags = src->flags;
 #ifndef FIPS_MODULE
@@ -176,7 +175,7 @@ int EC_KEY_up_ref(EC_KEY *r)
 {
     int i;
 
-    if (CRYPTO_UP_REF(&r->references, &i) <= 0)
+    if (!CRYPTO_UP_REF(&r->references, &i))
         return 0;
 
     REF_PRINT_COUNT("EC_KEY", i, r);
@@ -832,12 +831,13 @@ void EC_KEY_set_enc_flags(EC_KEY *key, unsigned int flags)
 
 point_conversion_form_t EC_KEY_get_conv_form(const EC_KEY *key)
 {
-    return key->conv_form;
+    return key->group != NULL
+        ? EC_GROUP_get_point_conversion_form(key->group)
+        : POINT_CONVERSION_UNCOMPRESSED;
 }
 
 void EC_KEY_set_conv_form(EC_KEY *key, point_conversion_form_t cform)
 {
-    key->conv_form = cform;
     if (key->group != NULL)
         EC_GROUP_set_point_conversion_form(key->group, cform);
 }
@@ -908,8 +908,10 @@ int EC_KEY_oct2key(EC_KEY *key, const unsigned char *buf, size_t len,
      * EC_POINT_oct2point() has already performed sanity checking of
      * the buffer so we know it is valid.
      */
-    if ((key->group->meth->flags & EC_FLAGS_CUSTOM_CURVE) == 0)
-        key->conv_form = (point_conversion_form_t)(buf[0] & ~0x01);
+    if ((key->group->meth->flags & EC_FLAGS_CUSTOM_CURVE) == 0) {
+        EC_GROUP_set_point_conversion_form(key->group,
+            (point_conversion_form_t)(buf[0] & ~0x01));
+    }
     return 1;
 }
 

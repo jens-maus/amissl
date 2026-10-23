@@ -7,26 +7,13 @@
  * https://www.openssl.org/source/license.html
  */
 
-#if defined(_WIN32)
-#include <windows.h>
+#include "internal/e_os.h"
+
 #if defined(_WIN32_WINNT) && _WIN32_WINNT >= 0x600
 #define USE_RWLOCK
 #endif
-#endif
+
 #include <assert.h>
-
-/*
- * VC++ 2008 or earlier x86 compilers do not have an inline implementation
- * of InterlockedOr64 for 32bit and will fail to run on Windows XP 32bit.
- * https://docs.microsoft.com/en-us/cpp/intrinsics/interlockedor-intrinsic-functions#requirements
- * To work around this problem, we implement a manual locking mechanism for
- * only VC++ 2008 or earlier x86 compilers.
- */
-
-#if ((defined(_MSC_VER) && defined(_M_IX86) && _MSC_VER <= 1600) || (defined(__MINGW32__) && !defined(__MINGW64__)))
-#define NO_INTERLOCKEDOR64
-#endif
-
 #include <openssl/crypto.h>
 #include <crypto/cryptlib.h>
 #include "internal/common.h"
@@ -120,7 +107,7 @@ struct rcu_lock_st {
     /* signal to wake threads waiting on prior_lock */
     CRYPTO_CONDVAR *prior_signal;
 
-    /* lock used with NO_INTERLOCKEDOR64: VS2010 x86 */
+    /* lock used without OSSL_USE_INTERLOCKEDOR64: VS2010 x86, mingw32 */
     CRYPTO_RWLOCK *rw_lock;
 };
 
@@ -196,8 +183,8 @@ void ossl_rcu_lock_free(CRYPTO_RCU_LOCK *lock)
 /* Read side acquisition of the current qp */
 static ossl_inline struct rcu_qp *get_hold_current_qp(CRYPTO_RCU_LOCK *lock)
 {
-    uint32_t qp_idx;
-    uint32_t tmp;
+    uint32_t qp_idx = 0;
+    uint32_t tmp = 0;
     uint64_t tmp64;
 
     /* get the current qp index */
@@ -286,7 +273,7 @@ void ossl_rcu_read_unlock(CRYPTO_RCU_LOCK *lock)
 {
     struct rcu_thr_data *data = CRYPTO_THREAD_get_local_ex(CRYPTO_THREAD_LOCAL_RCU_KEY, lock->ctx);
     int i;
-    LONG64 ret;
+    LONG64 ret = 0;
 
     assert(data != NULL);
 
@@ -339,8 +326,9 @@ static struct rcu_qp *update_qp(CRYPTO_RCU_LOCK *lock, uint32_t *curr_id)
 
     /* update the reader index to be the prior qp */
     tmp = lock->current_alloc_idx;
-#if (defined(NO_INTERLOCKEDOR64))
-    CRYPTO_THREAD_write_lock(lock->rw_lock);
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
+    /* This cannot fail, avoid unused result warning */
+    ossl_unused int r = CRYPTO_THREAD_write_lock(lock->rw_lock);
     lock->reader_idx = tmp;
     CRYPTO_THREAD_unlock(lock->rw_lock);
 #else
@@ -454,15 +442,11 @@ CRYPTO_RWLOCK *CRYPTO_THREAD_lock_new(void)
         /* Don't set error, to avoid recursion blowup. */
         return NULL;
 
-#if !defined(_WIN32_WCE)
     /* 0x400 is the spin count value suggested in the documentation */
     if (!InitializeCriticalSectionAndSpinCount(lock, 0x400)) {
         OPENSSL_free(lock);
         return NULL;
     }
-#else
-    InitializeCriticalSection(lock);
-#endif
 #endif
 
     return lock;
@@ -626,7 +610,7 @@ int CRYPTO_THREAD_compare_id(CRYPTO_THREAD_ID a, CRYPTO_THREAD_ID b)
 
 int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
         return 0;
     *val += amount;
@@ -646,7 +630,7 @@ int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock)
 int CRYPTO_atomic_add64(uint64_t *val, uint64_t op, uint64_t *ret,
     CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
         return 0;
     *val += op;
@@ -665,7 +649,7 @@ int CRYPTO_atomic_add64(uint64_t *val, uint64_t op, uint64_t *ret,
 int CRYPTO_atomic_and(uint64_t *val, uint64_t op, uint64_t *ret,
     CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
         return 0;
     *val &= op;
@@ -684,7 +668,7 @@ int CRYPTO_atomic_and(uint64_t *val, uint64_t op, uint64_t *ret,
 int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
     CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
         return 0;
     *val |= op;
@@ -702,7 +686,7 @@ int CRYPTO_atomic_or(uint64_t *val, uint64_t op, uint64_t *ret,
 
 int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
         return 0;
     *ret = *val;
@@ -718,7 +702,7 @@ int CRYPTO_atomic_load(uint64_t *val, uint64_t *ret, CRYPTO_RWLOCK *lock)
 
 int CRYPTO_atomic_store(uint64_t *dst, uint64_t val, CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
         return 0;
     *dst = val;
@@ -734,7 +718,7 @@ int CRYPTO_atomic_store(uint64_t *dst, uint64_t val, CRYPTO_RWLOCK *lock)
 
 int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
         return 0;
     *ret = *val;
@@ -751,7 +735,7 @@ int CRYPTO_atomic_load_int(int *val, int *ret, CRYPTO_RWLOCK *lock)
 
 int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock)
 {
-#if (defined(NO_INTERLOCKEDOR64))
+#if (!defined(OSSL_USE_INTERLOCKEDOR64))
     if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
         return 0;
     *dst = val;
@@ -763,6 +747,40 @@ int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock)
     InterlockedExchange((LONG volatile *)dst, val);
     return 1;
 #endif
+}
+
+int CRYPTO_atomic_load_ptr(void **ptr, void **ret, CRYPTO_RWLOCK *lock)
+{
+    /*
+     * Windows doesn't have an atomic to do this properly, but the ms learn
+     * site here:
+     * https://learn.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-interlockedcompareexchangepointer
+     * suggests that using InterlockedCompareExchangePointer can be used to
+     * devise a load operation
+     */
+    *ret = InterlockedCompareExchangePointer(ptr, NULL, NULL);
+    return 1;
+}
+
+int CRYPTO_atomic_store_ptr(void **dst, void **val, CRYPTO_RWLOCK *lock)
+{
+    InterlockedExchangePointer(dst, *val);
+    return 1;
+}
+
+int CRYPTO_atomic_cmp_exch_ptr(void **ptr, void **expect, void *desire, CRYPTO_RWLOCK *lock, int *lock_failed)
+{
+    void *initial;
+
+    if (lock_failed != NULL)
+        *lock_failed = 0;
+
+    /* Load the current pointer value */
+    initial = InterlockedCompareExchangePointer(ptr, desire, *expect);
+    if (*expect == initial)
+        return 1;
+    *expect = initial;
+    return 0;
 }
 
 int openssl_init_fork_handlers(void)

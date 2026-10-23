@@ -301,7 +301,7 @@ static ECDSA_SIG *sm2_sig_gen(const EC_KEY *key, const BIGNUM *e)
         /*
          * Pin the nonce to a fixed, value-independent width and flag it
          * BN_FLG_CONSTTIME, so its magnitude does not leak through operand
-         * lengths in the scalar copy inside the ladder or in the arithmetic
+         * lengths in the scalar copy inside the ladder, or in the arithmetic
          * below.  BN_priv_rand_range_ex() is kept so the nonce value itself
          * is unchanged; only its representation is pinned.
          */

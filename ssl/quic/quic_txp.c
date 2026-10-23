@@ -708,6 +708,18 @@ int ossl_quic_tx_packetiser_set_peer(OSSL_QUIC_TX_PACKETISER *txp,
     return BIO_ADDR_copy(&txp->args.peer, peer);
 }
 
+int ossl_quic_tx_packetiser_set_ack_delay_exponent(OSSL_QUIC_TX_PACKETISER *txp,
+    uint32_t exp)
+{
+    if (exp > QUIC_MAX_ACK_DELAY_EXP) {
+        ERR_raise(ERR_LIB_SSL, ERR_R_PASSED_INVALID_ARGUMENT);
+        return 0;
+    }
+
+    txp->args.ack_delay_exponent = exp;
+    return 1;
+}
+
 void ossl_quic_tx_packetiser_set_ack_tx_cb(OSSL_QUIC_TX_PACKETISER *txp,
     void (*cb)(const OSSL_QUIC_FRAME_ACK *ack,
         uint32_t pn_space,
@@ -1465,7 +1477,7 @@ static int txp_should_try_staging(OSSL_QUIC_TX_PACKETISER *txp,
      * This is not a major concern for clients, since if a client has a 1-RTT EL
      * provisioned the server is guaranteed to also have a 1-RTT EL provisioned.
      *
-     * TODO(QUIC FUTURE): Revisit this when when have reached a decision on how
+     * TODO(QUIC FUTURE): Revisit this when we have reached a decision on how
      * best to implement this
      */
     if (*conn_close_enc_level > enc_level

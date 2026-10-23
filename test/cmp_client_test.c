@@ -233,7 +233,7 @@ static OSSL_CRMF_CERTID *certid_new_non_dirName_issuer(void)
 
     if (cid == NULL || dns == NULL)
         goto err;
-    if (!ASN1_STRING_set(dns, "server.example", -1))
+    if (!ASN1_STRING_set1_string(dns, "server.example"))
         goto err;
     GENERAL_NAME_set0_value(cid->issuer, GEN_DNS, dns);
     dns = NULL; /* ownership transferred to cid->issuer */

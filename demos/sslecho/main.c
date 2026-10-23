@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 
 #define SOCKET int
+#define INVALID_SOCKET -1
 #define closesocket(s) close(s)
 
 #else
@@ -45,7 +46,7 @@ static SOCKET create_socket(flag isServer)
     struct sockaddr_in addr;
 
     s = socket(AF_INET, SOCK_STREAM, 0);
-    if (s < 0) {
+    if (s == INVALID_SOCKET) {
         perror("Unable to create socket");
         exit(EXIT_FAILURE);
     }
@@ -132,8 +133,8 @@ static void usage(void)
 {
     printf("Usage: sslecho s\n");
     printf("       --or--\n");
-    printf("       sslecho c ip\n");
-    printf("       c=client, s=server, ip=dotted ip of server\n");
+    printf("       sslecho c hostname\n");
+    printf("       c=client, s=server, hostname=hostname of server\n");
     exit(EXIT_FAILURE);
 }
 
@@ -146,8 +147,8 @@ int main(int argc, char **argv)
     SSL_CTX *ssl_ctx = NULL;
     SSL *ssl = NULL;
 
-    SOCKET server_skt = -1;
-    SOCKET client_skt = -1;
+    SOCKET server_skt = INVALID_SOCKET;
+    SOCKET client_skt = INVALID_SOCKET;
 
     /* used by fgets */
     char buffer[BUFFERSIZE];
@@ -157,7 +158,7 @@ int main(int argc, char **argv)
     size_t rxcap = sizeof(rxbuf);
     int rxlen;
 
-    char *rem_server_ip = NULL;
+    char *rem_server_name = NULL;
 
     struct sockaddr_in addr;
 #if defined(OPENSSL_SYS_CYGWIN) || defined(OPENSSL_SYS_WINDOWS)
@@ -181,13 +182,13 @@ int main(int argc, char **argv)
         /* NOTREACHED */
     }
     isServer = (argv[1][0] == 's') ? true : false;
-    /* If client get remote server address (could be 127.0.0.1) */
+    /* If client get remote server hostname */
     if (!isServer) {
         if (argc != 3) {
             usage();
             /* NOTREACHED */
         }
-        rem_server_ip = argv[2];
+        rem_server_name = argv[2];
     }
 
     /* Create context used by both client and server */
@@ -213,7 +214,7 @@ int main(int argc, char **argv)
             /* Wait for TCP connection from client */
             client_skt = accept(server_skt, (struct sockaddr *)&addr,
                 &addr_len);
-            if (client_skt < 0) {
+            if (client_skt == INVALID_SOCKET) {
                 perror("Unable to accept");
                 exit(EXIT_FAILURE);
             }
@@ -270,10 +271,10 @@ int main(int argc, char **argv)
                 SSL_free(ssl);
                 closesocket(client_skt);
                 /*
-                 * Set client_skt to -1 to avoid double close when
+                 * Set client_skt to INVALID_SOCKET to avoid double close when
                  * server_running become false before next accept
                  */
-                client_skt = -1;
+                client_skt = INVALID_SOCKET;
             }
         }
         printf("Server exiting...\n");
@@ -290,7 +291,7 @@ int main(int argc, char **argv)
         client_skt = create_socket(false);
         /* Set up connect address */
         addr.sin_family = AF_INET;
-        inet_pton(AF_INET, rem_server_ip, &addr.sin_addr.s_addr);
+        inet_pton(AF_INET, rem_server_name, &addr.sin_addr.s_addr);
         addr.sin_port = htons(server_port);
         /* Do TCP connect with server */
         if (connect(client_skt, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
@@ -307,9 +308,9 @@ int main(int argc, char **argv)
             goto exit;
         }
         /* Set hostname for SNI */
-        SSL_set_tlsext_host_name(ssl, rem_server_ip);
+        SSL_set_tlsext_host_name(ssl, rem_server_name);
         /* Configure server hostname check */
-        if (!SSL_set1_dnsname(ssl, rem_server_ip)) {
+        if (!SSL_set1_dnsname(ssl, rem_server_name)) {
             ERR_print_errors_fp(stderr);
             goto exit;
         }
@@ -368,9 +369,9 @@ exit:
     }
     SSL_CTX_free(ssl_ctx);
 
-    if (client_skt != -1)
+    if (client_skt != INVALID_SOCKET)
         closesocket(client_skt);
-    if (server_skt != -1)
+    if (server_skt != INVALID_SOCKET)
         closesocket(server_skt);
 
     printf("sslecho exiting\n");

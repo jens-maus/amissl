@@ -1,5 +1,5 @@
 /*
- *  Copyright 2024-2025 The OpenSSL Project Authors. All Rights Reserved.
+ *  Copyright 2024-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  *  Licensed under the Apache License 2.0 (the "License").  You may not use
  *  this file except in compliance with the License.  You can obtain a copy
@@ -50,15 +50,6 @@ static void errx(int status, const char *fmt, ...)
     vwarnx(fmt, ap);
     va_end(ap);
     exit(status);
-}
-
-static void warnx(const char *fmt, ...)
-{
-    va_list ap;
-
-    va_start(ap, fmt);
-    vwarnx(fmt, ap);
-    va_end(ap);
 }
 #endif
 
@@ -463,7 +454,7 @@ err:
     return ok;
 }
 
-/* Minimal QUIC HTTP/1.0 server. */
+/* Minimal QUIC HTTP/1.1 server. */
 int main(int argc, char *argv[])
 {
     int res = EXIT_FAILURE;

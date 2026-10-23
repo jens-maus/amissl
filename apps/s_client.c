@@ -9,11 +9,13 @@
  */
 
 #include "internal/e_os.h"
+#include <inttypes.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <limits.h>
 #include <openssl/e_os2.h>
 #include "internal/nelem.h"
 #include "internal/sockets.h" /* for openssl_fdset() */
@@ -170,8 +172,8 @@ static unsigned int psk_client_cb(SSL *ssl, const char *hint, char *identity,
     /*
      * lookup PSK identity and PSK key based on the given identity hint here
      */
-    ret = BIO_snprintf(identity, max_identity_len, "%s", psk_identity);
-    if (ret < 0 || (unsigned int)ret > max_identity_len)
+    ret = snprintf(identity, max_identity_len, "%s", psk_identity);
+    if (ret < 0 || (unsigned int)ret >= max_identity_len)
         goto out_err;
     if (c_debug)
         BIO_printf(bio_c_out, "created identity '%s' len=%d\n", identity,
@@ -186,7 +188,7 @@ static unsigned int psk_client_cb(SSL *ssl, const char *hint, char *identity,
     }
     if (max_psk_len > INT_MAX || key_len > (long)max_psk_len) {
         BIO_printf(bio_err,
-            "psk buffer of callback is too small (%d) for key (%ld)\n",
+            "psk buffer of callback is too small (%u) for key (%ld)\n",
             max_psk_len, key_len);
         OPENSSL_free(key);
         return 0;
@@ -215,6 +217,7 @@ static int psk_use_session_cb(SSL *s, const EVP_MD *md,
 {
     SSL_SESSION *usesess = NULL;
     const SSL_CIPHER *cipher = NULL;
+    const int version1_3 = SSL_is_dtls(s) ? DTLS1_3_VERSION : TLS1_3_VERSION;
 
     if (psksess != NULL) {
         if (!SSL_SESSION_up_ref(psksess))
@@ -242,7 +245,7 @@ static int psk_use_session_cb(SSL *s, const EVP_MD *md,
         if (usesess == NULL
             || !SSL_SESSION_set1_master_key(usesess, key, key_len)
             || !SSL_SESSION_set_cipher(usesess, cipher)
-            || !SSL_SESSION_set_protocol_version(usesess, TLS1_3_VERSION)) {
+            || !SSL_SESSION_set_protocol_version(usesess, version1_3)) {
             OPENSSL_free(key);
             goto err;
         }
@@ -340,7 +343,7 @@ static int serverinfo_cli_parse_cb(SSL *s, unsigned int ext_type,
     ext_buf[3] = (unsigned char)(inlen);
     memcpy(ext_buf + 4, in, inlen);
 
-    BIO_snprintf(pem_name, sizeof(pem_name), "SERVERINFO FOR EXTENSION %d",
+    snprintf(pem_name, sizeof(pem_name), "SERVERINFO FOR EXTENSION %u",
         ext_type);
     PEM_write_bio(bio_c_out, pem_name, "", ext_buf, (long)(4 + inlen));
     return 1;
@@ -551,6 +554,7 @@ typedef enum OPTION_choice {
     OPT_DTLS,
     OPT_DTLS1,
     OPT_DTLS1_2,
+    OPT_DTLS1_3,
     OPT_QUIC,
     OPT_SCTP,
     OPT_TIMEOUT,
@@ -598,6 +602,7 @@ typedef enum OPTION_choice {
     OPT_S_ENUM,
     OPT_IGNORE_UNEXPECTED_EOF,
     OPT_FALLBACKSCSV,
+    OPT_GREASE,
     OPT_NOCMDS,
     OPT_ADV,
     OPT_PROXY,
@@ -671,6 +676,7 @@ const OPTIONS s_client_options[] = {
     { "read_buf", OPT_READ_BUF, 'p',
         "Default read buffer size to be used for connections" },
     { "fallback_scsv", OPT_FALLBACKSCSV, '-', "Send the fallback SCSV" },
+    { "grease", OPT_GREASE, '-', "Send GREASE values in ClientHello (RFC 8701)" },
 
     OPT_SECTION("Identity"),
     { "cert", OPT_CERT, '<', "Client certificate file to use" },
@@ -682,11 +688,11 @@ const OPTIONS s_client_options[] = {
     { "key", OPT_KEY, 's', "Private key file to use; default: -cert file" },
     { "keyform", OPT_KEYFORM, 'f', "Key format (DER/PEM)" },
     { "pass", OPT_PASS, 's', "Private key and cert file pass phrase source" },
-    { "verify", OPT_VERIFY, 'p', "Turn on peer certificate verification" },
+    { "verify", OPT_VERIFY, 'p', "Turn on peer certificate verification, set depth" },
     { "nameopt", OPT_NAMEOPT, 's', "Certificate subject/issuer name printing options" },
-    { "CApath", OPT_CAPATH, '/', "PEM format directory of CA's" },
-    { "CAfile", OPT_CAFILE, '<', "PEM format file of CA's" },
-    { "CAstore", OPT_CASTORE, ':', "URI to store of CA's" },
+    { "CAfile", OPT_CAFILE, '<', "File in PEM format with trusted CA certs" },
+    { "CApath", OPT_CAPATH, '/', "Dir with trusted CA cert files in PEM format" },
+    { "CAstore", OPT_CASTORE, ':', "URI of store with trusted CA certs" },
     { "no-CAfile", OPT_NOCAFILE, '-',
         "Do not load the default certificates file" },
     { "no-CApath", OPT_NOCAPATH, '-',
@@ -811,6 +817,9 @@ const OPTIONS s_client_options[] = {
 #ifndef OPENSSL_NO_DTLS1_2
     { "dtls1_2", OPT_DTLS1_2, '-', "Just use DTLSv1.2" },
 #endif
+#ifndef OPENSSL_NO_DTLS1_3
+    { "dtls1_3", OPT_DTLS1_3, '-', "Just use DTLSv1.3" },
+#endif
 #ifndef OPENSSL_NO_SCTP
     { "sctp", OPT_SCTP, '-', "Use SCTP" },
     { "sctp_label_bug", OPT_SCTP_LABEL_BUG, '-', "Enable SCTP label length bug" },
@@ -872,17 +881,21 @@ const OPTIONS s_client_options[] = {
         "Close connection on verification error" },
     { "verify_quiet", OPT_VERIFY_QUIET, '-', "Restrict verify output to errors" },
     { "chainCAfile", OPT_CHAINCAFILE, '<',
-        "CA file for certificate chain (PEM format)" },
+        "File in PEM format with trusted CA certs to build own cert chain" },
     { "chainCApath", OPT_CHAINCAPATH, '/',
-        "Use dir as certificate store path to build CA certificate chain" },
+        "Dir with trusted CA cert files in PEM format to build own cert chain" },
     { "chainCAstore", OPT_CHAINCASTORE, ':',
-        "CA store URI for certificate chain" },
+        "URI of trusted CA cert store to build own cert chain" },
+    { OPT_MORE_STR, 0, 0,
+        "NOTE: these override -CApath, -CAfile, and -CAstore for client chain building" },
     { "verifyCAfile", OPT_VERIFYCAFILE, '<',
-        "CA file for certificate verification (PEM format)" },
+        "File in PEM format with trusted CA certs for server cert verification" },
     { "verifyCApath", OPT_VERIFYCAPATH, '/',
-        "Use dir as certificate store path to verify CA certificate" },
+        "Dir with trusted CA cert files in PEM format for server cert verification" },
     { "verifyCAstore", OPT_VERIFYCASTORE, ':',
-        "CA store URI for certificate verification" },
+        "URI of trusted CA cert store for server cert verification" },
+    { OPT_MORE_STR, 0, 0,
+        "NOTE: these override -CApath, -CAfile, and -CAstore for server cert verification" },
     OPT_X_OPTIONS,
     OPT_PROV_OPTIONS,
 
@@ -934,7 +947,7 @@ static const OPT_PAIR services[] = {
 #define IS_PROT_FLAG(o)                                                           \
     (o == OPT_TLS1 || o == OPT_TLS1_1 || o == OPT_TLS1_2                          \
         || o == OPT_TLS1_3 || o == OPT_DTLS || o == OPT_DTLS1 || o == OPT_DTLS1_2 \
-        || o == OPT_QUIC)
+        || o == OPT_DTLS1_3 || o == OPT_QUIC)
 
 /* Free |*dest| and optionally set it to a copy of |source|. */
 static void freeandcopy(char **dest, const char *source)
@@ -947,6 +960,7 @@ static void freeandcopy(char **dest, const char *source)
 
 static int new_session_cb(SSL *s, SSL_SESSION *sess)
 {
+    const int version1_3 = SSL_is_dtls(s) ? DTLS1_3_VERSION : TLS1_3_VERSION;
 
     if (sess_out != NULL) {
         BIO *stmp = BIO_new_file(sess_out, "w");
@@ -960,10 +974,10 @@ static int new_session_cb(SSL *s, SSL_SESSION *sess)
     }
 
     /*
-     * Session data gets dumped on connection for TLSv1.2 and below, and on
-     * arrival of the NewSessionTicket for TLSv1.3.
+     * Session data gets dumped on connection for (D)TLSv1.2 and below, and on
+     * arrival of the NewSessionTicket for (D)TLSv1.3.
      */
-    if (SSL_version(s) == TLS1_3_VERSION) {
+    if (SSL_version(s) == version1_3) {
         BIO_puts(bio_c_out,
             "---\nPost-Handshake New Session Ticket arrived:\n");
         SSL_SESSION_print(bio_c_out, sess);
@@ -1031,6 +1045,7 @@ int s_client_main(int argc, char **argv)
 #endif
     int read_buf_len = 0;
     int fallback_scsv = 0;
+    int grease = 0;
     OPTION_CHOICE o;
 #ifndef OPENSSL_NO_DTLS
     int enable_timeouts = 0;
@@ -1067,6 +1082,9 @@ int s_client_main(int argc, char **argv)
 #ifndef OPENSSL_NO_CT
     char *ctlog_file = NULL;
     int ct_validation = 0;
+#endif
+#ifndef OPENSSL_NO_NEXTPROTONEG
+    int version1_3;
 #endif
     int min_version = 0, max_version = 0, prot_opt = 0, no_prot_opt = 0;
     int async = 0;
@@ -1218,7 +1236,7 @@ int s_client_main(int argc, char **argv)
             break;
         case OPT_VERIFY:
             verify = SSL_VERIFY_PEER;
-            verify_args.depth = atoi(opt_arg());
+            verify_args.depth = opt_int_arg();
             if (!c_quiet)
                 BIO_printf(bio_err, "verify depth is %d\n", verify_args.depth);
             break;
@@ -1291,7 +1309,7 @@ int s_client_main(int argc, char **argv)
             crlf = 1;
             break;
         case OPT_QUIET:
-            c_quiet = c_ign_eof = 1;
+            verify_args.quiet = c_quiet = c_ign_eof = 1;
             break;
         case OPT_NBIO:
             c_nbio = 1;
@@ -1399,7 +1417,7 @@ int s_client_main(int argc, char **argv)
                 min_version = TLS1_VERSION;
             break;
         case OPT_SRP_STRENGTH:
-            srp_arg.strength = atoi(opt_arg());
+            srp_arg.strength = opt_int_arg();
             BIO_printf(bio_err, "SRP minimal length for N is %d\n",
                 srp_arg.strength);
             if (min_version < TLS1_VERSION)
@@ -1483,6 +1501,18 @@ int s_client_main(int argc, char **argv)
             isquic = 0;
 #endif
             break;
+        case OPT_DTLS1_3:
+#ifndef OPENSSL_NO_DTLS1_3
+            meth = DTLS_client_method();
+            min_version = DTLS1_3_VERSION;
+            max_version = DTLS1_3_VERSION;
+            socket_type = SOCK_DGRAM;
+            isdtls = 1;
+#ifndef OPENSS_NO_QUIC
+            isquic = 0;
+#endif
+#endif
+            break;
         case OPT_QUIC:
 #ifndef OPENSSL_NO_QUIC
             meth = OSSL_QUIC_client_method();
@@ -1512,11 +1542,15 @@ int s_client_main(int argc, char **argv)
             break;
         case OPT_MTU:
 #ifndef OPENSSL_NO_DTLS
-            socket_mtu = atol(opt_arg());
+            if (!opt_long(opt_arg(), &socket_mtu))
+                goto opthelp;
 #endif
             break;
         case OPT_FALLBACKSCSV:
             fallback_scsv = 1;
+            break;
+        case OPT_GREASE:
+            grease = 1;
             break;
         case OPT_KEYFORM:
             if (!opt_format(opt_arg(), OPT_FMT_ANY, &key_format))
@@ -1614,7 +1648,20 @@ int s_client_main(int argc, char **argv)
             len = (int)strlen(p);
             for (start = 0, i = 0; i <= len; ++i) {
                 if (i == len || p[i] == ',') {
-                    serverinfo_types[serverinfo_count] = atoi(p + start);
+                    char *end;
+                    unsigned long ul;
+
+                    /*
+                     * Parse only the current comma-separated component.
+                     * OPENSSL_strtoul() with an endptr consumes the leading
+                     * digits; we require it to stop exactly at the delimiter
+                     * (or NUL) and to fit in an unsigned short.
+                     */
+                    if (!OPENSSL_strtoul(p + start, &end, 10, &ul)
+                        || end != p + i
+                        || ul > USHRT_MAX)
+                        goto opthelp;
+                    serverinfo_types[serverinfo_count] = (unsigned short)ul;
                     if (++serverinfo_count == MAX_SI_TYPES)
                         break;
                     start = i + 1;
@@ -1642,7 +1689,7 @@ int s_client_main(int argc, char **argv)
             sni_outer_name = opt_arg();
             break;
         case OPT_ECH_SELECT:
-            ech_select = atoi(opt_arg());
+            ech_select = opt_int_arg();
             break;
         case OPT_ECH_GREASE:
             ech_grease = 1;
@@ -1651,7 +1698,13 @@ int s_client_main(int argc, char **argv)
             ech_grease_suite = opt_arg();
             break;
         case OPT_ECH_GREASE_TYPE:
-            ech_grease_type = atoi(opt_arg());
+            ech_grease_type = opt_int_arg();
+            if (ech_grease_type != (ech_grease_type & 0xFFFF)) {
+                BIO_printf(bio_err,
+                    "%s: invalid GREASE ECH type 0x%8x\n permitted values are 0-FFFF",
+                    prog, ech_grease_type);
+                goto opthelp;
+            }
             break;
         case OPT_ECH_IGNORE_CONFIG_ID:
             ech_ignore_cid = 1;
@@ -1672,13 +1725,13 @@ int s_client_main(int argc, char **argv)
             keymatexportlabel = opt_arg();
             break;
         case OPT_KEYMATEXPORTLEN:
-            keymatexportlen = atoi(opt_arg());
+            keymatexportlen = opt_int_arg();
             break;
         case OPT_ASYNC:
             async = 1;
             break;
         case OPT_MAXFRAGLEN:
-            len = atoi(opt_arg());
+            len = opt_int_arg();
             switch (len) {
             case 512:
                 maxfraglen = TLSEXT_max_fragment_length_512;
@@ -1694,22 +1747,22 @@ int s_client_main(int argc, char **argv)
                 break;
             default:
                 BIO_printf(bio_err,
-                    "%s: Max Fragment Len %u is out of permitted values",
+                    "%s: Max Fragment Len %d is out of permitted values",
                     prog, len);
                 goto opthelp;
             }
             break;
         case OPT_MAX_SEND_FRAG:
-            max_send_fragment = atoi(opt_arg());
+            max_send_fragment = opt_int_arg();
             break;
         case OPT_SPLIT_SEND_FRAG:
-            split_send_fragment = atoi(opt_arg());
+            split_send_fragment = opt_int_arg();
             break;
         case OPT_MAX_PIPELINES:
-            max_pipelines = atoi(opt_arg());
+            max_pipelines = opt_int_arg();
             break;
         case OPT_READ_BUF:
-            read_buf_len = atoi(opt_arg());
+            read_buf_len = opt_int_arg();
             break;
         case OPT_KEYLOG_FILE:
             keylog_file = opt_arg();
@@ -1740,6 +1793,10 @@ int s_client_main(int argc, char **argv)
             break;
         }
     }
+
+#ifndef OPENSSL_NO_NEXTPROTONEG
+    version1_3 = isdtls ? DTLS1_3_VERSION : TLS1_3_VERSION;
+#endif
 
     /* Optional argument is connect string if -connect not used. */
     if (opt_num_rest() == 1) {
@@ -1791,7 +1848,7 @@ int s_client_main(int argc, char **argv)
     }
 #endif
 #ifndef OPENSSL_NO_NEXTPROTONEG
-    if (min_version == TLS1_3_VERSION && next_proto_neg_in != NULL) {
+    if (min_version == version1_3 && next_proto_neg_in != NULL) {
         BIO_puts(bio_err, "Cannot supply -nextprotoneg with TLSv1.3\n");
         goto opthelp;
     }
@@ -2072,7 +2129,7 @@ int s_client_main(int argc, char **argv)
             vfyCApath, vfyCAfile, vfyCAstore,
             chCApath, chCAfile, chCAstore,
             crls, crl_download)) {
-        BIO_puts(bio_err, "Error loading store locations\n");
+        BIO_puts(bio_err, "Error loading store locations for server cert verification and client cert chain building\n");
         goto end;
     }
     if (ReqCAfile != NULL) {
@@ -2180,8 +2237,10 @@ int s_client_main(int argc, char **argv)
     SSL_CTX_set_verify(ctx, verify, verify_callback);
 
     if (!ctx_set_verify_locations(ctx, CAfile, noCAfile, CApath, noCApath,
-            CAstore, noCAstore))
+            CAstore, noCAstore)) {
+        BIO_puts(bio_err, "Error setting default locations for trusted certificates\n");
         goto end;
+    }
 
     ssl_ctx_add_crls(ctx, crls, crl_download);
 
@@ -2304,6 +2363,8 @@ int s_client_main(int argc, char **argv)
 
     if (fallback_scsv)
         SSL_set_mode(con, SSL_MODE_SEND_FALLBACK_SCSV);
+    if (grease)
+        SSL_set_options(con, SSL_OP_GREASE);
 
     if (!noservername && (servername != NULL || dane_tlsa_domain == NULL)) {
         if (servername == NULL) {
@@ -2426,7 +2487,7 @@ re_start:
     BIO_ADDR_free(peer_addr);
     peer_addr = NULL;
     if (init_client(&sock, host, port, bindhost, bindport, socket_family,
-            socket_type, protocol, tfo, !isquic, &peer_addr)
+            socket_type, protocol, tfo, !isquic, &peer_addr, c_quiet)
         == 0) {
         BIO_printf(bio_err, "connect:errno=%d\n", get_last_socket_error());
         BIO_closesocket(sock);
@@ -3028,6 +3089,7 @@ re_start:
         ASN1_TYPE *atyp = NULL;
         BIO *ldapbio = BIO_new(BIO_s_mem());
         CONF *cnf = NCONF_new(NULL);
+        size_t ssl_request_len;
 
         if (ldapbio == NULL || cnf == NULL) {
             BIO_free(ldapbio);
@@ -3060,11 +3122,18 @@ re_start:
             BIO_puts(bio_err, "ASN1_generate_nconf failed\n");
             goto end;
         }
+        ssl_request_len = ASN1_STRING_get_length(atyp->value.sequence);
+        if (ssl_request_len > INT_MAX) {
+            NCONF_free(cnf);
+            ASN1_TYPE_free(atyp);
+            BIO_puts(bio_err, "generated NCONF size is too large\n");
+            goto end;
+        }
         NCONF_free(cnf);
 
         /* Send SSLRequest packet */
         BIO_write(sbio, ASN1_STRING_get0_data(atyp->value.sequence),
-            ASN1_STRING_length(atyp->value.sequence));
+            (int)ssl_request_len);
         (void)BIO_flush(sbio);
         ASN1_TYPE_free(atyp);
 
@@ -3722,7 +3791,8 @@ static void print_stuff(BIO *bio, SSL *s, int full)
     X509 *peer = NULL;
     STACK_OF(X509) *sk;
     const SSL_CIPHER *c;
-    int i, istls13 = (SSL_version(s) == TLS1_3_VERSION);
+    const int version1_3 = SSL_is_dtls(s) ? DTLS1_3_VERSION : TLS1_3_VERSION;
+    int i;
     long verify_result;
 #ifndef OPENSSL_NO_COMP
     const COMP_METHOD *comp, *expansion;
@@ -3831,8 +3901,8 @@ static void print_stuff(BIO *bio, SSL *s, int full)
 #endif
 
         BIO_printf(bio,
-            "---\nSSL handshake has read %ju bytes "
-            "and written %ju bytes\n",
+            "---\nSSL handshake has read %" PRIu64 " bytes "
+            "and written %" PRIu64 " bytes\n",
             BIO_number_read(SSL_get_rbio(s)),
             BIO_number_written(SSL_get_wbio(s)));
     }
@@ -3913,7 +3983,7 @@ static void print_stuff(BIO *bio, SSL *s, int full)
     }
 #endif
 
-    if (istls13) {
+    if (SSL_version(s) == version1_3) {
         switch (SSL_get_early_data_status(s)) {
         case SSL_EARLY_DATA_NOT_SENT:
             BIO_puts(bio, "Early data was not sent\n");
@@ -3990,7 +4060,8 @@ static int ocsp_resp_cb(SSL *s, void *arg)
     STACK_OF(OCSP_RESPONSE) *sk_resp = NULL;
     OCSP_RESPONSE *rsp;
 
-    if (SSL_version(s) >= TLS1_3_VERSION) {
+    if ((!SSL_is_dtls(s) && SSL_version(s) >= TLS1_3_VERSION)
+        || (SSL_is_dtls(s) && SSL_version(s) <= DTLS1_3_VERSION)) {
         (void)SSL_get0_tlsext_status_ocsp_resp_ex(s, &sk_resp);
 
         BIO_puts(arg, "OCSP responses: ");
@@ -4222,6 +4293,8 @@ static int user_data_add(struct user_data_st *user_data, size_t i)
 
 static int user_data_execute(struct user_data_st *user_data, int cmd, char *arg)
 {
+    const int version1_3 = SSL_is_dtls(user_data->con) ? DTLS1_3_VERSION : TLS1_3_VERSION;
+
     switch (cmd) {
     case USER_COMMAND_HELP:
         /* This only ever occurs in advanced mode, so just emit advanced help */
@@ -4234,7 +4307,7 @@ static int user_data_execute(struct user_data_st *user_data, int cmd, char *arg)
                           "  {reconnect}: Reconnect to the peer\n");
         if (SSL_is_quic(user_data->con)) {
             BIO_puts(bio_err, "  {fin}: Send FIN on the stream. No further writing is possible\n");
-        } else if (SSL_version(user_data->con) == TLS1_3_VERSION) {
+        } else if (SSL_version(user_data->con) == version1_3) {
             BIO_puts(bio_err, "  {keyup:req|noreq}: Send a Key Update message\n"
                               "                     Arguments:\n"
                               "                     req   = peer update requested (default)\n"
@@ -4296,6 +4369,7 @@ static int user_data_process(struct user_data_st *user_data, size_t *len,
 {
     char *buf_start = user_data->buf + user_data->bufoff;
     size_t outlen = user_data->buflen;
+    const int version1_3 = SSL_is_dtls(user_data->con) ? DTLS1_3_VERSION : TLS1_3_VERSION;
 
     if (user_data->buflen == 0) {
         *len = 0;
@@ -4382,7 +4456,7 @@ static int user_data_process(struct user_data_st *user_data, size_t *len,
                 if (OPENSSL_strcasecmp(cmd_start, "fin") == 0)
                     cmd = USER_COMMAND_FIN;
             }
-            if (SSL_version(user_data->con) == TLS1_3_VERSION) {
+            if (SSL_version(user_data->con) == version1_3) {
                 if (OPENSSL_strcasecmp(cmd_start, "keyup") == 0) {
                     cmd = USER_COMMAND_KEY_UPDATE;
                     if (arg_start == NULL)

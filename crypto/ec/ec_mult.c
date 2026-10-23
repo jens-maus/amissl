@@ -72,8 +72,8 @@ static EC_PRE_COMP *ec_pre_comp_new(const EC_GROUP *group)
 EC_PRE_COMP *EC_ec_pre_comp_dup(EC_PRE_COMP *pre)
 {
     int i;
-    if (pre != NULL)
-        CRYPTO_UP_REF(&pre->references, &i);
+    if (pre == NULL || !CRYPTO_UP_REF(&pre->references, &i))
+        return NULL;
     return pre;
 }
 
@@ -224,7 +224,7 @@ int ossl_ec_scalar_mul_ladder(const EC_GROUP *group, EC_POINT *r,
      * the subsequent arithmetic constant time regardless, but cannot
      * retroactively fix the copy length here.
      */
-    if (!BN_copy(k, scalar)) {
+    if (BN_copy(k, scalar) == NULL) {
         ERR_raise(ERR_LIB_EC, ERR_R_BN_LIB);
         goto err;
     }

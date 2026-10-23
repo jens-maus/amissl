@@ -68,7 +68,14 @@ static ossl_inline int aes_generic_ocb_gettag(PROV_AES_OCB_CTX *ctx,
 
 static ossl_inline int aes_generic_ocb_final(PROV_AES_OCB_CTX *ctx)
 {
-    return (CRYPTO_ocb128_finish(&ctx->ocb, ctx->tag, ctx->taglen) == 0);
+    int ret = CRYPTO_ocb128_finish(&ctx->ocb, ctx->tag, ctx->taglen);
+
+    /* ret: -1 = bad tag length, 0 = tag verified, otherwise = tag mismatch */
+    if (ret == -1)
+        ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_TAG_LENGTH);
+    else if (ret != 0)
+        ERR_raise(ERR_LIB_PROV, PROV_R_BAD_DECRYPT);
+    return ret == 0;
 }
 
 static ossl_inline void aes_generic_ocb_cleanup(PROV_AES_OCB_CTX *ctx)
@@ -376,7 +383,7 @@ static int aes_ocb_set_ctx_params(void *vctx, const OSSL_PARAM params[])
             ctx->taglen = p.tag->data_size;
         } else {
             if (ctx->base.enc) {
-                ERR_raise(ERR_LIB_PROV, ERR_R_PASSED_INVALID_ARGUMENT);
+                ERR_raise(ERR_LIB_PROV, PROV_R_TAG_NOT_NEEDED);
                 return 0;
             }
             if (p.tag->data_size != ctx->taglen) {
@@ -476,7 +483,11 @@ static int aes_ocb_get_ctx_params(void *vctx, OSSL_PARAM params[])
             ERR_raise(ERR_LIB_PROV, PROV_R_FAILED_TO_GET_PARAMETER);
             return 0;
         }
-        if (!ctx->base.enc || p.tag->data_size != ctx->taglen) {
+        if (!ctx->base.enc) {
+            ERR_raise(ERR_LIB_PROV, PROV_R_TAG_NOT_SET);
+            return 0;
+        }
+        if (p.tag->data_size != ctx->taglen) {
             ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_TAG_LENGTH);
             return 0;
         }

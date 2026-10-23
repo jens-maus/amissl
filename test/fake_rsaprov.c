@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2021-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1269,5 +1269,10 @@ OSSL_PROVIDER *fake_rsa_start(OSSL_LIB_CTX *libctx)
 
 void fake_rsa_finish(OSSL_PROVIDER *p)
 {
+    TEST_info("fake_rsa info: has_selection: %d imptypes_selection: %d"
+              "exptypes_selection: %d query_id: %d key_deleted: %d",
+        has_selection, imptypes_selection,
+        exptypes_selection, query_id, key_deleted);
+
     OSSL_PROVIDER_unload(p);
 }

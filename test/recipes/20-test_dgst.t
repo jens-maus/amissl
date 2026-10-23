@@ -12,13 +12,14 @@ use warnings;
 
 use File::Spec;
 use File::Basename;
-use OpenSSL::Test qw/:DEFAULT with srctop_file data_file bldtop_dir/;
+use File::Copy;
+use OpenSSL::Test qw/:DEFAULT with srctop_file srctop_dir data_file bldtop_dir/;
 use OpenSSL::Test::Utils;
 use Cwd qw(abs_path);
 
 setup("test_dgst");
 
-plan tests => 24;
+plan tests => 29;
 
 sub tsignverify {
     my $testtext = shift;
@@ -89,91 +90,143 @@ sub tsignverify_sha512 {
        $testtext.": Expect failure verifying mismatching data");
 }
 
-SKIP: {
-    skip "RSA is not supported by this OpenSSL build", 1
-        if disabled("rsa");
-
-    subtest "RSA signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("RSA",
-                    srctop_file("test","testrsa.pem"),
-                    srctop_file("test","testrsapub.pem"));
-    };
-
-    subtest "RSA signature generation and verification with `sha512` CLI" => sub {
-        tsignverify_sha512("RSA",
-                           srctop_file("test","testrsa2048.pem"),
-                           srctop_file("test","testrsa2048pub.pem"));
-    };
-}
-
-SKIP: {
-    skip "DSA is not supported by this OpenSSL build", 1
-        if disabled("dsa");
-
-    subtest "DSA signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("DSA",
-                    srctop_file("test","testdsa.pem"),
-                    srctop_file("test","testdsapub.pem"));
-    };
-}
-
-SKIP: {
-    skip "ECDSA is not supported by this OpenSSL build", 1
-        if disabled("ec");
-
-    subtest "ECDSA signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("ECDSA",
-                    srctop_file("test","testec-p256.pem"),
-                    srctop_file("test","testecpub-p256.pem"));
-    };
-}
-
-SKIP: {
-    skip "EdDSA is not supported by this OpenSSL build", 2
-        if disabled("ecx");
-
-    subtest "Ed25519 signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("Ed25519",
-                    srctop_file("test","tested25519.pem"),
-                    srctop_file("test","tested25519pub.pem"));
-    };
-
-    subtest "Ed448 signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("Ed448",
-                    srctop_file("test","tested448.pem"),
-                    srctop_file("test","tested448pub.pem"));
-    };
-}
-
-SKIP: {
-    skip "ML-DSA is not supported by this OpenSSL build", 3
-        if disabled("ml-dsa");
-
-    subtest "ML-DSA-44 signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("Ml-DSA-44",
-                    srctop_file("test","testmldsa44.pem"),
-                    srctop_file("test","testmldsa44pub.pem"));
-    };
-    subtest "ML-DSA-65 signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("Ml-DSA-65",
-                    srctop_file("test","testmldsa65.pem"),
-                    srctop_file("test","testmldsa65pub.pem"));
-    };
-    subtest "ML-DSA-87 signature generation and verification with `dgst` CLI" => sub {
-        tsignverify("Ml-DSA-87",
-                    srctop_file("test","testmldsa87.pem"),
-                    srctop_file("test","testmldsa87pub.pem"));
-    };
-}
-
-SKIP: {
-    skip "dgst with provider is not supported by this OpenSSL build", 1
-        if disabled("module");
-
-    subtest "SHA1 generation by provider with `dgst` CLI" => sub {
+subtest "RSA signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("rsa")) {
         plan tests => 1;
+        ok(1, "Skipped (RSA not supported)");
+        return;
+    }
+    tsignverify("RSA",
+                srctop_file("test","testrsa.pem"),
+                srctop_file("test","testrsapub.pem"));
+};
 
-        $ENV{OPENSSL_MODULES} = abs_path(bldtop_dir("test"));
+subtest "RSA signature generation and verification with `sha512` CLI" => sub {
+    if (disabled("rsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (RSA not supported)");
+        return;
+    }
+    tsignverify_sha512("RSA",
+                       srctop_file("test","testrsa2048.pem"),
+                       srctop_file("test","testrsa2048pub.pem"));
+};
+
+subtest "DSA signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("dsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (DSA not supported)");
+        return;
+    }
+    tsignverify("DSA",
+                srctop_file("test","testdsa.pem"),
+                srctop_file("test","testdsapub.pem"));
+};
+
+subtest "ECDSA signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ec")) {
+        plan tests => 1;
+        ok(1, "Skipped (ECDSA not supported)");
+        return;
+    }
+    tsignverify("ECDSA",
+                srctop_file("test","testec-p256.pem"),
+                srctop_file("test","testecpub-p256.pem"));
+};
+
+subtest "Ed25519 signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ecx")) {
+        plan tests => 1;
+        ok(1, "Skipped (EdDSA not supported)");
+        return;
+    }
+    tsignverify("Ed25519",
+                srctop_file("test","tested25519.pem"),
+                srctop_file("test","tested25519pub.pem"));
+};
+
+subtest "Ed448 signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ecx")) {
+        plan tests => 1;
+        ok(1, "Skipped (EdDSA not supported)");
+        return;
+    }
+    tsignverify("Ed448",
+                srctop_file("test","tested448.pem"),
+                srctop_file("test","tested448pub.pem"));
+};
+
+subtest "dgst one-shot: no buffer fallback when mmap path fails (Unix)" => sub {
+    if ($^O eq 'MSWin32' || disabled("ecx")) {
+        plan tests => 1;
+        ok(1, "Skipped (Unix/mmap or EdDSA not available)");
+        return;
+    }
+    plan tests => 2;
+
+    # Use a directory with non-zero st_size so app_mmap_file() attempts open+mmap
+    # (curdir "." often has st_size 0 on some FS, which skips mmap and breaks this test).
+    # mmap() on a directory must fail; we must not fall back to bio_to_mem.
+    my $key = srctop_file("test", "tested25519.pem");
+    my $dir = srctop_dir("test");
+    my $stderr_file = "dgst_nofallback_err.txt";
+
+    with({ exit_checker => sub { return shift != 0; } },
+         sub {
+             ok(run(app(['openssl', 'dgst', '-sign', $key, $dir],
+                        stderr => $stderr_file)),
+                "dgst one-shot with un-mmapable file fails (no fallback)");
+         });
+    if (open(my $fh, '<', $stderr_file)) {
+        my $err = do { local $/; <$fh> };
+        close($fh);
+        ok($err =~ /Error: failed to use memory-mapped file/, "stderr mentions mmap failure");
+    } else {
+        ok(0, "could not read stderr file");
+    }
+    unlink($stderr_file) if -f $stderr_file;
+};
+
+subtest "ML-DSA-44 signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ml-dsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (ML-DSA not supported)");
+        return;
+    }
+    tsignverify("Ml-DSA-44",
+                srctop_file("test","testmldsa44.pem"),
+                srctop_file("test","testmldsa44pub.pem"));
+};
+subtest "ML-DSA-65 signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ml-dsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (ML-DSA not supported)");
+        return;
+    }
+    tsignverify("Ml-DSA-65",
+                srctop_file("test","testmldsa65.pem"),
+                srctop_file("test","testmldsa65pub.pem"));
+};
+subtest "ML-DSA-87 signature generation and verification with `dgst` CLI" => sub {
+    if (disabled("ml-dsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (ML-DSA not supported)");
+        return;
+    }
+    tsignverify("Ml-DSA-87",
+                srctop_file("test","testmldsa87.pem"),
+                srctop_file("test","testmldsa87pub.pem"));
+};
+
+subtest "SHA1 generation by provider with `dgst` CLI" => sub {
+    if (disabled("module")) {
+        plan tests => 1;
+        ok(1, "Skipped (dgst with provider not supported)");
+        return;
+    }
+    plan tests => 1;
+
+    $ENV{OPENSSL_MODULES} = abs_path(bldtop_dir("test"));
         my $testdata = srctop_file('test', 'data.bin');
         my @macdata = run(app(['openssl', 'dgst', '-sha1',
                                '-provider', "p_ossltest",
@@ -183,8 +236,7 @@ SKIP: {
         chomp(@macdata);
         my $expected = qr/SHA1\(\Q$testdata\E\)= 000102030405060708090a0b0c0d0e0f10111213/;
         ok($macdata[0] =~ $expected, "SHA1: Check HASH value is as expected ($macdata[0]) vs ($expected)");
-    }
-}
+};
 
 subtest "HMAC generation with `dgst` CLI" => sub {
     plan tests => 2;
@@ -357,33 +409,138 @@ subtest "SHAKE digest generation with no xoflen set `dgst` CLI" => sub {
     ok(!run(app(['openssl', 'dgst', '-shake256', $testdata])), "SHAKE256 must fail without xoflen");
 };
 
-SKIP: {
-    skip "ECDSA is not supported by this OpenSSL build", 2
-        if disabled("ec");
-
-    subtest "signing with xoflen is not supported `dgst` CLI" => sub {
+subtest "signing with xoflen is not supported `dgst` CLI" => sub {
+    if (disabled("ec")) {
         plan tests => 1;
-        my $data_to_sign = srctop_file('test', 'data.bin');
-
-        ok(!run(app(['openssl', 'dgst', '-shake256', '-xoflen', '64',
-                     '-sign', srctop_file("test","testec-p256.pem"),
-                     '-out', 'test.sig',
-                     srctop_file('test', 'data.bin')])),
-                     "Generating signature with xoflen should fail");
-    };
-
-    skip "HMAC-DRBG-KDF is not supported by this OpenSSL build", 1
-        if disabled("hmac-drbg-kdf");
-
-    subtest "signing using the nonce-type sigopt" => sub {
-        plan tests => 1;
-        my $data_to_sign = srctop_file('test', 'data.bin');
-
-        ok(run(app(['openssl', 'dgst', '-sha256',
-                     '-sign', srctop_file("test","testec-p256.pem"),
-                     '-out', 'test.sig',
-                     '-sigopt', 'nonce-type:1',
-                     srctop_file('test', 'data.bin')])),
-                     "Sign using the nonce-type sigopt");
+        ok(1, "Skipped (ECDSA not supported)");
+        return;
     }
-}
+    plan tests => 1;
+    my $data_to_sign = srctop_file('test', 'data.bin');
+
+    ok(!run(app(['openssl', 'dgst', '-shake256', '-xoflen', '64',
+                 '-sign', srctop_file("test","testec-p256.pem"),
+                 '-out', 'test.sig',
+                 srctop_file('test', 'data.bin')])),
+                 "Generating signature with xoflen should fail");
+};
+
+subtest "Coreutils format output with `dgst` CLI" => sub {
+    my $testdata = srctop_file('test', 'data.bin');
+    my $expected =
+        'd9fd1d3a7dc90526d2853450dcc63e26a311012d337fa4a192276f9824a046da';
+
+    # A newline in a filename is not possible everywhere, so that part of
+    # the test is conditional on actually being able to create such a file.
+    my $nlfile = "dgst_r_newline\nname.bin";
+    my $have_nl = $^O ne 'MSWin32' && $^O ne 'VMS' && copy($testdata, $nlfile);
+
+    plan tests => $have_nl ? 3 : 2;
+
+    my @rdata = run(app(['openssl', 'dgst', '-sha256', '-r', $testdata]),
+                    capture => 1);
+    chomp(@rdata);
+    ok($rdata[0] eq "$expected *$testdata",
+       "-r: Check coreutils style output is as expected ($rdata[0])");
+
+    # Without a file argument the input is stdin, reported as "stdin"
+    my @stdindata = run(app(['openssl', 'dgst', '-sha256', '-r'],
+                            stdin => $testdata), capture => 1);
+    chomp(@stdindata);
+    ok($stdindata[0] eq "$expected *stdin",
+       "-r: Check coreutils style output for stdin ($stdindata[0])");
+
+    if ($have_nl) {
+        # A newline in the filename is escaped as "\n" and the whole line
+        # is prefixed with a backslash, the way the '*sum' programs do it.
+        my @nldata = run(app(['openssl', 'dgst', '-sha256', '-r', $nlfile]),
+                         capture => 1);
+        chomp(@nldata);
+        ok($nldata[0] eq "\\$expected *dgst_r_newline\\nname.bin",
+           "-r: Check newline in filename is escaped ($nldata[0])");
+        unlink($nlfile);
+    }
+};
+
+subtest "Colon separated output with `dgst` CLI" => sub {
+    plan tests => 1;
+
+    my $testdata = srctop_file('test', 'data.bin');
+    my @cdata = run(app(['openssl', 'dgst', '-sha256', '-c', $testdata]),
+                    capture => 1);
+    chomp(@cdata);
+    my $hash = 'd9:fd:1d:3a:7d:c9:05:26:d2:85:34:50:dc:c6:3e:26:'
+               . 'a3:11:01:2d:33:7f:a4:a1:92:27:6f:98:24:a0:46:da';
+    my $expected = qr/SHA2-256\(\Q$testdata\E\)= \Q$hash\E/;
+    ok($cdata[0] =~ $expected,
+       "-c: Check colon separated output is as expected ($cdata[0])");
+};
+
+subtest "Listing supported digests with `dgst` CLI" => sub {
+    plan tests => 3;
+
+    my @listdata = run(app(['openssl', 'dgst', '-list']), capture => 1);
+    chomp(@listdata);
+    my $listing = join("\n", @listdata);
+
+    ok($listing =~ /Supported digests:/, "LIST: Check header is printed");
+    # Only check digests that are always present, each printed as "-<name>"
+    ok($listing =~ /-sha256\b/, "LIST: Check sha256 is listed");
+    ok($listing =~ /-sha512\b/, "LIST: Check sha512 is listed");
+};
+
+subtest "signing and verifying with DER `-keyform` `dgst` CLI" => sub {
+    if (disabled("rsa")) {
+        plan tests => 1;
+        ok(1, "Skipped (RSA not supported)");
+        return;
+    }
+    plan tests => 4;
+
+    my $data_to_sign = srctop_file('test', 'data.bin');
+    my $privkey_pem = srctop_file("test", "testrsa.pem");
+    my $pubkey_pem = srctop_file("test", "testrsapub.pem");
+    my $privkey_der = "testrsa-keyform.der";
+    my $pubkey_der = "testrsapub-keyform.der";
+    my $sigfile = "testrsa-keyform.sig";
+
+    # Convert the keys to DER so the `-keyform DER` code path can be exercised.
+    ok(run(app(['openssl', 'pkey', '-in', $privkey_pem,
+                '-outform', 'DER', '-out', $privkey_der])),
+       "Convert private key to DER");
+    ok(run(app(['openssl', 'pkey', '-in', $pubkey_pem, '-pubin',
+                '-outform', 'DER', '-pubout', '-out', $pubkey_der])),
+       "Convert public key to DER");
+
+    ok(run(app(['openssl', 'dgst', '-sign', $privkey_der, '-keyform', 'DER',
+                '-out', $sigfile,
+                $data_to_sign])),
+       "Generating signature with DER private key via -keyform");
+
+    ok(run(app(['openssl', 'dgst', '-verify', $pubkey_der, '-keyform', 'DER',
+                '-signature', $sigfile,
+                $data_to_sign])),
+       "Verify signature with DER public key via -keyform");
+};
+
+subtest "signing using the nonce-type sigopt" => sub {
+    if (disabled("ec")) {
+        plan tests => 1;
+        ok(1, "Skipped (ECDSA not supported)");
+        return;
+    }
+    if (disabled("hmac-drbg-kdf")) {
+        plan tests => 1;
+        ok(1, "Skipped (HMAC-DRBG-KDF not supported)");
+        return;
+    }
+    plan tests => 1;
+    my $data_to_sign = srctop_file('test', 'data.bin');
+
+    ok(run(app(['openssl', 'dgst', '-sha256',
+                 '-sign', srctop_file("test","testec-p256.pem"),
+                 '-out', 'test.sig',
+                 '-sigopt', 'nonce-type:1',
+                 srctop_file('test', 'data.bin')])),
+                 "Sign using the nonce-type sigopt");
+};

@@ -13,6 +13,7 @@
 #include <openssl/x509v3.h>
 #include <openssl/asn1.h>
 #include <openssl/evp.h>
+#include <openssl/pkcs7.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 #include "crypto/x509.h" /* x509_st definition */
@@ -191,6 +192,62 @@ err:
 #endif
     X509_free(x509);
     BIO_free(bio);
+    return ret;
+}
+
+/* Load the self-signed certificate passed on the command line. */
+static X509 *load_arg_cert(void)
+{
+    const char *certfile;
+    BIO *bio;
+    X509 *x509;
+
+    if ((certfile = test_get_argument(0)) == NULL
+        || (bio = BIO_new_file(certfile, "r")) == NULL)
+        return NULL;
+    x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
+    BIO_free(bio);
+    return x509;
+}
+
+/* Trigger memory failures during certificate self-signature verification. */
+static int test_x509_asn1_item_verify_mfail(void)
+{
+    X509 *x509;
+    EVP_PKEY *pkey;
+    const ASN1_BIT_STRING *sig = NULL;
+    const X509_ALGOR *alg = NULL;
+
+    if (!TEST_ptr(x509 = load_arg_cert())
+        || !TEST_ptr(pkey = X509_get0_pubkey(x509))) {
+        X509_free(x509);
+        return -1;
+    }
+    X509_get0_signature(&sig, &alg, x509);
+
+    MFAIL_start();
+    (void)ASN1_item_verify(ASN1_ITEM_rptr(X509_CINF), alg, sig,
+        &x509->cert_info, pkey);
+    MFAIL_end();
+
+    X509_free(x509);
+    return 1;
+}
+
+/* Trigger memory failures while hashing the issuer name. */
+static int test_x509_issuer_name_hash_mfail(void)
+{
+    X509 *x509;
+    int ret = -1;
+
+    if (!TEST_ptr(x509 = load_arg_cert()))
+        return -1;
+
+    MFAIL_start();
+    ret = X509_issuer_name_hash(x509) != 0 ? 1 : 0;
+    MFAIL_end();
+
+    X509_free(x509);
     return ret;
 }
 
@@ -461,6 +518,96 @@ err:
 }
 
 /*
+ * TPM 1.2 Endorsement Key certificate with a NID_rsaesOaep
+ * SubjectPublicKeyInfo AlgorithmIdentifier (per TCG Credential
+ * Profiles V1.2 section 3.2.7).  The AlgorithmIdentifier carries
+ * a TCG-specific pSourceAlgorithm ("TCPA") in its parameters,
+ * which we deliberately do not interpret.  The key body itself
+ * is a standard RSAPublicKey.
+ */
+static const char *kRsaesOaepCert[] = {
+    "-----BEGIN CERTIFICATE-----\n",
+    "MIIDhDCCAmygAwIBAgIUBchBXcXPAWxNMJEsLXEXHv/eVZswDQYJKoZIhvcNAQEL\n",
+    "BQAwVTELMAkGA1UEBhMCQ0gxHjAcBgNVBAoTFVNUTWljcm9lbGVjdHJvbmljcyBO\n",
+    "VjEmMCQGA1UEAxMdU1RNIFRQTSBFSyBJbnRlcm1lZGlhdGUgQ0EgMDIwHhcNMjEw\n",
+    "OTA0MDAwMDAwWhcNMzEwOTA0MDAwMDAwWjAAMIIBNzAiBgkqhkiG9w0BAQcwFaIT\n",
+    "MBEGCSqGSIb3DQEBCQQEVENQQQOCAQ8AMIIBCgKCAQEAxpd3DnecpD87acEsYp4J\n",
+    "stM2q5Ss3CkjAP2Ei8yGjbO6DG/6WBIZjTdI5RfIcInoqN4QMso94vm8VqijdRI+\n",
+    "Zo5hLTCPLKXYwa6UG5yIPZ3ENQdhgZWeEPWe+pp9VUwz8wi78Ifk+CCV6Xp/5kQi\n",
+    "DCsR+RYbOVb9QgR6kjq+cx1z8YFp5u+k3Pl9tMq9xgIp5E6hT2MaS12KnoN8+hYI\n",
+    "mfCYVnpzBeQaHDp1KUoyDK6xGt86VxB0QyRbniHI38qgQL6qhO7z96aQ0pNGoQde\n",
+    "QUxFf/sETurQ5zSf+3btnS8afjxdVBKzj3isv5BaQrt0mdB7+3XWD+ASda33SY12\n",
+    "6wIDAQABo4GLMIGIMB8GA1UdIwQYMBaAFFcfgGtHzOeb+jWUfO2IuNEAWuCeMEIG\n",
+    "A1UdIAQ7MDkwNwYEVR0gADAvMC0GCCsGAQUFBwIBFiFodHRwOi8vd3d3LnN0LmNv\n",
+    "bS9UUE0vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADATBgNVHSUBAf8ECTAHBgVn\n",
+    "gQUIATANBgkqhkiG9w0BAQsFAAOCAQEAMOhFPNcebyCRFOBztlWhmDb2DHTCD0nC\n",
+    "DVobH4WZJXGf4bkYNO3mOLyWtHEVzb36kiq7enh3f/eGhDPwKB8axlozpR5KAvER\n",
+    "szKNO8iLGOjuYzI2A4DazkttczFfzSB9QDgJrwTNEfIJtwRm2HQSiL0zzuEQOnaS\n",
+    "UWyt/iKn4/34BjEeaw4/Ld7+f06LXqSr18SUr0LTB2kk+Zzf0Och1C+G1CNLgJMM\n",
+    "MNQikAv0xdaOMX3HzA+phFlLbw/x8sboMlzmrbr92a/4Fp5WvmOSHH3ciwTtbAQn\n",
+    "A2TfExNOaKD2BG5FnB7c66puw2/yVxhveocQYgmT9XtMrNX00vEZJQ==\n",
+    "-----END CERTIFICATE-----\n",
+    NULL
+};
+
+/*
+ * Verify that a SubjectPublicKeyInfo with an id-RSAES-OAEP
+ * AlgorithmIdentifier decodes to an RSA EVP_PKEY via both the
+ * provider decoder path (exercised by X509_from_strings() +
+ * X509_get0_pubkey()) and the legacy type-specific path
+ * (exercised by d2i_RSA_PUBKEY() when available).
+ */
+static int test_rsaesoaep_spki(void)
+{
+    int ret = 0;
+    X509 *cert = NULL;
+    EVP_PKEY *pkey = NULL;
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+    const X509_PUBKEY *xpk = NULL;
+    unsigned char *spki_der = NULL, *q;
+    const unsigned char *p;
+    int spki_len;
+    RSA *rsa = NULL;
+#endif
+
+    /* Provider / OSSL_DECODER path. */
+    if (!TEST_ptr(cert = X509_from_strings(kRsaesOaepCert))
+        || !TEST_ptr(pkey = X509_get0_pubkey(cert))
+        || !TEST_int_eq(EVP_PKEY_get_base_id(pkey), EVP_PKEY_RSA)
+        || !TEST_int_ge(EVP_PKEY_get_bits(pkey), 2048))
+        goto err;
+
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+    /*
+     * Legacy path: d2i_RSA_PUBKEY() routes through
+     * ossl_d2i_PUBKEY_legacy() which sets flag_force_legacy=1,
+     * so this exercises the NID_rsaesOaep -> NID_rsaEncryption
+     * remap in x509_pubkey_decode().
+     */
+    if (!TEST_ptr(xpk = X509_get_X509_PUBKEY(cert))
+        || !TEST_int_gt((spki_len = i2d_X509_PUBKEY(xpk, NULL)), 0)
+        || !TEST_ptr(spki_der = OPENSSL_malloc(spki_len)))
+        goto err;
+    q = spki_der;
+    if (!TEST_int_eq(i2d_X509_PUBKEY(xpk, &q), spki_len))
+        goto err;
+    p = spki_der;
+    if (!TEST_ptr(rsa = d2i_RSA_PUBKEY(NULL, &p, spki_len))
+        || !TEST_int_ge(RSA_bits(rsa), 2048))
+        goto err;
+#endif
+
+    ret = 1;
+err:
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+    RSA_free(rsa);
+    OPENSSL_free(spki_der);
+#endif
+    X509_free(cert);
+    return ret;
+}
+
+/*
  * nameConstraints extnValue contents with one empty directoryName subtree.
  * Empty X509_NAME has canon_enc == NULL / canon_enclen == 0.
  *
@@ -555,6 +702,202 @@ static int test_nc_empty_dirname_permitted(void)
         sizeof(nc_permitted_empty_dirname), X509_V_OK);
 }
 
+static int test_x509_name_canon_failure_cache(void)
+{
+    static const unsigned char invalid_utf8[] = { 0xc0, 0xaf };
+    int ret = 0, hash_ok = 1;
+    X509 *cert = NULL;
+    X509_NAME *empty = NULL;
+    X509_STORE *store = NULL;
+
+    if (!TEST_ptr(cert = X509_new())
+        || !TEST_ptr(empty = X509_NAME_new())
+        || !TEST_ptr(store = X509_STORE_new())
+        || !TEST_true(X509_NAME_add_entry_by_txt(cert->cert_info.subject,
+            "CN", V_ASN1_UTF8STRING, invalid_utf8, sizeof(invalid_utf8), -1,
+            0))
+        /*
+         * The first attempt populates DER before canonicalization fails. A
+         * retry must not reuse that partial cache.
+         */
+        || !TEST_int_lt(i2d_X509_NAME(cert->cert_info.subject, NULL), 0)
+        || !TEST_int_lt(i2d_X509_NAME(cert->cert_info.subject, NULL), 0)
+        || !TEST_int_eq(X509_NAME_cmp(cert->cert_info.subject, empty), -2)
+        || !TEST_ulong_eq(X509_NAME_hash_ex(cert->cert_info.subject, NULL,
+                              NULL, &hash_ok),
+            0)
+        || !TEST_false(hash_ok)
+        || !TEST_false(X509_STORE_add_cert(store, cert)))
+        goto end;
+
+    ret = 1;
+
+end:
+    ERR_clear_error();
+    X509_STORE_free(store);
+    X509_NAME_free(empty);
+    X509_free(cert);
+    return ret;
+}
+
+static int test_x509_name_multivalued_rdn_mfail(void)
+{
+    X509_NAME *name = NULL;
+    int ret = 0;
+
+    if (!TEST_ptr(name = X509_NAME_new())
+        || !TEST_true(X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
+            (unsigned char *)"Alice", -1, -1, 0))
+        || !TEST_true(X509_NAME_add_entry_by_txt(name, "OU", MBSTRING_ASC,
+            (unsigned char *)"Engineering", -1, -1, -1)))
+        goto end;
+
+    MFAIL_start();
+    ret = i2d_X509_NAME(name, NULL) > 0;
+    MFAIL_end();
+
+end:
+    X509_NAME_free(name);
+    return ret;
+}
+
+static int test_x509_attribute_i2d_mfail(void)
+{
+    static const unsigned char value1[] = "first";
+    static const unsigned char value2[] = "second";
+    X509_ATTRIBUTE *attr = NULL;
+    unsigned char *der = NULL;
+    int len, ret = -1;
+
+    if (!TEST_ptr(attr = X509_ATTRIBUTE_create_by_NID(NULL, NID_commonName,
+                      V_ASN1_UTF8STRING, value1, sizeof(value1) - 1))
+        || !TEST_true(X509_ATTRIBUTE_set1_data(attr, V_ASN1_UTF8STRING,
+            value2, sizeof(value2) - 1)))
+        goto end;
+
+    MFAIL_start();
+    len = i2d_X509_ATTRIBUTE(attr, &der);
+    MFAIL_end();
+
+    if (len <= 0)
+        ret = der == NULL ? 0 : -1;
+    else
+        ret = der != NULL ? 1 : -1;
+
+end:
+    OPENSSL_free(der);
+    X509_ATTRIBUTE_free(attr);
+    return ret;
+}
+
+static PKCS7 *make_two_digest_pkcs7(void)
+{
+    PKCS7 *p7 = NULL;
+    X509_ALGOR *alg = NULL;
+
+    if (!TEST_ptr(p7 = PKCS7_new())
+        || !TEST_true(PKCS7_set_type(p7, NID_pkcs7_signed))
+        || !TEST_true(PKCS7_content_new(p7, NID_pkcs7_data))
+        || !TEST_ptr(alg = X509_ALGOR_new())
+        || !TEST_true(X509_ALGOR_set_md(alg, EVP_sha256()))
+        || !TEST_int_gt(sk_X509_ALGOR_push(p7->d.sign->md_algs, alg), 0))
+        goto end;
+    alg = NULL;
+
+    if (!TEST_ptr(alg = X509_ALGOR_new())
+        || !TEST_true(X509_ALGOR_set_md(alg, EVP_sha384()))
+        || !TEST_int_gt(sk_X509_ALGOR_push(p7->d.sign->md_algs, alg), 0))
+        goto end;
+    alg = NULL;
+
+    return p7;
+
+end:
+    X509_ALGOR_free(alg);
+    PKCS7_free(p7);
+    return NULL;
+}
+
+static int test_pkcs7_digest_set_i2d_mfail(void)
+{
+    PKCS7 *p7 = NULL;
+    unsigned char *der = NULL, *p;
+    int len, outlen, ret = -1;
+
+    if (!TEST_ptr(p7 = make_two_digest_pkcs7()))
+        goto end;
+
+    len = i2d_PKCS7(p7, NULL);
+    if (!TEST_int_gt(len, 0) || !TEST_ptr(der = OPENSSL_malloc(len)))
+        goto end;
+    p = der;
+
+    MFAIL_start();
+    outlen = i2d_PKCS7(p7, &p);
+    MFAIL_end();
+
+    if (outlen <= 0)
+        ret = 0;
+    else
+        ret = outlen == len && p == der + len ? 1 : -1;
+
+end:
+    OPENSSL_free(der);
+    PKCS7_free(p7);
+    return ret;
+}
+
+static int test_pkcs7_digest_set_stream_mfail(void)
+{
+    static const unsigned char content[] = "stream content";
+    PKCS7 *p7 = NULL, *expected_p7 = NULL;
+    BIO *in = NULL, *out = NULL;
+    BIO *expected_in = NULL, *expected_out = NULL;
+    char *data = NULL, *expected_data = NULL;
+    long len, expected_len;
+    int outlen, ret = -1;
+
+    if (!TEST_ptr(expected_p7 = make_two_digest_pkcs7())
+        || !TEST_ptr(expected_in = BIO_new_mem_buf(content,
+                         sizeof(content) - 1))
+        || !TEST_ptr(expected_out = BIO_new(BIO_s_mem()))
+        || !TEST_true(i2d_PKCS7_bio_stream(expected_out, expected_p7,
+            expected_in,
+            SMIME_STREAM | PKCS7_BINARY))
+        || !TEST_long_gt(expected_len = BIO_get_mem_data(expected_out,
+                             &expected_data),
+            0)
+        || !TEST_ptr(p7 = make_two_digest_pkcs7())
+        || !TEST_ptr(in = BIO_new_mem_buf(content, sizeof(content) - 1))
+        || !TEST_ptr(out = BIO_new(BIO_s_mem())))
+        goto end;
+
+    MFAIL_start();
+    outlen = i2d_PKCS7_bio_stream(out, p7, in,
+        SMIME_STREAM | PKCS7_BINARY);
+    MFAIL_end();
+
+    if (outlen <= 0) {
+        ret = 0;
+    } else {
+        len = BIO_get_mem_data(out, &data);
+        if (!TEST_long_eq(len, expected_len)
+            || !TEST_mem_eq(data, len, expected_data, expected_len))
+            ret = -1;
+        else
+            ret = 1;
+    }
+
+end:
+    BIO_free(out);
+    BIO_free(in);
+    PKCS7_free(p7);
+    BIO_free(expected_out);
+    BIO_free(expected_in);
+    PKCS7_free(expected_p7);
+    return ret;
+}
+
 OPT_TEST_DECLARE_USAGE("<pss-self-signed-cert.pem>\n")
 
 int setup_tests(void)
@@ -589,14 +932,22 @@ int setup_tests(void)
     ADD_TEST(test_x509_tbs_cache);
     ADD_TEST(test_x509_crl_tbs_cache);
     ADD_TEST(test_asn1_item_verify);
+    ADD_MFAIL_NO_CHECK_TEST(test_x509_asn1_item_verify_mfail);
+    ADD_MFAIL_TEST(test_x509_issuer_name_hash_mfail);
     ADD_TEST(test_x509_delete_last_extension);
     ADD_TEST(test_x509_crl_delete_last_extension);
     ADD_TEST(test_x509_revoked_delete_last_extension);
     ADD_TEST(test_drop_empty_cert_keyids);
     ADD_TEST(test_drop_empty_csr_keyids);
+    ADD_TEST(test_rsaesoaep_spki);
     ADD_TEST(test_x509_verify_with_new);
     ADD_TEST(test_nc_empty_dirname_excluded);
     ADD_TEST(test_nc_empty_dirname_permitted);
+    ADD_TEST(test_x509_name_canon_failure_cache);
+    ADD_MFAIL_TEST(test_x509_name_multivalued_rdn_mfail);
+    ADD_MFAIL_TEST(test_x509_attribute_i2d_mfail);
+    ADD_MFAIL_TEST(test_pkcs7_digest_set_i2d_mfail);
+    ADD_MFAIL_NO_CHECK_TEST(test_pkcs7_digest_set_stream_mfail);
     return 1;
 }
 

@@ -93,6 +93,14 @@ typedef struct validation_token {
  */
 #define ENCRYPTED_TOKEN_MAX_LEN (MARSHALLED_TOKEN_MAX_LEN + 16 + 12)
 
+/* Arbitrary choice of default idle timeout (not an RFC value). */
+#define DEFAULT_IDLE_TIMEOUT 30000
+
+#define DEFAULT_INIT_CONN_RXFC_WND (768 * 1024)
+#define DEFAULT_INIT_STREAM_RXFC_WND (512 * 1024)
+
+#define DEFAULT_INIT_CONN_MAX_STREAMS 100
+
 #define DEFAULT_MAX_PENDING_CONNS 256
 
 DEFINE_LIST_OF_IMPL(ch, QUIC_CHANNEL);
@@ -167,6 +175,33 @@ static int port_init(QUIC_PORT *port)
 
     port->rx_short_dcid_len = (unsigned char)rx_short_dcid_len;
     port->tx_init_dcid_len = INIT_DCID_LEN;
+
+    port->max_idle_timeout = DEFAULT_IDLE_TIMEOUT;
+
+    /*
+     * We tell the peer we can handle at most this many bytes in a datagram payload.
+     * However, currently the QUIC_DEMUX in the QRX uses the BIO's MTU as upper bound
+     * on an incoming datagram size.
+     */
+    port->max_udp_payload_size = QUIC_MIN_INITIAL_DGRAM_LEN;
+    port->init_max_data = DEFAULT_INIT_CONN_RXFC_WND;
+    port->init_max_stream_data_bidi_local = DEFAULT_INIT_STREAM_RXFC_WND;
+    port->init_max_stream_data_bidi_remote = DEFAULT_INIT_STREAM_RXFC_WND;
+    port->init_max_stream_data_uni = DEFAULT_INIT_STREAM_RXFC_WND;
+    port->init_max_streams_bidi = DEFAULT_INIT_CONN_MAX_STREAMS;
+    port->init_max_streams_uni = DEFAULT_INIT_CONN_MAX_STREAMS;
+    port->ack_delay_exponent = QUIC_DEFAULT_ACK_DELAY_EXP;
+
+    /*
+     * Our maximum ACK delay on the TX side. This is up to us to choose. Note that
+     * this could differ from QUIC_DEFAULT_MAX_DELAY in future as that is a protocol
+     * value which determines the value of the maximum ACK delay if the
+     * max_ack_delay transport parameter is not set.
+     */
+    port->max_ack_delay = QUIC_DEFAULT_MAX_ACK_DELAY;
+    port->disable_active_migration = 1;
+    port->active_conn_id_limit = QUIC_MIN_ACTIVE_CONN_ID_LIMIT;
+
     port->state = QUIC_PORT_STATE_RUNNING;
 
     ossl_list_port_insert_tail(&port->engine->port_list, port);
@@ -556,7 +591,9 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     QUIC_CHANNEL_ARGS args = { 0 };
     QUIC_CHANNEL *ch;
     SSL *user_ssl = NULL;
-    int ch_cleaned = 0;
+#ifndef OPENSSL_NO_QLOG
+    SSL_CTX *qlog_ctx;
+#endif
 
     args.port = port;
     args.is_server = is_server;
@@ -564,6 +601,19 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     args.srtm = port->srtm;
     args.qrx = qrx;
     args.is_tserver_ch = is_tserver;
+
+    args.max_idle_timeout = port->max_idle_timeout;
+    args.max_udp_payload_size = port->max_udp_payload_size;
+    args.init_max_data = port->init_max_data;
+    args.init_max_stream_data_bidi_local = port->init_max_stream_data_bidi_local;
+    args.init_max_stream_data_bidi_remote = port->init_max_stream_data_bidi_remote;
+    args.init_max_stream_data_uni = port->init_max_stream_data_uni;
+    args.init_max_streams_bidi = port->init_max_streams_bidi;
+    args.init_max_streams_uni = port->init_max_streams_uni;
+    args.ack_delay_exponent = port->ack_delay_exponent;
+    args.max_ack_delay = port->max_ack_delay;
+    args.disable_active_migration = port->disable_active_migration;
+    args.active_conn_id_limit = port->active_conn_id_limit;
 
     /*
      * Creating a new channel is made a bit tricky here as there is a
@@ -602,12 +652,15 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     }
 #ifndef OPENSSL_NO_QLOG
     /*
-     * If we're using qlog, make sure the tls get further configured properly
+     * A deferred SSL_listen_ex() channel does not have its TLS object yet, but
+     * it still uses the port's channel context. Configure its qlog title before
+     * the first packet can cause the qlog object to be instantiated.
      */
     ch->use_qlog = 1;
-    if (ch->tls != NULL && ch->tls->ctx->qlog_title != NULL) {
+    qlog_ctx = ch->tls != NULL ? ch->tls->ctx : port->channel_ctx;
+    if (qlog_ctx != NULL && qlog_ctx->qlog_title != NULL) {
         OPENSSL_free(ch->qlog_title);
-        if ((ch->qlog_title = OPENSSL_strdup(ch->tls->ctx->qlog_title)) == NULL)
+        if ((ch->qlog_title = OPENSSL_strdup(qlog_ctx->qlog_title)) == NULL)
             goto err;
     }
 #endif
@@ -615,10 +668,8 @@ static QUIC_CHANNEL *port_make_channel(QUIC_PORT *port, SSL *tls, OSSL_QRX *qrx,
     /*
      * And finally init the channel struct
      */
-    if (!ossl_quic_channel_init(ch)) {
-        ch_cleaned = 1;
+    if (!ossl_quic_channel_init(ch))
         goto err;
-    }
 
     ossl_qtx_set_bio(ch->qtx, port->net_wbio);
     return ch;
@@ -627,11 +678,7 @@ err:
     if (user_ssl != NULL)
         ((QUIC_CONNECTION *)user_ssl)->ch = NULL;
 
-    if (ch_cleaned)
-        OPENSSL_free(ch);
-    else
-        ossl_quic_channel_free(ch);
-
+    ossl_quic_channel_free(ch);
     SSL_free(user_ssl);
 
     return NULL;
@@ -672,9 +719,14 @@ QUIC_CHANNEL *ossl_quic_port_pop_incoming(QUIC_PORT *port)
     return ch;
 }
 
+QUIC_CHANNEL *ossl_quic_port_peek_incoming(QUIC_PORT *port)
+{
+    return ossl_list_incoming_ch_head(&port->incoming_channel_list);
+}
+
 int ossl_quic_port_have_incoming(QUIC_PORT *port)
 {
-    return ossl_list_incoming_ch_head(&port->incoming_channel_list) != NULL;
+    return ossl_quic_port_peek_incoming(port) != NULL;
 }
 
 void ossl_quic_port_drop_incoming(QUIC_PORT *port)
@@ -690,6 +742,12 @@ void ossl_quic_port_drop_incoming(QUIC_PORT *port)
             break;
 
         tls = ossl_quic_channel_get0_tls(ch);
+        if (tls == NULL) {
+            /* Unpeeled SSL_listen_ex() channels have no user SSL. */
+            ossl_quic_channel_free(ch);
+            continue;
+        }
+
         /*
          * The user ssl may or may not have been created via the
          * get_conn_user_ssl callback in the QUIC stack.  The
@@ -1099,7 +1157,7 @@ static int decrypt_validation_token(const QUIC_PORT *port,
         goto err;
 
     /* Prevent decryption of a buffer that is not within reasonable bounds */
-    if (ct_len < (size_t)(iv_len + tag_len) || ct_len > ENCRYPTED_TOKEN_MAX_LEN)
+    if (ct_len < (size_t)iv_len + tag_len || ct_len > ENCRYPTED_TOKEN_MAX_LEN)
         goto err;
 
     *pt_len = ct_len - iv_len - tag_len;
@@ -1417,6 +1475,10 @@ err:
  *              token is valid.
  * @param scid  Pointer to the connection ID structure to store the SCID if the
  *              token is valid.
+ * @param gen_new_token Set to 1 if a NEW_TOKEN frame should be sent on the
+ *              new connection.
+ * @param is_retry Set to 1 if the token decrypted and parsed as a token we
+ *              minted for a RETRY packet, even if it then failed validation.
  *
  * @return      1 if the token is valid and ODCID/SCID are successfully set.
  *              0 otherwise.
@@ -1430,7 +1492,8 @@ err:
  *   configurable in the future.
  */
 static int port_validate_token(QUIC_PKT_HDR *hdr, QUIC_PORT *port,
-    BIO_ADDR *peer, QUIC_CONN_ID *odcid, uint8_t *gen_new_token)
+    BIO_ADDR *peer, QUIC_CONN_ID *odcid, uint8_t *gen_new_token,
+    uint8_t *is_retry)
 {
     int ret = 0;
     QUIC_VALIDATION_TOKEN token = { 0 };
@@ -1440,6 +1503,7 @@ static int port_validate_token(QUIC_PKT_HDR *hdr, QUIC_PORT *port,
     OSSL_TIME now = ossl_time_now();
 
     *gen_new_token = 0;
+    *is_retry = 0;
 
     if (!decrypt_validation_token(port, hdr->token, hdr->token_len, NULL,
             &dec_token_len)
@@ -1448,6 +1512,8 @@ static int port_validate_token(QUIC_PKT_HDR *hdr, QUIC_PORT *port,
             dec_token, &dec_token_len)
         || !parse_validation_token(&token, dec_token, dec_token_len))
         goto err;
+
+    *is_retry = token.is_retry;
 
     /*
      * Validate token timestamp. Current time should not be before the token
@@ -1583,6 +1649,7 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
     QUIC_CHANNEL *ch = NULL, *new_ch = NULL;
     QUIC_CONN_ID odcid;
     uint8_t gen_new_token = 0;
+    uint8_t is_retry_token = 0;
     OSSL_QRX *qrx = NULL, *qrx_ref;
     OSSL_QRX *qrx_src = NULL;
     OSSL_QRX_ARGS qrx_args = { 0 };
@@ -1742,7 +1809,7 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
      */
     if (hdr.token != NULL
         && port_validate_token(&hdr, port, &e->peer,
-               &odcid, &gen_new_token)
+               &odcid, &gen_new_token, &is_retry_token)
             == 0) {
         /*
          * RFC 9000 s 8.1.3
@@ -1756,6 +1823,18 @@ static void port_default_packet_handler(QUIC_URXE *e, void *arg,
          * the request is valid
          */
         if (port->validate_addr == 1) {
+            /*
+             * RFC 9000 s 8.1.2
+             * If we minted this token for a Retry packet, the client has
+             * already processed a Retry and will not accept another one
+             * (RFC 9000 s 17.2.5.2), so sending one would only leave the
+             * client waiting for its idle timeout. The RFC prefers closing
+             * with INVALID_TOKEN, but also allows discarding the packet,
+             * which is what we do here.
+             */
+            if (is_retry_token)
+                goto undesirable;
+
             /*
              * Again: we should consider saving initial encryption level
              * secrets to token here to save some CPU cycles.
@@ -1873,6 +1952,110 @@ void ossl_quic_port_restore_err_state(const QUIC_PORT *port)
 {
     ERR_clear_error();
     OSSL_ERR_STATE_restore(port->err_state);
+}
+
+void ossl_quic_port_set_max_idle_timeout(QUIC_PORT *port, uint64_t ms)
+{
+    port->max_idle_timeout = ms;
+}
+
+uint64_t ossl_quic_port_get_max_idle_timeout(const QUIC_PORT *port)
+{
+    return port->max_idle_timeout;
+}
+
+void ossl_quic_port_set_max_udp_payload_size(QUIC_PORT *port, uint64_t size)
+{
+    port->max_udp_payload_size = size;
+}
+
+uint64_t ossl_quic_port_get_max_udp_payload_size(const QUIC_PORT *port)
+{
+    return port->max_udp_payload_size;
+}
+
+void ossl_quic_port_set_init_max_data(QUIC_PORT *port, uint64_t max_data)
+{
+    port->init_max_data = max_data;
+}
+
+uint64_t ossl_quic_port_get_init_max_data(const QUIC_PORT *port)
+{
+    return port->init_max_data;
+}
+
+void ossl_quic_port_set_init_max_stream_data(QUIC_PORT *port, uint64_t max_data, int is_uni, int is_remote)
+{
+    if (is_uni) {
+        port->init_max_stream_data_uni = max_data;
+    } else {
+        if (is_remote)
+            port->init_max_stream_data_bidi_remote = max_data;
+        else
+            port->init_max_stream_data_bidi_local = max_data;
+    }
+}
+
+uint64_t ossl_quic_port_get_init_max_stream_data(const QUIC_PORT *port, int is_uni, int is_remote)
+{
+    if (is_uni)
+        return port->init_max_stream_data_uni;
+    else
+        return is_remote ? port->init_max_stream_data_bidi_remote : port->init_max_stream_data_bidi_local;
+}
+
+void ossl_quic_port_set_init_max_streams(QUIC_PORT *port, uint64_t max_streams, int is_uni)
+{
+    if (is_uni) {
+        port->init_max_streams_uni = max_streams;
+    } else {
+        port->init_max_streams_bidi = max_streams;
+    }
+}
+
+uint64_t ossl_quic_port_get_init_max_streams(const QUIC_PORT *port, int is_uni)
+{
+    return is_uni ? port->init_max_streams_uni : port->init_max_streams_bidi;
+}
+
+void ossl_quic_port_set_ack_delay_exponent(QUIC_PORT *port, uint64_t exp)
+{
+    port->ack_delay_exponent = (unsigned char)exp;
+}
+
+uint64_t ossl_quic_port_get_ack_delay_exponent(const QUIC_PORT *port)
+{
+    return port->ack_delay_exponent;
+}
+
+void ossl_quic_port_set_max_ack_delay(QUIC_PORT *port, uint64_t ms)
+{
+    port->max_ack_delay = ms;
+}
+
+uint64_t ossl_quic_port_get_max_ack_delay(const QUIC_PORT *port)
+{
+    return port->max_ack_delay;
+}
+
+void ossl_quic_port_set_disable_active_migration(QUIC_PORT *port, uint64_t disable)
+{
+    port->disable_active_migration = (unsigned char)disable;
+}
+
+uint64_t ossl_quic_port_get_disable_active_migration(const QUIC_PORT *port)
+{
+    return port->disable_active_migration;
+}
+
+void ossl_quic_port_set_active_conn_id_limit(QUIC_PORT *port, uint64_t limit)
+{
+    port->active_conn_id_limit = limit;
+}
+
+uint64_t ossl_quic_port_get_active_conn_id_limit(const QUIC_PORT *port)
+{
+    return port->active_conn_id_limit;
 }
 
 uint64_t ossl_quic_port_get_max_pending_channels(const QUIC_PORT *port)

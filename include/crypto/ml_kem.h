@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2024-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -230,6 +230,8 @@ void ossl_ml_kem_key_free(ML_KEM_KEY *key);
  * |selection|, see <openssl/core_dispatch.h>.
  */
 ML_KEM_KEY *ossl_ml_kem_key_dup(const ML_KEM_KEY *key, int selection);
+
+__owur int ossl_ml_kem_key_fetch_digest(ML_KEM_KEY *key, const char *propq);
 
 /*
  * ----- Import or generate key material.

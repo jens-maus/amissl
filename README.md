@@ -41,7 +41,7 @@ The OpenSSL toolkit includes:
 
 - **libssl**
   an implementation of all TLS protocol versions up to TLSv1.3 ([RFC 8446]),
-  DTLS protocol versions up to DTLSv1.2 ([RFC 6347]) and
+  DTLS protocol versions up to DTLSv1.3 ([RFC 9147]) and
   the QUIC version 1 protocol ([RFC 9000]).
 
 - **libcrypto**
@@ -49,7 +49,7 @@ The OpenSSL toolkit includes:
   basis of the TLS implementation, but can also be used independently.
 
 - **openssl**
-  the OpenSSL command line tool, a swiss army knife for cryptographic tasks,
+  the OpenSSL command line tool, a Swiss Army knife for cryptographic tasks,
   testing and analyzing. It can be used for
   - creation of key parameters
   - creation of X.509 certificates, CSRs and CRLs
@@ -230,6 +230,9 @@ All rights reserved.
 
 [RFC 9000]:
      <https://tools.ietf.org/html/rfc9000>
+
+[RFC 9147]:
+    <https://tools.ietf.org/html/rfc9147>
 
 [Binaries]:
     <https://github.com/openssl/openssl/wiki/Binaries>
