@@ -53692,24 +53692,6 @@ X509_EXTENSION * LIBSTUB_X509v3_delete_extension(void)
   return LIB_X509v3_delete_extension(_base, ___x, ___loc);
 }
 
-EVP_PKEY * LIB_X509_get_pubkey(struct Library * _base, const X509 * ___x);
-
-EVP_PKEY * LIBSTUB_X509_get_pubkey(void)
-{
-  const X509 * ___x = (const X509 *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_get_pubkey(_base, ___x);
-}
-
-EVP_PKEY * LIB_X509_REQ_get_pubkey(struct Library * _base, X509_REQ * ___req);
-
-EVP_PKEY * LIBSTUB_X509_REQ_get_pubkey(void)
-{
-  X509_REQ * ___req = (X509_REQ *)REG_A0;
-  struct Library * _base = (struct Library *)REG_A6;
-  return LIB_X509_REQ_get_pubkey(_base, ___req);
-}
-
 X509 * LIB_CMS_SignerInfo_get0_signer_cert(struct Library * _base, const CMS_SignerInfo * ___si);
 
 X509 * LIBSTUB_CMS_SignerInfo_get0_signer_cert(void)

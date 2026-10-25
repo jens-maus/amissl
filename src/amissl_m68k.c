@@ -79673,34 +79673,6 @@ STATIC CONST struct EmuTrap stub_main_X509v3_delete_extension = { TRAPINST, TRAP
 
 // ---
 
-STATIC EVP_PKEY * stub_main_X509_get_pubkey_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->X509_get_pubkey(
-		(const X509 *)regarray[REG68K_A0/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_X509_get_pubkey = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_get_pubkey_PPC };
-
-// ---
-
-STATIC EVP_PKEY * stub_main_X509_REQ_get_pubkey_PPC(uint32 *regarray)
-{
-	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
-	struct ExtendedLibrary *ExtLib = (struct ExtendedLibrary *)((uint32)Base + Base->lib_PosSize);
-	struct AmiSSLIFace *Self = (struct AmiSSLIFace *)ExtLib->MainIFace;
-
-	return Self->X509_REQ_get_pubkey(
-		(X509_REQ *)regarray[REG68K_A0/4]
-	);
-}
-STATIC CONST struct EmuTrap stub_main_X509_REQ_get_pubkey = { TRAPINST, TRAPTYPE, (uint32 (*)(uint32 *))stub_main_X509_REQ_get_pubkey_PPC };
-
-// ---
-
 STATIC X509 * stub_main_CMS_SignerInfo_get0_signer_cert_PPC(uint32 *regarray)
 {
 	struct Library *Base = (struct Library *)regarray[REG68K_A6/4];
@@ -85321,8 +85293,6 @@ CONST CONST_APTR main_VecTable68K[] =
 	&stub_main_ASN1_BIT_STRING_set1,
 	&stub_main_OSSL_ESS_check_signing_certs_ex,
 	&stub_main_X509v3_delete_extension,
-	&stub_main_X509_get_pubkey,
-	&stub_main_X509_REQ_get_pubkey,
 	&stub_main_CMS_SignerInfo_get0_signer_cert,
 	&stub_main_CMS_SignerInfo_get_verification_result,
 	&stub_main_EVP_SKEY_get0_local_keyid,

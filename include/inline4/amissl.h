@@ -5383,8 +5383,6 @@
 #define ASN1_BIT_STRING_set1(abs, data, length, unused_bits) IAmiSSL->ASN1_BIT_STRING_set1((abs), (data), (length), (unused_bits))
 #define OSSL_ESS_check_signing_certs_ex(ss, ssv2, chain, libctx, propq, require_signing_cert) IAmiSSL->OSSL_ESS_check_signing_certs_ex((ss), (ssv2), (chain), (libctx), (propq), (require_signing_cert))
 #define X509v3_delete_extension(x, loc) IAmiSSL->X509v3_delete_extension((x), (loc))
-#define X509_get_pubkey(x) IAmiSSL->X509_get_pubkey((x))
-#define X509_REQ_get_pubkey(req) IAmiSSL->X509_REQ_get_pubkey((req))
 #define CMS_SignerInfo_get0_signer_cert(si) IAmiSSL->CMS_SignerInfo_get0_signer_cert((si))
 #define CMS_SignerInfo_get_verification_result(si, type) IAmiSSL->CMS_SignerInfo_get_verification_result((si), (type))
 #define EVP_SKEY_get0_local_keyid(skey, id, len) IAmiSSL->EVP_SKEY_get0_local_keyid((skey), (id), (len))

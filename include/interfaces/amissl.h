@@ -5377,8 +5377,6 @@ struct AmiSSLIFace
 	APICALL int (*ASN1_BIT_STRING_set1)(struct AmiSSLIFace *Self, ASN1_BIT_STRING * abs, const uint8_t * data, size_t length, int unused_bits);
 	APICALL int (*OSSL_ESS_check_signing_certs_ex)(struct AmiSSLIFace *Self, const ESS_SIGNING_CERT * ss, const ESS_SIGNING_CERT_V2 * ssv2, const STACK_OF(X509) * chain, OSSL_LIB_CTX * libctx, const char * propq, int require_signing_cert);
 	APICALL X509_EXTENSION * (*X509v3_delete_extension)(struct AmiSSLIFace *Self, STACK_OF(X509_EXTENSION) ** x, int loc);
-	APICALL EVP_PKEY * (*X509_get_pubkey)(struct AmiSSLIFace *Self, const X509 * x);
-	APICALL EVP_PKEY * (*X509_REQ_get_pubkey)(struct AmiSSLIFace *Self, X509_REQ * req);
 	APICALL X509 * (*CMS_SignerInfo_get0_signer_cert)(struct AmiSSLIFace *Self, const CMS_SignerInfo * si);
 	APICALL int (*CMS_SignerInfo_get_verification_result)(struct AmiSSLIFace *Self, const CMS_SignerInfo * si, int type);
 	APICALL int (*EVP_SKEY_get0_local_keyid)(struct AmiSSLIFace *Self, const EVP_SKEY * skey, const unsigned char ** id, size_t * len);

@@ -36,7 +36,7 @@
 @num_files=("openssl/util/libssl.num", "openssl/util/libcrypto.num");
 $idl_file="include/xml/amissl.xml";
 
-$re_ignore= qr/(STDIO|SSL_TRACE|CRYPTO_MDEBUG|UNIT_TEST|RC5|MD2|COMP|DEPRECATEDIN_0.*|DEPRECATEDIN_1.*|DEPRECATEDIN_3.*|DEPRECATED(IN)*_4_0)/;
+$re_ignore= qr/(STDIO|SSL_TRACE|CRYPTO_MDEBUG|UNIT_TEST|RC5|MD2|COMP|DEPRECATEDIN_0.*|DEPRECATEDIN_1.*|DEPRECATEDIN_3.*|DEPRECATED(IN)*_4_0|DEPRECATED(IN)*_4_1)/;
 
 #######################################################################
 

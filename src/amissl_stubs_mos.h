@@ -5341,8 +5341,6 @@ LIBSTUB(OPENSSL_sk_set_cmp_thunks, OPENSSL_STACK *);
 LIBSTUB(ASN1_BIT_STRING_set1, int);
 LIBSTUB(OSSL_ESS_check_signing_certs_ex, int);
 LIBSTUB(X509v3_delete_extension, X509_EXTENSION *);
-LIBSTUB(X509_get_pubkey, EVP_PKEY *);
-LIBSTUB(X509_REQ_get_pubkey, EVP_PKEY *);
 LIBSTUB(CMS_SignerInfo_get0_signer_cert, X509 *);
 LIBSTUB(CMS_SignerInfo_get_verification_result, int);
 LIBSTUB(EVP_SKEY_get0_local_keyid, int);

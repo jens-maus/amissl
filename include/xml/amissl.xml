@@ -21882,12 +21882,6 @@
 
     <!-- AmiSSL v6.1 - OpenSSL 4.1.0 -->
 
-    <method name="X509_get_pubkey" result="EVP_PKEY *">
-      <arg name="x" type="const X509 *" m68kreg="a0"/>
-    </method>
-    <method name="X509_REQ_get_pubkey" result="EVP_PKEY *">
-      <arg name="req" type="X509_REQ *" m68kreg="a0"/>
-    </method>
     <method name="CMS_SignerInfo_get0_signer_cert" result="X509 *">
       <arg name="si" type="const CMS_SignerInfo *" m68kreg="a0"/>
     </method>

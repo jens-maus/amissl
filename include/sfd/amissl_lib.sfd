@@ -5346,8 +5346,6 @@ OPENSSL_STACK * OPENSSL_sk_set_cmp_thunks(OPENSSL_STACK * st, int (*c_thunk)(int
 int ASN1_BIT_STRING_set1(ASN1_BIT_STRING * abs, const uint8_t * data, size_t length, int unused_bits) (a0,a1,d0,d1)
 int OSSL_ESS_check_signing_certs_ex(const ESS_SIGNING_CERT * ss, const ESS_SIGNING_CERT_V2 * ssv2, const STACK_OF(X509) * chain, OSSL_LIB_CTX * libctx, const char * propq, int require_signing_cert) (a0,a1,a2,a3,d0,d1)
 X509_EXTENSION * X509v3_delete_extension(STACK_OF(X509_EXTENSION) ** x, int loc) (a0,d0)
-EVP_PKEY * X509_get_pubkey(const X509 * x) (a0)
-EVP_PKEY * X509_REQ_get_pubkey(X509_REQ * req) (a0)
 X509 * CMS_SignerInfo_get0_signer_cert(const CMS_SignerInfo * si) (a0)
 int CMS_SignerInfo_get_verification_result(const CMS_SignerInfo * si, int type) (a0,d0)
 int EVP_SKEY_get0_local_keyid(const EVP_SKEY * skey, const unsigned char ** id, size_t * len) (a0,a1,a2)

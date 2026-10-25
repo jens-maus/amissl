@@ -16011,64 +16011,58 @@ int __OSSL_ESS_check_signing_certs_ex(__reg("a6") struct Library * , __reg("a0")
 X509_EXTENSION * __X509v3_delete_extension(__reg("a6") struct Library * , __reg("a0") STACK_OF(X509_EXTENSION) ** x , __reg("d0") int loc ) = "\tjsr\t-32022(a6)";
 #define X509v3_delete_extension(x, loc) __X509v3_delete_extension(AmiSSLBase, (x), (loc))
 
-EVP_PKEY * __X509_get_pubkey(__reg("a6") struct Library * , __reg("a0") const X509 * x ) = "\tjsr\t-32028(a6)";
-#define X509_get_pubkey(x) __X509_get_pubkey(AmiSSLBase, (x))
-
-EVP_PKEY * __X509_REQ_get_pubkey(__reg("a6") struct Library * , __reg("a0") X509_REQ * req ) = "\tjsr\t-32034(a6)";
-#define X509_REQ_get_pubkey(req) __X509_REQ_get_pubkey(AmiSSLBase, (req))
-
-X509 * __CMS_SignerInfo_get0_signer_cert(__reg("a6") struct Library * , __reg("a0") const CMS_SignerInfo * si ) = "\tjsr\t-32040(a6)";
+X509 * __CMS_SignerInfo_get0_signer_cert(__reg("a6") struct Library * , __reg("a0") const CMS_SignerInfo * si ) = "\tjsr\t-32028(a6)";
 #define CMS_SignerInfo_get0_signer_cert(si) __CMS_SignerInfo_get0_signer_cert(AmiSSLBase, (si))
 
-int __CMS_SignerInfo_get_verification_result(__reg("a6") struct Library * , __reg("a0") const CMS_SignerInfo * si , __reg("d0") int type ) = "\tjsr\t-32046(a6)";
+int __CMS_SignerInfo_get_verification_result(__reg("a6") struct Library * , __reg("a0") const CMS_SignerInfo * si , __reg("d0") int type ) = "\tjsr\t-32034(a6)";
 #define CMS_SignerInfo_get_verification_result(si, type) __CMS_SignerInfo_get_verification_result(AmiSSLBase, (si), (type))
 
-int __EVP_SKEY_get0_local_keyid(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const unsigned char ** id , __reg("a2") size_t * len ) = "\tjsr\t-32052(a6)";
+int __EVP_SKEY_get0_local_keyid(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const unsigned char ** id , __reg("a2") size_t * len ) = "\tjsr\t-32040(a6)";
 #define EVP_SKEY_get0_local_keyid(skey, id, len) __EVP_SKEY_get0_local_keyid(AmiSSLBase, (skey), (id), (len))
 
-int __EVP_SKEY_get0_algorithm_id(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const unsigned char ** oid , __reg("a2") size_t * oid_len , __reg("a3") const unsigned char ** params , __reg("d0") size_t * params_len ) = "\tjsr\t-32058(a6)";
+int __EVP_SKEY_get0_algorithm_id(__reg("a6") struct Library * , __reg("a0") const EVP_SKEY * skey , __reg("a1") const unsigned char ** oid , __reg("a2") size_t * oid_len , __reg("a3") const unsigned char ** params , __reg("d0") size_t * params_len ) = "\tjsr\t-32046(a6)";
 #define EVP_SKEY_get0_algorithm_id(skey, oid, oid_len, params, params_len) __EVP_SKEY_get0_algorithm_id(AmiSSLBase, (skey), (oid), (oid_len), (params), (params_len))
 
-int __CTLOG_STORE_add0_log(__reg("a6") struct Library * , __reg("a0") CTLOG_STORE * store , __reg("a1") CTLOG * log ) = "\tjsr\t-32064(a6)";
+int __CTLOG_STORE_add0_log(__reg("a6") struct Library * , __reg("a0") CTLOG_STORE * store , __reg("a1") CTLOG * log ) = "\tjsr\t-32052(a6)";
 #define CTLOG_STORE_add0_log(store, log) __CTLOG_STORE_add0_log(AmiSSLBase, (store), (log))
 
-int __CRYPTO_atomic_load_ptr(__reg("a6") struct Library * , __reg("a0") void ** ptr , __reg("a1") void ** ret , __reg("a2") CRYPTO_RWLOCK * lock ) = "\tjsr\t-32070(a6)";
+int __CRYPTO_atomic_load_ptr(__reg("a6") struct Library * , __reg("a0") void ** ptr , __reg("a1") void ** ret , __reg("a2") CRYPTO_RWLOCK * lock ) = "\tjsr\t-32058(a6)";
 #define CRYPTO_atomic_load_ptr(ptr, ret, lock) __CRYPTO_atomic_load_ptr(AmiSSLBase, (ptr), (ret), (lock))
 
-int __CRYPTO_atomic_store_ptr(__reg("a6") struct Library * , __reg("a0") void ** dst , __reg("a1") void ** val , __reg("a2") CRYPTO_RWLOCK * lock ) = "\tjsr\t-32076(a6)";
+int __CRYPTO_atomic_store_ptr(__reg("a6") struct Library * , __reg("a0") void ** dst , __reg("a1") void ** val , __reg("a2") CRYPTO_RWLOCK * lock ) = "\tjsr\t-32064(a6)";
 #define CRYPTO_atomic_store_ptr(dst, val, lock) __CRYPTO_atomic_store_ptr(AmiSSLBase, (dst), (val), (lock))
 
-int __CRYPTO_atomic_cmp_exch_ptr(__reg("a6") struct Library * , __reg("a0") void ** ptr , __reg("a1") void ** expect , __reg("a2") void * desire , __reg("a3") CRYPTO_RWLOCK * lock , __reg("d0") int * lock_failed ) = "\tjsr\t-32082(a6)";
+int __CRYPTO_atomic_cmp_exch_ptr(__reg("a6") struct Library * , __reg("a0") void ** ptr , __reg("a1") void ** expect , __reg("a2") void * desire , __reg("a3") CRYPTO_RWLOCK * lock , __reg("d0") int * lock_failed ) = "\tjsr\t-32070(a6)";
 #define CRYPTO_atomic_cmp_exch_ptr(ptr, expect, desire, lock, lock_failed) __CRYPTO_atomic_cmp_exch_ptr(AmiSSLBase, (ptr), (expect), (desire), (lock), (lock_failed))
 
-int __EVP_EC_affine2oct(__reg("a6") struct Library * , __reg("a0") const BIGNUM * x , __reg("a1") const BIGNUM * y , __reg("d0") size_t field_len , __reg("a2") unsigned char ** pbuf , __reg("a3") size_t * pbsize ) = "\tjsr\t-32088(a6)";
+int __EVP_EC_affine2oct(__reg("a6") struct Library * , __reg("a0") const BIGNUM * x , __reg("a1") const BIGNUM * y , __reg("d0") size_t field_len , __reg("a2") unsigned char ** pbuf , __reg("a3") size_t * pbsize ) = "\tjsr\t-32076(a6)";
 #define EVP_EC_affine2oct(x, y, field_len, pbuf, pbsize) __EVP_EC_affine2oct(AmiSSLBase, (x), (y), (field_len), (pbuf), (pbsize))
 
-OPENSSL_STACK * __OPENSSL_sk_set_copy_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_STACK * st , __reg("d0") OPENSSL_sk_copyfunc_thunk cp_thunk ) = "\tjsr\t-32094(a6)";
+OPENSSL_STACK * __OPENSSL_sk_set_copy_thunks(__reg("a6") struct Library * , __reg("a0") OPENSSL_STACK * st , __reg("d0") OPENSSL_sk_copyfunc_thunk cp_thunk ) = "\tjsr\t-32082(a6)";
 #define OPENSSL_sk_set_copy_thunks(st, cp_thunk) __OPENSSL_sk_set_copy_thunks(AmiSSLBase, (st), (cp_thunk))
 
-ASN1_STRING * __ASN1_STRING_new_not_owned(__reg("a6") struct Library * , __reg("d0") int type , __reg("a0") const uint8_t * data , __reg("d1") size_t length ) = "\tjsr\t-32100(a6)";
+ASN1_STRING * __ASN1_STRING_new_not_owned(__reg("a6") struct Library * , __reg("d0") int type , __reg("a0") const uint8_t * data , __reg("d1") size_t length ) = "\tjsr\t-32088(a6)";
 #define ASN1_STRING_new_not_owned(type, data, length) __ASN1_STRING_new_not_owned(AmiSSLBase, (type), (data), (length))
 
-const EVP_KDF * __EVP_KDF_CTX_get0_kdf(__reg("a6") struct Library * , __reg("a0") const EVP_KDF_CTX * ctx ) = "\tjsr\t-32106(a6)";
+const EVP_KDF * __EVP_KDF_CTX_get0_kdf(__reg("a6") struct Library * , __reg("a0") const EVP_KDF_CTX * ctx ) = "\tjsr\t-32094(a6)";
 #define EVP_KDF_CTX_get0_kdf(ctx) __EVP_KDF_CTX_get0_kdf(AmiSSLBase, (ctx))
 
-EVP_KDF * __EVP_KDF_CTX_get1_kdf(__reg("a6") struct Library * , __reg("a0") const EVP_KDF_CTX * ctx ) = "\tjsr\t-32112(a6)";
+EVP_KDF * __EVP_KDF_CTX_get1_kdf(__reg("a6") struct Library * , __reg("a0") const EVP_KDF_CTX * ctx ) = "\tjsr\t-32100(a6)";
 #define EVP_KDF_CTX_get1_kdf(ctx) __EVP_KDF_CTX_get1_kdf(AmiSSLBase, (ctx))
 
-int __ASN1_STRING_set1_data(__reg("a6") struct Library * , __reg("a0") ASN1_STRING * str , __reg("a1") const uint8_t * data , __reg("d0") size_t len ) = "\tjsr\t-32118(a6)";
+int __ASN1_STRING_set1_data(__reg("a6") struct Library * , __reg("a0") ASN1_STRING * str , __reg("a1") const uint8_t * data , __reg("d0") size_t len ) = "\tjsr\t-32106(a6)";
 #define ASN1_STRING_set1_data(str, data, len) __ASN1_STRING_set1_data(AmiSSLBase, (str), (data), (len))
 
-int __ASN1_STRING_set1_string(__reg("a6") struct Library * , __reg("a0") ASN1_STRING * str , __reg("a1") const char * cstring ) = "\tjsr\t-32124(a6)";
+int __ASN1_STRING_set1_string(__reg("a6") struct Library * , __reg("a0") ASN1_STRING * str , __reg("a1") const char * cstring ) = "\tjsr\t-32112(a6)";
 #define ASN1_STRING_set1_string(str, cstring) __ASN1_STRING_set1_string(AmiSSLBase, (str), (cstring))
 
-size_t __ASN1_STRING_get_length(__reg("a6") struct Library * , __reg("a0") const ASN1_STRING * x ) = "\tjsr\t-32130(a6)";
+size_t __ASN1_STRING_get_length(__reg("a6") struct Library * , __reg("a0") const ASN1_STRING * x ) = "\tjsr\t-32118(a6)";
 #define ASN1_STRING_get_length(x) __ASN1_STRING_get_length(AmiSSLBase, (x))
 
-int __CMS_add_standard_smimecap_ex(__reg("a6") struct Library * , __reg("a0") struct stack_st_X509_ALGOR ** smcap , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-32136(a6)";
+int __CMS_add_standard_smimecap_ex(__reg("a6") struct Library * , __reg("a0") struct stack_st_X509_ALGOR ** smcap , __reg("a1") OSSL_LIB_CTX * libctx , __reg("a2") const char * propq ) = "\tjsr\t-32124(a6)";
 #define CMS_add_standard_smimecap_ex(smcap, libctx, propq) __CMS_add_standard_smimecap_ex(AmiSSLBase, (smcap), (libctx), (propq))
 
-int __BIO_socket_ready(__reg("a6") struct Library * , __reg("d0") int fd , __reg("d1") int for_read ) = "\tjsr\t-32142(a6)";
+int __BIO_socket_ready(__reg("a6") struct Library * , __reg("d0") int fd , __reg("d1") int for_read ) = "\tjsr\t-32130(a6)";
 #define BIO_socket_ready(fd, for_read) __BIO_socket_ready(AmiSSLBase, (fd), (for_read))
 
 #endif /* !_INLINE_AMISSL_H */

@@ -37362,20 +37362,6 @@ X509_EXTENSION * SAVEDS ASM LIB_X509v3_delete_extension(REG(a6, UNUSED __IFACE_O
 
 // ---
 
-EVP_PKEY * SAVEDS ASM LIB_X509_get_pubkey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const X509 * x))
-{
-	return X509_get_pubkey(x);
-}
-
-// ---
-
-EVP_PKEY * SAVEDS ASM LIB_X509_REQ_get_pubkey(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, X509_REQ * req))
-{
-	return X509_REQ_get_pubkey(req);
-}
-
-// ---
-
 X509 * SAVEDS ASM LIB_CMS_SignerInfo_get0_signer_cert(REG(a6, UNUSED __IFACE_OR_BASE), REG(a0, const CMS_SignerInfo * si))
 {
 	return CMS_SignerInfo_get0_signer_cert(si);

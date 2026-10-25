@@ -4,7 +4,7 @@
 #
 # AmiSSL - OpenSSL wrapper for AmigaOS-based systems
 # Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
-# Copyright (c) 2006-2022 AmiSSL Open Source Team.
+# Copyright (c) 2006-2026 AmiSSL Open Source Team.
 # All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,8 @@ $tmp_dir="newXML";
 
 $re_unimplemented= qr/(STDIO|KRB5|JPAKE|SCTP|EC_NISTP_64_GCC_128)/;
 $re_ignore= qr/(STDIO|SSL_TRACE|CRYPTO_MDEBUG|UNIT_TEST)/;
+$re_ignore= qr/(STDIO|SSL_TRACE|CRYPTO_MDEBUG|UNIT_TEST|SCTP|RC5|MD2|COMP|DEPRECATEDIN_0.*|DEPRECATEDIN_1.*|DEPRECATEDIN_3.*|DEPRECATED(IN)*_4_0|DEPRECATED(IN)*_4_1)/;
+$re_deprecated_unmarked= qr/X509_get_pubkey|X509_REQ_get_pubkey|X509_OBJECT_up_ref_count/;
 
 #######################################################################
 
@@ -74,7 +76,10 @@ sub get_new_symbols {
          $columns[3] =~ /^EXIST:EXPORT_VAR_AS_FUNCTION.*:FUNCTION:.*/ ||
          $columns[3] =~ /^EXIST::FUNCTION:.*/)
       {
-         if ($idl !~ /name="(OBSOLETE_)*$columns[0](_amiga.*)*"/ && $columns[3] !~ $re_ignore) {
+	 if ($idl !~ /name="(OBSOLETE_)*$columns[0](_amiga.*)*"/ &&
+	     $columns[3] !~ $re_ignore &&
+	     $columns[0] !~ $re_deprecated_unmarked)
+	 {
             my $unimplemented = 0;
             if ($columns[3] =~ $re_unimplemented) {
                $unimplemented = 1;

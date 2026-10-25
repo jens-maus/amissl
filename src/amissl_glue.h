@@ -5378,8 +5378,6 @@ OPENSSL_STACK * SAVEDS ASM LIB_OPENSSL_sk_set_cmp_thunks(REG(a6, __IFACE_OR_BASE
 int SAVEDS ASM LIB_ASN1_BIT_STRING_set1(REG(a6, __IFACE_OR_BASE), REG(a0, ASN1_BIT_STRING * abs), REG(a1, const uint8_t * data), REG(d0, size_t length), REG(d1, int unused_bits));
 int SAVEDS ASM LIB_OSSL_ESS_check_signing_certs_ex(REG(a6, __IFACE_OR_BASE), REG(a0, const ESS_SIGNING_CERT * ss), REG(a1, const ESS_SIGNING_CERT_V2 * ssv2), REG(a2, const STACK_OF(X509) * chain), REG(a3, OSSL_LIB_CTX * libctx), REG(d0, const char * propq), REG(d1, int require_signing_cert));
 X509_EXTENSION * SAVEDS ASM LIB_X509v3_delete_extension(REG(a6, __IFACE_OR_BASE), REG(a0, STACK_OF(X509_EXTENSION) ** x), REG(d0, int loc));
-EVP_PKEY * SAVEDS ASM LIB_X509_get_pubkey(REG(a6, __IFACE_OR_BASE), REG(a0, const X509 * x));
-EVP_PKEY * SAVEDS ASM LIB_X509_REQ_get_pubkey(REG(a6, __IFACE_OR_BASE), REG(a0, X509_REQ * req));
 X509 * SAVEDS ASM LIB_CMS_SignerInfo_get0_signer_cert(REG(a6, __IFACE_OR_BASE), REG(a0, const CMS_SignerInfo * si));
 int SAVEDS ASM LIB_CMS_SignerInfo_get_verification_result(REG(a6, __IFACE_OR_BASE), REG(a0, const CMS_SignerInfo * si), REG(d0, int type));
 int SAVEDS ASM LIB_EVP_SKEY_get0_local_keyid(REG(a6, __IFACE_OR_BASE), REG(a0, const EVP_SKEY * skey), REG(a1, const unsigned char ** id), REG(a2, size_t * len));
@@ -10740,8 +10738,6 @@ int SAVEDS ASM LIB_BIO_socket_ready(REG(a6, __IFACE_OR_BASE), REG(d0, int fd), R
     LFUNC_FA_(ASN1_BIT_STRING_set1) \
     LFUNC_FA_(OSSL_ESS_check_signing_certs_ex) \
     LFUNC_FA_(X509v3_delete_extension) \
-    LFUNC_FA_(X509_get_pubkey) \
-    LFUNC_FA_(X509_REQ_get_pubkey) \
     LFUNC_FA_(CMS_SignerInfo_get0_signer_cert) \
     LFUNC_FA_(CMS_SignerInfo_get_verification_result) \
     LFUNC_FA_(EVP_SKEY_get0_local_keyid) \

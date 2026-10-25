@@ -5353,8 +5353,6 @@ STRUCTURE AmiSSLIFace, InterfaceData_SIZE
 	    FPTR IAmiSSL_ASN1_BIT_STRING_set1
 	    FPTR IAmiSSL_OSSL_ESS_check_signing_certs_ex
 	    FPTR IAmiSSL_X509v3_delete_extension
-	    FPTR IAmiSSL_X509_get_pubkey
-	    FPTR IAmiSSL_X509_REQ_get_pubkey
 	    FPTR IAmiSSL_CMS_SignerInfo_get0_signer_cert
 	    FPTR IAmiSSL_CMS_SignerInfo_get_verification_result
 	    FPTR IAmiSSL_EVP_SKEY_get0_local_keyid
