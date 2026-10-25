@@ -82,6 +82,7 @@ const BIGNUM *BN_value_one(void)
 }
 
 #ifndef __e2k__
+#ifndef OPENSSL_SYS_AMIGA
 int BN_num_bits_word(BN_ULONG l)
 {
     BN_ULONG x, mask;
@@ -126,6 +127,21 @@ int BN_num_bits_word(BN_ULONG l)
 
     return bits;
 }
+#else /* OPENSSL_SYS_AMIGA */
+#ifndef __amigaos4__
+static __inline__ int __builtin_clz(register BN_ULONG l)
+{
+    __asm__ ("bfffo %0{#0:#0},%0" : "=d" (l) : "0" (l));
+    return l;
+}
+#endif
+
+int BN_num_bits_word(BN_ULONG l)
+{
+    /* Both bfffo (m68k) and cntlzw (powerpc) return 32 when l == 0 */
+    return 32 - __builtin_clz(l);
+}
+#endif
 #else /* __e2k__ */
 #include <x86gprintrin.h>
 int BN_num_bits_word(BN_ULONG l)

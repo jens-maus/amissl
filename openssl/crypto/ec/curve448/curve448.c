@@ -502,8 +502,21 @@ struct smvt_control {
     int power, addend;
 };
 
-#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#if defined(__GNUC__)
 #define NUMTRAILINGZEROS __builtin_ctz
+
+#if defined(OPENSSL_SYS_AMIGA) && !defined(__amigaos4__)
+static __inline__ uint32_t __builtin_ctz(register uint32_t i)
+{
+    if (i == 0) {
+        return 32;
+    } else {
+        __asm__ ("bfffo %0{#0:#0},%0" : "=d" (i) : "0" (i & -i));
+        return 31 - i;
+    }
+}
+#endif
+
 #else
 #define NUMTRAILINGZEROS numtrailingzeros
 static uint32_t numtrailingzeros(uint32_t i)

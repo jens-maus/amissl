@@ -9,14 +9,17 @@
 - Libraries no longer have a different name for every OpenSSL release, as
   patch versions contain no API changes. All OpenSSL 4.1 builds will use
   amissl_v41x.library, OpenSSL 4.2 will use amissl_v42x.library, and so on.
+- BN_num_bits_word() now uses the m68k bfffo or PPC cntlzw asm instructions.
+- Curve448 and SRTP KDF now make use of the m68k bfffo asm instruction,
+  having already been using the PPC cnttzw asm instruction.
 - Removed all placeholders from the AmiSSL API for stdio OpenSSL API
   functions, as stdio can never be available in AmiSSL.
 - Support for RC5, MD2 and SRP has been removed.
-- Updated root certificates to latest Mozilla-based bundle provided
-  by https://curl.se/docs/caextract.html dated 14.5.2026.
+- Updated root certificates to latest Mozilla-based bundle provided by
+  https://curl.se/docs/caextract.html dated 14.5.2026.
 - Removed root certificate support for AmiSSL v3 and earlier. We used to
-  supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having
-  been used by OpenSSL since AmiSSL v4.
+  supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having been
+  used by OpenSSL since AmiSSL v4.
 - Enabled the rehash command in the OpenSSL tool.
 
 ## AmiSSL 5.27 (8.4.2026)

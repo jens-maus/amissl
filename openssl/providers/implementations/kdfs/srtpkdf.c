@@ -142,6 +142,14 @@ static int srtpkdf_set_membuf(unsigned char **dst, size_t *dst_len,
     return OSSL_PARAM_get_octet_string(p, (void **)dst, 0, dst_len);
 }
 
+#if defined(OPENSSL_SYS_AMIGA) && !defined(__amigaos4__)
+static __inline__ uint32_t __builtin_ctz(register uint32_t x)
+{
+    __asm__ ("bfffo %0{#0:#0},%0" : "=d" (x) : "0" (x & -x));
+    return 31 - x;
+}
+#endif
+
 static int is_power_of_two(uint32_t x, uint32_t *n)
 {
     /* Check if we've been given an exact power of two */
@@ -150,7 +158,7 @@ static int is_power_of_two(uint32_t x, uint32_t *n)
         return 0;
     }
     /* Count the number of trailing bits in the passed value */
-#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
+#if defined(__GNUC__)
     *n = __builtin_ctz(x);
 #else
     {
