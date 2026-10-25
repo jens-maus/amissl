@@ -149,7 +149,7 @@ static struct Library *OpenAmiSSLBase(int MaxAPI, ...)
     LONG libversion;
     const char *libfmt;
 
-    if(LibAPIVersion >= AMISSL_V40x)
+    if(LibAPIVersion >= AMISSL_V41x)
     {
       libfmt = AMISSL_LIBNAME_V6;
       libversion = 6;
@@ -296,7 +296,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
   SHOWPOINTER(DBF_STARTUP, &AmiSSLMasterLock);
   LOCK_OBTAIN(AmiSSLMasterLock);
 
-  if(LibAPIVersion >= AMISSL_V40x)
+  if(LibAPIVersion >= AMISSL_V41x)
   {
     D(DBF_STARTUP, "About to open amissl v4xx library");
 
@@ -306,7 +306,7 @@ LIBPROTO(OpenAmiSSL, struct Library *, REG(a6, UNUSED __BASE_OR_IFACE))
     // (https://wiki.openssl.org/index.php/OpenSSL_3.0#Versioning_Scheme) but we must
     // take care to prevent applications requiring newer API functions from loading
     // older libraries that do not contain those required entries
-    OPENASSL4SI( 40 ) END_OPENASSL
+    OPENASSL4SI( 41 ) END_OPENASSL
   }
   else if(LibAPIVersion >= AMISSL_V302)
   {

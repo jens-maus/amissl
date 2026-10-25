@@ -5,7 +5,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 2002-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2002-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -17,4 +17,9 @@
 #include <proto/amissl.h>
 #endif
 
+#if !defined(OSSL_OPENSSL_ECDH_H)
+#define OSSL_OPENSSL_ECDH_H
+
 #include <openssl/ec.h>
+
+#endif /* !defined(OSSL_OPENSSL_ECDH_H) */

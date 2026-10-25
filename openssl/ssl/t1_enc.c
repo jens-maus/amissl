@@ -34,6 +34,8 @@ static int tls1_PRF(SSL_CONNECTION *s,
 {
     const EVP_MD *md = ssl_prf_md(s);
     EVP_KDF_CTX *kctx = NULL;
+    const char *mdname;
+    OSSL_PARAM params[9], *p;
 
     if (md == NULL) {
         /* Should never happen */
@@ -48,8 +50,8 @@ static int tls1_PRF(SSL_CONNECTION *s,
     if (kctx == NULL)
         goto err;
 
-    const char *mdname = EVP_MD_get0_name(md);
-    OSSL_PARAM params[9], *p = params;
+    mdname = EVP_MD_get0_name(md);
+    p = params;
     *p++ = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_DIGEST,
         (char *)mdname, 0);
     *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SECRET,

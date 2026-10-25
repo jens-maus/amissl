@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2024 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -469,6 +469,50 @@ int CRYPTO_atomic_store_int(int *dst, int val, CRYPTO_RWLOCK *lock)
     ossl_crypto_mutex_unlock(lock);
 
     return 1;
+}
+
+int CRYPTO_atomic_load_ptr(void **ptr, void **ret, CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL || !CRYPTO_THREAD_read_lock(lock))
+        return 0;
+    *ret = *ptr;
+    if (!CRYPTO_THREAD_unlock(lock))
+        return 0;
+    return 1;
+}
+
+int CRYPTO_atomic_store_ptr(void **dst, void **val, CRYPTO_RWLOCK *lock)
+{
+    if (lock == NULL || !CRYPTO_THREAD_write_lock(lock))
+        return 0;
+    *dst = *val;
+    if (!CRYPTO_THREAD_unlock(lock))
+        return 0;
+    return 1;
+}
+
+int CRYPTO_atomic_cmp_exch_ptr(void **ptr, void **expect, void *desire, CRYPTO_RWLOCK *lock, int *lock_failed)
+{
+    int lock_sink;
+    int ret = 0;
+
+    if (lock_failed == NULL)
+        lock_failed = &lock_sink;
+
+    *lock_failed = 0;
+    if (lock == NULL || !CRYPTO_THREAD_write_lock(lock)) {
+        *lock_failed = 1;
+        return 0;
+    }
+    if (*ptr == *expect) {
+        ret = 1;
+        *ptr = desire;
+    } else {
+        *expect = *ptr;
+    }
+    if (!CRYPTO_THREAD_unlock(lock))
+        *lock_failed = 1;
+    return ret;
 }
 
 int openssl_init_fork_handlers(void)

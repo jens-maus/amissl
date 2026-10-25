@@ -381,9 +381,9 @@ BIO *PKCS7_dataInit(PKCS7 *p7, BIO *bio)
              */
             bio = BIO_new(BIO_s_mem());
             if (bio != NULL) {
-                BIO_set_mem_eof_return(bio, 0);
                 const unsigned char *os_data = ASN1_STRING_get0_data(os);
                 size_t os_len = ASN1_STRING_get_length(os);
+                BIO_set_mem_eof_return(bio, 0);
                 if (os_len > INT_MAX || BIO_write(bio, os_data, (int)os_len) != (int)os_len) {
                     BIO_free_all(bio);
                     bio = NULL;
@@ -1056,6 +1056,8 @@ int PKCS7_signatureVerify(BIO *bio, PKCS7 *p7, PKCS7_SIGNER_INFO *si,
     const PKCS7_CTX *ctx = ossl_pkcs7_get0_ctx(p7);
     OSSL_LIB_CTX *libctx = ossl_pkcs7_ctx_get0_libctx(ctx);
     const char *propq = ossl_pkcs7_ctx_get0_propq(ctx);
+    const unsigned char *sig_data;
+    size_t sig_len;
 
     mdc_tmp = EVP_MD_CTX_new();
     if (mdc_tmp == NULL) {
@@ -1144,8 +1146,8 @@ int PKCS7_signatureVerify(BIO *bio, PKCS7 *p7, PKCS7_SIGNER_INFO *si,
         goto err;
     }
 
-    const unsigned char *sig_data = ASN1_STRING_get0_data(os);
-    size_t sig_len = ASN1_STRING_get_length(os);
+    sig_data = ASN1_STRING_get0_data(os);
+    sig_len = ASN1_STRING_get_length(os);
     if (sig_len > INT_MAX) {
         ret = -1;
         goto err;

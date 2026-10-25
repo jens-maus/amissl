@@ -73,18 +73,6 @@ LIBPROTOVA(BIO_printf, int, UNUSED struct AmiSSLIFace *Self, BIO * bio, const ch
   return ret;
 }
 
-LIBPROTOVA(BIO_snprintf, int, UNUSED struct AmiSSLIFace *Self, char * buf, size_t n, const char * format, ...)
-{
-  VA_LIST args;
-  int ret;
-
-  VA_START(args, format);
-  ret = BIO_vsnprintf(buf,n,format,args);
-  VA_END(args);
-
-  return ret;
-}
-
 LIBPROTOVA(ERR_add_error_data, void, UNUSED struct AmiSSLIFace *Self, int num, ...)
 {
   VA_LIST args;

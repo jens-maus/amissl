@@ -9,7 +9,9 @@
 
 #ifndef OSSL_DTLS_RECORD_RX_H
 #define OSSL_DTLS_RECORD_RX_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
+#endif
 
 #include "internal/dgram_demux.h"
 #include "internal/thread_arch.h"

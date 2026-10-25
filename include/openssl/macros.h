@@ -23,7 +23,7 @@
 #pragma once
 #endif
 
-#include <openssl/opensslconf.h>
+#include <openssl/configuration.h>
 #include <openssl/opensslv.h>
 
 /* Helper macros for CPP string composition */
@@ -54,7 +54,7 @@
 #define OSSL_DEPRECATED(since) \
     __declspec(deprecated("Since OpenSSL " #since))
 #define OSSL_DEPRECATED_FOR(since, message) \
-    __declspec(deprecated("Since OpenSSL " #since ";" message))
+    __declspec(deprecated("Since OpenSSL " #since "; " message))
 #define OSSL_DEPRECATED_MESSAGE(message) __declspec(deprecated(message))
 #elif _MSC_VER >= 1310
 #define OSSL_DEPRECATED(since) __declspec(deprecated)
@@ -201,6 +201,7 @@
  * 'no-deprecated'.
  */
 
+#undef OPENSSL_NO_DEPRECATED_4_1
 #undef OPENSSL_NO_DEPRECATED_4_0
 #undef OPENSSL_NO_DEPRECATED_3_6
 #undef OPENSSL_NO_DEPRECATED_3_5
@@ -214,6 +215,17 @@
 #undef OPENSSL_NO_DEPRECATED_1_0_0
 #undef OPENSSL_NO_DEPRECATED_0_9_8
 
+#if OPENSSL_API_LEVEL >= 40100
+#ifndef OPENSSL_NO_DEPRECATED
+#define OSSL_DEPRECATEDIN_4_1 OSSL_DEPRECATED(4.1)
+#define OSSL_DEPRECATEDIN_4_1_FOR(msg) OSSL_DEPRECATED_FOR(4.1, msg)
+#else
+#define OPENSSL_NO_DEPRECATED_4_1
+#endif
+#else
+#define OSSL_DEPRECATEDIN_4_1
+#define OSSL_DEPRECATEDIN_4_1_FOR(msg)
+#endif
 #if OPENSSL_API_LEVEL >= 40000
 #ifndef OPENSSL_NO_DEPRECATED
 #define OSSL_DEPRECATEDIN_4_0 OSSL_DEPRECATED(4.0)
@@ -378,7 +390,7 @@
 #if defined(__STDC_VERSION__)
 #if __STDC_VERSION__ >= 199901L
 #define OPENSSL_FUNC __func__
-#elif defined(__GNUC__) && __GNUC__ >= 2
+#elif defined(__GNUC__)
 #define OPENSSL_FUNC __FUNCTION__
 #endif
 #elif defined(_MSC_VER)

@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2025 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,11 @@
         sk_##t1##_freefunc freefunc = (sk_##t1##_freefunc)freefunc_arg;                                                    \
         freefunc((t3 *)ptr);                                                                                               \
     }                                                                                                                      \
+    static ossl_inline void *sk_##t1##_copyfunc_thunk(OPENSSL_sk_copyfunc copyfunc_arg, const void *ptr)                   \
+    {                                                                                                                      \
+        sk_##t1##_copyfunc copyfunc = (sk_##t1##_copyfunc)copyfunc_arg;                                                    \
+        return (void *)copyfunc((const t3 *)ptr);                                                                          \
+    }                                                                                                                      \
     static ossl_inline int sk_##t1##_cmpfunc_thunk(int (*cmp)(const void *, const void *), const void *a, const void *b)   \
     {                                                                                                                      \
         int (*realcmp)(const t3 *const *a, const t3 *const *b) = (int (*)(const t3 *const *a, const t3 *const *b))(cmp);   \
@@ -69,6 +74,7 @@
                                                                                                                            \
         f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
         OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
+        OPENSSL_sk_set_copy_thunks(ret, sk_##t1##_copyfunc_thunk);                                                         \
         return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_null(void)                                                  \
@@ -77,7 +83,8 @@
         OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
                                                                                                                            \
         f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
-                                                                                                                           \
+        OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
+        OPENSSL_sk_set_copy_thunks(ret, sk_##t1##_copyfunc_thunk);                                                         \
         return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_new_reserve(sk_##t1##_compfunc compare, int n)                  \
@@ -87,6 +94,7 @@
                                                                                                                            \
         f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
         OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
+        OPENSSL_sk_set_copy_thunks(ret, sk_##t1##_copyfunc_thunk);                                                         \
         return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline int sk_##t1##_reserve(STACK_OF(t1) *sk, int n)                                          \
@@ -166,15 +174,27 @@
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_dup(const STACK_OF(t1) *sk)                                     \
     {                                                                                                                      \
-        return (STACK_OF(t1) *)OPENSSL_sk_dup((const OPENSSL_STACK *)sk);                                                  \
+        OPENSSL_STACK *ret = OPENSSL_sk_dup((const OPENSSL_STACK *)sk);                                                    \
+        OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
+                                                                                                                           \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
+        OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
+        OPENSSL_sk_set_copy_thunks(ret, sk_##t1##_copyfunc_thunk);                                                         \
+        return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline STACK_OF(t1) *sk_##t1##_deep_copy(const STACK_OF(t1) *sk,                               \
         sk_##t1##_copyfunc copyfunc,                                                                                       \
         sk_##t1##_freefunc freefunc)                                                                                       \
     {                                                                                                                      \
-        return (STACK_OF(t1) *)OPENSSL_sk_deep_copy((const OPENSSL_STACK *)sk,                                             \
+        OPENSSL_STACK *ret = OPENSSL_sk_deep_copy((const OPENSSL_STACK *)sk,                                               \
             (OPENSSL_sk_copyfunc)copyfunc,                                                                                 \
             (OPENSSL_sk_freefunc)freefunc);                                                                                \
+        OPENSSL_sk_freefunc_thunk f_thunk;                                                                                 \
+                                                                                                                           \
+        f_thunk = (OPENSSL_sk_freefunc_thunk)sk_##t1##_freefunc_thunk;                                                     \
+        OPENSSL_sk_set_cmp_thunks(ret, sk_##t1##_cmpfunc_thunk);                                                           \
+        OPENSSL_sk_set_copy_thunks(ret, sk_##t1##_copyfunc_thunk);                                                         \
+        return (STACK_OF(t1) *)OPENSSL_sk_set_thunks(ret, f_thunk);                                                        \
     }                                                                                                                      \
     static ossl_unused ossl_inline sk_##t1##_compfunc sk_##t1##_set_cmp_func(STACK_OF(t1) *sk, sk_##t1##_compfunc compare) \
     {                                                                                                                      \

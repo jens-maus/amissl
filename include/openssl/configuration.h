@@ -43,7 +43,7 @@ extern "C" {
 # ifndef OPENSSL_SYS_AMIGA
 #  define OPENSSL_SYS_AMIGA 1
 # endif
-# define OPENSSL_CONFIGURED_API 40000
+# define OPENSSL_CONFIGURED_API 40100
 # ifndef OPENSSL_RAND_SEED_OS
 #  define OPENSSL_RAND_SEED_OS
 # endif
@@ -73,6 +73,9 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_CRYPTO_MDEBUG
 #  define OPENSSL_NO_CRYPTO_MDEBUG
+# endif
+# ifndef OPENSSL_NO_CT_VALIDATION
+#  define OPENSSL_NO_CT_VALIDATION
 # endif
 # ifndef OPENSSL_NO_DEFAULT_THREAD_POOL
 #  define OPENSSL_NO_DEFAULT_THREAD_POOL
@@ -184,6 +187,9 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_UNIT_TEST
 #  define OPENSSL_NO_UNIT_TEST
+# endif
+# ifndef OPENSSL_NO_UNIT_TESTS
+#  define OPENSSL_NO_UNIT_TESTS
 # endif
 # ifndef OPENSSL_NO_UNSTABLE_QLOG
 #  define OPENSSL_NO_UNSTABLE_QLOG

@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,25 +44,13 @@ int main(int argc UNUSED, char **argv UNUSED)
 		0,0,
 	};
 	
-	char buffer[128];
-	BIO_snprintf(buffer,128,"Test %s of %d in %f","value",43,3.3);
-	printf("Buffer: >>%s<<\n",buffer);
-
-	BIO_snprintf(buffer,16,"Test %s of %d in %f","value",43,3.3);
-	printf("Buffer: >>%s<<\n",buffer);
-
 	arglist[2] = ((int *)&floatval)[0];
 	arglist[3] = ((int *)&floatval)[1];
-
-	BIO_vsnprintf(buffer, sizeof(buffer), "Test %s of %d in %f", (void *)arglist);
-	printf("Buffer: >>%s<<\n",buffer);
-
-	BIO_vsnprintf(buffer, 16, "Test %s of %d in %f", (void *)arglist);
-	printf("Buffer: >>%s<<\n",buffer);
 
 	if((out = BIO_new(BIO_s_file())) != NULL)
 	{
 		BIO_set_fp_amiga(out, Output(), BIO_NOCLOSE | BIO_FP_TEXT);
+		BIO_printf(out,"Test %s of %d in %f\n","value",43,3.3);
 		BIO_vprintf(out, "Test %s of %d in %f\n", (void *)arglist);
 
 		BIO_printf(out,"Error test: \n");

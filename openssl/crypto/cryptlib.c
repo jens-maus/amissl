@@ -244,7 +244,7 @@ void OPENSSL_showfatal(const char *fmta, ...)
   char error[512];
 
   va_start(ap, fmta);
-  BIO_vsnprintf(error, sizeof(error), fmta, ap);
+  vsnprintf(error, sizeof(error), fmta, ap);
   va_end(ap);
 
   ShowRequester(SR_ERROR,NULL,error,"Suspend");

@@ -5,7 +5,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2025 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2002, Oracle and/or its affiliates. All rights reserved
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
@@ -185,8 +185,6 @@ extern "C" {
 
 #define SSL3_RT_MAX_EXTRA (16384)
 
-/* Maximum plaintext length: defined by SSL/TLS standards */
-#define SSL3_RT_MAX_PLAIN_LENGTH 16384
 /* Maximum compression overhead: defined by SSL/TLS standards */
 #define SSL3_RT_MAX_COMPRESSED_OVERHEAD 1024
 
@@ -232,6 +230,7 @@ extern "C" {
 #define SSL3_RT_ALERT 21
 #define SSL3_RT_HANDSHAKE 22
 #define SSL3_RT_APPLICATION_DATA 23
+#define SSL3_RT_ACK 26 /* RFC 9147 */
 
 /* Pseudo content types to indicate additional parameters */
 #define TLS1_RT_CRYPTO 0x1000
@@ -345,6 +344,9 @@ extern "C" {
 #define SSL3_MT_MESSAGE_HASH 254
 #define DTLS1_MT_HELLO_VERIFY_REQUEST 3
 
+/* Dummy message type for handling ACK like a normal handshake message */
+#define DTLS13_MT_ACK 0x0126
+
 /* Dummy message type for handling CCS like a normal handshake message */
 #define SSL3_MT_CHANGE_CIPHER_SPEC 0x0101
 
@@ -358,6 +360,7 @@ extern "C" {
 #define SSL3_CC_EARLY 0x040
 #define SSL3_CC_HANDSHAKE 0x080
 #define SSL3_CC_APPLICATION 0x100
+#define SSL3_CC_COMP_CERT 0x200
 #define SSL3_CHANGE_CIPHER_CLIENT_WRITE (SSL3_CC_CLIENT | SSL3_CC_WRITE)
 #define SSL3_CHANGE_CIPHER_SERVER_READ (SSL3_CC_SERVER | SSL3_CC_READ)
 #define SSL3_CHANGE_CIPHER_CLIENT_READ (SSL3_CC_CLIENT | SSL3_CC_READ)

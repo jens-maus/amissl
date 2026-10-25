@@ -6,7 +6,7 @@
  *
  * This file has been modified for use with AmiSSL for AmigaOS-based systems.
  *
- * Copyright 1995-2022 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 1995-2026 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -56,7 +56,9 @@
 #define BIO_R_NO_HOSTNAME_OR_SERVICE_SPECIFIED 144
 #define BIO_R_NO_PORT_DEFINED 113
 #define BIO_R_NO_SUCH_FILE 128
-#define BIO_R_NULL_PARAMETER 115 /* unused */
+#define BIO_R_NULL_PARAMETER 115
+#define BIO_R_PEER_ADDR_NOT_AVAILABLE 151
+#define BIO_R_PORT_MISMATCH 150
 #define BIO_R_TFO_DISABLED 106
 #define BIO_R_TFO_NO_KERNEL_SUPPORT 108
 #define BIO_R_TRANSFER_ERROR 104
@@ -76,7 +78,5 @@
 #define BIO_R_UNSUPPORTED_PROTOCOL_FAMILY 131
 #define BIO_R_WRITE_TO_READ_ONLY_BIO 126
 #define BIO_R_WSASTARTUP 122
-#define BIO_R_PORT_MISMATCH 150
-#define BIO_R_PEER_ADDR_NOT_AVAILABLE 151
 
 #endif

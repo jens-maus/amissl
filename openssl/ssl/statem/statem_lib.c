@@ -1685,6 +1685,7 @@ int tls_common_finish_mac(SSL_CONNECTION *s)
     unsigned char *msg = (unsigned char *)s->init_buf->data;
     size_t msg_len = s->init_num;
     size_t hdr_len = 0;
+    size_t srvhellorandom_offs;
 
     if (SSL_CONNECTION_IS_DTLS(s)) {
         if (s->version != DTLS1_BAD_VER)
@@ -1705,7 +1706,7 @@ int tls_common_finish_mac(SSL_CONNECTION *s)
      * The (D)TLSv1.3 handshake transcript stops at the ClientFinished
      * message.
      */
-    const size_t srvhellorandom_offs = hdr_len + 2;
+    srvhellorandom_offs = hdr_len + 2;
 
     /* KeyUpdate and NewSessionTicket do not need to be added */
     if (!SSL_CONNECTION_IS_VERSION13(s)

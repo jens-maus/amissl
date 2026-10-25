@@ -341,9 +341,6 @@ LONG (Printf)( CONST_STRPTR format, ... )
 int (BIO_printf)( BIO *bio, const char *format, ... )
 { return BIO_vprintf(bio, format, (long *)((ULONG)&format + sizeof(const char *))); }
 
-int (BIO_snprintf)( char *buf, size_t n, const char *format, ... )
-{ return BIO_vsnprintf(buf, n, format, (long *)((ULONG)&format + sizeof(const char *))); }
-
 void (ERR_add_error_data)(int num, ...)
 {
   va_list args;

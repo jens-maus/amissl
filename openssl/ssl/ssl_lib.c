@@ -8540,14 +8540,14 @@ int SSL_get_peer_addr(SSL *ssl, BIO_ADDR *peer_addr)
 #endif
 
 #if !defined(OPENSSL_NO_DTLS) && !defined(OPENSSL_NO_SOCK)
-    SSL_CONNECTION *sc = SSL_CONNECTION_FROM_SSL(ssl);
+    { SSL_CONNECTION *sc = SSL_CONNECTION_FROM_SSL(ssl);
 
     if (sc != NULL && sc->d1 != NULL
         && BIO_ADDR_family(&sc->d1->peer_addr) != AF_UNSPEC) {
         if (!BIO_ADDR_copy(peer_addr, &sc->d1->peer_addr))
             return 0;
         return 1;
-    }
+    }}
 #endif
 
     return 0;

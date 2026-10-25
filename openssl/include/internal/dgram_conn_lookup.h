@@ -9,7 +9,9 @@
 
 #ifndef OSSL_INTERNAL_DGRAM_CONN_LOOKUP_H
 #define OSSL_INTERNAL_DGRAM_CONN_LOOKUP_H
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
+#endif
 
 #include <openssl/ssl.h>
 #include "internal/dgram_demux.h"

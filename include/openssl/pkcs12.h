@@ -86,9 +86,30 @@ typedef struct PKCS12_SAFEBAG_st PKCS12_SAFEBAG;
 SKM_DEFINE_STACK_OF_INTERNAL(PKCS12_SAFEBAG, PKCS12_SAFEBAG, PKCS12_SAFEBAG)
 #define sk_PKCS12_SAFEBAG_num(sk) OPENSSL_sk_num(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk))
 #define sk_PKCS12_SAFEBAG_value(sk, idx) ((PKCS12_SAFEBAG *)OPENSSL_sk_value(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk), (idx)))
-#define sk_PKCS12_SAFEBAG_new(cmp) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp)), sk_PKCS12_SAFEBAG_cmpfunc_thunk))
-#define sk_PKCS12_SAFEBAG_new_null() ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks(OPENSSL_sk_new_null(), sk_PKCS12_SAFEBAG_freefunc_thunk))
-#define sk_PKCS12_SAFEBAG_new_reserve(cmp, n) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_cmp_thunks(OPENSSL_sk_new_reserve(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp), (n)), sk_PKCS12_SAFEBAG_cmpfunc_thunk))
+#define sk_PKCS12_SAFEBAG_new(cmp) \
+    ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks( \
+        OPENSSL_sk_set_copy_thunks( \
+            OPENSSL_sk_set_cmp_thunks( \
+                OPENSSL_sk_new(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp)), \
+                sk_PKCS12_SAFEBAG_cmpfunc_thunk), \
+            sk_PKCS12_SAFEBAG_copyfunc_thunk), \
+        sk_PKCS12_SAFEBAG_freefunc_thunk))
+#define sk_PKCS12_SAFEBAG_new_null() \
+    ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks( \
+        OPENSSL_sk_set_copy_thunks( \
+            OPENSSL_sk_set_cmp_thunks( \
+                OPENSSL_sk_new_null(), \
+                sk_PKCS12_SAFEBAG_cmpfunc_thunk), \
+            sk_PKCS12_SAFEBAG_copyfunc_thunk), \
+        sk_PKCS12_SAFEBAG_freefunc_thunk))
+#define sk_PKCS12_SAFEBAG_new_reserve(cmp, n) \
+    ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks( \
+        OPENSSL_sk_set_copy_thunks( \
+            OPENSSL_sk_set_cmp_thunks( \
+                OPENSSL_sk_new_reserve(ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp), (n)), \
+                sk_PKCS12_SAFEBAG_cmpfunc_thunk), \
+            sk_PKCS12_SAFEBAG_copyfunc_thunk), \
+        sk_PKCS12_SAFEBAG_freefunc_thunk))
 #define sk_PKCS12_SAFEBAG_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_PKCS12_SAFEBAG_sk_type(sk), (n))
 #define sk_PKCS12_SAFEBAG_free(sk) OPENSSL_sk_free(ossl_check_PKCS12_SAFEBAG_sk_type(sk))
 #define sk_PKCS12_SAFEBAG_zero(sk) OPENSSL_sk_zero(ossl_check_PKCS12_SAFEBAG_sk_type(sk))
@@ -106,8 +127,25 @@ SKM_DEFINE_STACK_OF_INTERNAL(PKCS12_SAFEBAG, PKCS12_SAFEBAG, PKCS12_SAFEBAG)
 #define sk_PKCS12_SAFEBAG_find_all(sk, ptr, pnum) OPENSSL_sk_find_all(ossl_check_PKCS12_SAFEBAG_sk_type(sk), ossl_check_PKCS12_SAFEBAG_type(ptr), pnum)
 #define sk_PKCS12_SAFEBAG_sort(sk) OPENSSL_sk_sort(ossl_check_PKCS12_SAFEBAG_sk_type(sk))
 #define sk_PKCS12_SAFEBAG_is_sorted(sk) OPENSSL_sk_is_sorted(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk))
-#define sk_PKCS12_SAFEBAG_dup(sk) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_dup(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk)))
-#define sk_PKCS12_SAFEBAG_deep_copy(sk, copyfunc, freefunc) ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_deep_copy(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk), ossl_check_PKCS12_SAFEBAG_copyfunc_type(copyfunc), ossl_check_PKCS12_SAFEBAG_freefunc_type(freefunc)))
+#define sk_PKCS12_SAFEBAG_dup(sk) \
+    ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks( \
+        OPENSSL_sk_set_copy_thunks( \
+            OPENSSL_sk_set_cmp_thunks( \
+                OPENSSL_sk_dup(ossl_check_const_PKCS12_SAFEBAG_sk_type(sk)), \
+                sk_PKCS12_SAFEBAG_cmpfunc_thunk), \
+            sk_PKCS12_SAFEBAG_copyfunc_thunk), \
+        sk_PKCS12_SAFEBAG_freefunc_thunk))
+#define sk_PKCS12_SAFEBAG_deep_copy(sk, copyfunc, freefunc) \
+    ((STACK_OF(PKCS12_SAFEBAG) *)OPENSSL_sk_set_thunks( \
+        OPENSSL_sk_set_copy_thunks( \
+            OPENSSL_sk_set_cmp_thunks( \
+                OPENSSL_sk_deep_copy( \
+                    ossl_check_const_PKCS12_SAFEBAG_sk_type(sk), \
+                    ossl_check_PKCS12_SAFEBAG_copyfunc_type(copyfunc), \
+                    ossl_check_PKCS12_SAFEBAG_freefunc_type(freefunc)), \
+                sk_PKCS12_SAFEBAG_cmpfunc_thunk), \
+            sk_PKCS12_SAFEBAG_copyfunc_thunk), \
+        sk_PKCS12_SAFEBAG_freefunc_thunk))
 #define sk_PKCS12_SAFEBAG_set_cmp_func(sk, cmp) ((sk_PKCS12_SAFEBAG_compfunc)OPENSSL_sk_set_cmp_func(ossl_check_PKCS12_SAFEBAG_sk_type(sk), ossl_check_PKCS12_SAFEBAG_compfunc_type(cmp)))
 
 /* clang-format on */

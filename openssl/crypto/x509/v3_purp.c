@@ -466,10 +466,11 @@ static void scan_ext_flags(const X509 *x509, uint32_t *flags)
     uint64_t k[2]; /* random SipHash key for the fall-back table */
     uint8_t ex_bitset[(NUM_NID + 7) / 8];
     int count = X509_get_ext_count(x509);
+    int i;
 
     memset(ex_bitset, 0, sizeof(ex_bitset));
     /* A certificate MUST NOT include more than one instance of an extension. */
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         const X509_EXTENSION *ex = X509_get_ext(x509, i);
         const ASN1_OBJECT *a = X509_EXTENSION_get_object(ex);
         int nid = OBJ_obj2nid(a);
@@ -1189,11 +1190,12 @@ static int check_name_constraints(const NAME_CONSTRAINTS *nc)
 {
     GENERAL_SUBTREE *sub;
     int ret = 1;
+    int i;
 
     if (nc == NULL)
         goto done;
 
-    for (int i = 0; nc->permittedSubtrees != NULL
+    for (i = 0; nc->permittedSubtrees != NULL
         && i < sk_GENERAL_SUBTREE_num(nc->permittedSubtrees);
         i++) {
         sub = sk_GENERAL_SUBTREE_value(nc->permittedSubtrees, i);
@@ -1206,7 +1208,7 @@ static int check_name_constraints(const NAME_CONSTRAINTS *nc)
             goto done;
         }
     }
-    for (int i = 0; nc->excludedSubtrees != NULL
+    for (i = 0; nc->excludedSubtrees != NULL
         && i < sk_GENERAL_SUBTREE_num(nc->excludedSubtrees);
         i++) {
         sub = sk_GENERAL_SUBTREE_value(nc->excludedSubtrees, i);
