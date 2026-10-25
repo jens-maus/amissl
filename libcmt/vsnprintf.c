@@ -14,7 +14,6 @@
  #define HAVE_CTYPE_H
  #define HAVE_STRING_H
  #define HAVE_STDLIB_H
- #define HAVE_SNPRINTF
  #define PROTOTYPES 1
  #include "libcmt.h"
 #else
@@ -271,6 +270,10 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args)
 				break;
 			case 'L':
 				cflags = DP_C_LDOUBLE;
+				ch = *format++;
+				break;
+			case 'z':
+				cflags = DP_C_LONG;
 				ch = *format++;
 				break;
 			default:
