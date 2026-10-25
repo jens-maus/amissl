@@ -23,17 +23,16 @@ to be 100% API/ABI compatible to the OpenSSL version it is based on. Due to
 it being a shared library, it can be used by several Amiga applications at
 the same time, without wasting resources.
 
-AmiSSL v5 is a new major release which has been updated with full
-compatibility with OpenSSL 3.6. This includes important security related
-fixes, a built-in HTTP(S) client and comes with the latest encryption
-ciphers which are required nowadays to connect to modern SSL-based services
-such as HTTPS and SSH.
+AmiSSL v6 is a new major release using OpenSSL 4.x. This includes important
+security related fixes, the latest new encryption ciphers and security
+features which are required to connect to modern TLS-based services such as
+HTTPS and SSH. It also has basic built-in HTTP(S) client.
 
 ## General
 
 AmiSSL consists of four major components: the shared libraries, the public
 root CA certificates, a port of the `OpenSSL` command-line tool and the
-developer SDK.
+developer software development kit (SDK).
 
 ### Libraries
 
@@ -93,12 +92,12 @@ point of call being the [README-SDK](dist/README-SDK) file which explains what n
 
 ## Backwards Compatibility
 
-All applications compiled to use previous versions of AmiSSL v5 will
-automatically use the latest version once installed. Old applications will
-continue to use AmiSSL v4 or older and will need to be recompiled with the
-updated SDK in order to start using AmiSSL v5. Besides this difference,
-AmiSSL v5 can be installed on top of any previous AmiSSL versions, which
-ensures that applications compiled for AmiSSL v1/v2/v3/v4 continue to work.
+All applications compiled to use previous versions of AmiSSL v6 automatically
+use any updates installed. Old applications will continue to use AmiSSL v5 or
+older and will need to be recompiled with the AmiSSL v6 SDK in order to start
+using it. Besides this difference, AmiSSL v6 can be installed on top of any
+previous AmiSSL versions, which ensures that applications compiled to use
+AmiSSL v1/v2/v3/v4/v5 continue to work.
 
 ## Requirements
 
@@ -113,7 +112,7 @@ any new AmiSSL version. Otherwise, the latest release archive can be downloaded
 from any of the following URLs:
 
   https://github.com/jens-maus/amissl/releases  
-  http://aminet.net/search?query=amissl-5
+  http://aminet.net/search?query=amissl-v6
 
 Once downloaded it should be unarchived to a temporary directory and the "Install"
 script used accordingly.
@@ -123,7 +122,7 @@ script used accordingly.
 ```
 AmiSSL v1    Copyright (c) 1999-2006 Andrija Antonijevic.
 AmiSSL v2/v3 Copyright (c) 2002-2006 Andrija Antonijevic and Stefan Burstroem.
-AmiSSL v4/v5 Copyright (c) 2014-2026 AmiSSL Open Source Team.
+AmiSSL v4-v6 Copyright (c) 2014-2026 AmiSSL Open Source Team.
 All Rights Reserved.
 
 OpenSSL Cryptography and SSL/TLS Toolkit

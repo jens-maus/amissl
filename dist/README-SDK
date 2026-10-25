@@ -162,7 +162,7 @@ of long obsolete functions, along with all currently deprecated functions. In
 addition to making AmiSSL smaller, we hope this will perhaps allow us to make
 OpenSSL 5.x available automatically to applications compiled for AmiSSL v6,
 because if the OpenSSL team remove more functions, they are likely to be ones
-that they've already deprecated in OpenSSL 4.0 or earlier.
+that they've already deprecated in OpenSSL 4.1 or earlier.
 
 Read https://docs.openssl.org/master/man7/ossl-guide-migration/ and
 https://docs.openssl.org/master/man7/ossl-removed-api/ for information on
