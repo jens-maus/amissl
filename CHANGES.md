@@ -16,7 +16,7 @@
   functions, as stdio can never be available in AmiSSL.
 - Support for RC5, MD2 and SRP has been removed.
 - Updated root certificates to latest Mozilla-based bundle provided by
-  https://curl.se/docs/caextract.html dated 14.5.2026.
+  https://curl.se/docs/caextract.html dated 20.10.2026.
 - Removed root certificate support for AmiSSL v3 and earlier. We used to
   supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having been
   used by OpenSSL since AmiSSL v4.
