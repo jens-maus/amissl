@@ -11,6 +11,7 @@
 
 
 #if defined(AMIGA)
+ #define HAVE_LONG_LONG
  #define HAVE_CTYPE_H
  #define HAVE_STRING_H
  #define HAVE_STDLIB_H
@@ -122,7 +123,7 @@ static size_t dopr PARAMS((char *buffer, size_t maxlen, const char *format,
 static void fmtstr PARAMS((char *buffer, size_t *currlen, size_t maxlen,
 			   char *value, int flags, int min, int max));
 static void fmtint PARAMS((char *buffer, size_t *currlen, size_t maxlen,
-			   long value, int base, int min, int max, int flags));
+			   LLONG value, int base, int min, int max, int flags));
 static void fmtfp PARAMS((char *buffer, size_t *currlen, size_t maxlen,
 			  LDOUBLE fvalue, int min, int max, int flags));
 static void dopr_outch PARAMS((char *buffer, size_t *currlen, size_t maxlen,
@@ -259,6 +260,13 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args)
 			case 'h':
 				cflags = DP_C_SHORT;
 				ch = *format++;
+				if (ch == 'h') {	/* It's a char - handled the same */
+					ch = *format++;
+				}
+				break;
+			case 'j':
+				cflags = DP_C_LLONG;
+				ch = *format++;
 				break;
 			case 'l':
 				cflags = DP_C_LONG;
@@ -272,6 +280,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args)
 				cflags = DP_C_LDOUBLE;
 				ch = *format++;
 				break;
+			case 't':
 			case 'z':
 				cflags = DP_C_LONG;
 				ch = *format++;
@@ -467,11 +476,11 @@ fmtstr(char *buffer, size_t *currlen, size_t maxlen, char *value, int flags,
 /* Have to handle DP_F_NUM (ie 0x and 0 alternates) */
 
 static void
-fmtint(char *buffer, size_t *currlen, size_t maxlen, long value, int base,
+fmtint(char *buffer, size_t *currlen, size_t maxlen, LLONG value, int base,
        int min, int max, int flags)
 {
 	int signvalue = 0;
-	unsigned long uvalue;
+	unsigned LLONG uvalue;
 	char convert[20];
 	int place = 0;
 	int spadlen = 0; /* amount to space pad */
