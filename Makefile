@@ -423,7 +423,7 @@ LINKLIBS = $(BUILD_D)/libamisslauto.a \
            $(BUILD_D)/libamissldebug.a \
            $(EXTRALINKLIBS)
 
-LIBS = -L$(BUILD_D) $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
+LIBS =  $(LIBSSL) $(LIBCRYPTO) $(LIBCMT)
 
 APPS =  $(BUILD_D)/amisslmaster_test $(BUILD_D)/amissl_v$(VERSIONNAME)_test \
         $(BUILD_D)/https $(BUILD_D)/httpget $(BUILD_D)/uitest $(BUILD_D)/vatest
@@ -507,13 +507,13 @@ $(LIBCMT): $(BUILD_D)/libcmt libcmt
 $(BUILD_D)/amissl_rev.h:
 	@bumprev -q -v $(VERSION) -r $(REVISION) -n OpenSSL -b $(BUILD_D)/amissl -i h
 
-$(BUILD_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBCMT) $(LIBSSL) $(LIBCRYPTO)
+$(BUILD_D)/amissl_v$(VERSIONNAME).library: $(LIBOBJS) $(LIBS)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) $(LIBS) $(LDLIBS) $(LIBS) -Wl,-M,--cref,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(LIBOBJS) -Wl,--start-group $(LIBS) $(LDLIBS) -Wl,--end-group,-M,--cref,-Map=$@.map
 
 $(BUILD_D)/amisslmaster.library: $(MASTEROBJS) $(LIBCMT)
 	@echo "  LD $@"
-	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) $(LDLIBS) $(LIBCMT) -Wl,-M,--cref,-Map=$@.map
+	@$(CC) -o $@ $(LDFLAGS) $(MASTEROBJS) -Wl,--start-group $(LIBCMT) $(LDLIBS) -Wl,--end-group,-M,--cref,-Map=$@.map
 
 $(BUILD_D)/libamisslauto.a: $(BUILD_D)/autoinit_assl.o
 	@echo "  AR $@"
