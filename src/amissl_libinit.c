@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2023 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,8 +37,8 @@
   #include <proto/mathieeedoubtrans.h>
 #endif
 
-#include <internal/debug.h>
 #include <internal/amissl.h>
+#include <internal/debug.h>
 
 //
 
@@ -121,6 +121,8 @@ struct Library * AMISSL_COMMON_DATA SysBase = NULL;
 struct ExecIFace * AMISSL_COMMON_DATA IExec = NULL;
 struct Library * AMISSL_COMMON_DATA DOSBase = NULL;
 struct DOSIFace * AMISSL_COMMON_DATA IDOS = NULL;
+struct Library * AMISSL_COMMON_DATA UtilityBase = NULL;
+struct UtilityIFace * AMISSL_COMMON_DATA IUtility = NULL;
 #if defined(__NEWLIB__)
 struct Library * AMISSL_COMMON_DATA NewlibBase = NULL;
 struct NewlibIFace * AMISSL_COMMON_DATA INewlib = NULL;
@@ -128,6 +130,11 @@ struct NewlibIFace * AMISSL_COMMON_DATA INewlib = NULL;
 #else
 struct ExecBase * AMISSL_COMMON_DATA SysBase = NULL;
 struct DosLibrary * AMISSL_COMMON_DATA DOSBase = NULL;
+#if defined(__amigaos3__)
+struct UtilityBase * AMISSL_COMMON_DATA UtilityBase = NULL;
+#else
+struct Library * AMISSL_COMMON_DATA UtilityBase = NULL;
+#endif
 #endif
 
 #if defined(__amigaos3__) && defined(__CLIB2__)
@@ -752,13 +759,17 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     #if defined(__amigaos4__)
     if((DOSBase = OpenLibrary("dos.library", 52))
        && GETINTERFACE(IDOS, DOSBase)
+       && (UtilityBase = OpenLibrary("utility.library", 50)) != NULL
+       && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)) != NULL
        #if defined(__NEWLIB__)
        && (NewlibBase = OpenLibrary("newlib.library", 3))
        && GETINTERFACE(INewlib, NewlibBase)
        #endif
       )
     #else
-    if((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37)))
+    if((DOSBase = (struct DosLibrary *)OpenLibrary("dos.library", 37))
+       && (UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)) != NULL
+      )
     #endif
     {
       BOOL success;
@@ -832,6 +843,13 @@ struct LibraryHeader * LIBFUNC LibInit(REG(d0, struct LibraryHeader *base), REG(
     }
     #endif
 
+    if(UtilityBase)
+    {
+      DROPINTERFACE(IUtility);
+      CloseLibrary((struct Library *)UtilityBase);
+      UtilityBase = NULL;
+    }
+
     if(DOSBase)
     {
       DROPINTERFACE(IDOS);
@@ -894,6 +912,12 @@ STATIC BPTR LibDelete(struct LibraryHeader *base)
     CloseLibrary(NewlibBase);
   }
   #endif
+
+  if(UtilityBase)
+  {
+    DROPINTERFACE(IUtility);
+    CloseLibrary((struct Library *)UtilityBase);
+  }
 
   if(DOSBase)
   {

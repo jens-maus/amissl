@@ -2,7 +2,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#undef AMISSL_COMPILE // doesn't use our custom OS4 varargs
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -34,7 +35,10 @@
 #include <proto/exec.h>
 #include <exec/semaphores.h>
 
+#include <internal/amissl_compiler.h>
 #include <internal/debug.h>
+
+#include "../libcmt/libcmt.h"
 
 #if defined(kprintf)
  #undef kprintf
@@ -67,21 +71,21 @@ static struct SignalSemaphore debug_sema;
 
 /****************************************************************************/
 
-static inline void _DBPRINTF(const char *format, ...)
+static inline VARARGS68K void _DBPRINTF(const char *format, ...)
 {
-  va_list args;
+  VA_LIST args;
   #if defined(__amigaos4__)
   static char buf[1024];
   #endif
 
-  va_start(args, format);
+  VA_START(args, format);
 
   ObtainSemaphore(&debug_sema);
 
   #if defined(__MORPHOS__) || defined(__AROS__)
   VNewRawDoFmt(format, (APTR)RAWFMTFUNC_SERIAL, NULL, args);
   #elif defined(__amigaos4__)
-  vsnprintf(buf, sizeof(buf), format, args);
+  VSNPrintf(buf, sizeof(buf), format, VA_ARG(args, APTR));
   DebugPrintF("%s", buf);
   #else
   KPutFmt(format, args);
@@ -89,7 +93,7 @@ static inline void _DBPRINTF(const char *format, ...)
 
   ReleaseSemaphore(&debug_sema);
 
-  va_end(args);
+  VA_END(args);
 }
 
 /****************************************************************************/
@@ -433,19 +437,19 @@ void _SHOWMSG(unsigned long dclass, unsigned long dflags, const char *msg, const
 
 /****************************************************************************/
 
-void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int line, const char *format, ...)
+VARARGS68K void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int line, const char *format, ...)
 {
   if((isFlagSet(debug_classes, dclass) && isFlagSet(debug_flags, dflags)) ||
      (isFlagSet(dclass, DBC_ERROR) || isFlagSet(dclass, DBC_WARNING)))
   {
-    va_list args;
+    VA_LIST args;
     static char buf[1024];
 
     _INDENT();
 
-    va_start(args, format);
-    vsnprintf(buf, sizeof(buf), format, args);
-    va_end(args);
+    VA_START(args, format);
+    VSNPrintf(buf, sizeof(buf), format, VA_ARG(args, APTR));
+    VA_END(args);
 
     if(ansi_output)
     {

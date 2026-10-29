@@ -66,16 +66,16 @@
 #if defined(__amigaos4__)
 struct Library *IntuitionBase = NULL;
 struct IntuitionIFace *IIntuition = NULL;
-struct Library *UtilityBase = NULL;
-struct UtilityIFace *IUtility = NULL;
 extern struct Library * AMISSL_COMMON_DATA SysBase;
 extern struct ExecIFace * AMISSL_COMMON_DATA IExec;
+extern struct UtilityIFace * AMISSL_COMMON_DATA IUtility;
 #else
 struct IntuitionBase *IntuitionBase = NULL;
+extern struct ExecBase * AMISSL_COMMON_DATA SysBase;
 #if defined(__amigaos3__)
-struct UtilityBase *UtilityBase = NULL;
+extern struct UtilityBase * AMISSL_COMMON_DATA UtilityBase;
 #else
-struct Library *UtilityBase = NULL;
+extern struct Library * AMISSL_COMMON_DATA UtilityBase;
 #endif
 #endif
 
@@ -452,11 +452,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
     W(DBF_STARTUP, "No thread_hash");
 
 #if defined(__amigaos4__)
-  if(IUtility != NULL)
-  {
-    DropInterface((struct Interface *)IUtility);
-    IUtility = NULL;
-  }
   if(IIntuition != NULL)
   {
     DropInterface((struct Interface *)IIntuition);
@@ -464,11 +459,6 @@ LIBPROTO(__UserLibCleanup, void, REG(a6, UNUSED __BASE_OR_IFACE), REG(a0, struct
   }
 #endif
 
-  if(UtilityBase != NULL)
-  {
-    CloseLibrary((struct Library *)UtilityBase);
-    UtilityBase = NULL;
-  }
   if(IntuitionBase != NULL)
   {
     CloseLibrary((struct Library *)IntuitionBase);
@@ -528,12 +518,9 @@ LIBPROTO(__UserLibInit, int, REG(a6, __BASE_OR_IFACE), REG(a0, struct LibraryHea
   if (CRYPTO_THREAD_setup()
 #if defined(__amigaos4__)
     && (IntuitionBase = OpenLibrary("intuition.library", 50))
-    && (UtilityBase = OpenLibrary("utility.library", 50))
-    && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL))
-    && (IUtility = (struct UtilityIFace *)GetInterface(UtilityBase,"main",1,NULL)))
+      && (IIntuition = (struct IntuitionIFace *)GetInterface(IntuitionBase,"main",1,NULL)))
 #else
-    && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36))
-    && (UtilityBase = (struct UtilityBase *)OpenLibrary("utility.library", 37)))
+    && (IntuitionBase = (struct IntuitionBase*)OpenLibrary("intuition.library", 36)))
 #endif
   {
     err = 0;

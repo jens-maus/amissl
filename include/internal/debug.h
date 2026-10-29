@@ -5,7 +5,7 @@
 
  AmiSSL - OpenSSL wrapper for AmigaOS-based systems
  Copyright (c) 1999-2006 Andrija Antonijevic, Stefan Burstroem.
- Copyright (c) 2006-2022 AmiSSL Open Source Team.
+ Copyright (c) 2006-2026 AmiSSL Open Source Team.
  All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,7 +73,7 @@ void _SHOWVALUE(unsigned long dclass, unsigned long dflags, unsigned long value,
 void _SHOWPOINTER(unsigned long dclass, unsigned long dflags, const void *p, const char *name, const char *file, int line);
 void _SHOWSTRING(unsigned long dclass, unsigned long dflags, const char *string, const char *name, const char *file, int line);
 void _SHOWMSG(unsigned long dclass, unsigned long dflags, const char *msg, const char *file, int line);
-void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int line, const char *format, ...);
+VARARGS68K void _DPRINTF(unsigned long dclass, unsigned long dflags, const char *file, int line, const char *format, ...);
 
 // Core class information class messages
 #define ENTER()					     _ENTER(DBC_CTRACE, __FILE__, __LINE__, __FUNCTION__)
