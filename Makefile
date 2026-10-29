@@ -248,7 +248,7 @@ ifeq ($(OS), os3-68020)
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   STUBCFLAGS+= -mcrt=clib2 -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
-  LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
+  LDLIBS    += -ldebug -lgcc -lm -lamiga
   BASEREL   = -resident32
   NOBASEREL = -fno-baserel
   BRELLIB   = -mrestore-a4
@@ -280,7 +280,7 @@ ifeq ($(OS), os3-68060)
   CFLAGS    += -mcrt=clib2 -DMULTIBASE -DBASEREL -I./include/netinclude -DNO_INLINE_STDARG -D__amigaos3__
   STUBCFLAGS+= -mcrt=clib2 -D_INLINE_AMISSL_H -D_INLINE_AMISSLEXT_H -D__amigaos3__
   LDFLAGS   += -mcrt=clib2
-  LDLIBS    += -ldebug -lc -lgcc -lm -lamiga
+  LDLIBS    += -ldebug -lgcc -lm -lamiga
   BASEREL   = -resident32
   NOBASEREL = -fno-baserel
   BRELLIB   = -mrestore-a4

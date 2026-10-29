@@ -268,7 +268,6 @@ typedef struct ca_db_st {
 extern int do_updatedb(CA_DB *db, const time_t *now);
 
 # if defined(OPENSSL_SYS_AMIGA)
-# include <internal/amissl_compiler.h>
 void VARARGS68K app_bail_out(char *fmt, ...);
 # else
 void app_bail_out(char *fmt, ...);

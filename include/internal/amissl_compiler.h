@@ -32,7 +32,9 @@
 #include <internal/SDI_compiler.h>
 #include <internal/SDI_stdarg.h>
 #include <internal/SDI_lib.h>
+#if defined(AMISSL_COMPILE)
 #include <internal/debug.h>
+#endif
 
 #if defined(__amigaos4__)
 
