@@ -7,7 +7,7 @@ on:
 jobs:
   skip_check:
     name: Duplicate Check
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.check.outputs.should_skip }}
     steps:
@@ -20,7 +20,7 @@ jobs:
   build:
     needs: skip_check
     if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 480
 
     strategy:
@@ -51,7 +51,7 @@ jobs:
     - name: install adtools build env
       run: |
         DOWNLOAD_PATH=https://github.com/adtools/adtools/releases/download/20170213
-        DOWNLOAD_PATH_UTILS=https://github.com/adtools/adtools/releases/download/20220416
+        DOWNLOAD_PATH_UTILS=https://github.com/adtools/adtools/releases/download/20261114
         curl -L ${DOWNLOAD_PATH_UTILS}/adtools-utils.tar.bz2 | sudo tar xj -C /
         if [[ ${{ matrix.platform }} =~ os3-68020|os3-68060|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-m68k-amigaos.tar.bz2 | sudo tar xj -C / ; fi
         if [[ ${{ matrix.platform }} =~ os4|release|nightly ]]; then curl -L ${DOWNLOAD_PATH}/adtools-ppc-amigaos-legacy.tar.bz2 | sudo tar xj -C / ; fi
@@ -89,7 +89,7 @@ jobs:
     name: Cleanup artifacts/packages
     needs: skip_check
     if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Remove old artifacts
         uses: c-hive/gha-remove-artifacts@v1

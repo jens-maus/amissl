@@ -6,7 +6,7 @@ on:
 
 env:
   ADTOOLS_DL_PATH: https://github.com/adtools/adtools/releases/download/20170213
-  ADTOOLS_UTILS_DL: https://github.com/adtools/adtools/releases/download/20220416/adtools-utils.tar.bz2
+  ADTOOLS_UTILS_DL: https://github.com/adtools/adtools/releases/download/20261114/adtools-utils.tar.bz2
 
 jobs:
 
