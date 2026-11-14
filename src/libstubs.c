@@ -382,16 +382,6 @@ int (BIO_printf)(BIO *bio, const char *format, ...)
   return ret;
 }
 
-int (BIO_snprintf)(char *buf, size_t n, const char *format, ...)
-{ 
-  va_list args;
-  int ret;
-  va_start(args, format);
-  ret = BIO_vsnprintf(buf, n, format, (long *)args);
-  va_end(args);
-  return ret;
-}
-
 void (ERR_add_error_data)(int num, ...)
 {
   va_list args;

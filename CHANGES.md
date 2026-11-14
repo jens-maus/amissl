@@ -1,4 +1,4 @@
-## AmiSSL 6.1 (x.10.2026)
+## AmiSSL 6.1 (14.11.2026)
 
 - Switched to OpenSSL 4.1 and updated backend to full compatibility with
   the latest OpenSSL 4.1.0 (23.10.2026) version, which brings new features,
@@ -16,7 +16,7 @@
   functions, as stdio can never be available in AmiSSL.
 - Support for RC5, MD2 and SRP has been removed.
 - Updated root certificates to latest Mozilla-based bundle provided by
-  https://curl.se/docs/caextract.html dated 20.10.2026.
+  https://curl.se/docs/caextract.html dated 5.11.2026.
 - Removed root certificate support for AmiSSL v3 and earlier. We used to
   supply both MD5 and SHA1 hashed certs, with only SHA1 hashing having been
   used by OpenSSL since AmiSSL v4.

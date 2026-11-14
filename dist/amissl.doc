@@ -15,7 +15,7 @@ amissl.library/SSL_CIPHER_get_mac
 	the OpenSSL API at https://www.openssl.org/docs/manmaster/man3.
 	Instead, only the AmiSSL specific functions are documented here.
 
-	Since AmiSSL v2, you must not open this library directly. In AmiSSL v5
+	Since AmiSSL v2, you must not open this library directly. Since AmiSSL v5
 	you should use use amisslmaster.library/OpenAmiSSLTags() instead.
 	In AmiSSL v2/v3/v4, use amisslmaster.library/OpenAmiSSL() and then call
 	InitAmiSSL() before you can start using OpenSSL functions. This is
@@ -103,10 +103,10 @@ amissl.library/SSL_CIPHER_get_mac
    TAGS
 	AmiSSL_GetAmiSSLBase - (struct Library **) Pointer to your
 	    AmiSSLExtBase variable for AmigaOS 3.x. Because of the sheer
-	    number of available public functions in OpenSSL, AmiSSL v5 spans
-	    two library bases. If successful, this function will set this to
-	    the opened library. DO NOT call CloseLibrary() on this as
-	    CloseAmiSSL() takes care of it. Not needed in AmigaOS 4.x
+	    number of available public functions in OpenSSL, AmiSSL v5 and
+	    higher spans two library bases. If successful, this function will
+	    set this to the opened library. DO NOT call CloseLibrary() on
+	    this as CloseAmiSSL() takes care of it. Not needed by AmigaOS 4.x
 	    applications. (V5)
 
 	AmiSSL_SocketBase - (struct Library *) Pointer to the socket base. If
