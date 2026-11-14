@@ -21,7 +21,7 @@ jobs:
       run: |
         DIR=$(ls | grep release-)
         VERSION=$(echo $DIR | grep -oP "\-\K\d+\.\d+")
-        AMINET_VERSION=$(curl https://aminet.net/util/libs/AmiSSL-v6-SDK.readme | grep -oP "Version:\s+\K\d+\.\d+")
+        AMINET_VERSION=$(curl -s https://aminet.net/util/libs/AmiSSL-v6-SDK.readme | { grep -oP "Version:\s+\K\d+\.\d+" || true; })
         if $(dpkg --compare-versions "$AMINET_VERSION" "lt" "$VERSION"); then
           cd $DIR
           sudo apt install rename
